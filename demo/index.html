@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #frame {
+            width: 320px;
+            height: 240px;
+        }
+        .left,.right {
+            display: inline-block;
+            box-sizing: border-box;
+            vertical-align: top;
+        }
+        .left {
+            width:20%
+        }
+        .right {
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+    <div class="left">
+        <ul id="list"></ul>
+    </div>
+    <div class="right">
+        <iframe frameborder="0" id="frame"></iframe>
+    </div>
+
+    <script>
+        (()=>{
+
+            var items = [
+                {
+                    title: 'Вывод спрайта',
+                    name: 'basic'
+                }
+            ];
+
+            var res = '';
+            items.map(it=>{
+                res+='\
+                            <li>'+
+                    '            <a onclick="onClick(event)" target="_blank" href="#" data-href="'+it.name+'/index.html">\n' +
+                    '                \n' + it.title +
+                    '            </a>\n' +
+                    '        </li>\
+                    ';
+            });
+            document.getElementById('list').innerHTML = res;
+            var frame = document.getElementById('frame');
+            window.onClick = function (e) {
+                e.preventDefault();
+                var url = e.target.getAttribute('data-href');
+                frame.src = url;
+            }
+        })();
+    </script>
+</body>
+</html>

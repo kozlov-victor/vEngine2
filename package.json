@@ -1,0 +1,22 @@
+{
+  "name": "v-engine",
+  "sideEffects": [
+    "/engine/core/misc/polyfills.ts"
+  ],
+  "version": "0.1.0",
+  "devDependencies": {
+    "@types/node": "10.5.7",
+    "awesome-typescript-loader": "5.2.0",
+    "typescript": "3.0.1",
+    "uglify-js": "3.4.6",
+    "url-loader": "^1.1.2",
+    "webpack": "4.16.5",
+    "webpack-build": "1.0.1",
+    "webpack-cli": "3.1.0"
+  },
+  "dependencies": {
+    "webpack-closure-compiler": "^2.1.6"
+  },
+  "scripts": {},
+  "main": ""
+}

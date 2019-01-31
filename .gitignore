@@ -1,0 +1,9 @@
+.idea/**
+*.iml
+.DS_Store
+/Cache/*
+*.bkp
+/node_modules/*
+package-lock.json
+yarn.lock
+assets/generated/**
