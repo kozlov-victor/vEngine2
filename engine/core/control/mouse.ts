@@ -4,12 +4,8 @@ import {Point2d} from "../geometry/point2d";
 import {ObjectPool} from "../misc/objectPool";
 import {Game} from "../game";
 import {Scene} from "../../model/impl/scene";
-import {BaseModel} from "../../model/baseModel";
 import {Rect} from "../geometry/rect";
 import {RenderableModel} from "../../model/renderableModel";
-
-
-
 
 
 export class MousePoint extends Point2d{
@@ -17,8 +13,7 @@ export class MousePoint extends Point2d{
     public screenX:number;
     public screenY:number;
     public id:number;
-    public target:BaseModel;
-    public eventName:string;
+    public target:RenderableModel|Scene;
     public nativeEvent:MouseEventEx;
     public isMouseDown:boolean;
 
@@ -58,7 +53,7 @@ export let MOUSE_EVENTS = {
 
 export class Mouse {
 
-    private objectsCaptured:{[pointId:number]:BaseModel} = {};
+    private objectsCaptured:{[pointId:number]:RenderableModel} = {};
     private container:HTMLElement;
     private readonly game:Game;
 
@@ -67,7 +62,6 @@ export class Mouse {
     }
 
 
-    //MouseEvent|TouchEvent|PointerEvent
     resolvePoint(e:MouseEvent|TouchEvent|Touch|PointerEvent):MousePoint{
         let game:Game = this.game;
         let clientX:number = <number>(e as any).clientX;
@@ -113,26 +107,6 @@ export class Mouse {
     }
 
 
-    private triggerChildren(
-        e:MouseEvent|TouchEvent|Touch,
-        c:RenderableModel[],
-        eventName:string, point:MousePoint, offsetX:number, offsetY:number){
-        for (let i=0;i<c.length;i++){
-            let go:RenderableModel = c[c.length - 1 - i];
-            let isCaptured:boolean = Mouse.triggerGameObjectEvent(e,eventName,point,go,offsetX,offsetY);
-            if (isCaptured) {
-                this.triggerChildren(
-                    e,
-                    go.children,
-                    eventName,
-                    point,
-                    offsetX+go.pos.x,
-                    offsetY+go.pos.y);
-                break;
-            }
-        }
-    }
-
     triggerEvent(e:MouseEvent|TouchEvent|Touch,eventName:string,isMouseDown?:boolean):MousePoint{
         if (isMouseDown===undefined) isMouseDown = false;
         let g:Game = this.game;
@@ -145,21 +119,22 @@ export class Mouse {
         for (let go of scene.getAllGameObjects()) {
             let isCaptured:boolean = Mouse.triggerGameObjectEvent(e,eventName,point,go);
             if (isCaptured) {
-                if (go.children) this.triggerChildren(e,go.children,eventName,point,go.pos.x,go.pos.y);
+                point.target = go;
                 break;
             }
         }
 
-        let untransformedPoint = MousePoint.unTransform(point);
-        for (let j=0;j<scene.uiLayer.children.length;j++){
-            let go = scene.uiLayer.children[scene.uiLayer.children.length - 1 - j];
-            let isCaptured:boolean = Mouse.triggerGameObjectEvent(e,eventName,untransformedPoint,go);
-            if (isCaptured) {
-                if (go.children) this.triggerChildren(e,go.children,eventName,untransformedPoint,go.pos.x,go.pos.y);
-                break;
-            }
-        }
-        if (untransformedPoint.target) point.target = untransformedPoint.target;
+        // todo I will do it later!
+        // let untransformedPoint = MousePoint.unTransform(point);
+        // for (let j=0;j<scene.uiLayer.children.length;j++){
+        //     let go = scene.uiLayer.children[scene.uiLayer.children.length - 1 - j];
+        //     let isCaptured:boolean = Mouse.triggerGameObjectEvent(e,eventName,untransformedPoint,go);
+        //     if (isCaptured) {
+        //         if (go.children) this.triggerChildren(e,go.children,eventName,untransformedPoint,go.pos.x,go.pos.y);
+        //         break;
+        //     }
+        // }
+        // if (untransformedPoint.target) point.target = untransformedPoint.target;
 
         if (point.target===undefined) point.target = scene;
         scene.trigger(eventName,{
@@ -181,7 +156,7 @@ export class Mouse {
     resolveMouseMove(e:Touch|MouseEvent,isMouseDown:boolean){
         let point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,isMouseDown);
         if (!point) return;
-        let lastMouseDownObject:BaseModel = this.objectsCaptured[point.id];
+        let lastMouseDownObject:RenderableModel = this.objectsCaptured[point.id];
         if (lastMouseDownObject && lastMouseDownObject!==point.target) {
             lastMouseDownObject.trigger(MOUSE_EVENTS.mouseLeave,point);
             delete this.objectsCaptured[point.id];
@@ -189,7 +164,7 @@ export class Mouse {
 
         if (point.target && lastMouseDownObject!==point.target) {
             point.target.trigger(MOUSE_EVENTS.mouseEnter,point);
-            this.objectsCaptured[point.id] = point.target;
+            this.objectsCaptured[point.id] = point.target as RenderableModel;
         }
     }
 

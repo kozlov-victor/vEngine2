@@ -4,32 +4,28 @@ import {FrameAnimation} from "./frameAnimation";
 import {SpriteSheet} from "./spriteSheet";
 import {Game} from "../../core/game";
 import {Rect} from "../../core/geometry/rect";
-import {ArrayEx} from "../../declarations";
+import {ArrayEx, Cloneable} from "../../declarations";
 import {ShaderMaterial} from "../../core/light/shaderMaterial";
 import {RigidShape} from "../../core/physics/rigidShapes";
 import {RenderableModel} from "../renderableModel";
-import {BaseAbstractBehaviour} from "../../commonBehaviour/abstract/baseAbstractBehaviour";
+import {BaseAbstractBehaviour} from "../../behaviour/abstract/baseAbstractBehaviour";
 
 
 
-export class GameObject extends RenderableModel {
+export class GameObject extends RenderableModel implements Cloneable<GameObject>{
 
     type:string = 'GameObjectProto';
     spriteSheet:SpriteSheet;
-    commonBehaviour:BaseAbstractBehaviour[] = [];
     currFrameIndex:number = 0;
     frameAnimations:ArrayEx<FrameAnimation> = [] as ArrayEx<FrameAnimation>;
 
     groupNames:string[] = [];
     collideWith:string[] = [];
-    shaderMaterial:ShaderMaterial = new ShaderMaterial(); // todo?????
     rigidBody:RigidShape;
     velocity = new Point2d(0,0);
 
-    _frameRect = new Rect(); // todo make all private
-    _sprPosX:number = 0;
-    _sprPosY:number = 0;
-    _currFrameAnimation:FrameAnimation;
+    private _currFrameAnimation:FrameAnimation;
+    private _behaviours:BaseAbstractBehaviour[] = [];
 
     constructor(game:Game){
         super(game);
@@ -53,6 +49,10 @@ export class GameObject extends RenderableModel {
         }
     }
 
+    clone():GameObject {
+        return this;
+    }
+
     playFrameAnimation(fr:FrameAnimation,opts?):FrameAnimation{
         fr._gameObject = this;
         this._currFrameAnimation = fr;
@@ -73,8 +73,8 @@ export class GameObject extends RenderableModel {
         super.update(time,delta);
         this._currFrameAnimation && this._currFrameAnimation.update(time);
 
-        for (let i=0,max = this.commonBehaviour.length;i<max;i++){
-            if (this.commonBehaviour[i].onUpdate) this.commonBehaviour[i].onUpdate(time,delta);
+        for (let i=0,max = this._behaviours.length;i<max;i++){
+            if (this._behaviours[i].onUpdate) this._behaviours[i].onUpdate(time,delta);
         }
         if (this.rigidBody!==undefined) {
             this.rigidBody.update(time,delta);
@@ -98,6 +98,18 @@ export class GameObject extends RenderableModel {
     draw():boolean{
         this.game.getRenderer().draw(this);
         return true;
+    }
+
+    addBehaviour(b:BaseAbstractBehaviour){
+        this._behaviours.push(b);
+        b.manage(this);
+    }
+
+    kill(){
+        super.kill();
+        for (let b of this._behaviours) {
+            b.destroy();
+        }
     }
 
 

@@ -1,36 +1,29 @@
-import {BaseModel} from '../baseModel'
+
 import {Game} from "../../core/game";
 import {ArrayEx} from "../../declarations";
 import {GameObject} from "./gameObject";
 import {RenderableModel} from "../renderableModel";
 
-export class Layer extends BaseModel {
+export class Layer {
 
     type:string = 'Layer';
     parent:RenderableModel;
     children:ArrayEx<RenderableModel> = [] as ArrayEx<RenderableModel>;
 
-    constructor(game:Game) {
-        super(game);
+    constructor(protected game:Game) {
+
     }
 
-    findObject(query:{[key:string]:any}):BaseModel{
-        for (let c of this.children) {
-            let possibleItem = c.findObject(query);
-            if (possibleItem!==null) return possibleItem;
-        }
-        return null;
-    }
 
-    prependChild(go){
-        go.parent = this;
+    prependChild(go){ // todo set gameobject layer reference
+        go.parent = null;
+        go.revalidate();
         this.children.unshift(go);
-
-        go.onShow();
     }
     appendChild(go){
+        go.parent = null;
+        go.revalidate();
         this.children.push(go);
-        go.onShow();
     }
 
     getAllSpriteSheets() {
@@ -39,12 +32,6 @@ export class Layer extends BaseModel {
             obj.spriteSheet && !dataSet.find(it=>obj.id===it.id) && dataSet.push(obj.spriteSheet);
         });
         return dataSet;
-    }
-
-    onShow(){
-        this.children.forEach((g:GameObject)=>{
-            g.onShow();
-        })
     }
 
 

@@ -1,5 +1,3 @@
-import {inflateRaw} from "zlib";
-
 export const isObjectMatch =(obj:any,query:{[key:string]:any}):boolean=>{
     if (!(obj && query)) return false;
     let match:boolean = true;
@@ -42,4 +40,16 @@ export const isEqual = (a:any,b:any):boolean=>{
     if (isArray(a) && isArray(b)) return isEqualArray(a as any[],b as any[]);
     else if (isObject(a) && isObject(b)) return isEqualObject(a,b);
     return a===b;
+};
+
+export const removeFromArray = (arr:any[],predicate:(item:any)=>boolean):number=> {
+    let i:number = this.length;
+    let cnt:number = 0;
+    while (i--) {
+        if (predicate(arr[i])) {
+            arr.splice(i, 1);
+            cnt++;
+        }
+    }
+    return cnt;
 };

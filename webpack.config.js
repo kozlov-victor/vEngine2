@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
 
-const debug = false;
+const debug = true;
 
 class WebpackDonePlugin{
     apply(compiler){

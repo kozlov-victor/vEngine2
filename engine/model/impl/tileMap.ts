@@ -4,14 +4,13 @@ import {Game} from "../../core/game";
 import {Rect} from "../../core/geometry/rect";
 import {AbstractFilter} from "../../core/renderer/webGl/filters/abstract/abstractFilter";
 import {RigidRectangle,Vec2} from '../../core/physics/rigidShapes';
-import {CommonObject} from "../commonObject";
 import {DebugError} from "../../debugError";
 
 
 
-export class TileMap extends CommonObject  {
+export class TileMap {
 
-    type:string = "TileMap";
+    readonly type:string = "TileMap";
     spriteSheet:SpriteSheet = null;
     data:any[] = [];
     _tilesInScreenX:number;
@@ -22,8 +21,8 @@ export class TileMap extends CommonObject  {
     filters: AbstractFilter[];
     blendMode:string = '';
 
-    constructor(public game:Game){
-        super();
+    constructor(protected game:Game){
+
     }
 
     fromTiledJSON(source:number[],mapWidth:number,mapHeight:number){

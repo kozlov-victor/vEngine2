@@ -4,7 +4,6 @@ import {Game} from "../../core/game";
 import {GameObject} from "../../model/impl/gameObject";
 import {Scene} from "../../model/impl/scene";
 import {MouseEventEx} from "../../declarations";
-import {IKeyVal} from "../../core/misc/object";
 
 interface MouseDragPoint {
     mX: number,
@@ -24,20 +23,20 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
     };
 
     private blurListener:(e:MouseEvent)=>void;
-    private gameObjectOnClick;
-    private sceneOnMouseDown;
-    private sceneOnMouseMove;
-    private sceneOnMouseUp;
+    private gameObjectOnClick:Function;
+    private sceneOnMouseDown:Function;
+    private sceneOnMouseMove:Function;
+    private sceneOnMouseUp:Function;
 
     private points:{number:any};
     private gameObject:GameObject;
 
     constructor(game:Game){
-        super(game);
+        super(game,null);
         this.points = {} as {number:any};
     }
 
-    manage(gameObject:GameObject,params:IKeyVal) {
+    manage(gameObject:GameObject) {
         this.gameObject = gameObject;
         this.gameObjectOnClick = gameObject.on('click',(e)=>{
             this.points[DraggableBehaviour._getEventId(e)] = {
@@ -72,12 +71,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
                 }
             }
             gameObject.pos.x = e.screenX - point.mX;
-            gameObject.pos.y = e.screenY - point.mY; // todo check collision ant then move
-            // this.game._collider.moveTo(
-            //     gameObject,
-            //     e.screenX - point.mX,
-            //     e.screenY - point.mY
-            // );
+            gameObject.pos.y = e.screenY - point.mY;
         });
         this.sceneOnMouseUp = scene.on('mouseUp',e=>{
             let pointId = DraggableBehaviour._getEventId(e);

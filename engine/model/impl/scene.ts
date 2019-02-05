@@ -1,6 +1,5 @@
-import {noop} from "../../core/misc/noop";
-import {BaseModel} from '../baseModel'
-import {TileMap} from './tileMap'
+
+import {TileMap} from "./tileMap";
 import {Layer} from "./layer";
 import {AbstractFilter} from "../../core/renderer/webGl/filters/abstract/abstractFilter";
 import {Game} from "../../core/game";
@@ -9,19 +8,19 @@ import {Color} from "../../core/renderer/color";
 import {SpriteSheet} from "./spriteSheet";
 import {CAMERA_MATRIX_MODE} from "../../core/renderer/camera";
 import {TextField} from "./ui/components/textField";
-import {ParticleSystem} from "./particleSystem";
 import {IKeyVal, isObjectMatch} from "../../core/misc/object";
 import {ResourceLoader} from "../../core/resources/resourceLoader";
-import {ArrayEx} from "../../declarations";
-import {GameObject} from "./gameObject";
+import {ArrayEx, Revalidatable} from "../../declarations";
 import {RenderableModel} from "@engine/model/renderableModel";
+import {TweenMovie} from "@engine/core/tweenMovie";
+import {EventEmitter} from "@engine/core/misc/eventEmitter";
 
 
+export class Scene implements Revalidatable {
 
-
-export class Scene extends BaseModel  {
-
-    type:string = 'Scene';
+    readonly type:string = 'Scene';
+    width:number;  // todo now is 0!!!
+    height:number; // todo now is 0!!!
     layers:ArrayEx<Layer> = [] as ArrayEx<Layer>;
     uiLayer:Layer;
     useBG:boolean = false;
@@ -34,8 +33,9 @@ export class Scene extends BaseModel  {
 
     public readonly resourceLoader: ResourceLoader;
 
-    constructor(game:Game) {
-        super(game);
+    private _tweenMovies:TweenMovie[] = []; // todo lazy?
+
+    constructor(protected game:Game) {
         this.tileMap = new TileMap(game);
         this.ambientLight = new AmbientLight(game);
         this.uiLayer = new Layer(this.game);
@@ -44,14 +44,14 @@ export class Scene extends BaseModel  {
     }
 
     revalidate(){
-        super.revalidate();
+
     }
 
     addTweenMovie(tm){
         this._tweenMovies.push(tm);
     }
     getAllGameObjects(){
-        let res = [];
+        let res = []; // todo optimize
         const ONE = 1;
         for (let i=0;i<this.layers.length;i++) {
             let layer = this.layers[this.layers.length - ONE - i];
@@ -62,30 +62,11 @@ export class Scene extends BaseModel  {
         }
         return res;
     }
-    getAllSpriteSheets() {
-        let dataSet = {};
-        this.layers.forEach((l:Layer)=>{
-            l.getAllSpriteSheets().forEach((s:SpriteSheet)=>{
-                dataSet[s.id] = s;
-            })
-        });
-        if (this.tileMap && this.tileMap.spriteSheet) {
-            dataSet[this.tileMap.spriteSheet.id] = this.tileMap.spriteSheet;
-        }
-        return Object.keys(dataSet).map(key=>dataSet[key]);
-    }
 
     getDefaultLayer(){
         return this.layers[0];
     }
 
-    findObject(query:{[key:string]:any}):BaseModel {
-        for (let l of this.layers) {
-            let possibleResult:BaseModel = l.findObject(query);
-            if (possibleResult!==null) return possibleResult;
-        }
-        return null;
-    }
 
     addLayer(layer:Layer){
         this.layers.push(layer);
@@ -95,20 +76,13 @@ export class Scene extends BaseModel  {
         this.layers.remove(layer);
     }
 
-    appendChild(go:BaseModel){
+    appendChild(go:RenderableModel){
         go.revalidate();
         this.getDefaultLayer().appendChild(go);
     }
 
-    prependChild(go:BaseModel){
+    prependChild(go:RenderableModel){
         this.getDefaultLayer().prependChild(go);
-    }
-
-    findLayer(query:IKeyVal):Layer {
-        for (let l of this.layers) {
-            if (isObjectMatch(l,query)) return l;
-        }
-        return null;
     }
 
 
@@ -129,7 +103,6 @@ export class Scene extends BaseModel  {
     onDestroy(){}
 
     update(currTime:number,deltaTime:number){
-        super.update(currTime,deltaTime);
 
         this.beforeUpdate();
 
@@ -139,9 +112,6 @@ export class Scene extends BaseModel  {
         }
         this.uiLayer.update(currTime,deltaTime);
 
-        // this.game.repository.getArray('ParticleSystem').forEach((ps:ParticleSystem)=>{ // todo
-        //     ps.update(currTime,deltaTime);
-        // });
         this.onUpdate();
 
     }
@@ -207,5 +177,19 @@ export class Scene extends BaseModel  {
         }
 
         renderer.flipFrameBuffer(this.filters);
+    }
+
+    // todo repeated block renderable model
+    protected _emitter:EventEmitter;
+    on(eventName:string|string[],callBack:Function){
+        if (this._emitter===undefined) this._emitter = new EventEmitter();
+        this._emitter.on(eventName,callBack);
+        return callBack;
+    }
+    off(eventName:string,callBack:Function){
+        if (this._emitter!==undefined)this._emitter.off(eventName,callBack);
+    }
+    trigger(eventName:string,data?:any){
+        if (this._emitter!==undefined) this._emitter.trigger(eventName,data);
     }
 }

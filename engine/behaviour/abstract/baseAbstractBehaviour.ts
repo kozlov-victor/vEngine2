@@ -9,14 +9,14 @@ import {IKeyVal} from "../../core/misc/object";
 export class BaseAbstractBehaviour {
 
     protected game:Game;
-    public static instances:Array<BaseAbstractBehaviour> = [];
+    protected parameters:IKeyVal;
 
-    constructor(game:Game){
+    constructor(game:Game,parameters:IKeyVal){
         this.game = game;
-        BaseAbstractBehaviour.instances.push(this);
+        this.parameters = parameters;
     }
 
-    manage(gameObject:GameObject,parameters:IKeyVal){
+    manage(gameObject:GameObject){
         console.error(this);
         if (DEBUG) throw new DebugError(`BaseAbstractBehaviour: method 'manage' not implemented`);
     }
@@ -24,11 +24,5 @@ export class BaseAbstractBehaviour {
     onUpdate(time:number,delta:number){}
 
     destroy(){}
-
-    static destroyAll(){
-        BaseAbstractBehaviour.instances.forEach((it:BaseAbstractBehaviour)=>{
-            it.destroy();
-        });
-    }
 
 }

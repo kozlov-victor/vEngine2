@@ -130,12 +130,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             uniforms[sd.u_rectOffsetTop] = 0;
         }
 
+        this.save();
         this.translate(0,this.game.height);
         this.scale(1,-1);
 
         uniforms[sd.u_vertexMatrix] = makePositionMatrix(
             Rect.fromPool().setXYWH( -offsetX, -offsetY,maxSize,maxSize),
-            Size.fromPool().setWH(this.game.width,this.game.height));
+            Size.fromPool().setWH(this.game.width,this.game.height)
+        );
+        this.restore();
         uniforms[sd.u_lineWidth] = 0;
         uniforms[sd.u_borderRadius] = 0;
         uniforms[sd.u_shapeType] = SHAPE_TYPE.RECT;
@@ -143,6 +146,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         uniforms[sd.u_texRect] = [0,0,1,1];
         uniforms[sd.u_texOffset] = [0,0];
         uniforms[sd.u_alpha] = 1;
+
     }
 
 

@@ -1,10 +1,9 @@
 
 import {Game} from '../../core/game'
 import {GameObject} from './gameObject'
-import {CommonObject} from "../commonObject";
 import {EventEmitter} from "../../core/misc/eventEmitter";
 
-export class FrameAnimation extends CommonObject {
+export class FrameAnimation  {
 
     type:string = 'FrameAnimation';
     name:string;
@@ -12,12 +11,12 @@ export class FrameAnimation extends CommonObject {
     frames = [];
     duration:number = 1000;
     _gameObject:GameObject = null;
-    _startTime:number = null;
-    _timeForOneFrame:number;
+
+    private _startTime:number = null;
+    private _timeForOneFrame:number;
     private _isRepeat:boolean;
 
     constructor(public game:Game) {
-        super();
         this._emitter = new EventEmitter();
         this.stop();
     }
@@ -28,11 +27,11 @@ export class FrameAnimation extends CommonObject {
 
     play(opts = {repeat:true}) {
         this._isRepeat = opts.repeat;
-        this._gameObject._currFrameAnimation = this;
+        this._gameObject.playFrameAnimation(this,opts);
     }
 
     stop() {
-        if (this._gameObject) this._gameObject._currFrameAnimation = null;
+        if (this._gameObject) this._gameObject.stopFrAnimations();
         this._startTime = null;
         this._isRepeat = true;
     }

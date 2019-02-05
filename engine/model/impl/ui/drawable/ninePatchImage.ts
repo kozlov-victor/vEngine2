@@ -111,7 +111,7 @@ export class NinePatchImage extends Image {
 
     draw():boolean{
         for (let i=0;i<9;i++) {
-            this._patches[i].render(true);
+            this._patches[i].render();
         }
         return true;
     }

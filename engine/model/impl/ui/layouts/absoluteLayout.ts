@@ -23,7 +23,7 @@ export class AbsoluteLayout extends Container {
         let maxX = 0, maxY = 0;
         for (let v of this.children) {
             if (v instanceof Container) (v as Container).onGeometryChanged();
-            v._dirty = true;
+            v.setDirty();
             let r:Rect = v.getRect();
             if (r.right>maxX) maxX = r.right;
             if (r.bottom>maxY) maxY = r.bottom;

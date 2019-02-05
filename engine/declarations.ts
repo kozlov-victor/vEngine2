@@ -9,3 +9,11 @@ export interface MouseEventEx extends MouseEvent {
     touches: any[]
 }
 
+export interface Cloneable<T> {
+    clone:()=>T
+}
+
+export interface Revalidatable {
+    revalidate:()=>void
+}
+

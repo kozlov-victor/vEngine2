@@ -47,7 +47,6 @@ export abstract class Container extends RenderableModel {
 
     protected bgByState :{[state:string]:Shape} = {};
     private state     :STATE = STATE.NORMAL;
-    private _screenRect = new Rect();
 
     protected constructor(game:Game){
         super(game);
@@ -97,21 +96,21 @@ export abstract class Container extends RenderableModel {
         this.marginRight = right;
         this.marginBottom = bottom;
         this.marginLeft = left;
-        this._setDirty();
+        this.setDirty();
     }
 
     setMarginsTopBottom(top:number,bottom?:number){
         if (bottom===undefined) bottom = top;
         this.paddingTop = top;
         this.paddingBottom = bottom;
-        this._setDirty();
+        this.setDirty();
     }
 
     setMarginsLeftRight(left:number,right?:number){
         if (right===undefined) right = left;
         this.marginLeft = left;
         this.marginRight = right;
-        this._setDirty();
+        this.setDirty();
     }
 
     setPaddings(top:number);
@@ -126,21 +125,35 @@ export abstract class Container extends RenderableModel {
         this.paddingRight = right;
         this.paddingBottom = bottom;
         this.paddingLeft = left;
-        this._setDirty();
+        this.setDirty();
+    }
+
+    protected calcScreenRect(){
+        this._rect.setXYWH(
+            this.pos.x,this.pos.y,
+            this.width + this.marginLeft + this.marginRight,
+            this.height + this.marginTop + this.marginBottom
+        );
+        this._screenRect.set(this._rect);
+        let parent:RenderableModel = this.parent;
+        while (parent) {
+            this._screenRect.addXY(parent.getRect().x,parent.getRect().y);
+            parent = parent.parent;
+        }
     }
 
     setPaddingsTopBottom(top:number,bottom?:number){
         if (bottom===undefined) bottom = top;
         this.paddingTop = top;
         this.paddingBottom = bottom;
-        this._setDirty();
+        this.setDirty();
     }
 
     setPaddingsLeftRight(left:number,right?:number){
         if (right===undefined) right = left;
         this.paddingLeft = left;
         this.paddingRight = right;
-        this._setDirty();
+        this.setDirty();
     }
 
 
@@ -156,37 +169,12 @@ export abstract class Container extends RenderableModel {
     }
 
     revalidate(){
-        this.calcLayoutRect();
+        this.calcScreenRect();
         super.revalidate();
     }
 
     onGeometryChanged(){
         this.revalidate();
-    }
-
-    getRect():Rect{
-        if (this._dirty) {
-             this.calcLayoutRect();
-        }
-        return this._rect;
-    }
-
-    getScreenRect():Rect{
-        return this._screenRect;
-    }
-
-    private calcLayoutRect(){
-        this._rect.setXYWH(
-            this.pos.x,this.pos.y,
-            this.width + this.marginLeft + this.marginRight,
-            this.height + this.marginTop + this.marginBottom
-        );
-        this._screenRect.set(this._rect);
-        let parent:RenderableModel = this.parent;
-        while (parent) {
-            this._screenRect.addXY(parent.getRect().x,parent.getRect().y);
-            parent = parent.parent;
-        }
     }
 
     protected getBgByState():Shape {
@@ -212,7 +200,7 @@ export abstract class Container extends RenderableModel {
             this.width = paddedWidth;
             this.height = paddedHeight;
         }
-        this.calcLayoutRect();
+        this.calcScreenRect();
 
     }
 

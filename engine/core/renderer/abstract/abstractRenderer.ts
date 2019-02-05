@@ -132,7 +132,6 @@ export class AbstractRenderer {
         let textField = this.debugTextField;
         if (!textField) {
             textField = new TextField(this.game);
-            textField.name = 'defaultName';
             textField.revalidate();
             this.debugTextField = textField;
         }

@@ -95,8 +95,8 @@ export class Font extends Resource {
     fontContext:FontContext=null;
     fontColor:Color = Color.BLACK.clone();
 
-    constructor(game:Game){
-        super(game);
+    constructor(protected game:Game){
+        super();
     }
 
     asCss():string{

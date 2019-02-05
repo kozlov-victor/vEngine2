@@ -1,4 +1,114 @@
-!function(t){var e={};function r(i){if(e[i])return e[i].exports;var n=e[i]={i:i,l:!1,exports:{}};return t[i].call(n.exports,n,n.exports,r),n.l=!0,n.exports}r.m=t,r.c=e,r.d=function(t,e,i){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:i})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var i=Object.create(null);if(r.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)r.d(i,n,function(e){return t[e]}.bind(null,n));return i},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="",r(r.s=106)}([function(t,e,r){"use strict";r.r(e),r.d(e,"__extends",function(){return n}),r.d(e,"__assign",function(){return o}),r.d(e,"__rest",function(){return s}),r.d(e,"__decorate",function(){return a}),r.d(e,"__param",function(){return u}),r.d(e,"__metadata",function(){return h}),r.d(e,"__awaiter",function(){return c}),r.d(e,"__generator",function(){return l}),r.d(e,"__exportStar",function(){return f}),r.d(e,"__values",function(){return d}),r.d(e,"__read",function(){return p}),r.d(e,"__spread",function(){return m}),r.d(e,"__await",function(){return g}),r.d(e,"__asyncGenerator",function(){return _}),r.d(e,"__asyncDelegator",function(){return y}),r.d(e,"__asyncValues",function(){return v}),r.d(e,"__makeTemplateObject",function(){return E}),r.d(e,"__importStar",function(){return w}),r.d(e,"__importDefault",function(){return x});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 107);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__extends", function() { return __extends; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__assign", function() { return __assign; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__rest", function() { return __rest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__decorate", function() { return __decorate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__param", function() { return __param; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__metadata", function() { return __metadata; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__awaiter", function() { return __awaiter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__generator", function() { return __generator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__exportStar", function() { return __exportStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__values", function() { return __values; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__read", function() { return __read; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spread", function() { return __spread; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__await", function() { return __await; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncGenerator", function() { return __asyncGenerator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncDelegator", function() { return __asyncDelegator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncValues", function() { return __asyncValues; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__makeTemplateObject", function() { return __makeTemplateObject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importStar", function() { return __importStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importDefault", function() { return __importDefault; });
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -13,4 +123,7936 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
-var i=function(t,e){return(i=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var r in e)e.hasOwnProperty(r)&&(t[r]=e[r])})(t,e)};function n(t,e){function r(){this.constructor=t}i(t,e),t.prototype=null===e?Object.create(e):(r.prototype=e.prototype,new r)}var o=function(){return(o=Object.assign||function(t){for(var e,r=1,i=arguments.length;r<i;r++)for(var n in e=arguments[r])Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n]);return t}).apply(this,arguments)};function s(t,e){var r={};for(var i in t)Object.prototype.hasOwnProperty.call(t,i)&&e.indexOf(i)<0&&(r[i]=t[i]);if(null!=t&&"function"==typeof Object.getOwnPropertySymbols){var n=0;for(i=Object.getOwnPropertySymbols(t);n<i.length;n++)e.indexOf(i[n])<0&&(r[i[n]]=t[i[n]])}return r}function a(t,e,r,i){var n,o=arguments.length,s=o<3?e:null===i?i=Object.getOwnPropertyDescriptor(e,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(t,e,r,i);else for(var a=t.length-1;a>=0;a--)(n=t[a])&&(s=(o<3?n(s):o>3?n(e,r,s):n(e,r))||s);return o>3&&s&&Object.defineProperty(e,r,s),s}function u(t,e){return function(r,i){e(r,i,t)}}function h(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}function c(t,e,r,i){return new(r||(r=Promise))(function(n,o){function s(t){try{u(i.next(t))}catch(t){o(t)}}function a(t){try{u(i.throw(t))}catch(t){o(t)}}function u(t){t.done?n(t.value):new r(function(e){e(t.value)}).then(s,a)}u((i=i.apply(t,e||[])).next())})}function l(t,e){var r,i,n,o,s={label:0,sent:function(){if(1&n[0])throw n[1];return n[1]},trys:[],ops:[]};return o={next:a(0),throw:a(1),return:a(2)},"function"==typeof Symbol&&(o[Symbol.iterator]=function(){return this}),o;function a(o){return function(a){return function(o){if(r)throw new TypeError("Generator is already executing.");for(;s;)try{if(r=1,i&&(n=2&o[0]?i.return:o[0]?i.throw||((n=i.return)&&n.call(i),0):i.next)&&!(n=n.call(i,o[1])).done)return n;switch(i=0,n&&(o=[2&o[0],n.value]),o[0]){case 0:case 1:n=o;break;case 4:return s.label++,{value:o[1],done:!1};case 5:s.label++,i=o[1],o=[0];continue;case 7:o=s.ops.pop(),s.trys.pop();continue;default:if(!(n=(n=s.trys).length>0&&n[n.length-1])&&(6===o[0]||2===o[0])){s=0;continue}if(3===o[0]&&(!n||o[1]>n[0]&&o[1]<n[3])){s.label=o[1];break}if(6===o[0]&&s.label<n[1]){s.label=n[1],n=o;break}if(n&&s.label<n[2]){s.label=n[2],s.ops.push(o);break}n[2]&&s.ops.pop(),s.trys.pop();continue}o=e.call(t,s)}catch(t){o=[6,t],i=0}finally{r=n=0}if(5&o[0])throw o[1];return{value:o[0]?o[1]:void 0,done:!0}}([o,a])}}}function f(t,e){for(var r in t)e.hasOwnProperty(r)||(e[r]=t[r])}function d(t){var e="function"==typeof Symbol&&t[Symbol.iterator],r=0;return e?e.call(t):{next:function(){return t&&r>=t.length&&(t=void 0),{value:t&&t[r++],done:!t}}}}function p(t,e){var r="function"==typeof Symbol&&t[Symbol.iterator];if(!r)return t;var i,n,o=r.call(t),s=[];try{for(;(void 0===e||e-- >0)&&!(i=o.next()).done;)s.push(i.value)}catch(t){n={error:t}}finally{try{i&&!i.done&&(r=o.return)&&r.call(o)}finally{if(n)throw n.error}}return s}function m(){for(var t=[],e=0;e<arguments.length;e++)t=t.concat(p(arguments[e]));return t}function g(t){return this instanceof g?(this.v=t,this):new g(t)}function _(t,e,r){if(!Symbol.asyncIterator)throw new TypeError("Symbol.asyncIterator is not defined.");var i,n=r.apply(t,e||[]),o=[];return i={},s("next"),s("throw"),s("return"),i[Symbol.asyncIterator]=function(){return this},i;function s(t){n[t]&&(i[t]=function(e){return new Promise(function(r,i){o.push([t,e,r,i])>1||a(t,e)})})}function a(t,e){try{!function(t){t.value instanceof g?Promise.resolve(t.value.v).then(u,h):c(o[0][2],t)}(n[t](e))}catch(t){c(o[0][3],t)}}function u(t){a("next",t)}function h(t){a("throw",t)}function c(t,e){t(e),o.shift(),o.length&&a(o[0][0],o[0][1])}}function y(t){var e,r;return e={},i("next"),i("throw",function(t){throw t}),i("return"),e[Symbol.iterator]=function(){return this},e;function i(i,n){e[i]=t[i]?function(e){return(r=!r)?{value:g(t[i](e)),done:"return"===i}:n?n(e):e}:n}}function v(t){if(!Symbol.asyncIterator)throw new TypeError("Symbol.asyncIterator is not defined.");var e,r=t[Symbol.asyncIterator];return r?r.call(t):(t=d(t),e={},i("next"),i("throw"),i("return"),e[Symbol.asyncIterator]=function(){return this},e);function i(r){e[r]=t[r]&&function(e){return new Promise(function(i,n){(function(t,e,r,i){Promise.resolve(i).then(function(e){t({value:e,done:r})},e)})(i,n,(e=t[r](e)).done,e.value)})}}}function E(t,e){return Object.defineProperty?Object.defineProperty(t,"raw",{value:e}):t.raw=e,t}function w(t){if(t&&t.__esModule)return t;var e={};if(null!=t)for(var r in t)Object.hasOwnProperty.call(t,r)&&(e[r]=t[r]);return e.default=t,e}function x(t){return t&&t.__esModule?t:{default:t}}},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=function(t){function e(e){var r=t.call(this,e)||this;return Error.captureStackTrace?Error.captureStackTrace(r,r.constructor):r.stack=(new Error).stack,r.name="DebugError",r.errorMessage=e,r}return i.__extends(e,t),e.prototype.toString=function(){return this.errorMessage},e}(Error);e.DebugError=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(14),o=r(4),s=r(8),a=function(t){function e(e,r,i,n,o){void 0===e&&(e=0),void 0===r&&(r=0),void 0===i&&(i=0),void 0===n&&(n=0);var s=t.call(this)||this;return o&&s.addListener(o),s.setXYWH(e,r,i,n),s}return i.__extends(e,t),e.prototype.checkObservableChanged=function(){return this._state.setState(this.x,this.y,this.width,this.height)},e.prototype.observe=function(t){this.addListener(t)},e.prototype.revalidate=function(){this.right=this.x+this.width,this.bottom=this.y+this.height,this.triggerObservable()},e.prototype.setXYWH=function(t,e,r,i){return this.x=t,this.y=e,this.width=r,this.height=i,this.revalidate(),this},e.prototype.setXY=function(t,e){return this.x=t,this.y=e,this.revalidate(),this},e.prototype.setWH=function(t,e){return this.width=t,this.height=e,this.revalidate(),this},e.prototype.set=function(t){return this.setXYWH(t.x,t.y,t.width,t.height),this},e.prototype.setSize=function(t){return this.width=t.width,this.height=t.height,this.revalidate(),this},e.prototype.setPoint=function(t){return t.setXY(t.x,t.y),this},e.prototype.addXY=function(t,e){return this.x+=t,this.y+=e,this.revalidate(),this},e.prototype.addPoint=function(t){return this.addXY(t.x,t.y),this},e.prototype.getPoint=function(){var t=this;return void 0===this.p&&(this.p=new o.Point2d(0,0)),this.p.setXY(this.x,this.y),this.p.addListener(function(){return t.setXY(t.p.x,t.p.y)}),this.p},e.prototype.getSize=function(){return void 0===this.size&&(this.size=new n.Size),this.size.setWH(this.width,this.height),this.size},e.prototype.asArray=function(){return[this.x,this.y,this.width,this.height]},e.prototype.clone=function(){return new e(this.x,this.y,this.width,this.height)},e.prototype.toJSON=function(){return{x:this.x,y:this.y,width:this.width,height:this.height}},e.prototype.fromJSON=function(t){this.setXYWH(t.x,t.y,t.width,t.height)},e.fromPool=function(){return e.rectPool.getNextObject()},e.rectPool=new s.ObjectPool(e),e}(r(28).ObservableEntity);e.Rect=a},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(8),n=function(){function t(t,e,r,i){this._arr=null,this.type="Color",this.setRGBA(t,e,r,i)}return t.prototype.normalizeToZeroOne=function(){this.rNorm=this.r/255,this.gNorm=this.g/255,this.bNorm=this.b/255,this.aNorm=this.a/255},t.prototype.setRGBA=function(t,e,r,i){void 0===i&&(i=255),this.r=t,this.g=e,this.b=r,this.a=i,this.normalizeToZeroOne()},t.prototype.setRGB=function(t,e,r){this.r=t,this.g=e,this.b=r,this.a=255,this.normalizeToZeroOne()},t.prototype.setR=function(t){this.r=t,this.normalizeToZeroOne()},t.prototype.setG=function(t){this.g=t,this.normalizeToZeroOne()},t.prototype.setB=function(t){this.b=t,this.normalizeToZeroOne()},t.prototype.setA=function(t){this.a=t,this.normalizeToZeroOne()},t.prototype.set=function(t){this.setRGBA(t.r,t.g,t.b,t.a)},t.prototype.clone=function(){return new t(this.r,this.g,this.b,this.a)},t.getFromPool=function(){return void 0===t.objectPool&&(t.objectPool=new i.ObjectPool(t)),t.objectPool.getNextObject()},t.RGB=function(e,r,i,n){var o=new t(0,0,0);return o.setRGBA(e,r,i,n),o},t.prototype.asGL=function(){return null===this._arr&&(this._arr=new Array(3)),this._arr[0]=this.rNorm,this._arr[1]=this.gNorm,this._arr[2]=this.bNorm,this._arr[3]=this.aNorm,this._arr},t.prototype.asCSS=function(){return"rgba("+this.r+","+this.g+","+this.b+","+this.a+")"},t.prototype.toJSON=function(){return{r:this.r,g:this.g,b:this.b,a:this.a}},t.prototype.fromJSON=function(t){this.setRGBA(t.r,t.g,t.b,t.a)},t.WHITE=t.RGB(255,255,255),t.GREY=t.RGB(127,127,127),t.BLACK=t.RGB(0,0,0),t.NONE=t.RGB(0,0,0,0),t}();e.Color=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(8),o=function(t){function e(e,r,i){void 0===e&&(e=0),void 0===r&&(r=0);var n=t.call(this)||this;return n._x=0,n._y=0,n._x=e,n._y=r,i&&n.addListener(i),n}return i.__extends(e,t),e.fromPool=function(){return e.pool.getNextObject()},Object.defineProperty(e.prototype,"x",{get:function(){return this._x},set:function(t){this.setX(t)},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"y",{get:function(){return this._y},set:function(t){this.setY(t)},enumerable:!0,configurable:!0}),e.prototype.checkObservableChanged=function(){return this._state.setState(this._x,this._y)},e.prototype.observe=function(t){this.addListener(t)},e.prototype.setXY=function(t,e){return void 0===e&&(e=t),this._x=t,this._y=e,this.triggerObservable(),this},e.prototype.setX=function(t){return this._x=t,this.triggerObservable(),this},e.prototype.setY=function(t){return this._y=t,this.triggerObservable(),this},e.prototype.set=function(t){return this.setXY(t._x,t._y),this.triggerObservable(),this},e.prototype.add=function(t){return this.addXY(t._x,t._y),this.triggerObservable(),this},e.prototype.substract=function(t){return this.addXY(-t._x,-t._y),this.triggerObservable(),this},e.prototype.multiply=function(t){return this._x*=t,this._y*=t,this.triggerObservable(),this},e.prototype.addXY=function(t,e){return this._x+=t,this._y+=e,this.triggerObservable(),this},e.prototype.addX=function(t){return this._x+=t,this.triggerObservable(),this},e.prototype.addY=function(t){return this._y+=t,this.triggerObservable(),this},e.prototype.negative=function(){return this._x=-this._x,this._y=-this._y,this.triggerObservable(),this},e.prototype.equal=function(t){return this._x===t&&this._y===t},e.prototype.equalXY=function(t,e){return this._x===t&&this._y===e},e.prototype.equalPoint=function(t){return this._x===t._x&&this._y===t._y},e.prototype.clone=function(){return new e(this._x,this._y)},e.prototype.fromJSON=function(t){this.setXY(t.x,t.y)},e.prototype.toJSON=function(){return{x:this._x,y:this._y}},e.prototype.toArray=function(){return this._arr||(this._arr=new Array(2)),this._arr[0]=this._x,this._arr[1]=this._y,this._arr},e.pool=new n.ObjectPool(e,4),e}(r(28).ObservableEntity);e.Point2d=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1);e.compileShader=function(t,e,r){if(!e)throw new i.DebugError("can not compile shader: shader source not specified for type "+r);var n=t.createShader(r);if(!n)throw new i.DebugError("can not allocate memory for shader: gl.createShader(shaderType)");if(t.shaderSource(n,e),t.compileShader(n),!t.getShaderParameter(n,t.COMPILE_STATUS)){var o=t.getShaderInfoLog(n);t.deleteShader(n);var s=function(t){for(var e,r=[];e=t.match(/ERROR\:([^\n]+)/);){t=t.slice(e.index+1);var i=e[1].trim().split(":"),n=i.slice(2).join(":").trim(),o=parseInt(i[1],10);r.push({message:n,lineNum:o})}return r}(o),a=e.split("\n"),u="";throw s.forEach(function(t){var e=t.lineNum-1;-1==a[e].indexOf("-----\x3e")&&(a[e]="-----\x3e "+a[e]),u+=a[e]+" <----"+t.message+"\n"}),console.log(a.join("\n")),new i.DebugError("Error compiling shader: "+(u||o))}return n},e.createProgram=function(t,e,r){var n=t.createProgram();if(!n)throw new i.DebugError("can not allocate memory for gl.createProgram()");if(t.attachShader(n,e),t.attachShader(n,r),t.linkProgram(n),!t.getProgramParameter(n,t.LINK_STATUS)){t.deleteProgram(n);var o=t.getProgramInfoLog(n),s=t.getProgramParameter(n,t.VALIDATE_STATUS);throw console.error("VALIDATE_STATUS",s),new i.DebugError("Error in program linking "+o)}return n};var n=null;e.GL_TYPE={FLOAT:"float",FLOAT_VEC2:"vec2",FLOAT_VEC3:"vec3",FLOAT_VEC4:"vec4",INT:"int",INT_VEC2:"ivec2",INT_VEC3:"ivec3",INT_VEC4:"ivec4",BOOL:"bool",BOOL_VEC2:"bvec2",BOOL_VEC3:"bvec3",BOOL_VEC4:"bvec4",FLOAT_MAT2:"mat2",FLOAT_MAT3:"mat3",FLOAT_MAT4:"mat4",SAMPLER_2D:"sampler2D"};var o=function(t,r){if(!n){var i=Object.keys(e.GL_TYPE);n={};for(var o=0;o<i.length;++o){var s=i[o];n[t[s]]=e.GL_TYPE[s]}}return n[r]};e.normalizeUniformName=function(t){return t.indexOf("[")>-1?t.split("[")[0]:t},e.extractUniforms=function(t,r){for(var n=r.getProgram(),s=t.getProgramParameter(n,t.ACTIVE_UNIFORMS),a={},u=0;u<s;u++){var h=t.getActiveUniform(n,u);if(!h)throw new i.DebugError("can not receive active uniforms info: gl.getActiveUniform()");var c=o(t,h.type),f=e.normalizeUniformName(h.name),d=t.getUniformLocation(n,f);a[f]={type:c,size:h.size,location:d,setter:l(h.size,c)}}return a},e.extractAttributes=function(t,e){for(var r=e.getProgram(),n=t.getProgramParameter(r,t.ACTIVE_ATTRIBUTES),o={},s=0;s<n;s++){var a=t.getActiveAttrib(r,s);if(!a)throw new i.DebugError("can not receive active attribute info: gl.getActiveAttrib()");var u=t.getAttribLocation(r,a.name);if(u<0)throw console.log(e),new i.DebugError("error finding attribute location: "+a.name);o[a.name]=u}return o};var s={check:function(t){if(isNaN(parseFloat(t))||!isFinite(t))throw new i.DebugError("can not set uniform with value "+t+": expected argument of type number")}},a={check:function(t){if(s.check(t),t!==~~t)throw new i.DebugError("can not set uniform with value "+t+": expected argument of integer type, but "+t+" found")}},u={check:function(t){if(1!=t&&0!=t)throw new i.DebugError("can not set uniform with value "+t+": expected argument of boolean type, but "+t+" found")}},h=function(t,e){return{check:function(r){if(!r)throw new i.DebugError("can not set uniform  value: "+r);if(!r.splice)throw console.error("Can not set uniform value",r),new i.DebugError("can not set uniform with value ["+r+"]: expected argument of type Array");if(void 0!==e&&r.length!==e)throw new i.DebugError("can not set uniform with value ["+r+"]: expected array with size "+e+", but "+r.length+" found");for(var n=0;n<r.length;n++)try{t.check(r[n])}catch(t){throw console.error("Can not set uniform array item",r),new i.DebugError("can not set uniform array item with value ["+r+"]: unexpected array element type: "+r[n])}}}},c=function(t,e){e.check(t)},l=function(t,r){if(1===t)switch(r){case e.GL_TYPE.FLOAT:return function(t,e,r){c(r,s),t.uniform1f(e,r)};case e.GL_TYPE.FLOAT_VEC2:return function(t,e,r){c(r,h(s,2)),t.uniform2f(e,r[0],r[1])};case e.GL_TYPE.FLOAT_VEC3:return function(t,e,r){c(r,h(s,3)),t.uniform3f(e,r[0],r[1],r[2])};case e.GL_TYPE.FLOAT_VEC4:return function(t,e,r){c(r,h(s,4)),t.uniform4f(e,r[0],r[1],r[2],r[3])};case e.GL_TYPE.INT:return function(t,e,r){c(r,a),t.uniform1i(e,r)};case e.GL_TYPE.INT_VEC2:return function(t,e,r){c(r,h(a,2)),t.uniform2i(e,r[0],r[1])};case e.GL_TYPE.INT_VEC3:return function(t,e,r){c(r,h(a,3)),t.uniform3i(e,r[0],r[1],r[2])};case e.GL_TYPE.INT_VEC4:return function(t,e,r){c(r,h(a,4)),t.uniform4i(e,r[0],r[1],r[2],r[3])};case e.GL_TYPE.BOOL:return function(t,e,r){c(r,u),t.uniform1i(e,r)};case e.GL_TYPE.BOOL_VEC2:return function(t,e,r){c(r,h(u,2)),t.uniform2i(e,r[0],r[1])};case e.GL_TYPE.BOOL_VEC3:return function(t,e,r){c(r,h(u,3)),t.uniform3i(e,r[0],r[1],r[2])};case e.GL_TYPE.BOOL_VEC4:return function(t,e,r){c(r,h(u,4)),t.uniform4i(e,r[0],r[1],r[2],r[3])};case e.GL_TYPE.FLOAT_MAT2:return function(t,e,r){c(r,h(s,4)),t.uniformMatrix2fv(e,!1,r)};case e.GL_TYPE.FLOAT_MAT3:return function(t,e,r){c(r,h(s,9)),t.uniformMatrix3fv(e,!1,r)};case e.GL_TYPE.FLOAT_MAT4:return function(t,e,r){c(r,h(s,16)),t.uniformMatrix4fv(e,!1,r)};case e.GL_TYPE.SAMPLER_2D:return function(t,e,r){c(r,a),t.uniform1i(e,r)};default:throw new i.DebugError("can not set uniform for type "+r+" and size "+t)}else switch(r){case e.GL_TYPE.FLOAT:return function(e,r,i){c(i,h(s,t)),e.uniform1fv(r,i)};case e.GL_TYPE.FLOAT_VEC2:return function(e,r,i){c(i,h(s,2*t)),e.uniform2fv(r,i)};case e.GL_TYPE.FLOAT_VEC3:return function(e,r,i){c(i,h(s,3*t)),e.uniform3fv(r,i)};case e.GL_TYPE.FLOAT_VEC4:return function(e,r,i){c(i,h(s,4*t)),e.uniform4fv(r,i)};case e.GL_TYPE.INT:return function(t,e,r){c(r,a),t.uniform1iv(e,r)};case e.GL_TYPE.INT_VEC2:return function(e,r,i){c(i,h(a,2*t)),e.uniform2iv(r,i)};case e.GL_TYPE.INT_VEC3:return function(e,r,i){c(i,h(a,3*t)),e.uniform3iv(r,i)};case e.GL_TYPE.INT_VEC4:return function(e,r,i){c(i,h(a,4*t)),e.uniform4iv(r,i)};case e.GL_TYPE.BOOL:return function(t,e,r){c(r,u),t.uniform1iv(e,r)};case e.GL_TYPE.BOOL_VEC2:return function(e,r,i){c(i,h(u,2*t)),e.uniform2iv(r,i)};case e.GL_TYPE.BOOL_VEC3:return function(e,r,i){c(i,h(u,3*t)),e.uniform3iv(r,i)};case e.GL_TYPE.BOOL_VEC4:return function(e,r,i){c(i,h(u,4*t)),e.uniform4iv(r,i)};case e.GL_TYPE.SAMPLER_2D:return function(t,e,r){c(r,a),t.uniform1iv(e,r)};default:throw new i.DebugError("can not set uniform for type "+r+" and size "+t)}}},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i,n,o,s=r(0),a=r(2),u=r(22),h=r(25),c=r(1);!function(t){t[t.HIDDEN=0]="HIDDEN",t[t.VISIBLE=1]="VISIBLE"}(i=e.OVERFLOW||(e.OVERFLOW={})),function(t){t.FIXED="FIXED",t.WRAP_CONTENT="WRAP_CONTENT",t.MATCH_PARENT="MATCH_PARENT"}(n=e.LAYOUT_SIZE||(e.LAYOUT_SIZE={})),function(t){t.NORMAL="NORMAL",t.ACTIVE="ACTIVE",t.DISABLED="DISABLED"}(o=e.STATE||(e.STATE={}));var l=function(t){function e(e){var r=t.call(this,e)||this;return r.marginLeft=0,r.marginTop=0,r.marginRight=0,r.marginBottom=0,r.paddingLeft=0,r.paddingTop=0,r.paddingRight=0,r.paddingBottom=0,r.layoutWidth=n.WRAP_CONTENT,r.layoutHeight=n.WRAP_CONTENT,r.overflow=i.HIDDEN,r.background=void 0,r.drawingRect=new a.Rect,r.maxWidth=0,r.maxHeight=0,r.bgByState={},r.state=o.NORMAL,r._screenRect=new a.Rect,r.on(u.MOUSE_EVENTS.mouseDown,function(){r.state=o.ACTIVE}),r.on(u.MOUSE_EVENTS.mouseUp,function(){r.state=o.NORMAL}),r.on(u.MOUSE_EVENTS.mouseLeave,function(){r.state=o.NORMAL}),r}return s.__extends(e,t),e.prototype.testLayout=function(){if(this.layoutWidth===n.FIXED&&0===this.width)throw new c.DebugError("layoutWidth is LAYOUT_SIZE.FIXED so width must be specified");if(this.layoutHeight===n.FIXED&&0===this.height)throw new c.DebugError("layoutHeight is LAYOUT_SIZE.FIXED so height must be specified")},e.normalizeBorders=function(t,e,r,i){return void 0===e&&void 0===r&&void 0===i?e=r=i=t:void 0===r&&void 0===i?(r=t,i=e):void 0===i&&(i=e),{top:t,right:e,bottom:r,left:i}},e.prototype.setMargins=function(t,r,i,n){var o;t=(o=e.normalizeBorders(t,r,i,n)).top,r=o.right,i=o.bottom,n=o.left,this.marginTop=t,this.marginRight=r,this.marginBottom=i,this.marginLeft=n,this._setDirty()},e.prototype.setMarginsTopBottom=function(t,e){void 0===e&&(e=t),this.paddingTop=t,this.paddingBottom=e,this._setDirty()},e.prototype.setMarginsLeftRight=function(t,e){void 0===e&&(e=t),this.marginLeft=t,this.marginRight=e,this._setDirty()},e.prototype.setPaddings=function(t,r,i,n){var o;t=(o=e.normalizeBorders(t,r,i,n)).top,r=o.right,i=o.bottom,n=o.left,this.paddingTop=t,this.paddingRight=r,this.paddingBottom=i,this.paddingLeft=n,this._setDirty()},e.prototype.setPaddingsTopBottom=function(t,e){void 0===e&&(e=t),this.paddingTop=t,this.paddingBottom=e,this._setDirty()},e.prototype.setPaddingsLeftRight=function(t,e){void 0===e&&(e=t),this.paddingLeft=t,this.paddingRight=e,this._setDirty()},e.prototype.describeStates=function(t){var e=this,i=r(33);Object.keys(t).forEach(function(r){var n=o[r],s=new(0,i[t[r].type])(e.game);s.fromJSON(t[r]),e.bgByState[n]=s})},e.prototype.revalidate=function(){this.calcLayoutRect(),t.prototype.revalidate.call(this)},e.prototype.onGeometryChanged=function(){this.revalidate()},e.prototype.getRect=function(){return this._dirty&&this.calcLayoutRect(),this._rect},e.prototype.getScreenRect=function(){return this._screenRect},e.prototype.calcLayoutRect=function(){this._rect.setXYWH(this.pos.x,this.pos.y,this.width+this.marginLeft+this.marginRight,this.height+this.marginTop+this.marginBottom),this._screenRect.set(this._rect);for(var t=this.parent;t;)this._screenRect.addXY(t.getRect().x,t.getRect().y),t=t.parent},e.prototype.getBgByState=function(){var t=this.bgByState[this.state];return t||(t=this.background),t},e.prototype.setWH=function(t,e){this.width=t,this.height=e,this.drawingRect.setWH(t,e)},e.prototype.calcDrawableRect=function(t,e){var r=t+this.paddingLeft+this.paddingRight,i=e+this.paddingTop+this.paddingBottom;this.background?(this.background.setWH(r,i),this.width=this.background.width,this.height=this.background.height):(this.width=r,this.height=i),this.calcLayoutRect()},e.prototype.update=function(e,r){this.background=this.getBgByState(),this._dirty&&(this.onGeometryChanged(),this._dirty=!1),t.prototype.update.call(this,e,r)},e.prototype.beforeRender=function(){this.game.getRenderer().translate(this.pos.x+this.marginLeft,this.pos.y+this.marginTop)},e}(h.RenderableModel);e.Container=l},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=r(5),o=function(){function t(t,e,r){var i=n.compileShader(t,e,t.VERTEX_SHADER),o=n.compileShader(t,r,t.FRAGMENT_SHADER);this.program=n.createProgram(t,i,o),t.deleteShader(i),t.deleteShader(o),this.uniforms=n.extractUniforms(t,this),this.attributes=n.extractAttributes(t,this),this.gl=t}return t.prototype.getProgram=function(){return this.program},t.prototype.bind=function(){this.gl.useProgram(this.program),t.currentProgram=this},t.prototype.setUniform=function(e,r){if(!e)throw new i.DebugError("no uniform name was provided!");var n=this.uniforms[e];if(n){if(t.currentProgram!==this)throw console.error(this),new i.DebugError("can not set uniform: target program is inactive");n.setter(this.gl,n.location,r)}},t.prototype.bindBuffer=function(t,e){if(!e)throw new i.DebugError("can not found attribute location: attrLocationName not defined");if(void 0===this.attributes[e])throw console.log(this),new i.DebugError("can not found attribute location for  "+e);this.gl.bindBuffer(this.gl.ARRAY_BUFFER,t.getGlBuffer());var r=this.attributes[e];this.gl.enableVertexAttribArray(r),this.gl.vertexAttribPointer(r,t.getItemSize(),t.getItemType(),!1,0,0)},t.prototype.destroy=function(){this.gl.deleteProgram(this.program)},t.currentProgram=null,t}();e.ShaderProgram=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=function(){function t(t,e,r){if(void 0===e&&(e=16),void 0===r&&(r=!0),this.Class=t,this._pool=[],this._cnt=0,this._numberOfInstances=e,!t)throw new i.DebugError("can not instantiate ObjectPool: class not provided in constructor");if(!r)for(var n=0;n<e;n++)this._pool.push(new t)}return t.prototype.getNextObject=function(){var t=this._cnt++%this._numberOfInstances;return void 0===this._pool[t]&&(this._pool[t]=new this.Class),this._pool[t]},t}();e.ObjectPool=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1);e.makeIdentity=function(){return[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]},e.makeZToWMatrix=function(t){return[1,0,0,0,0,1,0,0,0,0,1,t,0,0,0,1]},e.make2DProjection=function(t,e,r){return[2/t,0,0,0,0,-2/e,0,0,0,0,2/r,0,-1,1,0,1]},e.ortho=function(t,e,r,i,n,o){var s=1/(t-e),a=1/(r-i),u=1/(n-o),h=new Array(16);return h[0]=-2*s,h[1]=0,h[2]=0,h[3]=0,h[4]=0,h[5]=-2*a,h[6]=0,h[7]=0,h[8]=0,h[9]=0,h[10]=2*u,h[11]=0,h[12]=(t+e)*s,h[13]=(i+r)*a,h[14]=(o+n)*u,h[15]=1,h},e.perspective=function(t,e,r,i){var n=1/Math.tan(t/2),o=1/(r-i),s=new Array(16);return s[0]=n/e,s[1]=0,s[2]=0,s[3]=0,s[4]=0,s[5]=n,s[6]=0,s[7]=0,s[8]=0,s[9]=0,s[10]=(i+r)*o,s[11]=-1,s[12]=0,s[13]=0,s[14]=2*i*r*o,s[15]=0,s},e.makeTranslation=function(t,e,r){return[1,0,0,0,0,1,0,0,0,0,1,0,t,e,r,1]},e.makeXRotation=function(t){var e=Math.cos(t),r=Math.sin(t);return[1,0,0,0,0,e,r,0,0,-r,e,0,0,0,0,1]},e.makeYRotation=function(t){var e=Math.cos(t),r=Math.sin(t);return[e,0,-r,0,0,1,0,0,r,0,e,0,0,0,0,1]},e.makeZRotation=function(t){var e=Math.cos(t),r=Math.sin(t);return[e,r,0,0,-r,e,0,0,0,0,1,0,0,0,0,1]},e.makeScale=function(t,e,r){return[t,0,0,0,0,e,0,0,0,0,r,0,0,0,0,1]},e.matrixMultiply=function(t,e){var r=new Array(16);return r[0]=t[0]*e[0]+t[1]*e[4]+t[2]*e[8]+t[3]*e[12],r[1]=t[0]*e[1]+t[1]*e[5]+t[2]*e[9]+t[3]*e[13],r[2]=t[0]*e[2]+t[1]*e[6]+t[2]*e[10]+t[3]*e[14],r[3]=t[0]*e[3]+t[1]*e[7]+t[2]*e[11]+t[3]*e[15],r[4]=t[4]*e[0]+t[5]*e[4]+t[6]*e[8]+t[7]*e[12],r[5]=t[4]*e[1]+t[5]*e[5]+t[6]*e[9]+t[7]*e[13],r[6]=t[4]*e[2]+t[5]*e[6]+t[6]*e[10]+t[7]*e[14],r[7]=t[4]*e[3]+t[5]*e[7]+t[6]*e[11]+t[7]*e[15],r[8]=t[8]*e[0]+t[9]*e[4]+t[10]*e[8]+t[11]*e[12],r[9]=t[8]*e[1]+t[9]*e[5]+t[10]*e[9]+t[11]*e[13],r[10]=t[8]*e[2]+t[9]*e[6]+t[10]*e[10]+t[11]*e[14],r[11]=t[8]*e[3]+t[9]*e[7]+t[10]*e[11]+t[11]*e[15],r[12]=t[12]*e[0]+t[13]*e[4]+t[14]*e[8]+t[15]*e[12],r[13]=t[12]*e[1]+t[13]*e[5]+t[14]*e[9]+t[15]*e[13],r[14]=t[12]*e[2]+t[13]*e[6]+t[14]*e[10]+t[15]*e[14],r[15]=t[12]*e[3]+t[13]*e[7]+t[14]*e[11]+t[15]*e[15],r},e.multMatrixVec=function(t,e){for(var r=new Array(16),i=0;i<4;i++)r[i]=e[0]*t[0+i]+e[1]*t[4+i]+e[2]*t[8+i]+e[3]*t[12+i];return r},e.inverse=function(t){var e=new Array(16);e[0]=t[5]*t[10]*t[15]-t[5]*t[14]*t[11]-t[6]*t[9]*t[15]+t[6]*t[13]*t[11]+t[7]*t[9]*t[14]-t[7]*t[13]*t[10],e[1]=-t[1]*t[10]*t[15]+t[1]*t[14]*t[11]+t[2]*t[9]*t[15]-t[2]*t[13]*t[11]-t[3]*t[9]*t[14]+t[3]*t[13]*t[10],e[2]=t[1]*t[6]*t[15]-t[1]*t[14]*t[7]-t[2]*t[5]*t[15]+t[2]*t[13]*t[7]+t[3]*t[5]*t[14]-t[3]*t[13]*t[6],e[3]=-t[1]*t[6]*t[11]+t[1]*t[10]*t[7]+t[2]*t[5]*t[11]-t[2]*t[9]*t[7]-t[3]*t[5]*t[10]+t[3]*t[9]*t[6],e[4]=-t[4]*t[10]*t[15]+t[4]*t[14]*t[11]+t[6]*t[8]*t[15]-t[6]*t[12]*t[11]-t[7]*t[8]*t[14]+t[7]*t[12]*t[10],e[5]=t[0]*t[10]*t[15]-t[0]*t[14]*t[11]-t[2]*t[8]*t[15]+t[2]*t[12]*t[11]+t[3]*t[8]*t[14]-t[3]*t[12]*t[10],e[6]=-t[0]*t[6]*t[15]+t[0]*t[14]*t[7]+t[2]*t[4]*t[15]-t[2]*t[12]*t[7]-t[3]*t[4]*t[14]+t[3]*t[12]*t[6],e[7]=t[0]*t[6]*t[11]-t[0]*t[10]*t[7]-t[2]*t[4]*t[11]+t[2]*t[8]*t[7]+t[3]*t[4]*t[10]-t[3]*t[8]*t[6],e[8]=t[4]*t[9]*t[15]-t[4]*t[13]*t[11]-t[5]*t[8]*t[15]+t[5]*t[12]*t[11]+t[7]*t[8]*t[13]-t[7]*t[12]*t[9],e[9]=-t[0]*t[9]*t[15]+t[0]*t[13]*t[11]+t[1]*t[8]*t[15]-t[1]*t[12]*t[11]-t[3]*t[8]*t[13]+t[3]*t[12]*t[9],e[10]=t[0]*t[5]*t[15]-t[0]*t[13]*t[7]-t[1]*t[4]*t[15]+t[1]*t[12]*t[7]+t[3]*t[4]*t[13]-t[3]*t[12]*t[5],e[11]=-t[0]*t[5]*t[11]+t[0]*t[9]*t[7]+t[1]*t[4]*t[11]-t[1]*t[8]*t[7]-t[3]*t[4]*t[9]+t[3]*t[8]*t[5],e[12]=-t[4]*t[9]*t[14]+t[4]*t[13]*t[10]+t[5]*t[8]*t[14]-t[5]*t[12]*t[10]-t[6]*t[8]*t[13]+t[6]*t[12]*t[9],e[13]=t[0]*t[9]*t[14]-t[0]*t[13]*t[10]-t[1]*t[8]*t[14]+t[1]*t[12]*t[10]+t[2]*t[8]*t[13]-t[2]*t[12]*t[9],e[14]=-t[0]*t[5]*t[14]+t[0]*t[13]*t[6]+t[1]*t[4]*t[14]-t[1]*t[12]*t[6]-t[2]*t[4]*t[13]+t[2]*t[12]*t[5],e[15]=t[0]*t[5]*t[10]-t[0]*t[9]*t[6]-t[1]*t[4]*t[10]+t[1]*t[8]*t[6]+t[2]*t[4]*t[9]-t[2]*t[8]*t[5];var r=t[0]*e[0]+t[1]*e[4]+t[2]*e[8]+t[3]*e[12];if(0===r)throw console.error(t),new i.DebugError("can not invert matrix");for(var n=0;n<16;n++)e[n]/=r;return e},e.IDENTITY=e.makeIdentity()},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(9),n=r(4),o=function(){function t(){}return t.isPointInRect=function(t,e,r){return t.x>e.x&&t.x<e.x+e.width&&t.y>e.y&&t.y<e.y+e.height},t.overlapTest=function(t,e){return t.x<e.x+e.width&&t.x+t.width>e.x&&t.y<e.y+e.height&&t.y+t.height>e.y},t.radToDeg=function(t){return 180*t/Math.PI},t.degToRad=function(t){return t*Math.PI/180},t.rectToPolar=function(t,e){return{radius:Math.sqrt(t.x*t.x+e.y*e.y),angle:Math.atan2(e.y-t.y,e.x-t.x)}},t.polarToRect=function(t,e,r){var i=t*Math.cos(e),o=t*Math.sin(e);return new n.Point2d(r.x-i,r.y-o)},t.getDistanceSquared=function(t,e){return Math.pow(t.x-e.x,2)+Math.pow(t.y-e.y,2)},t.closeTo=function(t,e,r){return void 0===r&&(r=.01),Math.abs(t-e)<=r},t.getDistance=function(e,r){return Math.sqrt(t.getDistanceSquared(e,r))},t.getAngle=function(t,e){var r=t.x-e.x,i=t.y-e.y;return Math.atan2(i,r)},t.unProject=function(t,e,r,o){var s=2*t.x/e-1,a=2*t.y/r-1,u=i.inverse(o),h=[s,a,0,1],c=i.multMatrixVec(u,h);return c[0]=(c[0]/2+.5)*e,c[1]=(c[1]/2+.5)*r,new n.Point2d(c[0],c[1])},t.random=function(t,e){if(t>e){var r=t;t=e,e=r}var i=~~(Math.random()*(e-t))+t;return i>e?i=e:i<t&&(i=t),i},t}();e.MathEx=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(15),n=function(){function t(e){this.program=null,this.uniformCache={},this.gl=e,t.instances.push(this)}return t.prototype.bind=function(){null!==t.currentInstance&&t.currentInstance!==this&&t.currentInstance.unbind(),t.currentInstance=this,this.bufferInfo.bind(this.program)},t.prototype.unbind=function(){this.bufferInfo.unbind()},t.prototype.destroy=function(){this.bufferInfo&&this.bufferInfo.destroy(),this.program.destroy()},t.destroyAll=function(){t.instances.forEach(function(t){t.destroy()})},t.prototype.setUniform=function(t,e){if(!i.isEqual(this.uniformCache[t],e)){if(i.isArray(e)){this.uniformCache[t]||(this.uniformCache[t]=Array(e.length));for(var r=0,n=e.length;r<n;r++)this.uniformCache[t][r]=e[r]}else this.uniformCache[t]=e;this.program.setUniform(t,this.uniformCache[t])}},t.prototype.drawElements=function(){this.bufferInfo.draw()},t.prototype.draw=function(t,e,r){var i=this;void 0===r&&(r=null),this.bind(),Object.keys(e).forEach(function(t){return i.setUniform(t,e[t])}),t&&t.forEach(function(t,e){t.texture.bind(t.name,e,i.program)}),this.drawElements()},t.currentInstance=null,t.instances=[],t}();e.AbstractDrawer=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=function(t){function e(e){var r=t.call(this,e)||this;return r.borderRadius=0,r.width=16,r.height=16,r.lineWidth=1,r}return i.__extends(e,t),e.prototype.draw=function(){return this.game.getRenderer().drawRectangle(this),!0},e}(r(21).Shape);e.Rectangle=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(47),n=function(t,e){var r=e.split(".");if(1===r.length)return{targetObj:t,targetKey:e};var i=r.pop();return r.forEach(function(e){t=t[e]}),{targetObj:t,targetKey:i}},o=function(t,e,r){var i=n(t,e);i.targetObj[i.targetKey]=r},s=function(t,e){var r=n(t,e);return r.targetObj[r.targetKey]},a=function(){function t(t){this._propsToChange=[],this._startedTime=0,this._currTime=0,this._completed=!1,this._target=t.target,this._progressFn=t.progress,this._completeFn=t.complete,this._easeFnName=t.ease||"linear",this._tweenTime=t.time||1e3,this._desc=this.normalizeDesc(t)}return t.prototype.reuse=function(t){var e=this;this._startedTime=this._currTime,this._completed=!1,Object.keys(t).forEach(function(r){e._desc[r]=t[r]}),this._desc=this.normalizeDesc(t)},t.prototype.normalizeDesc=function(t){var e=this;t.from=t.from||{},t.to=t.to||{};var r={};return Object.keys(t.from).forEach(function(t){r[t]=!0}),Object.keys(t.to).forEach(function(t){r[t]=!0}),this._propsToChange=Object.keys(r),this._propsToChange.forEach(function(r){void 0===t.from[r]&&(t.from[r]=s(e._target,r)),void 0===t.to[r]&&(t.to[r]=s(e._target,r))}),t},t.prototype.update=function(t){if(!this._completed){this._currTime=t,this._startedTime||(this._startedTime=t);var e=t-this._startedTime;if(e>this._tweenTime)this.complete();else{for(var r=this._propsToChange.length;r--;){var n=this._propsToChange[r],s=this._desc.from[n],a=this._desc.to[n],u=(0,i.Easing[this._easeFnName])(e,s,a-s,this._tweenTime);o(this._target,n,u)}this._progressFn&&this._progressFn(this._target)}}},t.prototype.progress=function(t){this._progressFn=t},t.prototype.reset=function(){this._startedTime=null,this._completed=!1},t.prototype.complete=function(){if(!this._completed){for(var t=this._propsToChange.length;t--;){var e=this._propsToChange[t],r=this._desc.to[e];o(this._target,e,r)}this._progressFn&&this._progressFn(this._target),this._completeFn&&this._completeFn(this._target),this._completed=!0}},t.prototype.isCompleted=function(){return this._completed},t.prototype.getTarget=function(){return this._target},t.prototype.getTweenTime=function(){return this._tweenTime},t}();e.Tween=a},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(8),n=function(){function t(t,e){void 0===t&&(t=0),void 0===e&&(e=0),this.width=t,this.height=e}return t.prototype.setW=function(t){return this.width=t,this},t.prototype.setH=function(t){return this.height=t,this},t.prototype.setWH=function(t,e){return this.width=t,this.height=e,this},t.prototype.set=function(t){return this.width=t.width,this.height=t.height,this},t.fromPool=function(){return t.rectPool.getNextObject()},t.rectPool=new i.ObjectPool(t),t}();e.Size=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.isObjectMatch=function(t,e){if(!t||!e)return!1;var r=!0,i=Object.keys(e);return!!i.length&&(i.some(function(i){if(t[i]!=e[i])return r=!1,!0}),r)},e.isObject=function(t){return t===Object(t)},e.isArray=function(t){return!!t.splice};e.isEqual=function(t,r){return void 0!==t&&(e.isArray(t)&&e.isArray(r)?function(t,e){for(var r=0,i=t.length;r<i;r++)if(t[r]!==e[r])return!1;return!0}(t,r):e.isObject(t)&&e.isObject(r)?function(t,e){throw"not implemented"}():t===r)}},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=r(79),o=r(80),s=function(){function t(t,e){if(this.posVertexBuffer=null,this.posIndexBuffer=null,this.texVertexBuffer=null,this.normalBuffer=null,this.drawMethod=null,this.numOfElementsToDraw=0,this.gl=t,void 0===e.drawMethod)throw new i.DebugError("can not create BufferInfo: drawMethod not defined");if(this.drawMethod=e.drawMethod,!e.posVertexInfo)throw new i.DebugError("can not create BufferInfo: posVertexInfo is mandatory");this.posVertexBuffer=new n.VertexBuffer(t),this.posVertexBuffer.setData(e.posVertexInfo.array,e.posVertexInfo.type,e.posVertexInfo.size),this.posVertexBuffer.setAttrName(e.posVertexInfo.attrName),e.posIndexInfo?(this.posIndexBuffer=new o.IndexBuffer(t),this.posIndexBuffer.setData(e.posIndexInfo.array)):this.numOfElementsToDraw=this._getNumOfElementsToDraw(this.drawMethod),e.texVertexInfo&&(this.texVertexBuffer=new n.VertexBuffer(t),this.texVertexBuffer.setData(e.texVertexInfo.array,e.texVertexInfo.type,e.texVertexInfo.size),this.texVertexBuffer.setAttrName(e.texVertexInfo.attrName)),e.normalInfo&&(this.normalBuffer=new n.VertexBuffer(t),this.normalBuffer.setData(e.normalInfo.array,e.normalInfo.type,e.normalInfo.size),this.normalBuffer.setAttrName(e.normalInfo.attrName))}return t.prototype.bind=function(t){t.bind(),this.posIndexBuffer&&this.posIndexBuffer.bind(),this.posVertexBuffer&&this.posVertexBuffer.bind(t),this.texVertexBuffer&&this.texVertexBuffer.bind(t),this.normalBuffer&&this.normalBuffer.bind(t)},t.prototype.unbind=function(){this.posIndexBuffer&&this.posIndexBuffer.unbind(),this.posVertexBuffer&&this.posVertexBuffer.unbind(),this.texVertexBuffer&&this.texVertexBuffer.unbind(),this.normalBuffer&&this.normalBuffer.unbind()},t.prototype.destroy=function(){this.posVertexBuffer&&this.posVertexBuffer.destroy(),this.posIndexBuffer&&this.posIndexBuffer.destroy(),this.texVertexBuffer&&this.texVertexBuffer.destroy(),this.normalBuffer&&this.normalBuffer.destroy()},t.prototype._getNumOfElementsToDraw=function(t){switch(t){case this.gl.LINE_STRIP:case this.gl.TRIANGLE_FAN:return this.posVertexBuffer.getBufferLength()/2;default:throw new i.DebugError("unknown draw method: "+t)}},t.prototype.draw=function(){null!==this.posIndexBuffer?this.gl.drawElements(this.drawMethod,this.posIndexBuffer.getBufferLength(),this.gl.UNSIGNED_SHORT,0):this.gl.drawArrays(this.drawMethod,0,this.numOfElementsToDraw)},t}();e.BufferInfo=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(2),o=r(1),s=r(21),a=r(3),u=r(4),h=function(t){function e(e){var r=t.call(this,e)||this;return r.srcRect=new n.Rect,r.borderRadius=0,r.offset=new u.Point2d,r.fillColor.set(a.Color.NONE),r}return i.__extends(e,t),e.prototype.revalidate=function(){if(!this.getResourceLink())throw console.error(this),new o.DebugError("can not render Image: resourceLink is not specified");var t=this.game.getRenderer().getTextureInfo(this.getResourceLink().getId());0===this.width&&(this.width=t.size.width),0===this.height&&(this.height=t.size.height),0===this.srcRect.width&&(this.srcRect.width=t.size.width),0===this.srcRect.height&&(this.srcRect.height=t.size.height)},e.prototype.draw=function(){return this.game.getRenderer().drawImage(this),!0},e}(s.Shape);e.Image=h},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=function(){function t(){}return t.prototype.fromJSON=function(t){var e=this;return void 0===t&&(t={}),Object.keys(t).forEach(function(r){e[r]=t[r]}),this.revalidate(),this},t.prototype.revalidate=function(){},t.prototype.clone=function(){return this},t}();e.CommonObject=i},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i,n=r(0),o=r(2),s=r(1),a=r(62),u=r(17);!function(t){t.LEFT="LEFT",t.RIGHT="RIGHT",t.CENTER="CENTER",t.JUSTIFY="JUSTIFY"}(i=e.TEXT_ALIGN||(e.TEXT_ALIGN={}));var h=function(){function t(t){this.textField=t,this.allCharsCached=[],this.width=0,this.height=0,this.posX=0,this.posY=0,this.strings=[]}return t.prototype.reset=function(){this.allCharsCached=[],this.strings=[],this.posX=0,this.posY=0},t.prototype.newString=function(){this.posX=0,this.strings.length&&(this.posY+=this.textField.font.getDefaultSymbolHeight()),this.strings.push(new d)},t.prototype.addChar=function(t){this.strings[this.strings.length-1].chars.push(t),this.allCharsCached.push(t),t.destRect.setXY(this.posX,this.posY),this.posX+=t.sourceRect.width},t.prototype.addWord=function(t){var e=this;t.chars.forEach(function(t){e.addChar(t)})},t.prototype.revalidate=function(t){this.height=0,this.width=0;for(var e=0,r=this.strings;e<r.length;e++){var i=r[e];i.calcSize(t),this.height+=i.height,i.width>this.width&&(this.width=i.width)}},t.prototype.align=function(t){var e=this;if(void 0===i[t]){var r=Object.keys(i).join(", ");throw new s.DebugError("can not align text: unknown enum type of TEXT_ALIGN: "+t+", expected: "+r)}this.strings.forEach(function(r){r.align(t,e.textField)})},t}(),c=function(){return function(){this.destRect=new o.Rect,this.sourceRect=new o.Rect}}(),l=function(){function t(){this.chars=[]}return t.prototype.moveBy=function(t,e){for(var r=0,i=this.chars;r<i.length;r++){i[r].destRect.getPoint().addXY(t,e)}},t.prototype.moveTo=function(t,e){for(var r=0,i=0,n=this.chars;i<n.length;i++){var o=n[i];o.destRect.getPoint().setXY(r+t,e),r+=o.sourceRect.width}},t}(),f=function(t){function e(){var e=null!==t&&t.apply(this,arguments)||this;return e.width=0,e}return n.__extends(e,t),e.prototype.revalidate=function(){this.width=0;for(var t=0,e=this.chars;t<e.length;t++){var r=e[t];this.width+=r.destRect.width}},e.prototype.addChar=function(t){this.chars.push(t),this.width+=t.sourceRect.width},e}(l),d=function(t){function e(){var e=null!==t&&t.apply(this,arguments)||this;return e.width=0,e.height=0,e}return n.__extends(e,t),e.prototype.calcSize=function(t){this.width=0,this.height=t;for(var e=0,r=this.chars;e<r.length;e++){var i=r[e];this.width+=i.sourceRect.width}},e.prototype.toWords=function(){for(var t=[],e=new f,r=0,i=this.chars;r<i.length;r++){var n=i[r];" "===n.symbol?e.chars.length&&(t.push(e),e=new f):e.chars.push(n)}return-1===t.indexOf(e)&&t.push(e),t},e.prototype.align=function(t,e){switch(t){case i.LEFT:break;case i.CENTER:var r=e.width-this.width;if(r<0)return;r/=2,this.moveBy(r,0);break;case i.RIGHT:if((r=e.width-this.width)<0)return;this.moveBy(r,0);break;case i.JUSTIFY:var n=this.toWords();if(n.length<=1)return;if(!n[0].chars.length)return;var o=0;n.forEach(function(t){t.revalidate(),o+=t.width});for(var a=(e.width-o)/(n.length-1),u=this.chars[0].destRect.getPoint().y,h=this.chars[0].destRect.getPoint().x,c=0;c<n.length;c++){var l=n[c];l.moveTo(h,u),h+=l.width+a}break;default:throw new s.DebugError("unknown TEXT_ALIGN value: "+t)}},e}(l),p=function(t){function e(e){var r=t.call(this,e)||this;return r.type="TextField",r.text="",r.font=null,r.textAlign=i.LEFT,r.border=null,r._textInfo=new h(r),r._symbolImage=new u.Image(r.game),r._initScrolling({vertical:!0}),r}return n.__extends(e,t),e.prototype.revalidate=function(){if(t.prototype.revalidate.call(this),!this.font)throw new s.DebugError("font is not provided");if(!this.font.getResourceLink())throw new s.DebugError("can not render textField: font resource link is not set");this.setFont(this.font)},e.prototype._getCharInfo=function(t){var e=this.font.fontContext.symbols[t]||this.font.fontContext.symbols[" "],r=new c;return r.symbol=t,r.sourceRect=e,r.destRect.setWH(e.width,e.height),r},e.prototype.onGeometryChanged=function(){var e=this;t.prototype.onGeometryChanged.call(this);var r=this._textInfo;r.reset(),r.newString();var i=this.text.split("\n");i.forEach(function(t,n){var o=t.split(" ");o.forEach(function(i,n){for(var s=new f,a=0;a<i.length;a++){var u=e._getCharInfo(i[a]);s.addChar(u)}if(e.maxWidth&&r.posX+s.width>e.maxWidth&&n<o.length-1&&r.newString(),r.addWord(s),n<t.length-1){var h=e._getCharInfo(" ");r.addChar(h)}}),n<i.length-1&&r.newString()}),r.revalidate(this.font.getDefaultSymbolHeight()),r.align(this.textAlign),this.width=r.width,0!==this.maxHeight&&r.height>this.maxHeight?this.height=this.maxHeight:this.height=r.height,this.border&&(this.border.width=this.width,this.border.height=this.height),this.updateScrollSize(r.height,this.height)},e.prototype.setText=function(t){void 0===t&&(t=""),this.text=t.toString(),this._dirty=!0},e.prototype.getText=function(){return this.text},e.prototype.setFont=function(t){this.font=t,this.setText(this.text)},e.prototype.draw=function(){var t=this.game.getRenderer();t.lockRect(this.getScreenRect()),t.save(),this.vScrollInfo.offset&&t.translate(0,-this.vScrollInfo.offset,0),this._symbolImage.setResourceLink(this.font.getResourceLink());for(var e=0,r=this._textInfo.allCharsCached;e<r.length;e++){var i=r[e];i.destRect.y-this.vScrollInfo.offset>this.height||(i.destRect.y+i.destRect.height-this.vScrollInfo.offset<0||(this._symbolImage.srcRect.set(i.sourceRect),this._symbolImage.setXYWH(i.destRect.x,i.destRect.y,i.destRect.width,i.destRect.height),this._symbolImage.render(!0)))}return t.restore(),t.unlockRect(),this.border&&this.border.render(),!0},e}(a.ScrollableContainer);e.TextField=p},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(46),o=r(18),s=r(13),a=r(26),u=r(2),h=r(1),c=r(48),l=function(t){function e(e){var r=t.call(this)||this;if(r.width=0,r.height=0,r._tweens=[],r._tweenMovies=[],r._dirty=!0,r._timers=[],r._rect=new u.Rect(0,0),!e)throw new h.DebugError("can not create model '"+r.type+"': game instance not passed to model constructor");return r.game=e,r._emitter=new a.EventEmitter,r}return i.__extends(e,t),e.prototype.setIndividualBehaviour=function(t){},e.prototype.setCommonBehaviour=function(){},e.prototype.setTimer=function(t,e){var r=new n.Timer(t,e);return this._timers.push(r),r},e.prototype.tween=function(t){var e=new s.Tween(t);return this._tweens.push(e),e},e.prototype.tweenMovie=function(){var t=new c.TweenMovie(this.game);return this._tweenMovies.push(t),t},e.prototype.update=function(t,e){var r=this;this._tweens.forEach(function(e,i){e.update(t),e.isCompleted()&&r._tweens.splice(i,1)}),this._tweenMovies.forEach(function(e,i){e.update(t),e.isCompleted()&&r._tweenMovies.splice(i,1)}),this._timers.forEach(function(e){e.onUpdate(t)})},e.prototype.on=function(t,e){return this._emitter.on(t,e),e},e.prototype.off=function(t,e){this._emitter.off(t,e)},e.prototype.trigger=function(t,e){this._emitter.trigger(t,e)},e}(o.CommonObject);e.BaseModel=l},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(25),o=r(3),s=function(t){function e(e){var r=t.call(this,e)||this;return r.color=o.Color.BLACK.clone(),r.lineWidth=0,r.fillColor=o.Color.RGB(100,100,100),r}return i.__extends(e,t),e.prototype.setWH=function(t,e){this.setXYWH(this.pos.x,this.pos.y,t,e)},e.prototype.setXYWH=function(t,e,r,i){this.pos.x=t,this.pos.y=e,this.width=r,this.height=i,this.getRect().setXYWH(t,e,r,i)},e.prototype.getDrawableInfo=function(){return{blendMode:this.blendMode,acceptLight:!1,alpha:this.alpha}},e}(n.RenderableModel);e.Shape=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(10),o=r(4),s=r(8),a=r(2),u=function(t){function e(){return t.call(this)||this}return i.__extends(e,t),e.fromPool=function(){return e.mousePointsPool.getNextObject()},e.unTransform=function(t){var r=e.fromPool();return r.screenX=t.screenX,r.screenY=t.screenY,r.id=t.id,r.target=t.target,r.setXY(r.screenX,r.screenY),r},e.mousePointsPool=new s.ObjectPool(e),e}(o.Point2d);e.MousePoint=u,e.MOUSE_EVENTS={click:"click",mouseDown:"mouseDown",mouseMove:"mouseMove",mouseLeave:"mouseLeave",mouseEnter:"mouseEnter",mouseUp:"mouseUp",doubleClick:"doubleClick",scroll:"scroll"};var h=function(){function t(t){this.objectsCaptured={},this.game=t}return t.prototype.resolvePoint=function(t){var e=this.game,r=t.clientX,i=t.clientY,n=(r-e.pos.x)/e.scale.x,s=(i-e.pos.y)/e.scale.y,a=e.camera.screenToWorld(o.Point2d.fromPool().setXY(n,s)),h=u.fromPool();return h.set(a),h.screenX=n,h.screenY=s,h.id=t.identifier||0,h},t.triggerGameObjectEvent=function(t,e,r,i,o,s){void 0===o&&(o=0),void 0===s&&(s=0);var u=a.Rect.fromPool().clone().set(i.getRect()).addXY(o,s);return!!n.MathEx.isPointInRect(r,u)&&(r.target=i,i.trigger(e,{screenX:r.x,screenY:r.y,objectX:r.x-i.pos.x,objectY:r.y-i.pos.y,id:r.id,target:i,nativeEvent:t,eventName:e,isMouseDown:r.isMouseDown}),!0)},t.prototype.triggerChildren=function(e,r,i,n,o,s){for(var a=0;a<r.length;a++){var u=r[r.length-1-a];if(t.triggerGameObjectEvent(e,i,n,u,o,s)){this.triggerChildren(e,u.children,i,n,o+u.pos.x,s+u.pos.y);break}}},t.prototype.triggerEvent=function(e,r,i){void 0===i&&(i=!1);var n=this.game.getCurrScene();if(n){var o=this.resolvePoint(e);o.isMouseDown=i,o.target=void 0;for(var s=0,a=n.getAllGameObjects();s<a.length;s++){var h=a[s];if(t.triggerGameObjectEvent(e,r,o,h)){h.children&&this.triggerChildren(e,h.children,r,o,h.pos.x,h.pos.y);break}}for(var c=u.unTransform(o),l=0;l<n.uiLayer.children.length;l++){h=n.uiLayer.children[n.uiLayer.children.length-1-l];if(t.triggerGameObjectEvent(e,r,c,h)){h.children&&this.triggerChildren(e,h.children,r,c,h.pos.x,h.pos.y);break}}return c.target&&(o.target=c.target),void 0===o.target&&(o.target=n),n.trigger(r,{screenX:o.x,screenY:o.y,id:o.id,target:n,eventName:r,isMouseDown:i}),o}},t.prototype.resolveClick=function(t){this.triggerEvent(t,e.MOUSE_EVENTS.click),this.triggerEvent(t,e.MOUSE_EVENTS.mouseDown)},t.prototype.resolveMouseMove=function(t,r){var i=this.triggerEvent(t,e.MOUSE_EVENTS.mouseMove,r);if(i){var n=this.objectsCaptured[i.id];n&&n!==i.target&&(n.trigger(e.MOUSE_EVENTS.mouseLeave,i),delete this.objectsCaptured[i.id]),i.target&&n!==i.target&&(i.target.trigger(e.MOUSE_EVENTS.mouseEnter,i),this.objectsCaptured[i.id]=i.target)}},t.prototype.resolveMouseUp=function(t){var r=this.triggerEvent(t,e.MOUSE_EVENTS.mouseUp);if(r){var i=this.objectsCaptured[r.id];i&&(r.target!==i&&i.trigger(e.MOUSE_EVENTS.mouseUp,r),delete this.objectsCaptured[r.id])}},t.prototype.resolveDoubleClick=function(t){var r=this.triggerEvent(t,e.MOUSE_EVENTS.doubleClick);r&&delete this.objectsCaptured[r.id]},t.prototype.resolveScroll=function(t){var r=this.triggerEvent(t,e.MOUSE_EVENTS.scroll);r&&delete this.objectsCaptured[r.id]},t.prototype.listenTo=function(t){var e=this;this.container=t,t.ontouchstart=function(t){for(var r=t.touches.length;r--;)e.resolveClick(t.touches[r])},t.onmousedown=function(t){0===t.button&&e.resolveClick(t)},t.ontouchend=t.ontouchcancel=function(t){for(var r=t.changedTouches.length;r--;)e.resolveMouseUp(t.changedTouches[r])},t.onmouseup=function(t){e.resolveMouseUp(t)},t.ontouchmove=function(t){for(var r=t.touches.length;r--;)e.resolveMouseMove(t.touches[r],!0)},t.onmousemove=function(t){var r=1===t.buttons;e.resolveMouseMove(t,r)},t.ondblclick=function(t){e.resolveDoubleClick(t)},t.onmousewheel=function(t){e.resolveScroll(t)}},t.prototype.destroy=function(){var t=this;this.container&&["mouseMove","ontouchstart","onmousedown","ontouchend","onmouseup","ontouchmove","onmousemove","ondblclick"].forEach(function(e){t.container[e]=null})},t}();e.Mouse=h},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(5),n=function(){function t(){this.vertexUniforms=[],this.fragmentUniforms=[],this.attributes=[],this.varyings=[],this.appendedFragCodeBlocks=[],this.appendedVertexCodeBlocks=[],this.prependedVertexCodeBlocks=[],this.prependedFragCodeBlocks=[],this.vertexMainFn="",this.fragmentMainFn=""}return t.prototype.addVertexUniform=function(t,e){return this.vertexUniforms.push({type:t,name:e}),i.normalizeUniformName(e)},t.prototype.addFragmentUniform=function(t,e){return this.fragmentUniforms.push({type:t,name:e}),i.normalizeUniformName(e)},t.prototype.addAttribute=function(t,e){return this.attributes.push({type:t,name:e}),i.normalizeUniformName(e)},t.prototype.addVarying=function(t,e){this.varyings.push({type:t,name:e})},t.prototype.appendVertexCodeBlock=function(t){this.appendedVertexCodeBlocks.push(t)},t.prototype.appendFragmentCodeBlock=function(t){this.appendedFragCodeBlocks.push(t)},t.prototype.prependVertexCodeBlock=function(t){this.prependedVertexCodeBlocks.push(t)},t.prototype.prependFragmentCodeBlock=function(t){this.prependedFragCodeBlocks.push(t)},t.prototype.setVertexMainFn=function(t){return this.vertexMainFn=t,this},t.prototype.setFragmentMainFn=function(t){return this.fragmentMainFn=t,this},t.prototype.getVertexSource=function(){return"\n"+this.prependedVertexCodeBlocks.map(function(t){return""+t}).join("\n")+"\n\n"+this.vertexUniforms.map(function(t){return"uniform   "+t.type+" "+t.name+";"}).join("\n")+"\n"+this.attributes.map(function(t){return"attribute "+t.type+" "+t.name+";"}).join("\n")+"\n"+this.varyings.map(function(t){return"varying   "+t.type+" "+t.name+";"}).join("\n")+"\n"+this.appendedVertexCodeBlocks.map(function(t){return""+t}).join("\n")+"\n\n"+this.vertexMainFn},t.prototype.getFragmentSource=function(){return"\nprecision mediump float;\n\n"+this.prependedFragCodeBlocks.map(function(t){return""+t}).join("\n")+"\n\n"+this.fragmentUniforms.map(function(t){return"uniform "+t.type+" "+t.name+";"}).join("\n")+"\n"+this.varyings.map(function(t){return"varying "+t.type+" "+t.name+";"}).join("\n")+"\n"+this.appendedFragCodeBlocks.map(function(t){return""+t}).join("\n")+"\n\n"+this.fragmentMainFn+"\n"},t.prototype.debug=function(){console.log("// *** vertex shader source ***"),console.log(this.getVertexSource()),console.log("// *** fragment shader source ***"),console.log(this.getFragmentSource())},t}();e.ShaderGenerator=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(5),o=function(t){function e(){var e=t.call(this)||this;return e.addAttribute(n.GL_TYPE.FLOAT_VEC4,"a_position"),e.addAttribute(n.GL_TYPE.FLOAT_VEC2,"a_texCoord"),e.addVertexUniform(n.GL_TYPE.FLOAT_MAT4,"u_vertexMatrix"),e.addVertexUniform(n.GL_TYPE.FLOAT_MAT4,"u_textureMatrix"),e.addVarying(n.GL_TYPE.FLOAT_VEC2,"v_texCoord"),e.prependFragmentCodeBlock("\n            vec4 tint(vec4 srcColor,vec4 tintColor){\n                vec3 r = vec3(srcColor) * (1.0 - tintColor.a) +\n                    vec3(tintColor) * tintColor.a;\n                vec4 result = vec4(r,srcColor.a);\n                return result;    \n            }\n        "),e.setVertexMainFn("\n            void main(){\n                gl_Position = u_vertexMatrix * a_position;\n                v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;\n            } \n        "),e.addFragmentUniform(n.GL_TYPE.SAMPLER_2D,"texture"),e.addFragmentUniform(n.GL_TYPE.FLOAT,"u_alpha"),e.setFragmentMainFn("\n            void main(){\n                gl_FragColor = texture2D(texture, v_texCoord);\n                gl_FragColor.a *= u_alpha;\n            }\n        "),e}return i.__extends(e,t),e}(r(23).ShaderGenerator);e.TexShaderGenerator=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(43),o=r(1),s=r(10),a=r(15),u=r(4),h=function(t){function e(){var e=null!==t&&t.apply(this,arguments)||this;return e.pos=new u.Point2d(0,0,function(){return e._dirty=!0}),e.scale=new u.Point2d(1,1),e.anchor=new u.Point2d(0,0),e.angle=0,e.alpha=1,e.filters=[],e.children=[],e.acceptLight=!1,e.fixedToCamera=!1,e.rigid=!1,e}return i.__extends(e,t),e.prototype.findObject=function(t){if(a.isObjectMatch(this,t))return this;for(var e=0,r=this.children;e<r.length;e++){var i=r[e].findObject(t);if(i)return i}return null},e.prototype.getRect=function(){return this._rect.setXYWH(this.pos.x-this.anchor.x,this.pos.y-this.anchor.y,this.width,this.height),this._rect},e.prototype.setAnchorToCenter=function(){if(this.revalidate(),!this.width||!this.height)throw new o.DebugError("can not set anchor to center: width or height of gameObject is not set");this.anchor.setXY(this.width/2,this.height/2)},e.prototype.onShow=function(){},e.prototype.appendChild=function(t){t.parent=this,this.children.push(t),t.onShow()},e.prototype.prependChild=function(t){t.parent=this,this.children.unshift(t),t.onShow()},e.prototype._setDirty=function(){this._dirty=!0},e.prototype.beforeRender=function(){this.game.getRenderer().translate(this.pos.x,this.pos.y)},e.prototype.isNeedAdditionalTransform=function(){return!(0===this.angle&&this.scale.equal(1))},e.prototype.doAdditionalTransform=function(){this.game.getRenderer().rotateZ(this.angle),this.angleY&&this.game.getRenderer().rotateY(this.angleY)},e.prototype.isInViewPort=function(){return s.MathEx.overlapTest(this.game.camera.getRectScaled(),this.getRect())},e.prototype.moveToFront=function(){var t=this.parent.children.indexOf(this);if(-1==t)throw new o.DebugError("can not move to front: gameObject is detached");this.parent.children.splice(t,1),this.parent.children.push(this)},e.prototype.moveToBack=function(){var t=this.parent.children.indexOf(this);if(-1==t)throw new o.DebugError("can not move to back: gameObject is detached");this.parent.children.splice(t,1),this.parent.children.unshift(this)},e.prototype.kill=function(){var t=this;this.parent.children.remove(function(e){return e.id===t.id})},e.prototype.render=function(t){if(void 0===t&&(t=!1),t||this.isInViewPort()){var e=this.game.getRenderer();if(e.save(),this.beforeRender(),e.translate(-this.anchor.x,-this.anchor.y),this.isNeedAdditionalTransform()){var r=this.width/2,i=this.height/2;e.translate(r,i),e.scale(this.scale.x,this.scale.y),this.doAdditionalTransform(),e.translate(-r,-i)}if(this.draw()&&this.children.length>0){e.save(),e.translate(this.anchor.x,this.anchor.y);for(var n=0,o=this.children.length;n<o;n++)this.children[n].render();e.restore()}e.restore()}},e.prototype.update=function(e,r){t.prototype.update.call(this,e,r);for(var i=0,n=this.children;i<n.length;i++){var o=n[i];this._dirty&&o._setDirty(),o.update(e,r)}},e}(n.Resource);e.RenderableModel=h},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=function(){function t(){this.events={}}return t.prototype._on=function(t,e){this.events[t]=this.events[t]||[],this.events[t].push(e)},t.prototype.on=function(t,e){var r=this;"string"==typeof t?this._on(t,e):t.splice&&t.forEach(function(t){r._on(t,e)})},t.prototype.off=function(t,e){var r=this.events[t];if(r){var n=r.indexOf(e);if(-1==n)throw console.error(e),new i.DebugError("can not remove event listener "+t);r.splice(n,1)}},t.prototype.trigger=function(t,e){var r=this.events[t];if(r)for(var i=r.length;i--;)r[i](e)},t}();e.EventEmitter=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i,n,o=r(26);!function(t){t.KEY_PRESSED="1",t.KEY_RELEASED="2",t.KEY_HOLD="3"}(i=e.KEYBOARD_EVENT||(e.KEYBOARD_EVENT={})),function(t){t[t.SPACE=32]="SPACE",t[t.A=65]="A",t[t.B=66]="B",t[t.C=67]="C",t[t.D=68]="D",t[t.E=69]="E",t[t.F=70]="F",t[t.G=71]="G",t[t.H=72]="H",t[t.I=73]="I",t[t.J=74]="J",t[t.K=75]="K",t[t.L=76]="L",t[t.M=77]="M",t[t.N=78]="N",t[t.O=79]="O",t[t.P=80]="P",t[t.Q=81]="Q",t[t.R=82]="R",t[t.S=83]="S",t[t.T=84]="T",t[t.U=85]="U",t[t.V=86]="V",t[t.W=87]="W",t[t.X=88]="X",t[t.Y=89]="Y",t[t.Z=80]="Z",t[t.LEFT=37]="LEFT",t[t.UP=38]="UP",t[t.RIGHT=39]="RIGHT",t[t.DOWN=40]="DOWN",t[t.GAME_PAD_1=0]="GAME_PAD_1",t[t.GAME_PAD_2=1]="GAME_PAD_2",t[t.GAME_PAD_3=2]="GAME_PAD_3",t[t.GAME_PAD_4=3]="GAME_PAD_4",t[t.GAME_PAD_5=4]="GAME_PAD_5",t[t.GAME_PAD_6=5]="GAME_PAD_6",t[t.GAME_PAD_7=6]="GAME_PAD_7",t[t.GAME_PAD_8=7]="GAME_PAD_8",t[t.GAME_PAD_AXIS_LEFT=8]="GAME_PAD_AXIS_LEFT",t[t.GAME_PAD_AXIS_RIGHT=9]="GAME_PAD_AXIS_RIGHT",t[t.GAME_PAD_AXIS_UP=10]="GAME_PAD_AXIS_UP",t[t.GAME_PAD_AXIS_DOWN=11]="GAME_PAD_AXIS_DOWN"}(e.KEY||(e.KEY={})),function(t){t[t.KEY_JUST_PRESSED=2]="KEY_JUST_PRESSED",t[t.KEY_PRESSED=1]="KEY_PRESSED",t[t.KEY_JUST_RELEASED=0]="KEY_JUST_RELEASED",t[t.KEY_RELEASED=-1]="KEY_RELEASED"}(n||(n={}));var s=function(){function t(t){this.buffer={},this.emitter=new o.EventEmitter,this.game=t}return t.prototype.press=function(t){this.isPressed(t)||(this.buffer[t]=n.KEY_JUST_PRESSED,this.emitter.trigger(i.KEY_PRESSED,t))},t.prototype.release=function(t){this.isReleased(t)||(this.buffer[t]=n.KEY_JUST_RELEASED,this.emitter.trigger(i.KEY_RELEASED,this.buffer[t]))},t.prototype.on=function(t,e){this.emitter.on(t,e)},t.prototype.off=function(t,e){this.emitter.off(t,e)},t.prototype.isPressed=function(t){return this.buffer[t]>=n.KEY_PRESSED},t.prototype.isJustPressed=function(t){return this.buffer[t]===n.KEY_JUST_PRESSED},t.prototype.isReleased=function(t){return void 0===this.buffer[t]||this.buffer[t]<=n.KEY_JUST_RELEASED},t.prototype.isJustReleased=function(t){return this.buffer[t]===n.KEY_JUST_RELEASED},t.prototype.update=function(){var t=this;Object.keys(this.buffer).forEach(function(e){var r=+e;t.buffer[r]===n.KEY_RELEASED?delete t.buffer[r]:t.buffer[r]===n.KEY_JUST_RELEASED&&(t.buffer[r]=n.KEY_RELEASED),t.buffer[r]===n.KEY_JUST_PRESSED&&(t.buffer[r]=n.KEY_PRESSED),t.emitter.trigger(i.KEY_HOLD,r)})},t.prototype.listenTo=function(){var t=this;this.keyDownListener=function(e){var r=e.keyCode;t.press(r)},this.keyUpListener=function(e){var r=e.keyCode;t.release(r)},window.addEventListener("keydown",this.keyDownListener),window.addEventListener("keyup",this.keyUpListener)},t.prototype.destroy=function(){window.removeEventListener("keydown",this.keyDownListener),window.removeEventListener("keyup",this.keyUpListener)},t}();e.Keyboard=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=function(){function t(){for(var t=[],e=0;e<arguments.length;e++)t[e]=arguments[e];this.currState=[],this.setState.apply(this,t)}return t.prototype.setState=function(){for(var t=this,e=[],r=0;r<arguments.length;r++)e[r]=arguments[r];var i=!1;return e.forEach(function(e,r){t.currState[r]!==e&&(i=!0),t.currState[r]=e}),i},t}(),n=function(){function t(){this._state=new i,this._onChanged=[]}return t.prototype.triggerObservable=function(){if(this.checkObservableChanged())for(var t=0,e=this._onChanged;t<e.length;t++){(0,e[t])()}},t.prototype.addListener=function(t){this._onChanged.push(t)},t.prototype.removeListener=function(t){this._onChanged.remove(t)},t}();e.ObservableEntity=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(1),o=function(){function t(t,e){this.x=t,this.y=e}return t.prototype.length=function(){return Math.sqrt(this.x*this.x+this.y*this.y)},t.prototype.add=function(e){return new t(e.x+this.x,e.y+this.y)},t.prototype.subtract=function(e){return new t(this.x-e.x,this.y-e.y)},t.prototype.scale=function(e){return new t(this.x*e,this.y*e)},t.prototype.dot=function(t){return this.x*t.x+this.y*t.y},t.prototype.cross=function(t){return this.x*t.y-this.y*t.x},t.prototype.rotate=function(e,r){var i=[],n=this.x-e.x,o=this.y-e.y;return i[0]=n*Math.cos(r)-o*Math.sin(r),i[1]=n*Math.sin(r)+o*Math.cos(r),i[0]+=e.x,i[1]+=e.y,new t(i[0],i[1])},t.prototype.normalize=function(){var e=this.length();return e>0&&(e=1/e),new t(this.x*e,this.y*e)},t.prototype.distance=function(t){var e=this.x-t.x,r=this.y-t.y;return Math.sqrt(e*e+r*r)},t}();e.Vec2=o;var s=function(){function t(){this.mDepth=0,this.mNormal=new o(0,0),this.mStart=new o(0,0),this.mEnd=new o(0,0)}return t.prototype.setDepth=function(t){this.mDepth=t},t.prototype.setNormal=function(t){this.mNormal=t},t.prototype.getDepth=function(){return this.mDepth},t.prototype.getNormal=function(){return this.mNormal},t.prototype.setInfo=function(t,e,r){this.mDepth=t,this.mNormal=e,this.mStart=r,this.mEnd=r.add(e.scale(t))},t.prototype.changeDir=function(){this.mNormal=this.mNormal.scale(-1);var t=this.mStart;this.mStart=this.mEnd,this.mEnd=t},t}();e.CollisionInfo=s;var a=function(){function t(t,e,r,i,n){this.fixedAngle=!1,this.mVelocity=new o(0,0),this.mAngle=0,this.mAngularVelocity=0,this.mAngularAcceleration=0,this.mBoundRadius=0,this.game=t,this.mCenter=e,this.mInertia=0,this.fixedAngle=!1,this.mInvMass=void 0!==r?r:1,this.mFriction=void 0!==i?i:.2,this.mRestitution=void 0!==n?n:.1,0!==this.mInvMass?(this.mInvMass=1/this.mInvMass,this.mAcceleration=new o(0,t.gravityConstant)):this.mAcceleration=new o(0,0)}return t.prototype.updateMass=function(t){var e;e=0!==this.mInvMass?1/this.mInvMass:0,(e+=t)<=0?(this.mInvMass=0,this.mVelocity=new o(0,0),this.mAcceleration=new o(0,0),this.mAngularVelocity=0,this.mAngularAcceleration=0):(this.mInvMass=1/e,this.mAcceleration=new o(0,this.game.gravityConstant)),this.updateInertia()},t.prototype.update=function(t,e){var r=e/1e3;this.mVelocity=this.mVelocity.add(this.mAcceleration.scale(r)),this.move(this.mVelocity.scale(r)),this.mAngularVelocity+=this.mAngularAcceleration*r,this.rotate(this.mAngularVelocity*r)},t.prototype.boundTest=function(t){var e=t.mCenter.subtract(this.mCenter),r=this.mBoundRadius+t.mBoundRadius;return e.length()<=r},t}();e.RigidShape=a;var u=function(t){function e(e,r,i,n,s,a){var u=t.call(this,e,r,n,s,a)||this;return u.mType="Circle",u.mRadius=i,u.mBoundRadius=i,u.mStartpoint=new o(r.x,r.y-i),u.updateInertia(),u}return i.__extends(e,t),e.prototype.move=function(t){return this.mStartpoint=this.mStartpoint.add(t),this.mCenter=this.mCenter.add(t),this},e.prototype.rotate=function(t){return this.mAngle+=t,this.mStartpoint=this.mStartpoint.rotate(this.mCenter,t),this},e.prototype.updateInertia=function(){0===this.mInvMass?this.mInertia=0:this.mInertia=1/this.mInvMass*(this.mRadius*this.mRadius)/12},e.prototype.collisionTest=function(t,r){if(e.isInstanceOf(t))return this.collidedCircCirc(this,t,r);if(f.isInstanceOf(t))return t.collidedRectCirc(this,r);throw console.error(this,t),new n.DebugError("collision test error")},e.prototype.collidedCircCirc=function(t,e,r){var i=e.mCenter.subtract(t.mCenter),n=t.mRadius+e.mRadius,s=i.length();if(s>Math.sqrt(n*n))return!1;if(0!==s){var a=i.scale(-1).normalize().scale(e.mRadius);r.setInfo(n-s,i.normalize(),e.mCenter.add(a))}else t.mRadius>e.mRadius?r.setInfo(n,new o(0,-1),t.mCenter.add(new o(0,t.mRadius))):r.setInfo(n,new o(0,-1),e.mCenter.add(new o(0,e.mRadius)));return!0},e.isInstanceOf=function(t){return"Circle"===t.mType},e}(a);e.RigidCircle=u;var h=new(function(){return function(){this.mSupportPointDist=0}}()),c=new s,l=new s,f=function(t){function e(e,r,i,n,s,a,u){var h=t.call(this,e,r,s,a,u)||this;return h.mType="Rectangle",h.mVertex=[],h.mFaceNormal=[],h.mWidth=i,h.mHeight=n,h.mBoundRadius=Math.sqrt(i*i+n*n)/2,h.mVertex[0]=new o(r.x-i/2,r.y-n/2),h.mVertex[1]=new o(r.x+i/2,r.y-n/2),h.mVertex[2]=new o(r.x+i/2,r.y+n/2),h.mVertex[3]=new o(r.x-i/2,r.y+n/2),h.mFaceNormal[0]=h.mVertex[1].subtract(h.mVertex[2]),h.mFaceNormal[0]=h.mFaceNormal[0].normalize(),h.mFaceNormal[1]=h.mVertex[2].subtract(h.mVertex[3]),h.mFaceNormal[1]=h.mFaceNormal[1].normalize(),h.mFaceNormal[2]=h.mVertex[3].subtract(h.mVertex[0]),h.mFaceNormal[2]=h.mFaceNormal[2].normalize(),h.mFaceNormal[3]=h.mVertex[0].subtract(h.mVertex[1]),h.mFaceNormal[3]=h.mFaceNormal[3].normalize(),h.updateInertia(),h}return i.__extends(e,t),e.prototype.rotate=function(t){this.mAngle+=t;for(var e=0;e<this.mVertex.length;e++)this.mVertex[e]=this.mVertex[e].rotate(this.mCenter,t);return this.mFaceNormal[0]=this.mVertex[1].subtract(this.mVertex[2]),this.mFaceNormal[0]=this.mFaceNormal[0].normalize(),this.mFaceNormal[1]=this.mVertex[2].subtract(this.mVertex[3]),this.mFaceNormal[1]=this.mFaceNormal[1].normalize(),this.mFaceNormal[2]=this.mVertex[3].subtract(this.mVertex[0]),this.mFaceNormal[2]=this.mFaceNormal[2].normalize(),this.mFaceNormal[3]=this.mVertex[0].subtract(this.mVertex[1]),this.mFaceNormal[3]=this.mFaceNormal[3].normalize(),this},e.prototype.move=function(t){for(var e=0;e<this.mVertex.length;e++)this.mVertex[e]=this.mVertex[e].add(t);return this.mCenter=this.mCenter.add(t),this},e.prototype.updateInertia=function(){0===this.mInvMass?this.mInertia=0:(this.mInertia=1/this.mInvMass*(this.mWidth*this.mWidth+this.mHeight*this.mHeight)/12,this.mInertia=1/this.mInertia)},e.prototype.collisionTest=function(t,r){if(u.isInstanceOf(t))return this.collidedRectCirc(t,r);if(e.isInstanceOf(t))return this.collidedRectRect(this,t,r);throw console.error(this,t),new n.DebugError("collision test error")},e.prototype.boundTest=function(t){var e=t.mCenter.subtract(this.mCenter),r=this.mBoundRadius+t.mBoundRadius;return e.length()<=r},e.prototype.findSupportPoint=function(t,e){var r;h.mSupportPointDist=-9999999,h.mSupportPoint=null;for(var i=0;i<this.mVertex.length;i++)(r=this.mVertex[i].subtract(e).dot(t))>0&&r>h.mSupportPointDist&&(h.mSupportPoint=this.mVertex[i],h.mSupportPointDist=r)},e.prototype.findAxisLeastPenetration=function(t,e){for(var r,i=999999,n=null,o=!0,s=0;o&&s<this.mFaceNormal.length;){var a=this.mFaceNormal[s].scale(-1),u=this.mVertex[s];t.findSupportPoint(a,u),(o=null!==h.mSupportPoint)&&h.mSupportPointDist<i&&(i=h.mSupportPointDist,n=s,r=h.mSupportPoint),s+=1}if(o){var c=this.mFaceNormal[n].scale(i);e.setInfo(i,this.mFaceNormal[n],r.add(c))}return o},e.prototype.collidedRectRect=function(t,e,r){var i,n;if((i=t.findAxisLeastPenetration(e,c))&&(n=e.findAxisLeastPenetration(t,l)))if(c.getDepth()<l.getDepth()){var o=c.getNormal().scale(c.getDepth());r.setInfo(c.getDepth(),c.getNormal(),c.mStart.subtract(o))}else r.setInfo(l.getDepth(),l.getNormal().scale(-1),l.mStart);return i&&n},e.prototype.collidedRectCirc=function(t,e){var r,i,n,o,s,a,u=!0,h=-99999,c=0;for(r=0;r<4;r++){if((n=(i=t.mCenter).subtract(this.mVertex[r]).dot(this.mFaceNormal[r]))>0){h=n,c=r,u=!1;break}n>h&&(h=n,c=r)}if(u)a=this.mFaceNormal[c].scale(t.mRadius),e.setInfo(t.mRadius-h,this.mFaceNormal[c],i.subtract(a));else{var l=i.subtract(this.mVertex[c]),f=this.mVertex[(c+1)%4].subtract(this.mVertex[c]),d=l.dot(f);if(d<0){if((o=l.length())>t.mRadius)return!1;a=(s=l.normalize()).scale(-t.mRadius),e.setInfo(t.mRadius-o,s,i.add(a))}else if(l=i.subtract(this.mVertex[(c+1)%4]),f=f.scale(-1),(d=l.dot(f))<0){if((o=l.length())>t.mRadius)return!1;a=(s=l.normalize()).scale(-t.mRadius),e.setInfo(t.mRadius-o,s,i.add(a))}else{if(!(h<t.mRadius))return!1;a=this.mFaceNormal[c].scale(t.mRadius),e.setInfo(t.mRadius-h,this.mFaceNormal[c],i.subtract(a))}}return!0},e.isInstanceOf=function(t){return"Rectangle"===t.mType},e}(a);e.RigidRectangle=f},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=r(3),o=function(){return function(t){if(this.color=n.Color.WHITE,this.intensity=1,!t)throw new i.DebugError("game instanse is not passed to AbstractLight constructor");this.game=t}}();e.AbstractLight=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i,n=r(1),o=r(13),s=r(9),a=r(10),u=r(2),h=r(4);!function(t){t[t.MODE_TRANSFORM=0]="MODE_TRANSFORM",t[t.MODE_IDENTITY=1]="MODE_IDENTITY"}(i=e.CAMERA_MATRIX_MODE||(e.CAMERA_MATRIX_MODE={}));var c=function(){function t(t){var e=this;this.objFollowTo=null,this.scene=null,this.sceneWidth=0,this.sceneHeight=0,this.pos=new h.Point2d(0,0),this.scale=new h.Point2d(1,1),this.matrixMode=i.MODE_TRANSFORM,this._rect=new u.Rect,this._rectIdentity=new u.Rect,this._rectScaled=new u.Rect,this.cameraShakeTween=null,this.cameraPosCorrection={current:new h.Point2d,max:new h.Point2d},this.game=t,this._updateRect(),this.sceneWidth=t.width,this.sceneHeight=t.height,this.scale.observe(function(){e.revalidate()})}return t.prototype.revalidate=function(){this.scene=this.game.getCurrScene(),this.scene&&(this.scene.tileMap&&this.scene.tileMap.revalidate(),this._rectIdentity.setXYWH(0,0,this.game.width,this.game.height),this.scene.tileMap.spriteSheet?(this.sceneWidth=this.scene.tileMap.spriteSheet._frameWidth*this.scene.tileMap.width,this.sceneHeight=this.scene.tileMap.spriteSheet._frameHeight*this.scene.tileMap.height):(this.sceneWidth=this.game.getCurrScene().width||this.game.width,this.sceneHeight=this.game.getCurrScene().height||this.game.height))},t.prototype.followTo=function(t){if(null!==t){if(void 0===t)throw new n.DebugError("Camera:followTo(gameObject) - gameObject not provided");this.objFollowTo=t,this.revalidate()}},t.prototype.update=function(t,e){this.scene=this.game.getCurrScene();var r=this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet._frameWidth:0,i=this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet._frameHeight:0,n=this.game.width,o=this.game.height,s=n/2,a=o/2,u=this.getRectScaled().width,c=this.objFollowTo;if(c){"Right"===c._lastDirection&&(this.cameraPosCorrection.max.x=u/3),"Left"===c._lastDirection&&(this.cameraPosCorrection.max.x=-u/3);var l=this.cameraPosCorrection.max.substract(this.cameraPosCorrection.current).multiply(.05);this.cameraPosCorrection.current.add(l);var f=h.Point2d.fromPool(),d=h.Point2d.fromPool();d.set(this.objFollowTo.pos),d.addXY(-s,-a),f.x=this.pos.x+.1*(d.x+this.cameraPosCorrection.current.x-this.pos.x),f.y=this.pos.y+.1*(d.y-this.pos.y),f.x<0&&(f.x=0),f.y<0&&(f.y=0),f.x>this.sceneWidth-n+r&&(f.x=this.sceneWidth-n+r),f.y>this.sceneHeight-o+i&&(f.y=this.sceneHeight-o+i),this.pos.setXY(f.x,f.y),this.cameraShakeTween&&this.cameraShakeTween.update(t)}this._updateRect(),this.render()},t.prototype.shake=function(t,e){var r=this,i={time:0,point:new h.Point2d(0,0)};this.cameraShakeTween=new o.Tween({target:i,time:e,to:{time:e},progress:function(){var e=a.MathEx.random(-t/2,t/2),r=a.MathEx.random(-t/2,t/2);i.point.setXY(e,r)},complete:function(){return r.cameraShakeTween=null}})},t.prototype._updateRect=function(){var t=this.screenToWorld(h.Point2d.fromPool().setXY(0,0)),e=this.screenToWorld(h.Point2d.fromPool().setXY(this.game.width,this.game.height));this._rectScaled.setXYWH(t.x,t.y,e.x-t.x,e.y-t.y)},t.prototype.render=function(){var t=this.game.getRenderer();t.translate(this.game.width/2,this.game.height/2),t.scale(this.scale.x,this.scale.y),t.translate(-this.game.width/2,-this.game.height/2),t.translate(-this.pos.x,-this.pos.y),null!==this.cameraShakeTween&&t.translate(this.cameraShakeTween.getTarget().point.x,this.cameraShakeTween.getTarget().point.y)},t.prototype.screenToWorld=function(t){var e=s.makeScale(this.scale.x,this.scale.y,1),r=a.MathEx.unProject(t,this.game.width,this.game.height,e);return r.add(this.pos),r},t.prototype.getRect=function(){return this.matrixMode===i.MODE_IDENTITY?this._rectIdentity:(this._rect.setXYWH(this.pos.x,this.pos.y,this.game.width,this.game.height),this._rect)},t.prototype.getRectScaled=function(){return this.matrixMode===i.MODE_IDENTITY?this._rectIdentity:this._rectScaled},t}();e.Camera=c},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),function(t){t[t.NO_SCALE=0]="NO_SCALE",t[t.FIT=1]="FIT",t[t.STRETCH=2]="STRETCH"}(e.SCALE_STRATEGY||(e.SCALE_STRATEGY={}))},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(44);e.Button=i.Button;var n=r(19);e.TextField=n.TextField;var o=r(34);e.VScroll=o.VScroll;var s=r(63);e.CheckBox=s.CheckBox;var a=r(6);e.Container=a.Container;var u=r(17);e.Image=u.Image;var h=r(12);e.Rectangle=h.Rectangle;var c=r(64);e.Circle=c.Circle;var l=r(35);e.Ellipse=l.Ellipse;var f=r(65);e.Border=f.Border;var d=r(66);e.NinePatchImage=d.NinePatchImage;var p=r(67);e.AbsoluteLayout=p.AbsoluteLayout;var m=r(3);e.Color=m.Color;var g=r(68);e.LinearGradient=g.LinearGradient},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(6),o=r(12),s=r(3),a=function(t){function e(e){var r=t.call(this,e)||this;r.maxValue=0,r.value=0,r.enabled=!1;var i=new o.Rectangle(e);i.width=5,i.fillColor=new s.Color(50,50,50,10),i.color=s.Color.NONE.clone();var n=new o.Rectangle(e);return n.height=10,n.color=s.Color.NONE.clone(),n.fillColor=new s.Color(10,10,10,100),r.background=i,r.handler=n,r.appendChild(i),r.appendChild(n),r}return i.__extends(e,t),e.prototype.onGeometryChanged=function(){this.handler.width=this.background.width,this.value>this.maxValue&&(this.value=this.maxValue),this.maxValue&&(this.handler.height=this.height*this.height/this.maxValue),this.maxValue&&(this.handler.pos.y=this.height*this.value/this.maxValue),this.background.revalidate(),this.handler.revalidate(),this.calcDrawableRect(this.width,this.height)},e.prototype.draw=function(){return this.enabled},e}(n.Container);e.VScroll=a},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=function(t){function e(){var e=null!==t&&t.apply(this,arguments)||this;return e.radiusX=10,e.radiusY=20,e}return i.__extends(e,t),e.prototype.draw=function(){return this.game.getRenderer().drawEllipse(this),!0},e}(r(21).Shape);e.Ellipse=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(70),n=r(72),o=r(73),s=r(74),a=r(13),u=function(){function t(e){this.game=e,this.tweens=[],i.WebAudioContext.isAcceptable()?this.contextClass=i.WebAudioContext:n.HtmlAudioContext.isAcceptable()?this.contextClass=n.HtmlAudioContext:this.contextClass=o.FakeAudioContext,this.audioNodeSet=new s.AudioNodeSet(e,this.contextClass,t.DEFAULT_AUDIO_NODES_COUNT)}return t.prototype.loadSound=function(t,e,r){new this.contextClass(this.game).load(t,e,r)},t.prototype.play=function(t){var e=this.audioNodeSet.getFreeNode();e||console.log("no free node to play sound"),e&&e.play(t.resourcePath,t.loop)},t.prototype.stop=function(t){var e=this.audioNodeSet.getNodeBySound(t);e&&e.stop()},t.prototype.stopAll=function(){this.audioNodeSet.stopAll()},t.prototype.pauseAll=function(){this.audioNodeSet.pauseAll()},t.prototype.resumeAll=function(){this.audioNodeSet.resumeAll()},t.prototype.setGain=function(t,e,r){var i=this;void 0===r&&(r=0);var n=this.audioNodeSet.getNodeBySound(t);if(n)if(r){var o=new a.Tween({target:t,to:{_gain:e},time:r,progress:function(t){n.setGain(t._gain)},complete:function(){i.tweens.remove(o)}});this.tweens.push(o)}else t._gain=e,n.setGain(t._gain)},t.prototype.update=function(t,e){this.tweens.forEach(function(e){e.update(t)})},t.cache={},t.DEFAULT_AUDIO_NODES_COUNT=6,t}();e.AudioPlayer=u},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=function(){return function(){}}();e.AbstractPrimitive=i},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=function(t){function e(){var e=t.call(this)||this;return e.vertexArr=[0,0,0,1,1,0,1,1],e.indexArr=[0,1,2,3],e.texCoordArr=[0,0,0,1,1,0,1,1],e}return i.__extends(e,t),e}(r(37).AbstractPrimitive);e.Plane=n},function(t,e,r){"use strict";var i,n;Object.defineProperty(e,"__esModule",{value:!0}),function(t){t[t.ELLIPSE=0]="ELLIPSE",t[t.RECT=1]="RECT"}(i=e.SHAPE_TYPE||(e.SHAPE_TYPE={})),function(t){t[t.COLOR=0]="COLOR",t[t.TEXTURE=1]="TEXTURE",t[t.LINEAR_GRADIENT=2]="LINEAR_GRADIENT"}(n=e.FILL_TYPE||(e.FILL_TYPE={})),e.fragmentSource="\n\n#define HALF .5\n#define ZERO  0.\n#define ONE   1.\n#define ERROR_COLOR vec4(ONE,ZERO,ZERO,ONE)\n\nvec4 getFillColor(){\n    if (u_fillType=="+n.COLOR+") return u_fillColor;\n    else if (u_fillType=="+n.LINEAR_GRADIENT+") {\n        vec2 polarCoords = vec2(length(v_position.xy),atan(v_position.y/v_position.x));\n        polarCoords.y+=u_fillLinearGradient[2].x;\n        vec2 rectCoords = vec2(polarCoords.x*cos(polarCoords.y),polarCoords.x*sin(polarCoords.y));\n        return mix(u_fillLinearGradient[0],u_fillLinearGradient[1],rectCoords.x);\n        //return vec4(u_fillLinearGradient[0].x,u_fillLinearGradient[0].y,u_fillLinearGradient[0].z,ONE);\n    }\n    else if (u_fillType=="+n.TEXTURE+") {\n        float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2]; \n        float ty = (v_position.y-u_rectOffsetTop)/u_height*u_texRect[3];\n        vec2 txVec = vec2(tx,ty);\n        txVec += fract(u_texOffset);\n        txVec = mod(txVec,u_texRect.zw);\n        txVec += u_texRect.xy;\n        return texture2D(texture, txVec);\n    }\n    else return ERROR_COLOR;\n}\nfloat calcRadiusAtAngle(float x,float y) {\n     float a = atan(y-HALF,x-HALF);\n     float cosA = cos(a);\n     float sinA = sin(a);\n     return u_rx*u_ry/sqrt(u_rx*u_rx*sinA*sinA+u_ry*u_ry*cosA*cosA);\n}\nvoid drawEllipse(){\n     float dist = distance(vec2(HALF,HALF),v_position.xy);\n     float rAtCurrAngle = calcRadiusAtAngle(v_position.x,v_position.y);\n     if (dist < rAtCurrAngle) {\n        if (dist > rAtCurrAngle - u_lineWidth) gl_FragColor = u_color;\n        else gl_FragColor = getFillColor();\n     }\n     else discard;\n}\nvoid drawRect(){\n    float x = v_position.x - HALF;\n    float y = v_position.y - HALF;\n    float distX = abs(x);\n    float distY = abs(y);\n    float halfW = u_width  * HALF;\n    float halfH = u_height * HALF;\n    if (distX < halfW && distY < halfH) {\n        \n        if (distX>halfW - u_borderRadius && distY>halfH - u_borderRadius) {\n            vec2 borderCenter = vec2(0.,0.);\n            float posX = v_position.x, posY = v_position.y;\n            if (posX<HALF && posY<HALF) { // top left\n                borderCenter = vec2(HALF - halfW + u_borderRadius,HALF - halfH + u_borderRadius);\n            }\n            else if (posX>HALF && posY<HALF) { // top right\n                borderCenter = vec2(HALF + halfW - u_borderRadius,HALF - halfH + u_borderRadius); \n            }    \n            else if (posX<HALF && posY>HALF) { // bottom left\n                borderCenter = vec2(HALF - halfW + u_borderRadius,HALF + halfH - u_borderRadius); \n            }\n            else {  // bottom right\n                borderCenter = vec2(HALF + halfW - u_borderRadius,HALF + halfH - u_borderRadius);\n            }\n            float distToBorderCenter = distance(v_position.xy,borderCenter);\n            if (distToBorderCenter>u_borderRadius) discard;\n            else if (distToBorderCenter>u_borderRadius-u_lineWidth) gl_FragColor = u_color;\n            else gl_FragColor = getFillColor();\n        }\n        \n        else if (distX > halfW - u_lineWidth || distY > halfH - u_lineWidth)\n            gl_FragColor = u_color;\n        else \n            gl_FragColor = getFillColor();\n    }\n    else discard;\n}\n\nvoid main(){\n    if (u_shapeType=="+i.ELLIPSE+") drawEllipse();\n    else if (u_shapeType=="+i.RECT+") drawRect();\n    else gl_FragColor = ERROR_COLOR;\n    gl_FragColor.a*=u_alpha;\n}\n\n\n\n"},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=r(41),o=function(){function t(t,e,r){if(!t)throw new i.DebugError("can not create FrameBuffer, gl context not passed to constructor, expected: FrameBuffer(gl)");this.gl=t,this.width=e,this.height=r,this.texture=new n.Texture(t),this.texture.setImage(null,e,r),this._init(t,e,r)}return t.prototype._init=function(t,e,r){if(this.glRenderBuffer=t.createRenderbuffer(),!this.glRenderBuffer)throw new i.DebugError("can not allocate memory for glRenderBuffer");if(t.bindRenderbuffer(t.RENDERBUFFER,this.glRenderBuffer),t.renderbufferStorage(t.RENDERBUFFER,t.DEPTH_COMPONENT16,e,r),this.glFrameBuffer=t.createFramebuffer(),!this.glFrameBuffer)throw new i.DebugError("can not allocate memory for glFrameBuffer");t.bindFramebuffer(t.FRAMEBUFFER,this.glFrameBuffer),t.framebufferTexture2D(t.FRAMEBUFFER,t.COLOR_ATTACHMENT0,t.TEXTURE_2D,this.texture.getGlTexture(),0),t.framebufferRenderbuffer(t.FRAMEBUFFER,t.DEPTH_ATTACHMENT,t.RENDERBUFFER,this.glRenderBuffer);var n=t.checkFramebufferStatus(t.FRAMEBUFFER);if(n!==t.FRAMEBUFFER_COMPLETE)throw new i.DebugError("frame buffer status error: "+n+" (expected gl.FRAMEBUFFER_COMPLETE("+t.FRAMEBUFFER_COMPLETE+"))");this.texture.unbind(),t.bindRenderbuffer(t.RENDERBUFFER,null),t.bindFramebuffer(t.FRAMEBUFFER,null)},t.prototype.bind=function(){t.currInstance!==this&&(this.gl.bindFramebuffer(this.gl.FRAMEBUFFER,this.glFrameBuffer),this.gl.viewport(0,0,this.width,this.height),t.currInstance=this)},t.prototype.unbind=function(){this.gl.bindFramebuffer(this.gl.FRAMEBUFFER,null),t.currInstance=null},t.prototype.destroy=function(){this.gl.deleteRenderbuffer(this.glRenderBuffer),this.gl.deleteFramebuffer(this.glFrameBuffer)},t.prototype.getTexture=function(){return this.texture},t.currInstance=null,t}();e.FrameBuffer=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=r(40),o=r(14),s=function(t){return 0==(t&t-1)},a=function(){function t(t){this.buffers=[],this.parent=t}return t.prototype.instantiate=function(t){this.gl=t;for(var e=0;e<2;e++)this.buffers.push(new n.FrameBuffer(t,this.parent.size.width,this.parent.size.height))},t.prototype.flip=function(){var t=this.buffers[0];this.buffers[0]=this.buffers[1],this.buffers[1]=t},t.prototype.getSourceBuffer=function(){return this.buffers[0]},t.prototype.getDestBuffer=function(){return this.buffers[1]},t.prototype.destroy=function(){this.buffers&&this.buffers.forEach(function(t){return t.destroy()})},t}(),u=function(){function t(e){if(this.tex=null,this.size=new o.Size(0,0),this.isPowerOfTwo=!1,this._texFilterBuff=null,!e)throw new i.DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");if(this.gl=e,t.MAX_TEXTURE_IMAGE_UNITS||(t.MAX_TEXTURE_IMAGE_UNITS=e.getParameter(e.MAX_TEXTURE_IMAGE_UNITS)),this.tex=e.createTexture(),!this.tex)throw new i.DebugError("can not allocate memory for texture");e.bindTexture(e.TEXTURE_2D,this.tex),e.texImage2D(e.TEXTURE_2D,0,e.RGBA,1,1,0,e.RGBA,e.UNSIGNED_BYTE,new Uint8Array([0,255,0,255])),e.bindTexture(e.TEXTURE_2D,this.tex),this._texFilterBuff=new a(this)}return t.prototype.setImage=function(t,e,r){if(void 0===e&&(e=0),void 0===r&&(r=0),!(t||e||r))throw new i.DebugError("texture.setImage: if image is null, width and height must be specified: tex.setImage(null,w,h)");var n=this.gl;t?this.size.setWH(t.width,t.height):this.size.setWH(e,r),n.bindTexture(n.TEXTURE_2D,this.tex),n.pixelStorei(n.UNPACK_PREMULTIPLY_ALPHA_WEBGL,1),t?n.texImage2D(n.TEXTURE_2D,0,n.RGBA,n.RGBA,n.UNSIGNED_BYTE,t):n.texImage2D(n.TEXTURE_2D,0,n.RGBA,e,r,0,n.RGBA,n.UNSIGNED_BYTE,null),this.isPowerOfTwo=!!t&&(s(t.width)&&s(t.height)),this.isPowerOfTwo?(n.generateMipmap(n.TEXTURE_2D),n.texParameteri(n.TEXTURE_2D,n.TEXTURE_WRAP_S,n.REPEAT),n.texParameteri(n.TEXTURE_2D,n.TEXTURE_WRAP_T,n.REPEAT)):(n.texParameteri(n.TEXTURE_2D,n.TEXTURE_WRAP_S,n.CLAMP_TO_EDGE),n.texParameteri(n.TEXTURE_2D,n.TEXTURE_WRAP_T,n.CLAMP_TO_EDGE),n.texParameteri(n.TEXTURE_2D,n.TEXTURE_MIN_FILTER,n.LINEAR),n.texParameteri(n.TEXTURE_2D,n.TEXTURE_MAG_FILTER,n.LINEAR)),n.bindTexture(n.TEXTURE_2D,null)},t.prototype.applyFilters=function(t,e){if(void 0===e)throw new i.DebugError("can not apply filters. frameBuffer must be explicitly passed. Pass null if no frame buffer needs to bind after filtering");var r=t.length;if(0===r)return this;this._texFilterBuff.buffers.length||this._texFilterBuff.instantiate(this.gl);var n=[{texture:this,name:"texture"}];t[0].doFilter(n,this._texFilterBuff.getDestBuffer());for(var o=1;o<r;o++){this._texFilterBuff.flip();var s=[{texture:this._texFilterBuff.getSourceBuffer().texture,name:"texture"}];t[o].doFilter(s,this._texFilterBuff.getDestBuffer())}return this._texFilterBuff.flip(),null!==e&&e.bind(),this._texFilterBuff.getSourceBuffer().texture},t.prototype.bind=function(e,r,n){if(!e)throw console.error(this),new i.DebugError("can not bind texture: uniform name was not provided");if(r>t.MAX_TEXTURE_IMAGE_UNITS-1)throw new i.DebugError("can not bind texture with index "+r+". Max supported value by device is "+t.MAX_TEXTURE_IMAGE_UNITS);if(n.setUniform(e,r),t.currInstances[r]!==this){var o=this.gl;o.activeTexture(o.TEXTURE0+r),o.bindTexture(o.TEXTURE_2D,this.tex),t.currInstances[r]=this}},t.prototype.unbind=function(e){void 0===e&&(e=0);var r=this.gl;r.activeTexture(r.TEXTURE0+e),r.bindTexture(r.TEXTURE_2D,null),delete t.currInstances[e]},t.prototype.getColorArray=function(){var t=this.gl,e=this.size.width*this.size.height;if(t.checkFramebufferStatus(t.FRAMEBUFFER)!==t.FRAMEBUFFER_COMPLETE)throw new i.DebugError("Texture.GetColorArray() failed!");var r=new Uint8Array(4*e);return t.readPixels(0,0,this.size.width,this.size.height,t.RGBA,t.UNSIGNED_BYTE,r),r},t.prototype.destroy=function(){this._texFilterBuff&&this._texFilterBuff.destroy(),this.gl.deleteTexture(this.tex)},t.prototype.getSize=function(){return this.size},t.prototype.getGlTexture=function(){return this.tex},t.MAX_TEXTURE_IMAGE_UNITS=0,t.currInstances={},t}();e.Texture=u},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(38),o=r(7),s=r(11),a=r(16),u=r(24),h=function(t){function e(e,r){var i=t.call(this,e)||this,s=new u.TexShaderGenerator;return i.primitive=new n.Plane,i.program=r||new o.ShaderProgram(e,s.getVertexSource(),s.getFragmentSource()),i.bufferInfo=new a.BufferInfo(e,{posVertexInfo:{array:i.primitive.vertexArr,type:e.FLOAT,size:2,attrName:"a_position"},posIndexInfo:{array:i.primitive.indexArr},texVertexInfo:{array:i.primitive.texCoordArr,type:e.FLOAT,size:2,attrName:"a_texCoord"},drawMethod:i.gl.TRIANGLE_STRIP}),i}return i.__extends(e,t),e}(s.AbstractDrawer);e.SpriteRectDrawer=h},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return i.__extends(e,t),e.prototype.setResourceLink=function(t){this._resourceLink=t},e.prototype.getResourceLink=function(){return this._resourceLink},e}(r(20).BaseModel);e.Resource=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(6),o=r(19),s=function(t){function e(e){var r=t.call(this,e)||this;return r.font=null,r._textField=new o.TextField(e),r.appendChild(r._textField),r}return i.__extends(e,t),e.prototype.revalidate=function(){t.prototype.revalidate.call(this),this._textField.setFont(this.font),this.onGeometryChanged()},e.prototype.onGeometryChanged=function(){if(this._textField.onGeometryChanged(),this.calcDrawableRect(this._textField.width,this._textField.height),this.background){var t=(this.background.width-this._textField.width)/2,e=(this.background.height-this._textField.height)/2;this._textField.pos.setXY(t,e)}},e.prototype.setText=function(t){this._textField.setText(t),this._dirty=!0},e.prototype.setFont=function(t){this.font=t,this._textField.setFont(t)},e.prototype.getText=function(){return this._textField.getText()},e.prototype.update=function(e,r){t.prototype.update.call(this,e,r)},e.prototype.draw=function(){return this.background&&this.background.draw(),this._textField.render(),!0},e}(n.Container);e.Button=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(20),o=r(49),s=r(50),a=r(51),u=r(3),h=r(31),c=r(15),l=r(52),f=function(t){function e(e){var r=t.call(this,e)||this;return r.type="Scene",r.layers=[],r.useBG=!1,r.colorBG=u.Color.WHITE,r.filters=[],r.tileMap=new o.TileMap(e),r.ambientLight=new a.AmbientLight(e),r.uiLayer=new s.Layer(r.game),r.addLayer(new s.Layer(e)),r.resourceLoader=new l.ResourceLoader(e),r}return i.__extends(e,t),e.prototype.revalidate=function(){t.prototype.revalidate.call(this)},e.prototype.addTweenMovie=function(t){this._tweenMovies.push(t)},e.prototype.getAllGameObjects=function(){for(var t=[],e=0;e<this.layers.length;e++)for(var r=this.layers[this.layers.length-1-e],i=0;i<r.children.length;i++){var n=r.children[r.children.length-1-i];t.push(n)}return t},e.prototype.getAllSpriteSheets=function(){var t={};return this.layers.forEach(function(e){e.getAllSpriteSheets().forEach(function(e){t[e.id]=e})}),this.tileMap&&this.tileMap.spriteSheet&&(t[this.tileMap.spriteSheet.id]=this.tileMap.spriteSheet),Object.keys(t).map(function(e){return t[e]})},e.prototype.getDefaultLayer=function(){return this.layers[0]},e.prototype.findObject=function(t){for(var e=0,r=this.layers;e<r.length;e++){var i=r[e].findObject(t);if(null!==i)return i}return null},e.prototype.addLayer=function(t){this.layers.push(t)},e.prototype.removeLayer=function(t){this.layers.remove(t)},e.prototype.appendChild=function(t){t.revalidate(),this.getDefaultLayer().appendChild(t)},e.prototype.prependChild=function(t){this.getDefaultLayer().prependChild(t)},e.prototype.findLayer=function(t){for(var e=0,r=this.layers;e<r.length;e++){var i=r[e];if(c.isObjectMatch(i,t))return i}return null},e.prototype.onPreloading=function(){},e.prototype.onProgress=function(t){},e.prototype.onReady=function(){},e.prototype.beforeUpdate=function(){},e.prototype.onUpdate=function(){},e.prototype.beforeRender=function(){},e.prototype.onRender=function(){},e.prototype.onDestroy=function(){},e.prototype.update=function(e,r){t.prototype.update.call(this,e,r),this.beforeUpdate();for(var i=0,n=this.layers;i<n.length;i++){n[i].update(e,r)}this.uiLayer.update(e,r),this.onUpdate()},e.prototype.renderMainFrame=function(){var t=this.game.getRenderer();this.game.camera.update(this.game.getTime(),this.game.getDeltaTime());for(var e=0,r=this.layers;e<r.length;e++){r[e].render()}this.tileMap.render(),t.save(),t.resetTransform(),this.game.camera.matrixMode=h.CAMERA_MATRIX_MODE.MODE_IDENTITY,this.uiLayer.render(),t.restore(),this.game.camera.matrixMode=h.CAMERA_MATRIX_MODE.MODE_TRANSFORM,this.onRender(),this.game.getRenderer().restore(),this.game.getRenderer().debugTextField&&(this.game.getRenderer().debugTextField.update(this.game.getTime(),this.game.getDeltaTime()),this.game.getRenderer().debugTextField.render()),this.game.getRenderer().restore()},e.prototype.renderPreloadingFrame=function(){this.game.getRenderer().resetTransform(),this.preloadingGameObject.render()},e.prototype.render=function(){this.beforeRender();var t=this.game.getRenderer();this.useBG?t.clearColor(this.colorBG):t.clear(),t.beginFrameBuffer(),this.useBG?t.clearColor(this.colorBG):t.clear(),this.game.camera.matrixMode=h.CAMERA_MATRIX_MODE.MODE_TRANSFORM,this.resourceLoader.isCompleted()?this.renderMainFrame():void 0!==this.preloadingGameObject&&this.renderPreloadingFrame(),t.flipFrameBuffer(this.filters)},e}(n.BaseModel);e.Scene=f},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=function(){function t(t,e){this.lastTime=0,this.interval=e,this.callback=t}return t.prototype.onUpdate=function(t){this.lastTime||(this.lastTime=t);var e=t-this.lastTime;0!==e&&e>this.interval&&(this.lastTime=t,this.callback())},t}();e.Timer=i},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=function(){function t(){}return t.linear=function(t,e,r,i){return r*t/i+e},t.easeInQuad=function(t,e,r,i){return r*(t/=i)*t+e},t.easeOutQuad=function(t,e,r,i){return-r*(t/=i)*(t-2)+e},t.easeInOutQuad=function(t,e,r,i){return(t/=i/2)<1?r/2*t*t+e:-r/2*(--t*(t-2)-1)+e},t.easeInCubic=function(t,e,r,i){return r*(t/=i)*t*t+e},t.easeOutCubic=function(t,e,r,i){return t/=i,r*(--t*t*t+1)+e},t.easeInOutCubic=function(t,e,r,i){return(t/=i/2)<1?r/2*t*t*t+e:r/2*((t-=2)*t*t+2)+e},t.easeInQuart=function(t,e,r,i){return r*(t/=i)*t*t*t+e},t.easeOutQuart=function(t,e,r,i){return t/=i,-r*(--t*t*t*t-1)+e},t.easeInOutQuart=function(t,e,r,i){return(t/=i/2)<1?r/2*t*t*t*t+e:-r/2*((t-=2)*t*t*t-2)+e},t.easeInQuint=function(t,e,r,i){return r*(t/=i)*t*t*t*t+e},t.easeOutQuint=function(t,e,r,i){return t/=i,r*(--t*t*t*t*t+1)+e},t.easeInOutQuint=function(t,e,r,i){return(t/=i/2)<1?r/2*t*t*t*t*t+e:r/2*((t-=2)*t*t*t*t+2)+e},t.easeInSine=function(t,e,r,i){return-r*Math.cos(t/i*(Math.PI/2))+r+e},t.easeOutSine=function(t,e,r,i){return r*Math.sin(t/i*(Math.PI/2))+e},t.easeInOutSine=function(t,e,r,i){return-r/2*(Math.cos(Math.PI*t/i)-1)+e},t.easeInExpo=function(t,e,r,i){return r*Math.pow(2,10*(t/i-1))+e},t.easeOutExpo=function(t,e,r,i){return r*(1-Math.pow(2,-10*t/i))+e},t.easeInOutExpo=function(t,e,r,i){return(t/=i/2)<1?r/2*Math.pow(2,10*(t-1))+e:(t--,r/2*(2-Math.pow(2,-10*t))+e)},t.easeInCirc=function(t,e,r,i){return t/=i,-r*(Math.sqrt(1-t*t)-1)+e},t.easeOutCirc=function(t,e,r,i){return t/=i,t--,r*Math.sqrt(1-t*t)+e},t.easeInOutCirc=function(t,e,r,i){return(t/=i/2)<1?-r/2*(Math.sqrt(1-t*t)-1)+e:(t-=2,r/2*(Math.sqrt(1-t*t)+1)+e)},t.easeInElastic=function(t,e,r,i){var n=1.70158,o=0,s=r;return 0===t?e:1==(t/=i)?e+r:(o||(o=.3*i),s<Math.abs(r)?(s=r,n=o/4):n=o/(2*Math.PI)*Math.asin(r/s),-s*Math.pow(2,10*(t-=1))*Math.sin((t*i-n)*(2*Math.PI)/o)+e)},t.easeOutElastic=function(t,e,r,i){var n=1.70158,o=0,s=r;return 0===t?e:1==(t/=i)?e+r:(o||(o=.3*i),s<Math.abs(r)?(s=r,n=o/4):n=o/(2*Math.PI)*Math.asin(r/s),s*Math.pow(2,-10*t)*Math.sin((t*i-n)*(2*Math.PI)/o)+r+e)},t.easeInOutElastic=function(t,e,r,i){var n=1.70158,o=0,s=r;return 0===t?e:2==(t/=i/2)?e+r:(o||(o=i*(.3*1.5)),s<Math.abs(r)?(s=r,n=o/4):n=o/(2*Math.PI)*Math.asin(r/s),t<1?s*Math.pow(2,10*(t-=1))*Math.sin((t*i-n)*(2*Math.PI)/o)*-.5+e:s*Math.pow(2,-10*(t-=1))*Math.sin((t*i-n)*(2*Math.PI)/o)*.5+r+e)},t.easeInBack=function(t,e,r,i){var n=1.70158;return r*(t/=i)*t*((n+1)*t-n)+e},t.easeOutBack=function(t,e,r,i){var n=1.70158;return r*((t=t/i-1)*t*((n+1)*t+n)+1)+e},t.easeInOutBack=function(t,e,r,i){var n=1.70158;return(t/=i/2)<1?r/2*(t*t*((1+(n*=1.525))*t-n))+e:r/2*((t-=2)*t*((1+(n*=1.525))*t+n)+2)+e},t.easeInBounce=function(e,r,i,n){return i-t.easeOutBounce(n-e,0,i,n)+r},t.easeOutBounce=function(t,e,r,i){return(t/=i)<1/2.75?r*(7.5625*t*t)+e:t<2/2.75?r*(7.5625*(t-=1.5/2.75)*t+.75)+e:t<2.5/2.75?r*(7.5625*(t-=2.25/2.75)*t+.9375)+e:r*(7.5625*(t-=2.625/2.75)*t+.984375)+e},t.easeInOutBounce=function(e,r,i,n){return e<n/2?.5*t.easeInBounce(2*e,0,i,n)+r:.5*t.easeOutBounce(2*e-n,0,i,n)+.5*i+r},t}();e.Easing=i},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(13),n=function(){function t(t){this.game=t,this._tweensInMovie=[],this._startedTime=null,this._completed=!1,this._loop=!1,this._onComplete=null}return t.prototype.tween=function(t,e){var r=new i.Tween(e);return this._tweensInMovie.push({startTime:t,tween:r}),this},t.prototype.loop=function(t){return this._loop=t,this},t.prototype.finish=function(t){return this._onComplete=t,this},t.prototype.play=function(){this.game.getCurrScene().addTweenMovie(this)},t.prototype.update=function(t){if(!this._completed){this._startedTime||(this._startedTime=t);var e=t-this._startedTime,r=!0;this._tweensInMovie.forEach(function(i){e>i.startTime&&(e<i.startTime+i.tween.getTweenTime()?i.tween.update(t):i.tween.complete()),i.tween.isCompleted()||(r=!1)}),r&&(this._loop?this.reset():(this._completed=!0,this._onComplete&&this._onComplete()))}},t.prototype.isCompleted=function(){return this._completed},t.prototype.reset=function(){return this._startedTime=null,this._completed=!1,this._tweensInMovie.forEach(function(t){t.tween.reset()}),this},t}();e.TweenMovie=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(2),o=r(29),s=r(18),a=r(1),u=function(t){function e(e){var r=t.call(this)||this;return r.game=e,r.type="TileMap",r.spriteSheet=null,r.data=[],r.width=0,r.height=0,r.blendMode="",r}return i.__extends(e,t),e.prototype.fromTiledJSON=function(t,e,r){this.data=[];for(var i=0,n=0;n<r;n++){this.data[n]=[];for(var s=0;s<e;s++){var u=t[i++];if(0===u)this.data[n][s]=void 0;else{this.data[n][s]={},this.data[n][s].val=u-1;var h=this.spriteSheet._frameWidth,c=this.spriteSheet._frameHeight,l=s*h,f=n*c,d=new o.Vec2(l+h/2,f+c/2),p=new o.RigidRectangle(this.game,d,h,c,0);p.fixedAngle=!0,this.data[n][s].rect=p}}}this.width=e,this.height=r;var m=i,g=t.length;if(g!==m)throw new a.DebugError("incorrect mapWidth/mapHeight provided. Expected "+g+" tiles, but "+m+" found ("+e+"*"+r+")")},e.prototype.revalidate=function(){this.game.camera._updateRect();var t=this.game.camera.getRectScaled();this.spriteSheet&&(this._tilesInScreenX=~~(t.width/this.spriteSheet._frameWidth),this._tilesInScreenY=~~(t.height/this.spriteSheet._frameHeight))},e.prototype.getTileAt=function(t,e){if(this.spriteSheet){var r=~~(t/this.spriteSheet._frameWidth),i=~~(e/this.spriteSheet._frameHeight);if(this.data[i]){var n=this.data[i][r];if(n)return{tileIndex:this.spriteSheet.numOfFramesH*i+r+1,tile:n}}}},e.prototype.getTilesAtRect=function(t){var e=[];if(!this.spriteSheet)return e;for(var r,i={},n=t.x,o=t.x+t.width,s=t.y+t.height;;){for(r=t.y;;){var a=this.getTileAt(n,r);if(a&&(i[a.tileIndex]||(e.push(a.tile),i[a.tileIndex]=!0)),r===s)break;(r+=this.spriteSheet._frameHeight)>s&&(r=s)}if(n===o)break;(n+=this.spriteSheet._frameWidth)>o&&(n=o)}return e},e.prototype.render=function(){var t=this.spriteSheet;if(t){var e=this.game.camera,r=(this.game.getRenderer(),e.getRectScaled()),i=~~(r.x/this.spriteSheet._frameWidth),o=~~(r.y/this.spriteSheet._frameHeight);i<0&&(i=0),o<0&&(o=0);for(var s=i+this._tilesInScreenX+1,a=o+this._tilesInScreenY+1,u=o;u<=a;u++)for(var h=i;h<=s;h++){var c=this.data[u]&&this.data[u][h]&&this.data[u][h].val;if(!1!==c&&null!==c&&void 0!==c)n.Rect.fromPool().clone().setXYWH(h*t._frameWidth,u*t._frameHeight,t._frameWidth,t._frameHeight)}}},e}(s.CommonObject);e.TileMap=u},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=function(t){function e(e){var r=t.call(this,e)||this;return r.type="Layer",r.children=[],r}return i.__extends(e,t),e.prototype.findObject=function(t){for(var e=0,r=this.children;e<r.length;e++){var i=r[e].findObject(t);if(null!==i)return i}return null},e.prototype.prependChild=function(t){t.parent=this,this.children.unshift(t),t.onShow()},e.prototype.appendChild=function(t){this.children.push(t),t.onShow()},e.prototype.getAllSpriteSheets=function(){var t=[];return this.children.forEach(function(e){e.spriteSheet&&!t.find(function(t){return e.id===t.id})&&t.push(e.spriteSheet)}),t},e.prototype.onShow=function(){this.children.forEach(function(t){t.onShow()})},e.prototype.update=function(t,e){for(var r=0,i=this.children;r<i.length;r++){i[r].update(t,e)}},e.prototype.render=function(){for(var t=0,e=this.children;t<e.length;t++){e[t].render()}},e}(r(20).BaseModel);e.Layer=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=function(t){function e(e){var r=t.call(this,e)||this;return r.direction=[1,1,1],r}return i.__extends(e,t),e.prototype.setUniforms=function(t){t["u_ambientLight.color"]=this.color.asGL(),t["u_ambientLight.direction"]=this.direction},e}(r(30).AbstractLight);e.AmbientLight=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(53),n=r(54),o=function(){function t(t){this.game=t,this.q=new i.Queue}return t.prototype.loadImage=function(t){var e=this,r=n.ResourceLink.create();return this.q.addTask(function(){e.game.getRenderer().loadTextureInfo(t,r,function(){return e.q.resolveTask(t)})},t),r},t.prototype.startLoading=function(){this.q.start()},t.prototype.isCompleted=function(){return this.q.isCompleted()},t.prototype.getProgress=function(){return this.q.calcProgress()},t.prototype.onProgress=function(t){this.q.onProgress=t},t.prototype.onCompleted=function(t){this.q.onResolved=t},t}();e.ResourceLoader=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=function(){function t(){this.tasksResolved=0,this.tasks=[],this.tasksProgressById={},this.completed=!1}return t.prototype.size=function(){return this.tasks.length},t.prototype.progressTask=function(t,e){this.tasksProgressById[t]=e,this.onProgress&&this.onProgress(this.calcProgress())},t.prototype.resolveTask=function(t){this.tasksResolved++,this.tasksProgressById[t]=1,this.tasks.length===this.tasksResolved?(this.onProgress&&this.onProgress(1),this.completed=!0,this.onResolved&&this.onResolved()):this.onProgress&&this.onProgress(this.calcProgress())},t.prototype.addTask=function(t,e){void 0===this.tasksProgressById[e]&&(this.tasks.push(t),this.tasksProgressById[e]=0)},t.prototype.isCompleted=function(){return this.completed},t.prototype.calcProgress=function(){var t=this,e=0;return Object.keys(this.tasksProgressById).forEach(function(r){e+=t.tasksProgressById[r]||0}),e/this.tasks.length},t.prototype.start=function(){0===this.size()&&this.onResolved&&this.onResolved(),this.tasks.forEach(function(t){t&&t()})},t}();e.Queue=i},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=0,n=function(){function t(t){this.id=t}return t.prototype.getId=function(){return this.id},t.prototype.setTarget=function(t){this.target=t},t.prototype.getTarget=function(){return this.target},t.create=function(){return new t((i++).toString())},t}();e.ResourceLink=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0);r(56);var n=r(57),o=r(22),s=r(27),a=r(58),u=r(18),h=r(31),c=r(32),l=r(4),f=r(59),d=r(61),p=r(69),m=r(1),g=r(36),_=function(t){function e(){var e=t.call(this)||this;return e._lastTime=0,e._currTime=0,e._deltaTime=0,e._running=!1,e._destroyed=!1,e.scale=new l.Point2d(1,1),e.pos=new l.Point2d(0,0),e.width=320,e.height=240,e.gravityConstant=0,e.fps=0,e.scaleStrategy=c.SCALE_STRATEGY.FIT,e._cnt=0,e.mouse=new o.Mouse(e),e.keyboard=new s.Keyboard(e),e.keyboard.listenTo(),e.gamePad=new a.GamePad(e),e.collider=new p.ColliderEngine(e),e.camera=new h.Camera(e),e.lightArray=new f.LightArray(e),e.uiBuilder=new d.UIBuilder(e),e.audioPlayer=new g.AudioPlayer(e),e.camera.revalidate(),window.game=e,e}return i.__extends(e,t),e.prototype.getTime=function(){return this._lastTime},e.prototype.getDeltaTime=function(){return this._deltaTime},e.prototype.log=function(t){this._renderer.log(t)},e.prototype.setRenderer=function(t){this._renderer=new t(this)},e.prototype.getRenderer=function(){return this._renderer},e.prototype.debug2=function(){for(var t=[],e=0;e<arguments.length;e++)t[e]=arguments[e];if(this._cnt++,console.log.apply(console,t),this._cnt>10)throw new m.DebugError("too many logs")},e.prototype.runScene=function(t){var e=this;this.revalidate(),t.onPreloading(),t.resourceLoader.onProgress(function(){t.onProgress(t.resourceLoader.getProgress())}),t.resourceLoader.startLoading(),this._currentScene=t,this._running||this.update(),this._running=!0,t.resourceLoader.onCompleted(function(){e._currentScene.onReady()})},e.prototype.getCurrScene=function(){return this._currentScene},e.prototype.update=function(){if(!this._destroyed){this._lastTime=this._currTime,this._currTime=Date.now();var t=this._currTime;this._lastTime||(this._lastTime=this._currTime),this._deltaTime=this._currTime-this._lastTime,this.fps=~~(1e3/this._deltaTime);var r=this._renderer.getError();if(r)throw new m.DebugError("render error with code "+r);var i=Math.min(this._deltaTime,e.UPDATE_TIME_RATE),n=~~(this._deltaTime/e.UPDATE_TIME_RATE)||1,o=this._currTime-n*e.UPDATE_TIME_RATE,s=0;do{if(this._currentScene.update(o,i),this.keyboard.update(),this.gamePad.update(),this.audioPlayer.update(o,i),o+=e.UPDATE_TIME_RATE,++s>10){this._lastTime=this._currTime=t;break}}while(s<n);this._currentScene.render(),requestAnimationFrame(this.update.bind(this))}},e.prototype.destroy=function(){var t=this;this._destroyed=!0;for(var e=setTimeout(function(){},0),r=setInterval(function(){},0),i=Math.max(e,r)+16,o=0;o<i;o++)clearInterval(o),clearTimeout(o);this.keyboard.destroy(),this.mouse.destroy(),this._renderer.cancelFullScreen(),n.BaseAbstractBehaviour.destroyAll(),setTimeout(function(){t._renderer.destroy()},200)},e.prototype.revalidate=function(){if(t.prototype.revalidate.call(this),!this._renderer)throw new m.DebugError("game renderer is not set")},e.UPDATE_TIME_RATE=20,e}(u.CommonObject);e.Game=_},function(t,e){Array.prototype.remove=function(t){for(var e=this.length,r=0;e--;)t(this[e],e)&&(this.splice(e,1),r++);return r},window.requestAnimationFrame=window.requestAnimationFrame||window.webkitRequestAnimationFrame||function(t){setTimeout(t,17)},window.cancelAnimationFrame||(window.cancelAnimationFrame=function(t){return clearTimeout(t)}),Array.prototype.find||(Array.prototype.find=function(t){if(null==this)throw new TypeError("Array.prototype.find called on null or undefined");if("function"!=typeof t)throw new TypeError("predicate must be a function");for(var e,r=Object(this),i=r.length>>>0,n=arguments[1],o=0;o<i;o++)if(e=r[o],t.call(n,e,o,r))return e})},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=function(){function t(e){this.game=e,t.instances.push(this)}return t.prototype.manage=function(t,e){throw console.error(this),new i.DebugError("BaseAbstractBehaviour: method 'manage' not implemented")},t.prototype.onUpdate=function(t,e){},t.prototype.destroy=function(){},t.destroyAll=function(){t.instances.forEach(function(t){t.destroy()})},t.instances=[],t}();e.BaseAbstractBehaviour=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(27);window.addEventListener("gamepadconnected",function(t){console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",t.gamepad.index,t.gamepad.id,t.gamepad.buttons.length,t.gamepad.axes.length)}),window.addEventListener("gamepaddisconnected",function(t){console.log("Gamepad disconnected from index %d: %s",t.gamepad.index,t.gamepad.id)});var n=function(){function t(t){this.game=t}return t.prototype.update=function(){this.gamepads=navigator.getGamepads&&navigator.getGamepads()||navigator.webkitGetGamepads&&navigator.webkitGetGamepads()||navigator.webkitGamepads||navigator.mozGamepads||navigator.msGamepads||navigator.gamepads||[];for(var t=0,e=this.gamepads.length;t<e;t++){var r=this.gamepads[t];if(r){var n=r.buttons.length;n>7&&(n=7);for(var o=0;o<n;o++){r.buttons[o].pressed?this.game.keyboard.press(o):this.game.keyboard.release(o)}if(0!==r.axes[0]&&0!==r.axes[1]){var s=~~r.axes[0],a=~~r.axes[1];1===s?this.game.keyboard.press(i.KEY.GAME_PAD_AXIS_RIGHT):this.game.keyboard.release(i.KEY.GAME_PAD_AXIS_RIGHT),-1===s?this.game.keyboard.press(i.KEY.GAME_PAD_AXIS_LEFT):this.game.keyboard.release(i.KEY.GAME_PAD_AXIS_LEFT),1===a?this.game.keyboard.press(i.KEY.GAME_PAD_AXIS_DOWN):this.game.keyboard.release(i.KEY.GAME_PAD_AXIS_DOWN),-1===a?this.game.keyboard.press(i.KEY.GAME_PAD_AXIS_UP):this.game.keyboard.release(i.KEY.GAME_PAD_AXIS_UP)}}}},t}();e.GamePad=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=r(60),o=function(){function t(e){if(!e)throw new i.DebugError("game instance is not passed to LightArray constructor");this.lights=new Array(t.NUM_OF_LIGHT_IN_VIEW);for(var r=0;r<this.lights.length;r++)this.lights[r]=new n.PointLight(e)}return t.prototype.getLightAt=function(t){return this.lights[t]},t.prototype.setUniforms=function(t){for(var e=0;e<this.lights.length;e++){this.lights[e].setUniforms(t,e)}},t.NUM_OF_LIGHT_IN_VIEW=4,t}();e.LightArray=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(4),o=function(t){function e(e){var r=t.call(this,e)||this;return r.pos=new n.Point2d,r.nearRadius=0,r.farRadius=0,r.isOn=!1,r._screenPoint=new n.Point2d,r}return i.__extends(e,t),e.prototype.getPosScaled=function(){var t=this.game.camera,e=t.getRectScaled(),r=t.scale;return this._screenPoint.setXY((this.pos.x-e.x)*r.x,(this.pos.y-e.y)*r.y),this._screenPoint},e.prototype.setUniforms=function(t,e){t["u_pointLights["+e+"].pos"]=this.getPosScaled().toArray(),t["u_pointLights["+e+"].nearRadius"]=this.nearRadius,t["u_pointLights["+e+"].farRadius"]=this.farRadius,t["u_pointLights["+e+"].isOn"]=this.isOn,t["u_pointLights["+e+"].color"]=this.color.asGL()},e}(r(30).AbstractLight);e.PointLight=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(33),n=r(1),o=r(15),s=function(){function t(t){var e=this;this._components={},this.game=t,Object.keys(i).forEach(function(t){e.registerComponent(t,i[t])})}return t.prototype.registerComponent=function(t,e){this._components[t]=e},t._normalizeSetterName=function(t){return"set"+t[0].toUpperCase()+t.substr(1)},t._getFirstKey=function(t){if(o.isObject(t))return Object.keys(t)[0]},t._getAllKeys=function(t){return Object.keys(t)},t._getKeysLength=function(e){return t._getAllKeys(e).length},t.prototype._resolveProperties=function(e,r,i){var o=this;t._getAllKeys(r).forEach(function(s){if("children"!==s)if(o._components[s]){var a=o._components[s],u=void 0;u=i?new a(o.game):e,o._resolveProperties(u,r[s],i),i&&e.appendChild(u)}else{var h=t._normalizeSetterName(s),c=h in e;if(!(s in e)&&!c){var l=e.constructor&&e.constructor.name||e.type||"";throw new n.DebugError("uiBuilder error: object "+l+" has not property "+s+" not associated setter "+h)}if(o._components[t._getFirstKey(r[s])]){var f=new(0,o._components[t._getFirstKey(r[s])])(o.game);o._resolveProperties(f,r[s],!1),r[s]=f}if(c){(d=r[s]).splice||(d=[r[s]]),e[h].apply(e,d)}else{if(r[s].type){if(!(a=o._components[r[s].type]))throw new n.DebugError("unknown type: "+r[s].type);e[s]=new a(o.game)}if(e[s]&&e[s].fromJSON)e[s].fromJSON(r[s]);else if(e[s]&&e[s].apply){var d;(d=r[s]).splice||(d=[d]),e[s].apply(e,d)}else e[s]=r[s]}}else{if(!r.children.splice)throw new n.DebugError("'children' property must be an array");r.children.forEach(function(r){var i=t._getFirstKey(r),n=new(0,o._components[i])(o.game);o._resolveProperties(n,r[i],!0),e.appendChild(n)})}}),e.revalidate()},t.prototype.build=function(e){if(t._getKeysLength(e)>1)throw new n.DebugError("only one root element is supported. Found: "+t._getAllKeys(e));var r=t._getFirstKey(e),i=this._components[r];if(!i)throw new n.DebugError("no such ui class: "+r);var o=new i(this.game);return this._resolveProperties(o,e[r],!0),o.testLayout(),window.l=o,o},t}();e.UIBuilder=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(22),o=r(6),s=r(34),a=r(10),u=function(){function t(t){this.game=t,this._scrollVelocity=0,this._deceleration=0,this._enabled=!1,this.offset=0,this.scrollHeight=0}return t.prototype._initScrollBar=function(){this.vScroll=new s.VScroll(this.game),this.vScroll.width=5,this._container.appendChild(this.vScroll)},t.prototype.setEnabled=function(t){this._enabled=t,this.vScroll.enabled=t},t.prototype.onScroll=function(){this.vScroll.maxValue=this.scrollHeight,this.vScroll.value=this.offset,this.vScroll.onGeometryChanged()},t.prototype.listenScroll=function(t){var e=this;this._container=t,t.on(n.MOUSE_EVENTS.mouseDown,function(t){e._lastPoint={point:t,time:Date.now()},e._prevPoint={point:e._lastPoint.point,time:e._lastPoint.time},e._scrollVelocity=0,e._deceleration=0}),t.on(n.MOUSE_EVENTS.mouseMove,function(t){if(t.isMouseDown){var r=e._lastPoint;e._lastPoint={point:t,time:Date.now()},r||(r=e._lastPoint),e._prevPoint={point:r.point,time:r.time},e.offset-=e._lastPoint.point.screenY-e._prevPoint.point.screenY,e.offset>e.scrollHeight-e._container.height&&(e.offset=e.scrollHeight-e._container.height),e.offset<0&&(e.offset=0),e.onScroll()}}),t.on(n.MOUSE_EVENTS.scroll,function(t){e._scrollVelocity=-t.nativeEvent.wheelDelta,e._deceleration=0}),t.on(n.MOUSE_EVENTS.mouseUp,function(t){e._lastPoint&&e._prevPoint&&(e._lastPoint.time===e._prevPoint.time?e._scrollVelocity=0:Date.now()-e._lastPoint.time>100?e._scrollVelocity=0:e._scrollVelocity=1e3*(e._prevPoint.point.screenY-e._lastPoint.point.screenY)/(e._lastPoint.time-e._prevPoint.time),e._deceleration=0)}),this._initScrollBar()},t.prototype._scrollBy=function(t){this.offset+=t,this.offset>this.scrollHeight-this._container.height&&(this.offset=this.scrollHeight-this._container.height,this._scrollVelocity=0,this._deceleration=0),this.offset<0&&(this.offset=0,this._scrollVelocity=0,this._deceleration=0),this.onScroll()},t.prototype.update=function(t,e){this._enabled&&(this._scrollVelocity&&this.onScroll(),this._scrollVelocity&&this._scrollBy(this._scrollVelocity*e/1e3),this._deceleration=this._deceleration+.5/e,e>1e3&&(this._scrollVelocity=0,this._deceleration=0),this._scrollVelocity>0?this._scrollVelocity-=this._deceleration:this._scrollVelocity<0&&(this._scrollVelocity+=this._deceleration),a.MathEx.closeTo(this._scrollVelocity,0,3)&&(this._scrollVelocity=0,this._deceleration=0))},t}();e.ScrollInfo=u;var h=function(t){function e(e){return t.call(this,e)||this}return i.__extends(e,t),e.prototype._initScrolling=function(t){t.vertical&&(this.vScrollInfo=new u(this.game),this.vScrollInfo.listenScroll(this))},e.prototype.updateScrollSize=function(t,e){0!==e&&t>e?(this.vScrollInfo.scrollHeight=t,this.vScrollInfo.setEnabled(!0)):this.vScrollInfo.setEnabled(!1),this.vScrollInfo.vScroll.height=e,this.vScrollInfo.vScroll.pos.x=this.width-this.vScrollInfo.vScroll.width-2,this.vScrollInfo.onScroll()},e.prototype.update=function(e,r){this.vScrollInfo&&this.vScrollInfo.update(e,r),t.prototype.update.call(this,e,r)},e}(o.Container);e.ScrollableContainer=h},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(6),o=r(12),s=r(3),a=function(t){function e(e){var r=t.call(this,e)||this;r.checked=!1;var i=new o.Rectangle(e);i.width=10,i.height=10,i.fillColor=new s.Color(10,10,10,100);var n=new o.Rectangle(e);return n.width=10,n.height=10,n.fillColor=new s.Color(10,50,10,100),r.rNormal=i,r.rChecked=n,r.on("click",function(){return r.toggle()}),r}return i.__extends(e,t),e.prototype.toggle=function(){this.checked=!this.checked},e.prototype.onGeometryChanged=function(){this.rNormal.setWH(this.width,this.height),this.rChecked.setWH(this.width,this.height)},e.prototype.getBgByState=function(){return this.checked?this.rChecked:this.rNormal},e.prototype.draw=function(){var t=this.getBgByState();return t&&t.draw(),!0},e}(n.Container);e.CheckBox=a},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=function(t){function e(){var e=null!==t&&t.apply(this,arguments)||this;return e._radius=10,e}return i.__extends(e,t),Object.defineProperty(e.prototype,"radius",{get:function(){return this._radius},set:function(t){this._radius=t,this.width=this.height=2*t},enumerable:!0,configurable:!0}),e.prototype.draw=function(){return this.radiusX=this.radiusY=this.radius,this.game.getRenderer().drawEllipse(this),!0},e}(r(35).Ellipse);e.Circle=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(12),o=r(3),s=function(t){function e(e){var r=t.call(this,e)||this;return r.fillColor=o.Color.NONE,r}return i.__extends(e,t),e}(n.Rectangle);e.Border=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(17),o=r(1),s=function(t){function e(e){var r=t.call(this,e)||this;r.a=0,r.b=0,r.c=0,r.d=0,r._patches=[];for(var i=0;i<9;i++)r._patches[i]=new n.Image(r.game);return r.getRect().observe(function(){r.revalidate()}),r}return i.__extends(e,t),e.prototype._revalidatePatches=function(){this.game.getRenderer().renderableCache[this.getResourceLink().getId()];throw new o.DebugError("can not find texture info by id "+this.getResourceLink().getId())},e.prototype.revalidate=function(){if(!this.getResourceLink())throw new o.DebugError("can not render Image: resource link is not specified");var t=this.width,e=this.height;t<this.a+this.b&&(t=this.a+this.b),e<this.c+this.d&&(e=this.c+this.d),this.setWH(t,e),this._revalidatePatches()},e.prototype.setABCD=function(t,e,r,i){void 0===e&&(e=t),void 0===r&&(r=e),void 0===i&&(i=r),this.a=t,this.b=e,this.c=r,this.d=i,this.revalidate()},e.prototype.draw=function(){for(var t=0;t<9;t++)this._patches[t].render(!0);return!0},e}(n.Image);e.NinePatchImage=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(2),o=r(6),s=function(t){function e(e){return t.call(this,e)||this}return i.__extends(e,t),e.prototype.appendChild=function(e){e instanceof o.Container&&e.testLayout(),t.prototype.appendChild.call(this,e)},e.prototype.onGeometryChanged=function(){t.prototype.onGeometryChanged.call(this);for(var e=0,r=0,i=0,n=this.children;i<n.length;i++){var s=n[i];s instanceof o.Container&&s.onGeometryChanged(),s._dirty=!0;var a=s.getRect();a.right>e&&(e=a.right),a.bottom>r&&(r=a.bottom)}this.layoutWidth===o.LAYOUT_SIZE.WRAP_CONTENT&&(this.width=e),this.layoutHeight===o.LAYOUT_SIZE.WRAP_CONTENT&&(this.height=r),this.calcDrawableRect(this.width,this.height)},e.prototype.draw=function(){var t=this.game.getRenderer();if(this.overflow===o.OVERFLOW.HIDDEN){var e=n.Rect.fromPool().set(this.getScreenRect());e.addXY(-1,-1),e.setWH(e.width+1,e.height+1),t.lockRect(e)}return this.background&&this.background.draw(),t.translate(this.paddingLeft,this.paddingTop),this.overflow===o.OVERFLOW.HIDDEN&&this.game.getRenderer().unlockRect(),!0},e}(o.Container);e.AbsoluteLayout=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(3),n=r(1),o=function(){function t(){this.type="LinearGradient",this.colorFrom=new i.Color(0,0,0),this.colorTo=new i.Color(200,200,200),this.angle=.1,this._arr=new Array(12)}return t.prototype.fromJSON=function(t){if(!t.colorFrom)throw new n.DebugError("can not parse LinearGradient from JSON: colorFrom not defined");if(!t.colorTo)throw new n.DebugError("can not parse LinearGradient from JSON: colorTo not defined");this.colorFrom.fromJSON(t.colorFrom),this.colorTo.fromJSON(t.colorTo)},t.prototype.asGL=function(){var t=this.colorFrom.asGL(),e=this.colorTo.asGL();return this._arr[0]=t[0],this._arr[1]=t[1],this._arr[2]=t[2],this._arr[3]=t[3],this._arr[4]=e[0],this._arr[5]=e[1],this._arr[6]=e[2],this._arr[7]=e[3],this._arr[8]=this.angle,this._arr[9]=0,this._arr[10]=0,this._arr[11]=0,this._arr},t}();e.LinearGradient=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(29),n=r(2),o=r(10),s=function(){function t(t){this.relaxationCount=15,this.posCorrectionRate=.8,this.game=t}return t.prototype.positionalCorrection=function(t,e,r){var i=t.mInvMass,n=e.mInvMass,o=r.getDepth()/(i+n)*this.posCorrectionRate,s=r.getNormal().scale(o);t.move(s.scale(-i)),e.move(s.scale(n))},t.prototype.resolveCollision=function(t,e,r){if(0!==t.mInvMass||0!==e.mInvMass){this.positionalCorrection(t,e,r);var n=r.getNormal(),o=r.mStart.scale(e.mInvMass/(t.mInvMass+e.mInvMass)),s=r.mEnd.scale(t.mInvMass/(t.mInvMass+e.mInvMass)),a=o.add(s),u=a.subtract(t.mCenter),h=a.subtract(e.mCenter),c=t.mVelocity.add(new i.Vec2(-1*t.mAngularVelocity*u.y,t.mAngularVelocity*u.x)),l=e.mVelocity.add(new i.Vec2(-1*e.mAngularVelocity*h.y,e.mAngularVelocity*h.x)).subtract(c),f=l.dot(n);if(!(f>0)){var d=Math.min(t.mRestitution,e.mRestitution),p=Math.min(t.mFriction,e.mFriction),m=u.cross(n),g=h.cross(n),_=-(1+d)*f;_/=t.mInvMass+e.mInvMass+m*m*t.mInertia+g*g*e.mInertia;var y=n.scale(_);t.mVelocity=t.mVelocity.subtract(y.scale(t.mInvMass)),e.mVelocity=e.mVelocity.add(y.scale(e.mInvMass)),t.fixedAngle||(t.mAngularVelocity-=m*_*t.mInertia),e.fixedAngle||(e.mAngularVelocity+=g*_*e.mInertia);var v=l.subtract(n.scale(l.dot(n)));v=v.normalize().scale(-1);var E=u.cross(v),w=h.cross(v),x=-(1+d)*l.dot(v)*p;(x/=t.mInvMass+e.mInvMass+E*E*t.mInertia+w*w*e.mInertia)>_&&(x=_),y=v.scale(x),t.mVelocity=t.mVelocity.subtract(y.scale(t.mInvMass)),e.mVelocity=e.mVelocity.add(y.scale(e.mInvMass)),t.fixedAngle||(t.mAngularVelocity-=E*x*t.mInertia),e.fixedAngle||(e.mAngularVelocity+=w*x*e.mInertia)}}},t.prototype.boundAndCollide=function(t,e,r){t.boundTest(e)&&t.collisionTest(e,r)&&(r.getNormal().dot(e.mCenter.subtract(t.mCenter))<0&&r.changeDir(),this.resolveCollision(t,e,r))},t.prototype.collision=function(){var t,e,r,o=this,s=this.game.getCurrScene().getAllGameObjects().map(function(t){return t.rigidBody}),a=new i.CollisionInfo;for(r=0;r<this.relaxationCount;r++)for(t=0;t<s.length;t++)if(s[t]){var u=this.game.getCurrScene().tileMap.getTilesAtRect(new n.Rect(s[t].mCenter.x-s[t].mWidth/2,s[t].mCenter.y-s[t].mHeight/2,s[t].mWidth,s[t].mHeight));for(u.length&&u.forEach(function(e){o.boundAndCollide(s[t],e.rect,a)}),e=t+1;e<s.length;e++)s[e]&&this.boundAndCollide(s[t],s[e],a)}},t.prototype.isIntersect=function(t,e){return void 0===t&&(t=[]),void 0===e&&(e=[]),t.filter(function(t){return-1!==e.indexOf(t)}).length>0},t.prototype.boundAndCollideAcrade=function(t,e){if(!t.velocity.equal(0)||!e.velocity.equal(0)){var r=0,i=o.MathEx.overlapTest(t.getRect(),e.getRect());if(i){if(!t.rigid||!e.rigid)return t.trigger("overlap",e),void e.trigger("overlap",t);for(;i&&!(r>3);){t.pos.x+=.01*-t.velocity.x,t.pos.y+=.01*-t.velocity.y,e.pos.x+=.01*-e.velocity.x,e.pos.y+=.01*-e.velocity.y,i=o.MathEx.overlapTest(t.getRect(),e.getRect()),r++}t.trigger("collide",e),e.trigger("collide",t)}}},t.prototype.collisionArcade=function(){for(var t=this.game.getCurrScene().getAllGameObjects(),e=0;e<t.length;e++)for(var r=e+1;r<t.length;r++){var i=t[e],n=t[r];(this.isIntersect(i.collideWith,n.groupNames)||this.isIntersect(n.collideWith,i.groupNames))&&this.boundAndCollideAcrade(i,n)}},t}();e.ColliderEngine=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=r(71),o=r(36),s=function(){function t(){}return t.fixAutoPlayPolicy=function(){var e=function(){t.res.resume(),document.removeEventListener("click",e)};document.addEventListener("click",e)},t.getCtx=function(){return t.ctx&&!t.res&&(t.res=new t.ctx,t.fixAutoPlayPolicy()),t.res},t.ctx=window.AudioContext,t.res=null,t}(),a=function(){function t(t){this.game=t,this.type="webAudioContext",this._ctx=null,this._currSource=null,this._gainNode=null,this._free=!0,this._ctx=s.getCtx(),this._gainNode=this._ctx.createGain(),this._gainNode.connect(this._ctx.destination)}return t.isAcceptable=function(){return!(!window||!s.getCtx())},t.prototype.load=function(t,e,r){o.AudioPlayer.cache[t]?r():n.LoaderUtil.loadBinary(t,e,function(e){!function(t,e){s.getCtx().decodeAudioData(t,function(t){e(t)},function(t){throw new i.DebugError(t.message)})}(e,function(e){o.AudioPlayer.cache[t]=e,r()})})},t.prototype.isFree=function(){return this._free},t.prototype.play=function(t,e){var r=this;this._free=!1;var i=this._ctx.createBufferSource();i.buffer=o.AudioPlayer.cache[t],i.loop=e,i.connect(this._gainNode),i.start(0),i.onended=function(){r.stop()},this._currSource=i},t.prototype.stop=function(){var t=this._currSource;t&&(t.stop(),t.disconnect(this._gainNode)),this._currSource=null,this._free=!0},t.prototype.setGain=function(t){this._gainNode.gain.value=t},t.prototype.pause=function(){this._ctx.suspend()},t.prototype.resume=function(){this._ctx.resume()},t}();e.WebAudioContext=a},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=function(){function t(){}return t.loadBinary=function(t,e,r){var i=new XMLHttpRequest;i.open("GET",t,!0),i.responseType="arraybuffer",i.setRequestHeader("Accept-Ranges","bytes"),i.setRequestHeader("Content-Range","bytes"),i.onload=function(){r(i.response)},i.onprogress=function(r){e&&e(t,r.loaded/r.total)},i.onerror=function(e){throw console.error(e),"can not load resource with url "+t},i.send()},t}();e.LoaderUtil=i},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=function(){function t(){}return t.getCtx=function(){return new(window&&window.Audio)},t}(),n=function(){function t(t){this.game=t,this.type="htmlAudioContext",this.free=!0,this._ctx=i.getCtx()}return t.isAcceptable=function(){return!(!window||!window.Audio)},t.prototype.load=function(t,e,r){r()},t.prototype.isFree=function(){return this.free},t.prototype.play=function(t,e){var r,i=this;r=t,this.free=!1,this._ctx.src=r,this._ctx.play(),this._ctx.loop=e,this._ctx.onended=function(){i.stop()}},t.prototype.stop=function(){this.free=!0},t.prototype.setGain=function(t){this._ctx.volume=t},t.prototype.pause=function(){this._ctx.pause()},t.prototype.resume=function(){throw"not implemented for now"},t}();e.HtmlAudioContext=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=function(){function t(t){this.game=t,this.type="fakeAudioContext",console.log("audio not supported")}return t.isAcceptable=function(){return!0},t.prototype.play=function(t,e){},t.prototype.stop=function(){},t.prototype.isFree=function(){return!1},t.prototype.setGain=function(t){},t.prototype.pause=function(){},t.prototype.resume=function(){},t.prototype.load=function(t,e,r){r()},t}();e.FakeAudioContext=i},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(75),n=function(){function t(t,e,r){this.ContextClass=e,this.numOfNodes=r,this.nodes=[];for(var n=0;n<r;n++)this.nodes.push(new i.AudioNode(new e(t)))}return t.prototype.getFreeNode=function(){for(var t=0;t<this.numOfNodes;t++)if(this.nodes[t].isFree())return this.nodes[t];return null},t.prototype.stopAll=function(){for(var t=0;t<this.numOfNodes;t++)this.nodes[t].stop()},t.prototype.pauseAll=function(){for(var t=0;t<this.numOfNodes;t++)this.nodes[t].pause()},t.prototype.resumeAll=function(){for(var t=0;t<this.numOfNodes;t++)this.nodes[t].resume()},t.prototype.getNodeBySound=function(t){for(var e=0;e<this.numOfNodes;e++)if(this.nodes[e].getCurrSound()==t)return this.nodes[e];return null},t}();e.AudioNodeSet=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=function(){function t(t){this.context=t,this.currSound=null}return t.prototype.play=function(t,e){void 0===e&&(e=!1),this.context.play(t,e)},t.prototype.stop=function(){this.context.stop(),this.currSound=null},t.prototype.setGain=function(t){this.context.setGain(t)},t.prototype.pause=function(){this.context.pause()},t.prototype.resume=function(){this.context.resume()},t.prototype.isFree=function(){return this.context.isFree()},t.prototype.getCurrSound=function(){return this.currSound},t}();e.AudioNode=i},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(1),o=r(11),s=r(77),a=r(82),u=r(40),h=r(83),c=r(9),l=r(41),f=r(84),d=r(2),p=r(88),m=r(14),g=r(91),_=r(39),y=new h.MatrixStack,v=function(t,e){var r=c.makeZToWMatrix(1),i=c.ortho(0,e.width,0,e.height,-1e3,1e3),n=c.makeScale(t.width,t.height,1),o=c.makeTranslation(t.x,t.y,0),s=c.matrixMultiply(n,o);return s=c.matrixMultiply(s,y.getCurrentMatrix()),s=c.matrixMultiply(s,i),s=c.matrixMultiply(s,r)},E=function(t){function e(e){var r=t.call(this,e)||this;return r.matrixStack=y,r.registerResize(),r._init(),r}return i.__extends(e,t),e.prototype._init=function(){var t=function(t){return t.getContext("webgl",{alpha:!1})||t.getContext("experimental-webgl",{alpha:!1})||t.getContext("webkit-3d",{alpha:!1})||t.getContext("moz-webgl",{alpha:!1})}(this.container);this.gl=t,this.nullTexture=new l.Texture(t),this.shapeDrawer=new a.ShapeDrawer(t),this.lineDrawer=new s.LineDrawer(t),this.modelDrawer=new g.ModelDrawer(t),this.addBlendDrawer=new f.AddBlendDrawer(t),this.frameBuffer=new u.FrameBuffer(t,this.game.width,this.game.height),t.blendFunc(t.SRC_ALPHA,t.ONE_MINUS_SRC_ALPHA),t.enable(t.BLEND),this._initFlipTexture(),this.currShapeUniformInfo={}},e.prototype._initFlipTexture=function(){var t=this.fullScreenSize;this.flipTextureInfo=[{texture:null,name:"texture"}];var e=0,r=0,i=t.width,n=t.height,o=Math.max(i,n),s=this.flipUniformInfo={},a=this.shapeDrawer;o==i?(s[a.u_width]=1,s[a.u_height]=n/i,r=(o-n)/2,s[a.u_rectOffsetLeft]=0,s[a.u_rectOffsetTop]=r/o):(s[a.u_height]=1,s[a.u_width]=i/n,e=(o-i)/2,s[a.u_rectOffsetLeft]=e/o,s[a.u_rectOffsetTop]=0),this.translate(0,this.game.height),this.scale(1,-1),s[a.u_vertexMatrix]=v(d.Rect.fromPool().setXYWH(-e,-r,o,o),m.Size.fromPool().setWH(this.game.width,this.game.height)),s[a.u_lineWidth]=0,s[a.u_borderRadius]=0,s[a.u_shapeType]=_.SHAPE_TYPE.RECT,s[a.u_fillType]=_.FILL_TYPE.TEXTURE,s[a.u_texRect]=[0,0,1,1],s[a.u_texOffset]=[0,0],s[a.u_alpha]=1},e.prototype.prepareShapeUniformInfo=function(t){var e=this.currShapeUniformInfo,r=t.getRect().width,i=t.getRect().height,n=Math.max(r,i),o=0,s=0,a=this.shapeDrawer;return n==r?(e[a.u_width]=1,e[a.u_height]=i/r,s=(n-i)/2,e[a.u_rectOffsetLeft]=0,e[a.u_rectOffsetTop]=s/n):(e[a.u_height]=1,e[a.u_width]=r/i,o=(n-r)/2,e[a.u_rectOffsetLeft]=o/n,e[a.u_rectOffsetTop]=0),e[a.u_vertexMatrix]=v(d.Rect.fromPool().setXYWH(-o,-s,n,n),m.Size.fromPool().setWH(this.game.width,this.game.height)),e[a.u_lineWidth]=Math.min(t.lineWidth/n,1),e[a.u_color]=t.color.asGL(),e[a.u_alpha]=t.alpha,"LinearGradient"==t.fillColor.type?(e[a.u_fillLinearGradient]=t.fillColor.asGL(),e[a.u_fillType]=_.FILL_TYPE.LINEAR_GRADIENT):"Color"==t.fillColor.type&&(e[a.u_fillColor]=t.fillColor.asGL(),e[a.u_fillType]=_.FILL_TYPE.COLOR),e},e.prototype.drawImage=function(t){if(!t.getResourceLink())throw new n.DebugError("image resource link is not set");if(!this.renderableCache[t.getResourceLink().getId()])throw new n.DebugError("can not find texture with resource link id "+t.getResourceLink().getId());var e=this.renderableCache[t.getResourceLink().getId()].texture,r=[{texture:e=e.applyFilters(t.filters,this.frameBuffer),name:"texture"}],i=Math.max(t.width,t.height),o=this.shapeDrawer,s=this.prepareShapeUniformInfo(t);s[o.u_borderRadius]=Math.min(t.borderRadius/i,1),s[o.u_shapeType]=_.SHAPE_TYPE.RECT,s[o.u_fillType]=_.FILL_TYPE.TEXTURE,s[o.u_texRect]=[t.srcRect.x/e.getSize().width,t.srcRect.y/e.getSize().height,t.srcRect.width/e.getSize().width,t.srcRect.height/e.getSize().height],s[o.u_texOffset]=[t.offset.x/i,t.offset.y/i],this.shapeDrawer.draw(r,s,null)},e.prototype.drawModel=function(t){this.modelDrawer.bindModel(t),this.modelDrawer.bind(),y.scale(1,-1,1);var e=y.getCurrentMatrix(),r=c.makeZToWMatrix(1),i=c.ortho(0,this.game.width,0,this.game.height,-1e3,1e3),n={u_modelMatrix:e,u_projectionMatrix:c.matrixMultiply(i,r),u_alpha:1},o=[{texture:t.texture,name:"u_texture"}];this.gl.enable(this.gl.DEPTH_TEST),this.modelDrawer.draw(o,n),this.modelDrawer.unbind(),this.gl.disable(this.gl.DEPTH_TEST)},e.prototype.drawRectangle=function(t){var e=t.width,r=t.height,i=Math.max(e,r),n=this.shapeDrawer,o=this.prepareShapeUniformInfo(t);o[n.u_borderRadius]=Math.min(t.borderRadius/i,1),o[n.u_shapeType]=_.SHAPE_TYPE.RECT;var s=[{texture:this.nullTexture,name:"texture"}];this.shapeDrawer.draw(s,o,null)},e.prototype.drawLine=function(t,e,r,i,n){var o=r-t,s=i-e,a={};a.u_vertexMatrix=v(d.Rect.fromPool().setXYWH(t,e,o,s),m.Size.fromPool().setWH(this.game.width,this.game.height)),a.u_rgba=n.asGL(),this.lineDrawer.draw(null,a,null)},e.prototype.drawEllipse=function(t){var e=Math.max(t.radiusX,t.radiusY),r=2*e,i=this.prepareShapeUniformInfo(t),n=this.shapeDrawer;i[n.u_vertexMatrix]=v(d.Rect.fromPool().setXYWH(t.pos.x,t.pos.y,r,r),m.Size.fromPool().setWH(this.game.width,this.game.height)),i[n.u_lineWidth]=Math.min(t.lineWidth/e,1),e==t.radiusX?(i[n.u_rx]=.5,i[n.u_ry]=t.radiusY/t.radiusX*.5):(i[n.u_ry]=.5,i[n.u_rx]=t.radiusX/t.radiusY*.5),i[n.u_shapeType]=_.SHAPE_TYPE.ELLIPSE,i[n.u_width]=1,i[n.u_height]=1,i[n.u_rectOffsetLeft]=1,i[n.u_rectOffsetTop]=1;var o=[{texture:this.nullTexture,name:"texture"}];this.shapeDrawer.draw(o,i,null)},e.prototype.setAlpha=function(t){throw new n.DebugError("not implemented")},e.prototype.save=function(){this.matrixStack.save()},e.prototype.scale=function(t,e){this.matrixStack.scale(t,e)},e.prototype.resetTransform=function(){this.matrixStack.resetTransform()},e.prototype.rotateZ=function(t){this.matrixStack.rotateZ(t)},e.prototype.rotateY=function(t){this.matrixStack.rotateY(t)},e.prototype.translate=function(t,e){this.matrixStack.translate(t,e)},e.prototype.restore=function(){this.matrixStack.restore()},e.prototype.lockRect=function(t){this.gl.enable(this.gl.SCISSOR_TEST),this.gl.scissor(t.x,t.y,t.width,t.height)},e.prototype.unlockRect=function(){this.gl.disable(this.gl.SCISSOR_TEST)},e.prototype.clear=function(){this.gl.clearColor(1,1,1,1),this.gl.clear(this.gl.COLOR_BUFFER_BIT|this.gl.DEPTH_BUFFER_BIT)},e.prototype.clearColor=function(t){var e=t.asGL();this.gl.clearColor(e[0],e[1],e[2],e[3]),this.gl.clear(this.gl.COLOR_BUFFER_BIT|this.gl.DEPTH_BUFFER_BIT)},e.prototype.beginFrameBuffer=function(){this.save(),this.frameBuffer.bind()},e.prototype.flipFrameBuffer=function(t){var e=this.frameBuffer.getTexture().applyFilters(t,null);this.frameBuffer.unbind(),this.gl.viewport(0,0,this.fullScreenSize.width,this.fullScreenSize.height),this.flipTextureInfo[0].texture=e,this.shapeDrawer.draw(this.flipTextureInfo,this.flipUniformInfo,null),this.restore()},e.prototype.getError=function(){var t=this.gl.getError();return(t=t===this.gl.NO_ERROR?0:t)&&console.log(o.AbstractDrawer.currentInstance),t},e.prototype.loadTextureInfo=function(t,e,r){var i=this;if(this.renderableCache[e.getId()])r();else{var o=new window.Image;o.src=t,o.onload=function(){var t=new l.Texture(i.gl);t.setImage(o),i.gl.bindTexture(i.gl.TEXTURE_2D,i.frameBuffer.getTexture().getGlTexture());var n={texture:t,size:t.size,name:void 0};i.renderableCache[e.getId()]=n,e.setTarget(n),r()},o.onerror=function(){throw new n.DebugError('Resource loading error: can not load resource with url "'+t+'"')}}},e.prototype.destroy=function(){var e=this;t.prototype.destroy.call(this),this.frameBuffer.destroy(),o.AbstractDrawer.destroyAll(),Object.keys(this.renderableCache).forEach(function(t){e.renderableCache[t].texture.destroy()})},e}(p.AbstractCanvasRenderer);e.WebGlRenderer=E},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(78),o=r(7),s=r(16),a=r(11),u=r(81),h=function(t){function e(e){var r=t.call(this,e)||this,i=new u.ColorShaderGenerator;return r.program=new o.ShaderProgram(e,i.getVertexSource(),i.getFragmentSource()),r.primitive=new n.Line,r.bufferInfo=new s.BufferInfo(e,{posVertexInfo:{array:r.primitive.vertexArr,type:e.FLOAT,size:2,attrName:"a_position"},drawMethod:r.gl.LINE_STRIP}),r}return i.__extends(e,t),e}(a.AbstractDrawer);e.LineDrawer=h},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=function(t){function e(){var e=t.call(this)||this;return e.vertexArr=[0,0,1,1],e.indexArr=[0,1],e}return i.__extends(e,t),e}(r(37).AbstractPrimitive);e.Line=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=function(){function t(t){if(this.bufferItemSize=0,this.bufferItemType=0,this.dataLength=0,!t)throw new i.DebugError("can not create VertexBuffer, gl context not passed to constructor, expected: VertexBuffer(gl)");if(this.gl=t,this.buffer=t.createBuffer(),!this.buffer)throw new i.DebugError("can not allocate memory for vertex buffer")}return t.prototype.setData=function(t,e,r){if(!t)throw new i.DebugError("can not set data to buffer: bufferData not specified");if(!e)throw new i.DebugError("can not set data to buffer: itemType not specified");if(!r)throw new i.DebugError("can not set data to buffer: itemSize not specified");var n=this.gl;n.bindBuffer(n.ARRAY_BUFFER,this.buffer),n.bufferData(n.ARRAY_BUFFER,new Float32Array(t),n.STATIC_DRAW),n.bindBuffer(n.ARRAY_BUFFER,null),this.bufferItemSize=r,this.bufferItemType=e,this.dataLength=t.length},t.prototype.setAttrName=function(t){if(!t)throw new i.DebugError("attrName not provided");this.attrName=t},t.prototype.bind=function(t){if(!t)throw new i.DebugError("can not bind VertexBuffer, program not specified");if(!this.attrName)throw new i.DebugError("can not bind VertexBuffer, attribute name not specified");t.bindBuffer(this,this.attrName)},t.prototype.unbind=function(){this.gl.bindBuffer(this.gl.ARRAY_BUFFER,null)},t.prototype.destroy=function(){this.gl.deleteBuffer(this.buffer)},t.prototype.getGlBuffer=function(){return this.buffer},t.prototype.getItemSize=function(){return this.bufferItemSize},t.prototype.getItemType=function(){return this.bufferItemType},t.prototype.getBufferLength=function(){return this.dataLength},t}();e.VertexBuffer=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(1),n=function(){function t(t){if(!t)throw new i.DebugError("can not create IndexBuffer, gl context not passed to constructor, expected: IndexBuffer(gl)");if(this.gl=t,this.buffer=t.createBuffer(),!this.buffer)throw new i.DebugError("can not allocate memory for index buffer");this.dataLength=null}return t.prototype.setData=function(t){if(!t)throw new i.DebugError("can not set data to buffer: bufferData not specified");var e=this.gl;this.dataLength=t.length,e.bindBuffer(e.ELEMENT_ARRAY_BUFFER,this.buffer),e.bufferData(e.ELEMENT_ARRAY_BUFFER,new Uint16Array(t),e.STATIC_DRAW),e.bindBuffer(e.ELEMENT_ARRAY_BUFFER,null)},t.prototype.getGlBuffer=function(){return this.buffer},t.prototype.bind=function(){this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER,this.buffer)},t.prototype.unbind=function(){this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER,null)},t.prototype.destroy=function(){this.gl.deleteBuffer(this.buffer)},t.prototype.getBufferLength=function(){return this.dataLength},t}();e.IndexBuffer=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(5),o=function(t){function e(){var e=t.call(this)||this;return e.addAttribute(n.GL_TYPE.FLOAT_VEC4,"a_position"),e.addVertexUniform(n.GL_TYPE.FLOAT_MAT4,"u_vertexMatrix"),e.setVertexMainFn("\n            void main(){\n                gl_Position = u_vertexMatrix * a_position;   \n            }\n        "),e.addFragmentUniform(n.GL_TYPE.FLOAT,"u_alpha"),e.addFragmentUniform(n.GL_TYPE.FLOAT_VEC4,"u_rgba"),e.setFragmentMainFn("\n            void main(){\n                gl_FragColor = u_rgba;\n            }\n        "),e}return i.__extends(e,t),e}(r(23).ShaderGenerator);e.ColorShaderGenerator=o},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(7),o=r(11),s=r(16),a=r(38),u=r(5),h=r(39),c=r(23),l=function(t){function e(e){var r=t.call(this,e)||this,i=new c.ShaderGenerator;return i.setVertexMainFn("\n            void main(){\n                v_position = a_position;\n                gl_Position = u_vertexMatrix * a_position;   \n            }\n        "),r.u_vertexMatrix=i.addVertexUniform(u.GL_TYPE.FLOAT_MAT4,"u_vertexMatrix"),r.a_position=i.addAttribute(u.GL_TYPE.FLOAT_VEC4,"a_position"),i.addVarying(u.GL_TYPE.FLOAT_VEC4,"v_position"),r.u_lineWidth=i.addFragmentUniform(u.GL_TYPE.FLOAT,"u_lineWidth"),r.u_rx=i.addFragmentUniform(u.GL_TYPE.FLOAT,"u_rx"),r.u_ry=i.addFragmentUniform(u.GL_TYPE.FLOAT,"u_ry"),r.u_width=i.addFragmentUniform(u.GL_TYPE.FLOAT,"u_width"),r.u_height=i.addFragmentUniform(u.GL_TYPE.FLOAT,"u_height"),r.u_rectOffsetTop=i.addFragmentUniform(u.GL_TYPE.FLOAT,"u_rectOffsetTop"),r.u_rectOffsetLeft=i.addFragmentUniform(u.GL_TYPE.FLOAT,"u_rectOffsetLeft"),r.u_borderRadius=i.addFragmentUniform(u.GL_TYPE.FLOAT,"u_borderRadius"),r.u_color=i.addFragmentUniform(u.GL_TYPE.FLOAT_VEC4,"u_color"),r.u_alpha=i.addFragmentUniform(u.GL_TYPE.FLOAT,"u_alpha"),r.u_fillColor=i.addFragmentUniform(u.GL_TYPE.FLOAT_VEC4,"u_fillColor"),r.u_fillLinearGradient=i.addFragmentUniform(u.GL_TYPE.FLOAT_VEC4,"u_fillLinearGradient[3]"),r.u_texRect=i.addFragmentUniform(u.GL_TYPE.FLOAT_VEC4,"u_texRect"),r.u_texOffset=i.addFragmentUniform(u.GL_TYPE.FLOAT_VEC2,"u_texOffset"),i.addFragmentUniform(u.GL_TYPE.SAMPLER_2D,"texture"),r.u_shapeType=i.addFragmentUniform(u.GL_TYPE.INT,"u_shapeType"),r.u_fillType=i.addFragmentUniform(u.GL_TYPE.INT,"u_fillType"),i.setFragmentMainFn(h.fragmentSource),r.program=new n.ShaderProgram(e,i.getVertexSource(),i.getFragmentSource()),r.primitive=new a.Plane,r.bufferInfo=new s.BufferInfo(e,{posVertexInfo:{array:r.primitive.vertexArr,type:e.FLOAT,size:2,attrName:r.a_position},posIndexInfo:{array:r.primitive.indexArr},drawMethod:r.gl.TRIANGLE_STRIP}),r}return i.__extends(e,t),e}(o.AbstractDrawer);e.ShapeDrawer=l},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(9),n=function(){function t(){this.stack=[],this.restore()}return t.prototype.restore=function(){this.stack.pop(),this.stack.length<1&&(this.stack[0]=i.makeIdentity())},t.prototype.save=function(){this.stack.push(this.getCurrentMatrix())},t.prototype.getCurrentMatrix=function(){return this.stack[this.stack.length-1].slice()},t.prototype.setCurrentMatrix=function(t){return this.stack[this.stack.length-1]=t},t.prototype.translate=function(t,e,r){void 0===r&&(r=0);var n=i.makeTranslation(t,e,r),o=this.getCurrentMatrix();return this.setCurrentMatrix(i.matrixMultiply(n,o)),this},t.prototype.rotateZ=function(t){var e=i.makeZRotation(t),r=this.getCurrentMatrix();return this.setCurrentMatrix(i.matrixMultiply(e,r)),this},t.prototype.rotateY=function(t){var e=i.makeYRotation(t),r=this.getCurrentMatrix();return this.setCurrentMatrix(i.matrixMultiply(e,r)),this},t.prototype.scale=function(t,e,r){void 0===r&&(r=1);var n=i.makeScale(t,e,r),o=this.getCurrentMatrix();return this.setCurrentMatrix(i.matrixMultiply(n,o)),this},t.prototype.resetTransform=function(){var t=i.makeIdentity();return this.setCurrentMatrix(t),this},t}();e.MatrixStack=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=function(t){function e(e){return t.call(this,e)||this}return i.__extends(e,t),e.prototype.prepare=function(t){t.setFragmentMainFn("\n            void main(){\n                vec4 srcColor =  texture2D(texture, v_texCoord)*2.0;\n                srcColor.a *= u_alpha;\n                vec4 destColor = texture2D(destTexture, v_destTexCoord.xy);\n                vec4 res = min(srcColor + destColor,vec4(1.0));\n                gl_FragColor = res;\n            }\n        ")},e}(r(85).AbstractBlendDrawer);e.AddBlendDrawer=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(42),n=r(5),o=r(24),s=r(7),a=r(86),u=function(){function t(t){this.gl=t;var e=new o.TexShaderGenerator;e.addVarying(n.GL_TYPE.FLOAT_VEC4,"v_destTexCoord"),e.addFragmentUniform(n.GL_TYPE.SAMPLER_2D,"destTexture"),e.setVertexMainFn("\n            void main(){\n                gl_Position = u_vertexMatrix * a_position;\n                v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;\n                v_destTexCoord = gl_Position*0.5+0.5; \n            }\n        "),this.prepare(e),this._afterPrepare(e),this.simpleCopyFilter=new a.SimpleCopyFilter(t)}return t.prototype._afterPrepare=function(t){this.program=new s.ShaderProgram(this.gl,t.getVertexSource(),t.getFragmentSource()),this.spriteRectDrawer=new i.SpriteRectDrawer(this.gl,this.program)},t.prototype.prepare=function(t){},t.prototype.draw=function(t,e,r){var i=r.texture.applyFilters([this.simpleCopyFilter],r);t.push({texture:i,name:"destTexture"}),this.spriteRectDrawer.draw(t,e,r)},t}();e.AbstractBlendDrawer=u},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(87),o=r(5),s=function(t){function e(e){return t.call(this,e)||this}return i.__extends(e,t),e.prototype.prepare=function(t){t.addFragmentUniform(o.GL_TYPE.FLOAT,"u_mixFactor"),t.setFragmentMainFn("\n            void main(){\n                gl_FragColor = texture2D(texture, v_texCoord);\n            }\n        ")},e}(n.AbstractFilter);e.SimpleCopyFilter=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(7),n=r(42),o=r(9),s=r(24),a=r(1),u=o.makeIdentity(),h=function(){function t(t){if(this.spriteRectDrawer=null,this.uniformsToSet={},!t)throw console.error(this),new a.DebugError("can not create Filter, gl context not passed to constructor, expected: Filter(gl)");this.gl=t;var e=new s.TexShaderGenerator;this.prepare(e),this._afterPrepare(e)}return t.prototype.prepare=function(t){},t.prototype._afterPrepare=function(t){var e=new i.ShaderProgram(this.gl,t.getVertexSource(),t.getFragmentSource());this.spriteRectDrawer=new n.SpriteRectDrawer(this.gl,e)},t.prototype.doFilter=function(t,e){e&&e.bind();var r=t[0].texture.size.width,i=t[0].texture.size.height;this.uniformsToSet.u_textureMatrix=u,this.uniformsToSet.u_vertexMatrix=function(t,e,r,i){var n=o.ortho(0,r,0,i,-1,1),s=o.makeScale(r,i,1);return o.matrixMultiply(s,n)}(0,0,r,i),this.spriteRectDrawer.draw(t,this.uniformsToSet,null)},t.prototype.setParam=function(t,e){this.uniformsToSet[t]=e},t}();e.AbstractFilter=h},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(89),o=r(32),s=function(t){function e(e){var r=t.call(this,e)||this,i=document.createElement("canvas");return document.body.appendChild(i),i.setAttribute("width",e.width.toString()),i.setAttribute("height",e.height.toString()),i.ondragstart=function(t){t.preventDefault()},r.container=i,r}return i.__extends(e,t),e.prototype.draw=function(t){t.spriteSheet.width=t.width,t.spriteSheet.height=t.height,this.drawImage(t.spriteSheet)},e.prototype.onResize=function(){var t=this.container;if(this.game.scaleStrategy!==o.SCALE_STRATEGY.NO_SCALE){if(this.game.scaleStrategy===o.SCALE_STRATEGY.STRETCH)return t.style.width=window.innerWidth+"px",void(t.style.height=window.innerHeight+"px");var e,r,i=t.height/t.width;window.innerHeight/window.innerWidth<i?e=(r=window.innerHeight)/i:r=(e=window.innerWidth)*i,this.game.scale.setXY(e/this.game.width,r/this.game.height),this.game.pos.setXY((window.innerWidth-e)/2,(window.innerHeight-r)/2),this.container.style.width=e+"px",this.container.style.height=r+"px",this.container.style.marginTop=this.game.pos.y+"px"}},e}(n.AbstractRenderer);e.AbstractCanvasRenderer=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(19),n=r(90),o=r(14),s=r(1),a=function(){function t(t){if(this.renderableCache={},this.fullScreenSize=new o.Size(0,0),this.game=t,n.Device.isCocoonJS){var e=window.devicePixelRatio||1;this.fullScreenSize.setW(window.innerWidth*e),this.fullScreenSize.setH(window.innerHeight*e)}else this.fullScreenSize.setWH(this.game.width,this.game.height)}return t.prototype.onResize=function(){},t.prototype.requestFullScreen=function(){var t=this.container;t.requestFullScreen?t.requestFullScreen():t.mozRequestFullScreen?t.mozRequestFullScreen():t.webkitRequestFullScreen&&t.webkitRequestFullScreen()},t.prototype.cancelFullScreen=function(){document.cancelFullScreen?document.cancelFullScreen():document.mozCancelFullScreen?document.mozCancelFullScreen():document.webkitCancelFullScreen&&document.webkitCancelFullScreen()},t.prototype.beginFrameBuffer=function(){},t.prototype.flipFrameBuffer=function(t){},t.prototype.registerResize=function(){var t=this;this.onResize(),window.addEventListener("resize",function(){return t.onResize()})},t.prototype.destroy=function(){window.removeEventListener("resize",this.onResize)},t.prototype.getError=function(){return 0},t.prototype.drawImage=function(t){},t.prototype.drawNinePatch=function(t){},t.prototype.drawTiledImage=function(t,e,r,i){},t.prototype.drawRectangle=function(t){},t.prototype.lockRect=function(t){},t.prototype.unlockRect=function(){},t.prototype.drawLine=function(t,e,r,i,n){},t.prototype.drawModel=function(t){},t.prototype.drawEllipse=function(t){},t.prototype.resetTransform=function(){},t.prototype.clear=function(){},t.prototype.clearColor=function(t){},t.prototype.save=function(){},t.prototype.restore=function(){},t.prototype.translate=function(t,e,r){},t.prototype.scale=function(t,e,r){},t.prototype.rotateZ=function(t){},t.prototype.rotateY=function(t){},t.prototype.draw=function(t){},t.prototype.log=function(t){var e=this.debugTextField;e||((e=new i.TextField(this.game)).name="defaultName",e.revalidate(),this.debugTextField=e);var r="";Array.prototype.slice.call(arguments).forEach(function(t){if(void 0===t)t="undefined";else if(null===t)t="null";else if(t.toJSON)t=JSON.stringify(t.toJSON(),null,4);else if("string"!=typeof t)try{t=JSON.stringify(t)}catch(t){}"string"!=typeof t&&(t=t.toString()),r+=t+"\n"}),e.pos.x=10,e.pos.y=10,e.setText(e.getText()+r)},t.prototype.loadTextureInfo=function(t,e,r){},t.prototype.getTextureInfo=function(t){var e=this.renderableCache[t];if(!e)throw new s.DebugError("can not find resource with id "+t);return e},t}();e.AbstractRenderer=a},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=function(){function t(t){this.game=t}return t.logInfo=function(){console.log({isCocoonJS:t.isCocoonJS,scale:t.scale,isTouch:t.isTouch})},t.isCocoonJS=!!navigator.isCocoonJS,t.scale=t.isCocoonJS&&window.devicePixelRatio||1,t.isTouch="undefined"!=typeof window&&"ontouchstart"in window,t}();e.Device=i},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(7),o=r(11),s=r(16),a=r(1),u="\n\nattribute vec4 a_position;\nattribute vec2 a_texcoord;\nattribute vec3 a_normal;\n\nuniform mat4 u_modelMatrix;\nuniform mat4 u_projectionMatrix;\n\nvarying vec2 v_texcoord;\nvarying vec3 v_normal;\n\nvoid main() {\n\n  gl_Position = u_projectionMatrix * u_modelMatrix * a_position;\n  v_texcoord = a_texcoord;\n  v_normal = a_normal;\n}\n",h="\n\nprecision highp float;\n\nvarying vec2 v_texcoord;\nvarying vec3 v_normal;\n\nuniform sampler2D u_texture;\nuniform float u_alpha;\nuniform mat4 u_modelMatrix;\n\n\nvoid main() {\n\n    vec3 lightDirection = normalize(vec3(-1,-1,1));\n    vec3 normalized = normalize((u_modelMatrix * vec4(v_normal,0)).xyz);\n    float lightFactor = max(0.5,dot(lightDirection,normalized));\n    gl_FragColor = texture2D(u_texture, v_texcoord);\n    gl_FragColor.rgb *= lightFactor;\n    gl_FragColor.a *= u_alpha;\n}\n\n",c=function(t){function e(e){var r=t.call(this,e)||this;return r.program=new n.ShaderProgram(e,u,h),r}return i.__extends(e,t),e.prototype._initBufferInfo=function(){this.g3d.bufferInfo=new s.BufferInfo(this.gl,{posVertexInfo:{array:this.g3d.model.vertexArr,type:this.gl.FLOAT,size:3,attrName:"a_position"},posIndexInfo:{array:this.g3d.model.indexArr},texVertexInfo:{array:this.g3d.model.texCoordArr,type:this.gl.FLOAT,size:2,attrName:"a_texcoord"},normalInfo:{array:this.g3d.model.normalArr,type:this.gl.FLOAT,size:3,attrName:"a_normal"},drawMethod:this.gl.TRIANGLES})},e.prototype.bindModel=function(t){this.g3d=t,this.g3d.bufferInfo||this._initBufferInfo(),this.bufferInfo=this.g3d.bufferInfo},e.prototype.bind=function(){if(!this.g3d.model)throw new a.DebugError("can not bind modelDrawer;bindModel must be invoked firstly");t.prototype.bind.call(this)},e.prototype.unbind=function(){this.g3d=null,t.prototype.unbind.call(this)},e}(o.AbstractDrawer);e.ModelDrawer=c},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(4),o=r(2),s=r(93),a=function(t){function e(e){var r=t.call(this,e)||this;return r.type="GameObjectProto",r.commonBehaviour=[],r.currFrameIndex=0,r.frameAnimations=[],r.groupNames=[],r.collideWith=[],r.shaderMaterial=new s.ShaderMaterial,r.velocity=new n.Point2d(0,0),r._frameRect=new o.Rect,r._sprPosX=0,r._sprPosY=0,r}return i.__extends(e,t),e.prototype.revalidate=function(){var e=this;t.prototype.revalidate.call(this),this.spriteSheet.revalidate(),this.setFrameIndex(this.currFrameIndex),this.spriteSheet&&(this.width=this.spriteSheet._frameWidth,this.height=this.spriteSheet._frameHeight),this.frameAnimations.forEach(function(t,r){e.frameAnimations[r]._gameObject=e}),this.rigid},e.prototype.playFrameAnimation=function(t,e){return t._gameObject=this,this._currFrameAnimation=t,t.play(e),t},e.prototype.setFrameIndex=function(t){this.currFrameIndex=t%this.spriteSheet._numOfFrames,this.spriteSheet.setFrameIndex(this.currFrameIndex)},e.prototype.getFrameRect=function(){return this.spriteSheet.srcRect},e.prototype.update=function(e,r){t.prototype.update.call(this,e,r),this._currFrameAnimation&&this._currFrameAnimation.update(e);for(var i=0,n=this.commonBehaviour.length;i<n;i++)this.commonBehaviour[i].onUpdate&&this.commonBehaviour[i].onUpdate(e,r);if(void 0!==this.rigidBody?(this.rigidBody.update(e,r),this.pos.x=~~(this.rigidBody.mCenter.x-this.rigidBody.mWidth/2),this.pos.y=~~(this.rigidBody.mCenter.y-this.rigidBody.mHeight/2),this.angle=this.rigidBody.mAngle):(this.velocity.x&&(this.pos.x+=this.velocity.x*r/1e3),this.velocity.y&&(this.pos.y+=this.velocity.y*r/1e3)),this.children.length>0)for(i=0;i<this.children.length;i++)this.children[i].update(e,r);this.render()},e.prototype.draw=function(){return this.game.getRenderer().draw(this),!0},e.prototype.stopFrAnimations=function(){this._currFrameAnimation&&this._currFrameAnimation.stop()},e}(r(25).RenderableModel);e.GameObject=a},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(3),n=function(){function t(){this.ambient=i.Color.BLACK.clone(),this.specular=i.Color.GREY.clone(),this.diffuse=i.Color.WHITE.clone(),this.shininess=10}return t.prototype.setUniforms=function(t){t["u_material.ambient"]=this.ambient.asGL(),t["u_material.specular"]=this.specular.asGL(),t["u_material.diffuse"]=this.diffuse.asGL(),t["u_material.shininess"]=this.shininess},t.DEFAULT=new t,t}();e.ShaderMaterial=n},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=function(t){function e(e){var r=t.call(this,e)||this;return r.type="SpriteSheet",r.numOfFramesH=1,r.numOfFramesV=1,r._frameWidth=0,r._frameHeight=0,r._numOfFrames=0,r}return i.__extends(e,t),e.prototype.revalidate=function(){t.prototype.revalidate.call(this),this.numOfFramesH&&this.numOfFramesV&&(this._frameWidth=~~(this.width/this.numOfFramesH),this._frameHeight=~~(this.height/this.numOfFramesV),this._numOfFrames=this.numOfFramesH*this.numOfFramesV,this.setWH(this._frameWidth,this._frameHeight))},e.prototype.getFramePosX=function(t){return t%this.numOfFramesH*this._frameWidth},e.prototype.getFramePosY=function(t){return~~(t/this.numOfFramesH)*this._frameHeight},e.prototype.setFrameIndex=function(t){this.srcRect.setXYWH(this.getFramePosX(t),this.getFramePosY(t),this._frameWidth,this._frameHeight)},e}(r(17).Image);e.SpriteSheet=n},,,,,,,,,,,,function(t,e,r){t.exports=r(107)},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(108),n=r(55),o=r(76),s=new n.Game,a=new i.MainScene(s);s.setRenderer(o.WebGlRenderer),s.runScene(a)},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(45),o=r(92),s=r(94),a=r(109),u=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return i.__extends(e,t),e.prototype.onPreloading=function(){this.resourceLink=this.resourceLoader.loadImage("../assets/character.png"),console.log("on preloading")},e.prototype.onReady=function(){console.log("on ready"),this.obj=new o.GameObject(this.game);var t=new s.SpriteSheet(this.game);t.numOfFramesV=3,t.numOfFramesH=5;var e=new a.FrameAnimation(this.game);e.frames=[0,1,2,3,4,5,6,7,8,9,10,11,12,13],this.obj.frameAnimations.push(e),this.obj.playFrameAnimation(e),console.log(this.obj.frameAnimations),e.play(),t.setResourceLink(this.resourceLink),this.obj.spriteSheet=t,this.obj.pos.fromJSON({x:10,y:10}),this.appendChild(this.obj)},e}(n.Scene);e.MainScene=u},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=r(0),n=r(18),o=r(26),s=function(t){function e(e){var r=t.call(this)||this;return r.game=e,r.type="FrameAnimation",r._currFrame=0,r.frames=[],r.duration=1e3,r._gameObject=null,r._startTime=null,r._emitter=new o.EventEmitter,r.stop(),r}return i.__extends(e,t),e.prototype.revalidate=function(){this._timeForOneFrame=~~(this.duration/this.frames.length)},e.prototype.play=function(t){void 0===t&&(t={repeat:!0}),this._isRepeat=t.repeat,this._gameObject._currFrameAnimation=this},e.prototype.stop=function(){this._gameObject&&(this._gameObject._currFrameAnimation=null),this._startTime=null,this._isRepeat=!0},e.prototype.update=function(t){this._startTime||(this._startTime=t);var e=(t-this._startTime)%this.duration;if(this._currFrame=~~(this.frames.length*e/this.duration),0==this._isRepeat&&this._currFrame>=this.frames.length-1)return this.trigger("loop"),void this.stop();this._gameObject.currFrameIndex!=this.frames[this._currFrame]&&(this._gameObject.setFrameIndex(this.frames[this._currFrame]),0===this._currFrame&&this._startTime!==t&&this.trigger("loop"))},e.prototype.nextFrame=function(){var t=this._currFrame;++t==this.frames.length&&(t=0),this._gameObject.setFrameIndex(this.frames[t]),this._currFrame=t},e.prototype.previousFrame=function(){var t=this._currFrame;--t<0&&(t=this.frames.length-1),this._gameObject.setFrameIndex(this.frames[t]),this._currFrame=t},e.prototype.on=function(t,e){return this._emitter.on(t,e),e},e.prototype.off=function(t,e){this._emitter.off(t,e)},e.prototype.trigger=function(t,e){this._emitter.trigger(t,e)},e}(n.CommonObject);e.FrameAnimation=s}]);
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    }
+    return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+function __exportStar(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+
+function __values(o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result.default = mod;
+    return result;
+}
+
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var DebugError = (function (_super) {
+    tslib_1.__extends(DebugError, _super);
+    function DebugError(message) {
+        var _this = _super.call(this, message) || this;
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(_this, _this.constructor);
+        }
+        else {
+            _this.stack = (new Error()).stack;
+        }
+        _this.name = 'DebugError';
+        _this.errorMessage = message;
+        return _this;
+    }
+    DebugError.prototype.toString = function () {
+        return this.errorMessage;
+    };
+    return DebugError;
+}(Error));
+exports.DebugError = DebugError;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var size_1 = __webpack_require__(13);
+var point2d_1 = __webpack_require__(4);
+var objectPool_1 = __webpack_require__(8);
+var observableEntity_1 = __webpack_require__(26);
+var Rect = (function (_super) {
+    tslib_1.__extends(Rect, _super);
+    function Rect(x, y, width, height, onChangedFn) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = 0; }
+        if (width === void 0) { width = 0; }
+        if (height === void 0) { height = 0; }
+        var _this = _super.call(this) || this;
+        if (onChangedFn)
+            _this.addListener(onChangedFn);
+        _this.setXYWH(x, y, width, height);
+        return _this;
+    }
+    Rect.prototype.checkObservableChanged = function () {
+        return this._state.setState(this.x, this.y, this.width, this.height);
+    };
+    Rect.prototype.observe = function (onChangedFn) {
+        this.addListener(onChangedFn);
+    };
+    Rect.prototype.revalidate = function () {
+        this.right = this.x + this.width;
+        this.bottom = this.y + this.height;
+        this.triggerObservable();
+    };
+    Rect.prototype.setXYWH = function (x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.revalidate();
+        return this;
+    };
+    Rect.prototype.setXY = function (x, y) {
+        this.x = x;
+        this.y = y;
+        this.revalidate();
+        return this;
+    };
+    Rect.prototype.setWH = function (width, height) {
+        this.width = width;
+        this.height = height;
+        this.revalidate();
+        return this;
+    };
+    Rect.prototype.set = function (another) {
+        this.setXYWH(another.x, another.y, another.width, another.height);
+        return this;
+    };
+    Rect.prototype.setSize = function (s) {
+        this.width = s.width;
+        this.height = s.height;
+        this.revalidate();
+        return this;
+    };
+    Rect.prototype.setPoint = function (p) {
+        p.setXY(p.x, p.y);
+        return this;
+    };
+    Rect.prototype.addXY = function (x, y) {
+        this.x += x;
+        this.y += y;
+        this.revalidate();
+        return this;
+    };
+    Rect.prototype.addPoint = function (another) {
+        this.addXY(another.x, another.y);
+        return this;
+    };
+    Rect.prototype.getPoint = function () {
+        var _this = this;
+        if (this.p === undefined)
+            this.p = new point2d_1.Point2d(0, 0);
+        this.p.setXY(this.x, this.y);
+        this.p.addListener(function () { return _this.setXY(_this.p.x, _this.p.y); });
+        return this.p;
+    };
+    Rect.prototype.getSize = function () {
+        if (this.size === undefined)
+            this.size = new size_1.Size();
+        this.size.setWH(this.width, this.height);
+        return this.size;
+    };
+    Rect.prototype.asArray = function () {
+        return [this.x, this.y, this.width, this.height];
+    };
+    Rect.prototype.clone = function () {
+        return new Rect(this.x, this.y, this.width, this.height);
+    };
+    Rect.prototype.toJSON = function () {
+        return { x: this.x, y: this.y, width: this.width, height: this.height };
+    };
+    Rect.prototype.fromJSON = function (jsonObj) {
+        this.setXYWH(jsonObj.x, jsonObj.y, jsonObj.width, jsonObj.height);
+    };
+    Rect.fromPool = function () {
+        return Rect.rectPool.getNextObject();
+    };
+    Rect.rectPool = new objectPool_1.ObjectPool(Rect);
+    return Rect;
+}(observableEntity_1.ObservableEntity));
+exports.Rect = Rect;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var objectPool_1 = __webpack_require__(8);
+var Color = (function () {
+    function Color(r, g, b, a) {
+        this._arr = null;
+        this.type = 'Color';
+        this.setRGBA(r, g, b, a);
+    }
+    Color.prototype.normalizeToZeroOne = function () {
+        this.rNorm = this.r / 0xff;
+        this.gNorm = this.g / 0xff;
+        this.bNorm = this.b / 0xff;
+        this.aNorm = this.a / 0xff;
+    };
+    Color.prototype.setRGBA = function (r, g, b, a) {
+        if (a === void 0) { a = 255; }
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
+        this.normalizeToZeroOne();
+    };
+    Color.prototype.setRGB = function (r, g, b) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = 255;
+        this.normalizeToZeroOne();
+    };
+    Color.prototype.setR = function (val) {
+        this.r = val;
+        this.normalizeToZeroOne();
+    };
+    Color.prototype.setG = function (val) {
+        this.g = val;
+        this.normalizeToZeroOne();
+    };
+    Color.prototype.setB = function (val) {
+        this.b = val;
+        this.normalizeToZeroOne();
+    };
+    Color.prototype.setA = function (val) {
+        this.a = val;
+        this.normalizeToZeroOne();
+    };
+    Color.prototype.set = function (another) {
+        this.setRGBA(another.r, another.g, another.b, another.a);
+    };
+    Color.prototype.clone = function () {
+        return new Color(this.r, this.g, this.b, this.a);
+    };
+    Color.getFromPool = function () {
+        if (Color.objectPool === undefined)
+            Color.objectPool = new objectPool_1.ObjectPool(Color);
+        return Color.objectPool.getNextObject();
+    };
+    Color.RGB = function (r, g, b, a) {
+        var c = new Color(0, 0, 0);
+        c.setRGBA(r, g, b, a);
+        return c;
+    };
+    Color.prototype.asGL = function () {
+        if (this._arr === null)
+            this._arr = new Array(3);
+        this._arr[0] = this.rNorm;
+        this._arr[1] = this.gNorm;
+        this._arr[2] = this.bNorm;
+        this._arr[3] = this.aNorm;
+        return this._arr;
+    };
+    Color.prototype.asCSS = function () {
+        return "rgba(" + this.r + "," + this.g + "," + this.b + "," + this.a + ")";
+    };
+    Color.prototype.toJSON = function () {
+        return { r: this.r, g: this.g, b: this.b, a: this.a };
+    };
+    Color.prototype.fromJSON = function (json) {
+        this.setRGBA(json.r, json.g, json.b, json.a);
+    };
+    Color.WHITE = Color.RGB(255, 255, 255);
+    Color.GREY = Color.RGB(127, 127, 127);
+    Color.BLACK = Color.RGB(0, 0, 0);
+    Color.NONE = Color.RGB(0, 0, 0, 0);
+    return Color;
+}());
+exports.Color = Color;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var objectPool_1 = __webpack_require__(8);
+var observableEntity_1 = __webpack_require__(26);
+var Point2d = (function (_super) {
+    tslib_1.__extends(Point2d, _super);
+    function Point2d(x, y, onChangedFn) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = 0; }
+        var _this = _super.call(this) || this;
+        _this._x = 0;
+        _this._y = 0;
+        _this._x = x;
+        _this._y = y;
+        if (onChangedFn)
+            _this.addListener(onChangedFn);
+        return _this;
+    }
+    Point2d.fromPool = function () {
+        return Point2d.pool.getNextObject();
+    };
+    Object.defineProperty(Point2d.prototype, "x", {
+        get: function () {
+            return this._x;
+        },
+        set: function (value) {
+            this.setX(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Point2d.prototype, "y", {
+        get: function () {
+            return this._y;
+        },
+        set: function (value) {
+            this.setY(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Point2d.prototype.checkObservableChanged = function () {
+        return this._state.setState(this._x, this._y);
+    };
+    Point2d.prototype.observe = function (onChangedFn) {
+        this.addListener(onChangedFn);
+    };
+    Point2d.prototype.setXY = function (x, y) {
+        if (y === undefined) {
+            y = x;
+        }
+        this._x = x;
+        this._y = y;
+        this.triggerObservable();
+        return this;
+    };
+    Point2d.prototype.setX = function (x) {
+        this._x = x;
+        this.triggerObservable();
+        return this;
+    };
+    Point2d.prototype.setY = function (y) {
+        this._y = y;
+        this.triggerObservable();
+        return this;
+    };
+    Point2d.prototype.set = function (another) {
+        this.setXY(another._x, another._y);
+        this.triggerObservable();
+        return this;
+    };
+    Point2d.prototype.add = function (another) {
+        this.addXY(another._x, another._y);
+        this.triggerObservable();
+        return this;
+    };
+    Point2d.prototype.substract = function (another) {
+        this.addXY(-another._x, -another._y);
+        this.triggerObservable();
+        return this;
+    };
+    Point2d.prototype.multiply = function (n) {
+        this._x *= n;
+        this._y *= n;
+        this.triggerObservable();
+        return this;
+    };
+    Point2d.prototype.addXY = function (x, y) {
+        this._x += x;
+        this._y += y;
+        this.triggerObservable();
+        return this;
+    };
+    Point2d.prototype.addX = function (x) {
+        this._x += x;
+        this.triggerObservable();
+        return this;
+    };
+    Point2d.prototype.addY = function (y) {
+        this._y += y;
+        this.triggerObservable();
+        return this;
+    };
+    Point2d.prototype.negative = function () {
+        this._x = -this._x;
+        this._y = -this._y;
+        this.triggerObservable();
+        return this;
+    };
+    Point2d.prototype.equal = function (val) {
+        return this._x === val && this._y === val;
+    };
+    Point2d.prototype.equalXY = function (x, y) {
+        return this._x === x && this._y === y;
+    };
+    Point2d.prototype.equalPoint = function (point) {
+        return this._x === point._x && this._y === point._y;
+    };
+    Point2d.prototype.clone = function () {
+        return new Point2d(this._x, this._y);
+    };
+    Point2d.prototype.fromJSON = function (json) {
+        this.setXY(json.x, json.y);
+    };
+    Point2d.prototype.toJSON = function () {
+        return { x: this._x, y: this._y };
+    };
+    Point2d.prototype.toArray = function () {
+        if (!this._arr)
+            this._arr = new Array(2);
+        this._arr[0] = this._x;
+        this._arr[1] = this._y;
+        return this._arr;
+    };
+    Point2d.pool = new objectPool_1.ObjectPool(Point2d, 4);
+    return Point2d;
+}(observableEntity_1.ObservableEntity));
+exports.Point2d = Point2d;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var parseErrors = function (log) {
+    if (false)
+        {}
+    var logs = [];
+    var result;
+    while (!!(result = log.match(/ERROR\:([^\n]+)/))) {
+        log = log.slice(result.index + 1);
+        var line = result[1].trim();
+        var seps = line.split(':');
+        var message = seps.slice(2).join(':').trim();
+        var lineNum = parseInt(seps[1], 10);
+        logs.push({ message: message, lineNum: lineNum });
+    }
+    return logs;
+};
+exports.compileShader = function (gl, shaderSource, shaderType) {
+    if (true) {
+        if (!shaderSource)
+            throw new debugError_1.DebugError("can not compile shader: shader source not specified for type " + shaderType);
+    }
+    var shader = gl.createShader(shaderType);
+    if (true && !shader)
+        throw new debugError_1.DebugError("can not allocate memory for shader: gl.createShader(shaderType)");
+    gl.shaderSource(shader, shaderSource);
+    gl.compileShader(shader);
+    var compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+    if (!compiled) {
+        var lastError = gl.getShaderInfoLog(shader);
+        gl.deleteShader(shader);
+        if (true) {
+            var parsedLogs = parseErrors(lastError);
+            var lines_1 = shaderSource.split('\n');
+            var errorMsg_1 = '';
+            var arrow_1 = '----->';
+            parsedLogs.forEach(function (inf) {
+                var i = inf.lineNum - 1;
+                if (lines_1[i].indexOf(arrow_1) == -1)
+                    lines_1[i] = arrow_1 + " " + lines_1[i];
+                errorMsg_1 += lines_1[i] + " <----" + inf.message + "\n";
+            });
+            console.log(lines_1.join('\n'));
+            throw new debugError_1.DebugError("Error compiling shader: " + (errorMsg_1 ? errorMsg_1 : lastError));
+        }
+        else {}
+    }
+    return shader;
+};
+exports.createProgram = function (gl, vertexShader, fragmentShader) {
+    var program = gl.createProgram();
+    if (true && !program)
+        throw new debugError_1.DebugError("can not allocate memory for gl.createProgram()");
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+    var linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+    if (!linked) {
+        gl.deleteProgram(program);
+        var lastError = gl.getProgramInfoLog(program);
+        if (true) {
+            var status = gl.getProgramParameter(program, gl.VALIDATE_STATUS);
+            console.error('VALIDATE_STATUS', status);
+            throw new debugError_1.DebugError("Error in program linking " + lastError);
+        }
+        else {}
+    }
+    return program;
+};
+var GL_TABLE = null;
+exports.GL_TYPE = {
+    FLOAT: 'float',
+    FLOAT_VEC2: 'vec2',
+    FLOAT_VEC3: 'vec3',
+    FLOAT_VEC4: 'vec4',
+    INT: 'int',
+    INT_VEC2: 'ivec2',
+    INT_VEC3: 'ivec3',
+    INT_VEC4: 'ivec4',
+    BOOL: 'bool',
+    BOOL_VEC2: 'bvec2',
+    BOOL_VEC3: 'bvec3',
+    BOOL_VEC4: 'bvec4',
+    FLOAT_MAT2: 'mat2',
+    FLOAT_MAT3: 'mat3',
+    FLOAT_MAT4: 'mat4',
+    SAMPLER_2D: 'sampler2D',
+};
+var mapType = function (gl, type) {
+    if (!GL_TABLE) {
+        var typeNames = Object.keys(exports.GL_TYPE);
+        GL_TABLE = {};
+        for (var i = 0; i < typeNames.length; ++i) {
+            var tn = typeNames[i];
+            GL_TABLE[gl[tn]] = exports.GL_TYPE[tn];
+        }
+    }
+    return GL_TABLE[type];
+};
+exports.normalizeUniformName = function (s) {
+    if (s.indexOf('[') > -1)
+        return s.split('[')[0];
+    else
+        return s;
+};
+exports.extractUniforms = function (gl, program) {
+    var glProgram = program.getProgram();
+    var activeUniforms = gl.getProgramParameter(glProgram, gl.ACTIVE_UNIFORMS);
+    var uniforms = {};
+    for (var i = 0; i < activeUniforms; i++) {
+        var uniformData = gl.getActiveUniform(glProgram, i);
+        if (true && !uniformData)
+            throw new debugError_1.DebugError("can not receive active uniforms info: gl.getActiveUniform()");
+        var type = mapType(gl, uniformData.type);
+        var name = exports.normalizeUniformName(uniformData.name);
+        var location = gl.getUniformLocation(glProgram, name);
+        uniforms[name] = {
+            type: type,
+            size: uniformData.size,
+            location: location,
+            setter: getUniformSetter(uniformData.size, type)
+        };
+    }
+    return uniforms;
+};
+exports.extractAttributes = function (gl, program) {
+    var glProgram = program.getProgram();
+    var activeAttributes = gl.getProgramParameter(glProgram, gl.ACTIVE_ATTRIBUTES);
+    var attrMap = {};
+    for (var i = 0; i < activeAttributes; i++) {
+        var attrData = gl.getActiveAttrib(glProgram, i);
+        if (true && !attrData)
+            throw new debugError_1.DebugError("can not receive active attribute info: gl.getActiveAttrib()");
+        var location = gl.getAttribLocation(glProgram, attrData.name);
+        if (true && location < 0) {
+            console.log(program);
+            throw new debugError_1.DebugError("error finding attribute location: " + attrData.name);
+        }
+        attrMap[attrData.name] = location;
+    }
+    return attrMap;
+};
+var TypeNumber = {
+    check: function (val) {
+        if (isNaN(parseFloat(val)) || !isFinite(val))
+            throw new debugError_1.DebugError("can not set uniform with value " + val + ": expected argument of type number");
+    }
+};
+var TypeInt = {
+    check: function (val) {
+        TypeNumber.check(val);
+        if (val !== ~~val)
+            throw new debugError_1.DebugError("can not set uniform with value " + val + ": expected argument of integer type, but " + val + " found");
+    }
+};
+var TypeBool = {
+    check: function (val) {
+        if (!(val == true || val == false))
+            throw new debugError_1.DebugError("can not set uniform with value " + val + ": expected argument of boolean type, but " + val + " found");
+    }
+};
+var TypeArray = function (checker, size) {
+    return {
+        check: function (val) {
+            if (!val)
+                throw new debugError_1.DebugError("can not set uniform  value: " + val);
+            if (!val.splice) {
+                console.error('Can not set uniform value', val);
+                throw new debugError_1.DebugError("can not set uniform with value [" + val + "]: expected argument of type Array");
+            }
+            if (size !== undefined && val.length !== size)
+                throw new debugError_1.DebugError("can not set uniform with value [" + val + "]: expected array with size " + size + ", but " + val.length + " found");
+            for (var i = 0; i < val.length; i++) {
+                try {
+                    checker.check(val[i]);
+                }
+                catch (e) {
+                    console.error('Can not set uniform array item', val);
+                    throw new debugError_1.DebugError("can not set uniform array item with value [" + val + "]: unexpected array element type: " + val[i]);
+                }
+            }
+        }
+    };
+};
+var expect = function (value, typeChecker) {
+    typeChecker.check(value);
+};
+var getUniformSetter = function (size, type) {
+    if (size === 1) {
+        switch (type) {
+            case exports.GL_TYPE.FLOAT: return function (gl, location, value) {
+                true && expect(value, TypeNumber);
+                gl.uniform1f(location, value);
+            };
+            case exports.GL_TYPE.FLOAT_VEC2: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeNumber, 2));
+                gl.uniform2f(location, value[0], value[1]);
+            };
+            case exports.GL_TYPE.FLOAT_VEC3: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeNumber, 3));
+                gl.uniform3f(location, value[0], value[1], value[2]);
+            };
+            case exports.GL_TYPE.FLOAT_VEC4: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeNumber, 4));
+                gl.uniform4f(location, value[0], value[1], value[2], value[3]);
+            };
+            case exports.GL_TYPE.INT: return function (gl, location, value) {
+                true && expect(value, TypeInt);
+                gl.uniform1i(location, value);
+            };
+            case exports.GL_TYPE.INT_VEC2: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeInt, 2));
+                gl.uniform2i(location, value[0], value[1]);
+            };
+            case exports.GL_TYPE.INT_VEC3: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeInt, 3));
+                gl.uniform3i(location, value[0], value[1], value[2]);
+            };
+            case exports.GL_TYPE.INT_VEC4: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeInt, 4));
+                gl.uniform4i(location, value[0], value[1], value[2], value[3]);
+            };
+            case exports.GL_TYPE.BOOL: return function (gl, location, value) {
+                true && expect(value, TypeBool);
+                gl.uniform1i(location, value);
+            };
+            case exports.GL_TYPE.BOOL_VEC2: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeBool, 2));
+                gl.uniform2i(location, value[0], value[1]);
+            };
+            case exports.GL_TYPE.BOOL_VEC3: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeBool, 3));
+                gl.uniform3i(location, value[0], value[1], value[2]);
+            };
+            case exports.GL_TYPE.BOOL_VEC4: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeBool, 4));
+                gl.uniform4i(location, value[0], value[1], value[2], value[3]);
+            };
+            case exports.GL_TYPE.FLOAT_MAT2: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeNumber, 2 * 2));
+                gl.uniformMatrix2fv(location, false, value);
+            };
+            case exports.GL_TYPE.FLOAT_MAT3: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeNumber, 3 * 3));
+                gl.uniformMatrix3fv(location, false, value);
+            };
+            case exports.GL_TYPE.FLOAT_MAT4: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeNumber, 4 * 4));
+                gl.uniformMatrix4fv(location, false, value);
+            };
+            case exports.GL_TYPE.SAMPLER_2D: return function (gl, location, value) {
+                true && expect(value, TypeInt);
+                gl.uniform1i(location, value);
+            };
+            default:
+                if (true)
+                    throw new debugError_1.DebugError("can not set uniform for type " + type + " and size " + size);
+                break;
+        }
+    }
+    else {
+        switch (type) {
+            case exports.GL_TYPE.FLOAT: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeNumber, size));
+                gl.uniform1fv(location, value);
+            };
+            case exports.GL_TYPE.FLOAT_VEC2: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeNumber, size * 2));
+                gl.uniform2fv(location, value);
+            };
+            case exports.GL_TYPE.FLOAT_VEC3: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeNumber, size * 3));
+                gl.uniform3fv(location, value);
+            };
+            case exports.GL_TYPE.FLOAT_VEC4: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeNumber, size * 4));
+                gl.uniform4fv(location, value);
+            };
+            case exports.GL_TYPE.INT: return function (gl, location, value) {
+                true && expect(value, TypeInt);
+                gl.uniform1iv(location, value);
+            };
+            case exports.GL_TYPE.INT_VEC2: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeInt, size * 2));
+                gl.uniform2iv(location, value);
+            };
+            case exports.GL_TYPE.INT_VEC3: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeInt, size * 3));
+                gl.uniform3iv(location, value);
+            };
+            case exports.GL_TYPE.INT_VEC4: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeInt, size * 4));
+                gl.uniform4iv(location, value);
+            };
+            case exports.GL_TYPE.BOOL: return function (gl, location, value) {
+                true && expect(value, TypeBool);
+                gl.uniform1iv(location, value);
+            };
+            case exports.GL_TYPE.BOOL_VEC2: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeBool, size * 2));
+                gl.uniform2iv(location, value);
+            };
+            case exports.GL_TYPE.BOOL_VEC3: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeBool, size * 3));
+                gl.uniform3iv(location, value);
+            };
+            case exports.GL_TYPE.BOOL_VEC4: return function (gl, location, value) {
+                true && expect(value, TypeArray(TypeBool, size * 4));
+                gl.uniform4iv(location, value);
+            };
+            case exports.GL_TYPE.SAMPLER_2D: return function (gl, location, value) {
+                true && expect(value, TypeInt);
+                gl.uniform1iv(location, value);
+            };
+            default:
+                if (true)
+                    throw new debugError_1.DebugError("can not set uniform for type " + type + " and size " + size);
+                break;
+        }
+    }
+};
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var rect_1 = __webpack_require__(2);
+var mouse_1 = __webpack_require__(21);
+var renderableModel_1 = __webpack_require__(24);
+var debugError_1 = __webpack_require__(1);
+var OVERFLOW;
+(function (OVERFLOW) {
+    OVERFLOW[OVERFLOW["HIDDEN"] = 0] = "HIDDEN";
+    OVERFLOW[OVERFLOW["VISIBLE"] = 1] = "VISIBLE";
+})(OVERFLOW = exports.OVERFLOW || (exports.OVERFLOW = {}));
+var LAYOUT_SIZE;
+(function (LAYOUT_SIZE) {
+    LAYOUT_SIZE["FIXED"] = "FIXED";
+    LAYOUT_SIZE["WRAP_CONTENT"] = "WRAP_CONTENT";
+    LAYOUT_SIZE["MATCH_PARENT"] = "MATCH_PARENT";
+})(LAYOUT_SIZE = exports.LAYOUT_SIZE || (exports.LAYOUT_SIZE = {}));
+var STATE;
+(function (STATE) {
+    STATE["NORMAL"] = "NORMAL";
+    STATE["ACTIVE"] = "ACTIVE";
+    STATE["DISABLED"] = "DISABLED";
+})(STATE = exports.STATE || (exports.STATE = {}));
+var Container = (function (_super) {
+    tslib_1.__extends(Container, _super);
+    function Container(game) {
+        var _this = _super.call(this, game) || this;
+        _this.marginLeft = 0;
+        _this.marginTop = 0;
+        _this.marginRight = 0;
+        _this.marginBottom = 0;
+        _this.paddingLeft = 0;
+        _this.paddingTop = 0;
+        _this.paddingRight = 0;
+        _this.paddingBottom = 0;
+        _this.layoutWidth = LAYOUT_SIZE.WRAP_CONTENT;
+        _this.layoutHeight = LAYOUT_SIZE.WRAP_CONTENT;
+        _this.overflow = OVERFLOW.HIDDEN;
+        _this.background = undefined;
+        _this.drawingRect = new rect_1.Rect();
+        _this.maxWidth = 0;
+        _this.maxHeight = 0;
+        _this.bgByState = {};
+        _this.state = STATE.NORMAL;
+        _this.on(mouse_1.MOUSE_EVENTS.mouseDown, function () {
+            _this.state = STATE.ACTIVE;
+        });
+        _this.on(mouse_1.MOUSE_EVENTS.mouseUp, function () {
+            _this.state = STATE.NORMAL;
+        });
+        _this.on(mouse_1.MOUSE_EVENTS.mouseLeave, function () {
+            _this.state = STATE.NORMAL;
+        });
+        return _this;
+    }
+    Container.prototype.testLayout = function () {
+        if (true) {
+            if (this.layoutWidth === LAYOUT_SIZE.FIXED && this.width === 0)
+                throw new debugError_1.DebugError("layoutWidth is LAYOUT_SIZE.FIXED so width must be specified");
+            if (this.layoutHeight === LAYOUT_SIZE.FIXED && this.height === 0)
+                throw new debugError_1.DebugError("layoutHeight is LAYOUT_SIZE.FIXED so height must be specified");
+        }
+    };
+    Container.normalizeBorders = function (top, right, bottom, left) {
+        if (right === undefined && bottom === undefined && left === undefined) {
+            right = bottom = left = top;
+        }
+        else if (bottom === undefined && left === undefined) {
+            bottom = top;
+            left = right;
+        }
+        else if (left === undefined) {
+            left = right;
+        }
+        return { top: top, right: right, bottom: bottom, left: left };
+    };
+    Container.prototype.setMargins = function (top, right, bottom, left) {
+        var _a;
+        (_a = Container.normalizeBorders(top, right, bottom, left), top = _a.top, right = _a.right, bottom = _a.bottom, left = _a.left);
+        this.marginTop = top;
+        this.marginRight = right;
+        this.marginBottom = bottom;
+        this.marginLeft = left;
+        this.setDirty();
+    };
+    Container.prototype.setMarginsTopBottom = function (top, bottom) {
+        if (bottom === undefined)
+            bottom = top;
+        this.paddingTop = top;
+        this.paddingBottom = bottom;
+        this.setDirty();
+    };
+    Container.prototype.setMarginsLeftRight = function (left, right) {
+        if (right === undefined)
+            right = left;
+        this.marginLeft = left;
+        this.marginRight = right;
+        this.setDirty();
+    };
+    Container.prototype.setPaddings = function (top, right, bottom, left) {
+        var _a;
+        (_a = Container.normalizeBorders(top, right, bottom, left), top = _a.top, right = _a.right, bottom = _a.bottom, left = _a.left);
+        this.paddingTop = top;
+        this.paddingRight = right;
+        this.paddingBottom = bottom;
+        this.paddingLeft = left;
+        this.setDirty();
+    };
+    Container.prototype.calcScreenRect = function () {
+        this._rect.setXYWH(this.pos.x, this.pos.y, this.width + this.marginLeft + this.marginRight, this.height + this.marginTop + this.marginBottom);
+        this._screenRect.set(this._rect);
+        var parent = this.parent;
+        while (parent) {
+            this._screenRect.addXY(parent.getRect().x, parent.getRect().y);
+            parent = parent.parent;
+        }
+    };
+    Container.prototype.setPaddingsTopBottom = function (top, bottom) {
+        if (bottom === undefined)
+            bottom = top;
+        this.paddingTop = top;
+        this.paddingBottom = bottom;
+        this.setDirty();
+    };
+    Container.prototype.setPaddingsLeftRight = function (left, right) {
+        if (right === undefined)
+            right = left;
+        this.paddingLeft = left;
+        this.paddingRight = right;
+        this.setDirty();
+    };
+    Container.prototype.describeStates = function (description) {
+        var _this = this;
+        var allUIRenderable = __webpack_require__(31);
+        Object.keys(description).forEach(function (stateName) {
+            var state = STATE[stateName];
+            var clazz = allUIRenderable[description[stateName].type];
+            var instance = new clazz(_this.game);
+            instance.fromJSON(description[stateName]);
+            _this.bgByState[state] = instance;
+        });
+    };
+    Container.prototype.revalidate = function () {
+        this.calcScreenRect();
+        _super.prototype.revalidate.call(this);
+    };
+    Container.prototype.onGeometryChanged = function () {
+        this.revalidate();
+    };
+    Container.prototype.getBgByState = function () {
+        var possibleBg = this.bgByState[this.state];
+        if (!possibleBg)
+            possibleBg = this.background;
+        return possibleBg;
+    };
+    Container.prototype.setWH = function (w, h) {
+        this.width = w;
+        this.height = h;
+        this.drawingRect.setWH(w, h);
+    };
+    Container.prototype.calcDrawableRect = function (contentWidth, contentHeight) {
+        var paddedWidth = contentWidth + this.paddingLeft + this.paddingRight;
+        var paddedHeight = contentHeight + this.paddingTop + this.paddingBottom;
+        if (this.background) {
+            this.background.setWH(paddedWidth, paddedHeight);
+            this.width = this.background.width;
+            this.height = this.background.height;
+        }
+        else {
+            this.width = paddedWidth;
+            this.height = paddedHeight;
+        }
+        this.calcScreenRect();
+    };
+    Container.prototype.update = function (time, delta) {
+        this.background = this.getBgByState();
+        if (this._dirty) {
+            this.onGeometryChanged();
+            this._dirty = false;
+        }
+        _super.prototype.update.call(this, time, delta);
+    };
+    Container.prototype.beforeRender = function () {
+        this.game.getRenderer().translate(this.pos.x + this.marginLeft, this.pos.y + this.marginTop);
+    };
+    return Container;
+}(renderableModel_1.RenderableModel));
+exports.Container = Container;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var shaderProgramUtils_1 = __webpack_require__(5);
+var ShaderProgram = (function () {
+    function ShaderProgram(gl, vertexSource, fragmentSource) {
+        var vShader = shaderProgramUtils_1.compileShader(gl, vertexSource, gl.VERTEX_SHADER);
+        var fShader = shaderProgramUtils_1.compileShader(gl, fragmentSource, gl.FRAGMENT_SHADER);
+        this.program = shaderProgramUtils_1.createProgram(gl, vShader, fShader);
+        gl.deleteShader(vShader);
+        gl.deleteShader(fShader);
+        this.uniforms = shaderProgramUtils_1.extractUniforms(gl, this);
+        this.attributes = shaderProgramUtils_1.extractAttributes(gl, this);
+        this.gl = gl;
+    }
+    ShaderProgram.prototype.getProgram = function () {
+        return this.program;
+    };
+    ShaderProgram.prototype.bind = function () {
+        this.gl.useProgram(this.program);
+        ShaderProgram.currentProgram = this;
+    };
+    ShaderProgram.prototype.setUniform = function (name, value) {
+        if (true && !name) {
+            throw new debugError_1.DebugError("no uniform name was provided!");
+        }
+        var uniform = this.uniforms[name];
+        if (true && !uniform) {
+            return;
+            throw new debugError_1.DebugError("no uniform with name " + name + " found!");
+        }
+        if (true) {
+            if (ShaderProgram.currentProgram !== this) {
+                console.error(this);
+                throw new debugError_1.DebugError("can not set uniform: target program is inactive");
+            }
+        }
+        uniform.setter(this.gl, uniform.location, value);
+    };
+    ShaderProgram.prototype.bindBuffer = function (buffer, attrName) {
+        if (true) {
+            if (!attrName)
+                throw new debugError_1.DebugError("can not found attribute location: attrLocationName not defined");
+            if (this.attributes[attrName] === undefined) {
+                console.log(this);
+                throw new debugError_1.DebugError("can not found attribute location for  " + attrName);
+            }
+        }
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer.getGlBuffer());
+        var attrLocation = this.attributes[attrName];
+        this.gl.enableVertexAttribArray(attrLocation);
+        this.gl.vertexAttribPointer(attrLocation, buffer.getItemSize(), buffer.getItemType(), false, 0, 0);
+    };
+    ShaderProgram.prototype.destroy = function () {
+        this.gl.deleteProgram(this.program);
+    };
+    ShaderProgram.currentProgram = null;
+    return ShaderProgram;
+}());
+exports.ShaderProgram = ShaderProgram;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var ObjectPool = (function () {
+    function ObjectPool(Class, numberOfInstances, lazy) {
+        if (numberOfInstances === void 0) { numberOfInstances = 16; }
+        if (lazy === void 0) { lazy = true; }
+        this.Class = Class;
+        this._pool = [];
+        this._cnt = 0;
+        this._numberOfInstances = numberOfInstances;
+        if (true && !Class)
+            throw new debugError_1.DebugError("can not instantiate ObjectPool: class not provided in constructor");
+        if (!lazy) {
+            for (var i = 0; i < numberOfInstances; i++) {
+                this._pool.push(new Class());
+            }
+        }
+    }
+    ObjectPool.prototype.getNextObject = function () {
+        var index = this._cnt++ % this._numberOfInstances;
+        if (this._pool[index] === undefined)
+            this._pool[index] = new this.Class();
+        return this._pool[index];
+    };
+    return ObjectPool;
+}());
+exports.ObjectPool = ObjectPool;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+exports.makeIdentity = function () {
+    return [
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    ];
+};
+exports.makeZToWMatrix = function (fudgeFactor) {
+    return [
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, fudgeFactor,
+        0, 0, 0, 1
+    ];
+};
+exports.make2DProjection = function (width, height, depth) {
+    return [
+        2 / width, 0, 0, 0,
+        0, -2 / height, 0, 0,
+        0, 0, 2 / depth, 0,
+        -1, 1, 0, 1
+    ];
+};
+exports.ortho = function (left, right, bottom, top, near, far) {
+    var lr = 1 / (left - right), bt = 1 / (bottom - top), nf = 1 / (near - far);
+    var out = new Array(16);
+    out[0] = -2 * lr;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 0;
+    out[5] = -2 * bt;
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 0;
+    out[9] = 0;
+    out[10] = 2 * nf;
+    out[11] = 0;
+    out[12] = (left + right) * lr;
+    out[13] = (top + bottom) * bt;
+    out[14] = (far + near) * nf;
+    out[15] = 1;
+    return out;
+};
+exports.perspective = function (fovy, aspect, near, far) {
+    var f = 1.0 / Math.tan(fovy / 2), nf = 1 / (near - far);
+    var out = new Array(16);
+    out[0] = f / aspect;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 0;
+    out[5] = f;
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 0;
+    out[9] = 0;
+    out[10] = (far + near) * nf;
+    out[11] = -1;
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = (2 * far * near) * nf;
+    out[15] = 0;
+    return out;
+};
+exports.makeTranslation = function (tx, ty, tz) {
+    return [
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        tx, ty, tz, 1
+    ];
+};
+exports.makeXRotation = function (angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+    return [
+        1, 0, 0, 0,
+        0, c, s, 0,
+        0, -s, c, 0,
+        0, 0, 0, 1
+    ];
+};
+exports.makeYRotation = function (angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+    return [
+        c, 0, -s, 0,
+        0, 1, 0, 0,
+        s, 0, c, 0,
+        0, 0, 0, 1
+    ];
+};
+exports.makeZRotation = function (angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+    return [
+        c, s, 0, 0,
+        -s, c, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    ];
+};
+exports.makeScale = function (sx, sy, sz) {
+    return [
+        sx, 0, 0, 0,
+        0, sy, 0, 0,
+        0, 0, sz, 0,
+        0, 0, 0, 1
+    ];
+};
+exports.matrixMultiply = function (a, b) {
+    var r = new Array(16);
+    r[0] = a[0] * b[0] + a[1] * b[4] + a[2] * b[8] + a[3] * b[12];
+    r[1] = a[0] * b[1] + a[1] * b[5] + a[2] * b[9] + a[3] * b[13];
+    r[2] = a[0] * b[2] + a[1] * b[6] + a[2] * b[10] + a[3] * b[14];
+    r[3] = a[0] * b[3] + a[1] * b[7] + a[2] * b[11] + a[3] * b[15];
+    r[4] = a[4] * b[0] + a[5] * b[4] + a[6] * b[8] + a[7] * b[12];
+    r[5] = a[4] * b[1] + a[5] * b[5] + a[6] * b[9] + a[7] * b[13];
+    r[6] = a[4] * b[2] + a[5] * b[6] + a[6] * b[10] + a[7] * b[14];
+    r[7] = a[4] * b[3] + a[5] * b[7] + a[6] * b[11] + a[7] * b[15];
+    r[8] = a[8] * b[0] + a[9] * b[4] + a[10] * b[8] + a[11] * b[12];
+    r[9] = a[8] * b[1] + a[9] * b[5] + a[10] * b[9] + a[11] * b[13];
+    r[10] = a[8] * b[2] + a[9] * b[6] + a[10] * b[10] + a[11] * b[14];
+    r[11] = a[8] * b[3] + a[9] * b[7] + a[10] * b[11] + a[11] * b[15];
+    r[12] = a[12] * b[0] + a[13] * b[4] + a[14] * b[8] + a[15] * b[12];
+    r[13] = a[12] * b[1] + a[13] * b[5] + a[14] * b[9] + a[15] * b[13];
+    r[14] = a[12] * b[2] + a[13] * b[6] + a[14] * b[10] + a[15] * b[14];
+    r[15] = a[12] * b[3] + a[13] * b[7] + a[14] * b[11] + a[15] * b[15];
+    return r;
+};
+exports.multMatrixVec = function (matrix, inp) {
+    var out = new Array(16);
+    for (var i = 0; i < 4; i++) {
+        out[i] =
+            inp[0] * matrix[0 * 4 + i] +
+                inp[1] * matrix[1 * 4 + i] +
+                inp[2] * matrix[2 * 4 + i] +
+                inp[3] * matrix[3 * 4 + i];
+    }
+    return out;
+};
+exports.inverse = function (m) {
+    var r = new Array(16);
+    r[0] = m[5] * m[10] * m[15] - m[5] * m[14] * m[11] - m[6] * m[9] * m[15] + m[6] * m[13] * m[11] + m[7] * m[9] * m[14] - m[7] * m[13] * m[10];
+    r[1] = -m[1] * m[10] * m[15] + m[1] * m[14] * m[11] + m[2] * m[9] * m[15] - m[2] * m[13] * m[11] - m[3] * m[9] * m[14] + m[3] * m[13] * m[10];
+    r[2] = m[1] * m[6] * m[15] - m[1] * m[14] * m[7] - m[2] * m[5] * m[15] + m[2] * m[13] * m[7] + m[3] * m[5] * m[14] - m[3] * m[13] * m[6];
+    r[3] = -m[1] * m[6] * m[11] + m[1] * m[10] * m[7] + m[2] * m[5] * m[11] - m[2] * m[9] * m[7] - m[3] * m[5] * m[10] + m[3] * m[9] * m[6];
+    r[4] = -m[4] * m[10] * m[15] + m[4] * m[14] * m[11] + m[6] * m[8] * m[15] - m[6] * m[12] * m[11] - m[7] * m[8] * m[14] + m[7] * m[12] * m[10];
+    r[5] = m[0] * m[10] * m[15] - m[0] * m[14] * m[11] - m[2] * m[8] * m[15] + m[2] * m[12] * m[11] + m[3] * m[8] * m[14] - m[3] * m[12] * m[10];
+    r[6] = -m[0] * m[6] * m[15] + m[0] * m[14] * m[7] + m[2] * m[4] * m[15] - m[2] * m[12] * m[7] - m[3] * m[4] * m[14] + m[3] * m[12] * m[6];
+    r[7] = m[0] * m[6] * m[11] - m[0] * m[10] * m[7] - m[2] * m[4] * m[11] + m[2] * m[8] * m[7] + m[3] * m[4] * m[10] - m[3] * m[8] * m[6];
+    r[8] = m[4] * m[9] * m[15] - m[4] * m[13] * m[11] - m[5] * m[8] * m[15] + m[5] * m[12] * m[11] + m[7] * m[8] * m[13] - m[7] * m[12] * m[9];
+    r[9] = -m[0] * m[9] * m[15] + m[0] * m[13] * m[11] + m[1] * m[8] * m[15] - m[1] * m[12] * m[11] - m[3] * m[8] * m[13] + m[3] * m[12] * m[9];
+    r[10] = m[0] * m[5] * m[15] - m[0] * m[13] * m[7] - m[1] * m[4] * m[15] + m[1] * m[12] * m[7] + m[3] * m[4] * m[13] - m[3] * m[12] * m[5];
+    r[11] = -m[0] * m[5] * m[11] + m[0] * m[9] * m[7] + m[1] * m[4] * m[11] - m[1] * m[8] * m[7] - m[3] * m[4] * m[9] + m[3] * m[8] * m[5];
+    r[12] = -m[4] * m[9] * m[14] + m[4] * m[13] * m[10] + m[5] * m[8] * m[14] - m[5] * m[12] * m[10] - m[6] * m[8] * m[13] + m[6] * m[12] * m[9];
+    r[13] = m[0] * m[9] * m[14] - m[0] * m[13] * m[10] - m[1] * m[8] * m[14] + m[1] * m[12] * m[10] + m[2] * m[8] * m[13] - m[2] * m[12] * m[9];
+    r[14] = -m[0] * m[5] * m[14] + m[0] * m[13] * m[6] + m[1] * m[4] * m[14] - m[1] * m[12] * m[6] - m[2] * m[4] * m[13] + m[2] * m[12] * m[5];
+    r[15] = m[0] * m[5] * m[10] - m[0] * m[9] * m[6] - m[1] * m[4] * m[10] + m[1] * m[8] * m[6] + m[2] * m[4] * m[9] - m[2] * m[8] * m[5];
+    var det = m[0] * r[0] + m[1] * r[4] + m[2] * r[8] + m[3] * r[12];
+    if (true && det === 0) {
+        console.error(m);
+        throw new debugError_1.DebugError("can not invert matrix");
+    }
+    for (var i = 0; i < 16; i++)
+        r[i] /= det;
+    return r;
+};
+exports.IDENTITY = exports.makeIdentity();
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var mat4 = __webpack_require__(9);
+var point2d_1 = __webpack_require__(4);
+var MathEx = (function () {
+    function MathEx() {
+    }
+    MathEx.isPointInRect = function (point, rect, angle) {
+        return point.x > rect.x &&
+            point.x < (rect.x + rect.width) &&
+            point.y > rect.y &&
+            point.y < (rect.y + rect.height);
+    };
+    MathEx.overlapTest = function (a, b) {
+        return (a.x < b.x + b.width) &&
+            (a.x + a.width > b.x) &&
+            (a.y < b.y + b.height) &&
+            (a.y + a.height > b.y);
+    };
+    MathEx.radToDeg = function (rad) {
+        return rad * 180 / Math.PI;
+    };
+    MathEx.degToRad = function (deg) {
+        return deg * Math.PI / 180;
+    };
+    MathEx.rectToPolar = function (point, center) {
+        var radius = Math.sqrt(point.x * point.x + center.y * center.y);
+        var angle = Math.atan2(center.y - point.y, center.x - point.x);
+        return { radius: radius, angle: angle };
+    };
+    MathEx.polarToRect = function (radius, angle, center) {
+        var x = radius * Math.cos(angle);
+        var y = radius * Math.sin(angle);
+        return new point2d_1.Point2d(center.x - x, center.y - y);
+    };
+    MathEx.getDistanceSquared = function (p1, p2) {
+        return Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2);
+    };
+    MathEx.closeTo = function (a, b, epsilon) {
+        if (epsilon === void 0) { epsilon = 0.01; }
+        return Math.abs(a - b) <= epsilon;
+    };
+    MathEx.getDistance = function (p1, p2) {
+        return Math.sqrt(MathEx.getDistanceSquared(p1, p2));
+    };
+    MathEx.getAngle = function (p1, p2) {
+        var dx = p1.x - p2.x;
+        var dy = p1.y - p2.y;
+        return Math.atan2(dy, dx);
+    };
+    MathEx.unProject = function (winPoint, width, height, viewProjectionMatrix) {
+        var x = 2.0 * winPoint.x / width - 1;
+        var y = 2.0 * winPoint.y / height - 1;
+        var viewProjectionInverse = mat4.inverse(viewProjectionMatrix);
+        var point3D = [x, y, 0, 1];
+        var res = mat4.multMatrixVec(viewProjectionInverse, point3D);
+        res[0] = (res[0] / 2 + 0.5) * width;
+        res[1] = (res[1] / 2 + 0.5) * height;
+        return new point2d_1.Point2d(res[0], res[1]);
+    };
+    MathEx.random = function (min, max) {
+        if (min > max) {
+            var tmp = min;
+            min = max;
+            max = tmp;
+        }
+        var res = ~~(Math.random() * (max - min)) + min;
+        if (res > max)
+            res = max;
+        else if (res < min)
+            res = min;
+        return res;
+    };
+    return MathEx;
+}());
+exports.MathEx = MathEx;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var object_1 = __webpack_require__(19);
+var AbstractDrawer = (function () {
+    function AbstractDrawer(gl) {
+        this.program = null;
+        this.uniformCache = {};
+        this.gl = gl;
+        AbstractDrawer.instances.push(this);
+    }
+    AbstractDrawer.prototype.bind = function () {
+        if (AbstractDrawer.currentInstance !== null &&
+            AbstractDrawer.currentInstance !== this) {
+            AbstractDrawer.currentInstance.unbind();
+        }
+        AbstractDrawer.currentInstance = this;
+        this.bufferInfo.bind(this.program);
+    };
+    AbstractDrawer.prototype.unbind = function () {
+        this.bufferInfo.unbind();
+    };
+    AbstractDrawer.prototype.destroy = function () {
+        if (this.bufferInfo)
+            this.bufferInfo.destroy();
+        this.program.destroy();
+    };
+    AbstractDrawer.destroyAll = function () {
+        AbstractDrawer.instances.forEach(function (it) {
+            it.destroy();
+        });
+    };
+    AbstractDrawer.prototype.setUniform = function (name, value) {
+        if (object_1.isEqual(this.uniformCache[name], value))
+            return;
+        if (object_1.isArray(value)) {
+            if (!this.uniformCache[name])
+                this.uniformCache[name] = Array(value.length);
+            for (var i = 0, max = value.length; i < max; i++) {
+                this.uniformCache[name][i] = value[i];
+            }
+        }
+        else {
+            this.uniformCache[name] = value;
+        }
+        this.program.setUniform(name, this.uniformCache[name]);
+    };
+    AbstractDrawer.prototype.drawElements = function () {
+        this.bufferInfo.draw();
+    };
+    AbstractDrawer.prototype.draw = function (textureInfos, uniforms, unused) {
+        var _this = this;
+        if (unused === void 0) { unused = null; }
+        this.bind();
+        Object.keys(uniforms).forEach(function (name) { return _this.setUniform(name, uniforms[name]); });
+        if (textureInfos) {
+            textureInfos.forEach(function (t, i) {
+                t.texture.bind(t.name, i, _this.program);
+            });
+        }
+        this.drawElements();
+    };
+    AbstractDrawer.currentInstance = null;
+    AbstractDrawer.instances = [];
+    return AbstractDrawer;
+}());
+exports.AbstractDrawer = AbstractDrawer;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var shape_1 = __webpack_require__(20);
+var Rectangle = (function (_super) {
+    tslib_1.__extends(Rectangle, _super);
+    function Rectangle(game) {
+        var _this = _super.call(this, game) || this;
+        _this.borderRadius = 0;
+        _this.width = 16;
+        _this.height = 16;
+        _this.lineWidth = 1;
+        return _this;
+    }
+    Rectangle.prototype.draw = function () {
+        this.game.getRenderer().drawRectangle(this);
+        return true;
+    };
+    return Rectangle;
+}(shape_1.Shape));
+exports.Rectangle = Rectangle;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var objectPool_1 = __webpack_require__(8);
+var Size = (function () {
+    function Size(width, height) {
+        if (width === void 0) { width = 0; }
+        if (height === void 0) { height = 0; }
+        this.width = width;
+        this.height = height;
+    }
+    Size.prototype.setW = function (width) {
+        this.width = width;
+        return this;
+    };
+    Size.prototype.setH = function (height) {
+        this.height = height;
+        return this;
+    };
+    Size.prototype.setWH = function (width, height) {
+        this.width = width;
+        this.height = height;
+        return this;
+    };
+    Size.prototype.set = function (another) {
+        this.width = another.width;
+        this.height = another.height;
+        return this;
+    };
+    Size.fromPool = function () {
+        return Size.rectPool.getNextObject();
+    };
+    Size.rectPool = new objectPool_1.ObjectPool(Size);
+    return Size;
+}());
+exports.Size = Size;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var easing_1 = __webpack_require__(47);
+var accessByPath = function (obj, path) {
+    var pathArr = path.split('.');
+    if (pathArr.length === 1)
+        return { targetObj: obj, targetKey: path };
+    var lastPath = pathArr.pop();
+    pathArr.forEach(function (p) {
+        obj = obj[p];
+    });
+    return { targetObj: obj, targetKey: lastPath };
+};
+var setValByPath = function (obj, path, val) {
+    var _a = accessByPath(obj, path), targetObj = _a.targetObj, targetKey = _a.targetKey;
+    targetObj[targetKey] = val;
+};
+var getValByPath = function (obj, path) {
+    var _a = accessByPath(obj, path), targetObj = _a.targetObj, targetKey = _a.targetKey;
+    return targetObj[targetKey];
+};
+var Tween = (function () {
+    function Tween(tweenDesc) {
+        this._propsToChange = [];
+        this._startedTime = 0;
+        this._currTime = 0;
+        this._completed = false;
+        this._target = tweenDesc.target;
+        this._progressFn = tweenDesc.progress;
+        this._completeFn = tweenDesc.complete;
+        this._easeFnName = tweenDesc.ease || 'linear';
+        this._tweenTime = tweenDesc.time || 1000;
+        this._desc = this.normalizeDesc(tweenDesc);
+    }
+    Tween.prototype.reuse = function (newTweenDesc) {
+        var _this = this;
+        this._startedTime = this._currTime;
+        this._completed = false;
+        Object.keys(newTweenDesc).forEach(function (key) {
+            _this._desc[key] = newTweenDesc[key];
+        });
+        this._desc = this.normalizeDesc(newTweenDesc);
+    };
+    Tween.prototype.normalizeDesc = function (tweenDesc) {
+        var _this = this;
+        tweenDesc.from = tweenDesc.from || {};
+        tweenDesc.to = tweenDesc.to || {};
+        var allPropsMap = {};
+        Object.keys(tweenDesc.from).forEach(function (keyFrom) {
+            allPropsMap[keyFrom] = true;
+        });
+        Object.keys(tweenDesc.to).forEach(function (keyTo) {
+            allPropsMap[keyTo] = true;
+        });
+        this._propsToChange = Object.keys(allPropsMap);
+        this._propsToChange.forEach(function (prp) {
+            if (tweenDesc.from[prp] === undefined)
+                tweenDesc.from[prp] = getValByPath(_this._target, prp);
+            if (tweenDesc.to[prp] === undefined)
+                tweenDesc.to[prp] = getValByPath(_this._target, prp);
+        });
+        return tweenDesc;
+    };
+    Tween.prototype.update = function (currTime) {
+        if (this._completed)
+            return;
+        this._currTime = currTime;
+        if (!this._startedTime)
+            this._startedTime = currTime;
+        var curTweenTime = currTime - this._startedTime;
+        if (curTweenTime > this._tweenTime) {
+            this.complete();
+            return;
+        }
+        var l = this._propsToChange.length;
+        while (l--) {
+            var prp = this._propsToChange[l];
+            var valFrom = this._desc.from[prp];
+            var valTo = this._desc.to[prp];
+            var fn = easing_1.Easing[this._easeFnName];
+            var valCurr = fn(curTweenTime, valFrom, valTo - valFrom, this._tweenTime);
+            setValByPath(this._target, prp, valCurr);
+        }
+        this._progressFn && this._progressFn(this._target);
+    };
+    Tween.prototype.progress = function (_progressFn) {
+        this._progressFn = _progressFn;
+    };
+    Tween.prototype.reset = function () {
+        this._startedTime = null;
+        this._completed = false;
+    };
+    Tween.prototype.complete = function () {
+        if (this._completed)
+            return;
+        var l = this._propsToChange.length;
+        while (l--) {
+            var prp = this._propsToChange[l];
+            var valCurr = this._desc.to[prp];
+            setValByPath(this._target, prp, valCurr);
+        }
+        this._progressFn && this._progressFn(this._target);
+        this._completeFn && this._completeFn(this._target);
+        this._completed = true;
+    };
+    Tween.prototype.isCompleted = function () {
+        return this._completed;
+    };
+    Tween.prototype.getTarget = function () {
+        return this._target;
+    };
+    Tween.prototype.getTweenTime = function () {
+        return this._tweenTime;
+    };
+    return Tween;
+}());
+exports.Tween = Tween;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var vertexBuffer_1 = __webpack_require__(76);
+var indexBuffer_1 = __webpack_require__(77);
+var BufferInfo = (function () {
+    function BufferInfo(gl, description) {
+        this.posVertexBuffer = null;
+        this.posIndexBuffer = null;
+        this.texVertexBuffer = null;
+        this.normalBuffer = null;
+        this.drawMethod = null;
+        this.numOfElementsToDraw = 0;
+        this.gl = gl;
+        if (true && description.drawMethod === undefined)
+            throw new debugError_1.DebugError("can not create BufferInfo: drawMethod not defined");
+        this.drawMethod = description.drawMethod;
+        if (true && !description.posVertexInfo)
+            throw new debugError_1.DebugError("can not create BufferInfo: posVertexInfo is mandatory");
+        this.posVertexBuffer = new vertexBuffer_1.VertexBuffer(gl);
+        this.posVertexBuffer.setData(description.posVertexInfo.array, description.posVertexInfo.type, description.posVertexInfo.size);
+        this.posVertexBuffer.setAttrName(description.posVertexInfo.attrName);
+        if (description.posIndexInfo) {
+            this.posIndexBuffer = new indexBuffer_1.IndexBuffer(gl);
+            this.posIndexBuffer.setData(description.posIndexInfo.array);
+        }
+        else
+            this.numOfElementsToDraw = this._getNumOfElementsToDraw(this.drawMethod);
+        if (description.texVertexInfo) {
+            this.texVertexBuffer = new vertexBuffer_1.VertexBuffer(gl);
+            this.texVertexBuffer.setData(description.texVertexInfo.array, description.texVertexInfo.type, description.texVertexInfo.size);
+            this.texVertexBuffer.setAttrName(description.texVertexInfo.attrName);
+        }
+        if (description.normalInfo) {
+            this.normalBuffer = new vertexBuffer_1.VertexBuffer(gl);
+            this.normalBuffer.setData(description.normalInfo.array, description.normalInfo.type, description.normalInfo.size);
+            this.normalBuffer.setAttrName(description.normalInfo.attrName);
+        }
+    }
+    BufferInfo.prototype.bind = function (program) {
+        program.bind();
+        if (this.posIndexBuffer)
+            this.posIndexBuffer.bind();
+        if (this.posVertexBuffer)
+            this.posVertexBuffer.bind(program);
+        if (this.texVertexBuffer)
+            this.texVertexBuffer.bind(program);
+        if (this.normalBuffer)
+            this.normalBuffer.bind(program);
+    };
+    BufferInfo.prototype.unbind = function () {
+        if (this.posIndexBuffer)
+            this.posIndexBuffer.unbind();
+        if (this.posVertexBuffer)
+            this.posVertexBuffer.unbind();
+        if (this.texVertexBuffer)
+            this.texVertexBuffer.unbind();
+        if (this.normalBuffer)
+            this.normalBuffer.unbind();
+    };
+    BufferInfo.prototype.destroy = function () {
+        if (this.posVertexBuffer)
+            this.posVertexBuffer.destroy();
+        if (this.posIndexBuffer)
+            this.posIndexBuffer.destroy();
+        if (this.texVertexBuffer)
+            this.texVertexBuffer.destroy();
+        if (this.normalBuffer)
+            this.normalBuffer.destroy();
+    };
+    BufferInfo.prototype._getNumOfElementsToDraw = function (drawMethod) {
+        switch (drawMethod) {
+            case this.gl.LINE_STRIP:
+            case this.gl.TRIANGLE_FAN:
+                return this.posVertexBuffer.getBufferLength() / 2;
+            default:
+                throw new debugError_1.DebugError("unknown draw method: " + drawMethod);
+        }
+    };
+    BufferInfo.prototype.draw = function () {
+        if (this.posIndexBuffer !== null) {
+            this.gl.drawElements(this.drawMethod, this.posIndexBuffer.getBufferLength(), this.gl.UNSIGNED_SHORT, 0);
+        }
+        else {
+            this.gl.drawArrays(this.drawMethod, 0, this.numOfElementsToDraw);
+        }
+    };
+    return BufferInfo;
+}());
+exports.BufferInfo = BufferInfo;
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var rect_1 = __webpack_require__(2);
+var debugError_1 = __webpack_require__(1);
+var shape_1 = __webpack_require__(20);
+var color_1 = __webpack_require__(3);
+var point2d_1 = __webpack_require__(4);
+var Image = (function (_super) {
+    tslib_1.__extends(Image, _super);
+    function Image(game) {
+        var _this = _super.call(this, game) || this;
+        _this.srcRect = new rect_1.Rect();
+        _this.borderRadius = 0;
+        _this.offset = new point2d_1.Point2d();
+        _this.fillColor.set(color_1.Color.NONE);
+        return _this;
+    }
+    Image.prototype.revalidate = function () {
+        if (true && !this.getResourceLink()) {
+            console.error(this);
+            throw new debugError_1.DebugError("can not render Image: resourceLink is not specified");
+        }
+        var tex = this.game.getRenderer().getTextureInfo(this.getResourceLink().getId());
+        if (this.width === 0)
+            this.width = tex.size.width;
+        if (this.height === 0)
+            this.height = tex.size.height;
+        if (this.srcRect.width === 0)
+            this.srcRect.width = tex.size.width;
+        if (this.srcRect.height === 0)
+            this.srcRect.height = tex.size.height;
+    };
+    Image.prototype.draw = function () {
+        this.game.getRenderer().drawImage(this);
+        return true;
+    };
+    return Image;
+}(shape_1.Shape));
+exports.Image = Image;
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var EventEmitter = (function () {
+    function EventEmitter() {
+        this.events = {};
+    }
+    EventEmitter.prototype._on = function (name, callBack) {
+        this.events[name] = this.events[name] || [];
+        this.events[name].push(callBack);
+    };
+    EventEmitter.prototype.on = function (eventNameOrList, callBack) {
+        var _this = this;
+        if (typeof eventNameOrList === 'string') {
+            this._on(eventNameOrList, callBack);
+        }
+        else if (eventNameOrList.splice) {
+            eventNameOrList.forEach(function (eventName) {
+                _this._on(eventName, callBack);
+            });
+        }
+    };
+    ;
+    EventEmitter.prototype.off = function (eventName, callback) {
+        var es = this.events[eventName];
+        if (!es)
+            return;
+        var index = es.indexOf(callback);
+        if (true && index == -1) {
+            console.error(callback);
+            throw new debugError_1.DebugError("can not remove event listener " + eventName);
+        }
+        es.splice(index, 1);
+    };
+    ;
+    EventEmitter.prototype.trigger = function (eventName, data) {
+        var es = this.events[eventName];
+        if (!es)
+            return;
+        var l = es.length;
+        while (l--) {
+            es[l](data);
+        }
+    };
+    ;
+    return EventEmitter;
+}());
+exports.EventEmitter = EventEmitter;
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var rect_1 = __webpack_require__(2);
+var debugError_1 = __webpack_require__(1);
+var scrollableContainer_1 = __webpack_require__(59);
+var image_1 = __webpack_require__(16);
+var TEXT_ALIGN;
+(function (TEXT_ALIGN) {
+    TEXT_ALIGN["LEFT"] = "LEFT";
+    TEXT_ALIGN["RIGHT"] = "RIGHT";
+    TEXT_ALIGN["CENTER"] = "CENTER";
+    TEXT_ALIGN["JUSTIFY"] = "JUSTIFY";
+})(TEXT_ALIGN = exports.TEXT_ALIGN || (exports.TEXT_ALIGN = {}));
+var TextInfo = (function () {
+    function TextInfo(textField) {
+        this.textField = textField;
+        this.allCharsCached = [];
+        this.width = 0;
+        this.height = 0;
+        this.posX = 0;
+        this.posY = 0;
+        this.strings = [];
+    }
+    TextInfo.prototype.reset = function () {
+        this.allCharsCached = [];
+        this.strings = [];
+        this.posX = 0;
+        this.posY = 0;
+    };
+    TextInfo.prototype.newString = function () {
+        this.posX = 0;
+        if (this.strings.length) {
+            this.posY += this.textField.font.getDefaultSymbolHeight();
+        }
+        this.strings.push(new StringInfo());
+    };
+    TextInfo.prototype.addChar = function (c) {
+        this.strings[this.strings.length - 1].chars.push(c);
+        this.allCharsCached.push(c);
+        c.destRect.setXY(this.posX, this.posY);
+        this.posX += c.sourceRect.width;
+    };
+    TextInfo.prototype.addWord = function (w) {
+        var _this = this;
+        w.chars.forEach(function (c) {
+            _this.addChar(c);
+        });
+    };
+    TextInfo.prototype.revalidate = function (defaultSymbolHeight) {
+        this.height = 0;
+        this.width = 0;
+        for (var _i = 0, _a = this.strings; _i < _a.length; _i++) {
+            var s = _a[_i];
+            s.calcSize(defaultSymbolHeight);
+            this.height += s.height;
+            if (s.width > this.width)
+                this.width = s.width;
+        }
+    };
+    TextInfo.prototype.align = function (textAlign) {
+        var _this = this;
+        if (true && TEXT_ALIGN[textAlign] === undefined) {
+            var keys = Object.keys(TEXT_ALIGN).join(', ');
+            throw new debugError_1.DebugError("can not align text: unknown enum type of TEXT_ALIGN: " + textAlign + ", expected: " + keys);
+        }
+        this.strings.forEach(function (s) {
+            s.align(textAlign, _this.textField);
+        });
+    };
+    return TextInfo;
+}());
+var CharInfo = (function () {
+    function CharInfo() {
+        this.destRect = new rect_1.Rect();
+        this.sourceRect = new rect_1.Rect();
+    }
+    return CharInfo;
+}());
+var CharsHolder = (function () {
+    function CharsHolder() {
+        this.chars = [];
+    }
+    CharsHolder.prototype.moveBy = function (dx, dy) {
+        for (var _i = 0, _a = this.chars; _i < _a.length; _i++) {
+            var ch = _a[_i];
+            ch.destRect.getPoint().addXY(dx, dy);
+        }
+    };
+    CharsHolder.prototype.moveTo = function (x, y) {
+        var initialOffsetX = 0;
+        for (var _i = 0, _a = this.chars; _i < _a.length; _i++) {
+            var ch = _a[_i];
+            ch.destRect.getPoint().setXY(initialOffsetX + x, y);
+            initialOffsetX += ch.sourceRect.width;
+        }
+    };
+    return CharsHolder;
+}());
+var WordInfo = (function (_super) {
+    tslib_1.__extends(WordInfo, _super);
+    function WordInfo() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.width = 0;
+        return _this;
+    }
+    WordInfo.prototype.revalidate = function () {
+        this.width = 0;
+        for (var _i = 0, _a = this.chars; _i < _a.length; _i++) {
+            var ch = _a[_i];
+            this.width += ch.destRect.width;
+        }
+    };
+    WordInfo.prototype.addChar = function (c) {
+        this.chars.push(c);
+        this.width += c.sourceRect.width;
+    };
+    return WordInfo;
+}(CharsHolder));
+var StringInfo = (function (_super) {
+    tslib_1.__extends(StringInfo, _super);
+    function StringInfo() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.width = 0;
+        _this.height = 0;
+        return _this;
+    }
+    StringInfo.prototype.calcSize = function (defaultSymbolHeight) {
+        this.width = 0;
+        this.height = defaultSymbolHeight;
+        for (var _i = 0, _a = this.chars; _i < _a.length; _i++) {
+            var ch = _a[_i];
+            this.width += ch.sourceRect.width;
+        }
+    };
+    StringInfo.prototype.toWords = function () {
+        var res = [];
+        var currWord = new WordInfo();
+        for (var _i = 0, _a = this.chars; _i < _a.length; _i++) {
+            var ch = _a[_i];
+            if (ch.symbol === ' ') {
+                if (currWord.chars.length) {
+                    res.push(currWord);
+                    currWord = new WordInfo();
+                }
+            }
+            else {
+                currWord.chars.push(ch);
+            }
+        }
+        if (res.indexOf(currWord) === -1)
+            res.push(currWord);
+        return res;
+    };
+    StringInfo.prototype.align = function (textAlign, textField) {
+        switch (textAlign) {
+            case TEXT_ALIGN.LEFT:
+                break;
+            case TEXT_ALIGN.CENTER:
+                var offset = textField.width - this.width;
+                if (offset < 0)
+                    return;
+                offset /= 2;
+                this.moveBy(offset, 0);
+                break;
+            case TEXT_ALIGN.RIGHT:
+                offset = textField.width - this.width;
+                if (offset < 0)
+                    return;
+                this.moveBy(offset, 0);
+                break;
+            case TEXT_ALIGN.JUSTIFY:
+                var words = this.toWords();
+                if (words.length <= 1)
+                    return;
+                if (!words[0].chars.length)
+                    return;
+                var totalWordsWidth_1 = 0;
+                words.forEach(function (w) {
+                    w.revalidate();
+                    totalWordsWidth_1 += w.width;
+                });
+                var totalSpaceWidth = textField.width - totalWordsWidth_1;
+                var oneSpaceWidth = totalSpaceWidth / (words.length - 1);
+                var initialPosY = this.chars[0].destRect.getPoint().y;
+                var currXPointer = this.chars[0].destRect.getPoint().x;
+                for (var i = 0; i < words.length; i++) {
+                    var w = words[i];
+                    w.moveTo(currXPointer, initialPosY);
+                    currXPointer += w.width + oneSpaceWidth;
+                }
+                break;
+            default:
+                if (true)
+                    throw new debugError_1.DebugError("unknown TEXT_ALIGN value: " + textAlign);
+        }
+    };
+    return StringInfo;
+}(CharsHolder));
+var TextField = (function (_super) {
+    tslib_1.__extends(TextField, _super);
+    function TextField(game) {
+        var _this = _super.call(this, game) || this;
+        _this.type = 'TextField';
+        _this.text = '';
+        _this.font = null;
+        _this.textAlign = TEXT_ALIGN.LEFT;
+        _this.border = null;
+        _this._textInfo = new TextInfo(_this);
+        _this._symbolImage = new image_1.Image(_this.game);
+        _this._initScrolling({ vertical: true });
+        return _this;
+    }
+    TextField.prototype.revalidate = function () {
+        _super.prototype.revalidate.call(this);
+        if (true && !this.font)
+            throw new debugError_1.DebugError("font is not provided");
+        if (true && !this.font.getResourceLink())
+            throw new debugError_1.DebugError("can not render textField: font resource link is not set");
+        this.setFont(this.font);
+    };
+    TextField.prototype._getCharInfo = function (c) {
+        var charRect = this.font.fontContext.symbols[c] ||
+            this.font.fontContext.symbols[' '];
+        var charInfo = new CharInfo();
+        charInfo.symbol = c;
+        charInfo.sourceRect = charRect;
+        charInfo.destRect.setWH(charRect.width, charRect.height);
+        return charInfo;
+    };
+    TextField.prototype.onGeometryChanged = function () {
+        var _this = this;
+        _super.prototype.onGeometryChanged.call(this);
+        var textInfo = this._textInfo;
+        textInfo.reset();
+        textInfo.newString();
+        var text = this.text;
+        var strings = text.split('\n');
+        strings.forEach(function (str, i) {
+            var words = str.split(' ');
+            words.forEach(function (w, i) {
+                var wordInfo = new WordInfo();
+                for (var k = 0; k < w.length; k++) {
+                    var charInfo = _this._getCharInfo(w[k]);
+                    wordInfo.addChar(charInfo);
+                }
+                if (_this.maxWidth && textInfo.posX + wordInfo.width > _this.maxWidth && i < words.length - 1) {
+                    textInfo.newString();
+                }
+                textInfo.addWord(wordInfo);
+                if (i < str.length - 1) {
+                    var spaceChar = _this._getCharInfo(' ');
+                    textInfo.addChar(spaceChar);
+                }
+            });
+            if (i < strings.length - 1) {
+                textInfo.newString();
+            }
+        });
+        textInfo.revalidate(this.font.getDefaultSymbolHeight());
+        textInfo.align(this.textAlign);
+        this.width = textInfo.width;
+        if (this.maxHeight !== 0 && textInfo.height > this.maxHeight) {
+            this.height = this.maxHeight;
+        }
+        else {
+            this.height = textInfo.height;
+        }
+        if (this.border) {
+            this.border.width = this.width;
+            this.border.height = this.height;
+        }
+        this.updateScrollSize(textInfo.height, this.height);
+    };
+    TextField.prototype.setText = function (text) {
+        if (text === void 0) { text = ''; }
+        this.text = text.toString();
+        this._dirty = true;
+    };
+    TextField.prototype.getText = function () {
+        return this.text;
+    };
+    TextField.prototype.setFont = function (font) {
+        this.font = font;
+        this.setText(this.text);
+    };
+    TextField.prototype.draw = function () {
+        var renderer = this.game.getRenderer();
+        renderer.lockRect(this.getScreenRect());
+        renderer.save();
+        if (this.vScrollInfo.offset)
+            renderer.translate(0, -this.vScrollInfo.offset, 0);
+        this._symbolImage.setResourceLink(this.font.getResourceLink());
+        for (var _i = 0, _a = this._textInfo.allCharsCached; _i < _a.length; _i++) {
+            var charInfo = _a[_i];
+            if (charInfo.destRect.y - this.vScrollInfo.offset > this.height)
+                continue;
+            if (charInfo.destRect.y + charInfo.destRect.height - this.vScrollInfo.offset < 0)
+                continue;
+            this._symbolImage.srcRect.set(charInfo.sourceRect);
+            this._symbolImage.setXYWH(charInfo.destRect.x, charInfo.destRect.y, charInfo.destRect.width, charInfo.destRect.height);
+            this._symbolImage.render();
+        }
+        renderer.restore();
+        renderer.unlockRect();
+        if (this.border)
+            this.border.render();
+        return true;
+    };
+    return TextField;
+}(scrollableContainer_1.ScrollableContainer));
+exports.TextField = TextField;
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isObjectMatch = function (obj, query) {
+    if (!(obj && query))
+        return false;
+    var match = true;
+    var keys = Object.keys(query);
+    if (!keys.length)
+        return false;
+    keys.some(function (key) {
+        if (obj[key] != query[key]) {
+            match = false;
+            return true;
+        }
+    });
+    return match;
+};
+exports.isObject = function (obj) {
+    return obj === Object(obj);
+};
+exports.isArray = function (a) {
+    return !!(a.splice);
+};
+var isEqualArray = function (a, b) {
+    for (var i = 0, max = a.length; i < max; i++) {
+        if (a[i] !== b[i])
+            return false;
+    }
+    return true;
+};
+var isEqualObject = function (a, b) {
+    throw 'not implemented';
+};
+exports.isEqual = function (a, b) {
+    if (a === undefined)
+        return false;
+    if (exports.isArray(a) && exports.isArray(b))
+        return isEqualArray(a, b);
+    else if (exports.isObject(a) && exports.isObject(b))
+        return isEqualObject(a, b);
+    return a === b;
+};
+exports.removeFromArray = function (arr, predicate) {
+    var i = _this.length;
+    var cnt = 0;
+    while (i--) {
+        if (predicate(arr[i])) {
+            arr.splice(i, 1);
+            cnt++;
+        }
+    }
+    return cnt;
+};
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var renderableModel_1 = __webpack_require__(24);
+var color_1 = __webpack_require__(3);
+var Shape = (function (_super) {
+    tslib_1.__extends(Shape, _super);
+    function Shape(game) {
+        var _this = _super.call(this, game) || this;
+        _this.color = color_1.Color.BLACK.clone();
+        _this.lineWidth = 0;
+        _this.fillColor = color_1.Color.RGB(100, 100, 100);
+        return _this;
+    }
+    Shape.prototype.setWH = function (w, h) {
+        this.setXYWH(this.pos.x, this.pos.y, w, h);
+    };
+    Shape.prototype.setXYWH = function (x, y, w, h) {
+        this.pos.x = x;
+        this.pos.y = y;
+        this.width = w;
+        this.height = h;
+        this.getRect().setXYWH(x, y, w, h);
+    };
+    Shape.prototype.getDrawableInfo = function () {
+        return { blendMode: this.blendMode, acceptLight: false, alpha: this.alpha };
+    };
+    return Shape;
+}(renderableModel_1.RenderableModel));
+exports.Shape = Shape;
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var mathEx_1 = __webpack_require__(10);
+var point2d_1 = __webpack_require__(4);
+var objectPool_1 = __webpack_require__(8);
+var rect_1 = __webpack_require__(2);
+var MousePoint = (function (_super) {
+    tslib_1.__extends(MousePoint, _super);
+    function MousePoint() {
+        return _super.call(this) || this;
+    }
+    MousePoint.fromPool = function () {
+        return MousePoint.mousePointsPool.getNextObject();
+    };
+    MousePoint.unTransform = function (another) {
+        var p = MousePoint.fromPool();
+        p.screenX = another.screenX;
+        p.screenY = another.screenY;
+        p.id = another.id;
+        p.target = another.target;
+        p.setXY(p.screenX, p.screenY);
+        return p;
+    };
+    MousePoint.mousePointsPool = new objectPool_1.ObjectPool(MousePoint);
+    return MousePoint;
+}(point2d_1.Point2d));
+exports.MousePoint = MousePoint;
+exports.MOUSE_EVENTS = {
+    click: 'click',
+    mouseDown: 'mouseDown',
+    mouseMove: 'mouseMove',
+    mouseLeave: 'mouseLeave',
+    mouseEnter: 'mouseEnter',
+    mouseUp: 'mouseUp',
+    doubleClick: 'doubleClick',
+    scroll: 'scroll'
+};
+var Mouse = (function () {
+    function Mouse(game) {
+        this.objectsCaptured = {};
+        this.game = game;
+    }
+    Mouse.prototype.resolvePoint = function (e) {
+        var game = this.game;
+        var clientX = e.clientX;
+        var clientY = e.clientY;
+        var screenX = (clientX - game.pos.x) / game.scale.x;
+        var screenY = (clientY - game.pos.y) / game.scale.y;
+        var p = game.camera.screenToWorld(point2d_1.Point2d.fromPool().setXY(screenX, screenY));
+        var mousePoint = MousePoint.fromPool();
+        mousePoint.set(p);
+        mousePoint.screenX = screenX;
+        mousePoint.screenY = screenY;
+        mousePoint.id = e.identifier || 0;
+        return mousePoint;
+    };
+    Mouse.triggerGameObjectEvent = function (e, eventName, point, go, offsetX, offsetY) {
+        if (offsetX === void 0) { offsetX = 0; }
+        if (offsetY === void 0) { offsetY = 0; }
+        var rectWithOffset = rect_1.Rect.fromPool().clone().set(go.getRect()).addXY(offsetX, offsetY);
+        if (mathEx_1.MathEx.isPointInRect(point, rectWithOffset)) {
+            point.target = go;
+            go.trigger(eventName, {
+                screenX: point.x,
+                screenY: point.y,
+                objectX: point.x - go.pos.x,
+                objectY: point.y - go.pos.y,
+                id: point.id,
+                target: go,
+                nativeEvent: e,
+                eventName: eventName,
+                isMouseDown: point.isMouseDown
+            });
+            return true;
+        }
+        return false;
+    };
+    Mouse.prototype.triggerEvent = function (e, eventName, isMouseDown) {
+        if (isMouseDown === undefined)
+            isMouseDown = false;
+        var g = this.game;
+        var scene = g.getCurrScene();
+        if (!scene)
+            return;
+        var point = this.resolvePoint(e);
+        point.isMouseDown = isMouseDown;
+        point.target = undefined;
+        for (var _i = 0, _a = scene.getAllGameObjects(); _i < _a.length; _i++) {
+            var go = _a[_i];
+            var isCaptured = Mouse.triggerGameObjectEvent(e, eventName, point, go);
+            if (isCaptured) {
+                point.target = go;
+                break;
+            }
+        }
+        if (point.target === undefined)
+            point.target = scene;
+        scene.trigger(eventName, {
+            screenX: point.x,
+            screenY: point.y,
+            id: point.id,
+            target: scene,
+            eventName: eventName,
+            isMouseDown: isMouseDown
+        });
+        return point;
+    };
+    Mouse.prototype.resolveClick = function (e) {
+        this.triggerEvent(e, exports.MOUSE_EVENTS.click);
+        this.triggerEvent(e, exports.MOUSE_EVENTS.mouseDown);
+    };
+    Mouse.prototype.resolveMouseMove = function (e, isMouseDown) {
+        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.mouseMove, isMouseDown);
+        if (!point)
+            return;
+        var lastMouseDownObject = this.objectsCaptured[point.id];
+        if (lastMouseDownObject && lastMouseDownObject !== point.target) {
+            lastMouseDownObject.trigger(exports.MOUSE_EVENTS.mouseLeave, point);
+            delete this.objectsCaptured[point.id];
+        }
+        if (point.target && lastMouseDownObject !== point.target) {
+            point.target.trigger(exports.MOUSE_EVENTS.mouseEnter, point);
+            this.objectsCaptured[point.id] = point.target;
+        }
+    };
+    Mouse.prototype.resolveMouseUp = function (e) {
+        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.mouseUp);
+        if (!point)
+            return;
+        var lastMouseDownObject = this.objectsCaptured[point.id];
+        if (!lastMouseDownObject)
+            return;
+        if (point.target !== lastMouseDownObject)
+            lastMouseDownObject.trigger(exports.MOUSE_EVENTS.mouseUp, point);
+        delete this.objectsCaptured[point.id];
+    };
+    Mouse.prototype.resolveDoubleClick = function (e) {
+        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.doubleClick);
+        if (!point)
+            return;
+        delete this.objectsCaptured[point.id];
+    };
+    Mouse.prototype.resolveScroll = function (e) {
+        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.scroll);
+        if (!point)
+            return;
+        delete this.objectsCaptured[point.id];
+    };
+    Mouse.prototype.listenTo = function (container) {
+        var _this = this;
+        this.container = container;
+        container.ontouchstart = function (e) {
+            var l = e.touches.length;
+            while (l--) {
+                _this.resolveClick(e.touches[l]);
+            }
+        };
+        container.onmousedown = function (e) {
+            (e.button === 0) && _this.resolveClick(e);
+        };
+        container.ontouchend = container.ontouchcancel = function (e) {
+            var l = e.changedTouches.length;
+            while (l--) {
+                _this.resolveMouseUp(e.changedTouches[l]);
+            }
+        };
+        container.onmouseup = function (e) {
+            _this.resolveMouseUp(e);
+        };
+        container.ontouchmove = function (e) {
+            var l = e.touches.length;
+            while (l--) {
+                _this.resolveMouseMove(e.touches[l], true);
+            }
+        };
+        container.onmousemove = function (e) {
+            var isMouseDown = e.buttons === 1;
+            _this.resolveMouseMove(e, isMouseDown);
+        };
+        container.ondblclick = function (e) {
+            _this.resolveDoubleClick(e);
+        };
+        container.onmousewheel = function (e) {
+            _this.resolveScroll(e);
+        };
+    };
+    Mouse.prototype.destroy = function () {
+        var _this = this;
+        if (!this.container)
+            return;
+        [
+            'mouseMove', 'ontouchstart', 'onmousedown',
+            'ontouchend', 'onmouseup', 'ontouchmove',
+            'onmousemove', 'ondblclick'
+        ].forEach(function (evtName) {
+            _this.container[evtName] = null;
+        });
+    };
+    return Mouse;
+}());
+exports.Mouse = Mouse;
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var shaderProgramUtils_1 = __webpack_require__(5);
+var ShaderGenerator = (function () {
+    function ShaderGenerator() {
+        this.vertexUniforms = [];
+        this.fragmentUniforms = [];
+        this.attributes = [];
+        this.varyings = [];
+        this.appendedFragCodeBlocks = [];
+        this.appendedVertexCodeBlocks = [];
+        this.prependedVertexCodeBlocks = [];
+        this.prependedFragCodeBlocks = [];
+        this.vertexMainFn = '';
+        this.fragmentMainFn = '';
+    }
+    ShaderGenerator.prototype.addVertexUniform = function (type, name) {
+        this.vertexUniforms.push({ type: type, name: name });
+        return shaderProgramUtils_1.normalizeUniformName(name);
+    };
+    ShaderGenerator.prototype.addFragmentUniform = function (type, name) {
+        this.fragmentUniforms.push({ type: type, name: name });
+        return shaderProgramUtils_1.normalizeUniformName(name);
+    };
+    ShaderGenerator.prototype.addAttribute = function (type, name) {
+        this.attributes.push({ type: type, name: name });
+        return shaderProgramUtils_1.normalizeUniformName(name);
+    };
+    ShaderGenerator.prototype.addVarying = function (type, name) {
+        this.varyings.push({ type: type, name: name });
+    };
+    ShaderGenerator.prototype.appendVertexCodeBlock = function (code) {
+        this.appendedVertexCodeBlocks.push(code);
+    };
+    ShaderGenerator.prototype.appendFragmentCodeBlock = function (code) {
+        this.appendedFragCodeBlocks.push(code);
+    };
+    ShaderGenerator.prototype.prependVertexCodeBlock = function (code) {
+        this.prependedVertexCodeBlocks.push(code);
+    };
+    ShaderGenerator.prototype.prependFragmentCodeBlock = function (code) {
+        this.prependedFragCodeBlocks.push(code);
+    };
+    ShaderGenerator.prototype.setVertexMainFn = function (fnCode) {
+        this.vertexMainFn = fnCode;
+        return this;
+    };
+    ShaderGenerator.prototype.setFragmentMainFn = function (fnCode) {
+        this.fragmentMainFn = fnCode;
+        return this;
+    };
+    ShaderGenerator.prototype.getVertexSource = function () {
+        return ("\n" + this.prependedVertexCodeBlocks.map(function (v) { return "" + v; }).join('\n') + "\n\n" + this.vertexUniforms.map(function (u) { return "uniform   " + u.type + " " + u.name + ";"; }).join('\n') + "\n" + this.attributes.map(function (u) { return "attribute " + u.type + " " + u.name + ";"; }).join('\n') + "\n" + this.varyings.map(function (u) { return "varying   " + u.type + " " + u.name + ";"; }).join('\n') + "\n" + this.appendedVertexCodeBlocks.map(function (v) { return "" + v; }).join('\n') + "\n\n" + this.vertexMainFn);
+    };
+    ShaderGenerator.prototype.getFragmentSource = function () {
+        return ("\nprecision mediump float;\n\n" + this.prependedFragCodeBlocks.map(function (v) { return "" + v; }).join('\n') + "\n\n" + this.fragmentUniforms.map(function (u) { return "uniform " + u.type + " " + u.name + ";"; }).join('\n') + "\n" + this.varyings.map(function (u) { return "varying " + u.type + " " + u.name + ";"; }).join('\n') + "\n" + this.appendedFragCodeBlocks.map(function (v) { return "" + v; }).join('\n') + "\n\n" + this.fragmentMainFn + "\n");
+    };
+    ShaderGenerator.prototype.debug = function () {
+        if (false)
+            {}
+        console.log('// *** vertex shader source ***');
+        console.log(this.getVertexSource());
+        console.log('// *** fragment shader source ***');
+        console.log(this.getFragmentSource());
+    };
+    return ShaderGenerator;
+}());
+exports.ShaderGenerator = ShaderGenerator;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var shaderProgramUtils_1 = __webpack_require__(5);
+var shaderGenerator_1 = __webpack_require__(22);
+var TexShaderGenerator = (function (_super) {
+    tslib_1.__extends(TexShaderGenerator, _super);
+    function TexShaderGenerator() {
+        var _this = _super.call(this) || this;
+        _this.addAttribute(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'a_position');
+        _this.addAttribute(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC2, 'a_texCoord');
+        _this.addVertexUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_MAT4, 'u_vertexMatrix');
+        _this.addVertexUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_MAT4, 'u_textureMatrix');
+        _this.addVarying(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC2, 'v_texCoord');
+        _this.prependFragmentCodeBlock("\n            vec4 tint(vec4 srcColor,vec4 tintColor){\n                vec3 r = vec3(srcColor) * (1.0 - tintColor.a) +\n                    vec3(tintColor) * tintColor.a;\n                vec4 result = vec4(r,srcColor.a);\n                return result;    \n            }\n        ");
+        _this.setVertexMainFn("\n            void main(){\n                gl_Position = u_vertexMatrix * a_position;\n                v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;\n            } \n        ");
+        _this.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.SAMPLER_2D, 'texture');
+        _this.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_alpha');
+        _this.setFragmentMainFn("\n            void main(){\n                gl_FragColor = texture2D(texture, v_texCoord);\n                gl_FragColor.a *= u_alpha;\n            }\n        ");
+        return _this;
+    }
+    return TexShaderGenerator;
+}(shaderGenerator_1.ShaderGenerator));
+exports.TexShaderGenerator = TexShaderGenerator;
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var resource_1 = __webpack_require__(41);
+var debugError_1 = __webpack_require__(1);
+var mathEx_1 = __webpack_require__(10);
+var object_1 = __webpack_require__(19);
+var point2d_1 = __webpack_require__(4);
+var rect_1 = __webpack_require__(2);
+var tween_1 = __webpack_require__(14);
+var tweenMovie_1 = __webpack_require__(51);
+var timer_1 = __webpack_require__(52);
+var eventEmitter_1 = __webpack_require__(17);
+var RenderableModel = (function (_super) {
+    tslib_1.__extends(RenderableModel, _super);
+    function RenderableModel(game) {
+        var _this = _super.call(this) || this;
+        _this.game = game;
+        _this.width = 0;
+        _this.height = 0;
+        _this.pos = new point2d_1.Point2d(0, 0, function () { return _this._dirty = true; });
+        _this.scale = new point2d_1.Point2d(1, 1);
+        _this.anchor = new point2d_1.Point2d(0, 0);
+        _this.angle = 0;
+        _this.alpha = 1;
+        _this.filters = [];
+        _this.children = [];
+        _this.acceptLight = false;
+        _this.rigid = false;
+        _this._tweens = [];
+        _this._tweenMovies = [];
+        _this._dirty = true;
+        _this._timers = [];
+        _this._rect = new rect_1.Rect();
+        _this._screenRect = new rect_1.Rect();
+        if (true && !game)
+            throw new debugError_1.DebugError("can not create model '" + _this.type + "': game instance not passed to model constructor");
+        return _this;
+    }
+    RenderableModel.prototype.revalidate = function () { };
+    RenderableModel.prototype.setTimer = function (callback, interval) {
+        var t = new timer_1.Timer(callback, interval);
+        this._timers.push(t);
+        return t;
+    };
+    RenderableModel.prototype.tween = function (desc) {
+        var t = new tween_1.Tween(desc);
+        this._tweens.push(t);
+        return t;
+    };
+    RenderableModel.prototype.tweenMovie = function () {
+        var tm = new tweenMovie_1.TweenMovie(this.game);
+        this._tweenMovies.push(tm);
+        return tm;
+    };
+    RenderableModel.prototype.findChildrenById = function (id) {
+        if (object_1.isObjectMatch(this, { id: id }))
+            return this;
+        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
+            var c = _a[_i];
+            var possibleObject = c.findChildrenById(id);
+            if (possibleObject)
+                return possibleObject;
+        }
+        return null;
+    };
+    RenderableModel.prototype.getScreenRect = function () {
+        if (this._dirty) {
+            this.calcScreenRect();
+        }
+        return this._screenRect;
+    };
+    RenderableModel.prototype.calcScreenRect = function () {
+        this._screenRect.set(this._rect);
+        var parent = this.parent;
+        while (parent) {
+            this._screenRect.addXY(parent.getRect().x, parent.getRect().y);
+            parent = parent.parent;
+        }
+    };
+    RenderableModel.prototype.getRect = function () {
+        this._rect.setXYWH(this.pos.x - this.anchor.x, this.pos.y - this.anchor.y, this.width, this.height);
+        if (this._dirty) {
+            this.calcScreenRect();
+        }
+        return this._rect;
+    };
+    RenderableModel.prototype.setAnchorToCenter = function () {
+        this.revalidate();
+        if (true && !(this.width && this.height))
+            throw new debugError_1.DebugError("can not set anchor to center: width or height of gameObject is not set");
+        this.anchor.setXY(this.width / 2, this.height / 2);
+    };
+    RenderableModel.prototype.appendChild = function (c) {
+        c.parent = this;
+        c.revalidate();
+        this.children.push(c);
+    };
+    RenderableModel.prototype.prependChild = function (c) {
+        c.parent = this;
+        c.revalidate();
+        this.children.unshift(c);
+    };
+    RenderableModel.prototype.setDirty = function () {
+        this._dirty = true;
+    };
+    RenderableModel.prototype.beforeRender = function () {
+        this.game.getRenderer().translate(this.pos.x, this.pos.y);
+    };
+    RenderableModel.prototype.isNeedAdditionalTransform = function () {
+        return !(this.angle === 0 && this.scale.equal(1));
+    };
+    RenderableModel.prototype.doAdditionalTransform = function () {
+        this.game.getRenderer().rotateZ(this.angle);
+        if (this['angleY'])
+            this.game.getRenderer()['rotateY'](this['angleY']);
+    };
+    RenderableModel.prototype.isInViewPort = function () {
+        return mathEx_1.MathEx.overlapTest(this.game.camera.getRectScaled(), this.getRect());
+    };
+    RenderableModel.prototype.moveToFront = function () {
+        var index = this.parent.children.indexOf(this);
+        if (true && index == -1)
+            throw new debugError_1.DebugError("can not move to front: gameObject is detached");
+        this.parent.children.splice(index, 1);
+        this.parent.children.push(this);
+    };
+    RenderableModel.prototype.moveToBack = function () {
+        var index = this.parent.children.indexOf(this);
+        if (true && index == -1)
+            throw new debugError_1.DebugError("can not move to back: gameObject is detached");
+        this.parent.children.splice(index, 1);
+        this.parent.children.unshift(this);
+    };
+    RenderableModel.prototype.kill = function () {
+    };
+    RenderableModel.prototype.render = function () {
+        var renderer = this.game.getRenderer();
+        renderer.save();
+        this.beforeRender();
+        renderer.translate(-this.anchor.x, -this.anchor.y);
+        if (this.isNeedAdditionalTransform()) {
+            var dx = this.width / 2, dy = this.height / 2;
+            renderer.translate(dx, dy);
+            renderer.scale(this.scale.x, this.scale.y);
+            this.doAdditionalTransform();
+            renderer.translate(-dx, -dy);
+        }
+        var drawResult = this.draw();
+        if (drawResult && this.children.length > 0) {
+            renderer.save();
+            renderer.translate(this.anchor.x, this.anchor.y);
+            for (var i = 0, max = this.children.length; i < max; i++) {
+                this.children[i].render();
+            }
+            renderer.restore();
+        }
+        renderer.restore();
+    };
+    RenderableModel.prototype.update = function (time, delta) {
+        var _this = this;
+        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
+            var c = _a[_i];
+            if (this._dirty)
+                c.setDirty();
+            c.update(time, delta);
+        }
+        this._tweens.forEach(function (t, index) {
+            t.update(time);
+            if (t.isCompleted())
+                _this._tweens.splice(index, 1);
+        });
+        this._tweenMovies.forEach(function (t, index) {
+            t.update(time);
+            if (t.isCompleted())
+                _this._tweenMovies.splice(index, 1);
+        });
+        this._timers.forEach(function (t) {
+            t.onUpdate(time);
+        });
+    };
+    RenderableModel.prototype.on = function (eventName, callBack) {
+        if (this._emitter === undefined)
+            this._emitter = new eventEmitter_1.EventEmitter();
+        this._emitter.on(eventName, callBack);
+        return callBack;
+    };
+    RenderableModel.prototype.off = function (eventName, callBack) {
+        if (this._emitter !== undefined)
+            this._emitter.off(eventName, callBack);
+    };
+    RenderableModel.prototype.trigger = function (eventName, data) {
+        if (this._emitter !== undefined)
+            this._emitter.trigger(eventName, data);
+    };
+    return RenderableModel;
+}(resource_1.Resource));
+exports.RenderableModel = RenderableModel;
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var eventEmitter_1 = __webpack_require__(17);
+var KEYBOARD_EVENT;
+(function (KEYBOARD_EVENT) {
+    KEYBOARD_EVENT["KEY_PRESSED"] = "1";
+    KEYBOARD_EVENT["KEY_RELEASED"] = "2";
+    KEYBOARD_EVENT["KEY_HOLD"] = "3";
+})(KEYBOARD_EVENT = exports.KEYBOARD_EVENT || (exports.KEYBOARD_EVENT = {}));
+var KEY;
+(function (KEY) {
+    KEY[KEY["SPACE"] = 32] = "SPACE";
+    KEY[KEY["A"] = 65] = "A";
+    KEY[KEY["B"] = 66] = "B";
+    KEY[KEY["C"] = 67] = "C";
+    KEY[KEY["D"] = 68] = "D";
+    KEY[KEY["E"] = 69] = "E";
+    KEY[KEY["F"] = 70] = "F";
+    KEY[KEY["G"] = 71] = "G";
+    KEY[KEY["H"] = 72] = "H";
+    KEY[KEY["I"] = 73] = "I";
+    KEY[KEY["J"] = 74] = "J";
+    KEY[KEY["K"] = 75] = "K";
+    KEY[KEY["L"] = 76] = "L";
+    KEY[KEY["M"] = 77] = "M";
+    KEY[KEY["N"] = 78] = "N";
+    KEY[KEY["O"] = 79] = "O";
+    KEY[KEY["P"] = 80] = "P";
+    KEY[KEY["Q"] = 81] = "Q";
+    KEY[KEY["R"] = 82] = "R";
+    KEY[KEY["S"] = 83] = "S";
+    KEY[KEY["T"] = 84] = "T";
+    KEY[KEY["U"] = 85] = "U";
+    KEY[KEY["V"] = 86] = "V";
+    KEY[KEY["W"] = 87] = "W";
+    KEY[KEY["X"] = 88] = "X";
+    KEY[KEY["Y"] = 89] = "Y";
+    KEY[KEY["Z"] = 80] = "Z";
+    KEY[KEY["LEFT"] = 37] = "LEFT";
+    KEY[KEY["UP"] = 38] = "UP";
+    KEY[KEY["RIGHT"] = 39] = "RIGHT";
+    KEY[KEY["DOWN"] = 40] = "DOWN";
+    KEY[KEY["GAME_PAD_1"] = 0] = "GAME_PAD_1";
+    KEY[KEY["GAME_PAD_2"] = 1] = "GAME_PAD_2";
+    KEY[KEY["GAME_PAD_3"] = 2] = "GAME_PAD_3";
+    KEY[KEY["GAME_PAD_4"] = 3] = "GAME_PAD_4";
+    KEY[KEY["GAME_PAD_5"] = 4] = "GAME_PAD_5";
+    KEY[KEY["GAME_PAD_6"] = 5] = "GAME_PAD_6";
+    KEY[KEY["GAME_PAD_7"] = 6] = "GAME_PAD_7";
+    KEY[KEY["GAME_PAD_8"] = 7] = "GAME_PAD_8";
+    KEY[KEY["GAME_PAD_AXIS_LEFT"] = 8] = "GAME_PAD_AXIS_LEFT";
+    KEY[KEY["GAME_PAD_AXIS_RIGHT"] = 9] = "GAME_PAD_AXIS_RIGHT";
+    KEY[KEY["GAME_PAD_AXIS_UP"] = 10] = "GAME_PAD_AXIS_UP";
+    KEY[KEY["GAME_PAD_AXIS_DOWN"] = 11] = "GAME_PAD_AXIS_DOWN";
+})(KEY = exports.KEY || (exports.KEY = {}));
+var KEY_STATE;
+(function (KEY_STATE) {
+    KEY_STATE[KEY_STATE["KEY_JUST_PRESSED"] = 2] = "KEY_JUST_PRESSED";
+    KEY_STATE[KEY_STATE["KEY_PRESSED"] = 1] = "KEY_PRESSED";
+    KEY_STATE[KEY_STATE["KEY_JUST_RELEASED"] = 0] = "KEY_JUST_RELEASED";
+    KEY_STATE[KEY_STATE["KEY_RELEASED"] = -1] = "KEY_RELEASED";
+})(KEY_STATE || (KEY_STATE = {}));
+var Keyboard = (function () {
+    function Keyboard(game) {
+        this.buffer = {};
+        this.emitter = new eventEmitter_1.EventEmitter();
+        this.game = game;
+    }
+    Keyboard.prototype.press = function (key) {
+        if (this.isPressed(key))
+            return;
+        this.buffer[key] = KEY_STATE.KEY_JUST_PRESSED;
+        this.emitter.trigger(KEYBOARD_EVENT.KEY_PRESSED, key);
+    };
+    Keyboard.prototype.release = function (key) {
+        if (this.isReleased(key))
+            return;
+        this.buffer[key] = KEY_STATE.KEY_JUST_RELEASED;
+        this.emitter.trigger(KEYBOARD_EVENT.KEY_RELEASED, this.buffer[key]);
+    };
+    Keyboard.prototype.on = function (e, callback) {
+        this.emitter.on(e, callback);
+    };
+    Keyboard.prototype.off = function (e, callback) {
+        this.emitter.off(e, callback);
+    };
+    Keyboard.prototype.isPressed = function (key) {
+        return this.buffer[key] >= KEY_STATE.KEY_PRESSED;
+    };
+    Keyboard.prototype.isJustPressed = function (key) {
+        return this.buffer[key] === KEY_STATE.KEY_JUST_PRESSED;
+    };
+    Keyboard.prototype.isReleased = function (key) {
+        if (this.buffer[key] === undefined)
+            return true;
+        return this.buffer[key] <= KEY_STATE.KEY_JUST_RELEASED;
+    };
+    Keyboard.prototype.isJustReleased = function (key) {
+        return this.buffer[key] === KEY_STATE.KEY_JUST_RELEASED;
+    };
+    Keyboard.prototype.update = function () {
+        var _this = this;
+        Object.keys(this.buffer).forEach(function (key) {
+            var keyNum = (+key);
+            if (_this.buffer[keyNum] === KEY_STATE.KEY_RELEASED)
+                delete _this.buffer[keyNum];
+            else if (_this.buffer[keyNum] === KEY_STATE.KEY_JUST_RELEASED)
+                _this.buffer[keyNum] = KEY_STATE.KEY_RELEASED;
+            if (_this.buffer[keyNum] === KEY_STATE.KEY_JUST_PRESSED) {
+                _this.buffer[keyNum] = KEY_STATE.KEY_PRESSED;
+            }
+            _this.emitter.trigger(KEYBOARD_EVENT.KEY_HOLD, keyNum);
+        });
+    };
+    Keyboard.prototype.listenTo = function () {
+        var _this = this;
+        this.keyDownListener = function (e) {
+            var code = e.keyCode;
+            _this.press(code);
+        };
+        this.keyUpListener = function (e) {
+            var code = e.keyCode;
+            _this.release(code);
+        };
+        window.addEventListener('keydown', this.keyDownListener);
+        window.addEventListener('keyup', this.keyUpListener);
+    };
+    Keyboard.prototype.destroy = function () {
+        window.removeEventListener('keydown', this.keyDownListener);
+        window.removeEventListener('keyup', this.keyUpListener);
+    };
+    return Keyboard;
+}());
+exports.Keyboard = Keyboard;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var State = (function () {
+    function State() {
+        var values = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            values[_i] = arguments[_i];
+        }
+        this.currState = [];
+        this.setState.apply(this, values);
+    }
+    State.prototype.setState = function () {
+        var _this = this;
+        var newState = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            newState[_i] = arguments[_i];
+        }
+        var changed = false;
+        newState.forEach(function (val, i) {
+            if (_this.currState[i] !== val)
+                changed = true;
+            _this.currState[i] = val;
+        });
+        return changed;
+    };
+    return State;
+}());
+var ObservableEntity = (function () {
+    function ObservableEntity() {
+        this._state = new State();
+        this._onChanged = [];
+    }
+    ObservableEntity.prototype.triggerObservable = function () {
+        var changed = this.checkObservableChanged();
+        if (!changed)
+            return;
+        for (var _i = 0, _a = this._onChanged; _i < _a.length; _i++) {
+            var fn = _a[_i];
+            fn();
+        }
+    };
+    ObservableEntity.prototype.addListener = function (f) {
+        this._onChanged.push(f);
+    };
+    ObservableEntity.prototype.removeListener = function (f) {
+        this._onChanged.remove(f);
+    };
+    return ObservableEntity;
+}());
+exports.ObservableEntity = ObservableEntity;
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var debugError_1 = __webpack_require__(1);
+var Vec2 = (function () {
+    function Vec2(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    Vec2.prototype.length = function () {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    };
+    Vec2.prototype.add = function (vec) {
+        return new Vec2(vec.x + this.x, vec.y + this.y);
+    };
+    Vec2.prototype.subtract = function (vec) {
+        return new Vec2(this.x - vec.x, this.y - vec.y);
+    };
+    Vec2.prototype.scale = function (n) {
+        return new Vec2(this.x * n, this.y * n);
+    };
+    Vec2.prototype.dot = function (vec) {
+        return (this.x * vec.x + this.y * vec.y);
+    };
+    Vec2.prototype.cross = function (vec) {
+        return (this.x * vec.y - this.y * vec.x);
+    };
+    Vec2.prototype.rotate = function (center, angle) {
+        var r = [];
+        var x = this.x - center.x;
+        var y = this.y - center.y;
+        r[0] = x * Math.cos(angle) - y * Math.sin(angle);
+        r[1] = x * Math.sin(angle) + y * Math.cos(angle);
+        r[0] += center.x;
+        r[1] += center.y;
+        return new Vec2(r[0], r[1]);
+    };
+    Vec2.prototype.normalize = function () {
+        var len = this.length();
+        if (len > 0) {
+            len = 1 / len;
+        }
+        return new Vec2(this.x * len, this.y * len);
+    };
+    Vec2.prototype.distance = function (vec) {
+        var x = this.x - vec.x;
+        var y = this.y - vec.y;
+        return Math.sqrt(x * x + y * y);
+    };
+    return Vec2;
+}());
+exports.Vec2 = Vec2;
+var CollisionInfo = (function () {
+    function CollisionInfo() {
+        this.mDepth = 0;
+        this.mNormal = new Vec2(0, 0);
+        this.mStart = new Vec2(0, 0);
+        this.mEnd = new Vec2(0, 0);
+    }
+    CollisionInfo.prototype.setDepth = function (s) {
+        this.mDepth = s;
+    };
+    CollisionInfo.prototype.setNormal = function (s) {
+        this.mNormal = s;
+    };
+    CollisionInfo.prototype.getDepth = function () {
+        return this.mDepth;
+    };
+    CollisionInfo.prototype.getNormal = function () {
+        return this.mNormal;
+    };
+    CollisionInfo.prototype.setInfo = function (d, n, s) {
+        this.mDepth = d;
+        this.mNormal = n;
+        this.mStart = s;
+        this.mEnd = s.add(n.scale(d));
+    };
+    CollisionInfo.prototype.changeDir = function () {
+        this.mNormal = this.mNormal.scale(-1);
+        var n = this.mStart;
+        this.mStart = this.mEnd;
+        this.mEnd = n;
+    };
+    return CollisionInfo;
+}());
+exports.CollisionInfo = CollisionInfo;
+var RigidShape = (function () {
+    function RigidShape(game, center, mass, friction, restitution) {
+        this.fixedAngle = false;
+        this.mVelocity = new Vec2(0, 0);
+        this.mAngle = 0;
+        this.mAngularVelocity = 0;
+        this.mAngularAcceleration = 0;
+        this.mBoundRadius = 0;
+        this.game = game;
+        this.mCenter = center;
+        this.mInertia = 0;
+        this.fixedAngle = false;
+        if (mass !== undefined) {
+            this.mInvMass = mass;
+        }
+        else {
+            this.mInvMass = 1;
+        }
+        if (friction !== undefined) {
+            this.mFriction = friction;
+        }
+        else {
+            this.mFriction = 0.2;
+        }
+        if (restitution !== undefined) {
+            this.mRestitution = restitution;
+        }
+        else {
+            this.mRestitution = 0.1;
+        }
+        if (this.mInvMass !== 0) {
+            this.mInvMass = 1 / this.mInvMass;
+            this.mAcceleration = new Vec2(0, game.gravityConstant);
+        }
+        else {
+            this.mAcceleration = new Vec2(0, 0);
+        }
+    }
+    RigidShape.prototype.updateMass = function (delta) {
+        var mass;
+        if (this.mInvMass !== 0) {
+            mass = 1 / this.mInvMass;
+        }
+        else {
+            mass = 0;
+        }
+        mass += delta;
+        if (mass <= 0) {
+            this.mInvMass = 0;
+            this.mVelocity = new Vec2(0, 0);
+            this.mAcceleration = new Vec2(0, 0);
+            this.mAngularVelocity = 0;
+            this.mAngularAcceleration = 0;
+        }
+        else {
+            this.mInvMass = 1 / mass;
+            this.mAcceleration = new Vec2(0, this.game.gravityConstant);
+        }
+        this.updateInertia();
+    };
+    RigidShape.prototype.update = function (time, _dt) {
+        var dt = _dt / 1000;
+        this.mVelocity = this.mVelocity.add(this.mAcceleration.scale(dt));
+        this.move(this.mVelocity.scale(dt));
+        this.mAngularVelocity += this.mAngularAcceleration * dt;
+        this.rotate(this.mAngularVelocity * dt);
+    };
+    RigidShape.prototype.boundTest = function (otherShape) {
+        var vFrom1to2 = otherShape.mCenter.subtract(this.mCenter);
+        var rSum = this.mBoundRadius + otherShape.mBoundRadius;
+        var dist = vFrom1to2.length();
+        return (dist <= rSum);
+    };
+    return RigidShape;
+}());
+exports.RigidShape = RigidShape;
+var RigidCircle = (function (_super) {
+    tslib_1.__extends(RigidCircle, _super);
+    function RigidCircle(game, center, radius, mass, friction, restitution) {
+        var _this = _super.call(this, game, center, mass, friction, restitution) || this;
+        _this.mType = "Circle";
+        _this.mRadius = radius;
+        _this.mBoundRadius = radius;
+        _this.mStartpoint = new Vec2(center.x, center.y - radius);
+        _this.updateInertia();
+        return _this;
+    }
+    RigidCircle.prototype.move = function (s) {
+        this.mStartpoint = this.mStartpoint.add(s);
+        this.mCenter = this.mCenter.add(s);
+        return this;
+    };
+    RigidCircle.prototype.rotate = function (angle) {
+        this.mAngle += angle;
+        this.mStartpoint = this.mStartpoint.rotate(this.mCenter, angle);
+        return this;
+    };
+    RigidCircle.prototype.updateInertia = function () {
+        if (this.mInvMass === 0) {
+            this.mInertia = 0;
+        }
+        else {
+            this.mInertia = (1 / this.mInvMass) * (this.mRadius * this.mRadius) / 12;
+        }
+    };
+    RigidCircle.prototype.collisionTest = function (otherShape, collisionInfo) {
+        if (RigidCircle.isInstanceOf(otherShape)) {
+            return this.collidedCircCirc(this, otherShape, collisionInfo);
+        }
+        else if (RigidRectangle.isInstanceOf(otherShape)) {
+            return otherShape.collidedRectCirc(this, collisionInfo);
+        }
+        else {
+            if (true) {
+                console.error(this, otherShape);
+                throw new debugError_1.DebugError("collision test error");
+            }
+        }
+    };
+    RigidCircle.prototype.collidedCircCirc = function (c1, c2, collisionInfo) {
+        var vFrom1to2 = c2.mCenter.subtract(c1.mCenter);
+        var rSum = c1.mRadius + c2.mRadius;
+        var dist = vFrom1to2.length();
+        if (dist > Math.sqrt(rSum * rSum)) {
+            return false;
+        }
+        if (dist !== 0) {
+            var normalFrom2to1 = vFrom1to2.scale(-1).normalize();
+            var radiusC2 = normalFrom2to1.scale(c2.mRadius);
+            collisionInfo.setInfo(rSum - dist, vFrom1to2.normalize(), c2.mCenter.add(radiusC2));
+        }
+        else {
+            if (c1.mRadius > c2.mRadius) {
+                collisionInfo.setInfo(rSum, new Vec2(0, -1), c1.mCenter.add(new Vec2(0, c1.mRadius)));
+            }
+            else {
+                collisionInfo.setInfo(rSum, new Vec2(0, -1), c2.mCenter.add(new Vec2(0, c2.mRadius)));
+            }
+        }
+        return true;
+    };
+    RigidCircle.isInstanceOf = function (shape) {
+        return shape.mType === 'Circle';
+    };
+    return RigidCircle;
+}(RigidShape));
+exports.RigidCircle = RigidCircle;
+var SupportStruct = (function () {
+    function SupportStruct() {
+        this.mSupportPointDist = 0;
+    }
+    return SupportStruct;
+}());
+var tmpSupport = new SupportStruct();
+var collisionInfoR1 = new CollisionInfo();
+var collisionInfoR2 = new CollisionInfo();
+var RigidRectangle = (function (_super) {
+    tslib_1.__extends(RigidRectangle, _super);
+    function RigidRectangle(game, center, width, height, mass, friction, restitution) {
+        var _this = _super.call(this, game, center, mass, friction, restitution) || this;
+        _this.mType = "Rectangle";
+        _this.mVertex = [];
+        _this.mFaceNormal = [];
+        _this.mWidth = width;
+        _this.mHeight = height;
+        _this.mBoundRadius = Math.sqrt(width * width + height * height) / 2;
+        _this.mVertex[0] = new Vec2(center.x - width / 2, center.y - height / 2);
+        _this.mVertex[1] = new Vec2(center.x + width / 2, center.y - height / 2);
+        _this.mVertex[2] = new Vec2(center.x + width / 2, center.y + height / 2);
+        _this.mVertex[3] = new Vec2(center.x - width / 2, center.y + height / 2);
+        _this.mFaceNormal[0] = _this.mVertex[1].subtract(_this.mVertex[2]);
+        _this.mFaceNormal[0] = _this.mFaceNormal[0].normalize();
+        _this.mFaceNormal[1] = _this.mVertex[2].subtract(_this.mVertex[3]);
+        _this.mFaceNormal[1] = _this.mFaceNormal[1].normalize();
+        _this.mFaceNormal[2] = _this.mVertex[3].subtract(_this.mVertex[0]);
+        _this.mFaceNormal[2] = _this.mFaceNormal[2].normalize();
+        _this.mFaceNormal[3] = _this.mVertex[0].subtract(_this.mVertex[1]);
+        _this.mFaceNormal[3] = _this.mFaceNormal[3].normalize();
+        _this.updateInertia();
+        return _this;
+    }
+    RigidRectangle.prototype.rotate = function (angle) {
+        this.mAngle += angle;
+        for (var i = 0; i < this.mVertex.length; i++) {
+            this.mVertex[i] = this.mVertex[i].rotate(this.mCenter, angle);
+        }
+        this.mFaceNormal[0] = this.mVertex[1].subtract(this.mVertex[2]);
+        this.mFaceNormal[0] = this.mFaceNormal[0].normalize();
+        this.mFaceNormal[1] = this.mVertex[2].subtract(this.mVertex[3]);
+        this.mFaceNormal[1] = this.mFaceNormal[1].normalize();
+        this.mFaceNormal[2] = this.mVertex[3].subtract(this.mVertex[0]);
+        this.mFaceNormal[2] = this.mFaceNormal[2].normalize();
+        this.mFaceNormal[3] = this.mVertex[0].subtract(this.mVertex[1]);
+        this.mFaceNormal[3] = this.mFaceNormal[3].normalize();
+        return this;
+    };
+    RigidRectangle.prototype.move = function (v) {
+        for (var i = 0; i < this.mVertex.length; i++) {
+            this.mVertex[i] = this.mVertex[i].add(v);
+        }
+        this.mCenter = this.mCenter.add(v);
+        return this;
+    };
+    RigidRectangle.prototype.updateInertia = function () {
+        if (this.mInvMass === 0) {
+            this.mInertia = 0;
+        }
+        else {
+            this.mInertia = (1 / this.mInvMass) * (this.mWidth * this.mWidth + this.mHeight * this.mHeight) / 12;
+            this.mInertia = 1 / this.mInertia;
+        }
+    };
+    RigidRectangle.prototype.collisionTest = function (otherShape, collisionInfo) {
+        if (RigidCircle.isInstanceOf(otherShape)) {
+            return this.collidedRectCirc(otherShape, collisionInfo);
+        }
+        else if (RigidRectangle.isInstanceOf(otherShape)) {
+            return this.collidedRectRect(this, otherShape, collisionInfo);
+        }
+        else {
+            if (true) {
+                console.error(this, otherShape);
+                throw new debugError_1.DebugError("collision test error");
+            }
+        }
+    };
+    RigidRectangle.prototype.boundTest = function (otherShape) {
+        var vFrom1to2 = otherShape.mCenter.subtract(this.mCenter);
+        var rSum = this.mBoundRadius + otherShape.mBoundRadius;
+        var dist = vFrom1to2.length();
+        return dist <= rSum;
+    };
+    RigidRectangle.prototype.findSupportPoint = function (dir, ptOnEdge) {
+        var vToEdge;
+        var projection;
+        tmpSupport.mSupportPointDist = -9999999;
+        tmpSupport.mSupportPoint = null;
+        for (var i = 0; i < this.mVertex.length; i++) {
+            vToEdge = this.mVertex[i].subtract(ptOnEdge);
+            projection = vToEdge.dot(dir);
+            if ((projection > 0) && (projection > tmpSupport.mSupportPointDist)) {
+                tmpSupport.mSupportPoint = this.mVertex[i];
+                tmpSupport.mSupportPointDist = projection;
+            }
+        }
+    };
+    RigidRectangle.prototype.findAxisLeastPenetration = function (otherRect, collisionInfo) {
+        var n;
+        var supportPoint;
+        var bestDistance = 999999;
+        var bestIndex = null;
+        var hasSupport = true;
+        var i = 0;
+        while ((hasSupport) && (i < this.mFaceNormal.length)) {
+            n = this.mFaceNormal[i];
+            var dir = n.scale(-1);
+            var ptOnEdge = this.mVertex[i];
+            otherRect.findSupportPoint(dir, ptOnEdge);
+            hasSupport = (tmpSupport.mSupportPoint !== null);
+            if ((hasSupport) && (tmpSupport.mSupportPointDist < bestDistance)) {
+                bestDistance = tmpSupport.mSupportPointDist;
+                bestIndex = i;
+                supportPoint = tmpSupport.mSupportPoint;
+            }
+            i = i + 1;
+        }
+        if (hasSupport) {
+            var bestVec = this.mFaceNormal[bestIndex].scale(bestDistance);
+            collisionInfo.setInfo(bestDistance, this.mFaceNormal[bestIndex], supportPoint.add(bestVec));
+        }
+        return hasSupport;
+    };
+    RigidRectangle.prototype.collidedRectRect = function (r1, r2, collisionInfo) {
+        var status1;
+        var status2;
+        status1 = r1.findAxisLeastPenetration(r2, collisionInfoR1);
+        if (status1) {
+            status2 = r2.findAxisLeastPenetration(r1, collisionInfoR2);
+            if (status2) {
+                if (collisionInfoR1.getDepth() < collisionInfoR2.getDepth()) {
+                    var depthVec = collisionInfoR1.getNormal().scale(collisionInfoR1.getDepth());
+                    collisionInfo.setInfo(collisionInfoR1.getDepth(), collisionInfoR1.getNormal(), collisionInfoR1.mStart.subtract(depthVec));
+                }
+                else {
+                    collisionInfo.setInfo(collisionInfoR2.getDepth(), collisionInfoR2.getNormal().scale(-1), collisionInfoR2.mStart);
+                }
+            }
+        }
+        return status1 && status2;
+    };
+    RigidRectangle.prototype.collidedRectCirc = function (otherCir, collisionInfo) {
+        var inside = true;
+        var bestDistance = -99999;
+        var nearestEdge = 0;
+        var i, v;
+        var circ2Pos, projection;
+        for (i = 0; i < 4; i++) {
+            circ2Pos = otherCir.mCenter;
+            v = circ2Pos.subtract(this.mVertex[i]);
+            projection = v.dot(this.mFaceNormal[i]);
+            if (projection > 0) {
+                bestDistance = projection;
+                nearestEdge = i;
+                inside = false;
+                break;
+            }
+            if (projection > bestDistance) {
+                bestDistance = projection;
+                nearestEdge = i;
+            }
+        }
+        var dis, normal, radiusVec;
+        if (!inside) {
+            var v1 = circ2Pos.subtract(this.mVertex[nearestEdge]);
+            var v2 = this.mVertex[(nearestEdge + 1) % 4].subtract(this.mVertex[nearestEdge]);
+            var dot = v1.dot(v2);
+            if (dot < 0) {
+                dis = v1.length();
+                if (dis > otherCir.mRadius) {
+                    return false;
+                }
+                normal = v1.normalize();
+                radiusVec = normal.scale(-otherCir.mRadius);
+                collisionInfo.setInfo(otherCir.mRadius - dis, normal, circ2Pos.add(radiusVec));
+            }
+            else {
+                v1 = circ2Pos.subtract(this.mVertex[(nearestEdge + 1) % 4]);
+                v2 = v2.scale(-1);
+                dot = v1.dot(v2);
+                if (dot < 0) {
+                    dis = v1.length();
+                    if (dis > otherCir.mRadius) {
+                        return false;
+                    }
+                    normal = v1.normalize();
+                    radiusVec = normal.scale(-otherCir.mRadius);
+                    collisionInfo.setInfo(otherCir.mRadius - dis, normal, circ2Pos.add(radiusVec));
+                }
+                else {
+                    if (bestDistance < otherCir.mRadius) {
+                        radiusVec = this.mFaceNormal[nearestEdge].scale(otherCir.mRadius);
+                        collisionInfo.setInfo(otherCir.mRadius - bestDistance, this.mFaceNormal[nearestEdge], circ2Pos.subtract(radiusVec));
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+        }
+        else {
+            radiusVec = this.mFaceNormal[nearestEdge].scale(otherCir.mRadius);
+            collisionInfo.setInfo(otherCir.mRadius - bestDistance, this.mFaceNormal[nearestEdge], circ2Pos.subtract(radiusVec));
+        }
+        return true;
+    };
+    RigidRectangle.isInstanceOf = function (shape) {
+        return shape.mType === 'Rectangle';
+    };
+    return RigidRectangle;
+}(RigidShape));
+exports.RigidRectangle = RigidRectangle;
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var color_1 = __webpack_require__(3);
+var AbstractLight = (function () {
+    function AbstractLight(game) {
+        this.color = color_1.Color.WHITE;
+        this.intensity = 1.0;
+        if (true && !game)
+            throw new debugError_1.DebugError("game instanse is not passed to AbstractLight constructor");
+        this.game = game;
+    }
+    return AbstractLight;
+}());
+exports.AbstractLight = AbstractLight;
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var tween_1 = __webpack_require__(14);
+var mat4 = __webpack_require__(9);
+var mathEx_1 = __webpack_require__(10);
+var rect_1 = __webpack_require__(2);
+var point2d_1 = __webpack_require__(4);
+var CAMERA_MATRIX_MODE;
+(function (CAMERA_MATRIX_MODE) {
+    CAMERA_MATRIX_MODE[CAMERA_MATRIX_MODE["MODE_TRANSFORM"] = 0] = "MODE_TRANSFORM";
+    CAMERA_MATRIX_MODE[CAMERA_MATRIX_MODE["MODE_IDENTITY"] = 1] = "MODE_IDENTITY";
+})(CAMERA_MATRIX_MODE = exports.CAMERA_MATRIX_MODE || (exports.CAMERA_MATRIX_MODE = {}));
+var Camera = (function () {
+    function Camera(game) {
+        var _this = this;
+        this.objFollowTo = null;
+        this.scene = null;
+        this.sceneWidth = 0;
+        this.sceneHeight = 0;
+        this.pos = new point2d_1.Point2d(0, 0);
+        this.scale = new point2d_1.Point2d(1, 1);
+        this.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
+        this._rect = new rect_1.Rect();
+        this._rectIdentity = new rect_1.Rect();
+        this._rectScaled = new rect_1.Rect();
+        this.cameraShakeTween = null;
+        this.cameraPosCorrection = {
+            current: new point2d_1.Point2d(),
+            max: new point2d_1.Point2d()
+        };
+        this.game = game;
+        this._updateRect();
+        this.sceneWidth = game.width;
+        this.sceneHeight = game.height;
+        this.scale.observe(function () {
+            _this.revalidate();
+        });
+    }
+    Camera.prototype.revalidate = function () {
+        this.scene = this.game.getCurrScene();
+        if (!this.scene)
+            return;
+        if (this.scene.tileMap)
+            this.scene.tileMap.revalidate();
+        this._rectIdentity.setXYWH(0, 0, this.game.width, this.game.height);
+        if (this.scene.tileMap.spriteSheet) {
+            this.sceneWidth = this.scene.tileMap.spriteSheet._frameWidth * this.scene.tileMap.width;
+            this.sceneHeight = this.scene.tileMap.spriteSheet._frameHeight * this.scene.tileMap.height;
+        }
+        else {
+            this.sceneWidth = this.game.getCurrScene().width || this.game.width;
+            this.sceneHeight = this.game.getCurrScene().height || this.game.height;
+        }
+    };
+    Camera.prototype.followTo = function (gameObject) {
+        if (gameObject === null)
+            return;
+        if (true && gameObject === undefined)
+            throw new debugError_1.DebugError("Camera:followTo(gameObject) - gameObject not provided");
+        this.objFollowTo = gameObject;
+        this.revalidate();
+    };
+    Camera.prototype.update = function (currTime, delta) {
+        this.scene = this.game.getCurrScene();
+        var tileWidth = this.scene.tileMap.spriteSheet ? this.scene.tileMap.spriteSheet._frameWidth : 0;
+        var tileHeight = this.scene.tileMap.spriteSheet ? this.scene.tileMap.spriteSheet._frameHeight : 0;
+        var w = this.game.width;
+        var h = this.game.height;
+        var wDiv2 = w / 2;
+        var hDiv2 = h / 2;
+        var wScaled = this.getRectScaled().width;
+        var gameObject = this.objFollowTo;
+        if (gameObject) {
+            if (gameObject['_lastDirection'] === 'Right')
+                this.cameraPosCorrection.max.x = wScaled / 3;
+            if (gameObject['_lastDirection'] === 'Left')
+                this.cameraPosCorrection.max.x = -wScaled / 3;
+            var currCorrection = this.cameraPosCorrection.max.
+                substract(this.cameraPosCorrection.current).
+                multiply(0.05);
+            this.cameraPosCorrection.current.add(currCorrection);
+            var newPos = point2d_1.Point2d.fromPool();
+            var pointToFollow = point2d_1.Point2d.fromPool();
+            pointToFollow.set(this.objFollowTo.pos);
+            pointToFollow.addXY(-wDiv2, -hDiv2);
+            newPos.x = this.pos.x + (pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x) * 0.1;
+            newPos.y = this.pos.y + (pointToFollow.y - this.pos.y) * 0.1;
+            if (newPos.x < 0)
+                newPos.x = 0;
+            if (newPos.y < 0)
+                newPos.y = 0;
+            if (newPos.x > this.sceneWidth - w + tileWidth)
+                newPos.x = this.sceneWidth - w + tileWidth;
+            if (newPos.y > this.sceneHeight - h + tileHeight)
+                newPos.y = this.sceneHeight - h + tileHeight;
+            this.pos.setXY(newPos.x, newPos.y);
+            if (this.cameraShakeTween)
+                this.cameraShakeTween.update(currTime);
+        }
+        this._updateRect();
+        this.render();
+    };
+    Camera.prototype.shake = function (amplitude, time) {
+        var _this = this;
+        var tweenTarget = { time: 0, point: new point2d_1.Point2d(0, 0) };
+        this.cameraShakeTween = new tween_1.Tween({
+            target: tweenTarget,
+            time: time,
+            to: { time: time },
+            progress: function () {
+                var r1 = mathEx_1.MathEx.random(-amplitude / 2, amplitude / 2);
+                var r2 = mathEx_1.MathEx.random(-amplitude / 2, amplitude / 2);
+                tweenTarget.point.setXY(r1, r2);
+            },
+            complete: function () { return _this.cameraShakeTween = null; }
+        });
+    };
+    Camera.prototype._updateRect = function () {
+        var point00 = this.screenToWorld(point2d_1.Point2d.fromPool().setXY(0, 0));
+        var pointWH = this.screenToWorld(point2d_1.Point2d.fromPool().setXY(this.game.width, this.game.height));
+        this._rectScaled.setXYWH(point00.x, point00.y, pointWH.x - point00.x, pointWH.y - point00.y);
+    };
+    Camera.prototype.render = function () {
+        var renderer = this.game.getRenderer();
+        renderer.translate(this.game.width / 2, this.game.height / 2);
+        renderer.scale(this.scale.x, this.scale.y);
+        renderer.translate(-this.game.width / 2, -this.game.height / 2);
+        renderer.translate(-this.pos.x, -this.pos.y);
+        if (this.cameraShakeTween !== null)
+            renderer.translate(this.cameraShakeTween.getTarget().point.x, this.cameraShakeTween.getTarget().point.y);
+    };
+    Camera.prototype.screenToWorld = function (p) {
+        var mScale = mat4.makeScale(this.scale.x, this.scale.y, 1);
+        var point2d = mathEx_1.MathEx.unProject(p, this.game.width, this.game.height, mScale);
+        point2d.add(this.pos);
+        return point2d;
+    };
+    Camera.prototype.getRect = function () {
+        if (this.matrixMode === CAMERA_MATRIX_MODE.MODE_IDENTITY)
+            return this._rectIdentity;
+        else {
+            this._rect.setXYWH(this.pos.x, this.pos.y, this.game.width, this.game.height);
+            return this._rect;
+        }
+    };
+    Camera.prototype.getRectScaled = function () {
+        if (this.matrixMode === CAMERA_MATRIX_MODE.MODE_IDENTITY)
+            return this._rectIdentity;
+        else
+            return this._rectScaled;
+    };
+    return Camera;
+}());
+exports.Camera = Camera;
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var SCALE_STRATEGY;
+(function (SCALE_STRATEGY) {
+    SCALE_STRATEGY[SCALE_STRATEGY["NO_SCALE"] = 0] = "NO_SCALE";
+    SCALE_STRATEGY[SCALE_STRATEGY["FIT"] = 1] = "FIT";
+    SCALE_STRATEGY[SCALE_STRATEGY["STRETCH"] = 2] = "STRETCH";
+})(SCALE_STRATEGY = exports.SCALE_STRATEGY || (exports.SCALE_STRATEGY = {}));
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var button_1 = __webpack_require__(42);
+exports.Button = button_1.Button;
+var textField_1 = __webpack_require__(18);
+exports.TextField = textField_1.TextField;
+var vScroll_1 = __webpack_require__(32);
+exports.VScroll = vScroll_1.VScroll;
+var checkBox_1 = __webpack_require__(60);
+exports.CheckBox = checkBox_1.CheckBox;
+var container_1 = __webpack_require__(6);
+exports.Container = container_1.Container;
+var image_1 = __webpack_require__(16);
+exports.Image = image_1.Image;
+var rectangle_1 = __webpack_require__(12);
+exports.Rectangle = rectangle_1.Rectangle;
+var circle_1 = __webpack_require__(61);
+exports.Circle = circle_1.Circle;
+var ellipse_1 = __webpack_require__(33);
+exports.Ellipse = ellipse_1.Ellipse;
+var border_1 = __webpack_require__(62);
+exports.Border = border_1.Border;
+var ninePatchImage_1 = __webpack_require__(63);
+exports.NinePatchImage = ninePatchImage_1.NinePatchImage;
+var absoluteLayout_1 = __webpack_require__(64);
+exports.AbsoluteLayout = absoluteLayout_1.AbsoluteLayout;
+var color_1 = __webpack_require__(3);
+exports.Color = color_1.Color;
+var linearGradient_1 = __webpack_require__(65);
+exports.LinearGradient = linearGradient_1.LinearGradient;
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var container_1 = __webpack_require__(6);
+var rectangle_1 = __webpack_require__(12);
+var color_1 = __webpack_require__(3);
+var VScroll = (function (_super) {
+    tslib_1.__extends(VScroll, _super);
+    function VScroll(game) {
+        var _this = _super.call(this, game) || this;
+        _this.maxValue = 0;
+        _this.value = 0;
+        _this.enabled = false;
+        var bg = new rectangle_1.Rectangle(game);
+        bg.width = 5;
+        bg.fillColor = new color_1.Color(50, 50, 50, 10);
+        bg.color = color_1.Color.NONE.clone();
+        var hnd = new rectangle_1.Rectangle(game);
+        hnd.height = 10;
+        hnd.color = color_1.Color.NONE.clone();
+        hnd.fillColor = new color_1.Color(10, 10, 10, 100);
+        _this.background = bg;
+        _this.handler = hnd;
+        _this.appendChild(bg);
+        _this.appendChild(hnd);
+        return _this;
+    }
+    VScroll.prototype.onGeometryChanged = function () {
+        this.handler.width = this.background.width;
+        if (this.value > this.maxValue)
+            this.value = this.maxValue;
+        if (this.maxValue)
+            this.handler.height = this.height * this.height / this.maxValue;
+        if (this.maxValue)
+            this.handler.pos.y =
+                this.height * this.value / this.maxValue;
+        this.background.revalidate();
+        this.handler.revalidate();
+        this.calcDrawableRect(this.width, this.height);
+    };
+    VScroll.prototype.draw = function () {
+        return this.enabled;
+    };
+    return VScroll;
+}(container_1.Container));
+exports.VScroll = VScroll;
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var shape_1 = __webpack_require__(20);
+var Ellipse = (function (_super) {
+    tslib_1.__extends(Ellipse, _super);
+    function Ellipse() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.radiusX = 10;
+        _this.radiusY = 20;
+        return _this;
+    }
+    Ellipse.prototype.draw = function () {
+        this.game.getRenderer().drawEllipse(this);
+        return true;
+    };
+    return Ellipse;
+}(shape_1.Shape));
+exports.Ellipse = Ellipse;
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var webAudioContext_1 = __webpack_require__(67);
+var htmlAudioContext_1 = __webpack_require__(69);
+var fakeAudioContext_1 = __webpack_require__(70);
+var audioNodeSet_1 = __webpack_require__(71);
+var tween_1 = __webpack_require__(14);
+var AudioPlayer = (function () {
+    function AudioPlayer(game) {
+        this.game = game;
+        this.tweens = [];
+        if (webAudioContext_1.WebAudioContext.isAcceptable()) {
+            this.contextClass = webAudioContext_1.WebAudioContext;
+        }
+        else if (htmlAudioContext_1.HtmlAudioContext.isAcceptable()) {
+            this.contextClass = htmlAudioContext_1.HtmlAudioContext;
+        }
+        else {
+            this.contextClass = fakeAudioContext_1.FakeAudioContext;
+        }
+        this.audioNodeSet = new audioNodeSet_1.AudioNodeSet(game, this.contextClass, AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
+    }
+    AudioPlayer.prototype.loadSound = function (url, progress, callback) {
+        new this.contextClass(this.game).load(url, progress, callback);
+    };
+    AudioPlayer.prototype.play = function (sound) {
+        var node = this.audioNodeSet.getFreeNode();
+        if (true && !node) {
+            console.log('no free node to play sound');
+        }
+        if (!node)
+            return;
+        node.play(sound.resourcePath, sound.loop);
+    };
+    AudioPlayer.prototype.stop = function (sound) {
+        var node = this.audioNodeSet.getNodeBySound(sound);
+        if (!node)
+            return;
+        node.stop();
+    };
+    AudioPlayer.prototype.stopAll = function () {
+        this.audioNodeSet.stopAll();
+    };
+    AudioPlayer.prototype.pauseAll = function () {
+        this.audioNodeSet.pauseAll();
+    };
+    AudioPlayer.prototype.resumeAll = function () {
+        this.audioNodeSet.resumeAll();
+    };
+    AudioPlayer.prototype.setGain = function (sound, val, time) {
+        var _this = this;
+        if (time === void 0) { time = 0; }
+        var node = this.audioNodeSet.getNodeBySound(sound);
+        if (!node)
+            return;
+        if (time) {
+            var tween_2 = new tween_1.Tween({
+                target: sound,
+                to: { _gain: val },
+                time: time,
+                progress: function (progressObj) {
+                    node.setGain(progressObj._gain);
+                },
+                complete: function () {
+                    _this.tweens.remove(tween_2);
+                }
+            });
+            this.tweens.push(tween_2);
+        }
+        else {
+            sound._gain = val;
+            node.setGain(sound._gain);
+        }
+    };
+    AudioPlayer.prototype.update = function (time, delta) {
+        this.tweens.forEach(function (t) {
+            t.update(time);
+        });
+    };
+    AudioPlayer.cache = {};
+    AudioPlayer.DEFAULT_AUDIO_NODES_COUNT = 6;
+    return AudioPlayer;
+}());
+exports.AudioPlayer = AudioPlayer;
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var AbstractPrimitive = (function () {
+    function AbstractPrimitive() {
+    }
+    return AbstractPrimitive;
+}());
+exports.AbstractPrimitive = AbstractPrimitive;
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var abstractPrimitive_1 = __webpack_require__(35);
+var Plane = (function (_super) {
+    tslib_1.__extends(Plane, _super);
+    function Plane() {
+        var _this = _super.call(this) || this;
+        _this.vertexArr = [
+            0, 0,
+            0, 1,
+            1, 0,
+            1, 1
+        ];
+        _this.indexArr = [0, 1, 2, 3];
+        _this.texCoordArr = [
+            0, 0,
+            0, 1,
+            1, 0,
+            1, 1
+        ];
+        return _this;
+    }
+    return Plane;
+}(abstractPrimitive_1.AbstractPrimitive));
+exports.Plane = Plane;
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var SHAPE_TYPE;
+(function (SHAPE_TYPE) {
+    SHAPE_TYPE[SHAPE_TYPE["ELLIPSE"] = 0] = "ELLIPSE";
+    SHAPE_TYPE[SHAPE_TYPE["RECT"] = 1] = "RECT";
+})(SHAPE_TYPE = exports.SHAPE_TYPE || (exports.SHAPE_TYPE = {}));
+var FILL_TYPE;
+(function (FILL_TYPE) {
+    FILL_TYPE[FILL_TYPE["COLOR"] = 0] = "COLOR";
+    FILL_TYPE[FILL_TYPE["TEXTURE"] = 1] = "TEXTURE";
+    FILL_TYPE[FILL_TYPE["LINEAR_GRADIENT"] = 2] = "LINEAR_GRADIENT";
+})(FILL_TYPE = exports.FILL_TYPE || (exports.FILL_TYPE = {}));
+exports.fragmentSource = "\n\n#define HALF .5\n#define ZERO  0.\n#define ONE   1.\n#define ERROR_COLOR vec4(ONE,ZERO,ZERO,ONE)\n\nvec4 getFillColor(){\n    if (u_fillType==" + FILL_TYPE.COLOR + ") return u_fillColor;\n    else if (u_fillType==" + FILL_TYPE.LINEAR_GRADIENT + ") {\n        vec2 polarCoords = vec2(length(v_position.xy),atan(v_position.y/v_position.x));\n        polarCoords.y+=u_fillLinearGradient[2].x;\n        vec2 rectCoords = vec2(polarCoords.x*cos(polarCoords.y),polarCoords.x*sin(polarCoords.y));\n        return mix(u_fillLinearGradient[0],u_fillLinearGradient[1],rectCoords.x);\n        //return vec4(u_fillLinearGradient[0].x,u_fillLinearGradient[0].y,u_fillLinearGradient[0].z,ONE);\n    }\n    else if (u_fillType==" + FILL_TYPE.TEXTURE + ") {\n        float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2]; \n        float ty = (v_position.y-u_rectOffsetTop)/u_height*u_texRect[3];\n        vec2 txVec = vec2(tx,ty);\n        txVec += fract(u_texOffset);\n        txVec = mod(txVec,u_texRect.zw);\n        txVec += u_texRect.xy;\n        return texture2D(texture, txVec);\n    }\n    else return ERROR_COLOR;\n}\nfloat calcRadiusAtAngle(float x,float y) {\n     float a = atan(y-HALF,x-HALF);\n     float cosA = cos(a);\n     float sinA = sin(a);\n     return u_rx*u_ry/sqrt(u_rx*u_rx*sinA*sinA+u_ry*u_ry*cosA*cosA);\n}\nvoid drawEllipse(){\n     float dist = distance(vec2(HALF,HALF),v_position.xy);\n     float rAtCurrAngle = calcRadiusAtAngle(v_position.x,v_position.y);\n     if (dist < rAtCurrAngle) {\n        if (dist > rAtCurrAngle - u_lineWidth) gl_FragColor = u_color;\n        else gl_FragColor = getFillColor();\n     }\n     else discard;\n}\nvoid drawRect(){\n    float x = v_position.x - HALF;\n    float y = v_position.y - HALF;\n    float distX = abs(x);\n    float distY = abs(y);\n    float halfW = u_width  * HALF;\n    float halfH = u_height * HALF;\n    if (distX < halfW && distY < halfH) {\n        \n        if (distX>halfW - u_borderRadius && distY>halfH - u_borderRadius) {\n            vec2 borderCenter = vec2(0.,0.);\n            float posX = v_position.x, posY = v_position.y;\n            if (posX<HALF && posY<HALF) { // top left\n                borderCenter = vec2(HALF - halfW + u_borderRadius,HALF - halfH + u_borderRadius);\n            }\n            else if (posX>HALF && posY<HALF) { // top right\n                borderCenter = vec2(HALF + halfW - u_borderRadius,HALF - halfH + u_borderRadius); \n            }    \n            else if (posX<HALF && posY>HALF) { // bottom left\n                borderCenter = vec2(HALF - halfW + u_borderRadius,HALF + halfH - u_borderRadius); \n            }\n            else {  // bottom right\n                borderCenter = vec2(HALF + halfW - u_borderRadius,HALF + halfH - u_borderRadius);\n            }\n            float distToBorderCenter = distance(v_position.xy,borderCenter);\n            if (distToBorderCenter>u_borderRadius) discard;\n            else if (distToBorderCenter>u_borderRadius-u_lineWidth) gl_FragColor = u_color;\n            else gl_FragColor = getFillColor();\n        }\n        \n        else if (distX > halfW - u_lineWidth || distY > halfH - u_lineWidth)\n            gl_FragColor = u_color;\n        else \n            gl_FragColor = getFillColor();\n    }\n    else discard;\n}\n\nvoid main(){\n    if (u_shapeType==" + SHAPE_TYPE.ELLIPSE + ") drawEllipse();\n    else if (u_shapeType==" + SHAPE_TYPE.RECT + ") drawRect();\n    else gl_FragColor = ERROR_COLOR;\n    gl_FragColor.a*=u_alpha;\n}\n\n\n\n";
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var texture_1 = __webpack_require__(39);
+var FrameBuffer = (function () {
+    function FrameBuffer(gl, width, height) {
+        if (true && !gl)
+            throw new debugError_1.DebugError("can not create FrameBuffer, gl context not passed to constructor, expected: FrameBuffer(gl)");
+        this.gl = gl;
+        this.width = width;
+        this.height = height;
+        this.texture = new texture_1.Texture(gl);
+        this.texture.setImage(null, width, height);
+        this._init(gl, width, height);
+    }
+    FrameBuffer.prototype._init = function (gl, width, height) {
+        this.glRenderBuffer = gl.createRenderbuffer();
+        if (true && !this.glRenderBuffer)
+            throw new debugError_1.DebugError("can not allocate memory for glRenderBuffer");
+        gl.bindRenderbuffer(gl.RENDERBUFFER, this.glRenderBuffer);
+        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
+        this.glFrameBuffer = gl.createFramebuffer();
+        if (true && !this.glFrameBuffer)
+            throw new debugError_1.DebugError("can not allocate memory for glFrameBuffer");
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this.glFrameBuffer);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture.getGlTexture(), 0);
+        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this.glRenderBuffer);
+        var fbStatus = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+        if (true && fbStatus !== gl.FRAMEBUFFER_COMPLETE) {
+            throw new debugError_1.DebugError("frame buffer status error: " + fbStatus + " (expected gl.FRAMEBUFFER_COMPLETE(" + gl.FRAMEBUFFER_COMPLETE + "))");
+        }
+        this.texture.unbind();
+        gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    };
+    FrameBuffer.prototype.bind = function () {
+        if (FrameBuffer.currInstance === this)
+            return;
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.glFrameBuffer);
+        this.gl.viewport(0, 0, this.width, this.height);
+        FrameBuffer.currInstance = this;
+    };
+    FrameBuffer.prototype.unbind = function () {
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+        FrameBuffer.currInstance = null;
+    };
+    FrameBuffer.prototype.destroy = function () {
+        this.gl.deleteRenderbuffer(this.glRenderBuffer);
+        this.gl.deleteFramebuffer(this.glFrameBuffer);
+    };
+    FrameBuffer.prototype.getTexture = function () {
+        return this.texture;
+    };
+    FrameBuffer.currInstance = null;
+    return FrameBuffer;
+}());
+exports.FrameBuffer = FrameBuffer;
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var frameBuffer_1 = __webpack_require__(38);
+var size_1 = __webpack_require__(13);
+var isPowerOf2 = function (value) {
+    return (value & (value - 1)) === 0;
+};
+var TextureFilterBuffer = (function () {
+    function TextureFilterBuffer(parent) {
+        this.buffers = [];
+        this.parent = parent;
+    }
+    TextureFilterBuffer.prototype.instantiate = function (gl) {
+        this.gl = gl;
+        var buffSize = 2;
+        for (var i = 0; i < buffSize; i++) {
+            this.buffers.push(new frameBuffer_1.FrameBuffer(gl, this.parent.size.width, this.parent.size.height));
+        }
+    };
+    TextureFilterBuffer.prototype.flip = function () {
+        var tmp = this.buffers[0];
+        this.buffers[0] = this.buffers[1];
+        this.buffers[1] = tmp;
+    };
+    TextureFilterBuffer.prototype.getSourceBuffer = function () {
+        return this.buffers[0];
+    };
+    TextureFilterBuffer.prototype.getDestBuffer = function () {
+        return this.buffers[1];
+    };
+    TextureFilterBuffer.prototype.destroy = function () {
+        if (this.buffers)
+            this.buffers.forEach(function (b) { return b.destroy(); });
+    };
+    return TextureFilterBuffer;
+}());
+var Texture = (function () {
+    function Texture(gl) {
+        this.tex = null;
+        this.size = new size_1.Size(0, 0);
+        this.isPowerOfTwo = false;
+        this._texFilterBuff = null;
+        if (true && !gl)
+            throw new debugError_1.DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
+        this.gl = gl;
+        if (true) {
+            if (!Texture.MAX_TEXTURE_IMAGE_UNITS)
+                Texture.MAX_TEXTURE_IMAGE_UNITS = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+        }
+        this.tex = gl.createTexture();
+        if (true && !this.tex)
+            throw new debugError_1.DebugError("can not allocate memory for texture");
+        gl.bindTexture(gl.TEXTURE_2D, this.tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 255, 0, 255]));
+        gl.bindTexture(gl.TEXTURE_2D, this.tex);
+        this._texFilterBuff = new TextureFilterBuffer(this);
+    }
+    Texture.prototype.setImage = function (img, width, height) {
+        if (width === void 0) { width = 0; }
+        if (height === void 0) { height = 0; }
+        if (true) {
+            if (!(img || width || height))
+                throw new debugError_1.DebugError("texture.setImage: if image is null, width and height must be specified: tex.setImage(null,w,h)");
+        }
+        var gl = this.gl;
+        if (img)
+            this.size.setWH(img.width, img.height);
+        else
+            this.size.setWH(width, height);
+        gl.bindTexture(gl.TEXTURE_2D, this.tex);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
+        if (img) {
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        }
+        else {
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        }
+        this.isPowerOfTwo = img ? (isPowerOf2(img.width) && isPowerOf2(img.height)) : false;
+        if (this.isPowerOfTwo) {
+            gl.generateMipmap(gl.TEXTURE_2D);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        }
+        else {
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        }
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    };
+    Texture.prototype.applyFilters = function (filters, frameBuffer) {
+        if (true && frameBuffer === undefined)
+            throw new debugError_1.DebugError("can not apply filters. frameBuffer must be explicitly passed. Pass null if no frame buffer needs to bind after filtering");
+        var len = filters.length;
+        if (len === 0)
+            return this;
+        if (!this._texFilterBuff.buffers.length)
+            this._texFilterBuff.instantiate(this.gl);
+        var filter = filters[0];
+        var texInfo = [{ texture: this, name: 'texture' }];
+        filter.doFilter(texInfo, this._texFilterBuff.getDestBuffer());
+        for (var i = 1; i < len; i++) {
+            this._texFilterBuff.flip();
+            var texInfo_1 = [{ texture: this._texFilterBuff.getSourceBuffer().texture, name: 'texture' }];
+            filters[i].doFilter(texInfo_1, this._texFilterBuff.getDestBuffer());
+        }
+        this._texFilterBuff.flip();
+        if (frameBuffer !== null)
+            frameBuffer.bind();
+        return this._texFilterBuff.getSourceBuffer().texture;
+    };
+    Texture.prototype.bind = function (name, i, program) {
+        if (true) {
+            if (!name) {
+                console.error(this);
+                throw new debugError_1.DebugError("can not bind texture: uniform name was not provided");
+            }
+            if (i > Texture.MAX_TEXTURE_IMAGE_UNITS - 1) {
+                throw new debugError_1.DebugError("can not bind texture with index " + i + ". Max supported value by device is " + Texture.MAX_TEXTURE_IMAGE_UNITS);
+            }
+        }
+        program.setUniform(name, i);
+        if (Texture.currInstances[i] === this)
+            return;
+        var gl = this.gl;
+        gl.activeTexture(gl.TEXTURE0 + i);
+        gl.bindTexture(gl.TEXTURE_2D, this.tex);
+        Texture.currInstances[i] = this;
+    };
+    Texture.prototype.unbind = function (i) {
+        if (i === void 0) { i = 0; }
+        var gl = this.gl;
+        gl.activeTexture(gl.TEXTURE0 + i);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        delete Texture.currInstances[i];
+    };
+    Texture.prototype.getColorArray = function () {
+        var gl = this.gl;
+        var wxh = this.size.width * this.size.height;
+        if (true && gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE)
+            throw new debugError_1.DebugError("Texture.GetColorArray() failed!");
+        var pixels = new Uint8Array(wxh * 4);
+        gl.readPixels(0, 0, this.size.width, this.size.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+        return pixels;
+    };
+    Texture.prototype.destroy = function () {
+        if (this._texFilterBuff)
+            this._texFilterBuff.destroy();
+        this.gl.deleteTexture(this.tex);
+    };
+    Texture.prototype.getSize = function () {
+        return this.size;
+    };
+    Texture.prototype.getGlTexture = function () {
+        return this.tex;
+    };
+    Texture.MAX_TEXTURE_IMAGE_UNITS = 0;
+    Texture.currInstances = {};
+    return Texture;
+}());
+exports.Texture = Texture;
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var plane_1 = __webpack_require__(36);
+var shaderProgram_1 = __webpack_require__(7);
+var abstractDrawer_1 = __webpack_require__(11);
+var bufferInfo_1 = __webpack_require__(15);
+var texShaderGenerator_1 = __webpack_require__(23);
+var SpriteRectDrawer = (function (_super) {
+    tslib_1.__extends(SpriteRectDrawer, _super);
+    function SpriteRectDrawer(gl, program) {
+        var _this = _super.call(this, gl) || this;
+        var gen = new texShaderGenerator_1.TexShaderGenerator();
+        _this.primitive = new plane_1.Plane();
+        _this.program = program || new shaderProgram_1.ShaderProgram(gl, gen.getVertexSource(), gen.getFragmentSource());
+        _this.bufferInfo = new bufferInfo_1.BufferInfo(gl, {
+            posVertexInfo: { array: _this.primitive.vertexArr, type: gl.FLOAT, size: 2, attrName: 'a_position' },
+            posIndexInfo: { array: _this.primitive.indexArr },
+            texVertexInfo: { array: _this.primitive.texCoordArr, type: gl.FLOAT, size: 2, attrName: 'a_texCoord' },
+            drawMethod: _this.gl.TRIANGLE_STRIP
+        });
+        return _this;
+    }
+    return SpriteRectDrawer;
+}(abstractDrawer_1.AbstractDrawer));
+exports.SpriteRectDrawer = SpriteRectDrawer;
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Resource = (function () {
+    function Resource() {
+    }
+    Resource.prototype.setResourceLink = function (link) {
+        this._resourceLink = link;
+    };
+    Resource.prototype.getResourceLink = function () {
+        return this._resourceLink;
+    };
+    return Resource;
+}());
+exports.Resource = Resource;
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var container_1 = __webpack_require__(6);
+var textField_1 = __webpack_require__(18);
+var Button = (function (_super) {
+    tslib_1.__extends(Button, _super);
+    function Button(game) {
+        var _this = _super.call(this, game) || this;
+        _this.font = null;
+        _this._textField = new textField_1.TextField(game);
+        _this.appendChild(_this._textField);
+        return _this;
+    }
+    Button.prototype.revalidate = function () {
+        _super.prototype.revalidate.call(this);
+        this._textField.setFont(this.font);
+        this.onGeometryChanged();
+    };
+    Button.prototype.onGeometryChanged = function () {
+        this._textField.onGeometryChanged();
+        this.calcDrawableRect(this._textField.width, this._textField.height);
+        if (this.background) {
+            var dx = (this.background.width - this._textField.width) / 2;
+            var dy = (this.background.height - this._textField.height) / 2;
+            this._textField.pos.setXY(dx, dy);
+        }
+    };
+    Button.prototype.setText = function (text) {
+        this._textField.setText(text);
+        this._dirty = true;
+    };
+    Button.prototype.setFont = function (f) {
+        this.font = f;
+        this._textField.setFont(f);
+    };
+    Button.prototype.getText = function () {
+        return this._textField.getText();
+    };
+    Button.prototype.update = function (time, delta) {
+        _super.prototype.update.call(this, time, delta);
+    };
+    Button.prototype.draw = function () {
+        if (this.background)
+            this.background.draw();
+        this._textField.render();
+        return true;
+    };
+    return Button;
+}(container_1.Container));
+exports.Button = Button;
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tileMap_1 = __webpack_require__(44);
+var layer_1 = __webpack_require__(45);
+var ambientLight_1 = __webpack_require__(46);
+var color_1 = __webpack_require__(3);
+var camera_1 = __webpack_require__(29);
+var resourceLoader_1 = __webpack_require__(48);
+var eventEmitter_1 = __webpack_require__(17);
+var Scene = (function () {
+    function Scene(game) {
+        this.game = game;
+        this.type = 'Scene';
+        this.layers = [];
+        this.useBG = false;
+        this.colorBG = color_1.Color.WHITE;
+        this.filters = [];
+        this._tweenMovies = [];
+        this.tileMap = new tileMap_1.TileMap(game);
+        this.ambientLight = new ambientLight_1.AmbientLight(game);
+        this.uiLayer = new layer_1.Layer(this.game);
+        this.addLayer(new layer_1.Layer(game));
+        this.resourceLoader = new resourceLoader_1.ResourceLoader(game);
+    }
+    Scene.prototype.revalidate = function () {
+    };
+    Scene.prototype.addTweenMovie = function (tm) {
+        this._tweenMovies.push(tm);
+    };
+    Scene.prototype.getAllGameObjects = function () {
+        var res = [];
+        var ONE = 1;
+        for (var i = 0; i < this.layers.length; i++) {
+            var layer = this.layers[this.layers.length - ONE - i];
+            for (var j = 0; j < layer.children.length; j++) {
+                var go = layer.children[layer.children.length - ONE - j];
+                res.push(go);
+            }
+        }
+        return res;
+    };
+    Scene.prototype.getDefaultLayer = function () {
+        return this.layers[0];
+    };
+    Scene.prototype.addLayer = function (layer) {
+        this.layers.push(layer);
+    };
+    Scene.prototype.removeLayer = function (layer) {
+        this.layers.remove(layer);
+    };
+    Scene.prototype.appendChild = function (go) {
+        go.revalidate();
+        this.getDefaultLayer().appendChild(go);
+    };
+    Scene.prototype.prependChild = function (go) {
+        this.getDefaultLayer().prependChild(go);
+    };
+    Scene.prototype.onPreloading = function () { };
+    Scene.prototype.onProgress = function (val) { };
+    Scene.prototype.onReady = function () { };
+    Scene.prototype.beforeUpdate = function () { };
+    Scene.prototype.onUpdate = function () { };
+    Scene.prototype.beforeRender = function () { };
+    Scene.prototype.onRender = function () { };
+    Scene.prototype.onDestroy = function () { };
+    Scene.prototype.update = function (currTime, deltaTime) {
+        this.beforeUpdate();
+        var layers = this.layers;
+        for (var _i = 0, layers_1 = layers; _i < layers_1.length; _i++) {
+            var l = layers_1[_i];
+            l.update(currTime, deltaTime);
+        }
+        this.uiLayer.update(currTime, deltaTime);
+        this.onUpdate();
+    };
+    Scene.prototype.renderMainFrame = function () {
+        var renderer = this.game.getRenderer();
+        this.game.camera.update(this.game.getTime(), this.game.getDeltaTime());
+        var layers = this.layers;
+        for (var _i = 0, layers_2 = layers; _i < layers_2.length; _i++) {
+            var l = layers_2[_i];
+            l.render();
+        }
+        this.tileMap.render();
+        renderer.save();
+        renderer.resetTransform();
+        this.game.camera.matrixMode = camera_1.CAMERA_MATRIX_MODE.MODE_IDENTITY;
+        this.uiLayer.render();
+        renderer.restore();
+        this.game.camera.matrixMode = camera_1.CAMERA_MATRIX_MODE.MODE_TRANSFORM;
+        this.onRender();
+        if (true) {
+            this.game.getRenderer().restore();
+            if (this.game.getRenderer().debugTextField) {
+                this.game.getRenderer().debugTextField.update(this.game.getTime(), this.game.getDeltaTime());
+                this.game.getRenderer().debugTextField.render();
+            }
+            this.game.getRenderer().restore();
+        }
+    };
+    Scene.prototype.renderPreloadingFrame = function () {
+        this.game.getRenderer().resetTransform();
+        this.preloadingGameObject.render();
+    };
+    Scene.prototype.render = function () {
+        this.beforeRender();
+        var renderer = this.game.getRenderer();
+        if (this.useBG)
+            renderer.clearColor(this.colorBG);
+        else
+            renderer.clear();
+        renderer.beginFrameBuffer();
+        if (this.useBG)
+            renderer.clearColor(this.colorBG);
+        else
+            renderer.clear();
+        this.game.camera.matrixMode = camera_1.CAMERA_MATRIX_MODE.MODE_TRANSFORM;
+        if (!this.resourceLoader.isCompleted()) {
+            if (this.preloadingGameObject !== undefined) {
+                this.renderPreloadingFrame();
+            }
+        }
+        else {
+            this.renderMainFrame();
+        }
+        renderer.flipFrameBuffer(this.filters);
+    };
+    Scene.prototype.on = function (eventName, callBack) {
+        if (this._emitter === undefined)
+            this._emitter = new eventEmitter_1.EventEmitter();
+        this._emitter.on(eventName, callBack);
+        return callBack;
+    };
+    Scene.prototype.off = function (eventName, callBack) {
+        if (this._emitter !== undefined)
+            this._emitter.off(eventName, callBack);
+    };
+    Scene.prototype.trigger = function (eventName, data) {
+        if (this._emitter !== undefined)
+            this._emitter.trigger(eventName, data);
+    };
+    return Scene;
+}());
+exports.Scene = Scene;
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var rect_1 = __webpack_require__(2);
+var rigidShapes_1 = __webpack_require__(27);
+var debugError_1 = __webpack_require__(1);
+var TileMap = (function () {
+    function TileMap(game) {
+        this.game = game;
+        this.type = "TileMap";
+        this.spriteSheet = null;
+        this.data = [];
+        this.width = 0;
+        this.height = 0;
+        this.blendMode = '';
+    }
+    TileMap.prototype.fromTiledJSON = function (source, mapWidth, mapHeight) {
+        this.data = [];
+        var cnt = 0;
+        for (var j = 0; j < mapHeight; j++) {
+            this.data[j] = [];
+            for (var i = 0; i < mapWidth; i++) {
+                var val = source[cnt++];
+                if (val === 0)
+                    this.data[j][i] = undefined;
+                else {
+                    this.data[j][i] = {};
+                    this.data[j][i].val = val - 1;
+                    var w = this.spriteSheet._frameWidth;
+                    var h = this.spriteSheet._frameHeight;
+                    var x = i * w;
+                    var y = j * h;
+                    var c = new rigidShapes_1.Vec2(x + w / 2, y + h / 2);
+                    var r = new rigidShapes_1.RigidRectangle(this.game, c, w, h, 0);
+                    r.fixedAngle = true;
+                    this.data[j][i].rect = r;
+                }
+            }
+        }
+        this.width = mapWidth;
+        this.height = mapHeight;
+        if (true) {
+            var found = cnt;
+            var expected = source.length;
+            if (expected !== found) {
+                throw new debugError_1.DebugError("incorrect mapWidth/mapHeight provided. Expected " + expected + " tiles, but " + found + " found (" + mapWidth + "*" + mapHeight + ")");
+            }
+        }
+    };
+    TileMap.prototype.revalidate = function () {
+        this.game.camera._updateRect();
+        var camRect = this.game.camera.getRectScaled();
+        if (!this.spriteSheet)
+            return;
+        this._tilesInScreenX = ~~(camRect.width / this.spriteSheet._frameWidth);
+        this._tilesInScreenY = ~~(camRect.height / this.spriteSheet._frameHeight);
+    };
+    TileMap.prototype.getTileAt = function (x, y) {
+        if (!this.spriteSheet)
+            return;
+        var tilePosX = ~~(x / this.spriteSheet._frameWidth);
+        var tilePosY = ~~(y / this.spriteSheet._frameHeight);
+        if (!this.data[tilePosY])
+            return;
+        var tile = this.data[tilePosY][tilePosX];
+        if (!tile)
+            return;
+        return {
+            tileIndex: this.spriteSheet.numOfFramesH * tilePosY + tilePosX + 1,
+            tile: tile
+        };
+    };
+    TileMap.prototype.getTilesAtRect = function (rect) {
+        var result = [];
+        if (!this.spriteSheet)
+            return result;
+        var alreadyCheckedTiles = {};
+        var x = rect.x, y;
+        var maxX = rect.x + rect.width, maxY = rect.y + rect.height;
+        while (true) {
+            y = rect.y;
+            while (true) {
+                var tileInfo = this.getTileAt(x, y);
+                if (tileInfo) {
+                    if (!alreadyCheckedTiles[tileInfo.tileIndex]) {
+                        result.push(tileInfo.tile);
+                        alreadyCheckedTiles[tileInfo.tileIndex] = true;
+                    }
+                }
+                if (y === maxY)
+                    break;
+                y += this.spriteSheet._frameHeight;
+                if (y > maxY)
+                    y = maxY;
+            }
+            if (x === maxX)
+                break;
+            x += this.spriteSheet._frameWidth;
+            if (x > maxX)
+                x = maxX;
+        }
+        return result;
+    };
+    TileMap.prototype.render = function () {
+        var spriteSheet = this.spriteSheet;
+        if (!spriteSheet)
+            return;
+        var camera = this.game.camera;
+        var renderer = this.game.getRenderer();
+        var cameraRect = camera.getRectScaled();
+        var tilePosX = ~~((cameraRect.x) / this.spriteSheet._frameWidth);
+        var tilePosY = ~~((cameraRect.y) / this.spriteSheet._frameHeight);
+        if (tilePosX < 0)
+            tilePosX = 0;
+        if (tilePosY < 0)
+            tilePosY = 0;
+        var w = tilePosX + this._tilesInScreenX + 1;
+        var h = tilePosY + this._tilesInScreenY + 1;
+        for (var y = tilePosY; y <= h; y++) {
+            for (var x = tilePosX; x <= w; x++) {
+                var tileVal = this.data[y] && this.data[y][x] && this.data[y][x].val;
+                if (tileVal === false || tileVal === null || tileVal === undefined)
+                    continue;
+                var destRect = rect_1.Rect.fromPool().clone();
+                destRect.setXYWH(x * spriteSheet._frameWidth, y * spriteSheet._frameHeight, spriteSheet._frameWidth, spriteSheet._frameHeight);
+            }
+        }
+    };
+    return TileMap;
+}());
+exports.TileMap = TileMap;
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Layer = (function () {
+    function Layer(game) {
+        this.game = game;
+        this.type = 'Layer';
+        this.children = [];
+    }
+    Layer.prototype.prependChild = function (go) {
+        go.parent = null;
+        go.revalidate();
+        this.children.unshift(go);
+    };
+    Layer.prototype.appendChild = function (go) {
+        go.parent = null;
+        go.revalidate();
+        this.children.push(go);
+    };
+    Layer.prototype.getAllSpriteSheets = function () {
+        var dataSet = [];
+        this.children.forEach(function (obj) {
+            obj.spriteSheet && !dataSet.find(function (it) { return obj.id === it.id; }) && dataSet.push(obj.spriteSheet);
+        });
+        return dataSet;
+    };
+    Layer.prototype.update = function (currTime, deltaTime) {
+        var all = this.children;
+        for (var _i = 0, all_1 = all; _i < all_1.length; _i++) {
+            var obj = all_1[_i];
+            obj.update(currTime, deltaTime);
+        }
+    };
+    Layer.prototype.render = function () {
+        var all = this.children;
+        for (var _i = 0, all_2 = all; _i < all_2.length; _i++) {
+            var obj = all_2[_i];
+            obj.render();
+        }
+    };
+    return Layer;
+}());
+exports.Layer = Layer;
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var abstractLight_1 = __webpack_require__(28);
+var AmbientLight = (function (_super) {
+    tslib_1.__extends(AmbientLight, _super);
+    function AmbientLight(game) {
+        var _this = _super.call(this, game) || this;
+        _this.direction = [1, 1, 1];
+        return _this;
+    }
+    AmbientLight.prototype.setUniforms = function (uniform) {
+        uniform['u_ambientLight.color'] = this.color.asGL();
+        uniform['u_ambientLight.direction'] = this.direction;
+    };
+    return AmbientLight;
+}(abstractLight_1.AbstractLight));
+exports.AmbientLight = AmbientLight;
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Easing = (function () {
+    function Easing() {
+    }
+    Easing.linear = function (t, b, c, d) {
+        return c * t / d + b;
+    };
+    Easing.easeInQuad = function (t, b, c, d) {
+        t /= d;
+        return c * t * t + b;
+    };
+    Easing.easeOutQuad = function (t, b, c, d) {
+        t /= d;
+        return -c * t * (t - 2) + b;
+    };
+    Easing.easeInOutQuad = function (t, b, c, d) {
+        t /= d / 2;
+        if (t < 1)
+            return c / 2 * t * t + b;
+        t--;
+        return -c / 2 * (t * (t - 2) - 1) + b;
+    };
+    Easing.easeInCubic = function (t, b, c, d) {
+        t /= d;
+        return c * t * t * t + b;
+    };
+    Easing.easeOutCubic = function (t, b, c, d) {
+        t /= d;
+        t--;
+        return c * (t * t * t + 1) + b;
+    };
+    Easing.easeInOutCubic = function (t, b, c, d) {
+        t /= d / 2;
+        if (t < 1)
+            return c / 2 * t * t * t + b;
+        t -= 2;
+        return c / 2 * (t * t * t + 2) + b;
+    };
+    Easing.easeInQuart = function (t, b, c, d) {
+        t /= d;
+        return c * t * t * t * t + b;
+    };
+    Easing.easeOutQuart = function (t, b, c, d) {
+        t /= d;
+        t--;
+        return -c * (t * t * t * t - 1) + b;
+    };
+    Easing.easeInOutQuart = function (t, b, c, d) {
+        t /= d / 2;
+        if (t < 1)
+            return c / 2 * t * t * t * t + b;
+        t -= 2;
+        return -c / 2 * (t * t * t * t - 2) + b;
+    };
+    Easing.easeInQuint = function (t, b, c, d) {
+        t /= d;
+        return c * t * t * t * t * t + b;
+    };
+    Easing.easeOutQuint = function (t, b, c, d) {
+        t /= d;
+        t--;
+        return c * (t * t * t * t * t + 1) + b;
+    };
+    Easing.easeInOutQuint = function (t, b, c, d) {
+        t /= d / 2;
+        if (t < 1)
+            return c / 2 * t * t * t * t * t + b;
+        t -= 2;
+        return c / 2 * (t * t * t * t * t + 2) + b;
+    };
+    Easing.easeInSine = function (t, b, c, d) {
+        return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
+    };
+    Easing.easeOutSine = function (t, b, c, d) {
+        return c * Math.sin(t / d * (Math.PI / 2)) + b;
+    };
+    Easing.easeInOutSine = function (t, b, c, d) {
+        return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
+    };
+    Easing.easeInExpo = function (t, b, c, d) {
+        return c * Math.pow(2, 10 * (t / d - 1)) + b;
+    };
+    Easing.easeOutExpo = function (t, b, c, d) {
+        return c * (-Math.pow(2, -10 * t / d) + 1) + b;
+    };
+    Easing.easeInOutExpo = function (t, b, c, d) {
+        t /= d / 2;
+        if (t < 1)
+            return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
+        t--;
+        return c / 2 * (-Math.pow(2, -10 * t) + 2) + b;
+    };
+    Easing.easeInCirc = function (t, b, c, d) {
+        t /= d;
+        return -c * (Math.sqrt(1 - t * t) - 1) + b;
+    };
+    Easing.easeOutCirc = function (t, b, c, d) {
+        t /= d;
+        t--;
+        return c * Math.sqrt(1 - t * t) + b;
+    };
+    Easing.easeInOutCirc = function (t, b, c, d) {
+        t /= d / 2;
+        if (t < 1)
+            return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
+        t -= 2;
+        return c / 2 * (Math.sqrt(1 - t * t) + 1) + b;
+    };
+    Easing.easeInElastic = function (t, b, c, d) {
+        var s = 1.70158, p = 0, a = c;
+        if (t === 0)
+            return b;
+        if ((t /= d) === 1)
+            return b + c;
+        if (!p)
+            p = d * .3;
+        if (a < Math.abs(c)) {
+            a = c;
+            s = p / 4;
+        }
+        else
+            s = p / (2 * Math.PI) * Math.asin(c / a);
+        return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+    };
+    Easing.easeOutElastic = function (t, b, c, d) {
+        var s = 1.70158, p = 0, a = c;
+        if (t === 0)
+            return b;
+        if ((t /= d) === 1)
+            return b + c;
+        if (!p)
+            p = d * .3;
+        if (a < Math.abs(c)) {
+            a = c;
+            s = p / 4;
+        }
+        else
+            s = p / (2 * Math.PI) * Math.asin(c / a);
+        return a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b;
+    };
+    Easing.easeInOutElastic = function (t, b, c, d) {
+        var s = 1.70158, p = 0, a = c;
+        if (t === 0)
+            return b;
+        if ((t /= d / 2) === 2)
+            return b + c;
+        if (!p)
+            p = d * (.3 * 1.5);
+        if (a < Math.abs(c)) {
+            a = c;
+            s = p / 4;
+        }
+        else
+            s = p / (2 * Math.PI) * Math.asin(c / a);
+        if (t < 1)
+            return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+        return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
+    };
+    Easing.easeInBack = function (t, b, c, d) {
+        var s = 1.70158;
+        return c * (t /= d) * t * ((s + 1) * t - s) + b;
+    };
+    Easing.easeOutBack = function (t, b, c, d) {
+        var s = 1.70158;
+        return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
+    };
+    Easing.easeInOutBack = function (t, b, c, d) {
+        var s = 1.70158;
+        if ((t /= d / 2) < 1)
+            return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
+        return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
+    };
+    Easing.easeInBounce = function (t, b, c, d) {
+        return c - Easing.easeOutBounce(d - t, 0, c, d) + b;
+    };
+    Easing.easeOutBounce = function (t, b, c, d) {
+        if ((t /= d) < (1 / 2.75)) {
+            return c * (7.5625 * t * t) + b;
+        }
+        else if (t < (2 / 2.75)) {
+            return c * (7.5625 * (t -= (1.5 / 2.75)) * t + .75) + b;
+        }
+        else if (t < (2.5 / 2.75)) {
+            return c * (7.5625 * (t -= (2.25 / 2.75)) * t + .9375) + b;
+        }
+        else {
+            return c * (7.5625 * (t -= (2.625 / 2.75)) * t + .984375) + b;
+        }
+    };
+    Easing.easeInOutBounce = function (t, b, c, d) {
+        if (t < d / 2)
+            return Easing.easeInBounce(t * 2, 0, c, d) * .5 + b;
+        else
+            return Easing.easeOutBounce(t * 2 - d, 0, c, d) * .5 + c * .5 + b;
+    };
+    return Easing;
+}());
+exports.Easing = Easing;
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var queue_1 = __webpack_require__(49);
+var resourceLink_1 = __webpack_require__(50);
+var ResourceLoader = (function () {
+    function ResourceLoader(game) {
+        this.game = game;
+        this.q = new queue_1.Queue();
+    }
+    ResourceLoader.prototype.loadImage = function (url) {
+        var _this = this;
+        var link = resourceLink_1.ResourceLink.create();
+        this.q.addTask(function () {
+            _this.game.getRenderer().loadTextureInfo(url, link, function () { return _this.q.resolveTask(url); });
+        }, url);
+        return link;
+    };
+    ResourceLoader.prototype.startLoading = function () {
+        this.q.start();
+    };
+    ResourceLoader.prototype.isCompleted = function () {
+        return this.q.isCompleted();
+    };
+    ResourceLoader.prototype.getProgress = function () {
+        return this.q.calcProgress();
+    };
+    ResourceLoader.prototype.onProgress = function (fn) {
+        this.q.onProgress = fn;
+    };
+    ResourceLoader.prototype.onCompleted = function (fn) {
+        this.q.onResolved = fn;
+    };
+    return ResourceLoader;
+}());
+exports.ResourceLoader = ResourceLoader;
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Queue = (function () {
+    function Queue() {
+        this.tasksResolved = 0;
+        this.tasks = [];
+        this.tasksProgressById = {};
+        this.completed = false;
+    }
+    Queue.prototype.size = function () {
+        return this.tasks.length;
+    };
+    Queue.prototype.progressTask = function (taskId, progress) {
+        this.tasksProgressById[taskId] = progress;
+        this.onProgress && this.onProgress(this.calcProgress());
+    };
+    ;
+    Queue.prototype.resolveTask = function (taskId) {
+        this.tasksResolved++;
+        this.tasksProgressById[taskId] = 1;
+        if (this.tasks.length === this.tasksResolved) {
+            this.onProgress && this.onProgress(1);
+            this.completed = true;
+            if (this.onResolved)
+                this.onResolved();
+        }
+        else {
+            this.onProgress && this.onProgress(this.calcProgress());
+        }
+    };
+    ;
+    Queue.prototype.addTask = function (taskFn, taskId) {
+        if (this.tasksProgressById[taskId] !== undefined)
+            return;
+        this.tasks.push(taskFn);
+        this.tasksProgressById[taskId] = 0;
+    };
+    ;
+    Queue.prototype.isCompleted = function () {
+        return this.completed;
+    };
+    Queue.prototype.calcProgress = function () {
+        var _this = this;
+        var sum = 0;
+        Object.keys(this.tasksProgressById).forEach(function (taskId) {
+            sum += _this.tasksProgressById[taskId] || 0;
+        });
+        return sum / this.tasks.length;
+    };
+    Queue.prototype.start = function () {
+        if (this.size() === 0) {
+            this.onResolved && this.onResolved();
+        }
+        this.tasks.forEach(function (t) {
+            t && t();
+        });
+    };
+    return Queue;
+}());
+exports.Queue = Queue;
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _cnt = 0;
+var ResourceLink = (function () {
+    function ResourceLink(id) {
+        this.id = id;
+    }
+    ResourceLink.prototype.getId = function () {
+        return this.id;
+    };
+    ResourceLink.prototype.setTarget = function (t) {
+        this.target = t;
+    };
+    ResourceLink.prototype.getTarget = function () {
+        return this.target;
+    };
+    ResourceLink.create = function () {
+        return new ResourceLink((_cnt++).toString());
+    };
+    return ResourceLink;
+}());
+exports.ResourceLink = ResourceLink;
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tween_1 = __webpack_require__(14);
+var TweenMovie = (function () {
+    function TweenMovie(game) {
+        this.game = game;
+        this._tweensInMovie = [];
+        this._startedTime = null;
+        this._completed = false;
+        this._loop = false;
+        this._onComplete = null;
+    }
+    TweenMovie.prototype.tween = function (startTime, desc) {
+        var tween = new tween_1.Tween(desc);
+        this._tweensInMovie.push({
+            startTime: startTime,
+            tween: tween
+        });
+        return this;
+    };
+    TweenMovie.prototype.loop = function (val) {
+        this._loop = val;
+        return this;
+    };
+    TweenMovie.prototype.finish = function (fn) {
+        this._onComplete = fn;
+        return this;
+    };
+    TweenMovie.prototype.play = function () {
+        this.game.getCurrScene().addTweenMovie(this);
+    };
+    TweenMovie.prototype.update = function (currTime) {
+        if (this._completed)
+            return;
+        if (!this._startedTime)
+            this._startedTime = currTime;
+        var deltaTime = currTime - this._startedTime;
+        var allCompleted = true;
+        this._tweensInMovie.forEach(function (item) {
+            if (deltaTime > item.startTime) {
+                if (deltaTime < item.startTime + item.tween.getTweenTime()) {
+                    item.tween.update(currTime);
+                }
+                else {
+                    item.tween.complete();
+                }
+            }
+            if (!item.tween.isCompleted())
+                allCompleted = false;
+        });
+        if (allCompleted) {
+            if (this._loop) {
+                this.reset();
+            }
+            else {
+                this._completed = true;
+                this._onComplete && this._onComplete();
+            }
+        }
+    };
+    ;
+    TweenMovie.prototype.isCompleted = function () {
+        return this._completed;
+    };
+    TweenMovie.prototype.reset = function () {
+        this._startedTime = null;
+        this._completed = false;
+        this._tweensInMovie.forEach(function (item) {
+            item.tween.reset();
+        });
+        return this;
+    };
+    return TweenMovie;
+}());
+exports.TweenMovie = TweenMovie;
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Timer = (function () {
+    function Timer(callback, interval) {
+        this.lastTime = 0;
+        this.interval = interval;
+        this.callback = callback;
+    }
+    Timer.prototype.onUpdate = function (time) {
+        if (!this.lastTime)
+            this.lastTime = time;
+        var delta = time - this.lastTime;
+        if (delta !== 0 && delta > this.interval) {
+            this.lastTime = time;
+            this.callback();
+        }
+    };
+    return Timer;
+}());
+exports.Timer = Timer;
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(54);
+var mouse_1 = __webpack_require__(21);
+var keyboard_1 = __webpack_require__(25);
+var gamePad_1 = __webpack_require__(55);
+var camera_1 = __webpack_require__(29);
+var consts_1 = __webpack_require__(30);
+var point2d_1 = __webpack_require__(4);
+var lightArray_1 = __webpack_require__(56);
+var uiBuilder_1 = __webpack_require__(58);
+var colliderEngine_1 = __webpack_require__(66);
+var debugError_1 = __webpack_require__(1);
+var audioPlayer_1 = __webpack_require__(34);
+var Game = (function () {
+    function Game() {
+        this._lastTime = 0;
+        this._currTime = 0;
+        this._deltaTime = 0;
+        this._running = false;
+        this._destroyed = false;
+        this.scale = new point2d_1.Point2d(1, 1);
+        this.pos = new point2d_1.Point2d(0, 0);
+        this.width = 320;
+        this.height = 240;
+        this.gravityConstant = 0;
+        this.fps = 0;
+        this.scaleStrategy = consts_1.SCALE_STRATEGY.FIT;
+        this._cnt = 0;
+        this.mouse = new mouse_1.Mouse(this);
+        this.keyboard = new keyboard_1.Keyboard(this);
+        this.keyboard.listenTo();
+        this.gamePad = new gamePad_1.GamePad(this);
+        this.collider = new colliderEngine_1.ColliderEngine(this);
+        this.camera = new camera_1.Camera(this);
+        this.lightArray = new lightArray_1.LightArray(this);
+        this.uiBuilder = new uiBuilder_1.UIBuilder(this);
+        this.audioPlayer = new audioPlayer_1.AudioPlayer(this);
+        this.camera.revalidate();
+        if (true)
+            window['game'] = this;
+    }
+    Game.prototype.getTime = function () {
+        return this._lastTime;
+    };
+    Game.prototype.getDeltaTime = function () {
+        return this._deltaTime;
+    };
+    Game.prototype.log = function (args) {
+        this._renderer.log(args);
+    };
+    Game.prototype.setRenderer = function (Renderer) {
+        this._renderer = new Renderer(this);
+        this.mouse.listenTo(this._renderer.container);
+    };
+    Game.prototype.getRenderer = function () {
+        return this._renderer;
+    };
+    Game.prototype.debug2 = function () {
+        var val = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            val[_i] = arguments[_i];
+        }
+        this._cnt++;
+        console.log.apply(console, val);
+        if (this._cnt > 10)
+            throw new debugError_1.DebugError('too many logs');
+    };
+    Game.prototype.runScene = function (scene) {
+        var _this = this;
+        this.revalidate();
+        scene.onPreloading();
+        scene.resourceLoader.onProgress(function () {
+            scene.onProgress(scene.resourceLoader.getProgress());
+        });
+        scene.resourceLoader.startLoading();
+        this._currentScene = scene;
+        if (!this._running)
+            this.update();
+        this._running = true;
+        scene.resourceLoader.onCompleted(function () {
+            _this._currentScene.onReady();
+        });
+    };
+    Game.prototype.getCurrScene = function () {
+        return this._currentScene;
+    };
+    Game.prototype.update = function () {
+        if (this._destroyed)
+            return;
+        this._lastTime = this._currTime;
+        this._currTime = Date.now();
+        var currTimeCopy = this._currTime;
+        if (!this._lastTime)
+            this._lastTime = this._currTime;
+        this._deltaTime = this._currTime - this._lastTime;
+        if (true) {
+            this.fps = ~~(1000 / this._deltaTime);
+            var renderError = this._renderer.getError();
+            if (renderError)
+                throw new debugError_1.DebugError("render error with code " + renderError);
+        }
+        var dTime = Math.min(this._deltaTime, Game.UPDATE_TIME_RATE);
+        var numOfLoops = (~~(this._deltaTime / Game.UPDATE_TIME_RATE)) || 1;
+        var currTime = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
+        var loopCnt = 0;
+        do {
+            this._currentScene.update(currTime, dTime);
+            this.keyboard.update();
+            this.gamePad.update();
+            this.audioPlayer.update(currTime, dTime);
+            currTime += Game.UPDATE_TIME_RATE;
+            loopCnt++;
+            if (loopCnt > 10) {
+                this._lastTime = this._currTime = currTimeCopy;
+                break;
+            }
+        } while (loopCnt < numOfLoops);
+        this._currentScene.render();
+        requestAnimationFrame(this.update.bind(this));
+    };
+    Game.prototype.destroy = function () {
+        this._destroyed = true;
+        this.keyboard.destroy();
+        this.mouse.destroy();
+        this._renderer.cancelFullScreen();
+        this._renderer.destroy();
+    };
+    Game.prototype.revalidate = function () {
+        if (true && !this._renderer)
+            throw new debugError_1.DebugError("game renderer is not set");
+    };
+    Game.UPDATE_TIME_RATE = 20;
+    return Game;
+}());
+exports.Game = Game;
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports) {
+
+window.requestAnimationFrame =
+    window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        function (f) { setTimeout(f, 17); };
+if (!window.cancelAnimationFrame) {
+    window.cancelAnimationFrame = function (id) { return clearTimeout(id); };
+}
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var keyboard_1 = __webpack_require__(25);
+if (true) {
+    window.addEventListener("gamepadconnected", function (e) {
+        console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.", e.gamepad.index, e.gamepad.id, e.gamepad.buttons.length, e.gamepad.axes.length);
+    });
+    window.addEventListener("gamepaddisconnected", function (e) {
+        console.log("Gamepad disconnected from index %d: %s", e.gamepad.index, e.gamepad.id);
+    });
+}
+var GamePad = (function () {
+    function GamePad(game) {
+        this.game = game;
+    }
+    GamePad.prototype.update = function () {
+        this.gamepads =
+            (navigator.getGamepads && navigator.getGamepads()) ||
+                (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) ||
+                navigator.webkitGamepads || navigator.mozGamepads ||
+                navigator.msGamepads || navigator.gamepads || [];
+        for (var i = 0, max = this.gamepads.length; i < max; i++) {
+            var gp = this.gamepads[i];
+            if (!gp)
+                continue;
+            var maxButtons = gp.buttons.length;
+            if (maxButtons > 7)
+                maxButtons = 7;
+            for (var j = 0; j < maxButtons; j++) {
+                var btn = gp.buttons[j];
+                if (btn.pressed) {
+                    this.game.keyboard.press(j);
+                }
+                else {
+                    this.game.keyboard.release(j);
+                }
+            }
+            if (gp.axes[0] === 0)
+                continue;
+            if (gp.axes[1] === 0)
+                continue;
+            var axis0 = ~~(gp.axes[0]);
+            var axis1 = ~~(gp.axes[1]);
+            if (axis0 === 1) {
+                this.game.keyboard.press(keyboard_1.KEY.GAME_PAD_AXIS_RIGHT);
+            }
+            else {
+                this.game.keyboard.release(keyboard_1.KEY.GAME_PAD_AXIS_RIGHT);
+            }
+            if (axis0 === -1) {
+                this.game.keyboard.press(keyboard_1.KEY.GAME_PAD_AXIS_LEFT);
+            }
+            else {
+                this.game.keyboard.release(keyboard_1.KEY.GAME_PAD_AXIS_LEFT);
+            }
+            if (axis1 === 1) {
+                this.game.keyboard.press(keyboard_1.KEY.GAME_PAD_AXIS_DOWN);
+            }
+            else {
+                this.game.keyboard.release(keyboard_1.KEY.GAME_PAD_AXIS_DOWN);
+            }
+            if (axis1 === -1) {
+                this.game.keyboard.press(keyboard_1.KEY.GAME_PAD_AXIS_UP);
+            }
+            else {
+                this.game.keyboard.release(keyboard_1.KEY.GAME_PAD_AXIS_UP);
+            }
+        }
+    };
+    return GamePad;
+}());
+exports.GamePad = GamePad;
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var pointLight_1 = __webpack_require__(57);
+var LightArray = (function () {
+    function LightArray(game) {
+        if (true && !game)
+            throw new debugError_1.DebugError("game instance is not passed to LightArray constructor");
+        this.lights = new Array(LightArray.NUM_OF_LIGHT_IN_VIEW);
+        for (var i = 0; i < this.lights.length; i++) {
+            this.lights[i] = new pointLight_1.PointLight(game);
+        }
+    }
+    LightArray.prototype.getLightAt = function (i) {
+        return this.lights[i];
+    };
+    LightArray.prototype.setUniforms = function (uniform) {
+        for (var i = 0; i < this.lights.length; i++) {
+            var p = this.lights[i];
+            p.setUniforms(uniform, i);
+        }
+    };
+    LightArray.NUM_OF_LIGHT_IN_VIEW = 4;
+    return LightArray;
+}());
+exports.LightArray = LightArray;
+
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var point2d_1 = __webpack_require__(4);
+var abstractLight_1 = __webpack_require__(28);
+var PointLight = (function (_super) {
+    tslib_1.__extends(PointLight, _super);
+    function PointLight(game) {
+        var _this = _super.call(this, game) || this;
+        _this.pos = new point2d_1.Point2d();
+        _this.nearRadius = 0;
+        _this.farRadius = 0;
+        _this.isOn = false;
+        _this._screenPoint = new point2d_1.Point2d();
+        return _this;
+    }
+    PointLight.prototype.getPosScaled = function () {
+        var camera = this.game.camera;
+        var rect = camera.getRectScaled();
+        var scale = camera.scale;
+        this._screenPoint.setXY((this.pos.x - rect.x) * scale.x, (this.pos.y - rect.y) * scale.y);
+        return this._screenPoint;
+    };
+    PointLight.prototype.setUniforms = function (uniform, i) {
+        uniform["u_pointLights[" + i + "].pos"] = this.getPosScaled().toArray();
+        uniform["u_pointLights[" + i + "].nearRadius"] = this.nearRadius;
+        uniform["u_pointLights[" + i + "].farRadius"] = this.farRadius;
+        uniform["u_pointLights[" + i + "].isOn"] = this.isOn;
+        uniform["u_pointLights[" + i + "].color"] = this.color.asGL();
+    };
+    return PointLight;
+}(abstractLight_1.AbstractLight));
+exports.PointLight = PointLight;
+
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var allUIClasses = __webpack_require__(31);
+var debugError_1 = __webpack_require__(1);
+var object_1 = __webpack_require__(19);
+var UIBuilder = (function () {
+    function UIBuilder(game) {
+        var _this = this;
+        this._components = {};
+        this.game = game;
+        Object.keys(allUIClasses).forEach(function (key) {
+            _this.registerComponent(key, allUIClasses[key]);
+        });
+    }
+    UIBuilder.prototype.registerComponent = function (key, component) {
+        this._components[key] = component;
+    };
+    UIBuilder._normalizeSetterName = function (name) {
+        return "set" + name[0].toUpperCase() + name.substr(1);
+    };
+    UIBuilder._getFirstKey = function (desc) {
+        if (!object_1.isObject(desc))
+            return undefined;
+        return Object.keys(desc)[0];
+    };
+    UIBuilder._getAllKeys = function (desc) {
+        return Object.keys(desc);
+    };
+    UIBuilder._getKeysLength = function (desc) {
+        return UIBuilder._getAllKeys(desc).length;
+    };
+    UIBuilder.prototype._resolveProperties = function (instance, desc, appendChildren) {
+        var _this = this;
+        UIBuilder._getAllKeys(desc).forEach(function (propName) {
+            if (propName === 'children') {
+                if (!desc.children.splice)
+                    throw new debugError_1.DebugError("'children' property must be an array");
+                desc.children.forEach(function (descChild) {
+                    var key = UIBuilder._getFirstKey(descChild);
+                    var Cl = _this._components[key];
+                    var child = new Cl(_this.game);
+                    _this._resolveProperties(child, descChild[key], true);
+                    instance.appendChild(child);
+                });
+                return;
+            }
+            else if (_this._components[propName]) {
+                var Cl = _this._components[propName];
+                var child = void 0;
+                if (appendChildren)
+                    child = new Cl(_this.game);
+                else
+                    child = instance;
+                _this._resolveProperties(child, desc[propName], appendChildren);
+                if (appendChildren)
+                    instance.appendChild(child);
+            }
+            else {
+                var setterName = UIBuilder._normalizeSetterName(propName);
+                var hasProperty = propName in instance;
+                var hasSetter = setterName in instance;
+                if (true && !hasProperty && !hasSetter) {
+                    var constructorName = (instance.constructor && instance.constructor.name) || instance.type || '';
+                    throw new debugError_1.DebugError("uiBuilder error: object " + constructorName + " has not property " + propName + " not associated setter " + setterName);
+                }
+                if (_this._components[UIBuilder._getFirstKey(desc[propName])]) {
+                    var PropClass = _this._components[UIBuilder._getFirstKey(desc[propName])];
+                    var propInstance = new PropClass(_this.game);
+                    _this._resolveProperties(propInstance, desc[propName], false);
+                    desc[propName] = propInstance;
+                }
+                if (hasSetter) {
+                    var args = desc[propName];
+                    if (!args.splice)
+                        args = [desc[propName]];
+                    instance[setterName].apply(instance, args);
+                }
+                else {
+                    if (desc[propName].type) {
+                        var Cl = _this._components[desc[propName].type];
+                        if (!Cl)
+                            throw new debugError_1.DebugError("unknown type: " + desc[propName].type);
+                        instance[propName] = new Cl(_this.game);
+                    }
+                    if (instance[propName] && instance[propName].fromJSON) {
+                        instance[propName].fromJSON(desc[propName]);
+                    }
+                    else if (instance[propName] && instance[propName].apply) {
+                        var args = desc[propName];
+                        if (!args.splice)
+                            args = [args];
+                        instance[propName].apply(instance, args);
+                    }
+                    else {
+                        instance[propName] = desc[propName];
+                    }
+                }
+            }
+        });
+        instance.revalidate();
+    };
+    UIBuilder.prototype.build = function (desc) {
+        if (true && UIBuilder._getKeysLength(desc) > 1)
+            throw new debugError_1.DebugError("only one root element is supported. Found: " + UIBuilder._getAllKeys(desc));
+        var firstKey = UIBuilder._getFirstKey(desc);
+        var Cl = this._components[firstKey];
+        if (true && !Cl)
+            throw new debugError_1.DebugError("no such ui class: " + firstKey);
+        var instance = new Cl(this.game);
+        this._resolveProperties(instance, desc[firstKey], true);
+        instance.testLayout();
+        window.l = instance;
+        return instance;
+    };
+    return UIBuilder;
+}());
+exports.UIBuilder = UIBuilder;
+
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var mouse_1 = __webpack_require__(21);
+var container_1 = __webpack_require__(6);
+var vScroll_1 = __webpack_require__(32);
+var mathEx_1 = __webpack_require__(10);
+var ScrollInfo = (function () {
+    function ScrollInfo(game) {
+        this.game = game;
+        this._scrollVelocity = 0;
+        this._deceleration = 0;
+        this._enabled = false;
+        this.offset = 0;
+        this.scrollHeight = 0;
+    }
+    ScrollInfo.prototype._initScrollBar = function () {
+        this.vScroll = new vScroll_1.VScroll(this.game);
+        this.vScroll.width = 5;
+        this._container.appendChild(this.vScroll);
+    };
+    ScrollInfo.prototype.setEnabled = function (val) {
+        this._enabled = val;
+        this.vScroll.enabled = val;
+    };
+    ScrollInfo.prototype.onScroll = function () {
+        this.vScroll.maxValue = this.scrollHeight;
+        this.vScroll.value = this.offset;
+        this.vScroll.onGeometryChanged();
+    };
+    ScrollInfo.prototype.listenScroll = function (container) {
+        var _this = this;
+        this._container = container;
+        container.on(mouse_1.MOUSE_EVENTS.mouseDown, function (p) {
+            _this._lastPoint = {
+                point: p,
+                time: Date.now()
+            };
+            _this._prevPoint = {
+                point: _this._lastPoint.point,
+                time: _this._lastPoint.time
+            };
+            _this._scrollVelocity = 0;
+            _this._deceleration = 0;
+        });
+        container.on(mouse_1.MOUSE_EVENTS.mouseMove, function (p) {
+            if (!p.isMouseDown)
+                return;
+            var lastPoint = _this._lastPoint;
+            _this._lastPoint = {
+                point: p,
+                time: Date.now()
+            };
+            if (!lastPoint)
+                lastPoint = _this._lastPoint;
+            _this._prevPoint = {
+                point: lastPoint.point,
+                time: lastPoint.time,
+            };
+            _this.offset -=
+                _this._lastPoint.point.screenY - _this._prevPoint.point.screenY;
+            if (_this.offset > _this.scrollHeight - _this._container.height)
+                _this.offset = _this.scrollHeight - _this._container.height;
+            if (_this.offset < 0)
+                _this.offset = 0;
+            _this.onScroll();
+        });
+        container.on(mouse_1.MOUSE_EVENTS.scroll, function (p) {
+            _this._scrollVelocity = -p.nativeEvent.wheelDelta;
+            _this._deceleration = 0;
+        });
+        container.on(mouse_1.MOUSE_EVENTS.mouseUp, function (p) {
+            if (!_this._lastPoint)
+                return;
+            if (!_this._prevPoint)
+                return;
+            if (_this._lastPoint.time === _this._prevPoint.time) {
+                _this._scrollVelocity = 0;
+            }
+            else if (Date.now() - _this._lastPoint.time > 100) {
+                _this._scrollVelocity = 0;
+            }
+            else {
+                _this._scrollVelocity = 1000 *
+                    (_this._prevPoint.point.screenY - _this._lastPoint.point.screenY) /
+                    (_this._lastPoint.time - _this._prevPoint.time);
+            }
+            _this._deceleration = 0;
+        });
+        this._initScrollBar();
+    };
+    ScrollInfo.prototype._scrollBy = function (val) {
+        this.offset += val;
+        if (this.offset > this.scrollHeight - this._container.height) {
+            this.offset = this.scrollHeight - this._container.height;
+            this._scrollVelocity = 0;
+            this._deceleration = 0;
+        }
+        if (this.offset < 0) {
+            this.offset = 0;
+            this._scrollVelocity = 0;
+            this._deceleration = 0;
+        }
+        this.onScroll();
+    };
+    ScrollInfo.prototype.update = function (time, delta) {
+        if (!this._enabled)
+            return;
+        if (this._scrollVelocity)
+            this.onScroll();
+        if (this._scrollVelocity) {
+            this._scrollBy(this._scrollVelocity * delta / 1000);
+        }
+        this._deceleration = this._deceleration + 0.5 / delta;
+        if (delta > 1000) {
+            this._scrollVelocity = 0;
+            this._deceleration = 0;
+        }
+        if (this._scrollVelocity > 0)
+            this._scrollVelocity -= this._deceleration;
+        else if (this._scrollVelocity < 0)
+            this._scrollVelocity += this._deceleration;
+        if (mathEx_1.MathEx.closeTo(this._scrollVelocity, 0, 3)) {
+            this._scrollVelocity = 0;
+            this._deceleration = 0;
+        }
+    };
+    return ScrollInfo;
+}());
+exports.ScrollInfo = ScrollInfo;
+var ScrollableContainer = (function (_super) {
+    tslib_1.__extends(ScrollableContainer, _super);
+    function ScrollableContainer(game) {
+        return _super.call(this, game) || this;
+    }
+    ScrollableContainer.prototype._initScrolling = function (desc) {
+        if (desc.vertical) {
+            this.vScrollInfo = new ScrollInfo(this.game);
+            this.vScrollInfo.listenScroll(this);
+        }
+    };
+    ScrollableContainer.prototype.updateScrollSize = function (desireableHeight, allowedHeight) {
+        if (allowedHeight !== 0 && desireableHeight > allowedHeight) {
+            this.vScrollInfo.scrollHeight = desireableHeight;
+            this.vScrollInfo.setEnabled(true);
+        }
+        else {
+            this.vScrollInfo.setEnabled(false);
+        }
+        this.vScrollInfo.vScroll.height = allowedHeight;
+        this.vScrollInfo.vScroll.pos.x = this.width - this.vScrollInfo.vScroll.width - 2;
+        this.vScrollInfo.onScroll();
+    };
+    ScrollableContainer.prototype.update = function (time, delta) {
+        if (this.vScrollInfo)
+            this.vScrollInfo.update(time, delta);
+        _super.prototype.update.call(this, time, delta);
+    };
+    return ScrollableContainer;
+}(container_1.Container));
+exports.ScrollableContainer = ScrollableContainer;
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var container_1 = __webpack_require__(6);
+var rectangle_1 = __webpack_require__(12);
+var color_1 = __webpack_require__(3);
+var CheckBox = (function (_super) {
+    tslib_1.__extends(CheckBox, _super);
+    function CheckBox(game) {
+        var _this = _super.call(this, game) || this;
+        _this.checked = false;
+        var rNormal = new rectangle_1.Rectangle(game);
+        rNormal.width = 10;
+        rNormal.height = 10;
+        rNormal.fillColor = new color_1.Color(10, 10, 10, 100);
+        var rChecked = new rectangle_1.Rectangle(game);
+        rChecked.width = 10;
+        rChecked.height = 10;
+        rChecked.fillColor = new color_1.Color(10, 50, 10, 100);
+        _this.rNormal = rNormal;
+        _this.rChecked = rChecked;
+        _this.on('click', function () { return _this.toggle(); });
+        return _this;
+    }
+    CheckBox.prototype.toggle = function () {
+        this.checked = !this.checked;
+    };
+    CheckBox.prototype.onGeometryChanged = function () {
+        this.rNormal.setWH(this.width, this.height);
+        this.rChecked.setWH(this.width, this.height);
+    };
+    CheckBox.prototype.getBgByState = function () {
+        if (this.checked)
+            return this.rChecked;
+        return this.rNormal;
+    };
+    CheckBox.prototype.draw = function () {
+        var bg = this.getBgByState();
+        if (bg)
+            bg.draw();
+        return true;
+    };
+    return CheckBox;
+}(container_1.Container));
+exports.CheckBox = CheckBox;
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var ellipse_1 = __webpack_require__(33);
+var Circle = (function (_super) {
+    tslib_1.__extends(Circle, _super);
+    function Circle() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this._radius = 10;
+        return _this;
+    }
+    Object.defineProperty(Circle.prototype, "radius", {
+        get: function () {
+            return this._radius;
+        },
+        set: function (val) {
+            this._radius = val;
+            this.width = this.height = val * 2;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Circle.prototype.draw = function () {
+        this.radiusX = this.radiusY = this.radius;
+        this.game.getRenderer().drawEllipse(this);
+        return true;
+    };
+    return Circle;
+}(ellipse_1.Ellipse));
+exports.Circle = Circle;
+
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var rectangle_1 = __webpack_require__(12);
+var color_1 = __webpack_require__(3);
+var Border = (function (_super) {
+    tslib_1.__extends(Border, _super);
+    function Border(game) {
+        var _this = _super.call(this, game) || this;
+        _this.fillColor = color_1.Color.NONE;
+        return _this;
+    }
+    return Border;
+}(rectangle_1.Rectangle));
+exports.Border = Border;
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var image_1 = __webpack_require__(16);
+var debugError_1 = __webpack_require__(1);
+var NinePatchImage = (function (_super) {
+    tslib_1.__extends(NinePatchImage, _super);
+    function NinePatchImage(game) {
+        var _this = _super.call(this, game) || this;
+        _this.a = 0;
+        _this.b = 0;
+        _this.c = 0;
+        _this.d = 0;
+        _this._patches = [];
+        for (var i = 0; i < 9; i++) {
+            _this._patches[i] = new image_1.Image(_this.game);
+        }
+        _this.getRect().observe(function () { _this.revalidate(); });
+        return _this;
+    }
+    NinePatchImage.prototype._revalidatePatches = function () {
+        var ti = this.game.getRenderer().renderableCache[this.getResourceLink().getId()];
+        if (true)
+            throw new debugError_1.DebugError("can not find texture info by id " + this.getResourceLink().getId());
+        var texSize = ti.texture.getSize();
+        var destRect = this.getRect();
+        var patch;
+        var a = this.a, b = this.b, c = this.c, d = this.d;
+        patch = this._patches[0];
+        var patchCnt = 1;
+        patch.srcRect.setXYWH(0, 0, a, c);
+        patch.setXYWH(destRect.getPoint().x, destRect.getPoint().y, a, c);
+        patch = this._patches[patchCnt++];
+        patch.srcRect.setXYWH(a, 0, texSize.width - a - b, c);
+        patch.setXYWH(destRect.x + a, destRect.y, destRect.width - a - c, c);
+        patch = this._patches[patchCnt++];
+        patch.srcRect.setXYWH(texSize.width - b, 0, b, c);
+        patch.setXYWH(destRect.getPoint().x + destRect.width - b, destRect.getPoint().y, b, c);
+        patch = this._patches[patchCnt++];
+        patch.srcRect.setXYWH(0, c, a, texSize.height - c - d);
+        patch.setXYWH(destRect.x, destRect.y + c, a, destRect.height - c - d);
+        patch = this._patches[patchCnt++];
+        patch.srcRect.setXYWH(a, c, texSize.width - a - b, texSize.height - c - d);
+        patch.setXYWH(destRect.x + a, destRect.y + c, destRect.width - a - b, destRect.height - c - d);
+        patch = this._patches[patchCnt++];
+        patch.srcRect.setXYWH(texSize.width - b, c, b, texSize.height - c - d);
+        patch.setXYWH(destRect.x + destRect.width - b, destRect.y + c, b, destRect.height - c - d);
+        patch = this._patches[patchCnt++];
+        patch.srcRect.setXYWH(0, texSize.height - d, a, d);
+        patch.setXYWH(destRect.getPoint().x, destRect.getPoint().y + destRect.height - d, a, d);
+        patch = this._patches[patchCnt++];
+        patch.srcRect.setXYWH(a, texSize.height - d, texSize.width - a - b, d);
+        patch.setXYWH(destRect.x + a, destRect.y + destRect.height - d, destRect.width - a - b, d);
+        patch = this._patches[patchCnt++];
+        patch.srcRect.setXYWH(texSize.width - b, texSize.height - d, b, d);
+        patch.setXYWH(destRect.getPoint().x + destRect.width - b, destRect.getPoint().y + destRect.height - d, b, d);
+        for (var i = 0; i < 9; i++) {
+            this._patches[i].setResourceLink(this.getResourceLink());
+        }
+    };
+    NinePatchImage.prototype.revalidate = function () {
+        if (true && !this.getResourceLink()) {
+            throw new debugError_1.DebugError("can not render Image: resource link is not specified");
+        }
+        var width = this.width;
+        var height = this.height;
+        if (width < this.a + this.b)
+            width = this.a + this.b;
+        if (height < this.c + this.d)
+            height = this.c + this.d;
+        this.setWH(width, height);
+        this._revalidatePatches();
+    };
+    NinePatchImage.prototype.setABCD = function (a, b, c, d) {
+        if (b === undefined)
+            b = a;
+        if (c === undefined)
+            c = b;
+        if (d === undefined)
+            d = c;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.revalidate();
+    };
+    NinePatchImage.prototype.draw = function () {
+        for (var i = 0; i < 9; i++) {
+            this._patches[i].render();
+        }
+        return true;
+    };
+    return NinePatchImage;
+}(image_1.Image));
+exports.NinePatchImage = NinePatchImage;
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var rect_1 = __webpack_require__(2);
+var container_1 = __webpack_require__(6);
+var AbsoluteLayout = (function (_super) {
+    tslib_1.__extends(AbsoluteLayout, _super);
+    function AbsoluteLayout(game) {
+        return _super.call(this, game) || this;
+    }
+    AbsoluteLayout.prototype.appendChild = function (c) {
+        if (c instanceof container_1.Container)
+            c.testLayout();
+        _super.prototype.appendChild.call(this, c);
+    };
+    AbsoluteLayout.prototype.onGeometryChanged = function () {
+        _super.prototype.onGeometryChanged.call(this);
+        var maxX = 0, maxY = 0;
+        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
+            var v = _a[_i];
+            if (v instanceof container_1.Container)
+                v.onGeometryChanged();
+            v.setDirty();
+            var r = v.getRect();
+            if (r.right > maxX)
+                maxX = r.right;
+            if (r.bottom > maxY)
+                maxY = r.bottom;
+        }
+        if (this.layoutWidth === container_1.LAYOUT_SIZE.WRAP_CONTENT) {
+            this.width = maxX;
+        }
+        if (this.layoutHeight === container_1.LAYOUT_SIZE.WRAP_CONTENT) {
+            this.height = maxY;
+        }
+        this.calcDrawableRect(this.width, this.height);
+    };
+    AbsoluteLayout.prototype.draw = function () {
+        var renderer = this.game.getRenderer();
+        if (this.overflow === container_1.OVERFLOW.HIDDEN) {
+            var r = rect_1.Rect.fromPool().set(this.getScreenRect());
+            r.addXY(-1, -1);
+            r.setWH(r.width + 1, r.height + 1);
+            renderer.lockRect(r);
+        }
+        if (this.background)
+            this.background.draw();
+        renderer.translate(this.paddingLeft, this.paddingTop);
+        if (this.overflow === container_1.OVERFLOW.HIDDEN)
+            this.game.getRenderer().unlockRect();
+        return true;
+    };
+    return AbsoluteLayout;
+}(container_1.Container));
+exports.AbsoluteLayout = AbsoluteLayout;
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var color_1 = __webpack_require__(3);
+var debugError_1 = __webpack_require__(1);
+var LinearGradient = (function () {
+    function LinearGradient() {
+        this.type = 'LinearGradient';
+        this.colorFrom = new color_1.Color(0, 0, 0);
+        this.colorTo = new color_1.Color(200, 200, 200);
+        this.angle = 0.1;
+        this._arr = new Array(12);
+    }
+    LinearGradient.prototype.fromJSON = function (json) {
+        if (true) {
+            if (!json.colorFrom)
+                throw new debugError_1.DebugError("can not parse LinearGradient from JSON: colorFrom not defined");
+            if (!json.colorTo)
+                throw new debugError_1.DebugError("can not parse LinearGradient from JSON: colorTo not defined");
+        }
+        this.colorFrom.fromJSON(json.colorFrom);
+        this.colorTo.fromJSON(json.colorTo);
+    };
+    LinearGradient.prototype.asGL = function () {
+        var cFrom = this.colorFrom.asGL();
+        var cTo = this.colorTo.asGL();
+        this._arr[0] = cFrom[0];
+        this._arr[1] = cFrom[1];
+        this._arr[2] = cFrom[2];
+        this._arr[3] = cFrom[3];
+        this._arr[4] = cTo[0];
+        this._arr[5] = cTo[1];
+        this._arr[6] = cTo[2];
+        this._arr[7] = cTo[3];
+        this._arr[8] = this.angle;
+        this._arr[9] = 0;
+        this._arr[10] = 0;
+        this._arr[11] = 0;
+        return this._arr;
+    };
+    return LinearGradient;
+}());
+exports.LinearGradient = LinearGradient;
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var rigidShapes_1 = __webpack_require__(27);
+var rect_1 = __webpack_require__(2);
+var mathEx_1 = __webpack_require__(10);
+var ColliderEngine = (function () {
+    function ColliderEngine(game) {
+        this.relaxationCount = 15;
+        this.posCorrectionRate = 0.8;
+        this.game = game;
+    }
+    ColliderEngine.prototype.positionalCorrection = function (s1, s2, collisionInfo) {
+        var s1InvMass = s1.mInvMass;
+        var s2InvMass = s2.mInvMass;
+        var num = collisionInfo.getDepth() / (s1InvMass + s2InvMass) * this.posCorrectionRate;
+        var correctionAmount = collisionInfo.getNormal().scale(num);
+        s1.move(correctionAmount.scale(-s1InvMass));
+        s2.move(correctionAmount.scale(s2InvMass));
+    };
+    ColliderEngine.prototype.resolveCollision = function (s1, s2, collisionInfo) {
+        if ((s1.mInvMass === 0) && (s2.mInvMass === 0)) {
+            return;
+        }
+        this.positionalCorrection(s1, s2, collisionInfo);
+        var n = collisionInfo.getNormal();
+        var start = collisionInfo.mStart.scale(s2.mInvMass / (s1.mInvMass + s2.mInvMass));
+        var end = collisionInfo.mEnd.scale(s1.mInvMass / (s1.mInvMass + s2.mInvMass));
+        var p = start.add(end);
+        var r1 = p.subtract(s1.mCenter);
+        var r2 = p.subtract(s2.mCenter);
+        var v1 = s1.mVelocity.add(new rigidShapes_1.Vec2(-1 * s1.mAngularVelocity * r1.y, s1.mAngularVelocity * r1.x));
+        var v2 = s2.mVelocity.add(new rigidShapes_1.Vec2(-1 * s2.mAngularVelocity * r2.y, s2.mAngularVelocity * r2.x));
+        var relativeVelocity = v2.subtract(v1);
+        var rVelocityInNormal = relativeVelocity.dot(n);
+        if (rVelocityInNormal > 0) {
+            return;
+        }
+        var newRestituion = Math.min(s1.mRestitution, s2.mRestitution);
+        var newFriction = Math.min(s1.mFriction, s2.mFriction);
+        var R1crossN = r1.cross(n);
+        var R2crossN = r2.cross(n);
+        var jN = -(1 + newRestituion) * rVelocityInNormal;
+        jN = jN / (s1.mInvMass + s2.mInvMass +
+            R1crossN * R1crossN * s1.mInertia +
+            R2crossN * R2crossN * s2.mInertia);
+        var impulse = n.scale(jN);
+        s1.mVelocity = s1.mVelocity.subtract(impulse.scale(s1.mInvMass));
+        s2.mVelocity = s2.mVelocity.add(impulse.scale(s2.mInvMass));
+        if (!s1.fixedAngle)
+            s1.mAngularVelocity -= R1crossN * jN * s1.mInertia;
+        if (!s2.fixedAngle)
+            s2.mAngularVelocity += R2crossN * jN * s2.mInertia;
+        var tangent = relativeVelocity.subtract(n.scale(relativeVelocity.dot(n)));
+        tangent = tangent.normalize().scale(-1);
+        var R1crossT = r1.cross(tangent);
+        var R2crossT = r2.cross(tangent);
+        var jT = -(1 + newRestituion) * relativeVelocity.dot(tangent) * newFriction;
+        jT = jT / (s1.mInvMass + s2.mInvMass + R1crossT * R1crossT * s1.mInertia + R2crossT * R2crossT * s2.mInertia);
+        if (jT > jN) {
+            jT = jN;
+        }
+        impulse = tangent.scale(jT);
+        s1.mVelocity = s1.mVelocity.subtract(impulse.scale(s1.mInvMass));
+        s2.mVelocity = s2.mVelocity.add(impulse.scale(s2.mInvMass));
+        if (!s1.fixedAngle)
+            s1.mAngularVelocity -= R1crossT * jT * s1.mInertia;
+        if (!s2.fixedAngle)
+            s2.mAngularVelocity += R2crossT * jT * s2.mInertia;
+    };
+    ColliderEngine.prototype.boundAndCollide = function (a, b, collisionInfo) {
+        if (a.boundTest(b)) {
+            if (a.collisionTest(b, collisionInfo)) {
+                if (collisionInfo.getNormal().dot(b.mCenter.subtract(a.mCenter)) < 0) {
+                    collisionInfo.changeDir();
+                }
+                this.resolveCollision(a, b, collisionInfo);
+            }
+        }
+    };
+    ColliderEngine.prototype.collision = function () {
+        var _this = this;
+        var rigidObjects = this.game.getCurrScene().getAllGameObjects().map(function (g) { return g.rigidBody; });
+        var i, j, k;
+        var collisionInfo = new rigidShapes_1.CollisionInfo();
+        for (k = 0; k < this.relaxationCount; k++) {
+            for (i = 0; i < rigidObjects.length; i++) {
+                if (!rigidObjects[i])
+                    continue;
+                var tiles = this.game.getCurrScene().tileMap.getTilesAtRect(new rect_1.Rect(rigidObjects[i].mCenter.x - rigidObjects[i].mWidth / 2, rigidObjects[i].mCenter.y - rigidObjects[i].mHeight / 2, rigidObjects[i].mWidth, rigidObjects[i].mHeight));
+                if (tiles.length) {
+                    tiles.forEach(function (t) {
+                        _this.boundAndCollide(rigidObjects[i], t.rect, collisionInfo);
+                    });
+                }
+                for (j = i + 1; j < rigidObjects.length; j++) {
+                    if (!rigidObjects[j])
+                        continue;
+                    this.boundAndCollide(rigidObjects[i], rigidObjects[j], collisionInfo);
+                }
+            }
+        }
+    };
+    ColliderEngine.prototype.isIntersect = function (arr1, arr2) {
+        if (arr1 === void 0) { arr1 = []; }
+        if (arr2 === void 0) { arr2 = []; }
+        return arr1.filter(function (value) { return arr2.indexOf(value) !== -1; }).length > 0;
+    };
+    ColliderEngine.prototype.boundAndCollideAcrade = function (a, b) {
+        if (a.velocity.equal(0) && b.velocity.equal(0))
+            return;
+        var numOfIterations = 0;
+        var isOverlapped = mathEx_1.MathEx.overlapTest(a.getRect(), b.getRect());
+        if (!isOverlapped)
+            return;
+        if (!a.rigid || !b.rigid) {
+            a.trigger('overlap', b);
+            b.trigger('overlap', a);
+            return;
+        }
+        while (isOverlapped) {
+            if (numOfIterations > 3)
+                break;
+            var dt = 0.01;
+            a.pos.x += -a.velocity.x * dt;
+            a.pos.y += -a.velocity.y * dt;
+            b.pos.x += -b.velocity.x * dt;
+            b.pos.y += -b.velocity.y * dt;
+            isOverlapped = mathEx_1.MathEx.overlapTest(a.getRect(), b.getRect());
+            numOfIterations++;
+        }
+        a.trigger('collide', b);
+        b.trigger('collide', a);
+    };
+    ColliderEngine.prototype.collisionArcade = function () {
+        var rigidObjects = this.game.getCurrScene().getAllGameObjects();
+        for (var i = 0; i < rigidObjects.length; i++) {
+            for (var j = i + 1; j < rigidObjects.length; j++) {
+                var a = rigidObjects[i], b = rigidObjects[j];
+                if (this.isIntersect(a.collideWith, b.groupNames) ||
+                    this.isIntersect(b.collideWith, a.groupNames)) {
+                    this.boundAndCollideAcrade(a, b);
+                }
+            }
+        }
+    };
+    return ColliderEngine;
+}());
+exports.ColliderEngine = ColliderEngine;
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var loaderUtil_1 = __webpack_require__(68);
+var audioPlayer_1 = __webpack_require__(34);
+var CtxHolder = (function () {
+    function CtxHolder() {
+    }
+    CtxHolder.fixAutoPlayPolicy = function () {
+        var click = function () {
+            CtxHolder.res.resume();
+            document.removeEventListener('click', click);
+        };
+        document.addEventListener('click', click);
+    };
+    CtxHolder.getCtx = function () {
+        if (CtxHolder.ctx && !CtxHolder.res) {
+            CtxHolder.res = new CtxHolder.ctx();
+            CtxHolder.fixAutoPlayPolicy();
+        }
+        return CtxHolder.res;
+    };
+    CtxHolder.ctx = window.AudioContext;
+    CtxHolder.res = null;
+    return CtxHolder;
+}());
+var decode = function (buffer, callback) {
+    CtxHolder.getCtx().decodeAudioData(buffer, function (decoded) {
+        callback(decoded);
+    }, function (err) {
+        if (true)
+            throw new debugError_1.DebugError(err.message);
+    });
+};
+var base64ToArrayBuffer = function (base64) {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+};
+var WebAudioContext = (function () {
+    function WebAudioContext(game) {
+        this.game = game;
+        this.type = 'webAudioContext';
+        this._ctx = null;
+        this._currSource = null;
+        this._gainNode = null;
+        this._free = true;
+        this._ctx = CtxHolder.getCtx();
+        this._gainNode = this._ctx.createGain();
+        this._gainNode.connect(this._ctx.destination);
+    }
+    WebAudioContext.isAcceptable = function () {
+        return !!(window && CtxHolder.getCtx());
+    };
+    WebAudioContext.prototype.load = function (url, progress, onLoad) {
+        if (audioPlayer_1.AudioPlayer.cache[url]) {
+            onLoad();
+            return;
+        }
+        loaderUtil_1.LoaderUtil.loadBinary(url, progress, function (buffer) {
+            decode(buffer, function (decoded) {
+                audioPlayer_1.AudioPlayer.cache[url] = decoded;
+                onLoad();
+            });
+        });
+    };
+    WebAudioContext.prototype.isFree = function () {
+        return this._free;
+    };
+    WebAudioContext.prototype.play = function (resourcePath, loop) {
+        var _this = this;
+        this._free = false;
+        var currSource = this._ctx.createBufferSource();
+        currSource.buffer = audioPlayer_1.AudioPlayer.cache[resourcePath];
+        currSource.loop = loop;
+        currSource.connect(this._gainNode);
+        currSource.start(0);
+        currSource.onended = function () {
+            _this.stop();
+        };
+        this._currSource = currSource;
+    };
+    WebAudioContext.prototype.stop = function () {
+        var currSource = this._currSource;
+        if (currSource) {
+            currSource.stop();
+            currSource.disconnect(this._gainNode);
+        }
+        this._currSource = null;
+        this._free = true;
+    };
+    WebAudioContext.prototype.setGain = function (val) {
+        this._gainNode.gain.value = val;
+    };
+    WebAudioContext.prototype.pause = function () {
+        this._ctx.suspend();
+    };
+    WebAudioContext.prototype.resume = function () {
+        this._ctx.resume();
+    };
+    return WebAudioContext;
+}());
+exports.WebAudioContext = WebAudioContext;
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LoaderUtil = (function () {
+    function LoaderUtil() {
+    }
+    LoaderUtil.loadBinary = function (url, progress, callBack) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.responseType = 'arraybuffer';
+        request.setRequestHeader('Accept-Ranges', 'bytes');
+        request.setRequestHeader('Content-Range', 'bytes');
+        request.onload = function () {
+            callBack(request.response);
+        };
+        request.onprogress = function (e) {
+            if (progress)
+                progress(url, e.loaded / e.total);
+        };
+        if (true) {
+            request.onerror = function (e) {
+                console.error(e);
+                throw 'can not load resource with url ' + url;
+            };
+        }
+        request.send();
+    };
+    ;
+    return LoaderUtil;
+}());
+exports.LoaderUtil = LoaderUtil;
+
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var CtxHolder = (function () {
+    function CtxHolder() {
+    }
+    CtxHolder.getCtx = function () {
+        var Ctx = window && window.Audio;
+        return new Ctx();
+    };
+    ;
+    return CtxHolder;
+}());
+var HtmlAudioContext = (function () {
+    function HtmlAudioContext(game) {
+        this.game = game;
+        this.type = 'htmlAudioContext';
+        this.free = true;
+        this._ctx = CtxHolder.getCtx();
+    }
+    HtmlAudioContext.isAcceptable = function () {
+        return !!(window && window.Audio);
+    };
+    HtmlAudioContext.prototype.load = function (url, progress, callBack) {
+        callBack();
+    };
+    HtmlAudioContext.prototype.isFree = function () {
+        return this.free;
+    };
+    HtmlAudioContext.prototype.play = function (resourcePath, loop) {
+        var _this = this;
+        var url;
+        url = resourcePath;
+        this.free = false;
+        this._ctx.src = url;
+        this._ctx.play();
+        this._ctx.loop = loop;
+        this._ctx.onended = function () {
+            _this.stop();
+        };
+    };
+    HtmlAudioContext.prototype.stop = function () {
+        this.free = true;
+    };
+    HtmlAudioContext.prototype.setGain = function (val) {
+        this._ctx.volume = val;
+    };
+    HtmlAudioContext.prototype.pause = function () {
+        this._ctx.pause();
+    };
+    HtmlAudioContext.prototype.resume = function () {
+        if (true)
+            throw "not implemented for now";
+    };
+    return HtmlAudioContext;
+}());
+exports.HtmlAudioContext = HtmlAudioContext;
+
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var FakeAudioContext = (function () {
+    function FakeAudioContext(game) {
+        this.game = game;
+        this.type = 'fakeAudioContext';
+        true && console.log('audio not supported');
+    }
+    FakeAudioContext.isAcceptable = function () { return true; };
+    FakeAudioContext.prototype.play = function (resourcePath, loop) { };
+    FakeAudioContext.prototype.stop = function () { };
+    FakeAudioContext.prototype.isFree = function () { return false; };
+    FakeAudioContext.prototype.setGain = function (val) { };
+    FakeAudioContext.prototype.pause = function () { };
+    FakeAudioContext.prototype.resume = function () { };
+    FakeAudioContext.prototype.load = function (url, progress, callBack) {
+        callBack();
+    };
+    return FakeAudioContext;
+}());
+exports.FakeAudioContext = FakeAudioContext;
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var audioNode_1 = __webpack_require__(72);
+var AudioNodeSet = (function () {
+    function AudioNodeSet(game, ContextClass, numOfNodes) {
+        this.ContextClass = ContextClass;
+        this.numOfNodes = numOfNodes;
+        this.nodes = [];
+        for (var i = 0; i < numOfNodes; i++) {
+            this.nodes.push(new audioNode_1.AudioNode(new ContextClass(game)));
+        }
+    }
+    AudioNodeSet.prototype.getFreeNode = function () {
+        for (var i = 0; i < this.numOfNodes; i++) {
+            if (this.nodes[i].isFree())
+                return this.nodes[i];
+        }
+        return null;
+    };
+    AudioNodeSet.prototype.stopAll = function () {
+        for (var i = 0; i < this.numOfNodes; i++) {
+            this.nodes[i].stop();
+        }
+    };
+    AudioNodeSet.prototype.pauseAll = function () {
+        for (var i = 0; i < this.numOfNodes; i++) {
+            this.nodes[i].pause();
+        }
+    };
+    AudioNodeSet.prototype.resumeAll = function () {
+        for (var i = 0; i < this.numOfNodes; i++) {
+            this.nodes[i].resume();
+        }
+    };
+    AudioNodeSet.prototype.getNodeBySound = function (sound) {
+        for (var i = 0; i < this.numOfNodes; i++) {
+            if (this.nodes[i].getCurrSound() == sound)
+                return this.nodes[i];
+        }
+        return null;
+    };
+    return AudioNodeSet;
+}());
+exports.AudioNodeSet = AudioNodeSet;
+
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var AudioNode = (function () {
+    function AudioNode(context) {
+        this.context = context;
+        this.currSound = null;
+    }
+    AudioNode.prototype.play = function (resourcePath, loop) {
+        if (loop === void 0) { loop = false; }
+        this.context.play(resourcePath, loop);
+    };
+    AudioNode.prototype.stop = function () {
+        this.context.stop();
+        this.currSound = null;
+    };
+    AudioNode.prototype.setGain = function (val) {
+        this.context.setGain(val);
+    };
+    AudioNode.prototype.pause = function () {
+        this.context.pause();
+    };
+    AudioNode.prototype.resume = function () {
+        this.context.resume();
+    };
+    AudioNode.prototype.isFree = function () {
+        return this.context.isFree();
+    };
+    AudioNode.prototype.getCurrSound = function () {
+        return this.currSound;
+    };
+    return AudioNode;
+}());
+exports.AudioNode = AudioNode;
+
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var debugError_1 = __webpack_require__(1);
+var abstractDrawer_1 = __webpack_require__(11);
+var lineDrawer_1 = __webpack_require__(74);
+var shapeDrawer_1 = __webpack_require__(79);
+var frameBuffer_1 = __webpack_require__(38);
+var matrixStack_1 = __webpack_require__(80);
+var mat4 = __webpack_require__(9);
+var texture_1 = __webpack_require__(39);
+var addBlendDrawer_1 = __webpack_require__(81);
+var rect_1 = __webpack_require__(2);
+var abstractCanvasRenderer_1 = __webpack_require__(85);
+var size_1 = __webpack_require__(13);
+var modelDrawer_1 = __webpack_require__(88);
+var shapeDrawer_frag_1 = __webpack_require__(37);
+var getCtx = function (el) {
+    return (el.getContext("webgl", { alpha: false }) ||
+        el.getContext('experimental-webgl', { alpha: false }) ||
+        el.getContext('webkit-3d', { alpha: false }) ||
+        el.getContext('moz-webgl', { alpha: false }));
+};
+var SCENE_DEPTH = 1000;
+var matrixStack = new matrixStack_1.MatrixStack();
+var makePositionMatrix = function (rect, viewSize) {
+    var zToWMatrix = mat4.makeZToWMatrix(1);
+    var projectionMatrix = mat4.ortho(0, viewSize.width, 0, viewSize.height, -SCENE_DEPTH, SCENE_DEPTH);
+    var scaleMatrix = mat4.makeScale(rect.width, rect.height, 1);
+    var translationMatrix = mat4.makeTranslation(rect.x, rect.y, 0);
+    var matrix = mat4.matrixMultiply(scaleMatrix, translationMatrix);
+    matrix = mat4.matrixMultiply(matrix, matrixStack.getCurrentMatrix());
+    matrix = mat4.matrixMultiply(matrix, projectionMatrix);
+    matrix = mat4.matrixMultiply(matrix, zToWMatrix);
+    return matrix;
+};
+var makeTextureMatrix = function (srcRect, texSize) {
+    var texScaleMatrix = mat4.makeScale(srcRect.width / texSize.width, srcRect.height / texSize.height, 1);
+    var texTranslationMatrix = mat4.makeTranslation(srcRect.x / texSize.width, srcRect.y / texSize.height, 0);
+    return mat4.matrixMultiply(texScaleMatrix, texTranslationMatrix);
+};
+var WebGlRenderer = (function (_super) {
+    tslib_1.__extends(WebGlRenderer, _super);
+    function WebGlRenderer(game) {
+        var _this = _super.call(this, game) || this;
+        _this.matrixStack = matrixStack;
+        _this.registerResize();
+        _this._init();
+        return _this;
+    }
+    WebGlRenderer.prototype._init = function () {
+        var gl = getCtx(this.container);
+        this.gl = gl;
+        this.nullTexture = new texture_1.Texture(gl);
+        this.shapeDrawer = new shapeDrawer_1.ShapeDrawer(gl);
+        this.lineDrawer = new lineDrawer_1.LineDrawer(gl);
+        this.modelDrawer = new modelDrawer_1.ModelDrawer(gl);
+        this.addBlendDrawer = new addBlendDrawer_1.AddBlendDrawer(gl);
+        this.frameBuffer = new frameBuffer_1.FrameBuffer(gl, this.game.width, this.game.height);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        gl.enable(gl.BLEND);
+        this._initFlipTexture();
+        this.currShapeUniformInfo = {};
+    };
+    WebGlRenderer.prototype._initFlipTexture = function () {
+        var fullScreen = this.fullScreenSize;
+        this.flipTextureInfo = [{ texture: null, name: 'texture' }];
+        var offsetX = 0, offsetY = 0;
+        var rw = fullScreen.width, rh = fullScreen.height;
+        var maxSize = Math.max(rw, rh);
+        var uniforms = this.flipUniformInfo = {};
+        var sd = this.shapeDrawer;
+        if (maxSize == rw) {
+            uniforms[sd.u_width] = 1;
+            uniforms[sd.u_height] = rh / rw;
+            offsetY = (maxSize - rh) / 2;
+            uniforms[sd.u_rectOffsetLeft] = 0;
+            uniforms[sd.u_rectOffsetTop] = offsetY / maxSize;
+        }
+        else {
+            uniforms[sd.u_height] = 1;
+            uniforms[sd.u_width] = rw / rh;
+            offsetX = (maxSize - rw) / 2;
+            uniforms[sd.u_rectOffsetLeft] = offsetX / maxSize;
+            uniforms[sd.u_rectOffsetTop] = 0;
+        }
+        this.save();
+        this.translate(0, this.game.height);
+        this.scale(1, -1);
+        uniforms[sd.u_vertexMatrix] = makePositionMatrix(rect_1.Rect.fromPool().setXYWH(-offsetX, -offsetY, maxSize, maxSize), size_1.Size.fromPool().setWH(this.game.width, this.game.height));
+        this.restore();
+        uniforms[sd.u_lineWidth] = 0;
+        uniforms[sd.u_borderRadius] = 0;
+        uniforms[sd.u_shapeType] = shapeDrawer_frag_1.SHAPE_TYPE.RECT;
+        uniforms[sd.u_fillType] = shapeDrawer_frag_1.FILL_TYPE.TEXTURE;
+        uniforms[sd.u_texRect] = [0, 0, 1, 1];
+        uniforms[sd.u_texOffset] = [0, 0];
+        uniforms[sd.u_alpha] = 1;
+    };
+    WebGlRenderer.prototype.prepareShapeUniformInfo = function (shape) {
+        var uniforms = this.currShapeUniformInfo;
+        var rw = shape.getRect().width;
+        var rh = shape.getRect().height;
+        var maxSize = Math.max(rw, rh);
+        var offsetX = 0, offsetY = 0;
+        var sd = this.shapeDrawer;
+        if (maxSize == rw) {
+            uniforms[sd.u_width] = 1;
+            uniforms[sd.u_height] = rh / rw;
+            offsetY = (maxSize - rh) / 2;
+            uniforms[sd.u_rectOffsetLeft] = 0;
+            uniforms[sd.u_rectOffsetTop] = offsetY / maxSize;
+        }
+        else {
+            uniforms[sd.u_height] = 1;
+            uniforms[sd.u_width] = rw / rh;
+            offsetX = (maxSize - rw) / 2;
+            uniforms[sd.u_rectOffsetLeft] = offsetX / maxSize;
+            uniforms[sd.u_rectOffsetTop] = 0;
+        }
+        uniforms[sd.u_vertexMatrix] = makePositionMatrix(rect_1.Rect.fromPool().setXYWH(-offsetX, -offsetY, maxSize, maxSize), size_1.Size.fromPool().setWH(this.game.width, this.game.height));
+        uniforms[sd.u_lineWidth] = Math.min(shape.lineWidth / maxSize, 1);
+        uniforms[sd.u_color] = shape.color.asGL();
+        uniforms[sd.u_alpha] = shape.alpha;
+        if (shape.fillColor.type == 'LinearGradient') {
+            uniforms[sd.u_fillLinearGradient] = shape.fillColor.asGL();
+            uniforms[sd.u_fillType] = shapeDrawer_frag_1.FILL_TYPE.LINEAR_GRADIENT;
+        }
+        else if (shape.fillColor.type == 'Color') {
+            uniforms[sd.u_fillColor] = shape.fillColor.asGL();
+            uniforms[sd.u_fillType] = shapeDrawer_frag_1.FILL_TYPE.COLOR;
+        }
+        return uniforms;
+    };
+    WebGlRenderer.prototype.drawImage = function (img) {
+        if (true) {
+            if (!img.getResourceLink())
+                throw new debugError_1.DebugError("image resource link is not set");
+            if (!this.renderableCache[img.getResourceLink().getId()])
+                throw new debugError_1.DebugError("can not find texture with resource link id " + img.getResourceLink().getId());
+        }
+        var texture = this.renderableCache[img.getResourceLink().getId()].texture;
+        texture = texture.applyFilters(img.filters, this.frameBuffer);
+        var texInfo = [{ texture: texture, name: 'texture' }];
+        var maxSize = Math.max(img.width, img.height);
+        var sd = this.shapeDrawer;
+        var uniforms = this.prepareShapeUniformInfo(img);
+        uniforms[sd.u_borderRadius] = Math.min(img.borderRadius / maxSize, 1);
+        uniforms[sd.u_shapeType] = shapeDrawer_frag_1.SHAPE_TYPE.RECT;
+        uniforms[sd.u_fillType] = shapeDrawer_frag_1.FILL_TYPE.TEXTURE;
+        uniforms[sd.u_texRect] =
+            [
+                img.srcRect.x / texture.getSize().width,
+                img.srcRect.y / texture.getSize().height,
+                img.srcRect.width / texture.getSize().width,
+                img.srcRect.height / texture.getSize().height
+            ];
+        uniforms[sd.u_texOffset] = [img.offset.x / maxSize, img.offset.y / maxSize];
+        this.shapeDrawer.draw(texInfo, uniforms, null);
+    };
+    WebGlRenderer.prototype.drawModel = function (g3d) {
+        this.modelDrawer.bindModel(g3d);
+        this.modelDrawer.bind();
+        matrixStack.scale(1, -1, 1);
+        var matrix1 = matrixStack.getCurrentMatrix();
+        var zToWMatrix = mat4.makeZToWMatrix(1);
+        var projectionMatrix = mat4.ortho(0, this.game.width, 0, this.game.height, -SCENE_DEPTH, SCENE_DEPTH);
+        var matrix2 = mat4.matrixMultiply(projectionMatrix, zToWMatrix);
+        var uniforms = {
+            u_modelMatrix: matrix1,
+            u_projectionMatrix: matrix2,
+            u_alpha: 1
+        };
+        var texInfo = [{ texture: g3d.texture, name: 'u_texture' }];
+        this.gl.enable(this.gl.DEPTH_TEST);
+        this.modelDrawer.draw(texInfo, uniforms);
+        this.modelDrawer.unbind();
+        this.gl.disable(this.gl.DEPTH_TEST);
+    };
+    ;
+    WebGlRenderer.prototype.drawRectangle = function (rectangle) {
+        var rw = rectangle.width;
+        var rh = rectangle.height;
+        var maxSize = Math.max(rw, rh);
+        var sd = this.shapeDrawer;
+        var uniforms = this.prepareShapeUniformInfo(rectangle);
+        uniforms[sd.u_borderRadius] = Math.min(rectangle.borderRadius / maxSize, 1);
+        uniforms[sd.u_shapeType] = shapeDrawer_frag_1.SHAPE_TYPE.RECT;
+        var texInfo = [{ texture: this.nullTexture, name: 'texture' }];
+        this.shapeDrawer.draw(texInfo, uniforms, null);
+    };
+    WebGlRenderer.prototype.drawLine = function (x1, y1, x2, y2, color) {
+        var dx = x2 - x1, dy = y2 - y1;
+        var uniforms = {};
+        uniforms.u_vertexMatrix = makePositionMatrix(rect_1.Rect.fromPool().setXYWH(x1, y1, dx, dy), size_1.Size.fromPool().setWH(this.game.width, this.game.height));
+        uniforms.u_rgba = color.asGL();
+        this.lineDrawer.draw(null, uniforms, null);
+    };
+    WebGlRenderer.prototype.drawEllipse = function (ellipse) {
+        var maxR = Math.max(ellipse.radiusX, ellipse.radiusY);
+        var maxR2 = maxR * 2;
+        var uniforms = this.prepareShapeUniformInfo(ellipse);
+        var sd = this.shapeDrawer;
+        uniforms[sd.u_vertexMatrix] = makePositionMatrix(rect_1.Rect.fromPool().setXYWH(ellipse.pos.x, ellipse.pos.y, maxR2, maxR2), size_1.Size.fromPool().setWH(this.game.width, this.game.height));
+        uniforms[sd.u_lineWidth] = Math.min(ellipse.lineWidth / maxR, 1);
+        if (maxR == ellipse.radiusX) {
+            uniforms[sd.u_rx] = 0.5;
+            uniforms[sd.u_ry] = ellipse.radiusY / ellipse.radiusX * 0.5;
+        }
+        else {
+            uniforms[sd.u_ry] = 0.5;
+            uniforms[sd.u_rx] = ellipse.radiusX / ellipse.radiusY * 0.5;
+        }
+        uniforms[sd.u_shapeType] = shapeDrawer_frag_1.SHAPE_TYPE.ELLIPSE;
+        uniforms[sd.u_width] = 1;
+        uniforms[sd.u_height] = 1;
+        uniforms[sd.u_rectOffsetLeft] = 1;
+        uniforms[sd.u_rectOffsetTop] = 1;
+        var texInfo = [{ texture: this.nullTexture, name: 'texture' }];
+        this.shapeDrawer.draw(texInfo, uniforms, null);
+    };
+    WebGlRenderer.prototype.setAlpha = function (a) {
+        if (true)
+            throw new debugError_1.DebugError('not implemented');
+    };
+    WebGlRenderer.prototype.save = function () {
+        this.matrixStack.save();
+    };
+    WebGlRenderer.prototype.scale = function (x, y) {
+        this.matrixStack.scale(x, y);
+    };
+    WebGlRenderer.prototype.resetTransform = function () {
+        this.matrixStack.resetTransform();
+    };
+    WebGlRenderer.prototype.rotateZ = function (angleInRadians) {
+        this.matrixStack.rotateZ(angleInRadians);
+    };
+    WebGlRenderer.prototype.rotateY = function (angleInRadians) {
+        this.matrixStack.rotateY(angleInRadians);
+    };
+    WebGlRenderer.prototype.translate = function (x, y) {
+        this.matrixStack.translate(x, y);
+    };
+    WebGlRenderer.prototype.restore = function () {
+        this.matrixStack.restore();
+    };
+    WebGlRenderer.prototype.lockRect = function (rect) {
+        this.gl.enable(this.gl.SCISSOR_TEST);
+        this.gl.scissor(rect.x, rect.y, rect.width, rect.height);
+    };
+    WebGlRenderer.prototype.unlockRect = function () {
+        this.gl.disable(this.gl.SCISSOR_TEST);
+    };
+    WebGlRenderer.prototype.clear = function () {
+        this.gl.clearColor(1, 1, 1, 1);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    };
+    WebGlRenderer.prototype.clearColor = function (color) {
+        var arr = color.asGL();
+        this.gl.clearColor(arr[0], arr[1], arr[2], arr[3]);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    };
+    WebGlRenderer.prototype.beginFrameBuffer = function () {
+        this.save();
+        this.frameBuffer.bind();
+    };
+    WebGlRenderer.prototype.flipFrameBuffer = function (filters) {
+        var texToDraw = this.frameBuffer.getTexture().applyFilters(filters, null);
+        this.frameBuffer.unbind();
+        this.gl.viewport(0, 0, this.fullScreenSize.width, this.fullScreenSize.height);
+        this.flipTextureInfo[0].texture = texToDraw;
+        this.shapeDrawer.draw(this.flipTextureInfo, this.flipUniformInfo, null);
+        this.restore();
+    };
+    ;
+    WebGlRenderer.prototype.getError = function () {
+        if (false)
+            {}
+        var err = this.gl.getError();
+        err = err === this.gl.NO_ERROR ? 0 : err;
+        if (err) {
+            console.log(abstractDrawer_1.AbstractDrawer.currentInstance);
+        }
+        return err;
+    };
+    WebGlRenderer.prototype.loadTextureInfo = function (url, link, onLoad) {
+        var _this = this;
+        if (this.renderableCache[link.getId()]) {
+            onLoad();
+            return;
+        }
+        var img = new window.Image();
+        img.src = url;
+        img.onload = function () {
+            var texture = new texture_1.Texture(_this.gl);
+            texture.setImage(img);
+            _this.gl.bindTexture(_this.gl.TEXTURE_2D, _this.frameBuffer.getTexture().getGlTexture());
+            var ti = { texture: texture, size: texture.size, name: undefined };
+            _this.renderableCache[link.getId()] = ti;
+            link.setTarget(ti);
+            onLoad();
+        };
+        if (true) {
+            img.onerror = function () {
+                throw new debugError_1.DebugError("Resource loading error: can not load resource with url \"" + url + "\"");
+            };
+        }
+    };
+    WebGlRenderer.prototype.destroy = function () {
+        var _this = this;
+        _super.prototype.destroy.call(this);
+        this.frameBuffer.destroy();
+        abstractDrawer_1.AbstractDrawer.destroyAll();
+        Object.keys(this.renderableCache).forEach(function (key) {
+            var t = _this.renderableCache[key].texture;
+            t.destroy();
+        });
+    };
+    return WebGlRenderer;
+}(abstractCanvasRenderer_1.AbstractCanvasRenderer));
+exports.WebGlRenderer = WebGlRenderer;
+
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var line_1 = __webpack_require__(75);
+var shaderProgram_1 = __webpack_require__(7);
+var bufferInfo_1 = __webpack_require__(15);
+var abstractDrawer_1 = __webpack_require__(11);
+var colorShaderGenerator_1 = __webpack_require__(78);
+var LineDrawer = (function (_super) {
+    tslib_1.__extends(LineDrawer, _super);
+    function LineDrawer(gl) {
+        var _this = _super.call(this, gl) || this;
+        var gen = new colorShaderGenerator_1.ColorShaderGenerator();
+        _this.program = new shaderProgram_1.ShaderProgram(gl, gen.getVertexSource(), gen.getFragmentSource());
+        _this.primitive = new line_1.Line();
+        _this.bufferInfo = new bufferInfo_1.BufferInfo(gl, {
+            posVertexInfo: { array: _this.primitive.vertexArr, type: gl.FLOAT, size: 2, attrName: 'a_position' },
+            drawMethod: _this.gl.LINE_STRIP
+        });
+        return _this;
+    }
+    return LineDrawer;
+}(abstractDrawer_1.AbstractDrawer));
+exports.LineDrawer = LineDrawer;
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var abstractPrimitive_1 = __webpack_require__(35);
+var Line = (function (_super) {
+    tslib_1.__extends(Line, _super);
+    function Line() {
+        var _this = _super.call(this) || this;
+        _this.vertexArr = [
+            0, 0,
+            1, 1
+        ];
+        _this.indexArr = [0, 1];
+        return _this;
+    }
+    return Line;
+}(abstractPrimitive_1.AbstractPrimitive));
+exports.Line = Line;
+
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var VertexBuffer = (function () {
+    function VertexBuffer(gl) {
+        this.bufferItemSize = 0;
+        this.bufferItemType = 0;
+        this.dataLength = 0;
+        if (true && !gl)
+            throw new debugError_1.DebugError("can not create VertexBuffer, gl context not passed to constructor, expected: VertexBuffer(gl)");
+        this.gl = gl;
+        this.buffer = gl.createBuffer();
+        if (true && !this.buffer)
+            throw new debugError_1.DebugError("can not allocate memory for vertex buffer");
+    }
+    VertexBuffer.prototype.setData = function (bufferData, itemType, itemSize) {
+        if (true) {
+            if (!bufferData)
+                throw new debugError_1.DebugError('can not set data to buffer: bufferData not specified');
+            if (!itemType)
+                throw new debugError_1.DebugError('can not set data to buffer: itemType not specified');
+            if (!itemSize)
+                throw new debugError_1.DebugError('can not set data to buffer: itemSize not specified');
+        }
+        var gl = this.gl;
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(bufferData), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, null);
+        this.bufferItemSize = itemSize;
+        this.bufferItemType = itemType;
+        this.dataLength = bufferData.length;
+    };
+    VertexBuffer.prototype.setAttrName = function (attrName) {
+        if (true && !attrName)
+            throw new debugError_1.DebugError("attrName not provided");
+        this.attrName = attrName;
+    };
+    VertexBuffer.prototype.bind = function (program) {
+        if (true && !program)
+            throw new debugError_1.DebugError("can not bind VertexBuffer, program not specified");
+        if (true && !this.attrName)
+            throw new debugError_1.DebugError("can not bind VertexBuffer, attribute name not specified");
+        program.bindBuffer(this, this.attrName);
+    };
+    VertexBuffer.prototype.unbind = function () {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+    };
+    VertexBuffer.prototype.destroy = function () {
+        this.gl.deleteBuffer(this.buffer);
+    };
+    VertexBuffer.prototype.getGlBuffer = function () {
+        return this.buffer;
+    };
+    VertexBuffer.prototype.getItemSize = function () {
+        return this.bufferItemSize;
+    };
+    VertexBuffer.prototype.getItemType = function () {
+        return this.bufferItemType;
+    };
+    VertexBuffer.prototype.getBufferLength = function () {
+        return this.dataLength;
+    };
+    return VertexBuffer;
+}());
+exports.VertexBuffer = VertexBuffer;
+
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(1);
+var IndexBuffer = (function () {
+    function IndexBuffer(gl) {
+        if (true && !gl)
+            throw new debugError_1.DebugError("can not create IndexBuffer, gl context not passed to constructor, expected: IndexBuffer(gl)");
+        this.gl = gl;
+        this.buffer = gl.createBuffer();
+        if (true && !this.buffer)
+            throw new debugError_1.DebugError("can not allocate memory for index buffer");
+        this.dataLength = null;
+    }
+    IndexBuffer.prototype.setData = function (bufferData) {
+        if (true) {
+            if (!bufferData)
+                throw new debugError_1.DebugError('can not set data to buffer: bufferData not specified');
+        }
+        var gl = this.gl;
+        this.dataLength = bufferData.length;
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(bufferData), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+    };
+    IndexBuffer.prototype.getGlBuffer = function () {
+        return this.buffer;
+    };
+    IndexBuffer.prototype.bind = function () {
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.buffer);
+    };
+    IndexBuffer.prototype.unbind = function () {
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
+    };
+    IndexBuffer.prototype.destroy = function () {
+        this.gl.deleteBuffer(this.buffer);
+    };
+    IndexBuffer.prototype.getBufferLength = function () {
+        return this.dataLength;
+    };
+    return IndexBuffer;
+}());
+exports.IndexBuffer = IndexBuffer;
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var shaderProgramUtils_1 = __webpack_require__(5);
+var shaderGenerator_1 = __webpack_require__(22);
+var ColorShaderGenerator = (function (_super) {
+    tslib_1.__extends(ColorShaderGenerator, _super);
+    function ColorShaderGenerator() {
+        var _this = _super.call(this) || this;
+        _this.addAttribute(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'a_position');
+        _this.addVertexUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_MAT4, 'u_vertexMatrix');
+        _this.setVertexMainFn("\n            void main(){\n                gl_Position = u_vertexMatrix * a_position;   \n            }\n        ");
+        _this.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_alpha');
+        _this.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'u_rgba');
+        _this.setFragmentMainFn("\n            void main(){\n                gl_FragColor = u_rgba;\n            }\n        ");
+        return _this;
+    }
+    return ColorShaderGenerator;
+}(shaderGenerator_1.ShaderGenerator));
+exports.ColorShaderGenerator = ColorShaderGenerator;
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var shaderProgram_1 = __webpack_require__(7);
+var abstractDrawer_1 = __webpack_require__(11);
+var bufferInfo_1 = __webpack_require__(15);
+var plane_1 = __webpack_require__(36);
+var shaderProgramUtils_1 = __webpack_require__(5);
+var shapeDrawer_frag_1 = __webpack_require__(37);
+var shaderGenerator_1 = __webpack_require__(22);
+var ShapeDrawer = (function (_super) {
+    tslib_1.__extends(ShapeDrawer, _super);
+    function ShapeDrawer(gl) {
+        var _this = _super.call(this, gl) || this;
+        var gen = new shaderGenerator_1.ShaderGenerator();
+        gen.setVertexMainFn("\n            void main(){\n                v_position = a_position;\n                gl_Position = u_vertexMatrix * a_position;   \n            }\n        ");
+        _this.u_vertexMatrix = gen.addVertexUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_MAT4, 'u_vertexMatrix');
+        _this.a_position = gen.addAttribute(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'a_position');
+        gen.addVarying(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'v_position');
+        _this.u_lineWidth = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_lineWidth');
+        _this.u_rx = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_rx');
+        _this.u_ry = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_ry');
+        _this.u_width = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_width');
+        _this.u_height = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_height');
+        _this.u_rectOffsetTop = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_rectOffsetTop');
+        _this.u_rectOffsetLeft = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_rectOffsetLeft');
+        _this.u_borderRadius = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_borderRadius');
+        _this.u_color = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'u_color');
+        _this.u_alpha = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_alpha');
+        _this.u_fillColor = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'u_fillColor');
+        _this.u_fillLinearGradient = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'u_fillLinearGradient[3]');
+        _this.u_texRect = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'u_texRect');
+        _this.u_texOffset = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC2, 'u_texOffset');
+        gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.SAMPLER_2D, 'texture');
+        _this.u_shapeType = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.INT, 'u_shapeType');
+        _this.u_fillType = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.INT, 'u_fillType');
+        gen.setFragmentMainFn(shapeDrawer_frag_1.fragmentSource);
+        _this.program = new shaderProgram_1.ShaderProgram(gl, gen.getVertexSource(), gen.getFragmentSource());
+        _this.primitive = new plane_1.Plane();
+        _this.bufferInfo = new bufferInfo_1.BufferInfo(gl, {
+            posVertexInfo: { array: _this.primitive.vertexArr, type: gl.FLOAT, size: 2, attrName: _this.a_position },
+            posIndexInfo: { array: _this.primitive.indexArr },
+            drawMethod: _this.gl.TRIANGLE_STRIP
+        });
+        return _this;
+    }
+    return ShapeDrawer;
+}(abstractDrawer_1.AbstractDrawer));
+exports.ShapeDrawer = ShapeDrawer;
+
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var mat4 = __webpack_require__(9);
+var MatrixStack = (function () {
+    function MatrixStack() {
+        this.stack = [];
+        this.restore();
+    }
+    MatrixStack.prototype.restore = function () {
+        this.stack.pop();
+        if (this.stack.length < 1) {
+            this.stack[0] = mat4.makeIdentity();
+        }
+    };
+    MatrixStack.prototype.save = function () {
+        this.stack.push(this.getCurrentMatrix());
+    };
+    MatrixStack.prototype.getCurrentMatrix = function () {
+        return this.stack[this.stack.length - 1].slice();
+    };
+    MatrixStack.prototype.setCurrentMatrix = function (m) {
+        return this.stack[this.stack.length - 1] = m;
+    };
+    MatrixStack.prototype.translate = function (x, y, z) {
+        if (z === undefined) {
+            z = 0;
+        }
+        var t = mat4.makeTranslation(x, y, z);
+        var m = this.getCurrentMatrix();
+        this.setCurrentMatrix(mat4.matrixMultiply(t, m));
+        return this;
+    };
+    MatrixStack.prototype.rotateZ = function (angleInRadians) {
+        var t = mat4.makeZRotation(angleInRadians);
+        var m = this.getCurrentMatrix();
+        this.setCurrentMatrix(mat4.matrixMultiply(t, m));
+        return this;
+    };
+    MatrixStack.prototype.rotateY = function (angleInRadians) {
+        var t = mat4.makeYRotation(angleInRadians);
+        var m = this.getCurrentMatrix();
+        this.setCurrentMatrix(mat4.matrixMultiply(t, m));
+        return this;
+    };
+    MatrixStack.prototype.scale = function (x, y, z) {
+        if (z === undefined) {
+            z = 1;
+        }
+        var t = mat4.makeScale(x, y, z);
+        var m = this.getCurrentMatrix();
+        this.setCurrentMatrix(mat4.matrixMultiply(t, m));
+        return this;
+    };
+    MatrixStack.prototype.resetTransform = function () {
+        var identity = mat4.makeIdentity();
+        this.setCurrentMatrix(identity);
+        return this;
+    };
+    return MatrixStack;
+}());
+exports.MatrixStack = MatrixStack;
+
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var abstractBlendDrawer_1 = __webpack_require__(82);
+var AddBlendDrawer = (function (_super) {
+    tslib_1.__extends(AddBlendDrawer, _super);
+    function AddBlendDrawer(gl) {
+        return _super.call(this, gl) || this;
+    }
+    AddBlendDrawer.prototype.prepare = function (programGen) {
+        programGen.setFragmentMainFn("\n            void main(){\n                vec4 srcColor =  texture2D(texture, v_texCoord)*2.0;\n                srcColor.a *= u_alpha;\n                vec4 destColor = texture2D(destTexture, v_destTexCoord.xy);\n                vec4 res = min(srcColor + destColor,vec4(1.0));\n                gl_FragColor = res;\n            }\n        ");
+    };
+    return AddBlendDrawer;
+}(abstractBlendDrawer_1.AbstractBlendDrawer));
+exports.AddBlendDrawer = AddBlendDrawer;
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var spriteRectDrawer_1 = __webpack_require__(40);
+var shaderProgramUtils_1 = __webpack_require__(5);
+var texShaderGenerator_1 = __webpack_require__(23);
+var shaderProgram_1 = __webpack_require__(7);
+var simpleCopyFilter_1 = __webpack_require__(83);
+var AbstractBlendDrawer = (function () {
+    function AbstractBlendDrawer(gl) {
+        this.gl = gl;
+        var gen = new texShaderGenerator_1.TexShaderGenerator();
+        gen.addVarying(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'v_destTexCoord');
+        gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.SAMPLER_2D, 'destTexture');
+        gen.setVertexMainFn("\n            void main(){\n                gl_Position = u_vertexMatrix * a_position;\n                v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;\n                v_destTexCoord = gl_Position*0.5+0.5; \n            }\n        ");
+        this.prepare(gen);
+        this._afterPrepare(gen);
+        this.simpleCopyFilter = new simpleCopyFilter_1.SimpleCopyFilter(gl);
+    }
+    AbstractBlendDrawer.prototype._afterPrepare = function (gen) {
+        this.program = new shaderProgram_1.ShaderProgram(this.gl, gen.getVertexSource(), gen.getFragmentSource());
+        this.spriteRectDrawer = new spriteRectDrawer_1.SpriteRectDrawer(this.gl, this.program);
+    };
+    AbstractBlendDrawer.prototype.prepare = function (programGen) { };
+    AbstractBlendDrawer.prototype.draw = function (textureInfos, uniforms, frameBuffer) {
+        var destTex = frameBuffer.texture.applyFilters([this.simpleCopyFilter], frameBuffer);
+        textureInfos.push({ texture: destTex, name: 'destTexture' });
+        this.spriteRectDrawer.draw(textureInfos, uniforms, frameBuffer);
+    };
+    return AbstractBlendDrawer;
+}());
+exports.AbstractBlendDrawer = AbstractBlendDrawer;
+
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var abstractFilter_1 = __webpack_require__(84);
+var shaderProgramUtils_1 = __webpack_require__(5);
+var SimpleCopyFilter = (function (_super) {
+    tslib_1.__extends(SimpleCopyFilter, _super);
+    function SimpleCopyFilter(gl) {
+        return _super.call(this, gl) || this;
+    }
+    SimpleCopyFilter.prototype.prepare = function (programGen) {
+        programGen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT, 'u_mixFactor');
+        programGen.setFragmentMainFn("\n            void main(){\n                gl_FragColor = texture2D(texture, v_texCoord);\n            }\n        ");
+    };
+    return SimpleCopyFilter;
+}(abstractFilter_1.AbstractFilter));
+exports.SimpleCopyFilter = SimpleCopyFilter;
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var shaderProgram_1 = __webpack_require__(7);
+var spriteRectDrawer_1 = __webpack_require__(40);
+var mat4 = __webpack_require__(9);
+var texShaderGenerator_1 = __webpack_require__(23);
+var debugError_1 = __webpack_require__(1);
+var makePositionMatrix = function (dstX, dstY, dstWidth, dstHeight) {
+    var projectionMatrix = mat4.ortho(0, dstWidth, 0, dstHeight, -1, 1);
+    var scaleMatrix = mat4.makeScale(dstWidth, dstHeight, 1);
+    return mat4.matrixMultiply(scaleMatrix, projectionMatrix);
+};
+var identity = mat4.makeIdentity();
+var AbstractFilter = (function () {
+    function AbstractFilter(gl) {
+        this.spriteRectDrawer = null;
+        this.uniformsToSet = {};
+        if (true && !gl) {
+            console.error(this);
+            throw new debugError_1.DebugError("can not create Filter, gl context not passed to constructor, expected: Filter(gl)");
+        }
+        this.gl = gl;
+        var gen = new texShaderGenerator_1.TexShaderGenerator();
+        this.prepare(gen);
+        this._afterPrepare(gen);
+    }
+    AbstractFilter.prototype.prepare = function (gen) { };
+    AbstractFilter.prototype._afterPrepare = function (gen) {
+        var program = new shaderProgram_1.ShaderProgram(this.gl, gen.getVertexSource(), gen.getFragmentSource());
+        this.spriteRectDrawer = new spriteRectDrawer_1.SpriteRectDrawer(this.gl, program);
+    };
+    AbstractFilter.prototype.doFilter = function (textureInfos, destFrameBuffer) {
+        if (destFrameBuffer)
+            destFrameBuffer.bind();
+        var w = textureInfos[0].texture.size.width;
+        var h = textureInfos[0].texture.size.height;
+        this.uniformsToSet.u_textureMatrix = identity;
+        this.uniformsToSet.u_vertexMatrix = makePositionMatrix(0, 0, w, h);
+        this.spriteRectDrawer.draw(textureInfos, this.uniformsToSet, null);
+    };
+    AbstractFilter.prototype.setParam = function (name, value) {
+        this.uniformsToSet[name] = value;
+    };
+    return AbstractFilter;
+}());
+exports.AbstractFilter = AbstractFilter;
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var abstractRenderer_1 = __webpack_require__(86);
+var consts_1 = __webpack_require__(30);
+var AbstractCanvasRenderer = (function (_super) {
+    tslib_1.__extends(AbstractCanvasRenderer, _super);
+    function AbstractCanvasRenderer(game) {
+        var _this = _super.call(this, game) || this;
+        var container = document.createElement('canvas');
+        document.body.appendChild(container);
+        container.setAttribute('width', game.width.toString());
+        container.setAttribute('height', game.height.toString());
+        container.ondragstart = function (e) {
+            e.preventDefault();
+        };
+        _this.container = container;
+        return _this;
+    }
+    AbstractCanvasRenderer.prototype.draw = function (renderable) {
+        renderable.spriteSheet.width = renderable.width;
+        renderable.spriteSheet.height = renderable.height;
+        this.drawImage(renderable.spriteSheet);
+    };
+    AbstractCanvasRenderer.prototype.onResize = function () {
+        var canvas = this.container;
+        if (this.game.scaleStrategy === consts_1.SCALE_STRATEGY.NO_SCALE)
+            return;
+        else if (this.game.scaleStrategy === consts_1.SCALE_STRATEGY.STRETCH) {
+            canvas.style.width = window.innerWidth + "px";
+            canvas.style.height = window.innerHeight + "px";
+            return;
+        }
+        var canvasRatio = canvas.height / canvas.width;
+        var windowRatio = window.innerHeight / window.innerWidth;
+        var width;
+        var height;
+        if (windowRatio < canvasRatio) {
+            height = window.innerHeight;
+            width = height / canvasRatio;
+        }
+        else {
+            width = window.innerWidth;
+            height = width * canvasRatio;
+        }
+        this.game.scale.setXY(width / this.game.width, height / this.game.height);
+        this.game.pos.setXY((window.innerWidth - width) / 2, (window.innerHeight - height) / 2);
+        this.container.style.width = width + 'px';
+        this.container.style.height = height + 'px';
+        this.container.style.marginTop = this.game.pos.y + "px";
+    };
+    return AbstractCanvasRenderer;
+}(abstractRenderer_1.AbstractRenderer));
+exports.AbstractCanvasRenderer = AbstractCanvasRenderer;
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var textField_1 = __webpack_require__(18);
+var device_1 = __webpack_require__(87);
+var size_1 = __webpack_require__(13);
+var debugError_1 = __webpack_require__(1);
+var AbstractRenderer = (function () {
+    function AbstractRenderer(game) {
+        this.renderableCache = {};
+        this.fullScreenSize = new size_1.Size(0, 0);
+        this.game = game;
+        if (device_1.Device.isCocoonJS) {
+            var dpr = window.devicePixelRatio || 1;
+            this.fullScreenSize.setW(window.innerWidth * dpr);
+            this.fullScreenSize.setH(window.innerHeight * dpr);
+        }
+        else {
+            this.fullScreenSize.setWH(this.game.width, this.game.height);
+        }
+    }
+    AbstractRenderer.prototype.onResize = function () { };
+    AbstractRenderer.prototype.requestFullScreen = function () {
+        var element = this.container;
+        if (element.requestFullScreen) {
+            element.requestFullScreen();
+        }
+        else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        }
+        else if (element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen();
+        }
+    };
+    AbstractRenderer.prototype.cancelFullScreen = function () {
+        if (document.cancelFullScreen) {
+            document.cancelFullScreen();
+        }
+        else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        }
+        else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+        }
+    };
+    AbstractRenderer.prototype.beginFrameBuffer = function () { };
+    AbstractRenderer.prototype.flipFrameBuffer = function (filters) { };
+    AbstractRenderer.prototype.registerResize = function () {
+        var _this = this;
+        this.onResize();
+        window.addEventListener('resize', function () { return _this.onResize(); });
+    };
+    AbstractRenderer.prototype.destroy = function () {
+        window.removeEventListener('resize', this.onResize);
+    };
+    AbstractRenderer.prototype.getError = function () {
+        return 0;
+    };
+    AbstractRenderer.prototype.drawImage = function (img) { };
+    AbstractRenderer.prototype.drawNinePatch = function (img) { };
+    AbstractRenderer.prototype.drawTiledImage = function (texturePath, srcRect, dstRect, offset) { };
+    AbstractRenderer.prototype.drawRectangle = function (rectangle) { };
+    AbstractRenderer.prototype.lockRect = function (rect) { };
+    AbstractRenderer.prototype.unlockRect = function () { };
+    AbstractRenderer.prototype.drawLine = function (x1, y1, x2, y2, color) { };
+    AbstractRenderer.prototype.drawModel = function (go) { };
+    AbstractRenderer.prototype.drawEllipse = function (ellispe) { };
+    AbstractRenderer.prototype.resetTransform = function () { };
+    AbstractRenderer.prototype.clear = function () { };
+    AbstractRenderer.prototype.clearColor = function (c) { };
+    AbstractRenderer.prototype.save = function () { };
+    AbstractRenderer.prototype.restore = function () { };
+    AbstractRenderer.prototype.translate = function (x, y, z) { };
+    AbstractRenderer.prototype.scale = function (x, y, z) { };
+    AbstractRenderer.prototype.rotateZ = function (a) { };
+    AbstractRenderer.prototype.rotateY = function (a) { };
+    AbstractRenderer.prototype.draw = function (renderable) {
+    };
+    AbstractRenderer.prototype.log = function (args) {
+        if (false)
+            {}
+        var textField = this.debugTextField;
+        if (!textField) {
+            textField = new textField_1.TextField(this.game);
+            textField.revalidate();
+            this.debugTextField = textField;
+        }
+        var res = '';
+        Array.prototype.slice.call(arguments).forEach(function (txt) {
+            if (txt === undefined)
+                txt = 'undefined';
+            else if (txt === null)
+                txt = 'null';
+            else if (txt.toJSON) {
+                txt = JSON.stringify(txt.toJSON(), null, 4);
+            }
+            else {
+                if (typeof txt !== 'string') {
+                    try {
+                        txt = JSON.stringify(txt);
+                    }
+                    catch (e) { }
+                }
+            }
+            if (typeof txt !== 'string')
+                txt = txt.toString();
+            res += txt + "\n";
+        });
+        textField.pos.x = 10;
+        textField.pos.y = 10;
+        textField.setText(textField.getText() + res);
+    };
+    AbstractRenderer.prototype.loadTextureInfo = function (url, link, onLoaded) { };
+    AbstractRenderer.prototype.getTextureInfo = function (textureId) {
+        var t = this.renderableCache[textureId];
+        if (!t)
+            throw new debugError_1.DebugError("can not find resource with id " + textureId);
+        return t;
+    };
+    return AbstractRenderer;
+}());
+exports.AbstractRenderer = AbstractRenderer;
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Device = (function () {
+    function Device(game) {
+        this.game = game;
+    }
+    Device.logInfo = function () {
+        console.log({
+            isCocoonJS: Device.isCocoonJS,
+            scale: Device.scale,
+            isTouch: Device.isTouch
+        });
+    };
+    Device.isCocoonJS = !!(navigator.isCocoonJS);
+    Device.scale = Device.isCocoonJS ? (window.devicePixelRatio || 1) : 1;
+    Device.isTouch = (typeof window !== 'undefined' && 'ontouchstart' in window);
+    return Device;
+}());
+exports.Device = Device;
+
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var shaderProgram_1 = __webpack_require__(7);
+var abstractDrawer_1 = __webpack_require__(11);
+var bufferInfo_1 = __webpack_require__(15);
+var debugError_1 = __webpack_require__(1);
+var vertexShader = "\n\nattribute vec4 a_position;\nattribute vec2 a_texcoord;\nattribute vec3 a_normal;\n\nuniform mat4 u_modelMatrix;\nuniform mat4 u_projectionMatrix;\n\nvarying vec2 v_texcoord;\nvarying vec3 v_normal;\n\nvoid main() {\n\n  gl_Position = u_projectionMatrix * u_modelMatrix * a_position;\n  v_texcoord = a_texcoord;\n  v_normal = a_normal;\n}\n";
+var textureShader = "\n\nprecision highp float;\n\nvarying vec2 v_texcoord;\nvarying vec3 v_normal;\n\nuniform sampler2D u_texture;\nuniform float u_alpha;\nuniform mat4 u_modelMatrix;\n\n\nvoid main() {\n\n    vec3 lightDirection = normalize(vec3(-1,-1,1));\n    vec3 normalized = normalize((u_modelMatrix * vec4(v_normal,0)).xyz);\n    float lightFactor = max(0.5,dot(lightDirection,normalized));\n    gl_FragColor = texture2D(u_texture, v_texcoord);\n    gl_FragColor.rgb *= lightFactor;\n    gl_FragColor.a *= u_alpha;\n}\n\n";
+var ModelDrawer = (function (_super) {
+    tslib_1.__extends(ModelDrawer, _super);
+    function ModelDrawer(gl) {
+        var _this = _super.call(this, gl) || this;
+        _this.program = new shaderProgram_1.ShaderProgram(gl, vertexShader, textureShader);
+        return _this;
+    }
+    ModelDrawer.prototype._initBufferInfo = function () {
+        this.g3d.bufferInfo = new bufferInfo_1.BufferInfo(this.gl, {
+            posVertexInfo: {
+                array: this.g3d.model.vertexArr, type: this.gl.FLOAT,
+                size: 3, attrName: 'a_position'
+            },
+            posIndexInfo: {
+                array: this.g3d.model.indexArr
+            },
+            texVertexInfo: {
+                array: this.g3d.model.texCoordArr, type: this.gl.FLOAT,
+                size: 2, attrName: 'a_texcoord'
+            },
+            normalInfo: {
+                array: this.g3d.model.normalArr, type: this.gl.FLOAT,
+                size: 3, attrName: 'a_normal'
+            },
+            drawMethod: this.gl.TRIANGLES
+        });
+    };
+    ModelDrawer.prototype.bindModel = function (g3d) {
+        this.g3d = g3d;
+        if (!this.g3d.bufferInfo)
+            this._initBufferInfo();
+        this.bufferInfo = this.g3d.bufferInfo;
+    };
+    ModelDrawer.prototype.bind = function () {
+        if (true && !this.g3d.model)
+            throw new debugError_1.DebugError("can not bind modelDrawer;bindModel must be invoked firstly");
+        _super.prototype.bind.call(this);
+    };
+    ModelDrawer.prototype.unbind = function () {
+        this.g3d = null;
+        _super.prototype.unbind.call(this);
+    };
+    return ModelDrawer;
+}(abstractDrawer_1.AbstractDrawer));
+exports.ModelDrawer = ModelDrawer;
+
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var point2d_1 = __webpack_require__(4);
+var renderableModel_1 = __webpack_require__(24);
+var GameObject = (function (_super) {
+    tslib_1.__extends(GameObject, _super);
+    function GameObject(game) {
+        var _this = _super.call(this, game) || this;
+        _this.type = 'GameObjectProto';
+        _this.currFrameIndex = 0;
+        _this.frameAnimations = [];
+        _this.groupNames = [];
+        _this.collideWith = [];
+        _this.velocity = new point2d_1.Point2d(0, 0);
+        _this._behaviours = [];
+        return _this;
+    }
+    GameObject.prototype.revalidate = function () {
+        var _this = this;
+        _super.prototype.revalidate.call(this);
+        this.spriteSheet.revalidate();
+        this.setFrameIndex(this.currFrameIndex);
+        if (this.spriteSheet) {
+            this.width = this.spriteSheet._frameWidth;
+            this.height = this.spriteSheet._frameHeight;
+        }
+        this.frameAnimations.forEach(function (f, i) {
+            _this.frameAnimations[i]._gameObject = _this;
+        });
+        if (this.rigid) {
+        }
+    };
+    GameObject.prototype.clone = function () {
+        return this;
+    };
+    GameObject.prototype.playFrameAnimation = function (fr, opts) {
+        fr._gameObject = this;
+        this._currFrameAnimation = fr;
+        fr.play(opts);
+        return fr;
+    };
+    GameObject.prototype.setFrameIndex = function (index) {
+        this.currFrameIndex = index % this.spriteSheet._numOfFrames;
+        this.spriteSheet.setFrameIndex(this.currFrameIndex);
+    };
+    GameObject.prototype.getFrameRect = function () {
+        return this.spriteSheet.srcRect;
+    };
+    GameObject.prototype.update = function (time, delta) {
+        _super.prototype.update.call(this, time, delta);
+        this._currFrameAnimation && this._currFrameAnimation.update(time);
+        for (var i = 0, max = this._behaviours.length; i < max; i++) {
+            if (this._behaviours[i].onUpdate)
+                this._behaviours[i].onUpdate(time, delta);
+        }
+        if (this.rigidBody !== undefined) {
+            this.rigidBody.update(time, delta);
+            this.pos.x = ~~(this.rigidBody.mCenter.x - this.rigidBody['mWidth'] / 2);
+            this.pos.y = ~~(this.rigidBody.mCenter.y - this.rigidBody['mHeight'] / 2);
+            this.angle = this.rigidBody.mAngle;
+        }
+        else {
+            if (this.velocity.x)
+                this.pos.x += this.velocity.x * delta / 1000;
+            if (this.velocity.y)
+                this.pos.y += this.velocity.y * delta / 1000;
+        }
+        if (this.children.length > 0) {
+            for (var i = 0; i < this.children.length; i++) {
+                this.children[i].update(time, delta);
+            }
+        }
+        this.render();
+    };
+    GameObject.prototype.draw = function () {
+        this.game.getRenderer().draw(this);
+        return true;
+    };
+    GameObject.prototype.addBehaviour = function (b) {
+        this._behaviours.push(b);
+        b.manage(this);
+    };
+    GameObject.prototype.kill = function () {
+        _super.prototype.kill.call(this);
+        for (var _i = 0, _a = this._behaviours; _i < _a.length; _i++) {
+            var b = _a[_i];
+            b.destroy();
+        }
+    };
+    GameObject.prototype.stopFrAnimations = function () {
+        this._currFrameAnimation && this._currFrameAnimation.stop();
+    };
+    return GameObject;
+}(renderableModel_1.RenderableModel));
+exports.GameObject = GameObject;
+
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var image_1 = __webpack_require__(16);
+var SpriteSheet = (function (_super) {
+    tslib_1.__extends(SpriteSheet, _super);
+    function SpriteSheet(game) {
+        var _this = _super.call(this, game) || this;
+        _this.type = 'SpriteSheet';
+        _this.numOfFramesH = 1;
+        _this.numOfFramesV = 1;
+        _this._frameWidth = 0;
+        _this._frameHeight = 0;
+        _this._numOfFrames = 0;
+        return _this;
+    }
+    SpriteSheet.prototype.revalidate = function () {
+        _super.prototype.revalidate.call(this);
+        if (!(this.numOfFramesH && this.numOfFramesV))
+            return;
+        this._frameWidth = ~~(this.width / this.numOfFramesH);
+        this._frameHeight = ~~(this.height / this.numOfFramesV);
+        this._numOfFrames = this.numOfFramesH * this.numOfFramesV;
+        this.setWH(this._frameWidth, this._frameHeight);
+    };
+    SpriteSheet.prototype.getFramePosX = function (frameIndex) {
+        return (frameIndex % this.numOfFramesH) * this._frameWidth;
+    };
+    SpriteSheet.prototype.getFramePosY = function (frameIndex) {
+        return ~~(frameIndex / this.numOfFramesH) * this._frameHeight;
+    };
+    SpriteSheet.prototype.setFrameIndex = function (frameIndex) {
+        this.srcRect.setXYWH(this.getFramePosX(frameIndex), this.getFramePosY(frameIndex), this._frameWidth, this._frameHeight);
+    };
+    return SpriteSheet;
+}(image_1.Image));
+exports.SpriteSheet = SpriteSheet;
+
+
+/***/ }),
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */,
+/* 97 */,
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */,
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(108);
+
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var mainScene_1 = __webpack_require__(109);
+var game_1 = __webpack_require__(53);
+var webGlRenderer_1 = __webpack_require__(73);
+var game = new game_1.Game();
+var mainScene = new mainScene_1.MainScene(game);
+game.setRenderer(webGlRenderer_1.WebGlRenderer);
+game.runScene(mainScene);
+
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var scene_1 = __webpack_require__(43);
+var gameObject_1 = __webpack_require__(89);
+var spriteSheet_1 = __webpack_require__(90);
+var frameAnimation_1 = __webpack_require__(110);
+var MainScene = (function (_super) {
+    tslib_1.__extends(MainScene, _super);
+    function MainScene() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    MainScene.prototype.onPreloading = function () {
+        this.resourceLink = this.resourceLoader.loadImage('../assets/character.png');
+        console.log('on preloading');
+    };
+    MainScene.prototype.onReady = function () {
+        this.obj = new gameObject_1.GameObject(this.game);
+        var spr = new spriteSheet_1.SpriteSheet(this.game);
+        spr.numOfFramesV = 3;
+        spr.numOfFramesH = 5;
+        var anim = new frameAnimation_1.FrameAnimation(this.game);
+        anim.frames = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+        this.obj.frameAnimations.push(anim);
+        this.obj.playFrameAnimation(anim);
+        anim.play();
+        spr.setResourceLink(this.resourceLink);
+        this.obj.spriteSheet = spr;
+        this.obj.pos.fromJSON({ x: 10, y: 10 });
+        this.appendChild(this.obj);
+    };
+    return MainScene;
+}(scene_1.Scene));
+exports.MainScene = MainScene;
+
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var eventEmitter_1 = __webpack_require__(17);
+var FrameAnimation = (function () {
+    function FrameAnimation(game) {
+        this.game = game;
+        this.type = 'FrameAnimation';
+        this._currFrame = 0;
+        this.frames = [];
+        this.duration = 1000;
+        this._gameObject = null;
+        this._startTime = null;
+        this._emitter = new eventEmitter_1.EventEmitter();
+        this.stop();
+    }
+    FrameAnimation.prototype.revalidate = function () {
+        this._timeForOneFrame = ~~(this.duration / this.frames.length);
+    };
+    FrameAnimation.prototype.play = function (opts) {
+        if (opts === void 0) { opts = { repeat: true }; }
+        this._isRepeat = opts.repeat;
+        this._gameObject.playFrameAnimation(this, opts);
+    };
+    FrameAnimation.prototype.stop = function () {
+        if (this._gameObject)
+            this._gameObject.stopFrAnimations();
+        this._startTime = null;
+        this._isRepeat = true;
+    };
+    FrameAnimation.prototype.update = function (time) {
+        if (!this._startTime)
+            this._startTime = time;
+        var delta = (time - this._startTime) % this.duration;
+        this._currFrame = ~~((this.frames.length) * delta / this.duration);
+        if (this._isRepeat == false && this._currFrame >= this.frames.length - 1) {
+            this.trigger('loop');
+            this.stop();
+            return;
+        }
+        var lastFrIndex = this._gameObject.currFrameIndex;
+        if (lastFrIndex != this.frames[this._currFrame]) {
+            this._gameObject.setFrameIndex(this.frames[this._currFrame]);
+            if (this._currFrame === 0 && this._startTime !== time)
+                this.trigger('loop');
+        }
+    };
+    FrameAnimation.prototype.nextFrame = function () {
+        var ind = this._currFrame;
+        ind++;
+        if (ind == this.frames.length)
+            ind = 0;
+        this._gameObject.setFrameIndex(this.frames[ind]);
+        this._currFrame = ind;
+    };
+    FrameAnimation.prototype.previousFrame = function () {
+        var ind = this._currFrame;
+        ind--;
+        if (ind < 0)
+            ind = this.frames.length - 1;
+        this._gameObject.setFrameIndex(this.frames[ind]);
+        this._currFrame = ind;
+    };
+    FrameAnimation.prototype.on = function (eventName, callBack) {
+        this._emitter.on(eventName, callBack);
+        return callBack;
+    };
+    FrameAnimation.prototype.off = function (eventName, callBack) {
+        this._emitter.off(eventName, callBack);
+    };
+    FrameAnimation.prototype.trigger = function (eventName, data) {
+        this._emitter.trigger(eventName, data);
+    };
+    return FrameAnimation;
+}());
+exports.FrameAnimation = FrameAnimation;
+
+
+/***/ })
+/******/ ]);

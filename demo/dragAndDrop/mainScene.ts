@@ -5,6 +5,7 @@ import {KEY, KEYBOARD_EVENT} from "@engine/core/control/keyboard";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/core/renderer/color";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 
 export class MainScene extends Scene {
@@ -14,15 +15,8 @@ export class MainScene extends Scene {
 
     onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
-        let rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
-        rect.height = 10;
-        this.preloadingGameObject = rect;
     }
 
-    onProgress(val: number) {
-        this.preloadingGameObject.width = val*this.game.width;
-    }
 
     onReady() {
         this.logoObj = new GameObject(this.game);
@@ -32,24 +26,19 @@ export class MainScene extends Scene {
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
 
-        this.game.keyboard.on(KEYBOARD_EVENT.KEY_HOLD, (e:KEY)=>{
-            switch (e) {
-                case KEY.LEFT:
-                    this.logoObj.pos.addX(-1);
-                    break;
-                case KEY.RIGHT:
-                    this.logoObj.pos.addX(1);
-                    break;
-                case KEY.UP:
-                    this.logoObj.pos.addY(-1);
-                    break;
-                case KEY.DOWN:
-                    this.logoObj.pos.addY(1);
-                    break;
-                case KEY.R:
-                    this.logoObj.angle+=0.1;
-            }
-        });
+        this.logoObj.addBehaviour(new DraggableBehaviour(this.game));
+
+        let objChild:GameObject = new GameObject(this.game);
+        let spr1:SpriteSheet = new SpriteSheet(this.game);
+        spr1.setResourceLink(this.logoLink);
+        objChild.spriteSheet = spr1;
+        objChild.pos.fromJSON({x:100,y:100});
+        objChild.addBehaviour(new DraggableBehaviour(this.game));
+
+        this.logoObj.appendChild(objChild);
+
+        (window as any).l = this.logoObj;
+
 
     }
 

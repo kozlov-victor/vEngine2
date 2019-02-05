@@ -1,38 +1,98 @@
 
 import {AbstractRenderer} from "../core/renderer/abstract/abstractRenderer";
 import {Resource} from "../core/resources/resource";
-import {ArrayEx} from "../declarations";
+import {ArrayEx, Cloneable, Revalidatable} from "../declarations";
 import {DebugError} from "../debugError";
 import {MathEx} from '../core/mathEx'
-import {isObjectMatch} from "../core/misc/object";
-import {GameObject} from "./impl/gameObject";
+import {isObjectMatch, removeFromArray} from "../core/misc/object";
 import {Point2d} from "../core/geometry/point2d";
 import {AbstractFilter} from "../core/renderer/webGl/filters/abstract/abstractFilter";
 import {Rect} from "../core/geometry/rect";
+import {Game} from "@engine/core/game";
+import {Tween, TweenDescription} from "@engine/core/tween";
+import {TweenMovie} from "@engine/core/tweenMovie";
+import {Timer} from "@engine/core/timer";
+import {EventEmitter} from "@engine/core/misc/eventEmitter";
 
 
-export abstract class RenderableModel extends Resource {
+export abstract class RenderableModel extends Resource implements Revalidatable {
 
+    readonly type:string;
+    id:string;
+    width:number = 0;
+    height:number = 0;
     pos:Point2d = new Point2d(0,0,()=>this._dirty=true);
     scale:Point2d = new Point2d(1,1);
     anchor:Point2d = new Point2d(0,0);
     angle:number = 0;
     alpha:number = 1;
     filters: AbstractFilter[] = [];
-    blendMode:string;
+    blendMode:string; // todo
     parent:RenderableModel;
     children:ArrayEx<RenderableModel> = [] as ArrayEx<RenderableModel>;
     acceptLight:boolean = false;
-    fixedToCamera:boolean = false;
     rigid:boolean = false;
 
-    findObject(query:{[key:string]:any}):RenderableModel{
-        if (isObjectMatch(this,query)) return this;
+    protected _tweens:Tween[] = [];
+    protected _tweenMovies:TweenMovie[] = [];
+    protected _dirty = true;
+    protected _timers:Timer[] = [];
+
+    protected _rect:Rect = new Rect();
+    protected _screenRect = new Rect();
+
+    protected constructor(protected game:Game){
+        super();
+        if (DEBUG && !game) throw new DebugError(
+            `can not create model '${this.type}': game instance not passed to model constructor`
+        );
+    }
+
+    revalidate(){}
+
+    setTimer(callback:Function,interval:number):Timer{
+        let t:Timer = new Timer(callback,interval);
+        this._timers.push(t);
+        return t;
+    }
+
+
+    tween(desc:TweenDescription):Tween{
+        let t:Tween = new Tween(desc);
+        this._tweens.push(t);
+        return t;
+    }
+
+    tweenMovie():TweenMovie{
+        let tm:TweenMovie = new TweenMovie(this.game);
+        this._tweenMovies.push(tm);
+        return tm;
+    }
+
+    findChildrenById(id:string):RenderableModel{
+        if (isObjectMatch(this,{id})) return this;
         for (let c of this.children) {
-            let possibleObject:RenderableModel = c.findObject(query);
+            let possibleObject:RenderableModel = c.findChildrenById(id);
             if (possibleObject) return possibleObject;
         }
         return null;
+    }
+
+
+    getScreenRect():Rect{
+        if (this._dirty) {
+            this.calcScreenRect();
+        }
+        return this._screenRect;
+    }
+
+    protected calcScreenRect(){
+        this._screenRect.set(this._rect);
+        let parent:RenderableModel = this.parent;
+        while (parent) {
+            this._screenRect.addXY(parent.getRect().x,parent.getRect().y);
+            parent = parent.parent;
+        }
     }
 
     getRect():Rect{
@@ -42,6 +102,9 @@ export abstract class RenderableModel extends Resource {
             this.width,
             this.height
         );
+        if (this._dirty) {
+            this.calcScreenRect();
+        }
         return this._rect;
     }
 
@@ -52,22 +115,21 @@ export abstract class RenderableModel extends Resource {
         this.anchor.setXY(this.width/2,this.height/2);
     }
 
-    onShow(){}
 
     appendChild(c:RenderableModel){
         c.parent = this;
+        c.revalidate();
         this.children.push(c);
-        (c as GameObject).onShow();
     }
 
 
     prependChild(c:RenderableModel){
         c.parent = this;
+        c.revalidate();
         this.children.unshift(c);
-        c.onShow();
     }
 
-    _setDirty(){
+    setDirty(){
         this._dirty = true;
         //if (this.parent) this.parent._dirty = true;
     }
@@ -106,12 +168,14 @@ export abstract class RenderableModel extends Resource {
         this.parent.children.unshift(this);
     }
 
-    kill(){
-        this.parent.children.remove(it=>it.id===this.id);
+    kill() {
+        // todo!!!!!
+        //let parents:RenderableModel[] = this.parent||
+        //emoveFromArray(,it=>it.id===this.id);
     }
 
-    render(force:boolean = false){
-        if (!force && !this.isInViewPort()) return;
+    render(){
+        //if (this.isInViewPort()) return;
         let renderer:AbstractRenderer = this.game.getRenderer();
 
         renderer.save();
@@ -144,11 +208,36 @@ export abstract class RenderableModel extends Resource {
     }
 
     update(time:number,delta:number){
-        super.update(time,delta);
         for (let c of this.children) {
-            if (this._dirty) c._setDirty();
+            if (this._dirty) c.setDirty();
             c.update(time,delta);
         }
+
+        this._tweens.forEach((t:Tween, index:number)=>{
+            t.update(time);
+            if (t.isCompleted()) this._tweens.splice(index,1);
+        });
+        this._tweenMovies.forEach((t:TweenMovie,index:number)=>{
+            t.update(time);
+            if (t.isCompleted()) this._tweenMovies.splice(index,1);
+        });
+        this._timers.forEach((t:Timer)=>{
+            t.onUpdate(time);
+        });
+    }
+
+    // todo repeated block (scene)
+    protected _emitter:EventEmitter;
+    on(eventName:string|string[],callBack:Function){
+        if (this._emitter===undefined) this._emitter = new EventEmitter();
+        this._emitter.on(eventName,callBack);
+        return callBack;
+    }
+    off(eventName:string,callBack:Function){
+        if (this._emitter!==undefined)this._emitter.off(eventName,callBack);
+    }
+    trigger(eventName:string,data?:any){
+        if (this._emitter!==undefined) this._emitter.trigger(eventName,data);
     }
 
 }

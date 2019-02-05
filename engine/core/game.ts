@@ -1,17 +1,12 @@
-
-import './misc/polyfills'
-
-import {BaseAbstractBehaviour} from "../commonBehaviour/abstract/baseAbstractBehaviour";
-import {Mouse} from './control/mouse'
-import {Keyboard} from './control/keyboard'
-import {GamePad} from './control/gamePad'
-
-import {CommonObject} from '../model/commonObject'
-import {Camera} from './renderer/camera'
+import "./misc/polyfills";
+import {Mouse} from "./control/mouse";
+import {Keyboard} from "./control/keyboard";
+import {GamePad} from "./control/gamePad";
+import {Camera} from "./renderer/camera";
 import {SCALE_STRATEGY} from "./misc/consts";
 import {Point2d} from "./geometry/point2d";
 import {AbstractRenderer} from "./renderer/abstract/abstractRenderer";
-import {Scene} from '../model/impl/scene';
+import {Scene} from "../model/impl/scene";
 import {LightArray} from "./light/lightArray";
 import {UIBuilder} from "../model/impl/ui/uiBuilder";
 import {ColliderEngine} from "./physics/colliderEngine";
@@ -19,13 +14,8 @@ import {DebugError} from "../debugError";
 import {AudioPlayer} from "./media/audioPlayer";
 import {Clazz} from "@engine/core/misc/clazz";
 
-declare let window:any;
 
-
-declare const setTimeout: (f:Function,n:number)=>number;
-declare const setInterval: (f:Function,n:number)=>number;
-
-export class Game extends CommonObject {
+export class Game {
 
     private _lastTime:number = 0;
     private _currTime:number = 0;
@@ -54,7 +44,6 @@ export class Game extends CommonObject {
     private static UPDATE_TIME_RATE = 20;
 
     constructor(){
-        super();
         this.mouse = new Mouse(this);
         this.keyboard = new Keyboard(this);
         this.keyboard.listenTo();
@@ -155,25 +144,13 @@ export class Game extends CommonObject {
 
     destroy(){
         this._destroyed = true;
-        const delta:number = 16;
-        let lastTimeout:number = setTimeout(()=>{},0);
-        let lastInterval:number = setInterval(()=>{},0);
-        let lastMaxVal = Math.max(lastTimeout,lastInterval) + delta;
-        for (let i=0;i<lastMaxVal;i++) {
-            clearInterval(i);
-            clearTimeout(i);
-        }
         this.keyboard.destroy();
         this.mouse.destroy();
         this._renderer.cancelFullScreen();
-        BaseAbstractBehaviour.destroyAll();
-        setTimeout(()=>{ // wait for rendering stopped
-            this._renderer.destroy();
-        },200);
+        this._renderer.destroy();
     }
 
     revalidate() {
-        super.revalidate();
         if (DEBUG && !this._renderer) throw new DebugError(`game renderer is not set`);
     }
 

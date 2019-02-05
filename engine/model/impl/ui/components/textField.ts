@@ -295,7 +295,7 @@ export class TextField extends ScrollableContainer {
             this._symbolImage.srcRect.set(charInfo.sourceRect);
             this._symbolImage.setXYWH(charInfo.destRect.x,charInfo.destRect.y,charInfo.destRect.width,charInfo.destRect.height);
 
-            this._symbolImage.render(true);
+            this._symbolImage.render();
         }
         renderer.restore();
         renderer.unlockRect();

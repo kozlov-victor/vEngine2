@@ -1,8 +1,7 @@
 import {Game} from "../../core/game";
 import {DebugError} from "../../debugError";
-import {CommonObject} from "../commonObject";
 
-export class Sound extends CommonObject {
+export class Sound {
 
     type:string = 'Sound';
     resourcePath:string = '';
@@ -10,7 +9,7 @@ export class Sound extends CommonObject {
     loop:boolean =false;
 
     constructor(protected game:Game){
-        super();
+
     }
 
     play(){
