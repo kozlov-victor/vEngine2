@@ -20,8 +20,6 @@ export class Image extends Shape {
     }
 
 
-
-
     revalidate(){
         if (DEBUG && !this.getResourceLink()) {
             console.error(this);

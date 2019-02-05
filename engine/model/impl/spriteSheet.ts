@@ -1,8 +1,9 @@
 
 import {Game} from "../../core/game";
 import {Image} from "./ui/drawable/image";
+import {Cloneable} from "@engine/declarations";
 
-export class SpriteSheet extends Image {
+export class SpriteSheet extends Image implements Cloneable<SpriteSheet>{
 
     type:string = 'SpriteSheet';
     numOfFramesH:number = 1;
@@ -24,6 +25,24 @@ export class SpriteSheet extends Image {
         this._frameHeight = ~~(this.height / this.numOfFramesV);
         this._numOfFrames = this.numOfFramesH * this.numOfFramesV;
         this.setWH(this._frameWidth,this._frameHeight);
+    }
+
+    clone():SpriteSheet{
+        const cloned:SpriteSheet = new SpriteSheet(this.game);
+        cloned.numOfFramesV = this.numOfFramesV;
+        cloned.numOfFramesH = this.numOfFramesH;
+        cloned.srcRect.set(this.srcRect);
+        cloned.borderRadius = this.borderRadius;
+        cloned.offset.set(this.offset);
+
+        cloned.width = this.width;
+        cloned.height = this.height;
+        cloned.pos.set(this.pos);
+        cloned.scale.set(this.scale);
+        cloned.anchor.set(this.anchor);
+
+        return cloned;
+
     }
 
     getFramePosX(frameIndex:number) {
