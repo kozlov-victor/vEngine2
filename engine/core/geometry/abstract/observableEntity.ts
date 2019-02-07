@@ -1,6 +1,6 @@
 
-import {ArrayEx} from "../../../declarations";
 
+import {removeFromArray} from "@engine/core/misc/object";
 class State<T> {
 
     private currState:T[] = [];
@@ -40,7 +40,7 @@ export abstract class ObservableEntity {
     }
 
     removeListener(f:()=>void){
-        (this._onChanged as ArrayEx<any>).remove(f);
+        removeFromArray(this._onChanged,(it)=>it===f);
     }
 
 }

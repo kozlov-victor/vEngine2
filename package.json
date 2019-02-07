@@ -17,6 +17,9 @@
   "dependencies": {
     "webpack-closure-compiler": "^2.1.6"
   },
-  "scripts": {},
+  "scripts": {
+    "start": "webpack -w",
+    "build": "webpack"
+  },
   "main": ""
 }

@@ -1,6 +1,7 @@
 
 
 import {ObjectPool} from "../misc/objectPool";
+import {Cloneable} from "@engine/declarations";
 
 
 export interface ColorJSON {
@@ -10,7 +11,7 @@ export interface ColorJSON {
     a:number
 }
 
-export class Color {
+export class Color implements Cloneable<Color>{
 
     private r:number;
     private g:number;
@@ -30,7 +31,7 @@ export class Color {
     private static objectPool:ObjectPool<Color>;
     private _arr:number[] = null;
 
-    type:string = 'Color';
+    readonly type:string = 'Color';
 
     constructor(r:number,g:number,b:number,a?:number){
         this.setRGBA(r,g,b,a);
@@ -83,7 +84,7 @@ export class Color {
         this.setRGBA(another.r,another.g,another.b,another.a);
     }
 
-    clone(){
+    clone():Color{
         return new Color(this.r,this.g,this.b,this.a);
     }
 

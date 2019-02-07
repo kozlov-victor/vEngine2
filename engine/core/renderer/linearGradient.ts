@@ -1,9 +1,14 @@
 
 import {Color, ColorJSON} from "./color";
 import {DebugError} from "../../debugError";
+import {Cloneable} from "@engine/declarations";
 
+interface IJSON {
+    colorFrom:ColorJSON,
+    colorTo:ColorJSON
+}
 
-export class LinearGradient {
+export class LinearGradient implements Cloneable<LinearGradient>{
 
     type:string = 'LinearGradient';
 
@@ -13,7 +18,7 @@ export class LinearGradient {
 
     private _arr:number[] = new Array(12);
 
-    fromJSON(json:{colorFrom:ColorJSON,colorTo:ColorJSON}){
+    fromJSON(json:IJSON){
         if (DEBUG) {
             if (!json.colorFrom)
                 throw new DebugError(`can not parse LinearGradient from JSON: colorFrom not defined`);
@@ -22,6 +27,13 @@ export class LinearGradient {
         }
         this.colorFrom.fromJSON(json.colorFrom);
         this.colorTo.fromJSON(json.colorTo);
+    }
+
+    toJSON():IJSON{
+        return {
+            colorFrom: this.colorFrom.toJSON(),
+            colorTo: this.colorTo.toJSON()
+        }
     }
 
     asGL():number[]{
@@ -43,6 +55,12 @@ export class LinearGradient {
         this._arr[11] = 0;  // unused
 
         return this._arr;
+    }
+
+    clone():LinearGradient {
+        const cloned:LinearGradient = new LinearGradient();
+        cloned.fromJSON(this.toJSON());
+        return cloned;
     }
 
 

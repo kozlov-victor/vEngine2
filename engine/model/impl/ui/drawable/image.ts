@@ -5,10 +5,11 @@ import {Shape} from "../generic/shape";
 import {Color} from "@engine/core/renderer/color";
 import {Point2d} from "@engine/core/geometry/point2d";
 import {TextureInfo} from "@engine/core/renderer/webGl/renderPrograms/abstract/abstractDrawer";
+import {Cloneable} from "@engine/declarations";
 
 
 
-export class Image extends Shape {
+export class Image extends Shape implements Cloneable<Image>{
 
     srcRect:Rect = new Rect();
     borderRadius:number = 0;
@@ -35,6 +36,19 @@ export class Image extends Shape {
     draw():boolean{
         this.game.getRenderer().drawImage(this);
         return true;
+    }
+
+    protected setClonedProperties(cloned:Image){
+        cloned.srcRect.set(this.srcRect);
+        cloned.borderRadius = this.borderRadius;
+        cloned.offset.set(this.offset);
+        super.setClonedProperties(cloned);
+    }
+
+    clone():Image {
+        const cloned:Image = new Image(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
     }
 
 

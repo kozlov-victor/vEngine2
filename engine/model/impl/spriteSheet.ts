@@ -27,22 +27,17 @@ export class SpriteSheet extends Image implements Cloneable<SpriteSheet>{
         this.setWH(this._frameWidth,this._frameHeight);
     }
 
-    clone():SpriteSheet{
-        const cloned:SpriteSheet = new SpriteSheet(this.game);
+    protected setClonedProperties(cloned:SpriteSheet) {
         cloned.numOfFramesV = this.numOfFramesV;
         cloned.numOfFramesH = this.numOfFramesH;
-        cloned.srcRect.set(this.srcRect);
-        cloned.borderRadius = this.borderRadius;
-        cloned.offset.set(this.offset);
+        cloned.numOfFramesV = this.numOfFramesV;
+        cloned.numOfFramesH = this.numOfFramesH;
+        super.setClonedProperties(cloned);
+    }
 
-        cloned.width = this.width;
-        cloned.height = this.height;
-        cloned.pos.set(this.pos);
-        cloned.scale.set(this.scale);
-        cloned.anchor.set(this.anchor);
-
-        cloned.setResourceLink(this.getResourceLink());
-
+    clone():SpriteSheet{
+        const cloned:SpriteSheet = new SpriteSheet(this.game);
+        this.setClonedProperties(cloned);
         return cloned;
 
     }

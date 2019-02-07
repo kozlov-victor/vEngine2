@@ -1,10 +1,9 @@
-
 import {AbstractRenderer} from "../core/renderer/abstract/abstractRenderer";
 import {Resource} from "../core/resources/resource";
-import {ArrayEx, Cloneable, Revalidatable} from "../declarations";
+import {Revalidatable} from "../declarations";
 import {DebugError} from "../debugError";
-import {MathEx} from '../core/mathEx'
-import {isObjectMatch, removeFromArray} from "../core/misc/object";
+import {MathEx} from "../core/mathEx";
+import {isObjectMatch} from "../core/misc/object";
 import {Point2d} from "../core/geometry/point2d";
 import {AbstractFilter} from "../core/renderer/webGl/filters/abstract/abstractFilter";
 import {Rect} from "../core/geometry/rect";
@@ -29,7 +28,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
     filters: AbstractFilter[] = [];
     blendMode:string; // todo
     parent:RenderableModel;
-    children:ArrayEx<RenderableModel> = [] as ArrayEx<RenderableModel>;
+    children:RenderableModel[] = [];
     acceptLight:boolean = false;
     rigid:boolean = false;
 
@@ -46,6 +45,24 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         if (DEBUG && !game) throw new DebugError(
             `can not create model '${this.type}': game instance not passed to model constructor`
         );
+    }
+
+    protected setClonedProperties(cloned:RenderableModel) {
+        cloned.width = this.width;
+        cloned.height = this.height;
+        cloned.pos.set(this.pos);
+        cloned.scale.set(this.scale);
+        cloned.anchor.set(this.anchor);
+        cloned.angle = this.angle;
+        cloned.alpha = this.alpha;
+        cloned.filters = [...this.filters];
+        cloned.blendMode = this.blendMode;
+        cloned.parent = null;
+        cloned.children = []; // todo deep clone
+        cloned.acceptLight = this.acceptLight;
+        cloned.rigid = this.rigid;
+        cloned.game = this.game;
+        super.setClonedProperties(cloned);
     }
 
     revalidate(){}

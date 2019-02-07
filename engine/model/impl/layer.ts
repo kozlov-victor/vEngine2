@@ -1,6 +1,5 @@
 
 import {Game} from "../../core/game";
-import {ArrayEx} from "../../declarations";
 import {GameObject} from "./gameObject";
 import {RenderableModel} from "../renderableModel";
 
@@ -8,7 +7,7 @@ export class Layer {
 
     type:string = 'Layer';
     parent:RenderableModel;
-    children:ArrayEx<RenderableModel> = [] as ArrayEx<RenderableModel>;
+    children:RenderableModel[] = [];
 
     constructor(protected game:Game) {
 

@@ -6,18 +6,16 @@ import {IAudioContext} from "./context/iAudioContext";
 import {Sound} from "../../model/impl/sound";
 import {AudioNode} from "./audioNode";
 import {Tween} from "../tween";
-import {ArrayEx} from "../../declarations";
 import {Game} from "../game";
-import {DebugError} from "../../debugError";
 import {Clazz} from "../misc/clazz";
-
+import {removeFromArray} from "@engine/core/misc/object";
 
 
 export  class AudioPlayer {
 
     private readonly contextClass:Clazz<IAudioContext>;
     private audioNodeSet:AudioNodeSet;
-    private tweens:ArrayEx<Tween> = [] as ArrayEx<Tween>;
+    private tweens:Tween[] = [];
 
     static cache:{[key:string]:any} = {};
     static DEFAULT_AUDIO_NODES_COUNT:number = 6;
@@ -76,7 +74,7 @@ export  class AudioPlayer {
                     node.setGain(progressObj._gain);
                 },
                 complete: ()=>{
-                    this.tweens.remove(tween);
+                    removeFromArray(this.tweens,it=>it===tween);
                 }
             });
             this.tweens.push(tween);

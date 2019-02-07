@@ -1,23 +1,19 @@
-
 import {Point2d} from "../../core/geometry/point2d";
 import {FrameAnimation} from "./frameAnimation";
 import {SpriteSheet} from "./spriteSheet";
 import {Game} from "../../core/game";
-import {Rect} from "../../core/geometry/rect";
-import {ArrayEx, Cloneable} from "../../declarations";
-import {ShaderMaterial} from "../../core/light/shaderMaterial";
+import {Cloneable} from "../../declarations";
 import {RigidShape} from "../../core/physics/rigidShapes";
 import {RenderableModel} from "../renderableModel";
 import {BaseAbstractBehaviour} from "../../behaviour/abstract/baseAbstractBehaviour";
 
 
-
 export class GameObject extends RenderableModel implements Cloneable<GameObject>{
 
-    type:string = 'GameObjectProto';
+    type:string = 'GameObject';
     spriteSheet:SpriteSheet;
     currFrameIndex:number = 0; // todo move to spriteSheet
-    frameAnimations:FrameAnimation[] = []; // todo remove arrayEx
+    frameAnimations:FrameAnimation[] = [];
 
     groupNames:string[] = [];
     collideWith:string[] = [];
@@ -49,13 +45,16 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         }
     }
 
-    clone():GameObject {
+    protected setClonedProperties(cloned:GameObject) {
         const spriteSheet:SpriteSheet = this.spriteSheet.clone();
-
-        const cloned:GameObject = new GameObject(this.game);
-        cloned.pos.set(this.pos);
         cloned.frameAnimations = [...this.frameAnimations];
         cloned.spriteSheet = spriteSheet;
+        super.setClonedProperties(cloned);
+    }
+
+    clone():GameObject {
+        const cloned:GameObject = new GameObject(this.game);
+        this.setClonedProperties(cloned);
         cloned.revalidate();
         return cloned;
     }

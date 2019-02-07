@@ -1,19 +1,17 @@
-
 import {TileMap} from "./tileMap";
 import {Layer} from "./layer";
 import {AbstractFilter} from "../../core/renderer/webGl/filters/abstract/abstractFilter";
 import {Game} from "../../core/game";
 import {AmbientLight} from "../../core/light/ambientLight";
 import {Color} from "../../core/renderer/color";
-import {SpriteSheet} from "./spriteSheet";
 import {CAMERA_MATRIX_MODE} from "../../core/renderer/camera";
 import {TextField} from "./ui/components/textField";
-import {IKeyVal, isObjectMatch} from "../../core/misc/object";
 import {ResourceLoader} from "../../core/resources/resourceLoader";
-import {ArrayEx, Revalidatable} from "../../declarations";
+import {Revalidatable} from "../../declarations";
 import {RenderableModel} from "@engine/model/renderableModel";
 import {TweenMovie} from "@engine/core/tweenMovie";
 import {EventEmitter} from "@engine/core/misc/eventEmitter";
+import {removeFromArray} from "@engine/core/misc/object";
 
 
 export class Scene implements Revalidatable {
@@ -21,7 +19,7 @@ export class Scene implements Revalidatable {
     readonly type:string = 'Scene';
     width:number;  // todo now is 0!!!
     height:number; // todo now is 0!!!
-    layers:ArrayEx<Layer> = [] as ArrayEx<Layer>;
+    layers:Layer[] = [];
     uiLayer:Layer;
     useBG:boolean = false;
     colorBG = Color.WHITE;
@@ -73,7 +71,7 @@ export class Scene implements Revalidatable {
     }
 
     removeLayer(layer:Layer){
-        this.layers.remove(layer);
+        removeFromArray(this.layers,it=>it===layer);
     }
 
     appendChild(go:RenderableModel){

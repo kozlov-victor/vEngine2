@@ -27,8 +27,15 @@ export abstract class Shape extends RenderableModel {
         return {blendMode:this.blendMode,acceptLight:false,alpha:this.alpha};
     }
 
-    constructor(game:Game){
+    protected constructor(game:Game){
         super(game);
+    }
+
+    protected setClonedProperties(cloned:Shape){
+        cloned.color = this.color.clone();
+        cloned.lineWidth = this.lineWidth;
+        cloned.fillColor = this.fillColor.clone();
+        super.setClonedProperties(cloned);
     }
 
 }

@@ -1,7 +1,7 @@
 import {ResourceLink} from "./resourceLink";
 
 
-export abstract class Resource {
+export abstract class Resource { // todo gameObject and spriteSheets are resources
 
     private _resourceLink:ResourceLink;
 
@@ -11,6 +11,11 @@ export abstract class Resource {
 
     getResourceLink(){
         return this._resourceLink;
+    }
+
+
+    protected setClonedProperties(cloned:Resource) {
+        cloned.setResourceLink(this.getResourceLink());
     }
 
 
