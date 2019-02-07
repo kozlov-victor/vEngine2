@@ -41,6 +41,8 @@ export class SpriteSheet extends Image implements Cloneable<SpriteSheet>{
         cloned.scale.set(this.scale);
         cloned.anchor.set(this.anchor);
 
+        cloned.setResourceLink(this.getResourceLink());
+
         return cloned;
 
     }

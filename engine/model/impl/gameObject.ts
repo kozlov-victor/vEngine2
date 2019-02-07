@@ -16,8 +16,8 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
 
     type:string = 'GameObjectProto';
     spriteSheet:SpriteSheet;
-    currFrameIndex:number = 0;
-    frameAnimations:ArrayEx<FrameAnimation> = [] as ArrayEx<FrameAnimation>;
+    currFrameIndex:number = 0; // todo move to spriteSheet
+    frameAnimations:FrameAnimation[] = []; // todo remove arrayEx
 
     groupNames:string[] = [];
     collideWith:string[] = [];
@@ -50,7 +50,14 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
     }
 
     clone():GameObject {
-        return this;
+        const spriteSheet:SpriteSheet = this.spriteSheet.clone();
+
+        const cloned:GameObject = new GameObject(this.game);
+        cloned.pos.set(this.pos);
+        cloned.frameAnimations = [...this.frameAnimations];
+        cloned.spriteSheet = spriteSheet;
+        cloned.revalidate();
+        return cloned;
     }
 
     playFrameAnimation(fr:FrameAnimation,opts?):FrameAnimation{
