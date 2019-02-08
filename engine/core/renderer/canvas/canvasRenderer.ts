@@ -1,20 +1,16 @@
 import {DebugError} from "../../../debugError";
 import {Game} from "../../game";
-import {GameObject} from "../../../model/impl/gameObject";
 import {Rect} from "../../geometry/rect";
 import {Point2d} from "../../geometry/point2d";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../color";
 import {Size} from "../../geometry/size";
-import { AbstractFilter } from '../webGl/filters/abstract/abstractFilter';
-import { DrawableInfo } from '../webGl/renderPrograms/interface/drawableInfo';
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Image} from "@engine/model/impl/ui/drawable/image";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 
 
-
-const getCtx = el=>{
+const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
     return (
         el.getContext("2d")
     );
@@ -22,12 +18,12 @@ const getCtx = el=>{
 
 export class CanvasRenderer extends AbstractCanvasRenderer {
 
-    private ctx;
+    private ctx:CanvasRenderingContext2D;
 
     constructor(game:Game){
         super(game);
         this.registerResize();
-        this.ctx = getCtx(this.container);
+        this.ctx = getCtx(this.container as HTMLCanvasElement);
     }
 
 
@@ -61,7 +57,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     drawRectangle(rectangle:Rectangle){
         this.ctx.fillStyle = (rectangle.fillColor as Color).asCSS();
         this.ctx.strokeStyle = rectangle.color.asCSS();
-        this.ctx.strokeWidth = rectangle.lineWidth;
+        this.ctx.lineWidth = rectangle.lineWidth;
         //this.ctx.strokeRect(0,0,rectangle.width,rectangle.height);
     }
 
@@ -117,6 +113,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     resetTransform(){
+        // @ts-ignore
         this.ctx.resetTransform();
     }
 

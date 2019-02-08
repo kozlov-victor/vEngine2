@@ -4,6 +4,7 @@ import {Game} from "../../core/game";
 import {GameObject} from "../../model/impl/gameObject";
 import {Scene} from "../../model/impl/scene";
 import {MouseEventEx} from "../../declarations";
+import {IMousePoint} from "@engine/core/control/mouse";
 
 interface MouseDragPoint {
     mX: number,
@@ -18,7 +19,7 @@ interface MouseDragPoint {
 
 export class DraggableBehaviour extends BaseAbstractBehaviour {
 
-    private static _getEventId(e:MouseEventEx):number{
+    private static _getEventId(e:IMousePoint):number{
         return e.id || 1;
     };
 
@@ -28,17 +29,17 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
     private sceneOnMouseMove:Function;
     private sceneOnMouseUp:Function;
 
-    private points:{number:any};
+    private readonly points:{[key:number]:MouseDragPoint};
     private gameObject:GameObject;
 
     constructor(game:Game){
         super(game,null);
-        this.points = {} as {number:any};
+        this.points = {} as {[key:number]:MouseDragPoint};
     }
 
     manage(gameObject:GameObject) {
         this.gameObject = gameObject;
-        this.gameObjectOnClick = gameObject.on('click',(e)=>{
+        this.gameObjectOnClick = gameObject.on('click',(e:IMousePoint)=>{
             this.points[DraggableBehaviour._getEventId(e)] = {
                 mX: e.objectX,
                 mY: e.objectY,
@@ -51,7 +52,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
             } as MouseDragPoint;
         });
         let scene:Scene = this.game.getCurrScene();
-        this.sceneOnMouseDown = scene.on('mouseDown',e=>{
+        this.sceneOnMouseDown = scene.on('mouseDown',(e:IMousePoint)=>{
             let pointId:number = DraggableBehaviour._getEventId(e);
             let point:MouseDragPoint = this.points[pointId];
             if (!point) return;

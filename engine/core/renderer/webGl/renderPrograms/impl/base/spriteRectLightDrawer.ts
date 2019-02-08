@@ -9,7 +9,7 @@ import {LightArray} from "../../../../../light/lightArray";
 
 export class SpriteRectLightDrawer extends SpriteRectDrawer {
 
-    constructor(gl){
+    constructor(gl:WebGLRenderingContext){
         let gen = new TexShaderGenerator();
         //language=GLSL
         gen.prependFragmentCodeBlock(`

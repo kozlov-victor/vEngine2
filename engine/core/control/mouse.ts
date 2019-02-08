@@ -8,6 +8,19 @@ import {Rect} from "../geometry/rect";
 import {RenderableModel} from "../../model/renderableModel";
 
 
+export interface IMousePoint {
+
+    screenX:number,
+    screenY:number,
+    objectX:number,
+    objectY:number,
+    id:number,
+    target:RenderableModel,
+    nativeEvent: Event,
+    eventName:string,
+    isMouseDown: boolean
+}
+
 export class MousePoint extends Point2d{
 
     public screenX:number;
@@ -100,7 +113,7 @@ export class Mouse {
                 nativeEvent: e,
                 eventName,
                 isMouseDown: point.isMouseDown
-            });
+            } as IMousePoint);
             return true;
         }
         return false;

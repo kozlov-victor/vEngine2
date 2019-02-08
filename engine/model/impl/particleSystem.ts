@@ -6,7 +6,7 @@ import {DebugError} from "@engine/debugError";
 import {Point2d} from "@engine/core/geometry/point2d";
 import {RenderableModel} from "@engine/model/renderableModel";
 
-let r = obj=>MathEx.random(obj.from,obj.to);
+let r = (obj:ParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
 
 interface ParticlePropertyDesc {
     from:number,
@@ -56,7 +56,7 @@ export class ParticleSystem {
         }
     }
 
-    update(time,delta){
+    update(time:number,delta:number){
         let all:ParticleHolder[] = this._particles;
         let i:number = all.length;
         let l:number = i - 1;
