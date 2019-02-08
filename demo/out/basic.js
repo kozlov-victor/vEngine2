@@ -1669,6 +1669,18 @@ var Rectangle = (function (_super) {
         this.game.getRenderer().drawRectangle(this);
         return true;
     };
+    Rectangle.prototype.setClonedProperties = function (cloned) {
+        cloned.borderRadius = this.borderRadius;
+        cloned.width = this.width;
+        cloned.height = this.height;
+        cloned.lineWidth = this.lineWidth;
+        _super.prototype.setClonedProperties.call(this, cloned);
+    };
+    Rectangle.prototype.clone = function () {
+        var cloned = new Rectangle(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
+    };
     return Rectangle;
 }(shape_1.Shape));
 exports.Rectangle = Rectangle;
@@ -1978,6 +1990,17 @@ var Image = (function (_super) {
     Image.prototype.draw = function () {
         this.game.getRenderer().drawImage(this);
         return true;
+    };
+    Image.prototype.setClonedProperties = function (cloned) {
+        cloned.srcRect.set(this.srcRect);
+        cloned.borderRadius = this.borderRadius;
+        cloned.offset.set(this.offset);
+        _super.prototype.setClonedProperties.call(this, cloned);
+    };
+    Image.prototype.clone = function () {
+        var cloned = new Image(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
     };
     return Image;
 }(shape_1.Shape));
@@ -2451,6 +2474,12 @@ var Shape = (function (_super) {
     Shape.prototype.getDrawableInfo = function () {
         return { blendMode: this.blendMode, acceptLight: false, alpha: this.alpha };
     };
+    Shape.prototype.setClonedProperties = function (cloned) {
+        cloned.color = this.color.clone();
+        cloned.lineWidth = this.lineWidth;
+        cloned.fillColor = this.fillColor.clone();
+        _super.prototype.setClonedProperties.call(this, cloned);
+    };
     return Shape;
 }(renderableModel_1.RenderableModel));
 exports.Shape = Shape;
@@ -2815,6 +2844,23 @@ var RenderableModel = (function (_super) {
             throw new debugError_1.DebugError("can not create model '" + _this.type + "': game instance not passed to model constructor");
         return _this;
     }
+    RenderableModel.prototype.setClonedProperties = function (cloned) {
+        cloned.width = this.width;
+        cloned.height = this.height;
+        cloned.pos.set(this.pos);
+        cloned.scale.set(this.scale);
+        cloned.anchor.set(this.anchor);
+        cloned.angle = this.angle;
+        cloned.alpha = this.alpha;
+        cloned.filters = this.filters.slice();
+        cloned.blendMode = this.blendMode;
+        cloned.parent = null;
+        cloned.children = [];
+        cloned.acceptLight = this.acceptLight;
+        cloned.rigid = this.rigid;
+        cloned.game = this.game;
+        _super.prototype.setClonedProperties.call(this, cloned);
+    };
     RenderableModel.prototype.revalidate = function () { };
     RenderableModel.prototype.setTimer = function (callback, interval) {
         var t = new timer_1.Timer(callback, interval);
@@ -3124,6 +3170,7 @@ exports.Keyboard = Keyboard;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var object_1 = __webpack_require__(19);
 var State = (function () {
     function State() {
         var values = [];
@@ -3167,7 +3214,7 @@ var ObservableEntity = (function () {
         this._onChanged.push(f);
     };
     ObservableEntity.prototype.removeListener = function (f) {
-        this._onChanged.remove(f);
+        object_1.removeFromArray(this._onChanged, function (it) { return it === f; });
     };
     return ObservableEntity;
 }());
@@ -3938,6 +3985,16 @@ var Ellipse = (function (_super) {
         this.game.getRenderer().drawEllipse(this);
         return true;
     };
+    Ellipse.prototype.setClonedProperties = function (cloned) {
+        cloned.radiusX = this.radiusX;
+        cloned.radiusY = this.radiusY;
+        _super.prototype.setClonedProperties.call(this, cloned);
+    };
+    Ellipse.prototype.clone = function () {
+        var cloned = new Ellipse(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
+    };
     return Ellipse;
 }(shape_1.Shape));
 exports.Ellipse = Ellipse;
@@ -3955,6 +4012,7 @@ var htmlAudioContext_1 = __webpack_require__(69);
 var fakeAudioContext_1 = __webpack_require__(70);
 var audioNodeSet_1 = __webpack_require__(71);
 var tween_1 = __webpack_require__(14);
+var object_1 = __webpack_require__(19);
 var AudioPlayer = (function () {
     function AudioPlayer(game) {
         this.game = game;
@@ -4012,7 +4070,7 @@ var AudioPlayer = (function () {
                     node.setGain(progressObj._gain);
                 },
                 complete: function () {
-                    _this.tweens.remove(tween_2);
+                    object_1.removeFromArray(_this.tweens, function (it) { return it === tween_2; });
                 }
             });
             this.tweens.push(tween_2);
@@ -4386,6 +4444,9 @@ var Resource = (function () {
     Resource.prototype.getResourceLink = function () {
         return this._resourceLink;
     };
+    Resource.prototype.setClonedProperties = function (cloned) {
+        cloned.setResourceLink(this.getResourceLink());
+    };
     return Resource;
 }());
 exports.Resource = Resource;
@@ -4463,6 +4524,7 @@ var color_1 = __webpack_require__(3);
 var camera_1 = __webpack_require__(29);
 var resourceLoader_1 = __webpack_require__(48);
 var eventEmitter_1 = __webpack_require__(17);
+var object_1 = __webpack_require__(19);
 var Scene = (function () {
     function Scene(game) {
         this.game = game;
@@ -4502,7 +4564,7 @@ var Scene = (function () {
         this.layers.push(layer);
     };
     Scene.prototype.removeLayer = function (layer) {
-        this.layers.remove(layer);
+        object_1.removeFromArray(this.layers, function (it) { return it === layer; });
     };
     Scene.prototype.appendChild = function (go) {
         go.revalidate();
@@ -5948,6 +6010,15 @@ var Circle = (function (_super) {
         this.game.getRenderer().drawEllipse(this);
         return true;
     };
+    Circle.prototype.setClonedProperties = function (cloned) {
+        cloned.radius = this.radius;
+        _super.prototype.setClonedProperties.call(this, cloned);
+    };
+    Circle.prototype.clone = function () {
+        var cloned = new Circle(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
+    };
     return Circle;
 }(ellipse_1.Ellipse));
 exports.Circle = Circle;
@@ -5970,6 +6041,15 @@ var Border = (function (_super) {
         _this.fillColor = color_1.Color.NONE;
         return _this;
     }
+    Border.prototype.setClonedProperties = function (cloned) {
+        cloned.fillColor = this.fillColor.clone();
+        _super.prototype.setClonedProperties.call(this, cloned);
+    };
+    Border.prototype.clone = function () {
+        var cloned = new Border(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
+    };
     return Border;
 }(rectangle_1.Rectangle));
 exports.Border = Border;
@@ -6166,6 +6246,12 @@ var LinearGradient = (function () {
         this.colorFrom.fromJSON(json.colorFrom);
         this.colorTo.fromJSON(json.colorTo);
     };
+    LinearGradient.prototype.toJSON = function () {
+        return {
+            colorFrom: this.colorFrom.toJSON(),
+            colorTo: this.colorTo.toJSON()
+        };
+    };
     LinearGradient.prototype.asGL = function () {
         var cFrom = this.colorFrom.asGL();
         var cTo = this.colorTo.asGL();
@@ -6182,6 +6268,11 @@ var LinearGradient = (function () {
         this._arr[10] = 0;
         this._arr[11] = 0;
         return this._arr;
+    };
+    LinearGradient.prototype.clone = function () {
+        var cloned = new LinearGradient();
+        cloned.fromJSON(this.toJSON());
+        return cloned;
     };
     return LinearGradient;
 }());
@@ -7759,7 +7850,7 @@ var GameObject = (function (_super) {
     tslib_1.__extends(GameObject, _super);
     function GameObject(game) {
         var _this = _super.call(this, game) || this;
-        _this.type = 'GameObjectProto';
+        _this.type = 'GameObject';
         _this.currFrameIndex = 0;
         _this.frameAnimations = [];
         _this.groupNames = [];
@@ -7783,8 +7874,17 @@ var GameObject = (function (_super) {
         if (this.rigid) {
         }
     };
+    GameObject.prototype.setClonedProperties = function (cloned) {
+        var spriteSheet = this.spriteSheet.clone();
+        cloned.frameAnimations = this.frameAnimations.slice();
+        cloned.spriteSheet = spriteSheet;
+        _super.prototype.setClonedProperties.call(this, cloned);
+    };
     GameObject.prototype.clone = function () {
-        return this;
+        var cloned = new GameObject(this.game);
+        this.setClonedProperties(cloned);
+        cloned.revalidate();
+        return cloned;
     };
     GameObject.prototype.playFrameAnimation = function (fr, opts) {
         fr._gameObject = this;
@@ -7878,6 +7978,18 @@ var SpriteSheet = (function (_super) {
         this._numOfFrames = this.numOfFramesH * this.numOfFramesV;
         this.setWH(this._frameWidth, this._frameHeight);
     };
+    SpriteSheet.prototype.setClonedProperties = function (cloned) {
+        cloned.numOfFramesV = this.numOfFramesV;
+        cloned.numOfFramesH = this.numOfFramesH;
+        cloned.numOfFramesV = this.numOfFramesV;
+        cloned.numOfFramesH = this.numOfFramesH;
+        _super.prototype.setClonedProperties.call(this, cloned);
+    };
+    SpriteSheet.prototype.clone = function () {
+        var cloned = new SpriteSheet(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
+    };
     SpriteSheet.prototype.getFramePosX = function (frameIndex) {
         return (frameIndex % this.numOfFramesH) * this._frameWidth;
     };
@@ -7969,6 +8081,7 @@ var MainScene = (function (_super) {
                     _this.logoObj.angle += 0.1;
             }
         });
+        window.logoObj = this.logoObj;
     };
     return MainScene;
 }(scene_1.Scene));

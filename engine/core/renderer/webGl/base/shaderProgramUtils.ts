@@ -95,7 +95,7 @@ export const createProgram = (gl:WebGLRenderingContext, vertexShader:WebGLShader
     return program;
 };
 
-let GL_TABLE:{[key:number]:string}|null = null;
+let GL_TABLE:{[key:number]:string} = null;
 
 export const GL_TYPE = {
     FLOAT:      'float',
@@ -126,7 +126,7 @@ const mapType = (gl:WebGLRenderingContext, type:number):string=> {
     if (!GL_TABLE) {
         let typeNames = Object.keys(GL_TYPE);
 
-        GL_TABLE = {};
+        GL_TABLE = {} as {[key:number]:string};
 
         for (let i = 0; i < typeNames.length; ++i) {
             let tn = typeNames[i];
@@ -258,9 +258,14 @@ const expect = (value:any,typeChecker:IChecker)=>{
     typeChecker.check(value);
 };
 
+type GL = WebGLRenderingContext;
+type LOC = WebGLUniformLocation;
+type NUM = string;
+
 const getUniformSetter = function(size:number,type:string){
     if (size===1) {
         switch (type) {
+
             case GL_TYPE.FLOAT: return (gl,location,value)=> {
                 DEBUG && expect(value,TypeNumber);
                 gl.uniform1f(location, value);
