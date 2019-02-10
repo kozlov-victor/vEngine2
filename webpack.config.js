@@ -2,16 +2,15 @@
 const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
-
 const debug = true;
+const colors = require('./node_tools/colors');
 
 class WebpackDonePlugin{
     apply(compiler){
-        // compiler.hooks.done.tap('compilation',  (stats)=> {
-        //     let indexHtml = fs.readFileSync('./game/index.html',{encoding:'UTF-8'});
-        //     indexHtml = indexHtml.replace('</body>','<script src="js/app.bundle.js"></script></body>');
-        //     fs.writeFileSync('./out/index.html',indexHtml);
-        // });
+        compiler.hooks.done.tap('compilation',  (stats)=> {
+            console.log(colors.fg.Green,'---===compiled===---',colors.Reset);
+        });
+
     }
 }
 

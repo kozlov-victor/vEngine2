@@ -1,4 +1,4 @@
-import {DebugError} from "../../../debugError";
+import {DebugError} from "@engine/debugError";
 import {IAudioContext} from "./iAudioContext";
 import {LoaderUtil} from "../../resources/loaderUtil";
 import {AudioPlayer} from "../audioPlayer";
@@ -31,13 +31,15 @@ class CtxHolder {
     }
 }
 
+
+
 const decode =(buffer:ArrayBuffer,callback:Function)=>{
     CtxHolder.getCtx().decodeAudioData(
         buffer,
-        function(decoded) {
+        (decoded:AudioBuffer)=> {
             callback(decoded);
         },
-        function(err){
+        (err:DOMException)=>{
             if (DEBUG) throw new DebugError(err.message);
         }
     );
@@ -65,7 +67,7 @@ export class WebAudioContext implements IAudioContext {
             return;
         }
         LoaderUtil.loadBinary(url, progress,  (buffer:ArrayBuffer)=> {
-            decode(buffer, (decoded)=>{
+            decode(buffer, (decoded:AudioBuffer)=>{
                 AudioPlayer.cache[url] = decoded;
                 onLoad();
             });
@@ -112,7 +114,7 @@ export class WebAudioContext implements IAudioContext {
         this._free = true;
     }
 
-    setGain(val) {
+    setGain(val:number) {
         this._gainNode.gain.value = val;
 
     }

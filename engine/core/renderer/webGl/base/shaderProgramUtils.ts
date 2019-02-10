@@ -1,4 +1,4 @@
-import {DebugError} from "../../../../debugError";
+import {DebugError} from "@engine/debugError";
 import {ShaderProgram} from "./shaderProgram";
 
 
@@ -124,13 +124,13 @@ export const GL_TYPE = {
 const mapType = (gl:WebGLRenderingContext, type:number):string=> {
 
     if (!GL_TABLE) {
-        let typeNames = Object.keys(GL_TYPE);
+        let typeNames:string[] = Object.keys(GL_TYPE);
 
         GL_TABLE = {} as {[key:number]:string};
 
         for (let i = 0; i < typeNames.length; ++i) {
-            let tn = typeNames[i];
-            GL_TABLE[gl[tn]] = GL_TYPE[tn];
+            let tn:string = typeNames[i];
+            GL_TABLE[(gl as any)[tn]] = (GL_TYPE as any)[tn]; //todo
         }
     }
 
@@ -260,73 +260,74 @@ const expect = (value:any,typeChecker:IChecker)=>{
 
 type GL = WebGLRenderingContext;
 type LOC = WebGLUniformLocation;
-type NUM = string;
+type NUM = number;
+type NUM_ARR = number[];
 
 const getUniformSetter = function(size:number,type:string){
     if (size===1) {
         switch (type) {
 
-            case GL_TYPE.FLOAT: return (gl,location,value)=> {
+            case GL_TYPE.FLOAT: return (gl:GL,location:LOC,value:NUM)=> {
                 DEBUG && expect(value,TypeNumber);
                 gl.uniform1f(location, value);
             };
-            case GL_TYPE.FLOAT_VEC2:  return (gl,location,value)=> {
+            case GL_TYPE.FLOAT_VEC2:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeNumber,2));
                 gl.uniform2f(location, value[0], value[1]);
             };
-            case GL_TYPE.FLOAT_VEC3:  return (gl,location,value)=> {
+            case GL_TYPE.FLOAT_VEC3:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeNumber,3));
                 gl.uniform3f(location, value[0], value[1], value[2]);
             };
-            case GL_TYPE.FLOAT_VEC4:  return (gl,location,value)=> {
+            case GL_TYPE.FLOAT_VEC4:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeNumber,4));
                 gl.uniform4f(location, value[0], value[1], value[2], value[3]);
             };
-            case GL_TYPE.INT:   return (gl,location,value)=> {
+            case GL_TYPE.INT:   return (gl:GL,location:LOC,value:NUM)=> {
                 DEBUG && expect(value,TypeInt);
                 gl.uniform1i(location, value);
             };
-            case GL_TYPE.INT_VEC2: return (gl,location,value)=> {
+            case GL_TYPE.INT_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeInt,2));
                 gl.uniform2i(location, value[0], value[1]);
             };
-            case GL_TYPE.INT_VEC3: return (gl,location,value)=> {
+            case GL_TYPE.INT_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeInt,3));
                 gl.uniform3i(location, value[0], value[1], value[2]);
             };
-            case GL_TYPE.INT_VEC4: return (gl,location,value)=> {
+            case GL_TYPE.INT_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeInt,4));
                 gl.uniform4i(location, value[0], value[1], value[2], value[3]);
             };
-            case GL_TYPE.BOOL:  return (gl,location,value)=> {
+            case GL_TYPE.BOOL:  return (gl:GL,location:LOC,value:NUM)=> {
                 DEBUG && expect(value,TypeBool);
                 gl.uniform1i(location, value);
             };
-            case GL_TYPE.BOOL_VEC2: return (gl,location,value)=> {
+            case GL_TYPE.BOOL_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeBool,2));
                 gl.uniform2i(location, value[0], value[1]);
             };
-            case GL_TYPE.BOOL_VEC3: return (gl,location,value)=> {
+            case GL_TYPE.BOOL_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeBool,3));
                 gl.uniform3i(location, value[0], value[1], value[2]);
             };
-            case GL_TYPE.BOOL_VEC4: return (gl,location,value)=> {
+            case GL_TYPE.BOOL_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeBool,4));
                 gl.uniform4i(location, value[0], value[1], value[2], value[3]);
             };
-            case GL_TYPE.FLOAT_MAT2:  return (gl,location,value)=> {
+            case GL_TYPE.FLOAT_MAT2:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeNumber,2*2));
                 gl.uniformMatrix2fv(location, false, value); // location, transpose (Must be false), value
             };
-            case GL_TYPE.FLOAT_MAT3:  return (gl,location,value)=> {
+            case GL_TYPE.FLOAT_MAT3:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeNumber,3*3));
                 gl.uniformMatrix3fv(location, false, value);
             };
-            case GL_TYPE.FLOAT_MAT4:  return (gl,location,value)=> {
+            case GL_TYPE.FLOAT_MAT4:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeNumber,4*4));
                 gl.uniformMatrix4fv(location, false, value);
             };
-            case GL_TYPE.SAMPLER_2D:return (gl,location,value)=> {
+            case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:NUM)=> {
                 DEBUG && expect(value,TypeInt);
                 gl.uniform1i(location, value);
             };
@@ -340,55 +341,55 @@ const getUniformSetter = function(size:number,type:string){
             // glsl:
             // uniform vec2 u_someVec2[3]
             // js:  u_someVec2 = [0,1, 2,3, 4,5];
-            case GL_TYPE.FLOAT: return (gl,location,value)=> {
+            case GL_TYPE.FLOAT: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeNumber,size));
                 gl.uniform1fv(location, value);
             };
-            case GL_TYPE.FLOAT_VEC2:  return (gl,location,value)=> {
+            case GL_TYPE.FLOAT_VEC2:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeNumber,size*2));
                 gl.uniform2fv(location, value);
             };
-            case GL_TYPE.FLOAT_VEC3:  return (gl,location,value)=> {
+            case GL_TYPE.FLOAT_VEC3:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeNumber,size*3));
                 gl.uniform3fv(location, value);
             };
-            case GL_TYPE.FLOAT_VEC4:  return (gl,location,value)=> {
+            case GL_TYPE.FLOAT_VEC4:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeNumber,size*4));
                 gl.uniform4fv(location, value);
             };
-            case GL_TYPE.INT:   return (gl,location,value)=> {
+            case GL_TYPE.INT:   return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeInt);
                 gl.uniform1iv(location, value);
             };
-            case GL_TYPE.INT_VEC2: return (gl,location,value)=> {
+            case GL_TYPE.INT_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeInt,size*2));
                 gl.uniform2iv(location, value);
             };
-            case GL_TYPE.INT_VEC3: return (gl,location,value)=> {
+            case GL_TYPE.INT_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeInt,size*3));
                 gl.uniform3iv(location, value);
             };
-            case GL_TYPE.INT_VEC4: return (gl,location,value)=> {
+            case GL_TYPE.INT_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeInt,size*4));
                 gl.uniform4iv(location, value);
             };
-            case GL_TYPE.BOOL:  return (gl,location,value)=> {
+            case GL_TYPE.BOOL:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeBool);
                 gl.uniform1iv(location, value);
             };
-            case GL_TYPE.BOOL_VEC2: return (gl,location,value)=> {
+            case GL_TYPE.BOOL_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeBool,size*2));
                 gl.uniform2iv(location, value);
             };
-            case GL_TYPE.BOOL_VEC3: return (gl,location,value)=> {
+            case GL_TYPE.BOOL_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeBool,size*3));
                 gl.uniform3iv(location, value);
             };
-            case GL_TYPE.BOOL_VEC4: return (gl,location,value)=> {
+            case GL_TYPE.BOOL_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeArray(TypeBool,size*4));
                 gl.uniform4iv(location, value);
             };
-            case GL_TYPE.SAMPLER_2D:return (gl,location,value)=> {
+            case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 DEBUG && expect(value,TypeInt);
                 gl.uniform1iv(location, value);
             };

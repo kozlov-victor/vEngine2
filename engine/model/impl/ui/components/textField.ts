@@ -33,7 +33,7 @@ class TextInfo {
     newString() {
         this.posX = 0;
         if (this.strings.length) {
-            this.posY += this.textField.font.getDefaultSymbolHeight();
+            this.posY += this.textField.getFont().getDefaultSymbolHeight();
         }
         this.strings.push(new StringInfo());
     }
@@ -186,13 +186,14 @@ class StringInfo extends CharsHolder {
 export class TextField extends ScrollableContainer {
 
     readonly type = 'TextField';
-    private _textInfo: TextInfo;
-    private _symbolImage:Image;
-
-    text: string = '';
-    font: Font = null;
     textAlign: TEXT_ALIGN = TEXT_ALIGN.LEFT;
     border: Rectangle = null;
+
+    private _textInfo: TextInfo;
+    private _symbolImage:Image;
+    private _text: string = '';
+    private _font: Font = null;
+
 
     constructor(game) {
         super(game);
@@ -204,15 +205,14 @@ export class TextField extends ScrollableContainer {
 
     revalidate() {
         super.revalidate();
-        if (DEBUG && !this.font) throw new DebugError(`font is not provided`);
-        if (DEBUG && !this.font.getResourceLink()) throw new DebugError(`can not render textField: font resource link is not set`);
-        this.setFont(this.font);
+        if (DEBUG && !this._font) throw new DebugError(`font is not provided`);
+        if (DEBUG && !this._font.getResourceLink()) throw new DebugError(`can not render textField: font resource link is not set`);
     }
 
     private _getCharInfo(c: char): CharInfo {
         let charRect: Rect =
-            this.font.fontContext.symbols[c] ||
-            this.font.fontContext.symbols[' '];
+            this._font.fontContext.symbols[c] ||
+            this._font.fontContext.symbols[' '];
         let charInfo = new CharInfo();
         charInfo.symbol = c;
         charInfo.sourceRect = charRect;
@@ -223,12 +223,12 @@ export class TextField extends ScrollableContainer {
     onGeometryChanged() {
         super.onGeometryChanged();
 
-        let textInfo = this._textInfo;
+        let textInfo:TextInfo = this._textInfo;
         textInfo.reset();
         textInfo.newString();
-        let text: string = this.text;
+        let text: string = this._text;
 
-        let strings = text.split('\n');
+        let strings:string[] = text.split('\n');
         strings.forEach((str:string, i:number) => {
             let words:string[] = str.split(' ');
             words.forEach((w: string, i: number) => {
@@ -250,7 +250,7 @@ export class TextField extends ScrollableContainer {
                 textInfo.newString();
             }
         });
-        textInfo.revalidate(this.font.getDefaultSymbolHeight());
+        textInfo.revalidate(this._font.getDefaultSymbolHeight());
         textInfo.align(this.textAlign);
         this.width = textInfo.width;
         if (this.maxHeight !== 0 && textInfo.height > this.maxHeight) {
@@ -266,17 +266,23 @@ export class TextField extends ScrollableContainer {
     }
 
     setText(text = '') {
-        this.text = text.toString();
+        this._text = text.toString();
         this._dirty = true;
     }
 
     getText() {
-        return this.text
+        return this._text
     }
 
     setFont(font) {
-        this.font = font;
-        this.setText(this.text);
+        this._font = font;
+        this.setText(this._text);
+    }
+
+
+
+    getFont():Font {
+        return this._font;
     }
 
 
@@ -286,7 +292,7 @@ export class TextField extends ScrollableContainer {
         renderer.save();
         if (this.vScrollInfo.offset) renderer.translate(0, -this.vScrollInfo.offset, 0);
 
-        this._symbolImage.setResourceLink(this.font.getResourceLink());
+        this._symbolImage.setResourceLink(this._font.getResourceLink());
         for (let charInfo of this._textInfo.allCharsCached) {
 
             if (charInfo.destRect.y - this.vScrollInfo.offset > this.height) continue;

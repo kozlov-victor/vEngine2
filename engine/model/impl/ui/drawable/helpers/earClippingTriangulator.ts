@@ -1,4 +1,4 @@
-import {DebugError} from "../../../../../debugError";
+import {DebugError} from "@engine/debugError";
 /**
  * adopted from https://raw.githubusercontent.com/libgdx/libgdx/master/gdx/src/com/badlogic/gdx/math/EarClippingTriangulator.java
  */
@@ -24,13 +24,13 @@ export class EarClippingTriangulator {
         let vertexCount: number = this.vertexCount = ~~(count / 2);
         let vertexOffset: number = ~~(offset / 2);
 
-        let indices = this.indices = [];
+        this.indices = [];
         if (EarClippingTriangulator.areVerticesClockwise(vertices, offset, count)) {
             for (let i: number = 0; i < vertexCount; i++)
-                indices[i] = vertexOffset + i;
+                this.indices[i] = vertexOffset + i;
         } else {
             for (let i = 0, n = vertexCount - 1; i < vertexCount; i++)
-                indices[i] = vertexOffset + n - i; // Reversed.
+                this.indices[i] = vertexOffset + n - i; // Reversed.
         }
 
         let vertexTypes: number[] = [];

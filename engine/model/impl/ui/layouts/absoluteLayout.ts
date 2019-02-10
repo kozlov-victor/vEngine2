@@ -5,10 +5,11 @@ import {RenderableModel} from "../../../renderableModel";
 
 import {Rect} from "@engine/core/geometry/rect";
 import {Container,LAYOUT_SIZE, OVERFLOW} from "../generic/container";
+import {Game} from "@engine/core/game";
 
 export class AbsoluteLayout extends Container {
 
-    constructor(game) {
+    constructor(game:Game) {
         super(game);
     }
 

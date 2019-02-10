@@ -3,7 +3,7 @@ import * as mat4 from '../../../geometry/mat4'
 
 export class MatrixStack {
 
-    stack = [];
+    stack:Array<number[]> = []; // todo type matrix, not number[]
 
     constructor(){
        this.restore();
@@ -25,35 +25,32 @@ export class MatrixStack {
         return this.stack[this.stack.length - 1].slice();
     }
 
-    setCurrentMatrix(m) {
+    setCurrentMatrix(m:number[]) {
         return this.stack[this.stack.length - 1] = m;
     }
 
-    translate(x, y, z?):MatrixStack {
-        if (z === undefined) {
-            z = 0;
-        }
+    translate(x:number, y:number, z:number = 0):MatrixStack {
         let t = mat4.makeTranslation(x, y, z);
         let m = this.getCurrentMatrix();
         this.setCurrentMatrix(mat4.matrixMultiply(t, m));
         return this;
     }
 
-    rotateZ(angleInRadians):MatrixStack {
+    rotateZ(angleInRadians:number):MatrixStack {
         let t = mat4.makeZRotation(angleInRadians);
         let m = this.getCurrentMatrix();
         this.setCurrentMatrix(mat4.matrixMultiply(t, m));
         return this;
     }
 
-    rotateY(angleInRadians):MatrixStack {
+    rotateY(angleInRadians:number):MatrixStack {
         let t = mat4.makeYRotation(angleInRadians);
         let m = this.getCurrentMatrix();
         this.setCurrentMatrix(mat4.matrixMultiply(t, m));
         return this;
     }
 
-    scale (x, y, z?):MatrixStack {
+    scale (x:number, y:number, z:number = 0):MatrixStack {
         if (z === undefined) {
             z = 1;
         }

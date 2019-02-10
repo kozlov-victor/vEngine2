@@ -9,9 +9,10 @@ export class SpriteSheet extends Image implements Cloneable<SpriteSheet>{
     numOfFramesH:number = 1;
     numOfFramesV:number = 1;
 
-    _frameWidth:number = 0;
-    _frameHeight:number = 0;
-    _numOfFrames:number = 0;
+    private _currFrameIndex:number = 0;
+    private _frameWidth:number = 0;
+    private _frameHeight:number = 0;
+    private _numOfFrames:number = 0;
 
 
     constructor(game:Game) {
@@ -20,11 +21,10 @@ export class SpriteSheet extends Image implements Cloneable<SpriteSheet>{
 
     revalidate(){
         super.revalidate();
-        if (!(this.numOfFramesH && this.numOfFramesV)) return;
         this._frameWidth = ~~(this.width / this.numOfFramesH);
         this._frameHeight = ~~(this.height / this.numOfFramesV);
         this._numOfFrames = this.numOfFramesH * this.numOfFramesV;
-        this.setWH(this._frameWidth,this._frameHeight);
+        this.setFrameIndex(0);
     }
 
     protected setClonedProperties(cloned:SpriteSheet) {
@@ -50,6 +50,19 @@ export class SpriteSheet extends Image implements Cloneable<SpriteSheet>{
         return ~~(frameIndex / this.numOfFramesH) * this._frameHeight;
     }
 
+    getNumOfFrames():number{
+        return this._numOfFrames;
+    }
+
+
+    getFrameWidth(): number {
+        return this._frameWidth;
+    }
+
+    getFrameHeight(): number {
+        return this._frameHeight;
+    }
+
     setFrameIndex(frameIndex:number){
         this.srcRect.setXYWH(
             this.getFramePosX(frameIndex),
@@ -57,6 +70,11 @@ export class SpriteSheet extends Image implements Cloneable<SpriteSheet>{
             this._frameWidth,
             this._frameHeight
         );
+        this._currFrameIndex = frameIndex;
+    }
+
+    getFrameIndex():number{
+        return this._currFrameIndex;
     }
 
 }

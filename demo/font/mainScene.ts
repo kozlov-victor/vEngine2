@@ -9,7 +9,6 @@ import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 
 export class MainScene extends Scene {
 
-    tf:TextField;
 
     onPreloading() {
         let fnt:Font = new Font(this.game);
@@ -19,25 +18,37 @@ export class MainScene extends Scene {
         fnt.createContext();
         let link:ResourceLink = this.resourceLoader.loadImage(fnt.createBitmap());
         fnt.setResourceLink(link);
+
+
+        let fnt2:Font = new Font(this.game);
+        fnt2.fontSize = 12;
+        fnt2.fontFamily = 'monospace';
+        fnt2.fontColor = Color.RGB(0,220,12);
+        fnt2.createContext();
+        let link2:ResourceLink = this.resourceLoader.loadImage(fnt2.createBitmap());
+        fnt2.setResourceLink(link2);
+
         let tf:TextField = new TextField(this.game);
-        tf.setFont(fnt);
-        tf.setText("hello");
+        tf.setFont(fnt2);
+        tf.setText("no clicks");
         this.appendChild(tf);
 
         let btn:Button = new Button(this.game);
         btn.setFont(fnt);
-        btn.setText("click me!");
+        btn.setText("click!");
         btn.pos.setXY(20,90);
         let bg:Rectangle = new Rectangle(this.game);
         bg.borderRadius = 15;
         bg.fillColor = Color.RGB(0,120,1);
         btn.background = bg;
         btn.setPaddings(15);
+
+        let cnt:number = 0;
+
         btn.on('click',()=>{
-           tf.setText(Math.random().toString());
+           tf.setText(`clicked ${++cnt} times`);
         });
         this.appendChild(btn);
-
     }
 
     onReady() {

@@ -1,9 +1,8 @@
-import {Rect} from "../../../../core/geometry/rect";
-import {DrawableInfo} from "../../../../core/renderer/webGl/renderPrograms/interface/drawableInfo";
-import {MOUSE_EVENTS} from "../../../../core/control/mouse";
+import {Rect} from "@engine/core/geometry/rect";
+import {MOUSE_EVENTS} from "@engine/core/control/mouse";
 import {RenderableModel} from "../../../renderableModel";
-import {DebugError} from "../../../../debugError";
-import {Game} from "../../../../core/game";
+import {DebugError} from "@engine/debugError";
+import {Game} from "@engine/core/game";
 import {Shape} from "./shape";
 
 
@@ -14,11 +13,15 @@ export enum OVERFLOW {
 }
 
 export enum LAYOUT_SIZE {
-    FIXED = 'FIXED',WRAP_CONTENT = 'WRAP_CONTENT',MATCH_PARENT = 'MATCH_PARENT'
+    FIXED,
+    WRAP_CONTENT,
+    MATCH_PARENT
 }
 
 export enum STATE {
-    NORMAL = 'NORMAL',ACTIVE = 'ACTIVE',DISABLED = 'DISABLED'
+    NORMAL,
+    ACTIVE,
+    DISABLED
 }
 
 
@@ -85,11 +88,11 @@ export abstract class Container extends RenderableModel {
         return {top,right,bottom,left};
     }
 
-    setMargins(top:number);
-    setMargins(top:number,right:number);
-    setMargins(top:number,right:number,bottom:number);
-    setMargins(top:number,right:number,bottom:number,left:number);
-    setMargins(top:number,right?:number,bottom?:number,left?:number){
+    setMargins(top:number):void;
+    setMargins(top:number,right:number):void;
+    setMargins(top:number,right:number,bottom:number):void;
+    setMargins(top:number,right:number,bottom:number,left:number):void;
+    setMargins(top:number,right?:number,bottom?:number,left?:number):void{
 
         ({top,right,bottom,left} = Container.normalizeBorders(top,right,bottom,left));
         this.marginTop = top;
@@ -113,11 +116,11 @@ export abstract class Container extends RenderableModel {
         this.setDirty();
     }
 
-    setPaddings(top:number);
-    setPaddings(top:number,right:number);
-    setPaddings(top:number,right:number,bottom:number);
-    setPaddings(top:number,right:number,bottom:number,left:number);
-    setPaddings(top:number,right?:number,bottom?:number,left?:number){
+    setPaddings(top:number):void;
+    setPaddings(top:number,right:number):void;
+    setPaddings(top:number,right:number,bottom:number):void;
+    setPaddings(top:number,right:number,bottom:number,left:number):void;
+    setPaddings(top:number,right?:number,bottom?:number,left?:number):void{
 
         ({top,right,bottom,left} = Container.normalizeBorders(top,right,bottom,left));
 
@@ -159,13 +162,14 @@ export abstract class Container extends RenderableModel {
 
     describeStates(description:{[state:string]:any}){
         let allUIRenderable = require('../all');
-        Object.keys(description).forEach((stateName:string)=>{
-            let state:STATE = STATE[stateName];
-            let clazz = allUIRenderable[description[stateName].type];
-            let instance = new clazz(this.game);
-            instance.fromJSON(description[stateName]);
-            this.bgByState[state] = instance;
-        });
+        throw 'deprecated';
+        // Object.keys(description).forEach((stateName:string)=>{
+        //     let state:STATE = STATE[stateName];
+        //     let clazz = allUIRenderable[description[stateName].type];
+        //     let instance = new clazz(this.game);
+        //     instance.fromJSON(description[stateName]);
+        //     this.bgByState[state] = instance;
+        // });
     }
 
     revalidate(){

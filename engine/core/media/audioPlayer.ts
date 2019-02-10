@@ -70,7 +70,7 @@ export  class AudioPlayer {
                 target: sound,
                 to: {_gain:val},
                 time,
-                progress:(progressObj)=>{
+                progress:(progressObj:{_gain:number})=>{
                     node.setGain(progressObj._gain);
                 },
                 complete: ()=>{

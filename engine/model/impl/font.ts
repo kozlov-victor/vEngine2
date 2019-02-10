@@ -32,16 +32,16 @@ class FontFactory {
         return height;
     }
     
-    public static getFontContext(arrFromTo:Range[], strFont, w):FontContext {
+    public static getFontContext(arrFromTo:Range[], strFont:string, w:number):FontContext {
         
         let cnv:HTMLCanvasElement = document.createElement('canvas');
         let ctx:CanvasRenderingContext2D = cnv.getContext('2d');
         ctx.font = strFont;
         let textHeight:number = FontFactory.getFontHeight(strFont) + 2 * FontFactory.SYMBOL_PADDING;
-        let symbols = {};
+        let symbols:{[key:string]:Rect} = {};
         let currX:number = 0, currY:number = 0, cnvHeight = textHeight;
         for (let k:number = 0; k < arrFromTo.length; k++) {
-            let arrFromToCurr = arrFromTo[k];
+            let arrFromToCurr:Range = arrFromTo[k];
             for (let i:number = arrFromToCurr.from; i < arrFromToCurr.to; i++) {
                 let currentChar = String.fromCharCode(i);
                 ctx = cnv.getContext('2d');
@@ -104,8 +104,8 @@ export class Font extends Resource {
     }
 
     createContext(){
-        const ranges:Range[] = [{from: 32, to: 150}, {from: 1040, to: 1116}];
-        const WIDTH:number = 128;
+        const ranges:Range[] = [{from: 32, to: 126}, {from: 1040, to: 1116}];
+        const WIDTH:number = 512;
         this.fontContext = FontFactory.getFontContext(ranges,this.asCss(),WIDTH);
     }
 
@@ -121,7 +121,7 @@ export class Font extends Resource {
     //         if (DEBUG) {
     //             if (s[key]==undefined) {
     //                 console.error(s);
-    //                 throw new DebugError(`font revalidation error: can not find proper object for key ${key}`);
+    //                 throw new DebugError(`_font revalidation error: can not find proper object for key ${key}`);
     //             }
     //         }
     //         this.fontContext.symbols[key] = new Rect(s[key].x,s[key].y,s[key].width,s[key].height);

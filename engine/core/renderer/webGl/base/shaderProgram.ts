@@ -1,6 +1,6 @@
 
 
-import {DebugError} from "../../../../debugError";
+import {DebugError} from "@engine/debugError";
 
 
 
@@ -40,7 +40,7 @@ export class ShaderProgram {
         ShaderProgram.currentProgram = this;
     }
 
-    setUniform(name:string, value) {
+    setUniform(name:string, value:any) {
         if (DEBUG && !name) {
             throw new DebugError(`no uniform name was provided!`);
         }
@@ -48,7 +48,7 @@ export class ShaderProgram {
         if (DEBUG && !uniform) {
             //console.error(this);
             return;
-            throw new DebugError(`no uniform with name ${name} found!`);
+            //throw new DebugError(`no uniform with name ${name} found!`); //todo ??
         }
         if (DEBUG) {
             if (ShaderProgram.currentProgram!==this) {

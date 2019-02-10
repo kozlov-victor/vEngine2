@@ -45,7 +45,7 @@ export class Scene implements Revalidatable {
 
     }
 
-    addTweenMovie(tm){
+    addTweenMovie(tm:TweenMovie){
         this._tweenMovies.push(tm);
     }
     getAllGameObjects(){

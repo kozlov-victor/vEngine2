@@ -1,5 +1,7 @@
 type num = number;
 
+export type EaseFn = (t:num,b:num,c:num,d:num)=>num;
+
 export class Easing {
     // simple linear tweening - no easing, no acceleration
     static linear(t: num, b: num, c: num, d: num): num {

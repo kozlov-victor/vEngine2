@@ -1,23 +1,27 @@
 import {Container} from "../generic/container";
 import {TextField} from "./textField";
 import {Font} from "../../font";
+import {Game} from "@engine/core/game";
+import {DebugError} from "@engine/debugError";
 
 
 export class Button extends Container {
 
-    font:Font = null;
+    private _font:Font;
 
     private readonly _textField:TextField;
 
-    constructor(game) {
+    constructor(game:Game) {
         super(game);
         this._textField = new TextField(game);
-        this.appendChild(this._textField);
     }
 
     revalidate(){
+         if (DEBUG && !this._font)
+             throw new DebugError(`font is not set`);
+        if (this.children.indexOf(this._textField)===-1)
+            this.appendChild(this._textField);
         super.revalidate();
-        this._textField.setFont(this.font);
         this.onGeometryChanged();
     }
 
@@ -39,7 +43,7 @@ export class Button extends Container {
     }
 
     setFont(f:Font){
-        this.font = f;
+        this._font = f;
         this._textField.setFont(f);
     }
 
@@ -53,7 +57,6 @@ export class Button extends Container {
 
     draw():boolean{
         if (this.background) this.background.draw();
-        this._textField.render();
         return true;
     }
 

@@ -19,7 +19,7 @@ export class AudioNode {
         this.currSound = null;
     }
 
-    setGain(val){
+    setGain(val:number){
         this.context.setGain(val);
     }
 

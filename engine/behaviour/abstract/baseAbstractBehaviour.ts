@@ -11,7 +11,7 @@ export abstract class BaseAbstractBehaviour {
     protected game:Game;
     protected parameters:IKeyVal;
 
-    abstract constructor(game:Game,parameters:IKeyVal){
+    protected constructor(game:Game,parameters:IKeyVal){
         this.game = game;
         this.parameters = parameters;
     }

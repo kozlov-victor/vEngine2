@@ -53,3 +53,5 @@ export const removeFromArray = (arr:any[],predicate:(item:any)=>boolean):number=
     }
     return cnt;
 };
+
+export const noop = (arg?:any):any=>{};

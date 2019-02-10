@@ -1,6 +1,6 @@
 
 
-import {Easing} from "./easing";
+import {EaseFn, Easing} from "./easing";
 
 interface KeyVal {
     [key:string]:any
@@ -35,14 +35,14 @@ export interface TweenDescription {
     target:any,
     progress?:Function,
     complete?:Function,
-    ease?:string,
+    ease?:EaseFn,
     time:number,
     from?:{[key:string]:number},
     to?:{[key:string]:number}
 }
 
 export interface TweenDescriptionNormalized extends TweenDescription{
-    ease:string,
+    ease:EaseFn,
     from:KeyVal,
     to:KeyVal
 }
@@ -56,7 +56,7 @@ export class Tween {
     private readonly _target: any;
     private _progressFn:Function|undefined;
     private readonly _completeFn: Function|undefined;
-    private readonly _easeFnName:string;
+    private readonly _easeFn:EaseFn;
     private readonly _tweenTime: number;
     private _desc:TweenDescriptionNormalized;
 
@@ -74,7 +74,7 @@ export class Tween {
         this._target = tweenDesc.target;
         this._progressFn = tweenDesc.progress;
         this._completeFn = tweenDesc.complete;
-        this._easeFnName = tweenDesc.ease || 'linear';
+        this._easeFn = tweenDesc.ease || Easing.linear  as EaseFn; // todo namespaces for easing?
         this._tweenTime = tweenDesc.time || 1000;
         this._desc = this.normalizeDesc(tweenDesc);
     }
@@ -122,7 +122,7 @@ export class Tween {
             let prp:string = this._propsToChange[l];
             let valFrom:number = this._desc.from[prp] as number;
             let valTo:number = this._desc.to[prp] as number;
-            let fn:Function = Easing[this._easeFnName] as Function;
+            let fn:EaseFn = this._easeFn;
             let valCurr:number = <number>fn(
                 curTweenTime,
                 valFrom,

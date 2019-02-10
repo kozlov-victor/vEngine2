@@ -95,9 +95,9 @@ export class NinePatchImage extends Image {
         this._revalidatePatches();
     }
 
-    setABCD(a:number);
-    setABCD(a:number,b:number,c:number,d:number);
-    setABCD(a:number,b?:number,c?:number,d?:number) {
+    setABCD(a:number):void;
+    setABCD(a:number,b:number,c:number,d:number):void;
+    setABCD(a:number,b?:number,c?:number,d?:number):void {
         if (b===undefined) b = a;
         if (c===undefined) c = b;
         if (d===undefined) d = c;

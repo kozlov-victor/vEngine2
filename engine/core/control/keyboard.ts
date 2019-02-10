@@ -8,9 +8,9 @@ import {Game} from "../game";
 declare const window:any;
 
 export enum KEYBOARD_EVENT {
-    KEY_PRESSED = '1',
-    KEY_RELEASED = '2',
-    KEY_HOLD = '3'
+    KEY_PRESSED,
+    KEY_RELEASED,
+    KEY_HOLD
 }
 
 export enum KEY  {
@@ -89,21 +89,21 @@ export class Keyboard {
         if (this.isPressed(key)) return;
         //console.log('pressed',key);
         this.buffer[key] = KEY_STATE.KEY_JUST_PRESSED;
-        this.emitter.trigger(KEYBOARD_EVENT.KEY_PRESSED,key);
+        this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_PRESSED],key);
     }
 
     release(key:number){
         if (this.isReleased(key)) return;
         this.buffer[key] = KEY_STATE.KEY_JUST_RELEASED;
-        this.emitter.trigger(KEYBOARD_EVENT.KEY_RELEASED,this.buffer[key]);
+        this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_RELEASED],this.buffer[key]);
     }
 
     on(e:KEYBOARD_EVENT,callback:(e:KEY)=>any) {
-        this.emitter.on(e,callback);
+        this.emitter.on(KEYBOARD_EVENT[e],callback);
     }
 
     off(e:KEYBOARD_EVENT,callback:Function){
-        this.emitter.off(e,callback);
+        this.emitter.off(KEY[e],callback);
     }
 
     isPressed(key:number):boolean{
@@ -131,7 +131,7 @@ export class Keyboard {
             if (this.buffer[keyNum]===KEY_STATE.KEY_JUST_PRESSED) {
                 this.buffer[keyNum] = KEY_STATE.KEY_PRESSED;
             }
-            this.emitter.trigger(KEYBOARD_EVENT.KEY_HOLD,keyNum);
+            this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_HOLD],keyNum);
         });
     }
 

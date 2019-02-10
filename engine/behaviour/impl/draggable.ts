@@ -1,19 +1,19 @@
-
-import {BaseAbstractBehaviour} from '../abstract/baseAbstractBehaviour'
+import {BaseAbstractBehaviour} from "../abstract/baseAbstractBehaviour";
 import {Game} from "../../core/game";
 import {GameObject} from "../../model/impl/gameObject";
 import {Scene} from "../../model/impl/scene";
-import {MouseEventEx} from "../../declarations";
 import {IMousePoint} from "@engine/core/control/mouse";
 
 interface MouseDragPoint {
     mX: number,
     mY: number,
+    x:number,y:number,
     target: GameObject,
     defaultPrevented:boolean,
     preventDefault():void,
     dragStartX:number,
-    dragStartY:number
+    dragStartY:number,
+    dragStart: boolean
 }
 
 
@@ -59,7 +59,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
             point.dragStartX = point.target.pos.x;
             point.dragStartY = point.target.pos.y;
         });
-        this.sceneOnMouseMove = scene.on('mouseMove',e=>{
+        this.sceneOnMouseMove = scene.on('mouseMove',(e:IMousePoint)=>{
             let pointId = DraggableBehaviour._getEventId(e);
             let point = this.points[pointId];
             if (!point) return;
@@ -74,9 +74,9 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
             gameObject.pos.x = e.screenX - point.mX;
             gameObject.pos.y = e.screenY - point.mY;
         });
-        this.sceneOnMouseUp = scene.on('mouseUp',e=>{
-            let pointId = DraggableBehaviour._getEventId(e);
-            let point = this.points[pointId];
+        this.sceneOnMouseUp = scene.on('mouseUp',(e:IMousePoint)=>{
+            let pointId:number = DraggableBehaviour._getEventId(e);
+            let point:MouseDragPoint = this.points[pointId];
             if (!point) return;
             if (point.dragStart) {
                 point.x = gameObject.pos.x;

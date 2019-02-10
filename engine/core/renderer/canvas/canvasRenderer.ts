@@ -114,7 +114,8 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     resetTransform(){
         // @ts-ignore
-        this.ctx.resetTransform();
+        //noinspection BadExpressionStatementJS
+        this.ctx['resetTransform']();
     }
 
     rotateZ(angleInRadians:number) {

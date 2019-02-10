@@ -23,13 +23,22 @@ export class MainScene extends Scene {
         spr.numOfFramesH = 5;
         let anim:FrameAnimation = new FrameAnimation(this.game);
         anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
-        this.obj.frameAnimations.push(anim);
-        this.obj.playFrameAnimation(anim);
-        anim.play();
+        this.obj.addFrameAnimation('animation',anim);
+        anim.isRepeat = true;
+        this.obj.playFrameAnimation('animation');
         spr.setResourceLink(this.resourceLink);
         this.obj.spriteSheet = spr;
         this.obj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.obj);
+
+        let playing:boolean = true;
+
+        this.on('click',()=>{
+           playing = !playing;
+           if (playing) this.obj.playFrameAnimation('animation');
+           else this.obj.stopFrAnimation();
+        });
+
     }
 
 }

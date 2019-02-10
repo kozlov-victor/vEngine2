@@ -3,6 +3,7 @@ import {Container} from "../generic/container";
 import {Rectangle} from "../drawable/rectangle";
 import {Color} from "../../../../core/renderer/color";
 import {Shape} from "../generic/shape";
+import {Game} from "@engine/core/game";
 
 export class CheckBox extends Container {
 
@@ -11,7 +12,7 @@ export class CheckBox extends Container {
 
     checked: boolean = false;
 
-    constructor(game) {
+    constructor(game:Game) {
         super(game);
         let rNormal = new Rectangle(game);
         rNormal.width = 10;

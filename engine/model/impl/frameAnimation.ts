@@ -5,67 +5,53 @@ import {EventEmitter} from "../../core/misc/eventEmitter";
 
 export class FrameAnimation  {
 
-    type:string = 'FrameAnimation';
+    readonly type:string = 'FrameAnimation';
     name:string;
-    _currFrame:number = 0;
-    frames = [];
+    frames:number[] = [];
     duration:number = 1000;
-    _gameObject:GameObject = null;
+    isRepeat:boolean = true;
 
-    private _startTime:number = null;
+    private _currFrame:number = 0;
+    private _gameObject:GameObject;
+    private _startTime:number;
     private _timeForOneFrame:number;
-    private _isRepeat:boolean;
 
     constructor(public game:Game) {
         this._emitter = new EventEmitter();
-        this.stop();
     }
 
     revalidate(){
         this._timeForOneFrame = ~~(this.duration / this.frames.length);
     }
 
-    play(opts = {repeat:true}) {
-        this._isRepeat = opts.repeat;
-        this._gameObject.playFrameAnimation(this,opts);
+    getGameObject():GameObject{
+        return this._gameObject;
     }
 
-    stop() {
-        if (this._gameObject) this._gameObject.stopFrAnimations();
-        this._startTime = null;
-        this._isRepeat = true;
+    setGameObject(g:GameObject){
+        this._gameObject = g;
     }
 
-    update(time) {
+    update(time:number) {
         if (!this._startTime) this._startTime = time;
         let delta = (time - this._startTime) % this.duration;
         this._currFrame = ~~((this.frames.length) * delta / this.duration);
-        if (this._isRepeat==false && this._currFrame>=this.frames.length-1) {
+        if (this.isRepeat==false && this._currFrame>=this.frames.length-1) {
             this.trigger('loop');
-            this.stop();
+            this._gameObject.stopFrAnimation();
             return;
         }
-        let lastFrIndex = this._gameObject.currFrameIndex;
+        let lastFrIndex = this._gameObject.spriteSheet.getFrameIndex();
         if (lastFrIndex != this.frames[this._currFrame]) {
-            this._gameObject.setFrameIndex(this.frames[this._currFrame]);
+            let index:number = this.frames[this._currFrame];
+            index = index % this._gameObject.spriteSheet.getNumOfFrames();
+            this._gameObject.spriteSheet.setFrameIndex(index);
             if (this._currFrame===0 && this._startTime!==time) this.trigger('loop');
         }
     }
 
-    nextFrame() {
-        let ind = this._currFrame;
-        ind++;
-        if (ind == this.frames.length) ind = 0;
-        this._gameObject.setFrameIndex(this.frames[ind]);
-        this._currFrame = ind;
-    }
-
-    previousFrame() {
-        let ind = this._currFrame;
-        ind--;
-        if (ind < 0) ind = this.frames.length - 1;
-        this._gameObject.setFrameIndex(this.frames[ind]);
-        this._currFrame = ind;
+    reset(){
+        this._startTime = 0;
     }
 
     // todo extract to class?

@@ -1,6 +1,4 @@
-
-
-import {DebugError} from "../../../debugError";
+import {DebugError} from "@engine/debugError";
 import {AbstractDrawer, TextureInfo} from "./renderPrograms/abstract/abstractDrawer";
 import {LineDrawer} from "./renderPrograms/impl/base/lineDrawer";
 import {ShapeDrawer} from "./renderPrograms/impl/base/shapeDrawer";
@@ -13,38 +11,31 @@ import {Rect} from "../../geometry/rect";
 import {Game} from "../../game";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../color";
-import {ShaderMaterial} from "../../light/shaderMaterial";
-import {DrawableInfo} from "./renderPrograms/interface/drawableInfo";
-import {IDrawer} from "./renderPrograms/interface/iDrawer";
 import {UniformsInfo} from "./renderPrograms/interface/uniformsInfo";
 import {Size} from "../../geometry/size";
-import { ModelDrawer } from './renderPrograms/impl/base/modelDrawer';
-import {GameObject3d} from "../../../model/impl/gameObject3d";
-import {Ellipse} from "../../../model/impl/ui/drawable/ellipse";
-import {Rectangle} from "../../../model/impl/ui/drawable/rectangle";
-import {Image} from "../../../model/impl/ui/drawable/image";
-import {SHAPE_TYPE, FILL_TYPE} from "./renderPrograms/impl/base/shapeDrawer.frag";
-import {Scene} from "../../../model/impl/scene";
-import {Shape} from "../../../model/impl/ui/generic/shape";
-import {GameObject} from "../../../model/impl/gameObject";
+import {ModelDrawer} from "./renderPrograms/impl/base/modelDrawer";
+import {GameObject3d} from "@engine/model/impl/gameObject3d";
+import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
+import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {Image} from "@engine/model/impl/ui/drawable/image";
+import {FILL_TYPE, SHAPE_TYPE} from "./renderPrograms/impl/base/shapeDrawer.frag";
+import {Shape} from "@engine/model/impl/ui/generic/shape";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
+import {AbstractFilter} from "@engine/core/renderer/webGl/filters/abstract/abstractFilter";
 
 
-
-
-
-const getCtx = el=>{
+const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
     return (
         el.getContext("webgl",{alpha: false}) ||
         el.getContext('experimental-webgl',{alpha: false}) ||
         el.getContext('webkit-3d',{alpha: false}) ||
         el.getContext('moz-webgl',{alpha: false})
-    );
+    ) as WebGLRenderingContext;
 };
 const SCENE_DEPTH:number = 1000;
 const matrixStack:MatrixStack = new MatrixStack();
 
-const makePositionMatrix = function(rect:Rect,viewSize:Size){
+const makePositionMatrix = (rect:Rect,viewSize:Size)=>{
     // proj * modelView
     let zToWMatrix = mat4.makeZToWMatrix(1);
     let projectionMatrix = mat4.ortho(0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
@@ -58,7 +49,8 @@ const makePositionMatrix = function(rect:Rect,viewSize:Size){
     return matrix;
 };
 
-const makeTextureMatrix = function(srcRect:Rect,texSize:Size){
+// todo remove
+const makeTextureMatrix = (srcRect:Rect,texSize:Size)=>{
 
     let texScaleMatrix = mat4.makeScale(srcRect.width / texSize.width, srcRect.height / texSize.height, 1);
     let texTranslationMatrix = mat4.makeTranslation(srcRect.x / texSize.width, srcRect.y / texSize.height, 0);
@@ -89,7 +81,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     private _init(){
-    	let gl = getCtx(this.container);
+    	let gl:WebGLRenderingContext = getCtx(this.container as HTMLCanvasElement);
     	this.gl = gl;
 
     	this.nullTexture = new Texture(gl);
@@ -384,7 +376,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
 
-    flipFrameBuffer(filters){
+    flipFrameBuffer(filters:AbstractFilter[]){
         let texToDraw = this.frameBuffer.getTexture().applyFilters(filters,null);
         this.frameBuffer.unbind();
         this.gl.viewport(0, 0, this.fullScreenSize.width,this.fullScreenSize.height);

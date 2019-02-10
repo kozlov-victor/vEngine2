@@ -14,12 +14,12 @@ export class Layer {
     }
 
 
-    prependChild(go){ // todo set gameobject layer reference
+    prependChild(go:RenderableModel){ // todo set gameobject layer reference
         go.parent = null;
         go.revalidate();
         this.children.unshift(go);
     }
-    appendChild(go){
+    appendChild(go:RenderableModel){
         go.parent = null;
         go.revalidate();
         this.children.push(go);
@@ -34,7 +34,7 @@ export class Layer {
     }
 
 
-    update(currTime,deltaTime){
+    update(currTime:number,deltaTime:number){
         let all = this.children;
         for (let obj of all) {
             obj.update(currTime,deltaTime);

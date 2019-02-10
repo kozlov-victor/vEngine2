@@ -4,6 +4,7 @@ import {Rect} from "../geometry/rect";
 import {Game} from "../game";
 import {AbstractLight} from "./abstract/abstractLight";
 import {Camera} from "../renderer/camera";
+import {IKeyVal} from "@engine/core/misc/object";
 
 export class PointLight extends AbstractLight {
 
@@ -29,7 +30,7 @@ export class PointLight extends AbstractLight {
         return this._screenPoint;
     }
 
-    setUniforms(uniform:Object,i:number){
+    setUniforms(uniform:IKeyVal,i:number){
         uniform[`u_pointLights[${i}].pos`] =  this.getPosScaled().toArray();
         uniform[`u_pointLights[${i}].nearRadius`] = this.nearRadius;
         uniform[`u_pointLights[${i}].farRadius`] = this.farRadius;

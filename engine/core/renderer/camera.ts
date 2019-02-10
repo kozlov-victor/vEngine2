@@ -8,6 +8,7 @@ import {Game} from "../game";
 import {GameObject} from "../../model/impl/gameObject";
 import {Scene} from "../../model/impl/scene";
 import {AbstractRenderer} from "@engine/core/renderer/abstract/abstractRenderer";
+import {RenderableModel} from "@engine/model/renderableModel";
 
 
 
@@ -23,7 +24,7 @@ export enum CAMERA_MATRIX_MODE {
 
 export class Camera {
 
-    private objFollowTo:GameObject = null;
+    private objFollowTo:RenderableModel;
     private game:Game;
     private scene:Scene = null;
     private sceneWidth:number = 0;
@@ -62,8 +63,8 @@ export class Camera {
         if (this.scene.tileMap) this.scene.tileMap.revalidate();
         this._rectIdentity.setXYWH(0,0,this.game.width,this.game.height);
         if (this.scene.tileMap.spriteSheet) {
-            this.sceneWidth = this.scene.tileMap.spriteSheet._frameWidth*this.scene.tileMap.width;
-            this.sceneHeight = this.scene.tileMap.spriteSheet._frameHeight*this.scene.tileMap.height;
+            this.sceneWidth = this.scene.tileMap.spriteSheet.getFrameWidth()*this.scene.tileMap.width;
+            this.sceneHeight = this.scene.tileMap.spriteSheet.getFrameHeight()*this.scene.tileMap.height;
         } else {
             this.sceneWidth = this.game.getCurrScene().width || this.game.width;
             this.sceneHeight = this.game.getCurrScene().height || this.game.height;
@@ -71,7 +72,7 @@ export class Camera {
     }
 
 
-    followTo(gameObject) {
+    followTo(gameObject:RenderableModel) {
         if (gameObject===null) return;
         if (DEBUG && gameObject===undefined) throw new DebugError(`Camera:followTo(gameObject) - gameObject not provided`);
         this.objFollowTo = gameObject;
@@ -81,8 +82,8 @@ export class Camera {
     update(currTime:number,delta:number) {
         this.scene = this.game.getCurrScene();
 
-        let tileWidth = this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet._frameWidth:0; // todo ?
-        let tileHeight = this.scene.tileMap.spriteSheet? this.scene.tileMap.spriteSheet._frameHeight:0;
+        let tileWidth = this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getFrameWidth():0; // todo ?
+        let tileHeight = this.scene.tileMap.spriteSheet? this.scene.tileMap.spriteSheet.getFrameHeight():0;
         let w = this.game.width;
         let h = this.game.height;
         let wDiv2 = w/2;
@@ -90,7 +91,7 @@ export class Camera {
 
         let wScaled = this.getRectScaled().width;
 
-        let gameObject:GameObject = this.objFollowTo;
+        let gameObject:RenderableModel = this.objFollowTo;
         if (gameObject) {
             if (gameObject['_lastDirection'] === 'Right')
                 this.cameraPosCorrection.max.x=wScaled/3; // todo _lastDirection

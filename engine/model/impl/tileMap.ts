@@ -36,8 +36,8 @@ export class TileMap {
                 else {
                     this.data[j][i] = {};
                     this.data[j][i].val = val - 1;
-                    let w = this.spriteSheet._frameWidth;
-                    let h = this.spriteSheet._frameHeight;
+                    let w = this.spriteSheet.getFrameWidth();
+                    let h = this.spriteSheet.getFrameHeight();
                     let x = i*w;
                     let y = j*h;
                     let c = new Vec2(x+w/2,y+h/2);
@@ -62,14 +62,14 @@ export class TileMap {
         this.game.camera._updateRect();
         let camRect = this.game.camera.getRectScaled();
         if (!this.spriteSheet) return;
-        this._tilesInScreenX = ~~(camRect.width / this.spriteSheet._frameWidth);
-        this._tilesInScreenY = ~~(camRect.height / this.spriteSheet._frameHeight);
+        this._tilesInScreenX = ~~(camRect.width / this.spriteSheet.getFrameWidth());
+        this._tilesInScreenY = ~~(camRect.height / this.spriteSheet.getFrameHeight());
     }
 
     getTileAt(x:number,y:number){
         if (!this.spriteSheet) return;
-        let tilePosX = ~~(x / this.spriteSheet._frameWidth);
-        let tilePosY = ~~(y / this.spriteSheet._frameHeight);
+        let tilePosX = ~~(x / this.spriteSheet.getFrameWidth());
+        let tilePosY = ~~(y / this.spriteSheet.getFrameHeight());
         if (!this.data[tilePosY]) return;
         let tile = this.data[tilePosY][tilePosX];
         if (!tile) return;
@@ -97,11 +97,11 @@ export class TileMap {
                     }
                 }
                 if (y===maxY) break;
-                y+=this.spriteSheet._frameHeight;
+                y+=this.spriteSheet.getFrameHeight();
                 if (y>maxY) y = maxY;
             }
             if (x===maxX) break;
-            x+=this.spriteSheet._frameWidth;
+            x+=this.spriteSheet.getFrameWidth();
             if (x>maxX) x = maxX;
         }
         return result;
@@ -113,20 +113,20 @@ export class TileMap {
         let camera = this.game.camera;
         let renderer = this.game.getRenderer();
         let cameraRect = camera.getRectScaled();
-        let tilePosX = ~~((cameraRect.x) / this.spriteSheet._frameWidth);
-        let tilePosY = ~~((cameraRect.y) / this.spriteSheet._frameHeight);
+        let tilePosX = ~~((cameraRect.x) / this.spriteSheet.getFrameWidth());
+        let tilePosY = ~~((cameraRect.y) / this.spriteSheet.getFrameHeight());
         if (tilePosX<0) tilePosX = 0;
         if (tilePosY<0) tilePosY = 0;
         let w = tilePosX + this._tilesInScreenX + 1;
         let h = tilePosY + this._tilesInScreenY + 1;
-        for (let y=tilePosY;y<=h;y++) {
-            for (let x=tilePosX;x<=w;x++) {
+        for (let y:number=tilePosY;y<=h;y++) {
+            for (let x:number=tilePosX;x<=w;x++) {
                 let tileVal = this.data[y] && this.data[y][x] && this.data[y][x].val;
                 if (tileVal===false || tileVal===null || tileVal===undefined) continue;
                 let destRect:Rect = Rect.fromPool().clone();
                 destRect.setXYWH(
-                    x*spriteSheet._frameWidth, y*spriteSheet._frameHeight,
-                    spriteSheet._frameWidth, spriteSheet._frameHeight
+                    x*spriteSheet.getFrameWidth(), y*spriteSheet.getFrameHeight(),
+                    spriteSheet.getFrameWidth(), spriteSheet.getFrameHeight()
                 );
                 // todo
                 // renderer.drawImage(

@@ -1,7 +1,7 @@
 
 
 import {Game} from "../game";
-import {Vec2,CollisionInfo} from './rigidShapes';
+import {Vec2, CollisionInfo, RigidShape} from './rigidShapes';
 import {Rect} from "../geometry/rect";
 import {MathEx} from '../mathEx'
 import {GameObject} from "../../model/impl/gameObject";
@@ -19,7 +19,7 @@ export class ColliderEngine {
         this.game = game;
     }
 
-    private positionalCorrection(s1, s2, collisionInfo){
+    private positionalCorrection(s1:RigidShape, s2:RigidShape, collisionInfo:CollisionInfo){
         var s1InvMass = s1.mInvMass;
         var s2InvMass = s2.mInvMass;
 
@@ -30,7 +30,7 @@ export class ColliderEngine {
         s2.move(correctionAmount.scale(s2InvMass));
     }
 
-    resolveCollision(s1, s2, collisionInfo){
+    resolveCollision(s1:RigidShape, s2:RigidShape, collisionInfo:CollisionInfo){
 
         if ((s1.mInvMass === 0) && (s2.mInvMass === 0)) {
             return;
@@ -113,47 +113,47 @@ export class ColliderEngine {
         if (!s2.fixedAngle) s2.mAngularVelocity += R2crossT * jT * s2.mInertia;
     }
 
-    private boundAndCollide(a,b,collisionInfo){
-        if (a.boundTest(b)) {
-            if (a.collisionTest(b, collisionInfo)) {
-                //make sure the normal is always from object[i] to object[j]
-                if (collisionInfo.getNormal().dot(b.mCenter.subtract(a.mCenter)) < 0) {
-                    collisionInfo.changeDir();
-                }
-                this.resolveCollision(a, b, collisionInfo);
-            }
-        }
+    private boundAndCollide(a:RigidShape, b:RigidShape, collisionInfo:CollisionInfo){
+        // if (a.boundTest(b)) {
+        //     if (a.collisionTest(b, collisionInfo)) {
+        //         //make sure the normal is always from object[i] to object[j]
+        //         if (collisionInfo.getNormal().dot(b.mCenter.subtract(a.mCenter)) < 0) {
+        //             collisionInfo.changeDir();
+        //         }
+        //         this.resolveCollision(a, b, collisionInfo);
+        //     }
+        // }
     }
 
     collision(){
-        let rigidObjects =
-            this.game.getCurrScene().getAllGameObjects().map(g=>g.rigidBody);
-            //concat(this.game.getCurrScene().tileMap.rigidBodies);
-
-        var i, j, k;
-        var collisionInfo = new CollisionInfo();
-        for (k = 0; k < this.relaxationCount; k++) {
-            for (i = 0; i < rigidObjects.length; i++) {
-                if (!rigidObjects[i]) continue;
-
-                let tiles = this.game.getCurrScene().tileMap.getTilesAtRect(new Rect(
-                    rigidObjects[i].mCenter.x -  rigidObjects[i].mWidth/2,
-                    rigidObjects[i].mCenter.y -  rigidObjects[i].mHeight/2,
-                    rigidObjects[i].mWidth,
-                    rigidObjects[i].mHeight
-                ));
-                if (tiles.length) {
-                    tiles.forEach(t=>{
-                        this.boundAndCollide(rigidObjects[i],t.rect,collisionInfo);
-                    })
-                }
-
-                for (j = i + 1; j < rigidObjects.length; j++) {
-                    if (!rigidObjects[j]) continue;
-                    this.boundAndCollide(rigidObjects[i],rigidObjects[j],collisionInfo);
-                }
-            }
-        }
+        // let rigidObjects =
+        //     this.game.getCurrScene().getAllGameObjects().map((g:GameObject)=>g.rigidBody); // todo
+        //     //concat(this.game.getCurrScene().tileMap.rigidBodies);
+        //
+        // var i:number, j:number, k:number;
+        // var collisionInfo = new CollisionInfo();
+        // for (k = 0; k < this.relaxationCount; k++) {
+        //     for (i = 0; i < rigidObjects.length; i++) {
+        //         if (!rigidObjects[i]) continue;
+        //
+        //         let tiles = this.game.getCurrScene().tileMap.getTilesAtRect(new Rect(
+        //             rigidObjects[i].mCenter.x -  rigidObjects[i].mWidth/2,
+        //             rigidObjects[i].mCenter.y -  rigidObjects[i].mHeight/2,
+        //             rigidObjects[i].mWidth,
+        //             rigidObjects[i].mHeight
+        //         ));
+        //         if (tiles.length) {
+        //             tiles.forEach(t=>{
+        //                 this.boundAndCollide(rigidObjects[i],t.rect,collisionInfo);
+        //             })
+        //         }
+        //
+        //         for (j = i + 1; j < rigidObjects.length; j++) {
+        //             if (!rigidObjects[j]) continue;
+        //             this.boundAndCollide(rigidObjects[i],rigidObjects[j],collisionInfo);
+        //         }
+        //     }
+        // }
     }
 
     private isIntersect(arr1:string[] = [], arr2:string[] = []):boolean{

@@ -22,42 +22,42 @@ export class ShaderGenerator {
         return normalizeUniformName(name);
     }
 
-    addFragmentUniform(type,name){
+    addFragmentUniform(type:string,name:string){
         this.fragmentUniforms.push({type,name});
         return normalizeUniformName(name);
     }
 
-    addAttribute(type,name){
+    addAttribute(type:string,name:string){
         this.attributes.push({type,name});
         return normalizeUniformName(name);
     }
 
-    addVarying(type,name){
+    addVarying(type:string,name:string){
         this.varyings.push({type,name});
     }
 
-    appendVertexCodeBlock(code){
+    appendVertexCodeBlock(code:string){
         this.appendedVertexCodeBlocks.push(code);
     }
 
-    appendFragmentCodeBlock(code){
+    appendFragmentCodeBlock(code:string){
         this.appendedFragCodeBlocks.push(code);
     }
 
-    prependVertexCodeBlock(code){
+    prependVertexCodeBlock(code:string){
         this.prependedVertexCodeBlocks.push(code);
     }
 
-    prependFragmentCodeBlock(code){
+    prependFragmentCodeBlock(code:string){
         this.prependedFragCodeBlocks.push(code);
     }
 
-    setVertexMainFn(fnCode){
+    setVertexMainFn(fnCode:string){
         this.vertexMainFn = fnCode;
         return this;
     }
 
-    setFragmentMainFn(fnCode){
+    setFragmentMainFn(fnCode:string){
         this.fragmentMainFn = fnCode;
         return this;
     }

@@ -5,7 +5,7 @@ import {IKeyVal} from "../misc/object";
 
 export class AmbientLight extends AbstractLight{
 
-    direction;
+    direction:number[]; // todo vector?
 
     constructor(game: Game) {
         super(game);

@@ -6,20 +6,21 @@ import {Cloneable} from "../../declarations";
 import {RigidShape} from "../../core/physics/rigidShapes";
 import {RenderableModel} from "../renderableModel";
 import {BaseAbstractBehaviour} from "../../behaviour/abstract/baseAbstractBehaviour";
+import {DebugError} from "@engine/debugError";
+import {setFlagsFromString} from "v8";
 
 
 export class GameObject extends RenderableModel implements Cloneable<GameObject>{
 
     type:string = 'GameObject';
     spriteSheet:SpriteSheet;
-    currFrameIndex:number = 0; // todo move to spriteSheet
-    frameAnimations:FrameAnimation[] = [];
 
     groupNames:string[] = [];
     collideWith:string[] = [];
     rigidBody:RigidShape;
     velocity = new Point2d(0,0);
 
+    private _frameAnimations:{[key:string]:FrameAnimation} = {};
     private _currFrameAnimation:FrameAnimation;
     private _behaviours:BaseAbstractBehaviour[] = [];
 
@@ -30,14 +31,10 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
     revalidate(){
         super.revalidate();
         this.spriteSheet.revalidate();
-        this.setFrameIndex(this.currFrameIndex);
         if (this.spriteSheet) {
-            this.width = this.spriteSheet._frameWidth;
-            this.height = this.spriteSheet._frameHeight;
+            this.width = this.spriteSheet.getFrameWidth();
+            this.height = this.spriteSheet.getFrameHeight();
         }
-        this.frameAnimations.forEach((f:FrameAnimation,i:number)=>{
-            this.frameAnimations[i]._gameObject = this;
-        });
         if (this.rigid) {
             // let center = new Vec2(this.pos.x+this.anchor.x,this.pos.y+this.anchor);
             // let mass = 10; // todo
@@ -47,7 +44,7 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
 
     protected setClonedProperties(cloned:GameObject) {
         const spriteSheet:SpriteSheet = this.spriteSheet.clone();
-        cloned.frameAnimations = [...this.frameAnimations];
+        cloned._frameAnimations = {...this._frameAnimations};
         cloned.spriteSheet = spriteSheet;
         super.setClonedProperties(cloned);
     }
@@ -59,16 +56,36 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         return cloned;
     }
 
-    playFrameAnimation(fr:FrameAnimation,opts?):FrameAnimation{
-        fr._gameObject = this;
-        this._currFrameAnimation = fr;
-        fr.play(opts);
-        return fr;
+    addFrameAnimation(name:string,fa:FrameAnimation) {
+        this._frameAnimations[name] = fa;
+        fa.setGameObject(this);
     }
 
-    setFrameIndex(index:number){
-        this.currFrameIndex = index % this.spriteSheet._numOfFrames;
-        this.spriteSheet.setFrameIndex(this.currFrameIndex);
+    playFrameAnimation(fr:FrameAnimation);
+    playFrameAnimation(fr:string);
+    playFrameAnimation(fr:string|FrameAnimation){
+        let frameAnimation:FrameAnimation;
+        if (typeof fr==='string') {
+            frameAnimation = this._frameAnimations[fr];
+        } else frameAnimation = fr;
+        if (DEBUG && !fr) throw new DebugError(`no such frame animation: ${name}`);
+        if (DEBUG && !frameAnimation.getGameObject()) {
+            console.error(frameAnimation);
+            throw new DebugError(`frame animation is not attached to game object`);
+        }
+        if (DEBUG && frameAnimation.getGameObject()!==this) {
+            console.error(frameAnimation);
+            throw new DebugError(`frame animation is attached to another game object`);
+        }
+        this._currFrameAnimation = frameAnimation;
+    }
+
+    stopFrAnimation(){
+        if (DEBUG && !this._currFrameAnimation) {
+            throw new DebugError(`can not stop frame animation: no active frame animation found`);
+        }
+        this._currFrameAnimation.reset();
+        this._currFrameAnimation = null;
     }
 
     getFrameRect(){
@@ -84,8 +101,9 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         }
         if (this.rigidBody!==undefined) {
             this.rigidBody.update(time,delta);
-            this.pos.x = ~~(this.rigidBody.mCenter.x - this.rigidBody['mWidth']/2); // todo
-            this.pos.y = ~~(this.rigidBody.mCenter.y - this.rigidBody['mHeight']/2);
+            // todo
+            // this.pos.x = ~~(this.rigidBody.mCenter.x - this.rigidBody['mWidth']/2); // todo
+            // this.pos.y = ~~(this.rigidBody.mCenter.y - this.rigidBody['mHeight']/2);
             this.angle = this.rigidBody.mAngle;
         } else {
             if (this.velocity.x) this.pos.x += this.velocity.x * delta / 1000;
@@ -116,10 +134,5 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         for (let b of this._behaviours) {
             b.destroy();
         }
-    }
-
-
-    stopFrAnimations(){
-        this._currFrameAnimation && this._currFrameAnimation.stop();
     }
 }

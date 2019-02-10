@@ -8,11 +8,11 @@ import {Point2d} from "./geometry/point2d";
 import {AbstractRenderer} from "./renderer/abstract/abstractRenderer";
 import {Scene} from "../model/impl/scene";
 import {LightArray} from "./light/lightArray";
-import {UIBuilder} from "../model/impl/ui/uiBuilder";
 import {ColliderEngine} from "./physics/colliderEngine";
 import {DebugError} from "../debugError";
 import {AudioPlayer} from "./media/audioPlayer";
 import {Clazz} from "@engine/core/misc/clazz";
+import {UIBuilder} from "@engine/model/impl/ui/uiBuilder";
 
 
 export class Game {
@@ -82,7 +82,6 @@ export class Game {
     private _cnt=0;
     debug2(...val){
         this._cnt++;
-        console.log(...val);
         if (this._cnt>10) throw new DebugError('too many logs');
     }
 

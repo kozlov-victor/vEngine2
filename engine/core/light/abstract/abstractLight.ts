@@ -1,4 +1,4 @@
-import {DebugError} from "../../../debugError";
+import {DebugError} from "@engine/debugError";
 
 
 

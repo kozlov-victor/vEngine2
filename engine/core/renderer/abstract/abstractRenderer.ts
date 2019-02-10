@@ -3,20 +3,20 @@
 
 
 import {AbstractFilter} from "../webGl/filters/abstract/abstractFilter";
-import {TextField} from '../../../model/impl/ui/components/textField'
+import {TextField} from '@engine/model/impl/ui/components/textField'
 import {Device} from '../../device'
 import {Game} from "../../game";
-import {GameObject} from '../../../model/impl/gameObject';
+import {GameObject} from '@engine/model/impl/gameObject';
 import {Rect} from "../../geometry/rect";
 import {Point2d} from "../../geometry/point2d";
 import {Color} from "../color";
 import {TextureInfo} from "../webGl/renderPrograms/abstract/abstractDrawer";
 import {Size} from "../../geometry/size";
-import {DebugError} from "../../../debugError";
-import {Rectangle} from "../../../model/impl/ui/drawable/rectangle";
-import {Ellipse} from "../../../model/impl/ui/drawable/ellipse";
-import {NinePatchImage} from "../../../model/impl/ui/drawable/ninePatchImage";
-import {Image} from "../../../model/impl/ui/drawable/image";
+import {DebugError} from "@engine/debugError";
+import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
+import {NinePatchImage} from "@engine/model/impl/ui/drawable/ninePatchImage";
+import {Image} from "@engine/model/impl/ui/drawable/image";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {GameObject3d} from "@engine/model/impl/gameObject3d";
 
@@ -115,9 +115,9 @@ export class AbstractRenderer {
 
     restore(){}
 
-    translate(x,y,z?){}
+    translate(x:number,y:number,z:number = 0){}
 
-    scale(x,y,z?){}
+    scale(x:number,y:number,z:number = 0){}
 
     rotateZ(a:number){}
 
@@ -127,7 +127,7 @@ export class AbstractRenderer {
 
     }
 
-    log(args){
+    log(args:any){
         if (!DEBUG) return;
         let textField = this.debugTextField;
         if (!textField) {

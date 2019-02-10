@@ -1,8 +1,5 @@
-
 import {Game} from "../game";
-import {Point2d} from "../geometry/point2d";
 import {DebugError} from "../../debugError";
-
 
 
 export class Vec2 {
@@ -180,9 +177,9 @@ export abstract class RigidShape {
         this.updateInertia();
     }
 
-    abstract updateInertia()
-    abstract move(v:Vec2)
-    abstract rotate(a:number)
+    abstract updateInertia():void
+    abstract move(v:Vec2):void
+    abstract rotate(a:number):void
 
     update(time:number,_dt:number){
         let dt:number = _dt / 1000;
@@ -382,7 +379,7 @@ export class RigidRectangle extends RigidShape {
         }
     }
 
-    boundTest(otherShape){
+    boundTest(otherShape:RigidShape){
         let vFrom1to2:Vec2 = otherShape.mCenter.subtract(this.mCenter);
         let rSum:number = this.mBoundRadius + otherShape.mBoundRadius;
         let dist:number = vFrom1to2.length();

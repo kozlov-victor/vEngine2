@@ -1,8 +1,9 @@
 import {DebugError} from "../../debugError";
 
 
-// todo convert to plain good oop style???
+
 // https://evanw.github.io/lightgl.js/docs/matrix.html
+// todo matrix type
 
 
 export let makeIdentity = ():number[] => {

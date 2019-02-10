@@ -36,7 +36,7 @@ export abstract class AbstractBlendDrawer implements IDrawer {
         this.simpleCopyFilter = new SimpleCopyFilter(gl);
     }
 
-    _afterPrepare(gen){
+    _afterPrepare(gen:ShaderGenerator){
         this.program = new ShaderProgram(
             this.gl,
             gen.getVertexSource(),

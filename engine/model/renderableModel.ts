@@ -163,7 +163,8 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
 
     protected doAdditionalTransform(){
         this.game.getRenderer().rotateZ(this.angle);
-        if (this['angleY']) this.game.getRenderer()['rotateY'](this['angleY']); // todo!!!
+        // todo
+        //if (this['angleY']) this.game.getRenderer()['rotateY'](this['angleY']); // todo!!!
     }
 
     protected isInViewPort():boolean{

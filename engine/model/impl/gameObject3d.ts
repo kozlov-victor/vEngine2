@@ -1,12 +1,13 @@
 import { GameObject } from './gameObject';
 import {BufferInfo} from "../../core/renderer/webGl/base/bufferInfo";
 import {IPrimitive} from "../../core/renderer/webGl/primitives/abstractPrimitive";
+import {Texture} from "@engine/core/renderer/webGl/base/texture";
 
 
 export class GameObject3d extends GameObject {
 
     model:IPrimitive;
-    texture;
+    texture:Texture;
     bufferInfo:BufferInfo;
     angleY:number = 0;
 

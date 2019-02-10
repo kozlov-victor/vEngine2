@@ -1,12 +1,12 @@
 
 
-import {Game} from "../../../core/game";
+import {Game} from "@engine/core/game";
 import * as allUIClasses from './all';
 import {Container} from "./generic/container";
-import {DebugError} from "../../../debugError";
+import {DebugError} from "@engine/debugError";
 import {AbsoluteLayout} from "./layouts/absoluteLayout";
-import {isObject} from "../../../core/misc/object";
-import {Clazz} from "../../../core/misc/clazz";
+import {isObject} from "@engine/core/misc/object";
+import {Clazz} from "@engine/core/misc/clazz";
 
 
 
