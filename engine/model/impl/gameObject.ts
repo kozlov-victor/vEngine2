@@ -94,26 +94,9 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         super.update(time,delta);
         this._currFrameAnimation && this._currFrameAnimation.update(time);
 
-        for (let i=0,max = this._behaviours.length;i<max;i++){
+        for (let i=0,max = this._behaviours.length;i<max;i++){ // todo to parent
             if (this._behaviours[i].onUpdate) this._behaviours[i].onUpdate(time,delta);
         }
-        if (this.rigidBody!==undefined) {
-            this.rigidBody.update(time,delta);
-            // todo
-            // this.pos.x = ~~(this.rigidBody.mCenter.x - this.rigidBody['mWidth']/2); // todo
-            // this.pos.y = ~~(this.rigidBody.mCenter.y - this.rigidBody['mHeight']/2);
-            this.angle = this.rigidBody.mAngle;
-        } else {
-            if (this.velocity.x) this.pos.x += this.velocity.x * delta / 1000;
-            if (this.velocity.y) this.pos.y += this.velocity.y * delta / 1000;
-        }
-
-        if (this.children.length>0) {
-            for(let i=0;i<this.children.length;i++) {
-                this.children[i].update(time,delta);
-            }
-        }
-        this.render();
     }
 
 

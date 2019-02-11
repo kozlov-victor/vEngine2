@@ -57,6 +57,7 @@ export class Queue{
 
     start() {
         if (this.size()===0) {
+            this.completed = true;
             this.onResolved && this.onResolved();
         }
         this.tasks.forEach((t:Function)=>{

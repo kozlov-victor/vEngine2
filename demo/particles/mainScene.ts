@@ -13,11 +13,14 @@ export class MainScene extends Scene {
         rect.width = 10;
         rect.height = 10;
         rect.pos.setXY(20,20);
+        rect.velocity.setXY(12,12);
         (rect.fillColor as Color).setRGBA(0,200,0);
-        // let ps: ParticleSystem = new ParticleSystem(this.game,rect); // todo constructor
-        // this.ps = ps;
+        let ps: ParticleSystem = new ParticleSystem(this.game,rect); // todo constructor
+        ps.numOfParticlesToEmit = {from:1,to:1};
+        ps.particleAngle = {from:0,to:2*Math.PI};
+        this.ps = ps;
         console.log('on onPreloading');
-        this.appendChild(rect);
+        //this.appendChild(rect);
     }
 
     // onProgress(val: number) {
@@ -29,10 +32,10 @@ export class MainScene extends Scene {
     // }
 
 
-    // onUpdate() {
-    //     super.onUpdate();
-    //     // this.ps.pos.setXY(20,20);
-    //     // this.ps.emit();
-    //     // this.ps.update(this.game.getTime(),this.game.getDeltaTime());
-    // }
+    onUpdate() {
+        // super.onUpdate();
+        this.ps.pos.setXY(20,20);
+        this.ps.emit();
+        this.ps.update(this.game.getTime(),this.game.getDeltaTime());
+    }
 }
