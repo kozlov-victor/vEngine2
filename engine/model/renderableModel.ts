@@ -12,6 +12,9 @@ import {Tween, TweenDescription} from "@engine/core/tween";
 import {TweenMovie} from "@engine/core/tweenMovie";
 import {Timer} from "@engine/core/timer";
 import {EventEmitter} from "@engine/core/misc/eventEmitter";
+import {RigidShape} from "@engine/core/physics/rigidShapes";
+import {Scene} from "@engine/model/impl/scene";
+import {Layer} from "@engine/model/impl/layer";
 
 
 export abstract class RenderableModel extends Resource implements Revalidatable {
@@ -31,11 +34,14 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
     children:RenderableModel[] = [];
     acceptLight:boolean = false;
     rigid:boolean = false;
+    rigidBody:RigidShape;
+    velocity = new Point2d(0,0);
 
     protected _tweens:Tween[] = [];
     protected _tweenMovies:TweenMovie[] = [];
     protected _dirty = true;
     protected _timers:Timer[] = [];
+    private _layer:Layer;
 
     protected _rect:Rect = new Rect();
     protected _screenRect = new Rect();
@@ -73,6 +79,14 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         return t;
     }
 
+
+    getLayer(): Layer {
+        return this._layer;
+    }
+
+    setLayer(value: Layer) {
+        this._layer = value;
+    }
 
     tween(desc:TweenDescription):Tween{
         let t:Tween = new Tween(desc);
@@ -187,9 +201,13 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
     }
 
     kill() {
-        // todo!!!!!
-        //let parents:RenderableModel[] = this.parent||
-        //emoveFromArray(,it=>it.id===this.id);
+        let parentArray:RenderableModel[];
+        if (this.parent) parentArray = this.parent.children;
+        else parentArray = this._layer.children;
+        let index:number = parentArray.indexOf(this);
+        if (DEBUG && index==-1) throw new DebugError('can not kill: gameObject is detached');
+        this.parent = null;
+        parentArray.splice(index,1);
     }
 
     render(){

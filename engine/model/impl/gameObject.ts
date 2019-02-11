@@ -17,8 +17,6 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
 
     groupNames:string[] = [];
     collideWith:string[] = [];
-    rigidBody:RigidShape;
-    velocity = new Point2d(0,0);
 
     private _frameAnimations:{[key:string]:FrameAnimation} = {};
     private _currFrameAnimation:FrameAnimation;

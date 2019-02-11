@@ -5,22 +5,22 @@ import {RenderableModel} from "../renderableModel";
 
 export class Layer {
 
-    type:string = 'Layer';
-    parent:RenderableModel;
+    readonly type:string = 'Layer';
     children:RenderableModel[] = [];
 
     constructor(protected game:Game) {
 
     }
 
-
-    prependChild(go:RenderableModel){ // todo set gameobject layer reference
+    prependChild(go:RenderableModel){
         go.parent = null;
+        go.setLayer(this);
         go.revalidate();
         this.children.unshift(go);
     }
     appendChild(go:RenderableModel){
         go.parent = null;
+        go.setLayer(this);
         go.revalidate();
         this.children.push(go);
     }

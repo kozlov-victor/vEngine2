@@ -5,6 +5,7 @@ import {GameObject} from "./gameObject";
 import {DebugError} from "@engine/debugError";
 import {Point2d} from "@engine/core/geometry/point2d";
 import {RenderableModel} from "@engine/model/renderableModel";
+import {Cloneable} from "@engine/declarations";
 
 let r = (obj:ParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
 
@@ -31,7 +32,7 @@ export class ParticleSystem {
 
     private _particles:ParticleHolder[] = [];
 
-    constructor(protected game:Game,private gameObject:GameObject){
+    constructor(protected game:Game,private gameObject:Cloneable<RenderableModel>){
 
     }
 
@@ -42,7 +43,7 @@ export class ParticleSystem {
 
     emit(){
         for (let i = 0;i<r(this.numOfParticlesToEmit);i++) {
-            let particle:GameObject = this.gameObject.clone() as GameObject;
+            let particle:RenderableModel = this.gameObject.clone();
             let angle = r(this.particleAngle);
             let vel = r(this.particleVelocity);
             particle.velocity.x = vel*Math.cos(angle);
@@ -57,15 +58,11 @@ export class ParticleSystem {
     }
 
     update(time:number,delta:number){
-        let all:ParticleHolder[] = this._particles;
-        let i:number = all.length;
-        let l:number = i - 1;
-        while(i--){
-            let holder:ParticleHolder = all[l-i];
+        this._particles.forEach((holder:ParticleHolder)=>{
             if (time - holder.createdTime > holder.lifeTime) {
                 this._particles.splice(this._particles.indexOf(holder),1);
                 holder.particle.kill();
             }
-        }
+        });
     }
 }

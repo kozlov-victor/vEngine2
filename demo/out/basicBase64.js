@@ -334,7 +334,7 @@ exports.DebugError = DebugError;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var objectPool_1 = __webpack_require__(9);
+var objectPool_1 = __webpack_require__(10);
 var Color = (function () {
     function Color(r, g, b, a) {
         this._arr = null;
@@ -431,7 +431,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
 var size_1 = __webpack_require__(14);
 var point2d_1 = __webpack_require__(4);
-var objectPool_1 = __webpack_require__(9);
+var objectPool_1 = __webpack_require__(10);
 var observableEntity_1 = __webpack_require__(26);
 var Rect = (function (_super) {
     tslib_1.__extends(Rect, _super);
@@ -544,7 +544,7 @@ exports.Rect = Rect;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
-var objectPool_1 = __webpack_require__(9);
+var objectPool_1 = __webpack_require__(10);
 var observableEntity_1 = __webpack_require__(26);
 var Point2d = (function (_super) {
     tslib_1.__extends(Point2d, _super);
@@ -1082,7 +1082,7 @@ exports.noop = function (arg) { };
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
 var rect_1 = __webpack_require__(3);
-var mouse_1 = __webpack_require__(21);
+var mouse_1 = __webpack_require__(19);
 var renderableModel_1 = __webpack_require__(24);
 var debugError_1 = __webpack_require__(1);
 var OVERFLOW;
@@ -1335,6 +1335,89 @@ exports.ShaderProgram = ShaderProgram;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var mat4 = __webpack_require__(11);
+var point2d_1 = __webpack_require__(4);
+var MathEx = (function () {
+    function MathEx() {
+    }
+    MathEx.isPointInRect = function (point, rect, angle) {
+        return point.x > rect.x &&
+            point.x < (rect.x + rect.width) &&
+            point.y > rect.y &&
+            point.y < (rect.y + rect.height);
+    };
+    MathEx.overlapTest = function (a, b) {
+        return (a.x < b.x + b.width) &&
+            (a.x + a.width > b.x) &&
+            (a.y < b.y + b.height) &&
+            (a.y + a.height > b.y);
+    };
+    MathEx.radToDeg = function (rad) {
+        return rad * 180 / Math.PI;
+    };
+    MathEx.degToRad = function (deg) {
+        return deg * Math.PI / 180;
+    };
+    MathEx.rectToPolar = function (point, center) {
+        var radius = Math.sqrt(point.x * point.x + center.y * center.y);
+        var angle = Math.atan2(center.y - point.y, center.x - point.x);
+        return { radius: radius, angle: angle };
+    };
+    MathEx.polarToRect = function (radius, angle, center) {
+        var x = radius * Math.cos(angle);
+        var y = radius * Math.sin(angle);
+        return new point2d_1.Point2d(center.x - x, center.y - y);
+    };
+    MathEx.getDistanceSquared = function (p1, p2) {
+        return Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2);
+    };
+    MathEx.closeTo = function (a, b, epsilon) {
+        if (epsilon === void 0) { epsilon = 0.01; }
+        return Math.abs(a - b) <= epsilon;
+    };
+    MathEx.getDistance = function (p1, p2) {
+        return Math.sqrt(MathEx.getDistanceSquared(p1, p2));
+    };
+    MathEx.getAngle = function (p1, p2) {
+        var dx = p1.x - p2.x;
+        var dy = p1.y - p2.y;
+        return Math.atan2(dy, dx);
+    };
+    MathEx.unProject = function (winPoint, width, height, viewProjectionMatrix) {
+        var x = 2.0 * winPoint.x / width - 1;
+        var y = 2.0 * winPoint.y / height - 1;
+        var viewProjectionInverse = mat4.inverse(viewProjectionMatrix);
+        var point3D = [x, y, 0, 1];
+        var res = mat4.multMatrixVec(viewProjectionInverse, point3D);
+        res[0] = (res[0] / 2 + 0.5) * width;
+        res[1] = (res[1] / 2 + 0.5) * height;
+        return new point2d_1.Point2d(res[0], res[1]);
+    };
+    MathEx.random = function (min, max) {
+        if (min > max) {
+            var tmp = min;
+            min = max;
+            max = tmp;
+        }
+        var res = ~~(Math.random() * (max - min)) + min;
+        if (res > max)
+            res = max;
+        else if (res < min)
+            res = min;
+        return res;
+    };
+    return MathEx;
+}());
+exports.MathEx = MathEx;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var debugError_1 = __webpack_require__(1);
 var ObjectPool = (function () {
     function ObjectPool(Class, numberOfInstances, lazy) {
@@ -1364,7 +1447,7 @@ exports.ObjectPool = ObjectPool;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1545,89 +1628,6 @@ exports.IDENTITY = exports.makeIdentity();
 
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var mat4 = __webpack_require__(10);
-var point2d_1 = __webpack_require__(4);
-var MathEx = (function () {
-    function MathEx() {
-    }
-    MathEx.isPointInRect = function (point, rect, angle) {
-        return point.x > rect.x &&
-            point.x < (rect.x + rect.width) &&
-            point.y > rect.y &&
-            point.y < (rect.y + rect.height);
-    };
-    MathEx.overlapTest = function (a, b) {
-        return (a.x < b.x + b.width) &&
-            (a.x + a.width > b.x) &&
-            (a.y < b.y + b.height) &&
-            (a.y + a.height > b.y);
-    };
-    MathEx.radToDeg = function (rad) {
-        return rad * 180 / Math.PI;
-    };
-    MathEx.degToRad = function (deg) {
-        return deg * Math.PI / 180;
-    };
-    MathEx.rectToPolar = function (point, center) {
-        var radius = Math.sqrt(point.x * point.x + center.y * center.y);
-        var angle = Math.atan2(center.y - point.y, center.x - point.x);
-        return { radius: radius, angle: angle };
-    };
-    MathEx.polarToRect = function (radius, angle, center) {
-        var x = radius * Math.cos(angle);
-        var y = radius * Math.sin(angle);
-        return new point2d_1.Point2d(center.x - x, center.y - y);
-    };
-    MathEx.getDistanceSquared = function (p1, p2) {
-        return Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2);
-    };
-    MathEx.closeTo = function (a, b, epsilon) {
-        if (epsilon === void 0) { epsilon = 0.01; }
-        return Math.abs(a - b) <= epsilon;
-    };
-    MathEx.getDistance = function (p1, p2) {
-        return Math.sqrt(MathEx.getDistanceSquared(p1, p2));
-    };
-    MathEx.getAngle = function (p1, p2) {
-        var dx = p1.x - p2.x;
-        var dy = p1.y - p2.y;
-        return Math.atan2(dy, dx);
-    };
-    MathEx.unProject = function (winPoint, width, height, viewProjectionMatrix) {
-        var x = 2.0 * winPoint.x / width - 1;
-        var y = 2.0 * winPoint.y / height - 1;
-        var viewProjectionInverse = mat4.inverse(viewProjectionMatrix);
-        var point3D = [x, y, 0, 1];
-        var res = mat4.multMatrixVec(viewProjectionInverse, point3D);
-        res[0] = (res[0] / 2 + 0.5) * width;
-        res[1] = (res[1] / 2 + 0.5) * height;
-        return new point2d_1.Point2d(res[0], res[1]);
-    };
-    MathEx.random = function (min, max) {
-        if (min > max) {
-            var tmp = min;
-            min = max;
-            max = tmp;
-        }
-        var res = ~~(Math.random() * (max - min)) + min;
-        if (res > max)
-            res = max;
-        else if (res < min)
-            res = min;
-        return res;
-    };
-    return MathEx;
-}());
-exports.MathEx = MathEx;
-
-
-/***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1708,7 +1708,7 @@ exports.AbstractDrawer = AbstractDrawer;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
-var shape_1 = __webpack_require__(20);
+var shape_1 = __webpack_require__(21);
 var Rectangle = (function (_super) {
     tslib_1.__extends(Rectangle, _super);
     function Rectangle(game) {
@@ -1747,7 +1747,7 @@ exports.Rectangle = Rectangle;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var objectPool_1 = __webpack_require__(9);
+var objectPool_1 = __webpack_require__(10);
 var Size = (function () {
     function Size(width, height) {
         if (width === void 0) { width = 0; }
@@ -2013,7 +2013,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
 var rect_1 = __webpack_require__(3);
 var debugError_1 = __webpack_require__(1);
-var shape_1 = __webpack_require__(20);
+var shape_1 = __webpack_require__(21);
 var color_1 = __webpack_require__(2);
 var point2d_1 = __webpack_require__(4);
 var Image = (function (_super) {
@@ -2118,6 +2118,215 @@ exports.EventEmitter = EventEmitter;
 
 /***/ }),
 /* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(0);
+var mathEx_1 = __webpack_require__(9);
+var point2d_1 = __webpack_require__(4);
+var objectPool_1 = __webpack_require__(10);
+var rect_1 = __webpack_require__(3);
+var MousePoint = (function (_super) {
+    tslib_1.__extends(MousePoint, _super);
+    function MousePoint() {
+        return _super.call(this) || this;
+    }
+    MousePoint.fromPool = function () {
+        return MousePoint.mousePointsPool.getNextObject();
+    };
+    MousePoint.unTransform = function (another) {
+        var p = MousePoint.fromPool();
+        p.screenX = another.screenX;
+        p.screenY = another.screenY;
+        p.id = another.id;
+        p.target = another.target;
+        p.setXY(p.screenX, p.screenY);
+        return p;
+    };
+    MousePoint.mousePointsPool = new objectPool_1.ObjectPool(MousePoint);
+    return MousePoint;
+}(point2d_1.Point2d));
+exports.MousePoint = MousePoint;
+exports.MOUSE_EVENTS = {
+    click: 'click',
+    mouseDown: 'mouseDown',
+    mouseMove: 'mouseMove',
+    mouseLeave: 'mouseLeave',
+    mouseEnter: 'mouseEnter',
+    mouseUp: 'mouseUp',
+    doubleClick: 'doubleClick',
+    scroll: 'scroll'
+};
+var Mouse = (function () {
+    function Mouse(game) {
+        this.objectsCaptured = {};
+        this.game = game;
+    }
+    Mouse.prototype.resolvePoint = function (e) {
+        var game = this.game;
+        var clientX = e.clientX;
+        var clientY = e.clientY;
+        var screenX = (clientX - game.pos.x) / game.scale.x;
+        var screenY = (clientY - game.pos.y) / game.scale.y;
+        var p = game.camera.screenToWorld(point2d_1.Point2d.fromPool().setXY(screenX, screenY));
+        var mousePoint = MousePoint.fromPool();
+        mousePoint.set(p);
+        mousePoint.screenX = screenX;
+        mousePoint.screenY = screenY;
+        mousePoint.id = e.identifier || 0;
+        return mousePoint;
+    };
+    Mouse.triggerGameObjectEvent = function (e, eventName, point, go, offsetX, offsetY) {
+        if (offsetX === void 0) { offsetX = 0; }
+        if (offsetY === void 0) { offsetY = 0; }
+        var rectWithOffset = rect_1.Rect.fromPool().clone().set(go.getRect()).addXY(offsetX, offsetY);
+        if (mathEx_1.MathEx.isPointInRect(point, rectWithOffset)) {
+            point.target = go;
+            go.trigger(eventName, {
+                screenX: point.x,
+                screenY: point.y,
+                objectX: point.x - go.pos.x,
+                objectY: point.y - go.pos.y,
+                id: point.id,
+                target: go,
+                nativeEvent: e,
+                eventName: eventName,
+                isMouseDown: point.isMouseDown
+            });
+            return true;
+        }
+        return false;
+    };
+    Mouse.prototype.triggerEvent = function (e, eventName, isMouseDown) {
+        if (isMouseDown === undefined)
+            isMouseDown = false;
+        var g = this.game;
+        var scene = g.getCurrScene();
+        if (!scene)
+            return;
+        var point = this.resolvePoint(e);
+        point.isMouseDown = isMouseDown;
+        point.target = undefined;
+        for (var _i = 0, _a = scene.getAllGameObjects(); _i < _a.length; _i++) {
+            var go = _a[_i];
+            var isCaptured = Mouse.triggerGameObjectEvent(e, eventName, point, go);
+            if (isCaptured) {
+                point.target = go;
+                break;
+            }
+        }
+        if (point.target === undefined)
+            point.target = scene;
+        scene.trigger(eventName, {
+            screenX: point.x,
+            screenY: point.y,
+            id: point.id,
+            target: scene,
+            eventName: eventName,
+            isMouseDown: isMouseDown
+        });
+        return point;
+    };
+    Mouse.prototype.resolveClick = function (e) {
+        this.triggerEvent(e, exports.MOUSE_EVENTS.click);
+        this.triggerEvent(e, exports.MOUSE_EVENTS.mouseDown);
+    };
+    Mouse.prototype.resolveMouseMove = function (e, isMouseDown) {
+        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.mouseMove, isMouseDown);
+        if (!point)
+            return;
+        var lastMouseDownObject = this.objectsCaptured[point.id];
+        if (lastMouseDownObject && lastMouseDownObject !== point.target) {
+            lastMouseDownObject.trigger(exports.MOUSE_EVENTS.mouseLeave, point);
+            delete this.objectsCaptured[point.id];
+        }
+        if (point.target && lastMouseDownObject !== point.target) {
+            point.target.trigger(exports.MOUSE_EVENTS.mouseEnter, point);
+            this.objectsCaptured[point.id] = point.target;
+        }
+    };
+    Mouse.prototype.resolveMouseUp = function (e) {
+        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.mouseUp);
+        if (!point)
+            return;
+        var lastMouseDownObject = this.objectsCaptured[point.id];
+        if (!lastMouseDownObject)
+            return;
+        if (point.target !== lastMouseDownObject)
+            lastMouseDownObject.trigger(exports.MOUSE_EVENTS.mouseUp, point);
+        delete this.objectsCaptured[point.id];
+    };
+    Mouse.prototype.resolveDoubleClick = function (e) {
+        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.doubleClick);
+        if (!point)
+            return;
+        delete this.objectsCaptured[point.id];
+    };
+    Mouse.prototype.resolveScroll = function (e) {
+        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.scroll);
+        if (!point)
+            return;
+        delete this.objectsCaptured[point.id];
+    };
+    Mouse.prototype.listenTo = function (container) {
+        var _this = this;
+        this.container = container;
+        container.ontouchstart = function (e) {
+            var l = e.touches.length;
+            while (l--) {
+                _this.resolveClick(e.touches[l]);
+            }
+        };
+        container.onmousedown = function (e) {
+            (e.button === 0) && _this.resolveClick(e);
+        };
+        container.ontouchend = container.ontouchcancel = function (e) {
+            var l = e.changedTouches.length;
+            while (l--) {
+                _this.resolveMouseUp(e.changedTouches[l]);
+            }
+        };
+        container.onmouseup = function (e) {
+            _this.resolveMouseUp(e);
+        };
+        container.ontouchmove = function (e) {
+            var l = e.touches.length;
+            while (l--) {
+                _this.resolveMouseMove(e.touches[l], true);
+            }
+        };
+        container.onmousemove = function (e) {
+            var isMouseDown = e.buttons === 1;
+            _this.resolveMouseMove(e, isMouseDown);
+        };
+        container.ondblclick = function (e) {
+            _this.resolveDoubleClick(e);
+        };
+        container.onmousewheel = function (e) {
+            _this.resolveScroll(e);
+        };
+    };
+    Mouse.prototype.destroy = function () {
+        var _this = this;
+        if (!this.container)
+            return;
+        [
+            'mouseMove', 'ontouchstart', 'onmousedown',
+            'ontouchend', 'onmouseup', 'ontouchmove',
+            'onmousemove', 'ondblclick'
+        ].forEach(function (evtName) {
+            _this.container[evtName] = null;
+        });
+    };
+    return Mouse;
+}());
+exports.Mouse = Mouse;
+
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2438,7 +2647,7 @@ exports.TextField = TextField;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2478,215 +2687,6 @@ var Shape = (function (_super) {
     return Shape;
 }(renderableModel_1.RenderableModel));
 exports.Shape = Shape;
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = __webpack_require__(0);
-var mathEx_1 = __webpack_require__(11);
-var point2d_1 = __webpack_require__(4);
-var objectPool_1 = __webpack_require__(9);
-var rect_1 = __webpack_require__(3);
-var MousePoint = (function (_super) {
-    tslib_1.__extends(MousePoint, _super);
-    function MousePoint() {
-        return _super.call(this) || this;
-    }
-    MousePoint.fromPool = function () {
-        return MousePoint.mousePointsPool.getNextObject();
-    };
-    MousePoint.unTransform = function (another) {
-        var p = MousePoint.fromPool();
-        p.screenX = another.screenX;
-        p.screenY = another.screenY;
-        p.id = another.id;
-        p.target = another.target;
-        p.setXY(p.screenX, p.screenY);
-        return p;
-    };
-    MousePoint.mousePointsPool = new objectPool_1.ObjectPool(MousePoint);
-    return MousePoint;
-}(point2d_1.Point2d));
-exports.MousePoint = MousePoint;
-exports.MOUSE_EVENTS = {
-    click: 'click',
-    mouseDown: 'mouseDown',
-    mouseMove: 'mouseMove',
-    mouseLeave: 'mouseLeave',
-    mouseEnter: 'mouseEnter',
-    mouseUp: 'mouseUp',
-    doubleClick: 'doubleClick',
-    scroll: 'scroll'
-};
-var Mouse = (function () {
-    function Mouse(game) {
-        this.objectsCaptured = {};
-        this.game = game;
-    }
-    Mouse.prototype.resolvePoint = function (e) {
-        var game = this.game;
-        var clientX = e.clientX;
-        var clientY = e.clientY;
-        var screenX = (clientX - game.pos.x) / game.scale.x;
-        var screenY = (clientY - game.pos.y) / game.scale.y;
-        var p = game.camera.screenToWorld(point2d_1.Point2d.fromPool().setXY(screenX, screenY));
-        var mousePoint = MousePoint.fromPool();
-        mousePoint.set(p);
-        mousePoint.screenX = screenX;
-        mousePoint.screenY = screenY;
-        mousePoint.id = e.identifier || 0;
-        return mousePoint;
-    };
-    Mouse.triggerGameObjectEvent = function (e, eventName, point, go, offsetX, offsetY) {
-        if (offsetX === void 0) { offsetX = 0; }
-        if (offsetY === void 0) { offsetY = 0; }
-        var rectWithOffset = rect_1.Rect.fromPool().clone().set(go.getRect()).addXY(offsetX, offsetY);
-        if (mathEx_1.MathEx.isPointInRect(point, rectWithOffset)) {
-            point.target = go;
-            go.trigger(eventName, {
-                screenX: point.x,
-                screenY: point.y,
-                objectX: point.x - go.pos.x,
-                objectY: point.y - go.pos.y,
-                id: point.id,
-                target: go,
-                nativeEvent: e,
-                eventName: eventName,
-                isMouseDown: point.isMouseDown
-            });
-            return true;
-        }
-        return false;
-    };
-    Mouse.prototype.triggerEvent = function (e, eventName, isMouseDown) {
-        if (isMouseDown === undefined)
-            isMouseDown = false;
-        var g = this.game;
-        var scene = g.getCurrScene();
-        if (!scene)
-            return;
-        var point = this.resolvePoint(e);
-        point.isMouseDown = isMouseDown;
-        point.target = undefined;
-        for (var _i = 0, _a = scene.getAllGameObjects(); _i < _a.length; _i++) {
-            var go = _a[_i];
-            var isCaptured = Mouse.triggerGameObjectEvent(e, eventName, point, go);
-            if (isCaptured) {
-                point.target = go;
-                break;
-            }
-        }
-        if (point.target === undefined)
-            point.target = scene;
-        scene.trigger(eventName, {
-            screenX: point.x,
-            screenY: point.y,
-            id: point.id,
-            target: scene,
-            eventName: eventName,
-            isMouseDown: isMouseDown
-        });
-        return point;
-    };
-    Mouse.prototype.resolveClick = function (e) {
-        this.triggerEvent(e, exports.MOUSE_EVENTS.click);
-        this.triggerEvent(e, exports.MOUSE_EVENTS.mouseDown);
-    };
-    Mouse.prototype.resolveMouseMove = function (e, isMouseDown) {
-        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.mouseMove, isMouseDown);
-        if (!point)
-            return;
-        var lastMouseDownObject = this.objectsCaptured[point.id];
-        if (lastMouseDownObject && lastMouseDownObject !== point.target) {
-            lastMouseDownObject.trigger(exports.MOUSE_EVENTS.mouseLeave, point);
-            delete this.objectsCaptured[point.id];
-        }
-        if (point.target && lastMouseDownObject !== point.target) {
-            point.target.trigger(exports.MOUSE_EVENTS.mouseEnter, point);
-            this.objectsCaptured[point.id] = point.target;
-        }
-    };
-    Mouse.prototype.resolveMouseUp = function (e) {
-        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.mouseUp);
-        if (!point)
-            return;
-        var lastMouseDownObject = this.objectsCaptured[point.id];
-        if (!lastMouseDownObject)
-            return;
-        if (point.target !== lastMouseDownObject)
-            lastMouseDownObject.trigger(exports.MOUSE_EVENTS.mouseUp, point);
-        delete this.objectsCaptured[point.id];
-    };
-    Mouse.prototype.resolveDoubleClick = function (e) {
-        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.doubleClick);
-        if (!point)
-            return;
-        delete this.objectsCaptured[point.id];
-    };
-    Mouse.prototype.resolveScroll = function (e) {
-        var point = this.triggerEvent(e, exports.MOUSE_EVENTS.scroll);
-        if (!point)
-            return;
-        delete this.objectsCaptured[point.id];
-    };
-    Mouse.prototype.listenTo = function (container) {
-        var _this = this;
-        this.container = container;
-        container.ontouchstart = function (e) {
-            var l = e.touches.length;
-            while (l--) {
-                _this.resolveClick(e.touches[l]);
-            }
-        };
-        container.onmousedown = function (e) {
-            (e.button === 0) && _this.resolveClick(e);
-        };
-        container.ontouchend = container.ontouchcancel = function (e) {
-            var l = e.changedTouches.length;
-            while (l--) {
-                _this.resolveMouseUp(e.changedTouches[l]);
-            }
-        };
-        container.onmouseup = function (e) {
-            _this.resolveMouseUp(e);
-        };
-        container.ontouchmove = function (e) {
-            var l = e.touches.length;
-            while (l--) {
-                _this.resolveMouseMove(e.touches[l], true);
-            }
-        };
-        container.onmousemove = function (e) {
-            var isMouseDown = e.buttons === 1;
-            _this.resolveMouseMove(e, isMouseDown);
-        };
-        container.ondblclick = function (e) {
-            _this.resolveDoubleClick(e);
-        };
-        container.onmousewheel = function (e) {
-            _this.resolveScroll(e);
-        };
-    };
-    Mouse.prototype.destroy = function () {
-        var _this = this;
-        if (!this.container)
-            return;
-        [
-            'mouseMove', 'ontouchstart', 'onmousedown',
-            'ontouchend', 'onmouseup', 'ontouchmove',
-            'onmousemove', 'ondblclick'
-        ].forEach(function (evtName) {
-            _this.container[evtName] = null;
-        });
-    };
-    return Mouse;
-}());
-exports.Mouse = Mouse;
 
 
 /***/ }),
@@ -2805,7 +2805,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
 var resource_1 = __webpack_require__(41);
 var debugError_1 = __webpack_require__(1);
-var mathEx_1 = __webpack_require__(11);
+var mathEx_1 = __webpack_require__(9);
 var object_1 = __webpack_require__(6);
 var point2d_1 = __webpack_require__(4);
 var rect_1 = __webpack_require__(3);
@@ -2829,6 +2829,7 @@ var RenderableModel = (function (_super) {
         _this.children = [];
         _this.acceptLight = false;
         _this.rigid = false;
+        _this.velocity = new point2d_1.Point2d(0, 0);
         _this._tweens = [];
         _this._tweenMovies = [];
         _this._dirty = true;
@@ -2861,6 +2862,12 @@ var RenderableModel = (function (_super) {
         var t = new timer_1.Timer(callback, interval);
         this._timers.push(t);
         return t;
+    };
+    RenderableModel.prototype.getLayer = function () {
+        return this._layer;
+    };
+    RenderableModel.prototype.setLayer = function (value) {
+        this._layer = value;
     };
     RenderableModel.prototype.tween = function (desc) {
         var t = new tween_1.Tween(desc);
@@ -2950,6 +2957,16 @@ var RenderableModel = (function (_super) {
         this.parent.children.unshift(this);
     };
     RenderableModel.prototype.kill = function () {
+        var parentArray;
+        if (this.parent)
+            parentArray = this.parent.children;
+        else
+            parentArray = this._layer.children;
+        var index = parentArray.indexOf(this);
+        if (true && index == -1)
+            throw new debugError_1.DebugError('can not kill: gameObject is detached');
+        this.parent = null;
+        parentArray.splice(index, 1);
     };
     RenderableModel.prototype.render = function () {
         var renderer = this.game.getRenderer();
@@ -3699,8 +3716,8 @@ exports.AbstractLight = AbstractLight;
 Object.defineProperty(exports, "__esModule", { value: true });
 var debugError_1 = __webpack_require__(1);
 var tween_1 = __webpack_require__(15);
-var mat4 = __webpack_require__(10);
-var mathEx_1 = __webpack_require__(11);
+var mat4 = __webpack_require__(11);
+var mathEx_1 = __webpack_require__(9);
 var rect_1 = __webpack_require__(3);
 var point2d_1 = __webpack_require__(4);
 var CAMERA_MATRIX_MODE;
@@ -3967,7 +3984,7 @@ exports.AudioPlayer = AudioPlayer;
 Object.defineProperty(exports, "__esModule", { value: true });
 var button_1 = __webpack_require__(42);
 exports.Button = button_1.Button;
-var textField_1 = __webpack_require__(19);
+var textField_1 = __webpack_require__(20);
 exports.TextField = textField_1.TextField;
 var vScroll_1 = __webpack_require__(33);
 exports.VScroll = vScroll_1.VScroll;
@@ -4056,7 +4073,7 @@ exports.VScroll = VScroll;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
-var shape_1 = __webpack_require__(20);
+var shape_1 = __webpack_require__(21);
 var Ellipse = (function (_super) {
     tslib_1.__extends(Ellipse, _super);
     function Ellipse() {
@@ -4453,7 +4470,7 @@ exports.Resource = Resource;
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
 var container_1 = __webpack_require__(7);
-var textField_1 = __webpack_require__(19);
+var textField_1 = __webpack_require__(20);
 var debugError_1 = __webpack_require__(1);
 var Button = (function (_super) {
     tslib_1.__extends(Button, _super);
@@ -4807,11 +4824,13 @@ var Layer = (function () {
     }
     Layer.prototype.prependChild = function (go) {
         go.parent = null;
+        go.setLayer(this);
         go.revalidate();
         this.children.unshift(go);
     };
     Layer.prototype.appendChild = function (go) {
         go.parent = null;
+        go.setLayer(this);
         go.revalidate();
         this.children.push(go);
     };
@@ -5327,7 +5346,7 @@ exports.Timer = Timer;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(54);
-var mouse_1 = __webpack_require__(21);
+var mouse_1 = __webpack_require__(19);
 var keyboard_1 = __webpack_require__(25);
 var gamePad_1 = __webpack_require__(55);
 var camera_1 = __webpack_require__(29);
@@ -5634,7 +5653,7 @@ exports.PointLight = PointLight;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var rigidShapes_1 = __webpack_require__(27);
-var mathEx_1 = __webpack_require__(11);
+var mathEx_1 = __webpack_require__(9);
 var ColliderEngine = (function () {
     function ColliderEngine(game) {
         this.relaxationCount = 15;
@@ -6216,10 +6235,10 @@ exports.UIBuilder = UIBuilder;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
-var mouse_1 = __webpack_require__(21);
+var mouse_1 = __webpack_require__(19);
 var container_1 = __webpack_require__(7);
 var vScroll_1 = __webpack_require__(33);
-var mathEx_1 = __webpack_require__(11);
+var mathEx_1 = __webpack_require__(9);
 var ScrollInfo = (function () {
     function ScrollInfo(game) {
         this.game = game;
@@ -6743,7 +6762,7 @@ var lineDrawer_1 = __webpack_require__(74);
 var shapeDrawer_1 = __webpack_require__(79);
 var frameBuffer_1 = __webpack_require__(38);
 var matrixStack_1 = __webpack_require__(80);
-var mat4 = __webpack_require__(10);
+var mat4 = __webpack_require__(11);
 var texture_1 = __webpack_require__(39);
 var addBlendDrawer_1 = __webpack_require__(81);
 var rect_1 = __webpack_require__(3);
@@ -7324,7 +7343,7 @@ exports.ShapeDrawer = ShapeDrawer;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var mat4 = __webpack_require__(10);
+var mat4 = __webpack_require__(11);
 var MatrixStack = (function () {
     function MatrixStack() {
         this.stack = [];
@@ -7477,7 +7496,7 @@ exports.SimpleCopyFilter = SimpleCopyFilter;
 Object.defineProperty(exports, "__esModule", { value: true });
 var shaderProgram_1 = __webpack_require__(8);
 var spriteRectDrawer_1 = __webpack_require__(40);
-var mat4 = __webpack_require__(10);
+var mat4 = __webpack_require__(11);
 var texShaderGenerator_1 = __webpack_require__(23);
 var debugError_1 = __webpack_require__(1);
 var makePositionMatrix = function (dstX, dstY, dstWidth, dstHeight) {
@@ -7589,7 +7608,7 @@ exports.AbstractCanvasRenderer = AbstractCanvasRenderer;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var textField_1 = __webpack_require__(19);
+var textField_1 = __webpack_require__(20);
 var device_1 = __webpack_require__(87);
 var size_1 = __webpack_require__(14);
 var debugError_1 = __webpack_require__(1);
@@ -7809,7 +7828,6 @@ exports.ModelDrawer = ModelDrawer;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
-var point2d_1 = __webpack_require__(4);
 var renderableModel_1 = __webpack_require__(24);
 var debugError_1 = __webpack_require__(1);
 var GameObject = (function (_super) {
@@ -7819,7 +7837,6 @@ var GameObject = (function (_super) {
         _this.type = 'GameObject';
         _this.groupNames = [];
         _this.collideWith = [];
-        _this.velocity = new point2d_1.Point2d(0, 0);
         _this._frameAnimations = {};
         _this._behaviours = [];
         return _this;
