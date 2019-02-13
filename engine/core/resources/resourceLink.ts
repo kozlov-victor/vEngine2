@@ -1,6 +1,6 @@
 
-let _cnt:number = 0;
 
+import {Incrementer} from "@engine/core/resources/incrementer";
 export class ResourceLink {
 
     private constructor(private id:string){}
@@ -19,7 +19,7 @@ export class ResourceLink {
     }
 
     static create () {
-        return new ResourceLink((_cnt++).toString());
+        return new ResourceLink((Incrementer.getValue()).toString());
     }
 
 }

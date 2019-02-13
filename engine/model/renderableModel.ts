@@ -1,6 +1,6 @@
 import {AbstractRenderer} from "../core/renderer/abstract/abstractRenderer";
 import {Resource} from "../core/resources/resource";
-import {Revalidatable} from "../declarations";
+import {Cloneable, Revalidatable} from "../declarations";
 import {DebugError} from "../debugError";
 import {MathEx} from "../core/mathEx";
 import {isObjectMatch} from "../core/misc/object";
@@ -17,15 +17,15 @@ import {Scene} from "@engine/model/impl/scene";
 import {Layer} from "@engine/model/impl/layer";
 
 
-export abstract class RenderableModel extends Resource implements Revalidatable {
+export abstract class RenderableModel extends Resource implements Revalidatable, Cloneable<RenderableModel> {
 
     readonly type:string;
     id:string;
     width:number = 0;
     height:number = 0;
-    pos:Point2d = new Point2d(0,0,()=>this._dirty=true);
-    scale:Point2d = new Point2d(1,1);
-    anchor:Point2d = new Point2d(0,0);
+    readonly pos:Point2d = new Point2d(0,0,()=>this._dirty=true);
+    readonly scale:Point2d = new Point2d(1,1);
+    readonly anchor:Point2d = new Point2d(0,0);
     angle:number = 0;
     alpha:number = 1;
     filters: AbstractFilter[] = [];
@@ -41,7 +41,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
     protected _tweenMovies:TweenMovie[] = [];
     protected _dirty = true;
     protected _timers:Timer[] = [];
-    private _layer:Layer;
+    private   _layer:Layer;
 
     protected _rect:Rect = new Rect();
     protected _screenRect = new Rect();
@@ -64,7 +64,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         cloned.filters = [...this.filters];
         cloned.blendMode = this.blendMode;
         cloned.parent = null;
-        cloned.children = []; // todo deep clone
+        // todo deep clone of childrens
         cloned.acceptLight = this.acceptLight;
         cloned.rigid = this.rigid;
         cloned.game = this.game;
@@ -72,6 +72,8 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
     }
 
     revalidate(){}
+
+    abstract clone():RenderableModel
 
     setTimer(callback:Function,interval:number):Timer{
         let t:Timer = new Timer(callback,interval);

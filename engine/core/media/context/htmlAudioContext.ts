@@ -1,5 +1,9 @@
-import {IAudioContext} from "./iAudioContext";
 import {Game} from "../../game";
+import {ResourceLink} from "@engine/core/resources/resourceLink";
+import {BasicAudioContext} from "@engine/core/media/context/basicAudioContext";
+import {AudioPlayer} from "@engine/core/media/audioPlayer";
+import {DebugError} from "@engine/debugError";
+import {Cloneable} from "@engine/declarations";
 
 
 
@@ -17,7 +21,7 @@ class CtxHolder {
 }
 
 
-export class HtmlAudioContext implements IAudioContext{
+export class HtmlAudioContext extends BasicAudioContext implements Cloneable<HtmlAudioContext>{
     readonly type: string = 'htmlAudioContext';
     private free: boolean = true;
     private _ctx: HTMLAudioElement;
@@ -25,11 +29,13 @@ export class HtmlAudioContext implements IAudioContext{
     static isAcceptable():boolean{
         return !!(window && (window as any).Audio);
     }
-    load(url:string,progress:Function,callBack:Function){
+    load(url:string,link:ResourceLink,callBack:()=>void){
+        AudioPlayer.cache[link.getId()] = url;
         callBack();
     }
 
-    constructor(private game:Game) {
+    constructor(game:Game) {
+        super(game);
         this._ctx = CtxHolder.getCtx();
     }
 
@@ -37,16 +43,10 @@ export class HtmlAudioContext implements IAudioContext{
         return this.free;
     }
 
-    play(resourcePath:string, loop: boolean) {
-
-        let url:string;
-        // if (EMBED_RESOURCES) { // todo
-        //     // let base64Url = this.game.repository.embeddedResources[resourcePath];
-        //     // url = base64Url;
-        //     // if (DEBUG && !base64Url) throw new DebugError(`no embedded resource provided by url ${resourcePath}`)
-        // } else
-
-        url = resourcePath;
+    play(link:ResourceLink, loop: boolean) {
+        this.setLastTimeId();
+        const url:string = AudioPlayer.cache[link.getId()];
+        if (DEBUG && !url) throw new DebugError(`can not retrieve audio from cache (link id=${link.getId()})`);
 
         this.free = false;
         this._ctx.src = url;
@@ -71,6 +71,10 @@ export class HtmlAudioContext implements IAudioContext{
 
     resume() {
         if (DEBUG) throw "not implemented for now"
+    }
+
+    clone():HtmlAudioContext{
+        return new HtmlAudioContext(this.game);
     }
 
 

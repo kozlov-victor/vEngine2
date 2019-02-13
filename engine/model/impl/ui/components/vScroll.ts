@@ -7,6 +7,7 @@ import {Shape} from "../generic/shape";
 
 export class VScroll extends Container {
 
+    readonly type:string = 'VScroll';
     handler: Shape;
 
     maxValue:number = 0;

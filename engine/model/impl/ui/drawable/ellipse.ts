@@ -5,6 +5,7 @@ import {Cloneable} from "@engine/declarations";
 
 export class Ellipse extends Shape implements Cloneable<Ellipse>{
 
+    readonly type:string = 'Ellipse';
     radiusX: number = 10;
     radiusY: number = 20;
 

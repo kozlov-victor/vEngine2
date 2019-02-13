@@ -5,6 +5,9 @@ import {Game} from "../../../../core/game";
 import {Cloneable} from "@engine/declarations";
 
 export class Border extends Rectangle implements Cloneable<Border>{
+
+    readonly type:string = 'Border';
+
     constructor(game:Game){
         super(game);
         this.fillColor = Color.NONE;

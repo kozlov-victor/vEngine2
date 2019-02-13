@@ -1,47 +1,46 @@
 import {WebAudioContext} from "./context/webAudioContext";
 import {HtmlAudioContext} from "./context/htmlAudioContext";
-import {FakeAudioContext} from "./context/fakeAudioContext";
 import {AudioNodeSet} from "./audioNodeSet";
-import {IAudioContext} from "./context/iAudioContext";
 import {Sound} from "../../model/impl/sound";
 import {AudioNode} from "./audioNode";
-import {Tween} from "../tween";
 import {Game} from "../game";
-import {Clazz} from "../misc/clazz";
-import {removeFromArray} from "@engine/core/misc/object";
+import {ResourceLink} from "@engine/core/resources/resourceLink";
+import {BasicAudioContext} from "@engine/core/media/context/basicAudioContext";
 
 
 export  class AudioPlayer {
 
-    private readonly contextClass:Clazz<IAudioContext>;
+    private readonly audioContext:BasicAudioContext;
     private audioNodeSet:AudioNodeSet;
-    private tweens:Tween[] = [];
 
     static cache:{[key:string]:any} = {};
     static DEFAULT_AUDIO_NODES_COUNT:number = 6;
 
     constructor(private game:Game){
         if (WebAudioContext.isAcceptable()) {
-            this.contextClass = WebAudioContext;
+            this.audioContext = new WebAudioContext(game);
         } else if (HtmlAudioContext.isAcceptable()) {
-            this.contextClass = HtmlAudioContext;
+            this.audioContext = new HtmlAudioContext(game);
         } else {
-            this.contextClass = FakeAudioContext;
+            this.audioContext = new BasicAudioContext(game);
         }
-        this.audioNodeSet = new AudioNodeSet(game,this.contextClass,AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
+        this.audioNodeSet = new AudioNodeSet(game,this.audioContext,AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
     }
 
-    loadSound(url:string, progress:Function, callback:Function) {
-        new this.contextClass(this.game).load(url,progress,callback);
+    loadSound(url:string, link:ResourceLink, onLoad:()=>void) {
+        this.audioContext.load(url,link,onLoad);
     }
 
     play(sound:Sound){
+
+        if (DEBUG) sound.revalidate();
+
         let node:AudioNode = this.audioNodeSet.getFreeNode();
         if (DEBUG && !node) {
             console.log('no free node to play sound');
         }
         if (!node) return;
-        node.play(sound.resourcePath,sound.loop);
+        node.play(sound.getResourceLink(),sound.loop);
     }
 
     stop(sound:Sound){
@@ -62,33 +61,14 @@ export  class AudioPlayer {
         this.audioNodeSet.resumeAll();
     }
 
-    setGain(sound:Sound,val:number,time:number = 0){
+    setGain(sound:Sound){
         let node:AudioNode = this.audioNodeSet.getNodeBySound(sound);
         if (!node) return;
-        if (time) {
-            let tween:Tween = new Tween({
-                target: sound,
-                to: {_gain:val},
-                time,
-                progress:(progressObj:{_gain:number})=>{
-                    node.setGain(progressObj._gain);
-                },
-                complete: ()=>{
-                    removeFromArray(this.tweens,it=>it===tween);
-                }
-            });
-            this.tweens.push(tween);
-
-        } else {
-            sound._gain = val;
-            node.setGain(sound._gain);
-        }
+        node.setGain(sound.getGain());
     }
 
     update(time:number,delta:number){
-        this.tweens.forEach((t:Tween)=>{
-            t.update(time);
-        })
+
     }
 
 }

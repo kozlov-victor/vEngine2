@@ -1,8 +1,6 @@
 
-declare const DEBUG: boolean;
-
 export class LoaderUtil {
-    static loadBinary(url:string,progress:Function,callBack:Function) {
+    static loadBinary(url:string,onLoad:(buffer:ArrayBuffer)=>void) {
         let request = new XMLHttpRequest();
         request.open('GET', url, true);
         request.responseType = 'arraybuffer';
@@ -11,11 +9,11 @@ export class LoaderUtil {
         request.setRequestHeader('Content-Range', 'bytes');
 
         request.onload = function() {
-            callBack(request.response);
+            onLoad(request.response as ArrayBuffer);
         };
-        request.onprogress = function(e){
-            if (progress) progress(url,e.loaded / e.total);
-        };
+        // request.onprogress = function(e){
+        //     if (progress) progress(url,e.loaded / e.total);
+        // };
 
         if (DEBUG) {
             request.onerror=function(e){

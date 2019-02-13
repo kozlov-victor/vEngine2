@@ -1,17 +1,23 @@
-import {IAudioContext} from "./context/iAudioContext";
-import {Sound} from "../../model/impl/sound";
 
+import {Sound} from "../../model/impl/sound";
+import {ResourceLink} from "@engine/core/resources/resourceLink";
+import {BasicAudioContext} from "@engine/core/media/context/basicAudioContext";
+
+// todo incrementer
+const getOrder = ():number=> {
+    return 0;
+};
 
 export class AudioNode {
 
     currSound:Sound = null;
+    private _orderStarted:number;
 
-    constructor(private context:IAudioContext){}
+    constructor(public context:BasicAudioContext){}
 
 
-    play(resourcePath:string,loop:boolean = false){
-        //this.currSound = ;
-        this.context.play(resourcePath,loop);
+    play(link:ResourceLink,loop:boolean = false){
+        this.context.play(link,loop);
     }
 
     stop() {

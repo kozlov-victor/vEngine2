@@ -19,30 +19,40 @@ export class Scene implements Revalidatable {
     readonly type:string = 'Scene';
     width:number;  // todo now is 0!!!
     height:number; // todo now is 0!!!
-    layers:Layer[] = [];
-    uiLayer:Layer;
     useBG:boolean = false;
     colorBG = Color.WHITE;
     tileMap:TileMap;
     ambientLight:AmbientLight;
     preloadingGameObject:RenderableModel;
-
     filters:AbstractFilter[] = [];
 
     public readonly resourceLoader: ResourceLoader;
 
     private _tweenMovies:TweenMovie[] = []; // todo lazy?
+    private _layers:Layer[] = [];
+    private _uiLayer:Layer;
+
 
     constructor(protected game:Game) {
         this.tileMap = new TileMap(game);
         this.ambientLight = new AmbientLight(game);
-        this.uiLayer = new Layer(this.game);
+        this._uiLayer = new Layer(this.game);
         this.addLayer(new Layer(game));
         this.resourceLoader = new ResourceLoader(game);
     }
 
     revalidate(){
+        if (this.width = 0) this.width = this.game.width;
+        if (this.height = 0) this.height = this.game.height;
+    }
 
+
+    getLayers(): Layer[] {
+        return this._layers;
+    }
+
+    getUiLayer(): Layer {
+        return this._uiLayer;
     }
 
     addTweenMovie(tm:TweenMovie){
@@ -51,8 +61,8 @@ export class Scene implements Revalidatable {
     getAllGameObjects(){
         let res = []; // todo optimize
         const ONE = 1;
-        for (let i=0;i<this.layers.length;i++) {
-            let layer = this.layers[this.layers.length - ONE - i];
+        for (let i=0;i<this._layers.length;i++) {
+            let layer = this._layers[this._layers.length - ONE - i];
             for (let j = 0; j < layer.children.length; j++) {
                 let go = layer.children[layer.children.length - ONE - j];
                 res.push(go);
@@ -62,16 +72,16 @@ export class Scene implements Revalidatable {
     }
 
     getDefaultLayer(){
-        return this.layers[0];
+        return this._layers[0];
     }
 
 
     addLayer(layer:Layer){
-        this.layers.push(layer);
+        this._layers.push(layer);
     }
 
     removeLayer(layer:Layer){
-        removeFromArray(this.layers,it=>it===layer);
+        removeFromArray(this._layers,it=>it===layer);
     }
 
     appendChild(go:RenderableModel){
@@ -104,11 +114,11 @@ export class Scene implements Revalidatable {
 
         this.beforeUpdate();
 
-        let layers = this.layers;
+        let layers = this._layers;
         for (let l of layers) {
             l.update(currTime,deltaTime);
         }
-        this.uiLayer.update(currTime,deltaTime);
+        this._uiLayer.update(currTime,deltaTime);
 
         this.onUpdate();
 
@@ -118,7 +128,7 @@ export class Scene implements Revalidatable {
         let renderer = this.game.getRenderer();
         this.game.camera.update(this.game.getTime(),this.game.getDeltaTime());
 
-        let layers = this.layers;
+        let layers = this._layers;
         for (let l of layers) {
             l.render();
         }
@@ -128,7 +138,7 @@ export class Scene implements Revalidatable {
         renderer.save();
         renderer.resetTransform();
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY;
-        this.uiLayer.render();
+        this._uiLayer.render();
         renderer.restore();
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;

@@ -5,7 +5,7 @@ import {Cloneable} from "@engine/declarations";
 
 export class SpriteSheet extends Image implements Cloneable<SpriteSheet>{
 
-    type:string = 'SpriteSheet';
+    readonly type:string = 'SpriteSheet';
     numOfFramesH:number = 1;
     numOfFramesV:number = 1;
 

@@ -29,6 +29,17 @@ export class ResourceLoader {
         return link;
     }
 
+    loadSound(url:string):ResourceLink {
+        const link:ResourceLink = ResourceLink.create();
+        this.q.addTask(()=>{
+            this.game.audioPlayer.loadSound(
+                url, link,
+                ()=>this.q.resolveTask(url)
+            );
+        },url);
+        return link;
+    }
+
     startLoading(){
         this.q.start();
     }

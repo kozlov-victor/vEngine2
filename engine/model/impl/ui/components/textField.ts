@@ -275,6 +275,7 @@ export class TextField extends ScrollableContainer {
     }
 
     setFont(font) {
+        font.revalidate();
         this._font = font;
         this.setText(this._text);
     }
