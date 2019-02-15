@@ -234,34 +234,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     };
 
 
-    // private drawTextureInfo(texInfo:TextureInfo[],
-    //                         drawableInfo:DrawableInfo,
-    //                         shaderMaterial:ShaderMaterial,
-    //                         srcRect:Rect,
-    //                         dstRect:Rect){
-    //
-    //     let scene:Scene = this.game.getCurrScene();
-    //
-    //     let drawer:IDrawer;
-    //     let uniforms:UniformsInfo = {
-    //         u_textureMatrix: makeTextureMatrix(srcRect,texInfo[0].texture.getSize()),
-    //         u_vertexMatrix: makePositionMatrix(dstRect, Size.fromPool().setWH(this.game.width,this.game.height)), // todo
-    //         u_alpha: drawableInfo.alpha
-    //     };
-    //
-    //     // if (drawableInfo.blendMode==='add') drawer = this.addBlendDrawer; // todo extract to separate class method
-    //     // else if (drawableInfo.acceptLight || texInfo.length>1) { // todo
-    //     //     drawer = this.spriteRectLightDrawer;
-    //     //     uniforms['u_useNormalMap'] = texInfo.length>1;
-    //     //     scene.ambientLight.setUniforms(uniforms);
-    //     //     this.game.lightArray.setUniforms(uniforms);
-    //     //     shaderMaterial.setUniforms(uniforms);
-    //     // } else {
-    //     //     //drawer = this.spriteRectDrawer;
-    //     // }
-    //     //drawer.draw(texInfo,uniforms,this.frameBuffer); // todo remove uniforms variable
-    // }
-
 
     drawRectangle(rectangle:Rectangle){
         let rw:number = rectangle.width;

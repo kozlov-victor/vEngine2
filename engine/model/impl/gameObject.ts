@@ -7,7 +7,7 @@ import {RigidShape} from "../../core/physics/rigidShapes";
 import {RenderableModel} from "../renderableModel";
 import {BaseAbstractBehaviour} from "../../behaviour/abstract/baseAbstractBehaviour";
 import {DebugError} from "@engine/debugError";
-import {setFlagsFromString} from "v8";
+
 
 
 export class GameObject extends RenderableModel implements Cloneable<GameObject>{
@@ -29,10 +29,8 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
     revalidate(){
         super.revalidate();
         this.spriteSheet.revalidate();
-        if (this.spriteSheet) {
-            this.width = this.spriteSheet.getFrameWidth();
-            this.height = this.spriteSheet.getFrameHeight();
-        }
+        this.width = this.spriteSheet.getFrameWidth();
+        this.height = this.spriteSheet.getFrameHeight();
         if (this.rigid) {
             // let center = new Vec2(this.pos.x+this.anchor.x,this.pos.y+this.anchor);
             // let mass = 10; // todo

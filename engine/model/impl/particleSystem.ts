@@ -20,10 +20,13 @@ interface ParticleHolder {
     createdTime:number,
 }
 
-export class ParticleSystem {
 
-    type:string = 'ParticleSystem';
-    pos:Point2d = new Point2d();
+
+
+
+export class ParticleSystem extends RenderableModel {
+
+    readonly type:string = 'ParticleSystem';
     numOfParticlesToEmit:ParticlePropertyDesc = {from:1,to:10};
     particleAngle:ParticlePropertyDesc = {from:0,to:0};
     particleVelocity:ParticlePropertyDesc = {from:1,to:100};
@@ -31,33 +34,47 @@ export class ParticleSystem {
     emissionRadius:number = 0;
 
     private _particles:ParticleHolder[] = [];
+    private _prototypes:RenderableModel[] = [];
 
-    constructor(protected game:Game,private gameObject:Cloneable<RenderableModel>){
-
+    constructor(protected game:Game){
+        super(game);
     }
 
     revalidate(){
-        if (!this.gameObject) throw new DebugError(`particle system error: game object is not set`);
+        if (DEBUG && !this._prototypes.length) throw new DebugError(`particle system error: add at least one object to emit`);
         if (this.particleAngle.to<this.particleAngle.from) this.particleAngle.to += 2*Math.PI;
     }
 
+    addParticle(r:RenderableModel){
+        this._prototypes.push(r);
+    }
+
     emit(){
+
+        if (DEBUG && !this.getLayer()) {
+            console.error(this);
+            throw new DebugError(`particle system is detached`);
+        }
+
         for (let i = 0;i<r(this.numOfParticlesToEmit);i++) {
-            let particle:RenderableModel = this.gameObject.clone();
-            let angle = r(this.particleAngle);
-            let vel = r(this.particleVelocity);
+            let particle:RenderableModel = this._prototypes[MathEx.random(0,this._prototypes.length-1)];
+            particle = ((particle as any).clone() as RenderableModel);
+
+            let angle:number = r(this.particleAngle);
+            let vel:number = r(this.particleVelocity);
             particle.velocity.x = vel*Math.cos(angle);
             particle.velocity.y = vel*Math.sin(angle);
-            particle.pos.x = r({from:this.pos.x-this.emissionRadius,to:this.pos.x+this.emissionRadius});
-            particle.pos.y = r({from:this.pos.y-this.emissionRadius,to:this.pos.y+this.emissionRadius});
-            const lifeTime = r(this.particleLiveTime);
+            particle.pos.x = r({from:-this.emissionRadius,to:+this.emissionRadius});
+            particle.pos.y = r({from:-this.emissionRadius,to:+this.emissionRadius});
+            const lifeTime:number = r(this.particleLiveTime);
             const createdTime:number = this.game.getTime();
             this._particles.push({particle,lifeTime,createdTime});
-            this.game.getCurrScene().appendChild(particle);
+            this.appendChild(particle);
         }
     }
 
     update(time:number,delta:number){
+        super.update(time,delta);
         this._particles.forEach((holder:ParticleHolder)=>{
             if (time - holder.createdTime > holder.lifeTime) {
                 this._particles.splice(this._particles.indexOf(holder),1);
@@ -65,4 +82,9 @@ export class ParticleSystem {
             }
         });
     }
+
+    draw():boolean{
+        return true; // do nothing
+    }
+
 }

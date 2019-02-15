@@ -149,6 +149,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
 
     appendChild(c:RenderableModel){
         c.parent = this;
+        c.setLayer(this.getLayer());
         c.revalidate();
         this.children.push(c);
     }
@@ -205,7 +206,10 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         if (this.parent) parentArray = this.parent.children;
         else parentArray = this._layer.children;
         let index:number = parentArray.indexOf(this);
-        if (DEBUG && index==-1) throw new DebugError('can not kill: gameObject is detached');
+        if (DEBUG && index==-1) {
+            console.error(this);
+            throw new DebugError('can not kill: gameObject is detached');
+        }
         this.parent = null;
         parentArray.splice(index,1);
     }
