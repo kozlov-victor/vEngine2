@@ -67,7 +67,7 @@ export class MathEx {
             min = max;
             max = tmp;
         }
-        let res = ~~(Math.random() * (max - min)) + min;
+        let res = ~~(Math.random() * (max + 1 - min)) + min;
         if (res > max) res = max;
         else if (res < min) res = min;
         return res;
