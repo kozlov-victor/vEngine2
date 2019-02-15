@@ -6,6 +6,8 @@ import {Game} from "../../core/game";
 import {Rect} from "../../core/geometry/rect";
 import {Resource} from "../../core/resources/resource";
 import {Color} from "@engine/core/renderer/color";
+import {Revalidatable} from "@engine/declarations";
+import {DebugError} from "@engine/debugError";
 
 interface FontContext {
     symbols: {[key:string]:Rect},
@@ -87,12 +89,12 @@ class FontFactory {
 
 
 
-export class Font extends Resource {
+export class Font extends Resource implements Revalidatable {
 
-    type:string = 'Font';
+    readonly type:string = 'Font';
     fontSize:number=12;
     fontFamily:string='Monospace';
-    fontContext:FontContext=null;
+    fontContext:FontContext;
     fontColor:Color = Color.BLACK.clone();
 
     constructor(protected game:Game){
@@ -113,20 +115,12 @@ export class Font extends Resource {
         return FontFactory.getFontImageBase64(this.fontContext,this.asCss(),this.fontColor);
     }
 
-    // revalidate(){
-    //     super.revalidate();
-    //     let s = this.fontContext.symbols;
-    //     this.fontContext.symbols = {};
-    //     Object.keys(s).forEach((key:string)=>{
-    //         if (DEBUG) {
-    //             if (s[key]==undefined) {
-    //                 console.error(s);
-    //                 throw new DebugError(`_font revalidation error: can not find proper object for key ${key}`);
-    //             }
-    //         }
-    //         this.fontContext.symbols[key] = new Rect(s[key].x,s[key].y,s[key].width,s[key].height);
-    //     });
-    // }  // todo is it really need???
+    revalidate(){
+        if (DEBUG) {
+            if (!this.fontContext) throw new DebugError(`font context is not created`);
+            if (!this.getResourceLink()) throw new DebugError(`font without resource link`);
+        }
+    }
 
     getDefaultSymbolHeight():number{
         return this.fontContext.symbols[' '].height;

@@ -11,6 +11,7 @@ import {Cloneable} from "@engine/declarations";
 
 export class Image extends Shape implements Cloneable<Image>{
 
+    readonly type:string = 'Image';
     srcRect:Rect = new Rect();
     borderRadius:number = 0;
     offset:Point2d = new Point2d();

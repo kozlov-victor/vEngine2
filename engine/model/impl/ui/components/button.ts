@@ -7,8 +7,9 @@ import {DebugError} from "@engine/debugError";
 
 export class Button extends Container {
 
-    private _font:Font;
+    readonly type:string = 'Button';
 
+    private _font:Font;
     private readonly _textField:TextField;
 
     constructor(game:Game) {
@@ -43,6 +44,7 @@ export class Button extends Container {
     }
 
     setFont(f:Font){
+        f.revalidate();
         this._font = f;
         this._textField.setFont(f);
     }

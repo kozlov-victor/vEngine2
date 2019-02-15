@@ -18,7 +18,7 @@ export class TileMap {
     width:number = 0;
     height:number = 0;
 
-    filters: AbstractFilter[];
+    readonly filters: AbstractFilter[];
     blendMode:string = '';
 
     constructor(protected game:Game){

@@ -8,6 +8,7 @@ import {TextureInfo} from "@engine/core/renderer/webGl/renderPrograms/abstract/a
 
 export class NinePatchImage extends Image {
 
+    readonly type:string = 'NinePatchImage';
     private a:number = 0;
     private b:number = 0;
     private c:number = 0;

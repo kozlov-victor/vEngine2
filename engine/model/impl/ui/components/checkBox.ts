@@ -7,6 +7,7 @@ import {Game} from "@engine/core/game";
 
 export class CheckBox extends Container {
 
+    readonly type:string = 'CheckBox';
     private rNormal:Shape;
     private rChecked: Shape;
 

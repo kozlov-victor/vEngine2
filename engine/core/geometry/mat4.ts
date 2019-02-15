@@ -15,6 +15,7 @@ export let makeIdentity = ():number[] => {
     ];
 };
 
+
 export let makeZToWMatrix = (fudgeFactor:number):number[] => {
     return [
         1, 0, 0, 0,

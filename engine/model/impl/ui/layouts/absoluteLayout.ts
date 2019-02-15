@@ -9,6 +9,8 @@ import {Game} from "@engine/core/game";
 
 export class AbsoluteLayout extends Container {
 
+    readonly type:string = 'AbsoluteLayout';
+
     constructor(game:Game) {
         super(game);
     }

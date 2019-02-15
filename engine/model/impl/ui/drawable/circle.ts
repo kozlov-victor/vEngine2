@@ -4,11 +4,13 @@ import {Cloneable} from "@engine/declarations";
 
 export class Circle extends Ellipse implements Cloneable<Circle>{
 
+    readonly type:string = 'Circle';
     _radius: number = 10;
 
     set radius(val:number){
         this._radius = val;
         this.width = this.height = val * 2;
+        this.radiusX = this.radiusY = val;
     }
 
     get radius(){
@@ -16,7 +18,6 @@ export class Circle extends Ellipse implements Cloneable<Circle>{
     }
 
     draw():boolean{
-        this.radiusX = this.radiusY = this.radius;
         this.game.getRenderer().drawEllipse(this);
         return true;
     }

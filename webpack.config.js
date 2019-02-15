@@ -30,6 +30,8 @@ module.exports = (env={})=>{
         entry[`${dir}`] = [`./demo/${dir}/index.ts`]
     });
 
+    entry['debug'] = './engine/debug/debug.ts';
+
 
 
     console.log('webpack started at',new Date());

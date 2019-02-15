@@ -1,8 +1,10 @@
 import {DebugError} from "@engine/debugError";
-import {IAudioContext} from "./iAudioContext";
 import {LoaderUtil} from "../../resources/loaderUtil";
 import {AudioPlayer} from "../audioPlayer";
 import {Game} from "../../game";
+import {ResourceLink} from "@engine/core/resources/resourceLink";
+import {BasicAudioContext} from "@engine/core/media/context/basicAudioContext";
+import {Cloneable} from "@engine/declarations";
 
 
 
@@ -55,27 +57,28 @@ const base64ToArrayBuffer = (base64:string):ArrayBuffer=> {
     return bytes.buffer;
 };
 
-export class WebAudioContext implements IAudioContext {
+export class WebAudioContext extends BasicAudioContext implements Cloneable<WebAudioContext>{
 
     static isAcceptable() {
         return !!(window && CtxHolder.getCtx());
     }
 
-    load(url:string, progress:Function, onLoad:()=>void) {
+    load(url:string, link:ResourceLink, onLoad:()=>void) {
         if (AudioPlayer.cache[url]) {
             onLoad();
             return;
         }
-        LoaderUtil.loadBinary(url, progress,  (buffer:ArrayBuffer)=> {
+        LoaderUtil.loadBinary(url, (buffer:ArrayBuffer)=> {
             decode(buffer, (decoded:AudioBuffer)=>{
-                AudioPlayer.cache[url] = decoded;
+                AudioPlayer.cache[link.getId()] = decoded;
                 onLoad();
             });
         });
 
     }
 
-    constructor(private game:Game) {
+    constructor(game:Game) {
+        super(game);
         this._ctx = CtxHolder.getCtx();
         this._gainNode = this._ctx.createGain();
         this._gainNode.connect(this._ctx.destination);
@@ -91,10 +94,11 @@ export class WebAudioContext implements IAudioContext {
         return this._free;
     }
 
-    play(resourcePath:string, loop:boolean) {
+    play(link:ResourceLink, loop:boolean) {
+        this.setLastTimeId();
         this._free = false;
         let currSource:AudioBufferSourceNode = this._ctx.createBufferSource();
-        currSource.buffer = AudioPlayer.cache[resourcePath];
+        currSource.buffer = AudioPlayer.cache[link.getId()];
         currSource.loop = loop;
         currSource.connect(this._gainNode);
         currSource.start(0);
@@ -125,5 +129,9 @@ export class WebAudioContext implements IAudioContext {
 
     resume() {
         this._ctx.resume();
+    }
+
+    clone():WebAudioContext{
+        return new WebAudioContext(this.game);
     }
 }

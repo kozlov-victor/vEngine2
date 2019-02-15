@@ -1,8 +1,8 @@
-import {IAudioContext} from "./context/iAudioContext";
 import {AudioNode} from "./audioNode";
 import {Sound} from "../../model/impl/sound";
 import {Game} from "../game";
 import {Clazz} from "../misc/clazz";
+import {BasicAudioContext} from "@engine/core/media/context/basicAudioContext";
 
 
 
@@ -10,9 +10,9 @@ export class AudioNodeSet {
 
     nodes:AudioNode[] = [] as AudioNode[];
 
-    constructor(game: Game,private ContextClass:Clazz<IAudioContext>,private numOfNodes:number){
+    constructor(game: Game,context:BasicAudioContext,private numOfNodes:number){
         for (let i = 0;i<numOfNodes;i++) {
-            this.nodes.push(new AudioNode(new ContextClass(game)));
+            this.nodes.push(new AudioNode(context.clone()));
         }
     }
 
@@ -20,7 +20,10 @@ export class AudioNodeSet {
         for (let i = 0;i<this.numOfNodes;i++) {
             if (this.nodes[i].isFree()) return this.nodes[i];
         }
-        return null;
+        // getting the oldest
+        return this.nodes.sort((a:AudioNode,b:AudioNode)=>{
+            return a.context.getLastValueId()>b.context.getLastValueId()?1:-1;
+        })[0];
     }
 
     stopAll(){

@@ -4,6 +4,7 @@ import {Cloneable} from "@engine/declarations";
 
 export class Rectangle extends Shape implements Cloneable<Rectangle>{
 
+    readonly type:string = 'Rectangle';
     borderRadius:number = 0;
 
     constructor(game: Game) {
