@@ -2,8 +2,9 @@
 import {Game} from '../../core/game'
 import {GameObject} from './gameObject'
 import {EventEmitter} from "../../core/misc/eventEmitter";
+import {Cloneable} from "@engine/declarations";
 
-export class FrameAnimation  {
+export class FrameAnimation implements Cloneable<FrameAnimation>{
 
     readonly type:string = 'FrameAnimation';
     name:string;
@@ -48,6 +49,18 @@ export class FrameAnimation  {
             this._gameObject.spriteSheet.setFrameIndex(index);
             if (this._currFrame===0 && this._startTime!==time) this.trigger('loop');
         }
+    }
+
+    protected setClonedProperties(cloned:FrameAnimation) {
+        cloned.frames = [...this.frames];
+        cloned.duration = this.duration;
+        cloned.isRepeat = this.isRepeat;
+    }
+
+    clone():FrameAnimation {
+        const cloned:FrameAnimation = new FrameAnimation(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
     }
 
     reset(){

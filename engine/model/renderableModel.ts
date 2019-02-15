@@ -17,7 +17,7 @@ import {Scene} from "@engine/model/impl/scene";
 import {Layer} from "@engine/model/impl/layer";
 
 
-export abstract class RenderableModel extends Resource implements Revalidatable, Cloneable<RenderableModel> {
+export abstract class RenderableModel extends Resource implements Revalidatable {
 
     readonly type:string;
     id:string;
@@ -72,8 +72,6 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
     }
 
     revalidate(){}
-
-    abstract clone():RenderableModel
 
     setTimer(callback:Function,interval:number):Timer{
         let t:Timer = new Timer(callback,interval);

@@ -42,7 +42,9 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
 
     protected setClonedProperties(cloned:GameObject) {
         const spriteSheet:SpriteSheet = this.spriteSheet.clone();
-        cloned._frameAnimations = {...this._frameAnimations};
+        Object.keys(this._frameAnimations).forEach((name:string)=>{
+            cloned.addFrameAnimation(name,this._frameAnimations[name].clone());
+        });
         cloned.spriteSheet = spriteSheet;
         super.setClonedProperties(cloned);
     }

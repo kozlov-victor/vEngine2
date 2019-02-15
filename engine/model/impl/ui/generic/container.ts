@@ -1,11 +1,8 @@
 import {Rect} from "@engine/core/geometry/rect";
-import {MOUSE_EVENTS} from "@engine/core/control/mouse";
 import {RenderableModel} from "../../../renderableModel";
 import {DebugError} from "@engine/debugError";
 import {Game} from "@engine/core/game";
 import {Shape} from "./shape";
-
-
 
 
 export enum OVERFLOW {
@@ -16,12 +13,6 @@ export enum LAYOUT_SIZE {
     FIXED,
     WRAP_CONTENT,
     MATCH_PARENT
-}
-
-export enum STATE {
-    NORMAL,
-    ACTIVE,
-    DISABLED
 }
 
 
@@ -40,7 +31,7 @@ export abstract class Container extends RenderableModel {
     layoutHeight    :LAYOUT_SIZE =  LAYOUT_SIZE.WRAP_CONTENT;
     overflow        :OVERFLOW = OVERFLOW.HIDDEN; // todo change
 
-    background      :Shape = undefined;
+    background      :Shape;
 
     drawingRect:Rect = new Rect();
 
@@ -48,20 +39,8 @@ export abstract class Container extends RenderableModel {
     maxHeight: number = 0;
 
 
-    protected bgByState :{[state:string]:Shape} = {};
-    private state     :STATE = STATE.NORMAL;
-
     protected constructor(game:Game){
         super(game);
-        this.on(MOUSE_EVENTS.mouseDown,()=>{
-            this.state = STATE.ACTIVE;
-        });
-        this.on(MOUSE_EVENTS.mouseUp,()=>{
-            this.state = STATE.NORMAL;
-        });
-        this.on(MOUSE_EVENTS.mouseLeave,()=>{
-            this.state = STATE.NORMAL;
-        });
     }
 
     testLayout(){
@@ -160,18 +139,6 @@ export abstract class Container extends RenderableModel {
     }
 
 
-    describeStates(description:{[state:string]:any}){
-        let allUIRenderable = require('../all');
-        throw 'deprecated';
-        // Object.keys(description).forEach((stateName:string)=>{
-        //     let state:STATE = STATE[stateName];
-        //     let clazz = allUIRenderable[description[stateName].type];
-        //     let instance = new clazz(this.game);
-        //     instance.fromJSON(description[stateName]);
-        //     this.bgByState[state] = instance;
-        // });
-    }
-
     revalidate(){
         this.calcScreenRect();
         super.revalidate();
@@ -181,11 +148,6 @@ export abstract class Container extends RenderableModel {
         this.revalidate();
     }
 
-    protected getBgByState():Shape {
-        let possibleBg:Shape = this.bgByState[this.state];
-        if (!possibleBg) possibleBg = this.background;
-        return possibleBg;
-    }
 
     setWH(w:number,h:number){
         this.width = w;
@@ -209,7 +171,6 @@ export abstract class Container extends RenderableModel {
     }
 
     update(time:number,delta:number){
-        this.background = this.getBgByState();
         if (this._dirty) {
             this.onGeometryChanged();
             this._dirty = false;
@@ -223,5 +184,6 @@ export abstract class Container extends RenderableModel {
             this.pos.y + this.marginTop
         );
     }
+
 
 }

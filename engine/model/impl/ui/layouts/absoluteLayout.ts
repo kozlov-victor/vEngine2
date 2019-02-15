@@ -6,8 +6,9 @@ import {RenderableModel} from "../../../renderableModel";
 import {Rect} from "@engine/core/geometry/rect";
 import {Container,LAYOUT_SIZE, OVERFLOW} from "../generic/container";
 import {Game} from "@engine/core/game";
+import {Cloneable} from "@engine/declarations";
 
-export class AbsoluteLayout extends Container {
+export class AbsoluteLayout extends Container implements Cloneable<AbsoluteLayout>{
 
     readonly type:string = 'AbsoluteLayout';
 
@@ -55,6 +56,16 @@ export class AbsoluteLayout extends Container {
         );
         if (this.overflow===OVERFLOW.HIDDEN) this.game.getRenderer().unlockRect();
         return true;
+    }
+
+    protected setClonedProperties(cloned:AbsoluteLayout) {
+        super.setClonedProperties(cloned);
+    }
+
+    clone():AbsoluteLayout {
+        const cloned:AbsoluteLayout = new AbsoluteLayout(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
     }
 
 }
