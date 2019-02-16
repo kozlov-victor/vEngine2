@@ -20,7 +20,7 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
 
     private _frameAnimations:{[key:string]:FrameAnimation} = {};
     private _currFrameAnimation:FrameAnimation;
-    private _behaviours:BaseAbstractBehaviour[] = [];
+
 
     constructor(game:Game){
         super(game);
@@ -93,10 +93,6 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
     update(time:number,delta:number) {
         super.update(time,delta);
         this._currFrameAnimation && this._currFrameAnimation.update(time);
-
-        for (let i=0,max = this._behaviours.length;i<max;i++){ // todo to parent
-            if (this._behaviours[i].onUpdate) this._behaviours[i].onUpdate(time,delta);
-        }
     }
 
 
@@ -105,10 +101,6 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         return true;
     }
 
-    addBehaviour(b:BaseAbstractBehaviour){
-        this._behaviours.push(b);
-        b.manage(this);
-    }
 
     kill(){
         super.kill();

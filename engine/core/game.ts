@@ -53,7 +53,6 @@ export class Game {
         this.lightArray = new LightArray(this);
         this.uiBuilder = new UIBuilder(this);
         this.audioPlayer = new AudioPlayer(this);
-        this.camera.revalidate();
         if (DEBUG) window['game'] = this;
     }
 
@@ -86,13 +85,13 @@ export class Game {
     }
 
     runScene(scene:Scene){
+        this._currentScene = scene;
         this.revalidate();
         scene.onPreloading();
         scene.resourceLoader.onProgress(()=>{
            scene.onProgress(scene.resourceLoader.getProgress());
         });
         scene.resourceLoader.startLoading();
-        this._currentScene = scene;
         if (!this._running) this.update();
         this._running = true;
         scene.resourceLoader.onCompleted(()=>{
@@ -101,6 +100,7 @@ export class Game {
     }
 
     getCurrScene():Scene{
+        if (DEBUG && !this._currentScene) throw new DebugError(`current scene is not set yet`);
         return this._currentScene;
     }
 
@@ -151,6 +151,7 @@ export class Game {
 
     revalidate() {
         if (DEBUG && !this._renderer) throw new DebugError(`game renderer is not set`);
+        this.camera.revalidate();
     }
 
 }

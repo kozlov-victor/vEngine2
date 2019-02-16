@@ -1,9 +1,8 @@
 
 import {DebugError} from "../../debugError";
-
-import {GameObject} from "../../model/impl/gameObject";
 import {Game} from "../../core/game";
 import {IKeyVal} from "../../core/misc/object";
+import {RenderableModel} from "@engine/model/renderableModel";
 
 
 export abstract class BaseAbstractBehaviour {
@@ -16,7 +15,7 @@ export abstract class BaseAbstractBehaviour {
         this.parameters = parameters;
     }
 
-    manage(gameObject:GameObject){
+    manage(gameObject:RenderableModel){
         console.error(this);
         if (DEBUG) throw new DebugError(`BaseAbstractBehaviour: method 'manage' not implemented`);
     }

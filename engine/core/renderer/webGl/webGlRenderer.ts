@@ -4,7 +4,6 @@ import {LineDrawer} from "./renderPrograms/impl/base/lineDrawer";
 import {ShapeDrawer} from "./renderPrograms/impl/base/shapeDrawer";
 import {FrameBuffer} from "./base/frameBuffer";
 import {MatrixStack} from "./base/matrixStack";
-import * as mat4 from "../../geometry/mat4";
 import {Texture} from "./base/texture";
 import {AddBlendDrawer} from "./renderPrograms/impl/blend/addBlendDrawer";
 import {Rect} from "../../geometry/rect";
@@ -22,6 +21,8 @@ import {FILL_TYPE, SHAPE_TYPE} from "./renderPrograms/impl/base/shapeDrawer.frag
 import {Shape} from "@engine/model/impl/ui/generic/shape";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {AbstractFilter} from "@engine/core/renderer/webGl/filters/abstract/abstractFilter";
+import {mat4} from "@engine/core/geometry/mat4";
+import MAT16 = mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
@@ -35,14 +36,14 @@ const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
 const SCENE_DEPTH:number = 1000;
 const matrixStack:MatrixStack = new MatrixStack();
 
-const makePositionMatrix = (rect:Rect,viewSize:Size)=>{
+const makePositionMatrix = (rect:Rect,viewSize:Size):MAT16=>{
     // proj * modelView
-    let zToWMatrix = mat4.makeZToWMatrix(1);
-    let projectionMatrix = mat4.ortho(0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
-    let scaleMatrix = mat4.makeScale(rect.width, rect.height, 1);
-    let translationMatrix = mat4.makeTranslation(rect.x, rect.y, 0);
+    let zToWMatrix:MAT16 = mat4.makeZToWMatrix(1);
+    let projectionMatrix:MAT16 = mat4.ortho(0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
+    let scaleMatrix:MAT16 = mat4.makeScale(rect.width, rect.height, 1);
+    let translationMatrix:MAT16 = mat4.makeTranslation(rect.x, rect.y, 0);
 
-    let matrix = mat4.matrixMultiply(scaleMatrix, translationMatrix);
+    let matrix:MAT16 = mat4.matrixMultiply(scaleMatrix, translationMatrix);
     matrix = mat4.matrixMultiply(matrix, matrixStack.getCurrentMatrix());
     matrix = mat4.matrixMultiply(matrix, projectionMatrix);
     matrix = mat4.matrixMultiply(matrix, zToWMatrix);
@@ -269,7 +270,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let uniforms:UniformsInfo = this.prepareShapeUniformInfo(ellipse);
         let sd:ShapeDrawer = this.shapeDrawer;
         uniforms[sd.u_vertexMatrix] = makePositionMatrix(
-            Rect.fromPool().setXYWH(ellipse.pos.x,ellipse.pos.y,maxR2,maxR2),
+            Rect.fromPool().setXYWH(0,0,maxR2,maxR2),
             Size.fromPool().setWH(this.game.width,this.game.height)
         );
         uniforms[sd.u_lineWidth] = Math.min(ellipse.lineWidth/maxR,1);

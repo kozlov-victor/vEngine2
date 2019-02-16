@@ -1,9 +1,8 @@
 
 import {RenderableModel} from "../../../renderableModel";
-import {Color} from "../../../../core/renderer/color";
-import {Game} from "../../../../core/game";
-import {DrawableInfo} from "../../../../core/renderer/webGl/renderPrograms/interface/drawableInfo";
-import {LinearGradient} from "../../../../core/renderer/linearGradient";
+import {Color} from "@engine/core/renderer/color";
+import {Game} from "@engine/core/game";
+import {LinearGradient} from "@engine/core/renderer/linearGradient";
 
 export abstract class Shape extends RenderableModel {
 
@@ -23,11 +22,8 @@ export abstract class Shape extends RenderableModel {
         this.getRect().setXYWH(x,y,w,h);
     }
 
-    getDrawableInfo():DrawableInfo { // todo remove this method
-        return {blendMode:this.blendMode,acceptLight:false,alpha:this.alpha};
-    }
 
-    protected constructor(game:Game){
+    constructor(game:Game){
         super(game);
     }
 

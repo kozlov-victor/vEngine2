@@ -1,11 +1,16 @@
 
 import {Ellipse} from "./ellipse";
 import {Cloneable} from "@engine/declarations";
+import {Game} from "@engine/core/game";
 
 export class Circle extends Ellipse implements Cloneable<Circle>{
 
     readonly type:string = 'Circle';
-    _radius: number = 10;
+    private _radius: number = 10;
+
+    constructor(game:Game){
+        super(game);
+    }
 
     set radius(val:number){
         this._radius = val;

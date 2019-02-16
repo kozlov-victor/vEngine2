@@ -1,11 +1,9 @@
 
 import {MathEx} from "../../core/mathEx";
 import {Game} from "../../core/game";
-import {GameObject} from "./gameObject";
 import {DebugError} from "@engine/debugError";
-import {Point2d} from "@engine/core/geometry/point2d";
 import {RenderableModel} from "@engine/model/renderableModel";
-import {Cloneable} from "@engine/declarations";
+import {noop} from "@engine/core/misc/object";
 
 let r = (obj:ParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
 
@@ -35,6 +33,8 @@ export class ParticleSystem extends RenderableModel {
 
     private _particles:ParticleHolder[] = [];
     private _prototypes:RenderableModel[] = [];
+    private _onUpdateParticle:(r:RenderableModel)=>void = noop;
+    private _onEmitParticle:(r:RenderableModel)=>void = noop;
 
     constructor(protected game:Game){
         super(game);
@@ -59,7 +59,7 @@ export class ParticleSystem extends RenderableModel {
         for (let i = 0;i<r(this.numOfParticlesToEmit);i++) {
             let particle:RenderableModel = this._prototypes[MathEx.random(0,this._prototypes.length-1)];
             particle = ((particle as any).clone() as RenderableModel);
-
+            this._onEmitParticle(particle);
             let angle:number = r(this.particleAngle);
             let vel:number = r(this.particleVelocity);
             particle.velocity.x = vel*Math.cos(angle);
@@ -76,11 +76,20 @@ export class ParticleSystem extends RenderableModel {
     update(time:number,delta:number){
         super.update(time,delta);
         this._particles.forEach((holder:ParticleHolder)=>{
+            this._onUpdateParticle(holder.particle);
             if (time - holder.createdTime > holder.lifeTime) {
                 this._particles.splice(this._particles.indexOf(holder),1);
                 holder.particle.kill();
             }
         });
+    }
+
+    onUpdateParticle(onUpdateParticle:(r:RenderableModel)=>void){
+        this._onUpdateParticle = onUpdateParticle;
+    }
+
+    onEmitParticle(onEmitParticle:(r:RenderableModel)=>void){
+        this._onEmitParticle = onEmitParticle;
     }
 
     draw():boolean{

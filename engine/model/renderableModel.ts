@@ -13,8 +13,8 @@ import {TweenMovie} from "@engine/core/tweenMovie";
 import {Timer} from "@engine/core/timer";
 import {EventEmitter} from "@engine/core/misc/eventEmitter";
 import {RigidShape} from "@engine/core/physics/rigidShapes";
-import {Scene} from "@engine/model/impl/scene";
 import {Layer} from "@engine/model/impl/layer";
+import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
 
 
 export abstract class RenderableModel extends Resource implements Revalidatable {
@@ -45,6 +45,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
 
     protected _rect:Rect = new Rect();
     protected _screenRect = new Rect();
+    protected _behaviours:BaseAbstractBehaviour[] = [];
 
     protected constructor(protected game:Game){
         super();
@@ -65,6 +66,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         cloned.blendMode = this.blendMode;
         cloned.parent = null;
         // todo deep clone of childrens
+        // todo clone behaviour
         cloned.acceptLight = this.acceptLight;
         cloned.rigid = this.rigid;
         cloned.game = this.game;
@@ -155,6 +157,12 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
     }
 
 
+    addBehaviour(b:BaseAbstractBehaviour){
+        this._behaviours.push(b);
+        b.manage(this);
+    }
+
+
     prependChild(c:RenderableModel){
         c.parent = this;
         c.revalidate();
@@ -162,7 +170,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
     }
 
     setDirty(){
-        this._dirty = true;
+        this._dirty = true; // todo
         //if (this.parent) this.parent._dirty = true;
     }
 
@@ -264,6 +272,10 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         this._timers.forEach((t:Timer)=>{
             t.onUpdate(time);
         });
+
+        for (let i=0,max = this._behaviours.length;i<max;i++) {
+            if (this._behaviours[i].onUpdate) this._behaviours[i].onUpdate(time, delta);
+        }
 
         if (this.rigidBody!==undefined) {
             this.rigidBody.update(time,delta);

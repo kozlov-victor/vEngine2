@@ -1,14 +1,13 @@
 import {DebugError} from "../../debugError";
 import {Tween} from "../tween";
-import * as mat4 from '../geometry/mat4'
 import {MathEx} from '../mathEx'
 import {Rect} from "../geometry/rect";
 import {Point2d} from "../geometry/point2d";
 import {Game} from "../game";
-import {GameObject} from "../../model/impl/gameObject";
 import {Scene} from "../../model/impl/scene";
 import {AbstractRenderer} from "@engine/core/renderer/abstract/abstractRenderer";
 import {RenderableModel} from "@engine/model/renderableModel";
+import {mat4} from "@engine/core/geometry/mat4";
 
 
 
@@ -59,7 +58,6 @@ export class Camera {
 
     revalidate(){
         this.scene = this.game.getCurrScene();
-        if (!this.scene) return;
         if (this.scene.tileMap) this.scene.tileMap.revalidate();
         this._rectIdentity.setXYWH(0,0,this.game.width,this.game.height);
         if (this.scene.tileMap.spriteSheet) {

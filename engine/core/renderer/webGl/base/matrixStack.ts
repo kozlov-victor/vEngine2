@@ -1,5 +1,6 @@
 
-import * as mat4 from '../../../geometry/mat4'
+
+import {mat4} from "@engine/core/geometry/mat4";
 
 export class MatrixStack {
 

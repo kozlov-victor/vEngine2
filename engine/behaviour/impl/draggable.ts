@@ -3,6 +3,7 @@ import {Game} from "../../core/game";
 import {GameObject} from "../../model/impl/gameObject";
 import {Scene} from "../../model/impl/scene";
 import {IMousePoint, MOUSE_EVENTS} from "@engine/core/control/mouse";
+import {RenderableModel} from "@engine/model/renderableModel";
 
 interface MouseDragPoint {
     mX: number,
@@ -30,14 +31,14 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
     private sceneOnMouseUp:Function;
 
     private readonly points:{[key:number]:MouseDragPoint};
-    private gameObject:GameObject;
+    private gameObject:RenderableModel;
 
     constructor(game:Game){
         super(game,null);
         this.points = {} as {[key:number]:MouseDragPoint};
     }
 
-    manage(gameObject:GameObject) {
+    manage(gameObject:RenderableModel) {
         this.gameObject = gameObject;
         this.gameObjectOnClick = gameObject.on(MOUSE_EVENTS.click,(e:IMousePoint)=>{
             this.points[DraggableBehaviour._getEventId(e)] = {
