@@ -1,7 +1,6 @@
 
 import {AbstractRenderer} from "./abstractRenderer";
-import {Game} from "../../game";
-import {SCALE_STRATEGY} from "../../misc/consts";
+import {Game, SCALE_STRATEGY} from "../../game";
 import {GameObject} from "@engine/model/impl/gameObject";
 
 

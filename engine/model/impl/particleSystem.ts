@@ -12,14 +12,13 @@ interface ParticlePropertyDesc {
     to:number
 }
 
+type RenderableCloneable = RenderableModel & {clone:()=>RenderableCloneable}
+
 interface ParticleHolder {
-    particle:RenderableModel,
+    particle:RenderableCloneable,
     lifeTime:number,
     createdTime:number,
 }
-
-
-
 
 
 export class ParticleSystem extends RenderableModel {
@@ -32,7 +31,7 @@ export class ParticleSystem extends RenderableModel {
     emissionRadius:number = 0;
 
     private _particles:ParticleHolder[] = [];
-    private _prototypes:RenderableModel[] = [];
+    private _prototypes:RenderableCloneable[] = [];
     private _onUpdateParticle:(r:RenderableModel)=>void = noop;
     private _onEmitParticle:(r:RenderableModel)=>void = noop;
 
@@ -45,7 +44,11 @@ export class ParticleSystem extends RenderableModel {
         if (this.particleAngle.to<this.particleAngle.from) this.particleAngle.to += 2*Math.PI;
     }
 
-    addParticle(r:RenderableModel){
+    addParticle(r:RenderableCloneable){
+        if (DEBUG && !r.clone) {
+            console.error(r);
+            throw new DebugError(`can not add particle: model does not implemet cloneable interface`);
+        }
         this._prototypes.push(r);
     }
 
@@ -57,8 +60,8 @@ export class ParticleSystem extends RenderableModel {
         }
 
         for (let i = 0;i<r(this.numOfParticlesToEmit);i++) {
-            let particle:RenderableModel = this._prototypes[MathEx.random(0,this._prototypes.length-1)];
-            particle = ((particle as any).clone() as RenderableModel);
+            let particle:RenderableCloneable = this._prototypes[MathEx.random(0,this._prototypes.length-1)];
+            particle = particle.clone();
             this._onEmitParticle(particle);
             let angle:number = r(this.particleAngle);
             let vel:number = r(this.particleVelocity);

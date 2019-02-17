@@ -31,7 +31,7 @@ export class MainScene extends Scene {
 
         const circle:Circle = new Circle(this.game);
         circle.radius = 40;
-        circle.pos.setXY(50,50);
+        circle.center.setXY(50,50);
         circle.color = Color.RGB(30,40,55);
         circle.addBehaviour(new DraggableBehaviour(this.game));
         circle.lineWidth = 2;
@@ -39,15 +39,15 @@ export class MainScene extends Scene {
         this.appendChild(circle);
 
         const ellipse:Ellipse = new Ellipse(this.game);
-        ellipse.radiusX = 40;
-        ellipse.radiusY = 60;
+        ellipse.radiusX = 60;
+        ellipse.radiusY = 40;
         gradient = new LinearGradient();
         gradient.colorFrom = Color.RGB(100,0,222);
         gradient.colorTo = Color.RGB(12,20,222);
         ellipse.fillColor = gradient;
         ellipse.color = Color.BLACK;
         ellipse.lineWidth = 5;
-        ellipse.pos.setXY(50,50);
+        ellipse.center.setXY(50,50);
         ellipse.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(ellipse);
 

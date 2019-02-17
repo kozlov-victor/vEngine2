@@ -3,7 +3,6 @@ import {Mouse} from "./control/mouse";
 import {Keyboard} from "./control/keyboard";
 import {GamePad} from "./control/gamePad";
 import {Camera} from "./renderer/camera";
-import {SCALE_STRATEGY} from "./misc/consts";
 import {Point2d} from "./geometry/point2d";
 import {AbstractRenderer} from "./renderer/abstract/abstractRenderer";
 import {Scene} from "../model/impl/scene";
@@ -14,6 +13,11 @@ import {AudioPlayer} from "./media/audioPlayer";
 import {Clazz} from "@engine/core/misc/clazz";
 import {UIBuilder} from "@engine/model/impl/ui/uiBuilder";
 
+export enum SCALE_STRATEGY {
+    NO_SCALE,
+    FIT,
+    STRETCH
+}
 
 export class Game {
 

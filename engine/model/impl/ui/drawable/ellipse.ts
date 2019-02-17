@@ -8,7 +8,7 @@ import {Game} from "@engine/core/game";
 export class Ellipse extends Shape implements Cloneable<Ellipse>{
 
     readonly type:string = 'Ellipse';
-    center:Point2d = new Point2d();
+    readonly center:Point2d = new Point2d();
 
     private _radiusX: number = 10;
     private _radiusY: number = 20;
@@ -18,7 +18,6 @@ export class Ellipse extends Shape implements Cloneable<Ellipse>{
         this.center.observe(()=>{
             const maxR:number = this._getMaxRadius();
             this.pos.setXY(this.center.x - maxR,this.center.y - maxR);
-
         });
         this.pos.observe(()=>{
             const maxR:number = this._getMaxRadius();

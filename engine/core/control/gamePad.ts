@@ -36,7 +36,7 @@ if (DEBUG) {
 export class GamePad {
 
     private game:Game;
-    private gamepads:Array<GamePadInfo>;
+    private gamepads:GamePadInfo[];
 
     constructor(game:Game){
         this.game = game;
@@ -48,15 +48,15 @@ export class GamePad {
             (navigator.getGamepads && navigator.getGamepads()) ||
             (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) ||
             navigator.webkitGamepads || navigator.mozGamepads ||
-            navigator.msGamepads || navigator.gamepads || [] as Array<GamePadInfo>;
+            navigator.msGamepads || navigator.gamepads || [] as GamePadInfo[];
 
-        for (let i=0,max=this.gamepads.length;i<max;i++) {
+        for (let i:number=0,max=this.gamepads.length;i<max;i++) {
             let gp:GamePadInfo = this.gamepads[i];
             if (!gp) continue;
             let maxButtons = gp.buttons.length;
             if (maxButtons>7) maxButtons = 7; // only 8-buttons gamePad is supported for now
-            for (let j=0;j<maxButtons;j++) {
-                let btn = gp.buttons[j];
+            for (let j:number=0;j<maxButtons;j++) {
+                let btn:GamePadButton = gp.buttons[j];
                 if (btn.pressed) {
                     this.game.keyboard.press(j);
                 } else {

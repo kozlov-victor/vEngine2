@@ -25,14 +25,6 @@ export class Layer {
         this.children.push(go);
     }
 
-    getAllSpriteSheets() {
-        let dataSet:any[] = [];
-        this.children.forEach((obj:GameObject)=>{
-            obj.spriteSheet && !dataSet.find(it=>obj.id===it.id) && dataSet.push(obj.spriteSheet);
-        });
-        return dataSet;
-    }
-
 
     update(currTime:number,deltaTime:number){
         let all = this.children;

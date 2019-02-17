@@ -8,7 +8,7 @@ import {BasicAudioContext} from "@engine/core/media/context/basicAudioContext";
 
 export class AudioNodeSet {
 
-    nodes:AudioNode[] = [] as AudioNode[];
+    readonly nodes:AudioNode[] = [] as AudioNode[];
 
     constructor(game: Game,context:BasicAudioContext,private numOfNodes:number){
         for (let i = 0;i<numOfNodes;i++) {

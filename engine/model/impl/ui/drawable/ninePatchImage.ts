@@ -14,7 +14,7 @@ export class NinePatchImage extends Image {
     private c:number = 0;
     private d:number = 0;
 
-    private _patches:Image[] = [];
+    private _patches:Image[] = new Array(10);
 
     /**
      *

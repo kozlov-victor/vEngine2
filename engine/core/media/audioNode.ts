@@ -11,10 +11,8 @@ const getOrder = ():number=> {
 export class AudioNode {
 
     currSound:Sound = null;
-    private _orderStarted:number;
 
     constructor(public context:BasicAudioContext){}
-
 
     play(link:ResourceLink,loop:boolean = false){
         this.context.play(link,loop);

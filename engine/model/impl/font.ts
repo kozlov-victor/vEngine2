@@ -1,7 +1,4 @@
 
-
-
-
 import {Game} from "../../core/game";
 import {Rect} from "../../core/geometry/rect";
 import {Resource} from "../../core/resources/resource";
