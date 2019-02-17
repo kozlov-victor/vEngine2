@@ -79,7 +79,7 @@ export class TileMap {
         }
     }
 
-    getTilesAtRect(rect){
+    getTilesAtRect(rect:Rect){
         let result = [];
         if (!this.spriteSheet) return result;
         let alreadyCheckedTiles = {};

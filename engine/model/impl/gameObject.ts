@@ -59,8 +59,8 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         fa.setGameObject(this);
     }
 
-    playFrameAnimation(fr:FrameAnimation);
-    playFrameAnimation(fr:string);
+    playFrameAnimation(fr:FrameAnimation):void;
+    playFrameAnimation(fr:string):void;
     playFrameAnimation(fr:string|FrameAnimation){
         let frameAnimation:FrameAnimation;
         if (typeof fr==='string') {

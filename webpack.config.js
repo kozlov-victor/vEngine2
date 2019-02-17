@@ -2,7 +2,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
-const debug = true;
 const colors = require('./node_tools/colors');
 
 class WebpackDonePlugin{
@@ -16,6 +15,11 @@ class WebpackDonePlugin{
 
 module.exports = (env={})=>{
 
+    console.log('env',env);
+
+    const debug = env.debug==='true';
+
+
     const entry = {
 
     };
@@ -26,7 +30,7 @@ module.exports = (env={})=>{
 
     let dirs = fs.readdirSync('./demo');
     dirs.forEach((dir)=>{
-        if (['assets','out','index.html'].includes(dir)) return;
+        if (['assets','out','index.html','.DS_Store'].includes(dir)) return;
         entry[`${dir}`] = [`./demo/${dir}/index.ts`]
     });
 
@@ -88,8 +92,7 @@ module.exports = (env={})=>{
     config.plugins = [
         new webpack.DefinePlugin({
             BUILD_AT: new Date().getTime(),
-            DEBUG: true,
-            EMBED_RESOURCES: false,
+            DEBUG: debug,
         }),
         new WebpackDonePlugin()
     ];

@@ -9,7 +9,7 @@ export class Point2d extends ObservableEntity{
     private _y:number = 0;
 
     private static pool = new ObjectPool<Point2d>(Point2d,4);
-    private _arr:Array<number>;
+    private _arr:number[];
 
     static fromPool():Point2d{
         return Point2d.pool.getNextObject();
@@ -41,10 +41,6 @@ export class Point2d extends ObservableEntity{
 
     protected checkObservableChanged():boolean{
         return this._state.setState(this._x,this._y);
-    }
-
-    observe(onChangedFn:()=>void){
-        this.addListener(onChangedFn);
     }
 
     setXY(x:number,y?:number):Point2d{

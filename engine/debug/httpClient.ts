@@ -1,9 +1,10 @@
 
 
-let noop = function(data?:any):any{};
+import {IKeyVal, noop} from "@engine/core/misc/object";
+import Timer = NodeJS.Timer;
 
 
-let objectToQuery = (o)=> {
+let objectToQuery = (o:IKeyVal)=> {
     if (!o) return '';
     if (o instanceof FormData) return o;
     let paramsArr:any[] = [];
@@ -15,8 +16,19 @@ let objectToQuery = (o)=> {
     return paramsArr.map((item:any)=>[item[0]+'='+item[1]]).join('&')
 };
 
-let request = (data)=> {
-    let abortTmr = null;
+interface IRequestData {
+    method: string,
+    data?: any,
+    url: string,
+    success: Function,
+    error?: Function,
+    requestType?: string,
+    timeout?: number,
+    ontimeout?: Function
+}
+
+let request = (data:IRequestData)=> {
+    let abortTmr;
     let resolved = false;
     data.method = data.method || 'get';
     if (data.data && data.method==='get') data.url+='?'+objectToQuery(data.data);
@@ -66,42 +78,46 @@ let request = (data)=> {
 };
 
 
-let get = (url,data,success?,error?)=>{
-    return request({
-        method:'get',
-        url,
-        data,
-        success,
-        error
-    });
-};
 
-let post = (url,data,success?,error?)=>{
-    return request({
-        method:'post',
-        url,
-        data,
-        requestType:'application/json',
-        success,
-        error
-    });
-};
 
-let postMultiPart = (url,file,data,success?,error?)=>{
-    let formData = new FormData();
-    Object.keys(data).forEach(function(key){
-        formData.append(key,data[key]);
-    });
-    formData.append('file',file);
-    formData.append('fileName',file.name);
-    return request({
-        method:'post',
-        url,
-        data: formData,
-        requestType:'multipart/form-data',
-        success,
-        error
-    });
-};
+export namespace httpClient {
 
-export const httpClient = {get,post,postMultiPart};
+    export const get = (url:string,data:IKeyVal,success?:Function,error?:Function)=>{
+        return request({
+            method:'get',
+            url,
+            data,
+            success,
+            error
+        });
+    };
+
+    export const  post = (url:string,data:IKeyVal,success?:Function,error?:Function)=>{
+        return request({
+            method:'post',
+            url,
+            data,
+            requestType:'application/json',
+            success,
+            error
+        });
+    };
+
+    export const  postMultiPart = (url:string,file:File,data:IKeyVal,success?:Function,error?:Function)=>{
+        let formData = new FormData();
+        Object.keys(data).forEach(function(key){
+            formData.append(key,data[key]);
+        });
+        formData.append('file',file);
+        formData.append('fileName',file.name);
+        return request({
+            method:'post',
+            url,
+            data: formData,
+            requestType:'multipart/form-data',
+            success,
+            error
+        });
+    };
+
+}

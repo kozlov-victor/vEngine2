@@ -30,7 +30,7 @@ window.addEventListener('load',(e:Event)=>{
 });
 
 
-const prepareMessage = function(e,lineNum){
+const prepareMessage = function(e:any,lineNum:number){
     let msg;
     if (typeof e === 'string') {
         msg = e;
@@ -60,7 +60,7 @@ const prepareMessage = function(e,lineNum){
 window.addEventListener('error',function(e:any){
     let lineNum:number = e.lineno;
     let colNum:number = e.colno;
-    let filename:number = e.filename;
+    let filename:string = e.filename;
 
     let runtimeInfo = '';
     if (e.error && e.error.name && e.error.name==='DebugError') {
@@ -106,7 +106,7 @@ window.addEventListener('error',function(e:any){
   </div> 
   
 `;
-        httpClient.get(filename,{r:Math.random()},file=>{
+        httpClient.get(filename,{r:Math.random()},(file:string)=>{
             let res:string='';
             let strings:string[] = file.split('\n');
             let linesAfter:number = 5;

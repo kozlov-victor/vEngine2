@@ -5,12 +5,16 @@ import {Rectangle} from "../drawable/rectangle";
 import {ScrollableContainer} from "../generic/scrollableContainer";
 import {Image} from "../drawable/image";
 import {AbstractRenderer} from "@engine/core/renderer/abstract/abstractRenderer";
+import {Game} from "@engine/core/game";
 
 type char = string;
 
 
 export enum TEXT_ALIGN {
-    LEFT = 'LEFT', RIGHT = 'RIGHT', CENTER = 'CENTER', JUSTIFY = 'JUSTIFY'
+    LEFT,
+    RIGHT,
+    CENTER,
+    JUSTIFY
 }
 
 class TextInfo {
@@ -195,7 +199,7 @@ export class TextField extends ScrollableContainer {
     private _font: Font = null;
 
 
-    constructor(game) {
+    constructor(game:Game) {
         super(game);
         this._textInfo = new TextInfo(this);
         this._symbolImage = new Image(this.game);
@@ -274,7 +278,7 @@ export class TextField extends ScrollableContainer {
         return this._text
     }
 
-    setFont(font) {
+    setFont(font:Font) {
         font.revalidate();
         this._font = font;
         this.setText(this._text);

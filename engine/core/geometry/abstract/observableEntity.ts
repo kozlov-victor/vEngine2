@@ -35,12 +35,23 @@ export abstract class ObservableEntity {
         }
     }
 
+    forceTriggerChange(){
+        for (let fn of this._onChanged) {
+            fn();
+        }
+    }
+
     addListener(f:()=>void){
         this._onChanged.push(f);
     }
 
     removeListener(f:()=>void){
         removeFromArray(this._onChanged,(it)=>it===f);
+    }
+
+
+    observe(onChangedFn:()=>void){
+        this.addListener(onChangedFn);
     }
 
 }

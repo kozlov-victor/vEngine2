@@ -6,7 +6,7 @@ export class Queue{
 
     private tasksResolved = 0;
     private tasks:Array<Function> = [];
-    private tasksProgressById:{[taskId:number]:number} = {};
+    private tasksProgressById:{[taskId:string]:number} = {};
     private completed:boolean = false;
 
     public onResolved:()=>void;

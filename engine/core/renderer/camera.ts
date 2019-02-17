@@ -139,7 +139,7 @@ export class Camera {
                 let r2 = MathEx.random(-amplitude/2,amplitude/2);
                 tweenTarget.point.setXY(r1,r2);
             },
-            complete:()=>this.cameraShakeTween = null
+            complete:():void=>this.cameraShakeTween = null
         });
     }
 

@@ -20,11 +20,11 @@ export class ColliderEngine {
     }
 
     private positionalCorrection(s1:RigidShape, s2:RigidShape, collisionInfo:CollisionInfo){
-        var s1InvMass = s1.mInvMass;
-        var s2InvMass = s2.mInvMass;
+        let s1InvMass = s1.mInvMass;
+        let s2InvMass = s2.mInvMass;
 
-        var num = collisionInfo.getDepth() / (s1InvMass + s2InvMass) * this.posCorrectionRate;
-        var correctionAmount = collisionInfo.getNormal().scale(num);
+        let num = collisionInfo.getDepth() / (s1InvMass + s2InvMass) * this.posCorrectionRate;
+        let correctionAmount = collisionInfo.getNormal().scale(num);
 
         s1.move(correctionAmount.scale(-s1InvMass));
         s2.move(correctionAmount.scale(s2InvMass));
@@ -99,7 +99,7 @@ export class ColliderEngine {
         var jT = -(1 + newRestituion) * relativeVelocity.dot(tangent) * newFriction;
         jT = jT / (s1.mInvMass + s2.mInvMass + R1crossT * R1crossT * s1.mInertia + R2crossT * R2crossT * s2.mInertia);
 
-        //friction should less than force in normal direction
+        //friction should less than forceTriggerChange in normal direction
         if (jT > jN) {
             jT = jN;
         }

@@ -53,7 +53,7 @@ export class Game {
         this.lightArray = new LightArray(this);
         this.uiBuilder = new UIBuilder(this);
         this.audioPlayer = new AudioPlayer(this);
-        if (DEBUG) window['game'] = this;
+        if (DEBUG) (window as any)['game'] = this;
     }
 
 
@@ -65,7 +65,7 @@ export class Game {
         return this._deltaTime;
     }
 
-    log(args){
+    log(args:any){
         this._renderer.log(args);
     }
 
@@ -79,7 +79,7 @@ export class Game {
     }
 
     private _cnt=0;
-    debug2(...val){
+    debug2(...val:any[]){
         this._cnt++;
         if (this._cnt>10) throw new DebugError('too many logs');
     }
