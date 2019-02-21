@@ -3,6 +3,7 @@
 import {httpClient} from "@engine/debug/httpClient";
 import {IKeyVal} from "@engine/core/misc/object";
 import {Game} from "@engine/core/game";
+
 let devConsole:HTMLElement = document.createElement('div');
 let css:IKeyVal = {
     position: 'absolute',
@@ -107,16 +108,19 @@ window.addEventListener('error',function(e:any){
   
 `;
         httpClient.get(filename,{r:Math.random()},(file:string)=>{
-            let res:string='';
             let strings:string[] = file.split('\n');
             let linesAfter:number = 5;
+            let linesBefore:number = 5;
             let errorString:string = strings[lineNum - 1] || '';
             errorString = `${errorString.substr(0,colNum-1)}<span class="errorCol">${errorString[colNum-1]}</span>${errorString.substr(colNum)}`;
-            res+=`<span class="errorRow">${errorString}</span>\n`;
-            for (let i=0;i<linesAfter;i++) {
+            errorString=`<span class="errorRow">${errorString}</span>\n`;
+            let res:string='';
+            for (let i=-linesBefore;i<linesAfter;i++) {
                 let index = lineNum + i;
+                if (index<0 || index>strings.length-1) continue;
                 let s = strings[index];
-                if (s) res+=s+'\n';
+                if (index==lineNum-1) res+=errorString;
+                else res+=s+'\n';
             }
             let errDiv:HTMLElement = document.createElement('div');
             errDiv.className = 'errorBlockHolder';

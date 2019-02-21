@@ -3,6 +3,7 @@ import {GameObject} from "@engine/model/impl/gameObject";
 import {SpriteSheet} from "@engine/model/impl/spriteSheet";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {FrameAnimation} from "@engine/model/impl/frameAnimation";
+import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
 
 
 export class MainScene extends Scene {
@@ -33,7 +34,7 @@ export class MainScene extends Scene {
 
         let playing:boolean = true;
 
-        this.on('click',()=>{
+        this.on(MOUSE_EVENTS.click,()=>{
            playing = !playing;
            if (playing) this.obj.playFrameAnimation('animation');
            else this.obj.stopFrAnimation();

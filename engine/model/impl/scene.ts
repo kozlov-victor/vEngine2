@@ -12,6 +12,8 @@ import {RenderableModel} from "@engine/model/renderableModel";
 import {TweenMovie} from "@engine/core/tweenMovie";
 import {EventEmitter} from "@engine/core/misc/eventEmitter";
 import {removeFromArray} from "@engine/core/misc/object";
+import {DebugError} from "@engine/debugError";
+import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
 
 
 export class Scene implements Revalidatable {
@@ -189,7 +191,14 @@ export class Scene implements Revalidatable {
 
     // todo repeated block renderable model
     protected _emitter:EventEmitter;
-    on(eventName:string|string[],callBack:Function){
+    on(eventName:string,callBack:Function){
+
+        if (DEBUG && !this.game.hasControl('Mouse')) {
+            if (MOUSE_EVENTS[eventName]!=undefined) {
+                throw new DebugError('can not listen mouse events: mouse control is not added');
+            }
+        }
+
         if (this._emitter===undefined) this._emitter = new EventEmitter();
         this._emitter.on(eventName,callBack);
         return callBack;

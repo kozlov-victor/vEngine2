@@ -52,6 +52,7 @@ export enum GAME_PAD_KEY {
 
 export class GamePad extends AbstractKeypad implements IControl{
 
+    readonly type:string = 'GamePad';
     private gamepads:GamePadInfo[];
 
     constructor(game:Game){

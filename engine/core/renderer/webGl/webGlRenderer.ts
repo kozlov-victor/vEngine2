@@ -194,7 +194,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let maxSize:number = Math.max(img.width,img.height);
         let sd:ShapeDrawer = this.shapeDrawer;
         let uniforms:UniformsInfo = this.prepareShapeUniformInfo(img);
-        // uniforms[sd.u_fillColor] unused;
         uniforms[sd.u_borderRadius] = Math.min(img.borderRadius/maxSize,1);
         uniforms[sd.u_shapeType] = SHAPE_TYPE.RECT;
         uniforms[sd.u_fillType] = FILL_TYPE.TEXTURE;

@@ -54,18 +54,33 @@ export class Game {
 
     addControl(C:Clazz<IControl>){
         const instance:IControl = new C(this);
+        if (DEBUG) {
+            for (let c of this._controls) {
+                if (c.type===instance.type) {
+                    throw new DebugError(`control with type "${c.type}" added already`)
+                }
+            }
+        }
         this._controls.push(instance);
         instance.listenTo();
     }
 
-    getControl<T>(C:Clazz<T>):T {
+    getControl<T>(C:Clazz<IControl>):T {
         for (let c of this._controls) {
             if (c instanceof C) {
                 return <T>(c as any);
             }
         }
-        if (DEBUG) throw new DebugError('no such control found');
-        else return null;
+        if (DEBUG) throw new DebugError('no such control');
+    }
+
+    hasControl(type:string):boolean {
+        for (let c of this._controls) {
+            if (c.type===type) {
+                return true;
+            }
+        }
+        return false;
     }
 
     getTime():number{

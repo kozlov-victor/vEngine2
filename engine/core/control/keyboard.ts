@@ -42,6 +42,7 @@ export enum KEYBOARD_KEY  {
 
 export class Keyboard extends AbstractKeypad implements IControl {
 
+    readonly type:string = 'Keyboard';
     private keyDownListener:(e:KeyboardEvent)=>void;
     private keyUpListener:(e:KeyboardEvent)=>void;
 

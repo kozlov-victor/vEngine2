@@ -33,7 +33,7 @@ export class MainScene extends Scene {
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
 
-        this.game.getControl(Keyboard).on(KEYBOARD_EVENT.KEY_HOLD, (e:KEYBOARD_KEY)=>{
+        this.game.getControl<Keyboard>(Keyboard).on(KEYBOARD_EVENT.KEY_HOLD, (e:KEYBOARD_KEY)=>{
             switch (e) {
                 case KEYBOARD_KEY.LEFT:
                     this.logoObj.pos.addX(-1);

@@ -1,7 +1,7 @@
 import {Scene} from "@engine/model/impl/scene";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {Sound} from "@engine/model/impl/sound";
-import {MOUSE_EVENTS} from "@engine/core/control/mouse";
+import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
 
 
 export class MainScene extends Scene {

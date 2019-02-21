@@ -1,73 +1,22 @@
-import {MouseEventEx} from "../../declarations";
-import {MathEx} from "../mathEx";
-import {Point2d} from "../geometry/point2d";
-import {ObjectPool} from "../misc/objectPool";
-import {Game} from "../game";
-import {Scene} from "../../model/impl/scene";
-import {Rect} from "../geometry/rect";
-import {RenderableModel} from "../../model/renderableModel";
+
+import {MathEx} from "../../mathEx";
+import {Point2d} from "../../geometry/point2d";
+import {Game} from "../../game";
+import {Scene} from "@engine/model/impl/scene";
+import {Rect} from "../../geometry/rect";
+import {RenderableModel} from "@engine/model/renderableModel";
 import {IControl} from "@engine/core/control/abstract/icontrol";
 import {DebugError} from "@engine/debugError";
+import {IMousePoint, MousePoint} from "@engine/core/control/mouse/mousePoint";
+import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
 
 
-export interface IMousePoint {
-
-    screenX:number,
-    screenY:number,
-    objectX:number,
-    objectY:number,
-    id:number,
-    target:RenderableModel,
-    nativeEvent: Event,
-    eventName:string,
-    isMouseDown: boolean
-}
-
-export class MousePoint extends Point2d{
-
-    public screenX:number;
-    public screenY:number;
-    public id:number;
-    public target:RenderableModel|Scene;
-    public nativeEvent:MouseEventEx;
-    public isMouseDown:boolean;
-
-    private static mousePointsPool:ObjectPool<MousePoint> = new ObjectPool<MousePoint>(MousePoint);
-
-    constructor(){
-        super();
-    }
 
 
-    static fromPool():MousePoint{
-        return MousePoint.mousePointsPool.getNextObject();
-    }
-
-    static unTransform(another:MousePoint):MousePoint{
-        let p:MousePoint = MousePoint.fromPool();
-        p.screenX = another.screenX;
-        p.screenY = another.screenY;
-        p.id = another.id;
-        p.target = another.target;
-        p.setXY(p.screenX,p.screenY);
-        return p;
-    }
-
-}
-
-export let MOUSE_EVENTS = {
-    click       :   'click',
-    mouseDown   :   'mouseDown',
-    mouseMove   :   'mouseMove',
-    mouseLeave  :   'mouseLeave',
-    mouseEnter  :   'mouseEnter',
-    mouseUp     :   'mouseUp',
-    doubleClick :   'doubleClick',
-    scroll      :   'scroll'
-};
 
 export class Mouse implements IControl {
 
+    readonly type:string = 'Mouse';
     private objectsCaptured:{[pointId:number]:RenderableModel} = {};
     private container:HTMLElement;
     private readonly game:Game;

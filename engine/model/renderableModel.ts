@@ -1,6 +1,6 @@
 import {AbstractRenderer} from "../core/renderer/abstract/abstractRenderer";
 import {Resource} from "../core/resources/resource";
-import {Cloneable, Revalidatable} from "../declarations";
+import {Revalidatable} from "../declarations";
 import {DebugError} from "../debugError";
 import {MathEx} from "../core/mathEx";
 import {isObjectMatch} from "../core/misc/object";
@@ -15,6 +15,7 @@ import {EventEmitter} from "@engine/core/misc/eventEmitter";
 import {RigidShape} from "@engine/core/physics/rigidShapes";
 import {Layer} from "@engine/model/impl/layer";
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
+import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
 
 
 export abstract class RenderableModel extends Resource implements Revalidatable {
@@ -298,7 +299,14 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
 
     // todo repeated block (scene)
     protected _emitter:EventEmitter;
-    on(eventName:string|string[],callBack:Function){
+    on(eventName:string,callBack:Function){
+
+        if (DEBUG && !this.game.hasControl('Mouse')) {
+            if (MOUSE_EVENTS[eventName]!=undefined) {
+                throw new DebugError('can not listen mouse events: mouse control is not added');
+            }
+        }
+
         if (this._emitter===undefined) this._emitter = new EventEmitter();
         this._emitter.on(eventName,callBack);
         return callBack;

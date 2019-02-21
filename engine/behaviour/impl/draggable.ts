@@ -2,8 +2,9 @@ import {BaseAbstractBehaviour} from "../abstract/baseAbstractBehaviour";
 import {Game} from "../../core/game";
 import {GameObject} from "../../model/impl/gameObject";
 import {Scene} from "../../model/impl/scene";
-import {IMousePoint, MOUSE_EVENTS} from "@engine/core/control/mouse";
 import {RenderableModel} from "@engine/model/renderableModel";
+import {IMousePoint} from "@engine/core/control/mouse/mousePoint";
+import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
 
 interface MouseDragPoint {
     mX: number,
