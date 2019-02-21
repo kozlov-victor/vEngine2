@@ -1,7 +1,4 @@
 
-
-
-
 import {AbstractFilter} from "../webGl/filters/abstract/abstractFilter";
 import {TextField} from '@engine/model/impl/ui/components/textField'
 import {Device} from '../../device'

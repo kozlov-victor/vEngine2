@@ -1,6 +1,5 @@
 import {Scene} from "@engine/model/impl/scene";
-import {Font} from "@engine/model/impl/font";
-import {ResourceLink} from "@engine/core/resources/resourceLink";
+import {Font, FontFactory} from "@engine/model/impl/font";
 import {TextField} from "@engine/model/impl/ui/components/textField";
 import {Color} from "@engine/core/renderer/color";
 import {Button} from "@engine/model/impl/ui/components/button";
@@ -15,18 +14,14 @@ export class MainScene extends Scene {
         fnt.fontSize = 50;
         fnt.fontFamily = 'monospace';
         fnt.fontColor = Color.RGB(200,0,12);
-        fnt.createContext();
-        let link:ResourceLink = this.resourceLoader.loadImage(fnt.createBitmap());
-        fnt.setResourceLink(link);
+        FontFactory.generate(fnt,this);
 
 
         let fnt2:Font = new Font(this.game);
         fnt2.fontSize = 12;
         fnt2.fontFamily = 'monospace';
         fnt2.fontColor = Color.RGB(0,220,12);
-        fnt2.createContext();
-        let link2:ResourceLink = this.resourceLoader.loadImage(fnt2.createBitmap());
-        fnt2.setResourceLink(link2);
+        FontFactory.generate(fnt2,this);
 
         let tf:TextField = new TextField(this.game);
         tf.setFont(fnt2);

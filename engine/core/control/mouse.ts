@@ -6,6 +6,8 @@ import {Game} from "../game";
 import {Scene} from "../../model/impl/scene";
 import {Rect} from "../geometry/rect";
 import {RenderableModel} from "../../model/renderableModel";
+import {IControl} from "@engine/core/control/abstract/icontrol";
+import {DebugError} from "@engine/debugError";
 
 
 export interface IMousePoint {
@@ -64,7 +66,7 @@ export let MOUSE_EVENTS = {
     scroll      :   'scroll'
 };
 
-export class Mouse {
+export class Mouse implements IControl {
 
     private objectsCaptured:{[pointId:number]:RenderableModel} = {};
     private container:HTMLElement;
@@ -202,7 +204,13 @@ export class Mouse {
         delete this.objectsCaptured[point.id];
     }
 
-    listenTo(container:HTMLElement) {
+    listenTo() {
+
+        if (DEBUG && !this.game.getRenderer()) {
+            throw new DebugError(`can not initialize mouse control: renderer is not set`);
+        }
+        const container:HTMLElement = this.game.getRenderer().container;
+
         this.container = container;
         // mouseDown
         container.ontouchstart = (e:TouchEvent)=>{
@@ -243,6 +251,8 @@ export class Mouse {
             this.resolveScroll(e);
         }
     }
+
+    update(){}
 
     destroy(){
             if (!this.container) return;

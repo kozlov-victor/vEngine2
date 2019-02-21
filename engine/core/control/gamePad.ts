@@ -1,6 +1,8 @@
-import {KEY} from "@engine/core/control/keyboard";
 
 import {Game} from "../game";
+import {IControl} from "@engine/core/control/abstract/icontrol";
+import {AbstractKeypad, KEYBOARD_EVENT} from "@engine/core/control/abstract/abstractKeypad";
+import {KEYBOARD_KEY} from "@engine/core/control/keyboard";
 
 declare const window:any,navigator:any;
 
@@ -12,8 +14,8 @@ interface GamePadButton {
 interface GamePadInfo {
     index:number,
     id:number,
-    buttons:Array<GamePadButton>,
-    axes:Array<number>
+    buttons:GamePadButton[],
+    axes:number[]
 }
 
 interface GamePadEvent {
@@ -33,13 +35,27 @@ if (DEBUG) {
     });
 }
 
-export class GamePad {
+export enum GAME_PAD_KEY {
+    GAME_PAD_1 = 0,
+    GAME_PAD_2 = 1,
+    GAME_PAD_3 = 2,
+    GAME_PAD_4 = 3,
+    GAME_PAD_5 = 4,
+    GAME_PAD_6 = 5,
+    GAME_PAD_7 = 6,
+    GAME_PAD_8 = 7,
+    GAME_PAD_AXIS_LEFT = 8,
+    GAME_PAD_AXIS_RIGHT = 9,
+    GAME_PAD_AXIS_UP = 10,
+    GAME_PAD_AXIS_DOWN = 11
+}
 
-    private game:Game;
+export class GamePad extends AbstractKeypad implements IControl{
+
     private gamepads:GamePadInfo[];
 
     constructor(game:Game){
-        this.game = game;
+        super(game);
     }
 
     update(){
@@ -58,9 +74,9 @@ export class GamePad {
             for (let j:number=0;j<maxButtons;j++) {
                 let btn:GamePadButton = gp.buttons[j];
                 if (btn.pressed) {
-                    this.game.keyboard.press(j);
+                    this.press(j);
                 } else {
-                    this.game.keyboard.release(j);
+                    this.release(j);
                 }
             }
             if (gp.axes[0]===0) continue; // to avoid oscillations, skip integer zero value
@@ -70,27 +86,41 @@ export class GamePad {
             let axis1 = ~~(gp.axes[1]);
 
             if (axis0===1) {
-                this.game.keyboard.press(KEY.GAME_PAD_AXIS_RIGHT);
+                this.press(GAME_PAD_KEY.GAME_PAD_AXIS_RIGHT);
             } else {
-                this.game.keyboard.release(KEY.GAME_PAD_AXIS_RIGHT);
+                this.release(GAME_PAD_KEY.GAME_PAD_AXIS_RIGHT);
             }
             if (axis0===-1) {
-                this.game.keyboard.press(KEY.GAME_PAD_AXIS_LEFT);
+                this.press(GAME_PAD_KEY.GAME_PAD_AXIS_LEFT);
             } else {
-                this.game.keyboard.release(KEY.GAME_PAD_AXIS_LEFT);
+                this.release(GAME_PAD_KEY.GAME_PAD_AXIS_LEFT);
             }
 
             if (axis1===1) {
-                this.game.keyboard.press(KEY.GAME_PAD_AXIS_DOWN);
+                this.press(GAME_PAD_KEY.GAME_PAD_AXIS_DOWN);
             } else {
-                this.game.keyboard.release(KEY.GAME_PAD_AXIS_DOWN);
+                this.release(GAME_PAD_KEY.GAME_PAD_AXIS_DOWN);
             }
             if (axis1===-1) {
-                this.game.keyboard.press(KEY.GAME_PAD_AXIS_UP);
+                this.press(GAME_PAD_KEY.GAME_PAD_AXIS_UP);
             } else {
-                this.game.keyboard.release(KEY.GAME_PAD_AXIS_UP);
+                this.release(GAME_PAD_KEY.GAME_PAD_AXIS_UP);
             }
         }
     }
+
+
+    on(e:KEYBOARD_EVENT,callback:(e:GAME_PAD_KEY)=>any) {
+        this.emitter.on(KEYBOARD_EVENT[e],callback);
+    }
+
+    off(e:KEYBOARD_EVENT,callback:Function){
+        this.emitter.off(GAME_PAD_KEY[e],callback);
+    }
+
+
+    listenTo(){}
+
+    destroy(){}
 
 }

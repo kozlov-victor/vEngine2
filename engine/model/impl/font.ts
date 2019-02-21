@@ -5,6 +5,8 @@ import {Resource} from "../../core/resources/resource";
 import {Color} from "@engine/core/renderer/color";
 import {Revalidatable} from "@engine/declarations";
 import {DebugError} from "@engine/debugError";
+import {ResourceLink} from "@engine/core/resources/resourceLink";
+import {Scene} from "@engine/model/impl/scene";
 
 interface FontContext {
     symbols: {[key:string]:Rect},
@@ -17,11 +19,11 @@ interface Range {
     to:number
 }
 
-class FontFactory {
+export namespace FontFactory {
 
-    static SYMBOL_PADDING:number = 4;
+    const SYMBOL_PADDING:number = 4;
 
-    private static getFontHeight(strFont:string):number {
+    const getFontHeight = (strFont:string):number=> {
         let parent = document.createElement("span");
         parent.appendChild(document.createTextNode("height!ДдЙЇ"));
         document.body.appendChild(parent);
@@ -29,14 +31,14 @@ class FontFactory {
         let height = parent.offsetHeight;
         document.body.removeChild(parent);
         return height;
-    }
+    };
     
-    public static getFontContext(arrFromTo:Range[], strFont:string, w:number):FontContext {
+    export const getFontContext = (arrFromTo:Range[], strFont:string, w:number):FontContext=> {
         
         let cnv:HTMLCanvasElement = document.createElement('canvas');
         let ctx:CanvasRenderingContext2D = cnv.getContext('2d');
         ctx.font = strFont;
-        let textHeight:number = FontFactory.getFontHeight(strFont) + 2 * FontFactory.SYMBOL_PADDING;
+        let textHeight:number = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
         let symbols:{[key:string]:Rect} = {};
         let currX:number = 0, currY:number = 0, cnvHeight = textHeight;
         for (let k:number = 0; k < arrFromTo.length; k++) {
@@ -45,7 +47,7 @@ class FontFactory {
                 let currentChar = String.fromCharCode(i);
                 ctx = cnv.getContext('2d');
                 let textWidth:number = ctx.measureText(currentChar).width;
-                textWidth += 2 * FontFactory.SYMBOL_PADDING;
+                textWidth += 2 * SYMBOL_PADDING;
                 if (textWidth == 0) continue;
                 if (currX + textWidth > w) {
                     currX = 0;
@@ -53,18 +55,18 @@ class FontFactory {
                     cnvHeight = currY + textHeight;
                 }
                 let symbolRect:Rect = new Rect();
-                symbolRect.x = ~~currX + FontFactory.SYMBOL_PADDING;
-                symbolRect.y = ~~currY + FontFactory.SYMBOL_PADDING;
-                symbolRect.width = ~~textWidth - 2 * FontFactory.SYMBOL_PADDING;
-                symbolRect.height = textHeight - 2 * FontFactory.SYMBOL_PADDING;
+                symbolRect.x = ~~currX + SYMBOL_PADDING;
+                symbolRect.y = ~~currY + SYMBOL_PADDING;
+                symbolRect.width = ~~textWidth - 2 * SYMBOL_PADDING;
+                symbolRect.height = textHeight - 2 * SYMBOL_PADDING;
                 symbols[currentChar] = symbolRect;
                 currX += textWidth;
             }
         }
         return {symbols: symbols, width: w, height: cnvHeight};
-    }
+    };
 
-    public static getFontImageBase64(fontContext:FontContext,strFont:string,color:Color):string {
+    export const  getFontImageBase64 = (fontContext:FontContext,strFont:string,color:Color):string=> {
         let cnv:HTMLCanvasElement = document.createElement('canvas');
         cnv.width = fontContext.width;
         cnv.height = fontContext.height;
@@ -79,6 +81,12 @@ class FontFactory {
         });
         return cnv.toDataURL();
     };
+
+    export const generate = (f:Font,s:Scene):void=>{
+        f.createContext();
+        let link:ResourceLink = s.resourceLoader.loadImage(f.createBitmap());
+        f.setResourceLink(link);
+    }
     
 }
 

@@ -1,19 +1,10 @@
-import {EventEmitter} from "@engine/core/misc/eventEmitter";
-
-
-
-import {Game} from "../game";
+import {IControl} from "@engine/core/control/abstract/icontrol";
+import {AbstractKeypad, KEYBOARD_EVENT} from "@engine/core/control/abstract/abstractKeypad";
 
 
 declare const window:any;
 
-export enum KEYBOARD_EVENT {
-    KEY_PRESSED,
-    KEY_RELEASED,
-    KEY_HOLD
-}
-
-export enum KEY  {
+export enum KEYBOARD_KEY  {
     SPACE = 32,
     A = 65,
     B = 66,
@@ -44,96 +35,15 @@ export enum KEY  {
     LEFT = 37,
     UP = 38,
     RIGHT = 39,
-    DOWN = 40,
-
-    GAME_PAD_1 = 0,
-    GAME_PAD_2 = 1,
-    GAME_PAD_3 = 2,
-    GAME_PAD_4 = 3,
-    GAME_PAD_5 = 4,
-    GAME_PAD_6 = 5,
-    GAME_PAD_7 = 6,
-    GAME_PAD_8 = 7,
-    GAME_PAD_AXIS_LEFT = 8,
-    GAME_PAD_AXIS_RIGHT = 9,
-    GAME_PAD_AXIS_UP = 10,
-    GAME_PAD_AXIS_DOWN = 11
+    DOWN = 40
 
 }
 
-enum KEY_STATE  {
-    KEY_JUST_PRESSED = 2,
-    KEY_PRESSED = 1,
-    KEY_JUST_RELEASED = 0,
-    KEY_RELEASED = -1
-}
 
-interface KeyboardBuffer {
-    [key:number]:KEY_STATE
-}
+export class Keyboard extends AbstractKeypad implements IControl {
 
-export class Keyboard {
-
-    private keyDownListener:Function;
-    private keyUpListener:Function;
-
-    private buffer:KeyboardBuffer = {};
-    private game:Game;
-    private emitter = new EventEmitter();
-
-    constructor(game:Game) {
-        this.game = game;
-    }
-
-    press(key:number){
-        if (this.isPressed(key)) return;
-        //console.log('pressed',key);
-        this.buffer[key] = KEY_STATE.KEY_JUST_PRESSED;
-        this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_PRESSED],key);
-    }
-
-    release(key:number){
-        if (this.isReleased(key)) return;
-        this.buffer[key] = KEY_STATE.KEY_JUST_RELEASED;
-        this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_RELEASED],this.buffer[key]);
-    }
-
-    on(e:KEYBOARD_EVENT,callback:(e:KEY)=>any) {
-        this.emitter.on(KEYBOARD_EVENT[e],callback);
-    }
-
-    off(e:KEYBOARD_EVENT,callback:Function){
-        this.emitter.off(KEY[e],callback);
-    }
-
-    isPressed(key:number):boolean{
-        return this.buffer[key]>=KEY_STATE.KEY_PRESSED;
-    }
-
-    isJustPressed(key:number):boolean{
-        return this.buffer[key]===KEY_STATE.KEY_JUST_PRESSED;
-    }
-
-    isReleased(key:number):boolean{
-        if (this.buffer[key]===undefined) return true;
-        return  this.buffer[key]<=KEY_STATE.KEY_JUST_RELEASED;
-    }
-
-    isJustReleased(key:number):boolean {
-        return this.buffer[key] === KEY_STATE.KEY_JUST_RELEASED;
-    }
-
-    update(){
-        Object.keys(this.buffer).forEach((key:string)=>{
-            let keyNum:number = <number>(+key);
-            if (this.buffer[keyNum]===KEY_STATE.KEY_RELEASED) delete this.buffer[keyNum];
-            else if (this.buffer[keyNum]===KEY_STATE.KEY_JUST_RELEASED) this.buffer[keyNum] = KEY_STATE.KEY_RELEASED;
-            if (this.buffer[keyNum]===KEY_STATE.KEY_JUST_PRESSED) {
-                this.buffer[keyNum] = KEY_STATE.KEY_PRESSED;
-            }
-            this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_HOLD],keyNum);
-        });
-    }
+    private keyDownListener:(e:KeyboardEvent)=>void;
+    private keyUpListener:(e:KeyboardEvent)=>void;
 
     listenTo(){
 
@@ -154,6 +64,14 @@ export class Keyboard {
     destroy(){
         window.removeEventListener('keydown',this.keyDownListener);
         window.removeEventListener('keyup',this.keyUpListener);
+    }
+
+    on(e:KEYBOARD_EVENT,callback:(e:KEYBOARD_KEY)=>any) {
+        this.emitter.on(KEYBOARD_EVENT[e],callback);
+    }
+
+    off(e:KEYBOARD_EVENT,callback:Function){
+        this.emitter.off(KEYBOARD_KEY[e],callback);
     }
 
 }

@@ -1,10 +1,11 @@
 import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
 import {SpriteSheet} from "@engine/model/impl/spriteSheet";
-import {KEY, KEYBOARD_EVENT} from "@engine/core/control/keyboard";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/core/renderer/color";
+import {KEYBOARD_EVENT} from "@engine/core/control/abstract/abstractKeypad";
+import {Keyboard, KEYBOARD_KEY} from "@engine/core/control/keyboard";
 
 
 export class MainScene extends Scene {
@@ -32,21 +33,21 @@ export class MainScene extends Scene {
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
 
-        this.game.keyboard.on(KEYBOARD_EVENT.KEY_HOLD, (e:KEY)=>{
+        this.game.getControl(Keyboard).on(KEYBOARD_EVENT.KEY_HOLD, (e:KEYBOARD_KEY)=>{
             switch (e) {
-                case KEY.LEFT:
+                case KEYBOARD_KEY.LEFT:
                     this.logoObj.pos.addX(-1);
                     break;
-                case KEY.RIGHT:
+                case KEYBOARD_KEY.RIGHT:
                     this.logoObj.pos.addX(1);
                     break;
-                case KEY.UP:
+                case KEYBOARD_KEY.UP:
                     this.logoObj.pos.addY(-1);
                     break;
-                case KEY.DOWN:
+                case KEYBOARD_KEY.DOWN:
                     this.logoObj.pos.addY(1);
                     break;
-                case KEY.R:
+                case KEYBOARD_KEY.R:
                     this.logoObj.angle+=0.1;
             }
         });

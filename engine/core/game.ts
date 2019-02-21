@@ -1,7 +1,4 @@
 import "./misc/polyfills";
-import {Mouse} from "./control/mouse";
-import {Keyboard} from "./control/keyboard";
-import {GamePad} from "./control/gamePad";
 import {Camera} from "./renderer/camera";
 import {Point2d} from "./geometry/point2d";
 import {AbstractRenderer} from "./renderer/abstract/abstractRenderer";
@@ -12,6 +9,7 @@ import {DebugError} from "../debugError";
 import {AudioPlayer} from "./media/audioPlayer";
 import {Clazz} from "@engine/core/misc/clazz";
 import {UIBuilder} from "@engine/model/impl/ui/uiBuilder";
+import {IControl} from "@engine/core/control/abstract/icontrol";
 
 export enum SCALE_STRATEGY {
     NO_SCALE,
@@ -28,6 +26,7 @@ export class Game {
     private _running:boolean = false;
     private _destroyed:boolean = false;
     private _renderer:AbstractRenderer;
+    private _controls:IControl[] = [];
 
     audioPlayer:AudioPlayer;
     scale:Point2d = new Point2d(1,1);
@@ -36,10 +35,7 @@ export class Game {
     height:number = 240;
     gravityConstant:number = 0;
     fps:number = 0;
-    gamePad:GamePad;
     lightArray:LightArray;
-    mouse:Mouse;
-    keyboard:Keyboard;
     collider:ColliderEngine;
     camera:Camera;
     uiBuilder:UIBuilder;
@@ -48,10 +44,6 @@ export class Game {
     private static UPDATE_TIME_RATE = 20;
 
     constructor(){
-        this.mouse = new Mouse(this);
-        this.keyboard = new Keyboard(this);
-        this.keyboard.listenTo();
-        this.gamePad = new GamePad(this);
         this.collider = new ColliderEngine(this);
         this.camera = new Camera(this);
         this.lightArray = new LightArray(this);
@@ -60,6 +52,21 @@ export class Game {
         if (DEBUG) (window as any)['game'] = this;
     }
 
+    addControl(C:Clazz<IControl>){
+        const instance:IControl = new C(this);
+        this._controls.push(instance);
+        instance.listenTo();
+    }
+
+    getControl<T>(C:Clazz<T>):T {
+        for (let c of this._controls) {
+            if (c instanceof C) {
+                return <T>(c as any);
+            }
+        }
+        if (DEBUG) throw new DebugError('no such control found');
+        else return null;
+    }
 
     getTime():number{
         return this._lastTime;
@@ -75,7 +82,6 @@ export class Game {
 
     setRenderer(Renderer:Clazz<AbstractRenderer>){
         this._renderer = new Renderer(this);
-        this.mouse.listenTo(this._renderer.container); // todo
     }
 
     getRenderer():AbstractRenderer{
@@ -129,8 +135,9 @@ export class Game {
         do {
             this._currentScene.update(currTime,dTime);
             //this.collider.collisionArcade(); todo
-            this.keyboard.update();
-            this.gamePad.update();
+            for (let c of this._controls) {
+                c.update();
+            }
             this.audioPlayer.update(currTime,dTime);
             currTime += Game.UPDATE_TIME_RATE;
             loopCnt++;
@@ -147,8 +154,9 @@ export class Game {
 
     destroy(){
         this._destroyed = true;
-        this.keyboard.destroy();
-        this.mouse.destroy();
+        for (let c of this._controls) {
+            c.destroy();
+        }
         this._renderer.cancelFullScreen();
         this._renderer.destroy();
     }
