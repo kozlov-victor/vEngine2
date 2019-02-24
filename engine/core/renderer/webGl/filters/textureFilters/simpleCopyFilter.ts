@@ -11,7 +11,7 @@ export class SimpleCopyFilter extends AbstractFilter{
         super(gl);
     }
 
-    prepare(programGen:ShaderGenerator){
+    protected prepare(programGen:ShaderGenerator){
         programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_mixFactor');
         //language=GLSL
         programGen.setFragmentMainFn(`

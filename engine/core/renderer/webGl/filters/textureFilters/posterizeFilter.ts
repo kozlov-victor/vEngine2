@@ -14,7 +14,7 @@ export class PosterizeFilter extends AbstractFilter {
         super(gl);
     }
 
-    prepare(programGen:ShaderGenerator){
+    protected prepare(programGen:ShaderGenerator){
         programGen.addFragmentUniform(GL_TYPE.FLOAT,' gamma');
         programGen.addFragmentUniform(GL_TYPE.FLOAT,'numColors');
         //language=GLSL
@@ -30,8 +30,16 @@ export class PosterizeFilter extends AbstractFilter {
               }
             `
         );
-        this.setParam('gamma',0.6);
-        this.setParam('numColors',8);
+        this.setGamma(0.6);
+        this.setNumOfColors(8);
+    }
+
+    setGamma(n:number){
+        this.setParam('gamma',n);
+    }
+
+    setNumOfColors(n:number){
+        this.setParam('numColors',n);
     }
 
 }

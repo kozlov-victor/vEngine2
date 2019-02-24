@@ -17,7 +17,7 @@ const isPowerOf2 = function(value:number):boolean {
 class TextureFilterBuffer {
 
     gl:WebGLRenderingContext;
-    buffers:FrameBuffer[] = [];
+    buffers:[FrameBuffer,FrameBuffer];
     parent:Texture;
 
     constructor(parent:Texture){
@@ -26,10 +26,10 @@ class TextureFilterBuffer {
 
     instantiate(gl:WebGLRenderingContext){
         this.gl = gl;
-        const buffSize = 2;
-        for (let i=0;i<buffSize;i++){
-            this.buffers.push(new FrameBuffer(gl,this.parent.size.width,this.parent.size.height));
-        }
+        this.buffers = [
+            new FrameBuffer(gl,this.parent.size.width,this.parent.size.height),
+            new FrameBuffer(gl,this.parent.size.width,this.parent.size.height)
+        ];
     }
 
     flip(){
@@ -125,12 +125,12 @@ export class Texture {
 
     }
 
-    applyFilters(filters:AbstractFilter[],frameBuffer:FrameBuffer){
+    applyFilters(filters:AbstractFilter[],frameBuffer:FrameBuffer):Texture{
         if (DEBUG && frameBuffer===undefined)
             throw new DebugError(`can not apply filters. frameBuffer must be explicitly passed. Pass null if no frame buffer needs to bind after filtering`);
         let len = filters.length;
         if (len===0) return this;
-        if (!this._texFilterBuff.buffers.length)
+        if (!this._texFilterBuff.buffers)
             this._texFilterBuff.instantiate(this.gl);
         let filter:AbstractFilter = filters[0];
 

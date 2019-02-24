@@ -29,14 +29,14 @@ export class AbstractDrawer implements IDrawer{
 
     protected bufferInfo:BufferInfo;
 
-    private static instances:Array<AbstractDrawer> = [];
+    private static instances:AbstractDrawer[] = [];
 
     constructor(gl:WebGLRenderingContext){
         this.gl = gl;
         AbstractDrawer.instances.push(this);
     }
 
-    bind(){
+    protected bind(){
         if (
             AbstractDrawer.currentInstance!==null &&
             AbstractDrawer.currentInstance!==this)
@@ -47,7 +47,7 @@ export class AbstractDrawer implements IDrawer{
         this.bufferInfo.bind(this.program);
     }
 
-    unbind(){
+    protected unbind(){
         this.bufferInfo.unbind();
     }
 
@@ -55,6 +55,7 @@ export class AbstractDrawer implements IDrawer{
         if (this.bufferInfo) this.bufferInfo.destroy();
         this.program.destroy();
     }
+
     static destroyAll(){
         AbstractDrawer.instances.forEach((it:AbstractDrawer)=>{
             it.destroy();
@@ -74,7 +75,7 @@ export class AbstractDrawer implements IDrawer{
         this.program.setUniform(name,this.uniformCache[name]);
     }
 
-    drawElements(){
+    protected drawElements(){
         this.bufferInfo.draw();
     }
 

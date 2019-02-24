@@ -11,7 +11,8 @@ export class ColorizeFilter extends AbstractFilter{
     constructor(gl:WebGLRenderingContext){
         super(gl);
     }
-    prepare(programGen:ShaderGenerator){
+
+    protected prepare(programGen:ShaderGenerator){
         programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'uPixelColor');
         this.setColor(Color.NONE);
         //language=GLSL

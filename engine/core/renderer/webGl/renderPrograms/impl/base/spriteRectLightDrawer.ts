@@ -1,13 +1,12 @@
 
-import {SpriteRectDrawer} from "./spriteRectDrawer";
 import {TexShaderGenerator} from "../../../shaders/generators/impl/texShaderGenerator";
 import {ShaderProgram} from "../../../base/shaderProgram";
 import {GL_TYPE} from "../../../base/shaderProgramUtils";
-import {Texture} from "../../../base/texture";
-import {LightArray} from "../../../../../light/lightArray";
+import {LightArray} from "@engine/core/light/lightArray";
+import {SimpleRectDrawer} from "@engine/core/renderer/webGl/renderPrograms/impl/base/simpleRectDrawer";
 
 
-export class SpriteRectLightDrawer extends SpriteRectDrawer {
+export class SpriteRectLightDrawer extends SimpleRectDrawer { // todo!
 
     constructor(gl:WebGLRenderingContext){
         let gen = new TexShaderGenerator();

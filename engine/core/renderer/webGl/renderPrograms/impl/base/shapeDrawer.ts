@@ -4,8 +4,8 @@ import {AbstractDrawer} from "../../abstract/abstractDrawer"
 import {BufferInfo, BufferInfoDescription} from "../../../base/bufferInfo";
 import {Plane} from "../../../primitives/plane";
 import {GL_TYPE} from "../../../base/shaderProgramUtils";
-import {fragmentSource} from './shapeDrawer.frag';
 import {ShaderGenerator} from "../../../shaders/generators/shaderGenerator";
+import {fragmentSource} from "@engine/core/renderer/webGl/renderPrograms/impl/base/shapeDrawer.shader";
 
 
 export class ShapeDrawer extends AbstractDrawer {

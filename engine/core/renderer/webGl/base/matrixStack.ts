@@ -1,6 +1,7 @@
 
 
 import {mat4} from "@engine/core/geometry/mat4";
+import MAT16 = mat4.MAT16;
 
 export class MatrixStack {
 
@@ -10,7 +11,7 @@ export class MatrixStack {
        this.restore();
     }
 
-    restore () {
+    restore():void {
         this.stack.pop();
         // Never let the stack be totally empty
         if (this.stack.length < 1) {
@@ -18,15 +19,15 @@ export class MatrixStack {
         }
     }
 
-    save() {
+    save():void {
         this.stack.push(this.getCurrentMatrix());
     }
 
-    getCurrentMatrix() {
-        return this.stack[this.stack.length - 1].slice();
+    getCurrentMatrix():MAT16 {
+        return this.stack[this.stack.length - 1].slice() as MAT16;
     }
 
-    setCurrentMatrix(m:number[]) {
+    setCurrentMatrix(m:MAT16) {
         return this.stack[this.stack.length - 1] = m;
     }
 
@@ -55,8 +56,8 @@ export class MatrixStack {
         if (z === undefined) {
             z = 1;
         }
-        let t = mat4.makeScale(x, y, z);
-        let m = this.getCurrentMatrix();
+        let t:MAT16 = mat4.makeScale(x, y, z);
+        let m:MAT16 = this.getCurrentMatrix();
         this.setCurrentMatrix(mat4.matrixMultiply(t, m));
         return this;
     }

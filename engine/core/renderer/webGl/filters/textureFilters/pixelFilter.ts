@@ -34,14 +34,27 @@ export class PixelFilter extends AbstractFilter {
             }
             `
         );
-        this.setParam('pixel_w',5);
-        this.setParam('pixel_h',5);
+        this.setPixelSize(5);
+
     }
 
     doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
         this.setParam('rt_w',textureInfos[0].texture.size.width);
         this.setParam('rt_h',textureInfos[0].texture.size.height);
         super.doFilter(textureInfos,destFrameBuffer);
+    }
+
+    setPixelWidth(n:number){
+        this.setParam('pixel_w',n);
+    }
+
+    setPixelHeight(n:number){
+        this.setParam('pixel_h',n);
+    }
+
+    setPixelSize(n:number) {
+        this.setPixelWidth(n);
+        this.setPixelHeight(n);
     }
 
 }

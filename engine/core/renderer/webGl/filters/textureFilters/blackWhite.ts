@@ -11,7 +11,7 @@ export class BlackWhiteFilter extends AbstractFilter{
         super(gl);
     }
 
-    prepare(programGen:ShaderGenerator){
+    protected prepare(programGen:ShaderGenerator){
         programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_mixFactor');
         //language=GLSL
         programGen.setFragmentMainFn(`
@@ -20,11 +20,15 @@ export class BlackWhiteFilter extends AbstractFilter{
                 float avg = (col.r+col.g+col.b)/3.0;
                 vec4 bw = vec4(avg);
                 vec4 result = mix(col,bw,vec4(u_mixFactor));
-                result.a = 1.0;
+                result = vec4(result.rbg, col.a);
                 gl_FragColor = result;
             } 
         `);
-        this.setParam('u_mixFactor',0.8);
+        this.setMixFactor(0.8);
+    }
+
+    setMixFactor(n:number) {
+        this.setParam('u_mixFactor',n);
     }
 
 }

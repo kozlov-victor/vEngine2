@@ -13,17 +13,19 @@ export class SimpleBlurFilter extends AbstractFilter {
         super(gl);
     }
 
-    prepare(programGen:ShaderGenerator){
+    protected prepare(programGen:ShaderGenerator){
         programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
         programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
-        programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,' u_direction'); // render target height
+        programGen.addFragmentUniform(GL_TYPE.FLOAT,' u_direction_x');
+        programGen.addFragmentUniform(GL_TYPE.FLOAT,' u_direction_y');
         //language=GLSL
         programGen.appendFragmentCodeBlock(`
               vec4 blur(vec2 uv) {
                   vec4 color = vec4(0.0);
                   vec2 resolution = vec2(rt_w,rt_h);
-                  vec2 off1 = vec2(1.3846153846) * u_direction;
-                  vec2 off2 = vec2(3.2307692308) * u_direction;
+                  vec2 direction = vec2(u_direction_x,u_direction_y);
+                  vec2 off1 = vec2(1.3846153846) * direction;
+                  vec2 off2 = vec2(3.2307692308) * direction;
                   color += texture2D(texture, uv) * 0.2270270270;
                   color += texture2D(texture, uv + (off1 / resolution)) * 0.3162162162;
                   color += texture2D(texture, uv - (off1 / resolution)) * 0.3162162162;
@@ -40,13 +42,26 @@ export class SimpleBlurFilter extends AbstractFilter {
             }
             `
         );
-        this.setParam("u_direction",[0.5,0.5]);
+        this.setSize(0.5);
     }
 
     doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
         this.setParam('rt_w',textureInfos[0].texture.size.width);
         this.setParam('rt_h',textureInfos[0].texture.size.height);
         super.doFilter(textureInfos,destFrameBuffer);
+    }
+
+    setSize(n:number){
+        this.setWidth(n);
+        this.setHeight(n);
+    }
+
+    setWidth(n:number){
+        this.setParam("u_direction_x",n);
+    }
+
+    setHeight(n:number){
+        this.setParam("u_direction_y",n);
     }
 
 }

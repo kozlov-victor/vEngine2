@@ -97,7 +97,3 @@ void main(){
 
 
 `;
-
-
-// float mixVal = distance(v_position.xy,vec2(HALF,HALF));
-// return mix(u_fillLinearGradient[0],u_fillLinearGradient[1],mixVal);

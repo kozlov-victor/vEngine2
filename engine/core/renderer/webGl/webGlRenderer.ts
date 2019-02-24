@@ -1,6 +1,5 @@
 import {DebugError} from "@engine/debugError";
 import {AbstractDrawer, TextureInfo} from "./renderPrograms/abstract/abstractDrawer";
-import {LineDrawer} from "./renderPrograms/impl/base/lineDrawer";
 import {ShapeDrawer} from "./renderPrograms/impl/base/shapeDrawer";
 import {FrameBuffer} from "./base/frameBuffer";
 import {MatrixStack} from "./base/matrixStack";
@@ -17,12 +16,14 @@ import {GameObject3d} from "@engine/model/impl/gameObject3d";
 import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Image} from "@engine/model/impl/ui/drawable/image";
-import {FILL_TYPE, SHAPE_TYPE} from "./renderPrograms/impl/base/shapeDrawer.frag";
 import {Shape} from "@engine/model/impl/ui/generic/shape";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {AbstractFilter} from "@engine/core/renderer/webGl/filters/abstract/abstractFilter";
 import {mat4} from "@engine/core/geometry/mat4";
 import MAT16 = mat4.MAT16;
+import {FILL_TYPE, SHAPE_TYPE} from "@engine/core/renderer/webGl/renderPrograms/impl/base/shapeDrawer.shader";
+import {SimpleRectDrawer} from "@engine/core/renderer/webGl/renderPrograms/impl/base/simpleRectDrawer";
+import {SimpleRectDrawer2} from "@engine/core/renderer/webGl/renderPrograms/impl/base/SimpleRectDrawer2";
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
@@ -50,13 +51,6 @@ const makePositionMatrix = (rect:Rect,viewSize:Size):MAT16=>{
     return matrix;
 };
 
-// todo remove
-const makeTextureMatrix = (srcRect:Rect,texSize:Size)=>{
-
-    let texScaleMatrix = mat4.makeScale(srcRect.width / texSize.width, srcRect.height / texSize.height, 1);
-    let texTranslationMatrix = mat4.makeTranslation(srcRect.x / texSize.width, srcRect.y / texSize.height, 0);
-    return mat4.matrixMultiply(texScaleMatrix, texTranslationMatrix);
-};
 
 //  gl.enable(gl.CULL_FACE);
 //  gl.enable(gl.DEPTH_TEST);
@@ -65,8 +59,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private gl:WebGLRenderingContext;
     private matrixStack:MatrixStack;
     private shapeDrawer:ShapeDrawer;
+    private simpleRectDrawer:SimpleRectDrawer2;
     private modelDrawer:ModelDrawer;
-    private lineDrawer:LineDrawer;
     private addBlendDrawer:AddBlendDrawer;
     private frameBuffer:FrameBuffer;
     private nullTexture:Texture;
@@ -88,7 +82,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     	this.nullTexture = new Texture(gl);
 
         this.shapeDrawer = new ShapeDrawer(gl);
-        this.lineDrawer = new LineDrawer(gl);
+        this.simpleRectDrawer = new SimpleRectDrawer2(gl);
         this.modelDrawer = new ModelDrawer(gl);
         this.addBlendDrawer = new AddBlendDrawer(gl);
 
@@ -258,7 +252,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         );
         uniforms.u_rgba = color.asGL();
         //gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-        this.lineDrawer.draw(null,uniforms,null);
+
     }
 
 
@@ -352,8 +346,28 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let texToDraw = this.frameBuffer.getTexture().applyFilters(filters,null);
         this.frameBuffer.unbind();
         this.gl.viewport(0, 0, this.fullScreenSize.width,this.fullScreenSize.height);
-        this.flipTextureInfo[0].texture = texToDraw;
-        this.shapeDrawer.draw(this.flipTextureInfo,this.flipUniformInfo,null);
+        //this.flipTextureInfo[0].texture = texToDraw;
+        //this.shapeDrawer.draw(this.flipTextureInfo,this.flipUniformInfo,null);
+
+
+        const u:UniformsInfo = {} as UniformsInfo;
+
+        const makePositionMatrix2 = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):number[] =>{
+            let projectionMatrix:MAT16 = mat4.ortho(0,dstWidth,0,dstHeight,-1,1);
+            let scaleMatrix:MAT16 = mat4.makeScale(dstWidth, dstHeight, 1);
+            return mat4.matrixMultiply(scaleMatrix, projectionMatrix);
+        };
+
+        const m:MatrixStack = new MatrixStack();
+        m.translate(0,1);
+        m.scale(1,-1);
+
+        u[this.simpleRectDrawer.u_textureMatrix] = m.getCurrentMatrix();
+        u[this.simpleRectDrawer.u_vertexMatrix] = makePositionMatrix2(0,0,texToDraw.size.width,texToDraw.size.height);
+        this.simpleRectDrawer.draw([{texture:texToDraw,name:'texture'}],u,null);
+
+
+
         this.restore();
     };
 

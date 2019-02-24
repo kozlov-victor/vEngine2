@@ -65,10 +65,15 @@ export class Game {
         instance.listenTo();
     }
 
-    getControl<T>(C:Clazz<IControl>):T {
+
+    private isOfType<T>(instance:any,C:Clazz<T>):instance is T {
+        return instance instanceof C;
+    }
+
+    getControl<T>(T:Clazz<IControl>):T {
         for (let c of this._controls) {
-            if (c instanceof C) {
-                return <T>(c as any);
+            if (c instanceof T) {
+                if (this.isOfType(c,T)) return <T>(c as any);
             }
         }
         if (DEBUG) throw new DebugError('no such control');

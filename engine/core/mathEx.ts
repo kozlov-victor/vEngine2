@@ -5,6 +5,7 @@ import {mat4} from "@engine/core/geometry/mat4";
 
 export namespace MathEx {
 
+    import MAT16 = mat4.MAT16;
     export const isPointInRect = (point: Point2d, rect: Rect, angle?: number): boolean => {
         // if  = (angle) {
         //     const vec2 = new Vec2 = (point.x - rect.x - rect.width/2,point.y - rect.y - rect.height/2);
@@ -82,7 +83,7 @@ export namespace MathEx {
     export const unProject = (winPoint: Point2d, width: number, height: number, viewProjectionMatrix: number[]): Point2d => {
         const x: number = 2.0 * winPoint.x / width - 1;
         const y: number = 2.0 * winPoint.y / height - 1;
-        const viewProjectionInverse: number[] = mat4.inverse(viewProjectionMatrix);
+        const viewProjectionInverse: MAT16 = mat4.inverse(viewProjectionMatrix);
 
         const point3D: number[] = [x, y, 0, 1];
         const res: number[] = mat4.multMatrixVec(viewProjectionInverse, point3D);

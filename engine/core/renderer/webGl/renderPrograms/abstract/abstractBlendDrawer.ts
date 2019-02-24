@@ -1,6 +1,5 @@
 
 
-import {SpriteRectDrawer} from "../impl/base/spriteRectDrawer";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {TexShaderGenerator} from "../../shaders/generators/impl/texShaderGenerator";
 import {ShaderProgram} from "../../base/shaderProgram";
@@ -10,10 +9,11 @@ import {FrameBuffer} from "../../base/frameBuffer";
 import {TextureInfo} from "./abstractDrawer";
 import {IDrawer} from "../interface/iDrawer";
 import {UniformsInfo} from "../interface/uniformsInfo";
+import {SimpleRectDrawer} from "@engine/core/renderer/webGl/renderPrograms/impl/base/simpleRectDrawer";
 
 export abstract class AbstractBlendDrawer implements IDrawer {
 
-    protected spriteRectDrawer:SpriteRectDrawer;
+    protected spriteRectDrawer:SimpleRectDrawer;
     protected simpleCopyFilter:SimpleCopyFilter;
     protected gl:WebGLRenderingContext;
     protected program:ShaderProgram;
@@ -36,17 +36,17 @@ export abstract class AbstractBlendDrawer implements IDrawer {
         this.simpleCopyFilter = new SimpleCopyFilter(gl);
     }
 
-    _afterPrepare(gen:ShaderGenerator){
+    private _afterPrepare(gen:ShaderGenerator){
         this.program = new ShaderProgram(
             this.gl,
             gen.getVertexSource(),
             gen.getFragmentSource()
         );
-        this.spriteRectDrawer = new SpriteRectDrawer(this.gl,this.program);
+        this.spriteRectDrawer = new SimpleRectDrawer(this.gl,this.program);
     }
 
 
-    prepare(programGen:ShaderGenerator){}
+    protected prepare(programGen:ShaderGenerator){}
 
     // destTex is copy or current destination texture
     // to avoid "Source and destination textures of the draw are the same" error
