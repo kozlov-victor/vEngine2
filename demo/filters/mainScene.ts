@@ -23,12 +23,12 @@ export class MainScene extends Scene {
 
     onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
-
     }
 
 
 
     onReady() {
+        console.log('ready');
         this.logoObj = new GameObject(this.game);
         let spr:SpriteSheet = new SpriteSheet(this.game);
         spr.setResourceLink(this.logoLink);
@@ -37,7 +37,6 @@ export class MainScene extends Scene {
         this.appendChild(this.logoObj);
 
         const bw:BlackWhiteFilter = new BlackWhiteFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
-        this.logoObj.spriteSheet.filters.push(bw);
 
         const cl:ColorizeFilter = new ColorizeFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
         cl.setColor(Color.RGB(0,200,23,122));
