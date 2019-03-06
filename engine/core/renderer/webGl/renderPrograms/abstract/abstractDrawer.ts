@@ -62,6 +62,7 @@ export class AbstractDrawer implements IDrawer{
         });
     }
 
+
     setUniform(name:string,value:any){
         if (isEqual(this.uniformCache[name],value)) return;
         if (isArray(value)) {
@@ -72,16 +73,19 @@ export class AbstractDrawer implements IDrawer{
         } else {
             this.uniformCache[name]=value;
         }
-        this.program.setUniform(name,this.uniformCache[name]);
+    }
+
+    private _setUniform(name:string,value:any){
+        this.program.setUniform(name,value);
     }
 
     protected drawElements(){
         this.bufferInfo.draw();
     }
 
-    draw(textureInfos:TextureInfo[],uniforms:UniformsInfo,unused:FrameBuffer = null){
+    draw(textureInfos:TextureInfo[],uniforms:UniformsInfo = this.uniformCache,unused:FrameBuffer = null){
         this.bind();
-        Object.keys(uniforms).forEach((name:string)=>this.setUniform(name,uniforms[name]));
+        Object.keys(uniforms).forEach((name:string)=>this._setUniform(name,uniforms[name]));
         if (textureInfos) {
             textureInfos.forEach((t:TextureInfo,i:number)=>{
                 t.texture.bind(t.name,i,this.program);

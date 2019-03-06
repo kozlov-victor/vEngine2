@@ -20,10 +20,9 @@ import {Shape} from "@engine/model/impl/ui/generic/shape";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {AbstractFilter} from "@engine/core/renderer/webGl/filters/abstract/abstractFilter";
 import {mat4} from "@engine/core/geometry/mat4";
-import MAT16 = mat4.MAT16;
 import {FILL_TYPE, SHAPE_TYPE} from "@engine/core/renderer/webGl/renderPrograms/impl/base/shapeDrawer.shader";
-import {SimpleRectDrawer} from "@engine/core/renderer/webGl/renderPrograms/impl/base/simpleRectDrawer";
 import {SimpleRectDrawer2} from "@engine/core/renderer/webGl/renderPrograms/impl/base/SimpleRectDrawer2";
+import MAT16 = mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
@@ -36,6 +35,9 @@ const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
 };
 const SCENE_DEPTH:number = 1000;
 const matrixStack:MatrixStack = new MatrixStack();
+const FLIP_TEXTURE_MATRIX:MAT16 = new MatrixStack().translate(0,1).scale(1,-1).getCurrentMatrix();
+let FLIP_POSITION_MATRIX:MAT16;
+
 
 const makePositionMatrix = (rect:Rect,viewSize:Size):MAT16=>{
     // proj * modelView
@@ -64,7 +66,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private addBlendDrawer:AddBlendDrawer;
     private frameBuffer:FrameBuffer;
     private nullTexture:Texture;
-    private flipTextureInfo:TextureInfo[];
     private flipUniformInfo:UniformsInfo;
     private currShapeUniformInfo:UniformsInfo;
 
@@ -73,6 +74,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.matrixStack = matrixStack;
         this.registerResize();
         this._init();
+        FLIP_POSITION_MATRIX = mat4.matrixMultiply(
+            mat4.makeScale(this.game.width, this.game.height, 1),
+            mat4.ortho(0,this.game.width,0,this.game.height,-1,1));
     }
 
     private _init(){
@@ -90,50 +94,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         gl.enable(gl.BLEND);
-        this._initFlipTexture();
         this.currShapeUniformInfo = {} as UniformsInfo;
         // gl.depthFunc(gl.LEQUAL);
-    }
-
-    private _initFlipTexture(){
-        let fullScreen:Size = this.fullScreenSize;
-        this.flipTextureInfo = [{texture:null,name:'texture'}];
-        let offsetX:number = 0, offsetY:number = 0;
-        let rw:number = fullScreen.width, rh:number = fullScreen.height;
-        let maxSize:number = Math.max(rw,rh);
-        let uniforms:UniformsInfo = this.flipUniformInfo = {} as UniformsInfo;
-        let sd:ShapeDrawer = this.shapeDrawer;
-        if (maxSize==rw) {
-            uniforms[sd.u_width] = 1;
-            uniforms[sd.u_height] = rh/rw;
-            offsetY = (maxSize - rh)/2;
-            uniforms[sd.u_rectOffsetLeft] = 0;
-            uniforms[sd.u_rectOffsetTop] = offsetY/maxSize;
-        } else {
-            uniforms[sd.u_height] = 1;
-            uniforms[sd.u_width] = rw/rh;
-            offsetX = (maxSize - rw)/2;
-            uniforms[sd.u_rectOffsetLeft] = offsetX/maxSize;
-            uniforms[sd.u_rectOffsetTop] = 0;
-        }
-
-        this.save();
-        this.translate(0,this.game.height);
-        this.scale(1,-1);
-
-        uniforms[sd.u_vertexMatrix] = makePositionMatrix(
-            Rect.fromPool().setXYWH( -offsetX, -offsetY,maxSize,maxSize),
-            Size.fromPool().setWH(this.game.width,this.game.height)
-        );
-        this.restore();
-        uniforms[sd.u_lineWidth] = 0;
-        uniforms[sd.u_borderRadius] = 0;
-        uniforms[sd.u_shapeType] = SHAPE_TYPE.RECT;
-        uniforms[sd.u_fillType] = FILL_TYPE.TEXTURE;
-        uniforms[sd.u_texRect] = [0,0,1,1];
-        uniforms[sd.u_texOffset] = [0,0];
-        uniforms[sd.u_alpha] = 1;
-
     }
 
 
@@ -346,27 +308,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let texToDraw = this.frameBuffer.getTexture().applyFilters(filters,null);
         this.frameBuffer.unbind();
         this.gl.viewport(0, 0, this.fullScreenSize.width,this.fullScreenSize.height);
-        //this.flipTextureInfo[0].texture = texToDraw;
-        //this.shapeDrawer.draw(this.flipTextureInfo,this.flipUniformInfo,null);
-
 
         const u:UniformsInfo = {} as UniformsInfo;
-
-        const makePositionMatrix2 = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):number[] =>{
-            let projectionMatrix:MAT16 = mat4.ortho(0,dstWidth,0,dstHeight,-1,1);
-            let scaleMatrix:MAT16 = mat4.makeScale(dstWidth, dstHeight, 1);
-            return mat4.matrixMultiply(scaleMatrix, projectionMatrix);
-        };
-
-        const m:MatrixStack = new MatrixStack();
-        m.translate(0,1);
-        m.scale(1,-1);
-
-        u[this.simpleRectDrawer.u_textureMatrix] = m.getCurrentMatrix();
-        u[this.simpleRectDrawer.u_vertexMatrix] = makePositionMatrix2(0,0,texToDraw.size.width,texToDraw.size.height);
-        this.simpleRectDrawer.draw([{texture:texToDraw,name:'texture'}],u,null);
-
-
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX);
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX);
+        this.simpleRectDrawer.draw([{texture:texToDraw,name:'texture'}],undefined,null); // todo
 
         this.restore();
     };
