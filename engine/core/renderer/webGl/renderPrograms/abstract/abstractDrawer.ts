@@ -8,8 +8,7 @@ import {FrameBuffer} from "../../base/frameBuffer";
 import {IDrawer} from "../interface/iDrawer";
 import {UniformsInfo} from "../interface/uniformsInfo";
 import {Size} from "../../../../geometry/size";
-
-
+import {DebugError} from "@engine/debugError";
 
 
 export interface TextureInfo {
@@ -37,6 +36,12 @@ export class AbstractDrawer implements IDrawer{
     }
 
     protected bind(){
+
+        if (DEBUG && !this.program) {
+            console.error(this);
+            throw new DebugError(`can not init drawer: initProgram method must be invoked!`);
+        }
+
         if (
             AbstractDrawer.currentInstance!==null &&
             AbstractDrawer.currentInstance!==this)
@@ -56,7 +61,7 @@ export class AbstractDrawer implements IDrawer{
         this.program.destroy();
     }
 
-    static destroyAll(){
+    static destroyAll(){ // todo remove this method
         AbstractDrawer.instances.forEach((it:AbstractDrawer)=>{
             it.destroy();
         });
@@ -83,9 +88,9 @@ export class AbstractDrawer implements IDrawer{
         this.bufferInfo.draw();
     }
 
-    draw(textureInfos:TextureInfo[],uniforms:UniformsInfo = this.uniformCache,unused:FrameBuffer = null){
+    draw(textureInfos:TextureInfo[],unused2:UniformsInfo,unused:FrameBuffer = null){
         this.bind();
-        Object.keys(uniforms).forEach((name:string)=>this._setUniform(name,uniforms[name]));
+        Object.keys(this.uniformCache).forEach((name:string)=>this._setUniform(name,this.uniformCache[name]));
         if (textureInfos) {
             textureInfos.forEach((t:TextureInfo,i:number)=>{
                 t.texture.bind(t.name,i,this.program);

@@ -3,21 +3,25 @@
 import {AbstractFilter} from "../abstract/abstractFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
-import {Texture} from "../../base/texture";
 import {FrameBuffer} from "../../base/frameBuffer";
 import {TextureInfo} from "../../renderPrograms/abstract/abstractDrawer";
 
 export class SimpleBlurFilter extends AbstractFilter {
 
+    rt_w:string;
+    rt_h:string;
+    u_direction_x:string;
+    u_direction_y:string;
+
     constructor(gl: WebGLRenderingContext) {
         super(gl);
-    }
+        this.spriteRectDrawer.prepareShaderGenerator();
+        const programGen = this.spriteRectDrawer.gen;
+        this.rt_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
+        this.rt_h = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
+        this.u_direction_x = programGen.addFragmentUniform(GL_TYPE.FLOAT,' u_direction_x');
+        this.u_direction_y = programGen.addFragmentUniform(GL_TYPE.FLOAT,' u_direction_y');
 
-    protected prepare(programGen:ShaderGenerator){
-        programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
-        programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
-        programGen.addFragmentUniform(GL_TYPE.FLOAT,' u_direction_x');
-        programGen.addFragmentUniform(GL_TYPE.FLOAT,' u_direction_y');
         //language=GLSL
         programGen.appendFragmentCodeBlock(`
               vec4 blur(vec2 uv) {
@@ -42,12 +46,14 @@ export class SimpleBlurFilter extends AbstractFilter {
             }
             `
         );
+        this.spriteRectDrawer.initProgram();
         this.setSize(0.5);
     }
 
+
     doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
-        this.setParam('rt_w',textureInfos[0].texture.size.width);
-        this.setParam('rt_h',textureInfos[0].texture.size.height);
+        this.setUniform(this.rt_w,textureInfos[0].texture.size.width);
+        this.setUniform(this.rt_h,textureInfos[0].texture.size.height);
         super.doFilter(textureInfos,destFrameBuffer);
     }
 
@@ -57,11 +63,11 @@ export class SimpleBlurFilter extends AbstractFilter {
     }
 
     setWidth(n:number){
-        this.setParam("u_direction_x",n);
+        this.setUniform(this.u_direction_x,n);
     }
 
     setHeight(n:number){
-        this.setParam("u_direction_y",n);
+        this.setUniform(this.u_direction_y,n);
     }
 
 }

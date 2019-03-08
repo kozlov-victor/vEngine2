@@ -4,6 +4,7 @@ import {AbstractDrawer} from "../../abstract/abstractDrawer";
 import {BufferInfo, BufferInfoDescription} from "../../../base/bufferInfo";
 import {ShaderGenerator} from "@engine/core/renderer/webGl/shaders/generators/shaderGenerator";
 import {GL_TYPE} from "@engine/core/renderer/webGl/base/shaderProgramUtils";
+import {DebugError} from "@engine/debugError";
 
 export class SimpleRectDrawer2 extends AbstractDrawer {
 
@@ -12,10 +13,18 @@ export class SimpleRectDrawer2 extends AbstractDrawer {
     u_vertexMatrix:string;
     u_textureMatrix:string;
 
+    /**
+     * @internal
+     */
+    gen:ShaderGenerator;
+
     constructor(gl:WebGLRenderingContext) {
         super(gl);
+    }
 
-        let gen:ShaderGenerator = new ShaderGenerator();
+    public prepareShaderGenerator():void{
+        this.gen = new ShaderGenerator();
+        const gen:ShaderGenerator = this.gen;
         this.a_position = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_position');
         this.a_texCoord = gen.addAttribute(GL_TYPE.FLOAT_VEC2,'a_texCoord');
         this.u_vertexMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_vertexMatrix');
@@ -36,17 +45,26 @@ export class SimpleRectDrawer2 extends AbstractDrawer {
                 gl_FragColor = texture2D(texture, v_texCoord);
             }
         `);
+    }
+
+    public initProgram(){
+
+        if (DEBUG) {
+            if (!this.gen) throw new DebugError(
+                `can not init simpleRectDrawer instance: prepareShaderGenerator method must be invoked`
+            );
+        }
 
         this.primitive = new Plane();
         this.program = new ShaderProgram(
-            gl,
-            gen.getVertexSource(),
-            gen.getFragmentSource()
+            this.gl,
+            this.gen.getVertexSource(),
+            this.gen.getFragmentSource()
         );
-        this.bufferInfo = new BufferInfo(gl, {
-            posVertexInfo: {array: this.primitive.vertexArr, type: gl.FLOAT, size: 2, attrName: 'a_position'},
+        this.bufferInfo = new BufferInfo(this.gl, {
+            posVertexInfo: {array: this.primitive.vertexArr, type: this.gl.FLOAT, size: 2, attrName: 'a_position'},
             posIndexInfo: {array: this.primitive.indexArr},
-            texVertexInfo: {array: this.primitive.texCoordArr, type: gl.FLOAT, size: 2, attrName: 'a_texCoord'},
+            texVertexInfo: {array: this.primitive.texCoordArr, type: this.gl.FLOAT, size: 2, attrName: 'a_texCoord'},
             drawMethod: this.gl.TRIANGLE_STRIP
         } as BufferInfoDescription);
     }

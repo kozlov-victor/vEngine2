@@ -66,8 +66,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private addBlendDrawer:AddBlendDrawer;
     private frameBuffer:FrameBuffer;
     private nullTexture:Texture;
-    private flipUniformInfo:UniformsInfo;
-    private currShapeUniformInfo:UniformsInfo;
 
     constructor(game:Game){
         super(game);
@@ -87,6 +85,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this.shapeDrawer = new ShapeDrawer(gl);
         this.simpleRectDrawer = new SimpleRectDrawer2(gl);
+        this.simpleRectDrawer.prepareShaderGenerator();
+        this.simpleRectDrawer.initProgram();
         this.modelDrawer = new ModelDrawer(gl);
         this.addBlendDrawer = new AddBlendDrawer(gl);
 
@@ -94,48 +94,44 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         gl.enable(gl.BLEND);
-        this.currShapeUniformInfo = {} as UniformsInfo;
         // gl.depthFunc(gl.LEQUAL);
     }
 
 
 
-    private prepareShapeUniformInfo(shape:Shape):UniformsInfo{
-        let uniforms:UniformsInfo = this.currShapeUniformInfo;
+    private prepareShapeUniformInfo(shape:Shape):void{
         let rw:number = shape.getRect().width;
         let rh:number = shape.getRect().height;
         let maxSize:number = Math.max(rw,rh);
         let offsetX:number = 0,offsetY:number = 0;
         let sd:ShapeDrawer = this.shapeDrawer;
         if (maxSize==rw) {
-            uniforms[sd.u_width] = 1;
-            uniforms[sd.u_height] = rh/rw;
+            sd.setUniform(sd.u_width,1);
+            sd.setUniform(sd.u_height,rh/rw);
             offsetY = (maxSize - rh)/2;
-            uniforms[sd.u_rectOffsetLeft] = 0;
-            uniforms[sd.u_rectOffsetTop] = offsetY/maxSize;
+            sd.setUniform(sd.u_rectOffsetLeft,0);
+            sd.setUniform(sd.u_rectOffsetTop,offsetY/maxSize);
         } else {
-            uniforms[sd.u_height] = 1;
-            uniforms[sd.u_width] = rw/rh;
+            sd.setUniform(sd.u_height,1);
+            sd.setUniform(sd.u_width,rw/rh);
             offsetX = (maxSize - rw)/2;
-            uniforms[sd.u_rectOffsetLeft] = offsetX/maxSize;
-            uniforms[sd.u_rectOffsetTop] = 0;
+            sd.setUniform(sd.u_rectOffsetLeft,offsetX/maxSize);
+            sd.setUniform(sd.u_rectOffsetTop,0);
         }
-        uniforms[sd.u_vertexMatrix] = makePositionMatrix(
+        sd.setUniform(sd.u_vertexMatrix,makePositionMatrix(
             Rect.fromPool().setXYWH( -offsetX, -offsetY,maxSize,maxSize),
-            Size.fromPool().setWH(this.game.width,this.game.height));
-        uniforms[sd.u_lineWidth] = Math.min(shape.lineWidth/maxSize,1);
-        uniforms[sd.u_color] = shape.color.asGL();
-        uniforms[sd.u_alpha] = shape.alpha;
+            Size.fromPool().setWH(this.game.width,this.game.height)));
+        sd.setUniform(sd.u_lineWidth,Math.min(shape.lineWidth/maxSize,1));
+        sd.setUniform(sd.u_color,shape.color.asGL());
+        sd.setUniform(sd.u_alpha,shape.alpha);
 
         if (shape.fillColor.type=='LinearGradient') {
-            uniforms[sd.u_fillLinearGradient] = shape.fillColor.asGL();
-            uniforms[sd.u_fillType] = FILL_TYPE.LINEAR_GRADIENT;
+            sd.setUniform(sd.u_fillLinearGradient,shape.fillColor.asGL());
+            sd.setUniform(sd.u_fillType,FILL_TYPE.LINEAR_GRADIENT);
         } else if (shape.fillColor.type=='Color') {
-            uniforms[sd.u_fillColor] = shape.fillColor.asGL();
-            uniforms[sd.u_fillType] = FILL_TYPE.COLOR;
+            sd.setUniform(sd.u_fillColor,shape.fillColor.asGL());
+            sd.setUniform(sd.u_fillType,FILL_TYPE.COLOR);
         }
-
-        return uniforms;
     }
 
     drawImage(img:Image){
@@ -149,20 +145,21 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         let maxSize:number = Math.max(img.width,img.height);
         let sd:ShapeDrawer = this.shapeDrawer;
-        let uniforms:UniformsInfo = this.prepareShapeUniformInfo(img);
-        uniforms[sd.u_borderRadius] = Math.min(img.borderRadius/maxSize,1);
-        uniforms[sd.u_shapeType] = SHAPE_TYPE.RECT;
-        uniforms[sd.u_fillType] = FILL_TYPE.TEXTURE;
-        uniforms[sd.u_texRect] =
+        this.prepareShapeUniformInfo(img);
+        sd.setUniform(sd.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
+        sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
+        sd.setUniform(sd.u_fillType,FILL_TYPE.TEXTURE);
+        sd.setUniform(sd.u_texRect,
             [
                 img.srcRect.x/texture.getSize().width,
                 img.srcRect.y/texture.getSize().height,
                 img.srcRect.width/texture.getSize().width,
                 img.srcRect.height/texture.getSize().height
-            ];
-        uniforms[sd.u_texOffset] = [img.offset.x/maxSize,img.offset.y/maxSize];
+            ]
+        );
+        sd.setUniform(sd.u_texOffset,[img.offset.x/maxSize,img.offset.y/maxSize]);
 
-        this.shapeDrawer.draw(texInfo,uniforms,null);
+        this.shapeDrawer.draw(texInfo,undefined,null);
     }
 
     drawModel(g3d:GameObject3d){
@@ -197,11 +194,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let maxSize:number = Math.max(rw,rh);
         let sd:ShapeDrawer = this.shapeDrawer;
 
-        let uniforms:UniformsInfo = this.prepareShapeUniformInfo(rectangle);
-        uniforms[sd.u_borderRadius] = Math.min(rectangle.borderRadius/maxSize,1);
-        uniforms[sd.u_shapeType] = SHAPE_TYPE.RECT;
+        this.prepareShapeUniformInfo(rectangle);
+        sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
+        sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
         let texInfo:TextureInfo[] = [{texture:this.nullTexture,name:'texture'}];
-        this.shapeDrawer.draw(texInfo,uniforms,null);
+        this.shapeDrawer.draw(texInfo,undefined,null);
     }
 
     drawLine(x1:number,y1:number,x2:number,y2:number,color:Color){
@@ -222,27 +219,27 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let maxR = Math.max(ellipse.radiusX,ellipse.radiusY);
         let maxR2 = maxR*2;
 
-        let uniforms:UniformsInfo = this.prepareShapeUniformInfo(ellipse);
+        this.prepareShapeUniformInfo(ellipse);
         let sd:ShapeDrawer = this.shapeDrawer;
-        uniforms[sd.u_vertexMatrix] = makePositionMatrix(
+        sd.setUniform(sd.u_vertexMatrix,makePositionMatrix(
             Rect.fromPool().setXYWH(0,0,maxR2,maxR2),
             Size.fromPool().setWH(this.game.width,this.game.height)
-        );
-        uniforms[sd.u_lineWidth] = Math.min(ellipse.lineWidth/maxR,1);
+        ));
+        sd.setUniform(sd.u_lineWidth,Math.min(ellipse.lineWidth/maxR,1));
         if (maxR==ellipse.radiusX) {
-            uniforms[sd.u_rx] = 0.5;
-            uniforms[sd.u_ry] = ellipse.radiusY/ellipse.radiusX*0.5;
+            sd.setUniform(sd.u_rx,0.5);
+            sd.setUniform(sd.u_ry,ellipse.radiusY/ellipse.radiusX*0.5);
         } else {
-            uniforms[sd.u_ry] = 0.5;
-            uniforms[sd.u_rx] = ellipse.radiusX/ellipse.radiusY*0.5;
+            sd.setUniform(sd.u_ry,0.5);
+            sd.setUniform(sd.u_rx,ellipse.radiusX/ellipse.radiusY*0.5);
         }
-        uniforms[sd.u_shapeType] = SHAPE_TYPE.ELLIPSE;
-        uniforms[sd.u_width] = 1;
-        uniforms[sd.u_height] = 1;
-        uniforms[sd.u_rectOffsetLeft] = 1;
-        uniforms[sd.u_rectOffsetTop] = 1;
+        sd.setUniform(sd.u_shapeType,SHAPE_TYPE.ELLIPSE);
+        sd.setUniform(sd.u_width,1);
+        sd.setUniform(sd.u_height,1);
+        sd.setUniform(sd.u_rectOffsetLeft,1);
+        sd.setUniform(sd.u_rectOffsetTop,1);
         let texInfo:TextureInfo[] = [{texture:this.nullTexture,name:'texture'}];
-        this.shapeDrawer.draw(texInfo,uniforms,null);
+        this.shapeDrawer.draw(texInfo,undefined,null);
     }
 
     setAlpha(a:number){
@@ -312,7 +309,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const u:UniformsInfo = {} as UniformsInfo;
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX);
-        this.simpleRectDrawer.draw([{texture:texToDraw,name:'texture'}],undefined,null); // todo
+        this.simpleRectDrawer.draw([{texture:texToDraw,name:'texture'}],null); // todo
 
         this.restore();
     };

@@ -1,11 +1,8 @@
 import {TextureInfo} from "../../renderPrograms/abstract/abstractDrawer";
-import {ShaderProgram} from "../../base/shaderProgram";
-import {TexShaderGenerator} from "../../shaders/generators/impl/texShaderGenerator";
-import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {FrameBuffer} from "../../base/frameBuffer";
 import {DebugError} from "@engine/debugError";
 import {mat4} from "@engine/core/geometry/mat4";
-import {SimpleRectDrawer} from "@engine/core/renderer/webGl/renderPrograms/impl/base/simpleRectDrawer";
+import {SimpleRectDrawer2} from "@engine/core/renderer/webGl/renderPrograms/impl/base/SimpleRectDrawer2";
 import MAT16 = mat4.MAT16;
 
 
@@ -20,8 +17,10 @@ const identity:number[] = mat4.makeIdentity();
 export abstract class AbstractFilter {
 
     protected gl:WebGLRenderingContext;
-    protected spriteRectDrawer:SimpleRectDrawer;
-    protected uniformsToSet:any = {};
+    protected spriteRectDrawer:SimpleRectDrawer2;
+
+    private u_textureMatrix:string;
+    private u_vertexMatrix:string;
 
     protected constructor(gl:WebGLRenderingContext){
         if (DEBUG && !gl) {
@@ -29,35 +28,22 @@ export abstract class AbstractFilter {
             throw new DebugError("can not create Filter, gl context not passed to constructor, expected: Filter(gl)");
         }
         this.gl = gl;
-        let gen = new TexShaderGenerator();
-        this.prepare(gen);
-        this._afterPrepare(gen);
+        this.spriteRectDrawer = new SimpleRectDrawer2(this.gl);
     }
 
-    protected prepare(gen:ShaderGenerator){}
-
-    private _afterPrepare(gen:ShaderGenerator){
-        let program = new ShaderProgram(
-            this.gl,
-            gen.getVertexSource(),
-            gen.getFragmentSource()
-        );
-        this.spriteRectDrawer = new SimpleRectDrawer(this.gl,program);
+    setUniform(name:string,value:any){
+        this.spriteRectDrawer.setUniform(name,value);
     }
 
     doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
         if (destFrameBuffer) destFrameBuffer.bind();
         let w:number = textureInfos[0].texture.size.width;
         let h:number = textureInfos[0].texture.size.height;
-        this.uniformsToSet.u_textureMatrix = identity;
-        this.uniformsToSet.u_vertexMatrix = makePositionMatrix(0,0,w,h);
+        this.spriteRectDrawer.setUniform(this.u_textureMatrix,identity);
+        this.spriteRectDrawer.setUniform(this.u_vertexMatrix,makePositionMatrix(0,0,w,h));
         this.gl.clearColor(1,1,1,0);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        this.spriteRectDrawer.draw(textureInfos,this.uniformsToSet,null);
-    }
-
-    protected setParam(name:string,value:any){
-        this.uniformsToSet[name] = value;
+        this.spriteRectDrawer.draw(textureInfos,undefined,null);
     }
 
 }
