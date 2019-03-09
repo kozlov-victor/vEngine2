@@ -6,7 +6,7 @@ import {AbstractFilter} from "../abstract/abstractFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {FrameBuffer} from "../../base/frameBuffer";
-import {TextureInfo} from "../../renderPrograms/abstract/abstractDrawer";
+import {TextureInfo} from "../../programs/abstract/abstractDrawer";
 
 export class PixelFilter extends AbstractFilter {
 

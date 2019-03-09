@@ -5,7 +5,7 @@ import {BufferInfo, BufferInfoDescription} from "../../../base/bufferInfo";
 import {Plane} from "../../../primitives/plane";
 import {GL_TYPE} from "../../../base/shaderProgramUtils";
 import {ShaderGenerator} from "../../../shaders/generators/shaderGenerator";
-import {fragmentSource} from "@engine/core/renderer/webGl/renderPrograms/impl/base/shapeDrawer.shader";
+import {fragmentSource} from "@engine/core/renderer/webGl/programs/impl/base/shapeDrawer.shader";
 
 
 export class ShapeDrawer extends AbstractDrawer {

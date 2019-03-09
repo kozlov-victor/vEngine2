@@ -7,7 +7,7 @@ import {GameObject} from '@engine/model/impl/gameObject';
 import {Rect} from "../../geometry/rect";
 import {Point2d} from "../../geometry/point2d";
 import {Color} from "../color";
-import {TextureInfo} from "../webGl/renderPrograms/abstract/abstractDrawer";
+import {TextureInfo} from "../webGl/programs/abstract/abstractDrawer";
 import {Size} from "../../geometry/size";
 import {DebugError} from "@engine/debugError";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";

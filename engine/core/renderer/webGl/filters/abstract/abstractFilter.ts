@@ -1,8 +1,8 @@
-import {TextureInfo} from "../../renderPrograms/abstract/abstractDrawer";
+import {TextureInfo} from "../../programs/abstract/abstractDrawer";
 import {FrameBuffer} from "../../base/frameBuffer";
 import {DebugError} from "@engine/debugError";
 import {mat4} from "@engine/core/geometry/mat4";
-import {SimpleRectDrawer2} from "@engine/core/renderer/webGl/renderPrograms/impl/base/SimpleRectDrawer2";
+import {SimpleRectDrawer} from "@engine/core/renderer/webGl/programs/impl/base/SimpleRectDrawer";
 import MAT16 = mat4.MAT16;
 
 
@@ -17,7 +17,7 @@ const identity:number[] = mat4.makeIdentity();
 export abstract class AbstractFilter {
 
     protected gl:WebGLRenderingContext;
-    protected spriteRectDrawer:SimpleRectDrawer2;
+    protected spriteRectDrawer:SimpleRectDrawer;
 
 
     protected constructor(gl:WebGLRenderingContext){
@@ -26,7 +26,7 @@ export abstract class AbstractFilter {
             throw new DebugError("can not create Filter, gl context not passed to constructor, expected: Filter(gl)");
         }
         this.gl = gl;
-        this.spriteRectDrawer = new SimpleRectDrawer2(this.gl);
+        this.spriteRectDrawer = new SimpleRectDrawer(this.gl);
     }
 
     setUniform(name:string,value:any){

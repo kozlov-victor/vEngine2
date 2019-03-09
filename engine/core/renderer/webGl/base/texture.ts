@@ -7,7 +7,7 @@ import {FrameBuffer} from "./frameBuffer";
 import {AbstractFilter} from "../filters/abstract/abstractFilter";
 import {Size} from "../../../geometry/size";
 import {ShaderProgram} from "./shaderProgram";
-import {TextureInfo} from "../renderPrograms/abstract/abstractDrawer";
+import {TextureInfo} from "../programs/abstract/abstractDrawer";
 
 const isPowerOf2 = function(value:number):boolean {
     return (value & (value - 1)) === 0;

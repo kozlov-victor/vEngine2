@@ -48,7 +48,7 @@ export class MainScene extends Scene {
             bw,
             pf,
             ps,
-            //sb,
+            sb,
         ];
         (window as any).logoObj = this.logoObj;
 

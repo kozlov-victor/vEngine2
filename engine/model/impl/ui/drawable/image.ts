@@ -4,7 +4,7 @@ import {DebugError} from "@engine/debugError";
 import {Shape} from "../generic/shape";
 import {Color} from "@engine/core/renderer/color";
 import {Point2d} from "@engine/core/geometry/point2d";
-import {TextureInfo} from "@engine/core/renderer/webGl/renderPrograms/abstract/abstractDrawer";
+import {TextureInfo} from "@engine/core/renderer/webGl/programs/abstract/abstractDrawer";
 import {Cloneable} from "@engine/declarations";
 
 

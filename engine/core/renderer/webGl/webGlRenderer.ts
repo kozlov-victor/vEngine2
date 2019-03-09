@@ -1,17 +1,16 @@
 import {DebugError} from "@engine/debugError";
-import {AbstractDrawer, TextureInfo} from "./renderPrograms/abstract/abstractDrawer";
-import {ShapeDrawer} from "./renderPrograms/impl/base/shapeDrawer";
+import {AbstractDrawer, TextureInfo} from "./programs/abstract/abstractDrawer";
+import {ShapeDrawer} from "./programs/impl/base/shapeDrawer";
 import {FrameBuffer} from "./base/frameBuffer";
 import {MatrixStack} from "./base/matrixStack";
 import {Texture} from "./base/texture";
-import {AddBlendDrawer} from "./renderPrograms/impl/blend/addBlendDrawer";
 import {Rect} from "../../geometry/rect";
 import {Game} from "../../game";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../color";
-import {UniformsInfo} from "./renderPrograms/interface/uniformsInfo";
+import {UniformsInfo} from "./programs/interface/uniformsInfo";
 import {Size} from "../../geometry/size";
-import {ModelDrawer} from "./renderPrograms/impl/base/modelDrawer";
+import {ModelDrawer} from "./programs/impl/base/modelDrawer";
 import {GameObject3d} from "@engine/model/impl/gameObject3d";
 import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
@@ -20,8 +19,8 @@ import {Shape} from "@engine/model/impl/ui/generic/shape";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {AbstractFilter} from "@engine/core/renderer/webGl/filters/abstract/abstractFilter";
 import {mat4} from "@engine/core/geometry/mat4";
-import {FILL_TYPE, SHAPE_TYPE} from "@engine/core/renderer/webGl/renderPrograms/impl/base/shapeDrawer.shader";
-import {SimpleRectDrawer2} from "@engine/core/renderer/webGl/renderPrograms/impl/base/SimpleRectDrawer2";
+import {FILL_TYPE, SHAPE_TYPE} from "@engine/core/renderer/webGl/programs/impl/base/shapeDrawer.shader";
+import {SimpleRectDrawer} from "@engine/core/renderer/webGl/programs/impl/base/SimpleRectDrawer";
 import MAT16 = mat4.MAT16;
 
 
@@ -61,9 +60,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private gl:WebGLRenderingContext;
     private matrixStack:MatrixStack;
     private shapeDrawer:ShapeDrawer;
-    private simpleRectDrawer:SimpleRectDrawer2;
+    private simpleRectDrawer:SimpleRectDrawer;
     private modelDrawer:ModelDrawer;
-    private addBlendDrawer:AddBlendDrawer;
     private frameBuffer:FrameBuffer;
     private nullTexture:Texture;
 
@@ -84,11 +82,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     	this.nullTexture = new Texture(gl);
 
         this.shapeDrawer = new ShapeDrawer(gl);
-        this.simpleRectDrawer = new SimpleRectDrawer2(gl);
+        this.simpleRectDrawer = new SimpleRectDrawer(gl);
         this.simpleRectDrawer.prepareShaderGenerator();
         this.simpleRectDrawer.initProgram();
         this.modelDrawer = new ModelDrawer(gl);
-        this.addBlendDrawer = new AddBlendDrawer(gl);
 
         this.frameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);
 

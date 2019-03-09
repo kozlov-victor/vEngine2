@@ -3,7 +3,7 @@ import {AbstractDrawer} from "../../abstract/abstractDrawer";
 import {BufferInfo, BufferInfoDescription} from "../../../base/bufferInfo";
 import {GameObject3d} from "@engine/model/impl/gameObject3d";
 import {DebugError} from "@engine/debugError";
-import {fragmentSource, vertexSource} from "@engine/core/renderer/webGl/renderPrograms/impl/base/modelDrawer.shader";
+import {fragmentSource, vertexSource} from "@engine/core/renderer/webGl/programs/impl/base/modelDrawer.shader";
 
 
 
