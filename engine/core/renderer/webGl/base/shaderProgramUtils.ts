@@ -153,6 +153,7 @@ export interface AttributesMap {
 }
 
 export  const normalizeUniformName =(s:string):string=>{
+    s = s.trim();
     if (s.indexOf('[')>-1) return s.split('[')[0];
     else return s;
 };

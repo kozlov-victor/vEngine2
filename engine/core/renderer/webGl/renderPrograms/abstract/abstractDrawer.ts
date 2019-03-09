@@ -1,6 +1,6 @@
 
 
-import {isEqual, isArray} from "../../../../misc/object";
+import {isEqual, isArray, IKeyVal} from "../../../../misc/object";
 import {AbstractPrimitive} from "../../primitives/abstractPrimitive";
 import {ShaderProgram} from "../../base/shaderProgram";
 import {BufferInfo} from "../../base/bufferInfo";
@@ -23,7 +23,7 @@ export class AbstractDrawer implements IDrawer{
 
     protected gl:WebGLRenderingContext;
     protected program:ShaderProgram = null;
-    protected uniformCache:any = {};
+    protected uniformCache:IKeyVal = {};
     protected primitive:AbstractPrimitive;
 
     protected bufferInfo:BufferInfo;
@@ -69,6 +69,10 @@ export class AbstractDrawer implements IDrawer{
 
 
     setUniform(name:string,value:any){
+        if (DEBUG && !name) {
+            console.trace();
+            throw new DebugError(`can not set uniform: name is not provided`);
+        }
         if (isEqual(this.uniformCache[name],value)) return;
         if (isArray(value)) {
             if (!this.uniformCache[name]) this.uniformCache[name] = Array(value.length);

@@ -19,8 +19,6 @@ export abstract class AbstractFilter {
     protected gl:WebGLRenderingContext;
     protected spriteRectDrawer:SimpleRectDrawer2;
 
-    private u_textureMatrix:string;
-    private u_vertexMatrix:string;
 
     protected constructor(gl:WebGLRenderingContext){
         if (DEBUG && !gl) {
@@ -39,8 +37,8 @@ export abstract class AbstractFilter {
         if (destFrameBuffer) destFrameBuffer.bind();
         let w:number = textureInfos[0].texture.size.width;
         let h:number = textureInfos[0].texture.size.height;
-        this.spriteRectDrawer.setUniform(this.u_textureMatrix,identity);
-        this.spriteRectDrawer.setUniform(this.u_vertexMatrix,makePositionMatrix(0,0,w,h));
+        this.spriteRectDrawer.setUniform(this.spriteRectDrawer.u_textureMatrix,identity);
+        this.spriteRectDrawer.setUniform(this.spriteRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,w,h));
         this.gl.clearColor(1,1,1,0);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         this.spriteRectDrawer.draw(textureInfos,undefined,null);

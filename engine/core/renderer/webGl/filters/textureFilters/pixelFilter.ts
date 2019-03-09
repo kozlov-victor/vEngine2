@@ -5,21 +5,25 @@
 import {AbstractFilter} from "../abstract/abstractFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
-import {Texture} from "../../base/texture";
 import {FrameBuffer} from "../../base/frameBuffer";
 import {TextureInfo} from "../../renderPrograms/abstract/abstractDrawer";
 
 export class PixelFilter extends AbstractFilter {
 
+    private rt_w:string;
+    private rt_h:string;
+    private pixel_w:string;
+    private pixel_h:string;
+
     constructor(gl: WebGLRenderingContext) {
         super(gl);
-    }
+        this.spriteRectDrawer.prepareShaderGenerator();
 
-    prepare(programGen:ShaderGenerator){
-        programGen.addFragmentUniform(GL_TYPE.FLOAT,' rt_w'); // render target width
-        programGen.addFragmentUniform(GL_TYPE.FLOAT,' rt_h'); // render target height
-        programGen.addFragmentUniform(GL_TYPE.FLOAT,' pixel_w');
-        programGen.addFragmentUniform(GL_TYPE.FLOAT,' pixel_h');
+        const programGen:ShaderGenerator = this.spriteRectDrawer.gen;
+        this.rt_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
+        this.rt_h = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
+        this.pixel_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixel_w');
+        this.pixel_h = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixel_h');
         //language=GLSL
         programGen.setFragmentMainFn(`
             void main(){
@@ -34,22 +38,23 @@ export class PixelFilter extends AbstractFilter {
             }
             `
         );
+        this.spriteRectDrawer.initProgram();
         this.setPixelSize(5);
-
     }
 
+
     doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
-        this.setParam('rt_w',textureInfos[0].texture.size.width);
-        this.setParam('rt_h',textureInfos[0].texture.size.height);
+        this.setUniform(this.rt_w,textureInfos[0].texture.size.width);
+        this.setUniform(this.rt_h,textureInfos[0].texture.size.height);
         super.doFilter(textureInfos,destFrameBuffer);
     }
 
     setPixelWidth(n:number){
-        this.setParam('pixel_w',n);
+        this.setUniform(this.pixel_w,n);
     }
 
     setPixelHeight(n:number){
-        this.setParam('pixel_h',n);
+        this.setUniform(this.pixel_h,n);
     }
 
     setPixelSize(n:number) {

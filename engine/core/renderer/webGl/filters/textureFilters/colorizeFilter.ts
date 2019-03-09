@@ -8,13 +8,14 @@ import {Color} from "../../../color";
 
 export class ColorizeFilter extends AbstractFilter{
 
+    private uPixelColor: string;
+
     constructor(gl:WebGLRenderingContext){
         super(gl);
-    }
+        this.spriteRectDrawer.prepareShaderGenerator();
 
-    protected prepare(programGen:ShaderGenerator){
-        programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'uPixelColor');
-        this.setColor(Color.NONE);
+        const programGen:ShaderGenerator = this.spriteRectDrawer.gen;
+        this.uPixelColor = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'uPixelColor');
         //language=GLSL
         programGen.setFragmentMainFn(`
             void main(){
@@ -24,10 +25,13 @@ export class ColorizeFilter extends AbstractFilter{
                 gl_FragColor = result;
             }
         `);
+        this.spriteRectDrawer.initProgram();
+        this.setColor(Color.NONE);
     }
 
+
     setColor(c:Color){
-        this.setParam('uPixelColor',c.clone().asGL());
+        this.setUniform(this.uPixelColor,c.clone().asGL());
     }
 
 }

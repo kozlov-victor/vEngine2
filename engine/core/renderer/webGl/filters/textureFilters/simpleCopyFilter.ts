@@ -9,16 +9,15 @@ export class SimpleCopyFilter extends AbstractFilter{
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
-    }
-
-    protected prepare(programGen:ShaderGenerator){
-        programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_mixFactor');
+        this.spriteRectDrawer.prepareShaderGenerator();
+        const programGen:ShaderGenerator = this.spriteRectDrawer.gen;
         //language=GLSL
         programGen.setFragmentMainFn(`
             void main(){
                 gl_FragColor = texture2D(texture, v_texCoord);
             }
         `);
+        this.spriteRectDrawer.initProgram();
     }
 
 }

@@ -2,18 +2,13 @@ import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
 import {SpriteSheet} from "@engine/model/impl/spriteSheet";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/core/renderer/color";
-import {KEYBOARD_EVENT} from "@engine/core/control/abstract/abstractKeypad";
-import {Keyboard, KEYBOARD_KEY} from "@engine/core/control/keyboard";
-import {BlackWhiteFilter} from "@engine/core/renderer/webGl/filters/textureFilters/blackWhite";
+import {BlackWhiteFilter} from "@engine/core/renderer/webGl/filters/textureFilters/blackWhiteFilter";
 import {WebGlRenderer} from "@engine/core/renderer/webGl/webGlRenderer";
 import {ColorizeFilter} from "@engine/core/renderer/webGl/filters/textureFilters/colorizeFilter";
 import {PixelFilter} from "@engine/core/renderer/webGl/filters/textureFilters/pixelFilter";
 import {PosterizeFilter} from "@engine/core/renderer/webGl/filters/textureFilters/posterizeFilter";
 import {SimpleBlurFilter} from "@engine/core/renderer/webGl/filters/textureFilters/simpleBlurFilter";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Circle} from "@engine/model/impl/ui/drawable/circle";
 
 
 export class MainScene extends Scene {
@@ -53,7 +48,7 @@ export class MainScene extends Scene {
             bw,
             pf,
             ps,
-            sb
+            //sb,
         ];
         (window as any).logoObj = this.logoObj;
 

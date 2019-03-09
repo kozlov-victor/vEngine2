@@ -10,13 +10,16 @@ import {FrameBuffer} from "../../base/frameBuffer";
 
 export class PosterizeFilter extends AbstractFilter {
 
+    private gamma:string;
+    private numColors:string;
+
     constructor(gl: WebGLRenderingContext) {
         super(gl);
-    }
+        this.spriteRectDrawer.prepareShaderGenerator();
 
-    protected prepare(programGen:ShaderGenerator){
-        programGen.addFragmentUniform(GL_TYPE.FLOAT,' gamma');
-        programGen.addFragmentUniform(GL_TYPE.FLOAT,'numColors');
+        const programGen = this.spriteRectDrawer.gen;
+        this.gamma = programGen.addFragmentUniform(GL_TYPE.FLOAT,'gamma');
+        this.numColors = programGen.addFragmentUniform(GL_TYPE.FLOAT,'numColors');
         //language=GLSL
         programGen.setFragmentMainFn(`
               void main(){
@@ -30,16 +33,18 @@ export class PosterizeFilter extends AbstractFilter {
               }
             `
         );
+        this.spriteRectDrawer.initProgram();
         this.setGamma(0.6);
         this.setNumOfColors(8);
     }
 
+
     setGamma(n:number){
-        this.setParam('gamma',n);
+        this.setUniform(this.gamma,n);
     }
 
     setNumOfColors(n:number){
-        this.setParam('numColors',n);
+        this.setUniform(this.numColors,n);
     }
 
 }
