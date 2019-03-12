@@ -137,11 +137,19 @@ const mapType = (gl:WebGLRenderingContext, type:number):string=> {
     return GL_TABLE[type];
 };
 
+type GL = WebGLRenderingContext;
+type LOC = WebGLUniformLocation;
+type NUM = number;
+type NUM_ARR = number[];
+
+type UNIFORM_SETTER = (gl:GL,location:LOC,value:any)=>void;
+
+
 interface UniformWrapper {
     type:string,
-    size:number,
-    location: WebGLUniformLocation,
-    setter: (gl:WebGLRenderingContext,location:WebGLUniformLocation,value:any)=>void
+    size:NUM,
+    location: LOC,
+    setter: UNIFORM_SETTER
 }
 
 export interface UniformsMap {
@@ -153,17 +161,17 @@ export interface AttributesMap {
 }
 
 export  const normalizeUniformName =(s:string):string=>{
-    s = s.trim();
+    if (DEBUG && s.indexOf(' ')>-1) throw new DebugError(`bad uniform name: "${s}"`);
     if (s.indexOf('[')>-1) return s.split('[')[0];
     else return s;
 };
 
 export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram):UniformsMap=> {
-    let glProgram:WebGLProgram = program.getProgram();
-    let activeUniforms:number = gl.getProgramParameter(glProgram, gl.ACTIVE_UNIFORMS) as number;
-    let uniforms:UniformsMap = {};
+    const glProgram:WebGLProgram = program.getProgram();
+    const activeUniforms:number = gl.getProgramParameter(glProgram, gl.ACTIVE_UNIFORMS) as number;
+    const uniforms:UniformsMap = {};
 
-    for (let i = 0; i < activeUniforms; i++) {
+    for (let i:number = 0; i < activeUniforms; i++) {
         let uniformData:WebGLActiveInfo = gl.getActiveUniform(glProgram, i) as WebGLActiveInfo;
         if (DEBUG && !uniformData) throw new DebugError(`can not receive active uniforms info: gl.getActiveUniform()`);
         let type = mapType(gl, uniformData.type);
@@ -259,15 +267,9 @@ const expect = (value:any,typeChecker:IChecker)=>{
     typeChecker.check(value);
 };
 
-type GL = WebGLRenderingContext;
-type LOC = WebGLUniformLocation;
-type NUM = number;
-type NUM_ARR = number[];
-
-const getUniformSetter = function(size:number,type:string){
+const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
     if (size===1) {
         switch (type) {
-
             case GL_TYPE.FLOAT: return (gl:GL,location:LOC,value:NUM)=> {
                 DEBUG && expect(value,TypeNumber);
                 gl.uniform1f(location, value);

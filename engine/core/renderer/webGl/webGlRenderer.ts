@@ -137,7 +137,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             if (!this.renderableCache[img.getResourceLink().getId()]) throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getId()}`);
         }
         let texture:Texture = this.renderableCache[img.getResourceLink().getId()].texture;
-        texture = texture.applyFilters(img.filters,this.frameBuffer);
+        texture = texture.applyFilters(img.filters);
+        this.frameBuffer.bind();
         let texInfo:TextureInfo[] = [{texture,name:'texture'}];
 
         let maxSize:number = Math.max(img.width,img.height);
@@ -297,13 +298,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.frameBuffer.bind();
     }
 
-
     flipFrameBuffer(filters:AbstractFilter[]){
-        let texToDraw = this.frameBuffer.getTexture().applyFilters(filters,null);
+        let texToDraw:Texture = this.frameBuffer.getTexture().applyFilters(filters);
         this.frameBuffer.unbind();
         this.gl.viewport(0, 0, this.fullScreenSize.width,this.fullScreenSize.height);
 
-        const u:UniformsInfo = {} as UniformsInfo;
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX);
         this.simpleRectDrawer.draw([{texture:texToDraw,name:'texture'}],null); // todo

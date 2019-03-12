@@ -30,10 +30,6 @@ export class BlackWhiteFilter extends AbstractFilter{
         this.setMixFactor(0.8);
     }
 
-    protected prepare(programGen:ShaderGenerator){
-
-    }
-
     setMixFactor(n:number) {
         this.setUniform(this.u_mixFactor,n);
     }

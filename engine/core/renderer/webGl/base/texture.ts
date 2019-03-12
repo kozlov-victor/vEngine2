@@ -125,10 +125,8 @@ export class Texture {
 
     }
 
-    applyFilters(filters:AbstractFilter[],frameBuffer:FrameBuffer):Texture{
-        if (DEBUG && frameBuffer===undefined)
-            throw new DebugError(`can not apply filters. frameBuffer must be explicitly passed. Pass null if no frame buffer needs to bind after filtering`);
-        let len = filters.length;
+    applyFilters(filters:AbstractFilter[]):Texture{
+        let len:number = filters.length;
         if (len===0) return this;
         if (!this._texFilterBuff.buffers)
             this._texFilterBuff.instantiate(this.gl);
@@ -136,7 +134,7 @@ export class Texture {
 
         let texInfo:TextureInfo[] = [{texture:this,name:'texture'}]; // todo now to make this array reusable?
         filter.doFilter(texInfo,this._texFilterBuff.getDestBuffer());
-        for (let i=1;i<len;i++){
+        for (let i:number=1;i<len;i++){
             this._texFilterBuff.flip();
             let texInfo:TextureInfo[] = [{texture:this._texFilterBuff.getSourceBuffer().texture,name:'texture'}];
             filters[i].doFilter(
@@ -144,7 +142,6 @@ export class Texture {
             );
         }
         this._texFilterBuff.flip();
-        if (frameBuffer!==null) frameBuffer.bind();
         return this._texFilterBuff.getSourceBuffer().texture;
     }
 

@@ -19,8 +19,8 @@ export class SimpleBlurFilter extends AbstractFilter {
         const programGen:ShaderGenerator = this.spriteRectDrawer.gen;
         this.rt_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
         this.rt_h = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
-        this.u_direction_x = programGen.addFragmentUniform(GL_TYPE.FLOAT,' u_direction_x');
-        this.u_direction_y = programGen.addFragmentUniform(GL_TYPE.FLOAT,' u_direction_y');
+        this.u_direction_x = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_direction_x');
+        this.u_direction_y = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_direction_y');
 
         //language=GLSL
         programGen.appendFragmentCodeBlock(`
