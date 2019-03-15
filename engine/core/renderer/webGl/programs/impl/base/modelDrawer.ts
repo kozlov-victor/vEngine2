@@ -7,8 +7,6 @@ import {fragmentSource, vertexSource} from "@engine/core/renderer/webGl/programs
 
 
 
-
-
 export class ModelDrawer extends AbstractDrawer {
 
     private g3d:GameObject3d;

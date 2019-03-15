@@ -10,10 +10,10 @@ import {TextureInfo} from "../../programs/abstract/abstractDrawer";
 
 export class PixelFilter extends AbstractFilter {
 
-    private rt_w:string;
-    private rt_h:string;
-    private pixel_w:string;
-    private pixel_h:string;
+    private readonly rt_w:string;
+    private readonly rt_h:string;
+    private readonly pixel_w:string;
+    private readonly pixel_h:string;
 
     constructor(gl: WebGLRenderingContext) {
         super(gl);

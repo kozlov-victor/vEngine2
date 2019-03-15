@@ -4,12 +4,12 @@ import {AbstractPrimitive, IPrimitive} from './abstractPrimitive'
 
 
 const prepareBuffers = (radius:number,bands:number)=>{
-    let latitudeBands:number = bands;
-    let longitudeBands:number = bands;
+    const latitudeBands:number = bands;
+    const longitudeBands:number = bands;
 
-    let vertexArr:number[] = [];
-    let normalArr:number[] = [];
-    let texCoordArr:number[] = [];
+    const vertexArr:number[] = [];
+    const normalArr:number[] = [];
+    const texCoordArr:number[] = [];
     for (let latNumber=0; latNumber <= latitudeBands; latNumber++) {
         let theta:number = latNumber * Math.PI / latitudeBands;
         let sinTheta:number = Math.sin(theta);
@@ -37,7 +37,7 @@ const prepareBuffers = (radius:number,bands:number)=>{
         }
     }
 
-    let indexArr:number[] = [];
+    const indexArr:number[] = [];
     for (let latNumber=0; latNumber < latitudeBands; latNumber++) {
         for (let longNumber=0; longNumber < longitudeBands; longNumber++) {
             let first:number = (latNumber * (longitudeBands + 1)) + longNumber;

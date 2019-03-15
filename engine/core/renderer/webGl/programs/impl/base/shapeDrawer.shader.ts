@@ -7,6 +7,7 @@ export enum FILL_TYPE {
     COLOR,TEXTURE,LINEAR_GRADIENT
 }
 
+
 export const fragmentSource = `
 
 #define HALF .5

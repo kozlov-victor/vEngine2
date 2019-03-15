@@ -3,7 +3,7 @@ import {AbstractPrimitive, IPrimitive} from './abstractPrimitive'
 
 const prepareBuffers = (size:number)=>{
 
-    let vertices = [
+    const vertices:number[] = [
         // Front face
         -size, -size,  size,
         size, -size,  size,
@@ -41,7 +41,7 @@ const prepareBuffers = (size:number)=>{
         -size,  size, -size
     ];
 
-    let textureCoords:number[] = [
+    const textureCoords:number[] = [
         // Front face
         0.0, 0.0,
         1, 0.0,
@@ -79,7 +79,7 @@ const prepareBuffers = (size:number)=>{
         0.0, 1
     ];
 
-    let cubeVertexIndices:number[] = [
+    const cubeVertexIndices:number[] = [
         0, 1, 2,      0, 2, 3,    // Front face
         4, 5, 6,      4, 6, 7,    // Back face
         8, 9, 10,     8, 10, 11,  // Top face
@@ -88,7 +88,7 @@ const prepareBuffers = (size:number)=>{
         20, 21, 22,   20, 22, 23  // Left face
     ];
 
-    let vertexNormals:number[] = [
+    const vertexNormals:number[] = [
         // Front face
         0.0,  0.0,  1,
         0.0,  0.0,  1,

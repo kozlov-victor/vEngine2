@@ -1,17 +1,21 @@
 
 import {normalizeUniformName} from "../../base/shaderProgramUtils";
 
+interface Info {
+    type: string,
+    name: string
+}
 
 export class ShaderGenerator {
 
-    private vertexUniforms:any[] = [];
-    private fragmentUniforms:any[] = [];
-    private attributes:any[] = [];
-    private varyings:any[] = [];
-    private appendedFragCodeBlocks:any[] = [];
-    private appendedVertexCodeBlocks:any[] = [];
-    private prependedVertexCodeBlocks:any[] = [];
-    private prependedFragCodeBlocks:any[] = [];
+    private vertexUniforms:Info[] = [];
+    private fragmentUniforms:Info[] = [];
+    private attributes:Info[] = [];
+    private varyings:Info[] = [];
+    private appendedFragCodeBlocks:string[] = [];
+    private appendedVertexCodeBlocks:string[] = [];
+    private prependedVertexCodeBlocks:string[] = [];
+    private prependedFragCodeBlocks:string[] = [];
     private vertexMainFn:string = '';
     private fragmentMainFn:string = '';
 

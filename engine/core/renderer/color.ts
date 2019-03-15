@@ -100,13 +100,13 @@ export class Color implements Cloneable<Color>{
     }
 
 
-    asGL():number[]{
+    asGL():[number,number,number,number]{
         if (this._arr===null) this._arr = new Array(3);
         this._arr[0] = this.rNorm;
         this._arr[1] = this.gNorm;
         this._arr[2] = this.bNorm;
         this._arr[3] = this.aNorm;
-        return this._arr;
+        return this._arr as [number,number,number,number];
     }
 
     asCSS():string{

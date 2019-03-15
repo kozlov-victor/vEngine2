@@ -2,8 +2,6 @@ import {DebugError} from "@engine/debugError";
 import {ShaderProgram} from "./shaderProgram";
 
 
-
-
 interface ShaderErrorInfo {
     message:string,
     lineNum:number
@@ -42,10 +40,10 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
     gl.compileShader(shader);
 
     // Check the compile status
-    let compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+    let compiled:number = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
     if (!compiled) {
         // Something went wrong during compilation; get the error
-        let lastError = gl.getShaderInfoLog(shader);
+        let lastError:string = gl.getShaderInfoLog(shader);
         gl.deleteShader(shader);
         if (DEBUG) {
             let parsedLogs = parseErrors(lastError);
@@ -78,11 +76,11 @@ export const createProgram = (gl:WebGLRenderingContext, vertexShader:WebGLShader
     gl.linkProgram(program);
 
     // Check the link status
-    let linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+    let linked:number = gl.getProgramParameter(program, gl.LINK_STATUS);
     if (!linked) {
         // something went wrong with the link
         gl.deleteProgram(program);
-        let lastError = gl.getProgramInfoLog(program);
+        let lastError:string = gl.getProgramInfoLog(program);
         if (DEBUG) {
             let status = gl.getProgramParameter( program, gl.VALIDATE_STATUS);
             console.error('VALIDATE_STATUS',status);
@@ -174,7 +172,7 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
     for (let i:number = 0; i < activeUniforms; i++) {
         let uniformData:WebGLActiveInfo = gl.getActiveUniform(glProgram, i) as WebGLActiveInfo;
         if (DEBUG && !uniformData) throw new DebugError(`can not receive active uniforms info: gl.getActiveUniform()`);
-        let type = mapType(gl, uniformData.type);
+        let type:string = mapType(gl, uniformData.type);
         let name:string = normalizeUniformName(uniformData.name);
         let location:WebGLUniformLocation = gl.getUniformLocation(glProgram, name) as WebGLUniformLocation;
         // if (DEBUG && location===null) {

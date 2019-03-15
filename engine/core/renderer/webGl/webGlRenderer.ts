@@ -22,6 +22,8 @@ import {mat4} from "@engine/core/geometry/mat4";
 import {FILL_TYPE, SHAPE_TYPE} from "@engine/core/renderer/webGl/programs/impl/base/shapeDrawer.shader";
 import {SimpleRectDrawer} from "@engine/core/renderer/webGl/programs/impl/base/SimpleRectDrawer";
 import MAT16 = mat4.MAT16;
+import {DoubleFrameBuffer} from "@engine/core/renderer/webGl/base/doubleFrameBuffer";
+import IDENTITY = mat4.IDENTITY;
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
@@ -62,7 +64,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private shapeDrawer:ShapeDrawer;
     private simpleRectDrawer:SimpleRectDrawer;
     private modelDrawer:ModelDrawer;
-    private frameBuffer:FrameBuffer;
+    private preprocessFrameBuffer:FrameBuffer;
+    private finalFrameBuffer:FrameBuffer;
+    private doubleFrameBuffer:DoubleFrameBuffer;
     private nullTexture:Texture;
 
     constructor(game:Game){
@@ -87,7 +91,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.simpleRectDrawer.initProgram();
         this.modelDrawer = new ModelDrawer(gl);
 
-        this.frameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);
+        this.preprocessFrameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);
+        this.finalFrameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);
+        this.doubleFrameBuffer = new DoubleFrameBuffer(gl,this.game.width,this.game.height);
 
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         gl.enable(gl.BLEND);
@@ -136,11 +142,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             if (!img.getResourceLink()) throw new DebugError(`image resource link is not set`);
             if (!this.renderableCache[img.getResourceLink().getId()]) throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getId()}`);
         }
-        let texture:Texture = this.renderableCache[img.getResourceLink().getId()].texture;
-        texture = texture.applyFilters(img.filters);
-        this.frameBuffer.bind();
-        let texInfo:TextureInfo[] = [{texture,name:'texture'}];
 
+        this.beforeItemDraw();
+
+        let texture:Texture = this.renderableCache[img.getResourceLink().getId()].texture;
+        let texInfo:TextureInfo[] = [{texture,name:'texture'}];
         let maxSize:number = Math.max(img.width,img.height);
         let sd:ShapeDrawer = this.shapeDrawer;
         this.prepareShapeUniformInfo(img);
@@ -156,11 +162,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             ]
         );
         sd.setUniform(sd.u_texOffset,[img.offset.x/maxSize,img.offset.y/maxSize]);
-
         this.shapeDrawer.draw(texInfo,undefined,null);
+
+        this.afterItemDraw(img.filters);
+
+
     }
 
-    drawModel(g3d:GameObject3d){
+    drawModel(g3d:GameObject3d){ // todo
         this.modelDrawer.bindModel(g3d);
         this.modelDrawer.bind();
 
@@ -192,16 +201,22 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let maxSize:number = Math.max(rw,rh);
         let sd:ShapeDrawer = this.shapeDrawer;
 
+        this.beforeItemDraw();
+
         this.prepareShapeUniformInfo(rectangle);
         sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
         sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
         let texInfo:TextureInfo[] = [{texture:this.nullTexture,name:'texture'}];
-        this.shapeDrawer.draw(texInfo,undefined,null);
+        sd.draw(texInfo,undefined,null);
+
+        this.afterItemDraw(rectangle.filters);
     }
 
     drawLine(x1:number,y1:number,x2:number,y2:number,color:Color){
 
-        let dx = x2-x1,dy = y2-y1;
+        this.beforeItemDraw();
+
+        let dx:number = x2-x1,dy:number = y2-y1;
         let uniforms:UniformsInfo = {};
         uniforms.u_vertexMatrix = makePositionMatrix(
             Rect.fromPool().setXYWH(x1,y1,dx,dy),
@@ -210,12 +225,16 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         uniforms.u_rgba = color.asGL();
         //gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
+        this.afterItemDraw([]);
+
     }
 
 
     drawEllipse(ellipse:Ellipse){
-        let maxR = Math.max(ellipse.radiusX,ellipse.radiusY);
-        let maxR2 = maxR*2;
+        let maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
+        let maxR2:number = maxR*2;
+
+        this.beforeItemDraw();
 
         this.prepareShapeUniformInfo(ellipse);
         let sd:ShapeDrawer = this.shapeDrawer;
@@ -238,6 +257,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_rectOffsetTop,1);
         let texInfo:TextureInfo[] = [{texture:this.nullTexture,name:'texture'}];
         this.shapeDrawer.draw(texInfo,undefined,null);
+
+        this.afterItemDraw(ellipse.filters);
+
     }
 
     setAlpha(a:number){
@@ -295,20 +317,33 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     beginFrameBuffer(){
         this.save();
-        this.frameBuffer.bind();
+        this.finalFrameBuffer.bind();
     }
 
     flipFrameBuffer(filters:AbstractFilter[]){
-        let texToDraw:Texture = this.frameBuffer.getTexture().applyFilters(filters);
-        this.frameBuffer.unbind();
+        let texToDraw:Texture = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(),filters);
+        this.finalFrameBuffer.unbind();
         this.gl.viewport(0, 0, this.fullScreenSize.width,this.fullScreenSize.height);
-
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX);
         this.simpleRectDrawer.draw([{texture:texToDraw,name:'texture'}],null); // todo
 
         this.restore();
     };
+
+    private beforeItemDraw(){
+        this.preprocessFrameBuffer.bind();
+        this.gl.clearColor(1,1,1,1);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    }
+
+    private afterItemDraw(filters:AbstractFilter[]){
+        const filteredTexture:Texture = this.doubleFrameBuffer.applyFilters(this.preprocessFrameBuffer.getTexture(),filters);
+        this.finalFrameBuffer.bind();
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX);
+        this.simpleRectDrawer.draw([{texture:filteredTexture,name:'texture'}],null); // todo
+    }
 
     getError():number{
         if (!DEBUG) return 0;
@@ -330,7 +365,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         img.onload = ()=>{
             let texture:Texture = new Texture(this.gl);
             texture.setImage(img);
-            this.gl.bindTexture(this.gl.TEXTURE_2D, this.frameBuffer.getTexture().getGlTexture()); // to restore texture binding
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.finalFrameBuffer.getTexture().getGlTexture()); // to restore texture binding
             const ti:TextureInfo = {texture,size:texture.size,name:undefined};
             this.renderableCache[link.getId()] = ti;
             link.setTarget<TextureInfo>(ti);
@@ -345,7 +380,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     destroy(){
         super.destroy();
-        this.frameBuffer.destroy();
+        this.finalFrameBuffer.destroy();
         AbstractDrawer.destroyAll();
         Object.keys(this.renderableCache).forEach((key:string)=>{
             let t:Texture = this.renderableCache[key].texture;

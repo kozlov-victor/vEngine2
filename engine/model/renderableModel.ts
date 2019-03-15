@@ -302,7 +302,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
     on(eventName:string,callBack:Function){
 
         if (DEBUG && !this.game.hasControl('Mouse')) {
-            if (MOUSE_EVENTS[eventName]!=undefined) {
+            if (!(eventName in MOUSE_EVENTS)) {
                 throw new DebugError('can not listen mouse events: mouse control is not added');
             }
         }

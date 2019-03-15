@@ -7,14 +7,15 @@ import {Texture} from './texture'
 
 export class FrameBuffer {
 
-    static currInstance:FrameBuffer = null;
-
+    private static currInstance:FrameBuffer = null;
     private gl:WebGLRenderingContext;
-    width:number;
-    height:number;
-    texture:Texture;
-    glRenderBuffer:WebGLRenderbuffer;
-    glFrameBuffer:WebGLRenderbuffer;
+
+    private readonly texture:Texture;
+    private glRenderBuffer:WebGLRenderbuffer;
+    private glFrameBuffer:WebGLRenderbuffer;
+
+    private readonly width:number;
+    private readonly height:number;
 
     constructor(gl:WebGLRenderingContext,width:number,height:number){
         if (DEBUG && !gl)

@@ -8,10 +8,10 @@ import {TextureInfo} from "../../programs/abstract/abstractDrawer";
 
 export class SimpleBlurFilter extends AbstractFilter {
 
-    rt_w:string;
-    rt_h:string;
-    u_direction_x:string;
-    u_direction_y:string;
+    private readonly rt_w:string;
+    private readonly rt_h:string;
+    private readonly u_direction_x:string;
+    private readonly u_direction_y:string;
 
     constructor(gl: WebGLRenderingContext) {
         super(gl);

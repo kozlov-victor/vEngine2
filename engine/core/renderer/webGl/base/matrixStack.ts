@@ -5,7 +5,7 @@ import MAT16 = mat4.MAT16;
 
 export class MatrixStack {
 
-    stack:Array<number[]> = []; // todo type matrix, not number[]
+    stack:MAT16[] = [];
 
     constructor(){
        this.restore();

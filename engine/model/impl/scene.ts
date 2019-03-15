@@ -14,6 +14,7 @@ import {EventEmitter} from "@engine/core/misc/eventEmitter";
 import {removeFromArray} from "@engine/core/misc/object";
 import {DebugError} from "@engine/debugError";
 import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
+import {AbstractRenderer} from "@engine/core/renderer/abstract/abstractRenderer";
 
 
 export class Scene implements Revalidatable {
@@ -169,9 +170,7 @@ export class Scene implements Revalidatable {
 
         this.beforeRender();
 
-        let renderer = this.game.getRenderer();
-        if (this.useBG) renderer.clearColor(this.colorBG);
-        else renderer.clear();
+        let renderer:AbstractRenderer = this.game.getRenderer();
         renderer.beginFrameBuffer();
         if (this.useBG) renderer.clearColor(this.colorBG);
         else renderer.clear();

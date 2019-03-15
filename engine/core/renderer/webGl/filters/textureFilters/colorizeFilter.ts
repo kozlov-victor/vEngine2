@@ -8,7 +8,7 @@ import {Color} from "../../../color";
 
 export class ColorizeFilter extends AbstractFilter{
 
-    private uPixelColor: string;
+    private readonly uPixelColor: string;
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
