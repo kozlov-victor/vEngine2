@@ -11,9 +11,9 @@ export class BlackWhiteFilter extends AbstractFilter{
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
-        this.spriteRectDrawer.prepareShaderGenerator();
+        this.simpleRectDrawer.prepareShaderGenerator();
 
-        const programGen:ShaderGenerator = this.spriteRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.u_mixFactor = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_mixFactor');
         //language=GLSL
         programGen.setFragmentMainFn(`
@@ -26,7 +26,7 @@ export class BlackWhiteFilter extends AbstractFilter{
                 gl_FragColor = result;
             } 
         `);
-        this.spriteRectDrawer.initProgram();
+        this.simpleRectDrawer.initProgram();
         this.setMixFactor(0.8);
     }
 

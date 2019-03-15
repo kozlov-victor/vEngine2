@@ -17,31 +17,27 @@ const identity:number[] = mat4.makeIdentity();
 export abstract class AbstractFilter {
 
     protected gl:WebGLRenderingContext;
-    protected spriteRectDrawer:SimpleRectDrawer;
+    protected simpleRectDrawer:SimpleRectDrawer;
 
 
     protected constructor(gl:WebGLRenderingContext){
-        if (DEBUG && !gl) {
-            console.error(this);
-            throw new DebugError("can not create Filter, gl context not passed to constructor, expected: Filter(gl)");
-        }
         this.gl = gl;
-        this.spriteRectDrawer = new SimpleRectDrawer(this.gl);
+        this.simpleRectDrawer = new SimpleRectDrawer(this.gl);
     }
 
     setUniform(name:string,value:any){
-        this.spriteRectDrawer.setUniform(name,value);
+        this.simpleRectDrawer.setUniform(name,value);
     }
 
     doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
         destFrameBuffer.bind();
         let w:number = textureInfos[0].texture.size.width;
         let h:number = textureInfos[0].texture.size.height;
-        this.spriteRectDrawer.setUniform(this.spriteRectDrawer.u_textureMatrix,identity);
-        this.spriteRectDrawer.setUniform(this.spriteRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,w,h));
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,identity);
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,w,h));
         this.gl.clearColor(1,1,1,0);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        this.spriteRectDrawer.draw(textureInfos,undefined,null);
+        this.simpleRectDrawer.draw(textureInfos,undefined,null);
     }
 
 }

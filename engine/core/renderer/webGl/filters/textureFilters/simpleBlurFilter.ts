@@ -15,8 +15,8 @@ export class SimpleBlurFilter extends AbstractFilter {
 
     constructor(gl: WebGLRenderingContext) {
         super(gl);
-        this.spriteRectDrawer.prepareShaderGenerator();
-        const programGen:ShaderGenerator = this.spriteRectDrawer.gen;
+        this.simpleRectDrawer.prepareShaderGenerator();
+        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.rt_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
         this.rt_h = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
         this.u_direction_x = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_direction_x');
@@ -46,7 +46,7 @@ export class SimpleBlurFilter extends AbstractFilter {
             }
             `
         );
-        this.spriteRectDrawer.initProgram();
+        this.simpleRectDrawer.initProgram();
         this.setSize(0.5);
     }
 

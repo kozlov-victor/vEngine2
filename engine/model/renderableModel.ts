@@ -38,10 +38,11 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
     rigidBody:RigidShape;
     velocity = new Point2d(0,0);
 
-    protected _tweens:Tween[] = [];
+    protected _tweens:Tween[] = []; // todo repeated with scene
     protected _tweenMovies:TweenMovie[] = [];
-    protected _dirty = true;
     protected _timers:Timer[] = [];
+
+    protected _dirty = true;
     private   _layer:Layer;
 
     protected _rect:Rect = new Rect();

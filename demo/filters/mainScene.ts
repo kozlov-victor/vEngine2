@@ -10,6 +10,8 @@ import {PixelFilter} from "@engine/core/renderer/webGl/filters/textureFilters/pi
 import {PosterizeFilter} from "@engine/core/renderer/webGl/filters/textureFilters/posterizeFilter";
 import {SimpleBlurFilter} from "@engine/core/renderer/webGl/filters/textureFilters/simpleBlurFilter";
 import {Circle} from "@engine/model/impl/ui/drawable/circle";
+import {Tween} from "@engine/core/tween";
+import {TweenMovie} from "@engine/core/tweenMovie";
 
 
 export class MainScene extends Scene {
@@ -42,8 +44,7 @@ export class MainScene extends Scene {
         const ps:PosterizeFilter = new PosterizeFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
 
         const sb:SimpleBlurFilter = new SimpleBlurFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
-        sb.setSize(1);
-
+        sb.setSize(2);
 
         const circle:Circle = new Circle(this.game);
         circle.radius = 40;
@@ -53,33 +54,76 @@ export class MainScene extends Scene {
         circle.color = Color.RGB(0,100,12);
         this.appendChild(circle);
         circle.filters = [
-            //ps,sb
+            ps,sb
         ];
 
         const circle2:Circle = new Circle(this.game);
         circle2.radius = 40;
-        circle2.center.setXY(80,80);
+        circle2.center.setXY(80,120);
         circle2.color = Color.RGB(30,120,55);
         circle2.lineWidth = 2;
         circle2.color = Color.RGB(120,10,12);
         this.appendChild(circle2);
         circle2.filters = [
-            ps
+            pf
         ];
 
 
-        // this.logoObj.spriteSheet.filters = [
-        //     // cl,
-        //     // bw,
-        //     // pf,
-        //     // ps,
-        //     // sb,
-        // ];
-        // (window as any).logoObj = this.logoObj;
+        this.logoObj.spriteSheet.filters = [
+            ps,bw
+        ];
 
 
 
-        //this.filters.push(bw);
+
+
+        const t1:Tween = new Tween({
+            target:{val:0},
+            progress:(obj)=>{
+                sb.setSize(obj.val);
+                pf.setPixelSize(obj.val);
+            },
+            time:2000,
+            from:{val:0},
+            to:{val:5}
+        });
+
+        const t2:Tween = new Tween({
+            target:{val:5},
+            progress:(obj)=>{
+                sb.setSize(obj.val);
+                pf.setPixelSize(obj.val);
+            },
+            time:2000,
+            from:{val:5},
+            to:{val:0}
+        });
+
+        const tm:TweenMovie = this.tweenMovie();
+        tm.tween(0,{
+            target:{val:0},
+            progress:(obj)=>{
+                sb.setSize(obj.val);
+                pf.setPixelSize(obj.val+0.1);
+            },
+            time:2000,
+            from:{val:0},
+            to:{val:5}
+        });
+        tm.tween(2000,{
+            target:{val:5},
+            progress:(obj)=>{
+                sb.setSize(obj.val);
+                pf.setPixelSize(obj.val+0.1);
+            },
+            time:2000,
+            from:{val:5},
+            to:{val:0}
+        });
+        tm.loop(true);
+
+
+        this.filters.push(pf);
     }
 
 }

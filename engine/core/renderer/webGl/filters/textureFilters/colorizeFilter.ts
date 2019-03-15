@@ -12,9 +12,9 @@ export class ColorizeFilter extends AbstractFilter{
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
-        this.spriteRectDrawer.prepareShaderGenerator();
+        this.simpleRectDrawer.prepareShaderGenerator();
 
-        const programGen:ShaderGenerator = this.spriteRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.uPixelColor = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'uPixelColor');
         //language=GLSL
         programGen.setFragmentMainFn(`
@@ -25,7 +25,7 @@ export class ColorizeFilter extends AbstractFilter{
                 gl_FragColor = result;
             }
         `);
-        this.spriteRectDrawer.initProgram();
+        this.simpleRectDrawer.initProgram();
         this.setColor(Color.NONE);
     }
 

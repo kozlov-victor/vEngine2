@@ -15,6 +15,8 @@ import {removeFromArray} from "@engine/core/misc/object";
 import {DebugError} from "@engine/debugError";
 import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
 import {AbstractRenderer} from "@engine/core/renderer/abstract/abstractRenderer";
+import {Tween, TweenDescription} from "@engine/core/tween";
+import {Timer} from "@engine/core/timer";
 
 
 export class Scene implements Revalidatable {
@@ -31,10 +33,12 @@ export class Scene implements Revalidatable {
 
     public readonly resourceLoader: ResourceLoader;
 
-    private _tweenMovies:TweenMovie[] = []; // todo lazy?
     private _layers:Layer[] = [];
     private _uiLayer:Layer;
 
+    protected _tweens:Tween[] = []; // todo repeated with renderablemodel
+    protected _tweenMovies:TweenMovie[] = [];
+    protected _timers:Timer[] = [];
 
     constructor(protected game:Game) {
         this.tileMap = new TileMap(game);
@@ -58,9 +62,29 @@ export class Scene implements Revalidatable {
         return this._uiLayer;
     }
 
-    addTweenMovie(tm:TweenMovie){
-        this._tweenMovies.push(tm);
+
+    tween(desc:TweenDescription):Tween{
+        let t:Tween = new Tween(desc);
+        this._tweens.push(t);
+        return t;
     }
+
+    addTween(t:Tween):void{
+        this._tweens.push(t);
+    }
+
+    tweenMovie():TweenMovie{
+        let tm:TweenMovie = new TweenMovie(this.game);
+        this._tweenMovies.push(tm);
+        return tm;
+    }
+
+    setTimer(callback:Function,interval:number):Timer{
+        let t:Timer = new Timer(callback,interval);
+        this._timers.push(t);
+        return t;
+    }
+
     getAllGameObjects(){
         let res = []; // todo optimize
         const ONE = 1;
@@ -116,6 +140,18 @@ export class Scene implements Revalidatable {
     update(currTime:number,deltaTime:number){
 
         this.beforeUpdate();
+
+        this._tweens.forEach((t:Tween, index:number)=>{
+            t.update(currTime);
+            if (t.isCompleted()) this._tweens.splice(index,1);
+        });
+        this._tweenMovies.forEach((t:TweenMovie,index:number)=>{
+            t.update(currTime);
+            if (t.isCompleted()) this._tweenMovies.splice(index,1);
+        });
+        this._timers.forEach((t:Timer)=>{
+            t.onUpdate(currTime);
+        });
 
         let layers = this._layers;
         for (let l of layers) {
