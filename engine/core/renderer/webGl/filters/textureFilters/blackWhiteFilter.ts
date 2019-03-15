@@ -7,7 +7,7 @@ import {GL_TYPE} from "../../base/shaderProgramUtils";
 
 export class BlackWhiteFilter extends AbstractFilter{
 
-    private u_mixFactor:string;
+    private readonly u_mixFactor:string;
 
     constructor(gl:WebGLRenderingContext){
         super(gl);

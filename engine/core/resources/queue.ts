@@ -4,8 +4,8 @@ import {DebugError} from "@engine/debugError";
 
 export class Queue{
 
-    private tasksResolved = 0;
-    private tasks:Array<Function> = [];
+    private tasksResolved:number = 0;
+    private tasks:Function[] = [];
     private tasksProgressById:{[taskId:string]:number} = {};
     private completed:boolean = false;
 
@@ -16,7 +16,7 @@ export class Queue{
 
     }
 
-    private size(){
+    private size():number{
         return this.tasks.length;
     }
 

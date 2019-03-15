@@ -34,7 +34,7 @@ export abstract class AbstractFilter {
     }
 
     doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
-        if (destFrameBuffer) destFrameBuffer.bind();
+        destFrameBuffer.bind();
         let w:number = textureInfos[0].texture.size.width;
         let h:number = textureInfos[0].texture.size.height;
         this.spriteRectDrawer.setUniform(this.spriteRectDrawer.u_textureMatrix,identity);

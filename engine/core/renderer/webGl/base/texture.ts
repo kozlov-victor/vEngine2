@@ -13,44 +13,7 @@ const isPowerOf2 = function(value:number):boolean {
     return (value & (value - 1)) === 0;
 };
 
-// array of two frameBuffer for filters to apply
-class TextureFilterBuffer {
 
-    gl:WebGLRenderingContext;
-    buffers:[FrameBuffer,FrameBuffer];
-    parent:Texture;
-
-    constructor(parent:Texture){
-        this.parent = parent;
-    }
-
-    instantiate(gl:WebGLRenderingContext){
-        this.gl = gl;
-        this.buffers = [
-            new FrameBuffer(gl,this.parent.size.width,this.parent.size.height),
-            new FrameBuffer(gl,this.parent.size.width,this.parent.size.height)
-        ];
-    }
-
-    flip(){
-        let tmp = this.buffers[0];
-        this.buffers[0] = this.buffers[1];
-        this.buffers[1] = tmp;
-    }
-
-    getSourceBuffer():FrameBuffer{
-        return this.buffers[0];
-    }
-
-    getDestBuffer():FrameBuffer{
-        return this.buffers[1];
-    }
-
-    destroy(){
-        if (this.buffers) this.buffers.forEach((b:FrameBuffer)=>b.destroy());
-    }
-
-}
 
 export class Texture {
 
@@ -58,7 +21,6 @@ export class Texture {
     tex:WebGLTexture = null;
     size:Size = new Size(0,0);
     isPowerOfTwo:boolean = false;
-    _texFilterBuff:TextureFilterBuffer = null;
 
     private static MAX_TEXTURE_IMAGE_UNITS:number = 0;
 
@@ -81,7 +43,6 @@ export class Texture {
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
             new Uint8Array([0, 255, 0, 255]));
         gl.bindTexture(gl.TEXTURE_2D, this.tex);
-        this._texFilterBuff = new TextureFilterBuffer(this);
     }
 
 
@@ -98,7 +59,7 @@ export class Texture {
                 throw new DebugError("texture.setImage: if image is null, width and height must be specified: tex.setImage(null,w,h)");
         }
 
-        const gl = this.gl;
+        const gl:WebGLRenderingContext = this.gl;
         if (img) this.size.setWH(img.width,img.height);
         else this.size.setWH(width,height);
         //gl.activeTexture(gl.TEXTURE0);
@@ -123,26 +84,6 @@ export class Texture {
         }
         gl.bindTexture(gl.TEXTURE_2D, null);
 
-    }
-
-    applyFilters(filters:AbstractFilter[]):Texture{
-        let len:number = filters.length;
-        if (len===0) return this;
-        if (!this._texFilterBuff.buffers)
-            this._texFilterBuff.instantiate(this.gl);
-        let filter:AbstractFilter = filters[0];
-
-        let texInfo:TextureInfo[] = [{texture:this,name:'texture'}]; // todo now to make this array reusable?
-        filter.doFilter(texInfo,this._texFilterBuff.getDestBuffer());
-        for (let i:number=1;i<len;i++){
-            this._texFilterBuff.flip();
-            let texInfo:TextureInfo[] = [{texture:this._texFilterBuff.getSourceBuffer().texture,name:'texture'}];
-            filters[i].doFilter(
-                texInfo, this._texFilterBuff.getDestBuffer()
-            );
-        }
-        this._texFilterBuff.flip();
-        return this._texFilterBuff.getSourceBuffer().texture;
     }
 
     bind(name:string,i:number,program:ShaderProgram) { // uniform eq to 0 by default
@@ -182,13 +123,11 @@ export class Texture {
         return pixels;
     }
 
-
     destroy(){
-        if (this._texFilterBuff) this._texFilterBuff.destroy();
         this.gl.deleteTexture(this.tex);
     }
 
-    getSize (){
+    getSize(){
         return this.size;
     }
 

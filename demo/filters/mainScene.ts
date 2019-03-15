@@ -9,6 +9,7 @@ import {ColorizeFilter} from "@engine/core/renderer/webGl/filters/textureFilters
 import {PixelFilter} from "@engine/core/renderer/webGl/filters/textureFilters/pixelFilter";
 import {PosterizeFilter} from "@engine/core/renderer/webGl/filters/textureFilters/posterizeFilter";
 import {SimpleBlurFilter} from "@engine/core/renderer/webGl/filters/textureFilters/simpleBlurFilter";
+import {Circle} from "@engine/model/impl/ui/drawable/circle";
 
 
 export class MainScene extends Scene {
@@ -43,28 +44,40 @@ export class MainScene extends Scene {
         const sb:SimpleBlurFilter = new SimpleBlurFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
         sb.setSize(1);
 
-        this.logoObj.spriteSheet.filters = [
-            cl,
-            bw,
-            pf,
-            ps,
-            sb,
+
+        const circle:Circle = new Circle(this.game);
+        circle.radius = 40;
+        circle.center.setXY(50,50);
+        circle.color = Color.RGB(30,40,55);
+        circle.lineWidth = 2;
+        circle.color = Color.RGB(0,100,12);
+        this.appendChild(circle);
+        circle.filters = [
+            //ps,sb
         ];
-        (window as any).logoObj = this.logoObj;
+
+        const circle2:Circle = new Circle(this.game);
+        circle2.radius = 40;
+        circle2.center.setXY(80,80);
+        circle2.color = Color.RGB(30,120,55);
+        circle2.lineWidth = 2;
+        circle2.color = Color.RGB(120,10,12);
+        this.appendChild(circle2);
+        circle2.filters = [
+            ps
+        ];
 
 
-        // const circle:Circle = new Circle(this.game);
-        // circle.radius = 40;
-        // circle.center.setXY(50,50);
-        // circle.color = Color.RGB(30,40,55);
-        // circle.lineWidth = 2;
-        // circle.color = Color.RGB(0,100,12);
-        // this.appendChild(circle);
-        // circle.filters = [cl,
-        //     bw,
-        //     pf,
-        //     ps,
-        //     sb];
+        // this.logoObj.spriteSheet.filters = [
+        //     // cl,
+        //     // bw,
+        //     // pf,
+        //     // ps,
+        //     // sb,
+        // ];
+        // (window as any).logoObj = this.logoObj;
+
+
 
         //this.filters.push(bw);
     }

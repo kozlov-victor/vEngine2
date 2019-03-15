@@ -1,4 +1,4 @@
-
+//language=GLSL
 export const vertexSource:string = `
 
 attribute vec4 a_position;
@@ -19,6 +19,7 @@ void main() {
 }
 `;
 
+//language=GLSL
 export const fragmentSource:string = `
 
 precision highp float;

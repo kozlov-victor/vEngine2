@@ -10,8 +10,8 @@ import {FrameBuffer} from "../../base/frameBuffer";
 
 export class PosterizeFilter extends AbstractFilter {
 
-    private gamma:string;
-    private numColors:string;
+    private readonly gamma:string;
+    private readonly numColors:string;
 
     constructor(gl: WebGLRenderingContext) {
         super(gl);
