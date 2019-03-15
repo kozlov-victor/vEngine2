@@ -73,10 +73,8 @@ export class Scene implements Revalidatable {
         this._tweens.push(t);
     }
 
-    tweenMovie():TweenMovie{
-        let tm:TweenMovie = new TweenMovie(this.game);
+    addTweenMovie(tm:TweenMovie){
         this._tweenMovies.push(tm);
-        return tm;
     }
 
     setTimer(callback:Function,interval:number):Timer{

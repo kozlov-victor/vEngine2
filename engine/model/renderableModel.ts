@@ -98,10 +98,8 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         return t;
     }
 
-    tweenMovie():TweenMovie{
-        let tm:TweenMovie = new TweenMovie(this.game);
+    addTweenMovie(tm:TweenMovie){
         this._tweenMovies.push(tm);
-        return tm;
     }
 
     findChildrenById(id:string):RenderableModel{

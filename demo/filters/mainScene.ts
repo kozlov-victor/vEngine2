@@ -73,33 +73,7 @@ export class MainScene extends Scene {
             ps,bw
         ];
 
-
-
-
-
-        const t1:Tween = new Tween({
-            target:{val:0},
-            progress:(obj)=>{
-                sb.setSize(obj.val);
-                pf.setPixelSize(obj.val);
-            },
-            time:2000,
-            from:{val:0},
-            to:{val:5}
-        });
-
-        const t2:Tween = new Tween({
-            target:{val:5},
-            progress:(obj)=>{
-                sb.setSize(obj.val);
-                pf.setPixelSize(obj.val);
-            },
-            time:2000,
-            from:{val:5},
-            to:{val:0}
-        });
-
-        const tm:TweenMovie = this.tweenMovie();
+        const tm:TweenMovie = new TweenMovie(this.game);
         tm.tween(0,{
             target:{val:0},
             progress:(obj)=>{
@@ -121,6 +95,7 @@ export class MainScene extends Scene {
             to:{val:0}
         });
         tm.loop(true);
+        this.addTweenMovie(tm);
 
 
         this.filters.push(pf);
