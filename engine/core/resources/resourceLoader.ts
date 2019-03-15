@@ -32,7 +32,7 @@ export class ResourceLoader {
     loadSound(url:string):ResourceLink {
         const link:ResourceLink = ResourceLink.create();
         this.q.addTask(()=>{
-            this.game.audioPlayer.loadSound(
+            this.game.getAudioPlayer().loadSound(
                 url, link,
                 ()=>this.q.resolveTask(url)
             );

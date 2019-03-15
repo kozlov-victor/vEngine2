@@ -8,8 +8,8 @@ import {ColliderEngine} from "./physics/colliderEngine";
 import {DebugError} from "../debugError";
 import {AudioPlayer} from "./media/audioPlayer";
 import {Clazz} from "@engine/core/misc/clazz";
-import {UIBuilder} from "@engine/model/impl/ui/uiBuilder";
 import {IControl} from "@engine/core/control/abstract/icontrol";
+import {IAudioPlayer} from "@engine/core/media/interface/iAudioPlayer";
 
 export enum SCALE_STRATEGY {
     NO_SCALE,
@@ -27,8 +27,8 @@ export class Game {
     private _destroyed:boolean = false;
     private _renderer:AbstractRenderer;
     private _controls:IControl[] = [];
+    private audioPlayer:IAudioPlayer;
 
-    audioPlayer:AudioPlayer;
     scale:Point2d = new Point2d(1,1);
     pos:Point2d = new Point2d(0,0);
     width:number = 320;
@@ -38,7 +38,6 @@ export class Game {
     lightArray:LightArray;
     collider:ColliderEngine;
     camera:Camera;
-    uiBuilder:UIBuilder;
     scaleStrategy:number = SCALE_STRATEGY.FIT;
 
     private static UPDATE_TIME_RATE = 20;
@@ -47,8 +46,6 @@ export class Game {
         this.collider = new ColliderEngine(this);
         this.camera = new Camera(this);
         this.lightArray = new LightArray(this);
-        this.uiBuilder = new UIBuilder(this);
-        this.audioPlayer = new AudioPlayer(this);
         if (DEBUG) (window as any)['game'] = this;
     }
 
@@ -63,6 +60,18 @@ export class Game {
         }
         this._controls.push(instance);
         instance.listenTo();
+    }
+
+
+    setAudioPLayer(p:IAudioPlayer){
+        this.audioPlayer = p;
+    }
+
+    getAudioPlayer():IAudioPlayer{
+        if (DEBUG && !this.audioPlayer) {
+            throw new DebugError('audio player is not set');
+        }
+        return this.audioPlayer;
     }
 
 
@@ -158,7 +167,6 @@ export class Game {
             for (let c of this._controls) {
                 c.update();
             }
-            this.audioPlayer.update(currTime,dTime);
             currTime += Game.UPDATE_TIME_RATE;
             loopCnt++;
             if (loopCnt>10) { // to avoid to much iterations

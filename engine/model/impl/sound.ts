@@ -18,17 +18,17 @@ export class Sound extends Resource implements Revalidatable {
     }
 
     play(){
-        this.game.audioPlayer.play(this);
+        this.game.getAudioPlayer().play(this);
     }
     stop(){
-        this.game.audioPlayer.stop(this);
+        this.game.getAudioPlayer().stop(this);
     }
     pause(){
         throw new DebugError('not implemented');
     }
     setGain(val:number){
         this._gain = val;
-        this.game.audioPlayer.setGain(this);
+        this.game.getAudioPlayer().setGain(this);
     }
     getGain():number{
         return this._gain;

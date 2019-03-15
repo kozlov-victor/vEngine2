@@ -6,9 +6,10 @@ import {AudioNode} from "./audioNode";
 import {Game} from "../game";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {BasicAudioContext} from "@engine/core/media/context/basicAudioContext";
+import {IAudioPlayer} from "@engine/core/media/interface/iAudioPlayer";
 
 
-export  class AudioPlayer {
+export  class AudioPlayer implements IAudioPlayer {
 
     private readonly audioContext:BasicAudioContext;
     private audioNodeSet:AudioNodeSet;

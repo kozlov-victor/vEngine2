@@ -102,7 +102,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let maxSize:number = Math.max(rw,rh);
         let offsetX:number = 0,offsetY:number = 0;
         let sd:ShapeDrawer = this.shapeDrawer;
-        if (maxSize==rw) {
+        if (maxSize===rw) {
             sd.setUniform(sd.u_width,1);
             sd.setUniform(sd.u_height,rh/rw);
             offsetY = (maxSize - rh)/2;
