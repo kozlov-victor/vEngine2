@@ -1,4 +1,4 @@
-import {IControl} from "@engine/core/control/abstract/icontrol";
+import {IControl} from "@engine/core/control/abstract/iControl";
 import {AbstractKeypad, KEYBOARD_EVENT} from "@engine/core/control/abstract/abstractKeypad";
 
 

@@ -1,6 +1,6 @@
 
 import {Game} from "../game";
-import {IControl} from "@engine/core/control/abstract/icontrol";
+import {IControl} from "@engine/core/control/abstract/iControl";
 import {AbstractKeypad, KEYBOARD_EVENT} from "@engine/core/control/abstract/abstractKeypad";
 import {KEYBOARD_KEY} from "@engine/core/control/keyboard";
 

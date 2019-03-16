@@ -5,7 +5,7 @@ import {Game} from "../../game";
 import {Scene} from "@engine/model/impl/scene";
 import {Rect} from "../../geometry/rect";
 import {RenderableModel} from "@engine/model/renderableModel";
-import {IControl} from "@engine/core/control/abstract/icontrol";
+import {IControl} from "@engine/core/control/abstract/iControl";
 import {DebugError} from "@engine/debugError";
 import {IMousePoint, MousePoint} from "@engine/core/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
