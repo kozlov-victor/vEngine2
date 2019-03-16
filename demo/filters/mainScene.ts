@@ -16,6 +16,7 @@ import {BarrelDistortionFilter} from "@engine/core/renderer/webGl/filters/textur
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {NoiseFilter} from "@engine/core/renderer/webGl/filters/textureFilters/noiseFilter";
 import {NoiseHorizontalFilter} from "@engine/core/renderer/webGl/filters/textureFilters/noiseHorizontalFilter";
+import {LowResolutionFilter} from "@engine/core/renderer/webGl/filters/textureFilters/lowResolutionFilter";
 
 
 export class MainScene extends Scene {
@@ -54,6 +55,7 @@ export class MainScene extends Scene {
         const barrel:BarrelDistortionFilter = new BarrelDistortionFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
         const noise:NoiseFilter = new NoiseFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
         const noiseHoriz:NoiseHorizontalFilter = new NoiseHorizontalFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
+        const lowResolution:LowResolutionFilter = new LowResolutionFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
 
         const circle:Circle = new Circle(this.game);
         circle.radius = 40;
