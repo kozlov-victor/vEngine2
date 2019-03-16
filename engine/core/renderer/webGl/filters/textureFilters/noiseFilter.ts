@@ -31,6 +31,7 @@ export class NoiseFilter extends AbstractFilter {
                 return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
             }
             vec4 noise(vec2 uv) {
+                vec4 colorOrig = texture2D(texture, uv);
                 vec3 color = texture2D(texture, uv).rgb;
 
                 // Random number.
@@ -44,7 +45,7 @@ export class NoiseFilter extends AbstractFilter {
                 // Combined colors.
                 color = mix(color, noise, u_noise_intensity);
 
-                return vec4(color, texture2D(texture, uv)).rgba;
+                return vec4(color, colorOrig.a);
             }
         `);
         //language=GLSL

@@ -55,6 +55,7 @@ export class MainScene extends Scene {
         const barrel:BarrelDistortionFilter = new BarrelDistortionFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
         const noise:NoiseFilter = new NoiseFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
         const noiseHoriz:NoiseHorizontalFilter = new NoiseHorizontalFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
+
         const lowResolution:LowResolutionFilter = new LowResolutionFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
 
         const circle:Circle = new Circle(this.game);
@@ -110,8 +111,7 @@ export class MainScene extends Scene {
         tm.loop(true);
         this.addTweenMovie(tm);
 
-
-        this.filters.push(noiseHoriz,barrel);
+        this.filters.push(noise,noiseHoriz,barrel);
     }
 
 }
