@@ -74,6 +74,7 @@ window.addEventListener('error',function(e:any){
   <div class="errorBlock"> 
         <style>
             .errorHeader {text-align: center;}
+            .errorText {white-space: pre-wrap;}
             .errorCol {color: #f30000;text-decoration: underline;}
             .errorRow {
                 color: #bf1313;
@@ -100,7 +101,7 @@ window.addEventListener('error',function(e:any){
        </style>
        <div class="errorClose" onclick="this.closest('.errorBlockHolder').remove();">x</div>
        <h1 class="errorHeader">Runtime error!</h1>
-       <h3>${runtimeInfo}</h3>
+       <h3 class="errorText">${runtimeInfo}</h3>
        <div>${filename}</div>
        <div>-------------------</div>
        <pre>$_content</pre>
