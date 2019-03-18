@@ -162,7 +162,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             ]
         );
         sd.setUniform(sd.u_texOffset,[img.offset.x/maxSize,img.offset.y/maxSize]);
-        this.shapeDrawer.draw(texInfo,undefined,null);
+        this.shapeDrawer.draw(texInfo);
 
         this.afterItemDraw(img.filters);
 
@@ -188,7 +188,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let texInfo:TextureInfo[] = [{texture:g3d.texture,name:'u_texture'}];
 
         this.gl.enable(this.gl.DEPTH_TEST);
-        this.modelDrawer.draw(texInfo,uniforms);
+        this.modelDrawer.draw(texInfo);// todo uniforms
         this.modelDrawer.unbind();
         this.gl.disable(this.gl.DEPTH_TEST);
     };
@@ -207,7 +207,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
         sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
         let texInfo:TextureInfo[] = [{texture:this.nullTexture,name:'texture'}];
-        sd.draw(texInfo,undefined,null);
+        sd.draw(texInfo);
 
         this.afterItemDraw(rectangle.filters);
     }
@@ -256,7 +256,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_rectOffsetLeft,1);
         sd.setUniform(sd.u_rectOffsetTop,1);
         let texInfo:TextureInfo[] = [{texture:this.nullTexture,name:'texture'}];
-        this.shapeDrawer.draw(texInfo,undefined,null);
+        this.shapeDrawer.draw(texInfo);
 
         this.afterItemDraw(ellipse.filters);
 
@@ -326,7 +326,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.gl.viewport(0, 0, this.fullScreenSize.width,this.fullScreenSize.height);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX);
-        this.simpleRectDrawer.draw([{texture:texToDraw,name:'texture'}],null); // todo
+        this.simpleRectDrawer.draw([{texture:texToDraw,name:'texture'}]); // todo
 
         this.restore();
     };
@@ -342,7 +342,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.finalFrameBuffer.bind();
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX);
-        this.simpleRectDrawer.draw([{texture:filteredTexture,name:'texture'}],null); // todo
+        this.simpleRectDrawer.draw([{texture:filteredTexture,name:'texture'}]);
     }
 
     getError():number{

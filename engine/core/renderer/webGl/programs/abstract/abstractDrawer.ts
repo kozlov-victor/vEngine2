@@ -92,7 +92,7 @@ export class AbstractDrawer implements IDrawer{
         this.bufferInfo.draw();
     }
 
-    draw(textureInfos:TextureInfo[],unused2:UniformsInfo,unused:FrameBuffer = null){
+    draw(textureInfos:TextureInfo[]){
         this.bind();
         Object.keys(this.uniformCache).forEach((name:string)=>this._setUniform(name,this.uniformCache[name]));
         if (textureInfos) {

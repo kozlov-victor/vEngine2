@@ -37,7 +37,7 @@ export abstract class AbstractFilter {
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,w,h));
         this.gl.clearColor(1,1,1,0);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        this.simpleRectDrawer.draw(textureInfos,undefined,null);
+        this.simpleRectDrawer.draw(textureInfos);
     }
 
 }
