@@ -63,8 +63,8 @@ export class Game {
     }
 
 
-    setAudioPLayer(p:IAudioPlayer){
-        this.audioPlayer = p;
+    setAudioPLayer(p:Clazz<IAudioPlayer>){
+        this.audioPlayer = new p(this);
     }
 
     getAudioPlayer():IAudioPlayer{

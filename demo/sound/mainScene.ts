@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private resourceLink:ResourceLink;
 
     onPreloading() {
-        this.game.setAudioPLayer(new AudioPlayer(this.game));
+        this.game.setAudioPLayer(AudioPlayer);
         this.resourceLink = this.resourceLoader.loadSound('../assets/sound.mp3');
 
         const sound:Sound = new Sound(this.game);
