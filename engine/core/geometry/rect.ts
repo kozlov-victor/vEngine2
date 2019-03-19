@@ -118,7 +118,7 @@ export class Rect extends ObservableEntity {
     }
 
     static fromPool():Rect {
-        return Rect.rectPool.getNextObject();
+        return Rect.rectPool.getFreeObject();
     }
 
 }

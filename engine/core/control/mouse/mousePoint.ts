@@ -4,7 +4,8 @@ import {RenderableModel} from "@engine/model/renderableModel";
 import {Point2d} from "@engine/core/geometry/point2d";
 import {Scene} from "@engine/model/impl/scene";
 import {MouseEventEx} from "@engine/declarations";
-import {ObjectPool} from "@engine/core/misc/objectPool";
+import {ObjectPool, Releasealable} from "@engine/core/misc/objectPool";
+
 export interface IMousePoint {
 
     screenX:number,
@@ -19,7 +20,7 @@ export interface IMousePoint {
 }
 
 
-export class MousePoint extends Point2d{
+export class MousePoint extends Point2d {
 
     public screenX:number;
     public screenY:number;
@@ -34,19 +35,8 @@ export class MousePoint extends Point2d{
         super();
     }
 
-
     static fromPool():MousePoint{
-        return MousePoint.mousePointsPool.getNextObject();
-    }
-
-    static unTransform(another:MousePoint):MousePoint{
-        let p:MousePoint = MousePoint.fromPool();
-        p.screenX = another.screenX;
-        p.screenY = another.screenY;
-        p.id = another.id;
-        p.target = another.target;
-        p.setXY(p.screenX,p.screenY);
-        return p;
+        return MousePoint.mousePointsPool.getFreeObject();
     }
 
 }

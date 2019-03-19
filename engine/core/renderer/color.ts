@@ -1,6 +1,6 @@
 
 
-import {ObjectPool} from "../misc/objectPool";
+import {ObjectPool, Releasealable} from "../misc/objectPool";
 import {Cloneable} from "@engine/declarations";
 
 
@@ -11,7 +11,7 @@ export interface ColorJSON {
     a:number
 }
 
-export class Color implements Cloneable<Color>{
+export class Color implements Cloneable<Color>, Releasealable{
 
     private r:number;
     private g:number;
@@ -88,9 +88,23 @@ export class Color implements Cloneable<Color>{
         return new Color(this.r,this.g,this.b,this.a);
     }
 
+    private _captured:boolean = false;
+
+    capture(): void {
+        this._captured = true;
+    }
+
+    isCaptured(): boolean {
+        return this._captured;
+    }
+
+    release(): void {
+        this._captured = false;
+    }
+
     private static getFromPool():Color{
         if (Color.objectPool===undefined) Color.objectPool = new ObjectPool<Color>(Color);
-        return Color.objectPool.getNextObject();
+        return Color.objectPool.getFreeObject();
     }
 
     static RGB(r:number,g:number,b:number,a?:number):Color{

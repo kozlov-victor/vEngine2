@@ -121,9 +121,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             sd.setUniform(sd.u_rectOffsetLeft,offsetX/maxSize);
             sd.setUniform(sd.u_rectOffsetTop,0);
         }
+        const rect:Rect = Rect.fromPool();
+        const size:Size = Size.fromPool();
         sd.setUniform(sd.u_vertexMatrix,makePositionMatrix(
-            Rect.fromPool().setXYWH( -offsetX, -offsetY,maxSize,maxSize),
-            Size.fromPool().setWH(this.game.width,this.game.height)));
+            rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize),
+            size.setWH(this.game.width,this.game.height)));
+        rect.release();
+        size.release();
         sd.setUniform(sd.u_lineWidth,Math.min(shape.lineWidth/maxSize,1));
         sd.setUniform(sd.u_color,shape.color.asGL());
         sd.setUniform(sd.u_alpha,shape.alpha);
@@ -153,12 +157,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
         sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
         sd.setUniform(sd.u_fillType,FILL_TYPE.TEXTURE);
+        const {width: texWidth,height: texHeight} = texture.getSize();
+        const {x:srcRectX,y:srcRectY,width:srcRectWidth,height:srcRectHeight} = img.srcRect;
         sd.setUniform(sd.u_texRect,
             [
-                img.srcRect.x/texture.getSize().width,
-                img.srcRect.y/texture.getSize().height,
-                img.srcRect.width/texture.getSize().width,
-                img.srcRect.height/texture.getSize().height
+                srcRectX/texWidth,
+                srcRectY/texHeight,
+                srcRectWidth/texWidth,
+                srcRectHeight/texHeight
             ]
         );
         sd.setUniform(sd.u_texOffset,[img.offset.x/maxSize,img.offset.y/maxSize]);

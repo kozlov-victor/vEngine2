@@ -153,7 +153,7 @@ export class Game {
 
         if (DEBUG) {
             this.fps = ~~(1000 / this._deltaTime);
-            let renderError = this._renderer.getError();
+            let renderError:number = this._renderer.getError();
             if (renderError) throw new DebugError(`render error with code ${renderError}`);
         }
 

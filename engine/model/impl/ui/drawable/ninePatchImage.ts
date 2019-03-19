@@ -5,7 +5,6 @@ import {DebugError} from "@engine/debugError";
 import {Size} from "@engine/core/geometry/size";
 import {TextureInfo} from "@engine/core/renderer/webGl/programs/abstract/abstractDrawer";
 
-
 export class NinePatchImage extends Image {
 
     readonly type:string = 'NinePatchImage';

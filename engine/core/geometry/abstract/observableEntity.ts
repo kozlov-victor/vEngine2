@@ -1,6 +1,7 @@
 
 
 import {removeFromArray} from "@engine/core/misc/object";
+import {Releasealable} from "@engine/core/misc/objectPool";
 class State<T> {
 
     private currState:T[] = [];
@@ -20,10 +21,24 @@ class State<T> {
 
 }
 
-export abstract class ObservableEntity {
+export abstract class ObservableEntity implements Releasealable{
 
     protected _state = new State<number>();
     private _onChanged:Array<()=>void> = [];
+
+    private _captured:boolean = false;
+
+    capture(): void {
+        this._captured = true;
+    }
+
+    isCaptured(): boolean {
+        return this._captured;
+    }
+
+    release(): void {
+        this._captured = false;
+    }
 
     protected abstract checkObservableChanged():boolean;
 

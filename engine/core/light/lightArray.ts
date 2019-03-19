@@ -10,7 +10,7 @@ export class LightArray {
 
     static NUM_OF_LIGHT_IN_VIEW = 4;
 
-    private readonly lights:Array<PointLight>;
+    private readonly lights:PointLight[];
 
     constructor(game:Game){
         if (DEBUG && !game) throw new DebugError(`game instance is not passed to LightArray constructor`);

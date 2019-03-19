@@ -49,8 +49,8 @@ export class Scene implements Revalidatable {
     }
 
     revalidate(){
-        if (this.width = 0) this.width = this.game.width;
-        if (this.height = 0) this.height = this.game.height;
+        if (this.width == 0) this.width = this.game.width = 0;
+        if (this.height == 0) this.height = this.game.height = 0;
     }
 
 
@@ -135,8 +135,8 @@ export class Scene implements Revalidatable {
 
     onDestroy(){}
 
-    update(currTime:number,deltaTime:number){
 
+    private updateMainFrame(currTime:number,deltaTime:number){
         this.beforeUpdate();
 
         this._tweens.forEach((t:Tween, index:number)=>{
@@ -158,6 +158,17 @@ export class Scene implements Revalidatable {
         this._uiLayer.update(currTime,deltaTime);
 
         this.onUpdate();
+    }
+
+
+    update(currTime:number,deltaTime:number){
+        if (!this.resourceLoader.isCompleted()) {
+            if (this.preloadingGameObject!==undefined) {
+                this.preloadingGameObject.update(currTime,deltaTime);
+            }
+        } else {
+            this.updateMainFrame(currTime,deltaTime);
+        }
 
     }
 
@@ -180,10 +191,6 @@ export class Scene implements Revalidatable {
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
         this.onRender();
-
-        // this.game.repository.getArray('ParticleSystem').forEach((ps:ParticleSystem)=>{ // todo also while? or foreach
-        //     ps.render();
-        // });
 
         if (DEBUG) {
             this.game.getRenderer().restore();
@@ -241,5 +248,9 @@ export class Scene implements Revalidatable {
     }
     trigger(eventName:string,data?:any){
         if (this._emitter!==undefined) this._emitter.trigger(eventName,data);
+    }
+
+    destroy(){
+        this.onDestroy();
     }
 }

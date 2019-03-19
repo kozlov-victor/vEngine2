@@ -144,12 +144,14 @@ export class Camera {
     }
 
     _updateRect(){
-        let point00 = this.screenToWorld(Point2d.fromPool().setXY(0,0));
-        let pointWH = this.screenToWorld(Point2d.fromPool().setXY(this.game.width,this.game.height));
+        const p:Point2d = Point2d.fromPool();
+        let point00 = this.screenToWorld(p.setXY(0,0));
+        let pointWH = this.screenToWorld(p.setXY(this.game.width,this.game.height));
         this._rectScaled.setXYWH(
             point00.x,point00.y,
             pointWH.x - point00.x,pointWH.y - point00.y
         );
+        p.release();
     }
 
     render(){ //TRS - (transform rotate scale) reverted

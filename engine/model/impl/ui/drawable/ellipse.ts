@@ -31,7 +31,7 @@ export class Ellipse extends Shape implements Cloneable<Ellipse>{
 
     set radiusX(value: number) {
         this._radiusX = value;
-        this.width = value*2;
+        this.width = this._getMaxRadius()*2;
         this.center.forceTriggerChange();
     }
 
@@ -41,7 +41,7 @@ export class Ellipse extends Shape implements Cloneable<Ellipse>{
 
     set radiusY(value: number) {
         this._radiusY = value;
-        this.height = value*2;
+        this.height = this._getMaxRadius()*2;
         this.center.forceTriggerChange();
     }
 

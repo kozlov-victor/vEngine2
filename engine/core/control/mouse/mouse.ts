@@ -34,13 +34,17 @@ export class Mouse implements IControl {
         let screenX:number = (clientX - game.pos.x ) / game.scale.x;
         let screenY:number = (clientY - game.pos.y ) / game.scale.y;
 
-        let p:Point2d = game.camera.screenToWorld(Point2d.fromPool().setXY(screenX,screenY));
+        const screenPoint:Point2d = Point2d.fromPool();
+        screenPoint.setXY(screenX,screenY);
+        let p:Point2d = game.camera.screenToWorld(screenPoint);
+        screenPoint.release();
 
         let mousePoint:MousePoint = MousePoint.fromPool();
         mousePoint.set(p);
         mousePoint.screenX = screenX;
         mousePoint.screenY = screenY;
         mousePoint.id = (e as Touch).identifier  || 0; // (e as PointerEvent).pointerId
+        mousePoint.release();
         return mousePoint;
     }
 

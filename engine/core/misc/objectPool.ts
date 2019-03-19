@@ -1,35 +1,49 @@
 import {DebugError} from "../../debugError";
 
 
+export interface Releasealable {
+    release():void,
+    capture():void,
+    isCaptured():boolean
+}
 
-
-export class ObjectPool<T> {
+export class ObjectPool<T extends Releasealable> {
 
     private _pool:T[] = [];
-    private _cnt = 0;
-    private readonly _numberOfInstances:number;
-
     /**
      * 16 - nice magic value for default pool size
      * @param Class
      * @param {number} numberOfInstances
-     * @param {boolean} lazy -  if true array populated on demand
      */
-    constructor(private Class:any, numberOfInstances = 16,lazy:boolean = true){
-        this._numberOfInstances = numberOfInstances;
+    constructor(private Class:any, private numberOfInstances = 16){
         if (DEBUG && !Class) throw new DebugError(`can not instantiate ObjectPool: class not provided in constructor`);
-        if (!lazy) {
-            for (let i=0;i<numberOfInstances;i++){
-                this._pool.push(new Class());
+    }
+
+    getFreeObject():T{
+        for (let i:number=0;i<this.numberOfInstances;i++) {
+            let current:T = this._pool[i];
+            if (current===undefined) {
+                current = this._pool[i] = new this.Class();
+                current.capture();
+                return current;
+            }
+            else if (!current.isCaptured()) {
+                current.capture();
+                return current;
             }
         }
-
+        if (DEBUG) throw new DebugError(`can not get free object: no free object in pool`);
+        return undefined;
     }
 
-    getNextObject():T{
-        let index:number = this._cnt++ % this._numberOfInstances;
-        if (this._pool[index]===undefined) this._pool[index] = new this.Class();
-        return this._pool[index];
+    releaseObject(obj:T){
+        const indexOf:number = this._pool.indexOf(obj);
+        if (DEBUG && indexOf==-1) {
+            console.error(obj);
+            throw new DebugError(`can not release the object: it does not belong to the pool`);
+        }
+        this._pool[indexOf].release();
     }
+
 
 }

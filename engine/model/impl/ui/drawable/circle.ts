@@ -18,7 +18,7 @@ export class Circle extends Ellipse implements Cloneable<Circle>{
         this.radiusX = this.radiusY = val;
     }
 
-    get radius(){
+    get radius():number{
         return this._radius;
     }
 

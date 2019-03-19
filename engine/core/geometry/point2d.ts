@@ -1,9 +1,9 @@
 
-import {ObjectPool} from "../misc/objectPool";
+import {ObjectPool, Releasealable} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
 
 
-export class Point2d extends ObservableEntity{
+export class Point2d extends ObservableEntity {
 
     private _x:number = 0;
     private _y:number = 0;
@@ -12,7 +12,7 @@ export class Point2d extends ObservableEntity{
     private _arr:number[];
 
     static fromPool():Point2d{
-        return Point2d.pool.getNextObject();
+        return Point2d.pool.getFreeObject();
     }
 
 

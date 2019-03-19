@@ -1,7 +1,7 @@
 
-import {ObjectPool} from "../misc/objectPool";
+import {ObjectPool, Releasealable} from "../misc/objectPool";
 
-export class Size {
+export class Size implements Releasealable{
 
     width:number;
     height:number;
@@ -11,6 +11,20 @@ export class Size {
     constructor(width:number = 0,height:number = 0){
         this.width = width;
         this.height = height;
+    }
+
+    private _captured:boolean = false;
+
+    capture(): void {
+        this._captured = true;
+    }
+
+    isCaptured(): boolean {
+        return this._captured;
+    }
+
+    release(): void {
+        this._captured = false;
     }
 
     setW(width:number):Size{
@@ -35,7 +49,7 @@ export class Size {
     }
 
     static fromPool():Size {
-        return Size.rectPool.getNextObject();
+        return Size.rectPool.getFreeObject();
     }
 
 

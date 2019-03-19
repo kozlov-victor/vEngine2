@@ -1,7 +1,7 @@
 
 import {Rectangle} from "./rectangle";
-import {Color} from "../../../../core/renderer/color";
-import {Game} from "../../../../core/game";
+import {Color} from "@engine/core/renderer/color";
+import {Game} from "@engine/core/game";
 import {Cloneable} from "@engine/declarations";
 
 export class Border extends Rectangle implements Cloneable<Border>{
