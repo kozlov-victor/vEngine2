@@ -53,8 +53,8 @@ export class Button extends Container {
         return this._textField.getText();
     }
 
-    update(time:number,delta:number){
-        super.update(time,delta);
+    update(){
+        super.update();
     }
 
     draw():boolean{

@@ -124,10 +124,12 @@ export class ScrollInfo {
         this.onScroll();
     }
     
-    update(time:number,delta:number){
+    update(){
         if (!this._enabled) return;
 
         if (this._scrollVelocity) this.onScroll();
+
+        const delta:number = this.game.getDeltaTime();
 
         if (this._scrollVelocity) {
             this._scrollBy(this._scrollVelocity * delta /1000)
@@ -180,9 +182,9 @@ export abstract class ScrollableContainer extends Container {
     }
 
 
-    update(time:number,delta:number){
-        if (this.vScrollInfo) this.vScrollInfo.update(time,delta);
-        super.update(time,delta);
+    update(){
+        if (this.vScrollInfo) this.vScrollInfo.update();
+        super.update();
     }
 
 }

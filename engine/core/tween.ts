@@ -1,6 +1,7 @@
 
 
 import {EaseFn, Easing} from "./easing";
+import {Game} from "@engine/core/game";
 
 interface KeyVal {
     [key:string]:any
@@ -108,8 +109,9 @@ export class Tween {
     }
 
 
-    update(currTime:number){
+    update(){
         if (this._completed) return;
+        const currTime:number = Game.getInstance().getTime();
         this._currTime = currTime;
         if (!this._startedTime) this._startedTime = currTime;
         let curTweenTime:number = currTime - this._startedTime;

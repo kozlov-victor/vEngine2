@@ -22,10 +22,10 @@ import {Timer} from "@engine/core/timer";
 export class Scene implements Revalidatable {
 
     readonly type:string = 'Scene';
-    width:number;  // todo now is 0!!!
-    height:number; // todo now is 0!!!
+    width:number;
+    height:number;
     useBG:boolean = false;
-    colorBG = Color.WHITE;
+    colorBG = Color.WHITE.clone();
     tileMap:TileMap;
     ambientLight:AmbientLight;
     preloadingGameObject:RenderableModel;
@@ -49,8 +49,8 @@ export class Scene implements Revalidatable {
     }
 
     revalidate(){
-        if (this.width == 0) this.width = this.game.width = 0;
-        if (this.height == 0) this.height = this.game.height = 0;
+        if (this.width == 0) this.width = this.game.width;
+        if (this.height == 0) this.height = this.game.height;
     }
 
 
@@ -61,7 +61,6 @@ export class Scene implements Revalidatable {
     getUiLayer(): Layer {
         return this._uiLayer;
     }
-
 
     tween(desc:TweenDescription):Tween{
         let t:Tween = new Tween(desc);
@@ -136,38 +135,38 @@ export class Scene implements Revalidatable {
     onDestroy(){}
 
 
-    private updateMainFrame(currTime:number,deltaTime:number){
+    private updateMainFrame(){
         this.beforeUpdate();
 
         this._tweens.forEach((t:Tween, index:number)=>{
-            t.update(currTime);
+            t.update();
             if (t.isCompleted()) this._tweens.splice(index,1);
         });
         this._tweenMovies.forEach((t:TweenMovie,index:number)=>{
-            t.update(currTime);
+            t.update();
             if (t.isCompleted()) this._tweenMovies.splice(index,1);
         });
         this._timers.forEach((t:Timer)=>{
-            t.onUpdate(currTime);
+            t.onUpdate();
         });
 
         let layers = this._layers;
         for (let l of layers) {
-            l.update(currTime,deltaTime);
+            l.update();
         }
-        this._uiLayer.update(currTime,deltaTime);
+        this._uiLayer.update();
 
         this.onUpdate();
     }
 
 
-    update(currTime:number,deltaTime:number){
+    update(){
         if (!this.resourceLoader.isCompleted()) {
             if (this.preloadingGameObject!==undefined) {
-                this.preloadingGameObject.update(currTime,deltaTime);
+                this.preloadingGameObject.update();
             }
         } else {
-            this.updateMainFrame(currTime,deltaTime);
+            this.updateMainFrame();
         }
 
     }
@@ -194,8 +193,12 @@ export class Scene implements Revalidatable {
 
         if (DEBUG) {
             this.game.getRenderer().restore();
-            if (this.game.getRenderer().debugTextField) {
-                (this.game.getRenderer().debugTextField as TextField).update(this.game.getTime(),this.game.getDeltaTime());
+            if (
+                this.game.getRenderer().debugTextField &&
+                this.game.getRenderer().debugTextField.getFont().getResourceLink() &&
+                this.game.getRenderer().debugTextField.getFont().getResourceLink().getTarget()
+            ) {
+                this.game.getRenderer().debugTextField.update();
                 this.game.getRenderer().debugTextField.render();
             }
             this.game.getRenderer().restore();

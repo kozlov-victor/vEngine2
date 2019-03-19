@@ -86,9 +86,9 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         return this.spriteSheet.srcRect;
     }
 
-    update(time:number,delta:number) {
-        super.update(time,delta);
-        this._currFrameAnimation && this._currFrameAnimation.update(time);
+    update() {
+        super.update();
+        this._currFrameAnimation && this._currFrameAnimation.update();
     }
 
 

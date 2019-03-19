@@ -7,7 +7,6 @@ import {BasicAudioContext} from "@engine/core/media/context/basicAudioContext";
 import {Cloneable} from "@engine/declarations";
 
 
-
 interface Clazz<T> {
     new() : T;
 }
@@ -18,7 +17,7 @@ class CtxHolder {
         (window as any).webkitAudioContext;
     private static res:AudioContext = null;
 
-    private static fixAutoPlayPolicy(){
+    private static fixAutoPlayPolicy(){ // chrome allow playing only with user gesture
         const click =()=>{
             CtxHolder.res.resume();
             document.removeEventListener('click',click);

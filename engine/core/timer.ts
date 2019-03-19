@@ -1,4 +1,5 @@
 
+import {Game} from "@engine/core/game";
 export class Timer {
 
     private lastTime:number = 0;
@@ -10,7 +11,8 @@ export class Timer {
         this.callback = callback;
     }
 
-    onUpdate(time:number){
+    onUpdate(){
+        const time:number = Game.getInstance().getTime();
         if (!this.lastTime) this.lastTime = time;
         let delta:number = time - this.lastTime;
         if (delta !==0 && delta>this.interval) {

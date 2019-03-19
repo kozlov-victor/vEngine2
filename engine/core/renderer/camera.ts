@@ -121,7 +121,7 @@ export class Camera {
             this.pos.setXY(newPos.x,newPos.y);
 
 
-            if (this.cameraShakeTween) this.cameraShakeTween.update(currTime);
+            if (this.cameraShakeTween) this.cameraShakeTween.update();
         }
 
         this._updateRect();

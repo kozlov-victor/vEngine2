@@ -76,8 +76,9 @@ export class ParticleSystem extends RenderableModel {
         }
     }
 
-    update(time:number,delta:number){
-        super.update(time,delta);
+    update(){
+        super.update();
+        const time:number = this.game.getTime();
         this._particles.forEach((holder:ParticleHolder)=>{
             this._onUpdateParticle(holder.particle);
             if (time - holder.createdTime > holder.lifeTime) {

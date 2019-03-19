@@ -267,22 +267,25 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         renderer.restore();
     }
 
-    update(time:number,delta:number){
+    update(){
         for (let c of this.children) {
             if (this._dirty) c.setDirty();
-            c.update(time,delta);
+            c.update();
         }
 
+        const time:number = this.game.getTime();
+        const delta:number = this.game.getDeltaTime();
+
         this._tweens.forEach((t:Tween, index:number)=>{
-            t.update(time);
+            t.update();
             if (t.isCompleted()) this._tweens.splice(index,1);
         });
         this._tweenMovies.forEach((t:TweenMovie,index:number)=>{
-            t.update(time);
+            t.update();
             if (t.isCompleted()) this._tweenMovies.splice(index,1);
         });
         this._timers.forEach((t:Timer)=>{
-            t.onUpdate(time);
+            t.onUpdate();
         });
 
         for (let i=0,max = this._behaviours.length;i<max;i++) {
@@ -290,7 +293,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         }
 
         if (this.rigidBody!==undefined) {
-            this.rigidBody.update(time,delta);
+            this.rigidBody.update();
             // todo
             // this.pos.x = ~~(this.rigidBody.mCenter.x - this.rigidBody['mWidth']/2); // todo
             // this.pos.y = ~~(this.rigidBody.mCenter.y - this.rigidBody['mHeight']/2);
@@ -302,7 +305,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
 
         if (this.children.length>0) {
             for(let i=0;i<this.children.length;i++) {
-                this.children[i].update(time,delta);
+                this.children[i].update();
             }
         }
 

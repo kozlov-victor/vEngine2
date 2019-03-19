@@ -33,7 +33,8 @@ export class FrameAnimation implements Cloneable<FrameAnimation>{
         this._gameObject = g;
     }
 
-    update(time:number) {
+    update() {
+        const time:number = this.game.getTime();
         if (!this._startTime) this._startTime = time;
         let delta = (time - this._startTime) % this.duration;
         this._currFrame = ~~((this.frames.length) * delta / this.duration);

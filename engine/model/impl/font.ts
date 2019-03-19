@@ -7,6 +7,7 @@ import {Revalidatable} from "@engine/declarations";
 import {DebugError} from "@engine/debugError";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {Scene} from "@engine/model/impl/scene";
+import {ResourceLoader} from "@engine/core/resources/resourceLoader";
 
 interface FontContext {
     symbols: {[key:string]:Rect},
@@ -24,28 +25,28 @@ export namespace FontFactory {
     const SYMBOL_PADDING:number = 4;
 
     const getFontHeight = (strFont:string):number=> {
-        let parent = document.createElement("span");
+        const parent:HTMLSpanElement = document.createElement("span");
         parent.appendChild(document.createTextNode("height!ДдЙЇ"));
         document.body.appendChild(parent);
-        parent.style.cssText = "font: " + strFont + "; white-space: nowrap; display: inline;";
-        let height = parent.offsetHeight;
+        parent.style.cssText = `font: ${strFont}; white-space: nowrap; display: inline;`;
+        const height:number = parent.offsetHeight;
         document.body.removeChild(parent);
         return height;
     };
     
     export const getFontContext = (arrFromTo:Range[], strFont:string, w:number):FontContext=> {
         
-        let cnv:HTMLCanvasElement = document.createElement('canvas');
-        let ctx:CanvasRenderingContext2D = cnv.getContext('2d');
+        const cnv:HTMLCanvasElement = document.createElement('canvas');
+        const ctx:CanvasRenderingContext2D = cnv.getContext('2d');
         ctx.font = strFont;
-        let textHeight:number = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
-        let symbols:{[key:string]:Rect} = {};
+        const textHeight:number = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
+        const symbols:{[key:string]:Rect} = {};
         let currX:number = 0, currY:number = 0, cnvHeight = textHeight;
         for (let k:number = 0; k < arrFromTo.length; k++) {
             let arrFromToCurr:Range = arrFromTo[k];
             for (let i:number = arrFromToCurr.from; i < arrFromToCurr.to; i++) {
                 let currentChar = String.fromCharCode(i);
-                ctx = cnv.getContext('2d');
+                let ctx = cnv.getContext('2d');
                 let textWidth:number = ctx.measureText(currentChar).width;
                 textWidth += 2 * SYMBOL_PADDING;
                 if (textWidth == 0) continue;
@@ -104,6 +105,20 @@ export class Font extends Resource implements Revalidatable {
 
     constructor(protected game:Game){
         super();
+    }
+
+    private static _systemFontInstance;
+
+    static getSystemFont():Font{
+        if (Font._systemFontInstance) return Font._systemFontInstance;
+        const f:Font = new Font(Game.getInstance());
+        f.createContext();
+        const resourceLoader:ResourceLoader = new ResourceLoader(Game.getInstance());
+        let link:ResourceLink = resourceLoader.loadImage(f.createBitmap());
+        resourceLoader.startLoading();
+        f.setResourceLink(link);
+        Font._systemFontInstance = f;
+        return f;
     }
 
     asCss():string{

@@ -170,12 +170,12 @@ export abstract class Container extends RenderableModel {
 
     }
 
-    update(time:number,delta:number){
+    update(){
         if (this._dirty) {
             this.onGeometryChanged();
             this._dirty = false;
         }
-        super.update(time,delta);
+        super.update();
     }
 
     beforeRender(){

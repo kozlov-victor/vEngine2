@@ -143,8 +143,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     drawImage(img:Image){
         if (DEBUG) {
-            if (!img.getResourceLink()) throw new DebugError(`image resource link is not set`);
-            if (!this.renderableCache[img.getResourceLink().getId()]) throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getId()}`);
+            if (!img.getResourceLink()) {
+                throw new DebugError(`image resource link is not set`);
+            }
+            if (!this.renderableCache[img.getResourceLink().getId()]) {
+                throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getId()}`);
+            }
         }
 
         this.beforeItemDraw();
@@ -382,7 +386,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             this.gl.bindTexture(this.gl.TEXTURE_2D, this.finalFrameBuffer.getTexture().getGlTexture()); // to restore texture binding
             const ti:TextureInfo = {texture,size:texture.size,name:undefined};
             this.renderableCache[link.getId()] = ti;
-            link.setTarget<TextureInfo>(ti);
+            link.setTarget(ti);
             onLoad();
         };
         if (DEBUG) {

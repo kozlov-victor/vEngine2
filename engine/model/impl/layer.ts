@@ -26,10 +26,10 @@ export class Layer {
     }
 
 
-    update(currTime:number,deltaTime:number){
-        let all = this.children;
+    update(){
+        let all:RenderableModel[] = this.children;
         for (let obj of all) {
-            obj.update(currTime,deltaTime);
+            obj.update();
         }
     }
 

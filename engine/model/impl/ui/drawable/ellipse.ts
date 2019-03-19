@@ -60,8 +60,8 @@ export class Ellipse extends Shape implements Cloneable<Ellipse>{
         super.setClonedProperties(cloned);
     }
 
-    update(time:number,delta:number){
-        super.update(time,delta);
+    update(){
+        super.update();
     }
 
     clone():Ellipse {

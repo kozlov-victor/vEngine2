@@ -41,15 +41,16 @@ export class TweenMovie {
         this.game.getCurrScene().addTweenMovie(this);
     }
 
-    update(currTime:number){
+    update(){
         if (this._completed) return;
+        const currTime:number = this.game.getTime();
         if (!this._startedTime) this._startedTime = currTime;
         let deltaTime:number = currTime - this._startedTime;
         let allCompleted:boolean = true;
         this._tweensInMovie.forEach((item:TweenInMovie)=>{
             if (deltaTime>item.startTime) {
                 if (deltaTime<item.startTime+item.tween.getTweenTime()) {
-                    item.tween.update(currTime);
+                    item.tween.update();
                 } else {
                     item.tween.complete();
                 }

@@ -16,6 +16,7 @@ import {NinePatchImage} from "@engine/model/impl/ui/drawable/ninePatchImage";
 import {Image} from "@engine/model/impl/ui/drawable/image";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
 import {GameObject3d} from "@engine/model/impl/gameObject3d";
+import {Font} from "@engine/model/impl/font";
 
 declare const document:any, window:any;
 
@@ -126,13 +127,14 @@ export class AbstractRenderer {
 
     log(args:any){
         if (!DEBUG) return;
-        let textField = this.debugTextField;
+        let textField:TextField = this.debugTextField;
         if (!textField) {
             textField = new TextField(this.game);
+            textField.setFont(Font.getSystemFont());
             textField.revalidate();
             this.debugTextField = textField;
         }
-        let res = '';
+        let res:string = '';
         Array.prototype.slice.call(arguments).forEach((txt:any)=>{
             if (txt===undefined) txt = 'undefined';
             else if (txt===null) txt = 'null';
@@ -143,15 +145,22 @@ export class AbstractRenderer {
                 if (typeof txt !== 'string') {
                     try{
                         txt = JSON.stringify(txt);
-                    } catch (e){}
+                    } catch (e){
+                        txt = `[Object](${e.error || e.toString()})`;
+                    }
                 }
             }
-            if (typeof txt!=='string') txt = txt.toString();
             res+=`${txt}\n`;
         });
         textField.pos.x = 10;
         textField.pos.y = 10;
         textField.setText(textField.getText()+res);
+    }
+
+    clearLog(){
+        if (!DEBUG) return;
+        if (!this.debugTextField) return;
+        this.debugTextField.setText('');
     }
 
 

@@ -6,7 +6,6 @@ import {Scene} from "../model/impl/scene";
 import {LightArray} from "./light/lightArray";
 import {ColliderEngine} from "./physics/colliderEngine";
 import {DebugError} from "../debugError";
-import {AudioPlayer} from "./media/audioPlayer";
 import {Clazz} from "@engine/core/misc/clazz";
 import {IControl} from "@engine/core/control/abstract/iControl";
 import {IAudioPlayer} from "@engine/core/media/interface/iAudioPlayer";
@@ -41,12 +40,18 @@ export class Game {
     scaleStrategy:number = SCALE_STRATEGY.FIT;
 
     private static UPDATE_TIME_RATE = 20;
+    private static instance:Game;
 
     constructor(){
         this.collider = new ColliderEngine(this);
         this.camera = new Camera(this);
         this.lightArray = new LightArray(this);
+        Game.instance = this;
         if (DEBUG) (window as any)['game'] = this;
+    }
+
+    public static getInstance():Game{
+        return Game.instance;
     }
 
     addControl(C:Clazz<IControl>){
@@ -106,7 +111,11 @@ export class Game {
     }
 
     log(args:any){
-        this._renderer.log(args);
+        if (DEBUG) this._renderer.log(args);
+    }
+
+    clearLog(){
+        if (DEBUG) this._renderer.clearLog();
     }
 
     setRenderer(Renderer:Clazz<AbstractRenderer>){
@@ -157,12 +166,11 @@ export class Game {
             if (renderError) throw new DebugError(`render error with code ${renderError}`);
         }
 
-        let dTime:number = Math.min(this._deltaTime,Game.UPDATE_TIME_RATE);
         let numOfLoops:number = (~~(this._deltaTime / Game.UPDATE_TIME_RATE))||1;
         let currTime:number = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
         let loopCnt:number = 0;
         do {
-            this._currentScene.update(currTime,dTime);
+            this._currentScene.update();
             //this.collider.collisionArcade(); todo
             for (let c of this._controls) {
                 c.update();
@@ -193,6 +201,7 @@ export class Game {
         if (DEBUG && !this._renderer) throw new DebugError(`game renderer is not set`);
         this.camera.revalidate();
     }
+
 
 }
 

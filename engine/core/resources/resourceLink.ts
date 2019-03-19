@@ -10,7 +10,7 @@ export class ResourceLink {
         return this.id;
     }
 
-    setTarget<T>(t:T){
+    setTarget(t:any){
         this.target = t;
     }
 

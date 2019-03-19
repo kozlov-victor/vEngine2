@@ -181,8 +181,9 @@ export abstract class RigidShape {
     abstract move(v:Vec2):void
     abstract rotate(a:number):void
 
-    update(time:number,_dt:number){
-        let dt:number = _dt / 1000;
+    update(){
+
+        const dt:number = this.game.getDeltaTime() / 1000;
 
         //v += a*t
         this.mVelocity = this.mVelocity.add(this.mAcceleration.scale(dt));
