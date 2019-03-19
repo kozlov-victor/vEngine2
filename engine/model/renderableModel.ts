@@ -194,31 +194,43 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         return MathEx.overlapTest(this.game.camera.getRectScaled(),this.getRect());
     }
 
+    private _getParent():RenderableModel|Layer|undefined{
+        return this.parent || this._layer || undefined;
+    }
+
     moveToFront(){
-        let index = this.parent.children.indexOf(this);
-        if (DEBUG && index==-1) throw new DebugError(`can not move to front: gameObject is detached`);
-        this.parent.children.splice(index,1);
-        this.parent.children.push(this);
+        if (DEBUG && !this._getParent()) throw new DebugError(`can not move to front: object is detached`);
+        let index:number = (this._getParent()).children.indexOf(this);
+        if (DEBUG && index===-1)
+            throw new DebugError(`can not move to front: object is not belong to current scene`);
+        const parentArray:RenderableModel[] = this._getParent().children;
+        parentArray.splice(index,1);
+        parentArray.push(this);
 
     }
 
     moveToBack(){
-        let index = this.parent.children.indexOf(this);
-        if (DEBUG && index==-1) throw new DebugError(`can not move to back: gameObject is detached`);
-        this.parent.children.splice(index,1);
-        this.parent.children.unshift(this);
+        if (DEBUG && !this._getParent()) throw new DebugError(`can not move to back: object is detached`);
+        let index:number = this._getParent().children.indexOf(this);
+        if (DEBUG && index===-1)
+            throw new DebugError(`can not move to front: object is not belong to current scene`);
+        const parentArray:RenderableModel[] = this._getParent().children;
+        parentArray.splice(index,1);
+        parentArray.unshift(this);
     }
 
     kill() {
-        let parentArray:RenderableModel[];
-        if (this.parent) parentArray = this.parent.children;
-        else parentArray = this._layer.children;
+
+        if (DEBUG && !this._getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
+
+        const parentArray:RenderableModel[] = this._getParent().children;
         let index:number = parentArray.indexOf(this);
-        if (DEBUG && index==-1) {
+        if (DEBUG && index===-1) {
             console.error(this);
-            throw new DebugError('can not kill: gameObject is detached');
+            throw new DebugError('can not kill: object is not belong to current scene');
         }
         this.parent = null;
+        this._layer = null;
         parentArray.splice(index,1);
     }
 

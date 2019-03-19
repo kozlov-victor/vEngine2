@@ -22,7 +22,6 @@ vec4 getFillColor(){
         polarCoords.y+=u_fillLinearGradient[2].x;
         vec2 rectCoords = vec2(polarCoords.x*cos(polarCoords.y),polarCoords.x*sin(polarCoords.y));
         return mix(u_fillLinearGradient[0],u_fillLinearGradient[1],rectCoords.x);
-        //return vec4(u_fillLinearGradient[0].x,u_fillLinearGradient[0].y,u_fillLinearGradient[0].z,ONE);
     }
     else if (u_fillType==${FILL_TYPE.TEXTURE}) {
         float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2]; 

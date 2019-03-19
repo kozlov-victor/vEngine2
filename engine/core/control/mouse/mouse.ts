@@ -43,7 +43,7 @@ export class Mouse implements IControl {
         mousePoint.set(p);
         mousePoint.screenX = screenX;
         mousePoint.screenY = screenY;
-        mousePoint.id = (e as Touch).identifier  || 0; // (e as PointerEvent).pointerId
+        mousePoint.id = (e as Touch).identifier  || (e as PointerEvent).pointerId || 0;
         mousePoint.release();
         return mousePoint;
     }
@@ -53,7 +53,8 @@ export class Mouse implements IControl {
         eventName:string,point:MousePoint,
         go:RenderableModel,offsetX = 0, offsetY = 0):boolean{
 
-        let rectWithOffset = Rect.fromPool().clone().set(go.getRect()).addXY(offsetX,offsetY);
+        let rectWithOffset:Rect = Rect.fromPool().set(go.getRect()).addXY(offsetX,offsetY);
+        rectWithOffset.release();
         if (
             MathEx.isPointInRect(point,rectWithOffset)
         ) {

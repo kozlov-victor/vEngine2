@@ -13,7 +13,9 @@ interface Clazz<T> {
 }
 
 class CtxHolder {
-    private static ctx:Clazz<AudioContext> = (window as any).AudioContext;
+    private static ctx:Clazz<AudioContext> =
+        (window as any).AudioContext ||
+        (window as any).webkitAudioContext;
     private static res:AudioContext = null;
 
     private static fixAutoPlayPolicy(){
@@ -68,7 +70,7 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
             onLoad();
             return;
         }
-        LoaderUtil.loadBinary(url, (buffer:ArrayBuffer)=> {
+        LoaderUtil.loadBinary(url, 'arraybuffer',(buffer:ArrayBuffer)=> {
             decode(buffer, (decoded:AudioBuffer)=>{
                 AudioPlayer.cache[link.getId()] = decoded;
                 onLoad();

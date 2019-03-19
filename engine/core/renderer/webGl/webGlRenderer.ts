@@ -224,10 +224,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         let dx:number = x2-x1,dy:number = y2-y1;
         let uniforms:UniformsInfo = {};
+        const rect:Rect = Rect.fromPool();
+        const size:Size = Size.fromPool();
         uniforms.u_vertexMatrix = makePositionMatrix(
-            Rect.fromPool().setXYWH(x1,y1,dx,dy),
-            Size.fromPool().setWH(this.game.width,this.game.height)
+            rect.setXYWH(x1,y1,dx,dy),
+            size.setWH(this.game.width,this.game.height)
         );
+        rect.release();
+        size.release();
         uniforms.u_rgba = color.asGL();
         //gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
@@ -244,12 +248,16 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this.prepareShapeUniformInfo(ellipse);
         let sd:ShapeDrawer = this.shapeDrawer;
+        const rect:Rect = Rect.fromPool();
+        const size:Size = Size.fromPool();
         sd.setUniform(sd.u_vertexMatrix,makePositionMatrix(
-            Rect.fromPool().setXYWH(0,0,maxR2,maxR2),
-            Size.fromPool().setWH(this.game.width,this.game.height)
+            rect.setXYWH(0,0,maxR2,maxR2),
+            size.setWH(this.game.width,this.game.height)
         ));
+        rect.release();
+        size.release();
         sd.setUniform(sd.u_lineWidth,Math.min(ellipse.lineWidth/maxR,1));
-        if (maxR==ellipse.radiusX) {
+        if (maxR===ellipse.radiusX) {
             sd.setUniform(sd.u_rx,0.5);
             sd.setUniform(sd.u_ry,ellipse.radiusY/ellipse.radiusX*0.5);
         } else {

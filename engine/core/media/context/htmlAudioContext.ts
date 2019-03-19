@@ -4,6 +4,7 @@ import {BasicAudioContext} from "@engine/core/media/context/basicAudioContext";
 import {AudioPlayer} from "@engine/core/media/audioPlayer";
 import {DebugError} from "@engine/debugError";
 import {Cloneable} from "@engine/declarations";
+import {LoaderUtil} from "@engine/core/resources/loaderUtil";
 
 
 
@@ -30,8 +31,11 @@ export class HtmlAudioContext extends BasicAudioContext implements Cloneable<Htm
         return !!(window && (window as any).Audio);
     }
     load(url:string,link:ResourceLink,callBack:()=>void){
-        AudioPlayer.cache[link.getId()] = url;
-        callBack();
+        LoaderUtil.loadBinary(url,'blob',(buffer:ArrayBuffer)=>{
+            AudioPlayer.cache[link.getId()] = URL.createObjectURL(buffer);
+            callBack();
+        });
+
     }
 
     constructor(game:Game) {

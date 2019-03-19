@@ -1,10 +1,6 @@
 import {Queue} from "./queue";
 import {Game} from "../game";
-import {Scene} from "../../model/impl/scene";
-import {DebugError} from "@engine/debugError";
 import {ResourceLink} from "@engine/core/resources/resourceLink";
-import {TextureInfo} from "@engine/core/renderer/webGl/programs/abstract/abstractDrawer";
-
 
 
 export class ResourceLoader {

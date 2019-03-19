@@ -1,13 +1,9 @@
-import {Point2d} from "../../core/geometry/point2d";
 import {FrameAnimation} from "./frameAnimation";
 import {SpriteSheet} from "./spriteSheet";
 import {Game} from "../../core/game";
 import {Cloneable} from "../../declarations";
-import {RigidShape} from "../../core/physics/rigidShapes";
 import {RenderableModel} from "../renderableModel";
-import {BaseAbstractBehaviour} from "../../behaviour/abstract/baseAbstractBehaviour";
 import {DebugError} from "@engine/debugError";
-
 
 
 export class GameObject extends RenderableModel implements Cloneable<GameObject>{

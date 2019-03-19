@@ -1,9 +1,9 @@
 
-export class LoaderUtil {
-    static loadBinary(url:string,onLoad:(buffer:ArrayBuffer)=>void) {
+export namespace LoaderUtil {
+    export const loadBinary = (url:string,responsetype:'arraybuffer'|'blob',onLoad:(buffer:ArrayBuffer)=>void)=> {
         let request = new XMLHttpRequest();
         request.open('GET', url, true);
-        request.responseType = 'arraybuffer';
+        request.responseType = responsetype;
 
         request.setRequestHeader('Accept-Ranges', 'bytes');
         request.setRequestHeader('Content-Range', 'bytes');
