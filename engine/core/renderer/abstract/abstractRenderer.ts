@@ -146,7 +146,7 @@ export class AbstractRenderer {
                     try{
                         txt = JSON.stringify(txt);
                     } catch (e){
-                        txt = `[Object](${e.error || e.toString()})`;
+                        txt = `[Object](${e.error})`;
                     }
                 }
             }

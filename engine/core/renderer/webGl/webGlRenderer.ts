@@ -151,7 +151,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             }
         }
 
-        this.beforeItemDraw();
+        this.beforeItemDraw(img.filters.length);
 
         let texture:Texture = this.renderableCache[img.getResourceLink().getId()].texture;
         let texInfo:TextureInfo[] = [{texture,name:'texture'}];
@@ -211,7 +211,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let maxSize:number = Math.max(rw,rh);
         let sd:ShapeDrawer = this.shapeDrawer;
 
-        this.beforeItemDraw();
+        this.beforeItemDraw(rectangle.filters.length);
 
         this.prepareShapeUniformInfo(rectangle);
         sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
@@ -224,7 +224,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     drawLine(x1:number,y1:number,x2:number,y2:number,color:Color){
 
-        this.beforeItemDraw();
+        this.beforeItemDraw(0);
 
         let dx:number = x2-x1,dy:number = y2-y1;
         let uniforms:UniformsInfo = {};
@@ -248,7 +248,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
         let maxR2:number = maxR*2;
 
-        this.beforeItemDraw();
+        this.beforeItemDraw(ellipse.filters.length);
 
         this.prepareShapeUniformInfo(ellipse);
         let sd:ShapeDrawer = this.shapeDrawer;
@@ -349,18 +349,24 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.restore();
     };
 
-    private beforeItemDraw(){
-        this.preprocessFrameBuffer.bind();
-        this.gl.clearColor(1,1,1,0);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    private beforeItemDraw(numOfFilters:number){
+        if (numOfFilters>0) {
+            this.preprocessFrameBuffer.bind();
+            this.gl.clearColor(1,1,1,0);
+            this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+        } else {
+            this.finalFrameBuffer.bind();
+        }
     }
 
     private afterItemDraw(filters:AbstractFilter[]){
-        const filteredTexture:Texture = this.doubleFrameBuffer.applyFilters(this.preprocessFrameBuffer.getTexture(),filters);
-        this.finalFrameBuffer.bind();
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX);
-        this.simpleRectDrawer.draw([{texture:filteredTexture,name:'texture'}]);
+        if (filters.length>0) {
+            const filteredTexture:Texture = this.doubleFrameBuffer.applyFilters(this.preprocessFrameBuffer.getTexture(),filters);
+            this.finalFrameBuffer.bind();
+            this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
+            this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX);
+            this.simpleRectDrawer.draw([{texture:filteredTexture,name:'texture'}]);
+        }
     }
 
     getError():number{
