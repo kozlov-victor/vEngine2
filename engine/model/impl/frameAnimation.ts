@@ -1,8 +1,10 @@
-
 import {Game} from '../../core/game'
 import {GameObject} from './gameObject'
 import {EventEmitter} from "../../core/misc/eventEmitter";
-import {Cloneable} from "@engine/declarations";
+import {Cloneable, IMPORT_DEPENDS} from "@engine/declarations";
+import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
+import {DebugError} from "@engine/debugError";
+import {SpriteSheet} from "@engine/model/impl/spriteSheet";
 
 export class FrameAnimation implements Cloneable<FrameAnimation>{
 
@@ -13,41 +15,48 @@ export class FrameAnimation implements Cloneable<FrameAnimation>{
     isRepeat:boolean = true;
 
     private _currFrame:number = 0;
-    private _gameObject:GameObject;
     private _startTime:number;
     private _timeForOneFrame:number;
+    private _isPlaying:boolean = false;
+    private _spriteSheet:SpriteSheet;
 
-    constructor(public game:Game) {
-        this._emitter = new EventEmitter();
-    }
+    constructor(protected game:Game) {}
 
     revalidate(){
         this._timeForOneFrame = ~~(this.duration / this.frames.length);
     }
 
-    getGameObject():GameObject{
-        return this._gameObject;
+    setSpriteSheet(spr: SpriteSheet) {
+        this._spriteSheet = spr;
     }
 
-    setGameObject(g:GameObject){
-        this._gameObject = g;
+    play(){
+        this._isPlaying = true;
+    }
+
+    stop(){
+        this._isPlaying = false;
     }
 
     update() {
+        if (!this._isPlaying) return;
         const time:number = this.game.getTime();
         if (!this._startTime) this._startTime = time;
         let delta = (time - this._startTime) % this.duration;
         this._currFrame = ~~((this.frames.length) * delta / this.duration);
         if (this.isRepeat==false && this._currFrame>=this.frames.length-1) {
             this.trigger('loop');
-            this._gameObject.stopFrAnimation();
+            this._isPlaying = false;
             return;
         }
-        let lastFrIndex = this._gameObject.spriteSheet.getFrameIndex();
+        if (DEBUG) {
+            if (!this._spriteSheet) throw new DebugError(`can not play frame animation: spriteSheet is not set`);
+        }
+        let lastFrIndex = this._spriteSheet.getFrameIndex();
         if (lastFrIndex != this.frames[this._currFrame]) {
             let index:number = this.frames[this._currFrame];
-            index = index % this._gameObject.spriteSheet.getNumOfFrames();
-            this._gameObject.spriteSheet.setFrameIndex(index);
+            index = index % this._spriteSheet.getNumOfFrames();
+            this._spriteSheet.setFrameIndex(index);
             if (this._currFrame===0 && this._startTime!==time) this.trigger('loop');
         }
     }
@@ -56,6 +65,7 @@ export class FrameAnimation implements Cloneable<FrameAnimation>{
         cloned.frames = [...this.frames];
         cloned.duration = this.duration;
         cloned.isRepeat = this.isRepeat;
+        cloned.setSpriteSheet(this._spriteSheet);
     }
 
     clone():FrameAnimation {
@@ -64,23 +74,13 @@ export class FrameAnimation implements Cloneable<FrameAnimation>{
         return cloned;
     }
 
-    reset(){
-        this._startTime = 0;
+    //#MACROS_BODY_BEGIN = ./engine/macroses/eventEmitterMacros
+    off(eventName: string, callBack: Function): void {}
+    on(eventName: string, callBack: Function): void {
+        IMPORT_DEPENDS(EventEmitter,MOUSE_EVENTS,DebugError)
     }
-
-    // todo extract to class?
-    _emitter:EventEmitter;
-
-    on(eventName:string,callBack:Function){
-        this._emitter.on(eventName,callBack);
-        return callBack;
-    }
-    off(eventName:string,callBack:Function){
-        this._emitter.off(eventName,callBack);
-    }
-    trigger(eventName:string,data?:any){
-        this._emitter.trigger(eventName,data);
-    }
+    trigger(eventName: string, data?: any): void {}
+    //#MACROS_BODY_END
 
 }
 

@@ -1,6 +1,6 @@
 import {AbstractRenderer} from "../core/renderer/abstract/abstractRenderer";
 import {Resource} from "../core/resources/resource";
-import {Revalidatable} from "../declarations";
+import {IMPORT_DEPENDS, Eventemittable, Revalidatable, Tweenable, Cloneable} from "../declarations";
 import {DebugError} from "../debugError";
 import {MathEx} from "../core/mathEx";
 import {isObjectMatch} from "../core/misc/object";
@@ -11,14 +11,14 @@ import {Game} from "@engine/core/game";
 import {Tween, TweenDescription} from "@engine/core/tween";
 import {TweenMovie} from "@engine/core/tweenMovie";
 import {Timer} from "@engine/core/timer";
-import {EventEmitter} from "@engine/core/misc/eventEmitter";
 import {RigidShape} from "@engine/core/physics/rigidShapes";
 import {Layer} from "@engine/model/impl/layer";
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
+import {EventEmitter} from "@engine/core/misc/eventEmitter";
 import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
 
 
-export abstract class RenderableModel extends Resource implements Revalidatable {
+export abstract class RenderableModel extends Resource implements Revalidatable, Tweenable, Eventemittable {
 
     readonly type:string;
     id:string;
@@ -34,7 +34,6 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
     parent:RenderableModel;
     children:RenderableModel[] = [];
     acceptLight:boolean = false;
-    rigid:boolean = false;
     rigidBody:RigidShape;
     velocity = new Point2d(0,0);
 
@@ -67,22 +66,24 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         cloned.filters = [...this.filters];
         cloned.blendMode = this.blendMode;
         cloned.parent = null;
-        // todo deep clone of childrens
-        // todo clone behaviour
+        this.children.forEach((c:RenderableModel)=>{
+            if (DEBUG && !('clone' in c)) {
+                console.error(c);
+                throw new DebugError(`can not clone object: cloneable interface is not implemented`);
+            }
+            const clonedChildren:RenderableModel = (c as any as Cloneable<RenderableModel>).clone();
+            if (DEBUG && ! (clonedChildren instanceof RenderableModel )) {
+                console.error(c);
+                throw new DebugError(`can not clone object: "clone"  method must return Cloneable object`);
+            }
+            cloned.appendChild(clonedChildren);
+        });
         cloned.acceptLight = this.acceptLight;
-        cloned.rigid = this.rigid;
         cloned.game = this.game;
         super.setClonedProperties(cloned);
     }
 
     revalidate(){}
-
-    setTimer(callback:Function,interval:number):Timer{
-        let t:Timer = new Timer(callback,interval);
-        this._timers.push(t);
-        return t;
-    }
-
 
     getLayer(): Layer {
         return this._layer;
@@ -92,18 +93,8 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         this._layer = value;
     }
 
-    tween(desc:TweenDescription):Tween{
-        let t:Tween = new Tween(desc);
-        this._tweens.push(t);
-        return t;
-    }
-
-    addTweenMovie(tm:TweenMovie){
-        this._tweenMovies.push(tm);
-    }
-
-    findChildrenById(id:string):RenderableModel{
-        if (isObjectMatch(this,{id})) return this;
+    findChildrenById(id:string):RenderableModel|null{
+        if (id===this.id) return this;
         for (let c of this.children) {
             let possibleObject:RenderableModel = c.findChildrenById(id);
             if (possibleObject) return possibleObject;
@@ -155,7 +146,6 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         c.revalidate();
         this.children.push(c);
     }
-
 
     addBehaviour(b:BaseAbstractBehaviour){
         this._behaviours.push(b);
@@ -232,6 +222,10 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
         this.parent = null;
         this._layer = null;
         parentArray.splice(index,1);
+
+        for (let b of this._behaviours) {
+            b.destroy();
+        }
     }
 
     render(){
@@ -311,25 +305,24 @@ export abstract class RenderableModel extends Resource implements Revalidatable 
 
     }
 
-    // todo repeated block (scene)
-    protected _emitter:EventEmitter;
-    on(eventName:string,callBack:Function){
 
-        if (DEBUG && !this.game.hasControl('Mouse')) {
-            if (!(eventName in MOUSE_EVENTS)) {
-                throw new DebugError('can not listen mouse events: mouse control is not added');
-            }
-        }
+    //#MACROS_BODY_BEGIN = ./engine/macroses/tweenableMacros
+    addTween(t: Tween): void {}
+    addTweenMovie(tm: TweenMovie) {}
+    tween(desc: TweenDescription): Tween {return undefined;}
+    //#MACROS_BODY_END
 
-        if (this._emitter===undefined) this._emitter = new EventEmitter();
-        this._emitter.on(eventName,callBack);
-        return callBack;
+    //#MACROS_BODY_BEGIN = ./engine/macroses/timerMacros
+    setTimer(callback:Function,interval:number):Timer{return undefined;}
+    //#MACROS_BODY_END
+
+
+    //#MACROS_BODY_BEGIN = ./engine/macroses/eventEmitterMacros
+    off(eventName: string, callBack: Function): void {}
+    on(eventName: string, callBack: Function): void {
+        IMPORT_DEPENDS(EventEmitter,MOUSE_EVENTS)
     }
-    off(eventName:string,callBack:Function){
-        if (this._emitter!==undefined)this._emitter.off(eventName,callBack);
-    }
-    trigger(eventName:string,data?:any){
-        if (this._emitter!==undefined) this._emitter.trigger(eventName,data);
-    }
+    trigger(eventName: string, data?: any): void {}
+    //#MACROS_BODY_END
 
 }

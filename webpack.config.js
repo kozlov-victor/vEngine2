@@ -59,8 +59,10 @@ module.exports = (env={})=>{
             rules: [
                 {
                     test: /\.ts$/,
-                    loader: "awesome-typescript-loader",
-                    options: {}
+                    use: [
+                        {loader: "awesome-typescript-loader",options: {}},
+                        {loader: "macros-loader",options: {}},
+                    ]
                 },
                 {
                     test: /\.(png|jpe?g|svg)$/,

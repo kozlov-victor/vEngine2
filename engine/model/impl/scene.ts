@@ -5,21 +5,20 @@ import {Game} from "../../core/game";
 import {AmbientLight} from "../../core/light/ambientLight";
 import {Color} from "../../core/renderer/color";
 import {CAMERA_MATRIX_MODE} from "../../core/renderer/camera";
-import {TextField} from "./ui/components/textField";
 import {ResourceLoader} from "../../core/resources/resourceLoader";
-import {Revalidatable} from "../../declarations";
+import {IMPORT_DEPENDS, Eventemittable, Revalidatable, Tweenable} from "../../declarations";
 import {RenderableModel} from "@engine/model/renderableModel";
 import {TweenMovie} from "@engine/core/tweenMovie";
 import {EventEmitter} from "@engine/core/misc/eventEmitter";
 import {removeFromArray} from "@engine/core/misc/object";
-import {DebugError} from "@engine/debugError";
-import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
 import {AbstractRenderer} from "@engine/core/renderer/abstract/abstractRenderer";
 import {Tween, TweenDescription} from "@engine/core/tween";
 import {Timer} from "@engine/core/timer";
+import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
+import {DebugError} from "@engine/debugError";
 
 
-export class Scene implements Revalidatable {
+export class Scene implements Revalidatable, Tweenable, Eventemittable {
 
     readonly type:string = 'Scene';
     width:number;
@@ -36,7 +35,7 @@ export class Scene implements Revalidatable {
     private _layers:Layer[] = [];
     private _uiLayer:Layer;
 
-    protected _tweens:Tween[] = []; // todo repeated with renderablemodel
+    protected _tweens:Tween[] = [];
     protected _tweenMovies:TweenMovie[] = [];
     protected _timers:Timer[] = [];
 
@@ -62,26 +61,6 @@ export class Scene implements Revalidatable {
         return this._uiLayer;
     }
 
-    tween(desc:TweenDescription):Tween{
-        let t:Tween = new Tween(desc);
-        this._tweens.push(t);
-        return t;
-    }
-
-    addTween(t:Tween):void{
-        this._tweens.push(t);
-    }
-
-    addTweenMovie(tm:TweenMovie){
-        this._tweenMovies.push(tm);
-    }
-
-    setTimer(callback:Function,interval:number):Timer{
-        let t:Timer = new Timer(callback,interval);
-        this._timers.push(t);
-        return t;
-    }
-
     getAllGameObjects(){
         let res = []; // todo optimize
         const ONE = 1;
@@ -98,7 +77,6 @@ export class Scene implements Revalidatable {
     getDefaultLayer(){
         return this._layers[0];
     }
-
 
     addLayer(layer:Layer){
         this._layers.push(layer);
@@ -232,26 +210,23 @@ export class Scene implements Revalidatable {
         renderer.flipFrameBuffer(this.filters);
     }
 
-    // todo repeated block renderable model
-    protected _emitter:EventEmitter;
-    on(eventName:string,callBack:Function){
+    //#MACROS_BODY_BEGIN = ./engine/macroses/tweenableMacros
+    addTween(t: Tween): void {}
+    addTweenMovie(tm: TweenMovie) {}
+    tween(desc: TweenDescription): Tween {return undefined;}
+    //#MACROS_BODY_END
 
-        if (DEBUG && !this.game.hasControl('Mouse')) {
-            if (MOUSE_EVENTS[eventName]!=undefined) {
-                throw new DebugError('can not listen mouse events: mouse control is not added');
-            }
-        }
+    //#MACROS_BODY_BEGIN = ./engine/macroses/timerMacros
+    setTimer(callback:Function,interval:number):Timer{return undefined;}
+    //#MACROS_BODY_END
 
-        if (this._emitter===undefined) this._emitter = new EventEmitter();
-        this._emitter.on(eventName,callBack);
-        return callBack;
+    //#MACROS_BODY_BEGIN = ./engine/macroses/eventEmitterMacros
+    off(eventName: string, callBack: Function): void {}
+    on(eventName: string, callBack: Function): void {
+        IMPORT_DEPENDS(EventEmitter,MOUSE_EVENTS,DebugError)
     }
-    off(eventName:string,callBack:Function){
-        if (this._emitter!==undefined)this._emitter.off(eventName,callBack);
-    }
-    trigger(eventName:string,data?:any){
-        if (this._emitter!==undefined) this._emitter.trigger(eventName,data);
-    }
+    trigger(eventName: string, data?: any): void {}
+    //#MACROS_BODY_END
 
     destroy(){
         this.onDestroy();

@@ -15,12 +15,12 @@ export class Image extends Shape implements Cloneable<Image>{
     srcRect:Rect = new Rect();
     borderRadius:number = 0;
     offset:Point2d = new Point2d();
+    // todo stretchMode:'stretch'|'repeat' = 'stretch';
 
     constructor(game: Game) {
         super(game);
         (this.fillColor as Color).set(Color.NONE);
     }
-
 
     revalidate(){
         if (DEBUG && !this.getResourceLink()) {

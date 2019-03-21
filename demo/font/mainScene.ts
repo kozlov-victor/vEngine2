@@ -16,7 +16,6 @@ export class MainScene extends Scene {
         fnt.fontColor = Color.RGB(200,0,12);
         FontFactory.generate(fnt,this);
 
-
         let fnt2:Font = new Font(this.game);
         fnt2.fontSize = 12;
         fnt2.fontFamily = 'monospace';

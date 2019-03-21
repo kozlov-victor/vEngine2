@@ -19,7 +19,7 @@ export class MainScene extends Scene {
         this.logoObj = new GameObject(this.game);
         let spr:SpriteSheet = new SpriteSheet(this.game);
         spr.setResourceLink(this.logoLink);
-        this.logoObj.spriteSheet = spr;
+        this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
 
@@ -28,7 +28,7 @@ export class MainScene extends Scene {
         let objChild:GameObject = new GameObject(this.game);
         let spr1:SpriteSheet = new SpriteSheet(this.game);
         spr1.setResourceLink(this.logoLink);
-        objChild.spriteSheet = spr1;
+        objChild.sprite = spr1;
         objChild.pos.fromJSON({x:100,y:100});
         objChild.addBehaviour(new DraggableBehaviour(this.game));
 

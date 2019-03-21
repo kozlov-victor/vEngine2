@@ -29,7 +29,7 @@ export class MainScene extends Scene {
         this.logoObj = new GameObject(this.game);
         let spr:SpriteSheet = new SpriteSheet(this.game);
         spr.setResourceLink(this.logoLink);
-        this.logoObj.spriteSheet = spr;
+        this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
 

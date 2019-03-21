@@ -93,8 +93,6 @@ export namespace FontFactory {
 
 
 
-
-
 export class Font extends Resource implements Revalidatable {
 
     readonly type:string = 'Font';

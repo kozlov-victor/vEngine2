@@ -24,11 +24,12 @@ export class MainScene extends Scene {
         spr.numOfFramesH = 5;
         let anim:FrameAnimation = new FrameAnimation(this.game);
         anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
-        this.obj.addFrameAnimation('animation',anim);
+        spr.addFrameAnimation('animation',anim);
         anim.isRepeat = true;
-        this.obj.playFrameAnimation('animation');
+        anim.setSpriteSheet(spr);
+        spr.playFrameAnimation('animation');
         spr.setResourceLink(this.resourceLink);
-        this.obj.spriteSheet = spr;
+        this.obj.sprite = spr;
         this.obj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.obj);
 
@@ -36,9 +37,11 @@ export class MainScene extends Scene {
 
         this.on(MOUSE_EVENTS.click,()=>{
            playing = !playing;
-           if (playing) this.obj.playFrameAnimation('animation');
-           else this.obj.stopFrAnimation();
+           if (playing) (this.obj.sprite as SpriteSheet).playFrameAnimation('animation');
+           else (this.obj.sprite as SpriteSheet).stopFrameAnimation();
         });
+
+        (window as any).obj = this.obj;
 
     }
 

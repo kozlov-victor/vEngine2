@@ -165,7 +165,7 @@ export class ColliderEngine {
         let numOfIterations = 0;
         let isOverlapped = MathEx.overlapTest(a.getRect(),b.getRect());
         if (!isOverlapped) return;
-        if (!a.rigid || !b.rigid) {
+        if (!a.rigidBody || !b.rigidBody) {
             a.trigger('overlap',b);
             b.trigger('overlap',a);
             return;

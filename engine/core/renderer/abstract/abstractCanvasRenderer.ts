@@ -18,11 +18,6 @@ export class AbstractCanvasRenderer extends AbstractRenderer {
         this.container = container;
     }
 
-    draw(renderable:GameObject){
-        renderable.spriteSheet.width = renderable.width;
-        renderable.spriteSheet.height = renderable.height;
-        this.drawImage(renderable.spriteSheet);
-    }
 
     onResize(){
         let canvas = this.container as HTMLCanvasElement;

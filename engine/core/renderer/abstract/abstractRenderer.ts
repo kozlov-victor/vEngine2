@@ -121,10 +121,6 @@ export class AbstractRenderer {
 
     rotateY(a:number){}
 
-    draw(renderable:GameObject){
-
-    }
-
     log(args:any){
         if (!DEBUG) return;
         let textField:TextField = this.debugTextField;

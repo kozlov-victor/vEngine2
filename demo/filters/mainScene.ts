@@ -35,7 +35,7 @@ export class MainScene extends Scene {
         this.logoObj = new GameObject(this.game);
         let spr:SpriteSheet = new SpriteSheet(this.game);
         spr.setResourceLink(this.logoLink);
-        this.logoObj.spriteSheet = spr;
+        this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
         this.logoObj.addBehaviour(new DraggableBehaviour(this.game));
@@ -83,7 +83,7 @@ export class MainScene extends Scene {
         circle2.addBehaviour(new DraggableBehaviour(this.game));
 
 
-        this.logoObj.spriteSheet.filters = [
+        this.logoObj.sprite.filters = [
             ps,bw
         ];
 
