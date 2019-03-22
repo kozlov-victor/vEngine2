@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 100);
+/******/ 	return __webpack_require__(__webpack_require__.s = 77);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -6276,349 +6276,417 @@ exports.DoubleFrameBuffer = DoubleFrameBuffer;
 
 
 /***/ }),
-/* 63 */
+/* 63 */,
+/* 64 */,
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var mathEx_1 = __webpack_require__(6);
-var point2d_1 = __webpack_require__(2);
-var rect_1 = __webpack_require__(3);
+var tslib_1 = __webpack_require__(1);
+var renderableModel_1 = __webpack_require__(16);
 var debugError_1 = __webpack_require__(0);
-var mousePoint_1 = __webpack_require__(64);
-var mouseEvents_1 = __webpack_require__(10);
-var Mouse = (function () {
-    function Mouse(game) {
-        this.type = 'Mouse';
-        this.objectsCaptured = {};
-        this.game = game;
-    }
-    Mouse.prototype.resolvePoint = function (e) {
-        var game = this.game;
-        var clientX = e.clientX;
-        var clientY = e.clientY;
-        var screenX = (clientX - game.pos.x) / game.scale.x;
-        var screenY = (clientY - game.pos.y) / game.scale.y;
-        var screenPoint = point2d_1.Point2d.fromPool();
-        screenPoint.setXY(screenX, screenY);
-        var p = game.camera.screenToWorld(screenPoint);
-        screenPoint.release();
-        var mousePoint = mousePoint_1.MousePoint.fromPool();
-        mousePoint.set(p);
-        mousePoint.screenX = screenX;
-        mousePoint.screenY = screenY;
-        mousePoint.id = e.identifier || e.pointerId || 0;
-        mousePoint.release();
-        return mousePoint;
-    };
-    Mouse.triggerGameObjectEvent = function (e, eventName, point, go, offsetX, offsetY) {
-        if (offsetX === void 0) { offsetX = 0; }
-        if (offsetY === void 0) { offsetY = 0; }
-        var rectWithOffset = rect_1.Rect.fromPool().set(go.getRect()).addXY(offsetX, offsetY);
-        rectWithOffset.release();
-        if (mathEx_1.MathEx.isPointInRect(point, rectWithOffset)) {
-            point.target = go;
-            go.trigger(eventName, {
-                screenX: point.x,
-                screenY: point.y,
-                objectX: point.x - go.pos.x,
-                objectY: point.y - go.pos.y,
-                id: point.id,
-                target: go,
-                nativeEvent: e,
-                eventName: eventName,
-                isMouseDown: point.isMouseDown
-            });
-            return true;
-        }
-        return false;
-    };
-    Mouse.prototype.triggerEvent = function (e, eventName, isMouseDown) {
-        if (isMouseDown === undefined)
-            isMouseDown = false;
-        var g = this.game;
-        var scene = g.getCurrScene();
-        if (!scene)
-            return;
-        var point = this.resolvePoint(e);
-        point.isMouseDown = isMouseDown;
-        point.target = undefined;
-        for (var _i = 0, _a = scene.getAllGameObjects(); _i < _a.length; _i++) {
-            var go = _a[_i];
-            var isCaptured = Mouse.triggerGameObjectEvent(e, eventName, point, go);
-            if (isCaptured) {
-                point.target = go;
-                break;
-            }
-        }
-        if (point.target === undefined)
-            point.target = scene;
-        scene.trigger(eventName, {
-            screenX: point.x,
-            screenY: point.y,
-            id: point.id,
-            target: scene,
-            eventName: eventName,
-            isMouseDown: isMouseDown
-        });
-        return point;
-    };
-    Mouse.prototype.resolveClick = function (e) {
-        this.triggerEvent(e, mouseEvents_1.MOUSE_EVENTS.click);
-        this.triggerEvent(e, mouseEvents_1.MOUSE_EVENTS.mouseDown);
-    };
-    Mouse.prototype.resolveMouseMove = function (e, isMouseDown) {
-        var point = this.triggerEvent(e, mouseEvents_1.MOUSE_EVENTS.mouseMove, isMouseDown);
-        if (!point)
-            return;
-        var lastMouseDownObject = this.objectsCaptured[point.id];
-        if (lastMouseDownObject && lastMouseDownObject !== point.target) {
-            lastMouseDownObject.trigger(mouseEvents_1.MOUSE_EVENTS.mouseLeave, point);
-            delete this.objectsCaptured[point.id];
-        }
-        if (point.target && lastMouseDownObject !== point.target) {
-            point.target.trigger(mouseEvents_1.MOUSE_EVENTS.mouseEnter, point);
-            this.objectsCaptured[point.id] = point.target;
-        }
-    };
-    Mouse.prototype.resolveMouseUp = function (e) {
-        var point = this.triggerEvent(e, mouseEvents_1.MOUSE_EVENTS.mouseUp);
-        if (!point)
-            return;
-        var lastMouseDownObject = this.objectsCaptured[point.id];
-        if (!lastMouseDownObject)
-            return;
-        if (point.target !== lastMouseDownObject)
-            lastMouseDownObject.trigger(mouseEvents_1.MOUSE_EVENTS.mouseUp, point);
-        delete this.objectsCaptured[point.id];
-    };
-    Mouse.prototype.resolveDoubleClick = function (e) {
-        var point = this.triggerEvent(e, mouseEvents_1.MOUSE_EVENTS.doubleClick);
-        if (!point)
-            return;
-        delete this.objectsCaptured[point.id];
-    };
-    Mouse.prototype.resolveScroll = function (e) {
-        var point = this.triggerEvent(e, mouseEvents_1.MOUSE_EVENTS.scroll);
-        if (!point)
-            return;
-        delete this.objectsCaptured[point.id];
-    };
-    Mouse.prototype.listenTo = function () {
-        var _this = this;
-        if ( true && !this.game.getRenderer()) {
-            throw new debugError_1.DebugError("can not initialize mouse control: renderer is not set");
-        }
-        var container = this.game.getRenderer().container;
-        this.container = container;
-        container.ontouchstart = function (e) {
-            var l = e.touches.length;
-            while (l--) {
-                _this.resolveClick(e.touches[l]);
-            }
-        };
-        container.onmousedown = function (e) {
-            (e.button === 0) && _this.resolveClick(e);
-        };
-        container.ontouchend = container.ontouchcancel = function (e) {
-            var l = e.changedTouches.length;
-            while (l--) {
-                _this.resolveMouseUp(e.changedTouches[l]);
-            }
-        };
-        container.onmouseup = function (e) {
-            _this.resolveMouseUp(e);
-        };
-        container.ontouchmove = function (e) {
-            var l = e.touches.length;
-            while (l--) {
-                _this.resolveMouseMove(e.touches[l], true);
-            }
-        };
-        container.onmousemove = function (e) {
-            var isMouseDown = e.buttons === 1;
-            _this.resolveMouseMove(e, isMouseDown);
-        };
-        container.ondblclick = function (e) {
-            _this.resolveDoubleClick(e);
-        };
-        container.onmousewheel = function (e) {
-            _this.resolveScroll(e);
-        };
-    };
-    Mouse.prototype.update = function () { };
-    Mouse.prototype.destroy = function () {
-        var _this = this;
-        if (!this.container)
-            return;
-        [
-            'mouseMove', 'ontouchstart', 'onmousedown',
-            'ontouchend', 'onmouseup', 'ontouchmove',
-            'onmousemove', 'ondblclick'
-        ].forEach(function (evtName) {
-            _this.container[evtName] = null;
-        });
-    };
-    return Mouse;
-}());
-exports.Mouse = Mouse;
-
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = __webpack_require__(1);
-var point2d_1 = __webpack_require__(2);
-var objectPool_1 = __webpack_require__(7);
-var MousePoint = (function (_super) {
-    tslib_1.__extends(MousePoint, _super);
-    function MousePoint() {
-        return _super.call(this) || this;
-    }
-    MousePoint.fromPool = function () {
-        return MousePoint.mousePointsPool.getFreeObject();
-    };
-    MousePoint.mousePointsPool = new objectPool_1.ObjectPool(MousePoint);
-    return MousePoint;
-}(point2d_1.Point2d));
-exports.MousePoint = MousePoint;
-
-
-/***/ }),
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = __webpack_require__(1);
-var baseAbstractBehaviour_1 = __webpack_require__(69);
-var mouseEvents_1 = __webpack_require__(10);
-var DraggableBehaviour = (function (_super) {
-    tslib_1.__extends(DraggableBehaviour, _super);
-    function DraggableBehaviour(game) {
-        var _this = _super.call(this, game, null) || this;
-        _this.points = {};
+var GameObject = (function (_super) {
+    tslib_1.__extends(GameObject, _super);
+    function GameObject(game) {
+        var _this = _super.call(this, game) || this;
+        _this.type = 'GameObject';
+        _this.groupNames = [];
+        _this.collideWith = [];
+        _this._frameAnimations = {};
         return _this;
     }
-    DraggableBehaviour._getEventId = function (e) {
-        return e.id || 1;
+    GameObject.prototype.revalidate = function () {
+        _super.prototype.revalidate.call(this);
+        this.spriteSheet.revalidate();
+        this.width = this.spriteSheet.getFrameWidth();
+        this.height = this.spriteSheet.getFrameHeight();
+        if (this.rigid) {
+        }
     };
-    ;
-    DraggableBehaviour.prototype.manage = function (gameObject) {
+    GameObject.prototype.setClonedProperties = function (cloned) {
         var _this = this;
-        this.gameObject = gameObject;
-        this.gameObjectOnClick = gameObject.on(mouseEvents_1.MOUSE_EVENTS.click, function (e) {
-            _this.points[DraggableBehaviour._getEventId(e)] = {
-                mX: e.objectX,
-                mY: e.objectY,
-                target: gameObject,
-                preventDefault: function () {
-                    this.defaultPrevented = true;
-                },
-                dragStartX: 0,
-                dragStartY: 0
-            };
+        var spriteSheet = this.spriteSheet.clone();
+        Object.keys(this._frameAnimations).forEach(function (name) {
+            cloned.addFrameAnimation(name, _this._frameAnimations[name].clone());
         });
-        var scene = this.game.getCurrScene();
-        this.sceneOnMouseDown = scene.on(mouseEvents_1.MOUSE_EVENTS.mouseDown, function (e) {
-            var pointId = DraggableBehaviour._getEventId(e);
-            var point = _this.points[pointId];
-            if (!point)
-                return;
-            point.dragStartX = point.target.pos.x;
-            point.dragStartY = point.target.pos.y;
-        });
-        this.sceneOnMouseMove = scene.on(mouseEvents_1.MOUSE_EVENTS.mouseMove, function (e) {
-            var pointId = DraggableBehaviour._getEventId(e);
-            var point = _this.points[pointId];
-            if (!point)
-                return;
-            if (!point.dragStart) {
-                point.dragStart = true;
-                gameObject.trigger('dragStart', point);
-                if (point.defaultPrevented) {
-                    delete _this.points[pointId];
-                    return;
-                }
-            }
-            gameObject.pos.x = e.screenX - point.mX;
-            gameObject.pos.y = e.screenY - point.mY;
-        });
-        this.sceneOnMouseUp = scene.on(mouseEvents_1.MOUSE_EVENTS.mouseUp, function (e) {
-            var pointId = DraggableBehaviour._getEventId(e);
-            var point = _this.points[pointId];
-            if (!point)
-                return;
-            if (point.dragStart) {
-                point.x = gameObject.pos.x;
-                point.y = gameObject.pos.y;
-                gameObject.trigger('dragStop', point);
-            }
-            delete _this.points[pointId];
-        });
-        this.blurListener = function (e) {
-            scene.trigger(mouseEvents_1.MOUSE_EVENTS.mouseUp, e);
-        };
-        this.game.getRenderer().container.addEventListener('mouseleave', this.blurListener);
+        cloned.spriteSheet = spriteSheet;
+        _super.prototype.setClonedProperties.call(this, cloned);
     };
-    DraggableBehaviour.prototype.destroy = function () {
-        var scene = this.game.getCurrScene();
-        this.game.getRenderer().container.removeEventListener('mouseleave', this.blurListener);
-        this.gameObject.off(mouseEvents_1.MOUSE_EVENTS.click, this.gameObjectOnClick);
-        scene.off(mouseEvents_1.MOUSE_EVENTS.mouseDown, this.sceneOnMouseDown);
-        scene.off(mouseEvents_1.MOUSE_EVENTS.mouseMove, this.sceneOnMouseMove);
-        scene.off(mouseEvents_1.MOUSE_EVENTS.mouseDown, this.sceneOnMouseUp);
+    GameObject.prototype.clone = function () {
+        var cloned = new GameObject(this.game);
+        this.setClonedProperties(cloned);
+        cloned.revalidate();
+        return cloned;
     };
-    return DraggableBehaviour;
-}(baseAbstractBehaviour_1.BaseAbstractBehaviour));
-exports.DraggableBehaviour = DraggableBehaviour;
+    GameObject.prototype.addFrameAnimation = function (name, fa) {
+        this._frameAnimations[name] = fa;
+        fa.setGameObject(this);
+    };
+    GameObject.prototype.playFrameAnimation = function (fr) {
+        var frameAnimation;
+        if (typeof fr === 'string') {
+            frameAnimation = this._frameAnimations[fr];
+        }
+        else
+            frameAnimation = fr;
+        if ( true && !fr)
+            throw new debugError_1.DebugError("no such frame animation: " + name);
+        if ( true && !frameAnimation.getGameObject()) {
+            console.error(frameAnimation);
+            throw new debugError_1.DebugError("frame animation is not attached to game object");
+        }
+        if ( true && frameAnimation.getGameObject() !== this) {
+            console.error(frameAnimation);
+            throw new debugError_1.DebugError("frame animation is attached to another game object");
+        }
+        this._currFrameAnimation = frameAnimation;
+    };
+    GameObject.prototype.stopFrAnimation = function () {
+        if ( true && !this._currFrameAnimation) {
+            throw new debugError_1.DebugError("can not stop frame animation: no active frame animation found");
+        }
+        this._currFrameAnimation.reset();
+        this._currFrameAnimation = null;
+    };
+    GameObject.prototype.getFrameRect = function () {
+        return this.spriteSheet.srcRect;
+    };
+    GameObject.prototype.update = function () {
+        _super.prototype.update.call(this);
+        this._currFrameAnimation && this._currFrameAnimation.update();
+    };
+    GameObject.prototype.draw = function () {
+        this.game.getRenderer().draw(this);
+        return true;
+    };
+    GameObject.prototype.kill = function () {
+        _super.prototype.kill.call(this);
+        for (var _i = 0, _a = this._behaviours; _i < _a.length; _i++) {
+            var b = _a[_i];
+            b.destroy();
+        }
+    };
+    return GameObject;
+}(renderableModel_1.RenderableModel));
+exports.GameObject = GameObject;
 
 
 /***/ }),
-/* 69 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var debugError_1 = __webpack_require__(0);
-var BaseAbstractBehaviour = (function () {
-    function BaseAbstractBehaviour(game, parameters) {
-        this.game = game;
-        this.parameters = parameters;
+var tslib_1 = __webpack_require__(1);
+var image_1 = __webpack_require__(31);
+var SpriteSheet = (function (_super) {
+    tslib_1.__extends(SpriteSheet, _super);
+    function SpriteSheet(game) {
+        var _this = _super.call(this, game) || this;
+        _this.type = 'SpriteSheet';
+        _this.numOfFramesH = 1;
+        _this.numOfFramesV = 1;
+        _this._currFrameIndex = 0;
+        _this._frameWidth = 0;
+        _this._frameHeight = 0;
+        _this._numOfFrames = 0;
+        return _this;
     }
-    BaseAbstractBehaviour.prototype.manage = function (gameObject) {
-        console.error(this);
-        if (true)
-            throw new debugError_1.DebugError("BaseAbstractBehaviour: method 'manage' not implemented");
+    SpriteSheet.prototype.revalidate = function () {
+        _super.prototype.revalidate.call(this);
+        this._frameWidth = ~~(this.width / this.numOfFramesH);
+        this._frameHeight = ~~(this.height / this.numOfFramesV);
+        this._numOfFrames = this.numOfFramesH * this.numOfFramesV;
+        this.setFrameIndex(0);
     };
-    BaseAbstractBehaviour.prototype.onUpdate = function (time, delta) { };
-    BaseAbstractBehaviour.prototype.destroy = function () { };
-    return BaseAbstractBehaviour;
-}());
-exports.BaseAbstractBehaviour = BaseAbstractBehaviour;
+    SpriteSheet.prototype.setClonedProperties = function (cloned) {
+        cloned.numOfFramesV = this.numOfFramesV;
+        cloned.numOfFramesH = this.numOfFramesH;
+        cloned.numOfFramesV = this.numOfFramesV;
+        cloned.numOfFramesH = this.numOfFramesH;
+        _super.prototype.setClonedProperties.call(this, cloned);
+    };
+    SpriteSheet.prototype.clone = function () {
+        var cloned = new SpriteSheet(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
+    };
+    SpriteSheet.prototype.getFramePosX = function (frameIndex) {
+        return (frameIndex % this.numOfFramesH) * this._frameWidth;
+    };
+    SpriteSheet.prototype.getFramePosY = function (frameIndex) {
+        return ~~(frameIndex / this.numOfFramesH) * this._frameHeight;
+    };
+    SpriteSheet.prototype.getNumOfFrames = function () {
+        return this._numOfFrames;
+    };
+    SpriteSheet.prototype.getFrameWidth = function () {
+        return this._frameWidth;
+    };
+    SpriteSheet.prototype.getFrameHeight = function () {
+        return this._frameHeight;
+    };
+    SpriteSheet.prototype.setFrameIndex = function (frameIndex) {
+        this.srcRect.setXYWH(this.getFramePosX(frameIndex), this.getFramePosY(frameIndex), this._frameWidth, this._frameHeight);
+        this._currFrameIndex = frameIndex;
+    };
+    SpriteSheet.prototype.getFrameIndex = function () {
+        return this._currFrameIndex;
+    };
+    return SpriteSheet;
+}(image_1.Image));
+exports.SpriteSheet = SpriteSheet;
 
 
 /***/ }),
+/* 67 */,
+/* 68 */,
+/* 69 */,
 /* 70 */,
 /* 71 */,
 /* 72 */,
 /* 73 */,
-/* 74 */,
-/* 75 */,
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var eventEmitter_1 = __webpack_require__(17);
+var KEY_STATE;
+(function (KEY_STATE) {
+    KEY_STATE[KEY_STATE["KEY_JUST_PRESSED"] = 2] = "KEY_JUST_PRESSED";
+    KEY_STATE[KEY_STATE["KEY_PRESSED"] = 1] = "KEY_PRESSED";
+    KEY_STATE[KEY_STATE["KEY_JUST_RELEASED"] = 0] = "KEY_JUST_RELEASED";
+    KEY_STATE[KEY_STATE["KEY_RELEASED"] = -1] = "KEY_RELEASED";
+})(KEY_STATE = exports.KEY_STATE || (exports.KEY_STATE = {}));
+var KEYBOARD_EVENT;
+(function (KEYBOARD_EVENT) {
+    KEYBOARD_EVENT[KEYBOARD_EVENT["KEY_PRESSED"] = 0] = "KEY_PRESSED";
+    KEYBOARD_EVENT[KEYBOARD_EVENT["KEY_RELEASED"] = 1] = "KEY_RELEASED";
+    KEYBOARD_EVENT[KEYBOARD_EVENT["KEY_HOLD"] = 2] = "KEY_HOLD";
+})(KEYBOARD_EVENT = exports.KEYBOARD_EVENT || (exports.KEYBOARD_EVENT = {}));
+var AbstractKeypad = (function () {
+    function AbstractKeypad(game) {
+        this.buffer = {};
+        this.emitter = new eventEmitter_1.EventEmitter();
+        this.game = game;
+    }
+    AbstractKeypad.prototype.press = function (key) {
+        if (this.isPressed(key))
+            return;
+        this.buffer[key] = KEY_STATE.KEY_JUST_PRESSED;
+        this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_PRESSED], key);
+    };
+    AbstractKeypad.prototype.release = function (key) {
+        if (this.isReleased(key))
+            return;
+        this.buffer[key] = KEY_STATE.KEY_JUST_RELEASED;
+        this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_RELEASED], this.buffer[key]);
+    };
+    AbstractKeypad.prototype.isPressed = function (key) {
+        return this.buffer[key] >= KEY_STATE.KEY_PRESSED;
+    };
+    AbstractKeypad.prototype.isJustPressed = function (key) {
+        return this.buffer[key] === KEY_STATE.KEY_JUST_PRESSED;
+    };
+    AbstractKeypad.prototype.isReleased = function (key) {
+        if (this.buffer[key] === undefined)
+            return true;
+        return this.buffer[key] <= KEY_STATE.KEY_JUST_RELEASED;
+    };
+    AbstractKeypad.prototype.isJustReleased = function (key) {
+        return this.buffer[key] === KEY_STATE.KEY_JUST_RELEASED;
+    };
+    AbstractKeypad.prototype.update = function () {
+        var _this = this;
+        Object.keys(this.buffer).forEach(function (key) {
+            var keyNum = (+key);
+            if (_this.buffer[keyNum] === KEY_STATE.KEY_RELEASED)
+                delete _this.buffer[keyNum];
+            else if (_this.buffer[keyNum] === KEY_STATE.KEY_JUST_RELEASED)
+                _this.buffer[keyNum] = KEY_STATE.KEY_RELEASED;
+            if (_this.buffer[keyNum] === KEY_STATE.KEY_JUST_PRESSED) {
+                _this.buffer[keyNum] = KEY_STATE.KEY_PRESSED;
+            }
+            _this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_HOLD], keyNum);
+        });
+    };
+    return AbstractKeypad;
+}());
+exports.AbstractKeypad = AbstractKeypad;
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(1);
+var abstractKeypad_1 = __webpack_require__(74);
+var KEYBOARD_KEY;
+(function (KEYBOARD_KEY) {
+    KEYBOARD_KEY[KEYBOARD_KEY["SPACE"] = 32] = "SPACE";
+    KEYBOARD_KEY[KEYBOARD_KEY["A"] = 65] = "A";
+    KEYBOARD_KEY[KEYBOARD_KEY["B"] = 66] = "B";
+    KEYBOARD_KEY[KEYBOARD_KEY["C"] = 67] = "C";
+    KEYBOARD_KEY[KEYBOARD_KEY["D"] = 68] = "D";
+    KEYBOARD_KEY[KEYBOARD_KEY["E"] = 69] = "E";
+    KEYBOARD_KEY[KEYBOARD_KEY["F"] = 70] = "F";
+    KEYBOARD_KEY[KEYBOARD_KEY["G"] = 71] = "G";
+    KEYBOARD_KEY[KEYBOARD_KEY["H"] = 72] = "H";
+    KEYBOARD_KEY[KEYBOARD_KEY["I"] = 73] = "I";
+    KEYBOARD_KEY[KEYBOARD_KEY["J"] = 74] = "J";
+    KEYBOARD_KEY[KEYBOARD_KEY["K"] = 75] = "K";
+    KEYBOARD_KEY[KEYBOARD_KEY["L"] = 76] = "L";
+    KEYBOARD_KEY[KEYBOARD_KEY["M"] = 77] = "M";
+    KEYBOARD_KEY[KEYBOARD_KEY["N"] = 78] = "N";
+    KEYBOARD_KEY[KEYBOARD_KEY["O"] = 79] = "O";
+    KEYBOARD_KEY[KEYBOARD_KEY["P"] = 80] = "P";
+    KEYBOARD_KEY[KEYBOARD_KEY["Q"] = 81] = "Q";
+    KEYBOARD_KEY[KEYBOARD_KEY["R"] = 82] = "R";
+    KEYBOARD_KEY[KEYBOARD_KEY["S"] = 83] = "S";
+    KEYBOARD_KEY[KEYBOARD_KEY["T"] = 84] = "T";
+    KEYBOARD_KEY[KEYBOARD_KEY["U"] = 85] = "U";
+    KEYBOARD_KEY[KEYBOARD_KEY["V"] = 86] = "V";
+    KEYBOARD_KEY[KEYBOARD_KEY["W"] = 87] = "W";
+    KEYBOARD_KEY[KEYBOARD_KEY["X"] = 88] = "X";
+    KEYBOARD_KEY[KEYBOARD_KEY["Y"] = 89] = "Y";
+    KEYBOARD_KEY[KEYBOARD_KEY["Z"] = 80] = "Z";
+    KEYBOARD_KEY[KEYBOARD_KEY["LEFT"] = 37] = "LEFT";
+    KEYBOARD_KEY[KEYBOARD_KEY["UP"] = 38] = "UP";
+    KEYBOARD_KEY[KEYBOARD_KEY["RIGHT"] = 39] = "RIGHT";
+    KEYBOARD_KEY[KEYBOARD_KEY["DOWN"] = 40] = "DOWN";
+})(KEYBOARD_KEY = exports.KEYBOARD_KEY || (exports.KEYBOARD_KEY = {}));
+var Keyboard = (function (_super) {
+    tslib_1.__extends(Keyboard, _super);
+    function Keyboard() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.type = 'Keyboard';
+        return _this;
+    }
+    Keyboard.prototype.listenTo = function () {
+        var _this = this;
+        this.keyDownListener = function (e) {
+            var code = e.keyCode;
+            _this.press(code);
+        };
+        this.keyUpListener = function (e) {
+            var code = e.keyCode;
+            _this.release(code);
+        };
+        window.addEventListener('keydown', this.keyDownListener);
+        window.addEventListener('keyup', this.keyUpListener);
+    };
+    Keyboard.prototype.destroy = function () {
+        window.removeEventListener('keydown', this.keyDownListener);
+        window.removeEventListener('keyup', this.keyUpListener);
+    };
+    Keyboard.prototype.on = function (e, callback) {
+        this.emitter.on(abstractKeypad_1.KEYBOARD_EVENT[e], callback);
+    };
+    Keyboard.prototype.off = function (e, callback) {
+        this.emitter.off(KEYBOARD_KEY[e], callback);
+    };
+    return Keyboard;
+}(abstractKeypad_1.AbstractKeypad));
+exports.Keyboard = Keyboard;
+
+
+/***/ }),
 /* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(78);
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var mainScene_1 = __webpack_require__(79);
+var game_1 = __webpack_require__(25);
+var webGlRenderer_1 = __webpack_require__(49);
+var keyboard_1 = __webpack_require__(75);
+var game = new game_1.Game();
+game.setRenderer(webGlRenderer_1.WebGlRenderer);
+game.addControl(keyboard_1.Keyboard);
+var mainScene = new mainScene_1.MainScene(game);
+game.runScene(mainScene);
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(1);
+var scene_1 = __webpack_require__(37);
+var gameObject_1 = __webpack_require__(65);
+var spriteSheet_1 = __webpack_require__(66);
+var rectangle_1 = __webpack_require__(32);
+var abstractKeypad_1 = __webpack_require__(74);
+var keyboard_1 = __webpack_require__(75);
+var MainScene = (function (_super) {
+    tslib_1.__extends(MainScene, _super);
+    function MainScene() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    MainScene.prototype.onPreloading = function () {
+        this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
+        var rect = new rectangle_1.Rectangle(this.game);
+        rect.fillColor.setRGB(10, 100, 100);
+        rect.height = 10;
+        this.preloadingGameObject = rect;
+    };
+    MainScene.prototype.onProgress = function (val) {
+        this.preloadingGameObject.width = val * this.game.width;
+    };
+    MainScene.prototype.onReady = function () {
+        var _this = this;
+        this.logoObj = new gameObject_1.GameObject(this.game);
+        var spr = new spriteSheet_1.SpriteSheet(this.game);
+        spr.setResourceLink(this.logoLink);
+        this.logoObj.spriteSheet = spr;
+        this.logoObj.pos.fromJSON({ x: 10, y: 10 });
+        this.appendChild(this.logoObj);
+        this.game.getControl(keyboard_1.Keyboard).on(abstractKeypad_1.KEYBOARD_EVENT.KEY_HOLD, function (e) {
+            switch (e) {
+                case keyboard_1.KEYBOARD_KEY.LEFT:
+                    _this.logoObj.pos.addX(-1);
+                    break;
+                case keyboard_1.KEYBOARD_KEY.RIGHT:
+                    _this.logoObj.pos.addX(1);
+                    break;
+                case keyboard_1.KEYBOARD_KEY.UP:
+                    _this.logoObj.pos.addY(-1);
+                    break;
+                case keyboard_1.KEYBOARD_KEY.DOWN:
+                    _this.logoObj.pos.addY(1);
+                    break;
+                case keyboard_1.KEYBOARD_KEY.R:
+                    _this.logoObj.angle += 0.1;
+            }
+        });
+        window.logoObj = this.logoObj;
+    };
+    return MainScene;
+}(scene_1.Scene));
+exports.MainScene = MainScene;
+
+
+/***/ }),
 /* 80 */,
 /* 81 */,
 /* 82 */,
@@ -6639,94 +6707,9 @@ exports.BaseAbstractBehaviour = BaseAbstractBehaviour;
 /* 97 */,
 /* 98 */,
 /* 99 */,
-/* 100 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(101);
-
-
-/***/ }),
-/* 101 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var mainScene_1 = __webpack_require__(102);
-var game_1 = __webpack_require__(25);
-var webGlRenderer_1 = __webpack_require__(49);
-var mouse_1 = __webpack_require__(63);
-var game = new game_1.Game();
-game.setRenderer(webGlRenderer_1.WebGlRenderer);
-game.addControl(mouse_1.Mouse);
-var mainScene = new mainScene_1.MainScene(game);
-game.runScene(mainScene);
-
-
-/***/ }),
-/* 102 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = __webpack_require__(1);
-var scene_1 = __webpack_require__(37);
-var font_1 = __webpack_require__(103);
-var textField_1 = __webpack_require__(34);
-var color_1 = __webpack_require__(4);
-var button_1 = __webpack_require__(104);
-var rectangle_1 = __webpack_require__(32);
-var draggable_1 = __webpack_require__(68);
-var MainScene = (function (_super) {
-    tslib_1.__extends(MainScene, _super);
-    function MainScene() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    MainScene.prototype.onPreloading = function () {
-        var fnt = new font_1.Font(this.game);
-        fnt.fontSize = 50;
-        fnt.fontFamily = 'monospace';
-        fnt.fontColor = color_1.Color.RGB(200, 0, 12);
-        font_1.FontFactory.generate(fnt, this);
-        var fnt2 = new font_1.Font(this.game);
-        fnt2.fontSize = 12;
-        fnt2.fontFamily = 'monospace';
-        fnt2.fontColor = color_1.Color.RGB(0, 220, 12);
-        font_1.FontFactory.generate(fnt2, this);
-        var i = new Image();
-        i.src = fnt2.createBitmap();
-        document.body.appendChild(i);
-        var tf = new textField_1.TextField(this.game);
-        tf.pos.setY(23);
-        tf.setFont(fnt2);
-        tf.setText("no clicks");
-        this.appendChild(tf);
-        tf.addBehaviour(new draggable_1.DraggableBehaviour(this.game));
-        var btn = new button_1.Button(this.game);
-        btn.setFont(fnt);
-        btn.setText("click!");
-        btn.pos.setXY(10, 10);
-        var bg = new rectangle_1.Rectangle(this.game);
-        bg.borderRadius = 15;
-        bg.fillColor = color_1.Color.RGB(0, 120, 1);
-        btn.background = bg;
-        btn.setPaddings(15);
-        var cnt = 0;
-        btn.on('click', function () {
-            tf.setText("clicked " + ++cnt + " times");
-        });
-        this.appendChild(btn);
-        tf.moveToFront();
-    };
-    MainScene.prototype.onReady = function () {
-    };
-    return MainScene;
-}(scene_1.Scene));
-exports.MainScene = MainScene;
-
-
-/***/ }),
+/* 100 */,
+/* 101 */,
+/* 102 */,
 /* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6859,67 +6842,6 @@ var Font = (function (_super) {
     return Font;
 }(resource_1.Resource));
 exports.Font = Font;
-
-
-/***/ }),
-/* 104 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = __webpack_require__(1);
-var container_1 = __webpack_require__(19);
-var textField_1 = __webpack_require__(34);
-var debugError_1 = __webpack_require__(0);
-var Button = (function (_super) {
-    tslib_1.__extends(Button, _super);
-    function Button(game) {
-        var _this = _super.call(this, game) || this;
-        _this.type = 'Button';
-        _this._textField = new textField_1.TextField(game);
-        return _this;
-    }
-    Button.prototype.revalidate = function () {
-        if ( true && !this._font)
-            throw new debugError_1.DebugError("font is not set");
-        if (this.children.indexOf(this._textField) === -1)
-            this.appendChild(this._textField);
-        _super.prototype.revalidate.call(this);
-        this.onGeometryChanged();
-    };
-    Button.prototype.onGeometryChanged = function () {
-        this._textField.onGeometryChanged();
-        this.calcDrawableRect(this._textField.width, this._textField.height);
-        if (this.background) {
-            var dx = (this.background.width - this._textField.width) / 2;
-            var dy = (this.background.height - this._textField.height) / 2;
-            this._textField.pos.setXY(dx, dy);
-        }
-    };
-    Button.prototype.setText = function (text) {
-        this._textField.setText(text);
-        this._dirty = true;
-    };
-    Button.prototype.setFont = function (f) {
-        f.revalidate();
-        this._font = f;
-        this._textField.setFont(f);
-    };
-    Button.prototype.getText = function () {
-        return this._textField.getText();
-    };
-    Button.prototype.update = function () {
-        _super.prototype.update.call(this);
-    };
-    Button.prototype.draw = function () {
-        if (this.background)
-            this.background.draw();
-        return true;
-    };
-    return Button;
-}(container_1.Container));
-exports.Button = Button;
 
 
 /***/ })

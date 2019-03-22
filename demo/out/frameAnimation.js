@@ -335,120 +335,8 @@ function __importDefault(mod) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var size_1 = __webpack_require__(11);
-var point2d_1 = __webpack_require__(3);
-var objectPool_1 = __webpack_require__(8);
-var observableEntity_1 = __webpack_require__(22);
-var Rect = (function (_super) {
-    tslib_1.__extends(Rect, _super);
-    function Rect(x, y, width, height, onChangedFn) {
-        if (x === void 0) { x = 0; }
-        if (y === void 0) { y = 0; }
-        if (width === void 0) { width = 0; }
-        if (height === void 0) { height = 0; }
-        var _this = _super.call(this) || this;
-        if (onChangedFn)
-            _this.addListener(onChangedFn);
-        _this.setXYWH(x, y, width, height);
-        return _this;
-    }
-    Rect.prototype.checkObservableChanged = function () {
-        return this._state.setState(this.x, this.y, this.width, this.height);
-    };
-    Rect.prototype.observe = function (onChangedFn) {
-        this.addListener(onChangedFn);
-    };
-    Rect.prototype.revalidate = function () {
-        this.right = this.x + this.width;
-        this.bottom = this.y + this.height;
-        this.triggerObservable();
-    };
-    Rect.prototype.setXYWH = function (x, y, width, height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.revalidate();
-        return this;
-    };
-    Rect.prototype.setXY = function (x, y) {
-        this.x = x;
-        this.y = y;
-        this.revalidate();
-        return this;
-    };
-    Rect.prototype.setWH = function (width, height) {
-        this.width = width;
-        this.height = height;
-        this.revalidate();
-        return this;
-    };
-    Rect.prototype.set = function (another) {
-        this.setXYWH(another.x, another.y, another.width, another.height);
-        return this;
-    };
-    Rect.prototype.setSize = function (s) {
-        this.width = s.width;
-        this.height = s.height;
-        this.revalidate();
-        return this;
-    };
-    Rect.prototype.setPoint = function (p) {
-        p.setXY(p.x, p.y);
-        return this;
-    };
-    Rect.prototype.addXY = function (x, y) {
-        this.x += x;
-        this.y += y;
-        this.revalidate();
-        return this;
-    };
-    Rect.prototype.addPoint = function (another) {
-        this.addXY(another.x, another.y);
-        return this;
-    };
-    Rect.prototype.getPoint = function () {
-        var _this = this;
-        if (this.p === undefined)
-            this.p = new point2d_1.Point2d(0, 0);
-        this.p.setXY(this.x, this.y);
-        this.p.addListener(function () { return _this.setXY(_this.p.x, _this.p.y); });
-        return this.p;
-    };
-    Rect.prototype.getSize = function () {
-        if (this.size === undefined)
-            this.size = new size_1.Size();
-        this.size.setWH(this.width, this.height);
-        return this.size;
-    };
-    Rect.prototype.clone = function () {
-        return new Rect(this.x, this.y, this.width, this.height);
-    };
-    Rect.prototype.toJSON = function () {
-        return { x: this.x, y: this.y, width: this.width, height: this.height };
-    };
-    Rect.prototype.fromJSON = function (jsonObj) {
-        this.setXYWH(jsonObj.x, jsonObj.y, jsonObj.width, jsonObj.height);
-    };
-    Rect.fromPool = function () {
-        return Rect.rectPool.getFreeObject();
-    };
-    Rect.rectPool = new objectPool_1.ObjectPool(Rect);
-    return Rect;
-}(observableEntity_1.ObservableEntity));
-exports.Rect = Rect;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = __webpack_require__(1);
-var objectPool_1 = __webpack_require__(8);
-var observableEntity_1 = __webpack_require__(22);
+var objectPool_1 = __webpack_require__(7);
+var observableEntity_1 = __webpack_require__(20);
 var Point2d = (function (_super) {
     tslib_1.__extends(Point2d, _super);
     function Point2d(x, y, onChangedFn) {
@@ -583,13 +471,125 @@ exports.Point2d = Point2d;
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(1);
+var size_1 = __webpack_require__(11);
+var point2d_1 = __webpack_require__(2);
+var objectPool_1 = __webpack_require__(7);
+var observableEntity_1 = __webpack_require__(20);
+var Rect = (function (_super) {
+    tslib_1.__extends(Rect, _super);
+    function Rect(x, y, width, height, onChangedFn) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = 0; }
+        if (width === void 0) { width = 0; }
+        if (height === void 0) { height = 0; }
+        var _this = _super.call(this) || this;
+        if (onChangedFn)
+            _this.addListener(onChangedFn);
+        _this.setXYWH(x, y, width, height);
+        return _this;
+    }
+    Rect.prototype.checkObservableChanged = function () {
+        return this._state.setState(this.x, this.y, this.width, this.height);
+    };
+    Rect.prototype.observe = function (onChangedFn) {
+        this.addListener(onChangedFn);
+    };
+    Rect.prototype.revalidate = function () {
+        this.right = this.x + this.width;
+        this.bottom = this.y + this.height;
+        this.triggerObservable();
+    };
+    Rect.prototype.setXYWH = function (x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.revalidate();
+        return this;
+    };
+    Rect.prototype.setXY = function (x, y) {
+        this.x = x;
+        this.y = y;
+        this.revalidate();
+        return this;
+    };
+    Rect.prototype.setWH = function (width, height) {
+        this.width = width;
+        this.height = height;
+        this.revalidate();
+        return this;
+    };
+    Rect.prototype.set = function (another) {
+        this.setXYWH(another.x, another.y, another.width, another.height);
+        return this;
+    };
+    Rect.prototype.setSize = function (s) {
+        this.width = s.width;
+        this.height = s.height;
+        this.revalidate();
+        return this;
+    };
+    Rect.prototype.setPoint = function (p) {
+        p.setXY(p.x, p.y);
+        return this;
+    };
+    Rect.prototype.addXY = function (x, y) {
+        this.x += x;
+        this.y += y;
+        this.revalidate();
+        return this;
+    };
+    Rect.prototype.addPoint = function (another) {
+        this.addXY(another.x, another.y);
+        return this;
+    };
+    Rect.prototype.getPoint = function () {
+        var _this = this;
+        if (this.p === undefined)
+            this.p = new point2d_1.Point2d(0, 0);
+        this.p.setXY(this.x, this.y);
+        this.p.addListener(function () { return _this.setXY(_this.p.x, _this.p.y); });
+        return this.p;
+    };
+    Rect.prototype.getSize = function () {
+        if (this.size === undefined)
+            this.size = new size_1.Size();
+        this.size.setWH(this.width, this.height);
+        return this.size;
+    };
+    Rect.prototype.clone = function () {
+        return new Rect(this.x, this.y, this.width, this.height);
+    };
+    Rect.prototype.toJSON = function () {
+        return { x: this.x, y: this.y, width: this.width, height: this.height };
+    };
+    Rect.prototype.fromJSON = function (jsonObj) {
+        this.setXYWH(jsonObj.x, jsonObj.y, jsonObj.width, jsonObj.height);
+    };
+    Rect.fromPool = function () {
+        return Rect.rectPool.getFreeObject();
+    };
+    Rect.rectPool = new objectPool_1.ObjectPool(Rect);
+    return Rect;
+}(observableEntity_1.ObservableEntity));
+exports.Rect = Rect;
+
+
+/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var objectPool_1 = __webpack_require__(8);
+var objectPool_1 = __webpack_require__(7);
 var Color = (function () {
     function Color(r, g, b, a) {
         this._arr = null;
@@ -693,200 +693,6 @@ exports.Color = Color;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(44);
-var camera_1 = __webpack_require__(25);
-var point2d_1 = __webpack_require__(3);
-var lightArray_1 = __webpack_require__(45);
-var colliderEngine_1 = __webpack_require__(47);
-var debugError_1 = __webpack_require__(0);
-var SCALE_STRATEGY;
-(function (SCALE_STRATEGY) {
-    SCALE_STRATEGY[SCALE_STRATEGY["NO_SCALE"] = 0] = "NO_SCALE";
-    SCALE_STRATEGY[SCALE_STRATEGY["FIT"] = 1] = "FIT";
-    SCALE_STRATEGY[SCALE_STRATEGY["STRETCH"] = 2] = "STRETCH";
-})(SCALE_STRATEGY = exports.SCALE_STRATEGY || (exports.SCALE_STRATEGY = {}));
-var Game = (function () {
-    function Game() {
-        this._lastTime = 0;
-        this._currTime = 0;
-        this._deltaTime = 0;
-        this._running = false;
-        this._destroyed = false;
-        this._controls = [];
-        this.scale = new point2d_1.Point2d(1, 1);
-        this.pos = new point2d_1.Point2d(0, 0);
-        this.width = 320;
-        this.height = 240;
-        this.gravityConstant = 0;
-        this.fps = 0;
-        this.scaleStrategy = SCALE_STRATEGY.FIT;
-        this._cnt = 0;
-        this.collider = new colliderEngine_1.ColliderEngine(this);
-        this.camera = new camera_1.Camera(this);
-        this.lightArray = new lightArray_1.LightArray(this);
-        Game.instance = this;
-        if (true)
-            window['game'] = this;
-    }
-    Game.getInstance = function () {
-        return Game.instance;
-    };
-    Game.prototype.addControl = function (C) {
-        var instance = new C(this);
-        if (true) {
-            for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
-                var c = _a[_i];
-                if (c.type === instance.type) {
-                    throw new debugError_1.DebugError("control with type \"" + c.type + "\" added already");
-                }
-            }
-        }
-        this._controls.push(instance);
-        instance.listenTo();
-    };
-    Game.prototype.setAudioPLayer = function (p) {
-        this.audioPlayer = new p(this);
-    };
-    Game.prototype.getAudioPlayer = function () {
-        if (true && !this.audioPlayer) {
-            throw new debugError_1.DebugError('audio player is not set');
-        }
-        return this.audioPlayer;
-    };
-    Game.prototype.isOfType = function (instance, C) {
-        return instance instanceof C;
-    };
-    Game.prototype.getControl = function (T) {
-        for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
-            var c = _a[_i];
-            if (c instanceof T) {
-                if (this.isOfType(c, T))
-                    return c;
-            }
-        }
-        if (true)
-            throw new debugError_1.DebugError('no such control');
-    };
-    Game.prototype.hasControl = function (type) {
-        for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
-            var c = _a[_i];
-            if (c.type === type) {
-                return true;
-            }
-        }
-        return false;
-    };
-    Game.prototype.getTime = function () {
-        return this._lastTime;
-    };
-    Game.prototype.getDeltaTime = function () {
-        return this._deltaTime;
-    };
-    Game.prototype.log = function (args) {
-        if (true)
-            this._renderer.log(args);
-    };
-    Game.prototype.clearLog = function () {
-        if (true)
-            this._renderer.clearLog();
-    };
-    Game.prototype.setRenderer = function (Renderer) {
-        this._renderer = new Renderer(this);
-    };
-    Game.prototype.getRenderer = function () {
-        return this._renderer;
-    };
-    Game.prototype.debug2 = function () {
-        var val = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            val[_i] = arguments[_i];
-        }
-        this._cnt++;
-        if (this._cnt > 10)
-            throw new debugError_1.DebugError('too many logs');
-    };
-    Game.prototype.runScene = function (scene) {
-        var _this = this;
-        this._currentScene = scene;
-        this.revalidate();
-        scene.onPreloading();
-        scene.resourceLoader.onProgress(function () {
-            scene.onProgress(scene.resourceLoader.getProgress());
-        });
-        scene.resourceLoader.startLoading();
-        if (!this._running)
-            this.update();
-        this._running = true;
-        scene.resourceLoader.onCompleted(function () {
-            _this._currentScene.onReady();
-        });
-    };
-    Game.prototype.getCurrScene = function () {
-        if (true && !this._currentScene)
-            throw new debugError_1.DebugError("current scene is not set yet");
-        return this._currentScene;
-    };
-    Game.prototype.update = function () {
-        if (this._destroyed)
-            return;
-        this._lastTime = this._currTime;
-        this._currTime = Date.now();
-        var currTimeCopy = this._currTime;
-        if (!this._lastTime)
-            this._lastTime = this._currTime;
-        this._deltaTime = this._currTime - this._lastTime;
-        if (true) {
-            this.fps = ~~(1000 / this._deltaTime);
-            var renderError = this._renderer.getError();
-            if (renderError)
-                throw new debugError_1.DebugError("render error with code " + renderError);
-        }
-        var numOfLoops = (~~(this._deltaTime / Game.UPDATE_TIME_RATE)) || 1;
-        var currTime = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
-        var loopCnt = 0;
-        do {
-            this._currentScene.update();
-            for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
-                var c = _a[_i];
-                c.update();
-            }
-            currTime += Game.UPDATE_TIME_RATE;
-            loopCnt++;
-            if (loopCnt > 10) {
-                this._lastTime = this._currTime = currTimeCopy;
-                break;
-            }
-        } while (loopCnt < numOfLoops);
-        this._currentScene.render();
-        requestAnimationFrame(this.update.bind(this));
-    };
-    Game.prototype.destroy = function () {
-        this._destroyed = true;
-        for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
-            var c = _a[_i];
-            c.destroy();
-        }
-        this._renderer.cancelFullScreen();
-        this._renderer.destroy();
-    };
-    Game.prototype.revalidate = function () {
-        if (true && !this._renderer)
-            throw new debugError_1.DebugError("game renderer is not set");
-        this.camera.revalidate();
-    };
-    Game.UPDATE_TIME_RATE = 20;
-    return Game;
-}());
-exports.Game = Game;
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var debugError_1 = __webpack_require__(0);
 var parseErrors = function (log) {
     if (false)
@@ -909,7 +715,7 @@ exports.compileShader = function (gl, shaderSource, shaderType) {
             throw new debugError_1.DebugError("can not compile shader: shader source not specified for type " + shaderType);
     }
     var shader = gl.createShader(shaderType);
-    if (true && !shader)
+    if ( true && !shader)
         throw new debugError_1.DebugError("can not allocate memory for shader: gl.createShader(shaderType)");
     gl.shaderSource(shader, shaderSource);
     gl.compileShader(shader);
@@ -937,7 +743,7 @@ exports.compileShader = function (gl, shaderSource, shaderType) {
 };
 exports.createProgram = function (gl, vertexShader, fragmentShader) {
     var program = gl.createProgram();
-    if (true && !program)
+    if ( true && !program)
         throw new debugError_1.DebugError("can not allocate memory for gl.createProgram()");
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
@@ -986,7 +792,7 @@ var mapType = function (gl, type) {
     return GL_TABLE[type];
 };
 exports.normalizeUniformName = function (s) {
-    if (true && s.indexOf(' ') > -1)
+    if ( true && s.indexOf(' ') > -1)
         throw new debugError_1.DebugError("bad uniform name: \"" + s + "\"");
     if (s.indexOf('[') > -1)
         return s.split('[')[0];
@@ -999,7 +805,7 @@ exports.extractUniforms = function (gl, program) {
     var uniforms = {};
     for (var i = 0; i < activeUniforms; i++) {
         var uniformData = gl.getActiveUniform(glProgram, i);
-        if (true && !uniformData)
+        if ( true && !uniformData)
             throw new debugError_1.DebugError("can not receive active uniforms info: gl.getActiveUniform()");
         var type = mapType(gl, uniformData.type);
         var name = exports.normalizeUniformName(uniformData.name);
@@ -1019,10 +825,10 @@ exports.extractAttributes = function (gl, program) {
     var attrMap = {};
     for (var i = 0; i < activeAttributes; i++) {
         var attrData = gl.getActiveAttrib(glProgram, i);
-        if (true && !attrData)
+        if ( true && !attrData)
             throw new debugError_1.DebugError("can not receive active attribute info: gl.getActiveAttrib()");
         var location = gl.getAttribLocation(glProgram, attrData.name);
-        if (true && location < 0) {
+        if ( true && location < 0) {
             console.log(program);
             throw new debugError_1.DebugError("error finding attribute location: " + attrData.name);
         }
@@ -1079,67 +885,67 @@ var getUniformSetter = function (size, type) {
     if (size === 1) {
         switch (type) {
             case exports.GL_TYPE.FLOAT: return function (gl, location, value) {
-                true && expect(value, TypeNumber);
+                 true && expect(value, TypeNumber);
                 gl.uniform1f(location, value);
             };
             case exports.GL_TYPE.FLOAT_VEC2: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeNumber, 2));
+                 true && expect(value, TypeArray(TypeNumber, 2));
                 gl.uniform2f(location, value[0], value[1]);
             };
             case exports.GL_TYPE.FLOAT_VEC3: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeNumber, 3));
+                 true && expect(value, TypeArray(TypeNumber, 3));
                 gl.uniform3f(location, value[0], value[1], value[2]);
             };
             case exports.GL_TYPE.FLOAT_VEC4: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeNumber, 4));
+                 true && expect(value, TypeArray(TypeNumber, 4));
                 gl.uniform4f(location, value[0], value[1], value[2], value[3]);
             };
             case exports.GL_TYPE.INT: return function (gl, location, value) {
-                true && expect(value, TypeInt);
+                 true && expect(value, TypeInt);
                 gl.uniform1i(location, value);
             };
             case exports.GL_TYPE.INT_VEC2: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeInt, 2));
+                 true && expect(value, TypeArray(TypeInt, 2));
                 gl.uniform2i(location, value[0], value[1]);
             };
             case exports.GL_TYPE.INT_VEC3: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeInt, 3));
+                 true && expect(value, TypeArray(TypeInt, 3));
                 gl.uniform3i(location, value[0], value[1], value[2]);
             };
             case exports.GL_TYPE.INT_VEC4: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeInt, 4));
+                 true && expect(value, TypeArray(TypeInt, 4));
                 gl.uniform4i(location, value[0], value[1], value[2], value[3]);
             };
             case exports.GL_TYPE.BOOL: return function (gl, location, value) {
-                true && expect(value, TypeBool);
+                 true && expect(value, TypeBool);
                 gl.uniform1i(location, value);
             };
             case exports.GL_TYPE.BOOL_VEC2: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeBool, 2));
+                 true && expect(value, TypeArray(TypeBool, 2));
                 gl.uniform2i(location, value[0], value[1]);
             };
             case exports.GL_TYPE.BOOL_VEC3: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeBool, 3));
+                 true && expect(value, TypeArray(TypeBool, 3));
                 gl.uniform3i(location, value[0], value[1], value[2]);
             };
             case exports.GL_TYPE.BOOL_VEC4: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeBool, 4));
+                 true && expect(value, TypeArray(TypeBool, 4));
                 gl.uniform4i(location, value[0], value[1], value[2], value[3]);
             };
             case exports.GL_TYPE.FLOAT_MAT2: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeNumber, 2 * 2));
+                 true && expect(value, TypeArray(TypeNumber, 2 * 2));
                 gl.uniformMatrix2fv(location, false, value);
             };
             case exports.GL_TYPE.FLOAT_MAT3: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeNumber, 3 * 3));
+                 true && expect(value, TypeArray(TypeNumber, 3 * 3));
                 gl.uniformMatrix3fv(location, false, value);
             };
             case exports.GL_TYPE.FLOAT_MAT4: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeNumber, 4 * 4));
+                 true && expect(value, TypeArray(TypeNumber, 4 * 4));
                 gl.uniformMatrix4fv(location, false, value);
             };
             case exports.GL_TYPE.SAMPLER_2D: return function (gl, location, value) {
-                true && expect(value, TypeInt);
+                 true && expect(value, TypeInt);
                 gl.uniform1i(location, value);
             };
             default:
@@ -1151,55 +957,55 @@ var getUniformSetter = function (size, type) {
     else {
         switch (type) {
             case exports.GL_TYPE.FLOAT: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeNumber, size));
+                 true && expect(value, TypeArray(TypeNumber, size));
                 gl.uniform1fv(location, value);
             };
             case exports.GL_TYPE.FLOAT_VEC2: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeNumber, size * 2));
+                 true && expect(value, TypeArray(TypeNumber, size * 2));
                 gl.uniform2fv(location, value);
             };
             case exports.GL_TYPE.FLOAT_VEC3: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeNumber, size * 3));
+                 true && expect(value, TypeArray(TypeNumber, size * 3));
                 gl.uniform3fv(location, value);
             };
             case exports.GL_TYPE.FLOAT_VEC4: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeNumber, size * 4));
+                 true && expect(value, TypeArray(TypeNumber, size * 4));
                 gl.uniform4fv(location, value);
             };
             case exports.GL_TYPE.INT: return function (gl, location, value) {
-                true && expect(value, TypeInt);
+                 true && expect(value, TypeInt);
                 gl.uniform1iv(location, value);
             };
             case exports.GL_TYPE.INT_VEC2: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeInt, size * 2));
+                 true && expect(value, TypeArray(TypeInt, size * 2));
                 gl.uniform2iv(location, value);
             };
             case exports.GL_TYPE.INT_VEC3: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeInt, size * 3));
+                 true && expect(value, TypeArray(TypeInt, size * 3));
                 gl.uniform3iv(location, value);
             };
             case exports.GL_TYPE.INT_VEC4: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeInt, size * 4));
+                 true && expect(value, TypeArray(TypeInt, size * 4));
                 gl.uniform4iv(location, value);
             };
             case exports.GL_TYPE.BOOL: return function (gl, location, value) {
-                true && expect(value, TypeBool);
+                 true && expect(value, TypeBool);
                 gl.uniform1iv(location, value);
             };
             case exports.GL_TYPE.BOOL_VEC2: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeBool, size * 2));
+                 true && expect(value, TypeArray(TypeBool, size * 2));
                 gl.uniform2iv(location, value);
             };
             case exports.GL_TYPE.BOOL_VEC3: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeBool, size * 3));
+                 true && expect(value, TypeArray(TypeBool, size * 3));
                 gl.uniform3iv(location, value);
             };
             case exports.GL_TYPE.BOOL_VEC4: return function (gl, location, value) {
-                true && expect(value, TypeArray(TypeBool, size * 4));
+                 true && expect(value, TypeArray(TypeBool, size * 4));
                 gl.uniform4iv(location, value);
             };
             case exports.GL_TYPE.SAMPLER_2D: return function (gl, location, value) {
-                true && expect(value, TypeInt);
+                 true && expect(value, TypeInt);
                 gl.uniform1iv(location, value);
             };
             default:
@@ -1212,14 +1018,14 @@ var getUniformSetter = function (size, type) {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var point2d_1 = __webpack_require__(3);
-var mat4_1 = __webpack_require__(10);
+var point2d_1 = __webpack_require__(2);
+var mat4_1 = __webpack_require__(9);
 var MathEx;
 (function (MathEx) {
     MathEx.isPointInRect = function (point, rect, angle) {
@@ -1292,7 +1098,7 @@ var MathEx;
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1305,7 +1111,7 @@ var ObjectPool = (function () {
         this.Class = Class;
         this.numberOfInstances = numberOfInstances;
         this._pool = [];
-        if (true && !Class)
+        if ( true && !Class)
             throw new debugError_1.DebugError("can not instantiate ObjectPool: class not provided in constructor");
     }
     ObjectPool.prototype.getFreeObject = function () {
@@ -1334,7 +1140,7 @@ var ObjectPool = (function () {
     };
     ObjectPool.prototype.releaseObject = function (obj) {
         var indexOf = this._pool.indexOf(obj);
-        if (true && indexOf == -1) {
+        if ( true && indexOf == -1) {
             console.error(obj);
             throw new debugError_1.DebugError("can not release the object: it does not belong to the pool");
         }
@@ -1346,26 +1152,69 @@ exports.ObjectPool = ObjectPool;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MOUSE_EVENTS = {
-    click: 'click',
-    mouseDown: 'mouseDown',
-    mouseMove: 'mouseMove',
-    mouseLeave: 'mouseLeave',
-    mouseEnter: 'mouseEnter',
-    mouseUp: 'mouseUp',
-    doubleClick: 'doubleClick',
-    scroll: 'scroll'
+exports.isObjectMatch = function (obj, query) {
+    if (!(obj && query))
+        return false;
+    var match = true;
+    var keys = Object.keys(query);
+    if (!keys.length)
+        return false;
+    keys.some(function (key) {
+        if (obj[key] != query[key]) {
+            match = false;
+            return true;
+        }
+    });
+    return match;
 };
+exports.isObject = function (obj) {
+    return obj === Object(obj);
+};
+exports.isArray = function (a) {
+    return !!(a.splice);
+};
+var isEqualArray = function (a, b) {
+    for (var i = 0, max = a.length; i < max; i++) {
+        if (a[i] !== b[i])
+            return false;
+    }
+    return true;
+};
+var isEqualObject = function (a, b) {
+    throw 'not implemented';
+};
+exports.isEqual = function (a, b) {
+    if (a === undefined)
+        return false;
+    if (exports.isArray(a) && exports.isArray(b))
+        return isEqualArray(a, b);
+    else if (exports.isObject(a) && exports.isObject(b))
+        return isEqualObject(a, b);
+    return a === b;
+};
+exports.removeFromArray = function (arr, predicate) {
+    var i = _this.length;
+    var cnt = 0;
+    while (i--) {
+        if (predicate(arr[i])) {
+            arr.splice(i, 1);
+            cnt++;
+        }
+    }
+    return cnt;
+};
+exports.noop = function (arg) { };
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1536,7 +1385,7 @@ var mat4;
         r[14] = -m[0] * m[5] * m[14] + m[0] * m[13] * m[6] + m[1] * m[4] * m[14] - m[1] * m[12] * m[6] - m[2] * m[4] * m[13] + m[2] * m[12] * m[5];
         r[15] = m[0] * m[5] * m[10] - m[0] * m[9] * m[6] - m[1] * m[4] * m[10] + m[1] * m[8] * m[6] + m[2] * m[4] * m[9] - m[2] * m[8] * m[5];
         var det = m[0] * r[0] + m[1] * r[4] + m[2] * r[8] + m[3] * r[12];
-        if (true && det === 0) {
+        if ( true && det === 0) {
             console.error(m);
             throw new debugError_1.DebugError("can not invert matrix");
         }
@@ -1549,13 +1398,32 @@ var mat4;
 
 
 /***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MOUSE_EVENTS = {
+    click: 'click',
+    mouseDown: 'mouseDown',
+    mouseMove: 'mouseMove',
+    mouseLeave: 'mouseLeave',
+    mouseEnter: 'mouseEnter',
+    mouseUp: 'mouseUp',
+    doubleClick: 'doubleClick',
+    scroll: 'scroll'
+};
+
+
+/***/ }),
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var objectPool_1 = __webpack_require__(8);
+var objectPool_1 = __webpack_require__(7);
 var Size = (function () {
     function Size(width, height) {
         if (width === void 0) { width = 0; }
@@ -1607,7 +1475,7 @@ exports.Size = Size;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var object_1 = __webpack_require__(13);
+var object_1 = __webpack_require__(8);
 var debugError_1 = __webpack_require__(0);
 var AbstractDrawer = (function () {
     function AbstractDrawer(gl) {
@@ -1617,7 +1485,7 @@ var AbstractDrawer = (function () {
         AbstractDrawer.instances.push(this);
     }
     AbstractDrawer.prototype.bind = function () {
-        if (true && !this.program) {
+        if ( true && !this.program) {
             console.error(this);
             throw new debugError_1.DebugError("can not init drawer: initProgram method must be invoked!");
         }
@@ -1642,7 +1510,7 @@ var AbstractDrawer = (function () {
         });
     };
     AbstractDrawer.prototype.setUniform = function (name, value) {
-        if (true && !name) {
+        if ( true && !name) {
             console.trace();
             throw new debugError_1.DebugError("can not set uniform: name is not provided");
         }
@@ -1689,71 +1557,9 @@ exports.AbstractDrawer = AbstractDrawer;
 
 "use strict";
 
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isObjectMatch = function (obj, query) {
-    if (!(obj && query))
-        return false;
-    var match = true;
-    var keys = Object.keys(query);
-    if (!keys.length)
-        return false;
-    keys.some(function (key) {
-        if (obj[key] != query[key]) {
-            match = false;
-            return true;
-        }
-    });
-    return match;
-};
-exports.isObject = function (obj) {
-    return obj === Object(obj);
-};
-exports.isArray = function (a) {
-    return !!(a.splice);
-};
-var isEqualArray = function (a, b) {
-    for (var i = 0, max = a.length; i < max; i++) {
-        if (a[i] !== b[i])
-            return false;
-    }
-    return true;
-};
-var isEqualObject = function (a, b) {
-    throw 'not implemented';
-};
-exports.isEqual = function (a, b) {
-    if (a === undefined)
-        return false;
-    if (exports.isArray(a) && exports.isArray(b))
-        return isEqualArray(a, b);
-    else if (exports.isObject(a) && exports.isObject(b))
-        return isEqualObject(a, b);
-    return a === b;
-};
-exports.removeFromArray = function (arr, predicate) {
-    var i = _this.length;
-    var cnt = 0;
-    while (i--) {
-        if (predicate(arr[i])) {
-            arr.splice(i, 1);
-            cnt++;
-        }
-    }
-    return cnt;
-};
-exports.noop = function (arg) { };
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var easing_1 = __webpack_require__(43);
-var game_1 = __webpack_require__(5);
+var easing_1 = __webpack_require__(41);
+var game_1 = __webpack_require__(25);
 var accessByPath = function (obj, path) {
     var pathArr = path.split('.');
     if (pathArr.length === 1)
@@ -1872,14 +1678,14 @@ exports.Tween = Tween;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var debugError_1 = __webpack_require__(0);
-var shaderProgramUtils_1 = __webpack_require__(6);
+var shaderProgramUtils_1 = __webpack_require__(5);
 var ShaderProgram = (function () {
     function ShaderProgram(gl, vertexSource, fragmentSource) {
         var vShader = shaderProgramUtils_1.compileShader(gl, vertexSource, gl.VERTEX_SHADER);
@@ -1899,11 +1705,11 @@ var ShaderProgram = (function () {
         ShaderProgram.currentProgram = this;
     };
     ShaderProgram.prototype.setUniform = function (name, value) {
-        if (true && !name) {
+        if ( true && !name) {
             throw new debugError_1.DebugError("no uniform name was provided!");
         }
         var uniform = this.uniforms[name];
-        if (true && !uniform) {
+        if ( true && !uniform) {
             return;
         }
         if (true) {
@@ -1938,15 +1744,15 @@ exports.ShaderProgram = ShaderProgram;
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var debugError_1 = __webpack_require__(0);
-var vertexBuffer_1 = __webpack_require__(52);
-var indexBuffer_1 = __webpack_require__(53);
+var vertexBuffer_1 = __webpack_require__(51);
+var indexBuffer_1 = __webpack_require__(52);
 var BufferInfo = (function () {
     function BufferInfo(gl, description) {
         this.posVertexBuffer = null;
@@ -1956,10 +1762,10 @@ var BufferInfo = (function () {
         this.drawMethod = null;
         this.numOfElementsToDraw = 0;
         this.gl = gl;
-        if (true && description.drawMethod === undefined)
+        if ( true && description.drawMethod === undefined)
             throw new debugError_1.DebugError("can not create BufferInfo: drawMethod not defined");
         this.drawMethod = description.drawMethod;
-        if (true && !description.posVertexInfo)
+        if ( true && !description.posVertexInfo)
             throw new debugError_1.DebugError("can not create BufferInfo: posVertexInfo is mandatory");
         this.posVertexBuffer = new vertexBuffer_1.VertexBuffer(gl);
         this.posVertexBuffer.setData(description.posVertexInfo.array, description.posVertexInfo.type, description.posVertexInfo.size);
@@ -2035,22 +1841,23 @@ exports.BufferInfo = BufferInfo;
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var resource_1 = __webpack_require__(20);
+var resource_1 = __webpack_require__(33);
 var debugError_1 = __webpack_require__(0);
-var mathEx_1 = __webpack_require__(7);
-var point2d_1 = __webpack_require__(3);
-var rect_1 = __webpack_require__(2);
-var tween_1 = __webpack_require__(14);
-var timer_1 = __webpack_require__(27);
-var eventEmitter_1 = __webpack_require__(18);
-var mouseEvents_1 = __webpack_require__(9);
+var mathEx_1 = __webpack_require__(6);
+var object_1 = __webpack_require__(8);
+var point2d_1 = __webpack_require__(2);
+var rect_1 = __webpack_require__(3);
+var tween_1 = __webpack_require__(13);
+var timer_1 = __webpack_require__(24);
+var eventEmitter_1 = __webpack_require__(17);
+var mouseEvents_1 = __webpack_require__(10);
 var RenderableModel = (function (_super) {
     tslib_1.__extends(RenderableModel, _super);
     function RenderableModel(game) {
@@ -2066,6 +1873,7 @@ var RenderableModel = (function (_super) {
         _this.filters = [];
         _this.children = [];
         _this.acceptLight = false;
+        _this.rigid = false;
         _this.velocity = new point2d_1.Point2d(0, 0);
         _this._tweens = [];
         _this._tweenMovies = [];
@@ -2074,7 +1882,7 @@ var RenderableModel = (function (_super) {
         _this._rect = new rect_1.Rect();
         _this._screenRect = new rect_1.Rect();
         _this._behaviours = [];
-        if (true && !game)
+        if ( true && !game)
             throw new debugError_1.DebugError("can not create model '" + _this.type + "': game instance not passed to model constructor");
         return _this;
     }
@@ -2089,31 +1897,33 @@ var RenderableModel = (function (_super) {
         cloned.filters = this.filters.slice();
         cloned.blendMode = this.blendMode;
         cloned.parent = null;
-        this.children.forEach(function (c) {
-            if (true && !('clone' in c)) {
-                console.error(c);
-                throw new debugError_1.DebugError("can not clone object: cloneable interface is not implemented");
-            }
-            var clonedChildren = c.clone();
-            if (true && !(clonedChildren instanceof RenderableModel)) {
-                console.error(c);
-                throw new debugError_1.DebugError("can not clone object: \"clone\"  method must return Cloneable object");
-            }
-            cloned.appendChild(clonedChildren);
-        });
         cloned.acceptLight = this.acceptLight;
+        cloned.rigid = this.rigid;
         cloned.game = this.game;
         _super.prototype.setClonedProperties.call(this, cloned);
     };
     RenderableModel.prototype.revalidate = function () { };
+    RenderableModel.prototype.setTimer = function (callback, interval) {
+        var t = new timer_1.Timer(callback, interval);
+        this._timers.push(t);
+        return t;
+    };
     RenderableModel.prototype.getLayer = function () {
         return this._layer;
     };
     RenderableModel.prototype.setLayer = function (value) {
         this._layer = value;
     };
+    RenderableModel.prototype.tween = function (desc) {
+        var t = new tween_1.Tween(desc);
+        this._tweens.push(t);
+        return t;
+    };
+    RenderableModel.prototype.addTweenMovie = function (tm) {
+        this._tweenMovies.push(tm);
+    };
     RenderableModel.prototype.findChildrenById = function (id) {
-        if (id === this.id)
+        if (object_1.isObjectMatch(this, { id: id }))
             return this;
         for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
             var c = _a[_i];
@@ -2146,7 +1956,7 @@ var RenderableModel = (function (_super) {
     };
     RenderableModel.prototype.setAnchorToCenter = function () {
         this.revalidate();
-        if (true && !(this.width && this.height))
+        if ( true && !(this.width && this.height))
             throw new debugError_1.DebugError("can not set anchor to center: width or height of gameObject is not set");
         this.anchor.setXY(this.width / 2, this.height / 2);
     };
@@ -2184,41 +1994,37 @@ var RenderableModel = (function (_super) {
         return this.parent || this._layer || undefined;
     };
     RenderableModel.prototype.moveToFront = function () {
-        if (true && !this._getParent())
+        if ( true && !this._getParent())
             throw new debugError_1.DebugError("can not move to front: object is detached");
         var index = (this._getParent()).children.indexOf(this);
-        if (true && index === -1)
+        if ( true && index === -1)
             throw new debugError_1.DebugError("can not move to front: object is not belong to current scene");
         var parentArray = this._getParent().children;
         parentArray.splice(index, 1);
         parentArray.push(this);
     };
     RenderableModel.prototype.moveToBack = function () {
-        if (true && !this._getParent())
+        if ( true && !this._getParent())
             throw new debugError_1.DebugError("can not move to back: object is detached");
         var index = this._getParent().children.indexOf(this);
-        if (true && index === -1)
+        if ( true && index === -1)
             throw new debugError_1.DebugError("can not move to front: object is not belong to current scene");
         var parentArray = this._getParent().children;
         parentArray.splice(index, 1);
         parentArray.unshift(this);
     };
     RenderableModel.prototype.kill = function () {
-        if (true && !this._getParent())
+        if ( true && !this._getParent())
             throw new debugError_1.DebugError("can not kill object: gameObject is detached");
         var parentArray = this._getParent().children;
         var index = parentArray.indexOf(this);
-        if (true && index === -1) {
+        if ( true && index === -1) {
             console.error(this);
             throw new debugError_1.DebugError('can not kill: object is not belong to current scene');
         }
         this.parent = null;
         this._layer = null;
         parentArray.splice(index, 1);
-        for (var _i = 0, _a = this._behaviours; _i < _a.length; _i++) {
-            var b = _a[_i];
-            b.destroy();
-        }
     };
     RenderableModel.prototype.render = function () {
         var renderer = this.game.getRenderer();
@@ -2286,25 +2092,9 @@ var RenderableModel = (function (_super) {
             }
         }
     };
-    RenderableModel.prototype.tween = function (desc) {
-        var t = new tween_1.Tween(desc);
-        this._tweens.push(t);
-        return t;
-    };
-    RenderableModel.prototype.addTween = function (t) {
-        this._tweens.push(t);
-    };
-    RenderableModel.prototype.addTweenMovie = function (tm) {
-        this._tweenMovies.push(tm);
-    };
-    RenderableModel.prototype.setTimer = function (callback, interval) {
-        var t = new timer_1.Timer(callback, interval);
-        this._timers.push(t);
-        return t;
-    };
     RenderableModel.prototype.on = function (eventName, callBack) {
-        if (true && !this.game.hasControl('Mouse')) {
-            if (mouseEvents_1.MOUSE_EVENTS[eventName] != undefined) {
+        if ( true && !this.game.hasControl('Mouse')) {
+            if (!(eventName in mouseEvents_1.MOUSE_EVENTS)) {
                 throw new debugError_1.DebugError('can not listen mouse events: mouse control is not added');
             }
         }
@@ -2327,7 +2117,7 @@ exports.RenderableModel = RenderableModel;
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2359,7 +2149,7 @@ var EventEmitter = (function () {
         if (!es)
             return;
         var index = es.indexOf(callback);
-        if (true && index == -1) {
+        if ( true && index == -1) {
             console.error(callback);
             throw new debugError_1.DebugError("can not remove event listener " + eventName);
         }
@@ -2382,14 +2172,14 @@ exports.EventEmitter = EventEmitter;
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var renderableModel_1 = __webpack_require__(17);
+var renderableModel_1 = __webpack_require__(16);
 var color_1 = __webpack_require__(4);
 var Shape = (function (_super) {
     tslib_1.__extends(Shape, _super);
@@ -2422,39 +2212,15 @@ exports.Shape = Shape;
 
 
 /***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Resource = (function () {
-    function Resource() {
-    }
-    Resource.prototype.setResourceLink = function (link) {
-        this._resourceLink = link;
-    };
-    Resource.prototype.getResourceLink = function () {
-        return this._resourceLink;
-    };
-    Resource.prototype.setClonedProperties = function (cloned) {
-        cloned.setResourceLink(this.getResourceLink());
-    };
-    return Resource;
-}());
-exports.Resource = Resource;
-
-
-/***/ }),
-/* 21 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var rect_1 = __webpack_require__(2);
-var renderableModel_1 = __webpack_require__(17);
+var rect_1 = __webpack_require__(3);
+var renderableModel_1 = __webpack_require__(16);
 var debugError_1 = __webpack_require__(0);
 var OVERFLOW;
 (function (OVERFLOW) {
@@ -2605,13 +2371,13 @@ exports.Container = Container;
 
 
 /***/ }),
-/* 22 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var object_1 = __webpack_require__(13);
+var object_1 = __webpack_require__(8);
 var State = (function () {
     function State() {
         var values = [];
@@ -2682,7 +2448,7 @@ exports.ObservableEntity = ObservableEntity;
 
 
 /***/ }),
-/* 23 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3136,7 +2902,7 @@ exports.RigidRectangle = RigidRectangle;
 
 
 /***/ }),
-/* 24 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3148,7 +2914,7 @@ var AbstractLight = (function () {
     function AbstractLight(game) {
         this.color = color_1.Color.WHITE;
         this.intensity = 1.0;
-        if (true && !game)
+        if ( true && !game)
             throw new debugError_1.DebugError("game instanse is not passed to AbstractLight constructor");
         this.game = game;
     }
@@ -3158,18 +2924,18 @@ exports.AbstractLight = AbstractLight;
 
 
 /***/ }),
-/* 25 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var debugError_1 = __webpack_require__(0);
-var tween_1 = __webpack_require__(14);
-var mathEx_1 = __webpack_require__(7);
-var rect_1 = __webpack_require__(2);
-var point2d_1 = __webpack_require__(3);
-var mat4_1 = __webpack_require__(10);
+var tween_1 = __webpack_require__(13);
+var mathEx_1 = __webpack_require__(6);
+var rect_1 = __webpack_require__(3);
+var point2d_1 = __webpack_require__(2);
+var mat4_1 = __webpack_require__(9);
 var CAMERA_MATRIX_MODE;
 (function (CAMERA_MATRIX_MODE) {
     CAMERA_MATRIX_MODE[CAMERA_MATRIX_MODE["MODE_TRANSFORM"] = 0] = "MODE_TRANSFORM";
@@ -3217,7 +2983,7 @@ var Camera = (function () {
     Camera.prototype.followTo = function (gameObject) {
         if (gameObject === null)
             return;
-        if (true && gameObject === undefined)
+        if ( true && gameObject === undefined)
             throw new debugError_1.DebugError("Camera:followTo(gameObject) - gameObject not provided");
         this.objFollowTo = gameObject;
         this.revalidate();
@@ -3319,63 +3085,13 @@ exports.Camera = Camera;
 
 
 /***/ }),
-/* 26 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var queue_1 = __webpack_require__(48);
-var resourceLink_1 = __webpack_require__(49);
-var ResourceLoader = (function () {
-    function ResourceLoader(game) {
-        this.game = game;
-        this.q = new queue_1.Queue();
-    }
-    ResourceLoader.prototype.loadImage = function (url) {
-        var _this = this;
-        var link = resourceLink_1.ResourceLink.create();
-        this.q.addTask(function () {
-            _this.game.getRenderer().loadTextureInfo(url, link, function () { return _this.q.resolveTask(url); });
-        }, url);
-        return link;
-    };
-    ResourceLoader.prototype.loadSound = function (url) {
-        var _this = this;
-        var link = resourceLink_1.ResourceLink.create();
-        this.q.addTask(function () {
-            _this.game.getAudioPlayer().loadSound(url, link, function () { return _this.q.resolveTask(url); });
-        }, url);
-        return link;
-    };
-    ResourceLoader.prototype.startLoading = function () {
-        this.q.start();
-    };
-    ResourceLoader.prototype.isCompleted = function () {
-        return this.q.isCompleted();
-    };
-    ResourceLoader.prototype.getProgress = function () {
-        return this.q.calcProgress();
-    };
-    ResourceLoader.prototype.onProgress = function (fn) {
-        this.q.onProgress = fn;
-    };
-    ResourceLoader.prototype.onCompleted = function (fn) {
-        this.q.onResolved = fn;
-    };
-    return ResourceLoader;
-}());
-exports.ResourceLoader = ResourceLoader;
-
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var game_1 = __webpack_require__(5);
+var game_1 = __webpack_require__(25);
 var Timer = (function () {
     function Timer(callback, interval) {
         this.lastTime = 0;
@@ -3398,14 +3114,208 @@ exports.Timer = Timer;
 
 
 /***/ }),
-/* 28 */
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(45);
+var camera_1 = __webpack_require__(23);
+var point2d_1 = __webpack_require__(2);
+var lightArray_1 = __webpack_require__(46);
+var colliderEngine_1 = __webpack_require__(48);
+var debugError_1 = __webpack_require__(0);
+var SCALE_STRATEGY;
+(function (SCALE_STRATEGY) {
+    SCALE_STRATEGY[SCALE_STRATEGY["NO_SCALE"] = 0] = "NO_SCALE";
+    SCALE_STRATEGY[SCALE_STRATEGY["FIT"] = 1] = "FIT";
+    SCALE_STRATEGY[SCALE_STRATEGY["STRETCH"] = 2] = "STRETCH";
+})(SCALE_STRATEGY = exports.SCALE_STRATEGY || (exports.SCALE_STRATEGY = {}));
+var Game = (function () {
+    function Game() {
+        this._lastTime = 0;
+        this._currTime = 0;
+        this._deltaTime = 0;
+        this._running = false;
+        this._destroyed = false;
+        this._controls = [];
+        this.scale = new point2d_1.Point2d(1, 1);
+        this.pos = new point2d_1.Point2d(0, 0);
+        this.width = 320;
+        this.height = 240;
+        this.gravityConstant = 0;
+        this.fps = 0;
+        this.scaleStrategy = SCALE_STRATEGY.FIT;
+        this._cnt = 0;
+        this.collider = new colliderEngine_1.ColliderEngine(this);
+        this.camera = new camera_1.Camera(this);
+        this.lightArray = new lightArray_1.LightArray(this);
+        Game.instance = this;
+        if (true)
+            window['game'] = this;
+    }
+    Game.getInstance = function () {
+        return Game.instance;
+    };
+    Game.prototype.addControl = function (C) {
+        var instance = new C(this);
+        if (true) {
+            for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
+                var c = _a[_i];
+                if (c.type === instance.type) {
+                    throw new debugError_1.DebugError("control with type \"" + c.type + "\" added already");
+                }
+            }
+        }
+        this._controls.push(instance);
+        instance.listenTo();
+    };
+    Game.prototype.setAudioPLayer = function (p) {
+        this.audioPlayer = new p(this);
+    };
+    Game.prototype.getAudioPlayer = function () {
+        if ( true && !this.audioPlayer) {
+            throw new debugError_1.DebugError('audio player is not set');
+        }
+        return this.audioPlayer;
+    };
+    Game.prototype.isOfType = function (instance, C) {
+        return instance instanceof C;
+    };
+    Game.prototype.getControl = function (T) {
+        for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
+            var c = _a[_i];
+            if (c instanceof T) {
+                if (this.isOfType(c, T))
+                    return c;
+            }
+        }
+        if (true)
+            throw new debugError_1.DebugError('no such control');
+    };
+    Game.prototype.hasControl = function (type) {
+        for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
+            var c = _a[_i];
+            if (c.type === type) {
+                return true;
+            }
+        }
+        return false;
+    };
+    Game.prototype.getTime = function () {
+        return this._lastTime;
+    };
+    Game.prototype.getDeltaTime = function () {
+        return this._deltaTime;
+    };
+    Game.prototype.log = function (args) {
+        if (true)
+            this._renderer.log(args);
+    };
+    Game.prototype.clearLog = function () {
+        if (true)
+            this._renderer.clearLog();
+    };
+    Game.prototype.setRenderer = function (Renderer) {
+        this._renderer = new Renderer(this);
+    };
+    Game.prototype.getRenderer = function () {
+        return this._renderer;
+    };
+    Game.prototype.debug2 = function () {
+        var val = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            val[_i] = arguments[_i];
+        }
+        this._cnt++;
+        if (this._cnt > 10)
+            throw new debugError_1.DebugError('too many logs');
+    };
+    Game.prototype.runScene = function (scene) {
+        var _this = this;
+        this._currentScene = scene;
+        this.revalidate();
+        scene.onPreloading();
+        scene.resourceLoader.onProgress(function () {
+            scene.onProgress(scene.resourceLoader.getProgress());
+        });
+        scene.resourceLoader.startLoading();
+        if (!this._running)
+            this.update();
+        this._running = true;
+        scene.resourceLoader.onCompleted(function () {
+            _this._currentScene.onReady();
+        });
+    };
+    Game.prototype.getCurrScene = function () {
+        if ( true && !this._currentScene)
+            throw new debugError_1.DebugError("current scene is not set yet");
+        return this._currentScene;
+    };
+    Game.prototype.update = function () {
+        if (this._destroyed)
+            return;
+        this._lastTime = this._currTime;
+        this._currTime = Date.now();
+        var currTimeCopy = this._currTime;
+        if (!this._lastTime)
+            this._lastTime = this._currTime;
+        this._deltaTime = this._currTime - this._lastTime;
+        if (true) {
+            this.fps = ~~(1000 / this._deltaTime);
+            var renderError = this._renderer.getError();
+            if (renderError)
+                throw new debugError_1.DebugError("render error with code " + renderError);
+        }
+        var numOfLoops = (~~(this._deltaTime / Game.UPDATE_TIME_RATE)) || 1;
+        var currTime = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
+        var loopCnt = 0;
+        do {
+            this._currentScene.update();
+            for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
+                var c = _a[_i];
+                c.update();
+            }
+            currTime += Game.UPDATE_TIME_RATE;
+            loopCnt++;
+            if (loopCnt > 10) {
+                this._lastTime = this._currTime = currTimeCopy;
+                break;
+            }
+        } while (loopCnt < numOfLoops);
+        this._currentScene.render();
+        requestAnimationFrame(this.update.bind(this));
+    };
+    Game.prototype.destroy = function () {
+        this._destroyed = true;
+        for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
+            var c = _a[_i];
+            c.destroy();
+        }
+        this._renderer.cancelFullScreen();
+        this._renderer.destroy();
+    };
+    Game.prototype.revalidate = function () {
+        if ( true && !this._renderer)
+            throw new debugError_1.DebugError("game renderer is not set");
+        this.camera.revalidate();
+    };
+    Game.UPDATE_TIME_RATE = 20;
+    return Game;
+}());
+exports.Game = Game;
+
+
+/***/ }),
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var abstractPrimitive_1 = __webpack_require__(54);
+var abstractPrimitive_1 = __webpack_require__(53);
 var Plane = (function (_super) {
     tslib_1.__extends(Plane, _super);
     function Plane() {
@@ -3431,13 +3341,13 @@ exports.Plane = Plane;
 
 
 /***/ }),
-/* 29 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var shaderProgramUtils_1 = __webpack_require__(6);
+var shaderProgramUtils_1 = __webpack_require__(5);
 var ShaderGenerator = (function () {
     function ShaderGenerator() {
         this.vertexUniforms = [];
@@ -3506,7 +3416,7 @@ exports.ShaderGenerator = ShaderGenerator;
 
 
 /***/ }),
-/* 30 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3527,17 +3437,17 @@ exports.fragmentSource = "\n\n#define HALF .5\n#define ZERO  0.\n#define ONE   1
 
 
 /***/ }),
-/* 31 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var debugError_1 = __webpack_require__(0);
-var texture_1 = __webpack_require__(32);
+var texture_1 = __webpack_require__(30);
 var FrameBuffer = (function () {
     function FrameBuffer(gl, width, height) {
-        if (true && !gl)
+        if ( true && !gl)
             throw new debugError_1.DebugError("can not create FrameBuffer, gl context not passed to constructor, expected: FrameBuffer(gl)");
         this.gl = gl;
         this.width = width;
@@ -3548,18 +3458,18 @@ var FrameBuffer = (function () {
     }
     FrameBuffer.prototype._init = function (gl, width, height) {
         this.glRenderBuffer = gl.createRenderbuffer();
-        if (true && !this.glRenderBuffer)
+        if ( true && !this.glRenderBuffer)
             throw new debugError_1.DebugError("can not allocate memory for glRenderBuffer");
         gl.bindRenderbuffer(gl.RENDERBUFFER, this.glRenderBuffer);
         gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
         this.glFrameBuffer = gl.createFramebuffer();
-        if (true && !this.glFrameBuffer)
+        if ( true && !this.glFrameBuffer)
             throw new debugError_1.DebugError("can not allocate memory for glFrameBuffer");
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.glFrameBuffer);
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture.getGlTexture(), 0);
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this.glRenderBuffer);
         var fbStatus = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-        if (true && fbStatus !== gl.FRAMEBUFFER_COMPLETE) {
+        if ( true && fbStatus !== gl.FRAMEBUFFER_COMPLETE) {
             throw new debugError_1.DebugError("frame buffer status error: " + fbStatus + " (expected gl.FRAMEBUFFER_COMPLETE(" + gl.FRAMEBUFFER_COMPLETE + "))");
         }
         this.texture.unbind();
@@ -3591,7 +3501,7 @@ exports.FrameBuffer = FrameBuffer;
 
 
 /***/ }),
-/* 32 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3607,7 +3517,7 @@ var Texture = (function () {
         this.tex = null;
         this.size = new size_1.Size(0, 0);
         this.isPowerOfTwo = false;
-        if (true && !gl)
+        if ( true && !gl)
             throw new debugError_1.DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
         this.gl = gl;
         if (true) {
@@ -3615,7 +3525,7 @@ var Texture = (function () {
                 Texture.MAX_TEXTURE_IMAGE_UNITS = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
         }
         this.tex = gl.createTexture();
-        if (true && !this.tex)
+        if ( true && !this.tex)
             throw new debugError_1.DebugError("can not allocate memory for texture");
         gl.bindTexture(gl.TEXTURE_2D, this.tex);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 255, 0, 255]));
@@ -3683,7 +3593,7 @@ var Texture = (function () {
     Texture.prototype.getColorArray = function () {
         var gl = this.gl;
         var wxh = this.size.width * this.size.height;
-        if (true && gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE)
+        if ( true && gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE)
             throw new debugError_1.DebugError("Texture.GetColorArray() failed!");
         var pixels = new Uint8Array(wxh * 4);
         gl.readPixels(0, 0, this.size.width, this.size.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
@@ -3706,18 +3616,18 @@ exports.Texture = Texture;
 
 
 /***/ }),
-/* 33 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var rect_1 = __webpack_require__(2);
+var rect_1 = __webpack_require__(3);
 var debugError_1 = __webpack_require__(0);
-var shape_1 = __webpack_require__(19);
+var shape_1 = __webpack_require__(18);
 var color_1 = __webpack_require__(4);
-var point2d_1 = __webpack_require__(3);
+var point2d_1 = __webpack_require__(2);
 var Image = (function (_super) {
     tslib_1.__extends(Image, _super);
     function Image(game) {
@@ -3730,7 +3640,7 @@ var Image = (function (_super) {
         return _this;
     }
     Image.prototype.revalidate = function () {
-        if (true && !this.getResourceLink()) {
+        if ( true && !this.getResourceLink()) {
             console.error(this);
             throw new debugError_1.DebugError("can not render Image: resourceLink is not specified");
         }
@@ -3765,14 +3675,14 @@ exports.Image = Image;
 
 
 /***/ }),
-/* 34 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var shape_1 = __webpack_require__(19);
+var shape_1 = __webpack_require__(18);
 var Rectangle = (function (_super) {
     tslib_1.__extends(Rectangle, _super);
     function Rectangle(game) {
@@ -3806,17 +3716,41 @@ exports.Rectangle = Rectangle;
 
 
 /***/ }),
-/* 35 */
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Resource = (function () {
+    function Resource() {
+    }
+    Resource.prototype.setResourceLink = function (link) {
+        this._resourceLink = link;
+    };
+    Resource.prototype.getResourceLink = function () {
+        return this._resourceLink;
+    };
+    Resource.prototype.setClonedProperties = function (cloned) {
+        cloned.setResourceLink(this.getResourceLink());
+    };
+    return Resource;
+}());
+exports.Resource = Resource;
+
+
+/***/ }),
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var rect_1 = __webpack_require__(2);
+var rect_1 = __webpack_require__(3);
 var debugError_1 = __webpack_require__(0);
-var scrollableContainer_1 = __webpack_require__(58);
-var image_1 = __webpack_require__(33);
+var scrollableContainer_1 = __webpack_require__(57);
+var image_1 = __webpack_require__(31);
 var TEXT_ALIGN;
 (function (TEXT_ALIGN) {
     TEXT_ALIGN[TEXT_ALIGN["LEFT"] = 0] = "LEFT";
@@ -3872,7 +3806,7 @@ var TextInfo = (function () {
     };
     TextInfo.prototype.align = function (textAlign) {
         var _this = this;
-        if (true && TEXT_ALIGN[textAlign] === undefined) {
+        if ( true && TEXT_ALIGN[textAlign] === undefined) {
             var keys = Object.keys(TEXT_ALIGN).join(', ');
             throw new debugError_1.DebugError("can not align text: unknown enum type of TEXT_ALIGN: " + textAlign + ", expected: " + keys);
         }
@@ -4025,9 +3959,9 @@ var TextField = (function (_super) {
     }
     TextField.prototype.revalidate = function () {
         _super.prototype.revalidate.call(this);
-        if (true && !this._font)
+        if ( true && !this._font)
             throw new debugError_1.DebugError("font is not provided");
-        if (true && !this._font.getResourceLink())
+        if ( true && !this._font.getResourceLink())
             throw new debugError_1.DebugError("can not render textField: font resource link is not set");
     };
     TextField.prototype._getCharInfo = function (c) {
@@ -4128,7 +4062,7 @@ exports.TextField = TextField;
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4147,148 +4081,19 @@ exports.Incrementer = Incrementer;
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var game_1 = __webpack_require__(5);
-var rect_1 = __webpack_require__(2);
-var resource_1 = __webpack_require__(20);
-var color_1 = __webpack_require__(4);
-var debugError_1 = __webpack_require__(0);
-var resourceLoader_1 = __webpack_require__(26);
-var FontFactory;
-(function (FontFactory) {
-    var SYMBOL_PADDING = 4;
-    var getFontHeight = function (strFont) {
-        var parent = document.createElement("span");
-        parent.appendChild(document.createTextNode("height!ДдЙЇ"));
-        document.body.appendChild(parent);
-        parent.style.cssText = "font: " + strFont + "; white-space: nowrap; display: inline;";
-        var height = parent.offsetHeight;
-        document.body.removeChild(parent);
-        return height;
-    };
-    FontFactory.getFontContext = function (arrFromTo, strFont, w) {
-        var cnv = document.createElement('canvas');
-        var ctx = cnv.getContext('2d');
-        ctx.font = strFont;
-        var textHeight = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
-        var symbols = {};
-        var currX = 0, currY = 0, cnvHeight = textHeight;
-        for (var k = 0; k < arrFromTo.length; k++) {
-            var arrFromToCurr = arrFromTo[k];
-            for (var i = arrFromToCurr.from; i < arrFromToCurr.to; i++) {
-                var currentChar = String.fromCharCode(i);
-                var ctx_1 = cnv.getContext('2d');
-                var textWidth = ctx_1.measureText(currentChar).width;
-                textWidth += 2 * SYMBOL_PADDING;
-                if (textWidth == 0)
-                    continue;
-                if (currX + textWidth > w) {
-                    currX = 0;
-                    currY += textHeight;
-                    cnvHeight = currY + textHeight;
-                }
-                var symbolRect = new rect_1.Rect();
-                symbolRect.x = ~~currX + SYMBOL_PADDING;
-                symbolRect.y = ~~currY + SYMBOL_PADDING;
-                symbolRect.width = ~~textWidth - 2 * SYMBOL_PADDING;
-                symbolRect.height = textHeight - 2 * SYMBOL_PADDING;
-                symbols[currentChar] = symbolRect;
-                currX += textWidth;
-            }
-        }
-        return { symbols: symbols, width: w, height: cnvHeight };
-    };
-    FontFactory.getFontImageBase64 = function (fontContext, strFont, color) {
-        var cnv = document.createElement('canvas');
-        cnv.width = fontContext.width;
-        cnv.height = fontContext.height;
-        var ctx = cnv.getContext('2d');
-        ctx.font = strFont;
-        ctx.fillStyle = color.asCSS();
-        ctx.textBaseline = "top";
-        var symbols = fontContext.symbols;
-        Object.keys(symbols).forEach(function (symbol) {
-            var rect = symbols[symbol];
-            ctx.fillText(symbol, rect.x, rect.y);
-        });
-        return cnv.toDataURL();
-    };
-    FontFactory.generate = function (f, s) {
-        f.createContext();
-        var link = s.resourceLoader.loadImage(f.createBitmap());
-        f.setResourceLink(link);
-    };
-})(FontFactory = exports.FontFactory || (exports.FontFactory = {}));
-var Font = (function (_super) {
-    tslib_1.__extends(Font, _super);
-    function Font(game) {
-        var _this = _super.call(this) || this;
-        _this.game = game;
-        _this.type = 'Font';
-        _this.fontSize = 12;
-        _this.fontFamily = 'Monospace';
-        _this.fontColor = color_1.Color.BLACK.clone();
-        return _this;
-    }
-    Font.getSystemFont = function () {
-        if (Font._systemFontInstance)
-            return Font._systemFontInstance;
-        var f = new Font(game_1.Game.getInstance());
-        f.createContext();
-        var resourceLoader = new resourceLoader_1.ResourceLoader(game_1.Game.getInstance());
-        var link = resourceLoader.loadImage(f.createBitmap());
-        resourceLoader.startLoading();
-        f.setResourceLink(link);
-        Font._systemFontInstance = f;
-        return f;
-    };
-    Font.prototype.asCss = function () {
-        return this.fontSize + "px " + this.fontFamily;
-    };
-    Font.prototype.createContext = function () {
-        var ranges = [{ from: 32, to: 126 }, { from: 1040, to: 1116 }];
-        var WIDTH = 512;
-        this.fontContext = FontFactory.getFontContext(ranges, this.asCss(), WIDTH);
-    };
-    Font.prototype.createBitmap = function () {
-        return FontFactory.getFontImageBase64(this.fontContext, this.asCss(), this.fontColor);
-    };
-    Font.prototype.revalidate = function () {
-        if (true) {
-            if (!this.fontContext)
-                throw new debugError_1.DebugError("font context is not created");
-            if (!this.getResourceLink())
-                throw new debugError_1.DebugError("font without resource link");
-        }
-    };
-    Font.prototype.getDefaultSymbolHeight = function () {
-        return this.fontContext.symbols[' '].height;
-    };
-    return Font;
-}(resource_1.Resource));
-exports.Font = Font;
-
-
-/***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = __webpack_require__(1);
-var plane_1 = __webpack_require__(28);
-var shaderProgram_1 = __webpack_require__(15);
+var plane_1 = __webpack_require__(26);
+var shaderProgram_1 = __webpack_require__(14);
 var abstractDrawer_1 = __webpack_require__(12);
-var bufferInfo_1 = __webpack_require__(16);
-var shaderGenerator_1 = __webpack_require__(29);
-var shaderProgramUtils_1 = __webpack_require__(6);
+var bufferInfo_1 = __webpack_require__(15);
+var shaderGenerator_1 = __webpack_require__(27);
+var shaderProgramUtils_1 = __webpack_require__(5);
 var debugError_1 = __webpack_require__(0);
 var SimpleRectDrawer = (function (_super) {
     tslib_1.__extends(SimpleRectDrawer, _super);
@@ -4327,24 +4132,24 @@ exports.SimpleRectDrawer = SimpleRectDrawer;
 
 
 /***/ }),
-/* 39 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var tileMap_1 = __webpack_require__(40);
-var layer_1 = __webpack_require__(41);
-var ambientLight_1 = __webpack_require__(42);
+var tileMap_1 = __webpack_require__(38);
+var layer_1 = __webpack_require__(39);
+var ambientLight_1 = __webpack_require__(40);
 var color_1 = __webpack_require__(4);
-var camera_1 = __webpack_require__(25);
-var resourceLoader_1 = __webpack_require__(26);
-var eventEmitter_1 = __webpack_require__(18);
-var object_1 = __webpack_require__(13);
-var tween_1 = __webpack_require__(14);
-var timer_1 = __webpack_require__(27);
-var mouseEvents_1 = __webpack_require__(9);
+var camera_1 = __webpack_require__(23);
+var resourceLoader_1 = __webpack_require__(42);
+var eventEmitter_1 = __webpack_require__(17);
+var object_1 = __webpack_require__(8);
 var debugError_1 = __webpack_require__(0);
+var mouseEvents_1 = __webpack_require__(10);
+var tween_1 = __webpack_require__(13);
+var timer_1 = __webpack_require__(24);
 var Scene = (function () {
     function Scene(game) {
         this.game = game;
@@ -4373,6 +4178,22 @@ var Scene = (function () {
     };
     Scene.prototype.getUiLayer = function () {
         return this._uiLayer;
+    };
+    Scene.prototype.tween = function (desc) {
+        var t = new tween_1.Tween(desc);
+        this._tweens.push(t);
+        return t;
+    };
+    Scene.prototype.addTween = function (t) {
+        this._tweens.push(t);
+    };
+    Scene.prototype.addTweenMovie = function (tm) {
+        this._tweenMovies.push(tm);
+    };
+    Scene.prototype.setTimer = function (callback, interval) {
+        var t = new timer_1.Timer(callback, interval);
+        this._timers.push(t);
+        return t;
     };
     Scene.prototype.getAllGameObjects = function () {
         var res = [];
@@ -4494,24 +4315,8 @@ var Scene = (function () {
         }
         renderer.flipFrameBuffer(this.filters);
     };
-    Scene.prototype.tween = function (desc) {
-        var t = new tween_1.Tween(desc);
-        this._tweens.push(t);
-        return t;
-    };
-    Scene.prototype.addTween = function (t) {
-        this._tweens.push(t);
-    };
-    Scene.prototype.addTweenMovie = function (tm) {
-        this._tweenMovies.push(tm);
-    };
-    Scene.prototype.setTimer = function (callback, interval) {
-        var t = new timer_1.Timer(callback, interval);
-        this._timers.push(t);
-        return t;
-    };
     Scene.prototype.on = function (eventName, callBack) {
-        if (true && !this.game.hasControl('Mouse')) {
+        if ( true && !this.game.hasControl('Mouse')) {
             if (mouseEvents_1.MOUSE_EVENTS[eventName] != undefined) {
                 throw new debugError_1.DebugError('can not listen mouse events: mouse control is not added');
             }
@@ -4538,14 +4343,14 @@ exports.Scene = Scene;
 
 
 /***/ }),
-/* 40 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var rect_1 = __webpack_require__(2);
-var rigidShapes_1 = __webpack_require__(23);
+var rect_1 = __webpack_require__(3);
+var rigidShapes_1 = __webpack_require__(21);
 var debugError_1 = __webpack_require__(0);
 var TileMap = (function () {
     function TileMap(game) {
@@ -4675,7 +4480,7 @@ exports.TileMap = TileMap;
 
 
 /***/ }),
-/* 41 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4719,14 +4524,14 @@ exports.Layer = Layer;
 
 
 /***/ }),
-/* 42 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var abstractLight_1 = __webpack_require__(24);
+var abstractLight_1 = __webpack_require__(22);
 var AmbientLight = (function (_super) {
     tslib_1.__extends(AmbientLight, _super);
     function AmbientLight(game) {
@@ -4744,7 +4549,7 @@ exports.AmbientLight = AmbientLight;
 
 
 /***/ }),
-/* 43 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4950,7 +4755,154 @@ exports.Easing = Easing;
 
 
 /***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var queue_1 = __webpack_require__(43);
+var resourceLink_1 = __webpack_require__(44);
+var ResourceLoader = (function () {
+    function ResourceLoader(game) {
+        this.game = game;
+        this.q = new queue_1.Queue();
+    }
+    ResourceLoader.prototype.loadImage = function (url) {
+        var _this = this;
+        var link = resourceLink_1.ResourceLink.create();
+        this.q.addTask(function () {
+            _this.game.getRenderer().loadTextureInfo(url, link, function () { return _this.q.resolveTask(url); });
+        }, url);
+        return link;
+    };
+    ResourceLoader.prototype.loadSound = function (url) {
+        var _this = this;
+        var link = resourceLink_1.ResourceLink.create();
+        this.q.addTask(function () {
+            _this.game.getAudioPlayer().loadSound(url, link, function () { return _this.q.resolveTask(url); });
+        }, url);
+        return link;
+    };
+    ResourceLoader.prototype.startLoading = function () {
+        this.q.start();
+    };
+    ResourceLoader.prototype.isCompleted = function () {
+        return this.q.isCompleted();
+    };
+    ResourceLoader.prototype.getProgress = function () {
+        return this.q.calcProgress();
+    };
+    ResourceLoader.prototype.onProgress = function (fn) {
+        this.q.onProgress = fn;
+    };
+    ResourceLoader.prototype.onCompleted = function (fn) {
+        this.q.onResolved = fn;
+    };
+    return ResourceLoader;
+}());
+exports.ResourceLoader = ResourceLoader;
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Queue = (function () {
+    function Queue() {
+        this.tasksResolved = 0;
+        this.tasks = [];
+        this.tasksProgressById = {};
+        this.completed = false;
+    }
+    Queue.prototype.size = function () {
+        return this.tasks.length;
+    };
+    Queue.prototype.progressTask = function (taskId, progress) {
+        this.tasksProgressById[taskId] = progress;
+        this.onProgress && this.onProgress(this.calcProgress());
+    };
+    ;
+    Queue.prototype.resolveTask = function (taskId) {
+        this.tasksResolved++;
+        this.tasksProgressById[taskId] = 1;
+        if (this.tasks.length === this.tasksResolved) {
+            this.onProgress && this.onProgress(1);
+            this.completed = true;
+            if (this.onResolved)
+                this.onResolved();
+        }
+        else {
+            this.onProgress && this.onProgress(this.calcProgress());
+        }
+    };
+    ;
+    Queue.prototype.addTask = function (taskFn, taskId) {
+        if (this.tasksProgressById[taskId] !== undefined)
+            return;
+        this.tasks.push(taskFn);
+        this.tasksProgressById[taskId] = 0;
+    };
+    ;
+    Queue.prototype.isCompleted = function () {
+        return this.completed;
+    };
+    Queue.prototype.calcProgress = function () {
+        var _this = this;
+        var sum = 0;
+        Object.keys(this.tasksProgressById).forEach(function (taskId) {
+            sum += _this.tasksProgressById[taskId] || 0;
+        });
+        return sum / this.tasks.length;
+    };
+    Queue.prototype.start = function () {
+        if (this.size() === 0) {
+            this.completed = true;
+            this.onResolved && this.onResolved();
+        }
+        this.tasks.forEach(function (t) {
+            t && t();
+        });
+    };
+    return Queue;
+}());
+exports.Queue = Queue;
+
+
+/***/ }),
 /* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var incrementer_1 = __webpack_require__(35);
+var ResourceLink = (function () {
+    function ResourceLink(id) {
+        this.id = id;
+    }
+    ResourceLink.prototype.getId = function () {
+        return this.id;
+    };
+    ResourceLink.prototype.setTarget = function (t) {
+        this.target = t;
+    };
+    ResourceLink.prototype.getTarget = function () {
+        return this.target;
+    };
+    ResourceLink.create = function () {
+        return new ResourceLink((incrementer_1.Incrementer.getValue()).toString());
+    };
+    return ResourceLink;
+}());
+exports.ResourceLink = ResourceLink;
+
+
+/***/ }),
+/* 45 */
 /***/ (function(module, exports) {
 
 window.requestAnimationFrame =
@@ -4963,17 +4915,17 @@ if (!window.cancelAnimationFrame) {
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var debugError_1 = __webpack_require__(0);
-var pointLight_1 = __webpack_require__(46);
+var pointLight_1 = __webpack_require__(47);
 var LightArray = (function () {
     function LightArray(game) {
-        if (true && !game)
+        if ( true && !game)
             throw new debugError_1.DebugError("game instance is not passed to LightArray constructor");
         this.lights = new Array(LightArray.NUM_OF_LIGHT_IN_VIEW);
         for (var i = 0; i < this.lights.length; i++) {
@@ -4996,15 +4948,15 @@ exports.LightArray = LightArray;
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var point2d_1 = __webpack_require__(3);
-var abstractLight_1 = __webpack_require__(24);
+var point2d_1 = __webpack_require__(2);
+var abstractLight_1 = __webpack_require__(22);
 var PointLight = (function (_super) {
     tslib_1.__extends(PointLight, _super);
     function PointLight(game) {
@@ -5036,14 +4988,14 @@ exports.PointLight = PointLight;
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var rigidShapes_1 = __webpack_require__(23);
-var mathEx_1 = __webpack_require__(7);
+var rigidShapes_1 = __webpack_require__(21);
+var mathEx_1 = __webpack_require__(6);
 var ColliderEngine = (function () {
     function ColliderEngine(game) {
         this.relaxationCount = 15;
@@ -5124,7 +5076,7 @@ var ColliderEngine = (function () {
         var isOverlapped = mathEx_1.MathEx.overlapTest(a.getRect(), b.getRect());
         if (!isOverlapped)
             return;
-        if (!a.rigidBody || !b.rigidBody) {
+        if (!a.rigid || !b.rigid) {
             a.trigger('overlap', b);
             b.trigger('overlap', a);
             return;
@@ -5161,104 +5113,7 @@ exports.ColliderEngine = ColliderEngine;
 
 
 /***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Queue = (function () {
-    function Queue() {
-        this.tasksResolved = 0;
-        this.tasks = [];
-        this.tasksProgressById = {};
-        this.completed = false;
-    }
-    Queue.prototype.size = function () {
-        return this.tasks.length;
-    };
-    Queue.prototype.progressTask = function (taskId, progress) {
-        this.tasksProgressById[taskId] = progress;
-        this.onProgress && this.onProgress(this.calcProgress());
-    };
-    ;
-    Queue.prototype.resolveTask = function (taskId) {
-        this.tasksResolved++;
-        this.tasksProgressById[taskId] = 1;
-        if (this.tasks.length === this.tasksResolved) {
-            this.onProgress && this.onProgress(1);
-            this.completed = true;
-            if (this.onResolved)
-                this.onResolved();
-        }
-        else {
-            this.onProgress && this.onProgress(this.calcProgress());
-        }
-    };
-    ;
-    Queue.prototype.addTask = function (taskFn, taskId) {
-        if (this.tasksProgressById[taskId] !== undefined)
-            return;
-        this.tasks.push(taskFn);
-        this.tasksProgressById[taskId] = 0;
-    };
-    ;
-    Queue.prototype.isCompleted = function () {
-        return this.completed;
-    };
-    Queue.prototype.calcProgress = function () {
-        var _this = this;
-        var sum = 0;
-        Object.keys(this.tasksProgressById).forEach(function (taskId) {
-            sum += _this.tasksProgressById[taskId] || 0;
-        });
-        return sum / this.tasks.length;
-    };
-    Queue.prototype.start = function () {
-        if (this.size() === 0) {
-            this.completed = true;
-            this.onResolved && this.onResolved();
-        }
-        this.tasks.forEach(function (t) {
-            t && t();
-        });
-    };
-    return Queue;
-}());
-exports.Queue = Queue;
-
-
-/***/ }),
 /* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var incrementer_1 = __webpack_require__(36);
-var ResourceLink = (function () {
-    function ResourceLink(id) {
-        this.id = id;
-    }
-    ResourceLink.prototype.getId = function () {
-        return this.id;
-    };
-    ResourceLink.prototype.setTarget = function (t) {
-        this.target = t;
-    };
-    ResourceLink.prototype.getTarget = function () {
-        return this.target;
-    };
-    ResourceLink.create = function () {
-        return new ResourceLink((incrementer_1.Incrementer.getValue()).toString());
-    };
-    return ResourceLink;
-}());
-exports.ResourceLink = ResourceLink;
-
-
-/***/ }),
-/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5267,18 +5122,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
 var debugError_1 = __webpack_require__(0);
 var abstractDrawer_1 = __webpack_require__(12);
-var shapeDrawer_1 = __webpack_require__(51);
-var frameBuffer_1 = __webpack_require__(31);
-var matrixStack_1 = __webpack_require__(55);
-var texture_1 = __webpack_require__(32);
-var rect_1 = __webpack_require__(2);
-var abstractCanvasRenderer_1 = __webpack_require__(56);
+var shapeDrawer_1 = __webpack_require__(50);
+var frameBuffer_1 = __webpack_require__(29);
+var matrixStack_1 = __webpack_require__(54);
+var texture_1 = __webpack_require__(30);
+var rect_1 = __webpack_require__(3);
+var abstractCanvasRenderer_1 = __webpack_require__(55);
 var size_1 = __webpack_require__(11);
-var modelDrawer_1 = __webpack_require__(61);
-var mat4_1 = __webpack_require__(10);
-var shapeDrawer_shader_1 = __webpack_require__(30);
-var SimpleRectDrawer_1 = __webpack_require__(38);
-var doubleFrameBuffer_1 = __webpack_require__(63);
+var modelDrawer_1 = __webpack_require__(60);
+var mat4_1 = __webpack_require__(9);
+var shapeDrawer_shader_1 = __webpack_require__(28);
+var SimpleRectDrawer_1 = __webpack_require__(36);
+var doubleFrameBuffer_1 = __webpack_require__(62);
 var IDENTITY = mat4_1.mat4.IDENTITY;
 var getCtx = function (el) {
     return (el.getContext("webgl", { alpha: false }) ||
@@ -5590,20 +5445,20 @@ exports.WebGlRenderer = WebGlRenderer;
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var shaderProgram_1 = __webpack_require__(15);
+var shaderProgram_1 = __webpack_require__(14);
 var abstractDrawer_1 = __webpack_require__(12);
-var bufferInfo_1 = __webpack_require__(16);
-var plane_1 = __webpack_require__(28);
-var shaderProgramUtils_1 = __webpack_require__(6);
-var shaderGenerator_1 = __webpack_require__(29);
-var shapeDrawer_shader_1 = __webpack_require__(30);
+var bufferInfo_1 = __webpack_require__(15);
+var plane_1 = __webpack_require__(26);
+var shaderProgramUtils_1 = __webpack_require__(5);
+var shaderGenerator_1 = __webpack_require__(27);
+var shapeDrawer_shader_1 = __webpack_require__(28);
 var ShapeDrawer = (function (_super) {
     tslib_1.__extends(ShapeDrawer, _super);
     function ShapeDrawer(gl) {
@@ -5646,7 +5501,7 @@ exports.ShapeDrawer = ShapeDrawer;
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5658,11 +5513,11 @@ var VertexBuffer = (function () {
         this.bufferItemSize = 0;
         this.bufferItemType = 0;
         this.dataLength = 0;
-        if (true && !gl)
+        if ( true && !gl)
             throw new debugError_1.DebugError("can not create VertexBuffer, gl context not passed to constructor, expected: VertexBuffer(gl)");
         this.gl = gl;
         this.buffer = gl.createBuffer();
-        if (true && !this.buffer)
+        if ( true && !this.buffer)
             throw new debugError_1.DebugError("can not allocate memory for vertex buffer");
     }
     VertexBuffer.prototype.setData = function (bufferData, itemType, itemSize) {
@@ -5683,14 +5538,14 @@ var VertexBuffer = (function () {
         this.dataLength = bufferData.length;
     };
     VertexBuffer.prototype.setAttrName = function (attrName) {
-        if (true && !attrName)
+        if ( true && !attrName)
             throw new debugError_1.DebugError("attrName not provided");
         this.attrName = attrName;
     };
     VertexBuffer.prototype.bind = function (program) {
-        if (true && !program)
+        if ( true && !program)
             throw new debugError_1.DebugError("can not bind VertexBuffer, program not specified");
-        if (true && !this.attrName)
+        if ( true && !this.attrName)
             throw new debugError_1.DebugError("can not bind VertexBuffer, attribute name not specified");
         program.bindBuffer(this, this.attrName);
     };
@@ -5718,7 +5573,7 @@ exports.VertexBuffer = VertexBuffer;
 
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5727,11 +5582,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var debugError_1 = __webpack_require__(0);
 var IndexBuffer = (function () {
     function IndexBuffer(gl) {
-        if (true && !gl)
+        if ( true && !gl)
             throw new debugError_1.DebugError("can not create IndexBuffer, gl context not passed to constructor, expected: IndexBuffer(gl)");
         this.gl = gl;
         this.buffer = gl.createBuffer();
-        if (true && !this.buffer)
+        if ( true && !this.buffer)
             throw new debugError_1.DebugError("can not allocate memory for index buffer");
         this.dataLength = null;
     }
@@ -5767,7 +5622,7 @@ exports.IndexBuffer = IndexBuffer;
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5782,13 +5637,13 @@ exports.AbstractPrimitive = AbstractPrimitive;
 
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var mat4_1 = __webpack_require__(10);
+var mat4_1 = __webpack_require__(9);
 var MatrixStack = (function () {
     function MatrixStack() {
         this.stack = [];
@@ -5849,15 +5704,15 @@ exports.MatrixStack = MatrixStack;
 
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var abstractRenderer_1 = __webpack_require__(57);
-var game_1 = __webpack_require__(5);
+var abstractRenderer_1 = __webpack_require__(56);
+var game_1 = __webpack_require__(25);
 var AbstractCanvasRenderer = (function (_super) {
     tslib_1.__extends(AbstractCanvasRenderer, _super);
     function AbstractCanvasRenderer(game) {
@@ -5872,6 +5727,11 @@ var AbstractCanvasRenderer = (function (_super) {
         _this.container = container;
         return _this;
     }
+    AbstractCanvasRenderer.prototype.draw = function (renderable) {
+        renderable.spriteSheet.width = renderable.width;
+        renderable.spriteSheet.height = renderable.height;
+        this.drawImage(renderable.spriteSheet);
+    };
     AbstractCanvasRenderer.prototype.onResize = function () {
         var canvas = this.container;
         if (this.game.scaleStrategy === game_1.SCALE_STRATEGY.NO_SCALE)
@@ -5905,17 +5765,17 @@ exports.AbstractCanvasRenderer = AbstractCanvasRenderer;
 
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var textField_1 = __webpack_require__(35);
-var device_1 = __webpack_require__(60);
+var textField_1 = __webpack_require__(34);
+var device_1 = __webpack_require__(59);
 var size_1 = __webpack_require__(11);
 var debugError_1 = __webpack_require__(0);
-var font_1 = __webpack_require__(37);
+var font_1 = __webpack_require__(103);
 var AbstractRenderer = (function () {
     function AbstractRenderer(game) {
         this.renderableCache = {};
@@ -5989,6 +5849,8 @@ var AbstractRenderer = (function () {
     };
     AbstractRenderer.prototype.rotateZ = function (a) { };
     AbstractRenderer.prototype.rotateY = function (a) { };
+    AbstractRenderer.prototype.draw = function (renderable) {
+    };
     AbstractRenderer.prototype.log = function (args) {
         if (false)
             {}
@@ -6044,17 +5906,17 @@ exports.AbstractRenderer = AbstractRenderer;
 
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var container_1 = __webpack_require__(21);
-var vScroll_1 = __webpack_require__(59);
-var mathEx_1 = __webpack_require__(7);
-var mouseEvents_1 = __webpack_require__(9);
+var container_1 = __webpack_require__(19);
+var vScroll_1 = __webpack_require__(58);
+var mathEx_1 = __webpack_require__(6);
+var mouseEvents_1 = __webpack_require__(10);
 var ScrollInfo = (function () {
     function ScrollInfo(game) {
         this.game = game;
@@ -6213,15 +6075,15 @@ exports.ScrollableContainer = ScrollableContainer;
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var container_1 = __webpack_require__(21);
-var rectangle_1 = __webpack_require__(34);
+var container_1 = __webpack_require__(19);
+var rectangle_1 = __webpack_require__(32);
 var color_1 = __webpack_require__(4);
 var VScroll = (function (_super) {
     tslib_1.__extends(VScroll, _super);
@@ -6267,7 +6129,7 @@ exports.VScroll = VScroll;
 
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6293,18 +6155,18 @@ exports.Device = Device;
 
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var shaderProgram_1 = __webpack_require__(15);
+var shaderProgram_1 = __webpack_require__(14);
 var abstractDrawer_1 = __webpack_require__(12);
-var bufferInfo_1 = __webpack_require__(16);
+var bufferInfo_1 = __webpack_require__(15);
 var debugError_1 = __webpack_require__(0);
-var modelDrawer_shader_1 = __webpack_require__(62);
+var modelDrawer_shader_1 = __webpack_require__(61);
 var ModelDrawer = (function (_super) {
     tslib_1.__extends(ModelDrawer, _super);
     function ModelDrawer(gl) {
@@ -6339,7 +6201,7 @@ var ModelDrawer = (function (_super) {
         this.bufferInfo = this.g3d.bufferInfo;
     };
     ModelDrawer.prototype.bind = function () {
-        if (true && !this.g3d.model)
+        if ( true && !this.g3d.model)
             throw new debugError_1.DebugError("can not bind modelDrawer;bindModel must be invoked firstly");
         _super.prototype.bind.call(this);
     };
@@ -6353,7 +6215,7 @@ exports.ModelDrawer = ModelDrawer;
 
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6364,13 +6226,13 @@ exports.fragmentSource = "\n\nprecision highp float;\n\nvarying vec2 v_texcoord;
 
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var frameBuffer_1 = __webpack_require__(31);
+var frameBuffer_1 = __webpack_require__(29);
 var DoubleFrameBuffer = (function () {
     function DoubleFrameBuffer(gl, width, height) {
         this.gl = gl;
@@ -6414,18 +6276,18 @@ exports.DoubleFrameBuffer = DoubleFrameBuffer;
 
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var mathEx_1 = __webpack_require__(7);
-var point2d_1 = __webpack_require__(3);
-var rect_1 = __webpack_require__(2);
+var mathEx_1 = __webpack_require__(6);
+var point2d_1 = __webpack_require__(2);
+var rect_1 = __webpack_require__(3);
 var debugError_1 = __webpack_require__(0);
-var mousePoint_1 = __webpack_require__(65);
-var mouseEvents_1 = __webpack_require__(9);
+var mousePoint_1 = __webpack_require__(64);
+var mouseEvents_1 = __webpack_require__(10);
 var Mouse = (function () {
     function Mouse(game) {
         this.type = 'Mouse';
@@ -6545,7 +6407,7 @@ var Mouse = (function () {
     };
     Mouse.prototype.listenTo = function () {
         var _this = this;
-        if (true && !this.game.getRenderer()) {
+        if ( true && !this.game.getRenderer()) {
             throw new debugError_1.DebugError("can not initialize mouse control: renderer is not set");
         }
         var container = this.game.getRenderer().container;
@@ -6604,15 +6466,15 @@ exports.Mouse = Mouse;
 
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var point2d_1 = __webpack_require__(3);
-var objectPool_1 = __webpack_require__(8);
+var point2d_1 = __webpack_require__(2);
+var objectPool_1 = __webpack_require__(7);
 var MousePoint = (function (_super) {
     tslib_1.__extends(MousePoint, _super);
     function MousePoint() {
@@ -6628,14 +6490,14 @@ exports.MousePoint = MousePoint;
 
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var renderableModel_1 = __webpack_require__(17);
+var renderableModel_1 = __webpack_require__(16);
 var debugError_1 = __webpack_require__(0);
 var GameObject = (function (_super) {
     tslib_1.__extends(GameObject, _super);
@@ -6644,25 +6506,24 @@ var GameObject = (function (_super) {
         _this.type = 'GameObject';
         _this.groupNames = [];
         _this.collideWith = [];
+        _this._frameAnimations = {};
         return _this;
     }
     GameObject.prototype.revalidate = function () {
         _super.prototype.revalidate.call(this);
-        this.sprite.revalidate();
-        this.width = this.sprite.getRect().width;
-        this.height = this.sprite.getRect().height;
+        this.spriteSheet.revalidate();
+        this.width = this.spriteSheet.getFrameWidth();
+        this.height = this.spriteSheet.getFrameHeight();
+        if (this.rigid) {
+        }
     };
     GameObject.prototype.setClonedProperties = function (cloned) {
-        if (true && !('clone' in this.sprite)) {
-            console.error(this.sprite);
-            throw new debugError_1.DebugError("can not clone sprite: cloneable interface is not implemented");
-        }
-        var clonedSprite = this.sprite.clone();
-        if (true && !(clonedSprite instanceof renderableModel_1.RenderableModel)) {
-            console.error(this.sprite);
-            throw new debugError_1.DebugError("can not clone sprite: \"clone\"  method must return Renderable object");
-        }
-        cloned.sprite = clonedSprite;
+        var _this = this;
+        var spriteSheet = this.spriteSheet.clone();
+        Object.keys(this._frameAnimations).forEach(function (name) {
+            cloned.addFrameAnimation(name, _this._frameAnimations[name].clone());
+        });
+        cloned.spriteSheet = spriteSheet;
         _super.prototype.setClonedProperties.call(this, cloned);
     };
     GameObject.prototype.clone = function () {
@@ -6671,16 +6532,53 @@ var GameObject = (function (_super) {
         cloned.revalidate();
         return cloned;
     };
+    GameObject.prototype.addFrameAnimation = function (name, fa) {
+        this._frameAnimations[name] = fa;
+        fa.setGameObject(this);
+    };
+    GameObject.prototype.playFrameAnimation = function (fr) {
+        var frameAnimation;
+        if (typeof fr === 'string') {
+            frameAnimation = this._frameAnimations[fr];
+        }
+        else
+            frameAnimation = fr;
+        if ( true && !fr)
+            throw new debugError_1.DebugError("no such frame animation: " + name);
+        if ( true && !frameAnimation.getGameObject()) {
+            console.error(frameAnimation);
+            throw new debugError_1.DebugError("frame animation is not attached to game object");
+        }
+        if ( true && frameAnimation.getGameObject() !== this) {
+            console.error(frameAnimation);
+            throw new debugError_1.DebugError("frame animation is attached to another game object");
+        }
+        this._currFrameAnimation = frameAnimation;
+    };
+    GameObject.prototype.stopFrAnimation = function () {
+        if ( true && !this._currFrameAnimation) {
+            throw new debugError_1.DebugError("can not stop frame animation: no active frame animation found");
+        }
+        this._currFrameAnimation.reset();
+        this._currFrameAnimation = null;
+    };
+    GameObject.prototype.getFrameRect = function () {
+        return this.spriteSheet.srcRect;
+    };
     GameObject.prototype.update = function () {
         _super.prototype.update.call(this);
-        this.sprite.update();
+        this._currFrameAnimation && this._currFrameAnimation.update();
     };
     GameObject.prototype.draw = function () {
-        this.sprite.draw();
+        this.game.getRenderer().draw(this);
         return true;
     };
     GameObject.prototype.kill = function () {
         _super.prototype.kill.call(this);
+        for (var _i = 0, _a = this._behaviours; _i < _a.length; _i++) {
+            var b = _a[_i];
+            b.destroy();
+        }
     };
     return GameObject;
 }(renderableModel_1.RenderableModel));
@@ -6688,15 +6586,14 @@ exports.GameObject = GameObject;
 
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var image_1 = __webpack_require__(33);
-var debugError_1 = __webpack_require__(0);
+var image_1 = __webpack_require__(31);
 var SpriteSheet = (function (_super) {
     tslib_1.__extends(SpriteSheet, _super);
     function SpriteSheet(game) {
@@ -6708,7 +6605,6 @@ var SpriteSheet = (function (_super) {
         _this._frameWidth = 0;
         _this._frameHeight = 0;
         _this._numOfFrames = 0;
-        _this._frameAnimations = {};
         return _this;
     }
     SpriteSheet.prototype.revalidate = function () {
@@ -6716,8 +6612,6 @@ var SpriteSheet = (function (_super) {
         this._frameWidth = ~~(this.width / this.numOfFramesH);
         this._frameHeight = ~~(this.height / this.numOfFramesV);
         this._numOfFrames = this.numOfFramesH * this.numOfFramesV;
-        this.width = this._frameWidth;
-        this.height = this._frameHeight;
         this.setFrameIndex(0);
     };
     SpriteSheet.prototype.setClonedProperties = function (cloned) {
@@ -6754,39 +6648,13 @@ var SpriteSheet = (function (_super) {
     SpriteSheet.prototype.getFrameIndex = function () {
         return this._currFrameIndex;
     };
-    SpriteSheet.prototype.getRect = function () {
-        return this.srcRect;
-    };
-    SpriteSheet.prototype.addFrameAnimation = function (name, fa) {
-        this._frameAnimations[name] = fa;
-    };
-    SpriteSheet.prototype.playFrameAnimation = function (fr) {
-        var frameAnimation;
-        if (typeof fr === 'string') {
-            frameAnimation = this._frameAnimations[fr];
-        }
-        else
-            frameAnimation = fr;
-        if (true && !fr)
-            throw new debugError_1.DebugError("no such frame animation: " + name);
-        this._currFrameAnimation = frameAnimation;
-        frameAnimation.play();
-    };
-    SpriteSheet.prototype.stopFrameAnimation = function () {
-        this._currFrameAnimation.stop();
-        this._currFrameAnimation = null;
-    };
-    SpriteSheet.prototype.update = function () {
-        _super.prototype.update.call(this);
-        if (this._currFrameAnimation)
-            this._currFrameAnimation.update();
-    };
     return SpriteSheet;
 }(image_1.Image));
 exports.SpriteSheet = SpriteSheet;
 
 
 /***/ }),
+/* 67 */,
 /* 68 */,
 /* 69 */,
 /* 70 */,
@@ -6822,7 +6690,141 @@ exports.SpriteSheet = SpriteSheet;
 /* 100 */,
 /* 101 */,
 /* 102 */,
-/* 103 */,
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(1);
+var game_1 = __webpack_require__(25);
+var rect_1 = __webpack_require__(3);
+var resource_1 = __webpack_require__(33);
+var color_1 = __webpack_require__(4);
+var debugError_1 = __webpack_require__(0);
+var resourceLoader_1 = __webpack_require__(42);
+var FontFactory;
+(function (FontFactory) {
+    var SYMBOL_PADDING = 4;
+    var getFontHeight = function (strFont) {
+        var parent = document.createElement("span");
+        parent.appendChild(document.createTextNode("height!ДдЙЇ"));
+        document.body.appendChild(parent);
+        parent.style.cssText = "font: " + strFont + "; white-space: nowrap; display: inline;";
+        var height = parent.offsetHeight;
+        document.body.removeChild(parent);
+        return height;
+    };
+    FontFactory.getFontContext = function (arrFromTo, strFont, w) {
+        var cnv = document.createElement('canvas');
+        var ctx = cnv.getContext('2d');
+        ctx.font = strFont;
+        var textHeight = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
+        var symbols = {};
+        var currX = 0, currY = 0, cnvHeight = textHeight;
+        for (var k = 0; k < arrFromTo.length; k++) {
+            var arrFromToCurr = arrFromTo[k];
+            for (var i = arrFromToCurr.from; i < arrFromToCurr.to; i++) {
+                var currentChar = String.fromCharCode(i);
+                var ctx_1 = cnv.getContext('2d');
+                var textWidth = ctx_1.measureText(currentChar).width;
+                textWidth += 2 * SYMBOL_PADDING;
+                if (textWidth == 0)
+                    continue;
+                if (currX + textWidth > w) {
+                    currX = 0;
+                    currY += textHeight;
+                    cnvHeight = currY + textHeight;
+                }
+                var symbolRect = new rect_1.Rect();
+                symbolRect.x = ~~currX + SYMBOL_PADDING;
+                symbolRect.y = ~~currY + SYMBOL_PADDING;
+                symbolRect.width = ~~textWidth - 2 * SYMBOL_PADDING;
+                symbolRect.height = textHeight - 2 * SYMBOL_PADDING;
+                symbols[currentChar] = symbolRect;
+                currX += textWidth;
+            }
+        }
+        return { symbols: symbols, width: w, height: cnvHeight };
+    };
+    FontFactory.getFontImageBase64 = function (fontContext, strFont, color) {
+        var cnv = document.createElement('canvas');
+        cnv.width = fontContext.width;
+        cnv.height = fontContext.height;
+        var ctx = cnv.getContext('2d');
+        ctx.font = strFont;
+        ctx.textBaseline = "top";
+        ctx.imageSmoothingEnabled = false;
+        ctx.mozImageSmoothingEnabled = false;
+        ctx.webkitImageSmoothingEnabled = false;
+        ctx.oImageSmoothingEnabled = false;
+        ctx.fillStyle = '#00000000';
+        ctx.fillRect(0, 0, cnv.width, cnv.height);
+        ctx.fillStyle = color.asCSS();
+        var symbols = fontContext.symbols;
+        Object.keys(symbols).forEach(function (symbol) {
+            var rect = symbols[symbol];
+            ctx.fillText(symbol, rect.x, rect.y);
+        });
+        return cnv.toDataURL();
+    };
+    FontFactory.generate = function (f, s) {
+        f.createContext();
+        var link = s.resourceLoader.loadImage(f.createBitmap());
+        f.setResourceLink(link);
+    };
+})(FontFactory = exports.FontFactory || (exports.FontFactory = {}));
+var Font = (function (_super) {
+    tslib_1.__extends(Font, _super);
+    function Font(game) {
+        var _this = _super.call(this) || this;
+        _this.game = game;
+        _this.type = 'Font';
+        _this.fontSize = 12;
+        _this.fontFamily = 'Monospace';
+        _this.fontColor = color_1.Color.BLACK.clone();
+        return _this;
+    }
+    Font.getSystemFont = function () {
+        if (Font._systemFontInstance)
+            return Font._systemFontInstance;
+        var f = new Font(game_1.Game.getInstance());
+        f.createContext();
+        var resourceLoader = new resourceLoader_1.ResourceLoader(game_1.Game.getInstance());
+        var link = resourceLoader.loadImage(f.createBitmap());
+        resourceLoader.startLoading();
+        f.setResourceLink(link);
+        Font._systemFontInstance = f;
+        return f;
+    };
+    Font.prototype.asCss = function () {
+        return this.fontSize + "px " + this.fontFamily;
+    };
+    Font.prototype.createContext = function () {
+        var ranges = [{ from: 32, to: 126 }, { from: 1040, to: 1116 }];
+        var WIDTH = 512;
+        this.fontContext = FontFactory.getFontContext(ranges, this.asCss(), WIDTH);
+    };
+    Font.prototype.createBitmap = function () {
+        return FontFactory.getFontImageBase64(this.fontContext, this.asCss(), this.fontColor);
+    };
+    Font.prototype.revalidate = function () {
+        if (true) {
+            if (!this.fontContext)
+                throw new debugError_1.DebugError("font context is not created");
+            if (!this.getResourceLink())
+                throw new debugError_1.DebugError("font without resource link");
+        }
+    };
+    Font.prototype.getDefaultSymbolHeight = function () {
+        return this.fontContext.symbols[' '].height;
+    };
+    return Font;
+}(resource_1.Resource));
+exports.Font = Font;
+
+
+/***/ }),
 /* 104 */,
 /* 105 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -6838,9 +6840,9 @@ module.exports = __webpack_require__(106);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var mainScene_1 = __webpack_require__(107);
-var game_1 = __webpack_require__(5);
-var webGlRenderer_1 = __webpack_require__(50);
-var mouse_1 = __webpack_require__(64);
+var game_1 = __webpack_require__(25);
+var webGlRenderer_1 = __webpack_require__(49);
+var mouse_1 = __webpack_require__(63);
 var game = new game_1.Game();
 var mainScene = new mainScene_1.MainScene(game);
 game.setRenderer(webGlRenderer_1.WebGlRenderer);
@@ -6856,11 +6858,11 @@ game.runScene(mainScene);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var scene_1 = __webpack_require__(39);
-var gameObject_1 = __webpack_require__(66);
-var spriteSheet_1 = __webpack_require__(67);
+var scene_1 = __webpack_require__(37);
+var gameObject_1 = __webpack_require__(65);
+var spriteSheet_1 = __webpack_require__(66);
 var frameAnimation_1 = __webpack_require__(108);
-var mouseEvents_1 = __webpack_require__(9);
+var mouseEvents_1 = __webpack_require__(10);
 var MainScene = (function (_super) {
     tslib_1.__extends(MainScene, _super);
     function MainScene() {
@@ -6878,23 +6880,21 @@ var MainScene = (function (_super) {
         spr.numOfFramesH = 5;
         var anim = new frameAnimation_1.FrameAnimation(this.game);
         anim.frames = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
-        spr.addFrameAnimation('animation', anim);
+        this.obj.addFrameAnimation('animation', anim);
         anim.isRepeat = true;
-        anim.setSpriteSheet(spr);
-        spr.playFrameAnimation('animation');
+        this.obj.playFrameAnimation('animation');
         spr.setResourceLink(this.resourceLink);
-        this.obj.sprite = spr;
+        this.obj.spriteSheet = spr;
         this.obj.pos.fromJSON({ x: 10, y: 10 });
         this.appendChild(this.obj);
         var playing = true;
         this.on(mouseEvents_1.MOUSE_EVENTS.click, function () {
             playing = !playing;
             if (playing)
-                _this.obj.sprite.playFrameAnimation('animation');
+                _this.obj.playFrameAnimation('animation');
             else
-                _this.obj.sprite.stopFrameAnimation();
+                _this.obj.stopFrAnimation();
         });
-        window.obj = this.obj;
     };
     return MainScene;
 }(scene_1.Scene));
@@ -6908,9 +6908,7 @@ exports.MainScene = MainScene;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var eventEmitter_1 = __webpack_require__(18);
-var mouseEvents_1 = __webpack_require__(9);
-var debugError_1 = __webpack_require__(0);
+var eventEmitter_1 = __webpack_require__(17);
 var FrameAnimation = (function () {
     function FrameAnimation(game) {
         this.game = game;
@@ -6919,23 +6917,18 @@ var FrameAnimation = (function () {
         this.duration = 1000;
         this.isRepeat = true;
         this._currFrame = 0;
-        this._isPlaying = false;
+        this._emitter = new eventEmitter_1.EventEmitter();
     }
     FrameAnimation.prototype.revalidate = function () {
         this._timeForOneFrame = ~~(this.duration / this.frames.length);
     };
-    FrameAnimation.prototype.setSpriteSheet = function (spr) {
-        this._spriteSheet = spr;
+    FrameAnimation.prototype.getGameObject = function () {
+        return this._gameObject;
     };
-    FrameAnimation.prototype.play = function () {
-        this._isPlaying = true;
-    };
-    FrameAnimation.prototype.stop = function () {
-        this._isPlaying = false;
+    FrameAnimation.prototype.setGameObject = function (g) {
+        this._gameObject = g;
     };
     FrameAnimation.prototype.update = function () {
-        if (!this._isPlaying)
-            return;
         var time = this.game.getTime();
         if (!this._startTime)
             this._startTime = time;
@@ -6943,18 +6936,14 @@ var FrameAnimation = (function () {
         this._currFrame = ~~((this.frames.length) * delta / this.duration);
         if (this.isRepeat == false && this._currFrame >= this.frames.length - 1) {
             this.trigger('loop');
-            this._isPlaying = false;
+            this._gameObject.stopFrAnimation();
             return;
         }
-        if (true) {
-            if (!this._spriteSheet)
-                throw new debugError_1.DebugError("can not play frame animation: spriteSheet is not set");
-        }
-        var lastFrIndex = this._spriteSheet.getFrameIndex();
+        var lastFrIndex = this._gameObject.spriteSheet.getFrameIndex();
         if (lastFrIndex != this.frames[this._currFrame]) {
             var index = this.frames[this._currFrame];
-            index = index % this._spriteSheet.getNumOfFrames();
-            this._spriteSheet.setFrameIndex(index);
+            index = index % this._gameObject.spriteSheet.getNumOfFrames();
+            this._gameObject.spriteSheet.setFrameIndex(index);
             if (this._currFrame === 0 && this._startTime !== time)
                 this.trigger('loop');
         }
@@ -6963,31 +6952,24 @@ var FrameAnimation = (function () {
         cloned.frames = this.frames.slice();
         cloned.duration = this.duration;
         cloned.isRepeat = this.isRepeat;
-        cloned.setSpriteSheet(this._spriteSheet);
     };
     FrameAnimation.prototype.clone = function () {
         var cloned = new FrameAnimation(this.game);
         this.setClonedProperties(cloned);
         return cloned;
     };
+    FrameAnimation.prototype.reset = function () {
+        this._startTime = 0;
+    };
     FrameAnimation.prototype.on = function (eventName, callBack) {
-        if (true && !this.game.hasControl('Mouse')) {
-            if (mouseEvents_1.MOUSE_EVENTS[eventName] != undefined) {
-                throw new debugError_1.DebugError('can not listen mouse events: mouse control is not added');
-            }
-        }
-        if (this._emitter === undefined)
-            this._emitter = new eventEmitter_1.EventEmitter();
         this._emitter.on(eventName, callBack);
         return callBack;
     };
     FrameAnimation.prototype.off = function (eventName, callBack) {
-        if (this._emitter !== undefined)
-            this._emitter.off(eventName, callBack);
+        this._emitter.off(eventName, callBack);
     };
     FrameAnimation.prototype.trigger = function (eventName, data) {
-        if (this._emitter !== undefined)
-            this._emitter.trigger(eventName, data);
+        this._emitter.trigger(eventName, data);
     };
     return FrameAnimation;
 }());
