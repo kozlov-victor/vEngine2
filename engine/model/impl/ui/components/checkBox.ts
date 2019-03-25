@@ -15,14 +15,12 @@ export class CheckBox extends Container {
 
     constructor(game:Game) {
         super(game);
-        let rNormal = new Rectangle(game);
-        rNormal.width = 10;
-        rNormal.height = 10;
+        let rNormal:Rectangle = new Rectangle(game);
+        rNormal.setWH(10);
         rNormal.fillColor = new Color(10,10,10,100);
 
-        let rChecked = new Rectangle(game);
-        rChecked.width = 10;
-        rChecked.height = 10;
+        let rChecked:Rectangle = new Rectangle(game);
+        rChecked.setWH(10);
         rChecked.fillColor = new Color(10,50,10,100);
 
         this.rNormal = rNormal;
@@ -35,8 +33,8 @@ export class CheckBox extends Container {
     }
 
     onGeometryChanged(){
-        this.rNormal.setWH(this.width,this.height);
-        this.rChecked.setWH(this.width,this.height);
+        this.rNormal.setWH(this.size.width,this.size.height);
+        this.rChecked.setWH(this.size.width,this.size.height);
     }
 
     protected getBgByState():Shape{

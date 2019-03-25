@@ -1,9 +1,10 @@
 
 import {ObjectPool, Releasealable} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
+import {Cloneable} from "@engine/declarations";
 
 
-export class Point2d extends ObservableEntity {
+export class Point2d extends ObservableEntity implements Cloneable<Point2d>{
 
     private _x:number = 0;
     private _y:number = 0;
@@ -39,14 +40,7 @@ export class Point2d extends ObservableEntity {
         if (onChangedFn) this.addListener(onChangedFn);
     }
 
-    protected checkObservableChanged():boolean{
-        return this._state.setState(this._x,this._y);
-    }
-
-    setXY(x:number,y?:number):Point2d{
-        if (y===undefined) { //noinspection JSSuspiciousNameCombination
-            y = x;
-        }
+    setXY(x:number,y:number = x):Point2d{
         this._x = x;
         this._y = y;
         this.triggerObservable();

@@ -3,6 +3,7 @@ import {Game} from "../game";
 import {IControl} from "@engine/core/control/abstract/iControl";
 import {AbstractKeypad, KEYBOARD_EVENT} from "@engine/core/control/abstract/abstractKeypad";
 import {KEYBOARD_KEY} from "@engine/core/control/keyboard";
+import {Int} from "@engine/declarations";
 
 declare const window:any,navigator:any;
 
@@ -50,6 +51,8 @@ export enum GAME_PAD_KEY {
     GAME_PAD_AXIS_DOWN = 11
 }
 
+
+
 export class GamePad extends AbstractKeypad implements IControl{
 
     readonly type:string = 'GamePad';
@@ -70,7 +73,7 @@ export class GamePad extends AbstractKeypad implements IControl{
         for (let i:number=0,max=this.gamepads.length;i<max;i++) {
             let gp:GamePadInfo = this.gamepads[i];
             if (!gp) continue;
-            let maxButtons = gp.buttons.length;
+            let maxButtons:number = gp.buttons.length;
             if (maxButtons>7) maxButtons = 7; // only 8-buttons gamePad is supported for now
             for (let j:number=0;j<maxButtons;j++) {
                 let btn:GamePadButton = gp.buttons[j];
@@ -83,8 +86,8 @@ export class GamePad extends AbstractKeypad implements IControl{
             if (gp.axes[0]===0) continue; // to avoid oscillations, skip integer zero value
             if (gp.axes[1]===0) continue;
 
-            let axis0 = ~~(gp.axes[0]);
-            let axis1 = ~~(gp.axes[1]);
+            const axis0:Int = ~~(gp.axes[0]) as Int;
+            const axis1:Int = ~~(gp.axes[1]) as Int;
 
             if (axis0===1) {
                 this.press(GAME_PAD_KEY.GAME_PAD_AXIS_RIGHT);

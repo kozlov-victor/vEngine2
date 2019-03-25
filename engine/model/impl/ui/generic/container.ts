@@ -45,9 +45,9 @@ export abstract class Container extends RenderableModel {
 
     testLayout(){
         if (DEBUG) {
-            if (this.layoutWidth===LAYOUT_SIZE.FIXED && this.width===0)
+            if (this.layoutWidth===LAYOUT_SIZE.FIXED && this.size.width===0)
                 throw new DebugError(`layoutWidth is LAYOUT_SIZE.FIXED so width must be specified`);
-            if (this.layoutHeight===LAYOUT_SIZE.FIXED && this.height===0)
+            if (this.layoutHeight===LAYOUT_SIZE.FIXED && this.size.height===0)
                 throw new DebugError(`layoutHeight is LAYOUT_SIZE.FIXED so height must be specified`);
         }
     }
@@ -113,13 +113,13 @@ export abstract class Container extends RenderableModel {
     protected calcScreenRect(){
         this._rect.setXYWH(
             this.pos.x,this.pos.y,
-            this.width + this.marginLeft + this.marginRight,
-            this.height + this.marginTop + this.marginBottom
+            this.size.width + this.marginLeft + this.marginRight,
+            this.size.height + this.marginTop + this.marginBottom
         );
         this._screenRect.set(this._rect);
         let parent:RenderableModel = this.parent;
         while (parent) {
-            this._screenRect.addXY(parent.getRect().x,parent.getRect().y);
+            this._screenRect.addXY(parent.getRect().point.x,parent.getRect().point.y);
             parent = parent.parent;
         }
     }
@@ -150,8 +150,7 @@ export abstract class Container extends RenderableModel {
 
 
     setWH(w:number,h:number){
-        this.width = w;
-        this.height = h;
+        this.size.setWH(w,h);
         this.drawingRect.setWH(w,h);
     }
 
@@ -160,14 +159,11 @@ export abstract class Container extends RenderableModel {
         let paddedHeight = contentHeight +  this.paddingTop +  this.paddingBottom;
         if (this.background) {
             this.background.setWH(paddedWidth,paddedHeight);
-            this.width = this.background.width;
-            this.height = this.background.height;
+            this.size.set(this.background.size);
         } else {
-            this.width = paddedWidth;
-            this.height = paddedHeight;
+            this.size.setWH(paddedWidth,paddedHeight);
         }
         this.calcScreenRect();
-
     }
 
     update(){

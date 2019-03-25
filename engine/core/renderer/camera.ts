@@ -87,7 +87,7 @@ export class Camera {
         let wDiv2 = w/2;
         let hDiv2 = h/2;
 
-        let wScaled = this.getRectScaled().width;
+        let wScaled = this.getRectScaled().size.width;
 
         let gameObject:RenderableModel = this.objFollowTo;
         if (gameObject) {

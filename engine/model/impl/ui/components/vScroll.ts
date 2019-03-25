@@ -17,11 +17,11 @@ export class VScroll extends Container {
     constructor(game:Game) {
         super(game);
         let bg:Rectangle = new Rectangle(game);
-        bg.width = 5;
+        bg.size.width = 5;
         bg.fillColor = new Color(50,50,50,10);
         bg.color = Color.NONE.clone();
         let hnd:Rectangle = new Rectangle(game);
-        hnd.height = 10;
+        hnd.size.height = 10;
         hnd.color = Color.NONE.clone();
         hnd.fillColor = new Color(10,10,10,100);
         this.background = bg;
@@ -31,14 +31,14 @@ export class VScroll extends Container {
     }
 
     onGeometryChanged(){
-        this.handler.width = this.background.width;
+        this.handler.size.width = this.background.size.width;
         if (this.value>this.maxValue) this.value = this.maxValue;
-        if (this.maxValue) this.handler.height = this.height * this.height / this.maxValue;
+        if (this.maxValue) this.handler.size.height = this.size.height * this.size.height / this.maxValue;
         if (this.maxValue) this.handler.pos.y =
-            this.height * this.value / this.maxValue;
+            this.size.height * this.value / this.maxValue;
         this.background.revalidate();
         this.handler.revalidate();
-        this.calcDrawableRect(this.width,this.height);
+        this.calcDrawableRect(this.size.width,this.size.height);
     }
 
     draw():boolean{

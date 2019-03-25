@@ -28,10 +28,10 @@ export class Image extends Shape implements Cloneable<Image>{
             throw new DebugError(`can not render Image: resourceLink is not specified`);
         }
         let tex:TextureInfo = this.game.getRenderer().getTextureInfo(this.getResourceLink().getId());
-        if (this.width===0) this.width = tex.size.width;
-        if (this.height===0) this.height = tex.size.height;
-        if (this.srcRect.width===0) this.srcRect.width = tex.size.width;
-        if (this.srcRect.height===0) this.srcRect.height = tex.size.height;
+        if (this.size.width===0) this.size.width = tex.size.width;
+        if (this.size.height===0) this.size.height = tex.size.height;
+        if (this.srcRect.size.width===0) this.srcRect.size.width = tex.size.width;
+        if (this.srcRect.size.height===0) this.srcRect.size.height = tex.size.height;
     }
 
     draw():boolean{

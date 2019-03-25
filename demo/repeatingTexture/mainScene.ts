@@ -12,8 +12,7 @@ export class MainScene extends Scene {
     onPreloading() {
         this.bg = new Image(this.game);
         this.bg.setResourceLink(this.resourceLoader.loadImage('../assets/repeat.jpg'));
-        this.bg.width = 100;
-        this.bg.height = 100;
+        this.bg.size.setWH(100);
         this.bg.borderRadius = 15;
     }
 

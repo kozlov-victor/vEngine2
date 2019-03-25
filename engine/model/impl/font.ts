@@ -56,10 +56,10 @@ export namespace FontFactory {
                     cnvHeight = currY + textHeight;
                 }
                 let symbolRect:Rect = new Rect();
-                symbolRect.x = ~~currX + SYMBOL_PADDING;
-                symbolRect.y = ~~currY + SYMBOL_PADDING;
-                symbolRect.width = ~~textWidth - 2 * SYMBOL_PADDING;
-                symbolRect.height = textHeight - 2 * SYMBOL_PADDING;
+                symbolRect.point.x = ~~currX + SYMBOL_PADDING;
+                symbolRect.point.y = ~~currY + SYMBOL_PADDING;
+                symbolRect.size.width = ~~textWidth - 2 * SYMBOL_PADDING;
+                symbolRect.size.height = textHeight - 2 * SYMBOL_PADDING;
                 symbols[currentChar] = symbolRect;
                 currX += textWidth;
             }
@@ -107,7 +107,7 @@ export namespace FontFactory {
         let symbols:{[key:string]:Rect} = fontContext.symbols;
         Object.keys(symbols).forEach((symbol:string)=>{
             let rect:Rect = symbols[symbol];
-            ctx.fillText(symbol, rect.x, rect.y);
+            ctx.fillText(symbol, rect.point.x, rect.point.y);
         });
         //correctColor(cnv,color);
         return cnv.toDataURL();
@@ -171,6 +171,6 @@ export class Font extends Resource implements Revalidatable {
     }
 
     getDefaultSymbolHeight():number{
-        return this.fontContext.symbols[' '].height;
+        return this.fontContext.symbols[' '].size.height;
     }
 }

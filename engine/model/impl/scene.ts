@@ -222,8 +222,9 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
 
     //#MACROS_BODY_BEGIN = ./engine/macroses/eventEmitterMacros
     off(eventName: string, callBack: Function): void {}
-    on(eventName: string, callBack: Function): void {
-        IMPORT_DEPENDS(EventEmitter,MOUSE_EVENTS,DebugError)
+    on(eventName: string, callBack: Function): Function {
+        IMPORT_DEPENDS(EventEmitter,MOUSE_EVENTS,DebugError);
+        return undefined;
     }
     trigger(eventName: string, data?: any): void {}
     //#MACROS_BODY_END

@@ -22,8 +22,8 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
     revalidate(){
         super.revalidate();
         this.sprite.revalidate();
-        this.width = this.sprite.getRect().width;
-        this.height = this.sprite.getRect().height;
+        this.size.width = this.sprite.size.width;
+        this.size.height = this.sprite.size.height;
         //if (this.rigid) {
             // let center = new Vec2(this.pos.x+this.anchor.x,this.pos.y+this.anchor);
             // let mass = 10; // todo

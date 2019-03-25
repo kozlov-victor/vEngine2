@@ -17,11 +17,17 @@ export class Ellipse extends Shape implements Cloneable<Ellipse>{
         super(game);
         this.center.observe(()=>{
             const maxR:number = this._getMaxRadius();
-            this.pos.setXY(this.center.x - maxR,this.center.y - maxR);
+            this.pos.
+                silent<Point2d>(true).
+                setXY(this.center.x - maxR,this.center.y - maxR).
+                silent(false);
         });
         this.pos.observe(()=>{
             const maxR:number = this._getMaxRadius();
-            this.center.setXY(this.pos.x+maxR,this.pos.y+maxR);
+            this.center.
+                silent<Point2d>(true).
+                setXY(this.pos.x+maxR,this.pos.y+maxR).
+                silent(false);
         });
     }
 
@@ -31,7 +37,7 @@ export class Ellipse extends Shape implements Cloneable<Ellipse>{
 
     set radiusX(value: number) {
         this._radiusX = value;
-        this.width = this._getMaxRadius()*2;
+        this.size.width = this._getMaxRadius()*2;
         this.center.forceTriggerChange();
     }
 
@@ -41,7 +47,7 @@ export class Ellipse extends Shape implements Cloneable<Ellipse>{
 
     set radiusY(value: number) {
         this._radiusY = value;
-        this.height = this._getMaxRadius()*2;
+        this.size.height = this._getMaxRadius()*2;
         this.center.forceTriggerChange();
     }
 

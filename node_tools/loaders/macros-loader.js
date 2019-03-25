@@ -12,7 +12,7 @@ const getMacrosBody = (url)=>{
     let inMacros = false;
     let bodyJustStarted = false;
     let bodyJustFinished = false;
-    macrosSrc.split('\r').forEach(line=>{
+    macrosSrc.split('\n').forEach(line=>{
 
         bodyJustStarted = false;
         bodyJustFinished = false;

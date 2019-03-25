@@ -27,19 +27,19 @@ export class Mouse implements IControl {
 
 
     resolvePoint(e:MouseEvent|TouchEvent|Touch|PointerEvent):MousePoint{
-        let game:Game = this.game;
-        let clientX:number = <number>(e as any).clientX;
-        let clientY:number = <number>(e as any).clientY;
+        const game:Game = this.game;
+        const clientX:number = (e as any).clientX as number;
+        const clientY:number = (e as any).clientY as number;
 
-        let screenX:number = (clientX - game.pos.x ) / game.scale.x;
-        let screenY:number = (clientY - game.pos.y ) / game.scale.y;
+        const screenX:number = (clientX - game.pos.x ) / game.scale.x;
+        const screenY:number = (clientY - game.pos.y ) / game.scale.y;
 
         const screenPoint:Point2d = Point2d.fromPool();
         screenPoint.setXY(screenX,screenY);
-        let p:Point2d = game.camera.screenToWorld(screenPoint);
+        const p:Point2d = game.camera.screenToWorld(screenPoint);
         screenPoint.release();
 
-        let mousePoint:MousePoint = MousePoint.fromPool();
+        const mousePoint:MousePoint = MousePoint.fromPool();
         mousePoint.set(p);
         mousePoint.screenX = screenX;
         mousePoint.screenY = screenY;
@@ -53,8 +53,8 @@ export class Mouse implements IControl {
         eventName:string,point:MousePoint,
         go:RenderableModel,offsetX = 0, offsetY = 0):boolean{
 
-        let rectWithOffset:Rect = Rect.fromPool().set(go.getRect()).addXY(offsetX,offsetY);
-        rectWithOffset.release();
+        const rectWithOffset:Rect = Rect.fromPool().set(go.getRect()).addXY(offsetX,offsetY);
+        let res:boolean = false;
         if (
             MathEx.isPointInRect(point,rectWithOffset)
         ) {
@@ -70,18 +70,19 @@ export class Mouse implements IControl {
                 eventName,
                 isMouseDown: point.isMouseDown
             } as IMousePoint);
-            return true;
+            res = true;
         }
-        return false;
+        rectWithOffset.release();
+        return res;
     }
 
 
     triggerEvent(e:MouseEvent|TouchEvent|Touch,eventName:string,isMouseDown?:boolean):MousePoint{
         if (isMouseDown===undefined) isMouseDown = false;
-        let g:Game = this.game;
-        let scene:Scene = g.getCurrScene();
+        const g:Game = this.game;
+        const scene:Scene = g.getCurrScene();
         if (!scene) return;
-        let point:MousePoint = this.resolvePoint(e);
+        const point:MousePoint = this.resolvePoint(e);
         point.isMouseDown = isMouseDown;
         point.target = undefined;
 
@@ -123,9 +124,9 @@ export class Mouse implements IControl {
     }
 
     resolveMouseMove(e:Touch|MouseEvent,isMouseDown:boolean){
-        let point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,isMouseDown);
+        const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,isMouseDown);
         if (!point) return;
-        let lastMouseDownObject:RenderableModel = this.objectsCaptured[point.id];
+        const lastMouseDownObject:RenderableModel = this.objectsCaptured[point.id];
         if (lastMouseDownObject && lastMouseDownObject!==point.target) {
             lastMouseDownObject.trigger(MOUSE_EVENTS.mouseLeave,point);
             delete this.objectsCaptured[point.id];
@@ -138,22 +139,22 @@ export class Mouse implements IControl {
     }
 
     resolveMouseUp(e:MouseEvent|Touch){
-        let point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseUp);
+        const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseUp);
         if (!point) return;
-        let lastMouseDownObject = this.objectsCaptured[point.id];
+        const lastMouseDownObject = this.objectsCaptured[point.id];
         if (!lastMouseDownObject) return;
         if (point.target!==lastMouseDownObject) lastMouseDownObject.trigger(MOUSE_EVENTS.mouseUp,point);
         delete this.objectsCaptured[point.id];
     }
 
     resolveDoubleClick(e:MouseEvent){
-        let point = this.triggerEvent(e,MOUSE_EVENTS.doubleClick);
+        const point = this.triggerEvent(e,MOUSE_EVENTS.doubleClick);
         if (!point) return;
         delete this.objectsCaptured[point.id];
     }
 
     resolveScroll(e:MouseEvent){
-        let point = this.triggerEvent(e,MOUSE_EVENTS.scroll);
+        const point = this.triggerEvent(e,MOUSE_EVENTS.scroll);
         if (!point) return;
         delete this.objectsCaptured[point.id];
     }

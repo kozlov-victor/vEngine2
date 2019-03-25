@@ -5,6 +5,7 @@ import {Scene} from "../../model/impl/scene";
 import {RenderableModel} from "@engine/model/renderableModel";
 import {IMousePoint} from "@engine/core/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
+import {Int} from "@engine/declarations";
 
 interface MouseDragPoint {
     mX: number,
@@ -21,8 +22,8 @@ interface MouseDragPoint {
 
 export class DraggableBehaviour extends BaseAbstractBehaviour {
 
-    private static _getEventId(e:IMousePoint):number{
-        return e.id || 1;
+    private static _getEventId(e:IMousePoint):Int{
+        return (e.id || 1) as Int;
     };
 
     private blurListener:(e:MouseEvent)=>void;
@@ -31,12 +32,11 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
     private sceneOnMouseMove:Function;
     private sceneOnMouseUp:Function;
 
-    private readonly points:{[key:number]:MouseDragPoint};
+    private readonly points:{[key:number]:MouseDragPoint} = {};
     private gameObject:RenderableModel;
 
     constructor(game:Game){
         super(game,null);
-        this.points = {} as {[key:number]:MouseDragPoint};
     }
 
     manage(gameObject:RenderableModel) {
@@ -53,7 +53,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
                 dragStartY:0
             } as MouseDragPoint;
         });
-        let scene:Scene = this.game.getCurrScene();
+        const scene:Scene = this.game.getCurrScene();
         this.sceneOnMouseDown = scene.on(MOUSE_EVENTS.mouseDown,(e:IMousePoint)=>{
             let pointId:number = DraggableBehaviour._getEventId(e);
             let point:MouseDragPoint = this.points[pointId];
@@ -94,7 +94,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
     }
 
     destroy(){
-        let scene:Scene = this.game.getCurrScene();
+        const scene:Scene = this.game.getCurrScene();
         this.game.getRenderer().container.removeEventListener('mouseleave',this.blurListener);
         this.gameObject.off(MOUSE_EVENTS.click,this.gameObjectOnClick);
         scene.off(MOUSE_EVENTS.mouseDown,this.sceneOnMouseDown);

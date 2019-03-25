@@ -7,6 +7,7 @@ import {Rect} from "@engine/core/geometry/rect";
 import {Container,LAYOUT_SIZE, OVERFLOW} from "../generic/container";
 import {Game} from "@engine/core/game";
 import {Cloneable} from "@engine/declarations";
+import {AbstractRenderer} from "@engine/core/renderer/abstract/abstractRenderer";
 
 export class AbsoluteLayout extends Container implements Cloneable<AbsoluteLayout>{
 
@@ -33,20 +34,20 @@ export class AbsoluteLayout extends Container implements Cloneable<AbsoluteLayou
             if (r.bottom>maxY) maxY = r.bottom;
         }
         if (this.layoutWidth===LAYOUT_SIZE.WRAP_CONTENT) {
-           this.width = maxX;
+           this.size.width = maxX;
         }
         if (this.layoutHeight===LAYOUT_SIZE.WRAP_CONTENT) {
-            this.height = maxY;
+            this.size.height = maxY;
         }
-        this.calcDrawableRect(this.width,this.height);
+        this.calcDrawableRect(this.size.width,this.size.height);
     }
 
     draw():boolean{
-        let renderer = this.game.getRenderer();
+        let renderer:AbstractRenderer = this.game.getRenderer();
         if (this.overflow===OVERFLOW.HIDDEN) {
             let r:Rect = Rect.fromPool().set(this.getScreenRect());
             r.addXY(-1,-1);
-            r.setWH(r.width+1,r.height+1);
+            r.setWH(r.size.width+1,r.size.height+1);
             renderer.lockRect(r);
         }
         if (this.background) this.background.draw();

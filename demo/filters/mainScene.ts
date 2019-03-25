@@ -10,7 +10,6 @@ import {PixelFilter} from "@engine/core/renderer/webGl/filters/textureFilters/pi
 import {PosterizeFilter} from "@engine/core/renderer/webGl/filters/textureFilters/posterizeFilter";
 import {SimpleBlurFilter} from "@engine/core/renderer/webGl/filters/textureFilters/simpleBlurFilter";
 import {Circle} from "@engine/model/impl/ui/drawable/circle";
-import {Tween} from "@engine/core/tween";
 import {TweenMovie} from "@engine/core/tweenMovie";
 import {BarrelDistortionFilter} from "@engine/core/renderer/webGl/filters/textureFilters/barrelDistortionFilter";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";

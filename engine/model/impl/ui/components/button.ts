@@ -28,10 +28,10 @@ export class Button extends Container {
 
     onGeometryChanged(){
         this._textField.onGeometryChanged();
-        this.calcDrawableRect(this._textField.width,this._textField.height);
+        this.calcDrawableRect(this._textField.size.width,this._textField.size.height);
         if (this.background) {
-            let dx = (this.background.width - this._textField.width)/2;
-            let dy = (this.background.height - this._textField.height)/2;
+            let dx:number = (this.background.size.width - this._textField.size.width)/2;
+            let dy:number = (this.background.size.height - this._textField.size.height)/2;
 
             this._textField.pos.setXY(dx,dy);
         }

@@ -16,14 +16,14 @@ import {Layer} from "@engine/model/impl/layer";
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
 import {EventEmitter} from "@engine/core/misc/eventEmitter";
 import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
+import {Size} from "@engine/core/geometry/size";
 
 
 export abstract class RenderableModel extends Resource implements Revalidatable, Tweenable, Eventemittable {
 
     readonly type:string;
     id:string;
-    width:number = 0;
-    height:number = 0;
+    readonly size:Size = new Size();
     readonly pos:Point2d = new Point2d(0,0,()=>this._dirty=true);
     readonly scale:Point2d = new Point2d(1,1);
     readonly anchor:Point2d = new Point2d(0,0);
@@ -37,7 +37,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
     rigidBody:RigidShape;
     velocity = new Point2d(0,0);
 
-    protected _tweens:Tween[] = []; // todo repeated with scene
+    protected _tweens:Tween[] = [];
     protected _tweenMovies:TweenMovie[] = [];
     protected _timers:Timer[] = [];
 
@@ -56,8 +56,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
     }
 
     protected setClonedProperties(cloned:RenderableModel) {
-        cloned.width = this.width;
-        cloned.height = this.height;
+        cloned.size.set(cloned.size);
         cloned.pos.set(this.pos);
         cloned.scale.set(this.scale);
         cloned.anchor.set(this.anchor);
@@ -114,7 +113,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         this._screenRect.set(this._rect);
         let parent:RenderableModel = this.parent;
         while (parent) {
-            this._screenRect.addXY(parent.getRect().x,parent.getRect().y);
+            this._screenRect.addXY(parent.getRect().point.x,parent.getRect().point.y);
             parent = parent.parent;
         }
     }
@@ -123,8 +122,8 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         this._rect.setXYWH(
             this.pos.x - this.anchor.x,
             this.pos.y - this.anchor.y,
-            this.width,
-            this.height
+            this.size.width,
+            this.size.height
         );
         if (this._dirty) {
             this.calcScreenRect();
@@ -134,9 +133,9 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
 
     setAnchorToCenter(){
         this.revalidate();
-        if (DEBUG && !(this.width && this.height))
+        if (DEBUG && !(this.size.width && this.size.height))
             throw new DebugError(`can not set anchor to center: width or height of gameObject is not set`);
-        this.anchor.setXY(this.width/2,this.height/2);
+        this.anchor.setXY(this.size.width/2,this.size.height/2);
     }
 
 
@@ -238,7 +237,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         renderer.translate(-this.anchor.x,-this.anchor.y);
 
         if (this.isNeedAdditionalTransform()) {
-            let dx = this.width/2,dy = this.height/2;
+            let dx:number = this.size.width/2,dy:number = this.size.height/2;
             renderer.translate(dx,dy);
             renderer.scale(this.scale.x,this.scale.y);
             this.doAdditionalTransform();
@@ -267,7 +266,6 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
             c.update();
         }
 
-        const time:number = this.game.getTime();
         const delta:number = this.game.getDeltaTime();
 
         this._tweens.forEach((t:Tween, index:number)=>{
@@ -282,8 +280,8 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
             t.onUpdate();
         });
 
-        for (let i=0,max = this._behaviours.length;i<max;i++) {
-            if (this._behaviours[i].onUpdate) this._behaviours[i].onUpdate(time, delta);
+        for (let i:number=0,max = this._behaviours.length;i<max;i++) {
+            if (this._behaviours[i].onUpdate) this._behaviours[i].onUpdate();
         }
 
         if (this.rigidBody!==undefined) {
@@ -298,7 +296,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         }
 
         if (this.children.length>0) {
-            for(let i=0;i<this.children.length;i++) {
+            for(let i:number=0;i<this.children.length;i++) {
                 this.children[i].update();
             }
         }
@@ -319,8 +317,9 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
 
     //#MACROS_BODY_BEGIN = ./engine/macroses/eventEmitterMacros
     off(eventName: string, callBack: Function): void {}
-    on(eventName: string, callBack: Function): void {
-        IMPORT_DEPENDS(EventEmitter,MOUSE_EVENTS)
+    on(eventName: string, callBack: Function): Function {
+        IMPORT_DEPENDS(EventEmitter,MOUSE_EVENTS);
+        return undefined;
     }
     trigger(eventName: string, data?: any): void {}
     //#MACROS_BODY_END

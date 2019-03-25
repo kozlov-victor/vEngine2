@@ -20,7 +20,7 @@ export abstract class BaseAbstractBehaviour {
         if (DEBUG) throw new DebugError(`BaseAbstractBehaviour: method 'manage' not implemented`);
     }
 
-    onUpdate(time:number,delta:number){}
+    onUpdate(){}
 
     destroy(){}
 

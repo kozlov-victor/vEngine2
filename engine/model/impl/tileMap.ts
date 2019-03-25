@@ -62,8 +62,8 @@ export class TileMap {
         this.game.camera._updateRect();
         let camRect = this.game.camera.getRectScaled();
         if (!this.spriteSheet) return;
-        this._tilesInScreenX = ~~(camRect.width / this.spriteSheet.getFrameWidth());
-        this._tilesInScreenY = ~~(camRect.height / this.spriteSheet.getFrameHeight());
+        this._tilesInScreenX = ~~(camRect.size.width / this.spriteSheet.getFrameWidth());
+        this._tilesInScreenY = ~~(camRect.size.height / this.spriteSheet.getFrameHeight());
     }
 
     getTileAt(x:number,y:number){
@@ -84,10 +84,11 @@ export class TileMap {
         if (!this.spriteSheet) return result;
         let alreadyCheckedTiles = {};
 
-        let x = rect.x,y;
-        let maxX = rect.x+rect.width,maxY = rect.y+rect.height;
+        let x:number = rect.point.x,y;
+        let maxX:number = rect.point.x+rect.size.width,
+            maxY:number = rect.point.y+rect.size.height;
         while (true) {
-            y = rect.y;
+            y = rect.point.y;
             while (true) {
                 let tileInfo = this.getTileAt(x,y);
                 if (tileInfo) {
@@ -108,20 +109,19 @@ export class TileMap {
     }
 
     render(){
-        let spriteSheet = this.spriteSheet;
+        const spriteSheet = this.spriteSheet;
         if (!spriteSheet) return;
-        let camera = this.game.camera;
-        let renderer = this.game.getRenderer();
-        let cameraRect = camera.getRectScaled();
-        let tilePosX = ~~((cameraRect.x) / this.spriteSheet.getFrameWidth());
-        let tilePosY = ~~((cameraRect.y) / this.spriteSheet.getFrameHeight());
+        const camera = this.game.camera;
+        const cameraRect:Rect = camera.getRectScaled();
+        let tilePosX:number = ~~((cameraRect.point.x) / this.spriteSheet.getFrameWidth());
+        let tilePosY:number = ~~((cameraRect.point.y) / this.spriteSheet.getFrameHeight());
         if (tilePosX<0) tilePosX = 0;
         if (tilePosY<0) tilePosY = 0;
-        let w = tilePosX + this._tilesInScreenX + 1;
-        let h = tilePosY + this._tilesInScreenY + 1;
+        let w:number = tilePosX + this._tilesInScreenX + 1;
+        let h:number = tilePosY + this._tilesInScreenY + 1;
         for (let y:number=tilePosY;y<=h;y++) {
             for (let x:number=tilePosX;x<=w;x++) {
-                let tileVal = this.data[y] && this.data[y][x] && this.data[y][x].val;
+                let tileVal:number|boolean|null = this.data[y] && this.data[y][x] && this.data[y][x].val;
                 if (tileVal===false || tileVal===null || tileVal===undefined) continue;
                 let destRect:Rect = Rect.fromPool().clone();
                 destRect.setXYWH(

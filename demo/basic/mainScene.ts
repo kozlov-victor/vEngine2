@@ -6,6 +6,7 @@ import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/core/renderer/color";
 import {KEYBOARD_EVENT} from "@engine/core/control/abstract/abstractKeypad";
 import {Keyboard, KEYBOARD_KEY} from "@engine/core/control/keyboard";
+import {GAME_PAD_KEY, GamePad} from "@engine/core/control/gamePad";
 
 
 export class MainScene extends Scene {
@@ -17,12 +18,12 @@ export class MainScene extends Scene {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
         let rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
-        rect.height = 10;
+        rect.size.height = 10;
         this.preloadingGameObject = rect;
     }
 
     onProgress(val: number) {
-        this.preloadingGameObject.width = val*this.game.width;
+        this.preloadingGameObject.size.width = val*this.game.width;
     }
 
     onReady() {
@@ -50,6 +51,10 @@ export class MainScene extends Scene {
                 case KEYBOARD_KEY.R:
                     this.logoObj.angle+=0.1;
             }
+        });
+
+        this.game.getControl<GamePad>(GamePad).on(KEYBOARD_EVENT.KEY_HOLD, (e)=>{
+            console.log(e);
         });
 
         (window as any).logoObj = this.logoObj;

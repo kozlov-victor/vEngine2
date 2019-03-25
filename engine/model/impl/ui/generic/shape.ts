@@ -10,18 +10,15 @@ export abstract class Shape extends RenderableModel {
     lineWidth:number = 0;
     fillColor:Color|LinearGradient = Color.RGB(100,100,100);
 
-    setWH(w:number,h:number){
+    setWH(w:number,h:number = w){
         this.setXYWH(this.pos.x,this.pos.y,w,h);
     }
 
     setXYWH(x:number,y:number,w:number,h:number){
-        this.pos.x = x;
-        this.pos.y = y;
-        this.width = w;
-        this.height = h;
+        this.pos.setXY(x,y);
+        this.size.setWH(w,h);
         this.getRect().setXYWH(x,y,w,h);
     }
-
 
     constructor(game:Game){
         super(game);

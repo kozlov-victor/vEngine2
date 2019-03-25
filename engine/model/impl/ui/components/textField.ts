@@ -2,10 +2,12 @@ import {Font} from "../../font";
 import {Rect} from "@engine/core/geometry/rect";
 import {DebugError} from "@engine/debugError";
 import {Rectangle} from "../drawable/rectangle";
-import {ScrollableContainer} from "../generic/scrollableContainer";
+import {ScrollableContainer, ScrollInfo} from "../generic/scrollableContainer";
 import {Image} from "../drawable/image";
 import {AbstractRenderer} from "@engine/core/renderer/abstract/abstractRenderer";
 import {Game} from "@engine/core/game";
+import {Size} from "@engine/core/geometry/size";
+import {Point2d} from "@engine/core/geometry/point2d";
 
 type char = string;
 
@@ -19,10 +21,8 @@ export enum TEXT_ALIGN {
 
 class TextInfo {
     allCharsCached: CharInfo[] = [];
-    width: number = 0;
-    height: number = 0;
-    posX: number = 0;
-    posY: number = 0;
+    size:Size = new Size();
+    pos: Point2d = new Point2d();
     private strings: StringInfo[] = [];
 
     constructor(private textField: TextField) {}
@@ -30,14 +30,13 @@ class TextInfo {
     reset() {
         this.allCharsCached = [];
         this.strings = [];
-        this.posX = 0;
-        this.posY = 0;
+        this.pos.setXY(0,0);
     }
 
     newString() {
-        this.posX = 0;
+        this.pos.x = 0;
         if (this.strings.length) {
-            this.posY += this.textField.getFont().getDefaultSymbolHeight();
+            this.pos.y += this.textField.getFont().getDefaultSymbolHeight();
         }
         this.strings.push(new StringInfo());
     }
@@ -45,8 +44,8 @@ class TextInfo {
     addChar(c: CharInfo) {
         this.strings[this.strings.length - 1].chars.push(c);
         this.allCharsCached.push(c);
-        c.destRect.setXY(this.posX, this.posY);
-        this.posX += c.sourceRect.width;
+        c.destRect.setPoint(this.pos);
+        this.pos.addX(c.sourceRect.size.width);
     }
 
     addWord(w: WordInfo) {
@@ -56,12 +55,11 @@ class TextInfo {
     }
 
     revalidate(defaultSymbolHeight: number) {
-        this.height = 0;
-        this.width = 0;
+        this.size.setWH(0);
         for (let s of this.strings) {
             s.calcSize(defaultSymbolHeight);
-            this.height += s.height;
-            if (s.width > this.width) this.width = s.width;
+            this.size.height += s.height;
+            if (s.width > this.size.width) this.size.width = s.width;
         }
     }
 
@@ -87,15 +85,15 @@ class CharsHolder {
 
     moveBy(dx: number, dy: number) {
         for (let ch of this.chars) {
-            ch.destRect.getPoint().addXY(dx, dy);
+            ch.destRect.point.addXY(dx, dy);
         }
     }
 
     moveTo(x: number, y: number) {
         let initialOffsetX: number = 0;
         for (let ch of this.chars) {
-            ch.destRect.getPoint().setXY(initialOffsetX + x, y);
-            initialOffsetX += ch.sourceRect.width;
+            ch.destRect.point.setXY(initialOffsetX + x, y);
+            initialOffsetX += ch.sourceRect.size.width;
         }
     }
 }
@@ -106,13 +104,13 @@ class WordInfo extends CharsHolder {
     revalidate() {
         this.width = 0;
         for (let ch of this.chars) {
-            this.width += ch.destRect.width;
+            this.width += ch.destRect.size.width;
         }
     }
 
     addChar(c: CharInfo) {
         this.chars.push(c);
-        this.width += c.sourceRect.width;
+        this.width += c.sourceRect.size.width;
     }
 }
 
@@ -124,7 +122,7 @@ class StringInfo extends CharsHolder {
         this.width = 0;
         this.height = defaultSymbolHeight;
         for (let ch of this.chars) {
-            this.width += ch.sourceRect.width;
+            this.width += ch.sourceRect.size.width;
         }
     }
 
@@ -150,13 +148,13 @@ class StringInfo extends CharsHolder {
             case TEXT_ALIGN.LEFT:
                 break;
             case TEXT_ALIGN.CENTER:
-                let offset = textField.width - this.width;
+                let offset = textField.size.width - this.width;
                 if (offset < 0) return;
                 offset /= 2;
                 this.moveBy(offset, 0);
                 break;
             case TEXT_ALIGN.RIGHT:
-                offset = textField.width - this.width;
+                offset = textField.size.width - this.width;
                 if (offset < 0) return;
                 this.moveBy(offset, 0);
                 break;
@@ -169,11 +167,11 @@ class StringInfo extends CharsHolder {
                     w.revalidate();
                     totalWordsWidth += w.width;
                 });
-                let totalSpaceWidth: number = textField.width - totalWordsWidth;
+                let totalSpaceWidth: number = textField.size.width - totalWordsWidth;
                 let oneSpaceWidth: number = totalSpaceWidth / (words.length - 1);
-                let initialPosY = this.chars[0].destRect.getPoint().y;
-                let currXPointer: number = this.chars[0].destRect.getPoint().x;
-                for (let i = 0; i < words.length; i++) {
+                let initialPosY: number = this.chars[0].destRect.point.y;
+                let currXPointer: number = this.chars[0].destRect.point.x;
+                for (let i:number = 0; i < words.length; i++) {
                     let w: WordInfo = words[i];
                     w.moveTo(currXPointer, initialPosY);
                     currXPointer += w.width + oneSpaceWidth;
@@ -220,7 +218,7 @@ export class TextField extends ScrollableContainer {
         let charInfo = new CharInfo();
         charInfo.symbol = c;
         charInfo.sourceRect = charRect;
-        charInfo.destRect.setWH(charRect.width, charRect.height);
+        charInfo.destRect.setSize(charRect.size);
         return charInfo;
     }
 
@@ -241,7 +239,7 @@ export class TextField extends ScrollableContainer {
                     let charInfo: CharInfo = this._getCharInfo(w[k]);
                     wordInfo.addChar(charInfo);
                 }
-                if (this.maxWidth && textInfo.posX + wordInfo.width > this.maxWidth && i < words.length - 1) {
+                if (this.maxWidth && textInfo.pos.x + wordInfo.width > this.maxWidth && i < words.length - 1) {
                     textInfo.newString();
                 }
                 textInfo.addWord(wordInfo);
@@ -256,17 +254,16 @@ export class TextField extends ScrollableContainer {
         });
         textInfo.revalidate(this._font.getDefaultSymbolHeight());
         textInfo.align(this.textAlign);
-        this.width = textInfo.width;
-        if (this.maxHeight !== 0 && textInfo.height > this.maxHeight) {
-            this.height = this.maxHeight;
+        this.size.width = textInfo.size.width;
+        if (this.maxHeight !== 0 && textInfo.size.height > this.maxHeight) {
+            this.size.height = this.maxHeight;
         } else {
-            this.height = textInfo.height;
+            this.size.height = textInfo.size.height;
         }
         if (this.border) {
-            this.border.width = this.width;
-            this.border.height = this.height;
+            this.border.size.set(this.size);
         }
-        this.updateScrollSize(textInfo.height,this.height);
+        this.updateScrollSize(textInfo.size.height,this.size.height);
     }
 
     setText(text = '') {
@@ -300,11 +297,14 @@ export class TextField extends ScrollableContainer {
         this._symbolImage.setResourceLink(this._font.getResourceLink());
         for (let charInfo of this._textInfo.allCharsCached) {
 
-            if (charInfo.destRect.y - this.vScrollInfo.offset > this.height) continue;
-            if (charInfo.destRect.y + charInfo.destRect.height - this.vScrollInfo.offset < 0) continue;
+            if (charInfo.destRect.point.y - this.vScrollInfo.offset > this.size.height) continue;
+            if (charInfo.destRect.point.y + charInfo.destRect.size.height - this.vScrollInfo.offset < 0) continue;
 
             this._symbolImage.srcRect.set(charInfo.sourceRect);
-            this._symbolImage.setXYWH(charInfo.destRect.x,charInfo.destRect.y,charInfo.destRect.width,charInfo.destRect.height);
+            this._symbolImage.setXYWH(
+                charInfo.destRect.point.x,
+                charInfo.destRect.point.y,
+                charInfo.destRect.size.width,charInfo.destRect.size.height);
 
             this._symbolImage.render();
         }

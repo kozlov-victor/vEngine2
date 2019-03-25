@@ -33,7 +33,7 @@ export class ScrollInfo {
 
     private _initScrollBar(){
         this.vScroll = new VScroll(this.game);
-        this.vScroll.width = 5;
+        this.vScroll.size.width = 5;
         this._container.appendChild(this.vScroll);
     }
 
@@ -81,8 +81,8 @@ export class ScrollInfo {
             this.offset -=
                 this._lastPoint.point.screenY - this._prevPoint.point.screenY;
 
-            if (this.offset > this.scrollHeight - this._container.height)
-                this.offset = this.scrollHeight - this._container.height;
+            if (this.offset > this.scrollHeight - this._container.size.height)
+                this.offset = this.scrollHeight - this._container.size.height;
             if (this.offset < 0) this.offset = 0;
             this.onScroll();
         });
@@ -110,8 +110,8 @@ export class ScrollInfo {
 
     private _scrollBy(val:number){
         this.offset += val;
-        if (this.offset > this.scrollHeight - this._container.height) {
-            this.offset = this.scrollHeight - this._container.height;
+        if (this.offset > this.scrollHeight - this._container.size.height) {
+            this.offset = this.scrollHeight - this._container.size.height;
             this._scrollVelocity = 0;
             this._deceleration = 0;
         }
@@ -170,14 +170,15 @@ export abstract class ScrollableContainer extends Container {
     }
 
     protected updateScrollSize(desireableHeight:number, allowedHeight:number){
+        if (!this.vScrollInfo) return;
         if (allowedHeight !== 0 && desireableHeight > allowedHeight) {
             this.vScrollInfo.scrollHeight = desireableHeight;
             this.vScrollInfo.setEnabled(true);
         } else {
             this.vScrollInfo.setEnabled(false);
         }
-        this.vScrollInfo.vScroll.height = allowedHeight;
-        this.vScrollInfo.vScroll.pos.x = this.width - this.vScrollInfo.vScroll.width - 2;
+        this.vScrollInfo.vScroll.size.height = allowedHeight;
+        this.vScrollInfo.vScroll.pos.x = this.size.width - this.vScrollInfo.vScroll.size.width - 2;
         this.vScrollInfo.onScroll();
     }
 

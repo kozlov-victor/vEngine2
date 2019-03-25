@@ -36,14 +36,14 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         let dstRect:Rect = img.getRect();
         this.ctx.drawImage(
             this.renderableCache[img.getResourceLink().getId()].texture,
-            srcRect.x,
-            srcRect.y,
-            srcRect.width,
-            srcRect.height,
-            dstRect.x,
-            dstRect.y,
-            dstRect.width,
-            dstRect.height
+            srcRect.point.x,
+            srcRect.point.y,
+            srcRect.size.width,
+            srcRect.size.height,
+            dstRect.point.x,
+            dstRect.point.y,
+            dstRect.size.width,
+            dstRect.size.height
         );
     }
 
@@ -88,7 +88,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     lockRect(rect:Rect) {
         this.ctx.save();
         this.ctx.beginPath();
-        this.ctx.rect(rect.x,rect.y,rect.width,rect.height);
+        this.ctx.rect(rect.point.x,rect.point.y,rect.size.width,rect.size.height);
         this.ctx.clip();
     }
 

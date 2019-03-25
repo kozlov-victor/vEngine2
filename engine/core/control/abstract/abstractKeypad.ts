@@ -60,7 +60,7 @@ export abstract class AbstractKeypad {
 
     update(){
         Object.keys(this.buffer).forEach((key:string)=>{
-            let keyNum:number = <number>(+key);
+            const keyNum:number = (+key) as number;
             if (this.buffer[keyNum]===KEY_STATE.KEY_RELEASED) delete this.buffer[keyNum];
             else if (this.buffer[keyNum]===KEY_STATE.KEY_JUST_RELEASED) this.buffer[keyNum] = KEY_STATE.KEY_RELEASED;
             if (this.buffer[keyNum]===KEY_STATE.KEY_JUST_PRESSED) {

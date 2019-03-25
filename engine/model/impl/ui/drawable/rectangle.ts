@@ -9,8 +9,7 @@ export class Rectangle extends Shape implements Cloneable<Rectangle>{
 
     constructor(game: Game) {
         super(game);
-        this.width = 16;
-        this.height = 16;
+        this.size.setWH(16);
         this.lineWidth = 1;
     }
 
@@ -22,8 +21,7 @@ export class Rectangle extends Shape implements Cloneable<Rectangle>{
 
     protected setClonedProperties(cloned:Rectangle):void{
         cloned.borderRadius  = this.borderRadius;
-        cloned.width = this.width;
-        cloned.height = this.height;
+        cloned.size.set(this.size);
         cloned.lineWidth = this.lineWidth;
         super.setClonedProperties(cloned);
     }

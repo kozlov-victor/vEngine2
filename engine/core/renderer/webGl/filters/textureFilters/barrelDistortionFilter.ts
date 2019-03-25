@@ -41,7 +41,7 @@ export class BarrelDistortionFilter extends AbstractFilter {
             `
         );
         this.simpleRectDrawer.initProgram();
-        this.setDistortion(0.2);
+        this.setDistortion(0.1);
     }
 
     setDistortion(val:number){

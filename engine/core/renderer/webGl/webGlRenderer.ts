@@ -35,17 +35,16 @@ const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
     ) as WebGLRenderingContext;
 };
 const SCENE_DEPTH:number = 1000;
-const matrixStack:MatrixStack = new MatrixStack();
 const FLIP_TEXTURE_MATRIX:MAT16 = new MatrixStack().translate(0,1).scale(1,-1).getCurrentMatrix();
 let FLIP_POSITION_MATRIX:MAT16;
 
 
-const makePositionMatrix = (rect:Rect,viewSize:Size):MAT16=>{
+const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):MAT16=>{
     // proj * modelView
     let zToWMatrix:MAT16 = mat4.makeZToWMatrix(1);
     let projectionMatrix:MAT16 = mat4.ortho(0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
-    let scaleMatrix:MAT16 = mat4.makeScale(rect.width, rect.height, 1);
-    let translationMatrix:MAT16 = mat4.makeTranslation(rect.x, rect.y, 0);
+    let scaleMatrix:MAT16 = mat4.makeScale(rect.size.width, rect.size.height, 1);
+    let translationMatrix:MAT16 = mat4.makeTranslation(rect.point.x, rect.point.y, 0);
 
     let matrix:MAT16 = mat4.matrixMultiply(scaleMatrix, translationMatrix);
     matrix = mat4.matrixMultiply(matrix, matrixStack.getCurrentMatrix());
@@ -71,7 +70,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     constructor(game:Game){
         super(game);
-        this.matrixStack = matrixStack;
+        this.matrixStack = new MatrixStack();
         this.registerResize();
         this._init();
         FLIP_POSITION_MATRIX = mat4.matrixMultiply(
@@ -101,10 +100,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
 
-
     private prepareShapeUniformInfo(shape:Shape):void{
-        let rw:number = shape.getRect().width;
-        let rh:number = shape.getRect().height;
+        let rw:number = shape.getRect().size.width;
+        let rh:number = shape.getRect().size.height;
         let maxSize:number = Math.max(rw,rh);
         let offsetX:number = 0,offsetY:number = 0;
         let sd:ShapeDrawer = this.shapeDrawer;
@@ -122,10 +120,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             sd.setUniform(sd.u_rectOffsetTop,0);
         }
         const rect:Rect = Rect.fromPool();
+        rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
         const size:Size = Size.fromPool();
-        sd.setUniform(sd.u_vertexMatrix,makePositionMatrix(
-            rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize),
-            size.setWH(this.game.width,this.game.height)));
+        size.setWH(this.game.width,this.game.height);
+        sd.setUniform(sd.u_vertexMatrix,makePositionMatrix(rect,size,this.matrixStack));
         rect.release();
         size.release();
         sd.setUniform(sd.u_lineWidth,Math.min(shape.lineWidth/maxSize,1));
@@ -155,14 +153,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         let texture:Texture = this.renderableCache[img.getResourceLink().getId()].texture;
         let texInfo:TextureInfo[] = [{texture,name:'texture'}];
-        let maxSize:number = Math.max(img.width,img.height);
+        let maxSize:number = Math.max(img.size.width,img.size.height);
         let sd:ShapeDrawer = this.shapeDrawer;
         this.prepareShapeUniformInfo(img);
         sd.setUniform(sd.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
         sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
         sd.setUniform(sd.u_fillType,FILL_TYPE.TEXTURE);
         const {width: texWidth,height: texHeight} = texture.getSize();
-        const {x:srcRectX,y:srcRectY,width:srcRectWidth,height:srcRectHeight} = img.srcRect;
+        const {x:srcRectX,y:srcRectY} = img.srcRect.point;
+        const {width:srcRectWidth,height:srcRectHeight} = img.srcRect.size;
         sd.setUniform(sd.u_texRect,
             [
                 srcRectX/texWidth,
@@ -183,12 +182,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.modelDrawer.bindModel(g3d);
         this.modelDrawer.bind();
 
-        matrixStack.scale(1,-1,1);
-        let matrix1 = matrixStack.getCurrentMatrix();
+        this.matrixStack.scale(1,-1,1);
+        let matrix1:MAT16 = this.matrixStack.getCurrentMatrix();
 
-        let zToWMatrix = mat4.makeZToWMatrix(1);
-        let projectionMatrix = mat4.ortho(0,this.game.width,0,this.game.height,-SCENE_DEPTH,SCENE_DEPTH);
-        let matrix2 = mat4.matrixMultiply(projectionMatrix, zToWMatrix);
+        let zToWMatrix:MAT16 = mat4.makeZToWMatrix(1);
+        let projectionMatrix:MAT16 = mat4.ortho(0,this.game.width,0,this.game.height,-SCENE_DEPTH,SCENE_DEPTH);
+        let matrix2:MAT16 = mat4.matrixMultiply(projectionMatrix, zToWMatrix);
 
         let uniforms:UniformsInfo = {
             u_modelMatrix: matrix1,
@@ -206,8 +205,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
 
     drawRectangle(rectangle:Rectangle){
-        let rw:number = rectangle.width;
-        let rh:number = rectangle.height;
+        const {width:rw,height:rh} = rectangle.size;
         let maxSize:number = Math.max(rw,rh);
         let sd:ShapeDrawer = this.shapeDrawer;
 
@@ -229,11 +227,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let dx:number = x2-x1,dy:number = y2-y1;
         let uniforms:UniformsInfo = {};
         const rect:Rect = Rect.fromPool();
+        rect.setXYWH(x1,y1,dx,dy);
         const size:Size = Size.fromPool();
-        uniforms.u_vertexMatrix = makePositionMatrix(
-            rect.setXYWH(x1,y1,dx,dy),
-            size.setWH(this.game.width,this.game.height)
-        );
+        size.setWH(this.game.width,this.game.height);
+        uniforms.u_vertexMatrix = makePositionMatrix(rect,size,this.matrixStack);
         rect.release();
         size.release();
         uniforms.u_rgba = color.asGL();
@@ -253,11 +250,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.prepareShapeUniformInfo(ellipse);
         let sd:ShapeDrawer = this.shapeDrawer;
         const rect:Rect = Rect.fromPool();
+        rect.setXYWH(0,0,maxR2,maxR2);
         const size:Size = Size.fromPool();
-        sd.setUniform(sd.u_vertexMatrix,makePositionMatrix(
-            rect.setXYWH(0,0,maxR2,maxR2),
-            size.setWH(this.game.width,this.game.height)
-        ));
+        size.setWH(this.game.width,this.game.height);
+        sd.setUniform(sd.u_vertexMatrix,makePositionMatrix(rect,size,this.matrixStack));
         rect.release();
         size.release();
         sd.setUniform(sd.u_lineWidth,Math.min(ellipse.lineWidth/maxR,1));
@@ -314,7 +310,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     lockRect(rect:Rect) {
         this.gl.enable(this.gl.SCISSOR_TEST);
-        this.gl.scissor(rect.x,rect.y,rect.width,rect.height);
+        this.gl.scissor(rect.point.x,rect.point.y,rect.size.width,rect.size.height);
     }
 
     unlockRect(){
@@ -405,7 +401,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     destroy(){
         super.destroy();
         this.finalFrameBuffer.destroy();
-        AbstractDrawer.destroyAll();
+        this.preprocessFrameBuffer.destroy();
+        this.doubleFrameBuffer.destroy();
+        this.nullTexture.destroy();
+        this.shapeDrawer.destroy();
+        this.simpleRectDrawer.destroy();
+        //this.modelDrawer.destroy();
         Object.keys(this.renderableCache).forEach((key:string)=>{
             let t:Texture = this.renderableCache[key].texture;
             t.destroy();

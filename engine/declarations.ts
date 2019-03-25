@@ -1,8 +1,5 @@
 import {Tween, TweenDescription} from "@engine/core/tween";
 import {TweenMovie} from "@engine/core/tweenMovie";
-import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
-import {DebugError} from "@engine/debugError";
-import {EventEmitter} from "@engine/core/misc/eventEmitter";
 
 export const IMPORT_DEPENDS = (...args)=>{
 
@@ -29,8 +26,12 @@ export interface Tweenable {
 }
 
 export interface Eventemittable {
-    on(eventName:string,callBack:Function):void;
+    on(eventName:string,callBack:Function):Function;
     off(eventName:string,callBack:Function):void,
     trigger(eventName:string,data?:any):void
 }
+
+type Brand<K,T> = K & {__brand: T};
+
+export type Int = Brand<number,'Int'>;
 

@@ -2,34 +2,22 @@
 
 import {removeFromArray} from "@engine/core/misc/object";
 import {Releasealable} from "@engine/core/misc/objectPool";
-class State<T> {
 
-    private currState:T[] = [];
-
-    setState(...newState:T[]){
-        let changed:boolean = false;
-        newState.forEach((val:T,i:number)=>{
-            if (this.currState[i]!==val) changed = true;
-            this.currState[i] = val;
-        });
-        return changed;
-    }
-
-    constructor(...values:T[]){
-        this.setState(...values);
-    }
-
-}
 
 export abstract class ObservableEntity implements Releasealable{
 
-    protected _state = new State<number>();
     private _onChanged:Array<()=>void> = [];
 
     private _captured:boolean = false;
+    private _silent:boolean = false;
 
     capture(): void {
         this._captured = true;
+    }
+
+    silent<T>(val:boolean):T{
+        this._silent = val;
+        return this as any;
     }
 
     isCaptured(): boolean {
@@ -40,11 +28,8 @@ export abstract class ObservableEntity implements Releasealable{
         this._captured = false;
     }
 
-    protected abstract checkObservableChanged():boolean;
-
     protected triggerObservable(){
-        let changed:boolean = this.checkObservableChanged();
-        if (!changed) return;
+        if (this._silent) return;
         for (let fn of this._onChanged) {
             fn();
         }

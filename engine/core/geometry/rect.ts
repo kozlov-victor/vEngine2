@@ -5,19 +5,20 @@ import {Size} from "./size";
 import {Point2d} from "./point2d";
 import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
+import {Cloneable} from "@engine/declarations";
 
-export class Rect extends ObservableEntity {
+export class Rect extends ObservableEntity implements Cloneable<Rect>{
 
-    x:number;
-    y:number;
-    width:number;
-    height:number;
-    right:number;
-    bottom:number;
+    readonly point:Point2d = new Point2d();
+    readonly size:Size = new Size();
+    private _right:number;
+    private _bottom:number;
 
     private static rectPool:ObjectPool<Rect> = new ObjectPool<Rect>(Rect);
-    private p:Point2d;
-    private size:Size;
+
+    static fromPool():Rect {
+        return Rect.rectPool.getFreeObject();
+    }
 
     constructor(x:number = 0,y:number = 0,width:number = 0,height:number = 0,onChangedFn?:()=>void){
         super();
@@ -25,64 +26,53 @@ export class Rect extends ObservableEntity {
         this.setXYWH(x,y,width,height);
     }
 
-    protected checkObservableChanged():boolean{
-        return this._state.setState(this.x,this.y,this.width,this.height);
-    }
-
     observe(onChangedFn:()=>void){
         this.addListener(onChangedFn);
     }
 
     revalidate(){
-        this.right = this.x+this.width;
-        this.bottom = this.y+this.height;
+        this._right = this.point.x+this.size.width;
+        this._bottom = this.point.y+this.size.height;
         this.triggerObservable();
     }
 
     setXYWH(x:number,y:number,width:number,height:number){
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.point.setXY(x,y);
+        this.size.setWH(width,height);
         this.revalidate();
         return this;
     }
 
     setXY(x:number,y:number){
-        this.x = x;
-        this.y = y;
+        this.point.setXY(x,y);
         this.revalidate();
         return this;
     }
 
     setWH(width:number,height:number){
-        this.width = width;
-        this.height = height;
+        this.size.setWH(width,height);
         this.revalidate();
         return this;
     }
 
     set(another:Rect):Rect {
-        this.setXYWH(another.x,another.y,another.width,another.height);
+        this.setPoint(another.point);
+        this.setSize(another.size);
         return this;
     }
 
     setSize(s:Size):Rect{
-        this.width = s.width;
-        this.height = s.height;
-        this.revalidate();
+        this.size.setWH(s.width,s.height);
         return this;
     }
 
     setPoint(p:Point2d):Rect{
-        p.setXY(p.x,p.y);
+        this.point.setXY(p.x,p.y);
         return this;
     }
 
     addXY(x:number,y:number):Rect{
-        this.x+=x;
-        this.y+=y;
-        this.revalidate();
+        this.point.addXY(x,y);
         return this;
     }
 
@@ -91,34 +81,32 @@ export class Rect extends ObservableEntity {
         return this;
     }
 
-    getPoint():Point2d{
-        if (this.p===undefined) this.p = new Point2d(0,0);
-        this.p.setXY(this.x,this.y);
-        this.p.addListener(()=>this.setXY(this.p.x,this.p.y));
-        return this.p;
-    }
-
-    getSize():Size{
-        if (this.size===undefined) this.size = new Size();
-        this.size.setWH(this.width,this.height);
-        return this.size;
-    }
-
     clone():Rect{
-        return new Rect(this.x,this.y,this.width,this.height);
+        return new Rect(this.point.x,this.point.y,this.size.width,this.size.height);
     }
 
 
     toJSON():{x:number,y:number,width:number,height:number}{
-        return {x:this.x,y:this.y,width:this.width,height:this.height};
+        return {
+            x:this.point.x,
+            y:this.point.y,
+            width:this.size.width,
+            height:this.size.height
+        };
+    }
+
+
+    get right(): number {
+        return this._right;
+    }
+
+    get bottom(): number {
+        return this._bottom;
     }
 
     fromJSON(jsonObj:{x:number,y:number,width:number,height:number}){
         this.setXYWH(jsonObj.x,jsonObj.y,jsonObj.width,jsonObj.height);
     }
 
-    static fromPool():Rect {
-        return Rect.rectPool.getFreeObject();
-    }
 
 }

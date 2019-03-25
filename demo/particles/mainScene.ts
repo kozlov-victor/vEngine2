@@ -11,8 +11,7 @@ export class MainScene extends Scene {
 
     onPreloading() {
         let rect:Rectangle = new Rectangle(this.game);
-        rect.width = 10;
-        rect.height = 10;
+        rect.size.setWH(20);
         (rect.fillColor as Color).setRGBA(0,200,0);
         let ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticle(rect);
