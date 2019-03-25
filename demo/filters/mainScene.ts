@@ -16,6 +16,9 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {NoiseFilter} from "@engine/core/renderer/webGl/filters/textureFilters/noiseFilter";
 import {NoiseHorizontalFilter} from "@engine/core/renderer/webGl/filters/textureFilters/noiseHorizontalFilter";
 import {LowResolutionFilter} from "@engine/core/renderer/webGl/filters/textureFilters/lowResolutionFilter";
+import {HexagonalFilter} from "@engine/core/renderer/webGl/filters/textureFilters/hexagonalFilter";
+import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
+import {LinearGradient} from "@engine/core/renderer/linearGradient";
 
 
 export class MainScene extends Scene {
@@ -69,6 +72,9 @@ export class MainScene extends Scene {
         ];
         circle.addBehaviour(new DraggableBehaviour(this.game));
 
+
+        const hex = new HexagonalFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
+
         const circle2:Circle = new Circle(this.game);
         circle2.radius = 40;
         circle2.center.setXY(80,120);
@@ -85,6 +91,19 @@ export class MainScene extends Scene {
         this.logoObj.sprite.filters = [
             ps,bw
         ];
+
+        const ellipse:Ellipse = new Ellipse(this.game);
+        ellipse.radiusX = 60;
+        ellipse.radiusY = 40;
+        ellipse.color = Color.BLACK;
+        ellipse.lineWidth = 5;
+        ellipse.center.setXY(150,50);
+        ellipse.addBehaviour(new DraggableBehaviour(this.game));
+        this.appendChild(ellipse);
+        ellipse.filters = [
+            hex
+        ];
+        hex.setSize(8);
 
         const tm:TweenMovie = new TweenMovie(this.game);
         tm.tween(0,{
@@ -109,6 +128,8 @@ export class MainScene extends Scene {
         });
         tm.loop(true);
         this.addTweenMovie(tm);
+
+
 
         this.filters.push(noise,noiseHoriz,barrel);
     }
