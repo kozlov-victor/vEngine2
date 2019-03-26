@@ -19,7 +19,7 @@ export class MainScene extends Scene {
         rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);
         rect.lineWidth = 4;
-        rect.size.setWH(40,60);
+        rect.size.setWH(40,)
         rect.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(rect);
 
