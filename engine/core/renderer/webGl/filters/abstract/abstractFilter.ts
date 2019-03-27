@@ -4,6 +4,9 @@ import {DebugError} from "@engine/debugError";
 import {mat4} from "@engine/core/geometry/mat4";
 import {SimpleRectDrawer} from "@engine/core/renderer/webGl/programs/impl/base/SimpleRectDrawer";
 import MAT16 = mat4.MAT16;
+import {Game} from "@engine/core/game";
+import {WebGlRenderer} from "@engine/core/renderer/webGl/webGlRenderer";
+import {AbstractRenderer} from "@engine/core/renderer/abstract/abstractRenderer";
 
 
 const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):number[] =>{
@@ -20,8 +23,14 @@ export abstract class AbstractFilter {
     protected simpleRectDrawer:SimpleRectDrawer;
 
 
-    protected constructor(gl:WebGLRenderingContext){
-        this.gl = gl;
+    protected constructor(game:Game){
+
+        const renderer:AbstractRenderer = game.getRenderer();
+        if (DEBUG && !(renderer instanceof WebGlRenderer)) {
+            throw new DebugError(`can not apply filter: filters awailable only for WebGlRenerer`);
+        }
+
+        this.gl = (game.getRenderer() as any as WebGlRenderer).getNativeContext();
         this.simpleRectDrawer = new SimpleRectDrawer(this.gl);
     }
 

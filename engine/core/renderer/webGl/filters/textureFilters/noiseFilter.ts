@@ -4,6 +4,7 @@ import {ShaderGenerator} from "@engine/core/renderer/webGl/shaders/generators/sh
 import {GL_TYPE} from "@engine/core/renderer/webGl/base/shaderProgramUtils";
 import {TextureInfo} from "@engine/core/renderer/webGl/programs/abstract/abstractDrawer";
 import {FrameBuffer} from "@engine/core/renderer/webGl/base/frameBuffer";
+import {Game} from "@engine/core/game";
 
 // https://clemz.io/article-retro-shaders-webgl.html
 
@@ -16,8 +17,8 @@ export class NoiseFilter extends AbstractFilter {
 
     private time:number = 0;
 
-    constructor(gl: WebGLRenderingContext) {
-        super(gl);
+    constructor(game:Game) {
+        super(game);
         this.simpleRectDrawer.prepareShaderGenerator();
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.rt_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width

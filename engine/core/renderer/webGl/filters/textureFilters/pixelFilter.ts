@@ -7,6 +7,7 @@ import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {FrameBuffer} from "../../base/frameBuffer";
 import {TextureInfo} from "../../programs/abstract/abstractDrawer";
+import {Game} from "@engine/core/game";
 
 export class PixelFilter extends AbstractFilter {
 
@@ -15,8 +16,8 @@ export class PixelFilter extends AbstractFilter {
     private readonly pixel_w:string;
     private readonly pixel_h:string;
 
-    constructor(gl: WebGLRenderingContext) {
-        super(gl);
+    constructor(game:Game) {
+        super(game);
         this.simpleRectDrawer.prepareShaderGenerator();
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;

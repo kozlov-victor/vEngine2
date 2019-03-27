@@ -53,7 +53,7 @@ const prepareMessage = function(e:any,lineNum:number){
     if (!msg) {
         msg = 'Unknown error: ' + e.toString();
     }
-    if (lineNum) msg+=' in line ' + lineNum;
+    if (lineNum) msg=`error in line ${lineNum}:  ${msg}`;
     return msg;
 };
 
@@ -74,7 +74,10 @@ window.addEventListener('error',function(e:any){
   <div class="errorBlock"> 
         <style>
             .errorHeader {text-align: center;}
-            .errorText {white-space: pre-wrap;}
+            .errorText {
+                color: #f3170d;
+                white-space: pre-wrap;
+            }
             .errorCol {color: #f30000;text-decoration: underline;}
             .errorRow {
                 color: #bf1313;

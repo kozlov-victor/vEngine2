@@ -1658,7 +1658,7 @@ var AbstractDrawer = (function () {
     AbstractDrawer.prototype.setUniform = function (name, value) {
         if ( true && !name) {
             console.trace();
-            throw new debugError_1.DebugError("can not set uniform: name is not provided");
+            throw new debugError_1.DebugError("can not set uniform witn value " + value + ": name is not provided");
         }
         if (object_1.isEqual(this.uniformCache[name], value))
             return;
@@ -5564,6 +5564,9 @@ var WebGlRenderer = (function (_super) {
                 throw new debugError_1.DebugError("Resource loading error: can not load resource with url \"" + url + "\"");
             };
         }
+    };
+    WebGlRenderer.prototype.getNativeContext = function () {
+        return this.gl;
     };
     WebGlRenderer.prototype.destroy = function () {
         var _this = this;

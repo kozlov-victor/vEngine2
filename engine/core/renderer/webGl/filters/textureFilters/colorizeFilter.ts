@@ -5,13 +5,14 @@ import {AbstractFilter} from "../abstract/abstractFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {Color} from "../../../color";
+import {Game} from "@engine/core/game";
 
 export class ColorizeFilter extends AbstractFilter{
 
     private readonly uPixelColor: string;
 
-    constructor(gl:WebGLRenderingContext){
-        super(gl);
+    constructor(game:Game){
+        super(game);
         this.simpleRectDrawer.prepareShaderGenerator();
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;

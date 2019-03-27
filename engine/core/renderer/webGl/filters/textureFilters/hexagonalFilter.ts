@@ -4,6 +4,7 @@ import {ShaderGenerator} from "@engine/core/renderer/webGl/shaders/generators/sh
 import {TextureInfo} from "@engine/core/renderer/webGl/programs/abstract/abstractDrawer";
 import {FrameBuffer} from "@engine/core/renderer/webGl/base/frameBuffer";
 import {GL_TYPE} from "@engine/core/renderer/webGl/base/shaderProgramUtils";
+import {Game} from "@engine/core/game";
 
 // http://evanw.github.io/webgl-filter/
 
@@ -13,8 +14,8 @@ export class HexagonalFilter extends AbstractFilter {
     private scale:string;
     private texSize:string;
 
-    constructor(gl: WebGLRenderingContext) {
-        super(gl);
+    constructor(game:Game) {
+        super(game);
         this.simpleRectDrawer.prepareShaderGenerator();
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.scale = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'scale');

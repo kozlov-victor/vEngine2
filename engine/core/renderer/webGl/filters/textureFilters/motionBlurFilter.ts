@@ -9,64 +9,62 @@ import {Game} from "@engine/core/game";
 
 // http://evanw.github.io/webgl-filter/
 
-export class SwirlFilter extends AbstractFilter {
+export class MotionBlurFilter extends AbstractFilter {
 
     private center:string;
-    private angle:string;
-    private radius:string;
+    private strength:string;
     private texSize:string;
 
     constructor(game:Game) {
         super(game);
         this.simpleRectDrawer.prepareShaderGenerator();
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.angle = programGen.addFragmentUniform(GL_TYPE.FLOAT,'angle');
-        this.radius = programGen.addFragmentUniform(GL_TYPE.FLOAT,'radius');
+        this.strength = programGen.addFragmentUniform(GL_TYPE.FLOAT,'strength');
         this.center = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
         this.texSize = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
 
 
         //language=GLSL
-        programGen.appendFragmentCodeBlock(`            
-            
+        programGen.appendFragmentCodeBlock(`
+            float rand(vec2 co){
+                return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+            }
         `);
         //language=GLSL
         programGen.setFragmentMainFn(`
-                    void main(){
-                        vec2 texCoord = v_texCoord;
-                        vec2 coord=texCoord*texSize;
-                        coord-=center;
-                        float distance=length(coord);
-                        if(distance<radius){
-                            float percent=(radius-distance)/radius;
-                            float theta=percent*percent*angle;
-                            float s=sin(theta);
-                            float c=cos(theta);
-                            coord=vec2(coord.x*c-coord.y*s,coord.x*s+coord.y*c);
-                        }
-                        coord+=center;
-                        gl_FragColor=texture2D(texture,coord/texSize);
-                    }
+            void main() {
+                vec2 texCoord = v_texCoord;
+                vec4 color=vec4(0.0);
+                float total=0.0;
+                vec2 toCenter=center-texCoord*texSize;
+                float offset=rand(texCoord);
+                for(float t=0.0;t<=40.0;t++) {
+                    float percent=(t+offset)/40.0;
+                    float weight=4.0*(percent-percent*percent);
+                    vec4 sampl=texture2D(texture,texCoord+toCenter*percent*strength/texSize);
+                    sampl.rgb*=sampl.a;
+                    color+=sampl*weight;
+                    total+=weight;
+                }
+                gl_FragColor = color/total;
+                gl_FragColor.rgb /= gl_FragColor.a+0.00001;
+            }
         `);
         this.simpleRectDrawer.initProgram();
-        this.setAngle(2*Math.PI);
-        this.setRadius(100);
+        this.setStrength(0.3);
     }
 
 
-    setRadius(val:number){
-        this.setUniform(this.radius,val);
+    setStrength(val:number){
+        this.setUniform(this.strength,val);
     }
 
-    setAngle(val:number){
-        this.setUniform(this.angle,val);
-    }
 
 
     doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
         const tex:Texture = textureInfos[0].texture;
         this.setUniform(this.texSize,[tex.size.width,tex.size.height]);
-        this.setUniform(this.center,[tex.size.width/2,tex.size.height/2]);
+        this.setUniform(this.center,[100,100]);
         super.doFilter(textureInfos,destFrameBuffer);
     }
 

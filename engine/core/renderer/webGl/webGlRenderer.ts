@@ -398,6 +398,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         }
     }
 
+    getNativeContext():WebGLRenderingContext {
+        return this.gl;
+    }
+
     destroy(){
         super.destroy();
         this.finalFrameBuffer.destroy();

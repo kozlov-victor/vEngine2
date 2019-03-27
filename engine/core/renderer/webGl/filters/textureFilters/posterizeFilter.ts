@@ -7,14 +7,15 @@ import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {Texture} from "../../base/texture";
 import {FrameBuffer} from "../../base/frameBuffer";
+import {Game} from "@engine/core/game";
 
 export class PosterizeFilter extends AbstractFilter {
 
     private readonly gamma:string;
     private readonly numColors:string;
 
-    constructor(gl: WebGLRenderingContext) {
-        super(gl);
+    constructor(game:Game) {
+        super(game);
         this.simpleRectDrawer.prepareShaderGenerator();
 
         const programGen = this.simpleRectDrawer.gen;

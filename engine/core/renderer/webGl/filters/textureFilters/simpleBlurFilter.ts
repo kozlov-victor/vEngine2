@@ -5,6 +5,7 @@ import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {FrameBuffer} from "../../base/frameBuffer";
 import {TextureInfo} from "../../programs/abstract/abstractDrawer";
+import {Game} from "@engine/core/game";
 
 export class SimpleBlurFilter extends AbstractFilter {
 
@@ -13,8 +14,8 @@ export class SimpleBlurFilter extends AbstractFilter {
     private readonly u_direction_x:string;
     private readonly u_direction_y:string;
 
-    constructor(gl: WebGLRenderingContext) {
-        super(gl);
+    constructor(game:Game) {
+        super(game);
         this.simpleRectDrawer.prepareShaderGenerator();
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.rt_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
