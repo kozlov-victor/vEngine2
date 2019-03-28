@@ -1,11 +1,10 @@
-
-import {Game} from "../../core/game";
+import {Game} from "../../game";
 import {Image} from "./ui/drawable/image";
 import {Cloneable} from "@engine/declarations";
-import {Rect} from "@engine/core/geometry/rect";
+import {Rect} from "@engine/geometry/rect";
 import {FrameAnimation} from "@engine/model/impl/frameAnimation";
-import {DebugError} from "@engine/debugError";
-import {Size} from "@engine/core/geometry/size";
+import {DebugError} from "@engine/debug/debugError";
+import {Size} from "@engine/geometry/size";
 
 export class SpriteSheet extends Image implements Cloneable<SpriteSheet>{
 

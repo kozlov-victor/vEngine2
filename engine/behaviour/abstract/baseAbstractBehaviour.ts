@@ -1,7 +1,6 @@
-
-import {DebugError} from "../../debugError";
-import {Game} from "../../core/game";
-import {IKeyVal} from "../../core/misc/object";
+import {DebugError} from "../../debug/debugError";
+import {Game} from "../../game";
+import {IKeyVal} from "../../misc/object";
 import {RenderableModel} from "@engine/model/renderableModel";
 
 

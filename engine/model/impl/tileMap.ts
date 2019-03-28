@@ -1,11 +1,9 @@
-
 import {SpriteSheet} from "./spriteSheet";
-import {Game} from "../../core/game";
-import {Rect} from "../../core/geometry/rect";
-import {AbstractFilter} from "../../core/renderer/webGl/filters/abstract/abstractFilter";
-import {RigidRectangle,Vec2} from '../../core/physics/rigidShapes';
-import {DebugError} from "../../debugError";
-
+import {Game} from "../../game";
+import {Rect} from "../../geometry/rect";
+import {AbstractFilter} from "../../renderer/webGl/filters/abstract/abstractFilter";
+import {RigidRectangle, Vec2} from "../../physics/rigidShapes";
+import {DebugError} from "../../debug/debugError";
 
 
 export class TileMap {

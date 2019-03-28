@@ -1,7 +1,7 @@
 import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
 import {SpriteSheet} from "@engine/model/impl/spriteSheet";
-import {ResourceLink} from "@engine/core/resources/resourceLink";
+import {ResourceLink} from "@engine/resources/resourceLink";
 
 
 import logoBase64 = require("../assets/engine.jpg");

@@ -1,9 +1,8 @@
-
-import {MathEx} from "../../core/mathEx";
-import {Game} from "../../core/game";
-import {DebugError} from "@engine/debugError";
+import {MathEx} from "../../misc/mathEx";
+import {Game} from "../../game";
+import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/model/renderableModel";
-import {noop} from "@engine/core/misc/object";
+import {noop} from "@engine/misc/object";
 
 let r = (obj:ParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
 

@@ -1,4 +1,4 @@
-import {Game} from "@engine/core/game";
+import {Game} from "@engine/game";
 import {Shape} from "../generic/shape";
 import {Cloneable} from "@engine/declarations";
 

@@ -1,10 +1,10 @@
 import {BaseAbstractBehaviour} from "../abstract/baseAbstractBehaviour";
-import {Game} from "../../core/game";
+import {Game} from "../../game";
 import {GameObject} from "../../model/impl/gameObject";
 import {Scene} from "../../model/impl/scene";
 import {RenderableModel} from "@engine/model/renderableModel";
-import {IMousePoint} from "@engine/core/control/mouse/mousePoint";
-import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
+import {IMousePoint} from "@engine/control/mouse/mousePoint";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Int} from "@engine/declarations";
 
 interface MouseDragPoint {

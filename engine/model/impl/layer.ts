@@ -1,6 +1,4 @@
-
-import {Game} from "../../core/game";
-import {GameObject} from "./gameObject";
+import {Game} from "../../game";
 import {RenderableModel} from "../renderableModel";
 
 export class Layer {

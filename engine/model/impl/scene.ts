@@ -1,21 +1,21 @@
 import {TileMap} from "./tileMap";
 import {Layer} from "./layer";
-import {AbstractFilter} from "../../core/renderer/webGl/filters/abstract/abstractFilter";
-import {Game} from "../../core/game";
-import {AmbientLight} from "../../core/light/ambientLight";
-import {Color} from "../../core/renderer/color";
-import {CAMERA_MATRIX_MODE} from "../../core/renderer/camera";
-import {ResourceLoader} from "../../core/resources/resourceLoader";
-import {IMPORT_DEPENDS, Eventemittable, Revalidatable, Tweenable} from "../../declarations";
+import {AbstractFilter} from "../../renderer/webGl/filters/abstract/abstractFilter";
+import {Game} from "../../game";
+import {AmbientLight} from "../../light/ambientLight";
+import {Color} from "../../renderer/color";
+import {CAMERA_MATRIX_MODE} from "../../renderer/camera";
+import {ResourceLoader} from "../../resources/resourceLoader";
+import {Eventemittable, Revalidatable, Tweenable} from "../../declarations";
 import {RenderableModel} from "@engine/model/renderableModel";
-import {TweenMovie} from "@engine/core/tweenMovie";
-import {EventEmitter} from "@engine/core/misc/eventEmitter";
-import {removeFromArray} from "@engine/core/misc/object";
-import {AbstractRenderer} from "@engine/core/renderer/abstract/abstractRenderer";
-import {Tween, TweenDescription} from "@engine/core/tween";
-import {Timer} from "@engine/core/timer";
-import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
-import {DebugError} from "@engine/debugError";
+import {TweenMovie} from "@engine/misc/tweenMovie";
+import {removeFromArray} from "@engine/misc/object";
+import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
+import {Tween, TweenDescription} from "@engine/misc/tween";
+import {Timer} from "@engine/misc/timer";
+import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
+import {TimerDelegate} from "@engine/delegates/timerDelegate";
+import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 
 
 export class Scene implements Revalidatable, Tweenable, Eventemittable {
@@ -34,10 +34,6 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
 
     private _layers:Layer[] = [];
     private _uiLayer:Layer;
-
-    protected _tweens:Tween[] = [];
-    protected _tweenMovies:TweenMovie[] = [];
-    protected _timers:Timer[] = [];
 
     constructor(protected game:Game) {
         this.tileMap = new TileMap(game);
@@ -116,19 +112,10 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
     private updateMainFrame(){
         this.beforeUpdate();
 
-        this._tweens.forEach((t:Tween, index:number)=>{
-            t.update();
-            if (t.isCompleted()) this._tweens.splice(index,1);
-        });
-        this._tweenMovies.forEach((t:TweenMovie,index:number)=>{
-            t.update();
-            if (t.isCompleted()) this._tweenMovies.splice(index,1);
-        });
-        this._timers.forEach((t:Timer)=>{
-            t.onUpdate();
-        });
+        this._tweenDelegate.update();
+        this._timerDelegate.update();
 
-        let layers = this._layers;
+        let layers:Layer[] = this._layers;
         for (let l of layers) {
             l.update();
         }
@@ -210,24 +197,39 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
         renderer.flipFrameBuffer(this.filters);
     }
 
-    //#MACROS_BODY_BEGIN = ./engine/macroses/tweenableMacros
-    addTween(t: Tween): void {}
-    addTweenMovie(tm: TweenMovie) {}
-    tween(desc: TweenDescription): Tween {return undefined;}
-    //#MACROS_BODY_END
+    // tween
+    private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
 
-    //#MACROS_BODY_BEGIN = ./engine/macroses/timerMacros
-    setTimer(callback:Function,interval:number):Timer{return undefined;}
-    //#MACROS_BODY_END
-
-    //#MACROS_BODY_BEGIN = ./engine/macroses/eventEmitterMacros
-    off(eventName: string, callBack: Function): void {}
-    on(eventName: string, callBack: Function): Function {
-        IMPORT_DEPENDS(EventEmitter,MOUSE_EVENTS,DebugError);
-        return undefined;
+    addTween(t: Tween): void {
+        this._tweenDelegate.addTween(t);
     }
-    trigger(eventName: string, data?: any): void {}
-    //#MACROS_BODY_END
+    addTweenMovie(tm: TweenMovie) {
+        this._tweenDelegate.addTweenMovie(tm);
+    }
+    tween(desc: TweenDescription): Tween {
+        return this._tweenDelegate.tween(desc);
+    }
+
+    // timer
+    private _timerDelegate:TimerDelegate = new TimerDelegate();
+
+    setTimer(callback:Function,interval:number):Timer{
+        return this._timerDelegate.setTimer(callback,interval);
+    }
+
+    //eventEmitter
+    private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
+
+    off(eventName: string, callBack: Function): void {
+        this._eventEmitterDelegate.off(eventName,callBack);
+    }
+    on(eventName: string, callBack: Function): Function {
+        return this._eventEmitterDelegate.on(eventName,callBack);
+    }
+    trigger(eventName: string, data?: any): void {
+        this._eventEmitterDelegate.trigger(eventName,data);
+    }
+
 
     destroy(){
         this.onDestroy();

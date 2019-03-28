@@ -1,6 +1,6 @@
-import {Game} from "../../core/game";
-import {DebugError} from "../../debugError";
-import {Resource} from "@engine/core/resources/resource";
+import {Game} from "../../game";
+import {DebugError} from "../../debug/debugError";
+import {Resource} from "@engine/resources/resource";
 import {Revalidatable} from "@engine/declarations";
 
 export class Sound extends Resource implements Revalidatable {

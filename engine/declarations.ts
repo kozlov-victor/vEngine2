@@ -1,9 +1,5 @@
-import {Tween, TweenDescription} from "@engine/core/tween";
-import {TweenMovie} from "@engine/core/tweenMovie";
-
-export const IMPORT_DEPENDS = (...args)=>{
-
-};
+import {Tween, TweenDescription} from "@engine/misc/tween";
+import {TweenMovie} from "@engine/misc/tweenMovie";
 
 export interface MouseEventEx extends MouseEvent {
     id:number,

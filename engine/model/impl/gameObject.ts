@@ -1,10 +1,7 @@
-import {FrameAnimation} from "./frameAnimation";
-import {SpriteSheet} from "./spriteSheet";
-import {Game} from "../../core/game";
+import {Game} from "../../game";
 import {Cloneable} from "../../declarations";
 import {RenderableModel} from "../renderableModel";
-import {DebugError} from "@engine/debugError";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {DebugError} from "@engine/debug/debugError";
 
 
 export class GameObject extends RenderableModel implements Cloneable<GameObject>{

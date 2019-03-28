@@ -1,12 +1,14 @@
-import {Game} from '../../core/game'
-import {GameObject} from './gameObject'
-import {EventEmitter} from "../../core/misc/eventEmitter";
-import {Cloneable, IMPORT_DEPENDS} from "@engine/declarations";
-import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
-import {DebugError} from "@engine/debugError";
+import {Game} from "../../game";
+import {EventEmitter} from "../../misc/eventEmitter";
+import {Cloneable, Eventemittable} from "@engine/declarations";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {DebugError} from "@engine/debug/debugError";
 import {SpriteSheet} from "@engine/model/impl/spriteSheet";
+import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
+import {unescape} from "querystring";
+import {isNullOrUndefined} from "util";
 
-export class FrameAnimation implements Cloneable<FrameAnimation>{
+export class FrameAnimation implements Eventemittable, Cloneable<FrameAnimation>{
 
     readonly type:string = 'FrameAnimation';
     name:string;
@@ -15,7 +17,7 @@ export class FrameAnimation implements Cloneable<FrameAnimation>{
     isRepeat:boolean = true;
 
     private _currFrame:number = 0;
-    private _startTime:number;
+    private _startTime:number = 0;
     private _timeForOneFrame:number;
     private _isPlaying:boolean = false;
     private _spriteSheet:SpriteSheet;
@@ -36,6 +38,7 @@ export class FrameAnimation implements Cloneable<FrameAnimation>{
 
     stop(){
         this._isPlaying = false;
+        this._startTime = 0;
     }
 
     update() {
@@ -52,7 +55,7 @@ export class FrameAnimation implements Cloneable<FrameAnimation>{
         if (DEBUG) {
             if (!this._spriteSheet) throw new DebugError(`can not play frame animation: spriteSheet is not set`);
         }
-        let lastFrIndex = this._spriteSheet.getFrameIndex();
+        let lastFrIndex:number = this._spriteSheet.getFrameIndex();
         if (lastFrIndex != this.frames[this._currFrame]) {
             let index:number = this.frames[this._currFrame];
             index = index % this._spriteSheet.getNumOfFrames();
@@ -74,13 +77,18 @@ export class FrameAnimation implements Cloneable<FrameAnimation>{
         return cloned;
     }
 
-    //#MACROS_BODY_BEGIN = ./engine/macroses/eventEmitterMacros
-    off(eventName: string, callBack: Function): void {}
-    on(eventName: string, callBack: Function): void {
-        IMPORT_DEPENDS(EventEmitter,MOUSE_EVENTS,DebugError)
+    //eventEmitter
+    private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
+
+    off(eventName: string, callBack: Function): void {
+        this._eventEmitterDelegate.off(eventName,callBack);
     }
-    trigger(eventName: string, data?: any): void {}
-    //#MACROS_BODY_END
+    on(eventName: string, callBack: Function): Function {
+        return this._eventEmitterDelegate.on(eventName,callBack);
+    }
+    trigger(eventName: string, data?: any): void {
+        this._eventEmitterDelegate.trigger(eventName,data);
+    }
 
 }
 

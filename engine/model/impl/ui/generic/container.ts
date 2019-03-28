@@ -1,7 +1,7 @@
-import {Rect} from "@engine/core/geometry/rect";
+import {Rect} from "@engine/geometry/rect";
 import {RenderableModel} from "../../../renderableModel";
-import {DebugError} from "@engine/debugError";
-import {Game} from "@engine/core/game";
+import {DebugError} from "@engine/debug/debugError";
+import {Game} from "@engine/game";
 import {Shape} from "./shape";
 
 

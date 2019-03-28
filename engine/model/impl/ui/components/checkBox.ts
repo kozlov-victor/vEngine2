@@ -1,9 +1,8 @@
-
 import {Container} from "../generic/container";
 import {Rectangle} from "../drawable/rectangle";
-import {Color} from "../../../../core/renderer/color";
+import {Color} from "../../../../renderer/color";
 import {Shape} from "../generic/shape";
-import {Game} from "@engine/core/game";
+import {Game} from "@engine/game";
 
 export class CheckBox extends Container {
 

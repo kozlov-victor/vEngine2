@@ -1,22 +1,22 @@
-import {AbstractRenderer} from "../core/renderer/abstract/abstractRenderer";
-import {Resource} from "../core/resources/resource";
-import {IMPORT_DEPENDS, Eventemittable, Revalidatable, Tweenable, Cloneable} from "../declarations";
-import {DebugError} from "../debugError";
-import {MathEx} from "../core/mathEx";
-import {isObjectMatch} from "../core/misc/object";
-import {Point2d} from "../core/geometry/point2d";
-import {AbstractFilter} from "../core/renderer/webGl/filters/abstract/abstractFilter";
-import {Rect} from "../core/geometry/rect";
-import {Game} from "@engine/core/game";
-import {Tween, TweenDescription} from "@engine/core/tween";
-import {TweenMovie} from "@engine/core/tweenMovie";
-import {Timer} from "@engine/core/timer";
-import {RigidShape} from "@engine/core/physics/rigidShapes";
+import {AbstractRenderer} from "../renderer/abstract/abstractRenderer";
+import {Resource} from "../resources/resource";
+import {Cloneable, Eventemittable, Revalidatable, Tweenable} from "../declarations";
+import {DebugError} from "../debug/debugError";
+import {MathEx} from "../misc/mathEx";
+import {Point2d} from "../geometry/point2d";
+import {AbstractFilter} from "../renderer/webGl/filters/abstract/abstractFilter";
+import {Rect} from "../geometry/rect";
+import {Game} from "@engine/game";
+import {Tween, TweenDescription} from "@engine/misc/tween";
+import {TweenMovie} from "@engine/misc/tweenMovie";
+import {Timer} from "@engine/misc/timer";
+import {RigidShape} from "@engine/physics/rigidShapes";
 import {Layer} from "@engine/model/impl/layer";
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
-import {EventEmitter} from "@engine/core/misc/eventEmitter";
-import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
-import {Size} from "@engine/core/geometry/size";
+import {Size} from "@engine/geometry/size";
+import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
+import {TimerDelegate} from "@engine/delegates/timerDelegate";
+import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 
 
 export abstract class RenderableModel extends Resource implements Revalidatable, Tweenable, Eventemittable {
@@ -37,9 +37,6 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
     rigidBody:RigidShape;
     velocity = new Point2d(0,0);
 
-    protected _tweens:Tween[] = [];
-    protected _tweenMovies:TweenMovie[] = [];
-    protected _timers:Timer[] = [];
 
     protected _dirty = true;
     private   _layer:Layer;
@@ -268,17 +265,8 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
 
         const delta:number = this.game.getDeltaTime();
 
-        this._tweens.forEach((t:Tween, index:number)=>{
-            t.update();
-            if (t.isCompleted()) this._tweens.splice(index,1);
-        });
-        this._tweenMovies.forEach((t:TweenMovie,index:number)=>{
-            t.update();
-            if (t.isCompleted()) this._tweenMovies.splice(index,1);
-        });
-        this._timers.forEach((t:Timer)=>{
-            t.onUpdate();
-        });
+        this._tweenDelegate.update();
+        this._timerDelegate.update();
 
         for (let i:number=0,max = this._behaviours.length;i<max;i++) {
             if (this._behaviours[i].onUpdate) this._behaviours[i].onUpdate();
@@ -304,24 +292,37 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
     }
 
 
-    //#MACROS_BODY_BEGIN = ./engine/macroses/tweenableMacros
-    addTween(t: Tween): void {}
-    addTweenMovie(tm: TweenMovie) {}
-    tween(desc: TweenDescription): Tween {return undefined;}
-    //#MACROS_BODY_END
+    // tween
+    private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
 
-    //#MACROS_BODY_BEGIN = ./engine/macroses/timerMacros
-    setTimer(callback:Function,interval:number):Timer{return undefined;}
-    //#MACROS_BODY_END
-
-
-    //#MACROS_BODY_BEGIN = ./engine/macroses/eventEmitterMacros
-    off(eventName: string, callBack: Function): void {}
-    on(eventName: string, callBack: Function): Function {
-        IMPORT_DEPENDS(EventEmitter,MOUSE_EVENTS);
-        return undefined;
+    addTween(t: Tween): void {
+        this._tweenDelegate.addTween(t);
     }
-    trigger(eventName: string, data?: any): void {}
-    //#MACROS_BODY_END
+    addTweenMovie(tm: TweenMovie) {
+        this._tweenDelegate.addTweenMovie(tm);
+    }
+    tween(desc: TweenDescription): Tween {
+        return this._tweenDelegate.tween(desc);
+    }
+
+    // timer
+    private _timerDelegate:TimerDelegate = new TimerDelegate();
+
+    setTimer(callback:Function,interval:number):Timer{
+        return this._timerDelegate.setTimer(callback,interval);
+    }
+
+    //eventEmitter
+    private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
+
+    off(eventName: string, callBack: Function): void {
+        this._eventEmitterDelegate.off(eventName,callBack);
+    }
+    on(eventName: string, callBack: Function): Function {
+        return this._eventEmitterDelegate.on(eventName,callBack);
+    }
+    trigger(eventName: string, data?: any): void {
+        this._eventEmitterDelegate.trigger(eventName,data);
+    }
 
 }

@@ -1,5 +1,5 @@
-import {Color} from "@engine/core/renderer/color";
-import {Game} from "@engine/core/game";
+import {Color} from "@engine/renderer/color";
+import {Game} from "@engine/game";
 
 
 type float = number;

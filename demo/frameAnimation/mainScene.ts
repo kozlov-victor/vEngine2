@@ -1,9 +1,9 @@
 import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
 import {SpriteSheet} from "@engine/model/impl/spriteSheet";
-import {ResourceLink} from "@engine/core/resources/resourceLink";
+import {ResourceLink} from "@engine/resources/resourceLink";
 import {FrameAnimation} from "@engine/model/impl/frameAnimation";
-import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 
 export class MainScene extends Scene {

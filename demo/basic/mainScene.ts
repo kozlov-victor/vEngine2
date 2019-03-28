@@ -1,12 +1,12 @@
 import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
 import {SpriteSheet} from "@engine/model/impl/spriteSheet";
-import {ResourceLink} from "@engine/core/resources/resourceLink";
+import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
-import {Color} from "@engine/core/renderer/color";
-import {KEYBOARD_EVENT} from "@engine/core/control/abstract/abstractKeypad";
-import {Keyboard, KEYBOARD_KEY} from "@engine/core/control/keyboard";
-import {GAME_PAD_KEY, GamePad} from "@engine/core/control/gamePad";
+import {Color} from "@engine/renderer/color";
+import {KEYBOARD_EVENT} from "@engine/control/abstract/abstractKeypad";
+import {Keyboard, KEYBOARD_KEY} from "@engine/control/keyboard";
+import {GamePad} from "@engine/control/gamePad";
 
 
 export class MainScene extends Scene {

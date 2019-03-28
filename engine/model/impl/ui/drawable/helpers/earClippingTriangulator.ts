@@ -1,4 +1,4 @@
-import {DebugError} from "@engine/debugError";
+import {DebugError} from "@engine/debug/debugError";
 /**
  * adopted from https://raw.githubusercontent.com/libgdx/libgdx/master/gdx/src/com/badlogic/gdx/math/EarClippingTriangulator.java
  */

@@ -1,8 +1,8 @@
 import {Scene} from "@engine/model/impl/scene";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
-import {Color} from "@engine/core/renderer/color";
+import {Color} from "@engine/renderer/color";
 import {ParticleSystem} from "@engine/model/impl/particleSystem";
-import {MathEx} from "@engine/core/mathEx";
+import {MathEx} from "@engine/misc/mathEx";
 
 
 export class MainScene extends Scene {

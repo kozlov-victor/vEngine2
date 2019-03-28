@@ -1,6 +1,4 @@
-
-
-import {IKeyVal, noop} from "@engine/core/misc/object";
+import {IKeyVal, noop} from "@engine/misc/object";
 import Timer = NodeJS.Timer;
 
 

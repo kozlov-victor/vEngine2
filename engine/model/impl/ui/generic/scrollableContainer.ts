@@ -1,10 +1,9 @@
-
 import {Container} from "./container";
 import {VScroll} from "../components/vScroll";
-import {Game} from "@engine/core/game";
-import {MathEx} from "@engine/core/mathEx";
-import {MousePoint} from "@engine/core/control/mouse/mousePoint";
-import {MOUSE_EVENTS} from "@engine/core/control/mouse/mouseEvents";
+import {Game} from "@engine/game";
+import {MathEx} from "@engine/misc/mathEx";
+import {MousePoint} from "@engine/control/mouse/mousePoint";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export interface ScrollInitDesc {
     vertical: boolean

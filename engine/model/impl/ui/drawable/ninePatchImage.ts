@@ -1,9 +1,8 @@
-
-import {Game} from "@engine/core/game";
+import {Game} from "@engine/game";
 import {Image} from "./image";
-import {DebugError} from "@engine/debugError";
-import {Size} from "@engine/core/geometry/size";
-import {TextureInfo} from "@engine/core/renderer/webGl/programs/abstract/abstractDrawer";
+import {DebugError} from "@engine/debug/debugError";
+import {Size} from "@engine/geometry/size";
+import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 
 export class NinePatchImage extends Image {
 

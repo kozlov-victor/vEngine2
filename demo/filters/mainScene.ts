@@ -1,24 +1,27 @@
 import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
 import {SpriteSheet} from "@engine/model/impl/spriteSheet";
-import {ResourceLink} from "@engine/core/resources/resourceLink";
-import {Color} from "@engine/core/renderer/color";
-import {BlackWhiteFilter} from "@engine/core/renderer/webGl/filters/textureFilters/blackWhiteFilter";
-import {WebGlRenderer} from "@engine/core/renderer/webGl/webGlRenderer";
-import {ColorizeFilter} from "@engine/core/renderer/webGl/filters/textureFilters/colorizeFilter";
-import {PixelFilter} from "@engine/core/renderer/webGl/filters/textureFilters/pixelFilter";
-import {PosterizeFilter} from "@engine/core/renderer/webGl/filters/textureFilters/posterizeFilter";
-import {SimpleBlurFilter} from "@engine/core/renderer/webGl/filters/textureFilters/simpleBlurFilter";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {Color} from "@engine/renderer/color";
+import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/textureFilters/blackWhiteFilter";
+import {ColorizeFilter} from "@engine/renderer/webGl/filters/textureFilters/colorizeFilter";
+import {PixelFilter} from "@engine/renderer/webGl/filters/textureFilters/pixelFilter";
+import {PosterizeFilter} from "@engine/renderer/webGl/filters/textureFilters/posterizeFilter";
+import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/simpleBlurFilter";
 import {Circle} from "@engine/model/impl/ui/drawable/circle";
-import {TweenMovie} from "@engine/core/tweenMovie";
-import {BarrelDistortionFilter} from "@engine/core/renderer/webGl/filters/textureFilters/barrelDistortionFilter";
+import {TweenMovie} from "@engine/misc/tweenMovie";
+import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/textureFilters/barrelDistortionFilter";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {NoiseFilter} from "@engine/core/renderer/webGl/filters/textureFilters/noiseFilter";
-import {NoiseHorizontalFilter} from "@engine/core/renderer/webGl/filters/textureFilters/noiseHorizontalFilter";
-import {LowResolutionFilter} from "@engine/core/renderer/webGl/filters/textureFilters/lowResolutionFilter";
-import {HexagonalFilter} from "@engine/core/renderer/webGl/filters/textureFilters/hexagonalFilter";
+import {NoiseFilter} from "@engine/renderer/webGl/filters/textureFilters/noiseFilter";
+import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/textureFilters/noiseHorizontalFilter";
+import {LowResolutionFilter} from "@engine/renderer/webGl/filters/textureFilters/lowResolutionFilter";
+import {HexagonalFilter} from "@engine/renderer/webGl/filters/textureFilters/hexagonalFilter";
 import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
-import {LinearGradient} from "@engine/core/renderer/linearGradient";
+import {LinearGradient} from "@engine/renderer/linearGradient";
+import {SwirlFilter} from "@engine/renderer/webGl/filters/textureFilters/swirlFilter";
+import {MotionBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/motionBlurFilter";
+import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/triangleBlurFilter";
 
 
 export class MainScene extends Scene {
@@ -42,23 +45,23 @@ export class MainScene extends Scene {
         this.appendChild(this.logoObj);
         this.logoObj.addBehaviour(new DraggableBehaviour(this.game));
 
-        const bw:BlackWhiteFilter = new BlackWhiteFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
+        const bw:BlackWhiteFilter = new BlackWhiteFilter(this.game);
 
-        const cl:ColorizeFilter = new ColorizeFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
+        const cl:ColorizeFilter = new ColorizeFilter(this.game);
         cl.setColor(Color.RGB(0,200,23,122));
 
-        const pf:PixelFilter = new PixelFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
+        const pf:PixelFilter = new PixelFilter(this.game);
 
-        const ps:PosterizeFilter = new PosterizeFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
+        const ps:PosterizeFilter = new PosterizeFilter(this.game);
 
-        const sb:SimpleBlurFilter = new SimpleBlurFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
+        const sb:SimpleBlurFilter = new SimpleBlurFilter(this.game);
         sb.setSize(2);
 
-        const barrel:BarrelDistortionFilter = new BarrelDistortionFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
-        const noise:NoiseFilter = new NoiseFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
-        const noiseHoriz:NoiseHorizontalFilter = new NoiseHorizontalFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
+        const barrel:BarrelDistortionFilter = new BarrelDistortionFilter(this.game);
+        const noise:NoiseFilter = new NoiseFilter(this.game);
+        const noiseHoriz:NoiseHorizontalFilter = new NoiseHorizontalFilter(this.game);
 
-        const lowResolution:LowResolutionFilter = new LowResolutionFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
+        const lowResolution:LowResolutionFilter = new LowResolutionFilter(this.game);
 
         const circle:Circle = new Circle(this.game);
         circle.radius = 40;
@@ -68,22 +71,20 @@ export class MainScene extends Scene {
         circle.color = Color.RGB(0,100,12);
         this.appendChild(circle);
         circle.filters = [
-            ps,sb
+            ps,sb, lowResolution
         ];
         circle.addBehaviour(new DraggableBehaviour(this.game));
 
 
-        const hex = new HexagonalFilter((this.game.getRenderer() as WebGlRenderer)['gl']);
-
         const circle2:Circle = new Circle(this.game);
         circle2.radius = 40;
         circle2.center.setXY(80,120);
-        circle2.color = Color.RGB(30,120,55);
-        circle2.lineWidth = 2;
-        circle2.color = Color.RGB(120,10,12);
+        circle2.color = Color.RGB(240,120,55);
+        circle2.lineWidth = 6;
         this.appendChild(circle2);
+        const motionBlur = new MotionBlurFilter(this.game);
         circle2.filters = [
-            pf
+            pf, motionBlur
         ];
         circle2.addBehaviour(new DraggableBehaviour(this.game));
 
@@ -100,10 +101,31 @@ export class MainScene extends Scene {
         ellipse.center.setXY(150,50);
         ellipse.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(ellipse);
+
+        const hex = new HexagonalFilter(this.game);
+        const swirl = new SwirlFilter(this.game);
+        (window as any).swirl = swirl;
+
         ellipse.filters = [
-            hex
+            hex,swirl
         ];
         hex.setSize(8);
+
+        const rect:Rectangle = new Rectangle(this.game);
+        let gradient:LinearGradient  = new LinearGradient();
+        gradient.angle = 0.2;
+        gradient.colorFrom = Color.RGB(100,0,20);
+        gradient.colorTo = Color.RGB(200,111,1);
+        rect.fillColor = gradient;
+        rect.borderRadius = 5;
+        rect.color = Color.RGB(0,0,40);
+        rect.lineWidth = 4;
+        rect.size.setWH(40);
+        rect.addBehaviour(new DraggableBehaviour(this.game));
+        rect.pos.setXY(120,120);
+        this.appendChild(rect);
+        const triangleBlur = new TriangleBlurFilter(this.game);
+        rect.filters = [triangleBlur];
 
         const tm:TweenMovie = new TweenMovie(this.game);
         tm.tween(0,{
@@ -128,7 +150,6 @@ export class MainScene extends Scene {
         });
         tm.loop(true);
         this.addTweenMovie(tm);
-
 
 
         this.filters.push(noise,noiseHoriz,barrel);

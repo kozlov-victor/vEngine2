@@ -1,12 +1,11 @@
-import {Game} from "@engine/core/game";
-import {Rect} from "@engine/core/geometry/rect";
-import {DebugError} from "@engine/debugError";
+import {Game} from "@engine/game";
+import {Rect} from "@engine/geometry/rect";
+import {DebugError} from "@engine/debug/debugError";
 import {Shape} from "../generic/shape";
-import {Color} from "@engine/core/renderer/color";
-import {Point2d} from "@engine/core/geometry/point2d";
-import {TextureInfo} from "@engine/core/renderer/webGl/programs/abstract/abstractDrawer";
+import {Color} from "@engine/renderer/color";
+import {Point2d} from "@engine/geometry/point2d";
+import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {Cloneable} from "@engine/declarations";
-
 
 
 export class Image extends Shape implements Cloneable<Image>{
@@ -28,10 +27,14 @@ export class Image extends Shape implements Cloneable<Image>{
             throw new DebugError(`can not render Image: resourceLink is not specified`);
         }
         let tex:TextureInfo = this.game.getRenderer().getTextureInfo(this.getResourceLink().getId());
-        if (this.size.width===0) this.size.width = tex.size.width;
-        if (this.size.height===0) this.size.height = tex.size.height;
-        if (this.srcRect.size.width===0) this.srcRect.size.width = tex.size.width;
-        if (this.srcRect.size.height===0) this.srcRect.size.height = tex.size.height;
+        if (this.size.isZero()) {
+            this.size.width = tex.size.width;
+            this.size.height = tex.size.height;
+        }
+        if (this.srcRect.size.isZero()) {
+            this.srcRect.size.width = tex.size.width;
+            this.srcRect.size.height = tex.size.height;
+        }
     }
 
     draw():boolean{

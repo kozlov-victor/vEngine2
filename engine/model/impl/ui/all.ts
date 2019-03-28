@@ -11,5 +11,5 @@ export {Ellipse} from './drawable/ellipse';
 export {Border} from './drawable/border';
 export {NinePatchImage} from './drawable/ninePatchImage';
 export {AbsoluteLayout} from './layouts/absoluteLayout';
-export {Color} from '../../../core/renderer/color';
-export {LinearGradient} from '../../../core/renderer/linearGradient';
+export {Color} from '../../../renderer/color';
+export {LinearGradient} from '../../../renderer/linearGradient';

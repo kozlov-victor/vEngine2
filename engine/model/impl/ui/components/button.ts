@@ -1,8 +1,8 @@
 import {Container} from "../generic/container";
 import {TextField} from "./textField";
 import {Font} from "../../font";
-import {Game} from "@engine/core/game";
-import {DebugError} from "@engine/debugError";
+import {Game} from "@engine/game";
+import {DebugError} from "@engine/debug/debugError";
 
 
 export class Button extends Container {

@@ -1,13 +1,13 @@
 import {Font} from "../../font";
-import {Rect} from "@engine/core/geometry/rect";
-import {DebugError} from "@engine/debugError";
+import {Rect} from "@engine/geometry/rect";
+import {DebugError} from "@engine/debug/debugError";
 import {Rectangle} from "../drawable/rectangle";
-import {ScrollableContainer, ScrollInfo} from "../generic/scrollableContainer";
+import {ScrollableContainer} from "../generic/scrollableContainer";
 import {Image} from "../drawable/image";
-import {AbstractRenderer} from "@engine/core/renderer/abstract/abstractRenderer";
-import {Game} from "@engine/core/game";
-import {Size} from "@engine/core/geometry/size";
-import {Point2d} from "@engine/core/geometry/point2d";
+import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
+import {Game} from "@engine/game";
+import {Size} from "@engine/geometry/size";
+import {Point2d} from "@engine/geometry/point2d";
 
 type char = string;
 

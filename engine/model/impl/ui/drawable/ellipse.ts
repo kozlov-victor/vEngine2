@@ -1,9 +1,7 @@
-
-
 import {Shape} from "../generic/shape";
 import {Cloneable} from "@engine/declarations";
-import {Point2d} from "@engine/core/geometry/point2d";
-import {Game} from "@engine/core/game";
+import {Point2d} from "@engine/geometry/point2d";
+import {Game} from "@engine/game";
 
 export class Ellipse extends Shape implements Cloneable<Ellipse>{
 

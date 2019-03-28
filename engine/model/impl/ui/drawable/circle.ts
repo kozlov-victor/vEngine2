@@ -1,7 +1,6 @@
-
 import {Ellipse} from "./ellipse";
 import {Cloneable} from "@engine/declarations";
-import {Game} from "@engine/core/game";
+import {Game} from "@engine/game";
 
 export class Circle extends Ellipse implements Cloneable<Circle>{
 

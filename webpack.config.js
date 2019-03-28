@@ -61,7 +61,6 @@ module.exports = (env={})=>{
                     test: /\.ts$/,
                     use: [
                         {loader: "awesome-typescript-loader",options: {}},
-                        {loader: "macros-loader",options: {}},
                     ]
                 },
                 {

@@ -1,8 +1,7 @@
-
 import {RenderableModel} from "../../../renderableModel";
-import {Color} from "@engine/core/renderer/color";
-import {Game} from "@engine/core/game";
-import {LinearGradient} from "@engine/core/renderer/linearGradient";
+import {Color} from "@engine/renderer/color";
+import {Game} from "@engine/game";
+import {LinearGradient} from "@engine/renderer/linearGradient";
 
 export abstract class Shape extends RenderableModel {
 

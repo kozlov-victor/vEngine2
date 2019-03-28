@@ -1,13 +1,12 @@
-
-import {Game} from "../../core/game";
-import {Rect} from "../../core/geometry/rect";
-import {Resource} from "../../core/resources/resource";
-import {Color} from "@engine/core/renderer/color";
+import {Game} from "../../game";
+import {Rect} from "../../geometry/rect";
+import {Resource} from "../../resources/resource";
+import {Color} from "@engine/renderer/color";
 import {Revalidatable} from "@engine/declarations";
-import {DebugError} from "@engine/debugError";
-import {ResourceLink} from "@engine/core/resources/resourceLink";
+import {DebugError} from "@engine/debug/debugError";
+import {ResourceLink} from "@engine/resources/resourceLink";
 import {Scene} from "@engine/model/impl/scene";
-import {ResourceLoader} from "@engine/core/resources/resourceLoader";
+import {ResourceLoader} from "@engine/resources/resourceLoader";
 
 interface FontContext {
     symbols: {[key:string]:Rect},
