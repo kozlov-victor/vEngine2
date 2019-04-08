@@ -27,13 +27,13 @@ class TextInfo {
 
     constructor(private textField: TextField) {}
 
-    reset() {
+    reset():void {
         this.allCharsCached = [];
         this.strings = [];
         this.pos.setXY(0,0);
     }
 
-    newString() {
+    newString():void {
         this.pos.x = 0;
         if (this.strings.length) {
             this.pos.y += this.textField.getFont().getDefaultSymbolHeight();
@@ -41,20 +41,20 @@ class TextInfo {
         this.strings.push(new StringInfo());
     }
 
-    addChar(c: CharInfo) {
+    addChar(c: CharInfo):void {
         this.strings[this.strings.length - 1].chars.push(c);
         this.allCharsCached.push(c);
         c.destRect.setPoint(this.pos);
         this.pos.addX(c.sourceRect.size.width);
     }
 
-    addWord(w: WordInfo) {
+    addWord(w: WordInfo):void {
         w.chars.forEach((c: CharInfo) => {
             this.addChar(c);
         });
     }
 
-    revalidate(defaultSymbolHeight: number) {
+    revalidate(defaultSymbolHeight: number):void {
         this.size.setWH(0);
         for (let s of this.strings) {
             s.calcSize(defaultSymbolHeight);
@@ -63,7 +63,7 @@ class TextInfo {
         }
     }
 
-    align(textAlign: TEXT_ALIGN) {
+    align(textAlign: TEXT_ALIGN):void {
         if (DEBUG && TEXT_ALIGN[textAlign] === undefined) {
             let keys = Object.keys(TEXT_ALIGN).join(', ');
             throw new DebugError(`can not align text: unknown enum type of TEXT_ALIGN: ${textAlign}, expected: ${keys}`);
@@ -83,13 +83,13 @@ class CharInfo {
 class CharsHolder {
     chars: CharInfo[] = [];
 
-    moveBy(dx: number, dy: number) {
+    moveBy(dx: number, dy: number):void {
         for (let ch of this.chars) {
             ch.destRect.point.addXY(dx, dy);
         }
     }
 
-    moveTo(x: number, y: number) {
+    moveTo(x: number, y: number):void {
         let initialOffsetX: number = 0;
         for (let ch of this.chars) {
             ch.destRect.point.setXY(initialOffsetX + x, y);
@@ -101,14 +101,14 @@ class CharsHolder {
 class WordInfo extends CharsHolder {
     width: number = 0;
 
-    revalidate() {
+    revalidate():void {
         this.width = 0;
         for (let ch of this.chars) {
             this.width += ch.destRect.size.width;
         }
     }
 
-    addChar(c: CharInfo) {
+    addChar(c: CharInfo):void {
         this.chars.push(c);
         this.width += c.sourceRect.size.width;
     }
@@ -118,7 +118,7 @@ class StringInfo extends CharsHolder {
     width: number = 0;
     height: number = 0;
 
-    calcSize(defaultSymbolHeight: number) {
+    calcSize(defaultSymbolHeight: number):void {
         this.width = 0;
         this.height = defaultSymbolHeight;
         for (let ch of this.chars) {
@@ -127,7 +127,7 @@ class StringInfo extends CharsHolder {
     }
 
     private toWords(): WordInfo[] {
-        let res: WordInfo[] = [];
+        const res: WordInfo[] = [];
         let currWord: WordInfo = new WordInfo();
         for (let ch of this.chars) {
             if (ch.symbol === ' ') {
@@ -143,7 +143,7 @@ class StringInfo extends CharsHolder {
         return res;
     }
 
-    align(textAlign: TEXT_ALIGN, textField: TextField) {
+    align(textAlign: TEXT_ALIGN, textField: TextField):void {
         switch (textAlign) {
             case TEXT_ALIGN.LEFT:
                 break;
@@ -205,7 +205,7 @@ export class TextField extends ScrollableContainer {
     }
 
 
-    revalidate() {
+    revalidate():void {
         super.revalidate();
         if (DEBUG && !this._font) throw new DebugError(`font is not provided`);
         if (DEBUG && !this._font.getResourceLink()) throw new DebugError(`can not render textField: font resource link is not set`);
@@ -222,15 +222,15 @@ export class TextField extends ScrollableContainer {
         return charInfo;
     }
 
-    onGeometryChanged() {
+    onGeometryChanged():void {
         super.onGeometryChanged();
 
-        let textInfo:TextInfo = this._textInfo;
+        const textInfo:TextInfo = this._textInfo;
         textInfo.reset();
         textInfo.newString();
-        let text: string = this._text;
+        const text: string = this._text;
 
-        let strings:string[] = text.split('\n');
+        const strings:string[] = text.split('\n');
         strings.forEach((str:string, i:number) => {
             let words:string[] = str.split(' ');
             words.forEach((w: string, i: number) => {
@@ -266,16 +266,16 @@ export class TextField extends ScrollableContainer {
         this.updateScrollSize(textInfo.size.height,this.size.height);
     }
 
-    setText(text = '') {
+    setText(text:string = '') {
         this._text = text.toString();
         this._dirty = true;
     }
 
-    getText() {
+    getText():string {
         return this._text
     }
 
-    setFont(font:Font) {
+    setFont(font:Font):void {
         font.revalidate();
         this._font = font;
         this.setText(this._text);
@@ -300,11 +300,9 @@ export class TextField extends ScrollableContainer {
             if (charInfo.destRect.point.y - this.vScrollInfo.offset > this.size.height) continue;
             if (charInfo.destRect.point.y + charInfo.destRect.size.height - this.vScrollInfo.offset < 0) continue;
 
-            this._symbolImage.srcRect.set(charInfo.sourceRect);
-            this._symbolImage.setXYWH(
-                charInfo.destRect.point.x,
-                charInfo.destRect.point.y,
-                charInfo.destRect.size.width,charInfo.destRect.size.height);
+            this._symbolImage.getSrcRect().set(charInfo.sourceRect);
+            this._symbolImage.size.set(charInfo.sourceRect.size);
+            this._symbolImage.pos.set(charInfo.destRect.point);
 
             this._symbolImage.render();
         }

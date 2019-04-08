@@ -30,63 +30,63 @@ export class NinePatchImage extends Image {
         for (let i=0;i<9;i++) {
             this._patches[i] = new Image(this.game);
         }
-        this.getRect().observe(()=>{this.revalidate()});
+        this.getSrcRect().observe(()=>{this.revalidate()});
     }
 
-    private _revalidatePatches(){
+    private _revalidatePatches():void{
         let ti:TextureInfo = this.game.getRenderer().renderableCache[this.getResourceLink().getId()];
         if (DEBUG || !ti) throw new DebugError(`can not find texture info by id ${this.getResourceLink().getId()}`);
         let texSize:Size = ti.texture.getSize();
-        let destRect = this.getRect();
+        let destRect = this.getSrcRect();
         let patch:Image;
-        let a = this.a,b=this.b,c=this.c,d=this.d;
+        let a:number = this.a,b:number=this.b,c:number=this.c,d:number=this.d;
         // patch 1
         patch = this._patches[0];
-        let patchCnt=1;
-        patch.srcRect.setXYWH(0,0,a,c);
+        let patchCnt:number=1;
+        patch.getSrcRect().setXYWH(0,0,a,c);
         patch.setXYWH(destRect.point.x,destRect.point.y,a,c);
         // patch 2
         patch = this._patches[patchCnt++];
-        patch.srcRect.setXYWH(a,0,texSize.width-a-b,c);
+        patch.getSrcRect().setXYWH(a,0,texSize.width-a-b,c);
         patch.setXYWH(destRect.point.x+a,destRect.point.y,destRect.size.width-a-c,c);
         // patch 3
         patch = this._patches[patchCnt++];
-        patch.srcRect.setXYWH(texSize.width-b,0,b,c);
+        patch.getSrcRect().setXYWH(texSize.width-b,0,b,c);
         patch.setXYWH(destRect.point.x+destRect.size.width-b,destRect.point.y,b,c);
         // patch 4
         patch = this._patches[patchCnt++];
-        patch.srcRect.setXYWH(0, c, a,texSize.height - c - d);
+        patch.getSrcRect().setXYWH(0, c, a,texSize.height - c - d);
         patch.setXYWH(destRect.point.x,destRect.point.y+c,a,destRect.size.height-c-d);
         // patch 5
         patch = this._patches[patchCnt++];
-        patch.srcRect.setXYWH(a, c, texSize.width - a - b,texSize.height - c - d);
+        patch.getSrcRect().setXYWH(a, c, texSize.width - a - b,texSize.height - c - d);
         patch.setXYWH(destRect.point.x + a,destRect.point.y+c,destRect.size.width - a - b,destRect.size.height-c-d);
         // patch 6
         patch = this._patches[patchCnt++];
-        patch.srcRect.setXYWH(texSize.width - b, c, b,texSize.height - c - d);
+        patch.getSrcRect().setXYWH(texSize.width - b, c, b,texSize.height - c - d);
         patch.setXYWH(
             destRect.point.x + destRect.size.width - b,destRect.point.y+c,b,destRect.size.height-c-d
         );
         // patch 7
         patch = this._patches[patchCnt++];
-        patch.srcRect.setXYWH(0,texSize.height - d,a,d);
+        patch.getSrcRect().setXYWH(0,texSize.height - d,a,d);
         patch.setXYWH(destRect.point.x,destRect.point.y+destRect.size.height - d,a,d);
         // patch 8
         patch = this._patches[patchCnt++];
-        patch.srcRect.setXYWH(a,texSize.height - d,texSize.width-a-b,d);
+        patch.getSrcRect().setXYWH(a,texSize.height - d,texSize.width-a-b,d);
         patch.setXYWH(
             destRect.point.x + a,destRect.point.y+destRect.size.height-d,destRect.size.width-a-b,d
         );
         // patch 9
         patch = this._patches[patchCnt++];
-        patch.srcRect.setXYWH(texSize.width-b,texSize.height-d,b,d);
+        patch.getSrcRect().setXYWH(texSize.width-b,texSize.height-d,b,d);
         patch.setXYWH(destRect.point.x+destRect.size.width-b,destRect.point.y+destRect.size.height-d,b,d);
         for (let i=0;i<9;i++) {
             this._patches[i].setResourceLink(this.getResourceLink());
         }
     }
 
-    revalidate(){
+    revalidate():void {
         if (DEBUG && !this.getResourceLink()) {
             throw new DebugError(`can not render Image: resource link is not specified`);
         }

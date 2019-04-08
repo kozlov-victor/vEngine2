@@ -4,11 +4,11 @@ export class ResourceLink {
     private constructor(private id:string){}
     private target:any;
 
-    getId(){
+    getId():string{
         return this.id;
     }
 
-    setTarget(t:any){
+    setTarget(t:any):void{
         this.target = t;
     }
 
@@ -16,7 +16,7 @@ export class ResourceLink {
         return this.target as T;
     }
 
-    static create () {
+    static create():ResourceLink {
         return new ResourceLink((Incrementer.getValue()).toString());
     }
 

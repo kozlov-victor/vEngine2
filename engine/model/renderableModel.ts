@@ -1,6 +1,6 @@
 import {AbstractRenderer} from "../renderer/abstract/abstractRenderer";
 import {Resource} from "../resources/resource";
-import {Cloneable, Eventemittable, Revalidatable, Tweenable} from "../declarations";
+import {Cloneable, Eventemittable, Int, Revalidatable, Tweenable} from "../declarations";
 import {DebugError} from "../debug/debugError";
 import {MathEx} from "../misc/mathEx";
 import {Point2d} from "../geometry/point2d";
@@ -41,7 +41,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
     protected _dirty = true;
     private   _layer:Layer;
 
-    protected _rect:Rect = new Rect();
+    protected _srcRect:Rect = new Rect();
     protected _screenRect = new Rect();
     protected _behaviours:BaseAbstractBehaviour[] = [];
 
@@ -52,7 +52,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         );
     }
 
-    protected setClonedProperties(cloned:RenderableModel) {
+    protected setClonedProperties(cloned:RenderableModel):void {
         cloned.size.set(cloned.size);
         cloned.pos.set(this.pos);
         cloned.scale.set(this.scale);
@@ -79,13 +79,13 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         super.setClonedProperties(cloned);
     }
 
-    revalidate(){}
+    revalidate():void{}
 
     getLayer(): Layer {
         return this._layer;
     }
 
-    setLayer(value: Layer) {
+    setLayer(value: Layer):void {
         this._layer = value;
     }
 
@@ -106,29 +106,26 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         return this._screenRect;
     }
 
-    protected calcScreenRect(){
-        this._screenRect.set(this._rect);
+    protected calcScreenRect():void {
+        this._screenRect.set(this._srcRect);
         let parent:RenderableModel = this.parent;
         while (parent) {
-            this._screenRect.addXY(parent.getRect().point.x,parent.getRect().point.y);
+            this._screenRect.addXY(parent.getSrcRect().point.x,parent.getSrcRect().point.y);
             parent = parent.parent;
         }
     }
 
-    getRect():Rect{
-        this._rect.setXYWH(
+    getSrcRect():Rect{
+        this._srcRect.setXYWH(
             this.pos.x - this.anchor.x,
             this.pos.y - this.anchor.y,
             this.size.width,
             this.size.height
         );
-        if (this._dirty) {
-            this.calcScreenRect();
-        }
-        return this._rect;
+        return this._srcRect;
     }
 
-    setAnchorToCenter(){
+    setAnchorToCenter():void {
         this.revalidate();
         if (DEBUG && !(this.size.width && this.size.height))
             throw new DebugError(`can not set anchor to center: width or height of gameObject is not set`);
@@ -136,33 +133,33 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
     }
 
 
-    appendChild(c:RenderableModel){
+    appendChild(c:RenderableModel):void {
         c.parent = this;
         c.setLayer(this.getLayer());
         c.revalidate();
         this.children.push(c);
     }
 
-    addBehaviour(b:BaseAbstractBehaviour){
+    addBehaviour(b:BaseAbstractBehaviour):void {
         this._behaviours.push(b);
         b.manage(this);
     }
 
 
-    prependChild(c:RenderableModel){
+    prependChild(c:RenderableModel):void {
         c.parent = this;
         c.revalidate();
         this.children.unshift(c);
     }
 
-    setDirty(){
+    setDirty():void {
         this._dirty = true; // todo
         //if (this.parent) this.parent._dirty = true;
     }
 
     abstract draw():boolean;
 
-    protected beforeRender(){
+    protected beforeRender():void {
         this.game.getRenderer().translate(this.pos.x,this.pos.y);
     }
 
@@ -170,21 +167,21 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         return !(this.angle===0 && this.scale.equal(1));
     }
 
-    protected doAdditionalTransform(){
+    protected doAdditionalTransform():void {
         this.game.getRenderer().rotateZ(this.angle);
         // todo
         //if (this['angleY']) this.game.getRenderer()['rotateY'](this['angleY']); // todo!!!
     }
 
     protected isInViewPort():boolean{
-        return MathEx.overlapTest(this.game.camera.getRectScaled(),this.getRect());
+        return MathEx.overlapTest(this.game.camera.getRectScaled(),this.getSrcRect());
     }
 
     private _getParent():RenderableModel|Layer|undefined{
         return this.parent || this._layer || undefined;
     }
 
-    moveToFront(){
+    moveToFront():void {
         if (DEBUG && !this._getParent()) throw new DebugError(`can not move to front: object is detached`);
         let index:number = (this._getParent()).children.indexOf(this);
         if (DEBUG && index===-1)
@@ -195,7 +192,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
 
     }
 
-    moveToBack(){
+    moveToBack():void {
         if (DEBUG && !this._getParent()) throw new DebugError(`can not move to back: object is detached`);
         let index:number = this._getParent().children.indexOf(this);
         if (DEBUG && index===-1)
@@ -205,7 +202,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         parentArray.unshift(this);
     }
 
-    kill() {
+    kill():void {
 
         if (DEBUG && !this._getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
 
@@ -224,7 +221,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         }
     }
 
-    render(){
+    render():void {
         //if (this.isInViewPort()) return;
         let renderer:AbstractRenderer = this.game.getRenderer();
 
@@ -241,7 +238,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
             renderer.translate(-dx, -dy);
         }
 
-        let drawResult:boolean = this.draw();
+        const drawResult:boolean = this.draw();
 
         if (drawResult && this.children.length>0) {
             renderer.save();
@@ -257,7 +254,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         renderer.restore();
     }
 
-    update(){
+    update():void {
         for (let c of this.children) {
             if (this._dirty) c.setDirty();
             c.update();
@@ -298,7 +295,7 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
     addTween(t: Tween): void {
         this._tweenDelegate.addTween(t);
     }
-    addTweenMovie(tm: TweenMovie) {
+    addTweenMovie(tm: TweenMovie):void {
         this._tweenDelegate.addTweenMovie(tm);
     }
     tween(desc: TweenDescription): Tween {

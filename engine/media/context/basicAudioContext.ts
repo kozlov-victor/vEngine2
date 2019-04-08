@@ -18,7 +18,7 @@ export class BasicAudioContext implements Cloneable<BasicAudioContext>{
 
     }
 
-    protected setLastTimeId() {
+    protected setLastTimeId():void {
         this._lastTimeId = Incrementer.getValue();
     };
 
@@ -27,12 +27,12 @@ export class BasicAudioContext implements Cloneable<BasicAudioContext>{
     }
 
     play(link:ResourceLink,loop:boolean){}
-    stop(){}
-    isFree(){return false}
-    setGain(val:number){}
-    pause(){}
-    resume(){}
-    load(url:string,link:ResourceLink,callBack:()=>void){
+    stop():void{}
+    isFree():boolean{return false}
+    setGain(val:number):void{}
+    pause():void{}
+    resume():void{}
+    load(url:string,link:ResourceLink,callBack:()=>void):void{
         callBack();
     }
     clone():BasicAudioContext{

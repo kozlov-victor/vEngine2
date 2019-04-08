@@ -36,9 +36,9 @@ export class Vec2 {
         return (this.x * vec.y - this.y * vec.x);
     }
 
-    rotate(center:Vec2, angle:number) {
+    rotate(center:Vec2, angle:number):Vec2 {
         //rotate in counterclockwise
-        let r:number[] = [];
+        const r:number[] = [];
 
         let x:number = this.x - center.x;
         let y:number = this.y - center.y;
@@ -74,30 +74,30 @@ export class CollisionInfo {
     mStart:Vec2 = new Vec2(0, 0);
     mEnd:Vec2 = new Vec2(0, 0);
 
-    setDepth(s:number) {
+    setDepth(s:number):void {
         this.mDepth = s;
     }
 
-    setNormal(s:Vec2) {
+    setNormal(s:Vec2):void {
         this.mNormal = s;
     }
 
-    getDepth(){
+    getDepth():number {
         return this.mDepth;
     }
 
-    getNormal(){
+    getNormal():Vec2 {
         return this.mNormal;
     }
 
-    setInfo(d:number, n:Vec2, s:Vec2){
+    setInfo(d:number, n:Vec2, s:Vec2):void {
         this.mDepth = d;
         this.mNormal = n;
         this.mStart = s;
         this.mEnd = s.add(n.scale(d));
     }
 
-    changeDir(){
+    changeDir():void {
         this.mNormal = this.mNormal.scale(-1);
         let n:Vec2 = this.mStart;
         this.mStart = this.mEnd;

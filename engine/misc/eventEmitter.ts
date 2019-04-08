@@ -13,12 +13,12 @@ export class EventEmitter{
 
     }
 
-    private _on(name:string,callBack:Function){
+    private _on(name:string,callBack:Function):void {
         this.events[name] = this.events[name] || [];
         this.events[name].push(callBack);
     }
 
-    on(eventNameOrList:string|string[],callBack:Function){
+    on(eventNameOrList:string|string[],callBack:Function):void {
         if (typeof  eventNameOrList === 'string') {
             this._on(eventNameOrList,callBack);
         } else if (eventNameOrList.splice) {
@@ -29,7 +29,7 @@ export class EventEmitter{
 
     };
 
-    off(eventName:string,callback:Function){
+    off(eventName:string,callback:Function):void {
         let es:Function[] = this.events[eventName];
         if (!es) return;
         let index:number = es.indexOf(callback);
@@ -40,7 +40,7 @@ export class EventEmitter{
         es.splice(index,1);
     };
 
-    trigger(eventName:string,data:any){
+    trigger(eventName:string,data:any):void {
         let es:Function[] = this.events[eventName];
         if (!es) return;
         let l:number = es.length;

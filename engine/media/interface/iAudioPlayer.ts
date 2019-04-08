@@ -6,9 +6,9 @@ export interface IAudioPlayer {
     loadSound(url:string, link:ResourceLink, onLoad:()=>void):void,
     play(sound:Sound):void,
     stop(sound:Sound):void,
-    stopAll(),
-    pauseAll(),
-    resumeAll(),
-    setGain(sound:Sound),
+    stopAll():void,
+    pauseAll():void,
+    resumeAll():void,
+    setGain(sound:Sound):void,
 
 }

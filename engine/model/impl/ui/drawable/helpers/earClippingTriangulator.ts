@@ -44,7 +44,7 @@ export class EarClippingTriangulator {
         return triangles;
     }
 
-    private triangulate() {
+    private triangulate():void {
         let vertexTypes: number[] = this.vertexTypes;
         let triangles: number[] = this.triangles;
 

@@ -2,23 +2,13 @@ import {Game} from "../game";
 import {IControl} from "@engine/control/abstract/iControl";
 import {AbstractKeypad, KEYBOARD_EVENT} from "@engine/control/abstract/abstractKeypad";
 import {Int} from "@engine/declarations";
+import {DebugError} from "@engine/debug/debugError";
 
 declare const window:any,navigator:any;
 
-interface GamePadButton {
-    pressed:boolean,
-    value:number
-}
-
-interface GamePadInfo {
-    index:number,
-    id:number,
-    buttons:GamePadButton[],
-    axes:number[]
-}
 
 interface GamePadEvent {
-    gamepad:GamePadInfo
+    gamepad:Gamepad
 }
 
 
@@ -49,12 +39,31 @@ export enum GAME_PAD_KEY {
     GAME_PAD_AXIS_DOWN = 11
 }
 
+type GamePadGetter = ()=>Gamepad[];
 
+const gamePadGetterFactory = ():GamePadGetter=>{
+    if (navigator.getGamepads) return (()=>navigator.getGamepads()) as GamePadGetter;
+    else if (navigator.webkitGetGamepads) return (()=>navigator.webkitGetGamepads()) as GamePadGetter;
+    else {
+        const possibles:string[] = ['webkitGamepads','mozGamepads','msGamepads','msGamepads'];
+        let possible:string;
+        for (let i:number = 0; i < possibles.length; i++) {
+            if (navigator[possibles[i]]) {
+                possible = possibles[i];
+                break;
+            }
+        }
+        if (DEBUG && !possible) throw new DebugError(`can not use game pad: it is not supported by this device`);
+        return (()=>navigator[possible]) as GamePadGetter
+    }
+};
 
-export class GamePad extends AbstractKeypad implements IControl{
+const gamePadGetter:GamePadGetter = gamePadGetterFactory();
 
-    readonly type:string = 'GamePad';
-    private gamepads:GamePadInfo[];
+export class GamePadControl extends AbstractKeypad implements IControl{
+
+    readonly type:string = 'GamePadControl';
+    private gamepads:Gamepad[];
 
     constructor(game:Game){
         super(game);
@@ -62,19 +71,17 @@ export class GamePad extends AbstractKeypad implements IControl{
 
     update(){
 
-        this.gamepads = // todo remove from runtime
-            (navigator.getGamepads && navigator.getGamepads()) ||
-            (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) ||
-            navigator.webkitGamepads || navigator.mozGamepads ||
-            navigator.msGamepads || navigator.gamepads || [] as GamePadInfo[];
+        super.update();
+
+        this.gamepads = gamePadGetter();
 
         for (let i:number=0,max=this.gamepads.length;i<max;i++) {
-            let gp:GamePadInfo = this.gamepads[i];
+            let gp:Gamepad = this.gamepads[i];
             if (!gp) continue;
             let maxButtons:number = gp.buttons.length;
-            if (maxButtons>7) maxButtons = 7; // only 8-buttons gamePad is supported for now
+            if (maxButtons>8) maxButtons = 8; // only 8-buttons gamePad is supported for now
             for (let j:number=0;j<maxButtons;j++) {
-                let btn:GamePadButton = gp.buttons[j];
+                let btn:GamepadButton = gp.buttons[j];
                 if (btn.pressed) {
                     this.press(j);
                 } else {
@@ -112,17 +119,17 @@ export class GamePad extends AbstractKeypad implements IControl{
     }
 
 
-    on(e:KEYBOARD_EVENT,callback:(e:GAME_PAD_KEY)=>any) {
+    on(e:KEYBOARD_EVENT,callback:(e:GAME_PAD_KEY)=>any):void {
         this.emitter.on(KEYBOARD_EVENT[e],callback);
     }
 
-    off(e:KEYBOARD_EVENT,callback:Function){
+    off(e:KEYBOARD_EVENT,callback:Function):void {
         this.emitter.off(GAME_PAD_KEY[e],callback);
     }
 
 
-    listenTo(){}
+    listenTo():void {}
 
-    destroy(){}
+    destroy():void {}
 
 }

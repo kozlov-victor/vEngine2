@@ -47,7 +47,7 @@ export class SimpleRectDrawer extends AbstractDrawer {
         `);
     }
 
-    public initProgram(){
+    public initProgram():void{
 
         if (DEBUG) {
             if (!this.gen) throw new DebugError(

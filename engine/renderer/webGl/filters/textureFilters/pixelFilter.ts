@@ -42,21 +42,21 @@ export class PixelFilter extends AbstractFilter {
     }
 
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
+    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
         this.setUniform(this.rt_w,textureInfos[0].texture.size.width);
         this.setUniform(this.rt_h,textureInfos[0].texture.size.height);
         super.doFilter(textureInfos,destFrameBuffer);
     }
 
-    setPixelWidth(n:number){
+    setPixelWidth(n:number):void{
         this.setUniform(this.pixel_w,n);
     }
 
-    setPixelHeight(n:number){
+    setPixelHeight(n:number):void{
         this.setUniform(this.pixel_h,n);
     }
 
-    setPixelSize(n:number) {
+    setPixelSize(n:number):void {
         this.setPixelWidth(n);
         this.setPixelHeight(n);
     }

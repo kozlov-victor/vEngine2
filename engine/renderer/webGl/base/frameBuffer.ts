@@ -29,7 +29,7 @@ export class FrameBuffer {
         this._init(gl,width,height);
     }
 
-    _init(gl:WebGLRenderingContext,width:number,height:number){
+    _init(gl:WebGLRenderingContext,width:number,height:number):void{
         // Init Render Buffer
         this.glRenderBuffer = gl.createRenderbuffer() as WebGLRenderbuffer;
         if (DEBUG && !this.glRenderBuffer) throw new DebugError(`can not allocate memory for glRenderBuffer`);
@@ -42,7 +42,7 @@ export class FrameBuffer {
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture.getGlTexture(), 0);
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this.glRenderBuffer);
         // check
-        let fbStatus = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+        const fbStatus:number = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
         if (DEBUG && fbStatus!==gl.FRAMEBUFFER_COMPLETE) {
             throw new DebugError(`frame buffer status error: ${fbStatus} (expected gl.FRAMEBUFFER_COMPLETE(${gl.FRAMEBUFFER_COMPLETE}))`);
         }
@@ -52,24 +52,24 @@ export class FrameBuffer {
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 
-    bind(){
+    bind():void{
         if (FrameBuffer.currInstance===this) return;
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.glFrameBuffer);
         this.gl.viewport(0, 0, this.width,this.height);
         FrameBuffer.currInstance = this;
     }
 
-    unbind(){
+    unbind():void{
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
         FrameBuffer.currInstance = null;
     }
 
-    destroy(){
+    destroy():void{
         this.gl.deleteRenderbuffer(this.glRenderBuffer);
         this.gl.deleteFramebuffer(this.glFrameBuffer);
     }
 
-    getTexture(){
+    getTexture():Texture {
         return this.texture;
     }
 

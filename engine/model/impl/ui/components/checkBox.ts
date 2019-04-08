@@ -1,6 +1,6 @@
 import {Container} from "../generic/container";
 import {Rectangle} from "../drawable/rectangle";
-import {Color} from "../../../../renderer/color";
+import {Color} from "@engine/renderer/color";
 import {Shape} from "../generic/shape";
 import {Game} from "@engine/game";
 
@@ -27,11 +27,11 @@ export class CheckBox extends Container {
         this.on('click',()=>this.toggle());
     }
 
-    toggle(){
+    toggle():void{
         this.checked = !this.checked;
     }
 
-    onGeometryChanged(){
+    onGeometryChanged():void{
         this.rNormal.setWH(this.size.width,this.size.height);
         this.rChecked.setWH(this.size.width,this.size.height);
     }

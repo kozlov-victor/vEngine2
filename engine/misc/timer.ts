@@ -10,7 +10,7 @@ export class Timer {
         this.callback = callback;
     }
 
-    onUpdate(){
+    onUpdate():void {
         const time:number = Game.getInstance().getTime();
         if (!this.lastTime) this.lastTime = time;
         let delta:number = time - this.lastTime;

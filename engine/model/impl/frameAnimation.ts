@@ -1,12 +1,8 @@
 import {Game} from "../../game";
-import {EventEmitter} from "../../misc/eventEmitter";
 import {Cloneable, Eventemittable} from "@engine/declarations";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {DebugError} from "@engine/debug/debugError";
 import {SpriteSheet} from "@engine/model/impl/spriteSheet";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
-import {unescape} from "querystring";
-import {isNullOrUndefined} from "util";
 
 export class FrameAnimation implements Eventemittable, Cloneable<FrameAnimation>{
 
@@ -24,28 +20,28 @@ export class FrameAnimation implements Eventemittable, Cloneable<FrameAnimation>
 
     constructor(protected game:Game) {}
 
-    revalidate(){
+    revalidate():void {
         this._timeForOneFrame = ~~(this.duration / this.frames.length);
     }
 
-    setSpriteSheet(spr: SpriteSheet) {
+    setSpriteSheet(spr: SpriteSheet):void {
         this._spriteSheet = spr;
     }
 
-    play(){
+    play():void {
         this._isPlaying = true;
     }
 
-    stop(){
+    stop():void {
         this._isPlaying = false;
         this._startTime = 0;
     }
 
-    update() {
+    update():void {
         if (!this._isPlaying) return;
         const time:number = this.game.getTime();
         if (!this._startTime) this._startTime = time;
-        let delta = (time - this._startTime) % this.duration;
+        const delta:number = (time - this._startTime) % this.duration;
         this._currFrame = ~~((this.frames.length) * delta / this.duration);
         if (this.isRepeat==false && this._currFrame>=this.frames.length-1) {
             this.trigger('loop');
@@ -64,7 +60,7 @@ export class FrameAnimation implements Eventemittable, Cloneable<FrameAnimation>
         }
     }
 
-    protected setClonedProperties(cloned:FrameAnimation) {
+    protected setClonedProperties(cloned:FrameAnimation):void {
         cloned.frames = [...this.frames];
         cloned.duration = this.duration;
         cloned.isRepeat = this.isRepeat;

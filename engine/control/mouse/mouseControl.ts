@@ -10,9 +10,9 @@ import {IMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 
-export class Mouse implements IControl {
+export class MouseControl implements IControl {
 
-    readonly type:string = 'Mouse';
+    readonly type:string = 'MouseControl';
     private objectsCaptured:{[pointId:number]:RenderableModel} = {};
     private container:HTMLElement;
     private readonly game:Game;
@@ -41,6 +41,7 @@ export class Mouse implements IControl {
         mousePoint.screenY = screenY;
         mousePoint.id = (e as Touch).identifier  || (e as PointerEvent).pointerId || 0;
         mousePoint.release();
+
         return mousePoint;
     }
 
@@ -49,7 +50,8 @@ export class Mouse implements IControl {
         eventName:string,point:MousePoint,
         go:RenderableModel,offsetX = 0, offsetY = 0):boolean{
 
-        const rectWithOffset:Rect = Rect.fromPool().set(go.getRect()).addXY(offsetX,offsetY);
+
+        const rectWithOffset:Rect = Rect.fromPool().set(go.getSrcRect()).addXY(offsetX,offsetY);
         let res:boolean = false;
         if (
             MathEx.isPointInRect(point,rectWithOffset)
@@ -83,7 +85,7 @@ export class Mouse implements IControl {
         point.target = undefined;
 
         for (let go of scene.getAllGameObjects()) {
-            let isCaptured:boolean = Mouse.triggerGameObjectEvent(e,eventName,point,go);
+            let isCaptured:boolean = MouseControl.triggerGameObjectEvent(e,eventName,point,go);
             if (isCaptured) {
                 point.target = go;
                 break;
@@ -94,7 +96,7 @@ export class Mouse implements IControl {
         // let untransformedPoint = MousePoint.unTransform(point);
         // for (let j=0;j<scene.uiLayer.children.length;j++){
         //     let go = scene.uiLayer.children[scene.uiLayer.children.length - 1 - j];
-        //     let isCaptured:boolean = Mouse.triggerGameObjectEvent(e,eventName,untransformedPoint,go);
+        //     let isCaptured:boolean = MouseControl.triggerGameObjectEvent(e,eventName,untransformedPoint,go);
         //     if (isCaptured) {
         //         if (go.children) this.triggerChildren(e,go.children,eventName,untransformedPoint,go.pos.x,go.pos.y);
         //         break;
@@ -114,12 +116,12 @@ export class Mouse implements IControl {
         return point;
     }
 
-    resolveClick(e:TouchEvent|MouseEvent){
+    resolveClick(e:TouchEvent|MouseEvent):void {
         this.triggerEvent(e,MOUSE_EVENTS.click);
         this.triggerEvent(e,MOUSE_EVENTS.mouseDown);
     }
 
-    resolveMouseMove(e:Touch|MouseEvent,isMouseDown:boolean){
+    resolveMouseMove(e:Touch|MouseEvent,isMouseDown:boolean):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,isMouseDown);
         if (!point) return;
         const lastMouseDownObject:RenderableModel = this.objectsCaptured[point.id];
@@ -134,7 +136,7 @@ export class Mouse implements IControl {
         }
     }
 
-    resolveMouseUp(e:MouseEvent|Touch){
+    resolveMouseUp(e:MouseEvent|Touch):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseUp);
         if (!point) return;
         const lastMouseDownObject = this.objectsCaptured[point.id];
@@ -143,19 +145,19 @@ export class Mouse implements IControl {
         delete this.objectsCaptured[point.id];
     }
 
-    resolveDoubleClick(e:MouseEvent){
+    resolveDoubleClick(e:MouseEvent):void {
         const point = this.triggerEvent(e,MOUSE_EVENTS.doubleClick);
         if (!point) return;
         delete this.objectsCaptured[point.id];
     }
 
-    resolveScroll(e:MouseEvent){
+    resolveScroll(e:MouseEvent):void {
         const point = this.triggerEvent(e,MOUSE_EVENTS.scroll);
         if (!point) return;
         delete this.objectsCaptured[point.id];
     }
 
-    listenTo() {
+    listenTo():void {
 
         if (DEBUG && !this.game.getRenderer()) {
             throw new DebugError(`can not initialize mouse control: renderer is not set`);
@@ -198,14 +200,14 @@ export class Mouse implements IControl {
         container.ondblclick = (e:MouseEvent)=>{ // todo now only on pc
             this.resolveDoubleClick(e);
         };
-        container.onmousewheel = (e:MouseEvent)=>{
+        (container as any).onmousewheel = (e:MouseEvent)=>{
             this.resolveScroll(e);
         }
     }
 
-    update(){}
+    update():void{}
 
-    destroy(){
+    destroy():void {
             if (!this.container) return;
         [
             'mouseMove','ontouchstart','onmousedown',

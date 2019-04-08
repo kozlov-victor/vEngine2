@@ -58,13 +58,13 @@ export class Ellipse extends Shape implements Cloneable<Ellipse>{
         return true;
     }
 
-    protected setClonedProperties(cloned:Ellipse) {
+    protected setClonedProperties(cloned:Ellipse):void {
         cloned.radiusX = this.radiusX;
         cloned.radiusY = this.radiusY;
         super.setClonedProperties(cloned);
     }
 
-    update(){
+    update():void {
         super.update();
     }
 

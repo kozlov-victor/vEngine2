@@ -20,49 +20,47 @@ export class ShaderGenerator {
 
     constructor(){}
 
-    addVertexUniform(type:string,name:string){
+    addVertexUniform(type:string,name:string):string{
         this.vertexUniforms.push({type,name});
         return normalizeUniformName(name);
     }
 
-    addFragmentUniform(type:string,name:string){
+    addFragmentUniform(type:string,name:string):string{
         this.fragmentUniforms.push({type,name});
         return normalizeUniformName(name);
     }
 
-    addAttribute(type:string,name:string){
+    addAttribute(type:string,name:string):string{
         this.attributes.push({type,name});
         return normalizeUniformName(name);
     }
 
-    addVarying(type:string,name:string){
+    addVarying(type:string,name:string):void{
         this.varyings.push({type,name});
     }
 
-    appendVertexCodeBlock(code:string){
+    appendVertexCodeBlock(code:string):void{
         this.appendedVertexCodeBlocks.push(code);
     }
 
-    appendFragmentCodeBlock(code:string){
+    appendFragmentCodeBlock(code:string):void{
         this.appendedFragCodeBlocks.push(code);
     }
 
-    prependVertexCodeBlock(code:string){
+    prependVertexCodeBlock(code:string):void{
         this.prependedVertexCodeBlocks.push(code);
     }
 
-    prependFragmentCodeBlock(code:string){
+    prependFragmentCodeBlock(code:string):void{
         this.prependedFragCodeBlocks.push(code);
     }
 
-    setVertexMainFn(fnCode:string){
+    setVertexMainFn(fnCode:string):void{
         this.vertexMainFn = fnCode;
-        return this;
     }
 
-    setFragmentMainFn(fnCode:string){
+    setFragmentMainFn(fnCode:string):void{
         this.fragmentMainFn = fnCode;
-        return this;
     }
 
     getVertexSource():string{
@@ -96,7 +94,7 @@ ${this.fragmentMainFn}
 `)
     }
 
-    debug(){
+    debug():void{
         if (!DEBUG) return;
         console.log('// *** vertex shader source ***');
         console.log(this.getVertexSource());

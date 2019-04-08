@@ -54,13 +54,13 @@ export class MotionBlurFilter extends AbstractFilter {
     }
 
 
-    setStrength(val:number){
+    setStrength(val:number):void{
         this.setUniform(this.strength,val);
     }
 
 
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
+    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
         const tex:Texture = textureInfos[0].texture;
         this.setUniform(this.texSize,[tex.size.width,tex.size.height]);
         this.setUniform(this.center,[100,100]);

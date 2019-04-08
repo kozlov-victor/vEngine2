@@ -44,8 +44,8 @@ export namespace FontFactory {
         for (let k:number = 0; k < arrFromTo.length; k++) {
             let arrFromToCurr:Range = arrFromTo[k];
             for (let i:number = arrFromToCurr.from; i < arrFromToCurr.to; i++) {
-                let currentChar = String.fromCharCode(i);
-                let ctx = cnv.getContext('2d');
+                let currentChar:string = String.fromCharCode(i);
+                let ctx:CanvasRenderingContext2D = cnv.getContext('2d');
                 let textWidth:number = ctx.measureText(currentChar).width;
                 textWidth += 2 * SYMBOL_PADDING;
                 if (textWidth == 0) continue;
@@ -96,10 +96,10 @@ export namespace FontFactory {
         ctx.font = strFont;
         ctx.textBaseline = "top";
         ctx.imageSmoothingEnabled = false;
-        ctx.mozImageSmoothingEnabled = false; // (obsolete)
-        ctx.webkitImageSmoothingEnabled = false;
+        (ctx as any).mozImageSmoothingEnabled = false; // (obsolete)
+        (ctx  as any).webkitImageSmoothingEnabled = false;
         //ctx.msImageSmoothingEnabled = false;
-        ctx.oImageSmoothingEnabled = false;
+        (ctx as any).oImageSmoothingEnabled = false;
         ctx.fillStyle = '#00000000';
         ctx.fillRect(0,0,cnv.width,cnv.height);
         ctx.fillStyle = color.asCSS();
@@ -134,7 +134,7 @@ export class Font extends Resource implements Revalidatable {
         super();
     }
 
-    private static _systemFontInstance;
+    private static _systemFontInstance:Font;
 
     static getSystemFont():Font{
         if (Font._systemFontInstance) return Font._systemFontInstance;
@@ -152,7 +152,7 @@ export class Font extends Resource implements Revalidatable {
         return `${this.fontSize}px ${this.fontFamily}`;
     }
 
-    createContext(){
+    createContext():void {
         const ranges:Range[] = [{from: 32, to: 126}, {from: 1040, to: 1116}];
         const WIDTH:number = 512;
         this.fontContext = FontFactory.getFontContext(ranges,this.asCss(),WIDTH);
@@ -162,7 +162,7 @@ export class Font extends Resource implements Revalidatable {
         return FontFactory.getFontImageBase64(this.fontContext,this.asCss(),this.fontColor);
     }
 
-    revalidate(){
+    revalidate():void {
         if (DEBUG) {
             if (!this.fontContext) throw new DebugError(`font context is not created`);
             if (!this.getResourceLink()) throw new DebugError(`font without resource link`);

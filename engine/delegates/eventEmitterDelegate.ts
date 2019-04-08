@@ -9,10 +9,10 @@ export class EventEmitterDelegate {
 
     private _emitter:EventEmitter;
 
-    on(eventName:string,callBack:Function){
+    on(eventName:string,callBack:Function):Function{
 
-        if (DEBUG && !Game.getInstance().hasControl('Mouse')) {
-            if (MOUSE_EVENTS[eventName]!=undefined) {
+        if (DEBUG && !Game.getInstance().hasControl('MouseControl')) {
+            if (!(eventName in MOUSE_EVENTS)) {
                 throw new DebugError('can not listen mouse events: mouse control is not added');
             }
         }
@@ -21,10 +21,10 @@ export class EventEmitterDelegate {
         this._emitter.on(eventName,callBack);
         return callBack;
     }
-    off(eventName:string,callBack:Function){
+    off(eventName:string,callBack:Function):void{
         if (this._emitter!==undefined)this._emitter.off(eventName,callBack);
     }
-    trigger(eventName:string,data?:any){
+    trigger(eventName:string,data?:any):void{
         if (this._emitter!==undefined) this._emitter.trigger(eventName,data);
     }
 

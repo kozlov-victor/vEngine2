@@ -5,15 +5,15 @@ export abstract class Resource { // todo gameObject and spriteSheets are resourc
 
     private _resourceLink:ResourceLink;
 
-    setResourceLink(link:ResourceLink){
+    setResourceLink(link:ResourceLink):void{
         this._resourceLink = link;
     }
 
-    getResourceLink(){
+    getResourceLink():ResourceLink{
         return this._resourceLink;
     }
 
-    protected setClonedProperties(cloned:Resource) {
+    protected setClonedProperties(cloned:Resource):void {
         cloned.setResourceLink(this.getResourceLink());
     }
 

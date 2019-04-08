@@ -17,7 +17,7 @@ export class Button extends Container {
         this._textField = new TextField(game);
     }
 
-    revalidate(){
+    revalidate():void{
          if (DEBUG && !this._font)
              throw new DebugError(`font is not set`);
         if (this.children.indexOf(this._textField)===-1)
@@ -26,7 +26,7 @@ export class Button extends Container {
         this.onGeometryChanged();
     }
 
-    onGeometryChanged(){
+    onGeometryChanged():void{
         this._textField.onGeometryChanged();
         this.calcDrawableRect(this._textField.size.width,this._textField.size.height);
         if (this.background) {
@@ -38,24 +38,24 @@ export class Button extends Container {
     }
 
 
-    setText(text:string){
+    setText(text:string):void{
         this._textField.setText(text);
         this._dirty = true;
     }
 
-    setFont(f:Font){
+    setFont(f:Font):void{
         f.revalidate();
         this._font = f;
         this._textField.setFont(f);
     }
 
-    getText(){
+    getText():string{
         return this._textField.getText();
     }
 
-    update(){
-        super.update();
-    }
+    // update():void{
+    //     super.update();
+    // }
 
     draw():boolean{
         if (this.background) this.background.draw();

@@ -3,6 +3,7 @@ import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/renderer/color";
 import {ParticleSystem} from "@engine/model/impl/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 
 export class MainScene extends Scene {
@@ -25,6 +26,8 @@ export class MainScene extends Scene {
         ps.particleLiveTime = {from:1000,to:3000};
         ps.particleAngle = {from:0,to:Math.PI/4};
         ps.pos.setXY(50,50);
+        ps.size.setWH(50,50);
+        ps.addBehaviour(new DraggableBehaviour(this.game));
         this.ps = ps;
         this.appendChild(ps);
     }

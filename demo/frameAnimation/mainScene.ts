@@ -40,6 +40,7 @@ export class MainScene extends Scene {
            if (playing) (this.obj.sprite as SpriteSheet).playFrameAnimation('animation');
            else (this.obj.sprite as SpriteSheet).stopFrameAnimation();
         });
+        //this.obj.sprite.size.width = 100;
 
         (window as any).obj = this.obj;
 

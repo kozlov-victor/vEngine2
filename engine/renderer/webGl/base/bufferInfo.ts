@@ -76,7 +76,7 @@ export class BufferInfo {
         }
     }
 
-    bind(program:ShaderProgram){
+    bind(program:ShaderProgram):void{
         program.bind();
         if (this.posIndexBuffer) this.posIndexBuffer.bind();
         if (this.posVertexBuffer) this.posVertexBuffer.bind(program);
@@ -84,21 +84,21 @@ export class BufferInfo {
         if (this.normalBuffer) this.normalBuffer.bind(program);
     }
 
-    unbind(){
+    unbind():void{
         if (this.posIndexBuffer) this.posIndexBuffer.unbind();
         if (this.posVertexBuffer) this.posVertexBuffer.unbind();
         if (this.texVertexBuffer) this.texVertexBuffer.unbind();
         if (this.normalBuffer) this.normalBuffer.unbind();
     }
 
-    destroy(){
+    destroy():void{
         if (this.posVertexBuffer) this.posVertexBuffer.destroy();
         if (this.posIndexBuffer) this.posIndexBuffer.destroy();
         if (this.texVertexBuffer) this.texVertexBuffer.destroy();
         if (this.normalBuffer) this.normalBuffer.destroy();
     }
 
-    private _getNumOfElementsToDraw(drawMethod:number){
+    private _getNumOfElementsToDraw(drawMethod:number):number {
         switch (drawMethod) {
             case this.gl.LINE_STRIP:
             case this.gl.TRIANGLE_FAN:
@@ -108,7 +108,7 @@ export class BufferInfo {
         }
     }
 
-    draw(){
+    draw():void {
         if (this.posIndexBuffer!==null){
             this.gl.drawElements(
                 this.drawMethod,

@@ -1,19 +1,21 @@
-export const isObjectMatch =(obj:any,query:{[key:string]:any}):boolean=>{
-    if (!(obj && query)) return false;
-    let match:boolean = true;
-    let keys:string[] = Object.keys(query);
-    if (!keys.length) return false;
-    keys.some((key:string)=>{
-        if (obj[key]!=query[key]) {
-            match = false;
-            return true;
-        }
-    });
-    return match;
-};
+import {Int} from "@engine/declarations";
 
-export interface IKeyVal {
-    [key:string]:any
+// export const isObjectMatch =(obj:any, query:{[key:string]:any}):boolean=>{
+//     if (!(obj && query)) return false;
+//     let match:boolean = true;
+//     const keys:string[] = Object.keys(query);
+//     if (!keys.length) return false;
+//     keys.some((key:string)=>{
+//         if (obj[key]!=query[key]) {
+//             match = false;
+//             return true;
+//         }
+//     });
+//     return match;
+// };
+
+export interface IKeyVal<T> {
+    [key:string]:T
 }
 
 export const isObject = (obj:any):boolean=>{
@@ -25,13 +27,13 @@ export const isArray = (a:any):a is any[]=> {
 };
 
 let isEqualArray = (a:any[],b:any[]):boolean=>{
-    for (let i=0,max=a.length;i<max;i++) {
+    for (let i:number=0,max=a.length;i<max;i++) {
         if (a[i]!==b[i]) return false;
     }
     return true;
 };
 
-let isEqualObject = (a:any,b:any):boolean=>{
+const isEqualObject = (a:any,b:any):boolean=>{
     throw 'not implemented';
 };
 

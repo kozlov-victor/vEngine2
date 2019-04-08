@@ -28,7 +28,7 @@ export class BlackWhiteFilter extends AbstractFilter{
         this.setMixFactor(0.8);
     }
 
-    setMixFactor(n:number) {
+    setMixFactor(n:number):void {
         this.setUniform(this.u_mixFactor,n);
     }
 

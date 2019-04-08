@@ -15,6 +15,12 @@ export class Point2d extends ObservableEntity implements Cloneable<Point2d>{
         return Point2d.pool.getFreeObject();
     }
 
+    constructor(x:number = 0,y:number = 0,onChangedFn?:()=>void){
+        super();
+        this._x = x;
+        this._y = y;
+        if (onChangedFn) this.addListener(onChangedFn);
+    }
 
     get x(): number {
         return this._x;
@@ -30,13 +36,6 @@ export class Point2d extends ObservableEntity implements Cloneable<Point2d>{
 
     set y(value: number) {
         this.setY(value)
-    }
-
-    constructor(x:number = 0,y:number = 0,onChangedFn?:()=>void){
-        super();
-        this._x = x;
-        this._y = y;
-        if (onChangedFn) this.addListener(onChangedFn);
     }
 
     setXY(x:number,y:number = x):Point2d{
@@ -110,23 +109,20 @@ export class Point2d extends ObservableEntity implements Cloneable<Point2d>{
         return this;
     }
 
-    equal(val:number) {
-        return this._x===val && this._y===val;
-    }
-
-    equalXY(x:number,y:number) {
+    equal(x:number,y:number = x):boolean {
         return this._x===x && this._y===y;
     }
 
-    equalPoint(point:Point2d) {
-        return this._x===point._x && this._y===point._y;
+
+    equalPoint(point:Point2d):boolean {
+        return this.equal(point.x,point.y);
     }
 
     clone():Point2d {
         return new Point2d(this._x,this._y);
     }
 
-    fromJSON(json:{x:number,y:number}){
+    fromJSON(json:{x:number,y:number}):void{
         this.setXY(json.x,json.y);
     }
 

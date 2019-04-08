@@ -6,7 +6,7 @@ import {AmbientLight} from "../../light/ambientLight";
 import {Color} from "../../renderer/color";
 import {CAMERA_MATRIX_MODE} from "../../renderer/camera";
 import {ResourceLoader} from "../../resources/resourceLoader";
-import {Eventemittable, Revalidatable, Tweenable} from "../../declarations";
+import {Eventemittable, Int, Revalidatable, Tweenable} from "../../declarations";
 import {RenderableModel} from "@engine/model/renderableModel";
 import {TweenMovie} from "@engine/misc/tweenMovie";
 import {removeFromArray} from "@engine/misc/object";
@@ -16,6 +16,7 @@ import {Timer} from "@engine/misc/timer";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
+import {GameObject} from "@engine/model/impl/gameObject";
 
 
 export class Scene implements Revalidatable, Tweenable, Eventemittable {
@@ -43,7 +44,7 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
         this.resourceLoader = new ResourceLoader(game);
     }
 
-    revalidate(){
+    revalidate():void {
         if (this.width == 0) this.width = this.game.width;
         if (this.height == 0) this.height = this.game.height;
     }
@@ -57,59 +58,59 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
         return this._uiLayer;
     }
 
-    getAllGameObjects(){
-        let res = []; // todo optimize
-        const ONE = 1;
-        for (let i=0;i<this._layers.length;i++) {
-            let layer = this._layers[this._layers.length - ONE - i];
-            for (let j = 0; j < layer.children.length; j++) {
-                let go = layer.children[layer.children.length - ONE - j];
+    getAllGameObjects():RenderableModel[] {
+        const res:RenderableModel[] = []; // todo optimize
+        const ONE:number = 1;
+        for (let i:number=0;i<this._layers.length;i++) {
+            const layer:Layer = this._layers[this._layers.length - ONE - i];
+            for (let j:number = 0; j < layer.children.length; j++) {
+                const go:RenderableModel = layer.children[layer.children.length - ONE - j];
                 res.push(go);
             }
         }
         return res;
     }
 
-    getDefaultLayer(){
+    getDefaultLayer():Layer{
         return this._layers[0];
     }
 
-    addLayer(layer:Layer){
+    addLayer(layer:Layer):void {
         this._layers.push(layer);
     }
 
-    removeLayer(layer:Layer){
+    removeLayer(layer:Layer):void {
         removeFromArray(this._layers,it=>it===layer);
     }
 
-    appendChild(go:RenderableModel){
+    appendChild(go:RenderableModel):void {
         go.revalidate();
         this.getDefaultLayer().appendChild(go);
     }
 
-    prependChild(go:RenderableModel){
+    prependChild(go:RenderableModel):void {
         this.getDefaultLayer().prependChild(go);
     }
 
 
-    onPreloading(){}
+    onPreloading():void {}
 
-    onProgress(val:number){}
+    onProgress(val:number):void {}
 
-    onReady(){}
+    onReady():void {}
 
-    beforeUpdate(){}
+    beforeUpdate():void {}
 
-    onUpdate(){}
+    onUpdate():void {}
 
-    beforeRender(){}
+    beforeRender():void {}
 
-    onRender(){}
+    onRender():void {}
 
-    onDestroy(){}
+    onDestroy():void {}
 
 
-    private updateMainFrame(){
+    private updateMainFrame():void {
         this.beforeUpdate();
 
         this._tweenDelegate.update();
@@ -125,7 +126,7 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
     }
 
 
-    update(){
+    update():void {
         if (!this.resourceLoader.isCompleted()) {
             if (this.preloadingGameObject!==undefined) {
                 this.preloadingGameObject.update();
@@ -136,9 +137,9 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
 
     }
 
-    private renderMainFrame(){
+    private renderMainFrame():void {
         let renderer = this.game.getRenderer();
-        this.game.camera.update(this.game.getTime(),this.game.getDeltaTime());
+        this.game.camera.update();
 
         let layers = this._layers;
         for (let l of layers) {
@@ -170,12 +171,12 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
         }
     }
 
-    private renderPreloadingFrame(){
+    private renderPreloadingFrame():void {
         this.game.getRenderer().resetTransform();
         this.preloadingGameObject.render();
     }
 
-    render(){
+    render():void {
 
         this.beforeRender();
 
@@ -203,7 +204,7 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
     addTween(t: Tween): void {
         this._tweenDelegate.addTween(t);
     }
-    addTweenMovie(tm: TweenMovie) {
+    addTweenMovie(tm: TweenMovie):void {
         this._tweenDelegate.addTweenMovie(tm);
     }
     tween(desc: TweenDescription): Tween {
@@ -231,7 +232,7 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
     }
 
 
-    destroy(){
+    destroy():void {
         this.onDestroy();
     }
 }

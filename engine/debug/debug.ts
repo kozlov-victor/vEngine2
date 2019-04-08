@@ -2,8 +2,8 @@ import {httpClient} from "@engine/debug/httpClient";
 import {IKeyVal} from "@engine/misc/object";
 import {Game} from "@engine/game";
 
-let devConsole:HTMLElement = document.createElement('div');
-let css:IKeyVal = {
+const devConsole:HTMLElement = document.createElement('div');
+const css:IKeyVal<string|number> = {
     position: 'absolute',
     right: 0,
     top: 0,
@@ -12,9 +12,9 @@ let css:IKeyVal = {
     'min-height': '20px',
     opacity: 0.5
 };
-Object.keys(css).forEach(key=>devConsole.style.setProperty(key,css[key]));
+Object.keys(css).forEach((key:string)=>devConsole.style.setProperty(key,''+css[key]));
 
-let label:HTMLElement = document.createElement('span');
+const label:HTMLElement = document.createElement('span');
 label.style.color = 'white';
 devConsole.appendChild(label);
 
@@ -56,18 +56,20 @@ const prepareMessage = function(e:any,lineNum:number){
 };
 
 
-window.addEventListener('error',function(e:any){
+window.addEventListener('error',(e:any)=>{
+    const game:Game = (window as any).game as Game;
+    if (game) game.destroy();
     let lineNum:number = e.lineno;
     let colNum:number = e.colno;
     let filename:string = e.filename;
 
-    let runtimeInfo = '';
+    let runtimeInfo:string = '';
     if (e.error && e.error.name && e.error.name==='DebugError') {
         runtimeInfo = prepareMessage(e,lineNum);
     }
 
     try {
-        let tmpl = `
+        let tmpl:string = `
 
   <div class="errorBlock"> 
         <style>

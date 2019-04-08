@@ -130,7 +130,7 @@ export class MainScene extends Scene {
         const tm:TweenMovie = new TweenMovie(this.game);
         tm.tween(0,{
             target:{val:0},
-            progress:(obj)=>{
+            progress:(obj:{val:number})=>{
                 sb.setSize(obj.val);
                 pf.setPixelSize(obj.val+0.1);
             },
@@ -140,7 +140,7 @@ export class MainScene extends Scene {
         });
         tm.tween(2000,{
             target:{val:5},
-            progress:(obj)=>{
+            progress:(obj:{val:number})=>{
                 sb.setSize(obj.val);
                 pf.setPixelSize(obj.val+0.1);
             },

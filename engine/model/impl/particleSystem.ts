@@ -4,7 +4,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/model/renderableModel";
 import {noop} from "@engine/misc/object";
 
-let r = (obj:ParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
+const r = (obj:ParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
 
 interface ParticlePropertyDesc {
     from:number,
@@ -38,12 +38,12 @@ export class ParticleSystem extends RenderableModel {
         super(game);
     }
 
-    revalidate(){
+    revalidate():void {
         if (DEBUG && !this._prototypes.length) throw new DebugError(`particle system error: add at least one object to emit`);
         if (this.particleAngle.to<this.particleAngle.from) this.particleAngle.to += 2*Math.PI;
     }
 
-    addParticle(r:RenderableCloneable){
+    addParticle(r:RenderableCloneable):void {
         if (DEBUG && !r.clone) {
             console.error(r);
             throw new DebugError(`can not add particle: model does not implemet cloneable interface`);
@@ -51,7 +51,7 @@ export class ParticleSystem extends RenderableModel {
         this._prototypes.push(r);
     }
 
-    emit(){
+    emit():void {
 
         if (DEBUG && !this.getLayer()) {
             console.error(this);
@@ -75,7 +75,7 @@ export class ParticleSystem extends RenderableModel {
         }
     }
 
-    update(){
+    update():void {
         super.update();
         const time:number = this.game.getTime();
         this._particles.forEach((holder:ParticleHolder)=>{
@@ -87,11 +87,11 @@ export class ParticleSystem extends RenderableModel {
         });
     }
 
-    onUpdateParticle(onUpdateParticle:(r:RenderableModel)=>void){
+    onUpdateParticle(onUpdateParticle:(r:RenderableModel)=>void):void {
         this._onUpdateParticle = onUpdateParticle;
     }
 
-    onEmitParticle(onEmitParticle:(r:RenderableModel)=>void){
+    onEmitParticle(onEmitParticle:(r:RenderableModel)=>void):void {
         this._onEmitParticle = onEmitParticle;
     }
 

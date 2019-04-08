@@ -12,7 +12,7 @@ export class Border extends Rectangle implements Cloneable<Border>{
         this.fillColor = Color.NONE;
     }
 
-    protected setClonedProperties(cloned:Border){
+    protected setClonedProperties(cloned:Border):void{
         cloned.fillColor = this.fillColor.clone();
         super.setClonedProperties(cloned);
     }

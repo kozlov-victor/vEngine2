@@ -1,7 +1,7 @@
 import {AbstractPrimitive, IPrimitive} from "./abstractPrimitive";
 
 
-const prepareBuffers = (radius:number,bands:number)=>{
+const prepareBuffers = (radius:number,bands:number):IPrimitive=>{
     const latitudeBands:number = bands;
     const longitudeBands:number = bands;
 

@@ -19,13 +19,13 @@ export class TweenableDelegate {
         this._tweens.push(t);
     }
 
-    addTweenMovie(tm:TweenMovie){
+    addTweenMovie(tm:TweenMovie):void {
         if (!this._tweenMovies) this._tweenMovies = [];
         this._tweenMovies.push(tm);
     }
 
 
-    update(){
+    update():void {
         if (this._tweens) this._tweens.forEach((t:Tween, index:number)=>{
             t.update();
             if (t.isCompleted()) this._tweens.splice(index,1);

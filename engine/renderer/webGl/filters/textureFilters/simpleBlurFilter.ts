@@ -52,22 +52,22 @@ export class SimpleBlurFilter extends AbstractFilter {
     }
 
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
+    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
         this.setUniform(this.rt_w,textureInfos[0].texture.size.width);
         this.setUniform(this.rt_h,textureInfos[0].texture.size.height);
         super.doFilter(textureInfos,destFrameBuffer);
     }
 
-    setSize(n:number){
+    setSize(n:number):void{
         this.setWidth(n);
         this.setHeight(n);
     }
 
-    setWidth(n:number){
+    setWidth(n:number):void{
         this.setUniform(this.u_direction_x,n);
     }
 
-    setHeight(n:number){
+    setHeight(n:number):void{
         this.setUniform(this.u_direction_y,n);
     }
 

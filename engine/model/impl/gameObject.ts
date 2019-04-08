@@ -16,7 +16,7 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         super(game);
     }
 
-    revalidate(){
+    revalidate():void {
         super.revalidate();
         this.sprite.revalidate();
         this.size.width = this.sprite.size.width;
@@ -28,7 +28,7 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         //}
     }
 
-    protected setClonedProperties(cloned:GameObject) {
+    protected setClonedProperties(cloned:GameObject):void {
 
         if (DEBUG && !('clone' in this.sprite)) {
             console.error(this.sprite);
@@ -50,7 +50,7 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         return cloned;
     }
 
-    update() {
+    update():void {
         super.update();
         this.sprite.update();
     }
@@ -60,7 +60,7 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
         return true;
     }
 
-    kill(){
+    kill():void {
         super.kill();
     }
 }

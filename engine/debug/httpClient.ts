@@ -2,7 +2,7 @@ import {IKeyVal, noop} from "@engine/misc/object";
 import Timer = NodeJS.Timer;
 
 
-let objectToQuery = (o:IKeyVal)=> {
+let objectToQuery = (o:IKeyVal<any>)=> {
     if (!o) return '';
     if (o instanceof FormData) return o;
     let paramsArr:any[] = [];
@@ -26,7 +26,7 @@ interface IRequestData {
 }
 
 let request = (data:IRequestData)=> {
-    let abortTmr;
+    let abortTmr:number;
     let resolved = false;
     data.method = data.method || 'get';
     if (data.data && data.method==='get') data.url+='?'+objectToQuery(data.data);
@@ -80,7 +80,7 @@ let request = (data:IRequestData)=> {
 
 export namespace httpClient {
 
-    export const get = (url:string,data:IKeyVal,success?:Function,error?:Function)=>{
+    export const get = (url:string,data:IKeyVal<any>,success?:Function,error?:Function)=>{
         return request({
             method:'get',
             url,
@@ -90,7 +90,7 @@ export namespace httpClient {
         });
     };
 
-    export const  post = (url:string,data:IKeyVal,success?:Function,error?:Function)=>{
+    export const  post = (url:string,data:IKeyVal<any>,success?:Function,error?:Function)=>{
         return request({
             method:'post',
             url,
@@ -101,7 +101,7 @@ export namespace httpClient {
         });
     };
 
-    export const  postMultiPart = (url:string,file:File,data:IKeyVal,success?:Function,error?:Function)=>{
+    export const  postMultiPart = (url:string,file:File,data:IKeyVal<any>,success?:Function,error?:Function)=>{
         let formData = new FormData();
         Object.keys(data).forEach(function(key){
             formData.append(key,data[key]);

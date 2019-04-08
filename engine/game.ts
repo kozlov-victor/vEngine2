@@ -37,16 +37,16 @@ export class Game {
     lightArray:LightArray;
     collider:ColliderEngine;
     camera:Camera;
-    scaleStrategy:number = SCALE_STRATEGY.FIT;
+    scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
-    private static UPDATE_TIME_RATE = 20;
+    private static UPDATE_TIME_RATE:number = 20;
     private static instance:Game;
 
     constructor(){
+        Game.instance = this;
         this.collider = new ColliderEngine(this);
         this.camera = new Camera(this);
         this.lightArray = new LightArray(this);
-        Game.instance = this;
         if (DEBUG) (window as any)['game'] = this;
     }
 
@@ -54,7 +54,7 @@ export class Game {
         return Game.instance;
     }
 
-    addControl(C:Clazz<IControl>){
+    addControl(C:Clazz<IControl>):void{
         const instance:IControl = new C(this);
         if (DEBUG) {
             for (let c of this._controls) {
@@ -68,7 +68,7 @@ export class Game {
     }
 
 
-    setAudioPLayer(p:Clazz<IAudioPlayer>){
+    setAudioPLayer(p:Clazz<IAudioPlayer>):void{
         this.audioPlayer = new p(this);
     }
 
@@ -86,9 +86,7 @@ export class Game {
 
     getControl<T>(T:Clazz<IControl>):T {
         for (let c of this._controls) {
-            if (c instanceof T) {
-                if (this.isOfType(c,T)) return <T>(c as any);
-            }
+            if (this.isOfType(c,T)) return <T>(c as any);
         }
         if (DEBUG) throw new DebugError('no such control');
     }
@@ -110,15 +108,15 @@ export class Game {
         return this._deltaTime;
     }
 
-    log(args:any){
+    log(args:any):void{
         if (DEBUG) this._renderer.log(args);
     }
 
-    clearLog(){
+    clearLog():void{
         if (DEBUG) this._renderer.clearLog();
     }
 
-    setRenderer(Renderer:Clazz<AbstractRenderer>){
+    setRenderer(Renderer:Clazz<AbstractRenderer>):void{
         this._renderer = new Renderer(this);
     }
 
@@ -127,12 +125,13 @@ export class Game {
     }
 
     private _cnt=0;
-    debug2(...val:any[]){
+    debug2(...val:any[]):void{
         this._cnt++;
-        if (this._cnt>10) throw new DebugError('too many logs');
+        console.log(val);
+        if (this._cnt>0xff) throw new DebugError('too many logs');
     }
 
-    runScene(scene:Scene){
+    runScene(scene:Scene):void{
         this._currentScene = scene;
         this.revalidate();
         scene.onPreloading();
@@ -152,7 +151,7 @@ export class Game {
         return this._currentScene;
     }
 
-    update(){
+    update():void{
         if (this._destroyed) return;
         this._lastTime = this._currTime;
         this._currTime = Date.now();
@@ -188,7 +187,7 @@ export class Game {
         requestAnimationFrame(this.update.bind(this));
     }
 
-    destroy(){
+    destroy():void{
         this._destroyed = true;
         for (let c of this._controls) {
             c.destroy();
@@ -197,7 +196,7 @@ export class Game {
         this._renderer.destroy();
     }
 
-    revalidate() {
+    revalidate():void {
         if (DEBUG && !this._renderer) throw new DebugError(`game renderer is not set`);
         this.camera.revalidate();
     }

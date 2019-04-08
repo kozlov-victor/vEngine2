@@ -12,7 +12,7 @@ export class Polygon {
 
     constructor(private game:Game){}
 
-    setVertices(vertices:float[]){
+    setVertices(vertices:float[]):void {
         this.vertices = vertices;
     }
 

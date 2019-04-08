@@ -15,7 +15,7 @@ export class GameObject3d extends GameObject {
         return !(this.angle===0 && this.angleY===0 && this.scale.equal(1));
     }
 
-    protected doAdditionalTransform(){
+    protected doAdditionalTransform():void {
         this.game.getRenderer().rotateY(this.angleY);
     }
 

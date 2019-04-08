@@ -1,12 +1,11 @@
 import {Scene} from "@engine/model/impl/scene";
 import {Image} from "@engine/model/impl/ui/drawable/image";
+import {ResourceLink} from "@engine/resources/resourceLink";
 
 
 export class MainScene extends Scene {
 
     private bg:Image;
-    private imgResourceLink;
-
 
 
     onPreloading() {

@@ -28,11 +28,11 @@ export  class AudioPlayer implements IAudioPlayer {
         this.audioNodeSet = new AudioNodeSet(game,this.audioContext,AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
     }
 
-    loadSound(url:string, link:ResourceLink, onLoad:()=>void) {
+    loadSound(url:string, link:ResourceLink, onLoad:()=>void):void {
         this.audioContext.load(url,link,onLoad);
     }
 
-    play(sound:Sound){
+    play(sound:Sound):void {
 
         if (DEBUG) sound.revalidate();
 
@@ -44,31 +44,31 @@ export  class AudioPlayer implements IAudioPlayer {
         node.play(sound.getResourceLink(),sound.loop);
     }
 
-    stop(sound:Sound){
+    stop(sound:Sound):void {
         let node:AudioNode = this.audioNodeSet.getNodeBySound(sound);
         if (!node) return;
         node.stop();
     }
 
-    stopAll(){
+    stopAll():void {
         this.audioNodeSet.stopAll();
     }
 
-    pauseAll(){
+    pauseAll():void {
         this.audioNodeSet.pauseAll();
     }
 
-    resumeAll(){
+    resumeAll():void {
         this.audioNodeSet.resumeAll();
     }
 
-    setGain(sound:Sound){
+    setGain(sound:Sound):void {
         let node:AudioNode = this.audioNodeSet.getNodeBySound(sound);
         if (!node) return;
         node.setGain(sound.getGain());
     }
 
-    update(time:number,delta:number){
+    update(time:number,delta:number):void {
 
     }
 

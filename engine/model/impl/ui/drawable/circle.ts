@@ -11,7 +11,7 @@ export class Circle extends Ellipse implements Cloneable<Circle>{
         super(game);
     }
 
-    set radius(val:number){
+    set radius(val:number) {
         this._radius = val;
         this.setWH(val*2);
         this.radiusX = this.radiusY = val;
@@ -26,7 +26,7 @@ export class Circle extends Ellipse implements Cloneable<Circle>{
         return true;
     }
 
-    protected setClonedProperties(cloned:Circle) {
+    protected setClonedProperties(cloned:Circle):void {
         cloned.radius = this.radius;
         super.setClonedProperties(cloned);
     }

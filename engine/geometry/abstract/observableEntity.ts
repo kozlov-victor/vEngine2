@@ -6,34 +6,33 @@ export abstract class ObservableEntity implements Releasealable{
 
     private _onChanged:Array<()=>void> = [];
 
-    private _captured:boolean = false;
     private _silent:boolean = false;
-
-    capture(): void {
-        this._captured = true;
-    }
-
     silent<T>(val:boolean):T{
         this._silent = val;
         return this as any;
     }
 
+    private _captured:boolean = false;
     isCaptured(): boolean {
         return this._captured;
+    }
+
+    capture(): void {
+        this._captured = true;
     }
 
     release(): void {
         this._captured = false;
     }
 
-    protected triggerObservable(){
+    protected triggerObservable():void {
         if (this._silent) return;
         for (let fn of this._onChanged) {
             fn();
         }
     }
 
-    forceTriggerChange(){
+    forceTriggerChange():void {
         for (let fn of this._onChanged) {
             fn();
         }

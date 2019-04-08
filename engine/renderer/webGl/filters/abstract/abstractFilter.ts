@@ -7,15 +7,17 @@ import {Game} from "@engine/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import MAT16 = mat4.MAT16;
+import Mat16Holder = mat4.Mat16Holder;
+import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 
 
-const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):number[] =>{
-    let projectionMatrix:MAT16 = mat4.ortho(0,dstWidth,0,dstHeight,-1,1);
-    let scaleMatrix:MAT16 = mat4.makeScale(dstWidth, dstHeight, 1);
+const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):Mat16Holder =>{
+    const projectionMatrix:Mat16Holder = mat4.ortho(0,dstWidth,0,dstHeight,-1,1);
+    const scaleMatrix:Mat16Holder = mat4.makeScale(dstWidth, dstHeight, 1);
     return mat4.matrixMultiply(scaleMatrix, projectionMatrix);
 };
 
-const identity:number[] = mat4.makeIdentity();
+const identity:Mat16Holder = mat4.makeIdentity();
 
 export abstract class AbstractFilter {
 
@@ -34,7 +36,7 @@ export abstract class AbstractFilter {
         this.simpleRectDrawer = new SimpleRectDrawer(this.gl);
     }
 
-    setUniform(name:string,value:any){
+    setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
         this.simpleRectDrawer.setUniform(name,value);
     }
 
@@ -42,8 +44,8 @@ export abstract class AbstractFilter {
         destFrameBuffer.bind();
         let w:number = textureInfos[0].texture.size.width;
         let h:number = textureInfos[0].texture.size.height;
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,identity);
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,w,h));
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,identity.mat16);
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,w,h).mat16);
         this.gl.clearColor(1,1,1,0);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         this.simpleRectDrawer.draw(textureInfos);

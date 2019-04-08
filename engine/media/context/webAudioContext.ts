@@ -17,7 +17,7 @@ class CtxHolder {
         (window as any).webkitAudioContext;
     private static res:AudioContext = null;
 
-    private static fixAutoPlayPolicy(){ // chrome allow playing only with user gesture
+    private static fixAutoPlayPolicy():void { // chrome allow playing only with user gesture
         const click =()=>{
             CtxHolder.res.resume();
             document.removeEventListener('click',click);
@@ -51,11 +51,11 @@ const decode =(buffer:ArrayBuffer,callback:Function)=>{
 
 export class WebAudioContext extends BasicAudioContext implements Cloneable<WebAudioContext>{
 
-    static isAcceptable() {
+    static isAcceptable():boolean {
         return !!(window && CtxHolder.getCtx());
     }
 
-    load(url:string, link:ResourceLink, onLoad:()=>void) {
+    load(url:string, link:ResourceLink, onLoad:()=>void):void {
         if (AudioPlayer.cache[url]) {
             onLoad();
             return;
@@ -86,7 +86,7 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
         return this._free;
     }
 
-    play(link:ResourceLink, loop:boolean) {
+    play(link:ResourceLink, loop:boolean):void {
         this.setLastTimeId();
         this._free = false;
         let currSource:AudioBufferSourceNode = this._ctx.createBufferSource();
@@ -100,8 +100,8 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
         this._currSource = currSource;
     }
 
-    stop() {
-        let currSource = this._currSource;
+    stop():void {
+        const currSource:AudioBufferSourceNode = this._currSource;
         if (currSource) {
             currSource.stop();
             currSource.disconnect(this._gainNode);
@@ -110,16 +110,16 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
         this._free = true;
     }
 
-    setGain(val:number) {
+    setGain(val:number):void {
         this._gainNode.gain.value = val;
 
     }
 
-    pause() {
+    pause():void {
         this._ctx.suspend();
     }
 
-    resume() {
+    resume():void {
         this._ctx.resume();
     }
 

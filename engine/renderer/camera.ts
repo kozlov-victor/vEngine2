@@ -8,6 +8,7 @@ import {Scene} from "../model/impl/scene";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {RenderableModel} from "@engine/model/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
+import Mat16Holder = mat4.Mat16Holder;
 
 
 interface CameraTweenTarget {
@@ -55,7 +56,7 @@ export class Camera {
     }
 
 
-    revalidate(){
+    revalidate():void{
         this.scene = this.game.getCurrScene();
         if (this.scene.tileMap) this.scene.tileMap.revalidate();
         this._rectIdentity.setXYWH(0,0,this.game.width,this.game.height);
@@ -69,41 +70,41 @@ export class Camera {
     }
 
 
-    followTo(gameObject:RenderableModel) {
+    followTo(gameObject:RenderableModel):void {
         if (gameObject===null) return;
         if (DEBUG && gameObject===undefined) throw new DebugError(`Camera:followTo(gameObject) - gameObject not provided`);
         this.objFollowTo = gameObject;
         this.revalidate();
     }
 
-    update(currTime:number,delta:number) {
+    update() {
         this.scene = this.game.getCurrScene();
 
-        let tileWidth = this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getFrameWidth():0; // todo ?
-        let tileHeight = this.scene.tileMap.spriteSheet? this.scene.tileMap.spriteSheet.getFrameHeight():0;
-        let w = this.game.width;
-        let h = this.game.height;
-        let wDiv2 = w/2;
-        let hDiv2 = h/2;
+        const tileWidth:number = this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getFrameWidth():0; // todo ?
+        let tileHeight:number = this.scene.tileMap.spriteSheet? this.scene.tileMap.spriteSheet.getFrameHeight():0;
+        const w:number = this.game.width;
+        const h:number = this.game.height;
+        const wDiv2:number = w/2;
+        const hDiv2:number = h/2;
 
-        let wScaled = this.getRectScaled().size.width;
 
         let gameObject:RenderableModel = this.objFollowTo;
         if (gameObject) {
-            if (gameObject['_lastDirection'] === 'Right')
-                this.cameraPosCorrection.max.x=wScaled/3; // todo _lastDirection
-            if (gameObject['_lastDirection'] === 'Left')
-                this.cameraPosCorrection.max.x=-wScaled/3;
+            //let wScaled = this.getRectScaled().size.width;
+            // if (gameObject['_lastDirection'] === 'Right') // todo _lastDirection
+            //     this.cameraPosCorrection.max.x=wScaled/3;
+            // if (gameObject['_lastDirection'] === 'Left')
+            //     this.cameraPosCorrection.max.x=-wScaled/3;
 
-            let currCorrection:Point2d =
+            const currCorrection:Point2d =
                 this.cameraPosCorrection.max.
                 substract(this.cameraPosCorrection.current).
                 multiply(0.05);
 
             this.cameraPosCorrection.current.add(currCorrection);
 
-            let newPos:Point2d = Point2d.fromPool();
-            let pointToFollow:Point2d = Point2d.fromPool();
+            const newPos:Point2d = Point2d.fromPool();
+            const pointToFollow:Point2d = Point2d.fromPool();
             pointToFollow.set(this.objFollowTo.pos);
             pointToFollow.addXY(-wDiv2,-hDiv2);
             newPos.x = this.pos.x+(pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x)*0.1;
@@ -119,7 +120,6 @@ export class Camera {
 
             this.pos.setXY(newPos.x,newPos.y);
 
-
             if (this.cameraShakeTween) this.cameraShakeTween.update();
         }
 
@@ -127,7 +127,7 @@ export class Camera {
         this.render();
     }
 
-    shake(amplitude:number,time:number) {
+    shake(amplitude:number,time:number):void {
         let tweenTarget:CameraTweenTarget = {time:0,point:new Point2d(0,0)};
         this.cameraShakeTween = new Tween({
             target:tweenTarget,
@@ -142,7 +142,7 @@ export class Camera {
         });
     }
 
-    _updateRect(){
+    _updateRect():void{
         const p:Point2d = Point2d.fromPool();
         let point00 = this.screenToWorld(p.setXY(0,0));
         let pointWH = this.screenToWorld(p.setXY(this.game.width,this.game.height));
@@ -153,7 +153,7 @@ export class Camera {
         p.release();
     }
 
-    render(){ //TRS - (transform rotate scale) reverted
+    render():void{ //TRS - (transform rotate scale) reverted
         let renderer:AbstractRenderer = this.game.getRenderer();
         renderer.translate(this.game.width/2,this.game.height/2);
         renderer.scale(this.scale.x,this.scale.y);
@@ -167,15 +167,15 @@ export class Camera {
         );
     }
 
-    screenToWorld(p:Point2d){
-        let mScale = mat4.makeScale(this.scale.x,this.scale.y,1);
-        let point2d = MathEx.unProject(
+    screenToWorld(p:Point2d):Point2d{
+        const mScale:Mat16Holder = mat4.makeScale(this.scale.x,this.scale.y,1);
+        const point2d:Point2d = MathEx.unProject(
             p, this.game.width,this.game.height,mScale);
         point2d.add(this.pos);
         return point2d;
     }
 
-    getRect(){
+    getRect():Rect{
         if (this.matrixMode===CAMERA_MATRIX_MODE.MODE_IDENTITY)
             return this._rectIdentity;
         else {
@@ -184,7 +184,7 @@ export class Camera {
         }
     }
 
-    getRectScaled(){
+    getRectScaled():Rect{
         if (this.matrixMode===CAMERA_MATRIX_MODE.MODE_IDENTITY)
             return this._rectIdentity;
         else

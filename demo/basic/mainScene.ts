@@ -5,9 +5,8 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/renderer/color";
 import {KEYBOARD_EVENT} from "@engine/control/abstract/abstractKeypad";
-import {Keyboard, KEYBOARD_KEY} from "@engine/control/keyboard";
-import {GamePad} from "@engine/control/gamePad";
-
+import {KeyboardControl, KEYBOARD_KEY} from "@engine/control/keyboardControl";
+import {GAME_PAD_KEY, GamePadControl} from "@engine/control/gamePadControl";
 
 export class MainScene extends Scene {
 
@@ -34,7 +33,7 @@ export class MainScene extends Scene {
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
 
-        this.game.getControl<Keyboard>(Keyboard).on(KEYBOARD_EVENT.KEY_HOLD, (e:KEYBOARD_KEY)=>{
+        this.game.getControl<KeyboardControl>(KeyboardControl).on(KEYBOARD_EVENT.KEY_HOLD, (e:KEYBOARD_KEY)=>{
             switch (e) {
                 case KEYBOARD_KEY.LEFT:
                     this.logoObj.pos.addX(-1);
@@ -53,8 +52,27 @@ export class MainScene extends Scene {
             }
         });
 
-        this.game.getControl<GamePad>(GamePad).on(KEYBOARD_EVENT.KEY_HOLD, (e)=>{
-            console.log(e);
+        this.game.getControl<GamePadControl>(GamePadControl).on(KEYBOARD_EVENT.KEY_HOLD, (e)=>{
+            switch (e) {
+                case GAME_PAD_KEY.GAME_PAD_AXIS_LEFT:
+                    this.logoObj.pos.addX(-1);
+                    break;
+                case GAME_PAD_KEY.GAME_PAD_AXIS_RIGHT:
+                    this.logoObj.pos.addX(1);
+                    break;
+                case GAME_PAD_KEY.GAME_PAD_AXIS_UP:
+                    this.logoObj.pos.addY(-1);
+                    break;
+                case GAME_PAD_KEY.GAME_PAD_AXIS_DOWN:
+                    this.logoObj.pos.addY(1);
+                    break;
+                case GAME_PAD_KEY.GAME_PAD_1:
+                    this.logoObj.angle+=0.1;
+                    break;
+                case GAME_PAD_KEY.GAME_PAD_3:
+                    this.logoObj.angle-=0.1;
+                    break;
+            }
         });
 
         (window as any).logoObj = this.logoObj;

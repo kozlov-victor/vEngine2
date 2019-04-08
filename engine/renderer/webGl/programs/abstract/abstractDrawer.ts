@@ -1,10 +1,11 @@
-import {IKeyVal, isArray, isEqual} from "../../../../misc/object";
+import {IKeyVal, isArray, isEqual} from "@engine/misc/object";
 import {AbstractPrimitive} from "../../primitives/abstractPrimitive";
 import {ShaderProgram} from "../../base/shaderProgram";
 import {BufferInfo} from "../../base/bufferInfo";
 import {IDrawer} from "../interface/iDrawer";
-import {Size} from "../../../../geometry/size";
+import {Size} from "@engine/geometry/size";
 import {DebugError} from "@engine/debug/debugError";
+import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 
 
 export interface TextureInfo {
@@ -19,7 +20,7 @@ export class AbstractDrawer implements IDrawer{
 
     protected gl:WebGLRenderingContext;
     protected program:ShaderProgram = null;
-    protected uniformCache:IKeyVal = {};
+    protected uniformCache:IKeyVal<UNIFORM_VALUE_TYPE> = {};
     protected primitive:AbstractPrimitive;
 
     protected bufferInfo:BufferInfo;
@@ -31,7 +32,7 @@ export class AbstractDrawer implements IDrawer{
         AbstractDrawer.instances.push(this);
     }
 
-    protected bind(){
+    protected bind():void{
 
         if (DEBUG && !this.program) {
             console.error(this);
@@ -48,11 +49,11 @@ export class AbstractDrawer implements IDrawer{
         this.bufferInfo.bind(this.program);
     }
 
-    protected unbind(){
+    protected unbind():void{
         this.bufferInfo.unbind();
     }
 
-    destroy(){
+    destroy():void{
         if (this.bufferInfo) this.bufferInfo.destroy();
         this.program.destroy();
     }
@@ -64,7 +65,7 @@ export class AbstractDrawer implements IDrawer{
     }
 
 
-    setUniform(name:string,value:any){
+    setUniform(name:string,value:UNIFORM_VALUE_TYPE){
         if (DEBUG && !name) {
             console.trace();
             throw new DebugError(`can not set uniform witn value ${value}: name is not provided`);
@@ -73,7 +74,7 @@ export class AbstractDrawer implements IDrawer{
         if (isArray(value)) {
             if (!this.uniformCache[name]) this.uniformCache[name] = Array(value.length);
             for (let i:number=0,max:number=value.length;i<max;i++) {
-                this.uniformCache[name][i] = value[i];
+                (this.uniformCache[name]  as any[])[i] = value[i];
             }
         } else {
             this.uniformCache[name]=value;

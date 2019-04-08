@@ -17,7 +17,7 @@ export class LinearGradient implements Cloneable<LinearGradient>{
 
     private _arr:number[] = new Array(12);
 
-    fromJSON(json:IJSON){
+    fromJSON(json:IJSON):void{
         if (DEBUG) {
             if (!json.colorFrom)
                 throw new DebugError(`can not parse LinearGradient from JSON: colorFrom not defined`);

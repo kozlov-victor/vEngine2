@@ -1,20 +1,16 @@
 import {Timer} from "@engine/misc/timer";
 
-const identity_array = [];
+const identity_array:Timer[] = [];
 
 export class TimerDelegate {
 
     private _timers: Timer[];
 
-    setTimer(callback:Function,interval:number){
-        let t:Timer = new Timer(callback,interval);
+    setTimer(callback:Function,interval:number):Timer{
+        const t:Timer = new Timer(callback,interval);
         if (!this._timers) this._timers = [];
         this._timers.push(t);
         return t;
-    }
-
-    getTimers():Timer[]|undefined{
-        return this._timers;
     }
 
     get timers():Timer[]{

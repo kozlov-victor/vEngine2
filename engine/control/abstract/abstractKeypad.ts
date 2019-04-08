@@ -28,13 +28,13 @@ export abstract class AbstractKeypad {
         this.game = game;
     }
 
-    press(key:number){
+    press(key:number):void{
         if (this.isPressed(key)) return;
         this.buffer[key] = KEY_STATE.KEY_JUST_PRESSED;
         this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_PRESSED],key);
     }
 
-    release(key:number){
+    release(key:number):void{
         if (this.isReleased(key)) return;
         this.buffer[key] = KEY_STATE.KEY_JUST_RELEASED;
         this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_RELEASED],this.buffer[key]);
@@ -57,7 +57,7 @@ export abstract class AbstractKeypad {
         return this.buffer[key] === KEY_STATE.KEY_JUST_RELEASED;
     }
 
-    update(){
+    update():void{
         Object.keys(this.buffer).forEach((key:string)=>{
             const keyNum:number = (+key) as number;
             if (this.buffer[keyNum]===KEY_STATE.KEY_RELEASED) delete this.buffer[keyNum];

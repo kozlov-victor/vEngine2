@@ -2,6 +2,7 @@ import {AudioNode} from "./audioNode";
 import {Sound} from "../model/impl/sound";
 import {Game} from "../game";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
+import {Int} from "@engine/declarations";
 
 
 export class AudioNodeSet {
@@ -24,20 +25,20 @@ export class AudioNodeSet {
         })[0];
     }
 
-    stopAll(){
-        for (let i = 0;i<this.numOfNodes;i++) {
+    stopAll():void{
+        for (let i:number = 0;i<this.numOfNodes;i++) {
             this.nodes[i].stop();
         }
     }
 
-    pauseAll(){
-        for (let i = 0;i<this.numOfNodes;i++) {
+    pauseAll():void{
+        for (let i:number = 0;i<this.numOfNodes;i++) {
             this.nodes[i].pause();
         }
     }
 
-    resumeAll(){
-        for (let i = 0;i<this.numOfNodes;i++) {
+    resumeAll():void {
+        for (let i:number = 0;i<this.numOfNodes;i++) {
             this.nodes[i].resume();
         }
     }
@@ -45,7 +46,7 @@ export class AudioNodeSet {
 
 
     getNodeBySound(sound:Sound):AudioNode|null{
-        for (let i = 0;i<this.numOfNodes;i++) {
+        for (let i:number = 0;i<this.numOfNodes;i++) {
             if (this.nodes[i].getCurrSound()==sound) return this.nodes[i];
         }
         return null;

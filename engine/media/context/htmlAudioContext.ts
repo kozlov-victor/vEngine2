@@ -13,7 +13,7 @@ interface Clazz<T> {
 
 class CtxHolder {
     static getCtx():HTMLAudioElement{
-        let Ctx:Clazz<HTMLAudioElement> = window && (window as any).Audio;
+        const Ctx:Clazz<HTMLAudioElement> = window && (window as any).Audio;
         return new Ctx();
     };
 
@@ -28,7 +28,7 @@ export class HtmlAudioContext extends BasicAudioContext implements Cloneable<Htm
     static isAcceptable():boolean{
         return !!(window && (window as any).Audio);
     }
-    load(url:string,link:ResourceLink,callBack:()=>void){
+    load(url:string,link:ResourceLink,callBack:()=>void):void {
         LoaderUtil.loadBinary(url,'blob',(buffer:ArrayBuffer)=>{
             AudioPlayer.cache[link.getId()] = URL.createObjectURL(buffer);
             callBack();
@@ -45,7 +45,7 @@ export class HtmlAudioContext extends BasicAudioContext implements Cloneable<Htm
         return this.free;
     }
 
-    play(link:ResourceLink, loop: boolean) {
+    play(link:ResourceLink, loop: boolean):void {
         this.setLastTimeId();
         const url:string = AudioPlayer.cache[link.getId()];
         if (DEBUG && !url) throw new DebugError(`can not retrieve audio from cache (link id=${link.getId()})`);
@@ -59,19 +59,19 @@ export class HtmlAudioContext extends BasicAudioContext implements Cloneable<Htm
         }
     }
 
-    stop() {
+    stop():void {
         this.free = true;
     }
 
-    setGain(val: number) {
+    setGain(val: number):void {
         this._ctx.volume = val;
     }
 
-    pause() {
+    pause():void {
         this._ctx.pause();
     }
 
-    resume() {
+    resume():void {
         if (DEBUG) throw "not implemented for now"
     }
 

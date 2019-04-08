@@ -1,6 +1,6 @@
 import {AbstractPrimitive, IPrimitive} from "./abstractPrimitive";
 
-const prepareBuffers = (size:number)=>{
+const prepareBuffers = (size:number):IPrimitive=>{
 
     const vertices:number[] = [
         // Front face

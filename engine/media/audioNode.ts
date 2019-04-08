@@ -13,24 +13,24 @@ export class AudioNode {
 
     constructor(public context:BasicAudioContext){}
 
-    play(link:ResourceLink,loop:boolean = false){
+    play(link:ResourceLink,loop:boolean = false):void {
         this.context.play(link,loop);
     }
 
-    stop() {
+    stop():void {
         this.context.stop();
         this.currSound = null;
     }
 
-    setGain(val:number){
+    setGain(val:number):void {
         this.context.setGain(val);
     }
 
-    pause() {
+    pause():void {
         this.context.pause();
     }
 
-    resume() {
+    resume():void {
         this.context.resume();
     }
 

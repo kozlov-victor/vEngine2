@@ -30,26 +30,26 @@ export class ScrollInfo {
 
     constructor(private game:Game){}
 
-    private _initScrollBar(){
+    private _initScrollBar():void{
         this.vScroll = new VScroll(this.game);
         this.vScroll.size.width = 5;
         this._container.appendChild(this.vScroll);
     }
 
 
-    setEnabled(val:boolean) {
+    setEnabled(val:boolean):void {
         this._enabled = val;
         this.vScroll.enabled = val;
     }
 
 
-    onScroll(){
+    onScroll():void {
         this.vScroll.maxValue = this.scrollHeight;
         this.vScroll.value = this.offset;
         this.vScroll.onGeometryChanged();
     }
 
-    listenScroll(container: Container) {
+    listenScroll(container: Container):void {
         this._container = container;
         container.on(MOUSE_EVENTS.mouseDown, (p: MousePoint) => {
             this._lastPoint = {
@@ -107,7 +107,7 @@ export class ScrollInfo {
         this._initScrollBar();
     }
 
-    private _scrollBy(val:number){
+    private _scrollBy(val:number):void {
         this.offset += val;
         if (this.offset > this.scrollHeight - this._container.size.height) {
             this.offset = this.scrollHeight - this._container.size.height;
@@ -123,7 +123,7 @@ export class ScrollInfo {
         this.onScroll();
     }
     
-    update(){
+    update():void {
         if (!this._enabled) return;
 
         if (this._scrollVelocity) this.onScroll();

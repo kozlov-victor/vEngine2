@@ -10,13 +10,13 @@ export class Layer {
 
     }
 
-    prependChild(go:RenderableModel){
+    prependChild(go:RenderableModel):void {
         go.parent = null;
         go.setLayer(this);
         go.revalidate();
         this.children.unshift(go);
     }
-    appendChild(go:RenderableModel){
+    appendChild(go:RenderableModel):void {
         go.parent = null;
         go.setLayer(this);
         go.revalidate();
@@ -24,15 +24,15 @@ export class Layer {
     }
 
 
-    update(){
+    update():void {
         let all:RenderableModel[] = this.children;
         for (let obj of all) {
             obj.update();
         }
     }
 
-    render(){
-        let all = this.children;
+    render():void {
+        let all:RenderableModel[] = this.children;
         for (let obj of all) {
             obj.render();
         }

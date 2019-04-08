@@ -16,8 +16,6 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {GameObject3d} from "@engine/model/impl/gameObject3d";
 import {Font} from "@engine/model/impl/font";
 
-declare const document:any, window:any;
-
 export class AbstractRenderer {
 
     public container:HTMLElement;
@@ -39,39 +37,39 @@ export class AbstractRenderer {
 
     }
 
-    onResize(){}
+    onResize():void {}
 
-    requestFullScreen(){
-        let element = this.container as any;
-        if(element.requestFullScreen) {
-            element.requestFullScreen();
-        } else if(element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-        } else if(element.webkitRequestFullScreen) {
-            element.webkitRequestFullScreen();
+    requestFullScreen():void {
+        let element:HTMLElement = this.container;
+        if((element as any).requestFullScreen) {
+            (element as any).requestFullScreen();
+        } else if((element as any).mozRequestFullScreen) {
+            (element as any).mozRequestFullScreen();
+        } else if((element as any).webkitRequestFullScreen) {
+            (element as any).webkitRequestFullScreen();
         }
     }
 
-    cancelFullScreen(){
-        if(document.cancelFullScreen) {
-            document.cancelFullScreen();
-        } else if(document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if(document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
+    cancelFullScreen():void {
+        if((document as any).cancelFullScreen) {
+            (document as any).cancelFullScreen();
+        } else if((document as any).mozCancelFullScreen) {
+            (document as any).mozCancelFullScreen();
+        } else if((document as any).webkitCancelFullScreen) {
+            (document as any).webkitCancelFullScreen();
         }
     }
 
-    beginFrameBuffer(){}
+    beginFrameBuffer():void {}
 
-    flipFrameBuffer(filters:Array<AbstractFilter>){}
+    flipFrameBuffer(filters:Array<AbstractFilter>):void {}
 
-    registerResize(){
+    registerResize():void {
         this.onResize();
         window.addEventListener('resize',()=>this.onResize());
     }
 
-    destroy(){
+    destroy():void {
         window.removeEventListener('resize',this.onResize);
     }
 
@@ -79,47 +77,47 @@ export class AbstractRenderer {
         return 0;
     }
 
-    drawImage(img:Image){}
+    drawImage(img:Image):void {}
 
-    drawNinePatch(img:NinePatchImage){}
+    drawNinePatch(img:NinePatchImage):void {}
 
     drawTiledImage(texturePath:string,
                    srcRect:Rect,
                    dstRect:Rect,
-                   offset:Point2d){}
+                   offset:Point2d):void {}
 
-    drawRectangle(rectangle:Rectangle){}
+    drawRectangle(rectangle:Rectangle):void {}
 
-    lockRect(rect:Rect) {}
+    lockRect(rect:Rect):void {}
 
-    unlockRect(){}
+    unlockRect():void {}
 
-    drawLine(x1:number,y1:number,x2:number,y2:number,color:Color){}
+    drawLine(x1:number,y1:number,x2:number,y2:number,color:Color):void {}
 
 
-    drawModel(go:GameObject3d){}
+    drawModel(go:GameObject3d):void {}
 
-    drawEllipse(ellispe:Ellipse){}
+    drawEllipse(ellispe:Ellipse):void {}
 
-    resetTransform(){}
+    resetTransform():void {}
 
-    clear(){}
+    clear():void {}
 
-    clearColor(c:Color){}
+    clearColor(c:Color):void {}
 
-    save(){}
+    save():void {}
 
-    restore(){}
+    restore():void {}
 
-    translate(x:number,y:number,z:number = 0){}
+    translate(x:number,y:number,z:number = 0):void {}
 
-    scale(x:number,y:number,z:number = 0){}
+    scale(x:number,y:number,z:number = 0):void {}
 
-    rotateZ(a:number){}
+    rotateZ(a:number):void {}
 
-    rotateY(a:number){}
+    rotateY(a:number):void {}
 
-    log(args:any){
+    log(args:any):void {
         if (!DEBUG) return;
         let textField:TextField = this.debugTextField;
         if (!textField) {
@@ -151,14 +149,14 @@ export class AbstractRenderer {
         textField.setText(textField.getText()+res);
     }
 
-    clearLog(){
+    clearLog():void {
         if (!DEBUG) return;
         if (!this.debugTextField) return;
         this.debugTextField.setText('');
     }
 
 
-    loadTextureInfo(url:string,link:ResourceLink,onLoaded:()=>void){}
+    loadTextureInfo(url:string,link:ResourceLink,onLoaded:()=>void):void {}
 
     getTextureInfo(textureId:string):TextureInfo{
         let t:TextureInfo =  this.renderableCache[textureId];

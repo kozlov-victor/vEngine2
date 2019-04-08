@@ -7,8 +7,8 @@ export enum FILL_TYPE {
     COLOR,TEXTURE,LINEAR_GRADIENT
 }
 
-
-export const fragmentSource = `
+//language=GLSL
+export const fragmentSource:string = `
 
 #define HALF .5
 #define ZERO  0.

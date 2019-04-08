@@ -13,20 +13,20 @@ export class Sound extends Resource implements Revalidatable {
         super();
     }
 
-    revalidate(){
+    revalidate():void {
         if (!this.getResourceLink()) throw new DebugError(`can not play sound: resource link is not set`);
     }
 
-    play(){
+    play():void {
         this.game.getAudioPlayer().play(this);
     }
-    stop(){
+    stop():void {
         this.game.getAudioPlayer().stop(this);
     }
-    pause(){
+    pause():void {
         throw new DebugError('not implemented');
     }
-    setGain(val:number){
+    setGain(val:number):void {
         this._gain = val;
         this.game.getAudioPlayer().setGain(this);
     }

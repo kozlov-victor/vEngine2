@@ -1,11 +1,13 @@
 import {Point2d} from "../geometry/point2d";
 import {Rect} from "../geometry/rect";
 import {mat4} from "@engine/geometry/mat4";
+import MAT16 = mat4.MAT16;
 
 
 export namespace MathEx {
 
     import MAT16 = mat4.MAT16;
+    import Mat16Holder = mat4.Mat16Holder;
     export const isPointInRect = (point: Point2d, rect: Rect, angle?: number): boolean => {
         // if  = (angle) {
         //     const vec2 = new Vec2 = (point.x - rect.x - rect.width/2,point.y - rect.y - rect.height/2);
@@ -70,7 +72,7 @@ export namespace MathEx {
             min = max;
             max = tmp;
         }
-        let res = ~~(Math.random() * (max + 1 - min)) + min;
+        let res:number = ~~(Math.random() * (max + 1 - min)) + min;
         if (res > max) res = max;
         else if (res < min) res = min;
         return res;
@@ -80,16 +82,19 @@ export namespace MathEx {
      * analog of glu unproject function
      * https://github.com/bringhurst/webgl-unproject/blob/master/GLU.js
      */
-    export const unProject = (winPoint: Point2d, width: number, height: number, viewProjectionMatrix: number[]): Point2d => {
+    export const unProject = (winPoint: Point2d, width: number, height: number, viewProjectionMatrix: Mat16Holder): Point2d => {
         const x: number = 2.0 * winPoint.x / width - 1;
         const y: number = 2.0 * winPoint.y / height - 1;
-        const viewProjectionInverse: MAT16 = mat4.inverse(viewProjectionMatrix);
+        const viewProjectionInverse: Mat16Holder = mat4.inverse(viewProjectionMatrix);
 
-        const point3D: number[] = [x, y, 0, 1];
-        const res: number[] = mat4.multMatrixVec(viewProjectionInverse, point3D);
-        res[0] = (res[0] / 2 + 0.5) * width;
-        res[1] = (res[1] / 2 + 0.5) * height;
-        return new Point2d(res[0], res[1]);
+        const point3D: [number,number,number,number] = [x, y, 0, 1];
+        const res: Mat16Holder = mat4.multMatrixVec(viewProjectionInverse, point3D);
+        res.mat16[0] = (res.mat16[0] / 2 + 0.5) * width;
+        res.mat16[1] = (res.mat16[1] / 2 + 0.5) * height;
+        return new Point2d(res.mat16[0], res.mat16[1]); // todo: new Point ---> point pool
     };
 
 }
+
+
+// mathex, abstractfilter,camera

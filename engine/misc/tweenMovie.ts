@@ -41,7 +41,7 @@ export class TweenMovie {
         this.game.getCurrScene().addTweenMovie(this);
     }
 
-    update(){
+    update():void{
         if (this._completed) return;
         const currTime:number = this.game.getTime();
         if (!this._startedTime) this._startedTime = currTime;
@@ -66,13 +66,13 @@ export class TweenMovie {
                 this._onComplete && this._onComplete();
             }
         }
-    };
+    }
 
     isCompleted():boolean{
         return this._completed;
     }
 
-    reset() {
+    reset():TweenMovie {
         this._startedTime = null;
         this._completed = false;
         this._tweensInMovie.forEach((item:TweenInMovie)=>{

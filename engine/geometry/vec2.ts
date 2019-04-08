@@ -81,39 +81,39 @@ export class Vec2 extends Point2d {
         return Math.atan2(this.y, this.x);
     };
 
-    getAngleBetween(that:Vec2){
+    getAngleBetween(that:Vec2):number{
         return Math.acos(
             (this.x*that.x + this.y*that.y)/
             this.getLength()*that.getLength()
         )
     }
 
-    setAngle(value:number) {
-        let len = this.getLength();
+    setAngle(value:number):void {
+        const len:number = this.getLength();
         this.x = Math.cos(value) * len;
         this.y = Math.sin(value) * len;
     };
 
-    clone() {
+    clone():Vec2 {
         return new Vec2(this.x, this.y);
     }
 
-    static angleBetween(v1:Vec2, v2:Vec2) {
+    static angleBetween(v1:Vec2, v2:Vec2):number {
         v1 = v1.clone().normalize();
         v2 = v2.clone().normalize();
         return Math.acos(v1.dotProduct(v2));
     };
 
-    static normalBetween(v1:Vec2,v2:Vec2){
-        let v = v1.minus(v2);
+    static normalBetween(v1:Vec2,v2:Vec2):Vec2 {
+        const v:Vec2 = v1.minus(v2);
         return v.normalize();
     }
 
-    static distance(a:Vec2,b:Vec2) {
+    static distance(a:Vec2,b:Vec2):number {
         return Math.sqrt(Vec2.distanceSquared(a,b));
     }
 
-    static distanceSquared(a:Vec2, b:Vec2) {
+    static distanceSquared(a:Vec2, b:Vec2):number {
         return (a.x - b.x)*(a.x - b.x) + (a.y - b.y)*((a.y - b.y));
     }
 

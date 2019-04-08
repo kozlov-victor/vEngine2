@@ -36,11 +36,11 @@ export class ResourceLoader {
         return link;
     }
 
-    startLoading(){
+    startLoading():void{
         this.q.start();
     }
 
-    isCompleted(){
+    isCompleted():boolean{
         return this.q.isCompleted();
     }
 
@@ -48,11 +48,11 @@ export class ResourceLoader {
         return this.q.calcProgress();
     }
 
-    onProgress(fn:()=>void){
+    onProgress(fn:()=>void):void{
         this.q.onProgress = fn;
     }
 
-    onCompleted(fn:()=>void){
+    onCompleted(fn:()=>void):void{
         this.q.onResolved = fn;
     }
 

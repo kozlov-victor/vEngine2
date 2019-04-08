@@ -19,7 +19,7 @@ export class ModelDrawer extends AbstractDrawer {
         );
     }
     
-    private _initBufferInfo(){
+    private _initBufferInfo():void{
         this.g3d.bufferInfo = new BufferInfo(this.gl,{
             posVertexInfo:{
                 array:this.g3d.model.vertexArr, type:this.gl.FLOAT,
@@ -40,18 +40,18 @@ export class ModelDrawer extends AbstractDrawer {
         } as BufferInfoDescription);
     }
 
-    bindModel(g3d:GameObject3d){
+    bindModel(g3d:GameObject3d):void{
         this.g3d = g3d;
         if (!this.g3d.bufferInfo) this._initBufferInfo();
         this.bufferInfo = this.g3d.bufferInfo;
     }
 
-    bind(){
+    bind():void{
         if (DEBUG && !this.g3d.model) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
         super.bind();
     }
 
-    unbind(){
+    unbind():void{
         this.g3d = null;
         super.unbind();
     }

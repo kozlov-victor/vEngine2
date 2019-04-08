@@ -15,7 +15,7 @@ export class DebugError extends Error {
         this.errorMessage = message;
     }
 
-    toString(){
+    toString():string{
         return this.errorMessage;
     }
 

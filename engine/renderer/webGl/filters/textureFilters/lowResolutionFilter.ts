@@ -47,12 +47,12 @@ export class LowResolutionFilter extends AbstractFilter {
         this.setResolution(0.1);
     }
 
-    setResolution(val:number){
+    setResolution(val:number):void{
         this.setUniform(this.u_resolution,val);
     }
 
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
+    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
         this.setUniform(this.rt_w,textureInfos[0].texture.size.width);
         this.setUniform(this.rt_h,textureInfos[0].texture.size.height);
         super.doFilter(textureInfos,destFrameBuffer);

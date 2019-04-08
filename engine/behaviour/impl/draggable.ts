@@ -39,7 +39,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         super(game,null);
     }
 
-    manage(gameObject:RenderableModel) {
+    manage(gameObject:RenderableModel):void {
         this.gameObject = gameObject;
         this.gameObjectOnClick = gameObject.on(MOUSE_EVENTS.click,(e:IMousePoint)=>{
             this.points[DraggableBehaviour._getEventId(e)] = {
@@ -93,7 +93,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         this.game.getRenderer().container.addEventListener('mouseleave',this.blurListener);
     }
 
-    destroy(){
+    destroy():void{
         const scene:Scene = this.game.getCurrScene();
         this.game.getRenderer().container.removeEventListener('mouseleave',this.blurListener);
         this.gameObject.off(MOUSE_EVENTS.click,this.gameObjectOnClick);

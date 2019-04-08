@@ -48,13 +48,13 @@ export class TriangleBlurFilter extends AbstractFilter {
     }
 
     // 0...1
-    setValue(val:number){
+    setValue(val:number):void{
         this.setUniform(this.delta,[val,val]);
     }
 
 
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
+    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
         const tex:Texture = textureInfos[0].texture;
         this.setUniform(this.texSize,[tex.size.width,tex.size.height]);
         super.doFilter(textureInfos,destFrameBuffer);

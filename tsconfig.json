@@ -13,13 +13,15 @@
         ],
         "importHelpers": true,
         "strict": false,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "noEmitOnError": true,
         "removeComments": true,
         "baseUrl": "./",
         "paths": {
             "@engine/*": ["engine/*"]
-        }
+        },
+        "incremental": true,
+        "outDir": "./lib"
     },
     "exclude": [
         "node_modules"

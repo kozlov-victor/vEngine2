@@ -15,19 +15,19 @@ export class AbsoluteLayout extends Container implements Cloneable<AbsoluteLayou
         super(game);
     }
 
-    appendChild(c:RenderableModel){
+    appendChild(c:RenderableModel):void {
         if (c instanceof Container) (c as Container).testLayout();
         super.appendChild(c);
     }
 
-    onGeometryChanged(){
+    onGeometryChanged():void {
         super.onGeometryChanged();
 
-        let maxX = 0, maxY = 0;
+        let maxX:number = 0, maxY:number = 0;
         for (let v of this.children) {
             if (v instanceof Container) (v as Container).onGeometryChanged();
             v.setDirty();
-            let r:Rect = v.getRect();
+            const r:Rect = v.getSrcRect();
             if (r.right>maxX) maxX = r.right;
             if (r.bottom>maxY) maxY = r.bottom;
         }
@@ -41,9 +41,9 @@ export class AbsoluteLayout extends Container implements Cloneable<AbsoluteLayou
     }
 
     draw():boolean{
-        let renderer:AbstractRenderer = this.game.getRenderer();
+        const renderer:AbstractRenderer = this.game.getRenderer();
         if (this.overflow===OVERFLOW.HIDDEN) {
-            let r:Rect = Rect.fromPool().set(this.getScreenRect());
+            const r:Rect = Rect.fromPool().set(this.getScreenRect());
             r.addXY(-1,-1);
             r.setWH(r.size.width+1,r.size.height+1);
             renderer.lockRect(r);
@@ -57,7 +57,7 @@ export class AbsoluteLayout extends Container implements Cloneable<AbsoluteLayou
         return true;
     }
 
-    protected setClonedProperties(cloned:AbsoluteLayout) {
+    protected setClonedProperties(cloned:AbsoluteLayout):void {
         super.setClonedProperties(cloned);
     }
 

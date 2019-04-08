@@ -1,4 +1,4 @@
 
 export interface UniformsInfo {
-    [name:string]:number|Array<number>|boolean
+    [name:string]:number|number[]|boolean
 }

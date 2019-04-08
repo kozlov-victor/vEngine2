@@ -4,6 +4,7 @@ import {Game} from "../game";
 import {AbstractLight} from "./abstract/abstractLight";
 import {Camera} from "../renderer/camera";
 import {IKeyVal} from "@engine/misc/object";
+import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 
 export class PointLight extends AbstractLight {
 
@@ -29,7 +30,7 @@ export class PointLight extends AbstractLight {
         return this._screenPoint;
     }
 
-    setUniforms(uniform:IKeyVal,i:number){
+    setUniforms(uniform:IKeyVal<UNIFORM_VALUE_TYPE>,i:number):void{
         uniform[`u_pointLights[${i}].pos`] =  this.getPosScaled().toArray();
         uniform[`u_pointLights[${i}].nearRadius`] = this.nearRadius;
         uniform[`u_pointLights[${i}].farRadius`] = this.farRadius;

@@ -6,8 +6,8 @@ import {
     compileShader,
     createProgram,
     extractAttributes,
-    extractUniforms,
-    UniformsMap
+    extractUniforms, UNIFORM_VALUE_TYPE,
+    UniformsMap, UniformWrapper
 } from "./shaderProgramUtils";
 import {VertexBuffer} from "./vertexBuffer";
 
@@ -22,8 +22,8 @@ export class ShaderProgram {
 
 
     constructor(gl:WebGLRenderingContext,vertexSource:string,fragmentSource:string) {
-        let vShader:WebGLShader = compileShader(gl, vertexSource, gl.VERTEX_SHADER) as WebGLShader;
-        let fShader:WebGLShader = compileShader(gl, fragmentSource, gl.FRAGMENT_SHADER) as WebGLShader;
+        const vShader:WebGLShader = compileShader(gl, vertexSource, gl.VERTEX_SHADER) as WebGLShader;
+        const fShader:WebGLShader = compileShader(gl, fragmentSource, gl.FRAGMENT_SHADER) as WebGLShader;
         this.program = createProgram(gl, vShader, fShader);
         gl.deleteShader(vShader);
         gl.deleteShader(fShader);
@@ -36,16 +36,16 @@ export class ShaderProgram {
         return this.program;
     }
 
-    bind(){
+    bind():void{
         this.gl.useProgram(this.program);
         ShaderProgram.currentProgram = this;
     }
 
-    setUniform(name:string, value:any) {
+    setUniform(name:string, value:UNIFORM_VALUE_TYPE):void {
         if (DEBUG && !name) {
             throw new DebugError(`no uniform name was provided!`);
         }
-        let uniform = this.uniforms[name];
+        let uniform:UniformWrapper = this.uniforms[name];
         if (DEBUG && !uniform) {
             //console.error(this);
             return;

@@ -27,13 +27,13 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    drawImage(img:Image){
+    drawImage(img:Image):void{
         if (DEBUG) {
             if (!img.getResourceLink()) throw new DebugError(`image resource link is not set`);
             if (!this.renderableCache[img.getResourceLink().getId()]) throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getId()}`);
         }
-        let srcRect:Rect = img.srcRect;
-        let dstRect:Rect = img.getRect();
+        let srcRect:Rect = img.getSrcRect();
+        let dstRect:Rect = img.getSrcRect();
         this.ctx.drawImage(
             this.renderableCache[img.getResourceLink().getId()].texture,
             srcRect.point.x,
@@ -50,11 +50,11 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     drawTiledImage(texturePath:string,
                    srcRect:Rect,
                    dstRect:Rect,
-                   offset:Point2d){
+                   offset:Point2d):void{
 
     }
 
-    drawRectangle(rectangle:Rectangle){
+    drawRectangle(rectangle:Rectangle):void{
         this.ctx.fillStyle = (rectangle.fillColor as Color).asCSS();
         this.ctx.strokeStyle = rectangle.color.asCSS();
         this.ctx.lineWidth = rectangle.lineWidth;
@@ -81,63 +81,63 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     //     ctx.closePath();
     // }
 
-    setAlpha(a:number){
+    setAlpha(a:number):void{
         this.ctx.globalAlpha = a;
     }
 
-    lockRect(rect:Rect) {
+    lockRect(rect:Rect):void {
         this.ctx.save();
         this.ctx.beginPath();
         this.ctx.rect(rect.point.x,rect.point.y,rect.size.width,rect.size.height);
         this.ctx.clip();
     }
 
-    unlockRect(){
+    unlockRect():void {
         this.ctx.restore();
     }
 
-    clear(){
+    clear():void {
         this.ctx.clearRect(0,0,this.game.width,this.game.height);
     }
 
-    clearColor(color:Color){
+    clearColor(color:Color):void {
         //this.fillRect(new Rect(0,0,this.game.width,this.game.height),color);
     }
 
-    save() {
+    save():void {
         this.ctx.save();
     }
 
-    scale(x:number,y:number) {
+    scale(x:number,y:number):void {
         this.ctx.scale(x,y);
     }
 
-    resetTransform(){
+    resetTransform():void {
         // @ts-ignore
         //noinspection BadExpressionStatementJS
         this.ctx['resetTransform']();
     }
 
-    rotateZ(angleInRadians:number) {
+    rotateZ(angleInRadians:number):void {
         this.ctx.rotate(angleInRadians);
     }
 
-    rotateY(angleInRadians:number) {
+    rotateY(angleInRadians:number):void {
         if (DEBUG) throw new DebugError('rotateY not supported by canvasRenderer');
     }
 
-    translate(x:number,y:number){
+    translate(x:number,y:number):void {
         this.ctx.translate(x,y);
     }
 
-    restore(){
+    restore():void {
         this.ctx.restore();
     }
 
-    beginFrameBuffer(){
+    beginFrameBuffer():void {
         this.save();
     }
-    flipFrameBuffer(){
+    flipFrameBuffer():void {
         this.restore();
     }
 

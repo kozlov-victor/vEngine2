@@ -1,5 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 import {ShaderProgram} from "./shaderProgram";
+import {Int} from "@engine/declarations";
+import {isArray} from "@engine/misc/object";
 
 
 interface ShaderErrorInfo {
@@ -139,11 +141,12 @@ type GL = WebGLRenderingContext;
 type LOC = WebGLUniformLocation;
 type NUM = number;
 type NUM_ARR = number[];
+export type UNIFORM_VALUE_TYPE = number|number[]|Int|Int[]|boolean|boolean[];
 
-type UNIFORM_SETTER = (gl:GL,location:LOC,value:any)=>void;
+type UNIFORM_SETTER = (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=>void;
 
 
-interface UniformWrapper {
+export interface UniformWrapper {
     type:string,
     size:NUM,
     location: LOC,
@@ -159,14 +162,14 @@ export interface AttributesMap {
 }
 
 export  const normalizeUniformName =(s:string):string=>{
-    if (DEBUG && s.indexOf(' ')>-1) throw new DebugError(`bad uniform name: "${s}"`);
+    if (DEBUG && s.indexOf(' ')>-1) throw new DebugError(`bad uniform name: "${s}", check spaces!`);
     if (s.indexOf('[')>-1) return s.split('[')[0];
     else return s;
 };
 
 export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram):UniformsMap=> {
     const glProgram:WebGLProgram = program.getProgram();
-    const activeUniforms:number = gl.getProgramParameter(glProgram, gl.ACTIVE_UNIFORMS) as number;
+    const activeUniforms:Int = gl.getProgramParameter(glProgram, gl.ACTIVE_UNIFORMS) as Int;
     const uniforms:UniformsMap = {};
 
     for (let i:number = 0; i < activeUniforms; i++) {
@@ -195,13 +198,13 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
 
 
 export const extractAttributes = (gl:WebGLRenderingContext, program:ShaderProgram):AttributesMap=>{
-    let glProgram:WebGLProgram = program.getProgram();
-    let activeAttributes:number = gl.getProgramParameter(glProgram, gl.ACTIVE_ATTRIBUTES) as number;
-    let attrMap:AttributesMap = {};
-    for (let i = 0; i < activeAttributes; i++) {
-        let attrData:WebGLActiveInfo = gl.getActiveAttrib(glProgram, i) as WebGLActiveInfo;
+    const glProgram:WebGLProgram = program.getProgram();
+    const activeAttributes:number = gl.getProgramParameter(glProgram, gl.ACTIVE_ATTRIBUTES) as number;
+    const attrMap:AttributesMap = {};
+    for (let i:number = 0; i < activeAttributes; i++) {
+        const attrData:WebGLActiveInfo = gl.getActiveAttrib(glProgram, i) as WebGLActiveInfo;
         if (DEBUG && !attrData) throw new DebugError(`can not receive active attribute info: gl.getActiveAttrib()`);
-        let location:number = gl.getAttribLocation(glProgram, attrData.name);
+        const location:number = gl.getAttribLocation(glProgram, attrData.name);
         if (DEBUG && location<0) {
             console.log(program);
             throw new DebugError(`error finding attribute location: ${attrData.name}`);
@@ -212,18 +215,18 @@ export const extractAttributes = (gl:WebGLRenderingContext, program:ShaderProgra
 };
 
 interface IChecker {
-    check:(val:any)=>void;
+    check:(val:UNIFORM_VALUE_TYPE)=>void;
 }
 
 const TypeNumber:IChecker = {
-    check: (val:any):void=>{
-        if (isNaN(parseFloat(val)) || !isFinite(val))
+    check: (val:UNIFORM_VALUE_TYPE):void=>{
+        if (isNaN(parseFloat(String(val))) || !isFinite(Number(val)))
             throw new DebugError(`can not set uniform with value ${val}: expected argument of type number`);
     }
 };
 
 const TypeInt:IChecker = {
-    check: (val:any):void=>{
+    check: (val:UNIFORM_VALUE_TYPE):void=>{
         TypeNumber.check(val);
         if (val!==~~val)
             throw new DebugError(`can not set uniform with value ${val}: expected argument of integer type, but ${val} found`);
@@ -231,7 +234,7 @@ const TypeInt:IChecker = {
 };
 
 const TypeBool:IChecker = {
-    check: (val:any):void=>{
+    check: (val:UNIFORM_VALUE_TYPE):void=>{
         if (!(val==true || val==false))
             throw new DebugError(`can not set uniform with value ${val}: expected argument of boolean type, but ${val} found`);
     }
@@ -240,28 +243,28 @@ const TypeBool:IChecker = {
 
 const TypeArray = (checker:IChecker,size?:number):IChecker=>{
     return {
-        check: (val:any)=>{
+        check: (val:UNIFORM_VALUE_TYPE)=>{
             if (!val)
                 throw new DebugError(`can not set uniform  value: ${val}`);
-            if (!val.splice) {
+            if (!isArray(val)) {
                 console.error('Can not set uniform value',val);
                 throw new DebugError(`can not set uniform with value [${val}]: expected argument of type Array`);
             }
-            if (size!==undefined && val.length!==size)
-                throw new DebugError(`can not set uniform with value [${val}]: expected array with size ${size}, but ${val.length} found`);
-            for (let i=0;i<val.length;i++) {
+            if (size!==undefined && (val as any[]).length!==size)
+                throw new DebugError(`can not set uniform with value [${val}]: expected array with size ${size}, but ${(val as any[]).length} found`);
+            for (let i:number=0;i<val.length;i++) {
                 try {
-                    checker.check(val[i]);
+                    checker.check((val as any[])[i]);
                 } catch (e){
                     console.error('Can not set uniform array item',val);
-                    throw new DebugError(`can not set uniform array item with value [${val}]: unexpected array element type: ${val[i]}`);
+                    throw new DebugError(`can not set uniform array item with value [${val}]: unexpected array element type: ${(val as any[])[i]}`);
                 }
             }
         }
     }
 };
 
-const expect = (value:any,typeChecker:IChecker)=>{
+const expect = (value:UNIFORM_VALUE_TYPE,typeChecker:IChecker):void=>{
     typeChecker.check(value);
 };
 

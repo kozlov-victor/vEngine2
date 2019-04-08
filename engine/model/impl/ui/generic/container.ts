@@ -43,7 +43,7 @@ export abstract class Container extends RenderableModel {
         super(game);
     }
 
-    testLayout(){
+    testLayout():void {
         if (DEBUG) {
             if (this.layoutWidth===LAYOUT_SIZE.FIXED && this.size.width===0)
                 throw new DebugError(`layoutWidth is LAYOUT_SIZE.FIXED so width must be specified`);
@@ -81,14 +81,14 @@ export abstract class Container extends RenderableModel {
         this.setDirty();
     }
 
-    setMarginsTopBottom(top:number,bottom?:number){
+    setMarginsTopBottom(top:number,bottom?:number):void {
         if (bottom===undefined) bottom = top;
         this.paddingTop = top;
         this.paddingBottom = bottom;
         this.setDirty();
     }
 
-    setMarginsLeftRight(left:number,right?:number){
+    setMarginsLeftRight(left:number,right?:number):void {
         if (right===undefined) right = left;
         this.marginLeft = left;
         this.marginRight = right;
@@ -110,21 +110,21 @@ export abstract class Container extends RenderableModel {
         this.setDirty();
     }
 
-    protected calcScreenRect(){
-        this._rect.setXYWH(
+    protected calcScreenRect():void {
+        this._srcRect.setXYWH(
             this.pos.x,this.pos.y,
             this.size.width + this.marginLeft + this.marginRight,
             this.size.height + this.marginTop + this.marginBottom
         );
-        this._screenRect.set(this._rect);
+        this._screenRect.set(this._srcRect);
         let parent:RenderableModel = this.parent;
         while (parent) {
-            this._screenRect.addXY(parent.getRect().point.x,parent.getRect().point.y);
+            this._screenRect.addXY(parent.getSrcRect().point.x,parent.getSrcRect().point.y);
             parent = parent.parent;
         }
     }
 
-    setPaddingsTopBottom(top:number,bottom?:number){
+    setPaddingsTopBottom(top:number,bottom?:number):void {
         if (bottom===undefined) bottom = top;
         this.paddingTop = top;
         this.paddingBottom = bottom;
@@ -139,22 +139,22 @@ export abstract class Container extends RenderableModel {
     }
 
 
-    revalidate(){
+    revalidate():void {
         this.calcScreenRect();
         super.revalidate();
     }
 
-    onGeometryChanged(){
+    onGeometryChanged():void {
         this.revalidate();
     }
 
 
-    setWH(w:number,h:number){
+    setWH(w:number,h:number):void {
         this.size.setWH(w,h);
         this.drawingRect.setWH(w,h);
     }
 
-    calcDrawableRect(contentWidth:number, contentHeight:number){
+    calcDrawableRect(contentWidth:number, contentHeight:number):void {
         let paddedWidth = contentWidth  + this.paddingLeft + this.paddingRight;
         let paddedHeight = contentHeight +  this.paddingTop +  this.paddingBottom;
         if (this.background) {
@@ -166,7 +166,7 @@ export abstract class Container extends RenderableModel {
         this.calcScreenRect();
     }
 
-    update(){
+    update():void {
         if (this._dirty) {
             this.onGeometryChanged();
             this._dirty = false;
@@ -174,7 +174,7 @@ export abstract class Container extends RenderableModel {
         super.update();
     }
 
-    beforeRender(){
+    beforeRender():void {
         this.game.getRenderer().translate(
             this.pos.x + this.marginLeft,
             this.pos.y + this.marginTop

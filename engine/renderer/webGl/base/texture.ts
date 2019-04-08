@@ -46,7 +46,7 @@ export class Texture {
      * @param width -unused if image specified
      * @param height -unused if image specified
      */
-    setImage(img:HTMLImageElement,width:number = 0,height:number = 0){
+    setImage(img:HTMLImageElement,width:number = 0,height:number = 0):void{
         if (DEBUG) {
             if (!(img || width || height))
                 throw new DebugError("texture.setImage: if image is null, width and height must be specified: tex.setImage(null,w,h)");
@@ -79,7 +79,7 @@ export class Texture {
 
     }
 
-    bind(name:string,i:number,program:ShaderProgram) { // uniform eq to 0 by default
+    bind(name:string,i:number,program:ShaderProgram):void { // uniform eq to 0 by default
         if (DEBUG) {
             if (!name) {
                 console.error(this);
@@ -97,7 +97,7 @@ export class Texture {
         Texture.currInstances[i] = this;
     }
 
-    unbind(i:number = 0) {
+    unbind(i:number = 0):void {
         let gl:WebGLRenderingContext = this.gl;
         gl.activeTexture(gl.TEXTURE0+i);
         gl.bindTexture(gl.TEXTURE_2D, null);
@@ -116,15 +116,15 @@ export class Texture {
         return pixels;
     }
 
-    destroy(){
+    destroy():void{
         this.gl.deleteTexture(this.tex);
     }
 
-    getSize(){
+    getSize():Size{
         return this.size;
     }
 
-    getGlTexture() {
+    getGlTexture():WebGLTexture {
         return this.tex;
     }
 

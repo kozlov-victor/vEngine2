@@ -29,7 +29,7 @@ export class VScroll extends Container {
         this.appendChild(hnd);
     }
 
-    onGeometryChanged(){
+    onGeometryChanged():void {
         this.handler.size.width = this.background.size.width;
         if (this.value>this.maxValue) this.value = this.maxValue;
         if (this.maxValue) this.handler.size.height = this.size.height * this.size.height / this.maxValue;

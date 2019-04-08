@@ -10,23 +10,23 @@ interface ValByPathObj {
     targetKey:string
 }
 
-let accessByPath = (obj:KeyVal,path:string):ValByPathObj=>{
+const _accessByPath = (obj:KeyVal,path:string):ValByPathObj=>{
     let pathArr:string[] = path.split('.');
     if (pathArr.length===1) return {targetObj:obj,targetKey:path};
-    let lastPath:string = pathArr.pop();
+    let lastPath:string = pathArr.pop() as string;
     pathArr.forEach(p=>{
         obj = obj[p];
     });
     return {targetObj:obj,targetKey:lastPath};
 };
 
-let setValByPath = (obj:KeyVal,path:string,val:number)=>{
-    let {targetObj,targetKey}:ValByPathObj = accessByPath(obj,path);
+const setValByPath = (obj:KeyVal,path:string,val:number)=>{
+    let {targetObj,targetKey}:ValByPathObj = _accessByPath(obj,path);
     targetObj[targetKey] = val;
 };
 
-let getValByPath = (obj:KeyVal,path:string):number=>{
-    let {targetObj,targetKey}:ValByPathObj = accessByPath(obj,path);
+const getValByPath = (obj:KeyVal,path:string):number=>{
+    let {targetObj,targetKey}:ValByPathObj = _accessByPath(obj,path);
     return targetObj[targetKey];
 };
 
@@ -107,7 +107,7 @@ export class Tween {
     }
 
 
-    update(){
+    update():void {
         if (this._completed) return;
         const currTime:number = Game.getInstance().getTime();
         this._currTime = currTime;
@@ -134,16 +134,16 @@ export class Tween {
 
     }
 
-    private progress(_progressFn:(val:number)=>void){
+    private progress(_progressFn:(val:number)=>void):void {
         this._progressFn = _progressFn;
     }
 
-    reset() {
+    reset():void {
         this._startedTime = null;
         this._completed = false;
     }
 
-    complete(){
+    complete():void {
         if (this._completed) return;
         let l = this._propsToChange.length;
         while(l--){

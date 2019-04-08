@@ -18,7 +18,7 @@ export interface Revalidatable {
 export interface Tweenable {
     tween(desc:TweenDescription):Tween;
     addTween(t:Tween):void;
-    addTweenMovie(tm:TweenMovie);
+    addTweenMovie(tm:TweenMovie):void;
 }
 
 export interface Eventemittable {

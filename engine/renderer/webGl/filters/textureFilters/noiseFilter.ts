@@ -62,12 +62,12 @@ export class NoiseFilter extends AbstractFilter {
     }
 
 
-    setIntensivity(val:number){
+    setIntensivity(val:number):void{
        this.setUniform(this.u_noise_intensity,val);
     }
 
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
+    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
         this.setUniform(this.rt_w,textureInfos[0].texture.size.width);
         this.setUniform(this.rt_h,textureInfos[0].texture.size.height);
         this.setUniform(this.u_time,this.time+=0.01);

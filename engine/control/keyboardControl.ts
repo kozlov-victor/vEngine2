@@ -40,13 +40,13 @@ export enum KEYBOARD_KEY  {
 }
 
 
-export class Keyboard extends AbstractKeypad implements IControl {
+export class KeyboardControl extends AbstractKeypad implements IControl {
 
-    readonly type:string = 'Keyboard';
+    readonly type:string = 'KeyboardControl';
     private keyDownListener:(e:KeyboardEvent)=>void;
     private keyUpListener:(e:KeyboardEvent)=>void;
 
-    listenTo(){
+    listenTo():void {
 
         this.keyDownListener = (e:KeyboardEvent)=>{
             let code = e.keyCode;
@@ -62,16 +62,16 @@ export class Keyboard extends AbstractKeypad implements IControl {
         window.addEventListener('keyup',this.keyUpListener);
     }
 
-    destroy(){
+    destroy():void{
         window.removeEventListener('keydown',this.keyDownListener);
         window.removeEventListener('keyup',this.keyUpListener);
     }
 
-    on(e:KEYBOARD_EVENT,callback:(e:KEYBOARD_KEY)=>any) {
+    on(e:KEYBOARD_EVENT,callback:(e:KEYBOARD_KEY)=>any):void {
         this.emitter.on(KEYBOARD_EVENT[e],callback);
     }
 
-    off(e:KEYBOARD_EVENT,callback:Function){
+    off(e:KEYBOARD_EVENT,callback:Function):void{
         this.emitter.off(KEYBOARD_KEY[e],callback);
     }
 

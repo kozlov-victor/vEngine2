@@ -16,12 +16,12 @@ export class Queue{
         return this.tasks.length;
     }
 
-    private progressTask(taskId:number|string,progress:number){
-        this.tasksProgressById[taskId] = progress;
-        this.onProgress && this.onProgress(this.calcProgress());
-    };
+    // private progressTask(taskId:number|string,progress:number):void{
+    //     this.tasksProgressById[taskId] = progress;
+    //     this.onProgress && this.onProgress(this.calcProgress());
+    // };
 
-    public resolveTask(taskId:number|string){
+    public resolveTask(taskId:number|string):void{
         this.tasksResolved++;
         this.tasksProgressById[taskId] = 1;
         if (this.tasks.length===this.tasksResolved) {
@@ -33,7 +33,7 @@ export class Queue{
         }
     };
 
-    addTask(taskFn:()=>void,taskId:string|number) {
+    addTask(taskFn:()=>void,taskId:string|number):void {
         if (this.tasksProgressById[taskId]!==undefined) return;
         this.tasks.push(taskFn);
         this.tasksProgressById[taskId] = 0;
@@ -43,15 +43,15 @@ export class Queue{
         return this.completed;
     }
 
-    calcProgress(){
-        let sum = 0;
+    calcProgress():number{
+        let sum:number = 0;
         Object.keys(this.tasksProgressById).forEach((taskId:string)=>{
             sum+=this.tasksProgressById[taskId]||0;
         });
         return sum/this.tasks.length;
     }
 
-    start() {
+    start():void {
         if (this.size()===0) {
             this.completed = true;
             this.onResolved && this.onResolved();

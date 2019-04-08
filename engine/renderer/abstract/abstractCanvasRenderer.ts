@@ -17,18 +17,18 @@ export class AbstractCanvasRenderer extends AbstractRenderer {
     }
 
 
-    onResize(){
-        let canvas = this.container as HTMLCanvasElement;
+    onResize():void {
+        const canvas:HTMLCanvasElement = this.container as HTMLCanvasElement;
         if (this.game.scaleStrategy===SCALE_STRATEGY.NO_SCALE) return;
         else if (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH) {
             canvas.style.width = `${window.innerWidth}px`;
             canvas.style.height = `${window.innerHeight}px`;
             return;
         }
-        let canvasRatio = canvas.height / canvas.width;
-        let windowRatio = window.innerHeight / window.innerWidth;
-        let width;
-        let height;
+        const canvasRatio:number = canvas.height / canvas.width;
+        const windowRatio:number = window.innerHeight / window.innerWidth;
+        let width:number;
+        let height:number;
 
         if (windowRatio < canvasRatio) {
             height = window.innerHeight;

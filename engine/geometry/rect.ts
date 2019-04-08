@@ -23,30 +23,30 @@ export class Rect extends ObservableEntity implements Cloneable<Rect>{
         this.setXYWH(x,y,width,height);
     }
 
-    observe(onChangedFn:()=>void){
+    observe(onChangedFn:()=>void):void{
         this.addListener(onChangedFn);
     }
 
-    revalidate(){
+    revalidate():void{
         this._right = this.point.x+this.size.width;
         this._bottom = this.point.y+this.size.height;
         this.triggerObservable();
     }
 
-    setXYWH(x:number,y:number,width:number,height:number){
+    setXYWH(x:number,y:number,width:number,height:number):Rect{
         this.point.setXY(x,y);
         this.size.setWH(width,height);
         this.revalidate();
         return this;
     }
 
-    setXY(x:number,y:number){
+    setXY(x:number,y:number):Rect{
         this.point.setXY(x,y);
         this.revalidate();
         return this;
     }
 
-    setWH(width:number,height:number){
+    setWH(width:number,height:number):Rect{
         this.size.setWH(width,height);
         this.revalidate();
         return this;
@@ -55,26 +55,31 @@ export class Rect extends ObservableEntity implements Cloneable<Rect>{
     set(another:Rect):Rect {
         this.setPoint(another.point);
         this.setSize(another.size);
+        this.revalidate();
         return this;
     }
 
     setSize(s:Size):Rect{
         this.size.setWH(s.width,s.height);
+        this.revalidate();
         return this;
     }
 
     setPoint(p:Point2d):Rect{
         this.point.setXY(p.x,p.y);
+        this.revalidate();
         return this;
     }
 
     addXY(x:number,y:number):Rect{
         this.point.addXY(x,y);
+        this.revalidate();
         return this;
     }
 
-    addPoint(another:Point2d){
+    addPoint(another:Point2d):Rect{
         this.addXY(another.x,another.y);
+        this.revalidate();
         return this;
     }
 
@@ -92,7 +97,6 @@ export class Rect extends ObservableEntity implements Cloneable<Rect>{
         };
     }
 
-
     get right(): number {
         return this._right;
     }
@@ -101,7 +105,7 @@ export class Rect extends ObservableEntity implements Cloneable<Rect>{
         return this._bottom;
     }
 
-    fromJSON(jsonObj:{x:number,y:number,width:number,height:number}){
+    fromJSON(jsonObj:{x:number,y:number,width:number,height:number}):void{
         this.setXYWH(jsonObj.x,jsonObj.y,jsonObj.width,jsonObj.height);
     }
 

@@ -1,9 +1,10 @@
 import {mat4} from "@engine/geometry/mat4";
 import MAT16 = mat4.MAT16;
+import Mat16Holder = mat4.Mat16Holder;
 
 export class MatrixStack {
 
-    stack:MAT16[] = [];
+    stack:Mat16Holder[] = [];
 
     constructor(){
        this.restore();
@@ -21,17 +22,17 @@ export class MatrixStack {
         this.stack.push(this.getCurrentMatrix());
     }
 
-    getCurrentMatrix():MAT16 {
-        return this.stack[this.stack.length - 1].slice() as MAT16;
+    getCurrentMatrix():Mat16Holder {
+        return this.stack[this.stack.length - 1];
     }
 
-    setCurrentMatrix(m:MAT16) {
+    setCurrentMatrix(m:Mat16Holder) {
         return this.stack[this.stack.length - 1] = m;
     }
 
     translate(x:number, y:number, z:number = 0):MatrixStack {
-        let t = mat4.makeTranslation(x, y, z);
-        let m = this.getCurrentMatrix();
+        let t:Mat16Holder = mat4.makeTranslation(x, y, z);
+        let m:Mat16Holder = this.getCurrentMatrix();
         this.setCurrentMatrix(mat4.matrixMultiply(t, m));
         return this;
     }
@@ -50,18 +51,15 @@ export class MatrixStack {
         return this;
     }
 
-    scale (x:number, y:number, z:number = 0):MatrixStack {
-        if (z === undefined) {
-            z = 1;
-        }
-        let t:MAT16 = mat4.makeScale(x, y, z);
-        let m:MAT16 = this.getCurrentMatrix();
+    scale (x:number, y:number, z:number = 1):MatrixStack {
+        let t:Mat16Holder = mat4.makeScale(x, y, z);
+        let m:Mat16Holder = this.getCurrentMatrix();
         this.setCurrentMatrix(mat4.matrixMultiply(t, m));
         return this;
     }
 
     resetTransform():MatrixStack{
-        let identity = mat4.makeIdentity();
+        let identity:Mat16Holder = mat4.makeIdentity();
         this.setCurrentMatrix(identity);
         return this;
     }

@@ -1,5 +1,6 @@
 import {ObjectPool, Releasealable} from "../misc/objectPool";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
+import {DebugError} from "@engine/debug/debugError";
 
 export class Size extends ObservableEntity implements Releasealable{
 
@@ -17,6 +18,8 @@ export class Size extends ObservableEntity implements Releasealable{
         this._width = width;
         this._height = height;
     }
+
+
 
     setW(width:number):Size{
         this._width = width;

@@ -1,5 +1,6 @@
 import {Color} from "../renderer/color";
 import {IKeyVal} from "../misc/object";
+import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 
 export class ShaderMaterial {
 
@@ -12,7 +13,7 @@ export class ShaderMaterial {
 
     constructor(){}
 
-    setUniforms(uniforms:IKeyVal){
+    setUniforms(uniforms:IKeyVal<UNIFORM_VALUE_TYPE>):void{
         uniforms['u_material.ambient'] = this.ambient.asGL();
         uniforms['u_material.specular'] = this.specular.asGL();
         uniforms['u_material.diffuse'] = this.diffuse.asGL();
