@@ -50,9 +50,9 @@ export class MouseControl implements IControl {
         eventName:string,point:MousePoint,
         go:RenderableModel,offsetX = 0, offsetY = 0):boolean{
 
-
         const rectWithOffset:Rect = Rect.fromPool().set(go.getSrcRect()).addXY(offsetX,offsetY);
         let res:boolean = false;
+
         if (
             MathEx.isPointInRect(point,rectWithOffset)
         ) {
@@ -158,7 +158,6 @@ export class MouseControl implements IControl {
     }
 
     listenTo():void {
-
         if (DEBUG && !this.game.getRenderer()) {
             throw new DebugError(`can not initialize mouse control: renderer is not set`);
         }

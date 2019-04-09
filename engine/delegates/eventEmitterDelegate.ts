@@ -12,7 +12,7 @@ export class EventEmitterDelegate {
     on(eventName:string,callBack:Function):Function{
 
         if (DEBUG && !Game.getInstance().hasControl('MouseControl')) {
-            if (!(eventName in MOUSE_EVENTS)) {
+            if (eventName in MOUSE_EVENTS) {
                 throw new DebugError('can not listen mouse events: mouse control is not added');
             }
         }

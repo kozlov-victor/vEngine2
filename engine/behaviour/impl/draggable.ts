@@ -55,15 +55,15 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         });
         const scene:Scene = this.game.getCurrScene();
         this.sceneOnMouseDown = scene.on(MOUSE_EVENTS.mouseDown,(e:IMousePoint)=>{
-            let pointId:number = DraggableBehaviour._getEventId(e);
-            let point:MouseDragPoint = this.points[pointId];
+            const pointId:number = DraggableBehaviour._getEventId(e);
+            const point:MouseDragPoint = this.points[pointId];
             if (!point) return;
             point.dragStartX = point.target.pos.x;
             point.dragStartY = point.target.pos.y;
         });
         this.sceneOnMouseMove = scene.on(MOUSE_EVENTS.mouseMove,(e:IMousePoint)=>{
-            let pointId = DraggableBehaviour._getEventId(e);
-            let point = this.points[pointId];
+            const pointId = DraggableBehaviour._getEventId(e);
+            const point = this.points[pointId];
             if (!point) return;
             if (!point.dragStart) {
                 point.dragStart = true;
@@ -77,8 +77,8 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
             gameObject.pos.y = e.screenY - point.mY;
         });
         this.sceneOnMouseUp = scene.on(MOUSE_EVENTS.mouseUp,(e:IMousePoint)=>{
-            let pointId:number = DraggableBehaviour._getEventId(e);
-            let point:MouseDragPoint = this.points[pointId];
+            const pointId:number = DraggableBehaviour._getEventId(e);
+            const point:MouseDragPoint = this.points[pointId];
             if (!point) return;
             if (point.dragStart) {
                 point.x = gameObject.pos.x;
