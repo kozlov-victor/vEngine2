@@ -38,7 +38,7 @@ const prepareMessage = function(e:any,lineNum:number){
     if (msg && msg.message) msg = msg.message;
     if (!msg) {
         if (e.target) {
-            ['img','audio','link'].some(function(it){
+            ['img','audio','link'].some((it:string)=>{
                 if (e.target.tagName && e.target.tagName.toLowerCase()===it) {
                     msg = `can not load ${it} with location ${(e.target.src||e.target.href)}`;
                     return true;

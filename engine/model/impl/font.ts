@@ -66,27 +66,28 @@ export namespace FontFactory {
         return {symbols: symbols, width: w, height: cnvHeight};
     };
 
-    // const correctColor = (canvas:HTMLCanvasElement,color:Color):void=>{
-    //     const {r,g,b,a} = color.toJSON();
-    //     const ctx:CanvasRenderingContext2D = canvas.getContext("2d");
-    //     const imgData:ImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    //     const clamped:Uint8ClampedArray = imgData.data;
-    //     for (let i:number = 0; i < clamped.length; i+=4) {
-    //         const rIndex:number = i;
-    //         const gIndex:number = i+1;
-    //         const bIndex:number = i+2;
-    //         const aIndex:number = i+3;
-    //         const avg:number = (clamped[rIndex]+clamped[gIndex]+clamped[bIndex]+clamped[aIndex])/4;
-    //         if (avg<110) {
-    //             clamped[aIndex] = 0;
-    //         } else {
-    //             clamped[rIndex] = r;
-    //             clamped[gIndex] = g;
-    //             clamped[bIndex] = b;
-    //         }
-    //     }
-    //     ctx.putImageData(imgData, 0, 0);
-    // };
+    const correctColor = (canvas:HTMLCanvasElement,color:Color):void=>{
+        const {r,g,b,a} = color.toJSON();
+        const ctx:CanvasRenderingContext2D = canvas.getContext("2d");
+        const imgData:ImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const clamped:Uint8ClampedArray = imgData.data;
+        for (let i:number = 0; i < clamped.length; i+=4) {
+            const rIndex:number = i;
+            const gIndex:number = i+1;
+            const bIndex:number = i+2;
+            const aIndex:number = i+3;
+            const avg:number = (clamped[rIndex]+clamped[gIndex]+clamped[bIndex]+clamped[aIndex])/4;
+            if (avg<0) {
+                //clamped[aIndex] = 0;
+            } else {
+                clamped[rIndex] = r;
+                clamped[gIndex] = g;
+                clamped[bIndex] = b;
+                clamped[aIndex] = ~~(clamped[aIndex]*a/255);
+            }
+        }
+        ctx.putImageData(imgData, 0, 0);
+    };
 
     export const  getFontImageBase64 = (fontContext:FontContext,strFont:string,color:Color):string=> {
         let cnv:HTMLCanvasElement = document.createElement('canvas');
@@ -98,17 +99,17 @@ export namespace FontFactory {
         ctx.imageSmoothingEnabled = false;
         (ctx as any).mozImageSmoothingEnabled = false; // (obsolete)
         (ctx  as any).webkitImageSmoothingEnabled = false;
-        //ctx.msImageSmoothingEnabled = false;
+        (ctx as any).msImageSmoothingEnabled = false;
         (ctx as any).oImageSmoothingEnabled = false;
         ctx.fillStyle = '#00000000';
         ctx.fillRect(0,0,cnv.width,cnv.height);
-        ctx.fillStyle = color.asCSS();
+        ctx.fillStyle = '#fff';
         let symbols:{[key:string]:Rect} = fontContext.symbols;
         Object.keys(symbols).forEach((symbol:string)=>{
             let rect:Rect = symbols[symbol];
             ctx.fillText(symbol, rect.point.x, rect.point.y);
         });
-        //correctColor(cnv,color);
+        correctColor(cnv,color);
         return cnv.toDataURL();
     };
 

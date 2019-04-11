@@ -99,15 +99,15 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
     }
 
 
-    getScreenRect():Rect{
+    getWorldRect():Rect{
         if (this._dirty) {
-            this.calcScreenRect();
+            this.calcWorldRect();
         }
         return this._screenRect;
     }
 
-    protected calcScreenRect():void {
-        this._screenRect.set(this._srcRect);
+    protected calcWorldRect():void {
+        this._screenRect.set(this.getSrcRect());
         let parent:RenderableModel = this.parent;
         while (parent) {
             this._screenRect.addXY(parent.getSrcRect().point.x,parent.getSrcRect().point.y);

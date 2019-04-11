@@ -51,6 +51,11 @@ const decode =(buffer:ArrayBuffer,callback:Function)=>{
 
 export class WebAudioContext extends BasicAudioContext implements Cloneable<WebAudioContext>{
 
+    _ctx: AudioContext = null;
+    _currSource: AudioBufferSourceNode = null;
+    _gainNode: GainNode = null;
+    _free: boolean = true;
+
     static isAcceptable():boolean {
         return !!(window && CtxHolder.getCtx());
     }
@@ -77,10 +82,6 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
     }
 
     readonly type: string = 'webAudioContext';
-    _ctx: AudioContext = null;
-    _currSource: AudioBufferSourceNode = null;
-    _gainNode: GainNode = null;
-    _free: boolean = true;
 
     isFree(): boolean {
         return this._free;

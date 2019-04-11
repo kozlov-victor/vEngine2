@@ -18,7 +18,7 @@ interface IRequestData {
     method: string,
     data?: any,
     url: string,
-    success: Function,
+    success?: Function,
     error?: Function,
     requestType?: string,
     timeout?: number,
@@ -30,9 +30,9 @@ let request = (data:IRequestData)=> {
     let resolved = false;
     data.method = data.method || 'get';
     if (data.data && data.method==='get') data.url+='?'+objectToQuery(data.data);
-    let xhr=new XMLHttpRequest();
+    const xhr=new XMLHttpRequest();
     let resolveFn = noop, rejectFn = noop;
-    let promise = new Promise((resolve,reject)=>{
+    const promise = new Promise((resolve,reject)=>{
         resolveFn = resolve;
         rejectFn = reject;
     });
@@ -102,7 +102,7 @@ export namespace httpClient {
     };
 
     export const  postMultiPart = (url:string,file:File,data:IKeyVal<any>,success?:Function,error?:Function)=>{
-        let formData = new FormData();
+        const formData = new FormData();
         Object.keys(data).forEach(function(key){
             formData.append(key,data[key]);
         });

@@ -1,6 +1,4 @@
 import {RenderableModel} from "../../../renderableModel";
-
-
 import {Rect} from "@engine/geometry/rect";
 import {Container, LAYOUT_SIZE, OVERFLOW} from "../generic/container";
 import {Game} from "@engine/game";
@@ -43,7 +41,7 @@ export class AbsoluteLayout extends Container implements Cloneable<AbsoluteLayou
     draw():boolean{
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (this.overflow===OVERFLOW.HIDDEN) {
-            const r:Rect = Rect.fromPool().set(this.getScreenRect());
+            const r:Rect = Rect.fromPool().set(this.getWorldRect());
             r.addXY(-1,-1);
             r.setWH(r.size.width+1,r.size.height+1);
             renderer.lockRect(r);

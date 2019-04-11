@@ -290,7 +290,7 @@ export class TextField extends ScrollableContainer {
 
     draw():boolean {
         let renderer:AbstractRenderer = this.game.getRenderer();
-        renderer.lockRect(this.getScreenRect());
+        renderer.lockRect(this.getWorldRect());
         renderer.save();
         if (this.vScrollInfo.offset) renderer.translate(0, -this.vScrollInfo.offset, 0);
 

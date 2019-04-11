@@ -110,7 +110,7 @@ export abstract class Container extends RenderableModel {
         this.setDirty();
     }
 
-    protected calcScreenRect():void {
+    protected calcWorldRect():void {
         this._srcRect.setXYWH(
             this.pos.x,this.pos.y,
             this.size.width + this.marginLeft + this.marginRight,
@@ -140,7 +140,7 @@ export abstract class Container extends RenderableModel {
 
 
     revalidate():void {
-        this.calcScreenRect();
+        this.calcWorldRect();
         super.revalidate();
     }
 
@@ -163,7 +163,7 @@ export abstract class Container extends RenderableModel {
         } else {
             this.size.setWH(paddedWidth,paddedHeight);
         }
-        this.calcScreenRect();
+        this.calcWorldRect();
     }
 
     update():void {

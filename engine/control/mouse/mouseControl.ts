@@ -8,6 +8,7 @@ import {IControl} from "@engine/control/abstract/iControl";
 import {DebugError} from "@engine/debug/debugError";
 import {IMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {Layer} from "@engine/model/impl/layer";
 
 
 export class MouseControl implements IControl {
@@ -48,11 +49,10 @@ export class MouseControl implements IControl {
     private static triggerGameObjectEvent(
         e:MouseEvent|TouchEvent|Touch,
         eventName:string,point:MousePoint,
-        go:RenderableModel,offsetX = 0, offsetY = 0):boolean{
+        go:RenderableModel):boolean{
 
-        const rectWithOffset:Rect = Rect.fromPool().set(go.getSrcRect()).addXY(offsetX,offsetY);
+        const rectWithOffset:Rect = Rect.fromPool().set(go.getWorldRect());
         let res:boolean = false;
-
         if (
             MathEx.isPointInRect(point,rectWithOffset)
         ) {
@@ -71,6 +71,9 @@ export class MouseControl implements IControl {
             res = true;
         }
         rectWithOffset.release();
+        for (let ch of go.children) {
+            res = res || MouseControl.triggerGameObjectEvent(e,eventName,point,ch);
+        }
         return res;
     }
 
@@ -84,13 +87,22 @@ export class MouseControl implements IControl {
         point.isMouseDown = isMouseDown;
         point.target = undefined;
 
-        for (let go of scene.getAllGameObjects()) {
-            let isCaptured:boolean = MouseControl.triggerGameObjectEvent(e,eventName,point,go);
-            if (isCaptured) {
-                point.target = go;
-                break;
+        let isCaptured = false;
+        let i:number = scene.getLayers().length; // reversed loop
+        while(i--) {
+            const layer:Layer = scene.getLayers()[i];
+            let j:number = layer.children.length;
+            while(j--) {
+               const go:RenderableModel = layer.children[j];
+                isCaptured = MouseControl.triggerGameObjectEvent(e,eventName,point,go);
+                if (isCaptured) {
+                    point.target = go;
+                    break;
+                }
             }
+            if (isCaptured) break;
         }
+
 
         // todo I will do it later!
         // let untransformedPoint = MousePoint.unTransform(point);

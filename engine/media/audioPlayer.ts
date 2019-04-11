@@ -36,17 +36,17 @@ export  class AudioPlayer implements IAudioPlayer {
 
         if (DEBUG) sound.revalidate();
 
-        let node:AudioNode = this.audioNodeSet.getFreeNode();
+        const node:AudioNode|null = this.audioNodeSet.getFreeNode();
         if (DEBUG && !node) {
             console.log('no free node to play sound');
         }
-        if (!node) return;
+        if (node===null) return;
         node.play(sound.getResourceLink(),sound.loop);
     }
 
     stop(sound:Sound):void {
-        let node:AudioNode = this.audioNodeSet.getNodeBySound(sound);
-        if (!node) return;
+        const node:AudioNode|null = this.audioNodeSet.getNodeBySound(sound);
+        if (node===null) return;
         node.stop();
     }
 
@@ -63,8 +63,8 @@ export  class AudioPlayer implements IAudioPlayer {
     }
 
     setGain(sound:Sound):void {
-        let node:AudioNode = this.audioNodeSet.getNodeBySound(sound);
-        if (!node) return;
+        const node:AudioNode|null = this.audioNodeSet.getNodeBySound(sound);
+        if (node===null) return;
         node.setGain(sound.getGain());
     }
 

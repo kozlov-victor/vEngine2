@@ -12,7 +12,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
     return (
-        el.getContext("2d")
+        el.getContext("2d") as CanvasRenderingContext2D
     );
 };
 
@@ -150,13 +150,13 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             let c = document.createElement('canvas');
             c.setAttribute('width',img.width.toString());
             c.setAttribute('height',img.height.toString());
-            let ctx = c.getContext('2d');
+            let ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
             ctx.drawImage(img as HTMLImageElement,0,0);
             let size = new Size(img.width,img.height);
             this.renderableCache[link.getId()] = {
                 texture: c,
                 size,
-                name: undefined
+                name: ''
             };
             (c as any).getSize = ()=>size;
             onLoad();
