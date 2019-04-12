@@ -23,6 +23,7 @@ import {FILL_TYPE, SHAPE_TYPE} from "@engine/renderer/webGl/programs/impl/base/s
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/SimpleRectDrawer";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
 import {BLEND_MODE} from "@engine/model/renderableModel";
+import {Blender} from "@engine/renderer/webGl/blender/blender";
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
 
@@ -68,6 +69,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private preprocessFrameBuffer:FrameBuffer;
     private finalFrameBuffer:FrameBuffer;
     private doubleFrameBuffer:DoubleFrameBuffer;
+    private blender:Blender;
     private nullTexture:Texture;
 
     constructor(game:Game){
@@ -97,8 +99,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.finalFrameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);
         this.doubleFrameBuffer = new DoubleFrameBuffer(gl,this.game.width,this.game.height);
 
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-        gl.enable(gl.BLEND);
+        this.blender = new Blender(this.gl);
+        this.blender.enable();
+        this.blender.setBlendMode(BLEND_MODE.NORMAL);
         // gl.depthFunc(gl.LEQUAL);
     }
 
@@ -355,7 +358,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (numOfFilters>0 || blendMode!==BLEND_MODE.NORMAL) {
             this.preprocessFrameBuffer.bind();
             this.gl.clearColor(0,0,0,0);
-            this.gl.blendFunc(this.gl.SRC_ALPHA,this.gl.ONE_MINUS_SRC_ALPHA);
+            this.blender.setBlendMode(BLEND_MODE.NORMAL);
             this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         } else {
             this.finalFrameBuffer.bind();
@@ -365,21 +368,17 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private afterItemDraw(filters:AbstractFilter[],blendMode:BLEND_MODE):void{
         if (filters.length>0 || blendMode!==BLEND_MODE.NORMAL) {
 
-            this.gl.blendFunc(this.gl.SRC_ALPHA,this.gl.ONE_MINUS_SRC_ALPHA);
+            this.blender.setBlendMode(BLEND_MODE.NORMAL);
             const filteredTexture:Texture = this.doubleFrameBuffer.applyFilters(this.preprocessFrameBuffer.getTexture(),filters);
 
-            if (blendMode==BLEND_MODE.ADDITIVE) {
-                this.gl.blendFunc(this.gl.ONE,this.gl.ONE);
-            } else {
-                this.gl.blendFunc(this.gl.SRC_ALPHA,this.gl.ONE_MINUS_SRC_ALPHA);
-            }
+            this.blender.setBlendMode(blendMode);
 
             this.finalFrameBuffer.bind();
             this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
             this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
             this.simpleRectDrawer.draw([{texture:filteredTexture,name:'texture'}]);
 
-            this.gl.blendFunc(this.gl.SRC_ALPHA,this.gl.ONE_MINUS_SRC_ALPHA);
+            this.blender.setBlendMode(BLEND_MODE.NORMAL);
         }
     }
 

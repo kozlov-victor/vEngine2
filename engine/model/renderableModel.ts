@@ -20,7 +20,9 @@ import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 
 export enum BLEND_MODE {
     NORMAL,
-    ADDITIVE
+    ADDITIVE,
+    SUBSTRACTIVE,
+    REVERSE_SUBSTRACTIVE
 }
 
 export abstract class RenderableModel extends Resource implements Revalidatable, Tweenable, Eventemittable {
