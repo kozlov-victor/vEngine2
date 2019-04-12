@@ -18,6 +18,10 @@ import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 
+export enum BLEND_MODE {
+    NORMAL,
+    ADDITIVE
+}
 
 export abstract class RenderableModel extends Resource implements Revalidatable, Tweenable, Eventemittable {
 
@@ -30,15 +34,15 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
     angle:number = 0;
     alpha:number = 1;
     filters: AbstractFilter[] = [];
-    blendMode:string; // todo
+    blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
     parent:RenderableModel;
-    children:RenderableModel[] = [];
+    readonly children:RenderableModel[] = [];
     acceptLight:boolean = false;
     rigidBody:RigidShape;
-    velocity = new Point2d(0,0);
+    readonly velocity = new Point2d(0,0);
 
 
-    protected _dirty = true;
+    protected _dirty:boolean = true;
     private   _layer:Layer;
 
     protected _srcRect:Rect = new Rect();

@@ -22,17 +22,18 @@ import {mat4} from "@engine/geometry/mat4";
 import {FILL_TYPE, SHAPE_TYPE} from "@engine/renderer/webGl/programs/impl/base/shapeDrawer.shader";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/SimpleRectDrawer";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
-import MAT16 = mat4.MAT16;
+import {BLEND_MODE} from "@engine/model/renderableModel";
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
+    const contextAttrs:WebGLContextAttributes = {alpha:false};
     return (
-        el.getContext("webgl",{alpha: false}) ||
-        el.getContext('experimental-webgl',{alpha: false}) ||
-        el.getContext('webkit-3d',{alpha: false}) ||
-        el.getContext('moz-webgl',{alpha: false})
+        el.getContext("webgl",contextAttrs) ||
+        el.getContext('experimental-webgl',contextAttrs) ||
+        el.getContext('webkit-3d',contextAttrs) ||
+        el.getContext('moz-webgl',contextAttrs)
     ) as WebGLRenderingContext;
 };
 const SCENE_DEPTH:number = 1000;
@@ -81,7 +82,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     private _init():void{
-    	let gl:WebGLRenderingContext = getCtx(this.container as HTMLCanvasElement);
+        const gl:WebGLRenderingContext = getCtx(this.container as HTMLCanvasElement);
     	this.gl = gl;
 
     	this.nullTexture = new Texture(gl);
@@ -155,7 +156,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             throw img;
         }
 
-        this.beforeItemDraw(img.filters.length);
+        this.beforeItemDraw(img.filters.length,img.blendMode);
 
         const texture:Texture = this.renderableCache[img.getResourceLink().getId()].texture;
         const texInfo:TextureInfo[] = [{texture,name:'texture'}];
@@ -179,7 +180,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_texOffset,[img.offset.x/maxSize,img.offset.y/maxSize]);
         this.shapeDrawer.draw(texInfo);
 
-        this.afterItemDraw(img.filters);
+        this.afterItemDraw(img.filters,img.blendMode);
 
 
     }
@@ -189,18 +190,18 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.modelDrawer.bind();
 
         this.matrixStack.scale(1,-1,1);
-        let matrix1:Mat16Holder = this.matrixStack.getCurrentMatrix();
+        const matrix1:Mat16Holder = this.matrixStack.getCurrentMatrix();
 
-        let zToWMatrix:Mat16Holder = mat4.makeZToWMatrix(1);
-        let projectionMatrix:Mat16Holder = mat4.ortho(0,this.game.width,0,this.game.height,-SCENE_DEPTH,SCENE_DEPTH);
-        let matrix2:Mat16Holder = mat4.matrixMultiply(projectionMatrix, zToWMatrix);
+        const zToWMatrix:Mat16Holder = mat4.makeZToWMatrix(1);
+        const projectionMatrix:Mat16Holder = mat4.ortho(0,this.game.width,0,this.game.height,-SCENE_DEPTH,SCENE_DEPTH);
+        const matrix2:Mat16Holder = mat4.matrixMultiply(projectionMatrix, zToWMatrix);
 
-        let uniforms:UniformsInfo = {
+        const uniforms:UniformsInfo = {
             u_modelMatrix: matrix1.mat16,
             u_projectionMatrix: matrix2.mat16,
             u_alpha: 1
         };
-        let texInfo:TextureInfo[] = [{texture:g3d.texture,name:'u_texture'}];
+        const texInfo:TextureInfo[] = [{texture:g3d.texture,name:'u_texture'}];
 
         this.gl.enable(this.gl.DEPTH_TEST);
         this.modelDrawer.draw(texInfo);// todo uniforms
@@ -212,26 +213,26 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     drawRectangle(rectangle:Rectangle):void{
         const {width:rw,height:rh} = rectangle.size;
-        let maxSize:number = Math.max(rw,rh);
-        let sd:ShapeDrawer = this.shapeDrawer;
+        const maxSize:number = Math.max(rw,rh);
+        const sd:ShapeDrawer = this.shapeDrawer;
 
-        this.beforeItemDraw(rectangle.filters.length);
+        this.beforeItemDraw(rectangle.filters.length,rectangle.blendMode);
 
         this.prepareShapeUniformInfo(rectangle);
         sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
         sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
-        let texInfo:TextureInfo[] = [{texture:this.nullTexture,name:'texture'}];
+        const texInfo:TextureInfo[] = [{texture:this.nullTexture,name:'texture'}];
         sd.draw(texInfo);
 
-        this.afterItemDraw(rectangle.filters);
+        this.afterItemDraw(rectangle.filters,rectangle.blendMode);
     }
 
     drawLine(x1:number,y1:number,x2:number,y2:number,color:Color):void{
 
-        this.beforeItemDraw(0);
+        this.beforeItemDraw(0,BLEND_MODE.NORMAL);
 
-        let dx:number = x2-x1,dy:number = y2-y1;
-        let uniforms:UniformsInfo = {};
+        const dx:number = x2-x1,dy:number = y2-y1;
+        const uniforms:UniformsInfo = {};
         const rect:Rect = Rect.fromPool();
         rect.setXYWH(x1,y1,dx,dy);
         const size:Size = Size.fromPool();
@@ -240,9 +241,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         rect.release();
         size.release();
         uniforms.u_rgba = color.asGL();
-        //gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-        this.afterItemDraw([]);
+        this.afterItemDraw([],BLEND_MODE.NORMAL);
 
     }
 
@@ -251,7 +251,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
         let maxR2:number = maxR*2;
 
-        this.beforeItemDraw(ellipse.filters.length);
+        this.beforeItemDraw(ellipse.filters.length,ellipse.blendMode);
 
         this.prepareShapeUniformInfo(ellipse);
         let sd:ShapeDrawer = this.shapeDrawer;
@@ -278,7 +278,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         let texInfo:TextureInfo[] = [{texture:this.nullTexture,name:'texture'}];
         this.shapeDrawer.draw(texInfo);
 
-        this.afterItemDraw(ellipse.filters);
+        this.afterItemDraw(ellipse.filters,ellipse.blendMode);
 
     }
 
@@ -330,7 +330,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     clearColor(color:Color):void{
-        let arr:number[] = color.asGL();
+        const arr:number[] = color.asGL();
         this.gl.clearColor(arr[0],arr[1],arr[2],arr[3]);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
@@ -341,7 +341,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     flipFrameBuffer(filters:AbstractFilter[]):void{
-        let texToDraw:Texture = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(),filters);
+        const texToDraw:Texture = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(),filters);
         this.finalFrameBuffer.unbind();
         this.gl.viewport(0, 0, this.fullScreenSize.width,this.fullScreenSize.height);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
@@ -351,31 +351,42 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.restore();
     };
 
-    private beforeItemDraw(numOfFilters:number):void{
-        if (numOfFilters>0) {
+    private beforeItemDraw(numOfFilters:number,blendMode:BLEND_MODE):void{
+        if (numOfFilters>0 || blendMode!==BLEND_MODE.NORMAL) {
             this.preprocessFrameBuffer.bind();
-            this.gl.clearColor(1,1,1,0);
+            this.gl.clearColor(0,0,0,0);
+            this.gl.blendFunc(this.gl.SRC_ALPHA,this.gl.ONE_MINUS_SRC_ALPHA);
             this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         } else {
             this.finalFrameBuffer.bind();
         }
     }
 
-    private afterItemDraw(filters:AbstractFilter[]):void{
-        if (filters.length>0) {
+    private afterItemDraw(filters:AbstractFilter[],blendMode:BLEND_MODE):void{
+        if (filters.length>0 || blendMode!==BLEND_MODE.NORMAL) {
+
+            this.gl.blendFunc(this.gl.SRC_ALPHA,this.gl.ONE_MINUS_SRC_ALPHA);
             const filteredTexture:Texture = this.doubleFrameBuffer.applyFilters(this.preprocessFrameBuffer.getTexture(),filters);
+
+            if (blendMode==BLEND_MODE.ADDITIVE) {
+                this.gl.blendFunc(this.gl.ONE,this.gl.ONE);
+            } else {
+                this.gl.blendFunc(this.gl.SRC_ALPHA,this.gl.ONE_MINUS_SRC_ALPHA);
+            }
+
             this.finalFrameBuffer.bind();
             this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
             this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
             this.simpleRectDrawer.draw([{texture:filteredTexture,name:'texture'}]);
+
+            this.gl.blendFunc(this.gl.SRC_ALPHA,this.gl.ONE_MINUS_SRC_ALPHA);
         }
     }
 
     getError():number{
         if (!DEBUG) return 0;
-        let err = this.gl.getError();
-        err=err===this.gl.NO_ERROR?0:err;
-        if (err) {
+        const err:number = this.gl.getError();
+        if (err!==this.gl.NO_ERROR) {
             console.log(AbstractDrawer.currentInstance);
         }
         return err;
@@ -386,7 +397,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             onLoad();
             return;
         }
-        let img:HTMLImageElement = new (window as any).Image() as HTMLImageElement;
+        const img:HTMLImageElement = new (window as any).Image() as HTMLImageElement;
         img.src = url;
         img.onload = ()=>{
             let texture:Texture = new Texture(this.gl);

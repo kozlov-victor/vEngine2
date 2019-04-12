@@ -6,7 +6,7 @@ import {AmbientLight} from "../../light/ambientLight";
 import {Color} from "../../renderer/color";
 import {CAMERA_MATRIX_MODE} from "../../renderer/camera";
 import {ResourceLoader} from "../../resources/resourceLoader";
-import {Eventemittable, Int, Revalidatable, Tweenable} from "../../declarations";
+import {Eventemittable, Revalidatable, Tweenable} from "../../declarations";
 import {RenderableModel} from "@engine/model/renderableModel";
 import {TweenMovie} from "@engine/misc/tweenMovie";
 import {removeFromArray} from "@engine/misc/object";
@@ -16,7 +16,6 @@ import {Timer} from "@engine/misc/timer";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
-import {GameObject} from "@engine/model/impl/gameObject";
 
 
 export class Scene implements Revalidatable, Tweenable, Eventemittable {
@@ -24,12 +23,11 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
     readonly type:string = 'Scene';
     width:number;
     height:number;
-    useBG:boolean = false;
-    colorBG = Color.WHITE.clone();
+    readonly colorBG = Color.WHITE.clone();
     tileMap:TileMap;
     ambientLight:AmbientLight;
     preloadingGameObject:RenderableModel;
-    filters:AbstractFilter[] = [];
+    readonly filters:AbstractFilter[] = [];
 
     public readonly resourceLoader: ResourceLoader;
 
@@ -182,8 +180,7 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
 
         let renderer:AbstractRenderer = this.game.getRenderer();
         renderer.beginFrameBuffer();
-        if (this.useBG) renderer.clearColor(this.colorBG);
-        else renderer.clear();
+        renderer.clearColor(this.colorBG);
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
 

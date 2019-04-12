@@ -46,7 +46,7 @@ export abstract class AbstractFilter {
         let h:number = textureInfos[0].texture.size.height;
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,identity.mat16);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,w,h).mat16);
-        this.gl.clearColor(1,1,1,0);
+        this.gl.clearColor(0,0,0,0);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         this.simpleRectDrawer.draw(textureInfos);
     }

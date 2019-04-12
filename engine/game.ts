@@ -138,12 +138,12 @@ export class Game {
         scene.resourceLoader.onProgress(()=>{
            scene.onProgress(scene.resourceLoader.getProgress());
         });
-        scene.resourceLoader.startLoading();
         if (!this._running) this.update();
         this._running = true;
         scene.resourceLoader.onCompleted(()=>{
            this._currentScene.onReady();
         });
+        scene.resourceLoader.startLoading();
     }
 
     getCurrScene():Scene{
