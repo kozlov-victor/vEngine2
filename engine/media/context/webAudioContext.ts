@@ -67,7 +67,7 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
         }
         LoaderUtil.loadBinary(url, 'arraybuffer',(buffer:ArrayBuffer)=> {
             decode(buffer, (decoded:AudioBuffer)=>{
-                AudioPlayer.cache[link.getId()] = decoded;
+                AudioPlayer.cache[link.getUrl()] = decoded;
                 onLoad();
             });
         });
@@ -91,7 +91,7 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
         this.setLastTimeId();
         this._free = false;
         let currSource:AudioBufferSourceNode = this._ctx.createBufferSource();
-        currSource.buffer = AudioPlayer.cache[link.getId()];
+        currSource.buffer = AudioPlayer.cache[link.getUrl()];
         currSource.loop = loop;
         currSource.connect(this._gainNode);
         currSource.start(0);

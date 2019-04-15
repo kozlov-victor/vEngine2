@@ -30,12 +30,12 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     drawImage(img:Image):void{
         if (DEBUG) {
             if (!img.getResourceLink()) throw new DebugError(`image resource link is not set`);
-            if (!this.renderableCache[img.getResourceLink().getId()]) throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getId()}`);
+            if (!this.renderableCache[img.getResourceLink().getUrl()]) throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getUrl()}`);
         }
         let srcRect:Rect = img.getSrcRect();
         let dstRect:Rect = img.getSrcRect();
         this.ctx.drawImage(
-            this.renderableCache[img.getResourceLink().getId()].texture,
+            this.renderableCache[img.getResourceLink().getUrl()].texture,
             srcRect.point.x,
             srcRect.point.y,
             srcRect.size.width,
@@ -145,7 +145,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     loadTextureInfo(url:string,link:ResourceLink,onLoad:()=>void){
         let img:HTMLImageElement = new (window as any).Image();
         img.src = url;
-        this.renderableCache[link.getId()] = this.renderableCache[link.getId()] || {} as any;
+        this.renderableCache[link.getUrl()] = this.renderableCache[link.getUrl()] || {} as any;
         img.onload = ()=>{
             let c = document.createElement('canvas');
             c.setAttribute('width',img.width.toString());
@@ -153,7 +153,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             let ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
             ctx.drawImage(img as HTMLImageElement,0,0);
             let size = new Size(img.width,img.height);
-            this.renderableCache[link.getId()] = {
+            this.renderableCache[link.getUrl()] = {
                 texture: c,
                 size,
                 name: ''

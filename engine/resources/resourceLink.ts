@@ -1,12 +1,12 @@
 
 export class ResourceLink {
 
-    constructor(private id:string){}
+    constructor(private url:string){}
 
     private target:any;
 
-    getId():string{
-        return this.id;
+    getUrl():string{
+        return this.url;
     }
 
     setTarget(t:any):void{

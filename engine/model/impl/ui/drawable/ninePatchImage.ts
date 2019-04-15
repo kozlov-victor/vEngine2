@@ -34,8 +34,8 @@ export class NinePatchImage extends Image {
     }
 
     private _revalidatePatches():void{
-        const ti:TextureInfo = this.game.getRenderer().renderableCache[this.getResourceLink().getId()];
-        if (DEBUG || !ti) throw new DebugError(`can not find texture info by id ${this.getResourceLink().getId()}`);
+        const ti:TextureInfo = this.game.getRenderer().renderableCache[this.getResourceLink().getUrl()];
+        if (DEBUG || !ti) throw new DebugError(`can not find texture info by id ${this.getResourceLink().getUrl()}`);
         const texSize:Size = ti.texture.getSize();
         const destRect = this.getSrcRect();
         let patch:Image;

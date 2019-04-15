@@ -25,7 +25,7 @@ export class Image extends Shape implements Cloneable<Image>{
             console.error(this);
             throw new DebugError(`can not render Image: resourceLink is not specified`);
         }
-        const tex:TextureInfo = this.game.getRenderer().getTextureInfo(this.getResourceLink().getId());
+        const tex:TextureInfo = this.game.getRenderer().getTextureInfo(this.getResourceLink().getUrl());
         if (this.size.isZero()) {
             this.size.width = tex.size.width;
             this.size.height = tex.size.height;
