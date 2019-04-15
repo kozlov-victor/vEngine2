@@ -90,10 +90,10 @@ export namespace FontFactory {
     };
 
     export const  getFontImageBase64 = (fontContext:FontContext,strFont:string,color:Color):string=> {
-        let cnv:HTMLCanvasElement = document.createElement('canvas');
+        const cnv:HTMLCanvasElement = document.createElement('canvas');
         cnv.width = fontContext.width;
         cnv.height = fontContext.height;
-        let ctx:CanvasRenderingContext2D = cnv.getContext('2d');
+        const ctx:CanvasRenderingContext2D = cnv.getContext('2d');
         ctx.font = strFont;
         ctx.textBaseline = "top";
         ctx.imageSmoothingEnabled = false;
@@ -104,9 +104,9 @@ export namespace FontFactory {
         ctx.fillStyle = '#00000000';
         ctx.fillRect(0,0,cnv.width,cnv.height);
         ctx.fillStyle = '#fff';
-        let symbols:{[key:string]:Rect} = fontContext.symbols;
+        const symbols:{[key:string]:Rect} = fontContext.symbols;
         Object.keys(symbols).forEach((symbol:string)=>{
-            let rect:Rect = symbols[symbol];
+            const rect:Rect = symbols[symbol];
             ctx.fillText(symbol, rect.point.x, rect.point.y);
         });
         correctColor(cnv,color);
@@ -115,7 +115,7 @@ export namespace FontFactory {
 
     export const generate = (f:Font,s:Scene):void=>{
         f.createContext();
-        let link:ResourceLink = s.resourceLoader.loadImage(f.createBitmap());
+        const link:ResourceLink = s.resourceLoader.loadImage(f.createBitmap());
         f.setResourceLink(link);
     }
     

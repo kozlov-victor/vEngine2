@@ -88,16 +88,18 @@ export class Color implements Cloneable<Color>, Releasealable{
 
     private _captured:boolean = false;
 
-    capture(): void {
+    capture(): this {
         this._captured = true;
+        return this;
     }
 
     isCaptured(): boolean {
         return this._captured;
     }
 
-    release(): void {
+    release(): this {
         this._captured = false;
+        return this;
     }
 
     private static getFromPool():Color{

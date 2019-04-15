@@ -2,8 +2,8 @@ import {DebugError} from "../debug/debugError";
 
 
 export interface Releasealable {
-    release():void,
-    capture():void,
+    release():this,
+    capture():this,
     isCaptured():boolean
 }
 
@@ -20,12 +20,6 @@ export class ObjectPool<T extends Releasealable> {
     }
 
     getFreeObject():T{
-
-        let c=0;
-        for (let i:number=0;i<this.numberOfInstances;i++) {
-            if (this._pool[i]  && this._pool[i].isCaptured()) c++;
-        }
-        if (c>=this.numberOfInstances-1) throw "";
 
         for (let i:number=0;i<this.numberOfInstances;i++) {
             let current:T = this._pool[i];

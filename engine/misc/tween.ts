@@ -36,6 +36,7 @@ export interface TweenDescription {
     complete?:Function,
     ease?:EaseFn,
     time:number,
+    delayBeforeStart?:number,
     from?:{[key:string]:number},
     to?:{[key:string]:number}
 }
@@ -48,12 +49,13 @@ export interface TweenDescriptionNormalized extends TweenDescription{
 
 export class Tween {
 
-    private _propsToChange:Array<any> = [];
+    private _propsToChange:any[] = [];
     private _startedTime:number = 0;
     private _currTime:number = 0;
     private _completed:boolean = false;
     private readonly _target: any;
     private _progressFn:Function|undefined;
+    private _delayBeforeStart:number = 0;
     private readonly _completeFn: Function|undefined;
     private readonly _easeFn:EaseFn;
     private readonly _tweenTime: number;
@@ -74,7 +76,8 @@ export class Tween {
         this._progressFn = tweenDesc.progress;
         this._completeFn = tweenDesc.complete;
         this._easeFn = tweenDesc.ease || Easing.linear  as EaseFn; // todo namespaces for easing?
-        this._tweenTime = tweenDesc.time || 1000;
+        this._delayBeforeStart = tweenDesc.delayBeforeStart || 0;
+        this._tweenTime = (tweenDesc.time || 1000) + this._delayBeforeStart;
         this._desc = this.normalizeDesc(tweenDesc);
     }
 
@@ -112,7 +115,10 @@ export class Tween {
         const currTime:number = Game.getInstance().getTime();
         this._currTime = currTime;
         if (!this._startedTime) this._startedTime = currTime;
-        let curTweenTime:number = currTime - this._startedTime;
+        const curTweenTime:number = currTime - this._startedTime;
+
+        if (curTweenTime<this._delayBeforeStart) return;
+
         if (curTweenTime>this._tweenTime) {
             this.complete();
             return;

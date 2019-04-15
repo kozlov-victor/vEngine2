@@ -5,7 +5,6 @@ import {ParticleSystem} from "@engine/model/impl/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {BLEND_MODE} from "@engine/model/renderableModel";
-import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/triangleBlurFilter";
 import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/simpleBlurFilter";
 import {Circle} from "@engine/model/impl/ui/drawable/circle";
 import {Shape} from "@engine/model/impl/ui/generic/shape";
@@ -27,11 +26,11 @@ export class MainScene extends Scene {
         console.log('on ready');
         this.colorBG.setRGB(20,20,75);
         let circle:Circle = new Circle(this.game);
-        circle.radius = 20;
+        circle.radius = MathEx.random(5,20);
         (circle.fillColor as Color).setRGBA(0,200,0);
 
         let rect:Rectangle = new Rectangle(this.game);
-        rect.size.setWH(30);
+        rect.size.setWH(MathEx.random(10,20));
         (rect.fillColor as Color).setRGBA(0,200,0);
 
         let ps: ParticleSystem = new ParticleSystem(this.game);
@@ -39,8 +38,6 @@ export class MainScene extends Scene {
         ps.addParticle(rect);
         ps.emissionRadius = 5;
 
-        const blur:TriangleBlurFilter = new TriangleBlurFilter(this.game);
-        blur.setValue(10);
         const sb:SimpleBlurFilter = new SimpleBlurFilter(this.game);
         sb.setSize(2);
 

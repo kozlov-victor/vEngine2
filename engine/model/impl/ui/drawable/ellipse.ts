@@ -16,14 +16,14 @@ export class Ellipse extends Shape implements Cloneable<Ellipse>{
         this.center.observe(()=>{
             const maxR:number = this._getMaxRadius();
             this.pos.
-                silent<Point2d>(true).
+                silent(true).
                 setXY(this.center.x - maxR,this.center.y - maxR).
                 silent(false);
         });
         this.pos.observe(()=>{
             const maxR:number = this._getMaxRadius();
             this.center.
-                silent<Point2d>(true).
+                silent(true).
                 setXY(this.pos.x+maxR,this.pos.y+maxR).
                 silent(false);
         });

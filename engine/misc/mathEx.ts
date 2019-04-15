@@ -37,14 +37,14 @@ export namespace MathEx {
     };
 
     export const rectToPolar = (point: Point2d, center: Point2d): { radius: number, angle: number } => {
-        let radius = Math.sqrt(point.x * point.x + center.y * center.y);
-        let angle = Math.atan2(center.y - point.y, center.x - point.x);
+        const radius:number = Math.sqrt(point.x * point.x + center.y * center.y);
+        const angle:number = Math.atan2(center.y - point.y, center.x - point.x);
         return {radius, angle}
     };
 
     export const polarToRect = (radius: number, angle: number, center: Point2d): Point2d => {
-        let x = radius * Math.cos(angle);
-        let y = radius * Math.sin(angle);
+        const x:number = radius * Math.cos(angle);
+        const y:number = radius * Math.sin(angle);
         return new Point2d(center.x - x, center.y - y);
     };
 
@@ -61,14 +61,14 @@ export namespace MathEx {
     };
 
     export const getAngle = (p1: Point2d, p2: Point2d): number => {
-        let dx: number = p1.x - p2.x;
-        let dy: number = p1.y - p2.y;
+        const dx: number = p1.x - p2.x;
+        const dy: number = p1.y - p2.y;
         return Math.atan2(dy, dx);
     };
 
     export const random = (min: number, max: number): number => {
         if (min > max) {
-            const tmp = min;
+            const tmp:number = min;
             min = max;
             max = tmp;
         }

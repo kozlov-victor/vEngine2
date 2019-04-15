@@ -30,7 +30,7 @@ export class EventEmitter{
     };
 
     off(eventName:string,callback:Function):void {
-        let es:Function[] = this.events[eventName];
+        const es:Function[] = this.events[eventName];
         if (!es) return;
         let index:number = es.indexOf(callback);
         if (DEBUG && index==-1) {
@@ -41,7 +41,7 @@ export class EventEmitter{
     };
 
     trigger(eventName:string,data:any):void {
-        let es:Function[] = this.events[eventName];
+        const es:Function[] = this.events[eventName];
         if (!es) return;
         let l:number = es.length;
         while(l--){

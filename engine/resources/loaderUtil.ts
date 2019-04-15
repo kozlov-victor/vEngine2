@@ -1,7 +1,7 @@
 
 export namespace LoaderUtil {
     export const loadBinary = (url:string,responsetype:'arraybuffer'|'blob',onLoad:(buffer:ArrayBuffer)=>void)=> {
-        let request = new XMLHttpRequest();
+        const request:XMLHttpRequest = new XMLHttpRequest();
         request.open('GET', url, true);
         request.responseType = responsetype;
 

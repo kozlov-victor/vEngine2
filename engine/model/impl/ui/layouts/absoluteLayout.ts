@@ -45,6 +45,7 @@ export class AbsoluteLayout extends Container implements Cloneable<AbsoluteLayou
             r.addXY(-1,-1);
             r.setWH(r.size.width+1,r.size.height+1);
             renderer.lockRect(r);
+            r.release();
         }
         if (this.background) this.background.draw();
         renderer.translate(

@@ -141,7 +141,7 @@ export class Cube extends AbstractPrimitive {
     constructor(){
         super();
         const size = 10;
-        let bufferArrs:IPrimitive = prepareBuffers(size);
+        const bufferArrs:IPrimitive = prepareBuffers(size);
         this.vertexArr = bufferArrs.vertexArr;
         this.normalArr = bufferArrs.normalArr;
         this.texCoordArr = bufferArrs.texCoordArr;

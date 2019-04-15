@@ -12,7 +12,7 @@ export class Texture {
 
     gl:WebGLRenderingContext;
     tex:WebGLTexture = null;
-    size:Size = new Size(0,0);
+    readonly size:Size = new Size(0,0);
     isPowerOfTwo:boolean = false;
 
     private static MAX_TEXTURE_IMAGE_UNITS:number = 0;
@@ -47,12 +47,19 @@ export class Texture {
      * @param height -unused if image specified
      */
     setImage(img:HTMLImageElement,width:number = 0,height:number = 0):void{
+
+        const gl:WebGLRenderingContext = this.gl;
+
         if (DEBUG) {
             if (!(img || width || height))
                 throw new DebugError("texture.setImage: if image is null, width and height must be specified: tex.setImage(null,w,h)");
+
+            const maxSupportedSize:number = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
+            if (width>maxSupportedSize || height>maxSupportedSize) {
+                throw new DebugError(`can not create texture with size ${width}x${height}, max supported size is ${maxSupportedSize}`);
+            }
         }
 
-        const gl:WebGLRenderingContext = this.gl;
         if (img) this.size.setWH(img.width,img.height);
         else this.size.setWH(width,height);
         //gl.activeTexture(gl.TEXTURE0);
@@ -91,14 +98,14 @@ export class Texture {
         }
         program.setUniform(name,i);
         if (Texture.currInstances[i]===this) return;
-        let gl:WebGLRenderingContext = this.gl;
+        const gl:WebGLRenderingContext = this.gl;
         gl.activeTexture(gl.TEXTURE0+i);
         gl.bindTexture(gl.TEXTURE_2D, this.tex);
         Texture.currInstances[i] = this;
     }
 
     unbind(i:number = 0):void {
-        let gl:WebGLRenderingContext = this.gl;
+        const gl:WebGLRenderingContext = this.gl;
         gl.activeTexture(gl.TEXTURE0+i);
         gl.bindTexture(gl.TEXTURE_2D, null);
         delete Texture.currInstances[i];
@@ -106,11 +113,11 @@ export class Texture {
 
 
     getColorArray():Uint8Array {
-        let gl:WebGLRenderingContext = this.gl;
-        let wxh:number = this.size.width*this.size.height;
+        const gl:WebGLRenderingContext = this.gl;
+        const wxh:number = this.size.width*this.size.height;
         if (DEBUG && gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)
             throw new DebugError(`Texture.GetColorArray() failed!`);
-        let pixels:Uint8Array = new Uint8Array(wxh * 4);
+        const pixels:Uint8Array = new Uint8Array(wxh * 4);
         gl.readPixels(0, 0, this.size.width, this.size.height, gl.RGBA,
         gl.UNSIGNED_BYTE, pixels);
         return pixels;

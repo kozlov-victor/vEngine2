@@ -81,7 +81,7 @@ export class Camera {
         this.scene = this.game.getCurrScene();
 
         const tileWidth:number = this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getFrameWidth():0; // todo ?
-        let tileHeight:number = this.scene.tileMap.spriteSheet? this.scene.tileMap.spriteSheet.getFrameHeight():0;
+        const tileHeight:number = this.scene.tileMap.spriteSheet? this.scene.tileMap.spriteSheet.getFrameHeight():0;
         const w:number = this.game.width;
         const h:number = this.game.height;
         const wDiv2:number = w/2;

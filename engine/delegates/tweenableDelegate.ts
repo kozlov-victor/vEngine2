@@ -8,7 +8,7 @@ export class TweenableDelegate {
     private _tweenMovies:TweenMovie[];
 
     tween(desc:TweenDescription):Tween{
-        let t:Tween = new Tween(desc);
+        const t:Tween = new Tween(desc);
         if (!this._tweens) this._tweens = [];
         this._tweens.push(t);
         return t;

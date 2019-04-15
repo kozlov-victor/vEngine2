@@ -4,7 +4,7 @@ import {RenderableModel} from "../renderableModel";
 export class Layer {
 
     readonly type:string = 'Layer';
-    children:RenderableModel[] = [];
+    readonly children:RenderableModel[] = [];
 
     constructor(protected game:Game) {
 
@@ -32,8 +32,7 @@ export class Layer {
     }
 
     render():void {
-        let all:RenderableModel[] = this.children;
-        for (let obj of all) {
+        for (let obj of this.children) {
             obj.render();
         }
     }

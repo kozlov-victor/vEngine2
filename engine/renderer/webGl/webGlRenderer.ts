@@ -392,14 +392,16 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     loadTextureInfo(url:string,link:ResourceLink,onLoad:()=>void):void{
-        if (this.renderableCache[link.getId()]) {
+        const possibleTargetInCache:TextureInfo = this.renderableCache[link.getId()];
+        if (possibleTargetInCache) {
+            link.setTarget(possibleTargetInCache);
             onLoad();
             return;
         }
         const img:HTMLImageElement = new (window as any).Image() as HTMLImageElement;
         img.src = url;
         img.onload = ()=>{
-            let texture:Texture = new Texture(this.gl);
+            const texture:Texture = new Texture(this.gl);
             texture.setImage(img);
             this.gl.bindTexture(this.gl.TEXTURE_2D, this.finalFrameBuffer.getTexture().getGlTexture()); // to restore texture binding
             const ti:TextureInfo = {texture,size:texture.size,name:undefined};

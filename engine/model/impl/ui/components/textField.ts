@@ -212,10 +212,10 @@ export class TextField extends ScrollableContainer {
     }
 
     private _getCharInfo(c: char): CharInfo {
-        let charRect: Rect =
+        const charRect: Rect =
             this._font.fontContext.symbols[c] ||
             this._font.fontContext.symbols[' '];
-        let charInfo = new CharInfo();
+        const charInfo = new CharInfo();
         charInfo.symbol = c;
         charInfo.sourceRect = charRect;
         charInfo.destRect.setSize(charRect.size);
@@ -266,7 +266,7 @@ export class TextField extends ScrollableContainer {
         this.updateScrollSize(textInfo.size.height,this.size.height);
     }
 
-    setText(text:string = '') {
+    setText(text:string = ''):void {
         this._text = text.toString();
         this._dirty = true;
     }
@@ -289,7 +289,7 @@ export class TextField extends ScrollableContainer {
 
 
     draw():boolean {
-        let renderer:AbstractRenderer = this.game.getRenderer();
+        const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.lockRect(this.getWorldRect());
         renderer.save();
         if (this.vScrollInfo.offset) renderer.translate(0, -this.vScrollInfo.offset, 0);

@@ -31,35 +31,35 @@ export class MatrixStack {
     }
 
     translate(x:number, y:number, z:number = 0):MatrixStack {
-        let t:Mat16Holder = mat4.makeTranslation(x, y, z);
-        let m:Mat16Holder = this.getCurrentMatrix();
+        const t:Mat16Holder = mat4.makeTranslation(x, y, z);
+        const m:Mat16Holder = this.getCurrentMatrix();
         this.setCurrentMatrix(mat4.matrixMultiply(t, m));
         return this;
     }
 
     rotateZ(angleInRadians:number):MatrixStack {
-        let t = mat4.makeZRotation(angleInRadians);
-        let m = this.getCurrentMatrix();
+        const t = mat4.makeZRotation(angleInRadians);
+        const m = this.getCurrentMatrix();
         this.setCurrentMatrix(mat4.matrixMultiply(t, m));
         return this;
     }
 
     rotateY(angleInRadians:number):MatrixStack {
-        let t = mat4.makeYRotation(angleInRadians);
-        let m = this.getCurrentMatrix();
+        const t = mat4.makeYRotation(angleInRadians);
+        const m = this.getCurrentMatrix();
         this.setCurrentMatrix(mat4.matrixMultiply(t, m));
         return this;
     }
 
     scale (x:number, y:number, z:number = 1):MatrixStack {
-        let t:Mat16Holder = mat4.makeScale(x, y, z);
-        let m:Mat16Holder = this.getCurrentMatrix();
+        const t:Mat16Holder = mat4.makeScale(x, y, z);
+        const m:Mat16Holder = this.getCurrentMatrix();
         this.setCurrentMatrix(mat4.matrixMultiply(t, m));
         return this;
     }
 
     resetTransform():MatrixStack{
-        let identity:Mat16Holder = mat4.makeIdentity();
+        const identity:Mat16Holder = mat4.makeIdentity();
         this.setCurrentMatrix(identity);
         return this;
     }
