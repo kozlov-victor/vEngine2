@@ -34,9 +34,9 @@ export class Game {
     height:number = 240;
     gravityConstant:number = 0;
     fps:number = 0;
-    lightArray:LightArray;
-    collider:ColliderEngine;
-    camera:Camera;
+    lightArray:LightArray = new LightArray(this);
+    collider:ColliderEngine = new ColliderEngine(this);
+    camera:Camera = new Camera(this);
     scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
     private static UPDATE_TIME_RATE:number = 20;
@@ -44,9 +44,6 @@ export class Game {
 
     constructor(){
         Game.instance = this;
-        this.collider = new ColliderEngine(this);
-        this.camera = new Camera(this);
-        this.lightArray = new LightArray(this);
         if (DEBUG) (window as any)['game'] = this;
     }
 
@@ -124,12 +121,7 @@ export class Game {
         return this._renderer;
     }
 
-    private _cnt=0;
-    debug2(...val:any[]):void{
-        this._cnt++;
-        console.log(val);
-        if (this._cnt>0xff) throw new DebugError('too many logs');
-    }
+    debug2?(...val:any[]):void;
 
     runScene(scene:Scene):void{
         this._currentScene = scene;
@@ -202,5 +194,13 @@ export class Game {
     }
 
 
+}
+
+if (DEBUG) {
+    let _cnt:number = 0;
+    Game.prototype.debug2  = (...val:any[])=>{
+        console.log(val);
+        if (_cnt>0xff) throw new DebugError('too many logs');
+    };
 }
 

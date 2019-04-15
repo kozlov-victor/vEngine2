@@ -88,7 +88,7 @@ export class Camera {
         const hDiv2:number = h/2;
 
 
-        let gameObject:RenderableModel = this.objFollowTo;
+        const gameObject:RenderableModel = this.objFollowTo;
         if (gameObject) {
             //let wScaled = this.getRectScaled().size.width;
             // if (gameObject['_lastDirection'] === 'Right') // todo _lastDirection
@@ -128,7 +128,7 @@ export class Camera {
     }
 
     shake(amplitude:number,time:number):void {
-        let tweenTarget:CameraTweenTarget = {time:0,point:new Point2d(0,0)};
+        const tweenTarget:CameraTweenTarget = {time:0,point:new Point2d(0,0)};
         this.cameraShakeTween = new Tween({
             target:tweenTarget,
             time,
@@ -144,8 +144,8 @@ export class Camera {
 
     _updateRect():void{
         const p:Point2d = Point2d.fromPool();
-        let point00 = this.screenToWorld(p.setXY(0,0));
-        let pointWH = this.screenToWorld(p.setXY(this.game.width,this.game.height));
+        const point00:Point2d = this.screenToWorld(p.setXY(0,0));
+        const pointWH:Point2d = this.screenToWorld(p.setXY(this.game.width,this.game.height));
         this._rectScaled.setXYWH(
             point00.x,point00.y,
             pointWH.x - point00.x,pointWH.y - point00.y
@@ -154,7 +154,7 @@ export class Camera {
     }
 
     render():void{ //TRS - (transform rotate scale) reverted
-        let renderer:AbstractRenderer = this.game.getRenderer();
+        const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.translate(this.game.width/2,this.game.height/2);
         renderer.scale(this.scale.x,this.scale.y);
         // todo rotation does not work correctly yet

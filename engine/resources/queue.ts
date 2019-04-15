@@ -1,4 +1,4 @@
-export class Queue{
+export class Queue {
 
     private tasksResolved:number = 0;
     private tasks:Function[] = [];
