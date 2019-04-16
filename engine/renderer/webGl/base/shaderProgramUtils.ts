@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 import {ShaderProgram} from "./shaderProgram";
 import {Int} from "@engine/declarations";
-import {isArray} from "@engine/misc/object";
+import {IKeyVal, isArray} from "@engine/misc/object";
 
 
 interface ShaderErrorInfo {
@@ -32,7 +32,7 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
         if (!shaderSource) throw new DebugError(`can not compile shader: shader source not specified for type ${shaderType}`);
     }
     // Create the shader object
-    const shader = gl.createShader(shaderType);
+    const shader:WebGLShader = gl.createShader(shaderType);
     if (DEBUG && !shader) throw new DebugError(`can not allocate memory for shader: gl.createShader(shaderType)`);
 
     // Load the shader source
@@ -95,7 +95,7 @@ export const createProgram = (gl:WebGLRenderingContext, vertexShader:WebGLShader
     return program;
 };
 
-let GL_TABLE:{[key:number]:string} = null;
+let GL_TABLE:IKeyVal<string> = null;
 
 export const GL_TYPE = {
     FLOAT:      'float',
@@ -126,10 +126,10 @@ const mapType = (gl:WebGLRenderingContext, type:number):string=> {
     if (!GL_TABLE) {
         let typeNames:string[] = Object.keys(GL_TYPE);
 
-        GL_TABLE = {} as {[key:number]:string};
+        GL_TABLE = {} as IKeyVal<string>;
 
-        for (let i = 0; i < typeNames.length; ++i) {
-            let tn:string = typeNames[i];
+        for (let i:number = 0; i < typeNames.length; ++i) {
+            const tn:string = typeNames[i];
             GL_TABLE[(gl as any)[tn]] = (GL_TYPE as any)[tn]; //todo
         }
     }
@@ -178,11 +178,11 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
         const type:string = mapType(gl, uniformData.type);
         const name:string = normalizeUniformName(uniformData.name);
         const location:WebGLUniformLocation = gl.getUniformLocation(glProgram, name) as WebGLUniformLocation;
-        // if (DEBUG && location===null) {
-        //     console.log(program);
-        //     throw new DebugError(`error finding uniform location: ${uniformData.name}`);
-        // }
-        // todo ie provide attrData.name but can not find location of unused attr
+        if (DEBUG && location===null) {
+            // todo ie provide attrData.name but can not find location of unused attr
+            console.log(program);
+            throw new DebugError(`error finding uniform location: ${uniformData.name}`);
+        }
 
         uniforms[name] = {
             type,
