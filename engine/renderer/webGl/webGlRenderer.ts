@@ -150,19 +150,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             if (!img.getResourceLink()) {
                 throw new DebugError(`image resource link is not set`);
             }
-            if (!this.renderableCache[img.getResourceLink().getId()]) {
-                throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getId()}`);
+            if (!img.getResourceLink().getTarget()) {
+                console.error(img);
+                throw new DebugError(`no target associated with resource link`);
             }
-        }
-
-        if (0) {
-            console.error(img);
-            throw img;
         }
 
         this.beforeItemDraw(img.filters.length,img.blendMode);
 
-        const texture:Texture = this.renderableCache[img.getResourceLink().getId()].texture;
+        const texture:Texture = img.getResourceLink().getTarget<TextureInfo>().texture as Texture;
         const texInfo:TextureInfo[] = [{texture,name:'texture'}];
         const maxSize:number = Math.max(img.size.width,img.size.height);
         const sd:ShapeDrawer = this.shapeDrawer;
@@ -393,18 +389,20 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     loadTextureInfo(url:string,link:ResourceLink,onLoad:()=>void):void{
-        if (this.renderableCache[link.getId()]) {
+        const possibleTargetInCache:TextureInfo = this.renderableCache[link.getUrl()];
+        if (possibleTargetInCache) {
+            link.setTarget(possibleTargetInCache);
             onLoad();
             return;
         }
         const img:HTMLImageElement = new (window as any).Image() as HTMLImageElement;
         img.src = url;
         img.onload = ()=>{
-            let texture:Texture = new Texture(this.gl);
+            const texture:Texture = new Texture(this.gl);
             texture.setImage(img);
             this.gl.bindTexture(this.gl.TEXTURE_2D, this.finalFrameBuffer.getTexture().getGlTexture()); // to restore texture binding
             const ti:TextureInfo = {texture,size:texture.size,name:undefined};
-            this.renderableCache[link.getId()] = ti;
+            this.renderableCache[link.getUrl()] = ti;
             link.setTarget(ti);
             onLoad();
         };

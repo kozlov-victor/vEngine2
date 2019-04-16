@@ -58,12 +58,12 @@ export class ParticleSystem extends RenderableModel {
             throw new DebugError(`particle system is detached`);
         }
 
-        for (let i = 0;i<r(this.numOfParticlesToEmit);i++) {
+        for (let i:number = 0;i<r(this.numOfParticlesToEmit);i++) {
             let particle:RenderableCloneable = this._prototypes[MathEx.random(0,this._prototypes.length-1)];
             particle = particle.clone();
             this._onEmitParticle(particle);
-            let angle:number = r(this.particleAngle);
-            let vel:number = r(this.particleVelocity);
+            const angle:number = r(this.particleAngle);
+            const vel:number = r(this.particleVelocity);
             particle.velocity.x = vel*Math.cos(angle);
             particle.velocity.y = vel*Math.sin(angle);
             particle.pos.x = r({from:-this.emissionRadius,to:+this.emissionRadius});

@@ -9,7 +9,7 @@ const getOrder = ():number=> {
 
 export class AudioNode {
 
-    currSound:Sound = null;
+    private currSound:Sound = null;
 
     constructor(public context:BasicAudioContext){}
 

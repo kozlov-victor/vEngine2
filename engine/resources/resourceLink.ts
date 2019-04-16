@@ -1,11 +1,12 @@
-import {Incrementer} from "@engine/resources/incrementer";
+
 export class ResourceLink {
 
-    private constructor(private id:string){}
+    constructor(private url:string){}
+
     private target:any;
 
-    getId():string{
-        return this.id;
+    getUrl():string{
+        return this.url;
     }
 
     setTarget(t:any):void{
@@ -14,10 +15,6 @@ export class ResourceLink {
 
     getTarget<T>():T{
         return this.target as T;
-    }
-
-    static create():ResourceLink {
-        return new ResourceLink((Incrementer.getValue()).toString());
     }
 
 }

@@ -6,7 +6,7 @@ export class AbstractCanvasRenderer extends AbstractRenderer {
 
     constructor(game:Game) {
         super(game);
-        let container = document.createElement('canvas');
+        const container:HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
         document.body.appendChild(container);
         container.setAttribute('width',game.width.toString());
         container.setAttribute('height',game.height.toString());

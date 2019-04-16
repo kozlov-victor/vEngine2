@@ -65,7 +65,7 @@ export class ScrollInfo {
         });
         container.on(MOUSE_EVENTS.mouseMove, (p: MousePoint) => {
             if (!p.isMouseDown) return;
-            let lastPoint = this._lastPoint;
+            let lastPoint:ScrollPointDesc = this._lastPoint;
             this._lastPoint = {
                 point: p,
                 time: Date.now()

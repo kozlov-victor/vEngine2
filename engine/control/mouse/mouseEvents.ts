@@ -1,5 +1,5 @@
 
-export let MOUSE_EVENTS = {
+export const MOUSE_EVENTS = {
     click       :   'click',
     mouseDown   :   'mouseDown',
     mouseMove   :   'mouseMove',

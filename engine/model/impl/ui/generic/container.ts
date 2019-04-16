@@ -155,8 +155,8 @@ export abstract class Container extends RenderableModel {
     }
 
     calcDrawableRect(contentWidth:number, contentHeight:number):void {
-        let paddedWidth = contentWidth  + this.paddingLeft + this.paddingRight;
-        let paddedHeight = contentHeight +  this.paddingTop +  this.paddingBottom;
+        const paddedWidth:number = contentWidth  + this.paddingLeft + this.paddingRight;
+        const paddedHeight:number = contentHeight +  this.paddingTop +  this.paddingBottom;
         if (this.background) {
             this.background.setWH(paddedWidth,paddedHeight);
             this.size.set(this.background.size);

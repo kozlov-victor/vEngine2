@@ -35,12 +35,14 @@ export namespace mat4 {
             return this._captured;
         }
 
-        capture(): void {
+        capture(): this {
             this._captured = true;
+            return this;
         }
 
-        release(): void {
+        release(): this {
             this._captured = false;
+            return this;
         }
 
     }

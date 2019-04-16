@@ -15,7 +15,7 @@ export class ResourceLoader {
 
 
     loadImage(url:string):ResourceLink {
-        const link:ResourceLink = ResourceLink.create();
+        const link:ResourceLink = new ResourceLink(url);
         this.q.addTask(()=>{
             this.game.getRenderer().loadTextureInfo(
                 url, link,
@@ -26,7 +26,7 @@ export class ResourceLoader {
     }
 
     loadSound(url:string):ResourceLink {
-        const link:ResourceLink = ResourceLink.create();
+        const link:ResourceLink = new ResourceLink(url);
         this.q.addTask(()=>{
             this.game.getAudioPlayer().loadSound(
                 url, link,

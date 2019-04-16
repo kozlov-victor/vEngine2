@@ -27,19 +27,19 @@ export class NinePatchImage extends Image {
      */
     constructor(game: Game) {
         super(game);
-        for (let i=0;i<9;i++) {
+        for (let i:number=0;i<9;i++) {
             this._patches[i] = new Image(this.game);
         }
         this.getSrcRect().observe(()=>{this.revalidate()});
     }
 
     private _revalidatePatches():void{
-        let ti:TextureInfo = this.game.getRenderer().renderableCache[this.getResourceLink().getId()];
-        if (DEBUG || !ti) throw new DebugError(`can not find texture info by id ${this.getResourceLink().getId()}`);
-        let texSize:Size = ti.texture.getSize();
-        let destRect = this.getSrcRect();
+        const ti:TextureInfo = this.game.getRenderer().renderableCache[this.getResourceLink().getUrl()];
+        if (DEBUG || !ti) throw new DebugError(`can not find texture info by id ${this.getResourceLink().getUrl()}`);
+        const texSize:Size = ti.texture.getSize();
+        const destRect = this.getSrcRect();
         let patch:Image;
-        let a:number = this.a,b:number=this.b,c:number=this.c,d:number=this.d;
+        const a:number = this.a,b:number=this.b,c:number=this.c,d:number=this.d;
         // patch 1
         patch = this._patches[0];
         let patchCnt:number=1;
@@ -81,7 +81,7 @@ export class NinePatchImage extends Image {
         patch = this._patches[patchCnt++];
         patch.getSrcRect().setXYWH(texSize.width-b,texSize.height-d,b,d);
         patch.setXYWH(destRect.point.x+destRect.size.width-b,destRect.point.y+destRect.size.height-d,b,d);
-        for (let i=0;i<9;i++) {
+        for (let i:number=0;i<9;i++) {
             this._patches[i].setResourceLink(this.getResourceLink());
         }
     }
@@ -112,7 +112,7 @@ export class NinePatchImage extends Image {
     }
 
     draw():boolean{
-        for (let i=0;i<9;i++) {
+        for (let i:number=0;i<9;i++) {
             this._patches[i].render();
         }
         return true;

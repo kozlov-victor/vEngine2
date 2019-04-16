@@ -63,7 +63,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         });
         this.sceneOnMouseMove = scene.on(MOUSE_EVENTS.mouseMove,(e:IMousePoint)=>{
             const pointId = DraggableBehaviour._getEventId(e);
-            const point = this.points[pointId];
+            const point:MouseDragPoint = this.points[pointId];
             if (!point) return;
             if (!point.dragStart) {
                 point.dragStart = true;

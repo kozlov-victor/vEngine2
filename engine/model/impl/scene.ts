@@ -136,10 +136,10 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
     }
 
     private renderMainFrame():void {
-        let renderer = this.game.getRenderer();
+        const renderer:AbstractRenderer = this.game.getRenderer();
         this.game.camera.update();
 
-        let layers = this._layers;
+        let layers:Layer[] = this._layers;
         for (let l of layers) {
             l.render();
         }
@@ -178,7 +178,7 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
 
         this.beforeRender();
 
-        let renderer:AbstractRenderer = this.game.getRenderer();
+        const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.beginFrameBuffer();
         renderer.clearColor(this.colorBG);
 

@@ -1,7 +1,7 @@
 import {Container} from "../generic/container";
-import {Game} from "../../../../game";
+import {Game} from "@engine/game";
 import {Rectangle} from "../drawable/rectangle";
-import {Color} from "../../../../renderer/color";
+import {Color} from "@engine/renderer/color";
 import {Shape} from "../generic/shape";
 
 export class VScroll extends Container {

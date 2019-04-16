@@ -7,9 +7,9 @@ export abstract class ObservableEntity implements Releasealable{
     private _onChanged:Array<()=>void> = [];
 
     private _silent:boolean = false;
-    silent<T>(val:boolean):T{
+    silent(val:boolean):this {
         this._silent = val;
-        return this as any;
+        return this;
     }
 
     private _captured:boolean = false;
@@ -17,12 +17,14 @@ export abstract class ObservableEntity implements Releasealable{
         return this._captured;
     }
 
-    capture(): void {
+    capture(): this {
         this._captured = true;
+        return this;
     }
 
-    release(): void {
+    release(): this {
         this._captured = false;
+        return this;
     }
 
     protected triggerObservable():void {

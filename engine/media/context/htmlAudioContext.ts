@@ -30,7 +30,7 @@ export class HtmlAudioContext extends BasicAudioContext implements Cloneable<Htm
     }
     load(url:string,link:ResourceLink,callBack:()=>void):void {
         LoaderUtil.loadBinary(url,'blob',(buffer:ArrayBuffer)=>{
-            AudioPlayer.cache[link.getId()] = URL.createObjectURL(buffer);
+            AudioPlayer.cache[link.getUrl()] = URL.createObjectURL(buffer);
             callBack();
         });
 
@@ -47,8 +47,8 @@ export class HtmlAudioContext extends BasicAudioContext implements Cloneable<Htm
 
     play(link:ResourceLink, loop: boolean):void {
         this.setLastTimeId();
-        const url:string = AudioPlayer.cache[link.getId()];
-        if (DEBUG && !url) throw new DebugError(`can not retrieve audio from cache (link id=${link.getId()})`);
+        const url:string = AudioPlayer.cache[link.getUrl()];
+        if (DEBUG && !url) throw new DebugError(`can not retrieve audio from cache (link id=${link.getUrl()})`);
 
         this.free = false;
         this._ctx.src = url;

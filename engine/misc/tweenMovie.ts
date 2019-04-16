@@ -45,7 +45,7 @@ export class TweenMovie {
         if (this._completed) return;
         const currTime:number = this.game.getTime();
         if (!this._startedTime) this._startedTime = currTime;
-        let deltaTime:number = currTime - this._startedTime;
+        const deltaTime:number = currTime - this._startedTime;
         let allCompleted:boolean = true;
         this._tweensInMovie.forEach((item:TweenInMovie)=>{
             if (deltaTime>item.startTime) {

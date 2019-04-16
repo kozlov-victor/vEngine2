@@ -11,16 +11,16 @@ interface ShaderErrorInfo {
 
 const parseErrors = (log:string):ShaderErrorInfo[]=> {
     if (!DEBUG) return [];
-    let logs:ShaderErrorInfo[] = [];
+    const logs:ShaderErrorInfo[] = [];
     let result:RegExpMatchArray;
 
     while (!!(result = log.match(/ERROR\:([^\n]+)/))) {
         log = log.slice(result.index + 1);
 
-        let line:string = result[1].trim();
-        let seps:string[] = line.split(':');
-        let message:string = seps.slice(2).join(':').trim();
-        let lineNum:number = parseInt(seps[1], 10);
+        const line:string = result[1].trim();
+        const seps:string[] = line.split(':');
+        const message:string = seps.slice(2).join(':').trim();
+        const lineNum:number = parseInt(seps[1], 10);
         logs.push({message, lineNum});
     }
 
@@ -32,7 +32,7 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
         if (!shaderSource) throw new DebugError(`can not compile shader: shader source not specified for type ${shaderType}`);
     }
     // Create the shader object
-    let shader = gl.createShader(shaderType);
+    const shader = gl.createShader(shaderType);
     if (DEBUG && !shader) throw new DebugError(`can not allocate memory for shader: gl.createShader(shaderType)`);
 
     // Load the shader source
@@ -42,18 +42,18 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
     gl.compileShader(shader);
 
     // Check the compile status
-    let compiled:number = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+    const compiled:number = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
     if (!compiled) {
         // Something went wrong during compilation; get the error
-        let lastError:string = gl.getShaderInfoLog(shader);
+        const lastError:string = gl.getShaderInfoLog(shader);
         gl.deleteShader(shader);
         if (DEBUG) {
-            let parsedLogs = parseErrors(lastError);
-            let lines:string[] = shaderSource.split('\n');
+            const parsedLogs = parseErrors(lastError);
+            const lines:string[] = shaderSource.split('\n');
             let errorMsg:string = '';
-            let arrow:string = '----->';
+            const arrow:string = '----->';
             parsedLogs.forEach((inf:ShaderErrorInfo)=>{
-                let i:number = inf.lineNum-1;
+                const i:number = inf.lineNum-1;
                 if (lines[i].indexOf(arrow)==-1) lines[i]=`${arrow} ${lines[i]}`;
                 errorMsg+=`${lines[i]} <----${inf.message}\n`;
             });

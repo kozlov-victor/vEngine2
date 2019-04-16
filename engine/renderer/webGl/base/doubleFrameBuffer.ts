@@ -19,7 +19,7 @@ export class DoubleFrameBuffer {
     }
 
     private flip():void{
-        let tmp:FrameBuffer = this.buffers[0];
+        const tmp:FrameBuffer = this.buffers[0];
         this.buffers[0] = this.buffers[1];
         this.buffers[1] = tmp;
     }

@@ -87,7 +87,7 @@ export class MouseControl implements IControl {
         point.isMouseDown = isMouseDown;
         point.target = undefined;
 
-        let isCaptured = false;
+        let isCaptured:boolean = false;
         let i:number = scene.getLayers().length; // reversed loop
         while(i--) {
             const layer:Layer = scene.getLayers()[i];
@@ -158,13 +158,13 @@ export class MouseControl implements IControl {
     }
 
     resolveDoubleClick(e:MouseEvent):void {
-        const point = this.triggerEvent(e,MOUSE_EVENTS.doubleClick);
+        const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.doubleClick);
         if (!point) return;
         delete this.objectsCaptured[point.id];
     }
 
     resolveScroll(e:MouseEvent):void {
-        const point = this.triggerEvent(e,MOUSE_EVENTS.scroll);
+        const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.scroll);
         if (!point) return;
         delete this.objectsCaptured[point.id];
     }
@@ -188,7 +188,7 @@ export class MouseControl implements IControl {
         };
         // mouseUp
         container.ontouchend = container.ontouchcancel = (e:TouchEvent)=>{
-            let l = e.changedTouches.length;
+            let l:number = e.changedTouches.length;
             while (l--){
                 this.resolveMouseUp(e.changedTouches[l]);
             }
@@ -198,13 +198,13 @@ export class MouseControl implements IControl {
         };
         // mouseMove
         container.ontouchmove = (e:TouchEvent)=>{
-            let l = e.touches.length;
+            let l:number = e.touches.length;
             while (l--){
                 this.resolveMouseMove(e.touches[l],true);
             }
         };
         container.onmousemove = (e:MouseEvent)=>{
-            let isMouseDown = e.buttons === 1;
+            let isMouseDown:boolean = e.buttons === 1;
             this.resolveMouseMove(e,isMouseDown);
         };
         // other
