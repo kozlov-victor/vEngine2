@@ -163,7 +163,7 @@ export interface AttributesMap {
 
 export  const normalizeUniformName =(s:string):string=>{
     if (DEBUG && s.indexOf(' ')>-1) throw new DebugError(`bad uniform name: "${s}", check spaces!`);
-    if (s.indexOf('[')>-1) return s.split('[')[0];
+    //if (s.indexOf('[')>-1) return s.split('[')[0];
     else return s;
 };
 
@@ -175,9 +175,9 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
     for (let i:number = 0; i < activeUniforms; i++) {
         let uniformData:WebGLActiveInfo = gl.getActiveUniform(glProgram, i) as WebGLActiveInfo;
         if (DEBUG && !uniformData) throw new DebugError(`can not receive active uniforms info: gl.getActiveUniform()`);
-        let type:string = mapType(gl, uniformData.type);
-        let name:string = normalizeUniformName(uniformData.name);
-        let location:WebGLUniformLocation = gl.getUniformLocation(glProgram, name) as WebGLUniformLocation;
+        const type:string = mapType(gl, uniformData.type);
+        const name:string = normalizeUniformName(uniformData.name);
+        const location:WebGLUniformLocation = gl.getUniformLocation(glProgram, name) as WebGLUniformLocation;
         // if (DEBUG && location===null) {
         //     console.log(program);
         //     throw new DebugError(`error finding uniform location: ${uniformData.name}`);

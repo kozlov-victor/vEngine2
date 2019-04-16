@@ -27,7 +27,7 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
     tileMap:TileMap;
     ambientLight:AmbientLight;
     preloadingGameObject:RenderableModel;
-    readonly filters:AbstractFilter[] = [];
+    filters:AbstractFilter[] = [];
 
     public readonly resourceLoader: ResourceLoader;
 

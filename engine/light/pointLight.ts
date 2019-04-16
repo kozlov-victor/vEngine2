@@ -20,9 +20,9 @@ export class PointLight extends AbstractLight {
     }
 
     getPosScaled():Point2d {
-        let camera:Camera = this.game.camera;
-        let rect:Rect = camera.getRectScaled();
-        let scale:Point2d = camera.scale;
+        const camera:Camera = this.game.camera;
+        const rect:Rect = camera.getRectScaled();
+        const scale:Point2d = camera.scale;
         this._screenPoint.setXY(
             (this.pos.x - rect.point.x) * scale.x,
             (this.pos.y - rect.point.y) * scale.y

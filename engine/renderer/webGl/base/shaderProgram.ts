@@ -45,11 +45,10 @@ export class ShaderProgram {
         if (DEBUG && !name) {
             throw new DebugError(`no uniform name was provided!`);
         }
-        let uniform:UniformWrapper = this.uniforms[name];
-        if (DEBUG && !uniform) {
-            //console.error(this);
-            return;
-            //throw new DebugError(`no uniform with name ${name} found!`); //todo ??
+        const uniformWrapper:UniformWrapper = this.uniforms[name];
+        if (DEBUG && !uniformWrapper) {
+            console.error('shader program failed',this);
+            throw new DebugError(`no uniform with name ${name} found!`);
         }
         if (DEBUG) {
             if (ShaderProgram.currentProgram!==this) {
@@ -57,7 +56,7 @@ export class ShaderProgram {
                 throw new DebugError(`can not set uniform: target program is inactive`);
             }
         }
-        uniform.setter(this.gl, uniform.location, value);
+        uniformWrapper.setter(this.gl, uniformWrapper.location, value);
     }
 
     bindBuffer(buffer:VertexBuffer, attrName:string) {

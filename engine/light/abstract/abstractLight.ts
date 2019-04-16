@@ -3,17 +3,19 @@ import {DebugError} from "@engine/debug/debugError";
 
 import {Game} from "../../game";
 import {Color} from "../../renderer/color";
+import {IKeyVal} from "@engine/misc/object";
+import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 
 export abstract class AbstractLight {
 
-    public color:Color = Color.WHITE;
+    public readonly color:Color = Color.WHITE.clone();
     public intensity:number = 1.0;
 
-    protected game:Game;
-
-    protected constructor(game:Game){
+    protected constructor(protected game:Game){
         if (DEBUG && !game) throw new DebugError(`game instanse is not passed to AbstractLight constructor`);
         this.game = game;
     }
+
+    abstract setUniforms(uniform:IKeyVal<UNIFORM_VALUE_TYPE>,i:number):void;
 
 }

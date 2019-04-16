@@ -81,6 +81,10 @@ export class AbstractDrawer implements IDrawer{
         }
     }
 
+    setUniformsFromBatch(batch:IKeyVal<UNIFORM_VALUE_TYPE>){
+        Object.keys(batch).forEach((name:string)=>this.setUniform(name,batch[name]));
+    }
+
     private _setUniform(name:string,value:any){
         this.program.setUniform(name,value);
     }

@@ -6,7 +6,7 @@ export class ShaderMaterial {
 
     public static readonly DEFAULT = new ShaderMaterial();
 
-    public readonly ambient:Color = Color.BLACK.clone();
+    public readonly ambient:Color = Color.WHITE.clone();
     public readonly specular:Color = Color.GREY.clone();
     public readonly diffuse:Color = Color.WHITE.clone();
     public readonly shininess:number = 10;

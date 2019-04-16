@@ -5,9 +5,10 @@ import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils
 
 export class AmbientLight extends AbstractLight{
 
-    direction:number[]; // todo vector?
+    direction:[number,number,number];
 
-    constructor(game: Game) {
+
+    constructor(protected game: Game) {
         super(game);
         this.direction = [1,1,1];
     }

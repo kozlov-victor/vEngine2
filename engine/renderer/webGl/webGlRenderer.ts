@@ -85,6 +85,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     private _init():void{
         const gl:WebGLRenderingContext = getCtx(this.container as HTMLCanvasElement);
+        if (DEBUG && !gl) throw new DebugError(`WebGLRenderingContext is not supported by this device`);
     	this.gl = gl;
 
     	this.nullTexture = new Texture(gl);
