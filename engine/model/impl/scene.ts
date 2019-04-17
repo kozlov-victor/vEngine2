@@ -2,7 +2,7 @@ import {TileMap} from "./tileMap";
 import {Layer} from "./layer";
 import {AbstractFilter} from "../../renderer/webGl/filters/abstract/abstractFilter";
 import {Game} from "../../game";
-import {AmbientLight} from "../../light/ambientLight";
+import {AmbientLight} from "../../light/impl/ambientLight";
 import {Color} from "../../renderer/color";
 import {CAMERA_MATRIX_MODE} from "../../renderer/camera";
 import {ResourceLoader} from "../../resources/resourceLoader";

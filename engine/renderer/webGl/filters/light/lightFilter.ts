@@ -7,7 +7,7 @@ import {mainFnSource} from "@engine/renderer/webGl/filters/light/source/mainFn.s
 import {IKeyVal} from "@engine/misc/object";
 import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
-import {LightArray} from "@engine/light/lightArray";
+import {LightSet} from "@engine/light/lightSet";
 
 
 export class LightFilter extends AbstractFilter {
@@ -15,7 +15,7 @@ export class LightFilter extends AbstractFilter {
     private readonly uniformInfo:IKeyVal<UNIFORM_VALUE_TYPE> = {};
 
 
-    constructor(game:Game, private lightArray:LightArray) {
+    constructor(game:Game, private lightArray:LightSet) {
         super(game);
         this.simpleRectDrawer.prepareShaderGenerator();
         const gen: ShaderGenerator = this.simpleRectDrawer.gen;
@@ -32,8 +32,8 @@ export class LightFilter extends AbstractFilter {
     }
 
     doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
-        this.lightArray.setUniformsToBatch(this.uniformInfo);
-        this.simpleRectDrawer.setUniformsFromBatch(this.uniformInfo);
+        this.lightArray.setUniformsToMap(this.uniformInfo);
+        this.simpleRectDrawer.setUniformsFromMap(this.uniformInfo);
         super.doFilter(textureInfos,destFrameBuffer);
     }
 

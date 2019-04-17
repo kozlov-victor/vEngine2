@@ -42,8 +42,8 @@ export abstract class AbstractFilter {
 
     doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
         destFrameBuffer.bind();
-        let w:number = textureInfos[0].texture.size.width;
-        let h:number = textureInfos[0].texture.size.height;
+        const w:number = textureInfos[0].texture.size.width;
+        const h:number = textureInfos[0].texture.size.height;
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,identity.mat16);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,w,h).mat16);
         this.gl.clearColor(0,0,0,0);

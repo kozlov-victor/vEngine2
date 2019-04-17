@@ -163,9 +163,9 @@ export interface AttributesMap {
 
 export  const normalizeUniformName =(s:string):string=>{
     if (DEBUG && s.indexOf(' ')>-1) throw new DebugError(`bad uniform name: "${s}", check spaces!`);
-    //if (s.indexOf('[')>-1) return s.split('[')[0];
     else return s;
 };
+
 
 export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram):UniformsMap=> {
     const glProgram:WebGLProgram = program.getProgram();
@@ -183,13 +183,17 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
             console.log(program);
             throw new DebugError(`error finding uniform location: ${uniformData.name}`);
         }
-
         uniforms[name] = {
             type,
             size: uniformData.size,
             location,
             setter: getUniformSetter(uniformData.size,type)
         } as UniformWrapper;
+
+        if (name.indexOf('[')>-1) {
+            const arrayName:string = name.split('[')[0];
+            uniforms[arrayName] = uniforms[name];
+        }
     }
 
     return uniforms;

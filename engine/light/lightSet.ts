@@ -3,11 +3,11 @@ import {Game} from "../game";
 import {IKeyVal} from "../misc/object";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {AbstractLight} from "@engine/light/abstract/abstractLight";
-import {PointLight} from "@engine/light/pointLight";
-import {AmbientLight} from "@engine/light/ambientLight";
-import {ShaderMaterial} from "@engine/light/shaderMaterial";
+import {PointLight} from "@engine/light/impl/pointLight";
+import {AmbientLight} from "@engine/light/impl/ambientLight";
+import {ShaderMaterial} from "@engine/light/material/shaderMaterial";
 
-export class LightArray {
+export class LightSet {
 
     static NUM_OF_LIGHT_IN_VIEW:number = 1;
 
@@ -28,12 +28,12 @@ export class LightArray {
         this.pointLights.push(l);
     }
 
-    setUniformsToBatch(uniforms:IKeyVal<UNIFORM_VALUE_TYPE>):void{
-        this.ambientLight.setUniforms(uniforms); // todo rename to batch
-        this.material.setUniforms(uniforms);
+    setUniformsToMap(map:IKeyVal<UNIFORM_VALUE_TYPE>):void{
+        this.ambientLight.setUniformsToMap(map); // todo rename to batch
+        this.material.setUniformsToMap(map);
         for (let i:number=0;i<this.pointLights.length;i++){
             let p:AbstractLight = this.pointLights[i];
-            p.setUniforms(uniforms,i);
+            p.setUniformsToMap(map,i);
         }
     }
 

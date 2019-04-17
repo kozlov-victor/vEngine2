@@ -55,7 +55,7 @@ export class ShapeDrawer extends AbstractDrawer {
         this.u_color = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_color');
         this.u_alpha = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
         this.u_fillColor = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillColor');
-        this.u_fillLinearGradient = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillLinearGradient[3]');
+        this.u_fillLinearGradient = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillLinearGradient[3]',true);
         // texture
         this.u_texRect = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_texRect');
         this.u_texOffset = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_texOffset');

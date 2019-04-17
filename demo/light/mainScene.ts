@@ -2,9 +2,9 @@ import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
 import {SpriteSheet} from "@engine/model/impl/spriteSheet";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {LightArray} from "@engine/light/lightArray";
+import {LightSet} from "@engine/light/lightSet";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
-import {PointLight} from "@engine/light/pointLight";
+import {PointLight} from "@engine/light/impl/pointLight";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MousePoint} from "@engine/control/mouse/mousePoint";
 
@@ -33,13 +33,15 @@ export class MainScene extends Scene {
         pointLight.pos.setXY(50,50);
         pointLight.color.setRGB(200,200,100);
 
-        const lightArray:LightArray = new LightArray(this.game);
-        lightArray.addPointLight(pointLight);
-        lightArray.ambientLight.color.setRGB(10,10,10);
+        const lightSet:LightSet = new LightSet(this.game);
+        lightSet.addPointLight(pointLight);
+        lightSet.ambientLight.color.setRGB(10,10,10);
+        lightSet.ambientLight.intensity = 0.1;
 
-        const lightFilter:LightFilter = new LightFilter(this.game,lightArray);
+        const lightFilter:LightFilter = new LightFilter(this.game,lightSet);
 
-        this.filters = [lightFilter];
+        //this.filters = [lightFilter];
+        this.logoObj.sprite.filters = [lightFilter];
 
         this.on(MOUSE_EVENTS.mouseMove,(e:MousePoint)=>{
             pointLight.pos.setXY(e.screenX,e.screenY);

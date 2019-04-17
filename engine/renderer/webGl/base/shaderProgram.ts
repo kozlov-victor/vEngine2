@@ -48,6 +48,7 @@ export class ShaderProgram {
         const uniformWrapper:UniformWrapper = this.uniforms[name];
         if (DEBUG && !uniformWrapper) {
             console.error('shader program failed',this);
+            console.error('uniforms',this.uniforms);
             throw new DebugError(`no uniform with name ${name} found!`);
         }
         if (DEBUG) {

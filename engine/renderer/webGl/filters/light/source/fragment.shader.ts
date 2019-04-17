@@ -1,21 +1,23 @@
 
 //language=GLSL
-import {LightArray} from "@engine/light/lightArray";
+import {LightSet} from "@engine/light/lightSet";
 
 export const fragmentSource:string = `
 
-#define NUM_OF_LIGHT_IN_VIEW ${LightArray.NUM_OF_LIGHT_IN_VIEW}
+#define NUM_OF_LIGHT_IN_VIEW ${LightSet.NUM_OF_LIGHT_IN_VIEW}
 
 struct PointLight {
     vec2 pos;
     vec4 color;
     float nearRadius;
     float farRadius;
+    float intensity;
     bool isOn;
 };
 struct AmbientLight {
     vec4 color;
     vec3 direction;
+    float intensity;
 };
 struct Material {
     vec4  ambient;
@@ -70,7 +72,7 @@ vec4 shadedResult(PointLight lgt, Material m, vec4 N4,vec4 texColor) {
     //float atten = angleAttenuation(lgt,dist,L);
     vec4 diffuse = diffuseResult(m, dotProduct, texColor);
     vec4 specular = specularResult(m, dotProduct, dist);
-    vec4 result = atten * lgt.color * (diffuse + specular);
+    vec4 result = atten * lgt.color * (diffuse + specular) * lgt.intensity;
     return result;
 }
 

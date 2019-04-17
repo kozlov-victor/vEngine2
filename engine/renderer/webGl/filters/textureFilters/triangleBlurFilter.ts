@@ -18,8 +18,6 @@ export class TriangleBlurFilter extends AbstractFilter {
         this.simpleRectDrawer.prepareShaderGenerator();
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.delta = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'delta');
-        this.texSize = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
-
 
         //language=GLSL
         programGen.setFragmentMainFn(`
@@ -50,10 +48,7 @@ export class TriangleBlurFilter extends AbstractFilter {
     }
 
 
-
     doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
-        const tex:Texture = textureInfos[0].texture;
-        this.setUniform(this.texSize,[tex.size.width,tex.size.height]);
         super.doFilter(textureInfos,destFrameBuffer);
     }
 

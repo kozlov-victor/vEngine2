@@ -3,7 +3,7 @@ import {Camera} from "./renderer/camera";
 import {Point2d} from "./geometry/point2d";
 import {AbstractRenderer} from "./renderer/abstract/abstractRenderer";
 import {Scene} from "./model/impl/scene";
-import {LightArray} from "./light/lightArray";
+import {LightSet} from "./light/lightSet";
 import {ColliderEngine} from "./physics/colliderEngine";
 import {DebugError} from "./debug/debugError";
 import {Clazz} from "@engine/misc/clazz";
@@ -34,7 +34,7 @@ export class Game {
     height:number = 240;
     gravityConstant:number = 0;
     fps:number = 0;
-    lightArray:LightArray = new LightArray(this);
+    lightArray:LightSet = new LightSet(this);
     collider:ColliderEngine = new ColliderEngine(this);
     camera:Camera = new Camera(this);
     scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;

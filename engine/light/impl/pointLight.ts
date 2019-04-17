@@ -1,8 +1,8 @@
-import {Point2d} from "../geometry/point2d";
-import {Rect} from "../geometry/rect";
-import {Game} from "../game";
-import {AbstractLight} from "./abstract/abstractLight";
-import {Camera} from "../renderer/camera";
+import {Point2d} from "../../geometry/point2d";
+import {Rect} from "../../geometry/rect";
+import {Game} from "../../game";
+import {AbstractLight} from "../abstract/abstractLight";
+import {Camera} from "../../renderer/camera";
 import {IKeyVal} from "@engine/misc/object";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 
@@ -30,12 +30,13 @@ export class PointLight extends AbstractLight {
         return this._screenPoint;
     }
 
-    setUniforms(uniform:IKeyVal<UNIFORM_VALUE_TYPE>,i:number):void{
-        uniform[`u_pointLights[${i}].pos`] =  this.getPosScaled().toArray();
-        uniform[`u_pointLights[${i}].nearRadius`] = this.nearRadius;
-        uniform[`u_pointLights[${i}].farRadius`] = this.farRadius;
-        uniform[`u_pointLights[${i}].isOn`] = this.isOn;
-        uniform[`u_pointLights[${i}].color`] = this.color.asGL();
+    setUniformsToMap(map:IKeyVal<UNIFORM_VALUE_TYPE>, i:number):void{
+        map[`u_pointLights[${i}].pos`] =  this.getPosScaled().toArray();
+        map[`u_pointLights[${i}].nearRadius`] = this.nearRadius;
+        map[`u_pointLights[${i}].farRadius`] = this.farRadius;
+        map[`u_pointLights[${i}].isOn`] = this.isOn;
+        map[`u_pointLights[${i}].color`] = this.color.asGL();
+        map[`u_pointLights[${i}].intensity`] = this.intensity;
     }
 
 }

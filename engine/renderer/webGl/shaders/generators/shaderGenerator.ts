@@ -25,9 +25,11 @@ export class ShaderGenerator {
         return normalizeUniformName(name);
     }
 
-    addFragmentUniform(type:string,name:string):string{
+    addFragmentUniform(type:string,name:string,extractArrayName:boolean = false):string{
         this.fragmentUniforms.push({type,name});
-        return normalizeUniformName(name);
+        name = normalizeUniformName(name);
+        if (extractArrayName) name = name.split('[')[0];
+        return name;
     }
 
     addAttribute(type:string,name:string):string{

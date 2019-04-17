@@ -9,7 +9,7 @@ export class Point2d extends ObservableEntity implements Cloneable<Point2d>{
     private _y:number = 0;
 
     private static pool = new ObjectPool<Point2d>(Point2d,4);
-    private _arr:number[];
+    private _arr:[number,number];
 
     static fromPool():Point2d{
         return Point2d.pool.getFreeObject();
@@ -130,8 +130,8 @@ export class Point2d extends ObservableEntity implements Cloneable<Point2d>{
         return {x:this._x,y:this._y}
     }
 
-    toArray():number[]{
-        if (!this._arr) this._arr = new Array(2);
+    toArray():[number,number]{
+        if (!this._arr) this._arr = new Array(2) as [number,number];
         this._arr[0] = this._x;
         this._arr[1] = this._y;
         return this._arr;

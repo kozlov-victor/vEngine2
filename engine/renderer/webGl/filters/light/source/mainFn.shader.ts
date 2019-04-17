@@ -6,7 +6,7 @@
 export const mainFnSource:string = `
 
 void main(){
-    vec4 texColor = texture2D(texture, v_texCoord); // todo u_texture
+    vec4 texColor = texture2D(texture, v_texCoord);
 
     vec4 N4;
     float dotProduct;
@@ -21,19 +21,21 @@ void main(){
         dotProduct = 1.;
     }
 
-    vec4 lightResult = (texColor * u_ambientLight.color) * (u_material.ambient + dotProduct);
-    // * u_ambientLight.intensity
+    vec4 lightResult = 
+        texColor * u_ambientLight.color * 
+        (u_material.ambient + dotProduct) *
+        vec4(u_ambientLight.intensity);
 
-    //if (texColor.a>0.) {
+    if (texColor.a>0.) {
         for (int i=0;i<NUM_OF_LIGHT_IN_VIEW;i++) {
             if (u_pointLights[i].isOn) lightResult+=shadedResult(
                 u_pointLights[i], u_material, N4, texColor
             );
         }
-    //}
+    }
 
     gl_FragColor = lightResult;
-    //gl_FragColor.a = texColor.a;
+    gl_FragColor.a = texColor.a;
 }
 
 `;

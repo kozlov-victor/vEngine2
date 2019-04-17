@@ -16,6 +16,6 @@ export abstract class AbstractLight {
         this.game = game;
     }
 
-    abstract setUniforms(uniform:IKeyVal<UNIFORM_VALUE_TYPE>,i:number):void;
+    abstract setUniformsToMap(map:IKeyVal<UNIFORM_VALUE_TYPE>, i:number):void;
 
 }

@@ -25,11 +25,8 @@ export class AbstractDrawer implements IDrawer{
 
     protected bufferInfo:BufferInfo;
 
-    private static instances:AbstractDrawer[] = [];
-
     constructor(gl:WebGLRenderingContext){
         this.gl = gl;
-        AbstractDrawer.instances.push(this);
     }
 
     protected bind():void{
@@ -58,12 +55,6 @@ export class AbstractDrawer implements IDrawer{
         this.program.destroy();
     }
 
-    static destroyAll(){ // todo remove this method
-        AbstractDrawer.instances.forEach((it:AbstractDrawer)=>{
-            it.destroy();
-        });
-    }
-
 
     setUniform(name:string,value:UNIFORM_VALUE_TYPE){
         if (DEBUG && !name) {
@@ -81,7 +72,7 @@ export class AbstractDrawer implements IDrawer{
         }
     }
 
-    setUniformsFromBatch(batch:IKeyVal<UNIFORM_VALUE_TYPE>){
+    setUniformsFromMap(batch:IKeyVal<UNIFORM_VALUE_TYPE>){
         Object.keys(batch).forEach((name:string)=>this.setUniform(name,batch[name]));
     }
 
