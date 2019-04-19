@@ -21,11 +21,12 @@ export class LightFilter extends AbstractFilter {
         const gen: ShaderGenerator = this.simpleRectDrawer.gen;
         gen.prependFragmentCodeBlock(fragmentSource);
         // program normal map gen 2 * (color - vec3(0.5))
-        gen.addFragmentUniform("PointLight",'u_pointLights[NUM_OF_LIGHT_IN_VIEW]');
+        gen.addFragmentUniform("PointLight",'u_pointLights[MAX_NUM_OF_POINT_LIGHTS]');
         gen.addFragmentUniform("AmbientLight",'u_ambientLight');
         gen.addFragmentUniform("Material",'u_material');
         gen.addFragmentUniform(GL_TYPE.SAMPLER_2D,'normalTexture');
         gen.addFragmentUniform(GL_TYPE.BOOL,'u_useNormalMap');
+        gen.addFragmentUniform(GL_TYPE.INT,'u_numOfPointLights');
         //language=GLSL
         gen.setFragmentMainFn(mainFnSource);
         this.simpleRectDrawer.initProgram();

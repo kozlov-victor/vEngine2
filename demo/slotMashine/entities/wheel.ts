@@ -10,8 +10,9 @@ export class Wheel {
     image:Image;
     mashine:Mashine;
 
-    static readonly CELL_WIDTH:number = 211;
-    static readonly CELL_HEIGHT:number = 247;
+    static readonly CELL_WIDTH:number = 215;
+    static readonly CELL_PADDING:number = 50;
+    static readonly CELL_HEIGHT:number = 251;
     private static readonly CELLS_IN_WHEEL:number = 5;
 
     private free:boolean = true;

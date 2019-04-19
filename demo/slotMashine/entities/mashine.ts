@@ -12,10 +12,12 @@ export class Mashine {
         const cellDeltaHeight:number = 160;
         for (let i:number = 0;i<3;i++){
             const wheel:Wheel = new Wheel(game,resourceLink);
-            wheel.image.pos.setXY(i*Wheel.CELL_WIDTH,-cellDeltaHeight);
+            wheel.image.pos.setXY(i*Wheel.CELL_WIDTH+i*Wheel.CELL_PADDING,-cellDeltaHeight);
             wheel.mashine = this;
             this.wheels[i] = wheel;
         }
+        this.wheels[0].image.pos.addX(40);
+        this.wheels[2].image.pos.addX(-40);
     }
 
     connectToScene(scene:Scene){
