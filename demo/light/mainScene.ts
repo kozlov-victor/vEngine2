@@ -7,6 +7,8 @@ import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
 import {PointLight} from "@engine/light/impl/pointLight";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MousePoint} from "@engine/control/mouse/mousePoint";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {Color} from "@engine/renderer/color";
 
 export class MainScene extends Scene {
 
@@ -19,6 +21,7 @@ export class MainScene extends Scene {
     }
 
     onReady() {
+        //this.colorBG = Color.BLACK;
         this.logoObj = new GameObject(this.game);
         let spr:SpriteSheet = new SpriteSheet(this.game);
         spr.setResourceLink(this.logoLink);
@@ -46,6 +49,7 @@ export class MainScene extends Scene {
         this.on(MOUSE_EVENTS.mouseMove,(e:MousePoint)=>{
             pointLight.pos.setXY(e.screenX,e.screenY);
         });
+        this.logoObj.addBehaviour(new DraggableBehaviour(this.game));
 
 
         (window as any).logoObj = this.logoObj;

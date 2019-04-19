@@ -4,7 +4,7 @@ import {LightSet} from "@engine/light/lightSet";
 
 export const fragmentSource:string = `
 
-#define NUM_OF_LIGHT_IN_VIEW ${LightSet.NUM_OF_LIGHT_IN_VIEW}
+#define MAX_NUM_OF_POINT_LIGHTS ${LightSet.MAX_NUM_OF_POINT_LIGHTS}
 
 struct PointLight {
     vec2 pos;
@@ -27,13 +27,13 @@ struct Material {
 };
 
 float distanceAttenuation(PointLight lgt,float dist){
-    float atten = 0.0;
+    float atten = .0;
     if (dist<=lgt.farRadius) {
-        if (dist<=lgt.nearRadius) atten = 1.0;
+        if (dist<=lgt.nearRadius) atten = 1.;
         else {
             float n = dist - lgt.nearRadius;
             float d = lgt.farRadius - lgt.nearRadius;
-            atten = smoothstep(0.0,1.0,1.0 - (n*n)/(d*d));
+            atten = smoothstep(.0,1.,1. - (n*n)/(d*d));
         }
     }
     return atten;
@@ -41,10 +41,10 @@ float distanceAttenuation(PointLight lgt,float dist){
 
 float angleAttenuation(PointLight lgt, float dist, vec3 L){
     float atten = 0.;
-    vec3 lightDir = vec3(-0.6,0.8,1.0);
+    vec3 lightDir = vec3(-.6,.8,1.);
     float cosOuter = cos(1.14);
     float cosInner = cos(0.20);
-    float dropOff = 2.0;
+    float dropOff = 2.;
     float cosL = dot(lightDir,L);
     float num = cosL - cosOuter;
     if (num>0.) {
@@ -64,10 +64,10 @@ vec4 diffuseResult(Material m, float dotProduct, vec4 texColor) {
     return m.diffuse * dotProduct * texColor;
 }
 vec4 shadedResult(PointLight lgt, Material m, vec4 N4,vec4 texColor) {
-    vec3 L = vec3(lgt.pos.xy - gl_FragCoord.xy,0.0);
-    float dist = length(L);
-    L = L / dist;
-    float dotProduct = (N4.a>0.)? max(0.0,dot(N4.xyz,L)): 1.;
+    vec3 l = vec3(lgt.pos.xy - gl_FragCoord.xy,0.0);
+    float dist = length(l);
+    l = l / dist;
+    float dotProduct = (N4.a>0.)? max(0.,dot(N4.xyz,l)): 1.;
     float atten = distanceAttenuation(lgt,dist);
     //float atten = angleAttenuation(lgt,dist,L);
     vec4 diffuse = diffuseResult(m, dotProduct, texColor);

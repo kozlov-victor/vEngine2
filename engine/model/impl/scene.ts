@@ -23,7 +23,7 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
     readonly type:string = 'Scene';
     width:number;
     height:number;
-    readonly colorBG = Color.WHITE.clone();
+    colorBG = Color.WHITE.clone();
     tileMap:TileMap;
     ambientLight:AmbientLight;
     preloadingGameObject:RenderableModel;

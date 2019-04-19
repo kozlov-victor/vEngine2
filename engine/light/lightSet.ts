@@ -9,7 +9,7 @@ import {ShaderMaterial} from "@engine/light/material/shaderMaterial";
 
 export class LightSet {
 
-    static NUM_OF_LIGHT_IN_VIEW:number = 1;
+    static MAX_NUM_OF_POINT_LIGHTS:number = 16;
 
     readonly ambientLight:AmbientLight = new AmbientLight(this.game);
     readonly material:ShaderMaterial = new ShaderMaterial();
@@ -25,11 +25,14 @@ export class LightSet {
     }
 
     addPointLight(l:PointLight):void{
+        if (DEBUG && this.pointLights.length==LightSet.MAX_NUM_OF_POINT_LIGHTS)
+            throw new DebugError(`can not add point light: maximum size of lights is ${LightSet.MAX_NUM_OF_POINT_LIGHTS}`);
         this.pointLights.push(l);
     }
 
     setUniformsToMap(map:IKeyVal<UNIFORM_VALUE_TYPE>):void{
-        this.ambientLight.setUniformsToMap(map); // todo rename to batch
+        map['u_numOfPointLights'] = this.pointLights.length;
+        this.ambientLight.setUniformsToMap(map);
         this.material.setUniformsToMap(map);
         for (let i:number=0;i<this.pointLights.length;i++){
             let p:AbstractLight = this.pointLights[i];

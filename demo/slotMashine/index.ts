@@ -3,13 +3,16 @@ import {MainScene} from "./mainScene";
 import {Game, SCALE_STRATEGY} from "@engine/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {KeyboardControl} from "@engine/control/keyboardControl";
+import {MouseControl} from "@engine/control/mouse/mouseControl";
+import {Wheel} from "./entities/wheel";
 
 const game:Game = new Game();
-game.width = 660;
-game.height = 384;
+game.width = Wheel.CELL_WIDTH*3+Wheel.CELL_PADDING*2; // 745
+game.height = 433;
 game.scaleStrategy = SCALE_STRATEGY.STRETCH;
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
+game.addControl(MouseControl);
 const mainScene:Scene = new MainScene(game);
 game.runScene(mainScene);
 

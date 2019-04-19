@@ -8,7 +8,7 @@ import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils
 
 export abstract class AbstractLight {
 
-    public readonly color:Color = Color.WHITE.clone();
+    public color:Color = Color.WHITE.clone();
     public intensity:number = 1.0;
 
     protected constructor(protected game:Game){
