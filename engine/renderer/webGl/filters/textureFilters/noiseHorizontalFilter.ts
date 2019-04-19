@@ -1,7 +1,6 @@
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Game} from "@engine/game";
 
@@ -44,11 +43,12 @@ export class NoiseHorizontalFilter extends AbstractFilter {
     }
 
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
-        this.setUniform(this.rt_w,textureInfos[0].texture.size.width);
-        this.setUniform(this.rt_h,textureInfos[0].texture.size.height);
+    doFilter(destFrameBuffer:FrameBuffer):void{
+        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        this.setUniform(this.rt_w,width);
+        this.setUniform(this.rt_h,height);
         this.setUniform(this.u_time,this.time+=0.01);
-        super.doFilter(textureInfos,destFrameBuffer);
+        super.doFilter(destFrameBuffer);
     }
 
 }

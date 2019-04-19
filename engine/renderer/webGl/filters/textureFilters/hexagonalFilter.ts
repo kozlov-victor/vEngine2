@@ -1,6 +1,5 @@
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
-import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {Game} from "@engine/game";
@@ -64,9 +63,10 @@ export class HexagonalFilter extends AbstractFilter {
     }
 
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
-        this.setUniform(this.texSize,[textureInfos[0].texture.size.width,textureInfos[0].texture.size.height]);
-        super.doFilter(textureInfos,destFrameBuffer);
+    doFilter(destFrameBuffer:FrameBuffer):void{
+        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        this.setUniform(this.texSize,[width,height]); // todo disposable array
+        super.doFilter(destFrameBuffer);
     }
 
 

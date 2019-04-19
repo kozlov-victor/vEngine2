@@ -1,11 +1,9 @@
 import {Game} from "../../game";
 import {Image} from "./ui/drawable/image";
 import {Cloneable} from "@engine/declarations";
-import {Rect} from "@engine/geometry/rect";
 import {FrameAnimation} from "@engine/model/impl/frameAnimation";
 import {DebugError} from "@engine/debug/debugError";
-import {Size} from "@engine/geometry/size";
-import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 export class SpriteSheet extends Image implements Cloneable<SpriteSheet>{
 
@@ -25,7 +23,7 @@ export class SpriteSheet extends Image implements Cloneable<SpriteSheet>{
 
     revalidate():void {
         super.revalidate();
-        const {width,height} = this.getResourceLink().getTarget<TextureInfo>().size;
+        const {width,height} = this.getResourceLink().getTarget<Texture>().size;
         this._srcRect.size.width = ~~(width / this.numOfFramesH);
         this._srcRect.size.height = ~~(height / this.numOfFramesV);
         this._numOfFrames = this.numOfFramesH * this.numOfFramesV;

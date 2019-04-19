@@ -2,7 +2,8 @@ import {Game} from "@engine/game";
 import {Image} from "./image";
 import {DebugError} from "@engine/debug/debugError";
 import {Size} from "@engine/geometry/size";
-import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
+import {Texture} from "@engine/renderer/webGl/base/texture";
+import {Rect} from "@engine/geometry/rect";
 
 export class NinePatchImage extends Image {
 
@@ -34,10 +35,13 @@ export class NinePatchImage extends Image {
     }
 
     private _revalidatePatches():void{
-        const ti:TextureInfo = this.game.getRenderer().renderableCache[this.getResourceLink().getUrl()];
-        if (DEBUG || !ti) throw new DebugError(`can not find texture info by id ${this.getResourceLink().getUrl()}`);
-        const texSize:Size = ti.texture.getSize();
-        const destRect = this.getSrcRect();
+        const t:Texture = this.getResourceLink().getTarget() as Texture;
+        if (DEBUG || !t) {
+            console.log(this.getResourceLink());
+            throw new DebugError(`can not find texture by link provided`);
+        }
+        const texSize:Size = t.size;
+        const destRect:Rect = this.getSrcRect();
         let patch:Image;
         const a:number = this.a,b:number=this.b,c:number=this.c,d:number=this.d;
         // patch 1

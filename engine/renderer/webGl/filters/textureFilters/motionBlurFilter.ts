@@ -1,9 +1,7 @@
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
-import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Game} from "@engine/game";
 
 // http://evanw.github.io/webgl-filter/
@@ -60,11 +58,11 @@ export class MotionBlurFilter extends AbstractFilter {
 
 
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
-        const tex:Texture = textureInfos[0].texture;
-        this.setUniform(this.texSize,[tex.size.width,tex.size.height]);
-        this.setUniform(this.center,[100,100]);
-        super.doFilter(textureInfos,destFrameBuffer);
+    doFilter(destFrameBuffer:FrameBuffer):void{
+        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        this.setUniform(this.texSize,[width,height]); // todo garbage
+        this.setUniform(this.center,[100,100]); // todo
+        super.doFilter(destFrameBuffer);
     }
 
 

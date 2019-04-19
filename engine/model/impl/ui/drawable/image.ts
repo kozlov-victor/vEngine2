@@ -4,8 +4,8 @@ import {DebugError} from "@engine/debug/debugError";
 import {Shape} from "../generic/shape";
 import {Color} from "@engine/renderer/color";
 import {Point2d} from "@engine/geometry/point2d";
-import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {Cloneable} from "@engine/declarations";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
 export class Image extends Shape implements Cloneable<Image>{
@@ -25,7 +25,11 @@ export class Image extends Shape implements Cloneable<Image>{
             console.error(this);
             throw new DebugError(`can not render Image: resourceLink is not specified`);
         }
-        const tex:TextureInfo = this.game.getRenderer().getTextureInfo(this.getResourceLink().getUrl());
+        if (DEBUG && !this.getResourceLink().getTarget<Texture>()) {
+            console.error(this);
+            throw new DebugError(`can not render Image: can not find texture by resource link`);
+        }
+        const tex:Texture = this.getResourceLink().getTarget<Texture>();
         if (this.size.isZero()) {
             this.size.width = tex.size.width;
             this.size.height = tex.size.height;

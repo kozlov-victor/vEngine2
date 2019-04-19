@@ -1,7 +1,6 @@
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Game} from "@engine/game";
 
@@ -34,10 +33,10 @@ export class BarrelDistortionFilter extends AbstractFilter {
         `);
         //language=GLSL
         programGen.setFragmentMainFn(`
-                    void main(){
-                        vec2 uv = vec2(gl_FragCoord.xy / vec2(rt_w,rt_h));
-                        gl_FragColor = barrel(uv);
-                    }
+            void main(){
+                vec2 uv = vec2(gl_FragCoord.xy / vec2(rt_w,rt_h));
+                gl_FragColor = barrel(uv);
+            }
             `
         );
         this.simpleRectDrawer.initProgram();
@@ -48,10 +47,11 @@ export class BarrelDistortionFilter extends AbstractFilter {
         this.setUniform(this.u_distortion,val);
     }
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
-        this.setUniform(this.rt_w,textureInfos[0].texture.size.width);
-        this.setUniform(this.rt_h,textureInfos[0].texture.size.height);
-        super.doFilter(textureInfos,destFrameBuffer);
+    doFilter(destFrameBuffer:FrameBuffer):void{
+        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        this.setUniform(this.rt_w,width);
+        this.setUniform(this.rt_h,height);
+        super.doFilter(destFrameBuffer);
     }
 
 }

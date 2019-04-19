@@ -5,7 +5,6 @@ import {GL_TYPE, UNIFORM_VALUE_TYPE} from "../../base/shaderProgramUtils";
 import {fragmentSource} from "@engine/renderer/webGl/filters/light/source/fragment.shader";
 import {mainFnSource} from "@engine/renderer/webGl/filters/light/source/mainFn.shader";
 import {IKeyVal} from "@engine/misc/object";
-import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {LightSet} from "@engine/light/lightSet";
 
@@ -31,10 +30,10 @@ export class LightFilter extends AbstractFilter {
         this.simpleRectDrawer.initProgram();
     }
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
+    doFilter(destFrameBuffer:FrameBuffer):void{
         this.lightArray.setUniformsToMap(this.uniformInfo);
         this.simpleRectDrawer.setUniformsFromMap(this.uniformInfo);
-        super.doFilter(textureInfos,destFrameBuffer);
+        super.doFilter(destFrameBuffer);
     }
 
 

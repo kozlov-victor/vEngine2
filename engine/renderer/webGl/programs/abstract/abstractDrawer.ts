@@ -6,12 +6,17 @@ import {IDrawer} from "../interface/iDrawer";
 import {Size} from "@engine/geometry/size";
 import {DebugError} from "@engine/debug/debugError";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
-export interface TextureInfo {
-    texture:any,
-    size?:Size,
-    name:string
+interface TextureInfo {
+    texture:Texture,
+    uniformName:string
+}
+
+interface TexturesToBind {
+    length: number,
+    texturesInfo: TextureInfo[]
 }
 
 export class AbstractDrawer implements IDrawer{
@@ -21,6 +26,7 @@ export class AbstractDrawer implements IDrawer{
     protected gl:WebGLRenderingContext;
     protected program:ShaderProgram = null;
     protected uniformCache:IKeyVal<UNIFORM_VALUE_TYPE> = {};
+    protected texturesToBind:TexturesToBind = {length: 0, texturesInfo: [] as TextureInfo[]};
     protected primitive:AbstractPrimitive;
 
     protected bufferInfo:BufferInfo;
@@ -72,6 +78,15 @@ export class AbstractDrawer implements IDrawer{
         }
     }
 
+    attachTexture(uniformName:string,texture:Texture){
+        this.texturesToBind.texturesInfo[this.texturesToBind.length++] = {uniformName,texture};
+    }
+
+    getAttachedTextureAt(i:number):Texture {
+        if (DEBUG && i>this.texturesToBind.length-1) throw new DebugError(`ca not find bound texture: out of range: index:${i}, length:${this.texturesToBind}`);
+        return this.texturesToBind.texturesInfo[i].texture;
+    }
+
     setUniformsFromMap(batch:IKeyVal<UNIFORM_VALUE_TYPE>){
         Object.keys(batch).forEach((name:string)=>this.setUniform(name,batch[name]));
     }
@@ -84,14 +99,14 @@ export class AbstractDrawer implements IDrawer{
         this.bufferInfo.draw();
     }
 
-    draw(textureInfos:TextureInfo[]){
+    draw(){
         this.bind();
         Object.keys(this.uniformCache).forEach((name:string)=>this._setUniform(name,this.uniformCache[name]));
-        if (textureInfos) {
-            textureInfos.forEach((t:TextureInfo,i:number)=>{
-                t.texture.bind(t.name,i,this.program);
-            });
+        for (let i:number=0,max:number = this.texturesToBind.length;i<max;i++) {
+            const t:TextureInfo = this.texturesToBind.texturesInfo[i];
+            t.texture.bind(t.uniformName,i,this.program);
         }
+        this.texturesToBind.length = 0;
         this.drawElements();
     }
 

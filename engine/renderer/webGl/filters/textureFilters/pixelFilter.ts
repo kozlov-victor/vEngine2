@@ -6,7 +6,6 @@ import {AbstractFilter} from "../abstract/abstractFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {FrameBuffer} from "../../base/frameBuffer";
-import {TextureInfo} from "../../programs/abstract/abstractDrawer";
 import {Game} from "@engine/game";
 
 export class PixelFilter extends AbstractFilter {
@@ -42,12 +41,6 @@ export class PixelFilter extends AbstractFilter {
     }
 
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
-        this.setUniform(this.rt_w,textureInfos[0].texture.size.width);
-        this.setUniform(this.rt_h,textureInfos[0].texture.size.height);
-        super.doFilter(textureInfos,destFrameBuffer);
-    }
-
     setPixelWidth(n:number):void{
         this.setUniform(this.pixel_w,n);
     }
@@ -60,5 +53,13 @@ export class PixelFilter extends AbstractFilter {
         this.setPixelWidth(n);
         this.setPixelHeight(n);
     }
+
+    doFilter(destFrameBuffer:FrameBuffer):void{
+        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        this.setUniform(this.rt_w,width);
+        this.setUniform(this.rt_h,height);
+        super.doFilter(destFrameBuffer);
+    }
+
 
 }

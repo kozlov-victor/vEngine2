@@ -1,4 +1,3 @@
-import {TextureInfo} from "../../programs/abstract/abstractDrawer";
 import {FrameBuffer} from "../../base/frameBuffer";
 import {DebugError} from "@engine/debug/debugError";
 import {mat4} from "@engine/geometry/mat4";
@@ -6,9 +5,9 @@ import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/Simple
 import {Game} from "@engine/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
-import MAT16 = mat4.MAT16;
-import Mat16Holder = mat4.Mat16Holder;
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import Mat16Holder = mat4.Mat16Holder;
+import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 
 
 const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):Mat16Holder =>{
@@ -40,15 +39,18 @@ export abstract class AbstractFilter {
         this.simpleRectDrawer.setUniform(name,value);
     }
 
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer){
+    getDrawer():AbstractDrawer{
+        return this.simpleRectDrawer;
+    }
+
+    doFilter(destFrameBuffer:FrameBuffer){
         destFrameBuffer.bind();
-        const w:number = textureInfos[0].texture.size.width;
-        const h:number = textureInfos[0].texture.size.height;
+        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,identity.mat16);
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,w,h).mat16);
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,width,height).mat16);
         this.gl.clearColor(0,0,0,0);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        this.simpleRectDrawer.draw(textureInfos);
+        this.simpleRectDrawer.draw();
     }
 
 }

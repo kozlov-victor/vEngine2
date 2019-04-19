@@ -127,10 +127,6 @@ export class Texture {
         this.gl.deleteTexture(this.tex);
     }
 
-    getSize():Size{
-        return this.size;
-    }
-
     getGlTexture():WebGLTexture {
         return this.tex;
     }

@@ -2,8 +2,6 @@
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
-import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
-import {Int} from "@engine/declarations";
 
 export class DoubleFrameBuffer {
 
@@ -38,14 +36,12 @@ export class DoubleFrameBuffer {
 
         const filter:AbstractFilter = filters[0];
 
-        const texInfo:TextureInfo[] = [{texture,name:'texture'}]; // todo make this array reusable
-        filter.doFilter(texInfo,this.getDestBuffer());
+        filter.getDrawer().attachTexture('texture',texture);
+        filter.doFilter(this.getDestBuffer());
         for (let i:number=1;i<len;i++){
             this.flip();
-            let texInfo:TextureInfo[] = [{texture:this.getSourceBuffer().getTexture(),name:'texture'}];
-            filters[i].doFilter(
-                texInfo, this.getDestBuffer()
-            );
+            filters[i].getDrawer().attachTexture('texture',this.getSourceBuffer().getTexture());
+            filters[i].doFilter(this.getDestBuffer());
         }
         this.flip();
         return this.getSourceBuffer().getTexture();

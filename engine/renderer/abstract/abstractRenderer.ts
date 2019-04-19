@@ -5,9 +5,7 @@ import {Game} from "../../game";
 import {Rect} from "../../geometry/rect";
 import {Point2d} from "../../geometry/point2d";
 import {Color} from "../color";
-import {TextureInfo} from "../webGl/programs/abstract/abstractDrawer";
 import {Size} from "../../geometry/size";
-import {DebugError} from "@engine/debug/debugError";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
 import {NinePatchImage} from "@engine/model/impl/ui/drawable/ninePatchImage";
@@ -15,17 +13,18 @@ import {Image} from "@engine/model/impl/ui/drawable/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {GameObject3d} from "@engine/model/impl/gameObject3d";
 import {Font} from "@engine/model/impl/font";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 export class AbstractRenderer {
 
     public container:HTMLElement;
     public debugTextField:TextField;
 
-    renderableCache:{[path:string]:TextureInfo} = {};
-    public fullScreenSize:Size = new Size(0,0);
-    protected game:Game;
+    public readonly fullScreenSize:Size = new Size(0,0);
 
-    constructor(game:Game){
+    protected renderableCache:{[path:string]:Texture} = {};
+
+    constructor(protected game:Game){
         this.game = game;
         if (Device.isCocoonJS) {
             let dpr = window.devicePixelRatio||1;
@@ -155,12 +154,5 @@ export class AbstractRenderer {
         this.debugTextField.setText('');
     }
 
-
     loadTextureInfo(url:string,link:ResourceLink,onLoaded:()=>void):void {}
-
-    getTextureInfo(textureId:string):TextureInfo{
-        let t:TextureInfo =  this.renderableCache[textureId];
-        if (!t) throw new DebugError(`can not find resource with id ${textureId}`);
-        return t;
-    }
 }

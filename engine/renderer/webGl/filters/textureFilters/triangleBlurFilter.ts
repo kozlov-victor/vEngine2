@@ -1,9 +1,6 @@
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
-import {TextureInfo} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Game} from "@engine/game";
 
 // http://evanw.github.io/webgl-filter/
@@ -45,11 +42,6 @@ export class TriangleBlurFilter extends AbstractFilter {
     // 0...1
     setValue(val:number):void{
         this.setUniform(this.delta,[val,val]);
-    }
-
-
-    doFilter(textureInfos:TextureInfo[],destFrameBuffer:FrameBuffer):void{
-        super.doFilter(textureInfos,destFrameBuffer);
     }
 
 

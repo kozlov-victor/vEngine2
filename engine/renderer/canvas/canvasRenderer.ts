@@ -8,6 +8,7 @@ import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Image} from "@engine/model/impl/ui/drawable/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -35,7 +36,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         let srcRect:Rect = img.getSrcRect();
         let dstRect:Rect = img.getSrcRect();
         this.ctx.drawImage(
-            this.renderableCache[img.getResourceLink().getUrl()].texture,
+            (this.renderableCache[img.getResourceLink().getUrl()] as any) as CanvasImageSource, // todo
             srcRect.point.x,
             srcRect.point.y,
             srcRect.size.width,
@@ -147,17 +148,18 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         img.src = url;
         this.renderableCache[link.getUrl()] = this.renderableCache[link.getUrl()] || {} as any;
         img.onload = ()=>{
-            let c = document.createElement('canvas');
+            const c:HTMLCanvasElement = document.createElement('canvas');
             c.setAttribute('width',img.width.toString());
             c.setAttribute('height',img.height.toString());
             let ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
             ctx.drawImage(img as HTMLImageElement,0,0);
             let size = new Size(img.width,img.height);
-            this.renderableCache[link.getUrl()] = {
-                texture: c,
-                size,
-                name: ''
-            };
+            // @ts-ignore
+            // todo
+            // this.renderableCache[link.getUrl()] = {
+            //     texture: c as any, // todo
+            //     name: ''
+            // };
             (c as any).getSize = ()=>size;
             onLoad();
         }
