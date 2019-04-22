@@ -145,13 +145,13 @@ export class Game {
         if (this._destroyed) return;
         this._lastTime = this._currTime;
         this._currTime = Date.now();
-        let currTimeCopy = this._currTime;
+        const currTimeCopy:number = this._currTime;
         if (!this._lastTime) this._lastTime = this._currTime;
         this._deltaTime = this._currTime - this._lastTime;
 
         if (DEBUG) {
             this.fps = ~~(1000 / this._deltaTime);
-            let renderError:number = this._renderer.getError();
+            const renderError:number = this._renderer.getError();
             if (renderError) throw new DebugError(`render error with code ${renderError}`);
         }
 

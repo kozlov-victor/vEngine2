@@ -375,8 +375,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const err:number = this.gl.getError();
         if (err!==this.gl.NO_ERROR) {
             console.log(AbstractDrawer.currentInstance);
+            return err;
         }
-        return err;
+        return this.gl.NO_ERROR;
     }
 
     loadTextureInfo(url:string,link:ResourceLink,onLoad:()=>void):void{
