@@ -1,9 +1,9 @@
 import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
-import {SpriteSheet} from "@engine/model/impl/spriteSheet";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {FrameAnimation} from "@engine/model/impl/frameAnimation";
+import {CellFrameAnimation} from "@engine/model/impl/frameAnimation/cellFrameAnimation";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {Image} from "@engine/model/impl/ui/drawable/image";
 
 
 export class MainScene extends Scene {
@@ -19,17 +19,15 @@ export class MainScene extends Scene {
 
     onReady() {
         this.obj = new GameObject(this.game);
-        let spr:SpriteSheet = new SpriteSheet(this.game);
-        spr.numOfFramesV = 3;
-        spr.numOfFramesH = 5;
-        let anim:FrameAnimation = new FrameAnimation(this.game);
-        anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
-        spr.addFrameAnimation('animation',anim);
-        anim.isRepeat = true;
-        anim.setSpriteSheet(spr);
-        spr.playFrameAnimation('animation');
+        let spr:Image = new Image(this.game);
         spr.setResourceLink(this.resourceLink);
+        let anim:CellFrameAnimation = new CellFrameAnimation(this.game);
+        anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
+        anim.isRepeat = true;
+        anim.setSpriteSheet(spr,5,3);
         this.obj.sprite = spr;
+        this.obj.addFrameAnimation('animation',anim);
+        this.obj.playFrameAnimation('animation');
         this.obj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.obj);
 
@@ -37,8 +35,8 @@ export class MainScene extends Scene {
 
         this.on(MOUSE_EVENTS.click,()=>{
            playing = !playing;
-           if (playing) (this.obj.sprite as SpriteSheet).playFrameAnimation('animation');
-           else (this.obj.sprite as SpriteSheet).stopFrameAnimation();
+           if (playing) this.obj.playFrameAnimation('animation');
+           else this.obj.stopFrameAnimation();
         });
         //this.obj.sprite.size.width = 100;
 

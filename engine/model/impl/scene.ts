@@ -179,8 +179,7 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
         this.beforeRender();
 
         const renderer:AbstractRenderer = this.game.getRenderer();
-        renderer.beginFrameBuffer();
-        renderer.clearColor(this.colorBG);
+        renderer.beforeFrameDraw(this.colorBG);
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
 
@@ -192,7 +191,7 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
              this.renderMainFrame();
         }
 
-        renderer.flipFrameBuffer(this.filters);
+        renderer.afterFrameDraw(this.filters);
     }
 
     // tween

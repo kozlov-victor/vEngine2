@@ -1,10 +1,10 @@
 import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
-import {SpriteSheet} from "@engine/model/impl/spriteSheet";
 import {ResourceLink} from "@engine/resources/resourceLink";
 
 
 import logoBase64 = require("../assets/engine.jpg");
+import {Image} from "@engine/model/impl/ui/drawable/image";
 
 export class MainScene extends Scene {
 
@@ -18,7 +18,7 @@ export class MainScene extends Scene {
 
     onReady() {
         this.logoObj = new GameObject(this.game);
-        let spr:SpriteSheet = new SpriteSheet(this.game);
+        let spr:Image = new Image(this.game);
         spr.setResourceLink(this.resourceLink);
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});

@@ -1,15 +1,17 @@
 
 export namespace LoaderUtil {
-    export const loadBinary = (url:string,responsetype:'arraybuffer'|'blob',onLoad:(buffer:ArrayBuffer)=>void)=> {
+    export const loadRaw = (url:string,responsetype:'arraybuffer'|'blob'|'text',onLoad:(buffer:ArrayBuffer|string)=>void)=> {
         const request:XMLHttpRequest = new XMLHttpRequest();
         request.open('GET', url, true);
         request.responseType = responsetype;
 
-        request.setRequestHeader('Accept-Ranges', 'bytes');
-        request.setRequestHeader('Content-Range', 'bytes');
+        if (responsetype!=='text') {
+            request.setRequestHeader('Accept-Ranges', 'bytes');
+            request.setRequestHeader('Content-Range', 'bytes');
+        }
 
         request.onload = function() {
-            onLoad(request.response as ArrayBuffer);
+            onLoad(request.response);
         };
         // request.onprogress = function(e){
         //     if (progress) progress(url,e.loaded / e.total);

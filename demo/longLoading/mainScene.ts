@@ -1,6 +1,5 @@
 import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
-import {SpriteSheet} from "@engine/model/impl/spriteSheet";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/renderer/color";
@@ -9,6 +8,7 @@ import {KeyboardControl, KEYBOARD_KEY} from "@engine/control/keyboardControl";
 import {GamePadControl} from "@engine/control/gamePadControl";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Queue} from "@engine/resources/queue";
+import {Image} from "@engine/model/impl/ui/drawable/image";
 
 
 const fakeLongLoadingFn = (resourceLoader:ResourceLoader,time:number)=>{
@@ -45,7 +45,7 @@ export class MainScene extends Scene {
 
     onReady() {
         this.logoObj = new GameObject(this.game);
-        let spr:SpriteSheet = new SpriteSheet(this.game);
+        let spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});

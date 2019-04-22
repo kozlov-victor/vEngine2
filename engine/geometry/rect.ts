@@ -4,6 +4,11 @@ import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
 import {Cloneable} from "@engine/declarations";
 
+export interface RectJSON {
+    x:number,y:number,
+    width:number,height:number
+}
+
 export class Rect extends ObservableEntity implements Cloneable<Rect>{
 
     readonly point:Point2d = new Point2d();
@@ -88,7 +93,7 @@ export class Rect extends ObservableEntity implements Cloneable<Rect>{
     }
 
 
-    toJSON():{x:number,y:number,width:number,height:number}{
+    toJSON():RectJSON{
         return {
             x:this.point.x,
             y:this.point.y,
@@ -105,7 +110,7 @@ export class Rect extends ObservableEntity implements Cloneable<Rect>{
         return this._bottom;
     }
 
-    fromJSON(jsonObj:{x:number,y:number,width:number,height:number}):void{
+    fromJSON(jsonObj:RectJSON):void{
         this.setXYWH(jsonObj.x,jsonObj.y,jsonObj.width,jsonObj.height);
     }
 

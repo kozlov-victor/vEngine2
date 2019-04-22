@@ -61,8 +61,10 @@ export class Camera {
         if (this.scene.tileMap) this.scene.tileMap.revalidate();
         this._rectIdentity.setXYWH(0,0,this.game.width,this.game.height);
         if (this.scene.tileMap.spriteSheet) {
-            this.sceneWidth = this.scene.tileMap.spriteSheet.getFrameWidth()*this.scene.tileMap.width;
-            this.sceneHeight = this.scene.tileMap.spriteSheet.getFrameHeight()*this.scene.tileMap.height;
+            this.sceneWidth =
+                this.scene.tileMap.spriteSheet.getSrcRect().size.width*this.scene.tileMap.width;
+            this.sceneHeight =
+                this.scene.tileMap.spriteSheet.getSrcRect().size.height*this.scene.tileMap.height;
         } else {
             this.sceneWidth = this.game.getCurrScene().width || this.game.width;
             this.sceneHeight = this.game.getCurrScene().height || this.game.height;
@@ -80,13 +82,14 @@ export class Camera {
     update() {
         this.scene = this.game.getCurrScene();
 
-        const tileWidth:number = this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getFrameWidth():0; // todo ?
-        const tileHeight:number = this.scene.tileMap.spriteSheet? this.scene.tileMap.spriteSheet.getFrameHeight():0;
+        const tileWidth:number =
+            this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getSrcRect().size.width:0; // todo ?
+        const tileHeight:number =
+            this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getSrcRect().size.height:0;
         const w:number = this.game.width;
         const h:number = this.game.height;
         const wDiv2:number = w/2;
         const hDiv2:number = h/2;
-
 
         const gameObject:RenderableModel = this.objFollowTo;
         if (gameObject) {

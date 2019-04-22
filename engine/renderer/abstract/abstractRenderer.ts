@@ -59,9 +59,9 @@ export class AbstractRenderer {
         }
     }
 
-    beginFrameBuffer():void {}
+    beforeFrameDraw(color:Color):void {}
 
-    flipFrameBuffer(filters:Array<AbstractFilter>):void {}
+    afterFrameDraw(filters:AbstractFilter[]):void {}
 
     registerResize():void {
         this.onResize();
@@ -99,10 +99,6 @@ export class AbstractRenderer {
     drawEllipse(ellispe:Ellipse):void {}
 
     resetTransform():void {}
-
-    clear():void {}
-
-    clearColor(c:Color):void {}
 
     save():void {}
 
