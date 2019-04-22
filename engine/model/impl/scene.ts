@@ -2,7 +2,6 @@ import {TileMap} from "./tileMap";
 import {Layer} from "./layer";
 import {AbstractFilter} from "../../renderer/webGl/filters/abstract/abstractFilter";
 import {Game} from "../../game";
-import {AmbientLight} from "../../light/impl/ambientLight";
 import {Color} from "../../renderer/color";
 import {CAMERA_MATRIX_MODE} from "../../renderer/camera";
 import {ResourceLoader} from "../../resources/resourceLoader";
@@ -25,7 +24,6 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
     height:number;
     colorBG = Color.WHITE.clone();
     tileMap:TileMap;
-    ambientLight:AmbientLight;
     preloadingGameObject:RenderableModel;
     filters:AbstractFilter[] = [];
 
@@ -36,15 +34,14 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
 
     constructor(protected game:Game) {
         this.tileMap = new TileMap(game);
-        this.ambientLight = new AmbientLight(game);
         this._uiLayer = new Layer(this.game);
         this.addLayer(new Layer(game));
         this.resourceLoader = new ResourceLoader(game);
     }
 
     revalidate():void {
-        if (this.width == 0) this.width = this.game.width;
-        if (this.height == 0) this.height = this.game.height;
+        if (!this.width) this.width = this.game.width;
+        if (!this.height) this.height = this.game.height;
     }
 
 
@@ -54,19 +51,6 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
 
     getUiLayer(): Layer {
         return this._uiLayer;
-    }
-
-    getAllGameObjects():RenderableModel[] {
-        const res:RenderableModel[] = []; // todo optimize
-        const ONE:number = 1;
-        for (let i:number=0;i<this._layers.length;i++) {
-            const layer:Layer = this._layers[this._layers.length - ONE - i];
-            for (let j:number = 0; j < layer.children.length; j++) {
-                const go:RenderableModel = layer.children[layer.children.length - ONE - j];
-                res.push(go);
-            }
-        }
-        return res;
     }
 
     getDefaultLayer():Layer{
@@ -114,8 +98,7 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
         this._tweenDelegate.update();
         this._timerDelegate.update();
 
-        let layers:Layer[] = this._layers;
-        for (let l of layers) {
+        for (let l of this._layers) {
             l.update();
         }
         this._uiLayer.update();
@@ -132,15 +115,13 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
         } else {
             this.updateMainFrame();
         }
-
     }
 
     private renderMainFrame():void {
         const renderer:AbstractRenderer = this.game.getRenderer();
         this.game.camera.update();
 
-        let layers:Layer[] = this._layers;
-        for (let l of layers) {
+        for (let l of this._layers) {
             l.render();
         }
 

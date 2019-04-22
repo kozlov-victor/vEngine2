@@ -71,7 +71,7 @@ export class MouseControl implements IControl {
             res = true;
         }
         rectWithOffset.release();
-        for (let ch of go.children) {
+        for (const ch of go.children) {
             res = res || MouseControl.triggerGameObjectEvent(e,eventName,point,ch);
         }
         return res;

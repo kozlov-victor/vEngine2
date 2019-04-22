@@ -7,7 +7,7 @@ import {Shape} from "../generic/shape";
 export class VScroll extends Container {
 
     readonly type:string = 'VScroll';
-    handler: Shape;
+    readonly handler: Shape;
 
     maxValue:number = 0;
     value: number = 0;
@@ -15,11 +15,11 @@ export class VScroll extends Container {
 
     constructor(game:Game) {
         super(game);
-        let bg:Rectangle = new Rectangle(game);
+        const bg:Rectangle = new Rectangle(game);
         bg.size.width = 5;
         bg.fillColor = new Color(50,50,50,10);
         bg.color = Color.NONE.clone();
-        let hnd:Rectangle = new Rectangle(game);
+        const hnd:Rectangle = new Rectangle(game);
         hnd.size.height = 10;
         hnd.color = Color.NONE.clone();
         hnd.fillColor = new Color(10,10,10,100);

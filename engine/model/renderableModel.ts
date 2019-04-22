@@ -271,8 +271,8 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
         this._tweenDelegate.update();
         this._timerDelegate.update();
 
-        for (let i:number=0,max = this._behaviours.length;i<max;i++) {
-            if (this._behaviours[i].onUpdate) this._behaviours[i].onUpdate();
+        for (const bh of this._behaviours) {
+            bh.onUpdate();
         }
 
         if (this.rigidBody!==undefined) {
@@ -286,10 +286,8 @@ export abstract class RenderableModel extends Resource implements Revalidatable,
             if (this.velocity.y) this.pos.y += this.velocity.y * delta / 1000;
         }
 
-        if (this.children.length>0) {
-            for(let i:number=0;i<this.children.length;i++) {
-                this.children[i].update();
-            }
+        for (const c of this.children) {
+            c.update();
         }
 
     }

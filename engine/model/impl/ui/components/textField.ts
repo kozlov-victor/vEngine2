@@ -163,16 +163,15 @@ class StringInfo extends CharsHolder {
                 if (words.length <= 1) return;
                 if (!words[0].chars.length) return;
                 let totalWordsWidth: number = 0;
-                words.forEach((w: WordInfo) => {
+                for (const w of words) {
                     w.revalidate();
                     totalWordsWidth += w.width;
-                });
-                let totalSpaceWidth: number = textField.size.width - totalWordsWidth;
-                let oneSpaceWidth: number = totalSpaceWidth / (words.length - 1);
-                let initialPosY: number = this.chars[0].destRect.point.y;
+                }
+                const totalSpaceWidth: number = textField.size.width - totalWordsWidth;
+                const oneSpaceWidth: number = totalSpaceWidth / (words.length - 1);
+                const initialPosY: number = this.chars[0].destRect.point.y;
                 let currXPointer: number = this.chars[0].destRect.point.x;
-                for (let i:number = 0; i < words.length; i++) {
-                    let w: WordInfo = words[i];
+                for (const w of words) {
                     w.moveTo(currXPointer, initialPosY);
                     currXPointer += w.width + oneSpaceWidth;
                 }

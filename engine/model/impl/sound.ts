@@ -9,6 +9,7 @@ export class Sound extends Resource implements Revalidatable {
     loop:boolean = false;
 
     private _gain:number = 1;
+
     constructor(protected game:Game){
         super();
     }
