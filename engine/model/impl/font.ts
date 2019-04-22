@@ -1,5 +1,5 @@
 import {Game} from "../../game";
-import {Rect} from "../../geometry/rect";
+import {Rect, RectJSON} from "../../geometry/rect";
 import {Resource} from "../../resources/resource";
 import {Color} from "@engine/renderer/color";
 import {Revalidatable} from "@engine/declarations";
@@ -8,8 +8,8 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Scene} from "@engine/model/impl/scene";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 
-interface FontContext {
-    symbols: {[key:string]:Rect},
+export interface FontContext {
+    symbols: {[key:string]:RectJSON},
     width:number,
     height:number
 }
@@ -39,7 +39,7 @@ export namespace FontFactory {
         const ctx:CanvasRenderingContext2D = cnv.getContext('2d');
         ctx.font = strFont;
         const textHeight:number = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
-        const symbols:{[key:string]:Rect} = {};
+        const symbols:{[key:string]:RectJSON} = {};
         let currX:number = 0, currY:number = 0, cnvHeight = textHeight;
         for (let k:number = 0; k < arrFromTo.length; k++) {
             let arrFromToCurr:Range = arrFromTo[k];
@@ -54,11 +54,11 @@ export namespace FontFactory {
                     currY += textHeight;
                     cnvHeight = currY + textHeight;
                 }
-                let symbolRect:Rect = new Rect();
-                symbolRect.point.x = ~~currX + SYMBOL_PADDING;
-                symbolRect.point.y = ~~currY + SYMBOL_PADDING;
-                symbolRect.size.width = ~~textWidth - 2 * SYMBOL_PADDING;
-                symbolRect.size.height = textHeight - 2 * SYMBOL_PADDING;
+                const symbolRect:RectJSON = {} as RectJSON;
+                symbolRect.x = ~~currX + SYMBOL_PADDING;
+                symbolRect.y = ~~currY + SYMBOL_PADDING;
+                symbolRect.width = ~~textWidth - 2 * SYMBOL_PADDING;
+                symbolRect.height = textHeight - 2 * SYMBOL_PADDING;
                 symbols[currentChar] = symbolRect;
                 currX += textWidth;
             }
@@ -104,10 +104,10 @@ export namespace FontFactory {
         ctx.fillStyle = '#00000000';
         ctx.fillRect(0,0,cnv.width,cnv.height);
         ctx.fillStyle = '#fff';
-        const symbols:{[key:string]:Rect} = fontContext.symbols;
+        const symbols:{[key:string]:RectJSON} = fontContext.symbols;
         Object.keys(symbols).forEach((symbol:string)=>{
-            const rect:Rect = symbols[symbol];
-            ctx.fillText(symbol, rect.point.x, rect.point.y);
+            const rect:RectJSON = symbols[symbol];
+            ctx.fillText(symbol, rect.x, rect.y);
         });
         correctColor(cnv,color);
         return cnv.toDataURL();
@@ -159,6 +159,13 @@ export class Font extends Resource implements Revalidatable {
         this.fontContext = FontFactory.getFontContext(ranges,this.asCss(),WIDTH);
     }
 
+    static fromAtlas(game:Game,link:ResourceLink,fontContext:FontContext):Font{
+        const fnt:Font = new Font(game);
+        fnt.setResourceLink(link);
+        fnt.fontContext = fontContext;
+        return fnt;
+    }
+
     createBitmap():string{
         return FontFactory.getFontImageBase64(this.fontContext,this.asCss(),this.fontColor);
     }
@@ -171,6 +178,12 @@ export class Font extends Resource implements Revalidatable {
     }
 
     getDefaultSymbolHeight():number{
-        return this.fontContext.symbols[' '].size.height;
+        let defaultRect:RectJSON = this.fontContext.symbols[' '];
+        if (!defaultRect) {
+            const firstKey:string = Object.keys(this.fontContext.symbols)[0];
+            if (DEBUG && !firstKey) throw new DebugError(`no symbols at font`);
+            defaultRect =this.fontContext.symbols[firstKey];
+        }
+        return defaultRect.height;
     }
 }

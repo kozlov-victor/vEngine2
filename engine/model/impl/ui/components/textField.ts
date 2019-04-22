@@ -1,5 +1,5 @@
 import {Font} from "../../font";
-import {Rect} from "@engine/geometry/rect";
+import {Rect, RectJSON} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
 import {Rectangle} from "../drawable/rectangle";
 import {ScrollableContainer} from "../generic/scrollableContainer";
@@ -211,19 +211,28 @@ export class TextField extends ScrollableContainer {
         if (DEBUG && !this._font.getResourceLink()) throw new DebugError(`can not render textField: font resource link is not set`);
     }
 
+    private _getDefaultSymbolRect():RectJSON {
+        let defaultChar:string = ' ';
+        if (!this._font.fontContext.symbols[' ']) {
+            const firstSymbol:string = Object.keys(this._font.fontContext.symbols)[0];
+            if (DEBUG && !firstSymbol) throw new DebugError(`no symbols in font`);
+            defaultChar = firstSymbol;
+        }
+        return this._font.fontContext.symbols[defaultChar];
+    }
+
     private _getCharInfo(c: char): CharInfo {
-        const charRect: Rect =
-            this._font.fontContext.symbols[c] ||
-            this._font.fontContext.symbols[' '];
+        const charRect: RectJSON =
+            this._font.fontContext.symbols[c] || this._getDefaultSymbolRect();
         const charInfo = new CharInfo();
         charInfo.symbol = c;
-        charInfo.sourceRect = charRect;
-        charInfo.destRect.setSize(charRect.size);
+        charInfo.sourceRect = new Rect();
+        charInfo.sourceRect.fromJSON(charRect);
+        charInfo.destRect.setWH(charRect.width,charRect.height);
         return charInfo;
     }
 
     onGeometryChanged():void {
-        super.onGeometryChanged();
 
         const textInfo:TextInfo = this._textInfo;
         textInfo.reset();
@@ -264,10 +273,12 @@ export class TextField extends ScrollableContainer {
             this.border.size.set(this.size);
         }
         this.updateScrollSize(textInfo.size.height,this.size.height);
+
+        super.onGeometryChanged();
     }
 
-    setText(text:string = ''):void {
-        this._text = text.toString();
+    setText(text:string|number = ''):void {
+        this._text = text+'';
         this._dirty = true;
     }
 
