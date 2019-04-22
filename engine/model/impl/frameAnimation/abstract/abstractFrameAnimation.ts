@@ -15,10 +15,11 @@ export abstract class AbstractFrameAnimation<T> implements Eventemittable {
     isRepeat:boolean = true;
     frames:T[] = [];
 
-    private _currFrame:number = 0;
+    private _currFrame:number = -1;
     private _startTime:number = 0;
     private _timeForOneFrame:number;
     private _isPlaying:boolean = false;
+    private _loopReached:boolean = false;
 
     constructor(protected game:Game) {}
 
@@ -36,6 +37,7 @@ export abstract class AbstractFrameAnimation<T> implements Eventemittable {
     stop():void {
         this._isPlaying = false;
         this._startTime = 0;
+        this._loopReached = false;
     }
 
     update():void {
@@ -46,18 +48,16 @@ export abstract class AbstractFrameAnimation<T> implements Eventemittable {
         let currFrame:number = ~~((this.frames.length) * delta / this.duration);
         currFrame = currFrame % this.frames.length;
         if (currFrame==this._currFrame) return;
+        if (this._loopReached && !this.isRepeat) {
+            this.stop();
+            this.trigger(FRAME_ANIMATION_EVENTS.completed);
+            return;
+        }
         this._currFrame = currFrame;
         this.onNextFrame(currFrame);
-        //console.log(this.name,this._currFrame,this.game.getTime()/1000);
-        if (this._currFrame>=this.frames.length-1) {
-            if (this.isRepeat==false) {
-                this.stop();
-                this.trigger(FRAME_ANIMATION_EVENTS.completed);
-                return;
-            } else {
-                this.trigger(FRAME_ANIMATION_EVENTS.loop);
-            }
-
+        if (this._currFrame===this.frames.length-1) {
+            this.trigger(FRAME_ANIMATION_EVENTS.loop);
+            this._loopReached = true;
         }
     }
 

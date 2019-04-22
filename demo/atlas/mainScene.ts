@@ -55,8 +55,7 @@ export class MainScene extends Scene {
         animJump.setAtlas(atlas);
         animJump.frames = [
             toFrame(framesRaw['jump-down.png']),
-            toFrame(framesRaw['jump-up.png']),
-            toFrame(framesRaw['jump-up.png']),
+            toFrame(framesRaw['jump-up.png'])
         ];
 
         animJump.on(FRAME_ANIMATION_EVENTS.completed,()=>{
