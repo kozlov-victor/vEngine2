@@ -6,13 +6,14 @@ export class ShaderMaterial {
 
     public static readonly DEFAULT = new ShaderMaterial();
 
-    public readonly ambient:Color = Color.WHITE.clone();
-    public readonly specular:Color = Color.GREY.clone();
-    public readonly diffuse:Color = Color.WHITE.clone();
-    readonly shininess:number = 10;
+    public ambient:Color = Color.WHITE.clone();
+    public specular:Color = Color.GREY.clone();
+    public diffuse:Color = Color.WHITE.clone();
+    public shininess:number = 10;
 
     constructor(){}
 
+    /** @internal */
     setUniformsToMap(map:IKeyVal<UNIFORM_VALUE_TYPE>):void{
         map['u_material.ambient'] = this.ambient.asGL();
         map['u_material.specular'] = this.specular.asGL();

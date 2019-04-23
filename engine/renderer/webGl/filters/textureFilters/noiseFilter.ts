@@ -3,6 +3,7 @@ import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderG
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Game} from "@engine/game";
+import {Size} from "@engine/geometry/size";
 
 // https://clemz.io/article-retro-shaders-webgl.html
 
@@ -67,9 +68,9 @@ export class NoiseFilter extends AbstractFilter {
 
 
     doFilter(destFrameBuffer:FrameBuffer):void{
-        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
-        this.setUniform(this.rt_w,width);
-        this.setUniform(this.rt_h,height);
+        const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        this.setUniform(this.rt_w,size.width);
+        this.setUniform(this.rt_h,size.height);
         this.setUniform(this.u_time,this.time+=0.01);
         super.doFilter(destFrameBuffer);
     }

@@ -7,6 +7,8 @@ export class Size extends ObservableEntity implements Releasealable{
     private _width:number;
     private _height:number;
 
+    private _arr:[number,number] = [this._width,this._height];
+
     private static rectPool:ObjectPool<Size> = new ObjectPool<Size>(Size);
 
     static fromPool():Size {
@@ -66,6 +68,12 @@ export class Size extends ObservableEntity implements Releasealable{
 
     isZero():boolean {
         return this._width===0 && this._height===0;
+    }
+
+    toArray():[number,number]{
+        this._arr[0] = this._width;
+        this._arr[1] = this._height;
+        return this._arr;
     }
 
 

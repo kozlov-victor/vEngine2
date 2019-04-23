@@ -8,9 +8,9 @@ import {Game} from "@engine/game";
 
 export class HexagonalFilter extends AbstractFilter {
 
-    private center:string;
-    private scale:string;
-    private texSize:string;
+    private readonly center:string;
+    private readonly scale:string;
+    private readonly texSize:string;
 
     constructor(game:Game) {
         super(game);
@@ -64,8 +64,7 @@ export class HexagonalFilter extends AbstractFilter {
 
 
     doFilter(destFrameBuffer:FrameBuffer):void{
-        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
-        this.setUniform(this.texSize,[width,height]); // todo disposable array
+        this.setUniform(this.texSize,this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray());
         super.doFilter(destFrameBuffer);
     }
 

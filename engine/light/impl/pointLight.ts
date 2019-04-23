@@ -8,10 +8,12 @@ import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils
 
 export class PointLight extends AbstractLight {
 
+    public static readonly LIGHT_TYPE:number = 0;
+
     public pos:Point2d = new Point2d();
-    public nearRadius: number = 0;
-    public farRadius: number = 0;
-    public isOn:boolean = false;
+    public nearRadius: number = 10;
+    public farRadius: number = 100;
+    public isOn:boolean = true;
 
     private _screenPoint = new Point2d();
 
@@ -19,7 +21,7 @@ export class PointLight extends AbstractLight {
         super(game);
     }
 
-    getPosScaled():Point2d {
+    protected getPosScaled():Point2d {
         const camera:Camera = this.game.camera;
         const rect:Rect = camera.getRectScaled();
         const scale:Point2d = camera.scale;
@@ -30,6 +32,7 @@ export class PointLight extends AbstractLight {
         return this._screenPoint;
     }
 
+    /** @private */
     setUniformsToMap(map:IKeyVal<UNIFORM_VALUE_TYPE>, i:number):void{
         map[`u_pointLights[${i}].pos`] =  this.getPosScaled().toArray();
         map[`u_pointLights[${i}].nearRadius`] = this.nearRadius;
@@ -37,6 +40,7 @@ export class PointLight extends AbstractLight {
         map[`u_pointLights[${i}].isOn`] = this.isOn;
         map[`u_pointLights[${i}].color`] = this.color.asGL();
         map[`u_pointLights[${i}].intensity`] = this.intensity;
+        map[`u_pointLights[${i}].type`] = PointLight.LIGHT_TYPE;
     }
 
 }

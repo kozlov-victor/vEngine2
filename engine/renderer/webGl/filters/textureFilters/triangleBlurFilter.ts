@@ -7,8 +7,9 @@ import {Game} from "@engine/game";
 
 export class TriangleBlurFilter extends AbstractFilter {
 
-    private delta:string;
-    private texSize:string;
+    private readonly delta:string;
+    private readonly valArr:[number,number] = [0,0];
+
 
     constructor(protected game:Game) {
         super(game);
@@ -41,7 +42,8 @@ export class TriangleBlurFilter extends AbstractFilter {
 
     // 0...1
     setValue(val:number):void{
-        this.setUniform(this.delta,[val,val]);
+        this.valArr[0] = this.valArr[1] = val;
+        this.setUniform(this.delta,this.valArr);
     }
 
 

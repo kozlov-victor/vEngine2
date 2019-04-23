@@ -9,10 +9,12 @@ import {Game} from "@engine/game";
 
 export class SwirlFilter extends AbstractFilter {
 
-    private center:string;
-    private angle:string;
-    private radius:string;
-    private texSize:string;
+    private readonly center:string;
+    private readonly angle:string;
+    private readonly radius:string;
+    private readonly texSize:string;
+
+    private readonly centerArr:[number,number] = [0,0];
 
     constructor(game:Game) {
         super(game);
@@ -62,9 +64,11 @@ export class SwirlFilter extends AbstractFilter {
 
 
     doFilter(destFrameBuffer:FrameBuffer):void{
-        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
-        this.setUniform(this.texSize,[width,height]); // todo garbage
-        this.setUniform(this.center,[width/2,height/2]); // todo garbage
+        const sizeArr:[number,number] = this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray();
+        this.setUniform(this.texSize,sizeArr);
+        this.centerArr[0] = sizeArr[0]/2;
+        this.centerArr[1] = sizeArr[1]/2;
+        this.setUniform(this.center,this.centerArr);
         super.doFilter(destFrameBuffer);
     }
 

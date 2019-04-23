@@ -21,6 +21,7 @@
             "@engine/*": ["engine/*"]
         },
         "incremental": true,
+        "stripInternal": true,
         "outDir": "./lib"
     },
     "exclude": [

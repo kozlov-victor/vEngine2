@@ -13,6 +13,7 @@ export class AmbientLight extends AbstractLight{
         this.direction = [1,1,1];
     }
 
+    /** @private */
     setUniformsToMap(map:IKeyVal<UNIFORM_VALUE_TYPE>):void {
         map['u_ambientLight.color'] = this.color.asGL();
         map['u_ambientLight.direction'] = this.direction;
