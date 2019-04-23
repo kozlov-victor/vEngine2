@@ -143,7 +143,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    loadTextureInfo(url:string,link:ResourceLink,onLoad:()=>void){
+    loadTextureInfo(url:string,link:ResourceLink<Texture>,onLoad:()=>void){
         let img:HTMLImageElement = new (window as any).Image();
         img.src = url;
         this.renderableCache[link.getUrl()] = this.renderableCache[link.getUrl()] || {} as any;

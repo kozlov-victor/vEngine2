@@ -1,4 +1,4 @@
-import {Font} from "../../font";
+import {Font, RectViewJSON} from "../../font";
 import {Rect, RectJSON} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
 import {Rectangle} from "../drawable/rectangle";
@@ -36,7 +36,7 @@ class TextInfo {
     newString():void {
         this.pos.x = 0;
         if (this.strings.length) {
-            this.pos.y += this.textField.getFont().getDefaultSymbolHeight();
+            this.pos.y += this.textField.getFont().fontContext.lineHeight;
         }
         this.strings.push(new StringInfo());
     }
@@ -45,7 +45,8 @@ class TextInfo {
         this.strings[this.strings.length - 1].chars.push(c);
         this.allCharsCached.push(c);
         c.destRect.setPoint(this.pos);
-        this.pos.addX(c.sourceRect.size.width);
+        c.destRect.point.addXY(c.destOffsetX,c.destOffsetY);
+        this.pos.addX(c.sourceRect.size.width+c.destOffsetX);
     }
 
     addWord(w: WordInfo):void {
@@ -78,6 +79,8 @@ class CharInfo {
     symbol: char;
     destRect: Rect = new Rect();
     sourceRect: Rect = new Rect();
+    destOffsetX: number = 0;
+    destOffsetY:number = 0;
 }
 
 class CharsHolder {
@@ -190,7 +193,7 @@ export class TextField extends ScrollableContainer {
     textAlign: TEXT_ALIGN = TEXT_ALIGN.LEFT;
     border: Rectangle = null;
 
-    private _textInfo: TextInfo;
+    private readonly _textInfo: TextInfo;
     private _symbolImage:Image;
     private _text: string = '';
     private _font: Font = null;
@@ -210,7 +213,7 @@ export class TextField extends ScrollableContainer {
         if (DEBUG && !this._font.getResourceLink()) throw new DebugError(`can not render textField: font resource link is not set`);
     }
 
-    private _getDefaultSymbolRect():RectJSON {
+    private _getDefaultSymbolRect():RectViewJSON {
         let defaultChar:string = ' ';
         if (!this._font.fontContext.symbols[' ']) {
             const firstSymbol:string = Object.keys(this._font.fontContext.symbols)[0];
@@ -221,13 +224,15 @@ export class TextField extends ScrollableContainer {
     }
 
     private _getCharInfo(c: char): CharInfo {
-        const charRect: RectJSON =
+        const charRect: RectViewJSON =
             this._font.fontContext.symbols[c] || this._getDefaultSymbolRect();
         const charInfo = new CharInfo();
         charInfo.symbol = c;
         charInfo.sourceRect = new Rect();
         charInfo.sourceRect.fromJSON(charRect);
         charInfo.destRect.setWH(charRect.width,charRect.height);
+        charInfo.destOffsetX = charRect.destOffsetX;
+        charInfo.destOffsetY = charRect.destOffsetY;
         return charInfo;
     }
 
@@ -240,11 +245,11 @@ export class TextField extends ScrollableContainer {
 
         const strings:string[] = text.split('\n');
         strings.forEach((str:string, i:number) => {
-            let words:string[] = str.split(' ');
+            const words:string[] = str.split(' ');
             words.forEach((w: string, i: number) => {
                 let wordInfo:WordInfo = new WordInfo();
                 for (let k:number = 0; k < w.length; k++) {
-                    let charInfo: CharInfo = this._getCharInfo(w[k]);
+                    const charInfo: CharInfo = this._getCharInfo(w[k]);
                     wordInfo.addChar(charInfo);
                 }
                 if (this.maxWidth && textInfo.pos.x + wordInfo.width > this.maxWidth && i < words.length - 1) {
@@ -252,7 +257,7 @@ export class TextField extends ScrollableContainer {
                 }
                 textInfo.addWord(wordInfo);
                 if (i < str.length - 1) {
-                    let spaceChar = this._getCharInfo(' ');
+                    const spaceChar = this._getCharInfo(' ');
                     textInfo.addChar(spaceChar);
                 }
             });
@@ -260,7 +265,7 @@ export class TextField extends ScrollableContainer {
                 textInfo.newString();
             }
         });
-        textInfo.revalidate(this._font.getDefaultSymbolHeight());
+        textInfo.revalidate(this._font.fontContext.lineHeight);
         textInfo.align(this.textAlign);
         this.size.width = textInfo.size.width;
         if (this.maxHeight !== 0 && textInfo.size.height > this.maxHeight) {
@@ -313,6 +318,8 @@ export class TextField extends ScrollableContainer {
             this._symbolImage.getSrcRect().set(charInfo.sourceRect);
             this._symbolImage.size.set(charInfo.sourceRect.size);
             this._symbolImage.pos.set(charInfo.destRect.point);
+
+            if (this._symbolImage.size.height===0) continue;
 
             this._symbolImage.render();
         }

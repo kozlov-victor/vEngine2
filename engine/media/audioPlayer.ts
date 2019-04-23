@@ -28,7 +28,7 @@ export  class AudioPlayer implements IAudioPlayer {
         this.audioNodeSet = new AudioNodeSet(game,this.audioContext,AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
     }
 
-    loadSound(url:string, link:ResourceLink, onLoad:()=>void):void {
+    loadSound(url:string, link:ResourceLink<void>, onLoad:()=>void):void {
         this.audioContext.load(url,link,onLoad);
     }
 

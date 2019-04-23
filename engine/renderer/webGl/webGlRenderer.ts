@@ -160,7 +160,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this.beforeItemDraw(img.filters.length,img.blendMode);
 
-        const texture:Texture = img.getResourceLink().getTarget<Texture>();
+        const texture:Texture = img.getResourceLink().getTarget();
         const maxSize:number = Math.max(img.size.width,img.size.height);
         const sd:ShapeDrawer = this.shapeDrawer;
         this.prepareShapeUniformInfo(img);
@@ -380,7 +380,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return this.gl.NO_ERROR;
     }
 
-    loadTextureInfo(url:string,link:ResourceLink,onLoad:()=>void):void{
+    loadTextureInfo(url:string,link:ResourceLink<Texture>,onLoad:()=>void):void{
         const possibleTargetInCache:Texture = this.renderableCache[link.getUrl()];
         if (possibleTargetInCache) {
             link.setTarget(possibleTargetInCache);

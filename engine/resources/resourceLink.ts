@@ -1,20 +1,20 @@
 
-export class ResourceLink {
+export class ResourceLink<T> {
 
     constructor(private url:string){}
 
-    private target:any;
+    private target:T;
 
     getUrl():string{
         return this.url;
     }
 
-    setTarget(t:any):void{
+    setTarget(t:T):void{
         this.target = t;
     }
 
-    getTarget<T>():T{
-        return this.target as T;
+    getTarget():T{
+        return this.target;
     }
 
 }

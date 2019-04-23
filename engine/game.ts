@@ -27,18 +27,21 @@ export class Game {
     private _controls:IControl[] = [];
     private audioPlayer:IAudioPlayer;
 
+    private static UPDATE_TIME_RATE:number = 20;
+    private static instance:Game;
+
     readonly scale:Point2d = new Point2d(1,1);
     readonly pos:Point2d = new Point2d(0,0);
+    readonly camera:Camera = new Camera(this);
+
     width:number = 320;
     height:number = 240;
     gravityConstant:number = 0;
     fps:number = 0;
+
     collider:ColliderEngine = new ColliderEngine(this);
-    readonly camera:Camera = new Camera(this);
     scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
-    private static UPDATE_TIME_RATE:number = 20;
-    private static instance:Game;
 
     constructor(){
         Game.instance = this;
@@ -52,7 +55,7 @@ export class Game {
     addControl(C:Clazz<IControl>):void{
         const instance:IControl = new C(this);
         if (DEBUG) {
-            for (let c of this._controls) {
+            for (const c of this._controls) {
                 if (c.type===instance.type) {
                     throw new DebugError(`control with type "${c.type}" added already`)
                 }
@@ -155,7 +158,7 @@ export class Game {
             if (renderError) throw new DebugError(`render error with code ${renderError}`);
         }
 
-        let numOfLoops:number = (~~(this._deltaTime / Game.UPDATE_TIME_RATE))||1;
+        const numOfLoops:number = (~~(this._deltaTime / Game.UPDATE_TIME_RATE))||1;
         let currTime:number = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
         let loopCnt:number = 0;
         do {

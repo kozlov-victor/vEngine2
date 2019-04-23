@@ -3,6 +3,7 @@ import {Game} from "../game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {LoaderUtil} from "@engine/resources/loaderUtil";
 import loadRaw = LoaderUtil.loadRaw;
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
 export class ResourceLoader {
@@ -16,8 +17,8 @@ export class ResourceLoader {
     }
 
 
-    loadImage(url:string):ResourceLink {
-        const link:ResourceLink = new ResourceLink(url);
+    loadImage(url:string):ResourceLink<Texture> {
+        const link:ResourceLink<Texture> = new ResourceLink(url);
         this.q.addTask(()=>{
             this.game.getRenderer().loadTextureInfo(
                 url, link,
@@ -27,19 +28,29 @@ export class ResourceLoader {
         return link;
     }
 
-    loadText(url:string):ResourceLink {
-        const link:ResourceLink = new ResourceLink(url);
+    private _loadText(url:string,callback:Function):void{
         this.q.addTask(()=>{
             loadRaw(url,'text',(data:string)=>{
-                link.setTarget(data);
+                callback(data);
                 this.q.resolveTask(url);
-            })
+            });
         },url);
+    }
+
+    loadText(url:string):ResourceLink<string> {
+        const link:ResourceLink<string> = new ResourceLink(url);
+        this._loadText(url,(data:string)=>link.setTarget(data));
         return link;
     }
 
-    loadSound(url:string):ResourceLink {
-        const link:ResourceLink = new ResourceLink(url);
+    loadJSON(url:string):ResourceLink<string> {
+        const link:ResourceLink<string> = new ResourceLink(url);
+        this._loadText(url,(data:string)=>link.setTarget(JSON.parse(data)));
+        return link;
+    }
+
+    loadSound(url:string):ResourceLink<void> {
+        const link:ResourceLink<void> = new ResourceLink(url);
         this.q.addTask(()=>{
             this.game.getAudioPlayer().loadSound(
                 url, link,

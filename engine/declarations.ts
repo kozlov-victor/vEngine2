@@ -8,11 +8,11 @@ export interface MouseEventEx extends MouseEvent {
 }
 
 export interface Cloneable<T> {
-    clone:()=>T
+    clone():T;
 }
 
 export interface Revalidatable {
-    revalidate:()=>void
+    revalidate():void
 }
 
 export interface Tweenable {

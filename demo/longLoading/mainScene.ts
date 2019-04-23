@@ -9,6 +9,7 @@ import {GamePadControl} from "@engine/control/gamePadControl";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Queue} from "@engine/resources/queue";
 import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
 const fakeLongLoadingFn = (resourceLoader:ResourceLoader,time:number)=>{
@@ -25,7 +26,7 @@ const fakeLongLoadingFn = (resourceLoader:ResourceLoader,time:number)=>{
 export class MainScene extends Scene {
 
     private logoObj:GameObject;
-    private logoLink:ResourceLink;
+    private logoLink:ResourceLink<Texture>;
 
     onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');

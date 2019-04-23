@@ -5,11 +5,12 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 
 import logoBase64 = require("../assets/engine.jpg");
 import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 export class MainScene extends Scene {
 
     private logoObj:GameObject;
-    private resourceLink:ResourceLink;
+    private resourceLink:ResourceLink<Texture>;
 
     onPreloading() {
         this.resourceLink = this.resourceLoader.loadImage(logoBase64);

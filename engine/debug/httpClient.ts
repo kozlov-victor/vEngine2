@@ -1,5 +1,6 @@
 import {IKeyVal, noop} from "@engine/misc/object";
-import Timer = NodeJS.Timer;
+
+declare const setTimeout:(f:Function,t:number)=>number;
 
 
 let objectToQuery = (o:IKeyVal<any>)=> {

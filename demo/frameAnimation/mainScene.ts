@@ -4,12 +4,13 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {CellFrameAnimation} from "@engine/model/impl/frameAnimation/cellFrameAnimation";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
 export class MainScene extends Scene {
 
     private obj:GameObject;
-    private resourceLink:ResourceLink;
+    private resourceLink:ResourceLink<Texture>;
 
     onPreloading() {
         this.resourceLink = this.resourceLoader.loadImage('../assets/character.png');

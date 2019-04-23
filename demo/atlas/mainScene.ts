@@ -7,13 +7,14 @@ import {Image} from "@engine/model/impl/ui/drawable/image";
 import {AtlasFrameAnimation} from "@engine/model/impl/frameAnimation/atlasFrameAnimation";
 import {RectJSON} from "@engine/geometry/rect";
 import {FRAME_ANIMATION_EVENTS} from "@engine/model/impl/frameAnimation/abstract/abstractFrameAnimation";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
 export class MainScene extends Scene {
 
     private obj:GameObject;
-    private spriteLink:ResourceLink;
-    private atlasLink:ResourceLink;
+    private spriteLink:ResourceLink<Texture>;
+    private atlasLink:ResourceLink<string>;
 
     onPreloading() {
         this.spriteLink = this.resourceLoader.loadImage('../atlas/player.png');
@@ -22,7 +23,7 @@ export class MainScene extends Scene {
 
 
     onReady() {
-        const framesRaw:any = JSON.parse(this.atlasLink.getTarget<any>() as any).frames;
+        const framesRaw:any = JSON.parse(this.atlasLink.getTarget()).frames;
 
         const toFrame = (data:any):RectJSON=>{
             const frame:any = data.frame;

@@ -7,11 +7,12 @@ import {KEYBOARD_EVENT} from "@engine/control/abstract/abstractKeypad";
 import {KeyboardControl, KEYBOARD_KEY} from "@engine/control/keyboardControl";
 import {GAME_PAD_KEY, GamePadControl} from "@engine/control/gamePadControl";
 import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 export class MainScene extends Scene {
 
     private logoObj:GameObject;
-    private logoLink:ResourceLink;
+    private logoLink:ResourceLink<Texture>;
 
     onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');

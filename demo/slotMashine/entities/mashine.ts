@@ -4,11 +4,12 @@ import {Game} from "@engine/game";
 import {Scene} from "@engine/model/impl/scene";
 import {MathEx} from "@engine/misc/mathEx";
 import random = MathEx.random;
+import {Texture} from "@engine/renderer/webGl/base/texture";
 export class Mashine {
 
     private wheels:Wheel[] = [];
 
-    constructor(game:Game,private resourceLink:ResourceLink){
+    constructor(game:Game,private resourceLink:ResourceLink<Texture>){
         const cellDeltaHeight:number = 160;
         for (let i:number = 0;i<3;i++){
             const wheel:Wheel = new Wheel(game,resourceLink);

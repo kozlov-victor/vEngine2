@@ -150,5 +150,5 @@ export class AbstractRenderer {
         this.debugTextField.setText('');
     }
 
-    loadTextureInfo(url:string,link:ResourceLink,onLoaded:()=>void):void {}
+    loadTextureInfo(url:string,link:ResourceLink<Texture>,onLoaded:()=>void):void {}
 }

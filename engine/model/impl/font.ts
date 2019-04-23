@@ -7,9 +7,16 @@ import {DebugError} from "@engine/debug/debugError";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Scene} from "@engine/model/impl/scene";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {Texture} from "@engine/renderer/webGl/base/texture";
+
+export interface RectViewJSON extends RectJSON {
+    destOffsetX:number,
+    destOffsetY:number
+}
 
 export interface FontContext {
-    symbols: {[key:string]:RectJSON},
+    lineHeight: number,
+    symbols: {[key:string]:RectViewJSON},
     width:number,
     height:number
 }
@@ -38,9 +45,9 @@ export namespace FontFactory {
         const cnv:HTMLCanvasElement = document.createElement('canvas');
         const ctx:CanvasRenderingContext2D = cnv.getContext('2d');
         ctx.font = strFont;
-        const textHeight:number = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
-        const symbols:{[key:string]:RectJSON} = {};
-        let currX:number = 0, currY:number = 0, cnvHeight = textHeight;
+        const lineHeight:number = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
+        const symbols:{[key:string]:RectViewJSON} = {};
+        let currX:number = 0, currY:number = 0, cnvHeight = lineHeight;
         for (let k:number = 0; k < arrFromTo.length; k++) {
             let arrFromToCurr:Range = arrFromTo[k];
             for (let i:number = arrFromToCurr.from; i < arrFromToCurr.to; i++) {
@@ -51,19 +58,20 @@ export namespace FontFactory {
                 if (textWidth == 0) continue;
                 if (currX + textWidth > w) {
                     currX = 0;
-                    currY += textHeight;
-                    cnvHeight = currY + textHeight;
+                    currY += lineHeight;
+                    cnvHeight = currY + lineHeight;
                 }
-                const symbolRect:RectJSON = {} as RectJSON;
+                const symbolRect:RectViewJSON = {} as RectViewJSON;
                 symbolRect.x = ~~currX + SYMBOL_PADDING;
                 symbolRect.y = ~~currY + SYMBOL_PADDING;
                 symbolRect.width = ~~textWidth - 2 * SYMBOL_PADDING;
-                symbolRect.height = textHeight - 2 * SYMBOL_PADDING;
+                symbolRect.height = lineHeight - 2 * SYMBOL_PADDING;
+                symbolRect.destOffsetX = symbolRect.destOffsetY = 0;
                 symbols[currentChar] = symbolRect;
                 currX += textWidth;
             }
         }
-        return {symbols: symbols, width: w, height: cnvHeight};
+        return {symbols: symbols, width: w, height: cnvHeight,lineHeight};
     };
 
     const correctColor = (canvas:HTMLCanvasElement,color:Color):void=>{
@@ -115,7 +123,7 @@ export namespace FontFactory {
 
     export const generate = (f:Font,s:Scene):void=>{
         f.createContext();
-        const link:ResourceLink = s.resourceLoader.loadImage(f.createBitmap());
+        const link:ResourceLink<Texture> = s.resourceLoader.loadImage(f.createBitmap());
         f.setResourceLink(link);
     }
     
@@ -123,7 +131,7 @@ export namespace FontFactory {
 
 
 
-export class Font extends Resource implements Revalidatable {
+export class Font extends Resource<Texture> implements Revalidatable {
 
     readonly type:string = 'Font';
     fontSize:number=12;
@@ -142,7 +150,7 @@ export class Font extends Resource implements Revalidatable {
         const f:Font = new Font(Game.getInstance());
         f.createContext();
         const resourceLoader:ResourceLoader = new ResourceLoader(Game.getInstance());
-        let link:ResourceLink = resourceLoader.loadImage(f.createBitmap());
+        let link:ResourceLink<Texture> = resourceLoader.loadImage(f.createBitmap());
         resourceLoader.startLoading();
         f.setResourceLink(link);
         Font._systemFontInstance = f;
@@ -159,7 +167,7 @@ export class Font extends Resource implements Revalidatable {
         this.fontContext = FontFactory.getFontContext(ranges,this.asCss(),WIDTH);
     }
 
-    static fromAtlas(game:Game,link:ResourceLink,fontContext:FontContext):Font{
+    static fromAtlas(game:Game,link:ResourceLink<Texture>,fontContext:FontContext):Font{
         const fnt:Font = new Font(game);
         fnt.setResourceLink(link);
         fnt.fontContext = fontContext;
@@ -173,17 +181,9 @@ export class Font extends Resource implements Revalidatable {
     revalidate():void {
         if (DEBUG) {
             if (!this.fontContext) throw new DebugError(`font context is not created`);
+            if (!this.fontContext.lineHeight) throw new DebugError(`lineHeight is not created at context`);
             if (!this.getResourceLink()) throw new DebugError(`font without resource link`);
         }
     }
 
-    getDefaultSymbolHeight():number{
-        let defaultRect:RectJSON = this.fontContext.symbols[' '];
-        if (!defaultRect) {
-            const firstKey:string = Object.keys(this.fontContext.symbols)[0];
-            if (DEBUG && !firstKey) throw new DebugError(`no symbols at font`);
-            defaultRect =this.fontContext.symbols[firstKey];
-        }
-        return defaultRect.height;
-    }
 }

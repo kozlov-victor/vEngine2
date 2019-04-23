@@ -60,7 +60,7 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
         return !!(window && CtxHolder.getCtx());
     }
 
-    load(url:string, link:ResourceLink, onLoad:()=>void):void {
+    load(url:string, link:ResourceLink<void>, onLoad:()=>void):void {
         if (AudioPlayer.cache[url]) {
             onLoad();
             return;
@@ -87,7 +87,7 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
         return this._free;
     }
 
-    play(link:ResourceLink, loop:boolean):void {
+    play(link:ResourceLink<void>, loop:boolean):void {
         this.setLastTimeId();
         this._free = false;
         let currSource:AudioBufferSourceNode = this._ctx.createBufferSource();

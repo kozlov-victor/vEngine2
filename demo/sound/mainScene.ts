@@ -3,12 +3,13 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Sound} from "@engine/model/impl/sound";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {AudioPlayer} from "@engine/media/audioPlayer";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
 export class MainScene extends Scene {
 
     private sound:Sound;
-    private resourceLink:ResourceLink;
+    private resourceLink:ResourceLink<void>;
 
     onPreloading() {
         this.game.setAudioPLayer(AudioPlayer);

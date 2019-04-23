@@ -3,7 +3,7 @@ import {DebugError} from "../../debug/debugError";
 import {Resource} from "@engine/resources/resource";
 import {Revalidatable} from "@engine/declarations";
 
-export class Sound extends Resource implements Revalidatable {
+export class Sound extends Resource<void> implements Revalidatable {
 
     readonly type:string = 'Sound';
     loop:boolean = false;

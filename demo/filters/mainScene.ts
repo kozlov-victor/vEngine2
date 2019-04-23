@@ -22,12 +22,13 @@ import {MotionBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/mo
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/triangleBlurFilter";
 import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
 export class MainScene extends Scene {
 
     private logoObj:GameObject;
-    private logoLink:ResourceLink;
+    private logoLink:ResourceLink<Texture>;
 
     onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');

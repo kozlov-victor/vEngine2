@@ -44,7 +44,7 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
 
     revalidate():void {
         if (DEBUG && !this._spriteSheet) throw new DebugError(`cellFrameAnimation needs spriteSheet! Invoke setSpriteSheet() method`);
-        const {width,height} = this._spriteSheet.getResourceLink().getTarget<Texture>().size;
+        const {width,height} = this._spriteSheet.getResourceLink().getTarget().size;
         const frameWidth:number = ~~(width / this._numOfFramesH);
         const frameHeight:number = ~~(height / this._numOfFramesV);
         this._spriteSheet.getSrcRect().setWH(frameWidth,frameHeight);

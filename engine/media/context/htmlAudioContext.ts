@@ -28,7 +28,7 @@ export class HtmlAudioContext extends BasicAudioContext implements Cloneable<Htm
     static isAcceptable():boolean{
         return !!(window && (window as any).Audio);
     }
-    load(url:string,link:ResourceLink,callBack:()=>void):void {
+    load(url:string,link:ResourceLink<void>,callBack:()=>void):void {
         LoaderUtil.loadRaw(url,'blob',(buffer:ArrayBuffer)=>{
             AudioPlayer.cache[link.getUrl()] = URL.createObjectURL(buffer);
             callBack();
@@ -45,7 +45,7 @@ export class HtmlAudioContext extends BasicAudioContext implements Cloneable<Htm
         return this.free;
     }
 
-    play(link:ResourceLink, loop: boolean):void {
+    play(link:ResourceLink<void>, loop: boolean):void {
         this.setLastTimeId();
         const url:string = AudioPlayer.cache[link.getUrl()];
         if (DEBUG && !url) throw new DebugError(`can not retrieve audio from cache (link id=${link.getUrl()})`);

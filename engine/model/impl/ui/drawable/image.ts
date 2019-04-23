@@ -25,11 +25,11 @@ export class Image extends Shape implements Cloneable<Image>{
             console.error(this);
             throw new DebugError(`can not render Image: resourceLink is not specified`);
         }
-        if (DEBUG && !this.getResourceLink().getTarget<Texture>()) {
+        if (DEBUG && !this.getResourceLink().getTarget()) {
             console.error(this);
             throw new DebugError(`can not render Image: can not find texture by resource link`);
         }
-        const tex:Texture = this.getResourceLink().getTarget<Texture>();
+        const tex:Texture = this.getResourceLink().getTarget();
         if (this.size.isZero()) {
             this.size.width = tex.size.width;
             this.size.height = tex.size.height;

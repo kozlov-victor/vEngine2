@@ -6,11 +6,12 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mashine} from "./entities/mashine";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/textureFilters/barrelDistortionFilter";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 export class MainScene extends Scene {
 
     private overlay:Image;
-    wheelLink:ResourceLink;
+    wheelLink:ResourceLink<Texture>;
 
     private mashine:Mashine;
 

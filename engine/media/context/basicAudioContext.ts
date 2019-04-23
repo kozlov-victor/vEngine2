@@ -26,13 +26,13 @@ export class BasicAudioContext implements Cloneable<BasicAudioContext>{
         return this._lastTimeId;
     }
 
-    play(link:ResourceLink,loop:boolean){}
+    play(link:ResourceLink<void>,loop:boolean){}
     stop():void{}
     isFree():boolean{return false}
     setGain(val:number):void{}
     pause():void{}
     resume():void{}
-    load(url:string,link:ResourceLink,callBack:()=>void):void{
+    load(url:string,link:ResourceLink<void>,callBack:()=>void):void{
         callBack();
     }
     clone():BasicAudioContext{

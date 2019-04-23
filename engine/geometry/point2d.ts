@@ -3,7 +3,7 @@ import {ObservableEntity} from "./abstract/observableEntity";
 import {Cloneable} from "@engine/declarations";
 
 
-export class Point2d extends ObservableEntity implements Cloneable<Point2d>{
+export class Point2d extends ObservableEntity implements Cloneable<Point2d> {
 
     private _x:number = 0;
     private _y:number = 0;

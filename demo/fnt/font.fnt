@@ -6,7 +6,7 @@
             <page id='0' file='font.png'/>
        </pages>
         <chars count='95'>
-            <char xadvance='8' x='34' chnl='0' yoffset='46' y='48' xoffset='0' id='32' page='0' height='0' width='0'/>
+            <char xadvance='8' x='34' chnl='0' yoffset='46' y='48' xoffset='0' id='32' page='0' height='0' width='20'/>
             <char xadvance='10' x='232' chnl='0' yoffset='10' y='202' xoffset='2' id='33' page='0' height='38' width='8'/>
             <char xadvance='17' x='266' chnl='0' yoffset='9' y='146' xoffset='2' id='34' page='0' height='14' width='16'/>
             <char xadvance='21' x='162' chnl='0' yoffset='10' y='2' xoffset='1' id='35' page='0' height='38' width='22'/>

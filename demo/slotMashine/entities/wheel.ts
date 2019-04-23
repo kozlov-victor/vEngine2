@@ -4,6 +4,7 @@ import {Image} from "@engine/model/impl/ui/drawable/image";
 import {Tween} from "@engine/misc/tween";
 import {Easing} from "@engine/misc/easing";
 import {Mashine} from "./mashine";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 export class Wheel {
 
     position:number = 0;
@@ -17,7 +18,7 @@ export class Wheel {
 
     private free:boolean = true;
 
-    constructor(private game:Game,public resourceLink:ResourceLink){
+    constructor(private game:Game,public resourceLink:ResourceLink<Texture>){
         this.image = new Image(game);
         this.image.setResourceLink(resourceLink);
 

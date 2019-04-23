@@ -17,6 +17,7 @@ import {Size} from "@engine/geometry/size";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 export enum BLEND_MODE {
     NORMAL,
@@ -25,7 +26,7 @@ export enum BLEND_MODE {
     REVERSE_SUBSTRACTIVE
 }
 
-export abstract class RenderableModel extends Resource implements Revalidatable, Tweenable, Eventemittable {
+export abstract class RenderableModel extends Resource<Texture> implements Revalidatable, Tweenable, Eventemittable {
 
     readonly type:string;
     id:string;

@@ -13,7 +13,7 @@ export class AudioNode {
 
     constructor(public context:BasicAudioContext){}
 
-    play(link:ResourceLink,loop:boolean = false):void {
+    play(link:ResourceLink<void>,loop:boolean = false):void {
         this.context.play(link,loop);
     }
 
