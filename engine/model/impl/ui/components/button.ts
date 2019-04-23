@@ -18,8 +18,8 @@ export class Button extends Container {
     }
 
     revalidate():void{
-         if (DEBUG && !this._font)
-             throw new DebugError(`font is not set`);
+        if (DEBUG && !this._font)
+            throw new DebugError(`font is not set`);
         if (this.children.indexOf(this._textField)===-1)
             this.appendChild(this._textField);
         super.revalidate();
@@ -30,9 +30,8 @@ export class Button extends Container {
         this._textField.onGeometryChanged();
         this.calcDrawableRect(this._textField.size.width,this._textField.size.height);
         if (this.background) {
-            let dx:number = (this.background.size.width - this._textField.size.width)/2;
-            let dy:number = (this.background.size.height - this._textField.size.height)/2;
-
+            const dx:number = (this.background.size.width - this._textField.size.width)/2;
+            const dy:number = (this.background.size.height - this._textField.size.height)/2;
             this._textField.pos.setXY(dx,dy);
         }
     }
@@ -52,10 +51,6 @@ export class Button extends Container {
     getText():string{
         return this._textField.getText();
     }
-
-    // update():void{
-    //     super.update();
-    // }
 
     draw():boolean{
         if (this.background) this.background.draw();

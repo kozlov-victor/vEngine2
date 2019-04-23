@@ -1,12 +1,12 @@
 import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
-import {SpriteSheet} from "@engine/model/impl/spriteSheet";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/renderer/color";
 import {KEYBOARD_EVENT} from "@engine/control/abstract/abstractKeypad";
 import {KeyboardControl, KEYBOARD_KEY} from "@engine/control/keyboardControl";
 import {GAME_PAD_KEY, GamePadControl} from "@engine/control/gamePadControl";
+import {Image} from "@engine/model/impl/ui/drawable/image";
 
 export class MainScene extends Scene {
 
@@ -27,7 +27,7 @@ export class MainScene extends Scene {
 
     onReady() {
         this.logoObj = new GameObject(this.game);
-        let spr:SpriteSheet = new SpriteSheet(this.game);
+        let spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});

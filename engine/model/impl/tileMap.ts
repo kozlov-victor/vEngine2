@@ -1,12 +1,13 @@
-import {SpriteSheet} from "./spriteSheet";
+
 import {Game} from "../../game";
 import {AbstractFilter} from "../../renderer/webGl/filters/abstract/abstractFilter";
+import {Image} from "@engine/model/impl/ui/drawable/image";
 
 
 export class TileMap {
 
     readonly type:string = "TileMap";
-    spriteSheet:SpriteSheet = null;
+    spriteSheet:Image = null;
     data:any[] = [];
     _tilesInScreenX:number;
     _tilesInScreenY:number;

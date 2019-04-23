@@ -4,7 +4,8 @@ import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/model/renderableModel";
 import {noop} from "@engine/misc/object";
 
-const r = (obj:ParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
+const r:(obj:ParticlePropertyDesc)=>number
+    = (obj:ParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
 
 interface ParticlePropertyDesc {
     from:number,
@@ -58,7 +59,8 @@ export class ParticleSystem extends RenderableModel {
             throw new DebugError(`particle system is detached`);
         }
 
-        for (let i:number = 0;i<r(this.numOfParticlesToEmit);i++) {
+        const num:number = r(this.numOfParticlesToEmit);
+        for (let i:number = 0;i<num;i++) {
             let particle:RenderableCloneable = this._prototypes[MathEx.random(0,this._prototypes.length-1)];
             particle = particle.clone();
             this._onEmitParticle(particle);

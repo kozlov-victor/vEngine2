@@ -43,6 +43,8 @@ let FLIP_POSITION_MATRIX:Mat16Holder;
 
 const zToWMatrix:Mat16Holder = mat4.makeZToWMatrix(1);
 
+const BLACK = Color.RGB(0,0,0,0);
+
 const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat16Holder=>{
     // proj * modelView
     const projectionMatrix:Mat16Holder = mat4.ortho(0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
@@ -323,24 +325,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.gl.disable(this.gl.SCISSOR_TEST);
     }
 
-    clear():void{
-        this.gl.clearColor(1,1,1,1);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        //this.gl.clearDepth(1.);
-    }
-
-    clearColor(color:Color):void{
-        const arr:number[] = color.asGL();
-        this.gl.clearColor(arr[0],arr[1],arr[2],arr[3]);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-    }
-
-    beginFrameBuffer():void{
+    beforeFrameDraw(color:Color):void{
         this.save();
         this.finalFrameBuffer.bind();
+        this.finalFrameBuffer.clear(color);
     }
 
-    flipFrameBuffer(filters:AbstractFilter[]):void{
+    afterFrameDraw(filters:AbstractFilter[]):void{
         const texToDraw:Texture = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(),filters);
         this.finalFrameBuffer.unbind();
         this.gl.viewport(0, 0, this.fullScreenSize.width,this.fullScreenSize.height);
@@ -354,8 +345,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private beforeItemDraw(numOfFilters:number,blendMode:BLEND_MODE):void{
         if (numOfFilters>0 || blendMode!==BLEND_MODE.NORMAL) {
             this.preprocessFrameBuffer.bind();
-            this.gl.clearColor(0,0,0,0);
-            this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+            this.preprocessFrameBuffer.clear(BLACK);
             this.blender.setBlendMode(BLEND_MODE.NORMAL);
         } else {
             this.finalFrameBuffer.bind();
@@ -385,8 +375,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const err:number = this.gl.getError();
         if (err!==this.gl.NO_ERROR) {
             console.log(AbstractDrawer.currentInstance);
+            return err;
         }
-        return err;
+        return this.gl.NO_ERROR;
     }
 
     loadTextureInfo(url:string,link:ResourceLink,onLoad:()=>void):void{

@@ -65,7 +65,7 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
             onLoad();
             return;
         }
-        LoaderUtil.loadBinary(url, 'arraybuffer',(buffer:ArrayBuffer)=> {
+        LoaderUtil.loadRaw(url, 'arraybuffer',(buffer:ArrayBuffer)=> {
             decode(buffer, (decoded:AudioBuffer)=>{
                 AudioPlayer.cache[link.getUrl()] = decoded;
                 onLoad();

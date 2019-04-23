@@ -1,6 +1,8 @@
 import {Queue} from "./queue";
 import {Game} from "../game";
 import {ResourceLink} from "@engine/resources/resourceLink";
+import {LoaderUtil} from "@engine/resources/loaderUtil";
+import loadRaw = LoaderUtil.loadRaw;
 
 
 export class ResourceLoader {
@@ -21,6 +23,17 @@ export class ResourceLoader {
                 url, link,
                 ()=>this.q.resolveTask(url)
             );
+        },url);
+        return link;
+    }
+
+    loadText(url:string):ResourceLink {
+        const link:ResourceLink = new ResourceLink(url);
+        this.q.addTask(()=>{
+            loadRaw(url,'text',(data:string)=>{
+                link.setTarget(data);
+                this.q.resolveTask(url);
+            })
         },url);
         return link;
     }

@@ -2,6 +2,7 @@ import {DebugError} from "@engine/debug/debugError";
 
 
 import {Texture} from "./texture";
+import {Color} from "@engine/renderer/color";
 
 
 export class FrameBuffer {
@@ -27,6 +28,11 @@ export class FrameBuffer {
         this.texture = new Texture(gl);
         this.texture.setImage(null,width,height);
         this._init(gl,width,height);
+    }
+
+    private _checkBound():void{
+        if (DEBUG) return;
+        if (FrameBuffer.currInstance!==this) throw new DebugError(`frame buffer is not bound; call bind() method firstly`);
     }
 
     _init(gl:WebGLRenderingContext,width:number,height:number):void{
@@ -60,8 +66,16 @@ export class FrameBuffer {
     }
 
     unbind():void{
+        this._checkBound();
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
         FrameBuffer.currInstance = null;
+    }
+
+    clear(color:Color){
+        this._checkBound();
+        const arr:[number,number,number,number] = color.asGL();
+        this.gl.clearColor(arr[0],arr[1],arr[2],arr[3]);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
 
     destroy():void{

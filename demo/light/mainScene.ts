@@ -1,6 +1,5 @@
 import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
-import {SpriteSheet} from "@engine/model/impl/spriteSheet";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {LightSet} from "@engine/light/lightSet";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
@@ -9,6 +8,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MousePoint} from "@engine/control/mouse/mousePoint";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Color} from "@engine/renderer/color";
+import {Image} from "@engine/model/impl/ui/drawable/image";
 import {DirectionalLight} from "@engine/light/impl/directionalLight";
 
 export class MainScene extends Scene {
@@ -24,7 +24,7 @@ export class MainScene extends Scene {
     onReady() {
         this.colorBG = Color.BLACK;
         this.logoObj = new GameObject(this.game);
-        let spr:SpriteSheet = new SpriteSheet(this.game);
+        let spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});

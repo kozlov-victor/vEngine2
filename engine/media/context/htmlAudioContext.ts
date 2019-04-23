@@ -29,7 +29,7 @@ export class HtmlAudioContext extends BasicAudioContext implements Cloneable<Htm
         return !!(window && (window as any).Audio);
     }
     load(url:string,link:ResourceLink,callBack:()=>void):void {
-        LoaderUtil.loadBinary(url,'blob',(buffer:ArrayBuffer)=>{
+        LoaderUtil.loadRaw(url,'blob',(buffer:ArrayBuffer)=>{
             AudioPlayer.cache[link.getUrl()] = URL.createObjectURL(buffer);
             callBack();
         });

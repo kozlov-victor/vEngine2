@@ -3,7 +3,6 @@ import {Camera} from "./renderer/camera";
 import {Point2d} from "./geometry/point2d";
 import {AbstractRenderer} from "./renderer/abstract/abstractRenderer";
 import {Scene} from "./model/impl/scene";
-import {LightSet} from "./light/lightSet";
 import {ColliderEngine} from "./physics/colliderEngine";
 import {DebugError} from "./debug/debugError";
 import {Clazz} from "@engine/misc/clazz";
@@ -28,15 +27,14 @@ export class Game {
     private _controls:IControl[] = [];
     private audioPlayer:IAudioPlayer;
 
-    scale:Point2d = new Point2d(1,1);
-    pos:Point2d = new Point2d(0,0);
+    readonly scale:Point2d = new Point2d(1,1);
+    readonly pos:Point2d = new Point2d(0,0);
     width:number = 320;
     height:number = 240;
     gravityConstant:number = 0;
     fps:number = 0;
-    lightArray:LightSet = new LightSet(this);
     collider:ColliderEngine = new ColliderEngine(this);
-    camera:Camera = new Camera(this);
+    readonly camera:Camera = new Camera(this);
     scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
     private static UPDATE_TIME_RATE:number = 20;
@@ -147,13 +145,13 @@ export class Game {
         if (this._destroyed) return;
         this._lastTime = this._currTime;
         this._currTime = Date.now();
-        let currTimeCopy = this._currTime;
+        const currTimeCopy:number = this._currTime;
         if (!this._lastTime) this._lastTime = this._currTime;
         this._deltaTime = this._currTime - this._lastTime;
 
         if (DEBUG) {
             this.fps = ~~(1000 / this._deltaTime);
-            let renderError:number = this._renderer.getError();
+            const renderError:number = this._renderer.getError();
             if (renderError) throw new DebugError(`render error with code ${renderError}`);
         }
 

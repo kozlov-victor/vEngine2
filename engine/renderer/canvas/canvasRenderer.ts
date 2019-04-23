@@ -97,13 +97,13 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.ctx.restore();
     }
 
-    clear():void {
-        this.ctx.clearRect(0,0,this.game.width,this.game.height);
-    }
-
-    clearColor(color:Color):void {
-        //this.fillRect(new Rect(0,0,this.game.width,this.game.height),color);
-    }
+    // clear():void {
+    //     this.ctx.clearRect(0,0,this.game.width,this.game.height);
+    // }
+    //
+    // clearColor(color:Color):void {
+    //     //this.fillRect(new Rect(0,0,this.game.width,this.game.height),color);
+    // }
 
     save():void {
         this.ctx.save();

@@ -1,6 +1,5 @@
 import {Scene} from "@engine/model/impl/scene";
 import {GameObject} from "@engine/model/impl/gameObject";
-import {SpriteSheet} from "@engine/model/impl/spriteSheet";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Color} from "@engine/renderer/color";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/textureFilters/blackWhiteFilter";
@@ -22,6 +21,7 @@ import {SwirlFilter} from "@engine/renderer/webGl/filters/textureFilters/swirlFi
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/motionBlurFilter";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/triangleBlurFilter";
+import {Image} from "@engine/model/impl/ui/drawable/image";
 
 
 export class MainScene extends Scene {
@@ -38,7 +38,7 @@ export class MainScene extends Scene {
     onReady() {
         console.log('ready');
         this.logoObj = new GameObject(this.game);
-        let spr:SpriteSheet = new SpriteSheet(this.game);
+        let spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});

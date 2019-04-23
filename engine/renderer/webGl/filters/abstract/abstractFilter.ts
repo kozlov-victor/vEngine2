@@ -8,6 +8,7 @@ import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import Mat16Holder = mat4.Mat16Holder;
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
+import {Color} from "@engine/renderer/color";
 
 
 const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):Mat16Holder =>{
@@ -17,6 +18,7 @@ const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:nu
 };
 
 const identity:Mat16Holder = mat4.makeIdentity();
+const BLACK = Color.RGB(0,0,0,0);
 
 export abstract class AbstractFilter {
 
@@ -48,8 +50,7 @@ export abstract class AbstractFilter {
         const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,identity.mat16);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,width,height).mat16);
-        this.gl.clearColor(0,0,0,0);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+        destFrameBuffer.clear(BLACK);
         this.simpleRectDrawer.draw();
     }
 
