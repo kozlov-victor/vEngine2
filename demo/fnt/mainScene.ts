@@ -1,6 +1,6 @@
 import {Scene} from "@engine/model/impl/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Font, FontFactory} from "@engine/model/impl/font";
+import {Font} from "@engine/model/impl/font";
 import {TextField} from "@engine/model/impl/ui/components/textField";
 import {Color} from "@engine/renderer/color";
 import {Texture} from "@engine/renderer/webGl/base/texture";
@@ -24,7 +24,6 @@ export class MainScene extends Scene {
         fnt.fontSize = 50;
         fnt.fontFamily = 'monospace';
         fnt.fontColor = Color.RGB(255,0,0);
-        FontFactory.generate(fnt,this);
         this.fnt = fnt;
     }
 

@@ -20,6 +20,7 @@ export class Button extends Container {
     revalidate():void{
         if (DEBUG && !this._font)
             throw new DebugError(`font is not set`);
+        this._font.revalidate();
         if (this.children.indexOf(this._textField)===-1)
             this.appendChild(this._textField);
         super.revalidate();
@@ -42,10 +43,9 @@ export class Button extends Container {
         this._dirty = true;
     }
 
-    setFont(f:Font):void{
-        f.revalidate();
-        this._font = f;
-        this._textField.setFont(f);
+    setFont(font:Font):void{
+        this._font = font;
+        this._textField.setFont(font);
     }
 
     getText():string{

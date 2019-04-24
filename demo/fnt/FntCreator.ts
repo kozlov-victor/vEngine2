@@ -1,15 +1,14 @@
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Font, FontContext} from "@engine/model/impl/font";
-import {Scene} from "@engine/model/impl/scene";
 import {Game} from "@engine/game";
 
 export namespace FntCreator {
 
     export const createFont = (game:Game,imgLink:ResourceLink<Texture>,docLink:ResourceLink<string>):Font=>{
         const ctx:FontContext = {
-            width: 320,
-            height: 256,
+            width: imgLink.getTarget().size.width,
+            height: imgLink.getTarget().size.height,
             lineHeight: null,
             symbols: {}
         };
@@ -17,6 +16,7 @@ export namespace FntCreator {
         // http://www.angelcode.com/products/bmfont/doc/file_format.html
         const doc:Document = new DOMParser().parseFromString(docLink.getTarget(),'application/xml');
         ctx.lineHeight = +doc.querySelector('common').getAttribute('lineHeight');
+        const face:string = doc.querySelector('info').getAttribute('face');
         const all:NodeListOf<Element> = doc.querySelectorAll('char');
         for (let i:number=0;i<all.length;i++){
             const el:Element = all[i];
@@ -39,7 +39,10 @@ export namespace FntCreator {
             }
 
         }
-        return Font.fromAtlas(game,imgLink,ctx);
+        const fnt:Font = Font.fromAtlas(game,imgLink,ctx);
+        fnt.fontFamily = face;
+        fnt.fontSize = ctx.lineHeight;
+        return fnt;
     }
 
 }

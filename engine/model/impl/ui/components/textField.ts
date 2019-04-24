@@ -210,7 +210,7 @@ export class TextField extends ScrollableContainer {
     revalidate():void {
         super.revalidate();
         if (DEBUG && !this._font) throw new DebugError(`font is not provided`);
-        if (DEBUG && !this._font.getResourceLink()) throw new DebugError(`can not render textField: font resource link is not set`);
+        this._font.revalidate();
     }
 
     private _getDefaultSymbolRect():RectViewJSON {
@@ -291,11 +291,9 @@ export class TextField extends ScrollableContainer {
     }
 
     setFont(font:Font):void {
-        font.revalidate();
         this._font = font;
-        this.setText(this._text);
+        this._dirty = true;
     }
-
 
 
     getFont():Font {

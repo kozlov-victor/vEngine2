@@ -1,9 +1,12 @@
+import {DebugError} from "@engine/debug/debugError";
+
 export class Queue {
 
     private tasksResolved:number = 0;
     private tasks:Function[] = [];
     private tasksProgressById:{[taskId:string]:number} = {};
     private completed:boolean = false;
+    private nextTaskIndex:number = 0;
 
     public onResolved:()=>void;
     public onProgress:(n:number)=>void;
@@ -22,6 +25,10 @@ export class Queue {
     // };
 
     public resolveTask(taskId:number|string):void{
+        if (DEBUG) {
+            if (this.tasksProgressById[taskId]===undefined) throw new DebugError(`can not resolve task: no task with id ${taskId}`);
+            if (this.tasksProgressById[taskId]===1) throw new DebugError(`task with id ${taskId} resolved already`);
+        }
         this.tasksResolved++;
         this.tasksProgressById[taskId] = 1;
         if (this.tasks.length===this.tasksResolved) {
@@ -30,6 +37,7 @@ export class Queue {
             if (this.onResolved) this.onResolved();
         } else {
             this.onProgress && this.onProgress(this.calcProgress());
+            this.tasks[this.nextTaskIndex++]();
         }
     };
 
@@ -55,9 +63,11 @@ export class Queue {
         if (this.size()===0) {
             this.completed = true;
             this.onResolved && this.onResolved();
+        } else {
+            this.tasks[this.nextTaskIndex++]();
         }
-        this.tasks.forEach((t:Function)=>{
-            t && t();
-        });
+        // this.tasks.forEach((t:Function)=>{
+        //     t && t();
+        // });
     }
 }

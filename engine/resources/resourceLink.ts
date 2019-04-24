@@ -1,3 +1,4 @@
+import {DebugError} from "@engine/debug/debugError";
 
 export class ResourceLink<T> {
 
@@ -14,6 +15,7 @@ export class ResourceLink<T> {
     }
 
     getTarget():T{
+        if (DEBUG && this.target===undefined) throw new DebugError(`no target associated with resource link`);
         return this.target;
     }
 

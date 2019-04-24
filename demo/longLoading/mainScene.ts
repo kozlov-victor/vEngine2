@@ -12,13 +12,12 @@ import {Image} from "@engine/model/impl/ui/drawable/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
-const fakeLongLoadingFn = (resourceLoader:ResourceLoader,time:number)=>{
-    const q:Queue = ((resourceLoader as any)['q'] as Queue);
+const fakeLongLoadingFn = (resourceLoader:ResourceLoader)=>{
     const id:string = Math.random()+'_'+Math.random();
-    q.addTask(()=>{
+    resourceLoader.q.addTask(()=>{
         setTimeout(()=>{
-            q.resolveTask(id);
-        },time);
+            resourceLoader.q.resolveTask(id);
+        },200);
     },id);
 };
 
@@ -30,7 +29,7 @@ export class MainScene extends Scene {
 
     onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
-        for (let i:number = 0;i<100;i++) fakeLongLoadingFn(this.resourceLoader,i*200);
+        for (let i:number = 0;i<100;i++) fakeLongLoadingFn(this.resourceLoader);
         let rect = new Rectangle(this.game);
         rect.borderRadius = 5;
         (rect.fillColor as Color).setRGB(10,100,100);

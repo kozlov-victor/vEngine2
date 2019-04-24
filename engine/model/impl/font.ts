@@ -26,7 +26,7 @@ interface Range {
     to:number
 }
 
-export namespace FontFactory {
+namespace FontFactory {
 
     const SYMBOL_PADDING:number = 4;
 
@@ -120,12 +120,6 @@ export namespace FontFactory {
         correctColor(cnv,color);
         return cnv.toDataURL();
     };
-
-    export const generate = (f:Font,s:Scene):void=>{
-        f.createContext();
-        const link:ResourceLink<Texture> = s.resourceLoader.loadImage(f.createBitmap());
-        f.setResourceLink(link);
-    }
     
 }
 
@@ -144,6 +138,13 @@ export class Font extends Resource<Texture> implements Revalidatable {
     }
 
     private static _systemFontInstance:Font;
+
+    generate(){
+        this.createContext();
+        const base64:string = this.createBitmap();
+        const link:ResourceLink<Texture> = this.game.getCurrScene().resourceLoader.loadImage(base64);
+        this.setResourceLink(link);
+    }
 
     static getSystemFont():Font{
         if (Font._systemFontInstance) return Font._systemFontInstance;
@@ -180,8 +181,7 @@ export class Font extends Resource<Texture> implements Revalidatable {
 
     revalidate():void {
         if (DEBUG) {
-            if (!this.fontContext) throw new DebugError(`font context is not created`);
-            if (!this.fontContext.lineHeight) throw new DebugError(`lineHeight is not created at context`);
+            if (!this.fontContext) throw new DebugError(`font context is not created. Did you invoke font.generate() method?`);
             if (!this.getResourceLink()) throw new DebugError(`font without resource link`);
         }
     }

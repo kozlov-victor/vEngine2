@@ -4,16 +4,15 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {LoaderUtil} from "@engine/resources/loaderUtil";
 import loadRaw = LoaderUtil.loadRaw;
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {Incrementer} from "@engine/resources/incrementer";
 
 
 export class ResourceLoader {
 
-    private q:Queue;
-    private readonly game:Game;
+    readonly q:Queue = new Queue();
 
-    constructor(game: Game) {
+    constructor(private game: Game) {
         this.game = game;
-        this.q = new Queue();
     }
 
 
@@ -60,6 +59,14 @@ export class ResourceLoader {
         return link;
     }
 
+    addNextTask(task:Function){
+        const id:string = Date.now() + '_' + Incrementer.getValue();
+        this.q.addTask(()=>{
+            task();
+            this.q.resolveTask(id);
+        },id);
+    }
+
     startLoading():void{
         this.q.start();
     }
@@ -79,5 +86,6 @@ export class ResourceLoader {
     onCompleted(fn:()=>void):void{
         this.q.onResolved = fn;
     }
+
 
 }
