@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 92);
+/******/ 	return __webpack_require__(__webpack_require__.s = 93);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -336,7 +336,7 @@ function __importDefault(mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
 var objectPool_1 = __webpack_require__(8);
-var observableEntity_1 = __webpack_require__(15);
+var observableEntity_1 = __webpack_require__(16);
 var Point2d = (function (_super) {
     tslib_1.__extends(Point2d, _super);
     function Point2d(x, y, onChangedFn) {
@@ -576,10 +576,10 @@ exports.Color = Color;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(44);
-var camera_1 = __webpack_require__(23);
+__webpack_require__(45);
+var camera_1 = __webpack_require__(22);
 var point2d_1 = __webpack_require__(2);
-var colliderEngine_1 = __webpack_require__(45);
+var colliderEngine_1 = __webpack_require__(46);
 var debugError_1 = __webpack_require__(0);
 var SCALE_STRATEGY;
 (function (SCALE_STRATEGY) {
@@ -770,7 +770,7 @@ if (true) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
 var objectPool_1 = __webpack_require__(8);
-var observableEntity_1 = __webpack_require__(15);
+var observableEntity_1 = __webpack_require__(16);
 var Size = (function (_super) {
     tslib_1.__extends(Size, _super);
     function Size(width, height) {
@@ -855,7 +855,7 @@ var tslib_1 = __webpack_require__(1);
 var size_1 = __webpack_require__(5);
 var point2d_1 = __webpack_require__(2);
 var objectPool_1 = __webpack_require__(8);
-var observableEntity_1 = __webpack_require__(15);
+var observableEntity_1 = __webpack_require__(16);
 var Rect = (function (_super) {
     tslib_1.__extends(Rect, _super);
     function Rect(x, y, width, height, onChangedFn) {
@@ -866,6 +866,7 @@ var Rect = (function (_super) {
         var _this = _super.call(this) || this;
         _this.point = new point2d_1.Point2d();
         _this.size = new size_1.Size();
+        _this._arr = [0, 0, 0, 0];
         if (onChangedFn)
             _this.addListener(onChangedFn);
         _this.setXYWH(x, y, width, height);
@@ -934,6 +935,13 @@ var Rect = (function (_super) {
             width: this.size.width,
             height: this.size.height
         };
+    };
+    Rect.prototype.toArray = function () {
+        this._arr[0] = this.point.x;
+        this._arr[1] = this.point.y;
+        this._arr[2] = this.size.width;
+        this._arr[3] = this.size.height;
+        return this._arr;
     };
     Object.defineProperty(Rect.prototype, "right", {
         get: function () {
@@ -1351,15 +1359,15 @@ exports.ObjectPool = ObjectPool;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var resource_1 = __webpack_require__(21);
+var resource_1 = __webpack_require__(23);
 var debugError_1 = __webpack_require__(0);
-var mathEx_1 = __webpack_require__(12);
+var mathEx_1 = __webpack_require__(13);
 var point2d_1 = __webpack_require__(2);
 var rect_1 = __webpack_require__(6);
 var size_1 = __webpack_require__(5);
-var tweenableDelegate_1 = __webpack_require__(25);
-var timerDelegate_1 = __webpack_require__(26);
-var eventEmitterDelegate_1 = __webpack_require__(20);
+var tweenableDelegate_1 = __webpack_require__(26);
+var timerDelegate_1 = __webpack_require__(27);
+var eventEmitterDelegate_1 = __webpack_require__(19);
 var BLEND_MODE;
 (function (BLEND_MODE) {
     BLEND_MODE[BLEND_MODE["NORMAL"] = 0] = "NORMAL";
@@ -1381,7 +1389,6 @@ var RenderableModel = (function (_super) {
         _this.filters = [];
         _this.blendMode = BLEND_MODE.NORMAL;
         _this.children = [];
-        _this.acceptLight = false;
         _this.velocity = new point2d_1.Point2d(0, 0);
         _this._dirty = true;
         _this._srcRect = new rect_1.Rect();
@@ -1416,7 +1423,6 @@ var RenderableModel = (function (_super) {
             }
             cloned.appendChild(clonedChildren);
         });
-        cloned.acceptLight = this.acceptLight;
         cloned.game = this.game;
         _super.prototype.setClonedProperties.call(this, cloned);
     };
@@ -1873,6 +1879,99 @@ exports.noop = function (arg) { };
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var object_1 = __webpack_require__(11);
+var debugError_1 = __webpack_require__(0);
+var AbstractDrawer = (function () {
+    function AbstractDrawer(gl) {
+        this.program = null;
+        this.uniformCache = {};
+        this.texturesToBind = { length: 0, texturesInfo: [] };
+        this.gl = gl;
+    }
+    AbstractDrawer.prototype.bind = function () {
+        if ( true && !this.program) {
+            console.error(this);
+            throw new debugError_1.DebugError("can not init drawer: initProgram method must be invoked!");
+        }
+        if (AbstractDrawer.currentInstance !== null &&
+            AbstractDrawer.currentInstance !== this) {
+            AbstractDrawer.currentInstance.unbind();
+        }
+        AbstractDrawer.currentInstance = this;
+        this.bufferInfo.bind(this.program);
+    };
+    AbstractDrawer.prototype.unbind = function () {
+        this.bufferInfo.unbind();
+    };
+    AbstractDrawer.prototype.destroy = function () {
+        if (this.bufferInfo)
+            this.bufferInfo.destroy();
+        this.program.destroy();
+    };
+    AbstractDrawer.prototype.setUniform = function (name, value) {
+        if ( true && !name) {
+            console.trace();
+            throw new debugError_1.DebugError("can not set uniform witn value " + value + ": name is not provided");
+        }
+        if ( true && value == undefined) {
+            console.trace();
+            throw new debugError_1.DebugError("can not set uniform with value " + value);
+        }
+        if (object_1.isEqual(this.uniformCache[name], value))
+            return;
+        if (object_1.isArray(value)) {
+            if (!this.uniformCache[name])
+                this.uniformCache[name] = Array(value.length);
+            for (var i = 0, max = value.length; i < max; i++) {
+                this.uniformCache[name][i] = value[i];
+            }
+        }
+        else {
+            this.uniformCache[name] = value;
+        }
+    };
+    AbstractDrawer.prototype.attachTexture = function (uniformName, texture) {
+        this.texturesToBind.texturesInfo[this.texturesToBind.length++] = { uniformName: uniformName, texture: texture };
+    };
+    AbstractDrawer.prototype.getAttachedTextureAt = function (i) {
+        if ( true && i > this.texturesToBind.length - 1)
+            throw new debugError_1.DebugError("ca not find bound texture: out of range: index:" + i + ", length:" + this.texturesToBind);
+        return this.texturesToBind.texturesInfo[i].texture;
+    };
+    AbstractDrawer.prototype.setUniformsFromMap = function (batch) {
+        var _this = this;
+        Object.keys(batch).forEach(function (name) { return _this.setUniform(name, batch[name]); });
+    };
+    AbstractDrawer.prototype._setUniform = function (name, value) {
+        this.program.setUniform(name, value);
+    };
+    AbstractDrawer.prototype.drawElements = function () {
+        this.bufferInfo.draw();
+    };
+    AbstractDrawer.prototype.draw = function () {
+        var _this = this;
+        this.bind();
+        Object.keys(this.uniformCache).forEach(function (name) { return _this._setUniform(name, _this.uniformCache[name]); });
+        for (var i = 0, max = this.texturesToBind.length; i < max; i++) {
+            var t = this.texturesToBind.texturesInfo[i];
+            t.texture.bind(t.uniformName, i, this.program);
+        }
+        this.texturesToBind.length = 0;
+        this.drawElements();
+    };
+    AbstractDrawer.currentInstance = null;
+    return AbstractDrawer;
+}());
+exports.AbstractDrawer = AbstractDrawer;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var point2d_1 = __webpack_require__(2);
 var mat4_1 = __webpack_require__(10);
 var MathEx;
@@ -1947,95 +2046,6 @@ var MathEx;
 
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var object_1 = __webpack_require__(11);
-var debugError_1 = __webpack_require__(0);
-var AbstractDrawer = (function () {
-    function AbstractDrawer(gl) {
-        this.program = null;
-        this.uniformCache = {};
-        this.texturesToBind = { length: 0, texturesInfo: [] };
-        this.gl = gl;
-    }
-    AbstractDrawer.prototype.bind = function () {
-        if ( true && !this.program) {
-            console.error(this);
-            throw new debugError_1.DebugError("can not init drawer: initProgram method must be invoked!");
-        }
-        if (AbstractDrawer.currentInstance !== null &&
-            AbstractDrawer.currentInstance !== this) {
-            AbstractDrawer.currentInstance.unbind();
-        }
-        AbstractDrawer.currentInstance = this;
-        this.bufferInfo.bind(this.program);
-    };
-    AbstractDrawer.prototype.unbind = function () {
-        this.bufferInfo.unbind();
-    };
-    AbstractDrawer.prototype.destroy = function () {
-        if (this.bufferInfo)
-            this.bufferInfo.destroy();
-        this.program.destroy();
-    };
-    AbstractDrawer.prototype.setUniform = function (name, value) {
-        if ( true && !name) {
-            console.trace();
-            throw new debugError_1.DebugError("can not set uniform witn value " + value + ": name is not provided");
-        }
-        if (object_1.isEqual(this.uniformCache[name], value))
-            return;
-        if (object_1.isArray(value)) {
-            if (!this.uniformCache[name])
-                this.uniformCache[name] = Array(value.length);
-            for (var i = 0, max = value.length; i < max; i++) {
-                this.uniformCache[name][i] = value[i];
-            }
-        }
-        else {
-            this.uniformCache[name] = value;
-        }
-    };
-    AbstractDrawer.prototype.attachTexture = function (uniformName, texture) {
-        this.texturesToBind.texturesInfo[this.texturesToBind.length++] = { uniformName: uniformName, texture: texture };
-    };
-    AbstractDrawer.prototype.getAttachedTextureAt = function (i) {
-        if ( true && i > this.texturesToBind.length - 1)
-            throw new debugError_1.DebugError("ca not find bound texture: out of range: index:" + i + ", length:" + this.texturesToBind);
-        return this.texturesToBind.texturesInfo[i].texture;
-    };
-    AbstractDrawer.prototype.setUniformsFromMap = function (batch) {
-        var _this = this;
-        Object.keys(batch).forEach(function (name) { return _this.setUniform(name, batch[name]); });
-    };
-    AbstractDrawer.prototype._setUniform = function (name, value) {
-        this.program.setUniform(name, value);
-    };
-    AbstractDrawer.prototype.drawElements = function () {
-        this.bufferInfo.draw();
-    };
-    AbstractDrawer.prototype.draw = function () {
-        var _this = this;
-        this.bind();
-        Object.keys(this.uniformCache).forEach(function (name) { return _this._setUniform(name, _this.uniformCache[name]); });
-        for (var i = 0, max = this.texturesToBind.length; i < max; i++) {
-            var t = this.texturesToBind.texturesInfo[i];
-            t.texture.bind(t.uniformName, i, this.program);
-        }
-        this.texturesToBind.length = 0;
-        this.drawElements();
-    };
-    AbstractDrawer.currentInstance = null;
-    return AbstractDrawer;
-}());
-exports.AbstractDrawer = AbstractDrawer;
-
-
-/***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2056,6 +2066,32 @@ exports.MOUSE_EVENTS = {
 
 /***/ }),
 /* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var SHAPE_TYPE;
+(function (SHAPE_TYPE) {
+    SHAPE_TYPE[SHAPE_TYPE["ELLIPSE"] = 0] = "ELLIPSE";
+    SHAPE_TYPE[SHAPE_TYPE["RECT"] = 1] = "RECT";
+})(SHAPE_TYPE = exports.SHAPE_TYPE || (exports.SHAPE_TYPE = {}));
+var FILL_TYPE;
+(function (FILL_TYPE) {
+    FILL_TYPE[FILL_TYPE["COLOR"] = 0] = "COLOR";
+    FILL_TYPE[FILL_TYPE["TEXTURE"] = 1] = "TEXTURE";
+    FILL_TYPE[FILL_TYPE["LINEAR_GRADIENT"] = 2] = "LINEAR_GRADIENT";
+})(FILL_TYPE = exports.FILL_TYPE || (exports.FILL_TYPE = {}));
+var STRETCH_MODE;
+(function (STRETCH_MODE) {
+    STRETCH_MODE[STRETCH_MODE["STRETCH"] = 0] = "STRETCH";
+    STRETCH_MODE[STRETCH_MODE["REPEAT"] = 1] = "REPEAT";
+})(STRETCH_MODE = exports.STRETCH_MODE || (exports.STRETCH_MODE = {}));
+exports.fragmentSource = "\n\n#define HALF                   .5\n#define ZERO                    0.\n#define ONE                     1.\n#define ERROR_COLOR             vec4(ONE,ZERO,ZERO,ONE)\n#define STRETCH_MODE_STRETCH    " + STRETCH_MODE.STRETCH + "\n#define STRETCH_MODE_REPEAT     " + STRETCH_MODE.REPEAT + "\n\nvec4 getStretchedImage(float tx,float ty){\n    vec2 txVec = vec2(tx,ty);\n    txVec += fract(u_texOffset);\n    txVec = mod(txVec,u_texRect.zw);\n    txVec += u_texRect.xy;\n    return texture2D(texture, txVec);\n}\n\nvec4 getRepeatedImage(float tx,float ty){\n    vec2 txVec = vec2(tx,ty)*u_repeatFactor;\n    txVec += fract(u_texOffset);  \n    txVec = mod(txVec,vec2(ONE,ONE));\n    return texture2D(texture, txVec);\n}\n\nvec4 getFillColor(){\n    if (u_fillType==" + FILL_TYPE.COLOR + ") return u_fillColor;\n    else if (u_fillType==" + FILL_TYPE.LINEAR_GRADIENT + ") {\n        vec2 polarCoords = vec2(length(v_position.xy),atan(v_position.y/v_position.x));\n        polarCoords.y+=u_fillLinearGradient[2].x;\n        vec2 rectCoords = vec2(polarCoords.x*cos(polarCoords.y),polarCoords.x*sin(polarCoords.y));\n        return mix(u_fillLinearGradient[0],u_fillLinearGradient[1],rectCoords.x);\n    }\n    else if (u_fillType==" + FILL_TYPE.TEXTURE + ") {\n        float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2]; \n        float ty = (v_position.y-u_rectOffsetTop)/u_height*u_texRect[3];\n        vec4 txVec;\n        if (u_stretchMode==STRETCH_MODE_STRETCH) txVec = getStretchedImage(tx,ty);\n        else if (u_stretchMode==STRETCH_MODE_REPEAT) txVec = getRepeatedImage(tx,ty);\n        else txVec = ERROR_COLOR;\n        return txVec;\n    }\n    else return ERROR_COLOR;\n}\nfloat calcRadiusAtAngle(float x,float y) {\n     float a = atan(y-HALF,x-HALF);\n     float cosA = cos(a);\n     float sinA = sin(a);\n     return u_rx*u_ry/sqrt(u_rx*u_rx*sinA*sinA+u_ry*u_ry*cosA*cosA);\n}\nvoid drawEllipse(){\n     float dist = distance(vec2(HALF,HALF),v_position.xy);\n     float rAtCurrAngle = calcRadiusAtAngle(v_position.x,v_position.y);\n     if (dist < rAtCurrAngle) {\n        if (dist > rAtCurrAngle - u_lineWidth) gl_FragColor = u_color;\n        else gl_FragColor = getFillColor();\n     }\n     else discard;\n}\nvoid drawRect(){\n    float x = v_position.x - HALF;\n    float y = v_position.y - HALF;\n    float distX = abs(x);\n    float distY = abs(y);\n    float halfW = u_width  * HALF;\n    float halfH = u_height * HALF;\n    if (distX < halfW && distY < halfH) {\n        \n        if (distX>halfW - u_borderRadius && distY>halfH - u_borderRadius) {\n            vec2 borderCenter = vec2(0.,0.);\n            float posX = v_position.x, posY = v_position.y;\n            if (posX<HALF && posY<HALF) { // top left\n                borderCenter = vec2(HALF - halfW + u_borderRadius,HALF - halfH + u_borderRadius);\n            }\n            else if (posX>HALF && posY<HALF) { // top right\n                borderCenter = vec2(HALF + halfW - u_borderRadius,HALF - halfH + u_borderRadius); \n            }    \n            else if (posX<HALF && posY>HALF) { // bottom left\n                borderCenter = vec2(HALF - halfW + u_borderRadius,HALF + halfH - u_borderRadius); \n            }\n            else {  // bottom right\n                borderCenter = vec2(HALF + halfW - u_borderRadius,HALF + halfH - u_borderRadius);\n            }\n            float distToBorderCenter = distance(v_position.xy,borderCenter);\n            if (distToBorderCenter>u_borderRadius) discard;\n            else if (distToBorderCenter>u_borderRadius-u_lineWidth) gl_FragColor = u_color;\n            else gl_FragColor = getFillColor();\n        }\n        \n        else if (distX > halfW - u_lineWidth || distY > halfH - u_lineWidth)\n            gl_FragColor = u_color;\n        else \n            gl_FragColor = getFillColor();\n    }\n    else discard;\n}\n\nvoid main(){\n    if (u_shapeType==" + SHAPE_TYPE.ELLIPSE + ") drawEllipse();\n    else if (u_shapeType==" + SHAPE_TYPE.RECT + ") drawRect();\n    else gl_FragColor = ERROR_COLOR;\n    gl_FragColor.a*=u_alpha;\n}\n\n\n\n";
+
+
+/***/ }),
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2112,7 +2148,7 @@ exports.ObservableEntity = ObservableEntity;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2180,15 +2216,15 @@ exports.ShaderProgram = ShaderProgram;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var debugError_1 = __webpack_require__(0);
-var vertexBuffer_1 = __webpack_require__(50);
-var indexBuffer_1 = __webpack_require__(51);
+var vertexBuffer_1 = __webpack_require__(51);
+var indexBuffer_1 = __webpack_require__(52);
 var BufferInfo = (function () {
     function BufferInfo(gl, description) {
         this.posVertexBuffer = null;
@@ -2277,7 +2313,45 @@ exports.BufferInfo = BufferInfo;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var mouseEvents_1 = __webpack_require__(14);
+var debugError_1 = __webpack_require__(0);
+var eventEmitter_1 = __webpack_require__(34);
+var game_1 = __webpack_require__(4);
+var EventEmitterDelegate = (function () {
+    function EventEmitterDelegate() {
+    }
+    EventEmitterDelegate.prototype.on = function (eventName, callBack) {
+        if ( true && !game_1.Game.getInstance().hasControl('MouseControl')) {
+            if (eventName in mouseEvents_1.MOUSE_EVENTS) {
+                throw new debugError_1.DebugError('can not listen mouse events: mouse control is not added');
+            }
+        }
+        if (this._emitter === undefined)
+            this._emitter = new eventEmitter_1.EventEmitter();
+        this._emitter.on(eventName, callBack);
+        return callBack;
+    };
+    EventEmitterDelegate.prototype.off = function (eventName, callBack) {
+        if (this._emitter !== undefined)
+            this._emitter.off(eventName, callBack);
+    };
+    EventEmitterDelegate.prototype.trigger = function (eventName, data) {
+        if (this._emitter !== undefined)
+            this._emitter.trigger(eventName, data);
+    };
+    return EventEmitterDelegate;
+}());
+exports.EventEmitterDelegate = EventEmitterDelegate;
+
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2316,7 +2390,7 @@ exports.Shape = Shape;
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2446,45 +2520,184 @@ exports.Tween = Tween;
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var mouseEvents_1 = __webpack_require__(14);
 var debugError_1 = __webpack_require__(0);
-var eventEmitter_1 = __webpack_require__(36);
-var game_1 = __webpack_require__(4);
-var EventEmitterDelegate = (function () {
-    function EventEmitterDelegate() {
+var tween_1 = __webpack_require__(21);
+var mathEx_1 = __webpack_require__(13);
+var rect_1 = __webpack_require__(6);
+var point2d_1 = __webpack_require__(2);
+var mat4_1 = __webpack_require__(10);
+var CAMERA_MATRIX_MODE;
+(function (CAMERA_MATRIX_MODE) {
+    CAMERA_MATRIX_MODE[CAMERA_MATRIX_MODE["MODE_TRANSFORM"] = 0] = "MODE_TRANSFORM";
+    CAMERA_MATRIX_MODE[CAMERA_MATRIX_MODE["MODE_IDENTITY"] = 1] = "MODE_IDENTITY";
+})(CAMERA_MATRIX_MODE = exports.CAMERA_MATRIX_MODE || (exports.CAMERA_MATRIX_MODE = {}));
+var DIRECTION_CORRECTION;
+(function (DIRECTION_CORRECTION) {
+    DIRECTION_CORRECTION[DIRECTION_CORRECTION["RIGHT"] = 0] = "RIGHT";
+    DIRECTION_CORRECTION[DIRECTION_CORRECTION["LEFT"] = 1] = "LEFT";
+    DIRECTION_CORRECTION[DIRECTION_CORRECTION["UP"] = 2] = "UP";
+    DIRECTION_CORRECTION[DIRECTION_CORRECTION["DOWN"] = 3] = "DOWN";
+})(DIRECTION_CORRECTION = exports.DIRECTION_CORRECTION || (exports.DIRECTION_CORRECTION = {}));
+var Camera = (function () {
+    function Camera(game) {
+        var _this = this;
+        this.scene = null;
+        this.sceneWidth = 0;
+        this.sceneHeight = 0;
+        this.pos = new point2d_1.Point2d(0, 0);
+        this.scale = new point2d_1.Point2d(1, 1);
+        this.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
+        this._rect = new rect_1.Rect();
+        this._rectIdentity = new rect_1.Rect();
+        this._rectScaled = new rect_1.Rect();
+        this.cameraShakeTween = null;
+        this.cameraPosCorrection = {
+            current: new point2d_1.Point2d(),
+            max: new point2d_1.Point2d()
+        };
+        this.game = game;
+        this._updateRect();
+        this.sceneWidth = game.width;
+        this.sceneHeight = game.height;
+        this.scale.observe(function () {
+            _this.revalidate();
+        });
     }
-    EventEmitterDelegate.prototype.on = function (eventName, callBack) {
-        if ( true && !game_1.Game.getInstance().hasControl('MouseControl')) {
-            if (eventName in mouseEvents_1.MOUSE_EVENTS) {
-                throw new debugError_1.DebugError('can not listen mouse events: mouse control is not added');
-            }
+    Camera.prototype.revalidate = function () {
+        this.scene = this.game.getCurrScene();
+        if (this.scene.tileMap)
+            this.scene.tileMap.revalidate();
+        this._rectIdentity.setXYWH(0, 0, this.game.width, this.game.height);
+        if (this.scene.tileMap.spriteSheet) {
+            this.sceneWidth =
+                this.scene.tileMap.spriteSheet.getSrcRect().size.width * this.scene.tileMap.width;
+            this.sceneHeight =
+                this.scene.tileMap.spriteSheet.getSrcRect().size.height * this.scene.tileMap.height;
         }
-        if (this._emitter === undefined)
-            this._emitter = new eventEmitter_1.EventEmitter();
-        this._emitter.on(eventName, callBack);
-        return callBack;
+        else {
+            this.sceneWidth = this.game.getCurrScene().width || this.game.width;
+            this.sceneHeight = this.game.getCurrScene().height || this.game.height;
+        }
     };
-    EventEmitterDelegate.prototype.off = function (eventName, callBack) {
-        if (this._emitter !== undefined)
-            this._emitter.off(eventName, callBack);
+    Camera.prototype.followTo = function (gameObject) {
+        if (gameObject === null)
+            return;
+        if ( true && gameObject === undefined)
+            throw new debugError_1.DebugError("Camera:followTo(gameObject) - gameObject not provided");
+        this.objFollowTo = gameObject;
+        this.revalidate();
     };
-    EventEmitterDelegate.prototype.trigger = function (eventName, data) {
-        if (this._emitter !== undefined)
-            this._emitter.trigger(eventName, data);
+    Camera.prototype.update = function () {
+        this.scene = this.game.getCurrScene();
+        var tileWidth = this.scene.width;
+        var tileHeight = this.scene.height;
+        var w = this.game.width;
+        var h = this.game.height;
+        var wDiv2 = w / 2;
+        var hDiv2 = h / 2;
+        var gameObject = this.objFollowTo;
+        if (gameObject) {
+            var _a = this.getRectScaled().size, wScaled = _a.width, hScaled = _a.height;
+            if (this.directionCorrection === DIRECTION_CORRECTION.RIGHT)
+                this.cameraPosCorrection.max.x = wScaled / 3;
+            else if (this.directionCorrection === DIRECTION_CORRECTION.LEFT)
+                this.cameraPosCorrection.max.x = -wScaled / 3;
+            else if (this.directionCorrection === DIRECTION_CORRECTION.DOWN)
+                this.cameraPosCorrection.max.y = hScaled / 3;
+            else if (this.directionCorrection === DIRECTION_CORRECTION.UP)
+                this.cameraPosCorrection.max.y = -hScaled / 3;
+            var currCorrection = this.cameraPosCorrection.max.
+                substract(this.cameraPosCorrection.current).
+                multiply(0.05);
+            this.cameraPosCorrection.current.add(currCorrection);
+            var newPos = point2d_1.Point2d.fromPool();
+            var pointToFollow = point2d_1.Point2d.fromPool();
+            pointToFollow.set(this.objFollowTo.pos);
+            pointToFollow.addXY(-wDiv2, -hDiv2);
+            newPos.x = this.pos.x + (pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x) * Camera.FOLLOW_FACTOR;
+            newPos.y = this.pos.y + (pointToFollow.y + this.cameraPosCorrection.current.y - this.pos.y) * Camera.FOLLOW_FACTOR;
+            if (newPos.x < 0)
+                newPos.x = 0;
+            if (newPos.y < 0)
+                newPos.y = 0;
+            if (newPos.x > this.sceneWidth - w + tileWidth)
+                newPos.x = this.sceneWidth - w + tileWidth;
+            if (newPos.y > this.sceneHeight - h + tileHeight)
+                newPos.y = this.sceneHeight - h + tileHeight;
+            this.pos.setXY(newPos.x, newPos.y);
+            newPos.release();
+            pointToFollow.release();
+            if (this.cameraShakeTween)
+                this.cameraShakeTween.update();
+        }
+        this._updateRect();
+        this.render();
     };
-    return EventEmitterDelegate;
+    Camera.prototype.shake = function (amplitude, time) {
+        var _this = this;
+        var tweenTarget = { time: 0, point: new point2d_1.Point2d(0, 0) };
+        this.cameraShakeTween = new tween_1.Tween({
+            target: tweenTarget,
+            time: time,
+            to: { time: time },
+            progress: function () {
+                var r1 = mathEx_1.MathEx.random(-amplitude / 2, amplitude / 2);
+                var r2 = mathEx_1.MathEx.random(-amplitude / 2, amplitude / 2);
+                tweenTarget.point.setXY(r1, r2);
+            },
+            complete: function () { return _this.cameraShakeTween = null; }
+        });
+    };
+    Camera.prototype._updateRect = function () {
+        var p = point2d_1.Point2d.fromPool();
+        var point00 = this.screenToWorld(p.setXY(0, 0));
+        var pointWH = this.screenToWorld(p.setXY(this.game.width, this.game.height));
+        this._rectScaled.setXYWH(point00.x, point00.y, pointWH.x - point00.x, pointWH.y - point00.y);
+        p.release();
+    };
+    Camera.prototype.render = function () {
+        var renderer = this.game.getRenderer();
+        renderer.translate(this.game.width / 2, this.game.height / 2);
+        renderer.scale(this.scale.x, this.scale.y);
+        renderer.translate(-this.game.width / 2, -this.game.height / 2);
+        renderer.translate(-this.pos.x, -this.pos.y);
+        if (this.cameraShakeTween !== null)
+            renderer.translate(this.cameraShakeTween.getTarget().point.x, this.cameraShakeTween.getTarget().point.y);
+    };
+    Camera.prototype.screenToWorld = function (p) {
+        var mScale = mat4_1.mat4.makeScale(this.scale.x, this.scale.y, 1);
+        var point2d = mathEx_1.MathEx.unProject(p, this.game.width, this.game.height, mScale);
+        point2d.add(this.pos);
+        return point2d;
+    };
+    Camera.prototype.getRect = function () {
+        if (this.matrixMode === CAMERA_MATRIX_MODE.MODE_IDENTITY)
+            return this._rectIdentity;
+        else {
+            this._rect.setXYWH(this.pos.x, this.pos.y, this.game.width, this.game.height);
+            return this._rect;
+        }
+    };
+    Camera.prototype.getRectScaled = function () {
+        if (this.matrixMode === CAMERA_MATRIX_MODE.MODE_IDENTITY)
+            return this._rectIdentity;
+        else
+            return this._rectScaled;
+    };
+    Camera.FOLLOW_FACTOR = 0.1;
+    return Camera;
 }());
-exports.EventEmitterDelegate = EventEmitterDelegate;
+exports.Camera = Camera;
 
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2508,7 +2721,7 @@ exports.Resource = Resource;
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2664,178 +2877,22 @@ exports.Container = Container;
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var debugError_1 = __webpack_require__(0);
-var tween_1 = __webpack_require__(19);
-var mathEx_1 = __webpack_require__(12);
-var rect_1 = __webpack_require__(6);
-var point2d_1 = __webpack_require__(2);
-var mat4_1 = __webpack_require__(10);
-var CAMERA_MATRIX_MODE;
-(function (CAMERA_MATRIX_MODE) {
-    CAMERA_MATRIX_MODE[CAMERA_MATRIX_MODE["MODE_TRANSFORM"] = 0] = "MODE_TRANSFORM";
-    CAMERA_MATRIX_MODE[CAMERA_MATRIX_MODE["MODE_IDENTITY"] = 1] = "MODE_IDENTITY";
-})(CAMERA_MATRIX_MODE = exports.CAMERA_MATRIX_MODE || (exports.CAMERA_MATRIX_MODE = {}));
-var Camera = (function () {
-    function Camera(game) {
-        var _this = this;
-        this.scene = null;
-        this.sceneWidth = 0;
-        this.sceneHeight = 0;
-        this.pos = new point2d_1.Point2d(0, 0);
-        this.scale = new point2d_1.Point2d(1, 1);
-        this.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
-        this._rect = new rect_1.Rect();
-        this._rectIdentity = new rect_1.Rect();
-        this._rectScaled = new rect_1.Rect();
-        this.cameraShakeTween = null;
-        this.cameraPosCorrection = {
-            current: new point2d_1.Point2d(),
-            max: new point2d_1.Point2d()
-        };
-        this.game = game;
-        this._updateRect();
-        this.sceneWidth = game.width;
-        this.sceneHeight = game.height;
-        this.scale.observe(function () {
-            _this.revalidate();
-        });
-    }
-    Camera.prototype.revalidate = function () {
-        this.scene = this.game.getCurrScene();
-        if (this.scene.tileMap)
-            this.scene.tileMap.revalidate();
-        this._rectIdentity.setXYWH(0, 0, this.game.width, this.game.height);
-        if (this.scene.tileMap.spriteSheet) {
-            this.sceneWidth =
-                this.scene.tileMap.spriteSheet.getSrcRect().size.width * this.scene.tileMap.width;
-            this.sceneHeight =
-                this.scene.tileMap.spriteSheet.getSrcRect().size.height * this.scene.tileMap.height;
-        }
-        else {
-            this.sceneWidth = this.game.getCurrScene().width || this.game.width;
-            this.sceneHeight = this.game.getCurrScene().height || this.game.height;
-        }
-    };
-    Camera.prototype.followTo = function (gameObject) {
-        if (gameObject === null)
-            return;
-        if ( true && gameObject === undefined)
-            throw new debugError_1.DebugError("Camera:followTo(gameObject) - gameObject not provided");
-        this.objFollowTo = gameObject;
-        this.revalidate();
-    };
-    Camera.prototype.update = function () {
-        this.scene = this.game.getCurrScene();
-        var tileWidth = this.scene.tileMap.spriteSheet ? this.scene.tileMap.spriteSheet.getSrcRect().size.width : 0;
-        var tileHeight = this.scene.tileMap.spriteSheet ? this.scene.tileMap.spriteSheet.getSrcRect().size.height : 0;
-        var w = this.game.width;
-        var h = this.game.height;
-        var wDiv2 = w / 2;
-        var hDiv2 = h / 2;
-        var gameObject = this.objFollowTo;
-        if (gameObject) {
-            var currCorrection = this.cameraPosCorrection.max.
-                substract(this.cameraPosCorrection.current).
-                multiply(0.05);
-            this.cameraPosCorrection.current.add(currCorrection);
-            var newPos = point2d_1.Point2d.fromPool();
-            var pointToFollow = point2d_1.Point2d.fromPool();
-            pointToFollow.set(this.objFollowTo.pos);
-            pointToFollow.addXY(-wDiv2, -hDiv2);
-            newPos.x = this.pos.x + (pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x) * 0.1;
-            newPos.y = this.pos.y + (pointToFollow.y - this.pos.y) * 0.1;
-            if (newPos.x < 0)
-                newPos.x = 0;
-            if (newPos.y < 0)
-                newPos.y = 0;
-            if (newPos.x > this.sceneWidth - w + tileWidth)
-                newPos.x = this.sceneWidth - w + tileWidth;
-            if (newPos.y > this.sceneHeight - h + tileHeight)
-                newPos.y = this.sceneHeight - h + tileHeight;
-            this.pos.setXY(newPos.x, newPos.y);
-            if (this.cameraShakeTween)
-                this.cameraShakeTween.update();
-        }
-        this._updateRect();
-        this.render();
-    };
-    Camera.prototype.shake = function (amplitude, time) {
-        var _this = this;
-        var tweenTarget = { time: 0, point: new point2d_1.Point2d(0, 0) };
-        this.cameraShakeTween = new tween_1.Tween({
-            target: tweenTarget,
-            time: time,
-            to: { time: time },
-            progress: function () {
-                var r1 = mathEx_1.MathEx.random(-amplitude / 2, amplitude / 2);
-                var r2 = mathEx_1.MathEx.random(-amplitude / 2, amplitude / 2);
-                tweenTarget.point.setXY(r1, r2);
-            },
-            complete: function () { return _this.cameraShakeTween = null; }
-        });
-    };
-    Camera.prototype._updateRect = function () {
-        var p = point2d_1.Point2d.fromPool();
-        var point00 = this.screenToWorld(p.setXY(0, 0));
-        var pointWH = this.screenToWorld(p.setXY(this.game.width, this.game.height));
-        this._rectScaled.setXYWH(point00.x, point00.y, pointWH.x - point00.x, pointWH.y - point00.y);
-        p.release();
-    };
-    Camera.prototype.render = function () {
-        var renderer = this.game.getRenderer();
-        renderer.translate(this.game.width / 2, this.game.height / 2);
-        renderer.scale(this.scale.x, this.scale.y);
-        renderer.translate(-this.game.width / 2, -this.game.height / 2);
-        renderer.translate(-this.pos.x, -this.pos.y);
-        if (this.cameraShakeTween !== null)
-            renderer.translate(this.cameraShakeTween.getTarget().point.x, this.cameraShakeTween.getTarget().point.y);
-    };
-    Camera.prototype.screenToWorld = function (p) {
-        var mScale = mat4_1.mat4.makeScale(this.scale.x, this.scale.y, 1);
-        var point2d = mathEx_1.MathEx.unProject(p, this.game.width, this.game.height, mScale);
-        point2d.add(this.pos);
-        return point2d;
-    };
-    Camera.prototype.getRect = function () {
-        if (this.matrixMode === CAMERA_MATRIX_MODE.MODE_IDENTITY)
-            return this._rectIdentity;
-        else {
-            this._rect.setXYWH(this.pos.x, this.pos.y, this.game.width, this.game.height);
-            return this._rect;
-        }
-    };
-    Camera.prototype.getRectScaled = function () {
-        if (this.matrixMode === CAMERA_MATRIX_MODE.MODE_IDENTITY)
-            return this._rectIdentity;
-        else
-            return this._rectScaled;
-    };
-    return Camera;
-}());
-exports.Camera = Camera;
-
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var queue_1 = __webpack_require__(46);
-var resourceLink_1 = __webpack_require__(47);
-var loaderUtil_1 = __webpack_require__(38);
+var queue_1 = __webpack_require__(47);
+var resourceLink_1 = __webpack_require__(48);
+var loaderUtil_1 = __webpack_require__(39);
 var loadRaw = loaderUtil_1.LoaderUtil.loadRaw;
+var incrementer_1 = __webpack_require__(41);
 var ResourceLoader = (function () {
     function ResourceLoader(game) {
         this.game = game;
         this.q = new queue_1.Queue();
+        this.game = game;
     }
     ResourceLoader.prototype.loadImage = function (url) {
         var _this = this;
@@ -2872,6 +2929,14 @@ var ResourceLoader = (function () {
         }, url);
         return link;
     };
+    ResourceLoader.prototype.addNextTask = function (task) {
+        var _this = this;
+        var id = Date.now() + '_' + incrementer_1.Incrementer.getValue();
+        this.q.addTask(function () {
+            task();
+            _this.q.resolveTask(id);
+        }, id);
+    };
     ResourceLoader.prototype.startLoading = function () {
         this.q.start();
     };
@@ -2893,13 +2958,13 @@ exports.ResourceLoader = ResourceLoader;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var tween_1 = __webpack_require__(19);
+var tween_1 = __webpack_require__(21);
 var TweenableDelegate = (function () {
     function TweenableDelegate() {
     }
@@ -2941,13 +3006,13 @@ exports.TweenableDelegate = TweenableDelegate;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var timer_1 = __webpack_require__(48);
+var timer_1 = __webpack_require__(49);
 var identity_array = [];
 var TimerDelegate = (function () {
     function TimerDelegate() {
@@ -2980,14 +3045,14 @@ exports.TimerDelegate = TimerDelegate;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var abstractPrimitive_1 = __webpack_require__(52);
+var abstractPrimitive_1 = __webpack_require__(53);
 var Plane = (function (_super) {
     tslib_1.__extends(Plane, _super);
     function Plane() {
@@ -3013,7 +3078,7 @@ exports.Plane = Plane;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3087,27 +3152,6 @@ var ShaderGenerator = (function () {
     return ShaderGenerator;
 }());
 exports.ShaderGenerator = ShaderGenerator;
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var SHAPE_TYPE;
-(function (SHAPE_TYPE) {
-    SHAPE_TYPE[SHAPE_TYPE["ELLIPSE"] = 0] = "ELLIPSE";
-    SHAPE_TYPE[SHAPE_TYPE["RECT"] = 1] = "RECT";
-})(SHAPE_TYPE = exports.SHAPE_TYPE || (exports.SHAPE_TYPE = {}));
-var FILL_TYPE;
-(function (FILL_TYPE) {
-    FILL_TYPE[FILL_TYPE["COLOR"] = 0] = "COLOR";
-    FILL_TYPE[FILL_TYPE["TEXTURE"] = 1] = "TEXTURE";
-    FILL_TYPE[FILL_TYPE["LINEAR_GRADIENT"] = 2] = "LINEAR_GRADIENT";
-})(FILL_TYPE = exports.FILL_TYPE || (exports.FILL_TYPE = {}));
-exports.fragmentSource = "\n\n#define HALF .5\n#define ZERO  0.\n#define ONE   1.\n#define ERROR_COLOR vec4(ONE,ZERO,ZERO,ONE)\n\nvec4 getFillColor(){\n    if (u_fillType==" + FILL_TYPE.COLOR + ") return u_fillColor;\n    else if (u_fillType==" + FILL_TYPE.LINEAR_GRADIENT + ") {\n        vec2 polarCoords = vec2(length(v_position.xy),atan(v_position.y/v_position.x));\n        polarCoords.y+=u_fillLinearGradient[2].x;\n        vec2 rectCoords = vec2(polarCoords.x*cos(polarCoords.y),polarCoords.x*sin(polarCoords.y));\n        return mix(u_fillLinearGradient[0],u_fillLinearGradient[1],rectCoords.x);\n    }\n    else if (u_fillType==" + FILL_TYPE.TEXTURE + ") {\n        float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2]; \n        float ty = (v_position.y-u_rectOffsetTop)/u_height*u_texRect[3];\n        vec2 txVec = vec2(tx,ty);\n        txVec += fract(u_texOffset);\n        txVec = mod(txVec,u_texRect.zw);\n        txVec += u_texRect.xy;\n        return texture2D(texture, txVec);\n    }\n    else return ERROR_COLOR;\n}\nfloat calcRadiusAtAngle(float x,float y) {\n     float a = atan(y-HALF,x-HALF);\n     float cosA = cos(a);\n     float sinA = sin(a);\n     return u_rx*u_ry/sqrt(u_rx*u_rx*sinA*sinA+u_ry*u_ry*cosA*cosA);\n}\nvoid drawEllipse(){\n     float dist = distance(vec2(HALF,HALF),v_position.xy);\n     float rAtCurrAngle = calcRadiusAtAngle(v_position.x,v_position.y);\n     if (dist < rAtCurrAngle) {\n        if (dist > rAtCurrAngle - u_lineWidth) gl_FragColor = u_color;\n        else gl_FragColor = getFillColor();\n     }\n     else discard;\n}\nvoid drawRect(){\n    float x = v_position.x - HALF;\n    float y = v_position.y - HALF;\n    float distX = abs(x);\n    float distY = abs(y);\n    float halfW = u_width  * HALF;\n    float halfH = u_height * HALF;\n    if (distX < halfW && distY < halfH) {\n        \n        if (distX>halfW - u_borderRadius && distY>halfH - u_borderRadius) {\n            vec2 borderCenter = vec2(0.,0.);\n            float posX = v_position.x, posY = v_position.y;\n            if (posX<HALF && posY<HALF) { // top left\n                borderCenter = vec2(HALF - halfW + u_borderRadius,HALF - halfH + u_borderRadius);\n            }\n            else if (posX>HALF && posY<HALF) { // top right\n                borderCenter = vec2(HALF + halfW - u_borderRadius,HALF - halfH + u_borderRadius); \n            }    \n            else if (posX<HALF && posY>HALF) { // bottom left\n                borderCenter = vec2(HALF - halfW + u_borderRadius,HALF + halfH - u_borderRadius); \n            }\n            else {  // bottom right\n                borderCenter = vec2(HALF + halfW - u_borderRadius,HALF + halfH - u_borderRadius);\n            }\n            float distToBorderCenter = distance(v_position.xy,borderCenter);\n            if (distToBorderCenter>u_borderRadius) discard;\n            else if (distToBorderCenter>u_borderRadius-u_lineWidth) gl_FragColor = u_color;\n            else gl_FragColor = getFillColor();\n        }\n        \n        else if (distX > halfW - u_lineWidth || distY > halfH - u_lineWidth)\n            gl_FragColor = u_color;\n        else \n            gl_FragColor = getFillColor();\n    }\n    else discard;\n}\n\nvoid main(){\n    if (u_shapeType==" + SHAPE_TYPE.ELLIPSE + ") drawEllipse();\n    else if (u_shapeType==" + SHAPE_TYPE.RECT + ") drawRect();\n    else gl_FragColor = ERROR_COLOR;\n    gl_FragColor.a*=u_alpha;\n}\n\n\n\n";
 
 
 /***/ }),
@@ -3312,9 +3356,10 @@ exports.Texture = Texture;
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
 var debugError_1 = __webpack_require__(0);
-var shape_1 = __webpack_require__(18);
+var shape_1 = __webpack_require__(20);
 var color_1 = __webpack_require__(3);
 var point2d_1 = __webpack_require__(2);
+var shapeDrawer_shader_1 = __webpack_require__(15);
 var Image = (function (_super) {
     tslib_1.__extends(Image, _super);
     function Image(game) {
@@ -3322,6 +3367,7 @@ var Image = (function (_super) {
         _this.type = 'Image';
         _this.borderRadius = 0;
         _this.offset = new point2d_1.Point2d();
+        _this.stretchMode = shapeDrawer_shader_1.STRETCH_MODE.STRETCH;
         _this.fillColor.set(color_1.Color.NONE);
         return _this;
     }
@@ -3352,6 +3398,7 @@ var Image = (function (_super) {
         cloned._srcRect.set(this._srcRect);
         cloned.borderRadius = this.borderRadius;
         cloned.offset.set(this.offset);
+        cloned.stretchMode = this.stretchMode;
         _super.prototype.setClonedProperties.call(this, cloned);
     };
     Image.prototype.clone = function () {
@@ -3375,7 +3422,7 @@ exports.Image = Image;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var shape_1 = __webpack_require__(18);
+var shape_1 = __webpack_require__(20);
 var Rectangle = (function (_super) {
     tslib_1.__extends(Rectangle, _super);
     function Rectangle(game) {
@@ -3413,24 +3460,79 @@ exports.Rectangle = Rectangle;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(0);
+var EventEmitter = (function () {
+    function EventEmitter() {
+        this.events = {};
+    }
+    EventEmitter.prototype._on = function (name, callBack) {
+        this.events[name] = this.events[name] || [];
+        this.events[name].push(callBack);
+    };
+    EventEmitter.prototype.on = function (eventNameOrList, callBack) {
+        var _this = this;
+        if (typeof eventNameOrList === 'string') {
+            this._on(eventNameOrList, callBack);
+        }
+        else if (eventNameOrList.splice) {
+            eventNameOrList.forEach(function (eventName) {
+                _this._on(eventName, callBack);
+            });
+        }
+    };
+    ;
+    EventEmitter.prototype.off = function (eventName, callback) {
+        var es = this.events[eventName];
+        if (!es)
+            return;
+        var index = es.indexOf(callback);
+        if ( true && index == -1) {
+            console.error(callback);
+            throw new debugError_1.DebugError("can not remove event listener " + eventName);
+        }
+        es.splice(index, 1);
+    };
+    ;
+    EventEmitter.prototype.trigger = function (eventName, data) {
+        var es = this.events[eventName];
+        if (!es)
+            return;
+        var l = es.length;
+        while (l--) {
+            es[l](data);
+        }
+    };
+    ;
+    return EventEmitter;
+}());
+exports.EventEmitter = EventEmitter;
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
 var debugError_1 = __webpack_require__(0);
-var abstractDrawer_1 = __webpack_require__(13);
-var shapeDrawer_1 = __webpack_require__(49);
+var abstractDrawer_1 = __webpack_require__(12);
+var shapeDrawer_1 = __webpack_require__(50);
 var frameBuffer_1 = __webpack_require__(30);
-var matrixStack_1 = __webpack_require__(53);
+var matrixStack_1 = __webpack_require__(54);
 var texture_1 = __webpack_require__(31);
 var rect_1 = __webpack_require__(6);
-var abstractCanvasRenderer_1 = __webpack_require__(54);
+var abstractCanvasRenderer_1 = __webpack_require__(55);
 var color_1 = __webpack_require__(3);
 var size_1 = __webpack_require__(5);
-var modelDrawer_1 = __webpack_require__(59);
+var modelDrawer_1 = __webpack_require__(60);
 var mat4_1 = __webpack_require__(10);
-var shapeDrawer_shader_1 = __webpack_require__(29);
-var SimpleRectDrawer_1 = __webpack_require__(35);
-var doubleFrameBuffer_1 = __webpack_require__(61);
+var shapeDrawer_shader_1 = __webpack_require__(15);
+var SimpleRectDrawer_1 = __webpack_require__(38);
+var doubleFrameBuffer_1 = __webpack_require__(62);
 var renderableModel_1 = __webpack_require__(9);
-var blender_1 = __webpack_require__(62);
+var blender_1 = __webpack_require__(63);
 var IDENTITY = mat4_1.mat4.IDENTITY;
 var getCtx = function (el) {
     var contextAttrs = { alpha: false };
@@ -3511,6 +3613,11 @@ var WebGlRenderer = (function (_super) {
         sd.setUniform(sd.u_lineWidth, Math.min(shape.lineWidth / maxSize, 1));
         sd.setUniform(sd.u_color, shape.color.asGL());
         sd.setUniform(sd.u_alpha, shape.alpha);
+        var repeatFactor = size_1.Size.fromPool();
+        repeatFactor.setWH(shape.size.width / shape.getSrcRect().size.width, shape.size.height / shape.getSrcRect().size.height);
+        sd.setUniform(sd.u_repeatFactor, repeatFactor.toArray());
+        repeatFactor.release();
+        sd.setUniform(sd.u_stretchMode, shapeDrawer_shader_1.STRETCH_MODE.STRETCH);
         if (shape.fillColor.type == 'LinearGradient') {
             sd.setUniform(sd.u_fillLinearGradient, shape.fillColor.asGL());
             sd.setUniform(sd.u_fillType, shapeDrawer_shader_1.FILL_TYPE.LINEAR_GRADIENT);
@@ -3541,13 +3648,11 @@ var WebGlRenderer = (function (_super) {
         var _a = texture.size, srcWidth = _a.width, srcHeight = _a.height;
         var _b = img.getSrcRect().point, srcRectX = _b.x, srcRectY = _b.y;
         var _c = img.getSrcRect().size, srcRectWidth = _c.width, srcRectHeight = _c.height;
-        sd.setUniform(sd.u_texRect, [
-            srcRectX / srcWidth,
-            srcRectY / srcHeight,
-            srcRectWidth / srcWidth,
-            srcRectHeight / srcHeight
-        ]);
-        sd.setUniform(sd.u_texOffset, [img.offset.x / maxSize, img.offset.y / maxSize]);
+        var srcArr = rect_1.Rect.fromPool().setXYWH(srcRectX / srcWidth, srcRectY / srcHeight, srcRectWidth / srcWidth, srcRectHeight / srcHeight).release().toArray();
+        sd.setUniform(sd.u_texRect, srcArr);
+        var offSetArr = size_1.Size.fromPool().setWH(img.offset.x / maxSize, img.offset.y / maxSize).release().toArray();
+        sd.setUniform(sd.u_texOffset, offSetArr);
+        sd.setUniform(sd.u_stretchMode, img.stretchMode);
         sd.attachTexture('texture', texture);
         this.shapeDrawer.draw();
         this.afterItemDraw(img.filters, img.blendMode);
@@ -3756,113 +3861,7 @@ exports.WebGlRenderer = WebGlRenderer;
 
 
 /***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = __webpack_require__(1);
-var plane_1 = __webpack_require__(27);
-var shaderProgram_1 = __webpack_require__(16);
-var abstractDrawer_1 = __webpack_require__(13);
-var bufferInfo_1 = __webpack_require__(17);
-var shaderGenerator_1 = __webpack_require__(28);
-var shaderProgramUtils_1 = __webpack_require__(7);
-var debugError_1 = __webpack_require__(0);
-var SimpleRectDrawer = (function (_super) {
-    tslib_1.__extends(SimpleRectDrawer, _super);
-    function SimpleRectDrawer(gl) {
-        return _super.call(this, gl) || this;
-    }
-    SimpleRectDrawer.prototype.prepareShaderGenerator = function () {
-        this.gen = new shaderGenerator_1.ShaderGenerator();
-        var gen = this.gen;
-        this.a_position = gen.addAttribute(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'a_position');
-        this.a_texCoord = gen.addAttribute(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC2, 'a_texCoord');
-        this.u_vertexMatrix = gen.addVertexUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_MAT4, 'u_vertexMatrix');
-        this.u_textureMatrix = gen.addVertexUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_MAT4, 'u_textureMatrix');
-        gen.addVarying(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC2, 'v_texCoord');
-        gen.setVertexMainFn("\n            void main(){\n                gl_Position = u_vertexMatrix * a_position;\n                v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;\n            } \n        ");
-        gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.SAMPLER_2D, 'texture');
-        gen.setFragmentMainFn("\n            void main(){\n                gl_FragColor = texture2D(texture, v_texCoord);\n            }\n        ");
-    };
-    SimpleRectDrawer.prototype.initProgram = function () {
-        if (true) {
-            if (!this.gen)
-                throw new debugError_1.DebugError("can not init simpleRectDrawer instance: prepareShaderGenerator method must be invoked");
-        }
-        this.primitive = new plane_1.Plane();
-        this.program = new shaderProgram_1.ShaderProgram(this.gl, this.gen.getVertexSource(), this.gen.getFragmentSource());
-        this.bufferInfo = new bufferInfo_1.BufferInfo(this.gl, {
-            posVertexInfo: { array: this.primitive.vertexArr, type: this.gl.FLOAT, size: 2, attrName: 'a_position' },
-            posIndexInfo: { array: this.primitive.indexArr },
-            texVertexInfo: { array: this.primitive.texCoordArr, type: this.gl.FLOAT, size: 2, attrName: 'a_texCoord' },
-            drawMethod: this.gl.TRIANGLE_STRIP
-        });
-    };
-    return SimpleRectDrawer;
-}(abstractDrawer_1.AbstractDrawer));
-exports.SimpleRectDrawer = SimpleRectDrawer;
-
-
-/***/ }),
 /* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var debugError_1 = __webpack_require__(0);
-var EventEmitter = (function () {
-    function EventEmitter() {
-        this.events = {};
-    }
-    EventEmitter.prototype._on = function (name, callBack) {
-        this.events[name] = this.events[name] || [];
-        this.events[name].push(callBack);
-    };
-    EventEmitter.prototype.on = function (eventNameOrList, callBack) {
-        var _this = this;
-        if (typeof eventNameOrList === 'string') {
-            this._on(eventNameOrList, callBack);
-        }
-        else if (eventNameOrList.splice) {
-            eventNameOrList.forEach(function (eventName) {
-                _this._on(eventName, callBack);
-            });
-        }
-    };
-    ;
-    EventEmitter.prototype.off = function (eventName, callback) {
-        var es = this.events[eventName];
-        if (!es)
-            return;
-        var index = es.indexOf(callback);
-        if ( true && index == -1) {
-            console.error(callback);
-            throw new debugError_1.DebugError("can not remove event listener " + eventName);
-        }
-        es.splice(index, 1);
-    };
-    ;
-    EventEmitter.prototype.trigger = function (eventName, data) {
-        var es = this.events[eventName];
-        if (!es)
-            return;
-        var l = es.length;
-        while (l--) {
-            es[l](data);
-        }
-    };
-    ;
-    return EventEmitter;
-}());
-exports.EventEmitter = EventEmitter;
-
-
-/***/ }),
-/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3871,7 +3870,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
 var rect_1 = __webpack_require__(6);
 var debugError_1 = __webpack_require__(0);
-var scrollableContainer_1 = __webpack_require__(56);
+var scrollableContainer_1 = __webpack_require__(57);
 var image_1 = __webpack_require__(32);
 var size_1 = __webpack_require__(5);
 var point2d_1 = __webpack_require__(2);
@@ -4085,8 +4084,7 @@ var TextField = (function (_super) {
         _super.prototype.revalidate.call(this);
         if ( true && !this._font)
             throw new debugError_1.DebugError("font is not provided");
-        if ( true && !this._font.getResourceLink())
-            throw new debugError_1.DebugError("can not render textField: font resource link is not set");
+        this._font.revalidate();
     };
     TextField.prototype._getDefaultSymbolRect = function () {
         var defaultChar = ' ';
@@ -4161,9 +4159,8 @@ var TextField = (function (_super) {
         return this._text;
     };
     TextField.prototype.setFont = function (font) {
-        font.revalidate();
         this._font = font;
-        this.setText(this._text);
+        this._dirty = true;
     };
     TextField.prototype.getFont = function () {
         return this._font;
@@ -4200,38 +4197,7 @@ exports.TextField = TextField;
 
 
 /***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var LoaderUtil;
-(function (LoaderUtil) {
-    LoaderUtil.loadRaw = function (url, responsetype, onLoad) {
-        var request = new XMLHttpRequest();
-        request.open('GET', url, true);
-        request.responseType = responsetype;
-        if (responsetype !== 'text') {
-            request.setRequestHeader('Accept-Ranges', 'bytes');
-            request.setRequestHeader('Content-Range', 'bytes');
-        }
-        request.onload = function () {
-            onLoad(request.response);
-        };
-        if (true) {
-            request.onerror = function (e) {
-                console.error(e);
-                throw 'can not load resource with url ' + url;
-            };
-        }
-        request.send();
-    };
-})(LoaderUtil = exports.LoaderUtil || (exports.LoaderUtil = {}));
-
-
-/***/ }),
-/* 39 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4239,10 +4205,10 @@ var LoaderUtil;
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
 var game_1 = __webpack_require__(4);
-var resource_1 = __webpack_require__(21);
+var resource_1 = __webpack_require__(23);
 var color_1 = __webpack_require__(3);
 var debugError_1 = __webpack_require__(0);
-var resourceLoader_1 = __webpack_require__(24);
+var resourceLoader_1 = __webpack_require__(25);
 var FontFactory;
 (function (FontFactory) {
     var SYMBOL_PADDING = 4;
@@ -4333,12 +4299,7 @@ var FontFactory;
         correctColor(cnv, color);
         return cnv.toDataURL();
     };
-    FontFactory.generate = function (f, s) {
-        f.createContext();
-        var link = s.resourceLoader.loadImage(f.createBitmap());
-        f.setResourceLink(link);
-    };
-})(FontFactory = exports.FontFactory || (exports.FontFactory = {}));
+})(FontFactory || (FontFactory = {}));
 var Font = (function (_super) {
     tslib_1.__extends(Font, _super);
     function Font(game) {
@@ -4350,6 +4311,12 @@ var Font = (function (_super) {
         _this.fontColor = color_1.Color.BLACK.clone();
         return _this;
     }
+    Font.prototype.generate = function () {
+        this.createContext();
+        var base64 = this.createBitmap();
+        var link = this.game.getCurrScene().resourceLoader.loadImage(base64);
+        this.setResourceLink(link);
+    };
     Font.getSystemFont = function () {
         if (Font._systemFontInstance)
             return Font._systemFontInstance;
@@ -4382,9 +4349,7 @@ var Font = (function (_super) {
     Font.prototype.revalidate = function () {
         if (true) {
             if (!this.fontContext)
-                throw new debugError_1.DebugError("font context is not created");
-            if (!this.fontContext.lineHeight)
-                throw new debugError_1.DebugError("lineHeight is not created at context");
+                throw new debugError_1.DebugError("font context is not created. Did you invoke font.generate() method?");
             if (!this.getResourceLink())
                 throw new debugError_1.DebugError("font without resource link");
         }
@@ -4392,6 +4357,88 @@ var Font = (function (_super) {
     return Font;
 }(resource_1.Resource));
 exports.Font = Font;
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__(1);
+var plane_1 = __webpack_require__(28);
+var shaderProgram_1 = __webpack_require__(17);
+var abstractDrawer_1 = __webpack_require__(12);
+var bufferInfo_1 = __webpack_require__(18);
+var shaderGenerator_1 = __webpack_require__(29);
+var shaderProgramUtils_1 = __webpack_require__(7);
+var debugError_1 = __webpack_require__(0);
+var SimpleRectDrawer = (function (_super) {
+    tslib_1.__extends(SimpleRectDrawer, _super);
+    function SimpleRectDrawer(gl) {
+        return _super.call(this, gl) || this;
+    }
+    SimpleRectDrawer.prototype.prepareShaderGenerator = function () {
+        this.gen = new shaderGenerator_1.ShaderGenerator();
+        var gen = this.gen;
+        this.a_position = gen.addAttribute(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC4, 'a_position');
+        this.a_texCoord = gen.addAttribute(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC2, 'a_texCoord');
+        this.u_vertexMatrix = gen.addVertexUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_MAT4, 'u_vertexMatrix');
+        this.u_textureMatrix = gen.addVertexUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_MAT4, 'u_textureMatrix');
+        gen.addVarying(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC2, 'v_texCoord');
+        gen.setVertexMainFn("\n            void main(){\n                gl_Position = u_vertexMatrix * a_position;\n                v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;\n            } \n        ");
+        gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.SAMPLER_2D, 'texture');
+        gen.setFragmentMainFn("\n            void main(){\n                gl_FragColor = texture2D(texture, v_texCoord);\n            }\n        ");
+    };
+    SimpleRectDrawer.prototype.initProgram = function () {
+        if (true) {
+            if (!this.gen)
+                throw new debugError_1.DebugError("can not init simpleRectDrawer instance: prepareShaderGenerator method must be invoked");
+        }
+        this.primitive = new plane_1.Plane();
+        this.program = new shaderProgram_1.ShaderProgram(this.gl, this.gen.getVertexSource(), this.gen.getFragmentSource());
+        this.bufferInfo = new bufferInfo_1.BufferInfo(this.gl, {
+            posVertexInfo: { array: this.primitive.vertexArr, type: this.gl.FLOAT, size: 2, attrName: 'a_position' },
+            posIndexInfo: { array: this.primitive.indexArr },
+            texVertexInfo: { array: this.primitive.texCoordArr, type: this.gl.FLOAT, size: 2, attrName: 'a_texCoord' },
+            drawMethod: this.gl.TRIANGLE_STRIP
+        });
+    };
+    return SimpleRectDrawer;
+}(abstractDrawer_1.AbstractDrawer));
+exports.SimpleRectDrawer = SimpleRectDrawer;
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LoaderUtil;
+(function (LoaderUtil) {
+    LoaderUtil.loadRaw = function (url, responsetype, onLoad) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.responseType = responsetype;
+        if (responsetype !== 'text') {
+            request.setRequestHeader('Accept-Ranges', 'bytes');
+            request.setRequestHeader('Content-Range', 'bytes');
+        }
+        request.onload = function () {
+            onLoad(request.response);
+        };
+        if (true) {
+            request.onerror = function (e) {
+                console.error(e);
+                throw 'can not load resource with url ' + url;
+            };
+        }
+        request.send();
+    };
+})(LoaderUtil = exports.LoaderUtil || (exports.LoaderUtil = {}));
 
 
 /***/ }),
@@ -4607,15 +4654,34 @@ exports.Easing = Easing;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var tileMap_1 = __webpack_require__(42);
-var layer_1 = __webpack_require__(43);
+var val = 0;
+var Incrementer = (function () {
+    function Incrementer() {
+    }
+    Incrementer.getValue = function () {
+        return val++;
+    };
+    return Incrementer;
+}());
+exports.Incrementer = Incrementer;
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tileMap_1 = __webpack_require__(43);
+var layer_1 = __webpack_require__(44);
 var color_1 = __webpack_require__(3);
-var camera_1 = __webpack_require__(23);
-var resourceLoader_1 = __webpack_require__(24);
+var camera_1 = __webpack_require__(22);
+var resourceLoader_1 = __webpack_require__(25);
 var object_1 = __webpack_require__(11);
-var tweenableDelegate_1 = __webpack_require__(25);
-var timerDelegate_1 = __webpack_require__(26);
-var eventEmitterDelegate_1 = __webpack_require__(20);
+var tweenableDelegate_1 = __webpack_require__(26);
+var timerDelegate_1 = __webpack_require__(27);
+var eventEmitterDelegate_1 = __webpack_require__(19);
 var Scene = (function () {
     function Scene(game) {
         this.game = game;
@@ -4763,7 +4829,7 @@ exports.Scene = Scene;
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4789,7 +4855,7 @@ exports.TileMap = TileMap;
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4832,7 +4898,7 @@ exports.Layer = Layer;
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports) {
 
 window.requestAnimationFrame =
@@ -4845,7 +4911,7 @@ if (!window.cancelAnimationFrame) {
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4863,23 +4929,31 @@ exports.ColliderEngine = ColliderEngine;
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(0);
 var Queue = (function () {
     function Queue() {
         this.tasksResolved = 0;
         this.tasks = [];
         this.tasksProgressById = {};
         this.completed = false;
+        this.nextTaskIndex = 0;
     }
     Queue.prototype.size = function () {
         return this.tasks.length;
     };
     Queue.prototype.resolveTask = function (taskId) {
+        if (true) {
+            if (this.tasksProgressById[taskId] === undefined)
+                throw new debugError_1.DebugError("can not resolve task: no task with id " + taskId);
+            if (this.tasksProgressById[taskId] === 1)
+                throw new debugError_1.DebugError("task with id " + taskId + " resolved already");
+        }
         this.tasksResolved++;
         this.tasksProgressById[taskId] = 1;
         if (this.tasks.length === this.tasksResolved) {
@@ -4890,6 +4964,7 @@ var Queue = (function () {
         }
         else {
             this.onProgress && this.onProgress(this.calcProgress());
+            this.tasks[this.nextTaskIndex++]();
         }
     };
     ;
@@ -4916,9 +4991,9 @@ var Queue = (function () {
             this.completed = true;
             this.onResolved && this.onResolved();
         }
-        this.tasks.forEach(function (t) {
-            t && t();
-        });
+        else {
+            this.tasks[this.nextTaskIndex++]();
+        }
     };
     return Queue;
 }());
@@ -4926,12 +5001,13 @@ exports.Queue = Queue;
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var debugError_1 = __webpack_require__(0);
 var ResourceLink = (function () {
     function ResourceLink(url) {
         this.url = url;
@@ -4943,6 +5019,8 @@ var ResourceLink = (function () {
         this.target = t;
     };
     ResourceLink.prototype.getTarget = function () {
+        if ( true && this.target === undefined)
+            throw new debugError_1.DebugError("no target associated with resource link");
         return this.target;
     };
     return ResourceLink;
@@ -4951,7 +5029,7 @@ exports.ResourceLink = ResourceLink;
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4980,20 +5058,20 @@ exports.Timer = Timer;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var shaderProgram_1 = __webpack_require__(16);
-var abstractDrawer_1 = __webpack_require__(13);
-var bufferInfo_1 = __webpack_require__(17);
-var plane_1 = __webpack_require__(27);
+var shaderProgram_1 = __webpack_require__(17);
+var abstractDrawer_1 = __webpack_require__(12);
+var bufferInfo_1 = __webpack_require__(18);
+var plane_1 = __webpack_require__(28);
 var shaderProgramUtils_1 = __webpack_require__(7);
-var shaderGenerator_1 = __webpack_require__(28);
-var shapeDrawer_shader_1 = __webpack_require__(29);
+var shaderGenerator_1 = __webpack_require__(29);
+var shapeDrawer_shader_1 = __webpack_require__(15);
 var ShapeDrawer = (function (_super) {
     tslib_1.__extends(ShapeDrawer, _super);
     function ShapeDrawer(gl) {
@@ -5020,6 +5098,8 @@ var ShapeDrawer = (function (_super) {
         gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.SAMPLER_2D, 'texture');
         _this.u_shapeType = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.INT, 'u_shapeType');
         _this.u_fillType = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.INT, 'u_fillType');
+        _this.u_repeatFactor = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.FLOAT_VEC2, 'u_repeatFactor');
+        _this.u_stretchMode = gen.addFragmentUniform(shaderProgramUtils_1.GL_TYPE.INT, 'u_stretchMode');
         gen.setFragmentMainFn(shapeDrawer_shader_1.fragmentSource);
         _this.program = new shaderProgram_1.ShaderProgram(gl, gen.getVertexSource(), gen.getFragmentSource());
         _this.primitive = new plane_1.Plane();
@@ -5036,7 +5116,7 @@ exports.ShapeDrawer = ShapeDrawer;
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5108,7 +5188,7 @@ exports.VertexBuffer = VertexBuffer;
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5157,7 +5237,7 @@ exports.IndexBuffer = IndexBuffer;
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5172,7 +5252,7 @@ exports.AbstractPrimitive = AbstractPrimitive;
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5236,14 +5316,14 @@ exports.MatrixStack = MatrixStack;
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var abstractRenderer_1 = __webpack_require__(55);
+var abstractRenderer_1 = __webpack_require__(56);
 var game_1 = __webpack_require__(4);
 var AbstractCanvasRenderer = (function (_super) {
     tslib_1.__extends(AbstractCanvasRenderer, _super);
@@ -5292,16 +5372,16 @@ exports.AbstractCanvasRenderer = AbstractCanvasRenderer;
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var textField_1 = __webpack_require__(37);
-var device_1 = __webpack_require__(58);
+var textField_1 = __webpack_require__(36);
+var device_1 = __webpack_require__(59);
 var size_1 = __webpack_require__(5);
-var font_1 = __webpack_require__(39);
+var font_1 = __webpack_require__(37);
 var AbstractRenderer = (function () {
     function AbstractRenderer(game) {
         this.game = game;
@@ -5423,16 +5503,16 @@ exports.AbstractRenderer = AbstractRenderer;
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var container_1 = __webpack_require__(22);
-var vScroll_1 = __webpack_require__(57);
-var mathEx_1 = __webpack_require__(12);
+var container_1 = __webpack_require__(24);
+var vScroll_1 = __webpack_require__(58);
+var mathEx_1 = __webpack_require__(13);
 var mouseEvents_1 = __webpack_require__(14);
 var ScrollInfo = (function () {
     function ScrollInfo(game) {
@@ -5594,14 +5674,14 @@ exports.ScrollableContainer = ScrollableContainer;
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var container_1 = __webpack_require__(22);
+var container_1 = __webpack_require__(24);
 var rectangle_1 = __webpack_require__(33);
 var color_1 = __webpack_require__(3);
 var VScroll = (function (_super) {
@@ -5648,7 +5728,7 @@ exports.VScroll = VScroll;
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5674,18 +5754,18 @@ exports.Device = Device;
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var shaderProgram_1 = __webpack_require__(16);
-var abstractDrawer_1 = __webpack_require__(13);
-var bufferInfo_1 = __webpack_require__(17);
+var shaderProgram_1 = __webpack_require__(17);
+var abstractDrawer_1 = __webpack_require__(12);
+var bufferInfo_1 = __webpack_require__(18);
 var debugError_1 = __webpack_require__(0);
-var modelDrawer_shader_1 = __webpack_require__(60);
+var modelDrawer_shader_1 = __webpack_require__(61);
 var ModelDrawer = (function (_super) {
     tslib_1.__extends(ModelDrawer, _super);
     function ModelDrawer(gl) {
@@ -5734,7 +5814,7 @@ exports.ModelDrawer = ModelDrawer;
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5745,7 +5825,7 @@ exports.fragmentSource = "\n\nprecision highp float;\n\nvarying vec2 v_texcoord;
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5795,7 +5875,7 @@ exports.DoubleFrameBuffer = DoubleFrameBuffer;
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5845,7 +5925,6 @@ exports.Blender = Blender;
 
 
 /***/ }),
-/* 63 */,
 /* 64 */,
 /* 65 */,
 /* 66 */
@@ -5898,6 +5977,7 @@ var GameObject = (function (_super) {
     GameObject.prototype.addFrameAnimation = function (name, fa) {
         fa.name = name;
         this._frameAnimations[name] = fa;
+        fa.parent = this;
     };
     GameObject.prototype.playFrameAnimation = function (fr) {
         var frameAnimation;
@@ -5961,26 +6041,11 @@ exports.GameObject = GameObject;
 /* 89 */,
 /* 90 */,
 /* 91 */,
-/* 92 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(93);
-
-
-/***/ }),
+/* 92 */,
 /* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var mainScene_1 = __webpack_require__(94);
-var game_1 = __webpack_require__(4);
-var webGlRenderer_1 = __webpack_require__(34);
-var game = new game_1.Game();
-game.setRenderer(webGlRenderer_1.WebGlRenderer);
-var mainScene = new mainScene_1.MainScene(game);
-game.runScene(mainScene);
+module.exports = __webpack_require__(94);
 
 
 /***/ }),
@@ -5990,10 +6055,26 @@ game.runScene(mainScene);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var mainScene_1 = __webpack_require__(95);
+var game_1 = __webpack_require__(4);
+var webGlRenderer_1 = __webpack_require__(35);
+var game = new game_1.Game();
+game.setRenderer(webGlRenderer_1.WebGlRenderer);
+var mainScene = new mainScene_1.MainScene(game);
+game.runScene(mainScene);
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(1);
-var scene_1 = __webpack_require__(41);
+var scene_1 = __webpack_require__(42);
 var gameObject_1 = __webpack_require__(66);
-var logoBase64 = __webpack_require__(95);
+var logoBase64 = __webpack_require__(96);
 var image_1 = __webpack_require__(32);
 var MainScene = (function (_super) {
     tslib_1.__extends(MainScene, _super);
@@ -6017,7 +6098,7 @@ exports.MainScene = MainScene;
 
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/jpeg;base64,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"

@@ -46,7 +46,7 @@ export class Camera {
     private _rect:Rect = new Rect();
     private _rectIdentity:Rect = new Rect();
     private _rectScaled:Rect = new Rect();
-    private cameraShakeTween:Tween = null;
+    private cameraShakeTween:Tween = null; // todo too complex!
     private static FOLLOW_FACTOR:number = 0.1;
     private cameraPosCorrection:{current:Point2d,max:Point2d} = {
         current: new Point2d(),
@@ -154,8 +154,8 @@ export class Camera {
             time,
             to:{time:time},
             progress:()=>{
-                let r1 = MathEx.random(-amplitude/2,amplitude/2);
-                let r2 = MathEx.random(-amplitude/2,amplitude/2);
+                let r1:number = MathEx.random(-amplitude/2,amplitude/2);
+                let r2:number = MathEx.random(-amplitude/2,amplitude/2);
                 tweenTarget.point.setXY(r1,r2);
             },
             complete:():void=>this.cameraShakeTween = null
