@@ -67,6 +67,10 @@ export class AbstractDrawer implements IDrawer{
             console.trace();
             throw new DebugError(`can not set uniform witn value ${value}: name is not provided`);
         }
+        if (DEBUG && value==undefined) {
+            console.trace();
+            throw new DebugError(`can not set uniform with value ${value}`);
+        }
         if (isEqual(this.uniformCache[name],value)) return;
         if (isArray(value)) {
             if (!this.uniformCache[name]) this.uniformCache[name] = Array(value.length);

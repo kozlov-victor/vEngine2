@@ -19,7 +19,7 @@ import {Shape} from "@engine/model/impl/ui/generic/shape";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {mat4} from "@engine/geometry/mat4";
-import {FILL_TYPE, SHAPE_TYPE} from "@engine/renderer/webGl/programs/impl/base/shapeDrawer.shader";
+import {FILL_TYPE, SHAPE_TYPE, STRETCH_MODE} from "@engine/renderer/webGl/programs/impl/base/shapeDrawer.shader";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/SimpleRectDrawer";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
 import {BLEND_MODE} from "@engine/model/renderableModel";
@@ -138,6 +138,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_color,shape.color.asGL());
         sd.setUniform(sd.u_alpha,shape.alpha);
 
+        const repeatFactor:Size = Size.fromPool();
+        repeatFactor.setWH(
+            shape.size.width/shape.getSrcRect().size.width,
+            shape.size.height/shape.getSrcRect().size.height
+        );
+        sd.setUniform(sd.u_repeatFactor,repeatFactor.toArray());
+        repeatFactor.release();
+        sd.setUniform(sd.u_stretchMode,STRETCH_MODE.STRETCH);
+
         if (shape.fillColor.type=='LinearGradient') {
             sd.setUniform(sd.u_fillLinearGradient,shape.fillColor.asGL());
             sd.setUniform(sd.u_fillType,FILL_TYPE.LINEAR_GRADIENT);
@@ -170,15 +179,17 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const {width: srcWidth,height: srcHeight} = texture.size;
         const {x:srcRectX,y:srcRectY} = img.getSrcRect().point;
         const {width:srcRectWidth,height:srcRectHeight} = img.getSrcRect().size;
-        sd.setUniform(sd.u_texRect,
-            [
-                srcRectX/srcWidth,
-                srcRectY/srcHeight,
-                srcRectWidth/srcWidth,
-                srcRectHeight/srcHeight
-            ]
-        );
-        sd.setUniform(sd.u_texOffset,[img.offset.x/maxSize,img.offset.y/maxSize]);
+
+        const srcArr:[number,number,number,number] = Rect.fromPool().setXYWH(
+            srcRectX/srcWidth,
+            srcRectY/srcHeight,
+            srcRectWidth/srcWidth,
+            srcRectHeight/srcHeight).release().toArray();
+        sd.setUniform(sd.u_texRect, srcArr);
+
+        const offSetArr:[number,number] = Size.fromPool().setWH(img.offset.x/maxSize,img.offset.y/maxSize).release().toArray();
+        sd.setUniform(sd.u_texOffset,offSetArr);
+        sd.setUniform(sd.u_stretchMode,img.stretchMode);
         sd.attachTexture('texture',texture);
         this.shapeDrawer.draw();
 

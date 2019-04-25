@@ -40,7 +40,6 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
     blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
     parent:RenderableModel;
     readonly children:RenderableModel[] = [];
-    acceptLight:boolean = false;
     rigidBody:RigidShape;
     readonly velocity = new Point2d(0,0);
 
@@ -81,7 +80,6 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
             }
             cloned.appendChild(clonedChildren);
         });
-        cloned.acceptLight = this.acceptLight;
         cloned.game = this.game;
         super.setClonedProperties(cloned);
     }

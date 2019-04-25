@@ -2,6 +2,9 @@
 import {Eventemittable} from "@engine/declarations";
 import {Game} from "@engine/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
+import {DebugError} from "@engine/debug/debugError";
+import {RenderableModel} from "@engine/model/renderableModel";
+import {GameObject} from "@engine/model/impl/gameObject";
 
 export const FRAME_ANIMATION_EVENTS = {
     completed:  'completed',
@@ -21,20 +24,26 @@ export abstract class AbstractFrameAnimation<T> implements Eventemittable {
     private _isPlaying:boolean = false;
     private _loopReached:boolean = false;
 
+    parent:GameObject;
+
+
     constructor(protected game:Game) {}
 
     protected abstract onNextFrame(i:number):void;
 
     revalidate():void {
+        if (DEBUG && !this.frames.length) throw new DebugError(`animation frames can not be empty`);
         this._timeForOneFrame = ~~(this.duration / this.frames.length);
         this.onNextFrame(0);
     }
 
     play():void {
+        if (DEBUG && !this.parent) throw new DebugError(`can not play frame animation: it is not attached to parent. Have you invoked `);
         this._isPlaying = true;
     }
 
     stop():void {
+        if (DEBUG && !this.parent) throw new DebugError(`can not stop frame animation: it is not attached to parent`);
         this._isPlaying = false;
         this._startTime = 0;
         this._loopReached = false;

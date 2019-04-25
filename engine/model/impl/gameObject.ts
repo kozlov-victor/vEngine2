@@ -60,6 +60,7 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
     addFrameAnimation(name:string,fa:AbstractFrameAnimation<any>):void {
         fa.name = name;
         this._frameAnimations[name] = fa;
+        fa.parent = this;
     }
 
     playFrameAnimation(fr:AbstractFrameAnimation<any>):void;

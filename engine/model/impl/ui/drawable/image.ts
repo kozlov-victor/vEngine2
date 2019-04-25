@@ -6,6 +6,7 @@ import {Color} from "@engine/renderer/color";
 import {Point2d} from "@engine/geometry/point2d";
 import {Cloneable} from "@engine/declarations";
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {STRETCH_MODE} from "@engine/renderer/webGl/programs/impl/base/shapeDrawer.shader";
 
 
 export class Image extends Shape implements Cloneable<Image>{
@@ -13,7 +14,7 @@ export class Image extends Shape implements Cloneable<Image>{
     readonly type:string = 'Image';
     borderRadius:number = 0;
     offset:Point2d = new Point2d();
-    // todo stretchMode:'stretch'|'repeat' = 'stretch';
+    stretchMode:STRETCH_MODE = STRETCH_MODE.STRETCH;
 
     constructor(game: Game) {
         super(game);
@@ -49,6 +50,7 @@ export class Image extends Shape implements Cloneable<Image>{
         cloned._srcRect.set(this._srcRect);
         cloned.borderRadius = this.borderRadius;
         cloned.offset.set(this.offset);
+        cloned.stretchMode = this.stretchMode;
         super.setClonedProperties(cloned);
     }
 

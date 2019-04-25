@@ -10,7 +10,6 @@ import {RenderableModel} from "@engine/model/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
 
-
 interface CameraTweenTarget {
     time:number,
     point:Point2d
@@ -21,6 +20,13 @@ export enum CAMERA_MATRIX_MODE {
     MODE_IDENTITY
 }
 
+export enum DIRECTION_CORRECTION {
+    RIGHT,
+    LEFT,
+    UP,
+    DOWN
+}
+
 export class Camera {
 
     private objFollowTo:RenderableModel;
@@ -29,8 +35,9 @@ export class Camera {
     private sceneWidth:number = 0;
     private sceneHeight:number = 0;
 
-    public pos:Point2d = new Point2d(0,0);
-    public scale:Point2d = new Point2d(1,1);
+    public readonly pos:Point2d = new Point2d(0,0);
+    public readonly scale:Point2d = new Point2d(1,1);
+    public directionCorrection:DIRECTION_CORRECTION;
 
     // flag to defined camera rect for transform mode (for dynamic objects)
     // and identity mode (for fixed objects)
@@ -82,10 +89,13 @@ export class Camera {
     update() {
         this.scene = this.game.getCurrScene();
 
-        const tileWidth:number =
-            this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getSrcRect().size.width:0; // todo ?
-        const tileHeight:number =
-            this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getSrcRect().size.height:0;
+        // const tileWidth:number =
+        //     this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getSrcRect().size.width:0; // todo ?
+        // const tileHeight:number =
+        //     this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getSrcRect().size.height:0;
+        const tileWidth:number = this.scene.width;
+        const tileHeight:number = this.scene.height;
+
         const w:number = this.game.width;
         const h:number = this.game.height;
         const wDiv2:number = w/2;
@@ -93,11 +103,15 @@ export class Camera {
 
         const gameObject:RenderableModel = this.objFollowTo;
         if (gameObject) {
-            //let wScaled = this.getRectScaled().size.width;
-            // if (gameObject['_lastDirection'] === 'Right') // todo _lastDirection
-            //     this.cameraPosCorrection.max.x=wScaled/3;
-            // if (gameObject['_lastDirection'] === 'Left')
-            //     this.cameraPosCorrection.max.x=-wScaled/3;
+            const wScaled:number = this.getRectScaled().size.width;
+            if (this.directionCorrection === DIRECTION_CORRECTION.RIGHT)
+                this.cameraPosCorrection.max.x=wScaled/3;
+            else if (this.directionCorrection === DIRECTION_CORRECTION.LEFT)
+                this.cameraPosCorrection.max.x=-wScaled/3;
+            else if (this.directionCorrection === DIRECTION_CORRECTION.DOWN)
+                this.cameraPosCorrection.max.y=wScaled/3;
+            else if (this.directionCorrection === DIRECTION_CORRECTION.UP)
+                this.cameraPosCorrection.max.y=-wScaled/3;
 
             const currCorrection:Point2d =
                 this.cameraPosCorrection.max.
@@ -122,6 +136,8 @@ export class Camera {
                 newPos.y = this.sceneHeight - h + tileHeight;
 
             this.pos.setXY(newPos.x,newPos.y);
+            newPos.release();
+            pointToFollow.release();
 
             if (this.cameraShakeTween) this.cameraShakeTween.update();
         }

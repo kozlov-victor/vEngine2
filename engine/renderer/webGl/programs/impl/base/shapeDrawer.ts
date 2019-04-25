@@ -27,7 +27,8 @@ export class ShapeDrawer extends AbstractDrawer {
     u_texOffset:string;
     u_rectOffsetTop: string;
     u_rectOffsetLeft: string;
-
+    u_repeatFactor:string;
+    u_stretchMode:string;
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
@@ -63,7 +64,9 @@ export class ShapeDrawer extends AbstractDrawer {
         // drawing type uniforms
         this.u_shapeType = gen.addFragmentUniform(GL_TYPE.INT,'u_shapeType');
         this.u_fillType = gen.addFragmentUniform(GL_TYPE.INT,'u_fillType');
-
+        // repeat texture (aka tiled image)
+        this.u_repeatFactor = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_repeatFactor');
+        this.u_stretchMode = gen.addFragmentUniform(GL_TYPE.INT,'u_stretchMode');
 
         gen.setFragmentMainFn(fragmentSource);
         this.program = new ShaderProgram(

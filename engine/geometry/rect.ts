@@ -16,6 +16,8 @@ export class Rect extends ObservableEntity implements Cloneable<Rect>{
     private _right:number;
     private _bottom:number;
 
+    private _arr:[number,number,number,number] = [0,0,0,0];
+
     private static rectPool:ObjectPool<Rect> = new ObjectPool<Rect>(Rect);
 
     static fromPool():Rect {
@@ -100,6 +102,14 @@ export class Rect extends ObservableEntity implements Cloneable<Rect>{
             width:this.size.width,
             height:this.size.height
         };
+    }
+
+    toArray():[number,number,number,number]{
+        this._arr[0] = this.point.x;
+        this._arr[1] = this.point.y;
+        this._arr[2] = this.size.width;
+        this._arr[3] = this.size.height;
+        return this._arr;
     }
 
     get right(): number {

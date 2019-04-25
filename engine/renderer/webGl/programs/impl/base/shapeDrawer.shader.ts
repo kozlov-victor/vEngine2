@@ -7,13 +7,35 @@ export enum FILL_TYPE {
     COLOR,TEXTURE,LINEAR_GRADIENT
 }
 
+export enum STRETCH_MODE {
+    STRETCH,
+    REPEAT
+}
+
 //language=GLSL
 export const fragmentSource:string = `
 
-#define HALF .5
-#define ZERO  0.
-#define ONE   1.
-#define ERROR_COLOR vec4(ONE,ZERO,ZERO,ONE)
+#define HALF                   .5
+#define ZERO                    0.
+#define ONE                     1.
+#define ERROR_COLOR             vec4(ONE,ZERO,ZERO,ONE)
+#define STRETCH_MODE_STRETCH    ${STRETCH_MODE.STRETCH}
+#define STRETCH_MODE_REPEAT     ${STRETCH_MODE.REPEAT}
+
+vec4 getStretchedImage(float tx,float ty){
+    vec2 txVec = vec2(tx,ty);
+    txVec += fract(u_texOffset);
+    txVec = mod(txVec,u_texRect.zw);
+    txVec += u_texRect.xy;
+    return texture2D(texture, txVec);
+}
+
+vec4 getRepeatedImage(float tx,float ty){
+    vec2 txVec = vec2(tx,ty)*u_repeatFactor;
+    txVec += fract(u_texOffset);  
+    txVec = mod(txVec,vec2(ONE,ONE));
+    return texture2D(texture, txVec);
+}
 
 vec4 getFillColor(){
     if (u_fillType==${FILL_TYPE.COLOR}) return u_fillColor;
@@ -26,11 +48,11 @@ vec4 getFillColor(){
     else if (u_fillType==${FILL_TYPE.TEXTURE}) {
         float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2]; 
         float ty = (v_position.y-u_rectOffsetTop)/u_height*u_texRect[3];
-        vec2 txVec = vec2(tx,ty);
-        txVec += fract(u_texOffset);
-        txVec = mod(txVec,u_texRect.zw);
-        txVec += u_texRect.xy;
-        return texture2D(texture, txVec);
+        vec4 txVec;
+        if (u_stretchMode==STRETCH_MODE_STRETCH) txVec = getStretchedImage(tx,ty);
+        else if (u_stretchMode==STRETCH_MODE_REPEAT) txVec = getRepeatedImage(tx,ty);
+        else txVec = ERROR_COLOR;
+        return txVec;
     }
     else return ERROR_COLOR;
 }
