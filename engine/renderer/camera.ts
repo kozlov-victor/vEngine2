@@ -47,7 +47,8 @@ export class Camera {
     private _rectIdentity:Rect = new Rect();
     private _rectScaled:Rect = new Rect();
     private cameraShakeTween:Tween = null;
-    private cameraPosCorrection:any = {
+    private static FOLLOW_FACTOR:number = 0.1;
+    private cameraPosCorrection:{current:Point2d,max:Point2d} = {
         current: new Point2d(),
         max: new Point2d()
     };
@@ -103,15 +104,15 @@ export class Camera {
 
         const gameObject:RenderableModel = this.objFollowTo;
         if (gameObject) {
-            const wScaled:number = this.getRectScaled().size.width;
+            const {width:wScaled,height:hScaled} = this.getRectScaled().size;
             if (this.directionCorrection === DIRECTION_CORRECTION.RIGHT)
                 this.cameraPosCorrection.max.x=wScaled/3;
             else if (this.directionCorrection === DIRECTION_CORRECTION.LEFT)
                 this.cameraPosCorrection.max.x=-wScaled/3;
             else if (this.directionCorrection === DIRECTION_CORRECTION.DOWN)
-                this.cameraPosCorrection.max.y=wScaled/3;
+                this.cameraPosCorrection.max.y=hScaled/3;
             else if (this.directionCorrection === DIRECTION_CORRECTION.UP)
-                this.cameraPosCorrection.max.y=-wScaled/3;
+                this.cameraPosCorrection.max.y=-hScaled/3;
 
             const currCorrection:Point2d =
                 this.cameraPosCorrection.max.
@@ -124,8 +125,8 @@ export class Camera {
             const pointToFollow:Point2d = Point2d.fromPool();
             pointToFollow.set(this.objFollowTo.pos);
             pointToFollow.addXY(-wDiv2,-hDiv2);
-            newPos.x = this.pos.x+(pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x)*0.1;
-            newPos.y = this.pos.y+(pointToFollow.y - this.pos.y)*0.1;
+            newPos.x = this.pos.x+(pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x)*Camera.FOLLOW_FACTOR;
+            newPos.y = this.pos.y+(pointToFollow.y + this.cameraPosCorrection.current.y - this.pos.y)*Camera.FOLLOW_FACTOR;
             if (newPos.x < 0)
                 newPos.x = 0;
             if (newPos.y < 0)
