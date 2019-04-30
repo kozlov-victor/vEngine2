@@ -30,11 +30,11 @@ class TextInfo {
     reset():void {
         this.allCharsCached = [];
         this.strings = [];
-        this.pos.setXY(0,0);
+        this.pos.setXY(this.textField.paddingLeft,this.textField.paddingTop);
     }
 
     newString():void {
-        this.pos.x = 0;
+        this.pos.x = this.textField.paddingLeft;
         if (this.strings.length) {
             this.pos.y += this.textField.getFont().fontContext.lineHeight;
         }
@@ -56,7 +56,7 @@ class TextInfo {
     }
 
     revalidate(defaultSymbolHeight: number):void {
-        this.size.setWH(0);
+        this.size.setWH(0,this.textField.paddingTop + this.textField.paddingBottom);
         for (let s of this.strings) {
             s.calcSize(defaultSymbolHeight);
             this.size.height += s.height;
@@ -66,12 +66,12 @@ class TextInfo {
 
     align(textAlign: TEXT_ALIGN):void {
         if (DEBUG && TEXT_ALIGN[textAlign] === undefined) {
-            let keys = Object.keys(TEXT_ALIGN).join(', ');
+            const keys = Object.keys(TEXT_ALIGN).join(', ');
             throw new DebugError(`can not align text: unknown enum type of TEXT_ALIGN: ${textAlign}, expected: ${keys}`);
         }
-        this.strings.forEach((s: StringInfo) => {
+        for (const s of this.strings) {
             s.align(textAlign, this.textField);
-        });
+        }
     }
 }
 
@@ -132,7 +132,7 @@ class StringInfo extends CharsHolder {
     private toWords(): WordInfo[] {
         const res: WordInfo[] = [];
         let currWord: WordInfo = new WordInfo();
-        for (let ch of this.chars) {
+        for (const ch of this.chars) {
             if (ch.symbol === ' ') {
                 if (currWord.chars.length) {
                     res.push(currWord);
@@ -191,12 +191,11 @@ export class TextField extends ScrollableContainer {
 
     readonly type = 'TextField';
     textAlign: TEXT_ALIGN = TEXT_ALIGN.LEFT;
-    border: Rectangle = null;
 
     private readonly _textInfo: TextInfo;
     private _symbolImage:Image;
     private _text: string = '';
-    private _font: Font = null;
+    private _font: Font;
 
 
     constructor(game:Game) {
@@ -244,10 +243,12 @@ export class TextField extends ScrollableContainer {
         const text: string = this._text;
 
         const strings:string[] = text.split('\n');
-        strings.forEach((str:string, i:number) => {
+        for (let i:number=0;i<strings.length;i++) {
+            const str = strings[i];
             const words:string[] = str.split(' ');
-            words.forEach((w: string, i: number) => {
-                let wordInfo:WordInfo = new WordInfo();
+            for (let j:number=0;j<words.length;j++) {
+                const w:string = words[j];
+                const wordInfo:WordInfo = new WordInfo();
                 for (let k:number = 0; k < w.length; k++) {
                     const charInfo: CharInfo = this._getCharInfo(w[k]);
                     wordInfo.addChar(charInfo);
@@ -260,22 +261,21 @@ export class TextField extends ScrollableContainer {
                     const spaceChar = this._getCharInfo(' ');
                     textInfo.addChar(spaceChar);
                 }
-            });
+            }
             if (i < strings.length - 1) {
                 textInfo.newString();
             }
-        });
+        }
+
         textInfo.revalidate(this._font.fontContext.lineHeight);
-        textInfo.align(this.textAlign);
         this.size.width = textInfo.size.width;
         if (this.maxHeight !== 0 && textInfo.size.height > this.maxHeight) {
             this.size.height = this.maxHeight;
         } else {
             this.size.height = textInfo.size.height;
         }
-        if (this.border) {
-            this.border.size.set(this.size);
-        }
+
+        textInfo.align(this.textAlign);
         this.updateScrollSize(textInfo.size.height,this.size.height);
 
         super.onGeometryChanged();
@@ -302,6 +302,9 @@ export class TextField extends ScrollableContainer {
 
 
     draw():boolean {
+
+        if (this.background) this.background.render();
+
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.lockRect(this.getWorldRect());
         renderer.save();
@@ -323,7 +326,6 @@ export class TextField extends ScrollableContainer {
         }
         renderer.restore();
         renderer.unlockRect();
-        if (this.border) this.border.render();
         return true;
     }
 

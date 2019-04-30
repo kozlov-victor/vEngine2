@@ -1,0 +1,6 @@
+
+export enum KEYBOARD_EVENTS {
+    KEY_PRESSED,
+    KEY_RELEASED,
+    KEY_HOLD
+}

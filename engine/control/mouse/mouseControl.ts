@@ -48,7 +48,7 @@ export class MouseControl implements IControl {
 
     private static triggerGameObjectEvent(
         e:MouseEvent|TouchEvent|Touch,
-        eventName:string,point:MousePoint,
+        eventName:MOUSE_EVENTS,point:MousePoint,
         go:RenderableModel):boolean{
 
         const rectWithOffset:Rect = Rect.fromPool().set(go.getWorldRect());
@@ -78,7 +78,7 @@ export class MouseControl implements IControl {
     }
 
 
-    triggerEvent(e:MouseEvent|TouchEvent|Touch,eventName:string,isMouseDown?:boolean):MousePoint{
+    triggerEvent(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,isMouseDown?:boolean):MousePoint{
         if (isMouseDown===undefined) isMouseDown = false;
         const g:Game = this.game;
         const scene:Scene = g.getCurrScene();

@@ -3,11 +3,11 @@ import {GameObject} from "@engine/model/impl/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/renderer/color";
-import {KEYBOARD_EVENT} from "@engine/control/abstract/abstractKeypad";
 import {KeyboardControl, KEYBOARD_KEY} from "@engine/control/keyboardControl";
 import {GAME_PAD_KEY, GamePadControl} from "@engine/control/gamePadControl";
 import {Image} from "@engine/model/impl/ui/drawable/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
 
@@ -34,7 +34,7 @@ export class MainScene extends Scene {
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
 
-        this.game.getControl<KeyboardControl>(KeyboardControl).on(KEYBOARD_EVENT.KEY_HOLD, (e:KEYBOARD_KEY)=>{
+        this.game.getControl<KeyboardControl>(KeyboardControl).on(KEYBOARD_EVENTS.KEY_HOLD, (e:KEYBOARD_KEY)=>{
             switch (e) {
                 case KEYBOARD_KEY.LEFT:
                     this.logoObj.pos.addX(-1);
@@ -53,7 +53,7 @@ export class MainScene extends Scene {
             }
         });
 
-        this.game.getControl<GamePadControl>(GamePadControl).on(KEYBOARD_EVENT.KEY_HOLD, (e)=>{
+        this.game.getControl<GamePadControl>(GamePadControl).on(KEYBOARD_EVENTS.KEY_HOLD, (e)=>{
             switch (e) {
                 case GAME_PAD_KEY.GAME_PAD_AXIS_LEFT:
                     this.logoObj.pos.addX(-1);
