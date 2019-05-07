@@ -24,9 +24,10 @@ export abstract class Shape extends RenderableModel {
     }
 
     protected setClonedProperties(cloned:Shape):void{
-        cloned.color = this.color.clone();
+        cloned.color.set(this.color);
         cloned.lineWidth = this.lineWidth;
-        cloned.fillColor = this.fillColor.clone();
+        if (!cloned.fillColor)cloned.fillColor = this.fillColor.clone();
+        else (cloned.fillColor as Color).set(this.fillColor as Color); //todo not very nice
         super.setClonedProperties(cloned);
     }
 

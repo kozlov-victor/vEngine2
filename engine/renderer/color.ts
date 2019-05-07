@@ -35,14 +35,14 @@ export class Color implements Cloneable<Color>, Releasealable{
         this.setRGBA(r,g,b,a);
     }
 
-    private normalizeToZeroOne(){
+    private normalizeToZeroOne():void{
         this.rNorm = this.r / 0xff;
         this.gNorm = this.g / 0xff;
         this.bNorm = this.b / 0xff;
         this.aNorm = this.a / 0xff;
     }
 
-    setRGBA(r:number,g:number,b:number,a:number = 255){
+    setRGBA(r:number,g:number,b:number,a:number = 255):void{
         this.r = r;
         this.g = g;
         this.b = b;
@@ -50,7 +50,7 @@ export class Color implements Cloneable<Color>, Releasealable{
         this.normalizeToZeroOne();
     }
 
-    setRGB(r:number,g:number,b:number){
+    setRGB(r:number,g:number,b:number):void{
         this.r = r;
         this.g = g;
         this.b = b;
@@ -58,27 +58,27 @@ export class Color implements Cloneable<Color>, Releasealable{
         this.normalizeToZeroOne();
     }
 
-    setR(val:number){
+    setR(val:number):void{
         this.r = val;
         this.normalizeToZeroOne();
     }
 
-    setG(val:number){
+    setG(val:number):void{
         this.g = val;
         this.normalizeToZeroOne();
     }
 
-    setB(val:number){
+    setB(val:number):void{
         this.b = val;
         this.normalizeToZeroOne();
     }
 
-    setA(val:number){
+    setA(val:number):void{
         this.a = val;
         this.normalizeToZeroOne();
     }
 
-    set(another:Color){
+    set(another:Color):void{
         this.setRGBA(another.r,another.g,another.b,another.a);
     }
 

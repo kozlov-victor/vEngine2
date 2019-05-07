@@ -2,10 +2,11 @@ import {Point2d} from "./point2d";
 
 export class Vec2 extends Point2d {
 
-    constructor(x?:number,y?:number){
+    constructor(x:number = 0,y:number = 0){
         // xyzw stpq rgba
         super(x,y);
     }
+
 
     // скалярное произведение
     dotProduct(another:Vec2):number{
@@ -16,21 +17,6 @@ export class Vec2 extends Point2d {
         return this.x * another.y - this.y * another.x;
     }
 
-    setXY(x:number,y?:number):Vec2{
-        if (y===undefined) { // noinspection JSSuspiciousNameCombination
-            y = x;
-        }
-        this.x = x;
-        this.y = y;
-        return this;
-    }
-
-    addXY(x:number,y:number):Vec2{
-        this.x += x;
-        this.y += y;
-        return this;
-    }
-
     multByScalar(scalar:number,mutateOrigin:boolean = true):Vec2{
         if (mutateOrigin) return new Vec2(this.x*scalar,this.y*scalar);
         this.x*=scalar;
@@ -38,7 +24,7 @@ export class Vec2 extends Point2d {
         return this;
     }
 
-    divByScalar(scalar:number,mutateOrigin:boolean = true):Vec2{ // todo
+    divByScalar(scalar:number,mutateOrigin:boolean = true):Vec2{
         return this.multByScalar(1/scalar,mutateOrigin);
     }
 
@@ -57,24 +43,24 @@ export class Vec2 extends Point2d {
     }
 
     getLength():number {
-        return Math.sqrt(this.lengthSquared());
+        return Math.sqrt(this.getLengthSquared());
     }
 
-    lengthSquared():number {
+    getLengthSquared():number {
         return (this.x * this.x) + (this.y * this.y);
     }
 
     normalize():Vec2 {
-        let length = this.getLength();
+        const length:number = this.getLength();
         this.x = this.x / length;
         this.y = this.y / length;
         return this;
     }
 
     setLength(value:number) {
-        let _angle = this.getAngle();
-        this.x = Math.cos(_angle) * value;
-        this.y = Math.sin(_angle) * value;
+        const angle:number = this.getAngle();
+        this.x = Math.cos(angle) * value;
+        this.y = Math.sin(angle) * value;
     };
 
     getAngle():number {
@@ -86,6 +72,10 @@ export class Vec2 extends Point2d {
             (this.x*that.x + this.y*that.y)/
             this.getLength()*that.getLength()
         )
+    }
+
+    getAngleTo(that:Vec2):number{
+        return Math.atan2(that.y-this.y,that.x-this.x);
     }
 
     setAngle(value:number):void {
@@ -102,7 +92,7 @@ export class Vec2 extends Point2d {
         v1 = v1.clone().normalize();
         v2 = v2.clone().normalize();
         return Math.acos(v1.dotProduct(v2));
-    };
+    }
 
     static normalBetween(v1:Vec2,v2:Vec2):Vec2 {
         const v:Vec2 = v1.minus(v2);
@@ -114,7 +104,9 @@ export class Vec2 extends Point2d {
     }
 
     static distanceSquared(a:Vec2, b:Vec2):number {
-        return (a.x - b.x)*(a.x - b.x) + (a.y - b.y)*((a.y - b.y));
+        const axMinusBx:number = a.x - b.x;
+        const ayMinusBy:number = a.y - b.y;
+        return axMinusBx*axMinusBx + ayMinusBy*ayMinusBy;
     }
 
 }

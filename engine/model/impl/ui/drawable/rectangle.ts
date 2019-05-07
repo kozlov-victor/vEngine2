@@ -1,6 +1,7 @@
 import {Game} from "@engine/game";
 import {Shape} from "../generic/shape";
 import {Cloneable} from "@engine/declarations";
+import {Line} from "@engine/model/impl/ui/drawable/line";
 
 export class Rectangle extends Shape implements Cloneable<Rectangle>{
 
@@ -12,7 +13,6 @@ export class Rectangle extends Shape implements Cloneable<Rectangle>{
         this.size.setWH(16);
         this.lineWidth = 1;
     }
-
 
     draw():boolean{
         this.game.getRenderer().drawRectangle(this);

@@ -26,16 +26,19 @@ import {BLEND_MODE} from "@engine/model/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
+import {Line} from "@engine/model/impl/ui/drawable/line";
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
     const contextAttrs:WebGLContextAttributes = {alpha:false};
-    return (
-        el.getContext("webgl",contextAttrs) ||
-        el.getContext('experimental-webgl',contextAttrs) ||
-        el.getContext('webkit-3d',contextAttrs) ||
-        el.getContext('moz-webgl',contextAttrs)
-    ) as WebGLRenderingContext;
+    const possibles:string[] = ['webgl2','webgl','experimental-webgl','webkit-3d','moz-webgl'];
+    for (const p of possibles) {
+        const ctx:WebGLRenderingContext = el.getContext(p,contextAttrs)  as WebGLRenderingContext;
+        //if (DEBUG && ctx) console.log(`context using: ${p}`);
+        if (ctx) return ctx;
+    }
+    if (DEBUG) throw new DebugError(`webGl is not accessible on this device`);
+    return null;
 };
 const SCENE_DEPTH:number = 1000;
 const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).scale(1,-1).getCurrentMatrix();
@@ -223,7 +226,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     };
 
 
-
     drawRectangle(rectangle:Rectangle):void{
         const {width:rw,height:rh} = rectangle.size;
         const maxSize:number = Math.max(rw,rh);
@@ -240,23 +242,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.afterItemDraw(rectangle.filters,rectangle.blendMode);
     }
 
-    drawLine(x1:number,y1:number,x2:number,y2:number,color:Color):void{
 
-        this.beforeItemDraw(0,BLEND_MODE.NORMAL);
-
-        const dx:number = x2-x1,dy:number = y2-y1;
-        const uniforms:UniformsInfo = {};
-        const rect:Rect = Rect.fromPool();
-        rect.setXYWH(x1,y1,dx,dy);
-        const size:Size = Size.fromPool();
-        size.setWH(this.game.width,this.game.height);
-        uniforms.u_vertexMatrix = makePositionMatrix(rect,size,this.matrixStack).mat16;
-        rect.release();
-        size.release();
-        uniforms.u_rgba = color.asGL();
-
-        this.afterItemDraw([],BLEND_MODE.NORMAL);
-
+    drawLine(line:Line):void{
+        const r:Rectangle = line.getRectangleRepresentation();
+        this.drawRectangle(r);
     }
 
 

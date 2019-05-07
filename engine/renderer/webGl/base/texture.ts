@@ -1,5 +1,5 @@
 import {DebugError} from "@engine/debug/debugError";
-import {Size} from "../../../geometry/size";
+import {Size} from "@engine/geometry/size";
 import {ShaderProgram} from "./shaderProgram";
 
 const isPowerOf2 = function(value:number):boolean {
@@ -13,7 +13,6 @@ export class Texture {
     gl:WebGLRenderingContext;
     tex:WebGLTexture = null;
     readonly size:Size = new Size(0,0);
-    isPowerOfTwo:boolean = false;
 
     private static MAX_TEXTURE_IMAGE_UNITS:number = 0;
 
@@ -70,9 +69,9 @@ export class Texture {
         } else {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         }
-        this.isPowerOfTwo = img?(isPowerOf2(img.width) && isPowerOf2(img.height)):false;
+        const isPowerOfTwo:boolean = img?(isPowerOf2(img.width) && isPowerOf2(img.height)):false;
         // Check if the image is a power of 2 in both dimensions.
-        if (this.isPowerOfTwo) {
+        if (isPowerOfTwo) {
             gl.generateMipmap(gl.TEXTURE_2D);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
@@ -118,8 +117,7 @@ export class Texture {
         if (DEBUG && gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)
             throw new DebugError(`Texture.GetColorArray() failed!`);
         const pixels:Uint8Array = new Uint8Array(wxh * 4);
-        gl.readPixels(0, 0, this.size.width, this.size.height, gl.RGBA,
-        gl.UNSIGNED_BYTE, pixels);
+        gl.readPixels(0, 0, this.size.width, this.size.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
         return pixels;
     }
 

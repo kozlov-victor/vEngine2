@@ -5,6 +5,8 @@ import {LinearGradient} from "@engine/renderer/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Circle} from "@engine/model/impl/ui/drawable/circle";
 import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
+import {Line} from "@engine/model/impl/ui/drawable/line";
+import {PolyLine} from "@engine/model/impl/ui/drawable/polyLine";
 
 
 export class MainScene extends Scene {
@@ -36,7 +38,7 @@ export class MainScene extends Scene {
         ellipse.radiusX = 60;
         ellipse.radiusY = 40;
         gradient = new LinearGradient();
-        gradient.colorFrom = Color.RGB(100,0,222);
+        gradient.colorFrom = Color.RGB(100,0,222,200);
         gradient.colorTo = Color.RGB(12,20,222);
         ellipse.fillColor = gradient;
         ellipse.color = Color.BLACK;

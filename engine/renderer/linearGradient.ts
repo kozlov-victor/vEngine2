@@ -28,6 +28,12 @@ export class LinearGradient implements Cloneable<LinearGradient>{
         this.colorTo.fromJSON(json.colorTo);
     }
 
+    set(g:LinearGradient):void{
+        this.colorFrom.set(g.colorFrom);
+        this.colorTo.set(g.colorTo);
+        this.angle = g.angle;
+    }
+
     toJSON():IJSON{
         return {
             colorFrom: this.colorFrom.toJSON(),

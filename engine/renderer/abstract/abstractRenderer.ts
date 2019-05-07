@@ -14,6 +14,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {GameObject3d} from "@engine/model/impl/gameObject3d";
 import {Font} from "@engine/model/impl/font";
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {Line} from "@engine/model/impl/ui/drawable/line";
 
 export class AbstractRenderer {
 
@@ -27,7 +28,7 @@ export class AbstractRenderer {
     constructor(protected game:Game){
         this.game = game;
         if (Device.isCocoonJS) {
-            let dpr = window.devicePixelRatio||1;
+            const dpr:number = window.devicePixelRatio||1;
             this.fullScreenSize.setW(window.innerWidth*dpr);
             this.fullScreenSize.setH(window.innerHeight*dpr);
         } else {
@@ -91,8 +92,7 @@ export class AbstractRenderer {
 
     unlockRect():void {}
 
-    drawLine(x1:number,y1:number,x2:number,y2:number,color:Color):void {}
-
+    drawLine(line:Line):void {}
 
     drawModel(go:GameObject3d):void {}
 
