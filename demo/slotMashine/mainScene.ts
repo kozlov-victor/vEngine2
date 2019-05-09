@@ -8,6 +8,13 @@ import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/textureFilt
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 
+interface WheelCommand {
+    a:number,
+    b:number,
+    c:number,
+    command:'spin'
+}
+
 export class MainScene extends Scene {
 
     private overlay:Image;
@@ -44,12 +51,13 @@ export class MainScene extends Scene {
         this.filters = [filter];
 
         window.addEventListener('message',(e:MessageEvent)=>{
-            const command = e.data as string;
-            if (command=='spin') this.mashine.spin();
+            const commandObj:WheelCommand = e.data as WheelCommand;
+            if (commandObj.command!=='spin') return;
+            this.mashine.spin(commandObj.a,commandObj.b,commandObj.c);
         });
 
         if (window.top===window) this.on(MOUSE_EVENTS.click,()=>{
-            this.mashine.spin();
+            this.mashine.spin(1,1,1);
         });
 
     }

@@ -3,7 +3,6 @@ import {AbstractPrimitive} from "../../primitives/abstractPrimitive";
 import {ShaderProgram} from "../../base/shaderProgram";
 import {BufferInfo} from "../../base/bufferInfo";
 import {IDrawer} from "../interface/iDrawer";
-import {Size} from "@engine/geometry/size";
 import {DebugError} from "@engine/debug/debugError";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {Texture} from "@engine/renderer/webGl/base/texture";

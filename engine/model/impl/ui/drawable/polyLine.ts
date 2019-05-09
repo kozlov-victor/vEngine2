@@ -3,11 +3,50 @@ import {Shape} from "@engine/model/impl/ui/generic/shape";
 import {Line} from "@engine/model/impl/ui/drawable/line";
 import {Point2d} from "@engine/geometry/point2d";
 import {DebugError} from "@engine/debug/debugError";
+import {Game} from "@engine/game";
 
 
 const clearString = (s:string):string=>{
     return s.replace(/\s\s+/g, ' ').trim();
 };
+
+type v2 = [number,number];
+
+// adds 1 or more v2s
+const add = (a:v2, ...args:v2[]):v2=> {
+    const n:[number,number] = [...a] as [number,number];
+    args.forEach(p => {
+        n[0] += p[0];
+        n[1] += p[1];
+    });
+    return n;
+};
+
+const mult =(a:v2, s:number):v2=> {
+    return [a[0] * s, a[1] * s];
+};
+
+const length = (a:v2,b:v2):number=>{
+   return Math.sqrt(Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1]));
+};
+
+const getPointOnBezierCurve =(points:v2[], offset:number, t:number):v2=> {
+    const invT:number = (1 - t);
+    return add(mult(points[offset + 0], invT * invT * invT),
+        mult(points[offset + 1], 3 * t * invT * invT),
+        mult(points[offset + 2], 3 * invT * t * t),
+        mult(points[offset + 3], t * t  *t));
+};
+
+const getPointsOnBezierCurve = (points:v2[], offset:number, numPoints:number):v2[]=> {
+    const cpoints:v2[] = [];
+    for (let i:number = 0; i < numPoints; ++i) {
+        const t:number = i / (numPoints - 1);
+        cpoints.push(getPointOnBezierCurve(points, offset, t));
+    }
+    return cpoints;
+};
+
 
 class SvgTokenizer {
 
@@ -26,7 +65,7 @@ class SvgTokenizer {
 
     private skipWhiteSpaces():void{
         while (!this.isEof()){
-            if (this.path[this.pos]!==' ') break;
+            if ([',',' '].indexOf(this.path[this.pos])==-1) break;
             this.pos++;
         }
     }
@@ -64,6 +103,11 @@ export class PolyLine extends Shape {
     private firstPoint:Point2d;
     vectorScaleFactor:number = 1;
     borderRadius:number = 1;
+
+    constructor(protected game:Game){
+        super(game);
+        this.lineWidth = 1;
+    }
 
     protected setClonedProperties(cloned:PolyLine):void{
         cloned.vectorScaleFactor = this.vectorScaleFactor;
@@ -103,11 +147,24 @@ export class PolyLine extends Shape {
 
     }
 
+    moveBy(x:number,y:number):void{
+        const lastX:number = this.lastPoint?this.lastPoint.x:0;
+        const lastY:number = this.lastPoint?this.lastPoint.y:0;
+        this.moveTo(lastX+x,lastY+y);
+    }
+
     lineTo(x:number,y:number):void{
         if (!this.lastPoint) this.lastPoint = new Point2d();
         if (!this.firstPoint) this.firstPoint = new Point2d(x,y);
         this.addSegment(this.lastPoint.x,this.lastPoint.y,x,y);
         this.lastPoint.setXY(x,y);
+    }
+
+
+    lineBy(x:number,y:number):void{
+        const lastX:number = this.lastPoint?this.lastPoint.x:0;
+        const lastY:number = this.lastPoint?this.lastPoint.y:0;
+        this.lineTo(lastX+x,lastY+y);
     }
 
     complete():void {
@@ -124,7 +181,11 @@ export class PolyLine extends Shape {
 
     setPoints(points:number[]|string){
         if (typeof points === 'string') {
-            points = clearString(points).split(/[ |,]/).map(it=>parseFloat(it));
+            points = clearString(points).split(/[ |,]/).map((it:string)=>{
+                const n:number = parseFloat(it);
+                if (DEBUG && isNaN(n)) throw new DebugError(`can not parse vertex array ${points}: unexpected value ${it}`);
+                return n;
+            });
         }
         this.moveTo(points[0],points[1]);
         for (let i:number=2;i<points.length;i+=2) {
@@ -133,6 +194,15 @@ export class PolyLine extends Shape {
     }
 
 
+    bezierTo(p1:v2,p2:v2,p3:v2,p4:v2){
+        const l:number = length(p1,p2)+length(p2,p3)+length(p3,p4);
+        const bezier:v2[] = getPointsOnBezierCurve([p1,p2,p3,p4],0,l);
+        bezier.forEach((v:v2)=>{
+            this.lineTo(v[0],v[1]);
+        });
+    }
+
+    // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
     setSvgPath(path:string){
         const tokenizer:SvgTokenizer = new SvgTokenizer(path);
         while (!tokenizer.isEof()) {
@@ -144,12 +214,82 @@ export class PolyLine extends Shape {
                     this.moveTo(x,y);
                     break;
                 }
+                case 'm': {
+                    const x:number = tokenizer.getNextNumber();
+                    const y:number = tokenizer.getNextNumber();
+                    this.moveBy(x,y);
+                    break;
+                }
                 case 'L': {
                     const x:number = tokenizer.getNextNumber();
                     const y:number = tokenizer.getNextNumber();
                     this.lineTo(x,y);
                     break;
                 }
+                case 'l': {
+                    const x:number = tokenizer.getNextNumber();
+                    const y:number = tokenizer.getNextNumber();
+                    this.lineBy(x,y);
+                    break;
+                }
+                case 'H': {
+                    const x:number = tokenizer.getNextNumber();
+                    const y:number = this.lastPoint.y;
+                    this.lineTo(x,y);
+                    break;
+                }
+                case 'h': {
+                    const x:number = this.lastPoint.x + tokenizer.getNextNumber();
+                    const y:number = this.lastPoint.y;
+                    this.lineTo(x,y);
+                    break;
+                }
+                case 'V': {
+                    const x:number = this.lastPoint.x;
+                    const y:number = this.lastPoint.y + tokenizer.getNextNumber();
+                    this.lineTo(x,y);
+                    break;
+                }
+                case 'v': {
+                    const x:number = this.lastPoint.x;
+                    const y:number = tokenizer.getNextNumber();
+                    this.lineTo(x,y);
+                    break;
+                }
+                case 'C': {
+                    const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                    const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                    const p3:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                    const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                    this.bezierTo(p1,p2,p3,p4);
+                    break;
+                }
+                case 'c': {
+                    const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                    const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                    const p3:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                    const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                    this.bezierTo(p1,add(p1,p2),add(p1,p3),add(p1,p4));
+                    break;
+                }
+                case 'S': {
+                    const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                    const p3:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                    const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                    const p2:v2 = [p1[0]+p4[0]-p3[0],p3[1]];
+                    this.bezierTo(p1,p2,p3,p4);
+                    break;
+                }
+                case 'Q': {
+                    const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                    const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                    const p3:v2 = [p2[0],p2[1]];
+                    const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                    this.bezierTo(p1,p2,p3,p4);
+                    break;
+                }
+                // T, A -unimplemented
+                case 'Z':
                 case 'z':
                     this.close();
                     break;

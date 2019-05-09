@@ -212,7 +212,7 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
         if (DEBUG && !this._getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
 
         const parentArray:RenderableModel[] = this._getParent().children;
-        let index:number = parentArray.indexOf(this);
+        const index:number = parentArray.indexOf(this);
         if (DEBUG && index===-1) {
             console.error(this);
             throw new DebugError('can not kill: object is not belong to current scene');
@@ -280,8 +280,8 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
         //     // this.pos.y = ~~(this.rigidBody.mCenter.y - this.rigidBody['mHeight']/2);
         //     this.angle = this.rigidBody.mAngle;
         // } else {
-        //     if (this.velocity.x) this.pos.x += this.velocity.x * delta / 1000;
-        //     if (this.velocity.y) this.pos.y += this.velocity.y * delta / 1000;
+            if (this.velocity.x) this.pos.x += this.velocity.x * delta / 1000;
+            if (this.velocity.y) this.pos.y += this.velocity.y * delta / 1000;
         // }
 
         for (const c of this.children) {
@@ -307,8 +307,12 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
     // timer
     private _timerDelegate:TimerDelegate = new TimerDelegate();
 
-    setTimer(callback:Function,interval:number):Timer{
-        return this._timerDelegate.setTimer(callback,interval);
+    setTimeout(callback:Function,interval:number):Timer{
+        return this._timerDelegate.setTimeout(callback,interval);
+    }
+
+    setInterval(callback:Function,interval:number):Timer{
+        return this._timerDelegate.setInterval(callback,interval);
     }
 
     //eventEmitter

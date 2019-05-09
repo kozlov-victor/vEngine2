@@ -21,10 +21,11 @@ export class WinScene extends Scene {
         this.colorBG = Color.RGB(10,30,40);
         p.blendMode = BLEND_MODE.ADDITIVE;
         p.fillColor = Color.RGB(240,10,140);
-        this.emitter.numOfParticlesToEmit = {from: 50,to:200};
+        this.emitter.numOfParticlesToEmit = {from: 10,to:50};
         this.emitter.addParticle(p);
-        this.emitter.particleVelocity = {from:1,to:50};
-        this.setTimer(()=>{
+        this.emitter.particleVelocity = {from:1,to:20};
+        this.emitter.particleLiveTime = {from:100,to:500};
+        this.setInterval(()=>{
             const x:number = MathEx.random(0,this.game.width);
             const y:number = MathEx.random(0,this.game.height);
             this.emitter.emissionPosition.setXY(x,y);

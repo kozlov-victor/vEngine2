@@ -20,7 +20,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {mat4} from "@engine/geometry/mat4";
 import {FILL_TYPE, SHAPE_TYPE, STRETCH_MODE} from "@engine/renderer/webGl/programs/impl/base/shapeDrawer.shader";
-import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/SimpleRectDrawer";
+import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRectDrawer";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
 import {BLEND_MODE} from "@engine/model/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
@@ -250,8 +250,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
 
     drawEllipse(ellipse:Ellipse):void{
-        let maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
-        let maxR2:number = maxR*2;
+        const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
+        const maxR2:number = maxR*2;
 
         this.beforeItemDraw(ellipse.filters.length,ellipse.blendMode);
 
@@ -277,6 +277,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_height,1);
         sd.setUniform(sd.u_rectOffsetLeft,1);
         sd.setUniform(sd.u_rectOffsetTop,1);
+        sd.setUniform(sd.u_arcAngleFrom,ellipse.arcAngleFrom);
+        sd.setUniform(sd.u_arcAngleTo,ellipse.arcAngleTo);
         sd.attachTexture('texture',this.nullTexture);
         this.shapeDrawer.draw();
 

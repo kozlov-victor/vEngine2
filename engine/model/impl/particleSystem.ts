@@ -63,7 +63,7 @@ export class ParticleSystem extends RenderableModel {
 
         const num:number = r(this.numOfParticlesToEmit);
         for (let i:number = 0;i<num;i++) {
-            const particleProto:RenderableCloneable = this._prototypes[MathEx.random(0,this._prototypes.length-1)];
+            const particleProto:RenderableCloneable = this._prototypes[MathEx.randomInt(0,this._prototypes.length-1)];
             const particle = particleProto.clone();
             this._onEmitParticle(particle);
             const angle:number = r(this.particleAngle);

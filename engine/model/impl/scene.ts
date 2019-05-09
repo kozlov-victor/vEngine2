@@ -191,8 +191,12 @@ export class Scene implements Revalidatable, Tweenable, Eventemittable {
     // timer
     private _timerDelegate:TimerDelegate = new TimerDelegate();
 
-    setTimer(callback:Function,interval:number):Timer{
-        return this._timerDelegate.setTimer(callback,interval);
+    setTimeout(callback:Function,interval:number):Timer{
+        return this._timerDelegate.setTimeout(callback,interval);
+    }
+
+    setInterval(callback:Function,interval:number):Timer{
+        return this._timerDelegate.setInterval(callback,interval);
     }
 
     //eventEmitter

@@ -29,6 +29,8 @@ export class ShapeDrawer extends AbstractDrawer {
     u_rectOffsetLeft: string;
     u_repeatFactor:string;
     u_stretchMode:string;
+    u_arcAngleFrom:string;
+    u_arcAngleTo:string;
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
@@ -64,6 +66,9 @@ export class ShapeDrawer extends AbstractDrawer {
         // drawing type uniforms
         this.u_shapeType = gen.addFragmentUniform(GL_TYPE.INT,'u_shapeType');
         this.u_fillType = gen.addFragmentUniform(GL_TYPE.INT,'u_fillType');
+        // ellipse arc angles
+        this.u_arcAngleFrom = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_arcAngleFrom');
+        this.u_arcAngleTo   = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_arcAngleTo');
         // repeat texture (aka tiled image)
         this.u_repeatFactor = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_repeatFactor');
         this.u_stretchMode = gen.addFragmentUniform(GL_TYPE.INT,'u_stretchMode');

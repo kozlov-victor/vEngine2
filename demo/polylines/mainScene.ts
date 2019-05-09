@@ -130,12 +130,23 @@ export class MainScene extends Scene {
         polyLine6.pos.setXY(135,-50);
         polyLine6.lineWidth = 2;
         polyLine6.color = Color.RGB(122,12,122);
-        polyLine6.setPoints(` 50,80 140,80 80,100 180,100 160,85 160,115 180,100`);
+        polyLine6.setPoints(`50,80 140,80 80,100 180,100 160,85 160,115 180,100`);
         polyLine6.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(polyLine6);
 
 
-        (window as any).p = polyLine6;
+        const polyLine7:PolyLine = new PolyLine(this.game);
+        polyLine7.pos.setXY(135,50);
+        polyLine7.lineWidth = 2;
+        polyLine7.color = Color.RGB(8,12,22);
+        polyLine7.setSvgPath('M10 80 Q 95 10 180 80');
+        polyLine7.complete();
+        polyLine7.setSvgPath('M10 80 C 40 10, 65 10, 95 80 S 150 150, 180 80');
+        polyLine7.complete();
+        polyLine7.vectorScaleFactor = 0.3;
+        polyLine7.setSvgPath('m128.312484,137.498709l0,0c0,-11.572243 15.236309,-20.953398 34.031247,-20.953398l15.468757,0l0,0l74.250011,0l139.218731,0c9.025671,0 17.681646,2.20758 24.063757,6.137107c6.382072,3.929528 9.967509,9.259109 9.967509,14.816291l0,52.383502l0,0l0,31.430092l0,0c0,11.572249 -15.236299,20.953398 -34.031257,20.953398l-139.218731,0l-96.998477,53.279623l22.748466,-53.279623l-15.468757,0c-18.794938,0 -34.031247,-9.381149 -34.031247,-20.953398l0,0l0,-31.430092l0,0l-0.00001,-52.383502z');
+        polyLine7.addBehaviour(new DraggableBehaviour(this.game));
+        this.appendChild(polyLine7);
     }
 
     onProgress(val: number) {
