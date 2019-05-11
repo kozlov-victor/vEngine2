@@ -382,6 +382,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return this.gl.NO_ERROR;
     }
 
+    putToCache(l:ResourceLink<Texture>,t:Texture) {
+        const url:string = l.getUrl();
+        if (DEBUG && !url) throw new DebugError(`no url is associated with resource link`);
+        this.renderableCache[url] = t;
+    }
+
     loadTextureInfo(url:string,link:ResourceLink<Texture>,onLoad:()=>void):void{
         const possibleTargetInCache:Texture = this.renderableCache[link.getUrl()];
         if (possibleTargetInCache) {
@@ -395,7 +401,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const texture:Texture = new Texture(this.gl);
             texture.setImage(img);
             this.gl.bindTexture(this.gl.TEXTURE_2D, this.finalFrameBuffer.getTexture().getGlTexture()); // to restore texture binding
-            this.renderableCache[link.getUrl()] = texture;
+            this.putToCache(link,texture);
             link.setTarget(texture);
             onLoad();
         };

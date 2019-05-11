@@ -18,7 +18,6 @@ export const fragmentSource:string = `
 #define HALF                   .5
 #define ZERO                    0.
 #define ONE                     1.
-#define TWO_PI                  3.1415927*2.0
 #define ERROR_COLOR             vec4(ONE,ZERO,ZERO,ONE)
 #define STRETCH_MODE_STRETCH    ${STRETCH_MODE.STRETCH}
 #define STRETCH_MODE_REPEAT     ${STRETCH_MODE.REPEAT}
@@ -68,7 +67,7 @@ void drawEllipse(){
      float dist = distance(vec2(HALF,HALF),v_position.xy);
      float rAtCurrAngle = calcRadiusAtAngle(v_position.x,v_position.y);
      float angle = atan(v_position.y-HALF,v_position.x-HALF);
-     if (angle<ZERO) angle = TWO_PI+angle;
+     //if (angle<ZERO) angle = TWO_PI+angle;
      bool isArcNotUsed = u_arcAngleFrom==u_arcAngleTo && u_arcAngleFrom==ZERO;
      if (isArcNotUsed || (angle>u_arcAngleFrom && angle<u_arcAngleTo)) {
          if (dist < rAtCurrAngle) {
