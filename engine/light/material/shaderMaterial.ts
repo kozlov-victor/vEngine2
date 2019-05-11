@@ -1,6 +1,7 @@
 import {Color} from "../../renderer/color";
 import {IKeyVal} from "../../misc/object";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {FastMap} from "@engine/misc/fastMap";
 
 export class ShaderMaterial {
 
@@ -14,11 +15,11 @@ export class ShaderMaterial {
     constructor(){}
 
     /** @internal */
-    setUniformsToMap(map:IKeyVal<UNIFORM_VALUE_TYPE>):void{
-        map['u_material.ambient'] = this.ambient.asGL();
-        map['u_material.specular'] = this.specular.asGL();
-        map['u_material.diffuse'] = this.diffuse.asGL();
-        map['u_material.shininess'] = this.shininess;
+    setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>):void{
+        map.put('u_material.ambient',this.ambient.asGL());
+        map.put('u_material.specular',this.specular.asGL());
+        map.put('u_material.diffuse',this.diffuse.asGL());
+        map.put('u_material.shininess',this.shininess);
     }
 
 }

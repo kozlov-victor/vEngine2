@@ -12,13 +12,20 @@ import {Color} from "@engine/renderer/color";
 
 
 const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):Mat16Holder =>{
-    const projectionMatrix:Mat16Holder = mat4.ortho(0,dstWidth,0,dstHeight,-1,1);
-    const scaleMatrix:Mat16Holder = mat4.makeScale(dstWidth, dstHeight, 1);
-    return mat4.matrixMultiply(scaleMatrix, projectionMatrix);
+    const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+    mat4.ortho(projectionMatrix,0,dstWidth,0,dstHeight,-1,1);
+    const scaleMatrix:Mat16Holder = Mat16Holder.fromPool();
+    mat4.makeScale(scaleMatrix,dstWidth, dstHeight, 1);
+    const result:Mat16Holder = Mat16Holder.fromPool();
+    mat4.matrixMultiply(result,scaleMatrix, projectionMatrix);
+    projectionMatrix.release();
+    scaleMatrix.release();
+    return result;
 };
 
-const identity:Mat16Holder = mat4.makeIdentity();
-const BLACK = Color.RGB(0,0,0,0);
+const IDENTITY:Mat16Holder = Mat16Holder.create();
+mat4.makeIdentity(IDENTITY);
+const BLACK:Color = Color.RGB(0,0,0,0);
 
 export abstract class AbstractFilter {
 
@@ -48,8 +55,10 @@ export abstract class AbstractFilter {
     doFilter(destFrameBuffer:FrameBuffer){
         destFrameBuffer.bind();
         const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,identity.mat16);
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,makePositionMatrix(0,0,width,height).mat16);
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY.mat16);
+        const m16h:Mat16Holder = makePositionMatrix(0,0,width,height);
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,m16h.mat16);
+        m16h.release();
         destFrameBuffer.clear(BLACK);
         this.simpleRectDrawer.draw();
     }

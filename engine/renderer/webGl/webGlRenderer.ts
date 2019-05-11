@@ -37,25 +37,47 @@ const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
         el.getContext('moz-webgl',contextAttrs)
     ) as WebGLRenderingContext;
 };
+
 const SCENE_DEPTH:number = 1000;
-const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).scale(1,-1).getCurrentMatrix();
+const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).scale(1,-1).release().getCurrentMatrix().clone();
 let FLIP_POSITION_MATRIX:Mat16Holder;
 
-const zToWMatrix:Mat16Holder = mat4.makeZToWMatrix(1);
+const zToWMatrix:Mat16Holder = Mat16Holder.create();
+mat4.makeZToWMatrix(zToWMatrix,1);
 
-const BLACK = Color.RGB(0,0,0,0);
+const BLACK:Color = Color.RGB(0,0,0,0);
 
 const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat16Holder=>{
     // proj * modelView
-    const projectionMatrix:Mat16Holder = mat4.ortho(0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
-    const scaleMatrix:Mat16Holder = mat4.makeScale(rect.size.width, rect.size.height, 1);
-    const translationMatrix:Mat16Holder = mat4.makeTranslation(rect.point.x, rect.point.y, 0);
+    const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+    mat4.ortho(projectionMatrix,0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
 
-    let matrix:Mat16Holder = mat4.matrixMultiply(scaleMatrix, translationMatrix);
-    matrix = mat4.matrixMultiply(matrix, matrixStack.getCurrentMatrix());
-    matrix = mat4.matrixMultiply(matrix, projectionMatrix);
-    matrix = mat4.matrixMultiply(matrix, zToWMatrix);
-    return matrix;
+    const scaleMatrix:Mat16Holder = Mat16Holder.fromPool();
+    mat4.makeScale(scaleMatrix,rect.size.width, rect.size.height, 1);
+
+    const translationMatrix:Mat16Holder = Mat16Holder.fromPool();
+    mat4.makeTranslation(translationMatrix,rect.point.x, rect.point.y, 0);
+
+    const matrix1:Mat16Holder = Mat16Holder.fromPool();
+    mat4.matrixMultiply(matrix1,scaleMatrix, translationMatrix);
+
+    const matrix2:Mat16Holder = Mat16Holder.fromPool();
+    mat4.matrixMultiply(matrix2,matrix1, matrixStack.getCurrentMatrix());
+
+    const matrix3:Mat16Holder = Mat16Holder.fromPool();
+    mat4.matrixMultiply(matrix3,matrix2, projectionMatrix);
+
+    const matrix4:Mat16Holder = Mat16Holder.fromPool();
+    mat4.matrixMultiply(matrix4,matrix3, zToWMatrix);
+
+    projectionMatrix.release();
+    scaleMatrix.release();
+    translationMatrix.release();
+    matrix1.release();
+    matrix2.release();
+    matrix3.release();
+
+    return matrix4;
 };
 
 
@@ -79,10 +101,18 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.matrixStack = new MatrixStack();
         this.registerResize();
         this._init();
-        FLIP_POSITION_MATRIX = mat4.matrixMultiply(
-            mat4.makeScale(this.game.width, this.game.height, 1),
-            mat4.ortho(0,this.game.width,0,this.game.height,-1,1)
-        );
+        const m16hResult:Mat16Holder = Mat16Holder.fromPool();
+        const m16Scale:Mat16Holder = Mat16Holder.fromPool();
+        mat4.makeScale(m16Scale,this.game.width, this.game.height, 1);
+        const m16Ortho:Mat16Holder = Mat16Holder.fromPool();
+        mat4.ortho(m16Ortho,0,this.game.width,0,this.game.height,-1,1);
+
+        mat4.matrixMultiply(m16hResult, m16Scale, m16Ortho);
+        FLIP_POSITION_MATRIX = m16hResult.clone();
+
+        m16hResult.release();
+        m16Scale.release();
+        m16Ortho.release();
     }
 
     private _init():void{
@@ -131,7 +161,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
         const size:Size = Size.fromPool();
         size.setWH(this.game.width,this.game.height);
-        sd.setUniform(sd.u_vertexMatrix,makePositionMatrix(rect,size,this.matrixStack).mat16);
+        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
+        sd.setUniform(sd.u_vertexMatrix,pos16h.mat16);
+
+        pos16h.release();
         rect.release();
         size.release();
         sd.setUniform(sd.u_lineWidth,Math.min(shape.lineWidth/maxSize,1));
@@ -199,27 +232,27 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     drawModel(g3d:GameObject3d):void{ // todo
-        this.modelDrawer.bindModel(g3d);
-        this.modelDrawer.bind();
-
-        this.matrixStack.scale(1,-1,1);
-        const matrix1:Mat16Holder = this.matrixStack.getCurrentMatrix();
-
-        const zToWMatrix:Mat16Holder = mat4.makeZToWMatrix(1);
-        const projectionMatrix:Mat16Holder = mat4.ortho(0,this.game.width,0,this.game.height,-SCENE_DEPTH,SCENE_DEPTH);
-        const matrix2:Mat16Holder = mat4.matrixMultiply(projectionMatrix, zToWMatrix);
-
-        const uniforms:UniformsInfo = {
-            u_modelMatrix: matrix1.mat16,
-            u_projectionMatrix: matrix2.mat16,
-            u_alpha: 1
-        };
-        //const texInfo:TextureInfo[] = [{texture:g3d.texture,name:'u_texture'}];
-
-        this.gl.enable(this.gl.DEPTH_TEST);
-        this.modelDrawer.draw();// todo uniforms, texture info
-        this.modelDrawer.unbind();
-        this.gl.disable(this.gl.DEPTH_TEST);
+        // this.modelDrawer.bindModel(g3d);
+        // this.modelDrawer.bind();
+        //
+        // this.matrixStack.scale(1,-1,1);
+        // const matrix1:Mat16Holder = this.matrixStack.getCurrentMatrix();
+        //
+        // const zToWMatrix:Mat16Holder = mat4.makeZToWMatrix(1);
+        // const projectionMatrix:Mat16Holder = mat4.ortho(0,this.game.width,0,this.game.height,-SCENE_DEPTH,SCENE_DEPTH);
+        // const matrix2:Mat16Holder = mat4.matrixMultiply(projectionMatrix, zToWMatrix);
+        //
+        // const uniforms:UniformsInfo = {
+        //     u_modelMatrix: matrix1.mat16,
+        //     u_projectionMatrix: matrix2.mat16,
+        //     u_alpha: 1
+        // };
+        // //const texInfo:TextureInfo[] = [{texture:g3d.texture,name:'u_texture'}];
+        //
+        // this.gl.enable(this.gl.DEPTH_TEST);
+        // this.modelDrawer.draw();// todo uniforms, texture info
+        // this.modelDrawer.unbind();
+        // this.gl.disable(this.gl.DEPTH_TEST);
     };
 
 
@@ -250,7 +283,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         rect.setXYWH(x1,y1,dx,dy);
         const size:Size = Size.fromPool();
         size.setWH(this.game.width,this.game.height);
-        uniforms.u_vertexMatrix = makePositionMatrix(rect,size,this.matrixStack).mat16;
+        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
+        uniforms.u_vertexMatrix = pos16h.mat16; // todo
+        pos16h.release();
         rect.release();
         size.release();
         uniforms.u_rgba = color.asGL();
@@ -272,7 +307,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         rect.setXYWH(0,0,maxR2,maxR2);
         const size:Size = Size.fromPool();
         size.setWH(this.game.width,this.game.height);
-        sd.setUniform(sd.u_vertexMatrix,makePositionMatrix(rect,size,this.matrixStack).mat16);
+        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
+        sd.setUniform(sd.u_vertexMatrix,pos16h.mat16);
+        pos16h.release();
         rect.release();
         size.release();
         sd.setUniform(sd.u_lineWidth,Math.min(ellipse.lineWidth/maxR,1));

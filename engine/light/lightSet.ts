@@ -6,6 +6,7 @@ import {AbstractLight} from "@engine/light/abstract/abstractLight";
 import {PointLight} from "@engine/light/impl/pointLight";
 import {AmbientLight} from "@engine/light/impl/ambientLight";
 import {ShaderMaterial} from "@engine/light/material/shaderMaterial";
+import {FastMap} from "@engine/misc/fastMap";
 
 export class LightSet {
 
@@ -30,8 +31,8 @@ export class LightSet {
         this.pointLights.push(l);
     }
 
-    setUniformsToMap(map:IKeyVal<UNIFORM_VALUE_TYPE>):void{
-        map['u_numOfPointLights'] = this.pointLights.length;
+    setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>):void{
+        map.put('u_numOfPointLights',this.pointLights.length);
         this.ambientLight.setUniformsToMap(map);
         this.material.setUniformsToMap(map);
         for (let i:number=0;i<this.pointLights.length;i++){

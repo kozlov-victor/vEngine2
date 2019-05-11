@@ -5,6 +5,7 @@ import {AbstractLight} from "../abstract/abstractLight";
 import {Camera} from "../../renderer/camera";
 import {IKeyVal} from "@engine/misc/object";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {FastMap} from "@engine/misc/fastMap";
 
 export class PointLight extends AbstractLight {
 
@@ -33,14 +34,14 @@ export class PointLight extends AbstractLight {
     }
 
     /** @private */
-    setUniformsToMap(map:IKeyVal<UNIFORM_VALUE_TYPE>, i:number):void{
-        map[`u_pointLights[${i}].pos`] =  this.getPosScaled().toArray();
-        map[`u_pointLights[${i}].nearRadius`] = this.nearRadius;
-        map[`u_pointLights[${i}].farRadius`] = this.farRadius;
-        map[`u_pointLights[${i}].isOn`] = this.isOn;
-        map[`u_pointLights[${i}].color`] = this.color.asGL();
-        map[`u_pointLights[${i}].intensity`] = this.intensity;
-        map[`u_pointLights[${i}].type`] = PointLight.LIGHT_TYPE;
+    setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>, i:number):void{
+        map.put(`u_pointLights[${i}].pos`,this.getPosScaled().toArray());
+        map.put(`u_pointLights[${i}].nearRadius`,this.nearRadius);
+        map.put(`u_pointLights[${i}].farRadius`,this.farRadius);
+        map.put(`u_pointLights[${i}].isOn`,this.isOn);
+        map.put(`u_pointLights[${i}].color`,this.color.asGL());
+        map.put(`u_pointLights[${i}].intensity`,this.intensity);
+        map.put(`u_pointLights[${i}].type`,PointLight.LIGHT_TYPE);
     }
 
 }

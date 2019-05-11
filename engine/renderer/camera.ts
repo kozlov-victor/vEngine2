@@ -91,7 +91,7 @@ export class Camera {
         this.scene = this.game.getCurrScene();
 
         // const tileWidth:number =
-        //     this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getSrcRect().size.width:0; // todo ?
+        //     this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getSrcRect().size.width:0; // todo
         // const tileHeight:number =
         //     this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getSrcRect().size.height:0;
         const tileWidth:number = this.scene.width;
@@ -188,10 +188,12 @@ export class Camera {
     }
 
     screenToWorld(p:Point2d):Point2d{
-        const mScale:Mat16Holder = mat4.makeScale(this.scale.x,this.scale.y,1);
+        const mScale:Mat16Holder = Mat16Holder.fromPool();
+        mat4.makeScale(mScale,this.scale.x,this.scale.y,1);
         const point2d:Point2d = MathEx.unProject(
             p, this.game.width,this.game.height,mScale);
         point2d.add(this.pos);
+        mScale.release();
         return point2d;
     }
 

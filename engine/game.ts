@@ -201,7 +201,8 @@ if (DEBUG) {
     let _cnt:number = 0;
     Game.prototype.debug2  = (...val:any[])=>{
         console.log(val);
-        if (_cnt>0xff) throw new DebugError('too many logs');
+        _cnt++;
+        if (_cnt>16) throw new DebugError('too many logs');
     };
 }
 

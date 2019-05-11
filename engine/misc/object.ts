@@ -38,7 +38,7 @@ const isEqualObject = (a:any,b:any):boolean=>{
 };
 
 export const isEqual = (a:any,b:any):boolean=>{
-    if (a===undefined) return false;
+    if (a===null || a===undefined) return false;
     if (isArray(a) && isArray(b)) return isEqualArray(a as any[],b as any[]);
     else if (isObject(a) && isObject(b)) return isEqualObject(a,b);
     return a===b;

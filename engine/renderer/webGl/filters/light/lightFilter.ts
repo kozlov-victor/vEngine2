@@ -7,11 +7,12 @@ import {mainFnSource} from "@engine/renderer/webGl/filters/light/source/mainFn.s
 import {IKeyVal} from "@engine/misc/object";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {LightSet} from "@engine/light/lightSet";
+import {FastMap} from "@engine/misc/fastMap";
 
 
 export class LightFilter extends AbstractFilter {
 
-    private readonly uniformInfo:IKeyVal<UNIFORM_VALUE_TYPE> = {};
+    private readonly uniformInfo:FastMap<string,UNIFORM_VALUE_TYPE> = new FastMap();
 
 
     constructor(game:Game, private lightArray:LightSet) {

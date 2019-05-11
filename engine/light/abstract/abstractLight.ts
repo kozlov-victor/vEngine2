@@ -5,6 +5,7 @@ import {Game} from "../../game";
 import {Color} from "../../renderer/color";
 import {IKeyVal} from "@engine/misc/object";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {FastMap} from "@engine/misc/fastMap";
 
 export abstract class AbstractLight {
 
@@ -16,6 +17,6 @@ export abstract class AbstractLight {
         this.game = game;
     }
 
-    abstract setUniformsToMap(map:IKeyVal<UNIFORM_VALUE_TYPE>, i:number):void;
+    abstract setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>, i:number):void;
 
 }
