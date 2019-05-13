@@ -1,7 +1,6 @@
 import {Font, RectViewJSON} from "../../font";
-import {Rect, RectJSON} from "@engine/geometry/rect";
+import {Rect} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
-import {Rectangle} from "../drawable/rectangle";
 import {ScrollableContainer} from "../generic/scrollableContainer";
 import {Image} from "../drawable/image";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
@@ -19,6 +18,11 @@ export enum TEXT_ALIGN {
     JUSTIFY
 }
 
+export enum WORD_BRAKE {
+    PREDEFINED,
+    FIT
+}
+
 class TextInfo {
     allCharsCached: CharInfo[] = [];
     size:Size = new Size();
@@ -30,11 +34,11 @@ class TextInfo {
     reset():void {
         this.allCharsCached = [];
         this.strings = [];
-        this.pos.setXY(0,0);
+        this.pos.setXY(this.textField.paddingLeft,this.textField.paddingTop);
     }
 
     newString():void {
-        this.pos.x = 0;
+        this.pos.x = this.textField.paddingLeft;
         if (this.strings.length) {
             this.pos.y += this.textField.getFont().fontContext.lineHeight;
         }
@@ -50,13 +54,16 @@ class TextInfo {
     }
 
     addWord(w: WordInfo):void {
-        w.chars.forEach((c: CharInfo) => {
+        for (const c of w.chars) {
             this.addChar(c);
-        });
+        }
     }
 
     revalidate(defaultSymbolHeight: number):void {
-        this.size.setWH(0);
+        this.size.setWH(
+            this.textField.paddingLeft + this.textField.paddingRight,
+            this.textField.paddingTop + this.textField.paddingBottom
+        );
         for (let s of this.strings) {
             s.calcSize(defaultSymbolHeight);
             this.size.height += s.height;
@@ -66,12 +73,12 @@ class TextInfo {
 
     align(textAlign: TEXT_ALIGN):void {
         if (DEBUG && TEXT_ALIGN[textAlign] === undefined) {
-            let keys = Object.keys(TEXT_ALIGN).join(', ');
+            const keys = Object.keys(TEXT_ALIGN).join(', ');
             throw new DebugError(`can not align text: unknown enum type of TEXT_ALIGN: ${textAlign}, expected: ${keys}`);
         }
-        this.strings.forEach((s: StringInfo) => {
+        for (const s of this.strings) {
             s.align(textAlign, this.textField);
-        });
+        }
     }
 }
 
@@ -132,7 +139,7 @@ class StringInfo extends CharsHolder {
     private toWords(): WordInfo[] {
         const res: WordInfo[] = [];
         let currWord: WordInfo = new WordInfo();
-        for (let ch of this.chars) {
+        for (const ch of this.chars) {
             if (ch.symbol === ' ') {
                 if (currWord.chars.length) {
                     res.push(currWord);
@@ -172,6 +179,7 @@ class StringInfo extends CharsHolder {
                 }
                 const totalSpaceWidth: number = textField.size.width - totalWordsWidth;
                 const oneSpaceWidth: number = totalSpaceWidth / (words.length - 1);
+                if (oneSpaceWidth>textField.getFont().fontContext.lineHeight*2) return;
                 const initialPosY: number = this.chars[0].destRect.point.y;
                 let currXPointer: number = this.chars[0].destRect.point.x;
                 for (const w of words) {
@@ -190,13 +198,13 @@ class StringInfo extends CharsHolder {
 export class TextField extends ScrollableContainer {
 
     readonly type = 'TextField';
-    textAlign: TEXT_ALIGN = TEXT_ALIGN.LEFT;
-    border: Rectangle = null;
+    private textAlign: TEXT_ALIGN = TEXT_ALIGN.LEFT;
+    private wordBreak: WORD_BRAKE = WORD_BRAKE.PREDEFINED;
 
     private readonly _textInfo: TextInfo;
     private _symbolImage:Image;
     private _text: string = '';
-    private _font: Font = null;
+    private _font: Font;
 
 
     constructor(game:Game) {
@@ -241,18 +249,24 @@ export class TextField extends ScrollableContainer {
         const textInfo:TextInfo = this._textInfo;
         textInfo.reset();
         textInfo.newString();
-        const text: string = this._text;
+        let text: string = this._text;
+        if (this.wordBreak==WORD_BRAKE.FIT) {
+            text = text.split('\n').map((str:string)=>str.trim()).join(' ');
+        }
 
         const strings:string[] = text.split('\n');
-        strings.forEach((str:string, i:number) => {
+        const MAX_WIDTH:number = this.maxWidth - this.paddingLeft - this.paddingRight;
+        for (let i:number=0;i<strings.length;i++) {
+            const str = strings[i];
             const words:string[] = str.split(' ');
-            words.forEach((w: string, i: number) => {
-                let wordInfo:WordInfo = new WordInfo();
+            for (let j:number=0;j<words.length;j++) {
+                const w:string = words[j];
+                const wordInfo:WordInfo = new WordInfo();
                 for (let k:number = 0; k < w.length; k++) {
                     const charInfo: CharInfo = this._getCharInfo(w[k]);
                     wordInfo.addChar(charInfo);
                 }
-                if (this.maxWidth && textInfo.pos.x + wordInfo.width > this.maxWidth && i < words.length - 1) {
+                if (this.maxWidth && textInfo.pos.x + wordInfo.width > MAX_WIDTH && i < words.length - 1) {
                     textInfo.newString();
                 }
                 textInfo.addWord(wordInfo);
@@ -260,22 +274,24 @@ export class TextField extends ScrollableContainer {
                     const spaceChar = this._getCharInfo(' ');
                     textInfo.addChar(spaceChar);
                 }
-            });
+            }
             if (i < strings.length - 1) {
                 textInfo.newString();
             }
-        });
+        }
+
         textInfo.revalidate(this._font.fontContext.lineHeight);
-        textInfo.align(this.textAlign);
         this.size.width = textInfo.size.width;
+        // if (this.maxWidth && this.size.width>this.maxWidth)
+        //     this.size.width = this.maxWidth;
+
         if (this.maxHeight !== 0 && textInfo.size.height > this.maxHeight) {
             this.size.height = this.maxHeight;
         } else {
             this.size.height = textInfo.size.height;
         }
-        if (this.border) {
-            this.border.size.set(this.size);
-        }
+
+        textInfo.align(this.textAlign);
         this.updateScrollSize(textInfo.size.height,this.size.height);
 
         super.onGeometryChanged();
@@ -283,6 +299,16 @@ export class TextField extends ScrollableContainer {
 
     setText(text:string|number = ''):void {
         this._text = text+'';
+        this._dirty = true;
+    }
+
+    setTextAlign(ta:TEXT_ALIGN):void{
+        this.textAlign = ta;
+        this._dirty = true;
+    }
+
+    setWordBreak(wb:WORD_BRAKE):void{
+        this.wordBreak = wb;
         this._dirty = true;
     }
 
@@ -302,8 +328,19 @@ export class TextField extends ScrollableContainer {
 
 
     draw():boolean {
+
+        if (this.background) this.background.render();
+
         const renderer:AbstractRenderer = this.game.getRenderer();
-        renderer.lockRect(this.getWorldRect());
+        const worldRectTmp:Rect = Rect.fromPool();
+        worldRectTmp.set(this.getWorldRect());
+        worldRectTmp.point.addXY(this.marginLeft+this.paddingLeft,this.marginTop+this.paddingTop);
+        worldRectTmp.size.addWH(
+            -this.marginRight-this.paddingRight-this.paddingLeft-this.paddingLeft,
+            -this.marginBottom-this.paddingBottom-this.marginTop-this.paddingTop
+        );
+        renderer.lockRect(worldRectTmp);
+        worldRectTmp.release();
         renderer.save();
         if (this.vScrollInfo.offset) renderer.translate(0, -this.vScrollInfo.offset, 0);
 
@@ -323,7 +360,6 @@ export class TextField extends ScrollableContainer {
         }
         renderer.restore();
         renderer.unlockRect();
-        if (this.border) this.border.render();
         return true;
     }
 

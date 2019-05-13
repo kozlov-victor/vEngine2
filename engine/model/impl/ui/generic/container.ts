@@ -141,6 +141,7 @@ export abstract class Container extends RenderableModel {
 
     revalidate():void {
         this.calcWorldRect();
+        if (this.background) this.background.size.set(this.size);
         super.revalidate();
     }
 

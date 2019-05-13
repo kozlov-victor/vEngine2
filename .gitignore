@@ -7,3 +7,4 @@
 package-lock.json
 yarn.lock
 demo/out/**
+demo/index.html

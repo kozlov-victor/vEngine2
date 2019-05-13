@@ -1,5 +1,6 @@
 import {Game} from "@engine/game";
 import {EventEmitter} from "@engine/misc/eventEmitter";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export enum KEY_STATE  {
     KEY_JUST_PRESSED = 2,
@@ -12,11 +13,6 @@ interface KeyboardBuffer {
     [key:number]:KEY_STATE
 }
 
-export enum KEYBOARD_EVENT {
-    KEY_PRESSED,
-    KEY_RELEASED,
-    KEY_HOLD
-}
 
 export abstract class AbstractKeypad {
 
@@ -31,13 +27,13 @@ export abstract class AbstractKeypad {
     press(key:number):void{
         if (this.isPressed(key)) return;
         this.buffer[key] = KEY_STATE.KEY_JUST_PRESSED;
-        this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_PRESSED],key);
+        this.emitter.trigger(KEYBOARD_EVENTS[KEYBOARD_EVENTS.KEY_PRESSED],key);
     }
 
     release(key:number):void{
         if (this.isReleased(key)) return;
         this.buffer[key] = KEY_STATE.KEY_JUST_RELEASED;
-        this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_RELEASED],this.buffer[key]);
+        this.emitter.trigger(KEYBOARD_EVENTS[KEYBOARD_EVENTS.KEY_RELEASED],this.buffer[key]);
     }
 
     isPressed(key:number):boolean{
@@ -65,7 +61,7 @@ export abstract class AbstractKeypad {
             if (this.buffer[keyNum]===KEY_STATE.KEY_JUST_PRESSED) {
                 this.buffer[keyNum] = KEY_STATE.KEY_PRESSED;
             }
-            this.emitter.trigger(KEYBOARD_EVENT[KEYBOARD_EVENT.KEY_HOLD],keyNum);
+            this.emitter.trigger(KEYBOARD_EVENTS[KEYBOARD_EVENTS.KEY_HOLD],keyNum);
         });
     }
 

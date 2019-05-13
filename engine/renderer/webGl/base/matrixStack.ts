@@ -82,7 +82,7 @@ export class MatrixStack {
     }
 
     resetTransform():MatrixStack{
-        this.getCurrentMatrix().release(); // todo
+        this.getCurrentMatrix().release();
         const identity:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeIdentity(identity);
         this.setCurrentMatrix(identity);

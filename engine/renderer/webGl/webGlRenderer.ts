@@ -20,22 +20,25 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {mat4} from "@engine/geometry/mat4";
 import {FILL_TYPE, SHAPE_TYPE, STRETCH_MODE} from "@engine/renderer/webGl/programs/impl/base/shapeDrawer.shader";
-import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/SimpleRectDrawer";
+import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRectDrawer";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
 import {BLEND_MODE} from "@engine/model/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
+import {Line} from "@engine/model/impl/ui/drawable/line";
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
     const contextAttrs:WebGLContextAttributes = {alpha:false};
-    return (
-        el.getContext("webgl",contextAttrs) ||
-        el.getContext('experimental-webgl',contextAttrs) ||
-        el.getContext('webkit-3d',contextAttrs) ||
-        el.getContext('moz-webgl',contextAttrs)
-    ) as WebGLRenderingContext;
+    const possibles:string[] = ['webgl2','webgl','experimental-webgl','webkit-3d','moz-webgl'];
+    for (const p of possibles) {
+        const ctx:WebGLRenderingContext = el.getContext(p,contextAttrs)  as WebGLRenderingContext;
+        //if (DEBUG && ctx) console.log(`context using: ${p}`);
+        if (ctx) return ctx;
+    }
+    if (DEBUG) throw new DebugError(`webGl is not accessible on this device`);
+    return null;
 };
 
 const SCENE_DEPTH:number = 1000;
@@ -256,7 +259,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     };
 
 
-
     drawRectangle(rectangle:Rectangle):void{
         const {width:rw,height:rh} = rectangle.size;
         const maxSize:number = Math.max(rw,rh);
@@ -273,31 +275,16 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.afterItemDraw(rectangle.filters,rectangle.blendMode);
     }
 
-    drawLine(x1:number,y1:number,x2:number,y2:number,color:Color):void{
 
-        this.beforeItemDraw(0,BLEND_MODE.NORMAL);
-
-        const dx:number = x2-x1,dy:number = y2-y1;
-        const uniforms:UniformsInfo = {};
-        const rect:Rect = Rect.fromPool();
-        rect.setXYWH(x1,y1,dx,dy);
-        const size:Size = Size.fromPool();
-        size.setWH(this.game.width,this.game.height);
-        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
-        uniforms.u_vertexMatrix = pos16h.mat16; // todo
-        pos16h.release();
-        rect.release();
-        size.release();
-        uniforms.u_rgba = color.asGL();
-
-        this.afterItemDraw([],BLEND_MODE.NORMAL);
-
+    drawLine(line:Line):void{
+        const r:Rectangle = line.getRectangleRepresentation();
+        this.drawRectangle(r);
     }
 
 
     drawEllipse(ellipse:Ellipse):void{
-        let maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
-        let maxR2:number = maxR*2;
+        const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
+        const maxR2:number = maxR*2;
 
         this.beforeItemDraw(ellipse.filters.length,ellipse.blendMode);
 
@@ -325,6 +312,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_height,1);
         sd.setUniform(sd.u_rectOffsetLeft,1);
         sd.setUniform(sd.u_rectOffsetTop,1);
+        sd.setUniform(sd.u_arcAngleFrom,ellipse.arcAngleFrom);
+        sd.setUniform(sd.u_arcAngleTo,ellipse.arcAngleTo);
         sd.attachTexture('texture',this.nullTexture);
         this.shapeDrawer.draw();
 
@@ -428,6 +417,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return this.gl.NO_ERROR;
     }
 
+    putToCache(l:ResourceLink<Texture>,t:Texture) {
+        const url:string = l.getUrl();
+        if (DEBUG && !url) throw new DebugError(`no url is associated with resource link`);
+        this.renderableCache[url] = t;
+    }
+
     loadTextureInfo(url:string,link:ResourceLink<Texture>,onLoad:()=>void):void{
         const possibleTargetInCache:Texture = this.renderableCache[link.getUrl()];
         if (possibleTargetInCache) {
@@ -441,7 +436,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const texture:Texture = new Texture(this.gl);
             texture.setImage(img);
             this.gl.bindTexture(this.gl.TEXTURE_2D, this.finalFrameBuffer.getTexture().getGlTexture()); // to restore texture binding
-            this.renderableCache[link.getUrl()] = texture;
+            this.putToCache(link,texture);
             link.setTarget(texture);
             onLoad();
         };

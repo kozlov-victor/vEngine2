@@ -1,5 +1,6 @@
 import {IControl} from "@engine/control/abstract/iControl";
-import {AbstractKeypad, KEYBOARD_EVENT} from "@engine/control/abstract/abstractKeypad";
+import {AbstractKeypad} from "@engine/control/abstract/abstractKeypad";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 
 declare const window:any;
@@ -67,11 +68,11 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
         window.removeEventListener('keyup',this.keyUpListener);
     }
 
-    on(e:KEYBOARD_EVENT,callback:(e:KEYBOARD_KEY)=>any):void {
-        this.emitter.on(KEYBOARD_EVENT[e],callback);
+    on(e:KEYBOARD_EVENTS, callback:(e:KEYBOARD_KEY)=>any):void {
+        this.emitter.on(KEYBOARD_EVENTS[e],callback);
     }
 
-    off(e:KEYBOARD_EVENT,callback:Function):void{
+    off(e:KEYBOARD_EVENTS, callback:Function):void{
         this.emitter.off(KEYBOARD_KEY[e],callback);
     }
 

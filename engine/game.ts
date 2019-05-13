@@ -3,7 +3,7 @@ import {Camera} from "./renderer/camera";
 import {Point2d} from "./geometry/point2d";
 import {AbstractRenderer} from "./renderer/abstract/abstractRenderer";
 import {Scene} from "./model/impl/scene";
-import {ColliderEngine} from "./physics/colliderEngine";
+import {ColliderEngine} from "./physics/unused/colliderEngine";
 import {DebugError} from "./debug/debugError";
 import {Clazz} from "@engine/misc/clazz";
 import {IControl} from "@engine/control/abstract/iControl";
@@ -34,8 +34,6 @@ export class Game {
     readonly pos:Point2d = new Point2d(0,0);
     readonly camera:Camera = new Camera(this);
 
-    width:number = 320;
-    height:number = 240;
     gravityConstant:number = 0;
     fps:number = 0;
 
@@ -43,7 +41,7 @@ export class Game {
     scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
 
-    constructor(){
+    constructor(public readonly width:number = 320, public readonly height:number = 240){
         Game.instance = this;
         if (DEBUG) (window as any)['game'] = this;
     }

@@ -1,18 +1,3 @@
-import {Int} from "@engine/declarations";
-
-// export const isObjectMatch =(obj:any, query:{[key:string]:any}):boolean=>{
-//     if (!(obj && query)) return false;
-//     let match:boolean = true;
-//     const keys:string[] = Object.keys(query);
-//     if (!keys.length) return false;
-//     keys.some((key:string)=>{
-//         if (obj[key]!=query[key]) {
-//             match = false;
-//             return true;
-//         }
-//     });
-//     return match;
-// };
 
 export interface IKeyVal<T> {
     [key:string]:T

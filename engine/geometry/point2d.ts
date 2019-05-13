@@ -38,65 +38,65 @@ export class Point2d extends ObservableEntity implements Cloneable<Point2d> {
         this.setY(value)
     }
 
-    setXY(x:number,y:number = x):Point2d{
+    setXY(x:number,y:number = x):this{
         this._x = x;
         this._y = y;
         this.triggerObservable();
         return this;
     }
 
-    setX(x:number):Point2d{
+    setX(x:number):this{
         this._x = x;
         this.triggerObservable();
         return this;
     }
 
-    setY(y:number):Point2d{
+    setY(y:number):this{
         this._y = y;
         this.triggerObservable();
         return this;
     }
 
-    set(another:Point2d):Point2d{
+    set(another:Point2d):this{
         this.setXY(another._x,another._y);
         this.triggerObservable();
         return this;
     }
 
 
-    add(another:Point2d):Point2d{
+    add(another:Point2d):this{
         this.addXY(another._x,another._y);
         this.triggerObservable();
         return this;
     }
 
-    substract(another:Point2d):Point2d{
+    substract(another:Point2d):this{
         this.addXY(-another._x,-another._y);
         this.triggerObservable();
         return this;
     }
 
-    multiply(n:number):Point2d {
+    multiply(n:number):this {
         this._x*=n;
         this._y*=n;
         this.triggerObservable();
         return this;
     }
 
-    addXY(x:number,y:number):Point2d{
+    addXY(x:number,y:number):this{
         this._x+=x;
         this._y+=y;
         this.triggerObservable();
         return this;
     }
 
-    addX(x:number):Point2d{
+    addX(x:number):this{
         this._x+=x;
         this.triggerObservable();
         return this;
     }
 
-    addY(y:number):Point2d{
+    addY(y:number):this{
         this._y+=y;
         this.triggerObservable();
         return this;

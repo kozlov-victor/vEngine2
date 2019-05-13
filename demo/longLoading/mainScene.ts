@@ -3,13 +3,12 @@ import {GameObject} from "@engine/model/impl/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/renderer/color";
-import {KEYBOARD_EVENT} from "@engine/control/abstract/abstractKeypad";
 import {KeyboardControl, KEYBOARD_KEY} from "@engine/control/keyboardControl";
 import {GamePadControl} from "@engine/control/gamePadControl";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {Queue} from "@engine/resources/queue";
 import {Image} from "@engine/model/impl/ui/drawable/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 
 const fakeLongLoadingFn = (resourceLoader:ResourceLoader)=>{
@@ -51,7 +50,7 @@ export class MainScene extends Scene {
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
 
-        this.game.getControl<KeyboardControl>(KeyboardControl).on(KEYBOARD_EVENT.KEY_HOLD, (e:KEYBOARD_KEY)=>{
+        this.game.getControl<KeyboardControl>(KeyboardControl).on(KEYBOARD_EVENTS.KEY_HOLD, (e:KEYBOARD_KEY)=>{
             switch (e) {
                 case KEYBOARD_KEY.LEFT:
                     this.logoObj.pos.addX(-1);
@@ -70,7 +69,7 @@ export class MainScene extends Scene {
             }
         });
 
-        this.game.getControl<GamePadControl>(GamePadControl).on(KEYBOARD_EVENT.KEY_HOLD, (e)=>{
+        this.game.getControl<GamePadControl>(GamePadControl).on(KEYBOARD_EVENTS.KEY_HOLD, (e)=>{
             console.log(e);
         });
 

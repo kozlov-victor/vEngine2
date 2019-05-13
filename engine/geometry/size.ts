@@ -41,6 +41,11 @@ export class Size extends ObservableEntity implements Releasealable{
         return this;
     }
 
+    addWH(width:number,height:number = width):Size{
+        this.setWH(this.width+width,this.height+height);
+        return this;
+    }
+
     set(another:Size):Size{
         this._width = another._width;
         this._height = another._height;

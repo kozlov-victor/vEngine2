@@ -1,6 +1,6 @@
 import {AbstractRenderer} from "../renderer/abstract/abstractRenderer";
 import {Resource} from "../resources/resource";
-import {Cloneable, Eventemittable, Int, Revalidatable, Tweenable} from "../declarations";
+import {Cloneable, Eventemittable, Revalidatable, Tweenable} from "../declarations";
 import {DebugError} from "../debug/debugError";
 import {MathEx} from "../misc/mathEx";
 import {Point2d} from "../geometry/point2d";
@@ -10,7 +10,6 @@ import {Game} from "@engine/game";
 import {Tween, TweenDescription} from "@engine/misc/tween";
 import {TweenMovie} from "@engine/misc/tweenMovie";
 import {Timer} from "@engine/misc/timer";
-import {RigidShape} from "@engine/physics/rigidShapes";
 import {Layer} from "@engine/model/impl/layer";
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
 import {Size} from "@engine/geometry/size";
@@ -34,13 +33,13 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
     readonly pos:Point2d = new Point2d(0,0,()=>this._dirty=true);
     readonly scale:Point2d = new Point2d(1,1);
     readonly anchor:Point2d = new Point2d(0,0);
+    readonly rotationPoint:Point2d = new Point2d(0,0);
     angle:number = 0;
     alpha:number = 1;
     filters: AbstractFilter[] = [];
     blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
     parent:RenderableModel;
     readonly children:RenderableModel[] = [];
-    rigidBody:RigidShape;
     readonly velocity = new Point2d(0,0);
 
 
@@ -63,9 +62,10 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
         cloned.pos.set(this.pos);
         cloned.scale.set(this.scale);
         cloned.anchor.set(this.anchor);
+        cloned.rotationPoint.set(this.rotationPoint);
         cloned.angle = this.angle;
         cloned.alpha = this.alpha;
-        cloned.filters = [...this.filters];
+        if (this.filters.length) cloned.filters = [...this.filters];
         cloned.blendMode = this.blendMode;
         cloned.parent = null;
         this.children.forEach((c:RenderableModel)=>{
@@ -212,7 +212,7 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
         if (DEBUG && !this._getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
 
         const parentArray:RenderableModel[] = this._getParent().children;
-        let index:number = parentArray.indexOf(this);
+        const index:number = parentArray.indexOf(this);
         if (DEBUG && index===-1) {
             console.error(this);
             throw new DebugError('can not kill: object is not belong to current scene');
@@ -228,7 +228,7 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
 
     render():void {
         //if (this.isInViewPort()) return;
-        let renderer:AbstractRenderer = this.game.getRenderer();
+        const renderer:AbstractRenderer = this.game.getRenderer();
 
         renderer.save();
         this.beforeRender();
@@ -236,11 +236,10 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
         renderer.translate(-this.anchor.x,-this.anchor.y);
 
         if (this.isNeedAdditionalTransform()) {
-            let dx:number = this.size.width/2,dy:number = this.size.height/2;
-            renderer.translate(dx,dy);
+            renderer.translate(this.rotationPoint.x,this.rotationPoint.y);
             renderer.scale(this.scale.x,this.scale.y);
             this.doAdditionalTransform();
-            renderer.translate(-dx, -dy);
+            renderer.translate(-this.rotationPoint.x,-this.rotationPoint.y);
         }
 
         const drawResult:boolean = this.draw();
@@ -274,16 +273,16 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
             bh.onUpdate();
         }
 
-        if (this.rigidBody!==undefined) {
-            this.rigidBody.update();
-            // todo
-            // this.pos.x = ~~(this.rigidBody.mCenter.x - this.rigidBody['mWidth']/2); // todo
-            // this.pos.y = ~~(this.rigidBody.mCenter.y - this.rigidBody['mHeight']/2);
-            this.angle = this.rigidBody.mAngle;
-        } else {
+        // if (this.rigidBody!==undefined) {
+        //     this.rigidBody.update();
+        //     // todo
+        //     // this.pos.x = ~~(this.rigidBody.mCenter.x - this.rigidBody['mWidth']/2); // todo
+        //     // this.pos.y = ~~(this.rigidBody.mCenter.y - this.rigidBody['mHeight']/2);
+        //     this.angle = this.rigidBody.mAngle;
+        // } else {
             if (this.velocity.x) this.pos.x += this.velocity.x * delta / 1000;
             if (this.velocity.y) this.pos.y += this.velocity.y * delta / 1000;
-        }
+        // }
 
         for (const c of this.children) {
             c.update();
@@ -308,8 +307,12 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
     // timer
     private _timerDelegate:TimerDelegate = new TimerDelegate();
 
-    setTimer(callback:Function,interval:number):Timer{
-        return this._timerDelegate.setTimer(callback,interval);
+    setTimeout(callback:Function,interval:number):Timer{
+        return this._timerDelegate.setTimeout(callback,interval);
+    }
+
+    setInterval(callback:Function,interval:number):Timer{
+        return this._timerDelegate.setInterval(callback,interval);
     }
 
     //eventEmitter

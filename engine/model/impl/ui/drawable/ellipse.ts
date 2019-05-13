@@ -8,6 +8,9 @@ export class Ellipse extends Shape implements Cloneable<Ellipse>{
     readonly type:string = 'Ellipse';
     readonly center:Point2d = new Point2d();
 
+    arcAngleFrom:number = 0;
+    arcAngleTo:number = 0;
+
     private _radiusX: number = 10;
     private _radiusY: number = 20;
 

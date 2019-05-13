@@ -3,6 +3,7 @@ import {Game} from "../../game";
 import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/model/renderableModel";
 import {noop} from "@engine/misc/object";
+import {Point2d} from "@engine/geometry/point2d";
 
 const r:(obj:ParticlePropertyDesc)=>number
     = (obj:ParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
@@ -25,10 +26,11 @@ export class ParticleSystem extends RenderableModel {
 
     readonly type:string = 'ParticleSystem';
     numOfParticlesToEmit:ParticlePropertyDesc = {from:1,to:10};
-    particleAngle:ParticlePropertyDesc = {from:0,to:0};
+    particleAngle:ParticlePropertyDesc = {from:0,to:Math.PI*2};
     particleVelocity:ParticlePropertyDesc = {from:1,to:100};
     particleLiveTime:ParticlePropertyDesc = {from:100,to:1000};
     emissionRadius:number = 0;
+    emissionPosition:Point2d = new Point2d();
 
     private _particles:ParticleHolder[] = [];
     private _prototypes:RenderableCloneable[] = [];
@@ -61,8 +63,8 @@ export class ParticleSystem extends RenderableModel {
 
         const num:number = r(this.numOfParticlesToEmit);
         for (let i:number = 0;i<num;i++) {
-            let particle:RenderableCloneable = this._prototypes[MathEx.random(0,this._prototypes.length-1)];
-            particle = particle.clone();
+            const particleProto:RenderableCloneable = this._prototypes[MathEx.randomInt(0,this._prototypes.length-1)];
+            const particle = particleProto.clone();
             this._onEmitParticle(particle);
             const angle:number = r(this.particleAngle);
             const vel:number = r(this.particleVelocity);
@@ -70,6 +72,7 @@ export class ParticleSystem extends RenderableModel {
             particle.velocity.y = vel*Math.sin(angle);
             particle.pos.x = r({from:-this.emissionRadius,to:+this.emissionRadius});
             particle.pos.y = r({from:-this.emissionRadius,to:+this.emissionRadius});
+            particle.pos.add(this.emissionPosition);
             const lifeTime:number = r(this.particleLiveTime);
             const createdTime:number = this.game.getTime();
             this._particles.push({particle,lifeTime,createdTime});

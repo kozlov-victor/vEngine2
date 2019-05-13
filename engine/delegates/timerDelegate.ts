@@ -1,27 +1,34 @@
 import {Timer} from "@engine/misc/timer";
 
-const identity_array:Timer[] = [];
-
 export class TimerDelegate {
 
     private _timers: Timer[];
 
-    setTimer(callback:Function,interval:number):Timer{
-        const t:Timer = new Timer(callback,interval);
+
+    private _addTimer(callback:Function,interval:number,once:boolean):Timer{
+        const t:Timer = new Timer(this,callback,interval,once);
         if (!this._timers) this._timers = [];
         this._timers.push(t);
         return t;
     }
 
-    get timers():Timer[]{
-        if (this._timers) return this._timers;
-        return identity_array;
+    setInterval(callback:Function,interval:number):Timer{
+        return this._addTimer(callback,interval,false);
+    }
+
+    setTimeout(callback:Function,interval:number):Timer{
+        return this._addTimer(callback,interval,true);
+    }
+
+    getTimers():Timer[]{
+        return this._timers;
     }
 
     update(){
-        if (this._timers) this._timers.forEach((t:Timer)=>{
+        if (!this._timers) return;
+        for (const t of this._timers) {
             t.onUpdate();
-        });
+        }
     }
 
 }

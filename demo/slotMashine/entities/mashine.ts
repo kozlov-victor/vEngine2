@@ -3,13 +3,16 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/game";
 import {Scene} from "@engine/model/impl/scene";
 import {MathEx} from "@engine/misc/mathEx";
-import random = MathEx.random;
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {WinScene} from "../winScene";
+import {defineWinType, WIN_TYPE} from "./common";
+
 export class Mashine {
 
     private wheels:Wheel[] = [];
+    locked:boolean = false;
 
-    constructor(game:Game,private resourceLink:ResourceLink<Texture>){
+    constructor(private game:Game,private resourceLink:ResourceLink<Texture>){
         const cellDeltaHeight:number = 160;
         for (let i:number = 0;i<3;i++){
             const wheel:Wheel = new Wheel(game,resourceLink);
@@ -36,23 +39,40 @@ export class Mashine {
     }
 
     onSpinCompleted(){
+        const result:number[] = [];
         for (let i:number = 0;i<3;i++){
             const wheel:Wheel = this.wheels[i];
-            console.log(wheel.position);
+            result.push(wheel.position);
         }
+
+        window.top.postMessage({
+            command:'machineCompleted',
+            result
+        },'*');
+
+        const isWIN:boolean = defineWinType(result)!==WIN_TYPE.NO_PRISE;
+        if (isWIN) {
+            this.locked = true;
+            this.game.getCurrScene().setTimeout(()=>{
+                this.game.runScene(new WinScene(this.game));
+            },3000);
+        }
+
     }
 
-    spin(){
+    spin(a:number,b:number,c:number){
 
         if (!this.isFree()) return;
+        if (this.locked) return;
 
-        let freeSpins:number = MathEx.random(2,5);
+        let freeSpins:number = MathEx.randomInt(2,5);
         let delayTime:number = 0;
+        const spinsTo:number[] = [a,b,c];
         for (let i:number = 0;i<3;i++){
             const wheel:Wheel = this.wheels[i];
-            wheel.spinTo(MathEx.random(0,4),freeSpins,delayTime);
-            delayTime+=MathEx.random(100,500);
-            freeSpins+=MathEx.random(2,5);
+            wheel.spinTo(spinsTo[i],freeSpins,delayTime);
+            delayTime+=MathEx.randomInt(100,500);
+            freeSpins+=MathEx.randomInt(2,5);
         }
     }
 

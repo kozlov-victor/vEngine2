@@ -59,6 +59,17 @@ export class ResourceLoader {
         return link;
     }
 
+    loadBinary(url:string):ResourceLink<ArrayBuffer> {
+        const link:ResourceLink<ArrayBuffer> = new ResourceLink<ArrayBuffer>(url);
+        this.q.addTask(()=>{
+            loadRaw(url,'arraybuffer',(buff:ArrayBuffer)=>{
+                link.setTarget(buff);
+                this.q.resolveTask(url);
+            });
+        },url);
+        return link;
+    }
+
     addNextTask(task:Function){
         const id:string = Date.now() + '_' + Incrementer.getValue();
         this.q.addTask(()=>{

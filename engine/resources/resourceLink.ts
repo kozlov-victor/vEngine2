@@ -2,7 +2,7 @@ import {DebugError} from "@engine/debug/debugError";
 
 export class ResourceLink<T> {
 
-    constructor(private url:string){}
+    constructor(public readonly url:string){}
 
     private target:T;
 

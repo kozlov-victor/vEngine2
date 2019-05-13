@@ -1,5 +1,5 @@
 import {DebugError} from "@engine/debug/debugError";
-import {Size} from "../../../geometry/size";
+import {Size} from "@engine/geometry/size";
 import {ShaderProgram} from "./shaderProgram";
 
 const isPowerOf2 = function(value:number):boolean {
@@ -7,13 +7,11 @@ const isPowerOf2 = function(value:number):boolean {
 };
 
 
-
 export class Texture {
 
     gl:WebGLRenderingContext;
     tex:WebGLTexture = null;
     readonly size:Size = new Size(0,0);
-    isPowerOfTwo:boolean = false;
 
     private static MAX_TEXTURE_IMAGE_UNITS:number = 0;
 
@@ -31,11 +29,8 @@ export class Texture {
 
         this.tex = gl.createTexture();
         if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);
-        gl.bindTexture(gl.TEXTURE_2D, this.tex);
         // Fill the texture with a 1x1 blue pixel.
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-            new Uint8Array([0, 255, 0, 255]));
-        gl.bindTexture(gl.TEXTURE_2D, this.tex);
+        this.setRawData(new Uint8Array([0, 255, 0, 255]),1,1);
     }
 
 
@@ -46,7 +41,10 @@ export class Texture {
      * @param width -unused if image specified
      * @param height -unused if image specified
      */
-    setImage(img:HTMLImageElement,width:number = 0,height:number = 0):void{
+    setImage(
+        img:null|ImageBitmap|ImageData|HTMLVideoElement|HTMLImageElement|HTMLCanvasElement,
+        width:number = 0,
+        height:number = 0):void{
 
         const gl:WebGLRenderingContext = this.gl;
 
@@ -70,9 +68,9 @@ export class Texture {
         } else {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         }
-        this.isPowerOfTwo = img?(isPowerOf2(img.width) && isPowerOf2(img.height)):false;
+        const isPowerOfTwo:boolean = img?(isPowerOf2(img.width) && isPowerOf2(img.height)):false;
         // Check if the image is a power of 2 in both dimensions.
-        if (this.isPowerOfTwo) {
+        if (isPowerOfTwo) {
             gl.generateMipmap(gl.TEXTURE_2D);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
@@ -84,6 +82,30 @@ export class Texture {
         }
         gl.bindTexture(gl.TEXTURE_2D, null);
 
+    }
+
+    setRawData(data:Uint8Array,width:number,height:number){
+        if (DEBUG) {
+            const numOfBytes:number = width*height*4;
+            if (data.length!==numOfBytes) {
+                throw new DebugError(`unexpected Uint8Array length, expected width*height*4 (${width}*${height}*4=${numOfBytes}), bun is found ${data.length}`);
+            }
+        }
+        const gl:WebGLRenderingContext = this.gl;
+        gl.bindTexture(gl.TEXTURE_2D, this.tex);
+        this.size.setWH(width,height);
+
+        // target: number,
+        // level: number,
+        // internalformat: number,
+        // width: number,
+        // height: number,
+        // border: number,
+        // format: number,
+        // type: number,
+        // pixels: ArrayBufferView | null
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+        gl.bindTexture(gl.TEXTURE_2D, null);
     }
 
     bind(name:string,i:number,program:ShaderProgram):void { // uniform eq to 0 by default
@@ -118,8 +140,7 @@ export class Texture {
         if (DEBUG && gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)
             throw new DebugError(`Texture.GetColorArray() failed!`);
         const pixels:Uint8Array = new Uint8Array(wxh * 4);
-        gl.readPixels(0, 0, this.size.width, this.size.height, gl.RGBA,
-        gl.UNSIGNED_BYTE, pixels);
+        gl.readPixels(0, 0, this.size.width, this.size.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
         return pixels;
     }
 

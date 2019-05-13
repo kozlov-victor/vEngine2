@@ -1,5 +1,5 @@
-import {Game} from "../game";
-import {DebugError} from "../debug/debugError";
+import {Game} from "../../game";
+import {DebugError} from "../../debug/debugError";
 
 
 export class Vec2 {
@@ -61,8 +61,8 @@ export class Vec2 {
     }
 
     distance(vec:Vec2):number {
-        let x:number = this.x - vec.x;
-        let y:number = this.y - vec.y;
+        const x:number = this.x - vec.x;
+        const y:number = this.y - vec.y;
         return Math.sqrt(x * x + y * y);
     }
 
