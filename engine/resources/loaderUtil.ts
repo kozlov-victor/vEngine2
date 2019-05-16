@@ -1,4 +1,5 @@
 
+import {DebugError} from "@engine/debug/debugError";
 export namespace LoaderUtil {
     export const loadRaw = (url:string,responsetype:'arraybuffer'|'blob'|'text',onLoad:(buffer:ArrayBuffer|string)=>void)=> {
         const request:XMLHttpRequest = new XMLHttpRequest();
@@ -10,19 +11,28 @@ export namespace LoaderUtil {
             request.setRequestHeader('Content-Range', 'bytes');
         }
 
-        request.onload = function() {
-            onLoad(request.response);
+        request.onload = ()=> {
+            if (request.readyState == 4) {
+                if(request.status == 200) onLoad(request.response);
+                else if (DEBUG) {
+                    throw new DebugError(`can not load resource with url '${url}', status ${request.status}`);
+                }
+            }
         };
-        // request.onprogress = function(e){
-        //     if (progress) progress(url,e.loaded / e.total);
-        // };
+        request.onprogress = function(e){
+            //if (progress) progress(url,e.loaded / e.total);
+        };
 
         if (DEBUG) {
-            request.onerror=function(e){
+            request.onerror=(e)=> {
                 console.error(e);
-                throw 'can not load resource with url '+url};
+                throw new DebugError(`can not load resource with url ${url}`);
+            };
+            request.ontimeout=(e)=> {
+                console.error(e);
+                throw new DebugError(`can not load resource with url ${url}, timeout!`);
+            }
         }
-
         request.send();
-    };
+    }
 }

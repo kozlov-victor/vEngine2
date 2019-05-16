@@ -108,9 +108,11 @@ export class AbstractRenderer {
 
     scale(x:number,y:number,z:number = 0):void {}
 
-    rotateZ(a:number):void {}
+    rotateX(a:number):void {}
 
     rotateY(a:number):void {}
+
+    rotateZ(a:number):void {}
 
     log(args:any):void {
         if (!DEBUG) return;

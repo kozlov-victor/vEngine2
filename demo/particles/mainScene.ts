@@ -45,7 +45,7 @@ export class MainScene extends Scene {
 
         ps.onEmitParticle((r:Shape)=>{
             r.blendMode = BLEND_MODE.ADDITIVE;
-            r.filters = [sb];
+            //r.filters = [sb];
             (r.fillColor as Color).setRGB(MathEx.random(0,255),MathEx.random(0,255),MathEx.random(0,255));
         });
         ps.onUpdateParticle((r:Rectangle)=>r.angle+=0.1);
@@ -67,6 +67,6 @@ export class MainScene extends Scene {
         let ps = this.ps;
         ps.particleAngle.from = ps.particleAngle.from+0.1;
         ps.particleAngle.to = ps.particleAngle.to+0.1;
-        this.ps.angle+=0.1;
+        //this.ps.angle+=0.1;
     }
 }

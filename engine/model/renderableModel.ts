@@ -35,6 +35,7 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
     readonly anchor:Point2d = new Point2d(0,0);
     readonly rotationPoint:Point2d = new Point2d(0,0);
     angle:number = 0;
+    angle3d:{x:number,y:number,z:number} = {x:0,y:0,z:0};
     alpha:number = 1;
     filters: AbstractFilter[] = [];
     blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
@@ -169,13 +170,15 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
     }
 
     protected isNeedAdditionalTransform():boolean{
-        return !(this.angle===0 && this.scale.equal(1));
+        return !(this.angle===0 && this.scale.equal(1) && this.angle3d.x===0 && this.angle3d.y===0 && this.angle3d.z===0);
     }
 
     protected doAdditionalTransform():void {
-        this.game.getRenderer().rotateZ(this.angle);
-        // todo
-        //if (this['angleY']) this.game.getRenderer()['rotateY'](this['angleY']); // todo!!!
+        const renderer:AbstractRenderer = this.game.getRenderer();
+        if (this.angle!==0) renderer.rotateZ(this.angle);
+        if (this.angle3d.x!==0) renderer.rotateX(this.angle3d.x);
+        if (this.angle3d.y!==0) renderer.rotateY(this.angle3d.y);
+        if (this.angle3d.z!==0) renderer.rotateY(this.angle3d.z);
     }
 
     protected isInViewPort():boolean{
@@ -237,7 +240,7 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
 
         if (this.isNeedAdditionalTransform()) {
             renderer.translate(this.rotationPoint.x,this.rotationPoint.y);
-            renderer.scale(this.scale.x,this.scale.y);
+            if (!this.scale.equal(1)) renderer.scale(this.scale.x,this.scale.y);
             this.doAdditionalTransform();
             renderer.translate(-this.rotationPoint.x,-this.rotationPoint.y);
         }

@@ -93,10 +93,10 @@ export class AbstractDrawer implements IDrawer{
     }
 
     setUniformsFromMap(batch:FastMap<string,UNIFORM_VALUE_TYPE>){
-        const keys:string[] = this.uniformCache.getKeys();
-        const values:UNIFORM_VALUE_TYPE[] = this.uniformCache.getValues();
+        const keys:string[] = batch.getKeys();
+        const values:UNIFORM_VALUE_TYPE[] = batch.getValues();
         for (let i:number=0;i<keys.length;i++) {
-            this._setUniform(keys[i],values[i]);
+            this.setUniform(keys[i],values[i]);
         }
     }
 

@@ -45,27 +45,35 @@ export class MatrixStack {
         return this;
     }
 
-    rotateZ(angleInRadians:number):MatrixStack {
-        const t:Mat16Holder = Mat16Holder.fromPool();
-        mat4.makeZRotation(t,angleInRadians);
+    private _rotate(rotMat:Mat16Holder){
         const m:Mat16Holder = this.getCurrentMatrix();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(result,t, m);
+        mat4.matrixMultiply(result,rotMat, m);
         this.setCurrentMatrix(result);
-        t.release();
         m.release();
+    }
+
+    rotateX(angleInRadians:number):MatrixStack {
+        const t:Mat16Holder = Mat16Holder.fromPool();
+        mat4.makeXRotation(t,angleInRadians);
+        this._rotate(t);
+        t.release();
         return this;
     }
 
     rotateY(angleInRadians:number):MatrixStack {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeYRotation(t,angleInRadians);
-        const m:Mat16Holder = this.getCurrentMatrix();
-        const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(result,t, m);
-        this.setCurrentMatrix(result);
+        this._rotate(t);
         t.release();
-        m.release();
+        return this;
+    }
+
+    rotateZ(angleInRadians:number):MatrixStack {
+        const t:Mat16Holder = Mat16Holder.fromPool();
+        mat4.makeZRotation(t,angleInRadians);
+        this._rotate(t);
+        t.release();
         return this;
     }
 
