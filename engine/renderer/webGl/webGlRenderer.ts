@@ -84,8 +84,7 @@ const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat
 };
 
 
-//  gl.enable(gl.CULL_FACE);
-//  gl.enable(gl.DEPTH_TEST);
+
 export class WebGlRenderer extends AbstractCanvasRenderer {
 
     private gl:WebGLRenderingContext;
@@ -139,6 +138,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.blender.enable();
         this.blender.setBlendMode(BLEND_MODE.NORMAL);
         // gl.depthFunc(gl.LEQUAL);
+        //gl.enable(gl.CULL_FACE);
+        gl.enable(gl.DEPTH_TEST);
     }
 
 
@@ -234,28 +235,39 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     }
 
-    drawModel(g3d:GameObject3d):void{ // todo
-        // this.modelDrawer.bindModel(g3d);
-        // this.modelDrawer.bind();
-        //
-        // this.matrixStack.scale(1,-1,1);
-        // const matrix1:Mat16Holder = this.matrixStack.getCurrentMatrix();
-        //
-        // const zToWMatrix:Mat16Holder = mat4.makeZToWMatrix(1);
-        // const projectionMatrix:Mat16Holder = mat4.ortho(0,this.game.width,0,this.game.height,-SCENE_DEPTH,SCENE_DEPTH);
-        // const matrix2:Mat16Holder = mat4.matrixMultiply(projectionMatrix, zToWMatrix);
-        //
-        // const uniforms:UniformsInfo = {
-        //     u_modelMatrix: matrix1.mat16,
-        //     u_projectionMatrix: matrix2.mat16,
-        //     u_alpha: 1
-        // };
-        // //const texInfo:TextureInfo[] = [{texture:g3d.texture,name:'u_texture'}];
-        //
-        // this.gl.enable(this.gl.DEPTH_TEST);
-        // this.modelDrawer.draw();// todo uniforms, texture info
-        // this.modelDrawer.unbind();
-        // this.gl.disable(this.gl.DEPTH_TEST);
+    drawModel(g3d:GameObject3d):void {
+        this.modelDrawer.bindModel(g3d);
+        this.modelDrawer.bind();
+
+        this.matrixStack.scale(1,-1,1);
+        const matrix1:Mat16Holder = this.matrixStack.getCurrentMatrix();
+
+        const zToWMatrix:Mat16Holder = Mat16Holder.fromPool();
+        mat4.makeZToWMatrix(zToWMatrix,1);
+        const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+        mat4.ortho(projectionMatrix,0,this.game.width,0,this.game.height,-SCENE_DEPTH,SCENE_DEPTH);
+        const matrix2:Mat16Holder = Mat16Holder.fromPool();
+        mat4.matrixMultiply(matrix2,projectionMatrix, zToWMatrix);
+
+        this.modelDrawer.setModelMatrix(matrix1.mat16);
+        this.modelDrawer.setProjectionMatrix(matrix2.mat16);
+        this.modelDrawer.setAlfa(g3d.alpha);
+        const isTextureUsed:boolean = !!g3d.texture;
+        this.modelDrawer.setTextureUsed(isTextureUsed);
+        this.modelDrawer.setColor(g3d.color);
+        this.modelDrawer.attachTexture('u_texture',g3d.texture?g3d.texture:this.nullTexture);
+
+
+        this.gl.enable(this.gl.DEPTH_TEST);
+        //this.gl.enable(this.gl.CULL_FACE);
+        this.modelDrawer.draw();
+
+        this.modelDrawer.unbind();
+        this.gl.disable(this.gl.DEPTH_TEST);
+        //this.gl.disable(this.gl.CULL_FACE);
+        zToWMatrix.release();
+        projectionMatrix.release();
+        matrix2.release();
     };
 
 

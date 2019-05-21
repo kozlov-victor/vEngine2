@@ -103,6 +103,8 @@ export class BufferInfo {
             case this.gl.LINE_STRIP:
             case this.gl.TRIANGLE_FAN:
                 return this.posVertexBuffer.getBufferLength() / 2;
+            case this.gl.TRIANGLE_STRIP:
+                return this.posVertexBuffer.getBufferLength() / 3;
             default:
                 throw new DebugError(`unknown draw method: ${drawMethod}`);
         }

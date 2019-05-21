@@ -22,7 +22,6 @@ export class Size extends ObservableEntity implements Releasealable{
     }
 
 
-
     setW(width:number):Size{
         this._width = width;
         this.triggerObservable();
@@ -79,6 +78,13 @@ export class Size extends ObservableEntity implements Releasealable{
         this._arr[0] = this._width;
         this._arr[1] = this._height;
         return this._arr;
+    }
+
+    toJSON():{width:number,height:number}{
+        return {
+            width: this.width,
+            height: this.height
+        }
     }
 
 

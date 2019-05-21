@@ -21,6 +21,8 @@ export abstract class BaseAbstractBehaviour {
 
     onUpdate():void{}
 
+    revalidate(){}
+
     destroy():void{}
 
 }

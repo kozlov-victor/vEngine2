@@ -64,7 +64,7 @@ export class Sphere extends AbstractPrimitive {
 
     constructor(radius:number = 10,bands:number = 30){
         super();
-        let bufferArrs:IPrimitive = prepareBuffers(radius,bands);
+        const bufferArrs:IPrimitive = prepareBuffers(radius,bands);
         this.vertexArr = bufferArrs.vertexArr;
         this.normalArr = bufferArrs.normalArr;
         this.texCoordArr = bufferArrs.texCoordArr;

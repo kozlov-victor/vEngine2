@@ -4,6 +4,9 @@ import {BufferInfo, BufferInfoDescription} from "../../../base/bufferInfo";
 import {GameObject3d} from "@engine/model/impl/gameObject3d";
 import {DebugError} from "@engine/debug/debugError";
 import {fragmentSource, vertexSource} from "@engine/renderer/webGl/programs/impl/base/modelDrawer.shader";
+import {mat4} from "@engine/geometry/mat4";
+import MAT16 = mat4.MAT16;
+import {Color} from "@engine/renderer/color";
 
 
 export class ModelDrawer extends AbstractDrawer {
@@ -19,14 +22,11 @@ export class ModelDrawer extends AbstractDrawer {
         );
     }
     
-    private _initBufferInfo():void{
-        this.g3d.bufferInfo = new BufferInfo(this.gl,{
+    private _initBufferInfo(drawMethod:number= this.gl.TRIANGLES):void{
+        const bufferInfo:BufferInfoDescription = {
             posVertexInfo:{
                 array:this.g3d.model.vertexArr, type:this.gl.FLOAT,
                 size:3, attrName:'a_position'
-            },
-            posIndexInfo: {
-                array: this.g3d.model.indexArr
             },
             texVertexInfo: {
                 array: this.g3d.model.texCoordArr, type:this.gl.FLOAT,
@@ -36,14 +36,40 @@ export class ModelDrawer extends AbstractDrawer {
                 array: this.g3d.model.normalArr, type:this.gl.FLOAT,
                 size:3, attrName:'a_normal'
             },
-            drawMethod:this.gl.TRIANGLES
-        } as BufferInfoDescription);
+            drawMethod
+        };
+        if (this.g3d.model.indexArr) {
+            bufferInfo.posIndexInfo = {
+                array: this.g3d.model.indexArr
+            }
+        }
+        this.g3d.bufferInfo = new BufferInfo(this.gl,bufferInfo);
     }
 
     bindModel(g3d:GameObject3d):void{
         this.g3d = g3d;
-        if (!this.g3d.bufferInfo) this._initBufferInfo();
+        if (!this.g3d.bufferInfo) this._initBufferInfo(g3d.model.drawMethod);
         this.bufferInfo = this.g3d.bufferInfo;
+    }
+
+    setModelMatrix(m:MAT16):void{
+        this.setUniform('u_modelMatrix',m);
+    }
+
+    setProjectionMatrix(m:MAT16):void{
+        this.setUniform('u_projectionMatrix',m);
+    }
+
+    setAlfa(a:number):void{
+        this.setUniform('u_alpha',1);
+    }
+
+    setTextureUsed(used:boolean):void{
+        this.setUniform('u_textureUsed',used);
+    }
+
+    setColor(c:Color):void{
+        this.setUniform('u_color',c.asGL());
     }
 
     bind():void{
