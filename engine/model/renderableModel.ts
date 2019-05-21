@@ -84,7 +84,9 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
         super.setClonedProperties(cloned);
     }
 
-    revalidate():void{}
+    revalidate():void{
+        for (const b of this._behaviours) b.revalidate();
+    }
 
     getLayer(): Layer {
         return this._layer;
