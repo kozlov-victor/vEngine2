@@ -6,6 +6,7 @@ import {RenderableModel} from "@engine/model/renderableModel";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Int} from "@engine/declarations";
+import {DebugError} from "@engine/debug/debugError";
 
 interface MouseDragPoint {
     mX: number,
@@ -91,6 +92,11 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
             scene.trigger(MOUSE_EVENTS.mouseUp,e);
         };
         this.game.getRenderer().container.addEventListener('mouseleave',this.blurListener);
+    }
+
+    revalidate() {
+        super.revalidate();
+        if (DEBUG && (this.gameObject.size.isZero())) throw new DebugError(`can not apply DraggableBehaviour ot object with zero render size. Current size is ${this.gameObject.size.toJSON()}`);
     }
 
     destroy():void{

@@ -58,7 +58,13 @@ const prepareMessage = function(e:any,lineNum:number){
 
 window.addEventListener('error',(e:any)=>{
     const game:Game = (window as any).game as Game;
-    if (game) game.destroy();
+    if (game) {
+        try {
+            game.destroy();
+        } catch (e) {
+            console.error(e);
+        }
+    }
     let lineNum:number = e.lineno;
     let colNum:number = e.colno;
     let filename:string = e.filename;

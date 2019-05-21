@@ -4,6 +4,7 @@ export interface IPrimitive {
     normalArr: number[],
     texCoordArr: number[],
     indexArr: number[]
+    drawMethod:number
 }
 
 export class AbstractPrimitive implements IPrimitive {
@@ -12,9 +13,9 @@ export class AbstractPrimitive implements IPrimitive {
     normalArr:number[];
     texCoordArr:number[];
     indexArr:number[];
+    drawMethod:number = undefined;
 
     constructor(){
-
     }
 
 }

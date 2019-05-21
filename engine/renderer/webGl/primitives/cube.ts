@@ -138,9 +138,8 @@ export class Cube extends AbstractPrimitive {
 
     // todo normalize to format: https://www.npmjs.com/package/wavefront-obj-parser
 
-    constructor(){
+    constructor(size:number = 10){
         super();
-        const size = 10;
         const bufferArrs:IPrimitive = prepareBuffers(size);
         this.vertexArr = bufferArrs.vertexArr;
         this.normalArr = bufferArrs.normalArr;
