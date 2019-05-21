@@ -36,7 +36,7 @@ export class MainScene extends Scene {
 
 
         const obj2:GameObject3d = new GameObject3d(this.game);
-        obj2.color.setRGB(122,22,12);
+        obj2.color.setRGB(12,22,122);
         obj2.model = new Cube(10);
         //obj.model = new Sphere(100,3);
         //obj.model = new Cylinder();

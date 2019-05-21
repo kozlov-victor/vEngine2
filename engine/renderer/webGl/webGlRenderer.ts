@@ -139,7 +139,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.blender.setBlendMode(BLEND_MODE.NORMAL);
         // gl.depthFunc(gl.LEQUAL);
         //gl.enable(gl.CULL_FACE);
-        gl.enable(gl.DEPTH_TEST);
+        //gl.enable(gl.DEPTH_TEST);
     }
 
 
@@ -268,7 +268,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         zToWMatrix.release();
         projectionMatrix.release();
         matrix2.release();
-    };
+    }
 
 
     drawRectangle(rectangle:Rectangle):void{

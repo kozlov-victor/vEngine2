@@ -177,10 +177,12 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
 
     protected doAdditionalTransform():void {
         const renderer:AbstractRenderer = this.game.getRenderer();
+
         if (this.angle!==0) renderer.rotateZ(this.angle);
+        else if (this.angle3d.z!==0) renderer.rotateZ(this.angle3d.z);
+
         if (this.angle3d.x!==0) renderer.rotateX(this.angle3d.x);
         if (this.angle3d.y!==0) renderer.rotateY(this.angle3d.y);
-        if (this.angle3d.z!==0) renderer.rotateY(this.angle3d.z);
     }
 
     protected isInViewPort():boolean{
@@ -193,7 +195,7 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
 
     moveToFront():void {
         if (DEBUG && !this._getParent()) throw new DebugError(`can not move to front: object is detached`);
-        let index:number = (this._getParent()).children.indexOf(this);
+        const index:number = (this._getParent()).children.indexOf(this);
         if (DEBUG && index===-1)
             throw new DebugError(`can not move to front: object is not belong to current scene`);
         const parentArray:RenderableModel[] = this._getParent().children;
