@@ -3,31 +3,44 @@ import {Image} from "@engine/model/impl/ui/drawable/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {PbmReader} from "./pbmReader";
+import {GameObject} from "@engine/model/impl/gameObject";
+import {MultiImageFrameAnimation} from "@engine/model/impl/frameAnimation/multiImageFrameAnimation";
 
 // https://www.twobitarcade.net/article/displaying-images-oled-displays/
 
 export class MainScene extends Scene {
 
-    private frames:Image[];
-    private resourceLink:ResourceLink<ArrayBuffer>[] = [];
+    private resourceLinks:ResourceLink<ArrayBuffer>[] = [];
+    private textureLinks:ResourceLink<Texture>[] = [];
+
+    private obj:GameObject;
 
     onPreloading() {
-        this.resourceLink.push(this.resourceLoader.loadBinary('./data/scatman.1.pbm'));
+
+        for (let i:number=1;i<=6;i++) {
+            this.resourceLinks.push(this.resourceLoader.loadBinary(`./data/scatman.${i}.pbm`));
+        }
+
     }
 
-
     onReady() {
-        const renderer:WebGlRenderer = this.game.getRenderer() as WebGlRenderer;
-        const gl:WebGLRenderingContext = renderer.getNativeContext();
-        const t:Texture = new Texture(gl);
 
-        const link:ResourceLink<Texture> = new ResourceLink<Texture>('url1');
-        renderer.putToCache(link,t);
-        t.setRawData(new Uint8Array([255, 0, 0, 255]),1,1);
-        link.setTarget(t);
-        const image:Image = new Image(this.game);
-        image.setResourceLink(link);
-        this.appendChild(image);
+        for (const rl of this.resourceLinks) {
+            const pbmReader:PbmReader = new PbmReader(this.game,rl.getTarget());
+            this.textureLinks.push(pbmReader.createTextureLink());
+        }
+
+        this.obj = new GameObject(this.game);
+        let anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
+        anim.frames = this.textureLinks;
+        anim.isRepeat = true;
+        anim.duration = 600;
+        this.obj.sprite = anim.currSprite;
+        this.obj.addFrameAnimation('animation',anim);
+        this.obj.playFrameAnimation('animation');
+        this.obj.pos.fromJSON({x:10,y:10});
+        this.appendChild(this.obj);
     }
 
 }

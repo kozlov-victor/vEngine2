@@ -9,6 +9,7 @@ dirs.forEach((dir)=>{
     allDirectories.push(dir);
 });
 
+
 const template = `
 <!DOCTYPE html>
 <html lang="en">

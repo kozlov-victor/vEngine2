@@ -34,6 +34,22 @@ export class Texture {
     }
 
 
+    private setFilters(){
+        const gl:WebGLRenderingContext = this.gl;
+        const isPowerOfTwo:boolean = (isPowerOf2(this.size.width) && isPowerOf2(this.size.height));
+        // Check if the image is a power of 2 in both dimensions.
+        if (isPowerOfTwo) {
+            gl.generateMipmap(gl.TEXTURE_2D);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        } else {
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); // NEAREST,LINEAR
+        }
+    }
+
     // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true); for bitmap textures
     // gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     /**
@@ -57,7 +73,6 @@ export class Texture {
                 throw new DebugError(`can not create texture with size ${width}x${height}, max supported size is ${maxSupportedSize}`);
             }
         }
-
         if (img) this.size.setWH(img.width,img.height);
         else this.size.setWH(width,height);
         //gl.activeTexture(gl.TEXTURE0);
@@ -68,18 +83,7 @@ export class Texture {
         } else {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         }
-        const isPowerOfTwo:boolean = img?(isPowerOf2(img.width) && isPowerOf2(img.height)):false;
-        // Check if the image is a power of 2 in both dimensions.
-        if (isPowerOfTwo) {
-            gl.generateMipmap(gl.TEXTURE_2D);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-        } else {
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); // NEAREST,LINEAR
-        }
+        this.setFilters();
         gl.bindTexture(gl.TEXTURE_2D, null);
 
     }
@@ -88,7 +92,7 @@ export class Texture {
         if (DEBUG) {
             const numOfBytes:number = width*height*4;
             if (data.length!==numOfBytes) {
-                throw new DebugError(`unexpected Uint8Array length, expected width*height*4 (${width}*${height}*4=${numOfBytes}), bun is found ${data.length}`);
+                throw new DebugError(`unexpected Uint8Array length, expected width*height*4 (${width}*${height}*4=${numOfBytes}), but is found ${data.length}`);
             }
         }
         const gl:WebGLRenderingContext = this.gl;
@@ -105,6 +109,7 @@ export class Texture {
         // type: number,
         // pixels: ArrayBufferView | null
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+        this.setFilters();
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
 
