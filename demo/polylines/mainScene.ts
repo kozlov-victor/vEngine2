@@ -1,11 +1,6 @@
 import {Scene} from "@engine/model/impl/scene";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/renderer/color";
-import {LinearGradient} from "@engine/renderer/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Circle} from "@engine/model/impl/ui/drawable/circle";
-import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
-import {Line} from "@engine/model/impl/ui/drawable/line";
 import {PolyLine} from "@engine/model/impl/ui/drawable/polyLine";
 
 

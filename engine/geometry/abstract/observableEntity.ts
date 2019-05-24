@@ -40,17 +40,17 @@ export abstract class ObservableEntity implements Releasealable{
         }
     }
 
-    addListener(f:()=>void){
+    addOnChangeListener(f:()=>void){
         this._onChanged.push(f);
     }
 
-    removeListener(f:()=>void){
+    removeOnChangeListener(f:()=>void){
         removeFromArray(this._onChanged,(it)=>it===f);
     }
 
 
     observe(onChangedFn:()=>void){
-        this.addListener(onChangedFn);
+        this.addOnChangeListener(onChangedFn);
     }
 
 }

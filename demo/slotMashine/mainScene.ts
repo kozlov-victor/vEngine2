@@ -7,6 +7,7 @@ import {Mashine} from "./entities/mashine";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/textureFilters/barrelDistortionFilter";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 
 interface WheelCommand {
     a:number,
@@ -46,9 +47,11 @@ export class MainScene extends Scene {
 
         this.appendChild(this.overlay);
 
-        const filter:BarrelDistortionFilter = new BarrelDistortionFilter(this.game);
-        filter.setDistortion(0.025);
-        this.filters = [filter];
+        if (this.game.getRenderer() instanceof WebGlRenderer) {
+            const filter:BarrelDistortionFilter = new BarrelDistortionFilter(this.game);
+            filter.setDistortion(0.025);
+            this.filters = [filter];
+        }
 
         window.addEventListener('message',(e:MessageEvent)=>{
             const commandObj:WheelCommand = e.data as WheelCommand;

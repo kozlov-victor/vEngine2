@@ -32,7 +32,10 @@ export class MainScene extends Scene {
         obj.size.setWH(100,100);
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
-        this.setInterval(()=>{obj.angleY+=0.01},20);
+        this.setInterval(()=>{
+            obj.angle3d.x+=0.01;
+            obj.angle3d.y+=0.01;
+        },20);
 
 
         const obj2:GameObject3d = new GameObject3d(this.game);
@@ -45,7 +48,10 @@ export class MainScene extends Scene {
         obj2.size.setWH(100,100);
         this.appendChild(obj2);
         obj2.addBehaviour(new DraggableBehaviour(this.game));
-        this.setInterval(()=>{obj2.angleY+=0.01},20);
+        this.setInterval(()=>{
+            obj2.angle3d.x+=0.01;
+            obj2.angle3d.y+=0.01;
+        },20);
 
 
 

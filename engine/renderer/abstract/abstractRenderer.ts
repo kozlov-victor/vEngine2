@@ -15,6 +15,7 @@ import {GameObject3d} from "@engine/model/impl/gameObject3d";
 import {Font} from "@engine/model/impl/font";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Line} from "@engine/model/impl/ui/drawable/line";
+import {RenderableModel} from "@engine/model/renderableModel";
 
 export class AbstractRenderer {
 
@@ -40,7 +41,7 @@ export class AbstractRenderer {
     onResize():void {}
 
     requestFullScreen():void {
-        let element:HTMLElement = this.container;
+        const element:HTMLElement = this.container;
         if((element as any).requestFullScreen) {
             (element as any).requestFullScreen();
         } else if((element as any).mozRequestFullScreen) {
@@ -113,6 +114,8 @@ export class AbstractRenderer {
     rotateY(a:number):void {}
 
     rotateZ(a:number):void {}
+
+    killObject(r:RenderableModel):void{}
 
     log(args:any):void {
         if (!DEBUG) return;

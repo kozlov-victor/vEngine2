@@ -17,6 +17,7 @@ import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {Incrementer} from "@engine/resources/incrementer";
 
 export enum BLEND_MODE {
     NORMAL,
@@ -31,6 +32,7 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
     id:string;
     readonly size:Size = new Size();
     readonly pos:Point2d = new Point2d(0,0,()=>this._dirty=true);
+    readonly posZ:number = 0;
     readonly scale:Point2d = new Point2d(1,1);
     readonly anchor:Point2d = new Point2d(0,0);
     readonly rotationPoint:Point2d = new Point2d(0,0);
@@ -56,6 +58,7 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
         if (DEBUG && !game) throw new DebugError(
             `can not create model '${this.type}': game instance not passed to model constructor`
         );
+        this.id = `object_${Incrementer.getValue()}`;
     }
 
     protected setClonedProperties(cloned:RenderableModel):void {
@@ -97,10 +100,10 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
         this._layer = value;
     }
 
-    findChildrenById(id:string):RenderableModel|null{
+    findChildById(id:string):RenderableModel|null{
         if (id===this.id) return this;
         for (let c of this.children) {
-            let possibleObject:RenderableModel = c.findChildrenById(id);
+            let possibleObject:RenderableModel = c.findChildById(id);
             if (possibleObject) return possibleObject;
         }
         return null;
@@ -146,6 +149,21 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
         c.setLayer(this.getLayer());
         c.revalidate();
         this.children.push(c);
+    }
+
+    removeChildAt(i:number){
+        const c:RenderableModel = this.children[i];
+        if (DEBUG && !c) throw new DebugError(`can not remove children with index ${i}`);
+        this.children.slice(i,1);
+        c.kill();
+    }
+
+    removeChildren(){
+        for (let i:number = this.children.length-1; i >= 0; i--) {
+            const c:RenderableModel = this.children[i];
+            this.removeChildAt(i);
+            c.kill();
+        }
     }
 
     addBehaviour(b:BaseAbstractBehaviour):void {
@@ -216,6 +234,8 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
 
     kill():void {
 
+        for (const c of this.children) c.kill();
+
         if (DEBUG && !this._getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
 
         const parentArray:RenderableModel[] = this._getParent().children;
@@ -231,6 +251,7 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
         for (let b of this._behaviours) {
             b.destroy();
         }
+        this.game.getRenderer().killObject(this);
     }
 
     render():void {
@@ -240,7 +261,7 @@ export abstract class RenderableModel extends Resource<Texture> implements Reval
         renderer.save();
         this.beforeRender();
 
-        renderer.translate(-this.anchor.x,-this.anchor.y);
+        renderer.translate(-this.anchor.x,-this.anchor.y,this.posZ);
 
         if (this.isNeedAdditionalTransform()) {
             renderer.translate(this.rotationPoint.x,this.rotationPoint.y);

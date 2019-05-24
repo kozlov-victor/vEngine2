@@ -26,12 +26,12 @@ export class Rect extends ObservableEntity implements Cloneable<Rect>{
 
     constructor(x:number = 0,y:number = 0,width:number = 0,height:number = 0,onChangedFn?:()=>void){
         super();
-        if (onChangedFn) this.addListener(onChangedFn);
+        if (onChangedFn) this.addOnChangeListener(onChangedFn);
         this.setXYWH(x,y,width,height);
     }
 
     observe(onChangedFn:()=>void):void{
-        this.addListener(onChangedFn);
+        this.addOnChangeListener(onChangedFn);
     }
 
     revalidate():void{

@@ -42,19 +42,19 @@ export class FastMap<T,U> {
 }
 
 
-// var fm:FastMap<string,number> = new FastMap<string, number>();
-// var obj:IKeyVal<number> = {};
-// var max = 9999;
+// let fm:FastMap<string,number> = new FastMap<string, number>();
+// let obj:IKeyVal<number> = {};
+// let max = 9999;
 //
 //
-// var mem = (performance as  any).memory.usedJSHeapSize;
+// let mem = (performance as  any).memory.usedJSHeapSize;
 //
 // console.time('obj');
 // for (let i:number=0;i<max;i++) {
 //     obj[i+'']=i;
 // }
 // for (let i:number=0;i<max;i++) {
-//     var keys = Object.keys(obj);
+//     let keys = Object.keys(obj);
 //     //console.log(keys);
 // }
 // console.timeEnd('obj');
@@ -64,7 +64,7 @@ export class FastMap<T,U> {
 //
 //
 //
-// var mem = (performance as  any).memory.usedJSHeapSize;
+// let mem = (performance as  any).memory.usedJSHeapSize;
 // console.time('fm ');
 // for (let i:number=0;i<max;i++) {
 //     fm.put(i+'',i);

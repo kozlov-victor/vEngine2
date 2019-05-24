@@ -361,8 +361,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.matrixStack.rotateZ(angleInRadians);
     }
 
-    translate(x:number,y:number):void{
-        this.matrixStack.translate(x,y);
+    translate(x:number,y:number,z:number=0):void{
+        this.matrixStack.translate(x,y,z);
     }
 
     restore():void{

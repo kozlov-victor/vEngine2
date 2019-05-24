@@ -36,7 +36,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         let srcRect:Rect = img.getSrcRect();
         let dstRect:Rect = img.getSrcRect();
         this.ctx.drawImage(
-            (this.renderableCache[img.getResourceLink().getUrl()] as any) as CanvasImageSource, // todo
+            (img.getResourceLink().getTarget() as any) as CanvasImageSource, // todo
             srcRect.point.x,
             srcRect.point.y,
             srcRect.size.width,
@@ -143,6 +143,12 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
+
+    beforeFrameDraw(color: Color): void {
+        this.ctx.fillRect(0,0,this.game.width,this.game.height);
+    }
+
+
     loadTextureInfo(url:string,link:ResourceLink<Texture>,onLoad:()=>void){
         let img:HTMLImageElement = new (window as any).Image();
         img.src = url;
@@ -154,13 +160,15 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             let ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
             ctx.drawImage(img as HTMLImageElement,0,0);
             let size = new Size(img.width,img.height);
-            // @ts-ignore
+
             // todo
-            // this.renderableCache[link.getUrl()] = {
-            //     texture: c as any, // todo
-            //     name: ''
-            // };
+            (this.renderableCache as any)[link.getUrl()] = {
+                texture: c , // todo
+                name: ''
+            };
             (c as any).getSize = ()=>size;
+            (c as any).size = size;
+            (link as any).setTarget(c);
             onLoad();
         }
     }

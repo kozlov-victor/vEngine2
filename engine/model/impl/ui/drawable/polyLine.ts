@@ -300,7 +300,7 @@ export class PolyLine extends Shape {
                 this.bezierTo(p1,add(p1,p2),add(p1,p3),add(p1,p4));
                 break;
             }
-            case 'S': { // bad tested
+            case 'S': {
                 const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
                 if (!this.lastBezierPoint || ['c','C','S','s'].indexOf(tokenizer.lastCommand)==-1) {
                     this.lastBezierPoint = p1;
@@ -312,7 +312,7 @@ export class PolyLine extends Shape {
                 this.bezierTo(p1,p2,p3,p4);
                 break;
             }
-            case 's': { // todo only stub, bad tested
+            case 's': {
                 const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
                 if (!this.lastBezierPoint || ['c','C','S','s'].indexOf(tokenizer.lastCommand)==-1) this.lastBezierPoint = p1;
                 const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
@@ -327,13 +327,43 @@ export class PolyLine extends Shape {
                 const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p3:v2 = [p2[0],p2[1]];
                 const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                this.lastBezierPoint = p3;
                 this.bezierTo(p1,p2,p3,p4);
+                break;
+            }
+            case 'q': {
+                const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                const p3:v2 = [p2[0],p2[1]];
+                const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                this.lastBezierPoint = p3;
+                this.bezierTo(p1,add(p1,p2),add(p1,p3),add(p1,p4));
+                break;
+            }
+            case 'T': {
+                const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)==-1) this.lastBezierPoint = p1;
+                const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
+                const p3:v2 = [p2[0],p2[1]];
+                const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                this.lastBezierPoint = p3;
+                this.bezierTo(p1,p2,p3,p4);
+                break;
+            }
+            case 't': {
+                const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)==-1) this.lastBezierPoint = p1;
+                const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
+                const p3:v2 = add(p1,[p2[0],p2[1]]);
+                const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                this.lastBezierPoint = p3;
+                this.bezierTo(p1,add(p1,p2),p3,add(p1,p4));
                 break;
             }
             // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
             // https://developer.mozilla.org/ru/docs/Web/SVG/Attribute/d
             // https://www.w3.org/TR/SVG/paths.html
-            // T, A, q,  -unimplemented
+            // A  -unimplemented
             case 'Z':
             case 'z':
                 this.close();

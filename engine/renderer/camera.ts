@@ -36,6 +36,7 @@ export class Camera {
     private sceneHeight:number = 0;
 
     public readonly pos:Point2d = new Point2d(0,0);
+    public posZ:number = 0;
     public readonly scale:Point2d = new Point2d(1,1);
     public directionCorrection:DIRECTION_CORRECTION;
 
@@ -175,12 +176,12 @@ export class Camera {
 
     render():void{ //TRS - (transform rotate scale) reverted
         const renderer:AbstractRenderer = this.game.getRenderer();
-        renderer.translate(this.game.width/2,this.game.height/2);
+        renderer.translate(this.game.width/2,this.game.height/2,this.posZ);
         renderer.scale(this.scale.x,this.scale.y);
         // todo rotation does not work correctly yet
         //this.game.renderer.rotateZ(this.angle);
         renderer.translate(-this.game.width/2,-this.game.height/2);
-        renderer.translate(-this.pos.x,-this.pos.y);
+        renderer.translate(-this.pos.x,-this.pos.y,0);
         if (this.cameraShakeTween!==null) renderer.translate(
             this.cameraShakeTween.getTarget().point.x,
             this.cameraShakeTween.getTarget().point.y

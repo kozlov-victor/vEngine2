@@ -8,8 +8,8 @@ export class Point2d extends ObservableEntity implements Cloneable<Point2d> {
     private _x:number = 0;
     private _y:number = 0;
 
-    private static pool = new ObjectPool<Point2d>(Point2d,4);
     private _arr:[number,number];
+    private static pool = new ObjectPool<Point2d>(Point2d,4);
 
     static fromPool():Point2d{
         return Point2d.pool.getFreeObject();
@@ -19,7 +19,7 @@ export class Point2d extends ObservableEntity implements Cloneable<Point2d> {
         super();
         this._x = x;
         this._y = y;
-        if (onChangedFn) this.addListener(onChangedFn);
+        if (onChangedFn) this.addOnChangeListener(onChangedFn);
     }
 
     get x(): number {
@@ -112,7 +112,6 @@ export class Point2d extends ObservableEntity implements Cloneable<Point2d> {
     equal(x:number,y:number = x):boolean {
         return this._x===x && this._y===y;
     }
-
 
     equalPoint(point:Point2d):boolean {
         return this.equal(point.x,point.y);
