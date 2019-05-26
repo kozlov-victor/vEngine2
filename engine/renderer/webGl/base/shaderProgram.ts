@@ -62,10 +62,10 @@ export class ShaderProgram {
 
     bindBuffer(buffer:VertexBuffer, attrName:string) {
         if (DEBUG) {
-            if (!attrName) throw new DebugError(`can not found attribute location: attrLocationName not defined`);
+            if (!attrName) throw new DebugError(`can not find attribute location: attrLocationName not defined`);
             if (this.attributes[attrName]===undefined) {
                 console.log(this);
-                throw new DebugError(`can not found attribute location for  ${attrName}`);
+                throw new DebugError(`can not find attribute location for ${attrName}`);
             }
         }
 

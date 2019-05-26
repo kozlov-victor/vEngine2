@@ -82,10 +82,6 @@ export class AbstractRenderer {
 
     drawNinePatch(img:NinePatchImage):void {}
 
-    drawTiledImage(texturePath:string,
-                   srcRect:Rect,
-                   dstRect:Rect,
-                   offset:Point2d):void {}
 
     drawRectangle(rectangle:Rectangle):void {}
 

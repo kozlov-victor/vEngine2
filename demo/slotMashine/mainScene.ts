@@ -8,6 +8,7 @@ import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/textureFilt
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {MathEx} from "@engine/misc/mathEx";
 
 interface WheelCommand {
     a:number,
@@ -60,6 +61,9 @@ export class MainScene extends Scene {
         });
 
         if (window.top===window) this.on(MOUSE_EVENTS.click,()=>{
+            const a:number = ~~MathEx.random(1,5);
+            const b:number = ~~MathEx.random(1,5);
+            const c:number = ~~MathEx.random(1,5);
             this.mashine.spin(1,1,1);
         });
 

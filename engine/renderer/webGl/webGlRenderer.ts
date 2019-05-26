@@ -30,7 +30,7 @@ import {Line} from "@engine/model/impl/ui/drawable/line";
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
-    const contextAttrs:WebGLContextAttributes = {alpha:false};
+    const contextAttrs:WebGLContextAttributes = {alpha:false,premultipliedAlpha:false};
     const possibles:string[] = ['webgl2','webgl','experimental-webgl','webkit-3d','moz-webgl'];
     for (const p of possibles) {
         const ctx:WebGLRenderingContext = el.getContext(p,contextAttrs)  as WebGLRenderingContext;
@@ -128,7 +128,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.simpleRectDrawer = new SimpleRectDrawer(gl);
         this.simpleRectDrawer.prepareShaderGenerator();
         this.simpleRectDrawer.initProgram();
-        this.modelDrawer = new ModelDrawer(gl);
 
         this.preprocessFrameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);
         this.finalFrameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);
@@ -236,6 +235,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     drawModel(g3d:GameObject3d):void {
+        if (!this.modelDrawer) this.modelDrawer = new ModelDrawer(this.gl);
         this.modelDrawer.bindModel(g3d);
         this.modelDrawer.bind();
 

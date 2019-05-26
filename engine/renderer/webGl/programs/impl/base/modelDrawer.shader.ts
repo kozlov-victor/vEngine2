@@ -21,8 +21,7 @@ void main() {
 
 //language=GLSL
 export const fragmentSource:string = `
-
-precision highp float;
+precision mediump float;
 
 varying vec2 v_texcoord;
 varying vec3 v_normal;

@@ -183,8 +183,10 @@ export class Game {
         for (let c of this._controls) {
             c.destroy();
         }
-        this._renderer.cancelFullScreen();
-        this._renderer.destroy();
+        if (this._renderer) {
+            this._renderer.cancelFullScreen();
+            this._renderer.destroy();
+        }
     }
 
     revalidate():void {
