@@ -4,17 +4,22 @@ import {Game} from "@engine/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {RenderableModel} from "@engine/model/renderableModel";
-import {DebugError} from "@engine/debug/debugError";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {mat4} from "@engine/geometry/mat4";
 import MAT16 = mat4.MAT16;
+import {Color} from "@engine/renderer/color";
 
 class Nodes  {
 
     private children: {[name:string]:VNode} = {};
+    public properties:{[key:string]:any} = {};
+
+    constructor(private container:HTMLElement){}
+
 
     register(id:string):void{
         this.children[id] = new VNode();
+        this.container.appendChild(this.children[id].domEl);
     }
 
     has(id:string):boolean{
@@ -23,14 +28,21 @@ class Nodes  {
 
     kill(id:string){
         const node:VNode = this.children[id];
+        if (!node) return;
         delete this.children[id];
-        document.removeChild(node.domEl);
+        this.container.removeChild(node.domEl);
     }
 
-    getById(id:string):VNode{
-        if (!this.has(id)) this.register(id);
-        return this.children[id];
+    getById(r:RenderableModel,register:boolean = false):VNode{
+        if (!this.has(r.id) && register) this.register(r.id);
+        if (r.parent) {
+            const p:RenderableModel = r.parent;
+            const parentEl:VNode =  this.getById(p);
+            parentEl.domEl.appendChild(this.children[r.id].domEl);
+        }
+        return this.children[r.id];
     }
+
 
 }
 
@@ -41,6 +53,7 @@ class VNode {
 
     constructor(){
         this.domEl = document.createElement('div');
+        this.domEl.style.cssText = 'position:absolute;';
     }
 
 }
@@ -49,30 +62,60 @@ class VNode {
 export class DomRenderer extends AbstractRenderer {
 
     private matrixStack:MatrixStack;
-    private nodes:Nodes = new Nodes();
+    private nodes:Nodes;
 
 
     constructor(protected game:Game){
         super(game);
         this.matrixStack = new MatrixStack();
         const container:HTMLDivElement = document.createElement('div');
+        container.style.cssText = 'position:relative';
         document.body.appendChild(container);
+        this.container = container;
+        this.nodes = new Nodes(container);
+        this.registerResize();
+    }
+
+    beforeFrameDraw(color:Color):void{
+        if (this.nodes.properties['bg_color']!==color.asCSS()) {
+            this.container.style.backgroundColor = color.asCSS();
+        }
     }
 
     drawImage(img: Image): void {
-        const node:VNode = this.nodes.getById(img.id);
-        if (img.pos.x!==node.properties['pos_x'] || img.pos.y!==node.properties['pos_y']) {
+        const node:VNode = this.nodes.getById(img,true);
+        if (img.pos.x!==node.properties['pos_x']) {
             node.properties['pos_x'] = img.pos.x;
-            node.properties['pos_y'] = img.pos.y;
-            const currMatrix:MAT16 = this.matrixStack.getCurrentMatrix().mat16;
-            const m16s:string = `
-                ${currMatrix[0]} ${currMatrix[1]} ${currMatrix[2]}
-                ${currMatrix[4]} ${currMatrix[5]} ${currMatrix[6]}
-                ${currMatrix[8]} ${currMatrix[9]} ${currMatrix[10]}
-                ${currMatrix[12]} ${currMatrix[13]} ${currMatrix[14]}
-            `;
+            node.domEl.style.left = `${img.pos.x}px`;
         }
+        if (img.pos.y!==node.properties['pos_y']) {
+            node.properties['pos_y'] = img.pos.y;
+            node.domEl.style.top = `${img.pos.y}px`;
+        }
+        if (img.size.width!==node.properties['width']) {
+            node.properties['width'] = img.size.width;
+            node.domEl.style.width = `${img.size.width}px`;
+        }
+        if (img.offset.x!==node.properties['offset_x']) {
+            node.properties['offset_x'] = img.offset.x;
+            node.domEl.style.backgroundPositionX = `${img.offset.x}px`;
+        }
+        if (img.offset.y!==node.properties['offset_y']) {
+            node.properties['offset_y'] = img.offset.y;
+            node.domEl.style.backgroundPositionY = `${img.offset.y}px`;
+        }
+        if (img.size.height!==node.properties['height']) {
+            node.properties['height'] = img.size.height;
+            node.domEl.style.height = `${img.size.height}px`;
+        }
+        if (img.getResourceLink().url!==node.properties['url']) {
+            node.properties['url'] = img.getResourceLink().url;
+            node.domEl.style.backgroundImage = `url(${img.getResourceLink().url})`;
+        }
+
     }
+
+
 
     killObject(r: RenderableModel): void {
         this.nodes.kill(r.id);
@@ -80,11 +123,16 @@ export class DomRenderer extends AbstractRenderer {
 
     loadTextureInfo(url:string,link:ResourceLink<Texture>,onLoaded:()=>void):void {
         const img:HTMLImageElement = new (window as any).Image() as HTMLImageElement;
-        img.onload = ()=>onLoaded();
-    }
-
-    setAlpha(a:number):void{
-        if (DEBUG) throw new DebugError('not implemented');
+        img.src = url;
+        img.onload = ()=>{ // todo
+            (link as any).setTarget({
+                size: {
+                    width: img.width,
+                    height: img.height
+                }
+            });
+            onLoaded()
+        };
     }
 
     save():void {

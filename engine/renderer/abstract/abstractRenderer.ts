@@ -1,7 +1,7 @@
 import {AbstractFilter} from "../webGl/filters/abstract/abstractFilter";
 import {TextField} from "@engine/model/impl/ui/components/textField";
 import {Device} from "../../misc/device";
-import {Game} from "../../game";
+import {Game, SCALE_STRATEGY} from "../../game";
 import {Rect} from "../../geometry/rect";
 import {Point2d} from "../../geometry/point2d";
 import {Color} from "../color";
@@ -35,10 +35,38 @@ export class AbstractRenderer {
         } else {
             this.fullScreenSize.setWH(this.game.width,this.game.height);
         }
-
     }
 
-    onResize():void {}
+    protected onResize():void {
+        const container:HTMLElement = this.container;
+        if (this.game.scaleStrategy===SCALE_STRATEGY.NO_SCALE) return;
+        else if (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH) {
+            container.style.width = `${window.innerWidth}px`;
+            container.style.height = `${window.innerHeight}px`;
+            return;
+        }
+        const canvasRatio:number = this.game.height / this.game.width;
+        const windowRatio:number = window.innerHeight / window.innerWidth;
+        let width:number;
+        let height:number;
+
+        if (windowRatio < canvasRatio) {
+            height = window.innerHeight;
+            width = height / canvasRatio;
+        } else {
+            width = window.innerWidth;
+            height = width * canvasRatio;
+        }
+        this.game.scale.setXY(width / this.game.width, height / this.game.height);
+        this.game.pos.setXY(
+            (window.innerWidth - width) / 2,
+            (window.innerHeight - height) / 2
+        );
+
+        this.container.style.width = width + 'px';
+        this.container.style.height = height + 'px';
+        this.container.style.marginTop = `${this.game.pos.y}px`;
+    }
 
     requestFullScreen():void {
         const element:HTMLElement = this.container;
