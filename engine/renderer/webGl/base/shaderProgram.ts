@@ -62,15 +62,15 @@ export class ShaderProgram {
 
     bindBuffer(buffer:VertexBuffer, attrName:string) {
         if (DEBUG) {
-            if (!attrName) throw new DebugError(`can not found attribute location: attrLocationName not defined`);
+            if (!attrName) throw new DebugError(`can not find attribute location: attrName not defined`);
             if (this.attributes[attrName]===undefined) {
                 console.log(this);
-                throw new DebugError(`can not found attribute location for  ${attrName}`);
+                throw new DebugError(`can not find attribute location for  ${attrName}`);
             }
         }
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer.getGlBuffer());
-        let attrLocation:number = this.attributes[attrName];
+        const attrLocation:GLuint = this.attributes[attrName];
         this.gl.enableVertexAttribArray(attrLocation);
         this.gl.vertexAttribPointer(
             attrLocation,
@@ -80,6 +80,15 @@ export class ShaderProgram {
             0,      // number of bytes to skip in between elements
             0       // offsets to the first element
         );
+    }
+
+    disableAttribute(attrName:string){
+        if (this.attributes[attrName]===undefined) {
+            console.log(this);
+            throw new DebugError(`unbind error: can not find attribute location for  ${attrName}`);
+        }
+        const attrLocation:GLuint = this.attributes[attrName];
+        this.gl.disableVertexAttribArray(attrLocation);
     }
 
     destroy(){

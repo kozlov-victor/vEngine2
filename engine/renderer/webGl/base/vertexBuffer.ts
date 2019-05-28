@@ -12,6 +12,7 @@ export class VertexBuffer {
     private dataLength:number = 0;
     private attrName:string;
 
+
     constructor(gl:WebGLRenderingContext){
         if (DEBUG && !gl) throw new DebugError("can not create VertexBuffer, gl context not passed to constructor, expected: VertexBuffer(gl)");
         this.gl = gl;
@@ -21,9 +22,9 @@ export class VertexBuffer {
 
     setData(bufferData:number[], itemType:number, itemSize:number):void{
         if (DEBUG) {
-            if (!bufferData) throw new DebugError('can not set data to buffer: bufferData not specified');
-            if (!itemType) throw new DebugError('can not set data to buffer: itemType not specified');
-            if (!itemSize) throw new DebugError('can not set data to buffer: itemSize not specified');
+            if (!bufferData) throw new DebugError('can not set data to vertex buffer: bufferData not specified');
+            if (!itemType) throw new DebugError('can not set data to vertex buffer: itemType not specified');
+            if (!itemSize) throw new DebugError('can not set data to vertex buffer: itemSize not specified');
         }
         const gl:WebGLRenderingContext = this.gl;
 

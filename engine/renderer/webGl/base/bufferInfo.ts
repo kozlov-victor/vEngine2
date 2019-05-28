@@ -21,7 +21,7 @@ export interface BufferInfoDescription {
     posIndexInfo?:IndexArrayInfo,
     texVertexInfo?:VertexArrayInfo,
     normalInfo?:VertexArrayInfo,
-    drawMethod:number
+    drawMethod:number,
 }
 
 export class BufferInfo {

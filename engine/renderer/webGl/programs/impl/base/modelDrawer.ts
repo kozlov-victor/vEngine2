@@ -13,6 +13,17 @@ export class ModelDrawer extends AbstractDrawer {
 
     private g3d:GameObject3d;
 
+    private readonly a_position:string = 'a_position';
+    private readonly a_normal:string = 'a_normal';
+    private readonly a_texcoord:string = 'a_texcoord';
+    private readonly u_modelMatrix:string = 'u_modelMatrix';
+    private readonly u_projectionMatrix:string = 'u_projectionMatrix';
+    private readonly u_color:string = 'u_color';
+    private readonly u_alpha:string = 'u_alpha';
+    private readonly u_textureUsed:string = 'u_textureUsed';
+
+
+
     constructor(gl:WebGLRenderingContext){
         super(gl);
         this.program = new ShaderProgram(
@@ -26,21 +37,23 @@ export class ModelDrawer extends AbstractDrawer {
         const bufferInfo:BufferInfoDescription = {
             posVertexInfo:{
                 array:this.g3d.model.vertexArr, type:this.gl.FLOAT,
-                size:3, attrName:'a_position'
-            },
-            texVertexInfo: {
-                array: this.g3d.model.texCoordArr, type:this.gl.FLOAT,
-                size:2, attrName:'a_texcoord'
+                size:3, attrName:this.a_position
             },
             normalInfo: {
                 array: this.g3d.model.normalArr, type:this.gl.FLOAT,
-                size:3, attrName:'a_normal'
+                size:3, attrName:this.a_normal
             },
             drawMethod
         };
         if (this.g3d.model.indexArr) {
             bufferInfo.posIndexInfo = {
                 array: this.g3d.model.indexArr
+            }
+        }
+        if (this.g3d.model.texCoordArr) {
+            bufferInfo.texVertexInfo ={
+                array: this.g3d.model.texCoordArr, type:this.gl.FLOAT,
+                size:2, attrName:this.a_texcoord
             }
         }
         this.g3d.bufferInfo = new BufferInfo(this.gl,bufferInfo);
@@ -53,28 +66,29 @@ export class ModelDrawer extends AbstractDrawer {
     }
 
     setModelMatrix(m:MAT16):void{
-        this.setUniform('u_modelMatrix',m);
+        this.setUniform(this.u_modelMatrix,m);
     }
 
     setProjectionMatrix(m:MAT16):void{
-        this.setUniform('u_projectionMatrix',m);
+        this.setUniform(this.u_projectionMatrix,m);
     }
 
     setAlfa(a:number):void{
-        this.setUniform('u_alpha',1);
+        this.setUniform(this.u_alpha,1);
     }
 
     setTextureUsed(used:boolean):void{
-        this.setUniform('u_textureUsed',used);
+        this.setUniform(this.u_textureUsed,used);
     }
 
     setColor(c:Color):void{
-        this.setUniform('u_color',c.asGL());
+        this.setUniform(this.u_color,c.asGL());
     }
 
     bind():void{
         if (DEBUG && !this.g3d.model) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
         super.bind();
+        if (!this.g3d.model.texCoordArr) this.program.disableAttribute(this.a_texcoord);
     }
 
     unbind():void{

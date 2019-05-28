@@ -8,6 +8,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {mat4} from "@engine/geometry/mat4";
 import MAT16 = mat4.MAT16;
+import {Line} from "@engine/model/impl/ui/drawable/line";
 
 class Nodes  {
 
@@ -72,6 +73,11 @@ export class DomRenderer extends AbstractRenderer {
                 ${currMatrix[12]} ${currMatrix[13]} ${currMatrix[14]}
             `;
         }
+    }
+
+
+    drawLine(line: Line): void {
+        // linear-gradient(to top right, #fff calc(50% - 1px), #aaa, #fff calc(50% + 1px) );
     }
 
     killObject(r: RenderableModel): void {
