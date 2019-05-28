@@ -62,6 +62,10 @@ export class LinearGradient implements Cloneable<LinearGradient>{
         return this._arr;
     }
 
+    asCSS():string{
+        return ''; // todo
+    }
+
     clone():LinearGradient {
         const cloned:LinearGradient = new LinearGradient();
         cloned.fromJSON(this.toJSON());

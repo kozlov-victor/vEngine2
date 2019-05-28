@@ -27,10 +27,11 @@ import {Blender} from "@engine/renderer/webGl/blender/blender";
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
 import {Line} from "@engine/model/impl/ui/drawable/line";
+import {ITexture} from "@engine/renderer/texture";
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
-    const contextAttrs:WebGLContextAttributes = {alpha:false};
+    const contextAttrs:WebGLContextAttributes = {alpha:false,premultipliedAlpha:false};
     const possibles:string[] = ['webgl2','webgl','experimental-webgl','webkit-3d','moz-webgl'];
     for (const p of possibles) {
         const ctx:WebGLRenderingContext = el.getContext(p,contextAttrs)  as WebGLRenderingContext;
@@ -128,7 +129,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.simpleRectDrawer = new SimpleRectDrawer(gl);
         this.simpleRectDrawer.prepareShaderGenerator();
         this.simpleRectDrawer.initProgram();
-        this.modelDrawer = new ModelDrawer(gl);
 
         this.preprocessFrameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);
         this.finalFrameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);
@@ -206,7 +206,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this.beforeItemDraw(img.filters.length,img.blendMode);
 
-        const texture:Texture = img.getResourceLink().getTarget();
+        const texture:Texture = (img.getResourceLink() as ResourceLink<Texture>).getTarget();
         const maxSize:number = Math.max(img.size.width,img.size.height);
         const sd:ShapeDrawer = this.shapeDrawer;
         this.prepareShapeUniformInfo(img);
@@ -236,6 +236,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     drawModel(g3d:GameObject3d):void {
+        if (!this.modelDrawer) this.modelDrawer = new ModelDrawer(this.gl);
         this.modelDrawer.bindModel(g3d);
         this.modelDrawer.bind();
 
@@ -433,14 +434,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return this.gl.NO_ERROR;
     }
 
-    putToCache(l:ResourceLink<Texture>,t:Texture) {
+    putToCache(l:ResourceLink<ITexture>,t:Texture) {
         const url:string = l.getUrl();
         if (DEBUG && !url) throw new DebugError(`no url is associated with resource link`);
         this.renderableCache[url] = t;
     }
 
-    loadTextureInfo(url:string,link:ResourceLink<Texture>,onLoad:()=>void):void{
-        const possibleTargetInCache:Texture = this.renderableCache[link.getUrl()];
+    loadTextureInfo(url:string,link:ResourceLink<ITexture>,onLoad:()=>void):void{
+        const possibleTargetInCache:ITexture = this.renderableCache[link.getUrl()];
         if (possibleTargetInCache) {
             link.setTarget(possibleTargetInCache);
             onLoad();
@@ -477,7 +478,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.simpleRectDrawer.destroy();
         //this.modelDrawer.destroy();
         Object.keys(this.renderableCache).forEach((key:string)=>{
-            let t:Texture = this.renderableCache[key];
+            let t:Texture = this.renderableCache[key] as Texture;
             t.destroy();
         });
     }

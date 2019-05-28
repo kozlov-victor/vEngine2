@@ -50,6 +50,7 @@ export class Mashine {
             result
         },'*');
 
+
         const isWIN:boolean = defineWinType(result)!==WIN_TYPE.NO_PRISE;
         if (isWIN) {
             this.locked = true;

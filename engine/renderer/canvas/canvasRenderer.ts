@@ -1,14 +1,14 @@
 import {DebugError} from "../../debug/debugError";
 import {Game} from "../../game";
 import {Rect} from "../../geometry/rect";
-import {Point2d} from "../../geometry/point2d";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../color";
 import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Image} from "@engine/model/impl/ui/drawable/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Texture} from "@engine/renderer/webGl/base/texture";
+import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
+import {ITexture} from "@engine/renderer/texture";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -16,6 +16,10 @@ const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
         el.getContext("2d") as CanvasRenderingContext2D
     );
 };
+
+interface ICanvasTexture extends ITexture{
+    source: CanvasImageSource
+}
 
 export class CanvasRenderer extends AbstractCanvasRenderer {
 
@@ -33,27 +37,39 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             if (!img.getResourceLink()) throw new DebugError(`image resource link is not set`);
             if (!this.renderableCache[img.getResourceLink().getUrl()]) throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getUrl()}`);
         }
-        let srcRect:Rect = img.getSrcRect();
-        let dstRect:Rect = img.getSrcRect();
-        this.ctx.drawImage(
-            (img.getResourceLink().getTarget() as any) as CanvasImageSource, // todo
-            srcRect.point.x,
-            srcRect.point.y,
-            srcRect.size.width,
-            srcRect.size.height,
-            dstRect.point.x,
-            dstRect.point.y,
-            dstRect.size.width,
-            dstRect.size.height
-        );
+
+        const srcRect:Rect = img.getSrcRect();
+        const dstRect:Rect = img.getSrcRect();
+
+        if (img.offset.x || img.offset.y) {
+            const pattern:CanvasPattern = this.ctx.createPattern((img.getResourceLink().getTarget() as any) as CanvasImageSource, 'repeat');
+            this.ctx.fillStyle = pattern;
+
+            this.ctx.save();
+            this.ctx.translate(-img.offset.x,-img.offset.y);
+
+            this.ctx.fillRect(
+                0,0,
+                dstRect.size.width + Math.abs(img.offset.x),
+                dstRect.size.height + Math.abs(img.offset.y)
+            );
+            this.ctx.restore();
+        } else {
+            this.ctx.drawImage(
+                (img.getResourceLink() as ResourceLink<ICanvasTexture>).getTarget().source,
+                srcRect.point.x,
+                srcRect.point.y,
+                srcRect.size.width,
+                srcRect.size.height,
+                0,0,
+                dstRect.size.width,
+                dstRect.size.height
+            );
+        }
+
+
     }
 
-    drawTiledImage(texturePath:string,
-                   srcRect:Rect,
-                   dstRect:Rect,
-                   offset:Point2d):void{
-
-    }
 
     drawRectangle(rectangle:Rectangle):void{
         this.ctx.fillStyle = (rectangle.fillColor as Color).asCSS();
@@ -62,25 +78,16 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         //this.ctx.strokeRect(0,0,rectangle.width,rectangle.height);
     }
 
-    // drawLine(point1:Point2d,point2:Point2d,color){ // todo
-    //     this.ctx.fillStyle = color;
-    //     this.ctx.beginPath();
-    //     this.ctx.moveTo(point1.x,point1.y);
-    //     this.ctx.lineTo(point2.x,point2.y);
-    //     this.ctx.stroke();
-    // }
+    drawEllipse(e:Ellipse){
+        const ctx:CanvasRenderingContext2D = this.ctx;
+        ctx.fillStyle = e.fillColor.asCSS();
+        ctx.strokeStyle = e.color.asCSS();
+        ctx.beginPath();
+        ctx.ellipse(0,0, e.radiusX, e.radiusY, 0, 0, 2 * Math.PI);
+        //ctx.arc(e.center.x, e.center.y, e.radiusX,  0, 2 * Math.PI);
+        ctx.fill();
+    }
 
-    // fillCircle(x:number,y:number,r:number,color:Color){
-    //     let cssCol:string = color.asCSS();
-    //     let ctx = this.ctx;
-    //     ctx.beginPath();
-    //     ctx.arc(x, y, r, 0, 2 * Math.PI, false);
-    //     ctx.fillStyle = cssCol;
-    //     ctx.strokeStyle = cssCol;
-    //     ctx.fill();
-    //     ctx.stroke();
-    //     ctx.closePath();
-    // }
 
     setAlpha(a:number):void{
         this.ctx.globalAlpha = a;
@@ -145,30 +152,29 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
 
     beforeFrameDraw(color: Color): void {
+        this.ctx.fillStyle = color.asCSS();
         this.ctx.fillRect(0,0,this.game.width,this.game.height);
     }
 
 
-    loadTextureInfo(url:string,link:ResourceLink<Texture>,onLoad:()=>void){
+    loadTextureInfo(url:string,link:ResourceLink<ITexture>,onLoad:()=>void){
         let img:HTMLImageElement = new (window as any).Image();
         img.src = url;
-        this.renderableCache[link.getUrl()] = this.renderableCache[link.getUrl()] || {} as any;
+        if (this.renderableCache[link.getUrl()]) {
+            onLoad();
+            link.setTarget(this.renderableCache[link.getUrl()]);
+            return;
+        }
         img.onload = ()=>{
             const c:HTMLCanvasElement = document.createElement('canvas');
             c.setAttribute('width',img.width.toString());
             c.setAttribute('height',img.height.toString());
-            let ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
+            const ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
             ctx.drawImage(img as HTMLImageElement,0,0);
-            let size = new Size(img.width,img.height);
-
-            // todo
-            (this.renderableCache as any)[link.getUrl()] = {
-                texture: c , // todo
-                name: ''
-            };
-            (c as any).getSize = ()=>size;
-            (c as any).size = size;
-            (link as any).setTarget(c);
+            const size = new Size(img.width,img.height);
+            const texture:ICanvasTexture = {size,source:c};
+            this.renderableCache[link.getUrl()] = texture;
+            link.setTarget(texture);
             onLoad();
         }
     }

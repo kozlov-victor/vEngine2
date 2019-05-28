@@ -1,13 +1,14 @@
 import {DebugError} from "@engine/debug/debugError";
 import {Size} from "@engine/geometry/size";
 import {ShaderProgram} from "./shaderProgram";
+import {ITexture} from "@engine/renderer/texture";
 
 const isPowerOf2 = function(value:number):boolean {
     return (value & (value - 1)) === 0;
 };
 
 
-export class Texture {
+export class Texture implements ITexture {
 
     gl:WebGLRenderingContext;
     tex:WebGLTexture = null;

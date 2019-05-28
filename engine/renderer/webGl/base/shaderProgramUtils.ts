@@ -70,7 +70,7 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
 
 
 export const createProgram = (gl:WebGLRenderingContext, vertexShader:WebGLShader,fragmentShader:WebGLShader):WebGLProgram=> {
-    let program:WebGLProgram = gl.createProgram() as WebGLProgram;
+    const program:WebGLProgram = gl.createProgram() as WebGLProgram;
     if (DEBUG && !program) throw new DebugError(`can not allocate memory for gl.createProgram()`);
 
     gl.attachShader(program, vertexShader);
@@ -78,15 +78,15 @@ export const createProgram = (gl:WebGLRenderingContext, vertexShader:WebGLShader
     gl.linkProgram(program);
 
     // Check the link status
-    let linked:number = gl.getProgramParameter(program, gl.LINK_STATUS);
+    const linked:boolean = gl.getProgramParameter(program, gl.LINK_STATUS) as boolean;
     if (!linked) {
         // something went wrong with the link
         gl.deleteProgram(program);
-        let lastError:string = gl.getProgramInfoLog(program);
+        const lastError:string = gl.getProgramInfoLog(program);
         if (DEBUG) {
-            let status = gl.getProgramParameter( program, gl.VALIDATE_STATUS);
+            const status:any = gl.getProgramParameter( program, gl.VALIDATE_STATUS);
             console.error('VALIDATE_STATUS',status);
-            throw new DebugError(`Error in program linking ${lastError}`);
+            throw new DebugError(`Error in program linking: last error ${lastError}, status ${status}`);
         } else {
             throw new Error(lastError);
         }

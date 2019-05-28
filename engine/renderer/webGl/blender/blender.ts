@@ -18,7 +18,7 @@ export class Blender {
         switch (blendMode) {
             case BLEND_MODE.NORMAL:
                 gl.blendEquation(gl.FUNC_ADD);
-                gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+                gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
                 break;
             case BLEND_MODE.ADDITIVE:
                 gl.blendEquation(gl.FUNC_ADD);
