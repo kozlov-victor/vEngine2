@@ -5,10 +5,13 @@ import {Shape} from "../generic/shape";
 import {Color} from "@engine/renderer/color";
 import {Point2d} from "@engine/geometry/point2d";
 import {Cloneable} from "@engine/declarations";
-import {Texture} from "@engine/renderer/webGl/base/texture";
-import {STRETCH_MODE} from "@engine/renderer/webGl/programs/impl/base/shapeDrawer.shader";
 import {ResourceLink} from "@engine/resources/resourceLink";
+import {ITexture} from "@engine/renderer/texture";
 
+export enum STRETCH_MODE {
+    STRETCH,
+    REPEAT
+}
 
 export class Image extends Shape implements Cloneable<Image>{
 
@@ -31,7 +34,7 @@ export class Image extends Shape implements Cloneable<Image>{
             console.error(this);
             throw new DebugError(`can not render Image: can not find texture by resource link`);
         }
-        const tex:Texture = (this.getResourceLink() as ResourceLink<Texture>).getTarget();
+        const tex:ITexture = (this.getResourceLink() as ResourceLink<ITexture>).getTarget();
         if (this.size.isZero()) {
             this.size.width = tex.size.width;
             this.size.height = tex.size.height;

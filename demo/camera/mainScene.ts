@@ -5,9 +5,8 @@ import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Color} from "@engine/renderer/color";
 import {KEYBOARD_KEY, KeyboardControl} from "@engine/control/keyboardControl";
 import {GAME_PAD_KEY, GamePadControl} from "@engine/control/gamePadControl";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Image, STRETCH_MODE} from "@engine/model/impl/ui/drawable/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {STRETCH_MODE} from "@engine/renderer/webGl/programs/impl/base/shapeDrawer.shader";
 import {DIRECTION_CORRECTION} from "@engine/renderer/camera";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 

@@ -1,3 +1,4 @@
+import {STRETCH_MODE} from "@engine/model/impl/ui/drawable/image";
 
 export enum SHAPE_TYPE {
     ELLIPSE,RECT
@@ -5,11 +6,6 @@ export enum SHAPE_TYPE {
 
 export enum FILL_TYPE {
     COLOR,TEXTURE,LINEAR_GRADIENT
-}
-
-export enum STRETCH_MODE {
-    STRETCH,
-    REPEAT
 }
 
 //language=GLSL
