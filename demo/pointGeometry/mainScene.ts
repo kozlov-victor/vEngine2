@@ -10,7 +10,7 @@ export class MainScene extends Scene {
     private ship:GameObject;
 
 
-    onPreloading() {
+    public onPreloading() {
         this.ship = new GameObject(this.game);
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.resourceLoader.loadImage('ship.png'));
@@ -19,7 +19,7 @@ export class MainScene extends Scene {
 
 
 
-    onReady() {
+    public onReady() {
         this.ship.pos.setXY(this.game.width/2,this.game.height/2);
         this.appendChild(this.ship);
         this.ship.anchor.setXY(this.ship.size.width/2,this.ship.size.height/2);
@@ -29,9 +29,8 @@ export class MainScene extends Scene {
         this.on(MOUSE_EVENTS.mouseMove,(p:MousePoint)=>{
             point.setXY(p.screenX,p.screenY);
             console.log(point.toJSON());
-            const angle:number = center.getAngleTo(point);
-            this.ship.angle = angle;
-        })
+            this.ship.angle = center.getAngleTo(point);
+        });
 
     }
 

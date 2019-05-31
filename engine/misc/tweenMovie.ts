@@ -1,53 +1,53 @@
-import {Tween, TweenDescription} from "./tween";
+import {Tween, ITweenDescription} from "./tween";
 import {Game} from "../game";
 
-interface TweenInMovie {
-    startTime: number,
-    tween: Tween
+interface ITweenInMovie {
+    startTime: number;
+    tween: Tween;
 }
 
 
 export class TweenMovie {
-    private _tweensInMovie:TweenInMovie[] = [];
+    private _loop:boolean = false;
+    private _onComplete:(arg?:any)=>void = null;
+    private _tweensInMovie:ITweenInMovie[] = [];
     private _startedTime:number = null;
     private _completed:boolean = false;
-    _loop:boolean = false;
-    _onComplete:()=>void = null;
 
     constructor(private game:Game){}
 
-    tween(startTime:number,desc:TweenDescription):TweenMovie{
-        let tween:Tween = new Tween(desc);
+    public tween(startTime:number,desc:ITweenDescription):TweenMovie{
+        const tween:Tween = new Tween(desc);
         this._tweensInMovie.push({
-            startTime: startTime,
-            tween: tween
+            startTime,
+            tween
         });
         return this;
     }
 
-    loop(val:boolean):TweenMovie {
+    public loop(val:boolean):TweenMovie {
         this._loop = val;
         return this;
     }
 
-    finish(fn:()=>void):TweenMovie{
+    public finish(fn:()=>void):TweenMovie{
         this._onComplete = fn;
         return this;
     }
 
-    play():void{
+    public play():void{
         // if (isGlobal) {
         //     game.addTweenMovie(this);
         this.game.getCurrScene().addTweenMovie(this);
     }
 
-    update():void{
+    public update():void{
         if (this._completed) return;
         const currTime:number = this.game.getTime();
         if (!this._startedTime) this._startedTime = currTime;
         const deltaTime:number = currTime - this._startedTime;
         let allCompleted:boolean = true;
-        this._tweensInMovie.forEach((item:TweenInMovie)=>{
+        this._tweensInMovie.forEach((item:ITweenInMovie)=>{
             if (deltaTime>item.startTime) {
                 if (deltaTime<item.startTime+item.tween.getTweenTime()) {
                     item.tween.update();
@@ -63,19 +63,19 @@ export class TweenMovie {
                 this.reset();
             } else {
                 this._completed = true;
-                this._onComplete && this._onComplete();
+                if (this._onComplete) this._onComplete();
             }
         }
     }
 
-    isCompleted():boolean{
+    public isCompleted():boolean{
         return this._completed;
     }
 
-    reset():TweenMovie {
+    public reset():TweenMovie {
         this._startedTime = null;
         this._completed = false;
-        this._tweensInMovie.forEach((item:TweenInMovie)=>{
+        this._tweensInMovie.forEach((item:ITweenInMovie)=>{
             item.tween.reset();
         });
         return this;

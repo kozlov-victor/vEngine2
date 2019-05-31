@@ -13,39 +13,6 @@ import {Layer} from "@engine/model/impl/layer";
 
 export class MouseControl implements IControl {
 
-    readonly type:string = 'MouseControl';
-    private objectsCaptured:{[pointId:number]:RenderableModel} = {};
-    private container:HTMLElement;
-    private readonly game:Game;
-
-    constructor(game:Game){
-        this.game = game;
-    }
-
-
-    resolvePoint(e:MouseEvent|TouchEvent|Touch|PointerEvent):MousePoint{
-        const game:Game = this.game;
-        const clientX:number = (e as any).clientX as number;
-        const clientY:number = (e as any).clientY as number;
-
-        const screenX:number = (clientX - game.pos.x ) / game.scale.x;
-        const screenY:number = (clientY - game.pos.y ) / game.scale.y;
-
-        const screenPoint:Point2d = Point2d.fromPool();
-        screenPoint.setXY(screenX,screenY);
-        const p:Point2d = game.camera.screenToWorld(screenPoint);
-        screenPoint.release();
-
-        const mousePoint:MousePoint = MousePoint.fromPool();
-        mousePoint.set(p);
-        mousePoint.screenX = screenX;
-        mousePoint.screenY = screenY;
-        mousePoint.id = (e as Touch).identifier  || (e as PointerEvent).pointerId || 0;
-        mousePoint.release();
-
-        return mousePoint;
-    }
-
     private static triggerGameObjectEvent(
         e:MouseEvent|TouchEvent|Touch,
         eventName:MOUSE_EVENTS,point:MousePoint,
@@ -77,8 +44,41 @@ export class MouseControl implements IControl {
         return res;
     }
 
+    public readonly type:string = 'MouseControl';
+    private objectsCaptured:{[pointId:number]:RenderableModel} = {};
+    private container:HTMLElement;
+    private readonly game:Game;
 
-    triggerEvent(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,isMouseDown?:boolean):MousePoint{
+    constructor(game:Game){
+        this.game = game;
+    }
+
+
+    public resolvePoint(e:MouseEvent|TouchEvent|Touch|PointerEvent):MousePoint{
+        const game:Game = this.game;
+        const clientX:number = (e as any).clientX as number;
+        const clientY:number = (e as any).clientY as number;
+
+        const screenX:number = (clientX - game.pos.x ) / game.scale.x;
+        const screenY:number = (clientY - game.pos.y ) / game.scale.y;
+
+        const screenPoint:Point2d = Point2d.fromPool();
+        screenPoint.setXY(screenX,screenY);
+        const p:Point2d = game.camera.screenToWorld(screenPoint);
+        screenPoint.release();
+
+        const mousePoint:MousePoint = MousePoint.fromPool();
+        mousePoint.set(p);
+        mousePoint.screenX = screenX;
+        mousePoint.screenY = screenY;
+        mousePoint.id = (e as Touch).identifier  || (e as PointerEvent).pointerId || 0;
+        mousePoint.release();
+
+        return mousePoint;
+    }
+
+
+    public triggerEvent(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,isMouseDown?:boolean):MousePoint{
         if (isMouseDown===undefined) isMouseDown = false;
         const g:Game = this.game;
         const scene:Scene = g.getCurrScene();
@@ -94,8 +94,8 @@ export class MouseControl implements IControl {
             let j:number = layer.children.length;
             while(j--) {
                const go:RenderableModel = layer.children[j];
-                isCaptured = MouseControl.triggerGameObjectEvent(e,eventName,point,go);
-                if (isCaptured) {
+               isCaptured = MouseControl.triggerGameObjectEvent(e,eventName,point,go);
+               if (isCaptured) {
                     point.target = go;
                     break;
                 }
@@ -128,12 +128,12 @@ export class MouseControl implements IControl {
         return point;
     }
 
-    resolveClick(e:TouchEvent|MouseEvent):void {
+    public resolveClick(e:TouchEvent|MouseEvent):void {
         this.triggerEvent(e,MOUSE_EVENTS.click);
         this.triggerEvent(e,MOUSE_EVENTS.mouseDown);
     }
 
-    resolveMouseMove(e:Touch|MouseEvent,isMouseDown:boolean):void {
+    public resolveMouseMove(e:Touch|MouseEvent,isMouseDown:boolean):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,isMouseDown);
         if (!point) return;
         const lastMouseDownObject:RenderableModel = this.objectsCaptured[point.id];
@@ -148,7 +148,7 @@ export class MouseControl implements IControl {
         }
     }
 
-    resolveMouseUp(e:MouseEvent|Touch):void {
+    public resolveMouseUp(e:MouseEvent|Touch):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseUp);
         if (!point) return;
         const lastMouseDownObject = this.objectsCaptured[point.id];
@@ -157,19 +157,19 @@ export class MouseControl implements IControl {
         delete this.objectsCaptured[point.id];
     }
 
-    resolveDoubleClick(e:MouseEvent):void {
+    public resolveDoubleClick(e:MouseEvent):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.doubleClick);
         if (!point) return;
         delete this.objectsCaptured[point.id];
     }
 
-    resolveScroll(e:MouseEvent):void {
+    public resolveScroll(e:MouseEvent):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.scroll);
         if (!point) return;
         delete this.objectsCaptured[point.id];
     }
 
-    listenTo():void {
+    public listenTo():void {
         if (DEBUG && !this.game.getRenderer()) {
             throw new DebugError(`can not initialize mouse control: renderer is not set`);
         }
@@ -184,7 +184,7 @@ export class MouseControl implements IControl {
             }
         };
         container.onmousedown = (e:MouseEvent)=>{
-            (e.button === 0) && this.resolveClick(e);
+            if (e.button === 0) this.resolveClick(e);
         };
         // mouseUp
         container.ontouchend = container.ontouchcancel = (e:TouchEvent)=>{
@@ -204,7 +204,7 @@ export class MouseControl implements IControl {
             }
         };
         container.onmousemove = (e:MouseEvent)=>{
-            let isMouseDown:boolean = e.buttons === 1;
+            const isMouseDown:boolean = e.buttons === 1;
             this.resolveMouseMove(e,isMouseDown);
         };
         // other
@@ -213,19 +213,19 @@ export class MouseControl implements IControl {
         };
         (container as any).onmousewheel = (e:MouseEvent)=>{
             this.resolveScroll(e);
-        }
+        };
     }
 
-    update():void{}
+    public update():void{}
 
-    destroy():void {
+    public destroy():void {
             if (!this.container) return;
-        [
+            [
             'mouseMove','ontouchstart','onmousedown',
             'ontouchend','onmouseup','ontouchmove',
             'onmousemove','ondblclick'].forEach((evtName:string)=>{
             (this.container as any)[evtName] = null;
-        })
+        });
     }
 
 }

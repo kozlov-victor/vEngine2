@@ -1,26 +1,9 @@
 import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
-import {Cloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/declarations";
 
 
-export class Point2d extends ObservableEntity implements Cloneable<Point2d> {
-
-    private _x:number = 0;
-    private _y:number = 0;
-
-    private _arr:[number,number];
-    private static pool = new ObjectPool<Point2d>(Point2d,4);
-
-    static fromPool():Point2d{
-        return Point2d.pool.getFreeObject();
-    }
-
-    constructor(x:number = 0,y:number = 0,onChangedFn?:()=>void){
-        super();
-        this._x = x;
-        this._y = y;
-        if (onChangedFn) this.addOnChangeListener(onChangedFn);
-    }
+export class Point2d extends ObservableEntity implements ICloneable<Point2d> {
 
     get x(): number {
         return this._x;
@@ -35,101 +18,118 @@ export class Point2d extends ObservableEntity implements Cloneable<Point2d> {
     }
 
     set y(value: number) {
-        this.setY(value)
+        this.setY(value);
     }
 
-    setXY(x:number,y:number = x):this{
+    public static fromPool():Point2d{
+        return Point2d.pool.getFreeObject();
+    }
+    private static pool = new ObjectPool<Point2d>(Point2d,4);
+
+    private _x:number = 0;
+    private _y:number = 0;
+
+    private _arr:[number,number];
+
+    constructor(x:number = 0,y:number = 0,onChangedFn?:()=>void){
+        super();
+        this._x = x;
+        this._y = y;
+        if (onChangedFn) this.addOnChangeListener(onChangedFn);
+    }
+
+    public setXY(x:number,y:number = x):this{
         this._x = x;
         this._y = y;
         this.triggerObservable();
         return this;
     }
 
-    setX(x:number):this{
+    public setX(x:number):this{
         this._x = x;
         this.triggerObservable();
         return this;
     }
 
-    setY(y:number):this{
+    public setY(y:number):this{
         this._y = y;
         this.triggerObservable();
         return this;
     }
 
-    set(another:Point2d):this{
+    public set(another:Point2d):this{
         this.setXY(another._x,another._y);
         this.triggerObservable();
         return this;
     }
 
 
-    add(another:Point2d):this{
+    public add(another:Point2d):this{
         this.addXY(another._x,another._y);
         this.triggerObservable();
         return this;
     }
 
-    substract(another:Point2d):this{
+    public substract(another:Point2d):this{
         this.addXY(-another._x,-another._y);
         this.triggerObservable();
         return this;
     }
 
-    multiply(n:number):this {
+    public multiply(n:number):this {
         this._x*=n;
         this._y*=n;
         this.triggerObservable();
         return this;
     }
 
-    addXY(x:number,y:number):this{
+    public addXY(x:number,y:number):this{
         this._x+=x;
         this._y+=y;
         this.triggerObservable();
         return this;
     }
 
-    addX(x:number):this{
+    public addX(x:number):this{
         this._x+=x;
         this.triggerObservable();
         return this;
     }
 
-    addY(y:number):this{
+    public addY(y:number):this{
         this._y+=y;
         this.triggerObservable();
         return this;
     }
 
-    negative(){
+    public negative(){
         this._x = - this._x;
         this._y = -this._y;
         this.triggerObservable();
         return this;
     }
 
-    equal(x:number,y:number = x):boolean {
+    public equal(x:number,y:number = x):boolean {
         return this._x===x && this._y===y;
     }
 
-    equalPoint(point:Point2d):boolean {
+    public equalPoint(point:Point2d):boolean {
         return this.equal(point.x,point.y);
     }
 
-    clone():Point2d {
+    public clone():Point2d {
         return new Point2d(this._x,this._y);
     }
 
-    fromJSON(json:{x:number,y:number}):void{
+    public fromJSON(json:{x:number,y:number}):void{
         this.setXY(json.x,json.y);
     }
 
-    toJSON():{x:number,y:number}{
-        return {x:this._x,y:this._y}
+    public toJSON():{x:number,y:number}{
+        return {x:this._x,y:this._y};
     }
 
-    toArray():[number,number]{
+    public toArray():[number,number]{
         if (!this._arr) this._arr = new Array(2) as [number,number];
         this._arr[0] = this._x;
         this._arr[1] = this._y;

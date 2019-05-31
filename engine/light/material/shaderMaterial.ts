@@ -14,8 +14,7 @@ export class ShaderMaterial {
 
     constructor(){}
 
-    /** @internal */
-    setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>):void{
+    public setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>):void{
         map.put('u_material.ambient',this.ambient.asGL());
         map.put('u_material.specular',this.specular.asGL());
         map.put('u_material.diffuse',this.diffuse.asGL());

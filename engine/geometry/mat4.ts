@@ -1,7 +1,6 @@
 import {DebugError} from "../debug/debugError";
-import {ObjectPool, Releasealable} from "@engine/misc/objectPool";
-import {Cloneable} from "@engine/declarations";
-
+import {ObjectPool, IReleasealable} from "@engine/misc/objectPool";
+import {ICloneable} from "@engine/declarations";
 
 // https://evanw.github.io/lightgl.js/docs/matrix.html
 
@@ -9,16 +8,22 @@ export namespace mat4 {
 
     type n = number;
 
-    export class Mat16Holder implements Releasealable, Cloneable<Mat16Holder>{
+    export class Mat16Holder implements IReleasealable, ICloneable<Mat16Holder>{
+
+        public static fromPool():Mat16Holder {
+            return Mat16Holder.m16hPool.getFreeObject();
+        }
+
+        public static create(): mat4.Mat16Holder {
+            return new Mat16Holder();
+        }
 
 
         private static m16hPool:ObjectPool<Mat16Holder> = new ObjectPool<Mat16Holder>(Mat16Holder,256);
 
-        static fromPool():Mat16Holder {
-            return Mat16Holder.m16hPool.getFreeObject();
-        }
+        public readonly mat16:MAT16 = new Array(16) as MAT16;
 
-        readonly mat16:MAT16 = new Array(16) as MAT16;
+        private _captured:boolean = false;
 
         private constructor(){
             this.set(
@@ -29,14 +34,14 @@ export namespace mat4 {
             );
         }
 
-        set(v0:n,v1:n,v2:n,v3:n,v4:n,v5:n,v6:n,v7:n,v8:n,v9:n,v10:n,v11:n,v12:n,v13:n,v14:n,v15:n):void{
+        public set(v0:n,v1:n,v2:n,v3:n,v4:n,v5:n,v6:n,v7:n,v8:n,v9:n,v10:n,v11:n,v12:n,v13:n,v14:n,v15:n):void{
             this.mat16[0 ]= v0;this.mat16[1 ]=v1 ;this.mat16[2 ]=v2 ;this.mat16[3 ]=v3;
             this.mat16[4 ]= v4;this.mat16[5 ]=v5 ;this.mat16[6 ]=v6 ;this.mat16[7 ]=v7;
             this.mat16[8 ]= v8;this.mat16[9 ]=v9 ;this.mat16[10]=v10;this.mat16[11]=v11;
             this.mat16[12]=v12;this.mat16[13]=v13;this.mat16[14]=v14;this.mat16[15]=v15;
         }
 
-        fromMat16(mat16:MAT16):void{
+        public fromMat16(mat16:MAT16):void{
             this.set(
                 mat16[0 ],mat16[1 ],mat16[2 ],mat16[3 ],
                 mat16[4 ],mat16[5 ],mat16[6 ],mat16[7 ],
@@ -45,30 +50,23 @@ export namespace mat4 {
             );
         }
 
-        clone(): mat4.Mat16Holder {
+        public clone(): mat4.Mat16Holder {
             const m:Mat16Holder = new Mat16Holder();
             for (let i:number=0;i<this.mat16.length;i++) {
                 m.mat16[i] = this.mat16[i];
             }
             return m;
         }
-
-        static create(): mat4.Mat16Holder {
-            const m:Mat16Holder = new Mat16Holder();
-            return m;
-        }
-
-        private _captured:boolean = false;
-        isCaptured(): boolean {
+        public isCaptured(): boolean {
             return this._captured;
         }
 
-        capture(): this {
+        public capture(): this {
             this._captured = true;
             return this;
         }
 
-        release(): this {
+        public release(): this {
             this._captured = false;
             return this;
         }

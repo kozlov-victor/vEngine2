@@ -10,10 +10,10 @@ import {FastMap} from "@engine/misc/fastMap";
 
 export class LightSet {
 
-    static MAX_NUM_OF_POINT_LIGHTS:number = 16;
+    public static MAX_NUM_OF_POINT_LIGHTS:number = 16;
 
-    readonly ambientLight:AmbientLight = new AmbientLight(this.game);
-    readonly material:ShaderMaterial = new ShaderMaterial();
+    public readonly ambientLight:AmbientLight = new AmbientLight(this.game);
+    public readonly material:ShaderMaterial = new ShaderMaterial();
     private readonly pointLights:PointLight[] = [];
 
     constructor(private game:Game){
@@ -21,22 +21,22 @@ export class LightSet {
         if (DEBUG && !game) throw new DebugError(`game instance is not passed to LightArray constructor`);
     }
 
-    getLightAt(i:number):PointLight{
+    public getLightAt(i:number):PointLight{
         return this.pointLights[i];
     }
 
-    addPointLight(l:PointLight):void{
-        if (DEBUG && this.pointLights.length==LightSet.MAX_NUM_OF_POINT_LIGHTS)
+    public addPointLight(l:PointLight):void{
+        if (DEBUG && this.pointLights.length===LightSet.MAX_NUM_OF_POINT_LIGHTS)
             throw new DebugError(`can not add point light: maximum size of lights is ${LightSet.MAX_NUM_OF_POINT_LIGHTS}`);
         this.pointLights.push(l);
     }
 
-    setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>):void{
+    public setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>):void{
         map.put('u_numOfPointLights',this.pointLights.length);
         this.ambientLight.setUniformsToMap(map);
         this.material.setUniformsToMap(map);
         for (let i:number=0;i<this.pointLights.length;i++){
-            let p:AbstractLight = this.pointLights[i];
+            const p:AbstractLight = this.pointLights[i];
             p.setUniformsToMap(map,i);
         }
     }

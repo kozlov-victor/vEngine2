@@ -12,14 +12,14 @@ export namespace LoaderUtil {
         }
 
         request.onload = ()=> {
-            if (request.readyState == 4) {
-                if(request.status == 200) onLoad(request.response);
+            if (request.readyState === 4) {
+                if(request.status === 200) onLoad(request.response);
                 else if (DEBUG) {
                     throw new DebugError(`can not load resource with url '${url}', status ${request.status}`);
                 }
             }
         };
-        request.onprogress = function(e){
+        request.onprogress = (e)=>{
             //if (progress) progress(url,e.loaded / e.total);
         };
 
@@ -31,8 +31,8 @@ export namespace LoaderUtil {
             request.ontimeout=(e)=> {
                 console.error(e);
                 throw new DebugError(`can not load resource with url ${url}, timeout!`);
-            }
+            };
         }
         request.send();
-    }
+    };
 }

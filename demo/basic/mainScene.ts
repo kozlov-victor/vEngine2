@@ -14,21 +14,21 @@ export class MainScene extends Scene {
     private logoObj:GameObject;
     private logoLink:ResourceLink<Texture>;
 
-    onPreloading() {
+    public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
-        let rect = new Rectangle(this.game);
+        const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }
 
-    onProgress(val: number) {
+    public onProgress(val: number) {
         this.preloadingGameObject.size.width = val*this.game.width;
     }
 
-    onReady() {
+    public onReady() {
         this.logoObj = new GameObject(this.game);
-        let spr:Image = new Image(this.game);
+        const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});
@@ -53,28 +53,7 @@ export class MainScene extends Scene {
             }
         });
 
-        this.game.getControl<GamePadControl>(GamePadControl).on(KEYBOARD_EVENTS.KEY_HOLD, (e)=>{
-            switch (e) {
-                case GAME_PAD_KEY.GAME_PAD_AXIS_LEFT:
-                    this.logoObj.pos.addX(-1);
-                    break;
-                case GAME_PAD_KEY.GAME_PAD_AXIS_RIGHT:
-                    this.logoObj.pos.addX(1);
-                    break;
-                case GAME_PAD_KEY.GAME_PAD_AXIS_UP:
-                    this.logoObj.pos.addY(-1);
-                    break;
-                case GAME_PAD_KEY.GAME_PAD_AXIS_DOWN:
-                    this.logoObj.pos.addY(1);
-                    break;
-                case GAME_PAD_KEY.GAME_PAD_1:
-                    this.logoObj.angle+=0.1;
-                    break;
-                case GAME_PAD_KEY.GAME_PAD_3:
-                    this.logoObj.angle-=0.1;
-                    break;
-            }
-        });
+
 
         (window as any).logoObj = this.logoObj;
 

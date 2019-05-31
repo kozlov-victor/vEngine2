@@ -7,7 +7,7 @@ import {Int} from "@engine/declarations";
 
 export class AudioNodeSet {
 
-    readonly nodes:AudioNode[] = [] as AudioNode[];
+    public readonly nodes:AudioNode[] = [] as AudioNode[];
 
     constructor(game: Game,context:BasicAudioContext,private numOfNodes:number){
         for (let i = 0;i<numOfNodes;i++) {
@@ -15,7 +15,7 @@ export class AudioNodeSet {
         }
     }
 
-    getFreeNode():AudioNode|null{
+    public getFreeNode():AudioNode|null{
         for (let i = 0;i<this.numOfNodes;i++) {
             if (this.nodes[i].isFree()) return this.nodes[i];
         }
@@ -25,19 +25,19 @@ export class AudioNodeSet {
         })[0];
     }
 
-    stopAll():void{
+    public stopAll():void{
         for (let i:number = 0;i<this.numOfNodes;i++) {
             this.nodes[i].stop();
         }
     }
 
-    pauseAll():void{
+    public pauseAll():void{
         for (let i:number = 0;i<this.numOfNodes;i++) {
             this.nodes[i].pause();
         }
     }
 
-    resumeAll():void {
+    public resumeAll():void {
         for (let i:number = 0;i<this.numOfNodes;i++) {
             this.nodes[i].resume();
         }
@@ -45,9 +45,9 @@ export class AudioNodeSet {
 
 
 
-    getNodeBySound(sound:Sound):AudioNode|null{
+    public getNodeBySound(sound:Sound):AudioNode|null{
         for (let i:number = 0;i<this.numOfNodes;i++) {
-            if (this.nodes[i].getCurrSound()==sound) return this.nodes[i];
+            if (this.nodes[i].getCurrSound()===sound) return this.nodes[i];
         }
         return null;
     }

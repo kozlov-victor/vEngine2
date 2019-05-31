@@ -14,15 +14,15 @@ export abstract class BaseAbstractBehaviour {
         this.parameters = parameters;
     }
 
-    manage(gameObject:RenderableModel):void{
+    public manage(gameObject:RenderableModel):void{
         console.error(this);
         if (DEBUG) throw new DebugError(`BaseAbstractBehaviour: method 'manage' not implemented`);
     }
 
-    onUpdate():void{}
+    public onUpdate():void{}
 
-    revalidate(){}
+    public revalidate(){}
 
-    destroy():void{}
+    public destroy():void{}
 
 }

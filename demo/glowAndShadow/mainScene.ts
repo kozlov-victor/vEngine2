@@ -13,13 +13,13 @@ export class MainScene extends Scene {
 
     private logoLink:ResourceLink<Texture>;
 
-    onPreloading() {
+    public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
 
     }
 
 
-    onReady() {
+    public onReady() {
         const circle:Circle = new Circle(this.game);
         circle.radius = 90;
         circle.center.setXY(120,120);

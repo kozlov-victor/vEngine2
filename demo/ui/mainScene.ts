@@ -21,10 +21,10 @@ commodo consequat.`;
 
 export class MainScene extends Scene {
 
-    fnt:Font;
+    public fnt!:Font;
 
-    onPreloading(){
-        let fnt:Font = new Font(this.game);
+    public onPreloading(){
+        const fnt:Font = new Font(this.game);
         fnt.fontSize = 25;
         fnt.fontFamily = 'monospace';
         fnt.fontColor = Color.RGB(255,255,200);
@@ -32,7 +32,7 @@ export class MainScene extends Scene {
         this.fnt = fnt;
     }
 
-    onReady() {
+    public onReady() {
 
         const tf:TextField = new TextField(this.game);
         tf.pos.setXY(10);

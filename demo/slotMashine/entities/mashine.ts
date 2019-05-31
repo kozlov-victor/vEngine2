@@ -9,8 +9,8 @@ import {defineWinType, WIN_TYPE} from "./common";
 
 export class Mashine {
 
+    public locked:boolean = false;
     private wheels:Wheel[] = [];
-    locked:boolean = false;
 
     constructor(private game:Game,private resourceLink:ResourceLink<Texture>){
         const cellDeltaHeight:number = 160;
@@ -24,13 +24,13 @@ export class Mashine {
         this.wheels[2].image.pos.addX(-40);
     }
 
-    connectToScene(scene:Scene){
+    public connectToScene(scene:Scene){
         for (let i:number = 0;i<3;i++){
             scene.appendChild(this.wheels[i].image);
         }
     }
 
-    isFree():boolean {
+    public isFree():boolean {
         for (let i:number = 0;i<3;i++){
             const wheel:Wheel = this.wheels[i];
             if (!wheel.isFree()) return false;
@@ -38,7 +38,7 @@ export class Mashine {
         return true;
     }
 
-    onSpinCompleted(){
+    public onSpinCompleted(){
         const result:number[] = [];
         for (let i:number = 0;i<3;i++){
             const wheel:Wheel = this.wheels[i];
@@ -61,7 +61,7 @@ export class Mashine {
 
     }
 
-    spin(a:number,b:number,c:number){
+    public spin(a:number,b:number,c:number){
 
         if (!this.isFree()) return;
         if (this.locked) return;

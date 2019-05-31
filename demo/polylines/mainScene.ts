@@ -8,7 +8,7 @@ export class MainScene extends Scene {
 
 
 
-    onPreloading() {
+    public onPreloading() {
 
         const polyLine1:PolyLine = new PolyLine(this.game);
         polyLine1.pos.setXY(81,68);

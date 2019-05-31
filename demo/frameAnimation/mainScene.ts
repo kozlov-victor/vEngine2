@@ -12,17 +12,17 @@ export class MainScene extends Scene {
     private obj:GameObject;
     private resourceLink:ResourceLink<Texture>;
 
-    onPreloading() {
+    public onPreloading() {
         this.resourceLink = this.resourceLoader.loadImage('../assets/character.png');
         console.log('on preloading');
     }
 
 
-    onReady() {
+    public onReady() {
         this.obj = new GameObject(this.game);
-        let spr:Image = new Image(this.game);
+        const spr:Image = new Image(this.game);
         spr.setResourceLink(this.resourceLink);
-        let anim:CellFrameAnimation = new CellFrameAnimation(this.game);
+        const anim:CellFrameAnimation = new CellFrameAnimation(this.game);
         anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
         anim.isRepeat = true;
         anim.setSpriteSheet(spr,5,3);
@@ -36,10 +36,10 @@ export class MainScene extends Scene {
 
         this.on(MOUSE_EVENTS.click,()=>{
            playing = !playing;
-           if (playing) this.obj.playFrameAnimation('animation');
-           else this.obj.stopFrameAnimation();
+           if (playing) { this.obj.playFrameAnimation('animation'); }
+           else { this.obj.stopFrameAnimation(); }
         });
-        //this.obj.sprite.size.width = 100;
+        // this.obj.sprite.size.width = 100;
 
         (window as any).obj = this.obj;
 

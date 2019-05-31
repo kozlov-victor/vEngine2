@@ -3,49 +3,47 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {AudioPlayer} from "@engine/media/audioPlayer";
 import {DebugError} from "@engine/debug/debugError";
-import {Cloneable} from "@engine/declarations";
+import {Clazz, ICloneable} from "@engine/declarations";
 import {LoaderUtil} from "@engine/resources/loaderUtil";
 
 
-interface Clazz<T> {
-    new() : T;
-}
+
 
 class CtxHolder {
-    static getCtx():HTMLAudioElement{
+    public static getCtx():HTMLAudioElement{
         const Ctx:Clazz<HTMLAudioElement> = window && (window as any).Audio;
         return new Ctx();
-    };
+    }
 
 }
 
 
-export class HtmlAudioContext extends BasicAudioContext implements Cloneable<HtmlAudioContext>{
-    readonly type: string = 'htmlAudioContext';
-    private free: boolean = true;
-    private _ctx: HTMLAudioElement;
+export class HtmlAudioContext extends BasicAudioContext implements ICloneable<HtmlAudioContext>{
 
-    static isAcceptable():boolean{
+    public static isAcceptable():boolean{
         return !!(window && (window as any).Audio);
     }
-    load(url:string,link:ResourceLink<void>,callBack:()=>void):void {
-        LoaderUtil.loadRaw(url,'blob',(buffer:ArrayBuffer)=>{
-            AudioPlayer.cache[link.getUrl()] = URL.createObjectURL(buffer);
-            callBack();
-        });
-
-    }
+    public readonly type: string = 'htmlAudioContext';
+    private free: boolean = true;
+    private _ctx: HTMLAudioElement;
 
     constructor(game:Game) {
         super(game);
         this._ctx = CtxHolder.getCtx();
     }
+    public load(url:string,link:ResourceLink<void>,callBack:()=>void):void {
+        LoaderUtil.loadRaw(url,'blob',(buffer:ArrayBuffer|string)=>{
+            AudioPlayer.cache[link.getUrl()] = URL.createObjectURL(buffer as ArrayBuffer);
+            callBack();
+        });
 
-    isFree(): boolean {
+    }
+
+    public isFree(): boolean {
         return this.free;
     }
 
-    play(link:ResourceLink<void>, loop: boolean):void {
+    public play(link:ResourceLink<void>, loop: boolean):void {
         this.setLastTimeId();
         const url:string = AudioPlayer.cache[link.getUrl()];
         if (DEBUG && !url) throw new DebugError(`can not retrieve audio from cache (link id=${link.getUrl()})`);
@@ -56,26 +54,26 @@ export class HtmlAudioContext extends BasicAudioContext implements Cloneable<Htm
         this._ctx.loop = loop;
         this._ctx.onended = () => {
             this.stop();
-        }
+        };
     }
 
-    stop():void {
+    public stop():void {
         this.free = true;
     }
 
-    setGain(val: number):void {
+    public setGain(val: number):void {
         this._ctx.volume = val;
     }
 
-    pause():void {
+    public pause():void {
         this._ctx.pause();
     }
 
-    resume():void {
-        if (DEBUG) throw "not implemented for now"
+    public resume():void {
+        if (DEBUG) throw new Error("not implemented for now");
     }
 
-    clone():HtmlAudioContext{
+    public clone():HtmlAudioContext{
         return new HtmlAudioContext(this.game);
     }
 

@@ -13,19 +13,19 @@ export class MainScene extends Scene {
     private logoObj:GameObject3d;
     private logoLink:ResourceLink<Texture>;
 
-    onPreloading() {
+    public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/repeat.jpg');
 
     }
 
 
 
-    onReady() {
+    public onReady() {
         const obj:GameObject3d = new GameObject3d(this.game);
         this.logoObj = obj;
         obj.color.setRGB(12,222,12);
-        //obj.model = new Cube(100);
-        //obj.model = new Sphere(100,3);
+        // obj.model = new Cube(100);
+        // obj.model = new Sphere(100,3);
         obj.model = new Cylinder();
         obj.texture = this.logoLink.getTarget();
         obj.pos.setXY(100,100);
@@ -41,8 +41,8 @@ export class MainScene extends Scene {
         const obj2:GameObject3d = new GameObject3d(this.game);
         obj2.color.setRGB(12,22,122);
         obj2.model = new Cube(10);
-        //obj.model = new Sphere(100,3);
-        //obj.model = new Cylinder();
+        // obj.model = new Sphere(100,3);
+        // obj.model = new Cylinder();
         obj2.texture = this.logoLink.getTarget();
         obj2.pos.setXY(120,120);
         obj2.size.setWH(100,100);

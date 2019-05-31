@@ -4,7 +4,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {Shape} from "../generic/shape";
 import {Color} from "@engine/renderer/color";
 import {Point2d} from "@engine/geometry/point2d";
-import {Cloneable} from "@engine/declarations";
+import {ICloneable, IResource} from "@engine/declarations";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/texture";
 
@@ -13,7 +13,9 @@ export enum STRETCH_MODE {
     REPEAT
 }
 
-export class Image extends Shape implements Cloneable<Image>{
+
+
+export class Image extends Shape implements ICloneable<Image>,IResource<ITexture>{
 
     readonly type:string = 'Image';
     borderRadius:number = 0;
@@ -55,6 +57,7 @@ export class Image extends Shape implements Cloneable<Image>{
         cloned.borderRadius = this.borderRadius;
         cloned.offset.set(this.offset);
         cloned.stretchMode = this.stretchMode;
+        cloned.setResourceLink(this.getResourceLink());
         super.setClonedProperties(cloned);
     }
 
@@ -66,6 +69,17 @@ export class Image extends Shape implements Cloneable<Image>{
 
     getSrcRect():Rect{
         return this._srcRect;
+    }
+
+    // resource
+    private _resourceLink:ResourceLink<ITexture>;
+
+    setResourceLink(link:ResourceLink<ITexture>):void{
+        this._resourceLink = link;
+    }
+
+    getResourceLink():ResourceLink<ITexture>{
+        return this._resourceLink;
     }
 
 

@@ -1,5 +1,5 @@
 import {AbstractFrameAnimation} from "@engine/model/impl/frameAnimation/abstract/abstractFrameAnimation";
-import {Cloneable, Revalidatable} from "@engine/declarations";
+import {ICloneable, IRevalidatable} from "@engine/declarations";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Image} from "@engine/model/impl/ui/drawable/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
@@ -21,7 +21,7 @@ class CurrSprite extends Image {
 }
 
 
-export class MultiImageFrameAnimation extends AbstractFrameAnimation<ResourceLink<Texture>> implements Revalidatable, Cloneable<MultiImageFrameAnimation> {
+export class MultiImageFrameAnimation extends AbstractFrameAnimation<ResourceLink<Texture>> implements IRevalidatable, ICloneable<MultiImageFrameAnimation> {
 
     readonly type:string = 'MultiImageFrameAnimation';
 

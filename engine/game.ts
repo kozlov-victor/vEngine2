@@ -5,9 +5,9 @@ import {AbstractRenderer} from "./renderer/abstract/abstractRenderer";
 import {Scene} from "./model/impl/scene";
 import {ColliderEngine} from "./physics/unused/colliderEngine";
 import {DebugError} from "./debug/debugError";
-import {Clazz} from "@engine/misc/clazz";
 import {IControl} from "@engine/control/abstract/iControl";
 import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
+import {Clazz, ClazzEx} from "@engine/declarations";
 
 export enum SCALE_STRATEGY {
     NO_SCALE,
@@ -16,6 +16,28 @@ export enum SCALE_STRATEGY {
 }
 
 export class Game {
+
+    public static getInstance():Game{
+        return Game.instance;
+    }
+
+    private static UPDATE_TIME_RATE:number = 20;
+    private static instance:Game;
+
+
+    private static isOfType<T>(instance:any, C:ClazzEx<T>):instance is T {
+        return instance instanceof C;
+    }
+
+    public readonly scale:Point2d = new Point2d(1,1);
+    public readonly pos:Point2d = new Point2d(0,0);
+    public readonly camera:Camera = new Camera(this);
+
+    public gravityConstant:number = 0;
+    public fps:number = 0;
+
+    public readonly collider:ColliderEngine = new ColliderEngine(this);
+    public scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
     private _lastTime:number = 0;
     private _currTime:number = 0;
@@ -27,35 +49,18 @@ export class Game {
     private _controls:IControl[] = [];
     private audioPlayer:IAudioPlayer;
 
-    private static UPDATE_TIME_RATE:number = 20;
-    private static instance:Game;
-
-    readonly scale:Point2d = new Point2d(1,1);
-    readonly pos:Point2d = new Point2d(0,0);
-    readonly camera:Camera = new Camera(this);
-
-    gravityConstant:number = 0;
-    fps:number = 0;
-
-    collider:ColliderEngine = new ColliderEngine(this);
-    scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
-
 
     constructor(public readonly width:number = 320, public readonly height:number = 240){
         Game.instance = this;
-        if (DEBUG) (window as any)['game'] = this;
+        if (DEBUG) (window as any).game = this;
     }
 
-    public static getInstance():Game{
-        return Game.instance;
-    }
-
-    addControl(C:Clazz<IControl>):void{
+    public addControl(C:ClazzEx<IControl>):void{
         const instance:IControl = new C(this);
         if (DEBUG) {
             for (const c of this._controls) {
                 if (c.type===instance.type) {
-                    throw new DebugError(`control with type "${c.type}" added already`)
+                    throw new DebugError(`control with type "${c.type}" added already`);
                 }
             }
         }
@@ -64,31 +69,26 @@ export class Game {
     }
 
 
-    setAudioPLayer(p:Clazz<IAudioPlayer>):void{
+    public setAudioPLayer(p:ClazzEx<IAudioPlayer>):void{
         this.audioPlayer = new p(this);
     }
 
-    getAudioPlayer():IAudioPlayer{
+    public getAudioPlayer():IAudioPlayer{
         if (DEBUG && !this.audioPlayer) {
             throw new DebugError('audio player is not set');
         }
         return this.audioPlayer;
     }
 
-
-    private isOfType<T>(instance:any,C:Clazz<T>):instance is T {
-        return instance instanceof C;
-    }
-
-    getControl<T>(T:Clazz<IControl>):T {
-        for (let c of this._controls) {
-            if (this.isOfType(c,T)) return <T>(c as any);
+    public getControl<T>(T:ClazzEx<IControl>):T {
+        for (const c of this._controls) {
+            if (Game.isOfType(c,T)) return (c as any) as T;
         }
         if (DEBUG) throw new DebugError('no such control');
     }
 
-    hasControl(type:string):boolean {
-        for (let c of this._controls) {
+    public hasControl(type:string):boolean {
+        for (const c of this._controls) {
             if (c.type===type) {
                 return true;
             }
@@ -96,33 +96,33 @@ export class Game {
         return false;
     }
 
-    getTime():number{
+    public getTime():number{
         return this._lastTime;
     }
 
-    getDeltaTime():number{
+    public getDeltaTime():number{
         return this._deltaTime;
     }
 
-    log(args:any):void{
+    public log(args:any):void{
         if (DEBUG) this._renderer.log(args);
     }
 
-    clearLog():void{
+    public clearLog():void{
         if (DEBUG) this._renderer.clearLog();
     }
 
-    setRenderer(Renderer:Clazz<AbstractRenderer>):void{
+    public setRenderer(Renderer:ClazzEx<AbstractRenderer>):void{
         this._renderer = new Renderer(this);
     }
 
-    getRenderer():AbstractRenderer{
+    public getRenderer():AbstractRenderer{
         return this._renderer;
     }
 
-    debug2?(...val:any[]):void;
+    public debug2?(...val:any[]):void;
 
-    runScene(scene:Scene):void{
+    public runScene(scene:Scene):void{
         this._currentScene = scene;
         this.revalidate();
         scene.onPreloading();
@@ -137,12 +137,12 @@ export class Game {
         scene.resourceLoader.startLoading();
     }
 
-    getCurrScene():Scene{
+    public getCurrScene():Scene{
         if (DEBUG && !this._currentScene) throw new DebugError(`current scene is not set yet`);
         return this._currentScene;
     }
 
-    update():void{
+    public update():void{
         if (this._destroyed) return;
         this._lastTime = this._currTime;
         this._currTime = Date.now();
@@ -161,8 +161,8 @@ export class Game {
         let loopCnt:number = 0;
         do {
             this._currentScene.update();
-            //this.collider.collisionArcade(); todo
-            for (let c of this._controls) {
+            // this.collider.collisionArcade(); todo
+            for (const c of this._controls) {
                 c.update();
             }
             currTime += Game.UPDATE_TIME_RATE;
@@ -178,9 +178,9 @@ export class Game {
         requestAnimationFrame(this.update.bind(this));
     }
 
-    destroy():void{
+    public destroy():void{
         this._destroyed = true;
-        for (let c of this._controls) {
+        for (const c of this._controls) {
             c.destroy();
         }
         if (this._renderer) {
@@ -189,7 +189,7 @@ export class Game {
         }
     }
 
-    revalidate():void {
+    public revalidate():void {
         if (DEBUG && !this._renderer) throw new DebugError(`game renderer is not set`);
         this.camera.revalidate();
     }

@@ -37,7 +37,7 @@ export namespace MathEx {
     export const rectToPolar = (point: Point2d, center: Point2d): { radius: number, angle: number } => {
         const radius:number = Math.sqrt(point.x * point.x + center.y * center.y);
         const angle:number = Math.atan2(center.y - point.y, center.x - point.x);
-        return {radius, angle}
+        return {radius, angle};
     };
 
     export const polarToRect = (radius: number, angle: number, center: Point2d): Point2d => {

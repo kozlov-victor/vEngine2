@@ -11,29 +11,29 @@ import {DIRECTION_CORRECTION} from "@engine/renderer/camera";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
-
+    
     private logoObj:GameObject;
     private logoLink:ResourceLink<Texture>;
     private bgLink:ResourceLink<Texture>;
 
-    onPreloading() {
+    public onPreloading() {
         this.width = 1000;
         this.height = 1000;
-        this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
-        this.bgLink = this.resourceLoader.loadImage('../assets/repeat.jpg');
-        let rect = new Rectangle(this.game);
+        this.logoLink = this.resourceLoader.loadImage("../assets/logo.png");
+        this.bgLink = this.resourceLoader.loadImage("../assets/repeat.jpg");
+        const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }
 
-    onProgress(val: number) {
+    public onProgress(val: number) {
         this.preloadingGameObject.size.width = val*this.game.width;
     }
 
-    onReady() {
+    public onReady() {
         this.logoObj = new GameObject(this.game);
-        let spr:Image = new Image(this.game);
+        const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         spr.size.setWH(250,300);
         spr.stretchMode = STRETCH_MODE.REPEAT;

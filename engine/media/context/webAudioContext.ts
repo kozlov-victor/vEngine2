@@ -4,18 +4,23 @@ import {AudioPlayer} from "../audioPlayer";
 import {Game} from "../../game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
-import {Cloneable} from "@engine/declarations";
+import {Clazz, ICloneable} from "@engine/declarations";
 
 
-interface Clazz<T> {
-    new() : T;
-}
 
 class CtxHolder {
+
+    public static getCtx():AudioContext{
+        if (CtxHolder.ctx && !CtxHolder.res) {
+            CtxHolder.res = new CtxHolder.ctx();
+            CtxHolder.fixAutoPlayPolicy();
+        }
+        return CtxHolder.res;
+    }
     private static ctx:Clazz<AudioContext> =
         (window as any).AudioContext ||
         (window as any).webkitAudioContext;
-    private static res:AudioContext = null;
+    private static res:AudioContext;
 
     private static fixAutoPlayPolicy():void { // chrome allow playing only with user gesture
         const click =()=>{
@@ -24,19 +29,11 @@ class CtxHolder {
         };
         document.addEventListener('click',click);
     }
-
-    static getCtx():AudioContext{
-        if (CtxHolder.ctx && !CtxHolder.res) {
-            CtxHolder.res = new CtxHolder.ctx();
-            CtxHolder.fixAutoPlayPolicy();
-        }
-        return CtxHolder.res;
-    }
 }
 
 
 
-const decode =(buffer:ArrayBuffer,callback:Function)=>{
+const decode =(buffer:ArrayBuffer,callback:(data:AudioBuffer)=>void)=>{
     CtxHolder.getCtx().decodeAudioData(
         buffer,
         (decoded:AudioBuffer)=> {
@@ -49,30 +46,18 @@ const decode =(buffer:ArrayBuffer,callback:Function)=>{
 };
 
 
-export class WebAudioContext extends BasicAudioContext implements Cloneable<WebAudioContext>{
+export class WebAudioContext extends BasicAudioContext implements ICloneable<WebAudioContext>{
 
-    _ctx: AudioContext = null;
-    _currSource: AudioBufferSourceNode = null;
-    _gainNode: GainNode = null;
-    _free: boolean = true;
-
-    static isAcceptable():boolean {
+    public static isAcceptable():boolean {
         return !!(window && CtxHolder.getCtx());
     }
 
-    load(url:string, link:ResourceLink<void>, onLoad:()=>void):void {
-        if (AudioPlayer.cache[url]) {
-            onLoad();
-            return;
-        }
-        LoaderUtil.loadRaw(url, 'arraybuffer',(buffer:ArrayBuffer)=> {
-            decode(buffer, (decoded:AudioBuffer)=>{
-                AudioPlayer.cache[link.getUrl()] = decoded;
-                onLoad();
-            });
-        });
+    public _ctx: AudioContext;
+    public _currSource!: AudioBufferSourceNode;
+    public _gainNode: GainNode;
+    public _free: boolean = true;
 
-    }
+    public readonly type: string = 'webAudioContext';
 
     constructor(game:Game) {
         super(game);
@@ -81,16 +66,28 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
         this._gainNode.connect(this._ctx.destination);
     }
 
-    readonly type: string = 'webAudioContext';
+    public load(url:string, link:ResourceLink<void>, onLoad:()=>void):void {
+        if (AudioPlayer.cache[url]) {
+            onLoad();
+            return;
+        }
+        LoaderUtil.loadRaw(url, 'arraybuffer',(buffer:ArrayBuffer|string)=> {
+            decode(buffer as ArrayBuffer, (decoded:AudioBuffer)=>{
+                AudioPlayer.cache[link.getUrl()] = decoded;
+                onLoad();
+            });
+        });
 
-    isFree(): boolean {
+    }
+
+    public isFree(): boolean {
         return this._free;
     }
 
-    play(link:ResourceLink<void>, loop:boolean):void {
+    public play(link:ResourceLink<void>, loop:boolean):void {
         this.setLastTimeId();
         this._free = false;
-        let currSource:AudioBufferSourceNode = this._ctx.createBufferSource();
+        const currSource:AudioBufferSourceNode = this._ctx.createBufferSource();
         currSource.buffer = AudioPlayer.cache[link.getUrl()];
         currSource.loop = loop;
         currSource.connect(this._gainNode);
@@ -101,30 +98,30 @@ export class WebAudioContext extends BasicAudioContext implements Cloneable<WebA
         this._currSource = currSource;
     }
 
-    stop():void {
+    public stop():void {
         const currSource:AudioBufferSourceNode = this._currSource;
         if (currSource) {
             currSource.stop();
             currSource.disconnect(this._gainNode);
         }
-        this._currSource = null;
+        this._currSource = null!;
         this._free = true;
     }
 
-    setGain(val:number):void {
+    public setGain(val:number):void {
         this._gainNode.gain.value = val;
 
     }
 
-    pause():void {
+    public pause():void {
         this._ctx.suspend();
     }
 
-    resume():void {
+    public resume():void {
         this._ctx.resume();
     }
 
-    clone():WebAudioContext{
+    public clone():WebAudioContext{
         return new WebAudioContext(this.game);
     }
 }

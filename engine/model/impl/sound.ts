@@ -1,37 +1,47 @@
 import {Game} from "../../game";
 import {DebugError} from "../../debug/debugError";
-import {Resource} from "@engine/resources/resource";
-import {Revalidatable} from "@engine/declarations";
+import {IResource, IRevalidatable} from "@engine/declarations";
+import {ResourceLink} from "@engine/resources/resourceLink";
 
-export class Sound extends Resource<void> implements Revalidatable {
+export class Sound implements IResource<void>,IRevalidatable {
 
-    readonly type:string = 'Sound';
-    loop:boolean = false;
+    public readonly type:string = 'Sound';
+    public loop:boolean = false;
 
     private _gain:number = 1;
 
-    constructor(protected game:Game){
-        super();
-    }
+    // resource
+    private _resourceLink!:ResourceLink<void>;
 
-    revalidate():void {
+    constructor(protected game:Game){}
+
+    public revalidate():void {
         if (!this.getResourceLink()) throw new DebugError(`can not play sound: resource link is not set`);
     }
 
-    play():void {
+    public play():void {
         this.game.getAudioPlayer().play(this);
     }
-    stop():void {
+    public stop():void {
         this.game.getAudioPlayer().stop(this);
     }
-    pause():void {
+    public pause():void {
         throw new DebugError('not implemented');
     }
-    setGain(val:number):void {
+    public setGain(val:number):void {
         this._gain = val;
         this.game.getAudioPlayer().setGain(this);
     }
-    getGain():number{
+    public getGain():number{
         return this._gain;
     }
+
+    public setResourceLink(link:ResourceLink<void>):void{
+        this._resourceLink = link;
+    }
+
+    public getResourceLink():ResourceLink<void>{
+        return this._resourceLink;
+    }
+
 }

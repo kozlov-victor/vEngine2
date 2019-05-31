@@ -9,7 +9,7 @@ export class MainScene extends Scene {
     private bg:Image;
 
 
-    onPreloading() {
+    public onPreloading() {
         this.bg = new Image(this.game);
         this.bg.setResourceLink(this.resourceLoader.loadImage('../assets/repeat.jpg'));
         this.bg.size.setWH(100);
@@ -17,12 +17,12 @@ export class MainScene extends Scene {
         (window as any).bg = this.bg;
     }
 
-    onReady() {
+    public onReady() {
         this.appendChild(this.bg);
         this.bg.addBehaviour(new DraggableBehaviour(this.game));
     }
 
-    onUpdate() {
+    public onUpdate() {
         this.bg.offset.x+=1;
         this.bg.offset.y+=.5;
     }

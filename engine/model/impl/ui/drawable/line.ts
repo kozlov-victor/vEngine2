@@ -1,13 +1,13 @@
 
 import {Shape} from "@engine/model/impl/ui/generic/shape";
-import {Cloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/declarations";
 import {Point2d} from "@engine/geometry/point2d";
 import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 import {Game} from "@engine/game";
 import {PolyLine} from "@engine/model/impl/ui/drawable/polyLine";
 
 
-export class Line extends Shape implements Cloneable<Line> {
+export class Line extends Shape implements ICloneable<Line> {
 
     private readonly rectangleRepresentation:Rectangle = new Rectangle(this.game);
 

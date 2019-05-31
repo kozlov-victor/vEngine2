@@ -10,9 +10,9 @@ import {RenderableModel} from "@engine/model/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
 
-interface CameraTweenTarget {
-    time:number,
-    point:Point2d
+interface ICameraTweenTarget {
+    time:number;
+    point:Point2d;
 }
 
 export enum CAMERA_MATRIX_MODE {
@@ -28,12 +28,7 @@ export enum DIRECTION_CORRECTION {
 }
 
 export class Camera {
-
-    private objFollowTo:RenderableModel;
-    private game:Game;
-    private scene:Scene = null;
-    private sceneWidth:number = 0;
-    private sceneHeight:number = 0;
+    private static FOLLOW_FACTOR:number = 0.1;
 
     public readonly pos:Point2d = new Point2d(0,0);
     public posZ:number = 0;
@@ -44,11 +39,16 @@ export class Camera {
     // and identity mode (for fixed objects)
     public matrixMode:CAMERA_MATRIX_MODE = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
 
+    private objFollowTo:RenderableModel;
+    private game:Game;
+    private scene:Scene = null;
+    private sceneWidth:number = 0;
+    private sceneHeight:number = 0;
+
     private _rect:Rect = new Rect();
     private _rectIdentity:Rect = new Rect();
     private _rectScaled:Rect = new Rect();
     private cameraShakeTween:Tween = null; // todo too complex!
-    private static FOLLOW_FACTOR:number = 0.1;
     private cameraPosCorrection:{current:Point2d,max:Point2d} = {
         current: new Point2d(),
         max: new Point2d()
@@ -65,7 +65,7 @@ export class Camera {
     }
 
 
-    revalidate():void{
+    public revalidate():void{
         this.scene = this.game.getCurrScene();
         if (this.scene.tileMap) this.scene.tileMap.revalidate();
         this._rectIdentity.setXYWH(0,0,this.game.width,this.game.height);
@@ -81,14 +81,14 @@ export class Camera {
     }
 
 
-    followTo(gameObject:RenderableModel):void {
+    public followTo(gameObject:RenderableModel):void {
         if (gameObject===null) return;
         if (DEBUG && gameObject===undefined) throw new DebugError(`Camera:followTo(gameObject) - gameObject not provided`);
         this.objFollowTo = gameObject;
         this.revalidate();
     }
 
-    update() {
+    public update() {
         this.scene = this.game.getCurrScene();
 
         // const tileWidth:number =
@@ -148,22 +148,22 @@ export class Camera {
         this.render();
     }
 
-    shake(amplitude:number,time:number):void {
-        const tweenTarget:CameraTweenTarget = {time:0,point:new Point2d(0,0)};
+    public shake(amplitude:number,time:number):void {
+        const tweenTarget:ICameraTweenTarget = {time:0,point:new Point2d(0,0)};
         this.cameraShakeTween = new Tween({
             target:tweenTarget,
             time,
-            to:{time:time},
+            to:{time},
             progress:()=>{
-                let r1:number = MathEx.random(-amplitude/2,amplitude/2);
-                let r2:number = MathEx.random(-amplitude/2,amplitude/2);
+                const r1:number = MathEx.random(-amplitude/2,amplitude/2);
+                const r2:number = MathEx.random(-amplitude/2,amplitude/2);
                 tweenTarget.point.setXY(r1,r2);
             },
             complete:():void=>this.cameraShakeTween = null
         });
     }
 
-    _updateRect():void{
+    public _updateRect():void{
         const p:Point2d = Point2d.fromPool();
         const point00:Point2d = this.screenToWorld(p.setXY(0,0));
         const pointWH:Point2d = this.screenToWorld(p.setXY(this.game.width,this.game.height));
@@ -174,7 +174,7 @@ export class Camera {
         p.release();
     }
 
-    render():void{ //TRS - (transform rotate scale) reverted
+    public render():void{ //TRS - (transform rotate scale) reverted
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.translate(this.game.width/2,this.game.height/2,this.posZ);
         renderer.scale(this.scale.x,this.scale.y);
@@ -188,7 +188,7 @@ export class Camera {
         );
     }
 
-    screenToWorld(p:Point2d):Point2d{
+    public screenToWorld(p:Point2d):Point2d{
         const mScale:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeScale(mScale,this.scale.x,this.scale.y,1);
         const point2d:Point2d = MathEx.unProject(
@@ -198,7 +198,7 @@ export class Camera {
         return point2d;
     }
 
-    getRect():Rect{
+    public getRect():Rect{
         if (this.matrixMode===CAMERA_MATRIX_MODE.MODE_IDENTITY)
             return this._rectIdentity;
         else {
@@ -207,7 +207,7 @@ export class Camera {
         }
     }
 
-    getRectScaled():Rect{
+    public getRectScaled():Rect{
         if (this.matrixMode===CAMERA_MATRIX_MODE.MODE_IDENTITY)
             return this._rectIdentity;
         else

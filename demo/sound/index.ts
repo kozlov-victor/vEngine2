@@ -5,11 +5,11 @@ import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {AudioPlayer} from "@engine/media/audioPlayer";
 
-let game = new Game();
+const game = new Game();
 game.setRenderer(WebGlRenderer);
 game.addControl(MouseControl);
 game.setAudioPLayer(AudioPlayer);
-let mainScene:Scene = new MainScene(game);
+const mainScene:Scene = new MainScene(game);
 game.runScene(mainScene);
 
 

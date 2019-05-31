@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private fnt:Font;
     private tf:TextField;
 
-    onPreloading() {
+    public onPreloading() {
 
         loadFont(this.game,'PressStart2P.ttf');
 
@@ -30,9 +30,9 @@ export class MainScene extends Scene {
         this.tf = tf;
     }
 
-    onReady() {
+    public onReady() {
         console.log('ready');
-        //this.colorBG.setRGB(12,12,12);
+        // this.colorBG.setRGB(12,12,12);
         this.tf.setFont(this.fnt);
         this.tf.setText("hello world\nКирилица");
         this.appendChild(this.tf);

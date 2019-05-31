@@ -5,11 +5,11 @@ import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {KeyboardControl} from "@engine/control/keyboardControl";
 import {GamePadControl} from "@engine/control/gamePadControl";
 
-let game = new Game(1200,800);
+const game = new Game(1200,800);
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(GamePadControl);
-let mainScene:Scene = new MainScene(game);
+const mainScene:Scene = new MainScene(game);
 game.runScene(mainScene);
 
 

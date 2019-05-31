@@ -52,7 +52,7 @@ export abstract class AbstractFilter {
         return this.simpleRectDrawer;
     }
 
-    doFilter(destFrameBuffer:FrameBuffer){
+    doFilter(destFrameBuffer:FrameBuffer){ // todo remove destFrameBuffer from arg and extract interface with doFilter() method
         destFrameBuffer.bind();
         const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY.mat16);

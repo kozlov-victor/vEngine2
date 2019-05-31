@@ -1,15 +1,14 @@
 import {Game} from "../../game";
-import {Rect, RectJSON} from "../../geometry/rect";
-import {Resource} from "../../resources/resource";
+import {IRectJSON} from "../../geometry/rect";
 import {Color} from "@engine/renderer/color";
-import {Revalidatable} from "@engine/declarations";
+import {IResource, IRevalidatable} from "@engine/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Scene} from "@engine/model/impl/scene";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {ITexture} from "@engine/renderer/texture";
 
-export interface RectViewJSON extends RectJSON {
+export interface RectViewJSON extends IRectJSON {
     destOffsetX:number,
     destOffsetY:number
 }
@@ -112,9 +111,9 @@ namespace FontFactory {
         ctx.fillStyle = '#00000000';
         ctx.fillRect(0,0,cnv.width,cnv.height);
         ctx.fillStyle = '#fff';
-        const symbols:{[key:string]:RectJSON} = fontContext.symbols;
+        const symbols:{[key:string]:IRectJSON} = fontContext.symbols;
         Object.keys(symbols).forEach((symbol:string)=>{
-            const rect:RectJSON = symbols[symbol];
+            const rect:IRectJSON = symbols[symbol];
             ctx.fillText(symbol, rect.x, rect.y);
         });
         correctColor(cnv,color);
@@ -125,7 +124,7 @@ namespace FontFactory {
 
 
 
-export class Font extends Resource<Texture> implements Revalidatable {
+export class Font implements IResource<ITexture>, IRevalidatable {
 
     readonly type:string = 'Font';
     fontSize:number=12;
@@ -133,9 +132,7 @@ export class Font extends Resource<Texture> implements Revalidatable {
     fontContext:FontContext;
     fontColor:Color = Color.BLACK.clone();
 
-    constructor(protected game:Game){
-        super();
-    }
+    constructor(protected game:Game){}
 
     private static _systemFontInstance:Font;
 
@@ -184,6 +181,17 @@ export class Font extends Resource<Texture> implements Revalidatable {
             if (!this.fontContext) throw new DebugError(`font context is not created. Did you invoke font.generate() method?`);
             if (!this.getResourceLink()) throw new DebugError(`font without resource link`);
         }
+    }
+
+    // resource
+    private _resourceLink:ResourceLink<ITexture>;
+
+    setResourceLink(link:ResourceLink<ITexture>):void{
+        this._resourceLink = link;
+    }
+
+    getResourceLink():ResourceLink<ITexture>{
+        return this._resourceLink;
     }
 
 }

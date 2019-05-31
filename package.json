@@ -7,6 +7,8 @@
   "devDependencies": {
     "@types/node": "11.13.0",
     "awesome-typescript-loader": "5.2.1",
+    "rollup-plugin-uglify": "^6.0.2",
+    "tslint": "^5.16.0",
     "typescript": "3.4.1",
     "uglify-js": "3.4.6",
     "url-loader": "^1.1.2",
@@ -14,7 +16,11 @@
     "webpack-build": "1.0.1",
     "webpack-cli": "3.2.3"
   },
-  "dependencies": {},
+  "dependencies": {
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-typescript2": "^0.21.1",
+    "tslint-webpack-plugin": "^2.0.4"
+  },
   "scripts": {
     "start": "webpack --env.debug=true -w",
     "build": "webpack",

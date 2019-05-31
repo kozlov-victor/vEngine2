@@ -1,14 +1,15 @@
 import {Game} from "../../game";
-import {Cloneable} from "../../declarations";
+import {ICloneable} from "../../declarations";
 import {RenderableModel} from "../renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractFrameAnimation} from "@engine/model/impl/frameAnimation/abstract/abstractFrameAnimation";
+import {Shape} from "@engine/model/impl/ui/generic/shape";
 
 
-export class GameObject extends RenderableModel implements Cloneable<GameObject>{
+export class GameObject extends RenderableModel implements ICloneable<GameObject>{
 
     type:string = 'GameObject';
-    sprite:RenderableModel;
+    sprite:Shape;
 
     private _currFrameAnimation:AbstractFrameAnimation<any>;
     private _frameAnimations:{[name:string]:AbstractFrameAnimation<any>} = {};
@@ -40,7 +41,7 @@ export class GameObject extends RenderableModel implements Cloneable<GameObject>
             console.error(this.sprite);
             throw new DebugError(`can not clone sprite: cloneable interface is not implemented`);
         }
-        const clonedSprite:RenderableModel = (this.sprite as any as Cloneable<RenderableModel>).clone();
+        const clonedSprite:Shape = (this.sprite as any as ICloneable<Shape>).clone();
         if (DEBUG && ! (clonedSprite instanceof RenderableModel )) {
             console.error(this.sprite);
             throw new DebugError(`can not clone sprite: "clone"  method must return Renderable object`);

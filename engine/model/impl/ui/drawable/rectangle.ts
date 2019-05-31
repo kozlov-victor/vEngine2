@@ -1,9 +1,9 @@
 import {Game} from "@engine/game";
 import {Shape} from "../generic/shape";
-import {Cloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/declarations";
 import {Line} from "@engine/model/impl/ui/drawable/line";
 
-export class Rectangle extends Shape implements Cloneable<Rectangle>{
+export class Rectangle extends Shape implements ICloneable<Rectangle>{
 
     readonly type:string = 'Rectangle';
     borderRadius:number = 0;

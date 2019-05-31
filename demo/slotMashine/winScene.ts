@@ -11,11 +11,11 @@ export class WinScene extends Scene {
 
     private emitter:ParticleSystem = new ParticleSystem(this.game);
 
-    onPreloading(){
+    public onPreloading(){
 
     }
 
-    onReady(){
+    public onReady(){
         const p:Circle = new Circle(this.game);
         p.radius = 5;
         this.colorBG = Color.RGB(10,30,40);

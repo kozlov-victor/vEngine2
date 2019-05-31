@@ -16,7 +16,7 @@ export class MainScene extends Scene {
 
     private obj:GameObject;
 
-    onPreloading() {
+    public onPreloading() {
 
         for (let i:number=1;i<=6;i++) {
             this.resourceLinks.push(this.resourceLoader.loadBinary(`./data/scatman.${i}.pbm`));
@@ -24,7 +24,7 @@ export class MainScene extends Scene {
 
     }
 
-    onReady() {
+    public onReady() {
 
         for (const rl of this.resourceLinks) {
             const pbmReader:PbmReader = new PbmReader(this.game,rl.getTarget());
@@ -32,7 +32,7 @@ export class MainScene extends Scene {
         }
 
         this.obj = new GameObject(this.game);
-        let anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
+        const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
         anim.frames = this.textureLinks;
         anim.isRepeat = true;
         anim.duration = 600;

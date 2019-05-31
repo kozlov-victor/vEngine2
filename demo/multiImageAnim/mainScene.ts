@@ -11,16 +11,16 @@ export class MainScene extends Scene {
     private obj:GameObject;
     private resourceLinks:ResourceLink<Texture>[] = [];
 
-    onPreloading() {
+    public onPreloading() {
         for (let i:number = 0;i<6;i++) {
             this.resourceLinks[i] = this.resourceLoader.loadImage(`character/ninja_right_${i+1}.png`);
         }
         console.log('on preloading');
     }
 
-    onReady() {
+    public onReady() {
         this.obj = new GameObject(this.game);
-        let anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
+        const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
         anim.frames = this.resourceLinks;
         anim.isRepeat = true;
         this.obj.sprite = anim.currSprite;
@@ -33,10 +33,10 @@ export class MainScene extends Scene {
 
         this.on(MOUSE_EVENTS.click,()=>{
            playing = !playing;
-           if (playing) this.obj.playFrameAnimation('animation');
-           else this.obj.stopFrameAnimation();
+           if (playing) { this.obj.playFrameAnimation('animation'); }
+           else { this.obj.stopFrameAnimation(); }
         });
-        //this.obj.sprite.size.width = 100;
+        // this.obj.sprite.size.width = 100;
 
         (window as any).obj = this.obj;
 

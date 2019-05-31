@@ -5,11 +5,11 @@ import {Game} from "@engine/game";
 
 export class EventEmitterDelegate {
 
-    constructor(){}
-
     private _emitter:EventEmitter;
 
-    on(eventName:string,callBack:Function):Function{
+    constructor(){}
+
+    public on(eventName:string,callBack:()=>void):()=>void{
 
         if (DEBUG && !Game.getInstance().hasControl('MouseControl')) {
             if (eventName in MOUSE_EVENTS) {
@@ -21,10 +21,10 @@ export class EventEmitterDelegate {
         this._emitter.on(eventName,callBack);
         return callBack;
     }
-    off(eventName:string,callBack:Function):void{
+    public off(eventName:string,callBack:(arg?:any)=>void):void{
         if (this._emitter!==undefined)this._emitter.off(eventName,callBack);
     }
-    trigger(eventName:string,data?:any):void{
+    public trigger(eventName:string,data?:any):void{
         if (this._emitter!==undefined) this._emitter.trigger(eventName,data);
     }
 

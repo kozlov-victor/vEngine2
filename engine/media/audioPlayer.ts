@@ -11,11 +11,11 @@ import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
 
 export  class AudioPlayer implements IAudioPlayer {
 
+    public static cache:{[key:string]:any} = {};
+    public static DEFAULT_AUDIO_NODES_COUNT:number = 6;
+
     private readonly audioContext:BasicAudioContext;
     private audioNodeSet:AudioNodeSet;
-
-    static cache:{[key:string]:any} = {};
-    static DEFAULT_AUDIO_NODES_COUNT:number = 6;
 
     constructor(private game:Game){
         if (WebAudioContext.isAcceptable()) {
@@ -28,11 +28,11 @@ export  class AudioPlayer implements IAudioPlayer {
         this.audioNodeSet = new AudioNodeSet(game,this.audioContext,AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
     }
 
-    loadSound(url:string, link:ResourceLink<void>, onLoad:()=>void):void {
+    public loadSound(url:string, link:ResourceLink<void>, onLoad:()=>void):void {
         this.audioContext.load(url,link,onLoad);
     }
 
-    play(sound:Sound):void {
+    public play(sound:Sound):void {
 
         if (DEBUG) sound.revalidate();
 
@@ -44,31 +44,31 @@ export  class AudioPlayer implements IAudioPlayer {
         node.play(sound.getResourceLink(),sound.loop);
     }
 
-    stop(sound:Sound):void {
+    public stop(sound:Sound):void {
         const node:AudioNode|null = this.audioNodeSet.getNodeBySound(sound);
         if (node===null) return;
         node.stop();
     }
 
-    stopAll():void {
+    public stopAll():void {
         this.audioNodeSet.stopAll();
     }
 
-    pauseAll():void {
+    public pauseAll():void {
         this.audioNodeSet.pauseAll();
     }
 
-    resumeAll():void {
+    public resumeAll():void {
         this.audioNodeSet.resumeAll();
     }
 
-    setGain(sound:Sound):void {
+    public setGain(sound:Sound):void {
         const node:AudioNode|null = this.audioNodeSet.getNodeBySound(sound);
         if (node===null) return;
         node.setGain(sound.getGain());
     }
 
-    update(time:number,delta:number):void {
+    public update(time:number,delta:number):void {
 
     }
 

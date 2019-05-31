@@ -1,8 +1,5 @@
 import {Game} from "@engine/game";
-import {Queue} from "@engine/resources/queue";
 import {DebugError} from "@engine/debug/debugError";
-import {Font} from "@engine/model/impl/font";
-import {Color} from "@engine/renderer/color";
 
 declare const FontFace:any;
 
@@ -20,6 +17,6 @@ export namespace fontLoader {
                 throw new DebugError(error);
             });
         },url);
-    }
+    };
 
 }

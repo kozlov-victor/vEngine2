@@ -26,10 +26,10 @@ export class MainScene extends Scene {
     private logoObj:GameObject;
     private logoLink:ResourceLink<Texture>;
 
-    onPreloading() {
+    public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
-        for (let i:number = 0;i<100;i++) fakeLongLoadingFn(this.resourceLoader);
-        let rect = new Rectangle(this.game);
+        for (let i:number = 0;i<100;i++) { fakeLongLoadingFn(this.resourceLoader); }
+        const rect = new Rectangle(this.game);
         rect.borderRadius = 5;
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.pos.y = 50;
@@ -37,14 +37,14 @@ export class MainScene extends Scene {
         this.preloadingGameObject = rect;
     }
 
-    onProgress(val: number) {
+    public onProgress(val: number) {
         this.preloadingGameObject.size.width = val*this.game.width;
         console.log('progress',val);
     }
 
-    onReady() {
+    public onReady() {
         this.logoObj = new GameObject(this.game);
-        let spr:Image = new Image(this.game);
+        const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});

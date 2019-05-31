@@ -10,22 +10,21 @@ import {Texture} from "@engine/renderer/webGl/base/texture";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MathEx} from "@engine/misc/mathEx";
 
-interface WheelCommand {
-    a:number,
-    b:number,
-    c:number,
-    command:'spin'
+interface IWheelCommand {
+    a:number;
+    b:number;
+    c:number;
+    command:'spin';
 }
 
 export class MainScene extends Scene {
-
+    
+    public wheelLink:ResourceLink<Texture>;
     private overlay:Image;
-    wheelLink:ResourceLink<Texture>;
-
     private mashine:Mashine;
 
 
-    onPreloading() {
+    public onPreloading() {
         this.overlay = new Image(this.game);
         this.overlay.setResourceLink(this.resourceLoader.loadImage('../slotMashine/resources/overlay.png'));
         this.wheelLink = this.resourceLoader.loadImage(`../slotMashine/resources/wheel.png?1`);
@@ -36,11 +35,11 @@ export class MainScene extends Scene {
         this.preloadingGameObject = rect;
     }
 
-    onProgress(val: number) {
+    public onProgress(val: number) {
         this.preloadingGameObject.size.width = val*this.game.width;
     }
 
-    onReady() {
+    public onReady() {
 
         this.colorBG = Color.RGB(100,0,0);
         this.mashine = new Mashine(this.game,this.wheelLink);
@@ -55,7 +54,7 @@ export class MainScene extends Scene {
         }
 
         window.addEventListener('message',(e:MessageEvent)=>{
-            const commandObj:WheelCommand = e.data as WheelCommand;
+            const commandObj:IWheelCommand = e.data as IWheelCommand;
             if (commandObj.command!=='spin') return;
             this.mashine.spin(commandObj.a,commandObj.b,commandObj.c);
         });

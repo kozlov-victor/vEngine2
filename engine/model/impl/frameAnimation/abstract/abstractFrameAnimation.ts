@@ -1,5 +1,5 @@
 
-import {Eventemittable} from "@engine/declarations";
+import {IEventemittable} from "@engine/declarations";
 import {Game} from "@engine/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";
@@ -11,12 +11,14 @@ export const FRAME_ANIMATION_EVENTS = {
     loop:       'loop'
 };
 
-export abstract class AbstractFrameAnimation<T> implements Eventemittable {
+export abstract class AbstractFrameAnimation<T> implements IEventemittable {
 
-    name:string;
-    duration:number = 1000;
-    isRepeat:boolean = true;
-    frames:T[] = [];
+    public name:string;
+    public duration:number = 1000;
+    public isRepeat:boolean = true;
+    public frames:T[] = [];
+
+    public parent:GameObject;
 
     private _currFrame:number = -1;
     private _startTime:number = 0;
@@ -24,39 +26,39 @@ export abstract class AbstractFrameAnimation<T> implements Eventemittable {
     private _isPlaying:boolean = false;
     private _loopReached:boolean = false;
 
-    parent:GameObject;
+
+    //eventEmitter
+    private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
 
     constructor(protected game:Game) {}
 
-    protected abstract onNextFrame(i:number):void;
-
-    revalidate():void {
+    public revalidate():void {
         if (DEBUG && !this.frames.length) throw new DebugError(`animation frames can not be empty`);
         this._timeForOneFrame = ~~(this.duration / this.frames.length);
         this.onNextFrame(0);
     }
 
-    play():void {
+    public play():void {
         if (DEBUG && !this.parent) throw new DebugError(`can not play frame animation: it is not attached to parent. Have you invoked `);
         this._isPlaying = true;
     }
 
-    stop():void {
+    public stop():void {
         if (DEBUG && !this.parent) throw new DebugError(`can not stop frame animation: it is not attached to parent`);
         this._isPlaying = false;
         this._startTime = 0;
         this._loopReached = false;
     }
 
-    update():void {
+    public update():void {
         if (!this._isPlaying) return;
         const time:number = this.game.getTime();
         if (!this._startTime) this._startTime = time;
         const delta:number = (time - this._startTime) % this.duration;
         let currFrame:number = ~~((this.frames.length) * delta / this.duration);
         currFrame = currFrame % this.frames.length;
-        if (currFrame==this._currFrame) return;
+        if (currFrame===this._currFrame) return;
         if (this._loopReached && !this.isRepeat) {
             this.stop();
             this.trigger(FRAME_ANIMATION_EVENTS.completed);
@@ -70,24 +72,22 @@ export abstract class AbstractFrameAnimation<T> implements Eventemittable {
         }
     }
 
+    public off(eventName: string, callBack: (arg?:any)=>void): void {
+        this._eventEmitterDelegate.off(eventName,callBack);
+    }
+    public on(eventName: string, callBack: (arg?:any)=>void): (arg?:any)=>void {
+        return this._eventEmitterDelegate.on(eventName,callBack);
+    }
+    public trigger(eventName: string, data?: any): void {
+        this._eventEmitterDelegate.trigger(eventName,data);
+    }
+
+    protected abstract onNextFrame(i:number):void;
+
     protected setClonedProperties(cloned:AbstractFrameAnimation<any>):void {
         cloned.frames = [...this.frames];
         cloned.duration = this.duration;
         cloned.isRepeat = this.isRepeat;
-    }
-
-
-    //eventEmitter
-    private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
-
-    off(eventName: string, callBack: Function): void {
-        this._eventEmitterDelegate.off(eventName,callBack);
-    }
-    on(eventName: string, callBack: Function): Function {
-        return this._eventEmitterDelegate.on(eventName,callBack);
-    }
-    trigger(eventName: string, data?: any): void {
-        this._eventEmitterDelegate.trigger(eventName,data);
     }
 
 }

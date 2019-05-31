@@ -1,32 +1,33 @@
+/* tslint:disable:forin */
 import {IKeyVal, noop} from "@engine/misc/object";
 
-declare const setTimeout:(f:Function,t:number)=>number;
+declare const setTimeout:(f:()=>void,t:number)=>number;
 
 
-let objectToQuery = (o:IKeyVal<any>)=> {
+const objectToQuery = (o:IKeyVal<any>)=> {
     if (!o) return '';
     if (o instanceof FormData) return o;
-    let paramsArr:any[] = [];
+    const paramsArr:any[] = [];
     if (o===null || o===undefined || typeof o==='string' || typeof o==='number')
         return o;
-    for (let key in o) {
+    for (const key in o) {
         paramsArr.push([key,encodeURIComponent(o[key])]);
     }
-    return paramsArr.map((item:any)=>[item[0]+'='+item[1]]).join('&')
+    return paramsArr.map((item:any)=>[item[0]+'='+item[1]]).join('&');
 };
 
 interface IRequestData {
-    method: string,
-    data?: any,
-    url: string,
-    success?: Function,
-    error?: Function,
-    requestType?: string,
-    timeout?: number,
-    ontimeout?: Function
+    method: string;
+    data?: any;
+    url: string;
+    success?: (arg:any)=>void;
+    error?: (opts:{status:number,error:string})=>void;
+    requestType?: string;
+    timeout?: number;
+    ontimeout?: ()=>void;
 }
 
-let request = (data:IRequestData)=> {
+const request = (data:IRequestData)=> {
     let abortTmr:number;
     let resolved = false;
     data.method = data.method || 'get';
@@ -41,7 +42,7 @@ let request = (data:IRequestData)=> {
         if (xhr.readyState===4) {
             if ( xhr.status===200 || xhr.status===0) {
                 let resp = xhr.responseText;
-                let contentType = xhr.getResponseHeader("Content-Type")||'';
+                const contentType = xhr.getResponseHeader("Content-Type")||'';
                 if (contentType.toLowerCase().indexOf('json')>-1) resp = JSON.parse(resp);
                 if (data.success) {
                     data.success(resp);
@@ -81,7 +82,7 @@ let request = (data:IRequestData)=> {
 
 export namespace httpClient {
 
-    export const get = (url:string,data:IKeyVal<any>,success?:Function,error?:Function)=>{
+    export const get = (url:string,data:IKeyVal<any>,success?:(arg:any)=>void,error?:(opts:{status:number,error:string})=>void)=>{
         return request({
             method:'get',
             url,
@@ -91,7 +92,7 @@ export namespace httpClient {
         });
     };
 
-    export const  post = (url:string,data:IKeyVal<any>,success?:Function,error?:Function)=>{
+    export const  post = (url:string,data:IKeyVal<any>,success?:(arg:any)=>void,error?:(opts:{status:number,error:string})=>void)=>{
         return request({
             method:'post',
             url,
@@ -102,9 +103,9 @@ export namespace httpClient {
         });
     };
 
-    export const  postMultiPart = (url:string,file:File,data:IKeyVal<any>,success?:Function,error?:Function)=>{
+    export const  postMultiPart = (url:string,file:File,data:IKeyVal<any>,success?:(arg:any)=>void,error?:(opts:{status:number,error:string})=>void)=>{
         const formData = new FormData();
-        Object.keys(data).forEach(function(key){
+        Object.keys(data).forEach((key)=>{
             formData.append(key,data[key]);
         });
         formData.append('file',file);

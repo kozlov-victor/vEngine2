@@ -1,10 +1,12 @@
 
+const rafPolyfill = (f:FrameRequestCallback):number=>{
+    return (setTimeout(f,17) as any) as number;
+};
 
-
-(window as any).requestAnimationFrame =
+window.requestAnimationFrame =
     window.requestAnimationFrame||
     window.webkitRequestAnimationFrame||
-    function(f:Function){setTimeout(f,17)};
+    rafPolyfill;
 
 if (!window.cancelAnimationFrame) {
     window.cancelAnimationFrame = (id) => clearTimeout(id);

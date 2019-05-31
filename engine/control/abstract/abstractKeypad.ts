@@ -9,51 +9,51 @@ export enum KEY_STATE  {
     KEY_RELEASED = -1
 }
 
-interface KeyboardBuffer {
-    [key:number]:KEY_STATE
+interface IKeyboardBuffer {
+    [key:number]:KEY_STATE;
 }
 
 
 export abstract class AbstractKeypad {
-
-    private buffer:KeyboardBuffer = {};
     protected game:Game;
     protected emitter = new EventEmitter();
+
+    private buffer:IKeyboardBuffer = {};
 
     constructor(game:Game) {
         this.game = game;
     }
 
-    press(key:number):void{
+    public press(key:number):void{
         if (this.isPressed(key)) return;
         this.buffer[key] = KEY_STATE.KEY_JUST_PRESSED;
         this.emitter.trigger(KEYBOARD_EVENTS[KEYBOARD_EVENTS.KEY_PRESSED],key);
     }
 
-    release(key:number):void{
+    public release(key:number):void{
         if (this.isReleased(key)) return;
         this.buffer[key] = KEY_STATE.KEY_JUST_RELEASED;
         this.emitter.trigger(KEYBOARD_EVENTS[KEYBOARD_EVENTS.KEY_RELEASED],this.buffer[key]);
     }
 
-    isPressed(key:number):boolean{
+    public isPressed(key:number):boolean{
         return this.buffer[key]>=KEY_STATE.KEY_PRESSED;
     }
 
-    isJustPressed(key:number):boolean{
+    public isJustPressed(key:number):boolean{
         return this.buffer[key]===KEY_STATE.KEY_JUST_PRESSED;
     }
 
-    isReleased(key:number):boolean{
+    public isReleased(key:number):boolean{
         if (this.buffer[key]===undefined) return true;
         return  this.buffer[key]<=KEY_STATE.KEY_JUST_RELEASED;
     }
 
-    isJustReleased(key:number):boolean {
+    public isJustReleased(key:number):boolean {
         return this.buffer[key] === KEY_STATE.KEY_JUST_RELEASED;
     }
 
-    update():void{
+    public update():void{
         Object.keys(this.buffer).forEach((key:string)=>{
             const keyNum:number = (+key) as number;
             if (this.buffer[keyNum]===KEY_STATE.KEY_RELEASED) delete this.buffer[keyNum];

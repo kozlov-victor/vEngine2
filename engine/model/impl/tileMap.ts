@@ -7,7 +7,7 @@ import {Image} from "@engine/model/impl/ui/drawable/image";
 export class TileMap {
 
     readonly type:string = "TileMap";
-    spriteSheet:Image = null;
+    spriteSheet:Image;
     data:any[] = [];
     _tilesInScreenX:number;
     _tilesInScreenY:number;

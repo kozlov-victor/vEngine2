@@ -1,6 +1,6 @@
 
 export interface IKeyVal<T> {
-    [key:string]:T
+    [key:string]:T;
 }
 
 export const isObject = (obj:any):boolean=>{
@@ -11,7 +11,7 @@ export const isArray = (a:any):a is any[]=> {
     return !!(a.splice);
 };
 
-let isEqualArray = (a:any[],b:any[]):boolean=>{
+const isEqualArray = (a:any[],b:any[]):boolean=>{
     for (let i:number=0,max=a.length;i<max;i++) {
         if (a[i]!==b[i]) return false;
     }
@@ -19,7 +19,7 @@ let isEqualArray = (a:any[],b:any[]):boolean=>{
 };
 
 const isEqualObject = (a:any,b:any):boolean=>{
-    throw 'not implemented';
+    throw new Error('not implemented');
 };
 
 export const isEqual = (a:any,b:any):boolean=>{

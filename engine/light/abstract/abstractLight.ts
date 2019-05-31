@@ -17,6 +17,6 @@ export abstract class AbstractLight {
         this.game = game;
     }
 
-    abstract setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>, i:number):void;
+    public abstract setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>, i:number):void;
 
 }

@@ -30,16 +30,16 @@ export class MainScene extends Scene {
     private logoObj:GameObject;
     private logoLink:ResourceLink<Texture>;
 
-    onPreloading() {
+    public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
     }
 
 
 
-    onReady() {
+    public onReady() {
         console.log('ready');
         this.logoObj = new GameObject(this.game);
-        let spr:Image = new Image(this.game);
+        const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});
@@ -113,7 +113,7 @@ export class MainScene extends Scene {
         hex.setSize(8);
 
         const rect:Rectangle = new Rectangle(this.game);
-        let gradient:LinearGradient  = new LinearGradient();
+        const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0.2;
         gradient.colorFrom = Color.RGB(100,0,20);
         gradient.colorTo = Color.RGB(200,111,1);

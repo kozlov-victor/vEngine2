@@ -1,24 +1,19 @@
 import {DebugError} from "../debug/debugError";
 
 
-interface EventsHolder {
-    [name:string]:Function[]
+interface IEventsHolder {
+    [name:string]:((arg?:any)=>void)[];
 }
 
 export class EventEmitter{
 
-    private events:EventsHolder = {};
+    private events:IEventsHolder = {} as IEventsHolder;
 
     constructor(){
 
     }
 
-    private _on(name:string,callBack:Function):void {
-        this.events[name] = this.events[name] || [];
-        this.events[name].push(callBack);
-    }
-
-    on(eventNameOrList:string|string[],callBack:Function):void {
+    public on(eventNameOrList:string|string[],callBack:(arg?:any)=>void):void {
         if (typeof  eventNameOrList === 'string') {
             this._on(eventNameOrList,callBack);
         } else if (eventNameOrList.splice) {
@@ -27,25 +22,30 @@ export class EventEmitter{
             });
         }
 
-    };
+    }
 
-    off(eventName:string,callback:Function):void {
-        const es:Function[] = this.events[eventName];
+    public off(eventName:string,callback:(arg?:any)=>void):void {
+        const es:((arg?:any)=>void)[]  = this.events[eventName];
         if (!es) return;
-        let index:number = es.indexOf(callback);
-        if (DEBUG && index==-1) {
+        const index:number = es.indexOf(callback);
+        if (DEBUG && index===-1) {
             console.error(callback);
             throw new DebugError(`can not remove event listener ${eventName}`);
         }
         es.splice(index,1);
-    };
+    }
 
-    trigger(eventName:string,data:any):void {
-        const es:Function[] = this.events[eventName];
+    public trigger(eventName:string,data:any):void {
+        const es:((arg?:any)=>void)[] = this.events[eventName];
         if (!es) return;
         let l:number = es.length;
         while(l--){
             es[l](data);
         }
-    };
+    }
+
+    private _on(name:string,callBack:(arg?:any)=>void):void {
+        this.events[name] = this.events[name] || [];
+        this.events[name].push(callBack);
+    }
 }

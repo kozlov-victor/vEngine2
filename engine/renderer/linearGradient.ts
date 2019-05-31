@@ -1,13 +1,13 @@
-import {Color, ColorJSON} from "./color";
+import {Color, IColorJSON} from "./color";
 import {DebugError} from "../debug/debugError";
-import {Cloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/declarations";
 
 interface IJSON {
-    colorFrom:ColorJSON,
-    colorTo:ColorJSON
+    colorFrom:IColorJSON,
+    colorTo:IColorJSON
 }
 
-export class LinearGradient implements Cloneable<LinearGradient>{
+export class LinearGradient implements ICloneable<LinearGradient>{
 
     type:string = 'LinearGradient';
 

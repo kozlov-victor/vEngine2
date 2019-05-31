@@ -30,19 +30,19 @@ export namespace FntCreator {
 
             const char:string = String.fromCharCode(id);
             ctx.symbols[char] = {
-                x: x,
-                y: y,
-                width: width,
-                height: height,
+                x,
+                y,
+                width,
+                height,
                 destOffsetX: xOffset,
                 destOffsetY: yOffset
-            }
+            };
 
         }
         const fnt:Font = Font.fromAtlas(game,imgLink,ctx);
         fnt.fontFamily = face;
         fnt.fontSize = ctx.lineHeight;
         return fnt;
-    }
+    };
 
 }

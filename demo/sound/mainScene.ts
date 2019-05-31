@@ -7,10 +7,10 @@ import {AudioPlayer} from "@engine/media/audioPlayer";
 
 export class MainScene extends Scene {
 
-    private sound:Sound;
-    private resourceLink:ResourceLink<void>;
+    private sound!:Sound;
+    private resourceLink!:ResourceLink<void>;
 
-    onPreloading() {
+    public onPreloading() {
         this.resourceLink = this.resourceLoader.loadSound('../assets/sound.mp3');
 
         const sound:Sound = new Sound(this.game);
@@ -25,11 +25,11 @@ export class MainScene extends Scene {
 
     }
 
-    onProgress(val: number) {
+    public onProgress(val: number) {
 
     }
 
-    onReady() {
+    public onReady() {
         console.log('ready');
     }
 

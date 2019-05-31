@@ -2,10 +2,10 @@ import {RenderableModel} from "../../../renderableModel";
 import {Rect} from "@engine/geometry/rect";
 import {Container, LAYOUT_SIZE, OVERFLOW} from "../generic/container";
 import {Game} from "@engine/game";
-import {Cloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/declarations";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 
-export class AbsoluteLayout extends Container implements Cloneable<AbsoluteLayout>{
+export class AbsoluteLayout extends Container implements ICloneable<AbsoluteLayout>{
 
     readonly type:string = 'AbsoluteLayout';
 

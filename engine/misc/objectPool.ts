@@ -1,13 +1,13 @@
 import {DebugError} from "../debug/debugError";
 
 
-export interface Releasealable {
-    release():this,
-    capture():this,
-    isCaptured():boolean
+export interface IReleasealable {
+    release():this;
+    capture():this;
+    isCaptured():boolean;
 }
 
-export class ObjectPool<T extends Releasealable> {
+export class ObjectPool<T extends IReleasealable> {
 
     private _pool:T[] = [];
     /**
@@ -19,7 +19,7 @@ export class ObjectPool<T extends Releasealable> {
         if (DEBUG && !Class) throw new DebugError(`can not instantiate ObjectPool: class not provided in constructor`);
     }
 
-    getFreeObject():T{
+    public getFreeObject():T{
 
         for (let i:number=0;i<this.numberOfInstances;i++) {
             let current:T = this._pool[i];
@@ -37,9 +37,9 @@ export class ObjectPool<T extends Releasealable> {
         return undefined;
     }
 
-    releaseObject(obj:T){
+    public releaseObject(obj:T){
         const indexOf:number = this._pool.indexOf(obj);
-        if (DEBUG && indexOf==-1) {
+        if (DEBUG && indexOf===-1) {
             console.error(obj);
             throw new DebugError(`can not release the object: it does not belong to the pool`);
         }

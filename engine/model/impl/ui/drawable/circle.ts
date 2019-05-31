@@ -1,8 +1,8 @@
 import {Ellipse} from "./ellipse";
-import {Cloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/declarations";
 import {Game} from "@engine/game";
 
-export class Circle extends Ellipse implements Cloneable<Circle>{
+export class Circle extends Ellipse implements ICloneable<Circle>{
 
     readonly type:string = 'Circle';
     private _radius: number = 10;

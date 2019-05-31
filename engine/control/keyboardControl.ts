@@ -43,19 +43,19 @@ export enum KEYBOARD_KEY  {
 
 export class KeyboardControl extends AbstractKeypad implements IControl {
 
-    readonly type:string = 'KeyboardControl';
+    public readonly type:string = 'KeyboardControl';
     private keyDownListener:(e:KeyboardEvent)=>void;
     private keyUpListener:(e:KeyboardEvent)=>void;
 
-    listenTo():void {
+    public listenTo():void {
 
         this.keyDownListener = (e:KeyboardEvent)=>{
-            let code = e.keyCode;
+            const code = e.keyCode;
             this.press(code);
         };
 
         this.keyUpListener  = (e:KeyboardEvent)=>{
-            let code = e.keyCode;
+            const code = e.keyCode;
             this.release(code);
         };
 
@@ -63,16 +63,16 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
         window.addEventListener('keyup',this.keyUpListener);
     }
 
-    destroy():void{
+    public destroy():void{
         window.removeEventListener('keydown',this.keyDownListener);
         window.removeEventListener('keyup',this.keyUpListener);
     }
 
-    on(e:KEYBOARD_EVENTS, callback:(e:KEYBOARD_KEY)=>any):void {
+    public on(e:KEYBOARD_EVENTS, callback:(e:KEYBOARD_KEY)=>any):void {
         this.emitter.on(KEYBOARD_EVENTS[e],callback);
     }
 
-    off(e:KEYBOARD_EVENTS, callback:Function):void{
+    public off(e:KEYBOARD_EVENTS, callback:(arg?:any)=>void):void{
         this.emitter.off(KEYBOARD_KEY[e],callback);
     }
 

@@ -8,7 +8,7 @@ export class FastMap<T,U> {
     private readonly keys:T[] = [];
     private readonly values:U[] = [];
 
-    put(key:T,value:U) {
+    public put(key:T,value:U) {
         const index:number = this.keys.indexOf(key);
         if (index===-1) {
             this.keys.push(key);
@@ -18,24 +18,24 @@ export class FastMap<T,U> {
         }
     }
 
-    get(key:T):U{
+    public get(key:T):U{
         const index:number = this.keys.indexOf(key);
         if (index===-1) return null;
         return this.values[index];
     }
 
-    remove(key:T):void{
+    public remove(key:T):void{
         const index:number = this.keys.indexOf(key);
         if (index===-1) return;
         this.keys.splice(index,1);
         this.values.splice(index,1);
     }
 
-    getKeys():T[]{
+    public getKeys():T[]{
         return this.keys;
     }
 
-    getValues():U[]{
+    public getValues():U[]{
         return this.values;
     }
 

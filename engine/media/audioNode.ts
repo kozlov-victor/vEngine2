@@ -1,44 +1,41 @@
-import {Sound} from "../model/impl/sound";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
+import {Sound} from "@engine/model/impl/sound";
 
-// todo incrementer
-const getOrder = ():number=> {
-    return 0;
-};
 
 export class AudioNode {
 
-    private currSound:Sound = null;
+    private currSound:Sound;
 
     constructor(public context:BasicAudioContext){}
 
-    play(link:ResourceLink<void>,loop:boolean = false):void {
+    public play(link:ResourceLink<void>,loop:boolean = false):void {
         this.context.play(link,loop);
+        // todo currSound is always undefined
     }
 
-    stop():void {
+    public stop():void {
         this.context.stop();
         this.currSound = null;
     }
 
-    setGain(val:number):void {
+    public setGain(val:number):void {
         this.context.setGain(val);
     }
 
-    pause():void {
+    public pause():void {
         this.context.pause();
     }
 
-    resume():void {
+    public resume():void {
         this.context.resume();
     }
 
-    isFree():boolean {
+    public isFree():boolean {
         return this.context.isFree();
     }
 
-    getCurrSound():Sound {
+    public getCurrSound():Sound {
         return this.currSound;
     }
 

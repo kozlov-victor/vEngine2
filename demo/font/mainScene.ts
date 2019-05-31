@@ -8,31 +8,35 @@ import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
 
 export class MainScene extends Scene {
 
+    public onReady() {
 
-    onPreloading() {
-        let fnt:Font = new Font(this.game);
+    }
+
+
+    public onPreloading() {
+        const fnt:Font = new Font(this.game);
         fnt.fontSize = 50;
         fnt.fontFamily = 'monospace';
         fnt.fontColor = Color.RGB(255,0,0);
         fnt.generate();
 
-        let fnt2:Font = new Font(this.game);
+        const fnt2:Font = new Font(this.game);
         fnt2.fontSize = 20;
         fnt2.fontFamily = 'monospace';
         fnt2.fontColor = Color.RGB(0,220,12);
         fnt2.generate();
 
-        let tf:TextField = new TextField(this.game);
+        const tf:TextField = new TextField(this.game);
         tf.pos.setY(23);
         tf.setFont(fnt2);
         tf.setText("no clicks");
         this.appendChild(tf);
 
-        let btn:Button = new Button(this.game);
+        const btn:Button = new Button(this.game);
         btn.setFont(fnt);
         btn.setText("click!");
         btn.pos.setXY(10,10);
-        let bg:Rectangle = new Rectangle(this.game);
+        const bg:Rectangle = new Rectangle(this.game);
         bg.borderRadius = 15;
         bg.fillColor = Color.RGB(0,120,1);
         btn.background = bg;
@@ -47,10 +51,6 @@ export class MainScene extends Scene {
 
 
         tf.moveToFront();
-
-    }
-
-    onReady() {
 
     }
 

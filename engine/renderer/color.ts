@@ -1,15 +1,35 @@
-import {ObjectPool, Releasealable} from "../misc/objectPool";
-import {Cloneable} from "@engine/declarations";
+import {ObjectPool, IReleasealable} from "../misc/objectPool";
+import {ICloneable} from "@engine/declarations";
 
 
-export interface ColorJSON {
-    r:number,
-    g:number,
-    b:number,
-    a:number
+export interface IColorJSON {
+    r:number;
+    g:number;
+    b:number;
+    a:number;
 }
 
-export class Color implements Cloneable<Color>, Releasealable{
+export class Color implements ICloneable<Color>, IReleasealable{
+
+    public static WHITE = Color.RGB(255,255,255);
+    public static GREY  = Color.RGB(127,127,127);
+    public static BLACK = Color.RGB(0,0,0);
+    public static NONE  = Color.RGB(0,0,0,0);
+
+    public static RGB(r:number,g:number,b:number,a?:number):Color{
+        const c:Color = new Color(0,0,0);
+        c.setRGBA(r,g,b,a);
+        return c;
+    }
+
+    private static objectPool:ObjectPool<Color>;
+
+    private static getFromPool():Color{
+        if (Color.objectPool===undefined) Color.objectPool = new ObjectPool<Color>(Color);
+        return Color.objectPool.getFreeObject();
+    }
+
+    public readonly type:string = 'Color';
 
     private r:number;
     private g:number;
@@ -20,29 +40,15 @@ export class Color implements Cloneable<Color>, Releasealable{
     private gNorm:number;
     private bNorm:number;
     private aNorm:number;
-
-    public static WHITE = Color.RGB(255,255,255);
-    public static GREY  = Color.RGB(127,127,127);
-    public static BLACK = Color.RGB(0,0,0);
-    public static NONE  = Color.RGB(0,0,0,0);
-
-    private static objectPool:ObjectPool<Color>;
     private _arr:number[] = null;
 
-    readonly type:string = 'Color';
+    private _captured:boolean = false;
 
     constructor(r:number,g:number,b:number,a?:number){
         this.setRGBA(r,g,b,a);
     }
 
-    private normalizeToZeroOne():void{
-        this.rNorm = this.r / 0xff;
-        this.gNorm = this.g / 0xff;
-        this.bNorm = this.b / 0xff;
-        this.aNorm = this.a / 0xff;
-    }
-
-    setRGBA(r:number,g:number,b:number,a:number = 255):void{
+    public setRGBA(r:number,g:number,b:number,a:number = 255):void{
         this.r = r;
         this.g = g;
         this.b = b;
@@ -50,7 +56,7 @@ export class Color implements Cloneable<Color>, Releasealable{
         this.normalizeToZeroOne();
     }
 
-    setRGB(r:number,g:number,b:number):void{
+    public setRGB(r:number,g:number,b:number):void{
         this.r = r;
         this.g = g;
         this.b = b;
@@ -58,63 +64,50 @@ export class Color implements Cloneable<Color>, Releasealable{
         this.normalizeToZeroOne();
     }
 
-    setR(val:number):void{
+    public setR(val:number):void{
         this.r = val;
         this.normalizeToZeroOne();
     }
 
-    setG(val:number):void{
+    public setG(val:number):void{
         this.g = val;
         this.normalizeToZeroOne();
     }
 
-    setB(val:number):void{
+    public setB(val:number):void{
         this.b = val;
         this.normalizeToZeroOne();
     }
 
-    setA(val:number):void{
+    public setA(val:number):void{
         this.a = val;
         this.normalizeToZeroOne();
     }
 
-    set(another:Color):void{
+    public set(another:Color):void{
         this.setRGBA(another.r,another.g,another.b,another.a);
     }
 
-    clone():Color{
+    public clone():Color{
         return new Color(this.r,this.g,this.b,this.a);
     }
 
-    private _captured:boolean = false;
-
-    capture(): this {
+    public capture(): this {
         this._captured = true;
         return this;
     }
 
-    isCaptured(): boolean {
+    public isCaptured(): boolean {
         return this._captured;
     }
 
-    release(): this {
+    public release(): this {
         this._captured = false;
         return this;
     }
 
-    private static getFromPool():Color{
-        if (Color.objectPool===undefined) Color.objectPool = new ObjectPool<Color>(Color);
-        return Color.objectPool.getFreeObject();
-    }
 
-    static RGB(r:number,g:number,b:number,a?:number):Color{
-        let c:Color = new Color(0,0,0);
-        c.setRGBA(r,g,b,a);
-        return c;
-    }
-
-
-    asGL():[number,number,number,number]{
+    public asGL():[number,number,number,number]{
         if (this._arr===null) this._arr = new Array(3);
         this._arr[0] = this.rNorm;
         this._arr[1] = this.gNorm;
@@ -123,16 +116,23 @@ export class Color implements Cloneable<Color>, Releasealable{
         return this._arr as [number,number,number,number];
     }
 
-    asCSS():string{
+    public asCSS():string{
         return `rgba(${this.r},${this.g},${this.b},${this.a})`;
     }
 
-    toJSON():ColorJSON{
+    public toJSON():IColorJSON{
         return {r:this.r,g:this.g,b:this.b,a:this.a};
     }
 
-    fromJSON(json:ColorJSON) {
+    public fromJSON(json:IColorJSON) {
         this.setRGBA(json.r,json.g,json.b,json.a);
+    }
+
+    private normalizeToZeroOne():void{
+        this.rNorm = this.r / 0xff;
+        this.gNorm = this.g / 0xff;
+        this.bNorm = this.b / 0xff;
+        this.aNorm = this.a / 0xff;
     }
 
 }

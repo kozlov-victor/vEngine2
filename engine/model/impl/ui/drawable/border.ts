@@ -1,9 +1,9 @@
 import {Rectangle} from "./rectangle";
 import {Color} from "@engine/renderer/color";
 import {Game} from "@engine/game";
-import {Cloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/declarations";
 
-export class Border extends Rectangle implements Cloneable<Border>{
+export class Border extends Rectangle implements ICloneable<Border>{
 
     readonly type:string = 'Border';
 

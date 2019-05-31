@@ -8,16 +8,17 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Int} from "@engine/declarations";
 import {DebugError} from "@engine/debug/debugError";
 
-interface MouseDragPoint {
-    mX: number,
-    mY: number,
-    x:number,y:number,
-    target: GameObject,
-    defaultPrevented:boolean,
-    preventDefault():void,
-    dragStartX:number,
-    dragStartY:number,
-    dragStart: boolean
+interface IMouseDragPoint {
+    mX: number;
+    mY: number;
+    x:number;
+    y:number;
+    target: GameObject;
+    defaultPrevented:boolean;
+    dragStartX:number;
+    dragStartY:number;
+    dragStart: boolean;
+    preventDefault():void;
 }
 
 
@@ -25,22 +26,22 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
 
     private static _getEventId(e:IMousePoint):Int{
         return (e.id || 1) as Int;
-    };
+    }
 
     private blurListener:(e:MouseEvent)=>void;
-    private gameObjectOnClick:Function;
-    private sceneOnMouseDown:Function;
-    private sceneOnMouseMove:Function;
-    private sceneOnMouseUp:Function;
+    private gameObjectOnClick:(e:IMousePoint)=>void;
+    private sceneOnMouseDown:()=>void;
+    private sceneOnMouseMove:()=>void;
+    private sceneOnMouseUp:()=>void;
 
-    private readonly points:{[key:number]:MouseDragPoint} = {};
+    private readonly points:{[key:number]:IMouseDragPoint} = {};
     private gameObject:RenderableModel;
 
     constructor(game:Game){
         super(game,null);
     }
 
-    manage(gameObject:RenderableModel):void {
+    public manage(gameObject:RenderableModel):void {
         this.gameObject = gameObject;
         this.gameObjectOnClick = gameObject.on(MOUSE_EVENTS.click,(e:IMousePoint)=>{
             this.points[DraggableBehaviour._getEventId(e)] = {
@@ -52,19 +53,19 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
                 },
                 dragStartX:0,
                 dragStartY:0
-            } as MouseDragPoint;
+            } as IMouseDragPoint;
         });
         const scene:Scene = this.game.getCurrScene();
         this.sceneOnMouseDown = scene.on(MOUSE_EVENTS.mouseDown,(e:IMousePoint)=>{
             const pointId:number = DraggableBehaviour._getEventId(e);
-            const point:MouseDragPoint = this.points[pointId];
+            const point:IMouseDragPoint = this.points[pointId];
             if (!point) return;
             point.dragStartX = point.target.pos.x;
             point.dragStartY = point.target.pos.y;
         });
         this.sceneOnMouseMove = scene.on(MOUSE_EVENTS.mouseMove,(e:IMousePoint)=>{
             const pointId = DraggableBehaviour._getEventId(e);
-            const point:MouseDragPoint = this.points[pointId];
+            const point:IMouseDragPoint = this.points[pointId];
             if (!point) return;
             if (!point.dragStart) {
                 point.dragStart = true;
@@ -79,7 +80,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         });
         this.sceneOnMouseUp = scene.on(MOUSE_EVENTS.mouseUp,(e:IMousePoint)=>{
             const pointId:number = DraggableBehaviour._getEventId(e);
-            const point:MouseDragPoint = this.points[pointId];
+            const point:IMouseDragPoint = this.points[pointId];
             if (!point) return;
             if (point.dragStart) {
                 point.x = gameObject.pos.x;
@@ -94,12 +95,12 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         this.game.getRenderer().container.addEventListener('mouseleave',this.blurListener);
     }
 
-    revalidate() {
+    public revalidate() {
         super.revalidate();
         if (DEBUG && (this.gameObject.size.isZero())) throw new DebugError(`can not apply DraggableBehaviour ot object with zero render size. Current size is ${this.gameObject.size.toJSON()}`);
     }
 
-    destroy():void{
+    public destroy():void{
         const scene:Scene = this.game.getCurrScene();
         this.game.getRenderer().container.removeEventListener('mouseleave',this.blurListener);
         this.gameObject.off(MOUSE_EVENTS.click,this.gameObjectOnClick);

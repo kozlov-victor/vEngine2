@@ -17,15 +17,15 @@ export class MainScene extends Scene {
     private logoObj:GameObject;
     private logoLink:ResourceLink<Texture>;
 
-    onPreloading() {
+    public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
 
     }
 
-    onReady() {
+    public onReady() {
         this.colorBG = Color.BLACK;
         this.logoObj = new GameObject(this.game);
-        let spr:Image = new Image(this.game);
+        const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});

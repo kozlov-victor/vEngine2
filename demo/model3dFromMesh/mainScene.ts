@@ -13,7 +13,7 @@ class ScullMesh extends AbstractPrimitive {
         this.vertexArr = skullData.vertices;
         this.normalArr = skullData.normals;
         this.indexArr =  skullData.faces;
-        this.texCoordArr = undefined;//new Array(this.vertexArr.length/3*2).fill(0);
+        this.texCoordArr = undefined;
     }
 
 }
@@ -25,21 +25,21 @@ export class MainScene extends Scene {
     private logoObj:GameObject3d;
     private dataLink:ResourceLink<any>;
 
-    onPreloading() {
+    public onPreloading() {
         this.dataLink = this.resourceLoader.loadJSON('./skull.json');
-        let rect = new Rectangle(this.game);
+        const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }
 
 
-    onProgress(val: number) {
+    public onProgress(val: number) {
         this.preloadingGameObject.size.width = val*this.game.width;
         console.log(val);
     }
 
-    onReady() {
+    public onReady() {
         const obj:GameObject3d = new GameObject3d(this.game);
         this.logoObj = obj;
         obj.color.setRGB(244,255,244);
@@ -50,7 +50,7 @@ export class MainScene extends Scene {
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{
-            //obj.angle3d.x+=0.01;
+            // obj.angle3d.x+=0.01;
             obj.angle3d.y-=0.01;
         },20);
 

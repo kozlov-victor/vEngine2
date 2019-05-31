@@ -16,11 +16,11 @@ export class MainScene extends Scene {
     private fnt:Font;
     private tf:TextField;
 
-    onPreloading() {
+    public onPreloading() {
         this.fntResourceLink = this.resourceLoader.loadText('../fnt/font.fnt');
         this.sprResourceLink = this.resourceLoader.loadImage('../fnt/font.png');
 
-        let fnt:Font = new Font(this.game);
+        const fnt:Font = new Font(this.game);
         fnt.fontSize = 50;
         fnt.fontFamily = 'monospace';
         fnt.fontColor = Color.RGB(255,0,0);
@@ -28,7 +28,7 @@ export class MainScene extends Scene {
     }
 
 
-    onReady() {
+    public onReady() {
 
 
         this.colorBG.setRGB(12,12,12);

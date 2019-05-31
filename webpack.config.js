@@ -2,6 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
+const TSLintPlugin = require('tslint-webpack-plugin');
 const colors = require('./node_tools/colors');
 
 class WebpackDonePlugin{
@@ -94,6 +95,9 @@ module.exports = (env={})=>{
         new webpack.DefinePlugin({
             BUILD_AT: new Date().getTime(),
             DEBUG: debug,
+        }),
+        new TSLintPlugin({
+            //files: ['./src/**/*.ts']
         }),
         new WebpackDonePlugin()
     ];

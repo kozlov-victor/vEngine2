@@ -7,14 +7,14 @@ import {Mashine} from "./mashine";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 export class Wheel {
 
-    position:number = 0;
-    image:Image;
-    mashine:Mashine;
-
-    static readonly CELL_WIDTH:number = 215;
-    static readonly CELL_PADDING:number = 50;
-    static readonly CELL_HEIGHT:number = 251;
+    public static readonly CELL_WIDTH:number = 215;
+    public static readonly CELL_PADDING:number = 50;
+    public static readonly CELL_HEIGHT:number = 251;
     private static readonly CELLS_IN_WHEEL:number = 5;
+
+    public position:number = 0;
+    public image:Image;
+    public mashine:Mashine;
 
     private free:boolean = true;
 
@@ -24,7 +24,7 @@ export class Wheel {
 
     }
 
-    spinTo(n:number,freeSpins:number,delayTime:number){
+    public spinTo(n:number,freeSpins:number,delayTime:number){
 
         if (!this.free) return;
 
@@ -42,7 +42,7 @@ export class Wheel {
                 Wheel.CELL_HEIGHT},
             time: freeSpins * 1000,
             progress: ({val}:{val:number})=>{
-                this.image.offset.setY(val)
+                this.image.offset.setY(val);
             },
             complete: ()=>{
                 this.free = true;
@@ -53,19 +53,10 @@ export class Wheel {
         this.game.getCurrScene().addTween(t);
     }
 
-    isFree():boolean {
+    public isFree():boolean {
         return this.free;
     }
 
 
 
 }
-
-
-// target:any,
-// progress?:Function,
-// complete?:Function,
-// ease?:EaseFn,
-// time:number,
-// from?:{[key:string]:number},
-// to?:{[key:string]:number}

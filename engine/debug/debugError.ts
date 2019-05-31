@@ -1,7 +1,7 @@
 
 export class DebugError extends Error {
 
-    errorMessage:string;
+    public errorMessage:string;
 
     constructor(message:string){
         super(message);
@@ -15,7 +15,7 @@ export class DebugError extends Error {
         this.errorMessage = message;
     }
 
-    toString():string{
+    public toString():string{
         return this.errorMessage;
     }
 

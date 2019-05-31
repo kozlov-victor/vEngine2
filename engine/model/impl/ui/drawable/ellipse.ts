@@ -1,9 +1,9 @@
 import {Shape} from "../generic/shape";
-import {Cloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/declarations";
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/game";
 
-export class Ellipse extends Shape implements Cloneable<Ellipse>{
+export class Ellipse extends Shape implements ICloneable<Ellipse>{
 
     readonly type:string = 'Ellipse';
     readonly center:Point2d = new Point2d();

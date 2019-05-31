@@ -6,7 +6,7 @@ import {FastMap} from "@engine/misc/fastMap";
 
 export class AmbientLight extends AbstractLight{
 
-    direction:[number,number,number];
+    public direction:[number,number,number];
 
 
     constructor(protected game: Game) {
@@ -15,7 +15,7 @@ export class AmbientLight extends AbstractLight{
     }
 
     /** @private */
-    setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>):void {
+    public setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>):void {
         map.put('u_ambientLight.color',this.color.asGL());
         map.put('u_ambientLight.direction',this.direction);
         map.put('u_ambientLight.intensity',this.intensity);

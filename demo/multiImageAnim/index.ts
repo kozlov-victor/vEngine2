@@ -4,9 +4,9 @@ import {Game} from "@engine/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 
-let game = new Game();
+const game = new Game();
 console.log(Game.getInstance());
-let mainScene:Scene = new MainScene(game);
+const mainScene:Scene = new MainScene(game);
 game.setRenderer(WebGlRenderer);
 game.addControl(MouseControl);
 game.runScene(mainScene);

@@ -2,12 +2,15 @@ import {RenderableModel} from "../../../renderableModel";
 import {Color} from "@engine/renderer/color";
 import {Game} from "@engine/game";
 import {LinearGradient} from "@engine/renderer/linearGradient";
+import {IFilterable} from "@engine/declarations";
+import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 
-export abstract class Shape extends RenderableModel {
+export abstract class Shape extends RenderableModel implements IFilterable{
 
     color:Color = Color.BLACK.clone();
     lineWidth:number = 0;
     fillColor:Color|LinearGradient = Color.RGB(100,100,100);
+    filters: AbstractFilter[] = [];
 
     setWH(w:number,h:number = w):void{
         this.setXYWH(this.pos.x,this.pos.y,w,h);
@@ -19,7 +22,7 @@ export abstract class Shape extends RenderableModel {
         this.getSrcRect().setXYWH(x,y,w,h);
     }
 
-    constructor(game:Game){
+    protected constructor(game:Game){
         super(game);
     }
 
@@ -28,6 +31,7 @@ export abstract class Shape extends RenderableModel {
         cloned.lineWidth = this.lineWidth;
         if (!cloned.fillColor)cloned.fillColor = this.fillColor.clone();
         else (cloned.fillColor as Color).set(this.fillColor as Color); //todo not very nice
+        cloned.filters = [...this.filters];
         super.setClonedProperties(cloned);
     }
 

@@ -6,12 +6,12 @@ import {KeyboardControl} from "@engine/control/keyboardControl";
 import {GamePadControl} from "@engine/control/gamePadControl";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 
-let game = new Game(800,600);
+const game = new Game(800,600);
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(GamePadControl);
 game.addControl(MouseControl);
-let mainScene:Scene = new MainScene(game);
+const mainScene:Scene = new MainScene(game);
 game.runScene(mainScene);
 
 

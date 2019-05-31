@@ -1,11 +1,11 @@
 import {AbstractFrameAnimation} from "@engine/model/impl/frameAnimation/abstract/abstractFrameAnimation";
-import {Cloneable, Revalidatable} from "@engine/declarations";
+import {ICloneable, IRevalidatable} from "@engine/declarations";
 import {Image} from "@engine/model/impl/ui/drawable/image";
 import {DebugError} from "@engine/debug/debugError";
-import {RectJSON} from "@engine/geometry/rect";
+import {IRectJSON} from "@engine/geometry/rect";
 
 
-export class AtlasFrameAnimation extends AbstractFrameAnimation<RectJSON> implements Revalidatable, Cloneable<AtlasFrameAnimation>{
+export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> implements IRevalidatable, ICloneable<AtlasFrameAnimation>{
 
     readonly type:string = 'AtlasFrameAnimation';
 
@@ -16,7 +16,7 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<RectJSON> implem
     }
 
     protected onNextFrame(i: number): void {
-        const currRect:RectJSON = this.frames[i];
+        const currRect:IRectJSON = this.frames[i];
         this._atlas.getSrcRect().fromJSON(currRect);
         this._atlas.size.set(this._atlas.getSrcRect().size);
     }

@@ -11,7 +11,7 @@ import {PolyLine} from "@engine/model/impl/ui/drawable/polyLine";
 
 export class MainScene extends Scene {
 
-    onPreloading() {
+    public onPreloading() {
         const rect:Rectangle = new Rectangle(this.game);
         let gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0.2;
@@ -62,11 +62,11 @@ export class MainScene extends Scene {
 
     }
 
-    onProgress(val: number) {
+    public onProgress(val: number) {
 
     }
 
-    onReady() {
+    public onReady() {
         console.log('ready');
     }
 

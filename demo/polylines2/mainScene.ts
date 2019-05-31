@@ -14,7 +14,7 @@ export class MainScene extends Scene {
 
 
 
-    onPreloading() {
+    public onPreloading() {
 
         const polyLine7:PolyLine = new PolyLine(this.game);
         polyLine7.pos.setXY(0, 100);
@@ -83,20 +83,20 @@ export class MainScene extends Scene {
 
 
         const children = polyLine7.children;
-        (polyLine7 as any)['children'] = [];
+        polyLine7.removeChildren();
         let i:number = 0;
         const interval:Timer = this.setInterval(()=>{
-            if (i==children.length) interval.kill();
-            else polyLine7.appendChild(children[i++]);
+            if (i===children.length) { interval.kill(); }
+            else { polyLine7.appendChild(children[i++]); }
         },10);
 
     }
 
-    onProgress(val: number) {
+    public onProgress(val: number) {
 
     }
 
-    onReady() {
+    public onReady() {
 
     }
 
