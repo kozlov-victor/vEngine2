@@ -5,15 +5,15 @@ export class Blender {
 
     constructor(private gl:WebGLRenderingContext){}
 
-    enable():void{
+    public enable():void{
         this.gl.enable(this.gl.BLEND);
     }
 
-    disable():void{
+    public disable():void{
         this.gl.disable(this.gl.BLEND);
     }
 
-    setBlendMode(blendMode:BLEND_MODE):void {
+    public setBlendMode(blendMode:BLEND_MODE):void {
         const gl:WebGLRenderingContext = this.gl;
         switch (blendMode) {
             case BLEND_MODE.NORMAL:

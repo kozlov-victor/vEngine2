@@ -6,16 +6,16 @@ import {Image} from "@engine/model/impl/ui/drawable/image";
 
 export class TileMap {
 
-    readonly type:string = "TileMap";
-    spriteSheet:Image;
-    data:any[] = [];
-    _tilesInScreenX:number;
-    _tilesInScreenY:number;
-    width:number = 0;
-    height:number = 0;
+    public readonly type:string = "TileMap";
+    public spriteSheet:Image;
+    public data:any[] = [];
+    public _tilesInScreenX:number;
+    public _tilesInScreenY:number;
+    public width:number = 0;
+    public height:number = 0;
 
-    readonly filters: AbstractFilter[];
-    blendMode:string = '';
+    public readonly filters: AbstractFilter[];
+    public blendMode:string = '';
 
     constructor(protected game:Game){
 
@@ -54,7 +54,7 @@ export class TileMap {
     //     }
     // }
 
-    revalidate(){
+    public revalidate(){
         // this.game.camera._updateRect();
         // let camRect = this.game.camera.getRectScaled();
         // if (!this.spriteSheet) return;
@@ -104,7 +104,7 @@ export class TileMap {
     //     return result;
     // }
 
-    render(){
+    public render(){
         // const spriteSheet:SpriteSheet = this.spriteSheet;
         // if (!spriteSheet) return;
         // const camera:Camera = this.game.camera;

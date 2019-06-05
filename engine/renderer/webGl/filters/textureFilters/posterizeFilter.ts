@@ -38,11 +38,11 @@ export class PosterizeFilter extends AbstractFilter {
     }
 
 
-    setGamma(n:number):void{
+    public setGamma(n:number):void{
         this.setUniform(this.gamma,n);
     }
 
-    setNumOfColors(n:number):void{
+    public setNumOfColors(n:number):void{
         this.setUniform(this.numColors,n);
     }
 

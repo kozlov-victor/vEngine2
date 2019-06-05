@@ -44,15 +44,15 @@ export abstract class AbstractFilter {
         this.simpleRectDrawer = new SimpleRectDrawer(this.gl);
     }
 
-    setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
+    public setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
         this.simpleRectDrawer.setUniform(name,value);
     }
 
-    getDrawer():AbstractDrawer{
+    public getDrawer():AbstractDrawer{
         return this.simpleRectDrawer;
     }
 
-    doFilter(destFrameBuffer:FrameBuffer){ // todo remove destFrameBuffer from arg and extract interface with doFilter() method
+    public doFilter(destFrameBuffer:FrameBuffer){ // todo remove destFrameBuffer from arg and extract interface with doFilter() method
         destFrameBuffer.bind();
         const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY.mat16);

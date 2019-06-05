@@ -30,12 +30,36 @@ export class FrameBuffer {
         this._init(gl,width,height);
     }
 
-    private _checkBound():void{
-        if (DEBUG) return;
-        if (FrameBuffer.currInstance!==this) throw new DebugError(`frame buffer is not bound; call bind() method firstly`);
+    public bind():void{
+        if (FrameBuffer.currInstance===this) return;
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.glFrameBuffer);
+        this.gl.viewport(0, 0, this.width,this.height);
+        FrameBuffer.currInstance = this;
     }
 
-    _init(gl:WebGLRenderingContext,width:number,height:number):void{
+    public unbind():void{
+        this._checkBound();
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+        FrameBuffer.currInstance = null;
+    }
+
+    public clear(color:Color){
+        this._checkBound();
+        const arr:[number,number,number,number] = color.asGL();
+        this.gl.clearColor(arr[0],arr[1],arr[2],arr[3]);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    }
+
+    public destroy():void{
+        this.gl.deleteRenderbuffer(this.glRenderBuffer);
+        this.gl.deleteFramebuffer(this.glFrameBuffer);
+    }
+
+    public getTexture():Texture {
+        return this.texture;
+    }
+
+    private _init(gl:WebGLRenderingContext,width:number,height:number):void{
         // Init Render Buffer
         this.glRenderBuffer = gl.createRenderbuffer() as WebGLRenderbuffer;
         if (DEBUG && !this.glRenderBuffer) throw new DebugError(`can not allocate memory for glRenderBuffer`);
@@ -58,33 +82,9 @@ export class FrameBuffer {
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 
-    bind():void{
-        if (FrameBuffer.currInstance===this) return;
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.glFrameBuffer);
-        this.gl.viewport(0, 0, this.width,this.height);
-        FrameBuffer.currInstance = this;
-    }
-
-    unbind():void{
-        this._checkBound();
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
-        FrameBuffer.currInstance = null;
-    }
-
-    clear(color:Color){
-        this._checkBound();
-        const arr:[number,number,number,number] = color.asGL();
-        this.gl.clearColor(arr[0],arr[1],arr[2],arr[3]);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-    }
-
-    destroy():void{
-        this.gl.deleteRenderbuffer(this.glRenderBuffer);
-        this.gl.deleteFramebuffer(this.glFrameBuffer);
-    }
-
-    getTexture():Texture {
-        return this.texture;
+    private _checkBound():void{
+        if (DEBUG) return;
+        if (FrameBuffer.currInstance!==this) throw new DebugError(`frame buffer is not bound; call bind() method firstly`);
     }
 
 }

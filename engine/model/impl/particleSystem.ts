@@ -5,34 +5,34 @@ import {RenderableModel} from "@engine/model/renderableModel";
 import {noop} from "@engine/misc/object";
 import {Point2d} from "@engine/geometry/point2d";
 
-const r:(obj:ParticlePropertyDesc)=>number
-    = (obj:ParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
+const r:(obj:IParticlePropertyDesc)=>number
+    = (obj:IParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
 
-interface ParticlePropertyDesc {
-    from:number,
-    to:number
+interface IParticlePropertyDesc {
+    from:number;
+    to:number;
 }
 
-type RenderableCloneable = RenderableModel & {clone:()=>RenderableCloneable}
+type RenderableCloneable = RenderableModel & {clone:()=>RenderableCloneable};
 
-interface ParticleHolder {
-    particle:RenderableCloneable,
-    lifeTime:number,
-    createdTime:number,
+interface IParticleHolder {
+    particle:RenderableCloneable;
+    lifeTime:number;
+    createdTime:number;
 }
 
 
 export class ParticleSystem extends RenderableModel {
 
-    readonly type:string = 'ParticleSystem';
-    numOfParticlesToEmit:ParticlePropertyDesc = {from:1,to:10};
-    particleAngle:ParticlePropertyDesc = {from:0,to:Math.PI*2};
-    particleVelocity:ParticlePropertyDesc = {from:1,to:100};
-    particleLiveTime:ParticlePropertyDesc = {from:100,to:1000};
-    emissionRadius:number = 0;
-    emissionPosition:Point2d = new Point2d();
+    public readonly type:string = 'ParticleSystem';
+    public numOfParticlesToEmit:IParticlePropertyDesc = {from:1,to:10};
+    public particleAngle:IParticlePropertyDesc = {from:0,to:Math.PI*2};
+    public particleVelocity:IParticlePropertyDesc = {from:1,to:100};
+    public particleLiveTime:IParticlePropertyDesc = {from:100,to:1000};
+    public emissionRadius:number = 0;
+    public emissionPosition:Point2d = new Point2d();
 
-    private _particles:ParticleHolder[] = [];
+    private _particles:IParticleHolder[] = [];
     private _prototypes:RenderableCloneable[] = [];
     private _onUpdateParticle:(r:RenderableModel)=>void = noop;
     private _onEmitParticle:(r:RenderableModel)=>void = noop;
@@ -41,20 +41,20 @@ export class ParticleSystem extends RenderableModel {
         super(game);
     }
 
-    revalidate():void {
+    public revalidate():void {
         if (DEBUG && !this._prototypes.length) throw new DebugError(`particle system error: add at least one object to emit`);
         if (this.particleAngle.to<this.particleAngle.from) this.particleAngle.to += 2*Math.PI;
     }
 
-    addParticle(r:RenderableCloneable):void {
-        if (DEBUG && !r.clone) {
+    public addParticle(renderableCloneable:RenderableCloneable):void {
+        if (DEBUG && !renderableCloneable.clone) {
             console.error(r);
             throw new DebugError(`can not add particle: model does not implemet cloneable interface`);
         }
-        this._prototypes.push(r);
+        this._prototypes.push(renderableCloneable);
     }
 
-    emit():void {
+    public emit():void {
 
         if (DEBUG && !this.getLayer()) {
             console.error(this);
@@ -80,10 +80,10 @@ export class ParticleSystem extends RenderableModel {
         }
     }
 
-    update():void {
+    public update():void {
         super.update();
         const time:number = this.game.getTime();
-        this._particles.forEach((holder:ParticleHolder)=>{
+        this._particles.forEach((holder:IParticleHolder)=>{
             this._onUpdateParticle(holder.particle);
             if (time - holder.createdTime > holder.lifeTime) {
                 this._particles.splice(this._particles.indexOf(holder),1);
@@ -92,15 +92,15 @@ export class ParticleSystem extends RenderableModel {
         });
     }
 
-    onUpdateParticle(onUpdateParticle:(r:RenderableModel)=>void):void {
+    public onUpdateParticle(onUpdateParticle:(r:RenderableModel)=>void):void {
         this._onUpdateParticle = onUpdateParticle;
     }
 
-    onEmitParticle(onEmitParticle:(r:RenderableModel)=>void):void {
+    public onEmitParticle(onEmitParticle:(r:RenderableModel)=>void):void {
         this._onEmitParticle = onEmitParticle;
     }
 
-    draw():boolean{
+    public draw():boolean{
         return true; // do nothing
     }
 

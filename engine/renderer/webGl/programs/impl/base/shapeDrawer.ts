@@ -1,6 +1,6 @@
 import {ShaderProgram} from "../../../base/shaderProgram";
 import {AbstractDrawer} from "../../abstract/abstractDrawer";
-import {BufferInfo, BufferInfoDescription} from "../../../base/bufferInfo";
+import {BufferInfo, IBufferInfoDescription} from "../../../base/bufferInfo";
 import {Plane} from "../../../primitives/plane";
 import {GL_TYPE} from "../../../base/shaderProgramUtils";
 import {ShaderGenerator} from "../../../shaders/generators/shaderGenerator";
@@ -9,28 +9,28 @@ import {fragmentSource} from "@engine/renderer/webGl/programs/impl/base/shapeDra
 
 export class ShapeDrawer extends AbstractDrawer {
 
-    u_vertexMatrix:string;
-    a_position:string;
-    u_lineWidth:string;
-    u_rx:string;
-    u_ry:string;
-    u_width:string;
-    u_height:string;
-    u_borderRadius:string;
-    u_color:string;
-    u_alpha:string;
-    u_fillLinearGradient:string;
-    u_fillColor:string;
-    u_shapeType:string;
-    u_fillType:string;
-    u_texRect:string;
-    u_texOffset:string;
-    u_rectOffsetTop: string;
-    u_rectOffsetLeft: string;
-    u_repeatFactor:string;
-    u_stretchMode:string;
-    u_arcAngleFrom:string;
-    u_arcAngleTo:string;
+    public u_vertexMatrix:string;
+    public a_position:string;
+    public u_lineWidth:string;
+    public u_rx:string;
+    public u_ry:string;
+    public u_width:string;
+    public u_height:string;
+    public u_borderRadius:string;
+    public u_color:string;
+    public u_alpha:string;
+    public u_fillLinearGradient:string;
+    public u_fillColor:string;
+    public u_shapeType:string;
+    public u_fillType:string;
+    public u_texRect:string;
+    public u_texOffset:string;
+    public u_rectOffsetTop: string;
+    public u_rectOffsetLeft: string;
+    public u_repeatFactor:string;
+    public u_stretchMode:string;
+    public u_arcAngleFrom:string;
+    public u_arcAngleTo:string;
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
@@ -86,7 +86,7 @@ export class ShapeDrawer extends AbstractDrawer {
             posIndexInfo: {array: this.primitive.indexArr},
             //texVertexInfo: {array: this.primitive.texCoordArr, type: gl.FLOAT, size: 2, attrName: 'a_texCoord'},
             drawMethod: this.gl.TRIANGLE_STRIP
-        } as BufferInfoDescription);
+        } as IBufferInfoDescription);
     }
 
 

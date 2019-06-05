@@ -1,4 +1,4 @@
-import {Font, RectViewJSON} from "../../font";
+import {Font, IRectViewJSON} from "../../font";
 import {Rect} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
 import {ScrollableContainer} from "../generic/scrollableContainer";
@@ -24,20 +24,20 @@ export enum WORD_BRAKE {
 }
 
 class TextInfo {
-    allCharsCached: CharInfo[] = [];
-    size:Size = new Size();
-    pos: Point2d = new Point2d();
+    public allCharsCached: CharInfo[] = [];
+    public size:Size = new Size();
+    public pos: Point2d = new Point2d();
     private strings: StringInfo[] = [];
 
     constructor(private textField: TextField) {}
 
-    reset():void {
+    public reset():void {
         this.allCharsCached = [];
         this.strings = [];
         this.pos.setXY(this.textField.paddingLeft,this.textField.paddingTop);
     }
 
-    newString():void {
+    public newString():void {
         this.pos.x = this.textField.paddingLeft;
         if (this.strings.length) {
             this.pos.y += this.textField.getFont().fontContext.lineHeight;
@@ -45,7 +45,7 @@ class TextInfo {
         this.strings.push(new StringInfo());
     }
 
-    addChar(c: CharInfo):void {
+    public addChar(c: CharInfo):void {
         this.strings[this.strings.length - 1].chars.push(c);
         this.allCharsCached.push(c);
         c.destRect.setPoint(this.pos);
@@ -53,25 +53,25 @@ class TextInfo {
         this.pos.addX(c.sourceRect.size.width+c.destOffsetX);
     }
 
-    addWord(w: WordInfo):void {
+    public addWord(w: WordInfo):void {
         for (const c of w.chars) {
             this.addChar(c);
         }
     }
 
-    revalidate(defaultSymbolHeight: number):void {
+    public revalidate(defaultSymbolHeight: number):void {
         this.size.setWH(
             this.textField.paddingLeft + this.textField.paddingRight,
             this.textField.paddingTop + this.textField.paddingBottom
         );
-        for (let s of this.strings) {
+        for (const s of this.strings) {
             s.calcSize(defaultSymbolHeight);
             this.size.height += s.height;
             if (s.width > this.size.width) this.size.width = s.width;
         }
     }
 
-    align(textAlign: TEXT_ALIGN):void {
+    public align(textAlign: TEXT_ALIGN):void {
         if (DEBUG && TEXT_ALIGN[textAlign] === undefined) {
             const keys = Object.keys(TEXT_ALIGN).join(', ');
             throw new DebugError(`can not align text: unknown enum type of TEXT_ALIGN: ${textAlign}, expected: ${keys}`);
@@ -83,25 +83,25 @@ class TextInfo {
 }
 
 class CharInfo {
-    symbol: char;
-    destRect: Rect = new Rect();
-    sourceRect: Rect = new Rect();
-    destOffsetX: number = 0;
-    destOffsetY:number = 0;
+    public symbol: char;
+    public destRect: Rect = new Rect();
+    public sourceRect: Rect = new Rect();
+    public destOffsetX: number = 0;
+    public destOffsetY:number = 0;
 }
 
 class CharsHolder {
-    chars: CharInfo[] = [];
+    public chars: CharInfo[] = [];
 
-    moveBy(dx: number, dy: number):void {
-        for (let ch of this.chars) {
+    public moveBy(dx: number, dy: number):void {
+        for (const ch of this.chars) {
             ch.destRect.point.addXY(dx, dy);
         }
     }
 
-    moveTo(x: number, y: number):void {
+    public moveTo(x: number, y: number):void {
         let initialOffsetX: number = 0;
-        for (let ch of this.chars) {
+        for (const ch of this.chars) {
             ch.destRect.point.setXY(initialOffsetX + x, y);
             initialOffsetX += ch.sourceRect.size.width;
         }
@@ -109,51 +109,34 @@ class CharsHolder {
 }
 
 class WordInfo extends CharsHolder {
-    width: number = 0;
+    public width: number = 0;
 
-    revalidate():void {
+    public revalidate():void {
         this.width = 0;
-        for (let ch of this.chars) {
+        for (const ch of this.chars) {
             this.width += ch.destRect.size.width;
         }
     }
 
-    addChar(c: CharInfo):void {
+    public addChar(c: CharInfo):void {
         this.chars.push(c);
         this.width += c.sourceRect.size.width;
     }
 }
 
 class StringInfo extends CharsHolder {
-    width: number = 0;
-    height: number = 0;
+    public width: number = 0;
+    public height: number = 0;
 
-    calcSize(defaultSymbolHeight: number):void {
+    public calcSize(defaultSymbolHeight: number):void {
         this.width = 0;
         this.height = defaultSymbolHeight;
-        for (let ch of this.chars) {
+        for (const ch of this.chars) {
             this.width += ch.sourceRect.size.width;
         }
     }
 
-    private toWords(): WordInfo[] {
-        const res: WordInfo[] = [];
-        let currWord: WordInfo = new WordInfo();
-        for (const ch of this.chars) {
-            if (ch.symbol === ' ') {
-                if (currWord.chars.length) {
-                    res.push(currWord);
-                    currWord = new WordInfo();
-                }
-            } else {
-                currWord.chars.push(ch);
-            }
-        }
-        if (res.indexOf(currWord) === -1) res.push(currWord);
-        return res;
-    }
-
-    align(textAlign: TEXT_ALIGN, textField: TextField):void {
+    public align(textAlign: TEXT_ALIGN, textField: TextField):void {
         switch (textAlign) {
             case TEXT_ALIGN.LEFT:
                 break;
@@ -169,7 +152,7 @@ class StringInfo extends CharsHolder {
                 this.moveBy(offset, 0);
                 break;
             case TEXT_ALIGN.JUSTIFY:
-                let words: WordInfo[] = this.toWords();
+                const words: WordInfo[] = this.toWords();
                 if (words.length <= 1) return;
                 if (!words[0].chars.length) return;
                 let totalWordsWidth: number = 0;
@@ -192,12 +175,29 @@ class StringInfo extends CharsHolder {
 
         }
     }
+
+    private toWords(): WordInfo[] {
+        const res: WordInfo[] = [];
+        let currWord: WordInfo = new WordInfo();
+        for (const ch of this.chars) {
+            if (ch.symbol === ' ') {
+                if (currWord.chars.length) {
+                    res.push(currWord);
+                    currWord = new WordInfo();
+                }
+            } else {
+                currWord.chars.push(ch);
+            }
+        }
+        if (res.indexOf(currWord) === -1) res.push(currWord);
+        return res;
+    }
 }
 
 
 export class TextField extends ScrollableContainer {
 
-    readonly type = 'TextField';
+    public readonly type = 'TextField';
     private textAlign: TEXT_ALIGN = TEXT_ALIGN.LEFT;
     private wordBreak: WORD_BRAKE = WORD_BRAKE.PREDEFINED;
 
@@ -215,42 +215,19 @@ export class TextField extends ScrollableContainer {
     }
 
 
-    revalidate():void {
+    public revalidate():void {
         super.revalidate();
         if (DEBUG && !this._font) throw new DebugError(`font is not provided`);
         this._font.revalidate();
     }
 
-    private _getDefaultSymbolRect():RectViewJSON {
-        let defaultChar:string = ' ';
-        if (!this._font.fontContext.symbols[' ']) {
-            const firstSymbol:string = Object.keys(this._font.fontContext.symbols)[0];
-            if (DEBUG && !firstSymbol) throw new DebugError(`no symbols in font`);
-            defaultChar = firstSymbol;
-        }
-        return this._font.fontContext.symbols[defaultChar];
-    }
-
-    private _getCharInfo(c: char): CharInfo {
-        const charRect: RectViewJSON =
-            this._font.fontContext.symbols[c] || this._getDefaultSymbolRect();
-        const charInfo = new CharInfo();
-        charInfo.symbol = c;
-        charInfo.sourceRect = new Rect();
-        charInfo.sourceRect.fromJSON(charRect);
-        charInfo.destRect.setWH(charRect.width,charRect.height);
-        charInfo.destOffsetX = charRect.destOffsetX;
-        charInfo.destOffsetY = charRect.destOffsetY;
-        return charInfo;
-    }
-
-    onGeometryChanged():void {
+    public onGeometryChanged():void {
 
         const textInfo:TextInfo = this._textInfo;
         textInfo.reset();
         textInfo.newString();
         let text: string = this._text;
-        if (this.wordBreak==WORD_BRAKE.FIT) {
+        if (this.wordBreak===WORD_BRAKE.FIT) {
             text = text.split('\n').map((str:string)=>str.trim()).join(' ');
         }
 
@@ -297,37 +274,37 @@ export class TextField extends ScrollableContainer {
         super.onGeometryChanged();
     }
 
-    setText(text:string|number = ''):void {
+    public setText(text:string|number = ''):void {
         this._text = text+'';
         this._dirty = true;
     }
 
-    setTextAlign(ta:TEXT_ALIGN):void{
+    public setTextAlign(ta:TEXT_ALIGN):void{
         this.textAlign = ta;
         this._dirty = true;
     }
 
-    setWordBreak(wb:WORD_BRAKE):void{
+    public setWordBreak(wb:WORD_BRAKE):void{
         this.wordBreak = wb;
         this._dirty = true;
     }
 
-    getText():string {
-        return this._text
+    public getText():string {
+        return this._text;
     }
 
-    setFont(font:Font):void {
+    public setFont(font:Font):void {
         this._font = font;
         this._dirty = true;
     }
 
 
-    getFont():Font {
+    public getFont():Font {
         return this._font;
     }
 
 
-    draw():boolean {
+    public draw():boolean {
 
         if (this.background) this.background.render();
 
@@ -345,7 +322,7 @@ export class TextField extends ScrollableContainer {
         if (this.vScrollInfo.offset) renderer.translate(0, -this.vScrollInfo.offset, 0);
 
         this._symbolImage.setResourceLink(this._font.getResourceLink());
-        for (let charInfo of this._textInfo.allCharsCached) {
+        for (const charInfo of this._textInfo.allCharsCached) {
 
             if (charInfo.destRect.point.y - this.vScrollInfo.offset > this.size.height) continue;
             if (charInfo.destRect.point.y + charInfo.destRect.size.height - this.vScrollInfo.offset < 0) continue;
@@ -361,6 +338,29 @@ export class TextField extends ScrollableContainer {
         renderer.restore();
         renderer.unlockRect();
         return true;
+    }
+
+    private _getDefaultSymbolRect():IRectViewJSON {
+        let defaultChar:string = ' ';
+        if (!this._font.fontContext.symbols[' ']) {
+            const firstSymbol:string = Object.keys(this._font.fontContext.symbols)[0];
+            if (DEBUG && !firstSymbol) throw new DebugError(`no symbols in font`);
+            defaultChar = firstSymbol;
+        }
+        return this._font.fontContext.symbols[defaultChar];
+    }
+
+    private _getCharInfo(c: char): CharInfo {
+        const charRect: IRectViewJSON =
+            this._font.fontContext.symbols[c] || this._getDefaultSymbolRect();
+        const charInfo = new CharInfo();
+        charInfo.symbol = c;
+        charInfo.sourceRect = new Rect();
+        charInfo.sourceRect.fromJSON(charRect);
+        charInfo.destRect.setWH(charRect.width,charRect.height);
+        charInfo.destOffsetX = charRect.destOffsetX;
+        charInfo.destOffsetY = charRect.destOffsetY;
+        return charInfo;
     }
 
 }

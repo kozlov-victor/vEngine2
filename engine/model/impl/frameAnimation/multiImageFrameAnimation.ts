@@ -7,13 +7,13 @@ import {Game} from "@engine/game";
 
 class CurrSprite extends Image {
 
-    frameIndex:number = 0;
+    public frameIndex:number = 0;
 
     constructor(game:Game,private anim:MultiImageFrameAnimation){
         super(game);
     }
 
-    revalidate(){
+    public revalidate(){
         this.setResourceLink(this.anim.frames[this.frameIndex]);
         super.revalidate();
     }
@@ -23,12 +23,18 @@ class CurrSprite extends Image {
 
 export class MultiImageFrameAnimation extends AbstractFrameAnimation<ResourceLink<Texture>> implements IRevalidatable, ICloneable<MultiImageFrameAnimation> {
 
-    readonly type:string = 'MultiImageFrameAnimation';
+    public readonly type:string = 'MultiImageFrameAnimation';
 
-    readonly currSprite:CurrSprite = new CurrSprite(this.game,this);
+    public readonly currSprite:CurrSprite = new CurrSprite(this.game,this);
 
     constructor(protected game:Game){
         super(game);
+    }
+
+
+    // todo
+    public clone(): MultiImageFrameAnimation {
+        return undefined;
     }
 
     protected onNextFrame(i: number): void {
@@ -38,12 +44,6 @@ export class MultiImageFrameAnimation extends AbstractFrameAnimation<ResourceLin
         this.currSprite.frameIndex = i;
         this.currSprite.revalidate();
         this.parent.sprite = this.currSprite;
-    }
-
-
-    // todo
-    clone(): MultiImageFrameAnimation {
-        return undefined;
     }
 
 

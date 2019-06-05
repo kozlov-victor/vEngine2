@@ -123,7 +123,6 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     public removeChildAt(i:number){
         const c:RenderableModel = this.children[i];
         if (DEBUG && !c) throw new DebugError(`can not remove children with index ${i}`);
-        this.children.slice(i,1);
         c.kill();
     }
 
@@ -131,7 +130,6 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         for (let i:number = this.children.length-1; i >= 0; i--) {
             const c:RenderableModel = this.children[i];
             this.removeChildAt(i);
-            c.kill();
         }
     }
 

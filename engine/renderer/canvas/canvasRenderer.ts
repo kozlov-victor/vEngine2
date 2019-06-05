@@ -18,7 +18,7 @@ const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
 };
 
 interface ICanvasTexture extends ITexture{
-    source: CanvasImageSource
+    source: CanvasImageSource;
 }
 
 export class CanvasRenderer extends AbstractCanvasRenderer {
@@ -32,7 +32,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    drawImage(img:Image):void{
+    public drawImage(img:Image):void{
         if (DEBUG) {
             if (!img.getResourceLink()) throw new DebugError(`image resource link is not set`);
             if (!this.renderableCache[img.getResourceLink().getUrl()]) throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getUrl()}`);
@@ -71,14 +71,14 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    drawRectangle(rectangle:Rectangle):void{
+    public drawRectangle(rectangle:Rectangle):void{
         this.ctx.fillStyle = (rectangle.fillColor as Color).asCSS();
         this.ctx.strokeStyle = rectangle.color.asCSS();
         this.ctx.lineWidth = rectangle.lineWidth;
         //this.ctx.strokeRect(0,0,rectangle.width,rectangle.height);
     }
 
-    drawEllipse(e:Ellipse){
+    public drawEllipse(e:Ellipse){
         const ctx:CanvasRenderingContext2D = this.ctx;
         ctx.fillStyle = e.fillColor.asCSS();
         ctx.strokeStyle = e.color.asCSS();
@@ -89,18 +89,18 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    setAlpha(a:number):void{
+    public setAlpha(a:number):void{
         this.ctx.globalAlpha = a;
     }
 
-    lockRect(rect:Rect):void {
+    public lockRect(rect:Rect):void {
         this.ctx.save();
         this.ctx.beginPath();
         this.ctx.rect(rect.point.x,rect.point.y,rect.size.width,rect.size.height);
         this.ctx.clip();
     }
 
-    unlockRect():void {
+    public unlockRect():void {
         this.ctx.restore();
     }
 
@@ -112,53 +112,53 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     //     //this.fillRect(new Rect(0,0,this.game.width,this.game.height),color);
     // }
 
-    save():void {
+    public save():void {
         this.ctx.save();
     }
 
-    scale(x:number,y:number):void {
+    public scale(x:number,y:number):void {
         this.ctx.scale(x,y);
     }
 
-    resetTransform():void {
+    public resetTransform():void {
         // @ts-ignore
         //noinspection BadExpressionStatementJS
-        this.ctx['resetTransform']();
+        this.ctx.resetTransform();
     }
 
-    rotateZ(angleInRadians:number):void {
+    public rotateZ(angleInRadians:number):void {
         this.ctx.rotate(angleInRadians);
     }
 
-    rotateY(angleInRadians:number):void {
+    public rotateY(angleInRadians:number):void {
         if (DEBUG) throw new DebugError('rotateY not supported by canvasRenderer');
     }
 
-    translate(x:number,y:number):void {
+    public translate(x:number,y:number):void {
         this.ctx.translate(x,y);
     }
 
-    restore():void {
+    public restore():void {
         this.ctx.restore();
     }
 
-    beginFrameBuffer():void {
+    public beginFrameBuffer():void {
         this.save();
     }
-    flipFrameBuffer():void {
+    public flipFrameBuffer():void {
         this.restore();
     }
 
 
 
-    beforeFrameDraw(color: Color): void {
+    public beforeFrameDraw(color: Color): void {
         this.ctx.fillStyle = color.asCSS();
         this.ctx.fillRect(0,0,this.game.width,this.game.height);
     }
 
 
-    loadTextureInfo(url:string,link:ResourceLink<ITexture>,onLoad:()=>void){
-        let img:HTMLImageElement = new (window as any).Image();
+    public loadTextureInfo(url:string,link:ResourceLink<ITexture>,onLoad:()=>void){
+        const img:HTMLImageElement = new (window as any).Image();
         img.src = url;
         if (this.renderableCache[link.getUrl()]) {
             onLoad();
@@ -176,7 +176,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             this.renderableCache[link.getUrl()] = texture;
             link.setTarget(texture);
             onLoad();
-        }
+        };
     }
 
 }

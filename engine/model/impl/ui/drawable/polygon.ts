@@ -6,13 +6,13 @@ type float = number;
 
 export class Polygon {
 
-    readonly type:string = 'Polygon';
-    fillColor: Color = Color.NONE;
+    public readonly type:string = 'Polygon';
+    public fillColor: Color = Color.NONE;
     private vertices:float[] = [];
 
     constructor(private game:Game){}
 
-    setVertices(vertices:float[]):void {
+    public setVertices(vertices:float[]):void {
         this.vertices = vertices;
     }
 

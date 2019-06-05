@@ -7,7 +7,7 @@ import {Rect} from "@engine/geometry/rect";
 
 export class NinePatchImage extends Image {
 
-    readonly type:string = 'NinePatchImage';
+    public readonly type:string = 'NinePatchImage';
     private a:number = 0;
     private b:number = 0;
     private c:number = 0;
@@ -31,7 +31,37 @@ export class NinePatchImage extends Image {
         for (let i:number=0;i<9;i++) {
             this._patches[i] = new Image(this.game);
         }
-        this.getSrcRect().observe(()=>{this.revalidate()});
+        this.getSrcRect().observe(()=>{this.revalidate();});
+    }
+
+    public revalidate():void {
+        if (DEBUG && !this.getResourceLink()) {
+            throw new DebugError(`can not render Image: resource link is not specified`);
+        }
+        let {width,height} = this.size;
+        if (width<this.a+this.b) width = this.a + this.b;
+        if (height<this.c+this.d) height = this.c + this.d;
+        this.setWH(width,height);
+        this._revalidatePatches();
+    }
+
+    public setABCD(a:number,b?:number,c?:number,d?:number):void {
+        if (b===undefined) b = a;
+        if (c===undefined) c = b;
+        if (d===undefined) d = c;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.revalidate();
+
+    }
+
+    public draw():boolean{
+        for (let i:number=0;i<9;i++) {
+            this._patches[i].render();
+        }
+        return true;
     }
 
     private _revalidatePatches():void{
@@ -88,38 +118,6 @@ export class NinePatchImage extends Image {
         for (let i:number=0;i<9;i++) {
             this._patches[i].setResourceLink(this.getResourceLink());
         }
-    }
-
-    revalidate():void {
-        if (DEBUG && !this.getResourceLink()) {
-            throw new DebugError(`can not render Image: resource link is not specified`);
-        }
-        let {width,height} = this.size;
-        if (width<this.a+this.b) width = this.a + this.b;
-        if (height<this.c+this.d) height = this.c + this.d;
-        this.setWH(width,height);
-        this._revalidatePatches();
-    }
-
-    setABCD(a:number):void;
-    setABCD(a:number,b:number,c:number,d:number):void;
-    setABCD(a:number,b?:number,c?:number,d?:number):void {
-        if (b===undefined) b = a;
-        if (c===undefined) c = b;
-        if (d===undefined) d = c;
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
-        this.revalidate();
-
-    }
-
-    draw():boolean{
-        for (let i:number=0;i<9;i++) {
-            this._patches[i].render();
-        }
-        return true;
     }
 
 }

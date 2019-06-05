@@ -10,13 +10,13 @@ const isPowerOf2 = function(value:number):boolean {
 
 export class Texture implements ITexture {
 
-    gl:WebGLRenderingContext;
-    tex:WebGLTexture = null;
-    readonly size:Size = new Size(0,0);
+    public static currInstances:{[index:number]:Texture} = {};
 
     private static MAX_TEXTURE_IMAGE_UNITS:number = 0;
+    public readonly size:Size = new Size(0,0);
 
-    static currInstances:{[index:number]:Texture} = {};
+    private readonly gl:WebGLRenderingContext;
+    private readonly tex:WebGLTexture = null;
 
     constructor(gl:WebGLRenderingContext){
         if (DEBUG && !gl) throw new DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
@@ -34,23 +34,6 @@ export class Texture implements ITexture {
         this.setRawData(new Uint8Array([0, 255, 0, 255]),1,1);
     }
 
-
-    private setFilters(){
-        const gl:WebGLRenderingContext = this.gl;
-        const isPowerOfTwo:boolean = (isPowerOf2(this.size.width) && isPowerOf2(this.size.height));
-        // Check if the image is a power of 2 in both dimensions.
-        if (isPowerOfTwo) {
-            gl.generateMipmap(gl.TEXTURE_2D);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-        } else {
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); // NEAREST,LINEAR
-        }
-    }
-
     // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true); for bitmap textures
     // gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     /**
@@ -58,7 +41,7 @@ export class Texture implements ITexture {
      * @param width -unused if image specified
      * @param height -unused if image specified
      */
-    setImage(
+    public setImage(
         img:null|ImageBitmap|ImageData|HTMLVideoElement|HTMLImageElement|HTMLCanvasElement,
         width:number = 0,
         height:number = 0):void{
@@ -89,7 +72,7 @@ export class Texture implements ITexture {
 
     }
 
-    setRawData(data:Uint8Array,width:number,height:number){
+    public setRawData(data:Uint8Array,width:number,height:number){
         if (DEBUG) {
             const numOfBytes:number = width*height*4;
             if (data.length!==numOfBytes) {
@@ -114,7 +97,7 @@ export class Texture implements ITexture {
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
 
-    bind(name:string,i:number,program:ShaderProgram):void { // uniform eq to 0 by default
+    public bind(name:string,i:number,program:ShaderProgram):void { // uniform eq to 0 by default
         if (DEBUG) {
             if (!name) {
                 console.error(this);
@@ -132,7 +115,7 @@ export class Texture implements ITexture {
         Texture.currInstances[i] = this;
     }
 
-    unbind(i:number = 0):void {
+    public unbind(i:number = 0):void {
         const gl:WebGLRenderingContext = this.gl;
         gl.activeTexture(gl.TEXTURE0+i);
         gl.bindTexture(gl.TEXTURE_2D, null);
@@ -140,7 +123,7 @@ export class Texture implements ITexture {
     }
 
 
-    getColorArray():Uint8Array {
+    public getColorArray():Uint8Array {
         const gl:WebGLRenderingContext = this.gl;
         const wxh:number = this.size.width*this.size.height;
         if (DEBUG && gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)
@@ -150,12 +133,29 @@ export class Texture implements ITexture {
         return pixels;
     }
 
-    destroy():void{
+    public destroy():void{
         this.gl.deleteTexture(this.tex);
     }
 
-    getGlTexture():WebGLTexture {
+    public getGlTexture():WebGLTexture {
         return this.tex;
+    }
+
+
+    private setFilters(){
+        const gl:WebGLRenderingContext = this.gl;
+        const isPowerOfTwo:boolean = (isPowerOf2(this.size.width) && isPowerOf2(this.size.height));
+        // Check if the image is a power of 2 in both dimensions.
+        if (isPowerOfTwo) {
+            gl.generateMipmap(gl.TEXTURE_2D);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        } else {
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); // NEAREST,LINEAR
+        }
     }
 
 }

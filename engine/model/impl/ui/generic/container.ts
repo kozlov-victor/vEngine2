@@ -18,40 +18,6 @@ export enum LAYOUT_SIZE {
 
 export abstract class Container extends RenderableModel {
 
-    marginLeft      :number = 0;
-    marginTop       :number = 0;
-    marginRight     :number = 0;
-    marginBottom    :number = 0;
-    paddingLeft     :number = 0;
-    paddingTop      :number = 0;
-    paddingRight    :number = 0;
-    paddingBottom   :number = 0;
-
-    layoutWidth     :LAYOUT_SIZE =  LAYOUT_SIZE.WRAP_CONTENT;
-    layoutHeight    :LAYOUT_SIZE =  LAYOUT_SIZE.WRAP_CONTENT;
-    overflow        :OVERFLOW = OVERFLOW.HIDDEN; // todo change
-
-    background      :Shape;
-
-    drawingRect:Rect = new Rect();
-
-    maxWidth: number = 0;
-    maxHeight: number = 0;
-
-
-    protected constructor(game:Game){
-        super(game);
-    }
-
-    testLayout():void {
-        if (DEBUG) {
-            if (this.layoutWidth===LAYOUT_SIZE.FIXED && this.size.width===0)
-                throw new DebugError(`layoutWidth is LAYOUT_SIZE.FIXED so width must be specified`);
-            if (this.layoutHeight===LAYOUT_SIZE.FIXED && this.size.height===0)
-                throw new DebugError(`layoutHeight is LAYOUT_SIZE.FIXED so height must be specified`);
-        }
-    }
-
 
     private static normalizeBorders(top:number,right:number,bottom:number,left:number){
         if (right===undefined && bottom===undefined && left===undefined) {
@@ -67,11 +33,42 @@ export abstract class Container extends RenderableModel {
         return {top,right,bottom,left};
     }
 
-    setMargins(top:number):void;
-    setMargins(top:number,right:number):void;
-    setMargins(top:number,right:number,bottom:number):void;
-    setMargins(top:number,right:number,bottom:number,left:number):void;
-    setMargins(top:number,right?:number,bottom?:number,left?:number):void{
+    public marginLeft      :number = 0;
+    public marginTop       :number = 0;
+    public marginRight     :number = 0;
+    public marginBottom    :number = 0;
+    public paddingLeft     :number = 0;
+    public paddingTop      :number = 0;
+    public paddingRight    :number = 0;
+    public paddingBottom   :number = 0;
+
+    public layoutWidth     :LAYOUT_SIZE =  LAYOUT_SIZE.WRAP_CONTENT;
+    public layoutHeight    :LAYOUT_SIZE =  LAYOUT_SIZE.WRAP_CONTENT;
+    public overflow        :OVERFLOW = OVERFLOW.HIDDEN; // todo change
+
+    public background      :Shape;
+
+    public drawingRect:Rect = new Rect();
+
+    public maxWidth: number = 0;
+    public maxHeight: number = 0;
+
+
+    protected constructor(game:Game){
+        super(game);
+    }
+
+    public testLayout():void {
+        if (DEBUG) {
+            if (this.layoutWidth===LAYOUT_SIZE.FIXED && this.size.width===0)
+                throw new DebugError(`layoutWidth is LAYOUT_SIZE.FIXED so width must be specified`);
+            if (this.layoutHeight===LAYOUT_SIZE.FIXED && this.size.height===0)
+                throw new DebugError(`layoutHeight is LAYOUT_SIZE.FIXED so height must be specified`);
+        }
+    }
+
+
+    public setMargins(top:number,right?:number,bottom?:number,left?:number):void{
 
         ({top,right,bottom,left} = Container.normalizeBorders(top,right,bottom,left));
         this.marginTop = top;
@@ -81,25 +78,22 @@ export abstract class Container extends RenderableModel {
         this.setDirty();
     }
 
-    setMarginsTopBottom(top:number,bottom?:number):void {
+    public setMarginsTopBottom(top:number,bottom?:number):void {
         if (bottom===undefined) bottom = top;
         this.paddingTop = top;
         this.paddingBottom = bottom;
         this.setDirty();
     }
 
-    setMarginsLeftRight(left:number,right?:number):void {
+    public setMarginsLeftRight(left:number,right?:number):void {
         if (right===undefined) right = left;
         this.marginLeft = left;
         this.marginRight = right;
         this.setDirty();
     }
 
-    setPaddings(top:number):void;
-    setPaddings(top:number,right:number):void;
-    setPaddings(top:number,right:number,bottom:number):void;
-    setPaddings(top:number,right:number,bottom:number,left:number):void;
-    setPaddings(top:number,right?:number,bottom?:number,left?:number):void{
+
+    public setPaddings(top:number,right?:number,bottom?:number,left?:number):void{
 
         ({top,right,bottom,left} = Container.normalizeBorders(top,right,bottom,left));
 
@@ -108,6 +102,64 @@ export abstract class Container extends RenderableModel {
         this.paddingBottom = bottom;
         this.paddingLeft = left;
         this.setDirty();
+    }
+
+    public setPaddingsTopBottom(top:number,bottom?:number):void {
+        if (bottom===undefined) bottom = top;
+        this.paddingTop = top;
+        this.paddingBottom = bottom;
+        this.setDirty();
+    }
+
+    public setPaddingsLeftRight(left:number,right?:number){
+        if (right===undefined) right = left;
+        this.paddingLeft = left;
+        this.paddingRight = right;
+        this.setDirty();
+    }
+
+
+    public revalidate():void {
+        this.calcWorldRect();
+        if (this.background) this.background.size.set(this.size);
+        super.revalidate();
+    }
+
+    public onGeometryChanged():void {
+        this.revalidate();
+    }
+
+
+    public setWH(w:number,h:number):void {
+        this.size.setWH(w,h);
+        this.drawingRect.setWH(w,h);
+    }
+
+    public calcDrawableRect(contentWidth:number, contentHeight:number):void {
+        const paddedWidth:number = contentWidth  + this.paddingLeft + this.paddingRight;
+        const paddedHeight:number = contentHeight +  this.paddingTop +  this.paddingBottom;
+        if (this.background) {
+            this.background.setWH(paddedWidth,paddedHeight);
+            this.size.set(this.background.size);
+        } else {
+            this.size.setWH(paddedWidth,paddedHeight);
+        }
+        this.calcWorldRect();
+    }
+
+    public update():void {
+        if (this._dirty) {
+            this.onGeometryChanged();
+            this._dirty = false;
+        }
+        super.update();
+    }
+
+    public beforeRender():void {
+        this.game.getRenderer().translate(
+            this.pos.x + this.marginLeft,
+            this.pos.y + this.marginTop
+        );
     }
 
     protected calcWorldRect():void {
@@ -122,64 +174,6 @@ export abstract class Container extends RenderableModel {
             this._screenRect.addXY(parent.getSrcRect().point.x,parent.getSrcRect().point.y);
             parent = parent.parent;
         }
-    }
-
-    setPaddingsTopBottom(top:number,bottom?:number):void {
-        if (bottom===undefined) bottom = top;
-        this.paddingTop = top;
-        this.paddingBottom = bottom;
-        this.setDirty();
-    }
-
-    setPaddingsLeftRight(left:number,right?:number){
-        if (right===undefined) right = left;
-        this.paddingLeft = left;
-        this.paddingRight = right;
-        this.setDirty();
-    }
-
-
-    revalidate():void {
-        this.calcWorldRect();
-        if (this.background) this.background.size.set(this.size);
-        super.revalidate();
-    }
-
-    onGeometryChanged():void {
-        this.revalidate();
-    }
-
-
-    setWH(w:number,h:number):void {
-        this.size.setWH(w,h);
-        this.drawingRect.setWH(w,h);
-    }
-
-    calcDrawableRect(contentWidth:number, contentHeight:number):void {
-        const paddedWidth:number = contentWidth  + this.paddingLeft + this.paddingRight;
-        const paddedHeight:number = contentHeight +  this.paddingTop +  this.paddingBottom;
-        if (this.background) {
-            this.background.setWH(paddedWidth,paddedHeight);
-            this.size.set(this.background.size);
-        } else {
-            this.size.setWH(paddedWidth,paddedHeight);
-        }
-        this.calcWorldRect();
-    }
-
-    update():void {
-        if (this._dirty) {
-            this.onGeometryChanged();
-            this._dirty = false;
-        }
-        super.update();
-    }
-
-    beforeRender():void {
-        this.game.getRenderer().translate(
-            this.pos.x + this.marginLeft,
-            this.pos.y + this.marginTop
-        );
     }
 
 

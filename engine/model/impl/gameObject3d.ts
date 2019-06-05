@@ -9,16 +9,16 @@ import {Color} from "@engine/renderer/color";
 
 export class GameObject3d extends RenderableModel {
 
-    model:IPrimitive;
-    texture:Texture;
-    color:Color = Color.WHITE.clone();
-    bufferInfo:BufferInfo;
+    public model:IPrimitive;
+    public texture:Texture;
+    public color:Color = Color.WHITE.clone();
+    public bufferInfo:BufferInfo;
 
     constructor(protected game:Game){
         super(game);
     }
 
-    draw():boolean{
+    public draw():boolean{
         this.game.getRenderer().drawModel(this);
         return true;
     }

@@ -5,8 +5,8 @@ import {Line} from "@engine/model/impl/ui/drawable/line";
 
 export class Rectangle extends Shape implements ICloneable<Rectangle>{
 
-    readonly type:string = 'Rectangle';
-    borderRadius:number = 0;
+    public readonly type:string = 'Rectangle';
+    public borderRadius:number = 0;
 
     constructor(game: Game) {
         super(game);
@@ -14,9 +14,15 @@ export class Rectangle extends Shape implements ICloneable<Rectangle>{
         this.lineWidth = 1;
     }
 
-    draw():boolean{
+    public draw():boolean{
         this.game.getRenderer().drawRectangle(this);
         return true;
+    }
+
+    public clone():Rectangle{
+        const cloned:Rectangle = new Rectangle(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
     }
 
     protected setClonedProperties(cloned:Rectangle):void{
@@ -24,12 +30,6 @@ export class Rectangle extends Shape implements ICloneable<Rectangle>{
         cloned.size.set(this.size);
         cloned.lineWidth = this.lineWidth;
         super.setClonedProperties(cloned);
-    }
-
-    clone():Rectangle{
-        const cloned:Rectangle = new Rectangle(this.game);
-        this.setClonedProperties(cloned);
-        return cloned;
     }
 
 }

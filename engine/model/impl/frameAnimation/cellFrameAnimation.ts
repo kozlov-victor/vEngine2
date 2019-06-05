@@ -6,16 +6,32 @@ import {Texture} from "@engine/renderer/webGl/base/texture";
 
 export class CellFrameAnimation extends AbstractFrameAnimation<number> implements IRevalidatable, ICloneable<CellFrameAnimation>{
 
-    readonly type:string = 'CellFrameAnimation';
+    public readonly type:string = 'CellFrameAnimation';
 
     private _spriteSheet:Image;
     private _numOfFramesH:number = 1;
     private _numOfFramesV:number = 1;
 
-    setSpriteSheet(spr: Image,numOfFramesH:number,numOfFramesV:number):void {
+    public setSpriteSheet(spr: Image,numOfFramesH:number,numOfFramesV:number):void {
         this._spriteSheet = spr;
         this._numOfFramesH = numOfFramesH;
         this._numOfFramesV = numOfFramesV;
+    }
+
+    public revalidate():void {
+        if (DEBUG && !this._spriteSheet) throw new DebugError(`cellFrameAnimation needs spriteSheet! Invoke setSpriteSheet() method`);
+        const {width,height} = this._spriteSheet.getResourceLink().getTarget().size;
+        const frameWidth:number = ~~(width / this._numOfFramesH);
+        const frameHeight:number = ~~(height / this._numOfFramesV);
+        this._spriteSheet.getSrcRect().setWH(frameWidth,frameHeight);
+        this._spriteSheet.size.setWH(frameWidth,frameHeight);
+        super.revalidate();
+    }
+
+    public clone():CellFrameAnimation {
+        const cloned:CellFrameAnimation = new CellFrameAnimation(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
     }
 
     protected onNextFrame(i:number){
@@ -40,22 +56,6 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
             this.getFramePosX(frameIndex),
             this.getFramePosY(frameIndex)
         );
-    }
-
-    revalidate():void {
-        if (DEBUG && !this._spriteSheet) throw new DebugError(`cellFrameAnimation needs spriteSheet! Invoke setSpriteSheet() method`);
-        const {width,height} = this._spriteSheet.getResourceLink().getTarget().size;
-        const frameWidth:number = ~~(width / this._numOfFramesH);
-        const frameHeight:number = ~~(height / this._numOfFramesV);
-        this._spriteSheet.getSrcRect().setWH(frameWidth,frameHeight);
-        this._spriteSheet.size.setWH(frameWidth,frameHeight);
-        super.revalidate();
-    }
-
-    clone():CellFrameAnimation {
-        const cloned:CellFrameAnimation = new CellFrameAnimation(this.game);
-        this.setClonedProperties(cloned);
-        return cloned;
     }
 
 }

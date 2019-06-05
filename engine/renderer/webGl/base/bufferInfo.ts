@@ -5,37 +5,37 @@ import {VertexBuffer} from "./vertexBuffer";
 import {IndexBuffer} from "./indexBuffer";
 import {ShaderProgram} from "./shaderProgram";
 
-export interface VertexArrayInfo {
-    array:number[],
-    type:number,
-    size:number,
-    attrName:string
+export interface IVertexArrayInfo {
+    array:number[];
+    type:number;
+    size:number;
+    attrName:string;
 }
 
-export interface IndexArrayInfo {
-    array:number[]
+export interface IIndexArrayInfo {
+    array:number[];
 }
 
-export interface BufferInfoDescription {
-    posVertexInfo:VertexArrayInfo,
-    posIndexInfo?:IndexArrayInfo,
-    texVertexInfo?:VertexArrayInfo,
-    normalInfo?:VertexArrayInfo,
-    drawMethod:number,
+export interface IBufferInfoDescription {
+    posVertexInfo:IVertexArrayInfo;
+    posIndexInfo?:IIndexArrayInfo;
+    texVertexInfo?:IVertexArrayInfo;
+    normalInfo?:IVertexArrayInfo;
+    drawMethod:number;
 }
 
 export class BufferInfo {
 
-    gl:WebGLRenderingContext;
+    public gl:WebGLRenderingContext;
 
-    posVertexBuffer:VertexBuffer = null;
-    posIndexBuffer:IndexBuffer = null;
-    texVertexBuffer:VertexBuffer = null;
-    normalBuffer:VertexBuffer = null;
-    drawMethod:number = null;
-    numOfElementsToDraw:number = 0;
+    public posVertexBuffer:VertexBuffer = null;
+    public posIndexBuffer:IndexBuffer = null;
+    public texVertexBuffer:VertexBuffer = null;
+    public normalBuffer:VertexBuffer = null;
+    public drawMethod:number = null;
+    public numOfElementsToDraw:number = 0;
 
-    constructor(gl:WebGLRenderingContext,description:BufferInfoDescription){
+    constructor(gl:WebGLRenderingContext,description:IBufferInfoDescription){
         this.gl = gl;
 
         if (DEBUG && description.drawMethod===undefined)
@@ -76,7 +76,7 @@ export class BufferInfo {
         }
     }
 
-    bind(program:ShaderProgram):void{
+    public bind(program:ShaderProgram):void{
         program.bind();
         if (this.posIndexBuffer) this.posIndexBuffer.bind();
         if (this.posVertexBuffer) this.posVertexBuffer.bind(program);
@@ -84,33 +84,21 @@ export class BufferInfo {
         if (this.normalBuffer) this.normalBuffer.bind(program);
     }
 
-    unbind():void{
+    public unbind():void{
         if (this.posIndexBuffer) this.posIndexBuffer.unbind();
         if (this.posVertexBuffer) this.posVertexBuffer.unbind();
         if (this.texVertexBuffer) this.texVertexBuffer.unbind();
         if (this.normalBuffer) this.normalBuffer.unbind();
     }
 
-    destroy():void{
+    public destroy():void{
         if (this.posVertexBuffer) this.posVertexBuffer.destroy();
         if (this.posIndexBuffer) this.posIndexBuffer.destroy();
         if (this.texVertexBuffer) this.texVertexBuffer.destroy();
         if (this.normalBuffer) this.normalBuffer.destroy();
     }
 
-    private _getNumOfElementsToDraw(drawMethod:number):number {
-        switch (drawMethod) {
-            case this.gl.LINE_STRIP:
-            case this.gl.TRIANGLE_FAN:
-                return this.posVertexBuffer.getBufferLength() / 2;
-            case this.gl.TRIANGLE_STRIP:
-                return this.posVertexBuffer.getBufferLength() / 3;
-            default:
-                throw new DebugError(`unknown draw method: ${drawMethod}`);
-        }
-    }
-
-    draw():void {
+    public draw():void {
         if (this.posIndexBuffer!==null){
             this.gl.drawElements(
                 this.drawMethod,
@@ -122,6 +110,18 @@ export class BufferInfo {
                 this.drawMethod,0,
                 this.numOfElementsToDraw
             );
+        }
+    }
+
+    private _getNumOfElementsToDraw(drawMethod:number):number {
+        switch (drawMethod) {
+            case this.gl.LINE_STRIP:
+            case this.gl.TRIANGLE_FAN:
+                return this.posVertexBuffer.getBufferLength() / 2;
+            case this.gl.TRIANGLE_STRIP:
+                return this.posVertexBuffer.getBufferLength() / 3;
+            default:
+                throw new DebugError(`unknown draw method: ${drawMethod}`);
         }
     }
 

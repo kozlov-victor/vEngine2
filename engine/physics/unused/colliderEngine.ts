@@ -5,9 +5,9 @@ import {GameObject} from "../../model/impl/gameObject";
 
 export class ColliderEngine {
 
-    relaxationCount:number = 15;
+    public relaxationCount:number = 15;
     // percentage of separation to project objects
-    posCorrectionRate:number = 0.8;
+    public posCorrectionRate:number = 0.8;
 
 
     private game:Game;

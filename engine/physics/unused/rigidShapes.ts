@@ -4,44 +4,44 @@ import {DebugError} from "../../debug/debugError";
 
 export class Vec2 {
 
-    x:number;
-    y:number;
+    public x:number;
+    public y:number;
 
     constructor(x:number,y:number) {
         this.x = x;
         this.y = y;
     }
 
-    length():number{
+    public length():number{
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
-    add(vec:Vec2):Vec2 {
+    public add(vec:Vec2):Vec2 {
         return new Vec2(vec.x + this.x, vec.y + this.y);
     }
 
-    subtract(vec:Vec2):Vec2 {
+    public subtract(vec:Vec2):Vec2 {
         return new Vec2(this.x - vec.x, this.y - vec.y);
     }
 
-    scale(n:number):Vec2{
+    public scale(n:number):Vec2{
         return new Vec2(this.x * n, this.y * n);
     }
 
-    dot(vec:Vec2):number{
+    public dot(vec:Vec2):number{
         return (this.x * vec.x + this.y * vec.y);
     }
 
-    cross(vec:Vec2):number{
+    public cross(vec:Vec2):number{
         return (this.x * vec.y - this.y * vec.x);
     }
 
-    rotate(center:Vec2, angle:number):Vec2 {
+    public rotate(center:Vec2, angle:number):Vec2 {
         //rotate in counterclockwise
         const r:number[] = [];
 
-        let x:number = this.x - center.x;
-        let y:number = this.y - center.y;
+        const x:number = this.x - center.x;
+        const y:number = this.y - center.y;
 
         r[0] = x * Math.cos(angle) - y * Math.sin(angle);
         r[1] = x * Math.sin(angle) + y * Math.cos(angle);
@@ -52,7 +52,7 @@ export class Vec2 {
         return new Vec2(r[0], r[1]);
     }
 
-    normalize():Vec2{
+    public normalize():Vec2{
         let len:number = this.length();
         if (len > 0) {
             len = 1 / len;
@@ -60,7 +60,7 @@ export class Vec2 {
         return new Vec2(this.x * len, this.y * len);
     }
 
-    distance(vec:Vec2):number {
+    public distance(vec:Vec2):number {
         const x:number = this.x - vec.x;
         const y:number = this.y - vec.y;
         return Math.sqrt(x * x + y * y);
@@ -69,37 +69,37 @@ export class Vec2 {
 }
 
 export class CollisionInfo {
-    mDepth:number = 0;
-    mNormal:Vec2 = new Vec2(0, 0);
-    mStart:Vec2 = new Vec2(0, 0);
-    mEnd:Vec2 = new Vec2(0, 0);
+    public mDepth:number = 0;
+    public mNormal:Vec2 = new Vec2(0, 0);
+    public mStart:Vec2 = new Vec2(0, 0);
+    public mEnd:Vec2 = new Vec2(0, 0);
 
-    setDepth(s:number):void {
+    public setDepth(s:number):void {
         this.mDepth = s;
     }
 
-    setNormal(s:Vec2):void {
+    public setNormal(s:Vec2):void {
         this.mNormal = s;
     }
 
-    getDepth():number {
+    public getDepth():number {
         return this.mDepth;
     }
 
-    getNormal():Vec2 {
+    public getNormal():Vec2 {
         return this.mNormal;
     }
 
-    setInfo(d:number, n:Vec2, s:Vec2):void {
+    public setInfo(d:number, n:Vec2, s:Vec2):void {
         this.mDepth = d;
         this.mNormal = n;
         this.mStart = s;
         this.mEnd = s.add(n.scale(d));
     }
 
-    changeDir():void {
+    public changeDir():void {
         this.mNormal = this.mNormal.scale(-1);
-        let n:Vec2 = this.mStart;
+        const n:Vec2 = this.mStart;
         this.mStart = this.mEnd;
         this.mEnd = n;
     }
@@ -109,20 +109,20 @@ export class CollisionInfo {
 
 export abstract class RigidShape {
 
-    mCenter:Vec2;
-    mInertia:number;
-    fixedAngle:boolean = false;
-    mInvMass:number;
-    mFriction:number;
-    mRestitution: number;
-    mVelocity:Vec2 = new Vec2(0, 0);
-    mAcceleration:Vec2;
-    mAngle:number = 0;
-    mAngularVelocity:number = 0; //negetive-- clockwise, postive-- counterclockwise
-    mAngularAcceleration:number = 0;
-    mBoundRadius:number = 0;
-    game:Game;
-    readonly abstract mType:string;
+    public mCenter:Vec2;
+    public mInertia:number;
+    public fixedAngle:boolean = false;
+    public mInvMass:number;
+    public mFriction:number;
+    public mRestitution: number;
+    public mVelocity:Vec2 = new Vec2(0, 0);
+    public mAcceleration:Vec2;
+    public mAngle:number = 0;
+    public mAngularVelocity:number = 0; //negetive-- clockwise, postive-- counterclockwise
+    public mAngularAcceleration:number = 0;
+    public mBoundRadius:number = 0;
+    public game:Game;
+    public readonly abstract mType:string;
 
     constructor(game:Game,center:Vec2, mass?:number, friction?:number, restitution?:number){
         this.game = game;
@@ -155,7 +155,7 @@ export abstract class RigidShape {
         }
     }
 
-    updateMass(delta:number){
+    public updateMass(delta:number){
         let mass:number;
         if (this.mInvMass !== 0) {
             mass = 1 / this.mInvMass;
@@ -177,11 +177,11 @@ export abstract class RigidShape {
         this.updateInertia();
     }
 
-    abstract updateInertia():void
-    abstract move(v:Vec2):void
-    abstract rotate(a:number):void
+    public abstract updateInertia():void;
+    public abstract move(v:Vec2):void;
+    public abstract rotate(a:number):void;
 
-    update(){
+    public update(){
 
         const dt:number = this.game.getDeltaTime() / 1000;
 
@@ -195,10 +195,10 @@ export abstract class RigidShape {
         this.rotate(this.mAngularVelocity * dt);
     }
 
-    boundTest(otherShape:RigidShape):boolean {
-        let vFrom1to2: Vec2 = otherShape.mCenter.subtract(this.mCenter);
-        let rSum: number = this.mBoundRadius + otherShape.mBoundRadius;
-        let dist: number = vFrom1to2.length();
+    public boundTest(otherShape:RigidShape):boolean {
+        const vFrom1to2: Vec2 = otherShape.mCenter.subtract(this.mCenter);
+        const rSum: number = this.mBoundRadius + otherShape.mBoundRadius;
+        const dist: number = vFrom1to2.length();
         return (dist <= rSum);
     }
 
@@ -206,9 +206,13 @@ export abstract class RigidShape {
 
 export class RigidCircle extends RigidShape {
 
-    readonly mType:string = "Circle";
-    mRadius:number;
-    mStartpoint:Vec2;
+    public static isInstanceOf(shape:RigidShape): shape is RigidCircle{
+        return shape.mType==='Circle';
+    }
+
+    public readonly mType:string = "Circle";
+    public mRadius:number;
+    public mStartpoint:Vec2;
 
     constructor(game:Game,center: Vec2, radius: number, mass?: number, friction?: number, restitution?: number) {
         super(game,center, mass, friction, restitution);
@@ -219,19 +223,19 @@ export class RigidCircle extends RigidShape {
         this.updateInertia();
     }
 
-    move(s:Vec2):RigidCircle{
+    public move(s:Vec2):RigidCircle{
         this.mStartpoint = this.mStartpoint.add(s);
         this.mCenter = this.mCenter.add(s);
         return this;
     }
 
-    rotate(angle:number):RigidCircle{
+    public rotate(angle:number):RigidCircle{
         this.mAngle += angle;
         this.mStartpoint = this.mStartpoint.rotate(this.mCenter, angle);
         return this;
     }
 
-    updateInertia(){
+    public updateInertia(){
         if (this.mInvMass === 0) {
             this.mInertia = 0;
         } else {
@@ -242,7 +246,7 @@ export class RigidCircle extends RigidShape {
         }
     }
 
-    collisionTest(otherShape:RigidShape, collisionInfo:CollisionInfo):boolean{
+    public collisionTest(otherShape:RigidShape, collisionInfo:CollisionInfo):boolean{
         if (RigidCircle.isInstanceOf(otherShape)) {
             return this.collidedCircCirc(this, otherShape as RigidCircle, collisionInfo);
         } else if (RigidRectangle.isInstanceOf(otherShape)){
@@ -255,18 +259,18 @@ export class RigidCircle extends RigidShape {
         }
     }
 
-    collidedCircCirc(c1:RigidCircle, c2:RigidCircle, collisionInfo:CollisionInfo):boolean{
-        let vFrom1to2:Vec2 = c2.mCenter.subtract(c1.mCenter);
-        let rSum:number = c1.mRadius + c2.mRadius;
-        let dist:number = vFrom1to2.length();
+    public collidedCircCirc(c1:RigidCircle, c2:RigidCircle, collisionInfo:CollisionInfo):boolean{
+        const vFrom1to2:Vec2 = c2.mCenter.subtract(c1.mCenter);
+        const rSum:number = c1.mRadius + c2.mRadius;
+        const dist:number = vFrom1to2.length();
         if (dist > Math.sqrt(rSum * rSum)) {
             //not overlapping
             return false;
         }
         if (dist !== 0) {
             // overlapping bu not same position
-            let normalFrom2to1:Vec2 = vFrom1to2.scale(-1).normalize();
-            let radiusC2:Vec2 = normalFrom2to1.scale(c2.mRadius);
+            const normalFrom2to1:Vec2 = vFrom1to2.scale(-1).normalize();
+            const radiusC2:Vec2 = normalFrom2to1.scale(c2.mRadius);
             collisionInfo.setInfo(rSum - dist, vFrom1to2.normalize(), c2.mCenter.add(radiusC2));
         } else {
             //same position
@@ -279,28 +283,28 @@ export class RigidCircle extends RigidShape {
         return true;
     }
 
-    static isInstanceOf(shape:RigidShape): shape is RigidCircle{
-        return shape.mType==='Circle'
-    }
-
 }
 
 class SupportStruct {
-    mSupportPoint:Vec2;
-    mSupportPointDist:number = 0;
+    public mSupportPoint:Vec2;
+    public mSupportPointDist:number = 0;
 }
 
-let tmpSupport = new SupportStruct();
-let collisionInfoR1:CollisionInfo = new CollisionInfo();
-let collisionInfoR2:CollisionInfo = new CollisionInfo();
+const tmpSupport = new SupportStruct();
+const collisionInfoR1:CollisionInfo = new CollisionInfo();
+const collisionInfoR2:CollisionInfo = new CollisionInfo();
 
 export class RigidRectangle extends RigidShape {
 
-    readonly mType:string = "Rectangle";
-    mWidth:number;
-    mHeight:number;
-    mVertex:Vec2[] = [];
-    mFaceNormal:Vec2[] = [];
+    public static isInstanceOf(shape:RigidShape): shape is RigidRectangle{
+        return shape.mType==='Rectangle';
+    }
+
+    public readonly mType:string = "Rectangle";
+    public mWidth:number;
+    public mHeight:number;
+    public mVertex:Vec2[] = [];
+    public mFaceNormal:Vec2[] = [];
 
 
     constructor(game:Game,center: Vec2, width: number, height: number, mass?: number, friction?: number, restitution?: number) {
@@ -330,7 +334,7 @@ export class RigidRectangle extends RigidShape {
         this.updateInertia();
     }
 
-    rotate(angle:number):RigidRectangle {
+    public rotate(angle:number):RigidRectangle {
         this.mAngle += angle;
         for (let i = 0; i < this.mVertex.length; i++) {
             this.mVertex[i] = this.mVertex[i].rotate(this.mCenter, angle);
@@ -346,7 +350,7 @@ export class RigidRectangle extends RigidShape {
         return this;
     }
 
-    move(v:Vec2):RigidRectangle {
+    public move(v:Vec2):RigidRectangle {
         for (let i = 0; i < this.mVertex.length; i++) {
             this.mVertex[i] = this.mVertex[i].add(v);
         }
@@ -354,7 +358,7 @@ export class RigidRectangle extends RigidShape {
         return this;
     }
 
-    updateInertia(){
+    public updateInertia(){
         // Expect this.mInvMass to be already inverted!
         if (this.mInvMass === 0) {
             this.mInertia = 0;
@@ -365,7 +369,7 @@ export class RigidRectangle extends RigidShape {
         }
     }
 
-    collisionTest(otherShape:RigidShape, collisionInfo:CollisionInfo){
+    public collisionTest(otherShape:RigidShape, collisionInfo:CollisionInfo){
         if (RigidCircle.isInstanceOf(otherShape)) {
             return this.collidedRectCirc(otherShape as RigidCircle, collisionInfo);
         } else if (RigidRectangle.isInstanceOf(otherShape)) {
@@ -380,14 +384,14 @@ export class RigidRectangle extends RigidShape {
         }
     }
 
-    boundTest(otherShape:RigidShape){
-        let vFrom1to2:Vec2 = otherShape.mCenter.subtract(this.mCenter);
-        let rSum:number = this.mBoundRadius + otherShape.mBoundRadius;
-        let dist:number = vFrom1to2.length();
+    public boundTest(otherShape:RigidShape){
+        const vFrom1to2:Vec2 = otherShape.mCenter.subtract(this.mCenter);
+        const rSum:number = this.mBoundRadius + otherShape.mBoundRadius;
+        const dist:number = vFrom1to2.length();
         return dist <= rSum;
     }
 
-    findSupportPoint(dir:Vec2, ptOnEdge:Vec2){
+    public findSupportPoint(dir:Vec2, ptOnEdge:Vec2){
         //the longest project length
         let vToEdge:Vec2;
         let projection:number;
@@ -412,7 +416,7 @@ export class RigidRectangle extends RigidShape {
      * Find the shortest axis that overlapping
      * the code is convert from http://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-oriented-rigid-bodies--gamedev-8032
      */
-    findAxisLeastPenetration(otherRect:RigidRectangle, collisionInfo:CollisionInfo):boolean{
+    public findAxisLeastPenetration(otherRect:RigidRectangle, collisionInfo:CollisionInfo):boolean{
         let n:Vec2;
         let supportPoint:Vec2;
 
@@ -427,8 +431,8 @@ export class RigidRectangle extends RigidShape {
             n = this.mFaceNormal[i];
 
             // use -n as direction and the vectex on edge i as point on edge
-            let dir:Vec2 = n.scale(-1);
-            let ptOnEdge:Vec2 = this.mVertex[i];
+            const dir:Vec2 = n.scale(-1);
+            const ptOnEdge:Vec2 = this.mVertex[i];
             // find the support on B
             // the point has longest distance with edge i
             otherRect.findSupportPoint(dir, ptOnEdge);
@@ -444,13 +448,13 @@ export class RigidRectangle extends RigidShape {
         }
         if (hasSupport) {
             //all four directions have support point
-            let bestVec:Vec2 = this.mFaceNormal[bestIndex].scale(bestDistance);
+            const bestVec:Vec2 = this.mFaceNormal[bestIndex].scale(bestDistance);
             collisionInfo.setInfo(bestDistance, this.mFaceNormal[bestIndex], supportPoint.add(bestVec));
         }
         return hasSupport;
     }
 
-    collidedRectRect(r1:RigidRectangle, r2:RigidRectangle, collisionInfo:CollisionInfo):boolean{
+    public collidedRectRect(r1:RigidRectangle, r2:RigidRectangle, collisionInfo:CollisionInfo):boolean{
         let status1:boolean;
         let status2:boolean;
 
@@ -462,7 +466,7 @@ export class RigidRectangle extends RigidShape {
             if (status2) {
                 //if both of rectangles are overlapping, choose the shorter normal as the normal
                 if (collisionInfoR1.getDepth() < collisionInfoR2.getDepth()) {
-                    let depthVec:Vec2 = collisionInfoR1.getNormal().scale(collisionInfoR1.getDepth());
+                    const depthVec:Vec2 = collisionInfoR1.getNormal().scale(collisionInfoR1.getDepth());
                     collisionInfo.setInfo(collisionInfoR1.getDepth(), collisionInfoR1.getNormal(), collisionInfoR1.mStart.subtract(depthVec));
                 } else {
                     collisionInfo.setInfo(collisionInfoR2.getDepth(), collisionInfoR2.getNormal().scale(-1), collisionInfoR2.mStart);
@@ -472,7 +476,7 @@ export class RigidRectangle extends RigidShape {
         return status1 && status2;
     }
 
-    collidedRectCirc(otherCir:RigidCircle, collisionInfo:CollisionInfo):boolean{
+    public collidedRectCirc(otherCir:RigidCircle, collisionInfo:CollisionInfo):boolean{
         let inside:boolean = true;
         let bestDistance:number = -99999;
         let nearestEdge:number = 0;
@@ -550,10 +554,6 @@ export class RigidRectangle extends RigidShape {
             collisionInfo.setInfo(otherCir.mRadius - bestDistance, this.mFaceNormal[nearestEdge], circ2Pos.subtract(radiusVec));
         }
         return true;
-    }
-
-    static isInstanceOf(shape:RigidShape): shape is RigidRectangle{
-        return shape.mType==='Rectangle'
     }
 
 }

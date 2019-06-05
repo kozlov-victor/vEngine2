@@ -41,7 +41,7 @@ export class TriangleBlurFilter extends AbstractFilter {
     }
 
     // 0...1
-    setValue(val:number):void{
+    public setValue(val:number):void{
         this.valArr[0] = this.valArr[1] = val;
         this.setUniform(this.delta,this.valArr);
     }

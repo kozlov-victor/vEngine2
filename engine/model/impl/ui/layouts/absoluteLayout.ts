@@ -7,22 +7,22 @@ import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 
 export class AbsoluteLayout extends Container implements ICloneable<AbsoluteLayout>{
 
-    readonly type:string = 'AbsoluteLayout';
+    public readonly type:string = 'AbsoluteLayout';
 
     constructor(game:Game) {
         super(game);
     }
 
-    appendChild(c:RenderableModel):void {
+    public appendChild(c:RenderableModel):void {
         if (c instanceof Container) (c as Container).testLayout();
         super.appendChild(c);
     }
 
-    onGeometryChanged():void {
+    public onGeometryChanged():void {
         super.onGeometryChanged();
 
         let maxX:number = 0, maxY:number = 0;
-        for (let v of this.children) {
+        for (const v of this.children) {
             if (v instanceof Container) (v as Container).onGeometryChanged();
             v.setDirty();
             const r:Rect = v.getSrcRect();
@@ -38,7 +38,7 @@ export class AbsoluteLayout extends Container implements ICloneable<AbsoluteLayo
         this.calcDrawableRect(this.size.width,this.size.height);
     }
 
-    draw():boolean{
+    public draw():boolean{
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (this.overflow===OVERFLOW.HIDDEN) {
             const r:Rect = Rect.fromPool().set(this.getWorldRect());
@@ -56,14 +56,14 @@ export class AbsoluteLayout extends Container implements ICloneable<AbsoluteLayo
         return true;
     }
 
-    protected setClonedProperties(cloned:AbsoluteLayout):void {
-        super.setClonedProperties(cloned);
-    }
-
-    clone():AbsoluteLayout {
+    public clone():AbsoluteLayout {
         const cloned:AbsoluteLayout = new AbsoluteLayout(this.game);
         this.setClonedProperties(cloned);
         return cloned;
+    }
+
+    protected setClonedProperties(cloned:AbsoluteLayout):void {
+        super.setClonedProperties(cloned);
     }
 
 }

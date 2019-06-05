@@ -54,16 +54,16 @@ export class SwirlFilter extends AbstractFilter {
     }
 
 
-    setRadius(val:number):void{
+    public setRadius(val:number):void{
         this.setUniform(this.radius,val);
     }
 
-    setAngle(val:number):void{
+    public setAngle(val:number):void{
         this.setUniform(this.angle,val);
     }
 
 
-    doFilter(destFrameBuffer:FrameBuffer):void{
+    public doFilter(destFrameBuffer:FrameBuffer):void{
         const sizeArr:[number,number] = this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray();
         this.setUniform(this.texSize,sizeArr);
         this.centerArr[0] = sizeArr[0]/2;

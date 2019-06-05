@@ -17,17 +17,20 @@ export enum STRETCH_MODE {
 
 export class Image extends Shape implements ICloneable<Image>,IResource<ITexture>{
 
-    readonly type:string = 'Image';
-    borderRadius:number = 0;
-    offset:Point2d = new Point2d();
-    stretchMode:STRETCH_MODE = STRETCH_MODE.STRETCH;
+    public readonly type:string = 'Image';
+    public borderRadius:number = 0;
+    public offset:Point2d = new Point2d();
+    public stretchMode:STRETCH_MODE = STRETCH_MODE.STRETCH;
+
+    // resource
+    private _resourceLink:ResourceLink<ITexture>;
 
     constructor(game: Game) {
         super(game);
         (this.fillColor as Color).set(Color.NONE);
     }
 
-    revalidate():void {
+    public revalidate():void {
         if (DEBUG && !this.getResourceLink()) {
             console.error(this);
             throw new DebugError(`can not render Image: resourceLink is not specified`);
@@ -47,9 +50,27 @@ export class Image extends Shape implements ICloneable<Image>,IResource<ITexture
         }
     }
 
-    draw():boolean{
+    public draw():boolean{
         this.game.getRenderer().drawImage(this);
         return true;
+    }
+
+    public clone():Image {
+        const cloned:Image = new Image(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
+    }
+
+    public getSrcRect():Rect{
+        return this._srcRect;
+    }
+
+    public setResourceLink(link:ResourceLink<ITexture>):void{
+        this._resourceLink = link;
+    }
+
+    public getResourceLink():ResourceLink<ITexture>{
+        return this._resourceLink;
     }
 
     protected setClonedProperties(cloned:Image):void {
@@ -59,27 +80,6 @@ export class Image extends Shape implements ICloneable<Image>,IResource<ITexture
         cloned.stretchMode = this.stretchMode;
         cloned.setResourceLink(this.getResourceLink());
         super.setClonedProperties(cloned);
-    }
-
-    clone():Image {
-        const cloned:Image = new Image(this.game);
-        this.setClonedProperties(cloned);
-        return cloned;
-    }
-
-    getSrcRect():Rect{
-        return this._srcRect;
-    }
-
-    // resource
-    private _resourceLink:ResourceLink<ITexture>;
-
-    setResourceLink(link:ResourceLink<ITexture>):void{
-        this._resourceLink = link;
-    }
-
-    getResourceLink():ResourceLink<ITexture>{
-        return this._resourceLink;
     }
 
 

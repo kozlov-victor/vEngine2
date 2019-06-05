@@ -10,6 +10,7 @@ export enum FILL_TYPE {
 
 //language=GLSL
 export const fragmentSource:string = `
+precision mediump float;
 
 #define HALF                   .5
 #define ZERO                    0.

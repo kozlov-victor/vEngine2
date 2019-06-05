@@ -16,21 +16,7 @@ export class DoubleFrameBuffer {
         ];
     }
 
-    private flip():void{
-        const tmp:FrameBuffer = this.buffers[0];
-        this.buffers[0] = this.buffers[1];
-        this.buffers[1] = tmp;
-    }
-
-    private getSourceBuffer():FrameBuffer{
-        return this.buffers[0];
-    }
-
-    private getDestBuffer():FrameBuffer{
-        return this.buffers[1];
-    }
-
-    applyFilters(texture:Texture,filters:AbstractFilter[]):Texture{
+    public applyFilters(texture:Texture,filters:AbstractFilter[]):Texture{
         const len:number = filters.length;
         if (len===0) return texture;
 
@@ -47,8 +33,22 @@ export class DoubleFrameBuffer {
         return this.getSourceBuffer().getTexture();
     }
 
-    destroy():void{
+    public destroy():void{
         this.buffers.forEach((b:FrameBuffer)=>b.destroy());
+    }
+
+    private flip():void{
+        const tmp:FrameBuffer = this.buffers[0];
+        this.buffers[0] = this.buffers[1];
+        this.buffers[1] = tmp;
+    }
+
+    private getSourceBuffer():FrameBuffer{
+        return this.buffers[0];
+    }
+
+    private getDestBuffer():FrameBuffer{
+        return this.buffers[1];
     }
 
 }

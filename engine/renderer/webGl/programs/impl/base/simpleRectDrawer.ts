@@ -1,7 +1,7 @@
 import {Plane} from "../../../primitives/plane";
 import {ShaderProgram} from "../../../base/shaderProgram";
 import {AbstractDrawer} from "../../abstract/abstractDrawer";
-import {BufferInfo, BufferInfoDescription} from "../../../base/bufferInfo";
+import {BufferInfo, IBufferInfoDescription} from "../../../base/bufferInfo";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {DebugError} from "@engine/debug/debugError";
@@ -66,7 +66,7 @@ export class SimpleRectDrawer extends AbstractDrawer {
             posIndexInfo: {array: this.primitive.indexArr},
             texVertexInfo: {array: this.primitive.texCoordArr, type: this.gl.FLOAT, size: 2, attrName: 'a_texCoord'},
             drawMethod: this.gl.TRIANGLE_STRIP
-        } as BufferInfoDescription);
+        } as IBufferInfoDescription);
     }
 
 

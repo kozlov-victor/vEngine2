@@ -51,23 +51,23 @@ export class SimpleBlurFilter extends AbstractFilter {
     }
 
 
-    doFilter(destFrameBuffer:FrameBuffer):void{
+    public doFilter(destFrameBuffer:FrameBuffer):void{
         const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,width);
         this.setUniform(this.rt_h,height);
         super.doFilter(destFrameBuffer);
     }
 
-    setSize(n:number):void{
+    public setSize(n:number):void{
         this.setWidth(n);
         this.setHeight(n);
     }
 
-    setWidth(n:number):void{
+    public setWidth(n:number):void{
         this.setUniform(this.u_direction_x,n);
     }
 
-    setHeight(n:number):void{
+    public setHeight(n:number):void{
         this.setUniform(this.u_direction_y,n);
     }
 

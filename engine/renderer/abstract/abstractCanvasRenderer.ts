@@ -1,5 +1,5 @@
 import {AbstractRenderer} from "./abstractRenderer";
-import {Game, SCALE_STRATEGY} from "../../game";
+import {Game} from "../../game";
 
 
 export class AbstractCanvasRenderer extends AbstractRenderer {

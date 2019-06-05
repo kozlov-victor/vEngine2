@@ -4,14 +4,14 @@ import {Int} from "@engine/declarations";
 import {IKeyVal, isArray} from "@engine/misc/object";
 
 
-interface ShaderErrorInfo {
-    message:string,
-    lineNum:number
+interface IShaderErrorInfo {
+    message:string;
+    lineNum:number;
 }
 
-const parseErrors = (log:string):ShaderErrorInfo[]=> {
+const parseErrors = (log:string):IShaderErrorInfo[]=> {
     if (!DEBUG) return [];
-    const logs:ShaderErrorInfo[] = [];
+    const logs:IShaderErrorInfo[] = [];
     let result:RegExpMatchArray;
 
     while (!!(result = log.match(/ERROR\:([^\n]+)/))) {
@@ -24,7 +24,7 @@ const parseErrors = (log:string):ShaderErrorInfo[]=> {
         logs.push({message, lineNum});
     }
 
-    return logs
+    return logs;
 };
 
 export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, shaderType:number):WebGLShader|null=> {
@@ -52,9 +52,9 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
             const lines:string[] = shaderSource.split('\n');
             let errorMsg:string = '';
             const arrow:string = '----->';
-            parsedLogs.forEach((inf:ShaderErrorInfo)=>{
+            parsedLogs.forEach((inf:IShaderErrorInfo)=>{
                 const i:number = inf.lineNum-1;
-                if (lines[i].indexOf(arrow)==-1) lines[i]=`${arrow} ${lines[i]}`;
+                if (lines[i].indexOf(arrow)===-1) lines[i]=`${arrow} ${lines[i]}`;
                 errorMsg+=`${lines[i]} <----${inf.message}\n`;
             });
             console.log(lines.join('\n'));
@@ -81,13 +81,19 @@ export const createProgram = (gl:WebGLRenderingContext, vertexShader:WebGLShader
     const linked:boolean = gl.getProgramParameter(program, gl.LINK_STATUS) as boolean;
     if (!linked) {
         // something went wrong with the link
-        gl.deleteProgram(program);
         const lastError:string = gl.getProgramInfoLog(program);
         if (DEBUG) {
             const status:any = gl.getProgramParameter( program, gl.VALIDATE_STATUS);
             console.error('VALIDATE_STATUS',status);
-            throw new DebugError(`Error in program linking: last error ${lastError}, status ${status}`);
+            const vertexSource:string = gl.getShaderSource(vertexShader);
+            const fragmentSource:string = gl.getShaderSource(fragmentShader);
+            console.log(vertexSource);
+            console.log('\n\n');
+            console.log(fragmentSource);
+            gl.deleteProgram(program);
+            throw new DebugError(`Error in program linking. Last error "${lastError}", status: ${status}`);
         } else {
+            gl.deleteProgram(program);
             throw new Error(lastError);
         }
 
@@ -124,7 +130,7 @@ export const GL_TYPE = {
 const mapType = (gl:WebGLRenderingContext, type:number):string=> {
 
     if (!GL_TABLE) {
-        let typeNames:string[] = Object.keys(GL_TYPE);
+        const typeNames:string[] = Object.keys(GL_TYPE);
 
         GL_TABLE = {} as IKeyVal<string>;
 
@@ -146,19 +152,19 @@ export type UNIFORM_VALUE_TYPE = number|number[]|Int|Int[]|boolean|boolean[];
 type UNIFORM_SETTER = (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=>void;
 
 
-export interface UniformWrapper {
-    type:string,
-    size:NUM,
-    location: LOC,
-    setter: UNIFORM_SETTER
+export interface IUniformWrapper {
+    type:string;
+    size:NUM;
+    location: LOC;
+    setter: UNIFORM_SETTER;
 }
 
-export interface UniformsMap {
-    [key:string]:UniformWrapper
+export interface IUniformsMap {
+    [key:string]:IUniformWrapper;
 }
 
-export interface AttributesMap {
-    [key:string]:number
+export interface IAttributesMap {
+    [key:string]:number;
 }
 
 export  const normalizeUniformName =(s:string):string=>{
@@ -167,13 +173,13 @@ export  const normalizeUniformName =(s:string):string=>{
 };
 
 
-export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram):UniformsMap=> {
+export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram):IUniformsMap=> {
     const glProgram:WebGLProgram = program.getProgram();
     const activeUniforms:Int = gl.getProgramParameter(glProgram, gl.ACTIVE_UNIFORMS) as Int;
-    const uniforms:UniformsMap = {};
+    const uniforms:IUniformsMap = {};
 
     for (let i:number = 0; i < activeUniforms; i++) {
-        let uniformData:WebGLActiveInfo = gl.getActiveUniform(glProgram, i) as WebGLActiveInfo;
+        const uniformData:WebGLActiveInfo = gl.getActiveUniform(glProgram, i) as WebGLActiveInfo;
         if (DEBUG && !uniformData) throw new DebugError(`can not receive active uniforms info: gl.getActiveUniform()`);
         const type:string = mapType(gl, uniformData.type);
         const name:string = normalizeUniformName(uniformData.name);
@@ -188,7 +194,7 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
             size: uniformData.size,
             location,
             setter: getUniformSetter(uniformData.size,type)
-        } as UniformWrapper;
+        } as IUniformWrapper;
 
         if (name.indexOf('[')>-1) {
             const arrayName:string = name.split('[')[0];
@@ -201,10 +207,10 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
 };
 
 
-export const extractAttributes = (gl:WebGLRenderingContext, program:ShaderProgram):AttributesMap=>{
+export const extractAttributes = (gl:WebGLRenderingContext, program:ShaderProgram):IAttributesMap=>{
     const glProgram:WebGLProgram = program.getProgram();
     const activeAttributes:number = gl.getProgramParameter(glProgram, gl.ACTIVE_ATTRIBUTES) as number;
-    const attrMap:AttributesMap = {};
+    const attrMap:IAttributesMap = {};
     for (let i:number = 0; i < activeAttributes; i++) {
         const attrData:WebGLActiveInfo = gl.getActiveAttrib(glProgram, i) as WebGLActiveInfo;
         if (DEBUG && !attrData) throw new DebugError(`can not receive active attribute info: gl.getActiveAttrib()`);
@@ -239,7 +245,7 @@ const TypeInt:IChecker = {
 
 const TypeBool:IChecker = {
     check: (val:UNIFORM_VALUE_TYPE):void=>{
-        if (!(val==true || val==false))
+        if (!(val===true || val===false))
             throw new DebugError(`can not set uniform with value ${val}: expected argument of boolean type, but ${val} found`);
     }
 };
@@ -265,7 +271,7 @@ const TypeArray = (checker:IChecker,size?:number):IChecker=>{
                 }
             }
         }
-    }
+    };
 };
 
 const expect = (value:UNIFORM_VALUE_TYPE,typeChecker:IChecker):void=>{
@@ -276,67 +282,67 @@ const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
     if (size===1) {
         switch (type) {
             case GL_TYPE.FLOAT: return (gl:GL,location:LOC,value:NUM)=> {
-                DEBUG && expect(value,TypeNumber);
+                if (DEBUG) expect(value,TypeNumber);
                 gl.uniform1f(location, value);
             };
             case GL_TYPE.FLOAT_VEC2:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeNumber,2));
+                if (DEBUG) expect(value,TypeArray(TypeNumber,2));
                 gl.uniform2f(location, value[0], value[1]);
             };
             case GL_TYPE.FLOAT_VEC3:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeNumber,3));
+                if (DEBUG) expect(value,TypeArray(TypeNumber,3));
                 gl.uniform3f(location, value[0], value[1], value[2]);
             };
             case GL_TYPE.FLOAT_VEC4:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeNumber,4));
+                if (DEBUG) expect(value,TypeArray(TypeNumber,4));
                 gl.uniform4f(location, value[0], value[1], value[2], value[3]);
             };
             case GL_TYPE.INT:   return (gl:GL,location:LOC,value:NUM)=> {
-                DEBUG && expect(value,TypeInt);
+                if (DEBUG) expect(value,TypeInt);
                 gl.uniform1i(location, value);
             };
             case GL_TYPE.INT_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeInt,2));
+                if (DEBUG) expect(value,TypeArray(TypeInt,2));
                 gl.uniform2i(location, value[0], value[1]);
             };
             case GL_TYPE.INT_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeInt,3));
+                if (DEBUG) expect(value,TypeArray(TypeInt,3));
                 gl.uniform3i(location, value[0], value[1], value[2]);
             };
             case GL_TYPE.INT_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeInt,4));
+                if (DEBUG) expect(value,TypeArray(TypeInt,4));
                 gl.uniform4i(location, value[0], value[1], value[2], value[3]);
             };
             case GL_TYPE.BOOL:  return (gl:GL,location:LOC,value:NUM)=> {
-                DEBUG && expect(value,TypeBool);
+                if (DEBUG) expect(value,TypeBool);
                 gl.uniform1i(location, value);
             };
             case GL_TYPE.BOOL_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeBool,2));
+                if (DEBUG) expect(value,TypeArray(TypeBool,2));
                 gl.uniform2i(location, value[0], value[1]);
             };
             case GL_TYPE.BOOL_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeBool,3));
+                if (DEBUG) expect(value,TypeArray(TypeBool,3));
                 gl.uniform3i(location, value[0], value[1], value[2]);
             };
             case GL_TYPE.BOOL_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeBool,4));
+                if (DEBUG) expect(value,TypeArray(TypeBool,4));
                 gl.uniform4i(location, value[0], value[1], value[2], value[3]);
             };
             case GL_TYPE.FLOAT_MAT2:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeNumber,2*2));
+                if (DEBUG) expect(value,TypeArray(TypeNumber,2*2));
                 gl.uniformMatrix2fv(location, false, value); // location, transpose (Must be false), value
             };
             case GL_TYPE.FLOAT_MAT3:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeNumber,3*3));
+                if (DEBUG) expect(value,TypeArray(TypeNumber,3*3));
                 gl.uniformMatrix3fv(location, false, value);
             };
             case GL_TYPE.FLOAT_MAT4:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeNumber,4*4));
+                if (DEBUG) expect(value,TypeArray(TypeNumber,4*4));
                 gl.uniformMatrix4fv(location, false, value);
             };
             case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:NUM)=> {
-                DEBUG && expect(value,TypeInt);
+                if (DEBUG) expect(value,TypeInt);
                 gl.uniform1i(location, value);
             };
             default:
@@ -350,55 +356,55 @@ const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
             // uniform vec2 u_someVec2[3]
             // js:  u_someVec2 = [0,1, 2,3, 4,5];
             case GL_TYPE.FLOAT: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeNumber,size));
+                if (DEBUG) expect(value,TypeArray(TypeNumber,size));
                 gl.uniform1fv(location, value);
             };
             case GL_TYPE.FLOAT_VEC2:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeNumber,size*2));
+                if (DEBUG) expect(value,TypeArray(TypeNumber,size*2));
                 gl.uniform2fv(location, value);
             };
             case GL_TYPE.FLOAT_VEC3:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeNumber,size*3));
+                if (DEBUG) expect(value,TypeArray(TypeNumber,size*3));
                 gl.uniform3fv(location, value);
             };
             case GL_TYPE.FLOAT_VEC4:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeNumber,size*4));
+                if (DEBUG) expect(value,TypeArray(TypeNumber,size*4));
                 gl.uniform4fv(location, value);
             };
             case GL_TYPE.INT:   return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeInt);
+                if (DEBUG) expect(value,TypeInt);
                 gl.uniform1iv(location, value);
             };
             case GL_TYPE.INT_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeInt,size*2));
+                if (DEBUG) expect(value,TypeArray(TypeInt,size*2));
                 gl.uniform2iv(location, value);
             };
             case GL_TYPE.INT_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeInt,size*3));
+                if (DEBUG) expect(value,TypeArray(TypeInt,size*3));
                 gl.uniform3iv(location, value);
             };
             case GL_TYPE.INT_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeInt,size*4));
+                if (DEBUG) expect(value,TypeArray(TypeInt,size*4));
                 gl.uniform4iv(location, value);
             };
             case GL_TYPE.BOOL:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeBool);
+                if (DEBUG) expect(value,TypeBool);
                 gl.uniform1iv(location, value);
             };
             case GL_TYPE.BOOL_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeBool,size*2));
+                if (DEBUG) expect(value,TypeArray(TypeBool,size*2));
                 gl.uniform2iv(location, value);
             };
             case GL_TYPE.BOOL_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeBool,size*3));
+                if (DEBUG) expect(value,TypeArray(TypeBool,size*3));
                 gl.uniform3iv(location, value);
             };
             case GL_TYPE.BOOL_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeArray(TypeBool,size*4));
+                if (DEBUG) expect(value,TypeArray(TypeBool,size*4));
                 gl.uniform4iv(location, value);
             };
             case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                DEBUG && expect(value,TypeInt);
+                if (DEBUG) expect(value,TypeInt);
                 gl.uniform1iv(location, value);
             };
             default:

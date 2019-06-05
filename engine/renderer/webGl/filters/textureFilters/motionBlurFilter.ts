@@ -52,13 +52,13 @@ export class MotionBlurFilter extends AbstractFilter {
     }
 
 
-    setStrength(val:number):void{
+    public setStrength(val:number):void{
         this.setUniform(this.strength,val);
     }
 
 
 
-    doFilter(destFrameBuffer:FrameBuffer):void{
+    public doFilter(destFrameBuffer:FrameBuffer):void{
         const sizeArr:[number,number] = this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray();
         this.setUniform(this.texSize,sizeArr);
         this.setUniform(this.center,[100,100]); // todo

@@ -3,20 +3,20 @@ import {RenderableModel} from "../renderableModel";
 
 export class Layer {
 
-    readonly type:string = 'Layer';
-    readonly children:RenderableModel[] = [];
+    public readonly type:string = 'Layer';
+    public readonly children:RenderableModel[] = [];
 
     constructor(protected game:Game) {
 
     }
 
-    prependChild(go:RenderableModel):void {
+    public prependChild(go:RenderableModel):void {
         go.parent = null;
         go.setLayer(this);
         go.revalidate();
         this.children.unshift(go);
     }
-    appendChild(go:RenderableModel):void {
+    public appendChild(go:RenderableModel):void {
         go.parent = null;
         go.setLayer(this);
         go.revalidate();
@@ -24,15 +24,15 @@ export class Layer {
     }
 
 
-    update():void {
-        let all:RenderableModel[] = this.children;
-        for (let obj of all) {
+    public update():void {
+        const all:RenderableModel[] = this.children;
+        for (const obj of all) {
             obj.update();
         }
     }
 
-    render():void {
-        for (let obj of this.children) {
+    public render():void {
+        for (const obj of this.children) {
             obj.render();
         }
     }

@@ -1,6 +1,6 @@
 import {ShaderProgram} from "../../../base/shaderProgram";
 import {AbstractDrawer} from "../../abstract/abstractDrawer";
-import {BufferInfo, BufferInfoDescription} from "../../../base/bufferInfo";
+import {BufferInfo, IBufferInfoDescription} from "../../../base/bufferInfo";
 import {GameObject3d} from "@engine/model/impl/gameObject3d";
 import {DebugError} from "@engine/debug/debugError";
 import {fragmentSource, vertexSource} from "@engine/renderer/webGl/programs/impl/base/modelDrawer.shader";
@@ -34,7 +34,7 @@ export class ModelDrawer extends AbstractDrawer {
     }
     
     private _initBufferInfo(drawMethod:number= this.gl.TRIANGLES):void{
-        const bufferInfo:BufferInfoDescription = {
+        const bufferInfo:IBufferInfoDescription = {
             posVertexInfo:{
                 array:this.g3d.model.vertexArr, type:this.gl.FLOAT,
                 size:3, attrName:this.a_position

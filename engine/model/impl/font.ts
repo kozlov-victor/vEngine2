@@ -8,21 +8,21 @@ import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ITexture} from "@engine/renderer/texture";
 
-export interface RectViewJSON extends IRectJSON {
-    destOffsetX:number,
-    destOffsetY:number
+export interface IRectViewJSON extends IRectJSON {
+    destOffsetX:number;
+    destOffsetY:number;
 }
 
-export interface FontContext {
-    lineHeight: number,
-    symbols: {[key:string]:RectViewJSON},
-    width:number,
-    height:number
+export interface IFontContext {
+    lineHeight: number;
+    symbols: {[key:string]:IRectViewJSON};
+    width:number;
+    height:number;
 }
 
-interface Range {
-    from:number,
-    to:number
+interface IRange {
+    from:number;
+    to:number;
 }
 
 namespace FontFactory {
@@ -39,28 +39,28 @@ namespace FontFactory {
         return height;
     };
     
-    export const getFontContext = (arrFromTo:Range[], strFont:string, w:number):FontContext=> {
+    export const getFontContext = (arrFromTo:IRange[], strFont:string, w:number):IFontContext=> {
         
         const cnv:HTMLCanvasElement = document.createElement('canvas');
         const ctx:CanvasRenderingContext2D = cnv.getContext('2d');
         ctx.font = strFont;
         const lineHeight:number = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
-        const symbols:{[key:string]:RectViewJSON} = {};
+        const symbols:{[key:string]:IRectViewJSON} = {};
         let currX:number = 0, currY:number = 0, cnvHeight = lineHeight;
         for (let k:number = 0; k < arrFromTo.length; k++) {
-            let arrFromToCurr:Range = arrFromTo[k];
+            const arrFromToCurr:IRange = arrFromTo[k];
             for (let i:number = arrFromToCurr.from; i < arrFromToCurr.to; i++) {
-                let currentChar:string = String.fromCharCode(i);
-                let ctx:CanvasRenderingContext2D = cnv.getContext('2d');
-                let textWidth:number = ctx.measureText(currentChar).width;
+                const currentChar:string = String.fromCharCode(i);
+                const context2D:CanvasRenderingContext2D = cnv.getContext('2d');
+                let textWidth:number = context2D.measureText(currentChar).width;
                 textWidth += 2 * SYMBOL_PADDING;
-                if (textWidth == 0) continue;
+                if (textWidth === 0) continue;
                 if (currX + textWidth > w) {
                     currX = 0;
                     currY += lineHeight;
                     cnvHeight = currY + lineHeight;
                 }
-                const symbolRect:RectViewJSON = {} as RectViewJSON;
+                const symbolRect:IRectViewJSON = {} as IRectViewJSON;
                 symbolRect.x = ~~currX + SYMBOL_PADDING;
                 symbolRect.y = ~~currY + SYMBOL_PADDING;
                 symbolRect.width = ~~textWidth - 2 * SYMBOL_PADDING;
@@ -70,7 +70,7 @@ namespace FontFactory {
                 currX += textWidth;
             }
         }
-        return {symbols: symbols, width: w, height: cnvHeight,lineHeight};
+        return {symbols, width: w, height: cnvHeight,lineHeight};
     };
 
     const correctColor = (canvas:HTMLCanvasElement,color:Color):void=>{
@@ -96,7 +96,7 @@ namespace FontFactory {
         ctx.putImageData(imgData, 0, 0);
     };
 
-    export const  getFontImageBase64 = (fontContext:FontContext,strFont:string,color:Color):string=> {
+    export const  getFontImageBase64 = (fontContext:IFontContext, strFont:string, color:Color):string=> {
         const cnv:HTMLCanvasElement = document.createElement('canvas');
         cnv.width = fontContext.width;
         cnv.height = fontContext.height;
@@ -126,71 +126,71 @@ namespace FontFactory {
 
 export class Font implements IResource<ITexture>, IRevalidatable {
 
-    readonly type:string = 'Font';
-    fontSize:number=12;
-    fontFamily:string='Monospace';
-    fontContext:FontContext;
-    fontColor:Color = Color.BLACK.clone();
-
-    constructor(protected game:Game){}
-
-    private static _systemFontInstance:Font;
-
-    generate(){
-        this.createContext();
-        const base64:string = this.createBitmap();
-        const link:ResourceLink<Texture> = this.game.getCurrScene().resourceLoader.loadImage(base64);
-        this.setResourceLink(link);
-    }
-
-    static getSystemFont():Font{
+    public static getSystemFont():Font{
         if (Font._systemFontInstance) return Font._systemFontInstance;
         const f:Font = new Font(Game.getInstance());
         f.createContext();
         const resourceLoader:ResourceLoader = new ResourceLoader(Game.getInstance());
-        let link:ResourceLink<Texture> = resourceLoader.loadImage(f.createBitmap());
+        const link:ResourceLink<Texture> = resourceLoader.loadImage(f.createBitmap());
         resourceLoader.startLoading();
         f.setResourceLink(link);
         Font._systemFontInstance = f;
         return f;
     }
 
-    asCss():string{
-        return `${this.fontSize}px ${this.fontFamily}`;
-    }
-
-    createContext():void {
-        const ranges:Range[] = [{from: 32, to: 126}, {from: 1040, to: 1116}];
-        const WIDTH:number = 512;
-        this.fontContext = FontFactory.getFontContext(ranges,this.asCss(),WIDTH);
-    }
-
-    static fromAtlas(game:Game,link:ResourceLink<Texture>,fontContext:FontContext):Font{
+    public static fromAtlas(game:Game,link:ResourceLink<Texture>,fontContext:IFontContext):Font{
         const fnt:Font = new Font(game);
         fnt.setResourceLink(link);
         fnt.fontContext = fontContext;
         return fnt;
     }
 
-    createBitmap():string{
+    private static _systemFontInstance:Font;
+
+    public readonly type:string = 'Font';
+    public fontSize:number=12;
+    public fontFamily:string='Monospace';
+    public fontContext:IFontContext;
+    public fontColor:Color = Color.BLACK.clone();
+
+    // resource
+    private _resourceLink:ResourceLink<ITexture>;
+
+    constructor(protected game:Game){}
+
+    public generate(){
+        this.createContext();
+        const base64:string = this.createBitmap();
+        const link:ResourceLink<Texture> = this.game.getCurrScene().resourceLoader.loadImage(base64);
+        this.setResourceLink(link);
+    }
+
+    public asCss():string{
+        return `${this.fontSize}px ${this.fontFamily}`;
+    }
+
+    public createContext():void {
+        const ranges:IRange[] = [{from: 32, to: 126}, {from: 1040, to: 1116}];
+        const WIDTH:number = 512;
+        this.fontContext = FontFactory.getFontContext(ranges,this.asCss(),WIDTH);
+    }
+
+    public createBitmap():string{
         return FontFactory.getFontImageBase64(this.fontContext,this.asCss(),this.fontColor);
     }
 
-    revalidate():void {
+    public revalidate():void {
         if (DEBUG) {
             if (!this.fontContext) throw new DebugError(`font context is not created. Did you invoke font.generate() method?`);
             if (!this.getResourceLink()) throw new DebugError(`font without resource link`);
         }
     }
 
-    // resource
-    private _resourceLink:ResourceLink<ITexture>;
-
-    setResourceLink(link:ResourceLink<ITexture>):void{
+    public setResourceLink(link:ResourceLink<ITexture>):void{
         this._resourceLink = link;
     }
 
-    getResourceLink():ResourceLink<ITexture>{
+    public getResourceLink():ResourceLink<ITexture>{
         return this._resourceLink;
     }
 

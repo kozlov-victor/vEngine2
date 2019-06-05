@@ -8,20 +8,20 @@ import {Shape} from "@engine/model/impl/ui/generic/shape";
 
 export class GameObject extends RenderableModel implements ICloneable<GameObject>{
 
-    type:string = 'GameObject';
-    sprite:Shape;
+    public type:string = 'GameObject';
+    public sprite:Shape;
+
+    public groupNames:string[] = [];
+    public collideWith:string[] = [];
 
     private _currFrameAnimation:AbstractFrameAnimation<any>;
     private _frameAnimations:{[name:string]:AbstractFrameAnimation<any>} = {};
-
-    groupNames:string[] = [];
-    collideWith:string[] = [];
 
     constructor(game:Game){
         super(game);
     }
 
-    revalidate():void {
+    public revalidate():void {
         this.sprite.revalidate();
         Object.keys(this._frameAnimations).forEach((key:string)=>{
            this._frameAnimations[key].revalidate();
@@ -33,6 +33,52 @@ export class GameObject extends RenderableModel implements ICloneable<GameObject
             // let mass = 10; // todo
             // this.rigidBody = new RigidRectangle(this.game,center,this.width,this.height,mass);
         //}
+    }
+
+    public clone():GameObject {
+        const cloned:GameObject = new GameObject(this.game);
+        this.setClonedProperties(cloned);
+        cloned.revalidate();
+        return cloned;
+    }
+
+
+    public addFrameAnimation(name:string,fa:AbstractFrameAnimation<any>):void {
+        fa.name = name;
+        this._frameAnimations[name] = fa;
+        fa.parent = this;
+    }
+
+    public playFrameAnimation(fr:string|AbstractFrameAnimation<any>){
+        let frameAnimation:AbstractFrameAnimation<any>;
+        if (typeof fr==='string') {
+            frameAnimation = this._frameAnimations[fr];
+        } else frameAnimation = fr;
+        if (DEBUG && !frameAnimation) throw new DebugError(`no such frame animation: '${fr}'`);
+        if (this._currFrameAnimation) this._currFrameAnimation.stop();
+        this._currFrameAnimation = frameAnimation;
+        frameAnimation.play();
+    }
+
+    public stopFrameAnimation():void {
+        this._currFrameAnimation.stop();
+        this._currFrameAnimation = null;
+    }
+
+
+    public update():void {
+        super.update();
+        this.sprite.update();
+        if (this._currFrameAnimation) this._currFrameAnimation.update();
+    }
+
+    public draw():boolean{
+        this.sprite.draw();
+        return true;
+    }
+
+    public kill():void {
+        super.kill();
     }
 
     protected setClonedProperties(cloned:GameObject):void {
@@ -48,53 +94,5 @@ export class GameObject extends RenderableModel implements ICloneable<GameObject
         }
         cloned.sprite = clonedSprite;
         super.setClonedProperties(cloned);
-    }
-
-    clone():GameObject {
-        const cloned:GameObject = new GameObject(this.game);
-        this.setClonedProperties(cloned);
-        cloned.revalidate();
-        return cloned;
-    }
-
-
-    addFrameAnimation(name:string,fa:AbstractFrameAnimation<any>):void {
-        fa.name = name;
-        this._frameAnimations[name] = fa;
-        fa.parent = this;
-    }
-
-    playFrameAnimation(fr:AbstractFrameAnimation<any>):void;
-    playFrameAnimation(fr:string):void;
-    playFrameAnimation(fr:string|AbstractFrameAnimation<any>){
-        let frameAnimation:AbstractFrameAnimation<any>;
-        if (typeof fr==='string') {
-            frameAnimation = this._frameAnimations[fr];
-        } else frameAnimation = fr;
-        if (DEBUG && !frameAnimation) throw new DebugError(`no such frame animation: '${fr}'`);
-        if (this._currFrameAnimation) this._currFrameAnimation.stop();
-        this._currFrameAnimation = frameAnimation;
-        frameAnimation.play();
-    }
-
-    stopFrameAnimation():void {
-        this._currFrameAnimation.stop();
-        this._currFrameAnimation = null;
-    }
-
-
-    update():void {
-        super.update();
-        this.sprite.update();
-        if (this._currFrameAnimation) this._currFrameAnimation.update();
-    }
-
-    draw():boolean{
-        this.sprite.draw();
-        return true;
-    }
-
-    kill():void {
-        super.kill();
     }
 }

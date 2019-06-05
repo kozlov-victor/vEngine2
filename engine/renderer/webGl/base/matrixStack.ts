@@ -3,13 +3,13 @@ import Mat16Holder = mat4.Mat16Holder;
 
 export class MatrixStack {
 
-    stack:Mat16Holder[] = [];
+    private stack:Mat16Holder[] = [];
 
     constructor(){
        this.restore();
     }
 
-    restore():void {
+    public restore():void {
         const last:Mat16Holder = this.stack.pop();
         if (last!==undefined) last.release();
         //Never let the stack be totally empty
@@ -19,21 +19,21 @@ export class MatrixStack {
         }
     }
 
-    save():void {
+    public save():void {
         const copy:Mat16Holder = Mat16Holder.fromPool();
         copy.fromMat16(this.getCurrentMatrix().mat16);
         this.stack.push(copy);
     }
 
-    getCurrentMatrix():Mat16Holder {
+    public getCurrentMatrix():Mat16Holder {
         return this.stack[this.stack.length - 1];
     }
 
-    setCurrentMatrix(m:Mat16Holder) {
+    public setCurrentMatrix(m:Mat16Holder) {
         return this.stack[this.stack.length - 1] = m;
     }
 
-    translate(x:number, y:number, z:number = 0):MatrixStack {
+    public translate(x:number, y:number, z:number = 0):MatrixStack {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeTranslation(t,x, y, z);
         const m:Mat16Holder = this.getCurrentMatrix();
@@ -45,15 +45,7 @@ export class MatrixStack {
         return this;
     }
 
-    private _rotate(rotMat:Mat16Holder){
-        const m:Mat16Holder = this.getCurrentMatrix();
-        const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(result,rotMat, m);
-        this.setCurrentMatrix(result);
-        m.release();
-    }
-
-    rotateX(angleInRadians:number):MatrixStack {
+    public rotateX(angleInRadians:number):MatrixStack {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeXRotation(t,angleInRadians);
         this._rotate(t);
@@ -61,7 +53,7 @@ export class MatrixStack {
         return this;
     }
 
-    rotateY(angleInRadians:number):MatrixStack {
+    public rotateY(angleInRadians:number):MatrixStack {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeYRotation(t,angleInRadians);
         this._rotate(t);
@@ -69,7 +61,7 @@ export class MatrixStack {
         return this;
     }
 
-    rotateZ(angleInRadians:number):MatrixStack {
+    public rotateZ(angleInRadians:number):MatrixStack {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeZRotation(t,angleInRadians);
         this._rotate(t);
@@ -77,7 +69,7 @@ export class MatrixStack {
         return this;
     }
 
-    scale(x:number, y:number, z:number = 1):MatrixStack {
+    public scale(x:number, y:number, z:number = 1):MatrixStack {
         const t:Mat16Holder =  Mat16Holder.fromPool();
         mat4.makeScale(t,x, y, z);
         const m:Mat16Holder = this.getCurrentMatrix();
@@ -89,7 +81,7 @@ export class MatrixStack {
         return this;
     }
 
-    resetTransform():MatrixStack{
+    public resetTransform():MatrixStack{
         this.getCurrentMatrix().release();
         const identity:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeIdentity(identity);
@@ -97,12 +89,20 @@ export class MatrixStack {
         return this;
     }
 
-    release():MatrixStack{
+    public release():MatrixStack{
         for (let i:number=0;i<this.stack.length;i++) {
             this.stack[i].release();
             return this;
         }
         return this;
+    }
+
+    private _rotate(rotMat:Mat16Holder){
+        const m:Mat16Holder = this.getCurrentMatrix();
+        const result:Mat16Holder = Mat16Holder.fromPool();
+        mat4.matrixMultiply(result,rotMat, m);
+        this.setCurrentMatrix(result);
+        m.release();
     }
 
 }

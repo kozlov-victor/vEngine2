@@ -3,21 +3,21 @@ import {DebugError} from "../debug/debugError";
 import {ICloneable} from "@engine/declarations";
 
 interface IJSON {
-    colorFrom:IColorJSON,
-    colorTo:IColorJSON
+    colorFrom:IColorJSON;
+    colorTo:IColorJSON;
 }
 
 export class LinearGradient implements ICloneable<LinearGradient>{
 
-    type:string = 'LinearGradient';
+    public type:string = 'LinearGradient';
 
-    colorFrom:Color = new Color(0,0,0);
-    colorTo:Color = new Color(200,200,200);
-    angle:number = 0.1;
+    public colorFrom:Color = new Color(0,0,0);
+    public colorTo:Color = new Color(200,200,200);
+    public angle:number = 0.1;
 
     private _arr:number[] = new Array(12);
 
-    fromJSON(json:IJSON):void{
+    public fromJSON(json:IJSON):void{
         if (DEBUG) {
             if (!json.colorFrom)
                 throw new DebugError(`can not parse LinearGradient from JSON: colorFrom not defined`);
@@ -28,22 +28,22 @@ export class LinearGradient implements ICloneable<LinearGradient>{
         this.colorTo.fromJSON(json.colorTo);
     }
 
-    set(g:LinearGradient):void{
+    public set(g:LinearGradient):void{
         this.colorFrom.set(g.colorFrom);
         this.colorTo.set(g.colorTo);
         this.angle = g.angle;
     }
 
-    toJSON():IJSON{
+    public toJSON():IJSON{
         return {
             colorFrom: this.colorFrom.toJSON(),
             colorTo: this.colorTo.toJSON()
-        }
+        };
     }
 
-    asGL():number[]{
-        let cFrom:number[] = this.colorFrom.asGL();
-        let cTo:number[] = this.colorTo.asGL();
+    public asGL():number[]{
+        const cFrom:number[] = this.colorFrom.asGL();
+        const cTo:number[] = this.colorTo.asGL();
         this._arr[0] = cFrom[0];
         this._arr[1] = cFrom[1];
         this._arr[2] = cFrom[2];
@@ -62,11 +62,11 @@ export class LinearGradient implements ICloneable<LinearGradient>{
         return this._arr;
     }
 
-    asCSS():string{
+    public asCSS():string{
         return ''; // todo
     }
 
-    clone():LinearGradient {
+    public clone():LinearGradient {
         const cloned:LinearGradient = new LinearGradient();
         cloned.fromJSON(this.toJSON());
         return cloned;

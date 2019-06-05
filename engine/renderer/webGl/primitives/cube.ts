@@ -130,7 +130,7 @@ const prepareBuffers = (size:number):IPrimitive=>{
         normalArr: vertexNormals,
         texCoordArr: textureCoords,
         indexArr: cubeVertexIndices
-    } as IPrimitive
+    } as IPrimitive;
 
 };
 

@@ -30,7 +30,7 @@ export class LightFilter extends AbstractFilter {
         this.simpleRectDrawer.initProgram();
     }
 
-    doFilter(destFrameBuffer:FrameBuffer):void{
+    public doFilter(destFrameBuffer:FrameBuffer):void{
         this.lightArray.setUniformsToMap(this.uniformInfo);
         this.simpleRectDrawer.setUniformsFromMap(this.uniformInfo);
         super.doFilter(destFrameBuffer);

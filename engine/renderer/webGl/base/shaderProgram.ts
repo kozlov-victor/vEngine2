@@ -2,22 +2,22 @@ import {DebugError} from "@engine/debug/debugError";
 
 
 import {
-    AttributesMap,
+    IAttributesMap,
     compileShader,
     createProgram,
     extractAttributes,
     extractUniforms, UNIFORM_VALUE_TYPE,
-    UniformsMap, UniformWrapper
+    IUniformsMap, IUniformWrapper
 } from "./shaderProgramUtils";
 import {VertexBuffer} from "./vertexBuffer";
 
 export class ShaderProgram {
 
-    static currentProgram:ShaderProgram = null;
+    public static currentProgram:ShaderProgram = null;
 
     private readonly program:WebGLProgram;
-    private readonly uniforms:UniformsMap;
-    private readonly attributes:AttributesMap;
+    private readonly uniforms:IUniformsMap;
+    private readonly attributes:IAttributesMap;
     private readonly gl:WebGLRenderingContext;
 
 
@@ -32,20 +32,20 @@ export class ShaderProgram {
         this.gl = gl;
     }
 
-    getProgram():WebGLProgram {
+    public getProgram():WebGLProgram {
         return this.program;
     }
 
-    bind():void{
+    public bind():void{
         this.gl.useProgram(this.program);
         ShaderProgram.currentProgram = this;
     }
 
-    setUniform(name:string, value:UNIFORM_VALUE_TYPE):void {
+    public setUniform(name:string, value:UNIFORM_VALUE_TYPE):void {
         if (DEBUG && !name) {
             throw new DebugError(`no uniform name was provided!`);
         }
-        const uniformWrapper:UniformWrapper = this.uniforms[name];
+        const uniformWrapper:IUniformWrapper = this.uniforms[name];
         if (DEBUG && !uniformWrapper) {
             console.error('shader program failed',this);
             console.error('uniforms',this.uniforms);
@@ -60,7 +60,7 @@ export class ShaderProgram {
         uniformWrapper.setter(this.gl, uniformWrapper.location, value);
     }
 
-    bindBuffer(buffer:VertexBuffer, attrName:string) {
+    public bindBuffer(buffer:VertexBuffer, attrName:string) {
         if (DEBUG) {
             if (!attrName) throw new DebugError(`can not find attribute location: attrName not defined`);
             if (this.attributes[attrName]===undefined) {
@@ -82,7 +82,7 @@ export class ShaderProgram {
         );
     }
 
-    disableAttribute(attrName:string){
+    public disableAttribute(attrName:string){
         if (this.attributes[attrName]===undefined) {
             console.log(this);
             throw new DebugError(`unbind error: can not find attribute location for  ${attrName}`);
@@ -91,7 +91,7 @@ export class ShaderProgram {
         this.gl.disableVertexAttribArray(attrLocation);
     }
 
-    destroy(){
+    public destroy(){
         this.gl.deleteProgram(this.program);
     }
 

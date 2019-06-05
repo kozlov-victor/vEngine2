@@ -7,7 +7,7 @@ import {DebugError} from "@engine/debug/debugError";
 
 export class Button extends Container {
 
-    readonly type:string = 'Button';
+    public readonly type:string = 'Button';
 
     private _font:Font;
     private readonly _textField:TextField;
@@ -17,7 +17,7 @@ export class Button extends Container {
         this._textField = new TextField(game);
     }
 
-    revalidate():void{
+    public revalidate():void{
         if (DEBUG && !this._font)
             throw new DebugError(`font is not set`);
         this._font.revalidate();
@@ -27,7 +27,7 @@ export class Button extends Container {
         this.onGeometryChanged();
     }
 
-    onGeometryChanged():void{
+    public onGeometryChanged():void{
         this._textField.onGeometryChanged();
         this.calcDrawableRect(this._textField.size.width,this._textField.size.height);
         if (this.background) {
@@ -38,21 +38,21 @@ export class Button extends Container {
     }
 
 
-    setText(text:string):void{
+    public setText(text:string):void{
         this._textField.setText(text);
         this._dirty = true;
     }
 
-    setFont(font:Font):void{
+    public setFont(font:Font):void{
         this._font = font;
         this._textField.setFont(font);
     }
 
-    getText():string{
+    public getText():string{
         return this._textField.getText();
     }
 
-    draw():boolean{
+    public draw():boolean{
         if (this.background) this.background.draw();
         return true;
     }

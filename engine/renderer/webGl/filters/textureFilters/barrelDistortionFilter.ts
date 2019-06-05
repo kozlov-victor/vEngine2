@@ -43,11 +43,11 @@ export class BarrelDistortionFilter extends AbstractFilter {
         this.setDistortion(0.1);
     }
 
-    setDistortion(val:number):void{
+    public setDistortion(val:number):void{
         this.setUniform(this.u_distortion,val);
     }
 
-    doFilter(destFrameBuffer:FrameBuffer):void{
+    public doFilter(destFrameBuffer:FrameBuffer):void{
         const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,width);
         this.setUniform(this.rt_h,height);

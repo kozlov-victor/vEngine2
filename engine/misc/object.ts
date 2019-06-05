@@ -30,7 +30,7 @@ export const isEqual = (a:any,b:any):boolean=>{
 };
 
 export const removeFromArray = (arr:any[],predicate:(item:any)=>boolean):number=> {
-    let i:number = this.length;
+    let i:number = arr.length;
     let cnt:number = 0;
     while (i--) {
         if (predicate(arr[i])) {

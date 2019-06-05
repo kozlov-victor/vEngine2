@@ -1,16 +1,16 @@
 import {normalizeUniformName} from "../../base/shaderProgramUtils";
 
-interface Info {
-    type: string,
-    name: string
+interface IInfo {
+    type: string;
+    name: string;
 }
 
 export class ShaderGenerator {
 
-    private vertexUniforms:Info[] = [];
-    private fragmentUniforms:Info[] = [];
-    private attributes:Info[] = [];
-    private varyings:Info[] = [];
+    private vertexUniforms:IInfo[] = [];
+    private fragmentUniforms:IInfo[] = [];
+    private attributes:IInfo[] = [];
+    private varyings:IInfo[] = [];
     private appendedFragCodeBlocks:string[] = [];
     private appendedVertexCodeBlocks:string[] = [];
     private prependedVertexCodeBlocks:string[] = [];
@@ -20,83 +20,85 @@ export class ShaderGenerator {
 
     constructor(){}
 
-    addVertexUniform(type:string,name:string):string{
+    public addVertexUniform(type:string,name:string):string{
         this.vertexUniforms.push({type,name});
         return normalizeUniformName(name);
     }
 
-    addFragmentUniform(type:string,name:string,extractArrayName:boolean = false):string{
+    public addFragmentUniform(type:string,name:string,extractArrayName:boolean = false):string{
         this.fragmentUniforms.push({type,name});
         name = normalizeUniformName(name);
         if (extractArrayName) name = name.split('[')[0];
         return name;
     }
 
-    addAttribute(type:string,name:string):string{
+    public addAttribute(type:string,name:string):string{
         this.attributes.push({type,name});
         return normalizeUniformName(name);
     }
 
-    addVarying(type:string,name:string):void{
+    public addVarying(type:string,name:string):void{
         this.varyings.push({type,name});
     }
 
-    appendVertexCodeBlock(code:string):void{
+    public appendVertexCodeBlock(code:string):void{
         this.appendedVertexCodeBlocks.push(code);
     }
 
-    appendFragmentCodeBlock(code:string):void{
+    public appendFragmentCodeBlock(code:string):void{
         this.appendedFragCodeBlocks.push(code);
     }
 
-    prependVertexCodeBlock(code:string):void{
+    public prependVertexCodeBlock(code:string):void{
         this.prependedVertexCodeBlocks.push(code);
     }
 
-    prependFragmentCodeBlock(code:string):void{
+    public prependFragmentCodeBlock(code:string):void{
         this.prependedFragCodeBlocks.push(code);
     }
 
-    setVertexMainFn(fnCode:string):void{
+    public setVertexMainFn(fnCode:string):void{
         this.vertexMainFn = fnCode;
     }
 
-    setFragmentMainFn(fnCode:string):void{
+    public setFragmentMainFn(fnCode:string):void{
         this.fragmentMainFn = fnCode;
     }
 
-    getVertexSource():string{
+    public getVertexSource():string{
         return (
 
 
 `
-${this.prependedVertexCodeBlocks.map(v=>`${v}`).join('\n')}
+precision mediump float;
 
-${this.vertexUniforms.map(  u=>`uniform   ${u.type} ${u.name};`).join('\n')}
-${this.attributes.map(      u=>`attribute ${u.type} ${u.name};`).join('\n')}
-${this.varyings.map(        u=>`varying   ${u.type} ${u.name};`).join('\n')}
-${this.appendedVertexCodeBlocks.map(v=>`${v}`).join('\n')}
+${this.prependedVertexCodeBlocks.map((v)=>`${v}`).join('\n')}
 
-${this.vertexMainFn}`)
+${this.vertexUniforms.map(  (u)=>`uniform   ${u.type} ${u.name};`).join('\n')}
+${this.attributes.map(      (u)=>`attribute ${u.type} ${u.name};`).join('\n')}
+${this.varyings.map(        (u)=>`varying   ${u.type} ${u.name};`).join('\n')}
+${this.appendedVertexCodeBlocks.map((v)=>`${v}`).join('\n')}
+
+${this.vertexMainFn}`);
     }
 
-    getFragmentSource():string{
+    public getFragmentSource():string{
         return (
 // lowp, mediump, highp
 `
 precision mediump float;
 
-${this.prependedFragCodeBlocks.map(v=>`${v}`).join('\n')}
+${this.prependedFragCodeBlocks.map((v)=>`${v}`).join('\n')}
 
-${this.fragmentUniforms.map(u=>`uniform ${u.type} ${u.name};`).join('\n')}
-${this.varyings.map(        u=>`varying ${u.type} ${u.name};`).join('\n')}
-${this.appendedFragCodeBlocks.map(v=>`${v}`).join('\n')}
+${this.fragmentUniforms.map((u)=>`uniform ${u.type} ${u.name};`).join('\n')}
+${this.varyings.map(        (u)=>`varying ${u.type} ${u.name};`).join('\n')}
+${this.appendedFragCodeBlocks.map((v)=>`${v}`).join('\n')}
 
 ${this.fragmentMainFn}
-`)
+`);
     }
 
-    debug():void{
+    public debug():void{
         if (!DEBUG) return;
         console.log('// *** vertex shader source ***');
         console.log(this.getVertexSource());

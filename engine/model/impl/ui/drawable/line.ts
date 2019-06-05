@@ -9,23 +9,51 @@ import {PolyLine} from "@engine/model/impl/ui/drawable/polyLine";
 
 export class Line extends Shape implements ICloneable<Line> {
 
-    private readonly rectangleRepresentation:Rectangle = new Rectangle(this.game);
-
     public borderRadius:number = 0;
     public readonly pointTo:Point2d = new Point2d(0,0,()=>this.onPointChanged());
-    vectorScaleFactor:number = 1;
+    public vectorScaleFactor:number = 1;
+
+    private readonly rectangleRepresentation:Rectangle = new Rectangle(this.game);
 
     constructor(game:Game){
         super(game);
         this.lineWidth = 1;
     }
 
-    setXYX1Y1(x:number,y:number,x1:number,y1:number){
+    public setXYX1Y1(x:number,y:number,x1:number,y1:number){
         this.pos.setXY(x*this.vectorScaleFactor,y*this.vectorScaleFactor);
         this.pointTo.setXY(x1*this.vectorScaleFactor,y1*this.vectorScaleFactor);
         const dx:number = this.pointTo.x - this.pos.x;
         const dy:number = this.pointTo.y - this.pos.y;
         this.pointTo.setXY(dx,dy);
+    }
+
+    public clone(): Line {
+        const l:Line = new Line(this.game);
+        this.setClonedProperties(l);
+        return l;
+    }
+
+    public draw():boolean{
+        this.game.getRenderer().drawLine(this);
+        return true;
+    }
+
+    public beforeRender(){
+        super.beforeRender();
+        this.game.getRenderer().translate(0,-this.lineWidth/2);
+    }
+
+    public getRectangleRepresentation():Rectangle{
+        this.rectangleRepresentation.borderRadius = this.borderRadius;
+        super.setClonedProperties(this.rectangleRepresentation);
+        return this.rectangleRepresentation;
+    }
+
+    protected setClonedProperties(cloned:Line):void{
+        cloned.borderRadius = this.borderRadius;
+        cloned.pointTo.set(this.pointTo);
+        super.setClonedProperties(cloned);
     }
 
 
@@ -57,34 +85,6 @@ export class Line extends Shape implements ICloneable<Line> {
         this.rectangleRepresentation.size.setWH(l,this.lineWidth);
         this.angle = Math.atan2(this.pointTo.y,this.pointTo.x);
         this.rotationPoint.setXY(0,this.lineWidth/2);
-    }
-
-    protected setClonedProperties(cloned:Line):void{
-        cloned.borderRadius = this.borderRadius;
-        cloned.pointTo.set(this.pointTo);
-        super.setClonedProperties(cloned);
-    }
-
-    clone(): Line {
-        const l:Line = new Line(this.game);
-        this.setClonedProperties(l);
-        return l;
-    }
-
-    draw():boolean{
-        this.game.getRenderer().drawLine(this);
-        return true;
-    }
-
-    beforeRender(){
-        super.beforeRender();
-        this.game.getRenderer().translate(0,-this.lineWidth/2);
-    }
-
-    getRectangleRepresentation():Rectangle{
-        this.rectangleRepresentation.borderRadius = this.borderRadius;
-        super.setClonedProperties(this.rectangleRepresentation);
-        return this.rectangleRepresentation;
     }
 
 }

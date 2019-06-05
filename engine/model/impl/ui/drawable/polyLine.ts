@@ -15,7 +15,7 @@ type v2 = [number,number];
 // adds 1 or more v2s
 const add = (a:v2, ...args:v2[]):v2=> {
     const n:[number,number] = [...a] as [number,number];
-    args.forEach(p => {
+    args.forEach((p) => {
         n[0] += p[0];
         n[1] += p[1];
     });
@@ -49,25 +49,59 @@ const getPointsOnBezierCurve = (points:v2[], offset:number, numPoints:number):v2
 
 
 class SvgTokenizer {
+    public lastCommand:string;
 
     private pos:number = 0;
     private lastPos:number;
-    public lastCommand:string;
+
+    private readonly CHAR:RegExp = /[a-zA-Z]/i;
+    private readonly NUM:RegExp = /[0-9.]/i;
 
     constructor(private path:string){
         this.path = clearString(path);
     }
 
-    private readonly CHAR:RegExp = /[a-zA-Z]/i;
-    private readonly NUM:RegExp = /[0-9.]/i;
-
-    isEof():boolean{
+    public isEof():boolean{
         return this.pos===this.path.length;
+    }
+
+    public releaseNextToken(){
+        if (DEBUG && this.lastPos===undefined) throw new DebugError(`can not release next token`);
+        this.pos = this.lastPos;
+        this.lastPos = undefined;
+    }
+
+    public getNextCommand():string{
+        let tkn:string = this.getNextToken(this.CHAR);
+        if (!tkn) tkn = ''+this.getNextNumber();
+        return tkn;
+    }
+
+    public getNextNumber():number{
+        this.skipWhiteSpaces();
+        const lastPos:number = this.lastPos;
+        let sign:number = 1;
+        if (this.path[this.pos]==='-') {
+            sign = -1;
+            this.pos++;
+        }
+        let s:string = this.getNextToken(this.NUM);
+        // check for numbers  like 2.52e-4
+        if (this.path[this.pos]==='e') {
+            this.pos++;
+            s+='e'+this.getNextNumber();
+        }
+        let n:number = +s;
+        if (DEBUG && isNaN(n)) throw new DebugError(`can not read number: ${sign===1?'':'-'}${s}`);
+        n*=sign;
+        //console.log({number:n});
+        this.lastPos = lastPos;
+        return n;
     }
 
     private skipWhiteSpaces():void{
         while (!this.isEof()){
-            if ([',',' '].indexOf(this.path[this.pos])==-1) break;
+            if ([',',' '].indexOf(this.path[this.pos])===-1) break;
             this.pos++;
         }
     }
@@ -87,54 +121,113 @@ class SvgTokenizer {
         return res.trim();
     }
 
-    releaseNextToken(){
-        if (DEBUG && this.lastPos===undefined) throw new DebugError(`can not release next token`);
-        this.pos = this.lastPos;
-        this.lastPos = undefined;
-    }
-
-    getNextCommand():string{
-        let tkn:string = this.getNextToken(this.CHAR);
-        if (!tkn) tkn = ''+this.getNextNumber();
-        return tkn;
-    }
-
-    getNextNumber():number{
-        this.skipWhiteSpaces();
-        let lastPos:number = this.lastPos;
-        let sign:number = 1;
-        if (this.path[this.pos]=='-') {
-            sign = -1;
-            this.pos++;
-        }
-        let s:string = this.getNextToken(this.NUM);
-        // check for numbers  like 2.52e-4
-        if (this.path[this.pos]==='e') {
-            this.pos++;
-            s+='e'+this.getNextNumber();
-        }
-        let n:number = +s;
-        if (DEBUG && isNaN(n)) throw new DebugError(`can not read number: ${sign==1?'':'-'}${s}`);
-        n*=sign;
-        //console.log({number:n});
-        this.lastPos = lastPos;
-        return n;
-    }
-
 }
 
 export class PolyLine extends Shape {
+    public vectorScaleFactor:number = 1;
+    public borderRadius:number = 1;
 
     private lastPoint:Point2d;
     private firstPoint:Point2d;
-    vectorScaleFactor:number = 1;
-    borderRadius:number = 1;
 
     private tokenizer:SvgTokenizer;
+
+
+    private lastBezierPoint:v2;
 
     constructor(protected game:Game){
         super(game);
         this.lineWidth = 1;
+    }
+
+    public moveTo(x:number,y:number):void{
+        if (DEBUG && this.lastPoint) throw new DebugError(`can not invoke moveTo: lineTo or moveTo already invoked`);
+        this.lastPoint = new Point2d(x,y);
+        if (!this.firstPoint) this.firstPoint = new Point2d(x,y);
+
+    }
+
+    public moveBy(x:number,y:number):void{
+        const lastX:number = this.lastPoint?this.lastPoint.x:0;
+        const lastY:number = this.lastPoint?this.lastPoint.y:0;
+        this.moveTo(lastX+x,lastY+y);
+    }
+
+    public lineTo(x:number,y:number):void{
+        if (!this.lastPoint) this.lastPoint = new Point2d();
+        if (!this.firstPoint) this.firstPoint = new Point2d(x,y);
+        this.addSegment(this.lastPoint.x,this.lastPoint.y,x,y);
+        this.lastPoint.setXY(x,y);
+    }
+
+
+    public lineBy(x:number,y:number):void{
+        const lastX:number = this.lastPoint?this.lastPoint.x:0;
+        const lastY:number = this.lastPoint?this.lastPoint.y:0;
+        this.lineTo(lastX+x,lastY+y);
+    }
+
+    public complete():void {
+        this.lastPoint = null;
+        this.firstPoint = null;
+    }
+
+    public close(){
+        if (DEBUG && !this.firstPoint) throw new DebugError(`can not close polyline: no first point defined`);
+        this.lineTo(this.firstPoint.x,this.firstPoint.y);
+        this.complete();
+    }
+
+
+    public setPoints(points:number[]|string){
+        if (typeof points === 'string') {
+            points = clearString(points).split(/[ |,]/).map((it:string)=>{
+                const n:number = parseFloat(it);
+                if (DEBUG && isNaN(n)) throw new DebugError(`can not parse vertex array ${points}: unexpected value ${it}`);
+                return n;
+            });
+        }
+        this.moveTo(points[0],points[1]);
+        for (let i:number=2;i<points.length;i+=2) {
+            this.lineTo(points[i],points[i+1]);
+        }
+    }
+
+
+    public bezierTo(p1:v2,p2:v2,p3:v2,p4:v2){
+        const l:number = length(p1,p2)+length(p2,p3)+length(p3,p4);
+        const bezier:v2[] = getPointsOnBezierCurve([p1,p2,p3,p4],0,l);
+        bezier.forEach((v:v2)=>{
+            this.lineTo(v[0],v[1]);
+        });
+    }
+
+    // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
+    public setSvgPath(path:string){
+        this.tokenizer = new SvgTokenizer(path);
+        let lastCommand:string;
+        while (!this.tokenizer.isEof()) {
+            const command:string = this.tokenizer.getNextCommand();
+            //console.log({command});
+            if (isFinite(+command) && lastCommand) {
+                this.tokenizer.releaseNextToken();
+                this.executeCommand(lastCommand);
+            }
+            else {
+                this.executeCommand(command);
+                lastCommand = command;
+            }
+        }
+    }
+
+    public clone(): PolyLine {
+        const l:PolyLine = new PolyLine(this.game);
+        this.setClonedProperties(l);
+        return l;
+    }
+
+    public draw():boolean{
+        return true;
     }
 
     protected setClonedProperties(cloned:PolyLine):void{
@@ -167,71 +260,6 @@ export class PolyLine extends Shape {
         }
         this.size.setWH(maxW,maxH);
     }
-
-    moveTo(x:number,y:number):void{
-        if (DEBUG && this.lastPoint) throw new DebugError(`can not invoke moveTo: lineTo or moveTo already invoked`);
-        this.lastPoint = new Point2d(x,y);
-        if (!this.firstPoint) this.firstPoint = new Point2d(x,y);
-
-    }
-
-    moveBy(x:number,y:number):void{
-        const lastX:number = this.lastPoint?this.lastPoint.x:0;
-        const lastY:number = this.lastPoint?this.lastPoint.y:0;
-        this.moveTo(lastX+x,lastY+y);
-    }
-
-    lineTo(x:number,y:number):void{
-        if (!this.lastPoint) this.lastPoint = new Point2d();
-        if (!this.firstPoint) this.firstPoint = new Point2d(x,y);
-        this.addSegment(this.lastPoint.x,this.lastPoint.y,x,y);
-        this.lastPoint.setXY(x,y);
-    }
-
-
-    lineBy(x:number,y:number):void{
-        const lastX:number = this.lastPoint?this.lastPoint.x:0;
-        const lastY:number = this.lastPoint?this.lastPoint.y:0;
-        this.lineTo(lastX+x,lastY+y);
-    }
-
-    complete():void {
-        this.lastPoint = null;
-        this.firstPoint = null;
-    }
-
-    close(){
-        if (DEBUG && !this.firstPoint) throw new DebugError(`can not close polyline: no first point defined`);
-        this.lineTo(this.firstPoint.x,this.firstPoint.y);
-        this.complete();
-    }
-
-
-    setPoints(points:number[]|string){
-        if (typeof points === 'string') {
-            points = clearString(points).split(/[ |,]/).map((it:string)=>{
-                const n:number = parseFloat(it);
-                if (DEBUG && isNaN(n)) throw new DebugError(`can not parse vertex array ${points}: unexpected value ${it}`);
-                return n;
-            });
-        }
-        this.moveTo(points[0],points[1]);
-        for (let i:number=2;i<points.length;i+=2) {
-            this.lineTo(points[i],points[i+1]);
-        }
-    }
-
-
-    bezierTo(p1:v2,p2:v2,p3:v2,p4:v2){
-        const l:number = length(p1,p2)+length(p2,p3)+length(p3,p4);
-        const bezier:v2[] = getPointsOnBezierCurve([p1,p2,p3,p4],0,l);
-        bezier.forEach((v:v2)=>{
-            this.lineTo(v[0],v[1]);
-        });
-    }
-
-
-    private lastBezierPoint:v2;
 
     private executeCommand(command:string):void{
         const tokenizer:SvgTokenizer = this.tokenizer;
@@ -314,7 +342,7 @@ export class PolyLine extends Shape {
             }
             case 's': {
                 const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
-                if (!this.lastBezierPoint || ['c','C','S','s'].indexOf(tokenizer.lastCommand)==-1) this.lastBezierPoint = p1;
+                if (!this.lastBezierPoint || ['c','C','S','s'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
                 const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
                 const p3:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
                 const p4:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
@@ -373,34 +401,6 @@ export class PolyLine extends Shape {
                 break;
         }
         tokenizer.lastCommand = command;
-    }
-
-    // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
-    setSvgPath(path:string){
-        this.tokenizer = new SvgTokenizer(path);
-        let lastCommand:string;
-        while (!this.tokenizer.isEof()) {
-            const command:string = this.tokenizer.getNextCommand();
-            //console.log({command});
-            if (isFinite(+command) && lastCommand) {
-                this.tokenizer.releaseNextToken();
-                this.executeCommand(lastCommand);
-            }
-            else {
-                this.executeCommand(command);
-                lastCommand = command;
-            }
-        }
-    }
-
-    clone(): PolyLine {
-        const l:PolyLine = new PolyLine(this.game);
-        this.setClonedProperties(l);
-        return l;
-    }
-
-    draw():boolean{
-        return true;
     }
 
 }

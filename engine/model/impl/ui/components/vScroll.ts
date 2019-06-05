@@ -6,12 +6,12 @@ import {Shape} from "../generic/shape";
 
 export class VScroll extends Container {
 
-    readonly type:string = 'VScroll';
-    readonly handler: Shape;
+    public readonly type:string = 'VScroll';
+    public readonly handler: Shape;
 
-    maxValue:number = 0;
-    value: number = 0;
-    enabled: boolean = false;
+    public maxValue:number = 0;
+    public value: number = 0;
+    public enabled: boolean = false;
 
     constructor(game:Game) {
         super(game);
@@ -29,7 +29,7 @@ export class VScroll extends Container {
         this.appendChild(hnd);
     }
 
-    onGeometryChanged():void {
+    public onGeometryChanged():void {
         this.handler.size.width = this.background.size.width;
         if (this.value>this.maxValue) this.value = this.maxValue;
         if (this.maxValue) this.handler.size.height = this.size.height * this.size.height / this.maxValue;
@@ -40,7 +40,7 @@ export class VScroll extends Container {
         this.calcDrawableRect(this.size.width,this.size.height);
     }
 
-    draw():boolean{
+    public draw():boolean{
         return this.enabled;
     }
 

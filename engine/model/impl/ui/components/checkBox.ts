@@ -7,11 +7,11 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class CheckBox extends Container {
 
-    readonly type:string = 'CheckBox';
-    private rNormal:Shape;
-    private rChecked: Shape;
+    public readonly type:string = 'CheckBox';
 
-    checked: boolean = false;
+    public checked: boolean = false;
+    private readonly rNormal:Shape;
+    private readonly rChecked: Shape;
 
     constructor(game:Game) {
         super(game);
@@ -28,23 +28,23 @@ export class CheckBox extends Container {
         this.on(MOUSE_EVENTS.click,()=>this.toggle());
     }
 
-    toggle():void{
+    public toggle():void{
         this.checked = !this.checked;
     }
 
-    onGeometryChanged():void{
+    public onGeometryChanged():void{
         this.rNormal.setWH(this.size.width,this.size.height);
         this.rChecked.setWH(this.size.width,this.size.height);
+    }
+
+    public draw():boolean{
+        const bg:Shape = this.getBgByState();
+        if (bg) bg.draw(); // todo
+        return true;
     }
 
     protected getBgByState():Shape{
         if (this.checked) return this.rChecked;
         return this.rNormal;
-    }
-
-    draw():boolean{
-        const bg:Shape = this.getBgByState();
-        if (bg) bg.draw(); // todo
-        return true;
     }
 }

@@ -16,7 +16,7 @@ export class IndexBuffer {
         this.dataLength = null;
     }
 
-    setData(bufferData:number[]){
+    public setData(bufferData:number[]){
         if (DEBUG) {
             if (!bufferData) throw new DebugError('can not set data to buffer: bufferData not specified');
         }
@@ -29,23 +29,23 @@ export class IndexBuffer {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
     }
 
-    getGlBuffer():WebGLRenderbuffer{
+    public getGlBuffer():WebGLRenderbuffer{
         return this.buffer;
     }
 
-    bind():void{
+    public bind():void{
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.buffer);
     }
 
-    unbind():void{
+    public unbind():void{
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
     }
 
-    destroy():void{
+    public destroy():void{
         this.gl.deleteBuffer(this.buffer);
     }
 
-    getBufferLength():number{
+    public getBufferLength():number{
         return this.dataLength;
     }
 

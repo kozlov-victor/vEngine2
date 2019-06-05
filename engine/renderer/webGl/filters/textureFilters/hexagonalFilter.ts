@@ -58,12 +58,12 @@ export class HexagonalFilter extends AbstractFilter {
     }
 
 
-    setSize(val:number):void {
+    public setSize(val:number):void {
         this.setUniform(this.scale,[val,val]);
     }
 
 
-    doFilter(destFrameBuffer:FrameBuffer):void{
+    public doFilter(destFrameBuffer:FrameBuffer):void{
         this.setUniform(this.texSize,this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray());
         super.doFilter(destFrameBuffer);
     }

@@ -5,11 +5,31 @@ import {Game} from "@engine/game";
 
 export class Ellipse extends Shape implements ICloneable<Ellipse>{
 
-    readonly type:string = 'Ellipse';
-    readonly center:Point2d = new Point2d();
+    get radiusX(): number {
+        return this._radiusX;
+    }
 
-    arcAngleFrom:number = 0;
-    arcAngleTo:number = 0;
+    set radiusX(value: number) {
+        this._radiusX = value;
+        this.size.width = this._getMaxRadius()*2;
+        this.center.forceTriggerChange();
+    }
+
+    get radiusY(): number {
+        return this._radiusY;
+    }
+
+    set radiusY(value: number) {
+        this._radiusY = value;
+        this.size.height = this._getMaxRadius()*2;
+        this.center.forceTriggerChange();
+    }
+
+    public readonly type:string = 'Ellipse';
+    public readonly center:Point2d = new Point2d();
+
+    public arcAngleFrom:number = 0;
+    public arcAngleTo:number = 0;
 
     private _radiusX: number = 10;
     private _radiusY: number = 20;
@@ -32,33 +52,19 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>{
         });
     }
 
-    get radiusX(): number {
-        return this._radiusX;
-    }
-
-    set radiusX(value: number) {
-        this._radiusX = value;
-        this.size.width = this._getMaxRadius()*2;
-        this.center.forceTriggerChange();
-    }
-
-    get radiusY(): number {
-        return this._radiusY;
-    }
-
-    set radiusY(value: number) {
-        this._radiusY = value;
-        this.size.height = this._getMaxRadius()*2;
-        this.center.forceTriggerChange();
-    }
-
-    private _getMaxRadius():number{
-        return this._radiusX>this._radiusY?this._radiusX:this._radiusY;
-    }
-
-    draw():boolean{
+    public draw():boolean{
         this.game.getRenderer().drawEllipse(this);
         return true;
+    }
+
+    public update():void {
+        super.update();
+    }
+
+    public clone():Ellipse {
+        const cloned:Ellipse = new Ellipse(this.game);
+        this.setClonedProperties(cloned);
+        return cloned;
     }
 
     protected setClonedProperties(cloned:Ellipse):void {
@@ -67,14 +73,8 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>{
         super.setClonedProperties(cloned);
     }
 
-    update():void {
-        super.update();
-    }
-
-    clone():Ellipse {
-        const cloned:Ellipse = new Ellipse(this.game);
-        this.setClonedProperties(cloned);
-        return cloned;
+    private _getMaxRadius():number{
+        return this._radiusX>this._radiusY?this._radiusX:this._radiusY;
     }
 
 }

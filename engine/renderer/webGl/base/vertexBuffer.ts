@@ -20,7 +20,7 @@ export class VertexBuffer {
         if (DEBUG && !this.buffer) throw new DebugError(`can not allocate memory for vertex buffer`);
     }
 
-    setData(bufferData:number[], itemType:number, itemSize:number):void{
+    public setData(bufferData:number[], itemType:number, itemSize:number):void{
         if (DEBUG) {
             if (!bufferData) throw new DebugError('can not set data to vertex buffer: bufferData not specified');
             if (!itemType) throw new DebugError('can not set data to vertex buffer: itemType not specified');
@@ -37,38 +37,38 @@ export class VertexBuffer {
         this.dataLength = bufferData.length;
     }
 
-    setAttrName(attrName:string):void{
+    public setAttrName(attrName:string):void{
         if (DEBUG && !attrName) throw new DebugError(`attrName not provided`);
         this.attrName = attrName;
     }
 
-    bind(program:ShaderProgram):void{
+    public bind(program:ShaderProgram):void{
         if (DEBUG && !program) throw new DebugError("can not bind VertexBuffer, program not specified");
         if (DEBUG && !this.attrName) throw new DebugError("can not bind VertexBuffer, attribute name not specified");
         program.bindBuffer(this,this.attrName);
     }
 
-    unbind():void{
+    public unbind():void{
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
     }
 
-    destroy():void{
+    public destroy():void{
         this.gl.deleteBuffer(this.buffer);
     }
 
-    getGlBuffer():WebGLBuffer{
+    public getGlBuffer():WebGLBuffer{
         return this.buffer;
     }
 
-    getItemSize():number{
+    public getItemSize():number{
         return this.bufferItemSize;
     }
 
-    getItemType():number{
+    public getItemType():number{
         return this.bufferItemType;
     }
 
-    getBufferLength():number{
+    public getBufferLength():number{
         return this.dataLength;
     }
 

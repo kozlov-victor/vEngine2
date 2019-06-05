@@ -2,21 +2,19 @@ import {DebugError} from "@engine/debug/debugError";
 
 export class Queue {
 
-    private tasksResolved:number = 0;
-    private tasks:Function[] = [];
-    private tasksProgressById:{[taskId:string]:number} = {};
-    private completed:boolean = false;
-    private nextTaskIndex:number = 0;
+
 
     public onResolved:()=>void;
     public onProgress:(n:number)=>void;
 
+    private tasksResolved:number = 0;
+    private tasks:(()=>void)[] = [];
+    private tasksProgressById:{[taskId:string]:number} = {};
+    private completed:boolean = false;
+    private nextTaskIndex:number = 0;
+
     constructor(){
 
-    }
-
-    private size():number{
-        return this.tasks.length;
     }
 
     // private progressTask(taskId:number|string,progress:number):void{
@@ -32,26 +30,24 @@ export class Queue {
         this.tasksResolved++;
         this.tasksProgressById[taskId] = 1;
         if (this.tasks.length===this.tasksResolved) {
-            this.onProgress && this.onProgress(1);
+            if (this.onProgress) this.onProgress(1);
             this.completed = true;
             if (this.onResolved) this.onResolved();
         } else {
-            this.onProgress && this.onProgress(this.calcProgress());
+            if (this.onProgress) this.onProgress(this.calcProgress());
             this.tasks[this.nextTaskIndex++]();
         }
-    };
-
-    addTask(taskFn:()=>void,taskId:string|number):void {
+    }
+    public addTask(taskFn:()=>void,taskId:string|number):void {
         if (this.tasksProgressById[taskId]!==undefined) return;
         this.tasks.push(taskFn);
         this.tasksProgressById[taskId] = 0;
-    };
-
-    isCompleted():boolean{
+    }
+    public isCompleted():boolean{
         return this.completed;
     }
 
-    calcProgress():number{
+    public calcProgress():number{
         let sum:number = 0;
         Object.keys(this.tasksProgressById).forEach((taskId:string)=>{
             sum+=this.tasksProgressById[taskId]||0;
@@ -59,15 +55,19 @@ export class Queue {
         return sum/this.tasks.length;
     }
 
-    start():void {
+    public start():void {
         if (this.size()===0) {
             this.completed = true;
-            this.onResolved && this.onResolved();
+            if (this.onResolved) this.onResolved();
         } else {
             this.tasks[this.nextTaskIndex++]();
         }
         // this.tasks.forEach((t:Function)=>{
         //     t && t();
         // });
+    }
+
+    private size():number{
+        return this.tasks.length;
     }
 }

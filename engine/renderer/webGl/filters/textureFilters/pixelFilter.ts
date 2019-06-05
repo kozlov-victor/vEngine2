@@ -42,20 +42,20 @@ export class PixelFilter extends AbstractFilter {
     }
 
 
-    setPixelWidth(n:number):void{
+    public setPixelWidth(n:number):void{
         this.setUniform(this.pixel_w,n);
     }
 
-    setPixelHeight(n:number):void{
+    public setPixelHeight(n:number):void{
         this.setUniform(this.pixel_h,n);
     }
 
-    setPixelSize(n:number):void {
+    public setPixelSize(n:number):void {
         this.setPixelWidth(n);
         this.setPixelHeight(n);
     }
 
-    doFilter(destFrameBuffer:FrameBuffer):void{
+    public doFilter(destFrameBuffer:FrameBuffer):void{
         const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,size.width);
         this.setUniform(this.rt_h,size.height);
