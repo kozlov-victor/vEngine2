@@ -67,17 +67,9 @@ export class Camera {
 
     public revalidate():void{
         this.scene = this.game.getCurrScene();
-        if (this.scene.tileMap) this.scene.tileMap.revalidate();
         this._rectIdentity.setXYWH(0,0,this.game.width,this.game.height);
-        if (this.scene.tileMap.spriteSheet) {
-            this.sceneWidth =
-                this.scene.tileMap.spriteSheet.getSrcRect().size.width*this.scene.tileMap.width;
-            this.sceneHeight =
-                this.scene.tileMap.spriteSheet.getSrcRect().size.height*this.scene.tileMap.height;
-        } else {
-            this.sceneWidth = this.game.getCurrScene().width || this.game.width;
-            this.sceneHeight = this.game.getCurrScene().height || this.game.height;
-        }
+        this.sceneWidth = this.game.getCurrScene().width || this.game.width;
+        this.sceneHeight = this.game.getCurrScene().height || this.game.height;
     }
 
 

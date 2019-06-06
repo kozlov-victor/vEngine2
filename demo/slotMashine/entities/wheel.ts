@@ -14,7 +14,7 @@ export class Wheel {
 
     public position:number = 0;
     public image:Image;
-    public mashine:Mashine;
+    public mashine!:Mashine;
 
     private free:boolean = true;
 

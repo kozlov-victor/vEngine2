@@ -2,7 +2,6 @@ import {ICloneable, IRevalidatable} from "@engine/declarations";
 import {AbstractFrameAnimation} from "@engine/model/impl/frameAnimation/abstract/abstractFrameAnimation";
 import {Image} from "@engine/model/impl/ui/drawable/image";
 import {DebugError} from "@engine/debug/debugError";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 
 export class CellFrameAnimation extends AbstractFrameAnimation<number> implements IRevalidatable, ICloneable<CellFrameAnimation>{
 

@@ -4,7 +4,7 @@ import {Color} from "@engine/renderer/color";
 import {ParticleSystem} from "@engine/model/impl/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {BLEND_MODE} from "@engine/model/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/model/renderableModel";
 import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/simpleBlurFilter";
 import {Circle} from "@engine/model/impl/ui/drawable/circle";
 import {Shape} from "@engine/model/impl/ui/generic/shape";
@@ -12,7 +12,7 @@ import {Shape} from "@engine/model/impl/ui/generic/shape";
 
 export class MainScene extends Scene {
 
-    private ps:ParticleSystem;
+    private ps!:ParticleSystem;
 
     public onPreloading() {
         console.log('on preloading');
@@ -43,12 +43,12 @@ export class MainScene extends Scene {
         const sb:SimpleBlurFilter = new SimpleBlurFilter(this.game);
         sb.setSize(2);
 
-        ps.onEmitParticle((r:Shape)=>{
+        ps.onEmitParticle((r:RenderableModel)=>{
             r.blendMode = BLEND_MODE.ADDITIVE;
             // r.filters = [sb];
-            (r.fillColor as Color).setRGB(MathEx.random(0,255),MathEx.random(0,255),MathEx.random(0,255));
+            ((r as Shape).fillColor as Color).setRGB(MathEx.random(0,255),MathEx.random(0,255),MathEx.random(0,255));
         });
-        ps.onUpdateParticle((r:Rectangle)=>r.angle+=0.1);
+        ps.onUpdateParticle((r:RenderableModel)=>r.angle+=0.1);
 
 
         ps.numOfParticlesToEmit = {from:1,to:10};

@@ -412,4 +412,5 @@ const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
                 break;
         }
     }
+    throw new Error();
 };

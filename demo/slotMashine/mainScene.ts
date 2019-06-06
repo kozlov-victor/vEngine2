@@ -19,9 +19,9 @@ interface IWheelCommand {
 
 export class MainScene extends Scene {
     
-    public wheelLink:ResourceLink<Texture>;
-    private overlay:Image;
-    private mashine:Mashine;
+    public wheelLink!:ResourceLink<Texture>;
+    private overlay!:Image;
+    private mashine!:Mashine;
 
 
     public onPreloading() {

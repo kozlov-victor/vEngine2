@@ -5,7 +5,7 @@ import {Sound} from "@engine/model/impl/sound";
 
 export class AudioNode {
 
-    private currSound:Sound;
+    private currSound!:Sound|null;
 
     constructor(public context:BasicAudioContext){}
 
@@ -35,7 +35,7 @@ export class AudioNode {
         return this.context.isFree();
     }
 
-    public getCurrSound():Sound {
+    public getCurrSound():Sound|null {
         return this.currSound;
     }
 

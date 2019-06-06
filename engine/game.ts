@@ -85,6 +85,7 @@ export class Game {
             if (Game.isOfType(c,T)) return (c as any) as T;
         }
         if (DEBUG) throw new DebugError('no such control');
+        else throw new Error();
     }
 
     public hasControl(type:string):boolean {

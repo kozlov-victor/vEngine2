@@ -81,12 +81,12 @@ export class MainScene extends Scene {
         polyLine7.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(polyLine7);
 
-
-        const children = polyLine7.children;
+        const children = [...polyLine7.children];
+        const l:number = polyLine7.children.length;
         polyLine7.removeChildren();
         let i:number = 0;
         const interval:Timer = this.setInterval(()=>{
-            if (i===children.length) { interval.kill(); }
+            if (i===l) { interval.kill(); }
             else { polyLine7.appendChild(children[i++]); }
         },10);
 

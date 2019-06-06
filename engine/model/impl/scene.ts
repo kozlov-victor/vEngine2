@@ -26,8 +26,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     public readonly resourceLoader: ResourceLoader;
     public filters:AbstractFilter[] = [];
 
-    public tileMap:TileMap; // todo
-
     protected preloadingGameObject!:RenderableModel;
     private _layers:Layer[] = [];
     private readonly _uiLayer:Layer;
@@ -42,7 +40,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
     constructor(protected game:Game) {
-        this.tileMap = new TileMap(game);
         this._uiLayer = new Layer(this.game);
         this.addLayer(new Layer(game));
         this.resourceLoader = new ResourceLoader(game);
@@ -186,8 +183,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         for (const l of this._layers) {
             l.render();
         }
-
-        this.tileMap.render();
 
         renderer.save();
         renderer.resetTransform();

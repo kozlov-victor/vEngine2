@@ -42,7 +42,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         const dstRect:Rect = img.getSrcRect();
 
         if (img.offset.x || img.offset.y) {
-            const pattern:CanvasPattern = this.ctx.createPattern((img.getResourceLink().getTarget() as any) as CanvasImageSource, 'repeat');
+            const pattern:CanvasPattern = this.ctx.createPattern((img.getResourceLink().getTarget() as any) as CanvasImageSource, 'repeat') as CanvasPattern;
             this.ctx.fillStyle = pattern;
 
             this.ctx.save();
