@@ -1,7 +1,7 @@
-import {MathEx} from "../../misc/mathEx";
-import {Game} from "../../game";
+import {MathEx} from "../../../misc/mathEx";
+import {Game} from "../../../game";
 import {DebugError} from "@engine/debug/debugError";
-import {RenderableModel} from "@engine/model/renderableModel";
+import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {noop} from "@engine/misc/object";
 import {Point2d} from "@engine/geometry/point2d";
 

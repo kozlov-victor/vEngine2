@@ -1,12 +1,12 @@
-import {Scene} from "@engine/model/impl/scene";
-import {GameObject} from "@engine/model/impl/gameObject";
+import {Scene} from "@engine/model/impl/general/scene";
+import {GameObject} from "@engine/model/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {KeyboardControl, KEYBOARD_KEY} from "@engine/control/keyboardControl";
 import {GamePadControl} from "@engine/control/gamePadControl";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Image} from "@engine/model/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 

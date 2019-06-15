@@ -1,10 +1,10 @@
-import {Scene} from "@engine/model/impl/scene";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Scene} from "@engine/model/impl/general/scene";
+import {Image} from "@engine/model/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {PbmReader} from "./pbmReader";
-import {GameObject} from "@engine/model/impl/gameObject";
+import {GameObject} from "@engine/model/impl/general/gameObject";
 import {MultiImageFrameAnimation} from "@engine/model/impl/frameAnimation/multiImageFrameAnimation";
 
 // https://www.twobitarcade.net/article/displaying-images-oled-displays/

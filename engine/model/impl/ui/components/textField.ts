@@ -1,8 +1,8 @@
-import {Font, IRectViewJSON} from "../../font";
+import {Font, IRectViewJSON} from "../../general/font";
 import {Rect} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
-import {ScrollableContainer} from "../generic/scrollableContainer";
-import {Image} from "../drawable/image";
+import {ScrollableContainer} from "../abstract/scrollableContainer";
+import {Image} from "../../geometry/image";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {Game} from "@engine/game";
 import {Size} from "@engine/geometry/size";

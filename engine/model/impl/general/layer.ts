@@ -1,5 +1,5 @@
-import {Game} from "../../game";
-import {RenderableModel} from "../renderableModel";
+import {Game} from "../../../game";
+import {RenderableModel} from "../../abstract/renderableModel";
 
 export class Layer {
 

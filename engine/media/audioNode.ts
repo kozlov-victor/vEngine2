@@ -1,6 +1,6 @@
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
-import {Sound} from "@engine/model/impl/sound";
+import {Sound} from "@engine/model/impl/general/sound";
 
 
 export class AudioNode {

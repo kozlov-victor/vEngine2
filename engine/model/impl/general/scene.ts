@@ -1,12 +1,12 @@
 import {TileMap} from "./tileMap";
 import {Layer} from "./layer";
-import {AbstractFilter} from "../../renderer/webGl/filters/abstract/abstractFilter";
-import {Game} from "../../game";
-import {Color} from "../../renderer/color";
-import {CAMERA_MATRIX_MODE} from "../../renderer/camera";
-import {ResourceLoader} from "../../resources/resourceLoader";
-import {IEventemittable, IFilterable, IRevalidatable, ITweenable} from "../../declarations";
-import {RenderableModel} from "@engine/model/renderableModel";
+import {AbstractFilter} from "../../../renderer/webGl/filters/abstract/abstractFilter";
+import {Game} from "../../../game";
+import {Color} from "../../../renderer/color";
+import {CAMERA_MATRIX_MODE} from "../../../renderer/camera";
+import {ResourceLoader} from "../../../resources/resourceLoader";
+import {IEventemittable, IFilterable, IRevalidatable, ITweenable} from "../../../declarations";
+import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {TweenMovie} from "@engine/misc/tweenMovie";
 import {removeFromArray} from "@engine/misc/object";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
@@ -165,6 +165,8 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     private updateMainFrame():void {
         this.beforeUpdate();
 
+        this.game.camera.update();
+
         this._tweenDelegate.update();
         this._timerDelegate.update();
 
@@ -177,21 +179,26 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     }
 
     private renderMainFrame():void {
+
         const renderer:AbstractRenderer = this.game.getRenderer();
-        this.game.camera.update();
+
+        renderer.save();
+        this.game.camera.render();
 
         for (const l of this._layers) {
             l.render();
         }
 
-        renderer.save();
-        renderer.resetTransform();
-        this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY;
-        this._uiLayer.render();
-        renderer.restore();
+        // renderer.save(); // todo
+        // renderer.resetTransform();
+        // this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY;
+        // this._uiLayer.render();
+        // renderer.restore();
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
         this.onRender();
+
+        renderer.restore();
 
         if (DEBUG) {
             this.game.getRenderer().restore();

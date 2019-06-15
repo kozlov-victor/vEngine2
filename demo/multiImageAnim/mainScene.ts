@@ -1,5 +1,5 @@
-import {Scene} from "@engine/model/impl/scene";
-import {GameObject} from "@engine/model/impl/gameObject";
+import {Scene} from "@engine/model/impl/general/scene";
+import {GameObject} from "@engine/model/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Texture} from "@engine/renderer/webGl/base/texture";

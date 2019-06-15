@@ -13,7 +13,7 @@ export class AbstractPrimitive implements IPrimitive {
     public normalArr:number[];
     public texCoordArr:number[];
     public indexArr:number[];
-    public drawMethod:number = undefined;
+    public drawMethod:number;
 
     constructor(){
     }

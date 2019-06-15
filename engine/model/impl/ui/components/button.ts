@@ -1,6 +1,6 @@
-import {Container} from "../generic/container";
+import {Container} from "../abstract/container";
 import {TextField} from "./textField";
-import {Font} from "../../font";
+import {Font} from "../../general/font";
 import {Game} from "@engine/game";
 import {DebugError} from "@engine/debug/debugError";
 

@@ -7,6 +7,10 @@ const isPowerOf2 = function(value:number):boolean {
     return (value & (value - 1)) === 0;
 };
 
+export enum INTERPOLATION_MODE {
+    NEAREST = 0,
+    LINEAR = 1,
+}
 
 export class Texture implements ITexture {
 
@@ -17,6 +21,7 @@ export class Texture implements ITexture {
 
     private readonly gl:WebGLRenderingContext;
     private readonly tex:WebGLTexture = null;
+    private interpolationMode:INTERPOLATION_MODE;
 
     constructor(gl:WebGLRenderingContext){
         if (DEBUG && !gl) throw new DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
@@ -32,6 +37,19 @@ export class Texture implements ITexture {
         if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);
         // Fill the texture with a 1x1 blue pixel.
         this.setRawData(new Uint8Array([0, 255, 0, 255]),1,1);
+    }
+
+    private _currentTextureAt0:Texture = null;
+    private beforeOperation() {
+        if (this._currentTextureAt0!==null) return;
+        this._currentTextureAt0 = Texture.currInstances[0];
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
+    }
+
+    private afterOperation(){
+        if (this._currentTextureAt0) this.gl.bindTexture(this.gl.TEXTURE_2D, this._currentTextureAt0.tex);
+        else this.gl.bindTexture(this.gl.TEXTURE_2D, null);
+        this._currentTextureAt0 = null;
     }
 
     // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true); for bitmap textures
@@ -59,8 +77,9 @@ export class Texture implements ITexture {
         }
         if (img) this.size.setWH(img.width,img.height);
         else this.size.setWH(width,height);
-        //gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, this.tex);
+
+        this.beforeOperation();
+
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1); // 1 or true
         if (img) {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
@@ -68,11 +87,13 @@ export class Texture implements ITexture {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         }
         this.setFilters();
-        gl.bindTexture(gl.TEXTURE_2D, null);
+        this.setInterpolationMode(INTERPOLATION_MODE.LINEAR);
+
+        this.afterOperation();
 
     }
 
-    public setRawData(data:Uint8Array,width:number,height:number){
+    public setRawData(data:Uint8Array,width:number,height:number,mode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR){
         if (DEBUG) {
             const numOfBytes:number = width*height*4;
             if (data.length!==numOfBytes) {
@@ -80,7 +101,9 @@ export class Texture implements ITexture {
             }
         }
         const gl:WebGLRenderingContext = this.gl;
-        gl.bindTexture(gl.TEXTURE_2D, this.tex);
+
+        this.beforeOperation();
+
         this.size.setWH(width,height);
 
         // target: number,
@@ -94,7 +117,10 @@ export class Texture implements ITexture {
         // pixels: ArrayBufferView | null
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
         this.setFilters();
-        gl.bindTexture(gl.TEXTURE_2D, null);
+        this.setInterpolationMode(mode);
+
+        this.afterOperation();
+
     }
 
     public bind(name:string,i:number,program:ShaderProgram):void { // uniform eq to 0 by default
@@ -123,7 +149,7 @@ export class Texture implements ITexture {
     }
 
 
-    public getColorArray():Uint8Array {
+    public getColorArray():Uint8Array { // todo test!
         const gl:WebGLRenderingContext = this.gl;
         const wxh:number = this.size.width*this.size.height;
         if (DEBUG && gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)
@@ -142,6 +168,36 @@ export class Texture implements ITexture {
     }
 
 
+
+    public setInterpolationMode(mode:INTERPOLATION_MODE) {
+
+        if (mode===this.interpolationMode) return;
+
+        this.beforeOperation();
+
+        const gl:WebGLRenderingContext = this.gl;
+
+        let glMode:number;
+        switch (mode) {
+            case INTERPOLATION_MODE.LINEAR:
+                glMode = gl.LINEAR;
+                break;
+            case INTERPOLATION_MODE.NEAREST:
+                glMode = gl.NEAREST;
+                break;
+            default:
+                if (DEBUG) throw new DebugError(`unknown interpolation mode ${mode}`);
+                break;
+        }
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, glMode);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, glMode);
+        this.interpolationMode = mode;
+
+        this.afterOperation();
+    }
+
+
     private setFilters(){
         const gl:WebGLRenderingContext = this.gl;
         const isPowerOfTwo:boolean = (isPowerOf2(this.size.width) && isPowerOf2(this.size.height));
@@ -153,8 +209,6 @@ export class Texture implements ITexture {
         } else {
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); // NEAREST,LINEAR
         }
     }
 

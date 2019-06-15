@@ -1,5 +1,5 @@
-import {Game} from "../../game";
-import {DebugError} from "../../debug/debugError";
+import {Game} from "../../../game";
+import {DebugError} from "../../../debug/debugError";
 import {IResource, IRevalidatable} from "@engine/declarations";
 import {ResourceLink} from "@engine/resources/resourceLink";
 

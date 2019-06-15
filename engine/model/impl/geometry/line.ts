@@ -1,10 +1,10 @@
 
-import {Shape} from "@engine/model/impl/ui/generic/shape";
+import {Shape} from "@engine/model/impl/geometry/abstract/shape";
 import {ICloneable} from "@engine/declarations";
 import {Point2d} from "@engine/geometry/point2d";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {Game} from "@engine/game";
-import {PolyLine} from "@engine/model/impl/ui/drawable/polyLine";
+import {PolyLine} from "@engine/model/impl/geometry/polyLine";
 
 
 export class Line extends Shape implements ICloneable<Line> {

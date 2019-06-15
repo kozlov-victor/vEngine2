@@ -1,10 +1,10 @@
 
 
-import {Scene} from "@engine/model/impl/scene";
-import {ParticleSystem} from "@engine/model/impl/particleSystem";
-import {Circle} from "@engine/model/impl/ui/drawable/circle";
+import {Scene} from "@engine/model/impl/general/scene";
+import {ParticleSystem} from "@engine/model/impl/general/particleSystem";
+import {Circle} from "@engine/model/impl/geometry/circle";
 import {MathEx} from "@engine/misc/mathEx";
-import {BLEND_MODE} from "@engine/model/renderableModel";
+import {BLEND_MODE} from "@engine/model/abstract/renderableModel";
 import {Color} from "@engine/renderer/color";
 
 export class WinScene extends Scene {

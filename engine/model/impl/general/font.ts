@@ -1,5 +1,5 @@
-import {Game} from "../../game";
-import {IRectJSON} from "../../geometry/rect";
+import {Game} from "../../../game";
+import {IRectJSON} from "../../../geometry/rect";
 import {Color} from "@engine/renderer/color";
 import {IResource, IRevalidatable} from "@engine/declarations";
 import {DebugError} from "@engine/debug/debugError";

@@ -1,13 +1,13 @@
-import {Scene} from "@engine/model/impl/scene";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {Scene} from "@engine/model/impl/general/scene";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {ParticleSystem} from "@engine/model/impl/particleSystem";
+import {ParticleSystem} from "@engine/model/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {BLEND_MODE, RenderableModel} from "@engine/model/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/model/abstract/renderableModel";
 import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/simpleBlurFilter";
-import {Circle} from "@engine/model/impl/ui/drawable/circle";
-import {Shape} from "@engine/model/impl/ui/generic/shape";
+import {Circle} from "@engine/model/impl/geometry/circle";
+import {Shape} from "@engine/model/impl/geometry/abstract/shape";
 
 
 export class MainScene extends Scene {

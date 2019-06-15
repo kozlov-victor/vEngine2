@@ -1,6 +1,6 @@
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {Font, IFontContext} from "@engine/model/impl/font";
+import {Font, IFontContext} from "@engine/model/impl/general/font";
 import {Game} from "@engine/game";
 
 export namespace FntCreator {

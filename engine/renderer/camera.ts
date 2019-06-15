@@ -4,9 +4,9 @@ import {MathEx} from "../misc/mathEx";
 import {Rect} from "../geometry/rect";
 import {Point2d} from "../geometry/point2d";
 import {Game} from "../game";
-import {Scene} from "../model/impl/scene";
+import {Scene} from "../model/impl/general/scene";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
-import {RenderableModel} from "@engine/model/renderableModel";
+import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
 
@@ -17,14 +17,14 @@ interface ICameraTweenTarget {
 
 export enum CAMERA_MATRIX_MODE {
     MODE_TRANSFORM,
-    MODE_IDENTITY
+    MODE_IDENTITY,
 }
 
-export enum DIRECTION_CORRECTION {
+enum DIRECTION_CORRECTION {
     RIGHT,
     LEFT,
     UP,
-    DOWN
+    DOWN,
 }
 
 export class Camera {
@@ -33,17 +33,14 @@ export class Camera {
     public readonly pos:Point2d = new Point2d(0,0);
     public posZ:number = 0;
     public readonly scale:Point2d = new Point2d(1,1);
-    public directionCorrection:DIRECTION_CORRECTION;
 
     // flag to defined camera rect for transform mode (for dynamic objects)
     // and identity mode (for fixed objects)
     public matrixMode:CAMERA_MATRIX_MODE = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
 
     private objFollowTo:RenderableModel;
-    private game:Game;
-    private scene:Scene = null;
-    private sceneWidth:number = 0;
-    private sceneHeight:number = 0;
+    private objFollowToPrevPos:Point2d;
+    private directionCorrection:DIRECTION_CORRECTION;
 
     private _rect:Rect = new Rect();
     private _rectIdentity:Rect = new Rect();
@@ -54,11 +51,8 @@ export class Camera {
         max: new Point2d()
     };
 
-    constructor(game:Game){
-        this.game = game;
+    constructor(protected game:Game){
         this._updateRect();
-        this.sceneWidth = game.width;
-        this.sceneHeight = game.height;
         this.scale.observe(()=>{
             this.revalidate();
         });
@@ -66,37 +60,36 @@ export class Camera {
 
 
     public revalidate():void{
-        this.scene = this.game.getCurrScene();
         this._rectIdentity.setXYWH(0,0,this.game.width,this.game.height);
-        this.sceneWidth = this.game.getCurrScene().width || this.game.width;
-        this.sceneHeight = this.game.getCurrScene().height || this.game.height;
     }
 
 
     public followTo(gameObject:RenderableModel):void {
-        if (gameObject===null) return;
+        if (gameObject===null) {
+            this.objFollowTo = null;
+            return;
+        }
         if (DEBUG && gameObject===undefined) throw new DebugError(`Camera:followTo(gameObject) - gameObject not provided`);
         this.objFollowTo = gameObject;
+        this.objFollowToPrevPos = new Point2d();
+        this.objFollowToPrevPos.set(this.objFollowTo.pos);
         this.revalidate();
     }
 
     public update() {
-        this.scene = this.game.getCurrScene();
-
-        // const tileWidth:number =
-        //     this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getSrcRect().size.width:0; // todo
-        // const tileHeight:number =
-        //     this.scene.tileMap.spriteSheet?this.scene.tileMap.spriteSheet.getSrcRect().size.height:0;
-        const tileWidth:number = this.scene.width;
-        const tileHeight:number = this.scene.height;
-
-        const w:number = this.game.width;
-        const h:number = this.game.height;
-        const wDiv2:number = w/2;
-        const hDiv2:number = h/2;
 
         const gameObject:RenderableModel = this.objFollowTo;
+
         if (gameObject) {
+
+            if ((gameObject.pos.x - this.objFollowToPrevPos.x)>0) this.directionCorrection = DIRECTION_CORRECTION.RIGHT;
+            else if ((gameObject.pos.x - this.objFollowToPrevPos.x)<0) this.directionCorrection = DIRECTION_CORRECTION.LEFT;
+
+            if ((gameObject.pos.y - this.objFollowToPrevPos.y)>0) this.directionCorrection = DIRECTION_CORRECTION.DOWN;
+            else if ((gameObject.pos.y - this.objFollowToPrevPos.y)<0) this.directionCorrection = DIRECTION_CORRECTION.UP;
+
+            this.objFollowToPrevPos.set(gameObject.pos);
+
             const {width:wScaled,height:hScaled} = this.getRectScaled().size;
             if (this.directionCorrection === DIRECTION_CORRECTION.RIGHT)
                 this.cameraPosCorrection.max.x=wScaled/3;
@@ -116,6 +109,13 @@ export class Camera {
 
             const newPos:Point2d = Point2d.fromPool();
             const pointToFollow:Point2d = Point2d.fromPool();
+            const scene:Scene = this.game.getCurrScene();
+
+            const w:number = this.game.width;
+            const h:number = this.game.height;
+            const wDiv2:number = w/2;
+            const hDiv2:number = h/2;
+
             pointToFollow.set(this.objFollowTo.pos);
             pointToFollow.addXY(-wDiv2,-hDiv2);
             newPos.x = this.pos.x+(pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x)*Camera.FOLLOW_FACTOR;
@@ -124,20 +124,20 @@ export class Camera {
                 newPos.x = 0;
             if (newPos.y < 0)
                 newPos.y = 0;
-            if (newPos.x > this.sceneWidth - w + tileWidth)
-                newPos.x = this.sceneWidth - w + tileWidth;
-            if (newPos.y > this.sceneHeight - h + tileHeight)
-                newPos.y = this.sceneHeight - h + tileHeight;
 
-            this.pos.setXY(newPos.x,newPos.y);
+            if (newPos.x > scene.width - w)
+                newPos.x = scene.width - w;
+            if (newPos.y > scene.height - h)
+                newPos.y = scene.height - h;
+
+            this.pos.set(newPos);
             newPos.release();
             pointToFollow.release();
 
-            if (this.cameraShakeTween) this.cameraShakeTween.update();
         }
+        if (this.cameraShakeTween) this.cameraShakeTween.update();
 
         this._updateRect();
-        this.render();
     }
 
     public shake(amplitude:number,time:number):void {
@@ -168,12 +168,14 @@ export class Camera {
 
     public render():void{ //TRS - (transform rotate scale) reverted
         const renderer:AbstractRenderer = this.game.getRenderer();
-        renderer.translate(this.game.width/2,this.game.height/2,this.posZ);
-        renderer.scale(this.scale.x,this.scale.y);
+        if (!this.scale.equal(1)) {
+            renderer.translate(this.game.width/2,this.game.height/2,this.posZ);
+            renderer.scale(this.scale.x,this.scale.y);
+            renderer.translate(-this.game.width/2,-this.game.height/2);
+        }
         // todo rotation does not work correctly yet
         //this.game.renderer.rotateZ(this.angle);
-        renderer.translate(-this.game.width/2,-this.game.height/2);
-        renderer.translate(-this.pos.x,-this.pos.y,0);
+        if (!this.pos.equal(0)) renderer.translate(-this.pos.x,-this.pos.y,0);
         if (this.cameraShakeTween!==null) renderer.translate(
             this.cameraShakeTween.getTarget().point.x,
             this.cameraShakeTween.getTarget().point.y

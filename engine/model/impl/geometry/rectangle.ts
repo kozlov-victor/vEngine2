@@ -1,7 +1,7 @@
 import {Game} from "@engine/game";
-import {Shape} from "../generic/shape";
+import {Shape} from "./abstract/shape";
 import {ICloneable} from "@engine/declarations";
-import {Line} from "@engine/model/impl/ui/drawable/line";
+import {Line} from "@engine/model/impl/geometry/line";
 
 export class Rectangle extends Shape implements ICloneable<Rectangle>{
 

@@ -1,10 +1,11 @@
-import {Scene} from "@engine/model/impl/scene";
+import {Scene} from "@engine/model/impl/general/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {GameObject3d} from "@engine/model/impl/gameObject3d";
+import {Mesh} from "@engine/model/abstract/mesh";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
+import {Model3d} from "@engine/model/impl/general/model3d";
 
 class ScullMesh extends AbstractPrimitive {
 
@@ -22,7 +23,7 @@ class ScullMesh extends AbstractPrimitive {
 // http://www.threejsworld.com/tutorials/skeletal-animation-and-morph-targets-with-tweenjs-threejs
 export class MainScene extends Scene {
 
-    private logoObj:GameObject3d;
+    private logoObj:Mesh;
     private dataLink:ResourceLink<any>;
 
     public onPreloading() {
@@ -40,10 +41,10 @@ export class MainScene extends Scene {
     }
 
     public onReady() {
-        const obj:GameObject3d = new GameObject3d(this.game);
+        const obj:Model3d = new Model3d(this.game);
         this.logoObj = obj;
-        obj.color.setRGB(244,255,244);
-        obj.model = new ScullMesh(this.dataLink.getTarget());
+        obj.fillColor.setRGB(244,255,244);
+        obj.modelPrimitive = new ScullMesh(this.dataLink.getTarget());
         obj.pos.setXY(200,250);
         obj.size.setWH(200,200);
         obj.scale.setXY(60);

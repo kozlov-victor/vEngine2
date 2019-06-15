@@ -3,8 +3,8 @@ import {IEventemittable} from "@engine/declarations";
 import {Game} from "@engine/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";
-import {RenderableModel} from "@engine/model/renderableModel";
-import {GameObject} from "@engine/model/impl/gameObject";
+import {RenderableModel} from "@engine/model/abstract/renderableModel";
+import {GameObject} from "@engine/model/impl/general/gameObject";
 
 export const FRAME_ANIMATION_EVENTS = {
     completed:  'completed',

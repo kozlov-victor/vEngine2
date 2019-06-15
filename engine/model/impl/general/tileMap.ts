@@ -1,8 +1,8 @@
 
-import {Game} from "../../game";
-import {AbstractFilter} from "../../renderer/webGl/filters/abstract/abstractFilter";
-import {Image} from "@engine/model/impl/ui/drawable/image";
-import {RenderableModel} from "@engine/model/renderableModel";
+import {Game} from "../../../game";
+import {AbstractFilter} from "../../../renderer/webGl/filters/abstract/abstractFilter";
+import {Image} from "@engine/model/impl/geometry/image";
+import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {ITexture} from "@engine/renderer/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
@@ -32,26 +32,14 @@ export class TileMap extends RenderableModel {
         super(game);
     }
 
-    public fromTiledJSON(source:number[],mapWidth:number,mapHeight:number){
+    public fromTiledJSON(source:number[],mapWidth:number,mapHeight?:number){
+        if (!mapHeight) mapHeight = source.length / mapWidth;
         this.data = new Array<number[]>(mapHeight);
         let cnt:number = 0;
-        for (let j=0;j<mapHeight;j++){
+        for (let j:number=0;j<mapHeight;j++){
             this.data[j] =  new Array<number>(mapWidth);
-            for (let i=0;i<mapWidth;i++) {
+            for (let i:number=0;i<mapWidth;i++) {
                 this.data[j][i] = source[cnt++];
-                // if (val===0) this.data[j][i] = undefined;
-                // else {
-                //     this.data[j][i] = {};
-                //     this.data[j][i].val = val - 1;
-                //     let w = this.spriteSheet.getFrameWidth();
-                //     let h = this.spriteSheet.getFrameHeight();
-                //     let x = i*w;
-                //     let y = j*h;
-                //     let c = new Vec2(x+w/2,y+h/2);
-                //     let r = new RigidRectangle(this.game,c,w,h,0);
-                //     r.fixedAngle = true;
-                //     this.data[j][i].rect = r;
-                // }
             }
         }
         this._tilesInScreenX = mapWidth;
@@ -74,9 +62,10 @@ export class TileMap extends RenderableModel {
         this.game.getCurrScene().height = this._tilesInScreenY * this._tileHeight;
         this.spriteSheet.getSrcRect().size.setWH(this._tileWidth,this._tileHeight);
         this.spriteSheet.size.set(this.spriteSheet.getSrcRect().size);
+        //this.spriteSheet.size.addWH(2); // to correct possible artifacts
         const texSize:Size = this.spriteSheet.getResourceLink().getTarget().size;
-        this._sprTilesInX = texSize.width / this._tileWidth;
-        this._sprTilesInY = texSize.height / this._tileHeight;
+        this._sprTilesInX = ~~(texSize.width / this._tileWidth);
+        this._sprTilesInY = ~~(texSize.height / this._tileHeight);
     }
 
     public draw(): boolean {
@@ -100,7 +89,6 @@ export class TileMap extends RenderableModel {
                 this.spriteSheet.render();
             }
         }
-
         return false;
     }
 

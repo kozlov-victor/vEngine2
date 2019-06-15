@@ -1,5 +1,5 @@
-import {Scene} from "@engine/model/impl/scene";
-import {GameObject} from "@engine/model/impl/gameObject";
+import {Scene} from "@engine/model/impl/general/scene";
+import {GameObject} from "@engine/model/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Color} from "@engine/renderer/color";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/textureFilters/blackWhiteFilter";
@@ -7,7 +7,7 @@ import {ColorizeFilter} from "@engine/renderer/webGl/filters/textureFilters/colo
 import {PixelFilter} from "@engine/renderer/webGl/filters/textureFilters/pixelFilter";
 import {PosterizeFilter} from "@engine/renderer/webGl/filters/textureFilters/posterizeFilter";
 import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/simpleBlurFilter";
-import {Circle} from "@engine/model/impl/ui/drawable/circle";
+import {Circle} from "@engine/model/impl/geometry/circle";
 import {TweenMovie} from "@engine/misc/tweenMovie";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/textureFilters/barrelDistortionFilter";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
@@ -15,13 +15,13 @@ import {NoiseFilter} from "@engine/renderer/webGl/filters/textureFilters/noiseFi
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/textureFilters/noiseHorizontalFilter";
 import {LowResolutionFilter} from "@engine/renderer/webGl/filters/textureFilters/lowResolutionFilter";
 import {HexagonalFilter} from "@engine/renderer/webGl/filters/textureFilters/hexagonalFilter";
-import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
+import {Ellipse} from "@engine/model/impl/geometry/ellipse";
 import {LinearGradient} from "@engine/renderer/linearGradient";
 import {SwirlFilter} from "@engine/renderer/webGl/filters/textureFilters/swirlFilter";
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/motionBlurFilter";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/triangleBlurFilter";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Image} from "@engine/model/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 
 

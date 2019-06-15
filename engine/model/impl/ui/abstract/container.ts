@@ -1,8 +1,8 @@
 import {Rect} from "@engine/geometry/rect";
-import {RenderableModel} from "../../../renderableModel";
+import {RenderableModel} from "../../../abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/game";
-import {Shape} from "./shape";
+import {Shape} from "../../geometry/abstract/shape";
 
 
 export enum OVERFLOW {

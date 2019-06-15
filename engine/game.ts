@@ -2,7 +2,7 @@ import "./misc/polyfills";
 import {Camera} from "./renderer/camera";
 import {Point2d} from "./geometry/point2d";
 import {AbstractRenderer} from "./renderer/abstract/abstractRenderer";
-import {Scene} from "./model/impl/scene";
+import {Scene} from "./model/impl/general/scene";
 import {ColliderEngine} from "./physics/unused/colliderEngine";
 import {DebugError} from "./debug/debugError";
 import {IControl} from "@engine/control/abstract/iControl";

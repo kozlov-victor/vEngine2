@@ -1,14 +1,14 @@
 import {MathEx} from "../../misc/mathEx";
 import {Point2d} from "../../geometry/point2d";
 import {Game} from "../../game";
-import {Scene} from "@engine/model/impl/scene";
+import {Scene} from "@engine/model/impl/general/scene";
 import {Rect} from "../../geometry/rect";
-import {RenderableModel} from "@engine/model/renderableModel";
+import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {IControl} from "@engine/control/abstract/iControl";
 import {DebugError} from "@engine/debug/debugError";
 import {IMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Layer} from "@engine/model/impl/layer";
+import {Layer} from "@engine/model/impl/general/layer";
 
 
 export class MouseControl implements IControl {

@@ -1,9 +1,9 @@
-import {Scene} from "@engine/model/impl/scene";
-import {Font} from "@engine/model/impl/font";
+import {Scene} from "@engine/model/impl/general/scene";
+import {Font} from "@engine/model/impl/general/font";
 import {TextField} from "@engine/model/impl/ui/components/textField";
 import {Color} from "@engine/renderer/color";
 import {Button} from "@engine/model/impl/ui/components/button";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 
 
 export class MainScene extends Scene {

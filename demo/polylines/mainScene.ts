@@ -1,7 +1,7 @@
-import {Scene} from "@engine/model/impl/scene";
+import {Scene} from "@engine/model/impl/general/scene";
 import {Color} from "@engine/renderer/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {PolyLine} from "@engine/model/impl/ui/drawable/polyLine";
+import {PolyLine} from "@engine/model/impl/geometry/polyLine";
 
 
 export class MainScene extends Scene {

@@ -1,7 +1,7 @@
 import {Game} from "@engine/game";
 import {Rect} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
-import {Shape} from "../generic/shape";
+import {Shape} from "./abstract/shape";
 import {Color} from "@engine/renderer/color";
 import {Point2d} from "@engine/geometry/point2d";
 import {ICloneable, IResource} from "@engine/declarations";
@@ -12,8 +12,6 @@ export enum STRETCH_MODE {
     STRETCH,
     REPEAT
 }
-
-
 
 export class Image extends Shape implements ICloneable<Image>,IResource<ITexture>{
 

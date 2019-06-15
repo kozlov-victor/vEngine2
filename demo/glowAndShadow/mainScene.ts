@@ -1,12 +1,12 @@
-import {Scene} from "@engine/model/impl/scene";
-import {GameObject} from "@engine/model/impl/gameObject";
+import {Scene} from "@engine/model/impl/general/scene";
+import {GameObject} from "@engine/model/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Image} from "@engine/model/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {GlowFilter} from "@engine/renderer/webGl/filters/textureFilters/glowFilter";
 import {Color} from "@engine/renderer/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Circle} from "@engine/model/impl/ui/drawable/circle";
+import {Circle} from "@engine/model/impl/geometry/circle";
 import {TweenMovie} from "@engine/misc/tweenMovie";
 
 export class MainScene extends Scene {

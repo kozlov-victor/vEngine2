@@ -99,7 +99,7 @@ export class BufferInfo {
     }
 
     public draw():void {
-        if (this.posIndexBuffer!==null){
+        if (this.posIndexBuffer){
             this.gl.drawElements(
                 this.drawMethod,
                 this.posIndexBuffer.getBufferLength(),
@@ -120,10 +120,11 @@ export class BufferInfo {
                 return this.posVertexBuffer.getBufferLength() / 2;
             case this.gl.TRIANGLE_STRIP:
                 return this.posVertexBuffer.getBufferLength() / 3;
+            case this.gl.TRIANGLES:
+                return this.posVertexBuffer.getBufferLength() / this.posVertexBuffer.getItemSize();
             default:
                 throw new DebugError(`unknown draw method: ${drawMethod}`);
         }
     }
-
 
 }

@@ -50,6 +50,8 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
     public listenTo():void {
 
         this.keyDownListener = (e:KeyboardEvent)=>{
+            e.preventDefault();
+            e.stopPropagation(); // to prevent page scroll
             const code = e.keyCode;
             this.press(code);
         };

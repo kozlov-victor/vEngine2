@@ -1,9 +1,9 @@
-import {Scene} from "@engine/model/impl/scene";
-import {GameObject} from "@engine/model/impl/gameObject";
+import {Scene} from "@engine/model/impl/general/scene";
+import {GameObject} from "@engine/model/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {CellFrameAnimation} from "@engine/model/impl/frameAnimation/cellFrameAnimation";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Image} from "@engine/model/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 
 

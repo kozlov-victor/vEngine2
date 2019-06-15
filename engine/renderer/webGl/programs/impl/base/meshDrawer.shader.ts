@@ -30,6 +30,7 @@ varying vec3 v_normal;
 uniform sampler2D u_texture;
 uniform float u_alpha;
 uniform bool u_textureUsed;
+//uniform bool u_lightUsed;
 uniform vec4 u_color;
 uniform mat4 u_modelMatrix;
 

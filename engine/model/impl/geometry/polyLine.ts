@@ -1,6 +1,6 @@
 
-import {Shape} from "@engine/model/impl/ui/generic/shape";
-import {Line} from "@engine/model/impl/ui/drawable/line";
+import {Shape} from "@engine/model/impl/geometry/abstract/shape";
+import {Line} from "@engine/model/impl/geometry/line";
 import {Point2d} from "@engine/geometry/point2d";
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/game";

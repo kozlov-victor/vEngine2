@@ -1,9 +1,9 @@
-import {Game} from "../../game";
-import {ICloneable} from "../../declarations";
-import {RenderableModel} from "../renderableModel";
+import {Game} from "../../../game";
+import {ICloneable} from "../../../declarations";
+import {RenderableModel} from "../../abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractFrameAnimation} from "@engine/model/impl/frameAnimation/abstract/abstractFrameAnimation";
-import {Shape} from "@engine/model/impl/ui/generic/shape";
+import {Shape} from "@engine/model/impl/geometry/abstract/shape";
 
 
 export class GameObject extends RenderableModel implements ICloneable<GameObject>{
