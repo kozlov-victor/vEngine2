@@ -23,6 +23,28 @@ export enum BLEND_MODE {
     REVERSE_SUBSTRACTIVE
 }
 
+class Angle3d {
+    public x:number = 0;
+    public y:number = 0;
+
+    private _z:number = 0;
+
+    constructor(private m:RenderableModel){}
+
+    set z(val:number) {
+        this.m.angle = val;
+    }
+
+    get z():number{
+        return this._z;
+    }
+
+    _setZSilently(val:number){
+        this._z = val;
+    }
+
+}
+
 export abstract class RenderableModel  implements IRevalidatable, ITweenable, IEventemittable {
 
     public readonly type:string;
@@ -33,8 +55,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly anchor:Point2d = new Point2d(0,0);
     public readonly rotationPoint:Point2d = new Point2d(0,0);
-    public angle:number = 0;
-    public angle3d:{x:number,y:number,z:number} = {x:0,y:0,z:0};
+    public angle3d:Angle3d = new Angle3d(this);
     public alpha:number = 1;
     public blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
     public parent:RenderableModel;
@@ -48,6 +69,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     protected _screenRect = new Rect();
     protected _behaviours:BaseAbstractBehaviour[] = [];
     private   _layer:Layer;
+    private   _angle:number = 0;
 
 
     // tween
@@ -64,6 +86,15 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
             `can not create model '${this.type}': game instance not passed to model constructor`
         );
         this.id = `object_${Incrementer.getValue()}`;
+    }
+
+    get angle():number{
+        return this._angle;
+    }
+
+    set angle(val:number){
+        this._angle = val;
+        this.angle3d._setZSilently(val);
     }
 
     public revalidate():void{
@@ -294,6 +325,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         cloned.anchor.set(this.anchor);
         cloned.rotationPoint.set(this.rotationPoint);
         cloned.angle = this.angle;
+        // todo angle 3d
         cloned.alpha = this.alpha;
         cloned.blendMode = this.blendMode;
         cloned.parent = null;
@@ -326,15 +358,13 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     }
 
     protected isNeedAdditionalTransform():boolean{
-        return !(this.angle===0 && this.scale.equal(1) && this.angle3d.x===0 && this.angle3d.y===0 && this.angle3d.z===0);
+        return !(this.scale.equal(1) && this.angle3d.x===0 && this.angle3d.y===0 && this.angle3d.z===0);
     }
 
     protected doAdditionalTransform():void {
         const renderer:AbstractRenderer = this.game.getRenderer();
 
-        if (this.angle!==0) renderer.rotateZ(this.angle);
-        else if (this.angle3d.z!==0) renderer.rotateZ(this.angle3d.z);
-
+        if (this.angle3d.z!==0) renderer.rotateZ(this.angle3d.z);
         if (this.angle3d.x!==0) renderer.rotateX(this.angle3d.x);
         if (this.angle3d.y!==0) renderer.rotateY(this.angle3d.y);
     }

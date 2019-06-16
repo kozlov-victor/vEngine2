@@ -153,8 +153,10 @@ export class Game {
 
         if (DEBUG) {
             this.fps = ~~(1000 / this._deltaTime);
-            const renderError:number = this._renderer.getError();
-            if (renderError) throw new DebugError(`render error with code ${renderError}`);
+            const renderError:{code:number,desc:string} = this._renderer.getError();
+            if (renderError) {
+                throw new DebugError(`rendering error with code ${renderError.code} (${renderError.desc})`);
+            }
         }
 
         const numOfLoops:number = (~~(this._deltaTime / Game.UPDATE_TIME_RATE))||1;

@@ -1,6 +1,6 @@
 import {ShaderProgram} from "../../../base/shaderProgram";
 import {AbstractDrawer} from "../../abstract/abstractDrawer";
-import {BufferInfo, IBufferInfoDescription} from "../../../base/bufferInfo";
+import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../base/bufferInfo";
 import {Mesh} from "@engine/model/abstract/mesh";
 import {DebugError} from "@engine/debug/debugError";
 import {fragmentSource, vertexSource} from "@engine/renderer/webGl/programs/impl/base/meshDrawer.shader";
@@ -21,7 +21,7 @@ export class MeshDrawer extends AbstractDrawer {
     private readonly u_color:string = 'u_color';
     private readonly u_alpha:string = 'u_alpha';
     private readonly u_textureUsed:string = 'u_textureUsed';
-
+    private readonly u_lightUsed:string = 'u_lightUsed';
 
 
     constructor(gl:WebGLRenderingContext){
@@ -33,7 +33,7 @@ export class MeshDrawer extends AbstractDrawer {
         );
     }
     
-    private _initBufferInfo(drawMethod:number= this.gl.TRIANGLES,vertexSize:2|3=3):void{
+    private _initBufferInfo(drawMethod:number= DRAW_METHOD.TRIANGLES,vertexSize:2|3=3):void{
         const bufferInfo:IBufferInfoDescription = {
             posVertexInfo:{
                 array:this.mesh.modelPrimitive.vertexArr, type:this.gl.FLOAT,
@@ -83,6 +83,10 @@ export class MeshDrawer extends AbstractDrawer {
 
     setTextureUsed(used:boolean):void{
         this.setUniform(this.u_textureUsed,used);
+    }
+
+    setLightUsed(used:boolean):void{
+        this.setUniform(this.u_lightUsed,used);
     }
 
     setColor(c:Color):void{

@@ -16,8 +16,8 @@ export class MainScene extends Scene {
     private bgLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.width = 1000;
-        this.height = 1000;
+        this.width = 1100;
+        this.height = 2100;
         this.logoLink = this.resourceLoader.loadImage("../assets/logo.png");
         this.bgLink = this.resourceLoader.loadImage("../assets/repeat.jpg");
         const rect = new Rectangle(this.game);
@@ -43,7 +43,7 @@ export class MainScene extends Scene {
 
         const bg:Image = new Image(this.game);
         bg.setResourceLink(this.bgLink);
-        bg.size.setWH(1000,1000);
+        bg.size.setWH(1000,2000);
         bg.stretchMode = STRETCH_MODE.REPEAT;
         this.appendChild(bg);
         this.logoObj.moveToFront();

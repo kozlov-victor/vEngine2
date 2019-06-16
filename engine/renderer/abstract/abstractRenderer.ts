@@ -72,8 +72,8 @@ export abstract class AbstractRenderer {
         window.removeEventListener('resize',this.onResize);
     }
 
-    public getError():number{
-        return 0;
+    public getError():{code:number,desc:string}{
+        return undefined;
     }
 
     public drawImage(img:Image):void {}

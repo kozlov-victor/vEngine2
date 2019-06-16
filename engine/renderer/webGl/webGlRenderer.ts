@@ -28,6 +28,8 @@ import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
 import {Line} from "@engine/model/impl/geometry/line";
 import {ITexture} from "@engine/renderer/texture";
+import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
+import glEnumToString = debugUtil.glEnumToString;
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
@@ -180,6 +182,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.meshDrawer.setAlfa(mesh.alpha);
         const isTextureUsed:boolean = !!mesh.texture;
         this.meshDrawer.setTextureUsed(isTextureUsed);
+        this.meshDrawer.setLightUsed(!!mesh.bufferInfo.normalBuffer);
         this.meshDrawer.setColor(mesh.fillColor);
         this.meshDrawer.attachTexture('u_texture',mesh.texture?mesh.texture:this.nullTexture);
 
@@ -320,14 +323,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.simpleRectDrawer.draw();
         this.restore();
     }
-    public getError():number{
-        if (!DEBUG) return 0;
+    public getError():{code:number,desc:string}{
+        if (!DEBUG) return undefined;
         const err:number = this.gl.getError();
         if (err!==this.gl.NO_ERROR) {
             console.log(AbstractDrawer.currentInstance);
-            return err;
+            return {code:err,desc:glEnumToString(this.gl,err)};
         }
-        return this.gl.NO_ERROR;
+        return undefined;
     }
 
     public putToCache(l:ResourceLink<ITexture>,t:Texture) {

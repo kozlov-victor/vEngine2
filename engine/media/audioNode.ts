@@ -10,6 +10,7 @@ export class AudioNode {
     constructor(public context:BasicAudioContext){}
 
     public play(link:ResourceLink<void>,loop:boolean = false):void {
+        this.stop();
         this.context.play(link,loop);
         // todo currSound is always undefined
     }

@@ -1,4 +1,5 @@
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
+import {DRAW_METHOD} from "@engine/renderer/webGl/base/bufferInfo";
 
 export class Cylinder extends AbstractPrimitive{
 
@@ -42,7 +43,7 @@ export class Cylinder extends AbstractPrimitive{
             x2 = c * x2 - s * z2;
             z2 = s * x3 + c * z2;
         }
-        this.drawMethod = 5; // todo triangle_strip
+        this.drawMethod = DRAW_METHOD.TRIANGLE_STRIP;
 
 
     }

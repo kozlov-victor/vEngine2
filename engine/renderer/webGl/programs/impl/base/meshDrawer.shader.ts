@@ -30,19 +30,21 @@ varying vec3 v_normal;
 uniform sampler2D u_texture;
 uniform float u_alpha;
 uniform bool u_textureUsed;
-//uniform bool u_lightUsed;
+uniform bool u_lightUsed;
 uniform vec4 u_color;
 uniform mat4 u_modelMatrix;
 
 
 void main() {
-
-    vec3 lightDirection = normalize(vec3(-1,-1,1));
-    vec3 normalized = normalize((u_modelMatrix * vec4(v_normal,0)).xyz);
-    float lightFactor = max(0.5,dot(lightDirection,normalized));
+    
     if (u_textureUsed) gl_FragColor = mix(u_color,texture2D(u_texture, v_texcoord),.5);
     else gl_FragColor = u_color;
-    gl_FragColor.rgb *= lightFactor;
+    if (u_lightUsed) {
+        vec3 lightDirection = normalize(vec3(-1,-1,1));
+        vec3 normalized = normalize((u_modelMatrix * vec4(v_normal,0)).xyz);
+        float lightFactor = max(0.5,dot(lightDirection,normalized));
+        gl_FragColor.rgb *= lightFactor;
+    }
     gl_FragColor.a *= u_alpha;
 }
 
