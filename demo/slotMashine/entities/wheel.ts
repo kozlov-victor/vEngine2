@@ -4,6 +4,7 @@ import {Image} from "@engine/model/impl/geometry/image";
 import {Tween} from "@engine/misc/tween";
 import {Easing} from "@engine/misc/easing";
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {Mashine} from "./mashine";
 export class Wheel {
 
     public static readonly CELL_WIDTH:number = 215;

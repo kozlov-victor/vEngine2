@@ -7,6 +7,8 @@ import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/textureFilt
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MathEx} from "@engine/misc/mathEx";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 interface IWheelCommand {
     a:number;
@@ -17,7 +19,7 @@ interface IWheelCommand {
 
 export class MainScene extends Scene {
     
-    public wheelLink!:ResourceLink<Texture>;
+    public wheelLink:ResourceLink<Texture>;
     private overlay!:Image;
     private mashine!:Mashine;
 
