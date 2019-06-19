@@ -1,17 +1,15 @@
 import {Scene} from "@engine/model/impl/general/scene";
 import {MainScene} from "./mainScene";
-import {Game, SCALE_STRATEGY} from "@engine/game";
+import {Game} from "@engine/game";
+import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {KeyboardControl} from "@engine/control/keyboardControl";
+import {GamePadControl} from "@engine/control/gamePadControl";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
-import {Wheel} from "./entities/wheel";
-import {CanvasRenderer} from "@engine/renderer/canvas/canvasRenderer";
 
-const W:number = Wheel.CELL_WIDTH*3+Wheel.CELL_PADDING*2; // 745;
-const H:number = 433;
-const game:Game = new Game(W,H);
-game.scaleStrategy = SCALE_STRATEGY.STRETCH;
-game.setRenderer(CanvasRenderer);
+const game = new Game(800,600);
+game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
+game.addControl(GamePadControl);
 game.addControl(MouseControl);
 const mainScene:Scene = new MainScene(game);
 game.runScene(mainScene);

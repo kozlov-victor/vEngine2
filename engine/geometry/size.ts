@@ -1,4 +1,4 @@
-import {ObjectPool, IReleasealable} from "../misc/objectPool";
+import {IReleasealable, ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 
 export class Size extends ObservableEntity implements IReleasealable{

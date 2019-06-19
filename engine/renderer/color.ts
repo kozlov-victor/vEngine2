@@ -1,4 +1,4 @@
-import {ObjectPool, IReleasealable} from "../misc/objectPool";
+import {IReleasealable, ObjectPool} from "../misc/objectPool";
 import {ICloneable} from "@engine/declarations";
 
 

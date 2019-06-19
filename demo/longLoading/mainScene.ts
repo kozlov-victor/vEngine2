@@ -3,7 +3,7 @@ import {GameObject} from "@engine/model/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {KeyboardControl, KEYBOARD_KEY} from "@engine/control/keyboardControl";
+import {KEYBOARD_KEY, KeyboardControl} from "@engine/control/keyboardControl";
 import {GamePadControl} from "@engine/control/gamePadControl";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Image} from "@engine/model/impl/geometry/image";

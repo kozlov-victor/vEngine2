@@ -66,6 +66,9 @@ export class MeshDrawer extends AbstractDrawer {
     bindModel(mesh:Mesh):void{
         this.mesh = mesh;
         if (!this.mesh.bufferInfo) this._initBufferInfo(mesh.modelPrimitive.drawMethod,mesh.vertexItemSize);
+        if (mesh.isLightAccepted()===undefined) {
+            mesh.acceptLight(!!this.mesh.bufferInfo.normalBuffer);
+        }
         this.bufferInfo = this.mesh.bufferInfo;
     }
 

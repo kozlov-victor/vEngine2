@@ -13,7 +13,6 @@ export class IndexBuffer {
         this.gl = gl;
         this.buffer = gl.createBuffer() as WebGLRenderbuffer;
         if (DEBUG && !this.buffer) throw new DebugError(`can not allocate memory for index buffer`);
-        this.dataLength = null;
     }
 
     public setData(bufferData:number[]){

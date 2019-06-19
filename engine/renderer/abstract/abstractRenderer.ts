@@ -127,12 +127,15 @@ export abstract class AbstractRenderer {
             else if (txt.toJSON) {
                 txt = JSON.stringify(txt.toJSON(),null,4);
             }
+            else if (typeof txt==='function') {
+                txt = txt.toString();
+            }
             else {
                 if (typeof txt !== 'string') {
                     try{
                         txt = JSON.stringify(txt);
                     } catch (e){
-                        txt = `[Object](${e.error})`;
+                        txt = txt.toString();
                     }
                 }
             }

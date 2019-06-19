@@ -1,5 +1,4 @@
 import {Scene} from "@engine/model/impl/general/scene";
-import {INTERPOLATION_MODE, Texture} from "@engine/renderer/webGl/base/texture";
 import {TileMap} from "@engine/model/impl/general/tileMap";
 import {Image} from "@engine/model/impl/geometry/image";
 import {Color} from "@engine/renderer/color";

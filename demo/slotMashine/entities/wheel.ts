@@ -3,7 +3,6 @@ import {Game} from "@engine/game";
 import {Image} from "@engine/model/impl/geometry/image";
 import {Tween} from "@engine/misc/tween";
 import {Easing} from "@engine/misc/easing";
-import {Mashine} from "./mashine";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 export class Wheel {
 

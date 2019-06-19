@@ -1,5 +1,3 @@
-
-
 import {Scene} from "@engine/model/impl/general/scene";
 import {ParticleSystem} from "@engine/model/impl/general/particleSystem";
 import {Circle} from "@engine/model/impl/geometry/circle";

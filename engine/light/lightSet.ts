@@ -1,6 +1,5 @@
 import {DebugError} from "../debug/debugError";
 import {Game} from "../game";
-import {IKeyVal} from "../misc/object";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {AbstractLight} from "@engine/light/abstract/abstractLight";
 import {PointLight} from "@engine/light/impl/pointLight";

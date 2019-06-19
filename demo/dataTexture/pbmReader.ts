@@ -1,4 +1,3 @@
-
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/game";
 import {Texture} from "@engine/renderer/webGl/base/texture";

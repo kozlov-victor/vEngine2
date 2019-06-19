@@ -1,7 +1,5 @@
 import {Scene} from "@engine/model/impl/general/scene";
-import {GameObject} from "@engine/model/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Image} from "@engine/model/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {GlowFilter} from "@engine/renderer/webGl/filters/textureFilters/glowFilter";
 import {Color} from "@engine/renderer/color";

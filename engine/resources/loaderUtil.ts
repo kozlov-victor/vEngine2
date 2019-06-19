@@ -1,4 +1,3 @@
-
 import {DebugError} from "@engine/debug/debugError";
 export namespace LoaderUtil {
     export const loadRaw = (url:string,responsetype:'arraybuffer'|'blob'|'text',onLoad:(buffer:ArrayBuffer|string)=>void)=> {

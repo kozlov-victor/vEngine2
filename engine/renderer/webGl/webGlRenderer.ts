@@ -182,7 +182,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.meshDrawer.setAlfa(mesh.alpha);
         const isTextureUsed:boolean = !!mesh.texture;
         this.meshDrawer.setTextureUsed(isTextureUsed);
-        this.meshDrawer.setLightUsed(!!mesh.bufferInfo.normalBuffer);
+        this.meshDrawer.setLightUsed(mesh.isLightAccepted());
         this.meshDrawer.setColor(mesh.fillColor);
         this.meshDrawer.attachTexture('u_texture',mesh.texture?mesh.texture:this.nullTexture);
 

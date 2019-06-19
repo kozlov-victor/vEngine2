@@ -7,7 +7,7 @@ import {ColliderEngine} from "./physics/unused/colliderEngine";
 import {DebugError} from "./debug/debugError";
 import {IControl} from "@engine/control/abstract/iControl";
 import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
-import {Clazz, ClazzEx} from "@engine/declarations";
+import {ClazzEx} from "@engine/declarations";
 
 export enum SCALE_STRATEGY {
     NO_SCALE,

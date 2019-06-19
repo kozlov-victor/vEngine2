@@ -16,7 +16,7 @@ void main() {
 
   gl_Position = u_projectionMatrix * u_modelMatrix * a_position;
   v_texcoord = a_texcoord;
-  v_normal = a_normal;
+    v_normal = (u_modelMatrix * vec4(a_normal, 0)).xyz;
 }
 `;
 
@@ -40,10 +40,10 @@ void main() {
     if (u_textureUsed) gl_FragColor = mix(u_color,texture2D(u_texture, v_texcoord),.5);
     else gl_FragColor = u_color;
     if (u_lightUsed) {
-        vec3 lightDirection = normalize(vec3(-1,-1,1));
-        vec3 normalized = normalize((u_modelMatrix * vec4(v_normal,0)).xyz);
-        float lightFactor = max(0.5,dot(lightDirection,normalized));
-        gl_FragColor.rgb *= lightFactor;
+        vec3 normal = normalize(v_normal);
+        vec3 lightDirectionInv = normalize(vec3(-1,-1,1));
+        float light = max(0.5,dot(normal, lightDirectionInv));
+        gl_FragColor.rgb *= light;
     }
     gl_FragColor.a *= u_alpha;
 }

@@ -19,3 +19,7 @@ export class AbstractPrimitive implements IPrimitive {
     }
 
 }
+
+// remember, that we cant really define smth like textCoordIndexArr
+// "should duplicate the vertex if the texture coord is different"
+// https://community.khronos.org/t/texture-coordinates-per-face-index-instead-of-per-vertex/2484

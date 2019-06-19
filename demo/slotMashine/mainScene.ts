@@ -2,11 +2,9 @@ import {Scene} from "@engine/model/impl/general/scene";
 import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {Image} from "@engine/model/impl/geometry/image";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mashine} from "./entities/mashine";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/textureFilters/barrelDistortionFilter";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MathEx} from "@engine/misc/mathEx";
 

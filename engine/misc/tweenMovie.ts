@@ -1,4 +1,4 @@
-import {Tween, ITweenDescription} from "./tween";
+import {ITweenDescription, Tween} from "./tween";
 import {Game} from "../game";
 
 interface ITweenInMovie {
