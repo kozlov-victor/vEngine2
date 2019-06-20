@@ -2,12 +2,12 @@ import "./misc/polyfills";
 import {Camera} from "./renderer/camera";
 import {Point2d} from "./geometry/point2d";
 import {AbstractRenderer} from "./renderer/abstract/abstractRenderer";
-import {Scene} from "./model/impl/scene";
+import {Scene} from "./model/impl/general/scene";
 import {ColliderEngine} from "./physics/unused/colliderEngine";
 import {DebugError} from "./debug/debugError";
 import {IControl} from "@engine/control/abstract/iControl";
 import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
-import {Clazz, ClazzEx} from "@engine/declarations";
+import {ClazzEx} from "@engine/declarations";
 
 export enum SCALE_STRATEGY {
     NO_SCALE,
@@ -153,8 +153,10 @@ export class Game {
 
         if (DEBUG) {
             this.fps = ~~(1000 / this._deltaTime);
-            const renderError:number = this._renderer.getError();
-            if (renderError) throw new DebugError(`render error with code ${renderError}`);
+            const renderError:{code:number,desc:string} = this._renderer.getError();
+            if (renderError) {
+                throw new DebugError(`rendering error with code ${renderError.code} (${renderError.desc})`);
+            }
         }
 
         const numOfLoops:number = (~~(this._deltaTime / Game.UPDATE_TIME_RATE))||1;

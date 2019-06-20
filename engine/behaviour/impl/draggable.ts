@@ -1,8 +1,8 @@
 import {BaseAbstractBehaviour} from "../abstract/baseAbstractBehaviour";
 import {Game} from "../../game";
-import {GameObject} from "../../model/impl/gameObject";
-import {Scene} from "../../model/impl/scene";
-import {RenderableModel} from "@engine/model/renderableModel";
+import {GameObject} from "../../model/impl/general/gameObject";
+import {Scene} from "../../model/impl/general/scene";
+import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Int} from "@engine/declarations";
@@ -42,6 +42,9 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
     }
 
     public manage(gameObject:RenderableModel):void {
+        if (DEBUG && this.gameObject) {
+            throw new DebugError(`DraggableBehaviour is already used by another RenderableModel`);
+        }
         this.gameObject = gameObject;
         this.gameObjectOnClick = gameObject.on(MOUSE_EVENTS.click,(e:IMousePoint)=>{
             this.points[DraggableBehaviour._getEventId(e)] = {

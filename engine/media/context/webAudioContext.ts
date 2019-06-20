@@ -103,6 +103,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         if (currSource) {
             currSource.stop();
             currSource.disconnect(this._gainNode);
+            currSource.onended = undefined;
         }
         this._currSource = null!;
         this._free = true;

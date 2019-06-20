@@ -1,14 +1,14 @@
 import {MathEx} from "../../misc/mathEx";
 import {Point2d} from "../../geometry/point2d";
 import {Game} from "../../game";
-import {Scene} from "@engine/model/impl/scene";
+import {Scene} from "@engine/model/impl/general/scene";
 import {Rect} from "../../geometry/rect";
-import {RenderableModel} from "@engine/model/renderableModel";
+import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {IControl} from "@engine/control/abstract/iControl";
 import {DebugError} from "@engine/debug/debugError";
 import {IMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Layer} from "@engine/model/impl/layer";
+import {Layer} from "@engine/model/impl/general/layer";
 
 
 export class MouseControl implements IControl {
@@ -24,7 +24,7 @@ export class MouseControl implements IControl {
             MathEx.isPointInRect(point,rectWithOffset)
         ) {
             point.target = go;
-            go.trigger(eventName,{
+            go.trigger(eventName as string,{
                 screenX:point.x,
                 screenY:point.y,
                 objectX:point.x - go.pos.x,
@@ -117,7 +117,7 @@ export class MouseControl implements IControl {
         // if (untransformedPoint.target) point.target = untransformedPoint.target;
 
         if (point.target===undefined) point.target = scene;
-        scene.trigger(eventName,{
+        scene.trigger(eventName as string,{
             screenX:point.x,
             screenY:point.y,
             id:point.id,
@@ -138,12 +138,12 @@ export class MouseControl implements IControl {
         if (!point) return;
         const lastMouseDownObject:RenderableModel = this.objectsCaptured[point.id];
         if (lastMouseDownObject && lastMouseDownObject!==point.target) {
-            lastMouseDownObject.trigger(MOUSE_EVENTS.mouseLeave,point);
+            lastMouseDownObject.trigger(MOUSE_EVENTS.mouseLeave as string,point);
             delete this.objectsCaptured[point.id];
         }
 
         if (point.target && lastMouseDownObject!==point.target) {
-            point.target.trigger(MOUSE_EVENTS.mouseEnter,point);
+            point.target.trigger(MOUSE_EVENTS.mouseEnter as string,point);
             this.objectsCaptured[point.id] = point.target as RenderableModel;
         }
     }
@@ -153,7 +153,7 @@ export class MouseControl implements IControl {
         if (!point) return;
         const lastMouseDownObject = this.objectsCaptured[point.id];
         if (!lastMouseDownObject) return;
-        if (point.target!==lastMouseDownObject) lastMouseDownObject.trigger(MOUSE_EVENTS.mouseUp,point);
+        if (point.target!==lastMouseDownObject) lastMouseDownObject.trigger(MOUSE_EVENTS.mouseUp as string,point);
         delete this.objectsCaptured[point.id];
     }
 
@@ -212,6 +212,8 @@ export class MouseControl implements IControl {
             this.resolveDoubleClick(e);
         };
         (container as any).onmousewheel = (e:MouseEvent)=>{
+            e.preventDefault();
+            e.stopPropagation(); // to prevent page scroll
             this.resolveScroll(e);
         };
     }

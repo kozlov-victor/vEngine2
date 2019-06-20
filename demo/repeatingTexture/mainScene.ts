@@ -1,6 +1,5 @@
-import {Scene} from "@engine/model/impl/scene";
-import {Image} from "@engine/model/impl/ui/drawable/image";
-import {ResourceLink} from "@engine/resources/resourceLink";
+import {Scene} from "@engine/model/impl/general/scene";
+import {Image} from "@engine/model/impl/geometry/image";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 

@@ -1,6 +1,6 @@
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
-import {Sound} from "@engine/model/impl/sound";
+import {Sound} from "@engine/model/impl/general/sound";
 
 
 export class AudioNode {
@@ -10,6 +10,7 @@ export class AudioNode {
     constructor(public context:BasicAudioContext){}
 
     public play(link:ResourceLink<void>,loop:boolean = false):void {
+        this.stop();
         this.context.play(link,loop);
         // todo currSound is always undefined
     }

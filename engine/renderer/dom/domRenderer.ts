@@ -1,11 +1,11 @@
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Image} from "@engine/model/impl/geometry/image";
 import {Game} from "@engine/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {RenderableModel} from "@engine/model/renderableModel";
+import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {mat4} from "@engine/geometry/mat4";
-import {Line} from "@engine/model/impl/ui/drawable/line";
+import {Line} from "@engine/model/impl/geometry/line";
 import {Color} from "@engine/renderer/color";
 import {ITexture} from "@engine/renderer/texture";
 import {Size} from "@engine/geometry/size";
@@ -64,6 +64,8 @@ class VNode {
 
 
 export class DomRenderer extends AbstractRenderer {
+
+    public readonly type:string = 'DomRenderer';
 
     private matrixStack:MatrixStack;
     private nodes:Nodes;

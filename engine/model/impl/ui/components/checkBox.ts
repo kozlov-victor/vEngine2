@@ -1,7 +1,7 @@
-import {Container} from "../generic/container";
-import {Rectangle} from "../drawable/rectangle";
+import {Container} from "../abstract/container";
+import {Rectangle} from "../../geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {Shape} from "../generic/shape";
+import {Shape} from "../../geometry/abstract/shape";
 import {Game} from "@engine/game";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 

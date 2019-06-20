@@ -4,10 +4,10 @@ import {Rect} from "../../geometry/rect";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../color";
 import {Size} from "../../geometry/size";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {Image} from "@engine/model/impl/geometry/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
+import {Ellipse} from "@engine/model/impl/geometry/ellipse";
 import {ITexture} from "@engine/renderer/texture";
 import {AbstractCanvasFilter} from "@engine/renderer/canvas/filers/abstract/abstractCanvasFilter";
 
@@ -26,10 +26,13 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     private ctx:CanvasRenderingContext2D;
 
+    public readonly type:string = 'CanvasRenderer';
+
     constructor(game:Game){
         super(game);
         this.registerResize();
         this.ctx = getCtx(this.container as HTMLCanvasElement);
+        if (DEBUG) console.log('created canvas renderer');
     }
 
 
@@ -44,7 +47,9 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         const dstRect:Rect = img.getSrcRect();
 
         if (img.offset.x || img.offset.y) {
-            const pattern:CanvasPattern = this.ctx.createPattern((img.getResourceLink().getTarget() as any) as CanvasImageSource, 'repeat') as CanvasPattern;
+            const pattern:CanvasPattern = this.ctx.createPattern(
+                (img.getResourceLink() as ResourceLink<ICanvasTexture>).getTarget().source,
+                'repeat') as CanvasPattern;
             this.ctx.fillStyle = pattern;
 
             this.ctx.save();
@@ -77,7 +82,8 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.ctx.fillStyle = (rectangle.fillColor as Color).asCSS();
         this.ctx.strokeStyle = rectangle.color.asCSS();
         this.ctx.lineWidth = rectangle.lineWidth;
-        //this.ctx.strokeRect(0,0,rectangle.width,rectangle.height);
+        this.ctx.fillRect(0,0,rectangle.size.width,rectangle.size.height);
+        this.ctx.strokeRect(0,0,rectangle.size.width,rectangle.size.height);
     }
 
     public drawEllipse(e:Ellipse){
@@ -106,14 +112,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.ctx.restore();
     }
 
-    // clear():void {
-    //     this.ctx.clearRect(0,0,this.game.width,this.game.height);
-    // }
-    //
-    // clearColor(color:Color):void {
-    //     //this.fillRect(new Rect(0,0,this.game.width,this.game.height),color);
-    // }
-
     public save():void {
         this.ctx.save();
     }
@@ -124,7 +122,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     public resetTransform():void {
         // @ts-ignore
-        //noinspection BadExpressionStatementJS
         this.ctx.resetTransform();
     }
 

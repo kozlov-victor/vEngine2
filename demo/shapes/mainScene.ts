@@ -1,12 +1,12 @@
-import {Scene} from "@engine/model/impl/scene";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {Scene} from "@engine/model/impl/general/scene";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {LinearGradient} from "@engine/renderer/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Circle} from "@engine/model/impl/ui/drawable/circle";
-import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
-import {Line} from "@engine/model/impl/ui/drawable/line";
-import {PolyLine} from "@engine/model/impl/ui/drawable/polyLine";
+import {Circle} from "@engine/model/impl/geometry/circle";
+import {Ellipse} from "@engine/model/impl/geometry/ellipse";
+import {PolyLine} from "@engine/model/impl/geometry/polyLine";
+import {Polygon} from "@engine/model/impl/geometry/polygon";
 
 
 export class MainScene extends Scene {
@@ -51,7 +51,7 @@ export class MainScene extends Scene {
 
         // created with https://editor.method.ac/
         const polyline:PolyLine = new PolyLine(this.game);
-        polyline.pos.setXY(100,100);
+        //polyline.pos.setXY(100,100);
         polyline.lineWidth = 10;
         polyline.color = Color.RGB(100,12,12);
         polyline.setSvgPath(`
@@ -59,6 +59,12 @@ export class MainScene extends Scene {
         `);
         polyline.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(polyline);
+
+        const polygon:Polygon = new Polygon(this.game);
+        polygon.fromPolyline(polyline);
+        polygon.fillColor = Color.RGB(12,233,33,122);
+        polygon.addBehaviour(new DraggableBehaviour(this.game));
+        this.appendChild(polygon);
 
     }
 

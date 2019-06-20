@@ -1,4 +1,4 @@
-import {Tween, ITweenDescription} from "@engine/misc/tween";
+import {ITweenDescription, Tween} from "@engine/misc/tween";
 import {TweenMovie} from "@engine/misc/tweenMovie";
 
 

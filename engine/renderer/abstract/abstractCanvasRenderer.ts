@@ -2,9 +2,10 @@ import {AbstractRenderer} from "./abstractRenderer";
 import {Game} from "../../game";
 
 
-export class AbstractCanvasRenderer extends AbstractRenderer {
+export abstract class AbstractCanvasRenderer extends AbstractRenderer {
 
-    constructor(game:Game) {
+
+    protected constructor(game:Game) {
         super(game);
         const container:HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
         document.body.appendChild(container);

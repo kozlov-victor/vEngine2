@@ -1,5 +1,5 @@
-import {Scene} from "@engine/model/impl/scene";
-import {Font} from "@engine/model/impl/font";
+import {Scene} from "@engine/model/impl/general/scene";
+import {Font} from "@engine/model/impl/general/font";
 import {TextField} from "@engine/model/impl/ui/components/textField";
 import {fontLoader} from "./FontLoader";
 import {Color} from "@engine/renderer/color";

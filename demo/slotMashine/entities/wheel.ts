@@ -1,10 +1,10 @@
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/game";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Image} from "@engine/model/impl/geometry/image";
 import {Tween} from "@engine/misc/tween";
 import {Easing} from "@engine/misc/easing";
-import {Mashine} from "./mashine";
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {Mashine} from "./mashine";
 export class Wheel {
 
     public static readonly CELL_WIDTH:number = 215;

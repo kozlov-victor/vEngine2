@@ -1,14 +1,14 @@
-import {Scene} from "@engine/model/impl/scene";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {Scene} from "@engine/model/impl/general/scene";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {Image} from "@engine/model/impl/ui/drawable/image";
-import {ResourceLink} from "@engine/resources/resourceLink";
+import {Image} from "@engine/model/impl/geometry/image";
 import {Mashine} from "./entities/mashine";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MathEx} from "@engine/misc/mathEx";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 interface IWheelCommand {
     a:number;
@@ -19,7 +19,7 @@ interface IWheelCommand {
 
 export class MainScene extends Scene {
     
-    public wheelLink!:ResourceLink<Texture>;
+    public wheelLink:ResourceLink<Texture>;
     private overlay!:Image;
     private mashine!:Mashine;
 

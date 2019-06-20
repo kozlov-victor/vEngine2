@@ -1,6 +1,6 @@
 import {ShaderProgram} from "../../../base/shaderProgram";
 import {AbstractDrawer} from "../../abstract/abstractDrawer";
-import {BufferInfo, IBufferInfoDescription} from "../../../base/bufferInfo";
+import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../base/bufferInfo";
 import {Plane} from "../../../primitives/plane";
 import {GL_TYPE} from "../../../base/shaderProgramUtils";
 import {ShaderGenerator} from "../../../shaders/generators/shaderGenerator";
@@ -85,7 +85,7 @@ export class ShapeDrawer extends AbstractDrawer {
             posVertexInfo:{array: this.primitive.vertexArr,type:gl.FLOAT,size:2,attrName:this.a_position},
             posIndexInfo: {array: this.primitive.indexArr},
             //texVertexInfo: {array: this.primitive.texCoordArr, type: gl.FLOAT, size: 2, attrName: 'a_texCoord'},
-            drawMethod: this.gl.TRIANGLE_STRIP
+            drawMethod: DRAW_METHOD.TRIANGLE_STRIP,
         } as IBufferInfoDescription);
     }
 

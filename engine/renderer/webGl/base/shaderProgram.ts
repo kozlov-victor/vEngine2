@@ -71,7 +71,7 @@ export class ShaderProgram {
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer.getGlBuffer());
         const attrLocation:GLuint = this.attributes[attrName];
-        this.gl.enableVertexAttribArray(attrLocation);
+        this.enableAttribute(attrName);
         this.gl.vertexAttribPointer(
             attrLocation,
             buffer.getItemSize(),
@@ -82,13 +82,22 @@ export class ShaderProgram {
         );
     }
 
-    public disableAttribute(attrName:string){
+    private toggleAttribute(attrName:string,on:boolean){
         if (this.attributes[attrName]===undefined) {
             console.log(this);
             throw new DebugError(`unbind error: can not find attribute location for  ${attrName}`);
         }
         const attrLocation:GLuint = this.attributes[attrName];
-        this.gl.disableVertexAttribArray(attrLocation);
+        if (on) this.gl.enableVertexAttribArray(attrLocation);
+        else this.gl.disableVertexAttribArray(attrLocation);
+    }
+
+    public disableAttribute(attrName:string){
+        this.toggleAttribute(attrName,false);
+    }
+
+    public enableAttribute(attrName:string){
+        this.toggleAttribute(attrName,true);
     }
 
     public destroy(){

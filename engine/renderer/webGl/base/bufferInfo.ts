@@ -4,6 +4,8 @@ import {DebugError} from "@engine/debug/debugError";
 import {VertexBuffer} from "./vertexBuffer";
 import {IndexBuffer} from "./indexBuffer";
 import {ShaderProgram} from "./shaderProgram";
+import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
+import glEnumToString = debugUtil.glEnumToString;
 
 export interface IVertexArrayInfo {
     array:number[];
@@ -21,8 +23,31 @@ export interface IBufferInfoDescription {
     posIndexInfo?:IIndexArrayInfo;
     texVertexInfo?:IVertexArrayInfo;
     normalInfo?:IVertexArrayInfo;
-    drawMethod:number;
+    drawMethod:DRAW_METHOD;
 }
+
+export enum DRAW_METHOD {
+    LINE_STRIP,
+    TRIANGLE_FAN,
+    TRIANGLE_STRIP,
+    TRIANGLES,
+}
+
+const drawMethodToGlEnum = (gl:WebGLRenderingContext,m:DRAW_METHOD):GLenum=>{
+    switch (m) {
+        case DRAW_METHOD.LINE_STRIP:
+            return gl.LINE_STRIP;
+        case DRAW_METHOD.TRIANGLE_FAN:
+            return gl.TRIANGLE_FAN;
+        case DRAW_METHOD.TRIANGLE_STRIP:
+            return gl.TRIANGLE_STRIP;
+        case DRAW_METHOD.TRIANGLES:
+            return gl.TRIANGLES;
+    }
+    if (DEBUG) {
+        throw new DebugError(`unknown drawMethod enum value: ${m}`);
+    }
+};
 
 export class BufferInfo {
 
@@ -32,7 +57,7 @@ export class BufferInfo {
     public posIndexBuffer:IndexBuffer = null;
     public texVertexBuffer:VertexBuffer = null;
     public normalBuffer:VertexBuffer = null;
-    public drawMethod:number = null;
+    public drawMethod:GLenum;
     public numOfElementsToDraw:number = 0;
 
     constructor(gl:WebGLRenderingContext,description:IBufferInfoDescription){
@@ -40,7 +65,7 @@ export class BufferInfo {
 
         if (DEBUG && description.drawMethod===undefined)
             throw new DebugError(`can not create BufferInfo: drawMethod not defined`);
-        this.drawMethod = description.drawMethod;
+        this.drawMethod = drawMethodToGlEnum(gl,description.drawMethod);
 
         if (DEBUG && !description.posVertexInfo)
             throw new DebugError(`can not create BufferInfo: posVertexInfo is mandatory`);
@@ -99,7 +124,7 @@ export class BufferInfo {
     }
 
     public draw():void {
-        if (this.posIndexBuffer!==null){
+        if (this.posIndexBuffer){
             this.gl.drawElements(
                 this.drawMethod,
                 this.posIndexBuffer.getBufferLength(),
@@ -120,10 +145,11 @@ export class BufferInfo {
                 return this.posVertexBuffer.getBufferLength() / 2;
             case this.gl.TRIANGLE_STRIP:
                 return this.posVertexBuffer.getBufferLength() / 3;
+            case this.gl.TRIANGLES:
+                return this.posVertexBuffer.getBufferLength() / this.posVertexBuffer.getItemSize();
             default:
-                throw new DebugError(`unknown draw method: ${drawMethod}`);
+                throw new DebugError(`unknown draw method: ${drawMethod} (${glEnumToString(this.gl,drawMethod)})`);
         }
     }
-
 
 }

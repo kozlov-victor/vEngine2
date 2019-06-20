@@ -1,9 +1,8 @@
-import {Scene} from "@engine/model/impl/scene";
+import {Scene} from "@engine/model/impl/general/scene";
 import {MainScene} from "./mainScene";
 import {Game} from "@engine/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
-import {fontLoader} from "./FontLoader";
 
 const game = new Game();
 const mainScene:Scene = new MainScene(game);

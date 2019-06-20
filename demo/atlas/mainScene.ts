@@ -2,9 +2,9 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IRectJSON} from "@engine/geometry/rect";
 import {FRAME_ANIMATION_EVENTS} from "@engine/model/impl/frameAnimation/abstract/abstractFrameAnimation";
 import {AtlasFrameAnimation} from "@engine/model/impl/frameAnimation/atlasFrameAnimation";
-import {GameObject} from "@engine/model/impl/gameObject";
-import {Scene} from "@engine/model/impl/scene";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {GameObject} from "@engine/model/impl/general/gameObject";
+import {Scene} from "@engine/model/impl/general/scene";
+import {Image} from "@engine/model/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 

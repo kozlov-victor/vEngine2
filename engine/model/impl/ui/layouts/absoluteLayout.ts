@@ -1,6 +1,6 @@
-import {RenderableModel} from "../../../renderableModel";
+import {RenderableModel} from "../../../abstract/renderableModel";
 import {Rect} from "@engine/geometry/rect";
-import {Container, LAYOUT_SIZE, OVERFLOW} from "../generic/container";
+import {Container, LAYOUT_SIZE, OVERFLOW} from "../abstract/container";
 import {Game} from "@engine/game";
 import {ICloneable} from "@engine/declarations";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";

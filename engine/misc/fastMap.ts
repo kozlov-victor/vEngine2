@@ -1,7 +1,6 @@
 /**
  * it allows fast iterate through map keys without new array creation
  */
-import {IKeyVal} from "@engine/misc/object";
 
 export class FastMap<T,U> {
 

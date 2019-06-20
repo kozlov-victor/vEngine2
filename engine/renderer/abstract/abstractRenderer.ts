@@ -5,18 +5,20 @@ import {Game, SCALE_STRATEGY} from "../../game";
 import {Rect} from "../../geometry/rect";
 import {Color} from "../color";
 import {Size} from "../../geometry/size";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
-import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
-import {NinePatchImage} from "@engine/model/impl/ui/drawable/ninePatchImage";
-import {Image} from "@engine/model/impl/ui/drawable/image";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {Ellipse} from "@engine/model/impl/geometry/ellipse";
+import {NinePatchImage} from "@engine/model/impl/geometry/ninePatchImage";
+import {Image} from "@engine/model/impl/geometry/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {GameObject3d} from "@engine/model/impl/gameObject3d";
-import {Font} from "@engine/model/impl/font";
-import {Line} from "@engine/model/impl/ui/drawable/line";
-import {RenderableModel} from "@engine/model/renderableModel";
+import {Mesh} from "@engine/model/abstract/mesh";
+import {Font} from "@engine/model/impl/general/font";
+import {Line} from "@engine/model/impl/geometry/line";
+import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/texture";
 
-export class AbstractRenderer {
+export abstract class AbstractRenderer {
+
+    public abstract type:string;
 
     public container:HTMLElement;
     public debugTextField:TextField;
@@ -25,7 +27,7 @@ export class AbstractRenderer {
 
     protected renderableCache:{[path:string]:ITexture} = {};
 
-    constructor(protected game:Game){
+    protected constructor(protected game:Game){
         this.game = game;
         if (Device.isCocoonJS) {
             const dpr:number = window.devicePixelRatio||1;
@@ -70,8 +72,8 @@ export class AbstractRenderer {
         window.removeEventListener('resize',this.onResize);
     }
 
-    public getError():number{
-        return 0;
+    public getError():{code:number,desc:string}{
+        return undefined;
     }
 
     public drawImage(img:Image):void {}
@@ -87,7 +89,7 @@ export class AbstractRenderer {
 
     public drawLine(line:Line):void {}
 
-    public drawModel(go:GameObject3d):void {}
+    public drawMesh(m:Mesh):void {}
 
     public drawEllipse(ellispe:Ellipse):void {}
 
@@ -125,12 +127,15 @@ export class AbstractRenderer {
             else if (txt.toJSON) {
                 txt = JSON.stringify(txt.toJSON(),null,4);
             }
+            else if (typeof txt==='function') {
+                txt = txt.toString();
+            }
             else {
                 if (typeof txt !== 'string') {
                     try{
                         txt = JSON.stringify(txt);
                     } catch (e){
-                        txt = `[Object](${e.error})`;
+                        txt = txt.toString();
                     }
                 }
             }

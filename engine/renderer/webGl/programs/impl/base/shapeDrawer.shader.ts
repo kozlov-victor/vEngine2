@@ -1,4 +1,4 @@
-import {STRETCH_MODE} from "@engine/model/impl/ui/drawable/image";
+import {STRETCH_MODE} from "@engine/model/impl/geometry/image";
 
 export enum SHAPE_TYPE {
     ELLIPSE,RECT

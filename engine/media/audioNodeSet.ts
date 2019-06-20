@@ -1,8 +1,7 @@
 import {AudioNode} from "./audioNode";
-import {Sound} from "../model/impl/sound";
+import {Sound} from "../model/impl/general/sound";
 import {Game} from "../game";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
-import {Int} from "@engine/declarations";
 
 
 export class AudioNodeSet {

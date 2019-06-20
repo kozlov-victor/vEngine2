@@ -55,6 +55,7 @@ const template = `
                     '            <a onclick="onClick(event)" target="_blank" href="#" data-href="'+it.name+'/index.html">\\n' +
                     '                \\n' + it.title +
                     '            </a>\\n' +
+                    '<a target="_blank" href="'+it.name+'/index.html"> . </a>'+
                     '        </li>\\
                     ';
             });

@@ -1,8 +1,8 @@
-import {Scene} from "@engine/model/impl/scene";
+import {Scene} from "@engine/model/impl/general/scene";
 import {TEXT_ALIGN, TextField, WORD_BRAKE} from "@engine/model/impl/ui/components/textField";
-import {Font} from "@engine/model/impl/font";
+import {Font} from "@engine/model/impl/general/font";
 import {Color} from "@engine/renderer/color";
-import {Rectangle} from "@engine/model/impl/ui/drawable/rectangle";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {FntCreator} from "../fnt/FntCreator";
 import createFont = FntCreator.createFont;
 
