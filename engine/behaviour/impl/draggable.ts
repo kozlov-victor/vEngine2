@@ -42,6 +42,9 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
     }
 
     public manage(gameObject:RenderableModel):void {
+        if (DEBUG && this.gameObject) {
+            throw new DebugError(`DraggableBehaviour is already used by another RenderableModel`);
+        }
         this.gameObject = gameObject;
         this.gameObjectOnClick = gameObject.on(MOUSE_EVENTS.click,(e:IMousePoint)=>{
             this.points[DraggableBehaviour._getEventId(e)] = {

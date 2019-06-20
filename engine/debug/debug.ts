@@ -10,12 +10,13 @@ const css:IKeyVal<string|number> = {
     'background-color': 'black',
     'min-width': '20px',
     'min-height': '20px',
-    "opacity": 0.5
+    "opacity": 0.5,
+    "pointer-events":"none",
 };
 Object.keys(css).forEach((key:string)=>devConsole.style.setProperty(key,''+css[key]));
 
 const label:HTMLElement = document.createElement('span');
-label.style.color = 'white';
+label.style.cssText = 'color:white;user-select: none;';
 devConsole.appendChild(label);
 
 window.addEventListener('load',(e:Event)=>{

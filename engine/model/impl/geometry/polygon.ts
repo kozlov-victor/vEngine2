@@ -41,4 +41,10 @@ export class Polygon extends Mesh {
         this.size.set(p.size);
     }
 
+    public fromSvgPath(p:string){
+        const polyline:PolyLine = new PolyLine(this.game);
+        polyline.setSvgPath(p);
+        this.fromPolyline(polyline);
+    }
+
 }
