@@ -16,7 +16,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
     public static BLACK = Color.RGB(0,0,0);
     public static NONE  = Color.RGB(0,0,0,0);
 
-    public static RGB(r:number,g:number,b:number,a?:number):Color{
+    public static RGB(r:number,g:number = r,b:number = r,a:number = 255):Color{
         const c:Color = new Color(0,0,0);
         c.setRGBA(r,g,b,a);
         return c;
