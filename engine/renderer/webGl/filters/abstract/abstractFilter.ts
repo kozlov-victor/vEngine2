@@ -9,6 +9,7 @@ import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils
 import Mat16Holder = mat4.Mat16Holder;
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {Color} from "@engine/renderer/color";
+import {IFilter} from "@engine/renderer/ifilter";
 
 
 const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):Mat16Holder =>{
@@ -27,7 +28,9 @@ const IDENTITY:Mat16Holder = Mat16Holder.create();
 mat4.makeIdentity(IDENTITY);
 const BLACK:Color = Color.RGB(0,0,0,0);
 
-export abstract class AbstractFilter {
+export abstract class AbstractFilter implements IFilter {
+
+    public readonly type:string = 'WebglFilter';
 
     protected gl:WebGLRenderingContext;
     protected simpleRectDrawer:SimpleRectDrawer;

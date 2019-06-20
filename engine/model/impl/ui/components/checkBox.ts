@@ -15,13 +15,14 @@ export class CheckBox extends Container {
 
     constructor(game:Game) {
         super(game);
+        this.size.setWH(10);
         const rNormal:Rectangle = new Rectangle(game);
-        rNormal.setWH(10);
-        rNormal.fillColor = new Color(10,10,10,100);
+        rNormal.size.set(this.size);
+        rNormal.fillColor = new Color(100,100,100,100);
 
         const rChecked:Rectangle = new Rectangle(game);
-        rChecked.setWH(10);
-        rChecked.fillColor = new Color(10,50,10,100);
+        rChecked.size.set(this.size);
+        rChecked.fillColor = new Color(50,50,50);
 
         this.rNormal = rNormal;
         this.rChecked = rChecked;

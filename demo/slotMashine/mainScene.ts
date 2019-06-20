@@ -4,7 +4,7 @@ import {Color} from "@engine/renderer/color";
 import {Image} from "@engine/model/impl/ui/drawable/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mashine} from "./entities/mashine";
-import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/textureFilters/barrelDistortionFilter";
+import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";

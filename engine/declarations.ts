@@ -3,6 +3,7 @@ import {TweenMovie} from "@engine/misc/tweenMovie";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {Game} from "@engine/game";
+import {IFilter} from "@engine/renderer/ifilter";
 
 export type Clazz<T> = new() => T;
 export type ClazzEx<T> = new(game:Game) => T;
@@ -39,7 +40,7 @@ export interface IResource<T> {
 }
 
 export interface IFilterable {
-    filters: AbstractFilter[];
+    filters: IFilter[];
 }
 
 type Brand<K,T> = K & {__brand: T};

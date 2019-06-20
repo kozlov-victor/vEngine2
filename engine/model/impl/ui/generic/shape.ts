@@ -4,13 +4,14 @@ import {Game} from "@engine/game";
 import {LinearGradient} from "@engine/renderer/linearGradient";
 import {IFilterable} from "@engine/declarations";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
+import {IFilter} from "@engine/renderer/ifilter";
 
 export abstract class Shape extends RenderableModel implements IFilterable{
 
     public color:Color = Color.BLACK.clone();
     public lineWidth:number = 0;
     public fillColor:Color|LinearGradient = Color.RGB(100,100,100);
-    public filters: AbstractFilter[] = [];
+    public filters: IFilter[] = [];
 
     protected constructor(game:Game){
         super(game);

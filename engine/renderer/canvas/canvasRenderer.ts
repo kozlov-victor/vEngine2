@@ -9,6 +9,7 @@ import {Image} from "@engine/model/impl/ui/drawable/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Ellipse} from "@engine/model/impl/ui/drawable/ellipse";
 import {ITexture} from "@engine/renderer/texture";
+import {AbstractCanvasFilter} from "@engine/renderer/canvas/filers/abstract/abstractCanvasFilter";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -37,6 +38,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             if (!img.getResourceLink()) throw new DebugError(`image resource link is not set`);
             if (!this.renderableCache[img.getResourceLink().getUrl()]) throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getUrl()}`);
         }
+
 
         const srcRect:Rect = img.getSrcRect();
         const dstRect:Rect = img.getSrcRect();

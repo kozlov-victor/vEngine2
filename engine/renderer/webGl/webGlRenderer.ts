@@ -155,7 +155,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.attachTexture('texture',texture);
         this.shapeDrawer.draw();
 
-        this.afterItemDraw(img.filters,img.blendMode);
+        this.afterItemDraw(img.filters as AbstractFilter[],img.blendMode);
 
 
     }
@@ -208,7 +208,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.attachTexture('texture',this.nullTexture);
         sd.draw();
 
-        this.afterItemDraw(rectangle.filters,rectangle.blendMode);
+        this.afterItemDraw(rectangle.filters as AbstractFilter[],rectangle.blendMode);
     }
 
 
@@ -253,7 +253,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.attachTexture('texture',this.nullTexture);
         this.shapeDrawer.draw();
 
-        this.afterItemDraw(ellipse.filters,ellipse.blendMode);
+        this.afterItemDraw(ellipse.filters as AbstractFilter[],ellipse.blendMode);
 
     }
 

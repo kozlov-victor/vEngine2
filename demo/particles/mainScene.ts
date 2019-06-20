@@ -5,7 +5,7 @@ import {ParticleSystem} from "@engine/model/impl/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {BLEND_MODE, RenderableModel} from "@engine/model/renderableModel";
-import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/textureFilters/simpleBlurFilter";
+import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/texture/simpleBlurFilter";
 import {Circle} from "@engine/model/impl/ui/drawable/circle";
 import {Shape} from "@engine/model/impl/ui/generic/shape";
 
