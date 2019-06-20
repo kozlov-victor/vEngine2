@@ -5,6 +5,7 @@ import {Color} from "@engine/renderer/color";
 import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {FntCreator} from "../fnt/FntCreator";
 import createFont = FntCreator.createFont;
+import {CheckBox} from "@engine/model/impl/ui/components/checkBox";
 
 const text:string=
 `Lorem ipsum dolor sit amet, 
@@ -49,6 +50,10 @@ export class MainScene extends Scene {
         tf.setPaddings(5);
         (tf.background as Rectangle).borderRadius = 15;
         this.appendChild(tf);
+
+        const chbox:CheckBox = new CheckBox(this.game);
+        chbox.pos.setXY(50,200);
+        this.appendChild(chbox);
 
         (window as any).tf = tf;
 
