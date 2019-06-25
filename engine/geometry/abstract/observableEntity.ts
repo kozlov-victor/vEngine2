@@ -4,7 +4,7 @@ import {IReleasealable} from "@engine/misc/objectPool";
 
 export abstract class ObservableEntity implements IReleasealable{
 
-    private _onChanged:Array<()=>void> = [];
+    private _onChanged:(()=>void)[] = [];
 
     private _silent:boolean = false;
 

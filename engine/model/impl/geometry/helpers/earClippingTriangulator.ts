@@ -69,41 +69,41 @@ export class EarClippingTriangulator {
 
     /** @return {@link #CONCAVE} or {@link #CONVEX} */
     private classifyVertex(index: number): number {
-        let indices: number[] = this.indices;
-        let previous: number = indices[this.previousIndex(index)] * 2;
-        let current: number = indices[index] * 2;
-        let next: number = indices[this.nextIndex(index)] * 2;
-        let vertices: number[] = this.vertices;
+        const indices: number[] = this.indices;
+        const previous: number = indices[this.previousIndex(index)] * 2;
+        const current: number = indices[index] * 2;
+        const next: number = indices[this.nextIndex(index)] * 2;
+        const vertices: number[] = this.vertices;
         return EarClippingTriangulator.computeSpannedAreaSign(vertices[previous], vertices[previous + 1], vertices[current], vertices[current + 1],
             vertices[next], vertices[next + 1]);
     }
 
     private findEarTip(): number {
-        let vertexCount: number = this.vertexCount;
+        const vertexCount: number = this.vertexCount;
         for (let i: number = 0; i < vertexCount; i++)
             if (this.isEarTip(i)) return i;
 
         // Return a convex or tangential vertex if one exists.
-        let vertexTypes: number[] = this.vertexTypes;
+        const vertexTypes: readonly number[] = this.vertexTypes;
         for (let i: number = 0; i < vertexCount; i++)
             if (vertexTypes[i] != EarClippingTriangulator.CONCAVE) return i;
         return 0; // If all vertices are concave, just return the first one.
     }
 
     private isEarTip(earTipIndex: number): boolean {
-        let vertexTypes: number[] = this.vertexTypes;
+        const vertexTypes: readonly number[] = this.vertexTypes;
         if (vertexTypes[earTipIndex] == EarClippingTriangulator.CONCAVE) return false;
 
-        let previousIndex: number = this.previousIndex(earTipIndex);
-        let nextIndex: number = this.nextIndex(earTipIndex);
-        let indices: number[] = this.indices;
-        let p1: number = indices[previousIndex] * 2;
-        let p2: number = indices[earTipIndex] * 2;
-        let p3: number = indices[nextIndex] * 2;
-        let vertices: number[] = this.vertices;
-        let p1x: number = vertices[p1], p1y = vertices[p1 + 1];
-        let p2x: number = vertices[p2], p2y = vertices[p2 + 1];
-        let p3x: number = vertices[p3], p3y = vertices[p3 + 1];
+        const previousIndex: number = this.previousIndex(earTipIndex);
+        const nextIndex: number = this.nextIndex(earTipIndex);
+        const indices: number[] = this.indices;
+        const p1: number = indices[previousIndex] * 2;
+        const p2: number = indices[earTipIndex] * 2;
+        const p3: number = indices[nextIndex] * 2;
+        const vertices: readonly number[] = this.vertices;
+        const p1x: number = vertices[p1], p1y = vertices[p1 + 1];
+        const p2x: number = vertices[p2], p2y = vertices[p2 + 1];
+        const p3x: number = vertices[p3], p3y = vertices[p3 + 1];
 
         // Check if any point is inside the triangle formed by previous, current and next vertices.
         // Only consider vertices that are not part of this triangle, or else we'll always find one inside.
@@ -111,9 +111,9 @@ export class EarClippingTriangulator {
             // Concave vertices can obviously be inside the candidate ear, but so can tangential vertices
             // if they coincide with one of the triangle's vertices.
             if (vertexTypes[i] != EarClippingTriangulator.CONVEX) {
-                let v: number = indices[i] * 2;
-                let vx: number = vertices[v];
-                let vy: number = vertices[v + 1];
+                const v: number = indices[i] * 2;
+                const vx: number = vertices[v];
+                const vy: number = vertices[v + 1];
                 // Because the polygon has clockwise winding order, the area sign will be positive if the point is strictly inside.
                 // It will be 0 on the edge, which we want to include as well.
                 // note: check the edge defined by p1->p3 first since this fails _far_ more then the other 2 checks.
@@ -128,8 +128,8 @@ export class EarClippingTriangulator {
     }
 
     private cutEarTip(earTipIndex: number): void {
-        let indices: number[] = this.indices;
-        let triangles: number[] = this.triangles;
+        const indices: readonly number[] = this.indices;
+        const triangles: number[] = this.triangles;
 
         triangles.push(indices[this.previousIndex(earTipIndex)]);
         triangles.push(indices[earTipIndex]);
@@ -152,7 +152,7 @@ export class EarClippingTriangulator {
 
     private static areVerticesClockwise(vertices: number[], offset: number, count: number): boolean {
         if (count <= 2) return false;
-        let area: number = 0, p1x, p1y, p2x, p2y;
+        let area: number = 0, p1x, p1y, p2x, p2y:number;
         for (let i: number = offset, n = offset + count - 3; i < n; i += 2) {
             p1x = vertices[i];
             p1y = vertices[i + 1];

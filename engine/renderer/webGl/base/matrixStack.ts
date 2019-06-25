@@ -3,7 +3,7 @@ import Mat16Holder = mat4.Mat16Holder;
 
 export class MatrixStack {
 
-    private stack:Mat16Holder[] = [];
+    private readonly stack:Mat16Holder[] = [];
 
     constructor(){
        this.restore();

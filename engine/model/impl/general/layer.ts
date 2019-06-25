@@ -1,4 +1,4 @@
-import {Game} from "../../../game";
+import {Game} from "@engine/game";
 import {RenderableModel} from "../../abstract/renderableModel";
 
 export class Layer {

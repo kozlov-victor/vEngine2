@@ -8,7 +8,7 @@ const objectToQuery = (o:IKeyVal<any>)=> {
     if (!o) return '';
     if (o instanceof FormData) return o;
     const paramsArr:any[] = [];
-    if (o===null || o===undefined || typeof o==='string' || typeof o==='number')
+    if (typeof o==='string' || typeof o==='number')
         return o;
     for (const key in o) {
         paramsArr.push([key,encodeURIComponent(o[key])]);

@@ -8,9 +8,9 @@ import {Game} from "@engine/game";
 
 export class MotionBlurFilter extends AbstractFilter {
 
-    private center:string;
-    private strength:string;
-    private texSize:string;
+    private readonly center:string;
+    private readonly strength:string;
+    private readonly texSize:string;
 
     constructor(game:Game) {
         super(game);

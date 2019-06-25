@@ -40,7 +40,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
     private gNorm:number;
     private bNorm:number;
     private aNorm:number;
-    private _arr:number[] = null;
+    private _arr:number[];
 
     private _captured:boolean = false;
 
@@ -108,7 +108,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
 
 
     public asGL():[number,number,number,number]{
-        if (this._arr===null) this._arr = new Array(3);
+        if (!this._arr) this._arr = new Array(3);
         this._arr[0] = this.rNorm;
         this._arr[1] = this.gNorm;
         this._arr[2] = this.bNorm;
@@ -117,7 +117,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
     }
 
     public asCSS():string{
-        return `rgba(${this.r},${this.g},${this.b},${this.a})`;
+        return `rgba(${this.r},${this.g},${this.b},${this.a/255})`;
     }
 
     public toJSON():IColorJSON{

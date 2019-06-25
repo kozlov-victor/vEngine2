@@ -34,7 +34,7 @@ export class Blender {
                 break;
             default:
                 if (DEBUG) {
-                    throw new DebugError(`unknow blend mode ${blendMode}`);
+                    throw new DebugError(`unknown blend mode: ${blendMode}`);
                 }
                 break;
         }

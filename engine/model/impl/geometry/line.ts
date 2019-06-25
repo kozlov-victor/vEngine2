@@ -59,25 +59,6 @@ export class Line extends Shape implements ICloneable<Line> {
 
     private onPointChanged(){
 
-        const x:number = this.pos.x;
-        const y:number = this.pos.y;
-        const x1:number = this.pointTo.x;
-        const y1:number = this.pointTo.y;
-
-        const abs:(x:number)=>number = Math.abs;
-        // if (x1<x) {
-        //     this.pointTo.silent(true);
-        //     this.pos.x = x1;
-        //     this.pointTo.x = abs(abs(x)-abs(x1));
-        //     this.pointTo.silent(false);
-        // }
-        // if (y1<y) {
-        //     this.pointTo.silent(true);
-        //     this.pos.y = y1;
-        //     this.pointTo.y = abs(abs(y)-abs(y1));
-        //     this.pointTo.silent(false);
-        // }
-
         const w:number = Math.abs(this.pointTo.x);
         const h:number = Math.abs(this.pointTo.y);
         const l:number = Math.sqrt(w*w+h*h) + this.lineWidth/2;

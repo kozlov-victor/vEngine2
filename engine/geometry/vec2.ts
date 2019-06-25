@@ -3,8 +3,6 @@ import {Point2d} from "./point2d";
 export class Vec2 extends Point2d {
 
 
-
-
     public static angleBetween(v1:Vec2, v2:Vec2):number {
         v1 = v1.clone().normalize();
         v2 = v2.clone().normalize();

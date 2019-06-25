@@ -72,7 +72,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
             if (!point) return;
             if (!point.dragStart) {
                 point.dragStart = true;
-                gameObject.trigger('dragStart',point);
+                gameObject.trigger(MOUSE_EVENTS.dragStart,point);
                 if (point.defaultPrevented) {
                     delete this.points[pointId];
                     return;
@@ -88,7 +88,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
             if (point.dragStart) {
                 point.x = gameObject.pos.x;
                 point.y = gameObject.pos.y;
-                gameObject.trigger('dragStop',point);
+                gameObject.trigger(MOUSE_EVENTS.dragStop,point);
             }
             delete this.points[pointId];
         });

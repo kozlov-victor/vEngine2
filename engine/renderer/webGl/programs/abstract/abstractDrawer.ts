@@ -1,4 +1,4 @@
-import {IKeyVal, isArray, isEqual} from "@engine/misc/object";
+import {isArray, isEqual} from "@engine/misc/object";
 import {AbstractPrimitive} from "../../primitives/abstractPrimitive";
 import {ShaderProgram} from "../../base/shaderProgram";
 import {BufferInfo} from "../../base/bufferInfo";
@@ -19,13 +19,18 @@ interface TexturesToBind {
     texturesInfo: TextureInfo[]
 }
 
+interface UniformValue {
+    value:UNIFORM_VALUE_TYPE,
+    dirty:boolean
+}
+
 export class AbstractDrawer implements IDrawer{
 
     static currentInstance:AbstractDrawer = null;
 
     protected gl:WebGLRenderingContext;
     protected program:ShaderProgram = null;
-    protected uniformCache:FastMap<string,UNIFORM_VALUE_TYPE> = new FastMap();
+    protected uniformCache:FastMap<string,UniformValue> = new FastMap();
     protected texturesToBind:TexturesToBind = {length: 0, texturesInfo: [] as TextureInfo[]};
     protected primitive:AbstractPrimitive;
 
@@ -65,21 +70,23 @@ export class AbstractDrawer implements IDrawer{
     setUniform(name:string,value:UNIFORM_VALUE_TYPE){
         if (DEBUG && !name) {
             console.trace();
-            throw new DebugError(`can not set uniform witn value ${value}: name is not provided`);
+            throw new DebugError(`can not set uniform with value ${value}: name is not provided`);
         }
         if (DEBUG && value==undefined) {
             console.trace();
             throw new DebugError(`can not set uniform with value ${value}`);
         }
-        if (isEqual(this.uniformCache.get(name),value)) return;
+        if (this.uniformCache.has(name) && isEqual(this.uniformCache.get(name).value,value)) return;
         if (isArray(value)) {
-            if (!this.uniformCache.get(name)) this.uniformCache.put(name,new Array(value.length));
-            const arr:number[]|boolean[] = this.uniformCache.get(name) as number[]|boolean[];
+            if (!this.uniformCache.has(name)) this.uniformCache.put(name,{value:new Array(value.length),dirty:true});
+            const uniformInCache:UniformValue = this.uniformCache.get(name);
+            const arr:number[]|boolean[] = uniformInCache.value as number[]|boolean[];
             for (let i:number=0,max:number=value.length;i<max;i++) {
                 arr[i] = value[i];
             }
+            uniformInCache.dirty = true;
         } else {
-            this.uniformCache.put(name,value);
+            this.uniformCache.put(name,{value,dirty:true});
         }
     }
 
@@ -93,8 +100,8 @@ export class AbstractDrawer implements IDrawer{
     }
 
     setUniformsFromMap(batch:FastMap<string,UNIFORM_VALUE_TYPE>){
-        const keys:string[] = batch.getKeys();
-        const values:UNIFORM_VALUE_TYPE[] = batch.getValues();
+        const keys:readonly string[] = batch.getKeys();
+        const values:readonly UNIFORM_VALUE_TYPE[] = batch.getValues();
         for (let i:number=0;i<keys.length;i++) {
             this.setUniform(keys[i],values[i]);
         }
@@ -111,9 +118,11 @@ export class AbstractDrawer implements IDrawer{
     draw(){
         this.bind();
         const keys:string[] = this.uniformCache.getKeys();
-        const values:UNIFORM_VALUE_TYPE[] = this.uniformCache.getValues();
+        const values:{dirty:boolean,value:UNIFORM_VALUE_TYPE}[] = this.uniformCache.getValues();
         for (let i:number=0;i<keys.length;i++) {
-            this._setUniform(keys[i],values[i]);
+            if (!values[i].dirty) continue;
+            this._setUniform(keys[i],values[i].value);
+            values[i].dirty = false;
         }
         for (let i:number=0,max:number = this.texturesToBind.length;i<max;i++) {
             const t:TextureInfo = this.texturesToBind.texturesInfo[i];

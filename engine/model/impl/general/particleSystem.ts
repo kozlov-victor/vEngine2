@@ -1,5 +1,5 @@
-import {MathEx} from "../../../misc/mathEx";
-import {Game} from "../../../game";
+import {MathEx} from "@engine/misc/mathEx";
+import {Game} from "@engine/game";
 import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {noop} from "@engine/misc/object";
@@ -83,13 +83,13 @@ export class ParticleSystem extends RenderableModel {
     public update():void {
         super.update();
         const time:number = this.game.getTime();
-        this._particles.forEach((holder:IParticleHolder)=>{
+        for (const holder of this._particles) {
             this._onUpdateParticle(holder.particle);
             if (time - holder.createdTime > holder.lifeTime) {
                 this._particles.splice(this._particles.indexOf(holder),1);
                 holder.particle.kill();
             }
-        });
+        }
     }
 
     public onUpdateParticle(onUpdateParticle:(r:RenderableModel)=>void):void {

@@ -8,7 +8,7 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
 
 
     public static isAcceptable():boolean{
-        if (DEBUG) console.log('audio not supported');
+        if (DEBUG) console.log('audio is not supported');
         return true;
     }
 

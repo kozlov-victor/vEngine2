@@ -1,5 +1,4 @@
 import {Color} from "../../renderer/color";
-import {IKeyVal} from "../../misc/object";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {FastMap} from "@engine/misc/fastMap";
 

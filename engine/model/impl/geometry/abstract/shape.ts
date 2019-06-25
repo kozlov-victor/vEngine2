@@ -3,7 +3,6 @@ import {Color} from "@engine/renderer/color";
 import {Game} from "@engine/game";
 import {LinearGradient} from "@engine/renderer/linearGradient";
 import {IFilterable} from "@engine/declarations";
-import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {IFilter} from "@engine/renderer/ifilter";
 
 export abstract class Shape extends RenderableModel implements IFilterable{

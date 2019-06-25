@@ -1,6 +1,5 @@
 import {AbstractLight} from "../abstract/abstractLight";
 import {Game} from "../../game";
-import {IKeyVal} from "../../misc/object";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {FastMap} from "@engine/misc/fastMap";
 

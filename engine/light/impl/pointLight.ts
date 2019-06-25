@@ -11,12 +11,12 @@ export class PointLight extends AbstractLight {
 
     public static readonly LIGHT_TYPE:number = 0;
 
-    public pos:Point2d = new Point2d();
+    public readonly pos:Point2d = new Point2d();
     public nearRadius: number = 10;
     public farRadius: number = 100;
     public isOn:boolean = true;
 
-    private _screenPoint = new Point2d();
+    private readonly _screenPoint = new Point2d();
 
     constructor(game:Game){
         super(game);

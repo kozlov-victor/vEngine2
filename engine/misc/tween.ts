@@ -49,7 +49,7 @@ export interface ITweenDescriptionNormalized extends ITweenDescription{
 
 export class Tween {
 
-    private _propsToChange:any[] = [];
+    private _propsToChange:string[] = [];
     private _startedTime:number = 0;
     private _currTime:number = 0;
     private _completed:boolean = false;
@@ -147,10 +147,10 @@ export class Tween {
 
     public complete():void {
         if (this._completed) return;
-        let l = this._propsToChange.length;
+        let l:number = this._propsToChange.length;
         while(l--){
-            const prp = this._propsToChange[l];
-            const valCurr = this._desc.to[prp];
+            const prp:string = this._propsToChange[l];
+            const valCurr:number = this._desc.to[prp];
             setValByPath(this._target,prp,valCurr);
         }
         if (this._progressFn) this._progressFn(this._target);
