@@ -61,6 +61,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     public parent:RenderableModel;
     public readonly children:RenderableModel[] = [];
     public readonly velocity = new Point2d(0,0);
+    public visible:boolean = true;
 
 
     protected _dirty:boolean = true;
@@ -143,8 +144,22 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         this.anchor.setXY(this.size.width/2,this.size.height/2);
     }
 
+    public setRotationPointToCenter():void {
+        this.revalidate();
+        if (DEBUG && !(this.size.width && this.size.height))
+            throw new DebugError(`can not set rotation point to center: width or height of gameObject is not set`);
+        this.rotationPoint.setXY(this.size.width/2,this.size.height/2);
+    }
+
 
     public appendChild(c:RenderableModel):void {
+        if (DEBUG) {
+            if (c===this) throw new DebugError(`parent and child objects are the same`);
+            // if (this._getParent().children.find((it:RenderableModel)=>it===c)) {
+            //     console.error(c);
+            //     throw new DebugError(`this children already added`);
+            // }
+        }
         c.parent = this;
         c.setLayer(this.getLayer());
         c.revalidate();
@@ -228,6 +243,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
 
     public render():void {
         //if (this.isInViewPort()) return;
+        if (!this.visible) return;
         const renderer:AbstractRenderer = this.game.getRenderer();
 
         renderer.save();

@@ -8,7 +8,6 @@ import {Rect} from "../../geometry/rect";
 import {Game} from "../../game";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../color";
-import {IUniformsInfo} from "./programs/interface/IUniformsInfo";
 import {Size} from "../../geometry/size";
 import {MeshDrawer} from "./programs/impl/base/meshDrawer";
 import {Mesh} from "@engine/model/abstract/mesh";
@@ -313,7 +312,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.finalFrameBuffer.clear(color);
     }
 
-    public afterFrameDraw(filters:AbstractFilter[]):void{
+    public afterFrameDraw(filters:readonly AbstractFilter[]):void{
         const texToDraw:Texture = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(),filters);
         this.finalFrameBuffer.unbind();
         this.gl.viewport(0, 0, this.fullScreenSize.width,this.fullScreenSize.height);
@@ -467,7 +466,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         }
     }
 
-    private afterItemDraw(filters:AbstractFilter[],blendMode:BLEND_MODE):void{
+    private afterItemDraw(filters:readonly AbstractFilter[],blendMode:BLEND_MODE):void{
         if (filters.length>0 || blendMode!==BLEND_MODE.NORMAL) {
 
             this.blender.setBlendMode(BLEND_MODE.NORMAL);

@@ -23,6 +23,11 @@ export class FastMap<T,U> {
         return this.values[index];
     }
 
+    public has(key:T):boolean{
+        const index:number = this.keys.indexOf(key);
+        return index>-1;
+    }
+
     public remove(key:T):void{
         const index:number = this.keys.indexOf(key);
         if (index===-1) return;

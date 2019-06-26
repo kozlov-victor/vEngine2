@@ -25,7 +25,6 @@ export class Cone extends AbstractPrimitive {
 
         const extra:number = (topCap ? 2 : 0) + (bottomCap ? 2 : 0);
 
-        let numVertices = (radialSubdivisions + 1) * (verticalSubdivisions + 1 + extra);
         const positions:number[] = [];
         const normals:number[] = [];
         const texCoords:number[] = [];

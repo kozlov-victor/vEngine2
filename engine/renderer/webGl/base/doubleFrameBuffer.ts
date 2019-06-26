@@ -16,7 +16,7 @@ export class DoubleFrameBuffer {
         ];
     }
 
-    public applyFilters(texture:Texture,filters:AbstractFilter[]):Texture{
+    public applyFilters(texture:Texture,filters:readonly AbstractFilter[]):Texture{
         const len:number = filters.length;
         if (len===0) return texture;
 

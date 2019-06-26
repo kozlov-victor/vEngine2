@@ -4,7 +4,6 @@ import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE, UNIFORM_VALUE_TYPE} from "../../base/shaderProgramUtils";
 import {fragmentSource} from "@engine/renderer/webGl/filters/light/source/fragment.shader";
 import {mainFnSource} from "@engine/renderer/webGl/filters/light/source/mainFn.shader";
-import {IKeyVal} from "@engine/misc/object";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {LightSet} from "@engine/light/lightSet";
 import {FastMap} from "@engine/misc/fastMap";

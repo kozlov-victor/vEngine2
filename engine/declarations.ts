@@ -46,4 +46,3 @@ export interface IFilterable {
 type Brand<K,T> = K & {__brand: T};
 
 export type Int = Brand<number,'Int'>;
-

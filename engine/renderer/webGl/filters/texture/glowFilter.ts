@@ -36,7 +36,7 @@ export class GlowFilter extends AbstractFilter {
 
         //language=GLSL
         programGen.setFragmentMainFn(`
-            #define PI 3.14159265358979323846264
+            #define PI ${Math.PI}
             vec2 px = vec2(pixelWidth, pixelHeight);
             void main(void) {
                 vec4 ownColor = texture2D(texture, v_texCoord);

@@ -121,7 +121,7 @@ export class Game {
         return this._renderer;
     }
 
-    public debug2?(...val:any[]):void;
+    public debug2?(...val:readonly any[]):void;
 
     public runScene(scene:Scene):void{
         this._currentScene = scene;

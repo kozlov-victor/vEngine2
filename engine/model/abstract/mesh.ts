@@ -17,7 +17,7 @@ export abstract class Mesh extends RenderableModel {
 
     private _lightAccepted:boolean;
 
-    constructor(
+    protected constructor(
         protected game:Game,
         public readonly depthTest:boolean,
         public readonly invertY:boolean

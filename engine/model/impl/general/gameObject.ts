@@ -1,5 +1,5 @@
-import {Game} from "../../../game";
-import {ICloneable} from "../../../declarations";
+import {Game} from "@engine/game";
+import {ICloneable} from "@engine/declarations";
 import {RenderableModel} from "../../abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractFrameAnimation} from "@engine/model/impl/frameAnimation/abstract/abstractFrameAnimation";

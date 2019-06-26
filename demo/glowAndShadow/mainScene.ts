@@ -6,6 +6,10 @@ import {Color} from "@engine/renderer/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Circle} from "@engine/model/impl/geometry/circle";
 import {TweenMovie} from "@engine/misc/tweenMovie";
+import {DropShadowFilter} from "@engine/renderer/webGl/filters/texture/dropShadowFilter";
+import {PolyLine} from "@engine/model/impl/geometry/polyLine";
+import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {LinearGradient} from "@engine/renderer/linearGradient";
 
 export class MainScene extends Scene {
 
@@ -32,6 +36,36 @@ export class MainScene extends Scene {
         circle.filters = [glow];
 
         this.appendChild(circle);
+
+
+        // created with https://editor.method.ac/
+        const polyline:PolyLine = new PolyLine(this.game);
+        polyline.pos.setXY(100,100);
+        polyline.lineWidth = 30;
+        polyline.color = Color.RGB(200,52,12);
+        polyline.borderRadius = 10;
+        polyline.setSvgPath(`
+        m1,110.07421l39.92579,-69.14842l69.14842,-39.92579l79.85159,0l69.14842,39.92579l39.92578,69.14842l0,79.85159l-39.92578,69.14842l-69.14842,39.92578l-79.85159,0l-69.14842,-39.92578l-39.92579,-69.14842l0,-79.85159z
+        `);
+        polyline.addBehaviour(new DraggableBehaviour(this.game));
+        this.appendChild(polyline);
+        const dropShadow:DropShadowFilter = new DropShadowFilter(this.game);
+        polyline.filters = [dropShadow];
+
+
+        const rect:Rectangle = new Rectangle(this.game);
+        let gradient:LinearGradient  = new LinearGradient();
+        gradient.angle = 0.2;
+        gradient.colorFrom = Color.RGB(100,0,20,122);
+        gradient.colorTo = Color.RGB(200,111,1,254);
+        rect.fillColor = gradient;
+        rect.borderRadius = 5;
+        rect.color = Color.RGB(0,0,40);
+        rect.lineWidth = 4;
+        rect.size.setWH(40);
+        rect.addBehaviour(new DraggableBehaviour(this.game));
+        rect.filters = [dropShadow];
+        this.appendChild(rect);
 
         const tm:TweenMovie = new TweenMovie(this.game);
         tm.tween(0,{

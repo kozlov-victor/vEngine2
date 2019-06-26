@@ -3,7 +3,6 @@ import {DebugError} from "@engine/debug/debugError";
 
 import {Game} from "../../game";
 import {Color} from "../../renderer/color";
-import {IKeyVal} from "@engine/misc/object";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {FastMap} from "@engine/misc/fastMap";
 

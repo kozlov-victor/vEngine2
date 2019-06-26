@@ -1,11 +1,11 @@
-import {TileMap} from "./tileMap";
+
 import {Layer} from "./layer";
-import {AbstractFilter} from "../../../renderer/webGl/filters/abstract/abstractFilter";
-import {Game} from "../../../game";
-import {Color} from "../../../renderer/color";
-import {CAMERA_MATRIX_MODE} from "../../../renderer/camera";
-import {ResourceLoader} from "../../../resources/resourceLoader";
-import {IEventemittable, IFilterable, IRevalidatable, ITweenable} from "../../../declarations";
+import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
+import {Game} from "@engine/game";
+import {Color} from "@engine/renderer/color";
+import {CAMERA_MATRIX_MODE} from "@engine/renderer/camera";
+import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {IEventemittable, IFilterable, IRevalidatable, ITweenable} from "@engine/declarations";
 import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {TweenMovie} from "@engine/misc/tweenMovie";
 import {removeFromArray} from "@engine/misc/object";

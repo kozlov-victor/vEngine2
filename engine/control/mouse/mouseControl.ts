@@ -54,10 +54,10 @@ export class MouseControl implements IControl {
     }
 
 
-    public resolvePoint(e:MouseEvent|TouchEvent|Touch|PointerEvent):MousePoint{
+    public resolvePoint(e:MouseEvent|Touch|PointerEvent):MousePoint{
         const game:Game = this.game;
-        const clientX:number = (e as any).clientX as number;
-        const clientY:number = (e as any).clientY as number;
+        const clientX:number = e.clientX;
+        const clientY:number = e.clientY;
 
         const screenX:number = (clientX - game.pos.x ) / game.scale.x;
         const screenY:number = (clientY - game.pos.y ) / game.scale.y;
@@ -78,7 +78,7 @@ export class MouseControl implements IControl {
     }
 
 
-    public triggerEvent(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,isMouseDown?:boolean):MousePoint{
+    public triggerEvent(e:MouseEvent|Touch|Touch,eventName:MOUSE_EVENTS,isMouseDown?:boolean):MousePoint{
         if (isMouseDown===undefined) isMouseDown = false;
         const g:Game = this.game;
         const scene:Scene = g.getCurrScene();
@@ -128,7 +128,7 @@ export class MouseControl implements IControl {
         return point;
     }
 
-    public resolveClick(e:TouchEvent|MouseEvent):void {
+    public resolveClick(e:Touch|MouseEvent):void {
         this.triggerEvent(e,MOUSE_EVENTS.click);
         this.triggerEvent(e,MOUSE_EVENTS.mouseDown);
     }
@@ -180,7 +180,7 @@ export class MouseControl implements IControl {
         container.ontouchstart = (e:TouchEvent)=>{
             let l = e.touches.length;
             while (l--){
-                this.resolveClick((e.touches[l] as any));
+                this.resolveClick((e.touches[l] as Touch));
             }
         };
         container.onmousedown = (e:MouseEvent)=>{

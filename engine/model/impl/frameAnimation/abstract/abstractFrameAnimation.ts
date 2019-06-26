@@ -28,7 +28,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable {
 
 
     //eventEmitter
-    private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
+    private readonly _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
 
     constructor(protected game:Game) {}

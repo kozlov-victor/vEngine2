@@ -21,10 +21,6 @@ export class HexagonalFilter extends AbstractFilter {
         this.texSize = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
 
         //language=GLSL
-        programGen.appendFragmentCodeBlock(`            
-            
-        `);
-        //language=GLSL
         programGen.setFragmentMainFn(`
             void main(){
                 vec2 texCoord = v_texCoord;

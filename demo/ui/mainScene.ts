@@ -5,6 +5,8 @@ import {Color} from "@engine/renderer/color";
 import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {FntCreator} from "../fnt/FntCreator";
 import createFont = FntCreator.createFont;
+import {CheckBox} from "@engine/model/impl/ui/components/checkBox";
+import {Button} from "@engine/model/impl/ui/components/button";
 
 const text:string=
 `Lorem ipsum dolor sit amet, 
@@ -27,7 +29,7 @@ export class MainScene extends Scene {
         const fnt:Font = new Font(this.game);
         fnt.fontSize = 25;
         fnt.fontFamily = 'monospace';
-        fnt.fontColor = Color.RGB(255,255,200);
+        fnt.fontColor = Color.RGB(10);
         fnt.generate();
         this.fnt = fnt;
     }
@@ -45,10 +47,27 @@ export class MainScene extends Scene {
         tf.setText(text);
 
         tf.background = new Rectangle(this.game);
-        tf.background.color = Color.RGB(10,10,10,100);
+        tf.background.fillColor = Color.RGB(250);
         tf.setPaddings(5);
-        (tf.background as Rectangle).borderRadius = 15;
+        (tf.background as Rectangle).borderRadius = 5;
         this.appendChild(tf);
+
+        const chbox:CheckBox = new CheckBox(this.game);
+        chbox.pos.setXY(50,200);
+        this.appendChild(chbox);
+
+
+        // const btn:Button = new Button(this.game);
+        // btn.setFont(this.fnt);
+        // btn.setText("click!");
+        // btn.pos.setXY(50,260);
+        // const bg:Rectangle = new Rectangle(this.game);
+        // bg.borderRadius = 2;
+        // bg.fillColor = Color.NONE;
+        // btn.background = bg;
+        // btn.setPaddings(20);
+        // this.appendChild(btn);
+
 
         (window as any).tf = tf;
 
