@@ -21,7 +21,7 @@ export namespace mat4 {
 
         private static m16hPool:ObjectPool<Mat16Holder> = new ObjectPool<Mat16Holder>(Mat16Holder,256);
 
-        public readonly mat16:MAT16 = new Array(16) as MAT16;
+        public readonly mat16:MAT16 = (new Float32Array(16) as unknown) as MAT16;
 
         private _captured:boolean = false;
 

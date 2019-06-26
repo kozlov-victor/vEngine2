@@ -4,6 +4,8 @@ import {Line} from "@engine/model/impl/geometry/line";
 import {Point2d} from "@engine/geometry/point2d";
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/game";
+import {arcToBezier} from "@engine/model/impl/geometry/helpers/arcToBezier";
+import {Circle} from "@engine/model/impl/geometry/circle";
 
 
 const clearString = (s:string):string=>{
@@ -40,10 +42,12 @@ const getPointOnBezierCurve =(points:v2[], offset:number, t:number):v2=> {
 
 const getPointsOnBezierCurve = (points:v2[], offset:number, numPoints:number):v2[]=> {
     const cpoints:v2[] = [];
-    for (let i:number = 0; i < numPoints; ++i) {
+    for (let i:number = 0; i < numPoints-1; ++i) {
         const t:number = i / (numPoints - 1);
         cpoints.push(getPointOnBezierCurve(points, offset, t));
     }
+    // correct possible deviation of last point
+    cpoints[cpoints.length-1] = points[points.length-1];
     return cpoints;
 };
 
@@ -235,6 +239,13 @@ export class PolyLine extends Shape {
         super.setClonedProperties(cloned);
     }
 
+    private testPoint(x:number,y:number,ind:number){
+        const p:Circle = new Circle(this.game);
+        p.radius = ind;
+        p.pos.setXY(x,y);
+        this.appendChild(p);
+    }
+
 
     private passProperties(l:Line){
         l.vectorScaleFactor = this.vectorScaleFactor;
@@ -261,6 +272,9 @@ export class PolyLine extends Shape {
         this.size.setWH(maxW,maxH);
     }
 
+    // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
+    // https://developer.mozilla.org/ru/docs/Web/SVG/Attribute/d
+    // https://www.w3.org/TR/SVG/paths.html
     private executeCommand(command:string):void{
         const tokenizer:SvgTokenizer = this.tokenizer;
         switch (command) {
@@ -330,7 +344,7 @@ export class PolyLine extends Shape {
             }
             case 'S': {
                 const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
-                if (!this.lastBezierPoint || ['c','C','S','s'].indexOf(tokenizer.lastCommand)==-1) {
+                if (!this.lastBezierPoint || ['c','C','S','s'].indexOf(tokenizer.lastCommand)===-1) {
                     this.lastBezierPoint = p1;
                 }
                 const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
@@ -370,7 +384,7 @@ export class PolyLine extends Shape {
             }
             case 'T': {
                 const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
-                if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)==-1) this.lastBezierPoint = p1;
+                if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
                 const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
                 const p3:v2 = [p2[0],p2[1]];
                 const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
@@ -380,7 +394,7 @@ export class PolyLine extends Shape {
             }
             case 't': {
                 const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
-                if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)==-1) this.lastBezierPoint = p1;
+                if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
                 const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
                 const p3:v2 = add(p1,[p2[0],p2[1]]);
                 const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
@@ -388,10 +402,44 @@ export class PolyLine extends Shape {
                 this.bezierTo(p1,add(p1,p2),p3,add(p1,p4));
                 break;
             }
-            // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
-            // https://developer.mozilla.org/ru/docs/Web/SVG/Attribute/d
-            // https://www.w3.org/TR/SVG/paths.html
             // A  -unimplemented
+            case 'A':
+            case 'a':
+                // A rx ry x-axis-rotation large-arc-flag sweep-flag x y
+                // a rx ry x-axis-rotation large-arc-flag sweep-flag dx dy
+                const rx:number = tokenizer.getNextNumber();
+                const ry:number = tokenizer.getNextNumber();
+                const xAxisRotation:number = tokenizer.getNextNumber();
+                const largeArcFlag:0|1 = tokenizer.getNextNumber() as (0|1);
+                const sweepFlag:0|1 = tokenizer.getNextNumber() as (0|1);
+                let x:number = tokenizer.getNextNumber();
+                let y:number = tokenizer.getNextNumber();
+                if (command==='a') {
+                    x+=this.lastPoint.x;
+                    y+=this.lastPoint.y;
+                }
+                const arcs:{x:number,y:number,x1:number,y1:number,x2:number,y2:number}[] = arcToBezier(
+                    this.lastPoint.x,this.lastPoint.y,
+                    x,y,
+                    rx,ry,xAxisRotation,
+                    largeArcFlag,sweepFlag
+                );
+                arcs.forEach((arc:{x:number,y:number,x1:number,y1:number,x2:number,y2:number},i:number)=>{
+                    let xTo:number = arc.x;
+                    let yTo:number = arc.y;
+                    if (i===arcs.length-1) {
+                        xTo = x;
+                        yTo = y;
+                    }
+                    this.bezierTo([this.lastPoint.x,this.lastPoint.y],[arc.x1,arc.y1],[arc.x2,arc.y2],[xTo,yTo]);
+                    // this.testPoint(arc.x,arc.y,1);
+                    // this.testPoint(arc.x1,arc.y1,2);
+                    // this.testPoint(arc.x2,arc.y2,3);
+                });
+                //this.lastPoint.setXY(x,y);
+                //this.testPoint(x,y,4);
+
+                break;
             case 'Z':
             case 'z':
                 this.close();

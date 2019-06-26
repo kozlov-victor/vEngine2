@@ -8,7 +8,7 @@ export const isObject = (obj:any):boolean=>{
 };
 
 export const isArray = (a:any):a is any[]=> {
-    return !!(a.splice);
+    return !!(a.splice) || !!(a.buffer);
 };
 
 const isEqualArray = (a:any[],b:any[]):boolean=>{
