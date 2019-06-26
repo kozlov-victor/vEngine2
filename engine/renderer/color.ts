@@ -1,5 +1,6 @@
 import {IReleasealable, ObjectPool} from "../misc/objectPool";
 import {ICloneable} from "@engine/declarations";
+import {DebugError} from "@engine/debug/debugError";
 
 
 export interface IColorJSON {
@@ -11,10 +12,10 @@ export interface IColorJSON {
 
 export class Color implements ICloneable<Color>, IReleasealable{
 
-    public static WHITE = Color.RGB(255,255,255);
-    public static GREY  = Color.RGB(127,127,127);
-    public static BLACK = Color.RGB(0,0,0);
-    public static NONE  = Color.RGB(0,0,0,0);
+    public static WHITE = Color.RGB(255,255,255).freeze();
+    public static GREY  = Color.RGB(127,127,127).freeze();
+    public static BLACK = Color.RGB(0,0,0).freeze();
+    public static NONE  = Color.RGB(0,0,0,0).freeze();
 
     public static RGB(r:number,g:number = r,b:number = r,a:number = 255):Color{
         const c:Color = new Color(0,0,0);
@@ -41,6 +42,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
     private bNorm:number;
     private aNorm:number;
     private _arr:number[];
+    private _freezed:boolean = false;
 
     private _captured:boolean = false;
 
@@ -49,6 +51,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
     }
 
     public setRGBA(r:number,g:number,b:number,a:number = 255):void{
+        this.checkFriezed();
         this.r = r;
         this.g = g;
         this.b = b;
@@ -57,6 +60,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
     }
 
     public setRGB(r:number,g:number,b:number):void{
+        this.checkFriezed();
         this.r = r;
         this.g = g;
         this.b = b;
@@ -65,26 +69,31 @@ export class Color implements ICloneable<Color>, IReleasealable{
     }
 
     public setR(val:number):void{
+        this.checkFriezed();
         this.r = val;
         this.normalizeToZeroOne();
     }
 
     public setG(val:number):void{
+        this.checkFriezed();
         this.g = val;
         this.normalizeToZeroOne();
     }
 
     public setB(val:number):void{
+        this.checkFriezed();
         this.b = val;
         this.normalizeToZeroOne();
     }
 
     public setA(val:number):void{
+        this.checkFriezed();
         this.a = val;
         this.normalizeToZeroOne();
     }
 
     public set(another:Color):void{
+        this.checkFriezed();
         this.setRGBA(another.r,another.g,another.b,another.a);
     }
 
@@ -103,6 +112,11 @@ export class Color implements ICloneable<Color>, IReleasealable{
 
     public release(): this {
         this._captured = false;
+        return this;
+    }
+
+    public freeze():this{
+        this._freezed = true;
         return this;
     }
 
@@ -126,6 +140,17 @@ export class Color implements ICloneable<Color>, IReleasealable{
 
     public fromJSON(json:IColorJSON) {
         this.setRGBA(json.r,json.g,json.b,json.a);
+    }
+
+    private checkFriezed(){
+        if (this._freezed) {
+            if (DEBUG) {
+                console.error(this);
+                throw new DebugError(`the color is friezed and can no be changed`);
+            }
+            else throw new Error('friezed');
+        }
+
     }
 
     private normalizeToZeroOne():void{

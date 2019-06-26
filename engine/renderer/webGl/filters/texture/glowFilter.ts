@@ -83,15 +83,15 @@ export class GlowFilter extends AbstractFilter {
         this.setUniform(this.glowColor,c.asGL());
     }
 
-    public setDistance(n:number){
-        this.setUniform(this.distance,n);
-    }
-
     public doFilter(destFrameBuffer:FrameBuffer):void{
         const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.pixelWidth,1/(size.width*this.quality));
         this.setUniform(this.pixelHeight,1/(size.height*this.quality));
         super.doFilter(destFrameBuffer);
+    }
+
+    private setDistance(n:number){
+        this.setUniform(this.distance,n);
     }
 
 

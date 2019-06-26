@@ -1,5 +1,6 @@
 1 tile map, tile map collisions
-2 filtering for parent/child
+2 filtering for parent/child (also filtering for polilines, poligones)
 3 arcade object collisions
 4 3d texture for 3d mesh, shader material
 5 ui components
+5 scml support (http://www.brashmonkey.com/ScmlDocs/ScmlReference.html http://sbcgamesdev.blogspot.com/2015/09/phaser-tutorial-phaser-and-spriter.html)

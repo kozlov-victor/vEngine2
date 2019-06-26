@@ -41,20 +41,21 @@ export class MainScene extends Scene {
         // created with https://editor.method.ac/
         const polyline:PolyLine = new PolyLine(this.game);
         polyline.pos.setXY(100,100);
-        polyline.lineWidth = 30;
+        polyline.lineWidth = 3;
         polyline.color = Color.RGB(200,52,12);
-        polyline.borderRadius = 10;
+        polyline.borderRadius = 1;
         polyline.setSvgPath(`
-        m1,110.07421l39.92579,-69.14842l69.14842,-39.92579l79.85159,0l69.14842,39.92579l39.92578,69.14842l0,79.85159l-39.92578,69.14842l-69.14842,39.92578l-79.85159,0l-69.14842,-39.92578l-39.92579,-69.14842l0,-79.85159z
-        `);
+        M 403 184 C 410 153 479 149 479 149 C 479 149 549 175 526 196 C 503 217 528 250 477 246 z`);
         polyline.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(polyline);
-        const dropShadow:DropShadowFilter = new DropShadowFilter(this.game);
+        const dropShadow:DropShadowFilter = new DropShadowFilter(this.game,0.1,5);
+        dropShadow.setColor(Color.RGB(0,12,0,122));
+        dropShadow.setShift(8,8);
         polyline.filters = [dropShadow];
 
 
         const rect:Rectangle = new Rectangle(this.game);
-        let gradient:LinearGradient  = new LinearGradient();
+        const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0.2;
         gradient.colorFrom = Color.RGB(100,0,20,122);
         gradient.colorTo = Color.RGB(200,111,1,254);
