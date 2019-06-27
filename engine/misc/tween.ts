@@ -1,4 +1,7 @@
-import {EaseFn, Easing} from "./easing";
+import {Easing} from "@engine/misc/easing/linear";
+
+type EaseFn = (t:number,b:number,c:number,d:number)=>number;
+
 import {Game} from "@engine/game";
 
 interface IKeyVal {
@@ -75,7 +78,7 @@ export class Tween {
         this._target = tweenDesc.target;
         this._progressFn = tweenDesc.progress;
         this._completeFn = tweenDesc.complete;
-        this._easeFn = tweenDesc.ease || Easing.linear  as EaseFn; // todo namespaces for easing?
+        this._easeFn = tweenDesc.ease || Easing.linear  as EaseFn;
         this._delayBeforeStart = tweenDesc.delayBeforeStart || 0;
         this._tweenTime = (tweenDesc.time || 1000) + this._delayBeforeStart;
         this._desc = this.normalizeDesc(tweenDesc);

@@ -89,6 +89,8 @@ const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat
 
 export class WebGlRenderer extends AbstractCanvasRenderer {
 
+    public readonly type:string = 'WebGlRenderer';
+
 
     private gl:WebGLRenderingContext;
     private readonly matrixStack:MatrixStack = new MatrixStack();
@@ -100,8 +102,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private doubleFrameBuffer:DoubleFrameBuffer;
     private blender:Blender;
     private nullTexture:Texture;
-
-    public readonly type:string = 'WebGlRenderer';
 
     constructor(game:Game){
         super(game);
