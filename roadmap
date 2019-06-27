@@ -4,3 +4,4 @@
 4 3d texture for 3d mesh, shader material
 5 ui components
 5 scml support (http://www.brashmonkey.com/ScmlDocs/ScmlReference.html http://sbcgamesdev.blogspot.com/2015/09/phaser-tutorial-phaser-and-spriter.html)
+6 bump lighting, composition filters
