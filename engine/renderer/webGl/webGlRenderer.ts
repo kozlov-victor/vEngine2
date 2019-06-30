@@ -293,6 +293,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.matrixStack.translate(x,y,z);
     }
 
+    public skewX(angle:number):void{
+        this.matrixStack.skewX(angle);
+    }
+
+    public skewY(angle:number):void{
+        this.matrixStack.skewY(angle);
+    }
+
     public restore():void{
         this.matrixStack.restore();
     }

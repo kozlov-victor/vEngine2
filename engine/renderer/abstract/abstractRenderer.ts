@@ -105,6 +105,10 @@ export abstract class AbstractRenderer {
 
     public rotateX(a:number):void {}
 
+    public skewX(a:number):void {}
+
+    public skewY(a:number):void {}
+
     public rotateY(a:number):void {}
 
     public rotateZ(a:number):void {}

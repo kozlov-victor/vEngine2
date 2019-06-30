@@ -1,5 +1,5 @@
 
-import {IEventemittable} from "@engine/declarations";
+import {ICloneable, IEventemittable} from "@engine/declarations";
 import {Game} from "@engine/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";
@@ -33,6 +33,8 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable {
 
     constructor(protected game:Game) {}
 
+    public abstract clone():this;
+
     public revalidate():void {
         if (DEBUG && !this.frames.length) throw new DebugError(`animation frames can not be empty`);
         this._timeForOneFrame = ~~(this.duration / this.frames.length);
@@ -40,7 +42,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable {
     }
 
     public play():void {
-        if (DEBUG && !this.parent) throw new DebugError(`can not play frame animation: it is not attached to parent. Have you invoked `);
+        if (DEBUG && !this.parent) throw new DebugError(`can not play frame animation: it is not attached to parent`);
         this._isPlaying = true;
     }
 
@@ -82,12 +84,16 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable {
         this._eventEmitterDelegate.trigger(eventName,data);
     }
 
+    /*@internal*/
+    public afterCloned(g:GameObject):void{}
+
     protected abstract onNextFrame(i:number):void;
 
     protected setClonedProperties(cloned:AbstractFrameAnimation<any>):void {
         cloned.frames = [...this.frames];
         cloned.duration = this.duration;
         cloned.isRepeat = this.isRepeat;
+        cloned.name = this.name;
     }
 
 }

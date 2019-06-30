@@ -180,6 +180,25 @@ export namespace mat4 {
         );
     };
 
+
+    export const makeXSkew = (out:Mat16Holder,angle:number):void => {
+        out.set(
+            1,  0,  0,  0,
+            Math.tan(angle),  1,  0,  0,
+            0,  0,  1,  0,
+            0, 0, 0,  1
+        );
+    };
+
+    export const makeYSkew = (out:Mat16Holder,angle:number):void => {
+        out.set(
+            1,  Math.tan(angle),  0,  0,
+            0,  1,  0,  0,
+            0,  0,  1,  0,
+            0, 0, 0,  1
+        );
+    };
+
     export const makeXRotation = (out:Mat16Holder,angleInRadians:number):void=> {
         const c:number = Math.cos(angleInRadians);
         const s:number = Math.sin(angleInRadians);

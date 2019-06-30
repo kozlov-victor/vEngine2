@@ -137,6 +137,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.ctx.translate(x,y);
     }
 
+
     public restore():void {
         this.ctx.restore();
     }

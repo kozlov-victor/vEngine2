@@ -49,8 +49,9 @@ export class ParticleSystem extends RenderableModel {
     public addParticle(renderableCloneable:RenderableCloneable):void {
         if (DEBUG && !renderableCloneable.clone) {
             console.error(r);
-            throw new DebugError(`can not add particle: model does not implemet cloneable interface`);
+            throw new DebugError(`can not add particle: model does not implement cloneable interface`);
         }
+        renderableCloneable.revalidate();
         this._prototypes.push(renderableCloneable);
     }
 
@@ -64,7 +65,7 @@ export class ParticleSystem extends RenderableModel {
         const num:number = r(this.numOfParticlesToEmit);
         for (let i:number = 0;i<num;i++) {
             const particleProto:RenderableCloneable = this._prototypes[MathEx.randomInt(0,this._prototypes.length-1)];
-            const particle = particleProto.clone();
+            const particle:RenderableCloneable = particleProto.clone();
             this._onEmitParticle(particle);
             const angle:number = r(this.particleAngle);
             const vel:number = r(this.particleVelocity);

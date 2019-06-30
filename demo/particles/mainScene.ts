@@ -8,6 +8,8 @@ import {BLEND_MODE, RenderableModel} from "@engine/model/abstract/renderableMode
 import {Circle} from "@engine/model/impl/geometry/circle";
 import {Shape} from "@engine/model/impl/geometry/abstract/shape";
 import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/texture/simpleBlurFilter";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {IMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";
 
 
 export class MainScene extends Scene {
@@ -26,12 +28,12 @@ export class MainScene extends Scene {
         console.log('on ready');
         this.colorBG.setRGB(20,20,75);
         const circle:Circle = new Circle(this.game);
-        circle.radius = MathEx.random(5,20);
+        circle.radius = MathEx.random(1,3);
         circle.rotationPoint.setXY(circle.radius/2,circle.radius/2);
-        (circle.fillColor as Color).setRGBA(0,200,0);
+        (circle.fillColor as Color).setRGBA(122,200,0);
 
         const rect:Rectangle = new Rectangle(this.game);
-        rect.size.setWH(MathEx.random(10,20));
+        rect.size.setWH(MathEx.random(1,3));
         rect.rotationPoint.setXY(rect.size.width/2,rect.size.height/2);
         (rect.fillColor as Color).setRGBA(0,200,0);
 
@@ -40,33 +42,31 @@ export class MainScene extends Scene {
         ps.addParticle(rect);
         ps.emissionRadius = 5;
 
-        const sb:SimpleBlurFilter = new SimpleBlurFilter(this.game);
-        sb.setSize(2);
-
         ps.onEmitParticle((r:RenderableModel)=>{
             r.blendMode = BLEND_MODE.ADDITIVE;
-            // r.filters = [sb];
-            ((r as Shape).fillColor as Color).setRGB(MathEx.random(0,255),MathEx.random(0,255),MathEx.random(0,255));
+            //((r as Shape).fillColor as Color).setRGB(MathEx.random(0,255),MathEx.random(0,255),MathEx.random(0,255));
         });
         ps.onUpdateParticle((r:RenderableModel)=>r.angle+=0.1);
 
 
         ps.numOfParticlesToEmit = {from:1,to:10};
         ps.particleLiveTime = {from:1000,to:3000};
-        ps.particleAngle = {from:0,to:Math.PI/4};
-        ps.pos.setXY(50,50);
+        ps.particleAngle = {from:0,to:2*Math.PI};
         ps.size.setWH(50,50);
-        ps.addBehaviour(new DraggableBehaviour(this.game));
         this.ps = ps;
         this.appendChild(ps);
+        this.on(MOUSE_EVENTS.mouseMove,(e:IMousePoint)=>{
+            console.log(e);
+            this.ps.emissionPosition.setXY(e.screenX,e.screenY);
+        });
     }
 
 
     public onUpdate() {
         this.ps.emit();
-        const ps = this.ps;
-        ps.particleAngle.from = ps.particleAngle.from+0.1;
-        ps.particleAngle.to = ps.particleAngle.to+0.1;
-        // this.ps.angle+=0.1;
+        const ps:ParticleSystem = this.ps;
+        // ps.particleAngle.from = ps.particleAngle.from+0.1;
+        // ps.particleAngle.to = ps.particleAngle.to+0.1;
+        // // this.ps.angle+=0.1;
     }
 }

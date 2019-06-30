@@ -38,7 +38,6 @@ export class GameObject extends RenderableModel implements ICloneable<GameObject
     public clone():GameObject {
         const cloned:GameObject = new GameObject(this.game);
         this.setClonedProperties(cloned);
-        cloned.revalidate();
         return cloned;
     }
 
@@ -93,6 +92,12 @@ export class GameObject extends RenderableModel implements ICloneable<GameObject
             throw new DebugError(`can not clone sprite: "clone"  method must return Renderable object`);
         }
         cloned.sprite = clonedSprite;
+        Object.keys(this._frameAnimations).forEach((key:string)=>{
+            const fr:AbstractFrameAnimation<any> = this._frameAnimations[key].clone();
+            fr.afterCloned(cloned);
+            cloned.addFrameAnimation(key,fr);
+        });
+        if (this._currFrameAnimation) cloned._currFrameAnimation = cloned._frameAnimations[this._currFrameAnimation.name];
         super.setClonedProperties(cloned);
     }
 }
