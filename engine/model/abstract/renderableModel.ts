@@ -43,6 +43,14 @@ class Angle3d {
         this._z = val;
     }
 
+    clone(m:RenderableModel):Angle3d{
+        const a:Angle3d = new Angle3d(m);
+        a.x = this.x;
+        a.y = this.y;
+        a.z = this.z;
+        return a;
+    }
+
 }
 
 export abstract class RenderableModel  implements IRevalidatable, ITweenable, IEventemittable {
@@ -53,6 +61,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     public readonly pos:Point2d = new Point2d(0,0,()=>this._dirty=true);
     public readonly posZ:number = 0;
     public readonly scale:Point2d = new Point2d(1,1);
+    public readonly skew:Point2d = new Point2d(0,0);
     public readonly anchor:Point2d = new Point2d(0,0);
     public readonly rotationPoint:Point2d = new Point2d(0,0);
     public angle3d:Angle3d = new Angle3d(this);
@@ -249,11 +258,13 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         renderer.save();
         this.beforeRender();
 
-        renderer.translate(-this.anchor.x,-this.anchor.y,this.posZ);
+        if (!this.anchor.equal(0,0)) renderer.translate(-this.anchor.x,-this.anchor.y,this.posZ);
 
         if (this.isNeedAdditionalTransform()) {
             renderer.translate(this.rotationPoint.x,this.rotationPoint.y);
             if (!this.scale.equal(1)) renderer.scale(this.scale.x,this.scale.y);
+            if (this.skew.x!==0) renderer.skewX(this.skew.x);
+            if (this.skew.y!==0) renderer.skewY(this.skew.y);
             this.doAdditionalTransform();
             renderer.translate(-this.rotationPoint.x,-this.rotationPoint.y);
         }
@@ -340,10 +351,10 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         cloned.scale.set(this.scale);
         cloned.anchor.set(this.anchor);
         cloned.rotationPoint.set(this.rotationPoint);
-        cloned.angle = this.angle;
-        // todo angle 3d
+        cloned.angle3d = this.angle3d.clone(this);
         cloned.alpha = this.alpha;
         cloned.blendMode = this.blendMode;
+
         cloned.parent = null;
         this.children.forEach((c:RenderableModel)=>{
             if (DEBUG && !('clone' in c)) {
@@ -374,7 +385,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     }
 
     protected isNeedAdditionalTransform():boolean{
-        return !(this.scale.equal(1) && this.angle3d.x===0 && this.angle3d.y===0 && this.angle3d.z===0);
+        return !(this.skew.equal(0) && this.scale.equal(1) && this.angle3d.x===0 && this.angle3d.y===0 && this.angle3d.z===0);
     }
 
     protected doAdditionalTransform():void {

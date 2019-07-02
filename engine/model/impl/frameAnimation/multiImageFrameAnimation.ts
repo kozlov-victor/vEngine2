@@ -32,8 +32,7 @@ export class MultiImageFrameAnimation extends AbstractFrameAnimation<ResourceLin
     }
 
 
-    // todo
-    public clone(): MultiImageFrameAnimation {
+    public clone(): this {
         return undefined;
     }
 

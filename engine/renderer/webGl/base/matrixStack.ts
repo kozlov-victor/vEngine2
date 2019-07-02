@@ -45,6 +45,30 @@ export class MatrixStack {
         return this;
     }
 
+    public skewX(angle:number):MatrixStack {
+        const t:Mat16Holder = Mat16Holder.fromPool();
+        mat4.makeXSkew(t,angle);
+        const m:Mat16Holder = this.getCurrentMatrix();
+        const result:Mat16Holder = Mat16Holder.fromPool();
+        mat4.matrixMultiply(result,t, m);
+        this.setCurrentMatrix(result);
+        t.release();
+        m.release();
+        return this;
+    }
+
+    public skewY(angle:number):MatrixStack {
+        const t:Mat16Holder = Mat16Holder.fromPool();
+        mat4.makeYSkew(t,angle);
+        const m:Mat16Holder = this.getCurrentMatrix();
+        const result:Mat16Holder = Mat16Holder.fromPool();
+        mat4.matrixMultiply(result,t, m);
+        this.setCurrentMatrix(result);
+        t.release();
+        m.release();
+        return this;
+    }
+
     public rotateX(angleInRadians:number):MatrixStack {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeXRotation(t,angleInRadians);

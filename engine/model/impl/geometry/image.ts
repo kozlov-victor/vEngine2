@@ -37,7 +37,7 @@ export class Image extends Shape implements ICloneable<Image>,IResource<ITexture
             console.error(this);
             throw new DebugError(`can not render Image: can not find texture by resource link`);
         }
-        const tex:ITexture = (this.getResourceLink() as ResourceLink<ITexture>).getTarget();
+        const tex:ITexture = this.getResourceLink().getTarget();
         if (this.size.isZero()) {
             this.size.width = tex.size.width;
             this.size.height = tex.size.height;
@@ -64,6 +64,9 @@ export class Image extends Shape implements ICloneable<Image>,IResource<ITexture
     }
 
     public setResourceLink(link:ResourceLink<ITexture>):void{
+        if (DEBUG && !link) {
+            throw new DebugError(`can not set resource link: link is not passed`);
+        }
         this._resourceLink = link;
     }
 

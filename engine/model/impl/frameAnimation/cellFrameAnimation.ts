@@ -2,6 +2,8 @@ import {ICloneable, IRevalidatable} from "@engine/declarations";
 import {AbstractFrameAnimation} from "@engine/model/impl/frameAnimation/abstract/abstractFrameAnimation";
 import {Image} from "@engine/model/impl/geometry/image";
 import {DebugError} from "@engine/debug/debugError";
+import {RenderableModel} from "@engine/model/abstract/renderableModel";
+import {GameObject} from "@engine/model/impl/general/gameObject";
 
 export class CellFrameAnimation extends AbstractFrameAnimation<number> implements IRevalidatable, ICloneable<CellFrameAnimation>{
 
@@ -27,10 +29,15 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
         super.revalidate();
     }
 
-    public clone():CellFrameAnimation {
+    public clone():this {
         const cloned:CellFrameAnimation = new CellFrameAnimation(this.game);
         this.setClonedProperties(cloned);
-        return cloned;
+        return cloned as this;
+    }
+
+    public afterCloned(g: GameObject): void {
+        super.afterCloned(g);
+        this.setSpriteSheet(g.sprite as Image,this._numOfFramesH,this._numOfFramesV);
     }
 
     protected onNextFrame(i:number){
@@ -38,7 +45,8 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
     }
 
     protected setClonedProperties(cloned:CellFrameAnimation):void {
-        cloned.setSpriteSheet(this._spriteSheet,this._numOfFramesH,this._numOfFramesV);
+        cloned._numOfFramesH = this._numOfFramesH;
+        cloned._numOfFramesV = this._numOfFramesV;
         super.setClonedProperties(cloned);
     }
 

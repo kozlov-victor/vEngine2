@@ -16,11 +16,11 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
     }
 
     public revalidate(){
-        if (DEBUG && !this._atlas) throw new DebugError(`atlasFrameAnimation needs atlas! Invoke setAtlas() method`);
+        if (DEBUG && !this._atlas) throw new DebugError(`atlasFrameAnimation needs atlas! Invoke setAtlas(img) method`);
         super.revalidate();
     }
 
-    public clone():AtlasFrameAnimation{
+    public clone():this{
         return null; // todo
     }
 
