@@ -2,9 +2,9 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/game";
 import {Image} from "@engine/model/impl/geometry/image";
 import {Tween} from "@engine/misc/tween";
-import {Easing} from "@engine/misc/easing";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Mashine} from "./mashine";
+import {Easing} from "@engine/misc/easing/bounce";
 export class Wheel {
 
     public static readonly CELL_WIDTH:number = 215;
@@ -48,9 +48,10 @@ export class Wheel {
                 this.free = true;
                 if (this.mashine.isFree()) this.mashine.onSpinCompleted();
             },
-            ease:Easing.easeOutBounce
+            ease:Easing.Bounce.InOut
         });
         this.game.getCurrScene().addTween(t);
+
     }
 
     public isFree():boolean {
