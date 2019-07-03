@@ -5,6 +5,7 @@ import {Game} from "../../game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {Clazz, ICloneable} from "@engine/declarations";
+import {Sound} from "@engine/model/impl/general/sound";
 
 
 
@@ -84,14 +85,15 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         return this._free;
     }
 
-    public play(link:ResourceLink<void>, loop:boolean):void {
+    public play(sound:Sound):void {
         this.setLastTimeId();
         this._free = false;
         const currSource:AudioBufferSourceNode = this._ctx.createBufferSource();
-        currSource.buffer = AudioPlayer.cache[link.getUrl()];
-        currSource.loop = loop;
+        currSource.buffer = AudioPlayer.cache[sound.getResourceLink().getUrl()];
+        currSource.loop = sound.loop;
         currSource.connect(this._gainNode);
         currSource.start(0);
+        currSource.playbackRate.value = sound.velocity;
         currSource.onended = ()=> {
             this.stop();
         };
@@ -111,7 +113,10 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
 
     public setGain(val:number):void {
         this._gainNode.gain.value = val;
+    }
 
+    public setVelocity(val:number):void {
+        this._currSource.playbackRate.value = val;
     }
 
     public pause():void {

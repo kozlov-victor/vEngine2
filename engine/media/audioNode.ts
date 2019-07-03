@@ -1,4 +1,3 @@
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {Sound} from "@engine/model/impl/general/sound";
 
@@ -9,9 +8,9 @@ export class AudioNode {
 
     constructor(public context:BasicAudioContext){}
 
-    public play(link:ResourceLink<void>,loop:boolean = false):void {
+    public play(sound:Sound):void {
         this.stop();
-        this.context.play(link,loop);
+        this.context.play(sound);
         // todo currSound is always undefined
     }
 
@@ -22,6 +21,10 @@ export class AudioNode {
 
     public setGain(val:number):void {
         this.context.setGain(val);
+    }
+
+    public setVelocity(val:number):void {
+        this.context.setVelocity(val);
     }
 
     public pause():void {

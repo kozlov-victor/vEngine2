@@ -97,7 +97,9 @@ export class GameObject extends RenderableModel implements ICloneable<GameObject
             fr.afterCloned(cloned);
             cloned.addFrameAnimation(key,fr);
         });
-        if (this._currFrameAnimation) cloned._currFrameAnimation = cloned._frameAnimations[this._currFrameAnimation.name];
+        if (this._currFrameAnimation) {
+            cloned.playFrameAnimation(this._currFrameAnimation.name);
+        }
         super.setClonedProperties(cloned);
     }
 }

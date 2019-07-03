@@ -5,6 +5,7 @@ import {AudioPlayer} from "@engine/media/audioPlayer";
 import {DebugError} from "@engine/debug/debugError";
 import {Clazz, ICloneable} from "@engine/declarations";
 import {LoaderUtil} from "@engine/resources/loaderUtil";
+import {Sound} from "@engine/model/impl/general/sound";
 
 
 
@@ -43,15 +44,15 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         return this.free;
     }
 
-    public play(link:ResourceLink<void>, loop: boolean):void {
+    public play(sound:Sound):void {
         this.setLastTimeId();
-        const url:string = AudioPlayer.cache[link.getUrl()];
-        if (DEBUG && !url) throw new DebugError(`can not retrieve audio from cache (link id=${link.getUrl()})`);
+        const url:string = AudioPlayer.cache[sound.getResourceLink().getUrl()];
+        if (DEBUG && !url) throw new DebugError(`can not retrieve audio from cache (link id=${sound.getResourceLink().getUrl()})`);
 
         this.free = false;
         this._ctx.src = url;
         this._ctx.play();
-        this._ctx.loop = loop;
+        this._ctx.loop = sound.loop;
         this._ctx.onended = () => {
             this.stop();
         };

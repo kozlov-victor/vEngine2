@@ -69,6 +69,7 @@ void drawEllipse(){
      if (isArcNotUsed || (angle>u_arcAngleFrom && angle<u_arcAngleTo)) {
          if (dist < rAtCurrAngle) {
             if (dist > rAtCurrAngle - u_lineWidth) gl_FragColor = u_color;
+            // float step = smoothstep(rAtCurrAngle,rAtCurrAngle-0.01,dist);
             else gl_FragColor = getFillColor();
          }
          else discard;
