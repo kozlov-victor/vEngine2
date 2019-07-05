@@ -13,14 +13,13 @@ export class MainScene extends Scene {
         this.resourceLink = this.resourceLoader.loadSound('../assets/sound.mp3');
 
         const sound:Sound = new Sound(this.game);
+        (window as any).sound = sound;
         this.sound = sound;
         sound.setResourceLink(this.resourceLink);
 
         this.on(MOUSE_EVENTS.mouseDown,()=>{
             sound.play();
         });
-
-        (window as any).sound = sound;
 
     }
 
