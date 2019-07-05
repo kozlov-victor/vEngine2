@@ -9,6 +9,7 @@ export class Sound implements IResource<void>,IRevalidatable {
     public loop:boolean = false;
 
     private _gain:number = 1;
+    private _velocity:number = 1;
 
     // resource
     private _resourceLink!:ResourceLink<void>;
@@ -28,12 +29,23 @@ export class Sound implements IResource<void>,IRevalidatable {
     public pause():void {
         throw new DebugError('not implemented');
     }
-    public setGain(val:number):void {
-        this._gain = val;
+
+
+    get gain(): number {
+        return this._gain;
+    }
+
+    set gain(value: number) {
+        this._gain = value;
         this.game.getAudioPlayer().setGain(this);
     }
-    public getGain():number{
-        return this._gain;
+
+    get velocity(): number {
+        return this._velocity;
+    }
+
+    set velocity(value: number) {
+        this._velocity = value;
     }
 
     public setResourceLink(link:ResourceLink<void>):void{

@@ -2,6 +2,7 @@ import {Game} from "../../game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ICloneable} from "@engine/declarations";
 import {Incrementer} from "@engine/resources/incrementer";
+import {Sound} from "@engine/model/impl/general/sound";
 
 
 export class BasicAudioContext implements ICloneable<BasicAudioContext>{
@@ -23,10 +24,11 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
         return this._lastTimeId;
     }
 
-    public play(link:ResourceLink<void>,loop:boolean){}
+    public play(sound:Sound){}
     public stop():void{}
     public isFree():boolean{return false;}
     public setGain(val:number):void{}
+    public setVelocity(val:number):void{}
     public pause():void{}
     public resume():void{}
     public load(url:string,link:ResourceLink<void>,callBack:()=>void):void{
