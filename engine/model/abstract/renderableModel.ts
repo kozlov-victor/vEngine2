@@ -39,11 +39,11 @@ class Angle3d {
         return this._z;
     }
 
-    _setZSilently(val:number){
+    public _setZSilently(val:number){
         this._z = val;
     }
 
-    clone(m:RenderableModel):Angle3d{
+    public clone(m:RenderableModel):Angle3d{
         const a:Angle3d = new Angle3d(m);
         a.x = this.x;
         a.y = this.y;
@@ -67,7 +67,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     public angle3d:Angle3d = new Angle3d(this);
     public alpha:number = 1;
     public blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
-    public parent:RenderableModel;
+    public parent:RenderableModel|null = null;
     public readonly children:RenderableModel[] = [];
     public readonly velocity = new Point2d(0,0);
     public visible:boolean = true;
@@ -78,7 +78,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     protected _srcRect:Rect = new Rect();
     protected _screenRect = new Rect();
     protected _behaviours:BaseAbstractBehaviour[] = [];
-    private   _layer:Layer;
+    private   _layer:Layer|null = null;
     private   _angle:number = 0;
 
 
@@ -111,18 +111,18 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         for (const b of this._behaviours) b.revalidate();
     }
 
-    public getLayer(): Layer {
+    public getLayer(): Layer|null {
         return this._layer;
     }
 
-    public setLayer(value: Layer):void {
+    public setLayer(value: Layer|null):void {
         this._layer = value;
     }
 
     public findChildById(id:string):RenderableModel|null{
         if (id===this.id) return this;
         for (const c of this.children) {
-            const possibleObject:RenderableModel = c.findChildById(id);
+            const possibleObject:RenderableModel|null = c.findChildById(id);
             if (possibleObject) return possibleObject;
         }
         return null;
@@ -209,10 +209,10 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
 
     public moveToFront():void {
         if (DEBUG && !this._getParent()) throw new DebugError(`can not move to front: object is detached`);
-        const index:number = (this._getParent()).children.indexOf(this);
+        const index:number = (this._getParent()!).children.indexOf(this);
         if (DEBUG && index===-1)
             throw new DebugError(`can not move to front: object is not belong to current scene`);
-        const parentArray:RenderableModel[] = this._getParent().children;
+        const parentArray:RenderableModel[] = this._getParent()!.children;
         parentArray.splice(index,1);
         parentArray.push(this);
 
@@ -220,10 +220,10 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
 
     public moveToBack():void {
         if (DEBUG && !this._getParent()) throw new DebugError(`can not move to back: object is detached`);
-        const index:number = this._getParent().children.indexOf(this);
+        const index:number = this._getParent()!.children.indexOf(this);
         if (DEBUG && index===-1)
             throw new DebugError(`can not move to front: object is not belong to current scene`);
-        const parentArray:RenderableModel[] = this._getParent().children;
+        const parentArray:RenderableModel[] = this._getParent()!.children;
         parentArray.splice(index,1);
         parentArray.unshift(this);
     }
@@ -234,7 +234,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
 
         if (DEBUG && !this._getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
 
-        const parentArray:RenderableModel[] = this._getParent().children;
+        const parentArray:RenderableModel[] = this._getParent()!.children;
         const index:number = parentArray.indexOf(this);
         if (DEBUG && index===-1) {
             console.error(this);
@@ -373,8 +373,8 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
 
     protected calcWorldRect():void {
         this._screenRect.set(this.getSrcRect());
-        let parent:RenderableModel = this.parent;
-        while (parent) {
+        let parent:RenderableModel|null = this.parent;
+        while (parent!==null) {
             this._screenRect.addXY(parent.getSrcRect().point.x,parent.getSrcRect().point.y);
             parent = parent.parent;
         }

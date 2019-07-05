@@ -82,16 +82,6 @@ export class ShaderProgram {
         );
     }
 
-    private toggleAttribute(attrName:string,on:boolean){
-        if (this.attributes[attrName]===undefined) {
-            console.log(this);
-            throw new DebugError(`unbind error: can not find attribute location for  ${attrName}`);
-        }
-        const attrLocation:GLuint = this.attributes[attrName];
-        if (on) this.gl.enableVertexAttribArray(attrLocation);
-        else this.gl.disableVertexAttribArray(attrLocation);
-    }
-
     public disableAttribute(attrName:string){
         this.toggleAttribute(attrName,false);
     }
@@ -102,6 +92,16 @@ export class ShaderProgram {
 
     public destroy(){
         this.gl.deleteProgram(this.program);
+    }
+
+    private toggleAttribute(attrName:string,on:boolean){
+        if (this.attributes[attrName]===undefined) {
+            console.log(this);
+            throw new DebugError(`unbind error: can not find attribute location for  ${attrName}`);
+        }
+        const attrLocation:GLuint = this.attributes[attrName];
+        if (on) this.gl.enableVertexAttribArray(attrLocation);
+        else this.gl.disableVertexAttribArray(attrLocation);
     }
 
 }

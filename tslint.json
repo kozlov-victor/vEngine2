@@ -29,7 +29,9 @@
     "no-console": {
       "severity": "off",
       "options": ["debug", "info", "log", "time", "timeEnd", "trace"]
-    }
+    },
+    "interface-over-type-literal": false,
+    "radix": false
   },
   "jsRules": {
     "max-line-length": {

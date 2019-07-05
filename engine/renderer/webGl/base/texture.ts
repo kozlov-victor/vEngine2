@@ -3,7 +3,7 @@ import {Size} from "@engine/geometry/size";
 import {ShaderProgram} from "./shaderProgram";
 import {ITexture} from "@engine/renderer/texture";
 
-const isPowerOf2 = function(value:number):boolean {
+const isPowerOf2 = (value:number):boolean=> {
     return (value & (value - 1)) === 0;
 };
 
@@ -23,6 +23,8 @@ export class Texture implements ITexture {
     private readonly tex:WebGLTexture = null;
     private interpolationMode:INTERPOLATION_MODE;
 
+    private _currentTextureAt0:Texture = null;
+
     constructor(gl:WebGLRenderingContext){
         if (DEBUG && !gl) throw new DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
         this.gl = gl;
@@ -37,19 +39,6 @@ export class Texture implements ITexture {
         if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);
         // Fill the texture with a 1x1 blue pixel.
         this.setRawData(new Uint8Array([0, 255, 0, 255]),1,1);
-    }
-
-    private _currentTextureAt0:Texture = null;
-    private beforeOperation() {
-        if (this._currentTextureAt0!==null) return;
-        this._currentTextureAt0 = Texture.currInstances[0];
-        this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
-    }
-
-    private afterOperation(){
-        if (this._currentTextureAt0) this.gl.bindTexture(this.gl.TEXTURE_2D, this._currentTextureAt0.tex);
-        else this.gl.bindTexture(this.gl.TEXTURE_2D, null);
-        this._currentTextureAt0 = null;
     }
 
     // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true); for bitmap textures
@@ -195,6 +184,17 @@ export class Texture implements ITexture {
         this.interpolationMode = mode;
 
         this.afterOperation();
+    }
+    private beforeOperation() {
+        if (this._currentTextureAt0!==null) return;
+        this._currentTextureAt0 = Texture.currInstances[0];
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
+    }
+
+    private afterOperation(){
+        if (this._currentTextureAt0) this.gl.bindTexture(this.gl.TEXTURE_2D, this._currentTextureAt0.tex);
+        else this.gl.bindTexture(this.gl.TEXTURE_2D, null);
+        this._currentTextureAt0 = null;
     }
 
 

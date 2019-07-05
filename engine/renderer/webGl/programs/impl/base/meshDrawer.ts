@@ -32,38 +32,8 @@ export class MeshDrawer extends AbstractDrawer {
             fragmentSource
         );
     }
-    
-    private _initBufferInfo(drawMethod:number= DRAW_METHOD.TRIANGLES,vertexSize:2|3=3):void{
-        const bufferInfo:IBufferInfoDescription = {
-            posVertexInfo:{
-                array:this.mesh.modelPrimitive.vertexArr, type:this.gl.FLOAT,
-                size:vertexSize, attrName:this.a_position
-            },
-            drawMethod
-        };
-        if (this.mesh.modelPrimitive.indexArr) {
-            bufferInfo.posIndexInfo = {
-                array: this.mesh.modelPrimitive.indexArr
-            }
-        }
-        if (this.mesh.modelPrimitive.normalArr) {
-            bufferInfo.normalInfo = {
-                array: this.mesh.modelPrimitive.normalArr,
-                type:this.gl.FLOAT,
-                size:3,
-                attrName:this.a_normal
-            }
-        }
-        if (this.mesh.modelPrimitive.texCoordArr) {
-            bufferInfo.texVertexInfo ={
-                array: this.mesh.modelPrimitive.texCoordArr, type:this.gl.FLOAT,
-                size:2, attrName:this.a_texcoord
-            }
-        }
-        this.mesh.bufferInfo = new BufferInfo(this.gl,bufferInfo);
-    }
 
-    bindModel(mesh:Mesh):void{
+    public bindModel(mesh:Mesh):void{
         this.mesh = mesh;
         if (!this.mesh.bufferInfo) this._initBufferInfo(mesh.modelPrimitive.drawMethod,mesh.vertexItemSize);
         if (mesh.isLightAccepted()===undefined) {
@@ -72,31 +42,31 @@ export class MeshDrawer extends AbstractDrawer {
         this.bufferInfo = this.mesh.bufferInfo;
     }
 
-    setModelMatrix(m:MAT16):void{
+    public setModelMatrix(m:MAT16):void{
         this.setUniform(this.u_modelMatrix,m);
     }
 
-    setProjectionMatrix(m:MAT16):void{
+    public setProjectionMatrix(m:MAT16):void{
         this.setUniform(this.u_projectionMatrix,m);
     }
 
-    setAlfa(a:number):void{
+    public setAlfa(a:number):void{
         this.setUniform(this.u_alpha,1);
     }
 
-    setTextureUsed(used:boolean):void{
+    public setTextureUsed(used:boolean):void{
         this.setUniform(this.u_textureUsed,used);
     }
 
-    setLightUsed(used:boolean):void{
+    public setLightUsed(used:boolean):void{
         this.setUniform(this.u_lightUsed,used);
     }
 
-    setColor(c:Color):void{
+    public setColor(c:Color):void{
         this.setUniform(this.u_color,c.asGL());
     }
 
-    bind():void{
+    public bind():void{
         if (DEBUG && !this.mesh.modelPrimitive) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
         super.bind();
         if (!this.mesh.modelPrimitive.texCoordArr) {
@@ -111,9 +81,39 @@ export class MeshDrawer extends AbstractDrawer {
         }
     }
 
-    unbind():void{
+    public unbind():void{
         this.mesh = null;
         super.unbind();
+    }
+    
+    private _initBufferInfo(drawMethod:number= DRAW_METHOD.TRIANGLES,vertexSize:2|3=3):void{
+        const bufferInfo:IBufferInfoDescription = {
+            posVertexInfo:{
+                array:this.mesh.modelPrimitive.vertexArr, type:this.gl.FLOAT,
+                size:vertexSize, attrName:this.a_position
+            },
+            drawMethod
+        };
+        if (this.mesh.modelPrimitive.indexArr) {
+            bufferInfo.posIndexInfo = {
+                array: this.mesh.modelPrimitive.indexArr
+            };
+        }
+        if (this.mesh.modelPrimitive.normalArr) {
+            bufferInfo.normalInfo = {
+                array: this.mesh.modelPrimitive.normalArr,
+                type:this.gl.FLOAT,
+                size:3,
+                attrName:this.a_normal
+            };
+        }
+        if (this.mesh.modelPrimitive.texCoordArr) {
+            bufferInfo.texVertexInfo ={
+                array: this.mesh.modelPrimitive.texCoordArr, type:this.gl.FLOAT,
+                size:2, attrName:this.a_texcoord
+            };
+        }
+        this.mesh.bufferInfo = new BufferInfo(this.gl,bufferInfo);
     }
 
 

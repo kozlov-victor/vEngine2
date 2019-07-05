@@ -279,49 +279,35 @@ export class PolyLine extends Shape {
         const tokenizer:SvgTokenizer = this.tokenizer;
         switch (command) {
             case 'M': {
-                const x:number = tokenizer.getNextNumber();
-                const y:number = tokenizer.getNextNumber();
-                this.moveTo(x,y);
+                this.moveTo(tokenizer.getNextNumber(), tokenizer.getNextNumber());
                 break;
             }
             case 'm': {
-                const x:number = tokenizer.getNextNumber();
-                const y:number = tokenizer.getNextNumber();
-                this.moveBy(x,y);
+                this.moveBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
                 break;
             }
             case 'L': {
-                const x:number = tokenizer.getNextNumber();
-                const y:number = tokenizer.getNextNumber();
-                this.lineTo(x,y);
+                this.lineTo(tokenizer.getNextNumber(),tokenizer.getNextNumber());
                 break;
             }
             case 'l': {
-                const x:number = tokenizer.getNextNumber();
-                const y:number = tokenizer.getNextNumber();
-                this.lineBy(x,y);
+                this.lineBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
                 break;
             }
             case 'H': {
-                const x:number = tokenizer.getNextNumber();
-                const y:number = this.lastPoint.y;
-                this.lineTo(x,y);
+                this.lineTo( tokenizer.getNextNumber(),this.lastPoint.y);
                 break;
             }
             case 'h': {
-                const x:number = tokenizer.getNextNumber();
-                this.lineBy(x,0);
+                this.lineBy( tokenizer.getNextNumber(),0);
                 break;
             }
             case 'V': {
-                const x:number = this.lastPoint.x;
-                const y:number = tokenizer.getNextNumber();
-                this.lineTo(x,y);
+                this.lineTo(this.lastPoint.x,tokenizer.getNextNumber());
                 break;
             }
             case 'v': {
-                const y:number = tokenizer.getNextNumber();
-                this.lineBy(0,y);
+                this.lineBy(0,tokenizer.getNextNumber());
                 break;
             }
             case 'C': {

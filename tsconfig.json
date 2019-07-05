@@ -12,7 +12,8 @@
             "es7"
         ],
         "importHelpers": true,
-        "strict": false,
+        "strict": true,
+        "strictPropertyInitialization": false,
         "noImplicitAny": true,
         "noImplicitThis": true,
         "noImplicitReturns": true,

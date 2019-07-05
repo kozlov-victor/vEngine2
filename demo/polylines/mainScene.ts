@@ -144,11 +144,11 @@ export class MainScene extends Scene {
         this.appendChild(polyLine7);
     }
 
-    onProgress(val: number) {
+    public onProgress(val: number) {
 
     }
 
-    onReady() {
+    public onReady() {
 
     }
 

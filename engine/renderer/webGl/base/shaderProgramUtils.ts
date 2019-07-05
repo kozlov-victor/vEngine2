@@ -12,10 +12,10 @@ interface IShaderErrorInfo {
 const parseErrors = (log:string):IShaderErrorInfo[]=> {
     if (!DEBUG) return [];
     const logs:IShaderErrorInfo[] = [];
-    let result:RegExpMatchArray;
+    let result:RegExpMatchArray|null;
 
     while (!!(result = log.match(/ERROR\:([^\n]+)/))) {
-        log = log.slice(result.index + 1);
+        log = log.slice((result.index + 1);
 
         const line:string = result[1].trim();
         const seps:string[] = line.split(':');
@@ -32,7 +32,7 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
         if (!shaderSource) throw new DebugError(`can not compile shader: shader source not specified for type ${shaderType}`);
     }
     // Create the shader object
-    const shader:WebGLShader = gl.createShader(shaderType);
+    const shader:WebGLShader = gl.createShader(shaderType) as WebGLShader;
     if (DEBUG && !shader) throw new DebugError(`can not allocate memory for shader: gl.createShader(shaderType)`);
 
     // Load the shader source
@@ -45,23 +45,28 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
     const compiled:number = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
     if (!compiled) {
         // Something went wrong during compilation; get the error
-        const lastError:string = gl.getShaderInfoLog(shader);
+        const lastError:string|null = gl.getShaderInfoLog(shader);
         gl.deleteShader(shader);
-        if (DEBUG) {
-            const parsedLogs = parseErrors(lastError);
-            const lines:string[] = shaderSource.split('\n');
-            let errorMsg:string = '';
-            const arrow:string = '----->';
-            parsedLogs.forEach((inf:IShaderErrorInfo)=>{
-                const i:number = inf.lineNum-1;
-                if (lines[i].indexOf(arrow)===-1) lines[i]=`${arrow} ${lines[i]}`;
-                errorMsg+=`${lines[i]} <----${inf.message}\n`;
-            });
-            console.log(lines.join('\n'));
-            throw new DebugError(`Error compiling shader: ${errorMsg?errorMsg:lastError}`);
+        if (lastError) {
+            if (DEBUG) {
+                const parsedLogs = parseErrors(lastError);
+                const lines:string[] = shaderSource.split('\n');
+                let errorMsg:string = '';
+                const arrow:string = '----->';
+                parsedLogs.forEach((inf:IShaderErrorInfo)=>{
+                    const i:number = inf.lineNum-1;
+                    if (lines[i].indexOf(arrow)===-1) lines[i]=`${arrow} ${lines[i]}`;
+                    errorMsg+=`${lines[i]} <----${inf.message}\n`;
+                });
+                console.log(lines.join('\n'));
+                throw new DebugError(`Error compiling shader: ${errorMsg?errorMsg:lastError}`);
+            } else {
+                throw new Error(lastError);
+            }
         } else {
-            throw new Error(lastError);
+            throw new Error(DEBUG?'unknown compilation error':'');
         }
+
 
     }
 
@@ -81,27 +86,32 @@ export const createProgram = (gl:WebGLRenderingContext, vertexShader:WebGLShader
     const linked:boolean = gl.getProgramParameter(program, gl.LINK_STATUS) as boolean;
     if (!linked) {
         // something went wrong with the link
-        const lastError:string = gl.getProgramInfoLog(program);
-        if (DEBUG) {
-            const status:any = gl.getProgramParameter( program, gl.VALIDATE_STATUS);
-            console.error('VALIDATE_STATUS',status);
-            const vertexSource:string = gl.getShaderSource(vertexShader);
-            const fragmentSource:string = gl.getShaderSource(fragmentShader);
-            console.log(vertexSource);
-            console.log('\n\n');
-            console.log(fragmentSource);
-            gl.deleteProgram(program);
-            throw new DebugError(`Error in program linking. Last error "${lastError}", status: ${status}`);
+        const lastError:string|null = gl.getProgramInfoLog(program);
+        if (lastError) {
+            if (DEBUG) {
+                const status:any = gl.getProgramParameter( program, gl.VALIDATE_STATUS);
+                console.error('VALIDATE_STATUS',status);
+                const vertexSource:string = gl.getShaderSource(vertexShader) as string;
+                const fragmentSource:string = gl.getShaderSource(fragmentShader) as string;
+                console.log(vertexSource);
+                console.log('\n\n');
+                console.log(fragmentSource);
+                gl.deleteProgram(program);
+                throw new DebugError(`Error in program linking. Last error "${lastError}", status: ${status}`);
+            } else {
+                gl.deleteProgram(program);
+                throw new Error(lastError);
+            }
         } else {
-            gl.deleteProgram(program);
-            throw new Error(lastError);
+            throw new Error(DEBUG?'unknown linking error':'');
         }
+
 
     }
     return program;
 };
 
-let GL_TABLE:IKeyVal<string> = null;
+let GL_TABLE:IKeyVal<string>|null = null;
 
 export const GL_TYPE = {
     FLOAT:      'float',
@@ -129,7 +139,7 @@ export const GL_TYPE = {
 
 const mapType = (gl:WebGLRenderingContext, type:number):string=> {
 
-    if (!GL_TABLE) {
+    if (GL_TABLE===null) {
         const typeNames:string[] = Object.keys(GL_TYPE);
 
         GL_TABLE = {} as IKeyVal<string>;
@@ -281,17 +291,17 @@ const expect = (value:UNIFORM_VALUE_TYPE,typeChecker:IChecker):void=>{
 const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
     if (size===1) {
         switch (type) {
-            case GL_TYPE.FLOAT: return (gl:GL,location:LOC,value:NUM)=> {
+            case GL_TYPE.FLOAT: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
                 if (DEBUG) expect(value,TypeNumber);
-                gl.uniform1f(location, value);
+                gl.uniform1f(location, value as NUM);
             };
-            case GL_TYPE.FLOAT_VEC2:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
+            case GL_TYPE.FLOAT_VEC2:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
                 if (DEBUG) expect(value,TypeArray(TypeNumber,2));
-                gl.uniform2f(location, value[0], value[1]);
+                gl.uniform2f(location, (value as NUM_ARR)[0], (value as NUM_ARR)[1]);
             };
-            case GL_TYPE.FLOAT_VEC3:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
+            case GL_TYPE.FLOAT_VEC3:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
                 if (DEBUG) expect(value,TypeArray(TypeNumber,3));
-                gl.uniform3f(location, value[0], value[1], value[2]);
+                gl.uniform3f(location, (value as NUM_ARR)[0], (value as NUM_ARR)[1], (value as NUM_ARR)[2]);
             };
             case GL_TYPE.FLOAT_VEC4:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
                 if (DEBUG) expect(value,TypeArray(TypeNumber,4));

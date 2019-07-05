@@ -7,6 +7,32 @@ export class EarClippingTriangulator {
     private static readonly CONCAVE: number = -1;
     private static readonly CONVEX: number = 1;
 
+    private static areVerticesClockwise(vertices: number[], offset: number, count: number): boolean {
+        if (count <= 2) return false;
+        let area: number = 0, p1x, p1y, p2x, p2y:number;
+        for (let i: number = offset, n = offset + count - 3; i < n; i += 2) {
+            p1x = vertices[i];
+            p1y = vertices[i + 1];
+            p2x = vertices[i + 2];
+            p2y = vertices[i + 3];
+            area += p1x * p2y - p2x * p1y;
+        }
+        p1x = vertices[offset + count - 2];
+        p1y = vertices[offset + count - 1];
+        p2x = vertices[offset];
+        p2y = vertices[offset + 1];
+        return area + p1x * p2y - p2x * p1y < 0;
+    }
+
+    private static computeSpannedAreaSign(p1x: number, p1y: number,
+                                          p2x: number, p2y: number,
+                                          p3x: number, p3y: number): number {
+        let area: number = p1x * (p3y - p2y);
+        area += p2x * (p1y - p3y);
+        area += p3x * (p2y - p1y);
+        return Math.sign(area);
+    }
+
     private indices: number[] = [];
     private vertices: number[];
     private vertexCount: number;
@@ -16,11 +42,11 @@ export class EarClippingTriangulator {
 
     public computeTriangles(vertices: number[]): number[] {
         this.vertices = vertices;
-        let offset:number = 0;
-        let count = vertices.length;
+        const offset:number = 0;
+        const count = vertices.length;
         if (DEBUG && count%2!==0) throw new DebugError(`wrong vertices size`);
-        let vertexCount: number = this.vertexCount = ~~(count / 2);
-        let vertexOffset: number = ~~(offset / 2);
+        const vertexCount: number = this.vertexCount = ~~(count / 2);
+        const vertexOffset: number = ~~(offset / 2);
 
         this.indices = [];
         if (EarClippingTriangulator.areVerticesClockwise(vertices, offset, count)) {
@@ -31,34 +57,34 @@ export class EarClippingTriangulator {
                 this.indices[i] = vertexOffset + n - i; // Reversed.
         }
 
-        let vertexTypes: number[] = [];
+        const vertexTypes: number[] = [];
         for (let i = 0, n = vertexCount; i < n; ++i)
             vertexTypes.push(this.classifyVertex(i));
 
         // A polygon with n vertices has a triangulation of n-2 triangles.
-        let triangles: number[] = this.triangles = [];
+        const triangles: number[] = this.triangles = [];
         this.vertexTypes = vertexTypes;
         this.triangulate();
         return triangles;
     }
 
     private triangulate():void {
-        let vertexTypes: number[] = this.vertexTypes;
-        let triangles: number[] = this.triangles;
+        const vertexTypes: number[] = this.vertexTypes;
+        const triangles: number[] = this.triangles;
 
         while (this.vertexCount > 3) {
-            let earTipIndex: number = this.findEarTip();
+            const earTipIndex: number = this.findEarTip();
             this.cutEarTip(earTipIndex);
 
             // The type of the two vertices adjacent to the clipped vertex may have changed.
-            let previousIndex: number = this.previousIndex(earTipIndex);
-            let nextIndex: number = earTipIndex == this.vertexCount ? 0 : earTipIndex;
+            const previousIndex: number = this.previousIndex(earTipIndex);
+            const nextIndex: number = earTipIndex === this.vertexCount ? 0 : earTipIndex;
             vertexTypes[previousIndex] = this.classifyVertex(previousIndex);
             vertexTypes[nextIndex] = this.classifyVertex(nextIndex);
         }
 
-        if (this.vertexCount == 3) {
-            let indices: number[] = this.indices;
+        if (this.vertexCount === 3) {
+            const indices: number[] = this.indices;
             triangles.push(indices[0]);
             triangles.push(indices[1]);
             triangles.push(indices[2]);
@@ -86,13 +112,13 @@ export class EarClippingTriangulator {
         // Return a convex or tangential vertex if one exists.
         const vertexTypes: readonly number[] = this.vertexTypes;
         for (let i: number = 0; i < vertexCount; i++)
-            if (vertexTypes[i] != EarClippingTriangulator.CONCAVE) return i;
+            if (vertexTypes[i] !== EarClippingTriangulator.CONCAVE) return i;
         return 0; // If all vertices are concave, just return the first one.
     }
 
     private isEarTip(earTipIndex: number): boolean {
         const vertexTypes: readonly number[] = this.vertexTypes;
-        if (vertexTypes[earTipIndex] == EarClippingTriangulator.CONCAVE) return false;
+        if (vertexTypes[earTipIndex] === EarClippingTriangulator.CONCAVE) return false;
 
         const previousIndex: number = this.previousIndex(earTipIndex);
         const nextIndex: number = this.nextIndex(earTipIndex);
@@ -107,10 +133,10 @@ export class EarClippingTriangulator {
 
         // Check if any point is inside the triangle formed by previous, current and next vertices.
         // Only consider vertices that are not part of this triangle, or else we'll always find one inside.
-        for (let i: number = this.nextIndex(nextIndex); i != previousIndex; i = this.nextIndex(i)) {
+        for (let i: number = this.nextIndex(nextIndex); i !== previousIndex; i = this.nextIndex(i)) {
             // Concave vertices can obviously be inside the candidate ear, but so can tangential vertices
             // if they coincide with one of the triangle's vertices.
-            if (vertexTypes[i] != EarClippingTriangulator.CONVEX) {
+            if (vertexTypes[i] !== EarClippingTriangulator.CONVEX) {
                 const v: number = indices[i] * 2;
                 const vx: number = vertices[v];
                 const vy: number = vertices[v + 1];
@@ -143,36 +169,10 @@ export class EarClippingTriangulator {
     }
 
     private previousIndex(index: number): number {
-        return (index == 0 ? this.vertexCount : index) - 1;
+        return (index === 0 ? this.vertexCount : index) - 1;
     }
 
     private nextIndex(index: number): number {
         return (index + 1) % this.vertexCount;
-    }
-
-    private static areVerticesClockwise(vertices: number[], offset: number, count: number): boolean {
-        if (count <= 2) return false;
-        let area: number = 0, p1x, p1y, p2x, p2y:number;
-        for (let i: number = offset, n = offset + count - 3; i < n; i += 2) {
-            p1x = vertices[i];
-            p1y = vertices[i + 1];
-            p2x = vertices[i + 2];
-            p2y = vertices[i + 3];
-            area += p1x * p2y - p2x * p1y;
-        }
-        p1x = vertices[offset + count - 2];
-        p1y = vertices[offset + count - 1];
-        p2x = vertices[offset];
-        p2y = vertices[offset + 1];
-        return area + p1x * p2y - p2x * p1y < 0;
-    }
-
-    private static computeSpannedAreaSign(p1x: number, p1y: number,
-                                          p2x: number, p2y: number,
-                                          p3x: number, p3y: number): number {
-        let area: number = p1x * (p3y - p2y);
-        area += p2x * (p1y - p3y);
-        area += p3x * (p2y - p1y);
-        return Math.sign(area);
     }
 }

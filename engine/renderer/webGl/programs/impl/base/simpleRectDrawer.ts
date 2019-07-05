@@ -8,15 +8,15 @@ import {DebugError} from "@engine/debug/debugError";
 
 export class SimpleRectDrawer extends AbstractDrawer {
 
-    a_position:string;
-    a_texCoord:string;
-    u_vertexMatrix:string;
-    u_textureMatrix:string;
-
     /**
      * @internal
      */
-    gen:ShaderGenerator;
+    public gen:ShaderGenerator;
+
+    public a_position:string;
+    public a_texCoord:string;
+    public u_vertexMatrix:string;
+    public u_textureMatrix:string;
 
     constructor(gl:WebGLRenderingContext) {
         super(gl);

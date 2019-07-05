@@ -47,11 +47,6 @@ export class CheckBox extends Container {
         this.on(MOUSE_EVENTS.click,()=>this.toggle());
     }
 
-    private updateChildrenByChecked(){
-        this.rNormal.visible = !this.checked;
-        this.rChecked.visible = this.checked;
-    }
-
     public toggle():void{
         this.checked = !this.checked;
         this.updateChildrenByChecked();
@@ -65,5 +60,10 @@ export class CheckBox extends Container {
 
     public draw():boolean{
         return true;
+    }
+
+    private updateChildrenByChecked(){
+        this.rNormal.visible = !this.checked;
+        this.rChecked.visible = this.checked;
     }
 }

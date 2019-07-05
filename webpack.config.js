@@ -97,7 +97,7 @@ module.exports = (env={})=>{
             DEBUG: debug,
         }),
         new TSLintPlugin({
-            //files: ['./src/**/*.ts']
+            files: ['./demo/**/*.ts','./engine/**/*.ts']
         }),
         new WebpackDonePlugin()
     ];

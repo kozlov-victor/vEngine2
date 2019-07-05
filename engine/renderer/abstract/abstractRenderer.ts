@@ -15,8 +15,9 @@ import {Font} from "@engine/model/impl/general/font";
 import {Line} from "@engine/model/impl/geometry/line";
 import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/texture";
+import {IDestroyable} from "@engine/declarations";
 
-export abstract class AbstractRenderer {
+export abstract class AbstractRenderer implements IDestroyable {
 
     public abstract type:string;
 
@@ -162,8 +163,12 @@ export abstract class AbstractRenderer {
         const container:HTMLElement = this.container;
         if (this.game.scaleStrategy===SCALE_STRATEGY.NO_SCALE) return;
         else if (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH) {
-            container.style.width = `${window.innerWidth}px`;
-            container.style.height = `${window.innerHeight}px`;
+            const innerWidth:number = window.innerWidth;
+            const innerHeight:number = window.innerHeight;
+            container.style.width = `${innerWidth}px`;
+            container.style.height = `${innerHeight}px`;
+            this.game.scale.setXY(innerWidth/this.game.width,innerHeight/this.game.height);
+            this.game.pos.setXY(0);
             return;
         }
         const canvasRatio:number = this.game.height / this.game.width;
