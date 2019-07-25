@@ -11,7 +11,7 @@ export class AudioNode {
     public play(sound:Sound):void {
         this.stop();
         this.context.play(sound);
-        // todo currSound is always undefined
+        this.currSound = sound;
     }
 
     public stop():void {

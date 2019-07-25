@@ -28,11 +28,11 @@ export class MainScene extends Scene {
     private dataTextureLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.data1Link = this.resourceLoader.loadText('./cow-nonormals.obj');
-        this.data2Link = this.resourceLoader.loadText('./cube_texture2.obj');
-        this.data3Link = this.resourceLoader.loadText('./diamond.obj');
+        this.data1Link = this.resourceLoader.loadText('./model3dFromObj/cow-nonormals.obj');
+        this.data2Link = this.resourceLoader.loadText('./model3dFromObj/cube_texture2.obj');
+        this.data3Link = this.resourceLoader.loadText('./model3dFromObj/diamond.obj');
 
-        this.dataTextureLink = this.resourceLoader.loadImage('../assets/repeat.jpg');
+        this.dataTextureLink = this.resourceLoader.loadImage('./assets/repeat.jpg');
     }
 
 

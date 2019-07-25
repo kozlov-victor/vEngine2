@@ -41,4 +41,11 @@ export const removeFromArray = (arr:any[],predicate:(item:any)=>boolean):number=
     return cnt;
 };
 
+export const parametrizeString = (source:string,args:Record<string,string|number|boolean>):string=>{
+    Object.keys(args).forEach((key:string)=>{
+        source = source.split(key).join(''+args[key]);
+    });
+    return source;
+};
+
 export const noop = (arg?:any):any=>{};

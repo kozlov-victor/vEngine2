@@ -5,7 +5,7 @@ const allDirectories = [];
 
 const dirs = fs.readdirSync('./demo');
 dirs.forEach((dir)=>{
-    if (['assets','out','index.html','.DS_Store','generateIndexPage.js'].includes(dir)) return;
+    if (['assets','out','index.html','demo.html','.DS_Store','generateIndexPage.js'].includes(dir)) return;
     allDirectories.push(dir);
 });
 
@@ -15,32 +15,65 @@ const template = `
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name ="viewport" content="width=device-width,initial-scale=1,user-scalable=1">
     <title></title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         #frame {
             width: 320px;
             height: 240px;
             box-shadow: 0 0 2px black;
+            margin: 5px;
         }
-        .left,.right {
-            display: inline-block;
-            box-sizing: border-box;
-            vertical-align: top;
+        .layout {
+            display: flex;
+            flex-direction: column;
         }
-        .left {
-            width:20%
+        html,body,.layout {
+            height: 100%;
         }
-        .right {
-            width: 70%;
+        body  {
+            position: fixed;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+        .up,.down {
+            display: flex;
+            margin: 0 auto;
+        }
+        .down {
+            flex: 1;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+        }
+        /* hide hosting ads */
+        div[style] {
+            display: none;
+        }
+        #list {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        #list li {
+            padding: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="left">
-        <ul id="list"></ul>
-    </div>
-    <div class="right">
-        <iframe frameborder="0" id="frame"></iframe>
+    <div class="layout">
+        <div class="up">
+            <iframe frameborder="0" id="frame"></iframe>
+        </div>
+        <div class="down">
+            <ul id="list"></ul>
+        </div>
     </div>
 
     <script>
@@ -52,10 +85,10 @@ const template = `
             items.map(it=>{
                 res+='\\
                             <li>'+
-                    '            <a onclick="onClick(event)" target="_blank" href="#" data-href="'+it.name+'/index.html">\\n' +
+                    '            <a onclick="onClick(event)" target="_blank" href="#" data-href="./demo.html?name='+it.name+'">\\n' +
                     '                \\n' + it.title +
                     '            </a>\\n' +
-                    '<a target="_blank" href="'+it.name+'/index.html"> . </a>'+
+                    '<a target="_blank" href="./demo.html?name='+it.name+'"> . </a>'+
                     '        </li>\\
                     ';
             });

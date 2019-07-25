@@ -13,13 +13,14 @@ export class MainScene extends Scene {
     public onPreloading() {
         this.ship = new GameObject(this.game);
         const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.resourceLoader.loadImage('ship.png'));
+        spr.setResourceLink(this.resourceLoader.loadImage('./pointGeometry/ship.png'));
         this.ship.sprite = spr;
     }
 
 
 
     public onReady() {
+        this.colorBG.setRGB(244,244,244);
         this.ship.pos.setXY(this.game.width/2,this.game.height/2);
         this.appendChild(this.ship);
         this.ship.anchor.setXY(this.ship.size.width/2,this.ship.size.height/2);

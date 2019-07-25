@@ -17,8 +17,8 @@ export class MainScene extends Scene {
     private tf:TextField;
 
     public onPreloading() {
-        this.fntResourceLink = this.resourceLoader.loadText('../fnt/font.fnt');
-        this.sprResourceLink = this.resourceLoader.loadImage('../fnt/font.png');
+        this.fntResourceLink = this.resourceLoader.loadText('./fnt/font.fnt');
+        this.sprResourceLink = this.resourceLoader.loadImage('./fnt/font.png');
 
         const fnt:Font = new Font(this.game);
         fnt.fontSize = 50;

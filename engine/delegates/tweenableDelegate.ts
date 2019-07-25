@@ -1,5 +1,5 @@
-import {ITweenDescription, Tween} from "@engine/misc/tween";
-import {TweenMovie} from "@engine/misc/tweenMovie";
+import {ITweenDescription, Tween} from "@engine/animation/tween";
+import {TweenMovie} from "@engine/animation/tweenMovie";
 
 
 export class TweenableDelegate {

@@ -3,7 +3,7 @@ import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {PbmReader} from "./pbmReader";
 import {GameObject} from "@engine/model/impl/general/gameObject";
-import {MultiImageFrameAnimation} from "@engine/model/impl/frameAnimation/multiImageFrameAnimation";
+import {MultiImageFrameAnimation} from "@engine/animation/frameAnimation/multiImageFrameAnimation";
 
 // https://www.twobitarcade.net/article/displaying-images-oled-displays/
 
@@ -17,7 +17,7 @@ export class MainScene extends Scene {
     public onPreloading() {
 
         for (let i:number=1;i<=6;i++) {
-            this.resourceLinks.push(this.resourceLoader.loadBinary(`./data/scatman.${i}.pbm`));
+            this.resourceLinks.push(this.resourceLoader.loadBinary(`./dataTexture/data/scatman.${i}.pbm`));
         }
 
     }

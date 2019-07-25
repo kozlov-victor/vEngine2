@@ -5,7 +5,7 @@ import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
 import {Color} from "@engine/renderer/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Circle} from "@engine/model/impl/geometry/circle";
-import {TweenMovie} from "@engine/misc/tweenMovie";
+import {TweenMovie} from "@engine/animation/tweenMovie";
 import {DropShadowFilter} from "@engine/renderer/webGl/filters/texture/dropShadowFilter";
 import {PolyLine} from "@engine/model/impl/geometry/polyLine";
 import {Rectangle} from "@engine/model/impl/geometry/rectangle";
@@ -17,7 +17,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
+        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
 
     }
 
@@ -78,7 +78,7 @@ export class MainScene extends Scene {
         this.appendChild(rect);
 
         const tm:TweenMovie = new TweenMovie(this.game);
-        tm.tween(0,{
+        tm.addTween(0,{
             target:{val:0},
             progress:(obj:{val:number})=>{
                  glow.setOuterStrength(obj.val);
@@ -87,7 +87,7 @@ export class MainScene extends Scene {
             from:{val:0},
             to:{val:5}
         });
-        tm.tween(2000,{
+        tm.addTween(2000,{
             target:{val:5},
             progress:(obj:{val:number})=>{
                 glow.setOuterStrength(obj.val);

@@ -1,7 +1,7 @@
 {
   "name": "v-engine",
   "sideEffects": [
-    "/engine/core/misc/polyfills.ts"
+    "./engine/misc/polyfills.ts"
   ],
   "version": "0.1.0",
   "devDependencies": {

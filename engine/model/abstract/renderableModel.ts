@@ -5,8 +5,8 @@ import {MathEx} from "../../misc/mathEx";
 import {Point2d} from "../../geometry/point2d";
 import {Rect} from "../../geometry/rect";
 import {Game} from "@engine/game";
-import {Tween, ITweenDescription} from "@engine/misc/tween";
-import {TweenMovie} from "@engine/misc/tweenMovie";
+import {Tween, ITweenDescription} from "@engine/animation/tween";
+import {TweenMovie} from "@engine/animation/tweenMovie";
 import {Timer} from "@engine/misc/timer";
 import {Layer} from "@engine/model/impl/general/layer";
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
@@ -23,28 +23,28 @@ export enum BLEND_MODE {
     REVERSE_SUBSTRACTIVE
 }
 
-class Angle3d {
+class AnglePoint3d {
     public x:number = 0;
     public y:number = 0;
 
     private _z:number = 0;
 
-    constructor(private m:RenderableModel){}
+    constructor(private m:RenderableModel,private zProperty:'angle'|'angleVelocity'){}
 
     set z(val:number) {
-        this.m.angle = val;
+        this.m[this.zProperty] = val;
     }
 
     get z():number{
         return this._z;
     }
 
-    _setZSilently(val:number){
+    public _setZSilently(val:number){
         this._z = val;
     }
 
-    clone(m:RenderableModel):Angle3d{
-        const a:Angle3d = new Angle3d(m);
+    public clone(m:RenderableModel):AnglePoint3d{
+        const a:AnglePoint3d = new AnglePoint3d(m,this.zProperty);
         a.x = this.x;
         a.y = this.y;
         a.z = this.z;
@@ -64,13 +64,15 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     public readonly skew:Point2d = new Point2d(0,0);
     public readonly anchor:Point2d = new Point2d(0,0);
     public readonly rotationPoint:Point2d = new Point2d(0,0);
-    public angle3d:Angle3d = new Angle3d(this);
+    public angle3d:AnglePoint3d = new AnglePoint3d(this,'angle');
     public alpha:number = 1;
     public blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
-    public parent:RenderableModel;
+    public parent:RenderableModel|null = null;
     public readonly children:RenderableModel[] = [];
     public readonly velocity = new Point2d(0,0);
+    public angleVelocity3d:AnglePoint3d = new AnglePoint3d(this,'angleVelocity');
     public visible:boolean = true;
+    public passMouseEventsThrough:boolean = false;
 
 
     protected _dirty:boolean = true;
@@ -78,11 +80,12 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     protected _srcRect:Rect = new Rect();
     protected _screenRect = new Rect();
     protected _behaviours:BaseAbstractBehaviour[] = [];
-    private   _layer:Layer;
+    private   _layer:Layer|null = null;
     private   _angle:number = 0;
+    private   _angleVelocity:number = 0;
 
 
-    // tween
+    // addTween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
 
     // timer
@@ -107,22 +110,31 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         this.angle3d._setZSilently(val);
     }
 
+    get angleVelocity():number{
+        return this._angle;
+    }
+
+    set angleVelocity(val:number){
+        this._angle = val;
+        this.angleVelocity3d._setZSilently(val);
+    }
+
     public revalidate():void{
         for (const b of this._behaviours) b.revalidate();
     }
 
-    public getLayer(): Layer {
+    public getLayer(): Layer|null {
         return this._layer;
     }
 
-    public setLayer(value: Layer):void {
+    public setLayer(value: Layer|null):void {
         this._layer = value;
     }
 
     public findChildById(id:string):RenderableModel|null{
         if (id===this.id) return this;
         for (const c of this.children) {
-            const possibleObject:RenderableModel = c.findChildById(id);
+            const possibleObject:RenderableModel|null = c.findChildById(id);
             if (possibleObject) return possibleObject;
         }
         return null;
@@ -209,10 +221,10 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
 
     public moveToFront():void {
         if (DEBUG && !this._getParent()) throw new DebugError(`can not move to front: object is detached`);
-        const index:number = (this._getParent()).children.indexOf(this);
+        const index:number = (this._getParent()!).children.indexOf(this);
         if (DEBUG && index===-1)
             throw new DebugError(`can not move to front: object is not belong to current scene`);
-        const parentArray:RenderableModel[] = this._getParent().children;
+        const parentArray:RenderableModel[] = this._getParent()!.children;
         parentArray.splice(index,1);
         parentArray.push(this);
 
@@ -220,10 +232,10 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
 
     public moveToBack():void {
         if (DEBUG && !this._getParent()) throw new DebugError(`can not move to back: object is detached`);
-        const index:number = this._getParent().children.indexOf(this);
+        const index:number = this._getParent()!.children.indexOf(this);
         if (DEBUG && index===-1)
             throw new DebugError(`can not move to front: object is not belong to current scene`);
-        const parentArray:RenderableModel[] = this._getParent().children;
+        const parentArray:RenderableModel[] = this._getParent()!.children;
         parentArray.splice(index,1);
         parentArray.unshift(this);
     }
@@ -234,7 +246,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
 
         if (DEBUG && !this._getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
 
-        const parentArray:RenderableModel[] = this._getParent().children;
+        const parentArray:RenderableModel[] = this._getParent()!.children;
         const index:number = parentArray.indexOf(this);
         if (DEBUG && index===-1) {
             console.error(this);
@@ -309,6 +321,9 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         // } else {
         if (this.velocity.x) this.pos.x += this.velocity.x * delta / 1000;
         if (this.velocity.y) this.pos.y += this.velocity.y * delta / 1000;
+        if (this.angleVelocity3d.x) this.angle3d.x+=this.angleVelocity3d.x * delta / 1000;
+        if (this.angleVelocity3d.y) this.angle3d.y+=this.angleVelocity3d.y * delta / 1000;
+        if (this.angleVelocity3d.z) this.angle3d.z+=this.angleVelocity3d.z * delta / 1000;
         // }
 
         for (const c of this.children) {
@@ -373,8 +388,8 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
 
     protected calcWorldRect():void {
         this._screenRect.set(this.getSrcRect());
-        let parent:RenderableModel = this.parent;
-        while (parent) {
+        let parent:RenderableModel|null = this.parent;
+        while (parent!==null) {
             this._screenRect.addXY(parent.getSrcRect().point.x,parent.getSrcRect().point.y);
             parent = parent.parent;
         }

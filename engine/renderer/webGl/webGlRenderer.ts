@@ -1,6 +1,6 @@
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractDrawer} from "./programs/abstract/abstractDrawer";
-import {ShapeDrawer} from "./programs/impl/base/shapeDrawer";
+import {FILL_TYPE, SHAPE_TYPE, ShapeDrawer} from "./programs/impl/base/shape/shapeDrawer";
 import {FrameBuffer} from "./base/frameBuffer";
 import {MatrixStack} from "./base/matrixStack";
 import {Texture} from "./base/texture";
@@ -9,7 +9,7 @@ import {Game} from "../../game";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../color";
 import {Size} from "../../geometry/size";
-import {MeshDrawer} from "./programs/impl/base/meshDrawer";
+import {MeshDrawer} from "./programs/impl/base/mesh/meshDrawer";
 import {Mesh} from "@engine/model/abstract/mesh";
 import {Ellipse} from "@engine/model/impl/geometry/ellipse";
 import {Rectangle} from "@engine/model/impl/geometry/rectangle";
@@ -18,8 +18,7 @@ import {Shape} from "@engine/model/impl/geometry/abstract/shape";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {mat4} from "@engine/geometry/mat4";
-import {FILL_TYPE, SHAPE_TYPE} from "@engine/renderer/webGl/programs/impl/base/shapeDrawer.shader";
-import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRectDrawer";
+import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
 import {BLEND_MODE} from "@engine/model/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
@@ -29,9 +28,10 @@ import {Line} from "@engine/model/impl/geometry/line";
 import {ITexture} from "@engine/renderer/texture";
 import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import glEnumToString = debugUtil.glEnumToString;
+import {Clazz, ClazzEx, IDestroyable} from "@engine/declarations";
 
 
-const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext=>{
+const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext|null=>{
     const contextAttrs:WebGLContextAttributes = {alpha:false,premultipliedAlpha:false};
     const possibles:string[] = ['webgl2','webgl','experimental-webgl','webkit-3d','moz-webgl'];
     for (const p of possibles) {
@@ -50,7 +50,7 @@ let FLIP_POSITION_MATRIX:Mat16Holder;
 const zToWMatrix:Mat16Holder = Mat16Holder.create();
 mat4.makeZToWMatrix(zToWMatrix,1);
 
-const BLACK:Color = Color.RGB(0,0,0,0);
+const BLACK:Color = Color.RGB(0,0,0,0).freeze();
 
 const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat16Holder=>{
     // proj * modelView
@@ -72,20 +72,42 @@ const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat
     const matrix3:Mat16Holder = Mat16Holder.fromPool();
     mat4.matrixMultiply(matrix3,matrix2, projectionMatrix);
 
-    const matrix4:Mat16Holder = Mat16Holder.fromPool();
-    mat4.matrixMultiply(matrix4,matrix3, zToWMatrix);
+
+    let matrix4:Mat16Holder;
+    const useOrtho = !!((window as any).ortho);
+    if (!useOrtho) {
+        matrix4 = Mat16Holder.fromPool();
+        mat4.matrixMultiply(matrix4,matrix3, zToWMatrix);
+    }
+
 
     projectionMatrix.release();
     scaleMatrix.release();
     translationMatrix.release();
     matrix1.release();
     matrix2.release();
-    matrix3.release();
 
-    return matrix4;
+    if (useOrtho) return matrix3;
+    else {
+        matrix3.release();
+        return matrix4;
+    }
 };
 
 
+class InstanceHolder<T extends IDestroyable> {
+    private instance:T;
+    constructor(private clazz:ClazzEx<T,WebGLRenderingContext>){}
+
+    public getInstance(gl:WebGLRenderingContext):T{
+        if (!this.instance) this.instance = new this.clazz(gl);
+        return this.instance;
+    }
+
+    public destroy():void{
+        if (this.instance) this.instance.destroy();
+    }
+}
 
 export class WebGlRenderer extends AbstractCanvasRenderer {
 
@@ -94,9 +116,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     private gl:WebGLRenderingContext;
     private readonly matrixStack:MatrixStack = new MatrixStack();
-    private shapeDrawer:ShapeDrawer;
+    private shapeDrawerHolder:InstanceHolder<ShapeDrawer> = new InstanceHolder(ShapeDrawer);
     private simpleRectDrawer:SimpleRectDrawer;
-    private meshDrawer:MeshDrawer;
+    private meshDrawerHolder:InstanceHolder<MeshDrawer> = new InstanceHolder(MeshDrawer);
     private preprocessFrameBuffer:FrameBuffer;
     private finalFrameBuffer:FrameBuffer;
     private doubleFrameBuffer:DoubleFrameBuffer;
@@ -136,7 +158,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const texture:Texture = (img.getResourceLink() as ResourceLink<Texture>).getTarget();
         const maxSize:number = Math.max(img.size.width,img.size.height);
-        const sd:ShapeDrawer = this.shapeDrawer;
+        const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
         this.prepareShapeUniformInfo(img);
         sd.setUniform(sd.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
         sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
@@ -156,7 +178,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_texOffset,offSetArr);
         sd.setUniform(sd.u_stretchMode,img.stretchMode);
         sd.attachTexture('texture',texture);
-        this.shapeDrawer.draw();
+        sd.draw();
 
         this.afterItemDraw(img.filters as AbstractFilter[],img.blendMode);
 
@@ -164,9 +186,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public drawMesh(mesh:Mesh):void {
-        if (!this.meshDrawer) this.meshDrawer = new MeshDrawer(this.gl);
-        this.meshDrawer.bindModel(mesh);
-        this.meshDrawer.bind();
+
+        const md:MeshDrawer = this.meshDrawerHolder.getInstance(this.gl);
+
+        md.bindModel(mesh);
+        md.bind();
 
         if (mesh.invertY) this.matrixStack.scale(1,-1,1);
         const matrix1:Mat16Holder = this.matrixStack.getCurrentMatrix();
@@ -176,21 +200,22 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const matrix2:Mat16Holder = Mat16Holder.fromPool();
         mat4.matrixMultiply(matrix2,projectionMatrix, zToWMatrix);
 
-        this.meshDrawer.setModelMatrix(matrix1.mat16);
-        this.meshDrawer.setProjectionMatrix(matrix2.mat16);
-        this.meshDrawer.setAlfa(mesh.alpha);
+        md.setModelMatrix(matrix1.mat16);
+        md.setProjectionMatrix(matrix2.mat16);
+        md.setAlfa(mesh.alpha);
         const isTextureUsed:boolean = !!mesh.texture;
-        this.meshDrawer.setTextureUsed(isTextureUsed);
-        this.meshDrawer.setLightUsed(mesh.isLightAccepted());
-        this.meshDrawer.setColor(mesh.fillColor);
-        this.meshDrawer.attachTexture('u_texture',mesh.texture?mesh.texture:this.nullTexture);
+        md.setTextureUsed(isTextureUsed);
+        if (isTextureUsed) md.setTectureMatrix(FLIP_TEXTURE_MATRIX.mat16);
+        md.setLightUsed(mesh.isLightAccepted()||false);
+        md.setColor(mesh.fillColor);
+        md.attachTexture('u_texture',mesh.texture?mesh.texture:this.nullTexture);
 
 
         if (mesh.depthTest) this.gl.enable(this.gl.DEPTH_TEST);
         //this.gl.enable(this.gl.CULL_FACE);
-        this.meshDrawer.draw();
+        md.draw();
 
-        this.meshDrawer.unbind();
+        md.unbind();
         this.gl.disable(this.gl.DEPTH_TEST);
         //this.gl.disable(this.gl.CULL_FACE);
         zToWMatrix.release();
@@ -202,7 +227,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     public drawRectangle(rectangle:Rectangle):void{
         const {width:rw,height:rh} = rectangle.size;
         const maxSize:number = Math.max(rw,rh);
-        const sd:ShapeDrawer = this.shapeDrawer;
+        const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
 
         this.beforeItemDraw(rectangle.filters.length,rectangle.blendMode);
 
@@ -229,7 +254,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.beforeItemDraw(ellipse.filters.length,ellipse.blendMode);
 
         this.prepareShapeUniformInfo(ellipse);
-        const sd:ShapeDrawer = this.shapeDrawer;
+        const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
         const rect:Rect = Rect.fromPool();
         rect.setXYWH(0,0,maxR2,maxR2);
         const size:Size = Size.fromPool();
@@ -255,7 +280,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_arcAngleFrom,ellipse.arcAngleFrom);
         sd.setUniform(sd.u_arcAngleTo,ellipse.arcAngleTo);
         sd.attachTexture('texture',this.nullTexture);
-        this.shapeDrawer.draw();
+        sd.draw();
 
         this.afterItemDraw(ellipse.filters as AbstractFilter[],ellipse.blendMode);
 
@@ -330,7 +355,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.simpleRectDrawer.draw();
         this.restore();
     }
-    public getError():{code:number,desc:string}{
+    public getError():{code:number,desc:string}|undefined{
         if (!DEBUG) return undefined;
         const err:number = this.gl.getError();
         if (err!==this.gl.NO_ERROR) {
@@ -348,7 +373,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public loadTextureInfo(url:string,link:ResourceLink<ITexture>,onLoad:()=>void):void{
         const possibleTargetInCache:ITexture = this.renderableCache[link.getUrl()];
-        if (possibleTargetInCache) {
+        if (possibleTargetInCache!==undefined) {
             link.setTarget(possibleTargetInCache);
             onLoad();
             return;
@@ -364,7 +389,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             onLoad();
         };
         if (DEBUG) {
-            img.onerror = ()=>{
+            img.onerror = (e:any)=>{
+                console.log(e);
                 throw new DebugError(`Resource loading error: can not load resource with url "${url}"`);
             };
         }
@@ -380,7 +406,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.preprocessFrameBuffer.destroy();
         this.doubleFrameBuffer.destroy();
         this.nullTexture.destroy();
-        this.shapeDrawer.destroy();
+        this.shapeDrawerHolder.destroy();
+        this.meshDrawerHolder.destroy();
         this.simpleRectDrawer.destroy();
         //this.modelDrawer.destroy();
         Object.keys(this.renderableCache).forEach((key:string)=>{
@@ -390,13 +417,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     private _init():void{
-        const gl:WebGLRenderingContext = getCtx(this.container as HTMLCanvasElement);
-        if (DEBUG && !gl) throw new DebugError(`WebGLRenderingContext is not supported by this device`);
-        this.gl = gl;
+        const gl:WebGLRenderingContext = getCtx(this.container as HTMLCanvasElement) as WebGLRenderingContext;
+        if (DEBUG && gl===null) throw new DebugError(`WebGLRenderingContext is not supported by this device`);
+        this.gl = gl as WebGLRenderingContext;
 
         this.nullTexture = new Texture(gl);
 
-        this.shapeDrawer = new ShapeDrawer(gl);
         this.simpleRectDrawer = new SimpleRectDrawer(gl);
         this.simpleRectDrawer.prepareShaderGenerator();
         this.simpleRectDrawer.initProgram();
@@ -417,7 +443,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private prepareShapeUniformInfo(shape:Shape):void{
         const {width:rw,height:rh} = shape.size;
         const maxSize:number = Math.max(rw,rh);
-        const sd:ShapeDrawer = this.shapeDrawer;
+        const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
         let offsetX:number = 0,offsetY:number = 0;
         if (maxSize===rw) {
             sd.setUniform(sd.u_width,1);

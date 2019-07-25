@@ -1,29 +1,45 @@
 import {Scene} from "@engine/model/impl/general/scene";
-import {Image} from "@engine/model/impl/geometry/image";
+import {Image, STRETCH_MODE} from "@engine/model/impl/geometry/image";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 
 export class MainScene extends Scene {
 
-    private bg:Image;
+    private img1:Image;
+    private img2:Image;
 
 
     public onPreloading() {
-        this.bg = new Image(this.game);
-        this.bg.setResourceLink(this.resourceLoader.loadImage('../assets/repeat.jpg'));
-        this.bg.size.setWH(100);
-        this.bg.borderRadius = 15;
-        (window as any).bg = this.bg;
+        this.img1 = new Image(this.game);
+        this.img1.setResourceLink(this.resourceLoader.loadImage('./assets/repeat.jpg'));
+        this.img1.size.setWH(100);
+        this.img1.stretchMode = STRETCH_MODE.STRETCH;
+        this.img1.borderRadius = 10;
+
+
+        this.img2 = new Image(this.game);
+        this.img2.pos.setXY(100,0);
+        this.img2.setResourceLink(this.resourceLoader.loadImage('./assets/repeat.jpg'));
+        this.img2.size.setWH(600);
+        this.img2.stretchMode = STRETCH_MODE.REPEAT;
+        this.img2.borderRadius = 15;
+
+        (window as any).img1 = this.img1;
+        (window as any).img2 = this.img2;
     }
 
     public onReady() {
-        this.appendChild(this.bg);
-        this.bg.addBehaviour(new DraggableBehaviour(this.game));
+        this.appendChild(this.img1);
+        this.img1.addBehaviour(new DraggableBehaviour(this.game));
+
+        this.appendChild(this.img2);
+        this.img2.addBehaviour(new DraggableBehaviour(this.game));
+
     }
 
     public onUpdate() {
-        this.bg.offset.x+=1;
-        this.bg.offset.y+=.5;
+        this.img1.offset.x+=1;
+        this.img1.offset.y+=.5;
     }
 
 }

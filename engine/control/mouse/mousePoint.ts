@@ -5,7 +5,6 @@ import {IMouseEventEx} from "@engine/declarations";
 import {ObjectPool} from "@engine/misc/objectPool";
 
 export interface IMousePoint {
-
     screenX:number;
     screenY:number;
     objectX:number;

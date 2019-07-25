@@ -3,8 +3,7 @@ import {GameObject} from "@engine/model/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/model/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {KeyboardControl, KEYBOARD_KEY} from "@engine/control/keyboardControl";
-import {GAME_PAD_KEY, GamePadControl} from "@engine/control/gamePadControl";
+import {KEYBOARD_KEY, KeyboardControl} from "@engine/control/keyboardControl";
 import {Image} from "@engine/model/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
@@ -15,7 +14,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
+        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;

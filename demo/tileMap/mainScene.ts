@@ -14,7 +14,7 @@ export class MainScene extends Scene {
     public onPreloading() {
         const tileMap:TileMap = new TileMap(this.game);
         const img:Image = new Image(this.game);
-        img.setResourceLink(this.resourceLoader.loadImage('tiles.png'));
+        img.setResourceLink(this.resourceLoader.loadImage('./tileMap/tiles.png'));
 
         const data:number[] = [
             1,1,1,1,1,1,1,1,1,1,1,1,

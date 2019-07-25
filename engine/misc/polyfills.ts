@@ -1,16 +1,20 @@
 
+
+if (typeof globalThis === 'undefined') window.globalThis = window;
+
 const rafPolyfill = (f:FrameRequestCallback):number=>{
     return (setTimeout(f,17) as any) as number;
 };
 
-window.requestAnimationFrame =
-    window.requestAnimationFrame||
-    window.webkitRequestAnimationFrame||
+globalThis.requestAnimationFrame =
+    globalThis.requestAnimationFrame||
+    globalThis.webkitRequestAnimationFrame||
     rafPolyfill;
 
-if (!window.cancelAnimationFrame) {
-    window.cancelAnimationFrame = (id) => clearTimeout(id);
+if (!globalThis.cancelAnimationFrame) {
+    globalThis.cancelAnimationFrame = (id) => clearTimeout(id);
 }
+
 
 // if (!Array.prototype['find']) {
 //     Array.prototype['find'] = function(predicate:Function) {

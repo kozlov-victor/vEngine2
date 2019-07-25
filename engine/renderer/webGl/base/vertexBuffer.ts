@@ -16,7 +16,7 @@ export class VertexBuffer {
     constructor(gl:WebGLRenderingContext){
         if (DEBUG && !gl) throw new DebugError("can not create VertexBuffer, gl context not passed to constructor, expected: VertexBuffer(gl)");
         this.gl = gl;
-        this.buffer = gl.createBuffer();
+        this.buffer = gl.createBuffer() as WebGLBuffer;
         if (DEBUG && !this.buffer) throw new DebugError(`can not allocate memory for vertex buffer`);
     }
 

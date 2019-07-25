@@ -1,7 +1,7 @@
 import {Scene} from "@engine/model/impl/general/scene";
 import {GameObject} from "@engine/model/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {CellFrameAnimation} from "@engine/model/impl/frameAnimation/cellFrameAnimation";
+import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Image} from "@engine/model/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     private resourceLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.resourceLink = this.resourceLoader.loadImage('../assets/character.png');
+        this.resourceLink = this.resourceLoader.loadImage('./assets/character.png');
         console.log('on preloading');
     }
 

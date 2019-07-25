@@ -3,7 +3,7 @@ import {Size} from "@engine/geometry/size";
 import {ShaderProgram} from "./shaderProgram";
 import {ITexture} from "@engine/renderer/texture";
 
-const isPowerOf2 = function(value:number):boolean {
+const isPowerOf2 = (value:number):boolean=> {
     return (value & (value - 1)) === 0;
 };
 
@@ -20,8 +20,10 @@ export class Texture implements ITexture {
     public readonly size:Size = new Size(0,0);
 
     private readonly gl:WebGLRenderingContext;
-    private readonly tex:WebGLTexture = null;
+    private readonly tex:WebGLTexture;
     private interpolationMode:INTERPOLATION_MODE;
+
+    private _currentTextureAt0:Texture|null = null;
 
     constructor(gl:WebGLRenderingContext){
         if (DEBUG && !gl) throw new DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
@@ -33,23 +35,10 @@ export class Texture implements ITexture {
                 Texture.MAX_TEXTURE_IMAGE_UNITS =  gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
         }
 
-        this.tex = gl.createTexture();
+        this.tex = gl.createTexture() as WebGLTexture;
         if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);
         // Fill the texture with a 1x1 blue pixel.
         this.setRawData(new Uint8Array([0, 255, 0, 255]),1,1);
-    }
-
-    private _currentTextureAt0:Texture = null;
-    private beforeOperation() {
-        if (this._currentTextureAt0!==null) return;
-        this._currentTextureAt0 = Texture.currInstances[0];
-        this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
-    }
-
-    private afterOperation(){
-        if (this._currentTextureAt0) this.gl.bindTexture(this.gl.TEXTURE_2D, this._currentTextureAt0.tex);
-        else this.gl.bindTexture(this.gl.TEXTURE_2D, null);
-        this._currentTextureAt0 = null;
     }
 
     // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true); for bitmap textures
@@ -177,7 +166,7 @@ export class Texture implements ITexture {
 
         const gl:WebGLRenderingContext = this.gl;
 
-        let glMode:number;
+        let glMode:number|undefined;
         switch (mode) {
             case INTERPOLATION_MODE.LINEAR:
                 glMode = gl.LINEAR;
@@ -190,11 +179,22 @@ export class Texture implements ITexture {
                 break;
         }
 
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, glMode);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, glMode);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, glMode as number);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, glMode as number);
         this.interpolationMode = mode;
 
         this.afterOperation();
+    }
+    private beforeOperation() {
+        if (this._currentTextureAt0!==null) return;
+        this._currentTextureAt0 = Texture.currInstances[0];
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
+    }
+
+    private afterOperation(){
+        if (this._currentTextureAt0) this.gl.bindTexture(this.gl.TEXTURE_2D, this._currentTextureAt0.tex);
+        else this.gl.bindTexture(this.gl.TEXTURE_2D, null);
+        this._currentTextureAt0 = null;
     }
 
 

@@ -3,7 +3,7 @@ import {GameObject} from "@engine/model/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Color} from "@engine/renderer/color";
 import {Circle} from "@engine/model/impl/geometry/circle";
-import {TweenMovie} from "@engine/misc/tweenMovie";
+import {TweenMovie} from "@engine/animation/tweenMovie";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Ellipse} from "@engine/model/impl/geometry/ellipse";
 import {LinearGradient} from "@engine/renderer/linearGradient";
@@ -31,7 +31,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
+        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
     }
 
 
@@ -129,7 +129,7 @@ export class MainScene extends Scene {
         rect.filters = [triangleBlur];
 
         const tm:TweenMovie = new TweenMovie(this.game);
-        tm.tween(0,{
+        tm.addTween(0,{
             target:{val:0},
             progress:(obj:{val:number})=>{
                 sb.setSize(obj.val);
@@ -139,7 +139,7 @@ export class MainScene extends Scene {
             from:{val:0},
             to:{val:5}
         });
-        tm.tween(2000,{
+        tm.addTween(2000,{
             target:{val:5},
             progress:(obj:{val:number})=>{
                 sb.setSize(obj.val);

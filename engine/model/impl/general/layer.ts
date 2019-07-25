@@ -31,6 +31,14 @@ export class Layer {
         }
     }
 
+    public findChildById(id:string):RenderableModel|null{
+        for (const c of this.children) {
+            const possibleObject:RenderableModel|null = c.findChildById(id);
+            if (possibleObject) return possibleObject;
+        }
+        return null;
+    }
+
     public render():void {
         for (const obj of this.children) {
             obj.render();

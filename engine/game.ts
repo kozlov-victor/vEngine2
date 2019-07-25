@@ -9,10 +9,17 @@ import {IControl} from "@engine/control/abstract/iControl";
 import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
 import {ClazzEx} from "@engine/declarations";
 
+
 export enum SCALE_STRATEGY {
     NO_SCALE,
     FIT,
     STRETCH
+}
+
+export interface IGameConstructorParams {
+    width?:number;
+    height?:number;
+    scaleStrategy?: SCALE_STRATEGY;
 }
 
 export class Game {
@@ -25,10 +32,12 @@ export class Game {
     private static instance:Game;
 
 
-    private static isOfType<T>(instance:any, C:ClazzEx<T>):instance is T {
+    private static isOfType<T>(instance:any, C:ClazzEx<T,any>):instance is T {
         return instance instanceof C;
     }
 
+    public readonly width:number;
+    public readonly height:number;
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly pos:Point2d = new Point2d(0,0);
     public readonly camera:Camera = new Camera(this);
@@ -37,7 +46,7 @@ export class Game {
     public fps:number = 0;
 
     public readonly collider:ColliderEngine = new ColliderEngine(this);
-    public scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
+    private _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
     private _lastTime:number = 0;
     private _currTime:number = 0;
@@ -50,12 +59,19 @@ export class Game {
     private audioPlayer:IAudioPlayer;
 
 
-    constructor(public readonly width:number = 320, public readonly height:number = 240){
+    constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT}:IGameConstructorParams = {}){
         Game.instance = this;
         if (DEBUG) (window as any).game = this;
+        this.width = width;
+        this.height = height;
+        this._scaleStrategy = scaleStrategy;
     }
 
-    public addControl(C:ClazzEx<IControl>):void{
+    get scaleStrategy(): SCALE_STRATEGY {
+        return this._scaleStrategy;
+    }
+
+    public addControl(C:ClazzEx<IControl,Game>):void{
         const instance:IControl = new C(this);
         if (DEBUG) {
             for (const c of this._controls) {
@@ -69,7 +85,7 @@ export class Game {
     }
 
 
-    public setAudioPLayer(p:ClazzEx<IAudioPlayer>):void{
+    public setAudioPLayer(p:ClazzEx<IAudioPlayer,Game>):void{
         this.audioPlayer = new p(this);
     }
 
@@ -80,7 +96,7 @@ export class Game {
         return this.audioPlayer;
     }
 
-    public getControl<T>(T:ClazzEx<IControl>):T {
+    public getControl<T>(T:ClazzEx<IControl,Game>):T {
         for (const c of this._controls) {
             if (Game.isOfType(c,T)) return (c as any) as T;
         }
@@ -113,7 +129,7 @@ export class Game {
         if (DEBUG) this._renderer.clearLog();
     }
 
-    public setRenderer(Renderer:ClazzEx<AbstractRenderer>):void{
+    public setRenderer(Renderer:ClazzEx<AbstractRenderer,Game>):void{
         this._renderer = new Renderer(this);
     }
 

@@ -10,8 +10,10 @@ const css:IKeyVal<string|number> = {
     'background-color': 'black',
     'min-width': '20px',
     'min-height': '20px',
-    "opacity": 0.5,
-    "pointer-events":"none",
+    'opacity': 0.5,
+    'pointer-events':'none',
+    'display':'block',
+    'z-index':1000
 };
 Object.keys(css).forEach((key:string)=>devConsole.style.setProperty(key,''+css[key]));
 
@@ -31,15 +33,16 @@ window.addEventListener('load',(e:Event)=>{
 
 
 const prepareMessage = (e:any,lineNum:number)=>{
+    //console.log(e);
     let msg;
     if (typeof e === 'string') {
         msg = e;
     }
-    else msg = e.message || e.reason;
+    else msg = e.message || e.reason || e.error;
     if (msg && msg.message) msg = msg.message;
     if (!msg) {
         if (e.target) {
-            ['img','audio','link'].some((it:string)=>{
+            ['img','audio','link','script'].some((it:string)=>{
                 if (e.target.tagName && e.target.tagName.toLowerCase()===it) {
                     msg = `can not load ${it} with location ${(e.target.src||e.target.href)}`;
                     return true;
@@ -57,27 +60,8 @@ const prepareMessage = (e:any,lineNum:number)=>{
     return msg;
 };
 
-
-window.addEventListener('error',(e:any)=>{
-    const game:Game = (window as any).game as Game;
-    if (game) {
-        try {
-            game.destroy();
-        } catch (e) {
-            console.error(e);
-        }
-    }
-    const lineNum:number = e.lineno;
-    const colNum:number = e.colno;
-    const filename:string = e.filename;
-
-    let runtimeInfo:string = '';
-    if (e.error && e.error.name && e.error.name==='DebugError') {
-        runtimeInfo = prepareMessage(e,lineNum);
-    }
-
-    try {
-        const tmpl:string = `
+const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
+    const tmpl:string = `
 
   <div class="errorBlock"> 
         <style>
@@ -113,12 +97,36 @@ window.addEventListener('error',(e:any)=>{
        <div class="errorClose" onclick="this.closest('.errorBlockHolder').remove();">x</div>
        <h1 class="errorHeader">Runtime error!</h1>
        <h3 class="errorText">${runtimeInfo}</h3>
-       <div>${filename}</div>
+       <div>${filename?filename:''}</div>
        <div>-------------------</div>
        <pre>$_content</pre>
   </div> 
   
 `;
+    const errDiv:HTMLElement = document.createElement('div');
+    errDiv.className = 'errorBlockHolder';
+    errDiv.innerHTML = tmpl.replace('$_content',debugInfo);
+    document.body.appendChild(errDiv);
+    document.title = 'runtime error!';
+};
+
+window.addEventListener('error',(e:any)=>{
+
+    const game:Game = (window as any).game as Game;
+    if (game) {
+        try {
+            game.destroy();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    const lineNum:number = e.lineno;
+    const colNum:number = e.colno;
+    const filename:string = e.filename;
+    const runtimeInfo:string = prepareMessage(e,lineNum);
+
+
+    if (filename) {
         httpClient.get(filename,{r:Math.random()},(file:string)=>{
             const strings:string[] = file.split('\n');
             const linesAfter:number = 5;
@@ -126,21 +134,18 @@ window.addEventListener('error',(e:any)=>{
             let errorString:string = strings[lineNum - 1] || '';
             errorString = `${errorString.substr(0,colNum-1)}<span class="errorCol">${errorString[colNum-1]}</span>${errorString.substr(colNum)}`;
             errorString=`<span class="errorRow">${errorString}</span>\n`;
-            let res:string='';
+            let debugInfo:string='';
             for (let i=-linesBefore;i<linesAfter;i++) {
                 const index = lineNum + i;
                 if (index<0 || index>strings.length-1) continue;
                 const s = strings[index];
-                if (index===lineNum-1) res+=errorString;
-                else res+=s+'\n';
+                if (index===lineNum-1) debugInfo+=errorString;
+                else debugInfo+=s+'\n';
             }
-            const errDiv:HTMLElement = document.createElement('div');
-            errDiv.className = 'errorBlockHolder';
-            errDiv.innerHTML = tmpl.replace('$_content',res);
-            document.body.appendChild(errDiv);
-            document.title = 'runtime error!';
+            renderError(filename,runtimeInfo,debugInfo);
         });
-    } catch (e) {
-        console.error(e);
+    } else {
+        renderError('',runtimeInfo,'');
     }
+
 },true);

@@ -2,13 +2,13 @@ import {Game} from "@engine/game";
 import {ICloneable} from "@engine/declarations";
 import {RenderableModel} from "../../abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
-import {AbstractFrameAnimation} from "@engine/model/impl/frameAnimation/abstract/abstractFrameAnimation";
+import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {Shape} from "@engine/model/impl/geometry/abstract/shape";
 
 
 export class GameObject extends RenderableModel implements ICloneable<GameObject>{
 
-    public type:string = 'GameObject';
+    public readonly type:string = 'GameObject';
     public sprite:Shape;
 
     public groupNames:string[] = [];

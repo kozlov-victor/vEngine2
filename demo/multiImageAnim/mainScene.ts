@@ -3,7 +3,7 @@ import {GameObject} from "@engine/model/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {MultiImageFrameAnimation} from "@engine/model/impl/frameAnimation/multiImageFrameAnimation";
+import {MultiImageFrameAnimation} from "@engine/animation/frameAnimation/multiImageFrameAnimation";
 
 
 export class MainScene extends Scene {
@@ -13,7 +13,7 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         for (let i:number = 0;i<6;i++) {
-            this.resourceLinks[i] = this.resourceLoader.loadImage(`character/ninja_right_${i+1}.png`);
+            this.resourceLinks[i] = this.resourceLoader.loadImage(`./multiImageAnim/character/ninja_right_${i+1}.png`);
         }
         console.log('on preloading');
     }

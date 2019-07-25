@@ -13,6 +13,7 @@
         ],
         "importHelpers": true,
         "strict": false,
+        "strictPropertyInitialization": false,
         "noImplicitAny": true,
         "noImplicitThis": true,
         "noImplicitReturns": true,
@@ -23,8 +24,7 @@
             "@engine/*": ["engine/*"]
         },
         "incremental": true,
-        "stripInternal": true,
-        "outDir": "./lib"
+        "stripInternal": true
     },
     "exclude": [
         "node_modules"

@@ -7,10 +7,10 @@ import {CAMERA_MATRIX_MODE} from "@engine/renderer/camera";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {IEventemittable, IFilterable, IRevalidatable, ITweenable} from "@engine/declarations";
 import {RenderableModel} from "@engine/model/abstract/renderableModel";
-import {TweenMovie} from "@engine/misc/tweenMovie";
+import {TweenMovie} from "@engine/animation/tweenMovie";
 import {removeFromArray} from "@engine/misc/object";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
-import {Tween, ITweenDescription} from "@engine/misc/tween";
+import {Tween, ITweenDescription} from "@engine/animation/tween";
 import {Timer} from "@engine/misc/timer";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
@@ -30,7 +30,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     private _layers:Layer[] = [];
     private readonly _uiLayer:Layer;
 
-    // tween
+    // addTween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
 
     // timer
@@ -41,7 +41,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
     constructor(protected game:Game) {
         this._uiLayer = new Layer(this.game);
-        this.addLayer(new Layer(game));
         this.resourceLoader = new ResourceLoader(game);
     }
 
@@ -60,6 +59,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     }
 
     public getDefaultLayer():Layer {
+        if (!this._layers.length) this.addLayer(new Layer(this.game));
         return this._layers[0];
     }
 
@@ -139,6 +139,13 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         this._eventEmitterDelegate.trigger(eventName,data);
     }
 
+    public findChildById(id:string):RenderableModel|null{
+        for (const l of this._layers) {
+            const possibleObject:RenderableModel|null = l.findChildById(id);
+            if (possibleObject) return possibleObject;
+        }
+        return null;
+    }
 
     public destroy():void {
         this.onDestroy();

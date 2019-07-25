@@ -10,7 +10,7 @@ export class MainScene extends Scene {
     private resourceLink!:ResourceLink<void>;
 
     public onPreloading() {
-        this.resourceLink = this.resourceLoader.loadSound('../assets/sound.mp3');
+        this.resourceLink = this.resourceLoader.loadSound('./assets/sound.mp3');
 
         const sound:Sound = new Sound(this.game);
         (window as any).sound = sound;

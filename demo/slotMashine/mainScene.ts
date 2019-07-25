@@ -26,8 +26,8 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         this.overlay = new Image(this.game);
-        this.overlay.setResourceLink(this.resourceLoader.loadImage('../slotMashine/resources/overlay.png'));
-        this.wheelLink = this.resourceLoader.loadImage(`../slotMashine/resources/wheel.png?1`);
+        this.overlay.setResourceLink(this.resourceLoader.loadImage('./slotMashine/resources/overlay.png'));
+        this.wheelLink = this.resourceLoader.loadImage(`./slotMashine/resources/wheel.png?1`);
 
         const rect:Rectangle = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);

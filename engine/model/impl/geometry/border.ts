@@ -5,22 +5,22 @@ import {ICloneable} from "@engine/declarations";
 
 export class Border extends Rectangle implements ICloneable<Border>{
 
-    readonly type:string = 'Border';
+    public readonly type:string = 'Border';
 
     constructor(game:Game){
         super(game);
         this.fillColor = Color.NONE;
     }
 
-    protected setClonedProperties(cloned:Border):void{
-        cloned.fillColor = this.fillColor.clone();
-        super.setClonedProperties(cloned);
-    }
-
-    clone():Border{
+    public clone():Border{
         const cloned:Border = new Border(this.game);
         this.setClonedProperties(cloned);
         return cloned;
+    }
+
+    protected setClonedProperties(cloned:Border):void{
+        cloned.fillColor = this.fillColor.clone();
+        super.setClonedProperties(cloned);
     }
 
 }

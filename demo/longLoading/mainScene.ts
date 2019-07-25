@@ -9,15 +9,15 @@ import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Image} from "@engine/model/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {TaskRef} from "@engine/resources/queue";
 
 
 const fakeLongLoadingFn = (resourceLoader:ResourceLoader)=>{
-    const id:string = Math.random()+'_'+Math.random();
-    resourceLoader.q.addTask(()=>{
+    const taskRef:TaskRef = resourceLoader.q.addTask(()=>{
         setTimeout(()=>{
-            resourceLoader.q.resolveTask(id);
+            resourceLoader.q.resolveTask(taskRef);
         },200);
-    },id);
+    });
 };
 
 
@@ -27,7 +27,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('../assets/logo.png');
+        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
         for (let i:number = 0;i<100;i++) { fakeLongLoadingFn(this.resourceLoader); }
         const rect = new Rectangle(this.game);
         rect.borderRadius = 5;

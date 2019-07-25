@@ -1,11 +1,11 @@
 import {DebugError} from "@engine/debug/debugError";
-import {LoaderUtil} from "../../resources/loaderUtil";
 import {AudioPlayer} from "../audioPlayer";
 import {Game} from "../../game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {Clazz, ICloneable} from "@engine/declarations";
 import {Sound} from "@engine/model/impl/general/sound";
+import {UrlLoader} from "@engine/resources/urlLoader";
 
 
 
@@ -24,11 +24,11 @@ class CtxHolder {
     private static res:AudioContext;
 
     private static fixAutoPlayPolicy():void { // chrome allow playing only with user gesture
-        const click =()=>{
+        const listener =()=>{
             CtxHolder.res.resume();
-            document.removeEventListener('click',click);
+            document.removeEventListener('click',listener);
         };
-        document.addEventListener('click',click);
+        document.addEventListener('click',listener);
     }
 }
 
@@ -72,13 +72,14 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
             onLoad();
             return;
         }
-        LoaderUtil.loadRaw(url, 'arraybuffer',(buffer:ArrayBuffer|string)=> {
+        const urlLoader:UrlLoader = new UrlLoader({url,responseType:'arraybuffer'});
+        urlLoader.onLoad = (buffer:ArrayBuffer|string)=>{
             decode(buffer as ArrayBuffer, (decoded:AudioBuffer)=>{
                 AudioPlayer.cache[link.getUrl()] = decoded;
                 onLoad();
             });
-        });
-
+        };
+        urlLoader.load();
     }
 
     public isFree(): boolean {
@@ -94,6 +95,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         currSource.connect(this._gainNode);
         currSource.start(0);
         currSource.playbackRate.value = sound.velocity;
+        this._gainNode.gain.value = sound.gain;
         currSource.onended = ()=> {
             this.stop();
         };

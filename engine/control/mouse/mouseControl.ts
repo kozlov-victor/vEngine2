@@ -24,18 +24,19 @@ export class MouseControl implements IControl {
             MathEx.isPointInRect(point,rectWithOffset)
         ) {
             point.target = go;
-            go.trigger(eventName as string,{
+            const iMousePoint:IMousePoint = {
                 screenX:point.x,
                 screenY:point.y,
                 objectX:point.x - go.pos.x,
                 objectY:point.y - go.pos.y,
                 id:point.id,
                 target:go,
-                nativeEvent: e,
+                nativeEvent: e as Event,
                 eventName,
                 isMouseDown: point.isMouseDown
-            } as IMousePoint);
-            res = true;
+            };
+            go.trigger(eventName as string,iMousePoint);
+            res = !go.passMouseEventsThrough;
         }
         rectWithOffset.release();
         for (const ch of go.children) {

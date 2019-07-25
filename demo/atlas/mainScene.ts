@@ -1,7 +1,7 @@
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IRectJSON} from "@engine/geometry/rect";
-import {FRAME_ANIMATION_EVENTS} from "@engine/model/impl/frameAnimation/abstract/abstractFrameAnimation";
-import {AtlasFrameAnimation} from "@engine/model/impl/frameAnimation/atlasFrameAnimation";
+import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
+import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAnimation";
 import {GameObject} from "@engine/model/impl/general/gameObject";
 import {Scene} from "@engine/model/impl/general/scene";
 import {Image} from "@engine/model/impl/geometry/image";
@@ -16,8 +16,8 @@ export class MainScene extends Scene {
     private atlasLink: ResourceLink<string>;
 
     public onPreloading() {
-        this.spriteLink = this.resourceLoader.loadImage("../atlas/player.png");
-        this.atlasLink = this.resourceLoader.loadText("../atlas/player.atlas");
+        this.spriteLink = this.resourceLoader.loadImage("./atlas/player.png");
+        this.atlasLink = this.resourceLoader.loadText("./atlas/player.atlas");
     }
 
 

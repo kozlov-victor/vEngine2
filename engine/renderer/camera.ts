@@ -1,5 +1,5 @@
 import {DebugError} from "../debug/debugError";
-import {Tween} from "../misc/tween";
+import {Tween} from "../animation/tween";
 import {MathEx} from "../misc/mathEx";
 import {Rect} from "../geometry/rect";
 import {Point2d} from "../geometry/point2d";

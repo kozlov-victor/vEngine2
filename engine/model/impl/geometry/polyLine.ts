@@ -56,7 +56,7 @@ class SvgTokenizer {
     public lastCommand:string;
 
     private pos:number = 0;
-    private lastPos:number;
+    private lastPos:number|undefined;
 
     private readonly CHAR:RegExp = /[a-zA-Z]/i;
     private readonly NUM:RegExp = /[0-9.]/i;
@@ -71,7 +71,7 @@ class SvgTokenizer {
 
     public releaseNextToken(){
         if (DEBUG && this.lastPos===undefined) throw new DebugError(`can not release next token`);
-        this.pos = this.lastPos;
+        this.pos = this.lastPos as number;
         this.lastPos = undefined;
     }
 
@@ -83,7 +83,7 @@ class SvgTokenizer {
 
     public getNextNumber():number{
         this.skipWhiteSpaces();
-        const lastPos:number = this.lastPos;
+        const lastPos:number = this.lastPos as number;
         let sign:number = 1;
         if (this.path[this.pos]==='-') {
             sign = -1;
@@ -131,8 +131,8 @@ export class PolyLine extends Shape {
     public vectorScaleFactor:number = 1;
     public borderRadius:number = 1;
 
-    private lastPoint:Point2d;
-    private firstPoint:Point2d;
+    private lastPoint:Point2d|null;
+    private firstPoint:Point2d|null;
 
     private tokenizer:SvgTokenizer;
 
@@ -178,7 +178,7 @@ export class PolyLine extends Shape {
 
     public close(){
         if (DEBUG && !this.firstPoint) throw new DebugError(`can not close polyline: no first point defined`);
-        this.lineTo(this.firstPoint.x,this.firstPoint.y);
+        this.lineTo(this!.firstPoint!.x,this!.firstPoint!.y);
         this.complete();
     }
 
@@ -209,7 +209,7 @@ export class PolyLine extends Shape {
     // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
     public setSvgPath(path:string){
         this.tokenizer = new SvgTokenizer(path);
-        let lastCommand:string;
+        let lastCommand:string|undefined;
         while (!this.tokenizer.isEof()) {
             const command:string = this.tokenizer.getNextCommand();
             //console.log({command});
@@ -279,53 +279,39 @@ export class PolyLine extends Shape {
         const tokenizer:SvgTokenizer = this.tokenizer;
         switch (command) {
             case 'M': {
-                const x:number = tokenizer.getNextNumber();
-                const y:number = tokenizer.getNextNumber();
-                this.moveTo(x,y);
+                this.moveTo(tokenizer.getNextNumber(), tokenizer.getNextNumber());
                 break;
             }
             case 'm': {
-                const x:number = tokenizer.getNextNumber();
-                const y:number = tokenizer.getNextNumber();
-                this.moveBy(x,y);
+                this.moveBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
                 break;
             }
             case 'L': {
-                const x:number = tokenizer.getNextNumber();
-                const y:number = tokenizer.getNextNumber();
-                this.lineTo(x,y);
+                this.lineTo(tokenizer.getNextNumber(),tokenizer.getNextNumber());
                 break;
             }
             case 'l': {
-                const x:number = tokenizer.getNextNumber();
-                const y:number = tokenizer.getNextNumber();
-                this.lineBy(x,y);
+                this.lineBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
                 break;
             }
             case 'H': {
-                const x:number = tokenizer.getNextNumber();
-                const y:number = this.lastPoint.y;
-                this.lineTo(x,y);
+                this.lineTo( tokenizer.getNextNumber(),this!.lastPoint!.y);
                 break;
             }
             case 'h': {
-                const x:number = tokenizer.getNextNumber();
-                this.lineBy(x,0);
+                this.lineBy( tokenizer.getNextNumber(),0);
                 break;
             }
             case 'V': {
-                const x:number = this.lastPoint.x;
-                const y:number = tokenizer.getNextNumber();
-                this.lineTo(x,y);
+                this.lineTo(this!.lastPoint!.x,tokenizer.getNextNumber());
                 break;
             }
             case 'v': {
-                const y:number = tokenizer.getNextNumber();
-                this.lineBy(0,y);
+                this.lineBy(0,tokenizer.getNextNumber());
                 break;
             }
             case 'C': {
-                const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p3:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
@@ -334,7 +320,7 @@ export class PolyLine extends Shape {
                 break;
             }
             case 'c': {
-                const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p3:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
@@ -343,7 +329,7 @@ export class PolyLine extends Shape {
                 break;
             }
             case 'S': {
-                const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 if (!this.lastBezierPoint || ['c','C','S','s'].indexOf(tokenizer.lastCommand)===-1) {
                     this.lastBezierPoint = p1;
                 }
@@ -355,7 +341,7 @@ export class PolyLine extends Shape {
                 break;
             }
             case 's': {
-                const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 if (!this.lastBezierPoint || ['c','C','S','s'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
                 const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
                 const p3:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
@@ -365,7 +351,7 @@ export class PolyLine extends Shape {
                 break;
             }
             case 'Q': {
-                const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p3:v2 = [p2[0],p2[1]];
                 const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
@@ -374,7 +360,7 @@ export class PolyLine extends Shape {
                 break;
             }
             case 'q': {
-                const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p3:v2 = [p2[0],p2[1]];
                 const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
@@ -383,7 +369,7 @@ export class PolyLine extends Shape {
                 break;
             }
             case 'T': {
-                const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
                 const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
                 const p3:v2 = [p2[0],p2[1]];
@@ -393,7 +379,7 @@ export class PolyLine extends Shape {
                 break;
             }
             case 't': {
-                const p1:v2 = [this.lastPoint.x,this.lastPoint.y];
+                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
                 const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
                 const p3:v2 = add(p1,[p2[0],p2[1]]);
@@ -415,23 +401,23 @@ export class PolyLine extends Shape {
                 let x:number = tokenizer.getNextNumber();
                 let y:number = tokenizer.getNextNumber();
                 if (command==='a') {
-                    x+=this.lastPoint.x;
-                    y+=this.lastPoint.y;
+                    x+=this.lastPoint!.x;
+                    y+=this.lastPoint!.y;
                 }
-                const arcs:{x:number,y:number,x1:number,y1:number,x2:number,y2:number}[] = arcToBezier(
-                    this.lastPoint.x,this.lastPoint.y,
+                const arcs:{x:number,y:number,x1:number,y1:number,x2:number,y2:number}[]|null = arcToBezier(
+                    this.lastPoint!.x,this.lastPoint!.y,
                     x,y,
                     rx,ry,xAxisRotation,
                     largeArcFlag,sweepFlag
                 );
-                arcs.forEach((arc:{x:number,y:number,x1:number,y1:number,x2:number,y2:number},i:number)=>{
+                if (arcs!==null) arcs.forEach((arc:{x:number,y:number,x1:number,y1:number,x2:number,y2:number},i:number)=>{
                     let xTo:number = arc.x;
                     let yTo:number = arc.y;
                     if (i===arcs.length-1) {
                         xTo = x;
                         yTo = y;
                     }
-                    this.bezierTo([this.lastPoint.x,this.lastPoint.y],[arc.x1,arc.y1],[arc.x2,arc.y2],[xTo,yTo]);
+                    this.bezierTo([this.lastPoint!.x,this.lastPoint!.y],[arc.x1,arc.y1],[arc.x2,arc.y2],[xTo,yTo]);
                     // this.testPoint(arc.x,arc.y,1);
                     // this.testPoint(arc.x1,arc.y1,2);
                     // this.testPoint(arc.x2,arc.y2,3);

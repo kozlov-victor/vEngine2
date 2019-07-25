@@ -61,13 +61,13 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
             this.release(code);
         };
 
-        window.addEventListener('keydown',this.keyDownListener);
-        window.addEventListener('keyup',this.keyUpListener);
+        globalThis.addEventListener('keydown',this.keyDownListener);
+        globalThis.addEventListener('keyup',this.keyUpListener);
     }
 
     public destroy():void{
-        window.removeEventListener('keydown',this.keyDownListener);
-        window.removeEventListener('keyup',this.keyUpListener);
+        globalThis.removeEventListener('keydown',this.keyDownListener);
+        globalThis.removeEventListener('keyup',this.keyUpListener);
     }
 
     public on(e:KEYBOARD_EVENTS, callback:(e:KEYBOARD_KEY)=>any):void {

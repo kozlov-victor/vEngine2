@@ -15,8 +15,13 @@ import {Font} from "@engine/model/impl/general/font";
 import {Line} from "@engine/model/impl/geometry/line";
 import {RenderableModel} from "@engine/model/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/texture";
+import {IDestroyable} from "@engine/declarations";
 
-export abstract class AbstractRenderer {
+const preventDefault = (e: Event) => {
+    e.preventDefault();
+};
+
+export abstract class AbstractRenderer implements IDestroyable {
 
     public abstract type:string;
 
@@ -30,9 +35,10 @@ export abstract class AbstractRenderer {
     protected constructor(protected game:Game){
         this.game = game;
         if (Device.isCocoonJS) {
-            const dpr:number = window.devicePixelRatio||1;
-            this.fullScreenSize.setW(window.innerWidth*dpr);
-            this.fullScreenSize.setH(window.innerHeight*dpr);
+            const [innerWidth,innerHeight] = this.getScreenResolution();
+            const dpr:number = globalThis.devicePixelRatio||1;
+            this.fullScreenSize.setW(innerWidth*dpr);
+            this.fullScreenSize.setH(innerHeight*dpr);
         } else {
             this.fullScreenSize.setWH(this.game.width,this.game.height);
         }
@@ -63,16 +69,11 @@ export abstract class AbstractRenderer {
 
     public afterFrameDraw(filters:AbstractFilter[]):void {}
 
-    public registerResize():void {
-        this.onResize();
-        window.addEventListener('resize',()=>this.onResize());
-    }
-
     public destroy():void {
-        window.removeEventListener('resize',this.onResize);
+        globalThis.removeEventListener('resize',this.onResize);
     }
 
-    public getError():{code:number,desc:string}{
+    public getError():{code:number,desc:string}|undefined{
         return undefined;
     }
 
@@ -158,34 +159,55 @@ export abstract class AbstractRenderer {
 
     public loadTextureInfo(url:string,link:ResourceLink<ITexture>,onLoaded:()=>void):void {}
 
+    protected registerResize():void {
+        this.onResize();
+        globalThis.addEventListener('resize', () => {
+            this.onResize();
+            setTimeout(()=>this.onResize(),100);
+        });
+        // to prevent zoom on ios
+        document.addEventListener('gesturestart', (e:Event)=>e.preventDefault());
+        this.container.addEventListener('gesturestart', (e:Event)=>e.preventDefault());
+    }
+
     protected onResize():void {
         const container:HTMLElement = this.container;
+
+        const [innerWidth,innerHeight] = this.getScreenResolution();
+
         if (this.game.scaleStrategy===SCALE_STRATEGY.NO_SCALE) return;
         else if (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH) {
-            container.style.width = `${window.innerWidth}px`;
-            container.style.height = `${window.innerHeight}px`;
+
+            container.style.width = `${innerWidth}px`;
+            container.style.height = `${innerHeight}px`;
+            this.game.scale.setXY(innerWidth/this.game.width,innerHeight/this.game.height);
+            this.game.pos.setXY(0);
             return;
         }
         const canvasRatio:number = this.game.height / this.game.width;
-        const windowRatio:number = window.innerHeight / window.innerWidth;
+        const windowRatio:number = innerHeight / innerWidth;
         let width:number;
         let height:number;
 
         if (windowRatio < canvasRatio) {
-            height = window.innerHeight;
+            height = innerHeight;
             width = height / canvasRatio;
         } else {
-            width = window.innerWidth;
+            width = innerWidth;
             height = width * canvasRatio;
         }
         this.game.scale.setXY(width / this.game.width, height / this.game.height);
         this.game.pos.setXY(
-            (window.innerWidth - width) / 2,
-            (window.innerHeight - height) / 2
+            (innerWidth - width) / 2,
+            (innerHeight - height) / 2
         );
 
         this.container.style.width = width + 'px';
         this.container.style.height = height + 'px';
         this.container.style.marginTop = `${this.game.pos.y}px`;
+    }
+
+    private getScreenResolution():[number,number]{
+        return [globalThis.innerWidth,globalThis.innerHeight];
     }
 }

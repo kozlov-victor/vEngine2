@@ -7,12 +7,12 @@ import {RenderableModel} from "@engine/model/abstract/renderableModel";
 
 export class MainScene extends Scene {
 
-    model:RenderableModel;
+    private model:RenderableModel;
 
     public onReady() {
 
         const rect:Rectangle = new Rectangle(this.game);
-        let gradient:LinearGradient  = new LinearGradient();
+        const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0.2;
         gradient.colorFrom = Color.RGB(100,0,20);
         gradient.colorTo = Color.RGB(200,111,1);

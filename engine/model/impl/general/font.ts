@@ -25,6 +25,10 @@ interface IRange {
     to:number;
 }
 
+const getCtx = (cnv:HTMLCanvasElement):CanvasRenderingContext2D=>{
+    return cnv.getContext('2d') as CanvasRenderingContext2D;
+};
+
 namespace FontFactory {
 
     const SYMBOL_PADDING:number = 4;
@@ -42,7 +46,7 @@ namespace FontFactory {
     export const getFontContext = (arrFromTo:IRange[], strFont:string, w:number):IFontContext=> {
         
         const cnv:HTMLCanvasElement = document.createElement('canvas');
-        const ctx:CanvasRenderingContext2D = cnv.getContext('2d');
+        const ctx:CanvasRenderingContext2D = getCtx(cnv);
         ctx.font = strFont;
         const lineHeight:number = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
         const symbols:{[key:string]:IRectViewJSON} = {};
@@ -51,7 +55,7 @@ namespace FontFactory {
             const arrFromToCurr:IRange = arrFromTo[k];
             for (let i:number = arrFromToCurr.from; i < arrFromToCurr.to; i++) {
                 const currentChar:string = String.fromCharCode(i);
-                const context2D:CanvasRenderingContext2D = cnv.getContext('2d');
+                const context2D:CanvasRenderingContext2D = cnv.getContext('2d') as CanvasRenderingContext2D;
                 let textWidth:number = context2D.measureText(currentChar).width;
                 textWidth += 2 * SYMBOL_PADDING;
                 if (textWidth === 0) continue;
@@ -75,7 +79,7 @@ namespace FontFactory {
 
     const correctColor = (canvas:HTMLCanvasElement,color:Color):void=>{
         const {r,g,b,a} = color.toJSON();
-        const ctx:CanvasRenderingContext2D = canvas.getContext("2d");
+        const ctx:CanvasRenderingContext2D = getCtx(canvas);
         const imgData:ImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const clamped:Uint8ClampedArray = imgData.data;
         for (let i:number = 0; i < clamped.length; i+=4) {
@@ -100,7 +104,7 @@ namespace FontFactory {
         const cnv:HTMLCanvasElement = document.createElement('canvas');
         cnv.width = fontContext.width;
         cnv.height = fontContext.height;
-        const ctx:CanvasRenderingContext2D = cnv.getContext('2d');
+        const ctx:CanvasRenderingContext2D = getCtx(cnv);
         ctx.font = strFont;
         ctx.textBaseline = "top";
         ctx.imageSmoothingEnabled = false;
@@ -148,6 +152,7 @@ export class Font implements IResource<ITexture>, IRevalidatable {
     private static _systemFontInstance:Font;
 
     public readonly type:string = 'Font';
+
     public fontSize:number=12;
     public fontFamily:string='Monospace';
     public fontContext:IFontContext;

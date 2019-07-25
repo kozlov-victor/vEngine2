@@ -8,7 +8,7 @@ import {ITexture} from "@engine/renderer/texture";
 import {Image} from "@engine/model/impl/geometry/image";
 import {Color} from "@engine/renderer/color";
 import {GameObject} from "@engine/model/impl/general/gameObject";
-import {CellFrameAnimation} from "@engine/model/impl/frameAnimation/cellFrameAnimation";
+import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {Game} from "@engine/game";
 
 
@@ -21,7 +21,7 @@ export class MainScene extends Scene {
     private _em:boolean = false;
 
     public onPreloading() {
-        this.resourceLink = this.resourceLoader.loadImage('fire-texture-atlas.jpg');
+        this.resourceLink = this.resourceLoader.loadImage('./particlesFire/fire-texture-atlas.jpg');
     }
 
 
@@ -52,8 +52,8 @@ export class MainScene extends Scene {
 
         const pi:number = Math.PI;
         ps.numOfParticlesToEmit = {from:1,to:1};
-        ps.particleLiveTime = {from:1000,to:2000};
-        ps.particleAngle = {from:-0.2-pi/2,to:0.2-pi/2};
+        ps.particleLiveTime = {from:500,to:800};
+        ps.particleAngle = {from:-pi/2 - pi/4,to:pi/2 + pi/4};
         this.ps = ps;
         ps.onEmitParticle((p:RenderableModel)=>{
 
@@ -70,8 +70,11 @@ export class MainScene extends Scene {
 
         });
         this.appendChild(ps);
+        this.on(MOUSE_EVENTS.click,()=>{
+            this.game.getRenderer().requestFullScreen();
+        });
         this.on(MOUSE_EVENTS.mouseMove,(e:IMousePoint)=>{
-            this.ps.emissionPosition.setXY(e.screenX,e.screenY);
+            this.ps.emissionPosition.setXY(e.screenX - this.obj.size.width/2,e.screenY-this.obj.size.height/2);
         });
 
 

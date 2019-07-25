@@ -9,7 +9,6 @@ import {Image} from "@engine/model/impl/geometry/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Ellipse} from "@engine/model/impl/geometry/ellipse";
 import {ITexture} from "@engine/renderer/texture";
-import {AbstractCanvasFilter} from "@engine/renderer/canvas/filers/abstract/abstractCanvasFilter";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -24,9 +23,9 @@ interface ICanvasTexture extends ITexture{
 
 export class CanvasRenderer extends AbstractCanvasRenderer {
 
-    private ctx:CanvasRenderingContext2D;
-
     public readonly type:string = 'CanvasRenderer';
+
+    private readonly ctx:CanvasRenderingContext2D;
 
     constructor(game:Game){
         super(game);

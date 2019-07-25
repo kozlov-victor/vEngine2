@@ -8,13 +8,13 @@ export class Size extends ObservableEntity implements IReleasealable{
         this.triggerObservable();
     }
 
+    get width(): number {
+        return this._width;
+    }
+
     set height(val:number) {
         this._height = val;
         this.triggerObservable();
-    }
-
-    get width(): number {
-        return this._width;
     }
 
     get height(): number {

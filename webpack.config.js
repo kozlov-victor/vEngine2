@@ -20,10 +20,7 @@ module.exports = (env={})=>{
 
     const debug = env.debug==='true';
 
-
-    const entry = {
-
-    };
+    const entry = {};
     const output = {
         path: path.resolve('./demo/out'),
         filename:'[name].js'
@@ -31,7 +28,7 @@ module.exports = (env={})=>{
 
     let dirs = fs.readdirSync('./demo');
     dirs.forEach((dir)=>{
-        if (['assets','out','index.html','.DS_Store','generateIndexPage.js'].includes(dir)) return;
+        if (['demo.html','assets','out','index.html','.DS_Store','generateIndexPage.js'].includes(dir)) return;
         entry[`${dir}`] = [`./demo/${dir}/index.ts`]
     });
 
@@ -42,7 +39,7 @@ module.exports = (env={})=>{
     console.log('webpack started at',new Date());
     console.log({entry,output});
 
-    let config = {
+    const config = {
         entry,
         output,
         mode: 'production', //debug ? 'development' : 'production',
@@ -59,9 +56,15 @@ module.exports = (env={})=>{
         module: {
             rules: [
                 {
-                    test: /\.ts$/,
+                    test: /\.glsl$/,
                     use: [
-                        {loader: "awesome-typescript-loader",options: {}},
+                        {loader: "glsl/glsl-loader",options: {debug}},
+                    ]
+                },
+                {
+                    test: /\.xml$/,
+                    use: [
+                        {loader: "xml/xml-loader",options: {debug}},
                     ]
                 },
                 {
@@ -72,7 +75,13 @@ module.exports = (env={})=>{
                             options: {}
                         }
                     ]
-                }
+                },
+                {
+                    test: /\.ts$/,
+                    use: [
+                        {loader: "awesome-typescript-loader",options: {}},
+                    ]
+                },
             ]
         },
         resolve: {
@@ -97,7 +106,7 @@ module.exports = (env={})=>{
             DEBUG: debug,
         }),
         new TSLintPlugin({
-            //files: ['./src/**/*.ts']
+            files: ['./demo/**/*.ts','./engine/**/*.ts']
         }),
         new WebpackDonePlugin()
     ];

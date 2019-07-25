@@ -35,7 +35,7 @@ export class Polygon extends Mesh {
         const triangulatedIndices:number[] = triangulator.computeTriangles(vertices);
         const triangulatedVertices:number[] = [];
         for (const ind of triangulatedIndices) {
-            triangulatedVertices.push(vertices[2*ind],vertices[2*ind+1])
+            triangulatedVertices.push(vertices[2*ind],vertices[2*ind+1]);
         }
         this.setVertices(triangulatedVertices);
         this.size.set(p.size);

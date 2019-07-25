@@ -4,8 +4,8 @@ import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {AudioPlayer} from "@engine/media/audioPlayer";
 import {DebugError} from "@engine/debug/debugError";
 import {Clazz, ICloneable} from "@engine/declarations";
-import {LoaderUtil} from "@engine/resources/loaderUtil";
 import {Sound} from "@engine/model/impl/general/sound";
+import {UrlLoader} from "@engine/resources/urlLoader";
 
 
 
@@ -33,11 +33,12 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         this._ctx = CtxHolder.getCtx();
     }
     public load(url:string,link:ResourceLink<void>,callBack:()=>void):void {
-        LoaderUtil.loadRaw(url,'blob',(buffer:ArrayBuffer|string)=>{
+        const urlLoader:UrlLoader = new UrlLoader({url,responseType:'blob'});
+        urlLoader.onLoad = (buffer:ArrayBuffer|string)=>{
             AudioPlayer.cache[link.getUrl()] = URL.createObjectURL(buffer as ArrayBuffer);
             callBack();
-        });
-
+        };
+        urlLoader.load();
     }
 
     public isFree(): boolean {

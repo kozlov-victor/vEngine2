@@ -7,7 +7,7 @@ import {Color} from "@engine/renderer/color";
 
 export class FrameBuffer {
 
-    private static currInstance:FrameBuffer = null;
+    private static currInstance:FrameBuffer|null = null;
     private gl:WebGLRenderingContext;
 
     private readonly texture:Texture;

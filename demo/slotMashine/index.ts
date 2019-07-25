@@ -8,8 +8,7 @@ import {CanvasRenderer} from "@engine/renderer/canvas/canvasRenderer";
 
 const W:number = Wheel.CELL_WIDTH*3+Wheel.CELL_PADDING*2; // 745;
 const H:number = 433;
-const game:Game = new Game(W,H);
-game.scaleStrategy = SCALE_STRATEGY.STRETCH;
+const game:Game = new Game({width:W,height:H,scaleStrategy:SCALE_STRATEGY.STRETCH});
 game.setRenderer(CanvasRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);

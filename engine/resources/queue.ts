@@ -1,4 +1,12 @@
 import {DebugError} from "@engine/debug/debugError";
+import {Incrementer} from "@engine/resources/incrementer";
+
+
+export class TaskRef {
+
+    public readonly id:number = Incrementer.getValue();
+
+}
 
 export class Queue {
 
@@ -22,7 +30,8 @@ export class Queue {
     //     this.onProgress && this.onProgress(this.calcProgress());
     // };
 
-    public resolveTask(taskId:number|string):void{
+    public resolveTask(taskRef:TaskRef):void{
+        const taskId:number = taskRef.id;
         if (DEBUG) {
             if (this.tasksProgressById[taskId]===undefined) throw new DebugError(`can not resolve task: no task with id ${taskId}`);
             if (this.tasksProgressById[taskId]===1) throw new DebugError(`task with id ${taskId} resolved already`);
@@ -38,10 +47,11 @@ export class Queue {
             this.tasks[this.nextTaskIndex++]();
         }
     }
-    public addTask(taskFn:()=>void,taskId:string|number):void {
-        if (this.tasksProgressById[taskId]!==undefined) return;
+    public addTask(taskFn:()=>void):TaskRef {
+        const taskRef:TaskRef = new TaskRef();
         this.tasks.push(taskFn);
-        this.tasksProgressById[taskId] = 0;
+        this.tasksProgressById[taskRef.id] = 0;
+        return taskRef;
     }
     public isCompleted():boolean{
         return this.completed;

@@ -19,7 +19,8 @@ export enum LAYOUT_SIZE {
 export abstract class Container extends RenderableModel {
 
 
-    private static normalizeBorders(top:number,right:number,bottom:number,left:number){
+    private static normalizeBorders(top:number,right?:number,bottom?:number,left?:number)
+    :{top:number,right:number,bottom:number,left:number} {
         if (right===undefined && bottom===undefined && left===undefined) {
             right = bottom = left = top;
         }
@@ -30,7 +31,7 @@ export abstract class Container extends RenderableModel {
         else if (left===undefined) {
             left = right;
         }
-        return {top,right,bottom,left};
+        return {top,right:right!,bottom:bottom!,left:left!};
     }
 
     public marginLeft      :number = 0;
@@ -169,7 +170,7 @@ export abstract class Container extends RenderableModel {
             this.size.height + this.marginTop + this.marginBottom
         );
         this._screenRect.set(this._srcRect);
-        let parent:RenderableModel = this.parent;
+        let parent:RenderableModel|null = this.parent;
         while (parent) {
             this._screenRect.addXY(parent.getSrcRect().point.x,parent.getSrcRect().point.y);
             parent = parent.parent;

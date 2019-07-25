@@ -132,7 +132,7 @@ export const arcToBezier = (
                          xAxisRotation:number = 0,
                          largeArcFlag:0|1 = 0,
                          sweepFlag:0|1 = 0
-                     ):{ x1:number, y1:number, x2:number, y2:number, x:number, y:number}[] => {
+                     ):{ x1:number, y1:number, x2:number, y2:number, x:number, y:number}[]|null => {
     const curves = [];
 
     if (rx === 0 || ry === 0) {

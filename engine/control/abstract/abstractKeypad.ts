@@ -29,7 +29,7 @@ export abstract class AbstractKeypad {
     public release(key:number):void{
         if (this.isReleased(key)) return;
         this.buffer.put(key,KEY_STATE.KEY_JUST_RELEASED);
-        this.emitter.trigger(KEYBOARD_EVENTS[KEYBOARD_EVENTS.KEY_RELEASED],this.buffer.get(key));
+        this.emitter.trigger(KEYBOARD_EVENTS[KEYBOARD_EVENTS.KEY_RELEASED],key);
     }
 
     public isPressed(key:number):boolean{

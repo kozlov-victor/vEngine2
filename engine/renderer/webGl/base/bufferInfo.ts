@@ -53,10 +53,10 @@ export class BufferInfo {
 
     public gl:WebGLRenderingContext;
 
-    public posVertexBuffer:VertexBuffer = null;
-    public posIndexBuffer:IndexBuffer = null;
-    public texVertexBuffer:VertexBuffer = null;
-    public normalBuffer:VertexBuffer = null;
+    public posVertexBuffer:VertexBuffer|null = null;
+    public posIndexBuffer:IndexBuffer|null = null;
+    public texVertexBuffer:VertexBuffer|null = null;
+    public normalBuffer:VertexBuffer|null = null;
     public drawMethod:GLenum;
     public numOfElementsToDraw:number = 0;
 
@@ -142,11 +142,11 @@ export class BufferInfo {
         switch (drawMethod) {
             case this.gl.LINE_STRIP:
             case this.gl.TRIANGLE_FAN:
-                return this.posVertexBuffer.getBufferLength() / 2;
+                return this.posVertexBuffer!.getBufferLength() / 2;
             case this.gl.TRIANGLE_STRIP:
-                return this.posVertexBuffer.getBufferLength() / 3;
+                return this.posVertexBuffer!.getBufferLength() / 3;
             case this.gl.TRIANGLES:
-                return this.posVertexBuffer.getBufferLength() / this.posVertexBuffer.getItemSize();
+                return this.posVertexBuffer!.getBufferLength() / this.posVertexBuffer!.getItemSize();
             default:
                 throw new DebugError(`unknown draw method: ${drawMethod} (${glEnumToString(this.gl,drawMethod)})`);
         }

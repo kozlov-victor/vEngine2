@@ -9,24 +9,24 @@ export namespace FntCreator {
         const ctx:IFontContext = {
             width: imgLink.getTarget().size.width,
             height: imgLink.getTarget().size.height,
-            lineHeight: null,
+            lineHeight: 0,
             symbols: {}
         };
 
         // http://www.angelcode.com/products/bmfont/doc/file_format.html
         const doc:Document = new DOMParser().parseFromString(docLink.getTarget(),'application/xml');
-        ctx.lineHeight = +doc.querySelector('common').getAttribute('lineHeight');
-        const face:string = doc.querySelector('info').getAttribute('face');
+        ctx.lineHeight = +(doc.querySelector('common').getAttribute('lineHeight'));
+        const face:string = doc.querySelector('info').getAttribute('face') as string;
         const all:NodeListOf<Element> = doc.querySelectorAll('char');
         for (let i:number=0;i<all.length;i++){
             const el:Element = all[i];
-            const id:number = +el.getAttribute('id');
-            const width:number = +el.getAttribute('width') || ~~(ctx.lineHeight/3) || 16;
-            const height:number = +el.getAttribute('height');
-            const x:number = +el.getAttribute('x');
-            const y:number = +el.getAttribute('y');
-            const xOffset:number = +el.getAttribute('xoffset');
-            const yOffset:number = +el.getAttribute('yoffset');
+            const id:number = +(el.getAttribute('id') as string);
+            const width:number = +(el.getAttribute('width') as string) || ~~(ctx.lineHeight/3) || 16;
+            const height:number = +(el.getAttribute('height') as string);
+            const x:number = +(el.getAttribute('x') as string);
+            const y:number = +(el.getAttribute('y') as string);
+            const xOffset:number = +(el.getAttribute('xoffset') as string);
+            const yOffset:number = +(el.getAttribute('yoffset') as string);
 
             const char:string = String.fromCharCode(id);
             ctx.symbols[char] = {

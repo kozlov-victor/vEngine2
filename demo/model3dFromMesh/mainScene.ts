@@ -27,7 +27,7 @@ export class MainScene extends Scene {
     private dataLink:ResourceLink<any>;
 
     public onPreloading() {
-        this.dataLink = this.resourceLoader.loadJSON('./skull.json');
+        this.dataLink = this.resourceLoader.loadJSON('./model3dFromMesh/skull.json');
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;

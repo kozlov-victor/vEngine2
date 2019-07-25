@@ -10,7 +10,7 @@ export class MatrixStack {
     }
 
     public restore():void {
-        const last:Mat16Holder = this.stack.pop();
+        const last:Mat16Holder|undefined = this.stack.pop();
         if (last!==undefined) last.release();
         //Never let the stack be totally empty
         if (this.stack.length < 1) {

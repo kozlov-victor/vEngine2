@@ -17,7 +17,7 @@ export class FastMap<T,U> {
         }
     }
 
-    public get(key:T):U{
+    public get(key:T):U|null{
         const index:number = this.keys.indexOf(key);
         if (index===-1) return null;
         return this.values[index];

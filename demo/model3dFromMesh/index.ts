@@ -5,7 +5,7 @@ import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {KeyboardControl} from "@engine/control/keyboardControl";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 
-const game = new Game(800,600);
+const game = new Game({width:800,height:600});
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);

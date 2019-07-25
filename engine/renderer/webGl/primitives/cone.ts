@@ -28,7 +28,7 @@ export class Cone extends AbstractPrimitive {
         const positions:number[] = [];
         const normals:number[] = [];
         const texCoords:number[] = [];
-        let indices:number[] = [];
+        const indices:number[] = [];
 
         const vertsAroundEdge:number = radialSubdivisions + 1;
 
@@ -56,7 +56,7 @@ export class Cone extends AbstractPrimitive {
                 ringRadius = bottomRadius +
                     (topRadius - bottomRadius) * (yy / verticalSubdivisions);
             }
-            if (yy == -2 || yy == verticalSubdivisions + 2) {
+            if (yy === -2 || yy === verticalSubdivisions + 2) {
                 ringRadius = 0;
                 v = 0;
             }

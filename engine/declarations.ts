@@ -1,12 +1,12 @@
-import {ITweenDescription, Tween} from "@engine/misc/tween";
-import {TweenMovie} from "@engine/misc/tweenMovie";
+import {ITweenDescription, Tween} from "@engine/animation/tween";
+import {TweenMovie} from "@engine/animation/tweenMovie";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {Game} from "@engine/game";
 import {IFilter} from "@engine/renderer/ifilter";
 
 export type Clazz<T> = new() => T;
-export type ClazzEx<T> = new(game:Game) => T;
+export type ClazzEx<T,U> = new(arg:U) => T;
 
 export interface IMouseEventEx extends MouseEvent {
     id:number;
@@ -41,6 +41,10 @@ export interface IResource<T> {
 
 export interface IFilterable {
     filters: IFilter[];
+}
+
+export interface IDestroyable {
+    destroy:()=>void;
 }
 
 type Brand<K,T> = K & {__brand: T};
