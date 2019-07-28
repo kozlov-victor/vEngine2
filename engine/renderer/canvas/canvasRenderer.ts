@@ -1,13 +1,13 @@
 import {DebugError} from "../../debug/debugError";
-import {Game} from "../../game";
+import {Game} from "../../core/game";
 import {Rect} from "../../geometry/rect";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../color";
 import {Size} from "../../geometry/size";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
-import {Image} from "@engine/model/impl/geometry/image";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Image} from "@engine/renderable/impl/geometry/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Ellipse} from "@engine/model/impl/geometry/ellipse";
+import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ITexture} from "@engine/renderer/texture";
 
 

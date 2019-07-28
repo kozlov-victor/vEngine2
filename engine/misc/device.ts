@@ -1,4 +1,4 @@
-import {Game} from "../game";
+import {Game} from "../core/game";
 
 declare let navigator:any;
 

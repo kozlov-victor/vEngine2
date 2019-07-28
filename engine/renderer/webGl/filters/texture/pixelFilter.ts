@@ -6,7 +6,7 @@ import {AbstractFilter} from "../abstract/abstractFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {FrameBuffer} from "../../base/frameBuffer";
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 import {Size} from "@engine/geometry/size";
 
 export class PixelFilter extends AbstractFilter {

@@ -1,6 +1,6 @@
 import {DebugError} from "@engine/debug/debugError";
 import {ShaderProgram} from "./shaderProgram";
-import {Int} from "@engine/declarations";
+import {Int} from "@engine/core/declarations";
 import {IKeyVal, isArray} from "@engine/misc/object";
 
 

@@ -1,6 +1,6 @@
 import {MouseControl} from "@engine/control/mouse/mouseControl";
-import {Game} from "@engine/game";
-import {Scene} from "@engine/model/impl/general/scene";
+import {Game} from "@engine/core/game";
+import {Scene} from "@engine/core/scene";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MainScene} from "./mainScene";
 

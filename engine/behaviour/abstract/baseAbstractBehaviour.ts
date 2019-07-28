@@ -1,7 +1,7 @@
 import {DebugError} from "../../debug/debugError";
-import {Game} from "../../game";
+import {Game} from "../../core/game";
 import {IKeyVal} from "../../misc/object";
-import {RenderableModel} from "@engine/model/abstract/renderableModel";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 
 export abstract class BaseAbstractBehaviour {

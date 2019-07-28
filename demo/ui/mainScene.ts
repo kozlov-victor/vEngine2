@@ -1,12 +1,12 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {TEXT_ALIGN, TextField, WORD_BRAKE} from "@engine/model/impl/ui/components/textField";
-import {Font} from "@engine/model/impl/general/font";
+import {Scene} from "@engine/core/scene";
+import {TEXT_ALIGN, TextField, WORD_BRAKE} from "@engine/renderable/impl/ui/components/textField";
+import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/color";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {FntCreator} from "../fnt/FntCreator";
 import createFont = FntCreator.createFont;
-import {CheckBox} from "@engine/model/impl/ui/components/checkBox";
-import {Button} from "@engine/model/impl/ui/components/button";
+import {CheckBox} from "@engine/renderable/impl/ui/components/checkBox";
+import {Button} from "@engine/renderable/impl/ui/components/button";
 
 const text:string=
 `Lorem ipsum dolor sit amet, 

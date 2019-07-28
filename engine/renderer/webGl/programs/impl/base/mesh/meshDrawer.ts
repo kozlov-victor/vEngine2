@@ -1,7 +1,7 @@
 import {ShaderProgram} from "../../../../base/shaderProgram";
 import {AbstractDrawer} from "../../../abstract/abstractDrawer";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
-import {Mesh} from "@engine/model/abstract/mesh";
+import {Mesh} from "@engine/renderable/abstract/mesh";
 import {DebugError} from "@engine/debug/debugError";
 import * as fragmentSource from "./mesh.fragment.glsl";
 import * as vertexSource from "./mesh.vertex.glsl";

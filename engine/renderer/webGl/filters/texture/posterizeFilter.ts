@@ -4,7 +4,7 @@
 
 import {AbstractFilter} from "../abstract/abstractFilter";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 
 export class PosterizeFilter extends AbstractFilter {
 

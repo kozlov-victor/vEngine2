@@ -1,8 +1,9 @@
-import {RenderableModel} from "@engine/model/abstract/renderableModel";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Point2d} from "@engine/geometry/point2d";
-import {Scene} from "@engine/model/impl/general/scene";
-import {IMouseEventEx} from "@engine/declarations";
+import {Scene} from "@engine/core/scene";
+import {IMouseEventEx} from "@engine/core/declarations";
 import {ObjectPool} from "@engine/misc/objectPool";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export interface IMousePoint {
     screenX:number;

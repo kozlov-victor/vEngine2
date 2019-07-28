@@ -1,10 +1,10 @@
 
-import {ICloneable, IEventemittable} from "@engine/declarations";
-import {Game} from "@engine/game";
+import {ICloneable, IEventemittable} from "@engine/core/declarations";
+import {Game} from "@engine/core/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";
-import {RenderableModel} from "@engine/model/abstract/renderableModel";
-import {GameObject} from "@engine/model/impl/general/gameObject";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {GameObject} from "@engine/renderable/impl/general/gameObject";
 
 export const FRAME_ANIMATION_EVENTS = {
     completed:  'completed',

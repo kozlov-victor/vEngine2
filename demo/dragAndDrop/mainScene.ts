@@ -1,8 +1,8 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {GameObject} from "@engine/model/impl/general/gameObject";
+import {Scene} from "@engine/core/scene";
+import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Image} from "@engine/model/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
+        this.logoLink = this.resourceLoader.loadImage('./assets/preIntro.png');
     }
 
 

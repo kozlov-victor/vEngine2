@@ -1,17 +1,18 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {Scene} from "@engine/core/scene";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {Element, IElement} from "../../data/assetsDocumentHolder";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/texture";
-import {Layer} from "@engine/model/impl/general/layer";
-import {RenderableModel} from "@engine/model/abstract/renderableModel";
-import {GameObject} from "@engine/model/impl/general/gameObject";
-import {Image} from "@engine/model/impl/geometry/image";
-import {Sound} from "@engine/model/impl/general/sound";
+import {Layer} from "@engine/renderable/impl/general/layer";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {GameObject} from "@engine/renderable/impl/general/gameObject";
+import {Image} from "@engine/renderable/impl/geometry/image";
+import {Sound} from "@engine/media/sound";
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
-import {NullGameObject} from "@engine/model/impl/general/nullGameObject";
+import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {ImageButton} from "@engine/renderable/impl/ui/components/imageButton";
 
 
 export abstract class AbstractAppScene extends Scene {
@@ -27,6 +28,10 @@ export abstract class AbstractAppScene extends Scene {
 
         this.getSceneElement().getElementsByTagName('gameObject').forEach((el:Element)=>{
             this.links[el.attributes.src] = this.resourceLoader.loadImage(`./steamSeaBattle/data/images/${el.attributes.src}`);
+        });
+        this.getSceneElement().getElementsByTagName('imageButton').forEach((el:Element)=>{
+            this.links[el.attributes['src-on']] = this.resourceLoader.loadImage(`./steamSeaBattle/data/images/${el.attributes['src-on']}`);
+            this.links[el.attributes['src-off']] = this.resourceLoader.loadImage(`./steamSeaBattle/data/images/${el.attributes['src-off']}`);
         });
 
         this.getSceneElement().getElementsByTagName('sound').forEach((el:Element)=>{
@@ -124,6 +129,19 @@ export abstract class AbstractAppScene extends Scene {
                 case 'nullGameObject': {
                     const go:NullGameObject = new NullGameObject(this.game);
                     this.afterObjectCreated(root,go,child);
+                    break;
+                }
+                case 'imageButton': {
+                    const imgOn:Image = new Image(this.game);
+                    imgOn.setResourceLink(this.links[child.attributes['src-on']]);
+                    const imgOff:Image = new Image(this.game);
+                    imgOff.setResourceLink(this.links[child.attributes['src-off']]);
+                    const btn:ImageButton = new ImageButton(this.game,imgOn,imgOff);
+                    btn.size.setWH(
+                        this.getNumber(child.attributes.width),
+                        this.getNumber(child.attributes.height)
+                    );
+                    this.afterObjectCreated(root,btn,child);
                     break;
                 }
                 default:

@@ -2,7 +2,7 @@ import {FrameBuffer} from "../../base/frameBuffer";
 import {DebugError} from "@engine/debug/debugError";
 import {mat4} from "@engine/geometry/mat4";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";

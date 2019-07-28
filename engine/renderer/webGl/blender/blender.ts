@@ -1,4 +1,4 @@
-import {BLEND_MODE} from "@engine/model/abstract/renderableModel";
+import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 
 export class Blender {

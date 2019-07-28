@@ -2,7 +2,7 @@ import {Easing} from "@engine/misc/easing/linear";
 
 type EaseFn = (t:number,b:number,c:number,d:number)=>number;
 
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 
 interface IKeyVal {
     [key:string]:any;

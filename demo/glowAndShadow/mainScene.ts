@@ -1,23 +1,23 @@
-import {Scene} from "@engine/model/impl/general/scene";
+import {Scene} from "@engine/core/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
 import {Color} from "@engine/renderer/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Circle} from "@engine/model/impl/geometry/circle";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {DropShadowFilter} from "@engine/renderer/webGl/filters/texture/dropShadowFilter";
-import {PolyLine} from "@engine/model/impl/geometry/polyLine";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderer/linearGradient";
-import {Polygon} from "@engine/model/impl/geometry/polygon";
+import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 
 export class MainScene extends Scene {
 
     private logoLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
+        this.logoLink = this.resourceLoader.loadImage('./assets/preIntro.png');
 
     }
 

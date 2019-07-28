@@ -1,6 +1,6 @@
-import {Scene} from "@engine/model/impl/general/scene";
+import {Scene} from "@engine/core/scene";
 import {MainScene} from "./mainScene";
-import {Game, SCALE_STRATEGY} from "@engine/game";
+import {Game, SCALE_STRATEGY} from "@engine/core/game";
 import {KeyboardControl} from "@engine/control/keyboardControl";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {Wheel} from "./entities/wheel";

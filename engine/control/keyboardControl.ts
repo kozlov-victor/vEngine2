@@ -3,8 +3,6 @@ import {AbstractKeypad} from "@engine/control/abstract/abstractKeypad";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 
-declare const window:any;
-
 export enum KEYBOARD_KEY  {
     SPACE = 32,
     A = 65,
@@ -70,12 +68,15 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
         globalThis.removeEventListener('keyup',this.keyUpListener);
     }
 
-    public on(e:KEYBOARD_EVENTS, callback:(e:KEYBOARD_KEY)=>any):void {
-        this.emitter.on(KEYBOARD_EVENTS[e],callback);
-    }
-
-    public off(e:KEYBOARD_EVENTS, callback:(arg?:any)=>void):void{
-        this.emitter.off(KEYBOARD_KEY[e],callback);
-    }
+    /**
+     * this method register global keyboard event, if you need register event for scene, use scene.on()
+     */
+    // public on(e:KEYBOARD_EVENTS, callback:(e:KEYBOARD_KEY)=>any):void {
+    //     this.emitter.on(e,callback);
+    // }
+    //
+    // public off(e:KEYBOARD_EVENTS, callback:(arg?:any)=>void):void{
+    //     this.emitter.off(e,callback);
+    // }
 
 }

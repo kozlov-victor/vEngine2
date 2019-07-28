@@ -1,5 +1,5 @@
 import {ITweenDescription, Tween} from "./tween";
-import {Game} from "../game";
+import {Game} from "../core/game";
 
 interface ITweenInMovie {
     startTime: number;

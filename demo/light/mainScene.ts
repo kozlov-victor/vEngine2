@@ -1,5 +1,5 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {GameObject} from "@engine/model/impl/general/gameObject";
+import {Scene} from "@engine/core/scene";
+import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {LightSet} from "@engine/light/lightSet";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
@@ -8,7 +8,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MousePoint} from "@engine/control/mouse/mousePoint";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Color} from "@engine/renderer/color";
-import {Image} from "@engine/model/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/geometry/image";
 import {DirectionalLight} from "@engine/light/impl/directionalLight";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 
@@ -18,7 +18,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
+        this.logoLink = this.resourceLoader.loadImage('./assets/preIntro.png');
 
     }
 

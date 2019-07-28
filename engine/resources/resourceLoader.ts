@@ -1,7 +1,7 @@
 
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Game} from "../game";
+import {Game} from "../core/game";
 import {Queue, TaskRef} from "./queue";
 import {UrlLoader} from "@engine/resources/urlLoader";
 

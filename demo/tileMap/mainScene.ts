@@ -1,8 +1,8 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {TileMap} from "@engine/model/impl/general/tileMap";
-import {Image} from "@engine/model/impl/geometry/image";
+import {Scene} from "@engine/core/scene";
+import {TileMap} from "@engine/renderable/impl/general/tileMap";
+import {Image} from "@engine/renderable/impl/geometry/image";
 import {Color} from "@engine/renderer/color";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {KEYBOARD_KEY, KeyboardControl} from "@engine/control/keyboardControl";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
@@ -62,7 +62,7 @@ export class MainScene extends Scene {
         const v:number = 1;
         //this.game.camera.pos.setXY(0.5);
 
-        this.game.getControl<KeyboardControl>(KeyboardControl).on(KEYBOARD_EVENTS.KEY_HOLD, (e:KEYBOARD_KEY)=>{
+        this.on(KEYBOARD_EVENTS.keyHold, (e:KEYBOARD_KEY)=>{
             switch (e) {
                 case KEYBOARD_KEY.LEFT:
                     this.rect.pos.addX(-v);

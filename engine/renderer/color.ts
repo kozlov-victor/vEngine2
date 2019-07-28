@@ -1,5 +1,5 @@
 import {IReleasealable, ObjectPool} from "../misc/objectPool";
-import {ICloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 
 

@@ -1,6 +1,6 @@
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
-import {ICloneable, IRevalidatable} from "@engine/declarations";
-import {Image} from "@engine/model/impl/geometry/image";
+import {ICloneable, IRevalidatable} from "@engine/core/declarations";
+import {Image} from "@engine/renderable/impl/geometry/image";
 import {DebugError} from "@engine/debug/debugError";
 import {IRectJSON} from "@engine/geometry/rect";
 

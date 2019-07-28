@@ -20,6 +20,9 @@
 - gotoAndPlay
 - gotoAndStop (frameNumber)
 
+**todo**
+- check mouse events
+
 
 - https://pixijs.download/dev/docs/PIXI.BitmapText.html
 - https://github.com/pixijs/pixi-filters

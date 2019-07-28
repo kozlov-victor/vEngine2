@@ -1,5 +1,5 @@
 import {DebugError} from "@engine/debug/debugError";
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";

@@ -1,7 +1,7 @@
-import {Game} from "../../game";
+import {Game} from "../../core/game";
 //import {CollisionInfo, RigidShape, Vec2} from "./rigidShapes";
 import {MathEx} from "../../misc/mathEx";
-import {GameObject} from "../../model/impl/general/gameObject";
+import {GameObject} from "../../renderable/impl/general/gameObject";
 
 export class ColliderEngine {
 

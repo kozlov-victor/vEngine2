@@ -2,7 +2,7 @@ import {Size} from "./size";
 import {Point2d} from "./point2d";
 import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
-import {ICloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/core/declarations";
 
 export interface IRectJSON {
     x:number;

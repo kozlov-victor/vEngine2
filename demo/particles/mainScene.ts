@@ -1,12 +1,12 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {Scene} from "@engine/core/scene";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {ParticleSystem} from "@engine/model/impl/general/particleSystem";
+import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {BLEND_MODE, RenderableModel} from "@engine/model/abstract/renderableModel";
-import {Circle} from "@engine/model/impl/geometry/circle";
-import {Shape} from "@engine/model/impl/geometry/abstract/shape";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
+import {Shape} from "@engine/renderable/impl/geometry/abstract/shape";
 import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/texture/simpleBlurFilter";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";

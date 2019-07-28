@@ -1,10 +1,10 @@
 import {DebugError} from "@engine/debug/debugError";
 import {AudioPlayer} from "../audioPlayer";
-import {Game} from "../../game";
+import {Game} from "../../core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
-import {Clazz, ICloneable} from "@engine/declarations";
-import {Sound} from "@engine/model/impl/general/sound";
+import {Clazz, ICloneable} from "@engine/core/declarations";
+import {Sound} from "@engine/media/sound";
 import {UrlLoader} from "@engine/resources/urlLoader";
 
 

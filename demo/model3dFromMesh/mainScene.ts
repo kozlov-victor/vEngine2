@@ -1,11 +1,11 @@
-import {Scene} from "@engine/model/impl/general/scene";
+import {Scene} from "@engine/core/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Mesh} from "@engine/model/abstract/mesh";
+import {Mesh} from "@engine/renderable/abstract/mesh";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {Model3d} from "@engine/model/impl/general/model3d";
+import {Model3d} from "@engine/renderable/impl/general/model3d";
 
 class ScullMesh extends AbstractPrimitive {
 

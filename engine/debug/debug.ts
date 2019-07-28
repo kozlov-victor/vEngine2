@@ -1,6 +1,6 @@
 import {httpClient} from "@engine/debug/httpClient";
 import {IKeyVal} from "@engine/misc/object";
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 
 const devConsole:HTMLElement = document.createElement('div');
 const css:IKeyVal<string|number> = {

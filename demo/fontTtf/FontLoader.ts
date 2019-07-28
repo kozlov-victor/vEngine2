@@ -1,4 +1,4 @@
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 import {DebugError} from "@engine/debug/debugError";
 import {TaskRef} from "@engine/resources/queue";
 

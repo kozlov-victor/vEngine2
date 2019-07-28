@@ -1,6 +1,6 @@
 import {KeyboardControl} from "@engine/control/keyboardControl";
-import {Game} from "@engine/game";
-import {Scene} from "@engine/model/impl/general/scene";
+import {Game} from "@engine/core/game";
+import {Scene} from "@engine/core/scene";
 import {MainScene} from "./mainScene";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 

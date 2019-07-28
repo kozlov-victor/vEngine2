@@ -1,9 +1,9 @@
-import {ICloneable, IRevalidatable} from "@engine/declarations";
+import {ICloneable, IRevalidatable} from "@engine/core/declarations";
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
-import {Image} from "@engine/model/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/geometry/image";
 import {DebugError} from "@engine/debug/debugError";
-import {RenderableModel} from "@engine/model/abstract/renderableModel";
-import {GameObject} from "@engine/model/impl/general/gameObject";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {GameObject} from "@engine/renderable/impl/general/gameObject";
 
 export class CellFrameAnimation extends AbstractFrameAnimation<number> implements IRevalidatable, ICloneable<CellFrameAnimation>{
 

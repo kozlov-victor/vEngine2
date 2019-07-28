@@ -1,21 +1,21 @@
 import {AbstractFilter} from "../webGl/filters/abstract/abstractFilter";
-import {TextField} from "@engine/model/impl/ui/components/textField";
+import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {Device} from "../../misc/device";
-import {Game, SCALE_STRATEGY} from "../../game";
+import {Game, SCALE_STRATEGY} from "../../core/game";
 import {Rect} from "../../geometry/rect";
 import {Color} from "../color";
 import {Size} from "../../geometry/size";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
-import {Ellipse} from "@engine/model/impl/geometry/ellipse";
-import {NinePatchImage} from "@engine/model/impl/geometry/ninePatchImage";
-import {Image} from "@engine/model/impl/geometry/image";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
+import {NinePatchImage} from "@engine/renderable/impl/geometry/ninePatchImage";
+import {Image} from "@engine/renderable/impl/geometry/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Mesh} from "@engine/model/abstract/mesh";
-import {Font} from "@engine/model/impl/general/font";
-import {Line} from "@engine/model/impl/geometry/line";
-import {RenderableModel} from "@engine/model/abstract/renderableModel";
+import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Font} from "@engine/renderable/impl/general/font";
+import {Line} from "@engine/renderable/impl/geometry/line";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/texture";
-import {IDestroyable} from "@engine/declarations";
+import {IDestroyable} from "@engine/core/declarations";
 
 const preventDefault = (e: Event) => {
     e.preventDefault();

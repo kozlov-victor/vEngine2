@@ -1,9 +1,9 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {Scene} from "@engine/core/scene";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderer/linearGradient";
 import {Color} from "@engine/renderer/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {RenderableModel} from "@engine/model/abstract/renderableModel";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 export class MainScene extends Scene {
 

@@ -1,8 +1,8 @@
-import {Scene} from "@engine/model/impl/general/scene";
+import {Scene} from "@engine/core/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
-import {Model3d} from "@engine/model/impl/general/model3d";
+import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ObjParser} from "./objParser";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 

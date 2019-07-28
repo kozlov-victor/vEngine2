@@ -1,7 +1,7 @@
 import {AbstractFilter} from "../abstract/abstractFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 
 export class BlackWhiteFilter extends AbstractFilter{
 

@@ -1,7 +1,7 @@
-import {Game} from "../game";
+import {Game} from "../core/game";
 import {IControl} from "@engine/control/abstract/iControl";
 import {AbstractKeypad} from "@engine/control/abstract/abstractKeypad";
-import {Int} from "@engine/declarations";
+import {Int} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
@@ -117,15 +117,6 @@ export class GamePadControl extends AbstractKeypad implements IControl{
                 this.release(GAME_PAD_KEY.GAME_PAD_AXIS_UP);
             }
         }
-    }
-
-
-    public on(e:KEYBOARD_EVENTS, callback:(e:GAME_PAD_KEY)=>any):void {
-        this.emitter.on(KEYBOARD_EVENTS[e],callback);
-    }
-
-    public off(e:KEYBOARD_EVENTS, callback:(arg?:any)=>void):void {
-        this.emitter.off(GAME_PAD_KEY[e],callback);
     }
 
 

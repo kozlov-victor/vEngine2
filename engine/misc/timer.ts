@@ -1,4 +1,4 @@
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {removeFromArray} from "@engine/misc/object";
 

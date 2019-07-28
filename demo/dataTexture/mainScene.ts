@@ -1,8 +1,8 @@
-import {Scene} from "@engine/model/impl/general/scene";
+import {Scene} from "@engine/core/scene";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {PbmReader} from "./pbmReader";
-import {GameObject} from "@engine/model/impl/general/gameObject";
+import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {MultiImageFrameAnimation} from "@engine/animation/frameAnimation/multiImageFrameAnimation";
 
 // https://www.twobitarcade.net/article/displaying-images-oled-displays/

@@ -1,9 +1,9 @@
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
-import {ICloneable, IRevalidatable} from "@engine/declarations";
+import {ICloneable, IRevalidatable} from "@engine/core/declarations";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {Image} from "@engine/model/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/geometry/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 
 class CurrSprite extends Image {
 

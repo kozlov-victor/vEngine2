@@ -1,5 +1,5 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {Scene} from "@engine/core/scene";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 
 // example from https://www.panda2.io/examples#sprite-skew

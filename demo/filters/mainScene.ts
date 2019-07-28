@@ -1,14 +1,14 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {GameObject} from "@engine/model/impl/general/gameObject";
+import {Scene} from "@engine/core/scene";
+import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Color} from "@engine/renderer/color";
-import {Circle} from "@engine/model/impl/geometry/circle";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Ellipse} from "@engine/model/impl/geometry/ellipse";
+import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {LinearGradient} from "@engine/renderer/linearGradient";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
-import {Image} from "@engine/model/impl/geometry/image";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Image} from "@engine/renderable/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
 import {ColorizeFilter} from "@engine/renderer/webGl/filters/texture/colorizeFilter";
@@ -31,7 +31,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
+        this.logoLink = this.resourceLoader.loadImage('./assets/preIntro.png');
     }
 
 

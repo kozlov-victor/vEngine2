@@ -1,5 +1,5 @@
 import {AbstractFilter} from "../abstract/abstractFilter";
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE, UNIFORM_VALUE_TYPE} from "../../base/shaderProgramUtils";
 import {fragmentSource} from "@engine/renderer/webGl/filters/light/source/fragment.shader";

@@ -1,8 +1,8 @@
-import {Game} from "../../game";
+import {Game} from "../../core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {ICloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/core/declarations";
 import {Incrementer} from "@engine/resources/incrementer";
-import {Sound} from "@engine/model/impl/general/sound";
+import {Sound} from "@engine/media/sound";
 
 
 export class BasicAudioContext implements ICloneable<BasicAudioContext>{

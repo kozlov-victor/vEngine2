@@ -1,5 +1,5 @@
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Sound} from "@engine/model/impl/general/sound";
+import {Sound} from "@engine/media/sound";
 
 export interface IAudioPlayer {
 

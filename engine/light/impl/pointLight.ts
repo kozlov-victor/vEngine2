@@ -1,6 +1,6 @@
 import {Point2d} from "../../geometry/point2d";
 import {Rect} from "../../geometry/rect";
-import {Game} from "../../game";
+import {Game} from "../../core/game";
 import {AbstractLight} from "../abstract/abstractLight";
 import {Camera} from "../../renderer/camera";
 import {IKeyVal} from "@engine/misc/object";

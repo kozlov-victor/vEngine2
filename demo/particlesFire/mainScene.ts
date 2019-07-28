@@ -1,15 +1,15 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {ParticleSystem} from "@engine/model/impl/general/particleSystem";
-import {BLEND_MODE, RenderableModel} from "@engine/model/abstract/renderableModel";
+import {Scene} from "@engine/core/scene";
+import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/texture";
-import {Image} from "@engine/model/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/geometry/image";
 import {Color} from "@engine/renderer/color";
-import {GameObject} from "@engine/model/impl/general/gameObject";
+import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 
 
 export class MainScene extends Scene {

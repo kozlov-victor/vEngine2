@@ -1,15 +1,15 @@
-import {Scene} from "@engine/model/impl/general/scene";
+import {Scene} from "@engine/core/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Cube} from "@engine/renderer/webGl/primitives/cube";
-import {Model3d} from "@engine/model/impl/general/model3d";
+import {Model3d} from "@engine/renderable/impl/general/model3d";
 
 export class MainScene extends Scene {
 
     private logoLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./model3dCubeTextured/logo.png');
+        this.logoLink = this.resourceLoader.loadImage('./model3dCubeTextured/preIntro.png');
     }
 
 

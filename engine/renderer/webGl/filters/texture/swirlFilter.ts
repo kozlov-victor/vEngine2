@@ -3,7 +3,7 @@ import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderG
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 
 // http://evanw.github.io/webgl-filter/
 

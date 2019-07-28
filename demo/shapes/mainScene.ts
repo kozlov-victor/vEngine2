@@ -1,12 +1,12 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {Scene} from "@engine/core/scene";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {LinearGradient} from "@engine/renderer/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Circle} from "@engine/model/impl/geometry/circle";
-import {Ellipse} from "@engine/model/impl/geometry/ellipse";
-import {PolyLine} from "@engine/model/impl/geometry/polyLine";
-import {Polygon} from "@engine/model/impl/geometry/polygon";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
+import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
+import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
+import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 
 
 export class MainScene extends Scene {

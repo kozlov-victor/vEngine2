@@ -1,5 +1,5 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {Polygon} from "@engine/model/impl/geometry/polygon";
+import {Scene} from "@engine/core/scene";
+import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {Color} from "@engine/renderer/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {MouseControl} from "@engine/control/mouse/mouseControl";

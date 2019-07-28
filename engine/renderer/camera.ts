@@ -3,10 +3,10 @@ import {Tween} from "../animation/tween";
 import {MathEx} from "../misc/mathEx";
 import {Rect} from "../geometry/rect";
 import {Point2d} from "../geometry/point2d";
-import {Game} from "../game";
-import {Scene} from "../model/impl/general/scene";
+import {Game} from "../core/game";
+import {Scene} from "../core/scene";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
-import {RenderableModel} from "@engine/model/abstract/renderableModel";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
 

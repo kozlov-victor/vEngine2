@@ -1,12 +1,12 @@
-import {Scene} from "@engine/model/impl/general/scene";
+import {Scene} from "@engine/core/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {Mesh} from "@engine/model/abstract/mesh";
+import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Cube} from "@engine/renderer/webGl/primitives/cube";
 import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Cylinder} from "@engine/renderer/webGl/primitives/cylinder";
-import {Model3d} from "@engine/model/impl/general/model3d";
+import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {Cone} from "@engine/renderer/webGl/primitives/cone";
 
 export class MainScene extends Scene {

@@ -1,5 +1,5 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {Sound} from "@engine/model/impl/general/sound";
+import {Scene} from "@engine/core/scene";
+import {Sound} from "@engine/media/sound";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ResourceLink} from "@engine/resources/resourceLink";
 

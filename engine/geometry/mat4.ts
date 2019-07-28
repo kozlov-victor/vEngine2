@@ -1,6 +1,6 @@
 import {DebugError} from "../debug/debugError";
 import {IReleasealable, ObjectPool} from "@engine/misc/objectPool";
-import {ICloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/core/declarations";
 
 // https://evanw.github.io/lightgl.js/docs/matrix.html
 

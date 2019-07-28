@@ -1,6 +1,6 @@
 import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
-import {ICloneable} from "@engine/declarations";
+import {ICloneable} from "@engine/core/declarations";
 
 
 export class Point2d extends ObservableEntity implements ICloneable<Point2d> {

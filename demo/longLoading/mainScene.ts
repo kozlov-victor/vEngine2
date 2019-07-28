@@ -1,12 +1,12 @@
-import {Scene} from "@engine/model/impl/general/scene";
-import {GameObject} from "@engine/model/impl/general/gameObject";
+import {Scene} from "@engine/core/scene";
+import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Rectangle} from "@engine/model/impl/geometry/rectangle";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {KEYBOARD_KEY, KeyboardControl} from "@engine/control/keyboardControl";
 import {GamePadControl} from "@engine/control/gamePadControl";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {Image} from "@engine/model/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {TaskRef} from "@engine/resources/queue";
@@ -27,7 +27,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<Texture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
+        this.logoLink = this.resourceLoader.loadImage('./assets/preIntro.png');
         for (let i:number = 0;i<100;i++) { fakeLongLoadingFn(this.resourceLoader); }
         const rect = new Rectangle(this.game);
         rect.borderRadius = 5;
@@ -50,7 +50,7 @@ export class MainScene extends Scene {
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
 
-        this.game.getControl<KeyboardControl>(KeyboardControl).on(KEYBOARD_EVENTS.KEY_HOLD, (e:KEYBOARD_KEY)=>{
+        this.on(KEYBOARD_EVENTS.keyHold, (e:KEYBOARD_KEY)=>{
             switch (e) {
                 case KEYBOARD_KEY.LEFT:
                     this.logoObj.pos.addX(-1);
@@ -69,7 +69,11 @@ export class MainScene extends Scene {
             }
         });
 
-        this.game.getControl<GamePadControl>(GamePadControl).on(KEYBOARD_EVENTS.KEY_HOLD, (e)=>{
+        this.on(KEYBOARD_EVENTS.keyHold, (e:KEYBOARD_KEY)=>{
+
+        });
+
+        this.on(KEYBOARD_EVENTS.keyHold, (e)=>{
             console.log(e);
         });
 

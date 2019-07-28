@@ -1,7 +1,7 @@
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {DebugError} from "@engine/debug/debugError";
 import {EventEmitter} from "@engine/misc/eventEmitter";
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 
 export class EventEmitterDelegate {
 

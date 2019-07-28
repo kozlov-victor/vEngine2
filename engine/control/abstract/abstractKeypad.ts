@@ -1,4 +1,4 @@
-import {Game} from "@engine/game";
+import {Game} from "@engine/core/game";
 import {EventEmitter} from "@engine/misc/eventEmitter";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {FastMap} from "@engine/misc/fastMap";
@@ -12,7 +12,6 @@ export enum KEY_STATE  {
 
 export abstract class AbstractKeypad {
     protected game:Game;
-    protected readonly emitter = new EventEmitter();
 
     private buffer:FastMap<number,KEY_STATE> = new FastMap();
 
@@ -22,14 +21,14 @@ export abstract class AbstractKeypad {
 
     public press(key:number):void{
         if (this.isPressed(key)) return;
-        this.buffer.put(key,KEY_STATE.KEY_JUST_PRESSED);
-        this.emitter.trigger(KEYBOARD_EVENTS[KEYBOARD_EVENTS.KEY_PRESSED],key);
+        //this.buffer.put(key,KEY_STATE.KEY_JUST_PRESSED);
+        this.notify(KEYBOARD_EVENTS.keyPressed, key);
     }
 
     public release(key:number):void{
         if (this.isReleased(key)) return;
         this.buffer.put(key,KEY_STATE.KEY_JUST_RELEASED);
-        this.emitter.trigger(KEYBOARD_EVENTS[KEYBOARD_EVENTS.KEY_RELEASED],key);
+        this.notify(KEYBOARD_EVENTS.keyReleased,key);
     }
 
     public isPressed(key:number):boolean{
@@ -59,8 +58,12 @@ export abstract class AbstractKeypad {
             if (keyVal===KEY_STATE.KEY_JUST_PRESSED) {
                 this.buffer.put(keyNum,KEY_STATE.KEY_PRESSED);
             }
-            this.emitter.trigger(KEYBOARD_EVENTS[KEYBOARD_EVENTS.KEY_HOLD],keyNum);
+            this.notify(KEYBOARD_EVENTS.keyHold, keyNum);
         }
+    }
+
+    protected notify(e:KEYBOARD_EVENTS,key:number):void{
+        this.game.getCurrScene().trigger(e,key);
     }
 
 }

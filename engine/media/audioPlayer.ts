@@ -1,9 +1,9 @@
 import {WebAudioContext} from "./context/webAudioContext";
 import {HtmlAudioContext} from "./context/htmlAudioContext";
 import {AudioNodeSet} from "./audioNodeSet";
-import {Sound} from "../model/impl/general/sound";
+import {Sound} from "./sound";
 import {AudioNode} from "./audioNode";
-import {Game} from "../game";
+import {Game} from "../core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
@@ -17,7 +17,7 @@ export  class AudioPlayer implements IAudioPlayer {
     private readonly audioContext:BasicAudioContext;
     private audioNodeSet:AudioNodeSet;
 
-    constructor(private game:Game){
+    constructor(private game:Game) {
         if (WebAudioContext.isAcceptable()) {
             this.audioContext = new WebAudioContext(game);
         } else if (HtmlAudioContext.isAcceptable()) {
