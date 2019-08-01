@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {Shape} from "./abstract/shape";
+import {Shape} from "../../abstract/shape";
 import {ICloneable} from "@engine/core/declarations";
 import {Line} from "@engine/renderable/impl/geometry/line";
 

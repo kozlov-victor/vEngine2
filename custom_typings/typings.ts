@@ -24,6 +24,7 @@ declare module "*.glsl" {
 }
 
 declare const DEBUG:boolean;
+declare const BUILD_AT:number;
 
 // tslint:disable-next-line:interface-name
 interface Window {

@@ -14,10 +14,9 @@ game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);
 game.setAudioPLayer(AudioPlayer);
-const introScene: Scene = new IntroScene(game);
-//game.runScene(introScene);
-game.runScene(new MainScene(game));
-//game.runScene(new PreIntroScene(game));
+//game.runScene(new IntroScene(game));
+//game.runScene(new MainScene(game));
+game.runScene(new PreIntroScene(game));
 //game.runScene(new ResultScene(game));
 
 

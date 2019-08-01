@@ -14,7 +14,7 @@ import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/geometry/image";
-import {Shape} from "@engine/renderable/impl/geometry/abstract/shape";
+import {Shape} from "@engine/renderable/abstract/shape";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {mat4} from "@engine/geometry/mat4";
@@ -29,6 +29,8 @@ import {ITexture} from "@engine/renderer/texture";
 import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import glEnumToString = debugUtil.glEnumToString;
 import {Clazz, ClazzEx, IDestroyable} from "@engine/core/declarations";
+import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {UrlLoader} from "@engine/resources/urlLoader";
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext|null=>{
@@ -379,7 +381,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             return;
         }
         const img:HTMLImageElement = new (window as any).Image() as HTMLImageElement;
-        img.src = url;
+        img.src = UrlLoader.addUrlParameter(url,'modified',BUILD_AT);
         img.onload = ()=>{
             const texture:Texture = new Texture(this.gl);
             texture.setImage(img);

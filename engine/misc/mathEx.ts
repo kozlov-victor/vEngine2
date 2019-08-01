@@ -70,10 +70,7 @@ export namespace MathEx {
             min = max;
             max = tmp;
         }
-        let res:number = (Math.random() * (max + 1 - min)) + min;
-        if (res > max) res = max;
-        else if (res < min) res = min;
-        return res;
+        return Math.random() * (max - min) + min;
     };
 
     export const randomInt = (min: number, max: number): number => {

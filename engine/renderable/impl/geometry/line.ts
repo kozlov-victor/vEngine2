@@ -1,5 +1,5 @@
 
-import {Shape} from "@engine/renderable/impl/geometry/abstract/shape";
+import {Shape} from "@engine/renderable/abstract/shape";
 import {ICloneable} from "@engine/core/declarations";
 import {Point2d} from "@engine/geometry/point2d";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";

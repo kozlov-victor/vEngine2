@@ -10,7 +10,7 @@ export interface IScrollInitDesc {
 }
 
 interface IScrollPointDesc {
-    point: MousePoint;
+    point: IMousePoint;
     time: number;
 }
 
@@ -57,7 +57,7 @@ export class ScrollInfo {
             this._scrollVelocity = 0;
             this._deceleration = 0;
         });
-        container.on(MOUSE_EVENTS.mouseMove, (p: MousePoint) => {
+        container.on(MOUSE_EVENTS.mouseMove, (p: IMousePoint) => {
             if (!p.isMouseDown) return;
             let lastPoint:IScrollPointDesc = this._lastPoint;
             this._lastPoint = {
@@ -79,11 +79,12 @@ export class ScrollInfo {
             if (this.offset < 0) this.offset = 0;
             this.onScroll();
         });
-        container.on(MOUSE_EVENTS.scroll, (p: MousePoint) => {
-            this._scrollVelocity = -p.nativeEvent.wheelDelta;
+        container.on(MOUSE_EVENTS.scroll, (p: IMousePoint) => {
+            console.log(p.nativeEvent);
+            this._scrollVelocity = -(p.nativeEvent as WheelEvent&{wheelDelta:number}).wheelDelta;
             this._deceleration = 0;
         });
-        container.on(MOUSE_EVENTS.mouseUp, (p: MousePoint) => {
+        container.on(MOUSE_EVENTS.mouseUp, (p: IMousePoint) => {
             if (!this._lastPoint) return;
             if (!this._prevPoint) return;
             if (this._lastPoint.time === this._prevPoint.time) {

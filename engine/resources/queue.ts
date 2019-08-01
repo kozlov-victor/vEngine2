@@ -25,10 +25,12 @@ export class Queue {
 
     }
 
-    // private progressTask(taskId:number|string,progress:number):void{
-    //     this.tasksProgressById[taskId] = progress;
-    //     this.onProgress && this.onProgress(this.calcProgress());
-    // };
+    public progressTask(taskRef:TaskRef,progress:number):void{
+        if (progress===1) return; // this task will be processed by "resolveTask" fn
+        const taskId:number = taskRef.id;
+        this.tasksProgressById[taskId] = progress;
+        if (this.onProgress) this.onProgress(this.calcProgress());
+    }
 
     public resolveTask(taskRef:TaskRef):void{
         const taskId:number = taskRef.id;

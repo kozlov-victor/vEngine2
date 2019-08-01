@@ -22,6 +22,7 @@ export class ResultScene extends BaseScene {
         this.setTimeout(()=>{
             const timer:Timer = this.setInterval(()=>{
                 this.nixieDisplay.setNumber(counter++);
+                this.sounds.click.play();
                 if (counter>this.SCORE_TO_SET) {
                     timer.kill();
                     this.sounds.win.play();
@@ -29,7 +30,7 @@ export class ResultScene extends BaseScene {
                         this.game.runScene(new IntroScene(this.game));
                     });
                 }
-            },300);
+            },420);
         },5000);
 
     }

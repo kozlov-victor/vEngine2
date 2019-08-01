@@ -2,7 +2,7 @@ import {Rect} from "@engine/geometry/rect";
 import {RenderableModel} from "../../../abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
-import {Shape} from "../../geometry/abstract/shape";
+import {Shape} from "../../../abstract/shape";
 
 
 export enum OVERFLOW {

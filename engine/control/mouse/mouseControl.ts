@@ -140,7 +140,7 @@ export class MouseControl implements IControl {
     }
 
 
-    private triggerEvent(e:MouseEvent|Touch|Touch,eventName:MOUSE_EVENTS,isMouseDown?:boolean):MousePoint{
+    private triggerEvent(e:MouseEvent|Touch|Touch, mouseEvent:MOUSE_EVENTS, isMouseDown?:boolean):MousePoint{
         if (isMouseDown===undefined) isMouseDown = false;
         const g:Game = this.game;
         const scene:Scene = g.getCurrScene();
@@ -156,7 +156,7 @@ export class MouseControl implements IControl {
             let j:number = layer.children.length;
             while(j--) {
                const go:RenderableModel = layer.children[j];
-               isCaptured = MouseControl.triggerGameObjectEvent(e,eventName,point,go);
+               isCaptured = MouseControl.triggerGameObjectEvent(e,mouseEvent,point,go);
                if (isCaptured) {
                     point.target = go;
                     break;
@@ -170,21 +170,21 @@ export class MouseControl implements IControl {
         // let untransformedPoint = MousePoint.unTransform(point);
         // for (let j=0;j<scene.uiLayer.children.length;j++){
         //     let go = scene.uiLayer.children[scene.uiLayer.children.length - 1 - j];
-        //     let isCaptured:boolean = MouseControl.triggerGameObjectEvent(e,eventName,untransformedPoint,go);
+        //     let isCaptured:boolean = MouseControl.triggerGameObjectEvent(e,mouseEvent,untransformedPoint,go);
         //     if (isCaptured) {
-        //         if (go.children) this.triggerChildren(e,go.children,eventName,untransformedPoint,go.pos.x,go.pos.y);
+        //         if (go.children) this.triggerChildren(e,go.children,mouseEvent,untransformedPoint,go.pos.x,go.pos.y);
         //         break;
         //     }
         // }
         // if (untransformedPoint.target) point.target = untransformedPoint.target;
 
         if (point.target===undefined) point.target = scene;
-        scene.trigger(eventName,{
+        scene.trigger(mouseEvent,{
             screenX:point.x,
             screenY:point.y,
             id:point.id,
             target:scene,
-            eventName,
+            eventName: mouseEvent,
             isMouseDown
         });
         return point;

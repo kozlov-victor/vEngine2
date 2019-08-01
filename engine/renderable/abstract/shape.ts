@@ -1,4 +1,4 @@
-import {RenderableModel} from "../../../abstract/renderableModel";
+import {RenderableModel} from "./renderableModel";
 import {Color} from "@engine/renderer/color";
 import {Game} from "@engine/core/game";
 import {LinearGradient} from "@engine/renderer/linearGradient";

@@ -7,6 +7,8 @@ export class Sound implements IResource<void>,IRevalidatable {
 
     public readonly type:string = 'Sound';
     public loop:boolean = false;
+    public offset:number; // start offset time of sound
+    public duration:number; // f this parameter isn't specified, the sound plays until it reaches its natural conclusion or is stopped
 
     private _gain:number = 1;
     private _velocity:number = 1;

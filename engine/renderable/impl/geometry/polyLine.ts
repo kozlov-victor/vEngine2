@@ -1,5 +1,5 @@
 
-import {Shape} from "@engine/renderable/impl/geometry/abstract/shape";
+import {Shape} from "@engine/renderable/abstract/shape";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {Point2d} from "@engine/geometry/point2d";
 import {DebugError} from "@engine/debug/debugError";

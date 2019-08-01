@@ -102,7 +102,7 @@ module.exports = (env={})=>{
 
     config.plugins = [
         new webpack.DefinePlugin({
-            BUILD_AT: new Date().getTime(),
+            BUILD_AT: webpack.DefinePlugin.runtimeValue(() => new Date().getTime()),
             DEBUG: debug,
         }),
         new TSLintPlugin({

@@ -3,7 +3,6 @@ import {Point2d} from "@engine/geometry/point2d";
 import {Scene} from "@engine/core/scene";
 import {IMouseEventEx} from "@engine/core/declarations";
 import {ObjectPool} from "@engine/misc/objectPool";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export interface IMousePoint {
     screenX:number;

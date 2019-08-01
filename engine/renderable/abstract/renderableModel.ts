@@ -176,18 +176,60 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     }
 
 
+    public addBehaviour(b:BaseAbstractBehaviour):void {
+        this._behaviours.push(b);
+        b.manage(this);
+    }
+
+
     public appendChild(c:RenderableModel):void {
         if (DEBUG) {
             if (c===this) throw new DebugError(`parent and child objects are the same`);
-            // if (this._getParent().children.find((it:RenderableModel)=>it===c)) {
-            //     console.error(c);
-            //     throw new DebugError(`this children already added`);
-            // }
+            if (this._getParent().children.find((it:RenderableModel)=>it===c)) {
+                console.error(c);
+                throw new DebugError(`this children already added`);
+            }
         }
         c.parent = this;
         c.setLayer(this.getLayer());
         c.revalidate();
         this.children.push(c);
+    }
+
+    public appendChildAt(c:RenderableModel,index:number){
+        if (DEBUG) {
+            if (index>this.children.length-1) throw new DebugError(`can not insert element: index is out of range (${index},${this.children.length-1})`);
+        }
+        c.parent = this;
+        c.setLayer(this.getLayer());
+        c.revalidate();
+        this.children.splice(index,0,c);
+    }
+
+    public appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel){
+        const afterIndex:number = this.children.indexOf(modelAfter);
+        if (DEBUG) {
+            if (afterIndex===-1) throw new DebugError(`can not insert element: object is detached`);
+        }
+        if (afterIndex===this.children.length-1) this.appendChild(newChild);
+        else this.appendChildAt(newChild,afterIndex+1);
+    }
+
+    public appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel){
+        const beforeIndex:number = this.children.indexOf(modelBefore);
+        if (DEBUG) {
+            if (beforeIndex===-1) throw new DebugError(`can not insert element: object is detached`);
+        }
+        if (beforeIndex===0) this.prependChild(newChild);
+        else this.appendChildAt(newChild,beforeIndex-1);
+    }
+
+
+    public prependChild(c:RenderableModel):void {
+        c.parent = this;
+        c.setLayer(this.getLayer());
+        c.revalidate();
+        this.children.unshift(c);
     }
 
     public removeChildAt(i:number){
@@ -202,25 +244,6 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
             this.removeChildAt(i);
         }
     }
-
-    public addBehaviour(b:BaseAbstractBehaviour):void {
-        this._behaviours.push(b);
-        b.manage(this);
-    }
-
-
-    public prependChild(c:RenderableModel):void {
-        c.parent = this;
-        c.revalidate();
-        this.children.unshift(c);
-    }
-
-    public setDirty():void {
-        this._dirty = true; // todo
-        //if (this.parent) this.parent._dirty = true;
-    }
-
-    public abstract draw():boolean;
 
     public moveToFront():void {
         if (DEBUG && !this._getParent()) throw new DebugError(`can not move to front: object is detached`);
@@ -242,6 +265,13 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         parentArray.splice(index,1);
         parentArray.unshift(this);
     }
+
+    public setDirty():void {
+        this._dirty = true; // todo
+        //if (this.parent) this.parent._dirty = true;
+    }
+
+    public abstract draw():boolean;
 
     public kill():void {
 

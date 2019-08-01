@@ -3,7 +3,7 @@ import {ICloneable} from "@engine/core/declarations";
 import {RenderableModel} from "../../abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
-import {Shape} from "@engine/renderable/impl/geometry/abstract/shape";
+import {Shape} from "@engine/renderable/abstract/shape";
 
 
 export class GameObject extends RenderableModel implements ICloneable<GameObject>{

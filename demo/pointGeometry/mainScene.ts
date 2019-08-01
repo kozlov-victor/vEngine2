@@ -3,7 +3,7 @@ import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Vec2} from "@engine/geometry/vec2";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {MousePoint} from "@engine/control/mouse/mousePoint";
+import {IMousePoint} from "@engine/control/mouse/mousePoint";
 
 export class MainScene extends Scene {
 
@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         this.ship.rotationPoint.set(this.ship.anchor);
         const center:Vec2 = new Vec2().set(this.ship.pos);
         const point:Vec2 = new Vec2();
-        this.on(MOUSE_EVENTS.mouseMove,(p:MousePoint)=>{
+        this.on(MOUSE_EVENTS.mouseMove,(p:IMousePoint)=>{
             point.setXY(p.screenX,p.screenY);
             console.log(point.toJSON());
             this.ship.angle = center.getAngleTo(point);

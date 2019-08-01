@@ -165,9 +165,12 @@
         </scene>
         <scene id="main">
             <sound src="water.wav"/>
+            <sound src="hit.wav"/>
+            <sound src="missed.mp3"/>
             <sound src="gear.wav"/>
-            <sound src="shoot.wav"/>
+            <sound src="shoot.wav" offset="1" gain="0.2"/>
             <sound src="riff1.wav"/>
+            <sound src="click.wav" gain="0.2"/>
             <layer>
                 <nullGameObject
                         id="seaContainer"
@@ -189,6 +192,41 @@
                             top="5"
                             width="1200"
                             height="300"/>
+                    <nullGameObject
+                            left="368"
+                            top="486"
+                            id="bulletContainer"
+                            width="28"
+                            height="53">
+                        <gameObject
+                                src="bullet.png"
+                                id="bullet"
+                                left="0"
+                                top="0"
+                                hidden="1"
+                                rotationPointX="14"
+                                rotationPointY="26"
+                                width="28"
+                                height="53">
+                            <animationComposition loop="1">
+                                <animation
+                                        offset="0"
+                                        property="angle"
+                                        from="-0.1"
+                                        to="0.1"
+                                        time="600"
+                                />
+                                <animation
+                                        offset="600"
+                                        property="angle"
+                                        from="0.1"
+                                        to="-0.1"
+                                        time="600"
+                                />
+
+                            </animationComposition>
+                        </gameObject>
+                    </nullGameObject>
                     <nullGameObject
                         id="shipContainer"
                         left="616"
@@ -361,8 +399,232 @@
                             height="64">
                     </gameObject>
                 </gameObject>
+
+
                 <nullGameObject
-                        id="nixieTube0"
+                        id="nixieTubeShoot0"
+                        left="22"
+                        top="28"
+                        width="64"
+                        height="58"
+                >
+                    <gameObject
+                            src="nixie0.png"
+                            id="nixie0"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="0"
+                            height="58"/>
+                    <gameObject
+                            src="nixie1.png"
+                            id="nixie1"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie2.png"
+                            id="nixie2"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie3.png"
+                            id="nixie3"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie4.png"
+                            id="nixie4"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie5.png"
+                            id="nixie5"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie6.png"
+                            id="nixie6"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie7.png"
+                            id="nixie7"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie8.png"
+                            id="nixie8"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie9.png"
+                            id="nixie9"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                </nullGameObject>
+                <nullGameObject
+                        id="nixieTubeShoot1"
+                        left="93"
+                        top="28"
+                        width="64"
+                        height="58"
+                >
+                    <gameObject
+                            src="nixie0.png"
+                            id="nixie0"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="0"
+                            height="58"/>
+                    <gameObject
+                            src="nixie1.png"
+                            id="nixie1"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie2.png"
+                            id="nixie2"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie3.png"
+                            id="nixie3"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie4.png"
+                            id="nixie4"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie5.png"
+                            id="nixie5"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie6.png"
+                            id="nixie6"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie7.png"
+                            id="nixie7"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie8.png"
+                            id="nixie8"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                    <gameObject
+                            src="nixie9.png"
+                            id="nixie9"
+                            left="0"
+                            top="0"
+                            width="64"
+                            hidden="1"
+                            height="58"/>
+                </nullGameObject>
+                <nullGameObject
+                        id="hitLamp"
+                        left="258"
+                        top="40"
+                        width="100"
+                        height="54">
+                    <gameObject
+                            id="hitOn"
+                            src="hitOn.png"
+                            hidden="1"
+                            left="0"
+                            top="0"
+                            width="100"
+                            height="54"/>
+                    <gameObject
+                            id="hitOff"
+                            src="hitOff.png"
+                            left="0"
+                            top="0"
+                            width="100"
+                            height="54"/>
+                </nullGameObject>
+                <nullGameObject
+                        id="missedLamp"
+                        left="400"
+                        top="40"
+                        width="100"
+                        height="54">
+                    <gameObject
+                            id="missedOn"
+                            src="missedOn.png"
+                            hidden="1"
+                            left="0"
+                            top="0"
+                            width="100"
+                            height="54"/>
+                    <gameObject
+                            id="missedOff"
+                            src="missedOff.png"
+                            left="0"
+                            top="0"
+                            width="100"
+                            height="54"/>
+                </nullGameObject>
+
+
+                <nullGameObject
+                        id="nixieTubeFired0"
                         left="624"
                         top="28"
                         width="64"
@@ -450,7 +712,7 @@
                             height="58"/>
                 </nullGameObject>
                 <nullGameObject
-                        id="nixieTube1"
+                        id="nixieTubeFired1"
                         left="696"
                         top="28"
                         width="64"
@@ -568,6 +830,7 @@
         <scene id="result">
             <sound src="gear.wav"/>
             <sound src="win.wav"/>
+            <sound src="click.wav"/>
             <layer>
                 <gameObject
                         src="back.png"

@@ -3,7 +3,7 @@ import {Sound} from "@engine/media/sound";
 
 export interface IAudioPlayer {
 
-    loadSound(url:string, link:ResourceLink<void>, onLoad:()=>void):void;
+    loadSound(url:string, link:ResourceLink<void>, onProgress:(n:number)=>void,onLoad:()=>void):void;
     play(sound:Sound):void;
     stop(sound:Sound):void;
     stopAll():void;

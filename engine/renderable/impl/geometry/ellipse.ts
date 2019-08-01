@@ -1,4 +1,4 @@
-import {Shape} from "./abstract/shape";
+import {Shape} from "../../abstract/shape";
 import {ICloneable} from "@engine/core/declarations";
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";

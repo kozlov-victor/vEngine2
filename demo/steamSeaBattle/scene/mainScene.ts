@@ -9,6 +9,9 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {NixieDisplay} from "./object/nixieDisplay";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
 import {ResultScene} from "./resultScene";
+import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
+import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 
 const MANOMETER_SCALE:number = MathEx.degToRad(360-111);
 const MAX_NUM_OF_SHOOTS:number = 10;
@@ -19,16 +22,28 @@ export class MainScene extends BaseScene {
     private seaContainer:GameObject;
     private gear1:GameObject;
     private gear2:GameObject;
+    private bulletContainer:NullGameObject;
+    private bullet:GameObject;
     private manometerArrow:GameObject;
     private btnLeft:ImageButton;
     private btnShoot:ImageButton;
     private btnRight:ImageButton;
-    private nixieDisplay:NixieDisplay;
+    private nixieDisplayFired:NixieDisplay;
+    private nixieDisplayShoot:NixieDisplay;
+    private hitOn:GameObject;
+    private hitOff:GameObject;
+    private missedOn:GameObject;
+    private missedOff:GameObject;
 
     private readonly PERISCOPES_LIMIT_LEFT:number = 30;
     private readonly PERISCOPES_LIMIT_RIGHT:number = -400;
+    private BULLET_INITIAL_POSITION:number;
+    private score:number = 0;
 
     private numOfShoots:number = MAX_NUM_OF_SHOOTS;
+
+
+    private psBullet:ParticleSystem;
 
     public onPreloading() {
         super.onPreloading();
@@ -41,29 +56,52 @@ export class MainScene extends BaseScene {
         this.seaContainer = this.findChildById('seaContainer') as GameObject;
         this.gear1 = this.findChildById('gear1') as GameObject;
         this.gear2 = this.findChildById('gear2') as GameObject;
+        this.bulletContainer = this.findChildById('bulletContainer') as NullGameObject;
+        this.bullet = this.findChildById('bullet') as GameObject;
+        this.BULLET_INITIAL_POSITION = this.bulletContainer.pos.y;
         this.btnLeft = this.findChildById('btnLeft') as ImageButton;
         this.btnShoot = this.findChildById('btnShoot') as ImageButton;
         this.btnRight = this.findChildById('btnRight') as ImageButton;
-        this.nixieDisplay = new NixieDisplay(
-            this.findChildById('nixieTube0'),
-            this.findChildById('nixieTube1')
+        this.nixieDisplayFired = new NixieDisplay(
+            this.findChildById('nixieTubeFired0'),
+            this.findChildById('nixieTubeFired1')
         );
+        this.nixieDisplayShoot = new NixieDisplay(
+            this.findChildById('nixieTubeShoot0'),
+            this.findChildById('nixieTubeShoot1')
+        );
+        this.hitOn = this.findChildById('hitOn') as GameObject;
+        this.hitOff = this.findChildById('hitOff') as GameObject;
+        this.missedOn = this.findChildById('missedOn') as GameObject;
+        this.missedOff = this.findChildById('missedOff') as GameObject;
         this.manometerArrow = this.findChildById('manometerArrow') as GameObject;
         this.ship.velocity.setX(-MathEx.random(20,60));
         this.sounds.water.gain = 0.02;
         this.waterWave();
         this.sounds.riff1.play();
         this.listenControls();
-        this.nixieDisplay.setNumber(this.numOfShoots);
+        this.nixieDisplayFired.setNumber(this.numOfShoots);
+
+        this.psBullet = new ParticleSystem(this.game);
+        const particle:Circle = new Circle(this.game);
+        particle.radius = 2;
+        this.psBullet.pos.setXY(28/2,53/2);
+        this.psBullet.numOfParticlesToEmit = {from:0,to:1};
+        this.psBullet.particleVelocity = {from:1,to:10};
+        this.psBullet.particleLiveTime = {from:1000,to:5000};
+        this.psBullet.emissionRadius = 10;
+        this.psBullet.particleAngle = {from:MathEx.degToRad(90-10),to:MathEx.degToRad(90+10)};
+        this.psBullet.addParticle(particle);
+        this.bulletContainer.appendChild(this.psBullet);
     }
 
     protected onUpdate(): void {
         super.onUpdate();
         if (this.ship.pos.x<-100) {
-            this.ship.pos.x = 1500;
-            this.ship.velocity.setX(-MathEx.random(20,60));
+            this.resetShip();
         }
         this.checkPeriscope();
+        this.checkBullet();
     }
 
     protected getSceneElement(): Element {
@@ -76,6 +114,11 @@ export class MainScene extends BaseScene {
             this.sounds.water.play();
             this.waterWave();
         },MathEx.randomInt(2000,5000));
+    }
+
+    private resetShip(){
+        this.ship.pos.x = 1000 + MathEx.random(0,300);
+        this.ship.velocity.setX(-MathEx.random(20,60));
     }
 
     private movePeriscope(factor:1|-1){
@@ -108,18 +151,60 @@ export class MainScene extends BaseScene {
             MANOMETER_SCALE;
     }
 
-    private shoot(){
-        this.sounds.shoot.play();
-        this.game.camera.shake(5,300);
-        this.numOfShoots--;
-        this.nixieDisplay.setNumber(this.numOfShoots);
-        if (this.numOfShoots<=0) {
+    private checkLevelCompleted(){
+        if (this.numOfShoots===0) {
             const resultScene:ResultScene = new ResultScene(this.game);
-            resultScene.SCORE_TO_SET = 10;
-            this.game.runScene(resultScene);
+            resultScene.SCORE_TO_SET = this.score;
+            this.setTimeout(()=>this.game.runScene(resultScene),3000);
         }
     }
 
+    private checkBullet() {
+        if (!this.bullet.visible) return;
+        if (this.bulletContainer.pos.y<270) {
+            this.bulletContainer.velocity.y = 0;
+            this.bullet.visible = false;
+            this.checkLevelCompleted();
+            if (MathEx.overlapTest(this.bulletContainer.getSrcRect(),this.ship.getSrcRect())) {
+                this.resetShip();
+                this.score++;
+                this.nixieDisplayShoot.setNumber(this.score);
+                this.hitOff.visible = false;
+                this.hitOn.visible = true;
+                this.setTimeout(()=>{
+                    this.hitOff.visible = true;
+                    this.hitOn.visible = false;
+                },3000);
+                this.sounds.hit.play();
+
+            } else {
+                this.missedOff.visible = false;
+                this.missedOn.visible = true;
+                this.setTimeout(()=>{
+                    this.missedOff.visible = true;
+                    this.missedOn.visible = false;
+                },3000);
+                this.sounds.missed.play();
+            }
+        }
+        if (this.bulletContainer.pos.y>this.BULLET_INITIAL_POSITION - 20)
+            this.psBullet.emit();
+
+    }
+
+
+    private shoot(){
+        if (this.numOfShoots===0) return;
+        if (this.bullet.visible) return;
+        this.sounds.shoot.play();
+        this.game.camera.shake(5,300);
+        this.bulletContainer.pos.x = -this.seaContainer.pos.x + 400;
+        this.bulletContainer.pos.y = this.BULLET_INITIAL_POSITION;
+        this.bullet.visible = true;
+        this.bulletContainer.velocity.y = -50;
+        this.numOfShoots--;
+        this.nixieDisplayFired.setNumber(this.numOfShoots);
+    }
 
 
     private listenControls(){

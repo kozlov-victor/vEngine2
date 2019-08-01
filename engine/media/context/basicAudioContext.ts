@@ -24,6 +24,11 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
         return this._lastTimeId;
     }
 
+    public setRawData(data:Uint8Array){
+        // todo
+    }
+
+
     public play(sound:Sound){}
     public stop():void{}
     public isFree():boolean{return false;}
@@ -31,8 +36,8 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
     public setVelocity(val:number):void{}
     public pause():void{}
     public resume():void{}
-    public load(url:string,link:ResourceLink<void>,callBack:()=>void):void{
-        callBack();
+    public load(url:string,link:ResourceLink<void>,onProgress:(n:number)=>void,onLoad:()=>void):void{
+        onLoad();
     }
     public clone():BasicAudioContext{
         return new BasicAudioContext(this.game);

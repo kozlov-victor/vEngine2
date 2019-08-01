@@ -1,7 +1,7 @@
 import {Game} from "@engine/core/game";
 import {Rect} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
-import {Shape} from "./abstract/shape";
+import {Shape} from "../../abstract/shape";
 import {Color} from "@engine/renderer/color";
 import {Point2d} from "@engine/geometry/point2d";
 import {ICloneable, IResource} from "@engine/core/declarations";

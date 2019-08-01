@@ -7,12 +7,19 @@ export interface IURLRequestHeader {
 
 export interface IURLRequest {
     url:string;
+    method?:'GET'|'POST';
     headers?:IURLRequestHeader[];
     responseType:'arraybuffer'|'blob'|'text';
 
 }
 
 export class UrlLoader {
+
+    public static addUrlParameter(url:string,param:string,value:string|number):string{
+        if (url.indexOf('?')>-1) url+='&';
+        else url+='?';
+        return `${url}${param}=${value}`;
+    }
 
     public onLoad:(buffer:ArrayBuffer|string)=>void;
     public onError:(e:any)=>void;
@@ -24,11 +31,12 @@ export class UrlLoader {
 
         let urlRequest:IURLRequest;
         if ((this.urlRequest as string).substr!==undefined){
-            urlRequest = {url:this.urlRequest as string,responseType:'text'};
+            urlRequest = {url:this.urlRequest as string,responseType:'text',method:'GET'};
         } else urlRequest = this.urlRequest as IURLRequest;
 
+        if (!urlRequest.method) urlRequest.method = 'GET';
         const xhr:XMLHttpRequest = new XMLHttpRequest();
-        xhr.open('GET',urlRequest.url, true);
+        xhr.open(urlRequest.method,UrlLoader.addUrlParameter(urlRequest.url,'modified',BUILD_AT), true);
         xhr.responseType = urlRequest.responseType;
 
         if (xhr.responseType==='blob') {
@@ -48,9 +56,11 @@ export class UrlLoader {
                 }
             }
         };
-        xhr.onprogress = (e)=>{
-            //if (progress) progress(url,e.loaded / e.total);
-        };
+        if (this.onProgress) {
+            xhr.onprogress = (e)=>{
+                this.onProgress(e.loaded / e.total);
+            };
+        }
 
         if (DEBUG) {
             xhr.onerror=(e)=> {

@@ -1,5 +1,6 @@
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "../../abstract/renderableModel";
+import {DebugError} from "@engine/debug/debugError";
 
 export class Layer {
 
@@ -21,6 +22,15 @@ export class Layer {
         go.setLayer(this);
         go.revalidate();
         this.children.push(go);
+    }
+
+    public appendChildAt(c:RenderableModel,index:number){
+        if (DEBUG) {
+            if (index>this.children.length-1) throw new DebugError(`can not insert element: index is out of range (${index},${this.children.length-1})`);
+        }
+        c.parent = null;
+        c.revalidate();
+        this.children.splice(index,0,c);
     }
 
 

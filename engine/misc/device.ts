@@ -18,10 +18,10 @@ export class Device {
             isTouch: Device.isTouch,
             isFrame: Device.isFrame,
             isIPhone: Device.isIPhone,
+            buildAt:BUILD_AT,
         });
     }
 
-    constructor(private game:Game){
-    }
+    private constructor(private game:Game){}
 
 }

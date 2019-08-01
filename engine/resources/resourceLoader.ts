@@ -43,6 +43,7 @@ export class ResourceLoader {
         const taskRef:TaskRef = this.q.addTask(() => {
             this.game.getAudioPlayer().loadSound(
                 url, link,
+                (n:number)=>this.q.progressTask(taskRef,n),
                 () => this.q.resolveTask(taskRef),
             );
         });

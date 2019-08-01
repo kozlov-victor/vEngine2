@@ -7,6 +7,7 @@ import {Scene} from "@engine/core/scene";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
+import {Game} from "@engine/core/game";
 
 
 export class MainScene extends Scene {
@@ -14,6 +15,10 @@ export class MainScene extends Scene {
     private obj: GameObject;
     private spriteLink: ResourceLink<Texture>;
     private atlasLink: ResourceLink<string>;
+
+    constructor(protected game:Game){
+        super(game);
+    }
 
     public onPreloading() {
         this.spriteLink = this.resourceLoader.loadImage("./atlas/player.png");

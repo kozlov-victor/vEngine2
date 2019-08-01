@@ -36,6 +36,8 @@ export abstract class AbstractAppScene extends Scene {
 
         this.getSceneElement().getElementsByTagName('sound').forEach((el:Element)=>{
             const sound:Sound = new Sound(this.game);
+            sound.offset = this.getNumber(el.attributes.offset)||0;
+            sound.gain = this.getNumber(el.attributes.gain)||1;
             sound.setResourceLink(this.resourceLoader.loadSound(`./steamSeaBattle/data/sounds/${el.attributes.src}`));
             this.sounds[el.attributes.src.split('.')[0]] = sound;
         });
@@ -128,6 +130,10 @@ export abstract class AbstractAppScene extends Scene {
                 }
                 case 'nullGameObject': {
                     const go:NullGameObject = new NullGameObject(this.game);
+                    go.size.setWH(
+                        this.getNumber(child.attributes.width),
+                        this.getNumber(child.attributes.height)
+                    );
                     this.afterObjectCreated(root,go,child);
                     break;
                 }

@@ -67,7 +67,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         this._gainNode.connect(this._ctx.destination);
     }
 
-    public load(url:string, link:ResourceLink<void>, onLoad:()=>void):void {
+    public load(url:string, link:ResourceLink<void>, onProgress:(p:number)=>void,onLoad:()=>void):void {
         if (AudioPlayer.cache[url]) {
             onLoad();
             return;
@@ -79,6 +79,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
                 onLoad();
             });
         };
+        urlLoader.onProgress = onProgress;
         urlLoader.load();
     }
 
@@ -93,7 +94,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         currSource.buffer = AudioPlayer.cache[sound.getResourceLink().getUrl()];
         currSource.loop = sound.loop;
         currSource.connect(this._gainNode);
-        currSource.start(0);
+        currSource.start(0,sound.offset,sound.duration);
         currSource.playbackRate.value = sound.velocity;
         this._gainNode.gain.value = sound.gain;
         currSource.onended = ()=> {

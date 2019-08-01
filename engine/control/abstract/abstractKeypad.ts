@@ -21,7 +21,7 @@ export abstract class AbstractKeypad {
 
     public press(key:number):void{
         if (this.isPressed(key)) return;
-        //this.buffer.put(key,KEY_STATE.KEY_JUST_PRESSED);
+        this.buffer.put(key,KEY_STATE.KEY_JUST_PRESSED);
         this.notify(KEYBOARD_EVENTS.keyPressed, key);
     }
 
