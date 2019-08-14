@@ -4,7 +4,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ObjParser} from "./objParser";
-import {Texture} from "@engine/renderer/webGl/base/texture";
+import {ITexture} from "@engine/renderer/texture";
 
 class ScullMesh extends AbstractPrimitive {
 
@@ -25,7 +25,7 @@ export class MainScene extends Scene {
     private data2Link:ResourceLink<string>;
     private data3Link:ResourceLink<string>;
 
-    private dataTextureLink:ResourceLink<Texture>;
+    private dataTextureLink:ResourceLink<ITexture>;
 
     public onPreloading() {
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj/cow-nonormals.obj');

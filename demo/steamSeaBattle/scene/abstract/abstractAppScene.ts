@@ -20,6 +20,12 @@ export abstract class AbstractAppScene extends Scene {
     private links:Record<string,ResourceLink<ITexture>> = {};
 
     public onPreloading() {
+        // const assetsFolder:string = 'data_jsonp';
+        // const assetsPostfix:string = '.js';
+        // const jsonp:boolean = true;
+        const assetsFolder:string = 'data';
+        const assetsPostfix:string = '';
+        const jsonp:boolean = false;
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;
@@ -27,19 +33,40 @@ export abstract class AbstractAppScene extends Scene {
         this.preloadingGameObject = rect;
 
         this.getSceneElement().getElementsByTagName('gameObject').forEach((el:Element)=>{
-            this.links[el.attributes.src] = this.resourceLoader.loadImage(`./steamSeaBattle/data/images/${el.attributes.src}`);
+            this.links[el.attributes.src] =
+                this.resourceLoader.loadImage({
+                    url:`./steamSeaBattle/${assetsFolder}/images/${el.attributes.src}${assetsPostfix}`,
+                    responseType: 'arraybuffer',
+                    jsonp
+                });
         });
         this.getSceneElement().getElementsByTagName('imageButton').forEach((el:Element)=>{
-            this.links[el.attributes['src-on']] = this.resourceLoader.loadImage(`./steamSeaBattle/data/images/${el.attributes['src-on']}`);
-            this.links[el.attributes['src-off']] = this.resourceLoader.loadImage(`./steamSeaBattle/data/images/${el.attributes['src-off']}`);
+            this.links[el.attributes['src-on']] =
+                this.resourceLoader.loadImage({
+                    url: `./steamSeaBattle/${assetsFolder}/images/${el.attributes['src-on']}${assetsPostfix}`,
+                    responseType: 'arraybuffer',
+                    jsonp
+            });
+            this.links[el.attributes['src-off']] =
+                this.resourceLoader.loadImage({
+                    url: `./steamSeaBattle/${assetsFolder}/images/${el.attributes['src-off']}${assetsPostfix}`,
+                    responseType: 'arraybuffer',
+                    jsonp
+            });
         });
 
         this.getSceneElement().getElementsByTagName('sound').forEach((el:Element)=>{
             const sound:Sound = new Sound(this.game);
             sound.offset = this.getNumber(el.attributes.offset)||0;
             sound.gain = this.getNumber(el.attributes.gain)||1;
-            sound.setResourceLink(this.resourceLoader.loadSound(`./steamSeaBattle/data/sounds/${el.attributes.src}`));
-            this.sounds[el.attributes.src.split('.')[0]] = sound;
+            sound.setResourceLink(this.resourceLoader.loadSound(
+                {
+                    url:`./steamSeaBattle/${assetsFolder}/sounds/${el.attributes.src}${assetsPostfix}`,
+                    responseType: 'arraybuffer',
+                    jsonp
+                }
+            ));
+            this.sounds[el.attributes.src.replace('.js','').split('.')[0]] = sound;
         });
 
     }

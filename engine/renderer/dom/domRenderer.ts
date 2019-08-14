@@ -10,6 +10,7 @@ import {Color} from "@engine/renderer/color";
 import {ITexture} from "@engine/renderer/texture";
 import {Size} from "@engine/geometry/size";
 import {MathEx} from "@engine/misc/mathEx";
+import {UrlLoader} from "@engine/resources/urlLoader";
 
 class Nodes  {
     public properties:{[key:string]:any} = {};
@@ -120,9 +121,9 @@ export class DomRenderer extends AbstractRenderer {
         this.nodes.kill(r.id);
     }
 
-    public loadTextureInfo(url:string,link:ResourceLink<ITexture>,onLoaded:()=>void):void {
+    public loadTextureInfo(buffer:ArrayBuffer|string,link:ResourceLink<ITexture>,onLoaded:()=>void):void {
         const img:HTMLImageElement = new (window as any).Image() as HTMLImageElement;
-        img.src = url;
+        img.src = link.getUrl();
         img.onload = ()=>{
             link.setTarget({
                 size: new Size(img.width, img.height)

@@ -8,7 +8,8 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MathEx} from "@engine/misc/mathEx";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Texture} from "@engine/renderer/webGl/base/texture";
+import {Game} from "@engine/core/game";
+import {ITexture} from "@engine/renderer/texture";
 
 interface IWheelCommand {
     a:number;
@@ -19,10 +20,14 @@ interface IWheelCommand {
 
 export class MainScene extends Scene {
     
-    public wheelLink:ResourceLink<Texture>;
+    public wheelLink:ResourceLink<ITexture>;
     private overlay!:Image;
     private mashine!:Mashine;
 
+
+    constructor(protected game:Game){
+        super(game);
+    }
 
     public onPreloading() {
         this.overlay = new Image(this.game);

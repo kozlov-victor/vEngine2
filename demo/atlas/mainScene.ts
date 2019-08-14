@@ -5,15 +5,15 @@ import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAn
 import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {Scene} from "@engine/core/scene";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
+import {ITexture} from "@engine/renderer/texture";
 
 
 export class MainScene extends Scene {
 
     private obj: GameObject;
-    private spriteLink: ResourceLink<Texture>;
+    private spriteLink: ResourceLink<ITexture>;
     private atlasLink: ResourceLink<string>;
 
     constructor(protected game:Game){

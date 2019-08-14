@@ -24,8 +24,8 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
         return this._lastTimeId;
     }
 
-    public setRawData(data:Uint8Array){
-        // todo
+    public isCached(l:ResourceLink<void>):boolean{
+        return false;
     }
 
 
@@ -36,7 +36,7 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
     public setVelocity(val:number):void{}
     public pause():void{}
     public resume():void{}
-    public load(url:string,link:ResourceLink<void>,onProgress:(n:number)=>void,onLoad:()=>void):void{
+    public load(buffer:ArrayBuffer,link:ResourceLink<void>,onLoad:()=>void):void{
         onLoad();
     }
     public clone():BasicAudioContext{

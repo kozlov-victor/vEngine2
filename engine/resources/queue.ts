@@ -9,9 +9,6 @@ export class TaskRef {
 }
 
 export class Queue {
-
-
-
     public onResolved:()=>void;
     public onProgress:(n:number)=>void;
 

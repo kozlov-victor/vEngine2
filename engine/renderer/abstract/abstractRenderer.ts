@@ -16,6 +16,7 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/texture";
 import {IDestroyable} from "@engine/core/declarations";
+import {UrlLoader} from "@engine/resources/urlLoader";
 
 const preventDefault = (e: Event) => {
     e.preventDefault();
@@ -157,7 +158,11 @@ export abstract class AbstractRenderer implements IDestroyable {
         this.debugTextField.setText('');
     }
 
-    public loadTextureInfo(url:string,link:ResourceLink<ITexture>,onLoaded:()=>void):void {}
+    public loadTextureInfo(buffer:ArrayBuffer|string,link:ResourceLink<ITexture>,onLoaded:()=>void):void {}
+
+    public getCachedTarget(l:ResourceLink<ITexture>):ITexture {
+        return undefined;
+    }
 
     protected registerResize():void {
         this.onResize();

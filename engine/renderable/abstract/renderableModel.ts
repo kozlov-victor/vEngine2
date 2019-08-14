@@ -185,7 +185,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     public appendChild(c:RenderableModel):void {
         if (DEBUG) {
             if (c===this) throw new DebugError(`parent and child objects are the same`);
-            if (this._getParent().children.find((it:RenderableModel)=>it===c)) {
+            if (this.children.find((it:RenderableModel)=>it===c)) {
                 console.error(c);
                 throw new DebugError(`this children already added`);
             }

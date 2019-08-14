@@ -23,12 +23,13 @@ import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlu
 import {HexagonalFilter} from "@engine/renderer/webGl/filters/texture/hexagonalFilter";
 import {SwirlFilter} from "@engine/renderer/webGl/filters/texture/swirlFilter";
 import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/texture/triangleBlurFilter";
+import {ITexture} from "@engine/renderer/texture";
 
 
 export class MainScene extends Scene {
 
     private logoObj:GameObject;
-    private logoLink:ResourceLink<Texture>;
+    private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');

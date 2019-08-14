@@ -1,16 +1,16 @@
 import {BufferInfo} from "../../renderer/webGl/base/bufferInfo";
 import {IPrimitive} from "../../renderer/webGl/primitives/abstractPrimitive";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/color";
 import {DebugError} from "@engine/debug/debugError";
+import {ITexture} from "@engine/renderer/texture";
 
 
 export abstract class Mesh extends RenderableModel {
 
     public modelPrimitive:IPrimitive;
-    public texture:Texture;
+    public texture:ITexture;
     public fillColor:Color = Color.BLACK.clone();
     public bufferInfo:BufferInfo;
     public vertexItemSize:2|3 = 3;

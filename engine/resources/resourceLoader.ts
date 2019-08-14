@@ -3,7 +3,8 @@ import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "../core/game";
 import {Queue, TaskRef} from "./queue";
-import {UrlLoader} from "@engine/resources/urlLoader";
+import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
+import {ITexture} from "@engine/renderer/texture";
 
 
 export class ResourceLoader {
@@ -14,50 +15,66 @@ export class ResourceLoader {
         this.game = game;
     }
 
-
-    public loadImage(url: string): ResourceLink<Texture> {
-        const link: ResourceLink<Texture> = new ResourceLink(url);
-        const taskRef:TaskRef = this.q.addTask(() => {
+    public loadImage(req: string|IURLRequest): ResourceLink<ITexture> {
+        const loader:UrlLoader = this.createUrlLoader(req,'arraybuffer');
+        const link: ResourceLink<ITexture> = new ResourceLink(loader.getUrl());
+        if (this.game.getRenderer().getCachedTarget(link)) {
+            link.setTarget(this.game.getRenderer().getCachedTarget(link));
+            return link;
+        }
+        loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
+        loader.onLoad = (buffer:ArrayBuffer|string)=>{
             this.game.getRenderer().loadTextureInfo(
-                url, link,
-                () => this.q.resolveTask(taskRef),
+                buffer,link,() => this.q.resolveTask(taskRef)
             );
+        };
+        const taskRef:TaskRef = this.q.addTask(() => {
+            loader.load();
         });
         return link;
     }
 
-    public loadText(url: string): ResourceLink<string> {
-        const link: ResourceLink<string> = new ResourceLink(url);
-        this._loadText(url, (data: string) => link.setTarget(data));
+    public loadText(req: string|IURLRequest): ResourceLink<string> {
+        const loader:UrlLoader = this.createUrlLoader(req);
+        const link: ResourceLink<string> = new ResourceLink(loader.getUrl());
+        this._loadText(loader, (data: string) => link.setTarget(data));
         return link;
     }
 
-    public loadJSON(url: string): ResourceLink<string> {
-        const link: ResourceLink<string> = new ResourceLink(url);
-        this._loadText(url, (data: string) => link.setTarget(JSON.parse(data)));
+    public loadJSON(req: string|IURLRequest): ResourceLink<string> {
+        const loader:UrlLoader = this.createUrlLoader(req);
+        const link: ResourceLink<string> = new ResourceLink(loader.getUrl());
+        this._loadText(loader, (data: string) => link.setTarget(JSON.parse(data)));
         return link;
     }
 
-    public loadSound(url: string): ResourceLink<void> {
-        const link: ResourceLink<void> = new ResourceLink(url);
-        const taskRef:TaskRef = this.q.addTask(() => {
+    public loadSound(req: string|IURLRequest): ResourceLink<void> {
+        const loader:UrlLoader = this.createUrlLoader(req,'arraybuffer');
+        const link: ResourceLink<void> = new ResourceLink(loader.getUrl());
+        if (this.game.getAudioPlayer().isCached(link)) {
+            return link;
+        }
+        const taskRef:TaskRef = this.q.addTask(() =>{
+            loader.load();
+        });
+        loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
+        loader.onLoad = (data:ArrayBuffer)=>{
             this.game.getAudioPlayer().loadSound(
-                url, link,
-                (n:number)=>this.q.progressTask(taskRef,n),
-                () => this.q.resolveTask(taskRef),
+                data, link, () => this.q.resolveTask(taskRef),
             );
-        });
+        };
         return link;
     }
 
-    public loadBinary(url: string): ResourceLink<ArrayBuffer> {
-        const link: ResourceLink<ArrayBuffer> = new ResourceLink<ArrayBuffer>(url);
+    public loadBinary(req: string|IURLRequest): ResourceLink<ArrayBuffer> {
+        const loader:UrlLoader = this.createUrlLoader(req,'arraybuffer');
+        const link: ResourceLink<ArrayBuffer> = new ResourceLink<ArrayBuffer>(loader.getUrl());
+        loader.onLoad = (buff: ArrayBuffer|string)=>{
+            link.setTarget(buff as ArrayBuffer);
+            this.q.resolveTask(taskRef);
+        };
+        loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
         const taskRef:TaskRef = this.q.addTask(() => {
-            const loader:UrlLoader = new UrlLoader({url,responseType:'arraybuffer'});
-            loader.onLoad = (buff: ArrayBuffer|string)=>{
-                link.setTarget(buff as ArrayBuffer);
-                this.q.resolveTask(taskRef);
-            };
             loader.load();
         });
         return link;
@@ -90,15 +107,24 @@ export class ResourceLoader {
         this.q.onResolved = fn;
     }
 
-    private _loadText(url: string, callback: (data:string)=>void): void {
+
+    private createUrlLoader(req: string|IURLRequest,responseType:'arraybuffer'|'text' = 'text'):UrlLoader{
+        let iReq:IURLRequest;
+        if ((req as string).substr!==undefined){
+            iReq = {url:req as string,responseType,method:'GET'};
+        } else iReq = req as IURLRequest;
+        return new UrlLoader(iReq);
+    }
+
+    private _loadText(loader:UrlLoader, callback: (data:string)=>void): void {
         const taskRef:TaskRef = this.q.addTask(() => {
-            const loader:UrlLoader = new UrlLoader({url,responseType:'text'});
-            loader.onLoad = (data: ArrayBuffer|string)=>{
-                callback(data as string);
-                this.q.resolveTask(taskRef);
-            };
             loader.load();
         });
+        loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
+        loader.onLoad = (data:string)=>{
+            callback(data);
+            this.q.resolveTask(taskRef);
+        };
     }
 
 

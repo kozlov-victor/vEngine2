@@ -3,16 +3,16 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/core/scene";
 import {MathEx} from "@engine/misc/mathEx";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {WinScene} from "../winScene";
 import {defineWinType, WIN_TYPE} from "./common";
+import {ITexture} from "@engine/renderer/texture";
 
 export class Mashine {
 
     public locked:boolean = false;
     private wheels:Wheel[] = [];
 
-    constructor(private game:Game,private resourceLink:ResourceLink<Texture>){
+    constructor(private game:Game,private resourceLink:ResourceLink<ITexture>){
         const cellDeltaHeight:number = 160;
         for (let i:number = 0;i<3;i++){
             const wheel:Wheel = new Wheel(game,resourceLink);

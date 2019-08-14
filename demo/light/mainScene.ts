@@ -10,12 +10,12 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Color} from "@engine/renderer/color";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {DirectionalLight} from "@engine/light/impl/directionalLight";
-import {Texture} from "@engine/renderer/webGl/base/texture";
+import {ITexture} from "@engine/renderer/texture";
 
 export class MainScene extends Scene {
 
     private logoObj:GameObject;
-    private logoLink:ResourceLink<Texture>;
+    private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');

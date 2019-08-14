@@ -5,8 +5,6 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {Clazz, ICloneable} from "@engine/core/declarations";
 import {Sound} from "@engine/media/sound";
-import {UrlLoader} from "@engine/resources/urlLoader";
-
 
 
 class CtxHolder {
@@ -67,20 +65,20 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         this._gainNode.connect(this._ctx.destination);
     }
 
-    public load(url:string, link:ResourceLink<void>, onProgress:(p:number)=>void,onLoad:()=>void):void {
-        if (AudioPlayer.cache[url]) {
+    public load(buffer:ArrayBuffer, link:ResourceLink<void>, onLoad:()=>void):void {
+        if (AudioPlayer.cache[link.getUrl()]) { // todo remove?
             onLoad();
             return;
         }
-        const urlLoader:UrlLoader = new UrlLoader({url,responseType:'arraybuffer'});
-        urlLoader.onLoad = (buffer:ArrayBuffer|string)=>{
-            decode(buffer as ArrayBuffer, (decoded:AudioBuffer)=>{
-                AudioPlayer.cache[link.getUrl()] = decoded;
-                onLoad();
-            });
-        };
-        urlLoader.onProgress = onProgress;
-        urlLoader.load();
+        decode(buffer, (decoded:AudioBuffer)=>{
+            AudioPlayer.cache[link.getUrl()] = decoded;
+            onLoad();
+        });
+    }
+
+
+    public isCached(l:ResourceLink<void>):boolean{
+        return !!AudioPlayer.cache[l.getUrl()];
     }
 
     public isFree(): boolean {

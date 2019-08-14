@@ -2,14 +2,14 @@ import {Scene} from "@engine/core/scene";
 import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {MultiImageFrameAnimation} from "@engine/animation/frameAnimation/multiImageFrameAnimation";
+import {ITexture} from "@engine/renderer/texture";
 
 
 export class MainScene extends Scene {
 
     private obj:GameObject;
-    private resourceLinks:ResourceLink<Texture>[] = [];
+    private resourceLinks:ResourceLink<ITexture>[] = [];
 
     public onPreloading() {
         for (let i:number = 0;i<6;i++) {

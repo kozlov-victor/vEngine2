@@ -28,8 +28,12 @@ export  class AudioPlayer implements IAudioPlayer {
         this.audioNodeSet = new AudioNodeSet(game,this.audioContext,AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
     }
 
-    public loadSound(url:string, link:ResourceLink<void>, onProgress:(n:number)=>void,onLoad:()=>void):void {
-        this.audioContext.load(url,link,onProgress,onLoad);
+    public loadSound(buffer:ArrayBuffer, link:ResourceLink<void>, onLoad:()=>void):void {
+        this.audioContext.load(buffer,link,onLoad);
+    }
+
+    public isCached(link:ResourceLink<void>):boolean {
+        return this.audioContext.isCached(link);
     }
 
     public play(sound:Sound):void {
@@ -48,6 +52,10 @@ export  class AudioPlayer implements IAudioPlayer {
         const node:AudioNode|null = this.audioNodeSet.getNodeBySound(sound);
         if (node===null) return;
         node.stop();
+    }
+
+    public getContext():BasicAudioContext {
+        return this.audioContext;
     }
 
     public stopAll():void {

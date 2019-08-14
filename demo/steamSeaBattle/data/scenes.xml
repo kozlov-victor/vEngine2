@@ -14,7 +14,7 @@
         <scene id="intro">
             <sound src="intro.wav"/>
             <sound src="gear.wav"/>
-            <sound src="start.wav"/>
+            <sound src="start.wav" gain="0.4"/>
             <layer>
                 <gameObject
                         src="back.png"
@@ -166,7 +166,7 @@
         <scene id="main">
             <sound src="water.wav"/>
             <sound src="hit.wav"/>
-            <sound src="missed.mp3"/>
+            <sound src="missed.mp3" gain="0.6"/>
             <sound src="gear.wav"/>
             <sound src="shoot.wav" offset="1" gain="0.2"/>
             <sound src="riff1.wav"/>
@@ -830,6 +830,7 @@
         <scene id="result">
             <sound src="gear.wav"/>
             <sound src="win.wav"/>
+            <sound src="life_lost.wav"/>
             <sound src="click.wav"/>
             <layer>
                 <gameObject

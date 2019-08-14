@@ -2,9 +2,10 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Tween} from "@engine/animation/tween";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Mashine} from "./mashine";
 import {Easing} from "@engine/misc/easing/bounce";
+import {ITexture} from "@engine/renderer/texture";
+
 export class Wheel {
 
     public static readonly CELL_WIDTH:number = 215;
@@ -18,7 +19,7 @@ export class Wheel {
 
     private free:boolean = true;
 
-    constructor(private game:Game,public resourceLink:ResourceLink<Texture>){
+    constructor(private game:Game,public resourceLink:ResourceLink<ITexture>){
         this.image = new Image(game);
         this.image.setResourceLink(resourceLink);
 

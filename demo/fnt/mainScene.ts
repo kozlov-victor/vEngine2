@@ -3,15 +3,15 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Font} from "@engine/renderable/impl/general/font";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {Color} from "@engine/renderer/color";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {FntCreator} from "./FntCreator";
+import {ITexture} from "@engine/renderer/texture";
 import createFont = FntCreator.createFont;
 
 
 export class MainScene extends Scene {
 
     private fntResourceLink:ResourceLink<string>;
-    private sprResourceLink:ResourceLink<Texture>;
+    private sprResourceLink:ResourceLink<ITexture>;
 
     private fnt:Font;
     private tf:TextField;

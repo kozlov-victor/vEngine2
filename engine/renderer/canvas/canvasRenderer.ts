@@ -9,6 +9,7 @@ import {Image} from "@engine/renderable/impl/geometry/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ITexture} from "@engine/renderer/texture";
+import {UrlLoader} from "@engine/resources/urlLoader";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -156,9 +157,9 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public loadTextureInfo(url:string,link:ResourceLink<ITexture>,onLoad:()=>void){
+    public loadTextureInfo(buffer:ArrayBuffer|string,link:ResourceLink<ITexture>,onLoad:()=>void){
         const img:HTMLImageElement = new (window as any).Image();
-        img.src = url;
+        img.src = link.getUrl();
         if (this.renderableCache[link.getUrl()]) {
             onLoad();
             link.setTarget(this.renderableCache[link.getUrl()]);

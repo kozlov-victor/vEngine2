@@ -135,14 +135,14 @@ export class Font implements IResource<ITexture>, IRevalidatable {
         const f:Font = new Font(Game.getInstance());
         f.createContext();
         const resourceLoader:ResourceLoader = new ResourceLoader(Game.getInstance());
-        const link:ResourceLink<Texture> = resourceLoader.loadImage(f.createBitmap());
+        const link:ResourceLink<ITexture> = resourceLoader.loadImage(f.createBitmap());
         resourceLoader.startLoading();
         f.setResourceLink(link);
         Font._systemFontInstance = f;
         return f;
     }
 
-    public static fromAtlas(game:Game,link:ResourceLink<Texture>,fontContext:IFontContext):Font{
+    public static fromAtlas(game:Game,link:ResourceLink<ITexture>,fontContext:IFontContext):Font{
         const fnt:Font = new Font(game);
         fnt.setResourceLink(link);
         fnt.fontContext = fontContext;
@@ -166,7 +166,7 @@ export class Font implements IResource<ITexture>, IRevalidatable {
     public generate(){
         this.createContext();
         const base64:string = this.createBitmap();
-        const link:ResourceLink<Texture> = this.game.getCurrScene().resourceLoader.loadImage(base64);
+        const link:ResourceLink<ITexture> = this.game.getCurrScene().resourceLoader.loadImage(base64);
         this.setResourceLink(link);
     }
 

@@ -3,13 +3,12 @@ import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {KEYBOARD_KEY, KeyboardControl} from "@engine/control/keyboardControl";
-import {GamePadControl} from "@engine/control/gamePadControl";
+import {KEYBOARD_KEY} from "@engine/control/keyboardControl";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {TaskRef} from "@engine/resources/queue";
+import {ITexture} from "@engine/renderer/texture";
 
 
 const fakeLongLoadingFn = (resourceLoader:ResourceLoader)=>{
@@ -24,7 +23,7 @@ const fakeLongLoadingFn = (resourceLoader:ResourceLoader)=>{
 export class MainScene extends Scene {
 
     private logoObj:GameObject;
-    private logoLink:ResourceLink<Texture>;
+    private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');

@@ -3,13 +3,13 @@ import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {Texture} from "@engine/renderer/webGl/base/texture";
+import {ITexture} from "@engine/renderer/texture";
 
 
 export class MainScene extends Scene {
 
     private logoObj:GameObject;
-    private logoLink:ResourceLink<Texture>;
+    private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');

@@ -32,14 +32,12 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         super(game);
         this._ctx = CtxHolder.getCtx();
     }
-    public load(url:string,link:ResourceLink<void>,onProgress:(n:number)=>void,onLoad:()=>void):void {
-        const urlLoader:UrlLoader = new UrlLoader({url,responseType:'blob'});
-        urlLoader.onLoad = (buffer:ArrayBuffer|string)=>{
-            AudioPlayer.cache[link.getUrl()] = URL.createObjectURL(buffer as ArrayBuffer);
-            onLoad();
-        };
-        urlLoader.onProgress = onProgress;
-        urlLoader.load();
+    public load(buffer:ArrayBuffer,link:ResourceLink<void>,onLoad:()=>void):void {
+        // urlLoader.onLoad = (buffer:ArrayBuffer|string)=>{
+        //     AudioPlayer.cache[link.getUrl()] = URL.createObjectURL(buffer as ArrayBuffer);
+        //     onLoad();
+        // };
+        onLoad(); // todo
     }
 
     public isFree(): boolean {

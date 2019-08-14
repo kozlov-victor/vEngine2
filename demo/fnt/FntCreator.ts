@@ -1,11 +1,11 @@
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Font, IFontContext} from "@engine/renderable/impl/general/font";
 import {Game} from "@engine/core/game";
+import {ITexture} from "@engine/renderer/texture";
 
 export namespace FntCreator {
 
-    export const createFont = (game:Game,imgLink:ResourceLink<Texture>,docLink:ResourceLink<string>):Font=>{
+    export const createFont = (game:Game,imgLink:ResourceLink<ITexture>,docLink:ResourceLink<string>):Font=>{
         const ctx:IFontContext = {
             width: imgLink.getTarget().size.width,
             height: imgLink.getTarget().size.height,

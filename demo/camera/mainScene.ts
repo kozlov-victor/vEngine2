@@ -6,14 +6,14 @@ import {Color} from "@engine/renderer/color";
 import {KEYBOARD_KEY} from "@engine/control/keyboardControl";
 import {GAME_PAD_KEY} from "@engine/control/gamePadControl";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/geometry/image";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {ITexture} from "@engine/renderer/texture";
 
 export class MainScene extends Scene {
     
     private logoObj:GameObject;
-    private logoLink:ResourceLink<Texture>;
-    private bgLink:ResourceLink<Texture>;
+    private logoLink:ResourceLink<ITexture>;
+    private bgLink:ResourceLink<ITexture>;
 
     public onPreloading() {
         this.width = 1100;

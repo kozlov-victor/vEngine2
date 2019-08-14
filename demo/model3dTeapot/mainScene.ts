@@ -5,6 +5,7 @@ import {Mesh} from "@engine/renderable/abstract/mesh";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
+import {ITexture} from "@engine/renderer/texture";
 
 class Teapot extends AbstractPrimitive {
 
@@ -21,7 +22,7 @@ class Teapot extends AbstractPrimitive {
 export class MainScene extends Scene {
 
     private logoObj:Mesh;
-    private logoLink:ResourceLink<Texture>;
+    private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('./model3d/Texture-67.jpg');

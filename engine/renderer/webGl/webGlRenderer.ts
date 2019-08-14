@@ -22,15 +22,13 @@ import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simple
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
-import IDENTITY = mat4.IDENTITY;
-import Mat16Holder = mat4.Mat16Holder;
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {ITexture} from "@engine/renderer/texture";
 import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
+import {ClazzEx, IDestroyable} from "@engine/core/declarations";
+import IDENTITY = mat4.IDENTITY;
+import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
-import {Clazz, ClazzEx, IDestroyable} from "@engine/core/declarations";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {UrlLoader} from "@engine/resources/urlLoader";
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext|null=>{
@@ -210,7 +208,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (isTextureUsed) md.setTectureMatrix(FLIP_TEXTURE_MATRIX.mat16);
         md.setLightUsed(mesh.isLightAccepted()||false);
         md.setColor(mesh.fillColor);
-        md.attachTexture('u_texture',mesh.texture?mesh.texture:this.nullTexture);
+        md.attachTexture('u_texture',mesh.texture?mesh.texture as any as Texture:this.nullTexture);
 
 
         if (mesh.depthTest) this.gl.enable(this.gl.DEPTH_TEST);
@@ -373,29 +371,68 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.renderableCache[url] = t;
     }
 
-    public loadTextureInfo(url:string,link:ResourceLink<ITexture>,onLoad:()=>void):void{
-        const possibleTargetInCache:ITexture = this.renderableCache[link.getUrl()];
+    public getCachedTarget(l:ResourceLink<ITexture>):ITexture {
+        return this.renderableCache[l.getUrl()];
+    }
+
+    public loadTextureInfo(buffer:ArrayBuffer|string,link:ResourceLink<ITexture>,onLoad:()=>void):void{
+        const possibleTargetInCache:ITexture = this.renderableCache[link.getUrl()]; // todo remove?
         if (possibleTargetInCache!==undefined) {
             link.setTarget(possibleTargetInCache);
             onLoad();
             return;
         }
+
+        let imgUrl:string;
+        let imgBlob:Blob;
         const img:HTMLImageElement = new (window as any).Image() as HTMLImageElement;
-        img.src = UrlLoader.addUrlParameter(url,'modified',BUILD_AT);
-        img.onload = ()=>{
-            const texture:Texture = new Texture(this.gl);
-            texture.setImage(img);
-            this.gl.bindTexture(this.gl.TEXTURE_2D, this.finalFrameBuffer.getTexture().getGlTexture()); // to restore texture binding
-            this.putToCache(link,texture);
-            link.setTarget(texture);
-            onLoad();
-        };
-        if (DEBUG) {
-            img.onerror = (e:any)=>{
-                console.log(e);
-                throw new DebugError(`Resource loading error: can not load resource with url "${url}"`);
-            };
+        const texture:Texture = new Texture(this.gl);
+        const isBase64:boolean =  !!((buffer as string).substr);
+
+        if (isBase64) {
+            imgUrl = buffer as string;
+        } else {
+            const arrayBufferView:Uint8Array = new Uint8Array(buffer as ArrayBuffer);
+            imgBlob = new Blob( [arrayBufferView], {type: "image/png"}); // todo
+            const urlCreator:any = window.URL;
+            imgUrl = urlCreator.createObjectURL(imgBlob);
         }
+
+        if (globalThis.createImageBitmap && !isBase64) {
+            globalThis.createImageBitmap(imgBlob).
+            then((bitmap:ImageBitmap)=>{
+                texture.setImage(bitmap);
+                this.gl.bindTexture(this.gl.TEXTURE_2D, this.finalFrameBuffer.getTexture().getGlTexture()); // to restore texture binding
+                this.putToCache(link,texture);
+                link.setTarget(texture);
+                onLoad();
+            }).catch((e:any)=>{
+                console.error(e);
+                if (DEBUG) {
+                    setTimeout(()=>{
+                        throw new DebugError(e);
+                    },1);
+                }
+            });
+        } else {
+            img.src = imgUrl;
+            img.onload = ()=>{
+                texture.setImage(img);
+                this.gl.bindTexture(this.gl.TEXTURE_2D, this.finalFrameBuffer.getTexture().getGlTexture()); // to restore texture binding
+                this.putToCache(link,texture);
+                link.setTarget(texture);
+                onLoad();
+            };
+            if (DEBUG) {
+                img.onerror = ()=>{
+                    console.error(buffer);
+                    throw new DebugError(`can not create image. Bad url data`);
+                };
+            }
+        }
+
+
+
     }
 
     public getNativeContext():WebGLRenderingContext {

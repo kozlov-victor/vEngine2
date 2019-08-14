@@ -11,10 +11,11 @@ import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderer/linearGradient";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
+import {ITexture} from "@engine/renderer/texture";
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<Texture>;
+    private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
