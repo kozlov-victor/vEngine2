@@ -36,7 +36,7 @@ export abstract class AbstractFilter implements IFilter {
     protected simpleRectDrawer:SimpleRectDrawer;
 
 
-    protected constructor(game:Game){
+    protected constructor(protected game:Game){
 
         const renderer:AbstractRenderer = game.getRenderer();
         if (DEBUG && !(renderer instanceof WebGlRenderer)) {

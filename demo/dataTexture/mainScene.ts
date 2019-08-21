@@ -24,6 +24,7 @@ export class MainScene extends Scene {
 
     public onReady() {
 
+
         for (const rl of this.resourceLinks) {
             const pbmReader:PbmReader = new PbmReader(this.game,rl.getTarget());
             this.textureLinks.push(pbmReader.createTextureLink());
@@ -37,7 +38,6 @@ export class MainScene extends Scene {
         this.obj.sprite = anim.currSprite;
         this.obj.addFrameAnimation('animation',anim);
         this.obj.playFrameAnimation('animation');
-        this.obj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.obj);
     }
 

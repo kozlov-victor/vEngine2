@@ -98,9 +98,7 @@ const loadViaJsonp = (urlLoader:UrlLoader,urlRequest:IURLRequest)=>{
     };
 };
 
-
 export class UrlLoader {
-
 
     public onLoad:(buffer:ArrayBuffer|string)=>void;
     public onError:(e:Event)=>void;

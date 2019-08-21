@@ -158,7 +158,7 @@ export abstract class AbstractRenderer implements IDestroyable {
         this.debugTextField.setText('');
     }
 
-    public loadTextureInfo(buffer:ArrayBuffer|string,link:ResourceLink<ITexture>,onLoaded:()=>void):void {}
+    public createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoaded:()=>void):void {}
 
     public getCachedTarget(l:ResourceLink<ITexture>):ITexture {
         return undefined;
@@ -185,10 +185,12 @@ export abstract class AbstractRenderer implements IDestroyable {
 
             container.style.width = `${innerWidth}px`;
             container.style.height = `${innerHeight}px`;
+            this.game.screenSize.setXY(innerWidth,innerHeight);
             this.game.scale.setXY(innerWidth/this.game.width,innerHeight/this.game.height);
             this.game.pos.setXY(0);
             return;
         }
+        // else FIT
         const canvasRatio:number = this.game.height / this.game.width;
         const windowRatio:number = innerHeight / innerWidth;
         let width:number;
@@ -210,6 +212,7 @@ export abstract class AbstractRenderer implements IDestroyable {
         this.container.style.width = width + 'px';
         this.container.style.height = height + 'px';
         this.container.style.marginTop = `${this.game.pos.y}px`;
+        this.game.screenSize.setXY(width,height);
     }
 
     private getScreenResolution():[number,number]{

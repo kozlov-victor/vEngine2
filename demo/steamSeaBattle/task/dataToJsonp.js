@@ -4,6 +4,7 @@ const processFolder = (folderName) => {
     fs.readdirSync(`./demo/steamSeaBattle/data/${folderName}`).forEach((s) => {
         const content = fs.readFileSync(`./demo/steamSeaBattle/data/${folderName}/${s}`);
         const arr = [...content];
+        //language=javascript
         const file = `
             (function(){
                 var array = ${JSON.stringify(arr)};

@@ -10,6 +10,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ITexture} from "@engine/renderer/texture";
 import {UrlLoader} from "@engine/resources/urlLoader";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -157,26 +158,21 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public loadTextureInfo(buffer:ArrayBuffer|string,link:ResourceLink<ITexture>,onLoad:()=>void){
-        const img:HTMLImageElement = new (window as any).Image();
-        img.src = link.getUrl();
-        if (this.renderableCache[link.getUrl()]) {
-            onLoad();
-            link.setTarget(this.renderableCache[link.getUrl()]);
-            return;
-        }
-        img.onload = ()=>{
+    public createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoad:()=>void){
+
+        this.createImageFromData(imgData,(bitmap:ImageBitmap|HTMLImageElement)=>{
             const c:HTMLCanvasElement = document.createElement('canvas');
-            c.setAttribute('width',img.width.toString());
-            c.setAttribute('height',img.height.toString());
+            c.setAttribute('width',bitmap.width.toString());
+            c.setAttribute('height',bitmap.height.toString());
             const ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
-            ctx.drawImage(img as HTMLImageElement,0,0);
-            const size = new Size(img.width,img.height);
+            ctx.drawImage(bitmap,0,0);
+            const size = new Size(bitmap.width,bitmap.height);
             const texture:ICanvasTexture = {size,source:c};
             this.renderableCache[link.getUrl()] = texture;
             link.setTarget(texture);
             onLoad();
-        };
+        });
+
     }
 
 }

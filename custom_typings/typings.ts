@@ -29,4 +29,5 @@ declare const BUILD_AT:number;
 // tslint:disable-next-line:interface-name
 interface Window {
     globalThis:Window;
+    __POLYFILLS_INCLUDED__:boolean;
 }

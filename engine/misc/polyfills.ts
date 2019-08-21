@@ -15,6 +15,9 @@ if (!globalThis.cancelAnimationFrame) {
     globalThis.cancelAnimationFrame = (id) => clearTimeout(id);
 }
 
+if (DEBUG) {
+    window.__POLYFILLS_INCLUDED__ = true;
+}
 
 // if (!Array.prototype['find']) {
 //     Array.prototype['find'] = function(predicate:Function) {

@@ -1,5 +1,3 @@
-
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "../core/game";
 import {Queue, TaskRef} from "./queue";
@@ -24,7 +22,7 @@ export class ResourceLoader {
         }
         loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
         loader.onLoad = (buffer:ArrayBuffer|string)=>{
-            this.game.getRenderer().loadTextureInfo(
+            this.game.getRenderer().createTexture(
                 buffer,link,() => this.q.resolveTask(taskRef)
             );
         };

@@ -4,13 +4,11 @@ import {Game} from "@engine/core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
-import {mat4} from "@engine/geometry/mat4";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {Color} from "@engine/renderer/color";
 import {ITexture} from "@engine/renderer/texture";
 import {Size} from "@engine/geometry/size";
 import {MathEx} from "@engine/misc/mathEx";
-import {UrlLoader} from "@engine/resources/urlLoader";
 
 class Nodes  {
     public properties:{[key:string]:any} = {};
@@ -121,8 +119,8 @@ export class DomRenderer extends AbstractRenderer {
         this.nodes.kill(r.id);
     }
 
-    public loadTextureInfo(buffer:ArrayBuffer|string,link:ResourceLink<ITexture>,onLoaded:()=>void):void {
-        const img:HTMLImageElement = new (window as any).Image() as HTMLImageElement;
+    public createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoaded:()=>void):void {
+        const img:HTMLImageElement = new (window as any).Image() as HTMLImageElement; // todo
         img.src = link.getUrl();
         img.onload = ()=>{
             link.setTarget({

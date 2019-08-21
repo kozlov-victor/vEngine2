@@ -33,14 +33,15 @@ export class Game {
     private static instance:Game;
 
 
-    private static isOfType<T>(instance:any, C:ClazzEx<T,any>):instance is T {
-        return instance instanceof C;
-    }
+    // private static isOfType<T>(instance:any, C:ClazzEx<T,any>):instance is T {
+    //     return instance instanceof C;
+    // }
 
     public readonly width:number;
     public readonly height:number;
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly pos:Point2d = new Point2d(0,0);
+    public readonly screenSize = new Point2d(0,0);
     public readonly camera:Camera = new Camera(this);
 
     public gravityConstant:number = 0;
@@ -97,13 +98,13 @@ export class Game {
         return this.audioPlayer;
     }
 
-    public getControl<T>(T:ClazzEx<IControl,Game>):T {
-        for (const c of this._controls) {
-            if (Game.isOfType(c,T)) return (c as any) as T;
-        }
-        if (DEBUG) throw new DebugError('no such control');
-        else throw new Error();
-    }
+    // public getControl<T>(T:ClazzEx<IControl,Game>):T {
+    //     for (const c of this._controls) {
+    //         if (Game.isOfType(c,T)) return c as any as T;
+    //     }
+    //     if (DEBUG) throw new DebugError('no such control');
+    //     else throw new Error();
+    // }
 
     public hasControl(type:string):boolean {
         for (const c of this._controls) {
@@ -224,5 +225,6 @@ if (DEBUG) {
         _cnt++;
         if (_cnt>16) throw new DebugError('too many logs');
     };
+    if (!window.__POLYFILLS_INCLUDED__) throw new DebugError(`polyfills module is not included!`);
 }
 

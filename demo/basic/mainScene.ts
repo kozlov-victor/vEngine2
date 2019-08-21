@@ -3,10 +3,11 @@ import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {KEYBOARD_KEY} from "@engine/control/keyboardControl";
+import {KEYBOARD_KEY, KeyboardControl} from "@engine/control/keyboardControl";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {ITexture} from "@engine/renderer/texture";
+import {MouseControl} from "@engine/control/mouse/mouseControl";
 
 export class MainScene extends Scene {
 
@@ -32,7 +33,6 @@ export class MainScene extends Scene {
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
-
         this.on(KEYBOARD_EVENTS.keyHold, (e:KEYBOARD_KEY)=>{
             switch (e) {
                 case KEYBOARD_KEY.LEFT:
@@ -53,8 +53,6 @@ export class MainScene extends Scene {
         });
 
 
-
-        (window as any).logoObj = this.logoObj;
 
     }
 
