@@ -17,7 +17,7 @@ import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {Incrementer} from "@engine/resources/incrementer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
-import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 
 export enum BLEND_MODE {
     NORMAL,
@@ -56,6 +56,21 @@ class AnglePoint3d {
 
 }
 
+class ModelPoint2d extends Point2d {
+
+    constructor(private model:RenderableModel){
+        super();
+    }
+
+    public setToCenter():void {
+        this.model.revalidate();
+        if (DEBUG && !(this.model.size.width && this.model.size.height))
+            throw new DebugError(`can not set anchor to center: width or height of gameObject is not set`);
+        this.setXY(this.model.size.width/2,this.model.size.height/2);
+    }
+
+}
+
 export abstract class RenderableModel  implements IRevalidatable, ITweenable, IEventemittable {
 
     public readonly type:string;
@@ -65,8 +80,8 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
     public readonly posZ:number = 0;
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly skew:Point2d = new Point2d(0,0);
-    public readonly anchor:Point2d = new Point2d(0,0);
-    public readonly rotationPoint:Point2d = new Point2d(0,0);
+    public readonly anchor:ModelPoint2d = new ModelPoint2d(this);
+    public readonly rotationPoint:ModelPoint2d = new ModelPoint2d(this);
     public angle3d:AnglePoint3d = new AnglePoint3d(this,'angle');
     public alpha:number = 1;
     public blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
@@ -160,21 +175,6 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         );
         return this._srcRect;
     }
-
-    public setAnchorToCenter():void {
-        this.revalidate();
-        if (DEBUG && !(this.size.width && this.size.height))
-            throw new DebugError(`can not set anchor to center: width or height of gameObject is not set`);
-        this.anchor.setXY(this.size.width/2,this.size.height/2);
-    }
-
-    public setRotationPointToCenter():void {
-        this.revalidate();
-        if (DEBUG && !(this.size.width && this.size.height))
-            throw new DebugError(`can not set rotation point to center: width or height of gameObject is not set`);
-        this.rotationPoint.setXY(this.size.width/2,this.size.height/2);
-    }
-
 
     public addBehaviour(b:BaseAbstractBehaviour):void {
         this._behaviours.push(b);

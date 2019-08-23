@@ -3,12 +3,12 @@ import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {KEYBOARD_KEY} from "@engine/control/keyboardControl";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {TaskRef} from "@engine/resources/queue";
 import {ITexture} from "@engine/renderer/texture";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 
 const fakeLongLoadingFn = (resourceLoader:ResourceLoader)=>{

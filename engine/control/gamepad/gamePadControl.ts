@@ -1,9 +1,9 @@
-import {Game} from "../core/game";
+import {Game} from "@engine/core/game";
 import {IControl} from "@engine/control/abstract/iControl";
 import {AbstractKeypad} from "@engine/control/abstract/abstractKeypad";
 import {Int} from "@engine/core/declarations";
-import {DebugError} from "@engine/debug/debugError";
-import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {GAME_PAD_KEY} from "@engine/control/gamepad/gamePadKeys";
+import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 
 declare const window:any,navigator:any;
 
@@ -25,45 +25,41 @@ if (DEBUG) {
     });
 }
 
-export enum GAME_PAD_KEY {
-    GAME_PAD_1 = 0,
-    GAME_PAD_2 = 1,
-    GAME_PAD_3 = 2,
-    GAME_PAD_4 = 3,
-    GAME_PAD_5 = 4,
-    GAME_PAD_6 = 5,
-    GAME_PAD_7 = 6,
-    GAME_PAD_8 = 7,
-    GAME_PAD_AXIS_LEFT = 8,
-    GAME_PAD_AXIS_RIGHT = 9,
-    GAME_PAD_AXIS_UP = 10,
-    GAME_PAD_AXIS_DOWN = 11
-}
-
 type GamePadGetter = ()=>Gamepad[];
+const NullGamepadGetter:GamePadGetter = ():Gamepad[]=>[];
 
-const gamePadGetterFactory = ():GamePadGetter=>{
-    if (navigator.getGamepads) return (()=>navigator.getGamepads()) as GamePadGetter;
-    else if (navigator.webkitGetGamepads) return (()=>navigator.webkitGetGamepads()) as GamePadGetter;
+const gamePadGetterFactory = ():[GamePadGetter,boolean]=>{
+    if (navigator.getGamepads) return [(()=>navigator.getGamepads()) as GamePadGetter,true];
+    else if (navigator.webkitGetGamepads) return [(()=>navigator.webkitGetGamepads()) as GamePadGetter,true];
     else {
         const possibles:string[] = ['webkitGamepads','mozGamepads','msGamepads','msGamepads'];
         let possible:string;
         for (let i:number = 0; i < possibles.length; i++) {
             if (navigator[possibles[i]]) {
                 possible = possibles[i];
+                if (DEBUG) console.log(`gamepad control with prefix is used (${possible})`);
                 break;
             }
         }
-        if (DEBUG && !possible) throw new DebugError(`can not use game pad: it is not supported by this device`);
-        return (()=>navigator[possible]) as GamePadGetter;
+        if (DEBUG && !possible) return [NullGamepadGetter,false];
+        return [(()=>navigator[possible]) as GamePadGetter,false];
     }
 };
 
-const gamePadGetter:GamePadGetter = gamePadGetterFactory();
+const [gamePadGetter,isEnabled] = gamePadGetterFactory();
 
+// https://www.w3.org/TR/gamepad/
 export class GamePadControl extends AbstractKeypad implements IControl{
 
+    public static readonly enabled:boolean = isEnabled;
+
     public readonly type:string = 'GamePadControl';
+
+    protected keyPressed: string = GAME_PAD_EVENTS.buttonPressed;
+    protected keyHold: string = GAME_PAD_EVENTS.buttonHold;
+    protected keyReleased: string = GAME_PAD_EVENTS.buttonReleased;
+
+
     private gamepads:Gamepad[];
 
     constructor(game:Game){

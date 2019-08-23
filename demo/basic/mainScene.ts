@@ -3,11 +3,10 @@ import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {KEYBOARD_KEY, KeyboardControl} from "@engine/control/keyboardControl";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/texture";
-import {MouseControl} from "@engine/control/mouse/mouseControl";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 export class MainScene extends Scene {
 

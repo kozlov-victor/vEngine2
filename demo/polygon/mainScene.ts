@@ -20,7 +20,7 @@ export class MainScene extends Scene {
         p.fillColor = Color.RGB(122,12,0);
         p.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(p);
-        p.setRotationPointToCenter();
+        p.rotationPoint.setToCenter();
         this.setInterval(()=>{
             p.angle3d.x+=0.01;
             p.angle3d.y+=0.01;

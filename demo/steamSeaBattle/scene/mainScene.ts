@@ -1,8 +1,7 @@
 import {AssetsDocumentHolder, Element} from "../data/assetsDocumentHolder";
 import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {MathEx} from "@engine/misc/mathEx";
-import {KEYBOARD_KEY, KeyboardControl} from "@engine/control/keyboardControl";
-import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {BaseScene} from "./baseScene";
 import {ImageButton} from "@engine/renderable/impl/ui/components/imageButton";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
@@ -12,6 +11,7 @@ import {ResultScene} from "./resultScene";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 const MANOMETER_SCALE:number = MathEx.degToRad(360-111);
 const MAX_NUM_OF_SHOOTS:number = 10;
