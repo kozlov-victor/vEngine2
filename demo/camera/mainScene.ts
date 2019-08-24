@@ -8,6 +8,7 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {GAME_PAD_KEY} from "@engine/control/gamepad/gamePadKeys";
+import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 
 export class MainScene extends Scene {
     
@@ -44,7 +45,7 @@ export class MainScene extends Scene {
         const bg:Image = new Image(this.game);
         bg.setResourceLink(this.bgLink);
         bg.size.setWH(1000,2000);
-        bg.stretchMode = STRETCH_MODE.REPEAT;
+        bg.stretchMode = STRETCH_MODE.STRETCH;
         this.appendChild(bg);
         this.logoObj.moveToFront();
 
@@ -70,7 +71,7 @@ export class MainScene extends Scene {
         });
 
 
-        this.on(KEYBOARD_EVENTS.keyHold, (e:number)=>{
+        this.on(GAME_PAD_EVENTS.buttonHold, (e:GAME_PAD_KEY)=>{
             switch (e) {
                 case GAME_PAD_KEY.STICK_L_LEFT:
                     this.logoObj.pos.addX(-1);

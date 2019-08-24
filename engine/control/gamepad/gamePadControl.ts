@@ -128,27 +128,24 @@ export class GamePadControl extends AbstractKeypad implements IControl{
         btnUp:GAME_PAD_KEY,
         btnDown:GAME_PAD_KEY
     ):void {
-        if (axis0===0) return; // to avoid oscillations, skip integer zero value
-        if (axis1===0) return;
 
-
-        if (axis0===1) {
+        if (axis0>0) {
             this.press(btnRight);
         } else {
             this.release(btnRight);
         }
-        if (axis0===-1) {
+        if (axis0<0) {
             this.press(btnLeft);
         } else {
             this.release(btnLeft);
         }
 
-        if (axis1===1) {
+        if (axis1>0) {
             this.press(btnDown);
         } else {
             this.release(btnDown);
         }
-        if (axis1===-1) {
+        if (axis1<0) {
             this.press(btnUp);
         } else {
             this.release(btnUp);

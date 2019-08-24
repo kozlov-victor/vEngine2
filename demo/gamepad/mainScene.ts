@@ -50,6 +50,10 @@ export class MainScene extends Scene {
                     break;
                 case GAME_PAD_KEY.BTN_A:
                     this.logoObj.angle+=0.1;
+                    break;
+                case GAME_PAD_KEY.BTN_B:
+                    this.logoObj.angle-=0.1;
+                    break;
             }
         });
 
