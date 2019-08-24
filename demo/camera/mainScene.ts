@@ -72,22 +72,22 @@ export class MainScene extends Scene {
 
         this.on(KEYBOARD_EVENTS.keyHold, (e:number)=>{
             switch (e) {
-                case GAME_PAD_KEY.GAME_PAD_AXIS_LEFT:
+                case GAME_PAD_KEY.STICK_L_LEFT:
                     this.logoObj.pos.addX(-1);
                     break;
-                case GAME_PAD_KEY.GAME_PAD_AXIS_RIGHT:
+                case GAME_PAD_KEY.STICK_L_RIGHT:
                     this.logoObj.pos.addX(1);
                     break;
-                case GAME_PAD_KEY.GAME_PAD_AXIS_UP:
+                case GAME_PAD_KEY.STICK_L_UP:
                     this.logoObj.pos.addY(-1);
                     break;
-                case GAME_PAD_KEY.GAME_PAD_AXIS_DOWN:
+                case GAME_PAD_KEY.STICK_L_DOWN:
                     this.logoObj.pos.addY(1);
                     break;
-                case GAME_PAD_KEY.GAME_PAD_1:
+                case GAME_PAD_KEY.BTN_A:
                     this.logoObj.angle+=0.1;
                     break;
-                case GAME_PAD_KEY.GAME_PAD_3:
+                case GAME_PAD_KEY.BTN_B:
                     this.logoObj.angle-=0.1;
                     break;
             }
