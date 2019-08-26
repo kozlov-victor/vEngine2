@@ -63,40 +63,52 @@ export class MouseControl implements IControl {
         this.container = container;
         // mouseDown
         container.ontouchstart = (e:TouchEvent)=>{
+            console.log('touchstart');
+            // to prevent "mouse" events on touch devices - https://www.html5rocks.com/en/mobile/touchandmouse/
+            e.preventDefault();
             let l = e.touches.length;
             while (l--){
                 this.resolveClick((e.touches[l] as Touch));
             }
         };
         container.onmousedown = (e:MouseEvent)=>{
+            console.log('onmousedown');
             if (e.button === 0) this.resolveClick(e);
         };
         // mouseUp
         container.ontouchend = container.ontouchcancel = (e:TouchEvent)=>{
+            console.log('ontouchend');
+            e.preventDefault();
             let l:number = e.changedTouches.length;
             while (l--){
                 this.resolveMouseUp(e.changedTouches[l]);
             }
         };
         container.onmouseup = (e:MouseEvent)=>{
+            console.log('onmouseup');
             this.resolveMouseUp(e);
         };
         // mouseMove
         container.ontouchmove = (e:TouchEvent)=>{
+            console.log('ontouchmove');
+            e.preventDefault();
             let l:number = e.touches.length;
             while (l--){
                 this.resolveMouseMove(e.touches[l],true);
             }
         };
         container.onmousemove = (e:MouseEvent)=>{
+            console.log('onmousemove');
             const isMouseDown:boolean = e.buttons === 1;
             this.resolveMouseMove(e,isMouseDown);
         };
         // other
         container.ondblclick = (e:MouseEvent)=>{ // todo now only on pc
+            console.log('ondblclick');
             this.resolveDoubleClick(e);
         };
         (container as any).onmousewheel = (e:MouseEvent)=>{
+            console.log('onmousewheel');
             e.preventDefault();
             e.stopPropagation(); // to prevent page scroll
             this.resolveScroll(e);
@@ -202,11 +214,6 @@ export class MouseControl implements IControl {
         if (lastMouseDownObject && lastMouseDownObject!==point.target) {
             lastMouseDownObject.trigger(MOUSE_EVENTS.mouseLeave,point);
         }
-
-        // if (point.target && lastMouseDownObject!==point.target) { // todo is it needed?
-        //     point.target.trigger(MOUSE_EVENTS.mouseEnter,point);
-        //     this.objectsCaptured[point.id] = point.target as RenderableModel;
-        // }
     }
 
     private resolveMouseUp(e:MouseEvent|Touch):void {
@@ -219,12 +226,10 @@ export class MouseControl implements IControl {
 
     private resolveDoubleClick(e:MouseEvent):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.doubleClick);
-        //delete this.objectsCaptured[point.id]; // todo is it needed?
     }
 
     private resolveScroll(e:MouseEvent):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.scroll);
-        //delete this.objectsCaptured[point.id]; // todo is it needed?
     }
 
 }
