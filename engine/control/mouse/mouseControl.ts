@@ -63,7 +63,6 @@ export class MouseControl implements IControl {
         this.container = container;
         // mouseDown
         container.ontouchstart = (e:TouchEvent)=>{
-            console.log('touchstart');
             // to prevent "mouse" events on touch devices - https://www.html5rocks.com/en/mobile/touchandmouse/
             e.preventDefault();
             let l = e.touches.length;
@@ -72,12 +71,10 @@ export class MouseControl implements IControl {
             }
         };
         container.onmousedown = (e:MouseEvent)=>{
-            console.log('onmousedown');
             if (e.button === 0) this.resolveClick(e);
         };
         // mouseUp
         container.ontouchend = container.ontouchcancel = (e:TouchEvent)=>{
-            console.log('ontouchend');
             e.preventDefault();
             let l:number = e.changedTouches.length;
             while (l--){
@@ -85,12 +82,10 @@ export class MouseControl implements IControl {
             }
         };
         container.onmouseup = (e:MouseEvent)=>{
-            console.log('onmouseup');
             this.resolveMouseUp(e);
         };
         // mouseMove
         container.ontouchmove = (e:TouchEvent)=>{
-            console.log('ontouchmove');
             e.preventDefault();
             let l:number = e.touches.length;
             while (l--){
@@ -98,17 +93,14 @@ export class MouseControl implements IControl {
             }
         };
         container.onmousemove = (e:MouseEvent)=>{
-            console.log('onmousemove');
             const isMouseDown:boolean = e.buttons === 1;
             this.resolveMouseMove(e,isMouseDown);
         };
         // other
         container.ondblclick = (e:MouseEvent)=>{ // todo now only on pc
-            console.log('ondblclick');
             this.resolveDoubleClick(e);
         };
         (container as any).onmousewheel = (e:MouseEvent)=>{
-            console.log('onmousewheel');
             e.preventDefault();
             e.stopPropagation(); // to prevent page scroll
             this.resolveScroll(e);
