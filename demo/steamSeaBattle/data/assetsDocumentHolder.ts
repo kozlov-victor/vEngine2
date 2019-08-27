@@ -1,36 +1,40 @@
 
 import * as docDesc from './scenes.xml';
 
-export interface IElement {
+export interface IElementDescription {
     tagName:string;
     attributes:Record<string,string>;
-    children:IElement[];
+    children:IElementDescription[];
 }
 
-export class Element implements IElement {
+export class Element  {
 
-    private static visitAll(children:IElement[],onVisited:(c:IElement)=>void){
-        children.forEach((c:IElement)=>{
+    protected static fromData(data:IElementDescription):Element{
+        const el:Element = new Element();
+        el.tagName = data.tagName;
+        el.attributes = data.attributes;
+        el.children = [];
+        if (data.children) data.children.forEach((c:IElementDescription) => {
+            el.children.push(Element.fromData(c));
+        });
+        return el;
+    }
+
+    private static visitAll(children:Element[],onVisited:(c:Element)=>void){
+        children.forEach((c:Element)=>{
             onVisited(c);
             Element.visitAll(c.children,onVisited);
         });
     }
 
-    private static fromData(data:IElement):Element{
-        const el:Element = new Element();
-        el.tagName = data.tagName;
-        el.attributes = data.attributes;
-        el.children = data.children;
-        return el;
-    }
+    public children:Element[];
 
     public tagName:string;
     public attributes:Record<string,string> = {};
-    public children:IElement[] = [];
 
     public getElementById(id:string):Element|null{
-        let el:IElement = null;
-        Element.visitAll(this.children,(current:IElement)=>{
+        let el:Element = null;
+        Element.visitAll(this.children,(current:Element)=>{
             if (current.attributes.id===id) el = current;
         });
         if (el===null) return null;
@@ -39,8 +43,8 @@ export class Element implements IElement {
 
     public getElementsByTagName(tagName:string):Element[]{
         const arr:Element[] = [];
-        Element.visitAll(this.children,(current:IElement)=>{
-            if (current.tagName===tagName) arr.push(Element.fromData(current));
+        Element.visitAll(this.children,(current:Element)=>{
+            if (current.tagName===tagName) arr.push(current);
         });
         return arr;
     }
@@ -51,7 +55,11 @@ export class Element implements IElement {
 
 export class Document extends Element {
 
-    constructor(public children:IElement[]){
+    public static create(desc:IElementDescription):Document{
+        return Element.fromData(desc);
+    }
+
+    private constructor(){
         super();
     }
 
@@ -61,7 +69,7 @@ export abstract class AssetsDocumentHolder {
 
     public static getDocument():Document {
         if (AssetsDocumentHolder.document===undefined) {
-            AssetsDocumentHolder.document = new Document(docDesc.children as IElement[]);
+            AssetsDocumentHolder.document = Document.create(docDesc);
         }
         return AssetsDocumentHolder.document;
     }

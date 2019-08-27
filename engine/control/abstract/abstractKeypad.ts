@@ -1,7 +1,7 @@
 import {Game} from "@engine/core/game";
 import {FastMap} from "@engine/misc/fastMap";
 
-export const enum KEY_STATE  {
+export enum KEY_STATE  {
     KEY_JUST_PRESSED = 2,
     KEY_PRESSED = 1,
     KEY_JUST_RELEASED = 0,
