@@ -5,11 +5,11 @@ import {Game} from "@engine/core/game";
 import {Shape} from "../../../abstract/shape";
 
 
-export enum OVERFLOW {
+export const enum OVERFLOW {
     HIDDEN,VISIBLE
 }
 
-export enum LAYOUT_SIZE {
+export const enum LAYOUT_SIZE {
     FIXED,
     WRAP_CONTENT,
     MATCH_PARENT

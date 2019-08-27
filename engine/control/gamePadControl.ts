@@ -25,7 +25,7 @@ if (DEBUG) {
     });
 }
 
-export enum GAME_PAD_KEY {
+export const enum GAME_PAD_KEY {
     GAME_PAD_1 = 0,
     GAME_PAD_2 = 1,
     GAME_PAD_3 = 2,

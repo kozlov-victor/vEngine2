@@ -8,11 +8,11 @@ import * as fragmentSource from "./shape.fragment.glsl";
 import {parametrizeString} from "@engine/misc/object";
 import {STRETCH_MODE} from "@engine/renderable/impl/geometry/image";
 
-export enum SHAPE_TYPE {
+export const enum SHAPE_TYPE {
     ELLIPSE,RECT
 }
 
-export enum FILL_TYPE {
+export const enum FILL_TYPE {
     COLOR,TEXTURE,LINEAR_GRADIENT
 }
 

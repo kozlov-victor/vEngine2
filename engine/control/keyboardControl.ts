@@ -3,7 +3,7 @@ import {AbstractKeypad} from "@engine/control/abstract/abstractKeypad";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 
-export enum KEYBOARD_KEY  {
+export const enum KEYBOARD_KEY  {
     SPACE = 32,
     A = 65,
     B = 66,

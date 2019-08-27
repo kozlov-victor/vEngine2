@@ -15,7 +15,7 @@ const parseErrors = (log:string):IShaderErrorInfo[]=> {
     let result:RegExpMatchArray|null;
 
     while (!!(result = log.match(/ERROR\:([^\n]+)/))) {
-        log = log.slice((result.index + 1));
+        if (result.index!==undefined) log = log.slice((result.index + 1));
 
         const line:string = result[1].trim();
         const seps:string[] = line.split(':');
@@ -234,126 +234,99 @@ export const extractAttributes = (gl:WebGLRenderingContext, program:ShaderProgra
     return attrMap;
 };
 
-interface IChecker {
-    check:(val:UNIFORM_VALUE_TYPE)=>void;
-}
-
-const TypeNumber:IChecker = {
-    check: (val:UNIFORM_VALUE_TYPE):void=>{
-        if (isNaN(parseFloat(String(val))) || !isFinite(Number(val)))
-            throw new DebugError(`can not set uniform with value ${val}: expected argument of type number`);
-    }
+const isNumber = (val:UNIFORM_VALUE_TYPE):val is number=>{
+    if (!DEBUG) return true;
+    if (isNaN(parseFloat(String(val))) || !isFinite(Number(val)))
+        throw new DebugError(`can not set uniform with value ${val}: expected argument of type number`);
+    else return true;
 };
 
-const TypeInt:IChecker = {
-    check: (val:UNIFORM_VALUE_TYPE):void=>{
-        TypeNumber.check(val);
-        if (val!==~~val)
-            throw new DebugError(`can not set uniform with value ${val}: expected argument of integer type, but ${val} found`);
-    }
+const isInteger = (val:UNIFORM_VALUE_TYPE):val is number=>{
+    if (!DEBUG) return true;
+    isNumber(val);
+    if (val!==~~val)
+        throw new DebugError(`can not set uniform with value ${val}: expected argument of integer type, but ${val} found`);
+    else return true;
 };
 
-const TypeBool:IChecker = {
-    check: (val:UNIFORM_VALUE_TYPE):void=>{
-        if (!(val===true || val===false))
-            throw new DebugError(`can not set uniform with value ${val}: expected argument of boolean type, but ${val} found`);
-    }
+const isBoolean = (val:UNIFORM_VALUE_TYPE):val is boolean=>{
+    if (!DEBUG) return true;
+    if (!(val===true || val===false))
+        throw new DebugError(`can not set uniform with value ${val}: expected argument of boolean type, but ${val} found`);
+    else return true;
 };
 
-
-const TypeArray = (checker:IChecker,size?:number):IChecker=>{
-    return {
-        check: (val:UNIFORM_VALUE_TYPE)=>{
-            if (!val)
-                throw new DebugError(`can not set uniform  value: ${val}`);
-            if (!isArray(val)) {
-                console.error('Can not set uniform value',val);
-                throw new DebugError(`can not set uniform with value [${val}]: expected argument of type Array`);
-            }
-            if (size!==undefined && (val as any[]).length!==size)
-                throw new DebugError(`can not set uniform with value [${val}]: expected array with size ${size}, but ${(val as any[]).length} found`);
-            for (let i:number=0;i<val.length;i++) {
-                try {
-                    checker.check((val as any[])[i]);
-                } catch (e){
-                    console.error('Can not set uniform array item',val);
-                    throw new DebugError(`can not set uniform array item with value [${val}]: unexpected array element type: ${(val as any[])[i]}`);
-                }
-            }
+const isArrayOfType = (val:UNIFORM_VALUE_TYPE,checker:(val:UNIFORM_VALUE_TYPE)=>boolean,size:number):val is number[]=> {
+    if (!DEBUG) return true;
+    if (!val)
+        throw new DebugError(`can not set uniform  value: ${val}`);
+    if (!isArray(val)) {
+        console.error('Can not set uniform value',val);
+        throw new DebugError(`can not set uniform with value [${val}]: expected argument of type Array`);
+    }
+    if (size!==undefined && (val as any[]).length!==size)
+        throw new DebugError(`can not set uniform with value [${val}]: expected array with size ${size}, but ${(val as any[]).length} found`);
+    for (let i:number=0;i<val.length;i++) {
+        try {
+            checker(val[i]);
+        } catch (e){
+            console.error('Can not set uniform array item',val);
+            throw new DebugError(`can not set uniform array item with value [${val}]: unexpected array element type: ${(val as any[])[i]}`);
         }
-    };
-};
-
-const expect = (value:UNIFORM_VALUE_TYPE,typeChecker:IChecker):void=>{
-    typeChecker.check(value);
+    }
+    return true;
 };
 
 const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
     if (size===1) {
         switch (type) {
             case GL_TYPE.FLOAT: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (DEBUG) expect(value,TypeNumber);
-                gl.uniform1f(location, value as NUM);
+                if (isNumber(value)) gl.uniform1f(location, value);
             };
             case GL_TYPE.FLOAT_VEC2:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (DEBUG) expect(value,TypeArray(TypeNumber,2));
-                gl.uniform2f(location, (value as NUM_ARR)[0], (value as NUM_ARR)[1]);
+                if (isArrayOfType(value,isNumber,2)) gl.uniform2f(location, value[0], value[1]);
             };
             case GL_TYPE.FLOAT_VEC3:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (DEBUG) expect(value,TypeArray(TypeNumber,3));
-                gl.uniform3f(location, (value as NUM_ARR)[0], (value as NUM_ARR)[1], (value as NUM_ARR)[2]);
+                if (isArrayOfType(value,isNumber,3)) gl.uniform3f(location, value[0], value[1], value[2]);
             };
             case GL_TYPE.FLOAT_VEC4:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (DEBUG) expect(value,TypeArray(TypeNumber,4));
-                gl.uniform4f(location, (value as NUM_ARR)[0], (value as NUM_ARR)[1], (value as NUM_ARR)[2], (value as NUM_ARR)[3]);
+                if (isArrayOfType(value,isNumber,4)) gl.uniform4f(location, value[0], value[1], value[2], value[3]);
             };
-            case GL_TYPE.INT:   return (gl:GL,location:LOC,value:NUM)=> {
-                if (DEBUG) expect(value,TypeInt);
-                gl.uniform1i(location, value);
+            case GL_TYPE.INT:   return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isInteger(value)) gl.uniform1i(location, value as number);
             };
-            case GL_TYPE.INT_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeInt,2));
-                gl.uniform2i(location, value[0], value[1]);
+            case GL_TYPE.INT_VEC2: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isInteger,2)) gl.uniform2i(location, value[0], value[1]);
             };
-            case GL_TYPE.INT_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeInt,3));
-                gl.uniform3i(location, value[0], value[1], value[2]);
+            case GL_TYPE.INT_VEC3: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isInteger,3)) gl.uniform3i(location, value[0], value[1], value[2]);
             };
-            case GL_TYPE.INT_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeInt,4));
-                gl.uniform4i(location, value[0], value[1], value[2], value[3]);
+            case GL_TYPE.INT_VEC4: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isInteger,4)) gl.uniform4i(location, value[0], value[1], value[2], value[3]);
             };
-            case GL_TYPE.BOOL:  return (gl:GL,location:LOC,value:NUM)=> {
-                if (DEBUG) expect(value,TypeBool);
-                gl.uniform1i(location, value);
+            case GL_TYPE.BOOL:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> { // todo ?
+                if (isBoolean(value)) gl.uniform1i(location, value?1:0);
             };
-            case GL_TYPE.BOOL_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeBool,2));
-                gl.uniform2i(location, value[0], value[1]);
+            case GL_TYPE.BOOL_VEC2: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isBoolean,2)) gl.uniform2i(location, value[0], value[1]);
             };
-            case GL_TYPE.BOOL_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeBool,3));
-                gl.uniform3i(location, value[0], value[1], value[2]);
+            case GL_TYPE.BOOL_VEC3: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isBoolean,3))  gl.uniform3i(location, value[0], value[1], value[2]);
             };
-            case GL_TYPE.BOOL_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeBool,4));
-                gl.uniform4i(location, value[0], value[1], value[2], value[3]);
+            case GL_TYPE.BOOL_VEC4: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isBoolean,4)) gl.uniform4i(location, value[0], value[1], value[2], value[3]);
             };
-            case GL_TYPE.FLOAT_MAT2:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeNumber,2*2));
-                gl.uniformMatrix2fv(location, false, value); // location, transpose (Must be false), value
+            case GL_TYPE.FLOAT_MAT2:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isNumber,2*2)) gl.uniformMatrix2fv(location, false, value as number[]); // location, transpose (Must be false), value
             };
-            case GL_TYPE.FLOAT_MAT3:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeNumber,3*3));
-                gl.uniformMatrix3fv(location, false, value);
+            case GL_TYPE.FLOAT_MAT3:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isNumber,3*3)) gl.uniformMatrix3fv(location, false, value as number[]);
             };
-            case GL_TYPE.FLOAT_MAT4:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeNumber,4*4));
-                gl.uniformMatrix4fv(location, false, value);
+            case GL_TYPE.FLOAT_MAT4:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isNumber,4*4)) gl.uniformMatrix4fv(location, false, value as number[]);
             };
-            case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:NUM)=> {
-                if (DEBUG) expect(value,TypeInt);
-                gl.uniform1i(location, value);
+            case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isNumber(value)) gl.uniform1i(location, value);
             };
             default:
                 if (DEBUG) throw new DebugError(`can not set uniform for type ${type} and size ${size}`);
@@ -365,57 +338,44 @@ const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
             // glsl:
             // uniform vec2 u_someVec2[3]
             // js:  u_someVec2 = [0,1, 2,3, 4,5];
-            case GL_TYPE.FLOAT: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeNumber,size));
-                gl.uniform1fv(location, value);
+            case GL_TYPE.FLOAT: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isNumber,size)) gl.uniform1fv(location, value);
             };
-            case GL_TYPE.FLOAT_VEC2:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeNumber,size*2));
-                gl.uniform2fv(location, value);
+            case GL_TYPE.FLOAT_VEC2:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isNumber,size*2)) gl.uniform2fv(location, value as number[]);
             };
-            case GL_TYPE.FLOAT_VEC3:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeNumber,size*3));
-                gl.uniform3fv(location, value);
+            case GL_TYPE.FLOAT_VEC3:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isNumber,size*3)) gl.uniform3fv(location, value as number[]);
             };
-            case GL_TYPE.FLOAT_VEC4:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeNumber,size*4));
-                gl.uniform4fv(location, value);
+            case GL_TYPE.FLOAT_VEC4:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isNumber,size*4)) gl.uniform4fv(location, value as number[]);
             };
-            case GL_TYPE.INT:   return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeInt);
-                gl.uniform1iv(location, value);
+            case GL_TYPE.INT:   return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isInteger,size)) gl.uniform1iv(location, value);
             };
-            case GL_TYPE.INT_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeInt,size*2));
-                gl.uniform2iv(location, value);
+            case GL_TYPE.INT_VEC2: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isInteger,size*2)) gl.uniform2iv(location, value);
             };
-            case GL_TYPE.INT_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeInt,size*3));
-                gl.uniform3iv(location, value);
+            case GL_TYPE.INT_VEC3: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isInteger,size*3)) gl.uniform3iv(location, value);
             };
-            case GL_TYPE.INT_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeInt,size*4));
-                gl.uniform4iv(location, value);
+            case GL_TYPE.INT_VEC4: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isInteger,size*4)) gl.uniform4iv(location, value);
             };
-            case GL_TYPE.BOOL:  return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeBool);
-                gl.uniform1iv(location, value);
+            case GL_TYPE.BOOL:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isBoolean,size)) gl.uniform1iv(location, value);
             };
-            case GL_TYPE.BOOL_VEC2: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeBool,size*2));
-                gl.uniform2iv(location, value);
+            case GL_TYPE.BOOL_VEC2: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isBoolean,size*2)) gl.uniform2iv(location, value);
             };
-            case GL_TYPE.BOOL_VEC3: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeBool,size*3));
-                gl.uniform3iv(location, value);
+            case GL_TYPE.BOOL_VEC3: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isBoolean,size*3)) gl.uniform3iv(location, value as number[]);
             };
-            case GL_TYPE.BOOL_VEC4: return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeArray(TypeBool,size*4));
-                gl.uniform4iv(location, value);
+            case GL_TYPE.BOOL_VEC4: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isBoolean,size*4)) gl.uniform4iv(location, value);
             };
-            case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:NUM_ARR)=> {
-                if (DEBUG) expect(value,TypeInt);
-                gl.uniform1iv(location, value);
+            case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isInteger,size)) gl.uniform1iv(location, value);
             };
             default:
                 if (DEBUG) throw new DebugError(`can not set uniform for type ${type} and size ${size}`);

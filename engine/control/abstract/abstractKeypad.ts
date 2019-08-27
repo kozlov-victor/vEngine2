@@ -1,9 +1,8 @@
 import {Game} from "@engine/core/game";
-import {EventEmitter} from "@engine/misc/eventEmitter";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {FastMap} from "@engine/misc/fastMap";
 
-export enum KEY_STATE  {
+export const enum KEY_STATE  {
     KEY_JUST_PRESSED = 2,
     KEY_PRESSED = 1,
     KEY_JUST_RELEASED = 0,

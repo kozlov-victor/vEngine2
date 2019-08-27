@@ -7,7 +7,7 @@ const isPowerOf2 = (value:number):boolean=> {
     return (value & (value - 1)) === 0;
 };
 
-export enum INTERPOLATION_MODE {
+export const enum INTERPOLATION_MODE {
     NEAREST = 0,
     LINEAR = 1,
 }
@@ -200,7 +200,7 @@ export class Texture implements ITexture {
 
     private setFilters(){
         const gl:WebGLRenderingContext = this.gl;
-        const isPowerOfTwo:boolean = false;//(isPowerOf2(this.size.width) && isPowerOf2(this.size.height));
+        const isPowerOfTwo:boolean = isPowerOf2(this.size.width) && isPowerOf2(this.size.height);
         // Check if the image is a power of 2 in both dimensions.
         if (isPowerOfTwo) {
             gl.generateMipmap(gl.TEXTURE_2D);

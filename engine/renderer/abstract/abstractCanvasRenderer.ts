@@ -1,8 +1,5 @@
 import {AbstractRenderer} from "./abstractRenderer";
 import {Game} from "../../core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/texture";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {DebugError} from "@engine/debug/debugError";
 
 
@@ -22,27 +19,7 @@ export abstract class AbstractCanvasRenderer extends AbstractRenderer {
         this.container = container;
     }
 
-    // https://miguelmota.com/blog/pixelate-images-with-canvas/demo/
-    public pixelate(){
-        // This is what gives us that blocky pixel styling, rather than a blend between pixels.
-        this.container.style.cssText += 'image-rendering: optimizeSpeed;' + // FireFox < 6.0
-            'image-rendering: -moz-crisp-edges;' + // FireFox
-            'image-rendering: -o-crisp-edges;' +  // Opera
-            'image-rendering: -webkit-crisp-edges;' + // Chrome
-            'image-rendering: crisp-edges;' + // Chrome
-            'image-rendering: -webkit-optimize-contrast;' + // Safari
-            'image-rendering: pixelated; ' + // Future browsers
-            '-ms-interpolation-mode: nearest-neighbor;'; // IE
-
-        // Grab the drawing context object. It's what lets us draw on the canvas.
-        const context:any = this.container.getContext('webgl2');
-
-        // Use nearest-neighbor scaling when images are resized instead of the resizing algorithm to create blur.
-        context.webkitImageSmoothingEnabled = false;
-        context.mozImageSmoothingEnabled = false;
-        context.msImageSmoothingEnabled = false;
-        context.imageSmoothingEnabled = false;
-    }
+    public abstract setPixelPerfectMode(mode:boolean):void;
 
 
     protected createImageFromData(buffer:ArrayBuffer|string,onCreated:(img:ImageBitmap|HTMLImageElement)=>void):void{

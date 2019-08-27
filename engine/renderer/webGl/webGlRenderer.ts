@@ -3,9 +3,9 @@ import {AbstractDrawer} from "./programs/abstract/abstractDrawer";
 import {FILL_TYPE, SHAPE_TYPE, ShapeDrawer} from "./programs/impl/base/shape/shapeDrawer";
 import {FrameBuffer} from "./base/frameBuffer";
 import {MatrixStack} from "./base/matrixStack";
-import {Texture} from "./base/texture";
+import {INTERPOLATION_MODE, Texture} from "./base/texture";
 import {Rect} from "../../geometry/rect";
-import {Game} from "../../core/game";
+import {Game, SCALE_STRATEGY} from "../../core/game";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../color";
 import {Size} from "../../geometry/size";
@@ -111,6 +111,7 @@ class InstanceHolder<T extends IDestroyable> {
 
 export class WebGlRenderer extends AbstractCanvasRenderer {
 
+
     public readonly type:string = 'WebGlRenderer';
 
 
@@ -124,6 +125,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private doubleFrameBuffer:DoubleFrameBuffer;
     private blender:Blender;
     private nullTexture:Texture;
+    private pixelPerfectMode:boolean = false;
 
     constructor(game:Game){
         super(game);
@@ -142,6 +144,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         m16Scale.release();
         m16Ortho.release();
     }
+
+    public setPixelPerfectMode(mode:boolean):void{
+        this.pixelPerfectMode = mode;
+        this.finalFrameBuffer.getTexture().setInterpolationMode(mode?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
+        this.onResize();
+    }
+
+
 
     public drawImage(img:Image):void{
         if (DEBUG) {
@@ -348,9 +358,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     public afterFrameDraw(filters:readonly AbstractFilter[]):void{
         const texToDraw:Texture = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(),filters);
         this.finalFrameBuffer.unbind();
-        this.gl.viewport(0, 0, this.game.screenSize.x,this.game.screenSize.y);
-        this.container.width = this.game.screenSize.x;
-        this.container.height = this.game.screenSize.y;
+        if (this.pixelPerfectMode) this.gl.viewport(0, 0, this.game.screenSize.x,this.game.screenSize.y);
+        else this.gl.viewport(0, 0, this.game.width,this.game.height);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
         this.simpleRectDrawer.attachTexture('texture',texToDraw);
@@ -415,6 +424,17 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const t:Texture = this.renderableCache[key] as Texture;
             t.destroy();
         });
+    }
+
+    protected onResize(): void {
+        super.onResize();
+        if (this.pixelPerfectMode && (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH || this.game.scaleStrategy===SCALE_STRATEGY.FIT)) {
+            this.container.width = this.game.screenSize.x;
+            this.container.height = this.game.screenSize.y;
+        } else {
+            this.container.width = this.game.width;
+            this.container.height = this.game.height;
+        }
     }
 
     private _init():void{
