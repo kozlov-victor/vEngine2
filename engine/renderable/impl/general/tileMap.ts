@@ -1,12 +1,7 @@
-
-import {Game} from "../../../core/game";
-import {AbstractFilter} from "../../../renderer/webGl/filters/abstract/abstractFilter";
+import {Game} from "@engine/core/game";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
-import {ITexture} from "@engine/renderer/texture";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {IResource} from "@engine/core/declarations";
 import {Camera} from "@engine/renderer/camera";
 import {Rect} from "@engine/geometry/rect";
 import {Size} from "@engine/geometry/size";
@@ -18,15 +13,21 @@ export class TileMap extends RenderableModel {
     public data:number[][] = [];
     public spriteSheet:Image;
 
+    public readonly drawInfo = {
+        tilePosX: 0,
+        tilePosY: 0,
+        tileWidth: 0,
+        tileHeight: 0
+    };
+    public tileWidth:number = 32;
+    public tileHeight:number = 32;
+
 
     private _tilesInScreenX:number;
     private _tilesInScreenY:number;
-    private _tileWidth:number = 32;
-    private _tileHeight:number = 32;
 
     private _sprTilesInX:number = 0;
     private _sprTilesInY:number = 0;
-
 
     constructor(protected game:Game){
         super(game);
@@ -58,37 +59,24 @@ export class TileMap extends RenderableModel {
         if (DEBUG && !this.spriteSheet) throw new DebugError('no spriteSheet is provided for TileMap');
         this.spriteSheet.revalidate();
 
-        this.game.getCurrScene().width = this._tilesInScreenX * this._tileWidth;
-        this.game.getCurrScene().height = this._tilesInScreenY * this._tileHeight;
-        this.spriteSheet.getSrcRect().size.setWH(this._tileWidth,this._tileHeight);
+        this.game.getCurrScene().width = this._tilesInScreenX * this.tileWidth;
+        this.game.getCurrScene().height = this._tilesInScreenY * this.tileHeight;
+        this.spriteSheet.getSrcRect().size.setWH(this.tileWidth,this.tileHeight);
         this.spriteSheet.size.set(this.spriteSheet.getSrcRect().size);
         //this.spriteSheet.size.addWH(2); // to correct possible artifacts
         const texSize:Size = this.spriteSheet.getResourceLink().getTarget().size;
-        this._sprTilesInX = ~~(texSize.width / this._tileWidth);
-        this._sprTilesInY = ~~(texSize.height / this._tileHeight);
+        this._sprTilesInX = ~~(texSize.width / this.tileWidth);
+        this._sprTilesInY = ~~(texSize.height / this.tileHeight);
+    }
+
+
+    public update(): void {
+        this.prepareDrawableInfo();
+        super.update();
     }
 
     public draw(): boolean {
-
-        const camera:Camera = this.game.camera;
-        const cameraRect:Rect = camera.getRectScaled();
-        let tilePosX:number = ~~((cameraRect.point.x) / this._tileWidth);
-        let tilePosY:number = ~~((cameraRect.point.y) / this._tileHeight);
-        if (tilePosX<0) tilePosX = 0;
-        if (tilePosY<0) tilePosY = 0;
-        let w:number = tilePosX + this._tilesInScreenX + 1;
-        let h:number = tilePosY + this._tilesInScreenY + 1;
-        if (w>this._tilesInScreenX-1) w = this._tilesInScreenX-1;
-        if (h>this._tilesInScreenY-1) h = this._tilesInScreenY-1;
-        for (let y:number=tilePosY;y<=h;y++) {
-            for (let x:number=tilePosX;x<=w;x++) {
-                const tileVal:number =this.data[y][x];
-                //if (tileVal===false || tileVal===null || tileVal===undefined) continue;
-                this.spriteSheet.getSrcRect().setXY(this.getFramePosX(tileVal),this.getFramePosY(tileVal));
-                this.spriteSheet.pos.setXY(x*this._tileWidth, y*this._tileHeight);
-                this.spriteSheet.render();
-            }
-        }
+        this.game.getRenderer().drawTileMap(this);
         return false;
     }
 
@@ -134,12 +122,30 @@ export class TileMap extends RenderableModel {
     //     return result;
     // }
 
-    private getFramePosX(frameIndex:number):number {
-        return (frameIndex % this._sprTilesInX) * this._tileWidth;
+    public getFramePosX(frameIndex:number):number {
+        return (frameIndex % this._sprTilesInX) * this.tileWidth;
     }
 
-    private getFramePosY(frameIndex:number):number {
-        return ~~(frameIndex / this._sprTilesInX) * this._tileHeight;
+    public getFramePosY(frameIndex:number):number {
+        return ~~(frameIndex / this._sprTilesInX) * this.tileHeight;
+    }
+
+
+    private prepareDrawableInfo(){
+        const camera:Camera = this.game.camera;
+        const cameraRect:Rect = camera.getRectScaled();
+        let tilePosX:number = ~~((cameraRect.point.x) / this.tileWidth);
+        let tilePosY:number = ~~((cameraRect.point.y) / this.tileHeight);
+        if (tilePosX<0) tilePosX = 0;
+        if (tilePosY<0) tilePosY = 0;
+        let w:number = tilePosX + this._tilesInScreenX + 1;
+        let h:number = tilePosY + this._tilesInScreenY + 1;
+        if (w>this._tilesInScreenX-1) w = this._tilesInScreenX-1;
+        if (h>this._tilesInScreenY-1) h = this._tilesInScreenY-1;
+        this.drawInfo.tilePosX = tilePosX;
+        this.drawInfo.tilePosY = tilePosY;
+        this.drawInfo.tileWidth = w;
+        this.drawInfo.tileHeight = h;
     }
 
     

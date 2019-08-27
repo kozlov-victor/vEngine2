@@ -8,6 +8,7 @@ const game = new Game();
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 const mainScene: Scene = new MainScene(game);
+throw 2;
 game.runScene(mainScene);
 
 
