@@ -3,8 +3,8 @@ import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Color} from "@engine/renderer/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {KEYBOARD_KEY, KeyboardControl} from "@engine/control/keyboardControl";
-import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 export class MainScene extends Scene {
 

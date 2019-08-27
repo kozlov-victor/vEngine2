@@ -4,9 +4,9 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/texture";
-import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {GAME_PAD_KEY} from "@engine/control/gamepad/gamePadKeys";
+import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 
 export class MainScene extends Scene {
 
@@ -14,7 +14,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
+        this.logoLink = this.resourceLoader.loadImage('./assets/repeat.jpg');
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;
@@ -32,22 +32,28 @@ export class MainScene extends Scene {
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KEYBOARD_KEY)=>{
+        this.logoObj.rotationPoint.setToCenter();
+        this.logoObj.scale.setXY(0.1);
+        this.on(GAME_PAD_EVENTS.buttonHold, (e:GAME_PAD_KEY)=>{
             switch (e) {
-                case KEYBOARD_KEY.LEFT:
+                case GAME_PAD_KEY.STICK_L_LEFT:
                     this.logoObj.pos.addX(-1);
                     break;
-                case KEYBOARD_KEY.RIGHT:
+                case GAME_PAD_KEY.STICK_L_RIGHT:
                     this.logoObj.pos.addX(1);
                     break;
-                case KEYBOARD_KEY.UP:
+                case GAME_PAD_KEY.STICK_L_UP:
                     this.logoObj.pos.addY(-1);
                     break;
-                case KEYBOARD_KEY.DOWN:
+                case GAME_PAD_KEY.STICK_L_DOWN:
                     this.logoObj.pos.addY(1);
                     break;
-                case KEYBOARD_KEY.R:
+                case GAME_PAD_KEY.BTN_A:
                     this.logoObj.angle+=0.1;
+                    break;
+                case GAME_PAD_KEY.BTN_B:
+                    this.logoObj.angle-=0.1;
+                    break;
             }
         });
 

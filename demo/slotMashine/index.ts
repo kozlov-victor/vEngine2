@@ -1,7 +1,7 @@
 import {Scene} from "@engine/core/scene";
 import {MainScene} from "./mainScene";
 import {Game, SCALE_STRATEGY} from "@engine/core/game";
-import {KeyboardControl} from "@engine/control/keyboardControl";
+import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {Wheel} from "./entities/wheel";
 import {CanvasRenderer} from "@engine/renderer/canvas/canvasRenderer";

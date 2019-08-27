@@ -1,49 +1,20 @@
 import {IControl} from "@engine/control/abstract/iControl";
 import {AbstractKeypad} from "@engine/control/abstract/abstractKeypad";
-import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
-
-
-export const enum KEYBOARD_KEY  {
-    SPACE = 32,
-    A = 65,
-    B = 66,
-    C = 67,
-    D = 68,
-    E = 69,
-    F = 70,
-    G = 71,
-    H = 72,
-    I = 73,
-    J = 74,
-    K = 75,
-    L = 76,
-    M = 77,
-    N = 78,
-    O = 79,
-    P = 80,
-    Q = 81,
-    R = 82,
-    S = 83,
-    T = 84,
-    U = 85,
-    V = 86,
-    W = 87,
-    X = 88,
-    Y = 89,
-    Z = 80,
-    LEFT = 37,
-    UP = 38,
-    RIGHT = 39,
-    DOWN = 40
-
-}
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 
 
 export class KeyboardControl extends AbstractKeypad implements IControl {
 
     public readonly type:string = 'KeyboardControl';
+
+    protected keyPressed: string = KEYBOARD_EVENTS.keyPressed;
+    protected keyHold: string = KEYBOARD_EVENTS.keyHold;
+    protected keyReleased: string = KEYBOARD_EVENTS.keyReleased;
+
     private keyDownListener:(e:KeyboardEvent)=>void;
     private keyUpListener:(e:KeyboardEvent)=>void;
+
+
 
     public listenTo():void {
 
