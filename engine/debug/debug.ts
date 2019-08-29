@@ -17,16 +17,16 @@ const css:IKeyVal<string|number> = {
 };
 Object.keys(css).forEach((key:string)=>devConsole.style.setProperty(key,''+css[key]));
 
-const label:HTMLElement = document.createElement('span');
-label.style.cssText = 'color:white;user-select: none;';
-devConsole.appendChild(label);
+const fpsLabel:HTMLElement = document.createElement('span');
+fpsLabel.style.cssText = 'color:white;user-select: none;';
+devConsole.appendChild(fpsLabel);
 
 window.addEventListener('load',(e:Event)=>{
     document.body.appendChild(devConsole);
     const game:Game = (window as any).game;
     if (!game) return;
     setInterval(()=>{
-        label.textContent = 'fps:'+`${game.fps}`||`?`;
+        fpsLabel.textContent = 'fps:'+`${game.fps}`||`?`;
     },1000);
 
 });
@@ -108,6 +108,7 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
     errDiv.innerHTML = tmpl.replace('$_content',debugInfo);
     document.body.appendChild(errDiv);
     document.title = 'runtime error!';
+    fpsLabel.textContent = 'stopped';
 };
 
 window.addEventListener('error',(e:any)=>{
