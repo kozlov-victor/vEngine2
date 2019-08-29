@@ -23,7 +23,8 @@ module.exports = (env={})=>{
     const entry = {};
     const output = {
         path: path.resolve('./demo/out'),
-        filename:'[name].js'
+        filename:'[name].js',
+        //chunkFilename: "[name].chunk.js",
     };
 
     let dirs = fs.readdirSync('./demo');
@@ -43,6 +44,7 @@ module.exports = (env={})=>{
         entry,
         output,
         mode: 'production', //debug ? 'development' : 'production',
+        //devtool: 'inline-source-map',
         resolveLoader: {
             modules: ['node_modules', path.resolve(__dirname, 'node_tools/loaders')]
         },

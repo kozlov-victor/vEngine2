@@ -15,12 +15,12 @@ interface ICameraTweenTarget {
     point:Point2d;
 }
 
-export enum CAMERA_MATRIX_MODE {
+export const enum CAMERA_MATRIX_MODE {
     MODE_TRANSFORM,
     MODE_IDENTITY,
 }
 
-enum DIRECTION_CORRECTION {
+const enum DIRECTION_CORRECTION {
     RIGHT,
     LEFT,
     UP,

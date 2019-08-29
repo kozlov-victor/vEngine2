@@ -16,7 +16,7 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/texture";
 import {IDestroyable} from "@engine/core/declarations";
-import {UrlLoader} from "@engine/resources/urlLoader";
+import {TileMap} from "@engine/renderable/impl/general/tileMap";
 
 const preventDefault = (e: Event) => {
     e.preventDefault();
@@ -94,6 +94,8 @@ export abstract class AbstractRenderer implements IDestroyable {
     public drawMesh(m:Mesh):void {}
 
     public drawEllipse(ellispe:Ellipse):void {}
+
+    public drawTileMap(tileMap:TileMap):void {}
 
     public resetTransform():void {}
 

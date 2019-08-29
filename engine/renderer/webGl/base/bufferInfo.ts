@@ -26,7 +26,7 @@ export interface IBufferInfoDescription {
     drawMethod:DRAW_METHOD;
 }
 
-export enum DRAW_METHOD {
+export const enum DRAW_METHOD {
     LINE_STRIP,
     TRIANGLE_FAN,
     TRIANGLE_STRIP,

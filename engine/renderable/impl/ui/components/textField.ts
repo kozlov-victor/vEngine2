@@ -11,14 +11,14 @@ import {Point2d} from "@engine/geometry/point2d";
 type char = string;
 
 
-export enum TEXT_ALIGN {
+export const enum TEXT_ALIGN {
     LEFT,
     RIGHT,
     CENTER,
     JUSTIFY
 }
 
-export enum WORD_BRAKE {
+export const enum WORD_BRAKE {
     PREDEFINED,
     FIT
 }
@@ -72,10 +72,6 @@ class TextInfo {
     }
 
     public align(textAlign: TEXT_ALIGN):void {
-        if (DEBUG && TEXT_ALIGN[textAlign] === undefined) {
-            const keys = Object.keys(TEXT_ALIGN).join(', ');
-            throw new DebugError(`can not align text: unknown enum type of TEXT_ALIGN: ${textAlign}, expected: ${keys}`);
-        }
         for (const s of this.strings) {
             s.align(textAlign, this.textField);
         }

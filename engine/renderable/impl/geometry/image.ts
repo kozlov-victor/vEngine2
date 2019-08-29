@@ -8,7 +8,7 @@ import {ICloneable, IResource} from "@engine/core/declarations";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/texture";
 
-export enum STRETCH_MODE {
+export const enum STRETCH_MODE {
     STRETCH,
     REPEAT
 }
