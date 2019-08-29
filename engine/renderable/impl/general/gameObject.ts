@@ -14,7 +14,7 @@ export class GameObject extends RenderableModel implements ICloneable<GameObject
     public groupNames:string[] = [];
     public collideWith:string[] = [];
 
-    private _currFrameAnimation:AbstractFrameAnimation<any>;
+    private _currFrameAnimation:AbstractFrameAnimation<any>|null;
     private _frameAnimations:{[name:string]:AbstractFrameAnimation<any>} = {};
 
     constructor(game:Game){
@@ -60,7 +60,7 @@ export class GameObject extends RenderableModel implements ICloneable<GameObject
     }
 
     public stopFrameAnimation():void {
-        this._currFrameAnimation.stop();
+        if (this._currFrameAnimation!==null) this._currFrameAnimation.stop();
         this._currFrameAnimation = null;
     }
 

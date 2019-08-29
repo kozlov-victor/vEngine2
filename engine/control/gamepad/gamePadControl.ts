@@ -33,7 +33,7 @@ const gamePadGetterFactory = ():[GamePadGetter,boolean]=>{
     else if (navigator.webkitGetGamepads) return [(()=>navigator.webkitGetGamepads()) as GamePadGetter,true];
     else {
         const possibles:string[] = ['webkitGamepads','mozGamepads','msGamepads','msGamepads'];
-        let possible:string;
+        let possible:string = '';
         for (let i:number = 0; i < possibles.length; i++) {
             if (navigator[possibles[i]]) {
                 possible = possibles[i];

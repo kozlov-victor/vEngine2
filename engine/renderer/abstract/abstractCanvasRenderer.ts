@@ -38,7 +38,7 @@ export abstract class AbstractCanvasRenderer extends AbstractRenderer {
         }
 
         if (globalThis.createImageBitmap && !isBase64) {
-            globalThis.createImageBitmap(imgBlob).
+            globalThis.createImageBitmap(imgBlob!).
             then((bitmap:ImageBitmap)=>{
                 onCreated(bitmap);
             }).catch((e:any)=>{

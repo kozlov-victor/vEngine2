@@ -18,10 +18,6 @@ import {ITexture} from "@engine/renderer/texture";
 import {IDestroyable} from "@engine/core/declarations";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 
-const preventDefault = (e: Event) => {
-    e.preventDefault();
-};
-
 export abstract class AbstractRenderer implements IDestroyable {
 
     public abstract type:string;
@@ -74,50 +70,45 @@ export abstract class AbstractRenderer implements IDestroyable {
         globalThis.removeEventListener('resize',this.onResize);
     }
 
-    public getError():{code:number,desc:string}|undefined{
-        return undefined;
-    }
+    public abstract getError():{code:number,desc:string}|undefined;
 
-    public drawImage(img:Image):void {}
+    public abstract drawImage(img:Image):void;
 
-    public drawNinePatch(img:NinePatchImage):void {}
+    public abstract drawRectangle(rectangle:Rectangle):void;
 
+    public abstract lockRect(rect:Rect):void;
 
-    public drawRectangle(rectangle:Rectangle):void {}
+    public abstract unlockRect():void;
 
-    public lockRect(rect:Rect):void {}
+    public abstract drawLine(line:Line):void;
 
-    public unlockRect():void {}
+    public abstract drawMesh(m:Mesh):void;
 
-    public drawLine(line:Line):void {}
+    public abstract drawEllipse(ellispe:Ellipse):void;
 
-    public drawMesh(m:Mesh):void {}
+    public abstract drawTileMap(tileMap:TileMap):void;
 
-    public drawEllipse(ellispe:Ellipse):void {}
+    public abstract resetTransform():void;
 
-    public drawTileMap(tileMap:TileMap):void {}
+    public abstract save():void;
 
-    public resetTransform():void {}
+    public abstract restore():void;
 
-    public save():void {}
+    public abstract translate(x:number,y:number,z?:number):void;
 
-    public restore():void {}
+    public abstract scale(x:number,y:number,z?:number):void;
 
-    public translate(x:number,y:number,z:number = 0):void {}
+    public abstract rotateX(a:number):void;
 
-    public scale(x:number,y:number,z:number = 0):void {}
+    public abstract skewX(a:number):void;
 
-    public rotateX(a:number):void {}
+    public abstract skewY(a:number):void;
 
-    public skewX(a:number):void {}
+    public abstract rotateY(a:number):void;
 
-    public skewY(a:number):void {}
+    public abstract rotateZ(a:number):void;
 
-    public rotateY(a:number):void {}
-
-    public rotateZ(a:number):void {}
-
-    public killObject(r:RenderableModel):void{}
+    public abstract killObject(r:RenderableModel):void;
 
     public log(args:any):void {
         if (!DEBUG) return;
@@ -160,11 +151,9 @@ export abstract class AbstractRenderer implements IDestroyable {
         this.debugTextField.setText('');
     }
 
-    public createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoaded:()=>void):void {}
+    public abstract createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoaded:()=>void):void;
 
-    public getCachedTarget(l:ResourceLink<ITexture>):ITexture {
-        return undefined;
-    }
+    public abstract getCachedTarget(l:ResourceLink<ITexture>):ITexture|undefined;
 
     protected registerResize():void {
         this.onResize();

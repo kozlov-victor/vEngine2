@@ -14,7 +14,7 @@ export class ResourceLoader {
     }
 
     public loadImage(req: string|IURLRequest): ResourceLink<ITexture> {
-        const loader:UrlLoader = this.createUrlLoader(req,'arraybuffer');
+        const loader:UrlLoader<ArrayBuffer> = this.createUrlLoader<ArrayBuffer>(req,'arraybuffer');
         const link: ResourceLink<ITexture> = new ResourceLink(loader.getUrl());
         if (this.game.getRenderer().getCachedTarget(link)) {
             link.setTarget(this.game.getRenderer().getCachedTarget(link));
@@ -33,21 +33,21 @@ export class ResourceLoader {
     }
 
     public loadText(req: string|IURLRequest): ResourceLink<string> {
-        const loader:UrlLoader = this.createUrlLoader(req);
+        const loader:UrlLoader<string> = this.createUrlLoader<string>(req);
         const link: ResourceLink<string> = new ResourceLink(loader.getUrl());
         this._loadText(loader, (data: string) => link.setTarget(data));
         return link;
     }
 
     public loadJSON(req: string|IURLRequest): ResourceLink<string> {
-        const loader:UrlLoader = this.createUrlLoader(req);
+        const loader:UrlLoader<string> = this.createUrlLoader<string>(req);
         const link: ResourceLink<string> = new ResourceLink(loader.getUrl());
         this._loadText(loader, (data: string) => link.setTarget(JSON.parse(data)));
         return link;
     }
 
     public loadSound(req: string|IURLRequest): ResourceLink<void> {
-        const loader:UrlLoader = this.createUrlLoader(req,'arraybuffer');
+        const loader:UrlLoader<ArrayBuffer> = this.createUrlLoader<ArrayBuffer>(req,'arraybuffer');
         const link: ResourceLink<void> = new ResourceLink(loader.getUrl());
         if (this.game.getAudioPlayer().isCached(link)) {
             return link;
@@ -65,7 +65,7 @@ export class ResourceLoader {
     }
 
     public loadBinary(req: string|IURLRequest): ResourceLink<ArrayBuffer> {
-        const loader:UrlLoader = this.createUrlLoader(req,'arraybuffer');
+        const loader:UrlLoader<ArrayBuffer> = this.createUrlLoader<ArrayBuffer>(req,'arraybuffer');
         const link: ResourceLink<ArrayBuffer> = new ResourceLink<ArrayBuffer>(loader.getUrl());
         loader.onLoad = (buff: ArrayBuffer|string)=>{
             link.setTarget(buff as ArrayBuffer);
@@ -106,7 +106,7 @@ export class ResourceLoader {
     }
 
 
-    private createUrlLoader(req: string|IURLRequest,responseType:'arraybuffer'|'text' = 'text'):UrlLoader{
+    private createUrlLoader<T extends string|ArrayBuffer>(req: string|IURLRequest,responseType:'arraybuffer'|'text' = 'text'):UrlLoader<T>{
         let iReq:IURLRequest;
         if ((req as string).substr!==undefined){
             iReq = {url:req as string,responseType,method:'GET'};
@@ -114,7 +114,7 @@ export class ResourceLoader {
         return new UrlLoader(iReq);
     }
 
-    private _loadText(loader:UrlLoader, callback: (data:string)=>void): void {
+    private _loadText(loader:UrlLoader<string>, callback: (data:string)=>void): void {
         const taskRef:TaskRef = this.q.addTask(() => {
             loader.load();
         });

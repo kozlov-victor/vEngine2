@@ -19,7 +19,7 @@ export class ObjectPool<T extends IReleasealable> {
         if (DEBUG && !Class) throw new DebugError(`can not instantiate ObjectPool: class not provided in constructor`);
     }
 
-    public getFreeObject():T{
+    public getFreeObject():T|undefined{
 
         for (let i:number=0;i<this.numberOfInstances;i++) {
             let current:T = this._pool[i];

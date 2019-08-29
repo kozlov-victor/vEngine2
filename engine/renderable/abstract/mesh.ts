@@ -13,7 +13,7 @@ export abstract class Mesh extends RenderableModel {
     public texture:ITexture;
     public fillColor:Color = Color.BLACK.clone();
     public bufferInfo:BufferInfo;
-    public vertexItemSize:2|3 = 3;
+    public vertexItemSize:2|3;
 
     private _lightAccepted:boolean;
 
@@ -23,6 +23,7 @@ export abstract class Mesh extends RenderableModel {
         public readonly invertY:boolean
     ) {
         super(game);
+        this.vertexItemSize = 3;
     }
 
     public acceptLight(val:boolean){
@@ -36,6 +37,20 @@ export abstract class Mesh extends RenderableModel {
 
     public isLightAccepted():boolean|undefined{
         return this._lightAccepted;
+    }
+
+    public revalidate(): void {
+        super.revalidate();
+        if (DEBUG) {
+            if (!this.modelPrimitive) throw new DebugError(`model primitive is not set`);
+            if (this.modelPrimitive.vertexArr.length%this.vertexItemSize!==0) {
+                console.error(this);
+                throw new DebugError(
+                    `wrong vertexArr size, actual size is ${this.modelPrimitive.vertexArr.length},
+                    but number must be a multiple of ${this.vertexItemSize} `
+                );
+            }
+        }
     }
 
     public draw():boolean{

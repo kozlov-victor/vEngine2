@@ -4,7 +4,7 @@ import {Scene} from "@engine/core/scene";
 import {MainScene} from "./mainScene";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 
-const game = new Game();
+const game = new Game({width:800,height:600});
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 const mainScene: Scene = new MainScene(game);

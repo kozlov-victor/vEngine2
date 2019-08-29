@@ -36,7 +36,8 @@ export abstract class AbstractKeypad {
     }
 
     public isPressed(key:number):boolean{
-        return this.buffer.get(key)>=KEY_STATE.KEY_PRESSED;
+        if (!this.buffer.has(key)) return false;
+        return this.buffer.get(key)!>=KEY_STATE.KEY_PRESSED;
     }
 
     public isJustPressed(key:number):boolean{
@@ -45,7 +46,7 @@ export abstract class AbstractKeypad {
 
     public isReleased(key:number):boolean{
         if (!this.buffer.has(key)) return true;
-        return  this.buffer.get(key)<=KEY_STATE.KEY_JUST_RELEASED;
+        return  this.buffer.get(key)!<=KEY_STATE.KEY_JUST_RELEASED;
     }
 
     public isJustReleased(key:number):boolean {
@@ -56,7 +57,7 @@ export abstract class AbstractKeypad {
 
         const keys:number[] = this.buffer.getKeys();
         for (const keyNum of keys) {
-            const keyVal:KEY_STATE = this.buffer.get(keyNum);
+            const keyVal:KEY_STATE = this.buffer.get(keyNum)!;
             if (keyVal===KEY_STATE.KEY_RELEASED) this.buffer.remove(keyNum);
             else if (keyVal===KEY_STATE.KEY_JUST_RELEASED) this.buffer.put(keyNum,KEY_STATE.KEY_RELEASED);
             if (keyVal===KEY_STATE.KEY_JUST_PRESSED) {

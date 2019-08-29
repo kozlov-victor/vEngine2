@@ -10,6 +10,9 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ITexture} from "@engine/renderer/texture";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Line} from "@engine/renderable/impl/geometry/line";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -32,7 +35,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         super(game);
         this.registerResize();
         this.ctx = getCtx(this.container as HTMLCanvasElement);
-        if (DEBUG) console.log('created canvas renderer');
     }
 
     // https://miguelmota.com/blog/pixelate-images-with-canvas/demo/
@@ -203,7 +205,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             c.setAttribute('height',bitmap.height.toString());
             const ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
             ctx.drawImage(bitmap,0,0);
-            const size = new Size(bitmap.width,bitmap.height);
+            const size:Size = new Size(bitmap.width,bitmap.height);
             const texture:ICanvasTexture = {size,source:c};
             this.renderableCache[link.getUrl()] = texture;
             link.setTarget(texture);
@@ -211,5 +213,35 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         });
 
     }
+
+    public drawLine(line: Line): void {
+    }
+
+    public drawMesh(m: Mesh): void {
+    }
+
+
+    public getCachedTarget(l: ResourceLink<ITexture>): ITexture|undefined {
+        return undefined;
+    }
+
+    public getError(): { code: number; desc: string } | undefined {
+        return undefined;
+    }
+
+    public killObject(r: RenderableModel): void {
+    }
+
+    public rotateX(a: number): void {
+    }
+
+    public skewX(a: number): void {
+    }
+
+    public skewY(a: number): void {
+    }
+
+
+
 
 }

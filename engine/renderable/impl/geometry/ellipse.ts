@@ -38,17 +38,11 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>{
         super(game);
         this.center.observe(()=>{
             const maxR:number = this._getMaxRadius();
-            this.pos.
-                silent(true).
-                setXY(this.center.x - maxR,this.center.y - maxR).
-                silent(false);
+            this.pos.setXY(this.center.x - maxR,this.center.y - maxR);
         });
         this.pos.observe(()=>{
             const maxR:number = this._getMaxRadius();
-            this.center.
-                silent(true).
-                setXY(this.pos.x+maxR,this.pos.y+maxR).
-                silent(false);
+            this.center.setXY(this.pos.x+maxR,this.pos.y+maxR);
         });
     }
 

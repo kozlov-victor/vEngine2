@@ -38,14 +38,14 @@ export class Camera {
     // and identity mode (for fixed objects)
     public matrixMode:CAMERA_MATRIX_MODE = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
 
-    private objFollowTo:RenderableModel;
+    private objFollowTo:RenderableModel|null = null;
     private objFollowToPrevPos:Point2d;
     private directionCorrection:DIRECTION_CORRECTION;
 
     private _rect:Rect = new Rect();
     private _rectIdentity:Rect = new Rect();
     private _rectScaled:Rect = new Rect();
-    private cameraShakeTween:Tween = null; // todo too complex!
+    private cameraShakeTween:Tween|null = null; // todo too complex!
     private cameraPosCorrection:{current:Point2d,max:Point2d} = {
         current: new Point2d(),
         max: new Point2d()
@@ -78,9 +78,9 @@ export class Camera {
 
     public update() {
 
-        const gameObject:RenderableModel = this.objFollowTo;
+        const gameObject:RenderableModel|null = this.objFollowTo;
 
-        if (gameObject) {
+        if (gameObject!==null) {
 
             if ((gameObject.pos.x - this.objFollowToPrevPos.x)>0) this.directionCorrection = DIRECTION_CORRECTION.RIGHT;
             else if ((gameObject.pos.x - this.objFollowToPrevPos.x)<0) this.directionCorrection = DIRECTION_CORRECTION.LEFT;
@@ -116,7 +116,7 @@ export class Camera {
             const wDiv2:number = w/2;
             const hDiv2:number = h/2;
 
-            pointToFollow.set(this.objFollowTo.pos);
+            pointToFollow.set(gameObject.pos);
             pointToFollow.addXY(-wDiv2,-hDiv2);
             newPos.x = this.pos.x+(pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x)*Camera.FOLLOW_FACTOR;
             newPos.y = this.pos.y+(pointToFollow.y + this.cameraPosCorrection.current.y - this.pos.y)*Camera.FOLLOW_FACTOR;
@@ -151,7 +151,7 @@ export class Camera {
                 const r2:number = MathEx.random(-amplitude/2,amplitude/2);
                 tweenTarget.point.setXY(r1,r2);
             },
-            complete:():void=>this.cameraShakeTween = null
+            complete:()=>this.cameraShakeTween = null
         });
     }
 

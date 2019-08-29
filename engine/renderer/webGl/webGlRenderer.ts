@@ -20,7 +20,7 @@ import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFi
 import {mat4} from "@engine/geometry/mat4";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
-import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {ITexture} from "@engine/renderer/texture";
@@ -29,6 +29,8 @@ import {ClazzEx, IDestroyable} from "@engine/core/declarations";
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
+import {TileMap} from "@engine/renderable/impl/general/tileMap";
+import {noop} from "@engine/misc/object";
 
 
 const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext|null=>{
@@ -114,6 +116,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public readonly type:string = 'WebGlRenderer';
 
+    public killObject: (r: RenderableModel)=>void  = noop;
 
     private gl:WebGLRenderingContext;
     private readonly matrixStack:MatrixStack = new MatrixStack();
@@ -355,7 +358,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.finalFrameBuffer.clear(color);
     }
 
-    public afterFrameDraw(filters:readonly AbstractFilter[]):void{
+    public afterFrameDraw(filters: AbstractFilter[]):void{
         const texToDraw:Texture = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(),filters);
         this.finalFrameBuffer.unbind();
         if (this.pixelPerfectMode) this.gl.viewport(0, 0, this.game.screenSize.x,this.game.screenSize.y);
@@ -382,7 +385,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.renderableCache[url] = t;
     }
 
-    public getCachedTarget(l:ResourceLink<ITexture>):ITexture {
+    public getCachedTarget(l:ResourceLink<ITexture>):ITexture|undefined {
         return this.renderableCache[l.getUrl()];
     }
 
@@ -425,6 +428,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             t.destroy();
         });
     }
+
+    public drawTileMap(tileMap: TileMap): void {}
+
 
     protected onResize(): void {
         super.onResize();
@@ -521,7 +527,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         }
     }
 
-    private afterItemDraw(filters:readonly AbstractFilter[],blendMode:BLEND_MODE):void{
+    private afterItemDraw(filters: AbstractFilter[],blendMode:BLEND_MODE):void{
         if (filters.length>0 || blendMode!==BLEND_MODE.NORMAL) {
 
             this.blender.setBlendMode(BLEND_MODE.NORMAL);

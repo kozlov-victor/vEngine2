@@ -10,7 +10,7 @@ export namespace mat4 {
 
     export class Mat16Holder implements IReleasealable, ICloneable<Mat16Holder>{
 
-        public static fromPool():Mat16Holder {
+        public static fromPool():Mat16Holder|undefined {
             return Mat16Holder.m16hPool.getFreeObject();
         }
 

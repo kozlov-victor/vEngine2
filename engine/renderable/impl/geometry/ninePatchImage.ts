@@ -3,17 +3,22 @@ import {Image} from "./image";
 import {DebugError} from "@engine/debug/debugError";
 import {Size} from "@engine/geometry/size";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {Rect} from "@engine/geometry/rect";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {ITexture} from "@engine/renderer/texture";
 
-export class NinePatchImage extends Image {
+export class NinePatchImage extends RenderableModel {
 
     public readonly type:string = 'NinePatchImage';
-    private a:number = 0;
-    private b:number = 0;
-    private c:number = 0;
-    private d:number = 0;
+    private a:number = 5;
+    private b:number = 5;
+    private c:number = 5;
+    private d:number = 5;
 
     private _patches:Image[] = new Array(10);
+
+    // resource
+    private _resourceLink:ResourceLink<ITexture>;
 
     /**
      *
@@ -28,10 +33,7 @@ export class NinePatchImage extends Image {
      */
     constructor(game: Game) {
         super(game);
-        for (let i:number=0;i<9;i++) {
-            this._patches[i] = new Image(this.game);
-        }
-        this.getSrcRect().observe(()=>{this.revalidate();});
+        this.size.observe(()=>{this.revalidate();});
     }
 
     public revalidate():void {
@@ -39,9 +41,19 @@ export class NinePatchImage extends Image {
             throw new DebugError(`can not render Image: resource link is not specified`);
         }
         let {width,height} = this.size;
+
+        const t:Texture = this.getResourceLink().getTarget() as Texture;
+        if (DEBUG && !t) {
+            console.log(this.getResourceLink());
+            throw new DebugError(`can not find texture by link provided`);
+        }
+
+        if (width===0) width = t.size.width;
+        if (height===0) height = t.size.height;
+
         if (width<this.a+this.b) width = this.a + this.b;
         if (height<this.c+this.d) height = this.c + this.d;
-        this.setWH(width,height);
+        this.size.setWH(width,height);
         this._revalidatePatches();
     }
 
@@ -57,67 +69,68 @@ export class NinePatchImage extends Image {
 
     }
 
-    public draw():boolean{
-        for (let i:number=0;i<9;i++) {
-            this._patches[i].render();
+    public setResourceLink(link:ResourceLink<ITexture>):void{
+        if (DEBUG && !link) {
+            throw new DebugError(`can not set resource link: link is not passed`);
         }
+        this._resourceLink = link;
+        for (let i:number=0;i<9;i++) {
+            this._patches[i] = new Image(this.game);
+            this._patches[i].setResourceLink(link);
+            this.appendChild(this._patches[i]);
+        }
+    }
+
+    public getResourceLink():ResourceLink<ITexture>{
+        return this._resourceLink;
+    }
+
+    public draw():boolean{
         return true;
     }
 
     private _revalidatePatches():void{
         const t:Texture = this.getResourceLink().getTarget() as Texture;
-        if (DEBUG || !t) {
-            console.log(this.getResourceLink());
-            throw new DebugError(`can not find texture by link provided`);
-        }
         const texSize:Size = t.size;
-        const destRect:Rect = this.getSrcRect();
+        const destSize:Size = this.size;
         let patch:Image;
         const a:number = this.a,b:number=this.b,c:number=this.c,d:number=this.d;
         // patch 1
         patch = this._patches[0];
-        let patchCnt:number=1;
+        patch.setXYWH(0,0,a,c);
         patch.getSrcRect().setXYWH(0,0,a,c);
-        patch.setXYWH(destRect.point.x,destRect.point.y,a,c);
         // patch 2
-        patch = this._patches[patchCnt++];
+        patch = this._patches[1];
+        patch.setXYWH(a,0,destSize.width-a-c,c);
         patch.getSrcRect().setXYWH(a,0,texSize.width-a-b,c);
-        patch.setXYWH(destRect.point.x+a,destRect.point.y,destRect.size.width-a-c,c);
         // patch 3
-        patch = this._patches[patchCnt++];
+        patch = this._patches[2];
+        patch.setXYWH(destSize.width-b,0,b,c);
         patch.getSrcRect().setXYWH(texSize.width-b,0,b,c);
-        patch.setXYWH(destRect.point.x+destRect.size.width-b,destRect.point.y,b,c);
         // patch 4
-        patch = this._patches[patchCnt++];
+        patch = this._patches[3];
+        patch.setXYWH(0,c,a,destSize.height-c-d);
         patch.getSrcRect().setXYWH(0, c, a,texSize.height - c - d);
-        patch.setXYWH(destRect.point.x,destRect.point.y+c,a,destRect.size.height-c-d);
         // patch 5
-        patch = this._patches[patchCnt++];
+        patch = this._patches[4];
+        patch.setXYWH(a,c,destSize.width - a - b,destSize.height-c-d);
         patch.getSrcRect().setXYWH(a, c, texSize.width - a - b,texSize.height - c - d);
-        patch.setXYWH(destRect.point.x + a,destRect.point.y+c,destRect.size.width - a - b,destRect.size.height-c-d);
         // patch 6
-        patch = this._patches[patchCnt++];
+        patch = this._patches[5];
+        patch.setXYWH(destSize.width - b,c,b,destSize.height-c-d);
         patch.getSrcRect().setXYWH(texSize.width - b, c, b,texSize.height - c - d);
-        patch.setXYWH(
-            destRect.point.x + destRect.size.width - b,destRect.point.y+c,b,destRect.size.height-c-d
-        );
         // patch 7
-        patch = this._patches[patchCnt++];
+        patch = this._patches[6];
+        patch.setXYWH(0,destSize.height - d,a,d);
         patch.getSrcRect().setXYWH(0,texSize.height - d,a,d);
-        patch.setXYWH(destRect.point.x,destRect.point.y+destRect.size.height - d,a,d);
         // patch 8
-        patch = this._patches[patchCnt++];
+        patch = this._patches[7];
+        patch.setXYWH(a,destSize.height-d,destSize.width-a-b,d);
         patch.getSrcRect().setXYWH(a,texSize.height - d,texSize.width-a-b,d);
-        patch.setXYWH(
-            destRect.point.x + a,destRect.point.y+destRect.size.height-d,destRect.size.width-a-b,d
-        );
         // patch 9
-        patch = this._patches[patchCnt++];
+        patch = this._patches[8];
+        patch.setXYWH(destSize.width-b,destSize.height-d,b,d);
         patch.getSrcRect().setXYWH(texSize.width-b,texSize.height-d,b,d);
-        patch.setXYWH(destRect.point.x+destRect.size.width-b,destRect.point.y+destRect.size.height-d,b,d);
-        for (let i:number=0;i<9;i++) {
-            this._patches[i].setResourceLink(this.getResourceLink());
-        }
     }
 
 }

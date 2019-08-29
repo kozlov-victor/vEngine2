@@ -25,7 +25,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
 
     private static objectPool:ObjectPool<Color>;
 
-    private static getFromPool():Color{
+    private static getFromPool():Color|undefined{
         if (Color.objectPool===undefined) Color.objectPool = new ObjectPool<Color>(Color);
         return Color.objectPool.getFreeObject();
     }

@@ -6,13 +6,9 @@ export abstract class ObservableEntity implements IReleasealable{
 
     private _onChanged:(()=>void)[] = [];
 
-    private _silent:boolean = false;
-
     private _captured:boolean = false;
-    public silent(val:boolean):this {
-        this._silent = val;
-        return this;
-    }
+
+
     public isCaptured(): boolean {
         return this._captured;
     }
@@ -47,7 +43,6 @@ export abstract class ObservableEntity implements IReleasealable{
     }
 
     protected triggerObservable():void {
-        if (this._silent) return;
         for (const fn of this._onChanged) {
             fn();
         }

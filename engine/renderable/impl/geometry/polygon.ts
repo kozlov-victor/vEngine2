@@ -3,7 +3,7 @@ import {Mesh} from "@engine/renderable/abstract/mesh";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {EarClippingTriangulator} from "@engine/renderable/impl/geometry/helpers/earClippingTriangulator";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
-import {Line} from "@engine/renderable/impl/geometry/line";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 class PolygonPrimitive extends AbstractPrimitive {
     constructor(){
@@ -15,10 +15,10 @@ class PolygonPrimitive extends AbstractPrimitive {
 export class Polygon extends Mesh {
 
     public readonly type:string = 'Polygon';
-    public readonly vertexItemSize:2|3 = 2;
 
     constructor(protected game:Game){
         super(game,false,false);
+        this.vertexItemSize = 2;
     }
 
     public setVertices(vertices:number[]):void {
@@ -26,9 +26,9 @@ export class Polygon extends Mesh {
         this.modelPrimitive.vertexArr = vertices;
     }
 
-    public fromPolyline(p:PolyLine) {
+    public fromPolyline(p:PolyLine):void {
         const vertices:number[] = [];
-        p.children.forEach((l:Line)=>{
+        p.children.forEach((l:RenderableModel)=>{
             vertices.push(l.pos.x,l.pos.y);
         });
         const triangulator:EarClippingTriangulator = new EarClippingTriangulator();
@@ -41,7 +41,7 @@ export class Polygon extends Mesh {
         this.size.set(p.size);
     }
 
-    public fromSvgPath(p:string){
+    public fromSvgPath(p:string):void {
         const polyline:PolyLine = new PolyLine(this.game);
         polyline.setSvgPath(p);
         this.fromPolyline(polyline);

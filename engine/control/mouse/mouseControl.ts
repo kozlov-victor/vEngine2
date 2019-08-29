@@ -148,10 +148,10 @@ export class MouseControl implements IControl {
         if (isMouseDown===undefined) isMouseDown = false;
         const g:Game = this.game;
         const scene:Scene = g.getCurrScene();
-        if (!scene) return null;
+        //if (!scene) return null; //todo check for runtime errors
         const point:MousePoint = this.resolvePoint(e);
         point.isMouseDown = isMouseDown;
-        point.target = undefined;
+        (point.target as RenderableModel|Scene|undefined) = undefined;
 
         let isCaptured:boolean = false;
         let i:number = scene.getLayers().length; // reversed loop

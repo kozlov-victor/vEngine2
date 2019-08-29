@@ -21,7 +21,7 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
     }
 
     public clone():this{
-        return null; // todo
+        return this; // todo
     }
 
     protected onNextFrame(i: number): void {

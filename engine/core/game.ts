@@ -170,8 +170,8 @@ export class Game {
 
         if (DEBUG) {
             this.fps = ~~(1000 / this._deltaTime);
-            const renderError:{code:number,desc:string} = this._renderer.getError();
-            if (renderError) {
+            const renderError:{code:number,desc:string}|undefined = this._renderer.getError();
+            if (renderError!==undefined) {
                 throw new DebugError(`rendering error with code ${renderError.code} (${renderError.desc})`);
             }
         }

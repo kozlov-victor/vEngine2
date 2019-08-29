@@ -21,7 +21,7 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d> {
         this.setY(value);
     }
 
-    public static fromPool():Point2d{
+    public static fromPool():Point2d|undefined {
         return Point2d.pool.getFreeObject();
     }
     private static pool = new ObjectPool<Point2d>(Point2d,4);
@@ -39,73 +39,63 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d> {
     }
 
     public setXY(x:number,y:number = x):this{
-        this._x = x;
-        this._y = y;
-        this.triggerObservable();
+        const changed:boolean = this._x!==x || this._y!==y;
+        if (changed) {
+            this._x = x;
+            this._y = y;
+            this.triggerObservable();
+        }
         return this;
     }
 
     public setX(x:number):this{
-        this._x = x;
-        this.triggerObservable();
+        this.setXY(x,this._y);
         return this;
     }
 
     public setY(y:number):this{
-        this._y = y;
-        this.triggerObservable();
+        this.setXY(this._x,y);
         return this;
     }
 
     public set(another:Point2d):this{
         this.setXY(another._x,another._y);
-        this.triggerObservable();
         return this;
     }
 
 
     public add(another:Point2d):this{
         this.addXY(another._x,another._y);
-        this.triggerObservable();
         return this;
     }
 
     public substract(another:Point2d):this{
         this.addXY(-another._x,-another._y);
-        this.triggerObservable();
         return this;
     }
 
     public multiply(n:number):this {
-        this._x*=n;
-        this._y*=n;
-        this.triggerObservable();
+        this.setXY(this._x*n,this._y*n);
         return this;
     }
 
     public addXY(x:number,y:number):this{
-        this._x+=x;
-        this._y+=y;
-        this.triggerObservable();
+        this.setXY(this._x+x,this._y+y);
         return this;
     }
 
     public addX(x:number):this{
-        this._x+=x;
-        this.triggerObservable();
+        this.addXY(x,this._y);
         return this;
     }
 
     public addY(y:number):this{
-        this._y+=y;
-        this.triggerObservable();
+        this.addXY(this._x,y);
         return this;
     }
 
     public negative(){
-        this._x = - this._x;
-        this._y = -this._y;
-        this.triggerObservable();
+        this.setXY(-this._x,-this._y);
         return this;
     }
 

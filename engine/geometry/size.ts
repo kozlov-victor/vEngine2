@@ -4,8 +4,9 @@ import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 export class Size extends ObservableEntity implements IReleasealable{
 
     set width(val:number) {
+        const changed:boolean = this._width!==val;
         this._width = val;
-        this.triggerObservable();
+        if (changed) this.triggerObservable();
     }
 
     get width(): number {
@@ -13,15 +14,16 @@ export class Size extends ObservableEntity implements IReleasealable{
     }
 
     set height(val:number) {
+        const changed:boolean = this._height!==val;
         this._height = val;
-        this.triggerObservable();
+        if (changed) this.triggerObservable();
     }
 
     get height(): number {
         return this._height;
     }
 
-    public static fromPool():Size {
+    public static fromPool():Size|undefined {
         return Size.rectPool.getFreeObject();
     }
 
@@ -34,26 +36,24 @@ export class Size extends ObservableEntity implements IReleasealable{
 
     constructor(width:number = 0,height:number = 0){
         super();
-        this._width = width;
-        this._height = height;
+        this.setWH(width,height);
     }
 
 
     public setW(width:number):Size{
-        this._width = width;
-        this.triggerObservable();
+        this.setWH(width,this._height);
         return this;
     }
     public setH(height:number):Size{
-        this._height = height;
-        this.triggerObservable();
+        this.setWH(this._width,height);
         return this;
     }
 
     public setWH(width:number,height:number = width):Size{
+        const changed:boolean = this._width!==width || this._height!==height;
         this._width = width;
         this._height = height;
-        this.triggerObservable();
+        if (changed) this.triggerObservable();
         return this;
     }
 
@@ -63,9 +63,7 @@ export class Size extends ObservableEntity implements IReleasealable{
     }
 
     public set(another:Size):Size{
-        this._width = another._width;
-        this._height = another._height;
-        this.triggerObservable();
+        this.setWH(another._width,another._height);
         return this;
     }
 

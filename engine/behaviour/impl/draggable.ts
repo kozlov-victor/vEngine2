@@ -38,7 +38,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
     private gameObject:RenderableModel;
 
     constructor(game:Game){
-        super(game,null);
+        super(game,{});
     }
 
     public manage(gameObject:RenderableModel):void {

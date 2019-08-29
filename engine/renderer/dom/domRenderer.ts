@@ -9,6 +9,12 @@ import {Color} from "@engine/renderer/color";
 import {ITexture} from "@engine/renderer/texture";
 import {Size} from "@engine/geometry/size";
 import {MathEx} from "@engine/misc/mathEx";
+import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
+import {Mesh} from "@engine/renderable/abstract/mesh";
+import {NinePatchImage} from "@engine/renderable/impl/geometry/ninePatchImage";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {TileMap} from "@engine/renderable/impl/general/tileMap";
+import {Rect} from "@engine/geometry/rect";
 
 class Nodes  {
     public properties:{[key:string]:any} = {};
@@ -161,6 +167,41 @@ export class DomRenderer extends AbstractRenderer {
     public restore():void{
         this.matrixStack.restore();
     }
+
+    public drawEllipse(ellispe: Ellipse): void {
+    }
+
+    public drawMesh(m: Mesh): void {
+    }
+
+
+    public drawRectangle(rectangle: Rectangle): void {
+    }
+
+    public drawTileMap(tileMap: TileMap): void {
+    }
+
+    public getCachedTarget(l: ResourceLink<ITexture>): ITexture {
+        return {size:new Size()};
+    }
+
+    public getError(): { code: number; desc: string } | undefined {
+        return undefined;
+    }
+
+    public lockRect(rect: Rect): void {
+    }
+
+    public skewX(a: number): void {
+    }
+
+    public skewY(a: number): void {
+    }
+
+    public unlockRect(): void {
+    }
+
+
 
     private _drawBasicElement(node:VNode,model:RenderableModel){
         if (model.pos.x!==node.properties.pos_x) {

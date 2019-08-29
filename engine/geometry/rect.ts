@@ -21,14 +21,23 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>{
         return this._bottom;
     }
 
-    public static fromPool():Rect {
+
+    get point(): Point2d { // todo remove direct access
+        return this._point;
+    }
+
+    get size(): Size { // todo remove direct access
+        return this._size;
+    }
+
+    public static fromPool():Rect|undefined {
         return Rect.rectPool.getFreeObject();
     }
 
     private static rectPool:ObjectPool<Rect> = new ObjectPool<Rect>(Rect);
 
-    public readonly point:Point2d = new Point2d();
-    public readonly size:Size = new Size();
+    private readonly _point:Point2d = new Point2d();
+    private readonly _size:Size = new Size();
     private _right:number;
     private _bottom:number;
 
@@ -44,86 +53,85 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>{
         this.addOnChangeListener(onChangedFn);
     }
 
-    public revalidate():void{
-        this._right = this.point.x+this.size.width;
-        this._bottom = this.point.y+this.size.height;
-        this.triggerObservable();
-    }
-
     public setXYWH(x:number,y:number,width:number,height:number):Rect{
-        this.point.setXY(x,y);
-        this.size.setWH(width,height);
-        this.revalidate();
+        const oldX:number = this._point.x;
+        const oldY:number = this._point.y;
+        const oldW:number = this._size.width;
+        const oldH:number = this._size.height;
+        this._point.setXY(x,y);
+        this._size.setWH(width,height);
+        const changed:boolean = oldX!==x || oldY!==y || oldW!==width || oldH!==height;
+        if (changed) this.revalidate();
         return this;
     }
 
     public setXY(x:number,y:number):Rect{
-        this.point.setXY(x,y);
-        this.revalidate();
+        this.setXYWH(x,y,this._size.width,this._size.height);
         return this;
     }
 
     public setWH(width:number,height:number):Rect{
-        this.size.setWH(width,height);
-        this.revalidate();
+        this.setXYWH(this._point.x,this._point.y,width,height);
         return this;
     }
 
     public set(another:Rect):Rect {
-        this.setPoint(another.point);
-        this.setSize(another.size);
-        this.revalidate();
+        this.setPoint(another._point);
+        this.setSize(another._size);
+        this.setXYWH(another._point.x,another._point.y,another._size.width,another._size.height);
         return this;
     }
 
     public setSize(s:Size):Rect{
-        this.size.setWH(s.width,s.height);
-        this.revalidate();
+        this.setWH(s.width,s.height);
         return this;
     }
 
     public setPoint(p:Point2d):Rect{
-        this.point.setXY(p.x,p.y);
-        this.revalidate();
+        this.setXY(p.x,p.y);
         return this;
     }
 
     public addXY(x:number,y:number):Rect{
-        this.point.addXY(x,y);
-        this.revalidate();
+        this.setXY(this._point.x+x,this._point.y+y);
         return this;
     }
 
     public addPoint(another:Point2d):Rect{
         this.addXY(another.x,another.y);
-        this.revalidate();
         return this;
     }
 
     public clone():Rect{
-        return new Rect(this.point.x,this.point.y,this.size.width,this.size.height);
+        return new Rect(this._point.x,this._point.y,this._size.width,this._size.height);
     }
 
 
     public toJSON():IRectJSON{
         return {
-            x:this.point.x,
-            y:this.point.y,
-            width:this.size.width,
-            height:this.size.height
+            x:this._point.x,
+            y:this._point.y,
+            width:this._size.width,
+            height:this._size.height
         };
     }
 
     public toArray():[number,number,number,number]{
-        this._arr[0] = this.point.x;
-        this._arr[1] = this.point.y;
-        this._arr[2] = this.size.width;
-        this._arr[3] = this.size.height;
+        this._arr[0] = this._point.x;
+        this._arr[1] = this._point.y;
+        this._arr[2] = this._size.width;
+        this._arr[3] = this._size.height;
         return this._arr;
     }
 
     public fromJSON(jsonObj:IRectJSON):void{
         this.setXYWH(jsonObj.x,jsonObj.y,jsonObj.width,jsonObj.height);
+    }
+
+    private revalidate():void{
+        this._right = this._point.x+this._size.width;
+        this._bottom = this._point.y+this._size.height;
+        this.triggerObservable();
     }
 
 

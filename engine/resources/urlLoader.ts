@@ -20,11 +20,11 @@ const addUrlParameter = (url:string,param:string,value:string|number):string=>{
 };
 
 
-const loadBase64 = (urlLoader:UrlLoader,urlRequest:IURLRequest)=>{
+const loadBase64 = (urlLoader:UrlLoader<any>,urlRequest:IURLRequest)=>{
     urlLoader.onLoad(urlRequest.url);
 };
 
-const loadViaXmlHttp = (urlLoader:UrlLoader,urlRequest:IURLRequest)=>{
+const loadViaXmlHttp = (urlLoader:UrlLoader<any>,urlRequest:IURLRequest)=>{
 
     if (!urlRequest.method) urlRequest.method = 'GET';
     const xhr:XMLHttpRequest = new XMLHttpRequest();
@@ -71,7 +71,7 @@ const loadViaXmlHttp = (urlLoader:UrlLoader,urlRequest:IURLRequest)=>{
     xhr.send();
 };
 
-const loadViaJsonp = (urlLoader:UrlLoader,urlRequest:IURLRequest)=>{
+const loadViaJsonp = (urlLoader:UrlLoader<any>,urlRequest:IURLRequest)=>{
     const script:HTMLScriptElement = document.createElement('script');
     script.src = urlLoader.getUrl();
     if (urlLoader.onProgress) {
@@ -79,16 +79,16 @@ const loadViaJsonp = (urlLoader:UrlLoader,urlRequest:IURLRequest)=>{
             urlLoader.onProgress(e.loaded / e.total);
         };
     }
-    script.onerror=(e:Event)=> {
+    script.onerror=(e:Event|string)=> {
         console.error(e);
         if (urlLoader.onError) urlLoader.onError(e);
         if (DEBUG) throw new DebugError(`can not load resource with url ${urlRequest.url}`);
     };
     const jsonpHandler:{[key:string]:(data:string|ArrayBuffer)=>void} = (window as any).jsonpHandler || ((window as any).jsonpHandler={});
     document.body.appendChild(script);
-    jsonpHandler[urlRequest.url] = (data:string|ArrayBuffer)=>{
+    jsonpHandler[urlRequest.url] = (data:ArrayBuffer|string)=>{
         if (DEBUG && !urlLoader.onLoad) throw new DebugError(`urlLoader.onLoad not provided for resource with url ${urlLoader.getUrl()}`);
-        urlLoader.onLoad(data);
+        urlLoader.onLoad(data as ArrayBuffer);
     };
     script.onload = ()=>{
         setTimeout(()=>{
@@ -98,10 +98,10 @@ const loadViaJsonp = (urlLoader:UrlLoader,urlRequest:IURLRequest)=>{
     };
 };
 
-export class UrlLoader {
+export class UrlLoader<T extends string|ArrayBuffer> {
 
-    public onLoad:(buffer:ArrayBuffer|string)=>void;
-    public onError:(e:Event)=>void;
+    public onLoad:(buffer:T)=>void;
+    public onError:(e:Event|string)=>void;
     public onProgress:(progress:number)=>void;
 
     constructor(private urlRequest:IURLRequest){}
