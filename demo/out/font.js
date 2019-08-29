@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 84);
+/******/ 	return __webpack_require__(__webpack_require__.s = 85);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1088,7 +1088,7 @@ var MOUSE_EVENTS;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Rect; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
+/* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
 /* harmony import */ var _point2d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _misc_objectPool__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
 /* harmony import */ var _abstract_observableEntity__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(18);
@@ -1346,15 +1346,17 @@ var Color = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BLEND_MODE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return RenderableModel; });
-/* harmony import */ var _debug_debugError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var _misc_mathEx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
-/* harmony import */ var _geometry_point2d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _geometry_rect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
-/* harmony import */ var _engine_geometry_size__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
-/* harmony import */ var _engine_delegates_tweenableDelegate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(28);
-/* harmony import */ var _engine_delegates_timerDelegate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(32);
-/* harmony import */ var _engine_delegates_eventEmitterDelegate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(24);
-/* harmony import */ var _engine_resources_incrementer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(26);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _debug_debugError__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
+/* harmony import */ var _misc_mathEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(13);
+/* harmony import */ var _geometry_point2d__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
+/* harmony import */ var _geometry_rect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
+/* harmony import */ var _engine_geometry_size__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(10);
+/* harmony import */ var _engine_delegates_tweenableDelegate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(28);
+/* harmony import */ var _engine_delegates_timerDelegate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(33);
+/* harmony import */ var _engine_delegates_eventEmitterDelegate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(25);
+/* harmony import */ var _engine_resources_incrementer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(26);
+
 
 
 
@@ -1401,39 +1403,54 @@ var AnglePoint3d = (function () {
     };
     return AnglePoint3d;
 }());
+var ModelPoint2d = (function (_super) {
+    tslib__WEBPACK_IMPORTED_MODULE_0__[/* __extends */ "c"](ModelPoint2d, _super);
+    function ModelPoint2d(model) {
+        var _this = _super.call(this) || this;
+        _this.model = model;
+        return _this;
+    }
+    ModelPoint2d.prototype.setToCenter = function () {
+        this.model.revalidate();
+        if ( true && !(this.model.size.width && this.model.size.height))
+            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not set anchor to center: width or height of gameObject is not set");
+        this.setXY(this.model.size.width / 2, this.model.size.height / 2);
+    };
+    return ModelPoint2d;
+}(_geometry_point2d__WEBPACK_IMPORTED_MODULE_3__[/* Point2d */ "a"]));
 var RenderableModel = (function () {
     function RenderableModel(game) {
         var _this = this;
         this.game = game;
-        this.size = new _engine_geometry_size__WEBPACK_IMPORTED_MODULE_4__[/* Size */ "a"]();
-        this.pos = new _geometry_point2d__WEBPACK_IMPORTED_MODULE_2__[/* Point2d */ "a"](0, 0, function () { return _this._dirty = true; });
+        this.size = new _engine_geometry_size__WEBPACK_IMPORTED_MODULE_5__[/* Size */ "a"]();
+        this.pos = new _geometry_point2d__WEBPACK_IMPORTED_MODULE_3__[/* Point2d */ "a"](0, 0, function () { return _this._dirty = true; });
         this.posZ = 0;
-        this.scale = new _geometry_point2d__WEBPACK_IMPORTED_MODULE_2__[/* Point2d */ "a"](1, 1);
-        this.skew = new _geometry_point2d__WEBPACK_IMPORTED_MODULE_2__[/* Point2d */ "a"](0, 0);
-        this.anchor = new _geometry_point2d__WEBPACK_IMPORTED_MODULE_2__[/* Point2d */ "a"](0, 0);
-        this.rotationPoint = new _geometry_point2d__WEBPACK_IMPORTED_MODULE_2__[/* Point2d */ "a"](0, 0);
+        this.scale = new _geometry_point2d__WEBPACK_IMPORTED_MODULE_3__[/* Point2d */ "a"](1, 1);
+        this.skew = new _geometry_point2d__WEBPACK_IMPORTED_MODULE_3__[/* Point2d */ "a"](0, 0);
+        this.anchor = new ModelPoint2d(this);
+        this.rotationPoint = new ModelPoint2d(this);
         this.angle3d = new AnglePoint3d(this, 'angle');
         this.alpha = 1;
         this.blendMode = BLEND_MODE.NORMAL;
         this.parent = null;
         this.children = [];
-        this.velocity = new _geometry_point2d__WEBPACK_IMPORTED_MODULE_2__[/* Point2d */ "a"](0, 0);
+        this.velocity = new _geometry_point2d__WEBPACK_IMPORTED_MODULE_3__[/* Point2d */ "a"](0, 0);
         this.angleVelocity3d = new AnglePoint3d(this, 'angleVelocity');
         this.visible = true;
         this.passMouseEventsThrough = false;
         this._dirty = true;
-        this._srcRect = new _geometry_rect__WEBPACK_IMPORTED_MODULE_3__[/* Rect */ "a"]();
-        this._screenRect = new _geometry_rect__WEBPACK_IMPORTED_MODULE_3__[/* Rect */ "a"]();
+        this._srcRect = new _geometry_rect__WEBPACK_IMPORTED_MODULE_4__[/* Rect */ "a"]();
+        this._screenRect = new _geometry_rect__WEBPACK_IMPORTED_MODULE_4__[/* Rect */ "a"]();
         this._behaviours = [];
         this._layer = null;
         this._angle = 0;
         this._angleVelocity = 0;
-        this._tweenDelegate = new _engine_delegates_tweenableDelegate__WEBPACK_IMPORTED_MODULE_5__[/* TweenableDelegate */ "a"]();
-        this._timerDelegate = new _engine_delegates_timerDelegate__WEBPACK_IMPORTED_MODULE_6__[/* TimerDelegate */ "a"]();
-        this._eventEmitterDelegate = new _engine_delegates_eventEmitterDelegate__WEBPACK_IMPORTED_MODULE_7__[/* EventEmitterDelegate */ "a"]();
+        this._tweenDelegate = new _engine_delegates_tweenableDelegate__WEBPACK_IMPORTED_MODULE_6__[/* TweenableDelegate */ "a"]();
+        this._timerDelegate = new _engine_delegates_timerDelegate__WEBPACK_IMPORTED_MODULE_7__[/* TimerDelegate */ "a"]();
+        this._eventEmitterDelegate = new _engine_delegates_eventEmitterDelegate__WEBPACK_IMPORTED_MODULE_8__[/* EventEmitterDelegate */ "a"]();
         if ( true && !game)
-            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not create model '" + this.type + "': game instance not passed to model constructor");
-        this.id = "object_" + _engine_resources_incrementer__WEBPACK_IMPORTED_MODULE_8__[/* Incrementer */ "a"].getValue();
+            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not create model '" + this.type + "': game instance not passed to model constructor");
+        this.id = "object_" + _engine_resources_incrementer__WEBPACK_IMPORTED_MODULE_9__[/* Incrementer */ "a"].getValue();
     }
     Object.defineProperty(RenderableModel.prototype, "angle", {
         get: function () {
@@ -1490,32 +1507,66 @@ var RenderableModel = (function () {
         this._srcRect.setXYWH(this.pos.x - this.anchor.x, this.pos.y - this.anchor.y, this.size.width, this.size.height);
         return this._srcRect;
     };
-    RenderableModel.prototype.setAnchorToCenter = function () {
-        this.revalidate();
-        if ( true && !(this.size.width && this.size.height))
-            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not set anchor to center: width or height of gameObject is not set");
-        this.anchor.setXY(this.size.width / 2, this.size.height / 2);
-    };
-    RenderableModel.prototype.setRotationPointToCenter = function () {
-        this.revalidate();
-        if ( true && !(this.size.width && this.size.height))
-            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not set rotation point to center: width or height of gameObject is not set");
-        this.rotationPoint.setXY(this.size.width / 2, this.size.height / 2);
+    RenderableModel.prototype.addBehaviour = function (b) {
+        this._behaviours.push(b);
+        b.manage(this);
     };
     RenderableModel.prototype.appendChild = function (c) {
         if (true) {
             if (c === this)
-                throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("parent and child objects are the same");
+                throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("parent and child objects are the same");
+            if (this.children.find(function (it) { return it === c; })) {
+                console.error(c);
+                throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("this children already added");
+            }
         }
         c.parent = this;
         c.setLayer(this.getLayer());
         c.revalidate();
         this.children.push(c);
     };
+    RenderableModel.prototype.appendChildAt = function (c, index) {
+        if (true) {
+            if (index > this.children.length - 1)
+                throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not insert element: index is out of range (" + index + "," + (this.children.length - 1) + ")");
+        }
+        c.parent = this;
+        c.setLayer(this.getLayer());
+        c.revalidate();
+        this.children.splice(index, 0, c);
+    };
+    RenderableModel.prototype.appendChildAfter = function (modelAfter, newChild) {
+        var afterIndex = this.children.indexOf(modelAfter);
+        if (true) {
+            if (afterIndex === -1)
+                throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not insert element: object is detached");
+        }
+        if (afterIndex === this.children.length - 1)
+            this.appendChild(newChild);
+        else
+            this.appendChildAt(newChild, afterIndex + 1);
+    };
+    RenderableModel.prototype.appendChildBefore = function (modelBefore, newChild) {
+        var beforeIndex = this.children.indexOf(modelBefore);
+        if (true) {
+            if (beforeIndex === -1)
+                throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not insert element: object is detached");
+        }
+        if (beforeIndex === 0)
+            this.prependChild(newChild);
+        else
+            this.appendChildAt(newChild, beforeIndex - 1);
+    };
+    RenderableModel.prototype.prependChild = function (c) {
+        c.parent = this;
+        c.setLayer(this.getLayer());
+        c.revalidate();
+        this.children.unshift(c);
+    };
     RenderableModel.prototype.removeChildAt = function (i) {
         var c = this.children[i];
         if ( true && !c)
-            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not remove children with index " + i);
+            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not remove children with index " + i);
         c.kill();
     };
     RenderableModel.prototype.removeChildren = function () {
@@ -1524,37 +1575,28 @@ var RenderableModel = (function () {
             this.removeChildAt(i);
         }
     };
-    RenderableModel.prototype.addBehaviour = function (b) {
-        this._behaviours.push(b);
-        b.manage(this);
-    };
-    RenderableModel.prototype.prependChild = function (c) {
-        c.parent = this;
-        c.revalidate();
-        this.children.unshift(c);
-    };
-    RenderableModel.prototype.setDirty = function () {
-        this._dirty = true;
-    };
     RenderableModel.prototype.moveToFront = function () {
         if ( true && !this._getParent())
-            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not move to front: object is detached");
+            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not move to front: object is detached");
         var index = (this._getParent()).children.indexOf(this);
         if ( true && index === -1)
-            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not move to front: object is not belong to current scene");
+            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not move to front: object is not belong to current scene");
         var parentArray = this._getParent().children;
         parentArray.splice(index, 1);
         parentArray.push(this);
     };
     RenderableModel.prototype.moveToBack = function () {
         if ( true && !this._getParent())
-            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not move to back: object is detached");
+            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not move to back: object is detached");
         var index = this._getParent().children.indexOf(this);
         if ( true && index === -1)
-            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not move to front: object is not belong to current scene");
+            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not move to front: object is not belong to current scene");
         var parentArray = this._getParent().children;
         parentArray.splice(index, 1);
         parentArray.unshift(this);
+    };
+    RenderableModel.prototype.setDirty = function () {
+        this._dirty = true;
     };
     RenderableModel.prototype.kill = function () {
         for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
@@ -1562,12 +1604,12 @@ var RenderableModel = (function () {
             c.kill();
         }
         if ( true && !this._getParent())
-            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not kill object: gameObject is detached");
+            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not kill object: gameObject is detached");
         var parentArray = this._getParent().children;
         var index = parentArray.indexOf(this);
         if ( true && index === -1) {
             console.error(this);
-            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]('can not kill: object is not belong to current scene');
+            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]('can not kill: object is not belong to current scene');
         }
         this.parent = null;
         this._layer = null;
@@ -1674,12 +1716,12 @@ var RenderableModel = (function () {
         this.children.forEach(function (c) {
             if ( true && !('clone' in c)) {
                 console.error(c);
-                throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not clone object: cloneable interface is not implemented");
+                throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not clone object: cloneable interface is not implemented");
             }
             var clonedChildren = c.clone();
             if ( true && !(clonedChildren instanceof RenderableModel)) {
                 console.error(c);
-                throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not clone object: \"clone\"  method must return Cloneable object");
+                throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]("can not clone object: \"clone\"  method must return Cloneable object");
             }
             cloned.appendChild(clonedChildren);
         });
@@ -1709,7 +1751,7 @@ var RenderableModel = (function () {
             renderer.rotateY(this.angle3d.y);
     };
     RenderableModel.prototype.isInViewPort = function () {
-        return _misc_mathEx__WEBPACK_IMPORTED_MODULE_1__[/* MathEx */ "a"].overlapTest(this.game.camera.getRectScaled(), this.getSrcRect());
+        return _misc_mathEx__WEBPACK_IMPORTED_MODULE_2__[/* MathEx */ "a"].overlapTest(this.game.camera.getRectScaled(), this.getSrcRect());
     };
     RenderableModel.prototype._getParent = function () {
         return this.parent || this._layer || undefined;
@@ -1724,105 +1766,9 @@ var RenderableModel = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Size; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _misc_objectPool__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
-/* harmony import */ var _engine_geometry_abstract_observableEntity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
-
-
-
-var Size = (function (_super) {
-    tslib__WEBPACK_IMPORTED_MODULE_0__[/* __extends */ "c"](Size, _super);
-    function Size(width, height) {
-        if (width === void 0) { width = 0; }
-        if (height === void 0) { height = 0; }
-        var _this = _super.call(this) || this;
-        _this._arr = [_this._width, _this._height];
-        _this._width = width;
-        _this._height = height;
-        return _this;
-    }
-    Object.defineProperty(Size.prototype, "width", {
-        get: function () {
-            return this._width;
-        },
-        set: function (val) {
-            this._width = val;
-            this.triggerObservable();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Size.prototype, "height", {
-        get: function () {
-            return this._height;
-        },
-        set: function (val) {
-            this._height = val;
-            this.triggerObservable();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Size.fromPool = function () {
-        return Size.rectPool.getFreeObject();
-    };
-    Size.prototype.setW = function (width) {
-        this._width = width;
-        this.triggerObservable();
-        return this;
-    };
-    Size.prototype.setH = function (height) {
-        this._height = height;
-        this.triggerObservable();
-        return this;
-    };
-    Size.prototype.setWH = function (width, height) {
-        if (height === void 0) { height = width; }
-        this._width = width;
-        this._height = height;
-        this.triggerObservable();
-        return this;
-    };
-    Size.prototype.addWH = function (width, height) {
-        if (height === void 0) { height = width; }
-        this.setWH(this.width + width, this.height + height);
-        return this;
-    };
-    Size.prototype.set = function (another) {
-        this._width = another._width;
-        this._height = another._height;
-        this.triggerObservable();
-        return this;
-    };
-    Size.prototype.isZero = function () {
-        return this._width === 0 && this._height === 0;
-    };
-    Size.prototype.toArray = function () {
-        this._arr[0] = this._width;
-        this._arr[1] = this._height;
-        return this._arr;
-    };
-    Size.prototype.toJSON = function () {
-        return {
-            width: this.width,
-            height: this.height
-        };
-    };
-    Size.rectPool = new _misc_objectPool__WEBPACK_IMPORTED_MODULE_1__[/* ObjectPool */ "a"](Size);
-    return Size;
-}(_engine_geometry_abstract_observableEntity__WEBPACK_IMPORTED_MODULE_2__[/* ObservableEntity */ "a"]));
-
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 
 // EXTERNAL MODULE: ./engine/misc/polyfills.ts
-var polyfills = __webpack_require__(51);
+var polyfills = __webpack_require__(50);
 
 // EXTERNAL MODULE: ./engine/renderer/camera.ts
 var camera = __webpack_require__(22);
@@ -1863,6 +1809,7 @@ var game_Game = (function () {
         var _b = _a === void 0 ? {} : _a, _c = _b.width, width = _c === void 0 ? 320 : _c, _d = _b.height, height = _d === void 0 ? 240 : _d, _e = _b.scaleStrategy, scaleStrategy = _e === void 0 ? SCALE_STRATEGY.FIT : _e;
         this.scale = new point2d["a" /* Point2d */](1, 1);
         this.pos = new point2d["a" /* Point2d */](0, 0);
+        this.screenSize = new point2d["a" /* Point2d */](0, 0);
         this.camera = new camera["b" /* Camera */](this);
         this.gravityConstant = 0;
         this.fps = 0;
@@ -1883,9 +1830,6 @@ var game_Game = (function () {
     }
     Game.getInstance = function () {
         return Game.instance;
-    };
-    Game.isOfType = function (instance, C) {
-        return instance instanceof C;
     };
     Object.defineProperty(Game.prototype, "scaleStrategy", {
         get: function () {
@@ -1915,17 +1859,6 @@ var game_Game = (function () {
             throw new debugError["a" /* DebugError */]('audio player is not set');
         }
         return this.audioPlayer;
-    };
-    Game.prototype.getControl = function (T) {
-        for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
-            var c = _a[_i];
-            if (Game.isOfType(c, T))
-                return c;
-        }
-        if (true)
-            throw new debugError["a" /* DebugError */]('no such control');
-        else
-            {}
     };
     Game.prototype.hasControl = function (type) {
         for (var _i = 0, _a = this._controls; _i < _a.length; _i++) {
@@ -2044,7 +1977,105 @@ if (true) {
         if (_cnt_1 > 16)
             throw new debugError["a" /* DebugError */]('too many logs');
     };
+    if (!window.__POLYFILLS_INCLUDED__)
+        throw new debugError["a" /* DebugError */]("polyfills module is not included!");
 }
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Size; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _misc_objectPool__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var _engine_geometry_abstract_observableEntity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
+
+
+
+var Size = (function (_super) {
+    tslib__WEBPACK_IMPORTED_MODULE_0__[/* __extends */ "c"](Size, _super);
+    function Size(width, height) {
+        if (width === void 0) { width = 0; }
+        if (height === void 0) { height = 0; }
+        var _this = _super.call(this) || this;
+        _this._arr = [_this._width, _this._height];
+        _this._width = width;
+        _this._height = height;
+        return _this;
+    }
+    Object.defineProperty(Size.prototype, "width", {
+        get: function () {
+            return this._width;
+        },
+        set: function (val) {
+            this._width = val;
+            this.triggerObservable();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Size.prototype, "height", {
+        get: function () {
+            return this._height;
+        },
+        set: function (val) {
+            this._height = val;
+            this.triggerObservable();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Size.fromPool = function () {
+        return Size.rectPool.getFreeObject();
+    };
+    Size.prototype.setW = function (width) {
+        this._width = width;
+        this.triggerObservable();
+        return this;
+    };
+    Size.prototype.setH = function (height) {
+        this._height = height;
+        this.triggerObservable();
+        return this;
+    };
+    Size.prototype.setWH = function (width, height) {
+        if (height === void 0) { height = width; }
+        this._width = width;
+        this._height = height;
+        this.triggerObservable();
+        return this;
+    };
+    Size.prototype.addWH = function (width, height) {
+        if (height === void 0) { height = width; }
+        this.setWH(this.width + width, this.height + height);
+        return this;
+    };
+    Size.prototype.set = function (another) {
+        this._width = another._width;
+        this._height = another._height;
+        this.triggerObservable();
+        return this;
+    };
+    Size.prototype.isZero = function () {
+        return this._width === 0 && this._height === 0;
+    };
+    Size.prototype.toArray = function () {
+        this._arr[0] = this._width;
+        this._arr[1] = this._height;
+        return this._arr;
+    };
+    Size.prototype.toJSON = function () {
+        return {
+            width: this.width,
+            height: this.height
+        };
+    };
+    Size.rectPool = new _misc_objectPool__WEBPACK_IMPORTED_MODULE_1__[/* ObjectPool */ "a"](Size);
+    return Size;
+}(_engine_geometry_abstract_observableEntity__WEBPACK_IMPORTED_MODULE_2__[/* ObservableEntity */ "a"]));
+
 
 
 /***/ }),
@@ -2212,12 +2243,7 @@ var MathEx;
             min = max;
             max = tmp;
         }
-        var res = (Math.random() * (max + 1 - min)) + min;
-        if (res > max)
-            res = max;
-        else if (res < min)
-            res = min;
-        return res;
+        return Math.random() * (max - min) + min;
     };
     MathEx.randomInt = function (min, max) {
         return ~~MathEx.random(min, max);
@@ -2572,7 +2598,7 @@ var Image = (function (_super) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AbstractDrawer; });
 /* harmony import */ var _engine_misc_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
 /* harmony import */ var _engine_debug_debugError__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
-/* harmony import */ var _engine_misc_fastMap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(37);
+/* harmony import */ var _engine_misc_fastMap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(36);
 
 
 
@@ -2847,7 +2873,7 @@ var ShaderProgram = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Shape; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _abstract_renderableModel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
+/* harmony import */ var _renderableModel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
 /* harmony import */ var _engine_renderer_color__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
 
 
@@ -2882,7 +2908,7 @@ var Shape = (function (_super) {
         _super.prototype.setClonedProperties.call(this, cloned);
     };
     return Shape;
-}(_abstract_renderableModel__WEBPACK_IMPORTED_MODULE_1__[/* RenderableModel */ "b"]));
+}(_renderableModel__WEBPACK_IMPORTED_MODULE_1__[/* RenderableModel */ "b"]));
 
 
 
@@ -2894,7 +2920,7 @@ var Shape = (function (_super) {
 /* unused harmony export INTERPOLATION_MODE */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Texture; });
 /* harmony import */ var _engine_debug_debugError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var _engine_geometry_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
+/* harmony import */ var _engine_geometry_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
 
 
 var isPowerOf2 = function (value) {
@@ -3043,7 +3069,7 @@ var Texture = (function () {
     };
     Texture.prototype.setFilters = function () {
         var gl = this.gl;
-        var isPowerOfTwo = (isPowerOf2(this.size.width) && isPowerOf2(this.size.height));
+        var isPowerOfTwo = false;
         if (isPowerOfTwo) {
             gl.generateMipmap(gl.TEXTURE_2D);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
@@ -3069,7 +3095,7 @@ var Texture = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CAMERA_MATRIX_MODE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Camera; });
 /* harmony import */ var _debug_debugError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var _animation_tween__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
+/* harmony import */ var _animation_tween__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(24);
 /* harmony import */ var _misc_mathEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(13);
 /* harmony import */ var _geometry_rect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 /* harmony import */ var _geometry_point2d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
@@ -3288,47 +3314,6 @@ var Rectangle = (function (_super) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventEmitterDelegate; });
-/* harmony import */ var _engine_control_mouse_mouseEvents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-/* harmony import */ var _engine_debug_debugError__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
-/* harmony import */ var _engine_misc_eventEmitter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
-/* harmony import */ var _engine_core_game__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
-
-
-
-
-var EventEmitterDelegate = (function () {
-    function EventEmitterDelegate() {
-    }
-    EventEmitterDelegate.prototype.on = function (eventName, callBack) {
-        if ( true && !_engine_core_game__WEBPACK_IMPORTED_MODULE_3__[/* Game */ "a"].getInstance().hasControl('MouseControl')) {
-            if (eventName in _engine_control_mouse_mouseEvents__WEBPACK_IMPORTED_MODULE_0__[/* MOUSE_EVENTS */ "a"]) {
-                throw new _engine_debug_debugError__WEBPACK_IMPORTED_MODULE_1__[/* DebugError */ "a"]('can not listen mouse events: mouse control is not added');
-            }
-        }
-        if (this._emitter === undefined)
-            this._emitter = new _engine_misc_eventEmitter__WEBPACK_IMPORTED_MODULE_2__[/* EventEmitter */ "a"]();
-        this._emitter.on(eventName, callBack);
-        return callBack;
-    };
-    EventEmitterDelegate.prototype.off = function (eventName, callBack) {
-        if (this._emitter !== undefined)
-            this._emitter.off(eventName, callBack);
-    };
-    EventEmitterDelegate.prototype.trigger = function (eventName, data) {
-        if (this._emitter !== undefined)
-            this._emitter.trigger(eventName, data);
-    };
-    return EventEmitterDelegate;
-}());
-
-
-
-/***/ }),
-/* 25 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 
 // CONCATENATED MODULE: ./engine/misc/easing/linear.ts
 var Easing;
@@ -3337,7 +3322,7 @@ var Easing;
 })(Easing || (Easing = {}));
 
 // EXTERNAL MODULE: ./engine/core/game.ts + 1 modules
-var game = __webpack_require__(10);
+var game = __webpack_require__(9);
 
 // CONCATENATED MODULE: ./engine/animation/tween.ts
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return tween_Tween; });
@@ -3471,6 +3456,119 @@ var tween_Tween = (function () {
         this._progressFn = _progressFn;
     };
     return Tween;
+}());
+
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXTERNAL MODULE: ./engine/control/mouse/mouseEvents.ts
+var mouseEvents = __webpack_require__(5);
+
+// EXTERNAL MODULE: ./engine/debug/debugError.ts
+var debugError = __webpack_require__(0);
+
+// CONCATENATED MODULE: ./engine/misc/eventEmitter.ts
+
+var eventEmitter_EventEmitter = (function () {
+    function EventEmitter() {
+        this.events = {};
+    }
+    EventEmitter.prototype.on = function (eventNameOrList, callBack) {
+        var _this = this;
+        if (typeof eventNameOrList === 'string') {
+            this._on(eventNameOrList, callBack);
+        }
+        else if (eventNameOrList.splice) {
+            eventNameOrList.forEach(function (eventName) {
+                _this._on(eventName, callBack);
+            });
+        }
+    };
+    EventEmitter.prototype.off = function (eventName, callback) {
+        var es = this.events[eventName];
+        if (!es)
+            return;
+        var index = es.indexOf(callback);
+        if ( true && index === -1) {
+            console.error(callback);
+            throw new debugError["a" /* DebugError */]("can not remove event listener " + eventName);
+        }
+        es.splice(index, 1);
+    };
+    EventEmitter.prototype.trigger = function (eventName, data) {
+        var es = this.events[eventName];
+        if (!es)
+            return;
+        var l = es.length;
+        while (l--) {
+            es[l](data);
+        }
+    };
+    EventEmitter.prototype._on = function (name, callBack) {
+        this.events[name] = this.events[name] || [];
+        this.events[name].push(callBack);
+    };
+    return EventEmitter;
+}());
+
+
+// EXTERNAL MODULE: ./engine/core/game.ts + 1 modules
+var game = __webpack_require__(9);
+
+// EXTERNAL MODULE: ./engine/control/gamepad/gamePadEvents.ts
+var gamePadEvents = __webpack_require__(37);
+
+// EXTERNAL MODULE: ./engine/control/keyboard/keyboardEvents.ts
+var keyboardEvents = __webpack_require__(34);
+
+// CONCATENATED MODULE: ./engine/delegates/eventEmitterDelegate.ts
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return eventEmitterDelegate_EventEmitterDelegate; });
+
+
+
+
+
+
+var getControlErrorMessage = function (controlName, controlClassName) {
+    if (false)
+        {}
+    return "can not listen " + controlName + " events: " + controlName + " control is not added;\ninvoke \"game.addControl(" + controlClassName + ");\"";
+};
+var eventEmitterDelegate_EventEmitterDelegate = (function () {
+    function EventEmitterDelegate() {
+    }
+    EventEmitterDelegate.prototype.on = function (eventName, callBack) {
+        if ( true && eventName in mouseEvents["a" /* MOUSE_EVENTS */]) {
+            if (!game["a" /* Game */].getInstance().hasControl('MouseControl'))
+                throw new debugError["a" /* DebugError */](getControlErrorMessage('mouse', 'MouseControl'));
+        }
+        if ( true && eventName in gamePadEvents["a" /* GAME_PAD_EVENTS */]) {
+            if (!game["a" /* Game */].getInstance().hasControl('GamePadControl'))
+                throw new debugError["a" /* DebugError */](getControlErrorMessage('gamepad', 'GamePadControl'));
+        }
+        if ( true && eventName in keyboardEvents["a" /* KEYBOARD_EVENTS */]) {
+            if (!game["a" /* Game */].getInstance().hasControl('KeyboardControl'))
+                throw new debugError["a" /* DebugError */](getControlErrorMessage('keyboard', 'KeyboardControl'));
+        }
+        if (this._emitter === undefined)
+            this._emitter = new eventEmitter_EventEmitter();
+        this._emitter.on(eventName, callBack);
+        return callBack;
+    };
+    EventEmitterDelegate.prototype.off = function (eventName, callBack) {
+        if (this._emitter !== undefined)
+            this._emitter.off(eventName, callBack);
+    };
+    EventEmitterDelegate.prototype.trigger = function (eventName, data) {
+        if (this._emitter !== undefined)
+            this._emitter.trigger(eventName, data);
+    };
+    return EventEmitterDelegate;
 }());
 
 
@@ -3662,7 +3760,7 @@ var Container = (function (_super) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TweenableDelegate; });
-/* harmony import */ var _engine_animation_tween__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
+/* harmony import */ var _engine_animation_tween__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(24);
 
 var TweenableDelegate = (function () {
     function TweenableDelegate() {
@@ -3811,7 +3909,7 @@ var ShaderGenerator = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Plane; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _abstractPrimitive__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(39);
+/* harmony import */ var _abstractPrimitive__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
 
 
 var Plane = (function (_super) {
@@ -3844,8 +3942,331 @@ var Plane = (function (_super) {
 
 "use strict";
 
+// EXTERNAL MODULE: ./engine/resources/resourceLink.ts
+var resourceLink = __webpack_require__(17);
+
+// EXTERNAL MODULE: ./engine/debug/debugError.ts
+var debugError = __webpack_require__(0);
+
+// EXTERNAL MODULE: ./engine/resources/incrementer.ts
+var incrementer = __webpack_require__(26);
+
+// CONCATENATED MODULE: ./engine/resources/queue.ts
+
+
+var queue_TaskRef = (function () {
+    function TaskRef() {
+        this.id = incrementer["a" /* Incrementer */].getValue();
+    }
+    return TaskRef;
+}());
+
+var queue_Queue = (function () {
+    function Queue() {
+        this.tasksResolved = 0;
+        this.tasks = [];
+        this.tasksProgressById = {};
+        this.completed = false;
+        this.nextTaskIndex = 0;
+    }
+    Queue.prototype.progressTask = function (taskRef, progress) {
+        if (progress === 1)
+            return;
+        var taskId = taskRef.id;
+        this.tasksProgressById[taskId] = progress;
+        if (this.onProgress)
+            this.onProgress(this.calcProgress());
+    };
+    Queue.prototype.resolveTask = function (taskRef) {
+        var taskId = taskRef.id;
+        if (true) {
+            if (this.tasksProgressById[taskId] === undefined)
+                throw new debugError["a" /* DebugError */]("can not resolve task: no task with id " + taskId);
+            if (this.tasksProgressById[taskId] === 1)
+                throw new debugError["a" /* DebugError */]("task with id " + taskId + " resolved already");
+        }
+        this.tasksResolved++;
+        this.tasksProgressById[taskId] = 1;
+        if (this.tasks.length === this.tasksResolved) {
+            if (this.onProgress)
+                this.onProgress(1);
+            this.completed = true;
+            if (this.onResolved)
+                this.onResolved();
+        }
+        else {
+            if (this.onProgress)
+                this.onProgress(this.calcProgress());
+            this.tasks[this.nextTaskIndex++]();
+        }
+    };
+    Queue.prototype.addTask = function (taskFn) {
+        var taskRef = new queue_TaskRef();
+        this.tasks.push(taskFn);
+        this.tasksProgressById[taskRef.id] = 0;
+        return taskRef;
+    };
+    Queue.prototype.isCompleted = function () {
+        return this.completed;
+    };
+    Queue.prototype.calcProgress = function () {
+        var _this = this;
+        var sum = 0;
+        Object.keys(this.tasksProgressById).forEach(function (taskId) {
+            sum += _this.tasksProgressById[taskId] || 0;
+        });
+        return sum / this.tasks.length;
+    };
+    Queue.prototype.start = function () {
+        if (this.size() === 0) {
+            this.completed = true;
+            if (this.onResolved)
+                this.onResolved();
+        }
+        else {
+            this.tasks[this.nextTaskIndex++]();
+        }
+    };
+    Queue.prototype.size = function () {
+        return this.tasks.length;
+    };
+    return Queue;
+}());
+
+
+// CONCATENATED MODULE: ./engine/resources/urlLoader.ts
+
+var addUrlParameter = function (url, param, value) {
+    if (url.indexOf('?') > -1)
+        url += '&';
+    else
+        url += '?';
+    return "" + url + param + "=" + value;
+};
+var loadBase64 = function (urlLoader, urlRequest) {
+    urlLoader.onLoad(urlRequest.url);
+};
+var loadViaXmlHttp = function (urlLoader, urlRequest) {
+    if (!urlRequest.method)
+        urlRequest.method = 'GET';
+    var xhr = new XMLHttpRequest();
+    xhr.open(urlRequest.method, addUrlParameter(urlRequest.url, 'modified', 1566839952783), true);
+    xhr.responseType = urlRequest.responseType;
+    if (xhr.responseType === 'blob') {
+        xhr.setRequestHeader('Accept-Ranges', 'bytes');
+        xhr.setRequestHeader('Content-Range', 'bytes');
+    }
+    if (urlRequest.headers) {
+        for (var _i = 0, _a = urlRequest.headers; _i < _a.length; _i++) {
+            var header = _a[_i];
+            xhr.setRequestHeader(header.name, header.value);
+        }
+    }
+    xhr.onload = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                if ( true && !urlLoader.onLoad)
+                    throw new debugError["a" /* DebugError */]("urlLoader.onLoad not provided for resource with url " + urlLoader.getUrl());
+                urlLoader.onLoad(xhr.response);
+            }
+            else if (true) {
+                throw new debugError["a" /* DebugError */]("can not load resource with url '" + urlRequest.url + "', status " + xhr.status);
+            }
+        }
+    };
+    if (urlLoader.onProgress) {
+        xhr.onprogress = function (e) {
+            urlLoader.onProgress(e.loaded / e.total);
+        };
+    }
+    xhr.onerror = function (e) {
+        console.error(e);
+        if (urlLoader.onError)
+            urlLoader.onError(e);
+        if (true)
+            throw new debugError["a" /* DebugError */]("can not load resource with url " + urlRequest.url);
+    };
+    xhr.ontimeout = function (e) {
+        console.error(e);
+        if (true)
+            throw new debugError["a" /* DebugError */]("can not load resource with url " + urlRequest.url + ", timeout!");
+    };
+    xhr.send();
+};
+var loadViaJsonp = function (urlLoader, urlRequest) {
+    var script = document.createElement('script');
+    script.src = urlLoader.getUrl();
+    if (urlLoader.onProgress) {
+        script.onprogress = function (e) {
+            urlLoader.onProgress(e.loaded / e.total);
+        };
+    }
+    script.onerror = function (e) {
+        console.error(e);
+        if (urlLoader.onError)
+            urlLoader.onError(e);
+        if (true)
+            throw new debugError["a" /* DebugError */]("can not load resource with url " + urlRequest.url);
+    };
+    var jsonpHandler = window.jsonpHandler || (window.jsonpHandler = {});
+    document.body.appendChild(script);
+    jsonpHandler[urlRequest.url] = function (data) {
+        if ( true && !urlLoader.onLoad)
+            throw new debugError["a" /* DebugError */]("urlLoader.onLoad not provided for resource with url " + urlLoader.getUrl());
+        urlLoader.onLoad(data);
+    };
+    script.onload = function () {
+        setTimeout(function () {
+            script.remove();
+            delete jsonpHandler[urlRequest.url];
+        }, 2000);
+    };
+};
+var UrlLoader = (function () {
+    function UrlLoader(urlRequest) {
+        this.urlRequest = urlRequest;
+    }
+    UrlLoader.prototype.getUrl = function () {
+        return this.urlRequest.url;
+    };
+    UrlLoader.prototype.load = function () {
+        if (this.getUrl().startsWith('data:'))
+            loadBase64(this, this.urlRequest);
+        else if (this.urlRequest.jsonp)
+            loadViaJsonp(this, this.urlRequest);
+        else
+            loadViaXmlHttp(this, this.urlRequest);
+    };
+    return UrlLoader;
+}());
+
+
+// CONCATENATED MODULE: ./engine/resources/resourceLoader.ts
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return resourceLoader_ResourceLoader; });
+
+
+
+var resourceLoader_ResourceLoader = (function () {
+    function ResourceLoader(game) {
+        this.game = game;
+        this.q = new queue_Queue();
+        this.game = game;
+    }
+    ResourceLoader.prototype.loadImage = function (req) {
+        var _this = this;
+        var loader = this.createUrlLoader(req, 'arraybuffer');
+        var link = new resourceLink["a" /* ResourceLink */](loader.getUrl());
+        if (this.game.getRenderer().getCachedTarget(link)) {
+            link.setTarget(this.game.getRenderer().getCachedTarget(link));
+            return link;
+        }
+        loader.onProgress = function (n) { return _this.q.progressTask(taskRef, n); };
+        loader.onLoad = function (buffer) {
+            _this.game.getRenderer().createTexture(buffer, link, function () { return _this.q.resolveTask(taskRef); });
+        };
+        var taskRef = this.q.addTask(function () {
+            loader.load();
+        });
+        return link;
+    };
+    ResourceLoader.prototype.loadText = function (req) {
+        var loader = this.createUrlLoader(req);
+        var link = new resourceLink["a" /* ResourceLink */](loader.getUrl());
+        this._loadText(loader, function (data) { return link.setTarget(data); });
+        return link;
+    };
+    ResourceLoader.prototype.loadJSON = function (req) {
+        var loader = this.createUrlLoader(req);
+        var link = new resourceLink["a" /* ResourceLink */](loader.getUrl());
+        this._loadText(loader, function (data) { return link.setTarget(JSON.parse(data)); });
+        return link;
+    };
+    ResourceLoader.prototype.loadSound = function (req) {
+        var _this = this;
+        var loader = this.createUrlLoader(req, 'arraybuffer');
+        var link = new resourceLink["a" /* ResourceLink */](loader.getUrl());
+        if (this.game.getAudioPlayer().isCached(link)) {
+            return link;
+        }
+        var taskRef = this.q.addTask(function () {
+            loader.load();
+        });
+        loader.onProgress = function (n) { return _this.q.progressTask(taskRef, n); };
+        loader.onLoad = function (data) {
+            _this.game.getAudioPlayer().loadSound(data, link, function () { return _this.q.resolveTask(taskRef); });
+        };
+        return link;
+    };
+    ResourceLoader.prototype.loadBinary = function (req) {
+        var _this = this;
+        var loader = this.createUrlLoader(req, 'arraybuffer');
+        var link = new resourceLink["a" /* ResourceLink */](loader.getUrl());
+        loader.onLoad = function (buff) {
+            link.setTarget(buff);
+            _this.q.resolveTask(taskRef);
+        };
+        loader.onProgress = function (n) { return _this.q.progressTask(taskRef, n); };
+        var taskRef = this.q.addTask(function () {
+            loader.load();
+        });
+        return link;
+    };
+    ResourceLoader.prototype.addNextTask = function (task) {
+        var _this = this;
+        var taskRef = this.q.addTask(function () {
+            task();
+            _this.q.resolveTask(taskRef);
+        });
+    };
+    ResourceLoader.prototype.startLoading = function () {
+        this.q.start();
+    };
+    ResourceLoader.prototype.isCompleted = function () {
+        return this.q.isCompleted();
+    };
+    ResourceLoader.prototype.getProgress = function () {
+        return this.q.calcProgress();
+    };
+    ResourceLoader.prototype.onProgress = function (fn) {
+        this.q.onProgress = fn;
+    };
+    ResourceLoader.prototype.onCompleted = function (fn) {
+        this.q.onResolved = fn;
+    };
+    ResourceLoader.prototype.createUrlLoader = function (req, responseType) {
+        if (responseType === void 0) { responseType = 'text'; }
+        var iReq;
+        if (req.substr !== undefined) {
+            iReq = { url: req, responseType: responseType, method: 'GET' };
+        }
+        else
+            iReq = req;
+        return new UrlLoader(iReq);
+    };
+    ResourceLoader.prototype._loadText = function (loader, callback) {
+        var _this = this;
+        var taskRef = this.q.addTask(function () {
+            loader.load();
+        });
+        loader.onProgress = function (n) { return _this.q.progressTask(taskRef, n); };
+        loader.onLoad = function (data) {
+            callback(data);
+            _this.q.resolveTask(taskRef);
+        };
+    };
+    return ResourceLoader;
+}());
+
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
 // EXTERNAL MODULE: ./engine/core/game.ts + 1 modules
-var game = __webpack_require__(10);
+var game = __webpack_require__(9);
 
 // EXTERNAL MODULE: ./engine/misc/object.ts
 var object = __webpack_require__(11);
@@ -3917,254 +4338,27 @@ var timerDelegate_TimerDelegate = (function () {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-// EXTERNAL MODULE: ./engine/resources/resourceLink.ts
-var resourceLink = __webpack_require__(17);
-
-// EXTERNAL MODULE: ./engine/debug/debugError.ts
-var debugError = __webpack_require__(0);
-
-// EXTERNAL MODULE: ./engine/resources/incrementer.ts
-var incrementer = __webpack_require__(26);
-
-// CONCATENATED MODULE: ./engine/resources/queue.ts
-
-
-var queue_TaskRef = (function () {
-    function TaskRef() {
-        this.id = incrementer["a" /* Incrementer */].getValue();
-    }
-    return TaskRef;
-}());
-
-var queue_Queue = (function () {
-    function Queue() {
-        this.tasksResolved = 0;
-        this.tasks = [];
-        this.tasksProgressById = {};
-        this.completed = false;
-        this.nextTaskIndex = 0;
-    }
-    Queue.prototype.resolveTask = function (taskRef) {
-        var taskId = taskRef.id;
-        if (true) {
-            if (this.tasksProgressById[taskId] === undefined)
-                throw new debugError["a" /* DebugError */]("can not resolve task: no task with id " + taskId);
-            if (this.tasksProgressById[taskId] === 1)
-                throw new debugError["a" /* DebugError */]("task with id " + taskId + " resolved already");
-        }
-        this.tasksResolved++;
-        this.tasksProgressById[taskId] = 1;
-        if (this.tasks.length === this.tasksResolved) {
-            if (this.onProgress)
-                this.onProgress(1);
-            this.completed = true;
-            if (this.onResolved)
-                this.onResolved();
-        }
-        else {
-            if (this.onProgress)
-                this.onProgress(this.calcProgress());
-            this.tasks[this.nextTaskIndex++]();
-        }
-    };
-    Queue.prototype.addTask = function (taskFn) {
-        var taskRef = new queue_TaskRef();
-        this.tasks.push(taskFn);
-        this.tasksProgressById[taskRef.id] = 0;
-        return taskRef;
-    };
-    Queue.prototype.isCompleted = function () {
-        return this.completed;
-    };
-    Queue.prototype.calcProgress = function () {
-        var _this = this;
-        var sum = 0;
-        Object.keys(this.tasksProgressById).forEach(function (taskId) {
-            sum += _this.tasksProgressById[taskId] || 0;
-        });
-        return sum / this.tasks.length;
-    };
-    Queue.prototype.start = function () {
-        if (this.size() === 0) {
-            this.completed = true;
-            if (this.onResolved)
-                this.onResolved();
-        }
-        else {
-            this.tasks[this.nextTaskIndex++]();
-        }
-    };
-    Queue.prototype.size = function () {
-        return this.tasks.length;
-    };
-    return Queue;
-}());
-
-
-// EXTERNAL MODULE: ./engine/resources/urlLoader.ts
-var urlLoader = __webpack_require__(35);
-
-// CONCATENATED MODULE: ./engine/resources/resourceLoader.ts
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return resourceLoader_ResourceLoader; });
-
-
-
-var resourceLoader_ResourceLoader = (function () {
-    function ResourceLoader(game) {
-        this.game = game;
-        this.q = new queue_Queue();
-        this.game = game;
-    }
-    ResourceLoader.prototype.loadImage = function (url) {
-        var _this = this;
-        var link = new resourceLink["a" /* ResourceLink */](url);
-        var taskRef = this.q.addTask(function () {
-            _this.game.getRenderer().loadTextureInfo(url, link, function () { return _this.q.resolveTask(taskRef); });
-        });
-        return link;
-    };
-    ResourceLoader.prototype.loadText = function (url) {
-        var link = new resourceLink["a" /* ResourceLink */](url);
-        this._loadText(url, function (data) { return link.setTarget(data); });
-        return link;
-    };
-    ResourceLoader.prototype.loadJSON = function (url) {
-        var link = new resourceLink["a" /* ResourceLink */](url);
-        this._loadText(url, function (data) { return link.setTarget(JSON.parse(data)); });
-        return link;
-    };
-    ResourceLoader.prototype.loadSound = function (url) {
-        var _this = this;
-        var link = new resourceLink["a" /* ResourceLink */](url);
-        var taskRef = this.q.addTask(function () {
-            _this.game.getAudioPlayer().loadSound(url, link, function () { return _this.q.resolveTask(taskRef); });
-        });
-        return link;
-    };
-    ResourceLoader.prototype.loadBinary = function (url) {
-        var _this = this;
-        var link = new resourceLink["a" /* ResourceLink */](url);
-        var taskRef = this.q.addTask(function () {
-            var loader = new urlLoader["a" /* UrlLoader */]({ url: url, responseType: 'arraybuffer' });
-            loader.onLoad = function (buff) {
-                link.setTarget(buff);
-                _this.q.resolveTask(taskRef);
-            };
-            loader.load();
-        });
-        return link;
-    };
-    ResourceLoader.prototype.addNextTask = function (task) {
-        var _this = this;
-        var taskRef = this.q.addTask(function () {
-            task();
-            _this.q.resolveTask(taskRef);
-        });
-    };
-    ResourceLoader.prototype.startLoading = function () {
-        this.q.start();
-    };
-    ResourceLoader.prototype.isCompleted = function () {
-        return this.q.isCompleted();
-    };
-    ResourceLoader.prototype.getProgress = function () {
-        return this.q.calcProgress();
-    };
-    ResourceLoader.prototype.onProgress = function (fn) {
-        this.q.onProgress = fn;
-    };
-    ResourceLoader.prototype.onCompleted = function (fn) {
-        this.q.onResolved = fn;
-    };
-    ResourceLoader.prototype._loadText = function (url, callback) {
-        var _this = this;
-        var taskRef = this.q.addTask(function () {
-            var loader = new urlLoader["a" /* UrlLoader */]({ url: url, responseType: 'text' });
-            loader.onLoad = function (data) {
-                callback(data);
-                _this.q.resolveTask(taskRef);
-            };
-            loader.load();
-        });
-    };
-    return ResourceLoader;
-}());
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return KEYBOARD_EVENTS; });
+var KEYBOARD_EVENTS;
+(function (KEYBOARD_EVENTS) {
+    KEYBOARD_EVENTS["keyPressed"] = "keyPressed";
+    KEYBOARD_EVENTS["keyReleased"] = "keyReleased";
+    KEYBOARD_EVENTS["keyHold"] = "keyHold";
+})(KEYBOARD_EVENTS || (KEYBOARD_EVENTS = {}));
 
 
 /***/ }),
-/* 34 */,
 /* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UrlLoader; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Layer; });
 /* harmony import */ var _engine_debug_debugError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 
-var UrlLoader = (function () {
-    function UrlLoader(urlRequest) {
-        this.urlRequest = urlRequest;
-    }
-    UrlLoader.prototype.load = function () {
-        var _this = this;
-        var urlRequest;
-        if (this.urlRequest.substr !== undefined) {
-            urlRequest = { url: this.urlRequest, responseType: 'text' };
-        }
-        else
-            urlRequest = this.urlRequest;
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', urlRequest.url, true);
-        xhr.responseType = urlRequest.responseType;
-        if (xhr.responseType === 'blob') {
-            xhr.setRequestHeader('Accept-Ranges', 'bytes');
-            xhr.setRequestHeader('Content-Range', 'bytes');
-        }
-        if (urlRequest.headers) {
-            for (var _i = 0, _a = urlRequest.headers; _i < _a.length; _i++) {
-                var header = _a[_i];
-                xhr.setRequestHeader(header.name, header.value);
-            }
-        }
-        xhr.onload = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200 && _this.onLoad !== undefined)
-                    _this.onLoad(xhr.response);
-                else if (true) {
-                    throw new _engine_debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not load resource with url '" + urlRequest.url + "', status " + xhr.status);
-                }
-            }
-        };
-        xhr.onprogress = function (e) {
-        };
-        if (true) {
-            xhr.onerror = function (e) {
-                console.error(e);
-                throw new _engine_debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not load resource with url " + urlRequest.url);
-            };
-            xhr.ontimeout = function (e) {
-                console.error(e);
-                throw new _engine_debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not load resource with url " + urlRequest.url + ", timeout!");
-            };
-        }
-        xhr.send();
-    };
-    return UrlLoader;
-}());
-
-
-
-/***/ }),
-/* 36 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Layer; });
 var Layer = (function () {
     function Layer(game) {
         this.game = game;
@@ -4182,6 +4376,15 @@ var Layer = (function () {
         go.setLayer(this);
         go.revalidate();
         this.children.push(go);
+    };
+    Layer.prototype.appendChildAt = function (c, index) {
+        if (true) {
+            if (index > this.children.length - 1)
+                throw new _engine_debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not insert element: index is out of range (" + index + "," + (this.children.length - 1) + ")");
+        }
+        c.parent = null;
+        c.revalidate();
+        this.children.splice(index, 0, c);
     };
     Layer.prototype.update = function () {
         var all = this.children;
@@ -4211,7 +4414,7 @@ var Layer = (function () {
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4260,59 +4463,21 @@ var FastMap = (function () {
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventEmitter; });
-/* harmony import */ var _debug_debugError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-
-var EventEmitter = (function () {
-    function EventEmitter() {
-        this.events = {};
-    }
-    EventEmitter.prototype.on = function (eventNameOrList, callBack) {
-        var _this = this;
-        if (typeof eventNameOrList === 'string') {
-            this._on(eventNameOrList, callBack);
-        }
-        else if (eventNameOrList.splice) {
-            eventNameOrList.forEach(function (eventName) {
-                _this._on(eventName, callBack);
-            });
-        }
-    };
-    EventEmitter.prototype.off = function (eventName, callback) {
-        var es = this.events[eventName];
-        if (!es)
-            return;
-        var index = es.indexOf(callback);
-        if ( true && index === -1) {
-            console.error(callback);
-            throw new _debug_debugError__WEBPACK_IMPORTED_MODULE_0__[/* DebugError */ "a"]("can not remove event listener " + eventName);
-        }
-        es.splice(index, 1);
-    };
-    EventEmitter.prototype.trigger = function (eventName, data) {
-        var es = this.events[eventName];
-        if (!es)
-            return;
-        var l = es.length;
-        while (l--) {
-            es[l](data);
-        }
-    };
-    EventEmitter.prototype._on = function (name, callBack) {
-        this.events[name] = this.events[name] || [];
-        this.events[name].push(callBack);
-    };
-    return EventEmitter;
-}());
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GAME_PAD_EVENTS; });
+var GAME_PAD_EVENTS;
+(function (GAME_PAD_EVENTS) {
+    GAME_PAD_EVENTS["buttonPressed"] = "buttonPressed";
+    GAME_PAD_EVENTS["buttonReleased"] = "buttonReleased";
+    GAME_PAD_EVENTS["buttonHold"] = "buttonHold";
+})(GAME_PAD_EVENTS || (GAME_PAD_EVENTS = {}));
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4326,7 +4491,7 @@ var AbstractPrimitive = (function () {
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4464,6 +4629,7 @@ var scrollableContainer_ScrollInfo = (function () {
             _this.onScroll();
         });
         container.on(mouseEvents["a" /* MOUSE_EVENTS */].scroll, function (p) {
+            console.log(p.nativeEvent);
             _this._scrollVelocity = -p.nativeEvent.wheelDelta;
             _this._deceleration = 0;
         });
@@ -4570,7 +4736,7 @@ var scrollableContainer_ScrollableContainer = (function (_super) {
 var geometry_image = __webpack_require__(15);
 
 // EXTERNAL MODULE: ./engine/geometry/size.ts
-var size = __webpack_require__(9);
+var size = __webpack_require__(10);
 
 // EXTERNAL MODULE: ./engine/geometry/point2d.ts
 var point2d = __webpack_require__(4);
@@ -4930,15 +5096,15 @@ var textField_TextField = (function (_super) {
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Font; });
-/* harmony import */ var _engine_core_game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
+/* harmony import */ var _engine_core_game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
 /* harmony import */ var _engine_renderer_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 /* harmony import */ var _engine_debug_debugError__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var _engine_resources_resourceLoader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(33);
+/* harmony import */ var _engine_resources_resourceLoader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(32);
 
 
 
@@ -5100,7 +5266,7 @@ var Font = (function () {
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5158,7 +5324,7 @@ var SimpleRectDrawer = (function (_super) {
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5188,7 +5354,7 @@ var shaderProgramUtils = __webpack_require__(2);
 var shaderGenerator = __webpack_require__(30);
 
 // EXTERNAL MODULE: ./engine/renderer/webGl/programs/impl/base/shape/shape.fragment.glsl
-var shape_fragment = __webpack_require__(46);
+var shape_fragment = __webpack_require__(45);
 
 // EXTERNAL MODULE: ./engine/misc/object.ts
 var object = __webpack_require__(11);
@@ -5470,19 +5636,19 @@ var matrixStack_MatrixStack = (function () {
 var geometry_rect = __webpack_require__(6);
 
 // EXTERNAL MODULE: ./engine/renderer/abstract/abstractCanvasRenderer.ts + 2 modules
-var abstractCanvasRenderer = __webpack_require__(45);
+var abstractCanvasRenderer = __webpack_require__(44);
 
 // EXTERNAL MODULE: ./engine/renderer/color.ts
 var color = __webpack_require__(7);
 
 // EXTERNAL MODULE: ./engine/geometry/size.ts
-var geometry_size = __webpack_require__(9);
+var geometry_size = __webpack_require__(10);
 
 // EXTERNAL MODULE: ./engine/renderer/webGl/programs/impl/base/mesh/mesh.fragment.glsl
-var mesh_fragment = __webpack_require__(48);
+var mesh_fragment = __webpack_require__(47);
 
 // EXTERNAL MODULE: ./engine/renderer/webGl/programs/impl/base/mesh/mesh.vertex.glsl
-var mesh_vertex = __webpack_require__(47);
+var mesh_vertex = __webpack_require__(46);
 
 // CONCATENATED MODULE: ./engine/renderer/webGl/programs/impl/base/mesh/meshDrawer.ts
 
@@ -5596,7 +5762,7 @@ var meshDrawer_MeshDrawer = (function (_super) {
 
 
 // EXTERNAL MODULE: ./engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer.ts
-var simpleRectDrawer = __webpack_require__(42);
+var simpleRectDrawer = __webpack_require__(41);
 
 // CONCATENATED MODULE: ./engine/renderer/webGl/base/doubleFrameBuffer.ts
 
@@ -5710,9 +5876,9 @@ var debugUtil = __webpack_require__(29);
 
 
 
+
 var IDENTITY = mat4["a" /* mat4 */].IDENTITY;
 var webGlRenderer_Mat16Holder = mat4["a" /* mat4 */].Mat16Holder;
-
 var glEnumToString = debugUtil["a" /* debugUtil */].glEnumToString;
 var getCtx = function (el) {
     var contextAttrs = { alpha: false, premultipliedAlpha: false };
@@ -5962,7 +6128,9 @@ var webGlRenderer_WebGlRenderer = (function (_super) {
     WebGlRenderer.prototype.afterFrameDraw = function (filters) {
         var texToDraw = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(), filters);
         this.finalFrameBuffer.unbind();
-        this.gl.viewport(0, 0, this.fullScreenSize.width, this.fullScreenSize.height);
+        this.gl.viewport(0, 0, this.game.screenSize.x, this.game.screenSize.y);
+        this.container.width = this.game.screenSize.x;
+        this.container.height = this.game.screenSize.y;
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix, FLIP_TEXTURE_MATRIX.mat16);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix, FLIP_POSITION_MATRIX.mat16);
         this.simpleRectDrawer.attachTexture('texture', texToDraw);
@@ -5985,7 +6153,10 @@ var webGlRenderer_WebGlRenderer = (function (_super) {
             throw new debugError["a" /* DebugError */]("no url is associated with resource link");
         this.renderableCache[url] = t;
     };
-    WebGlRenderer.prototype.loadTextureInfo = function (url, link, onLoad) {
+    WebGlRenderer.prototype.getCachedTarget = function (l) {
+        return this.renderableCache[l.getUrl()];
+    };
+    WebGlRenderer.prototype.createTexture = function (imgData, link, onLoad) {
         var _this = this;
         var possibleTargetInCache = this.renderableCache[link.getUrl()];
         if (possibleTargetInCache !== undefined) {
@@ -5993,22 +6164,14 @@ var webGlRenderer_WebGlRenderer = (function (_super) {
             onLoad();
             return;
         }
-        var img = new window.Image();
-        img.src = url;
-        img.onload = function () {
+        this.createImageFromData(imgData, function (bitmap) {
             var texture = new base_texture["a" /* Texture */](_this.gl);
-            texture.setImage(img);
+            texture.setImage(bitmap);
             _this.gl.bindTexture(_this.gl.TEXTURE_2D, _this.finalFrameBuffer.getTexture().getGlTexture());
             _this.putToCache(link, texture);
             link.setTarget(texture);
             onLoad();
-        };
-        if (true) {
-            img.onerror = function (e) {
-                console.log(e);
-                throw new debugError["a" /* DebugError */]("Resource loading error: can not load resource with url \"" + url + "\"");
-            };
-        }
+        });
     };
     WebGlRenderer.prototype.getNativeContext = function () {
         return this.gl;
@@ -6118,19 +6281,19 @@ var webGlRenderer_WebGlRenderer = (function (_super) {
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Scene; });
-/* harmony import */ var _renderable_impl_general_layer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(36);
+/* harmony import */ var _renderable_impl_general_layer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
 /* harmony import */ var _engine_renderer_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 /* harmony import */ var _engine_renderer_camera__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _engine_resources_resourceLoader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(33);
+/* harmony import */ var _engine_resources_resourceLoader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(32);
 /* harmony import */ var _engine_misc_object__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(11);
 /* harmony import */ var _engine_delegates_tweenableDelegate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(28);
-/* harmony import */ var _engine_delegates_timerDelegate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(32);
-/* harmony import */ var _engine_delegates_eventEmitterDelegate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(24);
+/* harmony import */ var _engine_delegates_timerDelegate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(33);
+/* harmony import */ var _engine_delegates_eventEmitterDelegate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(25);
 
 
 
@@ -6297,7 +6460,7 @@ var Scene = (function () {
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6306,7 +6469,7 @@ var Scene = (function () {
 var tslib_es6 = __webpack_require__(1);
 
 // EXTERNAL MODULE: ./engine/renderable/impl/ui/components/textField.ts + 2 modules
-var components_textField = __webpack_require__(40);
+var components_textField = __webpack_require__(39);
 
 // CONCATENATED MODULE: ./engine/misc/device.ts
 var Device = (function () {
@@ -6320,6 +6483,7 @@ var Device = (function () {
             isTouch: Device.isTouch,
             isFrame: Device.isFrame,
             isIPhone: Device.isIPhone,
+            buildAt: 1566839952789,
         });
     };
     Device.isCocoonJS = !!(navigator.isCocoonJS);
@@ -6332,13 +6496,13 @@ var Device = (function () {
 
 
 // EXTERNAL MODULE: ./engine/core/game.ts + 1 modules
-var core_game = __webpack_require__(10);
+var core_game = __webpack_require__(9);
 
 // EXTERNAL MODULE: ./engine/geometry/size.ts
-var size = __webpack_require__(9);
+var size = __webpack_require__(10);
 
 // EXTERNAL MODULE: ./engine/renderable/impl/general/font.ts
-var font = __webpack_require__(41);
+var font = __webpack_require__(40);
 
 // CONCATENATED MODULE: ./engine/renderer/abstract/abstractRenderer.ts
 
@@ -6464,7 +6628,10 @@ var abstractRenderer_AbstractRenderer = (function () {
             return;
         this.debugTextField.setText('');
     };
-    AbstractRenderer.prototype.loadTextureInfo = function (url, link, onLoaded) { };
+    AbstractRenderer.prototype.createTexture = function (imgData, link, onLoaded) { };
+    AbstractRenderer.prototype.getCachedTarget = function (l) {
+        return undefined;
+    };
     AbstractRenderer.prototype.registerResize = function () {
         var _this = this;
         this.onResize();
@@ -6483,6 +6650,7 @@ var abstractRenderer_AbstractRenderer = (function () {
         else if (this.game.scaleStrategy === core_game["b" /* SCALE_STRATEGY */].STRETCH) {
             container.style.width = innerWidth + "px";
             container.style.height = innerHeight + "px";
+            this.game.screenSize.setXY(innerWidth, innerHeight);
             this.game.scale.setXY(innerWidth / this.game.width, innerHeight / this.game.height);
             this.game.pos.setXY(0);
             return;
@@ -6504,6 +6672,7 @@ var abstractRenderer_AbstractRenderer = (function () {
         this.container.style.width = width + 'px';
         this.container.style.height = height + 'px';
         this.container.style.marginTop = this.game.pos.y + "px";
+        this.game.screenSize.setXY(width, height);
     };
     AbstractRenderer.prototype.getScreenResolution = function () {
         return [globalThis.innerWidth, globalThis.innerHeight];
@@ -6512,8 +6681,12 @@ var abstractRenderer_AbstractRenderer = (function () {
 }());
 
 
+// EXTERNAL MODULE: ./engine/debug/debugError.ts
+var debugError = __webpack_require__(0);
+
 // CONCATENATED MODULE: ./engine/renderer/abstract/abstractCanvasRenderer.ts
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return abstractCanvasRenderer_AbstractCanvasRenderer; });
+
 
 
 var abstractCanvasRenderer_AbstractCanvasRenderer = (function (_super) {
@@ -6530,13 +6703,68 @@ var abstractCanvasRenderer_AbstractCanvasRenderer = (function (_super) {
         _this.container = container;
         return _this;
     }
+    AbstractCanvasRenderer.prototype.pixelate = function () {
+        this.container.style.cssText += 'image-rendering: optimizeSpeed;' +
+            'image-rendering: -moz-crisp-edges;' +
+            'image-rendering: -o-crisp-edges;' +
+            'image-rendering: -webkit-crisp-edges;' +
+            'image-rendering: crisp-edges;' +
+            'image-rendering: -webkit-optimize-contrast;' +
+            'image-rendering: pixelated; ' +
+            '-ms-interpolation-mode: nearest-neighbor;';
+        var context = this.container.getContext('webgl2');
+        context.webkitImageSmoothingEnabled = false;
+        context.mozImageSmoothingEnabled = false;
+        context.msImageSmoothingEnabled = false;
+        context.imageSmoothingEnabled = false;
+    };
+    AbstractCanvasRenderer.prototype.createImageFromData = function (buffer, onCreated) {
+        var imgUrl;
+        var imgBlob;
+        var isBase64 = !!(buffer.substr);
+        if (isBase64) {
+            imgUrl = buffer;
+        }
+        else {
+            var arrayBufferView = new Uint8Array(buffer);
+            imgBlob = new Blob([arrayBufferView], { type: "image/png" });
+            var urlCreator = window.URL;
+            imgUrl = urlCreator.createObjectURL(imgBlob);
+        }
+        if (globalThis.createImageBitmap && !isBase64) {
+            globalThis.createImageBitmap(imgBlob).
+                then(function (bitmap) {
+                onCreated(bitmap);
+            }).catch(function (e) {
+                console.error(e);
+                if (true) {
+                    setTimeout(function () {
+                        throw new debugError["a" /* DebugError */](e);
+                    }, 1);
+                }
+            });
+        }
+        else {
+            var img_1 = new window.Image();
+            img_1.src = imgUrl;
+            img_1.onload = function () {
+                onCreated(img_1);
+            };
+            if (true) {
+                img_1.onerror = function () {
+                    console.error(buffer);
+                    throw new debugError["a" /* DebugError */]("can not create image. Bad url data");
+                };
+            }
+        }
+    };
     return AbstractCanvasRenderer;
 }(abstractRenderer_AbstractRenderer));
 
 
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports) {
 
 module.exports = [
@@ -6649,7 +6877,7 @@ module.exports = [
 ].join('\n');
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports) {
 
 module.exports = [
@@ -6670,7 +6898,7 @@ module.exports = [
 ].join('\n');
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports) {
 
 module.exports = [
@@ -6697,7 +6925,7 @@ module.exports = [
 ].join('\n');
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6788,6 +7016,7 @@ var mouseControl_MouseControl = (function () {
         var container = this.game.getRenderer().container;
         this.container = container;
         container.ontouchstart = function (e) {
+            e.preventDefault();
             var l = e.touches.length;
             while (l--) {
                 _this.resolveClick(e.touches[l]);
@@ -6798,6 +7027,7 @@ var mouseControl_MouseControl = (function () {
                 _this.resolveClick(e);
         };
         container.ontouchend = container.ontouchcancel = function (e) {
+            e.preventDefault();
             var l = e.changedTouches.length;
             while (l--) {
                 _this.resolveMouseUp(e.changedTouches[l]);
@@ -6807,6 +7037,7 @@ var mouseControl_MouseControl = (function () {
             _this.resolveMouseUp(e);
         };
         container.ontouchmove = function (e) {
+            e.preventDefault();
             var l = e.touches.length;
             while (l--) {
                 _this.resolveMouseMove(e.touches[l], true);
@@ -6856,7 +7087,7 @@ var mouseControl_MouseControl = (function () {
         mousePoint.release();
         return mousePoint;
     };
-    MouseControl.prototype.triggerEvent = function (e, eventName, isMouseDown) {
+    MouseControl.prototype.triggerEvent = function (e, mouseEvent, isMouseDown) {
         if (isMouseDown === undefined)
             isMouseDown = false;
         var g = this.game;
@@ -6873,7 +7104,7 @@ var mouseControl_MouseControl = (function () {
             var j = layer.children.length;
             while (j--) {
                 var go = layer.children[j];
-                isCaptured = MouseControl.triggerGameObjectEvent(e, eventName, point, go);
+                isCaptured = MouseControl.triggerGameObjectEvent(e, mouseEvent, point, go);
                 if (isCaptured) {
                     point.target = go;
                     break;
@@ -6884,12 +7115,12 @@ var mouseControl_MouseControl = (function () {
         }
         if (point.target === undefined)
             point.target = scene;
-        scene.trigger(eventName, {
+        scene.trigger(mouseEvent, {
             screenX: point.x,
             screenY: point.y,
             id: point.id,
             target: scene,
-            eventName: eventName,
+            eventName: mouseEvent,
             isMouseDown: isMouseDown
         });
         return point;
@@ -6927,9 +7158,9 @@ var mouseControl_MouseControl = (function () {
 
 
 /***/ }),
-/* 50 */,
-/* 51 */
-/***/ (function(module, exports) {
+/* 49 */,
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
 
 if (typeof globalThis === 'undefined')
     window.globalThis = window;
@@ -6943,9 +7174,13 @@ globalThis.requestAnimationFrame =
 if (!globalThis.cancelAnimationFrame) {
     globalThis.cancelAnimationFrame = function (id) { return clearTimeout(id); };
 }
+if (true) {
+    window.__POLYFILLS_INCLUDED__ = true;
+}
 
 
 /***/ }),
+/* 51 */,
 /* 52 */,
 /* 53 */,
 /* 54 */,
@@ -6978,14 +7213,14 @@ if (!globalThis.cancelAnimationFrame) {
 /* 81 */,
 /* 82 */,
 /* 83 */,
-/* 84 */
+/* 84 */,
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(121);
+module.exports = __webpack_require__(127);
 
 
 /***/ }),
-/* 85 */,
 /* 86 */,
 /* 87 */,
 /* 88 */,
@@ -7021,7 +7256,13 @@ module.exports = __webpack_require__(121);
 /* 118 */,
 /* 119 */,
 /* 120 */,
-/* 121 */
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7031,13 +7272,13 @@ __webpack_require__.r(__webpack_exports__);
 var tslib_es6 = __webpack_require__(1);
 
 // EXTERNAL MODULE: ./engine/core/scene.ts
-var scene = __webpack_require__(44);
+var scene = __webpack_require__(43);
 
 // EXTERNAL MODULE: ./engine/renderable/impl/general/font.ts
-var font = __webpack_require__(41);
+var font = __webpack_require__(40);
 
 // EXTERNAL MODULE: ./engine/renderable/impl/ui/components/textField.ts + 2 modules
-var textField = __webpack_require__(40);
+var textField = __webpack_require__(39);
 
 // EXTERNAL MODULE: ./engine/renderer/color.ts
 var color = __webpack_require__(7);
@@ -7102,7 +7343,11 @@ var button_Button = (function (_super) {
 // EXTERNAL MODULE: ./engine/renderable/impl/geometry/rectangle.ts
 var rectangle = __webpack_require__(23);
 
+// EXTERNAL MODULE: ./engine/control/mouse/mouseEvents.ts
+var mouseEvents = __webpack_require__(5);
+
 // CONCATENATED MODULE: ./demo/font/mainScene.ts
+
 
 
 
@@ -7143,7 +7388,7 @@ var mainScene_MainScene = (function (_super) {
         btn.background = bg;
         btn.setPaddings(15);
         var cnt = 0;
-        btn.on('click', function () {
+        btn.on(mouseEvents["a" /* MOUSE_EVENTS */].click, function (e) {
             tf.setText("clicked " + ++cnt + " times");
         });
         this.appendChild(btn);
@@ -7154,13 +7399,13 @@ var mainScene_MainScene = (function (_super) {
 
 
 // EXTERNAL MODULE: ./engine/core/game.ts + 1 modules
-var core_game = __webpack_require__(10);
+var core_game = __webpack_require__(9);
 
 // EXTERNAL MODULE: ./engine/renderer/webGl/webGlRenderer.ts + 6 modules
-var webGlRenderer = __webpack_require__(43);
+var webGlRenderer = __webpack_require__(42);
 
 // EXTERNAL MODULE: ./engine/control/mouse/mouseControl.ts + 1 modules
-var mouseControl = __webpack_require__(49);
+var mouseControl = __webpack_require__(48);
 
 // CONCATENATED MODULE: ./demo/font/index.ts
 
