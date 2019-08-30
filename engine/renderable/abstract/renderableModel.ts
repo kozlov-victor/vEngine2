@@ -425,7 +425,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         this._screenRect.set(this.getSrcRect());
         let parent:RenderableModel|null = this.parent;
         while (parent!==null) {
-            this._screenRect.addXY(parent.getSrcRect().point.x,parent.getSrcRect().point.y);
+            this._screenRect.addXY(parent.getSrcRect().x,parent.getSrcRect().y);
             parent = parent.parent;
         }
     }

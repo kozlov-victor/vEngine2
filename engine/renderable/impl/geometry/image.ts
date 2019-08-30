@@ -42,9 +42,8 @@ export class Image extends Shape implements ICloneable<Image>,IResource<ITexture
             this.size.width = tex.size.width;
             this.size.height = tex.size.height;
         }
-        if (this._srcRect.size.isZero()) {
-            this._srcRect.size.width = tex.size.width;
-            this._srcRect.size.height = tex.size.height;
+        if (this._srcRect.isZeroSize()) {
+            this._srcRect.setWH(tex.size.width,tex.size.height);
         }
     }
 

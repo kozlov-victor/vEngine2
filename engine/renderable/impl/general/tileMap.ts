@@ -61,8 +61,8 @@ export class TileMap extends RenderableModel {
 
         this.game.getCurrScene().width = this._tilesInScreenX * this.tileWidth;
         this.game.getCurrScene().height = this._tilesInScreenY * this.tileHeight;
-        this.spriteSheet.getSrcRect().size.setWH(this.tileWidth,this.tileHeight);
-        this.spriteSheet.size.set(this.spriteSheet.getSrcRect().size);
+        this.spriteSheet.getSrcRect().setWH(this.tileWidth,this.tileHeight);
+        this.spriteSheet.size.setWH(this.spriteSheet.getSrcRect().x,this.spriteSheet.getSrcRect().y);
         //this.spriteSheet.size.addWH(2); // to correct possible artifacts
         const texSize:Size = this.spriteSheet.getResourceLink().getTarget().size;
         this._sprTilesInX = ~~(texSize.width / this.tileWidth);
@@ -134,8 +134,8 @@ export class TileMap extends RenderableModel {
     private prepareDrawableInfo(){
         const camera:Camera = this.game.camera;
         const cameraRect:Rect = camera.getRectScaled();
-        let tilePosX:number = ~~((cameraRect.point.x) / this.tileWidth);
-        let tilePosY:number = ~~((cameraRect.point.y) / this.tileHeight);
+        let tilePosX:number = ~~((cameraRect.x) / this.tileWidth);
+        let tilePosY:number = ~~((cameraRect.y) / this.tileHeight);
         if (tilePosX<0) tilePosX = 0;
         if (tilePosY<0) tilePosY = 0;
         let w:number = tilePosX + this._tilesInScreenX + 1;

@@ -13,17 +13,17 @@ export namespace MathEx {
         //     point = {x:vec2.getX = () + point.x,y:vec2.getY = () + point.y};
         //
         // }
-        return point.x > rect.point.x &&
-        point.x < (rect.point.x + rect.size.width) &&
-        point.y > rect.point.y &&
-        point.y < (rect.point.y + rect.size.height);
+        return point.x > rect.x &&
+        point.x < (rect.x + rect.width) &&
+        point.y > rect.y &&
+        point.y < (rect.y + rect.height);
     };
 
     export const overlapTest = (a: Rect, b: Rect): boolean => {
-        return (a.point.x < b.point.x + b.size.width) &&
-            (a.point.x + a.size.width > b.point.x) &&
-            (a.point.y < b.point.y + b.size.height) &&
-            (a.point.y + a.size.height > b.point.y);
+        return (a.x < b.x + b.width) &&
+            (a.x + a.width > b.x) &&
+            (a.y < b.y + b.height) &&
+            (a.y + a.height > b.y);
     };
 
     export const radToDeg = (rad: number): number => {

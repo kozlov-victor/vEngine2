@@ -51,9 +51,11 @@ export class Size extends ObservableEntity implements IReleasealable{
 
     public setWH(width:number,height:number = width):Size{
         const changed:boolean = this._width!==width || this._height!==height;
-        this._width = width;
-        this._height = height;
-        if (changed) this.triggerObservable();
+        if (changed) {
+            this._width = width;
+            this._height = height;
+            this.triggerObservable();
+        }
         return this;
     }
 

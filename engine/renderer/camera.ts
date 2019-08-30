@@ -90,7 +90,7 @@ export class Camera {
 
             this.objFollowToPrevPos.set(gameObject.pos);
 
-            const {width:wScaled,height:hScaled} = this.getRectScaled().size;
+            const {width:wScaled,height:hScaled} = this.getRectScaled();
             if (this.directionCorrection === DIRECTION_CORRECTION.RIGHT)
                 this.cameraPosCorrection.max.x=wScaled/3;
             else if (this.directionCorrection === DIRECTION_CORRECTION.LEFT)

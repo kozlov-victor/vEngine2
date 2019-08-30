@@ -26,7 +26,7 @@ export class GameObject extends RenderableModel implements ICloneable<GameObject
         Object.keys(this._frameAnimations).forEach((key:string)=>{
            this._frameAnimations[key].revalidate();
         });
-        this.size.set(this.sprite.getSrcRect().size);
+        this.size.setWH(this.sprite.getSrcRect().width,this.sprite.getSrcRect().height);
         super.revalidate();
         //if (this.rigid) {
             // let center = new Vec2(this.pos.x+this.anchor.x,this.pos.y+this.anchor);

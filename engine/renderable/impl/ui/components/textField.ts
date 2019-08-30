@@ -49,8 +49,8 @@ class TextInfo {
         this.strings[this.strings.length - 1].chars.push(c);
         this.allCharsCached.push(c);
         c.destRect.setPoint(this.pos);
-        c.destRect.point.addXY(c.destOffsetX,c.destOffsetY);
-        this.pos.addX(c.sourceRect.size.width+c.destOffsetX);
+        c.destRect.addXY(c.destOffsetX,c.destOffsetY);
+        this.pos.addX(c.sourceRect.width+c.destOffsetX);
     }
 
     public addWord(w: WordInfo):void {
@@ -91,15 +91,15 @@ class CharsHolder {
 
     public moveBy(dx: number, dy: number):void {
         for (const ch of this.chars) {
-            ch.destRect.point.addXY(dx, dy);
+            ch.destRect.addXY(dx, dy);
         }
     }
 
     public moveTo(x: number, y: number):void {
         let initialOffsetX: number = 0;
         for (const ch of this.chars) {
-            ch.destRect.point.setXY(initialOffsetX + x, y);
-            initialOffsetX += ch.sourceRect.size.width;
+            ch.destRect.setXY(initialOffsetX + x, y);
+            initialOffsetX += ch.sourceRect.width;
         }
     }
 }
@@ -110,13 +110,13 @@ class WordInfo extends CharsHolder {
     public revalidate():void {
         this.width = 0;
         for (const ch of this.chars) {
-            this.width += ch.destRect.size.width;
+            this.width += ch.destRect.width;
         }
     }
 
     public addChar(c: CharInfo):void {
         this.chars.push(c);
-        this.width += c.sourceRect.size.width;
+        this.width += c.sourceRect.width;
     }
 }
 
@@ -128,7 +128,7 @@ class StringInfo extends CharsHolder {
         this.width = 0;
         this.height = defaultSymbolHeight;
         for (const ch of this.chars) {
-            this.width += ch.sourceRect.size.width;
+            this.width += ch.sourceRect.width;
         }
     }
 
@@ -159,8 +159,8 @@ class StringInfo extends CharsHolder {
                 const totalSpaceWidth: number = textField.size.width - totalWordsWidth;
                 const oneSpaceWidth: number = totalSpaceWidth / (words.length - 1);
                 if (oneSpaceWidth>textField.getFont().fontContext.lineHeight*2) return;
-                const initialPosY: number = this.chars[0].destRect.point.y;
-                let currXPointer: number = this.chars[0].destRect.point.x;
+                const initialPosY: number = this.chars[0].destRect.y;
+                let currXPointer: number = this.chars[0].destRect.x;
                 for (const w of words) {
                     w.moveTo(currXPointer, initialPosY);
                     currXPointer += w.width + oneSpaceWidth;
@@ -307,8 +307,8 @@ export class TextField extends ScrollableContainer {
         const renderer:AbstractRenderer = this.game.getRenderer();
         const worldRectTmp:Rect = Rect.fromPool();
         worldRectTmp.set(this.getWorldRect());
-        worldRectTmp.point.addXY(this.marginLeft+this.paddingLeft,this.marginTop+this.paddingTop);
-        worldRectTmp.size.addWH(
+        worldRectTmp.addXY(this.marginLeft+this.paddingLeft,this.marginTop+this.paddingTop);
+        worldRectTmp.addWH(
             -this.marginRight-this.paddingRight-this.paddingLeft-this.paddingLeft,
             -this.marginBottom-this.paddingBottom-this.marginTop-this.paddingTop
         );
@@ -320,12 +320,12 @@ export class TextField extends ScrollableContainer {
         this._symbolImage.setResourceLink(this._font.getResourceLink());
         for (const charInfo of this._textInfo.allCharsCached) {
 
-            if (charInfo.destRect.point.y - this.vScrollInfo.offset > this.size.height) continue;
-            if (charInfo.destRect.point.y + charInfo.destRect.size.height - this.vScrollInfo.offset < 0) continue;
+            if (charInfo.destRect.y - this.vScrollInfo.offset > this.size.height) continue;
+            if (charInfo.destRect.y + charInfo.destRect.height - this.vScrollInfo.offset < 0) continue;
 
             this._symbolImage.getSrcRect().set(charInfo.sourceRect);
-            this._symbolImage.size.set(charInfo.sourceRect.size);
-            this._symbolImage.pos.set(charInfo.destRect.point);
+            this._symbolImage.size.setWH(charInfo.sourceRect.width,charInfo.sourceRect.height);
+            this._symbolImage.pos.setXY(charInfo.destRect.x,charInfo.destRect.y);
 
             if (this._symbolImage.size.height===0) continue;
 

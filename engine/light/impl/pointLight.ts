@@ -37,8 +37,8 @@ export class PointLight extends AbstractLight {
         const rect:Rect = camera.getRectScaled();
         const scale:Point2d = camera.scale;
         this._screenPoint.setXY(
-            (this.pos.x - rect.point.x) * scale.x,
-            (this.pos.y - rect.point.y) * scale.y
+            (this.pos.x - rect.x) * scale.x,
+            (this.pos.y - rect.y) * scale.y
         );
         return this._screenPoint;
     }

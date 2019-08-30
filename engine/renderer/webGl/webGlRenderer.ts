@@ -60,10 +60,10 @@ const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat
     mat4.ortho(projectionMatrix,0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
 
     const scaleMatrix:Mat16Holder = Mat16Holder.fromPool();
-    mat4.makeScale(scaleMatrix,rect.size.width, rect.size.height, 1);
+    mat4.makeScale(scaleMatrix,rect.width, rect.height, 1);
 
     const translationMatrix:Mat16Holder = Mat16Holder.fromPool();
-    mat4.makeTranslation(translationMatrix,rect.point.x, rect.point.y, 0);
+    mat4.makeTranslation(translationMatrix,rect.x, rect.y, 0);
 
     const matrix1:Mat16Holder = Mat16Holder.fromPool();
     mat4.matrixMultiply(matrix1,scaleMatrix, translationMatrix);
@@ -176,16 +176,17 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
         sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
         sd.setUniform(sd.u_fillType,FILL_TYPE.TEXTURE);
-        const {width: srcWidth,height: srcHeight} = texture.size;
-        const {x:srcRectX,y:srcRectY} = img.getSrcRect().point;
-        const {width:srcRectWidth,height:srcRectHeight} = img.getSrcRect().size;
+        const {width: textureWidth,height: textureHeight} = texture.size;
+        const {x:srcRectX,y:srcRectY} = img.getSrcRect();
+        const {width:destRectWidth,height:destRectHeight} = img.getSrcRect();
 
-        const srcArr:[number,number,number,number] = Rect.fromPool().setXYWH(
-            srcRectX/srcWidth,
-            srcRectY/srcHeight,
-            srcRectWidth/srcWidth,
-            srcRectHeight/srcHeight).release().toArray();
-        sd.setUniform(sd.u_texRect, srcArr);
+        const destArr:[number,number,number,number] = Rect.fromPool().setXYWH(
+            srcRectX/textureWidth,
+            srcRectY/textureHeight,
+            destRectWidth/textureWidth,
+            destRectHeight/textureHeight).release().toArray();
+
+        sd.setUniform(sd.u_texRect, destArr);
 
         const offSetArr:[number,number] = Size.fromPool().setWH(img.offset.x/maxSize,img.offset.y/maxSize).release().toArray();
         sd.setUniform(sd.u_texOffset,offSetArr);
@@ -345,7 +346,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public lockRect(rect:Rect):void {
         this.gl.enable(this.gl.SCISSOR_TEST);
-        this.gl.scissor(rect.point.x,rect.point.y,rect.size.width,rect.size.height);
+        this.gl.scissor(rect.x,rect.y,rect.width,rect.height);
     }
 
     public unlockRect():void{
@@ -501,8 +502,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const repeatFactor:Size = Size.fromPool();
         repeatFactor.setWH(
-            shape.size.width/shape.getSrcRect().size.width,
-            shape.size.height/shape.getSrcRect().size.height
+            shape.size.width/shape.getSrcRect().width,
+            shape.size.height/shape.getSrcRect().height
         );
         sd.setUniform(sd.u_repeatFactor,repeatFactor.toArray());
         repeatFactor.release();

@@ -85,12 +85,12 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d> {
     }
 
     public addX(x:number):this{
-        this.addXY(x,this._y);
+        this.addXY(x,0);
         return this;
     }
 
     public addY(y:number):this{
-        this.addXY(this._x,y);
+        this.addXY(0,y);
         return this;
     }
 

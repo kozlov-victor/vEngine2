@@ -172,7 +172,7 @@ export abstract class Container extends RenderableModel {
         this._screenRect.set(this._srcRect);
         let parent:RenderableModel|null = this.parent;
         while (parent) {
-            this._screenRect.addXY(parent.getSrcRect().point.x,parent.getSrcRect().point.y);
+            this._screenRect.addXY(parent.getSrcRect().x,parent.getSrcRect().y);
             parent = parent.parent;
         }
     }

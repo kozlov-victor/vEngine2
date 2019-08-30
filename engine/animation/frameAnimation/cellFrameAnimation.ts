@@ -50,11 +50,11 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
     }
 
     private getFramePosX(frameIndex:number):number {
-        return (frameIndex % this._numOfFramesH) * this._spriteSheet.getSrcRect().size.width;
+        return (frameIndex % this._numOfFramesH) * this._spriteSheet.getSrcRect().width;
     }
 
     private getFramePosY(frameIndex:number):number {
-        return ~~(frameIndex / this._numOfFramesH) * this._spriteSheet.getSrcRect().size.height;
+        return ~~(frameIndex / this._numOfFramesH) * this._spriteSheet.getSrcRect().height;
     }
 
     private setFrameIndex(frameIndex:number):void {

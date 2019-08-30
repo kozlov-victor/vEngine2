@@ -43,7 +43,7 @@ export class AbsoluteLayout extends Container implements ICloneable<AbsoluteLayo
         if (this.overflow===OVERFLOW.HIDDEN) {
             const r:Rect = Rect.fromPool().set(this.getWorldRect());
             r.addXY(-1,-1);
-            r.setWH(r.size.width+1,r.size.height+1);
+            r.setWH(r.width+1,r.height+1);
             renderer.lockRect(r);
             r.release();
         }

@@ -80,20 +80,20 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
             this.ctx.fillRect(
                 0,0,
-                dstRect.size.width + Math.abs(img.offset.x),
-                dstRect.size.height + Math.abs(img.offset.y)
+                dstRect.width + Math.abs(img.offset.x),
+                dstRect.height + Math.abs(img.offset.y)
             );
             this.ctx.restore();
         } else {
             this.ctx.drawImage(
                 (img.getResourceLink() as ResourceLink<ICanvasTexture>).getTarget().source,
-                srcRect.point.x,
-                srcRect.point.y,
-                srcRect.size.width,
-                srcRect.size.height,
+                srcRect.x,
+                srcRect.y,
+                srcRect.width,
+                srcRect.height,
                 0,0,
-                dstRect.size.width,
-                dstRect.size.height
+                dstRect.width,
+                dstRect.height
             );
         }
 
@@ -144,7 +144,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     public lockRect(rect:Rect):void {
         this.ctx.save();
         this.ctx.beginPath();
-        this.ctx.rect(rect.point.x,rect.point.y,rect.size.width,rect.size.height);
+        this.ctx.rect(rect.x,rect.y,rect.width,rect.height);
         this.ctx.clip();
     }
 

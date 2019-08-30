@@ -78,6 +78,7 @@ export class MainScene extends Scene {
                     break;
                 case KEYBOARD_KEY.R:
                     this.rect.angle+=0.1;
+                    break;
             }
         });
 
