@@ -25,7 +25,7 @@ export namespace mat4 {
 
         private _captured:boolean = false;
 
-        private constructor(){
+        public constructor(){
             this.set(
                 0, 0, 0, 0,
                 0, 0, 0, 0,

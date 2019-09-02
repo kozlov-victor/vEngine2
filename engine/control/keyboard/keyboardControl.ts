@@ -23,14 +23,14 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
             e.stopPropagation(); // to prevent page scroll
             const code:number = e.keyCode;
             if (this.isPressed(code)) return; // keyboard generate repeated events when key is pressed - ignore it
-            try {
-                const engineEvent:KeyBoardEvent = KeyBoardEvent.fromPool();
-                engineEvent.key = code;
-                this.press(code,engineEvent);
-            } catch(er)  {
-                console.log(this.buffer.getKeys());
-                throw er;
-            }
+
+            const engineEvent:KeyBoardEvent = KeyBoardEvent.fromPool();
+            if (!engineEvent) {
+                if (DEBUG) console.warn('keyboard pool is full');
+                return;
+            } // todo strict check for null
+            engineEvent.key = code;
+            this.press(code,engineEvent);
 
         };
 
