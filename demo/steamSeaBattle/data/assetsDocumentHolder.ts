@@ -33,7 +33,7 @@ export class Element  {
     public attributes:Record<string,string> = {};
 
     public getElementById(id:string):Element|null{
-        let el:Element = null;
+        let el:Element|null = null;
         Element.visitAll(this.children,(current:Element)=>{
             if (current.attributes.id===id) el = current;
         });

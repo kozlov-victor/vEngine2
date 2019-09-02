@@ -59,9 +59,9 @@ export class Tween {
     private _completed:boolean = false;
     private readonly _target: any;
     private readonly _loop: boolean;
-    private _progressFn:(arg?:any)=>void;
+    private _progressFn:((arg?:any)=>void) | undefined;
     private _delayBeforeStart:number = 0;
-    private readonly _completeFn: (arg?:any)=>void;
+    private readonly _completeFn: ((arg?:any)=>void) | undefined;
     private readonly _easeFn:EaseFn;
     private readonly _tweenTime: number;
     private _desc:ITweenDescriptionNormalized;
@@ -109,8 +109,8 @@ export class Tween {
         });
         this._propsToChange = Object.keys(allPropsMap);
         this._propsToChange.forEach((prp:string)=>{
-            if (tweenDesc.from[prp]===undefined) tweenDesc.from[prp] = getValByPath(this._target,prp);
-            if (tweenDesc.to[prp]===undefined) tweenDesc.to[prp] = getValByPath(this._target,prp);
+            if (tweenDesc.from![prp]===undefined) tweenDesc.from![prp] = getValByPath(this._target,prp);
+            if (tweenDesc.to![prp]===undefined) tweenDesc.to![prp] = getValByPath(this._target,prp);
         });
         return tweenDesc as ITweenDescriptionNormalized;
     }
@@ -120,7 +120,7 @@ export class Tween {
         if (this._completed) return;
         const currTime:number = Game.getInstance().getTime();
         this._currTime = currTime;
-        if (!this._startedTime) this._startedTime = currTime;
+        if (this._startedTime===0) this._startedTime = currTime;
         let curTweenTime:number = currTime - this._startedTime;
         if (curTweenTime<0) curTweenTime = currTime; // after long delay of looped addTween
 
@@ -153,7 +153,7 @@ export class Tween {
     }
 
     public reset():void {
-        this._startedTime = null;
+        this._startedTime = 0;
         this._completed = false;
     }
 

@@ -41,19 +41,6 @@ export class ObjParser {
             const tex2:Point2 = objInstance.vt_arr[f[1].uv-1];
             const tex3:Point2 = objInstance.vt_arr[f[2].uv-1];
 
-            //Nx = UyVz - UzVy
-            //Ny = UzVx - UxVz
-            //Nz = UxVy - UyVx
-            // const norm1:Point3 = {x:0,y:0,z:0};
-            // norm1.x = vert1.y*vert2.z - vert1.z*vert2.y;
-            // norm1.y = vert1.z*vert2.x - vert1.x*vert2.z;
-            // norm1.z = vert1.x*vert2.y - vert1.y*vert2.x;
-            //
-            // pr.normalArr.push(
-            //     norm1.x,norm1.y,norm1.z,
-            //     norm1.x,norm1.y,norm1.z,
-            //     norm1.x,norm1.y,norm1.z
-            // );
 
             pr.vertexArr.push(
                 vert1.x,vert1.y,vert1.z,
@@ -62,7 +49,7 @@ export class ObjParser {
             );
 
             if (norm1) {
-                pr.normalArr.push(
+                pr.normalArr!.push(
                     norm1.x,norm1.y,norm1.z,
                     norm2.x,norm2.y,norm2.z,
                     norm3.x,norm3.y,norm3.z,
@@ -70,20 +57,19 @@ export class ObjParser {
             }
 
             if (tex1) {
-                pr.texCoordArr.push(
+                pr.texCoordArr!.push(
                     tex1.x,tex1.y,
                     tex2.x,tex2.y,
                     tex3.x,tex3.y,
                 );
             }
 
-            pr.indexArr.push(cnt++,cnt++,cnt++);
+            pr.indexArr!.push(cnt++,cnt++,cnt++);
 
         });
-        if (!pr.indexArr.length) pr.indexArr = undefined;
-        if (!pr.texCoordArr.length) pr.texCoordArr = undefined;
-        if (!pr.normalArr.length) pr.normalArr = undefined;
-        if (!pr.vertexArr.length) pr.vertexArr = undefined;
+        if (!pr.indexArr!.length) pr.indexArr = undefined;
+        if (!pr.texCoordArr!.length) pr.texCoordArr = undefined;
+        if (!pr.normalArr!.length) pr.normalArr = undefined;
         console.log(pr);
         return pr;
     }
@@ -95,7 +81,7 @@ export class ObjParser {
 
 
     private readPoint3(s:string):Point3{
-        const point3:Point3 = {x:undefined,y:undefined,z:undefined} as Point3;
+        const point3:Point3 = {x:NaN,y:NaN,z:NaN} as Point3;
         s.split(' ').filter((it:string)=>it.trim().length).map((it:string)=>parseFloat(it)).forEach((n:number,i:number)=>{
             if (i===0) point3.x = n;
             else if (i===1) point3.y = n;
@@ -106,7 +92,7 @@ export class ObjParser {
     }
 
     private readPoint2(s:string):Point2{
-        const point2:Point2 = {x:undefined,y:undefined} as Point2;
+        const point2:Point2 = {x:NaN,y:NaN} as Point2;
         s.split(' ').filter((it:string)=>it.trim().length).map((it:string)=>parseFloat(it)).forEach((n:number,i:number)=>{
             if (i===0) point2.x = n;
             else if (i===1) point2.y = n;
@@ -117,9 +103,9 @@ export class ObjParser {
 
     private readFace(s:string):Face{
         const face:Face = [
-            {v:undefined,uv:undefined,n:undefined},
-            {v:undefined,uv:undefined,n:undefined},
-            {v:undefined,uv:undefined,n:undefined},
+            {v:NaN,uv:NaN,n:NaN},
+            {v:NaN,uv:NaN,n:NaN},
+            {v:NaN,uv:NaN,n:NaN},
         ] as Face;
 
         s.split(' ').filter((it:string)=>it.trim().length).forEach((triplet:string,i:number)=>{

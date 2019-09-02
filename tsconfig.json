@@ -12,12 +12,13 @@
             "es7"
         ],
         "importHelpers": true,
-        "strict": false,
+        "strict": true,
         "strictPropertyInitialization": false,
         "noImplicitAny": true,
         "noImplicitThis": true,
         "noImplicitReturns": true,
         "noEmitOnError": true,
+        "strictNullChecks": true,
         "removeComments": true,
         "baseUrl": "./",
         "paths": {

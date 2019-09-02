@@ -2,7 +2,7 @@ import {Scene} from "@engine/core/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {NinePatchImage} from "@engine/renderable/impl/geometry/ninePatchImage";
@@ -33,8 +33,8 @@ export class MainScene extends Scene {
         this.obj.pos.setXY(20,20);
 
         this.appendChild(this.obj);
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KEYBOARD_KEY)=>{
-            switch (e) {
+        this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
+            switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     this.obj.size.width-=1;
                     break;

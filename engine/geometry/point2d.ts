@@ -21,8 +21,8 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d> {
         this.setY(value);
     }
 
-    public static fromPool():Point2d|undefined {
-        return Point2d.pool.getFreeObject();
+    public static fromPool():Point2d {
+        return Point2d.pool.getFreeObject()!;
     }
     private static pool = new ObjectPool<Point2d>(Point2d,4);
 

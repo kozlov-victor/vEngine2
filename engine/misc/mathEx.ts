@@ -84,7 +84,7 @@ export namespace MathEx {
     export const unProject = (winPoint: Point2d, width: number, height: number, viewProjectionMatrix: Mat16Holder): Point2d => {
         const x: number = 2.0 * winPoint.x / width - 1;
         const y: number = 2.0 * winPoint.y / height - 1;
-        const viewProjectionInverse: Mat16Holder = Mat16Holder.fromPool();
+        const viewProjectionInverse: Mat16Holder = Mat16Holder.fromPool()!;
         mat4.inverse(viewProjectionInverse,viewProjectionMatrix);
 
         const point3D: [number,number,number,number] = [x, y, 0, 1];

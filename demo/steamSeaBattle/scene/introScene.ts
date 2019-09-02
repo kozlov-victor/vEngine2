@@ -16,8 +16,8 @@ export class IntroScene extends BaseScene {
         this.sounds.intro.play();
         this.sounds.gear.loop = true;
         this.sounds.gear.play();
-        this.findChildById('coin_acceptor').on(MOUSE_EVENTS.click,(e:any)=>{
-            this.findChildById('coin').visible = true;
+        this.findChildById('coin_acceptor')!.on(MOUSE_EVENTS.click,(e:any)=>{
+            this.findChildById('coin')!.visible = true;
             this.sounds.start.play();
             this.sounds.gear.stop();
             this.setTimeout(()=>{
@@ -27,7 +27,7 @@ export class IntroScene extends BaseScene {
     }
 
     protected getSceneElement(): Element {
-        return AssetsDocumentHolder.getDocument().getElementById('intro');
+        return AssetsDocumentHolder.getDocument().getElementById('intro')!;
     }
 
 }

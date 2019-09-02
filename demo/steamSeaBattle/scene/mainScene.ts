@@ -63,12 +63,12 @@ export class MainScene extends BaseScene {
         this.btnShoot = this.findChildById('btnShoot') as ImageButton;
         this.btnRight = this.findChildById('btnRight') as ImageButton;
         this.nixieDisplayFired = new NixieDisplay(
-            this.findChildById('nixieTubeFired0'),
-            this.findChildById('nixieTubeFired1')
+            this.findChildById('nixieTubeFired0')!,
+            this.findChildById('nixieTubeFired1')!
         );
         this.nixieDisplayShoot = new NixieDisplay(
-            this.findChildById('nixieTubeShoot0'),
-            this.findChildById('nixieTubeShoot1')
+            this.findChildById('nixieTubeShoot0')!,
+            this.findChildById('nixieTubeShoot1')!
         );
         this.hitOn = this.findChildById('hitOn') as GameObject;
         this.hitOff = this.findChildById('hitOff') as GameObject;
@@ -105,7 +105,7 @@ export class MainScene extends BaseScene {
     }
 
     protected getSceneElement(): Element {
-        return AssetsDocumentHolder.getDocument().getElementById('main');
+        return AssetsDocumentHolder.getDocument().getElementById('main')!;
     }
 
     private waterWave(){

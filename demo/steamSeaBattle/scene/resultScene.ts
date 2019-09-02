@@ -15,8 +15,8 @@ export class ResultScene extends BaseScene {
         super.onReady();
         this.sounds.gear.play();
         this.nixieDisplay = new NixieDisplay(
-            this.findChildById('nixieTube0'),
-            this.findChildById('nixieTube1')
+            this.findChildById('nixieTube0')!,
+            this.findChildById('nixieTube1')!
         );
         let counter:number = 0;
         this.setTimeout(()=>{
@@ -37,7 +37,7 @@ export class ResultScene extends BaseScene {
     }
 
     protected getSceneElement(): Element {
-        return AssetsDocumentHolder.getDocument().getElementById('result');
+        return AssetsDocumentHolder.getDocument().getElementById('result')!;
     }
 
 

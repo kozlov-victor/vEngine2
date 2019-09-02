@@ -23,8 +23,8 @@ export class Size extends ObservableEntity implements IReleasealable{
         return this._height;
     }
 
-    public static fromPool():Size|undefined {
-        return Size.rectPool.getFreeObject();
+    public static fromPool():Size {
+        return Size.rectPool.getFreeObject()!;
     }
 
     private static rectPool:ObjectPool<Size> = new ObjectPool<Size>(Size);

@@ -16,8 +16,8 @@ export class ResourceLoader {
     public loadImage(req: string|IURLRequest): ResourceLink<ITexture> {
         const loader:UrlLoader<ArrayBuffer> = this.createUrlLoader<ArrayBuffer>(req,'arraybuffer');
         const link: ResourceLink<ITexture> = new ResourceLink(loader.getUrl());
-        if (this.game.getRenderer().getCachedTarget(link)) {
-            link.setTarget(this.game.getRenderer().getCachedTarget(link));
+        if (this.game.getRenderer().getCachedTarget(link)!==undefined) {
+            link.setTarget(this.game.getRenderer().getCachedTarget(link)!);
             return link;
         }
         loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);

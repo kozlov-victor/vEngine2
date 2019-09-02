@@ -46,7 +46,7 @@ export class MatrixStack {
     }
 
     public skewX(angle:number):MatrixStack {
-        const t:Mat16Holder = Mat16Holder.fromPool();
+        const t:Mat16Holder = Mat16Holder.fromPool()!;
         mat4.makeXSkew(t,angle);
         const m:Mat16Holder = this.getCurrentMatrix();
         const result:Mat16Holder = Mat16Holder.fromPool();

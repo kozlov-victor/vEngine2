@@ -75,12 +75,8 @@ const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat
     mat4.matrixMultiply(matrix3,matrix2, projectionMatrix);
 
 
-    let matrix4:Mat16Holder;
-    const useOrtho = !!((window as any).ortho);
-    if (!useOrtho) {
-        matrix4 = Mat16Holder.fromPool();
-        mat4.matrixMultiply(matrix4,matrix3, zToWMatrix);
-    }
+    const matrix4:Mat16Holder = Mat16Holder.fromPool();
+    mat4.matrixMultiply(matrix4,matrix3, zToWMatrix);
 
 
     projectionMatrix.release();
@@ -89,11 +85,8 @@ const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat
     matrix1.release();
     matrix2.release();
 
-    if (useOrtho) return matrix3;
-    else {
-        matrix3.release();
-        return matrix4;
-    }
+    matrix3.release();
+    return matrix4;
 };
 
 

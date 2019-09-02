@@ -11,6 +11,6 @@ export class PreIntroScene extends BaseScene {
     }
 
     protected getSceneElement(): Element {
-        return AssetsDocumentHolder.getDocument().getElementById('preIntro');
+        return AssetsDocumentHolder.getDocument().getElementById('preIntro')!;
     }
 }

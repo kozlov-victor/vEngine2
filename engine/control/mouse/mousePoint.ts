@@ -20,7 +20,7 @@ export interface IMousePoint {
 export class MousePoint extends Point2d {
 
     public static fromPool():MousePoint{
-        return MousePoint.mousePointsPool.getFreeObject();
+        return MousePoint.mousePointsPool.getFreeObject()!;
     }
 
     private static mousePointsPool:ObjectPool<MousePoint> = new ObjectPool<MousePoint>(MousePoint);

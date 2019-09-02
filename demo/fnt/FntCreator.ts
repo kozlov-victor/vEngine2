@@ -15,8 +15,8 @@ export namespace FntCreator {
 
         // http://www.angelcode.com/products/bmfont/doc/file_format.html
         const doc:Document = new DOMParser().parseFromString(docLink.getTarget(),'application/xml');
-        ctx.lineHeight = +(doc.querySelector('common').getAttribute('lineHeight'));
-        const face:string = doc.querySelector('info').getAttribute('face') as string;
+        ctx.lineHeight = +(doc.querySelector('common')!.getAttribute('lineHeight')!);
+        const face:string = doc.querySelector('info')!.getAttribute('face') as string;
         const all:NodeListOf<Element> = doc.querySelectorAll('char');
         for (let i:number=0;i<all.length;i++){
             const el:Element = all[i];
