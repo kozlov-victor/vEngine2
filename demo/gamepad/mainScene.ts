@@ -5,8 +5,8 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {ITexture} from "@engine/renderer/texture";
-import {GAME_PAD_KEY} from "@engine/control/gamepad/gamePadKeys";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
+import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
+import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 
 export class MainScene extends Scene {
 
@@ -34,24 +34,24 @@ export class MainScene extends Scene {
         this.appendChild(this.logoObj);
         this.logoObj.rotationPoint.setToCenter();
         this.logoObj.scale.setXY(0.1);
-        this.on(GAME_PAD_EVENTS.buttonHold, (e:GAME_PAD_KEY)=>{
-            switch (e) {
-                case GAME_PAD_KEY.STICK_L_LEFT:
+        this.on(GAME_PAD_EVENTS.buttonHold, (e:GamePadEvent)=>{
+            switch (e.button) {
+                case GAME_PAD_BUTTON.STICK_L_LEFT:
                     this.logoObj.pos.addX(-1);
                     break;
-                case GAME_PAD_KEY.STICK_L_RIGHT:
+                case GAME_PAD_BUTTON.STICK_L_RIGHT:
                     this.logoObj.pos.addX(1);
                     break;
-                case GAME_PAD_KEY.STICK_L_UP:
+                case GAME_PAD_BUTTON.STICK_L_UP:
                     this.logoObj.pos.addY(-1);
                     break;
-                case GAME_PAD_KEY.STICK_L_DOWN:
+                case GAME_PAD_BUTTON.STICK_L_DOWN:
                     this.logoObj.pos.addY(1);
                     break;
-                case GAME_PAD_KEY.BTN_A:
+                case GAME_PAD_BUTTON.BTN_A:
                     this.logoObj.angle+=0.1;
                     break;
-                case GAME_PAD_KEY.BTN_B:
+                case GAME_PAD_BUTTON.BTN_B:
                     this.logoObj.angle-=0.1;
                     break;
             }

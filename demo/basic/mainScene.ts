@@ -4,7 +4,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
@@ -32,8 +32,8 @@ export class MainScene extends Scene {
         this.logoObj.sprite = spr;
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KEYBOARD_KEY)=>{
-            switch (e) {
+        this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
+            switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     this.logoObj.pos.addX(-1);
                     break;

@@ -43,7 +43,7 @@ export class Game {
     public fps:number = 0;
 
     public readonly collider:ColliderEngine = new ColliderEngine(this);
-    private _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
+    private readonly _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
     private _lastTime:number = 0;
     private _currTime:number = 0;
@@ -165,15 +165,18 @@ export class Game {
         }
 
         const numOfLoops:number = (~~(this._deltaTime / Game.UPDATE_TIME_RATE))||1;
-        let currTime:number = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
+        this._currTime = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
         let loopCnt:number = 0;
         do {
+            this._lastTime = this._currTime;
+            this._currTime += Game.UPDATE_TIME_RATE;
+            this._deltaTime = this._currTime - this._lastTime;
+
             this._currentScene.update();
             // this.collider.collisionArcade(); todo
             for (const c of this._controls) {
                 c.update();
             }
-            currTime += Game.UPDATE_TIME_RATE;
             loopCnt++;
             if (loopCnt>10) { // to avoid to much iterations
                 this._lastTime = this._currTime = currTimeCopy;

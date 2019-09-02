@@ -10,10 +10,7 @@ game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);
 game.setAudioPLayer(AudioPlayer);
-//game.runScene(new IntroScene(game));
-//game.runScene(new MainScene(game));
 game.runScene(new PreIntroScene(game));
-//game.runScene(new ResultScene(game));
 
 
 

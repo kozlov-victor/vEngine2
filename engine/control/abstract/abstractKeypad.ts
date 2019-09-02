@@ -1,5 +1,6 @@
 import {Game} from "@engine/core/game";
 import {FastMap} from "@engine/misc/fastMap";
+import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 
 export enum KEY_STATE  {
     KEY_JUST_PRESSED = 2,
@@ -9,6 +10,10 @@ export enum KEY_STATE  {
 }
 
 
+export abstract class KeyPadEvent extends ObservableEntity {
+    public keyState:KEY_STATE;
+}
+
 export abstract class AbstractKeypad {
     protected game:Game;
 
@@ -16,58 +21,71 @@ export abstract class AbstractKeypad {
     protected abstract keyReleased:string;
     protected abstract keyHold:string;
 
-    private buffer:FastMap<number,KEY_STATE> = new FastMap();
+    protected buffer:FastMap<number,KeyPadEvent> = new FastMap();
 
 
     constructor(game:Game) {
         this.game = game;
     }
 
-    public press(key:number):void{
-        if (this.isPressed(key)) return;
-        this.buffer.put(key,KEY_STATE.KEY_JUST_PRESSED);
-        this.notify(this.keyPressed, key);
+    public press(key:number,event:KeyPadEvent):void{
+        event.keyState = KEY_STATE.KEY_JUST_PRESSED;
+        this.buffer.put(key,event);
+        this.notify(this.keyPressed,event);
     }
 
-    public release(key:number):void{
+    public release(key:number,event:KeyPadEvent):void{
         if (this.isReleased(key)) return;
-        this.buffer.put(key,KEY_STATE.KEY_JUST_RELEASED);
-        this.notify(this.keyReleased,key);
+        event.keyState = KEY_STATE.KEY_JUST_RELEASED;
+        //this.buffer.put(key,event); // todo need?
+        this.notify(this.keyReleased,event);
     }
 
     public isPressed(key:number):boolean{
-        return this.buffer.get(key)>=KEY_STATE.KEY_PRESSED;
+        if (!this.buffer.has(key)) return false;
+        return this.buffer.get(key).keyState>=KEY_STATE.KEY_PRESSED;
     }
 
     public isJustPressed(key:number):boolean{
-        return this.buffer.get(key)===KEY_STATE.KEY_JUST_PRESSED;
+        if (!this.buffer.has(key)) return false;
+        return this.buffer.get(key).keyState===KEY_STATE.KEY_JUST_PRESSED;
     }
 
     public isReleased(key:number):boolean{
         if (!this.buffer.has(key)) return true;
-        return  this.buffer.get(key)<=KEY_STATE.KEY_JUST_RELEASED;
+        return  this.buffer.get(key).keyState<=KEY_STATE.KEY_JUST_RELEASED;
     }
 
     public isJustReleased(key:number):boolean {
-        return this.buffer.get(key) === KEY_STATE.KEY_JUST_RELEASED;
+        if (!this.buffer.has(key)) return false;
+        return this.buffer.get(key).keyState === KEY_STATE.KEY_JUST_RELEASED;
     }
 
     public update():void{
 
         const keys:number[] = this.buffer.getKeys();
         for (const keyNum of keys) {
-            const keyVal:KEY_STATE = this.buffer.get(keyNum);
-            if (keyVal===KEY_STATE.KEY_RELEASED) this.buffer.remove(keyNum);
-            else if (keyVal===KEY_STATE.KEY_JUST_RELEASED) this.buffer.put(keyNum,KEY_STATE.KEY_RELEASED);
-            if (keyVal===KEY_STATE.KEY_JUST_PRESSED) {
-                this.buffer.put(keyNum,KEY_STATE.KEY_PRESSED);
+            const event:KeyPadEvent = this.buffer.get(keyNum);
+            const keyVal:KEY_STATE = event.keyState;
+            if (keyVal===KEY_STATE.KEY_RELEASED) {
+                this.buffer.remove(keyNum);
+                event.release();
             }
-            this.notify(this.keyHold, keyNum);
+            else if (keyVal===KEY_STATE.KEY_JUST_RELEASED) event.keyState = KEY_STATE.KEY_RELEASED;
+            if (keyVal===KEY_STATE.KEY_JUST_PRESSED) {
+                event.keyState = KEY_STATE.KEY_PRESSED;
+            }
+            this.notify(this.keyHold, event);
         }
     }
 
-    protected notify(eventName:string,key:number):void{
-        this.game.getCurrScene().trigger(eventName,key);
+    protected getEvent(key:number):KeyPadEvent|null {
+        return this.buffer.get(key);
+    }
+
+    protected notify(eventName:string,e:KeyPadEvent):void{
+        //console.log(eventName,(e as any).key);
+        this.game.getCurrScene().trigger(eventName,e);
     }
 
 }

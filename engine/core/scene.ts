@@ -1,4 +1,3 @@
-
 import {Layer} from "../renderable/impl/general/layer";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {Game} from "@engine/core/game";
@@ -10,17 +9,15 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {removeFromArray} from "@engine/misc/object";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
-import {Tween, ITweenDescription} from "@engine/animation/tween";
+import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {Timer} from "@engine/misc/timer";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {GAME_PAD_KEY} from "@engine/control/gamepad/gamePadKeys";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
+import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 
 
 export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilterable {
@@ -139,8 +136,8 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         this._eventEmitterDelegate.off(eventName,callBack);
     }
     public on(eventName:MOUSE_EVENTS,callBack:(e:IMousePoint)=>void):()=>void;
-    public on(eventName:KEYBOARD_EVENTS,callBack:(e:KEYBOARD_KEY)=>void):()=>void;
-    public on(eventName:GAME_PAD_EVENTS,callBack:(e:GAME_PAD_KEY)=>void):()=>void;
+    public on(eventName:KEYBOARD_EVENTS,callBack:(e:KeyBoardEvent)=>void):()=>void;
+    public on(eventName:GAME_PAD_EVENTS,callBack:(e:GamePadEvent)=>void):()=>void;
     public on(eventName: string, callBack: (arg?:any)=>void): ()=>void {
         return this._eventEmitterDelegate.on(eventName,callBack);
     }
