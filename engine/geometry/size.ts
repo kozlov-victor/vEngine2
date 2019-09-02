@@ -5,8 +5,10 @@ export class Size extends ObservableEntity implements IReleasealable{
 
     set width(val:number) {
         const changed:boolean = this._width!==val;
-        this._width = val;
-        if (changed) this.triggerObservable();
+        if (changed) {
+            this._width = val;
+            this.triggerObservable();
+        }
     }
 
     get width(): number {
@@ -15,8 +17,10 @@ export class Size extends ObservableEntity implements IReleasealable{
 
     set height(val:number) {
         const changed:boolean = this._height!==val;
-        this._height = val;
-        if (changed) this.triggerObservable();
+        if (changed) {
+            this._height = val;
+            this.triggerObservable();
+        }
     }
 
     get height(): number {

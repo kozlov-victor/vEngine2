@@ -164,6 +164,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const texture:Texture = (img.getResourceLink() as ResourceLink<Texture>).getTarget();
         const maxSize:number = Math.max(img.size.width,img.size.height);
+
         const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
         this.prepareShapeUniformInfo(img);
         sd.setUniform(sd.u_borderRadius,Math.min(img.borderRadius/maxSize,1));

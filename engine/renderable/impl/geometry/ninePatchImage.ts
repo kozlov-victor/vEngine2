@@ -57,16 +57,12 @@ export class NinePatchImage extends RenderableModel {
         this._revalidatePatches();
     }
 
-    public setABCD(a:number,b?:number,c?:number,d?:number):void {
-        if (b===undefined) b = a;
-        if (c===undefined) c = b;
-        if (d===undefined) d = c;
+    public setABCD(a:number,b:number = a,c:number = b,d:number = c):void {
         this.a = a;
         this.b = b;
         this.c = c;
         this.d = d;
         this.revalidate();
-
     }
 
     public setResourceLink(link:ResourceLink<ITexture>):void{
