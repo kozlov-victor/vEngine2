@@ -1,4 +1,5 @@
 import {DebugError} from "../debug/debugError";
+import {Clazz} from "@engine/core/declarations";
 
 
 export interface IReleasealable {
@@ -15,11 +16,11 @@ export class ObjectPool<T extends IReleasealable> {
      * @param Class
      * @param {number} numberOfInstances
      */
-    constructor(private Class:any, private numberOfInstances = 16){
+    constructor(private Class:Clazz<T>, private numberOfInstances = 16){
         if (DEBUG && !Class) throw new DebugError(`can not instantiate ObjectPool: class not provided in constructor`);
     }
 
-    public getFreeObject():T|undefined{
+    public getFreeObject(silently:boolean = false):T|undefined{
 
         for (let i:number=0;i<this.numberOfInstances;i++) {
             let current:T = this._pool[i];
@@ -33,7 +34,7 @@ export class ObjectPool<T extends IReleasealable> {
                 return current;
             }
         }
-        if (DEBUG) throw new DebugError(`can not get free object: no free object in pool`);
+        if (DEBUG && !silently) throw new DebugError(`can not get free object: no free object in pool`);
         return undefined;
     }
 

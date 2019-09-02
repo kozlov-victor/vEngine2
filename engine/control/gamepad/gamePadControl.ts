@@ -2,8 +2,8 @@ import {Game} from "@engine/core/game";
 import {IControl} from "@engine/control/abstract/iControl";
 import {AbstractKeypad} from "@engine/control/abstract/abstractKeypad";
 import {Int} from "@engine/core/declarations";
-import {GAME_PAD_KEY} from "@engine/control/gamepad/gamePadKeys";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
+import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
+import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 
 declare const window:any,navigator:any;
 
@@ -84,8 +84,8 @@ export class GamePadControl extends AbstractKeypad implements IControl{
                 this.pollAxes(
                     axisLeftStick0,
                     axisLeftStick1,
-                    GAME_PAD_KEY.STICK_L_LEFT,GAME_PAD_KEY.STICK_L_RIGHT,
-                    GAME_PAD_KEY.STICK_L_UP, GAME_PAD_KEY.STICK_L_DOWN,
+                    GAME_PAD_BUTTON.STICK_L_LEFT,GAME_PAD_BUTTON.STICK_L_RIGHT,
+                    GAME_PAD_BUTTON.STICK_L_UP, GAME_PAD_BUTTON.STICK_L_DOWN,
                 );
             }
 
@@ -95,8 +95,8 @@ export class GamePadControl extends AbstractKeypad implements IControl{
                 this.pollAxes(
                     axisRightStick0,
                     axisRightStick1,
-                    GAME_PAD_KEY.STICK_R_LEFT,GAME_PAD_KEY.STICK_R_RIGHT,
-                    GAME_PAD_KEY.STICK_R_UP, GAME_PAD_KEY.STICK_R_DOWN,
+                    GAME_PAD_BUTTON.STICK_R_LEFT,GAME_PAD_BUTTON.STICK_R_RIGHT,
+                    GAME_PAD_BUTTON.STICK_R_UP, GAME_PAD_BUTTON.STICK_R_DOWN,
                 );
             }
 
@@ -112,44 +112,59 @@ export class GamePadControl extends AbstractKeypad implements IControl{
         const maxButtons:number = gp.buttons.length;
         for (let j:number=0;j<maxButtons;j++) {
             const btn:GamepadButton = gp.buttons[j];
+            const engineEvent:GamePadEvent = GamePadEvent.fromPool();
+            engineEvent.button = j;
             if (btn.pressed) {
-                this.press(j);
+                this.press(j,engineEvent);
             } else {
-                this.release(j);
+                this.release(j,engineEvent);
             }
+            engineEvent.release();
         }
     }
 
     private pollAxes(
         axis0:Int,
         axis1:Int,
-        btnLeft:GAME_PAD_KEY,
-        btnRight:GAME_PAD_KEY,
-        btnUp:GAME_PAD_KEY,
-        btnDown:GAME_PAD_KEY
+        btnLeft:GAME_PAD_BUTTON,
+        btnRight:GAME_PAD_BUTTON,
+        btnUp:GAME_PAD_BUTTON,
+        btnDown:GAME_PAD_BUTTON
     ):void {
 
+        const engineEvent:GamePadEvent = GamePadEvent.fromPool();
+
         if (axis0>0) {
-            this.press(btnRight);
+            engineEvent.button = btnRight;
+            this.press(btnRight,engineEvent);
         } else {
-            this.release(btnRight);
+            engineEvent.button = btnRight;
+            this.release(btnRight,engineEvent);
         }
         if (axis0<0) {
-            this.press(btnLeft);
+            engineEvent.button = btnLeft;
+            this.press(btnLeft,engineEvent);
         } else {
-            this.release(btnLeft);
+            engineEvent.button = btnLeft;
+            this.release(btnLeft,engineEvent);
         }
 
         if (axis1>0) {
-            this.press(btnDown);
+            engineEvent.button = btnDown;
+            this.press(btnDown,engineEvent);
         } else {
-            this.release(btnDown);
+            engineEvent.button = btnDown;
+            this.release(btnDown,engineEvent);
         }
         if (axis1<0) {
-            this.press(btnUp);
+            engineEvent.button = btnUp;
+            this.press(btnUp,engineEvent);
         } else {
-            this.release(btnUp);
+            engineEvent.button = btnUp;
+            this.release(btnUp,engineEvent);
         }
+
+        engineEvent.release();
 
     }
 

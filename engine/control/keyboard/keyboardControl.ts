@@ -1,6 +1,6 @@
 import {IControl} from "@engine/control/abstract/iControl";
 import {AbstractKeypad} from "@engine/control/abstract/abstractKeypad";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 
 
 export class KeyboardControl extends AbstractKeypad implements IControl {
@@ -22,12 +22,23 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
             e.preventDefault();
             e.stopPropagation(); // to prevent page scroll
             const code:number = e.keyCode;
-            this.press(code);
+            if (this.isPressed(code)) return; // keyboard generate repeated events when key is pressed - ignore it
+
+            const engineEvent:KeyBoardEvent = KeyBoardEvent.fromPool();
+            if (!engineEvent) {
+                if (DEBUG) console.warn('keyboard pool is full');
+                return;
+            } // todo strict check for null
+            engineEvent.key = code;
+            this.press(code,engineEvent);
+
         };
 
         this.keyUpListener  = (e:KeyboardEvent)=>{
             const code:number = e.keyCode;
-            this.release(code);
+            const engineEvent:KeyBoardEvent = this.getEvent(code) as KeyBoardEvent;
+            if (engineEvent===null) return;
+            this.release(code,engineEvent);
         };
 
         globalThis.addEventListener('keydown',this.keyDownListener);

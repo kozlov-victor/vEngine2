@@ -49,28 +49,6 @@ export class MainScene extends Scene {
         this.logoObj.pos.fromJSON({x:10,y:10});
         this.appendChild(this.logoObj);
 
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KEYBOARD_KEY)=>{
-            switch (e) {
-                case KEYBOARD_KEY.LEFT:
-                    this.logoObj.pos.addX(-1);
-                    break;
-                case KEYBOARD_KEY.RIGHT:
-                    this.logoObj.pos.addX(1);
-                    break;
-                case KEYBOARD_KEY.UP:
-                    this.logoObj.pos.addY(-1);
-                    break;
-                case KEYBOARD_KEY.DOWN:
-                    this.logoObj.pos.addY(1);
-                    break;
-                case KEYBOARD_KEY.R:
-                    this.logoObj.angle+=0.1;
-            }
-        });
-
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KEYBOARD_KEY)=>{
-
-        });
 
         this.on(KEYBOARD_EVENTS.keyHold, (e)=>{
             console.log(e);

@@ -155,8 +155,6 @@ const mapType = (gl:WebGLRenderingContext, type:number):string=> {
 
 type GL = WebGLRenderingContext;
 type LOC = WebGLUniformLocation;
-type NUM = number;
-type NUM_ARR = number[];
 export type UNIFORM_VALUE_TYPE = number|number[]|Int|Int[]|boolean|boolean[];
 
 type UNIFORM_SETTER = (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=>void;
@@ -164,7 +162,7 @@ type UNIFORM_SETTER = (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=>void;
 
 export interface IUniformWrapper {
     type:string;
-    size:NUM;
+    size:number;
     location: LOC;
     setter: UNIFORM_SETTER;
 }
@@ -234,6 +232,7 @@ export const extractAttributes = (gl:WebGLRenderingContext, program:ShaderProgra
     return attrMap;
 };
 
+// todo remove to object module
 const isNumber = (val:UNIFORM_VALUE_TYPE):val is number=>{
     if (!DEBUG) return true;
     if (isNaN(parseFloat(String(val))) || !isFinite(Number(val)))

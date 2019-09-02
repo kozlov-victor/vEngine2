@@ -1,7 +1,7 @@
 import {AssetsDocumentHolder, Element} from "../data/assetsDocumentHolder";
 import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {MathEx} from "@engine/misc/mathEx";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {BaseScene} from "./baseScene";
 import {ImageButton} from "@engine/renderable/impl/ui/components/imageButton";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
@@ -208,8 +208,8 @@ export class MainScene extends BaseScene {
 
 
     private listenControls(){
-        this.on(KEYBOARD_EVENTS.keyPressed,(k:KEYBOARD_KEY)=>{
-            switch (k) {
+        this.on(KEYBOARD_EVENTS.keyPressed,(e:KeyBoardEvent)=>{
+            switch (e.key) {
                 case KEYBOARD_KEY.LEFT: {
                     this.movePeriscope(1);
                     this.btnLeft.triggerOn();
@@ -229,8 +229,8 @@ export class MainScene extends BaseScene {
                     break;
             }
         });
-        this.on(KEYBOARD_EVENTS.keyReleased,(k:KEYBOARD_KEY)=>{
-            switch (k) {
+        this.on(KEYBOARD_EVENTS.keyReleased,(e:KeyBoardEvent)=>{
+            switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
                     this.stopPeriscope();

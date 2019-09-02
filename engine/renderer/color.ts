@@ -46,7 +46,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
 
     private _captured:boolean = false;
 
-    constructor(r:number,g:number,b:number,a?:number){
+    constructor(r:number = 0,g:number = r,b:number = g,a:number = 255){
         this.setRGBA(r,g,b,a);
     }
 

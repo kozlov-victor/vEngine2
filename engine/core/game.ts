@@ -32,22 +32,18 @@ export class Game {
     private static instance:Game;
 
 
-    // private static isOfType<T>(instance:any, C:ClazzEx<T,any>):instance is T {
-    //     return instance instanceof C;
-    // }
-
     public readonly width:number;
     public readonly height:number;
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly pos:Point2d = new Point2d(0,0);
-    public readonly screenSize = new Point2d(0,0);
+    public readonly screenSize = new Point2d(0,0); // todo size not point
     public readonly camera:Camera = new Camera(this);
 
     public gravityConstant:number = 0;
     public fps:number = 0;
 
     public readonly collider:ColliderEngine = new ColliderEngine(this);
-    private _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
+    private readonly _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
     private _lastTime:number = 0;
     private _currTime:number = 0;
@@ -96,14 +92,6 @@ export class Game {
         }
         return this.audioPlayer;
     }
-
-    // public getControl<T>(T:ClazzEx<IControl,Game>):T {
-    //     for (const c of this._controls) {
-    //         if (Game.isOfType(c,T)) return c as any as T;
-    //     }
-    //     if (DEBUG) throw new DebugError('no such control');
-    //     else throw new Error();
-    // }
 
     public hasControl(type:string):boolean {
         for (const c of this._controls) {
@@ -177,15 +165,18 @@ export class Game {
         }
 
         const numOfLoops:number = (~~(this._deltaTime / Game.UPDATE_TIME_RATE))||1;
-        let currTime:number = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
+        this._currTime = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
         let loopCnt:number = 0;
         do {
+            this._lastTime = this._currTime;
+            this._currTime += Game.UPDATE_TIME_RATE;
+            this._deltaTime = this._currTime - this._lastTime;
+
             this._currentScene.update();
             // this.collider.collisionArcade(); todo
             for (const c of this._controls) {
                 c.update();
             }
-            currTime += Game.UPDATE_TIME_RATE;
             loopCnt++;
             if (loopCnt>10) { // to avoid to much iterations
                 this._lastTime = this._currTime = currTimeCopy;
