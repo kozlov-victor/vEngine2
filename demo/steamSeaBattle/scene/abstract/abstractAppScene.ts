@@ -98,7 +98,7 @@ export abstract class AbstractAppScene extends Scene {
         return val==='1';
     }
 
-    private require(val:any):typeof val{
+    private require(val:string|number):typeof val{
         if (val===undefined) throw new Error('value is required');
         return val;
     }

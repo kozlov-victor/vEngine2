@@ -9,12 +9,18 @@ declare module "*.png" {
 }
 
 declare module "*.json" {
-    const value: any;
+    const value: string;
     export = value;
 }
 
+declare interface IElementDescription {
+    tagName:string;
+    attributes:Record<string,string>;
+    children:IElementDescription[];
+}
+
 declare module "*.xml" {
-    const value:any;
+    const value:IElementDescription;
     export = value;
 }
 
@@ -28,6 +34,12 @@ declare const BUILD_AT:number;
 
 // tslint:disable-next-line:interface-name
 interface Window {
+    Image:typeof HTMLImageElement;
     globalThis:Window;
     __POLYFILLS_INCLUDED__:boolean;
 }
+
+declare const MACRO_GL_COMPRESS:(arg:TemplateStringsArray)=>string;
+
+declare type Optional<T> = T | undefined;
+

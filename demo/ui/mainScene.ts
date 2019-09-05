@@ -3,10 +3,7 @@ import {TEXT_ALIGN, TextField, WORD_BRAKE} from "@engine/renderable/impl/ui/comp
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {FntCreator} from "../fnt/FntCreator";
-import createFont = FntCreator.createFont;
 import {CheckBox} from "@engine/renderable/impl/ui/components/checkBox";
-import {Button} from "@engine/renderable/impl/ui/components/button";
 
 const text:string=
 `Lorem ipsum dolor sit amet, 
@@ -68,8 +65,6 @@ export class MainScene extends Scene {
         // btn.setPaddings(20);
         // this.appendChild(btn);
 
-
-        (window as any).tf = tf;
 
     }
 

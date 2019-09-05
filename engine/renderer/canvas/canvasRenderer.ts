@@ -25,6 +25,12 @@ interface ICanvasTexture extends ITexture{
     source: CanvasImageSource;
 }
 
+interface ICanvasRenderingContext2D extends CanvasRenderingContext2D {
+    webkitImageSmoothingEnabled:boolean;
+    mozImageSmoothingEnabled:boolean;
+    msImageSmoothingEnabled:boolean;
+}
+
 export class CanvasRenderer extends AbstractCanvasRenderer {
 
     public readonly type:string = 'CanvasRenderer';
@@ -39,7 +45,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     // https://miguelmota.com/blog/pixelate-images-with-canvas/demo/
     public setPixelPerfectMode(){ // todo
-        // This is what gives us that blocky pixel styling, rather than a blend between pixels.
+
         this.container.style.cssText += 'image-rendering: optimizeSpeed;' + // FireFox < 6.0
             'image-rendering: -moz-crisp-edges;' + // FireFox
             'image-rendering: -o-crisp-edges;' +  // Opera
@@ -49,10 +55,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             'image-rendering: pixelated; ' + // Future browsers
             '-ms-interpolation-mode: nearest-neighbor;'; // IE
 
-        // Grab the drawing context object. It's what lets us draw on the canvas.
-        const context:any = this.container.getContext('webgl2');
-
-        // Use nearest-neighbor scaling when images are resized instead of the resizing algorithm to create blur.
+        const context:ICanvasRenderingContext2D = this.container.getContext('2d')! as ICanvasRenderingContext2D;
         context.webkitImageSmoothingEnabled = false;
         context.mozImageSmoothingEnabled = false;
         context.msImageSmoothingEnabled = false;
@@ -221,7 +224,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public getCachedTarget(l: ResourceLink<ITexture>): ITexture|undefined {
+    public getCachedTarget(l: ResourceLink<ITexture>): Optional<ITexture> {
         return undefined;
     }
 

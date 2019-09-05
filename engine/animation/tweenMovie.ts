@@ -9,7 +9,7 @@ interface ITweenInMovie {
 
 export class TweenMovie {
     private _loop:boolean = false;
-    private _onComplete:((arg?:any)=>void) | undefined = undefined;
+    private _onComplete:Optional<((arg?:any)=>void)>;
     private _tweensInMovie:ITweenInMovie[] = [];
     private _startedTime:number = 0;
     private _completed:boolean = false;

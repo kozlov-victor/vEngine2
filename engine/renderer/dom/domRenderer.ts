@@ -11,13 +11,18 @@ import {Size} from "@engine/geometry/size";
 import {MathEx} from "@engine/misc/mathEx";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Mesh} from "@engine/renderable/abstract/mesh";
-import {NinePatchImage} from "@engine/renderable/impl/geometry/ninePatchImage";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Rect} from "@engine/geometry/rect";
 
+
+interface ICSSStyleDeclaration extends CSSStyleDeclaration{
+    msTransformOrigin:string;
+    msTransform:string;
+}
+
 class Nodes  {
-    public properties:{[key:string]:any} = {};
+    public properties:{[key:string]:string} = {};
 
     private children: {[name:string]:VNode} = {};
 
@@ -57,7 +62,7 @@ class Nodes  {
 
 class VNode {
 
-    public properties:{[name:string]:any} = {};
+    public properties:{[name:string]:string|number} = {};
     public domEl:HTMLDivElement;
 
     constructor(){
@@ -126,7 +131,7 @@ export class DomRenderer extends AbstractRenderer {
     }
 
     public createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoaded:()=>void):void {
-        const img:HTMLImageElement = new (window as any).Image() as HTMLImageElement; // todo
+        const img:HTMLImageElement = new globalThis.Image();
         img.src = link.getUrl();
         img.onload = ()=>{
             link.setTarget({
@@ -185,7 +190,7 @@ export class DomRenderer extends AbstractRenderer {
         return {size:new Size()};
     }
 
-    public getError(): { code: number; desc: string } | undefined {
+    public getError(): Optional<{code: number; desc: string}> {
         return undefined;
     }
 
@@ -224,12 +229,12 @@ export class DomRenderer extends AbstractRenderer {
             node.properties.rotation_point_x = model.rotationPoint.x;
             node.properties.rotation_point_y = model.rotationPoint.y;
             node.domEl.style.transformOrigin = `${model.rotationPoint.x}px ${model.rotationPoint.y}px`;
-            (node.domEl.style as any).msTransformOrigin = `${model.rotationPoint.x}px ${model.rotationPoint.y}px`;
+            (node.domEl.style as ICSSStyleDeclaration).msTransformOrigin = `${model.rotationPoint.x}px ${model.rotationPoint.y}px`;
         }
         if (model.angle!==node.properties.angle) {
             node.properties.angle = model.angle;
             node.domEl.style.transform = `rotate(${MathEx.radToDeg(model.angle)}deg)`;
-            (node.domEl.style as any).msTransform = `rotate(${MathEx.radToDeg(model.angle)}deg)`;
+            (node.domEl.style as ICSSStyleDeclaration).msTransform = `rotate(${MathEx.radToDeg(model.angle)}deg)`;
         }
     }
 

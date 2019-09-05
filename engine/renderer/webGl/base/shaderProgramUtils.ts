@@ -89,7 +89,7 @@ export const createProgram = (gl:WebGLRenderingContext, vertexShader:WebGLShader
         const lastError:string|null = gl.getProgramInfoLog(program);
         if (lastError) {
             if (DEBUG) {
-                const status:any = gl.getProgramParameter( program, gl.VALIDATE_STATUS);
+                const status:number|string = gl.getProgramParameter( program, gl.VALIDATE_STATUS);
                 console.error('VALIDATE_STATUS',status);
                 const vertexSource:string = gl.getShaderSource(vertexShader) as string;
                 const fragmentSource:string = gl.getShaderSource(fragmentShader) as string;
@@ -146,7 +146,7 @@ const mapType = (gl:WebGLRenderingContext, type:number):string=> {
 
         for (let i:number = 0; i < typeNames.length; ++i) {
             const tn:string = typeNames[i];
-            GL_TABLE[(gl as any)[tn]] = (GL_TYPE as any)[tn]; //todo
+            GL_TABLE[(gl as unknown as IKeyVal<string>)[tn]] = (GL_TYPE as unknown as IKeyVal<string>)[tn]; //todo
         }
     }
 
@@ -155,7 +155,9 @@ const mapType = (gl:WebGLRenderingContext, type:number):string=> {
 
 type GL = WebGLRenderingContext;
 type LOC = WebGLUniformLocation;
-export type UNIFORM_VALUE_TYPE = number|number[]|Int|Int[]|boolean|boolean[];
+
+export type UNIFORM_VALUE_PRIMITIVE_TYPE = number|Int|boolean;
+export type UNIFORM_VALUE_TYPE = UNIFORM_VALUE_PRIMITIVE_TYPE|UNIFORM_VALUE_PRIMITIVE_TYPE[];
 
 type UNIFORM_SETTER = (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=>void;
 
@@ -263,14 +265,14 @@ const isArrayOfType = (val:UNIFORM_VALUE_TYPE,checker:(val:UNIFORM_VALUE_TYPE)=>
         console.error('Can not set uniform value',val);
         throw new DebugError(`can not set uniform with value [${val}]: expected argument of type Array`);
     }
-    if (size!==undefined && (val as any[]).length!==size)
-        throw new DebugError(`can not set uniform with value [${val}]: expected array with size ${size}, but ${(val as any[]).length} found`);
+    if (size!==undefined && (val as unknown as UNIFORM_VALUE_TYPE[]).length!==size)
+        throw new DebugError(`can not set uniform with value [${val}]: expected array with size ${size}, but ${(val as unknown as UNIFORM_VALUE_TYPE[]).length} found`);
     for (let i:number=0;i<val.length;i++) {
         try {
             checker(val[i]);
         } catch (e){
             console.error('Can not set uniform array item',val);
-            throw new DebugError(`can not set uniform array item with value [${val}]: unexpected array element type: ${(val as any[])[i]}`);
+            throw new DebugError(`can not set uniform array item with value [${val}]: unexpected array element type: ${(val as unknown as UNIFORM_VALUE_TYPE[])[i]}`);
         }
     }
     return true;

@@ -32,16 +32,16 @@ export class SimpleRectDrawer extends AbstractDrawer {
         this.u_textureMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_textureMatrix');
         gen.addVarying(GL_TYPE.FLOAT_VEC2,'v_texCoord');
         //language=GLSL
-        gen.setVertexMainFn(`
+        gen.setVertexMainFn(MACRO_GL_COMPRESS`            
             void main(){
                 gl_Position = u_vertexMatrix * a_position;
                 v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
-            } 
+            }
         `);
         gen.addFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');
         //gen.addFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
         //language=GLSL
-        gen.setFragmentMainFn(`
+        gen.setFragmentMainFn(MACRO_GL_COMPRESS`            
             void main(){
                 gl_FragColor = texture2D(texture, v_texCoord);
             }

@@ -24,8 +24,6 @@ export class MainScene extends Scene {
         this.img2.stretchMode = STRETCH_MODE.REPEAT;
         this.img2.borderRadius = 15;
 
-        (window as any).img1 = this.img1;
-        (window as any).img2 = this.img2;
     }
 
     public onReady() {

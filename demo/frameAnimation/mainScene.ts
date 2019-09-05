@@ -41,7 +41,6 @@ export class MainScene extends Scene {
         });
         // this.obj.sprite.size.width = 100;
 
-        (window as any).obj = this.obj;
 
     }
 

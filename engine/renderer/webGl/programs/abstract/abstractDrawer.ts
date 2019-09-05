@@ -129,7 +129,7 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         this.bufferInfo.draw();
     }
 
-    private _setUniform(name:string,value:any){
+    private _setUniform(name:string,value:UNIFORM_VALUE_TYPE){
         this.program!.setUniform(name,value);
     }
 

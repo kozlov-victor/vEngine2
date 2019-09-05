@@ -450,7 +450,7 @@ export abstract class RenderableModel  implements IRevalidatable, ITweenable, IE
         return MathEx.overlapTest(this.game.camera.getRectScaled(),this.getSrcRect());
     }
 
-    private _getParent():RenderableModel|Layer|undefined{
+    private _getParent():Optional<RenderableModel|Layer>{
         return this.parent || this._layer || undefined;
     }
 

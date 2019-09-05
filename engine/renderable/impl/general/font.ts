@@ -133,6 +133,8 @@ export class Font implements IResource<ITexture>, IRevalidatable {
     public static getSystemFont():Font{
         if (Font._systemFontInstance) return Font._systemFontInstance;
         const f:Font = new Font(Game.getInstance());
+        f.fontFamily = 'monospace';
+        f.fontSize = 12;
         f.createContext();
         const resourceLoader:ResourceLoader = new ResourceLoader(Game.getInstance());
         const link:ResourceLink<ITexture> = resourceLoader.loadImage(f.createBitmap());

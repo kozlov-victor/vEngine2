@@ -62,8 +62,6 @@ export class MainScene extends Scene {
         this.logoObj.addBehaviour(new DraggableBehaviour(this.game));
 
 
-        (window as any).logoObj = this.logoObj;
-
     }
 
 }

@@ -36,7 +36,7 @@ export const getRandomWinType = ()=>{
     }
 };
 
-const oneOf = (arr:any[])=>{
+const oneOf = (arr:number[])=>{
     const n:number = MathEx.randomInt(0,arr.length-1);
     return arr[n];
 };
@@ -81,7 +81,11 @@ const common = {
     getRandomWinType,getSlotsByWinType
 };
 
-(window as any).common = common;
+interface IWindowEx extends Window {
+    common:typeof common;
+}
+
+(window as IWindowEx).common = common;
 
 // console.log(defineWinType([WHEEL_SECTOR.CAR,WHEEL_SECTOR.CAR,WHEEL_SECTOR.CAR])===WIN_TYPE.DELIVERY_FREE);
 // console.log(defineWinType([WHEEL_SECTOR.SINABON,WHEEL_SECTOR.SINABON,WHEEL_SECTOR.CAR])===WIN_TYPE.DISCOUNT_50);

@@ -73,9 +73,9 @@ export class Vec2 extends Point2d {
     }
 
     public normalize():Vec2 {
-        const length:number = this.getLength();
-        this.x = this.x / length;
-        this.y = this.y / length;
+        const l:number = this.getLength();
+        this.x = this.x / l;
+        this.y = this.y / l;
         return this;
     }
 

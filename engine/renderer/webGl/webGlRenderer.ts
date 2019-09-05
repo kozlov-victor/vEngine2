@@ -215,7 +215,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (isTextureUsed) md.setTectureMatrix(FLIP_TEXTURE_MATRIX.mat16);
         md.setLightUsed(mesh.isLightAccepted()||false);
         md.setColor(mesh.fillColor);
-        md.attachTexture('u_texture',mesh.texture?mesh.texture as any as Texture:this.nullTexture);
+        md.attachTexture('u_texture',mesh.texture?mesh.texture as Texture:this.nullTexture);
 
 
         if (mesh.depthTest) this.gl.enable(this.gl.DEPTH_TEST);
@@ -363,7 +363,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.simpleRectDrawer.draw();
         this.restore();
     }
-    public getError():{code:number,desc:string}|undefined{
+    public getError():Optional<{code:number,desc:string}>{
         if (!DEBUG) return undefined;
         const err:number = this.gl.getError();
         if (err!==this.gl.NO_ERROR) {
@@ -379,7 +379,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.renderableCache[url] = t;
     }
 
-    public getCachedTarget(l:ResourceLink<ITexture>):ITexture|undefined {
+    public getCachedTarget(l:ResourceLink<ITexture>):Optional<ITexture> {
         return this.renderableCache[l.getUrl()];
     }
 

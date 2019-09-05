@@ -27,10 +27,10 @@ export class MainScene extends Scene {
 
 
     public onReady() {
-        const framesRaw: any = JSON.parse(this.atlasLink.getTarget()).frames;
+        const framesRaw: Record<string,{frame:{x:number,y:number,w:number,h:number}}> = JSON.parse(this.atlasLink.getTarget()).frames;
 
-        const toFrame = (data: any): IRectJSON => {
-            const frame: any = data.frame;
+        const toFrame = (frameInfo: {frame:{x:number,y:number,w:number,h:number}}): IRectJSON => {
+            const frame:typeof frameInfo.frame = frameInfo.frame;
             return {x: frame.x, y: frame.y, width: frame.w, height: frame.h} as IRectJSON;
         };
 
@@ -84,10 +84,6 @@ export class MainScene extends Scene {
         this.obj.pos.fromJSON({x: 10, y: 10});
         this.appendChild(this.obj);
 
-        const playing: boolean = true;
-
-
-        (window as any).obj = this.obj;
 
     }
 

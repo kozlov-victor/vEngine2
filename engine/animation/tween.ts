@@ -59,9 +59,9 @@ export class Tween {
     private _completed:boolean = false;
     private readonly _target: any;
     private readonly _loop: boolean;
-    private _progressFn:((arg?:any)=>void) | undefined;
+    private _progressFn:Optional<((arg?:any)=>void)>;
     private _delayBeforeStart:number = 0;
-    private readonly _completeFn: ((arg?:any)=>void) | undefined;
+    private readonly _completeFn:Optional<((arg?:any)=>void)>;
     private readonly _easeFn:EaseFn;
     private readonly _tweenTime: number;
     private _desc:ITweenDescriptionNormalized;

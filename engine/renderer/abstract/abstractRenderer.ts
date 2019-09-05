@@ -7,7 +7,6 @@ import {Color} from "../color";
 import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
-import {NinePatchImage} from "@engine/renderable/impl/geometry/ninePatchImage";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mesh} from "@engine/renderable/abstract/mesh";
@@ -17,6 +16,18 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/texture";
 import {IDestroyable} from "@engine/core/declarations";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
+
+interface IHTMLElement extends HTMLElement{
+    requestFullScreen:()=>void;
+    mozRequestFullScreen:()=>void;
+    webkitRequestFullScreen:()=>void;
+}
+
+interface IDocument extends Document {
+    cancelFullScreen:()=>void;
+    mozCancelFullScreen:()=>void;
+    webkitCancelFullScreen:()=>void;
+}
 
 export abstract class AbstractRenderer implements IDestroyable {
 
@@ -42,23 +53,24 @@ export abstract class AbstractRenderer implements IDestroyable {
     }
 
     public requestFullScreen():void {
-        const element:HTMLElement = this.container;
-        if((element as any).requestFullScreen) {
-            (element as any).requestFullScreen();
-        } else if((element as any).mozRequestFullScreen) {
-            (element as any).mozRequestFullScreen();
-        } else if((element as any).webkitRequestFullScreen) {
-            (element as any).webkitRequestFullScreen();
+        const element:IHTMLElement = this.container as IHTMLElement;
+        if((element).requestFullScreen) {
+            (element).requestFullScreen();
+        } else if((element).mozRequestFullScreen) {
+            (element).mozRequestFullScreen();
+        } else if((element).webkitRequestFullScreen) {
+            (element).webkitRequestFullScreen();
         }
     }
 
     public cancelFullScreen():void {
-        if((document as any).cancelFullScreen) {
-            (document as any).cancelFullScreen();
-        } else if((document as any).mozCancelFullScreen) {
-            (document as any).mozCancelFullScreen();
-        } else if((document as any).webkitCancelFullScreen) {
-            (document as any).webkitCancelFullScreen();
+        const doc:IDocument = globalThis.document as IDocument;
+        if(doc.cancelFullScreen) {
+            (doc).cancelFullScreen();
+        } else if(doc.mozCancelFullScreen) {
+            doc.mozCancelFullScreen();
+        } else if(doc.webkitCancelFullScreen) {
+            doc.webkitCancelFullScreen();
         }
     }
 
@@ -70,7 +82,7 @@ export abstract class AbstractRenderer implements IDestroyable {
         globalThis.removeEventListener('resize',this.onResize);
     }
 
-    public abstract getError():{code:number,desc:string}|undefined;
+    public abstract getError():Optional<{code:number,desc:string}>;
 
     public abstract drawImage(img:Image):void;
 
@@ -110,7 +122,7 @@ export abstract class AbstractRenderer implements IDestroyable {
 
     public abstract killObject(r:RenderableModel):void;
 
-    public log(args:any):void {
+    public log(...args:any[]):void {
         if (!DEBUG) return;
         let textField:TextField = this.debugTextField;
         if (!textField) {
@@ -123,6 +135,9 @@ export abstract class AbstractRenderer implements IDestroyable {
         Array.prototype.slice.call(arguments).forEach((txt:any)=>{
             if (txt===undefined) txt = 'undefined';
             else if (txt===null) txt = 'null';
+            else if (txt instanceof HTMLElement) {
+                txt = `[object ${txt.tagName}]`;
+            }
             else if (txt.toJSON) {
                 txt = JSON.stringify(txt.toJSON(),null,4);
             }
@@ -130,19 +145,26 @@ export abstract class AbstractRenderer implements IDestroyable {
                 txt = txt.toString();
             }
             else {
-                if (typeof txt !== 'string') {
+                if (!(txt as string).substr) {
                     try{
                         txt = JSON.stringify(txt);
                     } catch (e){
-                        txt = txt.toString();
+                        if (txt.constructor && txt.constructor.name) txt = `[object ${txt.constructor.name}]`;
+                        else txt = txt.toString();
                     }
                 }
             }
             res+=`${txt}\n`;
         });
-        textField.pos.x = 10;
-        textField.pos.y = 10;
         textField.setText(textField.getText()+res);
+        textField.onGeometryChanged();
+        console.log(textField.size.height);
+        while (textField.size.height>this.game.height) {
+            const strings:string[] = textField.getText().split('\n');
+            strings.shift();
+            textField.setText(strings.join('\n'));
+            textField.onGeometryChanged();
+        }
     }
 
     public clearLog():void {
@@ -153,7 +175,7 @@ export abstract class AbstractRenderer implements IDestroyable {
 
     public abstract createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoaded:()=>void):void;
 
-    public abstract getCachedTarget(l:ResourceLink<ITexture>):ITexture|undefined;
+    public abstract getCachedTarget(l:ResourceLink<ITexture>):Optional<ITexture>;
 
     protected registerResize():void {
         this.onResize();

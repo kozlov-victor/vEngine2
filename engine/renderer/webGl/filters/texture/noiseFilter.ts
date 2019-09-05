@@ -26,7 +26,7 @@ export class NoiseFilter extends AbstractFilter {
         this.u_noise_intensity = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_noise_intensity');
 
         //language=GLSL
-        programGen.appendFragmentCodeBlock(`
+        programGen.appendFragmentCodeBlock(MACRO_GL_COMPRESS`
             float rand(vec2 co){
                 return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
             }

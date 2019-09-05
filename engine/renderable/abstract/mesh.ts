@@ -35,7 +35,7 @@ export abstract class Mesh extends RenderableModel {
         this._lightAccepted = val;
     }
 
-    public isLightAccepted():boolean|undefined{
+    public isLightAccepted():Optional<boolean>{
         return this._lightAccepted;
     }
 
