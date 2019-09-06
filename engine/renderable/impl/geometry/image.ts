@@ -23,6 +23,8 @@ export class Image extends Shape implements ICloneable<Image>,IResource<ITexture
     // resource
     private _resourceLink:ResourceLink<ITexture>;
 
+    private _srcRect:Rect = new Rect();
+
     constructor(game: Game) {
         super(game);
         (this.fillColor as Color).set(Color.NONE);
@@ -74,7 +76,6 @@ export class Image extends Shape implements ICloneable<Image>,IResource<ITexture
     }
 
     protected setClonedProperties(cloned:Image):void {
-        cloned._srcRect.set(this._srcRect);
         cloned.borderRadius = this.borderRadius;
         cloned.offset.set(this.offset);
         cloned.stretchMode = this.stretchMode;

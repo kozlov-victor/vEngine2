@@ -38,8 +38,9 @@ export class Size extends ObservableEntity implements IReleasealable{
 
     private _arr:[number,number] = [this._width,this._height];
 
-    constructor(width:number = 0,height:number = 0){
+    constructor(width:number = 0,height:number = 0,onChangedFn?:()=>void){
         super();
+        if (onChangedFn) this.addOnChangeListener(onChangedFn);
         this.setWH(width,height);
     }
 

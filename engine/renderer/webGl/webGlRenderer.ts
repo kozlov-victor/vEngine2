@@ -167,6 +167,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
         this.prepareShapeUniformInfo(img);
+
+        const repeatFactor:Size = Size.fromPool();
+        repeatFactor.setWH(
+            img.size.width/img.getSrcRect().width,
+            img.size.height/img.getSrcRect().height
+        );
+        sd.setUniform(sd.u_repeatFactor,repeatFactor.toArray());
+        repeatFactor.release();
+
         sd.setUniform(sd.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
         sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
         sd.setUniform(sd.u_fillType,FILL_TYPE.TEXTURE);
@@ -480,27 +489,20 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             sd.setUniform(sd.u_rectOffsetLeft,offsetX/maxSize);
             sd.setUniform(sd.u_rectOffsetTop,0);
         }
+
         const rect:Rect = Rect.fromPool();
         rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
         const size:Size = Size.fromPool();
         size.setWH(this.game.width,this.game.height);
         const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
         sd.setUniform(sd.u_vertexMatrix,pos16h.mat16);
-
         pos16h.release();
         rect.release();
         size.release();
+
         sd.setUniform(sd.u_lineWidth,Math.min(shape.lineWidth/maxSize,1));
         sd.setUniform(sd.u_color,shape.color.asGL());
         sd.setUniform(sd.u_alpha,shape.alpha);
-
-        const repeatFactor:Size = Size.fromPool();
-        repeatFactor.setWH(
-            shape.size.width/shape.getSrcRect().width,
-            shape.size.height/shape.getSrcRect().height
-        );
-        sd.setUniform(sd.u_repeatFactor,repeatFactor.toArray());
-        repeatFactor.release();
         sd.setUniform(sd.u_stretchMode,STRETCH_MODE.STRETCH);
 
         if (shape.fillColor.type==='LinearGradient') {

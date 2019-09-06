@@ -1,5 +1,5 @@
 import {Size} from "./size";
-import {Point2d} from "./point2d";
+import {IPoint2d, Point2d} from "./point2d";
 import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
 import {ICloneable} from "@engine/core/declarations";
@@ -11,7 +11,16 @@ export interface IRectJSON {
     height:number;
 }
 
-export class Rect extends ObservableEntity implements ICloneable<Rect>{
+export interface IRect {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    right: number;
+    bottom: number;
+}
+
+export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
 
     get right(): number {
         return this._right;
@@ -39,6 +48,7 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>{
 
     constructor(x:number = 0,y:number = 0,width:number = 0,height:number = 0,onChangedFn?:()=>void){
         super();
+        if (onChangedFn) this.addOnChangeListener(onChangedFn);
         this.setXYWH(x,y,width,height);
     }
 
@@ -101,8 +111,14 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>{
         return this;
     }
 
-    public setPoint(p:Point2d):Rect{
+    public setPoint(p:IPoint2d):Rect{
         this.setXY(p.x,p.y);
+        return this;
+    }
+
+    public setPointAndSize(p:IPoint2d,size:Size):Rect{
+        this.setPoint(p);
+        this.setSize(size);
         return this;
     }
 

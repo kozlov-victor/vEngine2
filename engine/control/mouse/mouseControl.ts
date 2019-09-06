@@ -18,7 +18,9 @@ export class MouseControl implements IControl {
         eventName:MOUSE_EVENTS,point:MousePoint,
         go:RenderableModel):boolean{
 
-        const rectWithOffset:Rect = Rect.fromPool().set(go.getWorldRect());
+        const rectWithOffset:Rect = Rect.fromPool();
+        rectWithOffset.setPointAndSize(go.getWorldPosition(),go.size);
+
         let res:boolean = false;
         if (
             MathEx.isPointInRect(point,rectWithOffset)

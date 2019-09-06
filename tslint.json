@@ -34,6 +34,8 @@
     },
     "interface-over-type-literal": false,
     "radix": false,
+    "arrow-parens": false,
+    "callable-types": false,
     "implicit-global-variable": true,
     "no-any": false,
     "no-null-keyword": false

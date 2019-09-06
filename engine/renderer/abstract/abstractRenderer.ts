@@ -158,7 +158,6 @@ export abstract class AbstractRenderer implements IDestroyable {
         });
         textField.setText(textField.getText()+res);
         textField.onGeometryChanged();
-        console.log(textField.size.height);
         while (textField.size.height>this.game.height) {
             const strings:string[] = textField.getText().split('\n');
             strings.shift();
