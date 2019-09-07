@@ -18,7 +18,9 @@ export class MouseControl implements IControl {
         eventName:MOUSE_EVENTS,point:MousePoint,
         go:RenderableModel):boolean{
 
-        const rectWithOffset:Rect = Rect.fromPool().set(go.getWorldRect());
+        const rectWithOffset:Rect = Rect.fromPool();
+        rectWithOffset.setPointAndSize(go.getWorldPosition(),go.size);
+
         let res:boolean = false;
         if (
             MathEx.isPointInRect(point,rectWithOffset)
@@ -151,7 +153,7 @@ export class MouseControl implements IControl {
         //if (!scene) return null; //todo check for runtime errors
         const point:MousePoint = this.resolvePoint(e);
         point.isMouseDown = isMouseDown;
-        (point.target as RenderableModel|Scene|undefined) = undefined;
+        (point.target as Optional<RenderableModel|Scene>) = undefined;
 
         let isCaptured:boolean = false;
         let i:number = scene.getLayers().length; // reversed loop

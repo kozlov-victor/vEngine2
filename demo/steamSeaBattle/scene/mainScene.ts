@@ -165,7 +165,7 @@ export class MainScene extends BaseScene {
             this.bulletContainer.velocity.y = 0;
             this.bullet.visible = false;
             this.checkLevelCompleted();
-            if (MathEx.overlapTest(this.bulletContainer.getSrcRect(),this.ship.getSrcRect())) {
+            if (MathEx.overlapTest(this.bulletContainer.getDestRect(),this.ship.getDestRect())) {
                 this.resetShip();
                 this.score++;
                 this.nixieDisplayShoot.setNumber(this.score);

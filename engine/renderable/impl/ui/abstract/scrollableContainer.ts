@@ -2,7 +2,7 @@ import {Container} from "./container";
 import {VScroll} from "../components/vScroll";
 import {Game} from "@engine/core/game";
 import {MathEx} from "@engine/misc/mathEx";
-import {IMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";
+import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export interface IScrollInitDesc {

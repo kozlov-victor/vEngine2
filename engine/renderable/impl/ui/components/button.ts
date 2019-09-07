@@ -40,7 +40,7 @@ export class Button extends Container {
 
     public setText(text:string):void{
         this._textField.setText(text);
-        this._dirty = true;
+        this.setDirty();
     }
 
     public setFont(font:Font):void{

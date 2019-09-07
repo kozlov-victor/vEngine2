@@ -13,7 +13,6 @@ export class MainScene extends Scene {
         this.resourceLink = this.resourceLoader.loadSound('./sound/sound.mp3');
 
         const sound:Sound = new Sound(this.game);
-        (window as any).sound = sound;
         this.sound = sound;
         sound.setResourceLink(this.resourceLink);
 

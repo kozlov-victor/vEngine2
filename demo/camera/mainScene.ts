@@ -94,7 +94,7 @@ export class MainScene extends Scene {
             }
         });
 
-        (window as any).logoObj = this.logoObj;
+        (window as (Window &{logoObj:GameObject})).logoObj = this.logoObj;
 
     }
 

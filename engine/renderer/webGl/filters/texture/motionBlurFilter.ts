@@ -28,7 +28,7 @@ export class MotionBlurFilter extends AbstractFilter {
             }
         `);
         //language=GLSL
-        programGen.setFragmentMainFn(`
+        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main() {
                 vec2 texCoord = v_texCoord;
                 vec4 color=vec4(0.0);

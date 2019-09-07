@@ -26,7 +26,7 @@ export class PixelFilter extends AbstractFilter {
         this.pixel_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixel_w');
         this.pixel_h = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixel_h');
         //language=GLSL
-        programGen.setFragmentMainFn(`
+        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){
                 vec2 uv = v_texCoord.xy;
                 float dx = pixel_w*(1./rt_w);

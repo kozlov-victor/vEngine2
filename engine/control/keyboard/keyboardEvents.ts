@@ -10,7 +10,7 @@ export enum KEYBOARD_EVENTS {
 
 export class KeyBoardEvent extends KeyPadEvent {
 
-    public static fromPool():KeyBoardEvent|undefined {
+    public static fromPool():Optional<KeyBoardEvent> {
         return KeyBoardEvent.rectPool.getFreeObject();
     }
 

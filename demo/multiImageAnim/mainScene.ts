@@ -36,9 +36,6 @@ export class MainScene extends Scene {
            if (playing) { this.obj.playFrameAnimation('animation'); }
            else { this.obj.stopFrameAnimation(); }
         });
-        // this.obj.sprite.size.width = 100;
-
-        (window as any).obj = this.obj;
 
     }
 

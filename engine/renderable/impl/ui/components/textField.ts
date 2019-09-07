@@ -272,17 +272,17 @@ export class TextField extends ScrollableContainer {
 
     public setText(text:string|number = ''):void {
         this._text = text+'';
-        this._dirty = true;
+        this.setDirty();
     }
 
     public setTextAlign(ta:TEXT_ALIGN):void{
         this.textAlign = ta;
-        this._dirty = true;
+        this.setDirty();
     }
 
     public setWordBreak(wb:WORD_BRAKE):void{
         this.wordBreak = wb;
-        this._dirty = true;
+        this.setDirty();
     }
 
     public getText():string {
@@ -291,7 +291,7 @@ export class TextField extends ScrollableContainer {
 
     public setFont(font:Font):void {
         this._font = font;
-        this._dirty = true;
+        this.setDirty();
     }
 
 
@@ -306,7 +306,7 @@ export class TextField extends ScrollableContainer {
 
         const renderer:AbstractRenderer = this.game.getRenderer();
         const worldRectTmp:Rect = Rect.fromPool();
-        worldRectTmp.set(this.getWorldRect());
+        worldRectTmp.setPointAndSize(this.getWorldPosition(),this.size);
         worldRectTmp.addXY(this.marginLeft+this.paddingLeft,this.marginTop+this.paddingTop);
         worldRectTmp.addWH(
             -this.marginRight-this.paddingRight-this.paddingLeft-this.paddingLeft,

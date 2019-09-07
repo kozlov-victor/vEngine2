@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const fs = require('fs');
 const TSLintPlugin = require('tslint-webpack-plugin');
 const colors = require('./node_tools/colors');
+const transformer = require('./node_tools/transformers/build/engineTransformer').engineTransformer;
 
 class WebpackDonePlugin{
     apply(compiler){
@@ -81,7 +82,11 @@ module.exports = (env={})=>{
                 {
                     test: /\.ts$/,
                     use: [
-                        {loader: "ts-loader",options: {}},
+                        {
+                            loader: "ts-loader",options: {
+                                getCustomTransformers: () => ({ before: [transformer] })
+                            }
+                        },
                     ]
                 },
             ]

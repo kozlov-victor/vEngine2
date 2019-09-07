@@ -26,7 +26,9 @@
   "scripts": {
     "start": "webpack --env.debug=true -w",
     "build": "webpack",
-    "build-demo": "node demo/generateIndexPage"
+    "build-demo": "node demo/generateIndexPage",
+    "build-lints": "node node_tools/lints/buildRules",
+    "build-transformers": "node node_tools/transformers/buildTransformers"
   },
   "main": ""
 }

@@ -23,7 +23,6 @@ export abstract class Shape extends RenderableModel implements IFilterable{
     public setXYWH(x:number,y:number,w:number,h:number):void{
         this.pos.setXY(x,y);
         this.size.setWH(w,h);
-        this.getSrcRect().setXYWH(x,y,w,h); // todo?
     }
 
     protected setClonedProperties(cloned:Shape):void{

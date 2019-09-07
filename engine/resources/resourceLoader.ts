@@ -39,9 +39,9 @@ export class ResourceLoader {
         return link;
     }
 
-    public loadJSON(req: string|IURLRequest): ResourceLink<string> {
+    public loadJSON<T>(req: string|IURLRequest): ResourceLink<T> {
         const loader:UrlLoader<string> = this.createUrlLoader<string>(req);
-        const link: ResourceLink<string> = new ResourceLink(loader.getUrl());
+        const link: ResourceLink<T> = new ResourceLink(loader.getUrl());
         this._loadText(loader, (data: string) => link.setTarget(JSON.parse(data)));
         return link;
     }

@@ -1,5 +1,5 @@
 import {RenderableModel} from "../../../abstract/renderableModel";
-import {Rect} from "@engine/geometry/rect";
+import {IRect, Rect} from "@engine/geometry/rect";
 import {Container, LAYOUT_SIZE, OVERFLOW} from "../abstract/container";
 import {Game} from "@engine/core/game";
 import {ICloneable} from "@engine/core/declarations";
@@ -24,8 +24,7 @@ export class AbsoluteLayout extends Container implements ICloneable<AbsoluteLayo
         let maxX:number = 0, maxY:number = 0;
         for (const v of this.children) {
             if (v instanceof Container) (v as Container).onGeometryChanged();
-            v.setDirty();
-            const r:Rect = v.getSrcRect();
+            const r:IRect = v.getDestRect();
             if (r.right>maxX) maxX = r.right;
             if (r.bottom>maxY) maxY = r.bottom;
         }
@@ -41,7 +40,7 @@ export class AbsoluteLayout extends Container implements ICloneable<AbsoluteLayo
     public draw():boolean{
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (this.overflow===OVERFLOW.HIDDEN) {
-            const r:Rect = Rect.fromPool().set(this.getWorldRect());
+            const r:Rect = Rect.fromPool().setPointAndSize(this.getWorldPosition(),this.size);
             r.addXY(-1,-1);
             r.setWH(r.width+1,r.height+1);
             renderer.lockRect(r);

@@ -55,6 +55,9 @@ export abstract class Container extends RenderableModel {
     public maxHeight: number = 0;
 
 
+    private _dirty:boolean = false;
+
+
     protected constructor(game:Game){
         super(game);
     }
@@ -105,15 +108,14 @@ export abstract class Container extends RenderableModel {
         this.setDirty();
     }
 
-    public setPaddingsTopBottom(top:number,bottom?:number):void {
+    public setPaddingsTopBottom(top:number,bottom:number = top):void {
         if (bottom===undefined) bottom = top;
         this.paddingTop = top;
         this.paddingBottom = bottom;
         this.setDirty();
     }
 
-    public setPaddingsLeftRight(left:number,right?:number){
-        if (right===undefined) right = left;
+    public setPaddingsLeftRight(left:number,right:number = left){
         this.paddingLeft = left;
         this.paddingRight = right;
         this.setDirty();
@@ -121,7 +123,7 @@ export abstract class Container extends RenderableModel {
 
 
     public revalidate():void {
-        this.calcWorldRect();
+        this.updateUIRect();
         if (this.background) this.background.size.set(this.size);
         super.revalidate();
     }
@@ -134,6 +136,7 @@ export abstract class Container extends RenderableModel {
     public setWH(w:number,h:number):void {
         this.size.setWH(w,h);
         this.drawingRect.setWH(w,h);
+        this.setDirty();
     }
 
     public calcDrawableRect(contentWidth:number, contentHeight:number):void {
@@ -145,13 +148,12 @@ export abstract class Container extends RenderableModel {
         } else {
             this.size.setWH(paddedWidth,paddedHeight);
         }
-        this.calcWorldRect();
+        this.updateUIRect();
     }
 
     public update():void {
-        if (this._dirty) {
+        if (this.isDirty()) {
             this.onGeometryChanged();
-            this._dirty = false;
         }
         super.update();
     }
@@ -163,19 +165,21 @@ export abstract class Container extends RenderableModel {
         );
     }
 
-    protected calcWorldRect():void {
-        this._srcRect.setXYWH(
-            this.pos.x,this.pos.y,
+    protected setDirty():void {
+        this._dirty = true;
+    }
+
+    protected isDirty():boolean {
+        return this._dirty;
+    }
+
+    private updateUIRect():void{
+        this.size.setWH(
             this.size.width + this.marginLeft + this.marginRight,
             this.size.height + this.marginTop + this.marginBottom
         );
-        this._screenRect.set(this._srcRect);
-        let parent:RenderableModel|null = this.parent;
-        while (parent) {
-            this._screenRect.addXY(parent.getSrcRect().x,parent.getSrcRect().y);
-            parent = parent.parent;
-        }
     }
+
 
 
 }

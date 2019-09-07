@@ -3,6 +3,7 @@ import {Game} from "@engine/core/game";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+
 export class PbmReader {
 
 
@@ -17,7 +18,7 @@ export class PbmReader {
     }
 
     private currentPos:number = 0;
-    private file:Int8Array;
+    private readonly file:Int8Array;
 
     constructor(private game:Game,buff:ArrayBuffer){
         this.file = new Int8Array(buff);

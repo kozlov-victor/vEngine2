@@ -1,5 +1,5 @@
 import {Point2d} from "../geometry/point2d";
-import {Rect} from "../geometry/rect";
+import {IRect, Rect} from "../geometry/rect";
 import {mat4} from "@engine/geometry/mat4";
 
 
@@ -19,7 +19,7 @@ export namespace MathEx {
         point.y < (rect.y + rect.height);
     };
 
-    export const overlapTest = (a: Rect, b: Rect): boolean => {
+    export const overlapTest = (a: IRect, b: IRect): boolean => {
         return (a.x < b.x + b.width) &&
             (a.x + a.width > b.x) &&
             (a.y < b.y + b.height) &&

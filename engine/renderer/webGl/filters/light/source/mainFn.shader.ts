@@ -1,7 +1,7 @@
 
 
 //language=GLSL
-export const mainFnSource:string = `
+export const mainFnSource:string = MACRO_GL_COMPRESS`
 
 void main(){
     vec4 texColor = texture2D(texture, v_texCoord);

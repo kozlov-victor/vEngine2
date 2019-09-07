@@ -9,7 +9,6 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {LinearGradient} from "@engine/renderer/linearGradient";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
 import {ColorizeFilter} from "@engine/renderer/webGl/filters/texture/colorizeFilter";
 import {PixelFilter} from "@engine/renderer/webGl/filters/texture/pixelFilter";
@@ -106,7 +105,6 @@ export class MainScene extends Scene {
 
         const hex = new HexagonalFilter(this.game);
         const swirl = new SwirlFilter(this.game);
-        (window as any).swirl = swirl;
 
         ellipse.filters = [
             hex,swirl

@@ -23,7 +23,7 @@ export class SimpleBlurFilter extends AbstractFilter {
         this.u_direction_y = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_direction_y');
 
         //language=GLSL
-        programGen.appendFragmentCodeBlock(`
+        programGen.appendFragmentCodeBlock(MACRO_GL_COMPRESS`
               vec4 blur(vec2 uv) {
                   vec4 color = vec4(0.0);
                   vec2 resolution = vec2(rt_w,rt_h);

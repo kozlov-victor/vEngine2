@@ -110,8 +110,8 @@ export class Game {
         return this._deltaTime;
     }
 
-    public log(args:any):void{
-        if (DEBUG) this._renderer.log(args);
+    public log(...args:any[]):void{
+        if (DEBUG) this._renderer.log(...args);
     }
 
     public clearLog():void{
@@ -126,7 +126,7 @@ export class Game {
         return this._renderer;
     }
 
-    public debug2?(...val:readonly any[]):void;
+    public debug2?(...val:any[]):void;
 
     public runScene(scene:Scene):void{
         this._currentScene = scene;
@@ -158,7 +158,7 @@ export class Game {
 
         if (DEBUG) {
             this.fps = ~~(1000 / this._deltaTime);
-            const renderError:{code:number,desc:string}|undefined = this._renderer.getError();
+            const renderError:Optional<{code:number,desc:string}> = this._renderer.getError();
             if (renderError!==undefined) {
                 throw new DebugError(`rendering error with code ${renderError.code} (${renderError.desc})`);
             }
@@ -217,4 +217,5 @@ if (DEBUG) {
     };
     if (!window.__POLYFILLS_INCLUDED__) throw new DebugError(`polyfills module is not included!`);
 }
+
 

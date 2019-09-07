@@ -2,8 +2,12 @@ import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
 import {ICloneable} from "@engine/core/declarations";
 
+export interface IPoint2d {
+    x:number;
+    y: number;
+}
 
-export class Point2d extends ObservableEntity implements ICloneable<Point2d> {
+export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IPoint2d {
 
     get x(): number {
         return this._x;
@@ -33,9 +37,8 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d> {
 
     constructor(x:number = 0,y:number = 0,onChangedFn?:()=>void){
         super();
-        this._x = x;
-        this._y = y;
         if (onChangedFn) this.addOnChangeListener(onChangedFn);
+        this.setXY(x,y);
     }
 
     public setXY(x:number,y:number = x):this{

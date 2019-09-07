@@ -35,8 +35,6 @@ export class MainScene extends Scene {
 
         this.logoObj.appendChild(objChild);
 
-        (window as any).l = this.logoObj;
-
 
     }
 

@@ -50,8 +50,6 @@ export class MainScene extends Scene {
             }
         });
 
-        (window as any).obj = this.obj;
-
     }
 
 }

@@ -1,18 +1,18 @@
 
 export interface IPrimitive {
     vertexArr:number[];
-    normalArr: number[]|undefined;
-    texCoordArr: number[]|undefined;
-    indexArr: number[]|undefined;
+    normalArr: Optional<number[]>;
+    texCoordArr: Optional<number[]>;
+    indexArr: Optional<number[]>;
     drawMethod:number;
 }
 
 export abstract class AbstractPrimitive implements IPrimitive {
 
     public vertexArr:number[];
-    public normalArr:number[]|undefined;
-    public texCoordArr:number[]|undefined;
-    public indexArr:number[]|undefined;
+    public normalArr:Optional<number[]>;
+    public texCoordArr:Optional<number[]>;
+    public indexArr:Optional<number[]>;
     public drawMethod:number;
 
     constructor(){

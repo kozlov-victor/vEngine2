@@ -54,8 +54,6 @@ export class MainScene extends Scene {
             console.log(e);
         });
 
-        (window as any).logoObj = this.logoObj;
-
     }
 
 }

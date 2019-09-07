@@ -166,7 +166,7 @@ export class Texture implements ITexture {
 
         const gl:WebGLRenderingContext = this.gl;
 
-        let glMode:number|undefined;
+        let glMode:Optional<number>;
         switch (mode) {
             case INTERPOLATION_MODE.LINEAR:
                 glMode = gl.LINEAR;

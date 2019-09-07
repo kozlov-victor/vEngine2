@@ -7,9 +7,15 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 
+interface IMeshData {
+    vertices:number[];
+    normals:number[];
+    faces:number[];
+}
+
 class ScullMesh extends AbstractPrimitive {
 
-    constructor(skullData:{vertices:number[],normals:number[],faces:number[]}){
+    constructor(skullData:IMeshData){
         super();
         this.vertexArr = skullData.vertices;
         this.normalArr = skullData.normals;
@@ -24,7 +30,7 @@ class ScullMesh extends AbstractPrimitive {
 export class MainScene extends Scene {
 
     private logoObj:Mesh;
-    private dataLink:ResourceLink<any>;
+    private dataLink:ResourceLink<IMeshData>;
 
     public onPreloading() {
         this.dataLink = this.resourceLoader.loadJSON('./model3dFromMesh/skull.json');

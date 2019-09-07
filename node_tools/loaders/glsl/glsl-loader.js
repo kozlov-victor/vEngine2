@@ -1,11 +1,9 @@
 
+const stringAsFilteredArray = require('../../common/common').stringAsClearedArray;
+
 module.exports = function(content) {
     const debug = !!(this.query||{}).debug;
-    let arr =
-        content.
-            split('\n').
-            filter(it=>!!it).
-            filter(it=>!it.startsWith('//'));
+    let arr = stringAsFilteredArray(content);
 
     if (!debug) arr = arr.map(it=>it.trim());
 

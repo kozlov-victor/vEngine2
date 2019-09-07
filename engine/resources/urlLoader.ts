@@ -19,12 +19,15 @@ const addUrlParameter = (url:string,param:string,value:string|number):string=>{
     return `${url}${param}=${value}`;
 };
 
+interface IWindow extends Window{
+    jsonpHandler: Record<string,(data:ArrayBuffer|string)=>void>;
+}
 
-const loadBase64 = (urlLoader:UrlLoader<any>,urlRequest:IURLRequest)=>{
+const loadBase64 = (urlLoader:UrlLoader<string>,urlRequest:IURLRequest)=>{
     urlLoader.onLoad(urlRequest.url);
 };
 
-const loadViaXmlHttp = (urlLoader:UrlLoader<any>,urlRequest:IURLRequest)=>{
+const loadViaXmlHttp = (urlLoader:UrlLoader<ArrayBuffer>,urlRequest:IURLRequest)=>{
 
     if (!urlRequest.method) urlRequest.method = 'GET';
     const xhr:XMLHttpRequest = new XMLHttpRequest();
@@ -71,7 +74,7 @@ const loadViaXmlHttp = (urlLoader:UrlLoader<any>,urlRequest:IURLRequest)=>{
     xhr.send();
 };
 
-const loadViaJsonp = (urlLoader:UrlLoader<any>,urlRequest:IURLRequest)=>{
+const loadViaJsonp = (urlLoader:UrlLoader<ArrayBuffer|string>,urlRequest:IURLRequest)=>{
     const script:HTMLScriptElement = document.createElement('script');
     script.src = urlLoader.getUrl();
     if (urlLoader.onProgress) {
@@ -84,11 +87,11 @@ const loadViaJsonp = (urlLoader:UrlLoader<any>,urlRequest:IURLRequest)=>{
         if (urlLoader.onError) urlLoader.onError(e);
         if (DEBUG) throw new DebugError(`can not load resource with url ${urlRequest.url}`);
     };
-    const jsonpHandler:{[key:string]:(data:string|ArrayBuffer)=>void} = (window as any).jsonpHandler || ((window as any).jsonpHandler={});
+    const jsonpHandler:{[key:string]:(data:string|ArrayBuffer)=>void} = (window as IWindow).jsonpHandler || ((window as IWindow).jsonpHandler={});
     document.body.appendChild(script);
-    jsonpHandler[urlRequest.url] = (data:ArrayBuffer|string)=>{
+    jsonpHandler[urlRequest.url] = (data:ArrayBuffer|string):void=>{
         if (DEBUG && !urlLoader.onLoad) throw new DebugError(`urlLoader.onLoad not provided for resource with url ${urlLoader.getUrl()}`);
-        urlLoader.onLoad(data as ArrayBuffer);
+        urlLoader.onLoad(data);
     };
     script.onload = ()=>{
         setTimeout(()=>{
@@ -111,9 +114,10 @@ export class UrlLoader<T extends string|ArrayBuffer> {
     }
 
     public load():void{
-        if (this.getUrl().startsWith('data:')) loadBase64(this,this.urlRequest);
-        else if (this.urlRequest.jsonp) loadViaJsonp(this,this.urlRequest);
-        else loadViaXmlHttp(this,this.urlRequest);
+        const self:UrlLoader<string|ArrayBuffer> = this as unknown as UrlLoader<string|ArrayBuffer>;
+        if (this.getUrl().startsWith('data:')) loadBase64(self,this.urlRequest);
+        else if (this.urlRequest.jsonp) loadViaJsonp(self,this.urlRequest);
+        else loadViaXmlHttp(self,this.urlRequest);
     }
 
 }

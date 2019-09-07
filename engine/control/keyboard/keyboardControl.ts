@@ -24,7 +24,7 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
             const code:number = e.keyCode;
             if (this.isPressed(code)) return; // keyboard generate repeated events when key is pressed - ignore it
 
-            const engineEvent:KeyBoardEvent|undefined = KeyBoardEvent.fromPool();
+            const engineEvent:Optional<KeyBoardEvent> = KeyBoardEvent.fromPool();
             if (engineEvent===undefined) {
                 if (DEBUG) console.warn('keyboard pool is full');
                 return;

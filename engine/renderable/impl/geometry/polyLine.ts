@@ -56,7 +56,7 @@ class SvgTokenizer {
     public lastCommand:string;
 
     private pos:number = 0;
-    private lastPos:number|undefined;
+    private lastPos:Optional<number>;
 
     private readonly CHAR:RegExp = /[a-zA-Z]/i;
     private readonly NUM:RegExp = /[0-9.]/i;
@@ -209,7 +209,7 @@ export class PolyLine extends Shape {
     // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
     public setSvgPath(path:string){
         this.tokenizer = new SvgTokenizer(path);
-        let lastCommand:string|undefined;
+        let lastCommand:Optional<string>;
         while (!this.tokenizer.isEof()) {
             const command:string = this.tokenizer.getNextCommand();
             //console.log({command});

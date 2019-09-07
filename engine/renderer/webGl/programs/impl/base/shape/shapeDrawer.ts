@@ -44,7 +44,7 @@ export class ShapeDrawer extends AbstractDrawer {
     constructor(gl:WebGLRenderingContext){
         super(gl);
         const gen:ShaderGenerator = new ShaderGenerator();
-        gen.setVertexMainFn(`
+        gen.setVertexMainFn(MACRO_GL_COMPRESS`
             void main(){
                 v_position = a_position;
                 gl_Position = u_vertexMatrix * a_position;   
