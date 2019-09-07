@@ -112,14 +112,18 @@ export class GamePadControl extends AbstractKeypad implements IControl{
         const maxButtons:number = gp.buttons.length;
         for (let j:number=0;j<maxButtons;j++) {
             const btn:GamepadButton = gp.buttons[j];
-            const engineEvent:GamePadEvent = GamePadEvent.fromPool()!; // todo
+            const engineEvent:Optional<GamePadEvent> = GamePadEvent.fromPool();
+            if (engineEvent===undefined) {
+                if (DEBUG) console.warn('gamepad pool is full');
+                return;
+            }
+
             engineEvent.button = j;
             if (btn.pressed) {
                 this.press(j,engineEvent);
             } else {
                 this.release(j,engineEvent);
             }
-            engineEvent.release();
         }
     }
 
@@ -132,7 +136,12 @@ export class GamePadControl extends AbstractKeypad implements IControl{
         btnDown:GAME_PAD_BUTTON
     ):void {
 
-        const engineEvent:GamePadEvent = GamePadEvent.fromPool()!; // todo
+        const engineEvent:Optional<GamePadEvent> = GamePadEvent.fromPool();
+        if (engineEvent===undefined) {
+            if (DEBUG) console.warn('gamepad pool is full');
+            return;
+        }
+
 
         if (axis0>0) {
             engineEvent.button = btnRight;
@@ -163,8 +172,6 @@ export class GamePadControl extends AbstractKeypad implements IControl{
             engineEvent.button = btnUp;
             this.release(btnUp,engineEvent);
         }
-
-        engineEvent.release();
 
     }
 

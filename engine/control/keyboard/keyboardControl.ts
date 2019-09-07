@@ -1,5 +1,5 @@
 import {IControl} from "@engine/control/abstract/iControl";
-import {AbstractKeypad} from "@engine/control/abstract/abstractKeypad";
+import {AbstractKeypad, KEY_STATE, KeyPadEvent} from "@engine/control/abstract/abstractKeypad";
 import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 
 
@@ -13,6 +13,7 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
 
     private keyDownListener:(e:KeyboardEvent)=>void;
     private keyUpListener:(e:KeyboardEvent)=>void;
+
 
 
 

@@ -37,7 +37,7 @@
     "arrow-parens": false,
     "callable-types": false,
     "implicit-global-variable": true,
-    "no-any": true,
+    "no-any": false,
     "no-null-keyword": false
   },
   "jsRules": {

@@ -37,7 +37,6 @@ export abstract class AbstractKeypad {
     public release(key:number,event:KeyPadEvent):void{
         if (this.isReleased(key)) return;
         event.keyState = KEY_STATE.KEY_JUST_RELEASED;
-        //this.buffer.put(key,event); // todo need?
         this.notify(this.keyReleased,event);
     }
 
@@ -84,7 +83,6 @@ export abstract class AbstractKeypad {
     }
 
     protected notify(eventName:string,e:KeyPadEvent):void{
-        //console.log(eventName,(e as any).key);
         this.game.getCurrScene().trigger(eventName,e);
     }
 

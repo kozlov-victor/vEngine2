@@ -12,7 +12,7 @@ export enum GAME_PAD_EVENTS {
 export class GamePadEvent extends KeyPadEvent {
 
     public static fromPool():Optional<GamePadEvent> {
-        return GamePadEvent.rectPool.getFreeObject();
+        return GamePadEvent.rectPool.getFreeObject(true);
     }
 
     private static rectPool:ObjectPool<GamePadEvent> = new ObjectPool<GamePadEvent>(GamePadEvent);
