@@ -128,7 +128,7 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     // eventEmitter
     private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
-    // paren-child
+    // parent-child
     private _parentChildDelegate:ParentChildDelegate = new ParentChildDelegate(this);
 
     protected constructor(protected game:Game){
@@ -150,14 +150,14 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
         this._layer = value;
     }
 
-    public getWorldPosition():IPoint2d {
+    public getWorldPosition():Readonly<IPoint2d> {
         if (this._worldPositionIsDirty) {
             this.calcWorldPosition();
         }
         return this._worldPosition;
     }
 
-    public getDestRect():IRect{
+    public getDestRect():Readonly<IRect>{
         this._destRect.setPoint(this.pos);
         this._destRect.setSize(this.size);
         return this._destRect;

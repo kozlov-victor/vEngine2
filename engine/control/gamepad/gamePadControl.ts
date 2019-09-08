@@ -58,9 +58,10 @@ export class GamePadControl extends AbstractKeypad implements IControl{
     protected keyPressed: string = GAME_PAD_EVENTS.buttonPressed;
     protected keyHold: string = GAME_PAD_EVENTS.buttonHold;
     protected keyReleased: string = GAME_PAD_EVENTS.buttonReleased;
-
+    protected buffer:GamePadEvent[];
 
     private gamepads:Gamepad[];
+
 
     constructor(game:Game){
         super(game);
@@ -76,7 +77,7 @@ export class GamePadControl extends AbstractKeypad implements IControl{
             const gp:Gamepad = this.gamepads[i];
             if (!gp) continue;
 
-            this.pollButtons(gp);
+            this.pollButtons(gp,i);
 
             if (gp.axes.length>=2) {
                 const axisLeftStick0:Int = ~~(gp.axes[0]) as Int;
@@ -86,6 +87,7 @@ export class GamePadControl extends AbstractKeypad implements IControl{
                     axisLeftStick1,
                     GAME_PAD_BUTTON.STICK_L_LEFT,GAME_PAD_BUTTON.STICK_L_RIGHT,
                     GAME_PAD_BUTTON.STICK_L_UP, GAME_PAD_BUTTON.STICK_L_DOWN,
+                    i
                 );
             }
 
@@ -97,6 +99,7 @@ export class GamePadControl extends AbstractKeypad implements IControl{
                     axisRightStick1,
                     GAME_PAD_BUTTON.STICK_R_LEFT,GAME_PAD_BUTTON.STICK_R_RIGHT,
                     GAME_PAD_BUTTON.STICK_R_UP, GAME_PAD_BUTTON.STICK_R_DOWN,
+                    i
                 );
             }
 
@@ -108,22 +111,37 @@ export class GamePadControl extends AbstractKeypad implements IControl{
 
     public destroy():void {}
 
-    private pollButtons(gp:Gamepad):void {
+    private pollButtons(gp:Gamepad,gamePadIndex:number):void {
         const maxButtons:number = gp.buttons.length;
-        for (let j:number=0;j<maxButtons;j++) {
-            const btn:GamepadButton = gp.buttons[j];
-            const engineEvent:Optional<GamePadEvent> = GamePadEvent.fromPool();
-            if (engineEvent===undefined) {
-                if (DEBUG) console.warn('gamepad pool is full');
-                return;
+        for (let i:number=0;i<maxButtons;i++) {
+            const btn:GamepadButton = gp.buttons[i];
+
+            const eventFromBuffer:Optional<GamePadEvent> = this.findEvent(i,gamePadIndex);
+
+            if (btn.pressed) {
+                if (eventFromBuffer===undefined) {
+                    const eventJustCreated:Optional<GamePadEvent> = GamePadEvent.fromPool();
+                    if (eventJustCreated===undefined) {
+                        if (DEBUG) console.warn('gamepad pool is full');
+                        return;
+                    }
+
+                    eventJustCreated.button = i;
+                    eventJustCreated.gamePadIndex = gamePadIndex;
+
+                    if (eventFromBuffer===undefined) {
+                        this.press(eventJustCreated);
+                    }
+
+                }
+
+            } else {
+                if (eventFromBuffer!==undefined) {
+                    console.log('try to release',eventFromBuffer.keyState);
+                    this.release(eventFromBuffer);
+                }
             }
 
-            engineEvent.button = j;
-            if (btn.pressed) {
-                this.press(j,engineEvent);
-            } else {
-                this.release(j,engineEvent);
-            }
         }
     }
 
@@ -133,46 +151,63 @@ export class GamePadControl extends AbstractKeypad implements IControl{
         btnLeft:GAME_PAD_BUTTON,
         btnRight:GAME_PAD_BUTTON,
         btnUp:GAME_PAD_BUTTON,
-        btnDown:GAME_PAD_BUTTON
+        btnDown:GAME_PAD_BUTTON,
+        gamePadIndex:number,
     ):void {
 
-        const engineEvent:Optional<GamePadEvent> = GamePadEvent.fromPool();
-        if (engineEvent===undefined) {
-            if (DEBUG) console.warn('gamepad pool is full');
-            return;
-        }
+        // const eventJustCreated:Optional<GamePadEvent> = GamePadEvent.fromPool();
+        // if (eventJustCreated===undefined) {
+        //     if (DEBUG) console.warn('gamepad pool is full');
+        //     return;
+        // }
+        // eventJustCreated.gamePadIndex = gamePadIndex;
+        // let eventIsUsed:boolean = false;
+        //
+        //
+        // if (axis0>0) {
+        //     eventJustCreated.button = btnRight;
+        //     this.press(eventJustCreated);
+        //     eventIsUsed = true;
+        // } else {
+        //     const eventFromBuffer:Optional<GamePadEvent> = this.findEvent(btnRight,gamePadIndex);
+        //     if (eventFromBuffer!==undefined) this.release(eventJustCreated);
+        // }
+        // if (axis0<0) {
+        //     eventJustCreated.button = btnLeft;
+        //     this.press(eventJustCreated);
+        //     eventIsUsed = true;
+        // } else {
+        //     const eventFromBuffer:Optional<GamePadEvent> = this.findEvent(btnLeft,gamePadIndex);
+        //     if (eventFromBuffer!==undefined) this.release(eventJustCreated);
+        // }
+        //
+        // if (axis1>0) {
+        //     eventJustCreated.button = btnDown;
+        //     this.press(eventJustCreated);
+        //     eventIsUsed = true;
+        // } else {
+        //     const eventFromBuffer:Optional<GamePadEvent> = this.findEvent(btnDown,gamePadIndex);
+        //     if (eventFromBuffer!==undefined) this.release(eventJustCreated);
+        // }
+        // if (axis1<0) {
+        //     eventJustCreated.button = btnUp;
+        //     this.press(eventJustCreated);
+        //     eventIsUsed = true;
+        // } else {
+        //     const eventFromBuffer:Optional<GamePadEvent> = this.findEvent(btnUp,gamePadIndex);
+        //     if (eventFromBuffer!==undefined) this.release(eventJustCreated);
+        // }
+        //
+        // if (!eventIsUsed) eventJustCreated.release();
+
+    }
 
 
-        if (axis0>0) {
-            engineEvent.button = btnRight;
-            this.press(btnRight,engineEvent);
-        } else {
-            engineEvent.button = btnRight;
-            this.release(btnRight,engineEvent);
+    private findEvent(button:number,gamePadIndex:number):Optional<GamePadEvent> {
+        for (const event of this.buffer) {
+            if (event.button===button && event.gamePadIndex === gamePadIndex) return event;
         }
-        if (axis0<0) {
-            engineEvent.button = btnLeft;
-            this.press(btnLeft,engineEvent);
-        } else {
-            engineEvent.button = btnLeft;
-            this.release(btnLeft,engineEvent);
-        }
-
-        if (axis1>0) {
-            engineEvent.button = btnDown;
-            this.press(btnDown,engineEvent);
-        } else {
-            engineEvent.button = btnDown;
-            this.release(btnDown,engineEvent);
-        }
-        if (axis1<0) {
-            engineEvent.button = btnUp;
-            this.press(btnUp,engineEvent);
-        } else {
-            engineEvent.button = btnUp;
-            this.release(btnUp,engineEvent);
-        }
-
+        return undefined;
     }
 
 }

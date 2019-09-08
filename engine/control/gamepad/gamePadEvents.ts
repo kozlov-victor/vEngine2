@@ -18,5 +18,6 @@ export class GamePadEvent extends KeyPadEvent {
     private static rectPool:ObjectPool<GamePadEvent> = new ObjectPool<GamePadEvent>(GamePadEvent);
 
     public button: GAME_PAD_BUTTON;
+    public gamePadIndex:number;
 
 }
