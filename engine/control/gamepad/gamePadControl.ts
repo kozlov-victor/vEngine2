@@ -1,6 +1,6 @@
 import {Game} from "@engine/core/game";
 import {IControl} from "@engine/control/abstract/iControl";
-import {AbstractKeypad} from "@engine/control/abstract/abstractKeypad";
+import {AbstractKeypad, KEY_STATE} from "@engine/control/abstract/abstractKeypad";
 import {Int} from "@engine/core/declarations";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
@@ -75,33 +75,34 @@ export class GamePadControl extends AbstractKeypad implements IControl{
 
         for (let i:number=0,max=this.gamepads.length;i<max;i++) {
             const gp:Gamepad = this.gamepads[i];
+
             if (!gp) continue;
 
             this.pollButtons(gp,i);
 
-            if (gp.axes.length>=2) {
-                const axisLeftStick0:Int = ~~(gp.axes[0]) as Int;
-                const axisLeftStick1:Int = ~~(gp.axes[1]) as Int;
-                this.pollAxes(
-                    axisLeftStick0,
-                    axisLeftStick1,
-                    GAME_PAD_BUTTON.STICK_L_LEFT,GAME_PAD_BUTTON.STICK_L_RIGHT,
-                    GAME_PAD_BUTTON.STICK_L_UP, GAME_PAD_BUTTON.STICK_L_DOWN,
-                    i
-                );
-            }
-
-            if (gp.axes.length>=4) {
-                const axisRightStick0:Int = ~~(gp.axes[2]) as Int;
-                const axisRightStick1:Int = ~~(gp.axes[3]) as Int;
-                this.pollAxes(
-                    axisRightStick0,
-                    axisRightStick1,
-                    GAME_PAD_BUTTON.STICK_R_LEFT,GAME_PAD_BUTTON.STICK_R_RIGHT,
-                    GAME_PAD_BUTTON.STICK_R_UP, GAME_PAD_BUTTON.STICK_R_DOWN,
-                    i
-                );
-            }
+            // if (gp.axes.length>=2) {
+            //     const axisLeftStick0:Int = ~~(gp.axes[0]) as Int;
+            //     const axisLeftStick1:Int = ~~(gp.axes[1]) as Int;
+            //     this.pollAxes(
+            //         axisLeftStick0,
+            //         axisLeftStick1,
+            //         GAME_PAD_BUTTON.STICK_L_LEFT,GAME_PAD_BUTTON.STICK_L_RIGHT,
+            //         GAME_PAD_BUTTON.STICK_L_UP, GAME_PAD_BUTTON.STICK_L_DOWN,
+            //         i
+            //     );
+            // }
+            //
+            // if (gp.axes.length>=4) {
+            //     const axisRightStick0:Int = ~~(gp.axes[2]) as Int;
+            //     const axisRightStick1:Int = ~~(gp.axes[3]) as Int;
+            //     this.pollAxes(
+            //         axisRightStick0,
+            //         axisRightStick1,
+            //         GAME_PAD_BUTTON.STICK_R_LEFT,GAME_PAD_BUTTON.STICK_R_RIGHT,
+            //         GAME_PAD_BUTTON.STICK_R_UP, GAME_PAD_BUTTON.STICK_R_DOWN,
+            //         i
+            //     );
+            // }
 
         }
     }
@@ -137,8 +138,7 @@ export class GamePadControl extends AbstractKeypad implements IControl{
 
             } else {
                 if (eventFromBuffer!==undefined) {
-                    console.log('try to release',eventFromBuffer.keyState);
-                    this.release(eventFromBuffer);
+                    if (!this.isReleased(eventFromBuffer)) this.release(eventFromBuffer);
                 }
             }
 
@@ -202,6 +202,10 @@ export class GamePadControl extends AbstractKeypad implements IControl{
 
     }
 
+
+    private isReleased(e:GamePadEvent):boolean{
+        return e.keyState===KEY_STATE.KEY_RELEASED || e.keyState===KEY_STATE.KEY_JUST_RELEASED;
+    }
 
     private findEvent(button:number,gamePadIndex:number):Optional<GamePadEvent> {
         for (const event of this.buffer) {

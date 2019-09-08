@@ -47,7 +47,9 @@ export abstract class AbstractKeypad {
                 this.buffer.splice(this.buffer.indexOf(event),1);
                 event.release();
             }
-            else if (keyVal===KEY_STATE.KEY_JUST_RELEASED) event.keyState = KEY_STATE.KEY_RELEASED;
+            else if (keyVal===KEY_STATE.KEY_JUST_RELEASED) {
+                event.keyState = KEY_STATE.KEY_RELEASED;
+            }
             else if (keyVal===KEY_STATE.KEY_JUST_PRESSED) {
                 event.keyState = KEY_STATE.KEY_PRESSED;
             }
