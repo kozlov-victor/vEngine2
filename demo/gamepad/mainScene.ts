@@ -36,7 +36,7 @@ export class MainScene extends Scene {
         this.logoObj.scale.setXY(0.1);
         this.on(GAME_PAD_EVENTS.buttonHold, (e:GamePadEvent)=>{
 
-            //console.log(e);
+            this.game.log(new Date().getTime() + ' ' + e.value);
 
             switch (e.button) {
                 case GAME_PAD_BUTTON.STICK_L_LEFT:

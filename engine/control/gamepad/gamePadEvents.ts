@@ -19,5 +19,6 @@ export class GamePadEvent extends KeyPadEvent {
 
     public button: GAME_PAD_BUTTON;
     public gamePadIndex:number;
+    public value:number;
 
 }
