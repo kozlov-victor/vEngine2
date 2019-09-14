@@ -1,52 +1,85 @@
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "../../abstract/renderableModel";
-import {DebugError} from "@engine/debug/debugError";
+import {IParentChild, Optional} from "@engine/core/declarations";
+import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 
-export class Layer {
+export class Layer implements IParentChild {
 
     public readonly type:string = 'Layer';
     public readonly children:RenderableModel[] = [];
+    public readonly parent:IParentChild;
+    public id:string;
+
+    private _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate(this);
 
     constructor(protected game:Game) {
 
     }
 
-    public prependChild(go:RenderableModel):void {
-        go.parent = null;
-        go.setLayer(this);
-        go.revalidate();
-        this.children.unshift(go);
-    }
-    public appendChild(go:RenderableModel):void {
-        go.parent = null;
-        go.setLayer(this);
-        go.revalidate();
-        this.children.push(go);
+    public appendChild(c:RenderableModel):void {
+        this._parentChildDelegate.appendChild(c);
+        c.setLayer(this);
+        (c as IParentChild).parent = undefined;
+        c.revalidate();
     }
 
     public appendChildAt(c:RenderableModel,index:number){
-        if (DEBUG) {
-            if (index>this.children.length-1) throw new DebugError(`can not insert element: index is out of range (${index},${this.children.length-1})`);
-        }
-        c.parent = null;
+        this._parentChildDelegate.appendChildAt(c,index);
+        c.setLayer(this);
+        (c as IParentChild).parent = undefined;
         c.revalidate();
-        this.children.splice(index,0,c);
     }
 
+    public appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel){
+        this._parentChildDelegate.appendChildAfter(modelAfter,newChild);
+        newChild.setLayer(this);
+        (newChild as IParentChild).parent = undefined;
+        newChild.revalidate();
+    }
+
+    public appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel){
+        this._parentChildDelegate.appendChildBefore(modelBefore,newChild);
+        newChild.setLayer(this);
+        (newChild as IParentChild).parent = undefined;
+        newChild.revalidate();
+    }
+
+    public prependChild(c:RenderableModel):void {
+        this._parentChildDelegate.prependChild(c);
+        c.setLayer(this);
+        (c as IParentChild).parent = undefined;
+        c.revalidate();
+    }
+
+    public removeChildAt(i:number){
+        this._parentChildDelegate.removeChildAt(i);
+    }
+
+    public removeChildren(){
+        this._parentChildDelegate.removeChildren();
+    }
+
+    public moveToFront():void {
+        this._parentChildDelegate.moveToFront();
+    }
+
+    public moveToBack():void {
+        this._parentChildDelegate.moveToBack();
+    }
+
+    public findChildById(id:string):Optional<RenderableModel>{
+        return this._parentChildDelegate.findChildById(id);
+    }
+
+    public getParent():Optional<RenderableModel>{
+        return this._parentChildDelegate.getParent();
+    }
 
     public update():void {
         const all:RenderableModel[] = this.children;
         for (const obj of all) {
             obj.update();
         }
-    }
-
-    public findChildById(id:string):RenderableModel|null{
-        for (const c of this.children) {
-            const possibleObject:RenderableModel|null = c.findChildById(id);
-            if (possibleObject) return possibleObject;
-        }
-        return null;
     }
 
     public render():void {

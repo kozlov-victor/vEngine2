@@ -4,7 +4,7 @@ import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/color";
 import {CAMERA_MATRIX_MODE} from "@engine/renderer/camera";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {IEventemittable, IFilterable, IRevalidatable, ITweenable} from "@engine/core/declarations";
+import {IEventemittable, IFilterable, IRevalidatable, ITweenable, Optional} from "@engine/core/declarations";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {removeFromArray} from "@engine/misc/object";
@@ -18,6 +18,8 @@ import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardE
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
+import {Point2d} from "@engine/geometry/point2d";
+import {Rect} from "@engine/geometry/rect";
 
 
 export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilterable {
@@ -27,6 +29,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     public height!:number;
     public colorBG = Color.WHITE.clone();
     public readonly resourceLoader: ResourceLoader;
+    public readonly pos:Point2d = new Point2d();
     public filters:AbstractFilter[] = [];
 
     protected preloadingGameObject!:RenderableModel;
@@ -145,12 +148,12 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         this._eventEmitterDelegate.trigger(eventName,data);
     }
 
-    public findChildById(id:string):RenderableModel|null{
+    public findChildById(id:string):Optional<RenderableModel>{
         for (const l of this._layers) {
-            const possibleObject:RenderableModel|null = l.findChildById(id);
+            const possibleObject:Optional<RenderableModel>= l.findChildById(id);
             if (possibleObject) return possibleObject;
         }
-        return null;
+        return undefined;
     }
 
     public destroy():void {
@@ -191,27 +194,46 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         this.onUpdate();
     }
 
+
+    private beforeFrameDraw():void {
+        if (this.pos.equal(0)) return;
+        const renderer:AbstractRenderer = this.game.getRenderer();
+        const r:Rect = Rect.fromPool();
+        r.setXYWH(
+            this.pos.x,
+            this.pos.y,
+            Math.min(this.game.width,this.game.width+this.pos.x),
+            Math.min(this.game.height,this.game.height+this.pos.y)
+        );
+        renderer.lockRect(r);
+        r.release();
+    }
+
+    private afterFrameDraw(){
+        if (this.pos.equal(0)) return;
+        const renderer:AbstractRenderer = this.game.getRenderer();
+        renderer.unlockRect();
+    }
+
+
     private renderMainFrame():void {
 
         const renderer:AbstractRenderer = this.game.getRenderer();
 
         renderer.save();
+        this.beforeFrameDraw();
         this.game.camera.render();
+        renderer.translate(this.pos.x,this.pos.y);
 
         for (const l of this._layers) {
             l.render();
         }
 
-        // renderer.save(); // todo
-        // renderer.resetTransform();
-        // this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY;
-        // this._uiLayer.render();
-        // renderer.restore();
-
-        this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
+        //this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM; // todo manage this
         this.onRender();
 
         renderer.restore();
+        this.afterFrameDraw();
 
         if (DEBUG) {
             this.game.getRenderer().restore();
@@ -228,7 +250,9 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     }
 
     private renderPreloadingFrame():void {
-        this.game.getRenderer().resetTransform();
+        this.game.getRenderer().resetTransform(); // todo is needed?
+        this.beforeFrameDraw();
         this.preloadingGameObject.render();
+        this.afterFrameDraw();
     }
 }

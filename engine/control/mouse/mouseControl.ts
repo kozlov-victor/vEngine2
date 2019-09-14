@@ -1,7 +1,7 @@
 import {MathEx} from "../../misc/mathEx";
 import {Point2d} from "../../geometry/point2d";
 import {Game} from "../../core/game";
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {Rect} from "../../geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IControl} from "@engine/control/abstract/iControl";
@@ -9,6 +9,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {IMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Layer} from "@engine/renderable/impl/general/layer";
+import {Optional} from "@engine/core/declarations";
 
 
 export class MouseControl implements IControl {

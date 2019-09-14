@@ -64,6 +64,9 @@ const template = `
         #list li {
             padding: 10px;
         }
+        .active {
+            background-color: aqua;
+        }
     </style>
 </head>
 <body>
@@ -94,9 +97,14 @@ const template = `
             });
             document.getElementById('list').innerHTML = res;
             var frame = document.getElementById('frame');
+            var lastActive;
             window.onClick = function (e) {
                 e.preventDefault();
                 frame.src =  e.target.getAttribute('data-href');
+                if (lastActive) lastActive.classList.remove('active');
+                lastActive = e.target.parentNode;
+                lastActive.classList.add('active');
+                
             }
         })();
     </script>

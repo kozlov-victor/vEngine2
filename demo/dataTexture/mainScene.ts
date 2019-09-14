@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {PbmReader} from "./pbmReader";

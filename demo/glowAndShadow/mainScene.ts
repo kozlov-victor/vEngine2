@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";

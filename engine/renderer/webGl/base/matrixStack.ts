@@ -1,5 +1,6 @@
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
+import {Optional} from "@engine/core/declarations";
 
 export class MatrixStack {
 

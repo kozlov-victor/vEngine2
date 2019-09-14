@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";

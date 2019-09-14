@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MathEx} from "@engine/misc/mathEx";

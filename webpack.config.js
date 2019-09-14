@@ -2,7 +2,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
-const TSLintPlugin = require('tslint-webpack-plugin');
 const colors = require('./node_tools/colors');
 const transformer = require('./node_tools/transformers/build/engineTransformer').engineTransformer;
 
@@ -81,6 +80,16 @@ module.exports = (env={})=>{
                 },
                 {
                     test: /\.ts$/,
+                    enforce: 'pre',
+                    use: [
+                        {
+                            loader: 'tslint-loader',
+                            options: { /* Loader options go here */ }
+                        }
+                    ]
+                },
+                {
+                    test: /\.ts$/,
                     use: [
                         {
                             loader: "ts-loader",options: {
@@ -111,9 +120,6 @@ module.exports = (env={})=>{
         new webpack.DefinePlugin({
             BUILD_AT: webpack.DefinePlugin.runtimeValue(() => new Date().getTime()),
             DEBUG: debug,
-        }),
-        new TSLintPlugin({
-            files: ['./demo/**/*.ts','./engine/**/*.ts']
         }),
         new WebpackDonePlugin()
     ];

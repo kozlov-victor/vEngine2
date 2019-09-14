@@ -1,7 +1,7 @@
 import {Game} from "@engine/core/game";
 import {IControl} from "@engine/control/abstract/iControl";
 import {AbstractKeypad, KEY_STATE} from "@engine/control/abstract/abstractKeypad";
-import {Int} from "@engine/core/declarations";
+import {Int, Optional} from "@engine/core/declarations";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 

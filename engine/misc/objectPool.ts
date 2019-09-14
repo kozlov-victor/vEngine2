@@ -1,5 +1,5 @@
 import {DebugError} from "../debug/debugError";
-import {Clazz} from "@engine/core/declarations";
+import {Clazz, Optional} from "@engine/core/declarations";
 
 
 export interface IReleasealable {

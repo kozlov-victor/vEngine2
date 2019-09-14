@@ -2,12 +2,12 @@ import "@engine/misc/polyfills";
 import {Camera} from "../renderer/camera";
 import {Point2d} from "../geometry/point2d";
 import {AbstractRenderer} from "../renderer/abstract/abstractRenderer";
-import {Scene} from "./scene";
+import {Scene} from "../scene/scene";
 import {ColliderEngine} from "../physics/unused/colliderEngine";
 import {DebugError} from "../debug/debugError";
 import {IControl} from "@engine/control/abstract/iControl";
 import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
-import {ClazzEx} from "@engine/core/declarations";
+import {ClazzEx, Optional} from "@engine/core/declarations";
 
 
 export const enum SCALE_STRATEGY {

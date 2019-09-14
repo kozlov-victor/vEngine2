@@ -2,6 +2,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {Size} from "@engine/geometry/size";
 import {ShaderProgram} from "./shaderProgram";
 import {ITexture} from "@engine/renderer/texture";
+import {Optional} from "@engine/core/declarations";
 
 const isPowerOf2 = (value:number):boolean=> {
     return (value & (value - 1)) === 0;

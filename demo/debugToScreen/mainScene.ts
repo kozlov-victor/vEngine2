@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {Rect} from "@engine/geometry/rect";
 
 export class MainScene extends Scene {

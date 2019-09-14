@@ -5,6 +5,7 @@ import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/color";
 import {DebugError} from "@engine/debug/debugError";
 import {ITexture} from "@engine/renderer/texture";
+import {Optional} from "@engine/core/declarations";
 
 
 export abstract class Mesh extends RenderableModel {

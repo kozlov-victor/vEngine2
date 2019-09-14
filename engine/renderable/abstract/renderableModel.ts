@@ -1,5 +1,5 @@
 import {AbstractRenderer} from "../../renderer/abstract/abstractRenderer";
-import {ICloneable, IEventemittable, IRevalidatable, ITweenable} from "../../core/declarations";
+import {ICloneable, IEventemittable, IParentChild, IRevalidatable, ITweenable, Optional} from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
 import {IPoint2d, Point2d} from "../../geometry/point2d";
 import {IRect, Rect} from "../../geometry/rect";
@@ -71,7 +71,7 @@ class ModelPoint2d extends Point2d {
 
 }
 
-export abstract class RenderableModel implements IRevalidatable, ITweenable, IEventemittable {
+export abstract class RenderableModel implements IRevalidatable, ITweenable, IEventemittable, IParentChild  {
 
     get angle():number{
         return this._angle;
@@ -103,7 +103,7 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     public angle3d:AnglePoint3d = new AnglePoint3d(this,'angle');
     public alpha:number = 1;
     public blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
-    public parent:RenderableModel|null = null;
+    public readonly parent:RenderableModel;
     public readonly children:RenderableModel[] = [];
     public readonly velocity = new Point2d(0,0);
     public visible:boolean = true;
@@ -116,8 +116,8 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
 
     private _destRect:Rect = new Rect();
     private _behaviours:BaseAbstractBehaviour[] = [];
-    private   _layer:Layer|null = null;
-    private   _angle:number = 0;
+    private _layer:Optional<Layer>;
+    private _angle:number = 0;
 
     // tween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
@@ -129,7 +129,7 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
     // parent-child
-    private _parentChildDelegate:ParentChildDelegate = new ParentChildDelegate(this);
+    private _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate(this);
 
     protected constructor(protected game:Game){
         if (DEBUG && !game) throw new DebugError(
@@ -142,11 +142,11 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
         for (const b of this._behaviours) b.revalidate();
     }
 
-    public getLayer(): Layer|null {
-        return this._layer;
+    public getLayer(): Layer {
+        return this._layer!;
     }
 
-    public setLayer(value: Layer|null):void {
+    public setLayer(value: Layer):void {
         this._layer = value;
     }
 
@@ -171,7 +171,7 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
 
     public abstract draw():boolean;
 
-    public kill():void {
+    public kill():void { // todo is this method need
 
         for (const c of this.children) c.kill();
 
@@ -183,8 +183,7 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
             console.error(this);
             throw new DebugError('can not kill: object is not belong to current scene');
         }
-        this.parent = null;
-        this._layer = null;
+        this._layer = undefined;
         parentArray.splice(index,1);
 
         for (const b of this._behaviours) {
@@ -291,30 +290,39 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
 
     public appendChild(c:RenderableModel):void {
         this._parentChildDelegate.appendChild(c);
+        c.setLayer(this._layer!);
+        c.revalidate();
     }
 
-    public appendChildAt(c:RenderableModel,index:number){
+    public appendChildAt(c:RenderableModel,index:number):void{
         this._parentChildDelegate.appendChildAt(c,index);
+        c.setLayer(this._layer!);
+        c.revalidate();
     }
 
-    public appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel){
+    public appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel):void{
         this._parentChildDelegate.appendChildAfter(modelAfter,newChild);
+        newChild.setLayer(this._layer!);
+        newChild.revalidate();
     }
 
-    public appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel){
+    public appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel):void{
         this._parentChildDelegate.appendChildBefore(modelBefore,newChild);
+        newChild.setLayer(this._layer!);
+        newChild.revalidate();
     }
-
 
     public prependChild(c:RenderableModel):void {
         this._parentChildDelegate.prependChild(c);
+        c.setLayer(this._layer!);
+        c.revalidate();
     }
 
-    public removeChildAt(i:number){
+    public removeChildAt(i:number):void{
         this._parentChildDelegate.removeChildAt(i);
     }
 
-    public removeChildren(){
+    public removeChildren():void{
         this._parentChildDelegate.removeChildren();
     }
 
@@ -326,11 +334,11 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
         this._parentChildDelegate.moveToBack();
     }
 
-    public findChildById(id:string){
+    public findChildById(id:string):Optional<RenderableModel>{
         return this._parentChildDelegate.findChildById(id);
     }
 
-    public getParent():Optional<RenderableModel|Layer>{
+    public getParent():Optional<RenderableModel>{
         return this._parentChildDelegate.getParent();
     }
 
@@ -344,7 +352,6 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
         cloned.alpha = this.alpha;
         cloned.blendMode = this.blendMode;
 
-        cloned.parent = null;
         this.children.forEach((c:RenderableModel)=>{
             if (DEBUG && !('clone' in c)) {
                 console.error(c);
@@ -386,8 +393,8 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
 
     private calcWorldPosition():void {
         this._worldPosition.set(this.pos);
-        let parent:RenderableModel|null = this.parent;
-        while (parent!==null) {
+        let parent:Optional<RenderableModel> = this.parent;
+        while (parent!==undefined) {
             this._worldPosition.add(parent.pos);
             parent = parent.parent;
         }

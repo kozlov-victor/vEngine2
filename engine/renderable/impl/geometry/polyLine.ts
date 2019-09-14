@@ -6,6 +6,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
 import {arcToBezier} from "@engine/renderable/impl/geometry/helpers/arcToBezier";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
+import {Optional} from "@engine/core/declarations";
 
 
 const clearString = (s:string):string=>{

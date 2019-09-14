@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {MainScene} from "./mainScene";
 import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";

@@ -1,6 +1,7 @@
 import {IControl} from "@engine/control/abstract/iControl";
-import {AbstractKeypad, KEY_STATE, KeyPadEvent} from "@engine/control/abstract/abstractKeypad";
+import {AbstractKeypad, KEY_STATE} from "@engine/control/abstract/abstractKeypad";
 import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {Optional} from "@engine/core/declarations";
 
 
 export class KeyboardControl extends AbstractKeypad implements IControl {

@@ -1,6 +1,7 @@
 import {KeyPadEvent} from "@engine/control/abstract/abstractKeypad";
 import {ObjectPool} from "@engine/misc/objectPool";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
+import {Optional} from "@engine/core/declarations";
 
 export enum GAME_PAD_EVENTS {
     buttonPressed = 'buttonPressed',

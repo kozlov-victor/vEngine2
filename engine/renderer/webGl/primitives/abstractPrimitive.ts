@@ -1,3 +1,4 @@
+import {Optional} from "@engine/core/declarations";
 
 export interface IPrimitive {
     vertexArr:number[];
