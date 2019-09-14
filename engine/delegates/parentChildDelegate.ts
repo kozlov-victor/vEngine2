@@ -67,22 +67,25 @@ export class ParentChildDelegate<T extends IParentChild> {
     }
 
     public moveToFront():void {
-        if (DEBUG && !this.getParent()) throw new DebugError(`can not move to front: object is detached`);
-        const index:number = (this.getParent()!).children.indexOf(this.model);
+        const parent:IParentChild = this.model.getParent() as IParentChild;
+        if (DEBUG && !parent) throw new DebugError(`can not move to front: object is detached`);
+        const parentArray:IParentChild[] = parent.children;
+        const index:number = parentArray.indexOf(this.model);
         if (DEBUG && index===-1)
             throw new DebugError(`can not move to front: object is not belong to current scene`);
-        const parentArray:IParentChild[] = this.getParent()!.children;
+
         parentArray.splice(index,1);
         parentArray.push(this.model);
 
     }
 
     public moveToBack():void {
-        if (DEBUG && !this.getParent()) throw new DebugError(`can not move to back: object is detached`);
-        const index:number = this.getParent()!.children.indexOf(this.model);
+        const parent:IParentChild = this.model.getParent() as IParentChild;
+        if (DEBUG && !parent) throw new DebugError(`can not move to back: object is detached`);
+        const parentArray:IParentChild[] = parent.children;
+        const index:number = parentArray.indexOf(this.model);
         if (DEBUG && index===-1)
             throw new DebugError(`can not move to front: object is not belong to current scene`);
-        const parentArray:IParentChild[] = this.model.parent!.children;
         parentArray.splice(index,1);
         parentArray.unshift(this.model);
     }

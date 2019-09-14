@@ -96,17 +96,19 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     public readonly size:Size = new Size();
     public readonly pos:Point2d = new Point2d(0,0,()=>this._worldPositionIsDirty=true);
     public readonly posZ:number = 0;
+
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly skew:Point2d = new Point2d(0,0);
     public readonly anchor:ModelPoint2d = new ModelPoint2d(this);
     public readonly rotationPoint:ModelPoint2d = new ModelPoint2d(this);
     public angle3d:AnglePoint3d = new AnglePoint3d(this,'angle');
     public alpha:number = 1;
+    public visible:boolean = true;
     public blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
+
     public readonly parent:RenderableModel;
     public readonly children:RenderableModel[] = [];
     public readonly velocity = new Point2d(0,0);
-    public visible:boolean = true;
     public passMouseEventsThrough:boolean = false;
     private _angleVelocity3d:AnglePoint3d = new AnglePoint3d(this,'angleVelocity');
 
@@ -338,8 +340,8 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
         return this._parentChildDelegate.findChildById(id);
     }
 
-    public getParent():Optional<RenderableModel>{
-        return this._parentChildDelegate.getParent();
+    public getParent():Optional<RenderableModel|Layer>{
+        return this._parentChildDelegate.getParent()||this._layer;
     }
 
     protected setClonedProperties(cloned:RenderableModel):void {
