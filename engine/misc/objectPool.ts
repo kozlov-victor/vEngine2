@@ -47,5 +47,14 @@ export class ObjectPool<T extends IReleasealable> {
         this._pool[indexOf].release();
     }
 
+    public releaseAll(){
+        for (let i:number=0;i<this.numberOfInstances;i++) {
+            const current:Optional<IReleasealable> = this._pool[i];
+            if (current!==undefined) {
+                current.release();
+            }
+        }
+    }
+
 
 }
