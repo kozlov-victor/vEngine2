@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";

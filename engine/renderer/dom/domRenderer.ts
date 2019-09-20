@@ -14,6 +14,7 @@ import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Rect} from "@engine/geometry/rect";
+import {Optional} from "@engine/core/declarations";
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{

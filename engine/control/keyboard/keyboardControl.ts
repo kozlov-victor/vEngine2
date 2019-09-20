@@ -1,6 +1,7 @@
 import {IControl} from "@engine/control/abstract/iControl";
-import {AbstractKeypad} from "@engine/control/abstract/abstractKeypad";
+import {AbstractKeypad, KEY_STATE} from "@engine/control/abstract/abstractKeypad";
 import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {Optional} from "@engine/core/declarations";
 
 
 export class KeyboardControl extends AbstractKeypad implements IControl {
@@ -11,10 +12,34 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
     protected keyHold: string = KEYBOARD_EVENTS.keyHold;
     protected keyReleased: string = KEYBOARD_EVENTS.keyReleased;
 
+    protected buffer:KeyBoardEvent[];
+
     private keyDownListener:(e:KeyboardEvent)=>void;
     private keyUpListener:(e:KeyboardEvent)=>void;
 
+    public isPressed(key:number):boolean{
+        const event:Optional<KeyBoardEvent> = this.findEvent(key);
+        if (event===undefined) return false;
+        return event.keyState>=KEY_STATE.KEY_PRESSED;
+    }
 
+    public isJustPressed(key:number):boolean{
+        const event:Optional<KeyBoardEvent> = this.findEvent(key);
+        if (event===undefined) return false;
+        return event.keyState===KEY_STATE.KEY_JUST_PRESSED;
+    }
+
+    public isReleased(key:number):boolean{
+        const event:Optional<KeyBoardEvent> = this.findEvent(key);
+        if (event===undefined) return false;
+        return event.keyState<=KEY_STATE.KEY_JUST_RELEASED;
+    }
+
+    public isJustReleased(key:number):boolean {
+        const event:Optional<KeyBoardEvent> = this.findEvent(key);
+        if (event===undefined) return false;
+        return event.keyState === KEY_STATE.KEY_JUST_RELEASED;
+    }
 
     public listenTo():void {
 
@@ -24,21 +49,21 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
             const code:number = e.keyCode;
             if (this.isPressed(code)) return; // keyboard generate repeated events when key is pressed - ignore it
 
-            const engineEvent:Optional<KeyBoardEvent> = KeyBoardEvent.fromPool();
-            if (engineEvent===undefined) {
+            const eventFromBuffer:Optional<KeyBoardEvent> = KeyBoardEvent.fromPool();
+            if (eventFromBuffer===undefined) {
                 if (DEBUG) console.warn('keyboard pool is full');
                 return;
             }
-            engineEvent.key = code;
-            this.press(code,engineEvent);
+            eventFromBuffer.key = code;
+            this.press(eventFromBuffer);
 
         };
 
         this.keyUpListener  = (e:KeyboardEvent)=>{
             const code:number = e.keyCode;
-            const engineEvent:KeyBoardEvent = this.getEvent(code) as KeyBoardEvent;
-            if (engineEvent===null) return;
-            this.release(code,engineEvent);
+            const eventFromBuffer:Optional<KeyBoardEvent> = this.findEvent(code);
+            if (eventFromBuffer===undefined) return;
+            this.release(eventFromBuffer);
         };
 
         globalThis.addEventListener('keydown',this.keyDownListener);
@@ -48,6 +73,13 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
     public destroy():void{
         globalThis.removeEventListener('keydown',this.keyDownListener);
         globalThis.removeEventListener('keyup',this.keyUpListener);
+    }
+
+    private findEvent(key:number):Optional<KeyBoardEvent> {
+        for (const event of this.buffer) {
+            if (event.key===key) return event;
+        }
+        return undefined;
     }
 
     /**

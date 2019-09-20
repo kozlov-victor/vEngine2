@@ -1,5 +1,5 @@
 import {GameObject} from "@engine/renderable/impl/general/gameObject";
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 
 

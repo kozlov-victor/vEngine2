@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {TEXT_ALIGN, TextField, WORD_BRAKE} from "@engine/renderable/impl/ui/components/textField";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/color";

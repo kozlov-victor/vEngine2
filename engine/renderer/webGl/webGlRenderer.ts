@@ -25,7 +25,7 @@ import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {ITexture} from "@engine/renderer/texture";
 import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
-import {ClazzEx, IDestroyable} from "@engine/core/declarations";
+import {ClazzEx, IDestroyable, Optional} from "@engine/core/declarations";
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;

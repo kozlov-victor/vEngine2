@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
@@ -35,6 +35,9 @@ export class MainScene extends Scene {
         this.logoObj.rotationPoint.setToCenter();
         this.logoObj.scale.setXY(0.1);
         this.on(GAME_PAD_EVENTS.buttonHold, (e:GamePadEvent)=>{
+
+            this.game.log(new Date().getTime() + ' ' + e.value);
+
             switch (e.button) {
                 case GAME_PAD_BUTTON.STICK_L_LEFT:
                     this.logoObj.pos.addX(-1);

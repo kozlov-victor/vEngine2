@@ -1,6 +1,7 @@
 import {KeyPadEvent} from "@engine/control/abstract/abstractKeypad";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {ObjectPool} from "@engine/misc/objectPool";
+import {Optional} from "@engine/core/declarations";
 
 export enum KEYBOARD_EVENTS {
     keyPressed = 'keyPressed',

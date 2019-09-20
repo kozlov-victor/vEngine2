@@ -2,7 +2,6 @@
   //"rulesDirectory": "./node_tools/lints/build",
   "extends": "tslint:recommended",
   "rules": {
-    "file-should-contains-header": true,
     "no-trailing-whitespace": false,
     "typedef-whitespace": false,
     "whitespace": false,
@@ -36,7 +35,6 @@
     "radix": false,
     "arrow-parens": false,
     "callable-types": false,
-    "implicit-global-variable": true,
     "no-any": false,
     "no-null-keyword": false
   },

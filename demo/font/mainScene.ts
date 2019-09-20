@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {Color} from "@engine/renderer/color";

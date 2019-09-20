@@ -1,5 +1,6 @@
 import {ITweenDescription, Tween} from "./tween";
 import {Game} from "../core/game";
+import {Optional} from "@engine/core/declarations";
 
 interface ITweenInMovie {
     startTime: number;

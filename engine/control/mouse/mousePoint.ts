@@ -1,6 +1,6 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Point2d} from "@engine/geometry/point2d";
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {IMouseEventEx} from "@engine/core/declarations";
 import {ObjectPool} from "@engine/misc/objectPool";
 

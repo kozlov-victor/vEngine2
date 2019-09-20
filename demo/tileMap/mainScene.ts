@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Color} from "@engine/renderer/color";

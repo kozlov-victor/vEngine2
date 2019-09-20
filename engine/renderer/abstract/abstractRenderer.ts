@@ -14,7 +14,7 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/texture";
-import {IDestroyable} from "@engine/core/declarations";
+import {IDestroyable, Optional} from "@engine/core/declarations";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 
 interface IHTMLElement extends HTMLElement{

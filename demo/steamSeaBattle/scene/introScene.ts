@@ -1,4 +1,3 @@
-import {AbstractAppScene} from "./abstract/abstractAppScene";
 import {AssetsDocumentHolder, Element} from "../data/assetsDocumentHolder";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MainScene} from "./mainScene";

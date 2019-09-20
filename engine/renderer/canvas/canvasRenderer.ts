@@ -13,6 +13,7 @@ import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Line} from "@engine/renderable/impl/geometry/line";
+import {Optional} from "@engine/core/declarations";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{

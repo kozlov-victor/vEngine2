@@ -3,7 +3,7 @@ import {IRectJSON} from "@engine/geometry/rect";
 import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAnimation";
 import {GameObject} from "@engine/renderable/impl/general/gameObject";
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";

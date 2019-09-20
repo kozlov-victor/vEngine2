@@ -1,4 +1,4 @@
-import {Scene} from "@engine/core/scene";
+import {Scene} from "@engine/scene/scene";
 import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Vec2} from "@engine/geometry/vec2";
