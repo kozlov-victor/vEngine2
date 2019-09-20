@@ -5,20 +5,17 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/texture";
-import {Image} from "@engine/renderable/impl/geometry/image";
 import {Color} from "@engine/renderer/color";
 import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
-import {Game} from "@engine/core/game";
+import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
 
 
 export class MainScene extends Scene {
 
     private ps!:ParticleSystem;
     private resourceLink!:ResourceLink<ITexture>;
-    private obj:GameObject;
 
-    private _em:boolean = false;
 
     public onPreloading() {
         this.resourceLink = this.resourceLoader.loadImage('./particlesFire/fire-texture-atlas.jpg');
@@ -29,24 +26,22 @@ export class MainScene extends Scene {
 
         this.colorBG = Color.BLACK;
 
-        this.obj = new GameObject(this.game);
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.resourceLink);
-        spr.blendMode = BLEND_MODE.ADDITIVE;
+        const animatedImage:AnimatedImage = new AnimatedImage(this.game);
+        animatedImage.setResourceLink(this.resourceLink);
+        animatedImage.blendMode = BLEND_MODE.ADDITIVE;
         const anim:CellFrameAnimation = new CellFrameAnimation(this.game);
         anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
         anim.isRepeat = true;
         anim.duration = 1400;
-        anim.setSpriteSheet(spr,4,4);
-        this.obj.sprite = spr;
-        this.obj.addFrameAnimation('animation',anim);
-        this.obj.playFrameAnimation(anim);
+        anim.setSpriteSheetSize(4,4);
+        animatedImage.addFrameAnimation('animation',anim);
+        animatedImage.playFrameAnimation(anim);
 
-        //this.appendChild(this.obj);
+        //this.appendChild(animatedImage);
 
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
-        ps.addParticle(this.obj);
+        ps.addParticle(animatedImage);
         ps.emissionRadius = 2;
 
 
@@ -57,16 +52,16 @@ export class MainScene extends Scene {
         this.ps = ps;
         ps.onEmitParticle((p:RenderableModel)=>{
 
-            const g:GameObject = (p as GameObject);
-            g.sprite.size.setWH(64,64);
-            g.playFrameAnimation('animation');
-            // const anim:CellFrameAnimation = new CellFrameAnimation(this.game);
-            // anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-            // anim.duration = 1400;
-            // anim.isRepeat = true;
-            // anim.setSpriteSheet((g.sprite as Image),4,4);
-            // g.addFrameAnimation('animation',anim);
-            // g.playFrameAnimation(anim);
+            const particle:AnimatedImage = (p as AnimatedImage);
+            particle.size.setWH(64,64);
+            particle.playFrameAnimation('animation');
+            const particleAnim:CellFrameAnimation = new CellFrameAnimation(this.game);
+            particleAnim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+            particleAnim.duration = 1400;
+            particleAnim.isRepeat = true;
+            particleAnim.setSpriteSheetSize(4,4);
+            particle.addFrameAnimation('animation',particleAnim);
+            particle.playFrameAnimation(particleAnim);
 
         });
         this.appendChild(ps);
@@ -74,7 +69,7 @@ export class MainScene extends Scene {
             this.game.getRenderer().requestFullScreen();
         });
         this.on(MOUSE_EVENTS.mouseMove,(e:IMousePoint)=>{
-            this.ps.emissionPosition.setXY(e.screenX - this.obj.size.width/2,e.screenY-this.obj.size.height/2);
+            this.ps.emissionPosition.setXY(e.screenX - animatedImage.size.width/2,e.screenY-animatedImage.size.height/2);
         });
 
 

@@ -1,10 +1,8 @@
-
-import {ICloneable, IEventemittable} from "@engine/core/declarations";
+import {IEventemittable} from "@engine/core/declarations";
 import {Game} from "@engine/core/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {GameObject} from "@engine/renderable/impl/general/gameObject";
+import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
 
 export const FRAME_ANIMATION_EVENTS = {
     completed:  'completed',
@@ -18,7 +16,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable {
     public isRepeat:boolean = true;
     public frames:T[] = [];
 
-    public parent:GameObject;
+    public target:AnimatedImage;
 
     private _currFrame:number = -1;
     private _startTime:number = 0;
@@ -42,12 +40,12 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable {
     }
 
     public play():void {
-        if (DEBUG && !this.parent) throw new DebugError(`can not play frame animation: it is not attached to parent`);
+        if (DEBUG && !this.target) throw new DebugError(`can not play frame animation: it is not attached to parent`);
         this._isPlaying = true;
     }
 
     public stop():void {
-        if (DEBUG && !this.parent) throw new DebugError(`can not stop frame animation: it is not attached to parent`);
+        if (DEBUG && !this.target) throw new DebugError(`can not stop frame animation: it is not attached to parent`);
         this._isPlaying = false;
         this._startTime = 0;
         this._loopReached = false;
@@ -85,7 +83,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable {
     }
 
     /*@internal*/
-    public afterCloned(g:GameObject):void{}
+    public afterCloned(g:AnimatedImage):void{}
 
     protected abstract onNextFrame(i:number):void;
 

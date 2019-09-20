@@ -1,14 +1,13 @@
 import {Scene} from "@engine/scene/scene";
-import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MultiImageFrameAnimation} from "@engine/animation/frameAnimation/multiImageFrameAnimation";
 import {ITexture} from "@engine/renderer/texture";
+import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
 
 
 export class MainScene extends Scene {
 
-    private obj:GameObject;
     private resourceLinks:ResourceLink<ITexture>[] = [];
 
     public onPreloading() {
@@ -19,22 +18,21 @@ export class MainScene extends Scene {
     }
 
     public onReady() {
-        this.obj = new GameObject(this.game);
         const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
         anim.frames = this.resourceLinks;
         anim.isRepeat = true;
-        this.obj.sprite = anim.currSprite;
-        this.obj.addFrameAnimation('animation',anim);
-        this.obj.playFrameAnimation('animation');
-        this.obj.pos.fromJSON({x:10,y:10});
-        this.appendChild(this.obj);
+        const animatedImage:AnimatedImage = new AnimatedImage(this.game);
+        animatedImage.addFrameAnimation('animation',anim);
+        animatedImage.playFrameAnimation('animation');
+        animatedImage.pos.fromJSON({x:10,y:10});
+        this.appendChild(animatedImage);
 
         let playing:boolean = true;
 
         this.on(MOUSE_EVENTS.click,()=>{
            playing = !playing;
-           if (playing) { this.obj.playFrameAnimation('animation'); }
-           else { this.obj.stopFrameAnimation(); }
+           if (playing) { animatedImage.playFrameAnimation('animation'); }
+           else { animatedImage.stopFrameAnimation(); }
         });
 
     }

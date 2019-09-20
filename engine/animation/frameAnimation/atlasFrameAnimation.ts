@@ -9,14 +9,9 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
 
     public readonly type:string = 'AtlasFrameAnimation';
 
-    private _atlas:Image;
-
-    public setAtlas(img:Image) {
-        this._atlas = img;
-    }
 
     public revalidate(){
-        if (DEBUG && !this._atlas) throw new DebugError(`atlasFrameAnimation needs atlas! Invoke setAtlas(img) method`);
+        if (DEBUG && !this.target) throw new DebugError(`atlasFrameAnimation needs image sourceLink!`);
         super.revalidate();
     }
 
@@ -26,9 +21,9 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
 
     protected onNextFrame(i: number): void {
         const currRect:IRectJSON = this.frames[i];
-        this._atlas.getSrcRect().fromJSON(currRect);
-        const rect:Rect = this._atlas.getSrcRect();
-        this._atlas.size.setWH(rect.width,rect.height);
+        this.target.getSrcRect().fromJSON(currRect);
+        const rect:Rect = this.target.getSrcRect();
+        this.target.size.setWH(rect.width,rect.height);
     }
 
 
