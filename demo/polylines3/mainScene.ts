@@ -2,6 +2,7 @@ import {Scene} from "@engine/core/scene";
 import {Color} from "@engine/renderer/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
+import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 
 
 export class MainScene extends Scene {
@@ -53,6 +54,16 @@ export class MainScene extends Scene {
         this.appendChild(polyLine1);
 
 
+        const p:Polygon = new Polygon(this.game);
+        p.fromSvgPath(`
+            M100,10L105.8,27.2 
+            123.8,27.2 109.4,38
+            114.6,55.2 100,45 85.4,55.2 90.6,38
+            76.2,27.2 94.2,27.2z
+        `);
+        p.addBehaviour(new DraggableBehaviour(this.game));
+        p.fillColor = Color.RGB(122,12,12);
+        this.appendChild(p);
 
     }
 
