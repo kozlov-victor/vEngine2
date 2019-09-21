@@ -2,6 +2,7 @@ import {AudioNode} from "./audioNode";
 import {Sound} from "./sound";
 import {Game} from "../core/game";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
+import {Optional} from "@engine/core/declarations";
 
 
 export class AudioNodeSet {
@@ -14,7 +15,7 @@ export class AudioNodeSet {
         }
     }
 
-    public getFreeNode():AudioNode|null{
+    public getFreeNode():Optional<AudioNode>{
         for (let i = 0;i<this.numOfNodes;i++) {
             if (this.nodes[i].isFree()) return this.nodes[i];
         }

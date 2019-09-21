@@ -99,6 +99,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         currSource.start(0,sound.offset,sound.duration);
         currSource.playbackRate.value = sound.velocity;
         this._gainNode.gain.value = sound.gain;
+        this._stereoPanNode.pan.value = sound.stereoPan;
         currSource.onended = ()=> {
             this.stop();
         };

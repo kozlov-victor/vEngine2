@@ -7,6 +7,7 @@ import {Game} from "../core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
+import {Optional} from "@engine/core/declarations";
 
 
 export  class AudioPlayer implements IAudioPlayer {
@@ -40,11 +41,11 @@ export  class AudioPlayer implements IAudioPlayer {
 
         if (DEBUG) sound.revalidate();
 
-        const node:AudioNode|null = this.audioNodeSet.getFreeNode();
+        const node:Optional<AudioNode> = this.audioNodeSet.getFreeNode();
         if (DEBUG && !node) {
             console.log('no free node to play sound');
         }
-        if (node===null) return;
+        if (node===undefined) return;
         node.play(sound);
     }
 
@@ -70,23 +71,6 @@ export  class AudioPlayer implements IAudioPlayer {
         this.audioNodeSet.resumeAll();
     }
 
-    public setGain(sound:Sound):void {
-        const node:AudioNode|null = this.audioNodeSet.getNodeBySound(sound);
-        if (node===null) return;
-        node.setGain(sound.gain);
-    }
-
-    public setStereoPan(sound:Sound):void {
-        const node:AudioNode|null = this.audioNodeSet.getNodeBySound(sound);
-        if (node===null) return;
-        node.setStereoPan(sound.stereoPan);
-    }
-
-    public setVelocity(sound:Sound):void {
-        const node:AudioNode|null = this.audioNodeSet.getNodeBySound(sound);
-        if (node===null) return;
-        node.setVelocity(sound.velocity);
-    }
 
     public update(time:number,delta:number):void {
 
