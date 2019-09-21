@@ -1,6 +1,5 @@
 import {BaseAbstractBehaviour} from "../abstract/baseAbstractBehaviour";
 import {Game} from "../../core/game";
-import {GameObject} from "../../renderable/impl/general/gameObject";
 import {Scene} from "../../scene/scene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
@@ -13,7 +12,7 @@ interface IMouseDragPoint {
     mY: number;
     x:number;
     y:number;
-    target: GameObject;
+    target: RenderableModel;
     defaultPrevented:boolean;
     dragStartX:number;
     dragStartY:number;

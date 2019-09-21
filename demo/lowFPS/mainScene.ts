@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
@@ -9,8 +8,8 @@ import {ITexture} from "@engine/renderer/texture";
 
 export class MainScene extends Scene {
 
-    private obj:GameObject;
     private logoLink:ResourceLink<ITexture>;
+    private obj:Image;
 
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
@@ -25,14 +24,13 @@ export class MainScene extends Scene {
     }
 
     public onReady() {
-        this.obj = new GameObject(this.game);
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
-        this.obj.sprite = spr;
-        this.obj.pos.fromJSON({x:10,y:10});
-        this.appendChild(this.obj);
-        this.obj.rotationPoint.setToCenter();
-        this.obj.velocity.x = -20;
+        spr.pos.fromJSON({x:10,y:10});
+        this.appendChild(spr);
+        spr.rotationPoint.setToCenter();
+        spr.velocity.x = -20;
+        this.obj = spr;
 
     }
 

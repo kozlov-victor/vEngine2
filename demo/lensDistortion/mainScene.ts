@@ -3,16 +3,18 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {Image} from "@engine/renderable/impl/geometry/image";
+import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/texture";
-import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
-import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {LensDistortionFilter} from "@engine/renderer/webGl/filters/texture/lensDistortionFilter";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
     private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/repeat.jpg');
+        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;
@@ -28,34 +30,31 @@ export class MainScene extends Scene {
         spr.setResourceLink(this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
-        spr.rotationPoint.setToCenter();
-        spr.scale.setXY(0.1);
-        this.on(GAME_PAD_EVENTS.buttonHold, (e:GamePadEvent)=>{
-
-            this.game.log(new Date().getTime() + ' ' + e.value);
-
-            switch (e.button) {
-                case GAME_PAD_BUTTON.STICK_L_LEFT:
+        this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
+            switch (e.key) {
+                case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-1);
                     break;
-                case GAME_PAD_BUTTON.STICK_L_RIGHT:
+                case KEYBOARD_KEY.RIGHT:
                     spr.pos.addX(1);
                     break;
-                case GAME_PAD_BUTTON.STICK_L_UP:
+                case KEYBOARD_KEY.UP:
                     spr.pos.addY(-1);
                     break;
-                case GAME_PAD_BUTTON.STICK_L_DOWN:
+                case KEYBOARD_KEY.DOWN:
                     spr.pos.addY(1);
                     break;
-                case GAME_PAD_BUTTON.BTN_A:
+                case KEYBOARD_KEY.R:
                     spr.angle+=0.1;
-                    break;
-                case GAME_PAD_BUTTON.BTN_B:
-                    spr.angle-=0.1;
-                    break;
             }
         });
 
+
+        const lensFilter:LensDistortionFilter = new LensDistortionFilter(this.game);
+        this.on(MOUSE_EVENTS.mouseMove, e=>{
+            lensFilter.setMouseScreenCoordinates(e.screenX,e.screenY);
+        });
+        this.filters = [lensFilter];
 
 
     }

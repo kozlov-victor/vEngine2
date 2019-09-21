@@ -1,5 +1,4 @@
 import {AssetsDocumentHolder, Element} from "../data/assetsDocumentHolder";
-import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {MathEx} from "@engine/misc/mathEx";
 import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {BaseScene} from "./baseScene";
@@ -12,28 +11,29 @@ import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 const MANOMETER_SCALE:number = MathEx.degToRad(360-111);
 const MAX_NUM_OF_SHOOTS:number = 10;
 
 export class MainScene extends BaseScene {
 
-    private ship:GameObject;
-    private seaContainer:GameObject;
-    private gear1:GameObject;
-    private gear2:GameObject;
+    private ship:RenderableModel;
+    private seaContainer:RenderableModel;
+    private gear1:RenderableModel;
+    private gear2:RenderableModel;
     private bulletContainer:NullGameObject;
-    private bullet:GameObject;
-    private manometerArrow:GameObject;
+    private bullet:RenderableModel;
+    private manometerArrow:RenderableModel;
     private btnLeft:ImageButton;
     private btnShoot:ImageButton;
     private btnRight:ImageButton;
     private nixieDisplayFired:NixieDisplay;
     private nixieDisplayShoot:NixieDisplay;
-    private hitOn:GameObject;
-    private hitOff:GameObject;
-    private missedOn:GameObject;
-    private missedOff:GameObject;
+    private hitOn:RenderableModel;
+    private hitOff:RenderableModel;
+    private missedOn:RenderableModel;
+    private missedOff:RenderableModel;
 
     private readonly PERISCOPES_LIMIT_LEFT:number = 30;
     private readonly PERISCOPES_LIMIT_RIGHT:number = -400;
@@ -52,12 +52,12 @@ export class MainScene extends BaseScene {
     public onReady() {
         super.onReady();
         this.filters.push(new BarrelDistortionFilter(this.game));
-        this.ship = this.findChildById('shipContainer') as GameObject;
-        this.seaContainer = this.findChildById('seaContainer') as GameObject;
-        this.gear1 = this.findChildById('gear1') as GameObject;
-        this.gear2 = this.findChildById('gear2') as GameObject;
+        this.ship = this.findChildById('shipContainer') as RenderableModel;
+        this.seaContainer = this.findChildById('seaContainer') as RenderableModel;
+        this.gear1 = this.findChildById('gear1') as RenderableModel;
+        this.gear2 = this.findChildById('gear2') as RenderableModel;
         this.bulletContainer = this.findChildById('bulletContainer') as NullGameObject;
-        this.bullet = this.findChildById('bullet') as GameObject;
+        this.bullet = this.findChildById('bullet') as RenderableModel;
         this.BULLET_INITIAL_POSITION = this.bulletContainer.pos.y;
         this.btnLeft = this.findChildById('btnLeft') as ImageButton;
         this.btnShoot = this.findChildById('btnShoot') as ImageButton;
@@ -70,11 +70,11 @@ export class MainScene extends BaseScene {
             this.findChildById('nixieTubeShoot0')!,
             this.findChildById('nixieTubeShoot1')!
         );
-        this.hitOn = this.findChildById('hitOn') as GameObject;
-        this.hitOff = this.findChildById('hitOff') as GameObject;
-        this.missedOn = this.findChildById('missedOn') as GameObject;
-        this.missedOff = this.findChildById('missedOff') as GameObject;
-        this.manometerArrow = this.findChildById('manometerArrow') as GameObject;
+        this.hitOn = this.findChildById('hitOn') as RenderableModel;
+        this.hitOff = this.findChildById('hitOff') as RenderableModel;
+        this.missedOn = this.findChildById('missedOn') as RenderableModel;
+        this.missedOff = this.findChildById('missedOff') as RenderableModel;
+        this.manometerArrow = this.findChildById('manometerArrow') as RenderableModel;
         this.ship.velocity.setX(-MathEx.random(20,60));
         this.sounds.water.gain = 0.02;
         this.waterWave();

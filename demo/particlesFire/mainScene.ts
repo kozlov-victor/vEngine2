@@ -6,7 +6,6 @@ import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/texture";
 import {Color} from "@engine/renderer/color";
-import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
 

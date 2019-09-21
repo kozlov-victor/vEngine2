@@ -5,8 +5,10 @@ import {DebugError} from "@engine/debug/debugError";
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {Shape} from "@engine/renderable/abstract/shape";
 
-
-export class GameObject extends RenderableModel implements ICloneable<GameObject>{
+/**
+ * @deprecated
+ */
+export class DeprectatedGameObject extends RenderableModel implements ICloneable<DeprectatedGameObject>{
 
     public readonly type:string = 'GameObject';
     public sprite:Shape;
@@ -35,8 +37,8 @@ export class GameObject extends RenderableModel implements ICloneable<GameObject
         //}
     }
 
-    public clone():GameObject {
-        const cloned:GameObject = new GameObject(this.game);
+    public clone():DeprectatedGameObject {
+        const cloned:DeprectatedGameObject = new DeprectatedGameObject(this.game);
         this.setClonedProperties(cloned);
         return cloned;
     }
@@ -80,7 +82,7 @@ export class GameObject extends RenderableModel implements ICloneable<GameObject
         super.kill();
     }
 
-    protected setClonedProperties(cloned:GameObject):void {
+    protected setClonedProperties(cloned:DeprectatedGameObject):void {
 
         if (DEBUG && !('clone' in this.sprite)) {
             console.error(this.sprite);

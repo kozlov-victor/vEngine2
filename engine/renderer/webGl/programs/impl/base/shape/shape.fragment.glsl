@@ -47,7 +47,7 @@ vec4 getFillColor(){
     }
     else return ERROR_COLOR;
 }
-float calcRadiusAtAngle(float x,float y) {
+float calcRadiusAtPosition(float x,float y) {
     float a = atan(y-HALF,x-HALF);
     float cosA = cos(a);
     float sinA = sin(a);
@@ -56,7 +56,7 @@ float calcRadiusAtAngle(float x,float y) {
 
 void drawEllipse(){
     float dist = distance(vec2(HALF, HALF), v_position.xy);
-    float rAtCurrAngle = calcRadiusAtAngle(v_position.x, v_position.y);
+    float rAtCurrAngle = calcRadiusAtPosition(v_position.x, v_position.y);
     float angle = atan(v_position.y-HALF, v_position.x-HALF);
     //if (angle<ZERO) angle = TWO_PI+angle;
     bool isArcNotUsed = u_arcAngleFrom==u_arcAngleTo && u_arcAngleFrom==ZERO;

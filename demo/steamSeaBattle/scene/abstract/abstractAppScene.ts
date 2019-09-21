@@ -6,7 +6,6 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/texture";
 import {Layer} from "@engine/renderable/impl/general/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Sound} from "@engine/media/sound";
 import {ITweenDescription, Tween} from "@engine/animation/tween";
@@ -30,7 +29,7 @@ export abstract class AbstractAppScene extends Scene {
         rect.pos.setY(200);
         this.preloadingGameObject = rect;
 
-        this.getSceneElement().getElementsByTagName('gameObject').forEach((el:Element)=>{
+        this.getSceneElement().getElementsByTagName('image').forEach((el:Element)=>{
             this.links[el.attributes.src] =
                 this.resourceLoader.loadImage({
                     url:`./steamSeaBattle/${assetsFolder}/images/${el.attributes.src}${assetsPostfix}`,
@@ -128,12 +127,10 @@ export abstract class AbstractAppScene extends Scene {
     private resolveChildren(root:Layer|RenderableModel,children:IElementDescription[]){
         children.forEach((child:IElementDescription)=>{
             switch (child.tagName) {
-                case 'gameObject': {
-                    const go:GameObject = new GameObject(this.game);
+                case 'image': {
                     const img:Image = new Image(this.game);
                     img.setResourceLink(this.links[child.attributes.src]);
-                    go.sprite = img;
-                    this.afterObjectCreated(root,go,child);
+                    this.afterObjectCreated(root,img,child);
                     break;
                 }
                 case 'rectangle': {

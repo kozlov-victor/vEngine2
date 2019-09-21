@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {LightSet} from "@engine/light/lightSet";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
@@ -14,7 +13,6 @@ import {ITexture} from "@engine/renderer/texture";
 
 export class MainScene extends Scene {
 
-    private logoObj:GameObject;
     private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
@@ -24,12 +22,10 @@ export class MainScene extends Scene {
 
     public onReady() {
         this.colorBG = Color.BLACK;
-        this.logoObj = new GameObject(this.game);
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
-        this.logoObj.sprite = spr;
-        this.logoObj.pos.fromJSON({x:10,y:10});
-        this.appendChild(this.logoObj);
+        spr.pos.fromJSON({x:10,y:10});
+        this.appendChild(spr);
 
         const pointLight:PointLight = new PointLight(this.game);
         pointLight.nearRadius = 10;
@@ -53,13 +49,13 @@ export class MainScene extends Scene {
         const lightFilter:LightFilter = new LightFilter(this.game,lightSet);
 
         this.filters = [lightFilter];
-        this.logoObj.sprite.filters = [lightFilter];
+        spr.filters = [lightFilter];
 
         this.on(MOUSE_EVENTS.mouseMove,(e:IMousePoint)=>{
             pointLight.pos.setXY(e.screenX,e.screenY);
             dirLight.pos.set(pointLight.pos);
         });
-        this.logoObj.addBehaviour(new DraggableBehaviour(this.game));
+        spr.addBehaviour(new DraggableBehaviour(this.game));
 
 
     }

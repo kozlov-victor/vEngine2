@@ -1,18 +1,14 @@
 import {Game} from "@engine/core/game";
 import {ICloneable} from "@engine/core/declarations";
-import {RenderableModel} from "../../abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
-import {Shape} from "@engine/renderable/abstract/shape";
 import {Image} from "@engine/renderable/impl/geometry/image";
 
 
 export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
 
-    public readonly type:string = 'GameObject';
+    public readonly type:string = 'AnimatedImage';
 
-    public groupNames:string[] = [];
-    public collideWith:string[] = [];
 
     private _currFrameAnimation:AbstractFrameAnimation<any>|null;
     private _frameAnimations:{[name:string]:AbstractFrameAnimation<any>} = {};
@@ -26,11 +22,6 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
            this._frameAnimations[key].revalidate();
         });
         super.revalidate();
-        //if (this.rigid) {
-            // let center = new Vec2(this.pos.x+this.anchor.x,this.pos.y+this.anchor);
-            // let mass = 10; // todo
-            // this.rigidBody = new RigidRectangle(this.game,center,this.width,this.height,mass);
-        //}
     }
 
     public clone():AnimatedImage {

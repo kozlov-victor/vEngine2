@@ -1,20 +1,19 @@
 import {Scene} from "@engine/scene/scene";
-import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Vec2} from "@engine/geometry/vec2";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 export class MainScene extends Scene {
 
-    private ship:GameObject;
+    private ship:RenderableModel;
 
 
     public onPreloading() {
-        this.ship = new GameObject(this.game);
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.resourceLoader.loadImage('./pointGeometry/ship.png'));
-        this.ship.sprite = spr;
+        this.ship = spr;
     }
 
 

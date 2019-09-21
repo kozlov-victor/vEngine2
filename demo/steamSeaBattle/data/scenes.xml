@@ -3,7 +3,7 @@
     <scenes>
         <scene id="preIntro">
             <layer>
-                <gameObject
+                <image
                         src="preIntro.png"
                         left="0"
                         top="0"
@@ -16,14 +16,14 @@
             <sound src="gear.wav"/>
             <sound src="start.wav" gain="0.4"/>
             <layer>
-                <gameObject
+                <image
                         src="back.png"
                         id="back"
                         left="-40"
                         top="0"
                         width="1200"
                         height="600"/>
-                <gameObject
+                <image
                         src="gear.png"
                         id="gear1"
                         left="100"
@@ -39,8 +39,8 @@
                             time="5000"
                             loop="1"
                     />
-                </gameObject>
-                <gameObject
+                </image>
+                <image
                         src="gear.png"
                         id="gear2"
                         left="98"
@@ -55,8 +55,8 @@
                             to="6.26"
                             time="7100"
                             loop="1"/>
-                </gameObject>
-                <gameObject
+                </image>
+                <image
                         src="gear.png"
                         id="gear3"
                         left="620"
@@ -71,8 +71,8 @@
                             to="6.26"
                             time="7000"
                             loop="1"/>
-                </gameObject>
-                <gameObject
+                </image>
+                <image
                         src="piston.png"
                         id="piston1"
                         left="455"
@@ -96,8 +96,8 @@
                                 time="2000"
                         />
                     </animationComposition>
-                </gameObject>
-                <gameObject
+                </image>
+                <image
                         src="piston.png"
                         id="piston2"
                         left="555"
@@ -121,22 +121,22 @@
                                 time="1000"
                         />
                     </animationComposition>
-                </gameObject>
-                <gameObject
+                </image>
+                <image
                         src="insert_coin.png"
                         id="insert_coin"
                         left="129"
                         top="171"
                         width="563"
                         height="252"/>
-                <gameObject
+                <image
                         src="coin_acceptor.png"
                         id="coin_acceptor"
                         left="268"
                         top="416"
                         width="300"
                         height="84"/>
-                <gameObject
+                <image
                         src="coin.png"
                         id="coin"
                         left="395"
@@ -152,8 +152,8 @@
                             to="6.26"
                             time="7100"
                             loop="1"/>
-                </gameObject>
-                <gameObject
+                </image>
+                <image
                         src="top.png"
                         id="top"
                         left="0"
@@ -178,14 +178,14 @@
                         top="0"
                         width="1200"
                         height="600">
-                    <gameObject
+                    <image
                             src="back.png"
                             id="back"
                             left="0"
                             top="0"
                             width="1200"
                             height="600"/>
-                    <gameObject
+                    <image
                             src="sky.png"
                             id="sky"
                             left="0"
@@ -198,7 +198,7 @@
                             id="bulletContainer"
                             width="28"
                             height="53">
-                        <gameObject
+                        <image
                                 src="bullet.png"
                                 id="bullet"
                                 left="0"
@@ -225,7 +225,7 @@
                                 />
 
                             </animationComposition>
-                        </gameObject>
+                        </image>
                     </nullGameObject>
                     <nullGameObject
                         id="shipContainer"
@@ -234,7 +234,7 @@
                         width="78"
                         height="68"
                         >
-                        <gameObject
+                        <image
                                 src="ship.png"
                                 id="ship"
                                 left="0"
@@ -275,7 +275,7 @@
                                         time="500"
                                 />
                             </animationComposition>
-                        </gameObject>
+                        </image>
                     </nullGameObject>
                     <rectangle
                             id="water"
@@ -304,7 +304,7 @@
                 </nullGameObject>
             </layer>
             <layer>
-                <gameObject
+                <image
                         src="gear.png"
                         id="gear1"
                         left="-20"
@@ -313,7 +313,7 @@
                         rotationPointY="49"
                         width="96"
                         height="96"/>
-                <gameObject
+                <image
                         src="gear.png"
                         id="gear2"
                         left="33"
@@ -322,7 +322,7 @@
                         rotationPointY="49"
                         width="96"
                         height="96"/>
-                <gameObject
+                <image
                         src="gear4.png"
                         id="gear4"
                         left="685"
@@ -347,8 +347,8 @@
                                 time="3000"
                         />
                     </animationComposition>
-                </gameObject>
-                <gameObject
+                </image>
+                <image
                         src="gear4.png"
                         id="gear4"
                         left="685"
@@ -373,22 +373,22 @@
                                 time="3000"
                         />
                     </animationComposition>
-                </gameObject>
-                <gameObject
+                </image>
+                <image
                         src="top.png"
                         id="top"
                         left="0"
                         top="0"
                         width="800"
                         height="600"/>
-                <gameObject
+                <image
                         src="manometer.png"
                         id="manometer"
                         left="554"
                         top="24"
                         width="62"
                         height="64">
-                    <gameObject
+                    <image
                             src="manometerArrow.png"
                             id="manometerArrow"
                             left="0"
@@ -397,8 +397,8 @@
                             rotationPointY="32"
                             width="62"
                             height="64">
-                    </gameObject>
-                </gameObject>
+                    </image>
+                </image>
 
 
                 <nullGameObject
@@ -408,7 +408,7 @@
                         width="64"
                         height="58"
                 >
-                    <gameObject
+                    <image
                             src="nixie0.png"
                             id="nixie0"
                             left="0"
@@ -416,7 +416,7 @@
                             width="64"
                             hidden="0"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie1.png"
                             id="nixie1"
                             left="0"
@@ -424,7 +424,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie2.png"
                             id="nixie2"
                             left="0"
@@ -432,7 +432,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie3.png"
                             id="nixie3"
                             left="0"
@@ -440,7 +440,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie4.png"
                             id="nixie4"
                             left="0"
@@ -448,7 +448,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie5.png"
                             id="nixie5"
                             left="0"
@@ -456,7 +456,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie6.png"
                             id="nixie6"
                             left="0"
@@ -464,7 +464,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie7.png"
                             id="nixie7"
                             left="0"
@@ -472,7 +472,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie8.png"
                             id="nixie8"
                             left="0"
@@ -480,7 +480,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie9.png"
                             id="nixie9"
                             left="0"
@@ -496,7 +496,7 @@
                         width="64"
                         height="58"
                 >
-                    <gameObject
+                    <image
                             src="nixie0.png"
                             id="nixie0"
                             left="0"
@@ -504,7 +504,7 @@
                             width="64"
                             hidden="0"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie1.png"
                             id="nixie1"
                             left="0"
@@ -512,7 +512,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie2.png"
                             id="nixie2"
                             left="0"
@@ -520,7 +520,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie3.png"
                             id="nixie3"
                             left="0"
@@ -528,7 +528,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie4.png"
                             id="nixie4"
                             left="0"
@@ -536,7 +536,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie5.png"
                             id="nixie5"
                             left="0"
@@ -544,7 +544,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie6.png"
                             id="nixie6"
                             left="0"
@@ -552,7 +552,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie7.png"
                             id="nixie7"
                             left="0"
@@ -560,7 +560,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie8.png"
                             id="nixie8"
                             left="0"
@@ -568,7 +568,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie9.png"
                             id="nixie9"
                             left="0"
@@ -583,7 +583,7 @@
                         top="40"
                         width="100"
                         height="54">
-                    <gameObject
+                    <image
                             id="hitOn"
                             src="hitOn.png"
                             hidden="1"
@@ -591,7 +591,7 @@
                             top="0"
                             width="100"
                             height="54"/>
-                    <gameObject
+                    <image
                             id="hitOff"
                             src="hitOff.png"
                             left="0"
@@ -605,7 +605,7 @@
                         top="40"
                         width="100"
                         height="54">
-                    <gameObject
+                    <image
                             id="missedOn"
                             src="missedOn.png"
                             hidden="1"
@@ -613,7 +613,7 @@
                             top="0"
                             width="100"
                             height="54"/>
-                    <gameObject
+                    <image
                             id="missedOff"
                             src="missedOff.png"
                             left="0"
@@ -630,7 +630,7 @@
                         width="64"
                         height="58"
                 >
-                    <gameObject
+                    <image
                             src="nixie0.png"
                             id="nixie0"
                             left="0"
@@ -638,7 +638,7 @@
                             width="64"
                             hidden="0"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie1.png"
                             id="nixie1"
                             left="0"
@@ -646,7 +646,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie2.png"
                             id="nixie2"
                             left="0"
@@ -654,7 +654,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie3.png"
                             id="nixie3"
                             left="0"
@@ -662,7 +662,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie4.png"
                             id="nixie4"
                             left="0"
@@ -670,7 +670,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie5.png"
                             id="nixie5"
                             left="0"
@@ -678,7 +678,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie6.png"
                             id="nixie6"
                             left="0"
@@ -686,7 +686,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie7.png"
                             id="nixie7"
                             left="0"
@@ -694,7 +694,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie8.png"
                             id="nixie8"
                             left="0"
@@ -702,7 +702,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie9.png"
                             id="nixie9"
                             left="0"
@@ -718,7 +718,7 @@
                         width="64"
                         height="58"
                 >
-                    <gameObject
+                    <image
                             src="nixie0.png"
                             id="nixie0"
                             left="0"
@@ -726,7 +726,7 @@
                             width="64"
                             hidden="0"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie1.png"
                             id="nixie1"
                             left="0"
@@ -734,7 +734,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie2.png"
                             id="nixie2"
                             left="0"
@@ -742,7 +742,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie3.png"
                             id="nixie3"
                             left="0"
@@ -750,7 +750,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie4.png"
                             id="nixie4"
                             left="0"
@@ -758,7 +758,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie5.png"
                             id="nixie5"
                             left="0"
@@ -766,7 +766,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie6.png"
                             id="nixie6"
                             left="0"
@@ -774,7 +774,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie7.png"
                             id="nixie7"
                             left="0"
@@ -782,7 +782,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie8.png"
                             id="nixie8"
                             left="0"
@@ -790,7 +790,7 @@
                             width="64"
                             hidden="1"
                             height="58"/>
-                    <gameObject
+                    <image
                             src="nixie9.png"
                             id="nixie9"
                             left="0"
@@ -833,20 +833,20 @@
             <sound src="life_lost.wav"/>
             <sound src="click.wav"/>
             <layer>
-                <gameObject
+                <image
                         src="back.png"
                         id="back"
                         left="-40"
                         top="0"
                         width="1200"
                         height="600"/>
-                <gameObject
+                <image
                         src="rail.png"
                         id="leftRail"
                         left="91"
                         top="0"
                         />
-                <gameObject
+                <image
                         src="rail.png"
                         id="rightRail"
                         left="670"
@@ -865,7 +865,7 @@
                             to="0"
                             time="5000"
                             loop="0"/>
-                    <gameObject
+                    <image
                             src="gear.png"
                             id="gear1"
                             left="15"
@@ -880,8 +880,8 @@
                                 to="9"
                                 time="5000"
                                 loop="0"/>
-                    </gameObject>
-                    <gameObject
+                    </image>
+                    <image
                             src="gear.png"
                             id="gear2"
                             left="14"
@@ -896,8 +896,8 @@
                                 to="9"
                                 time="5000"
                                 loop="0"/>
-                    </gameObject>
-                    <gameObject
+                    </image>
+                    <image
                             src="gear.png"
                             id="gear3"
                             left="600"
@@ -912,8 +912,8 @@
                                 to="9"
                                 time="5000"
                                 loop="0"/>
-                    </gameObject>
-                    <gameObject
+                    </image>
+                    <image
                             src="table.png"
                             id="table"
                             left="52"
@@ -929,7 +929,7 @@
                             width="64"
                             height="58"
                     >
-                        <gameObject
+                        <image
                                 src="nixie0.png"
                                 id="nixie0"
                                 left="0"
@@ -937,7 +937,7 @@
                                 width="64"
                                 hidden="0"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie1.png"
                                 id="nixie1"
                                 left="0"
@@ -945,7 +945,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie2.png"
                                 id="nixie2"
                                 left="0"
@@ -953,7 +953,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie3.png"
                                 id="nixie3"
                                 left="0"
@@ -961,7 +961,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie4.png"
                                 id="nixie4"
                                 left="0"
@@ -969,7 +969,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie5.png"
                                 id="nixie5"
                                 left="0"
@@ -977,7 +977,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie6.png"
                                 id="nixie6"
                                 left="0"
@@ -985,7 +985,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie7.png"
                                 id="nixie7"
                                 left="0"
@@ -993,7 +993,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie8.png"
                                 id="nixie8"
                                 left="0"
@@ -1001,7 +1001,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie9.png"
                                 id="nixie9"
                                 left="0"
@@ -1017,7 +1017,7 @@
                             width="64"
                             height="58"
                     >
-                        <gameObject
+                        <image
                                 src="nixie0.png"
                                 id="nixie0"
                                 left="0"
@@ -1025,7 +1025,7 @@
                                 width="64"
                                 hidden="0"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie1.png"
                                 id="nixie1"
                                 left="0"
@@ -1033,7 +1033,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie2.png"
                                 id="nixie2"
                                 left="0"
@@ -1041,7 +1041,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie3.png"
                                 id="nixie3"
                                 left="0"
@@ -1049,7 +1049,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie4.png"
                                 id="nixie4"
                                 left="0"
@@ -1057,7 +1057,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie5.png"
                                 id="nixie5"
                                 left="0"
@@ -1065,7 +1065,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie6.png"
                                 id="nixie6"
                                 left="0"
@@ -1073,7 +1073,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie7.png"
                                 id="nixie7"
                                 left="0"
@@ -1081,7 +1081,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie8.png"
                                 id="nixie8"
                                 left="0"
@@ -1089,7 +1089,7 @@
                                 width="64"
                                 hidden="1"
                                 height="58"/>
-                        <gameObject
+                        <image
                                 src="nixie9.png"
                                 id="nixie9"
                                 left="0"

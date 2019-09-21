@@ -17,6 +17,7 @@ export class Queue {
     private tasksProgressById:{[taskId:string]:number} = {};
     private completed:boolean = false;
     private nextTaskIndex:number = 0;
+    private currProgress:number = 0;
 
     constructor(){
 
@@ -61,7 +62,9 @@ export class Queue {
         Object.keys(this.tasksProgressById).forEach((taskId:string)=>{
             sum+=this.tasksProgressById[taskId]||0;
         });
-        return sum/this.tasks.length;
+        const progress = sum/this.tasks.length;
+        if (progress>this.currProgress) this.currProgress = progress; // avoid progress reducing if task were aded dynamically
+        return this.currProgress;
     }
 
     public start():void {

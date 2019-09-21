@@ -75,7 +75,7 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
     }
 
     public getAttachedTextureAt(i:number):Texture {
-        if (DEBUG && i>this.texturesToBind.length-1) throw new DebugError(`ca not find bound texture: out of range: index:${i}, length:${this.texturesToBind}`);
+        if (DEBUG && i>this.texturesToBind.length-1) throw new DebugError(`can not find bound texture: out of range: index:${i}, length:${this.texturesToBind.length}`);
         return this.texturesToBind.texturesInfo[i].texture;
     }
 

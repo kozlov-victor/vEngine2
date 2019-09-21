@@ -1,4 +1,3 @@
-import {GameObject} from "@engine/renderable/impl/general/gameObject";
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 
@@ -9,7 +8,6 @@ import {ITexture} from "@engine/renderer/texture";
 
 export class MainScene extends Scene {
 
-    private logoObj: GameObject;
     private resourceLink: ResourceLink<ITexture>;
 
     public onPreloading() {
@@ -18,12 +16,10 @@ export class MainScene extends Scene {
 
 
     public async onReady() {
-        this.logoObj = new GameObject(this.game);
         const spr: Image = new Image(this.game);
         spr.setResourceLink(this.resourceLink);
-        this.logoObj.sprite = spr;
-        this.logoObj.pos.fromJSON({x: 10, y: 10});
-        this.appendChild(this.logoObj);
+        spr.pos.fromJSON({x: 10, y: 10});
+        this.appendChild(spr);
     }
 
 }

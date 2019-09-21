@@ -13,6 +13,7 @@ import {Color} from "@engine/renderer/color";
 import {DebugError} from "@engine/debug/debugError";
 import {Easing as EasingQuart} from "@engine/misc/easing/quart";
 import {Easing as EasingQuint} from "@engine/misc/easing/quint";
+import {Optional} from "@engine/core/declarations";
 
 const POOL_SIZE:number = 128;
 
@@ -836,6 +837,7 @@ class SpriteTimelineKey extends SpatialTimelineKey {
         s.scmlObject = this.scmlObject;
         s.timeLine = this.timeLine;
         s.id = this.id;
+        s.useDefaultPivot = this.useDefaultPivot;
         return s;
     }
 
@@ -865,8 +867,8 @@ class SpriteTimelineKey extends SpatialTimelineKey {
         const returnKey:SpriteTimelineKey=this.clone();
         returnKey.info=linearSpatial(this.info,keyB.info,this.info.spin,t);
         if(!this.useDefaultPivot) {
-            returnKey.pivot_x=linear(this.pivot_x,keyB.pivot_x,t);
-            returnKey.pivot_y=linear(this.pivot_y,keyB.pivot_y,t);
+            //returnKey.pivot_x=linear(this.pivot_x,keyB.pivot_x,t); // todo is this really needed?
+            //returnKey.pivot_y=linear(this.pivot_y,keyB.pivot_y,t);
         }
         return returnKey;
     }
@@ -992,7 +994,6 @@ export class SpriterObject extends RenderableModel {
         resourceLoader.addNextTask(()=>{
             const scon:IScon = sconResourceLink.getTarget();
             this.scmlOjbect = ScmlObject.fromDescription(scon);
-            console.log(this.scmlOjbect);
             this.scmlOjbect.root = this;
             this.scmlOjbect.currentEntity = 0;
             this.scmlOjbect.currentAnimation = 0;
