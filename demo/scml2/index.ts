@@ -8,6 +8,7 @@ import {MouseControl} from "@engine/control/mouse/mouseControl";
 const game = new Game({width:800,height:640});
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
+game.addControl(MouseControl);
 const mainScene: Scene = new MainScene(game);
 game.runScene(mainScene);
 

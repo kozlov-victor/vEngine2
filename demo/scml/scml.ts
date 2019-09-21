@@ -971,7 +971,7 @@ const debugBone = (info:SpatialInfo,drawLength:number,drawHeight:number,i:number
 export class SpriterObject extends RenderableModel {
 
 
-    private scmlOjbect:ScmlObject;
+    private scmlObject:ScmlObject;
     private resourceLinks:Record<string,ResourceLink<ITexture>> = {};
 
     constructor(protected game:Game) {
@@ -993,11 +993,11 @@ export class SpriterObject extends RenderableModel {
         const sconResourceLink:ResourceLink<IScon> = resourceLoader.loadJSON(sconUrl);
         resourceLoader.addNextTask(()=>{
             const scon:IScon = sconResourceLink.getTarget();
-            this.scmlOjbect = ScmlObject.fromDescription(scon);
-            this.scmlOjbect.root = this;
-            this.scmlOjbect.currentEntity = 0;
-            this.scmlOjbect.currentAnimation = 0;
-            for (const folder of this.scmlOjbect.folders) {
+            this.scmlObject = ScmlObject.fromDescription(scon);
+            this.scmlObject.root = this;
+            this.scmlObject.currentEntity = 0;
+            this.scmlObject.currentAnimation = 0;
+            for (const folder of this.scmlObject.folders) {
                 for (const file of folder.files) {
                     urlRequest.url = `${baseUrl}/${file.name}`;
                     urlRequest.responseType = 'arraybuffer';
@@ -1010,7 +1010,7 @@ export class SpriterObject extends RenderableModel {
 
     public update(): void {
         super.update();
-        this.scmlOjbect.update();
+        this.scmlObject.update();
     }
 
     public clear():void {
@@ -1061,6 +1061,10 @@ export class SpriterObject extends RenderableModel {
         // transform-origin: ${0}px ${drawHeight/2}px;
         // transform: translate(${info.x}px,${info.y}px) rotate(${info.angle}deg) scale(${info.scaleX},${info.scaleY});
 
+    }
+
+    public nextAnimation(){
+        this.scmlObject.nextAnimation();
     }
 
     public draw(): boolean {

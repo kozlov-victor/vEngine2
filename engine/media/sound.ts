@@ -12,6 +12,7 @@ export class Sound implements IResource<void>,IRevalidatable {
 
     private _gain:number = 1;
     private _velocity:number = 1;
+    private _stereoPan:number = 0.5;
 
     // resource
     private _resourceLink!:ResourceLink<void>;
@@ -39,7 +40,6 @@ export class Sound implements IResource<void>,IRevalidatable {
 
     set gain(value: number) {
         this._gain = value;
-        this.game.getAudioPlayer().setGain(this);
     }
 
     get velocity(): number {
@@ -48,6 +48,15 @@ export class Sound implements IResource<void>,IRevalidatable {
 
     set velocity(value: number) {
         this._velocity = value;
+    }
+
+
+    get stereoPan(): number {
+        return this._stereoPan;
+    }
+
+    set stereoPan(value: number) {
+        this._stereoPan = value;
     }
 
     public setResourceLink(link:ResourceLink<void>):void{

@@ -1,8 +1,8 @@
-
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
 import {Scene} from "@engine/scene/scene";
 import {SpriterObject} from "../scml/scml";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 
 export class MainScene extends Scene {
@@ -30,6 +30,8 @@ export class MainScene extends Scene {
         this.appendChild(this.lobster);
         this.lobster.scale.setXY(1,-1);
         this.lobster.pos.setXY(120,120);
+
+        this.on(MOUSE_EVENTS.click, ()=>this.lobster.nextAnimation());
 
     }
 

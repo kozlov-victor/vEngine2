@@ -76,6 +76,12 @@ export  class AudioPlayer implements IAudioPlayer {
         node.setGain(sound.gain);
     }
 
+    public setStereoPan(sound:Sound):void {
+        const node:AudioNode|null = this.audioNodeSet.getNodeBySound(sound);
+        if (node===null) return;
+        node.setStereoPan(sound.stereoPan);
+    }
+
     public setVelocity(sound:Sound):void {
         const node:AudioNode|null = this.audioNodeSet.getNodeBySound(sound);
         if (node===null) return;

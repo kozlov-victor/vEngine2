@@ -11,6 +11,8 @@ export interface IAudioPlayer {
     pauseAll():void;
     resumeAll():void;
     setGain(sound:Sound):void;
+    setVelocity(sound:Sound):void;
+    setStereoPan(sound:Sound):void;
     isCached(link:ResourceLink<void>):boolean;
     getContext():BasicAudioContext;
 

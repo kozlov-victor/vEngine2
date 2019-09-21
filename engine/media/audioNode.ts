@@ -23,6 +23,10 @@ export class AudioNode {
         this.context.setGain(val);
     }
 
+    public setStereoPan(val:number):void {
+        this.context.setStereoPan(val);
+    }
+
     public setVelocity(val:number):void {
         this.context.setVelocity(val);
     }

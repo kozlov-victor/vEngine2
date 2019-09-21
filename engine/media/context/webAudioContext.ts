@@ -54,6 +54,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
     public _ctx: AudioContext;
     public _currSource!: AudioBufferSourceNode;
     public _gainNode: GainNode;
+    public _stereoPanNode: StereoPannerNode;
     public _free: boolean = true;
 
     public readonly type: string = 'webAudioContext';
@@ -62,7 +63,10 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         super(game);
         this._ctx = CtxHolder.getCtx();
         this._gainNode = this._ctx.createGain();
-        this._gainNode.connect(this._ctx.destination);
+        this._stereoPanNode = this._ctx.createStereoPanner();
+        this._stereoPanNode.pan.value = 0.5;
+        this._stereoPanNode.connect(this._ctx.destination);
+        this._gainNode.connect(this._stereoPanNode);
     }
 
     public load(buffer:ArrayBuffer, link:ResourceLink<void>, onLoad:()=>void):void {
@@ -118,6 +122,10 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
 
     public setVelocity(val:number):void {
         this._currSource.playbackRate.value = val;
+    }
+
+    public setStereoPan(val:number):void {
+        this._stereoPanNode.pan.value = val;
     }
 
     public pause():void {
