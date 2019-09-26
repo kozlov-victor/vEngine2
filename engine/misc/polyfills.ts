@@ -1,6 +1,6 @@
 
 
-if (typeof globalThis === 'undefined') window.globalThis = window;
+if (typeof globalThis === 'undefined') (window as unknown as {globalThis:Window}).globalThis = window;
 
 const rafPolyfill = (f:FrameRequestCallback):number=>{
     return (setTimeout(f,17) as any) as number;

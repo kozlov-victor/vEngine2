@@ -85,7 +85,7 @@ interface IWindowEx extends Window {
     common:typeof common;
 }
 
-(window as IWindowEx).common = common;
+(window as unknown as IWindowEx).common = common;
 
 // console.log(defineWinType([WHEEL_SECTOR.CAR,WHEEL_SECTOR.CAR,WHEEL_SECTOR.CAR])===WIN_TYPE.DELIVERY_FREE);
 // console.log(defineWinType([WHEEL_SECTOR.SINABON,WHEEL_SECTOR.SINABON,WHEEL_SECTOR.CAR])===WIN_TYPE.DISCOUNT_50);

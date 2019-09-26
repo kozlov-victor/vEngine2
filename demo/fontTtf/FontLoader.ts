@@ -13,7 +13,7 @@ interface IDocumentEx extends Document{
     };
 }
 
-if ((window as Window & {FontFace:{}}).FontFace===undefined) throw new DebugError(`FontFace is not supported`);
+if ((window as unknown as {FontFace:{}}).FontFace===undefined) throw new DebugError(`FontFace is not supported`);
 
 export namespace fontLoader {
 

@@ -11,7 +11,7 @@ interface IWindowEx extends Window{
     setOneFrameTime(va:number):void;
 }
 
-(window as IWindowEx).setOneFrameTime = (val:number)=>{
+(window as unknown as IWindowEx).setOneFrameTime = (val:number)=>{
     if (val<17) val = 17;
     oneFrameTime = val;
 };
