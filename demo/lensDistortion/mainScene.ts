@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/color";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image, STRETCH_MODE} from "@engine/renderable/impl/geometry/image";
 import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
@@ -15,6 +15,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 export class MainScene extends Scene {
 
     private logoLink:ResourceLink<ITexture>;
+    private img:Image;
 
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
@@ -22,6 +23,11 @@ export class MainScene extends Scene {
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
+
+        const img = new Image(this.game);
+        img.setResourceLink(this.resourceLoader.loadImage('./assets/repeat.jpg'));
+        this.img = img;
+
     }
 
     public onProgress(val: number) {
@@ -43,6 +49,13 @@ export class MainScene extends Scene {
         circle.arcAngleFrom = -2;
         circle.arcAngleTo = 2;
         this.appendChild(circle);
+
+        const img = this.img;
+        img.pos.setXY(100,0);
+        img.size.setWH(200);
+        img.stretchMode = STRETCH_MODE.REPEAT;
+        img.borderRadius = 15;
+        this.appendChild(this.img);
 
 
         this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
