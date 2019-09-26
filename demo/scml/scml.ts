@@ -5,11 +5,8 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {IURLRequest} from "@engine/resources/urlLoader";
-import {NinePatchImage} from "@engine/renderable/impl/geometry/ninePatchImage";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {ITexture} from "@engine/renderer/texture";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/color";
 import {DebugError} from "@engine/debug/debugError";
 import {Easing as EasingQuart} from "@engine/misc/easing/quart";
 import {Easing as EasingQuint} from "@engine/misc/easing/quint";
@@ -83,8 +80,8 @@ interface ISconMainlineKey {
 
 interface ISconSpriteTimeLineKey {
     angle?: number;
-    file?: number;
-    folder?: number;
+    file: number;
+    folder: number;
     x?: number;
     y?: number;
     scale_x?:number;
@@ -138,6 +135,12 @@ interface  ISconCharacterMap {
     maps:[];
 }
 
+class PoolHolder {
+    public spatialInfoPool:ObjectPool<SpatialInfo> = new ObjectPool(SpatialInfo,POOL_SIZE);
+    public boneTimeLineObjectPool:ObjectPool<BoneTimelineKey> = new ObjectPool(BoneTimelineKey,POOL_SIZE);
+    public spriteTimeLineObjectPool:ObjectPool<SpriteTimelineKey> = new ObjectPool(SpriteTimelineKey,POOL_SIZE);
+}
+
 export class ScmlObject {
 
     public static fromDescription(desc:IScon):ScmlObject{
@@ -153,6 +156,8 @@ export class ScmlObject {
         obj.activeCharacterMap = obj.folders; // only default character map is supported
         return obj;
     }
+
+    public poolHolder:PoolHolder = new PoolHolder();
 
     public root:SpriterObject;
 
@@ -208,6 +213,7 @@ export class ScmlObject {
         SpatialInfo.objectPool.releaseAll();
         SpriteTimelineKey.objectPool.releaseAll();
         BoneTimelineKey.objectPool.releaseAll();
+
 
     }
 
@@ -418,6 +424,8 @@ class Animation {
 
         const objectKeys:SpriteTimelineKey[] = []; // todo
         for(const o of mainKey.objectRefs) {
+            const timeLine:Timeline = this.timelines[o.timeline];
+            if (timeLine.objectType!=="SPRITE") continue; // only sprite object are supported
             let parentInfo:SpatialInfo;
             const currentRef:Ref=o;
 
@@ -520,8 +528,7 @@ class Timeline {
         t.name = timeLineDesc.name;
         t.id = timeLineDesc.id;
         if (timeLineDesc.object_type!==undefined) {
-            if (timeLineDesc.object_type==='bone')
-            t.objectType = 'BONE';
+           t.objectType = timeLineDesc.object_type.toUpperCase() as OBJECT_TYPE;
         }
         t.keys = [];
         for (const keyDesc of timeLineDesc.key) {
@@ -536,20 +543,21 @@ class Timeline {
 
     public name:string;
     public id:number;
-    public objectType:'SPRITE'|'BONE'|'BOX'|'POINT'|'SOUND'|'ENTITY'|'VARIABLE'; // enum : SPRITE,BONE,BOX,POINT,SOUND,ENTITY,VARIABLE
+    public objectType:OBJECT_TYPE = 'SPRITE'; // enum : SPRITE,BONE,BOX,POINT,SOUND,ENTITY,VARIABLE
     public keys:TimelineKey[]; // <key> tags within <timeline> tags
 
     private constructor() {}
 }
 
+type OBJECT_TYPE = 'SPRITE'|'BONE'|'BOX'|'POINT'|'SOUND'|'ENTITY'|'VARIABLE';
 type CURVE_TYPE = 'INSTANT' | 'LINEAR' | 'QUADRATIC' | 'CUBIC'|'QUARTIC'|'QUINTIC'|'BEZIER';
 
 abstract class TimelineKey {
 
     public static fromDescription(scmlObject:ScmlObject,timeLineKeyDesc:ISconTimelineKey):Optional<TimelineKey>{
-        const spriteTimeLineKeyDesc:Optional<ISconSpriteTimeLineKey> = timeLineKeyDesc.object;
+        const objectTimeLineKeyDesc:Optional<ISconSpriteTimeLineKey> = timeLineKeyDesc.object;
         const boneTimeLineKeyDesc:Optional<ISconBoneTimelineKey> = timeLineKeyDesc.bone;
-        if (spriteTimeLineKeyDesc!==undefined) return SpriteTimelineKey.fromDescriptionSub(scmlObject,timeLineKeyDesc,spriteTimeLineKeyDesc);
+        if (objectTimeLineKeyDesc!==undefined) return SpriteTimelineKey.fromDescriptionSub(scmlObject,timeLineKeyDesc,objectTimeLineKeyDesc);
         else if (boneTimeLineKeyDesc!==undefined) return BoneTimelineKey.fromDescriptionSub(scmlObject,timeLineKeyDesc,boneTimeLineKeyDesc);
         else return undefined;
     }
@@ -785,8 +793,8 @@ class SpriteTimelineKey extends SpatialTimelineKey {
         s.scmlObject = scmlObject;
         s.id = commonKeyDesc.id;
         s.info = SpatialInfo.fromDescription(commonKeyDesc,spriteKeyDesc);
-        if (spriteKeyDesc.folder!==undefined) s.folder = spriteKeyDesc.folder;
-        if (spriteKeyDesc.file!==undefined) s.file = spriteKeyDesc.file;
+        s.folder = spriteKeyDesc.folder;
+        s.file = spriteKeyDesc.file;
         if (commonKeyDesc.time!==undefined) s.time = commonKeyDesc.time;
         if (commonKeyDesc.curve_type!==undefined) s.curveType = commonKeyDesc.curve_type.toUpperCase() as CURVE_TYPE;
         if (commonKeyDesc.c1!==undefined) s.c1 = +commonKeyDesc.c1;
@@ -842,6 +850,10 @@ class SpriteTimelineKey extends SpatialTimelineKey {
     }
 
     public paint():void {
+
+        if (this.folder===undefined || this.file===undefined) return; // if image is missed
+
+
         let paintPivotX:number;
         let paintPivotY:number;
         if(this.useDefaultPivot) {

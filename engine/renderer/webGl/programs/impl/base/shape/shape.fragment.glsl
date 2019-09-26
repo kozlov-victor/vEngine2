@@ -81,7 +81,7 @@ void drawRect(){
     if (distX < halfW && distY < halfH) {
 
         if (distX>halfW - u_borderRadius && distY>halfH - u_borderRadius) {
-            vec2 borderCenter = vec2(0.,0.);
+            vec2 borderCenter = vec2(ZERO,ZERO);
             float posX = v_position.x, posY = v_position.y;
             if (posX<HALF && posY<HALF) { // top left
                 borderCenter = vec2(HALF - halfW + u_borderRadius,HALF - halfH + u_borderRadius);
@@ -111,7 +111,7 @@ void drawRect(){
 
 void main(){
     if (u_shapeType==SHAPE_TYPE_ELLIPSE) drawEllipse();
-else if (u_shapeType==SHAPE_TYPE_RECT) drawRect();
-else gl_FragColor = ERROR_COLOR;
-gl_FragColor.a*=u_alpha;
+    else if (u_shapeType==SHAPE_TYPE_RECT) drawRect();
+    else gl_FragColor = ERROR_COLOR;
+    gl_FragColor*=u_alpha;
 }

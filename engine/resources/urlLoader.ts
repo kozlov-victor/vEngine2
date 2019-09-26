@@ -87,7 +87,7 @@ const loadViaJsonp = (urlLoader:UrlLoader<ArrayBuffer|string>,urlRequest:IURLReq
         if (urlLoader.onError) urlLoader.onError(e);
         if (DEBUG) throw new DebugError(`can not load resource with url ${urlRequest.url}`);
     };
-    const jsonpHandler:{[key:string]:(data:string|ArrayBuffer)=>void} = (window as IWindow).jsonpHandler || ((window as IWindow).jsonpHandler={});
+    const jsonpHandler:{[key:string]:(data:string|ArrayBuffer)=>void} = (window as unknown as IWindow).jsonpHandler || ((window as unknown as IWindow).jsonpHandler={});
     document.body.appendChild(script);
     jsonpHandler[urlRequest.url] = (data:ArrayBuffer|string):void=>{
         if (DEBUG && !urlLoader.onLoad) throw new DebugError(`urlLoader.onLoad not provided for resource with url ${urlLoader.getUrl()}`);
