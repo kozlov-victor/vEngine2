@@ -111,7 +111,7 @@ void drawRect(){
 
 void main(){
     if (u_shapeType==SHAPE_TYPE_ELLIPSE) drawEllipse();
-else if (u_shapeType==SHAPE_TYPE_RECT) drawRect();
-else gl_FragColor = ERROR_COLOR;
-gl_FragColor.a*=u_alpha;
+    else if (u_shapeType==SHAPE_TYPE_RECT) drawRect();
+    else gl_FragColor = ERROR_COLOR;
+    gl_FragColor.a*=u_alpha;
 }

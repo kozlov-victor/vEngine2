@@ -102,19 +102,11 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         this.beforeRender();
 
         const renderer:AbstractRenderer = this.game.getRenderer();
-        renderer.beforeFrameDraw(this.colorBG);
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
 
-        if (!this.resourceLoader.isCompleted()) {
-            if (this.preloadingGameObject!==undefined) {
-                this.renderPreloadingFrame();
-            }
-        } else {
-             this.renderMainFrame();
-        }
+        this.renderFrame();
 
-        renderer.afterFrameDraw(this.filters);
     }
 
     public addTween(t: Tween): void {
@@ -195,13 +187,13 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     }
 
 
-    private beforeFrameDraw():void {
+    private beforeFrameRender():void {
         if (this.pos.equal(0)) return;
         const renderer:AbstractRenderer = this.game.getRenderer();
         const r:Rect = Rect.fromPool();
         r.setXYWH(
-            this.pos.x,
-            this.pos.y,
+            Math.max(0,this.pos.x),
+            Math.max(0,this.pos.y),
             Math.min(this.game.width,this.game.width+this.pos.x),
             Math.min(this.game.height,this.game.height+this.pos.y)
         );
@@ -209,31 +201,39 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         r.release();
     }
 
-    private afterFrameDraw(){
+    private afterFrameRender(){
         if (this.pos.equal(0)) return;
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.unlockRect();
     }
 
 
-    private renderMainFrame():void {
+    private renderFrame():void {
 
         const renderer:AbstractRenderer = this.game.getRenderer();
 
         renderer.save();
-        this.beforeFrameDraw();
+        this.beforeFrameRender();
+        renderer.beforeFrameDraw(this.colorBG);
         this.game.camera.render();
         renderer.translate(this.pos.x,this.pos.y);
 
-        for (const l of this._layers) {
-            l.render();
+        if (!this.resourceLoader.isCompleted()) {
+            if (this.preloadingGameObject!==undefined) {
+                this.preloadingGameObject.render();
+            }
+        } else {
+            for (const l of this._layers) {
+                l.render();
+            }
         }
+
 
         //this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM; // todo manage this
         this.onRender();
 
         renderer.restore();
-        this.afterFrameDraw();
+        this.afterFrameRender();
 
         if (DEBUG) {
             this.game.getRenderer().restore();
@@ -247,12 +247,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
             }
             this.game.getRenderer().restore();
         }
-    }
-
-    private renderPreloadingFrame():void {
-        this.game.getRenderer().resetTransform(); // todo is needed?
-        this.beforeFrameDraw();
-        this.preloadingGameObject.render();
-        this.afterFrameDraw();
+        renderer.afterFrameDraw(this.filters);
     }
 }

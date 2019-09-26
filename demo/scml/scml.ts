@@ -220,6 +220,7 @@ export class ScmlObject {
     }
 
 }
+
 class Folder {
 
     public static fromDescription(folderDesc:ISconFolder):Folder{
@@ -914,59 +915,59 @@ const cubic = (a:number,b:number,c:number,d:number,t:number):number=>{
     return linear(quadratic(a,b,c,t),quadratic(b,c,d,t),t);
 };
 
-const container:HTMLDivElement = document.createElement('div');
-container.style.cssText = 'position:absolute;width:300px;height:300px;display:block;left:100px;top:100px;overflow:visible;transform:scale(1,-1);';
-document.body.appendChild(container);
+// const container:HTMLDivElement = document.createElement('div');
+// container.style.cssText = 'position:absolute;width:300px;height:300px;display:block;left:100px;top:100px;overflow:visible;transform:scale(1,-1);';
+// document.body.appendChild(container);
 
 
-const debugReset = ()=>{
-    container.querySelectorAll('*').forEach((el:Element)=>{
-        (el as HTMLElement).style.display = 'none';
-    });
-};
+// const debugReset = ()=>{
+//     container.querySelectorAll('*').forEach((el:Element)=>{
+//         (el as HTMLElement).style.display = 'none';
+//     });
+// };
 
 
-const debugPaint = (url:string,file:File,info:SpatialInfo,pivotX:number,pivotY:number,index:number)=>{
-    let elSprite:HTMLDivElement = document.getElementById(url)! as HTMLDivElement;
-    if (elSprite===null) {
-        elSprite = document.createElement('div');
-        elSprite.id = url;
-        container.appendChild(elSprite);
-    }
-    elSprite.style.cssText = `
-        position:absolute;
-        width: ${file.width}px;
-        height: ${file.height}px;
-        border: 1px solid red;
-        display: block;
-        z-index: ${index};
-        opacity: ${info.a};
-        transform-origin: ${(pivotX)*file.width}px ${(1-pivotY)*file.height}px;
-        transform: translate(${info.x-pivotX*file.width}px,${info.y-(1-pivotY)*file.height}px) rotate(${info.angle}deg) scale(${info.scaleX},${-info.scaleY}) ;
-        background-image: url(scml/${url});
-    `;
+// const debugPaint = (url:string,file:File,info:SpatialInfo,pivotX:number,pivotY:number,index:number)=>{
+//     let elSprite:HTMLDivElement = document.getElementById(url)! as HTMLDivElement;
+//     if (elSprite===null) {
+//         elSprite = document.createElement('div');
+//         elSprite.id = url;
+//         container.appendChild(elSprite);
+//     }
+//     elSprite.style.cssText = `
+//         position:absolute;
+//         width: ${file.width}px;
+//         height: ${file.height}px;
+//         border: 1px solid red;
+//         display: block;
+//         z-index: ${index};
+//         opacity: ${info.a};
+//         transform-origin: ${(pivotX)*file.width}px ${(1-pivotY)*file.height}px;
+//         transform: translate(${info.x-pivotX*file.width}px,${info.y-(1-pivotY)*file.height}px) rotate(${info.angle}deg) scale(${info.scaleX},${-info.scaleY}) ;
+//         background-image: url(scml/${url});
+//     `;
+//
+// };
 
-};
 
-
-const debugBone = (info:SpatialInfo,drawLength:number,drawHeight:number,i:number)=>{
-    const id:string = 'bone'+i;
-    let el:HTMLDivElement = document.getElementById(id)! as HTMLDivElement;
-    if (el===null) {
-        el = document.createElement('div');
-        el.id = id;
-        container.appendChild(el);
-    }
-    el.style.cssText = `
-        position:absolute;
-        width: ${drawLength}px;
-        height: ${drawHeight}px;
-        border: 1px solid black;
-        display: block;
-        transform-origin: ${0}px ${drawHeight/2}px;
-        transform: translate(${info.x}px,${info.y}px) rotate(${info.angle}deg) scale(${info.scaleX},${info.scaleY});
-    `;
-};
+// const debugBone = (info:SpatialInfo,drawLength:number,drawHeight:number,i:number)=>{
+//     const id:string = 'bone'+i;
+//     let el:HTMLDivElement = document.getElementById(id)! as HTMLDivElement;
+//     if (el===null) {
+//         el = document.createElement('div');
+//         el.id = id;
+//         container.appendChild(el);
+//     }
+//     el.style.cssText = `
+//         position:absolute;
+//         width: ${drawLength}px;
+//         height: ${drawHeight}px;
+//         border: 1px solid black;
+//         display: block;
+//         transform-origin: ${0}px ${drawHeight/2}px;
+//         transform: translate(${info.x}px,${info.y}px) rotate(${info.angle}deg) scale(${info.scaleX},${info.scaleY});
+//     `;
+// };
 
 export class SpriterObject extends RenderableModel {
 

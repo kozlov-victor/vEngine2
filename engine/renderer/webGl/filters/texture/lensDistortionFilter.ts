@@ -33,30 +33,38 @@ export class LensDistortionFilter extends AbstractFilter {
             void main() {
 
                 vec2 resolution = vec2(rt_w,rt_h);
-                float aspect = resolution.y / resolution.y;
-                vec2 scale = vec2(aspect, 1.);
-                
-                vec2 p = v_texCoord.xy;
-                vec2 m = u_mouse.xy / resolution.xy;
-                
-                
-                float r = length((p-m)); // distance of pixel from mouse
+                vec2 pointScreen = v_texCoord.xy*resolution;
+                vec2 mouseSceen = u_mouse.xy;
+
+                vec2 point = v_texCoord.xy;
+                vec2 mouse = u_mouse.xy/resolution;
+
+                // distance of pixel from mouse
+                float rScreen = length(pointScreen-mouseSceen);
+                float r = length(point-mouse);
                 
                 vec4 col;
-                if (r > u_length_size) {
+                if (rScreen > u_length_size) {
                     col = texture2D(texture, v_texCoord);
                 }
                 else {
-                    vec2 displace = m+(p-m)*(r-u_force)/r;
-                    col = texture2D(texture, displace);
+//                    float r2=r-u_force;
+//                    if (r2<0.) r2=0.;
+//                    vec2 displace = mouse+(point-mouse)*(r2)/r;
+                    vec2 delta = point-mouse;
+                    float teta = atan(delta.y,delta.x);
+                    float r2 = pow(r, u_force);
+                    float dx = point.x+r2*cos(teta);
+                    float dy = point.y+r2*sin(teta);
+                    col = texture2D(texture, vec2(dx,dy));
                 }
                 gl_FragColor = col;
             }
             `
         );
         this.simpleRectDrawer.initProgram();
-        this.setLengthSize(0.2);
-        this.setForce(0.02);
+        this.setLengthSize(50);
+        this.setForce(2);
     }
 
     public setLengthSize(val:number):void{
