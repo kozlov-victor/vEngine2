@@ -95,7 +95,7 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     public id:string;
     public readonly size:Size = new Size();
     public readonly pos:Point2d = new Point2d(0,0,()=>this._worldPositionIsDirty=true);
-    public readonly posZ:number = 0;
+    public posZ:number = 0;
 
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly skew:Point2d = new Point2d(0,0);
@@ -171,7 +171,7 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     }
 
 
-    public abstract draw():boolean;
+    public abstract draw():boolean; // todo to void
 
     public kill():void { // todo is this method need
 
@@ -202,16 +202,15 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
         renderer.save();
         this.beforeRender();
 
-        if (!this.anchor.equal(0,0)) renderer.translate(-this.anchor.x,-this.anchor.y,this.posZ);
-
-        if (this.isNeedAdditionalTransform()) {
-            renderer.translate(this.rotationPoint.x,this.rotationPoint.y);
-            if (!this.scale.equal(1)) renderer.scale(this.scale.x,this.scale.y);
-            if (this.skew.x!==0) renderer.skewX(this.skew.x);
-            if (this.skew.y!==0) renderer.skewY(this.skew.y);
-            this.doAdditionalTransform();
-            renderer.translate(-this.rotationPoint.x,-this.rotationPoint.y);
-        }
+        renderer.translate(-this.anchor.x,-this.anchor.y,this.posZ);
+        renderer.translate(this.rotationPoint.x,this.rotationPoint.y);
+        renderer.scale(this.scale.x,this.scale.y);
+        renderer.skewX(this.skew.x);
+        renderer.skewY(this.skew.y);
+        renderer.rotateZ(this.angle3d.z);
+        renderer.rotateX(this.angle3d.x);
+        renderer.rotateY(this.angle3d.y);
+        renderer.translate(-this.rotationPoint.x,-this.rotationPoint.y);
 
         const drawResult:boolean = this.draw();
 
@@ -219,9 +218,7 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
             renderer.save();
             renderer.translate(this.anchor.x,this.anchor.y);
             for(let i=0,max=this.children.length;i<max;i++) {
-                //renderer.save();
                 this.children[i].render();
-                //renderer.restore();
             }
             renderer.restore();
         }
@@ -373,17 +370,6 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
         this.game.getRenderer().translate(this.pos.x,this.pos.y);
     }
 
-    protected isNeedAdditionalTransform():boolean{
-        return !(this.skew.equal(0) && this.scale.equal(1) && this.angle3d.x===0 && this.angle3d.y===0 && this.angle3d.z===0);
-    }
-
-    protected doAdditionalTransform():void {
-        const renderer:AbstractRenderer = this.game.getRenderer();
-
-        if (this.angle3d.z!==0) renderer.rotateZ(this.angle3d.z);
-        if (this.angle3d.x!==0) renderer.rotateX(this.angle3d.x);
-        if (this.angle3d.y!==0) renderer.rotateY(this.angle3d.y);
-    }
 
     /**
      * @deprecated

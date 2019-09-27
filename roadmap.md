@@ -19,6 +19,8 @@
 - worldTransform
 - gotoAndPlay
 - gotoAndStop (frameNumber)
+- rendering with fog
+- sprite batch
 
 **todo**
 
@@ -28,4 +30,4 @@
 
 - Линейный градиент с многими точками
 - Круговой градиент
-- Заливка спрайтрм
+- Заливка спрайтом

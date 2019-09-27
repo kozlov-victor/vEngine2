@@ -123,6 +123,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private nullTexture:Texture;
     private pixelPerfectMode:boolean = false;
 
+    private _isRectLocked:boolean = false;
+
     constructor(game:Game){
         super(game);
         this.registerResize();
@@ -312,6 +314,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public scale(x:number,y:number):void {
+        if (x===1 && y===1) return;
         this.matrixStack.scale(x,y);
     }
 
@@ -320,26 +323,32 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public rotateX(angleInRadians:number):void {
+        if (angleInRadians===0) return;
         this.matrixStack.rotateX(angleInRadians);
     }
 
     public rotateY(angleInRadians:number):void {
+        if (angleInRadians===0) return;
         this.matrixStack.rotateY(angleInRadians);
     }
 
     public rotateZ(angleInRadians:number):void {
+        if (angleInRadians===0) return;
         this.matrixStack.rotateZ(angleInRadians);
     }
 
     public translate(x:number,y:number,z:number=0):void{
+        if (x===0 && y===0 && z===0) return;
         this.matrixStack.translate(x,y,z);
     }
 
     public skewX(angle:number):void{
+        if (angle===0) return;
         this.matrixStack.skewX(angle);
     }
 
     public skewY(angle:number):void{
+        if (angle===0) return;
         this.matrixStack.skewY(angle);
     }
 
@@ -348,11 +357,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public lockRect(rect:Rect):void {
+        this._isRectLocked = true;
         this.gl.enable(this.gl.SCISSOR_TEST);
         this.gl.scissor(rect.x,rect.y,rect.width,rect.height);
     }
 
     public unlockRect():void{
+        if (!this._isRectLocked) return;
+        this._isRectLocked = false;
         this.gl.disable(this.gl.SCISSOR_TEST);
     }
 

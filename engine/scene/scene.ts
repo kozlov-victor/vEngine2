@@ -100,11 +100,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     public render():void {
 
         this.beforeRender();
-
-        const renderer:AbstractRenderer = this.game.getRenderer();
-
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
-
         this.renderFrame();
 
     }
