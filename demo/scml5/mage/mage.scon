@@ -1,0 +1,7695 @@
+{
+	"entity": [
+		{
+			"animation": [
+				{
+					"id": 0,
+					"interval": 100,
+					"length": 640,
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 0,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 0,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 0,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								]
+							},
+							{
+								"bone_ref": [],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 1,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 1,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 1,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 1,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 240
+							},
+							{
+								"bone_ref": [],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 2,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 2,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 2,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 2,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 520
+							},
+							{
+								"bone_ref": [],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 3,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 3,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 3,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 3,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 640
+							}
+						]
+					},
+					"name": "idle",
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 8.835769000000028,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -32.248516,
+										"y": -45.479294
+									},
+									"spin": -1,
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -40.7222,
+										"y": -47.479294
+									},
+									"spin": 0,
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -50.479294
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_000"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 13.718598999999983,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 21.210526,
+										"y": -54.736842
+									},
+									"spin": -1,
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 2.81704400000001,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 29.842105,
+										"y": -53.631579
+									},
+									"spin": -1,
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_001"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"scale_x": 1.041433,
+										"scale_y": 0.990208,
+										"x": -10.515707,
+										"y": 16.096502
+									},
+									"spin": 0,
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"scale_x": 0.963046,
+										"scale_y": 0.979192,
+										"x": -10.109035,
+										"y": -4.071249
+									},
+									"spin": 0,
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_002"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 355.601295,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -10.526316,
+										"y": 44.210526
+									},
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0.14680600000002642,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -10.594885,
+										"y": 22.520238
+									},
+									"spin": -1,
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_003"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 355.236358,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -7.157895,
+										"y": 96.684211
+									},
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 359.78187,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -11.157895,
+										"y": 72.105263
+									},
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_004"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 7.2734270000000265,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.631579,
+										"y": 17.894737
+									},
+									"spin": -1,
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 334.164059,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -58.631579,
+										"y": 1.315789
+									},
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_005"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 354.048578,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 33.894737,
+										"y": 8.473684
+									},
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 23.067579000000023,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 48.631579,
+										"y": -7.210526
+									},
+									"spin": -1,
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_006"
+						}
+					]
+				},
+				{
+					"id": 1,
+					"interval": 100,
+					"length": 480,
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 0,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 0,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 0,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								]
+							},
+							{
+								"bone_ref": [],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 1,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 1,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 1,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 1,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 120
+							},
+							{
+								"bone_ref": [],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"timeline": "5",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"timeline": "2",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 2,
+										"timeline": "3",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 2,
+										"timeline": "1",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 2,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 2,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 240
+							},
+							{
+								"bone_ref": [],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"timeline": "5",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"timeline": "2",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 3,
+										"timeline": "3",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 3,
+										"timeline": "1",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 3,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 3,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 360
+							},
+							{
+								"bone_ref": [],
+								"id": 4,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 4,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 4,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 4,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 4,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 4,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 4,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 4,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 480
+							}
+						]
+					},
+					"name": "run",
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 307.248276,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -48.248516,
+										"y": -28.479294
+									},
+									"time": 120
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"time": 240
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 43.94391300000001,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": 25.751484,
+										"y": -22.479294
+									},
+									"spin": -1,
+									"time": 360
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"spin": 0,
+									"time": 480
+								}
+							],
+							"name": "object_007"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 75.77922999999998,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 51.210526,
+										"y": -20.736842
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": -1,
+									"time": 240
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 300.995987,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": -39.789474,
+										"y": -34.736842
+									},
+									"time": 360
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": 0,
+									"time": 480
+								}
+							],
+							"name": "object_008"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -10.473684,
+										"y": 6.894737
+									},
+									"spin": 0,
+									"time": 120
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -3.105263
+									},
+									"spin": 0,
+									"time": 240
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -10.473684,
+										"y": 6.894737
+									},
+									"spin": 0,
+									"time": 360
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": 0,
+									"time": 480
+								}
+							],
+							"name": "object_009"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -10.473684,
+										"y": 39.421053
+									},
+									"spin": 0,
+									"time": 120
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 25.421053
+									},
+									"spin": -1,
+									"time": 240
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 356.95154,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -10.379022,
+										"y": 38.498361
+									},
+									"time": 360
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": 0,
+									"time": 480
+								}
+							],
+							"name": "object_010"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 359.310553,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -10.473684,
+										"y": 95.052632
+									},
+									"time": 120
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 76.052632
+									},
+									"time": 240
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 2.997708999999986,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -7.473684,
+										"y": 94.052632
+									},
+									"spin": -1,
+									"time": 360
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": 0,
+									"time": 480
+								}
+							],
+							"name": "object_011"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 13.621695999999986,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": 24.421053,
+										"y": 20.105263
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 1.105263
+									},
+									"spin": -1,
+									"time": 240
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 312.305716,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -65.578947,
+										"y": 18.105263
+									},
+									"time": 360
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": 0,
+									"time": 480
+								}
+							],
+							"name": "object_012"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 297.496327,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": -12.052632,
+										"y": -5.315789
+									},
+									"time": 120
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -8.315789
+									},
+									"time": 240
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 35.15154000000001,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 60.947368,
+										"y": -4.315789
+									},
+									"spin": -1,
+									"time": 360
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": 0,
+									"time": 480
+								}
+							],
+							"name": "object_013"
+						}
+					]
+				},
+				{
+					"id": 2,
+					"interval": 100,
+					"length": 640,
+					"looping": "false",
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 0,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 0,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 0,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								]
+							},
+							{
+								"bone_ref": [],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 1,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 1,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 1,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 1,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 80
+							},
+							{
+								"bone_ref": [],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 2,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 2,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 2,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 2,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 120
+							},
+							{
+								"bone_ref": [],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 3,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 3,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 3,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 0,
+										"timeline": "7",
+										"z_index": "6"
+									},
+									{
+										"id": 7,
+										"key": 3,
+										"timeline": "6",
+										"z_index": "7"
+									}
+								],
+								"time": 240
+							},
+							{
+								"bone_ref": [],
+								"id": 4,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 4,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 4,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 4,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 4,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 4,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 4,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 4,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 320
+							},
+							{
+								"bone_ref": [],
+								"id": 5,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 5,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 5,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 5,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 5,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 5,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 5,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 5,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 400
+							},
+							{
+								"bone_ref": [],
+								"id": 6,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 6,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 6,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 6,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 6,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 6,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 6,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 6,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 480
+							},
+							{
+								"bone_ref": [],
+								"id": 7,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 7,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 7,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 7,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 7,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 7,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 7,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 7,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 560
+							},
+							{
+								"bone_ref": [],
+								"id": 8,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 8,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 8,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 8,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 8,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 8,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 8,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 8,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 640
+							}
+						]
+					},
+					"name": "attack",
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 16.16714300000001,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -30.248516,
+										"y": -11.479294
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 16.16714300000001,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -29.248516,
+										"y": -4.479294
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 295.860893,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -46.248516,
+										"y": 18.520706
+									},
+									"spin": 0,
+									"time": 240
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 295.860893,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -46.248516,
+										"y": 18.520706
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 315.872888,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -34.248516,
+										"y": -1.479294
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"spin": 0,
+									"time": 560
+								},
+								{
+									"id": 8,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_014"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 21.443973000000028,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 27.210526,
+										"y": -23.736842
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 21.443973000000028,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 28.210526,
+										"y": -16.736842
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 357.571951,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 1.210526,
+										"y": -5.736842
+									},
+									"spin": 0,
+									"time": 240
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 357.571951,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 1.210526,
+										"y": -5.736842
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 12.896809000000019,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 30.210526,
+										"y": -10.736842
+									},
+									"spin": -1,
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": 0,
+									"time": 560
+								},
+								{
+									"id": 8,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_015"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 343.009177,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -4.473684,
+										"y": 38.894737
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 343.009177,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -3.473684,
+										"y": 42.894737
+									},
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 355.590396,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 0.526316,
+										"y": 47.894737
+									},
+									"spin": 0,
+									"time": 240
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 355.590396,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 0.526316,
+										"y": 47.894737
+									},
+									"spin": 0,
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 355.590396,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 0.526316,
+										"y": 39.894737
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -11.105263
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": 0,
+									"time": 560
+								},
+								{
+									"id": 8,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_016"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 355.040674,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 0.526316,
+										"y": 71.421053
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 355.040674,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 1.526316,
+										"y": 75.421053
+									},
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 13.988222000000007,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 1.294013,
+										"y": 76.216648
+									},
+									"spin": 0,
+									"time": 240
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 13.988222000000007,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 1.294013,
+										"y": 76.216648
+									},
+									"spin": -1,
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 11.94426900000002,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -0.704927,
+										"y": 67.832465
+									},
+									"spin": -1,
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 11.421053
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": 0,
+									"time": 560
+								},
+								{
+									"id": 8,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_017"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 345.680201,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 7.526316,
+										"y": 128.052632
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 345.680201,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 8.526316,
+										"y": 132.052632
+									},
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 4.627748999999994,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -10.473684,
+										"y": 132.052632
+									},
+									"spin": 0,
+									"time": 240
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 4.627748999999994,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -10.473684,
+										"y": 132.052632
+									},
+									"spin": -1,
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 2.583797000000004,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -10.473684,
+										"y": 124.052632
+									},
+									"spin": -1,
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -8.473684,
+										"y": 58.052632
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": 0,
+									"time": 560
+								},
+								{
+									"id": 8,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_018"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 327.849544,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -48.578947,
+										"y": 76.105263
+									},
+									"spin": -1,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 320.250273,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -47.578947,
+										"y": 82.105263
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 225.617081,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -63.578947,
+										"y": 77.105263
+									},
+									"spin": 0,
+									"time": 240
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 225.617081,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -71.578947,
+										"y": 77.105263
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 295.011221,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 58.105263
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 337.743037,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -65.578947,
+										"y": -2.894737
+									},
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": 0,
+									"time": 560
+								},
+								{
+									"id": 8,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_019"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 28.274344999999983,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 69.947368,
+										"y": 54.684211
+									},
+									"spin": -1,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 26.23194000000001,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 75.947368,
+										"y": 63.684211
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 309.017286,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": -51.052632,
+										"y": 67.684211
+									},
+									"time": 240
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 319.553768,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": -48.052632,
+										"y": 67.684211
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 10.610330999999974,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 75.947368,
+										"y": 60.684211
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 30.09570500000001,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 59.947368,
+										"y": -7.315789
+									},
+									"spin": -1,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": 0,
+									"time": 560
+								},
+								{
+									"id": 8,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_020"
+						},
+						{
+							"id": 7,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 7,
+										"folder": 0,
+										"x": -99,
+										"y": 98
+									},
+									"spin": 0,
+									"time": 240
+								}
+							],
+							"name": "object_021"
+						}
+					]
+				},
+				{
+					"id": 3,
+					"interval": 100,
+					"length": 640,
+					"looping": "false",
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 0,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 0,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 0,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								]
+							},
+							{
+								"bone_ref": [],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 1,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 1,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 1,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 1,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 103
+							},
+							{
+								"bone_ref": [],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"timeline": "5",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 2,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 2,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 2,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 2,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 239
+							},
+							{
+								"bone_ref": [],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"timeline": "5",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 3,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 3,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 3,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 3,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 280
+							},
+							{
+								"bone_ref": [],
+								"id": 4,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 4,
+										"timeline": "5",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 4,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 4,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 4,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 4,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 4,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 4,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 320
+							}
+						]
+					},
+					"name": "dead",
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 312.790963,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -56.680588,
+										"y": -20.098225
+									},
+									"time": 103
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 314.418226,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -67.467235,
+										"y": -22.939407
+									},
+									"time": 239
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 314.430191,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -64.546548,
+										"y": -22.960298
+									},
+									"spin": 0,
+									"time": 280
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 314.430191,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -63.546548,
+										"y": -23.960298
+									},
+									"time": 320
+								}
+							],
+							"name": "object_022"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 340.985084,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": -15.862514,
+										"y": -47.90355
+									},
+									"spin": -1,
+									"time": 103
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 315.878011,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": -70.094877,
+										"y": -41.521728
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 315.693401,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": -64.493643,
+										"y": -42.474803
+									},
+									"spin": 0,
+									"time": 280
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 315.693401,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": -66.493643,
+										"y": -42.474803
+									},
+									"time": 320
+								}
+							],
+							"name": "object_023"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 321.899049,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.962509,
+										"y": -6.23137
+									},
+									"spin": -1,
+									"time": 103
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 271.590997,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -10.607949,
+										"y": -11.679433
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 271.221086,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -8.612695,
+										"y": -12.719492
+									},
+									"spin": -1,
+									"time": 280
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 267.839498,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -8.612695,
+										"y": -13.719492
+									},
+									"time": 320
+								}
+							],
+							"name": "object_024"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 318.009595,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 3.993726,
+										"y": 11.902419
+									},
+									"spin": -1,
+									"time": 103
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 262.565953,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 21.775938,
+										"y": -9.908591
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 262.158281,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 24.906689,
+										"y": -13.068966
+									},
+									"time": 280
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 264.278226,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 24.906689,
+										"y": -14.068966
+									},
+									"time": 320
+								}
+							],
+							"name": "object_025"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 307.751569,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 39.588817,
+										"y": 52.148464
+									},
+									"spin": -1,
+									"time": 103
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 238.763349,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 95.118015,
+										"y": 2.418294
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 232.781046,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 101.526316,
+										"y": -1.947368
+									},
+									"spin": -1,
+									"time": 280
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 225.225751,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 110.526316,
+										"y": 1.052632
+									},
+									"time": 320
+								}
+							],
+							"name": "object_026"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 281.022581,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -33.567738,
+										"y": 34.118386
+									},
+									"spin": -1,
+									"time": 103
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 271.29263,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -31.594323,
+										"y": 5.682377
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 271.221086,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -39.300402,
+										"y": -19.534063
+									},
+									"spin": 0,
+									"time": 280
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 271.221086,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -37.300402,
+										"y": -19.534063
+									},
+									"time": 320
+								}
+							],
+							"name": "object_027"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 288.285691,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 14.747411,
+										"y": -30.141036
+									},
+									"spin": -1,
+									"time": 103
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 193.594953,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": -5.640485,
+										"y": -22.2771
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 181.085348,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": -4.790395,
+										"y": -15.219277
+									},
+									"spin": -1,
+									"time": 280
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 170.254105,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": -3.790395,
+										"y": -13.219277
+									},
+									"spin": -1,
+									"time": 320
+								}
+							],
+							"name": "object_028"
+						}
+					]
+				},
+				{
+					"id": 4,
+					"interval": 100,
+					"length": 800,
+					"looping": "false",
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 0,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 0,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 0,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								]
+							},
+							{
+								"bone_ref": [],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 1,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 1,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 1,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 1,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 119
+							},
+							{
+								"bone_ref": [],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 2,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 2,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 2,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 2,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 280
+							},
+							{
+								"bone_ref": [],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 3,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 3,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 3,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 3,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 560
+							},
+							{
+								"bone_ref": [],
+								"id": 4,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 4,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 4,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 4,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 4,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 4,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 4,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 4,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 681
+							},
+							{
+								"bone_ref": [],
+								"id": 5,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 5,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 5,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 5,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 5,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 5,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 5,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 5,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 792
+							}
+						]
+					},
+					"name": "dance",
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 5.482707000000005,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -28.248516,
+										"y": -52.479294
+									},
+									"spin": -1,
+									"time": 119
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 206.158525,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": 32.307083,
+										"y": 103.868017
+									},
+									"spin": 0,
+									"time": 280
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 206.158525,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": 38.307083,
+										"y": 110.868017
+									},
+									"spin": -1,
+									"time": 560
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 115.559158,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": 107.671815,
+										"y": 16.659225
+									},
+									"spin": -1,
+									"time": 681
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"spin": 0,
+									"time": 792
+								}
+							],
+							"name": "object_029"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 10.229698999999982,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 24.210526,
+										"y": -52.736842
+									},
+									"spin": -1,
+									"time": 119
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 309.611043,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": -30.137739,
+										"y": 48.457931
+									},
+									"spin": -1,
+									"time": 280
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 300.800679,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": -28.137739,
+										"y": 60.457931
+									},
+									"spin": -1,
+									"time": 560
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 210.201313,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 57.959548,
+										"y": 83.627737
+									},
+									"time": 681
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": 0,
+									"time": 792
+								}
+							],
+							"name": "object_030"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 7.316559999999981,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -10.883419,
+										"y": -16.428165
+									},
+									"spin": -1,
+									"time": 119
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 227.156802,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 33.0697,
+										"y": 48.061809
+									},
+									"spin": -1,
+									"time": 280
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 221.784193,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 36.0697,
+										"y": 51.061809
+									},
+									"spin": -1,
+									"time": 560
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 131.184827,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 47.892283,
+										"y": 19.522101
+									},
+									"spin": -1,
+									"time": 681
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": 0,
+									"time": 792
+								}
+							],
+							"name": "object_031"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 12.64215200000001,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -18.954676,
+										"y": 4.697052
+									},
+									"spin": -1,
+									"time": 119
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 209.060673,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 55.800936,
+										"y": 28.011998
+									},
+									"spin": -1,
+									"time": 280
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 203.043317,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 55.800936,
+										"y": 28.011998
+									},
+									"spin": -1,
+									"time": 560
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 112.443951,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 24.637331,
+										"y": 0.033063
+									},
+									"spin": -1,
+									"time": 681
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": 0,
+									"time": 792
+								}
+							],
+							"name": "object_032"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 17.308343999999977,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -28.473684,
+										"y": 49.052632
+									},
+									"spin": -1,
+									"time": 119
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 237.148585,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 166.526316,
+										"y": 97.052632
+									},
+									"spin": -1,
+									"time": 280
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 231.005343,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 175.526316,
+										"y": 88.052632
+									},
+									"spin": -1,
+									"time": 560
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 154.230811,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -20.663459,
+										"y": -37.156474
+									},
+									"spin": -1,
+									"time": 681
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": 0,
+									"time": 792
+								}
+							],
+							"name": "object_033"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 11.277708000000018,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -49.182063,
+										"y": -16.614081
+									},
+									"time": 119
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 159.942811,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": 130.357585,
+										"y": 29.740556
+									},
+									"spin": -1,
+									"time": 280
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 153.799569,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": 132.361918,
+										"y": 24.997676
+									},
+									"spin": -1,
+									"time": 560
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 77.025036,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -91.921334,
+										"y": -9.562852
+									},
+									"spin": -1,
+									"time": 681
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": 0,
+									"time": 792
+								}
+							],
+							"name": "object_034"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 356.072761,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 30.67959,
+										"y": -18.437924
+									},
+									"time": 119
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 84.96916399999998,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 35.67959,
+										"y": -71.437924
+									},
+									"spin": 0,
+									"time": 280
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 84.96916399999998,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 35.67959,
+										"y": -71.437924
+									},
+									"time": 560
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 253.278206,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": -55.32041,
+										"y": 54.562076
+									},
+									"time": 681
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": 0,
+									"time": 792
+								}
+							],
+							"name": "object_035"
+						}
+					]
+				},
+				{
+					"id": 5,
+					"interval": 100,
+					"length": 640,
+					"looping": "false",
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 0,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 0,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 0,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								]
+							},
+							{
+								"bone_ref": [],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 1,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 1,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 1,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 1,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 80
+							},
+							{
+								"bone_ref": [],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 2,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 2,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 2,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 2,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 120
+							},
+							{
+								"bone_ref": [],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 3,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 3,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 3,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 3,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 239
+							},
+							{
+								"bone_ref": [],
+								"id": 4,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 4,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 4,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 4,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 4,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 4,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 4,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 4,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 320
+							},
+							{
+								"bone_ref": [],
+								"id": 5,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 5,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 5,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 5,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 5,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 5,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 5,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 5,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 400
+							},
+							{
+								"bone_ref": [],
+								"id": 6,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 6,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 6,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 6,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 6,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 6,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 6,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 6,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 480
+							},
+							{
+								"bone_ref": [],
+								"id": 7,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 7,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 7,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 7,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 7,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 7,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 7,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 7,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 560
+							}
+						]
+					},
+					"name": "attackDown",
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 16.16714300000001,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -30.248516,
+										"y": -11.479294
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 16.16714300000001,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -29.248516,
+										"y": -4.479294
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 296.530111,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -46.106849,
+										"y": 18.32904
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 295.860893,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -46.248516,
+										"y": 18.520706
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 315.872888,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -34.248516,
+										"y": -1.479294
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_036"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 21.443973000000028,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 27.210526,
+										"y": -23.736842
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 21.443973000000028,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 28.210526,
+										"y": -16.736842
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 357.770884,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 1.435526,
+										"y": -5.828509
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 357.571951,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 1.210526,
+										"y": -5.736842
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 12.896809000000019,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 30.210526,
+										"y": -10.736842
+									},
+									"spin": -1,
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_037"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 343.009177,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -4.473684,
+										"y": 38.894737
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 343.009177,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -3.473684,
+										"y": 42.894737
+									},
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 355.485553,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 0.492983,
+										"y": 47.85307
+									},
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 355.590396,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 0.526316,
+										"y": 47.894737
+									},
+									"spin": 0,
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 355.590396,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 0.526316,
+										"y": 39.894737
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -11.105263
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_038"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 355.040674,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 0.526316,
+										"y": 71.421053
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 355.040674,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 1.526316,
+										"y": 75.421053
+									},
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 13.830326000000014,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 1.295949,
+										"y": 76.210018
+									},
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 13.988222000000007,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 1.294013,
+										"y": 76.216648
+									},
+									"spin": -1,
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 11.94426900000002,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -0.704927,
+										"y": 67.832465
+									},
+									"spin": -1,
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 11.421053
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_039"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 345.680201,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 7.526316,
+										"y": 128.052632
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 345.680201,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 8.526316,
+										"y": 132.052632
+									},
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 4.4698530000000005,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -10.315351,
+										"y": 132.052632
+									},
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 4.627748999999994,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -10.473684,
+										"y": 132.052632
+									},
+									"spin": -1,
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 2.583797000000004,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -10.473684,
+										"y": 124.052632
+									},
+									"spin": -1,
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -8.473684,
+										"y": 58.052632
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_040"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 327.849544,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -48.578947,
+										"y": 76.105263
+									},
+									"spin": -1,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 320.250273,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -47.578947,
+										"y": 82.105263
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 233.729045,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -52.546337,
+										"y": 33.354842
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 225.617081,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -66.578947,
+										"y": 31.105263
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 295.011221,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 58.105263
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 337.743037,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -65.578947,
+										"y": -2.894737
+									},
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_041"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 28.274344999999983,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 69.947368,
+										"y": 54.684211
+									},
+									"spin": -1,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 26.23194000000001,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 75.947368,
+										"y": 63.684211
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 316.984096,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": -37.9943,
+										"y": 25.650878
+									},
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 319.553768,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": -43.052632,
+										"y": 21.684211
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 10.610330999999974,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 75.947368,
+										"y": 60.684211
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 30.09570500000001,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 59.947368,
+										"y": -7.315789
+									},
+									"spin": -1,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_042"
+						}
+					]
+				},
+				{
+					"id": 6,
+					"interval": 100,
+					"length": 640,
+					"looping": "false",
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 0,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 0,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 0,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								]
+							},
+							{
+								"bone_ref": [],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 1,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 1,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 1,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 1,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 80
+							},
+							{
+								"bone_ref": [],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 2,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 2,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 2,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 2,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 120
+							},
+							{
+								"bone_ref": [],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 3,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 3,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 3,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 3,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 239
+							},
+							{
+								"bone_ref": [],
+								"id": 4,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 4,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 4,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 4,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 4,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 4,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 4,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 4,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 320
+							},
+							{
+								"bone_ref": [],
+								"id": 5,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 5,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 5,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 5,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 5,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 5,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 5,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 5,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 400
+							},
+							{
+								"bone_ref": [],
+								"id": 6,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 6,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 6,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 6,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 6,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 6,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 6,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 6,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 480
+							},
+							{
+								"bone_ref": [],
+								"id": 7,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 7,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 7,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 7,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 7,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 7,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 7,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 7,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 560
+							}
+						]
+					},
+					"name": "attackUp",
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 16.16714300000001,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -30.248516,
+										"y": -11.479294
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 16.16714300000001,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -29.248516,
+										"y": -4.479294
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 296.530111,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -46.106849,
+										"y": 18.32904
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 295.860893,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -46.248516,
+										"y": 18.520706
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 315.872888,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -34.248516,
+										"y": -1.479294
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_043"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 21.443973000000028,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 27.210526,
+										"y": -23.736842
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 21.443973000000028,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 28.210526,
+										"y": -16.736842
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 357.770884,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 1.435526,
+										"y": -5.828509
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 357.571951,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 1.210526,
+										"y": -5.736842
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 12.896809000000019,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 30.210526,
+										"y": -10.736842
+									},
+									"spin": -1,
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_044"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 343.009177,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -4.473684,
+										"y": 38.894737
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 343.009177,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -3.473684,
+										"y": 42.894737
+									},
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 355.485553,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 0.492983,
+										"y": 47.85307
+									},
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 355.590396,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 0.526316,
+										"y": 47.894737
+									},
+									"spin": 0,
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 355.590396,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": 0.526316,
+										"y": 39.894737
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -11.105263
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_045"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 355.040674,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 0.526316,
+										"y": 71.421053
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 355.040674,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 1.526316,
+										"y": 75.421053
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 353.206309,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 1.295949,
+										"y": 76.210018
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 347.188004,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": 1.294013,
+										"y": 76.216648
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 11.94426900000002,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -0.704927,
+										"y": 67.832465
+									},
+									"spin": -1,
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 11.421053
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_046"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 345.680201,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 7.526316,
+										"y": 128.052632
+									},
+									"spin": 0,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 345.680201,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 8.526316,
+										"y": 132.052632
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 343.845836,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 10.098461,
+										"y": 132.563683
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 337.827531,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": 15.965735,
+										"y": 131.36079
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 2.583797000000004,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -10.473684,
+										"y": 124.052632
+									},
+									"spin": -1,
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -8.473684,
+										"y": 58.052632
+									},
+									"spin": 0,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_047"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 327.849544,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -48.578947,
+										"y": 76.105263
+									},
+									"spin": -1,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 320.250273,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -47.578947,
+										"y": 82.105263
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 161.766261,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -55.174758,
+										"y": 143.873178
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 140.040965,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -66.474342,
+										"y": 169.867123
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 295.011221,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 58.105263
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 337.743037,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -65.578947,
+										"y": -2.894737
+									},
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_048"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 28.274344999999983,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 69.947368,
+										"y": 54.684211
+									},
+									"spin": -1,
+									"time": 80
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 26.23194000000001,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 75.947368,
+										"y": 63.684211
+									},
+									"spin": -1,
+									"time": 120
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 245.021312,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": -57.9943,
+										"y": 127.650878
+									},
+									"spin": -1,
+									"time": 239
+								},
+								{
+									"id": 4,
+									"object": {
+										"angle": 233.977652,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": -74.052632,
+										"y": 145.684211
+									},
+									"time": 320
+								},
+								{
+									"id": 5,
+									"object": {
+										"angle": 10.610330999999974,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 75.947368,
+										"y": 60.684211
+									},
+									"time": 400
+								},
+								{
+									"id": 6,
+									"object": {
+										"angle": 30.09570500000001,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 59.947368,
+										"y": -7.315789
+									},
+									"spin": -1,
+									"time": 480
+								},
+								{
+									"id": 7,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": 0,
+									"time": 560
+								}
+							],
+							"name": "object_049"
+						}
+					]
+				},
+				{
+					"id": 7,
+					"interval": 100,
+					"length": 640,
+					"looping": "false",
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 0,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 0,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 0,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								]
+							},
+							{
+								"bone_ref": [],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 1,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 1,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 1,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 1,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 240
+							},
+							{
+								"bone_ref": [],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 2,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 2,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 2,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 2,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 520
+							},
+							{
+								"bone_ref": [],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"timeline": "0",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"timeline": "1",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"timeline": "5",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 3,
+										"timeline": "2",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 3,
+										"timeline": "3",
+										"z_index": "4"
+									},
+									{
+										"id": 5,
+										"key": 3,
+										"timeline": "4",
+										"z_index": "5"
+									},
+									{
+										"id": 6,
+										"key": 3,
+										"timeline": "6",
+										"z_index": "6"
+									}
+								],
+								"time": 640
+							}
+						]
+					},
+					"name": "hit",
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -49.479294
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 8.835769000000028,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -32.248516,
+										"y": -45.479294
+									},
+									"spin": -1,
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -40.7222,
+										"y": -47.479294
+									},
+									"spin": 0,
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 0,
+										"folder": 0,
+										"pivot_x": 0.598997,
+										"pivot_y": 0.735526,
+										"scale_x": 0.902256,
+										"scale_y": 0.896053,
+										"x": -36.248516,
+										"y": -50.479294
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_050"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									}
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 13.718598999999983,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 21.210526,
+										"y": -54.736842
+									},
+									"spin": -1,
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 2.81704400000001,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 29.842105,
+										"y": -53.631579
+									},
+									"spin": -1,
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 1,
+										"folder": 0,
+										"pivot_x": 0.634085,
+										"pivot_y": 0.768421,
+										"x": 25.210526,
+										"y": -52.736842
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_051"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"scale_x": 1.041433,
+										"scale_y": 0.990208,
+										"x": -10.515707,
+										"y": 16.096502
+									},
+									"spin": 0,
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"scale_x": 0.963046,
+										"scale_y": 0.979192,
+										"x": -10.109035,
+										"y": -4.071249
+									},
+									"spin": 0,
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 3,
+										"folder": 0,
+										"pivot_x": 0.516237,
+										"pivot_y": 0.510404,
+										"x": -9.473684,
+										"y": -2.105263
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_052"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 345.524222,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -13.655818,
+										"y": 43.609405
+									},
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0.14680600000002642,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -10.594885,
+										"y": 22.520238
+									},
+									"spin": -1,
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 4,
+										"folder": 0,
+										"pivot_x": 0.459608,
+										"pivot_y": 0.12150099999999997,
+										"x": -9.473684,
+										"y": 28.421053
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_053"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 345.159285,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -1.157895,
+										"y": 94.684211
+									},
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 359.78187,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -11.157895,
+										"y": 72.105263
+									},
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 5,
+										"folder": 0,
+										"pivot_x": 0.469667,
+										"pivot_y": 0.39387400000000006,
+										"x": -9.473684,
+										"y": 81.052632
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_054"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 326.176415,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -63.631579,
+										"y": 44.894737
+									},
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 334.164059,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -58.631579,
+										"y": 1.315789
+									},
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 2,
+										"folder": 0,
+										"pivot_x": 0.574899,
+										"pivot_y": 0.704367,
+										"x": -51.578947,
+										"y": 2.105263
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_055"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": -1
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 337.669046,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 7.894737,
+										"y": 4.473684
+									},
+									"time": 240
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 23.067579000000023,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 48.631579,
+										"y": -7.210526
+									},
+									"spin": -1,
+									"time": 520
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"pivot_x": 0.554386,
+										"pivot_y": 0.52807,
+										"x": 38.947368,
+										"y": -6.315789
+									},
+									"spin": 0,
+									"time": 640
+								}
+							],
+							"name": "object_056"
+						}
+					]
+				}
+			],
+			"character_map": [],
+			"id": 0,
+			"name": "entity_000",
+			"obj_info": []
+		}
+	],
+	"folder": [
+		{
+			"file": [
+				{
+					"height": 40,
+					"id": 0,
+					"name": "mage_0006_shoe2.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 42
+				},
+				{
+					"height": 40,
+					"id": 1,
+					"name": "mage_0005_shoe1.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 42
+				},
+				{
+					"height": 47,
+					"id": 2,
+					"name": "mage_0004_handback.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 39
+				},
+				{
+					"height": 86,
+					"id": 3,
+					"name": "mage_0003_body.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 94
+				},
+				{
+					"height": 94,
+					"id": 4,
+					"name": "mage_0002_head.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 86
+				},
+				{
+					"height": 122,
+					"id": 5,
+					"name": "mage_0001_hat.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 131
+				},
+				{
+					"height": 60,
+					"id": 6,
+					"name": "mage_0000_handfront.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 45
+				},
+				{
+					"height": 45,
+					"id": 7,
+					"name": "Mage_projectile.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 45
+				}
+			],
+			"id": 0
+		}
+	],
+	"generator": "BrashMonkey Spriter",
+	"generator_version": "r11",
+	"scon_version": "1.0"
+}
