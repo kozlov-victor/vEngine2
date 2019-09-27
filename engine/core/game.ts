@@ -8,6 +8,7 @@ import {DebugError} from "../debug/debugError";
 import {IControl} from "@engine/control/abstract/iControl";
 import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
 import {ClazzEx, Optional} from "@engine/core/declarations";
+import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 
 
 export const enum SCALE_STRATEGY {
@@ -49,6 +50,7 @@ export class Game {
     private _currTime:number = 0;
     private _deltaTime:number = 0;
     private _currentScene:Scene;
+    private _sceneTransition:Optional<ISceneTransition>;
     private _running:boolean = false;
     private _destroyed:boolean = false;
     private _renderer:AbstractRenderer;
@@ -128,8 +130,16 @@ export class Game {
 
     public debug2?(...val:any[]):void;
 
-    public runScene(scene:Scene):void{
+    public runScene(scene:Scene, transition?:Optional<ISceneTransition>):void{
+        if (transition!==undefined) {
+            this._sceneTransition = transition;
+            transition.start(this._currentScene,scene);
+            transition.onComplete(()=>{
+                this._sceneTransition = undefined;
+            });
+        }
         this._currentScene = scene;
+
         this.revalidate();
         scene.onPreloading();
         scene.resourceLoader.onProgress(()=>{
@@ -184,7 +194,8 @@ export class Game {
             }
         } while (loopCnt<numOfLoops);
 
-        this._currentScene.render();
+        if (this._sceneTransition!==undefined) this._sceneTransition.render();
+        else this._currentScene.render();
 
         requestAnimationFrame(this.update.bind(this));
     }

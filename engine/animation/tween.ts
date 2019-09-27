@@ -1,6 +1,6 @@
 import {Easing} from "@engine/misc/easing/linear";
 
-type EaseFn = (t:number,b:number,c:number,d:number)=>number;
+export type EaseFn = (t:number,b:number,c:number,d:number)=>number;
 
 import {Game} from "@engine/core/game";
 import {Optional} from "@engine/core/declarations";
