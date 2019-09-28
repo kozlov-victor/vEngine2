@@ -123,9 +123,11 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
     }
 
     public toArray():[number,number]{
-        if (!this._arr) this._arr = new Array(2) as [number,number];
-        this._arr[0] = this._x;
-        this._arr[1] = this._y;
+        if (this._arr===undefined) this._arr = [this._x,this._y];
+        else {
+            this._arr[0] = this._x;
+            this._arr[1] = this._y;
+        }
         return this._arr;
     }
 

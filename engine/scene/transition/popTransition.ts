@@ -1,9 +1,12 @@
-import {AbstractSceneTransition} from "@engine/scene/transition/abstract/abstractSceneTransition";
-import {EaseFn, ITweenDescription} from "@engine/animation/tween";
-import {Easing} from "@engine/misc/easing/linear";
+import {
+    AbstractSceneTransition,
+    SceneProgressDescription
+} from "@engine/scene/transition/abstract/abstractSceneTransition";
 import {Game} from "@engine/core/game";
 import {SIDE} from "@engine/scene/transition/side";
 import {DebugError} from "@engine/debug/debugError";
+import {EaseFn} from "@engine/misc/easing/type";
+import {EasingLinear} from "@engine/misc/easing/functions/linear";
 
 export class PopTransition extends AbstractSceneTransition {
 
@@ -11,7 +14,7 @@ export class PopTransition extends AbstractSceneTransition {
         private readonly game:Game,
         private readonly sideTo:SIDE = SIDE.BOTTOM,
         private readonly time:number = 1000,
-        private readonly easeFn:EaseFn = Easing.linear)
+        private readonly easeFn:EaseFn = EasingLinear)
     {
         super();
     }
@@ -21,8 +24,8 @@ export class PopTransition extends AbstractSceneTransition {
         if (this._prevScene!==undefined) this._prevScene.render();
     }
 
-    public reset(): void {
-        super.reset();
+    public complete(): void {
+        super.complete();
         if (this._prevScene!==undefined) this._prevScene.pos.setXY(0);
         this._currScene.pos.setXY(0);
     }
@@ -40,7 +43,7 @@ export class PopTransition extends AbstractSceneTransition {
         }
     }
 
-    protected onTweenCreated(): ITweenDescription {
+    protected describe(): SceneProgressDescription {
 
         let from:number = 0, to:number = 0;
         switch (this.sideTo) {
@@ -70,14 +73,7 @@ export class PopTransition extends AbstractSceneTransition {
             from: {val: from},
             to: {val: to},
             time: this.time,
-            ease: this.easeFn,
-            progress: (obj: { val: number }) => {
-                this.onTransitionProgress(obj.val);
-            },
-            complete: () => {
-                this.reset();
-                this._onComplete();
-            }
+            ease: this.easeFn
         };
     }
 

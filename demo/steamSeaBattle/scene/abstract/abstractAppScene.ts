@@ -114,7 +114,7 @@ export abstract class AbstractAppScene extends Scene {
         this.resolveChildren(r,el.children);
     }
 
-    private createTweenDesc(root:Layer|RenderableModel,child:IElementDescription):ITweenDescription{
+    private createTweenDesc(root:Layer|RenderableModel,child:IElementDescription):ITweenDescription<unknown>{
         return {
             target: root,
             from: {[child.attributes.property]:this.getNumber(child.attributes.from)},
@@ -144,14 +144,14 @@ export abstract class AbstractAppScene extends Scene {
                     break;
                 }
                 case 'animation': {
-                    const tween:Tween = new Tween(this.createTweenDesc(root,child));
+                    const tween = new Tween(this.createTweenDesc(root,child));
                     this.game.getCurrScene().addTween(tween);
                     break;
                 }
                 case 'animationComposition': {
                     const tweenMovie:TweenMovie = new TweenMovie(this.game);
                     child.children.forEach((c:IElementDescription)=>{
-                        const tweenDesc:ITweenDescription = this.createTweenDesc(root,c);
+                        const tweenDesc = this.createTweenDesc(root,c);
                         const startTime:number = this.getNumber(c.attributes.offset);
                         tweenMovie.addTween(startTime,tweenDesc);
                     });

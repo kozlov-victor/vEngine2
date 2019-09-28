@@ -2,23 +2,23 @@ import {ITweenDescription, Tween} from "./tween";
 import {Game} from "../core/game";
 import {Optional} from "@engine/core/declarations";
 
-interface ITweenInMovie {
+interface ITweenInMovie<T> {
     startTime: number;
-    tween: Tween;
+    tween: Tween<T>;
 }
 
 
 export class TweenMovie {
     private _loop:boolean = false;
-    private _onComplete:Optional<((arg?:any)=>void)>;
-    private _tweensInMovie:ITweenInMovie[] = [];
+    private _onComplete:Optional<(()=>void)>;
+    private _tweensInMovie:ITweenInMovie<unknown>[] = [];
     private _startedTime:number = 0;
     private _completed:boolean = false;
 
     constructor(private game:Game){}
 
-    public addTween(startTime:number, desc:ITweenDescription):TweenMovie{
-        const tween:Tween = new Tween(desc);
+    public addTween<T>(startTime:number, desc:ITweenDescription<T>):TweenMovie{
+        const tween:Tween<unknown> = new Tween<T>(desc) as Tween<unknown>;
         this._tweensInMovie.push({
             startTime,
             tween
@@ -46,7 +46,7 @@ export class TweenMovie {
         if (this._startedTime===0) this._startedTime = currTime;
         const deltaTime:number = currTime - this._startedTime;
         let allCompleted:boolean = true;
-        this._tweensInMovie.forEach((item:ITweenInMovie)=>{
+        this._tweensInMovie.forEach((item)=>{
             if (deltaTime>item.startTime) {
                 if (deltaTime<item.startTime+item.tween.getTweenTime()) {
                     item.tween.update();
@@ -74,7 +74,7 @@ export class TweenMovie {
     public reset():TweenMovie {
         this._startedTime = 0;
         this._completed = false;
-        this._tweensInMovie.forEach((item:ITweenInMovie)=>{
+        this._tweensInMovie.forEach((item)=>{
             item.tween.reset();
         });
         return this;

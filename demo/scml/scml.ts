@@ -8,9 +8,9 @@ import {IURLRequest} from "@engine/resources/urlLoader";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {ITexture} from "@engine/renderer/texture";
 import {DebugError} from "@engine/debug/debugError";
-import {Easing as EasingQuart} from "@engine/misc/easing/quart";
-import {Easing as EasingQuint} from "@engine/misc/easing/quint";
 import {Optional} from "@engine/core/declarations";
+import {EasingQuart} from "@engine/misc/easing/functions/quart";
+import {EasingQuint} from "@engine/misc/easing/functions/quint";
 
 const POOL_SIZE:number = 128;
 
@@ -593,9 +593,9 @@ abstract class TimelineKey {
         } else if (this.curveType === 'CUBIC') {
             return (cubic(0.0, this.c1, this.c2, 1.0, t));
         } else if (this.curveType === 'QUARTIC') {
-            return (EasingQuart.Quart.InOut(t, this.c1, this.c2, 1.0));
+            return (EasingQuart.InOut(t, this.c1, this.c2, 1.0));
         } else if (this.curveType === 'QUINTIC') {
-            return (EasingQuint.Quint.InOut(t, this.c1, this.c2, this.c3));
+            return (EasingQuint.InOut(t, this.c1, this.c2, this.c3));
         } else if (this.curveType === 'BEZIER') { // todo
             return (cubic(0.0, this.c1, this.c2, 1.0, t));
         } else throw new DebugError(`unsupported curve type: ${this.curveType}`);

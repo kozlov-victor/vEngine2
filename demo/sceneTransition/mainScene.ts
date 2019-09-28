@@ -4,11 +4,11 @@ import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransiti
 import {PushTransition} from "@engine/scene/transition/pushTransition";
 import {SIDE} from "@engine/scene/transition/side";
 import {Color} from "@engine/renderer/color";
-import {Easing} from "@engine/misc/easing/quad";
 import {Font} from "@engine/renderable/impl/general/font";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {SecondScene} from "./secondScene";
 import {PopTransition} from "@engine/scene/transition/popTransition";
+import {EasingQuad} from "@engine/misc/easing/functions/quad";
 
 
 export class MainScene extends Scene {
@@ -54,12 +54,12 @@ export class MainScene extends Scene {
     }
 
     private createPushTransitionButton(text:string,side:SIDE){
-        const transition:ISceneTransition = new PushTransition(this.game,side,3000,Easing.Quad.InOut);
+        const transition:ISceneTransition = new PushTransition(this.game,side,3000,EasingQuad.InOut);
         this.createTransitionButton(text,transition);
     }
 
     private createPopTransitionButton(text:string,side:SIDE){
-        const transition:ISceneTransition = new PopTransition(this.game,side,3000,Easing.Quad.InOut);
+        const transition:ISceneTransition = new PopTransition(this.game,side,3000,EasingQuad.InOut);
         this.createTransitionButton(text,transition);
     }
 

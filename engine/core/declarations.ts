@@ -24,8 +24,8 @@ export interface IRevalidatable {
 }
 
 export interface ITweenable {
-    tween(desc:ITweenDescription):Tween;
-    addTween(t:Tween):void;
+    tween<T>(desc:ITweenDescription<T>):Tween<T>;
+    addTween<T>(t:Tween<T>):void;
     addTweenMovie(tm:TweenMovie):void;
 }
 

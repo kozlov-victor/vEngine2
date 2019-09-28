@@ -3,8 +3,8 @@ import {Game} from "@engine/core/game";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Tween} from "@engine/animation/tween";
 import {Mashine} from "./mashine";
-import {Easing} from "@engine/misc/easing/bounce";
 import {ITexture} from "@engine/renderer/texture";
+import {EasingBounce} from "@engine/misc/easing/functions/bounce";
 
 export class Wheel {
 
@@ -35,7 +35,7 @@ export class Wheel {
         this.free = false;
 
         const target = {val:this.image.offset.y};
-        const t:Tween = new Tween({
+        const t = new Tween({
             target,
             delayBeforeStart: delayTime,
             to: {val:
@@ -49,7 +49,7 @@ export class Wheel {
                 this.free = true;
                 if (this.mashine.isFree()) this.mashine.onSpinCompleted();
             },
-            ease:Easing.Bounce.InOut
+            ease:EasingBounce.InOut
         });
         this.game.getCurrScene().addTween(t);
 

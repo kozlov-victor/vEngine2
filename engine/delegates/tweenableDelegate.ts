@@ -4,19 +4,19 @@ import {TweenMovie} from "@engine/animation/tweenMovie";
 
 export class TweenableDelegate {
 
-    private _tweens:Tween[];
-    private _tweenMovies:TweenMovie[];
+    private _tweens:Tween<unknown>[] = [];
+    private _tweenMovies:TweenMovie[] = [];
 
-    public tween(desc:ITweenDescription):Tween{
-        const t:Tween = new Tween(desc);
+    public tween<T>(desc:ITweenDescription<T>):Tween<T>{
+        const t = new Tween(desc);
         if (!this._tweens) this._tweens = [];
-        this._tweens.push(t);
+        this._tweens.push(t as Tween<unknown>);
         return t;
     }
 
-    public addTween(t:Tween):void{
+    public addTween<T>(t:Tween<T>):void{
         if (!this._tweens) this._tweens = [];
-        this._tweens.push(t);
+        this._tweens.push(t as Tween<unknown>);
     }
 
     public addTweenMovie(tm:TweenMovie):void {
@@ -26,14 +26,21 @@ export class TweenableDelegate {
 
 
     public update():void {
-        if (this._tweens) this._tweens.forEach((t:Tween, index:number)=>{
+        for (let i:number = 0,l=this._tweens.length;i<this._tweens.length;i++) {
+            const t = this._tweens[i];
             t.update();
-            if (t.isCompleted()) this._tweens.splice(index,1);
-        });
-        if (this._tweenMovies) this._tweenMovies.forEach((t:TweenMovie,index:number)=>{
-            t.update();
-            if (t.isCompleted()) this._tweenMovies.splice(index,1);
-        });
+            if (t.isCompleted()) {
+                this._tweens.splice(i,1);
+                l--;
+            }
+        }
+        for (let i:number = 0,l=this._tweenMovies.length;i<this._tweenMovies.length;i++) {
+            const t = this._tweenMovies[i];
+            if (t.isCompleted()) {
+                this._tweenMovies.splice(i,1);
+                l--;
+            }
+        }
     }
 
 }

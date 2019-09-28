@@ -1,15 +1,21 @@
-import {EaseFn, ITweenDescription, Tween} from "@engine/animation/tween";
+import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {Scene} from "@engine/scene/scene";
 import {Optional} from "@engine/core/declarations";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 
+export interface ISceneTransitionValue {
+    val: number;
+}
+
+export type SceneProgressDescription = Omit<ITweenDescription<ISceneTransitionValue>,'progress|complete'>;
 
 export abstract class AbstractSceneTransition implements ISceneTransition{
 
     protected _prevScene: Optional<Scene>;
     protected _currScene: Scene;
     protected _onComplete: () => void;
-    private _tween:Tween;
+    private _tween:Tween<ISceneTransitionValue>;
+    private _completed:boolean = false;
 
     protected constructor() {
 
@@ -20,7 +26,17 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
     }
 
     public start(prevScene: Scene, currScene: Scene): void {
-        const t:Tween = new Tween(this.onTweenCreated());
+        const desc:ITweenDescription<ISceneTransitionValue> = {
+            ...this.describe(),
+            progress: (obj: { val: number }) => {
+                this.onTransitionProgress(obj.val);
+            },
+            complete: () => {
+                this.complete();
+                this._onComplete();
+            }
+        };
+        const t:Tween<ISceneTransitionValue> = new Tween(desc);
         this._currScene = currScene;
         this._prevScene = prevScene;
         currScene.addTween(t);
@@ -29,13 +45,15 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
 
     public abstract render(): void;
 
-    public reset():void {
+    public complete():void {
+        if (this._completed) return;
+        this._completed = true;
         this._tween.complete();
     }
 
-    protected abstract onTweenCreated():ITweenDescription;
+    protected abstract describe():SceneProgressDescription;
 
-    protected abstract onTransitionProgress(val: number): void;
+    protected abstract onTransitionProgress(val:number): void;
 
 
 }

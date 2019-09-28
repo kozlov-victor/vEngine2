@@ -1,95 +1,105 @@
-import {Easing} from "@engine/misc/easing/linear";
-
-export type EaseFn = (t:number,b:number,c:number,d:number)=>number;
 
 import {Game} from "@engine/core/game";
 import {Optional} from "@engine/core/declarations";
+import {EaseFn} from "@engine/misc/easing/type";
+import {EasingLinear} from "@engine/misc/easing/functions/linear";
+
+// https://medium.com/dailyjs/typescript-create-a-condition-based-subset-types-9d902cea5b8c
+type FilterFlags<Base, Condition> = {
+    [Key in keyof Base]:
+    Base[Key] extends Condition ? Key : never
+};
+type AllowedNames<Base, Condition> =
+    FilterFlags<Base, Condition>[keyof Base];
+type SubType<Base, Condition> =
+    Pick<Base, AllowedNames<Base, Condition>>;
+//
+
+
 
 interface IKeyVal {
     [key:string]:any;
 }
 
-interface IValByPathObj {
-    targetObj: any;
-    targetKey:string;
-}
 
-const _accessByPath = (obj:IKeyVal,path:string):IValByPathObj=>{
-    const pathArr:string[] = path.split('.');
-    if (pathArr.length===1) return {targetObj:obj,targetKey:path};
-    const lastPath:string = pathArr.pop() as string;
-    pathArr.forEach((p)=>{
-        obj = obj[p];
-    });
-    return {targetObj:obj,targetKey:lastPath};
-};
-
-//todo RangeError: Maximum call stack size exceeded
-const setValByPath = (obj:IKeyVal,path:string,val:number)=>{
-    const {targetObj,targetKey}:IValByPathObj = _accessByPath(obj,path);
-    targetObj[targetKey] = val;
-};
-
-const getValByPath = (obj:IKeyVal,path:string):number=>{
-    const {targetObj,targetKey}:IValByPathObj = _accessByPath(obj,path);
-    return targetObj[targetKey];
-};
-
-export interface ITweenDescription {
-    target:any;
-    progress?:(arg?:any)=>void;
-    complete?:(arg?:any)=>void;
+export interface ITweenDescription<T> {
+    target:T;
+    progress?:(arg:T)=>void;
+    complete?:(arg:T)=>void;
     ease?:EaseFn;
     time:number;
     delayBeforeStart?:number;
-    from?:{[key:string]:number};
-    to?:{[key:string]:number};
+    from?:Partial<SubType<T,number>>;
+    to?:Partial<SubType<T,number>>;
     loop?:boolean;
 }
 
-export interface ITweenDescriptionNormalized extends ITweenDescription{
-    ease:EaseFn;
-    from:IKeyVal;
-    to:IKeyVal;
+interface ITweenDescriptionNormalized<T> {
+    target:T;
+    progress?:(arg:T)=>void;
+    complete?:(arg:T)=>void;
+    ease?:EaseFn;
+    time:number;
+    delayBeforeStart?:number;
+    from:Partial<Record<keyof T,number>>;
+    to:Partial<Record<keyof T,number>>;
+    loop?:boolean;
 }
 
-export class Tween {
+export class Tween<T> {
 
-    private _propsToChange:string[] = [];
+    private _propsToChange:(keyof T)[] = [];
     private _startedTime:number = 0;
     private _currTime:number = 0;
     private _completed:boolean = false;
-    private readonly _target: any;
+    private readonly _target: T;
     private readonly _loop: boolean;
-    private _progressFn:Optional<((arg?:any)=>void)>;
-    private _delayBeforeStart:number = 0;
-    private readonly _completeFn:Optional<((arg?:any)=>void)>;
+    private _progressFn:Optional<((arg:T)=>void)>;
+    private readonly _delayBeforeStart:number = 0;
+    private readonly _completeFn:Optional<((arg:T)=>void)>;
     private readonly _easeFn:EaseFn;
     private readonly _tweenTime: number;
-    private _desc:ITweenDescriptionNormalized;
+    private _desc:ITweenDescriptionNormalized<T>;
 
-    /**
-     * @param tweenDesc
-     * target: obj,
-     * from: object with props,
-     * to: object with props,
-     * progress: fn,
-     * complete: fn,
-     * ease: str ease fn name,
-     * time: addTween time
+    /*
+     new Tween({
+        from :{y:5}, //<--error, only numeric properties of target can be tweenable
+        target: {x:2,y:'3'},
+        time: 1
+    });
+
+     new Tween({
+        from :{a:5}, //<--error, property 'a' does not belong to target
+        target: {x:2,y:'3'},
+        time: 1
+     });
+
+     new Tween({
+        from :{x:5,z:2}, //<--error, property 'z' does not belong to target
+        target: {x:2,y:'3'},
+        time: 1
+     });
+
+     new Tween({
+        from :{x:5}, //<--ok
+        target: {x:2,y:'3'},
+        time: 1
+     });
+     *
+     *
      */
-    constructor(tweenDesc:ITweenDescription){
+    constructor(tweenDesc:ITweenDescription<T>){
         this._target = tweenDesc.target;
         this._progressFn = tweenDesc.progress;
         this._completeFn = tweenDesc.complete;
-        this._easeFn = tweenDesc.ease || Easing.linear;
+        this._easeFn = tweenDesc.ease || EasingLinear;
         this._delayBeforeStart = tweenDesc.delayBeforeStart || 0;
         this._tweenTime = (tweenDesc.time || 1000) + this._delayBeforeStart;
         this._loop = tweenDesc.loop||false;
         this._desc = this.normalizeDesc(tweenDesc);
     }
 
-    public reuse(newTweenDesc:ITweenDescription):void{
+    public reuse(newTweenDesc:ITweenDescription<T>):void{
         this._startedTime = this._currTime;
         this._completed = false;
 
@@ -97,24 +107,6 @@ export class Tween {
             (this._desc as any)[key] = (newTweenDesc as any)[key];
         });
         this._desc = this.normalizeDesc(newTweenDesc);
-    }
-
-    public normalizeDesc(tweenDesc:ITweenDescription):ITweenDescriptionNormalized{
-        tweenDesc.from = tweenDesc.from || {};
-        tweenDesc.to = tweenDesc.to || {};
-        const allPropsMap:IKeyVal = {};
-        Object.keys(tweenDesc.from).forEach((keyFrom)=>{
-            allPropsMap[keyFrom] = true;
-        });
-        Object.keys(tweenDesc.to).forEach((keyTo)=>{
-            allPropsMap[keyTo] = true;
-        });
-        this._propsToChange = Object.keys(allPropsMap);
-        this._propsToChange.forEach((prp:string)=>{
-            if (tweenDesc.from![prp]===undefined) tweenDesc.from![prp] = getValByPath(this._target,prp);
-            if (tweenDesc.to![prp]===undefined) tweenDesc.to![prp] = getValByPath(this._target,prp);
-        });
-        return tweenDesc as ITweenDescriptionNormalized;
     }
 
 
@@ -139,16 +131,15 @@ export class Tween {
         }
         let l:number = this._propsToChange.length;
         while(l--){
-            const prp:string = this._propsToChange[l];
+            const prp:keyof T = this._propsToChange[l];
             const valFrom:number = this._desc.from[prp] as number;
             const valTo:number = this._desc.to[prp] as number;
             const fn:EaseFn = this._easeFn;
-            const valCurr:number = fn(
+            this._target[prp] = fn(
                 curTweenTime,
                 valFrom,
                 valTo - valFrom,
-                this._tweenTime) as number;
-            setValByPath(this._target,prp,valCurr);
+                this._tweenTime) as unknown as T[keyof T];
         }
         if (this._progressFn) this._progressFn(this._target);
 
@@ -161,11 +152,8 @@ export class Tween {
 
     public complete():void {
         if (this._completed) return;
-        let l:number = this._propsToChange.length;
-        while(l--){
-            const prp:string = this._propsToChange[l];
-            const valCurr:number = this._desc.to[prp];
-            setValByPath(this._target,prp,valCurr);
+        for (const k of this._propsToChange) {
+            this._target[k] = this._desc.to[k] as unknown as T[keyof T];
         }
         if (this._progressFn) this._progressFn(this._target);
         if (this._completeFn) this._completeFn(this._target);
@@ -184,7 +172,28 @@ export class Tween {
         return this._tweenTime;
     }
 
-    private progress(_progressFn:(val:number)=>void):void {
+    private normalizeDesc(tweenDesc:ITweenDescription<T>):ITweenDescriptionNormalized<T>{
+
+        const normalized:ITweenDescriptionNormalized<T> = tweenDesc as unknown as ITweenDescriptionNormalized<T> ;
+
+        normalized.from = normalized.from! || {};
+        normalized.to = normalized.to! || {};
+        const allPropsMap:IKeyVal = {};
+        Object.keys(normalized.from!).forEach((keyFrom)=>{
+            allPropsMap[keyFrom] = true;
+        });
+        Object.keys(normalized.to!).forEach((keyTo)=>{
+            allPropsMap[keyTo] = true;
+        });
+        this._propsToChange = Object.keys(allPropsMap) as (keyof T)[];
+        this._propsToChange.forEach((prp:keyof T)=>{
+            if (normalized.from![prp]===undefined) normalized.from![prp] = this._target[prp] as unknown as number;
+            if (normalized.to![prp]===undefined) normalized.to![prp] = this._target[prp] as unknown as number;
+        });
+        return normalized as ITweenDescriptionNormalized<T>;
+    }
+
+    private progress(_progressFn:(val:T)=>void):void {
         this._progressFn = _progressFn;
     }
 

@@ -266,13 +266,13 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     }
 
 
-    public addTween(t: Tween): void {
+    public addTween<T>(t: Tween<T>): void {
         this._tweenDelegate.addTween(t);
     }
     public addTweenMovie(tm: TweenMovie):void {
         this._tweenDelegate.addTweenMovie(tm);
     }
-    public tween(desc: ITweenDescription): Tween {
+    public tween<T>(desc: ITweenDescription<T>): Tween<T> {
         return this._tweenDelegate.tween(desc);
     }
 

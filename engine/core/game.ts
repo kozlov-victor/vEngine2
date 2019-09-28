@@ -131,7 +131,10 @@ export class Game {
     public debug2?(...val:any[]):void;
 
     public runScene(scene:Scene, transition?:Optional<ISceneTransition>):void{
-        if (this._sceneTransition!==undefined) this._sceneTransition.reset();
+        if (this._sceneTransition!==undefined) {
+            this._sceneTransition.complete();
+            this._sceneTransition = undefined;
+        }
         if (transition!==undefined) {
             this._sceneTransition = transition;
             transition.start(this._currentScene,scene);

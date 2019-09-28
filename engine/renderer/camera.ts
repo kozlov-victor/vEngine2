@@ -9,6 +9,7 @@ import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
+import {Optional} from "@engine/core/declarations";
 
 interface ICameraTweenTarget {
     time:number;
@@ -45,7 +46,7 @@ export class Camera {
     private _rect:Rect = new Rect();
     private _rectIdentity:Rect = new Rect();
     private _rectScaled:Rect = new Rect();
-    private cameraShakeTween:Tween|null = null; // todo too complex!
+    private cameraShakeTween:Optional<Tween<ICameraTweenTarget>>; // todo too complex!
     private cameraPosCorrection:{current:Point2d,max:Point2d} = {
         current: new Point2d(),
         max: new Point2d()
@@ -135,7 +136,7 @@ export class Camera {
             pointToFollow.release();
 
         }
-        if (this.cameraShakeTween) this.cameraShakeTween.update();
+        if (this.cameraShakeTween!==undefined) this.cameraShakeTween.update();
 
         this._updateRect();
     }
@@ -151,7 +152,7 @@ export class Camera {
                 const r2:number = MathEx.random(-amplitude/2,amplitude/2);
                 tweenTarget.point.setXY(r1,r2);
             },
-            complete:()=>this.cameraShakeTween = null
+            complete:()=>this.cameraShakeTween = undefined
         });
     }
 
@@ -176,7 +177,7 @@ export class Camera {
         // todo rotation does not work correctly yet
         //this.game.renderer.rotateZ(this.angle);
         if (!this.pos.equal(0)) renderer.translate(-this.pos.x,-this.pos.y,0);
-        if (this.cameraShakeTween!==null) renderer.translate(
+        if (this.cameraShakeTween!==undefined) renderer.translate(
             this.cameraShakeTween.getTarget().point.x,
             this.cameraShakeTween.getTarget().point.y
         );
