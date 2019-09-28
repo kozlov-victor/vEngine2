@@ -1,6 +1,6 @@
 import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Layer} from "@engine/renderable/impl/general/layer";
+import {Layer} from "@engine/scene/layer";
 import {IParentChild, Optional} from "@engine/core/declarations";
 
 export class ParentChildDelegate<T extends IParentChild> {

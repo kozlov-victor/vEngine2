@@ -4,7 +4,7 @@ import {Color} from "@engine/renderer/color";
 import {Element, IElementDescription} from "../../data/assetsDocumentHolder";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/texture";
-import {Layer} from "@engine/renderable/impl/general/layer";
+import {Layer} from "@engine/scene/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Sound} from "@engine/media/sound";

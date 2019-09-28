@@ -5,7 +5,7 @@ import {Game} from "@engine/core/game";
 import {SIDE} from "@engine/scene/transition/side";
 import {DebugError} from "@engine/debug/debugError";
 
-export class PushTransition extends AbstractSceneTransition {
+export class PopTransition extends AbstractSceneTransition {
 
     constructor(
         private readonly game:Game,
@@ -17,12 +17,13 @@ export class PushTransition extends AbstractSceneTransition {
     }
 
     public render(): void {
-        if (this._prevScene!==undefined) this._prevScene.render();
         this._currScene.render();
+        if (this._prevScene!==undefined) this._prevScene.render();
     }
 
     public reset(): void {
         super.reset();
+        if (this._prevScene!==undefined) this._prevScene.pos.setXY(0);
         this._currScene.pos.setXY(0);
     }
 
@@ -30,11 +31,11 @@ export class PushTransition extends AbstractSceneTransition {
         switch (this.sideTo) {
             case SIDE.RIGHT:
             case SIDE.LEFT:
-                this._currScene.pos.setX(val);
+                if (this._prevScene!==undefined) this._prevScene.pos.setX(val);
                 break;
             case SIDE.TOP:
             case SIDE.BOTTOM:
-                this._currScene.pos.setY(val);
+                if (this._prevScene!==undefined) this._prevScene.pos.setY(val);
                 break;
         }
     }
@@ -44,20 +45,20 @@ export class PushTransition extends AbstractSceneTransition {
         let from:number = 0, to:number = 0;
         switch (this.sideTo) {
             case SIDE.BOTTOM:
-                from = -this.game.height;
-                to = 0;
+                from = 0;
+                to = this.game.height;
                 break;
             case SIDE.TOP:
-                from = this.game.height;
-                to = 0;
+                from = 0;
+                to = -this.game.height;
                 break;
             case SIDE.LEFT:
-                from = this.game.width;
-                to = 0;
+                from = 0;
+                to = -this.game.width;
                 break;
             case SIDE.RIGHT:
-                from = -this.game.width;
-                to = 0;
+                from = 0;
+                to = this.game.width;
                 break;
             default:
                 if (DEBUG) throw new DebugError(`unknown side: ${this.sideTo}`);

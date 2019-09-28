@@ -74,6 +74,14 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         return this;
     }
 
+    // public clamp(x:number,y:number,width:number,height:number) { // todo
+    //     if (this._x<x) this._x = x;
+    //     if (this._y<y) this._y = y;
+    //     if (this._width>width) this._width = width;
+    //     if (this._height>height) this._height = width;
+    //     this.setXYWH(this._x,this._y,this.width,this._height);
+    // }
+
 
     get x(): number {
         return this._x;

@@ -8,7 +8,7 @@ import {IControl} from "@engine/control/abstract/iControl";
 import {DebugError} from "@engine/debug/debugError";
 import {IMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Layer} from "@engine/renderable/impl/general/layer";
+import {Layer} from "@engine/scene/layer";
 import {Optional} from "@engine/core/declarations";
 
 

@@ -3,6 +3,7 @@ import {Optional} from "@engine/core/declarations";
 
 export interface ISceneTransition {
     onComplete(fn: () => void): void;
+    reset():void;
     start(prevScene: Scene, currScene: Scene): void;
     render(): void;
 }

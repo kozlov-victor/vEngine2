@@ -1,4 +1,4 @@
-import {Layer} from "../renderable/impl/general/layer";
+import {Layer} from "./layer";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/color";
@@ -70,6 +70,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     }
 
     public addLayer(layer:Layer):void {
+        layer.setScene(this);
         this._layers.push(layer);
     }
 

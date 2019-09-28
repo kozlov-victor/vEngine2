@@ -7,7 +7,7 @@ import {Game} from "@engine/core/game";
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {Timer} from "@engine/misc/timer";
-import {Layer} from "@engine/renderable/impl/general/layer";
+import {Layer} from "@engine/scene/layer";
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
 import {Size} from "@engine/geometry/size";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
@@ -18,6 +18,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
+import {Scene} from "@engine/scene/scene";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -119,6 +120,7 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     private _destRect:Rect = new Rect();
     private _behaviours:BaseAbstractBehaviour[] = [];
     private _layer:Optional<Layer>;
+    private _scene:Scene;
     private _angle:number = 0;
 
     // tween
@@ -150,6 +152,14 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
 
     public setLayer(value: Layer):void {
         this._layer = value;
+    }
+
+    public getScene(): Scene {
+        return this._scene!;
+    }
+
+    public setScene(value: Scene):void {
+        this._scene = value;
     }
 
     public getWorldPosition():Readonly<IPoint2d> {
@@ -185,7 +195,6 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
             console.error(this);
             throw new DebugError('can not kill: object is not belong to current scene');
         }
-        this._layer = undefined;
         parentArray.splice(index,1);
 
         for (const b of this._behaviours) {
@@ -287,34 +296,29 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
         this._eventEmitterDelegate.trigger(eventName,data);
     }
 
-    public appendChild(c:RenderableModel):void {
-        this._parentChildDelegate.appendChild(c);
-        c.setLayer(this._layer!);
-        c.revalidate();
+    public appendChild(newChild:RenderableModel):void {
+        this._parentChildDelegate.appendChild(newChild);
+        this._afterChildAppended(newChild);
     }
 
-    public appendChildAt(c:RenderableModel,index:number):void{
-        this._parentChildDelegate.appendChildAt(c,index);
-        c.setLayer(this._layer!);
-        c.revalidate();
+    public appendChildAt(newChild:RenderableModel,index:number):void{
+        this._parentChildDelegate.appendChildAt(newChild,index);
+        this._afterChildAppended(newChild);
     }
 
     public appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel):void{
         this._parentChildDelegate.appendChildAfter(modelAfter,newChild);
-        newChild.setLayer(this._layer!);
-        newChild.revalidate();
+        this._afterChildAppended(newChild);
     }
 
     public appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel):void{
         this._parentChildDelegate.appendChildBefore(modelBefore,newChild);
-        newChild.setLayer(this._layer!);
-        newChild.revalidate();
+        this._afterChildAppended(newChild);
     }
 
-    public prependChild(c:RenderableModel):void {
-        this._parentChildDelegate.prependChild(c);
-        c.setLayer(this._layer!);
-        c.revalidate();
+    public prependChild(newChild:RenderableModel):void {
+        this._parentChildDelegate.prependChild(newChild);
+        this._afterChildAppended(newChild);
     }
 
     public removeChildAt(i:number):void{
@@ -386,6 +390,13 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
             this._worldPosition.add(parent.pos);
             parent = parent.parent;
         }
+        this._worldPosition.add(this.getScene().pos);
+    }
+
+    private _afterChildAppended(newChild:RenderableModel):void{
+        newChild.setLayer(this._layer!);
+        newChild.setScene(this.game.getCurrScene());
+        newChild.revalidate();
     }
 
 }

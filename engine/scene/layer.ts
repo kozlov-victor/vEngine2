@@ -1,7 +1,8 @@
 import {Game} from "@engine/core/game";
-import {RenderableModel} from "../../abstract/renderableModel";
+import {RenderableModel} from "../renderable/abstract/renderableModel";
 import {IParentChild, Optional} from "@engine/core/declarations";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
+import {Scene} from "@engine/scene/scene";
 
 export class Layer implements IParentChild {
 
@@ -11,44 +12,35 @@ export class Layer implements IParentChild {
     public id:string;
 
     private _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate(this);
+    private _scene:Scene;
 
     constructor(protected game:Game) {
 
     }
 
-    public appendChild(c:RenderableModel):void {
-        this._parentChildDelegate.appendChild(c);
-        c.setLayer(this);
-        (c as IParentChild).parent = undefined;
-        c.revalidate();
+    public appendChild(newChild:RenderableModel):void {
+        this._parentChildDelegate.appendChild(newChild);
+        this._afterChildAppended(newChild);
     }
 
-    public appendChildAt(c:RenderableModel,index:number){
-        this._parentChildDelegate.appendChildAt(c,index);
-        c.setLayer(this);
-        (c as IParentChild).parent = undefined;
-        c.revalidate();
+    public appendChildAt(newChild:RenderableModel,index:number){
+        this._parentChildDelegate.appendChildAt(newChild,index);
+        this._afterChildAppended(newChild);
     }
 
     public appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel){
         this._parentChildDelegate.appendChildAfter(modelAfter,newChild);
-        newChild.setLayer(this);
-        (newChild as IParentChild).parent = undefined;
-        newChild.revalidate();
+        this._afterChildAppended(newChild);
     }
 
     public appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel){
         this._parentChildDelegate.appendChildBefore(modelBefore,newChild);
-        newChild.setLayer(this);
-        (newChild as IParentChild).parent = undefined;
-        newChild.revalidate();
+        this._afterChildAppended(newChild);
     }
 
-    public prependChild(c:RenderableModel):void {
-        this._parentChildDelegate.prependChild(c);
-        c.setLayer(this);
-        (c as IParentChild).parent = undefined;
-        c.revalidate();
+    public prependChild(newChild:RenderableModel):void {
+        this._parentChildDelegate.prependChild(newChild);
+        this._afterChildAppended(newChild);
     }
 
     public removeChildAt(i:number){
@@ -71,8 +63,13 @@ export class Layer implements IParentChild {
         return this._parentChildDelegate.findChildById(id);
     }
 
-    public getParent():Optional<RenderableModel>{
-        return this._parentChildDelegate.getParent();
+    public getParent():Scene{
+        return this._scene;
+    }
+
+    /*** @internal */
+    public setScene(scene:Scene):void{
+        this._scene = scene;
     }
 
     public update():void {
@@ -87,4 +84,12 @@ export class Layer implements IParentChild {
             obj.render();
         }
     }
+
+    private _afterChildAppended(newChild:RenderableModel):void{
+        newChild.setLayer(this);
+        newChild.setScene(this.game.getCurrScene());
+        (newChild as IParentChild).parent = undefined;
+        newChild.revalidate();
+    }
+
 }

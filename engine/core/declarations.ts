@@ -2,8 +2,9 @@ import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {IFilter} from "@engine/renderer/ifilter";
-import {Layer} from "@engine/renderable/impl/general/layer";
+import {Layer} from "@engine/scene/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {Scene} from "@engine/scene/scene";
 
 export type Clazz<T> = new() => T;
 export type ClazzEx<T,U> = new(arg:U) => T;
@@ -61,7 +62,7 @@ export interface IParentChild {
     moveToFront():void;
     moveToBack():void;
     findChildById(id:string):Optional<RenderableModel>;
-    getParent():Optional<RenderableModel|Layer>;
+    getParent():Optional<RenderableModel|Layer|Scene>;
 }
 
 type Brand<K,T> = K & {__brand: T};

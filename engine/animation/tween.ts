@@ -24,6 +24,7 @@ const _accessByPath = (obj:IKeyVal,path:string):IValByPathObj=>{
     return {targetObj:obj,targetKey:lastPath};
 };
 
+//todo RangeError: Maximum call stack size exceeded
 const setValByPath = (obj:IKeyVal,path:string,val:number)=>{
     const {targetObj,targetKey}:IValByPathObj = _accessByPath(obj,path);
     targetObj[targetKey] = val;
@@ -81,7 +82,7 @@ export class Tween {
         this._target = tweenDesc.target;
         this._progressFn = tweenDesc.progress;
         this._completeFn = tweenDesc.complete;
-        this._easeFn = tweenDesc.ease || Easing.linear  as EaseFn;
+        this._easeFn = tweenDesc.ease || Easing.linear;
         this._delayBeforeStart = tweenDesc.delayBeforeStart || 0;
         this._tweenTime = (tweenDesc.time || 1000) + this._delayBeforeStart;
         this._loop = tweenDesc.loop||false;
@@ -186,5 +187,6 @@ export class Tween {
     private progress(_progressFn:(val:number)=>void):void {
         this._progressFn = _progressFn;
     }
+
 
 }

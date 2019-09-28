@@ -128,6 +128,7 @@ export abstract class AbstractRenderer implements IDestroyable {
         if (!textField) {
             textField = new TextField(this.game);
             textField.setFont(Font.getSystemFont());
+            textField.setScene(this.game.getCurrScene()); // todo temporary solution, refactor to debug layer creation
             textField.revalidate();
             this.debugTextField = textField;
         }

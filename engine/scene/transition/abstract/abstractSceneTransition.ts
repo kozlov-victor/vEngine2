@@ -9,6 +9,7 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
     protected _prevScene: Optional<Scene>;
     protected _currScene: Scene;
     protected _onComplete: () => void;
+    private _tween:Tween;
 
     protected constructor() {
 
@@ -23,14 +24,18 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
         this._currScene = currScene;
         this._prevScene = prevScene;
         currScene.addTween(t);
+        this._tween = t;
     }
 
     public abstract render(): void;
 
+    public reset():void {
+        this._tween.complete();
+    }
+
     protected abstract onTweenCreated():ITweenDescription;
 
-    protected abstract onTransitionProgress(val: number, prevScene: Optional<Scene>, currScene: Scene): void;
+    protected abstract onTransitionProgress(val: number): void;
 
-    protected abstract onTransitionCompleted(prevScene: Optional<Scene>, currScene: Scene): void;
 
 }
