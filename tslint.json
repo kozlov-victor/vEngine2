@@ -36,7 +36,7 @@
     "arrow-parens": false,
     "callable-types": false,
     "no-any": false,
-    "no-null-keyword": false
+    "no-null-keyword": true
   },
   "jsRules": {
     "max-line-length": {

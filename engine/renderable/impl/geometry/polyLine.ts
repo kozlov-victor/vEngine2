@@ -132,8 +132,8 @@ export class PolyLine extends Shape {
     public vectorScaleFactor:number = 1;
     public borderRadius:number = 1;
 
-    private lastPoint:Point2d|null;
-    private firstPoint:Point2d|null;
+    private lastPoint:Optional<Point2d>;
+    private firstPoint:Optional<Point2d>;
 
     private tokenizer:SvgTokenizer;
 
@@ -173,8 +173,8 @@ export class PolyLine extends Shape {
     }
 
     public complete():void {
-        this.lastPoint = null;
-        this.firstPoint = null;
+        this.lastPoint = undefined;
+        this.firstPoint = undefined;
     }
 
     public close(){
@@ -405,13 +405,13 @@ export class PolyLine extends Shape {
                     x+=this.lastPoint!.x;
                     y+=this.lastPoint!.y;
                 }
-                const arcs:{x:number,y:number,x1:number,y1:number,x2:number,y2:number}[]|null = arcToBezier(
+                const arcs:{x:number,y:number,x1:number,y1:number,x2:number,y2:number}[]|undefined = arcToBezier(
                     this.lastPoint!.x,this.lastPoint!.y,
                     x,y,
                     rx,ry,xAxisRotation,
                     largeArcFlag,sweepFlag
                 );
-                if (arcs!==null) arcs.forEach((arc:{x:number,y:number,x1:number,y1:number,x2:number,y2:number},i:number)=>{
+                if (arcs!==undefined) arcs.forEach((arc:{x:number,y:number,x1:number,y1:number,x2:number,y2:number},i:number)=>{
                     let xTo:number = arc.x;
                     let yTo:number = arc.y;
                     if (i===arcs.length-1) {

@@ -138,9 +138,7 @@ export class Game {
         if (transition!==undefined) {
             this._sceneTransition = transition;
             transition.start(this._currentScene,scene);
-            transition.onComplete(()=>{
-                this._sceneTransition = undefined;
-            });
+            transition.onComplete(()=>this._sceneTransition = undefined);
         }
         this._currentScene = scene;
 
@@ -149,8 +147,10 @@ export class Game {
         scene.resourceLoader.onProgress(()=>{
            scene.onProgress(scene.resourceLoader.getProgress());
         });
-        if (!this._running) this.update();
-        this._running = true;
+        if (!this._running) {
+            this.update();
+            this._running = true;
+        }
         scene.resourceLoader.onCompleted(()=>{
            this._currentScene.onReady();
         });

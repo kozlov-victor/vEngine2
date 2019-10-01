@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {ICloneable} from "@engine/core/declarations";
+import {ICloneable, Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {Image} from "@engine/renderable/impl/geometry/image";
@@ -10,7 +10,7 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
     public readonly type:string = 'AnimatedImage';
 
 
-    private _currFrameAnimation:AbstractFrameAnimation<any>|null;
+    private _currFrameAnimation:Optional<AbstractFrameAnimation<any>>;
     private _frameAnimations:{[name:string]:AbstractFrameAnimation<any>} = {};
 
     constructor(game:Game){
@@ -52,8 +52,8 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
     }
 
     public stopFrameAnimation():void {
-        if (this._currFrameAnimation!==null) this._currFrameAnimation.stop();
-        this._currFrameAnimation = null;
+        if (this._currFrameAnimation!==undefined) this._currFrameAnimation.stop();
+        this._currFrameAnimation = undefined;
     }
 
 

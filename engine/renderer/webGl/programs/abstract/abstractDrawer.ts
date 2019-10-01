@@ -7,7 +7,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {FastMap} from "@engine/misc/fastMap";
-import {IDestroyable} from "@engine/core/declarations";
+import {IDestroyable, Optional} from "@engine/core/declarations";
 
 
 interface ITextureInfo {
@@ -27,10 +27,10 @@ interface IUniformValue {
 
 export class AbstractDrawer implements IDrawer, IDestroyable{
 
-    public static currentInstance:AbstractDrawer|null = null;
+    public static currentInstance:Optional<AbstractDrawer>;
 
     protected gl:WebGLRenderingContext;
-    protected program:ShaderProgram|null = null;
+    protected program:Optional<ShaderProgram>;
     protected uniformCache:FastMap<string,IUniformValue> = new FastMap();
     protected texturesToBind:ITexturesToBind = {length: 0, texturesInfo: [] as ITextureInfo[]};
     protected primitive:AbstractPrimitive;
@@ -43,7 +43,7 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
 
     public destroy():void{
         if (this.bufferInfo) this.bufferInfo.destroy();
-        if (this.program!==null) this.program.destroy();
+        if (this.program!==undefined) this.program.destroy();
     }
 
 
@@ -106,13 +106,13 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
 
     protected bind():void{
 
-        if (DEBUG && this.program===null) {
+        if (DEBUG && this.program===undefined) {
             console.error(this);
             throw new DebugError(`can not init drawer: initProgram method must be invoked!`);
         }
 
         if (
-            AbstractDrawer.currentInstance!==null &&
+            AbstractDrawer.currentInstance!==undefined &&
             AbstractDrawer.currentInstance!==this)
         {
             AbstractDrawer.currentInstance.unbind();

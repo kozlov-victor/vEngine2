@@ -1,5 +1,6 @@
 
 import * as docDesc from './scenes.xml';
+import {Optional} from "@engine/core/declarations";
 
 export interface IElementDescription {
     tagName:string;
@@ -32,13 +33,13 @@ export class Element  {
     public tagName:string;
     public attributes:Record<string,string> = {};
 
-    public getElementById(id:string):Element|null{
-        let el:Element|null = null;
+    public getElementById(id:string):Optional<Element>{
+        let el:Optional<Element>;
         Element.visitAll(this.children,(current:Element)=>{
             if (current.attributes.id===id) el = current;
         });
-        if (el===null) return null;
-        return Element.fromData(el);
+        if (el===undefined) return undefined;
+        else return Element.fromData(el);
     }
 
     public getElementsByTagName(tagName:string):Element[]{

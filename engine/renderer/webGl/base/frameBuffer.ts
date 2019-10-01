@@ -3,11 +3,12 @@ import {DebugError} from "@engine/debug/debugError";
 
 import {Texture} from "./texture";
 import {Color} from "@engine/renderer/color";
+import {Optional} from "@engine/core/declarations";
 
 
 export class FrameBuffer {
 
-    private static currInstance:FrameBuffer|null = null;
+    private static currInstance:Optional<FrameBuffer>;
     private gl:WebGLRenderingContext;
 
     private readonly texture:Texture;
@@ -26,7 +27,7 @@ export class FrameBuffer {
         this.height = height;
 
         this.texture = new Texture(gl);
-        this.texture.setImage(null,width,height);
+        this.texture.setImage(undefined,width,height);
         this._init(gl,width,height);
     }
 
@@ -39,8 +40,9 @@ export class FrameBuffer {
 
     public unbind():void{
         this._checkBound();
+        // tslint:disable-next-line:no-null-keyword
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
-        FrameBuffer.currInstance = null;
+        FrameBuffer.currInstance = undefined;
     }
 
     public clear(color:Color){
@@ -78,7 +80,9 @@ export class FrameBuffer {
         }
         // Clean up
         this.texture.unbind();
+        // tslint:disable-next-line:no-null-keyword
         gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+        // tslint:disable-next-line:no-null-keyword
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 

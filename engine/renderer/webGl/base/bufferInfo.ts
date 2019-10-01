@@ -6,6 +6,7 @@ import {IndexBuffer} from "./indexBuffer";
 import {ShaderProgram} from "./shaderProgram";
 import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import glEnumToString = debugUtil.glEnumToString;
+import {Optional} from "@engine/core/declarations";
 
 export interface IVertexArrayInfo {
     array:number[];
@@ -53,10 +54,10 @@ export class BufferInfo {
 
     public gl:WebGLRenderingContext;
 
-    public posVertexBuffer:VertexBuffer|null = null;
-    public posIndexBuffer:IndexBuffer|null = null;
-    public texVertexBuffer:VertexBuffer|null = null;
-    public normalBuffer:VertexBuffer|null = null;
+    public posVertexBuffer:Optional<VertexBuffer>;
+    public posIndexBuffer:Optional<IndexBuffer>;
+    public texVertexBuffer:Optional<VertexBuffer>;
+    public normalBuffer:Optional<VertexBuffer>;
     public drawMethod:GLenum;
     public numOfElementsToDraw:number = 0;
 
@@ -103,28 +104,28 @@ export class BufferInfo {
 
     public bind(program:ShaderProgram):void{
         program.bind();
-        if (this.posIndexBuffer) this.posIndexBuffer.bind();
-        if (this.posVertexBuffer) this.posVertexBuffer.bind(program);
-        if (this.texVertexBuffer) this.texVertexBuffer.bind(program);
-        if (this.normalBuffer) this.normalBuffer.bind(program);
+        if (this.posIndexBuffer!==undefined) this.posIndexBuffer.bind();
+        if (this.posVertexBuffer!==undefined) this.posVertexBuffer.bind(program);
+        if (this.texVertexBuffer!==undefined) this.texVertexBuffer.bind(program);
+        if (this.normalBuffer!==undefined) this.normalBuffer.bind(program);
     }
 
     public unbind():void{
-        if (this.posIndexBuffer) this.posIndexBuffer.unbind();
-        if (this.posVertexBuffer) this.posVertexBuffer.unbind();
-        if (this.texVertexBuffer) this.texVertexBuffer.unbind();
-        if (this.normalBuffer) this.normalBuffer.unbind();
+        if (this.posIndexBuffer!==undefined) this.posIndexBuffer.unbind();
+        if (this.posVertexBuffer!==undefined) this.posVertexBuffer.unbind();
+        if (this.texVertexBuffer!==undefined) this.texVertexBuffer.unbind();
+        if (this.normalBuffer!==undefined) this.normalBuffer.unbind();
     }
 
     public destroy():void{
-        if (this.posVertexBuffer) this.posVertexBuffer.destroy();
-        if (this.posIndexBuffer) this.posIndexBuffer.destroy();
-        if (this.texVertexBuffer) this.texVertexBuffer.destroy();
-        if (this.normalBuffer) this.normalBuffer.destroy();
+        if (this.posVertexBuffer!==undefined) this.posVertexBuffer.destroy();
+        if (this.posIndexBuffer!==undefined) this.posIndexBuffer.destroy();
+        if (this.texVertexBuffer!==undefined) this.texVertexBuffer.destroy();
+        if (this.normalBuffer!==undefined) this.normalBuffer.destroy();
     }
 
     public draw():void {
-        if (this.posIndexBuffer){
+        if (this.posIndexBuffer!==undefined){
             this.gl.drawElements(
                 this.drawMethod,
                 this.posIndexBuffer.getBufferLength(),

@@ -3,7 +3,7 @@ import {AudioPlayer} from "../audioPlayer";
 import {Game} from "../../core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
-import {Clazz, ICloneable} from "@engine/core/declarations";
+import {Clazz, ICloneable, Optional} from "@engine/core/declarations";
 import {Sound} from "@engine/media/sound";
 
 
@@ -52,9 +52,9 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
     }
 
     public _ctx: AudioContext;
-    public _currSource!: AudioBufferSourceNode;
+    public _currSource: Optional<AudioBufferSourceNode>;
     public _gainNode: GainNode;
-    public _stereoPanNode: StereoPannerNode;
+    public _stereoPanNode: Optional<StereoPannerNode>;
     public _free: boolean = true;
 
     public readonly type: string = 'webAudioContext';
@@ -63,14 +63,19 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         super(game);
         this._ctx = CtxHolder.getCtx();
         this._gainNode = this._ctx.createGain();
-        this._stereoPanNode = this._ctx.createStereoPanner();
-        this._stereoPanNode.pan.value = 0.5;
-        this._stereoPanNode.connect(this._ctx.destination);
-        this._gainNode.connect(this._stereoPanNode);
+        if (this._ctx.createStereoPanner) {
+            this._stereoPanNode = this._ctx.createStereoPanner();
+            this._stereoPanNode.pan.value = 0.5;
+            this._stereoPanNode.connect(this._ctx.destination);
+            this._gainNode.connect(this._stereoPanNode);
+        } else {
+            this._gainNode.connect(this._ctx.destination);
+        }
+
     }
 
     public load(buffer:ArrayBuffer, link:ResourceLink<void>, onLoad:()=>void):void {
-        if (AudioPlayer.cache[link.getUrl()]) { // todo remove?
+        if (AudioPlayer.cache[link.getUrl()]) {
             onLoad();
             return;
         }
@@ -99,7 +104,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         currSource.start(0,sound.offset,sound.duration);
         currSource.playbackRate.value = sound.velocity;
         this._gainNode.gain.value = sound.gain;
-        this._stereoPanNode.pan.value = sound.stereoPan;
+        if (this._stereoPanNode!==undefined) this._stereoPanNode.pan.value = sound.stereoPan;
         currSource.onended = ()=> {
             this.stop();
         };
@@ -107,13 +112,14 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
     }
 
     public stop():void {
-        const currSource:AudioBufferSourceNode = this._currSource;
-        if (currSource) {
+        const currSource:Optional<AudioBufferSourceNode> = this._currSource;
+        if (currSource!==undefined) {
             currSource.stop();
             currSource.disconnect(this._gainNode);
+            // tslint:disable-next-line:no-null-keyword
             currSource.onended = null;
         }
-        this._currSource = null!;
+        this._currSource = undefined;
         this._free = true;
     }
 
@@ -122,11 +128,11 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
     }
 
     public setVelocity(val:number):void {
-        this._currSource.playbackRate.value = val;
+        this._currSource!.playbackRate.value = val;
     }
 
     public setStereoPan(val:number):void {
-        this._stereoPanNode.pan.value = val;
+        if (this._stereoPanNode!==undefined) this._stereoPanNode.pan.value = val;
     }
 
     public pause():void {

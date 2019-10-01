@@ -4,6 +4,7 @@ import {Rect} from "@engine/geometry/rect";
 export class MainScene extends Scene {
 
     public onReady() {
+        // tslint:disable-next-line:no-null-keyword
         this.game.log(null,undefined,{test:42});
         this.game.log('test log');
         this.game.log(document);

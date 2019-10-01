@@ -25,6 +25,7 @@ export class IndexBuffer {
         this.dataLength = bufferData.length;
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(bufferData), gl.STATIC_DRAW);
+        // tslint:disable-next-line:no-null-keyword
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
     }
 
@@ -37,6 +38,7 @@ export class IndexBuffer {
     }
 
     public unbind():void{
+        // tslint:disable-next-line:no-null-keyword
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
     }
 
