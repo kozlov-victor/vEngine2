@@ -11,12 +11,12 @@ import {Optional} from "@engine/core/declarations";
 export abstract class Mesh extends RenderableModel {
 
     public modelPrimitive:IPrimitive;
-    public texture:ITexture;
+    public texture:Optional<ITexture>;
     public fillColor:Color = Color.BLACK.clone();
     public bufferInfo:BufferInfo;
     public vertexItemSize:2|3;
 
-    private _lightAccepted:boolean;
+    private _lightAccepted:Optional<boolean>;
 
     protected constructor(
         protected game:Game,

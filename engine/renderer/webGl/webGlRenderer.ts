@@ -222,7 +222,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setModelMatrix(matrix1.mat16);
         md.setProjectionMatrix(matrix2.mat16);
         md.setAlfa(mesh.alpha);
-        const isTextureUsed:boolean = !!mesh.texture;
+        const isTextureUsed:boolean = mesh.texture!==undefined;
         md.setTextureUsed(isTextureUsed);
         if (isTextureUsed) md.setTectureMatrix(FLIP_TEXTURE_MATRIX.mat16);
         md.setLightUsed(mesh.isLightAccepted()||false);
