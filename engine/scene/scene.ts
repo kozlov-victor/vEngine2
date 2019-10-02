@@ -171,13 +171,13 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
             }
         }
 
-        //this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM; // todo manage this
         renderer.restore();
-        this.unlockSceneView();
+        this.unlockSceneView(); // todo apply it after filters?
         renderer.afterFrameDraw(this.filters);
 
         if (DEBUG) {
             this.game.getRenderer().restore();
+            this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY;
             if (
                 this.game.getRenderer().debugTextField &&
                 this.game.getRenderer().debugTextField.getFont().getResourceLink() &&

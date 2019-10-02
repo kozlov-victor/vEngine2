@@ -174,7 +174,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     public rotateY(angleInRadians:number):void {
-        if (DEBUG) throw new DebugError('rotateY not supported by canvasRenderer');
+
     }
 
     public translate(x:number,y:number):void {
