@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {ICloneable} from "@engine/core/declarations";
+import {ICloneable, Optional} from "@engine/core/declarations";
 import {RenderableModel} from "../../abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
@@ -16,7 +16,7 @@ export class DeprectatedGameObject extends RenderableModel implements ICloneable
     public groupNames:string[] = [];
     public collideWith:string[] = [];
 
-    private _currFrameAnimation:AbstractFrameAnimation<any>|null;
+    private _currFrameAnimation:Optional<AbstractFrameAnimation<any>>;
     private _frameAnimations:{[name:string]:AbstractFrameAnimation<any>} = {};
 
     constructor(game:Game){
@@ -62,8 +62,8 @@ export class DeprectatedGameObject extends RenderableModel implements ICloneable
     }
 
     public stopFrameAnimation():void {
-        if (this._currFrameAnimation!==null) this._currFrameAnimation.stop();
-        this._currFrameAnimation = null;
+        if (this._currFrameAnimation!==undefined) this._currFrameAnimation.stop();
+        this._currFrameAnimation = undefined;
     }
 
 

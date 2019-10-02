@@ -118,6 +118,7 @@ export class MouseControl implements IControl {
             'mouseMove','ontouchstart','onmousedown',
             'ontouchend','onmouseup','ontouchmove',
             'onmousemove','ondblclick'].forEach((evtName:string)=>{
+                // tslint:disable-next-line:no-null-keyword
             (this.container as any)[evtName] = null;
         });
     }

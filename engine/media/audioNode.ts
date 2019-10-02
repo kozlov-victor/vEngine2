@@ -1,10 +1,11 @@
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {Sound} from "@engine/media/sound";
+import {Optional} from "@engine/core/declarations";
 
 
 export class AudioNode {
 
-    private currSound!:Sound|null;
+    private currSound:Optional<Sound>;
 
     constructor(public context:BasicAudioContext){}
 
@@ -16,7 +17,7 @@ export class AudioNode {
 
     public stop():void {
         this.context.stop();
-        this.currSound = null;
+        this.currSound = undefined;
     }
 
     public setGain(val:number):void {
@@ -43,7 +44,7 @@ export class AudioNode {
         return this.context.isFree();
     }
 
-    public getCurrSound():Sound|null {
+    public getCurrSound():Optional<Sound> {
         return this.currSound;
     }
 

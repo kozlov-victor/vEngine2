@@ -5,9 +5,6 @@ import {AudioPlayer} from "@engine/media/audioPlayer";
 import {DebugError} from "@engine/debug/debugError";
 import {Clazz, ICloneable} from "@engine/core/declarations";
 import {Sound} from "@engine/media/sound";
-import {UrlLoader} from "@engine/resources/urlLoader";
-
-
 
 
 class CtxHolder {

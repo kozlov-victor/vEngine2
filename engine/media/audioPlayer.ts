@@ -42,16 +42,19 @@ export  class AudioPlayer implements IAudioPlayer {
         if (DEBUG) sound.revalidate();
 
         const node:Optional<AudioNode> = this.audioNodeSet.getFreeNode();
-        if (DEBUG && !node) {
-            console.log('no free node to play sound');
+
+        if (node===undefined) {
+            if (DEBUG) {
+                console.log('no free node to play sound');
+            }
+            return;
         }
-        if (node===undefined) return;
         node.play(sound);
     }
 
     public stop(sound:Sound):void {
-        const node:AudioNode|null = this.audioNodeSet.getNodeBySound(sound);
-        if (node===null) return;
+        const node:Optional<AudioNode> = this.audioNodeSet.getNodeBySound(sound);
+        if (node===undefined) return;
         node.stop();
     }
 

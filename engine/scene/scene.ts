@@ -94,17 +94,10 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
                 this.preloadingGameObject.update();
             }
         } else {
-            this.updateMainFrame();
+            this.updateFrame();
         }
     }
 
-    public render():void {
-
-        this.beforeRender();
-        this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
-        this.renderFrame();
-
-    }
 
     public addTween<T>(t: Tween<T>): void {
         this._tweenDelegate.addTween(t);
@@ -156,19 +149,54 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
     public onReady():void {}
 
-    protected beforeUpdate():void {}
+
+    public render():void {
+
+        this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
+
+        const renderer:AbstractRenderer = this.game.getRenderer();
+        renderer.save();
+        this.lockSceneView();
+        renderer.beforeFrameDraw(this.colorBG);
+        this.game.camera.render();
+        renderer.translate(this.pos.x,this.pos.y);
+
+        if (!this.resourceLoader.isCompleted()) {
+            if (this.preloadingGameObject!==undefined) {
+                this.preloadingGameObject.render();
+            }
+        } else {
+            for (const l of this._layers) {
+                l.render();
+            }
+        }
+
+        //this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM; // todo manage this
+        renderer.restore();
+        this.unlockSceneView();
+        renderer.afterFrameDraw(this.filters);
+
+        if (DEBUG) {
+            this.game.getRenderer().restore();
+            if (
+                this.game.getRenderer().debugTextField &&
+                this.game.getRenderer().debugTextField.getFont().getResourceLink() &&
+                this.game.getRenderer().debugTextField.getFont().getResourceLink().getTarget()
+            ) {
+                this.game.getRenderer().debugTextField.update();
+                this.game.getRenderer().debugTextField.render();
+            }
+            this.game.getRenderer().restore();
+        }
+
+    }
 
     protected onUpdate():void {}
-
-    protected beforeRender():void {}
-
-    protected onRender():void {}
 
     protected onDestroy():void {}
 
 
-    private updateMainFrame():void {
-        this.beforeUpdate();
+    private updateFrame():void {
 
         this.game.camera.update();
 
@@ -184,7 +212,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     }
 
 
-    private beforeFrameRender():void {
+    private lockSceneView():void {
         if (this.pos.equal(0)) return;
         const renderer:AbstractRenderer = this.game.getRenderer();
         const r:Rect = Rect.fromPool();
@@ -198,52 +226,8 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         r.release();
     }
 
-    private afterFrameRender(){
+    private unlockSceneView(){
         if (this.pos.equal(0)) return;
-        const renderer:AbstractRenderer = this.game.getRenderer();
-        renderer.unlockRect();
-    }
-
-
-    private renderFrame():void {
-
-        const renderer:AbstractRenderer = this.game.getRenderer();
-
-        renderer.save();
-        this.beforeFrameRender();
-        renderer.beforeFrameDraw(this.colorBG);
-        this.game.camera.render();
-        renderer.translate(this.pos.x,this.pos.y);
-
-        if (!this.resourceLoader.isCompleted()) {
-            if (this.preloadingGameObject!==undefined) {
-                this.preloadingGameObject.render();
-            }
-        } else {
-            for (const l of this._layers) {
-                l.render();
-            }
-        }
-
-
-        //this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM; // todo manage this
-        this.onRender();
-
-        renderer.restore();
-        this.afterFrameRender();
-
-        if (DEBUG) {
-            this.game.getRenderer().restore();
-            if (
-                this.game.getRenderer().debugTextField &&
-                this.game.getRenderer().debugTextField.getFont().getResourceLink() &&
-                this.game.getRenderer().debugTextField.getFont().getResourceLink().getTarget()
-            ) {
-                this.game.getRenderer().debugTextField.update();
-                this.game.getRenderer().debugTextField.render();
-            }
-            this.game.getRenderer().restore();
-        }
-        renderer.afterFrameDraw(this.filters);
+        this.game.getRenderer().unlockRect();
     }
 }

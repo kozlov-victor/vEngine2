@@ -40,6 +40,7 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
         this._currScene = currScene;
         this._prevScene = prevScene;
         currScene.addTween(t);
+        t.update();
         this._tween = t;
     }
 

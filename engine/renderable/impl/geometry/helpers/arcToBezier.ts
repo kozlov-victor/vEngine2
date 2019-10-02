@@ -132,11 +132,11 @@ export const arcToBezier = (
                          xAxisRotation:number = 0,
                          largeArcFlag:0|1 = 0,
                          sweepFlag:0|1 = 0
-                     ):{ x1:number, y1:number, x2:number, y2:number, x:number, y:number}[]|null => {
+                     ):{ x1:number, y1:number, x2:number, y2:number, x:number, y:number}[]|undefined => {
     const curves = [];
 
     if (rx === 0 || ry === 0) {
-        return null;
+        return undefined;
     }
 
     const sinphi = Math.sin(xAxisRotation * TAU / 360);
@@ -146,7 +146,7 @@ export const arcToBezier = (
     const pyp = -sinphi * (px - cx) / 2 + cosphi * (py - cy) / 2;
 
     if (pxp === 0 && pyp === 0) {
-        return null;
+        return undefined;
     }
 
     rx = Math.abs(rx);

@@ -140,7 +140,7 @@ export abstract class AbstractRenderer implements IDestroyable {
                 txt = `[object ${txt.tagName}]`;
             }
             else if (txt.toJSON) {
-                txt = JSON.stringify(txt.toJSON(),null,4);
+                txt = JSON.stringify(txt.toJSON(),undefined,4);
             }
             else if (typeof txt==='function') {
                 txt = txt.toString();

@@ -8,11 +8,12 @@ import * as vertexSource from "./mesh.vertex.glsl";
 import {mat4} from "@engine/geometry/mat4";
 import MAT16 = mat4.MAT16;
 import {Color} from "@engine/renderer/color";
+import {Optional} from "@engine/core/declarations";
 
 
 export class MeshDrawer extends AbstractDrawer {
 
-    private mesh:Mesh|null;
+    private mesh:Optional<Mesh>;
 
     private readonly a_position:string = 'a_position';
     private readonly a_normal:string = 'a_normal';
@@ -73,7 +74,7 @@ export class MeshDrawer extends AbstractDrawer {
     }
 
     public bind():void{
-        if (DEBUG && this.mesh===null) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
+        if (DEBUG && this.mesh===undefined) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
         super.bind();
         if (!this.mesh!.modelPrimitive.texCoordArr) {
             this.program!.disableAttribute(this.a_texcoord);
@@ -88,7 +89,7 @@ export class MeshDrawer extends AbstractDrawer {
     }
 
     public unbind():void{
-        this.mesh = null;
+        this.mesh = undefined;
         super.unbind();
     }
     

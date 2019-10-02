@@ -1,6 +1,7 @@
 /**
  * it allows fast iterate through map keys without new array creation
  */
+import {Optional} from "@engine/core/declarations";
 
 export class FastMap<T,U> {
 
@@ -17,9 +18,9 @@ export class FastMap<T,U> {
         }
     }
 
-    public get(key:T):U|null{
+    public get(key:T):Optional<U>{
         const index:number = this.keys.indexOf(key);
-        if (index===-1) return null;
+        if (index===-1) return undefined;
         return this.values[index];
     }
 

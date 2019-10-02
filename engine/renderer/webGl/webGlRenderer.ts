@@ -33,7 +33,7 @@ import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {noop} from "@engine/misc/object";
 
 
-const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext|null=>{
+const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
     const contextAttrs:WebGLContextAttributes = {alpha:false,premultipliedAlpha:false};
     const possibles:string[] = ['webgl2','webgl','experimental-webgl','webkit-3d','moz-webgl'];
     for (const p of possibles) {
@@ -42,7 +42,7 @@ const getCtx = (el:HTMLCanvasElement):WebGLRenderingContext|null=>{
         if (ctx) return ctx;
     }
     if (DEBUG) throw new DebugError(`webGl is not accessible on this device`);
-    return null;
+    return undefined;
 };
 
 const SCENE_DEPTH:number = 1000;
@@ -406,7 +406,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoad:()=>void):void{
-        const possibleTargetInCache:ITexture = this.renderableCache[link.getUrl()]; // todo remove?
+        const possibleTargetInCache:ITexture = this.renderableCache[link.getUrl()];
         if (possibleTargetInCache!==undefined) {
             link.setTarget(possibleTargetInCache);
             onLoad();
@@ -460,9 +460,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     private _init():void{
-        const gl:WebGLRenderingContext = getCtx(this.container as HTMLCanvasElement) as WebGLRenderingContext;
-        if (DEBUG && gl===null) throw new DebugError(`WebGLRenderingContext is not supported by this device`);
-        this.gl = gl as WebGLRenderingContext;
+        const gl:WebGLRenderingContext = getCtx(this.container as HTMLCanvasElement)!;
+        if (DEBUG && gl===undefined) throw new DebugError(`WebGLRenderingContext is not supported by this device`);
+        this.gl = gl;
 
         this.nullTexture = new Texture(gl);
 

@@ -45,11 +45,11 @@ export class AudioNodeSet {
 
 
 
-    public getNodeBySound(sound:Sound):AudioNode|null{
+    public getNodeBySound(sound:Sound):Optional<AudioNode>{
         for (let i:number = 0;i<this.numOfNodes;i++) {
             if (this.nodes[i].getCurrSound()===sound) return this.nodes[i];
         }
-        return null;
+        return undefined;
     }
 
 }

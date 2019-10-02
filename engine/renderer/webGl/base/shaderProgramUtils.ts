@@ -1,6 +1,6 @@
 import {DebugError} from "@engine/debug/debugError";
 import {ShaderProgram} from "./shaderProgram";
-import {Int} from "@engine/core/declarations";
+import {Int, Optional} from "@engine/core/declarations";
 import {IKeyVal, isArray} from "@engine/misc/object";
 
 
@@ -27,12 +27,12 @@ const parseErrors = (log:string):IShaderErrorInfo[]=> {
     return logs;
 };
 
-export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, shaderType:number):WebGLShader|null=> {
+export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, shaderType:number):Optional<WebGLShader>=> {
     if (DEBUG) {
         if (!shaderSource) throw new DebugError(`can not compile shader: shader source not specified for type ${shaderType}`);
     }
     // Create the shader object
-    const shader:WebGLShader = gl.createShader(shaderType) as WebGLShader;
+    const shader:WebGLShader = gl.createShader(shaderType)!;
     if (DEBUG && !shader) throw new DebugError(`can not allocate memory for shader: gl.createShader(shaderType)`);
 
     // Load the shader source
@@ -70,7 +70,7 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
 
     }
 
-    return shader;
+    return shader || undefined;
 };
 
 
@@ -111,7 +111,7 @@ export const createProgram = (gl:WebGLRenderingContext, vertexShader:WebGLShader
     return program;
 };
 
-let GL_TABLE:IKeyVal<string>|null = null;
+let GL_TABLE:Optional<IKeyVal<string>>;
 
 export const GL_TYPE = {
     FLOAT:      'float',
@@ -139,7 +139,7 @@ export const GL_TYPE = {
 
 const mapType = (gl:WebGLRenderingContext, type:number):string=> {
 
-    if (GL_TABLE===null) {
+    if (GL_TABLE===undefined) {
         const typeNames:string[] = Object.keys(GL_TYPE);
 
         GL_TABLE = {} as IKeyVal<string>;
@@ -193,7 +193,7 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
         if (DEBUG && !uniformData) throw new DebugError(`can not receive active uniforms info: gl.getActiveUniform()`);
         const type:string = mapType(gl, uniformData.type);
         const name:string = normalizeUniformName(uniformData.name);
-        const location:WebGLUniformLocation = gl.getUniformLocation(glProgram, name) as WebGLUniformLocation;
+        const location:WebGLUniformLocation = gl.getUniformLocation(glProgram, name)!;
         if (DEBUG && location===null) {
             // todo ie provide attrData.name but can not find location of unused attr
             console.log(program);

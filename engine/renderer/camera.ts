@@ -39,7 +39,7 @@ export class Camera {
     // and identity mode (for fixed objects)
     public matrixMode:CAMERA_MATRIX_MODE = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
 
-    private objFollowTo:RenderableModel|null = null;
+    private objFollowTo:Optional<RenderableModel>;
     private objFollowToPrevPos:Point2d;
     private directionCorrection:DIRECTION_CORRECTION;
 
@@ -65,12 +65,11 @@ export class Camera {
     }
 
 
-    public followTo(gameObject:RenderableModel):void {
-        if (gameObject===null) {
-            this.objFollowTo = null;
+    public followTo(gameObject:Optional<RenderableModel>):void {
+        if (gameObject===undefined) {
+            this.objFollowTo = undefined;
             return;
         }
-        if (DEBUG && gameObject===undefined) throw new DebugError(`Camera:followTo(gameObject) - gameObject not provided`);
         this.objFollowTo = gameObject;
         this.objFollowToPrevPos = new Point2d();
         this.objFollowToPrevPos.set(this.objFollowTo.pos);
@@ -79,9 +78,9 @@ export class Camera {
 
     public update() {
 
-        const gameObject:RenderableModel|null = this.objFollowTo;
+        const gameObject:Optional<RenderableModel> = this.objFollowTo;
 
-        if (gameObject!==null) {
+        if (gameObject!==undefined) {
 
             if ((gameObject.pos.x - this.objFollowToPrevPos.x)>0) this.directionCorrection = DIRECTION_CORRECTION.RIGHT;
             else if ((gameObject.pos.x - this.objFollowToPrevPos.x)<0) this.directionCorrection = DIRECTION_CORRECTION.LEFT;

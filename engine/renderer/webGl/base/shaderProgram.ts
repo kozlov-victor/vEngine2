@@ -10,10 +10,11 @@ import {
     IUniformsMap, IUniformWrapper
 } from "./shaderProgramUtils";
 import {VertexBuffer} from "./vertexBuffer";
+import {Optional} from "@engine/core/declarations";
 
 export class ShaderProgram {
 
-    public static currentProgram:ShaderProgram|null = null;
+    public static currentProgram:Optional<ShaderProgram>;
 
     private readonly program:WebGLProgram;
     private readonly uniforms:IUniformsMap;

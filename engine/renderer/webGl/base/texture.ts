@@ -24,7 +24,7 @@ export class Texture implements ITexture {
     private readonly tex:WebGLTexture;
     private interpolationMode:INTERPOLATION_MODE;
 
-    private _currentTextureAt0:Texture|null = null;
+    private _currentTextureAt0:Optional<Texture>;
 
     constructor(gl:WebGLRenderingContext){
         if (DEBUG && !gl) throw new DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
@@ -45,12 +45,12 @@ export class Texture implements ITexture {
     // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true); for bitmap textures
     // gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     /**
-     * @param img - if image is null, width and height must be specified
+     * @param img - if image is undefined, width and height must be specified
      * @param width -unused if image specified
      * @param height -unused if image specified
      */
     public setImage(
-        img:null|ImageBitmap|ImageData|HTMLVideoElement|HTMLImageElement|HTMLCanvasElement,
+        img:ImageBitmap|ImageData|HTMLVideoElement|HTMLImageElement|HTMLCanvasElement|undefined,
         width:number = 0,
         height:number = 0):void{
 
@@ -58,14 +58,14 @@ export class Texture implements ITexture {
 
         if (DEBUG) {
             if (!(img || width || height))
-                throw new DebugError("texture.setImage: if image is null, width and height must be specified: tex.setImage(null,w,h)");
+                throw new DebugError("texture.setImage: if image is undefined, width and height must be specified: tex.setImage(null,w,h)");
 
             const maxSupportedSize:number = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
             if (width>maxSupportedSize || height>maxSupportedSize) {
                 throw new DebugError(`can not create texture with size ${width}x${height}, max supported size is ${maxSupportedSize}`);
             }
         }
-        if (img) this.size.setWH(img.width,img.height);
+        if (img!==undefined) this.size.setWH(img.width,img.height);
         else this.size.setWH(width,height);
 
         this.beforeOperation();
@@ -74,6 +74,7 @@ export class Texture implements ITexture {
         if (img) {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
         } else {
+            // tslint:disable-next-line:no-null-keyword
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         }
         this.setFilters();
@@ -134,6 +135,7 @@ export class Texture implements ITexture {
     public unbind(i:number = 0):void {
         const gl:WebGLRenderingContext = this.gl;
         gl.activeTexture(gl.TEXTURE0+i);
+        // tslint:disable-next-line:no-null-keyword
         gl.bindTexture(gl.TEXTURE_2D, null);
         delete Texture.currInstances[i];
     }
@@ -187,15 +189,16 @@ export class Texture implements ITexture {
         this.afterOperation();
     }
     private beforeOperation() {
-        if (this._currentTextureAt0!==null) return;
+        if (this._currentTextureAt0!==undefined) return;
         this._currentTextureAt0 = Texture.currInstances[0];
         this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
     }
 
     private afterOperation(){
         if (this._currentTextureAt0) this.gl.bindTexture(this.gl.TEXTURE_2D, this._currentTextureAt0.tex);
+        // tslint:disable-next-line:no-null-keyword
         else this.gl.bindTexture(this.gl.TEXTURE_2D, null);
-        this._currentTextureAt0 = null;
+        this._currentTextureAt0 = undefined;
     }
 
 
