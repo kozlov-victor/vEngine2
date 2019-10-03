@@ -133,7 +133,10 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             for (let x:number=0;x<=width;x++) {
                 const tileVal:number =tileMap.data[y][x];
                 spriteSheet.getSrcRect().setXY(tileMap.getFramePosX(tileVal),tileMap.getFramePosY(tileVal));
-                spriteSheet.pos.setXY(x*tileMap.tileWidth, y*tileMap.tileHeight);
+                spriteSheet.pos.setXY(
+                    x*tileMap.tileWidth - tileMap.pos.x,
+                    y*tileMap.tileHeight - tileMap.pos.y
+                );
                 spriteSheet.render();
             }
         }

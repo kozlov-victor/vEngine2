@@ -148,7 +148,7 @@ export class TileMap extends RenderableModel {
         this.drawInfo.tilePosY = tilePosY;
         this.drawInfo.tileWidth = w;
         this.drawInfo.tileHeight = h;
-        this.pos.setXY(tilePosX,tilePosY);
+        this.pos.setXY(tilePosX*this.tileWidth,tilePosY*this.tileHeight);
     }
 
     
