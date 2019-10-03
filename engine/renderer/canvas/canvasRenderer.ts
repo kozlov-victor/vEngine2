@@ -127,12 +127,10 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     public drawTileMap(tileMap: TileMap): void {
         const spriteSheet:Image = tileMap.spriteSheet;
-        const tilePosX:number = tileMap.drawInfo.tilePosX;
-        const tilePosY:number = tileMap.drawInfo.tilePosY;
         const width:number = tileMap.drawInfo.tileWidth;
         const height:number = tileMap.drawInfo.tileHeight;
-        for (let y:number=tilePosY;y<=height;y++) {
-            for (let x:number=tilePosX;x<=width;x++) {
+        for (let y:number=0;y<=height;y++) {
+            for (let x:number=0;x<=width;x++) {
                 const tileVal:number =tileMap.data[y][x];
                 spriteSheet.getSrcRect().setXY(tileMap.getFramePosX(tileVal),tileMap.getFramePosY(tileVal));
                 spriteSheet.pos.setXY(x*tileMap.tileWidth, y*tileMap.tileHeight);
@@ -165,7 +163,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     public resetTransform():void {
-        // @ts-ignore
         this.ctx.resetTransform();
     }
 

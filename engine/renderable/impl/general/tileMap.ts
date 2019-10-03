@@ -134,8 +134,10 @@ export class TileMap extends RenderableModel {
     private prepareDrawableInfo(){
         const camera:Camera = this.game.camera;
         const cameraRect:Rect = camera.getRectScaled();
-        let tilePosX:number = ~~((cameraRect.x) / this.tileWidth);
-        let tilePosY:number = ~~((cameraRect.y) / this.tileHeight);
+        //let tilePosX:number = ~~((cameraRect.x) / this.tileWidth);
+        //let tilePosY:number = ~~((cameraRect.y) / this.tileHeight);
+        let tilePosX:number = ~~((camera.pos.x) / this.tileWidth);
+        let tilePosY:number = ~~((camera.pos.y) / this.tileHeight);
         if (tilePosX<0) tilePosX = 0;
         if (tilePosY<0) tilePosY = 0;
         let w:number = tilePosX + this._tilesInScreenX + 1;
@@ -146,6 +148,7 @@ export class TileMap extends RenderableModel {
         this.drawInfo.tilePosY = tilePosY;
         this.drawInfo.tileWidth = w;
         this.drawInfo.tileHeight = h;
+        this.pos.setXY(tilePosX,tilePosY);
     }
 
     
