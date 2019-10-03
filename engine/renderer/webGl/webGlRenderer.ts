@@ -274,7 +274,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         }
 
         const rect:Rect = Rect.fromPool();
-        rect.setXYWH( 0,0,tileMap.size.width,tileMap.size.height);
+        rect.setXYWH(
+            0,
+            0,
+            tileMap.drawInfo.tileWidth*tileMap.tileWidth,
+            tileMap.drawInfo.tileHeight*tileMap.tileHeight
+        );
         const size:Size = Size.fromPool();
         size.setWH(this.game.width,this.game.height);
         const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
