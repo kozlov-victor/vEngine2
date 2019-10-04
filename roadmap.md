@@ -22,7 +22,7 @@
 - rendering with fog
 - sprite batch
 - ui lib
-
+- Graphics drawing
 **todo**
 
 - https://pixijs.download/dev/docs/PIXI.BitmapText.html

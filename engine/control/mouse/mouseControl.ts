@@ -103,7 +103,7 @@ export class MouseControl implements IControl {
         container.ondblclick = (e:MouseEvent)=>{ // todo now only on pc
             this.resolveDoubleClick(e);
         };
-        (container as any).onmousewheel = (e:MouseEvent)=>{
+        (container as unknown as {onmousewheel:(e:MouseEvent)=>void}).onmousewheel = (e:MouseEvent)=>{
             e.preventDefault();
             e.stopPropagation(); // to prevent page scroll
             this.resolveScroll(e);
@@ -119,7 +119,7 @@ export class MouseControl implements IControl {
             'ontouchend','onmouseup','ontouchmove',
             'onmousemove','ondblclick'].forEach((evtName:string)=>{
                 // tslint:disable-next-line:no-null-keyword
-            (this.container as any)[evtName] = null;
+            (this.container as unknown as Record<string,null>)[evtName] = null;
         });
     }
 

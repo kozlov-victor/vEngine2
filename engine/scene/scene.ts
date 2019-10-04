@@ -171,10 +171,10 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
             }
         }
 
-        //this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM; // todo manage this
+        this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY; // todo manage this
         renderer.restore();
         this.unlockSceneView();
-        renderer.afterFrameDraw(this.filters);
+
 
         if (DEBUG) {
             this.game.getRenderer().restore();
@@ -188,6 +188,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
             }
             this.game.getRenderer().restore();
         }
+        renderer.afterFrameDraw(this.filters);
 
     }
 

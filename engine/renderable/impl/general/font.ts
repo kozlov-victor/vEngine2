@@ -5,7 +5,6 @@ import {IResource, IRevalidatable} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ITexture} from "@engine/renderer/texture";
 
 export interface IRectViewJSON extends IRectJSON {
@@ -23,6 +22,13 @@ export interface IFontContext {
 interface IRange {
     from:number;
     to:number;
+}
+
+interface IPrefixiedContext {
+    mozImageSmoothingEnabled?: boolean;
+    webkitImageSmoothingEnabled?: boolean;
+    msImageSmoothingEnabled?: boolean;
+    oImageSmoothingEnabled?: boolean;
 }
 
 const getCtx = (cnv:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -108,10 +114,10 @@ namespace FontFactory {
         ctx.font = strFont;
         ctx.textBaseline = "top";
         ctx.imageSmoothingEnabled = false;
-        (ctx as any).mozImageSmoothingEnabled = false; // (obsolete)
-        (ctx  as any).webkitImageSmoothingEnabled = false;
-        (ctx as any).msImageSmoothingEnabled = false;
-        (ctx as any).oImageSmoothingEnabled = false;
+        (ctx as IPrefixiedContext).mozImageSmoothingEnabled = false; // (obsolete)
+        (ctx  as IPrefixiedContext).webkitImageSmoothingEnabled = false;
+        (ctx as IPrefixiedContext).msImageSmoothingEnabled = false;
+        (ctx as IPrefixiedContext).oImageSmoothingEnabled = false;
         ctx.fillStyle = '#00000000';
         ctx.fillRect(0,0,cnv.width,cnv.height);
         ctx.fillStyle = '#fff';

@@ -7,9 +7,9 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 export abstract class BaseAbstractBehaviour {
 
     protected game:Game;
-    protected parameters:IKeyVal<any>;
+    protected parameters:IKeyVal<unknown>;
 
-    protected constructor(game:Game,parameters:IKeyVal<any>){
+    protected constructor(game:Game,parameters:IKeyVal<unknown>){
         this.game = game;
         this.parameters = parameters;
     }

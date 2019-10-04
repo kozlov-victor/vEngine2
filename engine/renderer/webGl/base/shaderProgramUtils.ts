@@ -47,7 +47,7 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
         // Something went wrong during compilation; get the error
         const lastError:string|null = gl.getShaderInfoLog(shader);
         gl.deleteShader(shader);
-        if (lastError) {
+        if (lastError!==null) {
             if (DEBUG) {
                 const parsedLogs = parseErrors(lastError);
                 const lines:string[] = shaderSource.split('\n');
