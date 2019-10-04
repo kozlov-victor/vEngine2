@@ -127,15 +127,16 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     public drawTileMap(tileMap: TileMap): void {
         const spriteSheet:Image = tileMap.spriteSheet;
-        const tilePosX:number = tileMap.drawInfo.tilePosX;
-        const tilePosY:number = tileMap.drawInfo.tilePosY;
-        const width:number = tileMap.drawInfo.tileWidth;
-        const height:number = tileMap.drawInfo.tileHeight;
-        for (let y:number=tilePosY;y<=height;y++) {
-            for (let x:number=tilePosX;x<=width;x++) {
+        const width:number = tileMap.drawInfo.numOfTilesInWidth;
+        const height:number = tileMap.drawInfo.numOfTilesInHeight;
+        for (let y:number=0;y<=height;y++) {
+            for (let x:number=0;x<=width;x++) {
                 const tileVal:number =tileMap.data[y][x];
                 spriteSheet.getSrcRect().setXY(tileMap.getFramePosX(tileVal),tileMap.getFramePosY(tileVal));
-                spriteSheet.pos.setXY(x*tileMap.tileWidth, y*tileMap.tileHeight);
+                spriteSheet.pos.setXY(
+                    ~~(x*tileMap.tileWidth - tileMap.pos.x),
+                    ~~(y*tileMap.tileHeight - tileMap.pos.y)
+                );
                 spriteSheet.render();
             }
         }
@@ -165,7 +166,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     public resetTransform():void {
-        // @ts-ignore
         this.ctx.resetTransform();
     }
 
@@ -174,7 +174,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     public rotateY(angleInRadians:number):void {
-        if (DEBUG) throw new DebugError('rotateY not supported by canvasRenderer');
+
     }
 
     public translate(x:number,y:number):void {

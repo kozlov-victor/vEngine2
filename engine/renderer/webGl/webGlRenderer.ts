@@ -31,6 +31,7 @@ import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {noop} from "@engine/misc/object";
+import {TileMapDrawer} from "@engine/renderer/webGl/programs/impl/base/tileMap/tileMapDrawer";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -91,16 +92,20 @@ const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat
 
 
 class InstanceHolder<T extends IDestroyable> {
-    private instance:T;
+    private instance:Optional<T>;
     constructor(private clazz:ClazzEx<T,WebGLRenderingContext>){}
 
     public getInstance(gl:WebGLRenderingContext):T{
-        if (!this.instance) this.instance = new this.clazz(gl);
+        if (this.instance===undefined) this.instance = new this.clazz(gl);
         return this.instance;
     }
 
     public destroy():void{
-        if (this.instance) this.instance.destroy();
+        if (this.instance!==undefined) this.instance.destroy();
+    }
+
+    public isInvoked():boolean{
+        return this.instance!==undefined;
     }
 }
 
@@ -116,6 +121,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private shapeDrawerHolder:InstanceHolder<ShapeDrawer> = new InstanceHolder(ShapeDrawer);
     private simpleRectDrawer:SimpleRectDrawer;
     private meshDrawerHolder:InstanceHolder<MeshDrawer> = new InstanceHolder(MeshDrawer);
+    private tileMapDrawerHolder:InstanceHolder<TileMapDrawer> = new InstanceHolder(TileMapDrawer);
     private preprocessFrameBuffer:FrameBuffer;
     private finalFrameBuffer:FrameBuffer;
     private doubleFrameBuffer:DoubleFrameBuffer;
@@ -257,6 +263,40 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.draw();
 
         this.afterItemDraw(rectangle.filters as AbstractFilter[],rectangle.blendMode);
+    }
+
+    public drawTileMap(tileMap: TileMap): void {
+        const justCreated:boolean = !this.tileMapDrawerHolder.isInvoked();
+        const tileMapDrawer:TileMapDrawer = this.tileMapDrawerHolder.getInstance(this.gl);
+        if (justCreated) {
+            tileMapDrawer.prepareShaderGenerator();
+            tileMapDrawer.initProgram();
+        }
+
+        const rect:Rect = Rect.fromPool();
+        rect.setXYWH(
+            0,
+            0,
+            tileMap.drawInfo.numOfTilesInWidth*tileMap.tileWidth,
+            tileMap.drawInfo.numOfTilesInHeight*tileMap.tileHeight
+        );
+
+        const size:Size = Size.fromPool();
+        size.setWH(this.game.width,this.game.height);
+        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
+        tileMapDrawer.setUniform(tileMapDrawer.u_vertexMatrix,pos16h.mat16);
+        pos16h.release();
+        rect.release();
+        size.release();
+
+        tileMapDrawer.setUniform(tileMapDrawer.u_textureMatrix,IDENTITY);
+        const texture:Texture = tileMap.spriteSheet.getResourceLink().getTarget() as Texture;
+        tileMapDrawer.attachTexture('texture',texture);
+        tileMapDrawer.setTileSize(
+            tileMap.tileWidth / texture.size.width,
+            tileMap.tileHeight / texture.size.height,
+        );
+        tileMapDrawer.draw();
     }
 
 
@@ -422,8 +462,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             onLoad();
         });
 
-
     }
+
 
     public getNativeContext():WebGLRenderingContext {
         return this.gl;
@@ -438,14 +478,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.shapeDrawerHolder.destroy();
         this.meshDrawerHolder.destroy();
         this.simpleRectDrawer.destroy();
+        this.tileMapDrawerHolder.destroy();
         //this.modelDrawer.destroy();
         Object.keys(this.renderableCache).forEach((key:string)=>{
             const t:Texture = this.renderableCache[key] as Texture;
             t.destroy();
         });
     }
-
-    public drawTileMap(tileMap: TileMap): void {}
 
 
     protected onResize(): void {

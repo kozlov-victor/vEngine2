@@ -11,13 +11,11 @@ export class TileMap extends RenderableModel {
 
     public readonly type:string = "TileMap";
     public data:number[][] = [];
-    public spriteSheet:Image;
+    public spriteSheet:Image; // todo replace to resource link
 
     public readonly drawInfo = {
-        tilePosX: 0,
-        tilePosY: 0,
-        tileWidth: 0,
-        tileHeight: 0
+        numOfTilesInWidth: 0,
+        numOfTilesInHeight: 0
     };
     public tileWidth:number = 32;
     public tileHeight:number = 32;
@@ -133,19 +131,20 @@ export class TileMap extends RenderableModel {
 
     private prepareDrawableInfo(){
         const camera:Camera = this.game.camera;
-        const cameraRect:Rect = camera.getRectScaled();
-        let tilePosX:number = ~~((cameraRect.x) / this.tileWidth);
-        let tilePosY:number = ~~((cameraRect.y) / this.tileHeight);
+        //const cameraRect:Rect = camera.getRectScaled(); // todo remove this method
+        //let tilePosX:number = ~~((cameraRect.x) / this.numOfTilesInWidth);
+        //let tilePosY:number = ~~((cameraRect.y) / this.numOfTilesInHeight);
+        let tilePosX:number = ~~((camera.pos.x) / this.tileWidth);
+        let tilePosY:number = ~~((camera.pos.y) / this.tileHeight);
         if (tilePosX<0) tilePosX = 0;
         if (tilePosY<0) tilePosY = 0;
-        let w:number = tilePosX + this._tilesInScreenX + 1;
-        let h:number = tilePosY + this._tilesInScreenY + 1;
+        let w:number =  this._tilesInScreenX + 1;
+        let h:number =  this._tilesInScreenY + 1;
         if (w>this._tilesInScreenX-1) w = this._tilesInScreenX-1;
         if (h>this._tilesInScreenY-1) h = this._tilesInScreenY-1;
-        this.drawInfo.tilePosX = tilePosX;
-        this.drawInfo.tilePosY = tilePosY;
-        this.drawInfo.tileWidth = w;
-        this.drawInfo.tileHeight = h;
+        this.drawInfo.numOfTilesInWidth = w;
+        this.drawInfo.numOfTilesInHeight = h;
+        this.pos.setXY(tilePosX*this.tileWidth,tilePosY*this.tileHeight);
     }
 
     
