@@ -233,9 +233,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const isTextureUsed:boolean = mesh.texture!==undefined;
         md.setTextureUsed(isTextureUsed);
         if (isTextureUsed) md.setTectureMatrix(FLIP_TEXTURE_MATRIX.mat16);
+        md.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this.nullTexture);
+
+        const isNormalsTextureUsed:boolean = mesh.normalsTexture!==undefined;
+        md.setNormalsTextureUsed(isNormalsTextureUsed);
+        md.attachTexture('u_normalsTexture',isNormalsTextureUsed?mesh.normalsTexture as Texture:this.nullTexture);
+
         md.setLightUsed(mesh.isLightAccepted()||false);
         md.setColor(mesh.fillColor);
-        md.attachTexture('u_texture',mesh.texture?mesh.texture as Texture:this.nullTexture);
 
 
         if (mesh.depthTest) this.gl.enable(this.gl.DEPTH_TEST);

@@ -12,11 +12,13 @@ export class MainScene extends Scene {
     private data1Link:ResourceLink<string>;
 
     private dataTextureLink:ResourceLink<ITexture>;
+    private dataTextureNormalLink:ResourceLink<ITexture>;
 
     public onPreloading() {
         // https://free3d.com/ru/3d-models/obj
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj3/earth.obj');
         this.dataTextureLink = this.resourceLoader.loadImage('./model3dFromObj3/earth.jpg');
+        this.dataTextureNormalLink = this.resourceLoader.loadImage('./model3dFromObj3/earth_normal.jpg');
     }
 
 
@@ -29,6 +31,7 @@ export class MainScene extends Scene {
         obj.size.setWH(200,200);
         obj.scale.setXY(1);
         obj.texture = this.dataTextureLink.getTarget();
+        obj.normalsTexture = this.dataTextureLink.getTarget();
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{

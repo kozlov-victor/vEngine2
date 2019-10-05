@@ -24,6 +24,7 @@ export class MeshDrawer extends AbstractDrawer {
     private readonly u_color:string = 'u_color';
     private readonly u_alpha:string = 'u_alpha';
     private readonly u_textureUsed:string = 'u_textureUsed';
+    private readonly u_normalsTextureUsed:string = 'u_normalsTextureUsed';
     private readonly u_lightUsed:string = 'u_lightUsed';
 
 
@@ -63,6 +64,10 @@ export class MeshDrawer extends AbstractDrawer {
 
     public setTextureUsed(used:boolean):void{
         this.setUniform(this.u_textureUsed,used);
+    }
+
+    public setNormalsTextureUsed(used:boolean):void{
+        this.setUniform(this.u_normalsTextureUsed,used);
     }
 
     public setLightUsed(used:boolean):void{

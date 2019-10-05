@@ -12,6 +12,7 @@ export abstract class Mesh extends RenderableModel {
 
     public modelPrimitive:IPrimitive;
     public texture:Optional<ITexture>;
+    public normalsTexture:Optional<ITexture>;
     public fillColor:Color = Color.BLACK.clone();
     public bufferInfo:BufferInfo;
     public vertexItemSize:2|3;
