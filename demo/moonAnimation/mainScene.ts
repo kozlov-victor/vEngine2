@@ -32,7 +32,6 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-
         this.sound.play();
         this.appendChild(this.player);
         this.player.pos.setXY(this.game.width/2,this.game.height/2+40);

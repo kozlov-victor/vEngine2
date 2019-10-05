@@ -4,6 +4,9 @@ import {Color} from "@engine/renderer/color";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MainScene} from "./mainScene";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {LinearGradient} from "@engine/renderer/linearGradient";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 export class SecondScene extends Scene {
 
@@ -31,6 +34,21 @@ export class SecondScene extends Scene {
             this.game.runScene(new MainScene(this.game));
         });
         this.appendChild(tf);
+
+        const rect:Rectangle = new Rectangle(this.game);
+        const gradient:LinearGradient  = new LinearGradient();
+        gradient.angle = 0.2;
+        gradient.colorFrom = Color.RGB(100,0,20);
+        gradient.colorTo = Color.RGB(200,111,1);
+        rect.fillColor = gradient;
+        rect.borderRadius = 5;
+        rect.color = Color.RGB(0,0,40);
+        rect.lineWidth = 4;
+        rect.size.setWH(220,160);
+        rect.pos.setXY(100,100);
+        rect.addBehaviour(new DraggableBehaviour(this.game));
+        this.appendChild(rect);
+        rect.rotationPoint.setXY(60,30);
 
     }
 
