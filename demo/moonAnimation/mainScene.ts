@@ -35,7 +35,6 @@ export class MainScene extends Scene {
 
         this.sound.play();
         this.appendChild(this.player);
-        this.player.scale.setXY(1,-1);
         this.player.pos.setXY(this.game.width/2,this.game.height/2+40);
 
         this.on(MOUSE_EVENTS.click, ()=>{

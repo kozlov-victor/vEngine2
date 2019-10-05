@@ -22,6 +22,7 @@ void main() {
         if (u_normalsTextureUsed) {
             vec3 bumpNormal = texture2D(u_normalsTexture, v_texcoord).rgb * 2. - 1.;
             normal = normalize(normal+bumpNormal);
+            //normal = normalize(bumpNormal + normal * dot(normal, bumpNormal));
         }
         vec3 lightDirectionInv = normalize(vec3(-1,-1,1));
         float light = max(0.5,dot(normal, lightDirectionInv));

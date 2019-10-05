@@ -83,14 +83,16 @@
                     <animationComposition loop="1">
                         <animation
                                 offset="0"
-                                property="pos.y"
+                                target="pos"
+                                property="y"
                                 from="136"
                                 to="200"
                                 time="2000"
                         />
                         <animation
                                 offset="2000"
-                                property="pos.y"
+                                target="pos"
+                                property="y"
                                 from="200"
                                 to="136"
                                 time="2000"
@@ -108,14 +110,16 @@
                     <animationComposition loop="1">
                         <animation
                                 offset="0"
-                                property="pos.y"
+                                target="pos"
+                                property="y"
                                 from="136"
                                 to="200"
                                 time="1000"
                         />
                         <animation
                                 offset="1000"
-                                property="pos.y"
+                                target="pos"
+                                property="y"
                                 from="200"
                                 to="136"
                                 time="1000"
@@ -147,7 +151,8 @@
                         width="60"
                         height="59">
                     <animation
-                            property="angle3d.y"
+                            target="angle3d"
+                            property="y"
                             from="0"
                             to="6.26"
                             time="7100"
@@ -246,14 +251,16 @@
                             <animationComposition loop="1">
                                 <animation
                                         offset="0"
-                                        property="pos.y"
+                                        target="pos"
+                                        property="y"
                                         from="0"
                                         to="5"
                                         time="2000"
                                 />
                                 <animation
                                         offset="2000"
-                                        property="pos.y"
+                                        target="pos"
+                                        property="y"
                                         from="5"
                                         to="0"
                                         time="2000"
@@ -287,14 +294,16 @@
                         <animationComposition loop="1">
                             <animation
                                     offset="0"
-                                    property="pos.y"
+                                    target="pos"
+                                    property="y"
                                     from="300"
                                     to="306"
                                     time="2000"
                             />
                             <animation
                                     offset="2000"
-                                    property="pos.y"
+                                    target="pos"
+                                    property="y"
                                     from="306"
                                     to="300"
                                     time="2000"
@@ -860,7 +869,8 @@
                     top="0"
                     >
                     <animation
-                            property="pos.y"
+                            target="pos"
+                            property="y"
                             from="-600"
                             to="0"
                             time="5000"

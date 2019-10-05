@@ -114,9 +114,19 @@ export abstract class AbstractAppScene extends Scene {
         this.resolveChildren(r,el.children);
     }
 
-    private createTweenDesc(root:Layer|RenderableModel,child:IElementDescription):ITweenDescription<unknown>{
+
+    private getObjectByPath(path:string,obj:Record<string,unknown>):Record<string,unknown> {
+        if (!path) return obj;
+        let result = obj;
+        path.split('.').forEach(pathSegment=>{
+            result = result[pathSegment] as Record<string,unknown>;
+        });
+        return result;
+    }
+
+    private createTweenDesc(target:Layer|RenderableModel,path:string,child:IElementDescription):ITweenDescription<unknown>{
         return {
-            target: root,
+            target: this.getObjectByPath(path,target as unknown as Record<string,unknown>),
             from: {[child.attributes.property]:this.getNumber(child.attributes.from)},
             to: {[child.attributes.property]:this.getNumber(child.attributes.to)},
             time: this.getNumber(child.attributes.time),
@@ -144,14 +154,16 @@ export abstract class AbstractAppScene extends Scene {
                     break;
                 }
                 case 'animation': {
-                    const tween = new Tween(this.createTweenDesc(root,child));
+                    const targetPath:string = child.attributes.target;
+                    const tween = new Tween(this.createTweenDesc(root,targetPath,child));
                     this.game.getCurrScene().addTween(tween);
                     break;
                 }
                 case 'animationComposition': {
                     const tweenMovie:TweenMovie = new TweenMovie(this.game);
                     child.children.forEach((c:IElementDescription)=>{
-                        const tweenDesc = this.createTweenDesc(root,c);
+                        const targetPath:string = c.attributes.target;
+                        const tweenDesc = this.createTweenDesc(root,targetPath,c);
                         const startTime:number = this.getNumber(c.attributes.offset);
                         tweenMovie.addTween(startTime,tweenDesc);
                     });
