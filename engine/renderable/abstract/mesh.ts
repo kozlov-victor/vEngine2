@@ -54,9 +54,8 @@ export abstract class Mesh extends RenderableModel {
         }
     }
 
-    public draw():boolean{
+    public draw():void{
         this.game.getRenderer().drawMesh(this);
-        return true;
     }
 
 }

@@ -34,9 +34,8 @@ export class Line extends Shape implements ICloneable<Line> {
         return l;
     }
 
-    public draw():boolean{
+    public draw():void{
         this.game.getRenderer().drawLine(this);
-        return true;
     }
 
     public beforeRender(){

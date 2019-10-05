@@ -3,15 +3,16 @@ import {Image} from "@engine/renderable/impl/geometry/image";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {Camera} from "@engine/renderer/camera";
-import {Rect} from "@engine/geometry/rect";
 import {Size} from "@engine/geometry/size";
+import {IResource} from "@engine/core/declarations";
+import {ITexture} from "@engine/renderer/texture";
+import {ResourceLink} from "@engine/resources/resourceLink";
 
 
-export class TileMap extends RenderableModel {
+export class TileMap extends RenderableModel implements IResource<ITexture> {
 
     public readonly type:string = "TileMap";
     public data:number[][] = [];
-    public spriteSheet:Image; // todo replace to resource link
 
     public readonly drawInfo = {
         numOfTilesInWidth: 0,
@@ -26,6 +27,11 @@ export class TileMap extends RenderableModel {
 
     private _sprTilesInX:number = 0;
     private _sprTilesInY:number = 0;
+
+    private _cellImage:Image;
+
+    // resource
+    private _resourceLink:ResourceLink<ITexture>;
 
     constructor(protected game:Game){
         super(game);
@@ -52,19 +58,29 @@ export class TileMap extends RenderableModel {
         }
     }
 
+    public setResourceLink(link:ResourceLink<ITexture>):void{
+        if (DEBUG && !link) {
+            throw new DebugError(`can not set resource link: link is not passed`);
+        }
+        this._resourceLink = link;
+    }
+
+    public getResourceLink():ResourceLink<ITexture>{
+        return this._resourceLink;
+    }
 
     public revalidate(){
-        if (DEBUG && !this.spriteSheet) throw new DebugError('no spriteSheet is provided for TileMap');
-        this.spriteSheet.revalidate();
 
         this.game.getCurrScene().width = this._tilesInScreenX * this.tileWidth;
         this.game.getCurrScene().height = this._tilesInScreenY * this.tileHeight;
-        this.spriteSheet.getSrcRect().setWH(this.tileWidth,this.tileHeight);
-        this.spriteSheet.size.setWH(this.spriteSheet.getSrcRect().x,this.spriteSheet.getSrcRect().y);
-        //this.spriteSheet.size.addWH(2); // to correct possible artifacts
-        const texSize:Size = this.spriteSheet.getResourceLink().getTarget().size;
+
+        const texSize:Size = this.getResourceLink().getTarget().size;
         this._sprTilesInX = ~~(texSize.width / this.tileWidth);
         this._sprTilesInY = ~~(texSize.height / this.tileHeight);
+
+        this._cellImage = new Image(this.game);
+        this._cellImage.setResourceLink(this.getResourceLink());
+        this._cellImage.revalidate();
     }
 
 
@@ -74,7 +90,21 @@ export class TileMap extends RenderableModel {
     }
 
     public draw(): boolean {
-        this.game.getRenderer().drawTileMap(this);
+
+        const width:number = this.drawInfo.numOfTilesInWidth;
+        const height:number = this.drawInfo.numOfTilesInHeight;
+        for (let y:number=0;y<=height;y++) {
+            for (let x:number=0;x<=width;x++) {
+                const tileVal:number =this.data[y][x];
+                this._cellImage.getSrcRect().setXY(this.getFramePosX(tileVal),this.getFramePosY(tileVal));
+                this._cellImage.pos.setXY(
+                    ~~(x * this.tileWidth  - this.pos.x),
+                    ~~(y * this.tileHeight - this.pos.y)
+                );
+                this._cellImage.render();
+            }
+        }
+
         return false;
     }
 

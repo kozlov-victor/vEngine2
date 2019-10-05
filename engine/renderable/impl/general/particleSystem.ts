@@ -102,8 +102,6 @@ export class ParticleSystem extends RenderableModel {
         this._onEmitParticle = onEmitParticle;
     }
 
-    public draw():boolean{
-        return true; // do nothing
-    }
+    public draw():void{}
 
 }

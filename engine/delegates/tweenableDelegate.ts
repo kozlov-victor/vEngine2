@@ -26,7 +26,7 @@ export class TweenableDelegate {
 
 
     public update():void {
-        for (let i:number = 0,l=this._tweens.length;i<this._tweens.length;i++) {
+        for (let i:number = 0,l=this._tweens.length;i<l;i++) {
             const t = this._tweens[i];
             t.update();
             if (t.isCompleted()) {
@@ -34,8 +34,9 @@ export class TweenableDelegate {
                 l--;
             }
         }
-        for (let i:number = 0,l=this._tweenMovies.length;i<this._tweenMovies.length;i++) {
+        for (let i:number = 0,l=this._tweenMovies.length;i<l;i++) {
             const t = this._tweenMovies[i];
+            t.update();
             if (t.isCompleted()) {
                 this._tweenMovies.splice(i,1);
                 l--;

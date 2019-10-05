@@ -81,9 +81,7 @@ export class NinePatchImage extends RenderableModel {
         return this._resourceLink;
     }
 
-    public draw():boolean{
-        return true;
-    }
+    public draw():void{}
 
     private _revalidatePatches():void{
         const t:Texture = this.getResourceLink().getTarget() as Texture;

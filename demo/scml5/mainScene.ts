@@ -45,19 +45,19 @@ export class MainScene extends Scene {
 
 
         this.appendChild(this.player);
-        this.player.scale.setXY(0.6,-0.6);
+        this.player.scale.setXY(0.6);
         this.player.pos.setXY(200,200);
 
         this.appendChild(this.mage);
-        this.mage.scale.setXY(0.6,-0.6);
+        this.mage.scale.setXY(0.6);
         this.mage.pos.setXY(100,100);
 
         this.appendChild(this.imp);
-        this.imp.scale.setXY(0.6,-0.6);
+        this.imp.scale.setXY(0.6);
         this.imp.pos.setXY(500,100);
 
         this.appendChild(this.brawler);
-        this.brawler.scale.setXY(0.6,-0.6);
+        this.brawler.scale.setXY(0.6);
         this.brawler.pos.setXY(500,300);
 
         this.on(MOUSE_EVENTS.click, ()=>{

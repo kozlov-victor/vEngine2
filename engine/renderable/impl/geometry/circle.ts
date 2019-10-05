@@ -21,9 +21,8 @@ export class Circle extends Ellipse implements ICloneable<Circle>{
         super(game);
     }
 
-    public draw():boolean{
+    public draw():void{
         this.game.getRenderer().drawEllipse(this);
-        return true;
     }
 
     public clone():Circle {

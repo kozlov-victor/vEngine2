@@ -46,9 +46,8 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>{
         });
     }
 
-    public draw():boolean{
+    public draw():void{
         this.game.getRenderer().drawEllipse(this);
-        return true;
     }
 
     public update():void {

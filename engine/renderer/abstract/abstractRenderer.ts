@@ -98,8 +98,6 @@ export abstract class AbstractRenderer implements IDestroyable {
 
     public abstract drawEllipse(ellispe:Ellipse):void;
 
-    public abstract drawTileMap(tileMap:TileMap):void;
-
     public abstract resetTransform():void;
 
     public abstract save():void;

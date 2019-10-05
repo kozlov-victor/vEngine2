@@ -73,9 +73,8 @@ export class DeprectatedGameObject extends RenderableModel implements ICloneable
         if (this._currFrameAnimation) this._currFrameAnimation.update();
     }
 
-    public draw():boolean{
+    public draw():void{
         this.sprite.draw();
-        return true;
     }
 
     public kill():void {

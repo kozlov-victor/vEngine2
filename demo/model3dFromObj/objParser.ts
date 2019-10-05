@@ -1,4 +1,5 @@
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
+import {DebugError} from "@engine/debug/debugError";
 type Point3 = Record<'x'|'y'|'z',number>;
 type Point2 = Record<'x'|'y',number>;
 type FacePoint = Record<'v'|'uv'|'n',number>;
@@ -101,22 +102,46 @@ export class ObjParser {
         return point2;
     }
 
-    private readFace(s:string):Face{
+
+    private readFaceTriplet(triplet:string):[number,number,number]{
+        const tripletArr:string[] = triplet.trim().split('/');
+        const n1 = parseInt(tripletArr[0]);
+        const n2 = parseInt(tripletArr[1]);
+        const n3 = parseInt(tripletArr[2]);
+        return [n1,n2,n3];
+    }
+
+    private getFace(triplets:string[]):Face{
         const face:Face = [
             {v:NaN,uv:NaN,n:NaN},
             {v:NaN,uv:NaN,n:NaN},
             {v:NaN,uv:NaN,n:NaN},
         ] as Face;
-
-        s.split(' ').filter((it:string)=>it.trim().length).forEach((triplet:string,i:number)=>{
-            triplet.trim().split('/').forEach((item:string,j:number)=>{
-                if (j===0) face[i].v = parseInt(item);
-                else if (j===1) face[i].uv = parseInt(item);
-                else if (j===2) face[i].n = parseInt(item);
-            });
-            if (isNaN(face[i].v)) throw new Error(`bad face value ${s}`);
+        triplets.forEach((triplet:string,i:number)=>{
+            const tripletNum:[number,number,number] = this.readFaceTriplet(triplet);
+            face[i].v = tripletNum[0];
+            face[i].uv = tripletNum[1];
+            face[i].n = tripletNum[2];
+            if (isNaN(face[i].v)) throw new Error(`bad face value ${triplets.join(' ')}`);
         });
         return face;
+    }
+
+    private readFace(s:string):Face[]{
+
+        const result:Face[] = [];
+        const triplets:string[] = s.split(' ').filter((it:string)=>it.trim().length);
+
+
+        if (triplets.length===3) {
+            result.push(this.getFace(triplets));
+        } else if (triplets.length===4) {
+            result.push(this.getFace([triplets[0],triplets[1],triplets[2]]));
+            result.push(this.getFace([triplets[0],triplets[2],triplets[3]]));
+        } else throw new DebugError(`unsupported face format ${s}`);
+
+
+        return result;
     }
 
     private readObj(source:string):obj{
@@ -143,11 +168,10 @@ export class ObjParser {
                     objInstalce.v_arr.push(this.readPoint3(restSymbols));
                     break;
                 case 'f':
-                    objInstalce.f_arr.push(this.readFace(restSymbols));
+                    objInstalce.f_arr.push(...this.readFace(restSymbols));
                     break;
             }
         });
-        console.log(objInstalce);
         return objInstalce;
     }
 

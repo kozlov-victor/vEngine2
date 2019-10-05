@@ -20,7 +20,7 @@ const parseErrors = (log:string):IShaderErrorInfo[]=> {
         const line:string = result[1].trim();
         const seps:string[] = line.split(':');
         const message:string = seps.slice(2).join(':').trim();
-        const lineNum:number = parseInt(seps[1], 10);
+        const lineNum:number = +seps[1];
         logs.push({message, lineNum});
     }
 

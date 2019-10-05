@@ -23,6 +23,7 @@
 - sprite batch
 - ui lib
 - Graphics drawing
+- global alpha composition
 **todo**
 
 - https://pixijs.download/dev/docs/PIXI.BitmapText.html

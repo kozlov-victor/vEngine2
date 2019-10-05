@@ -30,7 +30,6 @@ export class MainScene extends Scene {
         document.body.style.cssText = 'background-color:grey;';
 
         this.appendChild(this.lobster);
-        this.lobster.scale.setXY(1,-1);
         this.lobster.pos.setXY(120,120);
 
         this.on(MOUSE_EVENTS.click, ()=>{

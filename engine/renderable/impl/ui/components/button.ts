@@ -52,9 +52,8 @@ export class Button extends Container {
         return this._textField.getText();
     }
 
-    public draw():boolean{
+    public draw():void{
         if (this.background) this.background.draw();
-        return true;
     }
 
 }

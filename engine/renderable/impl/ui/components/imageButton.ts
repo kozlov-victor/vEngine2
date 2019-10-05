@@ -22,9 +22,7 @@ export class ImageButton extends RenderableModel {
         this.imgOff.visible = true;
     }
 
-    public draw(): boolean {
-        return true;
-    }
+    public draw(): void {}
 
     public revalidate(): void {
         if (!this.children.length) {

@@ -3,6 +3,7 @@ import {Game} from "@engine/core/game";
 import {Optional} from "@engine/core/declarations";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
+import {DebugError} from "@engine/debug/debugError";
 
 // https://medium.com/dailyjs/typescript-create-a-condition-based-subset-types-9d902cea5b8c
 type FilterFlags<Base, Condition> = {
@@ -118,7 +119,6 @@ export class Tween<T> {
         let curTweenTime:number = currTime - this._startedTime;
         if (curTweenTime<0) curTweenTime = currTime; // after long delay of looped addTween
 
-
         if (curTweenTime<this._delayBeforeStart) return;
 
         if (curTweenTime>this._tweenTime) {
@@ -130,7 +130,7 @@ export class Tween<T> {
             }
         }
         let l:number = this._propsToChange.length;
-        while(l--){
+        while(l--) {
             const prp:keyof T = this._propsToChange[l];
             const valFrom:number = this._desc.from[prp] as number;
             const valTo:number = this._desc.to[prp] as number;
@@ -186,6 +186,16 @@ export class Tween<T> {
             allPropsMap[keyTo] = true;
         });
         this._propsToChange = Object.keys(allPropsMap) as (keyof T)[];
+
+        if (DEBUG) {
+            this._propsToChange.forEach(key => {
+                if (!(key in this._target)) {
+                    console.error('target',this._target);
+                    throw new DebugError(`Can not create tween animation: property "${key}" does not belong to target object`);
+                }
+            });
+        }
+
         this._propsToChange.forEach((prp:keyof T)=>{
             if (normalized.from![prp]===undefined) normalized.from![prp] = this._target[prp] as unknown as number;
             if (normalized.to![prp]===undefined) normalized.to![prp] = this._target[prp] as unknown as number;

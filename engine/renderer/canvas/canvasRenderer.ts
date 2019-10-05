@@ -124,24 +124,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-
-    public drawTileMap(tileMap: TileMap): void {
-        const spriteSheet:Image = tileMap.spriteSheet;
-        const width:number = tileMap.drawInfo.numOfTilesInWidth;
-        const height:number = tileMap.drawInfo.numOfTilesInHeight;
-        for (let y:number=0;y<=height;y++) {
-            for (let x:number=0;x<=width;x++) {
-                const tileVal:number =tileMap.data[y][x];
-                spriteSheet.getSrcRect().setXY(tileMap.getFramePosX(tileVal),tileMap.getFramePosY(tileVal));
-                spriteSheet.pos.setXY(
-                    ~~(x*tileMap.tileWidth - tileMap.pos.x),
-                    ~~(y*tileMap.tileHeight - tileMap.pos.y)
-                );
-                spriteSheet.render();
-            }
-        }
-    }
-
     public setAlpha(a:number):void{
         this.ctx.globalAlpha = a;
     }

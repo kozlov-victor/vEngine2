@@ -49,9 +49,8 @@ export class Image extends Shape implements ICloneable<Image>,IResource<ITexture
         }
     }
 
-    public draw():boolean{
+    public draw():void{
         this.game.getRenderer().drawImage(this);
-        return true;
     }
 
     public clone():Image {

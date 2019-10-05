@@ -231,9 +231,7 @@ export class PolyLine extends Shape {
         return l;
     }
 
-    public draw():boolean{
-        return true;
-    }
+    public draw():void{}
 
     protected setClonedProperties(cloned:PolyLine):void{
         cloned.vectorScaleFactor = this.vectorScaleFactor;

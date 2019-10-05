@@ -11,6 +11,9 @@ import {DebugError} from "@engine/debug/debugError";
 import {Optional} from "@engine/core/declarations";
 import {EasingQuart} from "@engine/misc/easing/functions/quart";
 import {EasingQuint} from "@engine/misc/easing/functions/quint";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Color} from "@engine/renderer/color";
+import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 
 const POOL_SIZE:number = 128;
 
@@ -362,6 +365,10 @@ class Animation {
     public timelines:Timeline[]; // <timeline> tags
 
 
+    private transformBoneKeys:BoneTimelineKey[] = [];
+    private objectKeys:SpriteTimelineKey[] = [];
+
+
     constructor(private scmlObject: ScmlObject) {
         this.scmlObject = scmlObject;
     }
@@ -405,9 +412,9 @@ class Animation {
         return keyA.interpolate(keyB,keyBTime,newTime);
     }
 
-
     private updateCharacter(mainKey:MainlineKey,newTime:number) {
-        const transformBoneKeys:BoneTimelineKey[] = [];
+        const transformBoneKeys = this.transformBoneKeys;
+        transformBoneKeys.length = 0;
         for(const b of mainKey.boneRefs) {
             let parentInfo:SpatialInfo;
             const currentRef:Ref=b;
@@ -423,7 +430,8 @@ class Animation {
             transformBoneKeys.push(currentKey);
         }
 
-        const objectKeys:SpriteTimelineKey[] = []; // todo
+        const objectKeys = this.objectKeys;
+        objectKeys.length = 0;
         for(const o of mainKey.objectRefs) {
             const timeLine:Timeline = this.timelines[o.timeline];
             if (timeLine.objectType!=="SPRITE") continue; // only sprite object are supported
@@ -444,20 +452,14 @@ class Animation {
 
         this.scmlObject.root.clear();
 
-        let i = 0;
-        for(const k of transformBoneKeys) {
-            k.index = i++;
-            k.paint();
-        }
-
-        // <expose objectKeys to api users to retrieve AND replace objectKeys>
-        //debugReset();
-
-        i = 0;
         for(const k of objectKeys) {
-            k.index = i++;
             k.paint();
         }
+
+        for(const k of transformBoneKeys) {
+            k.paint();
+        }
+
 
     }
 
@@ -733,9 +735,7 @@ class BoneTimelineKey extends SpatialTimelineKey {
     // unimplemented in Spriter
     public length:number=200;
     public height:number=10;
-    public paintDebugBones:boolean = true;
-
-    public index:number;
+    public paintDebugBones:boolean = false;
 
     public scmlObject:ScmlObject;
 
@@ -748,6 +748,7 @@ class BoneTimelineKey extends SpatialTimelineKey {
     public clone():BoneTimelineKey{
         const b:BoneTimelineKey = BoneTimelineKey.objectPool.getFreeObject()!;
         b.scmlObject = this.scmlObject;
+        b.timeLine = this.timeLine;
         b.time = this.time;
         b.curveType = this.curveType;
         b.c1 = this.c1;
@@ -762,11 +763,8 @@ class BoneTimelineKey extends SpatialTimelineKey {
         if(this.paintDebugBones) {
             const drawLength:number=this.length*this.info.scaleX;
             const drawHeight:number =this.height*this.info.scaleY;
-            // paintSprite debug bone representation
-            // e.g. line starting at x,y,at angle,
-            // of length drawLength, and height drawHeight
-            //debugBone(this.info,drawLength,drawHeight,this.index);
-            this.scmlObject.root.paintBone(this.info,drawLength,drawHeight,this.index);
+            const paintId:string = this.timeLine.id + '_' + this.id;
+            this.scmlObject.root.paintBone(this.info,drawLength,drawHeight,paintId);
         }
     }
 
@@ -823,7 +821,6 @@ class SpriteTimelineKey extends SpatialTimelineKey {
 
     public scmlObject:ScmlObject;
 
-    public index:number = 0;
     private useDefaultPivot:boolean = true; // true if missing pivot_x and pivot_y in object tag
 
 
@@ -927,68 +924,18 @@ const cubic = (a:number,b:number,c:number,d:number,t:number):number=>{
     return linear(quadratic(a,b,c,t),quadratic(b,c,d,t),t);
 };
 
-// const container:HTMLDivElement = document.createElement('div');
-// container.style.cssText = 'position:absolute;width:300px;height:300px;display:block;left:100px;top:100px;overflow:visible;transform:scale(1,-1);';
-// document.body.appendChild(container);
-
-
-// const debugReset = ()=>{
-//     container.querySelectorAll('*').forEach((el:Element)=>{
-//         (el as HTMLElement).style.display = 'none';
-//     });
-// };
-
-
-// const debugPaint = (url:string,file:File,info:SpatialInfo,pivotX:number,pivotY:number,index:number)=>{
-//     let elSprite:HTMLDivElement = document.getElementById(url)! as HTMLDivElement;
-//     if (elSprite===null) {
-//         elSprite = document.createElement('div');
-//         elSprite.id = url;
-//         container.appendChild(elSprite);
-//     }
-//     elSprite.style.cssText = `
-//         position:absolute;
-//         width: ${file.width}px;
-//         height: ${file.height}px;
-//         border: 1px solid red;
-//         display: block;
-//         z-index: ${index};
-//         opacity: ${info.a};
-//         transform-origin: ${(pivotX)*file.width}px ${(1-pivotY)*file.height}px;
-//         transform: translate(${info.x-pivotX*file.width}px,${info.y-(1-pivotY)*file.height}px) rotate(${info.angle}deg) scale(${info.scaleX},${-info.scaleY}) ;
-//         background-image: url(scml/${url});
-//     `;
-//
-// };
-
-
-// const debugBone = (info:SpatialInfo,drawLength:number,drawHeight:number,i:number)=>{
-//     const id:string = 'bone'+i;
-//     let el:HTMLDivElement = document.getElementById(id)! as HTMLDivElement;
-//     if (el===null) {
-//         el = document.createElement('div');
-//         el.id = id;
-//         container.appendChild(el);
-//     }
-//     el.style.cssText = `
-//         position:absolute;
-//         width: ${drawLength}px;
-//         height: ${drawHeight}px;
-//         border: 1px solid black;
-//         display: block;
-//         transform-origin: ${0}px ${drawHeight/2}px;
-//         transform: translate(${info.x}px,${info.y}px) rotate(${info.angle}deg) scale(${info.scaleX},${info.scaleY});
-//     `;
-// };
 
 export class SpriterObject extends RenderableModel {
 
 
     private scmlObject:ScmlObject;
     private resourceLinks:Record<string,ResourceLink<ITexture>> = {};
+    private readonly rootNode:RenderableModel = new NullGameObject(this.game);
 
     constructor(protected game:Game) {
         super(game);
+        this.rootNode.scale.setXY(1,-1);
+        this.appendChild(this.rootNode);
     }
 
     public preload(sconUrl:string|IURLRequest){
@@ -1027,62 +974,51 @@ export class SpriterObject extends RenderableModel {
     }
 
     public clear():void {
-        for (const child of this.children) {
-            child.alpha = 0;
+        for (const child of this.rootNode.children) {
+            child.visible = false;
         }
     }
 
     public paintSprite(url:string, file:File, info:SpatialInfo, pivotX:number, pivotY:number, id:string):void {
         const link:ResourceLink<ITexture> = this.resourceLinks[file.name];
-        let child:Image = this.findChildById(id)! as Image;
-        if (!child) { // todo ===undefined
+        let child:Image = this.rootNode.findChildById(id)! as Image;
+        if (child===undefined) {
             child = new Image(this.game);
             child.setResourceLink(link);
             child.id = id;
-            this.appendChild(child);
+            this.rootNode.appendChild(child);
         }
         child.pos.setXY(info.x-pivotX*file.width,info.y-(1-pivotY)*file.height);
         child.scale.setXY(info.scaleX,-info.scaleY);
         child.angle = MathEx.degToRad(360-info.angle);
         child.alpha = info.a;
+        child.visible = true;
         child.rotationPoint.setXY(pivotX*file.width,(1-pivotY)*file.height);
         child.moveToFront();
     }
 
-    public paintBone(info:SpatialInfo,drawLength:number,drawHeight:number,i:number):void {
-        // const id:string = 'bone'+i;
-        // let child:Rectangle = this.findChildById(id)! as Rectangle;
-        // if (!child) { // todo ===undefined
-        //     child = new Rectangle(this.game);
-        //     child.id = id;
-        //     child.color = Color.WHITE;
-        //     child.fillColor =  Color.BLACK;
-        //     this.appendChild(child);
-        // }
-        // child.size.setWH(drawLength,drawHeight);
-        // child.rotationPoint.setXY(0,drawHeight/2);
-        // child.pos.setXY(info.x,info.y);
-        // child.angle = MathEx.degToRad(360-info.angle);
-        // child.scale.setXY(info.scaleX,-info.scaleY);
-        // child.alpha = 1;
-
-        // position:absolute;
-        // width: ${drawLength}px;
-        // height: ${drawHeight}px;
-        // border: 1px solid black;
-        // display: block;
-        // transform-origin: ${0}px ${drawHeight/2}px;
-        // transform: translate(${info.x}px,${info.y}px) rotate(${info.angle}deg) scale(${info.scaleX},${info.scaleY});
-
+    public paintBone(info:SpatialInfo,drawLength:number,drawHeight:number,id:string):void {
+        let child:Rectangle = this.rootNode.findChildById(id)! as Rectangle;
+        if (child===undefined) {
+            child = new Rectangle(this.game);
+            child.id = id;
+            child.color = Color.WHITE;
+            child.fillColor =  Color.BLACK;
+            this.rootNode.appendChild(child);
+        }
+        child.size.setWH(drawLength,drawHeight);
+        child.rotationPoint.setXY(0,drawHeight/2);
+        child.pos.setXY(info.x,info.y);
+        child.angle = MathEx.degToRad(360-info.angle);
+        child.scale.setXY(info.scaleX,-info.scaleY);
+        child.alpha = 1;
     }
 
     public nextAnimation(){
         this.scmlObject.nextAnimation();
     }
 
-    public draw(): boolean {
-        return true;
-    }
+    public draw(): void {}
 
 
 

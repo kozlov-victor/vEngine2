@@ -58,9 +58,7 @@ export class CheckBox extends Container {
         this.background.size.set(this.size);
     }
 
-    public draw():boolean{
-        return true;
-    }
+    public draw(){}
 
     private updateChildrenByChecked(){
         this.rNormal.visible = !this.checked;

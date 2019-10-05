@@ -37,7 +37,7 @@ export class AbsoluteLayout extends Container implements ICloneable<AbsoluteLayo
         this.calcDrawableRect(this.size.width,this.size.height);
     }
 
-    public draw():boolean{
+    public draw():void{
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (this.overflow===OVERFLOW.HIDDEN) {
             const r:Rect = Rect.fromPool().setPointAndSize(this.getWorldPosition(),this.size);
@@ -52,7 +52,6 @@ export class AbsoluteLayout extends Container implements ICloneable<AbsoluteLayo
             this.paddingTop
         );
         if (this.overflow===OVERFLOW.HIDDEN) this.game.getRenderer().unlockRect();
-        return true;
     }
 
     public clone():AbsoluteLayout {

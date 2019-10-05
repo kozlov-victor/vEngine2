@@ -181,9 +181,9 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     }
 
 
-    public abstract draw():boolean; // todo to void
+    public abstract draw():void;
 
-    public kill():void { // todo is this method need
+    public kill():void {
 
         for (const c of this.children) c.kill();
 
@@ -221,9 +221,9 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
         renderer.rotateY(this.angle3d.y);
         renderer.translate(-this.rotationPoint.x,-this.rotationPoint.y);
 
-        const drawResult:boolean = this.draw();
+        this.draw();
 
-        if (drawResult && this.children.length>0) {
+        if (this.children.length>0) {
             renderer.save();
             renderer.translate(this.anchor.x,this.anchor.y);
             for(let i=0,max=this.children.length;i<max;i++) {

@@ -13,8 +13,7 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         const tileMap:TileMap = new TileMap(this.game);
-        const img:Image = new Image(this.game);
-        img.setResourceLink(this.resourceLoader.loadImage('./tileMap/tiles.png'));
+        tileMap.setResourceLink(this.resourceLoader.loadImage('./tileMap/tiles.png'));
 
         const data:number[] = [
             1,1,1,1,1,1,1,1,1,1,1,1,
@@ -34,7 +33,6 @@ export class MainScene extends Scene {
         ];
 
         tileMap.fromTiledJSON(data,12);
-        tileMap.spriteSheet = img;
         this.tileMap = tileMap;
 
         const rect = new Rectangle(this.game);

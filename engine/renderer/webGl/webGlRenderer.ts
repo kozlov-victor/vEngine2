@@ -168,6 +168,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             }
         }
 
+        if (img.alpha===0) return; // todo global alpha composition
+
         this.beforeItemDraw(img.filters.length,img.blendMode);
 
         const texture:Texture = (img.getResourceLink() as ResourceLink<Texture>).getTarget();
@@ -290,7 +292,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         size.release();
 
         tileMapDrawer.setUniform(tileMapDrawer.u_textureMatrix,IDENTITY);
-        const texture:Texture = tileMap.spriteSheet.getResourceLink().getTarget() as Texture;
+        const texture:Texture = tileMap.getResourceLink().getTarget() as Texture;
         tileMapDrawer.attachTexture('texture',texture);
         tileMapDrawer.setTileSize(
             tileMap.tileWidth / texture.size.width,

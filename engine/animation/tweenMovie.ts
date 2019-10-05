@@ -46,7 +46,8 @@ export class TweenMovie {
         if (this._startedTime===0) this._startedTime = currTime;
         const deltaTime:number = currTime - this._startedTime;
         let allCompleted:boolean = true;
-        this._tweensInMovie.forEach((item)=>{
+
+        for (const item of this._tweensInMovie) {
             if (deltaTime>item.startTime) {
                 if (deltaTime<item.startTime+item.tween.getTweenTime()) {
                     item.tween.update();
@@ -55,7 +56,7 @@ export class TweenMovie {
                 }
             }
             if (!item.tween.isCompleted()) allCompleted = false;
-        });
+        }
 
         if (allCompleted) {
             if (this._loop) {

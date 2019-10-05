@@ -29,6 +29,11 @@ const template = `
             box-shadow: 0 0 2px black;
             margin: 5px;
         }
+        #frameLoadingInfo {
+            position: absolute;
+            top: 20px;
+            left: 20px
+        }
         .layout {
             display: flex;
             flex-direction: column;
@@ -45,6 +50,7 @@ const template = `
         .up,.down {
             display: flex;
             margin: 0 auto;
+            position: relative;
         }
         .down {
             flex: 1;
@@ -72,6 +78,7 @@ const template = `
 <body>
     <div class="layout">
         <div class="up">
+            <div id="frameLoadingInfo"></div>
             <iframe frameborder="0" id="frame"></iframe>
         </div>
         <div class="down">
@@ -104,6 +111,10 @@ const template = `
                 if (lastActive) lastActive.classList.remove('active');
                 lastActive = e.target.parentNode;
                 lastActive.classList.add('active');
+                document.getElementById('frameLoadingInfo').textContent = 'loading...';
+                frame.onload = frame.onerror = function(){
+                    document.getElementById('frameLoadingInfo').textContent = '';
+                };
                 
             }
         })();

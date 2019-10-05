@@ -11,7 +11,17 @@ export class VScroll extends Container {
 
     public maxValue:number = 0;
     public value: number = 0;
-    public enabled: boolean = false;
+    private _enabled: boolean = false;
+
+
+    get enabled(): boolean {
+        return this._enabled;
+    }
+
+    set enabled(value: boolean) {
+        this._enabled = value;
+        this.visible = value;
+    }
 
     constructor(game:Game) {
         super(game);
@@ -40,8 +50,6 @@ export class VScroll extends Container {
         this.calcDrawableRect(this.size.width,this.size.height);
     }
 
-    public draw():boolean{
-        return this.enabled;
-    }
+    public draw():void{}
 
 }

@@ -300,7 +300,7 @@ export class TextField extends ScrollableContainer {
     }
 
 
-    public draw():boolean {
+    public draw():void {
 
         if (this.background) this.background.render();
 
@@ -333,7 +333,6 @@ export class TextField extends ScrollableContainer {
         }
         renderer.restore();
         renderer.unlockRect();
-        return true;
     }
 
     private _getDefaultSymbolRect():IRectViewJSON {

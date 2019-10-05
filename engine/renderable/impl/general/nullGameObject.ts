@@ -8,8 +8,6 @@ export class NullGameObject extends RenderableModel { // todo rename to nullCont
         super(game);
     }
 
-    public draw():boolean{
-        return true;
-    }
+    public draw():void{}
 
 }

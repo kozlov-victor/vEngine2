@@ -29,7 +29,7 @@ export class MainScene extends Scene {
     public onReady() {
 
         this.appendChild(this.monster);
-        this.monster.scale.setXY(0.7,-0.7);
+        this.monster.scale.setXY(0.7);
         this.monster.pos.setXY(120,600);
 
         this.on(MOUSE_EVENTS.click, ()=>this.monster.nextAnimation());

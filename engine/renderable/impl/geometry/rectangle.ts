@@ -14,9 +14,8 @@ export class Rectangle extends Shape implements ICloneable<Rectangle>{
         this.lineWidth = 1;
     }
 
-    public draw():boolean{
+    public draw():void{
         this.game.getRenderer().drawRectangle(this);
-        return true;
     }
 
     public clone():Rectangle{
