@@ -6,6 +6,7 @@ import {mat4} from "@engine/geometry/mat4";
 export namespace MathEx {
 
     import Mat16Holder = mat4.Mat16Holder;
+
     export const isPointInRect = (point: Point2d, rect: Rect, angle?: number): boolean => {
         // if  = (angle) {
         //     const vec2 = new Vec2 = (point.x - rect.x - rect.width/2,point.y - rect.y - rect.height/2);
@@ -17,6 +18,12 @@ export namespace MathEx {
         point.x < (rect.x + rect.width) &&
         point.y > rect.y &&
         point.y < (rect.y + rect.height);
+    };
+
+    export const clamp = (val:number,min:number,max:number):number=> {
+        if (val<min) val = min;
+        if (val>max) val = max;
+        return val;
     };
 
     export const overlapTest = (a: IRect, b: IRect): boolean => {

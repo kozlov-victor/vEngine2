@@ -223,6 +223,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
             Math.min(this.game.width,this.game.width+this.pos.x),
             Math.min(this.game.height,this.game.height+this.pos.y)
         );
+        r.clamp(0,0,this.game.width,this.game.height);
         renderer.lockRect(r);
         r.release();
     }

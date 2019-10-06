@@ -3,6 +3,7 @@ import {IPoint2d, Point2d} from "./point2d";
 import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
 import {ICloneable} from "@engine/core/declarations";
+import {MathEx} from "@engine/misc/mathEx";
 
 export interface IRectJSON {
     x:number;
@@ -74,13 +75,21 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         return this;
     }
 
-    // public clamp(x:number,y:number,width:number,height:number) { // todo
-    //     if (this._x<x) this._x = x;
-    //     if (this._y<y) this._y = y;
-    //     if (this._width>width) this._width = width;
-    //     if (this._height>height) this._height = width;
-    //     this.setXYWH(this._x,this._y,this.width,this._height);
-    // }
+    public clamp(x:number,y:number,width:number,height:number) {
+
+        const clampX1 = x,clampY1 = y;
+        const clampX2 = x+width, clampY2 = y+height;
+
+        const realX1 = MathEx.clamp(this._x,clampX1,clampX2);
+        const realY1 = MathEx.clamp(this._y,clampY1,clampY2);
+        const realX2 = MathEx.clamp(realX1 + this._width,clampX1,clampX2);
+        const realY2 = MathEx.clamp(realY1 + this._height,clampY1,clampY2);
+
+        const realWidth  = Math.max(0,realX2 - realX1);
+        const realHeight = Math.max(0,realY2 - realY1);
+
+        this.setXYWH(realX1,realY1,realWidth,realHeight);
+    }
 
 
     get x(): number {
