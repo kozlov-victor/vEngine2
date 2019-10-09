@@ -158,10 +158,11 @@ export abstract class Container extends RenderableModel {
         super.update();
     }
 
-    public beforeRender():void {
+    public translate():void {
+        super.translate();
         this.game.getRenderer().translate(
-            this.pos.x + this.marginLeft,
-            this.pos.y + this.marginTop
+            this.marginLeft,
+            this.marginTop
         );
     }
 

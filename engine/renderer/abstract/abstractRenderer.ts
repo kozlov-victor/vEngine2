@@ -118,7 +118,7 @@ export abstract class AbstractRenderer implements IDestroyable {
 
     public abstract rotateZ(a:number):void;
 
-    public abstract killObject(r:RenderableModel):void;
+    public killObject(r:RenderableModel):void {}
 
     public log(...args:any[]):void {
         if (!DEBUG) return;

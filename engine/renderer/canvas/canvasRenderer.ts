@@ -215,8 +215,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         return undefined;
     }
 
-    public killObject(r: RenderableModel): void {
-    }
 
     public rotateX(a: number): void {
     }

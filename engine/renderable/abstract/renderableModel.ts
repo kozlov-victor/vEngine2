@@ -9,7 +9,6 @@ import {TweenMovie} from "@engine/animation/tweenMovie";
 import {Timer} from "@engine/misc/timer";
 import {Layer} from "@engine/scene/layer";
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
-import {Size} from "@engine/geometry/size";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
@@ -19,6 +18,7 @@ import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {Scene} from "@engine/scene/scene";
+import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -27,82 +27,11 @@ export const enum BLEND_MODE {
     REVERSE_SUBSTRACTIVE
 }
 
-class AnglePoint3d {
-    public x:number = 0;
-    public y:number = 0;
 
-    private _z:number = 0;
+export abstract class RenderableModel extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable, IParentChild  {
 
-    constructor(private m:RenderableModel,private zProperty:'angle'|'angleVelocity'){}
-
-    set z(val:number) {
-        this.m[this.zProperty] = val;
-    }
-
-    get z():number{
-        return this._z;
-    }
-
-    public _setZSilently(val:number){
-        this._z = val;
-    }
-
-    public clone(m:RenderableModel):AnglePoint3d{
-        const a:AnglePoint3d = new AnglePoint3d(m,this.zProperty);
-        a.x = this.x;
-        a.y = this.y;
-        a.z = this.z;
-        return a;
-    }
-
-}
-
-class ModelPoint2d extends Point2d {
-
-    constructor(private model:RenderableModel){
-        super();
-    }
-
-    public setToCenter():void {
-        this.model.revalidate();
-        if (DEBUG && !(this.model.size.width && this.model.size.height))
-            throw new DebugError(`can not set anchor to center: width or height of gameObject is not set`);
-        this.setXY(this.model.size.width/2,this.model.size.height/2);
-    }
-
-}
-
-export abstract class RenderableModel implements IRevalidatable, ITweenable, IEventemittable, IParentChild  {
-
-    get angle():number{
-        return this._angle;
-    }
-
-    set angle(val:number){
-        this._angle = val;
-        this.angle3d._setZSilently(val);
-    }
-
-    get angleVelocity():number{
-        return this._angle;
-    }
-
-    set angleVelocity(val:number){
-        this._angle = val;
-        this._angleVelocity3d._setZSilently(val);
-    }
-
-    public readonly type:string;
     public id:string;
-    public readonly size:Size = new Size();
-    public readonly pos:Point2d = new Point2d(0,0,()=>this._worldPositionIsDirty=true);
-    public posZ:number = 0;
 
-    public readonly scale:Point2d = new Point2d(1,1);
-    public readonly skew:Point2d = new Point2d(0,0);
-    public readonly anchor:ModelPoint2d = new ModelPoint2d(this);
-    public readonly rotationPoint:ModelPoint2d = new ModelPoint2d(this);
-    public angle3d:AnglePoint3d = new AnglePoint3d(this,'angle');
     public alpha:number = 1;
     public visible:boolean = true;
     public blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
@@ -111,17 +40,13 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     public readonly children:RenderableModel[] = [];
     public readonly velocity = new Point2d(0,0);
     public passMouseEventsThrough:boolean = false;
-    private _angleVelocity3d:AnglePoint3d = new AnglePoint3d(this,'angleVelocity');
 
-
-    private _worldPositionIsDirty:boolean = true;
-    private _worldPosition = new Point2d();
 
     private _destRect:Rect = new Rect();
     private _behaviours:BaseAbstractBehaviour[] = [];
     private _layer:Optional<Layer>;
     private _scene:Scene;
-    private _angle:number = 0;
+
 
     // tween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
@@ -135,11 +60,13 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     // parent-child
     private _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate(this);
 
+    private _worldPositionIsDirty:boolean = true;
+    private _worldPosition = new Point2d();
+
     protected constructor(protected game:Game){
-        if (DEBUG && !game) throw new DebugError(
-            `can not create model '${this.type}': game instance not passed to model constructor`
-        );
+        super(game);
         this.id = `object_${Incrementer.getValue()}`;
+        this.pos.addOnChangeListener(()=>this._worldPositionIsDirty = true);
     }
 
     public revalidate():void{
@@ -160,13 +87,6 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
 
     public setScene(value: Scene):void {
         this._scene = value;
-    }
-
-    public getWorldPosition():Readonly<IPoint2d> {
-        if (this._worldPositionIsDirty) {
-            this.calcWorldPosition();
-        }
-        return this._worldPosition;
     }
 
     public getDestRect():Readonly<IRect>{
@@ -206,20 +126,15 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
     public render():void {
         //if (this.isInViewPort()) return;
         if (!this.visible) return;
+        // todo global alpha composition
+        if (this.alpha===0) return;
         const renderer:AbstractRenderer = this.game.getRenderer();
 
         renderer.save();
-        this.beforeRender();
 
-        renderer.translate(-this.anchor.x,-this.anchor.y,this.posZ);
-        renderer.translate(this.rotationPoint.x,this.rotationPoint.y);
-        renderer.scale(this.scale.x,this.scale.y);
-        renderer.skewX(this.skew.x);
-        renderer.skewY(this.skew.y);
-        renderer.rotateZ(this.angle3d.z);
-        renderer.rotateX(this.angle3d.x);
-        renderer.rotateY(this.angle3d.y);
-        renderer.translate(-this.rotationPoint.x,-this.rotationPoint.y);
+        this.translate();
+        this.transform();
+
 
         this.draw();
 
@@ -345,13 +260,21 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
         return this._parentChildDelegate.getParent()||this._layer;
     }
 
+    public getWorldPosition():Readonly<IPoint2d> { // todo move to transformable
+        if (this._worldPositionIsDirty) {
+            this._worldPosition.set(this.pos);
+            let parent:Optional<RenderableModel> = this.parent;
+            while (parent!==undefined) {
+                this._worldPosition.add(parent.pos);
+                parent = parent.parent;
+            }
+            this._worldPosition.add(this.getScene().pos);
+        }
+        return this._worldPosition;
+    }
+
     protected setClonedProperties(cloned:RenderableModel):void {
         cloned.size.set(cloned.size);
-        cloned.pos.set(this.pos);
-        cloned.scale.set(this.scale);
-        cloned.anchor.set(this.anchor);
-        cloned.rotationPoint.set(this.rotationPoint);
-        cloned.angle3d = this.angle3d.clone(this);
         cloned.alpha = this.alpha;
         cloned.blendMode = this.blendMode;
 
@@ -370,27 +293,12 @@ export abstract class RenderableModel implements IRevalidatable, ITweenable, IEv
         cloned.game = this.game;
     }
 
-    protected beforeRender():void {
-        this.game.getRenderer().translate(this.pos.x,this.pos.y);
-    }
-
-
     /**
      * @deprecated
      */
     protected isInViewPort():boolean{
         return true; // now works incorrect - dont take transformations
         //return MathEx.overlapTest(this.game.camera.getRectScaled(),this.getSrcRect());
-    }
-
-    private calcWorldPosition():void {
-        this._worldPosition.set(this.pos);
-        let parent:Optional<RenderableModel> = this.parent;
-        while (parent!==undefined) {
-            this._worldPosition.add(parent.pos);
-            parent = parent.parent;
-        }
-        this._worldPosition.add(this.getScene().pos);
     }
 
     private _afterChildAppended(newChild:RenderableModel):void{

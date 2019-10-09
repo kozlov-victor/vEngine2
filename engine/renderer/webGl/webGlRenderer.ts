@@ -114,8 +114,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public readonly type:string = 'WebGlRenderer';
 
-    public killObject: (r: RenderableModel)=>void  = noop;
-
     private gl:WebGLRenderingContext;
     private readonly matrixStack:MatrixStack = new MatrixStack();
     private shapeDrawerHolder:InstanceHolder<ShapeDrawer> = new InstanceHolder(ShapeDrawer);
@@ -167,8 +165,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
                 throw new DebugError(`no target associated with resource link`);
             }
         }
-
-        if (img.alpha===0) return; // todo global alpha composition
 
         this.beforeItemDraw(img.filters.length,img.blendMode);
 

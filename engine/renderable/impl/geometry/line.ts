@@ -38,8 +38,8 @@ export class Line extends Shape implements ICloneable<Line> {
         this.game.getRenderer().drawLine(this);
     }
 
-    public beforeRender(){
-        super.beforeRender();
+    public translate(){
+        super.translate();
         this.game.getRenderer().translate(0,-this.lineWidth/2);
     }
 
