@@ -44,7 +44,7 @@ class ModelPoint2d extends Point2d {
     public setToCenter():void {
         this.model.revalidate();
         if (DEBUG && !(this.model.size.width && this.model.size.height))
-            throw new DebugError(`can not set anchor to center: width or height of gameObject is not set`);
+            throw new DebugError(`can not set anchor to center: width or height of transformable object is not set`);
         this.setXY(this.model.size.width/2,this.model.size.height/2);
     }
 

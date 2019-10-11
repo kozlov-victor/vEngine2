@@ -6,7 +6,7 @@ import {fragmentSource} from "@engine/renderer/webGl/filters/light/source/fragme
 import {mainFnSource} from "@engine/renderer/webGl/filters/light/source/mainFn.shader";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {LightSet} from "@engine/light/lightSet";
-import {FastMap} from "@engine/misc/fastMap";
+import {FastMap} from "@engine/misc/collection/fastMap";
 
 
 export class LightFilter extends AbstractFilter {

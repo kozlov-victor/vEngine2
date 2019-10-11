@@ -15,8 +15,7 @@ export class MainScene extends Scene {
     private bgLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.width = 1100;
-        this.height = 2100;
+        this.size.setWH(1100,2100);
         this.logoLink = this.resourceLoader.loadImage("./assets/logo.png");
         this.bgLink = this.resourceLoader.loadImage("./assets/repeat.jpg");
         const rect = new Rectangle(this.game);

@@ -3,10 +3,11 @@ import {
     SceneProgressDescription
 } from "@engine/scene/transition/abstract/abstractSceneTransition";
 import {Game} from "@engine/core/game";
-import {SIDE} from "@engine/scene/transition/side";
+import {OPPOSITE_SIDE, SIDE} from "@engine/scene/transition/side";
 import {DebugError} from "@engine/debug/debugError";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
+import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 
 export class PopTransition extends AbstractSceneTransition {
 
@@ -28,6 +29,10 @@ export class PopTransition extends AbstractSceneTransition {
         super.complete();
         if (this._prevScene!==undefined) this._prevScene.pos.setXY(0);
         this._currScene.pos.setXY(0);
+    }
+
+    public getOppositeTransition(): ISceneTransition {
+        return new PopTransition(this.game,OPPOSITE_SIDE.resolve(this.sideTo),this.time,this.easeFn);
     }
 
     protected onTransitionProgress(val:number): void {

@@ -3,10 +3,11 @@ import {
     SceneProgressDescription
 } from "@engine/scene/transition/abstract/abstractSceneTransition";
 import {Game} from "@engine/core/game";
-import {SIDE} from "@engine/scene/transition/side";
+import {OPPOSITE_SIDE, SIDE} from "@engine/scene/transition/side";
 import {DebugError} from "@engine/debug/debugError";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
+import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 
 export class SlideTransition extends AbstractSceneTransition {
 
@@ -29,6 +30,10 @@ export class SlideTransition extends AbstractSceneTransition {
     public complete(): void {
         super.complete();
         this._currScene.pos.setXY(0);
+    }
+
+    public getOppositeTransition(): ISceneTransition {
+        return new SlideTransition(this.game,OPPOSITE_SIDE.resolve(this.sideTo),this.time,this.easeFn);
     }
 
     protected onTransitionProgress(val:number): void {

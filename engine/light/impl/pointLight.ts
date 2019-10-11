@@ -3,9 +3,9 @@ import {Rect} from "../../geometry/rect";
 import {Game} from "../../core/game";
 import {AbstractLight} from "../abstract/abstractLight";
 import {Camera} from "../../renderer/camera";
-import {IKeyVal} from "@engine/misc/object";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {FastMap} from "@engine/misc/fastMap";
+import {FastMap} from "@engine/misc/collection/fastMap";
+
 
 export class PointLight extends AbstractLight {
 

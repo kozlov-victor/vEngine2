@@ -4,7 +4,8 @@ import {DebugError} from "@engine/debug/debugError";
 import {Game} from "../../core/game";
 import {Color} from "../../renderer/color";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {FastMap} from "@engine/misc/fastMap";
+import {FastMap} from "@engine/misc/collection/fastMap";
+
 
 export abstract class AbstractLight {
 

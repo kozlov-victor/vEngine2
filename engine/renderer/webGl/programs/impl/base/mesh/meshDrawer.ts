@@ -22,6 +22,7 @@ export class MeshDrawer extends AbstractDrawer {
     private readonly u_textureMatrix:string = 'u_textureMatrix';
     private readonly u_projectionMatrix:string = 'u_projectionMatrix';
     private readonly u_color:string = 'u_color';
+    private readonly u_color_mix:string = 'u_color_mix';
     private readonly u_alpha:string = 'u_alpha';
     private readonly u_textureUsed:string = 'u_textureUsed';
     private readonly u_normalsTextureUsed:string = 'u_normalsTextureUsed';
@@ -76,6 +77,10 @@ export class MeshDrawer extends AbstractDrawer {
 
     public setColor(c:Color):void{
         this.setUniform(this.u_color,c.asGL());
+    }
+
+    public setColorMix(val:number):void{
+        this.setUniform(this.u_color_mix,val);
     }
 
     public bind():void{

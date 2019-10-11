@@ -17,8 +17,8 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
-import {Scene} from "@engine/scene/scene";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
+import {Scene} from "@engine/scene/scene";
 
 export const enum BLEND_MODE {
     NORMAL,

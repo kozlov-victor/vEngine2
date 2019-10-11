@@ -4,6 +4,7 @@ import {Optional} from "@engine/core/declarations";
 export interface ISceneTransition {
     onComplete(fn: () => void): void;
     complete():void;
-    start(prevScene: Scene, currScene: Scene): void;
+    start(prevScene: Optional<Scene>, currScene: Scene): void;
+    getOppositeTransition():ISceneTransition;
     render(): void;
 }

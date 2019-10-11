@@ -54,7 +54,7 @@ export class MainScene extends Scene {
         tf.setText(text);
         tf.setFont(this.fnt);
         tf.on(MOUSE_EVENTS.click, e=>{
-            this.game.runScene(new SecondScene(this.game),transition);
+            this.game.pushScene(new SecondScene(this.game),transition);
         });
         this.appendChild(tf);
     }

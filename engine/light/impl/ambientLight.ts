@@ -1,7 +1,8 @@
 import {AbstractLight} from "../abstract/abstractLight";
 import {Game} from "../../core/game";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {FastMap} from "@engine/misc/fastMap";
+import {FastMap} from "@engine/misc/collection/fastMap";
+
 
 export class AmbientLight extends AbstractLight{
 

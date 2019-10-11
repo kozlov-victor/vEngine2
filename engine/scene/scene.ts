@@ -20,13 +20,12 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 import {Point2d} from "@engine/geometry/point2d";
 import {Rect} from "@engine/geometry/rect";
+import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 
 
-export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilterable {
+export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable {
 
     public readonly type:string = "Scene";
-    public width!:number;
-    public height!:number;
     public colorBG = Color.WHITE.clone();
     public readonly resourceLoader: ResourceLoader;
     public readonly pos:Point2d = new Point2d();
@@ -46,13 +45,13 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
     constructor(protected game:Game) {
+        super(game);
         this._uiLayer = new Layer(this.game);
         this.resourceLoader = new ResourceLoader(game);
     }
 
     public revalidate():void {
-        if (!this.width) { this.width = this.game.width; }
-        if (!this.height) { this.height = this.game.height; }
+        if (this.size.isZero()) this.size.setWH(this.game.width,this.game.height);
     }
 
 
@@ -159,7 +158,8 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         this.lockSceneView();
         renderer.beforeFrameDraw(this.colorBG);
         this.game.camera.render();
-        renderer.translate(this.pos.x,this.pos.y);
+        this.translate();
+        this.transform();
 
         if (!this.resourceLoader.isCompleted()) {
             if (this.preloadingGameObject!==undefined) {
@@ -224,6 +224,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
             Math.min(this.game.height,this.game.height+this.pos.y)
         );
         r.clamp(0,0,this.game.width,this.game.height);
+        console.log(r);
         renderer.lockRect(r);
         r.release();
     }

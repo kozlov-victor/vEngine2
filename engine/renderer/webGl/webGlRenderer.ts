@@ -237,6 +237,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         md.setLightUsed(mesh.isLightAccepted()||false);
         md.setColor(mesh.fillColor);
+        md.setColorMix(mesh.colorMix);
 
 
         if (mesh.depthTest) this.gl.enable(this.gl.DEPTH_TEST);

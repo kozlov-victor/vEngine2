@@ -31,7 +31,7 @@ export class SecondScene extends Scene {
         tf.setText("< back");
         tf.setFont(this.fnt);
         tf.on(MOUSE_EVENTS.click, e=>{
-            this.game.runScene(new MainScene(this.game));
+            this.game.popScene();
         });
         this.appendChild(tf);
 

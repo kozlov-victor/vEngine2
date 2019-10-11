@@ -6,8 +6,8 @@ import {IDrawer} from "../interface/iDrawer";
 import {DebugError} from "@engine/debug/debugError";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {FastMap} from "@engine/misc/fastMap";
 import {IDestroyable, Optional} from "@engine/core/declarations";
+import {FastMap} from "@engine/misc/collection/fastMap";
 
 
 interface ITextureInfo {

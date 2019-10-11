@@ -14,10 +14,12 @@ export class MainScene extends Scene {
     private logoObj:Mesh;
     private logoLink:ResourceLink<ITexture>;
     private logo2Link:ResourceLink<ITexture>;
+    private logoNormalsLink:ResourceLink<ITexture>;
 
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('./assets/repeat.jpg');
         this.logo2Link = this.resourceLoader.loadImage('./model3d/Texture-67.jpg');
+        this.logoNormalsLink = this.resourceLoader.loadImage('./model3d/normals.png');
     }
 
 
@@ -26,6 +28,7 @@ export class MainScene extends Scene {
         const obj:Model3d = new Model3d(this.game);
         this.logoObj = obj;
         obj.fillColor.setRGB(12,222,12);
+        obj.colorMix = 0.6;
         obj.modelPrimitive = new Cylinder(50,100);
         obj.texture = this.logoLink.getTarget();
         obj.pos.setXY(200,100);
@@ -40,6 +43,7 @@ export class MainScene extends Scene {
 
         const obj2:Model3d = new Model3d(this.game);
         obj2.fillColor.setRGB(12,22,122);
+        obj.colorMix = 0.2;
         obj2.modelPrimitive = new Cube(50);
         // obj.modelPrimitive = new Sphere(100,3);
         // obj.modelPrimitive = new Cylinder();
@@ -56,6 +60,7 @@ export class MainScene extends Scene {
 
         const obj3:Model3d = new Model3d(this.game);
         obj3.fillColor.setRGB(222,22,12);
+        obj.colorMix = 0.5;
         obj3.modelPrimitive = new Cone(
             60,
             20,
@@ -74,10 +79,12 @@ export class MainScene extends Scene {
 
         const obj4:Model3d = new Model3d(this.game);
         obj4.fillColor.setRGB(3,22,233);
+        obj4.colorMix = 0.8;
         obj4.modelPrimitive = new Sphere(
             60
         );
         obj4.texture = this.logoLink.getTarget();
+        obj4.normalsTexture = this.logoNormalsLink.getTarget();
         obj4.pos.setXY(150,150);
         obj4.size.setWH(100,100);
         this.appendChild(obj4);

@@ -9,6 +9,7 @@ import {IControl} from "@engine/control/abstract/iControl";
 import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
 import {ClazzEx, Optional} from "@engine/core/declarations";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
+import {Stack} from "@engine/misc/collection/stack";
 
 
 export const enum SCALE_STRATEGY {
@@ -21,6 +22,11 @@ export interface IGameConstructorParams {
     width?:number;
     height?:number;
     scaleStrategy?: SCALE_STRATEGY;
+}
+
+interface ISceneWithTransition {
+    scene:Scene;
+    transition:Optional<ISceneTransition>;
 }
 
 export class Game {
@@ -49,8 +55,9 @@ export class Game {
     private _lastTime:number = 0;
     private _currTime:number = 0;
     private _deltaTime:number = 0;
-    private _currentScene:Scene;
-    private _sceneTransition:Optional<ISceneTransition>;
+    private _sceneStack:Stack<ISceneWithTransition> = new Stack();
+    private _currScene:Scene;
+    private _currSceneTransition:Optional<ISceneTransition>;
     private _running:boolean = false;
     private _destroyed:boolean = false;
     private _renderer:AbstractRenderer;
@@ -131,35 +138,52 @@ export class Game {
     public debug2?(...val:any[]):void;
 
     public runScene(scene:Scene, transition?:Optional<ISceneTransition>):void{
-        if (this._sceneTransition!==undefined) {
-            this._sceneTransition.complete();
-            this._sceneTransition = undefined;
+        if (this._currSceneTransition!==undefined) {
+            this._currSceneTransition.complete();
+            this._currSceneTransition = undefined;
         }
         if (transition!==undefined) {
-            this._sceneTransition = transition;
-            transition.start(this._currentScene,scene);
-            transition.onComplete(()=>this._sceneTransition = undefined);
+            this._currSceneTransition = transition;
+            transition.start(this._currScene,scene);
+            this._currScene = scene;
+            transition.onComplete(()=>this._currSceneTransition = undefined);
         }
-        this._currentScene = scene;
+        this._sceneStack.replaceLast({scene,transition});
 
         this.revalidate();
-        scene.onPreloading();
-        scene.resourceLoader.onProgress(()=>{
-           scene.onProgress(scene.resourceLoader.getProgress());
-        });
+        if (!scene.resourceLoader.isCompleted()) {
+            scene.onPreloading();
+            scene.resourceLoader.onProgress(()=>{
+                scene.onProgress(scene.resourceLoader.getProgress());
+            });
+            scene.resourceLoader.onCompleted(()=>{
+                this._sceneStack.getLast()!.scene.onReady();
+            });
+            scene.resourceLoader.startLoading();
+        }
         if (!this._running) {
             this.update();
             this._running = true;
         }
-        scene.resourceLoader.onCompleted(()=>{
-           this._currentScene.onReady();
-        });
-        scene.resourceLoader.startLoading();
+    }
+
+    public pushScene(scene:Scene,transition:Optional<ISceneTransition>){
+        this._sceneStack.push({scene,transition});
+        this.runScene(scene,transition);
+    }
+
+    public popScene():void{
+        const currSceneWithTransition:ISceneWithTransition = this._sceneStack.pop()!;
+        const transitionToRun:Optional<ISceneTransition> = currSceneWithTransition!.transition?
+            currSceneWithTransition!.transition.getOppositeTransition():undefined;
+        const prevWithTransitionToRun:Optional<ISceneWithTransition> = this._sceneStack.pop();
+        if (DEBUG && prevWithTransitionToRun===undefined) throw new DebugError(`can not pop scene: no scene in stack`);
+        this.runScene(prevWithTransitionToRun!.scene,transitionToRun);
     }
 
     public getCurrScene():Scene{
-        if (DEBUG && !this._currentScene) throw new DebugError(`current scene is not set yet`);
-        return this._currentScene;
+        if (DEBUG && !this._sceneStack.getLast()) throw new DebugError(`current scene is not set yet`);
+        return this._sceneStack.getLast()!.scene;
     }
 
     public update():void{
@@ -180,13 +204,14 @@ export class Game {
 
         const numOfLoops:number = (~~(this._deltaTime / Game.UPDATE_TIME_RATE))||1;
         this._currTime = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
+        const currentScene:Scene = this._sceneStack.getLast()!.scene;
         let loopCnt:number = 0;
         do {
             this._lastTime = this._currTime;
             this._currTime += Game.UPDATE_TIME_RATE;
             this._deltaTime = this._currTime - this._lastTime;
 
-            this._currentScene.update();
+            currentScene.update();
             // this.collider.collisionArcade(); todo
             for (const c of this._controls) {
                 c.update();
@@ -198,8 +223,8 @@ export class Game {
             }
         } while (loopCnt<numOfLoops);
 
-        if (this._sceneTransition!==undefined) this._sceneTransition.render();
-        else this._currentScene.render();
+        if (this._currSceneTransition!==undefined) this._currSceneTransition.render();
+        else currentScene.render();
 
         requestAnimationFrame(this.update.bind(this));
     }

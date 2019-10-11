@@ -43,7 +43,7 @@ namespace FontFactory {
         const parent:HTMLSpanElement = document.createElement("span");
         parent.appendChild(document.createTextNode("height!ДдЙЇ"));
         document.body.appendChild(parent);
-        parent.style.cssText = `font: ${strFont}; white-space: nowrap; display: inline;`;
+        parent.style.cssText = `font: ${strFont}; white-space: nowrap; display: inline-block;`;
         const height:number = parent.offsetHeight;
         document.body.removeChild(parent);
         return height;
@@ -80,7 +80,7 @@ namespace FontFactory {
                 currX += textWidth;
             }
         }
-        return {symbols, width: w, height: cnvHeight,lineHeight};
+        return {symbols, width: w, height: cnvHeight,lineHeight:lineHeight - 2*SYMBOL_PADDING};
     };
 
     const correctColor = (canvas:HTMLCanvasElement,color:Color):void=>{

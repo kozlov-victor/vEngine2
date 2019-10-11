@@ -5,7 +5,7 @@ import {AbstractLight} from "@engine/light/abstract/abstractLight";
 import {PointLight} from "@engine/light/impl/pointLight";
 import {AmbientLight} from "@engine/light/impl/ambientLight";
 import {ShaderMaterial} from "@engine/light/material/shaderMaterial";
-import {FastMap} from "@engine/misc/fastMap";
+import {FastMap} from "@engine/misc/collection/fastMap";
 
 export class LightSet {
 

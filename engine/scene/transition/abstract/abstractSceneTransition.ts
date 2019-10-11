@@ -25,7 +25,7 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
         this._onComplete = fn;
     }
 
-    public start(prevScene: Scene, currScene: Scene): void {
+    public start(prevScene: Optional<Scene>, currScene: Scene): void {
         const desc:ITweenDescription<ISceneTransitionValue> = {
             ...this.describe(),
             progress: (obj: { val: number }) => {
@@ -51,6 +51,8 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
         this._completed = true;
         this._tween.complete();
     }
+
+    public abstract getOppositeTransition():ISceneTransition;
 
     protected abstract describe():SceneProgressDescription;
 

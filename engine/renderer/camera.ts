@@ -125,10 +125,10 @@ export class Camera {
             if (newPos.y < 0)
                 newPos.y = 0;
 
-            if (newPos.x > scene.width - w)
-                newPos.x = scene.width - w;
-            if (newPos.y > scene.height - h)
-                newPos.y = scene.height - h;
+            if (newPos.x > scene.size.width - w)
+                newPos.x = scene.size.width - w;
+            if (newPos.y > scene.size.height - h)
+                newPos.y = scene.size.height - h;
 
             this.pos.set(newPos);
             newPos.release();

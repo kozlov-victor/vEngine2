@@ -71,8 +71,8 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
 
     public revalidate(){
 
-        this.game.getCurrScene().width = this._tilesInScreenX * this.tileWidth;
-        this.game.getCurrScene().height = this._tilesInScreenY * this.tileHeight;
+        this.game.getCurrScene().size.width = this._tilesInScreenX * this.tileWidth;
+        this.game.getCurrScene().size.height = this._tilesInScreenY * this.tileHeight;
 
         const texSize:Size = this.getResourceLink().getTarget().size;
         this._sprTilesInX = ~~(texSize.width / this.tileWidth);
