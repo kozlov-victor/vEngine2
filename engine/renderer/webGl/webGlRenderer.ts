@@ -227,12 +227,17 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setAlfa(mesh.alpha);
         const isTextureUsed:boolean = mesh.texture!==undefined;
         md.setTextureUsed(isTextureUsed);
-        if (isTextureUsed) md.setTectureMatrix(FLIP_TEXTURE_MATRIX.mat16);
+        if (isTextureUsed) md.setTextureMatrix(FLIP_TEXTURE_MATRIX.mat16);
         md.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this.nullTexture);
 
         const isNormalsTextureUsed:boolean = mesh.normalsTexture!==undefined;
         md.setNormalsTextureUsed(isNormalsTextureUsed);
         md.attachTexture('u_normalsTexture',isNormalsTextureUsed?mesh.normalsTexture as Texture:this.nullTexture);
+
+        const isHeightMapTextureUsed:boolean = mesh.heightMapTexture!==undefined;
+        md.setHeightMapTextureUsed(isHeightMapTextureUsed);
+        md.attachTexture('u_heightMapTexture',isHeightMapTextureUsed?mesh.heightMapTexture as Texture:this.nullTexture);
+        md.setHeightMapFactor(mesh.heightMapFactor);
 
         md.setLightUsed(mesh.isLightAccepted()||false);
         md.setColor(mesh.fillColor);
