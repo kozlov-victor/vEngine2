@@ -6,10 +6,13 @@ import {DebugError} from "@engine/debug/debugError";
 import {Clazz, ICloneable} from "@engine/core/declarations";
 import {Sound} from "@engine/media/sound";
 
+interface IWindow {
+    Audio: typeof HTMLAudioElement;
+}
 
 class CtxHolder {
     public static getCtx():HTMLAudioElement{
-        const Ctx:Clazz<HTMLAudioElement> = window && (window as any).Audio;
+        const Ctx:Clazz<HTMLAudioElement> = window && (window as unknown as IWindow).Audio;
         return new Ctx();
     }
 
@@ -19,7 +22,7 @@ class CtxHolder {
 export class HtmlAudioContext extends BasicAudioContext implements ICloneable<HtmlAudioContext>{
 
     public static isAcceptable():boolean{
-        return !!(window && (window as any).Audio);
+        return !!(window && (window as unknown as IWindow).Audio);
     }
     public readonly type: string = 'htmlAudioContext';
     private free: boolean = true;
@@ -43,7 +46,7 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
 
     public play(sound:Sound):void {
         this.setLastTimeId();
-        const url:string = AudioPlayer.cache[sound.getResourceLink().getUrl()];
+        const url:string = AudioPlayer.cache[sound.getResourceLink().getUrl()] as string;
         if (DEBUG && !url) throw new DebugError(`can not retrieve audio from cache (link id=${sound.getResourceLink().getUrl()})`);
 
         this.free = false;

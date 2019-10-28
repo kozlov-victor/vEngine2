@@ -12,7 +12,7 @@ import {Optional} from "@engine/core/declarations";
 
 export  class AudioPlayer implements IAudioPlayer {
 
-    public static cache:{[key:string]:any} = {};
+    public static cache:{[key:string]:AudioBuffer|string} = {};
     public static DEFAULT_AUDIO_NODES_COUNT:number = 6;
 
     private readonly audioContext:BasicAudioContext;

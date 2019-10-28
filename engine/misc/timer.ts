@@ -25,7 +25,7 @@ export class Timer {
     }
 
     public kill():void{
-        removeFromArray(this.parent.getTimers(),(it:Timer)=>it===this);
+        removeFromArray(this.parent.getTimers(),(it)=>it===this);
     }
 
 }

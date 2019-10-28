@@ -5,21 +5,30 @@ import {Int, Optional} from "@engine/core/declarations";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 
-declare const window:any,navigator:any;
 
+interface IWindow {
+    addEventListener: (cmg:string,cb:(e:IGamePadEvent)=>void)=>void;
+}
 
 interface IGamePadEvent {
     gamepad:Gamepad;
 }
 
+interface INavigator extends Record<string,unknown>{
+    getGamepads:()=>Gamepad[];
+    webkitGetGamepads:()=>void;
+}
+
+const navigator = window.navigator as unknown as INavigator;
+
 
 if (DEBUG) {
-    window.addEventListener("gamepadconnected",(e:IGamePadEvent)=>{
+    (window as unknown as IWindow).addEventListener("gamepadconnected",(e:IGamePadEvent)=>{
         console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
             e.gamepad.index, e.gamepad.id,
             e.gamepad.buttons.length, e.gamepad.axes.length);
     });
-    window.addEventListener("gamepaddisconnected", (e:IGamePadEvent) => {
+    (window as unknown as IWindow).addEventListener("gamepaddisconnected", (e:IGamePadEvent) => {
         console.log("Gamepad disconnected from index %d: %s",
             e.gamepad.index, e.gamepad.id);
     });
@@ -35,7 +44,7 @@ const gamePadGetterFactory = ():[GamePadGetter,boolean]=>{
         const possibles:string[] = ['webkitGamepads','mozGamepads','msGamepads','msGamepads'];
         let possible:string = '';
         for (let i:number = 0; i < possibles.length; i++) {
-            if (navigator[possibles[i]]) {
+            if ((navigator as unknown as INavigator)[possibles[i]]) {
                 possible = possibles[i];
                 if (DEBUG) console.log(`gamepad control with prefix is used (${possible})`);
                 break;

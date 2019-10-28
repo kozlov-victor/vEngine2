@@ -80,7 +80,6 @@ export class ScrollInfo {
             this.onScroll();
         });
         container.on(MOUSE_EVENTS.scroll, (p: IMousePoint) => {
-            console.log(p.nativeEvent);
             this._scrollVelocity = -(p.nativeEvent as WheelEvent&{wheelDelta:number}).wheelDelta;
             this._deceleration = 0;
         });

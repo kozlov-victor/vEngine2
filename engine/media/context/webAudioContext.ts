@@ -98,7 +98,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         this.setLastTimeId();
         this._free = false;
         const currSource:AudioBufferSourceNode = this._ctx.createBufferSource();
-        currSource.buffer = AudioPlayer.cache[sound.getResourceLink().getUrl()];
+        currSource.buffer = AudioPlayer.cache[sound.getResourceLink().getUrl()] as AudioBuffer;
         currSource.loop = sound.loop;
         currSource.connect(this._gainNode);
         currSource.start(0,sound.offset,sound.duration);

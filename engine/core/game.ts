@@ -68,7 +68,7 @@ export class Game {
 
     constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT}:IGameConstructorParams = {}){
         Game.instance = this;
-        if (DEBUG) (window as any).game = this;
+        if (DEBUG) (window as unknown as {game:Game}).game = this;
         this.width = width;
         this.height = height;
         this._scaleStrategy = scaleStrategy;
@@ -120,7 +120,7 @@ export class Game {
         return this._deltaTime;
     }
 
-    public log(...args:any[]):void{
+    public log(...args:unknown[]):void{
         if (DEBUG) this._renderer.log(...args);
     }
 
@@ -136,7 +136,7 @@ export class Game {
         return this._renderer;
     }
 
-    public debug2?(...val:any[]):void;
+    public debug2?(...val:unknown[]):void;
 
     public runScene(scene:Scene, transition?:Optional<ISceneTransition>):void{
         this._prevScene = this._currScene;
@@ -249,7 +249,7 @@ export class Game {
 
 if (DEBUG) {
     let _cnt:number = 0;
-    Game.prototype.debug2  = (...val:any[])=>{
+    Game.prototype.debug2  = (...val:unknown[])=>{
         console.log(val);
         _cnt++;
         if (_cnt>16) throw new DebugError('too many logs');

@@ -115,7 +115,7 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
     fpsLabel.textContent = 'stopped';
 };
 
-window.addEventListener('error',(e:any)=>{
+window.addEventListener('error',(e:ErrorEvent)=>{
 
     const game:Game = (window as unknown as IGameHolder).game as Game;
     if (game) {
@@ -132,8 +132,8 @@ window.addEventListener('error',(e:any)=>{
 
 
     if (filename) {
-        httpClient.get(filename,{r:Math.random()},(file:string)=>{
-            const strings:string[] = file.split('\n');
+        httpClient.get(filename,{r:Math.random()},(file)=>{
+            const strings:string[] = (file as string).split('\n');
             const linesAfter:number = 5;
             const linesBefore:number = 5;
             let errorString:string = strings[lineNum - 1] || '';

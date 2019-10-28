@@ -4,23 +4,23 @@ import {IKeyVal, noop} from "@engine/misc/object";
 declare const setTimeout:(f:()=>void,t:number)=>number;
 
 
-const objectToQuery = (o:IKeyVal<any>)=> {
-    if (!o) return '';
+const objectToQuery = (o:string|number|FormData|IKeyVal<string|number|boolean>):string|FormData=> {
+    if (o===undefined || o===null) return '';
     if (o instanceof FormData) return o;
-    const paramsArr:any[] = [];
+    const paramsArr:([string,string|number|boolean])[] = [];
     if (typeof o==='string' || typeof o==='number')
-        return o;
+        return o.toString();
     for (const key in o) {
         paramsArr.push([key,encodeURIComponent(o[key])]);
     }
-    return paramsArr.map((item:any)=>[item[0]+'='+item[1]]).join('&');
+    return paramsArr.map((item)=>[item[0]+'='+item[1]]).join('&');
 };
 
 interface IRequestData {
     method: string;
-    data?: any;
+    data?: string|number|FormData|IKeyVal<string|number|boolean>;
     url: string;
-    success?: (arg:any)=>void;
+    success?: (arg:unknown)=>void;
     error?: (opts:{status:number,error:string})=>void;
     requestType?: string;
     timeout?: number;
@@ -65,7 +65,7 @@ const request = (data:IRequestData)=> {
     }
     if (data.requestType==='application/json')
         data.data = data.data && JSON.stringify(data.data);
-    xhr.send(data.data);
+    xhr.send(data.data as unknown as string);
     if (data.timeout) {
         abortTmr = setTimeout(()=>{
             if (resolved) return;
@@ -82,7 +82,7 @@ const request = (data:IRequestData)=> {
 
 export namespace httpClient {
 
-    export const get = (url:string,data:IKeyVal<any>,success?:(arg:any)=>void,error?:(opts:{status:number,error:string})=>void)=>{
+    export const get = (url:string,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void)=>{
         return request({
             method:'get',
             url,
@@ -92,7 +92,7 @@ export namespace httpClient {
         });
     };
 
-    export const  post = (url:string,data:IKeyVal<any>,success?:(arg:any)=>void,error?:(opts:{status:number,error:string})=>void)=>{
+    export const  post = (url:string,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void)=>{
         return request({
             method:'post',
             url,
@@ -103,10 +103,10 @@ export namespace httpClient {
         });
     };
 
-    export const  postMultiPart = (url:string,file:File,data:IKeyVal<any>,success?:(arg:any)=>void,error?:(opts:{status:number,error:string})=>void)=>{
+    export const  postMultiPart = (url:string,file:File,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void)=>{
         const formData = new FormData();
         Object.keys(data).forEach((key)=>{
-            formData.append(key,data[key]);
+            formData.append(key,data[key] as string);
         });
         formData.append('file',file);
         formData.append('fileName',file.name);

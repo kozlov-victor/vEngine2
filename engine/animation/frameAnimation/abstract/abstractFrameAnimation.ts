@@ -72,13 +72,13 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable {
         }
     }
 
-    public off(eventName: string, callBack: (arg?:any)=>void): void {
+    public off(eventName: string, callBack: (arg?:unknown)=>void): void {
         this._eventEmitterDelegate.off(eventName,callBack);
     }
-    public on(eventName: string, callBack: (arg?:any)=>void): (arg?:any)=>void {
+    public on(eventName: string, callBack: (arg?:unknown)=>void): (arg?:unknown)=>void {
         return this._eventEmitterDelegate.on(eventName,callBack);
     }
-    public trigger(eventName: string, data?: any): void {
+    public trigger(eventName: string, data?: unknown): void {
         this._eventEmitterDelegate.trigger(eventName,data);
     }
 
@@ -87,7 +87,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable {
 
     protected abstract onNextFrame(i:number):void;
 
-    protected setClonedProperties(cloned:AbstractFrameAnimation<any>):void {
+    protected setClonedProperties(cloned:AbstractFrameAnimation<unknown>):void {
         cloned.frames = [...this.frames];
         cloned.duration = this.duration;
         cloned.isRepeat = this.isRepeat;

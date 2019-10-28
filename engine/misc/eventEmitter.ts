@@ -2,7 +2,7 @@ import {DebugError} from "../debug/debugError";
 
 
 interface IEventsHolder {
-    [name:string]:((arg?:any)=>void)[];
+    [name:string]:((arg?:unknown)=>void)[];
 }
 
 export class EventEmitter{
@@ -13,7 +13,7 @@ export class EventEmitter{
 
     }
 
-    public on(eventNameOrList:string|string[],callBack:(arg?:any)=>void):void {
+    public on(eventNameOrList:string|string[],callBack:(arg?:unknown)=>void):void {
         if (typeof  eventNameOrList === 'string') {
             this._on(eventNameOrList,callBack);
         } else if (eventNameOrList.splice) {
@@ -24,8 +24,8 @@ export class EventEmitter{
 
     }
 
-    public off(eventName:string,callback:(arg?:any)=>void):void {
-        const es:((arg?:any)=>void)[]  = this.events[eventName];
+    public off(eventName:string,callback:(arg?:unknown)=>void):void {
+        const es:((arg?:unknown)=>void)[]  = this.events[eventName];
         if (!es) return;
         const index:number = es.indexOf(callback);
         if (DEBUG && index===-1) {
@@ -35,8 +35,8 @@ export class EventEmitter{
         es.splice(index,1);
     }
 
-    public trigger(eventName:string,data:any):void {
-        const es:((arg?:any)=>void)[] = this.events[eventName];
+    public trigger(eventName:string,data:unknown):void {
+        const es:((arg?:unknown)=>void)[] = this.events[eventName];
         if (!es) return;
         let l:number = es.length;
         while(l--){
@@ -44,7 +44,7 @@ export class EventEmitter{
         }
     }
 
-    private _on(name:string,callBack:(arg?:any)=>void):void {
+    private _on(name:string,callBack:(arg?:unknown)=>void):void {
         this.events[name] = this.events[name] || [];
         this.events[name].push(callBack);
     }

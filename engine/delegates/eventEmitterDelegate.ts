@@ -41,10 +41,10 @@ export class EventEmitterDelegate {
         this._emitter.on(eventName,callBack);
         return callBack;
     }
-    public off(eventName:string,callBack:(arg?:any)=>void):void{
+    public off(eventName:string,callBack:(arg?:unknown)=>void):void{
         if (this._emitter!==undefined)this._emitter.off(eventName,callBack);
     }
-    public trigger(eventName:string,data?:any):void{
+    public trigger(eventName:string,data?:unknown):void{
         if (this._emitter!==undefined) this._emitter.trigger(eventName,data);
     }
 
