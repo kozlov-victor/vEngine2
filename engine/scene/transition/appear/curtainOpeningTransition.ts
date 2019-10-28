@@ -1,0 +1,70 @@
+import {
+    AbstractSceneTransition,
+    SceneProgressDescription
+} from "@engine/scene/transition/abstract/abstractSceneTransition";
+import {Game} from "@engine/core/game";
+import {EaseFn} from "@engine/misc/easing/type";
+import {EasingLinear} from "@engine/misc/easing/functions/linear";
+import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
+import {Rect} from "@engine/geometry/rect";
+import {CurtainClosingTransition} from "@engine/scene/transition/appear/curtainClosingTransition";
+
+export class CurtainOpeningTransition extends AbstractSceneTransition {
+
+    private progress:number = 0;
+    private lockingRect:Rect = new Rect();
+
+    constructor(
+        private readonly game:Game,
+        private readonly time:number = 1000,
+        private readonly easeFn:EaseFn = EasingLinear)
+    {
+        super();
+    }
+
+    public render(): void {
+        this._currScene.render();
+        if (this._prevScene!==undefined) {
+            // left curtain
+            this._prevScene.pos.setX(this.progress);
+            this.lockingRect.setXYWH(this.progress,0,this._prevScene.size.width/2,this._prevScene.size.height);
+            this._prevScene.lockingRect = this.lockingRect;
+            this._prevScene.render();
+            // right curtain
+            this._prevScene.pos.setX(-this.progress);
+            this.lockingRect.setXYWH(-this.progress+this._prevScene.size.width/2,0,this._prevScene.size.width/2,this._prevScene.size.height);
+            this._prevScene.lockingRect = this.lockingRect;
+            this._prevScene.render();
+        }
+    }
+
+    public complete(): void {
+        super.complete();
+        if (this._prevScene!==undefined) {
+            this._prevScene.pos.setXY(0);
+            this._prevScene.lockingRect = undefined;
+        }
+        this._currScene.pos.setXY(0);
+    }
+
+    public getOppositeTransition(): ISceneTransition {
+        return new CurtainClosingTransition(this.game,this.time,this.easeFn);
+    }
+
+    protected onTransitionProgress(val:number): void {
+        this.progress = val;
+    }
+
+    protected describe(): SceneProgressDescription {
+        const from:number = 0;
+        const to:number = -this.game.width/2;
+        return {
+            target: {val: from},
+            from: {val: from},
+            to: {val: to},
+            time: this.time,
+            ease: this.easeFn
+        };
+    }
+
+}

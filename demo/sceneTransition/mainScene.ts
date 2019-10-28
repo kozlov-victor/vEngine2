@@ -1,15 +1,18 @@
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
-import {PushTransition} from "@engine/scene/transition/pushTransition";
-import {SIDE} from "@engine/scene/transition/side";
+import {PushTransition} from "@engine/scene/transition/move/pushTransition";
+import {SIDE} from "@engine/scene/transition/move/side";
 import {Color} from "@engine/renderer/color";
 import {Font} from "@engine/renderable/impl/general/font";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {SecondScene} from "./secondScene";
-import {PopTransition} from "@engine/scene/transition/popTransition";
+import {PopTransition} from "@engine/scene/transition/move/popTransition";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";
-import {SlideTransition} from "@engine/scene/transition/slideTransition";
+import {SlideTransition} from "@engine/scene/transition/move/slideTransition";
+import {CurtainOpeningTransition} from "@engine/scene/transition/appear/curtainOpeningTransition";
+import {EasingLinear} from "@engine/misc/easing/functions/linear";
+import {CurtainClosingTransition} from "@engine/scene/transition/appear/curtainClosingTransition";
 
 
 export class MainScene extends Scene {
@@ -46,6 +49,8 @@ export class MainScene extends Scene {
         this.createSlideTransitionButton('slide to left',SIDE.LEFT);
         this.createSlideTransitionButton('slide to right',SIDE.RIGHT);
 
+        this.createCurtainTransitionButton('open curtains (long test string)',true);
+        this.createCurtainTransitionButton('close curtains (long test string)',false);
     }
 
     private createTransitionButton(text:string,transition:ISceneTransition){
@@ -71,6 +76,14 @@ export class MainScene extends Scene {
 
     private createSlideTransitionButton(text:string,side:SIDE){
         const transition:ISceneTransition = new SlideTransition(this.game,side,1000,EasingBounce.Out);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createCurtainTransitionButton(text:string,isOpening:boolean){
+        const transition:ISceneTransition =
+            isOpening?
+            new CurtainOpeningTransition(this.game,1000,EasingBounce.Out):
+            new CurtainClosingTransition(this.game,1000,EasingBounce.Out);
         this.createTransitionButton(text,transition);
     }
 

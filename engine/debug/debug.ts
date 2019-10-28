@@ -2,6 +2,10 @@ import {httpClient} from "@engine/debug/httpClient";
 import {IKeyVal} from "@engine/misc/object";
 import {Game} from "@engine/core/game";
 
+interface IGameHolder {
+    game: Game;
+}
+
 const devConsole:HTMLElement = document.createElement('div');
 const css:IKeyVal<string|number> = {
     "position": 'absolute',
@@ -23,7 +27,7 @@ devConsole.appendChild(fpsLabel);
 
 window.addEventListener('load',(e:Event)=>{
     document.body.appendChild(devConsole);
-    const game:Game = (window as any).game;
+    const game:Game = (window as unknown as IGameHolder).game;
     if (!game) return;
     setInterval(()=>{
         fpsLabel.textContent = 'fps:'+`${game.fps}`||`?`;
@@ -113,7 +117,7 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
 
 window.addEventListener('error',(e:any)=>{
 
-    const game:Game = (window as any).game as Game;
+    const game:Game = (window as unknown as IGameHolder).game as Game;
     if (game) {
         try {
             game.destroy();

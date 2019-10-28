@@ -3,13 +3,17 @@ import {
     SceneProgressDescription
 } from "@engine/scene/transition/abstract/abstractSceneTransition";
 import {Game} from "@engine/core/game";
-import {OPPOSITE_SIDE, SIDE} from "@engine/scene/transition/side";
+import {OPPOSITE_SIDE, SIDE} from "@engine/scene/transition/move/side";
 import {DebugError} from "@engine/debug/debugError";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
+import {Rect} from "@engine/geometry/rect";
+import {Scene} from "@engine/scene/scene";
 
 export class PushTransition extends AbstractSceneTransition {
+
+    private lockingRect:Rect = new Rect();
 
     constructor(
         private readonly game:Game,
@@ -22,12 +26,18 @@ export class PushTransition extends AbstractSceneTransition {
 
     public render(): void {
         if (this._prevScene!==undefined) this._prevScene.render();
-        this._currScene.render();
+
+        const scene:Scene = this._currScene;
+        this.lockingRect.setXYWH(scene.pos.x,scene.pos.y,scene.size.width,scene.size.height);
+        scene.lockingRect = this.lockingRect;
+        scene.render();
     }
 
     public complete(): void {
         super.complete();
         this._currScene.pos.setXY(0);
+        this._currScene.lockingRect = undefined;
+        if (this._prevScene!==undefined) this._prevScene.lockingRect = undefined;
     }
 
     public getOppositeTransition(): ISceneTransition {

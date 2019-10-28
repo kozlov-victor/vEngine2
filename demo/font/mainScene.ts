@@ -51,7 +51,6 @@ export class MainScene extends Scene {
         });
         this.appendChild(btn);
 
-
         tf.moveToFront();
 
     }

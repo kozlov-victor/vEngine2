@@ -74,8 +74,12 @@ export class Size extends ObservableEntity implements IReleasealable{
         return this;
     }
 
+    public equal(w:number,h:number):boolean {
+        return this._width===w && this._height===h;
+    }
+
     public isZero():boolean {
-        return this._width===0 && this._height===0;
+        return this.equal(0,0);
     }
 
     public toArray():[number,number]{

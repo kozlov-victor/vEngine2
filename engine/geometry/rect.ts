@@ -75,21 +75,21 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         return this;
     }
 
-    public clamp(x:number,y:number,width:number,height:number) {
-
-        const clampX1 = x,clampY1 = y;
-        const clampX2 = x+width, clampY2 = y+height;
-
-        const realX1 = MathEx.clamp(this._x,clampX1,clampX2);
-        const realY1 = MathEx.clamp(this._y,clampY1,clampY2);
-        const realX2 = MathEx.clamp(realX1 + this._width,clampX1,clampX2);
-        const realY2 = MathEx.clamp(realY1 + this._height,clampY1,clampY2);
-
-        const realWidth  = Math.max(0,realX2 - realX1);
-        const realHeight = Math.max(0,realY2 - realY1);
-
-        this.setXYWH(realX1,realY1,realWidth,realHeight);
-    }
+    // public clamp(x:number,y:number,width:number,height:number) {
+    //
+    //     const realX1 = this.x,realY1 = this.y;
+    //     const realX2 = this.x+this.width, realY2 = this.y+this.height;
+    //
+    //     const clampX1 = MathEx.clamp(realX1,x,x+width);
+    //     const clampY1 = MathEx.clamp(realY1,y,y+height);
+    //     const clampX2 = MathEx.clamp(realX2,x,x+width);
+    //     const clampY2 = MathEx.clamp(realY2,y,y+height);
+    //
+    //     const clampWidth  = Math.max(0,clampX2 - clampX1);
+    //     const clampHeight = Math.max(0,clampY2 - clampY1);
+    //
+    //     this.setXYWH(clampX1,clampY1,clampWidth,clampHeight);
+    // }
 
 
     get x(): number {
@@ -118,8 +118,8 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         return this;
     }
 
-    public set(another:Rect):Rect {
-        this.setXYWH(another._x,another._y,another._width,another._height);
+    public set(another:IRectJSON):Rect {
+        this.setXYWH(another.x,another.y,another.width,another.height);
         return this;
     }
 

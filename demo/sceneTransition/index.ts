@@ -10,7 +10,7 @@ game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);
 const mainScene: Scene = new MainScene(game);
-game.runScene(mainScene);
+game.pushScene(mainScene,undefined);
 
 
 

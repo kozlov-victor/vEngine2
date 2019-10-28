@@ -19,14 +19,15 @@ import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 import {Point2d} from "@engine/geometry/point2d";
-import {Rect} from "@engine/geometry/rect";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
+import {Rect} from "@engine/geometry/rect";
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable {
 
     public readonly type:string = "Scene";
     public colorBG = Color.WHITE.clone();
+    public lockingRect:Optional<Rect>;
     public readonly resourceLoader: ResourceLoader;
     public readonly pos:Point2d = new Point2d();
     public filters:AbstractFilter[] = [];
@@ -48,6 +49,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         super(game);
         this._uiLayer = new Layer(this.game);
         this.resourceLoader = new ResourceLoader(game);
+        this.size.setWH(this.game.width,this.game.height);
     }
 
     public revalidate():void {
@@ -154,8 +156,8 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
 
         const renderer:AbstractRenderer = this.game.getRenderer();
+        if (this.lockingRect!==undefined) renderer.lockRect(this.lockingRect);
         renderer.save();
-        this.lockSceneView();
         renderer.beforeFrameDraw(this.colorBG);
         this.game.camera.render();
         this.translate();
@@ -173,7 +175,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY; // todo manage this
         renderer.restore();
-        this.unlockSceneView();
+        renderer.unlockRect();
 
 
         if (DEBUG) {
@@ -210,27 +212,5 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         this._uiLayer.update();
 
         this.onUpdate();
-    }
-
-
-    private lockSceneView():void {
-        if (this.pos.equal(0)) return;
-        const renderer:AbstractRenderer = this.game.getRenderer();
-        const r:Rect = Rect.fromPool();
-        r.setXYWH(
-            Math.max(0,this.pos.x),
-            Math.max(0,this.pos.y),
-            Math.min(this.game.width,this.game.width+this.pos.x),
-            Math.min(this.game.height,this.game.height+this.pos.y)
-        );
-        r.clamp(0,0,this.game.width,this.game.height);
-        console.log(r);
-        renderer.lockRect(r);
-        r.release();
-    }
-
-    private unlockSceneView(){
-        if (this.pos.equal(0)) return;
-        this.game.getRenderer().unlockRect();
     }
 }

@@ -400,7 +400,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.matrixStack.restore();
     }
 
-    public lockRect(rect:Rect):void { // todo fix GL_INVALID_VALUE : glScissor: height < 0
+    public lockRect(rect:Rect):void {
         this._isRectLocked = true;
         this.gl.enable(this.gl.SCISSOR_TEST);
         this.gl.scissor(rect.x,rect.y,rect.width,rect.height);

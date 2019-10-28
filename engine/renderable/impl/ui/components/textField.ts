@@ -312,7 +312,7 @@ export class TextField extends ScrollableContainer {
             -this.marginRight-this.paddingRight-this.paddingLeft-this.paddingLeft,
             -this.marginBottom-this.paddingBottom-this.marginTop-this.paddingTop
         );
-        renderer.lockRect(worldRectTmp);
+        //renderer.lockRect(worldRectTmp); // todo
         worldRectTmp.release();
         renderer.save();
         if (this.vScrollInfo.offset) renderer.translate(0, -this.vScrollInfo.offset, 0);
@@ -332,7 +332,7 @@ export class TextField extends ScrollableContainer {
             this._symbolImage.render();
         }
         renderer.restore();
-        renderer.unlockRect();
+        //renderer.unlockRect();
     }
 
     private _getDefaultSymbolRect():IRectViewJSON {

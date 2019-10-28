@@ -3,13 +3,17 @@ import {
     SceneProgressDescription
 } from "@engine/scene/transition/abstract/abstractSceneTransition";
 import {Game} from "@engine/core/game";
-import {OPPOSITE_SIDE, SIDE} from "@engine/scene/transition/side";
+import {OPPOSITE_SIDE, SIDE} from "@engine/scene/transition/move/side";
 import {DebugError} from "@engine/debug/debugError";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
+import {Rect} from "@engine/geometry/rect";
+import {Scene} from "@engine/scene/scene";
 
 export class PopTransition extends AbstractSceneTransition {
+
+    private lockingRect:Rect = new Rect();
 
     constructor(
         private readonly game:Game,
@@ -21,14 +25,24 @@ export class PopTransition extends AbstractSceneTransition {
     }
 
     public render(): void {
+        this.lockingRect.setXYWH(this._currScene.pos.x,this._currScene.pos.y,this._currScene.size.width,this._currScene.size.height);
         this._currScene.render();
-        if (this._prevScene!==undefined) this._prevScene.render();
+        if (this._prevScene!==undefined) {
+            const scene:Scene = this._prevScene;
+            this.lockingRect.setXYWH(scene.pos.x,scene.pos.y,scene.size.width,scene.size.height);
+            scene.lockingRect = this.lockingRect;
+            scene.render();
+        }
     }
 
     public complete(): void {
         super.complete();
-        if (this._prevScene!==undefined) this._prevScene.pos.setXY(0);
+        if (this._prevScene!==undefined) {
+            this._prevScene.pos.setXY(0);
+            this._prevScene.lockingRect = undefined;
+        }
         this._currScene.pos.setXY(0);
+        this._currScene.lockingRect = undefined;
     }
 
     public getOppositeTransition(): ISceneTransition {
@@ -84,3 +98,5 @@ export class PopTransition extends AbstractSceneTransition {
 
 
 }
+
+(window as unknown as {Rect:typeof Rect}).Rect = Rect;

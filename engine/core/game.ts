@@ -57,6 +57,7 @@ export class Game {
     private _deltaTime:number = 0;
     private _sceneStack:Stack<ISceneWithTransition> = new Stack();
     private _currScene:Scene;
+    private _prevScene:Optional<Scene>;
     private _currSceneTransition:Optional<ISceneTransition>;
     private _running:boolean = false;
     private _destroyed:boolean = false;
@@ -138,17 +139,17 @@ export class Game {
     public debug2?(...val:any[]):void;
 
     public runScene(scene:Scene, transition?:Optional<ISceneTransition>):void{
+        this._prevScene = this._currScene;
+        this._currScene = scene;
         if (this._currSceneTransition!==undefined) {
             this._currSceneTransition.complete();
             this._currSceneTransition = undefined;
         }
         if (transition!==undefined) {
             this._currSceneTransition = transition;
-            transition.start(this._currScene,scene);
-            this._currScene = scene;
+            transition.start(this._prevScene,this._currScene);
             transition.onComplete(()=>this._currSceneTransition = undefined);
         }
-        this._sceneStack.replaceLast({scene,transition});
 
         this.revalidate();
         if (!scene.resourceLoader.isCompleted()) {
@@ -157,7 +158,7 @@ export class Game {
                 scene.onProgress(scene.resourceLoader.getProgress());
             });
             scene.resourceLoader.onCompleted(()=>{
-                this._sceneStack.getLast()!.scene.onReady();
+                this._currScene.onReady();
             });
             scene.resourceLoader.startLoading();
         }
@@ -167,23 +168,21 @@ export class Game {
         }
     }
 
-    public pushScene(scene:Scene,transition:Optional<ISceneTransition>){
-        this._sceneStack.push({scene,transition});
+    public pushScene(scene:Scene,transition?:Optional<ISceneTransition>){
         this.runScene(scene,transition);
+        this._sceneStack.push({scene,transition});
     }
 
     public popScene():void{
-        const currSceneWithTransition:ISceneWithTransition = this._sceneStack.pop()!;
-        const transitionToRun:Optional<ISceneTransition> = currSceneWithTransition!.transition?
-            currSceneWithTransition!.transition.getOppositeTransition():undefined;
-        const prevWithTransitionToRun:Optional<ISceneWithTransition> = this._sceneStack.pop();
-        if (DEBUG && prevWithTransitionToRun===undefined) throw new DebugError(`can not pop scene: no scene in stack`);
-        this.runScene(prevWithTransitionToRun!.scene,transitionToRun);
+        const last:ISceneWithTransition = this._sceneStack.pop()!;
+        if (DEBUG && !last) throw new DebugError(`can not pop scene: no scene in stack`);
+        const transition = last.transition?last.transition.getOppositeTransition():undefined;
+        this.runScene(this._sceneStack.getLast()!.scene,transition);
     }
 
     public getCurrScene():Scene{
-        if (DEBUG && !this._sceneStack.getLast()) throw new DebugError(`current scene is not set yet`);
-        return this._sceneStack.getLast()!.scene;
+        if (DEBUG && !this._currScene) throw new DebugError(`current scene is not set yet`);
+        return this._currScene;
     }
 
     public update():void{
@@ -204,7 +203,7 @@ export class Game {
 
         const numOfLoops:number = (~~(this._deltaTime / Game.UPDATE_TIME_RATE))||1;
         this._currTime = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
-        const currentScene:Scene = this._sceneStack.getLast()!.scene;
+        const currentScene:Scene = this._currScene;
         let loopCnt:number = 0;
         do {
             this._lastTime = this._currTime;
