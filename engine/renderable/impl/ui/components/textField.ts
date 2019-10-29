@@ -9,7 +9,7 @@ import {Size} from "@engine/geometry/size";
 import {Point2d} from "@engine/geometry/point2d";
 
 type char = string;
-
+const SPACE = ' ';
 
 export const enum TEXT_ALIGN {
     LEFT,
@@ -176,7 +176,7 @@ class StringInfo extends CharsHolder {
         const res: WordInfo[] = [];
         let currWord: WordInfo = new WordInfo();
         for (const ch of this.chars) {
-            if (ch.symbol === ' ') {
+            if (ch.symbol === SPACE) {
                 if (currWord.chars.length) {
                     res.push(currWord);
                     currWord = new WordInfo();
@@ -224,28 +224,40 @@ export class TextField extends ScrollableContainer {
         textInfo.newString();
         let text: string = this._text;
         if (this.wordBreak===WORD_BRAKE.FIT) {
-            text = text.split('\n').map((str:string)=>str.trim()).join(' ');
+            text = text.split('\n').map((str:string)=>str.trim()).join(SPACE);
         }
 
         const strings:string[] = text.split('\n');
         const MAX_WIDTH:number = this.maxWidth - this.paddingLeft - this.paddingRight;
         for (let i:number=0;i<strings.length;i++) {
             const str = strings[i];
-            const words:string[] = str.split(' ');
-            for (let j:number=0;j<words.length;j++) {
-                const w:string = words[j];
+
+            // render string as is
+            if (this.wordBreak===WORD_BRAKE.PREDEFINED) {
                 const wordInfo:WordInfo = new WordInfo();
-                for (let k:number = 0; k < w.length; k++) {
-                    const charInfo: CharInfo = this._getCharInfo(w[k]);
+                for (let k:number = 0; k < str.length; k++) {
+                    const charInfo: CharInfo = this._getCharInfo(str[k]);
                     wordInfo.addChar(charInfo);
                 }
-                if (this.maxWidth && textInfo.pos.x + wordInfo.width > MAX_WIDTH && i < words.length - 1) {
-                    textInfo.newString();
-                }
                 textInfo.addWord(wordInfo);
-                if (i < str.length - 1) {
-                    const spaceChar = this._getCharInfo(' ');
-                    textInfo.addChar(spaceChar);
+            } else {
+                // break string by worlds and render each word separately
+                const words:string[] = str.split(SPACE);
+                for (let j:number=0;j<words.length;j++) {
+                    const w:string = words[j];
+                    const wordInfo:WordInfo = new WordInfo();
+                    for (let k:number = 0; k < w.length; k++) {
+                        const charInfo: CharInfo = this._getCharInfo(w[k]);
+                        wordInfo.addChar(charInfo);
+                    }
+                    if (this.maxWidth && textInfo.pos.x + wordInfo.width > MAX_WIDTH && i < words.length - 1) {
+                        textInfo.newString();
+                    }
+                    textInfo.addWord(wordInfo);
+                    if (i < str.length - 1) {
+                        const spaceChar = this._getCharInfo(SPACE);
+                        textInfo.addChar(spaceChar);
+                    }
                 }
             }
             if (i < strings.length - 1) {
@@ -336,8 +348,8 @@ export class TextField extends ScrollableContainer {
     }
 
     private _getDefaultSymbolRect():IRectViewJSON {
-        let defaultChar:string = ' ';
-        if (!this._font.fontContext.symbols[' ']) {
+        let defaultChar:string = SPACE;
+        if (!this._font.fontContext.symbols[SPACE]) {
             const firstSymbol:string = Object.keys(this._font.fontContext.symbols)[0];
             if (DEBUG && !firstSymbol) throw new DebugError(`no symbols in font`);
             defaultChar = firstSymbol;

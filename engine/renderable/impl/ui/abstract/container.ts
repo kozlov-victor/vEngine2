@@ -130,6 +130,7 @@ export abstract class Container extends RenderableModel {
 
     public onGeometryChanged():void {
         this.revalidate();
+        this._dirty = false;
     }
 
 
