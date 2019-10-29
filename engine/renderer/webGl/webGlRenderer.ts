@@ -20,18 +20,17 @@ import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFi
 import {mat4} from "@engine/geometry/mat4";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
-import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {ITexture} from "@engine/renderer/texture";
 import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import {ClazzEx, IDestroyable, Optional} from "@engine/core/declarations";
+import {TileMap} from "@engine/renderable/impl/general/tileMap";
+import {TileMapDrawer} from "@engine/renderer/webGl/programs/impl/base/tileMap/tileMapDrawer";
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
-import {TileMap} from "@engine/renderable/impl/general/tileMap";
-import {noop} from "@engine/misc/object";
-import {TileMapDrawer} from "@engine/renderer/webGl/programs/impl/base/tileMap/tileMapDrawer";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -228,12 +227,17 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setAlfa(mesh.alpha);
         const isTextureUsed:boolean = mesh.texture!==undefined;
         md.setTextureUsed(isTextureUsed);
-        if (isTextureUsed) md.setTectureMatrix(FLIP_TEXTURE_MATRIX.mat16);
+        if (isTextureUsed) md.setTextureMatrix(FLIP_TEXTURE_MATRIX.mat16);
         md.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this.nullTexture);
 
         const isNormalsTextureUsed:boolean = mesh.normalsTexture!==undefined;
         md.setNormalsTextureUsed(isNormalsTextureUsed);
         md.attachTexture('u_normalsTexture',isNormalsTextureUsed?mesh.normalsTexture as Texture:this.nullTexture);
+
+        const isHeightMapTextureUsed:boolean = mesh.heightMapTexture!==undefined;
+        md.setHeightMapTextureUsed(isHeightMapTextureUsed);
+        md.attachTexture('u_heightMapTexture',isHeightMapTextureUsed?mesh.heightMapTexture as Texture:this.nullTexture);
+        md.setHeightMapFactor(mesh.heightMapFactor);
 
         md.setLightUsed(mesh.isLightAccepted()||false);
         md.setColor(mesh.fillColor);

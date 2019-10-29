@@ -3,6 +3,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Cube} from "@engine/renderer/webGl/primitives/cube";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ITexture} from "@engine/renderer/texture";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
@@ -28,6 +29,15 @@ export class MainScene extends Scene {
             obj.angle3d.x+=0.01;
             obj.angle3d.y+=0.01;
         },20);
+
+        let isNormalApplied:boolean = true;
+        this.on(MOUSE_EVENTS.click, ()=>{
+            isNormalApplied = !isNormalApplied;
+            console.log({isNormalApplied});
+            if (isNormalApplied) obj.normalsTexture = this.normalsLink.getTarget();
+            else obj.normalsTexture = undefined;
+        });
+
 
 
 

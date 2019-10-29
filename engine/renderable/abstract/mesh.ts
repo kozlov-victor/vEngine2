@@ -13,6 +13,8 @@ export abstract class Mesh extends RenderableModel {
     public modelPrimitive:IPrimitive;
     public texture:Optional<ITexture>;
     public normalsTexture:Optional<ITexture>;
+    public heightMapTexture:Optional<ITexture>;
+    public heightMapFactor:number = 0;
     public fillColor:Color = Color.BLACK.clone();
     public colorMix:number = 0;
     public bufferInfo:BufferInfo;

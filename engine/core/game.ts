@@ -163,7 +163,7 @@ export class Game {
             scene.resourceLoader.startLoading();
         }
         if (!this._running) {
-            this.update();
+            startMainLoop(this);
             this._running = true;
         }
     }
@@ -224,8 +224,6 @@ export class Game {
 
         if (this._currSceneTransition!==undefined) this._currSceneTransition.render();
         else currentScene.render();
-
-        requestAnimationFrame(this.update.bind(this));
     }
 
     public destroy():void{
@@ -256,5 +254,14 @@ if (DEBUG) {
     };
     if (!window.__POLYFILLS_INCLUDED__) throw new DebugError(`polyfills module is not included!`);
 }
+
+const startMainLoop = (game:Game)=>{
+    const updateFn:()=>void = game.update.bind(game);
+    const loopFn = ()=>{
+        updateFn();
+        requestAnimationFrame(loopFn);
+    };
+    loopFn();
+};
 
 

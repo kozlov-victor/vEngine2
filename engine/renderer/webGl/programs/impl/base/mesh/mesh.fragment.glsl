@@ -21,11 +21,11 @@ void main() {
     if (u_lightUsed) {
         vec3 lightDirectionInv = normalize(vec3(-1,-1,1));
         vec3 normal = normalize(v_normal);
-        vec3 bumpNormal;
         float light = dot(normal, lightDirectionInv);
         if (u_normalsTextureUsed) {
-            bumpNormal = texture2D(u_normalsTexture, v_texcoord).rgb * 2. - 1.;
-            light += dot(bumpNormal, lightDirectionInv);
+            vec4 bumpNormal = texture2D(u_normalsTexture, v_texcoord) * 2. - 1.;
+            float lightNormal = dot(bumpNormal.rgb, lightDirectionInv);
+            light+=lightNormal;
         }
         light = clamp(light,.5,1.0);
         gl_FragColor.rgb *= light;

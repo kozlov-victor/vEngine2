@@ -1,14 +1,7 @@
 import * as ts from 'typescript';
+
 // @ts-ignore
 import {stringAsClearedArray} from "../../common/common";
-
-const cleanString = (s:string):string=> {
-    return s.
-        split('\n').
-        filter((it)=>!!it).
-        filter((it)=>!it.startsWith('//')).join('\n');
-};
-
 
 
 export const engineTransformer = <T extends ts.Node>(context: ts.TransformationContext) => {

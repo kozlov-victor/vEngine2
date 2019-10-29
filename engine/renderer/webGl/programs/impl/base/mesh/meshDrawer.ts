@@ -27,7 +27,8 @@ export class MeshDrawer extends AbstractDrawer {
     private readonly u_textureUsed:string = 'u_textureUsed';
     private readonly u_normalsTextureUsed:string = 'u_normalsTextureUsed';
     private readonly u_lightUsed:string = 'u_lightUsed';
-
+    private readonly u_heightMapTextureUsed:string = 'u_heightMapTextureUsed';
+    private readonly u_heightMapFactor:string = 'u_heightMapFactor';
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
@@ -55,7 +56,7 @@ export class MeshDrawer extends AbstractDrawer {
         this.setUniform(this.u_projectionMatrix,m);
     }
 
-    public setTectureMatrix(m:MAT16):void{
+    public setTextureMatrix(m:MAT16):void{
         this.setUniform(this.u_textureMatrix,m);
     }
 
@@ -69,6 +70,14 @@ export class MeshDrawer extends AbstractDrawer {
 
     public setNormalsTextureUsed(used:boolean):void{
         this.setUniform(this.u_normalsTextureUsed,used);
+    }
+
+    public setHeightMapTextureUsed(used:boolean):void{
+        this.setUniform(this.u_heightMapTextureUsed,used);
+    }
+
+    public setHeightMapFactor(val:number){
+        this.setUniform(this.u_heightMapFactor,val);
     }
 
     public setLightUsed(used:boolean):void{
