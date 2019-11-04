@@ -3,7 +3,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 import {PushTransition} from "@engine/scene/transition/move/pushTransition";
 import {SIDE} from "@engine/scene/transition/move/side";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Font} from "@engine/renderable/impl/general/font";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {SecondScene} from "./secondScene";

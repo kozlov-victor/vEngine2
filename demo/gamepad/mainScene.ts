@@ -1,9 +1,9 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 

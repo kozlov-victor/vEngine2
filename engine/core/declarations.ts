@@ -1,7 +1,7 @@
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {IFilter} from "@engine/renderer/ifilter";
+import {IFilter} from "@engine/renderer/common/ifilter";
 import {Layer} from "@engine/scene/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Scene} from "@engine/scene/scene";

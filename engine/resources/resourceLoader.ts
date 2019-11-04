@@ -2,7 +2,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "../core/game";
 import {Queue, TaskRef} from "./queue";
 import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
 export class ResourceLoader {

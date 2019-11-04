@@ -5,7 +5,7 @@ import {Size} from "@engine/geometry/size";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export class NinePatchImage extends RenderableModel {
 

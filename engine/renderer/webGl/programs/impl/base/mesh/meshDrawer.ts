@@ -7,7 +7,7 @@ import * as fragmentSource from "./mesh.fragment.glsl";
 import * as vertexSource from "./mesh.vertex.glsl";
 import {mat4} from "@engine/geometry/mat4";
 import MAT16 = mat4.MAT16;
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
 
 

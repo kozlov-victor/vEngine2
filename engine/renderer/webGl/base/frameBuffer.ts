@@ -2,7 +2,7 @@ import {DebugError} from "@engine/debug/debugError";
 
 
 import {Texture} from "./texture";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
 
 

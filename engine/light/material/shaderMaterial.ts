@@ -1,4 +1,4 @@
-import {Color} from "../../renderer/color";
+import {Color} from "../../renderer/common/color";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {FastMap} from "@engine/misc/collection/fastMap";
 

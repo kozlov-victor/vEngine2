@@ -4,34 +4,40 @@ import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {ScrReader} from "./scrReader";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {CurtainOpeningTransition} from "@engine/scene/transition/appear/curtainOpeningTransition";
+import {BORDER} from "./index";
 
 const files =
-    'athena,brunilda,cauldron,dlair,example,Gauntlet,KValley,Phantis,test,wtss'.split(',').map(it=>`./zxSpectrumScr/files/${it}.scr`);
+    'AAA - AY Megademo 3 Menu (2019),athena,brunilda,cauldron,dlair,example,Gauntlet,KValley,Phantis,test,wtss'.split(',').map(it=>`./zxSpectrumScr/files/${it}.scr`);
 let ptr = 0;
 
 export class MainScene extends Scene {
 
-    private img:Image;
-
+    private border:Image;
+    private screen:Image;
 
     public onPreloading() {
         (this.game.getRenderer() as WebGlRenderer).setPixelPerfectMode(true);
-        const img = new Image(this.game);
-        this.img = img;
+        const screen = new Image(this.game);
+        const border = new Image(this.game);
+        screen.pos.setXY(BORDER);
         const binary = this.resourceLoader.loadBinary(files[ptr++]);
         if (ptr>files.length-1) ptr = 0;
         this.resourceLoader.addNextTask(()=>{
             const reader = new ScrReader(this.game,binary.getTarget());
-            const link = reader.createTextureLink();
-            img.setResourceLink(link);
+            const {borderLink,screenLink} = reader.links;
+            border.setResourceLink(borderLink);
+            screen.setResourceLink(screenLink);
         });
         this.on(MOUSE_EVENTS.click, ()=>{
             this.game.runScene(new MainScene(this.game),new CurtainOpeningTransition(this.game));
         });
+        this.border = border;
+        this.screen = screen;
     }
 
     public onReady() {
-        this.appendChild(this.img);
+        this.border.appendChild(this.screen);
+        this.appendChild(this.border);
     }
 
 }

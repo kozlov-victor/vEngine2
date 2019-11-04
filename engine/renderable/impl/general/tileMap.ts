@@ -5,7 +5,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {Camera} from "@engine/renderer/camera";
 import {Size} from "@engine/geometry/size";
 import {IResource} from "@engine/core/declarations";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 
 

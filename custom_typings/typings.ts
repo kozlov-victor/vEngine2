@@ -31,6 +31,7 @@ declare module "*.glsl" {
 
 declare const DEBUG:boolean;
 declare const BUILD_AT:number;
+declare type byte = number;
 
 // tslint:disable-next-line:interface-name
 interface Window {
@@ -40,33 +41,5 @@ interface Window {
 }
 
 declare const MACRO_GL_COMPRESS:(arg:TemplateStringsArray)=>string;
-
-// class ClB {
-//     public b(){}
-// }
-//
-// class ClE {
-//     public e(){}
-// }
-//
-// class ClF {
-//     public f(){}
-// }
-//
-// class ClC extends  mix(ClB,ClE,ClF){
-//     public c() {}
-// }
-//
-// const c = new ClC();
-
-
-type FaceType<T> = {
-    [K in keyof T]: T[K];
-};
-
-type Constructor<T> = {
-    new(): T;
-};
-
 
 

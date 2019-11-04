@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";

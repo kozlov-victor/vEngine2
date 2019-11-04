@@ -3,7 +3,7 @@ import {Game} from "@engine/core/game";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Tween} from "@engine/animation/tween";
 import {Mashine} from "./mashine";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";
 
 export class Wheel {

@@ -1,4 +1,4 @@
-import {IFilter} from "@engine/renderer/ifilter";
+import {IFilter} from "@engine/renderer/common/ifilter";
 
 export abstract class AbstractCanvasFilter implements IFilter {
 

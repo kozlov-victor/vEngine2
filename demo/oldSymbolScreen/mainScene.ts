@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {TextField, WORD_BRAKE} from "@engine/renderable/impl/ui/components/textField";
 import {SCR} from "./oldScreenEmul";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";

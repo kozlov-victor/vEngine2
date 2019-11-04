@@ -3,7 +3,7 @@ import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MathEx} from "@engine/misc/mathEx";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
 
 export class WinScene extends Scene {

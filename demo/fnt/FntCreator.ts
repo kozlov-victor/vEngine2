@@ -1,7 +1,7 @@
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Font, IFontContext} from "@engine/renderable/impl/general/font";
 import {Game} from "@engine/core/game";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export namespace FntCreator {
 

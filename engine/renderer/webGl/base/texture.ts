@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 import {Size} from "@engine/geometry/size";
 import {ShaderProgram} from "./shaderProgram";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 import {Optional} from "@engine/core/declarations";
 
 const isPowerOf2 = (value:number):boolean=> {
@@ -84,7 +84,82 @@ export class Texture implements ITexture {
 
     }
 
-    public setRawData(data:Uint8Array,width:number,height:number,mode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR){
+    public bind(name:string,i:number,program:ShaderProgram):void { // uniform eq to 0 by default
+        if (DEBUG) {
+            if (!name) {
+                console.error(this);
+                throw new DebugError(`can not bind texture: uniform name was not provided`);
+            }
+            if (i>Texture.MAX_TEXTURE_IMAGE_UNITS - 1) {
+                throw new DebugError(`can not bind texture with index ${i}. Max supported value by device is ${Texture.MAX_TEXTURE_IMAGE_UNITS}`);
+            }
+        }
+        program.setUniform(name,i);
+        if (Texture.currInstances[i]===this) return;
+        const gl:WebGLRenderingContext = this.gl;
+        gl.activeTexture(gl.TEXTURE0+i);
+        gl.bindTexture(gl.TEXTURE_2D, this.tex);
+        Texture.currInstances[i] = this;
+    }
+
+    public unbind(i:number = 0):void {
+        const gl:WebGLRenderingContext = this.gl;
+        gl.activeTexture(gl.TEXTURE0+i);
+        // tslint:disable-next-line:no-null-keyword
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        delete Texture.currInstances[i];
+    }
+
+
+    public getData():Uint8Array { // todo test!
+        const gl:WebGLRenderingContext = this.gl;
+        const wxh:number = this.size.width*this.size.height;
+        if (DEBUG && gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)
+            throw new DebugError(`Texture.GetColorArray() failed!`);
+        const pixels:Uint8Array = new Uint8Array(wxh * 4);
+        gl.readPixels(0, 0, this.size.width, this.size.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+        return pixels;
+    }
+
+
+    public destroy():void{
+        this.gl.deleteTexture(this.tex);
+    }
+
+    public getGlTexture():WebGLTexture {
+        return this.tex;
+    }
+
+    public setInterpolationMode(mode:INTERPOLATION_MODE) {
+
+        if (mode===this.interpolationMode) return;
+
+        this.beforeOperation();
+
+        const gl:WebGLRenderingContext = this.gl;
+
+        let glMode:Optional<number>;
+        switch (mode) {
+            case INTERPOLATION_MODE.LINEAR:
+                glMode = gl.LINEAR;
+                break;
+            case INTERPOLATION_MODE.NEAREST:
+                glMode = gl.NEAREST;
+                break;
+            default:
+                if (DEBUG) throw new DebugError(`unknown interpolation mode ${mode}`);
+                break;
+        }
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, glMode as number);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, glMode as number);
+        this.interpolationMode = mode;
+
+        this.afterOperation();
+    }
+
+
+    protected setRawData(data:Uint8Array,width:number,height:number,mode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR){
         if (DEBUG) {
             const numOfBytes:number = width*height*4;
             if (data.length!==numOfBytes) {
@@ -114,80 +189,6 @@ export class Texture implements ITexture {
 
     }
 
-    public bind(name:string,i:number,program:ShaderProgram):void { // uniform eq to 0 by default
-        if (DEBUG) {
-            if (!name) {
-                console.error(this);
-                throw new DebugError(`can not bind texture: uniform name was not provided`);
-            }
-            if (i>Texture.MAX_TEXTURE_IMAGE_UNITS - 1) {
-                throw new DebugError(`can not bind texture with index ${i}. Max supported value by device is ${Texture.MAX_TEXTURE_IMAGE_UNITS}`);
-            }
-        }
-        program.setUniform(name,i);
-        if (Texture.currInstances[i]===this) return;
-        const gl:WebGLRenderingContext = this.gl;
-        gl.activeTexture(gl.TEXTURE0+i);
-        gl.bindTexture(gl.TEXTURE_2D, this.tex);
-        Texture.currInstances[i] = this;
-    }
-
-    public unbind(i:number = 0):void {
-        const gl:WebGLRenderingContext = this.gl;
-        gl.activeTexture(gl.TEXTURE0+i);
-        // tslint:disable-next-line:no-null-keyword
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        delete Texture.currInstances[i];
-    }
-
-
-    public getColorArray():Uint8Array { // todo test!
-        const gl:WebGLRenderingContext = this.gl;
-        const wxh:number = this.size.width*this.size.height;
-        if (DEBUG && gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)
-            throw new DebugError(`Texture.GetColorArray() failed!`);
-        const pixels:Uint8Array = new Uint8Array(wxh * 4);
-        gl.readPixels(0, 0, this.size.width, this.size.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-        return pixels;
-    }
-
-    public destroy():void{
-        this.gl.deleteTexture(this.tex);
-    }
-
-    public getGlTexture():WebGLTexture {
-        return this.tex;
-    }
-
-
-
-    public setInterpolationMode(mode:INTERPOLATION_MODE) {
-
-        if (mode===this.interpolationMode) return;
-
-        this.beforeOperation();
-
-        const gl:WebGLRenderingContext = this.gl;
-
-        let glMode:Optional<number>;
-        switch (mode) {
-            case INTERPOLATION_MODE.LINEAR:
-                glMode = gl.LINEAR;
-                break;
-            case INTERPOLATION_MODE.NEAREST:
-                glMode = gl.NEAREST;
-                break;
-            default:
-                if (DEBUG) throw new DebugError(`unknown interpolation mode ${mode}`);
-                break;
-        }
-
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, glMode as number);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, glMode as number);
-        this.interpolationMode = mode;
-
-        this.afterOperation();
-    }
     private beforeOperation() {
         if (this._currentTextureAt0!==undefined) return;
         this._currentTextureAt0 = Texture.currInstances[0];

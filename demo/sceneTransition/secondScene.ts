@@ -1,11 +1,11 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MainScene} from "./mainScene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {LinearGradient} from "@engine/renderer/linearGradient";
+import {LinearGradient} from "@engine/renderer/common/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 export class SecondScene extends Scene {

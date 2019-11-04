@@ -4,7 +4,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ObjParser} from "./objParser";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 class ScullMesh extends AbstractPrimitive {
 

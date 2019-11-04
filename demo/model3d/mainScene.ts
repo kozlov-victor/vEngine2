@@ -7,7 +7,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Cylinder} from "@engine/renderer/webGl/primitives/cylinder";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {Cone} from "@engine/renderer/webGl/primitives/cone";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export class MainScene extends Scene {
 

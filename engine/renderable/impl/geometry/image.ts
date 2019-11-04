@@ -2,11 +2,11 @@ import {Game} from "@engine/core/game";
 import {Rect} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
 import {Shape} from "../../abstract/shape";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Point2d} from "@engine/geometry/point2d";
 import {ICloneable, IResource} from "@engine/core/declarations";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export const enum STRETCH_MODE {
     STRETCH,

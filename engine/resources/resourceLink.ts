@@ -1,6 +1,11 @@
 
 
 export class ResourceLink<T> {
+    
+    public static create<T>():ResourceLink<T>{
+        const url:string = 'url'+Math.random()+'_'+Math.random();
+        return new ResourceLink<T>(url);
+    }
 
     private target:T;
 

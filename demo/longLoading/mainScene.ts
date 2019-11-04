@@ -1,12 +1,12 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {TaskRef} from "@engine/resources/queue";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 

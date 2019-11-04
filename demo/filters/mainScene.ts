@@ -1,11 +1,11 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
-import {LinearGradient} from "@engine/renderer/linearGradient";
+import {LinearGradient} from "@engine/renderer/common/linearGradient";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
@@ -21,7 +21,7 @@ import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlu
 import {HexagonalFilter} from "@engine/renderer/webGl/filters/texture/hexagonalFilter";
 import {SwirlFilter} from "@engine/renderer/webGl/filters/texture/swirlFilter";
 import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/texture/triangleBlurFilter";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
 export class MainScene extends Scene {

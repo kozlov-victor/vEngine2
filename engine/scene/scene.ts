@@ -1,7 +1,7 @@
 import {Layer} from "./layer";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
 import {Game} from "@engine/core/game";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {CAMERA_MATRIX_MODE} from "@engine/renderer/camera";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {IEventemittable, IFilterable, IRevalidatable, ITweenable, Optional} from "@engine/core/declarations";

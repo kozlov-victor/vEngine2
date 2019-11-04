@@ -2,7 +2,7 @@ import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/
 import {ICloneable, IRevalidatable} from "@engine/core/declarations";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 import {DebugError} from "@engine/debug/debugError";
 
 

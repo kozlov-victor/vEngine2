@@ -6,13 +6,13 @@ import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {IURLRequest} from "@engine/resources/urlLoader";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 import {DebugError} from "@engine/debug/debugError";
 import {Optional} from "@engine/core/declarations";
 import {EasingQuart} from "@engine/misc/easing/functions/quart";
 import {EasingQuint} from "@engine/misc/easing/functions/quint";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 
 const POOL_SIZE:number = 128;

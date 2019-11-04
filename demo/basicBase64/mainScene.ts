@@ -4,7 +4,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 
 import {Image} from "@engine/renderable/impl/geometry/image";
 import * as logoBase64 from "../assets/engine.jpg";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export class MainScene extends Scene {
 
