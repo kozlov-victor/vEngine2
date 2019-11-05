@@ -16,6 +16,10 @@ game.addControl(MouseControl);
 const mainScene: Scene = new MainScene(game);
 game.runScene(mainScene);
 
+window.addEventListener('click',e=>{
+
+});
+
 
 
 

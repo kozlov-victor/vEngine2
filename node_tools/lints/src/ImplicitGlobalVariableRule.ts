@@ -2,7 +2,9 @@
 import * as ts from 'typescript';
 import * as Lint from 'tslint';
 
+// noinspection JSUnusedGlobalSymbols
 export class Rule extends Lint.Rules.AbstractRule {
+    // noinspection JSUnusedGlobalSymbols
     public static FAILURE_STRING = 'not allowed to use: ';
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {

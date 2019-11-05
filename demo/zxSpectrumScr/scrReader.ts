@@ -4,6 +4,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
 import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
 import {H, W, BORDER} from "./index";
+import {AudioStream} from "./audioStream";
 
 
 
@@ -67,6 +68,7 @@ class Screen {
 
     public border:Border;
     public link:ResourceLink<Texture>;
+    public stream:AudioStream;
 
     private flashOn:boolean = false;
     private view:Int8Array = new Int8Array(this.data);
@@ -87,6 +89,7 @@ class Screen {
         link.setTarget(t);
 
         this.link = link;
+        this.stream = new AudioStream(this.view);
 
         game.getCurrScene().setInterval(()=>{
             this.flashOn = !this.flashOn;
@@ -110,12 +113,14 @@ class Screen {
             if (this.pointer>this.view.length) {
                 this.loadingCompleted = true;
                 this.border.reset();
+                this.stream.stop();
                 return;
             }
             this.videoMemory[i] = this.view[i];
             this.border.readNextByte(this.videoMemory[i]);
         }
         this.pointer+=chunkSize;
+        this.stream.setPointer(this.pointer);
     }
 
     private testNextChunk(){
