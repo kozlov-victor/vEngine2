@@ -2,8 +2,8 @@ import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/color";
 import {TextField, WORD_BRAKE} from "@engine/renderable/impl/ui/components/textField";
-import {SCR} from "./oldScreenEmul";
-import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
+import {BasicEnv} from "./oldScreenEmul";
+import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
 
 
 // this is interpretation of
@@ -16,7 +16,7 @@ export class MainScene extends Scene {
     public onPreloading(){
         this.colorBG = Color.RGB(10,10,30);
         const fnt:Font = new Font(this.game);
-        fnt.fontSize = 8;
+        fnt.fontSize = 14;
         fnt.fontFamily = 'monospace';
         fnt.fontColor = Color.RGB(10,100,20);
         fnt.generate();
@@ -29,10 +29,89 @@ export class MainScene extends Scene {
         tf.setFont(this.fnt);
         tf.setWordBreak(WORD_BRAKE.PREDEFINED);
         this.appendChild(tf);
-        tf.setText(SCR);
-
-        const filter = new WaveFilter(this.game);
+        const filter = new BarrelDistortionFilter(this.game);
         this.filters = [filter];
+
+
+        const b = new BasicEnv();
+        b.setProgram({
+
+            10: [
+                ()=>b.PRINT_TAB(33),
+                ()=>b.PRINT("BUNNY")
+            ],
+            20: [
+                ()=>b.PRINT_TAB(15),
+                ()=>b.PRINT("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+            ],
+            30: [
+                ()=>b.PRINT(),
+                ()=>b.PRINT(),
+                ()=>b.PRINT()
+            ],
+            100: ()=>b.REM("\"BUNNY\" FROM AHL'S 'BASIC COMPUTER GAMES'"),
+            110: ()=>b.REM(),
+            120: ()=>b.FOR('i',0,4),
+            121: ()=>b.READ('b',b.GET_VAR('i')),
+            122: ()=>b.NEXT('i'),
+            130: ()=>b.GOSUB(260),
+            140: ()=>b.ASSING_VAR('l',64),
+            160: ()=>b.PRINT(),
+            170: ()=>b.READ('x'),
+            171: ()=>b.IF(b.GET_VAR('x')<0,()=>b.GOTO(160)),
+            175: ()=>b.IF(b.GET_VAR('x')>128,()=>b.GOTO(240)),
+            180: ()=>b.PRINT_TAB(b.GET_VAR('x')),
+            181: ()=>b.READ('y'),
+            190: ()=>b.FOR('i',b.GET_VAR('x'),b.GET_VAR('y')),
+            191: ()=>b.ASSING_VAR('j',b.GET_VAR('i')-5*b.INT(b.GET_VAR('i')/5)),
+            200: ()=>b.PRINT(
+                b.CHR$(
+                    b.GET_VAR('l')+
+                    b.GET_VAR('b',b.GET_VAR('j'))
+                )
+            ),
+            210: ()=>b.NEXT('i'),
+            220: ()=>b.GOTO(170),
+            240: ()=>b.GOSUB(260),
+            241: ()=>b.GOTO(450),
+            260: ()=>b.FOR('i',1,6),
+            261: ()=>b.PRINT(b.CHR$(10)),
+            262: ()=>b.NEXT('i'),
+            270: ()=>b.RETURN(),
+
+
+            290: b.DATA([
+                2,21,14,14,25,
+                1,2,-1,0,2,45,50,-1,0,5,43,52,-1,0,7,41,52,-1,
+                1,9,37,50,-1,2,11,36,50,-1,3,13,34,49,-1,4,14,32,48,-1,
+                5,15,31,47,-1,6,16,30,45,-1,7,17,29,44,-1,8,19,28,43,-1,
+                9,20,27,41,-1,10,21,26,40,-1,11,22,25,38,-1,12,22,24,36,-1,
+                13,34,-1,14,33,-1,15,31,-1,17,29,-1,18,27,-1,
+                19,26,-1,16,28,-1,13,30,-1,11,31,-1,10,32,-1,
+                8,33,-1,7,34,-1,6,13,16,34,-1,5,12,16,35,-1,
+                4,12,16,35,-1,3,12,15,35,-1,2,35,-1,1,35,-1,
+                2,34,-1,3,34,-1,4,33,-1,6,33,-1,10,32,34,34,-1,
+                14,17,19,25,28,31,35,35,-1,15,19,23,30,36,36,-1,
+                14,18,21,21,24,30,37,37,-1,13,18,23,29,33,38,-1,
+                12,29,31,33,-1,11,13,17,17,19,19,22,22,24,31,-1,
+                10,11,17,18,22,22,24,24,29,29,-1,
+                22,23,26,29,-1,27,29,-1,28,29,-1,4096,
+            ]),
+
+
+            450: ()=>b.END(),
+
+
+
+        });
+        b.RUN();
+        b.onCompleted = ()=>{
+
+        };
+        b.onScreenChanged = ()=>{
+            tf.setText(b.getScreenResult());
+        };
+
 
     }
 
