@@ -5,6 +5,7 @@ import {Game} from "@engine/core/game";
 import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
 import {H, W, BORDER} from "./index";
 import {AudioStream} from "./audioStream";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
 
@@ -25,7 +26,7 @@ class Border {
     constructor(game:Game){
         const renderer:WebGlRenderer = game.getRenderer() as WebGlRenderer;
         const gl:WebGLRenderingContext = renderer.getNativeContext();
-        this.texture = new DataTexture(gl,W+BORDER*2, H+BORDER*2);
+        this.texture = new DataTexture(game,W+BORDER*2, H+BORDER*2);
         const link:ResourceLink<Texture> = ResourceLink.create();
         renderer.putToCache(link,this.texture);
         link.setTarget(this.texture);
@@ -67,7 +68,7 @@ class Border {
 class Screen {
 
     public border:Border;
-    public link:ResourceLink<Texture>;
+    public link:ResourceLink<ITexture>;
     public stream:AudioStream;
 
     private flashOn:boolean = false;
@@ -80,15 +81,8 @@ class Screen {
 
     constructor(private game:Game,private data:ArrayBuffer){
 
-        const renderer:WebGlRenderer = this.game.getRenderer() as WebGlRenderer;
-        const gl:WebGLRenderingContext = renderer.getNativeContext();
-        const t:DataTexture = new DataTexture(gl,W,H);
-
-        const link:ResourceLink<Texture> = ResourceLink.create();
-        renderer.putToCache(link,t);
-        link.setTarget(t);
-
-        this.link = link;
+        const t:DataTexture = new DataTexture(this.game,W,H);
+        this.link = t.getLink();
         this.stream = new AudioStream(this.view);
 
         game.getCurrScene().setInterval(()=>{
@@ -210,7 +204,7 @@ class Screen {
 
 export class ScrReader {
 
-    public links: {screenLink:ResourceLink<Texture>,borderLink:ResourceLink<Texture>};
+    public links: {screenLink:ResourceLink<ITexture>,borderLink:ResourceLink<Texture>};
 
     constructor(private game:Game,private data:ArrayBuffer){
         const screen = new Screen(game,data);

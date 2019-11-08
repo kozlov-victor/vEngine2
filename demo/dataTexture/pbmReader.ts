@@ -4,6 +4,7 @@ import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export class PbmReader {
 
@@ -25,20 +26,13 @@ export class PbmReader {
         this.file = new Int8Array(buff);
     }
 
-    public createTextureLink():ResourceLink<Texture>{
-        const renderer:WebGlRenderer = this.game.getRenderer() as WebGlRenderer;
-        const gl:WebGLRenderingContext = renderer.getNativeContext();
+    public createTextureLink():ResourceLink<ITexture>{
+
         const {width,height} = this.readHead();
-        const t:DataTexture = new DataTexture(gl,width,height);
-
-        const link:ResourceLink<Texture> = new ResourceLink<Texture>('url'+Math.random()+'_'+Math.random());
-        renderer.putToCache(link,t);
-
+        const t:DataTexture = new DataTexture(this.game,width,height);
         const bitmap = this.read(width,height);
-
         t.setData(new Uint8Array(bitmap));
-        link.setTarget(t);
-        return link;
+        return t.getLink();
     }
 
     private isEOF():boolean{

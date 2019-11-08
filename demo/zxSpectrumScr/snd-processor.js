@@ -11,6 +11,7 @@ class DataBuffer {
         this.currSampleForThisBit = 0;
         this.samplesForOneBit = 10;
         this.currSample = 0;
+        this.vol = 0.08;
         this.play();
     }
 
@@ -38,7 +39,7 @@ class DataBuffer {
             this.currPlayingByte++;
         }
 
-        return sample;
+        return sample * this.vol;
 
     }
 

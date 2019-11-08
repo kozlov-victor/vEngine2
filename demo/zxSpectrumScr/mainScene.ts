@@ -3,8 +3,9 @@ import {Image} from "@engine/renderable/impl/geometry/image";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {ScrReader} from "./scrReader";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {CurtainOpeningTransition} from "@engine/scene/transition/appear/curtainOpeningTransition";
+import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
 import {BORDER} from "./index";
+import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
 
 const files =
     'AAA - AY Megademo 3 Menu (2019),athena,brunilda,cauldron,dlair,example,Gauntlet,KValley,Phantis,test,wtss'.split(',').map(it=>`./zxSpectrumScr/files/${it}.scr`);
@@ -29,10 +30,13 @@ export class MainScene extends Scene {
             screen.setResourceLink(screenLink);
         });
         this.on(MOUSE_EVENTS.click, ()=>{
-            this.game.runScene(new MainScene(this.game),new CurtainOpeningTransition(this.game));
+            this.game.runScene(new MainScene(this.game),new CurtainsOpeningTransition(this.game));
         });
         this.border = border;
         this.screen = screen;
+
+        this.filters = [new Barrel2DistortionFilter(this.game)];
+
     }
 
     public onReady() {
