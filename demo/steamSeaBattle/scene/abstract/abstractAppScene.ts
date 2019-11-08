@@ -1,9 +1,9 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Element, IElementDescription} from "../../data/assetsDocumentHolder";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 import {Layer} from "@engine/scene/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Image} from "@engine/renderable/impl/geometry/image";

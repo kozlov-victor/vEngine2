@@ -1,5 +1,5 @@
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Scene} from "@engine/scene/scene";
 import {SpriterObject} from "../scml/scml";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";

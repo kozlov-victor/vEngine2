@@ -19,6 +19,8 @@ if (DEBUG) {
     window.__POLYFILLS_INCLUDED__ = true;
 }
 
+
+
 // if (!Array.prototype['find']) {
 //     Array.prototype['find'] = function(predicate:Function) {
 //         if (this == null && DEBUG) {

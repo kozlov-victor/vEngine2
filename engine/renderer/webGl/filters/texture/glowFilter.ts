@@ -4,7 +4,7 @@ import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {Game} from "@engine/core/game";
 import {Size} from "@engine/geometry/size";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 
 // https://codepen.io/mishaa/pen/raKzrm
 

@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Timer} from "@engine/misc/timer";

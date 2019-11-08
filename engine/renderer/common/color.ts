@@ -1,6 +1,6 @@
-import {IReleasealable, ObjectPool} from "../misc/objectPool";
-import {ICloneable} from "@engine/core/declarations";
-import {DebugError} from "@engine/debug/debugError";
+import {IReleasealable, ObjectPool} from "../../misc/objectPool";
+import {ICloneable} from "../../core/declarations";
+import {DebugError} from "../../debug/debugError";
 
 
 export interface IColorJSON {

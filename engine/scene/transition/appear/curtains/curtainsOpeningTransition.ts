@@ -1,15 +1,15 @@
 import {
     AbstractSceneTransition,
     SceneProgressDescription
-} from "@engine/scene/transition/abstract/abstractSceneTransition";
+} from "../../abstract/abstractSceneTransition";
 import {Game} from "@engine/core/game";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
-import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
+import {ISceneTransition} from "../../abstract/iSceneTransition";
 import {Rect} from "@engine/geometry/rect";
-import {CurtainClosingTransition} from "@engine/scene/transition/appear/curtainClosingTransition";
+import {CurtainsClosingTransition} from "@engine/scene/transition/appear/curtains/curtainsClosingTransition";
 
-export class CurtainOpeningTransition extends AbstractSceneTransition {
+export class CurtainsOpeningTransition extends AbstractSceneTransition {
 
     private progress:number = 0;
     private lockingRect:Rect = new Rect();
@@ -48,7 +48,7 @@ export class CurtainOpeningTransition extends AbstractSceneTransition {
     }
 
     public getOppositeTransition(): ISceneTransition {
-        return new CurtainClosingTransition(this.game,this.time,this.easeFn);
+        return new CurtainsClosingTransition(this.game,this.time,this.easeFn);
     }
 
     protected onTransitionProgress(val:number): void {

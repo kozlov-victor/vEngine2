@@ -3,7 +3,7 @@ import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {Device} from "../../misc/device";
 import {Game, SCALE_STRATEGY} from "../../core/game";
 import {Rect} from "../../geometry/rect";
-import {Color} from "../color";
+import {Color} from "../common/color";
 import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
@@ -13,7 +13,7 @@ import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 

@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Mashine} from "./entities/mashine";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
@@ -9,7 +9,7 @@ import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MathEx} from "@engine/misc/mathEx";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 interface IWheelCommand {
     a:number;

@@ -2,9 +2,9 @@ import {BufferInfo} from "../../renderer/webGl/base/bufferInfo";
 import {IPrimitive} from "../../renderer/webGl/primitives/abstractPrimitive";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {DebugError} from "@engine/debug/debugError";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 import {Optional} from "@engine/core/declarations";
 
 

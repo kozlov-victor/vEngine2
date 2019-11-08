@@ -1,4 +1,4 @@
-import {Size} from "@engine/geometry/size";
+import {Size} from "../../geometry/size";
 
 export interface ITexture {
     size: Size;

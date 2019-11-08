@@ -4,13 +4,14 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {PbmReader} from "./pbmReader";
 import {MultiImageFrameAnimation} from "@engine/animation/frameAnimation/multiImageFrameAnimation";
 import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
+import {ITexture} from "@engine/renderer/common/texture";
 
 // https://www.twobitarcade.net/article/displaying-images-oled-displays/
 
 export class MainScene extends Scene {
 
     private resourceLinks:ResourceLink<ArrayBuffer>[] = [];
-    private textureLinks:ResourceLink<Texture>[] = [];
+    private textureLinks:ResourceLink<ITexture>[] = [];
 
 
     public onPreloading() {

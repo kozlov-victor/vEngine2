@@ -115,7 +115,7 @@ export class UrlLoader<T extends string|ArrayBuffer> {
 
     public load():void{
         const self:UrlLoader<string|ArrayBuffer> = this as unknown as UrlLoader<string|ArrayBuffer>;
-        if (this.getUrl().startsWith('data:')) loadBase64(self,this.urlRequest);
+        if (this.getUrl().indexOf('data:')===0) loadBase64(self,this.urlRequest);
         else if (this.urlRequest.jsonp) loadViaJsonp(self,this.urlRequest);
         else loadViaXmlHttp(self,this.urlRequest);
     }

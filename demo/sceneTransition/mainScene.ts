@@ -3,16 +3,19 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 import {PushTransition} from "@engine/scene/transition/move/pushTransition";
 import {SIDE} from "@engine/scene/transition/move/side";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Font} from "@engine/renderable/impl/general/font";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {SecondScene} from "./secondScene";
 import {PopTransition} from "@engine/scene/transition/move/popTransition";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";
 import {SlideTransition} from "@engine/scene/transition/move/slideTransition";
-import {CurtainOpeningTransition} from "@engine/scene/transition/appear/curtainOpeningTransition";
-import {EasingLinear} from "@engine/misc/easing/functions/linear";
-import {CurtainClosingTransition} from "@engine/scene/transition/appear/curtainClosingTransition";
+import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
+import {CurtainsClosingTransition} from "@engine/scene/transition/appear/curtains/curtainsClosingTransition";
+import {
+    CellsAppearingTransition,
+    CellsDisappearingTransition
+} from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
 
 
 export class MainScene extends Scene {
@@ -51,11 +54,14 @@ export class MainScene extends Scene {
 
         this.createCurtainTransitionButton('open curtains (long test string)',true);
         this.createCurtainTransitionButton('close curtains (long test string)',false);
+
+        this.createCellTransitionButton('cell appearing',true);
+        this.createCellTransitionButton('cell disappearing',false);
     }
 
     private createTransitionButton(text:string,transition:ISceneTransition){
         const tf:TextField = new TextField(this.game);
-        tf.pos.setXY(10,this.btnPos+=50);
+        tf.pos.setXY(10,this.btnPos+=45);
         tf.setText(text);
         tf.setFont(this.fnt);
         tf.on(MOUSE_EVENTS.click, e=>{
@@ -82,8 +88,16 @@ export class MainScene extends Scene {
     private createCurtainTransitionButton(text:string,isOpening:boolean){
         const transition:ISceneTransition =
             isOpening?
-            new CurtainOpeningTransition(this.game,1000,EasingBounce.Out):
-            new CurtainClosingTransition(this.game,1000,EasingBounce.Out);
+            new CurtainsOpeningTransition(this.game,1000,EasingBounce.Out):
+            new CurtainsClosingTransition(this.game,1000,EasingBounce.Out);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createCellTransitionButton(text:string,isAppearing:boolean){
+        const transition:ISceneTransition =
+            isAppearing?
+                new CellsAppearingTransition(this.game,1000):
+                new CellsDisappearingTransition(this.game,1000);
         this.createTransitionButton(text,transition);
     }
 

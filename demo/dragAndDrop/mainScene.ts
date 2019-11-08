@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Image} from "@engine/renderable/impl/geometry/image";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
 export class MainScene extends Scene {

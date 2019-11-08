@@ -8,8 +8,8 @@ import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import Mat16Holder = mat4.Mat16Holder;
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
-import {Color} from "@engine/renderer/color";
-import {IFilter} from "@engine/renderer/ifilter";
+import {Color} from "@engine/renderer/common/color";
+import {IFilter} from "@engine/renderer/common/ifilter";
 
 
 const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):Mat16Holder =>{

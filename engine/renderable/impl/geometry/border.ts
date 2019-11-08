@@ -1,5 +1,5 @@
 import {Rectangle} from "./rectangle";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
 import {ICloneable} from "@engine/core/declarations";
 

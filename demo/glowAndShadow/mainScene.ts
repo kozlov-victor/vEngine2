@@ -1,16 +1,16 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {DropShadowFilter} from "@engine/renderer/webGl/filters/texture/dropShadowFilter";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {LinearGradient} from "@engine/renderer/linearGradient";
+import {LinearGradient} from "@engine/renderer/common/linearGradient";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export class MainScene extends Scene {
 

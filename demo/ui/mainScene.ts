@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {TEXT_ALIGN, TextField, WORD_BRAKE} from "@engine/renderable/impl/ui/components/textField";
 import {Font} from "@engine/renderable/impl/general/font";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {CheckBox} from "@engine/renderable/impl/ui/components/checkBox";
 

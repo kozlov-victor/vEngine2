@@ -1,11 +1,11 @@
 import {Game} from "@engine/core/game";
 import {IRectJSON} from "@engine/geometry/rect";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {IResource, IRevalidatable} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {ITexture} from "@engine/renderer/texture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export interface IRectViewJSON extends IRectJSON {
     destOffsetX:number;

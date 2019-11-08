@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {fontLoader} from "./FontLoader";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import loadFont = fontLoader.loadFont;
 
 

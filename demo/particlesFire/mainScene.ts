@@ -4,8 +4,8 @@ import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderabl
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/texture";
-import {Color} from "@engine/renderer/color";
+import {ITexture} from "@engine/renderer/common/texture";
+import {Color} from "@engine/renderer/common/color";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
 

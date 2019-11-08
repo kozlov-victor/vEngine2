@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
-import {Color} from "@engine/renderer/color";
+import {Color} from "@engine/renderer/common/color";
 import {Button} from "@engine/renderable/impl/ui/components/button";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
