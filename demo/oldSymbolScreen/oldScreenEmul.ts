@@ -2,11 +2,12 @@ import {Optional} from "@engine/core/declarations";
 
 class ProgramInstruction {
     public number:number;
-    public instructions:(()=>void)[] = [];
+    public subNumber:number;
+    public instruction:()=>void;
 }
 
 class LoopContext {
-    public number:number;
+    public pointer:number;
     public variableName:string;
     public to:number;
     public step:number;
@@ -102,8 +103,8 @@ export class BasicEnv {
         lc.to = to;
         lc.step = step;
         lc.variableName = varName;
+        lc.pointer = this.pointer+1;
         this.loopContexts.push(lc);
-        lc.number = this.pointer+1;
     }
 
     public NEXT(varName:string) {
@@ -120,7 +121,7 @@ export class BasicEnv {
             this.loopContexts.splice(lcn, 1);
         }
         else {
-            this.pointer = lc.number;
+            this.pointer = lc.pointer;
             this.variables[lc.variableName] = lc.currCounter;
             this.instructionPointSet = true;
         }
@@ -191,6 +192,10 @@ export class BasicEnv {
         this.ended = true;
     }
 
+    public DEBUG(){
+        console.log('variables',JSON.stringify(this.variables));
+    }
+
     public setProgram(p:Record<number,((()=>void)[])|(()=>void)|void>){
         const keys:number[] = Object.keys(p).map(s=>+s);
         // tslint:disable-next-line:no-shadowed-variable
@@ -199,19 +204,25 @@ export class BasicEnv {
             else return -1;
         });
         keys.forEach((k:number)=>{
-            const pi:ProgramInstruction = new ProgramInstruction();
-            pi.number = k;
             if (p[k]===undefined) {
                 // already performed instruction like DATA
                 return;
             }
             if ((p[k] as unknown as any[]).splice) {
-                pi.instructions = p[k] as (()=>void)[];
+                (p[k] as unknown as any[]).forEach((instr,i)=>{
+                    const pi:ProgramInstruction = new ProgramInstruction();
+                    pi.number = k;
+                    pi.subNumber = i;
+                    pi.instruction = instr as ()=>void;
+                    this.program.push(pi);
+                });
             } else if ((p[k] as unknown as ()=>void).call) {
-                pi.instructions = [p[k] as (()=>void)];
+                const pi:ProgramInstruction = new ProgramInstruction();
+                pi.number = k;
+                pi.subNumber = 0;
+                pi.instruction = p[k] as ()=>void;
+                this.program.push(pi);
             }
-
-            this.program.push(pi);
         });
     }
 
@@ -229,16 +240,13 @@ export class BasicEnv {
             if (this.onCompleted) this.onCompleted();
             return;
         }
-        const instructions:(()=>void)[] = this.program[this.pointer].instructions;
-        instructions.forEach(instr=>{
-            //console.log(instr);
-            instr();
-        });
+        const instruction = this.program[this.pointer].instruction;
+        instruction();
         if (this.instructionPointSet) {
             this.instructionPointSet = false;
         }
         else this.pointer++;
-        setTimeout(()=>this.RUN(),10);
+        setTimeout(()=>this.RUN(),1);
     }
 
 }

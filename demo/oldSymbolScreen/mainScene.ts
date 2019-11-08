@@ -7,6 +7,7 @@ import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/bar
 
 
 // this is interpretation of
+// http://vintage-basic.net/games.html
 // http://vintage-basic.net/bcg/bunny.bas
 
 export class MainScene extends Scene {
@@ -51,19 +52,28 @@ export class MainScene extends Scene {
             ],
             100: ()=>b.REM("\"BUNNY\" FROM AHL'S 'BASIC COMPUTER GAMES'"),
             110: ()=>b.REM(),
-            120: ()=>b.FOR('i',0,4),
-            121: ()=>b.READ('b',b.GET_VAR('i')),
-            122: ()=>b.NEXT('i'),
+            120: [
+                ()=>b.FOR('i',0,4),
+                ()=>b.DEBUG(),
+                ()=>b.READ('b',b.GET_VAR('i')),
+                ()=>b.NEXT('i')
+            ],
             130: ()=>b.GOSUB(260),
             140: ()=>b.ASSING_VAR('l',64),
             160: ()=>b.PRINT(),
-            170: ()=>b.READ('x'),
-            171: ()=>b.IF(b.GET_VAR('x')<0,()=>b.GOTO(160)),
+            170: [
+                ()=>b.READ('x'),
+                ()=>b.IF(b.GET_VAR('x')<0,()=>b.GOTO(160))
+            ],
             175: ()=>b.IF(b.GET_VAR('x')>128,()=>b.GOTO(240)),
-            180: ()=>b.PRINT_TAB(b.GET_VAR('x')),
-            181: ()=>b.READ('y'),
-            190: ()=>b.FOR('i',b.GET_VAR('x'),b.GET_VAR('y')),
-            191: ()=>b.ASSING_VAR('j',b.GET_VAR('i')-5*b.INT(b.GET_VAR('i')/5)),
+            180: [
+                ()=>b.PRINT_TAB(b.GET_VAR('x')),
+                ()=>b.READ('y')
+            ],
+            190: [
+                ()=>b.FOR('i',b.GET_VAR('x'),b.GET_VAR('y')),
+                ()=>b.ASSING_VAR('j',b.GET_VAR('i')-5*b.INT(b.GET_VAR('i')/5)),
+            ],
             200: ()=>b.PRINT(
                 b.CHR$(
                     b.GET_VAR('l')+
@@ -72,11 +82,15 @@ export class MainScene extends Scene {
             ),
             210: ()=>b.NEXT('i'),
             220: ()=>b.GOTO(170),
-            240: ()=>b.GOSUB(260),
-            241: ()=>b.GOTO(450),
-            260: ()=>b.FOR('i',1,6),
-            261: ()=>b.PRINT(b.CHR$(10)),
-            262: ()=>b.NEXT('i'),
+            240: [
+                ()=>b.GOSUB(260),
+                ()=>b.GOTO(450)
+            ],
+            260: [
+                ()=>b.FOR('i',1,6),
+                ()=>b.PRINT(b.CHR$(10)),
+                ()=>b.NEXT('i')
+            ],
             270: ()=>b.RETURN(),
 
 
