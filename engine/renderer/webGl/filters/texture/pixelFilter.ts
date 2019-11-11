@@ -18,7 +18,6 @@ export class PixelFilter extends AbstractFilter {
 
     constructor(game:Game) {
         super(game);
-        this.simpleRectDrawer.prepareShaderGenerator();
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.rt_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
@@ -37,8 +36,8 @@ export class PixelFilter extends AbstractFilter {
             }
             `
         );
-        this.simpleRectDrawer.initProgram();
         this.setPixelSize(5);
+        this.simpleRectDrawer.initProgram();
     }
 
 

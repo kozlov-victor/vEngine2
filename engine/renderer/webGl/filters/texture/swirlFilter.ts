@@ -18,7 +18,6 @@ export class SwirlFilter extends AbstractFilter {
 
     constructor(game:Game) {
         super(game);
-        this.simpleRectDrawer.prepareShaderGenerator();
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.angle = programGen.addFragmentUniform(GL_TYPE.FLOAT,'angle');
         this.radius = programGen.addFragmentUniform(GL_TYPE.FLOAT,'radius');
@@ -48,9 +47,9 @@ export class SwirlFilter extends AbstractFilter {
                         gl_FragColor=texture2D(texture,coord/texSize);
                     }
         `);
-        this.simpleRectDrawer.initProgram();
         this.setAngle(2*Math.PI);
         this.setRadius(100);
+        this.simpleRectDrawer.initProgram();
     }
 
 

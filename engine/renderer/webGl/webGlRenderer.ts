@@ -284,7 +284,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const justCreated:boolean = !this.tileMapDrawerHolder.isInvoked();
         const tileMapDrawer:TileMapDrawer = this.tileMapDrawerHolder.getInstance(this.gl);
         if (justCreated) {
-            tileMapDrawer.prepareShaderGenerator();
             tileMapDrawer.initProgram();
         }
 
@@ -522,7 +521,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.nullTexture = new Texture(gl);
 
         this.simpleRectDrawer = new SimpleRectDrawer(gl);
-        this.simpleRectDrawer.prepareShaderGenerator();
         this.simpleRectDrawer.initProgram();
 
         this.preprocessFrameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);

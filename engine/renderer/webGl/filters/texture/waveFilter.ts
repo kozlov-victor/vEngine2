@@ -8,13 +8,12 @@ import {Game} from "@engine/core/game";
 export class WaveFilter extends AbstractFilter {
 
     private readonly u_time:string;
-    private u_amplitude:string;
-    private u_frequency:string;
+    private readonly u_amplitude:string;
+    private readonly u_frequency:string;
     private time:number = 0;
 
     constructor(game:Game) {
         super(game);
-        this.simpleRectDrawer.prepareShaderGenerator();
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         //language=GLSL
@@ -32,9 +31,9 @@ export class WaveFilter extends AbstractFilter {
         this.u_time = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_time');
         this.u_amplitude = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_amplitude');
         this.u_frequency = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_frequency');
-        this.simpleRectDrawer.initProgram();
         this.setFrequency(1.5);
         this.setAmplitude(0.001);
+        this.simpleRectDrawer.initProgram();
     }
 
     public setFrequency(val:number):void{

@@ -10,6 +10,7 @@ import Mat16Holder = mat4.Mat16Holder;
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {Color} from "@engine/renderer/common/color";
 import {IFilter} from "@engine/renderer/common/ifilter";
+import {FastMap} from "@engine/misc/collection/fastMap";
 
 
 const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):Mat16Holder =>{
@@ -34,6 +35,7 @@ export abstract class AbstractFilter implements IFilter {
 
     protected gl:WebGLRenderingContext;
     protected simpleRectDrawer:SimpleRectDrawer;
+    private uniformCache:FastMap<string,UNIFORM_VALUE_TYPE> = new FastMap();
 
 
     protected constructor(protected game:Game){
@@ -48,15 +50,21 @@ export abstract class AbstractFilter implements IFilter {
     }
 
     public setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
-        this.simpleRectDrawer.setUniform(name,value);
+        this.uniformCache.put(name,value);
     }
 
     public getDrawer():AbstractDrawer{
         return this.simpleRectDrawer;
     }
 
-    public doFilter(destFrameBuffer:FrameBuffer){ // todo remove destFrameBuffer from arg and extract interface with doFilter() method
+    public doFilter(destFrameBuffer:FrameBuffer){
         destFrameBuffer.bind();
+        const keys:string[] = this.uniformCache.getKeys();
+        for (let i = 0; i < keys.length; i++) {
+            const name:string = keys[i];
+            const value:UNIFORM_VALUE_TYPE = this.uniformCache.get(keys[i])!;
+            this.simpleRectDrawer.setUniform(name,value);
+        }
         const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY.mat16);
         const m16h:Mat16Holder = makePositionMatrix(0,0,width,height);

@@ -21,7 +21,6 @@ export class GlowFilter extends AbstractFilter {
     constructor(protected game:Game,private quality:number = 0.03 /*[0..1]*/,private dist:number = 25) {
         // warn! quality=1 could produce a lack of performance
         super(game);
-        this.simpleRectDrawer.prepareShaderGenerator();
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
 
         this.quality = Math.pow(this.quality, 1/3);
@@ -64,11 +63,11 @@ export class GlowFilter extends AbstractFilter {
                 gl_FragColor = vec4(mix(mix(ownColor.rgb, glowColor.rgb, innerGlowAlpha / ownColor.a), glowColor.rgb, outerGlowAlpha / resultAlpha) * resultAlpha, resultAlpha);
             }
         `);
-        this.simpleRectDrawer.initProgram();
         this.setInnerStrength(1);
         this.setOuterStrength(4);
         this.setGlowColor(Color.WHITE);
         this.setDistance(this.dist);
+        this.simpleRectDrawer.initProgram();
     }
 
     public setInnerStrength(n:number){

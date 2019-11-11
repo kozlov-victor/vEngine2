@@ -10,7 +10,6 @@ export class ColorizeFilter extends AbstractFilter{
 
     constructor(game:Game){
         super(game);
-        this.simpleRectDrawer.prepareShaderGenerator();
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.uPixelColor = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'uPixelColor');
@@ -23,8 +22,8 @@ export class ColorizeFilter extends AbstractFilter{
                 gl_FragColor = result;
             }
         `);
-        this.simpleRectDrawer.initProgram();
         this.setColor(Color.NONE);
+        this.simpleRectDrawer.initProgram();
     }
 
 

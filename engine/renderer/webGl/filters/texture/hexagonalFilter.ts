@@ -14,7 +14,6 @@ export class HexagonalFilter extends AbstractFilter {
 
     constructor(game:Game) {
         super(game);
-        this.simpleRectDrawer.prepareShaderGenerator();
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.scale = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'scale');
         this.center = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
@@ -48,9 +47,9 @@ export class HexagonalFilter extends AbstractFilter {
                 gl_FragColor=texture2D(texture,choice+center/texSize);
             }
         `);
-        this.simpleRectDrawer.initProgram();
         this.setSize(10);
         this.setUniform(this.center,[0.5,0.5]);
+        this.simpleRectDrawer.initProgram();
     }
 
 

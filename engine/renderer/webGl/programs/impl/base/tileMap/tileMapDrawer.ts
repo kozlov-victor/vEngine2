@@ -9,11 +9,6 @@ export class TileMapDrawer extends SimpleRectDrawer {
 
     constructor(gl:WebGLRenderingContext) {
         super(gl);
-    }
-
-
-    public prepareShaderGenerator(): void {
-        super.prepareShaderGenerator();
         const gen:ShaderGenerator = this.gen;
         this.u_tileSize = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_tileSize');
         //language=GLSL

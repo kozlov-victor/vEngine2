@@ -16,7 +16,6 @@ export class LightFilter extends AbstractFilter {
 
     constructor(game:Game, private lightArray:LightSet) {
         super(game);
-        this.simpleRectDrawer.prepareShaderGenerator();
         const gen: ShaderGenerator = this.simpleRectDrawer.gen;
         gen.prependFragmentCodeBlock(fragmentSource);
         gen.addFragmentUniform("PointLight",'u_pointLights[MAX_NUM_OF_POINT_LIGHTS]');

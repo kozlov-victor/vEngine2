@@ -18,7 +18,6 @@ export class NoiseFilter extends AbstractFilter {
 
     constructor(game:Game) {
         super(game);
-        this.simpleRectDrawer.prepareShaderGenerator();
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.rt_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
         this.rt_h = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
@@ -56,8 +55,8 @@ export class NoiseFilter extends AbstractFilter {
                 }
             `
         );
-        this.simpleRectDrawer.initProgram();
         this.setIntensivity(0.1);
+        this.simpleRectDrawer.initProgram();
 
     }
 

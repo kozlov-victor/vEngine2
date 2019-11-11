@@ -14,16 +14,13 @@ export class SimpleRectDrawer extends AbstractDrawer {
      */
     public gen:ShaderGenerator;
 
-    public a_position:string;
-    public a_texCoord:string;
-    public u_vertexMatrix:string;
-    public u_textureMatrix:string;
+    public readonly a_position:string;
+    public readonly a_texCoord:string;
+    public readonly u_vertexMatrix:string;
+    public readonly u_textureMatrix:string;
 
     constructor(gl:WebGLRenderingContext) {
         super(gl);
-    }
-
-    public prepareShaderGenerator():void{
         this.gen = new ShaderGenerator();
         const gen:ShaderGenerator = this.gen;
         this.a_position = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_position');

@@ -14,7 +14,6 @@ export class MotionBlurFilter extends AbstractFilter {
 
     constructor(game:Game) {
         super(game);
-        this.simpleRectDrawer.prepareShaderGenerator();
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
         this.strength = programGen.addFragmentUniform(GL_TYPE.FLOAT,'strength');
         this.center = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
@@ -47,8 +46,8 @@ export class MotionBlurFilter extends AbstractFilter {
                 gl_FragColor.rgb /= gl_FragColor.a+0.00001;
             }
         `);
-        this.simpleRectDrawer.initProgram();
         this.setStrength(0.3);
+        this.simpleRectDrawer.initProgram();
     }
 
 
