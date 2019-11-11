@@ -2,25 +2,22 @@ import {
     AbstractSceneTransition,
     SceneProgressDescription
 } from "@engine/scene/transition/abstract/abstractSceneTransition";
-import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
-import {Rect} from "@engine/geometry/rect";
 import {Game} from "@engine/core/game";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
 import {Optional} from "@engine/core/declarations";
 import {Scene} from "@engine/scene/scene";
+import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
+import {Rect} from "@engine/geometry/rect";
 
-export abstract class AbstractCellsAppearingTransition extends AbstractSceneTransition {
+export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTransition {
 
     private val:number;
-
     private lockingRect:Rect = new Rect();
 
     constructor(
         protected readonly game:Game,
         protected readonly time:number = 1000,
-        protected numOfCellsX:number = 32,
-        protected numOfCellsY:number = 32,
         protected readonly easeFn:EaseFn = EasingLinear)
     {
         super();
@@ -30,9 +27,13 @@ export abstract class AbstractCellsAppearingTransition extends AbstractSceneTran
 
     public complete(): void {
         if (this._currScene!==undefined) {
+            this._currScene.scale.setXY(1);
+            this._currScene.rotationPoint.setXY(0);
             this._currScene.lockingRect = undefined;
         }
         if (this._prevScene!==undefined) {
+            this._prevScene.scale.setXY(1);
+            this._prevScene.rotationPoint.setXY(0);
             this._prevScene.lockingRect = undefined;
         }
         super.complete();
@@ -42,30 +43,18 @@ export abstract class AbstractCellsAppearingTransition extends AbstractSceneTran
 
 
     protected renderScenes(a:Optional<Scene>,b:Optional<Scene>): void {
-
-        if (b!==undefined) b.render();
-
-        if (a!==undefined) {
-
-            const cellWidth:number = a.size.width/this.numOfCellsX;
-            const cellHeight:number = a.size.height/this.numOfCellsY;
-            const total:number = this.numOfCellsX*this.numOfCellsY;
-
-            let progress:number=0;
-            for (let y:number = 0; y < this.numOfCellsY; y++) {
-                for (let x:number = 0; x < this.numOfCellsX; x++) {
-                    progress++;
-                    const currProgressRelative:number = progress/total*100;
-                    if (currProgressRelative<this.val) {
-                        this.lockingRect.setXYWH(x*cellWidth,y*cellHeight,cellWidth+1,cellHeight+1);
-                        a.lockingRect = this.lockingRect;
-                        a.render();
-                    }
-                }
-            }
+        if (b!==undefined) {
+            b.render();
         }
-
-
+        if (a!==undefined) {
+            const dx:number = a.size.width/2, dy:number = a.size.height/2;
+            a.rotationPoint.setXY(dx,dy);
+            a.scale.setXY(this.val);
+            const valInv:number = 1 - this.val;
+            this.lockingRect.setXYWH(dx*valInv,dy*valInv,a.size.width*this.val,a.size.height*this.val);
+            a.lockingRect = this.lockingRect;
+            a.render();
+        }
     }
 
     protected describe(): SceneProgressDescription {
@@ -86,9 +75,9 @@ export abstract class AbstractCellsAppearingTransition extends AbstractSceneTran
 
 }
 
-export class CellsAppearingTransition extends AbstractCellsAppearingTransition {
+export class ScaleInAppearanceTransition extends AbstractScaleAppearanceTransition {
     public getOppositeTransition(): ISceneTransition {
-        return new CellsDisappearingTransition(this.game,this.time,this.numOfCellsX,this.numOfCellsY,this.easeFn);
+        return new ScaleOutAppearanceTransition(this.game,this.time,this.easeFn);
     }
 
     public render(): void {
@@ -96,13 +85,13 @@ export class CellsAppearingTransition extends AbstractCellsAppearingTransition {
     }
 
     protected getFromTo(): { from: number; to: number } {
-        return {from: 0,to: 100};
+        return {from: 0,to: 1};
     }
 }
 
-export class CellsDisappearingTransition extends AbstractCellsAppearingTransition {
+export class ScaleOutAppearanceTransition extends AbstractScaleAppearanceTransition {
     public getOppositeTransition(): ISceneTransition {
-        return new CellsAppearingTransition(this.game,this.time,this.numOfCellsX,this.numOfCellsY,this.easeFn);
+        return new ScaleInAppearanceTransition(this.game,this.time,this.easeFn);
     }
 
     public render(): void {
@@ -110,6 +99,6 @@ export class CellsDisappearingTransition extends AbstractCellsAppearingTransitio
     }
 
     protected getFromTo(): { from: number; to: number } {
-        return {from: 100,to: 0};
+        return {from: 1,to: 0};
     }
 }

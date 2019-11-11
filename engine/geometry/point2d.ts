@@ -3,8 +3,8 @@ import {ObservableEntity} from "./abstract/observableEntity";
 import {ICloneable} from "@engine/core/declarations";
 
 export interface IPoint2d {
-    x:number;
-    y: number;
+    readonly x:number;
+    readonly y: number;
 }
 
 export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IPoint2d {

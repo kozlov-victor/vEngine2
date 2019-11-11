@@ -42,7 +42,7 @@ export class MainScene extends Scene {
         bg.borderRadius = 15;
         bg.fillColor = Color.RGB(0,120,1);
         btn.background = bg;
-        btn.setPaddings(15);
+        btn.setPaddings(60);
 
         let cnt:number = 0;
 

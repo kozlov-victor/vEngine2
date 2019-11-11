@@ -4,6 +4,7 @@ import {Game} from "@engine/core/game";
 import {MathEx} from "@engine/misc/mathEx";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {ISize, Size} from "@engine/geometry/size";
 
 export interface IScrollInitDesc {
     vertical: boolean;
@@ -100,7 +101,11 @@ export class ScrollInfo {
         });
         this._initScrollBar();
     }
-    
+
+    public getContainerSize():ISize{
+        return this._container.size;
+    }
+
     public update():void {
         if (!this._enabled) return;
 
@@ -157,10 +162,13 @@ export abstract class ScrollableContainer extends Container {
 
     protected vScrollInfo: ScrollInfo;
 
-    constructor(game:Game) {
+    protected constructor(game:Game) {
         super(game);
     }
 
+    public getSideScrollSize():ISize{
+        return this.vScrollInfo.getContainerSize();
+    }
 
     public update(){
         if (this.vScrollInfo) this.vScrollInfo.update();

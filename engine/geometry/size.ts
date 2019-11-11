@@ -1,6 +1,11 @@
 import {IReleasealable, ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 
+export interface ISize {
+    readonly width: number;
+    readonly height: number;
+}
+
 export class Size extends ObservableEntity implements IReleasealable{
 
     set width(val:number) {

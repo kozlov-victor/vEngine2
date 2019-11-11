@@ -3,7 +3,6 @@ import {IPoint2d, Point2d} from "./point2d";
 import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
 import {ICloneable} from "@engine/core/declarations";
-import {MathEx} from "@engine/misc/mathEx";
 
 export interface IRectJSON {
     x:number;
@@ -13,12 +12,12 @@ export interface IRectJSON {
 }
 
 export interface IRect {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    right: number;
-    bottom: number;
+    readonly x: number;
+    readonly y: number;
+    readonly width: number;
+    readonly height: number;
+    readonly right: number;
+    readonly bottom: number;
 }
 
 export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{

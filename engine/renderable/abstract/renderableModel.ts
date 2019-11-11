@@ -100,6 +100,15 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         b.manage(this);
     }
 
+    public setWH(w:number,h:number = w):void{
+        this.setXYWH(this.pos.x,this.pos.y,w,h);
+    }
+
+    public setXYWH(x:number,y:number,w:number,h:number):void{
+        this.pos.setXY(x,y);
+        this.size.setWH(w,h);
+    }
+
 
     public abstract draw():void;
 

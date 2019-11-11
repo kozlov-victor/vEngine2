@@ -16,6 +16,10 @@ import {
     CellsAppearingTransition,
     CellsDisappearingTransition
 } from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
+import {
+    ScaleInAppearanceTransition,
+    ScaleOutAppearanceTransition
+} from "@engine/scene/transition/appear/scale/scaleAppearanceTransition";
 
 
 export class MainScene extends Scene {
@@ -57,6 +61,8 @@ export class MainScene extends Scene {
 
         this.createCellTransitionButton('cell appearing',true);
         this.createCellTransitionButton('cell disappearing',false);
+
+        this.createScaleTransitionButton('scale in',true);
     }
 
     private createTransitionButton(text:string,transition:ISceneTransition){
@@ -98,6 +104,14 @@ export class MainScene extends Scene {
             isAppearing?
                 new CellsAppearingTransition(this.game,1000):
                 new CellsDisappearingTransition(this.game,1000);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createScaleTransitionButton(text:string,isAppearing:boolean){
+        const transition:ISceneTransition =
+            isAppearing?
+                new ScaleInAppearanceTransition(this.game,1000,EasingBounce.Out):
+                new ScaleOutAppearanceTransition(this.game,1000);
         this.createTransitionButton(text,transition);
     }
 

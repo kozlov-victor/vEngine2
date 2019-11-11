@@ -4,21 +4,27 @@ import {DebugError} from "@engine/debug/debugError";
 import {Shape} from "../../abstract/shape";
 import {Color} from "@engine/renderer/common/color";
 import {Point2d} from "@engine/geometry/point2d";
-import {ICloneable, IResource} from "@engine/core/declarations";
+import {ICloneable, IFilterable, IResource} from "@engine/core/declarations";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {IFilter} from "@engine/renderer/common/ifilter";
 
 export const enum STRETCH_MODE {
     STRETCH,
     REPEAT
 }
 
-export class Image extends Shape implements ICloneable<Image>,IResource<ITexture>{
+export class Image extends RenderableModel implements ICloneable<Image>,IResource<ITexture>,IFilterable{
 
     public readonly type:string = 'Image';
     public borderRadius:number = 0;
     public offset:Point2d = new Point2d();
     public stretchMode:STRETCH_MODE = STRETCH_MODE.STRETCH;
+    public color:Color = Color.RGB(0,0,0,0);
+    public lineWidth:number = 0;
+    public filters: IFilter[] = [];
+    public pixelPerfect:boolean = false;
 
     // resource
     private _resourceLink:ResourceLink<ITexture>;
@@ -27,7 +33,6 @@ export class Image extends Shape implements ICloneable<Image>,IResource<ITexture
 
     constructor(game: Game) {
         super(game);
-        (this.fillColor as Color).set(Color.NONE);
     }
 
     public revalidate():void {

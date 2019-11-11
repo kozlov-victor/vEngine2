@@ -133,17 +133,18 @@ class StringInfo extends CharsHolder {
     }
 
     public align(textAlign: TEXT_ALIGN, textField: TextField):void {
+        const AVAILABLE_WIDTH:number =  textField.size.width - textField.paddingLeft - textField.paddingRight;
         switch (textAlign) {
             case TEXT_ALIGN.LEFT:
                 break;
             case TEXT_ALIGN.CENTER:
-                let offset = textField.size.width - this.width;
+                let offset = AVAILABLE_WIDTH - this.width;
                 if (offset < 0) return;
                 offset /= 2;
                 this.moveBy(offset, 0);
                 break;
             case TEXT_ALIGN.RIGHT:
-                offset = textField.size.width - this.width;
+                offset = AVAILABLE_WIDTH - this.width;
                 if (offset < 0) return;
                 this.moveBy(offset, 0);
                 break;
@@ -156,7 +157,7 @@ class StringInfo extends CharsHolder {
                     w.revalidate();
                     totalWordsWidth += w.width;
                 }
-                const totalSpaceWidth: number = textField.size.width - totalWordsWidth;
+                const totalSpaceWidth: number = AVAILABLE_WIDTH - totalWordsWidth;
                 const oneSpaceWidth: number = totalSpaceWidth / (words.length - 1);
                 if (oneSpaceWidth>textField.getFont().fontContext.lineHeight*2) return;
                 const initialPosY: number = this.chars[0].destRect.y;
@@ -224,7 +225,7 @@ export class TextField extends ScrollableContainer {
         textInfo.newString();
         let text: string = this._text;
         if (this.wordBreak===WORD_BRAKE.FIT) {
-            text = text.split('\n').map((str:string)=>str.trim()).join(SPACE);
+            text = text.split('\n').map((str:string)=>str.trim()).join(' ');
         }
 
         const strings:string[] = text.split('\n');
@@ -321,7 +322,7 @@ export class TextField extends ScrollableContainer {
         worldRectTmp.setPointAndSize(this.getWorldPosition(),this.size);
         worldRectTmp.addXY(this.marginLeft+this.paddingLeft,this.marginTop+this.paddingTop);
         worldRectTmp.addWH(
-            -this.marginRight-this.paddingRight-this.paddingLeft-this.paddingLeft,
+            -this.marginRight-this.paddingRight-this.marginLeft-this.paddingLeft,
             -this.marginBottom-this.paddingBottom-this.marginTop-this.paddingTop
         );
         //renderer.lockRect(worldRectTmp); // todo

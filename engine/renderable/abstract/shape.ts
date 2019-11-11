@@ -16,15 +16,6 @@ export abstract class Shape extends RenderableModel implements IFilterable{
         super(game);
     }
 
-    public setWH(w:number,h:number = w):void{
-        this.setXYWH(this.pos.x,this.pos.y,w,h);
-    }
-
-    public setXYWH(x:number,y:number,w:number,h:number):void{
-        this.pos.setXY(x,y);
-        this.size.setWH(w,h);
-    }
-
     protected setClonedProperties(cloned:Shape):void{
         cloned.color.set(this.color);
         cloned.lineWidth = this.lineWidth;

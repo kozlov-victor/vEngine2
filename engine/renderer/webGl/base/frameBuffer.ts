@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 
 
-import {Texture} from "./texture";
+import {INTERPOLATION_MODE, Texture} from "./texture";
 import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
 
@@ -17,6 +17,7 @@ export class FrameBuffer {
 
     private readonly width:number;
     private readonly height:number;
+
 
     constructor(gl:WebGLRenderingContext,width:number,height:number){
         if (DEBUG && !gl)
@@ -45,7 +46,7 @@ export class FrameBuffer {
         FrameBuffer.currInstance = undefined;
     }
 
-    public clear(color:Color){
+    public clear(color:Color):void{
         this._checkBound();
         const arr:[number,number,number,number] = color.asGL();
         this.gl.clearColor(arr[0],arr[1],arr[2],arr[3]);
@@ -56,6 +57,7 @@ export class FrameBuffer {
         this.gl.deleteRenderbuffer(this.glRenderBuffer);
         this.gl.deleteFramebuffer(this.glFrameBuffer);
     }
+
 
     public getTexture():Texture {
         return this.texture;

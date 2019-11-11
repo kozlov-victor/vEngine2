@@ -20,12 +20,12 @@ import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFi
 import {mat4} from "@engine/geometry/mat4";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
-import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {ITexture} from "@engine/renderer/common/texture";
 import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
-import {ClazzEx, IDestroyable, Optional} from "@engine/core/declarations";
+import {ClazzEx, IDestroyable, IFilterable, Optional} from "@engine/core/declarations";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {TileMapDrawer} from "@engine/renderer/webGl/programs/impl/base/tileMap/tileMapDrawer";
 import IDENTITY = mat4.IDENTITY;
@@ -46,7 +46,7 @@ const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
 };
 
 const SCENE_DEPTH:number = 1000;
-const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).scale(1,-1).release().getCurrentMatrix().clone();
+const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).scale(1,-1).release().getCurrentValue().clone();
 let FLIP_POSITION_MATRIX:Mat16Holder;
 
 const zToWMatrix:Mat16Holder = Mat16Holder.create();
@@ -69,7 +69,7 @@ const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat
     mat4.matrixMultiply(matrix1,scaleMatrix, translationMatrix);
 
     const matrix2:Mat16Holder = Mat16Holder.fromPool();
-    mat4.matrixMultiply(matrix2,matrix1, matrixStack.getCurrentMatrix());
+    mat4.matrixMultiply(matrix2,matrix1, matrixStack.getCurrentValue());
 
     const matrix3:Mat16Holder = Mat16Holder.fromPool();
     mat4.matrixMultiply(matrix3,matrix2, projectionMatrix);
@@ -165,13 +165,19 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             }
         }
 
-        this.beforeItemDraw(img.filters.length,img.blendMode);
+        (img.getResourceLink().getTarget() as Texture).
+            setInterpolationMode(img.pixelPerfect?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
+        this.beforeItemDraw(img);
+
 
         const texture:Texture = (img.getResourceLink() as ResourceLink<Texture>).getTarget();
         const maxSize:number = Math.max(img.size.width,img.size.height);
 
         const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
-        this.prepareShapeUniformInfo(img);
+        this.prepareGeometryUniformInfo(img);
+
+        sd.setUniform(sd.u_lineWidth,Math.min(img.lineWidth/maxSize,1));
+        sd.setUniform(sd.u_color,img.color.asGL());
 
         const repeatFactor:Size = Size.fromPool();
         repeatFactor.setWH(
@@ -215,7 +221,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.bind();
 
         if (mesh.invertY) this.matrixStack.scale(1,-1,1);
-        const matrix1:Mat16Holder = this.matrixStack.getCurrentMatrix();
+        const matrix1:Mat16Holder = this.matrixStack.getCurrentValue();
 
         const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
         mat4.ortho(projectionMatrix,0,this.game.width,0,this.game.height,-SCENE_DEPTH,SCENE_DEPTH);
@@ -262,8 +268,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const maxSize:number = Math.max(rw,rh);
         const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
 
-        this.beforeItemDraw(rectangle.filters.length,rectangle.blendMode);
+        this.beforeItemDraw(rectangle);
 
+        this.prepareGeometryUniformInfo(rectangle);
         this.prepareShapeUniformInfo(rectangle);
         sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
         sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
@@ -318,8 +325,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
         const maxR2:number = maxR*2;
 
-        this.beforeItemDraw(ellipse.filters.length,ellipse.blendMode);
+        this.beforeItemDraw(ellipse);
 
+        this.prepareGeometryUniformInfo(ellipse);
         this.prepareShapeUniformInfo(ellipse);
         const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
         const rect:Rect = Rect.fromPool();
@@ -530,8 +538,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
 
-    private prepareShapeUniformInfo(shape:Shape):void{
-        const {width:rw,height:rh} = shape.size;
+    private prepareGeometryUniformInfo(model:RenderableModel):void{
+        const {width:rw,height:rh} = model.size;
         const maxSize:number = Math.max(rw,rh);
         const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
         let offsetX:number = 0,offsetY:number = 0;
@@ -559,22 +567,29 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         rect.release();
         size.release();
 
-        sd.setUniform(sd.u_lineWidth,Math.min(shape.lineWidth/maxSize,1));
-        sd.setUniform(sd.u_color,shape.color.asGL());
-        sd.setUniform(sd.u_alpha,shape.alpha);
+        sd.setUniform(sd.u_alpha,model.alpha);
         sd.setUniform(sd.u_stretchMode,STRETCH_MODE.STRETCH);
 
-        if (shape.fillColor.type==='LinearGradient') {
-            sd.setUniform(sd.u_fillLinearGradient,shape.fillColor.asGL());
+
+    }
+
+    private prepareShapeUniformInfo(model:Shape){
+        const maxSize:number = Math.max(model.size.width,model.size.height);
+        const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
+        sd.setUniform(sd.u_lineWidth,Math.min(model.lineWidth/maxSize,1));
+        sd.setUniform(sd.u_color,model.color.asGL());
+
+        if (model.fillColor.type==='LinearGradient') {
+            sd.setUniform(sd.u_fillLinearGradient,model.fillColor.asGL());
             sd.setUniform(sd.u_fillType,FILL_TYPE.LINEAR_GRADIENT);
-        } else if (shape.fillColor.type==='Color') {
-            sd.setUniform(sd.u_fillColor,shape.fillColor.asGL());
+        } else if (model.fillColor.type==='Color') {
+            sd.setUniform(sd.u_fillColor,model.fillColor.asGL());
             sd.setUniform(sd.u_fillType,FILL_TYPE.COLOR);
         }
     }
 
-    private beforeItemDraw(numOfFilters:number,blendMode:BLEND_MODE):void{
-        if (numOfFilters>0 || blendMode!==BLEND_MODE.NORMAL) {
+    private beforeItemDraw(sp:RenderableModel & IFilterable):void{
+        if (sp.filters.length>0 || sp.blendMode!==BLEND_MODE.NORMAL) {
             this.preprocessFrameBuffer.bind();
             this.preprocessFrameBuffer.clear(BLACK);
             this.blender.setBlendMode(BLEND_MODE.NORMAL);

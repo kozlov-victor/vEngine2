@@ -39,13 +39,13 @@ export class MainScene extends Scene {
         tf.maxHeight = 150;
         tf.maxWidth = 500;
 
-        tf.setTextAlign(TEXT_ALIGN.JUSTIFY);
+        tf.setTextAlign(TEXT_ALIGN.RIGHT);
         tf.setWordBreak(WORD_BRAKE.FIT);
         tf.setText(text);
 
         tf.background = new Rectangle(this.game);
         tf.background.fillColor = Color.RGB(250);
-        tf.setPaddings(5);
+        tf.setPaddings(20);
         (tf.background as Rectangle).borderRadius = 5;
         this.appendChild(tf);
 
