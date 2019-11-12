@@ -61,7 +61,7 @@ export class MeshDrawer extends AbstractDrawer {
     }
 
     public setAlfa(a:number):void{
-        this.setUniform(this.u_alpha,1);
+        this.setUniform(this.u_alpha,a);
     }
 
     public setTextureUsed(used:boolean):void{
