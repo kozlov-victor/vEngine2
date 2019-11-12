@@ -139,24 +139,29 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         if (this.alpha===0) return;
         const renderer:AbstractRenderer = this.game.getRenderer();
 
-        renderer.save();
+        renderer.saveTransform();
+        renderer.saveAlphaBlend();
 
         this.translate();
         this.transform();
+        renderer.setAlphaBlend(this.alpha);
 
 
         this.draw();
 
         if (this.children.length>0) {
-            renderer.save();
+            renderer.saveTransform();
+            renderer.saveAlphaBlend();
             renderer.translate(this.anchor.x,this.anchor.y);
             for(let i=0,max=this.children.length;i<max;i++) {
                 this.children[i].render();
             }
-            renderer.restore();
+            renderer.restoreTransform();
+            renderer.restoreAlphaBlend();
         }
 
-        renderer.restore();
+        renderer.restoreTransform();
+        renderer.restoreAlphaBlend();
     }
 
     public update():void {

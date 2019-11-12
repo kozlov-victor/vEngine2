@@ -15,7 +15,7 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
-import {TileMap} from "@engine/renderable/impl/general/tileMap";
+import {AlphaBlendStack} from "@engine/renderer/common/alphaBlendStack";
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>void;
@@ -39,6 +39,8 @@ export abstract class AbstractRenderer implements IDestroyable {
     public readonly fullScreenSize:Size = new Size(0,0);
 
     protected renderableCache:{[path:string]:ITexture} = {};
+
+    private alphaBlendStack:AlphaBlendStack = new AlphaBlendStack();
 
     protected constructor(protected game:Game){
         this.game = game;
@@ -100,9 +102,9 @@ export abstract class AbstractRenderer implements IDestroyable {
 
     public abstract resetTransform():void;
 
-    public abstract save():void;
+    public abstract saveTransform():void;
 
-    public abstract restore():void;
+    public abstract restoreTransform():void;
 
     public abstract translate(x:number,y:number,z?:number):void;
 
@@ -119,6 +121,22 @@ export abstract class AbstractRenderer implements IDestroyable {
     public abstract rotateZ(a:number):void;
 
     public killObject(r:RenderableModel):void {}
+
+    public saveAlphaBlend():void{
+        this.alphaBlendStack.save();
+    }
+
+    public restoreAlphaBlend():void{
+        this.alphaBlendStack.restore();
+    }
+
+    public setAlphaBlend(alpha:number):void{
+        this.alphaBlendStack.mult(alpha);
+    }
+
+    public getAlphaBlend():number{
+        return this.alphaBlendStack.getCurrentValue();
+    }
 
     public log(...args:any[]):void {
         if (!DEBUG) return;

@@ -327,7 +327,7 @@ export class TextField extends ScrollableContainer {
         );
         //renderer.lockRect(worldRectTmp); // todo
         worldRectTmp.release();
-        renderer.save();
+        renderer.saveTransform();
         if (this.vScrollInfo.offset) renderer.translate(0, -this.vScrollInfo.offset, 0);
 
         this._symbolImage.setResourceLink(this._font.getResourceLink());
@@ -344,7 +344,7 @@ export class TextField extends ScrollableContainer {
 
             this._symbolImage.render();
         }
-        renderer.restore();
+        renderer.restoreTransform();
         //renderer.unlockRect();
     }
 

@@ -2,23 +2,22 @@ import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
 import {Optional} from "@engine/core/declarations";
 import {IPropertyStack} from "@engine/renderer/common/propertyStack";
+import {Stack} from "@engine/misc/collection/stack";
 
 export class MatrixStack implements IPropertyStack<Mat16Holder>{
 
-    private readonly stack:Mat16Holder[] = [];
+    private readonly stack:Stack<Mat16Holder> = new Stack();
 
     constructor(){
-       this.restore();
+       this.setIdentity();
     }
 
     public restore():void {
-        const last:Optional<Mat16Holder> = this.stack.pop();
-        if (last!==undefined) last.release();
-        //Never let the stack be totally empty
-        if (this.stack.length < 1) {
-            this.stack[0] = Mat16Holder.fromPool();
-            mat4.makeIdentity(this.stack[0]);
-        }
+       if (this.stack.isEmpty()) this.setIdentity();
+       else {
+           const last:Optional<Mat16Holder> = this.stack.pop()!;
+           last.release();
+       }
     }
 
     public save():void {
@@ -28,11 +27,11 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
     public getCurrentValue():Mat16Holder {
-        return this.stack[this.stack.length - 1];
+        return this.stack.getLast()!;
     }
 
     public setCurrentValue(m:Mat16Holder) {
-        return this.stack[this.stack.length - 1] = m;
+        return this.stack.replaceLast(m);
     }
 
     public translate(x:number, y:number, z:number = 0):MatrixStack {
@@ -116,11 +115,16 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
     public release():MatrixStack{
-        for (let i:number=0;i<this.stack.length;i++) {
-            this.stack[i].release();
-            return this;
+        for (let i:number=0,max:number = this.stack.size();i<max;i++) {
+            this.stack.getAt(i)!.release();
         }
         return this;
+    }
+
+    private setIdentity(){
+        const ident = Mat16Holder.fromPool();
+        mat4.makeIdentity(ident);
+        this.stack.push(ident);
     }
 
     private _rotate(rotMat:Mat16Holder){

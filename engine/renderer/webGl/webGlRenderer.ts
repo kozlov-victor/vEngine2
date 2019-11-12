@@ -360,11 +360,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     }
 
-    public setAlpha(a:number):void{
-        if (DEBUG) throw new DebugError('not implemented');
-    }
-
-    public save():void {
+    public saveTransform():void {
         this.matrixStack.save();
     }
 
@@ -407,7 +403,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.matrixStack.skewY(angle);
     }
 
-    public restore():void{
+    public restoreTransform():void{
         this.matrixStack.restore();
     }
 
@@ -424,7 +420,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public beforeFrameDraw(color:Color):void{
-        this.save();
+        this.saveTransform();
         this.finalFrameBuffer.bind();
         this.finalFrameBuffer.clear(color);
     }
@@ -438,7 +434,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
         this.simpleRectDrawer.attachTexture('texture',texToDraw);
         this.simpleRectDrawer.draw();
-        this.restore();
+        this.restoreTransform();
     }
     public getError():Optional<{code:number,desc:string}>{
         if (!DEBUG) return undefined;
@@ -565,7 +561,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         rect.release();
         size.release();
 
-        sd.setUniform(sd.u_alpha,model.alpha);
+        sd.setUniform(sd.u_alpha,this.getAlphaBlend());
         sd.setUniform(sd.u_stretchMode,STRETCH_MODE.STRETCH);
 
 

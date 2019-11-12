@@ -142,7 +142,7 @@ export class DomRenderer extends AbstractRenderer {
         };
     }
 
-    public save():void {
+    public saveTransform():void {
         this.matrixStack.save();
     }
 
@@ -170,7 +170,7 @@ export class DomRenderer extends AbstractRenderer {
         this.matrixStack.translate(x,y,z);
     }
 
-    public restore():void{
+    public restoreTransform():void{
         this.matrixStack.restore();
     }
 

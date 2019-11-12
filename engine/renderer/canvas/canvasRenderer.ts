@@ -139,7 +139,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.ctx.restore();
     }
 
-    public save():void {
+    public saveTransform():void {
         this.ctx.save();
     }
 
@@ -164,15 +164,15 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public restore():void {
+    public restoreTransform():void {
         this.ctx.restore();
     }
 
     public beginFrameBuffer():void {
-        this.save();
+        this.saveTransform();
     }
     public flipFrameBuffer():void {
-        this.restore();
+        this.restoreTransform();
     }
 
 

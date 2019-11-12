@@ -1,5 +1,5 @@
 {
-  //"rulesDirectory": "./node_tools/lints/build",
+  "rulesDirectory": "./node_tools/lints/build",
   "extends": "tslint:recommended",
   "rules": {
     "no-trailing-whitespace": false,
@@ -36,7 +36,8 @@
     "arrow-parens": false,
     "callable-types": false,
     "no-any": false,
-    "no-null-keyword": true
+    "no-null-keyword": true,
+    "vEngine-as-statement": true
   },
   "jsRules": {
     "max-line-length": {

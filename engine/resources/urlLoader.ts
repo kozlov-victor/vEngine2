@@ -23,6 +23,8 @@ interface IWindow extends Window{
     jsonpHandler: Record<string,(data:ArrayBuffer|string)=>void>;
 }
 
+const c_IWindow = ():IWindow=>globalThis as unknown as IWindow;
+
 const loadBase64 = (urlLoader:UrlLoader<string>,urlRequest:IURLRequest)=>{
     urlLoader.onLoad(urlRequest.url);
 };
@@ -87,7 +89,7 @@ const loadViaJsonp = (urlLoader:UrlLoader<ArrayBuffer|string>,urlRequest:IURLReq
         if (urlLoader.onError) urlLoader.onError(e);
         if (DEBUG) throw new DebugError(`can not load resource with url ${urlRequest.url}`);
     };
-    const jsonpHandler:{[key:string]:(data:string|ArrayBuffer)=>void} = (window as unknown as IWindow).jsonpHandler || ((window as unknown as IWindow).jsonpHandler={});
+    const jsonpHandler:{[key:string]:(data:string|ArrayBuffer)=>void} = c_IWindow().jsonpHandler || (c_IWindow().jsonpHandler={});
     document.body.appendChild(script);
     jsonpHandler[urlRequest.url] = (data:ArrayBuffer|string):void=>{
         if (DEBUG && !urlLoader.onLoad) throw new DebugError(`urlLoader.onLoad not provided for resource with url ${urlLoader.getUrl()}`);
