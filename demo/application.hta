@@ -1,0 +1,127 @@
+<html>
+<head>
+    <title></title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <HTA:APPLICATION ID="oHTA"
+                     APPLICATIONNAME="vEngine"
+                     BORDER="thin"
+                     BORDERSTYLE="normal"
+                     maximizeButton="no"
+                     minimizeButton="yes"
+                     SHOWINTASKBAR="yes"
+                     SINGLEINSTANCE="yes"
+                     SYSMENU="yes"
+                     VERSION="1.0"
+    />
+
+    <script>
+
+        if ( ![].fill)  {
+            Array.prototype.fill = function( value ) {
+
+                var O = Object( this );
+                var len = parseInt( O.length, 10 );
+                var start = arguments[1];
+                var relativeStart = parseInt( start, 10 ) || 0;
+                var k = relativeStart < 0
+                    ? Math.max( len + relativeStart, 0)
+                    : Math.min( relativeStart, len );
+                var end = arguments[2];
+                var relativeEnd = end === undefined
+                    ? len
+                    : ( parseInt( end)  || 0) ;
+                var final = relativeEnd < 0
+                    ? Math.max( len + relativeEnd, 0 )
+                    : Math.min( relativeEnd, len );
+
+                for (; k < final; k++) {
+                    O[k] = value;
+                }
+
+                return O;
+            };
+        }
+
+        var readAsBin = function(url){
+            var inStream = new ActiveXObject("ADODB.Stream");
+            inStream.type = 1;
+            inStream.Open();
+            inStream.LoadFromFile(url);
+            return inStream.Read().toArray();
+        };
+
+        var readAsText = function(url){
+            try {
+                var fso, fileHandle, contents;
+                fso = new ActiveXObject("Scripting.FileSystemObject");
+                fileHandle = fso.OpenTextFile(url, 1);
+                return fileHandle.ReadAll();
+            } catch (e) {
+                alert('url loading error: ' + url + " " + e);
+            }
+            
+        };
+
+        var XMLHttpRequest = function(){
+            var self = this;
+            self.status = 0;
+            self.url = '';
+
+
+            self.setRequestHeader = function(key,val){
+
+            };
+
+            self.open = function(method,url){
+                self.url = url;
+            };
+            self.send = function(){
+                setTimeout(function(){
+                    var currUrl = self.url.split('?')[0];
+                    var resp = (self.responseType==='blob' || self.responseType==='arraybuffer')?readAsBin(currUrl):readAsText(currUrl);
+                    self.readyState = 4;
+                    self.status = 200;
+                    self.response = resp;
+                    self.onload && self.onload();
+                },1);
+            };
+            self.getResponseHeader = function(){};
+
+        };
+
+        var Blob = undefined;
+
+        var Promise = function(){
+
+        };
+
+		
+    </script>
+
+
+    <script src="./out/debug.js"></script>
+
+    <style>
+        html, body, div, canvas {
+            border:none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: black;
+        }
+    </style>
+    <script src="out/zxSpectrumScr.js"></script>
+
+</head>
+
+<body>
+</body>
+
+</html>
