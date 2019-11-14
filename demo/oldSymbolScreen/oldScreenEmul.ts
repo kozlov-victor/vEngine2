@@ -216,7 +216,7 @@ export class BasicEnv {
                     pi.instruction = instr as ()=>void;
                     this.program.push(pi);
                 });
-            } else if ((p[k] as unknown as ()=>void).call) {
+            } else if ((p[k] as unknown as ()=>void).call!==undefined) {
                 const pi:ProgramInstruction = new ProgramInstruction();
                 pi.number = k;
                 pi.subNumber = 0;

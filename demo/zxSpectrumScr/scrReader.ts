@@ -20,8 +20,8 @@ class Border {
     private pointerY:number = 0;
 
     private readonly pixelsPerBit:number = 1000;
-    private readonly BORDER_ON = [0,0,100,255];
-    private readonly BORDER_OFF = [100,100,0,255];
+    private readonly BORDER_ON:[byte,byte,byte,byte] = [0,0,100,255];
+    private readonly BORDER_OFF:[byte,byte,byte,byte] = [100,100,0,255];
 
     constructor(game:Game){
         const renderer:WebGlRenderer = game.getRenderer() as WebGlRenderer;
@@ -73,7 +73,7 @@ class Screen {
 
     private flashOn:boolean = false;
     private view:Int8Array = new Int8Array(this.data);
-    private videoMemory:number[] = new Array(this.data.byteLength).fill(0);
+    private videoMemory:byte[] = new Array(this.data.byteLength).fill(0);
     private pointer:number = 0;
     private loadingCompleted:boolean = false;
     private memoryTest1Completed:boolean = false;
@@ -110,7 +110,7 @@ class Screen {
                 this.stream.stop();
                 return;
             }
-            this.videoMemory[i] = this.view[i];
+            this.videoMemory[i] = this.view[i] as byte;
             this.border.readNextByte(this.videoMemory[i]);
         }
         this.pointer+=chunkSize;
@@ -165,13 +165,13 @@ class Screen {
 
                 const brightness = (attributeValue & 0b1000000)>0?255:200;
 
-                const colorOn:[number,number,number] = [
+                const colorOn:[byte,byte,byte] = [
                     (attributeValue & 0b001)>0?brightness:0,
                     (attributeValue & 0b010)>0?brightness:0,
                     (attributeValue & 0b100)>0?brightness:0,
                 ];
 
-                const colorOff:[number,number,number] = [
+                const colorOff:[byte,byte,byte] = [
                     (attributeValue & 0b001000)>0?255:0,
                     (attributeValue & 0b010000)>0?255:0,
                     (attributeValue & 0b100000)>0?255:0,
@@ -184,7 +184,7 @@ class Screen {
                 const a:byte = 255;
 
                 if (pixelSet) {
-                    r   = colorOn[1]; // r
+                    r = colorOn[1]; // r
                     g = colorOn[2]; // g
                     b = colorOn[0]; // b
                 } else {

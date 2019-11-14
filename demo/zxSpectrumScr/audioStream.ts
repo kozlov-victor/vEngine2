@@ -1,3 +1,4 @@
+import {WebAudioContextHolder} from "@engine/media/context/webAudioContext";
 
 
 export class AudioStream {
@@ -6,7 +7,8 @@ export class AudioStream {
     private ready:boolean = false;
 
     constructor(arr:Int8Array){
-        const context = new AudioContext();
+        const context =  WebAudioContextHolder.getNewAudioContext();
+        if (!context.audioWorklet) return;
         context.audioWorklet.addModule('./zxSpectrumScr/snd-processor.js').then(() => {
             const oscillator = new OscillatorNode(context);
             const gainWorkletNode = new AudioWorkletNode(context, 'snd-processor');
