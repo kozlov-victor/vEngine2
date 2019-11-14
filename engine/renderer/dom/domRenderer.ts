@@ -131,7 +131,7 @@ export class DomRenderer extends AbstractRenderer {
         this.nodes.kill(r.id);
     }
 
-    public createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoaded:()=>void):void {
+    public createTexture(imgData:ArrayBuffer|string|HTMLImageElement, link:ResourceLink<ITexture>, onLoaded:()=>void):void {
         const img:HTMLImageElement = new globalThis.Image();
         img.src = link.getUrl();
         img.onload = ()=>{

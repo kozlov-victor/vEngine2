@@ -1,5 +1,13 @@
 import {AbstractRenderer} from "../../renderer/abstract/abstractRenderer";
-import {ICloneable, IEventemittable, IParentChild, IRevalidatable, ITweenable, Optional} from "../../core/declarations";
+import {
+    IAlphaBlendable,
+    ICloneable,
+    IEventemittable,
+    IParentChild,
+    IRevalidatable,
+    ITweenable,
+    Optional
+} from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
 import {IPoint2d, Point2d} from "../../geometry/point2d";
 import {IRect, Rect} from "../../geometry/rect";
@@ -28,7 +36,7 @@ export const enum BLEND_MODE {
 }
 
 
-export abstract class RenderableModel extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable, IParentChild  {
+export abstract class RenderableModel extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable, IParentChild, IAlphaBlendable  {
 
     public id:string;
 

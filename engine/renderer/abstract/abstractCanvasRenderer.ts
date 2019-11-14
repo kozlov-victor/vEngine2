@@ -5,6 +5,10 @@ import {DebugError} from "@engine/debug/debugError";
 
 export abstract class AbstractCanvasRenderer extends AbstractRenderer {
 
+    public static canCreateImageViaBLOB():boolean{
+        return globalThis.Blob!==undefined && globalThis.URL!==undefined;
+    }
+
     public container:HTMLCanvasElement;
 
     protected constructor(game:Game) {
@@ -22,13 +26,17 @@ export abstract class AbstractCanvasRenderer extends AbstractRenderer {
     public abstract setPixelPerfectMode(mode:boolean):void;
 
 
-    protected createImageFromData(buffer:ArrayBuffer|string,onCreated:(img:ImageBitmap|HTMLImageElement)=>void):void{
+    protected createImageFromData(buffer:ArrayBuffer|string|HTMLImageElement,onCreated:(img:ImageBitmap|HTMLImageElement)=>void):void{
 
         let imgUrl:string;
         let imgBlob:Blob;
         const isBase64:boolean =  !!((buffer as string).substr);
+        const isImageElement = 'src' in (buffer as HTMLImageElement);
 
-        if (isBase64) {
+        if (isImageElement) {
+            imgUrl = (buffer as HTMLImageElement).src;
+        }
+        else if (isBase64) {
             imgUrl = buffer as string;
         } else {
             const arrayBufferView:Uint8Array = new Uint8Array(buffer as ArrayBuffer);
@@ -37,7 +45,7 @@ export abstract class AbstractCanvasRenderer extends AbstractRenderer {
             imgUrl = urlCreator.createObjectURL(imgBlob);
         }
 
-        if (globalThis.createImageBitmap && !isBase64) {
+        if (globalThis.createImageBitmap && !isBase64 && !isImageElement) {
             globalThis.createImageBitmap(imgBlob!).
             then((bitmap:ImageBitmap)=>{
                 onCreated(bitmap);
@@ -58,7 +66,7 @@ export abstract class AbstractCanvasRenderer extends AbstractRenderer {
             if (DEBUG) {
                 img.onerror = ()=>{
                     console.error(buffer);
-                    throw new DebugError(`can not create image. Bad url data`);
+                    throw new DebugError(`can not create image. Bad url data: ${img.src}`);
                 };
             }
         }

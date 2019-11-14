@@ -44,6 +44,10 @@ export interface IFilterable {
     filters: IFilter[];
 }
 
+export interface IAlphaBlendable {
+    alpha:number;
+}
+
 export interface IDestroyable {
     destroy:()=>void;
 }

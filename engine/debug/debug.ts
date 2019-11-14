@@ -133,6 +133,7 @@ window.addEventListener('error',(e:ErrorEvent)=>{
 
     if (filename) {
         httpClient.get(filename,{r:Math.random()},(file)=>{
+            if (!file) return;
             const strings:string[] = (file as string).split('\n');
             const linesAfter:number = 5;
             const linesBefore:number = 5;

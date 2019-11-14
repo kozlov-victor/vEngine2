@@ -74,6 +74,11 @@ export class Color implements ICloneable<Color>, IReleasealable{
         this.normalizeToZeroOne();
     }
 
+    public getR():number {return this.r;}
+    public getG():number {return this.g;}
+    public getB():number {return this.b;}
+    public getA():number {return this.a;}
+
     public setG(val:number):void{
         this.checkFriezed();
         this.g = val;

@@ -72,7 +72,6 @@ export class MeshDrawer extends AbstractDrawer {
         this.setUniform(this.u_normalsTextureUsed,used);
     }
 
-
     public setHeightMapTextureUsed(used:boolean):void{
         this.setUniform(this.u_heightMapTextureUsed,used);
     }

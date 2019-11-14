@@ -34,10 +34,13 @@ const request = (data:IRequestData)=> {
     if (data.data && data.method==='get') data.url+='?'+objectToQuery(data.data);
     const xhr=new XMLHttpRequest();
     let resolveFn = noop, rejectFn = noop;
-    const promise = new Promise((resolve,reject)=>{
-        resolveFn = resolve;
-        rejectFn = reject;
-    });
+    let promise;
+    if (window.Promise) {
+        promise = new Promise((resolve,reject)=>{
+            resolveFn = resolve;
+            rejectFn = reject;
+        });
+    }
     xhr.onreadystatechange=()=> {
         if (xhr.readyState===4) {
             if ( xhr.status===200 || xhr.status===0) {

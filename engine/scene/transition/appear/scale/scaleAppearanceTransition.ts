@@ -30,11 +30,13 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
             this._currScene.scale.setXY(1);
             this._currScene.rotationPoint.setXY(0);
             this._currScene.lockingRect = undefined;
+            this._currScene.alpha = 1;
         }
         if (this._prevScene!==undefined) {
             this._prevScene.scale.setXY(1);
             this._prevScene.rotationPoint.setXY(0);
             this._prevScene.lockingRect = undefined;
+            this._prevScene.alpha = 1;
         }
         super.complete();
     }
@@ -53,6 +55,7 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
             const valInv:number = 1 - this.val;
             this.lockingRect.setXYWH(dx*valInv,dy*valInv,a.size.width*this.val,a.size.height*this.val);
             a.lockingRect = this.lockingRect;
+            a.alpha = 0.6;
             a.render();
         }
     }

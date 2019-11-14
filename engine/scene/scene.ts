@@ -4,7 +4,14 @@ import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {CAMERA_MATRIX_MODE} from "@engine/renderer/camera";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {IEventemittable, IFilterable, IRevalidatable, ITweenable, Optional} from "@engine/core/declarations";
+import {
+    IAlphaBlendable,
+    IEventemittable,
+    IFilterable,
+    IRevalidatable,
+    ITweenable,
+    Optional
+} from "@engine/core/declarations";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {removeFromArray} from "@engine/misc/object";
@@ -23,7 +30,7 @@ import {TransformableModel} from "@engine/renderable/abstract/transformableModel
 import {Rect} from "@engine/geometry/rect";
 
 
-export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable {
+export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
 
     public readonly type:string = "Scene";
     public colorBG = Color.WHITE.clone();
@@ -31,6 +38,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public readonly resourceLoader: ResourceLoader;
     public readonly pos:Point2d = new Point2d();
     public filters:AbstractFilter[] = [];
+    public alpha:number = 1;
 
     protected preloadingGameObject!:RenderableModel;
     private _layers:Layer[] = [];
@@ -158,10 +166,12 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (this.lockingRect!==undefined) renderer.lockRect(this.lockingRect);
         renderer.saveTransform();
+        renderer.saveAlphaBlend();
         renderer.beforeFrameDraw(this.colorBG);
         this.game.camera.render();
         this.translate();
         this.transform();
+        renderer.setAlphaBlend(this.alpha);
 
         if (!this.resourceLoader.isCompleted()) {
             if (this.preloadingGameObject!==undefined) {
@@ -175,6 +185,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY; // todo manage this
         renderer.restoreTransform();
+        renderer.restoreAlphaBlend();
         renderer.unlockRect();
 
 

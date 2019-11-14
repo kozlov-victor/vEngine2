@@ -1,3 +1,4 @@
+/* tslint:disable:no-string-literal ban-types*/
 
 
 if (typeof globalThis === 'undefined') (window as unknown as {globalThis:Window}).globalThis = window;
@@ -21,28 +22,28 @@ if (DEBUG) {
 
 
 
-// if (!Array.prototype['find']) {
-//     Array.prototype['find'] = function(predicate:Function) {
-//         if (this == null && DEBUG) {
-//             throw new TypeError('Array.prototype.find called on null or undefined');
-//         }
-//         if (typeof predicate !== 'function' && DEBUG) {
-//             throw new TypeError('predicate must be a function');
-//         }
-//         let list = Object(this);
-//         let length = list['length'] >>> 0;
-//         let thisArg = arguments[1];
-//         let value;
-//
-//         for (let i = 0; i < length; i++) {
-//             value = list[i];
-//             if (predicate.call(thisArg, value, i, list)) {
-//                 return value;
-//             }
-//         }
-//         return undefined;
-//     };
-// }
+if (!Array.prototype['find']) {
+    Array.prototype['find'] = function(predicate:Function) {
+        if (!this && DEBUG) {
+            throw new TypeError('Array.prototype.find called on null or undefined');
+        }
+        if (typeof predicate !== 'function' && DEBUG) {
+            throw new TypeError('predicate must be a function');
+        }
+        const list = Object(this);
+        const length = list['length'] >>> 0;
+        const thisArg = arguments[1];
+        let value;
+
+        for (let i = 0; i < length; i++) {
+            value = list[i];
+            if (predicate.call(thisArg, value, i, list)) {
+                return value;
+            }
+        }
+        return undefined;
+    };
+}
 
 // if (!Object.keys) {
 //     Object.keys = (function() {

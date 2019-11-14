@@ -189,7 +189,7 @@ export abstract class AbstractRenderer implements IDestroyable {
         this.debugTextField.setText('');
     }
 
-    public abstract createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoaded:()=>void):void;
+    public abstract createTexture(imgData:ArrayBuffer|string|HTMLImageElement, link:ResourceLink<ITexture>, onLoaded:()=>void):void;
 
     public abstract getCachedTarget(l:ResourceLink<ITexture>):Optional<ITexture>;
 

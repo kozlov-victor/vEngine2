@@ -422,7 +422,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     public beforeFrameDraw(color:Color):void{
         this.saveTransform();
         this.finalFrameBuffer.bind();
-        this.finalFrameBuffer.clear(color);
+        this.finalFrameBuffer.clear(color,this.getAlphaBlend());
     }
 
     public afterFrameDraw(filters: AbstractFilter[]):void{
@@ -456,7 +456,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return this.renderableCache[l.getUrl()];
     }
 
-    public createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoad:()=>void):void{
+    public createTexture(imgData:ArrayBuffer|string|HTMLImageElement, link:ResourceLink<ITexture>, onLoad:()=>void):void{
         const possibleTargetInCache:ITexture = this.renderableCache[link.getUrl()];
         if (possibleTargetInCache!==undefined) {
             link.setTarget(possibleTargetInCache);

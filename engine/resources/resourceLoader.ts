@@ -3,6 +3,7 @@ import {Game} from "../core/game";
 import {Queue, TaskRef} from "./queue";
 import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ITexture} from "@engine/renderer/common/texture";
+import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
 
 
 export class ResourceLoader {
@@ -14,22 +15,8 @@ export class ResourceLoader {
     }
 
     public loadImage(req: string|IURLRequest): ResourceLink<ITexture> {
-        const loader:UrlLoader<ArrayBuffer> = this.createUrlLoader<ArrayBuffer>(req,'arraybuffer');
-        const link: ResourceLink<ITexture> = new ResourceLink(loader.getUrl());
-        if (this.game.getRenderer().getCachedTarget(link)!==undefined) {
-            link.setTarget(this.game.getRenderer().getCachedTarget(link)!);
-            return link;
-        }
-        loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
-        loader.onLoad = (buffer:ArrayBuffer|string)=>{
-            this.game.getRenderer().createTexture(
-                buffer,link,() => this.q.resolveTask(taskRef)
-            );
-        };
-        const taskRef:TaskRef = this.q.addTask(() => {
-            loader.load();
-        });
-        return link;
+        if (AbstractCanvasRenderer.canCreateImageViaBLOB()) return this.loadImageViaBLOB(req);
+        else return this.loadImageViaDOM(req);
     }
 
     public loadText(req: string|IURLRequest): ResourceLink<string> {
@@ -103,6 +90,42 @@ export class ResourceLoader {
 
     public onCompleted(fn: () => void): void {
         this.q.onResolved = fn;
+    }
+
+    private loadImageViaBLOB(req: string|IURLRequest): ResourceLink<ITexture> {
+        const loader:UrlLoader<ArrayBuffer> = this.createUrlLoader<ArrayBuffer>(req,'arraybuffer');
+        const link: ResourceLink<ITexture> = new ResourceLink(loader.getUrl());
+        if (this.game.getRenderer().getCachedTarget(link)!==undefined) {
+            link.setTarget(this.game.getRenderer().getCachedTarget(link)!);
+            return link;
+        }
+        loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
+        loader.onLoad = (buffer:ArrayBuffer|string)=>{
+            this.game.getRenderer().createTexture(
+                buffer,link,() => this.q.resolveTask(taskRef)
+            );
+        };
+        const taskRef:TaskRef = this.q.addTask(() => {
+            loader.load();
+        });
+        return link;
+    }
+
+    private loadImageViaDOM(req: string|IURLRequest): ResourceLink<ITexture> {
+        const url:string = (req as IURLRequest).url || (req as string);
+        const link: ResourceLink<ITexture> = new ResourceLink(url);
+        if (this.game.getRenderer().getCachedTarget(link)!==undefined) {
+            link.setTarget(this.game.getRenderer().getCachedTarget(link)!);
+            return link;
+        }
+        const img:HTMLImageElement = new Image();
+        img.src = url;
+        const taskRef:TaskRef = this.q.addTask(() => {
+            this.game.getRenderer().createTexture(
+                img,link,() => this.q.resolveTask(taskRef)
+            );
+        });
+        return link;
     }
 
 

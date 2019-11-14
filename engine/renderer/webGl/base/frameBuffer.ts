@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 
 
-import {INTERPOLATION_MODE, Texture} from "./texture";
+import {Texture} from "./texture";
 import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
 
@@ -46,10 +46,10 @@ export class FrameBuffer {
         FrameBuffer.currInstance = undefined;
     }
 
-    public clear(color:Color):void{
+    public clear(color:Color,alphaBlendValue:number = 1):void{
         this._checkBound();
         const arr:[number,number,number,number] = color.asGL();
-        this.gl.clearColor(arr[0],arr[1],arr[2],arr[3]);
+        this.gl.clearColor(arr[0],arr[1],arr[2],arr[3] * alphaBlendValue);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
 
