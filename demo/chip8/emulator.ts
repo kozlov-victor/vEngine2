@@ -38,6 +38,33 @@ class Timer {
 
 }
 
+class Keyboard {
+
+    private buttons:boolean[] = new Array(0xF+1);
+
+    constructor(){
+
+    }
+
+    public reset(){
+        this.buttons.fill(false);
+    }
+
+    public press(b:number){
+        this.buttons[b] = true;
+    }
+
+    public release(b:number){
+        this.buttons[b] = false;
+    }
+
+    public isPressed(b:number):boolean {
+        return this.buttons[b];
+    }
+
+
+}
+
 export abstract class Emulator {
 
     private static readonly STACK_SIZE:number = 24;
@@ -45,6 +72,7 @@ export abstract class Emulator {
     private static readonly SCREEN_WIDTH:number = 64;
     private static readonly SCREEN_HEIGHT:number = 32;
     private static readonly ROM_OFFSET:number = 0x200;
+    public readonly keyboard:Keyboard = new Keyboard();
 
     private memory:byte[] = new Array(Emulator.MEMORY_SIZE);
     private V:byte[] = new Array(0xF+1);
@@ -53,13 +81,16 @@ export abstract class Emulator {
     private SP:number;
     private delayTimer:Timer = new Timer();
     private soundTimer:Timer = new Timer();
-    private keys:boolean[] = new Array(0xF+1);
     private PC:number;
-    private screen:(0|1)[][];
+    private readonly screen:(0|1)[][];
 
     private PC_altered:boolean = false;
 
     protected constructor(private game:Game){
+        this.screen = [];
+        for (let y:number = 0; y < Emulator.SCREEN_HEIGHT; y++) {
+            this.screen[y] = new Array(Emulator.SCREEN_WIDTH);
+        }
         this.reset();
     }
 
@@ -95,19 +126,18 @@ export abstract class Emulator {
         this.SP = 0;
         this.delayTimer.setValue(0);
         this.soundTimer.setValue(0);
-        this.keys.fill(false);
         for (let i:number = 0; i < ROM.length; i++) {
             this.memory[i] = ROM[i];
         }
-        this.screen = [];
         for (let y:number = 0; y < Emulator.SCREEN_HEIGHT; y++) {
-            this.screen[y] = new Array(Emulator.SCREEN_WIDTH).fill(0);
+            this.screen[y].fill(0);
         }
         this.PC = Emulator.ROM_OFFSET;
+        this.keyboard.reset();
     }
 
     private SYS(addr:number,opCode:number){
-        console.log(`0x${this.PC.toString(16)}: SYS ${addr}, SP=${this.SP}, opCode=${opCode}`);
+        console.log(`0x${this.PC.toString(16)}: SYS 0x${addr.toString(16)}, SP=${this.SP}, opCode=${opCode}`);
     }
 
     private CLS(){
@@ -125,19 +155,19 @@ export abstract class Emulator {
     }
 
     private JP(addr:number) {
-        console.log(`0x${this.PC.toString(16)}: JP ${addr}`);
+        console.log(`0x${this.PC.toString(16)}: JP 0x${addr.toString(16)}`);
         this.PC = addr;
         this.PC_altered = true;
     }
 
     private JP_V0(addr:number){
-        console.log(`0x${this.PC.toString(16)}: JP_V0 ${addr}`);
+        console.log(`0x${this.PC.toString(16)}: JP_V0 0x${addr.toString(16)}`);
         this.PC = addr + this.V[0];
         this.PC_altered = true;
     }
 
     private CALL(addr:number) {
-        console.log(`0x${this.PC.toString(16)}: CALL ${addr}`);
+        console.log(`0x${this.PC.toString(16)}: CALL 0x${addr.toString(16)}`);
         if (this.SP>Emulator.STACK_SIZE) throw new Error(`stack overflow`);
         this.SP++;
         this.stack[this.SP-1] = this.PC;
@@ -146,15 +176,15 @@ export abstract class Emulator {
     }
 
     private SE_X_NN(x:number,nn:number) {
-        console.log(`0x${this.PC.toString(16)}: SE_X_NN ${x} ${nn}`);
         if (this.V[x]===nn) {
             this.PC_altered = true;
             this.PC+=4;
         }
+        console.log(`0x${this.PC.toString(16)}: SE_X_NN ${x} ${nn} (v[${x}]=${this.V[x].toString(16)})`);
     }
 
     private SE_X_Y(x:nibble,y:nibble) {
-        console.log(`0x${this.PC.toString(16)}: SE_X_Y ${x} ${y}`);
+        console.log(`0x${this.PC.toString(16)}: SE_X_Y ${x} ${y} (vx=${this.V[x].toString(16)},vy=${this.V[y].toString(16)})`);
         if (this.V[x]===this.V[y]) {
             this.PC_altered = true;
             this.PC+=4;
@@ -162,7 +192,7 @@ export abstract class Emulator {
     }
 
     private SNE_X_NN(x:nibble,nn:byte) {
-        console.log(`0x${this.PC.toString(16)}: SNE_X_NN ${x} ${nn}`);
+        console.log(`0x${this.PC.toString(16)}: SNE_X_NN ${x} ${nn} (v[${x}]=${this.V[x].toString(16)})`);
         if (this.V[x]!==nn) {
             this.PC_altered = true;
             this.PC+=4;
@@ -170,32 +200,34 @@ export abstract class Emulator {
     }
 
     private SNE_X_Y(x:nibble,y:nibble) {
-        console.log(`0x${this.PC.toString(16)}: SNE_X_Y ${x} ${y}`);
-        if (this.V[x]!==this.V[y]) this.PC+=4;
+        console.log(`0x${this.PC.toString(16)}: SNE_X_Y ${x} ${y} (v[${x}]=${this.V[x].toString(16)})`);
+        if (this.V[x]!==this.V[y]) {
+            this.PC+=4;
+            this.PC_altered = true;
+        }
     }
 
     private LD_X_NN(x:nibble,nn:byte) {
-        console.log(`0x${this.PC.toString(16)}: LD_X_NN ${x} ${nn}`);
         this.V[x]= (nn & 0xFF) as byte;
+        console.log(`0x${this.PC.toString(16)}: LD_X_NN ${x} ${nn} (v[${x}]=${this.V[x].toString(16)})`);
     }
 
     private LD_X_Y(x:nibble,y:nibble) {
-        console.log(`0x${this.PC.toString(16)}: LD_X_Y ${x} ${y}`);
         this.V[x]=this.V[y];
+        console.log(`0x${this.PC.toString(16)}: LD_X_Y ${x} ${y} (v[${x}]=${this.V[x].toString(16)})`);
     }
 
     private LD_I_NNN(addr:number) {
-        console.log(`0x${this.PC.toString(16)}: LD_I_NNN ${addr}`);
+        console.log(`0x${this.PC.toString(16)}: LD_I_NNN 0x${addr.toString(16)}`);
         this.I = addr;
     }
 
     private LD_I_SPR_X(x:nibble) {
-        console.log(`0x${this.PC.toString(16)}: LD_I_SPR_X ${x} ${x}`);
-        this.I = this.V[x];
+        this.I = this.V[x]*5;
+        console.log(`0x${this.PC.toString(16)}: LD_I_SPR_X ${x} (I=${this.I.toString(16)})`);
     }
 
     private LD_B_X(x:nibble) {
-        console.log(`0x${this.PC.toString(16)}: LD_B_X ${x}`);
         const vx:byte = this.V[x];
         const hundreds:number = ~~(vx / 100);
         const tens:number = ~~((vx - 100*hundreds)/10);
@@ -203,6 +235,7 @@ export abstract class Emulator {
         this.writeMemory(this.I,(hundreds & 0xFF) as byte);
         this.writeMemory(this.I+1,(tens & 0xFF) as byte);
         this.writeMemory(this.I+2,(ones & 0xFF) as byte);
+        console.log(`0x${this.PC.toString(16)}: LD_B_X ${x}`);
     }
 
     private LD_I_X(x:nibble) {
@@ -220,12 +253,11 @@ export abstract class Emulator {
     }
 
     private ADD_X_NN(x:nibble,nn:byte) {
-        console.log(`0x${this.PC.toString(16)}: ADD_X_NN ${x} ${nn}`);
         this.V[x]=((this.V[x]+nn)&0xFF) as byte;
+        console.log(`0x${this.PC.toString(16)}: ADD_X_NN ${x} ${nn} (x[${x}]=${this.V[x].toString(16)})`);
     }
 
     private ADD_X_Y(x:nibble,y:nibble) {
-        console.log(`0x${this.PC.toString(16)}: ADD_X_Y ${x} ${y}`);
         this.V[x]=(this.V[x]+this.V[y]) as byte;
         if (this.V[x]>0xFF) {
             this.V[0xF] = 0x1;
@@ -233,57 +265,58 @@ export abstract class Emulator {
         } else {
             this.V[0xF] = 0x0;
         }
+        console.log(`0x${this.PC.toString(16)}: ADD_X_Y ${x} ${y} (x[${x}]=${this.V[x].toString(16)}, v[0xf]=${this.V[0xF]})`);
     }
 
     private ADD_I_X(x:nibble){
-        console.log(`0x${this.PC.toString(16)}: ADD_I_X ${x}`);
         this.I=(this.I+this.V[x]) & 0xFFFF;
+        console.log(`0x${this.PC.toString(16)}: ADD_I_X ${x} (I=${this.I.toString(16)})`);
     }
 
     private OR(x:nibble,y:nibble) {
-        console.log(`OR ${x} ${y}`);
         this.V[x]=((this.V[x] | this.V[y]) & 0xFF) as byte;
+        console.log(`OR ${x} ${y} (x[${x}]=${this.V[x].toString(16)}`);
     }
 
     private AND(x:nibble,y:nibble) {
-        console.log(`0x${this.PC.toString(16)}: AND ${x} ${y}`);
         this.V[x]=((this.V[x] & this.V[y]) & 0xFF) as byte;
+        console.log(`0x${this.PC.toString(16)}: AND ${x} ${y} (x[${x}]=${this.V[x].toString(16)})`);
     }
 
     private XOR(x:nibble,y:nibble) {
-        console.log(`0x${this.PC.toString(16)}: XOR ${x} ${y}`);
         this.V[x]=((this.V[x] ^ this.V[y]) & 0xFF) as byte;
+        console.log(`0x${this.PC.toString(16)}: XOR ${x} ${y} (x[${x}]=${this.V[x].toString(16)})`);
     }
 
     private SUB(x:nibble,y:nibble) {
-        console.log(`0x${this.PC.toString(16)}: SUB ${x} ${y}`);
         if (this.V[x]>this.V[y]) this.V[0xF] = 0x1;
         else this.V[0xF] = 0x0;
         this.V[x] = ((this.V[x] - this.V[y]) & 0xFF) as byte;
+        console.log(`0x${this.PC.toString(16)}: SUB ${x} ${y} (x[${x}]=${this.V[x].toString(16)} v[0xf]=${this.V[0xF]})`);
     }
 
     private SUBN(x:nibble,y:nibble) {
-        console.log(`0x${this.PC.toString(16)}: SUBN ${x} ${y}`);
         if (this.V[y]>this.V[x]) this.V[0xF] = 0x1;
         else this.V[0xF] = 0x0;
         this.V[x] = ((this.V[y] - this.V[x]) & 0xFF) as byte;
+        console.log(`0x${this.PC.toString(16)}: SUBN ${x} ${y} (x[${x}]=${this.V[x].toString(16)} v[0xf]=${this.V[0xF]})`);
     }
 
     private SHR(x:nibble) {
-        console.log(`0x${this.PC.toString(16)}: SHR ${x}`);
         this.V[0xF] = (this.V[x] & 0b0000_0001) as byte;
         this.V[x] = ((this.V[x]>>1) & 0xFF) as byte;
+        console.log(`0x${this.PC.toString(16)}: SHR ${x} (x[${x}]=${this.V[x].toString(16)})`);
     }
 
     private SHL(x:nibble) {
-        console.log(`0x${this.PC.toString(16)}: SHL ${x}`);
         this.V[0xF] = (this.V[x] & 0b0000_0001) as byte;
         this.V[x] = ((this.V[x]<<1) & 0xFF) as byte;
+        console.log(`0x${this.PC.toString(16)}: SHL ${x} (x[${x}]=${this.V[x].toString(16)} v[0xf]=${this.V[0xF]})`);
     }
 
     private RND(x:nibble,nn:byte) {
-        console.log(`0x${this.PC.toString(16)}: RND ${x} ${x} ${nn}`);
         this.V[x] = ((~~(Math.random()*256)) & nn) as byte;
+        console.log(`0x${this.PC.toString(16)}: RND ${x} ${x} ${nn} ((x[${x}]=${this.V[x].toString(16)}))`);
     }
 
     private DRW(x:nibble,y:nibble,n:nibble) {
@@ -323,6 +356,22 @@ export abstract class Emulator {
     private LD_ST_X(x:nibble) {
         console.log(`0x${this.PC.toString(16)}: LD_ST_X ${x}`);
         this.soundTimer.setValue(this.V[x]);
+    }
+
+    private S_KEY_E(x:nibble) {
+        console.log(`0x${this.PC.toString(16)}: S_KEY_E ${x}`);
+        if (this.keyboard.isPressed(this.V[x])) {
+            this.PC+=4;
+            this.PC_altered = true;
+        }
+    }
+
+    private S_KEY_NE(x:nibble) {
+        console.log(`0x${this.PC.toString(16)}: S_KEY_E ${x}`);
+        if (!this.keyboard.isPressed(this.V[x])) {
+            this.PC+=4;
+            this.PC_altered = true;
+        }
     }
 
     private _UNKNOWN_OPCODE(opCode:number):void {
@@ -411,7 +460,9 @@ export abstract class Emulator {
                 break;
             }
             case 0xE: {
-                this._UNKNOWN_OPCODE(opCode);
+                if (NN===0x9E) this.S_KEY_E(X);
+                else if (NN===0xA1) this.S_KEY_NE(X);
+                else this._UNKNOWN_OPCODE(opCode);
                 break;
             }
             case 0xF: {

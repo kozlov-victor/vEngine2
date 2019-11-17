@@ -37,9 +37,9 @@ export class DataTexture extends Texture {
         return this._link;
     }
 
-    public setData(data: Uint8Array) {
+    public setNewData(data: Uint8Array) {
         this._data = data;
-        super.setRawData(this._data, this.size.width, this.size.height);
+        this.updateRawData();
     }
 
     public getData():Uint8Array {
@@ -59,7 +59,28 @@ export class DataTexture extends Texture {
     }
 
     public flush(){
-        this.setData(this._data);
+        this.updateRawData();
+    }
+
+    private updateRawData(){
+        const gl:WebGLRenderingContext = this.gl;
+        this.beforeOperation();
+        // target: GLenum,
+        // level: GLint,
+        // xoffset: GLint,
+        // yoffset: GLint,
+        // width: GLsizei,
+        // height: GLsizei,
+        // format: GLenum,
+        // type: GLenum,
+        // pixels: ArrayBufferView
+        gl.texSubImage2D(
+            gl.TEXTURE_2D,
+            0, 0, 0,
+            this.size.width,this.size.height,
+            gl.RGBA, gl.UNSIGNED_BYTE, this._data
+        );
+        this.afterOperation();
     }
 
 }

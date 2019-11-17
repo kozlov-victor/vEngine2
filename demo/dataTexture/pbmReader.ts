@@ -31,7 +31,7 @@ export class PbmReader {
         const {width,height} = this.readHead();
         const t:DataTexture = new DataTexture(this.game,width,height);
         const bitmap = this.read(width,height);
-        t.setData(new Uint8Array(bitmap));
+        t.setNewData(new Uint8Array(bitmap));
         return t.getLink();
     }
 

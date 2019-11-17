@@ -10,6 +10,7 @@ import Mat16Holder = mat4.Mat16Holder;
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {Color} from "@engine/renderer/common/color";
 import {IFilter} from "@engine/renderer/common/ifilter";
+import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/texture";
 
 
 const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):Mat16Holder =>{
