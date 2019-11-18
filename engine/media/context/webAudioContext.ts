@@ -6,28 +6,40 @@ import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {Clazz, ICloneable, Optional} from "@engine/core/declarations";
 import {Sound} from "@engine/media/sound";
 
+export class WebAudioContextHolder {
+    public static getAudioContextClass():Clazz<AudioContext>{
+        return (window as any).AudioContext ||
+            (window as any).webkitAudioContext;
+    }
+
+    public static getNewAudioContext():AudioContext{
+        const c:AudioContext = new (WebAudioContextHolder.getAudioContextClass())();
+        CtxHolder.fixAutoPlayPolicy(c);
+        return c;
+    }
+}
 
 class CtxHolder {
+
+
 
     public static getCtx():AudioContext{
         if (CtxHolder.ctx && !CtxHolder.res) {
             CtxHolder.res = new CtxHolder.ctx();
-            CtxHolder.fixAutoPlayPolicy();
+            CtxHolder.fixAutoPlayPolicy(CtxHolder.res);
         }
         return CtxHolder.res;
     }
-    private static ctx:Clazz<AudioContext> =
-        (window as any).AudioContext ||
-        (window as any).webkitAudioContext;
-    private static res:AudioContext;
 
-    private static fixAutoPlayPolicy():void { // chrome allow playing only with user gesture
+    public static fixAutoPlayPolicy(res:AudioContext):void { // chrome allow playing only with user gesture
         const listener =()=>{
-            CtxHolder.res.resume();
+            res.resume();
             document.removeEventListener('click',listener);
         };
         document.addEventListener('click',listener);
     }
+    private static ctx:Clazz<AudioContext> = WebAudioContextHolder.getAudioContextClass();
+    private static res:AudioContext;
 }
 
 
@@ -49,6 +61,10 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
 
     public static isAcceptable():boolean {
         return !!(window && CtxHolder.getCtx());
+    }
+
+    public static createContext():AudioContext{
+        return CtxHolder.getCtx();
     }
 
     public _ctx: AudioContext;

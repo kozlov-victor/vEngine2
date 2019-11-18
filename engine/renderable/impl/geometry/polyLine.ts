@@ -99,7 +99,6 @@ class SvgTokenizer {
         let n:number = +s;
         if (DEBUG && isNaN(n)) throw new DebugError(`can not read number: ${sign===1?'':'-'}${s}`);
         n*=sign;
-        //console.log({number:n});
         this.lastPos = lastPos;
         return n;
     }

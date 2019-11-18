@@ -20,7 +20,7 @@ export class Texture implements ITexture {
     private static MAX_TEXTURE_IMAGE_UNITS:number = 0;
     public readonly size:Size = new Size(0,0);
 
-    private readonly gl:WebGLRenderingContext;
+    protected readonly gl:WebGLRenderingContext;
     private readonly tex:WebGLTexture;
     private interpolationMode:INTERPOLATION_MODE;
 
@@ -189,13 +189,13 @@ export class Texture implements ITexture {
 
     }
 
-    private beforeOperation() {
+    protected beforeOperation() {
         if (this._currentTextureAt0!==undefined) return;
         this._currentTextureAt0 = Texture.currInstances[0];
         this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
     }
 
-    private afterOperation(){
+    protected afterOperation(){
         if (this._currentTextureAt0) this.gl.bindTexture(this.gl.TEXTURE_2D, this._currentTextureAt0.tex);
         // tslint:disable-next-line:no-null-keyword
         else this.gl.bindTexture(this.gl.TEXTURE_2D, null);

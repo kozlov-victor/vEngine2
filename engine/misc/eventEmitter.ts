@@ -16,7 +16,7 @@ export class EventEmitter{
     public on(eventNameOrList:string|string[],callBack:(arg?:unknown)=>void):void {
         if (typeof  eventNameOrList === 'string') {
             this._on(eventNameOrList,callBack);
-        } else if (eventNameOrList.splice) {
+        } else if (eventNameOrList.splice!==undefined) {
             eventNameOrList.forEach((eventName:string)=>{
                 this._on(eventName,callBack);
             });
