@@ -42,7 +42,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
     private bNorm:number;
     private aNorm:number;
     private _arr:number[];
-    private _freezed:boolean = false;
+    private _friezed:boolean = false;
 
     private _captured:boolean = false;
 
@@ -121,7 +121,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
     }
 
     public freeze():this{
-        this._freezed = true;
+        this._friezed = true;
         return this;
     }
 
@@ -148,7 +148,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
     }
 
     private checkFriezed(){
-        if (this._freezed) {
+        if (this._friezed) {
             if (DEBUG) {
                 console.error(this);
                 throw new DebugError(`the color is friezed and can no be changed`);

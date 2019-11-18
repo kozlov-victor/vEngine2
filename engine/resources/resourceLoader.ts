@@ -8,6 +8,10 @@ import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRe
 
 export class ResourceLoader {
 
+    private static canLoadResourceViaBLOB():boolean{
+        return globalThis.Blob!==undefined && globalThis.URL!==undefined;
+    }
+
     public readonly q: Queue = new Queue();
 
     constructor(private game: Game) {
@@ -15,7 +19,7 @@ export class ResourceLoader {
     }
 
     public loadImage(req: string|IURLRequest): ResourceLink<ITexture> {
-        if (AbstractCanvasRenderer.canCreateImageViaBLOB()) return this.loadImageViaBLOB(req);
+        if (ResourceLoader.canLoadResourceViaBLOB()) return this.loadImageViaBLOB(req);
         else return this.loadImageViaDOM(req);
     }
 

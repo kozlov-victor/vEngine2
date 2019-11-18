@@ -118,7 +118,7 @@ namespace FontFactory {
         (ctx  as IPrefixiedContext).webkitImageSmoothingEnabled = false;
         (ctx as IPrefixiedContext).msImageSmoothingEnabled = false;
         (ctx as IPrefixiedContext).oImageSmoothingEnabled = false;
-        ctx.fillStyle = '#00000000';
+        ctx.fillStyle = 'rgba(0,0,0,0)';
         ctx.fillRect(0,0,cnv.width,cnv.height);
         ctx.fillStyle = '#fff';
         const symbols:{[key:string]:IRectJSON} = fontContext.symbols;

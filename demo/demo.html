@@ -52,7 +52,6 @@
 
 <script>
     (function(){
-
         function getQueryParams(qs) {
             qs = qs.split('+').join(' ');
             var params = {},
@@ -65,7 +64,7 @@
         }
         var name = getQueryParams(document.location.search).name;
         if (!name) throw new Error('name url parameter is not set');
-        const scr = document.createElement('script');
+        var scr = document.createElement('script');
         scr.src = './out/'+name+'.js?modified='+new Date().getTime();
         document.body.appendChild(scr);
     })();

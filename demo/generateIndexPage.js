@@ -5,7 +5,7 @@ const allDirectories = [];
 
 const dirs = fs.readdirSync('./demo');
 dirs.forEach((dir)=>{
-    if (['assets','out','index.html','demo.html','.DS_Store','generateIndexPage.js'].includes(dir)) return;
+    if (['assets','out','index.html','demo.html','.DS_Store','generateIndexPage.js','application.hta'].includes(dir)) return;
     allDirectories.push(dir);
 });
 
@@ -52,6 +52,11 @@ const template = `
             margin: 0 auto;
             position: relative;
         }
+        .up {
+            display: block;
+            dislpay: flex;
+            width: 320px;
+        }
         .down {
             flex: 1;
             overflow-y: scroll;
@@ -87,12 +92,12 @@ const template = `
     </div>
 
     <script>
-        (()=>{
+        (function(){
 
             var items = ${JSON.stringify(allDirectories.map(it=>({title:it,name:it})),null,4)};
 
             var res = '';
-            items.map(it=>{
+            items.map(function(it){
                 res+='\\
                             <li>'+
                     '            <a onclick="onClick(event)" target="_blank" href="#" data-href="./demo.html?name='+it.name+'">\\n' +

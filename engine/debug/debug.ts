@@ -132,24 +132,40 @@ window.addEventListener('error',(e:ErrorEvent)=>{
 
 
     if (filename) {
-        httpClient.get(filename,{r:Math.random()},(file)=>{
-            if (!file) return;
-            const strings:string[] = (file as string).split('\n');
-            const linesAfter:number = 5;
-            const linesBefore:number = 5;
-            let errorString:string = strings[lineNum - 1] || '';
-            errorString = `${errorString.substr(0,colNum-1)}<span class="errorCol">${errorString[colNum-1]}</span>${errorString.substr(colNum)}`;
-            errorString=`<span class="errorRow">${errorString}</span>\n`;
-            let debugInfo:string='';
-            for (let i=-linesBefore;i<linesAfter;i++) {
-                const index = lineNum + i;
-                if (index<0 || index>strings.length-1) continue;
-                const s = strings[index];
-                if (index===lineNum-1) debugInfo+=errorString;
-                else debugInfo+=s+'\n';
-            }
-            renderError(filename,runtimeInfo,debugInfo);
-        });
+        try {
+            httpClient.get(filename,{r:Math.random()},
+                (file)=>{
+                    if (!file) return;
+                    try {
+                        const strings:string[] = (file as string).split('\n');
+                        const linesAfter:number = 5;
+                        const linesBefore:number = 5;
+                        let errorString:string = strings[lineNum - 1] || '';
+                        errorString = `${errorString.substr(0,colNum-1)}<span class="errorCol">${errorString[colNum-1]}</span>${errorString.substr(colNum)}`;
+                        errorString=`<span class="errorRow">${errorString}</span>\n`;
+                        let debugInfo:string='';
+                        for (let i=-linesBefore;i<linesAfter;i++) {
+                            const index = lineNum + i;
+                            if (index<0 || index>strings.length-1) continue;
+                            const s = strings[index];
+                            if (index===lineNum-1) debugInfo+=errorString;
+                            else debugInfo+=s+'\n';
+                        }
+                        renderError(filename,runtimeInfo,debugInfo);
+                    } catch (e) {
+                        console.error(e);
+                        renderError('',runtimeInfo,'');
+                    }
+                },
+                (err)=>{
+                    console.error(err);
+                    renderError('',runtimeInfo,'');
+                }
+            );
+        } catch (e) {
+            renderError('',runtimeInfo,'');
+        }
+
     } else {
         renderError('',runtimeInfo,'');
     }

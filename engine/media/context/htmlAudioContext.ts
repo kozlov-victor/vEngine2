@@ -37,6 +37,7 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         //     AudioPlayer.cache[link.getUrl()] = URL.createObjectURL(buffer as ArrayBuffer);
         //     onLoad();
         // };
+        AudioPlayer.cache[link.getUrl()] = link.getUrl();
         onLoad(); // todo
     }
 

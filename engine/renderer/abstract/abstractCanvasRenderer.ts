@@ -5,10 +5,6 @@ import {DebugError} from "@engine/debug/debugError";
 
 export abstract class AbstractCanvasRenderer extends AbstractRenderer {
 
-    public static canCreateImageViaBLOB():boolean{
-        return globalThis.Blob!==undefined && globalThis.URL!==undefined;
-    }
-
     public container:HTMLCanvasElement;
 
     protected constructor(game:Game) {
@@ -31,7 +27,7 @@ export abstract class AbstractCanvasRenderer extends AbstractRenderer {
         let imgUrl:string;
         let imgBlob:Blob;
         const isBase64:boolean =  !!((buffer as string).substr);
-        const isImageElement = 'src' in (buffer as HTMLImageElement);
+        const isImageElement = (buffer as HTMLImageElement).src!==undefined;
 
         if (isImageElement) {
             imgUrl = (buffer as HTMLImageElement).src;
