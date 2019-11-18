@@ -131,9 +131,7 @@ export class Texture implements ITexture {
     }
 
     public setInterpolationMode(mode:INTERPOLATION_MODE) {
-
         if (mode===this.interpolationMode) return;
-
         this.beforeOperation();
 
         const gl:WebGLRenderingContext = this.gl;
@@ -151,8 +149,8 @@ export class Texture implements ITexture {
                 break;
         }
 
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, glMode as number);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, glMode as number);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, glMode!);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, glMode!);
         this.interpolationMode = mode;
 
         this.afterOperation();

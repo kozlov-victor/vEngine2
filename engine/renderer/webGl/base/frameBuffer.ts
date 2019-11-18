@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 
 
-import {Texture} from "./texture";
+import {INTERPOLATION_MODE, Texture} from "./texture";
 import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
 
@@ -30,6 +30,10 @@ export class FrameBuffer {
         this.texture = new Texture(gl);
         this.texture.setImage(undefined,width,height);
         this._init(gl,width,height);
+    }
+
+    public setInterpolationMode(mode:INTERPOLATION_MODE) {
+        this.texture.setInterpolationMode(mode);
     }
 
     public bind():void{

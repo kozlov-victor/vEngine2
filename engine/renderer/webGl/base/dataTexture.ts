@@ -16,7 +16,7 @@ const asGlRenderer = (game:Game):WebGlRenderer|undefined=>{
 export class DataTexture extends Texture {
 
     private _data:Uint8Array;
-    private _link:ResourceLink<ITexture>;
+    private readonly _link:ResourceLink<ITexture>;
 
     constructor(game:Game,width:number,height:number){
         super(asGlRenderer(game)!.getNativeContext());

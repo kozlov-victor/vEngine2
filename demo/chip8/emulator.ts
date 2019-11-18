@@ -95,14 +95,18 @@ export abstract class Emulator {
     }
 
     public nextTick(){
-        const opCode:number = (this.memory[this.PC]<<8) | this.memory[this.PC+1];
-        if (Number.isNaN(opCode)) throw new Error(`wrong opCode with PC=${this.PC}`);
-        this.executeOpCode(opCode);
-        if (!this.PC_altered) this.PC+=2;
-        this.PC_altered = false;
-        this.flipScreen(this.screen);
-        this.delayTimer.update();
-        this.soundTimer.update();
+
+        for (let i:number=0;i<5;i++) {
+            const opCode:number = (this.memory[this.PC]<<8) | this.memory[this.PC+1];
+            if (Number.isNaN(opCode)) throw new Error(`wrong opCode with PC=${this.PC}`);
+            this.executeOpCode(opCode);
+            if (!this.PC_altered) this.PC+=2;
+            this.PC_altered = false;
+            this.flipScreen(this.screen);
+            this.delayTimer.update();
+            this.soundTimer.update();
+        }
+
     }
 
     public setRom(rom:Uint8Array){
