@@ -222,7 +222,7 @@ export class Game {
             }
         } while (loopCnt<numOfLoops);
 
-        if (this._currSceneTransition!==undefined) this._currSceneTransition?.render();
+        if (this._currSceneTransition!==undefined) this._currSceneTransition.render();
         else currentScene.render();
     }
 
