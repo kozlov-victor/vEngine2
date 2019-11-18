@@ -74,22 +74,6 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         return this;
     }
 
-    // public clamp(x:number,y:number,width:number,height:number) {
-    //
-    //     const realX1 = this.x,realY1 = this.y;
-    //     const realX2 = this.x+this.width, realY2 = this.y+this.height;
-    //
-    //     const clampX1 = MathEx.clamp(realX1,x,x+width);
-    //     const clampY1 = MathEx.clamp(realY1,y,y+height);
-    //     const clampX2 = MathEx.clamp(realX2,x,x+width);
-    //     const clampY2 = MathEx.clamp(realY2,y,y+height);
-    //
-    //     const clampWidth  = Math.max(0,clampX2 - clampX1);
-    //     const clampHeight = Math.max(0,clampY2 - clampY1);
-    //
-    //     this.setXYWH(clampX1,clampY1,clampWidth,clampHeight);
-    // }
-
 
     get x(): number {
         return this._x;
