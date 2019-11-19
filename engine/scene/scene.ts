@@ -28,6 +28,10 @@ import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEven
 import {Point2d} from "@engine/geometry/point2d";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 import {Rect} from "@engine/geometry/rect";
+import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
+import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
@@ -92,6 +96,12 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         this.getDefaultLayer().appendChild(go);
     }
 
+    public removeChild(c:RenderableModel):void{
+        for (let i = 0; i < this._layers.length; i++) {
+            if (this._layers[i].removeChild(c)) break;
+        }
+    }
+
     public prependChild(go:RenderableModel):void {
         this.getDefaultLayer().prependChild(go);
     }
@@ -107,6 +117,9 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         }
     }
 
+    public renderToTexture():ResourceLink<ITexture>{
+        return this.game.getRenderer().getHelper().renderSceneToTexture(this);
+    }
 
     public addTween<T>(t: Tween<T>): void {
         this._tweenDelegate.addTween(t);

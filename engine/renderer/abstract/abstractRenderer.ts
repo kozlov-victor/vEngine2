@@ -16,6 +16,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {AlphaBlendStack} from "@engine/renderer/common/alphaBlendStack";
+import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>void;
@@ -39,6 +40,7 @@ export abstract class AbstractRenderer implements IDestroyable {
     public readonly fullScreenSize:Size = new Size(0,0);
 
     protected renderableCache:{[path:string]:ITexture} = {};
+    protected abstract rendererHelper: RendererHelper;
 
     private alphaBlendStack:AlphaBlendStack = new AlphaBlendStack();
 
@@ -187,6 +189,10 @@ export abstract class AbstractRenderer implements IDestroyable {
         if (!DEBUG) return;
         if (!this.debugTextField) return;
         this.debugTextField.setText('');
+    }
+
+    public getHelper():RendererHelper{
+        return this.rendererHelper;
     }
 
     public abstract createTexture(imgData:ArrayBuffer|string|HTMLImageElement, link:ResourceLink<ITexture>, onLoaded:()=>void):void;

@@ -2,6 +2,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Layer} from "@engine/scene/layer";
 import {IParentChild, Optional} from "@engine/core/declarations";
+import {removeFromArray} from "@engine/misc/object";
 
 export class ParentChildDelegate<T extends IParentChild> {
 
@@ -57,6 +58,13 @@ export class ParentChildDelegate<T extends IParentChild> {
         if (DEBUG && c.parent===undefined) throw new DebugError(`can not remove children with index ${i}: parent is undefined`);
         c.parent!.children.splice(i,1);
         c.parent = undefined;
+    }
+
+    public removeChild(children:IParentChild[],c:IParentChild):boolean{
+        const parent:IParentChild = c.getParent() as IParentChild;
+        const i:number = parent.children.indexOf(c);
+        if (i===-1) return this.removeChild(c.children,c);
+        else return removeFromArray(children,it=>it===c)>0;
     }
 
     public removeChildren(){

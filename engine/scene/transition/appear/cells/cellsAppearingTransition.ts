@@ -19,8 +19,8 @@ export abstract class AbstractCellsAppearingTransition extends AbstractSceneTran
     constructor(
         protected readonly game:Game,
         protected readonly time:number = 1000,
-        protected numOfCellsX:number = 32,
-        protected numOfCellsY:number = 32,
+        protected numOfCellsX:number = 6,
+        protected numOfCellsY:number = 6,
         protected readonly easeFn:EaseFn = EasingLinear)
     {
         super();

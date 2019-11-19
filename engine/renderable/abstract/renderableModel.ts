@@ -258,6 +258,10 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         this._afterChildAppended(newChild);
     }
 
+    public removeChild(c:RenderableModel):void {
+        this._parentChildDelegate.removeChild(c.parent.children,c);
+    }
+
     public removeChildAt(i:number):void{
         this._parentChildDelegate.removeChildAt(i);
     }

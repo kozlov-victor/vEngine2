@@ -15,6 +15,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Rect} from "@engine/geometry/rect";
 import {Optional} from "@engine/core/declarations";
+import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
@@ -77,6 +78,8 @@ class VNode {
 export class DomRenderer extends AbstractRenderer {
 
     public readonly type:string = 'DomRenderer';
+
+    protected rendererHelper:RendererHelper = new RendererHelper(this.game);
 
     private matrixStack:MatrixStack;
     private nodes:Nodes;

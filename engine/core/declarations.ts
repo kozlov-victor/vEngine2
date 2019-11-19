@@ -62,6 +62,7 @@ export interface IParentChild {
     appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel):void;
     prependChild(c:RenderableModel):void;
     removeChildAt(i:number):void;
+    removeChild(c:RenderableModel):void;
     removeChildren():void;
     moveToFront():void;
     moveToBack():void;

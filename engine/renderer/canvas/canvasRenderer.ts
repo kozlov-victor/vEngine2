@@ -14,6 +14,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {Optional} from "@engine/core/declarations";
+import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -35,6 +36,8 @@ interface ICanvasRenderingContext2D extends CanvasRenderingContext2D {
 export class CanvasRenderer extends AbstractCanvasRenderer {
 
     public readonly type:string = 'CanvasRenderer';
+
+    protected rendererHelper:RendererHelper = new RendererHelper(this.game);
 
     private readonly ctx:CanvasRenderingContext2D;
 

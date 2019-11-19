@@ -53,9 +53,10 @@ export class FrameBuffer {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
 
-    public destroy():void{
+    public destroy(withTexture:boolean = true):void{
         this.gl.deleteRenderbuffer(this.glRenderBuffer);
         this.gl.deleteFramebuffer(this.glFrameBuffer);
+        if (withTexture) this.texture.destroy();
     }
 
 
