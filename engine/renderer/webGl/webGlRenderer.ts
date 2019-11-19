@@ -33,6 +33,7 @@ import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {WebGlRendererHelper} from "@engine/renderer/webGl/webGlRendererHelper";
+import {IFilter} from "@engine/renderer/common/ifilter";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -433,8 +434,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.finalFrameBuffer.clear(color,this.getAlphaBlend());
     }
 
-    public afterFrameDraw(filters: AbstractFilter[]):void{
-        const texToDraw:Texture = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(),filters);
+    public afterFrameDraw(filters: IFilter[]):void{
+        const texToDraw:Texture = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(),filters as AbstractFilter[]);
         this.finalFrameBuffer.unbind();
         if (this.finalFrameBuffer===this.origFinalFrameBuffer) {// is rendering to screen, otherwise to custom framebuffer
             const w:number = this.pixelPerfectMode?this.game.screenSize.x:this.game.width;
@@ -447,6 +448,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         }
         this.restoreTransform();
     }
+
     public getError():Optional<{code:number,desc:string}>{
         if (!DEBUG) return undefined;
         const err:number = this.gl.getError();

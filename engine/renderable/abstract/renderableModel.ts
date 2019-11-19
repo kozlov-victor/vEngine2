@@ -27,6 +27,8 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 import {Scene} from "@engine/scene/scene";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -297,6 +299,10 @@ export abstract class RenderableModel extends TransformableModel implements IRev
             this._worldPosition.add(this.getScene().pos);
         }
         return this._worldPosition;
+    }
+
+    public renderToTexture():ResourceLink<ITexture>{
+        return this.game.getRenderer().getHelper().renderRenderableModelToTexture(this);
     }
 
     protected setClonedProperties(cloned:RenderableModel):void {
