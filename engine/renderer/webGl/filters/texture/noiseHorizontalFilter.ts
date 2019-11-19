@@ -35,7 +35,9 @@ export class NoiseHorizontalFilter extends AbstractFilter {
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
                 void main(){
                     vec2 uv = vec2(gl_FragCoord.xy / vec2(rt_w,rt_h));
+                    vec4 colorOrig = texture2D(texture, v_texCoord);
                     gl_FragColor = noise(uv);
+                    gl_FragColor.a = colorOrig.a;
                 }
             `
         );

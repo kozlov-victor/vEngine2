@@ -46,9 +46,6 @@ export class MainScene extends Scene {
                     spr.angle+=0.1;
             }
         });
-
-
-
     }
 
 }

@@ -7,6 +7,7 @@ import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardE
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
+import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 
 export class MainScene extends Scene {
 
@@ -49,20 +50,21 @@ export class MainScene extends Scene {
             }
         });
 
-        let i:Image;
+        const img = new Image(this.game);
+        img.filters = [new BlackWhiteFilter(this.game),new NoiseHorizontalFilter(this.game)];
+        img.lineWidth = 5;
+        img.color = Color.RGB(100,200,11);
+        img.borderRadius = 5;
+        img.visible = false;
+        img.setResourceLink(this.renderToTexture());
+        img.visible = true;
+        this.appendChild(img);
+        img.scale.setXY(0.2);
 
         this.setInterval(()=>{
-            if (i!==undefined) {this.removeChild(i);}
-            const l:ResourceLink<ITexture> = this.renderToTexture();
-            const img = new Image(this.game);
-            img.filters = [new BlackWhiteFilter(this.game)];
-            img.scale.setXY(0.4);
-            img.setResourceLink(l);
-            img.lineWidth = 2;
-            img.color = Color.RGB(100,200,11);
-            img.borderRadius = 5;
-            this.appendChild(img);
-            i = img;
+            img.visible = false;
+            img.setResourceLink(this.renderToTexture());
+            img.visible = true;
         },1);
 
     }
