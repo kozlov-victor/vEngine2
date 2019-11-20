@@ -25,7 +25,7 @@ export class MainScene extends Scene {
 
         const obj:Model3d = new Model3d(this.game);
         obj.modelPrimitive = new Sphere(
-            60
+            120
         );
         obj.pos.setXY(150,150);
         obj.size.setWH(100,100);
@@ -43,8 +43,8 @@ export class MainScene extends Scene {
 
         const palletFilter:PalletOffsetFilter = new PalletOffsetFilter(this.game,this.palletLink.getTarget());
         const waveFilter = new WaveFilter(this.game);
-        waveFilter.setAmplitude(0.01);
-        spr.filters = [palletFilter,  ];
+        waveFilter.setAmplitude(0.005);
+        spr.filters = [palletFilter, waveFilter];
         let offset:number = 0;
         spr.revalidate();
         this.setInterval(()=>{
