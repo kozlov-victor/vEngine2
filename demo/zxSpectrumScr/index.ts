@@ -8,18 +8,14 @@ import {MouseControl} from "@engine/control/mouse/mouseControl";
 export const W = 256;
 export const H = 192;
 export const BORDER = 10;
+export const SCALE = 2;
 
-const game = new Game({width:W+BORDER*2,height:H+BORDER*2});
+const game = new Game({width:(W+BORDER*2)*SCALE,height:(H+BORDER*2)*SCALE});
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);
 const mainScene: Scene = new MainScene(game);
 game.runScene(mainScene);
-
-window.addEventListener('click',e=>{
-
-});
-
 
 
 

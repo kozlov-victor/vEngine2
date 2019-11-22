@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 
 
-import {Texture} from "./texture";
+import {INTERPOLATION_MODE, Texture} from "./texture";
 import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
 import {ISize, Size} from "@engine/geometry/size";
@@ -39,6 +39,10 @@ export class FrameBuffer implements IRenderTarget {
         this.texture.setImage(undefined,size);
         this._init(gl,size);
         this.link = ResourceLink.create(this.texture);
+    }
+
+    public setInterpolationMode(mode:INTERPOLATION_MODE) {
+        this.texture.setInterpolationMode(mode);
     }
 
     public bind():void{
