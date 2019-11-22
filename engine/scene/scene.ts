@@ -15,7 +15,7 @@ import {
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {removeFromArray} from "@engine/misc/object";
-import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
+import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {Timer} from "@engine/misc/timer";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
@@ -61,11 +61,11 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         super(game);
         this._uiLayer = new Layer(this.game);
         this.resourceLoader = new ResourceLoader(game);
-        this.size.setWH(this.game.width,this.game.height);
+        this.size.set(this.game.size);
     }
 
     public revalidate():void {
-        if (this.size.isZero()) this.size.setWH(this.game.width,this.game.height);
+        if (this.size.isZero()) this.size.set(this.game.size);
     }
 
 
@@ -117,8 +117,8 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         }
     }
 
-    public renderToTexture():ResourceLink<ITexture>{
-        return this.game.getRenderer().getHelper().renderSceneToTexture(this);
+    public renderToTexture(target:IRenderTarget):void {
+        this.game.getRenderer().getHelper().renderSceneToTexture(this,target);
     }
 
     public addTween<T>(t: Tween<T>): void {
@@ -180,7 +180,8 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         if (this.lockingRect!==undefined) renderer.lockRect(this.lockingRect);
         renderer.saveTransform();
         renderer.saveAlphaBlend();
-        renderer.beforeFrameDraw(this.colorBG);
+        renderer.clearColor.set(this.colorBG);
+        renderer.beforeFrameDraw();
         this.game.camera.render();
         this.translate();
         this.transform();

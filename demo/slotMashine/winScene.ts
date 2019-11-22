@@ -28,8 +28,8 @@ export class WinScene extends Scene {
         this.emitter.particleVelocity = {from:1,to:20};
         this.emitter.particleLiveTime = {from:100,to:500};
         this.setInterval(()=>{
-            const x:number = MathEx.random(0,this.game.width);
-            const y:number = MathEx.random(0,this.game.height);
+            const x:number = MathEx.random(0,this.game.size.width);
+            const y:number = MathEx.random(0,this.game.size.height);
             this.emitter.emissionPosition.setXY(x,y);
             this.emitter.emit();
         },1000);

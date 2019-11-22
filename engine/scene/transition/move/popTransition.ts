@@ -68,19 +68,19 @@ export class PopTransition extends AbstractSceneTransition {
         switch (this.sideTo) {
             case SIDE.BOTTOM:
                 from = 0;
-                to = this.game.height;
+                to = this.game.size.height;
                 break;
             case SIDE.TOP:
                 from = 0;
-                to = -this.game.height;
+                to = -this.game.size.height;
                 break;
             case SIDE.LEFT:
                 from = 0;
-                to = -this.game.width;
+                to = -this.game.size.width;
                 break;
             case SIDE.RIGHT:
                 from = 0;
-                to = this.game.width;
+                to = this.game.size.width;
                 break;
             default:
                 if (DEBUG) throw new DebugError(`unknown side: ${this.sideTo}`);

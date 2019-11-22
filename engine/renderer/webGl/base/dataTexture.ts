@@ -16,7 +16,7 @@ const asGlRenderer = (game:Game):WebGlRenderer|undefined=>{
 export class DataTexture extends Texture {
 
     private _data:Uint8Array;
-    private _link:ResourceLink<ITexture>;
+    private readonly _link:ResourceLink<ITexture>;
 
     constructor(game:Game,width:number,height:number){
         super(asGlRenderer(game)!.getNativeContext());
@@ -27,10 +27,7 @@ export class DataTexture extends Texture {
         this._data = new Uint8Array(this.size.width*this.size.height*4);
         super.setRawData(this._data,width,height);
 
-        const link:ResourceLink<Texture> = ResourceLink.create();
-        (game.getRenderer() as WebGlRenderer).putToCache(link,this);
-        link.setTarget(this);
-        this._link = link;
+        this._link = ResourceLink.create(this);
     }
 
     public getLink():ResourceLink<ITexture>{

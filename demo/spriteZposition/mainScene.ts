@@ -24,7 +24,7 @@ export class MainScene extends Scene {
     }
 
     public onProgress(val: number) {
-        this.preloadingGameObject.size.width = val*this.game.width;
+        this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     public onReady() {
@@ -32,7 +32,7 @@ export class MainScene extends Scene {
         for (let i=0;i<this.numOfStarts;i++) {
             const spr:Image = new Image(this.game);
             spr.setResourceLink(this.spriteLink);
-            spr.pos.setXY(MathEx.random(0,this.game.width),MathEx.random(0,this.game.height));
+            spr.pos.setXY(MathEx.random(0,this.game.size.width),MathEx.random(0,this.game.size.height));
             spr.posZ = MathEx.random(this.minZ,this.maxZ);
             this.appendChild(spr);
             this.points.push(spr);

@@ -23,7 +23,7 @@ export class MainScene extends Scene {
         obj.modelPrimitive = new Cube(150);
         obj.texture = this.logoLink.getTarget();
         obj.normalsTexture = this.normalsLink.getTarget();
-        obj.pos.setXY(this.game.width/2,this.game.height/2);
+        obj.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         this.appendChild(obj);
         this.setInterval(()=>{
             obj.angle3d.x+=0.01;

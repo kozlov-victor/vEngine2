@@ -99,10 +99,6 @@ export class ResourceLoader {
     private loadImageViaBLOB(req: string|IURLRequest): ResourceLink<ITexture> {
         const loader:UrlLoader<ArrayBuffer> = this.createUrlLoader<ArrayBuffer>(req,'arraybuffer');
         const link: ResourceLink<ITexture> = new ResourceLink(loader.getUrl());
-        if (this.game.getRenderer().getCachedTarget(link)!==undefined) {
-            link.setTarget(this.game.getRenderer().getCachedTarget(link)!);
-            return link;
-        }
         loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
         loader.onLoad = (buffer:ArrayBuffer|string)=>{
             this.game.getRenderer().createTexture(
@@ -118,10 +114,6 @@ export class ResourceLoader {
     private loadImageViaDOM(req: string|IURLRequest): ResourceLink<ITexture> {
         const url:string = (req as IURLRequest).url || (req as string);
         const link: ResourceLink<ITexture> = new ResourceLink(url);
-        if (this.game.getRenderer().getCachedTarget(link)!==undefined) {
-            link.setTarget(this.game.getRenderer().getCachedTarget(link)!);
-            return link;
-        }
         const img:HTMLImageElement = new Image();
         img.src = url;
         const taskRef:TaskRef = this.q.addTask(() => {

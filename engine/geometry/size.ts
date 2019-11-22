@@ -74,8 +74,8 @@ export class Size extends ObservableEntity implements IReleasealable{
         return this;
     }
 
-    public set(another:Size):Size{
-        this.setWH(another._width,another._height);
+    public set(another:ISize):Size{
+        this.setWH(another.width,another.height);
         return this;
     }
 

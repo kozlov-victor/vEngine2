@@ -10,6 +10,7 @@ import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
 import {ClazzEx, Optional} from "@engine/core/declarations";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 import {Stack} from "@engine/misc/collection/stack";
+import {ISize, Size} from "@engine/geometry/size";
 
 
 export const enum SCALE_STRATEGY {
@@ -38,9 +39,7 @@ export class Game {
     private static UPDATE_TIME_RATE:number = 20;
     private static instance:Game;
 
-
-    public readonly width:number;
-    public readonly height:number;
+    public readonly size:ISize = new Size();
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly pos:Point2d = new Point2d(0,0);
     public readonly screenSize = new Point2d(0,0); // todo size not point
@@ -69,8 +68,7 @@ export class Game {
     constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT}:IGameConstructorParams = {}){
         Game.instance = this;
         if (DEBUG) (window as unknown as {game:Game}).game = this;
-        this.width = width;
-        this.height = height;
+        (this.size as Size).setWH(width,height);
         this._scaleStrategy = scaleStrategy;
     }
 

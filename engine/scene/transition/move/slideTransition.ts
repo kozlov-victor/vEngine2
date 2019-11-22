@@ -70,19 +70,19 @@ export class SlideTransition extends AbstractSceneTransition {
         let from:number = 0, to:number = 0;
         switch (this.sideTo) {
             case SIDE.BOTTOM:
-                from = -this.game.height;
+                from = -this.game.size.height;
                 to = 0;
                 break;
             case SIDE.TOP:
-                from = this.game.height;
+                from = this.game.size.height;
                 to = 0;
                 break;
             case SIDE.LEFT:
-                from = this.game.width;
+                from = this.game.size.width;
                 to = 0;
                 break;
             case SIDE.RIGHT:
-                from = -this.game.width;
+                from = -this.game.size.width;
                 to = 0;
                 break;
             default:

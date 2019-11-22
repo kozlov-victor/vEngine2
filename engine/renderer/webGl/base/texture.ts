@@ -1,5 +1,5 @@
 import {DebugError} from "@engine/debug/debugError";
-import {Size} from "@engine/geometry/size";
+import {ISize, Size} from "@engine/geometry/size";
 import {ShaderProgram} from "./shaderProgram";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Optional} from "@engine/core/declarations";
@@ -15,9 +15,18 @@ export const enum INTERPOLATION_MODE {
 
 export class Texture implements ITexture {
 
-    public static currInstances:{[index:number]:Texture} = {};
+    public static currentBindTextureAt:{[index:number]:Texture} = {};
+
+    public static destroyAll(){
+        for (let i:number = Texture.instances.length-1; i <=0; i++) {
+            Texture.instances[i].destroy();
+        }
+        Texture.currentBindTextureAt = {};
+    }
 
     private static MAX_TEXTURE_IMAGE_UNITS:number = 0;
+
+    private static instances:Texture[] = [];
     public readonly size:Size = new Size(0,0);
 
     protected readonly gl:WebGLRenderingContext;
@@ -25,6 +34,7 @@ export class Texture implements ITexture {
     private interpolationMode:INTERPOLATION_MODE;
 
     private _currentTextureAt0:Optional<Texture>;
+    private destroyed:boolean = false;
 
     constructor(gl:WebGLRenderingContext){
         if (DEBUG && !gl) throw new DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
@@ -40,33 +50,32 @@ export class Texture implements ITexture {
         if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);
         // Fill the texture with a 1x1 blue pixel.
         this.setRawData(new Uint8Array([0, 255, 0, 255]),1,1);
+        Texture.instances.push(this);
     }
 
     // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true); for bitmap textures
     // gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     /**
      * @param img - if image is undefined, width and height must be specified
-     * @param width -unused if image specified
-     * @param height -unused if image specified
+     * @param size -unused if image specified
      */
     public setImage(
         img:ImageBitmap|ImageData|HTMLVideoElement|HTMLImageElement|HTMLCanvasElement|undefined,
-        width:number = 0,
-        height:number = 0):void{
+        size:ISize = new Size(0,0)):void{
 
         const gl:WebGLRenderingContext = this.gl;
 
         if (DEBUG) {
-            if (!(img || width || height))
+            if (!(img || size.width || size.height))
                 throw new DebugError("texture.setImage: if image is undefined, width and height must be specified: tex.setImage(null,w,h)");
 
             const maxSupportedSize:number = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
-            if (width>maxSupportedSize || height>maxSupportedSize) {
-                throw new DebugError(`can not create texture with size ${width}x${height}, max supported size is ${maxSupportedSize}`);
+            if (size.width>maxSupportedSize || size.height>maxSupportedSize) {
+                throw new DebugError(`can not create texture with size ${size.width}x${size.height}, max supported size is ${maxSupportedSize}`);
             }
         }
         if (img!==undefined) this.size.setWH(img.width,img.height);
-        else this.size.setWH(width,height);
+        else this.size.set(size);
 
         this.beforeOperation();
 
@@ -75,7 +84,7 @@ export class Texture implements ITexture {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
         } else {
             // tslint:disable-next-line:no-null-keyword
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, size.width, size.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         }
         this.setFilters();
         this.setInterpolationMode(INTERPOLATION_MODE.LINEAR);
@@ -91,15 +100,20 @@ export class Texture implements ITexture {
                 throw new DebugError(`can not bind texture: uniform name was not provided`);
             }
             if (i>Texture.MAX_TEXTURE_IMAGE_UNITS - 1) {
+                console.error(this);
                 throw new DebugError(`can not bind texture with index ${i}. Max supported value by device is ${Texture.MAX_TEXTURE_IMAGE_UNITS}`);
+            }
+            if (this.destroyed) {
+                console.error(this);
+                throw new DebugError(`can not bind destroyed texture`);
             }
         }
         program.setUniform(name,i);
-        if (Texture.currInstances[i]===this) return;
+        if (Texture.currentBindTextureAt[i]===this) return;
         const gl:WebGLRenderingContext = this.gl;
         gl.activeTexture(gl.TEXTURE0+i);
         gl.bindTexture(gl.TEXTURE_2D, this.tex);
-        Texture.currInstances[i] = this;
+        Texture.currentBindTextureAt[i] = this;
     }
 
     public unbind(i:number = 0):void {
@@ -107,7 +121,7 @@ export class Texture implements ITexture {
         gl.activeTexture(gl.TEXTURE0+i);
         // tslint:disable-next-line:no-null-keyword
         gl.bindTexture(gl.TEXTURE_2D, null);
-        delete Texture.currInstances[i];
+        delete Texture.currentBindTextureAt[i];
     }
 
 
@@ -124,6 +138,8 @@ export class Texture implements ITexture {
 
     public destroy():void{
         this.gl.deleteTexture(this.tex);
+        Texture.instances.splice(Texture.instances.indexOf(this),1);
+        this.destroyed = true;
     }
 
     public getGlTexture():WebGLTexture {
@@ -191,7 +207,7 @@ export class Texture implements ITexture {
 
     protected beforeOperation() {
         if (this._currentTextureAt0!==undefined) return;
-        this._currentTextureAt0 = Texture.currInstances[0];
+        this._currentTextureAt0 = Texture.currentBindTextureAt[0];
         this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
     }
 

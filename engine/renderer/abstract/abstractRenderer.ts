@@ -30,16 +30,21 @@ interface IDocument extends Document {
     webkitCancelFullScreen:()=>void;
 }
 
+export interface IRenderTarget {
+    getResourceLink():ResourceLink<ITexture>;
+}
+
 export abstract class AbstractRenderer implements IDestroyable {
 
     public abstract type:string;
 
     public container:HTMLElement;
     public debugTextField:TextField;
+    public clearBeforeRender:boolean = true;
+    public readonly clearColor:Color = Color.RGB(0,0,0);
 
     public readonly fullScreenSize:Size = new Size(0,0);
 
-    protected renderableCache:{[path:string]:ITexture} = {};
     protected abstract rendererHelper: RendererHelper;
 
     private alphaBlendStack:AlphaBlendStack = new AlphaBlendStack();
@@ -52,7 +57,7 @@ export abstract class AbstractRenderer implements IDestroyable {
             this.fullScreenSize.setW(innerWidth*dpr);
             this.fullScreenSize.setH(innerHeight*dpr);
         } else {
-            this.fullScreenSize.setWH(this.game.width,this.game.height);
+            this.fullScreenSize.set(this.game.size);
         }
     }
 
@@ -78,7 +83,7 @@ export abstract class AbstractRenderer implements IDestroyable {
         }
     }
 
-    public beforeFrameDraw(color:Color):void {}
+    public beforeFrameDraw():void {}
 
     public afterFrameDraw(filters:AbstractFilter[]):void {}
 
@@ -177,7 +182,7 @@ export abstract class AbstractRenderer implements IDestroyable {
         });
         textField.setText(textField.getText()+res);
         textField.onGeometryChanged();
-        while (textField.size.height>this.game.height) {
+        while (textField.size.height>this.game.size.height) {
             const strings:string[] = textField.getText().split('\n');
             strings.shift();
             textField.setText(strings.join('\n'));
@@ -197,7 +202,6 @@ export abstract class AbstractRenderer implements IDestroyable {
 
     public abstract createTexture(imgData:ArrayBuffer|string|HTMLImageElement, link:ResourceLink<ITexture>, onLoaded:()=>void):void;
 
-    public abstract getCachedTarget(l:ResourceLink<ITexture>):Optional<ITexture>;
 
     protected registerResize():void {
         this.onResize();
@@ -221,12 +225,12 @@ export abstract class AbstractRenderer implements IDestroyable {
             container.style.width = `${innerWidth}px`;
             container.style.height = `${innerHeight}px`;
             this.game.screenSize.setXY(innerWidth,innerHeight);
-            this.game.scale.setXY(innerWidth/this.game.width,innerHeight/this.game.height);
+            this.game.scale.setXY(innerWidth/this.game.size.width,innerHeight/this.game.size.height);
             this.game.pos.setXY(0);
             return;
         }
         // else FIT
-        const canvasRatio:number = this.game.height / this.game.width;
+        const canvasRatio:number = this.game.size.height / this.game.size.width;
         const windowRatio:number = innerHeight / innerWidth;
         let width:number;
         let height:number;
@@ -238,7 +242,7 @@ export abstract class AbstractRenderer implements IDestroyable {
             width = innerWidth;
             height = width * canvasRatio;
         }
-        this.game.scale.setXY(width / this.game.width, height / this.game.height);
+        this.game.scale.setXY(width / this.game.size.width, height / this.game.size.height);
         this.game.pos.setXY(
             (innerWidth - width) / 2,
             (innerHeight - height) / 2

@@ -6,6 +6,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {Color} from "@engine/renderer/common/color";
+import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 
 
 export class MainScene extends Scene {
@@ -33,13 +34,14 @@ export class MainScene extends Scene {
         spr.appendChild(spr1);
 
 
+        const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(spr.size);
         const img = new Image(this.game);
         img.filters = [new BlackWhiteFilter(this.game),new NoiseHorizontalFilter(this.game)];
         img.lineWidth = 5;
         img.color = Color.RGB(100,200,11);
         img.borderRadius = 5;
         img.visible = false;
-        img.setResourceLink(spr.renderToTexture());
+        img.setResourceLink(renderTarget.getResourceLink());
         img.visible = true;
         this.appendChild(img);
         img.scale.setXY(0.2);
@@ -47,7 +49,7 @@ export class MainScene extends Scene {
 
         this.setInterval(()=>{
             img.visible = false;
-            img.setResourceLink(spr.renderToTexture());
+            spr.renderToTexture(renderTarget);
             img.visible = true;
         },1);
 

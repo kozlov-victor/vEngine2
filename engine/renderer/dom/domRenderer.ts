@@ -96,9 +96,9 @@ export class DomRenderer extends AbstractRenderer {
         this.registerResize();
     }
 
-    public beforeFrameDraw(color:Color):void{
-        if (this.nodes.properties.bg_color!==color.asCSS()) {
-            this.container.style.backgroundColor = color.asCSS();
+    public beforeFrameDraw():void{
+        if (this.nodes.properties.bg_color!==this.clearColor.asCSS()) {
+            this.container.style.backgroundColor = this.clearColor.asCSS();
         }
     }
 
@@ -190,9 +190,6 @@ export class DomRenderer extends AbstractRenderer {
     public drawTileMap(tileMap: TileMap): void {
     }
 
-    public getCachedTarget(l: ResourceLink<ITexture>): ITexture {
-        return {size:new Size()};
-    }
 
     public getError(): Optional<{code: number; desc: string}> {
         return undefined;

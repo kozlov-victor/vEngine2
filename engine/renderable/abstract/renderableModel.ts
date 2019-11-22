@@ -1,4 +1,4 @@
-import {AbstractRenderer} from "../../renderer/abstract/abstractRenderer";
+import {AbstractRenderer, IRenderTarget} from "../../renderer/abstract/abstractRenderer";
 import {
     IAlphaBlendable,
     ICloneable,
@@ -29,6 +29,7 @@ import {TransformableModel} from "@engine/renderable/abstract/transformableModel
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
+import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -301,8 +302,8 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         return this._worldPosition;
     }
 
-    public renderToTexture():ResourceLink<ITexture>{
-        return this.game.getRenderer().getHelper().renderRenderableModelToTexture(this);
+    public renderToTexture(target:IRenderTarget):void{
+        this.game.getRenderer().getHelper().renderRenderableModelToTexture(this,target);
     }
 
     protected setClonedProperties(cloned:RenderableModel):void {

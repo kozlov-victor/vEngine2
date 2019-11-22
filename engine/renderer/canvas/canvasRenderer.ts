@@ -69,9 +69,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     public drawImage(img:Image):void{
         if (DEBUG) {
             if (!img.getResourceLink()) throw new DebugError(`image resource link is not set`);
-            if (!this.renderableCache[img.getResourceLink().getUrl()]) throw new DebugError(`can not find texture with resource link id ${img.getResourceLink().getUrl()}`);
         }
-
 
         const srcRect:Rect = img.getSrcRect();
         const dstRect:Rect = img.getSrcRect();
@@ -178,11 +176,10 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.restoreTransform();
     }
 
-
-
-    public beforeFrameDraw(color: Color): void {
-        this.ctx.fillStyle = color.asCSS();
-        this.ctx.fillRect(0,0,this.game.width,this.game.height);
+    public beforeFrameDraw(): void {
+        if (!this.clearBeforeRender) return;
+        this.ctx.fillStyle = this.clearColor.asCSS();
+        this.ctx.fillRect(0,0,this.game.size.width,this.game.size.height);
     }
 
 
@@ -196,7 +193,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             ctx.drawImage(bitmap,0,0);
             const size:Size = new Size(bitmap.width,bitmap.height);
             const texture:ICanvasTexture = {size,source:c};
-            this.renderableCache[link.getUrl()] = texture;
             link.setTarget(texture);
             onLoad();
         });
@@ -209,10 +205,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     public drawMesh(m: Mesh): void {
     }
 
-
-    public getCachedTarget(l: ResourceLink<ITexture>): Optional<ITexture> {
-        return undefined;
-    }
 
     public getError(): { code: number; desc: string } | undefined {
         return undefined;

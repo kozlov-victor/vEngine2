@@ -27,14 +27,14 @@ export class MainScene extends Scene {
     }
 
     public onProgress(val: number) {
-        this.preloadingGameObject.size.width = val*this.game.width;
+        this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     public onReady() {
 
         this.sound.play();
         this.appendChild(this.player);
-        this.player.pos.setXY(this.game.width/2,this.game.height/2+40);
+        this.player.pos.setXY(this.game.size.width/2,this.game.size.height/2+40);
 
         this.on(MOUSE_EVENTS.click, ()=>{
             this.sound.play();

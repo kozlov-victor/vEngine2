@@ -127,7 +127,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private preprocessFrameBuffer:FrameBuffer;
 
     private origFinalFrameBuffer:FrameBuffer;
-    private customFinalFrameBuffer:Optional<FrameBuffer>;
     private finalFrameBuffer:FrameBuffer;
 
     private doubleFrameBuffer:DoubleFrameBuffer;
@@ -143,9 +142,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._init();
         const m16hResult:Mat16Holder = Mat16Holder.fromPool();
         const m16Scale:Mat16Holder = Mat16Holder.fromPool();
-        mat4.makeScale(m16Scale,this.game.width, this.game.height, 1);
+        mat4.makeScale(m16Scale,this.game.size.width, this.game.size.height, 1);
         const m16Ortho:Mat16Holder = Mat16Holder.fromPool();
-        mat4.ortho(m16Ortho,0,this.game.width,0,this.game.height,-1,1);
+        mat4.ortho(m16Ortho,0,this.game.size.width,0,this.game.size.height,-1,1);
 
         mat4.matrixMultiply(m16hResult, m16Scale, m16Ortho);
         FLIP_POSITION_MATRIX = m16hResult.clone();
@@ -233,7 +232,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const matrix1:Mat16Holder = this.matrixStack.getCurrentValue();
 
         const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        mat4.ortho(projectionMatrix,0,this.game.width,0,this.game.height,-SCENE_DEPTH,SCENE_DEPTH);
+        mat4.ortho(projectionMatrix,0,this.game.size.width,0,this.game.size.height,-SCENE_DEPTH,SCENE_DEPTH);
         const matrix2:Mat16Holder = Mat16Holder.fromPool();
         mat4.matrixMultiply(matrix2,projectionMatrix, zToWMatrix);
 
@@ -428,18 +427,18 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.gl.disable(this.gl.SCISSOR_TEST);
     }
 
-    public beforeFrameDraw(color:Color):void{
+    public beforeFrameDraw():void{
         this.saveTransform();
         this.finalFrameBuffer.bind();
-        this.finalFrameBuffer.clear(color,this.getAlphaBlend());
+        if (this.clearBeforeRender) this.finalFrameBuffer.clear(this.clearColor,this.getAlphaBlend());
     }
 
     public afterFrameDraw(filters: IFilter[]):void{
         const texToDraw:Texture = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(),filters as AbstractFilter[]);
         this.finalFrameBuffer.unbind();
         if (this.finalFrameBuffer===this.origFinalFrameBuffer) {// is rendering to screen, otherwise to custom framebuffer
-            const w:number = this.pixelPerfectMode?this.game.screenSize.x:this.game.width;
-            const h:number = this.pixelPerfectMode?this.game.screenSize.y:this.game.height;
+            const w:number = this.pixelPerfectMode?this.game.screenSize.x:this.game.size.width;
+            const h:number = this.pixelPerfectMode?this.game.screenSize.y:this.game.size.height;
             this.gl.viewport(0, 0, w,h);
             this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
             this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
@@ -459,29 +458,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return undefined;
     }
 
-    public putToCache(l:ResourceLink<ITexture>,t:Texture) {
-        const url:string = l.getUrl();
-        if (DEBUG && !url) throw new DebugError(`no url is associated with resource link`);
-        this.renderableCache[url] = t;
-    }
-
-    public getCachedTarget(l:ResourceLink<ITexture>):Optional<ITexture> {
-        return this.renderableCache[l.getUrl()];
-    }
 
     public createTexture(imgData:ArrayBuffer|string|HTMLImageElement, link:ResourceLink<ITexture>, onLoad:()=>void):void{
-        const possibleTargetInCache:ITexture = this.renderableCache[link.getUrl()];
-        if (possibleTargetInCache!==undefined) {
-            link.setTarget(possibleTargetInCache);
-            onLoad();
-            return;
-        }
-
         this.createImageFromData(imgData,(bitmap:ImageBitmap|HTMLImageElement)=>{
             const texture:Texture = new Texture(this.gl);
             texture.setImage(bitmap);
             this.gl.bindTexture(this.gl.TEXTURE_2D, this.finalFrameBuffer.getTexture().getGlTexture()); // to restore texture binding
-            this.putToCache(link,texture);
             link.setTarget(texture);
             onLoad();
         });
@@ -511,11 +493,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.meshDrawerHolder.destroy();
         this.simpleRectDrawer.destroy();
         this.tileMapDrawerHolder.destroy();
-        //this.modelDrawer.destroy();
-        Object.keys(this.renderableCache).forEach((key:string)=>{
-            const t:Texture = this.renderableCache[key] as Texture;
-            t.destroy();
-        });
+        Texture.destroyAll();
     }
 
     protected onResize(): void {
@@ -524,8 +502,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             this.container.width = this.game.screenSize.x;
             this.container.height = this.game.screenSize.y;
         } else {
-            this.container.width = this.game.width;
-            this.container.height = this.game.height;
+            this.container.width = this.game.size.width;
+            this.container.height = this.game.size.height;
         }
     }
 
@@ -539,10 +517,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.simpleRectDrawer = new SimpleRectDrawer(gl);
         this.simpleRectDrawer.initProgram();
 
-        this.preprocessFrameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);
-        this.origFinalFrameBuffer = new FrameBuffer(gl,this.game.width,this.game.height);
+        this.preprocessFrameBuffer = new FrameBuffer(gl,this.game.size);
+        this.origFinalFrameBuffer = new FrameBuffer(gl,this.game.size);
         this.finalFrameBuffer = this.origFinalFrameBuffer;
-        this.doubleFrameBuffer = new DoubleFrameBuffer(gl,this.game.width,this.game.height);
+        this.doubleFrameBuffer = new DoubleFrameBuffer(gl,this.game.size);
 
         this.blender = new Blender(this.gl);
         this.blender.enable();

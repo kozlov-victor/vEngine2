@@ -2,17 +2,18 @@
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {INTERPOLATION_MODE, Texture} from "@engine/renderer/webGl/base/texture";
 import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
+import {ISize} from "@engine/geometry/size";
 
 export class DoubleFrameBuffer {
 
     private gl:WebGLRenderingContext;
     private readonly buffers:[FrameBuffer,FrameBuffer];
 
-    constructor(gl:WebGLRenderingContext,width:number,height:number){
+    constructor(gl:WebGLRenderingContext,size:ISize){
         this.gl = gl;
         this.buffers = [
-            new FrameBuffer(gl,width,height),
-            new FrameBuffer(gl,width,height)
+            new FrameBuffer(gl,size),
+            new FrameBuffer(gl,size)
         ];
     }
 

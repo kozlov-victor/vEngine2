@@ -23,7 +23,7 @@ export class MainScene extends Scene {
     }
 
     public onProgress(val: number) {
-        this.preloadingGameObject.size.width = val*this.game.width;
+        this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     public onReady() {

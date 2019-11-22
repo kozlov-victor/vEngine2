@@ -61,7 +61,7 @@ export class Camera {
 
 
     public revalidate():void{
-        this._rectIdentity.setXYWH(0,0,this.game.width,this.game.height);
+        this._rectIdentity.setXYWH(0,0,this.game.size.width,this.game.size.height);
     }
 
 
@@ -111,8 +111,8 @@ export class Camera {
             const pointToFollow:Point2d = Point2d.fromPool();
             const scene:Scene = this.game.getCurrScene();
 
-            const w:number = this.game.width;
-            const h:number = this.game.height;
+            const w:number = this.game.size.width;
+            const h:number = this.game.size.height;
             const wDiv2:number = w/2;
             const hDiv2:number = h/2;
 
@@ -158,7 +158,7 @@ export class Camera {
     public _updateRect():void{
         const p:Point2d = Point2d.fromPool();
         const point00:Point2d = this.screenToWorld(p.setXY(0,0));
-        const pointWH:Point2d = this.screenToWorld(p.setXY(this.game.width,this.game.height));
+        const pointWH:Point2d = this.screenToWorld(p.setXY(this.game.size.width,this.game.size.height));
         this._rectScaled.setXYWH(
             point00.x,point00.y,
             pointWH.x - point00.x,pointWH.y - point00.y
@@ -169,9 +169,9 @@ export class Camera {
     public render():void{ //TRS - (transform rotate scale) reverted
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (!this.scale.equal(1)) {
-            renderer.translate(this.game.width/2,this.game.height/2,this.posZ);
+            renderer.translate(this.game.size.width/2,this.game.size.height/2,this.posZ);
             renderer.scale(this.scale.x,this.scale.y);
-            renderer.translate(-this.game.width/2,-this.game.height/2);
+            renderer.translate(-this.game.size.width/2,-this.game.size.height/2);
         }
         // todo rotation does not work correctly yet
         //this.game.renderer.rotateZ(this.angle);
@@ -186,7 +186,7 @@ export class Camera {
         const mScale:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeScale(mScale,this.scale.x,this.scale.y,1);
         const point2d:Point2d = MathEx.unProject(
-            p, this.game.width,this.game.height,mScale);
+            p, this.game.size.width,this.game.size.height,mScale);
         point2d.add(this.pos);
         mScale.release();
         return point2d;
@@ -196,7 +196,7 @@ export class Camera {
         if (this.matrixMode===CAMERA_MATRIX_MODE.MODE_IDENTITY)
             return this._rectIdentity;
         else {
-            this._rect.setXYWH(this.pos.x,this.pos.y,this.game.width,this.game.height);
+            this._rect.setXYWH(this.pos.x,this.pos.y,this.game.size.width,this.game.size.height);
             return this._rect;
         }
     }

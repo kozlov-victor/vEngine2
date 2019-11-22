@@ -57,7 +57,7 @@ export class CurtainsOpeningTransition extends AbstractSceneTransition {
 
     protected describe(): SceneProgressDescription {
         const from:number = 0;
-        const to:number = -this.game.width/2;
+        const to:number = -this.game.size.width/2;
         return {
             target: {val: from},
             from: {val: from},

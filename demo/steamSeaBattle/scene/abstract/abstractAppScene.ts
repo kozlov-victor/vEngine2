@@ -79,7 +79,7 @@ export abstract class AbstractAppScene extends Scene {
     }
 
     public onProgress(val: number) {
-        this.preloadingGameObject.size.width = val*this.game.width;
+        this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     protected abstract getSceneElement():Element;

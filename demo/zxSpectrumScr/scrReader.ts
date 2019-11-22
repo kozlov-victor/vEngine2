@@ -27,10 +27,7 @@ class Border {
         const renderer:WebGlRenderer = game.getRenderer() as WebGlRenderer;
         const gl:WebGLRenderingContext = renderer.getNativeContext();
         this.texture = new DataTexture(game,W+BORDER*2, H+BORDER*2);
-        const link:ResourceLink<Texture> = ResourceLink.create();
-        renderer.putToCache(link,this.texture);
-        link.setTarget(this.texture);
-        this.link = link;
+        this.link = ResourceLink.create(this.texture);
         this.reset();
     }
 

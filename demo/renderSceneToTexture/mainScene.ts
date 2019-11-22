@@ -8,6 +8,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
+import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 
 export class MainScene extends Scene {
 
@@ -22,7 +23,7 @@ export class MainScene extends Scene {
     }
 
     public onProgress(val: number) {
-        this.preloadingGameObject.size.width = val*this.game.width;
+        this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     public onReady() {
@@ -50,20 +51,22 @@ export class MainScene extends Scene {
             }
         });
 
+
+        const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.size);
         const img = new Image(this.game);
         img.filters = [new BlackWhiteFilter(this.game),new NoiseHorizontalFilter(this.game)];
         img.lineWidth = 5;
         img.color = Color.RGB(100,200,11);
         img.borderRadius = 5;
         img.visible = false;
-        img.setResourceLink(this.renderToTexture());
+        img.setResourceLink(renderTarget.getResourceLink());
         img.visible = true;
         this.appendChild(img);
         img.scale.setXY(0.2);
 
         this.setInterval(()=>{
             img.visible = false;
-            img.setResourceLink(this.renderToTexture());
+            this.renderToTexture(renderTarget);
             img.visible = true;
         },1);
 

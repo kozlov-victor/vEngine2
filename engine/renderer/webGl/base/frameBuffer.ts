@@ -4,9 +4,13 @@ import {DebugError} from "@engine/debug/debugError";
 import {Texture} from "./texture";
 import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
+import {ISize, Size} from "@engine/geometry/size";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {ITexture} from "@engine/renderer/common/texture";
+import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 
 
-export class FrameBuffer {
+export class FrameBuffer implements IRenderTarget {
 
     private static currInstance:Optional<FrameBuffer>;
     private gl:WebGLRenderingContext;
@@ -15,24 +19,35 @@ export class FrameBuffer {
     private glRenderBuffer:WebGLRenderbuffer;
     private glFrameBuffer:WebGLRenderbuffer;
 
+    private link:ResourceLink<ITexture>;
+
     private readonly width:number;
     private readonly height:number;
 
+    private destroyed:boolean = false;
 
-    constructor(gl:WebGLRenderingContext,width:number,height:number){
+
+    constructor(gl:WebGLRenderingContext,size:ISize){
         if (DEBUG && !gl)
             throw new DebugError("can not create FrameBuffer, gl context not passed to constructor, expected: FrameBuffer(gl)");
 
         this.gl = gl;
-        this.width = width;
-        this.height = height;
+        this.width = size.width;
+        this.height = size.height;
 
         this.texture = new Texture(gl);
-        this.texture.setImage(undefined,width,height);
-        this._init(gl,width,height);
+        this.texture.setImage(undefined,size);
+        this._init(gl,size);
+        this.link = ResourceLink.create(this.texture);
     }
 
     public bind():void{
+        if (DEBUG) {
+            if (this.destroyed) {
+                console.error(this);
+                throw new DebugError(`can not bind destroyed frame buffer`);
+            }
+        }
         if (FrameBuffer.currInstance===this) return;
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.glFrameBuffer);
         this.gl.viewport(0, 0, this.width,this.height);
@@ -53,10 +68,10 @@ export class FrameBuffer {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
 
-    public destroy(withTexture:boolean = true):void{
+    public destroy():void{
         this.gl.deleteRenderbuffer(this.glRenderBuffer);
         this.gl.deleteFramebuffer(this.glFrameBuffer);
-        if (withTexture) this.texture.destroy();
+        this.destroyed = true;
     }
 
 
@@ -64,12 +79,16 @@ export class FrameBuffer {
         return this.texture;
     }
 
-    private _init(gl:WebGLRenderingContext,width:number,height:number):void{
+    public getResourceLink():ResourceLink<ITexture>{
+        return this.link;
+    }
+
+    private _init(gl:WebGLRenderingContext,size:ISize):void{
         // Init Render Buffer
         this.glRenderBuffer = gl.createRenderbuffer() as WebGLRenderbuffer;
         if (DEBUG && !this.glRenderBuffer) throw new DebugError(`can not allocate memory for glRenderBuffer`);
         gl.bindRenderbuffer(gl.RENDERBUFFER, this.glRenderBuffer);
-        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
+        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, size.width, size.height);
         // Init Frame Buffer
         this.glFrameBuffer = gl.createFramebuffer() as WebGLFramebuffer;
         if (DEBUG && !this.glFrameBuffer) throw new DebugError(`can not allocate memory for glFrameBuffer`);
