@@ -168,14 +168,14 @@ export class Camera {
 
     public render():void{ //TRS - (transform rotate scale) reverted
         const renderer:AbstractRenderer = this.game.getRenderer();
-        if (!this.scale.equal(1)) {
-            renderer.transformTranslate(this.game.size.width/2,this.game.size.height/2,this.posZ);
+        if (!this.scale.equal(1)) { // todo posZ???
+            renderer.transformTranslate(this.game.size.width/2,this.game.size.height/2,0);
             renderer.transformScale(this.scale.x,this.scale.y);
             renderer.transformTranslate(-this.game.size.width/2,-this.game.size.height/2);
         }
         // todo rotation does not work correctly yet
         //this.game.renderer.transformRotateZ(this.angle);
-        if (!this.pos.equal(0)) renderer.transformTranslate(-this.pos.x,-this.pos.y,0);
+        renderer.transformTranslate(-this.pos.x,-this.pos.y,0);
         if (this.cameraShakeTween!==undefined) renderer.transformTranslate(
             this.cameraShakeTween.getTarget().point.x,
             this.cameraShakeTween.getTarget().point.y

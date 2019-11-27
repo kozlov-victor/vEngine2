@@ -62,11 +62,8 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
     public pushMatrix(t:Mat16Holder):MatrixStack {
-        const m:Mat16Holder = this.getCurrentValue();
-        const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(result,t, m);
-        this.setCurrentValue(result);
-        m.release();
+        this.getCurrentValue().release();
+        this.setCurrentValue(t);
         return this;
     }
 

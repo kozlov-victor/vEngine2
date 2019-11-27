@@ -28,10 +28,6 @@ import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEven
 import {Point2d} from "@engine/geometry/point2d";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 import {Rect} from "@engine/geometry/rect";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/common/texture";
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {

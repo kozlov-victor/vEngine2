@@ -92,6 +92,8 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
 
         this._cellImage = new Image(this.game);
         this._cellImage.setResourceLink(this.getResourceLink());
+        this._cellImage.size.setWH(this.tileWidth,this.tileHeight);
+        this._cellImage.getSrcRect().setWH(this.tileHeight,this.tileHeight);
         this._cellImage.revalidate();
         if (!this._drawingSurface) {
             const size:Size = new Size();
