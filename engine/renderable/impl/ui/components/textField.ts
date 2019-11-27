@@ -3,7 +3,7 @@ import {Rect} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
 import {ScrollableContainer} from "../abstract/scrollableContainer";
 import {Image} from "../../geometry/image";
-import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
+import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {Game} from "@engine/core/game";
 import {Size} from "@engine/geometry/size";
 import {Point2d} from "@engine/geometry/point2d";
@@ -203,6 +203,7 @@ export class TextField extends ScrollableContainer {
     private _text: string = '';
     private _font: Font;
 
+    private drawingSurface:IRenderTarget;
 
     constructor(game:Game) {
         super(game);
@@ -318,17 +319,18 @@ export class TextField extends ScrollableContainer {
         if (this.background) this.background.render();
 
         const renderer:AbstractRenderer = this.game.getRenderer();
-        const worldRectTmp:Rect = Rect.fromPool();
-        worldRectTmp.setPointAndSize(this.getWorldPosition(),this.size);
-        worldRectTmp.addXY(this.marginLeft+this.paddingLeft,this.marginTop+this.paddingTop);
-        worldRectTmp.addWH(
-            -this.marginRight-this.paddingRight-this.marginLeft-this.paddingLeft,
-            -this.marginBottom-this.paddingBottom-this.marginTop-this.paddingTop
-        );
+        // const worldRectTmp:Rect = Rect.fromPool();
+        // worldRectTmp.setPointAndSize(this.getWorldPosition(),this.size);
+        // worldRectTmp.addXY(this.marginLeft+this.paddingLeft,this.marginTop+this.paddingTop);
+        // worldRectTmp.addWH(
+        //     -this.marginRight-this.paddingRight-this.marginLeft-this.paddingLeft,
+        //     -this.marginBottom-this.paddingBottom-this.marginTop-this.paddingTop
+        // );
+
+
         //renderer.lockRect(worldRectTmp); // todo
-        worldRectTmp.release();
-        renderer.saveTransform();
-        if (this.vScrollInfo.offset) renderer.translate(0, -this.vScrollInfo.offset, 0);
+        renderer.transformSave();
+        if (this.vScrollInfo.offset) renderer.transformTranslate(0, -this.vScrollInfo.offset, 0);
 
         this._symbolImage.setResourceLink(this._font.getResourceLink());
         for (const charInfo of this._textInfo.allCharsCached) {
@@ -344,7 +346,7 @@ export class TextField extends ScrollableContainer {
 
             this._symbolImage.render();
         }
-        renderer.restoreTransform();
+        renderer.transformRestore();
         //renderer.unlockRect();
     }
 

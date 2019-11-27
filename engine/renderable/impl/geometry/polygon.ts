@@ -4,6 +4,7 @@ import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimi
 import {EarClippingTriangulator} from "@engine/renderable/impl/geometry/helpers/earClippingTriangulator";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {DebugError} from "@engine/debug/debugError";
 
 class PolygonPrimitive extends AbstractPrimitive {
     constructor(){
@@ -13,6 +14,17 @@ class PolygonPrimitive extends AbstractPrimitive {
 }
 
 export class Polygon extends Mesh {
+
+    public static fromSvgPath(game:Game,path:string):Polygon[]{
+        const polygons:Polygon[] = [];
+        path.split(/z/gi).forEach((p:string)=>{
+            if (!p.trim()) return;
+            const polygon:Polygon = new Polygon(game);
+            polygon.fromSvgPath(p+ ' z');
+            polygons.push(polygon);
+        });
+        return polygons;
+    }
 
     public readonly type:string = 'Polygon';
 
@@ -43,6 +55,7 @@ export class Polygon extends Mesh {
 
     public fromSvgPath(p:string):void {
         const polyline:PolyLine = new PolyLine(this.game);
+        if (DEBUG && p.split(/z/gi).length-1>1) throw new DebugError(`multiple closing operation ('z') in one svg path. Use static method Polygon.fromSvgPath() instead`);
         polyline.setSvgPath(p);
         this.fromPolyline(polyline);
     }

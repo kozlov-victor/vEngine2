@@ -47,7 +47,7 @@ export class AbsoluteLayout extends Container implements ICloneable<AbsoluteLayo
             r.release();
         }
         if (this.background) this.background.draw();
-        renderer.translate(
+        renderer.transformTranslate(
             this.paddingLeft,
             this.paddingTop
         );

@@ -4,6 +4,12 @@ import {Scene} from "@engine/scene/scene";
 import {IMouseEventEx} from "@engine/core/declarations";
 import {ObjectPool} from "@engine/misc/objectPool";
 
+export const enum MOUSE_BUTTON {
+    LEFT,
+    RIGHT,
+    SCROLL
+}
+
 export interface IMousePoint {
     screenX:number;
     screenY:number;
@@ -14,6 +20,7 @@ export interface IMousePoint {
     nativeEvent: Event;
     eventName:string;
     isMouseDown: boolean;
+    button:MOUSE_BUTTON;
 }
 
 

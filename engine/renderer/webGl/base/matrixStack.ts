@@ -4,6 +4,21 @@ import {Optional} from "@engine/core/declarations";
 import {IPropertyStack} from "@engine/renderer/common/propertyStack";
 import {Stack} from "@engine/misc/collection/stack";
 
+export interface IMatrixTransformable {
+    transformSave():void;
+    transformReset():void;
+    transformRestore():void;
+    transformPush(m:Mat16Holder):void;
+    transformScale(x:number, y:number, z?:number):void;
+    transformTranslate(x:number, y:number, z?:number):void;
+    transformSkewX(angle:number):void;
+    transformSkewY(angle:number):void;
+    transformRotateX(angleInRadians:number):void;
+    transformRotateY(angleInRadians:number):void;
+    transformRotateZ(angleInRadians:number):void;
+}
+
+
 export class MatrixStack implements IPropertyStack<Mat16Holder>{
 
     private readonly stack:Stack<Mat16Holder> = new Stack();
@@ -42,6 +57,15 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         mat4.matrixMultiply(result,t, m);
         this.setCurrentValue(result);
         t.release();
+        m.release();
+        return this;
+    }
+
+    public pushMatrix(t:Mat16Holder):MatrixStack {
+        const m:Mat16Holder = this.getCurrentValue();
+        const result:Mat16Holder = Mat16Holder.fromPool();
+        mat4.matrixMultiply(result,t, m);
+        this.setCurrentValue(result);
         m.release();
         return this;
     }

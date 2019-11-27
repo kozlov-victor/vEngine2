@@ -301,8 +301,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         // rect.setXYWH(
         //     0,
         //     0,
-        //     tileMap.drawInfo.numOfTilesInWidth*tileMap.tileWidth,
-        //     tileMap.drawInfo.numOfTilesInHeight*tileMap.tileHeight
+        //     tileMap.drawInfo.numOfTilesToDrawByX*tileMap.tileWidth,
+        //     tileMap.drawInfo.numOfTilesToDrawByY*tileMap.tileHeight
         // );
         //
         // const size:Size = Size.fromPool();
@@ -370,51 +370,55 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     }
 
-    public saveTransform():void {
+    public transformSave():void {
         this.matrixStack.save();
     }
 
-    public scale(x:number,y:number):void {
+    public transformScale(x:number, y:number):void {
         if (x===1 && y===1) return;
         this.matrixStack.scale(x,y);
     }
 
-    public resetTransform():void{
+    public transformReset():void{
         this.matrixStack.resetTransform();
     }
 
-    public rotateX(angleInRadians:number):void {
+    public transformRotateX(angleInRadians:number):void {
         if (angleInRadians===0) return;
         this.matrixStack.rotateX(angleInRadians);
     }
 
-    public rotateY(angleInRadians:number):void {
+    public transformRotateY(angleInRadians:number):void {
         if (angleInRadians===0) return;
         this.matrixStack.rotateY(angleInRadians);
     }
 
-    public rotateZ(angleInRadians:number):void {
+    public transformRotateZ(angleInRadians:number):void {
         if (angleInRadians===0) return;
         this.matrixStack.rotateZ(angleInRadians);
     }
 
-    public translate(x:number,y:number,z:number=0):void{
+    public transformTranslate(x:number, y:number, z:number=0):void{
         if (x===0 && y===0 && z===0) return;
         this.matrixStack.translate(x,y,z);
     }
 
-    public skewX(angle:number):void{
+    public transformSkewX(angle:number):void{
         if (angle===0) return;
         this.matrixStack.skewX(angle);
     }
 
-    public skewY(angle:number):void{
+    public transformSkewY(angle:number):void{
         if (angle===0) return;
         this.matrixStack.skewY(angle);
     }
 
-    public restoreTransform():void{
+    public transformRestore():void{
         this.matrixStack.restore();
+    }
+
+    public transformPush(m:Mat16Holder): void {
+        this.matrixStack.pushMatrix(m);
     }
 
     public lockRect(rect:Rect):void {
@@ -430,7 +434,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public beforeFrameDraw():void{
-        this.saveTransform();
+        this.transformSave();
         this.finalFrameBuffer.bind();
         if (this.clearBeforeRender) this.finalFrameBuffer.clear(this.clearColor,this.getAlphaBlend());
     }
@@ -447,7 +451,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             this.simpleRectDrawer.attachTexture('texture',texToDraw);
             this.simpleRectDrawer.draw();
         }
-        this.restoreTransform();
+        this.transformRestore();
     }
 
     public getError():Optional<{code:number,desc:string}>{

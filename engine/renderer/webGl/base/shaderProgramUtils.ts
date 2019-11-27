@@ -49,7 +49,7 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
         gl.deleteShader(shader);
         if (lastError!==null) {
             if (DEBUG) {
-                const parsedLogs = parseErrors(lastError);
+                const parsedLogs = parseErrors(lastError!);
                 const lines:string[] = shaderSource.split('\n');
                 let errorMsg:string = '';
                 const arrow:string = '----->';

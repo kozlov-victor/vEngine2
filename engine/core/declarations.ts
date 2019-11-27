@@ -49,7 +49,7 @@ export interface IAlphaBlendable {
 }
 
 export interface IDestroyable {
-    destroy:()=>void;
+    destroy():void;
 }
 
 export interface IParentChild {

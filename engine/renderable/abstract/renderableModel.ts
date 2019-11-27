@@ -150,7 +150,7 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         if (this.alpha===0) return;
         const renderer:AbstractRenderer = this.game.getRenderer();
 
-        renderer.saveTransform();
+        renderer.transformSave();
         renderer.saveAlphaBlend();
 
         this.translate();
@@ -161,17 +161,17 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         this.draw();
 
         if (this.children.length>0) {
-            renderer.saveTransform();
+            renderer.transformSave();
             renderer.saveAlphaBlend();
-            renderer.translate(this.anchor.x,this.anchor.y);
+            renderer.transformTranslate(this.anchor.x,this.anchor.y);
             for(let i=0,max=this.children.length;i<max;i++) {
                 this.children[i].render();
             }
-            renderer.restoreTransform();
+            renderer.transformRestore();
             renderer.restoreAlphaBlend();
         }
 
-        renderer.restoreTransform();
+        renderer.transformRestore();
         renderer.restoreAlphaBlend();
     }
 
@@ -302,8 +302,8 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         return this._worldPosition;
     }
 
-    public renderToTexture(target:IRenderTarget):void{
-        this.game.getRenderer().getHelper().renderRenderableModelToTexture(this,target);
+    public renderToTexture(target:IRenderTarget,clearBeforeRender:boolean = true):void{
+        this.game.getRenderer().getHelper().renderRenderableModelToTexture(this,target,clearBeforeRender);
     }
 
     protected setClonedProperties(cloned:RenderableModel):void {

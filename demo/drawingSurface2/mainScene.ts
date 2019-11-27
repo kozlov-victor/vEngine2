@@ -31,6 +31,9 @@ export class MainScene extends Scene {
             surface.moveTo(e.screenX,e.screenY);
             surface.lineTo(e.screenX,e.screenY);
         });
+        surface.on(MOUSE_EVENTS.mousePressed, e=>{
+            surface.clear();
+        });
         const wf = new WaveFilter(this.game);
         wf.setAmplitude(0.01);
         this.filters = [wf];

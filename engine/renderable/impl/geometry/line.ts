@@ -40,7 +40,7 @@ export class Line extends Shape implements ICloneable<Line> {
 
     public translate(){
         super.translate();
-        this.game.getRenderer().translate(0,-this.lineWidth/2);
+        this.game.getRenderer().transformTranslate(0,-this.lineWidth/2);
     }
 
     public getRectangleRepresentation():Rectangle{

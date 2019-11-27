@@ -89,20 +89,20 @@ export abstract class TransformableModel extends BaseModel {
 
     public translate():void{
         const renderer = this.game.getRenderer();
-        renderer.translate(this.pos.x,this.pos.y);
+        renderer.transformTranslate(this.pos.x,this.pos.y);
     }
 
     public transform():void{
         const renderer = this.game.getRenderer();
-        renderer.translate(-this.anchor.x,-this.anchor.y,this.posZ);
-        renderer.translate(this.rotationPoint.x,this.rotationPoint.y);
-        renderer.scale(this.scale.x,this.scale.y);
-        renderer.skewX(this.skew.x);
-        renderer.skewY(this.skew.y);
-        renderer.rotateZ(this.angle3d.z);
-        renderer.rotateX(this.angle3d.x);
-        renderer.rotateY(this.angle3d.y);
-        renderer.translate(-this.rotationPoint.x,-this.rotationPoint.y);
+        renderer.transformTranslate(-this.anchor.x,-this.anchor.y,this.posZ);
+        renderer.transformTranslate(this.rotationPoint.x,this.rotationPoint.y);
+        renderer.transformScale(this.scale.x,this.scale.y);
+        renderer.transformSkewX(this.skew.x);
+        renderer.transformSkewY(this.skew.y);
+        renderer.transformRotateZ(this.angle3d.z);
+        renderer.transformRotateX(this.angle3d.x);
+        renderer.transformRotateY(this.angle3d.y);
+        renderer.transformTranslate(-this.rotationPoint.x,-this.rotationPoint.y);
     }
 
     protected setClonedProperties(cloned:TransformableModel){

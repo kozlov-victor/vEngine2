@@ -15,13 +15,15 @@ export class RendererHelper {
         return undefined!;
     }
 
-    public renderRenderableModelToTexture(m:RenderableModel,renderTarget:IRenderTarget):void {
+    public renderRenderableModelToTexture(m:RenderableModel,renderTarget:IRenderTarget,clearBeforeRender:boolean):void {
         return undefined!;
     }
 
     public createRenderTarget(size:ISize):IRenderTarget{
         return undefined!;
     }
+
+    public destroyRenderTarget(t:IRenderTarget){}
 
 
 }

@@ -6,7 +6,7 @@ import {Rect} from "../../geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IControl} from "@engine/control/abstract/iControl";
 import {DebugError} from "@engine/debug/debugError";
-import {IMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";
+import {IMousePoint, MOUSE_BUTTON, MousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Layer} from "@engine/scene/layer";
 import {Optional} from "@engine/core/declarations";
@@ -36,7 +36,8 @@ export class MouseControl implements IControl {
                 target:go,
                 nativeEvent: e as Event,
                 eventName,
-                isMouseDown: point.isMouseDown
+                isMouseDown: point.isMouseDown,
+                button: (e as MouseEvent).button,
             };
             go.trigger(eventName,iMousePoint);
             res = !go.passMouseEventsThrough;
@@ -75,6 +76,7 @@ export class MouseControl implements IControl {
         };
         container.onmousedown = (e:MouseEvent)=>{
             if (e.button === 0) this.resolveClick(e);
+            else this.resolveButtonPressed(e);
         };
         // mouseUp
         container.ontouchend = container.ontouchcancel = (e:TouchEvent)=>{
@@ -201,6 +203,12 @@ export class MouseControl implements IControl {
     private resolveClick(e:Touch|MouseEvent):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.click);
         this.triggerEvent(e,MOUSE_EVENTS.mouseDown);
+        this.objectsCaptured[point.id] = point.target as RenderableModel;
+    }
+
+    private resolveButtonPressed(e:Touch|MouseEvent):void {
+        const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.click);
+        this.triggerEvent(e,MOUSE_EVENTS.mousePressed);
         this.objectsCaptured[point.id] = point.target as RenderableModel;
     }
 

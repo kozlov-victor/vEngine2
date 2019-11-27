@@ -178,7 +178,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (this.lockingRect!==undefined) renderer.lockRect(this.lockingRect);
-        renderer.saveTransform();
+        renderer.transformSave();
         renderer.saveAlphaBlend();
         renderer.clearColor.set(this.colorBG);
         renderer.beforeFrameDraw();
@@ -198,13 +198,13 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         }
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY; // todo manage this
-        renderer.restoreTransform();
+        renderer.transformRestore();
         renderer.restoreAlphaBlend();
         renderer.unlockRect();
 
 
         if (DEBUG) {
-            this.game.getRenderer().restoreTransform();
+            this.game.getRenderer().transformRestore();
             if (
                 this.game.getRenderer().debugTextField &&
                 this.game.getRenderer().debugTextField.getFont().getResourceLink() &&
@@ -213,7 +213,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
                 this.game.getRenderer().debugTextField.update();
                 this.game.getRenderer().debugTextField.render();
             }
-            this.game.getRenderer().restoreTransform();
+            this.game.getRenderer().transformRestore();
         }
         renderer.afterFrameDraw(this.filters);
 

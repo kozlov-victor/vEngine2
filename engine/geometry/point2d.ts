@@ -35,7 +35,7 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
 
     private _arr:[number,number];
 
-    constructor(x:number = 0,y:number = 0,onChangedFn?:()=>void){
+    constructor(x:number = 0,y:number = x,onChangedFn?:()=>void){
         super();
         if (onChangedFn) this.addOnChangeListener(onChangedFn);
         this.setXY(x,y);
@@ -61,19 +61,19 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         return this;
     }
 
-    public set(another:Point2d):this{
-        this.setXY(another._x,another._y);
+    public set(another:IPoint2d):this{
+        this.setXY(another.x,another.y);
         return this;
     }
 
 
-    public add(another:Point2d):this{
-        this.addXY(another._x,another._y);
+    public add(another:IPoint2d):this{
+        this.addXY(another.x,another.y);
         return this;
     }
 
-    public substract(another:Point2d):this{
-        this.addXY(-another._x,-another._y);
+    public substract(another:IPoint2d):this{
+        this.addXY(-another.x,-another.y);
         return this;
     }
 
@@ -106,7 +106,7 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         return this._x===x && this._y===y;
     }
 
-    public equalPoint(point:Point2d):boolean {
+    public equalPoint(point:IPoint2d):boolean {
         return this.equal(point.x,point.y);
     }
 
@@ -114,11 +114,11 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         return new Point2d(this._x,this._y);
     }
 
-    public fromJSON(json:{x:number,y:number}):void{
+    public fromJSON(json:IPoint2d):void{
         this.setXY(json.x,json.y);
     }
 
-    public toJSON():{x:number,y:number}{
+    public toJSON():IPoint2d{
         return {x:this._x,y:this._y};
     }
 

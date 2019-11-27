@@ -15,6 +15,8 @@ import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
+import {mat4} from "@engine/geometry/mat4";
+import Mat16Holder = mat4.Mat16Holder;
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -140,40 +142,44 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.ctx.restore();
     }
 
-    public saveTransform():void {
+    public transformSave():void {
         this.ctx.save();
     }
 
-    public scale(x:number,y:number):void {
+    public transformScale(x:number, y:number):void {
         this.ctx.scale(x,y);
     }
 
-    public resetTransform():void {
+    public transformReset():void {
         this.ctx.resetTransform();
     }
 
-    public rotateZ(angleInRadians:number):void {
+    public transformRotateZ(angleInRadians:number):void {
         this.ctx.rotate(angleInRadians);
     }
 
-    public rotateY(angleInRadians:number):void {
+    public transformRotateY(angleInRadians:number):void {
 
     }
 
-    public translate(x:number,y:number):void {
+    public transformPush(m:Mat16Holder): void {
+
+    }
+
+    public transformTranslate(x:number, y:number):void {
         this.ctx.translate(x,y);
     }
 
 
-    public restoreTransform():void {
+    public transformRestore():void {
         this.ctx.restore();
     }
 
     public beginFrameBuffer():void {
-        this.saveTransform();
+        this.transformSave();
     }
     public flipFrameBuffer():void {
-        this.restoreTransform();
+        this.transformRestore();
     }
 
     public beforeFrameDraw(): void {
@@ -211,13 +217,13 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public rotateX(a: number): void {
+    public transformRotateX(a: number): void {
     }
 
-    public skewX(a: number): void {
+    public transformSkewX(a: number): void {
     }
 
-    public skewY(a: number): void {
+    public transformSkewY(a: number): void {
     }
 
 

@@ -17,6 +17,9 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {AlphaBlendStack} from "@engine/renderer/common/alphaBlendStack";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
+import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
+import {mat4} from "@engine/geometry/mat4";
+import Mat16Holder = mat4.Mat16Holder;
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>void;
@@ -32,9 +35,10 @@ interface IDocument extends Document {
 
 export interface IRenderTarget {
     getResourceLink():ResourceLink<ITexture>;
+    destroy():void;
 }
 
-export abstract class AbstractRenderer implements IDestroyable {
+export abstract class AbstractRenderer implements IDestroyable,IMatrixTransformable {
 
     public abstract type:string;
 
@@ -107,25 +111,27 @@ export abstract class AbstractRenderer implements IDestroyable {
 
     public abstract drawEllipse(ellispe:Ellipse):void;
 
-    public abstract resetTransform():void;
+    public abstract transformReset():void;
 
-    public abstract saveTransform():void;
+    public abstract transformSave():void;
 
-    public abstract restoreTransform():void;
+    public abstract transformRestore():void;
 
-    public abstract translate(x:number,y:number,z?:number):void;
+    public abstract transformTranslate(x:number, y:number, z?:number):void;
 
-    public abstract scale(x:number,y:number,z?:number):void;
+    public abstract transformScale(x:number, y:number, z?:number):void;
 
-    public abstract rotateX(a:number):void;
+    public abstract transformRotateX(a:number):void;
 
-    public abstract skewX(a:number):void;
+    public abstract transformSkewX(a:number):void;
 
-    public abstract skewY(a:number):void;
+    public abstract transformSkewY(a:number):void;
 
-    public abstract rotateY(a:number):void;
+    public abstract transformRotateY(a:number):void;
 
-    public abstract rotateZ(a:number):void;
+    public abstract transformRotateZ(a:number):void;
+
+    public abstract transformPush(m:Mat16Holder):void;
 
     public killObject(r:RenderableModel):void {}
 

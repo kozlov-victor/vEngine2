@@ -16,6 +16,8 @@ import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Rect} from "@engine/geometry/rect";
 import {Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
+import {mat4} from "@engine/geometry/mat4";
+import Mat16Holder = mat4.Mat16Holder;
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
@@ -145,35 +147,39 @@ export class DomRenderer extends AbstractRenderer {
         };
     }
 
-    public saveTransform():void {
+    public transformSave():void {
         this.matrixStack.save();
     }
 
-    public scale(x:number,y:number):void {
+    public transformScale(x:number, y:number):void {
         this.matrixStack.scale(x,y);
     }
 
-    public resetTransform():void{
+    public transformReset():void{
         this.matrixStack.resetTransform();
     }
 
-    public rotateX(angleInRadians:number):void {
+    public transformRotateX(angleInRadians:number):void {
         this.matrixStack.rotateX(angleInRadians);
     }
 
-    public rotateY(angleInRadians:number):void {
+    public transformRotateY(angleInRadians:number):void {
         this.matrixStack.rotateY(angleInRadians);
     }
 
-    public rotateZ(angleInRadians:number):void {
+    public transformRotateZ(angleInRadians:number):void {
         this.matrixStack.rotateZ(angleInRadians);
     }
 
-    public translate(x:number,y:number,z:number=0):void{
+    public transformTranslate(x:number, y:number, z:number=0):void{
         this.matrixStack.translate(x,y,z);
     }
 
-    public restoreTransform():void{
+    public transformPush(m:Mat16Holder): void {
+        this.matrixStack.pushMatrix(m);
+    }
+
+    public transformRestore():void{
         this.matrixStack.restore();
     }
 
@@ -198,10 +204,10 @@ export class DomRenderer extends AbstractRenderer {
     public lockRect(rect: Rect): void {
     }
 
-    public skewX(a: number): void {
+    public transformSkewX(a: number): void {
     }
 
-    public skewY(a: number): void {
+    public transformSkewY(a: number): void {
     }
 
     public unlockRect(): void {
