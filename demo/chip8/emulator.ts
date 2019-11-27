@@ -96,7 +96,7 @@ export abstract class Emulator {
 
     public nextTick(){
 
-        for (let i:number=0;i<5;i++) {
+        for (let i:number=0;i<6;i++) {
             const opCode:number = (this.memory[this.PC]<<8) | this.memory[this.PC+1];
             if (Number.isNaN(opCode)) throw new Error(`wrong opCode with PC=${this.PC}`);
             this.executeOpCode(opCode);

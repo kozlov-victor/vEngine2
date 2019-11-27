@@ -19,13 +19,9 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
     public readonly tileHeight:number = 32;
 
     private readonly drawInfo = {
-        numOfTilesToDrawByX: 0,
-        numOfTilesToDrawByY: 0,
         dirty:true,
         firstTileToDrawByX: NaN,
         firstTileToDrawByY: NaN,
-        tileMapCameraOffsetX: 0,
-        tileMapCameraOffsetY: 0,
     };
 
 
@@ -62,8 +58,8 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
         this._numOfTilesInMapByX = mapWidth;
         this._numOfTilesInMapByY = mapHeight;
 
-        this._numOfTilesInScreenByX = ~~(this.game.size.width / this.tileWidth)+2;
-        this._numOfTilesInScreenByY = ~~(this.game.size.height / this.tileHeight)+2;
+        this._numOfTilesInScreenByX = ~~(this.game.size.width / this.tileWidth)+3;
+        this._numOfTilesInScreenByY = ~~(this.game.size.height / this.tileHeight)+3;
 
         if (DEBUG) {
             const found:number = cnt;
@@ -115,24 +111,22 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
     public draw(): void {
 
         if (!this.drawInfo.dirty) {
-            this.updatePos();
+            this.updateDrawingSurfacePos();
             return;
         }
 
-        this._drawingSurface.pos.setXY(0);
+        this._drawingSurface.pos.setXY(0,0);
 
-        const width:number = this.drawInfo.numOfTilesToDrawByX;
-        const height:number = this.drawInfo.numOfTilesToDrawByY;
-        for (let y:number=0;y<height;y++) {
-            const currTilePosY:number = this.drawInfo.firstTileToDrawByY + y;
-            if (currTilePosY<0) continue;
-            if (currTilePosY>this._numOfTilesInMapByY-1) continue;
-            for (let x:number=0;x<width;x++) {
-                const currTilePosX:number = this.drawInfo.firstTileToDrawByX + x;
-                if (currTilePosX<0) continue;
-                if (currTilePosX>this._numOfTilesInMapByX-1) continue;
+        for (let y:number=0;y<this._numOfTilesInScreenByY;y++) {
+            const currTileByY:number = this.drawInfo.firstTileToDrawByY + y;
+            if (currTileByY<0) continue;
+            if (currTileByY>this._numOfTilesInMapByY-1) continue;
+            for (let x:number=0;x<this._numOfTilesInScreenByX;x++) {
+                const currTileByX:number = this.drawInfo.firstTileToDrawByX + x;
+                if (currTileByX<0) continue;
+                if (currTileByX>this._numOfTilesInMapByX-1) continue;
 
-                const tileVal:number =this.data[currTilePosY][currTilePosX];
+                const tileVal:number =this.data[currTileByY][currTileByX];
                 this._cellImage.getSrcRect().setXY(this.getFramePosX(tileVal),this.getFramePosY(tileVal));
                 this._cellImage.pos.setXY(
                      (x * this.tileWidth),
@@ -142,7 +136,7 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
             }
         }
         this.drawInfo.dirty = false;
-        this.updatePos();
+        this.updateDrawingSurfacePos();
     }
 
     //getTileAt(x:number,y:number):{tileIndex:number,tile:number}{
@@ -196,24 +190,18 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
     }
 
 
-    private updatePos(){
-        const camera:Camera = this.game.camera;
-        this.pos.setXY(camera.pos.x - this.drawInfo.tileMapCameraOffsetX - this.tileWidth,camera.pos.y - this.drawInfo.tileMapCameraOffsetY - this.tileHeight);
+    private updateDrawingSurfacePos(){
+        this._drawingSurface.pos.setXY(
+            this.drawInfo.firstTileToDrawByX * this.tileWidth,
+            this.drawInfo.firstTileToDrawByY * this.tileHeight
+        );
     }
-
 
     private prepareDrawableInfo(){
         const camera:Camera = this.game.camera;
-        const firstTileToDrawByX:number = ~~((camera.pos.x - this.tileWidth ) / this.tileWidth);
-        const firstTileToDrawByY:number = ~~((camera.pos.y - this.tileHeight) / this.tileHeight);
+        const firstTileToDrawByX:number = ~~((camera.pos.x) / this.tileWidth) - 1;
+        const firstTileToDrawByY:number = ~~((camera.pos.y) / this.tileHeight) - 1;
 
-        this.drawInfo.tileMapCameraOffsetX =  camera.pos.x % this.tileWidth;
-        this.drawInfo.tileMapCameraOffsetY =  camera.pos.y % this.tileHeight;
-        const w:number =  this._numOfTilesInScreenByX;
-        const h:number =  this._numOfTilesInScreenByY;
-
-        this.drawInfo.numOfTilesToDrawByX = w;
-        this.drawInfo.numOfTilesToDrawByY = h;
         this.drawInfo.dirty = this.drawInfo.firstTileToDrawByX!==firstTileToDrawByX || this.drawInfo.firstTileToDrawByY!==firstTileToDrawByY;
         this.drawInfo.firstTileToDrawByX = firstTileToDrawByX;
         this.drawInfo.firstTileToDrawByY = firstTileToDrawByY;

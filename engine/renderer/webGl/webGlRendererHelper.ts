@@ -29,7 +29,10 @@ export class WebGlRendererHelper extends RendererHelper {
         const clearBeforeRenderOrig:boolean = renderer.clearBeforeRender;
         renderer.clearBeforeRender = clearBeforeRender;
         renderer.beforeFrameDraw();
+        renderer.transformSave();
+        renderer.transformTranslate(this.game.camera.pos.x,this.game.camera.pos.y);
         m.render();
+        renderer.transformRestore();
         renderer.afterFrameDraw(m.filters);
         renderer.unsetRenderTarget();
         renderer.clearBeforeRender = clearBeforeRenderOrig;
