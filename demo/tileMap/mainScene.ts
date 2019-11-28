@@ -32,7 +32,7 @@ export class MainScene extends Scene {
             3,3,3,3,3,3,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,
         ];
 
-        tileMap.fromTiledJSON(data,30);
+        tileMap.fromTiledJSON(data,30,undefined,32,32);
         this.tileMap = tileMap;
 
         const rect = new Rectangle(this.game);

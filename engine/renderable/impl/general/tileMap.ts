@@ -4,7 +4,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {Camera} from "@engine/renderer/camera";
 import {Size} from "@engine/geometry/size";
-import {IResource} from "@engine/core/declarations";
+import {IResource, Optional} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
@@ -13,10 +13,10 @@ import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 export class TileMap extends RenderableModel implements IResource<ITexture> {
 
     public readonly type:string = "TileMap";
-    public data:number[][] = [];
 
-    public readonly tileWidth:number = 32;
-    public readonly tileHeight:number = 32;
+    private data:number[][] = [];
+    private tileWidth:number;
+    private tileHeight:number;
 
     private readonly drawInfo = {
         dirty:true,
@@ -44,7 +44,7 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
         super(game);
     }
 
-    public fromTiledJSON(source:number[],mapWidth:number,mapHeight?:number){
+    public fromTiledJSON(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number){
         if (!mapHeight) mapHeight = source.length / mapWidth;
         this.data = new Array<number[]>(mapHeight);
         let cnt:number = 0;
@@ -54,6 +54,9 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
                 this.data[j][i] = source[cnt++];
             }
         }
+
+        this.tileWidth = tileWidth;
+        this.tileHeight = tileHeight;
 
         this._numOfTilesInMapByX = mapWidth;
         this._numOfTilesInMapByY = mapHeight;
@@ -183,11 +186,11 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
     //     return result;
     // }
 
-    public getFramePosX(frameIndex:number):number {
+    private getFramePosX(frameIndex:number):number {
         return (frameIndex % this._numOfTilesInSpriteByX) * this.tileWidth;
     }
 
-    public getFramePosY(frameIndex:number):number {
+    private getFramePosY(frameIndex:number):number {
         return ~~(frameIndex / this._numOfTilesInSpriteByX) * this.tileHeight;
     }
 

@@ -31,9 +31,11 @@ export class MainScene extends Scene {
         obj.modelPrimitive = new Sphere(
             120
         );
-        obj.pos.setXY(150,150);
+        obj.pos.setXY(140,140);
         obj.size.setWH(100,100);
         obj.texture = renderTarget.getResourceLink().getTarget();
+        obj.heightMapTexture = obj.texture;
+        obj.heightMapFactor = 15;
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{
