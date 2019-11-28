@@ -1,4 +1,4 @@
-import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
+import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {Game} from "@engine/core/game";
@@ -8,7 +8,7 @@ import {Color} from "@engine/renderer/common/color";
 
 // https://codepen.io/mishaa/pen/raKzrm
 
-export class GlowFilter extends AbstractFilter {
+export class GlowFilter extends AbstractGlFilter {
 
     private readonly distance:string;
     private readonly outerStrength:string;

@@ -2,11 +2,11 @@
 // http://www.geeks3d.com/20091027/shader-library-posterization-post-processing-effect-glsl/
 // adopted to webGl ES
 
-import {AbstractFilter} from "../abstract/abstractFilter";
+import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {Game} from "@engine/core/game";
 
-export class PosterizeFilter extends AbstractFilter {
+export class PosterizeFilter extends AbstractGlFilter {
 
     private readonly gamma:string;
     private readonly numColors:string;

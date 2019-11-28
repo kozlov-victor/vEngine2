@@ -1,4 +1,4 @@
-import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
+import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
@@ -7,7 +7,7 @@ import {Game} from "@engine/core/game";
 // https://prideout.net/barrel-distortion
 
 
-export class Barrel2DistortionFilter extends AbstractFilter {
+export class Barrel2DistortionFilter extends AbstractGlFilter {
 
     private readonly rt_w:string;
     private readonly rt_h:string;

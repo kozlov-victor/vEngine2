@@ -2,9 +2,11 @@ import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Scene} from "@engine/scene/scene";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IFilterable} from "@engine/core/declarations";
 import {ISize} from "@engine/geometry/size";
+import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
+import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 
 
 export class WebGlRendererHelper extends RendererHelper {
@@ -28,10 +30,10 @@ export class WebGlRendererHelper extends RendererHelper {
         renderer.setRenderTarget(renderTarget);
         const clearBeforeRenderOrig:boolean = renderer.clearBeforeRender;
         renderer.clearBeforeRender = clearBeforeRender;
-        renderer.beforeFrameDraw();
+        const statePointer:IStateStackPointer = renderer.beforeFrameDraw(m.filters as AbstractGlFilter[],BLEND_MODE.NORMAL);
         renderer.transformTranslate(this.game.camera.pos.x,this.game.camera.pos.y);
         m.render();
-        renderer.afterFrameDraw(m.filters);
+        renderer.afterFrameDraw(statePointer);
         renderer.unsetRenderTarget();
         renderer.clearBeforeRender = clearBeforeRenderOrig;
     }

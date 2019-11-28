@@ -1,5 +1,5 @@
 
-import {AbstractFilter} from "../abstract/abstractFilter";
+import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {Color} from "../../../common/color";
@@ -8,7 +8,7 @@ import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Size} from "@engine/geometry/size";
 
 
-export class DropShadowFilter  extends AbstractFilter{
+export class DropShadowFilter  extends AbstractGlFilter{
 
 
     private readonly color:string;

@@ -1,11 +1,11 @@
 
-import {AbstractFilter} from "../abstract/abstractFilter";
+import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {FrameBuffer} from "../../base/frameBuffer";
 import {Game} from "@engine/core/game";
 
-export class WaveFilter extends AbstractFilter {
+export class WaveFilter extends AbstractGlFilter {
 
     private readonly u_time:string;
     private readonly u_amplitude:string;

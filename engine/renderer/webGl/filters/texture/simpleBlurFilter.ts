@@ -1,12 +1,12 @@
 //https://github.com/Jam3/glsl-fast-gaussian-blur/blob/master/5.glsl
 
-import {AbstractFilter} from "../abstract/abstractFilter";
+import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {FrameBuffer} from "../../base/frameBuffer";
 import {Game} from "@engine/core/game";
 
-export class SimpleBlurFilter extends AbstractFilter {
+export class SimpleBlurFilter extends AbstractGlFilter {
 
     private readonly rt_w:string;
     private readonly rt_h:string;

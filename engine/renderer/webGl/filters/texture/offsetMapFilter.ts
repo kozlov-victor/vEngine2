@@ -1,4 +1,4 @@
-import {AbstractFilter} from "../abstract/abstractFilter";
+import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {Game} from "@engine/core/game";
@@ -8,7 +8,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Int} from "@engine/core/declarations";
 import {Size} from "@engine/geometry/size";
 
-export class OffsetMapFilter extends AbstractFilter{
+export class OffsetMapFilter extends AbstractGlFilter{
 
     private readonly offsetTexture:string;
     private readonly offsetForce:string;

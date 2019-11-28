@@ -1,11 +1,11 @@
-import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
+import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {Game} from "@engine/core/game";
 
 // http://evanw.github.io/webgl-filter/
 
-export class TriangleBlurFilter extends AbstractFilter {
+export class TriangleBlurFilter extends AbstractGlFilter {
 
     private readonly delta:string;
     private readonly valArr:[number,number] = [0,0];

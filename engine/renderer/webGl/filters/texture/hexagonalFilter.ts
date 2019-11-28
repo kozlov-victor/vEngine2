@@ -1,4 +1,4 @@
-import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
+import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
@@ -6,7 +6,7 @@ import {Game} from "@engine/core/game";
 
 // http://evanw.github.io/webgl-filter/
 
-export class HexagonalFilter extends AbstractFilter {
+export class HexagonalFilter extends AbstractGlFilter {
 
     private readonly center:string;
     private readonly scale:string;

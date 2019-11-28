@@ -2,7 +2,7 @@ import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {Image} from "@engine/renderable/impl/geometry/image";
 import {Game} from "@engine/core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {Color} from "@engine/renderer/common/color";
@@ -18,6 +18,8 @@ import {Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
+import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
+import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
@@ -98,10 +100,11 @@ export class DomRenderer extends AbstractRenderer {
         this.registerResize();
     }
 
-    public beforeFrameDraw():void{
+    public beforeFrameDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer{
         if (this.nodes.properties.bg_color!==this.clearColor.asCSS()) {
             this.container.style.backgroundColor = this.clearColor.asCSS();
         }
+        return undefined!;
     }
 
     public drawImage(img: Image): void {

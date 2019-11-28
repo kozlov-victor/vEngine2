@@ -1,10 +1,10 @@
-import {AbstractFilter} from "../abstract/abstractFilter";
+import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {Color} from "../../../common/color";
 import {Game} from "@engine/core/game";
 
-export class ColorizeFilter extends AbstractFilter{
+export class ColorizeFilter extends AbstractGlFilter{
 
     private readonly uPixelColor: string;
 

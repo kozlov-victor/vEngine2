@@ -1,7 +1,7 @@
 // array of two frameBuffer for filters to apply
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {INTERPOLATION_MODE, Texture} from "@engine/renderer/webGl/base/texture";
-import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
+import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ISize} from "@engine/geometry/size";
 
 export class DoubleFrameBuffer {
@@ -22,11 +22,11 @@ export class DoubleFrameBuffer {
         this.buffers[1].getTexture().setInterpolationMode(mode);
     }
 
-    public applyFilters(texture:Texture,filters:readonly AbstractFilter[]):Texture{
+    public applyFilters(texture:Texture,filters:AbstractGlFilter[]):Texture{
         const len:number = filters.length;
         if (len===0) return texture;
 
-        const filter:AbstractFilter = filters[0];
+        const filter:AbstractGlFilter = filters[0];
 
         filter.getDrawer().attachTexture('texture',texture);
         filter.doFilter(this.getDestBuffer());

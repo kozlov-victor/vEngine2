@@ -1,4 +1,4 @@
-import {AbstractFilter} from "../abstract/abstractFilter";
+import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE} from "../../base/shaderProgramUtils";
 import {Game} from "@engine/core/game";
@@ -7,7 +7,7 @@ import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Int} from "@engine/core/declarations";
 
-export class PalletOffsetFilter extends AbstractFilter{
+export class PalletOffsetFilter extends AbstractGlFilter{
 
     private readonly palletTexture:string;
     private readonly palletTextureWidth:string;

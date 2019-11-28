@@ -1,4 +1,4 @@
-import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
+import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
@@ -8,7 +8,7 @@ import {Size} from "@engine/geometry/size";
 // https://clemz.io/article-retro-shaders-webgl.html
 
 
-export class LowResolutionFilter extends AbstractFilter {
+export class LowResolutionFilter extends AbstractGlFilter {
 
     private readonly rt_w:string;
     private readonly rt_h:string;

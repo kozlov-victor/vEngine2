@@ -1,3 +1,4 @@
+/* tslint:disable:no-string-literal */
 import {AbstractRenderer, IRenderTarget} from "../../renderer/abstract/abstractRenderer";
 import {
     IAlphaBlendable,
@@ -30,6 +31,7 @@ import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
+import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -156,7 +158,9 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         this.translate();
         this.transform();
         renderer.setAlphaBlend(this.alpha);
-
+        // todo
+        // @ts-ignore
+        const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(this['filters'] || [],this.blendMode);
 
         this.draw();
 
@@ -170,6 +174,8 @@ export abstract class RenderableModel extends TransformableModel implements IRev
             renderer.transformRestore();
             renderer.restoreAlphaBlend();
         }
+
+        renderer.afterItemStackDraw(statePointer);
 
         renderer.transformRestore();
         renderer.restoreAlphaBlend();

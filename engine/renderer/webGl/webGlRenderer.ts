@@ -16,7 +16,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/geometry/image";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
+import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {mat4} from "@engine/geometry/mat4";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
@@ -26,14 +26,14 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {ITexture} from "@engine/renderer/common/texture";
 import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import {ClazzEx, IDestroyable, IFilterable, Optional} from "@engine/core/declarations";
-import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {TileMapDrawer} from "@engine/renderer/webGl/programs/impl/base/tileMap/tileMapDrawer";
-import IDENTITY = mat4.IDENTITY;
-import Mat16Holder = mat4.Mat16Holder;
-import glEnumToString = debugUtil.glEnumToString;
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {WebGlRendererHelper} from "@engine/renderer/webGl/webGlRendererHelper";
 import {IFilter} from "@engine/renderer/common/ifilter";
+import IDENTITY = mat4.IDENTITY;
+import Mat16Holder = mat4.Mat16Holder;
+import glEnumToString = debugUtil.glEnumToString;
+import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -49,13 +49,11 @@ const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
 };
 
 const SCENE_DEPTH:number = 1000;
-const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).scale(1,-1).release().getCurrentValue().clone();
-let FLIP_POSITION_MATRIX:Mat16Holder;
+export const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).scale(1,-1).release().getCurrentValue().clone(); // todo to separate module
+let FLIP_POSITION_MATRIX:Mat16Holder; // todo place to separate
 
 const zToWMatrix:Mat16Holder = Mat16Holder.create();
 mat4.makeZToWMatrix(zToWMatrix,1);
-
-const BLACK:Color = Color.RGB(0,0,0,0).freeze();
 
 const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat16Holder=>{
     // proj * modelView
@@ -124,17 +122,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private simpleRectDrawer:SimpleRectDrawer;
     private meshDrawerHolder:InstanceHolder<MeshDrawer> = new InstanceHolder(MeshDrawer);
     private tileMapDrawerHolder:InstanceHolder<TileMapDrawer> = new InstanceHolder(TileMapDrawer);
-    private preprocessFrameBuffer:FrameBuffer;
 
-    private origFinalFrameBuffer:FrameBuffer;
-    private finalFrameBuffer:FrameBuffer;
-
-    private doubleFrameBuffer:DoubleFrameBuffer;
-    private blender:Blender;
     private nullTexture:Texture;
-    private pixelPerfectMode:boolean = false;
+
+    private frameBufferStack:FrameBufferStack;
+
 
     private _isRectLocked:boolean = false;
+    private _pixelPerfectMode:boolean = false;
 
     constructor(game:Game){
         super(game);
@@ -152,14 +147,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         m16hResult.release();
         m16Scale.release();
         m16Ortho.release();
+
+        this.frameBufferStack = new FrameBufferStack(game,this.getNativeContext(),game.size,this.simpleRectDrawer,FLIP_POSITION_MATRIX);
+
     }
 
     public setPixelPerfectMode(mode:boolean):void{
-        this.pixelPerfectMode = mode;
         const interpolation = mode?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR;
-        this.finalFrameBuffer.getTexture().setInterpolationMode(interpolation);
-        this.doubleFrameBuffer.setInterpolationMode(interpolation);
-        this.preprocessFrameBuffer.setInterpolationMode(interpolation);
+        this.frameBufferStack.setInterpolationMode(interpolation);
+        this._pixelPerfectMode = mode;
         this.onResize();
     }
 
@@ -177,8 +173,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         (img.getResourceLink().getTarget() as Texture).
             setInterpolationMode(img.pixelPerfect?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
-        this.beforeItemDraw(img);
-
 
         const texture:Texture = (img.getResourceLink() as ResourceLink<Texture>).getTarget();
         const maxSize:number = Math.max(img.size.width,img.size.height);
@@ -217,9 +211,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_stretchMode,img.stretchMode);
         sd.attachTexture('texture',texture);
         sd.draw();
-
-        this.afterItemDraw(img.filters as AbstractFilter[],img.blendMode);
-
 
     }
 
@@ -278,49 +269,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const maxSize:number = Math.max(rw,rh);
         const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
 
-        this.beforeItemDraw(rectangle);
-
         this.prepareGeometryUniformInfo(rectangle);
         this.prepareShapeUniformInfo(rectangle);
         sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
         sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
         sd.attachTexture('texture',this.nullTexture);
         sd.draw();
-
-        this.afterItemDraw(rectangle.filters as AbstractFilter[],rectangle.blendMode);
-    }
-
-    public drawTileMap(tileMap: TileMap): void {
-        // const justCreated:boolean = !this.tileMapDrawerHolder.isInvoked();
-        // const tileMapDrawer:TileMapDrawer = this.tileMapDrawerHolder.getInstance(this.gl);
-        // if (justCreated) {
-        //     tileMapDrawer.initProgram();
-        // }
-        //
-        // const rect:Rect = Rect.fromPool();
-        // rect.setXYWH(
-        //     0,
-        //     0,
-        //     tileMap.drawInfo.numOfTilesToDrawByX*tileMap.tileWidth,
-        //     tileMap.drawInfo.numOfTilesToDrawByY*tileMap.tileHeight
-        // );
-        //
-        // const size:Size = Size.fromPool();
-        // size.setWH(this.game.width,this.game.height);
-        // const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
-        // tileMapDrawer.setUniform(tileMapDrawer.u_vertexMatrix,pos16h.mat16);
-        // pos16h.release();
-        // rect.release();
-        // size.release();
-        //
-        // tileMapDrawer.setUniform(tileMapDrawer.u_textureMatrix,IDENTITY);
-        // const texture:Texture = tileMap.getResourceLink().getTarget() as Texture;
-        // tileMapDrawer.attachTexture('texture',texture);
-        // tileMapDrawer.setTileSize(
-        //     tileMap.tileWidth / texture.size.width,
-        //     tileMap.tileHeight / texture.size.height,
-        // );
-        // tileMapDrawer.draw();
     }
 
 
@@ -334,15 +288,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
         const maxR2:number = maxR*2;
 
-        this.beforeItemDraw(ellipse);
-
         this.prepareGeometryUniformInfo(ellipse);
         this.prepareShapeUniformInfo(ellipse);
         const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
         const rect:Rect = Rect.fromPool();
         rect.setXYWH(0,0,maxR2,maxR2);
         const size:Size = Size.fromPool();
-        size.set(this.finalFrameBuffer.getTexture().size);
+        size.set(this.frameBufferStack.getCurrentTargetSize());
         const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
         sd.setUniform(sd.u_vertexMatrix,pos16h.mat16);
         pos16h.release();
@@ -365,8 +317,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_arcAngleTo,ellipse.arcAngleTo);
         sd.attachTexture('texture',this.nullTexture);
         sd.draw();
-
-        this.afterItemDraw(ellipse.filters as AbstractFilter[],ellipse.blendMode);
 
     }
 
@@ -433,24 +383,27 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.gl.disable(this.gl.SCISSOR_TEST);
     }
 
-    public beforeFrameDraw():void{
-        this.transformSave();
-        this.finalFrameBuffer.bind();
-        if (this.clearBeforeRender) this.finalFrameBuffer.clear(this.clearColor,this.getAlphaBlend());
+    public beforeItemStackDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer {
+        const ptr:IStateStackPointer = this.frameBufferStack.pushState(filters,blendMode);
+        this.frameBufferStack.bind();
+        return ptr;
     }
 
-    public afterFrameDraw(filters: IFilter[]):void{
-        const texToDraw:Texture = this.doubleFrameBuffer.applyFilters(this.finalFrameBuffer.getTexture(),filters as AbstractFilter[]);
-        this.finalFrameBuffer.unbind();
-        if (this.finalFrameBuffer===this.origFinalFrameBuffer) {// is rendering to screen, otherwise to custom framebuffer
-            const w:number = this.pixelPerfectMode?this.game.screenSize.x:this.game.size.width;
-            const h:number = this.pixelPerfectMode?this.game.screenSize.y:this.game.size.height;
-            this.gl.viewport(0, 0, w,h);
-            this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
-            this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
-            this.simpleRectDrawer.attachTexture('texture',texToDraw);
-            this.simpleRectDrawer.draw();
-        }
+    public afterItemStackDraw(stackPointer:IStateStackPointer):void {
+        this.frameBufferStack.reduceState(stackPointer);
+    }
+
+    public beforeFrameDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer{
+        this.transformSave();
+        const ptr:IStateStackPointer = this.frameBufferStack.pushState(filters,blendMode);
+        this.frameBufferStack.bind();
+        return ptr;
+    }
+
+    public afterFrameDraw(stackPointer:IStateStackPointer):void{
+        this.frameBufferStack.reduceState(stackPointer);
+        this.frameBufferStack.unbind();
+        if (this.frameBufferStack.isRenderingToScreen()) this.frameBufferStack.renderToScreen();
         this.transformRestore();
     }
 
@@ -469,7 +422,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.createImageFromData(imgData,(bitmap:ImageBitmap|HTMLImageElement)=>{
             const texture:Texture = new Texture(this.gl);
             texture.setImage(bitmap);
-            this.gl.bindTexture(this.gl.TEXTURE_2D, this.finalFrameBuffer.getTexture().getGlTexture()); // to restore texture binding
             link.setTarget(texture);
             onLoad();
         });
@@ -482,18 +434,16 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public setRenderTarget(fb:FrameBuffer){
-        this.finalFrameBuffer = fb;
+        this.frameBufferStack.setRenderTarget(fb);
     }
 
     public unsetRenderTarget(){
-        this.finalFrameBuffer = this.origFinalFrameBuffer;
+        this.frameBufferStack.unsetRenderTarget();
     }
 
     public destroy():void{
         super.destroy();
-        this.finalFrameBuffer.destroy();
-        this.preprocessFrameBuffer.destroy();
-        this.doubleFrameBuffer.destroy();
+        this.frameBufferStack.destroy();
         this.nullTexture.destroy();
         this.shapeDrawerHolder.destroy();
         this.meshDrawerHolder.destroy();
@@ -504,7 +454,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     protected onResize(): void {
         super.onResize();
-        if (this.pixelPerfectMode && (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH || this.game.scaleStrategy===SCALE_STRATEGY.FIT)) {
+        if (this._pixelPerfectMode && (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH || this.game.scaleStrategy===SCALE_STRATEGY.FIT)) {
             this.container.width = this.game.screenSize.x;
             this.container.height = this.game.screenSize.y;
         } else {
@@ -523,14 +473,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.simpleRectDrawer = new SimpleRectDrawer(gl);
         this.simpleRectDrawer.initProgram();
 
-        this.preprocessFrameBuffer = new FrameBuffer(gl,this.game.size);
-        this.origFinalFrameBuffer = new FrameBuffer(gl,this.game.size);
-        this.finalFrameBuffer = this.origFinalFrameBuffer;
-        this.doubleFrameBuffer = new DoubleFrameBuffer(gl,this.game.size);
-
-        this.blender = new Blender(this.gl);
-        this.blender.enable();
-        this.blender.setBlendMode(BLEND_MODE.NORMAL);
         // gl.depthFunc(gl.LEQUAL);
         //gl.enable(gl.CULL_FACE);
         //gl.enable(gl.DEPTH_TEST);
@@ -559,7 +501,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const rect:Rect = Rect.fromPool();
         rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
         const size:Size = Size.fromPool();
-        size.set(this.finalFrameBuffer.getTexture().size);
+        size.set(this.frameBufferStack.getCurrentTargetSize());
         const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
         sd.setUniform(sd.u_vertexMatrix,pos16h.mat16);
         pos16h.release();
@@ -587,32 +529,32 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         }
     }
 
-    private beforeItemDraw(sp:RenderableModel & IFilterable):void{
-        if (sp.filters.length>0 || sp.blendMode!==BLEND_MODE.NORMAL) {
-            this.preprocessFrameBuffer.bind();
-            this.preprocessFrameBuffer.clear(BLACK);
-            this.blender.setBlendMode(BLEND_MODE.NORMAL);
-        } else {
-            this.finalFrameBuffer.bind();
-        }
-    }
-
-    private afterItemDraw(filters: AbstractFilter[],blendMode:BLEND_MODE):void{
-        if (filters.length>0 || blendMode!==BLEND_MODE.NORMAL) {
-
-            this.blender.setBlendMode(BLEND_MODE.NORMAL);
-            const filteredTexture:Texture = this.doubleFrameBuffer.applyFilters(this.preprocessFrameBuffer.getTexture(),filters);
-
-            this.blender.setBlendMode(blendMode);
-
-            this.finalFrameBuffer.bind();
-            this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
-            this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
-            this.simpleRectDrawer.attachTexture('texture',filteredTexture);
-            this.simpleRectDrawer.draw();
-
-            this.blender.setBlendMode(BLEND_MODE.NORMAL);
-        }
-    }
+    // private beforeItemDraw(sp:RenderableModel & IFilterable):void{
+    //     if (sp.filters.length>0 || sp.blendMode!==BLEND_MODE.NORMAL) {
+    //         this.preprocessFrameBuffer.bind();
+    //         this.preprocessFrameBuffer.clear(BLACK);
+    //         this.blender.setBlendMode(BLEND_MODE.NORMAL);
+    //     } else {
+    //         this.finalFrameBuffer.bind();
+    //     }
+    // }
+    //
+    // private afterItemDraw():void{
+    //     if (filters.length>0 || blendMode!==BLEND_MODE.NORMAL) {
+    //
+    //         this.blender.setBlendMode(BLEND_MODE.NORMAL);
+    //         const filteredTexture:Texture = this.doubleFrameBuffer.applyFilters(this.preprocessFrameBuffer.getTexture(),filters);
+    //
+    //         this.blender.setBlendMode(blendMode);
+    //
+    //         this.finalFrameBuffer.bind();
+    //         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
+    //         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
+    //         this.simpleRectDrawer.attachTexture('texture',filteredTexture);
+    //         this.simpleRectDrawer.draw();
+    //
+    //         this.blender.setBlendMode(BLEND_MODE.NORMAL);
+    //     }
+    // }
 
 }

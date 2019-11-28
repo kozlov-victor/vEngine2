@@ -1,4 +1,4 @@
-import {AbstractFilter} from "../abstract/abstractFilter";
+import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {Game} from "@engine/core/game";
 import {ShaderGenerator} from "../../shaders/generators/shaderGenerator";
 import {GL_TYPE, UNIFORM_VALUE_TYPE} from "../../base/shaderProgramUtils";
@@ -9,7 +9,7 @@ import {LightSet} from "@engine/light/lightSet";
 import {FastMap} from "@engine/misc/collection/fastMap";
 
 
-export class LightFilter extends AbstractFilter {
+export class LightFilter extends AbstractGlFilter {
 
     private readonly uniformInfo:FastMap<string,UNIFORM_VALUE_TYPE> = new FastMap();
 

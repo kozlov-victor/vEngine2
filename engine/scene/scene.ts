@@ -1,5 +1,5 @@
 import {Layer} from "./layer";
-import {AbstractFilter} from "@engine/renderer/webGl/filters/abstract/abstractFilter";
+import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {CAMERA_MATRIX_MODE} from "@engine/renderer/camera";
@@ -12,7 +12,7 @@ import {
     ITweenable,
     Optional
 } from "@engine/core/declarations";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {removeFromArray} from "@engine/misc/object";
 import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
@@ -28,6 +28,7 @@ import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEven
 import {Point2d} from "@engine/geometry/point2d";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 import {Rect} from "@engine/geometry/rect";
+import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
@@ -37,7 +38,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public lockingRect:Optional<Rect>;
     public readonly resourceLoader: ResourceLoader;
     public readonly pos:Point2d = new Point2d();
-    public filters:AbstractFilter[] = [];
+    public filters:AbstractGlFilter[] = [];
     public alpha:number = 1;
 
     protected preloadingGameObject!:RenderableModel;
@@ -177,7 +178,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         renderer.transformSave();
         renderer.saveAlphaBlend();
         renderer.clearColor.set(this.colorBG);
-        renderer.beforeFrameDraw();
+        const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters,BLEND_MODE.NORMAL); // todo blend mode for scene
         this.game.camera.render();
         this.translate();
         this.transform();
@@ -198,7 +199,6 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         renderer.restoreAlphaBlend();
         renderer.unlockRect();
 
-
         if (DEBUG) {
             this.game.getRenderer().transformRestore();
             if (
@@ -211,7 +211,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
             }
             this.game.getRenderer().transformRestore();
         }
-        renderer.afterFrameDraw(this.filters);
+        renderer.afterFrameDraw(statePointer);
 
     }
 

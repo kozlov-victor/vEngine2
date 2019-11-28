@@ -1,4 +1,4 @@
-import {AbstractFilter} from "../webGl/filters/abstract/abstractFilter";
+import {AbstractGlFilter} from "../webGl/filters/abstract/abstractGlFilter";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {Device} from "../../misc/device";
 import {Game, SCALE_STRATEGY} from "../../core/game";
@@ -12,7 +12,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {AlphaBlendStack} from "@engine/renderer/common/alphaBlendStack";
@@ -20,6 +20,7 @@ import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
+import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>void;
@@ -87,9 +88,18 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         }
     }
 
-    public beforeFrameDraw():void {}
 
-    public afterFrameDraw(filters:AbstractFilter[]):void {}
+    public beforeItemStackDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer {
+        return undefined!;
+    }
+
+    public afterItemStackDraw(stackPointer:IStateStackPointer):void {}
+
+    public beforeFrameDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer {
+        return undefined!;
+    }
+
+    public afterFrameDraw(stackPointer:IStateStackPointer):void {}
 
     public destroy():void {
         globalThis.removeEventListener('resize',this.onResize);

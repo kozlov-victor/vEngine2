@@ -10,13 +10,15 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ITexture} from "@engine/renderer/common/texture";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
+import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
+import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -182,10 +184,11 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.transformRestore();
     }
 
-    public beforeFrameDraw(): void {
-        if (!this.clearBeforeRender) return;
+    public beforeFrameDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE): IStateStackPointer {
+        if (!this.clearBeforeRender) return undefined!;
         this.ctx.fillStyle = this.clearColor.asCSS();
         this.ctx.fillRect(0,0,this.game.size.width,this.game.size.height);
+        return undefined!;
     }
 
 

@@ -30,7 +30,7 @@ const IDENTITY:Mat16Holder = Mat16Holder.create();
 mat4.makeIdentity(IDENTITY);
 const BLACK:Color = Color.RGB(0,0,0,0);
 
-export abstract class AbstractFilter implements IFilter {
+export abstract class AbstractGlFilter implements IFilter {
 
     public readonly type:string = 'WebglFilter';
 
