@@ -385,19 +385,24 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public beforeItemStackDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer {
         const ptr:IStateStackPointer = this.frameBufferStack.pushState(filters,blendMode);
-        this.frameBufferStack.bind();
+        console.log('beforeItemStackDraw',{ptr,stackSize:this.frameBufferStack.getStackSize()});
         return ptr;
     }
 
     public afterItemStackDraw(stackPointer:IStateStackPointer):void {
+        console.log('afterItemStackDraw',{stackPointer});
         this.frameBufferStack.reduceState(stackPointer);
     }
 
+    // tslint:disable-next-line:member-ordering
+    public terminate:boolean = false;
+
     public beforeFrameDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer{
         this.transformSave();
+        this.terminate = filters.length>0;
         const ptr:IStateStackPointer = this.frameBufferStack.pushState(filters,blendMode);
-        this.frameBufferStack.bind();
         if (this.clearBeforeRender) this.frameBufferStack.clear(this.clearColor,this.getAlphaBlend());
+        console.log('beforeFrameDraw',{filters,ptr,stackSize:this.frameBufferStack.getStackSize()});
         return ptr;
     }
 
@@ -406,6 +411,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.frameBufferStack.unbind();
         if (this.frameBufferStack.isRenderingToScreen()) this.frameBufferStack.renderToScreen();
         this.transformRestore(); // todo need?
+        console.log('afterFrameDraw',{stackPointer});
+        //if (this.terminate) throw new DebugError('stoped');
     }
 
     public getError():Optional<{code:number,desc:string}>{

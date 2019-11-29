@@ -52,21 +52,25 @@ export class FrameBufferStack implements IDestroyable{
     }
 
     public pushState(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer{
+        const prevPointer = this._getLast().pointer;
         if (filters.length>0 || blendMode!==BLEND_MODE.NORMAL) {
+            console.log('state has been pushed');
             if (this._stack[this._stackPointer]===undefined) {
                 this._stack[this._stackPointer] = {
                     frameBuffer: new FrameBuffer(this.gl,this.size),
                     filters:undefined!,
                     blendMode: undefined!,
-                    pointer: {ptr:this._stack.length-1}
+                    pointer: {ptr:NaN}
                 };
             }
             this._stack[this._stackPointer].filters = filters;
             this._stack[this._stackPointer].blendMode = blendMode;
+            this._stack[this._stackPointer].frameBuffer.bind();
             this._stack[this._stackPointer].frameBuffer.clear(Color.NONE);
+            this._stack[this._stackPointer].pointer.ptr = this._stackPointer;
             this._stackPointer++;
         }
-        return this._getLast().pointer;
+        return prevPointer;
     }
 
     public bind(){
@@ -114,6 +118,7 @@ export class FrameBufferStack implements IDestroyable{
 
     public reduceState(to:IStateStackPointer){
         if (this._stackPointer===1) return;
+        console.log(`reducing state from ${this._stackPointer-1} to ${to.ptr}`);
         for (let i:number = this._stackPointer-1; i>to.ptr; i--) {
             const currItem:IStackItem = this._stack[i];
             const nextItem:IStackItem = this._stack[i-1];
@@ -129,8 +134,9 @@ export class FrameBufferStack implements IDestroyable{
             this.simpleRectDrawer.draw();
         }
         this.blender.setBlendMode(BLEND_MODE.NORMAL);
-        this._stackPointer = to.ptr;
-        if (this._stackPointer===0) this._stackPointer = 1;
+        this._stackPointer = to.ptr + 1;
+        //if (this._stackPointer===0) this._stackPointer = 1; todo ???
+        console.log(`stack pointer after reducing ${this._stackPointer}`);
     }
 
     public isRenderingToScreen():boolean{

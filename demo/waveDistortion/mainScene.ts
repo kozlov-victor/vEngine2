@@ -8,6 +8,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
+import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
 
 export class MainScene extends Scene {
 
@@ -16,11 +17,11 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
-        const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-
+        //const rect = new Rectangle(this.game);
+        // (rect.fillColor as Color).setRGB(10,100,100);
+        // rect.size.height = 10;
+        // this.preloadingGameObject = rect;
+        //
         const img = new Image(this.game);
         img.setResourceLink(this.resourceLoader.loadImage('./assets/repeat.jpg'));
         this.img = img;
@@ -28,13 +29,14 @@ export class MainScene extends Scene {
     }
 
     public onProgress(val: number) {
-        this.preloadingGameObject.size.width = val*this.game.size.width;
+        //this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     public onReady() {
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
+        spr.filters = [new BlackWhiteFilter(this.game)];
         this.appendChild(spr);
 
 
