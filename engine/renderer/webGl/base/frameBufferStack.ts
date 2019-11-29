@@ -27,36 +27,44 @@ export interface IStateStackPointer {
 
 export class FrameBufferStack implements IDestroyable{
 
-    private _stackPoint:number = 0;
-    private _stack:IStackItem[] = [];
-    private _interpolationMode:INTERPOLATION_MODE;
+    private _stackPointer:number;
+    private readonly _stack:IStackItem[] = [];
+    private _interpolationMode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR;
 
     private readonly _origFinalFrameBuffer:FrameBuffer;
     private _finalFrameBuffer:FrameBuffer;
     private _doubleFrameBuffer:DoubleFrameBuffer = new DoubleFrameBuffer(this.gl,this.size);
 
     private _pixelPerfectMode:boolean = false;
-    private blender:Blender;
+    private blender:Blender = new Blender(this.gl);
 
     constructor(private game:Game,private gl:WebGLRenderingContext, private size:ISize, private simpleRectDrawer: SimpleRectDrawer,private FLIP_POSITION_MATRIX:Mat16Holder){
-        this.pushState([],BLEND_MODE.NORMAL);
+        this._stack.push({
+            frameBuffer: new FrameBuffer(this.gl,this.size),
+            filters:[],
+            blendMode:BLEND_MODE.NORMAL,
+            pointer: {ptr:0}
+        });
+        this._stackPointer = 1;
         this._origFinalFrameBuffer = this._finalFrameBuffer = this._getFirst().frameBuffer;
-        this.blender = new Blender(this.gl);
         this.blender.enable();
         this.blender.setBlendMode(BLEND_MODE.NORMAL);
     }
 
     public pushState(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer{
-        if (filters.length>0 && blendMode!==BLEND_MODE.NORMAL) {
-            if (this._stack[this._stackPoint]===undefined) {
-                this._stack.push({
+        if (filters.length>0 || blendMode!==BLEND_MODE.NORMAL) {
+            if (this._stack[this._stackPointer]===undefined) {
+                this._stack[this._stackPointer] = {
                     frameBuffer: new FrameBuffer(this.gl,this.size),
-                    filters,
-                    blendMode,
+                    filters:undefined!,
+                    blendMode: undefined!,
                     pointer: {ptr:this._stack.length-1}
-                });
-                this._stackPoint++;
+                };
             }
+            this._stack[this._stackPointer].filters = filters;
+            this._stack[this._stackPointer].blendMode = blendMode;
+            this._stack[this._stackPointer].frameBuffer.clear(Color.NONE);
+            this._stackPointer++;
         }
         return this._getLast().pointer;
     }
@@ -69,7 +77,7 @@ export class FrameBufferStack implements IDestroyable{
         this._getLast().frameBuffer.unbind();
     }
 
-    public clear(color:Color,alphaBlend:number){
+    public clear(color:Color,alphaBlend?:number){
         this._getLast().frameBuffer.clear(color,alphaBlend);
     }
 
@@ -95,15 +103,21 @@ export class FrameBufferStack implements IDestroyable{
         this._pixelPerfectMode = mode;
     }
 
+    public getStackSize():number {
+        return this._stackPointer;
+    }
+
     public destroy(){
         this._stack.forEach(f=>f.frameBuffer.destroy());
         this._doubleFrameBuffer.destroy();
     }
 
     public reduceState(to:IStateStackPointer){
-        for (let i = this._stackPoint-1; i <=to.ptr; i++) {
+        if (this._stackPointer===1) return;
+        for (let i:number = this._stackPointer-1; i>to.ptr; i--) {
             const currItem:IStackItem = this._stack[i];
             const nextItem:IStackItem = this._stack[i-1];
+
             const filteredTexture:Texture = this._doubleFrameBuffer.applyFilters(currItem.frameBuffer.getTexture(),currItem.filters);
 
             this.blender.setBlendMode(currItem.blendMode);
@@ -115,7 +129,8 @@ export class FrameBufferStack implements IDestroyable{
             this.simpleRectDrawer.draw();
         }
         this.blender.setBlendMode(BLEND_MODE.NORMAL);
-        this._stackPoint = to.ptr;
+        this._stackPointer = to.ptr;
+        if (this._stackPointer===0) this._stackPointer = 1;
     }
 
     public isRenderingToScreen():boolean{
@@ -133,7 +148,7 @@ export class FrameBufferStack implements IDestroyable{
     }
 
     private _getLast():IStackItem{
-        return this._stack[this._stackPoint-1];
+        return this._stack[this._stackPointer-1];
     }
 
     private _getFirst():IStackItem{

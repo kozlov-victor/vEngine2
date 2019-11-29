@@ -397,6 +397,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.transformSave();
         const ptr:IStateStackPointer = this.frameBufferStack.pushState(filters,blendMode);
         this.frameBufferStack.bind();
+        if (this.clearBeforeRender) this.frameBufferStack.clear(this.clearColor,this.getAlphaBlend());
         return ptr;
     }
 
@@ -404,7 +405,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.frameBufferStack.reduceState(stackPointer);
         this.frameBufferStack.unbind();
         if (this.frameBufferStack.isRenderingToScreen()) this.frameBufferStack.renderToScreen();
-        this.transformRestore();
+        this.transformRestore(); // todo need?
     }
 
     public getError():Optional<{code:number,desc:string}>{

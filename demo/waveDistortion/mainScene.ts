@@ -6,11 +6,7 @@ import {Image, STRETCH_MODE} from "@engine/renderable/impl/geometry/image";
 import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {LensDistortionFilter} from "@engine/renderer/webGl/filters/texture/lensDistortionFilter";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 
 export class MainScene extends Scene {
