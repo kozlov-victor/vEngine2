@@ -12,23 +12,9 @@ import {Color} from "@engine/renderer/common/color";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/texture";
-
-
-const makePositionMatrix = (dstX:number,dstY:number,dstWidth:number,dstHeight:number):Mat16Holder =>{
-    const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-    mat4.ortho(projectionMatrix,0,dstWidth,0,dstHeight,-1,1);
-    const scaleMatrix:Mat16Holder = Mat16Holder.fromPool();
-    mat4.makeScale(scaleMatrix,dstWidth, dstHeight, 1);
-    const result:Mat16Holder = Mat16Holder.fromPool();
-    mat4.matrixMultiply(result,scaleMatrix, projectionMatrix);
-    projectionMatrix.release();
-    scaleMatrix.release();
-    return result;
-};
-
-const IDENTITY:Mat16Holder = Mat16Holder.create();
-mat4.makeIdentity(IDENTITY);
-const BLACK:Color = Color.RGB(0,0,0,0);
+import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
+import {ISize} from "@engine/geometry/size";
+import IDENTITY = mat4.IDENTITY;
 
 export abstract class AbstractGlFilter implements IFilter {
 
@@ -66,12 +52,12 @@ export abstract class AbstractGlFilter implements IFilter {
             const value:UNIFORM_VALUE_TYPE = this.uniformCache.get(keys[i])!;
             this.simpleRectDrawer.setUniform(name,value);
         }
-        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY.mat16);
-        const m16h:Mat16Holder = makePositionMatrix(0,0,width,height);
+        const size:ISize = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
+        const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,size);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,m16h.mat16);
         m16h.release();
-        destFrameBuffer.clear(BLACK);
+        destFrameBuffer.clear(Color.NONE);
         this.simpleRectDrawer.draw();
     }
 

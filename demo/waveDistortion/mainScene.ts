@@ -9,6 +9,11 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
+import {DropShadowFilter} from "@engine/renderer/webGl/filters/texture/dropShadowFilter";
+import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
+import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
 
 export class MainScene extends Scene {
 
@@ -36,8 +41,23 @@ export class MainScene extends Scene {
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
-        spr.filters = [new BlackWhiteFilter(this.game)];
+        const nf = new NoiseFilter(this.game);
+        nf.setIntensivity(0.5);
+        spr.filters = [nf];
+        spr.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(spr);
+
+        const spr2:Image = new Image(this.game);
+        spr2.setResourceLink(this.logoLink);
+        spr2.pos.setXY(30,30);
+        spr2.filters = [new BlackWhiteFilter(this.game)];
+        spr.appendChild(spr2);
+
+        const spr3:Image = new Image(this.game);
+        spr3.setResourceLink(this.logoLink);
+        spr3.pos.setXY(30,30);
+        spr3.filters = [new Barrel2DistortionFilter(this.game)];
+        spr2.appendChild(spr3);
 
 
         const circle:Circle = new Circle(this.game);
@@ -47,6 +67,9 @@ export class MainScene extends Scene {
         circle.color = Color.RGB(0,100,12);
         circle.arcAngleFrom = -2;
         circle.arcAngleTo = 2;
+        circle.addBehaviour(new DraggableBehaviour(this.game));
+        const waveFilter:WaveFilter = new WaveFilter(this.game);
+        circle.filters = [waveFilter];
         this.appendChild(circle);
 
         const img = this.img;
@@ -54,31 +77,11 @@ export class MainScene extends Scene {
         img.size.setWH(200);
         img.stretchMode = STRETCH_MODE.REPEAT;
         img.borderRadius = 15;
-        this.appendChild(this.img);
+        img.addBehaviour(new DraggableBehaviour(this.game));
+        circle.appendChild(img);
 
 
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
-            switch (e.key) {
-                case KEYBOARD_KEY.LEFT:
-                    spr.pos.addX(-1);
-                    break;
-                case KEYBOARD_KEY.RIGHT:
-                    spr.pos.addX(1);
-                    break;
-                case KEYBOARD_KEY.UP:
-                    spr.pos.addY(-1);
-                    break;
-                case KEYBOARD_KEY.DOWN:
-                    spr.pos.addY(1);
-                    break;
-                case KEYBOARD_KEY.R:
-                    spr.angle+=0.1;
-            }
-        });
-
-
-        const waveFilter:WaveFilter = new WaveFilter(this.game);
-        this.filters = [waveFilter];
+        //this.filters = [new MotionBlurFilter(this.game)];
 
 
     }

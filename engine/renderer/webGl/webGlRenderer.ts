@@ -28,7 +28,7 @@ import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import {ClazzEx, IDestroyable, IFilterable, Optional} from "@engine/core/declarations";
 import {TileMapDrawer} from "@engine/renderer/webGl/programs/impl/base/tileMap/tileMapDrawer";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
-import {WebGlRendererHelper} from "@engine/renderer/webGl/webGlRendererHelper";
+import {FLIP_TEXTURE_MATRIX, WebGlRendererHelper} from "@engine/renderer/webGl/webGlRendererHelper";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
@@ -49,8 +49,7 @@ const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
 };
 
 const SCENE_DEPTH:number = 1000;
-export const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).scale(1,-1).release().getCurrentValue().clone(); // todo to separate module
-let FLIP_POSITION_MATRIX:Mat16Holder; // todo place to separate
+
 
 const zToWMatrix:Mat16Holder = Mat16Holder.create();
 mat4.makeZToWMatrix(zToWMatrix,1);
@@ -135,26 +134,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         super(game);
         this.registerResize();
         this._init();
-        const m16hResult:Mat16Holder = Mat16Holder.fromPool();
-        const m16Scale:Mat16Holder = Mat16Holder.fromPool();
-        mat4.makeScale(m16Scale,this.game.size.width, this.game.size.height, 1);
-        const m16Ortho:Mat16Holder = Mat16Holder.fromPool();
-        mat4.ortho(m16Ortho,0,this.game.size.width,0,this.game.size.height,-1,1);
-
-        mat4.matrixMultiply(m16hResult, m16Scale, m16Ortho);
-        FLIP_POSITION_MATRIX = m16hResult.clone();
-
-        m16hResult.release();
-        m16Scale.release();
-        m16Ortho.release();
-
-        this.frameBufferStack = new FrameBufferStack(game,this.getNativeContext(),game.size,this.simpleRectDrawer,FLIP_POSITION_MATRIX);
+        this.frameBufferStack = new FrameBufferStack(game,this.getNativeContext(),game.size,this.simpleRectDrawer);
 
     }
 
     public setPixelPerfectMode(mode:boolean):void{
         const interpolation = mode?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR;
         this.frameBufferStack.setInterpolationMode(interpolation);
+        this.frameBufferStack.setPixelPerfectMode(mode);
         this._pixelPerfectMode = mode;
         this.onResize();
     }
@@ -385,33 +372,35 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public beforeItemStackDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer {
         const ptr:IStateStackPointer = this.frameBufferStack.pushState(filters,blendMode);
-        console.log('beforeItemStackDraw',{ptr,stackSize:this.frameBufferStack.getStackSize()});
+        if (this.debug) console.log('beforeItemStackDraw',{ptr,stackSize:this.frameBufferStack.getStackSize()});
         return ptr;
     }
 
     public afterItemStackDraw(stackPointer:IStateStackPointer):void {
-        console.log('afterItemStackDraw',{stackPointer});
+        if (this.debug) console.log('afterItemStackDraw',{stackPointer});
         this.frameBufferStack.reduceState(stackPointer);
     }
 
     // tslint:disable-next-line:member-ordering
     public terminate:boolean = false;
 
+    // tslint:disable-next-line
+    private debug:boolean = false;
+
     public beforeFrameDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer{
         this.transformSave();
         this.terminate = filters.length>0;
         const ptr:IStateStackPointer = this.frameBufferStack.pushState(filters,blendMode);
         if (this.clearBeforeRender) this.frameBufferStack.clear(this.clearColor,this.getAlphaBlend());
-        console.log('beforeFrameDraw',{filters,ptr,stackSize:this.frameBufferStack.getStackSize()});
+        if (this.debug) console.log('beforeFrameDraw',{filters,ptr,stackSize:this.frameBufferStack.getStackSize()});
         return ptr;
     }
 
     public afterFrameDraw(stackPointer:IStateStackPointer):void{
         this.frameBufferStack.reduceState(stackPointer);
-        this.frameBufferStack.unbind();
         if (this.frameBufferStack.isRenderingToScreen()) this.frameBufferStack.renderToScreen();
         this.transformRestore(); // todo need?
-        console.log('afterFrameDraw',{stackPointer});
+        if (this.debug) console.log('afterFrameDraw',{stackPointer});
         //if (this.terminate) throw new DebugError('stoped');
     }
 
