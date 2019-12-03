@@ -34,7 +34,7 @@ export class MainScene extends Scene {
 
         this.appendChild(this.player);
         this.player.scale.setXY(0.3);
-        this.player.pos.setXY(200,200);
+        this.player.pos.setXY(200,300);
 
 
 
