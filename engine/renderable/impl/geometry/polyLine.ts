@@ -131,6 +131,8 @@ export class PolyLine extends Shape {
     public vectorScaleFactor:number = 1;
     public borderRadius:number = 1;
 
+    public children:Line[];
+
     private lastPoint:Optional<Point2d>;
     private firstPoint:Optional<Point2d>;
 
@@ -235,13 +237,6 @@ export class PolyLine extends Shape {
     protected setClonedProperties(cloned:PolyLine):void{
         cloned.vectorScaleFactor = this.vectorScaleFactor;
         super.setClonedProperties(cloned);
-    }
-
-    private testPoint(x:number,y:number,ind:number){
-        const p:Circle = new Circle(this.game);
-        p.radius = ind;
-        p.pos.setXY(x,y);
-        this.appendChild(p);
     }
 
 
