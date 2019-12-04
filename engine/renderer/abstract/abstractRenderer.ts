@@ -7,7 +7,7 @@ import {Color} from "../common/color";
 import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Font} from "@engine/renderable/impl/general/font";
@@ -21,6 +21,7 @@ import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
+import {IFilter} from "@engine/renderer/common/ifilter";
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>void;
@@ -89,13 +90,13 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     }
 
 
-    public beforeItemStackDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer {
+    public beforeItemStackDraw(filters:AbstractGlFilter[]):IStateStackPointer {
         return undefined!;
     }
 
     public afterItemStackDraw(stackPointer:IStateStackPointer):void {}
 
-    public beforeFrameDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer {
+    public beforeFrameDraw(filters:IFilter[]):IStateStackPointer {
         return undefined!;
     }
 

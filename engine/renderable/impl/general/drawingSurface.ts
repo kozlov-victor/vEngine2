@@ -1,12 +1,12 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ICloneable, IDestroyable, IFilterable, IResource} from "@engine/core/declarations";
+import {ICloneable, IDestroyable, IResource} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {Game} from "@engine/core/game";
 import {ISize} from "@engine/geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Point2d} from "@engine/geometry/point2d";
@@ -22,7 +22,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 
 const COLOR_TMP = new Color();
 
-export class DrawingSurface extends RenderableModel implements ICloneable<DrawingSurface>,IResource<ITexture>,IFilterable, IMatrixTransformable, IDestroyable {
+export class DrawingSurface extends RenderableModel implements ICloneable<DrawingSurface>,IResource<ITexture>, IMatrixTransformable, IDestroyable {
 
     public filters: IFilter[] = [];
     public setResourceLink:never = undefined as unknown as never;
@@ -48,7 +48,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         super(game);
         this.size.set(size);
         this.canvasImage.size.set(this.size);
-        this.renderTarget = this.game.getRenderer().getHelper().createRenderTarget(size);
+        this.renderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,size);
         this.canvasImage.setResourceLink(this.renderTarget.getResourceLink());
         this.canvasImage.revalidate();
     }

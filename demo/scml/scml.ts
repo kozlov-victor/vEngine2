@@ -5,7 +5,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {IURLRequest} from "@engine/resources/urlLoader";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DebugError} from "@engine/debug/debugError";
 import {Optional} from "@engine/core/declarations";

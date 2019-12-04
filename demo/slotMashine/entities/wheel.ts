@@ -1,6 +1,6 @@
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {Tween} from "@engine/animation/tween";
 import {Mashine} from "./mashine";
 import {ITexture} from "@engine/renderer/common/texture";

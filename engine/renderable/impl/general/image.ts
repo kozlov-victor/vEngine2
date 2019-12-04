@@ -1,21 +1,21 @@
-import {Game} from "@engine/core/game";
-import {Rect} from "@engine/geometry/rect";
-import {DebugError} from "@engine/debug/debugError";
+import {Game} from "../../../core/game";
+import {Rect} from "../../../geometry/rect";
+import {DebugError} from "../../../debug/debugError";
 import {Shape} from "../../abstract/shape";
-import {Color} from "@engine/renderer/common/color";
-import {Point2d} from "@engine/geometry/point2d";
-import {ICloneable, IFilterable, IResource} from "@engine/core/declarations";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/common/texture";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {IFilter} from "@engine/renderer/common/ifilter";
+import {Color} from "../../../renderer/common/color";
+import {Point2d} from "../../../geometry/point2d";
+import {ICloneable, IResource} from "../../../core/declarations";
+import {ResourceLink} from "../../../resources/resourceLink";
+import {ITexture} from "../../../renderer/common/texture";
+import {RenderableModel} from "../../abstract/renderableModel";
+import {IFilter} from "../../../renderer/common/ifilter";
 
 export const enum STRETCH_MODE {
     STRETCH,
     REPEAT
 }
 
-export class Image extends RenderableModel implements ICloneable<Image>,IResource<ITexture>,IFilterable{
+export class Image extends RenderableModel implements ICloneable<Image>,IResource<ITexture>{
 
     public readonly type:string = 'Image';
     public borderRadius:number = 0;

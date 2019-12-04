@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 
 
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import * as logoBase64 from "../assets/engine.jpg";
 import {ITexture} from "@engine/renderer/common/texture";
 

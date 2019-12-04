@@ -7,7 +7,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Color} from "@engine/renderer/common/color";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {DirectionalLight} from "@engine/light/impl/directionalLight";
 import {ITexture} from "@engine/renderer/common/texture";
 

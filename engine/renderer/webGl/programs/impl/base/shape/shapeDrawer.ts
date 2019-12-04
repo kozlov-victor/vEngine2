@@ -6,7 +6,7 @@ import {GL_TYPE} from "../../../../base/shaderProgramUtils";
 import {ShaderGenerator} from "../../../../shaders/generators/shaderGenerator";
 import * as fragmentSource from "./shape.fragment.glsl";
 import {parametrizeString} from "@engine/misc/object";
-import {STRETCH_MODE} from "@engine/renderable/impl/geometry/image";
+import {STRETCH_MODE} from "@engine/renderable/impl/general/image";
 
 export const enum SHAPE_TYPE {
     ELLIPSE,RECT

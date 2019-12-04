@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
@@ -34,7 +34,7 @@ export class MainScene extends Scene {
         spr.appendChild(spr1);
 
 
-        const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(spr.size);
+        const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,spr.size);
         const img = new Image(this.game);
         img.filters = [new BlackWhiteFilter(this.game),new NoiseHorizontalFilter(this.game)];
         img.lineWidth = 5;

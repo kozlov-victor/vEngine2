@@ -13,27 +13,23 @@ import {MeshDrawer} from "./programs/impl/base/mesh/meshDrawer";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Image, STRETCH_MODE} from "@engine/renderable/impl/geometry/image";
+import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {mat4} from "@engine/geometry/mat4";
-import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
-import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {ITexture} from "@engine/renderer/common/texture";
 import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
-import {ClazzEx, IDestroyable, IFilterable, Optional} from "@engine/core/declarations";
+import {ClazzEx, IDestroyable, Optional} from "@engine/core/declarations";
 import {TileMapDrawer} from "@engine/renderer/webGl/programs/impl/base/tileMap/tileMapDrawer";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {FLIP_TEXTURE_MATRIX, WebGlRendererHelper} from "@engine/renderer/webGl/webGlRendererHelper";
-import {IFilter} from "@engine/renderer/common/ifilter";
-import IDENTITY = mat4.IDENTITY;
+import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
-import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -118,13 +114,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private gl:WebGLRenderingContext;
     private readonly matrixStack:MatrixStack = new MatrixStack();
     private shapeDrawerHolder:InstanceHolder<ShapeDrawer> = new InstanceHolder(ShapeDrawer);
-    private simpleRectDrawer:SimpleRectDrawer;
     private meshDrawerHolder:InstanceHolder<MeshDrawer> = new InstanceHolder(MeshDrawer);
     private tileMapDrawerHolder:InstanceHolder<TileMapDrawer> = new InstanceHolder(TileMapDrawer);
 
     private nullTexture:Texture;
 
-    private frameBufferStack:FrameBufferStack;
+    private origFrameBufferStack:FrameBufferStack;
+    private currFrameBufferStack:FrameBufferStack;
+
+    private blender:Blender;
 
 
     private _isRectLocked:boolean = false;
@@ -134,14 +132,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         super(game);
         this.registerResize();
         this._init();
-        this.frameBufferStack = new FrameBufferStack(game,this.getNativeContext(),game.size,this.simpleRectDrawer);
 
     }
 
     public setPixelPerfectMode(mode:boolean):void{
-        const interpolation = mode?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR;
-        this.frameBufferStack.setInterpolationMode(interpolation);
-        this.frameBufferStack.setPixelPerfectMode(mode);
+        const interpolation:INTERPOLATION_MODE = mode?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR;
+        this.currFrameBufferStack.setInterpolationMode(interpolation);
+        this.currFrameBufferStack.setPixelPerfectMode(mode);
         this._pixelPerfectMode = mode;
         this.onResize();
     }
@@ -281,7 +278,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const rect:Rect = Rect.fromPool();
         rect.setXYWH(0,0,maxR2,maxR2);
         const size:Size = Size.fromPool();
-        size.set(this.frameBufferStack.getCurrentTargetSize());
+        size.set(this.currFrameBufferStack.getCurrentTargetSize());
         const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
         sd.setUniform(sd.u_vertexMatrix,pos16h.mat16);
         pos16h.release();
@@ -370,15 +367,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.gl.disable(this.gl.SCISSOR_TEST);
     }
 
-    public beforeItemStackDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer {
-        const ptr:IStateStackPointer = this.frameBufferStack.pushState(filters,blendMode);
-        if (this.debug) console.log('beforeItemStackDraw',{ptr,stackSize:this.frameBufferStack.getStackSize()});
+    public beforeItemStackDraw(filters:AbstractGlFilter[]):IStateStackPointer {
+        const ptr:IStateStackPointer = this.currFrameBufferStack.pushState(filters);
+        if (this.debug) console.log('beforeItemStackDraw',{ptr,stackSize:this.currFrameBufferStack.getStackSize()});
         return ptr;
     }
 
     public afterItemStackDraw(stackPointer:IStateStackPointer):void {
         if (this.debug) console.log('afterItemStackDraw',{stackPointer});
-        this.frameBufferStack.reduceState(stackPointer);
+        this.currFrameBufferStack.reduceState(stackPointer);
     }
 
     // tslint:disable-next-line:member-ordering
@@ -387,18 +384,18 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     // tslint:disable-next-line
     private debug:boolean = false;
 
-    public beforeFrameDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer{
+    public beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
         this.transformSave();
         this.terminate = filters.length>0;
-        const ptr:IStateStackPointer = this.frameBufferStack.pushState(filters,blendMode);
-        if (this.clearBeforeRender) this.frameBufferStack.clear(this.clearColor,this.getAlphaBlend());
-        if (this.debug) console.log('beforeFrameDraw',{filters,ptr,stackSize:this.frameBufferStack.getStackSize()});
+        const ptr:IStateStackPointer = this.currFrameBufferStack.pushState(filters);
+        if (this.clearBeforeRender) this.currFrameBufferStack.clear(this.clearColor,this.getAlphaBlend());
+        if (this.debug) console.log('beforeFrameDraw',{filters,ptr,stackSize:this.currFrameBufferStack.getStackSize()});
         return ptr;
     }
 
     public afterFrameDraw(stackPointer:IStateStackPointer):void{
-        this.frameBufferStack.reduceState(stackPointer);
-        if (this.frameBufferStack.isRenderingToScreen()) this.frameBufferStack.renderToScreen();
+        this.currFrameBufferStack.reduceState(stackPointer);
+        if (this.currFrameBufferStack===this.origFrameBufferStack) this.currFrameBufferStack.renderToScreen();
         this.transformRestore(); // todo need?
         if (this.debug) console.log('afterFrameDraw',{stackPointer});
         //if (this.terminate) throw new DebugError('stoped');
@@ -430,21 +427,20 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return this.gl;
     }
 
-    public setRenderTarget(fb:FrameBuffer){
-        this.frameBufferStack.setRenderTarget(fb);
+    public setRenderTarget(fbs:FrameBufferStack){
+        this.currFrameBufferStack = fbs;
     }
 
-    public unsetRenderTarget(){
-        this.frameBufferStack.unsetRenderTarget();
+    public setDefaultRenderTarget(){
+        this.currFrameBufferStack = this.origFrameBufferStack;
     }
 
     public destroy():void{
         super.destroy();
-        this.frameBufferStack.destroy();
+        this.origFrameBufferStack.destroy();
         this.nullTexture.destroy();
         this.shapeDrawerHolder.destroy();
         this.meshDrawerHolder.destroy();
-        this.simpleRectDrawer.destroy();
         this.tileMapDrawerHolder.destroy();
         Texture.destroyAll();
     }
@@ -466,9 +462,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.gl = gl;
 
         this.nullTexture = new Texture(gl);
+        this.blender = Blender.getSingleton(gl);
+        this.blender.enable();
+        this.blender.setBlendMode(BLEND_MODE.NORMAL);
 
-        this.simpleRectDrawer = new SimpleRectDrawer(gl);
-        this.simpleRectDrawer.initProgram();
+        this.origFrameBufferStack = new FrameBufferStack(this.game,this.getNativeContext(),this.game.size);
+        this.setDefaultRenderTarget();
 
         // gl.depthFunc(gl.LEQUAL);
         //gl.enable(gl.CULL_FACE);
@@ -498,7 +497,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const rect:Rect = Rect.fromPool();
         rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
         const size:Size = Size.fromPool();
-        size.set(this.frameBufferStack.getCurrentTargetSize());
+        size.set(this.currFrameBufferStack.getCurrentTargetSize());
         const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
         sd.setUniform(sd.u_vertexMatrix,pos16h.mat16);
         pos16h.release();
@@ -507,7 +506,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         sd.setUniform(sd.u_alpha,this.getAlphaBlend());
         sd.setUniform(sd.u_stretchMode,STRETCH_MODE.STRETCH);
-
+        this.blender.setBlendMode(model.blendMode);
 
     }
 

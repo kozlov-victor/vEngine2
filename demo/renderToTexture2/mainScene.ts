@@ -5,7 +5,7 @@ import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {PalletOffsetFilter} from "@engine/renderer/webGl/filters/texture/palletOffsetFilter";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
@@ -25,7 +25,7 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-        const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(new Size(320,240));
+        const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,new Size(320,240));
 
         const obj:Model3d = new Model3d(this.game);
         obj.modelPrimitive = new Sphere(

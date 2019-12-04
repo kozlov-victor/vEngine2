@@ -10,14 +10,16 @@ import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstract
 import {mat4} from "@engine/geometry/mat4";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
 import {Game} from "@engine/core/game";
+import {FLIP_TEXTURE_MATRIX, makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
-import {FLIP_TEXTURE_MATRIX, makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
+import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {ITexture} from "@engine/renderer/common/texture";
 
 interface IStackItem {
     frameBuffer:FrameBuffer;
     filters:AbstractGlFilter[];
-    blendMode:BLEND_MODE;
     pointer:IStateStackPointer;
 }
 
@@ -28,8 +30,7 @@ export interface IStateStackPointer {
 let FLIP_POSITION_MATRIX:Mat16Holder;
 
 
-
-export class FrameBufferStack implements IDestroyable{
+export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     private debug:boolean = false;
 
@@ -37,22 +38,26 @@ export class FrameBufferStack implements IDestroyable{
     private readonly _stack:IStackItem[] = [];
     private _interpolationMode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR;
 
-    private readonly _origFinalFrameBuffer:FrameBuffer;
-    private _finalFrameBuffer:FrameBuffer;
+
     private _doubleFrameBuffer:DoubleFrameBuffer = new DoubleFrameBuffer(this.gl,this.size);
 
     private _pixelPerfectMode:boolean = false;
-    private blender:Blender = new Blender(this.gl);
+    private simpleRectDrawer:SimpleRectDrawer;
+    private blender:Blender = Blender.getSingleton(this.gl);
 
-    constructor(private game:Game,private gl:WebGLRenderingContext, private size:ISize, private simpleRectDrawer: SimpleRectDrawer){
+    private resourceLink:ResourceLink<Texture>;
+
+    constructor(private game:Game,private gl:WebGLRenderingContext, private size:ISize){
         this._stack.push({
             frameBuffer: new FrameBuffer(this.gl,this.size),
             filters:[],
-            blendMode:BLEND_MODE.NORMAL,
             pointer: {ptr:0}
         });
         this._stackPointer = 1;
-        this._origFinalFrameBuffer = this._finalFrameBuffer = this._getFirst().frameBuffer;
+
+        this.simpleRectDrawer = new SimpleRectDrawer(gl);
+        this.simpleRectDrawer.initProgram();
+
         this.blender.enable();
         this.blender.setBlendMode(BLEND_MODE.NORMAL);
 
@@ -69,22 +74,22 @@ export class FrameBufferStack implements IDestroyable{
         m16Scale.release();
         m16Ortho.release();
 
+        this.resourceLink = ResourceLink.create(this._getFirst().frameBuffer.getTexture());
+
     }
 
-    public pushState(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer{
+    public pushState(filters:AbstractGlFilter[]):IStateStackPointer{
         const prevPointer = this._getLast().pointer;
-        if (filters.length>0 || blendMode!==BLEND_MODE.NORMAL) {
+        if (filters.length>0) {
             if (this.debug) console.log('state has been pushed');
             if (this._stack[this._stackPointer]===undefined) {
                 this._stack[this._stackPointer] = {
                     frameBuffer: new FrameBuffer(this.gl,this.size),
                     filters:undefined!,
-                    blendMode: undefined!,
                     pointer: {ptr:NaN}
                 };
             }
             this._stack[this._stackPointer].filters = filters;
-            this._stack[this._stackPointer].blendMode = blendMode;
             this._stack[this._stackPointer].frameBuffer.bind();
             this._stack[this._stackPointer].frameBuffer.clear(Color.NONE);
             this._stack[this._stackPointer].pointer.ptr = this._stackPointer;
@@ -105,18 +110,9 @@ export class FrameBufferStack implements IDestroyable{
         this._interpolationMode = interpolation;
     }
 
-    public setRenderTarget(fb:FrameBuffer){
-        this._finalFrameBuffer = fb;
-        this._finalFrameBuffer.bind();
-    }
-
-    public unsetRenderTarget(){
-        this._finalFrameBuffer = this._origFinalFrameBuffer;
-        this._finalFrameBuffer.bind();
-    }
 
     public getCurrentTargetSize():ISize{
-        return this._finalFrameBuffer.getTexture().size;
+        return this._getLast().frameBuffer.getTexture().size;
     }
 
     public setPixelPerfectMode(mode:boolean):void {
@@ -130,6 +126,7 @@ export class FrameBufferStack implements IDestroyable{
     public destroy(){
         this._stack.forEach(f=>f.frameBuffer.destroy());
         this._doubleFrameBuffer.destroy();
+        this.simpleRectDrawer.destroy();
     }
 
     public reduceState(to:IStateStackPointer){
@@ -141,24 +138,19 @@ export class FrameBufferStack implements IDestroyable{
 
             const filteredTexture:Texture = this._doubleFrameBuffer.applyFilters(currItem.frameBuffer.getTexture(),currItem.filters);
 
-            this.blender.setBlendMode(currItem.blendMode);
             nextItem.frameBuffer.bind();
             nextItem.frameBuffer.setInterpolationMode(this._interpolationMode);
             this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
-            const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,this._finalFrameBuffer.getTexture().size);
+            const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,this._getLast().frameBuffer.getTexture().size);
             this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,m16h.mat16);
             this.simpleRectDrawer.attachTexture('texture',filteredTexture);
+            this.blender.setBlendMode(BLEND_MODE.NORMAL);
             this.simpleRectDrawer.draw();
             m16h.release();
         }
-        this.blender.setBlendMode(BLEND_MODE.NORMAL);
         this._stackPointer = to.ptr + 1;
         //if (this._stackPointer===0) this._stackPointer = 1; todo ???
         if (this.debug) console.log(`stack pointer after reducing ${this._stackPointer}`);
-    }
-
-    public isRenderingToScreen():boolean{
-        return this._finalFrameBuffer===this._origFinalFrameBuffer;
     }
 
     public renderToScreen():void{
@@ -170,8 +162,13 @@ export class FrameBufferStack implements IDestroyable{
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
         this.simpleRectDrawer.attachTexture('texture',this._getLast().frameBuffer.getTexture());
         this.simpleRectDrawer.draw();
-        console.log(this._stack.length);
     }
+
+    public getResourceLink(): ResourceLink<Texture> {
+        return this.resourceLink;
+    }
+
+
 
     private _getLast():IStackItem{
         return this._stack[this._stackPointer-1];

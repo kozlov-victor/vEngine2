@@ -1,5 +1,4 @@
 import {Layer} from "./layer";
-import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {CAMERA_MATRIX_MODE} from "@engine/renderer/camera";
@@ -12,7 +11,7 @@ import {
     ITweenable,
     Optional
 } from "@engine/core/declarations";
-import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {removeFromArray} from "@engine/misc/object";
 import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
@@ -29,6 +28,7 @@ import {Point2d} from "@engine/geometry/point2d";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 import {Rect} from "@engine/geometry/rect";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
+import {IFilter} from "@engine/renderer/common/ifilter";
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
@@ -38,7 +38,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public lockingRect:Optional<Rect>;
     public readonly resourceLoader: ResourceLoader;
     public readonly pos:Point2d = new Point2d();
-    public filters:AbstractGlFilter[] = [];
+    public filters:IFilter[] = [];
     public alpha:number = 1;
 
     protected preloadingGameObject!:RenderableModel;
@@ -178,7 +178,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         renderer.transformSave();
         renderer.saveAlphaBlend();
         renderer.clearColor.set(this.colorBG);
-        const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters,BLEND_MODE.NORMAL); // todo blend mode for scene
+        const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters); // todo blend mode for scene
         this.game.camera.render();
         this.translate();
         this.transform();

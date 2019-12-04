@@ -5,7 +5,7 @@ import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../common/color";
 import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -184,7 +184,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.transformRestore();
     }
 
-    public beforeFrameDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE): IStateStackPointer {
+    public beforeFrameDraw(filters:AbstractGlFilter[]): IStateStackPointer {
         if (!this.clearBeforeRender) return undefined!;
         this.ctx.fillStyle = this.clearColor.asCSS();
         this.ctx.fillRect(0,0,this.game.size.width,this.game.size.height);

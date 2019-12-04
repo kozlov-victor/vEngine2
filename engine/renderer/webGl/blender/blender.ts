@@ -4,10 +4,17 @@ import {Optional} from "@engine/core/declarations";
 
 export class Blender {
 
+    public static getSingleton(gl:WebGLRenderingContext):Blender{
+        if (Blender.instance===undefined) Blender.instance = new Blender(gl);
+        return Blender.instance;
+    }
+
+    private static instance:Blender;
+
     private _lastMode:Optional<BLEND_MODE>;
     private _enabled:Optional<boolean>;
 
-    constructor(private gl:WebGLRenderingContext){}
+    private constructor(private gl:WebGLRenderingContext){}
 
     public enable():void{
         if (this._enabled) return;

@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {Camera} from "@engine/renderer/camera";

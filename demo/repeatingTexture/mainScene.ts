@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Image, STRETCH_MODE} from "@engine/renderable/impl/geometry/image";
+import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 

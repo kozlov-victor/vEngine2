@@ -3,7 +3,7 @@ import {AbstractRenderer, IRenderTarget} from "../../renderer/abstract/abstractR
 import {
     IAlphaBlendable,
     ICloneable,
-    IEventemittable,
+    IEventemittable, IFilterable,
     IParentChild,
     IRevalidatable,
     ITweenable,
@@ -32,6 +32,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
+import {IFilter} from "@engine/renderer/common/ifilter";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -41,13 +42,14 @@ export const enum BLEND_MODE {
 }
 
 
-export abstract class RenderableModel extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable, IParentChild, IAlphaBlendable  {
+export abstract class RenderableModel extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable, IParentChild, IAlphaBlendable, IFilterable  {
 
     public id:string;
 
     public alpha:number = 1;
     public visible:boolean = true;
     public blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
+    public filters: IFilter[] = [];
 
     public readonly parent:RenderableModel;
     public readonly children:RenderableModel[] = [];
@@ -309,7 +311,7 @@ export abstract class RenderableModel extends TransformableModel implements IRev
     }
 
     public renderToTexture(target:IRenderTarget,clearBeforeRender:boolean = true):void{
-        this.game.getRenderer().getHelper().renderRenderableModelToTexture(this,target,clearBeforeRender);
+        this.game.getRenderer().getHelper().renderModelToTexture(this,target,clearBeforeRender);
     }
 
     protected setClonedProperties(cloned:RenderableModel):void {

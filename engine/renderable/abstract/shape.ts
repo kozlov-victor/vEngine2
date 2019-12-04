@@ -2,10 +2,9 @@ import {RenderableModel} from "./renderableModel";
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
 import {LinearGradient} from "@engine/renderer/common/linearGradient";
-import {IFilterable} from "@engine/core/declarations";
 import {IFilter} from "@engine/renderer/common/ifilter";
 
-export abstract class Shape extends RenderableModel implements IFilterable{
+export abstract class Shape extends RenderableModel {
 
     public color:Color = Color.BLACK.clone();
     public lineWidth:number = 0;

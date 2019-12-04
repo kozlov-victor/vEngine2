@@ -1,6 +1,6 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class ImageButton extends RenderableModel {

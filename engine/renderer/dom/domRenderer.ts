@@ -1,5 +1,5 @@
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
-import {Image} from "@engine/renderable/impl/geometry/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
@@ -100,7 +100,7 @@ export class DomRenderer extends AbstractRenderer {
         this.registerResize();
     }
 
-    public beforeFrameDraw(filters:AbstractGlFilter[],blendMode:BLEND_MODE):IStateStackPointer{
+    public beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
         if (this.nodes.properties.bg_color!==this.clearColor.asCSS()) {
             this.container.style.backgroundColor = this.clearColor.asCSS();
         }

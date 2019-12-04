@@ -2,7 +2,7 @@ import {Font, IRectViewJSON} from "../../general/font";
 import {Rect} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
 import {ScrollableContainer} from "../abstract/scrollableContainer";
-import {Image} from "../../geometry/image";
+import {Image} from "../../general/image";
 import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {Game} from "@engine/core/game";
 import {Size} from "@engine/geometry/size";
