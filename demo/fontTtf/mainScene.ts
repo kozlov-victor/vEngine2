@@ -16,6 +16,8 @@ export class MainScene extends Scene {
 
     public onPreloading() {
 
+        console.log('preloading');
+
         loadFont(this.game,'./fontTtf/PressStart2P.ttf','pressStart2P');
         loadFont(this.game,'./fontTtf/vintage.ttf','vintage');
 

@@ -111,7 +111,6 @@ export abstract class Emulator {
 
     public setRom(rom:Uint8Array){
         console.log({rom});
-        // todo check memory access
         for (let i = 0; i < rom.length; i++) {
             this.memory[Emulator.ROM_OFFSET+i] = rom[i] as byte;
         }

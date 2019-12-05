@@ -26,11 +26,12 @@ export class EarClippingTriangulator {
 
     private static computeSpannedAreaSign(p1x: number, p1y: number,
                                           p2x: number, p2y: number,
-                                          p3x: number, p3y: number): number {
+                                          p3x: number, p3y: number): 0|1|-1 {
         let area: number = p1x * (p3y - p2y);
         area += p2x * (p1y - p3y);
         area += p3x * (p2y - p1y);
-        return Math.sign(area);
+        if (area===0) return 0;
+        return area>0?1:-1;
     }
 
     private indices: number[] = [];
