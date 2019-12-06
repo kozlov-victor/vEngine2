@@ -8,7 +8,7 @@ export class Rule extends Lint.Rules.AbstractRule {
     public static FAILURE_STRING = 'not allowed to use: ';
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
-        return this.applyWithWalker(new LintWalker(sourceFile, 'vEngine-as-statement',undefined));
+        return this.applyWithWalker(new LintWalker(sourceFile, 'v-engine-as-statement',undefined));
     }
 }
 

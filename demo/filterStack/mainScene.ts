@@ -8,8 +8,6 @@ import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
-import {LensDistortionFilter} from "@engine/renderer/webGl/filters/texture/lensDistortionFilter";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
 
 export class MainScene extends Scene {
@@ -63,12 +61,6 @@ export class MainScene extends Scene {
         tf.setText("No signal");
         tf.filters = [new WaveFilter(this.game)];
         rect2.appendChild(tf);
-
-        const lensFilter:LensDistortionFilter = new LensDistortionFilter(this.game);
-        this.on(MOUSE_EVENTS.mouseMove, e=>{
-            lensFilter.setMouseScreenCoordinates(e.screenX,e.screenY);
-        });
-        this.filters = [lensFilter];
 
     }
 

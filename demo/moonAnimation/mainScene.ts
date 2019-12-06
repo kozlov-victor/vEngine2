@@ -1,4 +1,3 @@
-
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Scene} from "@engine/scene/scene";
@@ -40,6 +39,7 @@ export class MainScene extends Scene {
             this.sound.play();
             this.player.nextAnimation();
         });
+
     }
 
 }
