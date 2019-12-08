@@ -12,8 +12,7 @@ void main(){
         vec4 normal = texture2D(normalTexture, v_texCoord);
         vec4 normalMap = (2. * normal) - 1.;
         n4 = vec4(normalize(normalMap.xyz), 1.);
-        dotProduct = max(0., dot(n4.xyz, normalize(u_ambientLight.direction)));
-        //n4 = vec4(0.0);
+        dotProduct = 1.0;//max(0., dot(n4.xyz, normalize(u_ambientLight.direction)));
     } else {
         n4 = vec4(0.0);
         dotProduct = 1.;
