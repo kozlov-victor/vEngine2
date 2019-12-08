@@ -5,15 +5,15 @@ export const mainFnSource:string = MACRO_GL_COMPRESS`
 
 void main(){
     vec4 texColor = texture2D(texture, v_texCoord);
-
+    
     vec4 n4;
     float dotProduct;
     if (u_useNormalMap) {
         vec4 normal = texture2D(normalTexture, v_texCoord);
-        vec4 normalMap = (2.0 * normal) - 1.0;
-        n4 = vec4(normalize(normalMap.xyz), 1);
-        vec3 n = n4.xyz;
-        dotProduct = max(0., dot(n, normalize(u_ambientLight.direction)));
+        vec4 normalMap = (2. * normal) - 1.;
+        n4 = vec4(normalize(normalMap.xyz), 1.);
+        dotProduct = max(0., dot(n4.xyz, normalize(u_ambientLight.direction)));
+        //n4 = vec4(0.0);
     } else {
         n4 = vec4(0.0);
         dotProduct = 1.;
@@ -28,7 +28,7 @@ void main(){
         for (int i=0;i<MAX_NUM_OF_POINT_LIGHTS;i++) {
             if (i>u_numOfPointLights) break;
             if (u_pointLights[i].isOn) lightResult+=shadedResult(
-            u_pointLights[i], u_material, n4, texColor
+                u_pointLights[i], u_material, n4, texColor
             );
         }
     }

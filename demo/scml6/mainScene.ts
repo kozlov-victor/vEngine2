@@ -31,16 +31,12 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-
         this.appendChild(this.player);
         this.player.scale.setXY(0.3);
         this.player.pos.setXY(200,300);
 
-
-
         this.on(MOUSE_EVENTS.click, ()=>{
             this.player.nextAnimation();
-
         });
     }
 

@@ -5,7 +5,6 @@ import {Game} from "@engine/core/game";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Int} from "@engine/core/declarations";
 
 export class PalletOffsetFilter extends AbstractGlFilter{
 
