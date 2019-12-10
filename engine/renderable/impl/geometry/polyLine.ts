@@ -52,17 +52,16 @@ const getPointsOnBezierCurve = (points:v2[], offset:number, numPoints:number):v2
     return cpoints;
 };
 
-
 class SvgTokenizer {
     public lastCommand:string;
 
     private pos:number = 0;
     private lastPos:Optional<number>;
 
-    private readonly CHAR:RegExp = /[a-zA-Z]/i;
-    private readonly NUM:RegExp = /[0-9.]/i;
+    private readonly CHAR:string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; // to avoid regexps
+    private readonly NUM:string = '01234567890.';
 
-    constructor(private path:string){
+    constructor(private readonly path:string){
         this.path = clearString(path);
     }
 
@@ -110,7 +109,7 @@ class SvgTokenizer {
         }
     }
 
-    private getNextToken(regexp:RegExp){
+    private getNextToken(allowedSymbols:string){
         if (DEBUG && this.isEof()) throw new DebugError(`unexpected end of string`);
         let char:string;
         let res:string = '';
@@ -118,7 +117,7 @@ class SvgTokenizer {
         this.lastPos = this.pos;
         while (!this.isEof()){
             char = this.path[this.pos];
-            if (!char.match(regexp)) break;
+            if (allowedSymbols.indexOf(char)===-1) break;
             res+=char;
             this.pos++;
         }
@@ -128,6 +127,17 @@ class SvgTokenizer {
 }
 
 export class PolyLine extends Shape {
+
+    public static fromSvgPath(game:Game,path:string):PolyLine[]{
+        const polyLines:PolyLine[] = [];
+        path.split(/z/gi).forEach((p:string)=>{
+            if (!p.trim()) return;
+            const polyLine:PolyLine = new PolyLine(game);
+            polyLine.fromSvgPath(p+ ' z');
+            polyLines.push(polyLine);
+        });
+        return polyLines;
+    }
     public vectorScaleFactor:number = 1;
     public borderRadius:number = 1;
 
@@ -209,7 +219,8 @@ export class PolyLine extends Shape {
     }
 
     // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
-    public setSvgPath(path:string){
+    public fromSvgPath(path:string){
+        if (DEBUG && path.split(/z/gi).length-1>1) throw new DebugError(`multiple closing operation ('z') in one svg path. Use static method PolyLine.fromSvgPath() instead`);
         this.tokenizer = new SvgTokenizer(path);
         let lastCommand:Optional<string>;
         while (!this.tokenizer.isEof()) {
@@ -271,38 +282,6 @@ export class PolyLine extends Shape {
     private executeCommand(command:string):void{
         const tokenizer:SvgTokenizer = this.tokenizer;
         switch (command) {
-            case 'M': {
-                this.moveTo(tokenizer.getNextNumber(), tokenizer.getNextNumber());
-                break;
-            }
-            case 'm': {
-                this.moveBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
-                break;
-            }
-            case 'L': {
-                this.lineTo(tokenizer.getNextNumber(),tokenizer.getNextNumber());
-                break;
-            }
-            case 'l': {
-                this.lineBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
-                break;
-            }
-            case 'H': {
-                this.lineTo( tokenizer.getNextNumber(),this!.lastPoint!.y);
-                break;
-            }
-            case 'h': {
-                this.lineBy( tokenizer.getNextNumber(),0);
-                break;
-            }
-            case 'V': {
-                this.lineTo(this!.lastPoint!.x,tokenizer.getNextNumber());
-                break;
-            }
-            case 'v': {
-                this.lineBy(0,tokenizer.getNextNumber());
-                break;
-            }
             case 'C': {
                 const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
@@ -381,7 +360,38 @@ export class PolyLine extends Shape {
                 this.bezierTo(p1,add(p1,p2),p3,add(p1,p4));
                 break;
             }
-            // A  -unimplemented
+            case 'M': {
+                this.moveTo(tokenizer.getNextNumber(), tokenizer.getNextNumber());
+                break;
+            }
+            case 'm': {
+                this.moveBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
+                break;
+            }
+            case 'L': {
+                this.lineTo(tokenizer.getNextNumber(),tokenizer.getNextNumber());
+                break;
+            }
+            case 'l': {
+                this.lineBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
+                break;
+            }
+            case 'H': {
+                this.lineTo( tokenizer.getNextNumber(),this!.lastPoint!.y);
+                break;
+            }
+            case 'h': {
+                this.lineBy( tokenizer.getNextNumber(),0);
+                break;
+            }
+            case 'V': {
+                this.lineTo(this!.lastPoint!.x,tokenizer.getNextNumber());
+                break;
+            }
+            case 'v': {
+                this.lineBy(0,tokenizer.getNextNumber());
+                break;
+            }
             case 'A':
             case 'a':
                 // A rx ry x-axis-rotation large-arc-flag sweep-flag x y

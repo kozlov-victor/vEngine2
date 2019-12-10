@@ -54,7 +54,7 @@ export class MainScene extends Scene {
         //polyline.pos.setXY(100,100);
         polyline.lineWidth = 10;
         polyline.color = Color.RGB(100,12,12);
-        polyline.setSvgPath(`
+        polyline.fromSvgPath(`
         M 64.693 116.615 L 21.388 208.094 C -11.852 237.461 44.495 288.708 93.428 305.375 C 153.485 325.832 203.521 325.984 200.027 298.722 C 188.33 207.452 145.765 169.448 115.841 191.82 C 93.541 208.492 72.912 92.281 64.693 116.615 Z
         `);
         polyline.addBehaviour(new DraggableBehaviour(this.game));

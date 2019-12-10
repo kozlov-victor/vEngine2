@@ -1,5 +1,5 @@
 {
-  "rulesDirectory": "./node_tools/lints/build",
+  "rulesDirectory": ["./node_tools/lints/build"],
   "extends": "tslint:recommended",
   "rules": {
     "no-trailing-whitespace": false,

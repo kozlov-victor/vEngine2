@@ -56,7 +56,7 @@ export class Polygon extends Mesh {
     public fromSvgPath(p:string):void {
         const polyline:PolyLine = new PolyLine(this.game);
         if (DEBUG && p.split(/z/gi).length-1>1) throw new DebugError(`multiple closing operation ('z') in one svg path. Use static method Polygon.fromSvgPath() instead`);
-        polyline.setSvgPath(p);
+        polyline.fromSvgPath(p);
         this.fromPolyline(polyline);
     }
 

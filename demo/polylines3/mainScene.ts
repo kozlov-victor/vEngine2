@@ -15,32 +15,32 @@ export class MainScene extends Scene {
         //polyLine1.pos.setXY(81,68);
         polyLine1.color = Color.RGB(100,20,222);
         polyLine1.lineWidth = 2;
-        polyLine1.setSvgPath(`
+        polyLine1.fromSvgPath(`
            M80 80
            A 45 45, 0, 0, 0, 125 125
            L 125 80 Z
            `
         );
         polyLine1.complete();
-        polyLine1.setSvgPath(`
+        polyLine1.fromSvgPath(`
            M230 80
            A 45 45, 0, 1, 0, 275 125
            L 275 80 Z
         `);
         polyLine1.complete();
-        polyLine1.setSvgPath(`
+        polyLine1.fromSvgPath(`
            M80 230
            A 45 45, 0, 0, 1, 125 275
            L 125 230 Z
         `);
         polyLine1.complete();
-        polyLine1.setSvgPath(`
+        polyLine1.fromSvgPath(`
            M230 230
            A 45 45, 0, 1, 1, 275 275
            L 275 230 Z
         `);
         polyLine1.complete();
-        polyLine1.setSvgPath(`
+        polyLine1.fromSvgPath(`
             M10 315
             L 110 215
             A 30 50 0 0 1 162.55 162.45
