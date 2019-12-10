@@ -3,37 +3,32 @@
 //language=GLSL
 export const mainFnSource:string = MACRO_GL_COMPRESS`
 
-void main(){
-    vec4 texColor = texture2D(texture, v_texCoord);
-    
-    vec4 n4;
-    float dotProduct;
-    if (u_useNormalMap) {
-        vec4 normal = texture2D(normalTexture, v_texCoord);
-        vec4 normalMap = (2. * normal) - 1.;
-        n4 = vec4(normalize(normalMap.xyz), 1.);
-        dotProduct = 1.0;//max(0., dot(n4.xyz, normalize(u_ambientLight.direction)));
-    } else {
-        n4 = vec4(0.0);
-        dotProduct = 1.;
-    }
+    void main(){
+        vec4 texColor = texture2D(texture, v_texCoord);
 
-    vec4 lightResult =
-        texColor * u_ambientLight.color *
-        (u_material.ambient + dotProduct) *
-        vec4(u_ambientLight.intensity);
-
-    if (texColor.a>0.) {
-        for (int i=0;i<MAX_NUM_OF_POINT_LIGHTS;i++) {
-            if (i>u_numOfPointLights) break;
-            if (u_pointLights[i].isOn) lightResult+=shadedResult(
-                u_pointLights[i], u_material, n4, texColor
-            );
+        vec4 normal;
+        if (u_useNormalMap) {
+            normal = texture2D(normalTexture, v_texCoord) * 2. - 1.;
+        } else {
+            normal = vec4(0.,0.,-1.,1.);
         }
-    }
+        
+        vec4 lightResult =
+            texColor * u_ambientLight.color *
+            u_material.ambient *
+            vec4(u_ambientLight.intensity);
 
-    gl_FragColor = lightResult;
-    gl_FragColor.a = texColor.a;
-}
+        if (texColor.a>0.) {
+            for (int i=0;i<MAX_NUM_OF_POINT_LIGHTS;i++) {
+                if (i>u_numOfPointLights) break;
+                if (u_pointLights[i].isOn) {
+                    lightResult+= shadedResult(u_pointLights[i], u_material, normal, texColor);
+                }
+            }
+        }
+
+        gl_FragColor = lightResult;
+        gl_FragColor.a = texColor.a;
+    }
 `;
 

@@ -1,38 +1,5 @@
-
-
-import {LightSet} from "@engine/light/lightSet";
-import {PointLight} from "@engine/light/impl/pointLight";
-import {DirectionalLight} from "@engine/light/impl/directionalLight";
-
 //language=GLSL
-export const fragmentSource:string = `
-
-#define MAX_NUM_OF_POINT_LIGHTS ${LightSet.MAX_NUM_OF_POINT_LIGHTS}
-#define LIGHT_TYPE_POINT ${PointLight.LIGHT_TYPE}
-#define LIGHT_TYPE_DIRECTIONAL ${DirectionalLight.LIGHT_TYPE}
-
-struct PointLight {
-    int type;
-    vec3 direction;
-    vec2 pos;
-    vec4 color;
-    float nearRadius;
-    float farRadius;
-    float intensity;
-    bool isOn;
-};
-struct AmbientLight {
-    vec4 color;
-    vec3 direction;
-    float intensity;
-};
-struct Material {
-    vec4  ambient;
-    vec4  diffuse;
-    vec4  specular;
-    float shininess;
-};
-
+export const functions:string = `
 float distanceAttenuation(PointLight lgt,float dist){
     float atten = .0;
     if (dist<=lgt.farRadius) {
@@ -70,17 +37,18 @@ vec4 diffuseResult(Material m, float dotProduct, vec4 texColor) {
     return m.diffuse * dotProduct * texColor;
 }
 vec4 shadedResult(PointLight lgt, Material m, vec4 N4,vec4 texColor) {
-    vec3 l = vec3(lgt.pos.xy - gl_FragCoord.xy,0.0);
+    vec3 l = vec3(lgt.pos.xy - v_texCoord,0.);
+    vec2 posNorm = vec2(lgt.pos.x/u_dimension.x,lgt.pos.y/u_dimension.y);
+    vec3 direction = normalize(vec3(posNorm - v_texCoord,0.));
     float dist = length(l);
     l = l / dist;
-    float dotProduct = (N4.a>0.)? max(0.,dot(N4.xyz,l)): 1.;
+    float dotProduct = dot(N4.xyz,direction);
     float atten;
     if (lgt.type==LIGHT_TYPE_POINT) atten = distanceAttenuation(lgt,dist);
     else atten = angleAttenuation(lgt,dist,l);
     vec4 diffuse = diffuseResult(m, dotProduct, texColor);
     vec4 specular = specularResult(m, dotProduct, dist);
-    vec4 result = atten * lgt.color * (diffuse + specular) * lgt.intensity;
+    vec4 result = atten * lgt.color * (diffuse + specular) * lgt.intensity + dotProduct;
     return result;
 }
-
 `;

@@ -22,9 +22,6 @@ export class MainScene extends Scene {
         this.logoLink = this.resourceLoader.loadImage('./lightNormalMap/ship.png');
         this.normalMapLink = this.resourceLoader.loadImage('./lightNormalMap/shipNormal.png');
 
-        //this.logoLink = this.resourceLoader.loadImage('./model3dFromObj3/earth.jpg');
-        //this.normalMapLink = this.resourceLoader.loadImage('./model3dFromObj3/earth_normal.jpg');
-
     }
 
     public onReady() {
@@ -35,15 +32,15 @@ export class MainScene extends Scene {
         this.appendChild(spr);
 
         const pointLight:PointLight = new PointLight(this.game);
-        pointLight.nearRadius = 10;
+        pointLight.nearRadius = 90;
         pointLight.farRadius = 120;
         pointLight.pos.setXY(50,50);
-        pointLight.color.setRGB(244,244,244);
+        pointLight.color.setRGB(255,255,255);
 
         const lightSet:LightSet = new LightSet(this.game);
         lightSet.addPointLight(pointLight);
-        lightSet.ambientLight.color.setRGB(110,110,110);
-        lightSet.ambientLight.intensity = 0.8;
+        lightSet.ambientLight.color.setRGB(210,210,210);
+        lightSet.ambientLight.intensity = 0.9;
 
         const surf:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         const sprNormal:Image = new Image(this.game);

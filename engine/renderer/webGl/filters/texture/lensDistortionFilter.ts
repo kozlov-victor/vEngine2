@@ -3,6 +3,7 @@ import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderG
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Game} from "@engine/core/game";
+import {ISize} from "@engine/geometry/size";
 
 // https://www.geeks3d.com/20140213/glsl-shader-library-fish-eye-and-dome-and-barrel-distortion-post-processing-filters/6/
 
@@ -81,9 +82,9 @@ export class LensDistortionFilter extends AbstractGlFilter {
     }
 
     public doFilter(destFrameBuffer:FrameBuffer):void{
-        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
-        this.setUniform(this.rt_w,width);
-        this.setUniform(this.rt_h,height);
+        const size:ISize = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        this.setUniform(this.rt_w,size.width);
+        this.setUniform(this.rt_h,size.height);
 
         super.doFilter(destFrameBuffer);
     }

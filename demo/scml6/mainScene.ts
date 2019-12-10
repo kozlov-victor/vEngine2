@@ -22,7 +22,6 @@ export class MainScene extends Scene {
         this.player = new SpriterObject(this.game);
         this.player.preload('./scml6/fair/1.scon');
 
-
     }
 
     public onProgress(val: number) {

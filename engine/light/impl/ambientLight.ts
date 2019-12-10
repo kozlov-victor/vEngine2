@@ -11,7 +11,7 @@ export class AmbientLight extends AbstractLight{
 
     constructor(protected game: Game) {
         super(game);
-        this.direction = [1,1,1];
+        this.direction = [0,0,-1];
     }
 
     /** @private */
