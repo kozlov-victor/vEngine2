@@ -60,7 +60,7 @@ export class LightFilter extends AbstractGlFilter {
         const size:ISize = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.size[0] = size.width;
         this.size[1] = size.height;
-        this.simpleRectDrawer.setUniform(this.u_dimension,this.size);
+        //this.simpleRectDrawer.setUniform(this.u_dimension,this.size);
         super.doFilter(destFrameBuffer);
     }
 

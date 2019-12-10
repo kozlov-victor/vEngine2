@@ -19,8 +19,9 @@ export class MainScene extends Scene {
     private normalMapLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./lightNormalMap/ship.png');
-        this.normalMapLink = this.resourceLoader.loadImage('./lightNormalMap/shipNormal.png');
+
+        this.logoLink = this.resourceLoader.loadImage('./lightNormalMap/rocks.png');
+        this.normalMapLink = this.resourceLoader.loadImage('./lightNormalMap/rocks-normal.png');
 
     }
 

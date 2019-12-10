@@ -10,7 +10,7 @@ export const mainFnSource:string = MACRO_GL_COMPRESS`
         if (u_useNormalMap) {
             normal = texture2D(normalTexture, v_texCoord) * 2. - 1.;
         } else {
-            normal = vec4(0.,0.,-1.,1.);
+            normal = vec4(0.,0.,-1.,0.);
         }
         
         vec4 lightResult =

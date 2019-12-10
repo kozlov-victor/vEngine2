@@ -37,18 +37,18 @@ vec4 diffuseResult(Material m, float dotProduct, vec4 texColor) {
     return m.diffuse * dotProduct * texColor;
 }
 vec4 shadedResult(PointLight lgt, Material m, vec4 N4,vec4 texColor) {
-    vec3 l = vec3(lgt.pos.xy - v_texCoord,0.);
+    vec3 l = vec3(lgt.pos.xy - gl_FragCoord.xy,0.0);
     vec2 posNorm = vec2(lgt.pos.x/u_dimension.x,lgt.pos.y/u_dimension.y);
-    vec3 direction = normalize(vec3(posNorm - v_texCoord,0.));
+    vec3 direction = normalize(vec3(lgt.pos - gl_FragCoord.xy,0.));
     float dist = length(l);
     l = l / dist;
-    float dotProduct = dot(N4.xyz,direction);
+    float dotProduct = (N4.a>0.)? max(0.,dot(N4.xyz,direction)): 1.;
     float atten;
     if (lgt.type==LIGHT_TYPE_POINT) atten = distanceAttenuation(lgt,dist);
     else atten = angleAttenuation(lgt,dist,l);
     vec4 diffuse = diffuseResult(m, dotProduct, texColor);
     vec4 specular = specularResult(m, dotProduct, dist);
-    vec4 result = atten * lgt.color * (diffuse + specular) * lgt.intensity + dotProduct;
+    vec4 result = atten * lgt.color * (diffuse + specular) * lgt.intensity;
     return result;
 }
 `;
