@@ -1,11 +1,12 @@
 import {Optional} from "@engine/core/declarations";
+import {DRAW_METHOD} from "@engine/renderer/webGl/base/bufferInfo";
 
 export interface IPrimitive {
     vertexArr:number[];
     normalArr: Optional<number[]>;
     texCoordArr: Optional<number[]>;
     indexArr: Optional<number[]>;
-    drawMethod:number;
+    drawMethod:DRAW_METHOD;
 }
 
 export abstract class AbstractPrimitive implements IPrimitive {

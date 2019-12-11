@@ -5,6 +5,7 @@ import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimi
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ObjParser} from "./objParser";
 import {ITexture} from "@engine/renderer/common/texture";
+import {DRAW_METHOD} from "@engine/renderer/webGl/base/bufferInfo";
 
 class ScullMesh extends AbstractPrimitive {
 

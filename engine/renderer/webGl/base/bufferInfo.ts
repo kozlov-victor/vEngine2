@@ -32,6 +32,8 @@ export const enum DRAW_METHOD {
     TRIANGLE_FAN,
     TRIANGLE_STRIP,
     TRIANGLES,
+    LINES,
+    LINE_LOOP,
 }
 
 const drawMethodToGlEnum = (gl:WebGLRenderingContext,m:DRAW_METHOD):GLenum=>{
@@ -44,6 +46,10 @@ const drawMethodToGlEnum = (gl:WebGLRenderingContext,m:DRAW_METHOD):GLenum=>{
             return gl.TRIANGLE_STRIP;
         case DRAW_METHOD.TRIANGLES:
             return gl.TRIANGLES;
+        case DRAW_METHOD.LINES:
+            return gl.LINES;
+        case DRAW_METHOD.LINE_LOOP:
+            return gl.LINE_LOOP;
     }
     if (DEBUG) {
         throw new DebugError(`unknown drawMethod enum value: ${m}`);
