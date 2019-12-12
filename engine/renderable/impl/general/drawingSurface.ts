@@ -19,6 +19,7 @@ import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
+import {verify} from "crypto";
 
 const COLOR_TMP = new Color();
 
@@ -230,6 +231,14 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     private drawPolygonFromVertices(vertices:number[]){
+        const prev:number = vertices[vertices.length-2];
+        const last:number = vertices[vertices.length-1];
+
+        const first:number = vertices[0];
+        const next:number = vertices[1];
+
+        if (last!==next && prev!==first) vertices = [...vertices,first,next];
+
         const pl:PolyLine = new PolyLine(this.game);
         pl.color = this.drawColor;
         pl.fromPoints(vertices);
