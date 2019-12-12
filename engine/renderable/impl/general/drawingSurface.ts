@@ -1,4 +1,4 @@
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICloneable, IDestroyable, IResource} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IFilter} from "@engine/renderer/common/ifilter";
@@ -64,12 +64,16 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         return this.canvasImage.getResourceLink();
     }
 
-    public setFillColor(r:byte,g:byte,b:byte,a:byte = 255){
-        this.fillColor.setRGBA(r,g,b,a);
+    public setFillColor(col:number,alpha?:byte):void;
+    public setFillColor(r:byte,g:byte,b:byte,a?:byte):void;
+    public setFillColor(col:byte|number,g?:byte,b?:byte,a:byte = 255){
+        this.fillColor.set(this.normalizeColor(col,g,b,a));
     }
 
-    public setDrawColor(r:byte,g:byte,b:byte,a:byte = 255){
-        this.drawColor.setRGBA(r,g,b,a);
+    public setDrawColor(col:number,alpha?:number):void;
+    public setDrawColor(r:byte,g:byte,b:byte,a?:byte):void;
+    public setDrawColor(col:byte|number,g?:byte,b?:byte,a:byte = 255){
+        this.drawColor.set(this.normalizeColor(col,g,b,a));
     }
 
     public setLineWidth(v:number):void {
@@ -133,10 +137,16 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
 
+    public drawRoundedRect(x:number,y:number,width:number,height:number, radius:number):void {
+        this.rect.borderRadius = radius;
+        this.drawRect(x,y,width,height);
+    }
+
     public drawRect(x:number,y:number,width:number,height:number):void {
         this.rect.pos.setXY(x,y);
         this.rect.size.setWH(width,height);
         this.drawSimpleShape(this.rect);
+        this.rect.borderRadius = 0;
     }
 
     public drawCircle(cx:number,cy:number,radius:number):void {
@@ -159,20 +169,11 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this.drawSimpleShape(this.line);
     }
 
-    public drawPolygon(svgPath:string){
-        const polyLines:PolyLine[] = PolyLine.fromSvgPath(this.game,svgPath);
-        polyLines.forEach((pl:PolyLine)=>{
-            const pg:Polygon = new Polygon(this.game);
-            pg.fromPolyline(pl);
-            pg.fillColor = this.fillColor;
-            this.drawModel(pg,false);
-        });
-        if (this.lineWidth>0) {
-            polyLines.forEach((pl:PolyLine)=>{
-                pl.color = this.drawColor;
-                pl.lineWidth = this.lineWidth;
-                this.drawModel(pl,false);
-            });
+    public drawPolygon(pathOrVertices:string|number[]){
+        if ((pathOrVertices as number[]).push!==undefined) {
+            this.drawPolygonFromVertices(pathOrVertices as number[]);
+        } else {
+            this.drawPolygonFromSvgPath(pathOrVertices as string);
         }
     }
 
@@ -201,12 +202,54 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this.renderTarget.destroy();
     }
 
+    private normalizeColor(col:byte|number,g?:byte,b?:byte,a:byte = 255):Color {
+        if (b===undefined) {
+            const color:Color = Color.fromRGBNumeric(col as number);
+            color.setA(g!);
+            return color;
+        } else {
+            return new Color(col as byte,g!,b!,a);
+        }
+    }
+
+    private drawPolygonFromSvgPath(svgPath:string) {
+        const polyLines:PolyLine[] = PolyLine.fromSvgPath(this.game,svgPath);
+        polyLines.forEach((pl:PolyLine)=>{
+            const pg:Polygon = new Polygon(this.game);
+            pg.fillColor = this.fillColor;
+            pg.fromPolyline(pl);
+            this.drawModel(pg,false);
+        });
+        if (this.lineWidth>0) {
+            polyLines.forEach((pl:PolyLine)=>{
+                pl.color = this.drawColor;
+                pl.lineWidth = this.lineWidth;
+                this.drawModel(pl,false);
+            });
+        }
+    }
+
+    private drawPolygonFromVertices(vertices:number[]){
+        const pl:PolyLine = new PolyLine(this.game);
+        pl.color = this.drawColor;
+        pl.fromPoints(vertices);
+        const pg:Polygon = new Polygon(this.game);
+        pg.fillColor = this.fillColor;
+        pg.fromPolyline(pl);
+        this.drawModel(pg,false);
+        if (this.lineWidth>0) {
+            pl.lineWidth = this.lineWidth;
+            this.drawModel(pl,false);
+        }
+    }
+
 
 
     private prepareShape(shape:Shape){
         shape.fillColor = this.fillColor;
         shape.lineWidth = this.lineWidth;
         shape.color = this.drawColor;
+        shape.blendMode = BLEND_MODE.NORMAL_SEPARATE;
     }
 
     private drawSimpleShape(shape:Shape){

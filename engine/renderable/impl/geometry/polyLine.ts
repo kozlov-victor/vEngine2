@@ -195,7 +195,7 @@ export class PolyLine extends Shape {
     }
 
 
-    public setPoints(points:number[]|string){
+    public fromPoints(points:number[]|string){
         if (typeof points === 'string') {
             points = clearString(points).split(/[ |,]/).map((it:string)=>{
                 const n:number = parseFloat(it);

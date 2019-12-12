@@ -36,7 +36,7 @@ export class MainScene extends Scene {
         surface.setFillColor(0,0,244);
         surface.drawCircle(33,33,34);
 
-        surface.setFillColor(20,90,12);
+        surface.setFillColor(20,90,12, 122);
         surface.setLineWidth(0);
         surface.drawEllipse(53,83,20,40);
 

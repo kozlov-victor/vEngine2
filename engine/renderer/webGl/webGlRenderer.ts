@@ -1,7 +1,5 @@
 import {DebugError} from "@engine/debug/debugError";
-import {AbstractDrawer} from "./programs/abstract/abstractDrawer";
 import {FILL_TYPE, SHAPE_TYPE, ShapeDrawer} from "./programs/impl/base/shape/shapeDrawer";
-import {FrameBuffer} from "./base/frameBuffer";
 import {MatrixStack} from "./base/matrixStack";
 import {INTERPOLATION_MODE, Texture} from "./base/texture";
 import {Rect} from "../../geometry/rect";
@@ -368,28 +366,18 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public beforeItemStackDraw(filters:AbstractGlFilter[]):IStateStackPointer {
-        const ptr:IStateStackPointer = this.currFrameBufferStack.pushState(filters);
-        if (this.debug) console.log('beforeItemStackDraw',{ptr,stackSize:this.currFrameBufferStack.getStackSize()});
-        return ptr;
+        return this.currFrameBufferStack.pushState(filters);
     }
 
     public afterItemStackDraw(stackPointer:IStateStackPointer):void {
-        if (this.debug) console.log('afterItemStackDraw',{stackPointer});
         this.currFrameBufferStack.reduceState(stackPointer);
     }
 
-    // tslint:disable-next-line:member-ordering
-    public terminate:boolean = false;
-
-    // tslint:disable-next-line
-    private debug:boolean = false;
 
     public beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
         this.transformSave();
-        this.terminate = filters.length>0;
         const ptr:IStateStackPointer = this.currFrameBufferStack.pushState(filters);
         if (this.clearBeforeRender) this.currFrameBufferStack.clear(this.clearColor,this.getAlphaBlend());
-        if (this.debug) console.log('beforeFrameDraw',{filters,ptr,stackSize:this.currFrameBufferStack.getStackSize()});
         return ptr;
     }
 
@@ -397,15 +385,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.currFrameBufferStack.reduceState(stackPointer);
         if (this.currFrameBufferStack===this.origFrameBufferStack) this.currFrameBufferStack.renderToScreen();
         this.transformRestore(); // todo need?
-        if (this.debug) console.log('afterFrameDraw',{stackPointer});
-        //if (this.terminate) throw new DebugError('stoped');
     }
 
     public getError():Optional<{code:number,desc:string}>{
         if (!DEBUG) return undefined;
         const err:number = this.gl.getError();
         if (err!==this.gl.NO_ERROR) {
-            console.log(AbstractDrawer.currentInstance);
             return {code:err,desc:glEnumToString(this.gl,err)};
         }
         return undefined;
@@ -524,7 +509,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             sd.setUniform(sd.u_fillType,FILL_TYPE.COLOR);
         }
     }
-
     // private beforeItemDraw(sp:RenderableModel & IFilterable):void{
     //     if (sp.filters.length>0 || sp.blendMode!==BLEND_MODE.NORMAL) {
     //         this.preprocessFrameBuffer.bind();

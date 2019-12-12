@@ -109,7 +109,7 @@ export class MainScene extends Scene {
         polyLine5.lineWidth = 4;
         polyLine5.vectorScaleFactor = 0.2;
 
-        polyLine5.setPoints(`50,375
+        polyLine5.fromPoints(`50,375
                     150,375 150,325 250,325 250,375
                     350,375 350,250 450,250 450,375
                     550,375 550,175 650,175 650,375
@@ -125,7 +125,7 @@ export class MainScene extends Scene {
         polyLine6.pos.setXY(135,-50);
         polyLine6.lineWidth = 2;
         polyLine6.color = Color.RGB(122,12,122);
-        polyLine6.setPoints(`50,80 140,80 80,100 180,100 160,85 160,115 180,100`);
+        polyLine6.fromPoints(`50,80 140,80 80,100 180,100 160,85 160,115 180,100`);
         polyLine6.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(polyLine6);
 

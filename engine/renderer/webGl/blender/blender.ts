@@ -37,6 +37,9 @@ export class Blender {
                 gl.blendEquation(gl.FUNC_ADD);
                 gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
                 break;
+            case BLEND_MODE.NORMAL_SEPARATE:
+                gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+                break;
             case BLEND_MODE.ADDITIVE:
                 gl.blendEquation(gl.FUNC_ADD);
                 gl.blendFunc(gl.ONE,gl.ONE);

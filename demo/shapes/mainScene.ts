@@ -32,6 +32,7 @@ export class MainScene extends Scene {
         circle.addBehaviour(new DraggableBehaviour(this.game));
         circle.lineWidth = 2;
         circle.color = Color.RGB(0,100,12);
+        circle.fillColor = Color.RGB(100,100,100,111);
         circle.arcAngleFrom = -2;
         circle.arcAngleTo = 2;
         this.appendChild(circle);

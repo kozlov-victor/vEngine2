@@ -45,7 +45,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     private simpleRectDrawer:SimpleRectDrawer;
     private blender:Blender = Blender.getSingleton(this.gl);
 
-    private resourceLink:ResourceLink<Texture>;
+    private readonly resourceLink:ResourceLink<Texture>;
 
     constructor(private game:Game,private gl:WebGLRenderingContext, private size:ISize){
         this._stack.push({
@@ -149,8 +149,6 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
             m16h.release();
         }
         this._stackPointer = to.ptr + 1;
-        //if (this._stackPointer===0) this._stackPointer = 1; todo ???
-        if (this.debug) console.log(`stack pointer after reducing ${this._stackPointer}`);
     }
 
     public renderToScreen():void{
@@ -158,7 +156,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         const h:number = this._pixelPerfectMode?this.game.screenSize.y:this.game.size.height;
         this._getLast().frameBuffer.unbind();
         this.gl.viewport(0, 0, w,h);
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16); // todo identity
+        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
         this.simpleRectDrawer.attachTexture('texture',this._getLast().frameBuffer.getTexture());
         this.simpleRectDrawer.draw();

@@ -3,7 +3,8 @@ import {AbstractRenderer, IRenderTarget} from "../../renderer/abstract/abstractR
 import {
     IAlphaBlendable,
     ICloneable,
-    IEventemittable, IFilterable,
+    IEventemittable,
+    IFilterable,
     IParentChild,
     IRevalidatable,
     ITweenable,
@@ -28,14 +29,12 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/common/texture";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
 
 export const enum BLEND_MODE {
     NORMAL,
+    NORMAL_SEPARATE,
     ADDITIVE,
     SUBSTRACTIVE,
     REVERSE_SUBSTRACTIVE
@@ -160,9 +159,7 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         this.translate();
         this.transform();
         renderer.setAlphaBlend(this.alpha);
-        // todo
-        // @ts-ignore
-        const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(this['filters'] || [],this.blendMode);
+        const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(this.filters);
 
         this.draw();
 

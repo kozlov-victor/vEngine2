@@ -37,13 +37,13 @@ vec4 getFillColor(){
         return mix(u_fillLinearGradient[0],u_fillLinearGradient[1],rectCoords.x);
     }
     else if (u_fillType==FILL_TYPE_TEXTURE) {
-    float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2];
-    float ty = (v_position.y-u_rectOffsetTop)/u_height*u_texRect[3];
-    vec4 txVec;
-    if (u_stretchMode==STRETCH_MODE_STRETCH) txVec = getStretchedImage(tx,ty);
-    else if (u_stretchMode==STRETCH_MODE_REPEAT) txVec = getRepeatedImage(tx,ty);
-    else txVec = ERROR_COLOR;
-    return txVec;
+        float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2];
+        float ty = (v_position.y-u_rectOffsetTop)/u_height*u_texRect[3];
+        vec4 txVec;
+        if (u_stretchMode==STRETCH_MODE_STRETCH) txVec = getStretchedImage(tx,ty);
+        else if (u_stretchMode==STRETCH_MODE_REPEAT) txVec = getRepeatedImage(tx,ty);
+        else txVec = ERROR_COLOR;
+        return txVec;
     }
     else return ERROR_COLOR;
 }
@@ -63,7 +63,6 @@ void drawEllipse(){
     if (isArcNotUsed || (angle>u_arcAngleFrom && angle<u_arcAngleTo)) {
         if (dist < rAtCurrAngle) {
             if (dist > rAtCurrAngle - u_lineWidth) gl_FragColor = u_color;
-            // float step = smoothstep(rAtCurrAngle,rAtCurrAngle-0.01,dist);
             else gl_FragColor = getFillColor();
         }
         else discard;
@@ -100,11 +99,8 @@ void drawRect(){
             else if (distToBorderCenter>u_borderRadius-u_lineWidth) gl_FragColor = u_color;
             else gl_FragColor = getFillColor();
         }
-
-        else if (distX > halfW - u_lineWidth || distY > halfH - u_lineWidth)
-        gl_FragColor = u_color;
-        else
-        gl_FragColor = getFillColor();
+        else if (distX > halfW - u_lineWidth || distY > halfH - u_lineWidth) gl_FragColor = u_color;
+        else gl_FragColor = getFillColor();
     }
     else discard;
 }

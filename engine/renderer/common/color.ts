@@ -4,10 +4,10 @@ import {DebugError} from "../../debug/debugError";
 
 
 export interface IColorJSON {
-    r:number;
-    g:number;
-    b:number;
-    a:number;
+    r:byte;
+    g:byte;
+    b:byte;
+    a:byte;
 }
 
 export class Color implements ICloneable<Color>, IReleasealable{
@@ -17,25 +17,25 @@ export class Color implements ICloneable<Color>, IReleasealable{
     public static BLACK = Color.RGB(0,0,0).freeze();
     public static NONE  = Color.RGB(0,0,0,0).freeze();
 
-    public static RGB(r:number,g:number = r,b:number = r,a:number = 255):Color{
+    public static RGB(r:byte,g:byte = r,b:byte = r,a:byte = 255):Color{
         const c:Color = new Color(0,0,0);
         c.setRGBA(r,g,b,a);
         return c;
     }
 
-    private static objectPool:ObjectPool<Color>;
-
-    private static getFromPool():Color{
-        if (Color.objectPool===undefined) Color.objectPool = new ObjectPool<Color>(Color);
-        return Color.objectPool.getFreeObject()!;
+    public static fromRGBNumeric(col:number):Color {
+        const r:byte = (col & 0xFF_00_00)>>(4*4) as byte;
+        const g:byte = (col & 0x00_FF_00)>>(4*2) as byte;
+        const b:byte = (col & 0x00_00_FF) as byte;
+        return new Color(r,g,b);
     }
 
     public readonly type:string = 'Color';
 
-    private r:number;
-    private g:number;
-    private b:number;
-    private a:number;
+    private r:byte;
+    private g:byte;
+    private b:byte;
+    private a:byte;
 
     private rNorm:number;
     private gNorm:number;
@@ -45,12 +45,12 @@ export class Color implements ICloneable<Color>, IReleasealable{
     private _friezed:boolean = false;
 
     private _captured:boolean = false;
-
-    constructor(r:number = 0,g:number = r,b:number = g,a:number = 255){
+    
+    constructor(r:byte = 0,g:byte = r,b:byte = g,a:byte = 255){
         this.setRGBA(r,g,b,a);
     }
 
-    public setRGBA(r:number,g:number,b:number,a:number = 255):void{
+    public setRGBA(r:byte,g:byte,b:byte,a:byte = 255):void{
         this.checkFriezed();
         this.r = r;
         this.g = g;
@@ -59,7 +59,7 @@ export class Color implements ICloneable<Color>, IReleasealable{
         this.normalizeToZeroOne();
     }
 
-    public setRGB(r:number,g:number,b:number):void{
+    public setRGB(r:byte,g:byte,b:byte):void{
         this.checkFriezed();
         this.r = r;
         this.g = g;
@@ -68,30 +68,30 @@ export class Color implements ICloneable<Color>, IReleasealable{
         this.normalizeToZeroOne();
     }
 
-    public setR(val:number):void{
+    public getR():byte {return this.r;}
+    public getG():byte {return this.g;}
+    public getB():byte {return this.b;}
+    public getA():byte {return this.a;}
+
+    public setR(val:byte):void{
         this.checkFriezed();
         this.r = val;
         this.normalizeToZeroOne();
     }
 
-    public getR():number {return this.r;}
-    public getG():number {return this.g;}
-    public getB():number {return this.b;}
-    public getA():number {return this.a;}
-
-    public setG(val:number):void{
+    public setG(val:byte):void{
         this.checkFriezed();
         this.g = val;
         this.normalizeToZeroOne();
     }
 
-    public setB(val:number):void{
+    public setB(val:byte):void{
         this.checkFriezed();
         this.b = val;
         this.normalizeToZeroOne();
     }
 
-    public setA(val:number):void{
+    public setA(val:byte):void{
         this.checkFriezed();
         this.a = val;
         this.normalizeToZeroOne();
