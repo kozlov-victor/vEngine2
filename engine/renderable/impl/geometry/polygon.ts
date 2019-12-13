@@ -33,11 +33,6 @@ export class Polygon extends Mesh {
         this.vertexItemSize = 2;
     }
 
-    public setVertices(vertices:number[]):void {
-        this.modelPrimitive = new PolygonPrimitive();
-        this.modelPrimitive.vertexArr = vertices;
-    }
-
     public fromPolyline(p:PolyLine):void {
         const vertices:number[] = [];
         p.children.forEach((l:RenderableModel)=>{
@@ -60,4 +55,15 @@ export class Polygon extends Mesh {
         this.fromPolyline(polyline);
     }
 
+    private setVertices(vertices:number[]):void {
+        this.modelPrimitive = new PolygonPrimitive();
+        this.modelPrimitive.vertexArr = vertices;
+    }
+
+}
+
+export abstract class StaticPolygon extends Polygon {
+
+    public fromPolyline:(p:never)=>never = undefined as never;
+    public fromSvgPath:(p:never)=>never = undefined as never;
 }

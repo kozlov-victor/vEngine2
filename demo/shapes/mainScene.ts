@@ -7,6 +7,7 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
+import {Star} from "@engine/renderable/impl/geometry/star";
 
 
 export class MainScene extends Scene {
@@ -67,6 +68,10 @@ export class MainScene extends Scene {
         polygon.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(polygon);
 
+        const star:Star = new Star(this.game,5,40);
+        star.fillColor  = Color.RGB(222,33,122,122);
+        star.addBehaviour(new DraggableBehaviour(this.game));
+        this.appendChild(star);
     }
 
     public onProgress(val: number) {

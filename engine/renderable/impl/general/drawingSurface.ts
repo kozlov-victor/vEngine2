@@ -253,7 +253,6 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
 
-
     private prepareShape(shape:Shape){
         shape.fillColor = this.fillColor;
         shape.lineWidth = this.lineWidth;
