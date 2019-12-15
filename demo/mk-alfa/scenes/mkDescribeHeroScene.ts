@@ -126,13 +126,17 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         this.setInterval(()=>{
             if (MathEx.randomInt(0,50)<25) {
                 this.game.camera.shake(5,200);
-                const splashes:number = MathEx.randomInt(2,8);
-                for (let i=0;i<splashes;i++) this.createSplash();
+                const splashes:number = MathEx.randomInt(0,8);
+                const vertical:boolean = MathEx.randomInt(0,10)>5;
+                for (let i=0;i<splashes;i++) {
+                    if (vertical) this.createSplashVertical();
+                    else this.createSplashHorizontal();
+                }
             }
         },1000);
     }
 
-    private  createSplash(){
+    private  createSplashVertical(){
         const pl = new PolyLine(this.game);
         pl.lineWidth = MathEx.randomInt(2,7);
         pl.color = Color.RGB(
@@ -147,6 +151,27 @@ export class MkDescribeHeroScene extends MkAbstractScene {
             height+=dh;
         }
         pl.pos.setX(MathEx.randomInt(0,this.game.size.width));
+        this.lightContainer.appendChild(pl);
+        this.setTimeout(()=>{
+            this.lightContainer.removeChild(pl);
+        },MathEx.randomInt(200,2000));
+    }
+
+    private  createSplashHorizontal(){
+        const pl = new PolyLine(this.game);
+        pl.lineWidth = MathEx.randomInt(2,7);
+        pl.color = Color.RGB(
+            MathEx.randomInt(100,122) as byte,
+            MathEx.randomInt(100,122) as byte,
+            MathEx.randomInt(150,255) as byte,
+        );
+        let width:number = 0;
+        while (width<this.game.size.width) {
+            const dw:number = MathEx.randomInt(10,100);
+            pl.lineBy(dw,MathEx.randomInt(-50,50));
+            width+=dw;
+        }
+        pl.pos.setY(MathEx.randomInt(0,this.game.size.height));
         this.lightContainer.appendChild(pl);
         this.setTimeout(()=>{
             this.lightContainer.removeChild(pl);
