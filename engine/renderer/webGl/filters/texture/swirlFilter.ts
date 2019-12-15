@@ -49,6 +49,7 @@ export class SwirlFilter extends AbstractGlFilter {
         `);
         this.setAngle(2*Math.PI);
         this.setRadius(100);
+        this.setCenter(this.game.size.width/2,this.game.size.height/2);
         this.simpleRectDrawer.initProgram();
     }
 
@@ -61,13 +62,16 @@ export class SwirlFilter extends AbstractGlFilter {
         this.setUniform(this.angle,val);
     }
 
+    public setCenter(x:number,y:number):void{
+        this.centerArr[0] = x;
+        this.centerArr[1] = y;
+        this.setUniform(this.center,this.centerArr);
+    }
+
 
     public doFilter(destFrameBuffer:FrameBuffer):void{
         const sizeArr:[number,number] = this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray();
         this.setUniform(this.texSize,sizeArr);
-        this.centerArr[0] = sizeArr[0]/2;
-        this.centerArr[1] = sizeArr[1]/2;
-        this.setUniform(this.center,this.centerArr);
         super.doFilter(destFrameBuffer);
     }
 

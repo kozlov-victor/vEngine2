@@ -175,8 +175,6 @@ class TabStrip {
 
 }
 
-
-
 export class MkSelectHeroScene extends MkAbstractScene {
 
     private fnt:Font;
@@ -187,9 +185,6 @@ export class MkSelectHeroScene extends MkAbstractScene {
 
     public onPreloading(): void {
         super.onPreloading();
-
-
-
 
 
         this.tabStrip = new TabStrip(this.game);

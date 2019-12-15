@@ -28,6 +28,8 @@ import {Shape} from "@engine/renderable/abstract/shape";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
+import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
+import {SwirlFilter} from "@engine/renderer/webGl/filters/texture/swirlFilter";
 
 export class MkDescribeHeroScene extends MkAbstractScene {
 
@@ -63,18 +65,12 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         this.lightContainer.filters = [lightFilter];
 
         const circle:Circle = new Circle(this.game);
-        circle.radius = MathEx.random(1,4);
+        circle.radius = 2;
         circle.transformPoint.setXY(circle.radius/2,circle.radius/2);
         (circle.fillColor as Color).setRGBA(122,200,0);
 
-        const rect:Rectangle = new Rectangle(this.game);
-        rect.size.setWH(MathEx.random(1,3));
-        rect.transformPoint.setXY(rect.size.width/2,rect.size.height/2);
-        (rect.fillColor as Color).setRGBA(0,200,0);
-
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticle(circle);
-        ps.addParticle(rect);
         ps.emissionRadius = 5;
 
         ps.onEmitParticle((r:RenderableModel)=>{
@@ -93,9 +89,15 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         },500);
 
         ps.numOfParticlesToEmit = {from:50,to:100};
-        ps.particleLiveTime = {from:100,to:500};
+        ps.particleLiveTime = {from:200,to:500};
         ps.particleAngle = {from:0,to:2*Math.PI};
         this.appendChild(ps);
+        const particlesFilter1 = new GlowFilter(this.game);
+        particlesFilter1.setGlowColor(Color.RGB(2,200,2));
+        const particlesFilter2 = new SwirlFilter(this.game);
+        particlesFilter2.setCenter(this.game.size.width/2,this.game.size.height);
+        particlesFilter2.setRadius(1000);
+        ps.filters = [particlesFilter1, particlesFilter2];
 
 
         const tf:TextField = new TextField(this.game);
@@ -128,7 +130,6 @@ export class MkDescribeHeroScene extends MkAbstractScene {
                 for (let i=0;i<splashes;i++) this.createSplash();
             }
         },1000);
-
     }
 
     private  createSplash(){
