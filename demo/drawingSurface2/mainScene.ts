@@ -3,7 +3,6 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 
 export class MainScene extends Scene {
 
@@ -34,9 +33,6 @@ export class MainScene extends Scene {
         surface.on(MOUSE_EVENTS.mousePressed, e=>{
             surface.clear();
         });
-        const wf = new WaveFilter(this.game);
-        wf.setAmplitude(0.01);
-        this.filters = [wf];
     }
 
 }

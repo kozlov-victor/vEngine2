@@ -134,7 +134,7 @@ export abstract class Container extends RenderableModel {
     }
 
 
-    public setWH(w:number,h:number):void {
+    public setWH(w:number,h:number):void { // todo remove it
         this.size.setWH(w,h);
         this.drawingRect.setWH(w,h);
         this.setDirty();

@@ -1,5 +1,6 @@
 
 export enum KEYBOARD_KEY {
+    ENTER   = 13,
     DIGIT_0 = 48,
     DIGIT_1 = 49,
     DIGIT_2 = 50,

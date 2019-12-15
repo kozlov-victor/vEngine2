@@ -19,6 +19,7 @@ import IDENTITY = mat4.IDENTITY;
 export abstract class AbstractGlFilter implements IFilter {
 
     public readonly type:string = 'WebglFilter';
+    public enabled:boolean = true;
 
     protected gl:WebGLRenderingContext;
     protected simpleRectDrawer:SimpleRectDrawer;

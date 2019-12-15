@@ -62,6 +62,7 @@ export class Tween<T> {
     private readonly _tweenTime: number;
     private _desc:ITweenDescriptionNormalized<T>;
 
+
     /*
      new Tween({
         from :{y:5}, //<--error, only numeric properties of target can be tweenable
@@ -142,7 +143,6 @@ export class Tween<T> {
                 this._tweenTime) as unknown as T[keyof T];
         }
         if (this._progressFn) this._progressFn(this._target);
-
     }
 
     public reset():void {

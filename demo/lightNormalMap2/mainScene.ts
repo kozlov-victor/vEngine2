@@ -51,7 +51,6 @@ export class MainScene extends Scene {
         this.on(MOUSE_EVENTS.mouseMove,(e:IMousePoint)=>{
             pointLight.pos.setXY(e.screenX,e.screenY);
         });
-        rect.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(rect);
 
 

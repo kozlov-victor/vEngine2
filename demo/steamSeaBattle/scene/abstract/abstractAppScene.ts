@@ -78,6 +78,7 @@ export abstract class AbstractAppScene extends Scene {
         });
     }
 
+
     public onProgress(val: number) {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
@@ -106,7 +107,7 @@ export abstract class AbstractAppScene extends Scene {
         r.pos.setXY(this.getNumber(el.attributes.left),this.getNumber(el.attributes.top));
         const rotationPointX:number = this.getNumber(el.attributes.rotationPointX,0);
         const rotationPointY:number = this.getNumber(el.attributes.rotationPointY,0);
-        r.rotationPoint.setXY(rotationPointX,rotationPointY);
+        r.transformPoint.setXY(rotationPointX,rotationPointY);
         r.id = el.attributes.id;
         r.visible = !this.getBoolean(el.attributes.hidden);
         r.passMouseEventsThrough = this.getBoolean(el.attributes.passMouseEventsThrough);

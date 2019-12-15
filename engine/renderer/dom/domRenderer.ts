@@ -235,11 +235,11 @@ export class DomRenderer extends AbstractRenderer {
             node.properties.height = model.size.height;
             node.domEl.style.height = `${model.size.height}px`;
         }
-        if (model.rotationPoint.x!==node.properties.rotation_point_x || model.rotationPoint.y!==node.properties.rotation_point_y) {
-            node.properties.rotation_point_x = model.rotationPoint.x;
-            node.properties.rotation_point_y = model.rotationPoint.y;
-            node.domEl.style.transformOrigin = `${model.rotationPoint.x}px ${model.rotationPoint.y}px`;
-            (node.domEl.style as ICSSStyleDeclaration).msTransformOrigin = `${model.rotationPoint.x}px ${model.rotationPoint.y}px`;
+        if (model.transformPoint.x!==node.properties.rotation_point_x || model.transformPoint.y!==node.properties.rotation_point_y) {
+            node.properties.rotation_point_x = model.transformPoint.x;
+            node.properties.rotation_point_y = model.transformPoint.y;
+            node.domEl.style.transformOrigin = `${model.transformPoint.x}px ${model.transformPoint.y}px`;
+            (node.domEl.style as ICSSStyleDeclaration).msTransformOrigin = `${model.transformPoint.x}px ${model.transformPoint.y}px`;
         }
         if (model.angle!==node.properties.angle) {
             node.properties.angle = model.angle;

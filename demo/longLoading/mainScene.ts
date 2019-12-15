@@ -7,14 +7,14 @@ import {Image} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {TaskRef} from "@engine/resources/queue";
 import {ITexture} from "@engine/renderer/common/texture";
-import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 
-const fakeLongLoadingFn = (resourceLoader:ResourceLoader)=>{
+export const fakeLongLoadingFn = (resourceLoader:ResourceLoader)=>{
     const taskRef:TaskRef = resourceLoader.q.addTask(()=>{
         setTimeout(()=>{
             resourceLoader.q.resolveTask(taskRef);
-        },200);
+            console.log('resolved');
+        },50);
     });
 };
 
@@ -36,7 +36,6 @@ export class MainScene extends Scene {
 
     public onProgress(val: number) {
         this.preloadingGameObject.size.width = val*this.game.size.width;
-        console.log('progress',val);
     }
 
     public onReady() {

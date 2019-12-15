@@ -73,7 +73,7 @@ export abstract class TransformableModel extends BaseModel {
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly skew:Point2d = new Point2d(0,0);
     public readonly anchor:ModelPoint2d = new ModelPoint2d(this);
-    public readonly rotationPoint:ModelPoint2d = new ModelPoint2d(this);
+    public readonly transformPoint:ModelPoint2d = new ModelPoint2d(this);
     public angle3d:AnglePoint3d = new AnglePoint3d(this,'angle');
 
     protected _angleVelocity3d:AnglePoint3d = new AnglePoint3d(this,'angleVelocity');
@@ -95,21 +95,21 @@ export abstract class TransformableModel extends BaseModel {
     public transform():void{
         const renderer = this.game.getRenderer();
         renderer.transformTranslate(-this.anchor.x,-this.anchor.y,this.posZ);
-        renderer.transformTranslate(this.rotationPoint.x,this.rotationPoint.y);
+        renderer.transformTranslate(this.transformPoint.x,this.transformPoint.y);
         renderer.transformScale(this.scale.x,this.scale.y);
         renderer.transformSkewX(this.skew.x);
         renderer.transformSkewY(this.skew.y);
         renderer.transformRotateZ(this.angle3d.z);
         renderer.transformRotateX(this.angle3d.x);
         renderer.transformRotateY(this.angle3d.y);
-        renderer.transformTranslate(-this.rotationPoint.x,-this.rotationPoint.y);
+        renderer.transformTranslate(-this.transformPoint.x,-this.transformPoint.y);
     }
 
     protected setClonedProperties(cloned:TransformableModel){
         cloned.pos.set(this.pos);
         cloned.scale.set(this.scale);
         cloned.anchor.set(this.anchor);
-        cloned.rotationPoint.set(this.rotationPoint);
+        cloned.transformPoint.set(this.transformPoint);
         cloned.angle3d = this.angle3d.clone(this);
     }
 

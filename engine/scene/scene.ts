@@ -43,7 +43,6 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     protected preloadingGameObject!:RenderableModel;
     private _layers:Layer[] = [];
-    private readonly _uiLayer:Layer;
 
     // addTween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
@@ -56,7 +55,6 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     constructor(protected game:Game) {
         super(game);
-        this._uiLayer = new Layer(this.game);
         this.resourceLoader = new ResourceLoader(game);
         this.size.set(this.game.size);
     }
@@ -70,9 +68,6 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         return this._layers;
     }
 
-    public getUiLayer(): Layer {
-        return this._uiLayer;
-    }
 
     public getDefaultLayer():Layer {
         if (!this._layers.length) this.addLayer(new Layer(this.game));
@@ -230,7 +225,6 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         for (const l of this._layers) {
             l.update();
         }
-        this._uiLayer.update();
 
         this.onUpdate();
     }

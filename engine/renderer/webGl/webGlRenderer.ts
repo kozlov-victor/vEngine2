@@ -154,7 +154,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         }
 
         (img.getResourceLink().getTarget() as Texture).
-            setInterpolationMode(img.pixelPerfect?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
+            setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
 
         const texture:Texture = (img.getResourceLink() as ResourceLink<Texture>).getTarget();
         const maxSize:number = Math.max(img.size.width,img.size.height);

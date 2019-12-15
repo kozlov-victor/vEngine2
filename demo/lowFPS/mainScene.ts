@@ -28,7 +28,7 @@ export class MainScene extends Scene {
         spr.setResourceLink(this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
-        spr.rotationPoint.setToCenter();
+        spr.transformPoint.setToCenter();
         spr.velocity.x = -20;
         this.obj = spr;
 

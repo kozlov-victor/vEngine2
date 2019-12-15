@@ -24,7 +24,7 @@ export class Image extends RenderableModel implements ICloneable<Image>,IResourc
     public color:Color = Color.RGB(0,0,0,0);
     public lineWidth:number = 0;
     public filters: IFilter[] = [];
-    public pixelPerfect:boolean = false;
+    private _pixelPerfect:boolean = false;
 
     // resource
     private _resourceLink:ResourceLink<ITexture>;
@@ -77,6 +77,14 @@ export class Image extends RenderableModel implements ICloneable<Image>,IResourc
 
     public getResourceLink():ResourceLink<ITexture>{
         return this._resourceLink;
+    }
+
+    public setPixelPerfect(val:boolean):void{
+        this._pixelPerfect = val;
+    }
+
+    public isPixelPerfect():boolean{
+        return this._pixelPerfect;
     }
 
     protected setClonedProperties(cloned:Image):void {

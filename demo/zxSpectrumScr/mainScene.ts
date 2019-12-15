@@ -6,11 +6,10 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {BORDER, SCALE} from "./index";
 import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
 import {CellsAppearingTransition} from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
-import {INTERPOLATION_MODE, Texture} from "@engine/renderer/webGl/base/texture";
 
 const files =
     'AAA - AY Megademo 3 Menu (2019),athena,brunilda,cauldron,dlair,example,Gauntlet,KValley,Phantis,test,wtss'.split(',').map(it=>`./zxSpectrumScr/files/${it}.scr`);
-let ptr = 0;
+let ptr:number = 0;
 
 export class MainScene extends Scene {
 
@@ -43,8 +42,8 @@ export class MainScene extends Scene {
 
     public onReady() {
         this.border.appendChild(this.screen);
-        this.border.pixelPerfect = true;
-        this.screen.pixelPerfect = true;
+        this.border.setPixelPerfect(true);
+        this.screen.setPixelPerfect(true);
         this.appendChild(this.border);
     }
 

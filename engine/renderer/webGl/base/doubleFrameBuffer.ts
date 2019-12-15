@@ -27,10 +27,12 @@ export class DoubleFrameBuffer {
         if (len===0) return texture;
 
         const filter:AbstractGlFilter = filters[0];
+        if (!filter.enabled) return texture;
 
         filter.getDrawer().attachTexture('texture',texture);
         filter.doFilter(this.getDestBuffer());
         for (let i:number=1;i<len;i++){
+            if (!filters[i].enabled) continue;
             this.flip();
             filters[i].getDrawer().attachTexture('texture',this.getSourceBuffer().getTexture());
             filters[i].doFilter(this.getDestBuffer());

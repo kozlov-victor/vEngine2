@@ -136,7 +136,8 @@ export class Game {
 
     public debug2?(...val:unknown[]):void;
 
-    public runScene(scene:Scene, transition?:Optional<ISceneTransition>):void{
+    public runScene(scene:Scene, transition?:Optional<ISceneTransition>,replaceStack:boolean = true):void{
+        if (replaceStack) this._sceneStack.replaceLast({scene,transition});
         this._prevScene = this._currScene;
         this._currScene = scene;
         if (this._currSceneTransition!==undefined) {
@@ -167,7 +168,7 @@ export class Game {
     }
 
     public pushScene(scene:Scene,transition?:Optional<ISceneTransition>){
-        this.runScene(scene,transition);
+        this.runScene(scene,transition,false);
         this._sceneStack.push({scene,transition});
     }
 
@@ -208,7 +209,9 @@ export class Game {
             this._currTime += Game.UPDATE_TIME_RATE;
             this._deltaTime = this._currTime - this._lastTime;
 
-            currentScene.update();
+            if (this._currSceneTransition!==undefined) this._currSceneTransition.update();
+            else currentScene.update();
+
             // this.collider.collisionArcade(); todo
             for (const c of this._controls) {
                 c.update();

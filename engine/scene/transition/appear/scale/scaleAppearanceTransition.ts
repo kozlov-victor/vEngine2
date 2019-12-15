@@ -28,12 +28,12 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
     public complete(): void {
         if (this._currScene!==undefined) {
             this._currScene.scale.setXY(1);
-            this._currScene.rotationPoint.setXY(0);
+            this._currScene.transformPoint.setXY(0);
             this._currScene.lockingRect = undefined;
         }
         if (this._prevScene!==undefined) {
             this._prevScene.scale.setXY(1);
-            this._prevScene.rotationPoint.setXY(0);
+            this._prevScene.transformPoint.setXY(0);
             this._prevScene.lockingRect = undefined;
         }
         super.complete();
@@ -48,7 +48,7 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
         }
         if (a!==undefined) {
             const dx:number = a.size.width/2, dy:number = a.size.height/2;
-            a.rotationPoint.setXY(dx,dy);
+            a.transformPoint.setXY(dx,dy);
             a.scale.setXY(this.val);
             const valInv:number = 1 - this.val;
             this.lockingRect.setXYWH(dx*valInv,dy*valInv,a.size.width*this.val,a.size.height*this.val);

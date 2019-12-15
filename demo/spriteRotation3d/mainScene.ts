@@ -24,7 +24,7 @@ export class MainScene extends Scene {
         rect.pos.setXY(100,100);
         rect.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(rect);
-        rect.rotationPoint.setXY(60,30);
+        rect.transformPoint.setXY(60,30);
         this.model = rect;
 
     }

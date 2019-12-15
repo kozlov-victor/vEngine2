@@ -64,7 +64,7 @@ export class Line extends Shape implements ICloneable<Line> {
         this.size.setWH(w,h+this.lineWidth);
         this.rectangleRepresentation.size.setWH(l,this.lineWidth);
         this.angle = Math.atan2(this.pointTo.y,this.pointTo.x);
-        this.rotationPoint.setXY(0,this.lineWidth/2);
+        this.transformPoint.setXY(0,this.lineWidth/2);
     }
 
 }

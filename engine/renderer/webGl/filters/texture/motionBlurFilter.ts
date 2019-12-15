@@ -12,6 +12,8 @@ export class MotionBlurFilter extends AbstractGlFilter {
     private readonly strength:string;
     private readonly texSize:string;
 
+    private centerArr:[number,number] = [0,0];
+
     constructor(game:Game) {
         super(game);
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
@@ -47,6 +49,7 @@ export class MotionBlurFilter extends AbstractGlFilter {
             }
         `);
         this.setStrength(0.3);
+        this.setCenter(this.game.size.width/2,this.game.size.height/2);
         this.simpleRectDrawer.initProgram();
     }
 
@@ -55,12 +58,17 @@ export class MotionBlurFilter extends AbstractGlFilter {
         this.setUniform(this.strength,val);
     }
 
+    public setCenter(x:number,y:number):void{
+        this.centerArr[0] = x;
+        this.centerArr[1] = y;
+        this.setUniform(this.center,this.centerArr);
+    }
+
 
 
     public doFilter(destFrameBuffer:FrameBuffer):void{
         const sizeArr:[number,number] = this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray();
         this.setUniform(this.texSize,sizeArr);
-        this.setUniform(this.center,[100,100]); // todo
         super.doFilter(destFrameBuffer);
     }
 

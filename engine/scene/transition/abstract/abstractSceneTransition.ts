@@ -41,12 +41,17 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
         const t:Tween<ISceneTransitionValue> = new Tween(desc);
         this._currScene = currScene;
         this._prevScene = prevScene;
-        currScene.addTween(t);
         t.update();
         this._tween = t;
     }
 
     public abstract render(): void;
+
+    public update():void {
+        if (this._currScene!==undefined) this._currScene.update();
+        if (this._prevScene!==undefined) this._prevScene.update();
+        this._tween.update();
+    }
 
     public complete():void {
         if (this._completed) return;

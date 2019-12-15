@@ -7,4 +7,5 @@ export interface ISceneTransition {
     start(prevScene: Optional<Scene>, currScene: Scene): void;
     getOppositeTransition():ISceneTransition;
     render(): void;
+    update(): void;
 }

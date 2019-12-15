@@ -36,7 +36,7 @@ export class MainScene extends Scene {
             spr.posZ = MathEx.random(this.minZ,this.maxZ);
             this.appendChild(spr);
             this.points.push(spr);
-            spr.rotationPoint.setToCenter();
+            spr.transformPoint.setToCenter();
         }
 
     }

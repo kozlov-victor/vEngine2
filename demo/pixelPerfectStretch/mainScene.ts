@@ -59,9 +59,7 @@ export class MainScene extends Scene {
                     spr.angle+=0.1;
             }
         });
-        this.on(MOUSE_EVENTS.click, ()=>spr.pixelPerfect=!spr.pixelPerfect);
-
-
+        this.on(MOUSE_EVENTS.click, ()=>spr.setPixelPerfect(!spr.isPixelPerfect()));
 
     }
 

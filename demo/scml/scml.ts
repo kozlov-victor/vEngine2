@@ -993,7 +993,7 @@ export class SpriterObject extends RenderableModel {
         child.angle = MathEx.degToRad(360-info.angle);
         child.alpha = info.a;
         child.visible = true;
-        child.rotationPoint.setXY(pivotX*file.width,(1-pivotY)*file.height);
+        child.transformPoint.setXY(pivotX*file.width,(1-pivotY)*file.height);
         child.moveToFront();
     }
 
@@ -1007,7 +1007,7 @@ export class SpriterObject extends RenderableModel {
             this.rootNode.appendChild(child);
         }
         child.size.setWH(drawLength,drawHeight);
-        child.rotationPoint.setXY(0,drawHeight/2);
+        child.transformPoint.setXY(0,drawHeight/2);
         child.pos.setXY(info.x,info.y);
         child.angle = MathEx.degToRad(360-info.angle);
         child.scale.setXY(info.scaleX,-info.scaleY);
