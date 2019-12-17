@@ -375,7 +375,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
 
     public beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
-        this.transformSave();
         const ptr:IStateStackPointer = this.currFrameBufferStack.pushState(filters);
         if (this.clearBeforeRender) this.currFrameBufferStack.clear(this.clearColor,this.getAlphaBlend());
         return ptr;
@@ -384,7 +383,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     public afterFrameDraw(stackPointer:IStateStackPointer):void{
         this.currFrameBufferStack.reduceState(stackPointer);
         if (this.currFrameBufferStack===this.origFrameBufferStack) this.currFrameBufferStack.renderToScreen();
-        this.transformRestore(); // todo need?
     }
 
     public getError():Optional<{code:number,desc:string}>{
