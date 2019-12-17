@@ -20,6 +20,9 @@ import {
     ScaleInAppearanceTransition,
     ScaleOutAppearanceTransition
 } from "@engine/scene/transition/appear/scale/scaleAppearanceTransition";
+import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
+import {PixelFilter} from "@engine/renderer/webGl/filters/texture/pixelFilter";
+import {ColorizeFilter} from "@engine/renderer/webGl/filters/texture/colorizeFilter";
 
 
 export class MainScene extends Scene {
@@ -63,6 +66,10 @@ export class MainScene extends Scene {
         this.createCellTransitionButton('cell disappearing',false);
 
         this.createScaleTransitionButton('scale in',true);
+
+        const f = new ColorizeFilter(this.game);
+        f.enabled = false;
+        this.filters = [f];
     }
 
     private createTransitionButton(text:string,transition:ISceneTransition){

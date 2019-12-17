@@ -158,8 +158,11 @@ export class Game {
             });
             scene.resourceLoader.onCompleted(()=>{
                 this._currScene.onReady();
+                this._currScene.onContinue();
             });
             scene.resourceLoader.startLoading();
+        } else {
+            this._currScene.onContinue();
         }
         if (!this._running) {
             startMainLoop(this);

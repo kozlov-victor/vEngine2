@@ -163,6 +163,8 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     public onReady():void {}
 
+    public onContinue():void {}
+
 
     public render():void {
 
