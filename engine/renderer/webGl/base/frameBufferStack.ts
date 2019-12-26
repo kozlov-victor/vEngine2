@@ -169,8 +169,6 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         return this.resourceLink;
     }
 
-
-
     private _getLast():IStackItem{
         return this._stack[this._stackPointer-1];
     }

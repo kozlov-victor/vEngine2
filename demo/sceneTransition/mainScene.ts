@@ -67,9 +67,6 @@ export class MainScene extends Scene {
 
         this.createScaleTransitionButton('scale in',true);
 
-        const f = new ColorizeFilter(this.game);
-        f.setColor(Color.RGB(122,12,12));
-        this.filters = [f];
     }
 
     private createTransitionButton(text:string,transition:ISceneTransition){

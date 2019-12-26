@@ -199,7 +199,7 @@ export class Game {
             this.fps = ~~(1000 / this._deltaTime);
             const renderError:Optional<{code:number,desc:string}> = this._renderer.getError();
             if (renderError!==undefined) {
-                throw new DebugError(`rendering error with code ${renderError!.code} (${renderError!.desc})`);
+                throw new DebugError(`rendering error with code ${renderError.code} (${renderError.desc})`);
             }
         }
 
@@ -220,7 +220,7 @@ export class Game {
                 c.update();
             }
             loopCnt++;
-            if (loopCnt>10) { // to avoid to much iterations
+            if (loopCnt>10) { // to avoid too much iterations
                 this._lastTime = this._currTime = currTimeCopy;
                 break;
             }

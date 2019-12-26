@@ -204,7 +204,7 @@ export class DomRenderer extends AbstractRenderer {
         return undefined;
     }
 
-    public lockRect(rect: Rect): void {
+    public setLockRect(rect: Rect): void {
     }
 
     public transformSkewX(a: number): void {
@@ -213,7 +213,7 @@ export class DomRenderer extends AbstractRenderer {
     public transformSkewY(a: number): void {
     }
 
-    public unlockRect(): void {
+    public unsetLockRect(): void {
     }
 
 

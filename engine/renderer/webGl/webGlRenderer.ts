@@ -123,7 +123,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private blender:Blender;
 
 
-    private _isRectLocked:boolean = false;
+    private _lockRect:Optional<Rect>;
     private _pixelPerfectMode:boolean = false;
 
     constructor(game:Game){
@@ -353,16 +353,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.matrixStack.pushMatrix(m);
     }
 
-    public lockRect(rect:Rect):void {
-        this._isRectLocked = true;
-        this.gl.enable(this.gl.SCISSOR_TEST);
-        this.gl.scissor(rect.x,rect.y,rect.width,rect.height);
+    public setLockRect(rect:Rect):void {
+        this._lockRect = rect;
     }
 
-    public unlockRect():void{
-        if (!this._isRectLocked) return;
-        this._isRectLocked = false;
-        this.gl.disable(this.gl.SCISSOR_TEST);
+    public unsetLockRect():void{
+       this._lockRect = undefined;
     }
 
     public beforeItemStackDraw(filters:AbstractGlFilter[]):IStateStackPointer {
@@ -384,7 +380,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public afterFrameDraw(stackPointer:IStateStackPointer):void{
         this.currFrameBufferStack.reduceState(stackPointer);
-        if (this.currFrameBufferStack===this.origFrameBufferStack) this.currFrameBufferStack.renderToScreen();
+        if (this.currFrameBufferStack===this.origFrameBufferStack) {
+            if (this._lockRect!==undefined) {
+                const rect = this._lockRect;
+                this.gl.enable(this.gl.SCISSOR_TEST);
+                this.gl.scissor(rect.x, this.game.size.height - rect.height - rect.y, rect.width,rect.height);
+            }
+            this.currFrameBufferStack.renderToScreen();
+            this.gl.disable(this.gl.SCISSOR_TEST);
+        }
     }
 
     public getError():Optional<{code:number,desc:string}>{

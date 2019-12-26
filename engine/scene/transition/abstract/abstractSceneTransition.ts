@@ -11,8 +11,6 @@ export type SceneProgressDescription = Omit<ITweenDescription<ISceneTransitionVa
 
 export abstract class AbstractSceneTransition implements ISceneTransition{
 
-
-
     protected _prevScene: Optional<Scene>;
     protected _currScene!: Scene;
     protected _onComplete!: () => void;

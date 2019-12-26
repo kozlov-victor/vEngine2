@@ -5,7 +5,6 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {SecondScene} from "./secondScene";
 import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 
 

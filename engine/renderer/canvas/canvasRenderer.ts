@@ -133,14 +133,14 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.ctx.globalAlpha = a;
     }
 
-    public lockRect(rect:Rect):void {
+    public setLockRect(rect:Rect):void {
         this.ctx.save();
         this.ctx.beginPath();
         this.ctx.rect(rect.x,rect.y,rect.width,rect.height);
         this.ctx.clip();
     }
 
-    public unlockRect():void {
+    public unsetLockRect():void {
         this.ctx.restore();
     }
 
