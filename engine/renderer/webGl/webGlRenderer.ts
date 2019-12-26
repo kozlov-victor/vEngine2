@@ -376,7 +376,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
         const ptr:IStateStackPointer = this.currFrameBufferStack.pushState(filters);
-        if (this.clearBeforeRender) this.currFrameBufferStack.clear(this.clearColor,this.getAlphaBlend());
+        if (this.clearBeforeRender) {
+            this.currFrameBufferStack.clear(this.clearColor,this.getAlphaBlend());
+        }
         return ptr;
     }
 

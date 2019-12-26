@@ -213,7 +213,11 @@ namespace HTTPServer
             // Создадим новый сервер
             int port = 8088;
             Console.WriteLine($"Server is running on port {port}...");
+            string url = $"http://localhost:{port}";
+            System.Diagnostics.Process.Start(url);
+            Console.WriteLine($"browser is opened: {url}");
             new Server(port);
+
         }
     }
 }

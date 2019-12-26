@@ -22,7 +22,7 @@ export class DoubleFrameBuffer {
         this.buffers[1].getTexture().setInterpolationMode(mode);
     }
 
-    public applyFilters(texture:Texture,filters:AbstractGlFilter[]):Texture{
+    public applyFilters(texture:Texture,filters:readonly AbstractGlFilter[]):Texture{
         const len:number = filters.length;
         if (len===0) return texture;
 

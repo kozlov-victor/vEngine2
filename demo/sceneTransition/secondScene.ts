@@ -66,6 +66,8 @@ export class SecondScene extends Scene {
         this.appendChild(rect);
         rect.transformPoint.setXY(60,30);
 
+        this.filters = [new VignetteFilter(this.game)];
+
     }
 
 }

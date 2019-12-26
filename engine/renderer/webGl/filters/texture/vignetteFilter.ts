@@ -29,8 +29,8 @@ export class VignetteFilter extends AbstractGlFilter{
                 gl_FragColor = color;
             }
         `);
-        this.setSize(0.5);
-        this.setAmount(0.5);
+        this.setSize(0.2);
+        this.setAmount(0.8);
         this.simpleRectDrawer.initProgram();
     }
 

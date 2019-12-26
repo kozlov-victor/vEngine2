@@ -19,7 +19,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 
 interface IStackItem {
     frameBuffer:FrameBuffer;
-    filters:AbstractGlFilter[];
+    filters:readonly AbstractGlFilter[];
     pointer:IStateStackPointer;
 }
 
@@ -28,6 +28,8 @@ export interface IStateStackPointer {
 }
 
 let FLIP_POSITION_MATRIX:Mat16Holder;
+
+const NONE_FILTERS:readonly AbstractGlFilter[] = [];
 
 
 export class FrameBufferStack implements IDestroyable, IRenderTarget{
@@ -78,7 +80,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     }
 
-    public pushState(filters:AbstractGlFilter[]):IStateStackPointer{
+    public pushState(filters:readonly AbstractGlFilter[]):IStateStackPointer{
         const prevPointer = this._getLast().pointer;
         if (filters.length>0) {
             if (this.debug) console.log('state has been pushed');
@@ -86,13 +88,12 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
                 this._stack[this._stackPointer] = {
                     frameBuffer: new FrameBuffer(this.gl,this.size),
                     filters:undefined!,
-                    pointer: {ptr:NaN}
+                    pointer: {ptr:this._stackPointer}
                 };
             }
             this._stack[this._stackPointer].filters = filters;
             this._stack[this._stackPointer].frameBuffer.bind();
             this._stack[this._stackPointer].frameBuffer.clear(Color.NONE);
-            this._stack[this._stackPointer].pointer.ptr = this._stackPointer;
             this._stackPointer++;
         } else {
             this._getLast().frameBuffer.bind();
@@ -101,6 +102,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     }
 
     public clear(color:Color,alphaBlend?:number){
+        this._getLast().frameBuffer.bind();
         this._getLast().frameBuffer.clear(color,alphaBlend);
     }
 
@@ -137,6 +139,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
             const nextItem:IStackItem = this._stack[i-1];
 
             const filteredTexture:Texture = this._doubleFrameBuffer.applyFilters(currItem.frameBuffer.getTexture(),currItem.filters);
+            currItem.filters = NONE_FILTERS;
 
             nextItem.frameBuffer.bind();
             nextItem.frameBuffer.setInterpolationMode(this._interpolationMode);

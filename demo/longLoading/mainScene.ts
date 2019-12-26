@@ -13,7 +13,6 @@ export const fakeLongLoadingFn = (resourceLoader:ResourceLoader)=>{
     const taskRef:TaskRef = resourceLoader.q.addTask(()=>{
         setTimeout(()=>{
             resourceLoader.q.resolveTask(taskRef);
-            console.log('resolved');
         },50);
     });
 };
