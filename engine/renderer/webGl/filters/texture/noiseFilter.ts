@@ -30,7 +30,7 @@ export class NoiseFilter extends AbstractGlFilter {
             }
         `);
         //language=GLSL
-        programGen.setFragmentMainFn(`
+        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){
                 gl_FragColor.rgb = noise();
                 vec4 colorOrig = texture2D(texture, v_texCoord);

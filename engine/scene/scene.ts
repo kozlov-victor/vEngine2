@@ -29,6 +29,7 @@ import {TransformableModel} from "@engine/renderable/abstract/transformableModel
 import {Rect} from "@engine/geometry/rect";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
+import {IAnimation} from "@engine/animation/iAnimation";
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
@@ -43,6 +44,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     protected preloadingGameObject!:RenderableModel;
     private _layers:Layer[] = [];
+    private _propertyAnimations:IAnimation[] = [];
 
     // addTween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
@@ -111,6 +113,10 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     public renderToTexture(target:IRenderTarget):void {
         this.game.getRenderer().getHelper().renderSceneToTexture(this,target);
+    }
+
+    public addPropertyAnimation(animation:IAnimation){
+        this._propertyAnimations.push(animation);
     }
 
     public addTween<T>(t: Tween<T>): void {
@@ -217,16 +223,11 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
 
     private updateFrame():void {
-
         this.game.camera.update();
-
         this._tweenDelegate.update();
         this._timerDelegate.update();
-
-        for (const l of this._layers) {
-            l.update();
-        }
-
+        for (const a of this._propertyAnimations) a.update();
+        for (const l of this._layers) l.update();
         this.onUpdate();
     }
 }
