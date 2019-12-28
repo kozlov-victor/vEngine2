@@ -3,13 +3,14 @@ import {Game} from "@engine/core/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";
 import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
+import {IAnimation} from "@engine/animation/iAnimation";
 
 export const FRAME_ANIMATION_EVENTS = {
     completed:  'completed',
     loop:       'loop'
 };
 
-export abstract class AbstractFrameAnimation<T> implements IEventemittable {
+export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnimation {
 
     public name:string;
     public duration:number = 1000;

@@ -24,7 +24,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     private readonly stack:Stack<Mat16Holder> = new Stack();
 
     constructor(){
-       this.setIdentity();
+       this.restore();
     }
 
     public restore():void {

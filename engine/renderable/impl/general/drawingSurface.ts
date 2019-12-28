@@ -25,6 +25,16 @@ const COLOR_TMP = new Color();
 
 export class DrawingSurface extends RenderableModel implements ICloneable<DrawingSurface>,IResource<ITexture>, IMatrixTransformable, IDestroyable {
 
+    private static normalizeColor(col:byte|number, g?:byte, b?:byte, a:byte = 255):Color {
+        if (b===undefined) {
+            const color:Color = Color.fromRGBNumeric(col as number);
+            color.setA(g!);
+            return color;
+        } else {
+            return new Color(col as byte,g!,b!,a);
+        }
+    }
+
     public filters: IFilter[] = [];
     public setResourceLink:never = undefined as unknown as never;
 
@@ -68,13 +78,13 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     public setFillColor(col:number,alpha?:byte):void;
     public setFillColor(r:byte,g:byte,b:byte,a?:byte):void;
     public setFillColor(col:byte|number,g?:byte,b?:byte,a:byte = 255){
-        this.fillColor.set(this.normalizeColor(col,g,b,a));
+        this.fillColor.set(DrawingSurface.normalizeColor(col,g,b,a));
     }
 
     public setDrawColor(col:number,alpha?:number):void;
     public setDrawColor(r:byte,g:byte,b:byte,a?:byte):void;
     public setDrawColor(col:byte|number,g?:byte,b?:byte,a:byte = 255){
-        this.drawColor.set(this.normalizeColor(col,g,b,a));
+        this.drawColor.set(DrawingSurface.normalizeColor(col,g,b,a));
     }
 
     public setLineWidth(v:number):void {
@@ -201,16 +211,6 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
     public destroy() {
         this.renderTarget.destroy();
-    }
-
-    private normalizeColor(col:byte|number,g?:byte,b?:byte,a:byte = 255):Color {
-        if (b===undefined) {
-            const color:Color = Color.fromRGBNumeric(col as number);
-            color.setA(g!);
-            return color;
-        } else {
-            return new Color(col as byte,g!,b!,a);
-        }
     }
 
     private drawPolygonFromSvgPath(svgPath:string) {

@@ -6,7 +6,8 @@ import {Image} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
+import {TrianglesMosaicFilter} from "@engine/renderer/webGl/filters/texture/trianglesMosaicFilter";
+import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
 
 export class MainScene extends Scene {
 
@@ -47,9 +48,10 @@ export class MainScene extends Scene {
                     spr.angle+=0.1;
             }
         });
-        this.on(GAME_PAD_EVENTS.buttonPressed, e=>{
-            console.log(e);
-        });
+        const tm = new TrianglesMosaicFilter(this.game);
+        const v = new VignetteFilter(this.game);
+        this.filters = [v,tm];
+
     }
 
 }

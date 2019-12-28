@@ -6,23 +6,24 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.IO;
 
-// https://habr.com/ru/post/120157/
-
 namespace HTTPServer
 {
     // Класс-обработчик клиента
     class Client
     {
+
+        private readonly static string n = "\n";
+
         // Отправка страницы с ошибкой
         private void SendError(TcpClient Client, int Code)
         {
             // Получаем строку вида "200 OK"
             // HttpStatusCode хранит в себе все статус-коды HTTP/1.1
-            string CodeStr = Code.ToString() + " " + ((HttpStatusCode)Code).ToString();
+            string CodeStr = $"{Code.ToString()} {((HttpStatusCode)Code).ToString()}";
             // Код простой HTML-странички
-            string Html = "<html><body><h1>" + CodeStr + "</h1></body></html>";
+            string Html = $"<html><body><h1>{CodeStr}</h1></body></html>";
             // Необходимые заголовки: ответ сервера, тип и длина содержимого. После двух пустых строк - само содержимое
-            string Str = "HTTP/1.1 " + CodeStr + "\nContent-type: text/html\nContent-Length:" + Html.Length.ToString() + "\n\n" + Html;
+            string Str = $"HTTP/1.1 {CodeStr}{n}Content-type: text/html{n}Content-Length:{Html.Length.ToString()}{n}{n}{Html}";
             // Приведем строку к виду массива байт
             byte[] Buffer = Encoding.ASCII.GetBytes(Str);
             // Отправим его клиенту
@@ -151,7 +152,8 @@ namespace HTTPServer
             }
 
             // Посылаем заголовки
-            string Headers = "HTTP/1.1 200 OK\nContent-Type: " + ContentType + "\nContent-Length: " + FS.Length + "\n\n";
+
+            string Headers = $"HTTP/1.1 200 OK{n}Content-Type: {ContentType}{n}Content-Length: {FS.Length}{n}{n}";
             byte[] HeadersBuffer = Encoding.ASCII.GetBytes(Headers);
             Client.GetStream().Write(HeadersBuffer, 0, HeadersBuffer.Length);
 
@@ -213,8 +215,13 @@ namespace HTTPServer
         static void Main(string[] args)
         {
             // Создадим новый сервер
-            Console.WriteLine("Server is running...");
-            new Server(8088);
+            int port = 8088;
+            Console.WriteLine($"Server is running on port {port}...");
+            string url = $"http://localhost:{port}";
+            System.Diagnostics.Process.Start(url);
+            Console.WriteLine($"browser is opened: {url}");
+            new Server(port);
+
         }
     }
 }

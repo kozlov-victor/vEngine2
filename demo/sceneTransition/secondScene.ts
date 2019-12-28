@@ -7,6 +7,8 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderer/common/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {fakeLongLoadingFn} from "../longLoading/mainScene";
+import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
+import {ColorizeFilter} from "@engine/renderer/webGl/filters/texture/colorizeFilter";
 
 export class SecondScene extends Scene {
 

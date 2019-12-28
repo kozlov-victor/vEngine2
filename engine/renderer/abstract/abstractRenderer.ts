@@ -112,9 +112,9 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     public abstract drawRectangle(rectangle:Rectangle):void;
 
-    public abstract lockRect(rect:Rect):void;
+    public abstract setLockRect(rect:Rect):void;
 
-    public abstract unlockRect():void;
+    public abstract unsetLockRect():void;
 
     public abstract drawLine(line:Line):void;
 

@@ -29,6 +29,9 @@ import {TransformableModel} from "@engine/renderable/abstract/transformableModel
 import {Rect} from "@engine/geometry/rect";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
+import {IAnimation} from "@engine/animation/iAnimation";
+import {mat4} from "@engine/geometry/mat4";
+import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
@@ -43,6 +46,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     protected preloadingGameObject!:RenderableModel;
     private _layers:Layer[] = [];
+    private _propertyAnimations:IAnimation[] = [];
 
     // addTween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
@@ -113,6 +117,10 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         this.game.getRenderer().getHelper().renderSceneToTexture(this,target);
     }
 
+    public addPropertyAnimation(animation:IAnimation){
+        this._propertyAnimations.push(animation);
+    }
+
     public addTween<T>(t: Tween<T>): void {
         this._tweenDelegate.addTween(t);
     }
@@ -163,13 +171,14 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     public onReady():void {}
 
+    public onContinue():void {}
+
 
     public render():void {
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
 
         const renderer:AbstractRenderer = this.game.getRenderer();
-        if (this.lockingRect!==undefined) renderer.lockRect(this.lockingRect);
         renderer.transformSave();
         renderer.saveAlphaBlend();
         renderer.clearColor.set(this.colorBG);
@@ -190,24 +199,26 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         }
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY; // todo manage this
-        renderer.transformRestore();
         renderer.restoreAlphaBlend();
-        renderer.unlockRect();
 
         if (DEBUG) {
-            this.game.getRenderer().transformRestore();
             if (
                 this.game.getRenderer().debugTextField &&
                 this.game.getRenderer().debugTextField.getFont().getResourceLink() &&
                 this.game.getRenderer().debugTextField.getFont().getResourceLink().getTarget()
             ) {
+                renderer.transformSave();
+                renderer.transformPush(IDENTITY_HOLDER);
                 this.game.getRenderer().debugTextField.update();
                 this.game.getRenderer().debugTextField.render();
+                renderer.transformRestore();
             }
-            this.game.getRenderer().transformRestore();
         }
-        renderer.afterFrameDraw(statePointer);
 
+        if (this.lockingRect!==undefined) renderer.setLockRect(this.lockingRect);
+        renderer.afterFrameDraw(statePointer);
+        renderer.transformRestore();
+        renderer.unsetLockRect();
     }
 
     protected onUpdate():void {}
@@ -216,16 +227,11 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
 
     private updateFrame():void {
-
         this.game.camera.update();
-
         this._tweenDelegate.update();
         this._timerDelegate.update();
-
-        for (const l of this._layers) {
-            l.update();
-        }
-
+        for (const a of this._propertyAnimations) a.update();
+        for (const l of this._layers) l.update();
         this.onUpdate();
     }
 }
