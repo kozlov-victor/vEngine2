@@ -30,7 +30,7 @@ export class CurtainsOpeningTransition extends AbstractSceneTransition {
             this.lockingRect.setXYWH(this.progress,0,this._prevScene.size.width/2,this._prevScene.size.height);
             this._prevScene.lockingRect = this.lockingRect;
             this._prevScene.render();
-            // right curtain
+            //right curtain
             this._prevScene.pos.setX(-this.progress);
             this.lockingRect.setXYWH(-this.progress+this._prevScene.size.width/2,0,this._prevScene.size.width/2,this._prevScene.size.height);
             this._prevScene.lockingRect = this.lockingRect;

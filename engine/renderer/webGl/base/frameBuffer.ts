@@ -19,7 +19,7 @@ export class FrameBuffer implements IRenderTarget {
     private glRenderBuffer:WebGLRenderbuffer;
     private glFrameBuffer:WebGLRenderbuffer;
 
-    private link:ResourceLink<ITexture>;
+    private readonly link:ResourceLink<ITexture>;
 
     private readonly width:number;
     private readonly height:number;

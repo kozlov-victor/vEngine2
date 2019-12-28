@@ -1,7 +1,7 @@
 import {Game} from "@engine/core/game";
 import {IControl} from "@engine/control/abstract/iControl";
 import {AbstractKeypad, KEY_STATE} from "@engine/control/abstract/abstractKeypad";
-import {Int, Optional} from "@engine/core/declarations";
+import {Optional} from "@engine/core/declarations";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 
@@ -21,6 +21,7 @@ interface INavigator extends Record<string,unknown>{
 
 const navigator = window.navigator as unknown as INavigator;
 
+const AXIS_THRESHOLD = 0.005 as const;
 
 if (DEBUG) {
     (window as unknown as IWindow).addEventListener("gamepadconnected",(e:IGamePadEvent)=>{
@@ -90,8 +91,8 @@ export class GamePadControl extends AbstractKeypad implements IControl{
             this.pollButtons(gp,i);
 
             if (gp.axes.length>=2) {
-                const axisLeftStick0:Int = ~~(gp.axes[0]) as Int;
-                const axisLeftStick1:Int = ~~(gp.axes[1]) as Int;
+                const axisLeftStick0:number = this.clampAxis(gp.axes[0]);
+                const axisLeftStick1:number = this.clampAxis(gp.axes[1]);
                 this.pollAxes(
                     axisLeftStick0,
                     axisLeftStick1,
@@ -102,8 +103,8 @@ export class GamePadControl extends AbstractKeypad implements IControl{
             }
 
             if (gp.axes.length>=4) {
-                const axisRightStick0:Int = ~~(gp.axes[2]) as Int;
-                const axisRightStick1:Int = ~~(gp.axes[3]) as Int;
+                const axisRightStick0:number = this.clampAxis(gp.axes[2]);
+                const axisRightStick1:number = this.clampAxis(gp.axes[3]);
                 this.pollAxes(
                     axisRightStick0,
                     axisRightStick1,
@@ -133,11 +134,9 @@ export class GamePadControl extends AbstractKeypad implements IControl{
             eventJustCreated.button = buton;
             eventJustCreated.gamePadIndex = gamePadIndex;
             eventJustCreated.value = value;
-
-            if (eventFromBuffer===undefined) {
-                this.press(eventJustCreated);
-            }
-
+            this.press(eventJustCreated);
+        } else {
+            eventFromBuffer.value = value;
         }
     }
 
@@ -162,15 +161,14 @@ export class GamePadControl extends AbstractKeypad implements IControl{
     }
 
     private pollAxes(
-        axis0:Int,
-        axis1:Int,
+        axis0:number,
+        axis1:number,
         btnLeft:GAME_PAD_BUTTON,
         btnRight:GAME_PAD_BUTTON,
         btnUp:GAME_PAD_BUTTON,
         btnDown:GAME_PAD_BUTTON,
         gamePadIndex:number,
     ):void {
-
 
         if (axis0>0) {
             const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(btnRight, gamePadIndex);
@@ -213,6 +211,11 @@ export class GamePadControl extends AbstractKeypad implements IControl{
             if (event.button===button && event.gamePadIndex === gamePadIndex) return event;
         }
         return undefined;
+    }
+
+    private clampAxis(val:number):number{
+        if (Math.abs(val)<AXIS_THRESHOLD) return 0;
+        return val;
     }
 
 }
