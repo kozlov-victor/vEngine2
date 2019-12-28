@@ -322,5 +322,7 @@ export namespace mat4 {
     makeIdentity(m16h);
 
     export const IDENTITY:MAT16 = m16h.mat16;
+    export const IDENTITY_HOLDER = new Mat16Holder();
+    IDENTITY_HOLDER.set(...IDENTITY);
 }
 

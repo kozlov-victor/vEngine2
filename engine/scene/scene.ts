@@ -30,6 +30,8 @@ import {Rect} from "@engine/geometry/rect";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation} from "@engine/animation/iAnimation";
+import {mat4} from "@engine/geometry/mat4";
+import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
@@ -197,23 +199,25 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         }
 
         this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY; // todo manage this
-        renderer.transformRestore();
         renderer.restoreAlphaBlend();
 
         if (DEBUG) {
-            this.game.getRenderer().transformRestore();
             if (
                 this.game.getRenderer().debugTextField &&
                 this.game.getRenderer().debugTextField.getFont().getResourceLink() &&
                 this.game.getRenderer().debugTextField.getFont().getResourceLink().getTarget()
             ) {
+                renderer.transformSave();
+                renderer.transformPush(IDENTITY_HOLDER);
                 this.game.getRenderer().debugTextField.update();
                 this.game.getRenderer().debugTextField.render();
+                renderer.transformRestore();
             }
-            this.game.getRenderer().transformRestore();
         }
+
         if (this.lockingRect!==undefined) renderer.setLockRect(this.lockingRect);
         renderer.afterFrameDraw(statePointer);
+        renderer.transformRestore();
         renderer.unsetLockRect();
     }
 
