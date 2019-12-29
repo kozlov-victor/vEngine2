@@ -22,7 +22,7 @@ export class ColorizeFilter extends AbstractGlFilter{
                 gl_FragColor = result;
             }
         `);
-        this.setColor(Color.RGB(12,255,0));
+        this.setColor(Color.NONE);
         this.simpleRectDrawer.initProgram();
     }
 

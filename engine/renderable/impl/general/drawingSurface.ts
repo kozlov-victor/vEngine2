@@ -16,10 +16,9 @@ import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {IMatrixTransformable, MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {mat4} from "@engine/geometry/mat4";
-import Mat16Holder = mat4.Mat16Holder;
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {verify} from "crypto";
+import Mat16Holder = mat4.Mat16Holder;
 
 const COLOR_TMP = new Color();
 
@@ -53,7 +52,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     private _matrixStack:MatrixStack = new MatrixStack();
 
     private readonly renderTarget:IRenderTarget;
-    private omit:boolean = false;
+    private omitSelfOnRendering:boolean = false;
 
     constructor(game:Game,size:ISize){
         super(game);
@@ -67,7 +66,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     public clone(): DrawingSurface {return undefined!;}
 
     public draw(): void {
-        if (this.omit) return;
+        if (this.omitSelfOnRendering) return;
         this.game.getRenderer().drawImage(this.canvasImage);
     }
 
@@ -202,9 +201,9 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         renderer.transformSave();
         renderer.transformPush(this._matrixStack.getCurrentValue());
         this.appendChild(model);
-        this.omit = true;
+        this.omitSelfOnRendering = true;
         this.renderToTexture(this.renderTarget,clearBeforeRender);
-        this.omit = false;
+        this.omitSelfOnRendering = false;
         this.removeChild(model);
         renderer.transformRestore();
     }

@@ -47,7 +47,7 @@ export class WebGlRendererHelper extends RendererHelper {
         const clearBeforeRenderOrig:boolean = renderer.clearBeforeRender;
         renderer.clearBeforeRender = clearBeforeRender;
         const statePointer:IStateStackPointer = renderer.beforeFrameDraw(m.filters as AbstractGlFilter[]);
-        renderer.transformTranslate(this.game.camera.pos.x,this.game.camera.pos.y);
+        //renderer.transformTranslate(this.game.camera.pos.x,this.game.camera.pos.y);
         m.render();
         renderer.afterFrameDraw(statePointer);
         renderer.setDefaultRenderTarget();

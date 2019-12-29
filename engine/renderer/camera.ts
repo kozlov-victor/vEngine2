@@ -1,4 +1,3 @@
-import {DebugError} from "../debug/debugError";
 import {Tween} from "../animation/tween";
 import {MathEx} from "../misc/mathEx";
 import {Rect} from "../geometry/rect";
@@ -8,8 +7,8 @@ import {Scene} from "../scene/scene";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
-import Mat16Holder = mat4.Mat16Holder;
 import {Optional} from "@engine/core/declarations";
+import Mat16Holder = mat4.Mat16Holder;
 
 interface ICameraTweenTarget {
     time:number;
@@ -166,7 +165,7 @@ export class Camera {
         p.release();
     }
 
-    public render():void{ //TRS - (transform rotate scale) reverted
+    public transform():void{ //TRS - (transform rotate scale) reverted
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (!this.scale.equal(1)) { // todo posZ???
             renderer.transformTranslate(this.game.size.width/2,this.game.size.height/2,0);

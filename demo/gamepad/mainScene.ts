@@ -36,16 +36,16 @@ export class MainScene extends Scene {
 
             switch (e.button) {
                 case GAME_PAD_BUTTON.STICK_L_LEFT:
-                    spr.pos.addX(-1);
+                    spr.pos.addX(e.value);
                     break;
                 case GAME_PAD_BUTTON.STICK_L_RIGHT:
-                    spr.pos.addX(1);
+                    spr.pos.addX(e.value);
                     break;
                 case GAME_PAD_BUTTON.STICK_L_UP:
-                    spr.pos.addY(-1);
+                    spr.pos.addY(e.value);
                     break;
                 case GAME_PAD_BUTTON.STICK_L_DOWN:
-                    spr.pos.addY(1);
+                    spr.pos.addY(e.value);
                     break;
                 case GAME_PAD_BUTTON.BTN_A:
                     spr.angle+=0.1;

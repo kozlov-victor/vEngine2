@@ -117,7 +117,7 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
 
         if (!this.drawInfo.dirty) {
             this.updateDrawingSurfacePos();
-            return;
+            //return;
         }
 
         this._drawingSurface.pos.setXY(0,0);
