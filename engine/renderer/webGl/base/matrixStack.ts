@@ -63,7 +63,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
 
-    public setTransform(
+    public setMatrixValues(
         v0:number, v1:number, v2:number, v3:number,
         v4:number, v5:number, v6:number, v7:number,
         v8:number, v9:number, v10:number,v11:number,
