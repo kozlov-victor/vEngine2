@@ -208,7 +208,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
                 this.game.getRenderer().debugTextField.getFont().getResourceLink().getTarget()
             ) {
                 renderer.transformSave();
-                renderer.transformPush(IDENTITY_HOLDER);
+                renderer.transformSet(...IDENTITY_HOLDER.mat16);
                 this.game.getRenderer().debugTextField.update();
                 this.game.getRenderer().debugTextField.render();
                 renderer.transformRestore();

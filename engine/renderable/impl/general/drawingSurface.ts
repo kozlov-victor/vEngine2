@@ -90,13 +90,19 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this.lineWidth = v;
     }
 
-    public transformPush(m: Mat16Holder): void {
-        this._matrixStack.pushMatrix(m);
-    }
-
     public transformReset(): void {
         this._matrixStack.resetTransform();
     }
+
+    public transformSet(
+        v0: number, v1: number, v2: number, v3: number,
+        v4: number, v5: number, v6: number, v7: number,
+        v8: number, v9: number, v10: number, v11: number,
+        v12: number, v13: number, v14: number, v15: number): void {
+        this._matrixStack.setTransform(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
+    }
+
+
 
     public transformRestore(): void {
         this._matrixStack.resetTransform();
@@ -199,7 +205,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     public drawModel(model:RenderableModel,clearBeforeRender:boolean = true){
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
-        renderer.transformPush(this._matrixStack.getCurrentValue());
+        renderer.transformSet(...this._matrixStack.getCurrentValue().mat16);
         this.appendChild(model);
         this.omitSelfOnRendering = true;
         this.renderToTexture(this.renderTarget,clearBeforeRender);

@@ -72,7 +72,6 @@ const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat
     const matrix4:Mat16Holder = Mat16Holder.fromPool();
     mat4.matrixMultiply(matrix4,matrix3, zToWMatrix);
 
-
     projectionMatrix.release();
     scaleMatrix.release();
     translationMatrix.release();
@@ -349,8 +348,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.matrixStack.restore();
     }
 
-    public transformPush(m:Mat16Holder): void {
-        this.matrixStack.pushMatrix(m);
+    public transformSet(v0: number, v1: number, v2: number, v3: number, v4: number, v5: number, v6: number, v7: number, v8: number, v9: number, v10: number, v11: number, v12: number, v13: number, v14: number, v15: number): void {
+        this.matrixStack.setTransform(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
     }
 
     public setLockRect(rect:Rect):void {

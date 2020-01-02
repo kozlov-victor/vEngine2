@@ -8,7 +8,8 @@ export interface IMatrixTransformable {
     transformSave():void;
     transformReset():void;
     transformRestore():void;
-    transformPush(m:Mat16Holder):void;
+    transformSet(v0:number, v1:number, v2:number, v3:number, v4:number, v5:number, v6:number, v7:number,
+                 v8:number, v9:number, v10:number,v11:number, v12:number,v13:number,v14:number,v15:number):void;
     transformScale(x:number, y:number, z?:number):void;
     transformTranslate(x:number, y:number, z?:number):void;
     transformSkewX(angle:number):void;
@@ -61,9 +62,14 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this;
     }
 
-    public pushMatrix(t:Mat16Holder):MatrixStack {
-        this.getCurrentValue().release();
-        this.setCurrentValue(t);
+
+    public setTransform(
+        v0:number, v1:number, v2:number, v3:number,
+        v4:number, v5:number, v6:number, v7:number,
+        v8:number, v9:number, v10:number,v11:number,
+        v12:number,v13:number,v14:number,v15:number
+    ):MatrixStack {
+        this.getCurrentValue().set(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
         return this;
     }
 
@@ -143,7 +149,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
     private setIdentity(){
-        const ident = Mat16Holder.fromPool();
+        const ident:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeIdentity(ident);
         this.stack.push(ident);
     }
