@@ -8,6 +8,8 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
+import {Layer, LayerTransformType} from "@engine/scene/layer";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 export class MainScene extends Scene {
 
@@ -29,6 +31,7 @@ export class MainScene extends Scene {
     }
 
     public onReady() {
+
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         spr.size.setWH(250,300);
@@ -43,8 +46,19 @@ export class MainScene extends Scene {
         bg.stretchMode = STRETCH_MODE.STRETCH;
         this.appendChild(bg);
         spr.moveToFront();
+        spr.addBehaviour(new DraggableBehaviour(this.game));
 
         this.game.camera.followTo(spr);
+
+        const uiLayer:Layer = new Layer(this.game);
+        uiLayer.transformType = LayerTransformType.STICK_TO_CAMERA;
+        const infoRect:Rectangle = new Rectangle(this.game);
+        infoRect.size.setWH(600,10);
+        infoRect.color.setRGB(200,12,22);
+        (infoRect.fillColor as Color).setRGB(12,100,55);
+        infoRect.addBehaviour(new DraggableBehaviour(this.game));
+        uiLayer.appendChild(infoRect);
+        this.addLayer(uiLayer);
 
         this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
             switch (e.key) {

@@ -4,9 +4,15 @@ import {IParentChild, Optional} from "@engine/core/declarations";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {Scene} from "@engine/scene/scene";
 
+export const enum LayerTransformType {
+    TRANSFORM,
+    STICK_TO_CAMERA,
+}
+
 export class Layer implements IParentChild {
 
     public readonly type:string = 'Layer';
+    public transformType:LayerTransformType = LayerTransformType.TRANSFORM;
     public readonly children:RenderableModel[] = [];
     public readonly parent:IParentChild;
     public id:string;

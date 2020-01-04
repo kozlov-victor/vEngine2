@@ -5,7 +5,7 @@ import {Color} from "@engine/renderer/common/color";
 import {Button} from "@engine/renderable/impl/ui/components/button";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {IMousePoint} from "@engine/control/mouse/mousePoint";
+import {IObjectMousePoint} from "@engine/control/mouse/mousePoint";
 
 
 export class MainScene extends Scene {
@@ -46,7 +46,7 @@ export class MainScene extends Scene {
 
         let cnt:number = 0;
 
-        btn.on(MOUSE_EVENTS.click, (e:IMousePoint)=>{
+        btn.on(MOUSE_EVENTS.click, (e:IObjectMousePoint)=>{
            tf.setText(`clicked ${++cnt} times`);
         });
         this.appendChild(btn);

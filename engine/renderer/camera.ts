@@ -15,11 +15,6 @@ interface ICameraTweenTarget {
     point:Point2d;
 }
 
-export const enum CAMERA_MATRIX_MODE {
-    MODE_TRANSFORM,
-    MODE_IDENTITY,
-}
-
 const enum DIRECTION_CORRECTION {
     RIGHT,
     LEFT,
@@ -33,10 +28,6 @@ export class Camera {
     public readonly pos:Point2d = new Point2d(0,0);
     public posZ:number = 0;
     public readonly scale:Point2d = new Point2d(1,1);
-
-    // flag to defined camera rect for transform mode (for dynamic objects)
-    // and identity mode (for fixed objects)
-    public matrixMode:CAMERA_MATRIX_MODE = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
 
     private objFollowTo:Optional<RenderableModel>;
     private objFollowToPrevPos:Point2d;
@@ -192,19 +183,15 @@ export class Camera {
     }
 
     public getRect():Rect{
-        if (this.matrixMode===CAMERA_MATRIX_MODE.MODE_IDENTITY)
-            return this._rectIdentity;
-        else {
-            this._rect.setXYWH(this.pos.x,this.pos.y,this.game.size.width,this.game.size.height);
-            return this._rect;
-        }
+        this._rect.setXYWH(this.pos.x,this.pos.y,this.game.size.width,this.game.size.height);
+        return this._rect;
     }
 
+    /**
+     * @deprecated
+     */
     public getRectScaled():Rect{
-        if (this.matrixMode===CAMERA_MATRIX_MODE.MODE_IDENTITY)
-            return this._rectIdentity;
-        else
-            return this._rectScaled;
+        return this._rectScaled;
     }
 
 }

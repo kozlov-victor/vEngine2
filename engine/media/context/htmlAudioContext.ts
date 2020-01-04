@@ -33,11 +33,14 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         this._ctx = CtxHolder.getCtx();
     }
     public load(buffer:ArrayBuffer,link:ResourceLink<void>,onLoad:()=>void):void {
-        // urlLoader.onLoad = (buffer:ArrayBuffer|string)=>{
-        //     AudioPlayer.cache[link.getUrl()] = URL.createObjectURL(buffer as ArrayBuffer);
-        //     onLoad();
-        // };
-        AudioPlayer.cache[link.getUrl()] = link.getUrl();
+        const url:string = link.getUrl();
+        if (DEBUG) {
+            const type:string = url.split('.').pop()??'';
+            if (type==='') throw new DebugError(`Can not define audio type from url: ${url}`);
+            const canPlayType:CanPlayTypeResult = this._ctx.canPlayType(`audio/${type}`);
+            if (canPlayType==='') throw new DebugError(`Can not play this audio type: ${type}`);
+        }
+        AudioPlayer.cache[url] = url;
         onLoad(); // todo
     }
 

@@ -1,4 +1,3 @@
-
 import * as ts from 'typescript';
 import * as Lint from 'tslint';
 

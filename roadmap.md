@@ -1,3 +1,5 @@
+bug: draggable with camera 
+
 - 1 tile map, tile map collisions
 - 2 filtering for parent/child (also filtering for polilines, poligones)
 - 3 arcade object collisions
