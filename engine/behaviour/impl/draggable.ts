@@ -2,7 +2,7 @@ import {BaseAbstractBehaviour} from "../abstract/baseAbstractBehaviour";
 import {Game} from "../../core/game";
 import {Scene} from "../../scene/scene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {IObjectMousePoint, ISceneMousePoint} from "@engine/control/mouse/mousePoint";
+import {ObjectMousePoint, SceneMousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Int} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
@@ -24,12 +24,12 @@ interface IMouseDragPoint {
 
 export class DraggableBehaviour extends BaseAbstractBehaviour {
 
-    private static _getEventId(e:ISceneMousePoint):Int{
+    private static _getEventId(e:SceneMousePoint):Int{
         return (e.id || 1) as Int;
     }
 
     private blurListener:(e:MouseEvent)=>void;
-    private gameObjectOnClick:(e:IObjectMousePoint)=>void;
+    private gameObjectOnClick:(e:ObjectMousePoint)=>void;
     private sceneOnMouseDown:()=>void;
     private sceneOnMouseMove:()=>void;
     private sceneOnMouseUp:()=>void;
@@ -46,7 +46,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
             throw new DebugError(`DraggableBehaviour is already used by another RenderableModel`);
         }
         this.gameObject = gameObject;
-        this.gameObjectOnClick = gameObject.on(MOUSE_EVENTS.click,(e:IObjectMousePoint)=>{
+        this.gameObjectOnClick = gameObject.on(MOUSE_EVENTS.click,(e:ObjectMousePoint)=>{
             this.points[DraggableBehaviour._getEventId(e)] = {
                 mX: e.objectX,
                 mY: e.objectY,
@@ -59,14 +59,14 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
             } as IMouseDragPoint;
         });
         const scene:Scene = this.game.getCurrScene();
-        this.sceneOnMouseDown = scene.on(MOUSE_EVENTS.mouseDown,(e:ISceneMousePoint)=>{
+        this.sceneOnMouseDown = scene.on(MOUSE_EVENTS.mouseDown,(e:SceneMousePoint)=>{
             const pointId:number = DraggableBehaviour._getEventId(e);
             const point:IMouseDragPoint = this.points[pointId];
             if (!point) return;
             point.dragStartX = point.target.pos.x;
             point.dragStartY = point.target.pos.y;
         });
-        this.sceneOnMouseMove = scene.on(MOUSE_EVENTS.mouseMove,(e:ISceneMousePoint)=>{
+        this.sceneOnMouseMove = scene.on(MOUSE_EVENTS.mouseMove,(e:SceneMousePoint)=>{
             const pointId = DraggableBehaviour._getEventId(e);
             const point:IMouseDragPoint = this.points[pointId];
             if (!point) return;
@@ -89,7 +89,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
             gameObject.pos.x = x - point.mX;
             gameObject.pos.y = y - point.mY;
         });
-        this.sceneOnMouseUp = scene.on(MOUSE_EVENTS.mouseUp,(e:ISceneMousePoint)=>{
+        this.sceneOnMouseUp = scene.on(MOUSE_EVENTS.mouseUp,(e:SceneMousePoint)=>{
             const pointId:number = DraggableBehaviour._getEventId(e);
             const point:IMouseDragPoint = this.points[pointId];
             if (!point) return;

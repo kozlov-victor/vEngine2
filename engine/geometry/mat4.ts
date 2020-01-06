@@ -1,5 +1,5 @@
 import {DebugError} from "../debug/debugError";
-import {IReleasealable, ObjectPool} from "@engine/misc/objectPool";
+import {ObjectPool, ReleasableObject} from "@engine/misc/objectPool";
 import {ICloneable} from "@engine/core/declarations";
 
 // https://evanw.github.io/lightgl.js/docs/matrix.html
@@ -8,7 +8,7 @@ export namespace mat4 {
 
     type n = number;
 
-    export class Mat16Holder implements IReleasealable, ICloneable<Mat16Holder>{
+    export class Mat16Holder extends ReleasableObject implements ICloneable<Mat16Holder>{
 
         public static fromPool():Mat16Holder {
             return Mat16Holder.m16hPool.getFreeObject()!;
@@ -23,9 +23,8 @@ export namespace mat4 {
 
         public readonly mat16:MAT16 = (new Float32Array(16) as unknown) as MAT16;
 
-        private _captured:boolean = false;
-
         public constructor(){
+            super();
             this.set(
                 0, 0, 0, 0,
                 0, 0, 0, 0,
@@ -56,19 +55,6 @@ export namespace mat4 {
                 m.mat16[i] = this.mat16[i];
             }
             return m;
-        }
-        public isCaptured(): boolean {
-            return this._captured;
-        }
-
-        public capture(): this {
-            this._captured = true;
-            return this;
-        }
-
-        public release(): this {
-            this._captured = false;
-            return this;
         }
 
     }

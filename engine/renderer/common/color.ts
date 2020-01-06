@@ -1,4 +1,4 @@
-import {IReleasealable, ObjectPool} from "../../misc/objectPool";
+import {ReleasableObject} from "../../misc/objectPool";
 import {ICloneable} from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
 
@@ -10,7 +10,7 @@ export interface IColorJSON {
     a:byte;
 }
 
-export class Color implements ICloneable<Color>, IReleasealable{
+export class Color extends ReleasableObject implements ICloneable<Color>{
 
     public static WHITE = Color.RGB(255,255,255).freeze();
     public static GREY  = Color.RGB(127,127,127).freeze();
@@ -43,10 +43,9 @@ export class Color implements ICloneable<Color>, IReleasealable{
     private aNorm:number;
     private _arr:number[];
     private _friezed:boolean = false;
-
-    private _captured:boolean = false;
     
     constructor(r:byte = 0,g:byte = r,b:byte = g,a:byte = 255){
+        super();
         this.setRGBA(r,g,b,a);
     }
 
@@ -104,20 +103,6 @@ export class Color implements ICloneable<Color>, IReleasealable{
 
     public clone():Color{
         return new Color(this.r,this.g,this.b,this.a);
-    }
-
-    public capture(): this {
-        this._captured = true;
-        return this;
-    }
-
-    public isCaptured(): boolean {
-        return this._captured;
-    }
-
-    public release(): this {
-        this._captured = false;
-        return this;
     }
 
     public freeze():this{

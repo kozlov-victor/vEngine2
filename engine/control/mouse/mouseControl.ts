@@ -6,7 +6,7 @@ import {Rect} from "../../geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IControl} from "@engine/control/abstract/iControl";
 import {DebugError} from "@engine/debug/debugError";
-import {IObjectMousePoint, ISceneMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";
+import {MousePoint, MousePointPool, ObjectMousePoint, SceneMousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {Optional} from "@engine/core/declarations";
@@ -27,22 +27,27 @@ export class MouseControl implements IControl {
             MathEx.isPointInRect(point,rectWithOffset)
         ) {
             point.target = go;
-            const mousePoint:IObjectMousePoint = { // todo pool?
-                screenX:point.screenPoint.x,
-                screenY:point.screenPoint.y,
-                sceneX:point.x,
-                sceneY:point.y,
-                objectX:point.x - go.pos.x,
-                objectY:point.y - go.pos.y,
-                id:point.id,
-                target:go,
-                nativeEvent: e as Event,
-                eventName,
-                isMouseDown: point.isMouseDown,
-                button: (e as MouseEvent).button,
-            };
-            go.trigger(eventName,mousePoint);
-            res = !go.passMouseEventsThrough;
+
+            const mousePoint:Optional<ObjectMousePoint> = MousePointPool.getObjectMousePoint()!;
+            if (mousePoint!==undefined) {
+                mousePoint.screenX = point.screenPoint.x;
+                mousePoint.screenY = point.screenPoint.y;
+                mousePoint.sceneX = point.x;
+                mousePoint.sceneY = point.y;
+                mousePoint.objectX = point.x - go.pos.x;
+                mousePoint.objectY = point.y - go.pos.y;
+                mousePoint.id = point.id;
+                mousePoint.target = go;
+                mousePoint.nativeEvent =  e as Event;
+                mousePoint.eventName = eventName;
+                mousePoint.isMouseDown =  point.isMouseDown;
+                mousePoint.button =  (e as MouseEvent).button;
+
+                go.trigger(eventName,mousePoint);
+                mousePoint.release();
+                res = !go.passMouseEventsThrough;
+            } else res = false;
+
         }
         rectWithOffset.release();
         for (const ch of go.children) {
@@ -183,17 +188,21 @@ export class MouseControl implements IControl {
         pointUntransformed.release();
 
         if (pointTransformed.target===undefined) pointTransformed.target = scene;
-        scene.trigger(mouseEvent,{
-            screenX:pointUntransformed.x,
-            screenY:pointUntransformed.y,
-            sceneX: pointTransformed.x,
-            sceneY: pointTransformed.y,
-            id:pointTransformed.id,
-            eventName: mouseEvent,
-            nativeEvent: e as Event,
-            button: (e as MouseEvent).button,
-            isMouseDown
-        } as ISceneMousePoint);
+
+        const sceneMousePoint:Optional<SceneMousePoint> = MousePointPool.getSceneMousePoint();
+        if (sceneMousePoint!==undefined) {
+            sceneMousePoint.screenX = pointUntransformed.x;
+            sceneMousePoint.screenY = pointUntransformed.y;
+            sceneMousePoint.sceneX = pointTransformed.x;
+            sceneMousePoint.sceneY = pointTransformed.y;
+            sceneMousePoint.id = pointTransformed.id;
+            sceneMousePoint.eventName = mouseEvent;
+            sceneMousePoint.nativeEvent = e as Event;
+            sceneMousePoint.button = (e as MouseEvent).button;
+            sceneMousePoint.isMouseDown = isMouseDown;
+            scene.trigger(mouseEvent,sceneMousePoint);
+            sceneMousePoint.release();
+        }
 
         return pointTransformed;
     }
