@@ -1,4 +1,4 @@
-import {ObjectPool, ReleasableObject} from "../misc/objectPool";
+import {IReleasealable, ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 
 export interface ISize {
@@ -6,7 +6,7 @@ export interface ISize {
     readonly height: number;
 }
 
-export class Size extends ObservableEntity implements ReleasableObject{
+export class Size extends ObservableEntity implements IReleasealable{
 
     set width(val:number) {
         const changed:boolean = this._width!==val;

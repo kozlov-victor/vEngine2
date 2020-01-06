@@ -2,7 +2,7 @@ import {Container} from "./container";
 import {VScroll} from "../components/vScroll";
 import {Game} from "@engine/core/game";
 import {MathEx} from "@engine/misc/mathEx";
-import {ObjectMousePoint} from "@engine/control/mouse/mousePoint";
+import {IObjectMousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ISize} from "@engine/geometry/size";
 
@@ -11,7 +11,7 @@ export interface IScrollInitDesc {
 }
 
 interface IScrollPointDesc {
-    point: ObjectMousePoint;
+    point: IObjectMousePoint;
     time: number;
 }
 
@@ -46,7 +46,7 @@ export class ScrollInfo {
 
     public listenScroll(container: Container):void {
         this._container = container;
-        container.on(MOUSE_EVENTS.mouseDown, (p: ObjectMousePoint) => {
+        container.on(MOUSE_EVENTS.mouseDown, (p: IObjectMousePoint) => {
             this._lastPoint = {
                 point: p,
                 time: Date.now()
@@ -58,7 +58,7 @@ export class ScrollInfo {
             this._scrollVelocity = 0;
             this._deceleration = 0;
         });
-        container.on(MOUSE_EVENTS.mouseMove, (p: ObjectMousePoint) => {
+        container.on(MOUSE_EVENTS.mouseMove, (p: IObjectMousePoint) => {
             if (!p.isMouseDown) return;
             let lastPoint:IScrollPointDesc = this._lastPoint;
             this._lastPoint = {
@@ -80,11 +80,11 @@ export class ScrollInfo {
             if (this.offset < 0) this.offset = 0;
             this.onScroll();
         });
-        container.on(MOUSE_EVENTS.scroll, (p: ObjectMousePoint) => {
+        container.on(MOUSE_EVENTS.scroll, (p: IObjectMousePoint) => {
             this._scrollVelocity = -(p.nativeEvent as WheelEvent&{wheelDelta:number}).wheelDelta;
             this._deceleration = 0;
         });
-        container.on(MOUSE_EVENTS.mouseUp, (p: ObjectMousePoint) => {
+        container.on(MOUSE_EVENTS.mouseUp, (p: IObjectMousePoint) => {
             if (!this._lastPoint) return;
             if (!this._prevPoint) return;
             if (this._lastPoint.time === this._prevPoint.time) {

@@ -2,26 +2,13 @@ import {DebugError} from "../debug/debugError";
 import {Clazz, Optional} from "@engine/core/declarations";
 
 
-export abstract class ReleasableObject {
-
-    private _captured:boolean = false;
-
-    public isCaptured(): boolean {
-        return this._captured;
-    }
-
-    public capture(): this {
-        this._captured = true;
-        return this;
-    }
-
-    public release(): this {
-        this._captured = false;
-        return this;
-    }
+export interface IReleasealable {
+    release():this;
+    capture():this;
+    isCaptured():boolean;
 }
 
-export class ObjectPool<T extends ReleasableObject> {
+export class ObjectPool<T extends IReleasealable> {
 
     private _pool:T[] = [];
     /**
@@ -62,7 +49,7 @@ export class ObjectPool<T extends ReleasableObject> {
 
     public releaseAll(){
         for (let i:number=0;i<this.numberOfInstances;i++) {
-            const current:Optional<ReleasableObject> = this._pool[i];
+            const current:Optional<IReleasealable> = this._pool[i];
             if (current!==undefined) {
                 current.release();
             }

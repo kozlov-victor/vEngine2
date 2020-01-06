@@ -24,7 +24,7 @@ import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {Incrementer} from "@engine/resources/incrementer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {ObjectMousePoint} from "@engine/control/mouse/mousePoint";
+import {IObjectMousePoint} from "@engine/control/mouse/mousePoint";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
@@ -232,7 +232,7 @@ export abstract class RenderableModel extends TransformableModel implements IRev
     public off(eventName: string, callBack: (arg?:any)=>void): void {
         this._eventEmitterDelegate.off(eventName,callBack);
     }
-    public on(eventName:MOUSE_EVENTS,callBack:(e:ObjectMousePoint)=>void):()=>void;
+    public on(eventName:MOUSE_EVENTS,callBack:(e:IObjectMousePoint)=>void):()=>void;
     public on(eventName:KEYBOARD_EVENTS,callBack:(e:number)=>void):()=>void;
     public on(eventName: string, callBack: (arg?:any)=>void): ()=>void {
         return this._eventEmitterDelegate.on(eventName,callBack);

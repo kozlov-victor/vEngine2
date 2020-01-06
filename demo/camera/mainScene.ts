@@ -53,7 +53,7 @@ export class MainScene extends Scene {
         const uiLayer:Layer = new Layer(this.game);
         uiLayer.transformType = LayerTransformType.STICK_TO_CAMERA;
         const infoRect:Rectangle = new Rectangle(this.game);
-        infoRect.size.setWH(600,10);
+        infoRect.size.setWH(600,50);
         infoRect.color.setRGB(200,12,22);
         (infoRect.fillColor as Color).setRGB(12,100,55);
         infoRect.addBehaviour(new DraggableBehaviour(this.game));

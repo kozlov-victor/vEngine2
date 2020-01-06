@@ -1,5 +1,5 @@
 import {DebugError} from "../debug/debugError";
-import {ObjectPool, ReleasableObject} from "@engine/misc/objectPool";
+import {IReleasealable, ObjectPool} from "@engine/misc/objectPool";
 import {ICloneable} from "@engine/core/declarations";
 
 // https://evanw.github.io/lightgl.js/docs/matrix.html
@@ -8,7 +8,7 @@ export namespace mat4 {
 
     type n = number;
 
-    export class Mat16Holder extends ReleasableObject implements ICloneable<Mat16Holder>{
+    export class Mat16Holder implements IReleasealable, ICloneable<Mat16Holder>{
 
         public static fromPool():Mat16Holder {
             return Mat16Holder.m16hPool.getFreeObject()!;
@@ -23,8 +23,9 @@ export namespace mat4 {
 
         public readonly mat16:MAT16 = (new Float32Array(16) as unknown) as MAT16;
 
+        private _captured:boolean = false;
+
         public constructor(){
-            super();
             this.set(
                 0, 0, 0, 0,
                 0, 0, 0, 0,
@@ -55,6 +56,19 @@ export namespace mat4 {
                 m.mat16[i] = this.mat16[i];
             }
             return m;
+        }
+        public isCaptured(): boolean {
+            return this._captured;
+        }
+
+        public capture(): this {
+            this._captured = true;
+            return this;
+        }
+
+        public release(): this {
+            this._captured = false;
+            return this;
         }
 
     }
@@ -104,6 +118,14 @@ export namespace mat4 {
         bottom:number, top:number,
         near:number, far:number):void =>
     {
+
+        if (DEBUG) {
+            if (left===right || bottom===top || near===far) {
+                console.error({left,right,bottom,top,near,far});
+                throw new DebugError(`Can not create ortho matrix with wrong parameters`);
+            }
+        }
+
         const lr:number = 1 / (left - right),
             bt:number = 1 / (bottom - top),
             nf:number = 1 / (near - far);
@@ -299,7 +321,7 @@ export namespace mat4 {
         const det:number = m[0]*r[0] + m[1]*r[4] + m[2]*r[8] + m[3]*r[12];
         if (DEBUG && det===0) {
             console.error(m);
-            throw new DebugError("can not invert matrix");
+            throw new DebugError("can not invert matrix with zero determinant");
         }
         for (let i:number = 0; i < 16; i++) r[i] /= det;
     };
