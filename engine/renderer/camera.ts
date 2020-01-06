@@ -26,7 +26,7 @@ export class Camera {
     private static FOLLOW_FACTOR:number = 0.1;
 
     public readonly pos:Point2d = new Point2d(0,0);
-    public posZ:number = 0;
+    public posZ:number = 0; // todo
     public readonly scale:Point2d = new Point2d(1,1);
 
     private objFollowTo:Optional<RenderableModel>;
@@ -43,15 +43,11 @@ export class Camera {
     };
 
     constructor(protected game:Game){
-        this._updateRect();
-        this.scale.observe(()=>{
-            this.revalidate();
-        });
     }
 
 
     public revalidate():void{
-        this._rectIdentity.setXYWH(0,0,this.game.size.width,this.game.size.height);
+        this._rect.setSize(this.game.size);
     }
 
 
@@ -80,15 +76,15 @@ export class Camera {
 
             this.objFollowToPrevPos.set(gameObject.pos);
 
-            const {width:wScaled,height:hScaled} = this.getRectScaled();
+            const {width,height} = this.getRect();
             if (this.directionCorrection === DIRECTION_CORRECTION.RIGHT)
-                this.cameraPosCorrection.max.x=wScaled/3;
+                this.cameraPosCorrection.max.x=width/3;
             else if (this.directionCorrection === DIRECTION_CORRECTION.LEFT)
-                this.cameraPosCorrection.max.x=-wScaled/3;
+                this.cameraPosCorrection.max.x=-width/3;
             else if (this.directionCorrection === DIRECTION_CORRECTION.DOWN)
-                this.cameraPosCorrection.max.y=hScaled/3;
+                this.cameraPosCorrection.max.y=height/3;
             else if (this.directionCorrection === DIRECTION_CORRECTION.UP)
-                this.cameraPosCorrection.max.y=-hScaled/3;
+                this.cameraPosCorrection.max.y=-height/3;
 
             const currCorrection:Point2d =
                 this.cameraPosCorrection.max.
@@ -127,7 +123,6 @@ export class Camera {
         }
         if (this.cameraShakeTween!==undefined) this.cameraShakeTween.update();
 
-        this._updateRect();
     }
 
     public shake(amplitude:number,time:number):void {
@@ -143,17 +138,6 @@ export class Camera {
             },
             complete:()=>this.cameraShakeTween = undefined
         });
-    }
-
-    public _updateRect():void{
-        const p:Point2d = Point2d.fromPool();
-        const point00:Point2d = this.screenToWorld(p.setXY(0,0));
-        const pointWH:Point2d = this.screenToWorld(p.setXY(this.game.size.width,this.game.size.height));
-        this._rectScaled.setXYWH(
-            point00.x,point00.y,
-            pointWH.x - point00.x,pointWH.y - point00.y
-        );
-        p.release();
     }
 
     public transform():void{ //TRS - (transform rotate scale) reverted
@@ -183,17 +167,9 @@ export class Camera {
     }
 
     public getRect():Rect{
-        this._rect.setXYWH(this.pos.x,this.pos.y,this.game.size.width,this.game.size.height);
+        this._rect.setXY(this.pos.x,this.pos.y);
         return this._rect;
     }
-
-    /**
-     * @deprecated
-     */
-    public getRectScaled():Rect{
-        return this._rectScaled;
-    }
-
 }
 
 

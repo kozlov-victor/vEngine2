@@ -23,7 +23,7 @@ export class PointLight extends AbstractLight {
     }
 
     public setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>, i:number):void{
-        map.put(`u_pointLights[${i}].pos`,this.getPosScaled().toArray());
+        map.put(`u_pointLights[${i}].pos`,this.getPositionRelativeToScreen().toArray());
         map.put(`u_pointLights[${i}].nearRadius`,this.nearRadius);
         map.put(`u_pointLights[${i}].farRadius`,this.farRadius);
         map.put(`u_pointLights[${i}].isOn`,this.isOn);
@@ -32,13 +32,11 @@ export class PointLight extends AbstractLight {
         map.put(`u_pointLights[${i}].type`,PointLight.LIGHT_TYPE);
     }
 
-    protected getPosScaled():Point2d {
+    private getPositionRelativeToScreen():Point2d {
         const camera:Camera = this.game.camera;
-        const rect:Rect = camera.getRectScaled();
-        const scale:Point2d = camera.scale;
         this._screenPoint.setXY(
-            (this.pos.x - rect.x) * scale.x,
-            (this.pos.y - rect.y) * scale.y
+            (this.pos.x - camera.pos.x),
+            (this.pos.y - camera.pos.y)
         );
         return this._screenPoint;
     }

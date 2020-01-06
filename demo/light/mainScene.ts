@@ -21,6 +21,7 @@ export class MainScene extends Scene {
     }
 
     public onReady() {
+        this.game.camera.scale.setXY(0.8);
         this.colorBG = Color.BLACK;
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
