@@ -7,12 +7,15 @@ export class Circle extends Ellipse implements ICloneable<Circle>{
     set radius(val:number) {
         this._radius = val;
         this.setWH(val*2);
-        this.radiusX = this.radiusY = val;
+        (this as Ellipse).radiusX = (this as Ellipse).radiusY = val;
     }
 
     get radius():number{
         return this._radius;
     }
+
+    public radiusX:never;
+    public radiusY:never;
 
     public readonly type:string = 'Circle';
     private _radius: number = 10;
