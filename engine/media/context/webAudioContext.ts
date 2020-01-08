@@ -21,8 +21,6 @@ export class WebAudioContextHolder {
 
 class CtxHolder {
 
-
-
     public static getCtx():AudioContext{
         if (CtxHolder.ctx && !CtxHolder.res) {
             CtxHolder.res = new CtxHolder.ctx();

@@ -37,7 +37,7 @@
     "callable-types": false,
     "no-any": false,
     "no-null-keyword": true,
-    "v-engine-as-statement": true
+    "v-engine-as-statement": false
   },
   "jsRules": {
     "max-line-length": {

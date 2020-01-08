@@ -118,6 +118,14 @@ export namespace mat4 {
         bottom:number, top:number,
         near:number, far:number):void =>
     {
+
+        if (DEBUG) {
+            if (left===right || bottom===top || near===far) {
+                console.error({left,right,bottom,top,near,far});
+                throw new DebugError(`Can not create ortho matrix with wrong parameters`);
+            }
+        }
+
         const lr:number = 1 / (left - right),
             bt:number = 1 / (bottom - top),
             nf:number = 1 / (near - far);
@@ -313,7 +321,7 @@ export namespace mat4 {
         const det:number = m[0]*r[0] + m[1]*r[4] + m[2]*r[8] + m[3]*r[12];
         if (DEBUG && det===0) {
             console.error(m);
-            throw new DebugError("can not invert matrix");
+            throw new DebugError("can not invert matrix with zero determinant");
         }
         for (let i:number = 0; i < 16; i++) r[i] /= det;
     };

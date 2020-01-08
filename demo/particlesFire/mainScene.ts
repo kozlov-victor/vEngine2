@@ -2,7 +2,6 @@ import {Scene} from "@engine/scene/scene";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Color} from "@engine/renderer/common/color";
@@ -67,7 +66,7 @@ export class MainScene extends Scene {
         this.on(MOUSE_EVENTS.click,()=>{
             this.game.getRenderer().requestFullScreen();
         });
-        this.on(MOUSE_EVENTS.mouseMove,(e:IMousePoint)=>{
+        this.on(MOUSE_EVENTS.mouseMove,(e)=>{
             this.ps.emissionPosition.setXY(e.screenX - animatedImage.size.width/2,e.screenY-animatedImage.size.height/2);
         });
 

@@ -1,7 +1,6 @@
-import {Layer} from "./layer";
+import {Layer, LayerTransformType} from "./layer";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
-import {CAMERA_MATRIX_MODE} from "@engine/renderer/camera";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {
     IAlphaBlendable,
@@ -21,7 +20,7 @@ import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
-import {IMousePoint} from "@engine/control/mouse/mousePoint";
+import {ISceneMousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 import {Point2d} from "@engine/geometry/point2d";
@@ -75,7 +74,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     public getDefaultLayer():Layer {
         if (!this._layers.length) this.addLayer(new Layer(this.game));
-        return this._layers[0];
+        return this._layers[this._layers.length-1];
     }
 
     public addLayer(layer:Layer):void {
@@ -142,7 +141,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public off(eventName: string, callBack: ()=>void): void {
         this._eventEmitterDelegate.off(eventName,callBack);
     }
-    public on(eventName:MOUSE_EVENTS,callBack:(e:IMousePoint)=>void):()=>void;
+    public on(eventName:MOUSE_EVENTS,callBack:(e:ISceneMousePoint)=>void):()=>void;
     public on(eventName:KEYBOARD_EVENTS,callBack:(e:KeyBoardEvent)=>void):()=>void;
     public on(eventName:GAME_PAD_EVENTS,callBack:(e:GamePadEvent)=>void):()=>void;
     public on(eventName: string, callBack: (arg?:any)=>void): ()=>void {
@@ -176,8 +175,6 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     public render():void {
 
-        this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_TRANSFORM;
-
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
         renderer.saveAlphaBlend();
@@ -194,11 +191,17 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
             }
         } else {
             for (const l of this._layers) {
+                if (l.transformType===LayerTransformType.STICK_TO_CAMERA) {
+                    renderer.transformSave();
+                    renderer.transformSet(...IDENTITY_HOLDER.mat16);
+                }
                 l.render();
+                if (l.transformType===LayerTransformType.STICK_TO_CAMERA) {
+                    renderer.transformRestore();
+                }
             }
         }
 
-        this.game.camera.matrixMode = CAMERA_MATRIX_MODE.MODE_IDENTITY; // todo manage this
         renderer.restoreAlphaBlend();
 
         if (DEBUG) {

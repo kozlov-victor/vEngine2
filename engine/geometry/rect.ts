@@ -1,4 +1,4 @@
-import {Size} from "./size";
+import {ISize} from "./size";
 import {IPoint2d, Point2d} from "./point2d";
 import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
@@ -106,7 +106,7 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         return this;
     }
 
-    public setSize(s:Size):Rect{
+    public setSize(s:ISize):Rect{
         this.setWH(s.width,s.height);
         return this;
     }
@@ -116,7 +116,7 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         return this;
     }
 
-    public setPointAndSize(p:IPoint2d,size:Size):Rect{
+    public setPointAndSize(p:IPoint2d,size:ISize):Rect{
         this.setPoint(p);
         this.setSize(size);
         return this;

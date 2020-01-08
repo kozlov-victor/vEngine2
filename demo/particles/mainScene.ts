@@ -6,7 +6,6 @@ import {MathEx} from "@engine/misc/mathEx";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {IMousePoint} from "@engine/control/mouse/mousePoint";
 import {Shape} from "@engine/renderable/abstract/shape";
 
 
@@ -53,7 +52,7 @@ export class MainScene extends Scene {
         ps.size.setWH(50,50);
         this.ps = ps;
         this.appendChild(ps);
-        this.on(MOUSE_EVENTS.mouseMove,(e:IMousePoint)=>{
+        this.on(MOUSE_EVENTS.mouseMove,(e)=>{
             console.log(e);
             this.ps.emissionPosition.setXY(e.screenX,e.screenY);
         });
