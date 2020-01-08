@@ -71,15 +71,12 @@ export class ObjParser {
         if (!pr.indexArr!.length) pr.indexArr = undefined;
         if (!pr.texCoordArr!.length) pr.texCoordArr = undefined;
         if (!pr.normalArr!.length) pr.normalArr = undefined;
-        console.log(pr);
         return pr;
     }
 
     public parse(source:string):AbstractPrimitive{
         return this.objToPrimitive(this.readObj(source));
     }
-
-
 
     private readPoint3(s:string):Point3{
         const point3:Point3 = {x:NaN,y:NaN,z:NaN} as Point3;
@@ -88,7 +85,7 @@ export class ObjParser {
             else if (i===1) point3.y = n;
             else if (i===2) point3.z = n;
         });
-        if (isNaN(point3.x) || isNaN(point3.y) || isNaN(point3.z)) throw new Error(`unexpected line ${s}`);
+        if (Number.isNaN(point3.x) || Number.isNaN(point3.y) || Number.isNaN(point3.z)) throw new Error(`unexpected line ${s}`);
         return point3;
     }
 
@@ -98,7 +95,7 @@ export class ObjParser {
             if (i===0) point2.x = n;
             else if (i===1) point2.y = n;
         });
-        if (isNaN(point2.x) || isNaN(point2.y)) throw new Error(`unexpected line ${s}`);
+        if (Number.isNaN(point2.x) || Number.isNaN(point2.y)) throw new Error(`unexpected line ${s}`);
         return point2;
     }
 
@@ -122,7 +119,7 @@ export class ObjParser {
             face[i].v = tripletNum[0];
             face[i].uv = tripletNum[1];
             face[i].n = tripletNum[2];
-            if (isNaN(face[i].v)) throw new Error(`bad face value ${triplets.join(' ')}`);
+            if (Number.isNaN(face[i].v)) throw new Error(`bad face value ${triplets.join(' ')}`);
         });
         return face;
     }
