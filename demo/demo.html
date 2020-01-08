@@ -51,6 +51,99 @@
 
 
 <script>
+
+        if (window.external && window.external.V_ENGINE_NAVIGATOR) {
+
+            window.console = window.console || new function(){
+                this.log = this.error = function(){}
+            };
+
+            if ( ![].fill)  {
+                Array.prototype.fill = function( value ) {
+
+                    var O = Object( this );
+                    var len = parseInt( O.length, 10 );
+                    var start = arguments[1];
+                    var relativeStart = parseInt( start, 10 ) || 0;
+                    var k = relativeStart < 0
+                        ? Math.max( len + relativeStart, 0)
+                        : Math.min( relativeStart, len );
+                    var end = arguments[2];
+                    var relativeEnd = end === undefined
+                        ? len
+                        : ( parseInt( end)  || 0) ;
+                    var final = relativeEnd < 0
+                        ? Math.max( len + relativeEnd, 0 )
+                        : Math.min( relativeEnd, len );
+
+                    for (; k < final; k++) {
+                        O[k] = value;
+                    }
+
+                    return O;
+                };
+            }
+
+            var readAsBin = function(url){
+                try {
+                    var jsonArr = window.external.LoadDataAsBin(url);
+                    return JSON.parse("[" + jsonArr + "]");
+                } catch (e) {
+                    alert('readAsBin error: ' + url + " " + e);
+                }
+            };
+
+            var readAsText = function(url){
+                try {
+                    return window.external.LoadDataAsText(url);
+                } catch (e) {
+                    alert('readAsText error: ' + url + " " + e);
+                }
+            };
+
+            window.XMLHttpRequest = function(){
+                var self = this;
+                self.status = 0;
+                self.url = '';
+
+
+                self.setRequestHeader = function(key,val){
+
+                };
+
+                self.open = function(method,url){
+                    self.url = url;
+                };
+                self.send = function(){
+                    setTimeout(function(){
+                        var currUrl = self.url.split('?')[0];
+                        currUrl = currUrl.replace('file:///','');
+                        var resp = (self.responseType==='blob' || self.responseType==='arraybuffer')?readAsBin(currUrl):readAsText(currUrl);
+                        self.readyState = 4;
+                        self.status = 200;
+                        self.response = resp;
+                        self.onload && self.onload();
+                    },1);
+                };
+                self.getResponseHeader = function(){};
+
+            };
+
+            var Blob = undefined;
+
+            var Promise = function(){
+
+            };
+
+            Number.isNaN = function(n){
+               return !isFinite(n);
+            };
+
+        }
+
+    </script>
+
+<script>
     (function(){
         function getQueryParams(qs) {
             qs = qs.split('+').join(' ');
