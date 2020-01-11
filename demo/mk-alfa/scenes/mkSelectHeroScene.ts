@@ -24,32 +24,16 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {MkDescribeHeroScene} from "./mkDescribeHeroScene";
 import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {TaskRef} from "@engine/resources/queue";
+import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
+import {TrianglesMosaicFilter} from "@engine/renderer/webGl/filters/texture/trianglesMosaicFilter";
+import {HEROES_DESCRIPTION, IItemDescription} from "../assets/images/heroes/description/heroesDescription";
+import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
 
-interface IItemDescription {
-    url:string;
-}
 
 class TabStrip {
 
-    private description:IItemDescription[] = [
-        {
-            url: '1.jpg'
-        },
-        {
-            url: '2.jpg'
-        },
-        {
-            url: '3.jpg'
-        },
-        {
-            url: '4.jpg'
-        },
-        {
-            url: '5.jpg'
-        }
-    ];
 
     private linkByUrl: Record<string,ResourceLink<ITexture>> = {};
 
@@ -59,7 +43,7 @@ class TabStrip {
     private cell3:RenderableModel;
     private selectedIndex:number = 2;
     private emptyResourceLink:ResourceLink<ITexture>;
-    private readonly CELL_WIDTH:number = 340 as const;
+    private readonly CELL_WIDTH:number = 340;
     private readonly CELL_HEIGHT:number = 400;
 
     constructor(private game:Game){
@@ -70,7 +54,7 @@ class TabStrip {
 
     public preload(){
         this.emptyResourceLink = this.game.getCurrScene().resourceLoader.loadImage('./mk-alfa/assets/images/heroes/empty.jpg');
-        this.description.forEach(it=>{
+        HEROES_DESCRIPTION.forEach(it=>{
             this.linkByUrl[it.url] = this.game.getCurrScene().resourceLoader.loadImage(`./mk-alfa/assets/images/heroes/${it.url}`);
         });
     }
@@ -82,6 +66,37 @@ class TabStrip {
         this.cell2.moveToFront();
         this.updateImages();
         this.animateSelected();
+
+        const splashContainer = new NullGameObject(this.game);
+        this.game.getCurrScene().appendChild(splashContainer);
+        const glow = new GlowFilter(this.game,0.01,10);
+        splashContainer.filters = [glow];
+
+        this.game.getCurrScene().setInterval(()=>{
+            if (MathEx.randomInt(0,10)> 5) {
+                const numOfSplashes:number = MathEx.randomInt(1,5);
+                for (let i=0;i<numOfSplashes;i++) this.createSplashVertical(splashContainer);
+                glow.enabled = MathEx.random(0,5)>3;
+                if (glow.enabled) {
+                    glow.setGlowColor(Color.RGB(
+                        MathEx.randomInt(0,200) as byte,
+                        MathEx.randomInt(100,255) as byte,
+                        MathEx.randomInt(0,200) as byte,
+                    ));
+                }
+
+            }
+        },200);
+
+
+        const f = new TrianglesMosaicFilter(this.game);
+        this.cell2.children[0].filters = [f];
+        this.game.getCurrScene().setInterval(()=>{
+            if (MathEx.randomInt(0,10)> 5) {
+                f.enabled = true;
+                this.game.getCurrScene().setTimeout(()=>{f.enabled = false;},MathEx.randomInt(20,500));
+            }
+        },1000);
     }
 
 
@@ -91,7 +106,7 @@ class TabStrip {
 
     public goNext(){
         this.selectedIndex++;
-        if (this.selectedIndex>this.description.length-1) this.selectedIndex=this.description.length-1;
+        if (this.selectedIndex>HEROES_DESCRIPTION.length-1) this.selectedIndex=HEROES_DESCRIPTION.length-1;
         else this.updateImages();
     }
 
@@ -125,6 +140,27 @@ class TabStrip {
         return rectWrap;
     }
 
+    private createSplashVertical(splashContainer:NullGameObject){
+        const pl = new PolyLine(this.game);
+        pl.lineWidth = MathEx.randomInt(2,7);
+        pl.color = Color.RGB(
+            MathEx.randomInt(200,222) as byte,
+            MathEx.randomInt(200,222) as byte,
+            MathEx.randomInt(15,25) as byte,
+        );
+        let height:number = 0;
+        while (height<this.CELL_HEIGHT) {
+            const dh:number = MathEx.randomInt(10,100);
+            pl.lineBy(MathEx.randomInt(-50,50),dh);
+            height+=dh;
+        }
+        pl.pos.setX(MathEx.randomInt(0,this.game.size.width));
+        splashContainer.appendChild(pl);
+        this.game.getCurrScene().setTimeout(()=>{
+            splashContainer.removeChild(pl);
+        },MathEx.randomInt(200,500));
+    }
+
     private animateSelected():void{
         const time = 900;
         const from = 1;
@@ -153,7 +189,7 @@ class TabStrip {
         this.game.getCurrScene().addTweenMovie(tm);
     }
 
-    private updateImage(desc:IItemDescription,wrapper:RenderableModel,img:Image){
+    private updateImage(desc:IItemDescription,img:Image){
         if (desc===undefined) {
             img.setResourceLink(this.emptyResourceLink);
         }
@@ -163,12 +199,12 @@ class TabStrip {
     }
 
     private updateImages(){
-        const prev = this.description[this.selectedIndex-1];
-        const curr = this.description[this.selectedIndex];
-        const next = this.description[this.selectedIndex+1];
-        this.updateImage(prev,this.cell1,this.cell1.children[0] as Image);
-        this.updateImage(curr,this.cell2,this.cell2.children[0] as Image);
-        this.updateImage(next,this.cell3,this.cell3.children[0] as Image);
+        const prev = HEROES_DESCRIPTION[this.selectedIndex-1];
+        const curr = HEROES_DESCRIPTION[this.selectedIndex];
+        const next = HEROES_DESCRIPTION[this.selectedIndex+1];
+        this.updateImage(prev,this.cell1.children[0] as Image);
+        this.updateImage(curr,this.cell2.children[0] as Image);
+        this.updateImage(next,this.cell3.children[0] as Image);
     }
 
 
@@ -181,7 +217,9 @@ export class MkSelectHeroScene extends MkAbstractScene {
     private logoLink:ResourceLink<ITexture>;
     private soundLink1:ResourceLink<void>;
     private soundLink2:ResourceLink<void>;
+    private soundLinkTheme:ResourceLink<void>;
     private tabStrip:TabStrip;
+    private nextScene:MkDescribeHeroScene;
 
     public onPreloading(): void {
         super.onPreloading();
@@ -201,11 +239,22 @@ export class MkSelectHeroScene extends MkAbstractScene {
         this.logoLink = this.resourceLoader.loadImage('./mk-alfa/assets/images/mkLogo.png');
         this.soundLink1 = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn2.wav');
         this.soundLink2 = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn.wav');
+        this.soundLinkTheme = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/theme.mp3');
+        this.filters = [new VignetteFilter(this.game)];
     }
 
     public onReady(): void {
         super.onReady();
         this.tabStrip.onReady();
+
+        this.on(MOUSE_EVENTS.doubleClick, ()=>{
+            this.game.getRenderer().requestFullScreen();
+        });
+
+        const theme:Sound = new Sound(this.game);
+        theme.loop = true;
+        theme.setResourceLink(this.soundLinkTheme);
+        theme.play();
 
         const img:Image = new Image(this.game);
         img.setResourceLink(this.logoLink);
@@ -242,11 +291,11 @@ export class MkSelectHeroScene extends MkAbstractScene {
         const sndSelect:Sound = new Sound(this.game);
         sndSelect.setResourceLink(this.soundLink1);
         this.on(GAME_PAD_EVENTS.buttonPressed, e=>{
-            if (e.button===GAME_PAD_BUTTON.STICK_L_LEFT) {
+            if (e.button===GAME_PAD_BUTTON.STICK_L_LEFT || e.button===GAME_PAD_BUTTON.D_PAD_LEFT) {
                 this.tabStrip.goPrev();
                 sndSelect.play();
             }
-            else if (e.button===GAME_PAD_BUTTON.STICK_L_RIGHT) {
+            else if (e.button===GAME_PAD_BUTTON.STICK_L_RIGHT  || e.button===GAME_PAD_BUTTON.D_PAD_RIGHT) {
                 this.tabStrip.goNext();
                 sndSelect.play();
             }
@@ -274,9 +323,9 @@ export class MkSelectHeroScene extends MkAbstractScene {
         const sndSelect:Sound = new Sound(this.game);
         sndSelect.setResourceLink(this.soundLink2);
         sndSelect.play();
-        const descrScene = new MkDescribeHeroScene(this.game);
-        descrScene.selectedIndex = this.tabStrip.getSelectedIndex();
-        this.game.pushScene(descrScene,new CurtainsOpeningTransition(this.game));
+        if (this.nextScene===undefined) this.nextScene = new MkDescribeHeroScene(this.game);
+        this.nextScene.selectedIndex = this.tabStrip.getSelectedIndex();
+        this.game.pushScene(this.nextScene,new CurtainsOpeningTransition(this.game));
     }
 
 }

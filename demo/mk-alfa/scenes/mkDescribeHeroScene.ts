@@ -1,35 +1,25 @@
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
 import {TEXT_ALIGN, TextField, WORD_BRAKE} from "@engine/renderable/impl/ui/components/textField";
-import {Image} from "@engine/renderable/impl/general/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
-import {createGlowTweenFilter, createScaleTweenMovie} from "../utils/miscFunctions";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
-import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
 import {MathEx} from "@engine/misc/mathEx";
-import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
-import {MkSelectHeroScene} from "./mkSelectHeroScene";
-import {Sound} from "@engine/media/sound";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {MkAbstractScene} from "./mkAbstractScene";
-import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
-import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
-import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {PixelFilter} from "@engine/renderer/webGl/filters/texture/pixelFilter";
-import {LowResolutionFilter} from "@engine/renderer/webGl/filters/texture/lowResolutionFilter";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Shape} from "@engine/renderable/abstract/shape";
-import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
 import {SwirlFilter} from "@engine/renderer/webGl/filters/texture/swirlFilter";
+import {HEROES_DESCRIPTION, IItemDescription} from "../assets/images/heroes/description/heroesDescription";
+import {Sound} from "@engine/media/sound";
+import {MoveByCircleAnimation} from "@engine/animation/propertyAnimation/moveByCircleAnimation";
+
 
 export class MkDescribeHeroScene extends MkAbstractScene {
 
@@ -37,7 +27,9 @@ export class MkDescribeHeroScene extends MkAbstractScene {
 
     private fnt:Font;
     private logoLink:ResourceLink<ITexture>;
+    private sndBtnLink:ResourceLink<void>;
     private lightContainer:NullGameObject = new NullGameObject(this.game);
+    private tfInfo:TextField;
 
     public onPreloading(): void {
         super.onPreloading();
@@ -52,8 +44,12 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         });
 
         this.logoLink = this.resourceLoader.loadImage('./mk-alfa/assets/images/mkLogo.png');
+        this.sndBtnLink = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn3.mp3');
+
+        //for (let i:number = 0;i<100;i++) { fakeLongLoadingFn(this.resourceLoader); }
 
     }
+
 
     public onReady(): void {
 
@@ -86,10 +82,10 @@ export class MkDescribeHeroScene extends MkAbstractScene {
                 MathEx.randomInt(0,this.game.size.width),
                 MathEx.randomInt(0,this.game.size.height)
             );
-        },500);
+        },100);
 
-        ps.numOfParticlesToEmit = {from:50,to:100};
-        ps.particleLiveTime = {from:200,to:500};
+        ps.numOfParticlesToEmit = {from:4,to:10};
+        ps.particleLiveTime = {from:500,to:1000};
         ps.particleAngle = {from:0,to:2*Math.PI};
         this.appendChild(ps);
         const particlesFilter1 = new GlowFilter(this.game);
@@ -98,6 +94,12 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         particlesFilter2.setCenter(this.game.size.width/2,this.game.size.height);
         particlesFilter2.setRadius(1000);
         ps.filters = [particlesFilter1, particlesFilter2];
+        const circleAnim = new MoveByCircleAnimation(this.game);
+        circleAnim.radius = 300;
+        this.addPropertyAnimation(circleAnim);
+        circleAnim.onProgress((p)=>{
+            particlesFilter2.setCenter(p.x,p.y);
+        });
 
 
         const tf:TextField = new TextField(this.game);
@@ -106,18 +108,16 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         tf.setWordBreak(WORD_BRAKE.FIT);
         tf.pos.setY(100);
         tf.layoutWidth = this.game.size.width;
-        tf.setText(
-            "Our hero is\n" + this.selectedIndex + ". (Long name test string 123456). Take the price with number 8"
-        );
+        this.tfInfo = tf;
         tf.layoutWidth = this.game.size.width;
         tf.maxWidth = this.game.size.width;
         this.appendChild(tf);
 
         this.on(GAME_PAD_EVENTS.buttonPressed, e=>{
-            this.game.popScene();
+            this.goBack();
         });
         this.on(KEYBOARD_EVENTS.keyPressed, (e)=>{
-            this.game.popScene();
+            this.goBack();
         });
 
         const sceneFilter = new NoiseHorizontalFilter(this.game);
@@ -134,6 +134,22 @@ export class MkDescribeHeroScene extends MkAbstractScene {
                 }
             }
         },1000);
+    }
+
+
+    public onContinue(): void {
+        super.onContinue();
+        const hero:IItemDescription = HEROES_DESCRIPTION[this.selectedIndex];
+        this.tfInfo.setText(
+            `Our hero is ${hero.name}. Take the price with number ${hero.priceNumber}`
+        );
+    }
+
+    private goBack(){
+        const s = new Sound(this.game);
+        s.setResourceLink(this.sndBtnLink);
+        s.play();
+        this.game.popScene();
     }
 
     private  createSplashVertical(){

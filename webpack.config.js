@@ -29,7 +29,7 @@ module.exports = (env={})=>{
 
     let dirs = fs.readdirSync('./demo');
     dirs.forEach((dir)=>{
-        if (['demo.html','assets','out','index.html','.DS_Store','generateIndexPage.js','application.hta'].includes(dir)) return;
+        if (['demo.html','assets','out','index.html','.DS_Store','generateIndexPage.js','application.hta','VEngineNavigator.exe'].includes(dir)) return;
         entry[`${dir}`] = [`./demo/${dir}/index.ts`]
     });
 

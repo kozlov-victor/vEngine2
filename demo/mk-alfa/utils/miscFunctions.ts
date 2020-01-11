@@ -3,7 +3,6 @@ import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {EasingElastic} from "@engine/misc/easing/functions/elastic";
 
 export const createGlowTweenFilter = (game:Game,color:Color,glowValFrom:number,glowValTo:number,time:number):GlowFilter=>{
     const glow:GlowFilter = new GlowFilter(game,0.02);

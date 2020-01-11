@@ -45,7 +45,7 @@ export namespace fontLoader {
 
             setTimeout(()=>{
                 game.getCurrScene().resourceLoader.q.resolveTask(taskRef);
-            },2000);
+            },100);
 
         });
 

@@ -5,7 +5,7 @@ const allDirectories = [];
 
 const dirs = fs.readdirSync('./demo');
 dirs.forEach((dir)=>{
-    if (['assets','out','index.html','demo.html','.DS_Store','generateIndexPage.js','application.hta'].includes(dir)) return;
+    if (['assets','out','index.html','demo.html','.DS_Store','generateIndexPage.js','application.hta','VEngineNavigator.exe'].includes(dir)) return;
     allDirectories.push(dir);
 });
 
