@@ -360,8 +360,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
        this._lockRect = undefined;
     }
 
-    public beforeItemStackDraw(filters:AbstractGlFilter[]):IStateStackPointer {
-        return this.currFrameBufferStack.pushState(filters);
+    public beforeItemStackDraw(filters:AbstractGlFilter[],forceDrawChildrenOnNewSurface:boolean):IStateStackPointer {
+        return this.currFrameBufferStack.pushState(filters,forceDrawChildrenOnNewSurface);
     }
 
     public afterItemStackDraw(stackPointer:IStateStackPointer):void {
@@ -370,7 +370,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
 
     public beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
-        const ptr:IStateStackPointer = this.currFrameBufferStack.pushState(filters);
+        const ptr:IStateStackPointer = this.currFrameBufferStack.pushState(filters,false);
         if (this.clearBeforeRender) {
             this.currFrameBufferStack.clear(this.clearColor,this.getAlphaBlend());
         }
