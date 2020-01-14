@@ -87,6 +87,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         ps.numOfParticlesToEmit = {from:4,to:10};
         ps.particleLiveTime = {from:500,to:1000};
         ps.particleAngle = {from:0,to:2*Math.PI};
+        ps.emitAuto = false;
         this.appendChild(ps);
         const particlesFilter1 = new GlowFilter(this.game);
         particlesFilter1.setGlowColor(Color.RGB(2,200,2));
@@ -141,7 +142,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         super.onContinue();
         const hero:IItemDescription = HEROES_DESCRIPTION[this.selectedIndex];
         this.tfInfo.setText(
-            `Our hero is ${hero.name}. Take the price with number ${hero.priceNumber}`
+            `Our hero is ${hero.name}. Take the prize with number ${hero.priceNumber}`
         );
     }
 

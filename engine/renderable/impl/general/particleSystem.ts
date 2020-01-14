@@ -25,6 +25,8 @@ interface IParticleHolder {
 export class ParticleSystem extends RenderableModel {
 
     public readonly type:string = 'ParticleSystem';
+    public enabled:boolean = true;
+    public emitAuto:boolean = true;
     public numOfParticlesToEmit:IParticlePropertyDesc = {from:1,to:10};
     public particleAngle:IParticlePropertyDesc = {from:0,to:Math.PI*2};
     public particleVelocity:IParticlePropertyDesc = {from:1,to:100};
@@ -55,7 +57,33 @@ export class ParticleSystem extends RenderableModel {
         this._prototypes.push(renderableCloneable);
     }
 
+    public update():void {
+        super.update();
+        const time:number = this.game.getTime();
+        for (const holder of this._particles) {
+            this._onUpdateParticle(holder.particle);
+            if (time - holder.createdTime > holder.lifeTime) {
+                this._particles.splice(this._particles.indexOf(holder),1);
+                holder.particle.kill();
+            }
+        }
+        if (this.emitAuto) this.emit();
+    }
+
+    public onUpdateParticle(onUpdateParticle:(r:RenderableModel)=>void):void {
+        this._onUpdateParticle = onUpdateParticle;
+    }
+
+    public onEmitParticle(onEmitParticle:(r:RenderableModel)=>void):void {
+        this._onEmitParticle = onEmitParticle;
+    }
+
+    public draw():void{}
+
+
     public emit():void {
+
+        if (!this.enabled) return;
 
         if (DEBUG && !this.getLayer()) {
             console.error(this);
@@ -81,27 +109,5 @@ export class ParticleSystem extends RenderableModel {
             this.appendChild(particle);
         }
     }
-
-    public update():void {
-        super.update();
-        const time:number = this.game.getTime();
-        for (const holder of this._particles) {
-            this._onUpdateParticle(holder.particle);
-            if (time - holder.createdTime > holder.lifeTime) {
-                this._particles.splice(this._particles.indexOf(holder),1);
-                holder.particle.kill();
-            }
-        }
-    }
-
-    public onUpdateParticle(onUpdateParticle:(r:RenderableModel)=>void):void {
-        this._onUpdateParticle = onUpdateParticle;
-    }
-
-    public onEmitParticle(onEmitParticle:(r:RenderableModel)=>void):void {
-        this._onEmitParticle = onEmitParticle;
-    }
-
-    public draw():void{}
 
 }

@@ -49,6 +49,7 @@ export abstract class RenderableModel extends TransformableModel implements IRev
     public visible:boolean = true;
     public blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
     public filters: IFilter[] = [];
+    public forceDrawChildrenOnNewSurface:boolean = false;
 
     public readonly parent:RenderableModel;
     public readonly children:RenderableModel[] = [];

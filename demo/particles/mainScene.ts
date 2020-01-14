@@ -11,8 +11,6 @@ import {Shape} from "@engine/renderable/abstract/shape";
 
 export class MainScene extends Scene {
 
-    private ps!:ParticleSystem;
-
     public onPreloading() {
         console.log('on preloading');
     }
@@ -50,20 +48,10 @@ export class MainScene extends Scene {
         ps.particleLiveTime = {from:100,to:500};
         ps.particleAngle = {from:0,to:2*Math.PI};
         ps.size.setWH(50,50);
-        this.ps = ps;
         this.appendChild(ps);
         this.on(MOUSE_EVENTS.mouseMove,(e)=>{
             console.log(e);
-            this.ps.emissionPosition.setXY(e.screenX,e.screenY);
+            ps.emissionPosition.setXY(e.screenX,e.screenY);
         });
-    }
-
-
-    public onUpdate() {
-        this.ps.emit();
-        const ps:ParticleSystem = this.ps;
-        // ps.particleAngle.from = ps.particleAngle.from+0.1;
-        // ps.particleAngle.to = ps.particleAngle.to+0.1;
-        // // this.ps.angle+=0.1;
     }
 }
