@@ -87,7 +87,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     }
 
 
-    public beforeItemStackDraw(filters:IFilter[]):IStateStackPointer {
+    public beforeItemStackDraw(filters:IFilter[],forceDrawChildrenOnNewSurface:boolean):IStateStackPointer {
         return undefined!;
     }
 

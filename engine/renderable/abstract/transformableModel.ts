@@ -106,9 +106,12 @@ export abstract class TransformableModel extends BaseModel {
     }
 
     protected setClonedProperties(cloned:TransformableModel){
+        cloned.angle = this.angle;
+        cloned.angleVelocity = this.angleVelocity;
         cloned.pos.set(this.pos);
         cloned.scale.set(this.scale);
         cloned.anchor.set(this.anchor);
+        cloned.skew.set(this.skew);
         cloned.transformPoint.set(this.transformPoint);
         cloned.angle3d = this.angle3d.clone(this);
     }

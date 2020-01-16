@@ -49,6 +49,7 @@ export abstract class RenderableModel extends TransformableModel implements IRev
     public visible:boolean = true;
     public blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
     public filters: IFilter[] = [];
+    public forceDrawChildrenOnNewSurface:boolean = false;
 
     public readonly parent:RenderableModel;
     public readonly children:RenderableModel[] = [];
@@ -159,7 +160,7 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         this.translate();
         this.transform();
         renderer.setAlphaBlend(this.alpha);
-        const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(this.filters);
+        const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(this.filters,this.forceDrawChildrenOnNewSurface);
 
         this.draw();
 
@@ -315,13 +316,14 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         cloned.size.set(cloned.size);
         cloned.alpha = this.alpha;
         cloned.blendMode = this.blendMode;
+        cloned.forceDrawChildrenOnNewSurface = this.forceDrawChildrenOnNewSurface;
 
         this.children.forEach((c:RenderableModel)=>{
             if (DEBUG && !('clone' in c)) {
                 console.error(c);
                 throw new DebugError(`can not clone object: cloneable interface is not implemented`);
             }
-            const clonedChildren:RenderableModel = (c as any as ICloneable<RenderableModel>).clone();
+            const clonedChildren:RenderableModel = (c as unknown as ICloneable<RenderableModel>).clone();
             if (DEBUG && ! (clonedChildren instanceof RenderableModel )) {
                 console.error(c);
                 throw new DebugError(`can not clone object: "clone"  method must return Cloneable object`);

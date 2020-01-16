@@ -1,5 +1,6 @@
 import {IReleasealable, ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
+import {DebugError} from "@engine/debug/debugError";
 
 export interface ISize {
     readonly width: number;
@@ -9,6 +10,7 @@ export interface ISize {
 export class Size extends ObservableEntity implements IReleasealable{
 
     set width(val:number) {
+        if (DEBUG && Number.isNaN(val)) throw new DebugError(`Size: wrong numeric argument  ${val}`);
         const changed:boolean = this._width!==val;
         if (changed) {
             this._width = val;

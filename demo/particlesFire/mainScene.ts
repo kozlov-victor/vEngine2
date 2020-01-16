@@ -11,7 +11,6 @@ import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
 
 export class MainScene extends Scene {
 
-    private ps!:ParticleSystem;
     private resourceLink!:ResourceLink<ITexture>;
 
 
@@ -47,7 +46,6 @@ export class MainScene extends Scene {
         ps.numOfParticlesToEmit = {from:1,to:1};
         ps.particleLiveTime = {from:500,to:800};
         ps.particleAngle = {from:-pi/2 - pi/4,to:pi/2 + pi/4};
-        this.ps = ps;
         ps.onEmitParticle((p:RenderableModel)=>{
 
             const particle:AnimatedImage = (p as AnimatedImage);
@@ -68,15 +66,9 @@ export class MainScene extends Scene {
             if (window.external && (window.external as any).V_ENGINE_NAVIGATOR) (window.external as any).GoFullscreen(true);
         });
         this.on(MOUSE_EVENTS.mouseMove,(e)=>{
-            this.ps.emissionPosition.setXY(e.screenX - animatedImage.size.width/2,e.screenY-animatedImage.size.height/2);
+            ps.emissionPosition.setXY(e.screenX - animatedImage.size.width/2,e.screenY-animatedImage.size.height/2);
         });
 
 
-    }
-
-
-    public onUpdate() {
-
-        this.ps.emit();
     }
 }

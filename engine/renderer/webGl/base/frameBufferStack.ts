@@ -4,7 +4,7 @@ import {IDestroyable} from "@engine/core/declarations";
 import {INTERPOLATION_MODE, Texture} from "@engine/renderer/webGl/base/texture";
 import {Color} from "@engine/renderer/common/color";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
-import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {mat4} from "@engine/geometry/mat4";
@@ -16,6 +16,7 @@ import Mat16Holder = mat4.Mat16Holder;
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
+import {IFilter} from "@engine/renderer/common/ifilter";
 
 interface IStackItem {
     frameBuffer:FrameBuffer;
@@ -80,9 +81,9 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     }
 
-    public pushState(filters:readonly AbstractGlFilter[]):IStateStackPointer{
+    public pushState(filters:AbstractGlFilter[],forceDrawChildrenOnNewSurface:boolean):IStateStackPointer{
         const prevPointer = this._getLast().pointer;
-        if (filters.length>0) {
+        if (filters.length>0 || forceDrawChildrenOnNewSurface) {
             if (this.debug) console.log('state has been pushed');
             if (this._stack[this._stackPointer]===undefined) {
                 this._stack[this._stackPointer] = {

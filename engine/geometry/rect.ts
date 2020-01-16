@@ -3,6 +3,7 @@ import {IPoint2d, Point2d} from "./point2d";
 import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
 import {ICloneable} from "@engine/core/declarations";
+import {DebugError} from "@engine/debug/debugError";
 
 export interface IRectJSON {
     x:number;
@@ -57,6 +58,15 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
     }
 
     public setXYWH(x:number,y:number,width:number,height:number):Rect{
+        if (
+            DEBUG &&
+            (
+                Number.isNaN(x) ||
+                Number.isNaN(y) ||
+                Number.isNaN(width) ||
+                Number.isNaN(height)
+            )
+        ) throw new DebugError(`Rect: wrong numeric arguments ${x},${y},${width},${height}`);
         const oldX:number = this._x;
         const oldY:number = this._y;
         const oldW:number = this._width;

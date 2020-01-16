@@ -250,7 +250,6 @@ export class PolyLine extends Shape {
         super.setClonedProperties(cloned);
     }
 
-
     private passProperties(l:Line){
         l.vectorScaleFactor = this.vectorScaleFactor;
         l.borderRadius = this.borderRadius;
