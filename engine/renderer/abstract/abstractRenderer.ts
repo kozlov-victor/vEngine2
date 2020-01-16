@@ -1,4 +1,3 @@
-import {AbstractGlFilter} from "../webGl/filters/abstract/abstractGlFilter";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {Device} from "../../misc/device";
 import {Game, SCALE_STRATEGY} from "../../core/game";
@@ -12,14 +11,12 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {AlphaBlendStack} from "@engine/renderer/common/alphaBlendStack";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
-import {mat4} from "@engine/geometry/mat4";
-import Mat16Holder = mat4.Mat16Holder;
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
 
@@ -69,12 +66,12 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     public requestFullScreen():void {
         const element:IHTMLElement = this.container as IHTMLElement;
-        if((element).requestFullScreen) {
-            (element).requestFullScreen();
-        } else if((element).mozRequestFullScreen) {
-            (element).mozRequestFullScreen();
-        } else if((element).webkitRequestFullScreen) {
-            (element).webkitRequestFullScreen();
+        if(element.requestFullScreen) {
+            element.requestFullScreen();
+        } else if(element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        } else if(element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen();
         }
     }
 
