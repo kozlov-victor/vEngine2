@@ -240,7 +240,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
             container.style.width = `${innerWidth}px`;
             container.style.height = `${innerHeight}px`;
-            this.game.screenSize.setXY(innerWidth,innerHeight);
+            this.game.screenSize.setWH(innerWidth,innerHeight);
             this.game.scale.setXY(innerWidth/this.game.size.width,innerHeight/this.game.size.height);
             this.game.pos.setXY(0);
             return;
@@ -267,7 +267,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         this.container.style.width = width + 'px';
         this.container.style.height = height + 'px';
         this.container.style.marginTop = `${this.game.pos.y}px`;
-        this.game.screenSize.setXY(width,height);
+        this.game.screenSize.setWH(width,height);
     }
 
     private getScreenResolution():[number,number]{

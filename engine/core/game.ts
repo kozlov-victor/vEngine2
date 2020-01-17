@@ -42,7 +42,7 @@ export class Game {
     public readonly size:ISize = new Size();
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly pos:Point2d = new Point2d(0,0);
-    public readonly screenSize = new Point2d(0,0); // todo size not point
+    public readonly screenSize = new Size();
     public readonly camera:Camera = new Camera(this);
 
     public gravityConstant:number = 0;

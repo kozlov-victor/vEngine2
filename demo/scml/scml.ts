@@ -414,6 +414,10 @@ class Animation {
 
     private updateCharacter(mainKey:MainlineKey,newTime:number) {
         const transformBoneKeys = this.transformBoneKeys;
+        for (let i = 0; i < transformBoneKeys.length; i++) {
+            const transformBoneKey = transformBoneKeys[i];
+            transformBoneKey.info.release();
+        }
         transformBoneKeys.length = 0;
         for(const b of mainKey.boneRefs) {
             let parentInfo:SpatialInfo;
@@ -483,7 +487,11 @@ class Ref {
     public static fromDescription(refDesc:ISconBoneRef|ISconObjectRef):Ref {
         const ref:Ref = new Ref();
         if (refDesc.parent!==undefined) ref.parent = refDesc.parent;
-        ref.timeline = +refDesc.timeline; // todo check for NaN
+        if (DEBUG && Number.isNaN(+refDesc.timeline)) {
+            console.error(refDesc);
+            throw new DebugError(`wrong timeline value: ${refDesc.timeline}`);
+        }
+        ref.timeline = +refDesc.timeline;
         ref.key = refDesc.key;
         return ref;
     }
@@ -877,7 +885,7 @@ class SpriteTimelineKey extends SpatialTimelineKey {
         const returnKey:SpriteTimelineKey=this.clone();
         returnKey.info=linearSpatial(this.info,keyB.info,this.info.spin,t);
         if(!this.useDefaultPivot) {
-            //returnKey.pivot_x=linear(this.pivot_x,keyB.pivot_x,t); // todo is this really needed?
+            //returnKey.pivot_x=linear(this.pivot_x,keyB.pivot_x,t); // todo is this really needed? more tests!
             //returnKey.pivot_y=linear(this.pivot_y,keyB.pivot_y,t);
         }
         return returnKey;
@@ -889,7 +897,7 @@ const linear = (a:number,b:number,t:number) =>{
 };
 
 const linearSpatial = (infoA:SpatialInfo,infoB:SpatialInfo,spin:number,t:number):SpatialInfo=> {
-    const resultInfo:SpatialInfo = new SpatialInfo(); // todo
+    const resultInfo:SpatialInfo = SpatialInfo.objectPool.getFreeObject(true)!;
     resultInfo.x=linear(infoA.x,infoB.x,t);
     resultInfo.y=linear(infoA.y,infoB.y,t);
     resultInfo.angle=angleLinear(infoA.angle,infoB.angle,spin,t);

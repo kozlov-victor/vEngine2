@@ -150,9 +150,9 @@ export abstract class RenderableModel extends TransformableModel implements IRev
     public render():void {
         //if (this.isInViewPort()) return;
         if (!this.visible) return;
-        // todo global alpha composition
         if (this.alpha===0) return;
         const renderer:AbstractRenderer = this.game.getRenderer();
+        if (renderer.getAlphaBlend()===0) return;
 
         renderer.transformSave();
         renderer.saveAlphaBlend();
@@ -193,8 +193,7 @@ export abstract class RenderableModel extends TransformableModel implements IRev
 
         // if (this.rigidBody!==undefined) {
         //     this.rigidBody.update();
-        //     // todo
-        //     // this.pos.x = ~~(this.rigidBody.mCenter.x - this.rigidBody['mWidth']/2); // todo
+        //     // this.pos.x = ~~(this.rigidBody.mCenter.x - this.rigidBody['mWidth']/2);
         //     // this.pos.y = ~~(this.rigidBody.mCenter.y - this.rigidBody['mHeight']/2);
         //     this.angle = this.rigidBody.mAngle;
         // } else {

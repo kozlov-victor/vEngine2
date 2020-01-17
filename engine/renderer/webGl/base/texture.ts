@@ -135,6 +135,11 @@ export class Texture implements ITexture {
         return pixels;
     }
 
+    // public getDataUrl():string {
+    //     const blob = new Blob(this.getData(), 'image/png');
+    //     return window.URL.createObjectURL(blob);
+    // }
+
 
     public destroy():void{
         this.gl.deleteTexture(this.tex);
