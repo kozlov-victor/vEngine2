@@ -15,9 +15,9 @@ export abstract class AbstractPrimitive implements IPrimitive {
     public normalArr:Optional<number[]>;
     public texCoordArr:Optional<number[]>;
     public indexArr:Optional<number[]>;
-    public drawMethod:number;
+    public drawMethod:DRAW_METHOD;
 
-    constructor(){
+    protected constructor(){
     }
 
 }

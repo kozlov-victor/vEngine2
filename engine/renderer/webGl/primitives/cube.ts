@@ -136,8 +136,6 @@ const prepareBuffers = (size:number):IPrimitive=>{
 
 export class Cube extends AbstractPrimitive {
 
-    // todo normalize to format: https://www.npmjs.com/package/wavefront-obj-parser
-
     constructor(size:number = 10){
         super();
         const bufferArrs:IPrimitive = prepareBuffers(size);

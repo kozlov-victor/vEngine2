@@ -2,10 +2,9 @@ import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {Color} from "@engine/renderer/common/color";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Size} from "@engine/geometry/size";
 import {MathEx} from "@engine/misc/mathEx";
@@ -14,10 +13,8 @@ import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Rect} from "@engine/geometry/rect";
-import {Optional} from "@engine/core/declarations";
+import {Base64, Optional, URI} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
-import {mat4} from "@engine/geometry/mat4";
-import Mat16Holder = mat4.Mat16Holder;
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 
@@ -139,7 +136,7 @@ export class DomRenderer extends AbstractRenderer {
         this.nodes.kill(r.id);
     }
 
-    public createTexture(imgData:ArrayBuffer|string|HTMLImageElement, link:ResourceLink<ITexture>, onLoaded:()=>void):void {
+    public createTexture(imgData:ArrayBuffer|Base64|HTMLImageElement|URI, link:ResourceLink<ITexture>, onLoaded:()=>void):void {
         const img:HTMLImageElement = new globalThis.Image();
         img.src = link.getUrl();
         img.onload = ()=>{

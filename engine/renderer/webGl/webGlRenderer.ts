@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 import {FILL_TYPE, SHAPE_TYPE, ShapeDrawer} from "./programs/impl/base/shape/shapeDrawer";
 import {MatrixStack} from "./base/matrixStack";
-import {INTERPOLATION_MODE, Texture} from "./base/texture";
+import {Texture} from "./base/texture";
 import {Rect} from "../../geometry/rect";
 import {Game, SCALE_STRATEGY} from "../../core/game";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
@@ -21,13 +21,16 @@ import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {ITexture} from "@engine/renderer/common/texture";
 import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
-import {ClazzEx, IDestroyable, Optional} from "@engine/core/declarations";
+import {Base64, ClazzEx, IDestroyable, Optional, URI} from "@engine/core/declarations";
 import {TileMapDrawer} from "@engine/renderer/webGl/programs/impl/base/tileMap/tileMapDrawer";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {FLIP_TEXTURE_MATRIX, WebGlRendererHelper} from "@engine/renderer/webGl/webGlRendererHelper";
 import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
+import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
+import {ResourceUtil} from "@engine/resources/resourceUtil";
+import createImageFromData = ResourceUtil.createImageFromData;
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -400,14 +403,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public createTexture(imgData:ArrayBuffer|string|HTMLImageElement, link:ResourceLink<ITexture>, onLoad:()=>void):void{
-        this.createImageFromData(imgData,(bitmap:ImageBitmap|HTMLImageElement)=>{
+    public createTexture(imgData:ArrayBuffer|Base64|URI, link:ResourceLink<ITexture>, onLoad:()=>void):void{
+        createImageFromData(imgData,(bitmap:ImageBitmap|HTMLImageElement)=>{
             const texture:Texture = new Texture(this.gl);
             texture.setImage(bitmap);
             link.setTarget(texture);
             onLoad();
         });
-
     }
 
 
@@ -520,32 +522,5 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             sd.setUniform(sd.u_fillType,FILL_TYPE.COLOR);
         }
     }
-    // private beforeItemDraw(sp:RenderableModel & IFilterable):void{
-    //     if (sp.filters.length>0 || sp.blendMode!==BLEND_MODE.NORMAL) {
-    //         this.preprocessFrameBuffer.bind();
-    //         this.preprocessFrameBuffer.clear(BLACK);
-    //         this.blender.setBlendMode(BLEND_MODE.NORMAL);
-    //     } else {
-    //         this.finalFrameBuffer.bind();
-    //     }
-    // }
-    //
-    // private afterItemDraw():void{
-    //     if (filters.length>0 || blendMode!==BLEND_MODE.NORMAL) {
-    //
-    //         this.blender.setBlendMode(BLEND_MODE.NORMAL);
-    //         const filteredTexture:Texture = this.doubleFrameBuffer.applyFilters(this.preprocessFrameBuffer.getTexture(),filters);
-    //
-    //         this.blender.setBlendMode(blendMode);
-    //
-    //         this.finalFrameBuffer.bind();
-    //         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
-    //         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
-    //         this.simpleRectDrawer.attachTexture('texture',filteredTexture);
-    //         this.simpleRectDrawer.draw();
-    //
-    //         this.blender.setBlendMode(BLEND_MODE.NORMAL);
-    //     }
-    // }
 
 }

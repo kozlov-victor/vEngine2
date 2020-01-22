@@ -195,7 +195,6 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
         const name:string = normalizeUniformName(uniformData.name);
         const location:WebGLUniformLocation = gl.getUniformLocation(glProgram, name)!;
         if (DEBUG && location===null) {
-            // todo ie provide attrData.name but can not find location of unused attr
             console.log(program);
             throw new DebugError(`error finding uniform location: ${uniformData.name}`);
         }
