@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     }
 
 
-    public async onReady() {
+    public onReady() {
         const spr: Image = new Image(this.game);
         spr.setResourceLink(this.resourceLink);
         spr.pos.fromJSON({x: 10, y: 10});

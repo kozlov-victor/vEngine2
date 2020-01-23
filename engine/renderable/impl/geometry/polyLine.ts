@@ -7,6 +7,7 @@ import {Game} from "@engine/core/game";
 import {arcToBezier} from "@engine/renderable/impl/geometry/helpers/arcToBezier";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Optional} from "@engine/core/declarations";
+import {createSplinePathFromPoints} from "@engine/renderable/impl/geometry/helpers/splineFromPoints";
 
 
 const clearString = (s:string):string=>{
@@ -138,6 +139,7 @@ export class PolyLine extends Shape {
         });
         return polyLines;
     }
+
     public vectorScaleFactor:number = 1;
     public borderRadius:number = 1;
 
@@ -155,6 +157,7 @@ export class PolyLine extends Shape {
         super(game);
         this.lineWidth = 1;
     }
+
 
     public moveTo(x:number,y:number):void{
         if (DEBUG && this.lastPoint) throw new DebugError(`can not invoke moveTo: lineTo or moveTo already invoked`);
@@ -207,6 +210,10 @@ export class PolyLine extends Shape {
         for (let i:number=2;i<points.length;i+=2) {
             this.lineTo(points[i],points[i+1]);
         }
+    }
+
+    public splineFromPoints(game:Game,points:number[]):void{
+        this.fromSvgPath(createSplinePathFromPoints(points));
     }
 
 

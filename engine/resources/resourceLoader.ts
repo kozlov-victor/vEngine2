@@ -118,7 +118,9 @@ export class ResourceLoader {
         img.src = url;
         const taskRef:TaskRef = this.q.addTask(() => {
             this.game.getRenderer().createTexture(
-                img,link,() => this.q.resolveTask(taskRef)
+                img,link,() => {
+                    this.q.resolveTask(taskRef);
+                }
             );
         });
         return link;
