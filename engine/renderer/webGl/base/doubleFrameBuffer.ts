@@ -1,8 +1,9 @@
 // array of two frameBuffer for filters to apply
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
-import {INTERPOLATION_MODE, Texture} from "@engine/renderer/webGl/base/texture";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ISize} from "@engine/geometry/size";
+import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 
 export class DoubleFrameBuffer {
 

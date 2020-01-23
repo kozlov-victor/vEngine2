@@ -1,13 +1,14 @@
 import {DebugError} from "@engine/debug/debugError";
 
 
-import {INTERPOLATION_MODE, Texture} from "./texture";
+import {Texture} from "./texture";
 import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
-import {ISize, Size} from "@engine/geometry/size";
+import {ISize} from "@engine/geometry/size";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
+import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 
 
 export class FrameBuffer implements IRenderTarget {

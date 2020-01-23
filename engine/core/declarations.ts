@@ -9,12 +9,6 @@ import {Scene} from "@engine/scene/scene";
 export type Clazz<T> = new() => T;
 export type ClazzEx<T,U> = new(arg:U) => T;
 
-export interface IMouseEventEx extends MouseEvent {
-    id:number;
-    wheelDelta: number;
-    touches: any[];
-}
-
 export interface ICloneable<T> {
     clone():T;
 }
@@ -73,4 +67,6 @@ export interface IParentChild {
 type Brand<K,T> = K & {__brand: T};
 
 export type Int = Brand<number,'Int'>;
+export type Base64 = Brand<string,'Base64'>;
+export type URI = Brand<string,'URI'>;
 export declare type Optional<T> = T | undefined;

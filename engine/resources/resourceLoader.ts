@@ -3,7 +3,7 @@ import {Game} from "../core/game";
 import {Queue, TaskRef} from "./queue";
 import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ITexture} from "@engine/renderer/common/texture";
-import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
+import {Base64, URI} from "@engine/core/declarations";
 
 
 export class ResourceLoader {
@@ -19,8 +19,8 @@ export class ResourceLoader {
     }
 
     public loadImage(req: string|IURLRequest): ResourceLink<ITexture> {
-        if (ResourceLoader.canLoadResourceViaBLOB()) return this.loadImageViaBLOB(req);
-        else return this.loadImageViaDOM(req);
+        if (ResourceLoader.canLoadResourceViaBLOB()) return this.loadImageViaBLOB(req as (URI|Base64|IURLRequest));
+        else return this.loadImageViaDOM(req as (URI|Base64|IURLRequest));
     }
 
     public loadText(req: string|IURLRequest): ResourceLink<string> {
@@ -96,11 +96,11 @@ export class ResourceLoader {
         this.q.onResolved = fn;
     }
 
-    private loadImageViaBLOB(req: string|IURLRequest): ResourceLink<ITexture> {
+    private loadImageViaBLOB(req: URI|Base64|IURLRequest): ResourceLink<ITexture> {
         const loader:UrlLoader<ArrayBuffer> = this.createUrlLoader<ArrayBuffer>(req,'arraybuffer');
         const link: ResourceLink<ITexture> = new ResourceLink(loader.getUrl());
         loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
-        loader.onLoad = (buffer:ArrayBuffer|string)=>{
+        loader.onLoad = (buffer:ArrayBuffer)=>{
             this.game.getRenderer().createTexture(
                 buffer,link,() => this.q.resolveTask(taskRef)
             );
@@ -111,26 +111,23 @@ export class ResourceLoader {
         return link;
     }
 
-    private loadImageViaDOM(req: string|IURLRequest): ResourceLink<ITexture> {
-        const url:string = (req as IURLRequest).url || (req as string);
+    private loadImageViaDOM(req: URI|Base64|IURLRequest): ResourceLink<ITexture> {
+        const url:URI|Base64 = ((req as IURLRequest).url || req) as (URI|Base64);
         const link: ResourceLink<ITexture> = new ResourceLink(url);
-        const img:HTMLImageElement = new Image();
-        img.src = url;
         const taskRef:TaskRef = this.q.addTask(() => {
             this.game.getRenderer().createTexture(
-                img,link,() => {
-                    this.q.resolveTask(taskRef);
-                }
+                url,link,() => this.q.resolveTask(taskRef)
             );
         });
         return link;
     }
 
 
+
     private createUrlLoader<T extends string|ArrayBuffer>(req: string|IURLRequest,responseType:'arraybuffer'|'text' = 'text'):UrlLoader<T>{
         let iReq:IURLRequest;
         if ((req as string).substr!==undefined){
-            iReq = {url:req as string,responseType,method:'GET'};
+            iReq = {url:req as URI,responseType,method:'GET'};
         } else iReq = req as IURLRequest;
         return new UrlLoader(iReq);
     }

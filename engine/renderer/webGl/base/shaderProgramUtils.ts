@@ -146,7 +146,7 @@ const mapType = (gl:WebGLRenderingContext, type:number):string=> {
 
         for (let i:number = 0; i < typeNames.length; ++i) {
             const tn:string = typeNames[i];
-            GL_TABLE[(gl as unknown as IKeyVal<string>)[tn]] = (GL_TYPE as unknown as IKeyVal<string>)[tn]; //todo
+            GL_TABLE[(gl as unknown as IKeyVal<string>)[tn]] = (GL_TYPE as unknown as IKeyVal<string>)[tn];
         }
     }
 
@@ -195,7 +195,6 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
         const name:string = normalizeUniformName(uniformData.name);
         const location:WebGLUniformLocation = gl.getUniformLocation(glProgram, name)!;
         if (DEBUG && location===null) {
-            // todo ie provide attrData.name but can not find location of unused attr
             console.log(program);
             throw new DebugError(`error finding uniform location: ${uniformData.name}`);
         }
@@ -234,7 +233,6 @@ export const extractAttributes = (gl:WebGLRenderingContext, program:ShaderProgra
     return attrMap;
 };
 
-// todo remove to object module
 const isNumber = (val:UNIFORM_VALUE_TYPE):val is number=>{
     if (!DEBUG) return true;
     if (isNaN(parseFloat(String(val))) || !isFinite(Number(val)))
@@ -305,7 +303,7 @@ const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
             case GL_TYPE.INT_VEC4: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
                 if (isArrayOfType(value,isInteger,4)) gl.uniform4i(location, value[0], value[1], value[2], value[3]);
             };
-            case GL_TYPE.BOOL:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> { // todo ?
+            case GL_TYPE.BOOL:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
                 if (isBoolean(value)) gl.uniform1i(location, value?1:0);
             };
             case GL_TYPE.BOOL_VEC2: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {

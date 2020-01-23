@@ -9,16 +9,14 @@ import {Image} from "@engine/renderable/impl/general/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ITexture} from "@engine/renderer/common/texture";
-import {TileMap} from "@engine/renderable/impl/general/tileMap";
-import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {Optional} from "@engine/core/declarations";
+import {Base64, URI} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
-import {mat4} from "@engine/geometry/mat4";
-import Mat16Holder = mat4.Mat16Holder;
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
+import {ResourceUtil} from "@engine/resources/resourceUtil";
+import createImageFromData = ResourceUtil.createImageFromData;
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -190,9 +188,9 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public createTexture(imgData:ArrayBuffer|string, link:ResourceLink<ITexture>, onLoad:()=>void){
+    public createTexture(imgData:ArrayBuffer|Base64|URI, link:ResourceLink<ITexture>, onLoad:()=>void){
 
-        this.createImageFromData(imgData,(bitmap:ImageBitmap|HTMLImageElement)=>{
+        createImageFromData(imgData,(bitmap:ImageBitmap|HTMLImageElement)=>{
             const c:HTMLCanvasElement = document.createElement('canvas');
             c.setAttribute('width',bitmap.width.toString());
             c.setAttribute('height',bitmap.height.toString());

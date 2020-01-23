@@ -10,7 +10,6 @@ import {LightSet} from "@engine/light/lightSet";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Optional} from "@engine/core/declarations";
-import {ISize} from "@engine/geometry/size";
 
 
 export class LightFilter extends AbstractGlFilter {

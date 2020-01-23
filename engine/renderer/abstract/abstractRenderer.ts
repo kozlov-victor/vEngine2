@@ -13,7 +13,7 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/common/texture";
-import {IDestroyable, Optional} from "@engine/core/declarations";
+import {Base64, IDestroyable, Optional, URI} from "@engine/core/declarations";
 import {AlphaBlendStack} from "@engine/renderer/common/alphaBlendStack";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
@@ -215,7 +215,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         return this.rendererHelper;
     }
 
-    public abstract createTexture(imgData:ArrayBuffer|string|HTMLImageElement, link:ResourceLink<ITexture>, onLoaded:()=>void):void;
+    public abstract createTexture(imgData:ArrayBuffer|Base64|URI, link:ResourceLink<ITexture>, onLoaded:()=>void):void;
 
 
     protected registerResize():void {
@@ -239,7 +239,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
             container.style.width = `${innerWidth}px`;
             container.style.height = `${innerHeight}px`;
-            this.game.screenSize.setXY(innerWidth,innerHeight);
+            this.game.screenSize.setWH(innerWidth,innerHeight);
             this.game.scale.setXY(innerWidth/this.game.size.width,innerHeight/this.game.size.height);
             this.game.pos.setXY(0);
             return;
@@ -266,7 +266,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         this.container.style.width = width + 'px';
         this.container.style.height = height + 'px';
         this.container.style.marginTop = `${this.game.pos.y}px`;
-        this.game.screenSize.setXY(width,height);
+        this.game.screenSize.setWH(width,height);
     }
 
     private getScreenResolution():[number,number]{

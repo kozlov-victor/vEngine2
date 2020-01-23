@@ -42,4 +42,3 @@ interface Window {
 }
 
 declare const MACRO_GL_COMPRESS:(arg:TemplateStringsArray)=>string;
-

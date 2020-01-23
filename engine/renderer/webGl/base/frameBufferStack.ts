@@ -1,22 +1,21 @@
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {ISize} from "@engine/geometry/size";
 import {IDestroyable} from "@engine/core/declarations";
-import {INTERPOLATION_MODE, Texture} from "@engine/renderer/webGl/base/texture";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Color} from "@engine/renderer/common/color";
 import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
-import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {mat4} from "@engine/geometry/mat4";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
 import {Game} from "@engine/core/game";
 import {FLIP_TEXTURE_MATRIX, makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
-import IDENTITY = mat4.IDENTITY;
-import Mat16Holder = mat4.Mat16Holder;
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/common/texture";
-import {IFilter} from "@engine/renderer/common/ifilter";
+import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
+import IDENTITY = mat4.IDENTITY;
+import Mat16Holder = mat4.Mat16Holder;
 
 interface IStackItem {
     frameBuffer:FrameBuffer;
@@ -156,8 +155,8 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     }
 
     public renderToScreen():void{
-        const w:number = this._pixelPerfectMode?this.game.screenSize.x:this.game.size.width;
-        const h:number = this._pixelPerfectMode?this.game.screenSize.y:this.game.size.height;
+        const w:number = this._pixelPerfectMode?this.game.screenSize.width:this.game.size.width;
+        const h:number = this._pixelPerfectMode?this.game.screenSize.height:this.game.size.height;
         this._getLast().frameBuffer.unbind();
         this.gl.viewport(0, 0, w,h);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);

@@ -11,7 +11,6 @@ import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractD
 import {Color} from "@engine/renderer/common/color";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {FastMap} from "@engine/misc/collection/fastMap";
-import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/texture";
 import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
 import {ISize} from "@engine/geometry/size";
 import IDENTITY = mat4.IDENTITY;

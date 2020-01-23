@@ -34,9 +34,7 @@ export class Camera {
     private directionCorrection:DIRECTION_CORRECTION;
 
     private _rect:Rect = new Rect();
-    private _rectIdentity:Rect = new Rect();
-    private _rectScaled:Rect = new Rect();
-    private cameraShakeTween:Optional<Tween<ICameraTweenTarget>>; // todo too complex!
+    private cameraShakeTween:Optional<Tween<ICameraTweenTarget>>;
     private cameraPosCorrection:{current:Point2d,max:Point2d} = {
         current: new Point2d(),
         max: new Point2d()
