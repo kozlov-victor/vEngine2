@@ -1,51 +1,69 @@
 import {Base64, URI} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
+import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
+import {Queue, TaskRef} from "@engine/resources/queue";
 
 export namespace ResourceUtil {
 
-    export const createImageFromData = (
-        imageData:ArrayBuffer|Base64|URI,
-        onCreated:(img:ImageBitmap|HTMLImageElement)=>void
-    )=> {
+    const loadArrayBuffer = (req: string|IURLRequest,q:Queue,taskRef:TaskRef):Promise<ArrayBuffer>=>{
+        return new Promise<ArrayBuffer>((resolve,reject)=>{
+            let iReq:IURLRequest;
+            if ((req as string).substr!==undefined){
+                iReq = {url:req as string,responseType:'arraybuffer',method:'GET'};
+            } else iReq = req as IURLRequest;
+            const loader:UrlLoader<ArrayBuffer> = new UrlLoader(iReq);
+            loader.onProgress = (n:number)=>q.progressTask(taskRef,n);
+            loader.onLoad = (buffer:ArrayBuffer)=>{
+                resolve(buffer);
+            };
+            loader.onError = (e:Event|string)=>{
+                reject(e);
+            };
+            loader.load();
+        });
+    };
 
-        let imgUrl: string;
-        let imgBlob: Blob;
-        const isBase64: boolean = !!((imageData as string).substr) && ((imageData as string).indexOf('data:image/') === 0);
-        const isURI = !isBase64 && !!((imageData as string).substr);
+    const createBitmapFromBlob = (imgBlob:Blob):Promise<ImageBitmap>=>{
+        const p = globalThis.createImageBitmap(imgBlob!);
+        p.catch((e: string) => {
+            console.error(e);
+            if (DEBUG) {
+                setTimeout(() => {
+                    throw new DebugError(e);
+                }, 1);
+            }
+        });
+        return p;
+    };
 
-        if (isURI || isBase64) {
-            imgUrl = imageData as string;
-        } else {
-            const arrayBufferView: Uint8Array = new Uint8Array(imageData as ArrayBuffer);
-            imgBlob = new Blob([arrayBufferView], {type: "image/png"}); // todo
-            const urlCreator: any = window.URL;
-            imgUrl = urlCreator.createObjectURL(imgBlob);
-        }
-
-        if (globalThis.createImageBitmap && !isBase64 && !isURI) {
-            globalThis.createImageBitmap(imgBlob!).then((bitmap: ImageBitmap) => {
-                onCreated(bitmap);
-            }).catch((e: any) => {
-                console.error(e);
-                if (DEBUG) {
-                    setTimeout(() => {
-                        throw new DebugError(e);
-                    }, 1);
-                }
-            });
-        } else {
+    const createHTMLImageFromUrl = (imgUrl:string):Promise<HTMLImageElement>=>{
+        return new Promise<HTMLImageElement>((resolve,reject)=>{
             const img: HTMLImageElement = new (window as any).Image() as HTMLImageElement;
             img.src = imgUrl;
             img.onload = () => {
-                onCreated(img);
+                resolve(img);
             };
             if (DEBUG) {
-                img.onerror = () => {
-                    console.error(imageData);
-                    throw new DebugError(`can not create image. Bad url data: ${img.src}`);
+                img.onerror = (e:any) => {
+                    console.error(e);
+                    const msg:string = DEBUG?`can not create image. Bad url data: ${imgUrl}`:imgUrl;
+                    reject(msg);
                 };
             }
-        }
+        });
+    };
+
+    export const createImageFromData = async (imageData:Base64|URI|IURLRequest, q:Queue,taskRef:TaskRef):Promise<ImageBitmap|HTMLImageElement>=> {
+
+        const isBase64: boolean = (imageData as string).substr!==undefined && (imageData as string).indexOf('data:image/') === 0;
+
+        if (isBase64) return await createHTMLImageFromUrl(imageData as string);
+        if (globalThis.createImageBitmap===undefined) return await createHTMLImageFromUrl(imageData as string);
+
+        const arrayBuffer: ArrayBuffer = await loadArrayBuffer(imageData as (URI|IURLRequest),q,taskRef);
+        const arrayBufferView: Uint8Array = new Uint8Array(arrayBuffer);
+        const imgBlob: Blob = new Blob([arrayBufferView]);
+        return await createBitmapFromBlob(imgBlob);
 
     };
 }

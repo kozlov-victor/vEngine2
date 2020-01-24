@@ -82,11 +82,11 @@ export class CubeTexture extends AbstractTexture {
         const faceInfos: IFaceInfo[] = [
             {
                 target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-                img: right,
+                img: left,
             },
             {
                 target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-                img: left,
+                img: right,
             },
             {
                 target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y,

@@ -403,13 +403,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public createTexture(imgData:ArrayBuffer|Base64|URI, link:ResourceLink<ITexture>, onLoad:()=>void):void{
-        createImageFromData(imgData,(bitmap:ImageBitmap|HTMLImageElement)=>{
-            const texture:Texture = new Texture(this.gl);
-            texture.setImage(bitmap);
-            link.setTarget(texture);
-            onLoad();
-        });
+    public createTexture(bitmap:ImageBitmap|HTMLImageElement):ITexture{
+        const texture:Texture = new Texture(this.gl);
+        texture.setImage(bitmap);
+        return texture;
     }
 
 
