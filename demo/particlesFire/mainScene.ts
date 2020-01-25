@@ -63,6 +63,7 @@ export class MainScene extends Scene {
         this.appendChild(ps);
         this.on(MOUSE_EVENTS.click,()=>{
             this.game.getRenderer().requestFullScreen();
+            if (window.external && (window.external as any).V_ENGINE_NAVIGATOR) (window.external as any).GoFullscreen(true);
         });
         this.on(MOUSE_EVENTS.mouseMove,(e)=>{
             ps.emissionPosition.setXY(e.screenX - animatedImage.size.width/2,e.screenY-animatedImage.size.height/2);

@@ -11,12 +11,9 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {Base64, URI} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
-import {ResourceUtil} from "@engine/resources/resourceUtil";
-import createImageFromData = ResourceUtil.createImageFromData;
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -188,20 +185,14 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public createTexture(imgData:ArrayBuffer|Base64|URI, link:ResourceLink<ITexture>, onLoad:()=>void){
-
-        createImageFromData(imgData,(bitmap:ImageBitmap|HTMLImageElement)=>{
-            const c:HTMLCanvasElement = document.createElement('canvas');
-            c.setAttribute('width',bitmap.width.toString());
-            c.setAttribute('height',bitmap.height.toString());
-            const ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
-            ctx.drawImage(bitmap,0,0);
-            const size:Size = new Size(bitmap.width,bitmap.height);
-            const texture:ICanvasTexture = {size,source:c};
-            link.setTarget(texture);
-            onLoad();
-        });
-
+    public createTexture(bitmap:HTMLImageElement|ImageBitmap){
+        const c:HTMLCanvasElement = document.createElement('canvas');
+        c.setAttribute('width',bitmap.width.toString());
+        c.setAttribute('height',bitmap.height.toString());
+        const ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
+        ctx.drawImage(bitmap,0,0);
+        const size:Size = new Size(bitmap.width,bitmap.height);
+        return {size,source:c};
     }
 
     public drawLine(line: Line): void {

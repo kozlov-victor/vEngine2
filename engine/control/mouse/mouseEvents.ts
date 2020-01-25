@@ -10,5 +10,6 @@ export enum MOUSE_EVENTS  {
     doubleClick     =   'doubleClick',
     scroll          =   'scroll',
     dragStart       =   'dragStart',
+    dragMove        =   'dragMove',
     dragStop        =   'dragStop',
 }

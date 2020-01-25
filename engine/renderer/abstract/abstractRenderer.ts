@@ -17,7 +17,6 @@ import {Base64, IDestroyable, Optional, URI} from "@engine/core/declarations";
 import {AlphaBlendStack} from "@engine/renderer/common/alphaBlendStack";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
-import {mat4} from "@engine/geometry/mat4";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
 
@@ -67,12 +66,12 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     public requestFullScreen():void {
         const element:IHTMLElement = this.container as IHTMLElement;
-        if((element).requestFullScreen) {
-            (element).requestFullScreen();
-        } else if((element).mozRequestFullScreen) {
-            (element).mozRequestFullScreen();
-        } else if((element).webkitRequestFullScreen) {
-            (element).webkitRequestFullScreen();
+        if(element.requestFullScreen) {
+            element.requestFullScreen();
+        } else if(element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        } else if(element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen();
         }
     }
 
@@ -216,7 +215,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         return this.rendererHelper;
     }
 
-    public abstract createTexture(imgData:ArrayBuffer|Base64|URI, link:ResourceLink<ITexture>, onLoaded:()=>void):void;
+    public abstract createTexture(bitmap:ImageBitmap|HTMLImageElement):ITexture;
 
 
     protected registerResize():void {

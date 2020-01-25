@@ -77,6 +77,8 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
                     delete this.points[pointId];
                     return;
                 }
+            } else {
+                gameObject.trigger(MOUSE_EVENTS.dragMove,point);
             }
             let x:number,y:number;
             if (gameObject.getLayer().transformType===LayerTransformType.TRANSFORM) {

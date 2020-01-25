@@ -40,9 +40,9 @@ export class DropShadowFilter  extends AbstractGlFilter{
             #define MAX_DISTANCE ${this.dist.toFixed(7)}
             #define MAX_ANGLE ${(1 / this.quality / this.dist).toFixed(7)}
             vec2 px = vec2(pixelWidth, pixelHeight);
-            
+
             void main(void){
-                
+
                 float totalAlpha = 0.;
                 vec4 curColor;
                 float cosAngle;
@@ -53,7 +53,7 @@ export class DropShadowFilter  extends AbstractGlFilter{
                    sinAngle = sin(angle);
                    for (float curDistance = 1.; curDistance <= MAX_DISTANCE; curDistance++) {
                        vec2 texCoord = vec2(v_texCoord.x - shift.x +cosAngle * curDistance * px.x, v_texCoord.y - shift.y + sinAngle * curDistance * px.y);
-                       if (texCoord.x<0. || texCoord.y<0. || texCoord.x>1. || texCoord.y>1.) discard; 
+                       if (texCoord.x<0. || texCoord.y<0. || texCoord.x>1. || texCoord.y>1.) discard;
                        curColor = texture2D(texture,texCoord);
                        totalAlpha += curColor.a * curDistance/MAX_DISTANCE; // * force;
                        cnt++;
@@ -61,11 +61,11 @@ export class DropShadowFilter  extends AbstractGlFilter{
                 }
                 totalAlpha/=float(cnt);
                 totalAlpha = clamp(totalAlpha,0.,1.);
-               
-                
+
+
                 vec4 sampleShadow = color*totalAlpha;
                 vec4 sampleOrig = texture2D(texture, v_texCoord);
-    
+
                 //result = src.rgb+dst.rgb(1-src.a)
                 //result.a = src.a+dst.a(1-src.a)
                 gl_FragColor.rgb = sampleOrig.rgb + sampleShadow.rgb*(1.0-sampleOrig.a);
