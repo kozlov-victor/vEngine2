@@ -12,7 +12,7 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         for (let i:number = 0;i<6;i++) {
-            this.resourceLinks[i] = this.resourceLoader.loadImage(`./multiImageAnim/character/ninja_right_${i+1}.png`);
+            this.resourceLinks[i] = this.resourceLoader.loadTexture(`./multiImageAnim/character/ninja_right_${i+1}.png`);
         }
         console.log('on preloading');
     }

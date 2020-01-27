@@ -19,18 +19,17 @@ import {mat4} from "@engine/geometry/mat4";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {ITexture} from "@engine/renderer/common/texture";
+import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
-import {Base64, ClazzEx, IDestroyable, Optional, URI} from "@engine/core/declarations";
+import {ClazzEx, IDestroyable, Optional} from "@engine/core/declarations";
 import {TileMapDrawer} from "@engine/renderer/webGl/programs/impl/base/tileMap/tileMapDrawer";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {FLIP_TEXTURE_MATRIX, WebGlRendererHelper} from "@engine/renderer/webGl/webGlRendererHelper";
 import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
+import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
+import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
-import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
-import {ResourceUtil} from "@engine/resources/resourceUtil";
-import createImageFromData = ResourceUtil.createImageFromData;
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -118,6 +117,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private tileMapDrawerHolder:InstanceHolder<TileMapDrawer> = new InstanceHolder(TileMapDrawer);
 
     private nullTexture:Texture;
+    private nullCubeMapTexture:CubeMapTexture;
 
     private origFrameBufferStack:FrameBufferStack;
     private currFrameBufferStack:FrameBufferStack;
@@ -229,6 +229,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setHeightMapTextureUsed(isHeightMapTextureUsed);
         md.attachTexture('u_heightMapTexture',isHeightMapTextureUsed?mesh.heightMapTexture as Texture:this.nullTexture);
         md.setHeightMapFactor(mesh.heightMapFactor);
+
+        const isCubeMapTextureUsed:boolean = mesh.cubeMapTexture!==undefined;
+        if (DEBUG && !isCubeMapTextureUsed && mesh.reflectivity!==0) throw new DebugError(`can not apply reflectivity without cubeMapTexture`);
+        md.setCubeMapTextureUsed(isCubeMapTextureUsed);
+        md.setReflectivity(mesh.reflectivity);
+        md.attachTexture('u_cubeMapTexture',isCubeMapTextureUsed?mesh.cubeMapTexture as CubeMapTexture:this.nullCubeMapTexture);
 
         md.setLightUsed(mesh.isLightAccepted()||false);
         md.setColor(mesh.fillColor);
@@ -409,6 +415,20 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return texture;
     }
 
+    public createCubeTexture(
+        imgLeft:ImageBitmap|HTMLImageElement,
+        imgRight:ImageBitmap|HTMLImageElement,
+        imgTop:ImageBitmap|HTMLImageElement,
+        imgBottom:ImageBitmap|HTMLImageElement,
+        imgFront:ImageBitmap|HTMLImageElement,
+        imgBack:ImageBitmap|HTMLImageElement
+    ): ICubeMapTexture {
+
+        const cubeTexture:CubeMapTexture = new CubeMapTexture(this.gl);
+        cubeTexture.setImages(imgLeft,imgRight,imgTop,imgBottom,imgFront,imgBack);
+        return cubeTexture;
+    }
+
 
     public getNativeContext():WebGLRenderingContext {
         return this.gl;
@@ -426,6 +446,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         super.destroy();
         this.origFrameBufferStack.destroy();
         this.nullTexture.destroy();
+        this.nullCubeMapTexture.destroy();
         this.shapeDrawerHolder.destroy();
         this.meshDrawerHolder.destroy();
         this.tileMapDrawerHolder.destroy();
@@ -449,6 +470,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.gl = gl;
 
         this.nullTexture = new Texture(gl);
+        this.nullCubeMapTexture = new CubeMapTexture(gl);
+        this.nullCubeMapTexture.setAsZero();
         this.blender = Blender.getSingleton(gl);
         this.blender.enable();
         this.blender.setBlendMode(BLEND_MODE.NORMAL);

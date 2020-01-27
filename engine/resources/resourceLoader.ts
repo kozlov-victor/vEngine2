@@ -2,7 +2,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "../core/game";
 import {Queue, TaskRef} from "./queue";
 import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
-import {ITexture} from "@engine/renderer/common/texture";
+import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
 import createImageFromData = ResourceUtil.createImageFromData;
@@ -24,11 +24,31 @@ export class ResourceLoader {
         this.game = game;
     }
 
-    public loadImage(req: string|IURLRequest): ResourceLink<ITexture> {
+    public loadTexture(req: string|IURLRequest): ResourceLink<ITexture> {
         const link: ResourceLink<ITexture> = new ResourceLink(req as string);
         const taskRef:TaskRef = this.q.addTask(async () => {
             const img:HTMLImageElement|ImageBitmap = await createImageFromData(req as (URI|Base64|IURLRequest),this.q,taskRef);
             const texture:ITexture = this.game.getRenderer().createTexture(img);
+            link.setTarget(texture);
+            this.q.resolveTask(taskRef);
+        });
+        return link;
+    }
+
+    public loadCubeTexture(
+        leftSide: string|IURLRequest, rightSide:string|IURLRequest,
+        topSide: string|IURLRequest, bottomSide:string|IURLRequest,
+        frontSide: string|IURLRequest, backSide:string|IURLRequest,
+    ): ResourceLink<ICubeMapTexture> {
+        const link: ResourceLink<ICubeMapTexture> = new ResourceLink('');
+        const taskRef:TaskRef = this.q.addTask(async () => {
+            const imgLeft:HTMLImageElement|ImageBitmap = await createImageFromData(leftSide as (URI|Base64|IURLRequest),this.q,taskRef);
+            const imgRight:HTMLImageElement|ImageBitmap = await createImageFromData(rightSide as (URI|Base64|IURLRequest),this.q,taskRef);
+            const imgTop:HTMLImageElement|ImageBitmap = await createImageFromData(topSide as (URI|Base64|IURLRequest),this.q,taskRef);
+            const imgBottom:HTMLImageElement|ImageBitmap = await createImageFromData(bottomSide as (URI|Base64|IURLRequest),this.q,taskRef);
+            const imgFront:HTMLImageElement|ImageBitmap = await createImageFromData(frontSide as (URI|Base64|IURLRequest),this.q,taskRef);
+            const imgBack:HTMLImageElement|ImageBitmap = await createImageFromData(backSide as (URI|Base64|IURLRequest),this.q,taskRef);
+            const texture:ICubeMapTexture = this.game.getRenderer().createCubeTexture(imgLeft,imgRight,imgTop,imgBottom,imgFront,imgBack);
             link.setTarget(texture);
             this.q.resolveTask(taskRef);
         });

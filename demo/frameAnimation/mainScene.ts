@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private resourceLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.resourceLink = this.resourceLoader.loadImage('./assets/character.png');
+        this.resourceLink = this.resourceLoader.loadTexture('./assets/character.png');
         console.log('on preloading');
     }
 

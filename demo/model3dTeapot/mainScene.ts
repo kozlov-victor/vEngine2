@@ -25,7 +25,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./model3d/Texture-67.jpg');
+        this.logoLink = this.resourceLoader.loadTexture('./model3d/Texture-67.jpg');
     }
 
 

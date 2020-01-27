@@ -31,7 +31,7 @@ export abstract class AbstractAppScene extends Scene {
 
         this.getSceneElement().getElementsByTagName('image').forEach((el:Element)=>{
             this.links[el.attributes.src] =
-                this.resourceLoader.loadImage({
+                this.resourceLoader.loadTexture({
                     url:`./steamSeaBattle/${assetsFolder}/images/${el.attributes.src}${assetsPostfix}`,
                     responseType: 'arraybuffer',
                     jsonp
@@ -39,13 +39,13 @@ export abstract class AbstractAppScene extends Scene {
         });
         this.getSceneElement().getElementsByTagName('imageButton').forEach((el:Element)=>{
             this.links[el.attributes['src-on']] =
-                this.resourceLoader.loadImage({
+                this.resourceLoader.loadTexture({
                     url: `./steamSeaBattle/${assetsFolder}/images/${el.attributes['src-on']}${assetsPostfix}`,
                     responseType: 'arraybuffer',
                     jsonp
             });
             this.links[el.attributes['src-off']] =
-                this.resourceLoader.loadImage({
+                this.resourceLoader.loadTexture({
                     url: `./steamSeaBattle/${assetsFolder}/images/${el.attributes['src-off']}${assetsPostfix}`,
                     responseType: 'arraybuffer',
                     jsonp

@@ -9,7 +9,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./model3dCubeTextured/logo.png');
+        this.logoLink = this.resourceLoader.loadTexture('./model3dCubeTextured/logo.png');
     }
 
 

@@ -14,6 +14,7 @@ uniform float u_heightMapFactor;
 
 varying vec2 v_texcoord;
 varying vec3 v_normal;
+varying vec4 v_position;
 
 void main() {
 
@@ -26,5 +27,6 @@ void main() {
         position = position + vec4(a_normal, 0) * bumpData.r * u_heightMapFactor;
     }
 
-    gl_Position = u_projectionMatrix * u_modelMatrix * position;
+    v_position = u_projectionMatrix * u_modelMatrix * position;
+    gl_Position = v_position;
 }

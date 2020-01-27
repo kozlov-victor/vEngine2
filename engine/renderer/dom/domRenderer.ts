@@ -1,22 +1,21 @@
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {ITexture} from "@engine/renderer/common/texture";
-import {Size} from "@engine/geometry/size";
+import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {MathEx} from "@engine/misc/mathEx";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Rect} from "@engine/geometry/rect";
-import {Base64, Optional, URI} from "@engine/core/declarations";
+import {Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
+import {DebugError} from "@engine/debug/debugError";
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
@@ -137,6 +136,18 @@ export class DomRenderer extends AbstractRenderer {
     }
 
     public createTexture(bitmap:ImageBitmap|HTMLImageElement):ITexture {
+        return undefined!;
+    }
+
+    public createCubeTexture(
+        imgLeft:ImageBitmap|HTMLImageElement,
+        imgRight:ImageBitmap|HTMLImageElement,
+        imgTop:ImageBitmap|HTMLImageElement,
+        imgBottom:ImageBitmap|HTMLImageElement,
+        imgFront:ImageBitmap|HTMLImageElement,
+        imgBack:ImageBitmap|HTMLImageElement
+    ): ICubeMapTexture {
+        if (DEBUG) throw new DebugError(`Cube texture is not supported by this renderer`);
         return undefined!;
     }
 

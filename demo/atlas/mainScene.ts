@@ -19,7 +19,7 @@ export class MainScene extends Scene {
     }
 
     public onPreloading() {
-        this.spriteLink = this.resourceLoader.loadImage("./atlas/player.png");
+        this.spriteLink = this.resourceLoader.loadTexture("./atlas/player.png");
         this.atlasLink = this.resourceLoader.loadText("./atlas/player.atlas");
     }
 

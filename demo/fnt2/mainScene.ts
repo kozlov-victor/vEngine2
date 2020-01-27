@@ -19,7 +19,7 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         this.fntResourceLink = this.resourceLoader.loadText('./fnt2/desyrel.xml');
-        this.sprResourceLink = this.resourceLoader.loadImage('./fnt2/desyrel.png');
+        this.sprResourceLink = this.resourceLoader.loadTexture('./fnt2/desyrel.png');
     }
 
 

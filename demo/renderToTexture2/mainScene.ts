@@ -17,8 +17,8 @@ export class MainScene extends Scene {
     private palletLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.plasmaLink = this.resourceLoader.loadImage('./plasma/Plasma_effect.jpg');
-        this.palletLink = this.resourceLoader.loadImage('./plasma/gradient.png');
+        this.plasmaLink = this.resourceLoader.loadTexture('./plasma/Plasma_effect.jpg');
+        this.palletLink = this.resourceLoader.loadTexture('./plasma/gradient.png');
     }
 
 

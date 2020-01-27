@@ -19,9 +19,9 @@ export class MainScene extends Scene {
     public onPreloading() {
         // https://free3d.com/ru/3d-models/obj
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj3/planet.obj');
-        this.dataTextureLink = this.resourceLoader.loadImage('./model3dFromObj3/earth.jpg');
-        this.dataTextureNormalLink = this.resourceLoader.loadImage('./model3dFromObj3/earth_normal.jpg');
-        this.dataTextureHeightLink = this.resourceLoader.loadImage('./model3dFromObj3/earth_height.jpg');
+        this.dataTextureLink = this.resourceLoader.loadTexture('./model3dFromObj3/earth.jpg');
+        this.dataTextureNormalLink = this.resourceLoader.loadTexture('./model3dFromObj3/earth_normal.jpg');
+        this.dataTextureHeightLink = this.resourceLoader.loadTexture('./model3dFromObj3/earth_height.jpg');
     }
 
 

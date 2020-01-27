@@ -12,8 +12,8 @@ import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ITexture} from "@engine/renderer/common/texture";
-import {Base64, IDestroyable, Optional, URI} from "@engine/core/declarations";
+import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
+import {IDestroyable, Optional} from "@engine/core/declarations";
 import {AlphaBlendStack} from "@engine/renderer/common/alphaBlendStack";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
@@ -216,6 +216,15 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     }
 
     public abstract createTexture(bitmap:ImageBitmap|HTMLImageElement):ITexture;
+
+    public abstract createCubeTexture(
+        imgLeft:ImageBitmap|HTMLImageElement,
+        imgRight:ImageBitmap|HTMLImageElement,
+        imgTop:ImageBitmap|HTMLImageElement,
+        imgBottom:ImageBitmap|HTMLImageElement,
+        imgFront:ImageBitmap|HTMLImageElement,
+        imgBack:ImageBitmap|HTMLImageElement
+    ):ICubeMapTexture;
 
 
     protected registerResize():void {

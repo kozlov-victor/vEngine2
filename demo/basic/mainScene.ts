@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
+        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;

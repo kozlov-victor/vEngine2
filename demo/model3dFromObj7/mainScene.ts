@@ -16,8 +16,8 @@ export class MainScene extends Scene {
     public onPreloading() {
         //https://www.reinerstilesets.de/graphics/3d-grafiken/3d-plants/
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj7/mushroom_tube_A.obj');
-        this.dataTextureLink = this.resourceLoader.loadImage('./model3dFromObj7/mushroom_tube_tex.png');
-        this.dataTextureNormalLink = this.resourceLoader.loadImage('./model3dFromObj7/mushroom_tube_NM.png');
+        this.dataTextureLink = this.resourceLoader.loadTexture('./model3dFromObj7/mushroom_tube_tex.png');
+        this.dataTextureNormalLink = this.resourceLoader.loadTexture('./model3dFromObj7/mushroom_tube_NM.png');
     }
 
 

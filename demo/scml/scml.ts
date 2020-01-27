@@ -969,7 +969,7 @@ export class SpriterObject extends RenderableModel {
                 for (const file of folder.files) {
                     urlRequest.url = `${baseUrl}/${file.name}`;
                     urlRequest.responseType = 'arraybuffer';
-                    this.resourceLinks[file.name] = resourceLoader.loadImage({...urlRequest});
+                    this.resourceLinks[file.name] = resourceLoader.loadTexture({...urlRequest});
                 }
             }
         });

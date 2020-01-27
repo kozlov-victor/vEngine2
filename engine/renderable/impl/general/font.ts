@@ -48,9 +48,9 @@ namespace FontFactory {
         document.body.removeChild(parent);
         return height;
     };
-    
+
     export const getFontContext = (arrFromTo:IRange[], strFont:string, w:number):IFontContext=> {
-        
+
         const cnv:HTMLCanvasElement = document.createElement('canvas');
         const ctx:CanvasRenderingContext2D = getCtx(cnv);
         ctx.font = strFont;
@@ -129,7 +129,7 @@ namespace FontFactory {
         correctColor(cnv,color);
         return cnv.toDataURL();
     };
-    
+
 }
 
 
@@ -143,7 +143,7 @@ export class Font implements IResource<ITexture>, IRevalidatable {
         f.fontSize = 12;
         f.createContext();
         const resourceLoader:ResourceLoader = new ResourceLoader(Game.getInstance());
-        const link:ResourceLink<ITexture> = resourceLoader.loadImage(f.createBitmap());
+        const link:ResourceLink<ITexture> = resourceLoader.loadTexture(f.createBitmap());
         resourceLoader.startLoading();
         f.setResourceLink(link);
         Font._systemFontInstance = f;
@@ -174,7 +174,7 @@ export class Font implements IResource<ITexture>, IRevalidatable {
     public generate(){
         this.createContext();
         const base64:string = this.createBitmap();
-        const link:ResourceLink<ITexture> = this.game.getCurrScene().resourceLoader.loadImage(base64);
+        const link:ResourceLink<ITexture> = this.game.getCurrScene().resourceLoader.loadTexture(base64);
         this.setResourceLink(link);
     }
 

@@ -134,7 +134,7 @@ export const GL_TYPE = {
     FLOAT_MAT4: 'mat4',
 
     SAMPLER_2D: 'sampler2D',
-    //SAMPLER_CUBE: 'samplerCube',
+    SAMPLER_CUBE: 'samplerCube',
 };
 
 const mapType = (gl:WebGLRenderingContext, type:number):string=> {
@@ -327,6 +327,9 @@ const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
             case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
                 if (isNumber(value)) gl.uniform1i(location, value);
             };
+            case GL_TYPE.SAMPLER_CUBE:return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isNumber(value)) gl.uniform1i(location, value);
+            };
             default:
                 if (DEBUG) throw new DebugError(`can not set uniform for type ${type} and size ${size}`);
                 break;
@@ -374,6 +377,9 @@ const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
                 if (isArrayOfType(value,isBoolean,size*4)) gl.uniform4iv(location, value);
             };
             case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
+                if (isArrayOfType(value,isInteger,size)) gl.uniform1iv(location, value);
+            };
+            case GL_TYPE.SAMPLER_CUBE:return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
                 if (isArrayOfType(value,isInteger,size)) gl.uniform1iv(location, value);
             };
             default:

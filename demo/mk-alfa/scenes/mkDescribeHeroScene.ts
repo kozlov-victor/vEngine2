@@ -43,7 +43,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
             this.fnt.generate();
         });
 
-        this.logoLink = this.resourceLoader.loadImage('./mk-alfa/assets/images/mkLogo.png');
+        this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
         this.sndBtnLink = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn3.mp3');
 
         //for (let i:number = 0;i<100;i++) { fakeLongLoadingFn(this.resourceLoader); }

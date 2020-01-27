@@ -12,7 +12,7 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         const tileMap:TileMap = new TileMap(this.game);
-        tileMap.setResourceLink(this.resourceLoader.loadImage('./tileMap/tiles.png'));
+        tileMap.setResourceLink(this.resourceLoader.loadTexture('./tileMap/tiles.png'));
 
         const data:number[] = [
             1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,

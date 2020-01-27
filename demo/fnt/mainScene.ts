@@ -18,7 +18,7 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         this.fntResourceLink = this.resourceLoader.loadText('./fnt/font.fnt');
-        this.sprResourceLink = this.resourceLoader.loadImage('./fnt/font.png');
+        this.sprResourceLink = this.resourceLoader.loadTexture('./fnt/font.png');
 
         const fnt:Font = new Font(this.game);
         fnt.fontSize = 50;

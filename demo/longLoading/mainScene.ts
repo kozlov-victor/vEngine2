@@ -23,7 +23,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
+        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
         for (let i:number = 0;i<100;i++) { fakeLongLoadingFn(this.resourceLoader); }
         const rect = new Rectangle(this.game);
         rect.borderRadius = 5;

@@ -15,7 +15,7 @@ export class MainScene extends Scene {
 
 
     public onPreloading() {
-        this.resourceLink = this.resourceLoader.loadImage('./particlesFire/fire-texture-atlas.jpg');
+        this.resourceLink = this.resourceLoader.loadTexture('./particlesFire/fire-texture-atlas.jpg');
     }
 
 

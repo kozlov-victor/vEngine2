@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/repeat.jpg');
+        this.logoLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
     }
 
 

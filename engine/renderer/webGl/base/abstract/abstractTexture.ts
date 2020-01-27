@@ -30,6 +30,8 @@ export abstract class AbstractTexture implements ITexture {
 
     public readonly size:Size = new Size(0,0);
 
+    protected abstract samplerType:GLenum;
+
     protected tex:WebGLTexture;
     protected destroyed:boolean = false;
 
@@ -43,6 +45,8 @@ export abstract class AbstractTexture implements ITexture {
             if (!AbstractTexture.MAX_TEXTURE_IMAGE_UNITS)
                 AbstractTexture.MAX_TEXTURE_IMAGE_UNITS =  gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
         }
+        this.tex = gl.createTexture() as WebGLTexture;
+        if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);
     }
 
     public bind(name:string,i:number,program:ShaderProgram):void { // uniform eq to 0 by default
@@ -64,7 +68,7 @@ export abstract class AbstractTexture implements ITexture {
         if (AbstractTexture.currentBindTextureAt[i]===this) return;
         const gl:WebGLRenderingContext = this.gl;
         gl.activeTexture(gl.TEXTURE0+i);
-        gl.bindTexture(gl.TEXTURE_2D, this.tex);
+        gl.bindTexture(this.samplerType, this.tex);
         AbstractTexture.currentBindTextureAt[i] = this;
     }
 
