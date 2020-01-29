@@ -24,10 +24,9 @@ export class CheckBox extends Container {
         const rChecked:Rectangle = new Rectangle(game);
         rChecked.fillColor = Color.NONE;
         rChecked.color = Color.NONE;
-        const polyLine:PolyLine = new PolyLine(this.game);
+        const polyLine:PolyLine = PolyLine.fromSvgPath(this.game,'M14.1 27.2l7.1 7.2 16.7-16.8');
         polyLine.lineWidth = 6;
         polyLine.color = new Color(50,50,50);
-        polyLine.fromSvgPath('M14.1 27.2l7.1 7.2 16.7-16.8');
         rChecked.appendChild(polyLine);
 
         this.rNormal = rNormal;

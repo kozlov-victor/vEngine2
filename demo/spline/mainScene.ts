@@ -29,9 +29,8 @@ export class MainScene extends Scene {
         if (this.polyline!==undefined) {
             this.removeChild(this.polyline);
         }
-        this.polyline = new PolyLine(this.game);
-        this.polyline.lineWidth = 10;
-        this.polyline.splineFromPoints(this.game,this.points);
+        this.polyline = PolyLine.splineFromPoints(this.game,this.points);
+        this.polyline.lineWidth = 20;
         this.polyline.color.setRGB(12,122,22);
         this.prependChild(this.polyline);
     }

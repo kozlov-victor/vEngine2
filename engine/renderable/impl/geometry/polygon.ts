@@ -15,16 +15,39 @@ class PolygonPrimitive extends AbstractPrimitive {
 
 export class Polygon extends Mesh {
 
-    public static fromSvgPath(game:Game,path:string):Polygon[]{
+    public static fromMultiCurveSvgPath(game:Game,path:string):Polygon[]{
         const polygons:Polygon[] = [];
-        path.split(/z/gi).forEach((p:string)=>{
+        path.split('\n').join(' ').split(/(.*?z)/gi).forEach((p:string)=>{
             if (!p.trim()) return;
-            const polygon:Polygon = new Polygon(game);
-            polygon.fromSvgPath(p+ ' z');
+            const polygon:Polygon = Polygon.fromSvgPath(game,p+ ' z');
             polygons.push(polygon);
         });
         return polygons;
     }
+
+    public static createStar(game:Game,points:number, radius:number, innerRadius:number = radius / 2, rotation:number = 0):Polygon {
+        // according to https://github.com/pixijs/pixi.js/blob/873b65041bd3a5d173b0e0e10fa93be68bc033d9/packages/graphics/src/utils/Star.js
+        const startAngle:number = (-1 * Math.PI / 2) + rotation;
+        const len:number = points * 2;
+        const delta:number = Math.PI * 2 / len;
+        const vertices:number[] = [];
+
+        for (let i:number = 0; i < len; i++) {
+            const r:number = i % 2 ? innerRadius : radius;
+            const angle:number = (i * delta) + startAngle;
+
+            vertices.push(
+                (r * Math.cos(angle)),
+                (r * Math.sin(angle))
+            );
+        }
+
+        vertices.push(vertices[0],vertices[1]); // close path
+
+        const p:PolyLine = PolyLine.fromPoints(game,vertices);
+        return Polygon.fromPolyline(game,p);
+    }
+
 
     public readonly type:string = 'Polygon';
 
@@ -33,7 +56,7 @@ export class Polygon extends Mesh {
         this.vertexItemSize = 2;
     }
 
-    public fromPolyline(p:PolyLine):void {
+    public static fromPolyline(game:Game,p:PolyLine):Polygon {
         const vertices:number[] = [];
         p.children.forEach((l:RenderableModel)=>{
             vertices.push(l.pos.x,l.pos.y);
@@ -44,15 +67,16 @@ export class Polygon extends Mesh {
         for (const ind of triangulatedIndices) {
             triangulatedVertices.push(vertices[2*ind],vertices[2*ind+1]);
         }
-        this.setVertices(triangulatedVertices);
-        this.size.set(p.size);
+        const pg:Polygon = new Polygon(game);
+        pg.setVertices(triangulatedVertices);
+        pg.size.set(p.size);
+        return pg;
     }
 
-    public fromSvgPath(p:string):void {
-        const polyline:PolyLine = new PolyLine(this.game);
-        if (DEBUG && p.split(/z/gi).length-1>1) throw new DebugError(`multiple closing operation ('z') in one svg path. Use static method Polygon.fromSvgPath() instead`);
-        polyline.fromSvgPath(p);
-        this.fromPolyline(polyline);
+    public static fromSvgPath(game:Game,p:string):Polygon {
+        if (DEBUG && p.split(/z/gi).length-1>1) throw new DebugError(`multiple closing operation ('z') in one svg path. Use static method Polygon.fromMultiCurveSvgPath() instead`);
+        const polyline:PolyLine = PolyLine.fromSvgPath(game,p);
+        return Polygon.fromPolyline(game,polyline);
     }
 
     private setVertices(vertices:number[]):void {
@@ -60,10 +84,4 @@ export class Polygon extends Mesh {
         this.modelPrimitive.vertexArr = vertices;
     }
 
-}
-
-export abstract class StaticPolygon extends Polygon {
-
-    public fromPolyline:(p:never)=>never = undefined as never;
-    public fromSvgPath:(p:never)=>never = undefined as never;
 }

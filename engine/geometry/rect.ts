@@ -53,10 +53,6 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         this.setXYWH(x,y,width,height);
     }
 
-    public observe(onChangedFn:()=>void):void{
-        this.addOnChangeListener(onChangedFn);
-    }
-
     public setXYWH(x:number,y:number,width:number,height:number):Rect{
         if (
             DEBUG &&

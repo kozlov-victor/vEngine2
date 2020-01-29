@@ -129,19 +129,33 @@ class SvgTokenizer {
 
 export class PolyLine extends Shape {
 
-    public static fromSvgPath(game:Game,path:string):PolyLine[]{
+    public static fromMultiCurveSvgPath(game:Game,path:string):PolyLine[]{
         const polyLines:PolyLine[] = [];
-        path.split(/z/gi).forEach((p:string)=>{
+        path.split('\n').join(' ').split(/(.*?z)/gi).forEach((p:string)=>{
             if (!p.trim()) return;
-            const polyLine:PolyLine = new PolyLine(game);
-            polyLine.fromSvgPath(p+ ' z');
+            const polyLine:PolyLine = PolyLine.fromSvgPath(game,p);
             polyLines.push(polyLine);
         });
         return polyLines;
     }
 
-    public vectorScaleFactor:number = 1;
-    public borderRadius:number = 1;
+    public get lineWidth(){
+        return this._lineWidth;
+    }
+
+    public set lineWidth(val:number){
+        this._lineWidth = val;
+        this.passPropertiesChildren();
+    }
+
+    public set borderRadius(val:number){
+        this._borderRadius = val;
+        this.passPropertiesChildren();
+    }
+
+    public get borderRadius(){
+        return this._borderRadius;
+    }
 
     public children:Line[];
 
@@ -149,15 +163,56 @@ export class PolyLine extends Shape {
     private firstPoint:Optional<Point2d>;
 
     private tokenizer:SvgTokenizer;
-
+    private _lineWidth:number = 1;
+    private _borderRadius:number = 1;
 
     private lastBezierPoint:v2;
 
     constructor(protected game:Game){
         super(game);
-        this.lineWidth = 1;
+        this.color.addOnChangeListener(()=>this.passPropertiesChildren());
     }
 
+    public static fromPoints(game:Game,points:number[]|string):PolyLine{
+        if (typeof points === 'string') {
+            points = clearString(points).split(/[ |,]/).map((it:string)=>{
+                const n:number = parseFloat(it);
+                if (DEBUG && isNaN(n)) throw new DebugError(`can not parse vertex array ${points}: unexpected value ${it}`);
+                return n;
+            });
+        }
+        const pl:PolyLine = new PolyLine(game);
+        pl.moveTo(points[0],points[1]);
+        for (let i:number=2;i<points.length;i+=2) {
+            pl.lineTo(points[i],points[i+1]);
+        }
+        return pl;
+    }
+
+    // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
+    public static fromSvgPath(game:Game,path:string):PolyLine {
+        if (DEBUG && path.split(/z/gi).length-1>1) throw new DebugError(`multiple closing operation ('z') in one svg path. Use static method PolyLine.fromMultiCurveSvgPath() instead`);
+        const pl:PolyLine = new PolyLine(game);
+        pl.tokenizer = new SvgTokenizer(path);
+        let lastCommand:Optional<string>;
+        while (!pl.tokenizer.isEof()) {
+            const command:string = pl.tokenizer.getNextCommand();
+            //console.log({command});
+            if (isFinite(+command) && lastCommand) {
+                pl.tokenizer.releaseNextToken();
+                pl.executeCommand(lastCommand);
+            }
+            else {
+                pl.executeCommand(command);
+                lastCommand = command;
+            }
+        }
+        return pl;
+    }
+
+    public static splineFromPoints(game:Game,points:number[]):PolyLine{
+        return PolyLine.fromSvgPath(game,createSplinePathFromPoints(points));
+    }
 
     public moveTo(x:number,y:number):void{
         if (DEBUG && this.lastPoint) throw new DebugError(`can not invoke moveTo: lineTo or moveTo already invoked`);
@@ -186,34 +241,10 @@ export class PolyLine extends Shape {
         this.lineTo(lastX+x,lastY+y);
     }
 
-    public complete():void {
-        this.lastPoint = undefined;
-        this.firstPoint = undefined;
-    }
-
     public close(){
         if (DEBUG && !this.firstPoint) throw new DebugError(`can not close polyline: no first point defined`);
         this.lineTo(this!.firstPoint!.x,this!.firstPoint!.y);
         this.complete();
-    }
-
-
-    public fromPoints(points:number[]|string){
-        if (typeof points === 'string') {
-            points = clearString(points).split(/[ |,]/).map((it:string)=>{
-                const n:number = parseFloat(it);
-                if (DEBUG && isNaN(n)) throw new DebugError(`can not parse vertex array ${points}: unexpected value ${it}`);
-                return n;
-            });
-        }
-        this.moveTo(points[0],points[1]);
-        for (let i:number=2;i<points.length;i+=2) {
-            this.lineTo(points[i],points[i+1]);
-        }
-    }
-
-    public splineFromPoints(game:Game,points:number[]):void{
-        this.fromSvgPath(createSplinePathFromPoints(points));
     }
 
 
@@ -225,25 +256,6 @@ export class PolyLine extends Shape {
         });
     }
 
-    // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
-    public fromSvgPath(path:string){
-        if (DEBUG && path.split(/z/gi).length-1>1) throw new DebugError(`multiple closing operation ('z') in one svg path. Use static method PolyLine.fromSvgPath() instead`);
-        this.tokenizer = new SvgTokenizer(path);
-        let lastCommand:Optional<string>;
-        while (!this.tokenizer.isEof()) {
-            const command:string = this.tokenizer.getNextCommand();
-            //console.log({command});
-            if (isFinite(+command) && lastCommand) {
-                this.tokenizer.releaseNextToken();
-                this.executeCommand(lastCommand);
-            }
-            else {
-                this.executeCommand(command);
-                lastCommand = command;
-            }
-        }
-    }
-
     public clone(): PolyLine {
         const l:PolyLine = new PolyLine(this.game);
         this.setClonedProperties(l);
@@ -253,22 +265,30 @@ export class PolyLine extends Shape {
     public draw():void{}
 
     protected setClonedProperties(cloned:PolyLine):void{
-        cloned.vectorScaleFactor = this.vectorScaleFactor;
         super.setClonedProperties(cloned);
     }
 
-    private passProperties(l:Line){
-        l.vectorScaleFactor = this.vectorScaleFactor;
+    private complete():void {
+        this.lastPoint = undefined;
+        this.firstPoint = undefined;
+    }
+
+    private passPropertiesToChild(l:Line){
         l.borderRadius = this.borderRadius;
         l.color = this.color;
         l.fillColor = this.fillColor;
         l.lineWidth = this.lineWidth;
+        l.pointTo.forceTriggerChange();
+    }
+
+    private passPropertiesChildren(){
+        this.children.forEach(l=>this.passPropertiesToChild(l));
     }
 
 
     private addSegment(x:number,y:number,x1:number,y1:number){
         const line:Line = new Line(this.game);
-        this.passProperties(line);
+        this.passPropertiesToChild(line);
         line.setXYX1Y1(x,y,x1,y1);
         this.appendChild(line);
         let maxW:number = this.children[0].pos.x+this.children[0].size.width;
@@ -427,12 +447,7 @@ export class PolyLine extends Shape {
                         yTo = y;
                     }
                     this.bezierTo([this.lastPoint!.x,this.lastPoint!.y],[arc.x1,arc.y1],[arc.x2,arc.y2],[xTo,yTo]);
-                    // this.testPoint(arc.x,arc.y,1);
-                    // this.testPoint(arc.x1,arc.y1,2);
-                    // this.testPoint(arc.x2,arc.y2,3);
                 });
-                //this.lastPoint.setXY(x,y);
-                //this.testPoint(x,y,4);
 
                 break;
             case 'Z':

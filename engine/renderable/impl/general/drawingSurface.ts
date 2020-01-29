@@ -194,11 +194,10 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public drawPolyline(svgPath:string){
-        const p:PolyLine = new PolyLine(this.game);
+        const p:PolyLine = PolyLine.fromSvgPath(this.game,svgPath);
         p.fillColor = this.fillColor;
         p.color = this.drawColor;
         p.lineWidth = this.lineWidth;
-        p.fromSvgPath(svgPath);
         this.drawModel(p,false);
     }
 
@@ -219,11 +218,10 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     private drawPolygonFromSvgPath(svgPath:string) {
-        const polyLines:PolyLine[] = PolyLine.fromSvgPath(this.game,svgPath);
+        const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(this.game,svgPath);
         polyLines.forEach((pl:PolyLine)=>{
-            const pg:Polygon = new Polygon(this.game);
+            const pg:Polygon = Polygon.fromPolyline(this.game,pl);
             pg.fillColor = this.fillColor;
-            pg.fromPolyline(pl);
             this.drawModel(pg,false);
         });
         if (this.lineWidth>0) {
@@ -244,12 +242,10 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
         if (last!==next && prev!==first) vertices = [...vertices,first,next];
 
-        const pl:PolyLine = new PolyLine(this.game);
+        const pl:PolyLine = PolyLine.fromPoints(this.game,vertices);
         pl.color = this.drawColor;
-        pl.fromPoints(vertices);
-        const pg:Polygon = new Polygon(this.game);
+        const pg:Polygon = Polygon.fromPolyline(this.game,pl);
         pg.fillColor = this.fillColor;
-        pg.fromPolyline(pl);
         this.drawModel(pg,false);
         if (this.lineWidth>0) {
             pl.lineWidth = this.lineWidth;
