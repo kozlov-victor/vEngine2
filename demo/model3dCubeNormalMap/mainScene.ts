@@ -11,8 +11,8 @@ export class MainScene extends Scene {
     private normalsLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./model3dCubeNormalMap/wood.png');
-        this.normalsLink = this.resourceLoader.loadImage('./model3dCubeNormalMap/wood_normal.png');
+        this.logoLink = this.resourceLoader.loadTexture('./model3dCubeNormalMap/wood.png');
+        this.normalsLink = this.resourceLoader.loadTexture('./model3dCubeNormalMap/wood_normal.png');
     }
 
 

@@ -18,14 +18,14 @@ export class MainScene extends Scene {
     private img:Image;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
+        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
 
         const img = new Image(this.game);
-        img.setResourceLink(this.resourceLoader.loadImage('./assets/repeat.jpg'));
+        img.setResourceLink(this.resourceLoader.loadTexture('./assets/repeat.jpg'));
         this.img = img;
 
     }

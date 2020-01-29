@@ -5,13 +5,13 @@ import {BufferInfo} from "../../base/bufferInfo";
 import {IDrawer} from "../interface/iDrawer";
 import {DebugError} from "@engine/debug/debugError";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {FastMap} from "@engine/misc/collection/fastMap";
+import {AbstractTexture} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 
 
 interface ITextureInfo {
-    texture:Texture;
+    texture:AbstractTexture;
     uniformName:string;
 }
 
@@ -70,11 +70,11 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         }
     }
 
-    public attachTexture(uniformName:string,texture:Texture){
+    public attachTexture(uniformName:string,texture:AbstractTexture){
         this.texturesToBind.texturesInfo[this.texturesToBind.length++] = {uniformName,texture};
     }
 
-    public getAttachedTextureAt(i:number):Texture {
+    public getAttachedTextureAt(i:number):AbstractTexture {
         if (DEBUG && i>this.texturesToBind.length-1) throw new DebugError(`can not find bound texture: out of range: index:${i}, length:${this.texturesToBind.length}`);
         return this.texturesToBind.texturesInfo[i].texture;
     }

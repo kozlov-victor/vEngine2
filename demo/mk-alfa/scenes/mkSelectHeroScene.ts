@@ -53,9 +53,9 @@ class TabStrip {
     }
 
     public preload(){
-        this.emptyResourceLink = this.game.getCurrScene().resourceLoader.loadImage('./mk-alfa/assets/images/heroes/empty.jpg');
+        this.emptyResourceLink = this.game.getCurrScene().resourceLoader.loadTexture('./mk-alfa/assets/images/heroes/empty.jpg');
         HEROES_DESCRIPTION.forEach(it=>{
-            this.linkByUrl[it.url] = this.game.getCurrScene().resourceLoader.loadImage(`./mk-alfa/assets/images/heroes/${it.url}`);
+            this.linkByUrl[it.url] = this.game.getCurrScene().resourceLoader.loadTexture(`./mk-alfa/assets/images/heroes/${it.url}`);
         });
     }
 
@@ -236,7 +236,7 @@ export class MkSelectHeroScene extends MkAbstractScene {
             this.fnt.generate();
         });
 
-        this.logoLink = this.resourceLoader.loadImage('./mk-alfa/assets/images/mkLogo.png');
+        this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
         this.soundLink1 = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn2.wav');
         this.soundLink2 = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn.wav');
         this.soundLinkTheme = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/theme.mp3');

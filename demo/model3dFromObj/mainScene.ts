@@ -33,7 +33,7 @@ export class MainScene extends Scene {
         this.data2Link = this.resourceLoader.loadText('./model3dFromObj/cube_texture2.obj');
         this.data3Link = this.resourceLoader.loadText('./model3dFromObj/diamond.obj');
 
-        this.dataTextureLink = this.resourceLoader.loadImage('./assets/repeat.jpg');
+        this.dataTextureLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
     }
 
 

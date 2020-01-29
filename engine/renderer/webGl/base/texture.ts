@@ -6,11 +6,10 @@ import {AbstractTexture, INTERPOLATION_MODE} from "@engine/renderer/webGl/base/a
 export class Texture extends AbstractTexture{
 
 
+    protected samplerType: GLenum = this.gl.TEXTURE_2D;
+
     constructor(protected gl:WebGLRenderingContext){
         super(gl);
-
-        this.tex = gl.createTexture() as WebGLTexture;
-        if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);
         // Fill the texture with a 1x1 blue pixel.
         this.setRawData(new Uint8Array([0, 255, 0, 255]),1,1);
     }

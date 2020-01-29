@@ -17,7 +17,7 @@ export class MainScene extends Scene {
     private normalMapLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.normalMapLink = this.resourceLoader.loadImage('./lightNormalMap2/coin1.jpg');
+        this.normalMapLink = this.resourceLoader.loadTexture('./lightNormalMap2/coin1.jpg');
     }
 
     public onReady() {

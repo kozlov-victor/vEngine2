@@ -14,8 +14,8 @@ export class MainScene extends Scene {
     private offsetMapLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadImage('./assets/logo.png');
-        this.offsetMapLink =  this.resourceLoader.loadImage('./offsetMap/glass.jpg');
+        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
+        this.offsetMapLink =  this.resourceLoader.loadTexture('./offsetMap/glass.jpg');
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;

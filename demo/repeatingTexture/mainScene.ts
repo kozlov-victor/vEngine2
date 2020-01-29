@@ -11,7 +11,7 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         this.img1 = new Image(this.game);
-        this.img1.setResourceLink(this.resourceLoader.loadImage('./assets/repeat.jpg'));
+        this.img1.setResourceLink(this.resourceLoader.loadTexture('./assets/repeat.jpg'));
         this.img1.size.setWH(100);
         this.img1.stretchMode = STRETCH_MODE.STRETCH;
         this.img1.borderRadius = 10;
@@ -19,7 +19,7 @@ export class MainScene extends Scene {
 
         this.img2 = new Image(this.game);
         this.img2.pos.setXY(100,0);
-        this.img2.setResourceLink(this.resourceLoader.loadImage('./assets/repeat.jpg'));
+        this.img2.setResourceLink(this.resourceLoader.loadTexture('./assets/repeat.jpg'));
         this.img2.size.setWH(600);
         this.img2.stretchMode = STRETCH_MODE.REPEAT;
         this.img2.borderRadius = 15;

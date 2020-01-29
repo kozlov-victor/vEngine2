@@ -15,7 +15,7 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj6/tiger.x.obj');
-        this.dataTextureLink = this.resourceLoader.loadImage('./model3dFromObj6/tiger.png');
+        this.dataTextureLink = this.resourceLoader.loadTexture('./model3dFromObj6/tiger.png');
     }
 
 

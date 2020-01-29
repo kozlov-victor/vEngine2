@@ -8,7 +8,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
-import {ITexture} from "@engine/renderer/common/texture";
+import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
@@ -194,6 +194,20 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         const size:Size = new Size(bitmap.width,bitmap.height);
         return {size,source:c};
     }
+
+    public createCubeTexture(
+        imgLeft:ImageBitmap|HTMLImageElement,
+        imgRight:ImageBitmap|HTMLImageElement,
+        imgTop:ImageBitmap|HTMLImageElement,
+        imgBottom:ImageBitmap|HTMLImageElement,
+        imgFront:ImageBitmap|HTMLImageElement,
+        imgBack:ImageBitmap|HTMLImageElement
+    ): ICubeMapTexture {
+        if (DEBUG) throw new DebugError(`Cube texture is not supported by this renderer`);
+        return undefined!;
+    }
+
+
 
     public drawLine(line: Line): void {
     }

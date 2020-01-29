@@ -12,7 +12,7 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.resourceLoader.loadImage('./pointGeometry/ship.png'));
+        spr.setResourceLink(this.resourceLoader.loadTexture('./pointGeometry/ship.png'));
         this.ship = spr;
     }
 

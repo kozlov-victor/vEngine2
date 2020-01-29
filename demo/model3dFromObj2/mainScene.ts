@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     public onPreloading() {
         // https://free3d.com/ru/3d-models/obj
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj2/dog.obj');
-        this.dataTextureLink = this.resourceLoader.loadImage('./model3dFromObj2/dog.jpg');
+        this.dataTextureLink = this.resourceLoader.loadTexture('./model3dFromObj2/dog.jpg');
     }
 
 

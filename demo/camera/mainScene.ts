@@ -18,8 +18,8 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         this.size.setWH(1100,2100);
-        this.logoLink = this.resourceLoader.loadImage("./assets/logo.png");
-        this.bgLink = this.resourceLoader.loadImage("./assets/repeat.jpg");
+        this.logoLink = this.resourceLoader.loadTexture("./assets/logo.png");
+        this.bgLink = this.resourceLoader.loadTexture("./assets/repeat.jpg");
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;

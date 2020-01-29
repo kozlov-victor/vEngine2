@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     private imgLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.imgLink = this.resourceLoader.loadImage('./ninePatchImage/ninePatchImage.png');
+        this.imgLink = this.resourceLoader.loadTexture('./ninePatchImage/ninePatchImage.png');
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;

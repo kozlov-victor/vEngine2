@@ -34,7 +34,7 @@ export class MkIntroScene extends MkAbstractScene {
             this.fnt.generate();
         });
 
-        this.logoLink = this.resourceLoader.loadImage('./mk-alfa/assets/images/mkLogo.png');
+        this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
         this.soundLink = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn.wav');
 
     }

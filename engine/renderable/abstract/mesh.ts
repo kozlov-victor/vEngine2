@@ -4,7 +4,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {DebugError} from "@engine/debug/debugError";
-import {ITexture} from "@engine/renderer/common/texture";
+import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Optional} from "@engine/core/declarations";
 
 
@@ -12,11 +12,13 @@ export abstract class Mesh extends RenderableModel {
 
     public modelPrimitive:IPrimitive;
     public texture:Optional<ITexture>;
+    public  cubeMapTexture:Optional<ICubeMapTexture>;
     public normalsTexture:Optional<ITexture>;
     public heightMapTexture:Optional<ITexture>;
     public heightMapFactor:number = 0.01;
     public fillColor:Color = Color.BLACK.clone();
     public colorMix:number = 0;
+    public reflectivity:number = 0;
     public bufferInfo:BufferInfo;
     public vertexItemSize:2|3;
 

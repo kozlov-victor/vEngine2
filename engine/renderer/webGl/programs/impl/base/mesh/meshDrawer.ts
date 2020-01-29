@@ -24,10 +24,12 @@ export class MeshDrawer extends AbstractDrawer {
     private readonly u_color:string = 'u_color';
     private readonly u_color_mix:string = 'u_color_mix';
     private readonly u_alpha:string = 'u_alpha';
+    private readonly u_reflectivity:string = 'u_reflectivity';
     private readonly u_textureUsed:string = 'u_textureUsed';
     private readonly u_normalsTextureUsed:string = 'u_normalsTextureUsed';
     private readonly u_lightUsed:string = 'u_lightUsed';
     private readonly u_heightMapTextureUsed:string = 'u_heightMapTextureUsed';
+    private readonly u_cubeMapTextureUsed:string = 'u_cubeMapTextureUsed';
     private readonly u_heightMapFactor:string = 'u_heightMapFactor';
 
     constructor(gl:WebGLRenderingContext){
@@ -64,6 +66,10 @@ export class MeshDrawer extends AbstractDrawer {
         this.setUniform(this.u_alpha,a);
     }
 
+    public setReflectivity(r:number):void{
+        this.setUniform(this.u_reflectivity,r);
+    }
+
     public setTextureUsed(used:boolean):void{
         this.setUniform(this.u_textureUsed,used);
     }
@@ -74,6 +80,10 @@ export class MeshDrawer extends AbstractDrawer {
 
     public setHeightMapTextureUsed(used:boolean):void{
         this.setUniform(this.u_heightMapTextureUsed,used);
+    }
+
+    public setCubeMapTextureUsed(used:boolean):void{
+        this.setUniform(this.u_cubeMapTextureUsed,used);
     }
 
     public setHeightMapFactor(val:number){
@@ -111,7 +121,7 @@ export class MeshDrawer extends AbstractDrawer {
         this.mesh = undefined;
         super.unbind();
     }
-    
+
     private _initBufferInfo(drawMethod:number= DRAW_METHOD.TRIANGLES,vertexSize:2|3=3):void{
         const bufferInfo:IBufferInfoDescription = {
             posVertexInfo:{

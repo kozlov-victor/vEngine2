@@ -18,8 +18,8 @@ export class MainScene extends Scene {
 
     public onPreloading() {
 
-        this.logoLink = this.resourceLoader.loadImage('./lightNormalMap/rocks.png');
-        this.normalMapLink = this.resourceLoader.loadImage('./lightNormalMap/rocks-normal.png');
+        this.logoLink = this.resourceLoader.loadTexture('./lightNormalMap/rocks.png');
+        this.normalMapLink = this.resourceLoader.loadTexture('./lightNormalMap/rocks-normal.png');
 
     }
 
