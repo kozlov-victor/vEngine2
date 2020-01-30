@@ -51,8 +51,8 @@ export class MainScene extends Scene {
         this.logoObj = obj;
         obj.fillColor.setRGB(244,255,244);
         obj.modelPrimitive = new ScullMesh(this.dataLink.getTarget());
-        obj.pos.setXY(200,250);
-        obj.size.setWH(200,200);
+        obj.pos.setXY(300,450);
+        obj.size.setWH(500,500);
         obj.scale.setXY(60);
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
