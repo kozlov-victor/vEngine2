@@ -23,7 +23,7 @@ export class CubeMapTexture extends AbstractTexture implements ICubeMapTexture{
         bottom:HTMLImageElement|ImageBitmap,
         front:HTMLImageElement|ImageBitmap,
         back:HTMLImageElement|ImageBitmap,
-    ):void{
+    ):void {
         this.validate(left,right,top,bottom,front,back);
         this.init(left,right,top,bottom,front,back);
     }
@@ -54,10 +54,10 @@ export class CubeMapTexture extends AbstractTexture implements ICubeMapTexture{
     }
 
     private validate(
-        top:HTMLImageElement|ImageBitmap,
-        bottom:HTMLImageElement|ImageBitmap,
         left:HTMLImageElement|ImageBitmap,
         right:HTMLImageElement|ImageBitmap,
+        top:HTMLImageElement|ImageBitmap,
+        bottom:HTMLImageElement|ImageBitmap,
         front:HTMLImageElement|ImageBitmap,
         back:HTMLImageElement|ImageBitmap,
     ):void {
@@ -100,14 +100,15 @@ export class CubeMapTexture extends AbstractTexture implements ICubeMapTexture{
 
 
     private init(
-        top:HTMLImageElement|ImageBitmap,
-        bottom:HTMLImageElement|ImageBitmap,
         left:HTMLImageElement|ImageBitmap,
         right:HTMLImageElement|ImageBitmap,
+        top:HTMLImageElement|ImageBitmap,
+        bottom:HTMLImageElement|ImageBitmap,
         front:HTMLImageElement|ImageBitmap,
         back:HTMLImageElement|ImageBitmap,
     ):void{
         const gl:WebGLRenderingContext = this.gl;
+
         const faceInfos: IFaceInfo[] = [
             {
                 target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
@@ -127,11 +128,11 @@ export class CubeMapTexture extends AbstractTexture implements ICubeMapTexture{
             },
             {
                 target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-                img: front,
+                img: back,
             },
             {
                 target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-                img: back,
+                img: front,
             },
         ];
 

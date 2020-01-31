@@ -41,7 +41,7 @@ export class MainScene extends Scene {
         obj.texture = this.baseTextureLink.getTarget();
         obj.colorMix = 0.4;
         obj.cubeMapTexture = this.cubeTextureLink.getTarget();
-        obj.reflectivity = 0.1;
+        obj.reflectivity = 0.9;
         obj.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         this.appendChild(obj);
         this.setInterval(()=>{

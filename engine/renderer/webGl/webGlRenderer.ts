@@ -217,6 +217,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setProjectionMatrix(matrix2.mat16);
         md.setAlfa(this.getAlphaBlend());
         const isTextureUsed:boolean = mesh.texture!==undefined;
+        if (DEBUG && isTextureUsed && mesh.modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
         md.setTextureUsed(isTextureUsed);
         if (isTextureUsed) md.setTextureMatrix(FLIP_TEXTURE_MATRIX.mat16);
         md.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this.nullTexture);
@@ -314,9 +315,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.matrixStack.save();
     }
 
-    public transformScale(x:number, y:number):void {
+    public transformScale(x:number, y:number):void { // todo
         if (x===1 && y===1) return;
-        this.matrixStack.scale(x,y);
+        this.matrixStack.scale(x,y,x);
     }
 
     public transformReset():void{

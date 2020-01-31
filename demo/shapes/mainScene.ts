@@ -7,7 +7,6 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
-import {Star} from "@engine/renderable/impl/geometry/star";
 
 
 export class MainScene extends Scene {
@@ -52,23 +51,21 @@ export class MainScene extends Scene {
         this.appendChild(ellipse);
 
         // created with https://editor.method.ac/
-        const polyline:PolyLine = new PolyLine(this.game);
+        const polyline:PolyLine = PolyLine.fromSvgPath(this.game,`
+        M 64.693 116.615 L 21.388 208.094 C -11.852 237.461 44.495 288.708 93.428 305.375 C 153.485 325.832 203.521 325.984 200.027 298.722 C 188.33 207.452 145.765 169.448 115.841 191.82 C 93.541 208.492 72.912 92.281 64.693 116.615 Z
+        `);
         //polyline.pos.setXY(100,100);
         polyline.lineWidth = 10;
         polyline.color = Color.RGB(100,12,12);
-        polyline.fromSvgPath(`
-        M 64.693 116.615 L 21.388 208.094 C -11.852 237.461 44.495 288.708 93.428 305.375 C 153.485 325.832 203.521 325.984 200.027 298.722 C 188.33 207.452 145.765 169.448 115.841 191.82 C 93.541 208.492 72.912 92.281 64.693 116.615 Z
-        `);
         polyline.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(polyline);
 
-        const polygon:Polygon = new Polygon(this.game);
-        polygon.fromPolyline(polyline);
+        const polygon:Polygon = Polygon.fromPolyline(this.game,polyline);
         polygon.fillColor = Color.RGB(12,233,33,122);
         polygon.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(polygon);
 
-        const star:Star = new Star(this.game,5,40);
+        const star:Polygon = Polygon.createStar(this.game,5,40);
         star.fillColor  = Color.RGB(222,33,122,122);
         star.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(star);

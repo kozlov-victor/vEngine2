@@ -12,9 +12,8 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-        const polyLine1:PolyLine = new PolyLine(this.game);
         // created with https://editor.method.ac/
-        polyLine1.fromSvgPath(`
+        const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`
             M298.3727321057046,152.1270653836292 C369.0813467766147,-15.027008172167507 646.1200173724658,152.1270653836292 298.3727321057046,367.0394456696475 C-49.37455316105007,152.1270653836292 227.66411743479748,-15.027008172167507 298.3727321057046,152.1270653836292 z
         `);
 

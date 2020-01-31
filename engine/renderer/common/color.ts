@@ -1,6 +1,7 @@
 import {IReleasealable, ObjectPool} from "../../misc/objectPool";
 import {ICloneable} from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
+import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 
 
 export interface IColorJSON {
@@ -10,7 +11,7 @@ export interface IColorJSON {
     a:byte;
 }
 
-export class Color implements ICloneable<Color>, IReleasealable{
+export class Color extends ObservableEntity implements ICloneable<Color>{
 
     public static WHITE = Color.RGB(255,255,255).freeze();
     public static GREY  = Color.RGB(127,127,127).freeze();
@@ -44,28 +45,26 @@ export class Color implements ICloneable<Color>, IReleasealable{
     private _arr:number[];
     private _friezed:boolean = false;
 
-    private _captured:boolean = false;
-    
+
     constructor(r:byte = 0,g:byte = r,b:byte = g,a:byte = 255){
+        super();
         this.setRGBA(r,g,b,a);
     }
 
     public setRGBA(r:byte,g:byte,b:byte,a:byte = 255):void{
         this.checkFriezed();
+        const changed:boolean = this.r!==r || this.g!==g || this.b!==b || this.a!==a;
+        if (!changed) return;
         this.r = r;
         this.g = g;
         this.b = b;
         this.a = a;
+        this.triggerObservable();
         this.normalizeToZeroOne();
     }
 
     public setRGB(r:byte,g:byte,b:byte):void{
-        this.checkFriezed();
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.a = 255;
-        this.normalizeToZeroOne();
+        this.setRGBA(r,g,b,255);
     }
 
     public getR():byte {return this.r;}
@@ -74,50 +73,27 @@ export class Color implements ICloneable<Color>, IReleasealable{
     public getA():byte {return this.a;}
 
     public setR(val:byte):void{
-        this.checkFriezed();
-        this.r = val;
-        this.normalizeToZeroOne();
+        this.setRGBA(val,this.g,this.b,this.a);
     }
 
     public setG(val:byte):void{
-        this.checkFriezed();
-        this.g = val;
-        this.normalizeToZeroOne();
+        this.setRGBA(this.r,val,this.b,this.a);
     }
 
     public setB(val:byte):void{
-        this.checkFriezed();
-        this.b = val;
-        this.normalizeToZeroOne();
+        this.setRGBA(this.r,this.g,val,this.a);
     }
 
     public setA(val:byte):void{
-        this.checkFriezed();
-        this.a = val;
-        this.normalizeToZeroOne();
+        this.setRGBA(this.r,this.g,this.b,val);
     }
 
     public set(another:Color):void{
-        this.checkFriezed();
         this.setRGBA(another.r,another.g,another.b,another.a);
     }
 
     public clone():Color{
         return new Color(this.r,this.g,this.b,this.a);
-    }
-
-    public capture(): this {
-        this._captured = true;
-        return this;
-    }
-
-    public isCaptured(): boolean {
-        return this._captured;
-    }
-
-    public release(): this {
-        this._captured = false;
-        return this;
     }
 
     public freeze():this{
