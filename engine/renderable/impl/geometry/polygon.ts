@@ -48,14 +48,6 @@ export class Polygon extends Mesh {
         return Polygon.fromPolyline(game,p);
     }
 
-
-    public readonly type:string = 'Polygon';
-
-    constructor(protected game:Game){
-        super(game,false,false);
-        this.vertexItemSize = 2;
-    }
-
     public static fromPolyline(game:Game,p:PolyLine):Polygon {
         const vertices:number[] = [];
         p.children.forEach((l:RenderableModel)=>{
@@ -77,6 +69,14 @@ export class Polygon extends Mesh {
         if (DEBUG && p.split(/z/gi).length-1>1) throw new DebugError(`multiple closing operation ('z') in one svg path. Use static method Polygon.fromMultiCurveSvgPath() instead`);
         const polyline:PolyLine = PolyLine.fromSvgPath(game,p);
         return Polygon.fromPolyline(game,polyline);
+    }
+
+
+    public readonly type:string = 'Polygon';
+
+    constructor(protected game:Game){
+        super(game,false,false);
+        this.vertexItemSize = 2;
     }
 
     private setVertices(vertices:number[]):void {

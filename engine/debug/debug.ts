@@ -67,7 +67,7 @@ const prepareMessage = (e:any,lineNum:number)=>{
 const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
     const tmpl:string = `
 
-  <div class="errorBlock"> 
+  <div class="errorBlock">
         <style>
             .errorHeader {text-align: center;}
             .errorText {
@@ -86,6 +86,9 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
                 background-color: rgba(255,215,200,0.99);
                 font-family: monospace;
                 padding: 10px;
+                -webkit-touch-callout: default;
+                -webkit-user-select: text;
+                user-select: text;
             }
             .errorClose {
                 position: absolute;
@@ -96,7 +99,7 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
                 height: 20px;
                 cursor: pointer;
                 color: black;
-            }    
+            }
        </style>
        <div class="errorClose" onclick="this.closest('.errorBlockHolder').remove();">x</div>
        <h1 class="errorHeader">Runtime error!</h1>
@@ -104,8 +107,8 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
        <div>${filename?filename:''}</div>
        <div>-------------------</div>
        <pre>$_content</pre>
-  </div> 
-  
+  </div>
+
 `;
     const errDiv:HTMLElement = document.createElement('div');
     errDiv.className = 'errorBlockHolder';

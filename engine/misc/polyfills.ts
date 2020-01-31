@@ -1,5 +1,10 @@
 /* tslint:disable:no-string-literal ban-types*/
 
+import {Clazz} from "@engine/core/declarations";
+
+if (DEBUG) {
+    window.__POLYFILLS_INCLUDED__ = true;
+}
 
 if (typeof globalThis === 'undefined') (window as unknown as {globalThis:Window}).globalThis = window;
 
@@ -15,12 +20,6 @@ globalThis.requestAnimationFrame =
 if (!globalThis.cancelAnimationFrame) {
     globalThis.cancelAnimationFrame = (id) => clearTimeout(id);
 }
-
-if (DEBUG) {
-    window.__POLYFILLS_INCLUDED__ = true;
-}
-
-
 
 if (!Array.prototype['find']) {
     Array.prototype['find'] = function(predicate:Function) {
@@ -44,44 +43,3 @@ if (!Array.prototype['find']) {
         return undefined;
     };
 }
-
-// if (!Object.keys) {
-//     Object.keys = (function() {
-//         'use strict';
-//         let hasOwnProperty = Object.prototype.hasOwnProperty,
-//             hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
-//             dontEnums = [
-//                 'toString',
-//                 'toLocaleString',
-//                 'valueOf',
-//                 'hasOwnProperty',
-//                 'isPrototypeOf',
-//                 'propertyIsEnumerable',
-//                 'constructor'
-//             ],
-//             dontEnumsLength = dontEnums.length;
-//
-//         return function(obj) {
-//             if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
-//                 throw new TypeError('Object.keys called on non-object');
-//             }
-//
-//             let result = [], prop, i;
-//
-//             for (prop in obj) {
-//                 if (hasOwnProperty.call(obj, prop)) {
-//                     result.push(prop);
-//                 }
-//             }
-//
-//             if (hasDontEnumBug) {
-//                 for (i = 0; i < dontEnumsLength; i++) {
-//                     if (hasOwnProperty.call(obj, dontEnums[i])) {
-//                         result.push(dontEnums[i]);
-//                     }
-//                 }
-//             }
-//             return result;
-//         };
-//     }());
-// }
