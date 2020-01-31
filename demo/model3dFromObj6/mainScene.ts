@@ -29,7 +29,7 @@ export class MainScene extends Scene {
         obj.size.setWH(200,200);
         obj.scale.setXY(320);
         this.appendChild(obj);
-        obj.acceptLight(false);
+        //obj.acceptLight(false);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{
             // obj.angle3d.x+=0.01;
