@@ -314,9 +314,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.matrixStack.save();
     }
 
-    public transformScale(x:number, y:number):void {
+    public transformScale(x:number, y:number):void { // todo
         if (x===1 && y===1) return;
-        this.matrixStack.scale(x,y);
+        this.matrixStack.scale(x,y,y);
     }
 
     public transformReset():void{
