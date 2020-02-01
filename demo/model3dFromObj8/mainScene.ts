@@ -35,6 +35,7 @@ export class MainScene extends Scene {
         obj.cubeMapTexture = this.cubeTextureLink.getTarget();
         obj.reflectivity = 0.03;
         obj.size.setWH(200,200);
+        obj.scale.setXY(2,2);
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{

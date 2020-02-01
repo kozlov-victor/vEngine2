@@ -129,16 +129,6 @@ class SvgTokenizer {
 
 export class PolyLine extends Shape {
 
-    public static fromMultiCurveSvgPath(game:Game,path:string):PolyLine[]{
-        const polyLines:PolyLine[] = [];
-        path.split('\n').join(' ').split(/(.*?z)/gi).forEach((p:string)=>{
-            if (!p.trim()) return;
-            const polyLine:PolyLine = PolyLine.fromSvgPath(game,p);
-            polyLines.push(polyLine);
-        });
-        return polyLines;
-    }
-
     public get lineWidth(){
         return this._lineWidth;
     }
@@ -157,20 +147,14 @@ export class PolyLine extends Shape {
         return this._borderRadius;
     }
 
-    public children:Line[];
-
-    private lastPoint:Optional<Point2d>;
-    private firstPoint:Optional<Point2d>;
-
-    private tokenizer:SvgTokenizer;
-    private _lineWidth:number = 1;
-    private _borderRadius:number = 1;
-
-    private lastBezierPoint:v2;
-
-    constructor(protected game:Game){
-        super(game);
-        this.color.addOnChangeListener(()=>this.passPropertiesChildren());
+    public static fromMultiCurveSvgPath(game:Game,path:string):PolyLine[]{
+        const polyLines:PolyLine[] = [];
+        path.split('\n').join(' ').split(/(.*?z)/gi).forEach((p:string)=>{
+            if (!p.trim()) return;
+            const polyLine:PolyLine = PolyLine.fromSvgPath(game,p);
+            polyLines.push(polyLine);
+        });
+        return polyLines;
     }
 
     public static fromPoints(game:Game,points:number[]|string):PolyLine{
@@ -212,6 +196,22 @@ export class PolyLine extends Shape {
 
     public static splineFromPoints(game:Game,points:number[]):PolyLine{
         return PolyLine.fromSvgPath(game,createSplinePathFromPoints(points));
+    }
+
+    public children:Line[];
+
+    private lastPoint:Optional<Point2d>;
+    private firstPoint:Optional<Point2d>;
+
+    private tokenizer:SvgTokenizer;
+    private _lineWidth:number = 1;
+    private _borderRadius:number = 1;
+
+    private lastBezierPoint:v2;
+
+    constructor(protected game:Game){
+        super(game);
+        this.color.addOnChangeListener(()=>this.passPropertiesChildren());
     }
 
     public moveTo(x:number,y:number):void{
