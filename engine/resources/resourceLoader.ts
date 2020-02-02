@@ -41,64 +41,65 @@ export class ResourceLoader {
         frontSide: string|IURLRequest, backSide:string|IURLRequest,
     ): ResourceLink<ICubeMapTexture> {
         const link: ResourceLink<ICubeMapTexture> = new ResourceLink('');
+
         const taskRef:TaskRef = this.q.addTask(async () => {
             const imgLeft:HTMLImageElement|ImageBitmap = await createImageFromData(leftSide as (URI|Base64|IURLRequest),this.q,taskRef);
-            const imgRight:HTMLImageElement|ImageBitmap = await createImageFromData(rightSide as (URI|Base64|IURLRequest),this.q,taskRef);
-            const imgTop:HTMLImageElement|ImageBitmap = await createImageFromData(topSide as (URI|Base64|IURLRequest),this.q,taskRef);
-            const imgBottom:HTMLImageElement|ImageBitmap = await createImageFromData(bottomSide as (URI|Base64|IURLRequest),this.q,taskRef);
-            const imgFront:HTMLImageElement|ImageBitmap = await createImageFromData(frontSide as (URI|Base64|IURLRequest),this.q,taskRef);
-            const imgBack:HTMLImageElement|ImageBitmap = await createImageFromData(backSide as (URI|Base64|IURLRequest),this.q,taskRef);
+            const imgRight:HTMLImageElement|ImageBitmap = await createImageFromData(rightSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[0]);
+            this.q.resolveTask(taskRefsAdditionals[0]);
+            const imgTop:HTMLImageElement|ImageBitmap = await createImageFromData(topSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[1]);
+            this.q.resolveTask(taskRefsAdditionals[1]);
+            const imgBottom:HTMLImageElement|ImageBitmap = await createImageFromData(bottomSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[2]);
+            this.q.resolveTask(taskRefsAdditionals[2]);
+            const imgFront:HTMLImageElement|ImageBitmap = await createImageFromData(frontSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[3]);
+            this.q.resolveTask(taskRefsAdditionals[3]);
+            const imgBack:HTMLImageElement|ImageBitmap = await createImageFromData(backSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[4]);
+            this.q.resolveTask(taskRefsAdditionals[4]);
             const texture:ICubeMapTexture = this.game.getRenderer().createCubeTexture(imgLeft,imgRight,imgTop,imgBottom,imgFront,imgBack);
             link.setTarget(texture);
             this.q.resolveTask(taskRef);
         });
+
+        const taskRefsAdditionals:[TaskRef,TaskRef,TaskRef,TaskRef,TaskRef]
+            = new Array(5) as [TaskRef,TaskRef,TaskRef,TaskRef,TaskRef];
+        for (let i:number=0;i<taskRefsAdditionals.length;i++) {
+            taskRefsAdditionals[i]=(this.q.addTask(()=>{}));
+        }
+
         return link;
     }
 
     public loadText(req: string|IURLRequest): ResourceLink<string> {
-        const loader:UrlLoader<string> = ResourceLoader.createUrlLoader<string>(req as (URI|IURLRequest));
-        const link: ResourceLink<string> = new ResourceLink(loader.getUrl());
-        this._loadText(loader, (data: string) => link.setTarget(data));
-        return link;
+        return this._loadAndProcessText(req,t=>t);
     }
 
     public loadJSON<T>(req: string|IURLRequest): ResourceLink<T> {
-        const loader:UrlLoader<string> = ResourceLoader.createUrlLoader<string>(req as (URI|IURLRequest));
-        const link: ResourceLink<T> = new ResourceLink(loader.getUrl());
-        this._loadText(loader, (data: string) => link.setTarget(JSON.parse(data)));
-        return link;
+        const postPrecessFn:(t:string)=>T = t=>JSON.parse(t);
+        return this._loadAndProcessText<T>(req,postPrecessFn);
     }
 
     public loadSound(req: string|IURLRequest): ResourceLink<void> {
         const loader:UrlLoader<ArrayBuffer> = ResourceLoader.createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
         const link: ResourceLink<void> = new ResourceLink(loader.getUrl());
-        if (this.game.getAudioPlayer().isCached(link)) {
-            return link;
-        }
-        const taskRef:TaskRef = this.q.addTask(() =>{
-            loader.load();
+        const taskRef:TaskRef = this.q.addTask(async () =>{
+            const buff:ArrayBuffer = await loader.load();
+            await this.game.getAudioPlayer().loadSound(buff,link);
+            this.q.resolveTask(taskRef);
         });
         loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
-        loader.onLoad = (data:ArrayBuffer)=>{
-            this.game.getAudioPlayer().loadSound(
-                data, link, () => this.q.resolveTask(taskRef),
-            );
-        };
         return link;
     }
 
     public loadBinary(req: string|IURLRequest): ResourceLink<ArrayBuffer> {
         const loader:UrlLoader<ArrayBuffer> = ResourceLoader.createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
         const link: ResourceLink<ArrayBuffer> = new ResourceLink<ArrayBuffer>(loader.getUrl());
-        loader.onLoad = (buff: ArrayBuffer|string)=>{
+        loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
+        const taskRef:TaskRef = this.q.addTask(async () => {
+            const buff:ArrayBuffer = await loader.load();
             link.setTarget(buff as ArrayBuffer);
             this.q.resolveTask(taskRef);
-        };
-        loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
-        const taskRef:TaskRef = this.q.addTask(() => {
-            loader.load();
         });
         return link;
+
     }
 
     public addNextTask(task: () => void) {
@@ -128,15 +129,18 @@ export class ResourceLoader {
         this.q.onResolved = fn;
     }
 
-    private _loadText(loader:UrlLoader<string>, callback: (data:string)=>void): void {
-        const taskRef:TaskRef = this.q.addTask(() => {
-            loader.load();
-        });
+    private _loadAndProcessText<T>(req: string|IURLRequest,postProcess:(s:string)=>T): ResourceLink<T> {
+        const url:string = (req as IURLRequest).url?(req as IURLRequest).url:req as string;
+        const link: ResourceLink<T> = new ResourceLink(url);
+        const loader:UrlLoader<string> = ResourceLoader.createUrlLoader<string>(req as (URI|IURLRequest));
         loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
-        loader.onLoad = (data:string)=>{
-            callback(data);
+        const taskRef:TaskRef = this.q.addTask(async () => {
+            const text:string = await loader.load();
+            const data:T = postProcess(text);
+            link.setTarget(data);
             this.q.resolveTask(taskRef);
-        };
+        });
+        return link;
     }
 
 

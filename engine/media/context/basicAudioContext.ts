@@ -37,8 +37,8 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
     public setStereoPan(val:number):void{}
     public pause():void{}
     public resume():void{}
-    public load(buffer:ArrayBuffer,link:ResourceLink<void>,onLoad:()=>void):void{
-        onLoad();
+    public load(buffer:ArrayBuffer,link:ResourceLink<void>):Promise<void>{
+        return Promise.resolve();
     }
     public clone():BasicAudioContext{
         return new BasicAudioContext(this.game);

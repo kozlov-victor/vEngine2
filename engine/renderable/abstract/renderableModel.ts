@@ -148,7 +148,6 @@ export abstract class RenderableModel extends TransformableModel implements IRev
     }
 
     public render():void {
-        //if (this.isInViewPort()) return;
         if (!this.visible) return;
         if (this.alpha===0) return;
         const renderer:AbstractRenderer = this.game.getRenderer();

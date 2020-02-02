@@ -65,6 +65,7 @@ const prepareMessage = (e:any,lineNum:number)=>{
 };
 
 const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
+
     const tmpl:string = `
 
   <div class="errorBlock">
@@ -118,8 +119,7 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
     fpsLabel.textContent = 'stopped';
 };
 
-window.addEventListener('error',(e:ErrorEvent)=>{
-
+const handleCatchError = (e:ErrorEvent)=>{
     const game:Game = (window as unknown as IGameHolder).game as Game;
     if (game) {
         try {
@@ -172,5 +172,21 @@ window.addEventListener('error',(e:ErrorEvent)=>{
     } else {
         renderError('',runtimeInfo,'');
     }
+};
 
+const extractPromiseError = (e:any):string=>{
+    let r:string = 'Async error\n';
+    if ((e as string).substr!==undefined) r+=e;
+    if (e.message) r+=`${e.message}\n`;
+    if (e.stack) r+=e.stack;
+
+    return r;
+};
+
+window.addEventListener('error',(e:ErrorEvent)=>{
+    handleCatchError(e);
 },true);
+
+window.addEventListener('unhandledrejection', (e:PromiseRejectionEvent)=> {
+    renderError('',extractPromiseError(e.reason),'');
+});

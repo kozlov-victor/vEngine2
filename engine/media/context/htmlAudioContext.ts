@@ -32,7 +32,7 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         super(game);
         this._ctx = CtxHolder.getCtx();
     }
-    public load(buffer:ArrayBuffer,link:ResourceLink<void>,onLoad:()=>void):void {
+    public async load(buffer:ArrayBuffer,link:ResourceLink<void>):Promise<void> {
         const url:string = link.getUrl();
         if (DEBUG) {
             const type:string = url.split('.').pop()??'';
@@ -41,7 +41,6 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
             if (canPlayType==='') throw new DebugError(`Can not play this audio type: ${type}`);
         }
         AudioPlayer.cache[url] = url;
-        onLoad(); // todo
     }
 
     public isFree(): boolean {

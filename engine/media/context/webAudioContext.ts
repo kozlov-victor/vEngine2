@@ -42,16 +42,19 @@ class CtxHolder {
 
 
 
-const decode =(buffer:ArrayBuffer,callback:(data:AudioBuffer)=>void)=>{
-    CtxHolder.getCtx().decodeAudioData(
-        buffer,
-        (decoded:AudioBuffer)=> {
-            callback(decoded);
-        },
-        (err:DOMException)=>{
-            if (DEBUG) throw new DebugError(err.message);
-        }
-    );
+const decode =(buffer:ArrayBuffer):Promise<AudioBuffer>=>{
+    return new Promise<AudioBuffer>((resolve, reject)=>{
+        CtxHolder.getCtx().decodeAudioData(
+            buffer,
+            (decoded:AudioBuffer)=> {
+                resolve(decoded);
+            },
+            (err:DOMException)=>{
+                reject(err.message);
+            }
+        );
+    });
+
 };
 
 
@@ -88,15 +91,11 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
 
     }
 
-    public load(buffer:ArrayBuffer, link:ResourceLink<void>, onLoad:()=>void):void {
+    public async load(buffer:ArrayBuffer, link:ResourceLink<void>):Promise<void> {
         if (AudioPlayer.cache[link.getUrl()]) {
-            onLoad();
-            return;
+            return undefined;
         }
-        decode(buffer, (decoded:AudioBuffer)=>{
-            AudioPlayer.cache[link.getUrl()] = decoded;
-            onLoad();
-        });
+        AudioPlayer.cache[link.getUrl()] = await decode(buffer);
     }
 
 

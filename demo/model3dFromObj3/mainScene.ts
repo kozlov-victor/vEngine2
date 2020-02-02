@@ -35,7 +35,7 @@ export class MainScene extends Scene {
         obj.modelPrimitive = new ObjParser().parse(this.data1Link.getTarget() as string);
         obj.pos.setXY(200,250);
         obj.size.setWH(200,200);
-        obj.scale.setXY(1);
+        obj.scale.setXYZ(1);
         obj.texture = this.dataTextureLink.getTarget();
         obj.normalsTexture = this.dataTextureNormalLink.getTarget();
         obj.heightMapTexture = this.dataTextureHeightLink.getTarget();

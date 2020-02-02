@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         obj.texture = this.dataTextureLink.getTarget();
         obj.pos.setXY(200,250);
         obj.size.setWH(200,200);
-        obj.scale.setXY(320);
+        obj.scale.setXYZ(320);
         this.appendChild(obj);
         //obj.acceptLight(false);
         obj.addBehaviour(new DraggableBehaviour(this.game));

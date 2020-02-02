@@ -38,7 +38,7 @@ export class MainScene extends Scene {
         obj.texture = this.logoLink.getTarget();
         obj.pos.setXY(400,200);
         obj.size.setWH(100,100);
-        obj.scale.setXY(20);
+        obj.scale.setXYZ(20);
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{

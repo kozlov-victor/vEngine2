@@ -22,7 +22,6 @@ export abstract class AbstractAppScene extends Scene {
     public onPreloading() {
         const assetsFolder:string = 'data';
         const assetsPostfix:string = '';
-        const jsonp:boolean = false;
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;
@@ -34,21 +33,18 @@ export abstract class AbstractAppScene extends Scene {
                 this.resourceLoader.loadTexture({
                     url:`./steamSeaBattle/${assetsFolder}/images/${el.attributes.src}${assetsPostfix}`,
                     responseType: 'arraybuffer',
-                    jsonp
                 });
         });
         this.getSceneElement().getElementsByTagName('imageButton').forEach((el:Element)=>{
             this.links[el.attributes['src-on']] =
                 this.resourceLoader.loadTexture({
                     url: `./steamSeaBattle/${assetsFolder}/images/${el.attributes['src-on']}${assetsPostfix}`,
-                    responseType: 'arraybuffer',
-                    jsonp
+                    responseType: 'arraybuffer'
             });
             this.links[el.attributes['src-off']] =
                 this.resourceLoader.loadTexture({
                     url: `./steamSeaBattle/${assetsFolder}/images/${el.attributes['src-off']}${assetsPostfix}`,
-                    responseType: 'arraybuffer',
-                    jsonp
+                    responseType: 'arraybuffer'
             });
         });
 
@@ -59,8 +55,7 @@ export abstract class AbstractAppScene extends Scene {
             sound.setResourceLink(this.resourceLoader.loadSound(
                 {
                     url:`./steamSeaBattle/${assetsFolder}/sounds/${el.attributes.src}${assetsPostfix}`,
-                    responseType: 'arraybuffer',
-                    jsonp
+                    responseType: 'arraybuffer'
                 }
             ));
             this.sounds[el.attributes.src.replace('.js','').split('.')[0]] = sound;

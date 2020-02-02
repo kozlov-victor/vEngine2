@@ -53,7 +53,7 @@ export class MainScene extends Scene {
         obj.modelPrimitive = new ScullMesh(this.dataLink.getTarget());
         obj.pos.setXY(300,450);
         obj.size.setWH(500,500);
-        obj.scale.setXY(60);
+        obj.scale.setXYZ(60);
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{
