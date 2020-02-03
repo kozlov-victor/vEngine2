@@ -178,7 +178,6 @@ export class PolyLine extends Shape {
 
     // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
     public static fromSvgPath(game:Game,path:string):PolyLine {
-        if (DEBUG && path.split(/z/gi).length-1>1) throw new DebugError(`multiple closing operation ('z') in one svg path. Use static method PolyLine.fromMultiCurveSvgPath() instead`);
         const pl:PolyLine = new PolyLine(game);
         pl.tokenizer = new SvgTokenizer(path);
         let lastCommand:Optional<string>;
