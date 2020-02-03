@@ -43,14 +43,14 @@ const getPointOnBezierCurve =(points:v2[], offset:number, t:number):v2=> {
 };
 
 const getPointsOnBezierCurve = (points:v2[], offset:number, numPoints:number):v2[]=> {
-    const cpoints:v2[] = [];
+    const cPoints:v2[] = [];
     for (let i:number = 0; i < numPoints-1; ++i) {
         const t:number = i / (numPoints - 1);
-        cpoints.push(getPointOnBezierCurve(points, offset, t));
+        cPoints.push(getPointOnBezierCurve(points, offset, t));
     }
     // correct possible deviation of last point
-    cpoints[cpoints.length-1] = points[points.length-1];
-    return cpoints;
+    cPoints[cPoints.length-1] = points[points.length-1];
+    return cPoints;
 };
 
 class SvgTokenizer {
