@@ -29,8 +29,8 @@ export  class AudioPlayer implements IAudioPlayer {
         this.audioNodeSet = new AudioNodeSet(game,this.audioContext,AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
     }
 
-    public loadSound(buffer:ArrayBuffer, link:ResourceLink<void>, onLoad:()=>void):void {
-        this.audioContext.load(buffer,link,onLoad);
+    public async loadSound(buffer:ArrayBuffer, link:ResourceLink<void>):Promise<void> {
+        await this.audioContext.load(buffer,link);
     }
 
     public isCached(link:ResourceLink<void>):boolean {

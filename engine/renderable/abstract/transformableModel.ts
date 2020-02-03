@@ -1,9 +1,8 @@
-import {IPoint2d, Point2d} from "@engine/geometry/point2d";
+import {Point2d} from "@engine/geometry/point2d";
 import {DebugError} from "@engine/debug/debugError";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
-import {Optional} from "@engine/core/declarations";
 import {BaseModel} from "@engine/renderable/abstract/baseModel";
+import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 
 class AnglePoint3d {
     public x:number = 0;
@@ -88,15 +87,16 @@ export abstract class TransformableModel extends BaseModel {
     public abstract revalidate():void;
 
     public translate():void{
-        const renderer = this.game.getRenderer();
+        const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformTranslate(this.pos.x,this.pos.y);
     }
 
     public transform():void{
-        const renderer = this.game.getRenderer();
+        const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformTranslate(-this.anchor.x,-this.anchor.y,this.posZ);
         renderer.transformTranslate(this.transformPoint.x,this.transformPoint.y);
-        renderer.transformScale(this.scale.x,this.scale.y);
+        const [x,y,z] = this.scale.toArray();
+        renderer.transformScale(x,y,z);
         renderer.transformSkewX(this.skew.x);
         renderer.transformSkewY(this.skew.y);
         renderer.transformRotateZ(this.angle3d.z);

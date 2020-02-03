@@ -39,22 +39,22 @@ void main() {
             normal = normalize(normal);
         }
 
-        vec3 directionLightPos = vec3(-1,0,100);
+        vec3 directionLightPos = vec3(0,0,-100);
         vec3 lightDirection = normalize(directionLightPos);
         float light = max(0.,dot(normal, lightDirection));
         light += max(0.,dot(normal, surfaceToLightDirection));
-        float specular = pow(max(dot(normal, halfVector), 0.0), 16.);
+        float specular = pow(max(dot(normal, halfVector), 0.0), 2.);
 
         light = clamp(light,.5,1.0);
+        //gl_FragColor = vec4(normalize(v_normal)*0.5+0.5,1.0);
         gl_FragColor.rgb *= light;
 
         gl_FragColor.rgb+=specular;
-
     }
 
     if (u_cubeMapTextureUsed) {
         vec3 I = normalize(vec3(v_position));
-        vec3 R = reflect(I, normalize(v_normal.xyz));
+        vec3 R = reflect(I, normalize(v_normal));
         vec4 reflectionColor = textureCube(u_cubeMapTexture, R);
         gl_FragColor = mix(gl_FragColor,reflectionColor,u_reflectivity);
     }

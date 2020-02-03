@@ -111,6 +111,7 @@ export abstract class AbstractTexture implements ITexture {
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, glMode!);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, glMode!);
+
         this.interpolationMode = mode;
 
         this.afterOperation();

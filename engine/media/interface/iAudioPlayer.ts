@@ -4,7 +4,7 @@ import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 
 export interface IAudioPlayer {
 
-    loadSound(buffer:ArrayBuffer, link:ResourceLink<void>, onLoad:()=>void):void;
+    loadSound(buffer:ArrayBuffer, link:ResourceLink<void>):Promise<void>;
     play(sound:Sound):void;
     stop(sound:Sound):void;
     stopAll():void;

@@ -12,7 +12,7 @@ export abstract class Mesh extends RenderableModel {
 
     public modelPrimitive:IPrimitive;
     public texture:Optional<ITexture>;
-    public  cubeMapTexture:Optional<ICubeMapTexture>;
+    public cubeMapTexture:Optional<ICubeMapTexture>;
     public normalsTexture:Optional<ITexture>;
     public heightMapTexture:Optional<ITexture>;
     public heightMapFactor:number = 0.01;

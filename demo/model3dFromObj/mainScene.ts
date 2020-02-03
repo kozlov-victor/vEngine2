@@ -44,28 +44,26 @@ export class MainScene extends Scene {
         obj.modelPrimitive = new ObjParser().parse(this.data1Link.getTarget() as string);
         obj.pos.setXY(200,250);
         obj.size.setWH(200,200);
-        obj.scale.setXY(60);
+        obj.scale.setXYZ(60);
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{
-            // obj.angle3d.x+=0.01;
             obj.angle3d.y-=0.01;
         },20);
 
 
         const obj3:Model3d = new Model3d(this.game);
-        obj3.fillColor.setRGB(122,12,12);
+        obj3.fillColor.setRGB(100,250,100);
         obj3.modelPrimitive = new ObjParser().parse(this.data3Link.getTarget() as string);
-        obj3.pos.setXY(200,250);
+        obj3.pos.setXY(300,350);
         obj3.size.setWH(200,200);
-        obj3.scale.setXY(60);
         this.appendChild(obj3);
         obj3.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{
-            // obj.angle3d.x+=0.01;
+            obj3.angle3d.x+=0.01;
             obj3.angle3d.y-=0.01;
         },20);
-        obj3.scale.setXY(0.5);
+        obj3.scale.setXYZ(225);
 
         const obj2:Model3d = new Model3d(this.game);
         obj2.fillColor.setRGB(22,122,122);
@@ -73,7 +71,7 @@ export class MainScene extends Scene {
         obj2.texture = this.dataTextureLink.getTarget();
         obj2.pos.setXY(570,260);
         obj2.size.setWH(200,200);
-        obj2.scale.setXY(60);
+        obj2.scale.setXYZ(60);
         this.appendChild(obj2);
         obj2.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{

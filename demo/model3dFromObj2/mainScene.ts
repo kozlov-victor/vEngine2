@@ -26,7 +26,7 @@ export class MainScene extends Scene {
         obj.modelPrimitive = new ObjParser().parse(this.data1Link.getTarget() as string);
         obj.pos.setXY(200,250);
         obj.size.setWH(200,200);
-        obj.scale.setXY(6);
+        obj.scale.setXYZ(6);
         obj.texture = this.dataTextureLink.getTarget();
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));

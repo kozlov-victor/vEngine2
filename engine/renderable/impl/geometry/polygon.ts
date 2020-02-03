@@ -19,7 +19,7 @@ export class Polygon extends Mesh {
         const polygons:Polygon[] = [];
         path.split('\n').join(' ').split(/(.*?z)/gi).forEach((p:string)=>{
             if (!p.trim()) return;
-            const polygon:Polygon = Polygon.fromSvgPath(game,p+ ' z');
+            const polygon:Polygon = Polygon.fromSvgPath(game,p);
             polygons.push(polygon);
         });
         return polygons;
@@ -68,6 +68,8 @@ export class Polygon extends Mesh {
     public static fromSvgPath(game:Game,p:string):Polygon {
         if (DEBUG && p.split(/z/gi).length-1>1) throw new DebugError(`multiple closing operation ('z') in one svg path. Use static method Polygon.fromMultiCurveSvgPath() instead`);
         const polyline:PolyLine = PolyLine.fromSvgPath(game,p);
+        if (DEBUG && !polyline.isClosed()) throw new DebugError(`can not create polygon from unclosed path`);
+        if (DEBUG && !polyline.isInterrupted()) throw new DebugError(`can not create polygon from interrupted path`);
         return Polygon.fromPolyline(game,polyline);
     }
 
