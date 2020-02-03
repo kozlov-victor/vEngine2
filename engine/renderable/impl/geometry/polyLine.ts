@@ -43,14 +43,14 @@ const getPointOnBezierCurve =(points:v2[], offset:number, t:number):v2=> {
 };
 
 const getPointsOnBezierCurve = (points:v2[], offset:number, numPoints:number):v2[]=> {
-    const cpoints:v2[] = [];
+    const cPoints:v2[] = [];
     for (let i:number = 0; i < numPoints-1; ++i) {
         const t:number = i / (numPoints - 1);
-        cpoints.push(getPointOnBezierCurve(points, offset, t));
+        cPoints.push(getPointOnBezierCurve(points, offset, t));
     }
     // correct possible deviation of last point
-    cpoints[cpoints.length-1] = points[points.length-1];
-    return cpoints;
+    cPoints[cPoints.length-1] = points[points.length-1];
+    return cPoints;
 };
 
 class SvgTokenizer {
@@ -79,6 +79,7 @@ class SvgTokenizer {
     public getNextCommand():string{
         let tkn:string = this.getNextToken(this.CHAR);
         if (!tkn) tkn = ''+this.getNextNumber();
+        //console.log('next command',tkn);
         return tkn;
     }
 
@@ -103,6 +104,7 @@ class SvgTokenizer {
         if (DEBUG && isNaN(n)) throw new DebugError(`can not read number: ${sign===1?'':'-'}${s}`);
         n*=sign;
         this.lastPos = lastPos;
+        //console.log('next number',n);
         return n;
     }
 
@@ -441,18 +443,22 @@ export class PolyLine extends Shape {
                 const ry:number = tokenizer.getNextNumber();
                 const xAxisRotation:number = tokenizer.getNextNumber();
                 const largeArcFlag:0|1 = tokenizer.getNextNumber() as (0|1);
+                if (DEBUG && largeArcFlag!==0 && largeArcFlag!==1) throw new DebugError(`wrong largeArcFlag value: ${largeArcFlag}`);
                 const sweepFlag:0|1 = tokenizer.getNextNumber() as (0|1);
+                if (DEBUG && sweepFlag!==0 && sweepFlag!==1) throw new DebugError(`wrong largeArcFlag value: ${sweepFlag}`);
                 let x:number = tokenizer.getNextNumber();
                 let y:number = tokenizer.getNextNumber();
                 if (command==='a') {
                     x+=this.lastPoint!.x;
                     y+=this.lastPoint!.y;
                 }
+
                 const arcs:{x:number,y:number,x1:number,y1:number,x2:number,y2:number}[]|undefined = arcToBezier(
                     this.lastPoint!.x,this.lastPoint!.y,
                     x,y,
-                    rx,ry,xAxisRotation,
-                    largeArcFlag,sweepFlag
+                    rx,ry,
+                    xAxisRotation,
+                    largeArcFlag ,sweepFlag
                 );
                 if (arcs!==undefined) arcs.forEach((arc:{x:number,y:number,x1:number,y1:number,x2:number,y2:number},i:number)=>{
                     let xTo:number = arc.x;

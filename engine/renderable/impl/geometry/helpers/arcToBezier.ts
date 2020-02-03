@@ -23,25 +23,27 @@ const mapToEllipse = ({ x, y }:IXY, rx:number, ry:number, cosphi:number, sinphi:
 };
 
 const approxUnitArc = (ang1:number, ang2:number):[IXY,IXY,IXY] => {
-    // See http://spencermortensen.com/articles/bezier-circle/ for the derivation
-    // of this constant.
-    // Note: We need to keep the sign of ang2, because this determines the
-    //       direction of the arc using the sweep-flag parameter.
-    const c:number = 0.551915024494 * (ang2 < 0 ? -1 : 1);
+    // If 90 degree circular arc, use a constant
+    // as derived from http://spencermortensen.com/articles/bezier-circle
+    const a:number = ang2 === 1.5707963267948966
+        ? 0.551915024494
+        : ang2 === -1.5707963267948966
+            ? -0.551915024494
+            : 4 / 3 * Math.tan(ang2 / 4);
 
-    const x1:number = Math.cos(ang1);
-    const y1:number = Math.sin(ang1);
-    const x2:number = Math.cos(ang1 + ang2);
-    const y2:number = Math.sin(ang1 + ang2);
+    const x1 = Math.cos(ang1);
+    const y1 = Math.sin(ang1);
+    const x2 = Math.cos(ang1 + ang2);
+    const y2 = Math.sin(ang1 + ang2);
 
     return [
         {
-            x: x1 - y1 * c,
-            y: y1 + x1 * c
+            x: x1 - y1 * a,
+            y: y1 + x1 * a
         },
         {
-            x: x2 + y2 * c,
-            y: y2 - x2 * c
+            x: x2 + y2 * a,
+            y: y2 - x2 * a
         },
         {
             x: x2,
