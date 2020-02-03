@@ -17,17 +17,11 @@ export class MainScene extends Scene {
             L -2 4 L 0 7 L 0 9 L -3 9`
         );
         polyLine1.pos.setXY(81,68);
-        polyLine1.scale.setXY(1,-1);
+        polyLine1.scale.setXY(3,-3);
         polyLine1.color = Color.RGB(100,20,222);
         polyLine1.lineWidth = 2;
         this.appendChild(polyLine1);
         polyLine1.addBehaviour(new DraggableBehaviour(this.game));
-
-        const polyLine8:PolyLine = PolyLine.fromSvgPath(this.game,`
-            M 1 1 L 7 1 L 7 -1 L 2 -3 L 1 1`
-        );
-        polyLine8.addBehaviour(new DraggableBehaviour(this.game));
-        this.appendChild(polyLine8);
 
 
         const polyLine2:PolyLine = PolyLine.fromSvgPath(this.game,`
@@ -39,29 +33,29 @@ export class MainScene extends Scene {
             L -6 3 L -9 4 L -9 5`
         );
         polyLine2.pos.setXY(187,83);
-        polyLine2.scale.setXY(1,-1);
+        polyLine2.scale.setXY(3,-3);
         polyLine2.color = Color.RGB(100,20,2);
         polyLine2.lineWidth = 2;
 
         polyLine2.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(polyLine2);
 
-        // const polyLine9:PolyLine =  PolyLine.fromSvgPath(this.game,`
-        //     M -10 -4 L -10 -3 L -7 6 L 1 6 L 8 2
-        //     L 11 2 L 11 -4 L -10 -4
-        //     M -6 1 L -6 3 L -4 3 L -4 1 L -6 1
-        //     M -5 10 L -5 11 L -1 11 L -1 10
-        //     M -3 6 L -3 11
-        //     M -10 -2 L -5 -2 L -5 -4
-        //     M -10 -3 L -5 -3
-        // `
-        // );
-        // polyLine9.pos.setXY(100,200);
-        // polyLine9.scale.setXY(1,-1);
-        // polyLine9.color = Color.RGB(23,234,2);
-        // polyLine9.lineWidth = 2;
-        // this.appendChild(polyLine9);
-        // polyLine9.addBehaviour(new DraggableBehaviour(this.game));
+        const polyLine9:PolyLine =  PolyLine.fromSvgPath(this.game,`
+            M -10 -4 L -10 -3 L -7 6 L 1 6 L 8 2
+            L 11 2 L 11 -4 L -10 -4
+            M -6 1 L -6 3 L -4 3 L -4 1 L -6 1
+            M -5 10 L -5 11 L -1 11 L -1 10
+            M -3 6 L -3 11
+            M -10 -2 L -5 -2 L -5 -4
+            M -10 -3 L -5 -3
+        `
+        );
+        polyLine9.pos.setXY(100,200);
+        polyLine9.scale.setXY(5,-5);
+        polyLine9.color = Color.RGB(23,234,2);
+        polyLine9.lineWidth = 2;
+        this.appendChild(polyLine9);
+        polyLine9.addBehaviour(new DraggableBehaviour(this.game));
 
 
         const polyLine4:PolyLine = PolyLine.fromSvgPath(this.game,`
@@ -86,6 +80,7 @@ export class MainScene extends Scene {
                     1150,375`);
         polyLine5.pos.setXY(64,158);
         polyLine5.color = Color.RGB(234,12,34);
+        polyLine5.scale.setXY(0.4);
         polyLine5.lineWidth = 4;
         polyLine5.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(polyLine5);
@@ -100,16 +95,16 @@ export class MainScene extends Scene {
         this.appendChild(polyLine6);
 
 
-        // const polyLine7:PolyLine = PolyLine.fromSvgPath(this.game,`
-        //     M 227 239 L 328 90 346 250 201 124 410 150 228 238
-        //     M10 80 C 40 10 65 10 95 80 S 150 150, 180 80
-        //     m128.312484,137.498709l0,0c0,-11.572243 15.236309,-20.953398 34.031247,-20.953398l15.468757,0l0,0l74.250011,0l139.218731,0c9.025671,0 17.681646,2.20758 24.063757,6.137107c6.382072,3.929528 9.967509,9.259109 9.967509,14.816291l0,52.383502l0,0l0,31.430092l0,0c0,11.572249 -15.236299,20.953398 -34.031257,20.953398l-139.218731,0l-96.998477,53.279623l22.748466,-53.279623l-15.468757,0c-18.794938,0 -34.031247,-9.381149 -34.031247,-20.953398l0,0l0,-31.430092l0,0l-0.00001,-52.383502z
-        // `);
-        // polyLine7.pos.setXY(135,50);
-        // polyLine7.lineWidth = 2;
-        // polyLine7.color = Color.RGB(8,12,22);
-        // polyLine7.addBehaviour(new DraggableBehaviour(this.game));
-        // this.appendChild(polyLine7);
+        const polyLine7:PolyLine = PolyLine.fromSvgPath(this.game,`
+            M 227 239 L 328 90 346 250 201 124 410 150 228 238
+            M10 80 C 40 10 65 10 95 80 S 150 150, 180 80
+            m128.312484,137.498709l0,0c0,-11.572243 15.236309,-20.953398 34.031247,-20.953398l15.468757,0l0,0l74.250011,0l139.218731,0c9.025671,0 17.681646,2.20758 24.063757,6.137107c6.382072,3.929528 9.967509,9.259109 9.967509,14.816291l0,52.383502l0,0l0,31.430092l0,0c0,11.572249 -15.236299,20.953398 -34.031257,20.953398l-139.218731,0l-96.998477,53.279623l22.748466,-53.279623l-15.468757,0c-18.794938,0 -34.031247,-9.381149 -34.031247,-20.953398l0,0l0,-31.430092l0,0l-0.00001,-52.383502z
+        `);
+        polyLine7.pos.setXY(135,50);
+        polyLine7.lineWidth = 2;
+        polyLine7.color = Color.RGB(8,12,22);
+        polyLine7.addBehaviour(new DraggableBehaviour(this.game));
+        this.appendChild(polyLine7);
     }
 
     public onProgress(val: number) {

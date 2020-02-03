@@ -96,6 +96,9 @@ class SvgTokenizer {
             this.pos++;
             s+='e'+this.getNextNumber();
         }
+        if (DEBUG && s.length===0) {
+            throw new DebugError(`can not read number, wrong next symbol: ${this.path[this.pos]}`);
+        }
         let n:number = +s;
         if (DEBUG && isNaN(n)) throw new DebugError(`can not read number: ${sign===1?'':'-'}${s}`);
         n*=sign;
@@ -149,7 +152,7 @@ export class PolyLine extends Shape {
 
     public static fromMultiCurveSvgPath(game:Game,path:string):PolyLine[]{
         const polyLines:PolyLine[] = [];
-        path.split('\n').join(' ').split(/(.*?z)/gi).forEach((p:string)=>{
+        path.split('\n').join(' ').split(/(.*?z)/gi).forEach((p:string)=>{ // todo z and m
             if (!p.trim()) return;
             const polyLine:PolyLine = PolyLine.fromSvgPath(game,p);
             polyLines.push(polyLine);
@@ -209,13 +212,16 @@ export class PolyLine extends Shape {
 
     private lastBezierPoint:v2;
 
+    private closed:boolean = false;
+    private interrupted:boolean = false;
+
     constructor(protected game:Game){
         super(game);
         this.color.addOnChangeListener(()=>this.passPropertiesChildren());
     }
 
     public moveTo(x:number,y:number):void{
-        if (DEBUG && this.lastPoint) throw new DebugError(`can not invoke moveTo: lineTo or moveTo already invoked`);
+        if (this.children.length>0) this.complete();
         this.lastPoint = new Point2d(x,y);
         if (!this.firstPoint) this.firstPoint = new Point2d(x,y);
 
@@ -241,10 +247,12 @@ export class PolyLine extends Shape {
         this.lineTo(lastX+x,lastY+y);
     }
 
-    public close(){
-        if (DEBUG && !this.firstPoint) throw new DebugError(`can not close polyline: no first point defined`);
-        this.lineTo(this!.firstPoint!.x,this!.firstPoint!.y);
-        this.complete();
+    public isClosed():boolean {
+        return this.closed;
+    }
+
+    public isInterrupted():boolean {
+        return this.interrupted;
     }
 
 
@@ -268,9 +276,17 @@ export class PolyLine extends Shape {
         super.setClonedProperties(cloned);
     }
 
+    private close(){
+        if (DEBUG && !this.firstPoint) throw new DebugError(`can not close polyline: no first point defined`);
+        this.lineTo(this!.firstPoint!.x,this!.firstPoint!.y);
+        this.closed = true;
+        this.complete();
+    }
+
     private complete():void {
         this.lastPoint = undefined;
         this.firstPoint = undefined;
+        this.interrupted = true;
     }
 
     private passPropertiesToChild(l:Line){
