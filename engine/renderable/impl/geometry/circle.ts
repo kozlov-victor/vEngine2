@@ -22,6 +22,7 @@ export class Circle extends Ellipse implements ICloneable<Circle>{
 
     constructor(game:Game){
         super(game);
+        this.radius = this._radius;
     }
 
     public draw():void{
