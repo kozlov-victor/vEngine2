@@ -17,8 +17,8 @@ const clearString = (s:string):string=>{
 type v2 = [number,number];
 
 // adds 1 or more v2s
-const add = (a:v2, ...args:v2[]):v2=> {
-    const n:[number,number] = [...a] as [number,number];
+const add = (a:Readonly<v2>, ...args:Readonly<v2>[]):v2=> {
+    const n:v2 = [...a] as v2;
     args.forEach((p) => {
         n[0] += p[0];
         n[1] += p[1];
@@ -26,15 +26,15 @@ const add = (a:v2, ...args:v2[]):v2=> {
     return n;
 };
 
-const mult =(a:v2, s:number):v2=> {
+const mult =(a:Readonly<v2>, s:number):v2=> {
     return [a[0] * s, a[1] * s];
 };
 
-const length = (a:v2,b:v2):number=>{
+const length = (a:Readonly<v2>,b:Readonly<v2>):number=>{
    return Math.sqrt(Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1]));
 };
 
-const getPointOnBezierCurve =(points:v2[], offset:number, t:number):v2=> {
+const getPointOnBezierCurve =(points:Readonly<v2>[], offset:number, t:number):v2=> {
     const invT:number = 1 - t;
     return add(mult(points[offset + 0], invT * invT * invT),
         mult(points[offset + 1], 3 * t * invT * invT),
@@ -42,14 +42,14 @@ const getPointOnBezierCurve =(points:v2[], offset:number, t:number):v2=> {
         mult(points[offset + 3], t * t  *t));
 };
 
-const getPointsOnBezierCurve = (points:v2[], offset:number, numPoints:number):v2[]=> {
+const getPointsOnBezierCurve = (points:Readonly<v2>[], offset:number, numPoints:number):v2[]=> {
     const cPoints:v2[] = [];
     for (let i:number = 0; i < numPoints-1; ++i) {
         const t:number = i / (numPoints - 1);
         cPoints.push(getPointOnBezierCurve(points, offset, t));
     }
     // correct possible deviation of last point
-    cPoints[cPoints.length-1] = points[points.length-1];
+    cPoints[cPoints.length-1] = points[points.length-1] as v2;
     return cPoints;
 };
 
@@ -77,7 +77,7 @@ class SvgTokenizer {
     }
 
     public getNextCommand():string{
-        let tkn:string = this.getNextToken(this.CHAR);
+        let tkn:string = this.getNextToken(this.CHAR,1);
         if (!tkn) tkn = ''+this.getNextNumber();
         //console.log('next command',tkn);
         return tkn;
@@ -115,7 +115,7 @@ class SvgTokenizer {
         }
     }
 
-    private getNextToken(allowedSymbols:string){
+    private getNextToken(allowedSymbols:string, limit:number = 0){
         if (DEBUG && this.isEof()) throw new DebugError(`unexpected end of string`);
         let char:string;
         let res:string = '';
@@ -124,10 +124,11 @@ class SvgTokenizer {
         while (!this.isEof()){
             char = this.path[this.pos];
             if (allowedSymbols.indexOf(char)===-1) break;
+            if (limit>0 && res.length===limit) break;
             res+=char;
             this.pos++;
         }
-        return res.trim();
+        return res;
     }
 
 }
@@ -375,14 +376,14 @@ export class PolyLine extends Shape {
             }
             case 'q': {
                 const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
-                const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                const p2:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
                 const p3:v2 = [p2[0],p2[1]];
-                const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                const p4:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
                 this.lastBezierPoint = p3;
-                this.bezierTo(p1,add(p1,p2),add(p1,p3),add(p1,p4));
+                this.bezierTo(p1,p2,p3,p4);
                 break;
             }
-            case 'T': {
+            case 'T': { // https://www.w3.org/TR/SVG/paths.html
                 const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
                 const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
@@ -396,10 +397,10 @@ export class PolyLine extends Shape {
                 const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
                 const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
-                const p3:v2 = add(p1,[p2[0],p2[1]]);
-                const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                const p3:v2 = [p2[0],p2[1]];
+                const p4:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
                 this.lastBezierPoint = p3;
-                this.bezierTo(p1,add(p1,p2),p3,add(p1,p4));
+                this.bezierTo(p1,p2,p3,p4);
                 break;
             }
             case 'M': {
@@ -480,5 +481,11 @@ export class PolyLine extends Shape {
         }
         tokenizer.lastCommand = command;
     }
+
+    // private visualizePoint([x,y]:[number,number]){
+    //     const c = new Circle(this.game);
+    //     c.center.setXY(x,y);
+    //     this.game.getCurrScene().appendChild(c);
+    // }
 
 }

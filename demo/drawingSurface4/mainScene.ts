@@ -2,8 +2,6 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 export class MainScene extends Scene {
