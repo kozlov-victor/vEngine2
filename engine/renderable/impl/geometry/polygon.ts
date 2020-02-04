@@ -62,6 +62,7 @@ export class Polygon extends Mesh {
         const pg:Polygon = new Polygon(game);
         pg.setVertices(triangulatedVertices);
         pg.size.set(p.size);
+        this.edgeVertices = vertices;
         return pg;
     }
 
@@ -81,9 +82,49 @@ export class Polygon extends Mesh {
         this.vertexItemSize = 2;
     }
 
+    public extrudeToMesh(depth:number):Mesh{
+        const primitive = new class extends AbstractPrimitive {
+
+            constructor() {
+                super();
+                this.vertexArr = [];
+            }
+        };
+        const sideA:number[] = [];
+        const sideB:number[] = [];
+        const sideC:number[] = [];
+        for (let i = 0; i < this.modelPrimitive.vertexArr.length; i+=2) {
+            const vertexArrElement1 = this.modelPrimitive.vertexArr[i];
+            const vertexArrElement2 = this.modelPrimitive.vertexArr[i+1];
+            sideA.push(vertexArrElement1,vertexArrElement2,depth/2);
+            sideB.push(vertexArrElement1,vertexArrElement2,-depth/2);
+        }
+        for (let i = 0; i < this.edgeVertices.length; i+=2) {
+            const edgeVertex1A = this.edgeVertices[i];
+            const edgeVertex1B = this.edgeVertices[i+1];
+            sideC.push(
+                edgeVertex1A,edgeVertex1B,depth/2,
+
+            );
+        }
+
+        const allPolygons:number[] = [...sideA,...sideB];
+        primitive.vertexArr.push(...allPolygons);
+        const game = this.game;
+        return new class extends Mesh {
+            constructor() {
+                super(game, true, false);
+                this.modelPrimitive = primitive;
+                this.vertexItemSize = 3;
+            }
+        };
+    }
+
     private setVertices(vertices:number[]):void {
         this.modelPrimitive = new PolygonPrimitive();
         this.modelPrimitive.vertexArr = vertices;
     }
+
+    private edgeVertices:number[];
 
 }

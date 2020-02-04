@@ -18,11 +18,11 @@ export class Circle extends Ellipse implements ICloneable<Circle>{
     public radiusY:never;
 
     public readonly type:string = 'Circle';
-    private _radius: number = 10;
+    private _radius:number;
 
     constructor(game:Game){
         super(game);
-        this.radius = this._radius;
+        this.radius = 10;
     }
 
     public draw():void{
