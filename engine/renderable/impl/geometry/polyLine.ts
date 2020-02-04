@@ -256,7 +256,6 @@ export class PolyLine extends Shape {
         return this.interrupted;
     }
 
-
     public bezierTo(p1:v2,p2:v2,p3:v2,p4:v2){
         const l:number = length(p1,p2)+length(p2,p3)+length(p3,p4);
         const bezier:v2[] = getPointsOnBezierCurve([p1,p2,p3,p4],0,l);
@@ -273,15 +272,15 @@ export class PolyLine extends Shape {
 
     public draw():void{}
 
-    protected setClonedProperties(cloned:PolyLine):void{
-        super.setClonedProperties(cloned);
-    }
-
-    private close(){
+    public close(){
         if (DEBUG && !this.firstPoint) throw new DebugError(`can not close polyline: no first point defined`);
         this.lineTo(this!.firstPoint!.x,this!.firstPoint!.y);
         this.closed = true;
         this.complete();
+    }
+
+    protected setClonedProperties(cloned:PolyLine):void{
+        super.setClonedProperties(cloned);
     }
 
     private complete():void {
