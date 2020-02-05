@@ -27,11 +27,12 @@ export class MainScene extends Scene {
             `;
 
 
+
         const p:Polygon = Polygon.fromSvgPath(this.game,path);
         const m = p.extrudeToMesh(50);
         this.appendChild(m);
         m.setInterval(()=>{
-            m.angle3d.x+=0.01;
+            m.angle3d.y+=0.01;
         },1);
 
     }

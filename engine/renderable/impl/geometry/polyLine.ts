@@ -249,6 +249,14 @@ export class PolyLine extends Shape {
         this.lineTo(lastX+x,lastY+y);
     }
 
+    public arcTo(rx:number,ry:number,xAxisRotation:number,largeArcFlag:0|1,sweepFlag:0|1,x:number,y:number){
+        this._arcTo(rx,ry,xAxisRotation,largeArcFlag,sweepFlag,x,y,false);
+    }
+
+    public arcBy(rx:number,ry:number,xAxisRotation:number,largeArcFlag:0|1,sweepFlag:0|1,x:number,y:number){
+        this._arcTo(rx,ry,xAxisRotation,largeArcFlag,sweepFlag,x,y,true);
+    }
+
     public isClosed():boolean {
         return this.closed;
     }
@@ -257,12 +265,11 @@ export class PolyLine extends Shape {
         return this.interrupted;
     }
 
-    public bezierTo(p1:v2,p2:v2,p3:v2,p4:v2){
-        const l:number = length(p1,p2)+length(p2,p3)+length(p3,p4);
-        const bezier:v2[] = getPointsOnBezierCurve([p1,p2,p3,p4],0,l);
-        bezier.forEach((v:v2)=>{
-            this.lineTo(v[0],v[1]);
-        });
+    public close(){
+        if (DEBUG && !this.firstPoint) throw new DebugError(`can not close polyline: no first point defined`);
+        this.lineTo(this!.firstPoint!.x,this!.firstPoint!.y);
+        this.closed = true;
+        this.complete();
     }
 
     public clone(): PolyLine {
@@ -273,15 +280,42 @@ export class PolyLine extends Shape {
 
     public draw():void{}
 
-    public close(){
-        if (DEBUG && !this.firstPoint) throw new DebugError(`can not close polyline: no first point defined`);
-        this.lineTo(this!.firstPoint!.x,this!.firstPoint!.y);
-        this.closed = true;
-        this.complete();
-    }
-
     protected setClonedProperties(cloned:PolyLine):void{
         super.setClonedProperties(cloned);
+    }
+
+    private bezierTo(p1:v2,p2:v2,p3:v2,p4:v2){
+        const l:number = length(p1,p2)+length(p2,p3)+length(p3,p4);
+        const bezier:v2[] = getPointsOnBezierCurve([p1,p2,p3,p4],0,l);
+        bezier.forEach((v:v2)=>{
+            this.lineTo(v[0],v[1]);
+        });
+    }
+
+    private _arcTo(rx:number,ry:number,xAxisRotation:number,largeArcFlag:0|1,sweepFlag:0|1,x:number,y:number,isRelativeCoordinates:boolean){
+        if (DEBUG && largeArcFlag!==0 && largeArcFlag!==1) throw new DebugError(`wrong largeArcFlag value: ${largeArcFlag}`);
+        if (DEBUG && sweepFlag!==0 && sweepFlag!==1) throw new DebugError(`wrong largeArcFlag value: ${sweepFlag}`);
+        if (isRelativeCoordinates) {
+            x+=this.lastPoint!.x;
+            y+=this.lastPoint!.y;
+        }
+
+        const arcs:{x:number,y:number,x1:number,y1:number,x2:number,y2:number}[]|undefined = arcToBezier(
+            this.lastPoint!.x,this.lastPoint!.y,
+            x,y,
+            rx,ry,
+            xAxisRotation,
+            largeArcFlag ,sweepFlag
+        );
+        if (arcs!==undefined) arcs.forEach((arc:{x:number,y:number,x1:number,y1:number,x2:number,y2:number},i:number)=>{
+            let xTo:number = arc.x;
+            let yTo:number = arc.y;
+            if (i===arcs.length-1) {
+                xTo = x;
+                yTo = y;
+            }
+            this.bezierTo([this.lastPoint!.x,this.lastPoint!.y],[arc.x1,arc.y1],[arc.x2,arc.y2],[xTo,yTo]);
+        });
     }
 
     private complete():void {
@@ -325,6 +359,38 @@ export class PolyLine extends Shape {
     private executeCommand(command:string):void{
         const tokenizer:SvgTokenizer = this.tokenizer;
         switch (command) {
+            case 'L': {
+                this.lineTo(tokenizer.getNextNumber(),tokenizer.getNextNumber());
+                break;
+            }
+            case 'l': {
+                this.lineBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
+                break;
+            }
+            case 'H': {
+                this.lineTo( tokenizer.getNextNumber(),this!.lastPoint!.y);
+                break;
+            }
+            case 'h': {
+                this.lineBy( tokenizer.getNextNumber(),0);
+                break;
+            }
+            case 'V': {
+                this.lineTo(this!.lastPoint!.x,tokenizer.getNextNumber());
+                break;
+            }
+            case 'v': {
+                this.lineBy(0,tokenizer.getNextNumber());
+                break;
+            }
+            case 'M': {
+                this.moveTo(tokenizer.getNextNumber(), tokenizer.getNextNumber());
+                break;
+            }
+            case 'm': {
+                this.moveBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
+                break;
+            }
             case 'C': {
                 const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
@@ -403,73 +469,17 @@ export class PolyLine extends Shape {
                 this.bezierTo(p1,p2,p3,p4);
                 break;
             }
-            case 'M': {
-                this.moveTo(tokenizer.getNextNumber(), tokenizer.getNextNumber());
-                break;
-            }
-            case 'm': {
-                this.moveBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
-                break;
-            }
-            case 'L': {
-                this.lineTo(tokenizer.getNextNumber(),tokenizer.getNextNumber());
-                break;
-            }
-            case 'l': {
-                this.lineBy(tokenizer.getNextNumber(),tokenizer.getNextNumber());
-                break;
-            }
-            case 'H': {
-                this.lineTo( tokenizer.getNextNumber(),this!.lastPoint!.y);
-                break;
-            }
-            case 'h': {
-                this.lineBy( tokenizer.getNextNumber(),0);
-                break;
-            }
-            case 'V': {
-                this.lineTo(this!.lastPoint!.x,tokenizer.getNextNumber());
-                break;
-            }
-            case 'v': {
-                this.lineBy(0,tokenizer.getNextNumber());
-                break;
-            }
             case 'A':
             case 'a':
-                // A rx ry x-axis-rotation large-arc-flag sweep-flag x y
-                // a rx ry x-axis-rotation large-arc-flag sweep-flag dx dy
                 const rx:number = tokenizer.getNextNumber();
                 const ry:number = tokenizer.getNextNumber();
                 const xAxisRotation:number = tokenizer.getNextNumber();
                 const largeArcFlag:0|1 = tokenizer.getNextNumber() as (0|1);
-                if (DEBUG && largeArcFlag!==0 && largeArcFlag!==1) throw new DebugError(`wrong largeArcFlag value: ${largeArcFlag}`);
                 const sweepFlag:0|1 = tokenizer.getNextNumber() as (0|1);
-                if (DEBUG && sweepFlag!==0 && sweepFlag!==1) throw new DebugError(`wrong largeArcFlag value: ${sweepFlag}`);
-                let x:number = tokenizer.getNextNumber();
-                let y:number = tokenizer.getNextNumber();
-                if (command==='a') {
-                    x+=this.lastPoint!.x;
-                    y+=this.lastPoint!.y;
-                }
-
-                const arcs:{x:number,y:number,x1:number,y1:number,x2:number,y2:number}[]|undefined = arcToBezier(
-                    this.lastPoint!.x,this.lastPoint!.y,
-                    x,y,
-                    rx,ry,
-                    xAxisRotation,
-                    largeArcFlag ,sweepFlag
-                );
-                if (arcs!==undefined) arcs.forEach((arc:{x:number,y:number,x1:number,y1:number,x2:number,y2:number},i:number)=>{
-                    let xTo:number = arc.x;
-                    let yTo:number = arc.y;
-                    if (i===arcs.length-1) {
-                        xTo = x;
-                        yTo = y;
-                    }
-                    this.bezierTo([this.lastPoint!.x,this.lastPoint!.y],[arc.x1,arc.y1],[arc.x2,arc.y2],[xTo,yTo]);
-                });
-
+                const x:number = tokenizer.getNextNumber();
+                const y:number = tokenizer.getNextNumber();
+                const relative:boolean = command==='a';
+                this._arcTo(rx,ry,xAxisRotation,largeArcFlag,sweepFlag,x,y,relative);
                 break;
             case 'Z':
             case 'z':
