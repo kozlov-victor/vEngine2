@@ -1,11 +1,13 @@
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {DebugError} from "@engine/debug/debugError";
-type Point3 = Record<'x'|'y'|'z',number>;
-type Point2 = Record<'x'|'y',number>;
+import {IPoint3d} from "@engine/geometry/point3d";
+import {IPoint2d} from "@engine/geometry/point2d";
+import {calcNormal} from "@engine/renderable/impl/geometry/helpers/calcNormal";
 type FacePoint = Record<'v'|'uv'|'n',number>;
 type Face = [FacePoint,FacePoint,FacePoint];
+type IPoint2dRecord = Record<'x'|'y'|'z',number>;
 
-type obj = {v_arr:Point3[],vn_arr:Point3[],f_arr:Face[],vt_arr:Point2[]};
+type obj = {v_arr:IPoint3d[],vn_arr:IPoint3d[],f_arr:Face[],vt_arr:IPoint2d[]};
 
 class ObjPrimitive extends AbstractPrimitive {
     constructor(){
@@ -24,23 +26,23 @@ export class ObjParser {
         let cnt:number = 0;
         objInstance.f_arr.forEach((f:Face,i:number)=>{
 
-            const vert1:Point3 = objInstance.v_arr[f[0].v-1];
-            const vert2:Point3 = objInstance.v_arr[f[1].v-1];
-            const vert3:Point3 = objInstance.v_arr[f[2].v-1];
+            const vert1:IPoint3d = objInstance.v_arr[f[0].v-1];
+            const vert2:IPoint3d = objInstance.v_arr[f[1].v-1];
+            const vert3:IPoint3d = objInstance.v_arr[f[2].v-1];
 
-            let norm1:Point3 = objInstance.vn_arr[f[0].n-1];
-            let norm2:Point3 = objInstance.vn_arr[f[1].n-1];
-            let norm3:Point3 = objInstance.vn_arr[f[2].n-1];
+            let norm1:IPoint3d = objInstance.vn_arr[f[0].n-1];
+            let norm2:IPoint3d = objInstance.vn_arr[f[1].n-1];
+            let norm3:IPoint3d = objInstance.vn_arr[f[2].n-1];
 
             if (!norm1) {
-                norm1 = this.calcNormal(vert1,vert2,vert3);
+                norm1 = calcNormal(vert1,vert2,vert3);
                 norm2 = {...norm1};
                 norm3 = {...norm1};
             }
 
-            const tex1:Point2 = objInstance.vt_arr[f[0].uv-1];
-            const tex2:Point2 = objInstance.vt_arr[f[1].uv-1];
-            const tex3:Point2 = objInstance.vt_arr[f[2].uv-1];
+            const tex1:IPoint2d = objInstance.vt_arr[f[0].uv-1];
+            const tex2:IPoint2d = objInstance.vt_arr[f[1].uv-1];
+            const tex3:IPoint2d = objInstance.vt_arr[f[2].uv-1];
 
 
             pr.vertexArr.push(
@@ -78,25 +80,25 @@ export class ObjParser {
         return this.objToPrimitive(this.readObj(source));
     }
 
-    private readPoint3(s:string):Point3{
-        const point3:Point3 = {x:NaN,y:NaN,z:NaN} as Point3;
+    private readIPoint3d(s:string):IPoint3d{
+        const point:IPoint2dRecord = {x:NaN,y:NaN,z:NaN} as IPoint2dRecord;
         s.split(' ').filter((it:string)=>it.trim().length).map((it:string)=>parseFloat(it)).forEach((n:number,i:number)=>{
-            if (i===0) point3.x = n;
-            else if (i===1) point3.y = n;
-            else if (i===2) point3.z = n;
+            if (i===0) point.x = n;
+            else if (i===1) point.y = n;
+            else if (i===2) point.z = n;
         });
-        if (Number.isNaN(point3.x) || Number.isNaN(point3.y) || Number.isNaN(point3.z)) throw new Error(`unexpected line ${s}`);
-        return point3;
+        if (Number.isNaN(point.x) || Number.isNaN(point.y) || Number.isNaN(point.z)) throw new Error(`unexpected line ${s}`);
+        return point;
     }
 
-    private readPoint2(s:string):Point2{
-        const point2:Point2 = {x:NaN,y:NaN} as Point2;
+    private readIPoint2d(s:string):IPoint2d{
+        const point:IPoint2dRecord = {x:NaN,y:NaN} as IPoint2dRecord;
         s.split(' ').filter((it:string)=>it.trim().length).map((it:string)=>parseFloat(it)).forEach((n:number,i:number)=>{
-            if (i===0) point2.x = n;
-            else if (i===1) point2.y = n;
+            if (i===0) (point as Record<'x'|'y'|'z',number>).x = n;
+            else if (i===1) point.y = n;
         });
-        if (Number.isNaN(point2.x) || Number.isNaN(point2.y)) throw new Error(`unexpected line ${s}`);
-        return point2;
+        if (Number.isNaN(point.x) || Number.isNaN(point.y)) throw new Error(`unexpected line ${s}`);
+        return point;
     }
 
 
@@ -156,13 +158,13 @@ export class ObjParser {
             const restSymbols:string = line.substr(2);
             switch (command) {
                 case 'vn':
-                    objInstalce.vn_arr.push(this.readPoint3(restSymbols));
+                    objInstalce.vn_arr.push(this.readIPoint3d(restSymbols));
                     break;
                 case 'vt':
-                    objInstalce.vt_arr.push(this.readPoint2(restSymbols));
+                    objInstalce.vt_arr.push(this.readIPoint2d(restSymbols));
                     break;
                 case 'v':
-                    objInstalce.v_arr.push(this.readPoint3(restSymbols));
+                    objInstalce.v_arr.push(this.readIPoint3d(restSymbols));
                     break;
                 case 'f':
                     objInstalce.f_arr.push(...this.readFace(restSymbols));
@@ -170,31 +172,6 @@ export class ObjParser {
             }
         });
         return objInstalce;
-    }
-
-
-    private calcNormal(p1:Point3,p2:Point3,p3:Point3):Point3 {
-        const a:Point3 = {
-            x:p2.x-p1.x,
-            y:p2.y-p1.y,
-            z:p2.z-p1.z,
-        };
-        const b:Point3 = {
-            x:p3.x-p1.x,
-            y:p3.y-p1.y,
-            z:p3.z-p1.z,
-        };
-        const n:Point3 = {
-            x:a.y*b.z - a.z*b.y,
-            y:a.z*b.x - a.x*b.z,
-            z:a.x*b.y - a.y*b.x
-        };
-        const l:number = Math.sqrt(n.x*n.x+n.y*n.y+n.z*n.z);
-        n.x/=l;
-        n.y/=l;
-        n.z/=l;
-
-        return n;
     }
 
 }

@@ -5,6 +5,9 @@ import {EarClippingTriangulator} from "@engine/renderable/impl/geometry/helpers/
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
+import {Optional} from "@engine/core/declarations";
+import {calcNormal} from "@engine/renderable/impl/geometry/helpers/calcNormal";
+import {IPoint3d} from "@engine/geometry/point3d";
 
 class PolygonPrimitive extends AbstractPrimitive {
     constructor(){
@@ -87,46 +90,91 @@ export class Polygon extends Mesh {
     public extrudeToMesh(depth:number):Mesh{
         const primitive = new class extends AbstractPrimitive {
 
+            public normalArr:number[] = [];
+
             constructor() {
                 super();
                 this.vertexArr = [];
+                this.normalArr = [];
             }
-        };
-        const sideA:number[] = [];
-        const sideB:number[] = [];
-        const sideC:number[] = [];
-        for (let i = 0; i < this.modelPrimitive.vertexArr.length; i+=2) {
-            const vertexArrElement1 = this.modelPrimitive.vertexArr[i];
-            const vertexArrElement2 = this.modelPrimitive.vertexArr[i+1];
-            sideA.push(vertexArrElement1,vertexArrElement2,depth/2);
-            sideB.push(vertexArrElement1,vertexArrElement2,-depth/2);
-        }
-        for (let i = 0; i <= this.edgeVertices.length-4; i+=4) {
-            const edgeVertex1A = this.edgeVertices[i];
-            const edgeVertex1B = this.edgeVertices[i+1];
-            const edgeVertex2A = this.edgeVertices[i+2];
-            const edgeVertex2B = this.edgeVertices[i+3];
-            sideC.push(
-                edgeVertex1A,edgeVertex1B,depth/2,
-                edgeVertex2A,edgeVertex2B,depth/2,
-                edgeVertex1A,edgeVertex1B,-depth/2,
+        }();
+        const d2:number = depth/2;
 
-                edgeVertex1A,edgeVertex1B,-depth/2,
-                edgeVertex2A,edgeVertex2B,depth/2,
-                edgeVertex2A,edgeVertex2B,-depth/2,
+        for (let i:number = 0; i < this.modelPrimitive.vertexArr.length; i+=6) {
+            const vertexA1:number = this.modelPrimitive.vertexArr[i];
+            const vertexA2:number = this.modelPrimitive.vertexArr[i+1];
+
+            const vertexB1:number = this.modelPrimitive.vertexArr[i+2];
+            const vertexB2:number = this.modelPrimitive.vertexArr[i+3];
+
+            const vertexC1:number = this.modelPrimitive.vertexArr[i+4];
+            const vertexC2:number = this.modelPrimitive.vertexArr[i+5];
+
+            // side a
+            primitive.vertexArr.push(
+                vertexA1,vertexA2,d2,
+                vertexB1,vertexB2,d2,
+                vertexC1,vertexC2,d2
+            );
+            primitive.normalArr.push(
+                0,0,1,
+                0,0,1,
+                0,0,1
+            );
+
+            // side b
+            primitive.vertexArr.push(
+                vertexA1,vertexA2,-d2,
+                vertexB1,vertexB2,-d2,
+                vertexC1,vertexC2,-d2
+            );
+            primitive.normalArr.push(
+                0,0,-1,
+                0,0,-1,
+                0,0,-1
             );
         }
+        for (let i = 0; i < this.edgeVertices.length-2; i+=2) {
+            const edgeVertexA1:number = this.edgeVertices[i];
+            const edgeVertexA2:number = this.edgeVertices[i+1];
+            const edgeVertexB1:number = this.edgeVertices[i+2];
+            const edgeVertexB2:number = this.edgeVertices[i+3];
+            // side c
+            primitive.vertexArr.push(
+                edgeVertexA1,edgeVertexA2,d2,
+                edgeVertexB1,edgeVertexB2,d2,
+                edgeVertexA1,edgeVertexA2,-d2,
 
-        const allPolygons:number[] = [...sideA,...sideB,...sideC];
-        primitive.vertexArr.push(...allPolygons);
+                edgeVertexA1,edgeVertexA2,-d2,
+                edgeVertexB1,edgeVertexB2,d2,
+                edgeVertexB1,edgeVertexB2,-d2,
+            );
+            const normal:IPoint3d = calcNormal(
+                {x:edgeVertexB1,y:edgeVertexB2,z:d2},
+                {x:edgeVertexA1,y:edgeVertexA2,z:d2},
+                {x:edgeVertexA1,y:edgeVertexA2,z:-d2}
+            );
+            primitive.normalArr.push(
+                normal.x,normal.y,normal.z,
+                normal.x,normal.y,normal.z,
+                normal.x,normal.y,normal.z,
+
+                normal.x,normal.y,normal.z,
+                normal.x,normal.y,normal.z,
+                normal.x,normal.y,normal.z,
+            );
+
+        }
+
         const game = this.game;
+        console.log(primitive);
         return new class extends Mesh {
             constructor() {
                 super(game, true, false);
                 this.modelPrimitive = primitive;
                 this.vertexItemSize = 3;
             }
-        };
+        }();
     }
 
     private setVertices(vertices:number[]):void {
