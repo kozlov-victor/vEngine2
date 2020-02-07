@@ -5,6 +5,11 @@ import {Optional} from "@engine/core/declarations";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 
+// g.vibrationActuator.playEffect("dual-rumble", {
+//     duration: 100,
+//     strongMagnitude: 1.0,
+//     weakMagnitude: 1.0
+// });
 
 interface IWindow {
     addEventListener: (cmg:string,cb:(e:IGamePadEvent)=>void)=>void;
@@ -64,6 +69,8 @@ export class GamePadControl extends AbstractKeypad implements IControl{
     public static readonly enabled:boolean = isEnabled;
 
     public readonly type:string = 'GamePadControl';
+
+    public static SENSITIVITY:number = 0.05;
 
     protected keyPressed: string = GAME_PAD_EVENTS.buttonPressed;
     protected keyHold: string = GAME_PAD_EVENTS.buttonHold;
@@ -170,6 +177,9 @@ export class GamePadControl extends AbstractKeypad implements IControl{
         gamePadIndex:number,
     ):void {
 
+        if (Math.abs(axis0)<GamePadControl.SENSITIVITY) axis0 = 0;
+        if (Math.abs(axis1)<GamePadControl.SENSITIVITY) axis1 = 0;
+
         if (axis0>0) {
             const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(btnRight, gamePadIndex);
             this.pressButton(btnRight,axis0,gamePadIndex,eventFromBuffer);
@@ -199,6 +209,10 @@ export class GamePadControl extends AbstractKeypad implements IControl{
             const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(btnUp, gamePadIndex);
             this.releaseButton(eventFromBuffer);
         }
+
+
+
+
     }
 
 
