@@ -43,29 +43,21 @@ export class MainScene extends Scene {
 
         const path = `
 
-            M66.039,133.545c0,0-21-57,18-67s49-4,65,8
-            s30,41,53,27s66,4,58,32s-5,44,18,57s22,46,0,45s-54-40-68-16s-40,88-83,48s11-61-11-80s-79-7-70-41
-            C46.039,146.545,53.039,128.545,66.039,133.545z
-
+            M1.1752732294430075,-39.366672544669086 C37.663396365128506,-141.54919587847198 180.62505914269707,-39.366672544669086 1.1752732294430075,92.01085745592928 C-178.27451268382262,-39.366672544669086 -35.31284990626381,-141.54919587847198 1.1752732294430075,-39.366672544669086 z
             `;
-
-        // const path = `
-        //
-        //     M 0 0 h 200 v 200 h -200 v -200 z
-        //
-        //     `;
 
         const p:Polygon = Polygon.fromSvgPath(this.game,path);
         const m = p.extrudeToMesh(50);
-        m.setWH(200);
+        m.setWH(150);
         m.transformPoint.setToCenter();
         m.cubeMapTexture = this.cubeTextureLink.getTarget();
         m.reflectivity = 0.1;
+        m.pos.setXY(200,200);
         m.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(m);
         m.setInterval(()=>{
             m.angle3d.y+=0.01;
-            m.angle3d.z+=0.01;
+            //m.angle3d.z+=0.01;
         },1);
     }
 

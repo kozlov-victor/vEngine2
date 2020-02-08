@@ -14,9 +14,6 @@ export class MainScene extends Scene {
     public onPreloading() {
 
 
-        // https://onlinefontconverter.com/
-        // https://gero3.github.io/facetype.js/
-
         const n = new NullGameObject(this.game);
         n.scale.setXY(0.5);
         n.size.setWH(500);

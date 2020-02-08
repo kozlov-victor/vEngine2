@@ -400,7 +400,7 @@ export class PolyLine extends Shape {
                 this.bezierTo(p1,p2,p3,p4);
                 break;
             }
-            case 'c': {
+            case 'c': { // cubic Bézier curve
                 const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p3:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
@@ -409,7 +409,7 @@ export class PolyLine extends Shape {
                 this.bezierTo(p1,add(p1,p2),add(p1,p3),add(p1,p4));
                 break;
             }
-            case 'S': {
+            case 'S': { // smooth cubic Bézier curve
                 const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 if (!this.lastBezierPoint || ['c','C','S','s'].indexOf(tokenizer.lastCommand)===-1) {
                     this.lastBezierPoint = p1;
@@ -431,7 +431,7 @@ export class PolyLine extends Shape {
                 this.bezierTo(p1,p2,p3,p4);
                 break;
             }
-            case 'Q': {
+            case 'Q': { // quadratic Bézier curve
                 const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p3:v2 = [p2[0],p2[1]];
@@ -449,7 +449,8 @@ export class PolyLine extends Shape {
                 this.bezierTo(p1,p2,p3,p4);
                 break;
             }
-            case 'T': { // https://www.w3.org/TR/SVG/paths.html
+            case 'T': { // smooth quadratic Bézier curve
+                // https://www.w3.org/TR/SVG/paths.html
                 const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
                 if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
                 const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
