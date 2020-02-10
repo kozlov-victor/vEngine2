@@ -8,6 +8,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {Optional} from "@engine/core/declarations";
 import {calcNormal} from "@engine/renderable/impl/geometry/helpers/calcNormal";
 import {IPoint3d} from "@engine/geometry/point3d";
+import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/helpers/isPolylineClockWise";
 
 class PolygonPrimitive extends AbstractPrimitive {
     constructor(){
@@ -88,6 +89,7 @@ export class Polygon extends Mesh {
     }
 
     public extrudeToMesh(depth:number):Mesh{
+        const isClockWise:boolean = isPolylineCloseWise(this.edgeVertices);
         const primitive = new class extends AbstractPrimitive {
 
             public normalArr:number[] = [];
@@ -149,11 +151,23 @@ export class Polygon extends Mesh {
                 edgeVertexB1,edgeVertexB2,d2,
                 edgeVertexB1,edgeVertexB2,-d2,
             );
-            const normal:IPoint3d = calcNormal(
-                {x:edgeVertexB1,y:edgeVertexB2,z:d2},
-                {x:edgeVertexA1,y:edgeVertexA2,z:d2},
-                {x:edgeVertexA1,y:edgeVertexA2,z:-d2}
-            );
+
+            let normal:IPoint3d;
+            console.log(isClockWise);
+            if (isClockWise) {
+                normal = calcNormal(
+                    {x:edgeVertexA1,y:edgeVertexA2,z:d2},
+                    {x:edgeVertexB1,y:edgeVertexB2,z:d2},
+                    {x:edgeVertexA1,y:edgeVertexA2,z:-d2}
+                );
+            } else {
+                normal = calcNormal(
+                    {x:edgeVertexB1,y:edgeVertexB2,z:d2},
+                    {x:edgeVertexA1,y:edgeVertexA2,z:d2},
+                    {x:edgeVertexA1,y:edgeVertexA2,z:-d2}
+                );
+            }
+
             primitive.normalArr.push(
                 normal.x,normal.y,normal.z,
                 normal.x,normal.y,normal.z,
@@ -167,7 +181,6 @@ export class Polygon extends Mesh {
         }
 
         const game = this.game;
-        console.log(primitive);
         return new class extends Mesh {
             constructor() {
                 super(game, true, false);

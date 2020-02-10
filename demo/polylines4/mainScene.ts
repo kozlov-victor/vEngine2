@@ -14,6 +14,7 @@ export class MainScene extends Scene {
     public onPreloading() {
 
 
+
         const n = new NullGameObject(this.game);
         n.scale.setXY(0.5);
         n.size.setWH(500);
