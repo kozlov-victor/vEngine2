@@ -15,8 +15,8 @@ export class MainScene extends Scene {
 
     // https://gero3.github.io/facetype.js/
     public onPreloading() {
-        //this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Mortal Kombat 4_Regular.json');
-        this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Press Start 2P_Regular.json');
+        this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Mortal Kombat 4_Regular.json');
+        //this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Press Start 2P_Regular.json');
     }
 
     public onProgress(val: number) {

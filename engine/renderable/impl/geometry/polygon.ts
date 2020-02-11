@@ -90,6 +90,7 @@ export class Polygon extends Mesh {
 
     public extrudeToMesh(depth:number):Mesh{
         const isClockWise:boolean = isPolylineCloseWise(this.edgeVertices);
+        console.log({isClockWise});
         const primitive = new class extends AbstractPrimitive {
 
             public normalArr:number[] = [];
@@ -137,10 +138,16 @@ export class Polygon extends Mesh {
             );
         }
         for (let i = 0; i < this.edgeVertices.length-2; i+=2) {
-            const edgeVertexA1:number = this.edgeVertices[i];
-            const edgeVertexA2:number = this.edgeVertices[i+1];
-            const edgeVertexB1:number = this.edgeVertices[i+2];
-            const edgeVertexB2:number = this.edgeVertices[i+3];
+            let edgeVertexA1:number = this.edgeVertices[i];
+            let edgeVertexA2:number = this.edgeVertices[i+1];
+            let edgeVertexB1:number = this.edgeVertices[i+2];
+            let edgeVertexB2:number = this.edgeVertices[i+3];
+
+            if (isClockWise) {
+                [edgeVertexA1,edgeVertexA2,edgeVertexB1,edgeVertexB2] =
+                    [edgeVertexB1,edgeVertexB2,edgeVertexA1,edgeVertexA2];
+            }
+
             // side c
             primitive.vertexArr.push(
                 edgeVertexA1,edgeVertexA2,d2,
@@ -152,21 +159,11 @@ export class Polygon extends Mesh {
                 edgeVertexB1,edgeVertexB2,-d2,
             );
 
-            let normal:IPoint3d;
-            console.log(isClockWise);
-            if (isClockWise) {
-                normal = calcNormal(
-                    {x:edgeVertexA1,y:edgeVertexA2,z:d2},
-                    {x:edgeVertexB1,y:edgeVertexB2,z:d2},
-                    {x:edgeVertexA1,y:edgeVertexA2,z:-d2}
-                );
-            } else {
-                normal = calcNormal(
-                    {x:edgeVertexB1,y:edgeVertexB2,z:d2},
-                    {x:edgeVertexA1,y:edgeVertexA2,z:d2},
-                    {x:edgeVertexA1,y:edgeVertexA2,z:-d2}
-                );
-            }
+            const normal:IPoint3d = calcNormal(
+                {x:edgeVertexA1,y:edgeVertexA2,z:d2},
+                {x:edgeVertexB1,y:edgeVertexB2,z:d2},
+                {x:edgeVertexA1,y:edgeVertexA2,z:-d2}
+            );
 
             primitive.normalArr.push(
                 normal.x,normal.y,normal.z,
