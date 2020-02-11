@@ -142,7 +142,7 @@ export class Polygon extends Mesh {
             let edgeVertexB1:number = this.edgeVertices[i+2];
             let edgeVertexB2:number = this.edgeVertices[i+3];
 
-            if (isClockWise) {
+            if (!isClockWise) {
                 [edgeVertexA1,edgeVertexA2,edgeVertexB1,edgeVertexB2] =
                     [edgeVertexB1,edgeVertexB2,edgeVertexA1,edgeVertexA2];
             }

@@ -54,12 +54,12 @@ export class MainScene extends Scene {
 
         // const path = `
         //
-        //     M 0 0 v 200 h 200 v -200 v -200 z
+        //     M 0 0 v 200 h 200 v -200 h -200 z
         //
         //     `;
 
         const p:Polygon = Polygon.fromSvgPath(this.game,path);
-        const m = p.extrudeToMesh(50);
+        const m = p.extrudeToMesh(180);
         m.setWH(150);
         m.transformPoint.setToCenter();
         m.cubeMapTexture = this.cubeTextureLink.getTarget();
