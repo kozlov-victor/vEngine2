@@ -2,12 +2,12 @@
 
 export const isPolylineCloseWise = (vertices:number[]): boolean=> {
     let sum:number = 0.0;
-    const l2 = vertices.length;
-    for (let i:number = 0; i < vertices.length; i+=2) {
+    const l = vertices.length;
+    for (let i:number = 0; i < l; i+=2) {
         const v1x:number = vertices[i];
-        const v1y:number = vertices[(i+1)%l2];
-        const v2x:number = vertices[(i+2)%l2];
-        const v2y:number = vertices[(i+3)%l2];
+        const v1y:number = vertices[(i+1)%l];
+        const v2x:number = vertices[(i+2)%l];
+        const v2y:number = vertices[(i+3)%l];
         sum += (v2x - v1x) * (v2y + v1y);
     }
     return sum > 0.0;
