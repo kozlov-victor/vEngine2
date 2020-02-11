@@ -15,8 +15,8 @@ export class MainScene extends Scene {
 
     // https://gero3.github.io/facetype.js/
     public onPreloading() {
-        //this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Mortal Kombat 4_Regular.json');
-        this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Press Start 2P_Regular.json');
+        this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Mortal Kombat 4_Regular.json');
+        //this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Press Start 2P_Regular.json');
     }
 
     public onProgress(val: number) {
@@ -33,13 +33,13 @@ export class MainScene extends Scene {
             container.angle3d.x+=0.01;
         },1);
 
-        const word:string = 'vEngine';
+        const word:string = 'vEngine Hello!';
         let offsetX:number = 0;
         const scale:number = 0.1;
         word.split('').forEach(letter=>{
             const path = this.fontJsonLink.getTarget().glyphs[letter].o;
             if (!path) {
-                offsetX+=100;
+                offsetX+=50;
                 return;
             }
             const svgPath:string = new FaceTypeToSvg().convert(path,scale,offsetX,0);
