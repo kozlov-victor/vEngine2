@@ -90,7 +90,6 @@ export class Polygon extends Mesh {
 
     public extrudeToMesh(depth:number):Mesh{
         const isClockWise:boolean = isPolylineCloseWise(this.edgeVertices);
-        console.log({isClockWise});
         const primitive = new class extends AbstractPrimitive {
 
             public normalArr:number[] = [];
@@ -178,13 +177,15 @@ export class Polygon extends Mesh {
         }
 
         const game = this.game;
-        return new class extends Mesh {
+        const m:Mesh = new class extends Mesh {
             constructor() {
                 super(game, true, false);
                 this.modelPrimitive = primitive;
                 this.vertexItemSize = 3;
             }
         }();
+        this.setClonedProperties(m);
+        return m;
     }
 
     private setVertices(vertices:number[]):void {

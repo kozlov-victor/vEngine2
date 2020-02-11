@@ -33,17 +33,17 @@ export class MainScene extends Scene {
             container.angle3d.x+=0.01;
         },1);
 
-        const word:string = 'vEngine';
+        const word:string = 'vEngine Hello!';
         let offsetX:number = 0;
         const scale:number = 0.1;
+        const faceTypeToSvg:FaceTypeToSvg = new FaceTypeToSvg();
         word.split('').forEach(letter=>{
             const path = this.fontJsonLink.getTarget().glyphs[letter].o;
             if (!path) {
-                offsetX+=100;
+                offsetX+=50;
                 return;
             }
-            const svgPath:string = new FaceTypeToSvg().convert(path,scale,offsetX,0);
-            console.log(letter,svgPath);
+            const svgPath:string = faceTypeToSvg.convert(path,scale,offsetX,0);
             const polygons:Polygon[] = Polygon.fromMultiCurveSvgPath(this.game,svgPath);
             polygons.forEach(p=>{
                 p.fillColor.setRGB(12,233,54);

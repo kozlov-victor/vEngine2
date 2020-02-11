@@ -5,11 +5,12 @@ import {Point2d} from "@engine/geometry/point2d";
 
 export const isPolylineCloseWise = (vertices:number[]):boolean=> {
     let sum:number = 0.0;
-    for (let i:number = 0; i < vertices.length; i+=4) {
+    for (let i:number = 0; i < vertices.length-4; i+=2) {
+        const l2 = vertices.length<<1;
         const v1x:number = vertices[i];
-        const v1y:number = vertices[(i+1)%(vertices.length/4)];
-        const v2x:number = vertices[(i+2)%(vertices.length/4)];
-        const v2y:number = vertices[(i+3)%(vertices.length/4)];
+        const v1y:number = vertices[(i+1)%l2];
+        const v2x:number = vertices[(i+2)%l2];
+        const v2y:number = vertices[(i+3)%l2];
         sum += (v2x - v1x) * (v2y + v1y);
     }
     return sum > 0.0;

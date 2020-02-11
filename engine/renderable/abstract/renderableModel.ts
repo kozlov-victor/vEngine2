@@ -314,6 +314,8 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         cloned.size.set(cloned.size);
         cloned.alpha = this.alpha;
         cloned.blendMode = this.blendMode;
+        cloned.visible = this.visible;
+        cloned.filters = [...this.filters];
         cloned.forceDrawChildrenOnNewSurface = this.forceDrawChildrenOnNewSurface;
 
         this.children.forEach((c:RenderableModel)=>{
@@ -329,6 +331,7 @@ export abstract class RenderableModel extends TransformableModel implements IRev
             cloned.appendChild(clonedChildren);
         });
         cloned.game = this.game;
+        super.setClonedProperties(cloned);
     }
 
     /**

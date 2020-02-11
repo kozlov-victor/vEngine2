@@ -53,7 +53,7 @@ export abstract class Mesh extends RenderableModel {
             if (this.modelPrimitive.vertexArr.length%this.vertexItemSize!==0) {
                 console.error(this);
                 throw new DebugError(
-                    `wrong vertexArr size, actual size is ${this.modelPrimitive.vertexArr.length},
+                    `Wrong vertexArr size, actual size is ${this.modelPrimitive.vertexArr.length},
                     but number must be a multiple of ${this.vertexItemSize} `
                 );
             }
@@ -62,6 +62,18 @@ export abstract class Mesh extends RenderableModel {
 
     public draw():void{
         this.game.getRenderer().drawMesh(this);
+    }
+
+    protected setClonedProperties(cloned: Mesh): void {
+        cloned.texture = this.texture;
+        cloned.cubeMapTexture = this.cubeMapTexture;
+        cloned.normalsTexture = this.normalsTexture;
+        cloned.heightMapTexture = this.heightMapTexture;
+        cloned.heightMapFactor = this.heightMapFactor;
+        cloned.fillColor = this.fillColor.clone();
+        cloned.colorMix = this.colorMix;
+        cloned.reflectivity = this.reflectivity;
+        super.setClonedProperties(cloned);
     }
 
 }

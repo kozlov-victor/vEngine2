@@ -1,6 +1,4 @@
 import {DebugError} from "@engine/debug/debugError";
-
-
 import {ShaderProgram} from "./shaderProgram";
 
 export class VertexBuffer {
@@ -22,9 +20,9 @@ export class VertexBuffer {
 
     public setData(bufferData:number[], itemType:number, itemSize:number):void{
         if (DEBUG) {
-            if (!bufferData) throw new DebugError('can not set data to vertex buffer: bufferData not specified');
-            if (!itemType) throw new DebugError('can not set data to vertex buffer: itemType not specified');
-            if (!itemSize) throw new DebugError('can not set data to vertex buffer: itemSize not specified');
+            if (!bufferData) throw new DebugError('can not set data to vertex buffer: bufferData is not specified');
+            if (!itemType) throw new DebugError('can not set data to vertex buffer: itemType is not specified');
+            if (!itemSize) throw new DebugError('can not set data to vertex buffer: itemSize is not specified');
         }
         const gl:WebGLRenderingContext = this.gl;
 
@@ -44,8 +42,8 @@ export class VertexBuffer {
     }
 
     public bind(program:ShaderProgram):void{
-        if (DEBUG && !program) throw new DebugError("can not bind VertexBuffer, program not specified");
-        if (DEBUG && !this.attrName) throw new DebugError("can not bind VertexBuffer, attribute name not specified");
+        if (DEBUG && !program) throw new DebugError("can not bind VertexBuffer, program is not specified");
+        if (DEBUG && !this.attrName) throw new DebugError("can not bind VertexBuffer, attribute name is not specified");
         program.bindBuffer(this,this.attrName);
     }
 
