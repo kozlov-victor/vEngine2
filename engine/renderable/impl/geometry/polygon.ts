@@ -153,7 +153,6 @@ export class Polygon extends Mesh {
             );
 
             let normal:IPoint3d;
-            console.log(isClockWise);
             if (isClockWise) {
                 normal = calcNormal(
                     {x:edgeVertexA1,y:edgeVertexA2,z:d2},
@@ -181,13 +180,15 @@ export class Polygon extends Mesh {
         }
 
         const game = this.game;
-        return new class extends Mesh {
+        const m:Mesh = new class extends Mesh {
             constructor() {
                 super(game, true, false);
                 this.modelPrimitive = primitive;
                 this.vertexItemSize = 3;
             }
         }();
+        this.setClonedProperties(m);
+        return m;
     }
 
     private setVertices(vertices:number[]):void {
