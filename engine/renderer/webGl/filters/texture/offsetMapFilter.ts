@@ -21,10 +21,10 @@ export class OffsetMapFilter extends AbstractGlFilter{
         super(game);
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.offsetTexture = programGen.addFragmentUniform(GL_TYPE.SAMPLER_2D,'offsetTexture');
-        this.offsetForce = programGen.addFragmentUniform(GL_TYPE.FLOAT,'offsetForce');
-        this.pixelWidth = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixelWidth');
-        this.pixelHeight = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixelHeight');
+        this.offsetTexture = programGen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'offsetTexture');
+        this.offsetForce = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'offsetForce');
+        this.pixelWidth = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixelWidth');
+        this.pixelHeight = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixelHeight');
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){

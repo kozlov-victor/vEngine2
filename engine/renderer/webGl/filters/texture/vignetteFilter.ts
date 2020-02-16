@@ -17,8 +17,8 @@ export class VignetteFilter extends AbstractGlFilter{
         super(game);
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.size = programGen.addFragmentUniform(GL_TYPE.FLOAT,'size');
-        this.amount = programGen.addFragmentUniform(GL_TYPE.FLOAT,'amount');
+        this.size = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'size');
+        this.amount = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'amount');
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main() {

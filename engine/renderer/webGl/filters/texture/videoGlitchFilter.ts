@@ -128,8 +128,8 @@ export class VideoGlitchFilter extends AbstractGlFilter {
             }
             `
         );
-        this.iTime = programGen.addFragmentUniform(GL_TYPE.FLOAT,'iTime');
-        this.iResolution = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'iResolution');
+        this.iTime = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'iTime');
+        this.iResolution = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'iResolution');
         this.simpleRectDrawer.initProgram();
     }
 

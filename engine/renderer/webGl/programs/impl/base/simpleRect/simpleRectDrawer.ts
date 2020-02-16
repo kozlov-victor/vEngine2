@@ -35,7 +35,7 @@ export class SimpleRectDrawer extends AbstractDrawer {
                 v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
             }
         `);
-        gen.addFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');
+        gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');
         //gen.addFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
         //language=GLSL
         gen.setFragmentMainFn(MACRO_GL_COMPRESS`            

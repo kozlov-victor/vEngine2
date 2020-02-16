@@ -19,10 +19,10 @@ export class SwirlFilter extends AbstractGlFilter {
     constructor(game:Game) {
         super(game);
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.angle = programGen.addFragmentUniform(GL_TYPE.FLOAT,'angle');
-        this.radius = programGen.addFragmentUniform(GL_TYPE.FLOAT,'radius');
-        this.center = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
-        this.texSize = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
+        this.angle = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'angle');
+        this.radius = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'radius');
+        this.center = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
+        this.texSize = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
 
 
         //language=GLSL

@@ -13,7 +13,7 @@ export class TrianglesMosaicFilter extends AbstractGlFilter{
         super(game);
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.tileSize = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'tileSize');
+        this.tileSize = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'tileSize');
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main()

@@ -26,12 +26,12 @@ export class GlowFilter extends AbstractGlFilter {
         this.quality = Math.pow(this.quality, 1/3);
         this.dist *= this.quality;
 
-        this.distance = programGen.addFragmentUniform(GL_TYPE.FLOAT,'distance');
-        this.outerStrength = programGen.addFragmentUniform(GL_TYPE.FLOAT,'outerStrength');
-        this.innerStrength = programGen.addFragmentUniform(GL_TYPE.FLOAT,'innerStrength');
-        this.pixelWidth = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixelWidth');
-        this.pixelHeight = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixelHeight');
-        this.glowColor = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'glowColor');
+        this.distance = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'distance');
+        this.outerStrength = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'outerStrength');
+        this.innerStrength = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'innerStrength');
+        this.pixelWidth = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixelWidth');
+        this.pixelHeight = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixelHeight');
+        this.glowColor = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'glowColor');
 
         //language=GLSL
         programGen.setFragmentMainFn(`

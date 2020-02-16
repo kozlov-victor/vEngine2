@@ -17,9 +17,9 @@ export class MotionBlurFilter extends AbstractGlFilter {
     constructor(game:Game) {
         super(game);
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.strength = programGen.addFragmentUniform(GL_TYPE.FLOAT,'strength');
-        this.center = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
-        this.texSize = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
+        this.strength = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'strength');
+        this.center = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
+        this.texSize = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
 
 
         //language=GLSL

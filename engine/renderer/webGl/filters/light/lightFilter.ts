@@ -29,13 +29,13 @@ export class LightFilter extends AbstractGlFilter {
         const gen: ShaderGenerator = this.simpleRectDrawer.gen;
         gen.prependFragmentCodeBlock(structures);
         gen.appendFragmentCodeBlock(functions);
-        gen.addFragmentUniform("PointLight",'u_pointLights[MAX_NUM_OF_POINT_LIGHTS]');
-        gen.addFragmentUniform("AmbientLight",'u_ambientLight');
-        gen.addFragmentUniform("Material",'u_material');
-        this.normalTexture = gen.addFragmentUniform(GL_TYPE.SAMPLER_2D,'normalTexture');
-        this.u_useNormalMap = gen.addFragmentUniform(GL_TYPE.BOOL,'u_useNormalMap');
-        this.u_dimension = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_dimension');
-        gen.addFragmentUniform(GL_TYPE.INT,'u_numOfPointLights');
+        gen.addStructFragmentUniform("PointLight",'u_pointLights[MAX_NUM_OF_POINT_LIGHTS]');
+        gen.addStructFragmentUniform("AmbientLight",'u_ambientLight');
+        gen.addStructFragmentUniform("Material",'u_material');
+        this.normalTexture = gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'normalTexture');
+        this.u_useNormalMap = gen.addScalarFragmentUniform(GL_TYPE.BOOL,'u_useNormalMap');
+        this.u_dimension = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_dimension');
+        gen.addScalarFragmentUniform(GL_TYPE.INT,'u_numOfPointLights');
         gen.setFragmentMainFn(mainFnSource);
         this.simpleRectDrawer.initProgram();
     }

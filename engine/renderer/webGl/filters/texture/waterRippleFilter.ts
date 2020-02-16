@@ -32,8 +32,8 @@ export class WaterRippleFilter extends AbstractGlFilter {
             this.dropVectors[i] = -100;
         }
 
-        this.amount = programGen.addFragmentUniform(GL_TYPE.FLOAT,'amount');
-        this.time = programGen.addFragmentUniform(GL_TYPE.FLOAT,'time');
+        this.amount = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'amount');
+        this.time = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'time');
 
         //language=GLSL
         programGen.setFragmentMainFn(`

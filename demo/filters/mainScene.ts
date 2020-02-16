@@ -12,7 +12,7 @@ import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhit
 import {ColorizeFilter} from "@engine/renderer/webGl/filters/texture/colorizeFilter";
 import {PixelFilter} from "@engine/renderer/webGl/filters/texture/pixelFilter";
 import {PosterizeFilter} from "@engine/renderer/webGl/filters/texture/posterizeFilter";
-import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/texture/simpleBlurFilter";
+import {FastBlurFilter} from "@engine/renderer/webGl/filters/texture/fastBlurFilter";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
@@ -51,7 +51,7 @@ export class MainScene extends Scene {
 
         const ps:PosterizeFilter = new PosterizeFilter(this.game);
 
-        const sb:SimpleBlurFilter = new SimpleBlurFilter(this.game);
+        const sb:FastBlurFilter = new FastBlurFilter(this.game);
         sb.setSize(2);
 
         const barrel:BarrelDistortionFilter = new BarrelDistortionFilter(this.game);

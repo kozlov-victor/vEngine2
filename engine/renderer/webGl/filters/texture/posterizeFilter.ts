@@ -15,8 +15,8 @@ export class PosterizeFilter extends AbstractGlFilter {
         super(game);
 
         const programGen = this.simpleRectDrawer.gen;
-        this.gamma = programGen.addFragmentUniform(GL_TYPE.FLOAT,'gamma');
-        this.numColors = programGen.addFragmentUniform(GL_TYPE.FLOAT,'numColors');
+        this.gamma = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'gamma');
+        this.numColors = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'numColors');
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
               void main(){

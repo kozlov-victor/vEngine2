@@ -1,4 +1,4 @@
-import {normalizeUniformName} from "../../base/shaderProgramUtils";
+import {GL_TYPE, normalizeUniformName} from "../../base/shaderProgramUtils";
 
 interface IInfo {
     type: string;
@@ -25,11 +25,12 @@ export class ShaderGenerator {
         return normalizeUniformName(name);
     }
 
-    public addFragmentUniform(type:string,name:string,extractArrayName:boolean = false):string{
-        this.fragmentUniforms.push({type,name});
-        name = normalizeUniformName(name);
-        if (extractArrayName) name = name.split('[')[0];
-        return name;
+    public addScalarFragmentUniform(type:GL_TYPE, name:string, extractArrayName:boolean = false):string{
+        return this._addFragmentUniform(type,name,extractArrayName);
+    }
+
+    public addStructFragmentUniform(strucName:string,uniformName:string, extractArrayName:boolean = false){
+        return this._addFragmentUniform(strucName,uniformName,extractArrayName);
     }
 
     public addAttribute(type:string,name:string):string{
@@ -105,5 +106,14 @@ ${this.fragmentMainFn}
         console.log('// *** fragment shader source ***');
         console.log(this.getFragmentSource());
     }
+
+    private _addFragmentUniform(type:string,name:string, extractArrayName:boolean = false){
+        this.fragmentUniforms.push({type,name});
+        name = normalizeUniformName(name);
+        if (extractArrayName) name = name.split('[')[0];
+        return name;
+    }
+
+
 
 }

@@ -15,8 +15,8 @@ export class NoiseFilter extends AbstractGlFilter {
     constructor(game:Game) {
         super(game);
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.u_time = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_time');
-        this.u_noise_intensity = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_noise_intensity');
+        this.u_time = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_time');
+        this.u_noise_intensity = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_noise_intensity');
 
         //language=GLSL
         programGen.appendFragmentCodeBlock(MACRO_GL_COMPRESS`

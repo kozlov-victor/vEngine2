@@ -21,11 +21,11 @@ export class LensDistortionFilter extends AbstractGlFilter {
     constructor(game:Game) {
         super(game);
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.rt_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
-        this.rt_h = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
-        this.u_mouse = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_mouse');
-        this.u_force = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_force');
-        this.u_length_size = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_length_size');
+        this.rt_w = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
+        this.rt_h = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
+        this.u_mouse = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_mouse');
+        this.u_force = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_force');
+        this.u_length_size = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_length_size');
 
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`

@@ -14,7 +14,7 @@ export class TriangleBlurFilter extends AbstractGlFilter {
     constructor(protected game:Game) {
         super(game);
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.delta = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'delta');
+        this.delta = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'delta');
 
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`

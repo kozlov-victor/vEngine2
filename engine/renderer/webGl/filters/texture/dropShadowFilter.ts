@@ -29,11 +29,11 @@ export class DropShadowFilter  extends AbstractGlFilter{
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
 
-        this.color = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'color');
-        this.shift = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'shift');
-        this.pixelWidth = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixelWidth');
-        this.pixelHeight = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixelHeight');
-        this.distance = programGen.addFragmentUniform(GL_TYPE.FLOAT,'distance');
+        this.color = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'color');
+        this.shift = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'shift');
+        this.pixelWidth = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixelWidth');
+        this.pixelHeight = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixelHeight');
+        this.distance = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'distance');
         //language=GLSL
         programGen.setFragmentMainFn(`
             #define PI ${Math.PI.toFixed(7)}

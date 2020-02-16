@@ -55,32 +55,32 @@ export class ShapeDrawer extends AbstractDrawer {
         this.a_position = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_position');
         gen.addVarying(GL_TYPE.FLOAT_VEC4,'v_position');
         // rect uniforms
-        this.u_lineWidth = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_lineWidth');
-        this.u_rx = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_rx');
-        this.u_ry = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_ry');
-        this.u_width = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_width');
-        this.u_height = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_height');
-        this.u_rectOffsetTop = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_rectOffsetTop');
-        this.u_rectOffsetLeft = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_rectOffsetLeft');
-        this.u_borderRadius = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_borderRadius');
+        this.u_lineWidth = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_lineWidth');
+        this.u_rx = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_rx');
+        this.u_ry = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_ry');
+        this.u_width = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_width');
+        this.u_height = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_height');
+        this.u_rectOffsetTop = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_rectOffsetTop');
+        this.u_rectOffsetLeft = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_rectOffsetLeft');
+        this.u_borderRadius = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_borderRadius');
         // color and texture data uniforms
-        this.u_color = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_color');
-        this.u_alpha = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
-        this.u_fillColor = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillColor');
-        this.u_fillLinearGradient = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillLinearGradient[3]',true);
+        this.u_color = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_color');
+        this.u_alpha = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
+        this.u_fillColor = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillColor');
+        this.u_fillLinearGradient = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillLinearGradient[3]',true);
         // texture
-        this.u_texRect = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_texRect');
-        this.u_texOffset = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_texOffset');
-        gen.addFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');
+        this.u_texRect = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_texRect');
+        this.u_texOffset = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_texOffset');
+        gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');
         // drawing type uniforms
-        this.u_shapeType = gen.addFragmentUniform(GL_TYPE.INT,'u_shapeType');
-        this.u_fillType = gen.addFragmentUniform(GL_TYPE.INT,'u_fillType');
+        this.u_shapeType = gen.addScalarFragmentUniform(GL_TYPE.INT,'u_shapeType');
+        this.u_fillType = gen.addScalarFragmentUniform(GL_TYPE.INT,'u_fillType');
         // ellipse arc angles
-        this.u_arcAngleFrom = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_arcAngleFrom');
-        this.u_arcAngleTo   = gen.addFragmentUniform(GL_TYPE.FLOAT,'u_arcAngleTo');
+        this.u_arcAngleFrom = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_arcAngleFrom');
+        this.u_arcAngleTo   = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_arcAngleTo');
         // repeat texture (aka tiled image)
-        this.u_repeatFactor = gen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_repeatFactor');
-        this.u_stretchMode = gen.addFragmentUniform(GL_TYPE.INT,'u_stretchMode');
+        this.u_repeatFactor = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_repeatFactor');
+        this.u_stretchMode = gen.addScalarFragmentUniform(GL_TYPE.INT,'u_stretchMode');
 
         gen.setFragmentMainFn(parametrizeString(fragmentSource,{
             __STRETCH_MODE_STRETCH__:       STRETCH_MODE.STRETCH,

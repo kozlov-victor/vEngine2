@@ -12,7 +12,7 @@ export class ColorizeFilter extends AbstractGlFilter{
         super(game);
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.uPixelColor = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC4,'uPixelColor');
+        this.uPixelColor = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'uPixelColor');
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){

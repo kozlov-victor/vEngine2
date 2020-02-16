@@ -28,9 +28,9 @@ export class WaveFilter extends AbstractGlFilter {
                     }
             `
         );
-        this.u_time = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_time');
-        this.u_amplitude = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_amplitude');
-        this.u_frequency = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_frequency');
+        this.u_time = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_time');
+        this.u_amplitude = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_amplitude');
+        this.u_frequency = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_frequency');
         this.setFrequency(1.5);
         this.setAmplitude(0.001);
         this.simpleRectDrawer.initProgram();

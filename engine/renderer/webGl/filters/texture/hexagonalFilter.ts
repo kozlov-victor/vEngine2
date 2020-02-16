@@ -15,9 +15,9 @@ export class HexagonalFilter extends AbstractGlFilter {
     constructor(game:Game) {
         super(game);
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.scale = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'scale');
-        this.center = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
-        this.texSize = programGen.addFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
+        this.scale = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'scale');
+        this.center = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
+        this.texSize = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
 
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`

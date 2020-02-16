@@ -20,10 +20,10 @@ export class PixelFilter extends AbstractGlFilter {
         super(game);
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.rt_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
-        this.rt_h = programGen.addFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
-        this.pixel_w = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixel_w');
-        this.pixel_h = programGen.addFragmentUniform(GL_TYPE.FLOAT,'pixel_h');
+        this.rt_w = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
+        this.rt_h = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
+        this.pixel_w = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixel_w');
+        this.pixel_h = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixel_h');
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){

@@ -11,7 +11,7 @@ export class BlackWhiteFilter extends AbstractGlFilter{
         super(game);
 
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
-        this.u_mixFactor = programGen.addFragmentUniform(GL_TYPE.FLOAT,'u_mixFactor');
+        this.u_mixFactor = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_mixFactor');
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){
