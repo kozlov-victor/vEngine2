@@ -42,7 +42,7 @@ export class TweenMovie {
 
     public update():void{
         if (this._completed) return;
-        const currTime:number = this.game.getTime();
+        const currTime:number = this.game.getCurrentTime();
         if (this._startedTime===0) this._startedTime = currTime;
         const deltaTime:number = currTime - this._startedTime;
         let allCompleted:boolean = true;

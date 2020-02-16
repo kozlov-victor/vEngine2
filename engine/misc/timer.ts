@@ -14,7 +14,7 @@ export class Timer {
     }
 
     public onUpdate():void {
-        const time:number = Game.getInstance().getTime();
+        const time:number = Game.getInstance().getCurrentTime();
         if (!this.lastTime) this.lastTime = time;
         const delta:number = time - this.lastTime;
         if (delta !==0 && delta>this.interval) {

@@ -59,7 +59,7 @@ export class ParticleSystem extends RenderableModel {
 
     public update():void {
         super.update();
-        const time:number = this.game.getTime();
+        const time:number = this.game.getCurrentTime();
         for (const holder of this._particles) {
             this._onUpdateParticle(holder.particle);
             if (time - holder.createdTime > holder.lifeTime) {
@@ -103,7 +103,7 @@ export class ParticleSystem extends RenderableModel {
             particle.pos.y = r({from:-this.emissionRadius,to:+this.emissionRadius});
             particle.pos.add(this.emissionPosition);
             const lifeTime:number = r(this.particleLiveTime);
-            const createdTime:number = this.game.getTime();
+            const createdTime:number = this.game.getCurrentTime();
             this._particles.push({particle,lifeTime,createdTime});
             //this.parent.appendChildAfter(this,particle);
             this.appendChild(particle);

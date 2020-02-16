@@ -138,9 +138,7 @@
 
     if (!window.Blob) window.Blob = undefined;
 
-    if (!window.Promise) window.Promise = function(){
 
-    };
     if ( ![].fill)  {
         Array.prototype.fill = function( value ) {
 
@@ -170,7 +168,13 @@
 
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.js"></script>
+<script>
+    if (!window.Promise) {
+        document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.js"></sc'+'ript>');
+    }
+</script>
+
+
 <script>
     document.write('<script src="./out/debug.js?modified='+new Date().getTime()+'"></sc'+'ript>');
 </script>

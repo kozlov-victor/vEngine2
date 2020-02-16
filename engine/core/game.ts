@@ -51,6 +51,7 @@ export class Game {
     public readonly collider:ColliderEngine = new ColliderEngine(this);
     private readonly _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
+    private _startedTime:number = 0;
     private _lastTime:number = 0;
     private _currTime:number = 0;
     private _deltaTime:number = 0;
@@ -70,6 +71,7 @@ export class Game {
         if (DEBUG) (window as unknown as {game:Game}).game = this;
         (this.size as Size).setWH(width,height);
         this._scaleStrategy = scaleStrategy;
+        this._startedTime = Date.now();
     }
 
     get scaleStrategy(): SCALE_STRATEGY {
@@ -110,12 +112,16 @@ export class Game {
         return false;
     }
 
-    public getTime():number{
+    public getCurrentTime():number{
         return this._lastTime;
     }
 
     public getDeltaTime():number{
         return this._deltaTime;
+    }
+
+    public getElapsedTime():number{
+        return this._lastTime - this._startedTime;
     }
 
     public log(...args:unknown[]):void{

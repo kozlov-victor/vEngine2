@@ -114,7 +114,7 @@ export class Tween<T> {
 
     public update():void {
         if (this._completed) return;
-        const currTime:number = Game.getInstance().getTime();
+        const currTime:number = Game.getInstance().getCurrentTime();
         this._currTime = currTime;
         if (this._startedTime===0) this._startedTime = currTime;
         let curTweenTime:number = currTime - this._startedTime;

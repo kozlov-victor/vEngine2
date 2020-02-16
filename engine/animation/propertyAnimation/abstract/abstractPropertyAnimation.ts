@@ -29,7 +29,7 @@ export abstract class AbstractPropertyAnimation implements IAnimation {
 
     public update(): void {
         if (!this.playing) return;
-        const time:number = this.game.getTime();
+        const time:number = this.game.getCurrentTime();
         if (this.startTime===0) this.startTime = time;
         const passed:number = time - this.startTime;
         this.onUpdate(passed);

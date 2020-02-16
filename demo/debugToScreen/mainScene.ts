@@ -15,7 +15,7 @@ export class MainScene extends Scene {
         this.game.log(new Rect());
 
         this.setInterval(()=>{
-            this.game.log(this.game.getTime());
+            this.game.log(this.game.getCurrentTime());
         },1000);
     }
 

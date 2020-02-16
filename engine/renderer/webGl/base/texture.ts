@@ -31,6 +31,7 @@ export class Texture extends AbstractTexture{
                 throw new DebugError("texture.setImage: if image is undefined, width and height must be specified: tex.setImage(null,w,h)");
 
             const maxSupportedSize:number = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
+            if (DEBUG && !maxSupportedSize) throw new DebugError(`Can not obtain MAX_TEXTURE_SIZE value`);
             if (size.width>maxSupportedSize || size.height>maxSupportedSize) {
                 throw new DebugError(`can not create texture with size ${size.width}x${size.height}, max supported size is ${maxSupportedSize}`);
             }

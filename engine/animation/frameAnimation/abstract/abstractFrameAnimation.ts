@@ -54,7 +54,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnim
 
     public update():void {
         if (!this._isPlaying) return;
-        const time:number = this.game.getTime();
+        const time:number = this.game.getCurrentTime();
         if (!this._startTime) this._startTime = time;
         const delta:number = (time - this._startTime) % this.duration;
         let currFrame:number = ~~((this.frames.length) * delta / this.duration);

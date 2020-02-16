@@ -42,8 +42,10 @@ export abstract class AbstractTexture implements ITexture {
         if (DEBUG) {
             if (!gl) throw new DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
             // define max texture units supported
-            if (!AbstractTexture.MAX_TEXTURE_IMAGE_UNITS)
-                AbstractTexture.MAX_TEXTURE_IMAGE_UNITS =  gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+            if (!AbstractTexture.MAX_TEXTURE_IMAGE_UNITS) {
+                AbstractTexture.MAX_TEXTURE_IMAGE_UNITS = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+                if (DEBUG && !AbstractTexture.MAX_TEXTURE_IMAGE_UNITS) throw new DebugError(`Can not obtain MAX_TEXTURE_IMAGE_UNITS value`);
+            }
         }
         this.tex = gl.createTexture() as WebGLTexture;
         if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);

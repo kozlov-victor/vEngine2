@@ -34,11 +34,13 @@ import glEnumToString = debugUtil.glEnumToString;
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
     const contextAttrs:WebGLContextAttributes = {alpha:false,premultipliedAlpha:false};
-    const possibles:string[] = ['webgl2','webgl','experimental-webgl','webkit-3d','moz-webgl'];
+    const possibles:string[] = ['webgl','experimental-webgl','webkit-3d','moz-webgl'];
     for (const p of possibles) {
         const ctx:WebGLRenderingContext = el.getContext(p,contextAttrs)  as WebGLRenderingContext;
         //if (DEBUG && ctx) console.log(`context using: ${p}`);
-        if (ctx) return ctx;
+        if (ctx) {
+            return ctx;
+        }
     }
     if (DEBUG) throw new DebugError(`webGl is not accessible on this device`);
     return undefined;
