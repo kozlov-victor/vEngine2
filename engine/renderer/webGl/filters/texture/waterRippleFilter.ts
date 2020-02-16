@@ -19,6 +19,7 @@ export class WaterRippleFilter extends AbstractGlFilter {
 
     private readonly amount:string;
     private readonly time:string;
+    private readonly drops:string;
 
     private readonly dropVectors:number[];
     private currentDrop:number = 0;
@@ -34,12 +35,14 @@ export class WaterRippleFilter extends AbstractGlFilter {
 
         this.amount = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'amount');
         this.time = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'time');
+        this.drops =
+            // x,y are pos z is age
+            programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC3,'drops[MAX_DROPS]',true);
 
         //language=GLSL
-        programGen.setFragmentMainFn(`
-            precision mediump float;
-			
-            uniform vec3 drops[${maxDrops}]; // x,y are pos z is age
+        programGen.prependFragmentCodeBlock(`
+            #define MAX_DROPS ${maxDrops}
+            #define PI ${(Math.PI * 2).toFixed(6)})
 
             vec2 offset;
             float dist;
@@ -49,19 +52,21 @@ export class WaterRippleFilter extends AbstractGlFilter {
             vec2 txC;
             float w;
             float cau;
-
+        `);
+        //language=GLSL
+        programGen.setFragmentMainFn(`
             void main() {
                 txC = v_texCoord;
                 cau = distance(vec2(-1.0, -1.0), txC) * 20.0 + time;
                 surf = vec2(sin(cau), cos(cau)) * 0.01;
                 cau = distance(vec2(1.0, 1.0), txC) * 30.0 + time;
                 surf += vec2(sin(cau), cos(cau)) * 0.02;
-                for(int i = 0; i < ${maxDrops}; i+= 1){
+                for(int i = 0; i < MAX_DROPS; i+= 1){
                     if(drops[i].z > -90.0){
                         dir = drops[i].xy - txC;
                         dist = length(dir);
                         dir = normalize(dir);
-                        w = cos((4.0 / (1.0 + pow(2.0, dist * 50.0 - drops[i].z))) * ${(Math.PI * 2).toFixed(6)}) * -0.5 + 0.5;
+                        w = cos((4.0 / (1.0 + pow(2.0, dist * 50.0 - drops[i].z))) * PI * -0.5 + 0.5;
                         wave = w * pow(2.0, -dist * 8.0);
                         surf += dir * wave;
                     }
@@ -89,18 +94,8 @@ export class WaterRippleFilter extends AbstractGlFilter {
     }
 
     public doFilter(destFrameBuffer:FrameBuffer):void{
-
-        // animate drops
-        const drops = this.dropVectors;
-        for(let i:number = 0; i < this.maxDrops; i ++){
-            if(drops[i * 3 + 2] > -90){
-                drops[i * 3 + 2] += 0.1;
-                if(drops[i * 3 + 2] > 50){
-                    drops[i * 3 + 2] = -100;
-                }
-            }
-        }
-        this.setUniform('drops',drops);
+        this.animateDrops();
+        this.setUniform(this.drops,this.dropVectors);
         this.setUniform(this.time,this.game.getElapsedTime()/1_000);
         super.doFilter(destFrameBuffer);
     }
@@ -139,6 +134,19 @@ export class WaterRippleFilter extends AbstractGlFilter {
             }
             default: {
                 return undefined;
+            }
+        }
+    }
+
+    private animateDrops():void{
+        // animate drops
+        const drops = this.dropVectors;
+        for(let i:number = 0; i < this.maxDrops; i ++){
+            if(drops[i * 3 + 2] > -90){
+                drops[i * 3 + 2] += 0.1;
+                if(drops[i * 3 + 2] > 50){
+                    drops[i * 3 + 2] = -100;
+                }
             }
         }
     }
