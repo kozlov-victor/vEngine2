@@ -119,7 +119,8 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
     fpsLabel.textContent = 'stopped';
 };
 
-const handleCatchError = (e:ErrorEvent)=>{
+
+const stopGame = ()=>{
     const game:Game = (window as unknown as IGameHolder).game as Game;
     if (game) {
         try {
@@ -128,11 +129,13 @@ const handleCatchError = (e:ErrorEvent)=>{
             console.error(e);
         }
     }
+};
+
+const handleCatchError = (e:ErrorEvent)=>{
     const lineNum:number = e.lineno;
     const colNum:number = e.colno;
     const filename:string = e.filename;
     const runtimeInfo:string = prepareMessage(e,lineNum);
-
 
     if (filename) {
         try {
@@ -184,9 +187,11 @@ const extractPromiseError = (e:any):string=>{
 };
 
 window.addEventListener('error',(e:ErrorEvent)=>{
+    stopGame();
     handleCatchError(e);
 },true);
 
 window.addEventListener('unhandledrejection', (e:PromiseRejectionEvent)=> {
+    stopGame();
     renderError('',extractPromiseError(e.reason),'');
 });
