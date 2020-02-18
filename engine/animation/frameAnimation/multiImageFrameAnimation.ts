@@ -31,6 +31,7 @@ export class MultiImageFrameAnimation extends AbstractFrameAnimation<ResourceLin
         this.target.setResourceLink(this.frames[i]);
         const texture:ITexture = this.target.getResourceLink().getTarget();
         this.target.size.set(texture.size);
+        this.target.getSrcRect().setSize(texture.size);
     }
 
 
