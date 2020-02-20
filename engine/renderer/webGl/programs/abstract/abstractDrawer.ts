@@ -46,7 +46,6 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         if (this.program!==undefined) this.program.destroy();
     }
 
-
     public setUniform(name:string,value:UNIFORM_VALUE_TYPE){
         if (DEBUG && !name) {
             console.trace();
@@ -58,12 +57,13 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         }
         if (this.uniformCache.has(name) && isEqual(this.uniformCache.get(name)!.value,value)) return;
         if (isArray(value)) {
-            if (!this.uniformCache.has(name)) this.uniformCache.put(name,{value:new Array(value.length),dirty:true});
-            const uniformInCache:IUniformValue = this.uniformCache.get(name) as IUniformValue;
-            const arr:number[]|boolean[] = uniformInCache.value as number[]|boolean[];
-            for (let i:number=0,max:number=value.length;i<max;i++) {
-                arr[i] = value[i];
+            if (!this.uniformCache.has(name)) {
+                // todo how to define Float32Array of Int32Array???
+                this.uniformCache.put(name,{value:new Float32Array(value.length),dirty:true});
             }
+            const uniformInCache:IUniformValue = this.uniformCache.get(name) as IUniformValue;
+            const arr:Float32Array = uniformInCache.value as Float32Array;
+            arr.set(value as number[]);
             uniformInCache.dirty = true;
         } else {
             this.uniformCache.put(name,{value,dirty:true});
