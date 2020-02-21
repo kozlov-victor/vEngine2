@@ -41,7 +41,8 @@ if (DEBUG) {
 }
 
 type GamePadGetter = ()=>Gamepad[];
-const NullGamepadGetter:GamePadGetter = ():Gamepad[]=>[];
+const EMPTY_ARR:Gamepad[] = [];
+const NullGamepadGetter:GamePadGetter = ():Gamepad[]=>EMPTY_ARR;
 
 const gamePadGetterFactory = ():[GamePadGetter,boolean]=>{
     if (navigator.getGamepads) return [(()=>navigator.getGamepads()) as GamePadGetter,true];
@@ -56,8 +57,8 @@ const gamePadGetterFactory = ():[GamePadGetter,boolean]=>{
                 break;
             }
         }
-        if (DEBUG && !possible) return [NullGamepadGetter,false];
-        return [(()=>navigator[possible]) as GamePadGetter,false];
+        if (!possible) return [NullGamepadGetter,false];
+        else return [(()=>navigator[possible]) as GamePadGetter,true];
     }
 };
 
