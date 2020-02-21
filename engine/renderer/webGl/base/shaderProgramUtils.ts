@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 import {ShaderProgram} from "./shaderProgram";
 import {Int, Optional} from "@engine/core/declarations";
-import {IKeyVal, isArray} from "@engine/misc/object";
+import {IKeyVal, isCommonArray, isTypedArray} from "@engine/misc/object";
 
 
 interface IShaderErrorInfo {
@@ -157,7 +157,8 @@ type GL = WebGLRenderingContext;
 type LOC = WebGLUniformLocation;
 
 export type UNIFORM_VALUE_PRIMITIVE_TYPE = number|Int|boolean;
-export type UNIFORM_VALUE_TYPE = UNIFORM_VALUE_PRIMITIVE_TYPE|UNIFORM_VALUE_PRIMITIVE_TYPE[];
+export type UNIFORM_VALUE_ARRAY_TYPE = UNIFORM_VALUE_PRIMITIVE_TYPE[]|Float32Array|Int32Array;
+export type UNIFORM_VALUE_TYPE = UNIFORM_VALUE_PRIMITIVE_TYPE|UNIFORM_VALUE_ARRAY_TYPE;
 
 type UNIFORM_SETTER = (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=>void;
 
@@ -255,15 +256,19 @@ const isBoolean = (val:UNIFORM_VALUE_TYPE):val is boolean=>{
     else return true;
 };
 
-const isArrayOfType = (val:UNIFORM_VALUE_TYPE,checker:(val:UNIFORM_VALUE_TYPE)=>boolean,size:number):val is number[]=> {
+const isArrayOfType = (val:UNIFORM_VALUE_TYPE,checker:(val:UNIFORM_VALUE_TYPE)=>boolean,size:number):val is Float32Array|Int32Array=> {
     if (!DEBUG) return true;
     if (!val)
         throw new DebugError(`can not set uniform  value: ${val}`);
-    if (!isArray(val)) {
+    if (isCommonArray(val)) {
+        console.error(val);
+        throw new DebugError(`can not use primitive array as uniform value. Use Float32Array of Int32Array instead`);
+    }
+    if (!isTypedArray(val)) {
         console.error('Can not set uniform value',val);
         throw new DebugError(`can not set uniform with value [${val}]: expected argument of type Array`);
     }
-    if (size!==undefined && (val as unknown as UNIFORM_VALUE_TYPE[]).length!==size)
+    if (size!==undefined && val.length!==size)
         throw new DebugError(`can not set uniform with value [${val}]: expected array with size ${size}, but ${(val as unknown as UNIFORM_VALUE_TYPE[]).length} found`);
     for (let i:number=0;i<val.length;i++) {
         try {
@@ -316,13 +321,13 @@ const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
                 if (isArrayOfType(value,isBoolean,4)) gl.uniform4i(location, value[0], value[1], value[2], value[3]);
             };
             case GL_TYPE.FLOAT_MAT2:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isNumber,2*2)) gl.uniformMatrix2fv(location, false, value as number[]); // location, transpose (Must be false), value
+                if (isArrayOfType(value,isNumber,2*2)) gl.uniformMatrix2fv(location, false, value as Float32List); // location, transpose (Must be false), value
             };
             case GL_TYPE.FLOAT_MAT3:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isNumber,3*3)) gl.uniformMatrix3fv(location, false, value as number[]);
+                if (isArrayOfType(value,isNumber,3*3)) gl.uniformMatrix3fv(location, false, value as Float32List);
             };
             case GL_TYPE.FLOAT_MAT4:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isNumber,4*4)) gl.uniformMatrix4fv(location, false, value as number[]);
+                if (isArrayOfType(value,isNumber,4*4)) gl.uniformMatrix4fv(location, false, value as Float32List);
             };
             case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
                 if (isNumber(value)) gl.uniform1i(location, value);
@@ -341,46 +346,46 @@ const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
             // uniform vec2 u_someVec2[3]
             // js:  u_someVec2 = [0,1, 2,3, 4,5];
             case GL_TYPE.FLOAT: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isNumber,size)) gl.uniform1fv(location, value);
+                if (isArrayOfType(value,isNumber,size)) gl.uniform1fv(location, value as Float32List);
             };
             case GL_TYPE.FLOAT_VEC2:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isNumber,size*2)) gl.uniform2fv(location, value as number[]);
+                if (isArrayOfType(value,isNumber,size*2)) gl.uniform2fv(location, value as Float32List);
             };
             case GL_TYPE.FLOAT_VEC3:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isNumber,size*3)) gl.uniform3fv(location, value as number[]);
+                if (isArrayOfType(value,isNumber,size*3)) gl.uniform3fv(location, value as Float32List);
             };
             case GL_TYPE.FLOAT_VEC4:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isNumber,size*4)) gl.uniform4fv(location, value as number[]);
+                if (isArrayOfType(value,isNumber,size*4)) gl.uniform4fv(location, value as Float32List);
             };
             case GL_TYPE.INT:   return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isInteger,size)) gl.uniform1iv(location, value);
+                if (isArrayOfType(value,isInteger,size)) gl.uniform1iv(location, value as Int32List);
             };
             case GL_TYPE.INT_VEC2: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isInteger,size*2)) gl.uniform2iv(location, value);
+                if (isArrayOfType(value,isInteger,size*2)) gl.uniform2iv(location, value as Int32List);
             };
             case GL_TYPE.INT_VEC3: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isInteger,size*3)) gl.uniform3iv(location, value);
+                if (isArrayOfType(value,isInteger,size*3)) gl.uniform3iv(location, value as Int32List);
             };
             case GL_TYPE.INT_VEC4: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isInteger,size*4)) gl.uniform4iv(location, value);
+                if (isArrayOfType(value,isInteger,size*4)) gl.uniform4iv(location, value as Int32List);
             };
             case GL_TYPE.BOOL:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isBoolean,size)) gl.uniform1iv(location, value);
+                if (isArrayOfType(value,isBoolean,size)) gl.uniform1iv(location, value as Int32List);
             };
             case GL_TYPE.BOOL_VEC2: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isBoolean,size*2)) gl.uniform2iv(location, value);
+                if (isArrayOfType(value,isBoolean,size*2)) gl.uniform2iv(location, value as Int32List);
             };
             case GL_TYPE.BOOL_VEC3: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isBoolean,size*3)) gl.uniform3iv(location, value as number[]);
+                if (isArrayOfType(value,isBoolean,size*3)) gl.uniform3iv(location, value as Int32List);
             };
             case GL_TYPE.BOOL_VEC4: return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isBoolean,size*4)) gl.uniform4iv(location, value);
+                if (isArrayOfType(value,isBoolean,size*4)) gl.uniform4iv(location, value as Int32List);
             };
             case GL_TYPE.SAMPLER_2D:return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isInteger,size)) gl.uniform1iv(location, value);
+                if (isArrayOfType(value,isInteger,size)) gl.uniform1iv(location, value as Int32List);
             };
             case GL_TYPE.SAMPLER_CUBE:return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isInteger,size)) gl.uniform1iv(location, value);
+                if (isArrayOfType(value,isInteger,size)) gl.uniform1iv(location, value as Int32List);
             };
             default:
                 if (DEBUG) throw new DebugError(`can not set uniform for type ${type} and size ${size}`);

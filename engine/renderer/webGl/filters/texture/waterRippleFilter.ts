@@ -42,7 +42,7 @@ export class WaterRippleFilter extends AbstractGlFilter {
         //language=GLSL
         programGen.prependFragmentCodeBlock(`
             #define MAX_DROPS ${maxDrops}
-            #define PI ${(Math.PI * 2).toFixed(6)})
+            #define PI ${(Math.PI * 2).toFixed(6)}
 
             vec2 offset;
             float dist;
@@ -66,7 +66,7 @@ export class WaterRippleFilter extends AbstractGlFilter {
                         dir = drops[i].xy - txC;
                         dist = length(dir);
                         dir = normalize(dir);
-                        w = cos((4.0 / (1.0 + pow(2.0, dist * 50.0 - drops[i].z))) * PI * -0.5 + 0.5;
+                        w = cos((4.0 / (1.0 + pow(2.0, dist * 50.0 - drops[i].z))) * PI) * -0.5 + 0.5;
                         wave = w * pow(2.0, -dist * 8.0);
                         surf += dir * wave;
                     }
