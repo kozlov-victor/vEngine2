@@ -31,6 +31,7 @@ import {TransformableModel} from "@engine/renderable/abstract/transformableModel
 import {Scene} from "@engine/scene/scene";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
+import {IAnimation} from "@engine/animation/iAnimation";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -59,6 +60,7 @@ export abstract class RenderableModel extends TransformableModel implements IRev
 
     private _destRect:Rect = new Rect();
     private _behaviours:BaseAbstractBehaviour[] = [];
+    private _propertyAnimations:IAnimation[] = [];
     private _layer:Optional<Layer>;
     private _scene:Scene;
 
@@ -115,11 +117,16 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         b.manage(this);
     }
 
-    public setWH(w:number,h:number = w):void{
+    public addPropertyAnimation(animation:IAnimation){
+        animation.target = this;
+        this._propertyAnimations.push(animation);
+    }
+
+    public setWH(w:number,h:number = w):void{ // todo remove
         this.setXYWH(this.pos.x,this.pos.y,w,h);
     }
 
-    public setXYWH(x:number,y:number,w:number,h:number):void{
+    public setXYWH(x:number,y:number,w:number,h:number):void{ // todo remove
         this.pos.setXY(x,y);
         this.size.setWH(w,h);
     }
@@ -166,7 +173,7 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         if (this.children.length>0) {
             renderer.transformSave();
             renderer.saveAlphaBlend();
-            renderer.transformTranslate(this.anchor.x,this.anchor.y);
+            renderer.transformTranslate(this.anchorPoint.x,this.anchorPoint.y);
             for(let i=0,max=this.children.length;i<max;i++) {
                 this.children[i].render();
             }
@@ -186,9 +193,8 @@ export abstract class RenderableModel extends TransformableModel implements IRev
         this._tweenDelegate.update();
         this._timerDelegate.update();
 
-        for (const bh of this._behaviours) {
-            bh.onUpdate();
-        }
+        for (const bh of this._behaviours) bh.update();
+        for (const pa of this._propertyAnimations) pa.update();
 
         // if (this.rigidBody!==undefined) {
         //     this.rigidBody.update();

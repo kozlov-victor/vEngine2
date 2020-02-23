@@ -11,12 +11,11 @@ export class MainScene extends Scene {
         model.color.setRGB(2,244,34);
         model.lineWidth = 5;
         this.appendChild(model);
-        model.anchor.setToCenter();
-
+        model.anchorPoint.setToCenter();
 
         const anim1 = new MoveByCircleAnimation(this.game);
         anim1.radius = 200;
-        this.addPropertyAnimation(anim1);
+        model.addPropertyAnimation(anim1);
 
         const circle:Circle = new Circle(this.game);
         circle.center.set(anim1.center);
@@ -25,10 +24,6 @@ export class MainScene extends Scene {
         circle.radius = anim1.radius;
         circle.lineWidth = 3;
         this.prependChild(circle);
-
-        anim1.onProgress((p)=>{
-            model.pos.set(p);
-        });
 
     }
 

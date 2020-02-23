@@ -19,7 +19,7 @@ export abstract class BaseAbstractBehaviour {
         if (DEBUG) throw new DebugError(`BaseAbstractBehaviour: method 'manage' not implemented`);
     }
 
-    public onUpdate():void{}
+    public update():void{}
 
     public revalidate(){}
 

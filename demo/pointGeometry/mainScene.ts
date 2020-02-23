@@ -22,8 +22,8 @@ export class MainScene extends Scene {
         this.colorBG.setRGB(244,244,244);
         this.ship.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         this.appendChild(this.ship);
-        this.ship.anchor.setXY(this.ship.size.width/2,this.ship.size.height/2);
-        this.ship.transformPoint.set(this.ship.anchor);
+        this.ship.anchorPoint.setXY(this.ship.size.width/2,this.ship.size.height/2);
+        this.ship.transformPoint.set(this.ship.anchorPoint);
         const center:Vec2 = new Vec2().set(this.ship.pos);
         const point:Vec2 = new Vec2();
         this.on(MOUSE_EVENTS.mouseMove,(p:ISceneMousePoint)=>{

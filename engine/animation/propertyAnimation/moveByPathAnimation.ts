@@ -3,7 +3,7 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {MathEx} from "@engine/misc/mathEx";
 import {IPoint2d, Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
-import {AbstractPropertyAnimation} from "@engine/animation/propertyAnimation/abstract/abstractPropertyAnimation";
+import {AbstractMoveAnimation} from "@engine/animation/propertyAnimation/abstract/abstractMoveAnimation";
 
 interface IControlPoint {
     from:number;
@@ -13,16 +13,12 @@ interface IControlPoint {
     length: number;
 }
 
-export class MoveByPathAnimation extends AbstractPropertyAnimation {
+export class MoveByPathAnimation extends AbstractMoveAnimation {
 
     public velocity: number = 10;
 
-    public onProgress:(fn:(point:Point2d)=>void)=>void;
-
     private controlPoints:IControlPoint[] = [];
     private totalLength:number = 0;
-
-    private progressPoint:Point2d = new Point2d();
 
     private currentControlPointIndex:number = 0;
 
@@ -48,8 +44,8 @@ export class MoveByPathAnimation extends AbstractPropertyAnimation {
     }
 
 
-    public onUpdate(timePassed:number){
-        const lengthPassed:number = this.velocity * timePassed / 1000;
+    protected onUpdate(){
+        const lengthPassed:number = this.velocity * this.passedTime / 1000;
         const point:IControlPoint = this.getCurrentControlPoint(lengthPassed);
         const lengthPassedRelative:number = lengthPassed - point.from;
         const passedFactor:number =
@@ -57,7 +53,7 @@ export class MoveByPathAnimation extends AbstractPropertyAnimation {
         const x:number = point.pointFrom.x + (point.pointTo.x - point.pointFrom.x)*passedFactor;
         const y:number = point.pointFrom.y + (point.pointTo.y - point.pointFrom.y)*passedFactor;
         this.progressPoint.setXY(x,y);
-        this.progress(this.progressPoint);
+        super.onUpdate();
         if (lengthPassed>=this.totalLength) {
             this.reset();
         }
