@@ -258,7 +258,10 @@ export class PolyLine extends Shape {
     }
 
     public isClosed():boolean {
-        return this.closed;
+        return (
+            this.closed ||
+            this.children[0].pos.equalPoint(this.children[this.children.length-1].pos)
+        );
     }
 
     public isInterrupted():boolean {

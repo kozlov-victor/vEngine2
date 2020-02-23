@@ -4,6 +4,7 @@ import {MathEx} from "@engine/misc/mathEx";
 import {IPoint2d, Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {AbstractMoveAnimation} from "@engine/animation/propertyAnimation/abstract/abstractMoveAnimation";
+import {Optional} from "@engine/core/declarations";
 
 interface IControlPoint {
     from:number;
@@ -16,9 +17,11 @@ interface IControlPoint {
 export class MoveByPathAnimation extends AbstractMoveAnimation {
 
     public velocity: number = 10;
+    public durationSec:Optional<number>;
 
     private controlPoints:IControlPoint[] = [];
     private totalLength:number = 0;
+    private oldDurationSec:Optional<number>;
 
     private currentControlPointIndex:number = 0;
 
@@ -45,6 +48,10 @@ export class MoveByPathAnimation extends AbstractMoveAnimation {
 
 
     protected onUpdate(){
+        if (this.durationSec!==undefined && this.durationSec!==this.oldDurationSec) {
+            this.oldDurationSec = this.durationSec;
+            this.velocity = this.totalLength / this.durationSec;
+        }
         const lengthPassed:number = this.velocity * this.passedTime / 1000;
         const point:IControlPoint = this.getCurrentControlPoint(lengthPassed);
         const lengthPassedRelative:number = lengthPassed - point.from;
