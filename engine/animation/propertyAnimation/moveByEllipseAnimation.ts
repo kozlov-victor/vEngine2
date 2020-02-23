@@ -1,7 +1,8 @@
 import {Point2d} from "@engine/geometry/point2d";
 import {AbstractMoveAnimation} from "@engine/animation/propertyAnimation/abstract/abstractMoveAnimation";
 
-export const FACTOR: number = Math.PI * 2 / 6000;
+const PI_2:number = Math.PI *2;
+export const FACTOR: number = PI_2 * 2 / 6000;
 
 export class MoveByEllipseAnimation extends AbstractMoveAnimation {
 
@@ -12,8 +13,9 @@ export class MoveByEllipseAnimation extends AbstractMoveAnimation {
 
     protected onUpdate(): void {
         const arg:number = FACTOR * this.angularVelocity * this.passedTime;
-        const x:number = this.center.x + this.radiusX *  Math.cos(arg);
-        const y:number = this.center.y + this.radiusY *  Math.sin(arg);
+        if (this.repeatCount!==Infinity) this.numOfLoopPassed = ~~(arg/PI_2);
+        const x:number = this.center.x + this.radiusX * Math.cos(arg);
+        const y:number = this.center.y + this.radiusY * Math.sin(arg);
         this.progressPoint.setXY(x,y);
         super.onUpdate();
     }

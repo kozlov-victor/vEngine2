@@ -53,10 +53,11 @@ export class MoveByPathAnimation extends AbstractMoveAnimation {
         const x:number = point.pointFrom.x + (point.pointTo.x - point.pointFrom.x)*passedFactor;
         const y:number = point.pointFrom.y + (point.pointTo.y - point.pointFrom.y)*passedFactor;
         this.progressPoint.setXY(x,y);
-        super.onUpdate();
         if (lengthPassed>=this.totalLength) {
             this.reset();
+            this.numOfLoopPassed++;
         }
+        super.onUpdate();
     }
 
     private getCurrentControlPoint(lengthPassed:number):IControlPoint {

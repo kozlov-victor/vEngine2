@@ -27,6 +27,7 @@ export class MainScene extends Scene {
         const anim1 = new MoveByPathAnimation(this.game,polyLine1);
         anim1.velocity = 150;
         anim1.rotate = true;
+        anim1.repeatCount = 2;
         model.addPropertyAnimation(anim1);
     }
 

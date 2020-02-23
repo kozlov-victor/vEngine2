@@ -6,13 +6,22 @@ export abstract class AbstractMoveAnimation extends AbstractPropertyAnimation {
 
     public rotate:boolean = false;
     public onProgress:(fn:(point:Point2d,angle:number)=>void)=>void;
+    public repeatCount:number = Infinity;
 
+    protected numOfLoopPassed:number = 0;
     protected angle:number = 0;
     protected progressPoint:Point2d = new Point2d();
 
     private oldPoint:Point2d;
+    private terminated:boolean = false;
 
     protected onUpdate(): void {
+        if (this.terminated) return;
+        if (this.numOfLoopPassed>this.repeatCount) {
+            this.terminated = true;
+            this.reset();
+            return;
+        }
         if (this.rotate) {
             if (this.oldPoint===undefined) {
                 this.oldPoint = new Point2d(this.progressPoint.x,this.progressPoint.y);

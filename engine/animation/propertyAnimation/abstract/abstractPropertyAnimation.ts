@@ -6,12 +6,14 @@ import {Optional} from "@engine/core/declarations";
 export abstract class AbstractPropertyAnimation implements IAnimation {
 
     public readonly target:Optional<RenderableModel>;
+
     protected progress:Optional<(...opts:unknown[])=>void>;
 
     protected passedTime:number = 0;
 
     private playing:boolean = true;
     private startTime:number = 0;
+
 
     constructor(protected game: Game) {
     }
