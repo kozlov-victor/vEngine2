@@ -7,7 +7,7 @@ import {
     IFilterable,
     IParentChild,
     IRevalidatable,
-    ITweenable,
+    ITweenable, IUpdatable,
     Optional
 } from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
@@ -42,7 +42,13 @@ export const enum BLEND_MODE {
 }
 
 
-export abstract class RenderableModel extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable, IParentChild, IAlphaBlendable, IFilterable  {
+export abstract class RenderableModel
+    extends TransformableModel
+    implements
+        IRevalidatable, ITweenable,
+        IEventemittable, IParentChild,
+        IAlphaBlendable, IFilterable,
+        IUpdatable  {
 
     public id:string;
 

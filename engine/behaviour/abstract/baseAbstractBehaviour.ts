@@ -2,9 +2,10 @@ import {DebugError} from "../../debug/debugError";
 import {Game} from "../../core/game";
 import {IKeyVal} from "../../misc/object";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {IUpdatable} from "@engine/core/declarations";
 
 
-export abstract class BaseAbstractBehaviour {
+export abstract class BaseAbstractBehaviour implements IUpdatable{
 
     protected game:Game;
     protected parameters:IKeyVal<unknown>;

@@ -46,6 +46,10 @@ export interface IDestroyable {
     destroy():void;
 }
 
+export interface IUpdatable {
+    update():void;
+}
+
 export interface IParentChild {
     id:string;
     parent:Optional<IParentChild>;

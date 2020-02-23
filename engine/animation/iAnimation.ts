@@ -1,7 +1,7 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Optional} from "@engine/core/declarations";
+import {IUpdatable, Optional} from "@engine/core/declarations";
 
-export interface IAnimation {
+export interface IAnimation extends IUpdatable{
     target:Optional<RenderableModel>;
     play():void;
     stop():void;
