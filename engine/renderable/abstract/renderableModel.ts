@@ -55,6 +55,7 @@ export abstract class RenderableModel
     public alpha:number = 1;
     public visible:boolean = true;
     public blendMode:BLEND_MODE = BLEND_MODE.NORMAL;
+    public depthTest:boolean = false;
     public filters: IFilter[] = [];
     public forceDrawChildrenOnNewSurface:boolean = false;
 

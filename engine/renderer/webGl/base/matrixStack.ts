@@ -141,6 +141,11 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this;
     }
 
+    public rotationReset():void{
+        const m:Mat16Holder = this.getCurrentValue();
+        mat4.makeRotationReset(m);
+    }
+
     public release():MatrixStack{
         for (let i:number=0,max:number = this.stack.size();i<max;i++) {
             this.stack.getAt(i)!.release();

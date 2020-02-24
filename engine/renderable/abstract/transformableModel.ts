@@ -73,7 +73,8 @@ export abstract class TransformableModel extends BaseModel {
     public readonly skew:Point2d = new Point2d(0,0);
     public readonly anchorPoint:ModelPoint2d = new ModelPoint2d(this);
     public readonly transformPoint:ModelPoint2d = new ModelPoint2d(this);
-    public angle3d:AnglePoint3d = new AnglePoint3d(this,'angle');
+    public readonly angle3d:AnglePoint3d = new AnglePoint3d(this,'angle');
+    public billBoard:boolean = false;
 
     protected _angleVelocity3d:AnglePoint3d = new AnglePoint3d(this,'angleVelocity');
 
@@ -104,6 +105,7 @@ export abstract class TransformableModel extends BaseModel {
         renderer.transformRotateX(this.angle3d.x);
         renderer.transformRotateY(this.angle3d.y);
         renderer.transformTranslate(-this.transformPoint.x,-this.transformPoint.y);
+        if (this.billBoard) renderer.transformRotationReset();
     }
 
     protected setClonedProperties(cloned:TransformableModel){
@@ -114,7 +116,10 @@ export abstract class TransformableModel extends BaseModel {
         cloned.anchorPoint.set(this.anchorPoint);
         cloned.skew.set(this.skew);
         cloned.transformPoint.set(this.transformPoint);
-        cloned.angle3d = this.angle3d.clone(this);
+        const angle3dCloned:AnglePoint3d = this.angle3d.clone(this);
+        cloned.angle3d.x = angle3dCloned.x;
+        cloned.angle3d.y = angle3dCloned.y;
+        cloned.angle3d.z = angle3dCloned.z;
     }
 
 }

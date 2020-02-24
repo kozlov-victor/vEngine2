@@ -8,7 +8,8 @@ export class Model3d extends Mesh {
     public scale:Point3d = new Point3d(1,1,1);
 
     constructor(protected game:Game) {
-        super(game,true,true);
+        super(game,true);
+        this.depthTest = true;
     }
 
 }

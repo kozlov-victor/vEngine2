@@ -243,13 +243,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setColor(mesh.fillColor);
         md.setColorMix(mesh.colorMix);
 
-
-        if (mesh.depthTest) this.gl.enable(this.gl.DEPTH_TEST);
         //this.gl.enable(this.gl.CULL_FACE);
         md.draw();
-
         md.unbind();
-        this.gl.disable(this.gl.DEPTH_TEST);
         //this.gl.disable(this.gl.CULL_FACE);
         zToWMatrix.release();
         projectionMatrix.release();
@@ -346,6 +342,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.matrixStack.translate(x,y,z);
     }
 
+    public transformRotationReset(){
+        this.matrixStack.rotationReset();
+    }
+
     public transformSkewX(angle:number):void{
         if (angle===0) return;
         this.matrixStack.skewX(angle);
@@ -377,6 +377,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public afterItemStackDraw(stackPointer:IStateStackPointer):void {
+        this.gl.disable(this.gl.DEPTH_TEST);
         this.currFrameBufferStack.reduceState(stackPointer);
     }
 
@@ -528,6 +529,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_alpha,this.getAlphaBlend());
         sd.setUniform(sd.u_stretchMode,STRETCH_MODE.STRETCH);
         this.blender.setBlendMode(model.blendMode);
+        if (model.depthTest) this.gl.enable(this.gl.DEPTH_TEST);
+        else this.gl.disable(this.gl.DEPTH_TEST);
 
     }
 

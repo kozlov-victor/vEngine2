@@ -129,6 +129,8 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     public abstract transformTranslate(x:number, y:number, z?:number):void;
 
+    public abstract transformRotationReset():void;
+
     public abstract transformScale(x:number, y:number, z?:number):void;
 
     public abstract transformRotateX(a:number):void;
