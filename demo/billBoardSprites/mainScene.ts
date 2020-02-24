@@ -36,7 +36,9 @@ export class MainScene extends Scene {
         image.setResourceLink(this.textureResourceLink);
         container.appendChild(image);
         image.anchorPoint.setToCenter();
+        image.transformPoint.setToCenter();
         image.billBoard = true;
+        image.depthTest = true;
 
 
         const maxRadius:number = 250;
