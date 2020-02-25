@@ -74,7 +74,9 @@ module.exports = (env={})=>{
                     use: [
                         {
                             loader: 'url-loader',
-                            options: {}
+                            options: {
+                                esModule: false,
+                            }
                         }
                     ]
                 },
