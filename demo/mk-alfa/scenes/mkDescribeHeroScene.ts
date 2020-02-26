@@ -102,7 +102,6 @@ export class MkDescribeHeroScene extends MkAbstractScene {
             particlesFilter2.setCenter(p.x,p.y);
         });
 
-
         const tf:TextField = new TextField(this.game);
         tf.setFont(this.fnt);
         tf.setTextAlign(TEXT_ALIGN.CENTER);

@@ -84,6 +84,10 @@ export namespace MathEx {
         return ~~random(min,max);
     };
 
+    export const randomByte = (min: byte, max: byte): byte => {
+        return randomInt(min,max) as byte;
+    };
+
     /**
      * analog of glu unproject function
      * https://github.com/bringhurst/webgl-unproject/blob/master/GLU.js
@@ -108,6 +112,3 @@ export namespace MathEx {
     };
 
 }
-
-
-// mathex, abstractfilter,camera

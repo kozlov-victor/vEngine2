@@ -26,8 +26,7 @@ export abstract class Mesh extends RenderableModel {
 
     protected constructor(
         protected game:Game,
-        public readonly depthTest:boolean,
-        public readonly invertY:boolean
+        public readonly invertY:boolean,
     ) {
         super(game);
         this.vertexItemSize = 3;

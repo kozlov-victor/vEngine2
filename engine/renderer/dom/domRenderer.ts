@@ -179,6 +179,9 @@ export class DomRenderer extends AbstractRenderer {
         this.matrixStack.translate(x,y,z);
     }
 
+    public transformRotationReset(): void {
+    }
+
     public transformRestore():void{
         this.matrixStack.restore();
     }

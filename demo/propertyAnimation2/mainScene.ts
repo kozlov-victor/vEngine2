@@ -14,13 +14,13 @@ export class MainScene extends Scene {
         model.color.setRGB(2,244,34);
         model.lineWidth = 5;
         this.appendChild(model);
-        model.anchor.setToCenter();
+        model.anchorPoint.setToCenter();
 
 
         const anim1 = new MoveByEllipseAnimation(this.game);
         anim1.radiusX = 200;
         anim1.radiusY = 80;
-        this.addPropertyAnimation(anim1);
+        model.addPropertyAnimation(anim1);
 
         const ellipse:Ellipse = new Ellipse(this.game);
         ellipse.center.set(anim1.center);
@@ -30,10 +30,6 @@ export class MainScene extends Scene {
         ellipse.radiusY = anim1.radiusY;
         ellipse.lineWidth = 3;
         this.prependChild(ellipse);
-
-        anim1.onProgress((p)=>{
-            model.pos.set(p);
-        });
 
     }
 

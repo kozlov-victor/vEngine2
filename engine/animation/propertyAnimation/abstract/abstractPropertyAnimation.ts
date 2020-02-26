@@ -1,12 +1,19 @@
 import {IAnimation} from "@engine/animation/iAnimation";
 import {Game} from "@engine/core/game";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {Optional} from "@engine/core/declarations";
 
 export abstract class AbstractPropertyAnimation implements IAnimation {
 
-    protected progress:(opts:unknown)=>void;
+    public readonly target:Optional<RenderableModel>;
+
+    protected progress:Optional<(...opts:unknown[])=>void>;
+
+    protected passedTime:number = 0;
 
     private playing:boolean = true;
     private startTime:number = 0;
+
 
     constructor(protected game: Game) {
     }
@@ -31,11 +38,11 @@ export abstract class AbstractPropertyAnimation implements IAnimation {
         if (!this.playing) return;
         const time:number = this.game.getCurrentTime();
         if (this.startTime===0) this.startTime = time;
-        const passed:number = time - this.startTime;
-        this.onUpdate(passed);
+        this.passedTime = time - this.startTime;
+        this.onUpdate();
     }
 
-    protected abstract onUpdate(timePassed:number):void;
+    protected abstract onUpdate():void;
 
 }
 

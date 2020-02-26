@@ -71,11 +71,13 @@ export abstract class TransformableModel extends BaseModel {
 
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly skew:Point2d = new Point2d(0,0);
-    public readonly anchor:ModelPoint2d = new ModelPoint2d(this);
+    public readonly anchorPoint:ModelPoint2d = new ModelPoint2d(this);
     public readonly transformPoint:ModelPoint2d = new ModelPoint2d(this);
-    public angle3d:AnglePoint3d = new AnglePoint3d(this,'angle');
+    public readonly angle3d:AnglePoint3d = new AnglePoint3d(this,'angle');
+    public billBoard:boolean = false;
 
     protected _angleVelocity3d:AnglePoint3d = new AnglePoint3d(this,'angleVelocity');
+
     private _angle:number = 0;
 
     protected constructor(protected game:Game){
@@ -93,7 +95,7 @@ export abstract class TransformableModel extends BaseModel {
 
     public transform():void{
         const renderer:AbstractRenderer = this.game.getRenderer();
-        renderer.transformTranslate(-this.anchor.x,-this.anchor.y,this.posZ);
+        renderer.transformTranslate(-this.anchorPoint.x,-this.anchorPoint.y,this.posZ);
         renderer.transformTranslate(this.transformPoint.x,this.transformPoint.y);
         const [x,y,z] = this.scale.toArray();
         renderer.transformScale(x,y,z);
@@ -103,6 +105,7 @@ export abstract class TransformableModel extends BaseModel {
         renderer.transformRotateX(this.angle3d.x);
         renderer.transformRotateY(this.angle3d.y);
         renderer.transformTranslate(-this.transformPoint.x,-this.transformPoint.y);
+        if (this.billBoard) renderer.transformRotationReset();
     }
 
     protected setClonedProperties(cloned:TransformableModel){
@@ -110,10 +113,13 @@ export abstract class TransformableModel extends BaseModel {
         cloned.angleVelocity = this.angleVelocity;
         cloned.pos.set(this.pos);
         cloned.scale.set(this.scale);
-        cloned.anchor.set(this.anchor);
+        cloned.anchorPoint.set(this.anchorPoint);
         cloned.skew.set(this.skew);
         cloned.transformPoint.set(this.transformPoint);
-        cloned.angle3d = this.angle3d.clone(this);
+        const angle3dCloned:AnglePoint3d = this.angle3d.clone(this);
+        cloned.angle3d.x = angle3dCloned.x;
+        cloned.angle3d.y = angle3dCloned.y;
+        cloned.angle3d.z = angle3dCloned.z;
     }
 
 }

@@ -44,11 +44,13 @@ export class MainScene extends Scene {
         this.appendChild(ps);
 
         const anim1 = new MoveByPathAnimation(this.game,polyLine1);
+        anim1.rotate = true;
         anim1.velocity = 50;
         this.addPropertyAnimation(anim1);
 
-        anim1.onProgress((p)=>{
-            ps.emissionPosition.set(p);
+        anim1.onProgress((p,a)=>{
+            ps.pos.set(p);
+            ps.particleAngle = {from:a-0.1,to:a+0.1};
         });
 
     }

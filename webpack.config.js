@@ -74,7 +74,9 @@ module.exports = (env={})=>{
                     use: [
                         {
                             loader: 'url-loader',
-                            options: {}
+                            options: {
+                                esModule: false,
+                            }
                         }
                     ]
                 },
@@ -92,7 +94,7 @@ module.exports = (env={})=>{
                     test: /\.ts$/,
                     use: [
                         {
-                            loader: "ts-loader",options: {
+                            loader: "awesome-typescript-loader",options: {
                                 getCustomTransformers: () => ({ before: [transformer] })
                             },
                         },
