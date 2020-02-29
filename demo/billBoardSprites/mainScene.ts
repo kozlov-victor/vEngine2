@@ -8,6 +8,7 @@ import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFil
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
+import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 
 export class MainScene extends Scene {
 
@@ -70,7 +71,9 @@ export class MainScene extends Scene {
         },1);
 
         const filter1 = new VignetteFilter(this.game);
-        this.filters = [filter1];
+        const filter2 = new WaveFilter(this.game);
+        filter2.setAmplitude(0.01);
+        this.filters = [filter1,filter2];
 
     }
 

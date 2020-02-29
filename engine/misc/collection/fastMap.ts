@@ -44,6 +44,10 @@ export class FastMap<T,U> {
         return this.values;
     }
 
+    public size():number{
+        return this.keys.length;
+    }
+
 }
 
 

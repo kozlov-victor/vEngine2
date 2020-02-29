@@ -39,8 +39,8 @@ export class MainScene extends Scene {
         ps.forceDrawChildrenOnNewSurface = true;
 
 
-        ps.numOfParticlesToEmit = {from:10,to:50};
-        ps.particleLiveTime = {from:100,to:500};
+        ps.numOfParticlesToEmit = {from:50,to:100};
+        ps.particleLiveTime = {from:100,to:800};
         ps.particleAngle = {from:0,to:2*Math.PI};
         ps.size.setWH(50,50);
         this.appendChild(ps);

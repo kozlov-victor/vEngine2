@@ -4,6 +4,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {noop} from "@engine/misc/object";
 import {Point2d} from "@engine/geometry/point2d";
+import {Optional} from "@engine/core/declarations";
 
 const r:(obj:IParticlePropertyDesc)=>number
     = (obj:IParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
@@ -19,6 +20,7 @@ interface IParticleHolder {
     particle:RenderableCloneable;
     lifeTime:number;
     createdTime:number;
+    active:boolean;
 }
 
 
@@ -58,12 +60,14 @@ export class ParticleSystem extends RenderableModel {
     }
 
     public update():void {
+        if (!this.enabled) return;
         super.update();
         const time:number = this.game.getCurrentTime();
         for (const holder of this._particles) {
+            if (!holder.active) continue;
             this._onUpdateParticle(holder.particle);
             if (time - holder.createdTime > holder.lifeTime) {
-                this._particles.splice(this._particles.indexOf(holder),1);
+                holder.active = false;
                 holder.particle.kill();
             }
         }
@@ -92,9 +96,19 @@ export class ParticleSystem extends RenderableModel {
 
         const num:number = r(this.numOfParticlesToEmit);
         for (let i:number = 0;i<num;i++) {
-            const particleProto:RenderableCloneable = this._prototypes[MathEx.randomInt(0,this._prototypes.length-1)];
-            const particle:RenderableCloneable = particleProto.clone();
-            this._onEmitParticle(particle);
+
+            let particle:RenderableCloneable;
+            let holder:Optional<IParticleHolder> =
+                this._particles.filter(it=>!it.active)[0];
+            if (holder===undefined) {
+                const particleProto:RenderableCloneable = this._prototypes[MathEx.randomInt(0,this._prototypes.length-1)];
+                particle  = particleProto.clone();
+                holder = {particle,lifeTime:0,createdTime:0,active:true};
+                this._particles.push(holder);
+            } else {
+                particle = holder.particle;
+            }
+
             const angle:number = r(this.particleAngle);
             const vel:number = r(this.particleVelocity);
             particle.velocity.x = vel*Math.cos(angle);
@@ -102,10 +116,11 @@ export class ParticleSystem extends RenderableModel {
             particle.pos.x = r({from:-this.emissionRadius,to:+this.emissionRadius});
             particle.pos.y = r({from:-this.emissionRadius,to:+this.emissionRadius});
             particle.pos.add(this.emissionPosition);
-            const lifeTime:number = r(this.particleLiveTime);
-            const createdTime:number = this.game.getCurrentTime();
-            this._particles.push({particle,lifeTime,createdTime});
-            //this.parent.appendChildAfter(this,particle);
+            holder.lifeTime = r(this.particleLiveTime);
+            holder.createdTime = this.game.getCurrentTime();
+            holder.active = true;
+
+            this._onEmitParticle(particle);
             this.appendChild(particle);
         }
     }
