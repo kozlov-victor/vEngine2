@@ -59,6 +59,7 @@ export class ParticleSystem extends RenderableModel {
         this._prototypes.push(renderableCloneable);
     }
 
+
     public update():void {
         if (!this.enabled) return;
         super.update();
@@ -68,7 +69,7 @@ export class ParticleSystem extends RenderableModel {
             this._onUpdateParticle(holder.particle);
             if (time - holder.createdTime > holder.lifeTime) {
                 holder.active = false;
-                holder.particle.kill();
+                this.removeChild(holder.particle);
             }
         }
         if (this.emitAuto) this.emit();
