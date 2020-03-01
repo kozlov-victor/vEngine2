@@ -72,6 +72,7 @@ export abstract class Mesh extends RenderableModel {
         cloned.fillColor = this.fillColor.clone();
         cloned.colorMix = this.colorMix;
         cloned.reflectivity = this.reflectivity;
+        cloned.depthTest = this.depthTest;
         super.setClonedProperties(cloned);
     }
 

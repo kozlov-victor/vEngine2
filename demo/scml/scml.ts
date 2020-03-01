@@ -160,8 +160,6 @@ export class ScmlObject {
         return obj;
     }
 
-    public poolHolder:PoolHolder = new PoolHolder();
-
     public root:SpriterObject;
 
 
@@ -321,15 +319,6 @@ class CharacterMap {
 
 // not implemented
 class MapInstruction {
-
-    // public static fromDescription(mapDesc:{}):MapInstruction{
-    //     const m:MapInstruction = new MapInstruction();
-    //     m.folder = mapDesc.folder;
-    //     m.file = mapDesc.file;
-    //     if (mapDesc.tarFolder!==undefined) m.tarFolder = mapDesc.tarFolder;
-    //     if (mapDesc.tarFile) m.tarFile = mapDesc.tarFile;
-    //     return m;
-    // }
 
     public folder:number;
     public file:number;
@@ -998,7 +987,7 @@ export class SpriterObject extends RenderableModel {
         }
         child.pos.setXY(info.x-pivotX*file.width,info.y-(1-pivotY)*file.height);
         child.scale.setXY(info.scaleX,-info.scaleY);
-        child.angle = MathEx.degToRad(360-info.angle);
+        child.angle = MathEx.degToRad(info.angle);
         child.alpha = info.a;
         child.visible = true;
         child.transformPoint.setXY(pivotX*file.width,(1-pivotY)*file.height);

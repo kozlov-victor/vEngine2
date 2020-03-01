@@ -176,7 +176,7 @@ export class Polygon extends Mesh {
 
         }
 
-        const game = this.game;
+        const game:Game = this.game;
         const m:Mesh = new class extends Mesh {
             constructor() {
                 super(game, true);
@@ -185,6 +185,7 @@ export class Polygon extends Mesh {
             }
         }();
         this.setClonedProperties(m);
+        m.depthTest = true;
         return m;
     }
 

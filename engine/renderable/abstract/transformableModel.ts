@@ -97,13 +97,13 @@ export abstract class TransformableModel extends BaseModel {
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformTranslate(-this.anchorPoint.x,-this.anchorPoint.y,this.posZ);
         renderer.transformTranslate(this.transformPoint.x,this.transformPoint.y);
+        renderer.transformRotateZ(this.angle3d.z);
+        renderer.transformRotateX(this.angle3d.x);
+        renderer.transformRotateY(this.angle3d.y);
         const [x,y,z] = this.scale.toArray();
         renderer.transformScale(x,y,z);
         renderer.transformSkewX(this.skew.x);
         renderer.transformSkewY(this.skew.y);
-        renderer.transformRotateZ(this.angle3d.z);
-        renderer.transformRotateX(this.angle3d.x);
-        renderer.transformRotateY(this.angle3d.y);
         renderer.transformTranslate(-this.transformPoint.x,-this.transformPoint.y);
         if (this.billBoard) renderer.transformRotationReset();
     }
