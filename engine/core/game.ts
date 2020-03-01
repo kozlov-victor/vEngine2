@@ -158,6 +158,7 @@ export class Game {
 
         this.revalidate();
         if (!scene.resourceLoader.isCompleted()) {
+            scene?.preloadingTaskFromDecorators?.forEach(cb=>cb(scene));
             scene.onPreloading();
             scene.resourceLoader.onProgress(()=>{
                 scene.onProgress(scene.resourceLoader.getProgress());

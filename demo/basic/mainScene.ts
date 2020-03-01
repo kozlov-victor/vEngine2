@@ -7,13 +7,14 @@ import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardE
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
+import {Source} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
+    @Source.Texture('./assets/logo.png')
     private logoLink:ResourceLink<ITexture>;
 
     public onPreloading() {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
         const rect = new Rectangle(this.game);
         (rect.fillColor as Color).setRGB(10,100,100);
         rect.size.height = 10;
