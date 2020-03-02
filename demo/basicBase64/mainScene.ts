@@ -12,11 +12,6 @@ export class MainScene extends Scene {
     @Source.Texture(logoBase64)
     private resourceLink: ResourceLink<ITexture>;
 
-    public onPreloading() {
-
-    }
-
-
     public onReady() {
         const spr: Image = new Image(this.game);
         spr.setResourceLink(this.resourceLink);

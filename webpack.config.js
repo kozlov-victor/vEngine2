@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
 const colors = require('./node_tools/colors');
-const transformer = require('./node_tools/transformers/build/engineTransformer').engineTransformer;
+const engineTransformer = require('./node_tools/transformers/build/engineTransformer').engineTransformer;
 
 class WebpackDonePlugin{
     apply(compiler){
@@ -94,8 +94,14 @@ module.exports = (env={})=>{
                     test: /\.ts$/,
                     use: [
                         {
-                            loader: "awesome-typescript-loader",options: {
-                                getCustomTransformers: () => ({ before: [transformer] })
+                            loader: "ts-loader",options: {
+                                getCustomTransformers: program => {
+                                    return {
+                                        before: [
+                                            engineTransformer
+                                        ]
+                                    }
+                                },
                             },
                         },
                     ]

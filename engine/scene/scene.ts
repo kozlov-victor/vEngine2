@@ -31,6 +31,7 @@ import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation} from "@engine/animation/iAnimation";
 import {mat4} from "@engine/geometry/mat4";
 import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
@@ -167,9 +168,16 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     }
 
 
-    public onPreloading():void {}
+    public onPreloading():void {
+        const rect = new Rectangle(this.game);
+        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.size.height = 10;
+        this.preloadingGameObject = rect;
+    }
 
-    public onProgress(val:number):void {}
+    public onProgress(val:number):void {
+        if (this.preloadingGameObject!==undefined) this.preloadingGameObject.size.width = val*this.game.size.width;
+    }
 
     public onReady():void {}
 

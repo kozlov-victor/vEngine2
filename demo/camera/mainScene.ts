@@ -10,25 +10,12 @@ import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {Source} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
-    private bgLink:ResourceLink<ITexture>;
-
-    public onPreloading() {
-        this.size.setWH(1100,2100);
-        this.logoLink = this.resourceLoader.loadTexture("./assets/logo.png");
-        this.bgLink = this.resourceLoader.loadTexture("./assets/repeat.jpg");
-        const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-    }
-
-    public onProgress(val: number) {
-        this.preloadingGameObject.size.width = val*this.game.size.width;
-    }
+    @Source.Texture('./assets/logo.png') private logoLink:ResourceLink<ITexture>;
+    @Source.Texture('./assets/repeat.jpg')  private bgLink:ResourceLink<ITexture>;
 
     public onReady() {
 
