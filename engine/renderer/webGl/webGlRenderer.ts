@@ -207,16 +207,20 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.bindModel(mesh);
         md.bind();
 
-        if (mesh.invertY) this.matrixStack.scale(1,-1,1);
-        const matrix1:Mat16Holder = this.matrixStack.getCurrentValue();
+        const modelMatrix:Mat16Holder = this.matrixStack.getCurrentValue();
 
-        const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        mat4.ortho(projectionMatrix,0,this.game.size.width,0,this.game.size.height,-SCENE_DEPTH,SCENE_DEPTH);
-        const matrix2:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(matrix2,projectionMatrix, zToWMatrix);
+        const orthoProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+        mat4.ortho(orthoProjectionMatrix,0,this.game.size.width,0,this.game.size.height,-SCENE_DEPTH,SCENE_DEPTH);
+        const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+        mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
 
-        md.setModelMatrix(matrix1.mat16);
-        md.setProjectionMatrix(matrix2.mat16);
+        const inverseTransposeModelMatrix:Mat16Holder = Mat16Holder.fromPool();
+        mat4.inverse(inverseTransposeModelMatrix,modelMatrix);
+        mat4.transpose(inverseTransposeModelMatrix,inverseTransposeModelMatrix);
+
+        md.setModelMatrix(modelMatrix.mat16);
+        md.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
+        md.setProjectionMatrix(zToWProjectionMatrix.mat16);
         md.setAlfa(this.getAlphaBlend());
         const isTextureUsed:boolean = mesh.texture!==undefined;
         if (DEBUG && isTextureUsed && mesh.modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
@@ -250,8 +254,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.unbind();
         //this.gl.disable(this.gl.CULL_FACE);
         zToWMatrix.release();
-        projectionMatrix.release();
-        matrix2.release();
+        orthoProjectionMatrix.release();
+        zToWProjectionMatrix.release();
+        inverseTransposeModelMatrix.release();
     }
 
 

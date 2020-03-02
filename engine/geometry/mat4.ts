@@ -344,6 +344,28 @@ export namespace mat4 {
         for (let i:number = 0; i < 16; i++) r[i] /= det;
     };
 
+
+    // analog of glsl function
+    // mat4 transpose(mat4 m) {
+    //     return mat4(
+    //         m[0][0], m[1][0], m[2][0], m[3][0],
+    //         m[0][1], m[1][1], m[2][1], m[3][1],
+    //         m[0][2], m[1][2], m[2][2], m[3][2],
+    //         m[0][3], m[1][3], m[2][3], m[3][3]);
+    // }
+
+    export const transpose = (out:Mat16Holder,mHolder:Mat16Holder):void=>{
+        const m:MAT16 = mHolder.mat16;
+
+        out.set(
+            m[0], m[4], m[ 8], m[12],
+            m[1], m[5], m[ 9], m[13],
+            m[2], m[6], m[10], m[14],
+            m[3], m[7], m[11], m[15]
+        );
+
+    };
+
     const m16h:Mat16Holder = Mat16Holder.create();
     makeIdentity(m16h);
 

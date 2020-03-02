@@ -1,6 +1,6 @@
 precision mediump float;
 
-varying vec2 v_texcoord;
+varying vec2 v_texCoord;
 varying vec3 v_normal;
 varying vec4 v_position;
 
@@ -24,7 +24,7 @@ uniform mat4  u_modelMatrix;
 
 void main() {
 
-    if (u_textureUsed) gl_FragColor = mix(texture2D(u_texture, v_texcoord),u_color,u_color_mix);
+    if (u_textureUsed) gl_FragColor = mix(texture2D(u_texture, v_texCoord),u_color,u_color_mix);
     else gl_FragColor = u_color;
     if (u_lightUsed) {
         vec3 normal = normalize(v_normal);
@@ -34,7 +34,7 @@ void main() {
         vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
 
         if (u_normalsTextureUsed) {
-            vec4 bumpNormal = texture2D(u_normalsTexture, v_texcoord) * 2. - 1.;
+            vec4 bumpNormal = texture2D(u_normalsTexture, v_texCoord) * 2. - 1.;
             normal+= bumpNormal.rgb;
             normal = normalize(normal);
         }
@@ -46,7 +46,7 @@ void main() {
         float specular = pow(max(dot(normal, halfVector), 0.0), 2.);
 
         light = clamp(light,.5,1.0);
-        //gl_FragColor = vec4(normalize(v_normal)*0.5+0.5,1.0);
+        //gl_FragColor = vec4(normalize(v_normal)*0.5+0.5,1.0); // to debug normals
         gl_FragColor.rgb *= light;
 
         gl_FragColor.rgb+=specular;

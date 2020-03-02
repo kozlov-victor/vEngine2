@@ -14,7 +14,6 @@ export class AmbientLight extends AbstractLight{
         this.direction = [0,0,-1];
     }
 
-    /** @private */
     public setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>):void {
         map.put('u_ambientLight.color',this.color.asGL());
         map.put('u_ambientLight.direction',this.direction);

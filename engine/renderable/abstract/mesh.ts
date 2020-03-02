@@ -7,7 +7,6 @@ import {DebugError} from "@engine/debug/debugError";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Optional} from "@engine/core/declarations";
 
-
 export abstract class Mesh extends RenderableModel {
 
     public modelPrimitive:IPrimitive;
@@ -21,12 +20,12 @@ export abstract class Mesh extends RenderableModel {
     public reflectivity:number = 0;
     public bufferInfo:BufferInfo;
     public vertexItemSize:2|3;
+    public invertY:boolean = false;
 
     private _lightAccepted:Optional<boolean>;
 
     protected constructor(
         protected game:Game,
-        public readonly invertY:boolean,
     ) {
         super(game);
         this.vertexItemSize = 3;
@@ -57,6 +56,12 @@ export abstract class Mesh extends RenderableModel {
                 );
             }
         }
+    }
+
+
+    public transform(): void {
+        super.transform();
+        if (this.invertY) this.game.getRenderer().transformScale(1,-1,1);
     }
 
     public draw():void{
