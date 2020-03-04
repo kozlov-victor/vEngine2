@@ -4,6 +4,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Source} from "@engine/resources/resourceDecorators";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
 
 
 export class MainScene extends Scene {
@@ -13,7 +14,11 @@ export class MainScene extends Scene {
 
 
     public onReady() {
+
+        //this.game.camera.scale.setXY(1.5);
+
         const spr:Image = new Image(this.game);
+        spr.scale.setXY(0.3);
         spr.setResourceLink(this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
@@ -26,7 +31,6 @@ export class MainScene extends Scene {
         spr1.addBehaviour(new DraggableBehaviour(this.game));
 
         spr.appendChild(spr1);
-
 
     }
 

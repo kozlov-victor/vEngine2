@@ -102,11 +102,11 @@ export class ParentChildDelegate<T extends IParentChild> {
         return this.model.parent as T;
     }
 
-    public findChildById(id:string):Optional<T>{
-        if (id===this.model.id) return this.model as T;
+    public findChildById<U extends RenderableModel>(id:string):Optional<U>{
+        if (id===this.model.id) return this.model as U;
         for (const c of this.model.children) {
             const possibleObject:Optional<IParentChild> = c.findChildById(id);
-            if (possibleObject) return possibleObject as T;
+            if (possibleObject) return possibleObject as U;
         }
         return undefined;
     }

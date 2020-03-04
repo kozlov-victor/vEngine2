@@ -30,6 +30,7 @@ import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractT
 import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
+import MAT16 = mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -369,6 +370,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public transformSet(v0: number, v1: number, v2: number, v3: number, v4: number, v5: number, v6: number, v7: number, v8: number, v9: number, v10: number, v11: number, v12: number, v13: number, v14: number, v15: number): void {
         this.matrixStack.setMatrixValues(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
+    }
+
+    public transformGet(): Readonly<MAT16> {
+        return this.matrixStack.getCurrentValue().mat16;
     }
 
     public setLockRect(rect:Rect):void {

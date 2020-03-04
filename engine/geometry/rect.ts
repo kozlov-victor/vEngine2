@@ -138,10 +138,11 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         return this;
     }
 
-    public addPoint(another:Point2d):Rect{
+    public addPoint(another:IPoint2d):Rect{
         this.addXY(another.x,another.y);
         return this;
     }
+
 
     public isZeroSize():boolean{
         return this._width===0 || this._height===0;

@@ -21,7 +21,7 @@ export namespace mat4 {
 
         private static m16hPool:ObjectPool<Mat16Holder> = new ObjectPool<Mat16Holder>(Mat16Holder,256);
 
-        public readonly mat16:MAT16 = (new Float32Array(16) as unknown) as MAT16;
+        public readonly mat16:Readonly<MAT16> = (new Float32Array(16) as unknown) as MAT16; // exports only readonly arr
 
         private _captured:boolean = false;
 
@@ -35,13 +35,14 @@ export namespace mat4 {
         }
 
         public set(v0:n,v1:n,v2:n,v3:n,v4:n,v5:n,v6:n,v7:n,v8:n,v9:n,v10:n,v11:n,v12:n,v13:n,v14:n,v15:n):void{
-            this.mat16[0 ]= v0;this.mat16[1 ]=v1 ;this.mat16[2 ]=v2 ;this.mat16[3 ]=v3;
-            this.mat16[4 ]= v4;this.mat16[5 ]=v5 ;this.mat16[6 ]=v6 ;this.mat16[7 ]=v7;
-            this.mat16[8 ]= v8;this.mat16[9 ]=v9 ;this.mat16[10]=v10;this.mat16[11]=v11;
-            this.mat16[12]=v12;this.mat16[13]=v13;this.mat16[14]=v14;this.mat16[15]=v15;
+            const mat16:MAT16 = this.mat16 as MAT16;
+            mat16[0 ]= v0;mat16[1 ]=v1 ;mat16[2 ]=v2 ;mat16[3 ]=v3;
+            mat16[4 ]= v4;mat16[5 ]=v5 ;mat16[6 ]=v6 ;mat16[7 ]=v7;
+            mat16[8 ]= v8;mat16[9 ]=v9 ;mat16[10]=v10;mat16[11]=v11;
+            mat16[12]=v12;mat16[13]=v13;mat16[14]=v14;mat16[15]=v15;
         }
 
-        public fromMat16(mat16:MAT16):void{
+        public fromMat16(mat16:Readonly<MAT16>):void{
             this.set(
                 mat16[0 ],mat16[1 ],mat16[2 ],mat16[3 ],
                 mat16[4 ],mat16[5 ],mat16[6 ],mat16[7 ],
@@ -53,7 +54,7 @@ export namespace mat4 {
         public clone(): mat4.Mat16Holder {
             const m:Mat16Holder = new Mat16Holder();
             for (let i:number=0;i<this.mat16.length;i++) {
-                m.mat16[i] = this.mat16[i];
+                (m.mat16 as MAT16)[i] = this.mat16[i];
             }
             return m;
         }
@@ -129,7 +130,7 @@ export namespace mat4 {
         const lr:number = 1 / (left - right),
             bt:number = 1 / (bottom - top),
             nf:number = 1 / (near - far);
-        const outMat16:MAT16 = out.mat16;
+        const outMat16:MAT16 = out.mat16 as MAT16;
         outMat16[0] = -2 * lr;
         outMat16[1] = 0;
         outMat16[2] = 0;
@@ -155,7 +156,7 @@ export namespace mat4 {
         const f:number = 1.0 / Math.tan(fovy / 2),
             nf:number = 1 / (near - far);
 
-        const outMat16:MAT16 = out.mat16;
+        const outMat16:MAT16 = out.mat16 as MAT16;
 
         outMat16[0] = f / aspect;
         outMat16[1] = 0;
@@ -244,7 +245,7 @@ export namespace mat4 {
     };
 
     export const makeRotationReset = (out:Mat16Holder):void=>{
-        const matrix:MAT16 = out.mat16;
+        const matrix:MAT16 = out.mat16 as MAT16;
         const d:number = Math.sqrt(matrix[0] * matrix[0] + matrix[1] * matrix[1] + matrix[2] * matrix[2]);
         matrix[0] = d;
         matrix[4] = 0;
@@ -273,9 +274,9 @@ export namespace mat4 {
 
     export const matrixMultiply = (out:Mat16Holder,aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
 
-        const r:MAT16 = out.mat16;
-        const a:MAT16 = aHolder.mat16;
-        const b:MAT16 = bHolder.mat16;
+        const r:MAT16 = out.mat16 as MAT16;
+        const a:MAT16 = aHolder.mat16 as MAT16;
+        const b:MAT16 = bHolder.mat16 as MAT16;
 
         r[0] = a[0] * b[0] + a[1] * b[4] + a[2] * b[8] + a[3] * b[12];
         r[1] = a[0] * b[1] + a[1] * b[5] + a[2] * b[9] + a[3] * b[13];
@@ -299,22 +300,19 @@ export namespace mat4 {
 
     };
 
-    export const multMatrixVec = (out:Mat16Holder,matrix:Mat16Holder, inp:number[]):void => {
-
-        const outMat16:MAT16 = out.mat16;
-
+    export const multVecByMatrix = (out:[number,number,number,number], matrix:Mat16Holder, vec4Arr:[number,number,number,number]):void => {
         for (let i:number = 0; i < 4; i++) {
-            outMat16[i] =
-                inp[0] * matrix.mat16[0 * 4 + i] +
-                inp[1] * matrix.mat16[1 * 4 + i] +
-                inp[2] * matrix.mat16[2 * 4 + i] +
-                inp[3] * matrix.mat16[3 * 4 + i];
+            out[i] =
+                vec4Arr[0] * matrix.mat16[0 * 4 + i] +
+                vec4Arr[1] * matrix.mat16[1 * 4 + i] +
+                vec4Arr[2] * matrix.mat16[2 * 4 + i] +
+                vec4Arr[3] * matrix.mat16[3 * 4 + i];
         }
     };
 
     export const inverse = (out:Mat16Holder,mHolder:Mat16Holder):void=>{
-        const r:MAT16 = out.mat16;
-        const m:MAT16 = mHolder.mat16;
+        const r:MAT16 = out.mat16 as MAT16;
+        const m:MAT16 = mHolder.mat16 as MAT16;
 
         r[0] = m[5]*m[10]*m[15] - m[5]*m[14]*m[11] - m[6]*m[9]*m[15] + m[6]*m[13]*m[11] + m[7]*m[9]*m[14] - m[7]*m[13]*m[10];
         r[1] = -m[1]*m[10]*m[15] + m[1]*m[14]*m[11] + m[2]*m[9]*m[15] - m[2]*m[13]*m[11] - m[3]*m[9]*m[14] + m[3]*m[13]*m[10];
@@ -355,7 +353,7 @@ export namespace mat4 {
     // }
 
     export const transpose = (out:Mat16Holder,mHolder:Mat16Holder):void=>{
-        const m:MAT16 = mHolder.mat16;
+        const m:MAT16 = mHolder.mat16 as MAT16;
 
         out.set(
             m[0], m[4], m[ 8], m[12],
@@ -369,7 +367,7 @@ export namespace mat4 {
     const m16h:Mat16Holder = Mat16Holder.create();
     makeIdentity(m16h);
 
-    export const IDENTITY:MAT16 = m16h.mat16;
+    export const IDENTITY:Readonly<MAT16> = m16h.mat16;
     export const IDENTITY_HOLDER = new Mat16Holder();
     IDENTITY_HOLDER.set(...IDENTITY);
 }

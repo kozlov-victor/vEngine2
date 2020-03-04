@@ -51,19 +51,19 @@ export class MeshDrawer extends AbstractDrawer {
         this.bufferInfo = this.mesh.bufferInfo;
     }
 
-    public setModelMatrix(m:MAT16):void{
+    public setModelMatrix(m:Readonly<MAT16>):void{
         this.setUniform(this.u_modelMatrix,m);
     }
 
-    public setInverseTransposeModelMatrix(m:MAT16):void{
+    public setInverseTransposeModelMatrix(m:Readonly<MAT16>):void{
         this.setUniform(this.u_inverseTransposeModelMatrix,m);
     }
 
-    public setProjectionMatrix(m:MAT16):void{
+    public setProjectionMatrix(m:Readonly<MAT16>):void{
         this.setUniform(this.u_projectionMatrix,m);
     }
 
-    public setTextureMatrix(m:MAT16):void{
+    public setTextureMatrix(m:Readonly<MAT16>):void{
         this.setUniform(this.u_textureMatrix,m);
     }
 

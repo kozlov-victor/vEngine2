@@ -157,7 +157,7 @@ type GL = WebGLRenderingContext;
 type LOC = WebGLUniformLocation;
 
 export type UNIFORM_VALUE_PRIMITIVE_TYPE = number|Int|boolean;
-export type UNIFORM_VALUE_ARRAY_TYPE = UNIFORM_VALUE_PRIMITIVE_TYPE[]|Float32Array|Int32Array;
+export type UNIFORM_VALUE_ARRAY_TYPE = Readonly<UNIFORM_VALUE_PRIMITIVE_TYPE[]>|Readonly<Float32Array>|Readonly<Int32Array>;
 export type UNIFORM_VALUE_TYPE = UNIFORM_VALUE_PRIMITIVE_TYPE|UNIFORM_VALUE_ARRAY_TYPE;
 
 type UNIFORM_SETTER = (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=>void;

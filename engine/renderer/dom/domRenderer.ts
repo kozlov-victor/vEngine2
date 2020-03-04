@@ -16,6 +16,8 @@ import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {DebugError} from "@engine/debug/debugError";
+import {mat4} from "@engine/geometry/mat4";
+import MAT16 = mat4.MAT16;
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
@@ -186,7 +188,16 @@ export class DomRenderer extends AbstractRenderer {
         this.matrixStack.restore();
     }
 
-    public transformSet(v0: number, v1: number, v2: number, v3: number, v4: number, v5: number, v6: number, v7: number, v8: number, v9: number, v10: number, v11: number, v12: number, v13: number, v14: number, v15: number): void {
+    public transformSet(
+        v0: number, v1: number, v2: number, v3: number,
+        v4: number, v5: number, v6: number, v7: number,
+        v8: number, v9: number, v10: number, v11: number,
+        v12: number, v13: number, v14: number, v15: number
+    ): void {
+    }
+
+    public transformGet(): Readonly<MAT16> {
+        return undefined!;
     }
 
     public drawEllipse(ellispe: Ellipse): void {

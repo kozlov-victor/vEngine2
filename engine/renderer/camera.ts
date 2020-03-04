@@ -7,7 +7,7 @@ import {Scene} from "../scene/scene";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
-import {Optional} from "@engine/core/declarations";
+import {ITransformable, IUpdatable, Optional} from "@engine/core/declarations";
 import Mat16Holder = mat4.Mat16Holder;
 
 interface ICameraTweenTarget {
@@ -22,7 +22,7 @@ const enum DIRECTION_CORRECTION {
     DOWN,
 }
 
-export class Camera {
+export class Camera implements IUpdatable, ITransformable  {
     private static FOLLOW_FACTOR:number = 0.1;
 
     public readonly pos:Point2d = new Point2d(0,0);
@@ -138,16 +138,27 @@ export class Camera {
         });
     }
 
-    public transform():void{ //TRS - (transform rotate scale) reverted
+
+    public translate():void{
+        const renderer:AbstractRenderer = this.game.getRenderer();
+        renderer.transformTranslate(-this.pos.x,-this.pos.y,0);
+    }
+
+    public transform():void{
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (!this.scale.equal(1)) { // todo posZ???
-            renderer.transformTranslate(this.game.size.width/2,this.game.size.height/2,0);
-            renderer.transformScale(this.scale.x,this.scale.y);
-            renderer.transformTranslate(-this.game.size.width/2,-this.game.size.height/2);
+
         }
+
+        renderer.transformTranslate(this.game.size.width/2,this.game.size.height/2,0);
+        //rotate
+        //renderer.transformRotateX(0.6);
+        renderer.transformScale(this.scale.x,this.scale.y);
+        //scew
+        renderer.transformTranslate(-this.game.size.width/2,-this.game.size.height/2);
+
         // todo rotation does not work correctly yet
         //this.game.renderer.transformRotateZ(this.angle);
-        renderer.transformTranslate(-this.pos.x,-this.pos.y,0);
         if (this.cameraShakeTween!==undefined) renderer.transformTranslate(
             this.cameraShakeTween.getTarget().point.x,
             this.cameraShakeTween.getTarget().point.y

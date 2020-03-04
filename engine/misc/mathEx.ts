@@ -1,4 +1,4 @@
-import {Point2d} from "../geometry/point2d";
+import {IPoint2d, Point2d} from "../geometry/point2d";
 import {IRect, Rect} from "../geometry/rect";
 import {mat4} from "@engine/geometry/mat4";
 
@@ -99,14 +99,13 @@ export namespace MathEx {
         mat4.inverse(viewProjectionInverse,viewProjectionMatrix);
 
         const point3D: [number,number,number,number] = [x, y, 0, 1];
-        const res: Mat16Holder = Mat16Holder.fromPool();
-        mat4.multMatrixVec(res,viewProjectionInverse, point3D);
-        res.mat16[0] = (res.mat16[0] / 2 + 0.5) * width;
-        res.mat16[1] = (res.mat16[1] / 2 + 0.5) * height;
-        const result:Point2d = new Point2d(res.mat16[0], res.mat16[1]); // todo: new Point ---> point pool
+        const res= [0,0,0,0] as [number,number,number,number];
+        mat4.multVecByMatrix(res,viewProjectionInverse, point3D);
+        res[0] = (res[0] / 2 + 0.5) * width;
+        res[1] = (res[1] / 2 + 0.5) * height;
+        const result:Point2d = new Point2d(res[0], res[1]); // todo: new Point ---> point pool
 
         viewProjectionInverse.release();
-        res.release();
 
         return result;
     };

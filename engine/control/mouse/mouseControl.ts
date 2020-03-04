@@ -10,6 +10,10 @@ import {IObjectMousePoint, ISceneMousePoint, MousePoint} from "@engine/control/m
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {Optional} from "@engine/core/declarations";
+import {mat4} from "@engine/geometry/mat4";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Color} from "@engine/renderer/common/color";
+
 
 
 export class MouseControl implements IControl {
@@ -19,12 +23,41 @@ export class MouseControl implements IControl {
         eventName:MOUSE_EVENTS,point:MousePoint,
         go:RenderableModel):boolean{
 
-        const rectWithOffset:Rect = Rect.fromPool();
-        rectWithOffset.setPointAndSize(go.getWorldPosition(),go.size);
+        const goRect:Rect = Rect.fromPool();
+
+        const pointTopLeft:[number,number,number,number] = [0,0,0,1];
+        const pointBottomRight:[number,number,number,number] = [go.size.width,go.size.height,0,1];
+        const pointTopLeftTransformation:[number,number,number,number] = [0,0,0,0];
+        const pointBottomRightTransformation:[number,number,number,number] = [0,0,0,0];
+
+        mat4.multVecByMatrix(pointTopLeftTransformation,go.worldTransformMatrix,pointTopLeft);
+        mat4.multVecByMatrix(pointBottomRightTransformation,go.worldTransformMatrix,pointBottomRight);
+
+        goRect.setXYWH(
+            pointTopLeftTransformation[0],
+            pointTopLeftTransformation[1],
+            pointBottomRightTransformation[0]-pointTopLeftTransformation[0],
+            pointBottomRightTransformation[1]-pointTopLeftTransformation[1]
+        );
+
+        let debugRect:Rectangle = Game.getInstance().getCurrScene().getDefaultLayer().findChildById<Rectangle>('debugRect')!;
+        if (!debugRect) {
+            const layer:Layer = new Layer(Game.getInstance());
+            layer.transformType = LayerTransformType.STICK_TO_CAMERA;
+            Game.getInstance().getCurrScene().addLayer(layer);
+            debugRect = new Rectangle(Game.getInstance());
+            debugRect.setWH(10);
+            debugRect.fillColor = Color.RGBA(0,122,12,22);
+            debugRect.passMouseEventsThrough = true;
+            debugRect.id = 'debugRect';
+            layer.appendChild(debugRect);
+        }
+        debugRect.pos.setXY(goRect.x,goRect.y);
+        debugRect.size.setWH(goRect.width || 1, goRect.height || 1);
 
         let res:boolean = false;
         if (
-            MathEx.isPointInRect(point,rectWithOffset)
+            MathEx.isPointInRect(point,goRect)
         ) {
             point.target = go;
             const mousePoint:IObjectMousePoint = { // todo pool?
@@ -44,7 +77,7 @@ export class MouseControl implements IControl {
             go.trigger(eventName,mousePoint);
             res = !go.passMouseEventsThrough;
         }
-        rectWithOffset.release();
+        goRect.release();
         for (const ch of go.children) {
             res = res || MouseControl.triggerGameObjectEvent(e,eventName,point,ch);
         }
@@ -151,7 +184,7 @@ export class MouseControl implements IControl {
     }
 
 
-    private triggerEvent(e:MouseEvent|Touch|Touch, mouseEvent:MOUSE_EVENTS, isMouseDown:boolean = false):MousePoint{
+    private triggerEvent(e:MouseEvent|Touch, mouseEvent:MOUSE_EVENTS, isMouseDown:boolean = false):MousePoint{
         const scene:Scene = this.game.getCurrScene();
         const pointTransformed:MousePoint = this.resolvePoint(e);
         pointTransformed.isMouseDown = isMouseDown;

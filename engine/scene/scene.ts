@@ -191,6 +191,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         renderer.saveAlphaBlend();
         renderer.clearColor.set(this.colorBG);
         const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters); // todo blend mode for scene
+        this.game.camera.translate();
         this.game.camera.transform();
         this.translate();
         this.transform();

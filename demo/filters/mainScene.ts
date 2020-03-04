@@ -45,7 +45,7 @@ export class MainScene extends Scene {
         const bw:BlackWhiteFilter = new BlackWhiteFilter(this.game);
 
         const cl:ColorizeFilter = new ColorizeFilter(this.game);
-        cl.setColor(Color.RGB(0,200,23,122));
+        cl.setColor(Color.RGBA(0,200,23,122));
 
         const pf:PixelFilter = new PixelFilter(this.game);
 

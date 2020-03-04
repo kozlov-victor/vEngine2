@@ -1,4 +1,3 @@
-import {IReleasealable, ObjectPool} from "../../misc/objectPool";
 import {ICloneable} from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
@@ -16,9 +15,13 @@ export class Color extends ObservableEntity implements ICloneable<Color>{
     public static WHITE = Color.RGB(255,255,255).freeze();
     public static GREY  = Color.RGB(127,127,127).freeze();
     public static BLACK = Color.RGB(0,0,0).freeze();
-    public static NONE  = Color.RGB(0,0,0,0).freeze();
+    public static NONE  = Color.RGBA(0,0,0,0).freeze();
 
-    public static RGB(r:byte,g:byte = r,b:byte = r,a:byte = 255):Color{
+    public static RGB(r:byte,g:byte = r,b:byte = r):Color{
+        return Color.RGBA(r,g,b,255);
+    }
+
+    public static RGBA(r:byte,g:byte = r,b:byte = r, a:byte = b):Color{
         const c:Color = new Color(0,0,0);
         c.setRGBA(r,g,b,a);
         return c;

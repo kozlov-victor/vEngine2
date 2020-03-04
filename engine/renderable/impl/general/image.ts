@@ -1,14 +1,13 @@
-import {Game} from "../../../core/game";
-import {Rect} from "../../../geometry/rect";
-import {DebugError} from "../../../debug/debugError";
-import {Shape} from "../../abstract/shape";
-import {Color} from "../../../renderer/common/color";
-import {Point2d} from "../../../geometry/point2d";
-import {ICloneable, IResource} from "../../../core/declarations";
-import {ResourceLink} from "../../../resources/resourceLink";
-import {ITexture} from "../../../renderer/common/texture";
+import {Game} from "@engine/core/game";
+import {Rect} from "@engine/geometry/rect";
+import {DebugError} from "@engine/debug/debugError";
+import {Color} from "@engine/renderer/common/color";
+import {Point2d} from "@engine/geometry/point2d";
+import {ICloneable, IResource} from "@engine/core/declarations";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {ITexture} from "@engine/renderer/common/texture";
 import {RenderableModel} from "../../abstract/renderableModel";
-import {IFilter} from "../../../renderer/common/ifilter";
+import {IFilter} from "@engine/renderer/common/ifilter";
 
 export const enum STRETCH_MODE {
     STRETCH,
@@ -21,7 +20,7 @@ export class Image extends RenderableModel implements ICloneable<Image>,IResourc
     public borderRadius:number = 0;
     public offset:Point2d = new Point2d();
     public stretchMode:STRETCH_MODE = STRETCH_MODE.STRETCH;
-    public color:Color = Color.RGB(0,0,0,0);
+    public color:Color = Color.NONE.clone();
     public lineWidth:number = 0;
     public filters: IFilter[] = [];
     private _pixelPerfect:boolean = false;

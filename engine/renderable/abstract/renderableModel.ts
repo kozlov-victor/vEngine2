@@ -2,7 +2,7 @@
 import {AbstractRenderer, IRenderTarget} from "../../renderer/abstract/abstractRenderer";
 import {
     IAlphaBlendable,
-    ICloneable,
+    ICloneable, IDestroyable,
     IEventemittable,
     IFilterable,
     IParentChild,
@@ -48,7 +48,7 @@ export abstract class RenderableModel
         IRevalidatable, ITweenable,
         IEventemittable, IParentChild,
         IAlphaBlendable, IFilterable,
-        IUpdatable  {
+        IUpdatable, IDestroyable  {
 
     public id:string;
 
@@ -141,9 +141,9 @@ export abstract class RenderableModel
 
     public abstract draw():void;
 
-    public kill():void {
+    public destroy():void {
 
-        for (const c of this.children) c.kill();
+        for (const c of this.children) c.destroy();
 
         if (DEBUG && !this.getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
 
@@ -172,6 +172,7 @@ export abstract class RenderableModel
 
         this.translate();
         this.transform();
+        this.worldTransformMatrix.fromMat16(renderer.transformGet());
         renderer.setAlphaBlend(this.alpha);
         const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(this.filters,this.forceDrawChildrenOnNewSurface);
 

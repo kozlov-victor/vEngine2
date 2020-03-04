@@ -3,8 +3,6 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Cube} from "@engine/renderer/webGl/primitives/cube";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/texture/simpleBlurFilter";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {Source} from "@engine/resources/resourceDecorators";

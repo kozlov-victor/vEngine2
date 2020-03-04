@@ -63,10 +63,6 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
     }
 
 
-    public kill():void {
-        super.kill();
-    }
-
     protected setClonedProperties(cloned:AnimatedImage):void {
 
         if (DEBUG && !('clone' in this)) {

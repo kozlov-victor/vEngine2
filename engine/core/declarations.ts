@@ -50,6 +50,11 @@ export interface IUpdatable {
     update():void;
 }
 
+export interface ITransformable {
+    transform():void;
+    translate():void;
+}
+
 export interface IParentChild {
     id:string;
     parent:Optional<IParentChild>;
