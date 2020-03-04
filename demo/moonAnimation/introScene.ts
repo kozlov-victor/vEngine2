@@ -4,7 +4,7 @@ import {Color} from "@engine/renderer/common/color";
 import {Button} from "@engine/renderable/impl/ui/components/button";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {IObjectMousePoint} from "@engine/control/mouse/mousePoint";
+import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {MainScene} from "./mainScene";
 
 
@@ -39,7 +39,7 @@ export class IntroScene extends Scene {
         btn.setPaddings(15);
 
 
-        btn.on(MOUSE_EVENTS.click, (e:IObjectMousePoint)=>{
+        btn.on(MOUSE_EVENTS.click, (e:IObjectMouseEvent)=>{
            this.game.runScene(new MainScene(this.game));
         });
         this.appendChild(btn);

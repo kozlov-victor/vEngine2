@@ -1,11 +1,13 @@
 import {IPoint2d, Point2d} from "../geometry/point2d";
 import {IRect, Rect} from "../geometry/rect";
 import {mat4} from "@engine/geometry/mat4";
+import {vec4} from "@engine/geometry/vec4";
 
 
 export namespace MathEx {
 
     import Mat16Holder = mat4.Mat16Holder;
+    import Vec4Holder = vec4.Vec4Holder;
 
     export const isPointInRect = (point: Point2d, rect: Rect, angle?: number): boolean => {
         // if  = (angle) {
@@ -98,13 +100,17 @@ export namespace MathEx {
         const viewProjectionInverse: Mat16Holder = Mat16Holder.fromPool()!;
         mat4.inverse(viewProjectionInverse,viewProjectionMatrix);
 
-        const point3D: [number,number,number,number] = [x, y, 0, 1];
-        const res= [0,0,0,0] as [number,number,number,number];
+        const point3D: Vec4Holder = Vec4Holder.fromPool();
+        point3D.set(x, y, 0, 1);
+        const res: Vec4Holder = Vec4Holder.fromPool();
         mat4.multVecByMatrix(res,viewProjectionInverse, point3D);
-        res[0] = (res[0] / 2 + 0.5) * width;
-        res[1] = (res[1] / 2 + 0.5) * height;
-        const result:Point2d = new Point2d(res[0], res[1]); // todo: new Point ---> point pool
+        const resultX:number = (res.x / 2 + 0.5) * width;
+        const resultY:number = (res.y / 2 + 0.5) * height;
+        const result:Point2d = Point2d.fromPool();
+        result.setXY(resultX,resultY);
 
+        point3D.release();
+        res.release();
         viewProjectionInverse.release();
 
         return result;

@@ -2,6 +2,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Point2d} from "@engine/geometry/point2d";
 import {Scene} from "@engine/scene/scene";
 import {ObjectPool} from "@engine/misc/objectPool";
+import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 
 export const enum MOUSE_BUTTON {
     LEFT,
@@ -9,7 +10,7 @@ export const enum MOUSE_BUTTON {
     SCROLL
 }
 
-export interface ISceneMousePoint {
+export interface ISceneMouseEvent {
     screenX:number;
     screenY:number;
     sceneX:number;
@@ -21,14 +22,14 @@ export interface ISceneMousePoint {
     button:MOUSE_BUTTON;
 }
 
-export interface IObjectMousePoint extends ISceneMousePoint {
+export interface IObjectMouseEvent extends ISceneMouseEvent {
     objectX:number;
     objectY:number;
     target:RenderableModel;
 }
 
 
-export class MousePoint extends Point2d {
+export class MousePoint extends ReleaseableEntity{
 
     public static fromPool():MousePoint{
         return MousePoint.mousePointsPool.getFreeObject()!;
@@ -36,21 +37,11 @@ export class MousePoint extends Point2d {
 
     private static mousePointsPool:ObjectPool<MousePoint> = new ObjectPool(MousePoint);
 
-    public readonly screenPoint:Point2d = new Point2d();
+    public readonly screenCoordinate:Point2d = new Point2d();
+    public readonly sceneCoordinate:Point2d = new Point2d();
     public id:number;
     public target:RenderableModel|Scene;
     public isMouseDown:boolean;
 
-    constructor(){
-        super();
-    }
-
-    public copyTo(pointCopyTo:MousePoint):void{
-        pointCopyTo.set(this);
-        pointCopyTo.screenPoint.set(this.screenPoint);
-        pointCopyTo.id = this.id;
-        pointCopyTo.target = this.target;
-        pointCopyTo.isMouseDown = this.isMouseDown;
-    }
 
 }

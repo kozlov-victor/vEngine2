@@ -1,14 +1,18 @@
 import {DebugError} from "../debug/debugError";
-import {IReleasealable, ObjectPool} from "@engine/misc/objectPool";
+import {ObjectPool} from "@engine/misc/objectPool";
 import {ICloneable} from "@engine/core/declarations";
+import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
+import {vec4} from "@engine/geometry/vec4";
 
 // https://evanw.github.io/lightgl.js/docs/matrix.html
 
 export namespace mat4 {
 
+    import Vec4Holder = vec4.Vec4Holder;
+    import VEC4 = vec4.VEC4;
     type n = number;
 
-    export class Mat16Holder implements IReleasealable, ICloneable<Mat16Holder>{
+    export class Mat16Holder extends ReleaseableEntity implements ICloneable<Mat16Holder>{
 
         public static fromPool():Mat16Holder {
             return Mat16Holder.m16hPool.getFreeObject()!;
@@ -23,9 +27,8 @@ export namespace mat4 {
 
         public readonly mat16:Readonly<MAT16> = (new Float32Array(16) as unknown) as MAT16; // exports only readonly arr
 
-        private _captured:boolean = false;
-
         public constructor(){
+            super();
             this.set(
                 0, 0, 0, 0,
                 0, 0, 0, 0,
@@ -57,19 +60,6 @@ export namespace mat4 {
                 (m.mat16 as MAT16)[i] = this.mat16[i];
             }
             return m;
-        }
-        public isCaptured(): boolean {
-            return this._captured;
-        }
-
-        public capture(): this {
-            this._captured = true;
-            return this;
-        }
-
-        public release(): this {
-            this._captured = false;
-            return this;
         }
 
     }
@@ -300,13 +290,13 @@ export namespace mat4 {
 
     };
 
-    export const multVecByMatrix = (out:[number,number,number,number], matrix:Mat16Holder, vec4Arr:[number,number,number,number]):void => {
+    export const multVecByMatrix = (out:Vec4Holder, matrix:Mat16Holder, vec4Arr:Vec4Holder):void => {
         for (let i:number = 0; i < 4; i++) {
-            out[i] =
-                vec4Arr[0] * matrix.mat16[0 * 4 + i] +
-                vec4Arr[1] * matrix.mat16[1 * 4 + i] +
-                vec4Arr[2] * matrix.mat16[2 * 4 + i] +
-                vec4Arr[3] * matrix.mat16[3 * 4 + i];
+            (out.vec4 as VEC4)[i] =
+                vec4Arr.vec4[0] * matrix.mat16[0 * 4 + i] +
+                vec4Arr.vec4[1] * matrix.mat16[1 * 4 + i] +
+                vec4Arr.vec4[2] * matrix.mat16[2 * 4 + i] +
+                vec4Arr.vec4[3] * matrix.mat16[3 * 4 + i];
         }
     };
 
