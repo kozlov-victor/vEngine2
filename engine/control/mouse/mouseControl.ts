@@ -14,6 +14,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {vec4} from "@engine/geometry/vec4";
 import Vec4Holder = vec4.Vec4Holder;
+import {Circle} from "@engine/renderable/impl/geometry/circle";
 
 const pointTopLeft:Vec4Holder = new Vec4Holder();
 pointTopLeft.set(0,0,0,1);
@@ -50,6 +51,7 @@ export class MouseControl implements IControl {
         let debugRect:Rectangle = Game.getInstance().getCurrScene().getDefaultLayer().findChildById<Rectangle>('debugRect')!;
         if (!debugRect) {
             const layer:Layer = new Layer(Game.getInstance());
+            layer.id = 'debugLayer';
             layer.transformType = LayerTransformType.STICK_TO_CAMERA;
             Game.getInstance().getCurrScene().addLayer(layer);
             debugRect = new Rectangle(Game.getInstance());
@@ -62,15 +64,25 @@ export class MouseControl implements IControl {
         debugRect.pos.setXY(goRect.x,goRect.y);
         debugRect.size.setWH(goRect.width || 1, goRect.height || 1);
 
+        let debugPoint:Circle = Game.getInstance().getCurrScene().getDefaultLayer().findChildById<Circle>('debugPoint')!;
+        if (!debugPoint) {
+            debugPoint = new Circle( Game.getInstance());
+            debugPoint.radius = 5;
+            debugPoint.id = 'debugPoint';
+            debugPoint.passMouseEventsThrough = true;
+            Game.getInstance().getCurrScene().getLayerById('debugLayer')!.appendChild(debugPoint);
+        }
+        debugPoint.center.setXY(mousePoint.screenCoordinate.x,mousePoint.screenCoordinate.y);
+
         const screenPoint:Point2d = Point2d.fromPool();
-        screenPoint.setXY(mousePoint.sceneCoordinate.x,mousePoint.sceneCoordinate.y);
+        screenPoint.setXY(mousePoint.screenCoordinate.x,mousePoint.screenCoordinate.y);
         let res:boolean = false;
         if (
             MathEx.isPointInRect(screenPoint,goRect)
         ) {
             mousePoint.target = go;
             const mouseEvent:IObjectMouseEvent = { // todo pool?
-                screenX:mousePoint.sceneCoordinate.x,
+                screenX:mousePoint.screenCoordinate.x,
                 screenY:mousePoint.screenCoordinate.y,
                 sceneX:mousePoint.sceneCoordinate.x,
                 sceneY:mousePoint.sceneCoordinate.y,

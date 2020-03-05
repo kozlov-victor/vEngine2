@@ -18,7 +18,8 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<ITexture>;
 
     public onReady() {
-        this.game.camera.scale.setXY(0.8);
+        this.game.camera.scale.setXY(0.6);
+        this.game.camera.pos.setXY(-5);
 
         this.colorBG = Color.BLACK;
         const spr:Image = new Image(this.game);

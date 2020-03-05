@@ -81,6 +81,13 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         return this._layers[this._layers.length-1];
     }
 
+    public getLayerById(id:string):Optional<Layer> {
+        for (const layer of this._layers) {
+            if (layer.id===id) return layer;
+        }
+        return undefined;
+    }
+
     public addLayer(layer:Layer):void {
         layer.setScene(this);
         this._layers.push(layer);

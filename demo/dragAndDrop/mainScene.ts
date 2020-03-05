@@ -14,12 +14,13 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-        //this.game.camera.scale.setXY(1.5);
+        this.game.camera.scale.setXY(1.6);
+        this.game.camera.pos.setXY(-10,-15);
 
         const spr:Image = new Image(this.game);
-        spr.scale.setXY(0.3);
+        spr.scale.setXY(0.2);
         spr.setResourceLink(this.logoLink);
-        spr.pos.fromJSON({x:10,y:10});
+        spr.pos.setXY(50,50);
         this.appendChild(spr);
 
         spr.addBehaviour(new DraggableBehaviour(this.game));
@@ -27,6 +28,7 @@ export class MainScene extends Scene {
         const spr1:Image = new Image(this.game);
         spr1.setResourceLink(this.logoLink);
         spr1.pos.fromJSON({x:100,y:100});
+        spr1.scale.setXY(1.2);
         spr1.addBehaviour(new DraggableBehaviour(this.game));
 
         spr.appendChild(spr1);
