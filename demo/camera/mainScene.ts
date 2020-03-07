@@ -19,6 +19,8 @@ export class MainScene extends Scene {
 
     public onReady() {
 
+        this.size.setWH(1100,2100);
+
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         spr.size.setWH(250,300);
