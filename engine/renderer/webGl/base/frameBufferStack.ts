@@ -34,7 +34,7 @@ const NONE_FILTERS:readonly AbstractGlFilter[] = [];
 
 export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
-    private debug:boolean = false;
+    private debug:boolean = false; // todo remove this flag
 
     private _stackPointer:number;
     private readonly _stack:IStackItem[] = [];
@@ -44,7 +44,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     private _doubleFrameBuffer:DoubleFrameBuffer = new DoubleFrameBuffer(this.gl,this.size);
 
     private _pixelPerfectMode:boolean = false;
-    private simpleRectDrawer:SimpleRectDrawer;
+    private simpleRectDrawer:SimpleRectDrawer; // todo singleton?
     private blender:Blender = Blender.getSingleton(this.gl);
 
     private readonly resourceLink:ResourceLink<Texture>;
@@ -52,7 +52,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     constructor(private game:Game,private gl:WebGLRenderingContext, private size:ISize){
         this._stack.push({
             frameBuffer: new FrameBuffer(this.gl,this.size),
-            filters:[],
+            filters:NONE_FILTERS,
             pointer: {ptr:0}
         });
         this._stackPointer = 1;
@@ -87,7 +87,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
             if (this._stack[this._stackPointer]===undefined) {
                 this._stack[this._stackPointer] = {
                     frameBuffer: new FrameBuffer(this.gl,this.size),
-                    filters:undefined!,
+                    filters:NONE_FILTERS,
                     pointer: {ptr:this._stackPointer}
                 };
             }

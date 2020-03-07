@@ -80,22 +80,24 @@ export class MouseControl implements IControl {
         if (
             MathEx.isPointInRect(screenPoint,goRect)
         ) {
-            mousePoint.target = go;
-            const mouseEvent:IObjectMouseEvent = { // todo pool?
-                screenX:mousePoint.screenCoordinate.x,
-                screenY:mousePoint.screenCoordinate.y,
-                sceneX:mousePoint.sceneCoordinate.x,
-                sceneY:mousePoint.sceneCoordinate.y,
-                objectX:mousePoint.sceneCoordinate.x - go.pos.x,
-                objectY:mousePoint.sceneCoordinate.y - go.pos.y,
-                id:mousePoint.id,
-                target:go,
-                nativeEvent: e as Event,
-                eventName,
-                isMouseDown: mousePoint.isMouseDown,
-                button: (e as MouseEvent).button,
-            };
-            go.trigger(eventName,mouseEvent);
+            if (!go.passMouseEventsThrough) {
+                mousePoint.target = go;
+                const mouseEvent:IObjectMouseEvent = { // todo pool?
+                    screenX:mousePoint.screenCoordinate.x,
+                    screenY:mousePoint.screenCoordinate.y,
+                    sceneX:mousePoint.sceneCoordinate.x,
+                    sceneY:mousePoint.sceneCoordinate.y,
+                    objectX:mousePoint.sceneCoordinate.x - go.pos.x,
+                    objectY:mousePoint.sceneCoordinate.y - go.pos.y,
+                    id:mousePoint.id,
+                    target:go,
+                    nativeEvent: e as Event,
+                    eventName,
+                    isMouseDown: mousePoint.isMouseDown,
+                    button: (e as MouseEvent).button,
+                };
+                go.trigger(eventName,mouseEvent);
+            }
             res = !go.passMouseEventsThrough;
         }
         goRect.release();

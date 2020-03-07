@@ -46,14 +46,14 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         if (this.program!==undefined) this.program.destroy();
     }
 
-    public setUniform(name:string,value:UNIFORM_VALUE_TYPE){
+    public setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
         if (DEBUG && !name) {
             console.trace();
             throw new DebugError(`can not set uniform with value ${value}: name is not provided`);
         }
         if (DEBUG && value===null  || value===undefined) {
             console.trace();
-            throw new DebugError(`can not set uniform with value ${value}`);
+            throw new DebugError(`can not set uniform with name ${name} and value ${value}`);
         }
         if (this.uniformCache.has(name) && isEqual(this.uniformCache.get(name)!.value,value)) return;
         if (isArray(value)) {
@@ -70,8 +70,12 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         }
     }
 
-    public attachTexture(uniformName:string,texture:AbstractTexture){
-        this.texturesToBind.texturesInfo[this.texturesToBind.length++] = {uniformName,texture};
+    public attachTexture(uniformName:string,texture:AbstractTexture):void{
+        this.texturesToBind.texturesInfo[this.texturesToBind.length] =
+            this.texturesToBind.texturesInfo[this.texturesToBind.length] || {uniformName:undefined,texture:undefined};
+        this.texturesToBind.texturesInfo[this.texturesToBind.length].uniformName = uniformName;
+        this.texturesToBind.texturesInfo[this.texturesToBind.length].texture = texture;
+        this.texturesToBind.length++;
     }
 
     public getAttachedTextureAt(i:number):AbstractTexture {
@@ -79,7 +83,7 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         return this.texturesToBind.texturesInfo[i].texture;
     }
 
-    public setUniformsFromMap(batch:FastMap<string,UNIFORM_VALUE_TYPE>){
+    public setUniformsFromMap(batch:FastMap<string,UNIFORM_VALUE_TYPE>):void{
         const keys:readonly string[] = batch.getKeys();
         const values:readonly UNIFORM_VALUE_TYPE[] = batch.getValues();
         for (let i:number=0;i<keys.length;i++) {
@@ -87,7 +91,7 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         }
     }
 
-    public draw(){
+    public draw():void{
         this.bind();
         const keys:string[] = this.uniformCache.getKeys();
         const values:{dirty:boolean,value:UNIFORM_VALUE_TYPE}[] = this.uniformCache.getValues();
@@ -125,11 +129,11 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         this.bufferInfo.unbind();
     }
 
-    protected drawElements(){
+    protected drawElements():void{
         this.bufferInfo.draw();
     }
 
-    private _setUniform(name:string,value:UNIFORM_VALUE_TYPE){
+    private _setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
         this.program!.setUniform(name,value);
     }
 
