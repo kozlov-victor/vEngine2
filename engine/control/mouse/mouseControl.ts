@@ -8,13 +8,10 @@ import {IControl} from "@engine/control/abstract/iControl";
 import {DebugError} from "@engine/debug/debugError";
 import {IObjectMouseEvent, ISceneMouseEvent, MousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Layer, LayerTransformType} from "@engine/scene/layer";
+import {Layer} from "@engine/scene/layer";
 import {mat4} from "@engine/geometry/mat4";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {vec4} from "@engine/geometry/vec4";
 import Vec4Holder = vec4.Vec4Holder;
-import {Circle} from "@engine/renderable/impl/geometry/circle";
 
 const pointTopLeft:Vec4Holder = new Vec4Holder();
 pointTopLeft.set(0,0,0,1);
