@@ -9,6 +9,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
 import {ITransformable, IUpdatable, Optional} from "@engine/core/declarations";
 import Mat16Holder = mat4.Mat16Holder;
+import {LayerTransformType} from "@engine/scene/layer";
 
 interface ICameraTweenTarget {
     time:number;
@@ -162,17 +163,24 @@ export class Camera implements IUpdatable, ITransformable  {
         );
     }
 
-    public screenToWorld(p:Point2d):Point2d{
+    public screenToWorld(p:Point2d,transformType:LayerTransformType):Point2d{
         const mScale:Mat16Holder = Mat16Holder.fromPool();
-        mat4.makeScale(mScale,this.scale.x,this.scale.y,1);
+
+        const scaleX:number = transformType===LayerTransformType.TRANSFORM?this.scale.x:1;
+        const scaleY:number = transformType===LayerTransformType.TRANSFORM?this.scale.y:1;
+        const posX:number = transformType===LayerTransformType.TRANSFORM?this.pos.x:0;
+        const posY:number = transformType===LayerTransformType.TRANSFORM?this.pos.y:0;
+
+
+        mat4.makeScale(mScale,scaleX,scaleY,1);
         const point2d:Point2d = MathEx.unProject(
             p, this.game.size.width,this.game.size.height,mScale);
-        point2d.add(this.pos);
+        point2d.addXY(posX/scaleX,posY/scaleY);
         mScale.release();
         return point2d;
     }
 
-    public getRect():Rect{
+    private getRect():Rect{
         this._rect.setXY(this.pos.x,this.pos.y);
         return this._rect;
     }

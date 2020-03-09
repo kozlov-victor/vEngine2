@@ -57,31 +57,31 @@ export class MouseControl implements IControl {
         pointTopLeftTransformation.release();
         pointBottomRightTransformation.release();
 
-        let debugRect:Rectangle = Game.getInstance().getCurrScene().getDefaultLayer().findChildById<Rectangle>('debugRect')!;
-        if (!debugRect) {
-            const layer:Layer = new Layer(Game.getInstance());
-            layer.id = 'debugLayer';
-            layer.transformType = LayerTransformType.STICK_TO_CAMERA;
-            Game.getInstance().getCurrScene().addLayer(layer);
-            debugRect = new Rectangle(Game.getInstance());
-            debugRect.setWH(10);
-            debugRect.fillColor = Color.RGBA(0,122,12,22);
-            debugRect.passMouseEventsThrough = true;
-            debugRect.id = 'debugRect';
-            layer.appendChild(debugRect);
-        }
-        debugRect.pos.setXY(goRect.x,goRect.y);
-        debugRect.size.setWH(goRect.width || 1, goRect.height || 1);
-
-        let debugPoint:Circle = Game.getInstance().getCurrScene().getDefaultLayer().findChildById<Circle>('debugPoint')!;
-        if (!debugPoint) {
-            debugPoint = new Circle( Game.getInstance());
-            debugPoint.radius = 5;
-            debugPoint.id = 'debugPoint';
-            debugPoint.passMouseEventsThrough = true;
-            Game.getInstance().getCurrScene().getLayerById('debugLayer')!.appendChild(debugPoint);
-        }
-        debugPoint.center.setXY(mousePoint.screenCoordinate.x,mousePoint.screenCoordinate.y);
+        // let debugRect:Rectangle = Game.getInstance().getCurrScene().getDefaultLayer().findChildById<Rectangle>('debugRect')!;
+        // if (!debugRect) {
+        //     const layer:Layer = new Layer(Game.getInstance());
+        //     layer.id = 'debugLayer';
+        //     layer.transformType = LayerTransformType.STICK_TO_CAMERA;
+        //     Game.getInstance().getCurrScene().addLayer(layer);
+        //     debugRect = new Rectangle(Game.getInstance());
+        //     debugRect.setWH(10);
+        //     debugRect.fillColor = Color.RGBA(0,122,12,22);
+        //     debugRect.passMouseEventsThrough = true;
+        //     debugRect.id = 'debugRect';
+        //     layer.appendChild(debugRect);
+        // }
+        // debugRect.pos.setXY(goRect.x,goRect.y);
+        // debugRect.size.setWH(goRect.width || 1, goRect.height || 1);
+        //
+        // let debugPoint:Circle = Game.getInstance().getCurrScene().getDefaultLayer().findChildById<Circle>('debugPoint')!;
+        // if (!debugPoint) {
+        //     debugPoint = new Circle( Game.getInstance());
+        //     debugPoint.radius = 5;
+        //     debugPoint.id = 'debugPoint';
+        //     debugPoint.passMouseEventsThrough = true;
+        //     Game.getInstance().getCurrScene().getLayerById('debugLayer')!.appendChild(debugPoint);
+        // }
+        // debugPoint.center.setXY(mousePoint.screenCoordinate.x,mousePoint.screenCoordinate.y);
 
         const screenPoint:Point2d = Point2d.fromPool();
         screenPoint.setXY(mousePoint.screenCoordinate.x,mousePoint.screenCoordinate.y);
@@ -193,6 +193,11 @@ export class MouseControl implements IControl {
         });
     }
 
+    private resolveSceneCoordinates(mousePoint:MousePoint,layer:Layer):void{
+        const worldPoint:Point2d = this.game.camera.screenToWorld(mousePoint.screenCoordinate,layer.transformType);
+        mousePoint.sceneCoordinate.set(worldPoint);
+        worldPoint.release();
+    }
 
     private resolvePoint(e:MouseEvent|Touch|PointerEvent):MousePoint{
         const game:Game = this.game;
@@ -205,15 +210,11 @@ export class MouseControl implements IControl {
         const screenPoint:Point2d = Point2d.fromPool();
         screenPoint.setXY(screenX,screenY);
 
-        const worldPoint:Point2d = game.camera.screenToWorld(screenPoint);
-
         const mousePoint:MousePoint = MousePoint.fromPool();
-        mousePoint.sceneCoordinate.set(worldPoint);
         mousePoint.screenCoordinate.set(screenPoint);
         mousePoint.id = (e as Touch).identifier  || (e as PointerEvent).pointerId || 0;
 
         screenPoint.release();
-        worldPoint.release();
 
         return mousePoint;
     }
@@ -228,7 +229,7 @@ export class MouseControl implements IControl {
         let i:number = scene.getLayers().length; // reversed loop
         while(i--) {
             const layer:Layer = scene.getLayers()[i];
-
+            this.resolveSceneCoordinates(mousePoint,layer);
             let j:number = layer.children.length;
             while(j--) {
                const go:RenderableModel = layer.children[j];
