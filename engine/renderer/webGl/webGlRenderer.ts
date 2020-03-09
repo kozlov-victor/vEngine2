@@ -287,16 +287,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this.prepareGeometryUniformInfo(ellipse);
         this.prepareShapeUniformInfo(ellipse);
+
         const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
-        const rect:Rect = Rect.fromPool();
-        rect.setXYWH(0,0,maxR2,maxR2);
-        const size:Size = Size.fromPool();
-        size.set(this.currFrameBufferStack.getCurrentTargetSize());
-        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
-        sd.setUniform(sd.u_vertexMatrix,pos16h.mat16);
-        pos16h.release();
-        rect.release();
-        size.release();
         sd.setUniform(sd.u_lineWidth,Math.min(ellipse.lineWidth/maxR,1));
         if (maxR===ellipse.radiusX) {
             sd.setUniform(sd.u_rx,0.5);

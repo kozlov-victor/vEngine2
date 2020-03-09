@@ -1,8 +1,8 @@
 import {IReleasealable} from "@engine/misc/objectPool";
 
 export abstract class ReleaseableEntity implements IReleasealable{
-    private _captured:boolean = false;
 
+    private _captured:boolean = false;
 
     public isCaptured(): boolean {
         return this._captured;

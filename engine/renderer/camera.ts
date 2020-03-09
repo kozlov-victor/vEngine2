@@ -105,15 +105,20 @@ export class Camera implements IUpdatable, ITransformable  {
             pointToFollow.addXY(-wDiv2,-hDiv2);
             newPos.x = this.pos.x+(pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x)*Camera.FOLLOW_FACTOR;
             newPos.y = this.pos.y+(pointToFollow.y + this.cameraPosCorrection.current.y - this.pos.y)*Camera.FOLLOW_FACTOR;
-            if (newPos.x < 0)
-                newPos.x = 0;
-            if (newPos.y < 0)
-                newPos.y = 0;
 
-            if (newPos.x > scene.size.width - w)
+            if (newPos.x < 0) {
+                newPos.x = 0;
+            }
+            if (newPos.y < 0) {
+                newPos.y = 0;
+            }
+
+            if (newPos.x > scene.size.width - w) {
                 newPos.x = scene.size.width - w;
-            if (newPos.y > scene.size.height - h)
+            }
+            if (newPos.y > scene.size.height - h) {
                 newPos.y = scene.size.height - h;
+            }
 
             this.pos.set(newPos);
             newPos.release();
