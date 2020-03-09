@@ -32,6 +32,7 @@ export class MainScene extends Scene {
         this.polyline = PolyLine.splineFromPoints(this.game,this.points);
         this.polyline.lineWidth = 20;
         this.polyline.color.setRGB(12,122,22);
+        this.polyline.passMouseEventsThrough = true;
         this.prependChild(this.polyline);
     }
 

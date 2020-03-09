@@ -55,15 +55,13 @@ export class MainScene extends Scene {
             container.appendChild(billBoardObj);
         }
         this.setInterval(()=>{
-            container.angle3d.x+=0.01;
-            container.angle3d.y+=0.01;
-            container.angle3d.z+=0.01;
+            container.angle3d.x+=0.001;
+            container.angle3d.y+=0.001;
+            container.angle3d.z+=0.001;
         },1);
 
         const filter1 = new VignetteFilter(this.game);
-        const filter2 = new WaveFilter(this.game);
-        filter2.setAmplitude(0.01);
-        this.filters = [filter1,filter2];
+        this.filters = [filter1];
 
     }
 

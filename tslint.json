@@ -37,6 +37,7 @@
     "callable-types": false,
     "no-any": false,
     "no-null-keyword": true,
+    "adjacent-overload-signatures": false,
     "v-engine-as-statement": false
   },
   "jsRules": {

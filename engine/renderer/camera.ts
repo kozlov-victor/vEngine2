@@ -147,16 +147,13 @@ export class Camera implements IUpdatable, ITransformable  {
     public transform():void{
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (!this.scale.equal(1)) { // todo posZ???
-
+            renderer.transformTranslate(this.game.size.width/2,this.game.size.height/2,0);
+            //rotate
+            //renderer.transformRotateX(0.6);
+            renderer.transformScale(this.scale.x,this.scale.y);
+            //scew
+            renderer.transformTranslate(-this.game.size.width/2,-this.game.size.height/2);
         }
-
-        renderer.transformTranslate(this.game.size.width/2,this.game.size.height/2,0);
-        //rotate
-        //renderer.transformRotateX(0.6);
-        renderer.transformScale(this.scale.x,this.scale.y);
-        //scew
-        renderer.transformTranslate(-this.game.size.width/2,-this.game.size.height/2);
-
         // todo rotation does not work correctly yet
         //this.game.renderer.transformRotateZ(this.angle);
         if (this.cameraShakeTween!==undefined) renderer.transformTranslate(

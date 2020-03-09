@@ -44,6 +44,15 @@ export class MouseControl implements IControl {
             pointBottomRightTransformation.y-pointTopLeftTransformation.y
         );
 
+        if (goRect.width<0) {
+            goRect.width=-goRect.width;
+            goRect.x-=goRect.width;
+        }
+        if (goRect.height<0) {
+            goRect.height=-goRect.height;
+            goRect.y-=goRect.height;
+        }
+
         pointBottomRight.release();
         pointTopLeftTransformation.release();
         pointBottomRightTransformation.release();

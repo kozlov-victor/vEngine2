@@ -23,14 +23,6 @@ export interface IRect {
 
 export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
 
-    get right(): number {
-        return this._right;
-    }
-
-    get bottom(): number {
-        return this._bottom;
-    }
-
     public static fromPool():Rect {
         return Rect.rectPool.getFreeObject()!;
     }
@@ -95,6 +87,30 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
 
     get height(): number {
         return this._height;
+    }
+
+    get right(): number {
+        return this._right;
+    }
+
+    get bottom(): number {
+        return this._bottom;
+    }
+
+    set x(x: number) {
+        this.setXY(x,this.y);
+    }
+
+    set y(y: number) {
+        this.setXY(this.x,y);
+    }
+
+    set width(width: number) {
+        this.setWH(width,this.height);
+    }
+
+    set height(height: number) {
+        this.setWH(this.width,height);
     }
 
     public setXY(x:number,y:number):Rect{

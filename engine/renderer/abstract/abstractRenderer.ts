@@ -173,10 +173,11 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         if (!textField) {
             textField = new TextField(this.game);
             textField.setFont(Font.getSystemFont());
-            textField.setScene(this.game.getCurrScene()); // todo temporary solution, refactor to debug layer creation
+             // todo temporary solution, refactor to debug layer creation
             textField.revalidate();
             this.debugTextField = textField;
         }
+        textField.setScene(this.game.getCurrScene());
         let res:string = '';
         Array.prototype.slice.call(arguments).forEach((txt:any)=>{
             if (txt===undefined) txt = 'undefined';
