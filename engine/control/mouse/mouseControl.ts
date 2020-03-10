@@ -52,7 +52,9 @@ export class MouseControl implements IControl {
     }
 
     public readonly type:string = 'MouseControl';
-    private objectsCaptured:{[pointId:number]:RenderableModel} = {};
+    private objectsCaptured:{[pointId:number]:RenderableModel|Scene} = {};
+    private objectsHovered:{[pointId:number]:RenderableModel|Scene} = {};
+    private objectsFirstHovered:{[pointId:number]:RenderableModel|Scene} = {};
     private container:HTMLElement;
     private readonly game:Game;
 
@@ -151,7 +153,7 @@ export class MouseControl implements IControl {
     }
 
 
-    private triggerEvent(e:MouseEvent|Touch|Touch, mouseEvent:MOUSE_EVENTS, isMouseDown:boolean = false):MousePoint{
+    private triggerEvent(e:MouseEvent|Touch, mouseEvent:MOUSE_EVENTS, isMouseDown:boolean = false):MousePoint{
         const scene:Scene = this.game.getCurrScene();
         const pointTransformed:MousePoint = this.resolvePoint(e);
         pointTransformed.isMouseDown = isMouseDown;
@@ -201,32 +203,44 @@ export class MouseControl implements IControl {
     private resolveClick(e:Touch|MouseEvent):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.click);
         this.triggerEvent(e,MOUSE_EVENTS.mouseDown).release();
-        this.objectsCaptured[point.id] = point.target as RenderableModel;
+        this.objectsCaptured[point.id] = point.target;
         point.release();
     }
 
     private resolveButtonPressed(e:Touch|MouseEvent):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.click);
         this.triggerEvent(e,MOUSE_EVENTS.mousePressed).release();
-        this.objectsCaptured[point.id] = point.target as RenderableModel;
+        this.objectsCaptured[point.id] = point.target;
         point.release();
     }
 
     private resolveMouseMove(e:Touch|MouseEvent,isMouseDown:boolean):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,isMouseDown);
-        const lastMouseDownObject:RenderableModel = this.objectsCaptured[point.id];
-        if (lastMouseDownObject && lastMouseDownObject!==point.target) {
-            lastMouseDownObject.trigger(MOUSE_EVENTS.mouseLeave,point);
+        const lastHoveredObject:RenderableModel|Scene = this.objectsHovered[point.id];
+        if (lastHoveredObject!==undefined) {
+            if (lastHoveredObject!==point.target) {
+                lastHoveredObject.trigger(MOUSE_EVENTS.mouseLeave,point);
+                delete this.objectsFirstHovered[point.id];
+            } else {
+                if (this.objectsFirstHovered[point.id]===undefined) {
+                    lastHoveredObject.trigger(MOUSE_EVENTS.mouseEnter,point);
+                    this.objectsFirstHovered[point.id] = point.target;
+                }
+
+            }
         }
+        this.objectsHovered[point.id] = point.target;
         point.release();
     }
 
     private resolveMouseUp(e:MouseEvent|Touch):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseUp);
-        const lastMouseDownObject = this.objectsCaptured[point.id];
-        if (!lastMouseDownObject) return;
-        if (point.target!==lastMouseDownObject) lastMouseDownObject.trigger(MOUSE_EVENTS.mouseUp,point);
+        const lastCapturedObject = this.objectsCaptured[point.id];
+        if (lastCapturedObject!==undefined && point.target!==lastCapturedObject) {
+            lastCapturedObject.trigger(MOUSE_EVENTS.mouseUp,point);
+        }
         delete this.objectsCaptured[point.id];
+        delete this.objectsHovered[point.id];
         point.release();
     }
 

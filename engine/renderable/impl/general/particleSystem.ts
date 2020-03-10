@@ -105,7 +105,6 @@ export class ParticleSystem extends RenderableModel {
             const lifeTime:number = r(this.particleLiveTime);
             const createdTime:number = this.game.getCurrentTime();
             this._particles.push({particle,lifeTime,createdTime});
-            //this.parent.appendChildAfter(this,particle);
             this.appendChild(particle);
         }
     }

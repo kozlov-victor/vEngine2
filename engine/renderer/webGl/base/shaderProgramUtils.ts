@@ -207,7 +207,7 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
         } as IUniformWrapper;
 
         if (name.indexOf('[')>-1) {
-            const arrayName:string = name.split('[')[0];
+            const arrayName:string = name.split(/\[/)[0];
             uniforms[arrayName] = uniforms[name];
         }
     }
