@@ -1,16 +1,14 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
-import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
-import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Source} from "@engine/resources/resourceDecorators";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Color} from "@engine/renderer/common/color";
 
 export class MainScene extends Scene {
 
@@ -20,6 +18,7 @@ export class MainScene extends Scene {
     public onReady() {
 
         this.size.setWH(1100,2100);
+        this.game.camera.scale.setXY(0.8);
 
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
@@ -38,35 +37,6 @@ export class MainScene extends Scene {
         spr.addBehaviour(new DraggableBehaviour(this.game));
 
         this.game.camera.followTo(spr);
-
-        const uiLayer:Layer = new Layer(this.game);
-        uiLayer.transformType = LayerTransformType.STICK_TO_CAMERA;
-        const infoRect:Rectangle = new Rectangle(this.game);
-        infoRect.size.setWH(600,50);
-        infoRect.color.setRGB(200,12,22);
-        (infoRect.fillColor as Color).setRGB(12,100,55);
-        infoRect.addBehaviour(new DraggableBehaviour(this.game));
-        uiLayer.appendChild(infoRect);
-        this.addLayer(uiLayer);
-
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
-            switch (e.key) {
-                case KEYBOARD_KEY.LEFT:
-                    spr.pos.addX(-5);
-                    break;
-                case KEYBOARD_KEY.RIGHT:
-                    spr.pos.addX(5);
-                    break;
-                case KEYBOARD_KEY.UP:
-                    spr.pos.addY(-5);
-                    break;
-                case KEYBOARD_KEY.DOWN:
-                    spr.pos.addY(5);
-                    break;
-                case KEYBOARD_KEY.R:
-                    spr.angle+=0.1;
-            }
-        });
 
 
         this.on(GAME_PAD_EVENTS.buttonHold, (e:GamePadEvent)=>{
@@ -90,6 +60,14 @@ export class MainScene extends Scene {
                     spr.angle-=0.1;
                     break;
             }
+        });
+
+        this.on(MOUSE_EVENTS.click, e=>{
+            const rect = new Rectangle(this.game);
+            (rect.fillColor as Color) = Color.RGB(122,12,33);
+            rect.pos.setXY(e.sceneX,e.sceneY);
+            this.getLayers()[0].appendChild(rect);
+            console.log(e,rect);
         });
 
 

@@ -17,8 +17,9 @@ export class MeshDrawer extends AbstractDrawer {
 
     private readonly a_position:string = 'a_position';
     private readonly a_normal:string = 'a_normal';
-    private readonly a_texcoord:string = 'a_texcoord';
+    private readonly a_texCoord:string = 'a_texCoord';
     private readonly u_modelMatrix:string = 'u_modelMatrix';
+    private readonly u_inverseTransposeModelMatrix:string = 'u_inverseTransposeModelMatrix';
     private readonly u_textureMatrix:string = 'u_textureMatrix';
     private readonly u_projectionMatrix:string = 'u_projectionMatrix';
     private readonly u_color:string = 'u_color';
@@ -50,15 +51,19 @@ export class MeshDrawer extends AbstractDrawer {
         this.bufferInfo = this.mesh.bufferInfo;
     }
 
-    public setModelMatrix(m:MAT16):void{
+    public setModelMatrix(m:Readonly<MAT16>):void{
         this.setUniform(this.u_modelMatrix,m);
     }
 
-    public setProjectionMatrix(m:MAT16):void{
+    public setInverseTransposeModelMatrix(m:Readonly<MAT16>):void{
+        this.setUniform(this.u_inverseTransposeModelMatrix,m);
+    }
+
+    public setProjectionMatrix(m:Readonly<MAT16>):void{
         this.setUniform(this.u_projectionMatrix,m);
     }
 
-    public setTextureMatrix(m:MAT16):void{
+    public setTextureMatrix(m:Readonly<MAT16>):void{
         this.setUniform(this.u_textureMatrix,m);
     }
 
@@ -106,9 +111,9 @@ export class MeshDrawer extends AbstractDrawer {
         if (DEBUG && this.mesh===undefined) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
         super.bind();
         if (!this.mesh!.modelPrimitive.texCoordArr) {
-            this.program!.disableAttribute(this.a_texcoord);
+            this.program!.disableAttribute(this.a_texCoord);
         } else {
-            this.program!.enableAttribute(this.a_texcoord);
+            this.program!.enableAttribute(this.a_texCoord);
         }
         if (!this.mesh!.modelPrimitive.normalArr) {
             this.program!.disableAttribute(this.a_normal);
@@ -144,9 +149,9 @@ export class MeshDrawer extends AbstractDrawer {
             };
         }
         if (this.mesh!.modelPrimitive.texCoordArr) {
-            bufferInfo.texVertexInfo ={
+            bufferInfo.texVertexInfo = {
                 array: this.mesh!.modelPrimitive.texCoordArr, type:this.gl.FLOAT,
-                size:2, attrName:this.a_texcoord
+                size:2, attrName:this.a_texCoord
             };
         }
         this.mesh!.bufferInfo = new BufferInfo(this.gl,bufferInfo);

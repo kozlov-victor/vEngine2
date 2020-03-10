@@ -30,6 +30,7 @@ import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractT
 import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
+import MAT16 = mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -207,16 +208,20 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.bindModel(mesh);
         md.bind();
 
-        if (mesh.invertY) this.matrixStack.scale(1,-1,1);
-        const matrix1:Mat16Holder = this.matrixStack.getCurrentValue();
+        const modelMatrix:Mat16Holder = this.matrixStack.getCurrentValue();
 
-        const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        mat4.ortho(projectionMatrix,0,this.game.size.width,0,this.game.size.height,-SCENE_DEPTH,SCENE_DEPTH);
-        const matrix2:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(matrix2,projectionMatrix, zToWMatrix);
+        const orthoProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+        mat4.ortho(orthoProjectionMatrix,0,this.game.size.width,0,this.game.size.height,-SCENE_DEPTH,SCENE_DEPTH);
+        const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+        mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
 
-        md.setModelMatrix(matrix1.mat16);
-        md.setProjectionMatrix(matrix2.mat16);
+        const inverseTransposeModelMatrix:Mat16Holder = Mat16Holder.fromPool();
+        mat4.inverse(inverseTransposeModelMatrix,modelMatrix);
+        mat4.transpose(inverseTransposeModelMatrix,inverseTransposeModelMatrix);
+
+        md.setModelMatrix(modelMatrix.mat16);
+        md.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
+        md.setProjectionMatrix(zToWProjectionMatrix.mat16);
         md.setAlfa(this.getAlphaBlend());
         const isTextureUsed:boolean = mesh.texture!==undefined;
         if (DEBUG && isTextureUsed && mesh.modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
@@ -244,12 +249,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setColorMix(mesh.colorMix);
 
         //this.gl.enable(this.gl.CULL_FACE);
+        if (mesh.depthTest) this.gl.enable(this.gl.DEPTH_TEST);
+        else this.gl.disable(this.gl.DEPTH_TEST);
         md.draw();
         md.unbind();
         //this.gl.disable(this.gl.CULL_FACE);
         zToWMatrix.release();
-        projectionMatrix.release();
-        matrix2.release();
+        orthoProjectionMatrix.release();
+        zToWProjectionMatrix.release();
+        inverseTransposeModelMatrix.release();
     }
 
 
@@ -279,16 +287,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this.prepareGeometryUniformInfo(ellipse);
         this.prepareShapeUniformInfo(ellipse);
+
         const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
-        const rect:Rect = Rect.fromPool();
-        rect.setXYWH(0,0,maxR2,maxR2);
-        const size:Size = Size.fromPool();
-        size.set(this.currFrameBufferStack.getCurrentTargetSize());
-        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
-        sd.setUniform(sd.u_vertexMatrix,pos16h.mat16);
-        pos16h.release();
-        rect.release();
-        size.release();
         sd.setUniform(sd.u_lineWidth,Math.min(ellipse.lineWidth/maxR,1));
         if (maxR===ellipse.radiusX) {
             sd.setUniform(sd.u_rx,0.5);
@@ -362,6 +362,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public transformSet(v0: number, v1: number, v2: number, v3: number, v4: number, v5: number, v6: number, v7: number, v8: number, v9: number, v10: number, v11: number, v12: number, v13: number, v14: number, v15: number): void {
         this.matrixStack.setMatrixValues(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
+    }
+
+    public transformGet(): Readonly<MAT16> {
+        return this.matrixStack.getCurrentValue().mat16;
     }
 
     public setLockRect(rect:Rect):void {

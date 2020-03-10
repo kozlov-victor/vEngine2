@@ -7,8 +7,9 @@ import {Scene} from "../scene/scene";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
-import {Optional} from "@engine/core/declarations";
+import {ITransformable, IUpdatable, Optional} from "@engine/core/declarations";
 import Mat16Holder = mat4.Mat16Holder;
+import {LayerTransformType} from "@engine/scene/layer";
 
 interface ICameraTweenTarget {
     time:number;
@@ -22,7 +23,7 @@ const enum DIRECTION_CORRECTION {
     DOWN,
 }
 
-export class Camera {
+export class Camera implements IUpdatable, ITransformable  {
     private static FOLLOW_FACTOR:number = 0.1;
 
     public readonly pos:Point2d = new Point2d(0,0);
@@ -104,15 +105,20 @@ export class Camera {
             pointToFollow.addXY(-wDiv2,-hDiv2);
             newPos.x = this.pos.x+(pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x)*Camera.FOLLOW_FACTOR;
             newPos.y = this.pos.y+(pointToFollow.y + this.cameraPosCorrection.current.y - this.pos.y)*Camera.FOLLOW_FACTOR;
-            if (newPos.x < 0)
-                newPos.x = 0;
-            if (newPos.y < 0)
-                newPos.y = 0;
 
-            if (newPos.x > scene.size.width - w)
+            if (newPos.x < 0) {
+                newPos.x = 0;
+            }
+            if (newPos.y < 0) {
+                newPos.y = 0;
+            }
+
+            if (newPos.x > scene.size.width - w) {
                 newPos.x = scene.size.width - w;
-            if (newPos.y > scene.size.height - h)
+            }
+            if (newPos.y > scene.size.height - h) {
                 newPos.y = scene.size.height - h;
+            }
 
             this.pos.set(newPos);
             newPos.release();
@@ -138,33 +144,48 @@ export class Camera {
         });
     }
 
-    public transform():void{ //TRS - (transform rotate scale) reverted
+
+    public translate():void{
+        const renderer:AbstractRenderer = this.game.getRenderer();
+        renderer.transformTranslate(-this.pos.x,-this.pos.y,0);
+    }
+
+    public transform():void{
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (!this.scale.equal(1)) { // todo posZ???
             renderer.transformTranslate(this.game.size.width/2,this.game.size.height/2,0);
+            //rotate
+            //renderer.transformRotateX(0.6);
             renderer.transformScale(this.scale.x,this.scale.y);
+            //scew
             renderer.transformTranslate(-this.game.size.width/2,-this.game.size.height/2);
         }
         // todo rotation does not work correctly yet
         //this.game.renderer.transformRotateZ(this.angle);
-        renderer.transformTranslate(-this.pos.x,-this.pos.y,0);
         if (this.cameraShakeTween!==undefined) renderer.transformTranslate(
             this.cameraShakeTween.getTarget().point.x,
             this.cameraShakeTween.getTarget().point.y
         );
     }
 
-    public screenToWorld(p:Point2d):Point2d{
+    public screenToWorld(p:Point2d,transformType:LayerTransformType):Point2d{
         const mScale:Mat16Holder = Mat16Holder.fromPool();
-        mat4.makeScale(mScale,this.scale.x,this.scale.y,1);
+
+        const scaleX:number = transformType===LayerTransformType.TRANSFORM?this.scale.x:1;
+        const scaleY:number = transformType===LayerTransformType.TRANSFORM?this.scale.y:1;
+        const posX:number = transformType===LayerTransformType.TRANSFORM?this.pos.x:0;
+        const posY:number = transformType===LayerTransformType.TRANSFORM?this.pos.y:0;
+
+
+        mat4.makeScale(mScale,scaleX,scaleY,1);
         const point2d:Point2d = MathEx.unProject(
             p, this.game.size.width,this.game.size.height,mScale);
-        point2d.add(this.pos);
+        point2d.addXY(posX/scaleX,posY/scaleY);
         mScale.release();
         return point2d;
     }
 
-    public getRect():Rect{
+    private getRect():Rect{
         this._rect.setXY(this.pos.x,this.pos.y);
         return this._rect;
     }

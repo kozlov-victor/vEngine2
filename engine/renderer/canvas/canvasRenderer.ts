@@ -14,6 +14,8 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
+import {mat4} from "@engine/geometry/mat4";
+import MAT16 = mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -167,6 +169,10 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     public transformSet(v0: number, v1: number, v2: number, v3: number, v4: number, v5: number, v6: number, v7: number, v8: number, v9: number, v10: number, v11: number, v12: number, v13: number, v14: number, v15: number): void {
+    }
+
+    public transformGet(): Readonly<MAT16> {
+        return undefined!;
     }
 
     public transformRestore():void {

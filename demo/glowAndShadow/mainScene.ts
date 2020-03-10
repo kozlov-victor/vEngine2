@@ -56,7 +56,7 @@ export class MainScene extends Scene {
         polyline.appendChild(polygon);
 
         const dropShadow:DropShadowFilter = new DropShadowFilter(this.game,0.1,5);
-        dropShadow.setColor(Color.RGB(0,12,0,122));
+        dropShadow.setColor(Color.RGBA(0,12,0,122));
         dropShadow.setShift(8,8);
         polyline.filters = [dropShadow];
 
@@ -64,8 +64,8 @@ export class MainScene extends Scene {
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0.2;
-        gradient.colorFrom = Color.RGB(100,0,20,122);
-        gradient.colorTo = Color.RGB(200,111,1,254);
+        gradient.colorFrom = Color.RGBA(100,0,20,122);
+        gradient.colorTo = Color.RGBA(200,111,1,254);
         rect.fillColor = gradient;
         rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);

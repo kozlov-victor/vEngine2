@@ -32,7 +32,7 @@ export class MainScene extends Scene {
         circle.addBehaviour(new DraggableBehaviour(this.game));
         circle.lineWidth = 2;
         circle.color = Color.RGB(0,100,12);
-        circle.fillColor = Color.RGB(100,100,100,111);
+        circle.fillColor = Color.RGBA(100,100,100,111);
         circle.arcAngleFrom = -2;
         circle.arcAngleTo = 2;
         this.appendChild(circle);
@@ -41,7 +41,7 @@ export class MainScene extends Scene {
         ellipse.radiusX = 60;
         ellipse.radiusY = 40;
         gradient = new LinearGradient();
-        gradient.colorFrom = Color.RGB(100,0,222,200);
+        gradient.colorFrom = Color.RGBA(100,0,222,200);
         gradient.colorTo = Color.RGB(12,20,222);
         ellipse.fillColor = gradient;
         ellipse.color = Color.BLACK;
@@ -61,12 +61,12 @@ export class MainScene extends Scene {
         this.appendChild(polyline);
 
         const polygon:Polygon = Polygon.fromPolyline(this.game,polyline);
-        polygon.fillColor = Color.RGB(12,233,33,122);
+        polygon.fillColor = Color.RGBA(12,233,33,122);
         polygon.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(polygon);
 
         const star:Polygon = Polygon.createStar(this.game,5,40);
-        star.fillColor  = Color.RGB(222,33,122,122);
+        star.fillColor  = Color.RGBA(222,33,122,122);
         star.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(star);
     }

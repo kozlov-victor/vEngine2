@@ -8,23 +8,14 @@ import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFil
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
+import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
+import {Source} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-
+    @Source.Texture('./assets/star.png')
     private textureResourceLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
-        this.textureResourceLink = this.resourceLoader.loadTexture('./assets/star.png');
-        const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-    }
-
-    public onProgress(val: number) {
-        this.preloadingGameObject.size.width = val*this.game.size.width;
-    }
 
     public onReady() {
 
@@ -64,9 +55,9 @@ export class MainScene extends Scene {
             container.appendChild(billBoardObj);
         }
         this.setInterval(()=>{
-            container.angle3d.x+=0.01;
-            container.angle3d.y+=0.01;
-            container.angle3d.z+=0.01;
+            container.angle3d.x+=0.001;
+            container.angle3d.y+=0.001;
+            container.angle3d.z+=0.001;
         },1);
 
         const filter1 = new VignetteFilter(this.game);

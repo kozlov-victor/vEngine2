@@ -69,8 +69,8 @@ export class Layer implements IParentChild {
         this._parentChildDelegate.moveToBack();
     }
 
-    public findChildById(id:string):Optional<RenderableModel>{
-        return this._parentChildDelegate.findChildById(id);
+    public findChildById<T extends RenderableModel>(id:string):Optional<T>{
+        return this._parentChildDelegate.findChildById<T>(id);
     }
 
     public getParent():Scene{

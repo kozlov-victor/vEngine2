@@ -18,7 +18,7 @@ export class FrameBuffer implements IRenderTarget {
 
     private readonly texture:Texture;
     private glRenderBuffer:WebGLRenderbuffer;
-    private glFrameBuffer:WebGLRenderbuffer;
+    private glFrameBuffer:WebGLFramebuffer;
 
     private readonly link:ResourceLink<ITexture>;
 

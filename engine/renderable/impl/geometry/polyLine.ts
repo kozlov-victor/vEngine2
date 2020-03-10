@@ -182,6 +182,7 @@ export class PolyLine extends Shape {
     // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
     public static fromSvgPath(game:Game,path:string):PolyLine {
         const pl:PolyLine = new PolyLine(game);
+        pl.passMouseEventsThrough = true;
         pl.tokenizer = new SvgTokenizer(path);
         let lastCommand:Optional<string>;
         while (!pl.tokenizer.isEof()) {

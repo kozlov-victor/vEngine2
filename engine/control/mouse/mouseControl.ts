@@ -6,47 +6,110 @@ import {Rect} from "../../geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IControl} from "@engine/control/abstract/iControl";
 import {DebugError} from "@engine/debug/debugError";
-import {IObjectMousePoint, ISceneMousePoint, MousePoint} from "@engine/control/mouse/mousePoint";
+import {IObjectMouseEvent, ISceneMouseEvent, MousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Layer, LayerTransformType} from "@engine/scene/layer";
-import {Optional} from "@engine/core/declarations";
+import {Layer} from "@engine/scene/layer";
+import {mat4} from "@engine/geometry/mat4";
+import {vec4} from "@engine/geometry/vec4";
+import Vec4Holder = vec4.Vec4Holder;
 
+const pointTopLeft:Vec4Holder = new Vec4Holder();
+pointTopLeft.set(0,0,0,1);
 
 export class MouseControl implements IControl {
 
     private static triggerGameObjectEvent(
         e:MouseEvent|TouchEvent|Touch,
-        eventName:MOUSE_EVENTS,point:MousePoint,
+        eventName:MOUSE_EVENTS,mousePoint:MousePoint,
         go:RenderableModel):boolean{
 
-        const rectWithOffset:Rect = Rect.fromPool();
-        rectWithOffset.setPointAndSize(go.getWorldPosition(),go.size);
+        const goRect:Rect = Rect.fromPool();
 
+
+        const pointBottomRight:Vec4Holder = Vec4Holder.fromPool();
+        pointBottomRight.set(go.size.width,go.size.height,0,1);
+        const pointTopLeftTransformation:Vec4Holder =  Vec4Holder.fromPool();
+        const pointBottomRightTransformation:Vec4Holder = Vec4Holder.fromPool();
+
+        mat4.multVecByMatrix(pointTopLeftTransformation,go.worldTransformMatrix,pointTopLeft);
+        mat4.multVecByMatrix(pointBottomRightTransformation,go.worldTransformMatrix,pointBottomRight);
+
+        goRect.setXYWH(
+            pointTopLeftTransformation.x,
+            pointTopLeftTransformation.y,
+            pointBottomRightTransformation.x-pointTopLeftTransformation.x,
+            pointBottomRightTransformation.y-pointTopLeftTransformation.y
+        );
+
+        if (goRect.width<0) {
+            goRect.width=-goRect.width;
+            goRect.x-=goRect.width;
+        }
+        if (goRect.height<0) {
+            goRect.height=-goRect.height;
+            goRect.y-=goRect.height;
+        }
+
+        pointBottomRight.release();
+        pointTopLeftTransformation.release();
+        pointBottomRightTransformation.release();
+
+        // let debugRect:Rectangle = Game.getInstance().getCurrScene().getDefaultLayer().findChildById<Rectangle>('debugRect')!;
+        // if (!debugRect) {
+        //     const layer:Layer = new Layer(Game.getInstance());
+        //     layer.id = 'debugLayer';
+        //     layer.transformType = LayerTransformType.STICK_TO_CAMERA;
+        //     Game.getInstance().getCurrScene().addLayer(layer);
+        //     debugRect = new Rectangle(Game.getInstance());
+        //     debugRect.setWH(10);
+        //     debugRect.fillColor = Color.RGBA(0,122,12,22);
+        //     debugRect.passMouseEventsThrough = true;
+        //     debugRect.id = 'debugRect';
+        //     layer.appendChild(debugRect);
+        // }
+        // debugRect.pos.setXY(goRect.x,goRect.y);
+        // debugRect.size.setWH(goRect.width || 1, goRect.height || 1);
+        //
+        // let debugPoint:Circle = Game.getInstance().getCurrScene().getDefaultLayer().findChildById<Circle>('debugPoint')!;
+        // if (!debugPoint) {
+        //     debugPoint = new Circle( Game.getInstance());
+        //     debugPoint.radius = 5;
+        //     debugPoint.id = 'debugPoint';
+        //     debugPoint.passMouseEventsThrough = true;
+        //     Game.getInstance().getCurrScene().getLayerById('debugLayer')!.appendChild(debugPoint);
+        // }
+        // debugPoint.center.setXY(mousePoint.screenCoordinate.x,mousePoint.screenCoordinate.y);
+
+        const screenPoint:Point2d = Point2d.fromPool();
+        screenPoint.setXY(mousePoint.screenCoordinate.x,mousePoint.screenCoordinate.y);
         let res:boolean = false;
         if (
-            MathEx.isPointInRect(point,rectWithOffset)
+            MathEx.isPointInRect(screenPoint,goRect)
         ) {
-            point.target = go;
-            const mousePoint:IObjectMousePoint = { // todo pool?
-                screenX:point.screenPoint.x,
-                screenY:point.screenPoint.y,
-                sceneX:point.x,
-                sceneY:point.y,
-                objectX:point.x - go.pos.x,
-                objectY:point.y - go.pos.y,
-                id:point.id,
-                target:go,
-                nativeEvent: e as Event,
-                eventName,
-                isMouseDown: point.isMouseDown,
-                button: (e as MouseEvent).button,
-            };
-            go.trigger(eventName,mousePoint);
+            if (!go.passMouseEventsThrough) {
+                mousePoint.target = go;
+                const mouseEvent:IObjectMouseEvent = { // todo pool?
+                    screenX:mousePoint.screenCoordinate.x,
+                    screenY:mousePoint.screenCoordinate.y,
+                    sceneX:mousePoint.sceneCoordinate.x,
+                    sceneY:mousePoint.sceneCoordinate.y,
+                    objectX:mousePoint.sceneCoordinate.x - go.pos.x,
+                    objectY:mousePoint.sceneCoordinate.y - go.pos.y,
+                    id:mousePoint.id,
+                    target:go,
+                    nativeEvent: e as Event,
+                    eventName,
+                    isMouseDown: mousePoint.isMouseDown,
+                    button: (e as MouseEvent).button,
+                };
+                go.trigger(eventName,mouseEvent);
+            }
             res = !go.passMouseEventsThrough;
         }
-        rectWithOffset.release();
+        goRect.release();
+        screenPoint.release();
         for (const ch of go.children) {
-            res = res || MouseControl.triggerGameObjectEvent(e,eventName,point,ch);
+            res = res || MouseControl.triggerGameObjectEvent(e,eventName,mousePoint,ch);
         }
         return res;
     }
@@ -129,6 +192,11 @@ export class MouseControl implements IControl {
         });
     }
 
+    private resolveSceneCoordinates(mousePoint:MousePoint,layer:Layer):void{
+        const worldPoint:Point2d = this.game.camera.screenToWorld(mousePoint.screenCoordinate,layer.transformType);
+        mousePoint.sceneCoordinate.set(worldPoint);
+        worldPoint.release();
+    }
 
     private resolvePoint(e:MouseEvent|Touch|PointerEvent):MousePoint{
         const game:Game = this.game;
@@ -138,16 +206,14 @@ export class MouseControl implements IControl {
         const screenX:number = (clientX - game.pos.x ) / game.scale.x;
         const screenY:number = (clientY - game.pos.y ) / game.scale.y;
 
-        const scenePoint:Point2d = Point2d.fromPool();
-        scenePoint.setXY(screenX,screenY);
-        const p:Point2d = game.camera.screenToWorld(scenePoint);
+        const screenPoint:Point2d = Point2d.fromPool();
+        screenPoint.setXY(screenX,screenY);
 
         const mousePoint:MousePoint = MousePoint.fromPool();
-        mousePoint.set(p);
-        mousePoint.screenPoint.setXY(screenX,screenY);
+        mousePoint.screenCoordinate.set(screenPoint);
         mousePoint.id = (e as Touch).identifier  || (e as PointerEvent).pointerId || 0;
 
-        scenePoint.release();
+        screenPoint.release();
 
         return mousePoint;
     }
@@ -155,49 +221,40 @@ export class MouseControl implements IControl {
 
     private triggerEvent(e:MouseEvent|Touch, mouseEvent:MOUSE_EVENTS, isMouseDown:boolean = false):MousePoint{
         const scene:Scene = this.game.getCurrScene();
-        const pointTransformed:MousePoint = this.resolvePoint(e);
-        pointTransformed.isMouseDown = isMouseDown;
-        (pointTransformed.target as Optional<RenderableModel|Scene>) = undefined;
-
-        const pointUntransformed:MousePoint = MousePoint.fromPool();
-        pointTransformed.copyTo(pointUntransformed);
-        pointUntransformed.set(pointUntransformed.screenPoint);
+        const mousePoint:MousePoint = this.resolvePoint(e);
+        mousePoint.isMouseDown = isMouseDown;
 
         let isCaptured:boolean = false;
         let i:number = scene.getLayers().length; // reversed loop
         while(i--) {
             const layer:Layer = scene.getLayers()[i];
-            const currMousePoint:MousePoint =
-                layer.transformType===LayerTransformType.TRANSFORM?
-                    pointTransformed:pointUntransformed;
-
+            this.resolveSceneCoordinates(mousePoint,layer);
             let j:number = layer.children.length;
             while(j--) {
                const go:RenderableModel = layer.children[j];
-               isCaptured = MouseControl.triggerGameObjectEvent(e,mouseEvent,currMousePoint,go);
+               isCaptured = MouseControl.triggerGameObjectEvent(e, mouseEvent, mousePoint, go);
                if (isCaptured) {
-                    pointTransformed.target = go;
+                    mousePoint.target = go;
                     break;
                }
             }
             if (isCaptured) break;
         }
-        pointUntransformed.release();
 
-        if (pointTransformed.target===undefined) pointTransformed.target = scene;
+        if (mousePoint.target===undefined) mousePoint.target = scene;
         scene.trigger(mouseEvent,{
-            screenX:pointUntransformed.x,
-            screenY:pointUntransformed.y,
-            sceneX: pointTransformed.x,
-            sceneY: pointTransformed.y,
-            id:pointTransformed.id,
+            screenX:mousePoint.screenCoordinate.x,
+            screenY:mousePoint.screenCoordinate.y,
+            sceneX: mousePoint.sceneCoordinate.x,
+            sceneY: mousePoint.sceneCoordinate.y,
+            id:mousePoint.id,
             eventName: mouseEvent,
             nativeEvent: e as Event,
             button: (e as MouseEvent).button,
             isMouseDown
-        } as ISceneMousePoint);
+        } as ISceneMouseEvent);
 
-        return pointTransformed;
+        return mousePoint;
     }
 
     private resolveClick(e:Touch|MouseEvent):void {

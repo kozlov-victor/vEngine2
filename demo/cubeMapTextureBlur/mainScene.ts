@@ -3,36 +3,24 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Cube} from "@engine/renderer/webGl/primitives/cube";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/texture/simpleBlurFilter";
 import {TweenMovie} from "@engine/animation/tweenMovie";
+import {Source} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
+    @Source.Texture('./assets/repeat.jpg')
     private baseTextureLink:ResourceLink<ITexture>;
+
+    @Source.CubeTexture(
+        './cubeMapTexture/textures/cm_left.jpg',
+        './cubeMapTexture/textures/cm_right.jpg',
+        './cubeMapTexture/textures/cm_top.jpg',
+        './cubeMapTexture/textures/cm_bottom.jpg',
+        './cubeMapTexture/textures/cm_front.jpg',
+        './cubeMapTexture/textures/cm_back.jpg'
+    )
     private cubeTextureLink:ResourceLink<ICubeMapTexture>;
-
-    public onPreloading() {
-
-        const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-        this.baseTextureLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
-        this.cubeTextureLink = this.resourceLoader.loadCubeTexture(
-            './cubeMapTexture/textures/cm_left.jpg',
-            './cubeMapTexture/textures/cm_right.jpg',
-            './cubeMapTexture/textures/cm_top.jpg',
-            './cubeMapTexture/textures/cm_bottom.jpg',
-            './cubeMapTexture/textures/cm_front.jpg',
-            './cubeMapTexture/textures/cm_back.jpg',
-        );
-    }
-
-    public onProgress(val: number) {
-        this.preloadingGameObject.size.width = val*this.game.size.width;
-    }
 
 
     public onReady() {

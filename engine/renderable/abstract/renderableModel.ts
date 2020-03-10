@@ -2,7 +2,7 @@
 import {AbstractRenderer, IRenderTarget} from "../../renderer/abstract/abstractRenderer";
 import {
     IAlphaBlendable,
-    ICloneable,
+    ICloneable, IDestroyable,
     IEventemittable,
     IFilterable,
     IParentChild,
@@ -24,7 +24,7 @@ import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {Incrementer} from "@engine/resources/incrementer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {IObjectMousePoint} from "@engine/control/mouse/mousePoint";
+import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
@@ -48,7 +48,7 @@ export abstract class RenderableModel
         IRevalidatable, ITweenable,
         IEventemittable, IParentChild,
         IAlphaBlendable, IFilterable,
-        IUpdatable  {
+        IUpdatable, IDestroyable  {
 
     public id:string;
 
@@ -141,9 +141,9 @@ export abstract class RenderableModel
 
     public abstract draw():void;
 
-    public kill():void {
+    public destroy():void {
 
-        for (const c of this.children) c.kill();
+        for (const c of this.children) c.destroy();
 
         if (DEBUG && !this.getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
 
@@ -172,6 +172,7 @@ export abstract class RenderableModel
 
         this.translate();
         this.transform();
+        this.worldTransformMatrix.fromMat16(renderer.transformGet());
         renderer.setAlphaBlend(this.alpha);
         const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(this.filters,this.forceDrawChildrenOnNewSurface);
 
@@ -244,7 +245,7 @@ export abstract class RenderableModel
     public off(eventName: string, callBack: (arg?:any)=>void): void {
         this._eventEmitterDelegate.off(eventName,callBack);
     }
-    public on(eventName:MOUSE_EVENTS,callBack:(e:IObjectMousePoint)=>void):()=>void;
+    public on(eventName:MOUSE_EVENTS,callBack:(e:IObjectMouseEvent)=>void):()=>void;
     public on(eventName:KEYBOARD_EVENTS,callBack:(e:number)=>void):()=>void;
     public on(eventName: string, callBack: (arg?:any)=>void): ()=>void {
         return this._eventEmitterDelegate.on(eventName,callBack);

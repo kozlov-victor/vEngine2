@@ -3,10 +3,9 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
-import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Shape} from "@engine/renderable/abstract/shape";
 
 
 export class MainScene extends Scene {
@@ -45,7 +44,6 @@ export class MainScene extends Scene {
         ps.size.setWH(50,50);
         this.appendChild(ps);
         this.on(MOUSE_EVENTS.mouseMove,(e)=>{
-            console.log(e);
             ps.emissionPosition.setXY(e.screenX,e.screenY);
         });
     }

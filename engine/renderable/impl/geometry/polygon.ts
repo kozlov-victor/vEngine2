@@ -84,7 +84,8 @@ export class Polygon extends Mesh {
     private edgeVertices:number[];
 
     constructor(protected game:Game){
-        super(game,false);
+        super(game);
+        this.invertY = false;
         this.vertexItemSize = 2;
     }
 
@@ -176,15 +177,17 @@ export class Polygon extends Mesh {
 
         }
 
-        const game = this.game;
+        const game:Game = this.game;
         const m:Mesh = new class extends Mesh {
             constructor() {
-                super(game, true);
+                super(game);
+                this.invertY = true;
                 this.modelPrimitive = primitive;
                 this.vertexItemSize = 3;
             }
         }();
         this.setClonedProperties(m);
+        m.depthTest = true;
         return m;
     }
 

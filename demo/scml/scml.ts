@@ -14,6 +14,7 @@ import {EasingQuint} from "@engine/misc/easing/functions/quint";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 
 const POOL_SIZE:number = 128;
 
@@ -159,8 +160,6 @@ export class ScmlObject {
         obj.activeCharacterMap = obj.folders; // only default character map is supported
         return obj;
     }
-
-    public poolHolder:PoolHolder = new PoolHolder();
 
     public root:SpriterObject;
 
@@ -321,15 +320,6 @@ class CharacterMap {
 
 // not implemented
 class MapInstruction {
-
-    // public static fromDescription(mapDesc:{}):MapInstruction{
-    //     const m:MapInstruction = new MapInstruction();
-    //     m.folder = mapDesc.folder;
-    //     m.file = mapDesc.file;
-    //     if (mapDesc.tarFolder!==undefined) m.tarFolder = mapDesc.tarFolder;
-    //     if (mapDesc.tarFile) m.tarFile = mapDesc.tarFile;
-    //     return m;
-    // }
 
     public folder:number;
     public file:number;
@@ -563,7 +553,7 @@ class Timeline {
 type OBJECT_TYPE = 'SPRITE'|'BONE'|'BOX'|'POINT'|'SOUND'|'ENTITY'|'VARIABLE';
 type CURVE_TYPE = 'INSTANT' | 'LINEAR' | 'QUADRATIC' | 'CUBIC'|'QUARTIC'|'QUINTIC'|'BEZIER';
 
-abstract class TimelineKey {
+abstract class TimelineKey extends ReleaseableEntity{
 
     public static fromDescription(scmlObject:ScmlObject,timeLineKeyDesc:ISconTimelineKey):Optional<TimelineKey>{
         const objectTimeLineKeyDesc:Optional<ISconSpriteTimeLineKey> = timeLineKeyDesc.object;
@@ -618,28 +608,12 @@ abstract class TimelineKey {
 
 }
 
-abstract class SpatialTimelineKey extends TimelineKey implements IReleasealable{
+abstract class SpatialTimelineKey extends TimelineKey {
 
     public info:SpatialInfo;
-
-    private _captured:boolean = false;
-
-    public capture(): this {
-        this._captured = true;
-        return this;
-    }
-
-    public isCaptured(): boolean {
-        return this._captured;
-    }
-
-    public release(): this {
-        this._captured = false;
-        return this;
-    }
 }
 
-class SpatialInfo implements IReleasealable {
+class SpatialInfo extends ReleaseableEntity{
 
     public static objectPool:ObjectPool<SpatialInfo> = new ObjectPool(SpatialInfo,POOL_SIZE);
 
@@ -664,23 +638,6 @@ class SpatialInfo implements IReleasealable {
     public a:number=1;
     public spin:number=1;
 
-    private _captured:boolean = false;
-
-    public constructor() {}
-
-    public capture(): this {
-        this._captured = true;
-        return this;
-    }
-
-    public isCaptured(): boolean {
-        return this._captured;
-    }
-
-    public release(): this {
-        this._captured = false;
-        return this;
-    }
 
     public clone():SpatialInfo{
         const s:SpatialInfo = SpatialInfo.objectPool.getFreeObject()!;
@@ -998,7 +955,7 @@ export class SpriterObject extends RenderableModel {
         }
         child.pos.setXY(info.x-pivotX*file.width,info.y-(1-pivotY)*file.height);
         child.scale.setXY(info.scaleX,-info.scaleY);
-        child.angle = MathEx.degToRad(360-info.angle);
+        child.angle = MathEx.degToRad(info.angle);
         child.alpha = info.a;
         child.visible = true;
         child.transformPoint.setXY(pivotX*file.width,(1-pivotY)*file.height);

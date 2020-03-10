@@ -20,7 +20,7 @@ import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
-import {ISceneMousePoint} from "@engine/control/mouse/mousePoint";
+import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
 import {Point2d} from "@engine/geometry/point2d";
@@ -31,6 +31,7 @@ import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation} from "@engine/animation/iAnimation";
 import {mat4} from "@engine/geometry/mat4";
 import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
@@ -43,7 +44,10 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public filters:IFilter[] = [];
     public alpha:number = 1;
 
+    public preloadingTaskFromDecorators:((scene:Scene)=>void)[];
+
     protected preloadingGameObject!:RenderableModel;
+    protected _preloadingTasks:(()=>void)[] = [];
     private _layers:Layer[] = [];
     private _propertyAnimations:IAnimation[] = [];
 
@@ -75,6 +79,13 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public getDefaultLayer():Layer {
         if (!this._layers.length) this.addLayer(new Layer(this.game));
         return this._layers[this._layers.length-1];
+    }
+
+    public getLayerById(id:string):Optional<Layer> {
+        for (const layer of this._layers) {
+            if (layer.id===id) return layer;
+        }
+        return undefined;
     }
 
     public addLayer(layer:Layer):void {
@@ -141,7 +152,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public off(eventName: string, callBack: ()=>void): void {
         this._eventEmitterDelegate.off(eventName,callBack);
     }
-    public on(eventName:MOUSE_EVENTS,callBack:(e:ISceneMousePoint)=>void):()=>void;
+    public on(eventName:MOUSE_EVENTS,callBack:(e:ISceneMouseEvent)=>void):()=>void;
     public on(eventName:KEYBOARD_EVENTS,callBack:(e:KeyBoardEvent)=>void):()=>void;
     public on(eventName:GAME_PAD_EVENTS,callBack:(e:GamePadEvent)=>void):()=>void;
     public on(eventName: string, callBack: (arg?:any)=>void): ()=>void {
@@ -164,9 +175,16 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     }
 
 
-    public onPreloading():void {}
+    public onPreloading():void {
+        const rect = new Rectangle(this.game);
+        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.size.height = 10;
+        this.preloadingGameObject = rect;
+    }
 
-    public onProgress(val:number):void {}
+    public onProgress(val:number):void {
+        if (this.preloadingGameObject!==undefined) this.preloadingGameObject.size.width = val*this.game.size.width;
+    }
 
     public onReady():void {}
 
@@ -180,6 +198,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         renderer.saveAlphaBlend();
         renderer.clearColor.set(this.colorBG);
         const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters); // todo blend mode for scene
+        this.game.camera.translate();
         this.game.camera.transform();
         this.translate();
         this.transform();

@@ -4,24 +4,23 @@ import {LightSet} from "@engine/light/lightSet";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
 import {PointLight} from "@engine/light/impl/pointLight";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {ISceneMousePoint} from "@engine/control/mouse/mousePoint";
+import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
 import {DirectionalLight} from "@engine/light/impl/directionalLight";
 import {ITexture} from "@engine/renderer/common/texture";
+import {Source} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
+    @Source.Texture('./assets/logo.png')
     private logoLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
-
-    }
-
     public onReady() {
-        this.game.camera.scale.setXY(0.8);
+        this.game.camera.scale.setXY(0.6);
+        this.game.camera.pos.setXY(-5);
+
         this.colorBG = Color.BLACK;
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
@@ -52,7 +51,7 @@ export class MainScene extends Scene {
         this.filters = [lightFilter];
         spr.filters = [lightFilter];
 
-        this.on(MOUSE_EVENTS.mouseMove,(e:ISceneMousePoint)=>{
+        this.on(MOUSE_EVENTS.mouseMove,(e:ISceneMouseEvent)=>{
             pointLight.pos.setXY(e.screenX,e.screenY);
             dirLight.pos.set(pointLight.pos);
         });

@@ -18,7 +18,7 @@ export abstract class AbstractTexture implements ITexture {
     public static currentBindTextureAt:{[index:number]:AbstractTexture} = {};
 
     public static destroyAll(){
-        for (let i:number = AbstractTexture.instances.length-1; i <=0; i++) {
+        for (let i:number = 0; i<AbstractTexture.instances.length; i++) {
             AbstractTexture.instances[i].destroy();
         }
         AbstractTexture.currentBindTextureAt = {};

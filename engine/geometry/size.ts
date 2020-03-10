@@ -7,7 +7,7 @@ export interface ISize {
     readonly height: number;
 }
 
-export class Size extends ObservableEntity implements IReleasealable{
+export class Size extends ObservableEntity {
 
     set width(val:number) {
         if (DEBUG && Number.isNaN(val)) throw new DebugError(`Size: wrong numeric argument  ${val}`);
