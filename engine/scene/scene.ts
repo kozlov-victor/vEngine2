@@ -223,6 +223,10 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
         renderer.restoreAlphaBlend();
 
+        renderer.transformSave();
+        this.onRender();
+        renderer.transformRestore();
+
         if (DEBUG) {
             if (
                 this.game.getRenderer().debugTextField &&
@@ -244,6 +248,8 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     }
 
     protected onUpdate():void {}
+
+    protected onRender():void {}
 
     protected onDestroy():void {}
 

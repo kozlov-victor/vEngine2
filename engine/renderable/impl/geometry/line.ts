@@ -45,7 +45,7 @@ export class Line extends Shape implements ICloneable<Line> {
 
     public getRectangleRepresentation():Rectangle{
         this.rectangleRepresentation.borderRadius = this.borderRadius;
-        super.setClonedProperties(this.rectangleRepresentation);
+        //super.setClonedProperties(this.rectangleRepresentation);
         return this.rectangleRepresentation;
     }
 
@@ -57,7 +57,6 @@ export class Line extends Shape implements ICloneable<Line> {
 
 
     private onPointChanged(){
-
         const w:number = Math.abs(this.pointTo.x);
         const h:number = Math.abs(this.pointTo.y);
         const l:number = Math.sqrt(w*w+h*h) + this.lineWidth/2;
