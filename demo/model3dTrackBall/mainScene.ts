@@ -31,8 +31,9 @@ export class MainScene extends Scene {
             if (lastPoint===undefined) lastPoint = {x:e.sceneX,y:e.screenY};
             const offsetX:number = e.sceneX - lastPoint.x;
             const offsetY:number = e.sceneY - lastPoint.y;
-            obj.angle3d.x-=offsetY/this.game.size.width;
-            obj.angle3d.y+=offsetX/this.game.size.height;
+            const factor = 1.4;
+            obj.angle3d.x-=offsetY/this.game.size.width*factor;
+            obj.angle3d.y+=offsetX/this.game.size.height*factor;
             lastPoint.x = e.sceneX;
             lastPoint.y = e.sceneY;
         });

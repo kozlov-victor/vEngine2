@@ -1,23 +1,22 @@
 import {Scene} from "@engine/scene/scene";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {Size} from "@engine/geometry/size";
+import {Color} from "@engine/renderer/common/color";
 
 export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
+    private renderScene:()=>void;
 
 
 
     public onReady() {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
+        surface.setLineWidth(0);
         this.appendChild(surface);
-    }
 
-    protected onRender(): void {
-
-        //this.surface.clear();
 
         // u(t) is called 60 times per second.
         // t: Elapsed time in seconds.
@@ -27,32 +26,42 @@ export class MainScene extends Scene {
         // R: Function that generates rgba-strings, usage ex.: R(255, 255, 255, 0.5)
         // c: A 1920x1080 canvas.
         // x: A 2D context for that canvas.
-        const t = this.game.getCurrentTime() / 1000;
         const S = Math.sin;
         const C = Math.cos;
         const T = Math.tan;
         const c = this.surface;
         const x = this.surface;
+        // tslint:disable-next-line:no-shadowed-variable
         const R = (r:number,g:number,b:number)=>{
             if (r>255) r = 255;
             if (g>255) g = 255;
             if (b>255) b = 255;
+            if (r<0) r = 0;
+            if (g<0) g = 0;
+            if (b<0) b = 0;
             return (r<<16)|(g<<8)|(b);
         };
 
-        // https://www.dwitter.net/d/8876
+        this.renderScene = ()=>{
+            const t = this.game.getCurrentTime() / 1000;
 
-        let j,h,v = 0,z:number;
-
-        for(j=20,h=96;h--;) {
-            for(v=54;v--;) {
-                x.setFillColor(R(z=(T(t-h*v)+1)*j,z/2,z*4));
-                x.drawRect(h*j,v*j,j,j);
+            let j,a,m,q:number;
+            for(j=2e3;j--;x.drawRect(99+9*S(a=j/1250)*S(j)+50*S(m=t*3+a),75+25*(S(-a*5)+1)*C(j),3,7)) {
+                q=(j&128)-C(j)**3*99;
+                x.setFillColor(R(q,q,q));
             }
-        }
+        };
 
+    }
 
+    // https://www.dwitter.net/d/6331
+    protected onRender(): void {
+
+        this.surface.clear();
+
+        this.renderScene();
 
 
     }
 }
+

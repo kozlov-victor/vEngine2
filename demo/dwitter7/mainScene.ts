@@ -35,7 +35,7 @@ export class MainScene extends Scene {
         const T = Math.tan;
         const c = this.surface;
         const x = this.surface;
-        const R = (r:number,g:number,b:number = 0)=>{
+        const R = (r:number,g:number,b:number)=>{
             if (r<0) r = 0;
             if (g<0) g = 0;
             if (b<0) b = 0;
@@ -47,7 +47,7 @@ export class MainScene extends Scene {
 
         x.setLineWidth(15);
         for(let i=0;i<1920;i++) {
-            if (i==0) x.moveTo(i,400+S(t+i/127)*200);
+            if (i===0) x.moveTo(i,400+S(t+i/127)*200);
             x.lineTo(i,400+S(t+i/127)*200);
             x.moveTo(i,400+S(t+i/127)*200);
         }

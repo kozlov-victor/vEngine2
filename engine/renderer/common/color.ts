@@ -1,6 +1,7 @@
 import {ICloneable} from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
+import {MathEx} from "@engine/misc/mathEx";
 
 
 export interface IColorJSON {
@@ -19,6 +20,16 @@ export class Color extends ObservableEntity implements ICloneable<Color>{
 
     public static RGB(r:byte,g:byte = r,b:byte = r):Color{
         return Color.RGBA(r,g,b,255);
+    }
+
+    public static HSLA(h:number,s:number,l:number,a:byte):Color{
+        const c:Color = new Color();
+        c.setHSLA(h,s,l,a);
+        return c;
+    }
+
+    public static HSL(h:number,s:number,l:number):Color{
+        return Color.HSLA(h,s,l,255);
     }
 
     public static RGBA(r:byte,g:byte = r,b:byte = r, a:byte = b):Color{
@@ -70,6 +81,49 @@ export class Color extends ObservableEntity implements ICloneable<Color>{
         this.setRGBA(r,g,b,255);
     }
 
+    /**
+     * @param h angle in degrees
+     * @param s saturation 0-100%
+     * @param l light 0-100%
+     * @param a alpha 0-255
+     */
+    public setHSLA(h:number,s:number,l:number,a:byte):void{
+
+        h = (h%360)/360;
+        s/=100;
+        l/=100;
+
+        let r, g, b:number;
+
+        if(s === 0){
+            r = g = b = l; // achromatic
+        }else{
+            const hue2rgb = (pCol:number, qCol:number, t:number)=>{
+                if(t < 0) t += 1;
+                if(t > 1) t -= 1;
+                if(t < 1/6) return pCol + (qCol - pCol) * 6 * t;
+                if(t < 1/2) return qCol;
+                if(t < 2/3) return pCol + (qCol - pCol) * (2/3 - t) * 6;
+                return pCol;
+            };
+
+            const q:number = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            const p:number = 2 * l - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
+        }
+
+        const rResult:byte = Math.round(r * 255) as byte;
+        const gResult:byte = Math.round(g * 255) as byte;
+        const bResult:byte = Math.round(b * 255) as byte;
+        this.setRGBA(rResult,gResult,bResult,a);
+    }
+
+    public setHSL(h:number,s:number,l:number):void{
+        this.setHSLA(h,s,l,255);
+    }
+
     public getR():byte {return this.r;}
     public getG():byte {return this.g;}
     public getB():byte {return this.b;}
@@ -116,6 +170,10 @@ export class Color extends ObservableEntity implements ICloneable<Color>{
 
     public asCSS():string{
         return `rgba(${this.r},${this.g},${this.b},${this.a/255})`;
+    }
+
+    public asRGBNumeric():number {
+        return (this.r<<16)|(this.g<<8)|this.b;
     }
 
     public toJSON():IColorJSON{

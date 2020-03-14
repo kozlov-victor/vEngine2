@@ -12,12 +12,14 @@ export class MainScene extends Scene {
     public onReady() {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
+        surface.setLineWidth(0);
         this.appendChild(surface);
     }
 
+    // https://www.dwitter.net/d/4388
     protected onRender(): void {
 
-        //this.surface.clear();
+        this.surface.clear();
 
         // u(t) is called 60 times per second.
         // t: Elapsed time in seconds.
@@ -33,6 +35,7 @@ export class MainScene extends Scene {
         const T = Math.tan;
         const c = this.surface;
         const x = this.surface;
+        // tslint:disable-next-line:no-shadowed-variable
         const R = (r:number,g:number,b:number)=>{
             if (r>255) r = 255;
             if (g>255) g = 255;
@@ -40,17 +43,9 @@ export class MainScene extends Scene {
             return (r<<16)|(g<<8)|(b);
         };
 
-        // https://www.dwitter.net/d/8876
+        let i,w,a,b,g,j,s:number;
 
-        let j,h,v = 0,z:number;
-
-        for(j=20,h=96;h--;) {
-            for(v=54;v--;) {
-                x.setFillColor(R(z=(T(t-h*v)+1)*j,z/2,z*4));
-                x.drawRect(h*j,v*j,j,j);
-            }
-        }
-
+        for(i=w=3e3,a=b=g=333*T(t%9/7);j=(i^a*a)%4,i--;x.drawRect(a+=g+C(j*5+t)*g-a/2-w+g,b+=g+S(j*9+t)*g-b/2-w,s,s),w=2)x.setFillColor(R(s=w*9,w,s),100);
 
 
 

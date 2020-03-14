@@ -19,7 +19,7 @@ export class MainScene extends Scene {
     // https://www.dwitter.net/d/17858
     protected onRender(): void {
 
-        this.surface.clear();
+        //this.surface.clear();
 
         // u(t) is called 60 times per second.
         // t: Elapsed time in seconds.
@@ -35,7 +35,8 @@ export class MainScene extends Scene {
         const T = Math.tan;
         const c = this.surface;
         const x = this.surface;
-        const R = (r:number,g:number,b:number = 0)=>{
+        // tslint:disable-next-line:no-shadowed-variable
+        const R = (r:number,g:number,b:number)=>{
             if (r>255) r = 255;
             if (g>255) g = 255;
             if (b>255) b = 255;

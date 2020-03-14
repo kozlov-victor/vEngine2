@@ -27,11 +27,17 @@ module.exports = (env={})=>{
         //chunkFilename: "[name].chunk.js",
     };
 
-    let dirs = fs.readdirSync('./demo');
-    dirs.forEach((dir)=>{
-        if (['demo.html','assets','out','index.html','.DS_Store','generateIndexPage.js','application.hta','VEngineNavigator.exe'].includes(dir)) return;
-        entry[`${dir}`] = [`./demo/${dir}/index.ts`]
-    });
+    if (env.project) {
+        entry[env.project] = [`./demo/${env.project}/index.ts`]
+    } else {
+        let dirs = fs.readdirSync('./demo');
+        dirs.forEach((dir)=>{
+            if (['demo.html','assets','out','index.html','.DS_Store','generateIndexPage.js','application.hta','VEngineNavigator.exe'].includes(dir)) return;
+            entry[`${dir}`] = [`./demo/${dir}/index.ts`];
+        });
+    }
+
+
 
     entry['debug'] = './engine/debug/debug.ts';
 

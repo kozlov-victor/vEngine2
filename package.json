@@ -27,6 +27,7 @@
   },
   "scripts": {
     "start": "webpack --env.debug=true -w",
+    "start-project": "webpack --env.debug=true --env.project=dwitter13  -w",
     "build": "webpack",
     "build-demo": "node demo/generateIndexPage",
     "build-lints": "node node_tools/lints/buildRules",

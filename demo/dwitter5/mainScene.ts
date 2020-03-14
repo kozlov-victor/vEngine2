@@ -35,7 +35,7 @@ export class MainScene extends Scene {
         const T = Math.tan;
         const c = this.surface;
         const x = this.surface;
-        const R = (r:number,g:number,b:number = 0)=>{
+        const R = (r:number,g:number,b:number)=>{
             if (r>255) r = 255;
             if (g>255) g = 255;
             if (b>255) b = 255;
@@ -46,6 +46,7 @@ export class MainScene extends Scene {
         c.size.width^=0;
         for(i=5e3;p=3*t+T(t/2)*i/2e3+i%4*2,i-=5;x.setFillColor(0xFF0000)) {
             d=C(p)-S(p);
+            // tslint:disable-next-line:no-unused-expression
             d>0&&x.drawRect(960+199*S(p)+249*C(t+i/9e4),i/4,99*d,9);
         }
 

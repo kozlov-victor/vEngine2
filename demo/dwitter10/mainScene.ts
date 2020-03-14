@@ -1,6 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {Size} from "@engine/geometry/size";
+import {Color} from "@engine/renderer/common/color";
 
 export class MainScene extends Scene {
 
@@ -12,9 +13,14 @@ export class MainScene extends Scene {
     public onReady() {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
+        surface.setLineWidth(0);
         this.appendChild(surface);
+        const c = new Color();
+        c.setHSL(12,22,44);
+        console.log(c.toJSON());
     }
 
+    // https://www.dwitter.net/d/6331
     protected onRender(): void {
 
         //this.surface.clear();
@@ -33,6 +39,7 @@ export class MainScene extends Scene {
         const T = Math.tan;
         const c = this.surface;
         const x = this.surface;
+        // tslint:disable-next-line:no-shadowed-variable
         const R = (r:number,g:number,b:number)=>{
             if (r>255) r = 255;
             if (g>255) g = 255;
@@ -40,19 +47,15 @@ export class MainScene extends Scene {
             return (r<<16)|(g<<8)|(b);
         };
 
-        // https://www.dwitter.net/d/8876
-
-        let j,h,v = 0,z:number;
-
-        for(j=20,h=96;h--;) {
-            for(v=54;v--;) {
-                x.setFillColor(R(z=(T(t-h*v)+1)*j,z/2,z*4));
-                x.drawRect(h*j,v*j,j,j);
-            }
+        const v=23;
+        let l,d,r:number;
+        for(l=499;l--;) {
+            d=(l*t/9)%v*v;
+            x.setFillColor(Color.HSL(t*l-l+d,99,65).asRGBNumeric());
+            x.drawRect(960+S(r=S(t-d/444)+l/v*.4)*d,540+C(r)*d,v,v);
         }
-
-
 
 
     }
 }
+
