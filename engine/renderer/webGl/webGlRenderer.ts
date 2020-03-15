@@ -31,6 +31,7 @@ import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
 import MAT16 = mat4.MAT16;
+import {SimpleColoredRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleColoredRectDrawer";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -116,6 +117,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private gl:WebGLRenderingContext;
     private readonly matrixStack:MatrixStack = new MatrixStack();
     private shapeDrawerHolder:InstanceHolder<ShapeDrawer> = new InstanceHolder(ShapeDrawer);
+    private coloredRectDrawer:InstanceHolder<SimpleColoredRectDrawer> = new InstanceHolder(SimpleColoredRectDrawer);
     private meshDrawerHolder:InstanceHolder<MeshDrawer> = new InstanceHolder(MeshDrawer);
     private tileMapDrawerHolder:InstanceHolder<TileMapDrawer> = new InstanceHolder(TileMapDrawer);
 
@@ -262,16 +264,22 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
 
     public drawRectangle(rectangle:Rectangle):void{
-        const {width:rw,height:rh} = rectangle.size;
-        const maxSize:number = Math.max(rw,rh);
-        const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
 
-        this.prepareGeometryUniformInfo(rectangle);
-        this.prepareShapeUniformInfo(rectangle);
-        sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
-        sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
-        sd.attachTexture('texture',this.nullTexture);
-        sd.draw();
+        if (rectangle.lineWidth===0 && rectangle.borderRadius===0 && rectangle.color.type==='Color') {
+            this.drawSimpleColoredRectangle(rectangle); // optimise drawing of simple rectangle with very simple gl program
+        } else {
+            const {width:rw,height:rh} = rectangle.size;
+            const maxSize:number = Math.max(rw,rh);
+            const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
+
+            this.prepareGeometryUniformInfo(rectangle);
+            this.prepareShapeUniformInfo(rectangle);
+            sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
+            sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
+            sd.attachTexture('texture',this.nullTexture);
+            sd.draw();
+        }
+
     }
 
 
@@ -492,6 +500,24 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         //gl.enable(gl.DEPTH_TEST);
     }
 
+    // optimised version of rectangle drawing
+    private drawSimpleColoredRectangle(rectangle:Rectangle):void{
+
+        const scd:SimpleColoredRectDrawer = this.coloredRectDrawer.getInstance(this.gl);
+
+        const rect:Rect = Rect.fromPool();
+        rect.setXYWH( 0,0,rectangle.size.width,rectangle.size.height);
+        const size:Size = Size.fromPool();
+        size.set(this.currFrameBufferStack.getCurrentTargetSize());
+        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
+        scd.setUniform(scd.u_vertexMatrix,pos16h.mat16);
+        pos16h.release();
+        rect.release();
+        size.release();
+        scd.setUniform(scd.u_alpha,this.getAlphaBlend());
+        scd.setUniform(scd.u_color,((rectangle.fillColor) as Color).asGL());
+        scd.draw();
+    }
 
     private prepareGeometryUniformInfo(model:RenderableModel):void{
 

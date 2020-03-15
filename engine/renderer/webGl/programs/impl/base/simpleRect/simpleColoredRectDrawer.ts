@@ -1,48 +1,40 @@
-import {Plane} from "../../../../primitives/plane";
-import {ShaderProgram} from "../../../../base/shaderProgram";
-import {AbstractDrawer} from "../../../abstract/abstractDrawer";
-import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {DebugError} from "@engine/debug/debugError";
+import {Plane} from "@engine/renderer/webGl/primitives/plane";
+import {ShaderProgram} from "@engine/renderer/webGl/base/shaderProgram";
+import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/bufferInfo";
+import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 
+export class SimpleColoredRectDrawer extends AbstractDrawer {
 
-export class SimpleRectDrawer extends AbstractDrawer {
-
-    /**
-     * @internal
-     */
     public gen:ShaderGenerator;
-
-    public readonly a_position:string;
-    public readonly a_texCoord:string;
     public readonly u_vertexMatrix:string;
-    public readonly u_textureMatrix:string;
+    public readonly u_color:string;
+    public readonly u_alpha:string;
 
-    constructor(gl:WebGLRenderingContext) {
+
+    constructor(protected gl:WebGLRenderingContext) {
         super(gl);
         this.gen = new ShaderGenerator();
         const gen:ShaderGenerator = this.gen;
-        this.a_position = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_position');
-        this.a_texCoord = gen.addAttribute(GL_TYPE.FLOAT_VEC2,'a_texCoord');
+        gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_position');
         this.u_vertexMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_vertexMatrix');
-        this.u_textureMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_textureMatrix');
-        gen.addVarying(GL_TYPE.FLOAT_VEC2,'v_texCoord');
+        this.u_alpha = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
+        this.u_color = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_color');
         //language=GLSL
         gen.setVertexMainFn(MACRO_GL_COMPRESS`
             void main(){
                 gl_Position = u_vertexMatrix * a_position;
-                v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
             }
         `);
-        gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');
-        //gen.addFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
         //language=GLSL
         gen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){
-                gl_FragColor = texture2D(texture, v_texCoord);
+                gl_FragColor = u_color*u_alpha;
             }
         `);
+        this.initProgram();
     }
 
     public initProgram():void{
@@ -62,10 +54,8 @@ export class SimpleRectDrawer extends AbstractDrawer {
         this.bufferInfo = new BufferInfo(this.gl, {
             posVertexInfo: {array: this.primitive.vertexArr, type: this.gl.FLOAT, size: 2, attrName: 'a_position'},
             posIndexInfo: {array: this.primitive.indexArr},
-            texVertexInfo: {array: this.primitive.texCoordArr, type: this.gl.FLOAT, size: 2, attrName: 'a_texCoord'},
             drawMethod: DRAW_METHOD.TRIANGLE_STRIP
         } as IBufferInfoDescription);
     }
-
 
 }

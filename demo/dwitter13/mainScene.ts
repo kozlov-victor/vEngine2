@@ -1,6 +1,5 @@
 import {Scene} from "@engine/scene/scene";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
-import {Size} from "@engine/geometry/size";
 import {Color} from "@engine/renderer/common/color";
 
 export class MainScene extends Scene {
@@ -8,9 +7,6 @@ export class MainScene extends Scene {
 
     private surface:DrawingSurface;
     private renderScene:()=>void;
-
-
-
 
     public onReady() {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
@@ -51,8 +47,11 @@ export class MainScene extends Scene {
             p=Math.PI*2;
             a=960;
             b=535;
-            for(i=0;i<a;i+=10)for(j=0;j<b;j+=10)
-                x.drawRect(a+a/7*S((y=i/a*p)+S(t))*(z=j/b*p),b+b/2*S(z)*C(y+t),9,9);
+            for(i=0;i<a;i+=10){
+                for(j=0;j<b;j+=10) {
+                    x.drawRect(a+a/7*S((y=i/a*p)+S(t))*(z=j/b*p),b+b/2*S(z)*C(y+t),9,9);
+                }
+            }
         };
 
     }

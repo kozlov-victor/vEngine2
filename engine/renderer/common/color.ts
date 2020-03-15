@@ -1,7 +1,6 @@
 import {ICloneable} from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
-import {MathEx} from "@engine/misc/mathEx";
 
 
 export interface IColorJSON {
@@ -45,7 +44,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>{
         return new Color(r,g,b);
     }
 
-    public readonly type:string = 'Color';
+    public readonly type:'Color' = 'Color';
 
     private r:byte;
     private g:byte;

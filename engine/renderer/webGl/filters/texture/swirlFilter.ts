@@ -2,7 +2,6 @@ import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstract
 import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Game} from "@engine/core/game";
 
 // http://evanw.github.io/webgl-filter/
@@ -25,10 +24,6 @@ export class SwirlFilter extends AbstractGlFilter {
         this.texSize = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
 
 
-        //language=GLSL
-        programGen.appendFragmentCodeBlock(`            
-            
-        `);
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
                     void main(){
