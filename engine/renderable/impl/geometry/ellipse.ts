@@ -30,6 +30,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>{
 
     public arcAngleFrom:number = 0;
     public arcAngleTo:number = 0;
+    public anticlockwise:boolean = false;
 
     private _radiusX: number = 10;
     private _radiusY: number = 20;

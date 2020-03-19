@@ -45,7 +45,6 @@ export class Line extends Shape implements ICloneable<Line> {
 
     public getRectangleRepresentation():Rectangle{
         this.rectangleRepresentation.borderRadius = this.borderRadius;
-        //super.setClonedProperties(this.rectangleRepresentation);
         return this.rectangleRepresentation;
     }
 

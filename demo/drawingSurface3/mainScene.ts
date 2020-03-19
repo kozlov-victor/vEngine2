@@ -5,6 +5,7 @@ import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {Size} from "@engine/geometry/size";
 
 export class MainScene extends Scene {
 

@@ -14,7 +14,7 @@ import {Optional} from "@engine/core/declarations";
 
 export class ShaderProgram {
 
-    public static currentProgram:Optional<ShaderProgram>;
+    private static currentProgram:Optional<ShaderProgram>;
 
     private readonly program:WebGLProgram;
     private readonly uniforms:IUniformsMap;
@@ -38,8 +38,15 @@ export class ShaderProgram {
     }
 
     public bind():void{
+        if (ShaderProgram.currentProgram===this) return;
         this.gl.useProgram(this.program);
         ShaderProgram.currentProgram = this;
+    }
+
+    public unbind():void {
+        // tslint:disable-next-line:no-null-keyword
+        this.gl.useProgram(null);
+        ShaderProgram.currentProgram = undefined;
     }
 
     public setUniform(name:string, value:UNIFORM_VALUE_TYPE):void {
@@ -71,8 +78,8 @@ export class ShaderProgram {
         }
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer.getGlBuffer());
-        const attrLocation:GLuint = this.attributes[attrName];
         this.enableAttribute(attrName);
+        const attrLocation:GLuint = this.attributes[attrName];
         this.gl.vertexAttribPointer(
             attrLocation,
             buffer.getItemSize(),

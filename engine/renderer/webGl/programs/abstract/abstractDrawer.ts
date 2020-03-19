@@ -27,7 +27,7 @@ interface IUniformValue {
 
 export class AbstractDrawer implements IDrawer, IDestroyable{
 
-    public static currentInstance:Optional<AbstractDrawer>;
+    private static currentInstance:Optional<AbstractDrawer>;
 
     protected gl:WebGLRenderingContext;
     protected program:Optional<ShaderProgram>;
@@ -115,18 +115,13 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
             throw new DebugError(`can not init drawer: initProgram method must be invoked!`);
         }
 
-        if (
-            AbstractDrawer.currentInstance!==undefined &&
-            AbstractDrawer.currentInstance!==this)
-        {
-            AbstractDrawer.currentInstance.unbind();
-        }
         AbstractDrawer.currentInstance = this;
-        this.bufferInfo.bind(this.program as ShaderProgram);
+        this.bufferInfo.bind(this.program!);
     }
 
     protected unbind():void{
-        this.bufferInfo.unbind();
+        this.bufferInfo.unbind(this.program!);
+        AbstractDrawer.currentInstance = undefined;
     }
 
     protected drawElements():void{

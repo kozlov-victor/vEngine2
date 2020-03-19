@@ -6,7 +6,7 @@ import {Rect} from "../../geometry/rect";
 import {Game, SCALE_STRATEGY} from "../../core/game";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../common/color";
-import {Size} from "../../geometry/size";
+import {ISize, Size} from "../../geometry/size";
 import {MeshDrawer} from "./programs/impl/base/mesh/meshDrawer";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
@@ -213,7 +213,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const modelMatrix:Mat16Holder = this.matrixStack.getCurrentValue();
 
         const orthoProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        mat4.ortho(orthoProjectionMatrix,0,this.game.size.width,0,this.game.size.height,-SCENE_DEPTH,SCENE_DEPTH);
+        const currViewSize:ISize = this.currFrameBufferStack.getCurrentTargetSize();
+        mat4.ortho(orthoProjectionMatrix,0,currViewSize.width,0,currViewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
         const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
         mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
 
@@ -291,7 +292,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public drawEllipse(ellipse:Ellipse):void{
         const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
-        const maxR2:number = maxR*2;
 
         this.prepareGeometryUniformInfo(ellipse);
         this.prepareShapeUniformInfo(ellipse);
@@ -312,6 +312,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_rectOffsetTop,1);
         sd.setUniform(sd.u_arcAngleFrom,ellipse.arcAngleFrom);
         sd.setUniform(sd.u_arcAngleTo,ellipse.arcAngleTo);
+        sd.setUniform(sd.u_anticlockwise,ellipse.anticlockwise);
         sd.attachTexture('texture',this.nullTexture);
         sd.draw();
 

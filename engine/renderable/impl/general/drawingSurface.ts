@@ -19,6 +19,7 @@ import {mat4} from "@engine/geometry/mat4";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import Mat16Holder = mat4.Mat16Holder;
+import {describeArc} from "@engine/renderable/impl/geometry/helpers/splineFromPoints";
 
 const COLOR_TMP = new Color();
 
@@ -44,8 +45,8 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     private line:Line = new Line(this.game);
     private nullGameObject:NullGameObject = new NullGameObject(this.game);
 
-    private fillColor:Color = Color.RGB(0,0);
-    private drawColor:Color = Color.RGB(0,0);
+    private fillColor:Color = Color.RGBA(0,0,0,255);
+    private drawColor:Color = Color.RGBA(0,0,0,255);
     private lineWidth:number = 1;
     private pointMoveTo:Point2d = new Point2d();
 
@@ -173,7 +174,52 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this.ellipse.radiusX = radiusX;
         this.ellipse.radiusY = radiusY;
         this.ellipse.center.setXY(cx,cy);
+        this.ellipse.arcAngleFrom = 0;
+        this.ellipse.arcAngleTo = 0;
         this.drawSimpleShape(this.ellipse);
+    }
+
+    public drawArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {
+        if (endAngle>Math.PI) {
+            endAngle = Math.PI - endAngle;
+        }
+        this.ellipse.radiusX = radius;
+        this.ellipse.radiusY = radius;
+        this.ellipse.center.setXY(cx,cy);
+        this.ellipse.arcAngleFrom = startAngle;
+        this.ellipse.arcAngleTo = endAngle;
+        this.ellipse.anticlockwise = anticlockwise;
+        const fillColor:Color = this.fillColor;
+        this.fillColor = Color.NONE;
+        this.drawSimpleShape(this.ellipse);
+        this.fillColor = fillColor;
+    }
+
+    public fillArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {
+
+        if ( // full circle
+            Math.abs(
+                Math.abs(startAngle%(Math.PI*2)) -
+                   Math.abs(endAngle%(Math.PI*2))
+            )<=0.001
+        ) {
+            const lineWidth:number = this.lineWidth;
+            this.lineWidth = 0;
+            this.drawCircle(cx,cy,radius);
+            this.lineWidth = lineWidth;
+        } else {
+            if (anticlockwise) {
+                const tmp:number = startAngle;
+                startAngle = endAngle;
+                endAngle = tmp + 2*Math.PI;
+            }
+            const path:string = describeArc(cx,cy,radius,startAngle,endAngle,anticlockwise)+` z`;
+            const polygon:Polygon = Polygon.fromSvgPath(this.game,path);
+            polygon.fillColor = this.fillColor;
+            this.drawModel(polygon,false);
+        }
+
+
     }
 
     public moveTo(x:number,y:number):void {

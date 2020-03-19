@@ -171,6 +171,9 @@ export class PolyLine extends Shape {
                 return n;
             });
         }
+
+        if (DEBUG && points.length===0) throw new DebugError(`can not create polyline from empty vertex array`);
+
         const pl:PolyLine = new PolyLine(game);
         pl.moveTo(points[0],points[1]);
         for (let i:number=2;i<points.length;i+=2) {
@@ -297,6 +300,7 @@ export class PolyLine extends Shape {
     }
 
     private _arcTo(rx:number,ry:number,xAxisRotation:number,largeArcFlag:0|1,sweepFlag:0|1,x:number,y:number,isRelativeCoordinates:boolean){
+
         if (DEBUG && largeArcFlag!==0 && largeArcFlag!==1) throw new DebugError(`wrong largeArcFlag value: ${largeArcFlag}`);
         if (DEBUG && sweepFlag!==0 && sweepFlag!==1) throw new DebugError(`wrong largeArcFlag value: ${sweepFlag}`);
         if (isRelativeCoordinates) {

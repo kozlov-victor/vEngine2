@@ -116,7 +116,8 @@ export class BufferInfo {
         if (this.normalBuffer!==undefined) this.normalBuffer.bind(program);
     }
 
-    public unbind():void{
+    public unbind(program:ShaderProgram):void{
+        program.unbind();
         if (this.posIndexBuffer!==undefined) this.posIndexBuffer.unbind();
         if (this.posVertexBuffer!==undefined) this.posVertexBuffer.unbind();
         if (this.texVertexBuffer!==undefined) this.texVertexBuffer.unbind();

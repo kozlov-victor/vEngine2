@@ -1,9 +1,9 @@
 
-precision mediump float;
-
 #define HALF                            .5
-#define ZERO                            0.
+#define ZERO                            .0
 #define ONE                             1.
+#define PI                              __PI__
+#define TWO_PI                          __PI__*2.
 #define ERROR_COLOR                     vec4(ONE,ZERO,ZERO,ONE)
 #define STRETCH_MODE_STRETCH            __STRETCH_MODE_STRETCH__
 #define STRETCH_MODE_REPEAT             __STRETCH_MODE_REPEAT__
@@ -54,18 +54,49 @@ float calcRadiusAtPosition(float x,float y) {
     return u_rx*u_ry/sqrt(u_rx*u_rx*sinA*sinA+u_ry*u_ry*cosA*cosA);
 }
 
+void _drawElliplse(float dist,float rAtCurrAngle){
+    if (dist < rAtCurrAngle) {
+        if (dist > rAtCurrAngle - u_lineWidth) gl_FragColor = u_color;
+        else gl_FragColor = getFillColor();
+    }
+}
+
 void drawEllipse(){
     float dist = distance(vec2(HALF, HALF), v_position.xy);
     float rAtCurrAngle = calcRadiusAtPosition(v_position.x, v_position.y);
-    float angle = atan(v_position.y-HALF, v_position.x-HALF);
-    //if (angle<ZERO) angle = TWO_PI+angle;
-    bool isArcNotUsed = u_arcAngleFrom==u_arcAngleTo && u_arcAngleFrom==ZERO;
-    if (isArcNotUsed || (angle>u_arcAngleFrom && angle<u_arcAngleTo)) {
-        if (dist < rAtCurrAngle) {
-            if (dist > rAtCurrAngle - u_lineWidth) gl_FragColor = u_color;
-            else gl_FragColor = getFillColor();
+    bool isArcNotUsed = u_arcAngleFrom==u_arcAngleTo;
+
+    if (dist > rAtCurrAngle) discard;
+
+    if (isArcNotUsed) {
+        _drawElliplse(dist,rAtCurrAngle);
+    } else {
+
+        float angle = atan(v_position.y-HALF, v_position.x-HALF);
+        float angleFrom = u_arcAngleFrom;
+        float angleTo =  u_arcAngleTo;
+
+        if (angleFrom<ZERO) angleFrom = TWO_PI + angleFrom;
+        if (angleTo<ZERO) angleTo = TWO_PI + angleTo;
+        if (angle<ZERO) angle = TWO_PI + angle;
+        bool anticlockwise = u_anticlockwise;
+        if (angleFrom>angleTo) {
+            anticlockwise=!anticlockwise;
+            float tmp = angleFrom;
+            angleFrom = angleTo;
+            angleTo = tmp;
         }
-        else discard;
+
+        bool withinArc = (angleFrom<=angle) && (angle<=angleTo);
+        if (withinArc) {
+            if (anticlockwise) discard;
+            else _drawElliplse(dist,rAtCurrAngle);
+        }
+        else {
+            if (!anticlockwise) discard;
+            else _drawElliplse(dist,rAtCurrAngle);
+
+        }
     }
 }
 

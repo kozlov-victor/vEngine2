@@ -57,6 +57,9 @@ export class Polygon extends Mesh {
         p.children.forEach((l:RenderableModel)=>{
             vertices.push(l.pos.x,l.pos.y);
         });
+
+        //if (DEBUG && vertices.length<=2) throw new DebugError(`can not create polygon from polyline with vertices [${vertices}]`);
+
         const triangulator:EarClippingTriangulator = new EarClippingTriangulator();
         const triangulatedIndices:number[] = triangulator.computeTriangles(vertices);
         const triangulatedVertices:number[] = [];
@@ -76,6 +79,10 @@ export class Polygon extends Mesh {
         if (DEBUG && !polyline.isClosed()) throw new DebugError(`can not create polygon from unclosed path`);
         if (DEBUG && !polyline.isInterrupted()) throw new DebugError(`can not create polygon from interrupted path`);
         return Polygon.fromPolyline(game,polyline);
+    }
+
+    public static fromPoints(game:Game,points:number[]):Polygon {
+        return Polygon.fromPolyline(game,PolyLine.fromPoints(game,points));
     }
 
 

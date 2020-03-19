@@ -18,28 +18,29 @@ export const enum FILL_TYPE {
 
 export class ShapeDrawer extends AbstractDrawer {
 
-    public u_vertexMatrix:string;
-    public a_position:string;
-    public u_lineWidth:string;
-    public u_rx:string;
-    public u_ry:string;
-    public u_width:string;
-    public u_height:string;
-    public u_borderRadius:string;
-    public u_color:string;
-    public u_alpha:string;
-    public u_fillLinearGradient:string;
-    public u_fillColor:string;
-    public u_shapeType:string;
-    public u_fillType:string;
-    public u_texRect:string;
-    public u_texOffset:string;
-    public u_rectOffsetTop: string;
-    public u_rectOffsetLeft: string;
-    public u_repeatFactor:string;
-    public u_stretchMode:string;
-    public u_arcAngleFrom:string;
-    public u_arcAngleTo:string;
+    public readonly u_vertexMatrix:string;
+    public readonly a_position:string;
+    public readonly u_lineWidth:string;
+    public readonly u_rx:string;
+    public readonly u_ry:string;
+    public readonly u_width:string;
+    public readonly u_height:string;
+    public readonly u_borderRadius:string;
+    public readonly u_color:string;
+    public readonly u_alpha:string;
+    public readonly u_fillLinearGradient:string;
+    public readonly u_fillColor:string;
+    public readonly u_shapeType:string;
+    public readonly u_fillType:string;
+    public readonly u_texRect:string;
+    public readonly u_texOffset:string;
+    public readonly u_rectOffsetTop: string;
+    public readonly u_rectOffsetLeft: string;
+    public readonly u_repeatFactor:string;
+    public readonly u_stretchMode:string;
+    public readonly u_arcAngleFrom:string;
+    public readonly u_arcAngleTo:string;
+    public readonly u_anticlockwise:string;
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
@@ -47,7 +48,7 @@ export class ShapeDrawer extends AbstractDrawer {
         gen.setVertexMainFn(MACRO_GL_COMPRESS`
             void main(){
                 v_position = a_position;
-                gl_Position = u_vertexMatrix * a_position;   
+                gl_Position = u_vertexMatrix * a_position;
             }
         `);
         // base uniforms and attrs
@@ -81,6 +82,7 @@ export class ShapeDrawer extends AbstractDrawer {
         // repeat texture (aka tiled image)
         this.u_repeatFactor = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_repeatFactor');
         this.u_stretchMode = gen.addScalarFragmentUniform(GL_TYPE.INT,'u_stretchMode');
+        this.u_anticlockwise = gen.addScalarFragmentUniform(GL_TYPE.BOOL,'u_anticlockwise');
 
         gen.setFragmentMainFn(parametrizeString(fragmentSource,{
             __STRETCH_MODE_STRETCH__:       STRETCH_MODE.STRETCH,
@@ -89,7 +91,8 @@ export class ShapeDrawer extends AbstractDrawer {
             __FILL_TYPE_TEXTURE__:          FILL_TYPE.TEXTURE,
             __FILL_TYPE_LINEAR_GRADIENT__:  FILL_TYPE.LINEAR_GRADIENT,
             __SHAPE_TYPE_ELLIPSE__:         SHAPE_TYPE.ELLIPSE,
-            __SHAPE_TYPE_RECT__:            SHAPE_TYPE.RECT
+            __SHAPE_TYPE_RECT__:            SHAPE_TYPE.RECT,
+            __PI__:                         Math.PI,
         }));
         this.program = new ShaderProgram(
             gl,
@@ -101,7 +104,6 @@ export class ShapeDrawer extends AbstractDrawer {
         this.bufferInfo = new BufferInfo(gl,{
             posVertexInfo:{array: this.primitive.vertexArr,type:gl.FLOAT,size:2,attrName:this.a_position},
             posIndexInfo: {array: this.primitive.indexArr},
-            //texVertexInfo: {array: this.primitive.texCoordArr, type: gl.FLOAT, size: 2, attrName: 'a_texCoord'},
             drawMethod: DRAW_METHOD.TRIANGLE_STRIP,
         } as IBufferInfoDescription);
     }
