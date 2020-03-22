@@ -16,6 +16,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
+import {Device} from "@engine/misc/device";
 
 interface IStackItem {
     frameBuffer:FrameBuffer;
@@ -155,8 +156,9 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     }
 
     public renderToScreen():void{
-        const w:number = this._pixelPerfectMode?this.game.screenSize.width:this.game.size.width;
-        const h:number = this._pixelPerfectMode?this.game.screenSize.height:this.game.size.height;
+        const needFullScreen:boolean = this._pixelPerfectMode || Device.embeddedEngine;
+        const w:number = needFullScreen?this.game.getRenderer().fullScreenSize.width:this.game.size.width;
+        const h:number = needFullScreen?this.game.getRenderer().fullScreenSize.height:this.game.size.height;
         this._getLast().frameBuffer.unbind();
         this.gl.viewport(0, 0, w,h);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);

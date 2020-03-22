@@ -42,7 +42,6 @@ export class WaterRippleFilter extends AbstractGlFilter {
         //language=GLSL
         programGen.prependFragmentCodeBlock(`
             #define MAX_DROPS ${maxDrops}
-            #define PI ${(Math.PI * 2).toFixed(6)}
 
             vec2 offset;
             float dist;
@@ -79,7 +78,7 @@ export class WaterRippleFilter extends AbstractGlFilter {
                 vec3 lRef = normalize(2.0 * dot(norm, toLight) * norm - toLight);
                 float spec = dot(lRef, toCamera) * 2.0;
                 spec = clamp(spec, 0.0, 1.3) - 0.6;
-                spec = pow(spec, 8.0) * 4.0;           
+                spec = pow(spec, 8.0) * 4.0;
                 vec4 col = texture2D(texture, offset);
                 col.xyz = col.xyz + spec;
                 gl_FragColor = col;

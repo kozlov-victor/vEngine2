@@ -45,10 +45,8 @@ export class Game {
     public readonly screenSize = new Size();
     public readonly camera:Camera = new Camera(this);
 
-    public gravityConstant:number = 0;
     public fps:number = 0;
 
-    public readonly collider:ColliderEngine = new ColliderEngine(this);
     private readonly _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
     private _startedTime:number = 0;

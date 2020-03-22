@@ -106,6 +106,7 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         }
         this.texturesToBind.length = 0;
         this.drawElements();
+        this.unbind();
     }
 
     protected bind():void{
@@ -114,6 +115,9 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
             console.error(this);
             throw new DebugError(`can not init drawer: initProgram method must be invoked!`);
         }
+
+        if (AbstractDrawer.currentInstance===this) return;
+        AbstractDrawer.currentInstance?.unbind();
 
         AbstractDrawer.currentInstance = this;
         this.bufferInfo.bind(this.program!);

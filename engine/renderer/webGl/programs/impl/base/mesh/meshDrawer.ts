@@ -122,11 +122,6 @@ export class MeshDrawer extends AbstractDrawer {
         }
     }
 
-    public unbind():void{
-        this.mesh = undefined;
-        super.unbind();
-    }
-
     private _initBufferInfo(drawMethod:number= DRAW_METHOD.TRIANGLES,vertexSize:2|3=3):void{
         const bufferInfo:IBufferInfoDescription = {
             posVertexInfo:{

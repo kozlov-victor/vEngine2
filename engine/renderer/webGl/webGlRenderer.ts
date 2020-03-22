@@ -255,7 +255,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (mesh.depthTest) this.gl.enable(this.gl.DEPTH_TEST);
         else this.gl.disable(this.gl.DEPTH_TEST);
         md.draw();
-        md.unbind();
         //this.gl.disable(this.gl.CULL_FACE);
         zToWMatrix.release();
         orthoProjectionMatrix.release();

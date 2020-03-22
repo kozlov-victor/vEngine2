@@ -57,14 +57,6 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     protected constructor(protected game:Game){
         this.game = game;
-        if (Device.isCocoonJS) {
-            const [innerWidth,innerHeight] = this.getScreenResolution();
-            const dpr:number = globalThis.devicePixelRatio||1;
-            this.fullScreenSize.setW(innerWidth*dpr);
-            this.fullScreenSize.setH(innerHeight*dpr);
-        } else {
-            this.fullScreenSize.set(this.game.size);
-        }
     }
 
     public requestFullScreen():void {
@@ -252,38 +244,50 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         const [innerWidth,innerHeight] = this.getScreenResolution();
 
         if (this.game.scaleStrategy===SCALE_STRATEGY.NO_SCALE) return;
-        else if (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH) {
+        else if (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH || Device.embeddedEngine) {
 
             container.style.width = `${innerWidth}px`;
             container.style.height = `${innerHeight}px`;
             this.game.screenSize.setWH(innerWidth,innerHeight);
             this.game.scale.setXY(innerWidth/this.game.size.width,innerHeight/this.game.size.height);
             this.game.pos.setXY(0);
-            return;
-        }
-        // else FIT
-        const canvasRatio:number = this.game.size.height / this.game.size.width;
-        const windowRatio:number = innerHeight / innerWidth;
-        let width:number;
-        let height:number;
-
-        if (windowRatio < canvasRatio) {
-            height = innerHeight;
-            width = height / canvasRatio;
         } else {
-            width = innerWidth;
-            height = width * canvasRatio;
-        }
-        this.game.scale.setXY(width / this.game.size.width, height / this.game.size.height);
-        this.game.pos.setXY(
-            (innerWidth - width) / 2,
-            (innerHeight - height) / 2
-        );
+            // else FIT
+            const canvasRatio:number = this.game.size.height / this.game.size.width;
+            const windowRatio:number = innerHeight / innerWidth;
+            let width:number;
+            let height:number;
 
-        this.container.style.width = width + 'px';
-        this.container.style.height = height + 'px';
-        this.container.style.marginTop = `${this.game.pos.y}px`;
-        this.game.screenSize.setWH(width,height);
+            if (windowRatio < canvasRatio) {
+                height = innerHeight;
+                width = height / canvasRatio;
+            } else {
+                width = innerWidth;
+                height = width * canvasRatio;
+            }
+
+            this.game.scale.setXY(width / this.game.size.width, height / this.game.size.height);
+            this.game.pos.setXY(
+                (innerWidth - width) / 2,
+                (innerHeight - height) / 2
+            );
+
+            this.container.style.width = width + 'px';
+            this.container.style.height = height + 'px';
+            this.container.style.marginTop = `${this.game.pos.y}px`;
+
+            this.game.screenSize.setWH(width,height);
+        }
+
+        if (Device.embeddedEngine) {
+            const dpr:number = globalThis.devicePixelRatio||1;
+            this.fullScreenSize.setW(innerWidth*dpr);
+            this.fullScreenSize.setH(innerHeight*dpr);
+        } else {
+            this.fullScreenSize.set(this.game.screenSize);
+        }
+
+
     }
 
     private getScreenResolution():[number,number]{
