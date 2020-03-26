@@ -184,7 +184,7 @@ export  const normalizeUniformName =(s:string):string=>{
 };
 
 
-export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram):IUniformsMap=> {
+export const extractUniformsFromShaderBin = (gl:WebGLRenderingContext, program:ShaderProgram):IUniformsMap=> {
     const glProgram:WebGLProgram = program.getProgram();
     const activeUniforms:Int = gl.getProgramParameter(glProgram, gl.ACTIVE_UNIFORMS) as Int;
     const uniforms:IUniformsMap = {};
@@ -216,6 +216,23 @@ export const extractUniforms = (gl:WebGLRenderingContext, program:ShaderProgram)
 
 };
 
+export const extractUniformsAndAttributesFromShaderSource = (vertexSource:string,fragmentSource:string):{attributes:string[],uniforms:string[]}=>{
+    const uniforms:string[] = [];
+    const attributes:string[] = [];
+    const allTokens:string[] = `${vertexSource} ${fragmentSource}`.split(/[\s;]/).filter(it=>!!it);
+    allTokens.forEach((it:string,i:number)=>{
+        const possibleUniformName:string = allTokens[i+2];
+        if (it==='uniform' && possibleUniformName!==undefined && uniforms.indexOf(possibleUniformName)===-1) {
+            uniforms.push(possibleUniformName);
+        } else {
+            const possibleAttributeName:string = allTokens[i+2];
+            if (it==='attribute' && possibleAttributeName!==undefined && attributes.indexOf(possibleAttributeName)===-1) {
+                attributes.push(possibleAttributeName);
+            }
+        }
+    });
+    return {uniforms,attributes};
+};
 
 export const extractAttributes = (gl:WebGLRenderingContext, program:ShaderProgram):IAttributesMap=>{
     const glProgram:WebGLProgram = program.getProgram();

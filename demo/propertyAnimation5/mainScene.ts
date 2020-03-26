@@ -17,7 +17,7 @@ export class MainScene extends Scene {
             M298.3727321057046,152.1270653836292 C369.0813467766147,-15.027008172167507 646.1200173724658,152.1270653836292 298.3727321057046,367.0394456696475 C-49.37455316105007,152.1270653836292 227.66411743479748,-15.027008172167507 298.3727321057046,152.1270653836292 z
         `);
 
-        this.appendChild(polyLine1);
+        this.appendChild(polyLine1.cacheAsBitmap());
 
         const circle:Circle = new Circle(this.game);
         circle.radius = 6;

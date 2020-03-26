@@ -6,8 +6,8 @@ import {
     compileShader,
     createProgram,
     extractAttributes,
-    extractUniforms, UNIFORM_VALUE_TYPE,
-    IUniformsMap, IUniformWrapper
+    extractUniformsFromShaderBin, UNIFORM_VALUE_TYPE,
+    IUniformsMap, IUniformWrapper, extractUniformsAndAttributesFromShaderSource
 } from "./shaderProgramUtils";
 import {VertexBuffer} from "./vertexBuffer";
 import {Optional} from "@engine/core/declarations";
@@ -18,6 +18,8 @@ export class ShaderProgram {
 
     private readonly program:WebGLProgram;
     private readonly uniforms:IUniformsMap;
+    private readonly uniformSourceNames:string[];
+    private readonly attributeSourceNames:string[] = [];
     private readonly attributes:IAttributesMap;
     private readonly gl:WebGLRenderingContext;
 
@@ -28,8 +30,12 @@ export class ShaderProgram {
         this.program = createProgram(gl, vShader, fShader);
         gl.deleteShader(vShader);
         gl.deleteShader(fShader);
-        this.uniforms = extractUniforms(gl, this);
+        this.uniforms = extractUniformsFromShaderBin(gl, this);
         this.attributes = extractAttributes(gl,this);
+        const sourceExtracted:{attributes:string[],uniforms:string[]} =
+            extractUniformsAndAttributesFromShaderSource(vertexSource,fragmentSource);
+        this.attributeSourceNames = sourceExtracted.attributes;
+        this.uniformSourceNames = sourceExtracted.uniforms;
         this.gl = gl;
     }
 
@@ -72,6 +78,11 @@ export class ShaderProgram {
         if (DEBUG) {
             if (!attrName) throw new DebugError(`can not find attribute location: attrName not defined`);
             if (this.attributes[attrName]===undefined) {
+                if (this.attributeSourceNames.indexOf(attrName)>-1) {
+                    // its ok, buffer is present in source, but absent in bin code because is is unused and removed by compiler
+                    // so, ignore this uniform
+                    return;
+                }
                 console.log(this);
                 throw new DebugError(`can not find attribute location for  ${attrName}`);
             }

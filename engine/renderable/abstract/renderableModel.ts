@@ -2,16 +2,18 @@
 import {AbstractRenderer, IRenderTarget} from "../../renderer/abstract/abstractRenderer";
 import {
     IAlphaBlendable,
-    ICloneable, IDestroyable,
+    ICloneable,
+    IDestroyable,
     IEventemittable,
     IFilterable,
     IParentChild,
     IRevalidatable,
-    ITweenable, IUpdatable,
+    ITweenable,
+    IUpdatable,
     Optional
 } from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
-import {IPoint2d, Point2d} from "../../geometry/point2d";
+import {Point2d} from "../../geometry/point2d";
 import {IRect, Rect} from "../../geometry/rect";
 import {Game} from "@engine/core/game";
 import {ITweenDescription, Tween} from "@engine/animation/tween";
@@ -305,19 +307,6 @@ export abstract class RenderableModel
 
     public getParent():Optional<RenderableModel|Layer>{
         return this._parentChildDelegate.getParent()||this._layer;
-    }
-
-    public getWorldPosition():Readonly<IPoint2d> { // todo move to transformable
-        if (this._worldPositionIsDirty) {
-            this._worldPosition.set(this.pos);
-            let parent:Optional<RenderableModel> = this.parent;
-            while (parent!==undefined) {
-                this._worldPosition.add(parent.pos);
-                parent = parent.parent;
-            }
-            this._worldPosition.add(this.getScene().pos);
-        }
-        return this._worldPosition;
     }
 
     public renderToTexture(target:IRenderTarget,clearBeforeRender:boolean = true):void{

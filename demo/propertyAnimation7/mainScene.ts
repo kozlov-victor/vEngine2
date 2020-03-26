@@ -26,7 +26,7 @@ export class MainScene extends Scene {
             C222.5,59,212.5,57.8,202.4,58.3
            `
         );
-        this.appendChild(polyLine1);
+        this.appendChild(polyLine1.cacheAsBitmap());
 
         const anim1 = new MoveByPathAnimation(this.game,polyLine1);
         //anim1.velocity = 50;

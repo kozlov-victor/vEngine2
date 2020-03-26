@@ -36,7 +36,6 @@ export class SimpleRectDrawer extends AbstractDrawer {
             }
         `);
         gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');
-        //gen.addFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
         //language=GLSL
         gen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){
