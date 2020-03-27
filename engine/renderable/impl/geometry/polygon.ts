@@ -5,7 +5,6 @@ import {EarClippingTriangulator} from "@engine/renderable/impl/geometry/helpers/
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
-import {Optional} from "@engine/core/declarations";
 import {calcNormal} from "@engine/renderable/impl/geometry/helpers/calcNormal";
 import {IPoint3d} from "@engine/geometry/point3d";
 import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/helpers/isPolylineClockWise";

@@ -47,9 +47,10 @@ export class MainScene extends Scene {
         img.scale.setXY(0.2);
         img.passMouseEventsThrough = true;
 
+        const clearColor:Color = Color.NONE;
         this.setInterval(()=>{
             img.visible = false;
-            spr.renderToTexture(renderTarget);
+            spr.renderToTexture(renderTarget,clearColor);
             img.visible = true;
         },1);
 

@@ -15,13 +15,10 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {IMatrixTransformable, MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
-import {mat4} from "@engine/geometry/mat4";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import Mat16Holder = mat4.Mat16Holder;
 import {describeArc} from "@engine/renderable/impl/geometry/helpers/splineFromPoints";
 
-const COLOR_TMP = new Color();
 
 export class DrawingSurface extends RenderableModel implements ICloneable<DrawingSurface>,IResource<ITexture>, IMatrixTransformable, IDestroyable {
 
@@ -143,14 +140,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
 
     public clear():void{
-        const renderer:AbstractRenderer = this.game.getRenderer();
-        const clearOrig:boolean = renderer.clearBeforeRender;
-        COLOR_TMP.set(renderer.clearColor);
-        renderer.clearColor.set(Color.NONE);
-        renderer.clearBeforeRender = true;
-        this.drawModel(this.nullGameObject,true);
-        renderer.clearColor.set(COLOR_TMP);
-        renderer.clearBeforeRender = clearOrig;
+        this.drawModel(this.nullGameObject,Color.NONE);
     }
 
 
@@ -216,7 +206,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
             const path:string = describeArc(cx,cy,radius,startAngle,endAngle,anticlockwise)+` z`;
             const polygon:Polygon = Polygon.fromSvgPath(this.game,path);
             polygon.fillColor = this.fillColor;
-            this.drawModel(polygon,false);
+            this.drawModel(polygon);
         }
 
 
@@ -244,16 +234,16 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         p.fillColor = this.fillColor;
         p.color = this.drawColor;
         p.lineWidth = this.lineWidth;
-        this.drawModel(p,false);
+        this.drawModel(p);
     }
 
-    public drawModel(model:RenderableModel,clearBeforeRender:boolean = true){
+    public drawModel(model:RenderableModel,clearColor?:Color){
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
         renderer.transformSet(...this._matrixStack.getCurrentValue().mat16);
         this.appendChild(model);
         this.omitSelfOnRendering = true;
-        this.renderToTexture(this.renderTarget,clearBeforeRender);
+        this.renderToTexture(this.renderTarget,clearColor);
         this.omitSelfOnRendering = false;
         this.removeChild(model);
         renderer.transformRestore();
@@ -268,13 +258,13 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         polyLines.forEach((pl:PolyLine)=>{
             const pg:Polygon = Polygon.fromPolyline(this.game,pl);
             pg.fillColor = this.fillColor;
-            this.drawModel(pg,false);
+            this.drawModel(pg);
         });
         if (this.lineWidth>0) {
             polyLines.forEach((pl:PolyLine)=>{
                 pl.color = this.drawColor;
                 pl.lineWidth = this.lineWidth;
-                this.drawModel(pl,false);
+                this.drawModel(pl);
             });
         }
     }
@@ -292,10 +282,10 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         pl.color = this.drawColor;
         const pg:Polygon = Polygon.fromPolyline(this.game,pl);
         pg.fillColor = this.fillColor;
-        this.drawModel(pg,false);
+        this.drawModel(pg);
         if (this.lineWidth>0) {
             pl.lineWidth = this.lineWidth;
-            this.drawModel(pl,false);
+            this.drawModel(pl);
         }
     }
 
@@ -309,7 +299,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
     private drawSimpleShape(shape:Shape){
         this.prepareShape(shape);
-        this.drawModel(shape,false);
+        this.drawModel(shape);
     }
 
 }

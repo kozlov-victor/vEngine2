@@ -34,6 +34,7 @@ import {Scene} from "@engine/scene/scene";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation} from "@engine/animation/iAnimation";
+import {Color} from "@engine/renderer/common/color";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -309,8 +310,8 @@ export abstract class RenderableModel
         return this._parentChildDelegate.getParent()||this._layer;
     }
 
-    public renderToTexture(target:IRenderTarget,clearBeforeRender:boolean = true):void{
-        this.game.getRenderer().getHelper().renderModelToTexture(this,target,clearBeforeRender);
+    public renderToTexture(target:IRenderTarget,clearColor?:Color):void{
+        this.game.getRenderer().getHelper().renderModelToTexture(this,target,clearColor);
     }
 
     protected setClonedProperties(cloned:RenderableModel):void {

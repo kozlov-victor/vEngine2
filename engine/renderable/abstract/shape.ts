@@ -26,7 +26,7 @@ export abstract class Shape extends RenderableModel {
 
         const image:Image = new Image(this.game);
         image.size.set(sizeInt);
-        this.renderToTexture(renderTarget,false);
+        this.renderToTexture(renderTarget,Color.NONE);
         image.setResourceLink(renderTarget.getResourceLink());
         renderTarget.destroy();
         return image;

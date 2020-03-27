@@ -3,6 +3,7 @@ import {Scene} from "@engine/scene/scene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {ISize} from "@engine/geometry/size";
+import {Color} from "@engine/renderer/common/color";
 
 export class RendererHelper {
 
@@ -12,7 +13,7 @@ export class RendererHelper {
         return undefined!;
     }
 
-    public renderModelToTexture(m:RenderableModel, renderTarget:IRenderTarget, clearBeforeRender:boolean):void {
+    public renderModelToTexture(m:RenderableModel, renderTarget:IRenderTarget, clearColor?:Color):void {
         return undefined!;
     }
 

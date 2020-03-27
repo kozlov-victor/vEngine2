@@ -18,6 +18,7 @@ export class Line extends Shape implements ICloneable<Line> {
     constructor(game:Game){
         super(game);
         this.lineWidth = 1;
+        this.rectangleRepresentation.lineWidth = 0;
     }
 
     public setXYX1Y1(x:number,y:number,x1:number,y1:number){
@@ -45,6 +46,7 @@ export class Line extends Shape implements ICloneable<Line> {
 
     public getRectangleRepresentation():Rectangle{
         this.rectangleRepresentation.borderRadius = this.borderRadius;
+        this.rectangleRepresentation.fillColor = this.color;
         return this.rectangleRepresentation;
     }
 

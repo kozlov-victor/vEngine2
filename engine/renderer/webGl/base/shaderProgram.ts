@@ -61,6 +61,11 @@ export class ShaderProgram {
         }
         const uniformWrapper:IUniformWrapper = this.uniforms[name];
         if (DEBUG && !uniformWrapper) {
+            if (this.uniformSourceNames.indexOf(name)>-1) {
+                // its ok, uniform is present in source, but absent in bin code because is is unused and removed by compiler
+                // so, ignore this uniform
+                return;
+            }
             console.error('shader program failed',this);
             console.error('uniforms',this.uniforms);
             throw new DebugError(`no uniform with name ${name} found!`);
@@ -80,7 +85,7 @@ export class ShaderProgram {
             if (this.attributes[attrName]===undefined) {
                 if (this.attributeSourceNames.indexOf(attrName)>-1) {
                     // its ok, buffer is present in source, but absent in bin code because is is unused and removed by compiler
-                    // so, ignore this uniform
+                    // so, ignore this attribute
                     return;
                 }
                 console.log(this);

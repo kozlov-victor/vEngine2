@@ -9,6 +9,7 @@ import {mat4} from "@engine/geometry/mat4";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {Game} from "@engine/core/game";
 import Mat16Holder = mat4.Mat16Holder;
+import {Color} from "@engine/renderer/common/color";
 
 export const makeIdentityPositionMatrix = (dstX:number,dstY:number,destSize:ISize):Mat16Holder =>{
     const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
@@ -40,16 +41,19 @@ export class WebGlRendererHelper extends RendererHelper {
         renderer.setDefaultRenderTarget();
     }
 
-    public renderModelToTexture(m: RenderableModel, renderTarget:FrameBufferStack, clearBeforeRender:boolean): void {
+    public renderModelToTexture(m: RenderableModel, renderTarget:FrameBufferStack, clearColor?:Color): void {
         const renderer:WebGlRenderer = this.game.getRenderer() as WebGlRenderer;
         if (m.size.isZero()) m.revalidate();
         renderer.setRenderTarget(renderTarget);
         const clearBeforeRenderOrig:boolean = renderer.clearBeforeRender;
-        renderer.clearBeforeRender = clearBeforeRender;
+        const clearColorOrig:Color = renderer.clearColor;
+        renderer.clearBeforeRender = clearColor!==undefined;
+        if (clearColor!==undefined) renderer.clearColor.set(clearColor);
         const statePointer:IStateStackPointer = renderer.beforeFrameDraw(m.filters as AbstractGlFilter[]);
         m.render();
         renderer.afterFrameDraw(statePointer);
         renderer.setDefaultRenderTarget();
         renderer.clearBeforeRender = clearBeforeRenderOrig;
+        renderer.clearColor.set(clearColorOrig);
     }
 }
