@@ -140,7 +140,7 @@ export class WaterRippleFilter extends AbstractGlFilter {
 
     private animateDrops():void{
         // animate drops
-        const drops = this.dropVectors;
+        const drops:number[] = this.dropVectors;
         for(let i:number = 0; i < this.maxDrops; i ++){
             if(drops[i * 3 + 2] > -90){
                 drops[i * 3 + 2] += 0.1;

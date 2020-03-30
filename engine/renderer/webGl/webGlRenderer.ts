@@ -472,8 +472,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     protected onResize(): void {
         super.onResize();
         if (this._pixelPerfectMode && (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH || this.game.scaleStrategy===SCALE_STRATEGY.FIT)) {
-            this.container.width = this.game.screenSize.width;
-            this.container.height = this.game.screenSize.height;
+            this.container.width = this.containerSize.width;
+            this.container.height = this.containerSize.height;
         } else {
             this.container.width = this.game.size.width;
             this.container.height = this.game.size.height;

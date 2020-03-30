@@ -41,11 +41,10 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     private readonly _stack:IStackItem[] = [];
     private _interpolationMode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR;
 
-
     private _doubleFrameBuffer:DoubleFrameBuffer = new DoubleFrameBuffer(this.gl,this.size);
 
     private _pixelPerfectMode:boolean = false;
-    private simpleRectDrawer:SimpleRectDrawer; // todo singleton?
+    private simpleRectDrawer:SimpleRectDrawer;
     private blender:Blender = Blender.getSingleton(this.gl);
 
     private readonly resourceLink:ResourceLink<Texture>;
@@ -157,8 +156,8 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     public renderToScreen():void{
         const needFullScreen:boolean = this._pixelPerfectMode || Device.embeddedEngine;
-        const w:number = needFullScreen?this.game.getRenderer().fullScreenSize.width:this.game.size.width;
-        const h:number = needFullScreen?this.game.getRenderer().fullScreenSize.height:this.game.size.height;
+        const w:number = needFullScreen?this.game.getRenderer().screenSize.width:this.game.size.width;
+        const h:number = needFullScreen?this.game.getRenderer().screenSize.height:this.game.size.height;
         this._getLast().frameBuffer.unbind();
         this.gl.viewport(0, 0, w,h);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);

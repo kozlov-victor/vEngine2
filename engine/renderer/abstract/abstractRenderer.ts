@@ -48,7 +48,8 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     public clearBeforeRender:boolean = true;
     public readonly clearColor:Color = Color.RGB(0,0,0);
 
-    public readonly fullScreenSize:Size = new Size(0,0);
+    public readonly screenSize:Size = new Size(0,0);
+    public readonly containerSize = new Size();
 
     protected abstract rendererHelper: RendererHelper;
 
@@ -248,7 +249,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
             container.style.width = `${innerWidth}px`;
             container.style.height = `${innerHeight}px`;
-            this.game.screenSize.setWH(innerWidth,innerHeight);
+            this.containerSize.setWH(innerWidth,innerHeight);
             this.game.scale.setXY(innerWidth/this.game.size.width,innerHeight/this.game.size.height);
             this.game.pos.setXY(0);
         } else {
@@ -276,15 +277,15 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
             this.container.style.height = height + 'px';
             this.container.style.marginTop = `${this.game.pos.y}px`;
 
-            this.game.screenSize.setWH(width,height);
+            this.containerSize.setWH(width,height);
         }
 
         if (Device.embeddedEngine) {
             const dpr:number = globalThis.devicePixelRatio||1;
-            this.fullScreenSize.setW(innerWidth*dpr);
-            this.fullScreenSize.setH(innerHeight*dpr);
+            this.screenSize.setW(innerWidth*dpr);
+            this.screenSize.setH(innerHeight*dpr);
         } else {
-            this.fullScreenSize.set(this.game.screenSize);
+            this.screenSize.set(this.containerSize);
         }
 
 
