@@ -47,8 +47,6 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     public debugTextField:TextField;
     public clearBeforeRender:boolean = true;
     public readonly clearColor:Color = Color.RGB(0,0,0);
-
-    public readonly screenSize:Size = new Size(0,0);
     public readonly containerSize = new Size();
 
     protected abstract rendererHelper: RendererHelper;
@@ -245,8 +243,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         const [innerWidth,innerHeight] = this.getScreenResolution();
 
         if (this.game.scaleStrategy===SCALE_STRATEGY.NO_SCALE) return;
-        else if (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH || Device.embeddedEngine) {
-
+        else if (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH) {
             container.style.width = `${innerWidth}px`;
             container.style.height = `${innerHeight}px`;
             this.containerSize.setWH(innerWidth,innerHeight);
@@ -279,15 +276,6 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
             this.containerSize.setWH(width,height);
         }
-
-        if (Device.embeddedEngine) {
-            const dpr:number = globalThis.devicePixelRatio||1;
-            this.screenSize.setW(innerWidth*dpr);
-            this.screenSize.setH(innerHeight*dpr);
-        } else {
-            this.screenSize.set(this.containerSize);
-        }
-
 
     }
 
