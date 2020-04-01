@@ -170,9 +170,6 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public drawArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {
-        if (endAngle>Math.PI) {
-            endAngle = Math.PI - endAngle;
-        }
         this.ellipse.radiusX = radius;
         this.ellipse.radiusY = radius;
         this.ellipse.center.setXY(cx,cy);

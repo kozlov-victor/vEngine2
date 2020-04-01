@@ -3,7 +3,7 @@
 #define ZERO                            .0
 #define ONE                             1.
 #define PI                              __PI__
-#define TWO_PI                          __PI__*2.
+#define TWO_PI                          (__PI__*2.)
 #define ERROR_COLOR                     vec4(ONE,ZERO,ZERO,ONE)
 #define STRETCH_MODE_STRETCH            __STRETCH_MODE_STRETCH__
 #define STRETCH_MODE_REPEAT             __STRETCH_MODE_REPEAT__
@@ -58,7 +58,7 @@ void _drawElliplse(float dist,float rAtCurrAngle){
     if (dist < rAtCurrAngle) {
         if (dist > rAtCurrAngle - u_lineWidth) gl_FragColor = u_color;
         else gl_FragColor = getFillColor();
-    }
+    } else discard;
 }
 
 void drawEllipse(){
@@ -95,7 +95,6 @@ void drawEllipse(){
         else {
             if (!anticlockwise) discard;
             else _drawElliplse(dist,rAtCurrAngle);
-
         }
     }
 }

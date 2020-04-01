@@ -2,7 +2,6 @@ import {Scene} from "@engine/scene/scene";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {Size} from "@engine/geometry/size";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
@@ -11,6 +10,7 @@ export class MainScene extends Scene {
     // https://stackoverflow.com/questions/33622680/javascript-canvas-animated-arc
     public onReady() {
         const surface:DrawingSurface = new DrawingSurface(this.game,new Size(300,300));
+        surface.pos.setXY(40,40);
         surface.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(surface);
         surface.setLineWidth(1);
@@ -31,21 +31,15 @@ export class MainScene extends Scene {
                 angle=0;
                 direction*=-1;
             }
-            const counterclockwise=(direction>0)?false:true;
+            const counterclockwise=(direction <= 0);
             const s=-Math.PI/2;
             const e=angle-Math.PI/2;
-            console.log({s,e,counterclockwise});
             surface.drawArc(cx,cy,radius,s,e,counterclockwise);
         };
-
-        this.on(MOUSE_EVENTS.click, e=>{
-            this.renderScene();
-        });
-
     }
 
 
     protected onRender(): void {
-        //this.renderScene();
+        this.renderScene();
     }
 }
