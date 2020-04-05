@@ -24,7 +24,7 @@ const enum DIRECTION_CORRECTION {
 }
 
 export class Camera implements IUpdatable, ITransformable  {
-    private static FOLLOW_FACTOR:number = 0.1;
+    public static readonly FOLLOW_FACTOR:Point2d = new Point2d(0.1,0.1);
 
     public readonly pos:Point2d = new Point2d(0,0);
     public posZ:number = 0; // todo
@@ -103,8 +103,8 @@ export class Camera implements IUpdatable, ITransformable  {
 
             pointToFollow.set(gameObject.pos);
             pointToFollow.addXY(-wDiv2,-hDiv2);
-            newPos.x = this.pos.x+(pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x)*Camera.FOLLOW_FACTOR;
-            newPos.y = this.pos.y+(pointToFollow.y + this.cameraPosCorrection.current.y - this.pos.y)*Camera.FOLLOW_FACTOR;
+            newPos.x = this.pos.x+(pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x)*Camera.FOLLOW_FACTOR.x;
+            newPos.y = this.pos.y+(pointToFollow.y + this.cameraPosCorrection.current.y - this.pos.y)*Camera.FOLLOW_FACTOR.y;
 
             if (newPos.x < 0) {
                 newPos.x = 0;

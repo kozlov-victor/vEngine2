@@ -35,6 +35,7 @@ import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation} from "@engine/animation/iAnimation";
 import {Color} from "@engine/renderer/common/color";
+import {IRigidBody} from "@engine/physics/common/interfaces";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -66,6 +67,7 @@ export abstract class RenderableModel
     public readonly children:RenderableModel[] = [];
     public readonly velocity = new Point2d(0,0);
     public passMouseEventsThrough:boolean = false;
+    public rigidBody:IRigidBody;
 
 
     private _destRect:Rect = new Rect();
@@ -87,13 +89,9 @@ export abstract class RenderableModel
     // parent-child
     private _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate(this);
 
-    private _worldPositionIsDirty:boolean = true;
-    private _worldPosition = new Point2d();
-
     protected constructor(protected game:Game){
         super(game);
         this.id = `object_${Incrementer.getValue()}`;
-        this.pos.addOnChangeListener(()=>this._worldPositionIsDirty = true);
     }
 
     public revalidate():void{
@@ -207,18 +205,15 @@ export abstract class RenderableModel
         for (const bh of this._behaviours) bh.update();
         for (const pa of this._propertyAnimations) pa.update();
 
-        // if (this.rigidBody!==undefined) {
-        //     this.rigidBody.update();
-        //     // this.pos.x = ~~(this.rigidBody.mCenter.x - this.rigidBody['mWidth']/2);
-        //     // this.pos.y = ~~(this.rigidBody.mCenter.y - this.rigidBody['mHeight']/2);
-        //     this.angle = this.rigidBody.mAngle;
-        // } else {
-        if (this.velocity.x) this.pos.x += this.velocity.x * delta / 1000;
-        if (this.velocity.y) this.pos.y += this.velocity.y * delta / 1000;
-        if (this._angleVelocity3d.x) this.angle3d.x+=this._angleVelocity3d.x * delta / 1000;
-        if (this._angleVelocity3d.y) this.angle3d.y+=this._angleVelocity3d.y * delta / 1000;
-        if (this._angleVelocity3d.z) this.angle3d.z+=this._angleVelocity3d.z * delta / 1000;
-        // }
+        if (this.rigidBody!==undefined) {
+            this.rigidBody.nextTick();
+        } else {
+            if (this.velocity.x) this.pos.x += this.velocity.x * delta / 1000;
+            if (this.velocity.y) this.pos.y += this.velocity.y * delta / 1000;
+            if (this._angleVelocity3d.x) this.angle3d.x+=this._angleVelocity3d.x * delta / 1000;
+            if (this._angleVelocity3d.y) this.angle3d.y+=this._angleVelocity3d.y * delta / 1000;
+            if (this._angleVelocity3d.z) this.angle3d.z+=this._angleVelocity3d.z * delta / 1000;
+        }
 
         for (const c of this.children) {
             c.update();

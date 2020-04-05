@@ -11,6 +11,7 @@ import {ClazzEx, Optional} from "@engine/core/declarations";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 import {Stack} from "@engine/misc/collection/stack";
 import {ISize, Size} from "@engine/geometry/size";
+import {IPhysicsSystem} from "@engine/physics/common/interfaces";
 
 
 export const enum SCALE_STRATEGY {
@@ -61,6 +62,7 @@ export class Game {
     private _renderer:AbstractRenderer;
     private _controls:IControl[] = [];
     private audioPlayer:IAudioPlayer;
+    private physicsSystem:IPhysicsSystem;
 
 
     constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT}:IGameConstructorParams = {}){
@@ -86,6 +88,14 @@ export class Game {
         }
         this._controls.push(instance);
         instance.listenTo();
+    }
+
+    public setPhysicsSystem(s:ClazzEx<IPhysicsSystem,Game>){
+        this.physicsSystem = new s(this);
+    }
+
+    public getPhysicsSystem():IPhysicsSystem {
+        return this.physicsSystem;
     }
 
 
@@ -219,7 +229,7 @@ export class Game {
             if (this._currSceneTransition!==undefined) this._currSceneTransition.update();
             else currentScene.update();
 
-            // this.collider.collisionArcade(); todo
+            if (this.physicsSystem!==undefined) this.physicsSystem.nextTick();
             for (const c of this._controls) {
                 c.update();
             }
