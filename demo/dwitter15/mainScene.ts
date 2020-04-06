@@ -57,7 +57,7 @@ export class MainScene extends Scene {
 
         const bcf = new BrightessContrastFilter(this.game);
         bcf.setContrast(10);
-        this.filters = [bcf, new TriangleBlurFilter(this.game)];
+        this.filters = [new TriangleBlurFilter(this.game),bcf];
 
     }
 

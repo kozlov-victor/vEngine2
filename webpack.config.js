@@ -70,7 +70,7 @@ module.exports = (env={})=>{
                     ]
                 },
                 {
-                    test: /\.xml$/,
+                    test: /\.(xml)$/,
                     use: [
                         {loader: "xml/xml-loader",options: {debug}},
                     ]

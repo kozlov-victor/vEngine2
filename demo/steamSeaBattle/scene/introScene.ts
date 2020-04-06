@@ -1,7 +1,8 @@
-import {AssetsDocumentHolder, Element} from "../data/assetsDocumentHolder";
+import {AssetsDocumentHolder} from "../data/assetsDocumentHolder";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MainScene} from "./mainScene";
 import {BaseScene} from "./baseScene";
+import {Element} from "@engine/misc/xmlUtils";
 
 export class IntroScene extends BaseScene {
 

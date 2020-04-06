@@ -1,7 +1,7 @@
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {IPhysicsSystem} from "@engine/physics/common/interfaces";
-import {ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/mathEx";
 
@@ -12,6 +12,14 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     public static STICKY_THRESHOLD:number = 0.01;
 
     private static resolveCollision(player:ArcadeRigidBody, entity:ArcadeRigidBody):void {
+
+
+        if (player.modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC && entity.modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
+            const tmp:ArcadeRigidBody = player;
+            player = entity;
+            entity = tmp;
+        }
+
 
         // Find the mid points of the entity and player
         const pMidX:number = player.getMidX();
@@ -138,20 +146,23 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     constructor(private game:Game) {
     }
 
-    public createRigidBody(renderableModel:RenderableModel): ArcadeRigidBody {
-        return new ArcadeRigidBody(this.game,renderableModel.pos,renderableModel.size);
+    public createRigidBody(type:ARCADE_RIGID_BODY_TYPE): ArcadeRigidBody {
+        type Clazz = new(game:Game) => ArcadeRigidBody; // "unprivate" constructor
+        const body:ArcadeRigidBody = new (ArcadeRigidBody as Clazz)(this.game);
+        body.modelType = type;
+        return body;
     }
 
     public nextTick():void {
         const all:RenderableModel[] = this.game.getCurrScene().getLayers()[0].children; // todo
         for (let i :number = 0; i < all.length; i++) {
             const player:RenderableModel = all[i];
-            const playerBody:ArcadeRigidBody = player.rigidBody as ArcadeRigidBody;
+            const playerBody:ArcadeRigidBody = player.getRigidBody();
             if (playerBody===undefined) continue;
-            for (let j:number = i+1; j < all.length; j++) {
+            for (let j:number = i + 1; j < all.length; j++) {
                 const obstacle:RenderableModel = all[j];
-                if (obstacle.rigidBody===undefined) continue;
-                const obstacleBody = obstacle.rigidBody as ArcadeRigidBody;
+                if (obstacle.getRigidBody()===undefined) continue;
+                const obstacleBody:ArcadeRigidBody = obstacle.getRigidBody();
                 if (!MathEx.overlapTest(playerBody.getBoundRect(),obstacleBody.getBoundRect())) continue;
                 ArcadePhysicsSystem.resolveCollision(playerBody, obstacleBody);
             }

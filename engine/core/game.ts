@@ -94,8 +94,9 @@ export class Game {
         this.physicsSystem = new s(this);
     }
 
-    public getPhysicsSystem():IPhysicsSystem {
-        return this.physicsSystem;
+    public getPhysicsSystem<T extends IPhysicsSystem>():T {
+        if (DEBUG && this.physicsSystem===undefined) throw new DebugError(`Physics system is not initialized.`);
+        return this.physicsSystem as T;
     }
 
 
@@ -103,11 +104,11 @@ export class Game {
         this.audioPlayer = new p(this);
     }
 
-    public getAudioPlayer():IAudioPlayer{
+    public getAudioPlayer<T extends IAudioPlayer>():T{
         if (DEBUG && !this.audioPlayer) {
             throw new DebugError('audio player is not set');
         }
-        return this.audioPlayer;
+        return this.audioPlayer as T;
     }
 
     public hasControl(type:string):boolean {

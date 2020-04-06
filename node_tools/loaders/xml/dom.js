@@ -424,7 +424,6 @@ let HTMLtoDOM = (html,strictClosing)=> {
 };
 
 
-
 module.exports.createDocument = (html,strictClosing)=>{
     let doc = new Document(strictClosing);
     doc.innerHTML = html;

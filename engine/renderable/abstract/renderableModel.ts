@@ -67,7 +67,6 @@ export abstract class RenderableModel
     public readonly children:RenderableModel[] = [];
     public readonly velocity = new Point2d(0,0);
     public passMouseEventsThrough:boolean = false;
-    public rigidBody:IRigidBody;
 
 
     private _destRect:Rect = new Rect();
@@ -75,6 +74,7 @@ export abstract class RenderableModel
     private _propertyAnimations:IAnimation[] = [];
     private _layer:Optional<Layer>;
     private _scene:Scene;
+    private _rigidBody:IRigidBody;
 
 
     // tween
@@ -139,6 +139,14 @@ export abstract class RenderableModel
         this.size.setWH(w,h);
     }
 
+    public setRigidBody(rigidBody:IRigidBody):void{
+        this._rigidBody = rigidBody;
+        rigidBody.updateBounds(this);
+    }
+
+    public getRigidBody<T extends IRigidBody>():T{
+        return this._rigidBody as T;
+    }
 
     public abstract draw():void;
 
@@ -205,15 +213,16 @@ export abstract class RenderableModel
         for (const bh of this._behaviours) bh.update();
         for (const pa of this._propertyAnimations) pa.update();
 
-        if (this.rigidBody!==undefined) {
-            this.rigidBody.nextTick();
+        if (this._rigidBody!==undefined) {
+            this._rigidBody.nextTick();
         } else {
             if (this.velocity.x) this.pos.x += this.velocity.x * delta / 1000;
             if (this.velocity.y) this.pos.y += this.velocity.y * delta / 1000;
-            if (this._angleVelocity3d.x) this.angle3d.x+=this._angleVelocity3d.x * delta / 1000;
-            if (this._angleVelocity3d.y) this.angle3d.y+=this._angleVelocity3d.y * delta / 1000;
-            if (this._angleVelocity3d.z) this.angle3d.z+=this._angleVelocity3d.z * delta / 1000;
         }
+
+        if (this._angleVelocity3d.x) this.angle3d.x+=this._angleVelocity3d.x * delta / 1000;
+        if (this._angleVelocity3d.y) this.angle3d.y+=this._angleVelocity3d.y * delta / 1000;
+        if (this._angleVelocity3d.z) this.angle3d.z+=this._angleVelocity3d.z * delta / 1000;
 
         for (const c of this.children) {
             c.update();
@@ -316,6 +325,7 @@ export abstract class RenderableModel
         cloned.visible = this.visible;
         cloned.filters = [...this.filters];
         cloned.forceDrawChildrenOnNewSurface = this.forceDrawChildrenOnNewSurface;
+        if (this.getRigidBody()!==undefined) cloned.setRigidBody(this.getRigidBody().clone());
 
         this.children.forEach((c:RenderableModel)=>{
             if (DEBUG && !('clone' in c)) {

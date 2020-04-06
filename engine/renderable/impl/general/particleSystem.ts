@@ -69,7 +69,7 @@ export class ParticleSystem extends RenderableModel {
             this._onUpdateParticle(holder.particle);
             if (time - holder.createdTime > holder.lifeTime) {
                 holder.active = false;
-                this.removeChild(holder.particle);
+                this.getScene().removeChild(holder.particle);
             }
         }
         if (this.emitAuto) this.emit();
@@ -100,7 +100,7 @@ export class ParticleSystem extends RenderableModel {
 
             let particle:RenderableCloneable;
             let holder:Optional<IParticleHolder> =
-                this._particles.filter(it=>!it.active)[0];
+                this._particles.find(it=>!it.active);
             if (holder===undefined) {
                 const particleProto:RenderableCloneable = this._prototypes[MathEx.randomInt(0,this._prototypes.length-1)];
                 particle  = particleProto.clone();
@@ -112,8 +112,10 @@ export class ParticleSystem extends RenderableModel {
 
             const angle:number = r(this.particleAngle);
             const vel:number = r(this.particleVelocity);
-            particle.velocity.x = vel*Math.cos(angle);
-            particle.velocity.y = vel*Math.sin(angle);
+            const velocityX:number = vel*Math.cos(angle);
+            const velocityY:number = vel*Math.sin(angle);
+            const velocity:Point2d = particle.getRigidBody===undefined?particle.velocity:particle.getRigidBody().velocity;
+            velocity.setXY(velocityX,velocityY);
             particle.pos.x = r({from:-this.emissionRadius,to:+this.emissionRadius});
             particle.pos.y = r({from:-this.emissionRadius,to:+this.emissionRadius});
             particle.pos.add(this.emissionPosition);
@@ -122,7 +124,7 @@ export class ParticleSystem extends RenderableModel {
             holder.active = true;
 
             this._onEmitParticle(particle);
-            this.appendChild(particle);
+            this.getScene().appendChild(particle);
         }
     }
 

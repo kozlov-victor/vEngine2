@@ -1,9 +1,10 @@
 import {BaseScene} from "./baseScene";
-import {AssetsDocumentHolder, Element} from "../data/assetsDocumentHolder";
+import {AssetsDocumentHolder} from "../data/assetsDocumentHolder";
 import {NixieDisplay} from "./object/nixieDisplay";
 import {Timer} from "@engine/misc/timer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IntroScene} from "./introScene";
+import {Element} from "@engine/misc/xmlUtils";
 
 export class ResultScene extends BaseScene {
 
