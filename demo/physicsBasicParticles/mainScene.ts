@@ -44,13 +44,12 @@ export class MainScene extends Scene {
         ps.emitAuto = false;
         ps.addParticle(particle);
         ps.emissionRadius = 5;
-        ps.forceDrawChildrenOnNewSurface = true;
+        ps.emissionTarget = this;
 
         ps.numOfParticlesToEmit = {from:1,to:5};
         ps.particleLiveTime = {from:1000,to:2000};
         ps.particleVelocity = {from: 50, to: 100};
         ps.particleAngle = {from:0,to:2*Math.PI};
-        ps.size.setWH(50,50);
         this.appendChild(ps);
 
         this.on(MOUSE_EVENTS.click,(e)=>{

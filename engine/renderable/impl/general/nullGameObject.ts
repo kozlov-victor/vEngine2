@@ -2,9 +2,9 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 
-export class NullGameObject extends RenderableModel { // todo rename to nullContainer
+export class NullGameObject extends RenderableModel {
 
-    constructor(public game:Game){
+    constructor(protected game:Game){
         super(game);
     }
 

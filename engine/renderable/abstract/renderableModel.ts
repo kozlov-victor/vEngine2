@@ -144,7 +144,7 @@ export abstract class RenderableModel
         rigidBody.updateBounds(this);
     }
 
-    public getRigidBody<T extends IRigidBody>():T{
+    public getRigidBody<T extends IRigidBody>():Optional<T>{
         return this._rigidBody as T;
     }
 
@@ -325,7 +325,7 @@ export abstract class RenderableModel
         cloned.visible = this.visible;
         cloned.filters = [...this.filters];
         cloned.forceDrawChildrenOnNewSurface = this.forceDrawChildrenOnNewSurface;
-        if (this.getRigidBody()!==undefined) cloned.setRigidBody(this.getRigidBody().clone());
+        if (this.getRigidBody()!==undefined) cloned.setRigidBody(this.getRigidBody()!.clone());
 
         this.children.forEach((c:RenderableModel)=>{
             if (DEBUG && !('clone' in c)) {
@@ -341,14 +341,6 @@ export abstract class RenderableModel
         });
         cloned.game = this.game;
         super.setClonedProperties(cloned);
-    }
-
-    /**
-     * @deprecated
-     */
-    protected isInViewPort():boolean{
-        return true; // now works incorrect - dont take transformations
-        //return MathEx.overlapTest(this.game.camera.getRectScaled(),this.getSrcRect());
     }
 
     private _afterChildAppended(newChild:RenderableModel):void{

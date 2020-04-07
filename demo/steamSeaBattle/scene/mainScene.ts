@@ -60,9 +60,9 @@ export class MainScene extends BaseScene {
         this.bulletContainer = this.findChildById('bulletContainer') as NullGameObject;
         this.bullet = this.findChildById('bullet') as RenderableModel;
         this.BULLET_INITIAL_POSITION = this.bulletContainer.pos.y;
-        this.btnLeft = this.findChildById('btnLeft') as ImageButton;
-        this.btnShoot = this.findChildById('btnShoot') as ImageButton;
-        this.btnRight = this.findChildById('btnRight') as ImageButton;
+        this.btnLeft = this.findChildById<ImageButton>('btnLeft')!;
+        this.btnShoot = this.findChildById<ImageButton>('btnShoot')!;
+        this.btnRight = this.findChildById<ImageButton>('btnRight')!;
         this.nixieDisplayFired = new NixieDisplay(
             this.findChildById('nixieTubeFired0')!,
             this.findChildById('nixieTubeFired1')!
@@ -71,11 +71,11 @@ export class MainScene extends BaseScene {
             this.findChildById('nixieTubeShoot0')!,
             this.findChildById('nixieTubeShoot1')!
         );
-        this.hitOn = this.findChildById('hitOn') as RenderableModel;
-        this.hitOff = this.findChildById('hitOff') as RenderableModel;
-        this.missedOn = this.findChildById('missedOn') as RenderableModel;
-        this.missedOff = this.findChildById('missedOff') as RenderableModel;
-        this.manometerArrow = this.findChildById('manometerArrow') as RenderableModel;
+        this.hitOn = this.findChildById('hitOn')!;
+        this.hitOff = this.findChildById('hitOff')!;
+        this.missedOn = this.findChildById('missedOn')!;
+        this.missedOff = this.findChildById('missedOff')!;
+        this.manometerArrow = this.findChildById('manometerArrow')!;
         this.ship.velocity.setX(-MathEx.random(20,60));
         this.sounds.water.gain = 0.02;
         this.waterWave();
@@ -86,13 +86,14 @@ export class MainScene extends BaseScene {
         this.psBullet = new ParticleSystem(this.game);
         const particle:Circle = new Circle(this.game);
         particle.radius = 2;
-        this.psBullet.pos.setXY(28/2,53/2);
+        this.psBullet.emissionPosition.setXY(28/2,53/2);
         this.psBullet.numOfParticlesToEmit = {from:0,to:1};
         this.psBullet.particleVelocity = {from:1,to:10};
         this.psBullet.particleLiveTime = {from:1000,to:5000};
         this.psBullet.emissionRadius = 10;
         this.psBullet.particleAngle = {from:MathEx.degToRad(90-10),to:MathEx.degToRad(90+10)};
         this.psBullet.addParticle(particle);
+
         this.bulletContainer.appendChild(this.psBullet);
     }
 
@@ -188,9 +189,9 @@ export class MainScene extends BaseScene {
                 this.sounds.missed.play();
             }
         }
-        if (this.bulletContainer.pos.y>this.BULLET_INITIAL_POSITION - 20)
+        if (this.bulletContainer.pos.y>this.BULLET_INITIAL_POSITION - 20) {
             this.psBullet.emit();
-
+        }
     }
 
 

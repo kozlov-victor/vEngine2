@@ -9,6 +9,8 @@ import * as docDesc from "./level.xml";
 import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Document} from "@engine/misc/xmlUtils";
+import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
@@ -68,6 +70,32 @@ export class MainScene extends Scene {
             rect.setRigidBody(rigidBody);
             this.appendChild(rect);
         });
+
+
+        const particle:Rectangle = new Rectangle(this.game);
+        particle.size.setWH(5);
+        particle.transformPoint.setXY(particle.size.width/2,particle.size.height/2);
+        (particle.fillColor as Color).setRGBA(133,200,0);
+        particle.setRigidBody(physicsSystem.createRigidBody(ARCADE_RIGID_BODY_TYPE.DYNAMIC));
+
+        const ps: ParticleSystem = new ParticleSystem(this.game);
+        ps.emitAuto = false;
+        ps.addParticle(particle);
+        ps.emissionRadius = 5;
+        ps.forceDrawChildrenOnNewSurface = true;
+
+        ps.numOfParticlesToEmit = {from:1,to:5};
+        ps.particleLiveTime = {from:1000,to:2000};
+        ps.particleVelocity = {from: 50, to: 100};
+        ps.particleAngle = {from:0,to:2*Math.PI};
+        ps.emissionTarget = this;
+        this.appendChild(ps);
+
+        this.on(MOUSE_EVENTS.click,(e)=>{
+            ps.emissionPosition.setXY(e.sceneX,e.sceneY);
+            ps.emit();
+        });
+
     }
 
     protected onUpdate(): void {

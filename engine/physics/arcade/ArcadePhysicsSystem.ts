@@ -4,6 +4,7 @@ import {IPhysicsSystem} from "@engine/physics/common/interfaces";
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/mathEx";
+import {Optional} from "@engine/core/declarations";
 
 
 export class ArcadePhysicsSystem implements IPhysicsSystem {
@@ -24,13 +25,13 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         // Find the mid points of the entity and player
         const pMidX:number = player.getMidX();
         const pMidY:number = player.getMidY();
-        const aMidX:number = entity.getMidX();
-        const aMidY:number = entity.getMidY();
+        const eMidX:number = entity.getMidX();
+        const eMidY:number = entity.getMidY();
 
         // To find the side of entry calculate based on
         // the normalized sides
-        const dx:number = (aMidX - pMidX) / entity.halfSize.width;
-        const dy:number = (aMidY - pMidY) / entity.halfSize.height;
+        const dx:number = (eMidX - pMidX) / entity.halfSize.width;
+        const dy:number = (eMidY - pMidY) / entity.halfSize.height;
 
         // Calculate the absolute change in x and y
         const absDX:number = Math.abs(dx);
@@ -155,16 +156,16 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
     public nextTick():void {
         const all:RenderableModel[] = this.game.getCurrScene().getLayers()[0].children; // todo
-        for (let i :number = 0; i < all.length; i++) {
+        for (let i:number = 0; i < all.length; i++) {
             const player:RenderableModel = all[i];
-            const playerBody:ArcadeRigidBody = player.getRigidBody();
+            const playerBody:Optional<ArcadeRigidBody> = player.getRigidBody();
             if (playerBody===undefined) continue;
             for (let j:number = i + 1; j < all.length; j++) {
-                const obstacle:RenderableModel = all[j];
-                if (obstacle.getRigidBody()===undefined) continue;
-                const obstacleBody:ArcadeRigidBody = obstacle.getRigidBody();
-                if (!MathEx.overlapTest(playerBody.getBoundRect(),obstacleBody.getBoundRect())) continue;
-                ArcadePhysicsSystem.resolveCollision(playerBody, obstacleBody);
+                const entity:RenderableModel = all[j];
+                const entityBody:Optional<ArcadeRigidBody> = entity.getRigidBody();
+                if (entityBody===undefined) continue;
+                if (!MathEx.overlapTest(playerBody.getBoundRect(),entityBody.getBoundRect())) continue;
+                ArcadePhysicsSystem.resolveCollision(playerBody, entityBody);
             }
         }
     }

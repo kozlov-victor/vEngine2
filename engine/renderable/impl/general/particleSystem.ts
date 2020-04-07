@@ -5,6 +5,10 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {noop} from "@engine/misc/object";
 import {Point2d} from "@engine/geometry/point2d";
 import {Optional} from "@engine/core/declarations";
+import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {Scene} from "@engine/scene/scene";
+import {Layer} from "@engine/scene/layer";
+import {IRigidBody} from "@engine/physics/common/interfaces";
 
 const r:(obj:IParticlePropertyDesc)=>number
     = (obj:IParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
@@ -24,9 +28,10 @@ interface IParticleHolder {
 }
 
 
-export class ParticleSystem extends RenderableModel {
+export class ParticleSystem extends NullGameObject {
 
     public readonly type:string = 'ParticleSystem';
+
     public enabled:boolean = true;
     public emitAuto:boolean = true;
     public numOfParticlesToEmit:IParticlePropertyDesc = {from:1,to:10};
@@ -35,6 +40,7 @@ export class ParticleSystem extends RenderableModel {
     public particleLiveTime:IParticlePropertyDesc = {from:100,to:1000};
     public emissionRadius:number = 0;
     public emissionPosition:Point2d = new Point2d();
+    public emissionTarget:ParticleSystem|Scene|Layer = this;
 
     private _particles:IParticleHolder[] = [];
     private _prototypes:RenderableCloneable[] = [];
@@ -69,7 +75,7 @@ export class ParticleSystem extends RenderableModel {
             this._onUpdateParticle(holder.particle);
             if (time - holder.createdTime > holder.lifeTime) {
                 holder.active = false;
-                this.getScene().removeChild(holder.particle);
+                this.emissionTarget.removeChild(holder.particle);
             }
         }
         if (this.emitAuto) this.emit();
@@ -114,7 +120,8 @@ export class ParticleSystem extends RenderableModel {
             const vel:number = r(this.particleVelocity);
             const velocityX:number = vel*Math.cos(angle);
             const velocityY:number = vel*Math.sin(angle);
-            const velocity:Point2d = particle.getRigidBody===undefined?particle.velocity:particle.getRigidBody().velocity;
+            const rigidBody:Optional<IRigidBody> = particle.getRigidBody();
+            const velocity:Point2d = rigidBody===undefined?particle.velocity:rigidBody.velocity;
             velocity.setXY(velocityX,velocityY);
             particle.pos.x = r({from:-this.emissionRadius,to:+this.emissionRadius});
             particle.pos.y = r({from:-this.emissionRadius,to:+this.emissionRadius});
@@ -124,7 +131,7 @@ export class ParticleSystem extends RenderableModel {
             holder.active = true;
 
             this._onEmitParticle(particle);
-            this.getScene().appendChild(particle);
+            this.emissionTarget.appendChild(particle);
         }
     }
 

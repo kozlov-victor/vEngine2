@@ -43,11 +43,9 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public readonly pos:Point2d = new Point2d();
     public filters:IFilter[] = [];
     public alpha:number = 1;
-
     public preloadingTaskFromDecorators:((scene:Scene)=>void)[];
 
     protected preloadingGameObject!:RenderableModel;
-    protected _preloadingTasks:(()=>void)[] = [];
     private _layers:Layer[] = [];
     private _propertyAnimations:IAnimation[] = [];
 
@@ -162,10 +160,10 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         this._eventEmitterDelegate.trigger(eventName,data);
     }
 
-    public findChildById(id:string):Optional<RenderableModel>{
+    public findChildById<T extends RenderableModel>(id:string):Optional<T>{
         for (const l of this._layers) {
             const possibleObject:Optional<RenderableModel>= l.findChildById(id);
-            if (possibleObject) return possibleObject;
+            if (possibleObject) return possibleObject as T;
         }
         return undefined;
     }
