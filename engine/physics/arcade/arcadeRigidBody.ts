@@ -9,6 +9,9 @@ import {IRect, Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICloneable} from "@engine/core/declarations";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Color} from "@engine/renderer/common/color";
+import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 
 export enum ARCADE_RIGID_BODY_TYPE {
     // Kinematic entities are not affected by gravity, and
@@ -47,15 +50,18 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public readonly velocity:Point2d = new Point2d();
     public readonly acceleration:Point2d = new Point2d();
 
+    public debug:boolean = false;
+
     public _modelType: ARCADE_RIGID_BODY_TYPE = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
     public readonly _boundRect:Rect = new Rect();
     public _restitution:number = 0.5;
     public readonly _halfSize:Size = new Size();
     public readonly collisionFlags:ICollisionFlags = new CollisionFlags();
     public _pos:Point2d;
-    public _size:Size;
+    public _rect:Rect;
 
     private model:RenderableModel;
+    private debugRectangle:Rectangle;
 
     private constructor(private game:Game) {
     }
@@ -83,46 +89,58 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         model.revalidate();
         this.model = model;
         this._pos = model.pos;
-        if (!this._size) this._size = new Size(model.size.width,model.size.height);
-        this._halfSize.width = this._size.width/2;
-        this._halfSize.height = this._size.height/2;
+        if (!this._rect) this._rect = new Rect(0,0,model.size.width,model.size.height);
+        this._halfSize.width = this._rect.width/2;
+        this._halfSize.height = this._rect.height/2;
     }
 
     // Getters for the mid point of the rect
     public getMidX():number {
-        return this._halfSize.width + this._pos.x;
+        return this._halfSize.width + this._pos.x + this._rect.x;
     }
 
     public getMidY():number {
-        return this._halfSize.height + this._pos.y;
+        return this._halfSize.height + this._pos.y + this._rect.y;
     }
 
     // Getters for the top, left, right, and bottom
     // of the rectangle
     public getTop():number {
-        return this._pos.y;
+        return this._pos.y + this._rect.y;
     }
 
     public getLeft():number {
-        return this._pos.x;
+        return this._pos.x + this._rect.x;
     }
 
     public getRight():number {
-        return this._pos.x + this._size.width;
+        return this._pos.x + this._rect.x + this._rect.width;
     }
 
     public getBottom():number {
-        return this._pos.y + this._size.height;
+        return this._pos.y + this._rect.y + this._rect.height;
     }
 
     public calcAndGetBoundRect():IRect {
         this._boundRect.setXYWH(
-            this._pos.x,
-            this._pos.y,
-            this._size.width,
-            this._size.height
+            this._pos.x + this._rect.x,
+            this._pos.y + this._rect.y,
+            this._rect.width,
+            this._rect.height
         );
         return this._boundRect;
+    }
+
+    public debugRender():void {
+        if (!DEBUG) return;
+        if (!this.debug) return;
+        if (this.debugRectangle===undefined) {
+            this.debugRectangle = new Rectangle(this.game);
+            this.debugRectangle.size.setWH(this._rect.width,this._rect.height);
+            this.debugRectangle.fillColor = Color.RGBA(0,233,0,50);
+        }
+        this.debugRectangle.pos.setXY(this._pos.x + this._rect.x,this._pos.y + this._rect.y);
+        this.debugRectangle.render();
     }
 
     public clone():ArcadeRigidBody{
@@ -136,7 +154,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         body.velocity.set(this.velocity);
         body.acceleration.set(this.acceleration);
         body._restitution = this._restitution;
-        body._size = this._size.clone();
+        body._rect = this._rect.clone();
         body.updateBounds(this.model);
     }
 

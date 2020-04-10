@@ -203,6 +203,8 @@ export abstract class RenderableModel
 
         renderer.transformRestore();
         renderer.restoreAlphaBlend();
+
+        if (DEBUG && this._rigidBody!==undefined) this._rigidBody.debugRender();
     }
 
     public update():void {

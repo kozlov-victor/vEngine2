@@ -8,6 +8,7 @@ export interface IRigidBody extends ICloneable<IRigidBody>{
     acceleration:Point2d;
     updateBounds(model:RenderableModel):void;
     nextTick():void;
+    debugRender():void;
 }
 
 export interface IPhysicsSystem {

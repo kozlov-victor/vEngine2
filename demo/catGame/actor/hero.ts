@@ -7,8 +7,8 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
-import {Size} from "@engine/geometry/size";
 import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
+import {Rect} from "@engine/geometry/rect";
 
 export class Hero {
 
@@ -58,12 +58,12 @@ export class Hero {
         this.walkAnimation.setSpriteSheetSize(10,10);
         img.addFrameAnimation('walk',this.walkAnimation);
 
-        img.anchorPoint.setXY(20,10);
         this.game.camera.followTo(img);
 
         const rigidBody:ArcadeRigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
             restitution: 0.2,
-            size: new Size(10,30)
+            rect: new Rect(15,10,15,30),
+            //debug: true,
         });
         img.setRigidBody(rigidBody);
         game.getCurrScene().appendChild(img);
@@ -83,11 +83,13 @@ export class Hero {
                 case KEYBOARD_KEY.LEFT:
                     this.heroImage.getRigidBody()!.velocity.x = -velocity;
                     this.heroImage.scale.x = -1;
+                    this.heroImage.anchorPoint.x = 3;
                     this.walkAnimation.play();
                     break;
                 case KEYBOARD_KEY.RIGHT:
                     this.heroImage.getRigidBody()!.velocity.x = velocity;
                     this.heroImage.scale.x = 1;
+                    this.heroImage.anchorPoint.x = 0;
                     this.walkAnimation.play();
                     break;
                 case KEYBOARD_KEY.SPACE:

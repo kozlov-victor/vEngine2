@@ -29,7 +29,6 @@ export class MainScene extends Scene {
         const rigidBody1: ArcadeRigidBody = physicsSystem.createRigidBody({
             type: ARCADE_RIGID_BODY_TYPE.DYNAMIC,
             restitution: 0.01,
-            size: new Size(13,13)
         });
         rect1.setRigidBody(rigidBody1);
         this.appendChild(rect1);
