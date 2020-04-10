@@ -6,7 +6,7 @@ import {
     IDestroyable,
     IEventemittable,
     IFilterable,
-    IParentChild,
+    IParentChild, IRenderable,
     IRevalidatable,
     ITweenable,
     IUpdatable,
@@ -50,6 +50,7 @@ export const enum BLEND_MODE {
 export abstract class RenderableModel
     extends TransformableModel
     implements
+        IRenderable,
         IRevalidatable, ITweenable,
         IEventemittable, IParentChild,
         IAlphaBlendable, IFilterable,

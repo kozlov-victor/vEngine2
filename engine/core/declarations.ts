@@ -17,6 +17,11 @@ export interface IRevalidatable {
     revalidate():void;
 }
 
+export interface IRenderable {
+    render():void;
+    draw():void;
+}
+
 export interface ITweenable {
     tween<T>(desc:ITweenDescription<T>):Tween<T>;
     addTween<T>(t:Tween<T>):void;
