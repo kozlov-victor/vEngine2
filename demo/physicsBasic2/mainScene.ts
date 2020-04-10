@@ -11,6 +11,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Document} from "@engine/misc/xmlUtils";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {Size} from "@engine/geometry/size";
 
 export class MainScene extends Scene {
 
@@ -25,10 +26,13 @@ export class MainScene extends Scene {
 
         const rect1: Rectangle = new Rectangle(this.game);
         rect1.pos.setXY(10, 10);
-        const rigidBody1: ArcadeRigidBody = physicsSystem.createRigidBody(ARCADE_RIGID_BODY_TYPE.DYNAMIC);
+        const rigidBody1: ArcadeRigidBody = physicsSystem.createRigidBody({
+            type: ARCADE_RIGID_BODY_TYPE.DYNAMIC,
+            restitution: 0.01,
+            size: new Size(13,13)
+        });
         rect1.setRigidBody(rigidBody1);
         this.appendChild(rect1);
-        rigidBody1.restitution = 0.01;
         this.player = rect1;
 
 
@@ -66,17 +70,16 @@ export class MainScene extends Scene {
             rect.size.setWH(+c.attributes.width, +c.attributes.height);
             rect.fillColor = Color.fromRGBNumeric(parseInt(c.attributes.fill.replace('#', ''), 16));
             rect.addBehaviour(new DraggableBehaviour(this.game));
-            const rigidBody: ArcadeRigidBody = physicsSystem.createRigidBody(ARCADE_RIGID_BODY_TYPE.KINEMATIC);
+            const rigidBody: ArcadeRigidBody = physicsSystem.createRigidBody({type:ARCADE_RIGID_BODY_TYPE.KINEMATIC});
             rect.setRigidBody(rigidBody);
             this.appendChild(rect);
         });
-
 
         const particle:Rectangle = new Rectangle(this.game);
         particle.size.setWH(5);
         particle.transformPoint.setXY(particle.size.width/2,particle.size.height/2);
         (particle.fillColor as Color).setRGBA(133,200,0);
-        particle.setRigidBody(physicsSystem.createRigidBody(ARCADE_RIGID_BODY_TYPE.DYNAMIC));
+        particle.setRigidBody(physicsSystem.createRigidBody({type: ARCADE_RIGID_BODY_TYPE.DYNAMIC}));
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.emitAuto = false;

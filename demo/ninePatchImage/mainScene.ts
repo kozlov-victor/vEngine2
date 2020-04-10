@@ -6,6 +6,7 @@ import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardE
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {NinePatchImage} from "@engine/renderable/impl/geometry/ninePatchImage";
+import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 
 export class MainScene extends Scene {
 
@@ -33,7 +34,7 @@ export class MainScene extends Scene {
         this.obj.pos.setXY(20,20);
 
         this.appendChild(this.obj);
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
+        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     this.obj.size.width-=1;

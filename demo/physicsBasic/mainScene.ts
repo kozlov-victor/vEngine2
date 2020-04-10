@@ -18,20 +18,20 @@ export class MainScene extends Scene {
 
         const rect1:Rectangle = new Rectangle(this.game);
         rect1.pos.setXY(10,10);
-        const rigidBody1:ArcadeRigidBody = physicsSystem.createRigidBody(ARCADE_RIGID_BODY_TYPE.DYNAMIC);
+        const rigidBody1:ArcadeRigidBody = physicsSystem.createRigidBody();
         rect1.setRigidBody(rigidBody1);
         this.appendChild(rect1);
 
         const rect2:Rectangle = new Rectangle(this.game);
         rect2.size.setWH(500,15);
         rect2.pos.setXY(10,200);
-        rect2.setRigidBody(physicsSystem.createRigidBody(ARCADE_RIGID_BODY_TYPE.KINEMATIC));
+        rect2.setRigidBody(physicsSystem.createRigidBody({type: ARCADE_RIGID_BODY_TYPE.KINEMATIC}));
         this.appendChild(rect2);
 
         const rect3:Rectangle = new Rectangle(this.game);
         rect3.size.setWH(40,60);
         rect3.pos.setXY(200,100);
-        const rigidBody3:ArcadeRigidBody = physicsSystem.createRigidBody(ARCADE_RIGID_BODY_TYPE.KINEMATIC);
+        const rigidBody3:ArcadeRigidBody = physicsSystem.createRigidBody({type: ARCADE_RIGID_BODY_TYPE.KINEMATIC});
         rect3.setRigidBody(rigidBody3);
         this.appendChild(rect3);
 

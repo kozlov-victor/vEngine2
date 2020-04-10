@@ -6,6 +6,7 @@ import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {IEventemittable} from "@engine/core/declarations";
 
 
 const getControlErrorMessage = (controlName:string,controlClassName:string):string=>{
@@ -14,13 +15,13 @@ const getControlErrorMessage = (controlName:string,controlClassName:string):stri
 };
 
 
-export class EventEmitterDelegate {
+export class EventEmitterDelegate implements IEventemittable {
 
     private _emitter:EventEmitter;
 
     constructor(){}
 
-    public on(eventName:string,callBack:()=>void):()=>void{
+    public on(eventName:string,callBack:(arg:unknown)=>void):(arg:unknown)=>void{
 
         if (DEBUG && eventName in MOUSE_EVENTS) {
             if (!Game.getInstance().hasControl('MouseControl'))
@@ -40,6 +41,12 @@ export class EventEmitterDelegate {
         if (this._emitter===undefined) this._emitter = new EventEmitter();
         this._emitter.on(eventName,callBack);
         return callBack;
+    }
+    public once(eventName:string,callBack:(arg?:unknown)=>void):void {
+        const cb = this.on(eventName,(_args)=>{
+            this.off(eventName,cb);
+            callBack(_args);
+        });
     }
     public off(eventName:string,callBack:(arg?:unknown)=>void):void{
         if (this._emitter!==undefined)this._emitter.off(eventName,callBack);

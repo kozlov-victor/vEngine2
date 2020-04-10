@@ -35,6 +35,9 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
         if (DEBUG && fa.target!==undefined) {
             throw new DebugError(`can not add FrameAnimation: this animation is already attached to another AnimatedImage object`);
         }
+        if (DEBUG && this._frameAnimations[name]!==undefined) {
+            throw new DebugError(`can not add FrameAnimation: another animation with name "${name}" is already attached`);
+        }
         fa.name = name;
         this._frameAnimations[name] = fa;
         fa.target = this;
@@ -54,6 +57,10 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
     public stopFrameAnimation():void {
         if (this._currFrameAnimation!==undefined) this._currFrameAnimation.stop();
         this._currFrameAnimation = undefined;
+    }
+
+    public getCurrentFrameAnimation():Optional<AbstractFrameAnimation<any>>{
+        return this._currFrameAnimation;
     }
 
 

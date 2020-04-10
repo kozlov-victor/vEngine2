@@ -5,7 +5,13 @@ import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/ar
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/mathEx";
 import {Optional} from "@engine/core/declarations";
+import {Size} from "@engine/geometry/size";
 
+export interface ICreateRigidBodyParams {
+    type?: ARCADE_RIGID_BODY_TYPE;
+    size?:Size;
+    restitution?:number;
+}
 
 export class ArcadePhysicsSystem implements IPhysicsSystem {
 
@@ -14,8 +20,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
     private static resolveCollision(player:ArcadeRigidBody, entity:ArcadeRigidBody):void {
 
-
-        if (player.modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC && entity.modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
+        if (player._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC && entity._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
             const tmp:ArcadeRigidBody = player;
             player = entity;
             entity = tmp;
@@ -30,14 +35,14 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
         // To find the side of entry calculate based on
         // the normalized sides
-        const dx:number = (eMidX - pMidX) / entity.halfSize.width;
-        const dy:number = (eMidY - pMidY) / entity.halfSize.height;
+        const dx:number = (eMidX - pMidX) / entity._halfSize.width;
+        const dy:number = (eMidY - pMidY) / entity._halfSize.height;
 
         // Calculate the absolute change in x and y
         const absDX:number = Math.abs(dx);
         const absDY:number = Math.abs(dy);
 
-        const commonRestitution:number = (player.restitution + entity.restitution)/2;
+        const commonRestitution:number = (player._restitution + entity._restitution)/2;
 
         // If the distance between the normalized x and y
         // position is less than a small threshold (.1 in this case)
@@ -48,7 +53,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
             if (dx < 0) {
 
                 // Set the player x to the right side
-                player.pos.x = entity.getRight();
+                player._pos.x = entity.getRight();
                 player.collisionFlags.left =
                     entity.collisionFlags.right = true;
 
@@ -56,7 +61,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
             } else {
 
                 // Set the player x to the left side
-                player.pos.x = entity.getLeft() - player.size.width;
+                player._pos.x = entity.getLeft() - player._size.width;
                 player.collisionFlags.right =
                     entity.collisionFlags.left = true;
             }
@@ -65,7 +70,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
             if (dy < 0) {
 
                 // Set the player y to the bottom
-                player.pos.y = entity.getBottom();
+                player._pos.y = entity.getBottom();
                 player.collisionFlags.top =
                     entity.collisionFlags.bottom = true;
 
@@ -73,7 +78,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
             } else {
 
                 // Set the player y to the top
-                player.pos.y = entity.getTop() - player.size.height;
+                player._pos.y = entity.getTop() - player._size.height;
                 player.collisionFlags.bottom =
                     entity.collisionFlags.top = true;
             }
@@ -102,13 +107,13 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
             // If the player is approaching from positive X
             if (dx < 0) {
-                player.pos.x = entity.getRight();
+                player._pos.x = entity.getRight();
                 player.collisionFlags.left =
                     entity.collisionFlags.right = true;
 
             } else {
                 // If the player is approaching from negative X
-                player.pos.x = entity.getLeft() - player.size.width;
+                player._pos.x = entity.getLeft() - player._size.width;
                 player.collisionFlags.right =
                     entity.collisionFlags.left = true;
             }
@@ -125,13 +130,13 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
             // If the player is approaching from positive Y
             if (dy < 0) {
-                player.pos.y = entity.getBottom();
+                player._pos.y = entity.getBottom();
                 player.collisionFlags.top =
                     entity.collisionFlags.bottom = true;
 
             } else {
                 // If the player is approaching from negative Y
-                player.pos.y = entity.getTop() - player.size.height;
+                player._pos.y = entity.getTop() - player._size.height;
                 player.collisionFlags.bottom =
                     entity.collisionFlags.top = true;
             }
@@ -147,11 +152,13 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     constructor(private game:Game) {
     }
 
-    public createRigidBody(type:ARCADE_RIGID_BODY_TYPE): ArcadeRigidBody {
+    public createRigidBody(params?:ICreateRigidBodyParams): ArcadeRigidBody {
         type Clazz = new(game:Game) => ArcadeRigidBody; // "unprivate" constructor
         const body:ArcadeRigidBody = new (ArcadeRigidBody as Clazz)(this.game);
-        body.modelType = type;
-        return body;
+        body._modelType = params?.type??body._modelType;
+        body._restitution = params?.restitution??body._restitution;
+        if (params?.size!==undefined) body._size = new Size(params.size.width,params.size.height);
+        return body as unknown as ArcadeRigidBody;
     }
 
     public nextTick():void {
@@ -164,7 +171,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                 const entity:RenderableModel = all[j];
                 const entityBody:Optional<ArcadeRigidBody> = entity.getRigidBody();
                 if (entityBody===undefined) continue;
-                if (!MathEx.overlapTest(playerBody.getBoundRect(),entityBody.getBoundRect())) continue;
+                if (!MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) continue;
                 ArcadePhysicsSystem.resolveCollision(playerBody, entityBody);
             }
         }

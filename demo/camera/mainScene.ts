@@ -3,14 +3,16 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
-import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
+import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Source} from "@engine/resources/resourceDecorators";
+import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 
 export class MainScene extends Scene {
 
@@ -49,7 +51,7 @@ export class MainScene extends Scene {
         uiLayer.appendChild(infoRect);
         this.addLayer(uiLayer);
 
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
+        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-5);
@@ -69,7 +71,7 @@ export class MainScene extends Scene {
         });
 
 
-        this.on(GAME_PAD_EVENTS.buttonHold, (e:GamePadEvent)=>{
+        this.on(GAME_PAD_EVENTS.buttonHold, (e:IGamePadEvent)=>{
             switch (e.button) {
                 case GAME_PAD_BUTTON.STICK_L_LEFT:
                     spr.pos.addX(-1);

@@ -144,8 +144,8 @@ export class Game {
         this._renderer = new Renderer(this);
     }
 
-    public getRenderer():AbstractRenderer{
-        return this._renderer;
+    public getRenderer<T extends AbstractRenderer>():T{
+        return this._renderer as T;
     }
 
     public debug2?(...val:unknown[]):void;

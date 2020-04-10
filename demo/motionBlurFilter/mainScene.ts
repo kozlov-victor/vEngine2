@@ -3,11 +3,12 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
+import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 
 export class MainScene extends Scene {
 
@@ -30,7 +31,7 @@ export class MainScene extends Scene {
         spr.setResourceLink(this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
+        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-1);

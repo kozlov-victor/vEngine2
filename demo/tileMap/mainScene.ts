@@ -2,8 +2,9 @@ import {Scene} from "@engine/scene/scene";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 
 export class MainScene extends Scene {
 
@@ -52,7 +53,7 @@ export class MainScene extends Scene {
         //this.game.camera.pos.setXY(0.5);
         this.rect.pos.setY(120);
 
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
+        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     this.rect.pos.addX(-v);

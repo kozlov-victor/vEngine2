@@ -8,13 +8,14 @@ import {createGlowTweenFilter, createScaleTweenMovie} from "../utils/miscFunctio
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
 import {MathEx} from "@engine/misc/mathEx";
-import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
+import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {MkSelectHeroScene} from "./mkSelectHeroScene";
 import {Sound} from "@engine/media/sound";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MkAbstractScene} from "./mkAbstractScene";
 import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 
 export class MkIntroScene extends MkAbstractScene {
 
@@ -82,7 +83,7 @@ export class MkIntroScene extends MkAbstractScene {
 
         const snd:Sound = new Sound(this.game);
         snd.setResourceLink(this.soundLink);
-        this.on(GAME_PAD_EVENTS.buttonPressed, (e:GamePadEvent)=>{
+        this.on(GAME_PAD_EVENTS.buttonPressed, (e:IGamePadEvent)=>{
             snd.play();
             this.game.runScene(new MkSelectHeroScene(this.game),new CurtainsOpeningTransition(this.game));
         });

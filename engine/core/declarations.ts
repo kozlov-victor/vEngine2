@@ -24,8 +24,9 @@ export interface ITweenable {
 }
 
 export interface IEventemittable {
-    on(eventName:string,callBack:(arg?:any)=>void):()=>void;
-    off(eventName:string,callBack:()=>void):void;
+    on(eventName:string,callBack:(arg?:any)=>void):(arg?:any)=>void;
+    once(eventName:string,callBack:(arg?:any)=>void):void;
+    off(eventName:string,callBack:(arg?:any)=>void):void;
     trigger(eventName:string,data?:any):void;
 }
 

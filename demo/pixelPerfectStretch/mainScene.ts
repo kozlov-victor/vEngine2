@@ -3,10 +3,11 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 
 export class MainScene extends Scene {
 
@@ -41,7 +42,7 @@ export class MainScene extends Scene {
         spr.color.setRGB(12,12,12);
         spr.lineWidth = 0.1;
         this.appendChild(spr);
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
+        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-1);

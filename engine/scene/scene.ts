@@ -19,7 +19,7 @@ import {Timer} from "@engine/misc/timer";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
@@ -30,8 +30,10 @@ import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation} from "@engine/animation/iAnimation";
 import {mat4} from "@engine/geometry/mat4";
-import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
+import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
@@ -147,14 +149,20 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         return this._timerDelegate.setInterval(callback,interval);
     }
 
-    public off(eventName: string, callBack: ()=>void): void {
+    public off(eventName: string, callBack: (e:any)=>void): void {
         this._eventEmitterDelegate.off(eventName,callBack);
     }
-    public on(eventName:MOUSE_EVENTS,callBack:(e:ISceneMouseEvent)=>void):()=>void;
-    public on(eventName:KEYBOARD_EVENTS,callBack:(e:KeyBoardEvent)=>void):()=>void;
-    public on(eventName:GAME_PAD_EVENTS,callBack:(e:GamePadEvent)=>void):()=>void;
-    public on(eventName: string, callBack: (arg?:any)=>void): ()=>void {
+    public on(eventName:MOUSE_EVENTS,callBack:(e:ISceneMouseEvent)=>void):(e:ISceneMouseEvent)=>void;
+    public on(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):(e:IKeyBoardEvent)=>void;
+    public on(eventName:GAME_PAD_EVENTS,callBack:(e:IGamePadEvent)=>void):(e:IGamePadEvent)=>void;
+    public on(eventName: string, callBack: (arg?:any)=>void): (arg?:any)=>void {
         return this._eventEmitterDelegate.on(eventName,callBack);
+    }
+    public once(eventName:MOUSE_EVENTS,callBack:(e:ISceneMouseEvent)=>void):void;
+    public once(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):void;
+    public once(eventName:GAME_PAD_EVENTS,callBack:(e:IGamePadEvent)=>void):void;
+    public once(eventName: string, callBack: (arg?:any)=>void):void {
+        this._eventEmitterDelegate.once(eventName,callBack);
     }
     public trigger(eventName: string, data?: any): void {
         this._eventEmitterDelegate.trigger(eventName,data);

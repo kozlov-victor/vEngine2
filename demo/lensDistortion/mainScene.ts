@@ -3,14 +3,13 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {LensDistortionFilter} from "@engine/renderer/webGl/filters/texture/lensDistortionFilter";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 
 export class MainScene extends Scene {
 
@@ -58,7 +57,7 @@ export class MainScene extends Scene {
         this.appendChild(this.img);
 
 
-        this.on(KEYBOARD_EVENTS.keyHold, (e:KeyBoardEvent)=>{
+        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-1);

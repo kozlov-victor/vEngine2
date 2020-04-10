@@ -13,6 +13,7 @@ import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Element} from "@engine/misc/xmlUtils";
+import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 
 const MANOMETER_SCALE:number = MathEx.degToRad(360-111);
 const MAX_NUM_OF_SHOOTS:number = 10;
@@ -210,7 +211,7 @@ export class MainScene extends BaseScene {
 
 
     private listenControls(){
-        this.on(KEYBOARD_EVENTS.keyPressed,(e:KeyBoardEvent)=>{
+        this.on(KEYBOARD_EVENTS.keyPressed,(e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT: {
                     this.movePeriscope(1);
@@ -231,7 +232,7 @@ export class MainScene extends BaseScene {
                     break;
             }
         });
-        this.on(KEYBOARD_EVENTS.keyReleased,(e:KeyBoardEvent)=>{
+        this.on(KEYBOARD_EVENTS.keyReleased,(e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:

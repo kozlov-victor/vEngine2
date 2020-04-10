@@ -2,6 +2,7 @@ import {KeyPadEvent} from "@engine/control/abstract/abstractKeypad";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {ObjectPool} from "@engine/misc/objectPool";
 import {Optional} from "@engine/core/declarations";
+import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 
 export enum KEYBOARD_EVENTS {
     keyPressed = 'keyPressed',
@@ -9,7 +10,7 @@ export enum KEYBOARD_EVENTS {
     keyHold = 'keyHold'
 }
 
-export class KeyBoardEvent extends KeyPadEvent {
+export class KeyBoardEvent extends KeyPadEvent implements IKeyBoardEvent {
 
     public static fromPool():Optional<KeyBoardEvent> {
         return KeyBoardEvent.rectPool.getFreeObject();

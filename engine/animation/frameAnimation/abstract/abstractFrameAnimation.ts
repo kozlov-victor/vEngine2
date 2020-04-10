@@ -5,10 +5,10 @@ import {DebugError} from "@engine/debug/debugError";
 import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
 import {IAnimation} from "@engine/animation/iAnimation";
 
-export const FRAME_ANIMATION_EVENTS = {
-    completed:  'completed',
-    loop:       'loop'
-};
+export const enum FRAME_ANIMATION_EVENTS {
+    completed =  'completed',
+    loop      =  'loop'
+}
 
 export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnimation {
 
@@ -42,6 +42,9 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnim
 
     public play():void {
         if (DEBUG && !this.target) throw new DebugError(`can not play frame animation: it is not attached to parent`);
+        if (this.target.getCurrentFrameAnimation()!==this) {
+            this.target.playFrameAnimation(this);
+        }
         this._isPlaying = true;
     }
 
@@ -73,13 +76,16 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnim
         }
     }
 
-    public off(eventName: string, callBack: (arg?:unknown)=>void): void {
-        this._eventEmitterDelegate.off(eventName,callBack);
+    public off(eventName: FRAME_ANIMATION_EVENTS, callBack: (arg?:never)=>void): void {
+        this._eventEmitterDelegate.off(eventName,callBack as (arg:any)=>void);
     }
-    public on(eventName: string, callBack: (arg?:unknown)=>void): (arg?:unknown)=>void {
-        return this._eventEmitterDelegate.on(eventName,callBack);
+    public on(eventName: FRAME_ANIMATION_EVENTS, callBack: (arg?:never)=>void): (arg?:unknown)=>void {
+        return this._eventEmitterDelegate.on(eventName,callBack as (arg:any)=>void);
     }
-    public trigger(eventName: string, data?: unknown): void {
+    public once(eventName: FRAME_ANIMATION_EVENTS, callBack: (arg?:never)=>void):void {
+        this._eventEmitterDelegate.once(eventName,callBack as (arg:any)=>void);
+    }
+    public trigger(eventName: FRAME_ANIMATION_EVENTS, data?: never): void {
         this._eventEmitterDelegate.trigger(eventName,data);
     }
 

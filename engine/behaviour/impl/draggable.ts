@@ -30,9 +30,9 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
 
     private blurListener:(e:MouseEvent)=>void;
     private gameObjectOnClick:(e:IObjectMouseEvent)=>void;
-    private sceneOnMouseDown:()=>void;
-    private sceneOnMouseMove:()=>void;
-    private sceneOnMouseUp:()=>void;
+    private sceneOnMouseDown:(arg:ISceneMouseEvent)=>void;
+    private sceneOnMouseMove:(arg:ISceneMouseEvent)=>void;
+    private sceneOnMouseUp:(arg:ISceneMouseEvent)=>void;
 
     private readonly points:{[key:number]:IMouseDragPoint} = {};
     private gameObject:RenderableModel;

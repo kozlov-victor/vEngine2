@@ -1,5 +1,6 @@
 import {Game} from "@engine/core/game";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
+import {DebugError} from "@engine/debug/debugError";
 
 export enum KEY_STATE  {
     KEY_JUST_PRESSED = 2,
@@ -42,18 +43,26 @@ export abstract class AbstractKeypad {
     public update():void {
 
         for (const event of this.buffer) {
+            if (!event.isCaptured()) continue;
             const keyVal:KEY_STATE = event.keyState;
-            if (keyVal===KEY_STATE.KEY_RELEASED) {
-                this.buffer.splice(this.buffer.indexOf(event),1);
-                event.release();
+            switch (keyVal) {
+                case KEY_STATE.KEY_RELEASED:
+                    this.buffer.splice(this.buffer.indexOf(event),1);
+                    event.release();
+                    break;
+                case KEY_STATE.KEY_JUST_RELEASED:
+                    event.keyState = KEY_STATE.KEY_RELEASED;
+                    break;
+                case KEY_STATE.KEY_JUST_PRESSED:
+                    event.keyState = KEY_STATE.KEY_PRESSED;
+                    break;
+                case KEY_STATE.KEY_PRESSED:
+                    this.notify(this.keyHold, event);
+                    break;
+                default:
+                    if (DEBUG) throw new DebugError(`unknown button state: ${keyVal}`);
+                    break;
             }
-            else if (keyVal===KEY_STATE.KEY_JUST_RELEASED) {
-                event.keyState = KEY_STATE.KEY_RELEASED;
-            }
-            else if (keyVal===KEY_STATE.KEY_JUST_PRESSED) {
-                event.keyState = KEY_STATE.KEY_PRESSED;
-            }
-            this.notify(this.keyHold, event);
         }
     }
 

@@ -11,6 +11,6 @@ export interface IRigidBody extends ICloneable<IRigidBody>{
 }
 
 export interface IPhysicsSystem {
-    createRigidBody(...params:any):IRigidBody;
+    createRigidBody(params:never):IRigidBody;
     nextTick():void;
 }

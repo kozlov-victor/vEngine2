@@ -1,4 +1,4 @@
-/* tslint:disable:no-string-literal */
+
 import {AbstractRenderer, IRenderTarget} from "../../renderer/abstract/abstractRenderer";
 import {
     IAlphaBlendable,
@@ -36,6 +36,7 @@ import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation} from "@engine/animation/iAnimation";
 import {Color} from "@engine/renderer/common/color";
 import {IRigidBody} from "@engine/physics/common/interfaces";
+import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -253,9 +254,14 @@ export abstract class RenderableModel
         this._eventEmitterDelegate.off(eventName,callBack);
     }
     public on(eventName:MOUSE_EVENTS,callBack:(e:IObjectMouseEvent)=>void):()=>void;
-    public on(eventName:KEYBOARD_EVENTS,callBack:(e:number)=>void):()=>void;
-    public on(eventName: string, callBack: (arg?:any)=>void): ()=>void {
+    public on(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):()=>void;
+    public on(eventName: string, callBack: (arg?:any)=>void): (arg:any)=>void {
         return this._eventEmitterDelegate.on(eventName,callBack);
+    }
+    public once(eventName:MOUSE_EVENTS,callBack:(e:IObjectMouseEvent)=>void):void;
+    public once(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):void;
+    public once(eventName: string, callBack: (arg?:any)=>void):void {
+        this._eventEmitterDelegate.once(eventName,callBack);
     }
     public trigger(eventName: string, data?: any): void {
         this._eventEmitterDelegate.trigger(eventName,data);

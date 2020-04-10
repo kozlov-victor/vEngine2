@@ -1,13 +1,14 @@
 import {IReleasealable, ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 import {DebugError} from "@engine/debug/debugError";
+import {ICloneable} from "@engine/core/declarations";
 
 export interface ISize {
     readonly width: number;
     readonly height: number;
 }
 
-export class Size extends ObservableEntity {
+export class Size extends ObservableEntity implements ICloneable<ISize>{
 
     set width(val:number) {
         if (DEBUG && Number.isNaN(val)) throw new DebugError(`Size: wrong numeric argument  ${val}`);
@@ -83,6 +84,10 @@ export class Size extends ObservableEntity {
 
     public equal(w:number,h:number):boolean {
         return this._width===w && this._height===h;
+    }
+
+    public clone():Size {
+        return  new Size(this.width,this.height);
     }
 
     public isZero():boolean {
