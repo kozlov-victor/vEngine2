@@ -24,6 +24,7 @@ class PromisePolyfill {
     private value:any;
 
     constructor(executor:(resolve:(result:any)=>void,reject:(result:any)=>void)=>void) {
+        console.log('create pr');
         this.state = States.PENDING;
         this.value = undefined;
         this.callbacks = [];

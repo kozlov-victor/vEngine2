@@ -10,6 +10,7 @@ import {Rect} from "@engine/geometry/rect";
 import {AbstractCharacter} from "./abstract/abstract";
 import {Size} from "@engine/geometry/size";
 import {Monster1} from "./monster1";
+import {Burster} from "./burster";
 
 export class Hero extends AbstractCharacter {
 
@@ -82,10 +83,10 @@ export class Hero extends AbstractCharacter {
         this.game.camera.followTo(this.renderableImage);
         this.rigidBody = this.createRigidBody({
             restitution: 0.2,
-            rect: new Rect(23,20,15,35),
+            rect: new Rect(23,20,15,33),
             //debug: true,
-            groupNames: [Hero.groupName,'entity'],
-            ignoreCollisionWithGroupNames: ['entity'],
+            groupNames: [Hero.groupName],
+            //ignoreCollisionWithGroupNames: [Burster.groupName],
         });
         this.appendToScene();
 

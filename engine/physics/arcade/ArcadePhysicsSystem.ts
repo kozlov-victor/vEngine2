@@ -31,22 +31,6 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
     private static resolveCollision(player:ArcadeRigidBody, entity:ArcadeRigidBody):void {
 
-        if (player._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC && entity._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
-            const tmp:ArcadeRigidBody = player;
-            player = entity;
-            entity = tmp;
-        }
-
-        // const penetrationX:number = (player._rect.width + entity._rect.width)   - Math.abs(player.getLeft() - entity.getLeft());
-        // const penetrationY:number = (player._rect.height + entity._rect.height) - Math.abs(player.getTop() - entity.getTop());
-        // if (penetrationX>penetrationY) { //If the object is approaching from the the top or bottom
-        //     if (player.getTop()<entity.getTop()) ArcadePhysicsSystem.collidePlayerWithBottom(player, entity);
-        //     else ArcadePhysicsSystem.collidePlayerWithTop(player, entity);
-        // } else {  // If the object is approaching from the sides
-        //     if (player.getLeft()<entity.getLeft()) ArcadePhysicsSystem.collidePlayerWithRight(player, entity);
-        //     else ArcadePhysicsSystem.collidePlayerWithLeft(player, entity);
-        // }
-
         // Find the mid points of the entity and player
         const pMidX:number = player.getMidX();
         const pMidY:number = player.getMidY();
@@ -65,26 +49,26 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         // If the distance between the normalized x and y
         // position is less than a small threshold (.1 in this case)
         // then this object is approaching from a corner
-        if (Math.abs(absDX - absDY) < .1) {
-            // If the player is approaching from positive X
-            if (dx < 0) {
-                // Set the player x to the right side
-                ArcadePhysicsSystem.collidePlayerWithLeft(player, entity);
-                // If the player is approaching from negative X
-            } else {
-                // Set the player x to the left side
-                ArcadePhysicsSystem.collidePlayerWithRight(player, entity);
-            }
-            // If the player is approaching from positive Y
-            if (dy < 0) {
-                // Set the player y to the bottom
-                ArcadePhysicsSystem.collidePlayerWithTop(player, entity);
-                // If the player is approaching from negative Y
-            } else {
-                // Set the player y to the top
-                ArcadePhysicsSystem.collidePlayerWithBottom(player, entity);
-            }
-        }
+        // if (Math.abs(absDX - absDY) < .1) {
+        //     // If the player is approaching from positive X
+        //     if (dx < 0) {
+        //         // Set the player x to the right side
+        //         ArcadePhysicsSystem.collidePlayerWithLeft(player, entity);
+        //         // If the player is approaching from negative X
+        //     } else {
+        //         // Set the player x to the left side
+        //         ArcadePhysicsSystem.collidePlayerWithRight(player, entity);
+        //     }
+        //     // If the player is approaching from positive Y
+        //     if (dy < 0) {
+        //         // Set the player y to the bottom
+        //         ArcadePhysicsSystem.collidePlayerWithTop(player, entity);
+        //         // If the player is approaching from negative Y
+        //     } else {
+        //         // Set the player y to the top
+        //         ArcadePhysicsSystem.collidePlayerWithBottom(player, entity);
+        //     }
+        // }
 
         //If the object is approaching from the sides
         if (absDX > absDY) {
@@ -107,9 +91,33 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                 ArcadePhysicsSystem.collidePlayerWithBottom(player,entity);
             }
         }
+    }
 
-
-
+    private static interpolateAndResolveCollision(player:ArcadeRigidBody, entity:ArcadeRigidBody):void {
+        if (player._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) return;
+        let oldEntityPosX:number = entity._oldPos.x;
+        let oldEntityPosY:number = entity._oldPos.y;
+        const newEntityPosX:number = entity._pos.x;
+        const newEntityPosY:number = entity._pos.y;
+        const lengthX:number = newEntityPosX - oldEntityPosX;
+        const lengthY:number = newEntityPosY - oldEntityPosY;
+        const lengthXAbs:number = Math.abs(lengthX);
+        const lengthYAbs:number = Math.abs(lengthY);
+        const lengthMax:number = Math.max(lengthXAbs,lengthYAbs);
+        const isMaxLengthX:boolean = lengthMax===lengthXAbs;
+        const deltaX:number = isMaxLengthX?Math.sign(lengthX):lengthX/lengthYAbs;
+        const deltaY:number = isMaxLengthX?lengthY/lengthXAbs:Math.sign(lengthY);
+        let steps:number = 0;
+        while (steps<=lengthMax) {
+            entity._pos.setXY(oldEntityPosX,oldEntityPosY);
+            if (MathEx.overlapTest(player.calcAndGetBoundRect(),entity.calcAndGetBoundRect())) {
+                ArcadePhysicsSystem.resolveCollision(player, entity);
+                break;
+            }
+            oldEntityPosX+=deltaX;
+            oldEntityPosY+=deltaY;
+            steps++;
+        }
     }
 
 
@@ -206,7 +214,8 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                 ) {
                     ArcadePhysicsSystem.emitOverlapEvents(playerBody, entityBody);
                 } else {
-                    ArcadePhysicsSystem.resolveCollision(playerBody, entityBody);
+                    ArcadePhysicsSystem.interpolateAndResolveCollision(playerBody, entityBody);
+                    ArcadePhysicsSystem.interpolateAndResolveCollision(entityBody, playerBody);
                 }
 
             }

@@ -8,6 +8,7 @@ import {Rect} from "@engine/geometry/rect";
 import {ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {Hero} from "./hero";
 import {MathEx} from "@engine/misc/mathEx";
+import {Burster} from "./burster";
 
 export class Monster1 extends AbstractMonster {
 
@@ -17,7 +18,7 @@ export class Monster1 extends AbstractMonster {
     private idleAnimation:CellFrameAnimation;
 
     private body:ArcadeRigidBody;
-    private baseVelocity:number = 30;
+    private baseVelocity:number = 70;
     private velocity:number = this.baseVelocity;
 
 
@@ -25,20 +26,20 @@ export class Monster1 extends AbstractMonster {
         super(game, spr);
 
         this.idleAnimation = this.createFrameAnimation(
-            'idle', [5,6],1000,
+            'idle', [5,6],900 + MathEx.random(10,100),
             new Size(5,5)
         );
 
         this.walkAnimation = this.createFrameAnimation(
-            'walk', [0,1,2,3,4],1000,
+            'walk', [0,1,2,3,4],900 + MathEx.random(10,100),
             new Size(5,5)
         );
         this.appendToScene();
         this.body = this.createRigidBody({
             restitution: 0.2,
             rect: new Rect(15,10,25,30),
-            groupNames: [Monster1.groupName,'entity'],
-            ignoreCollisionWithGroupNames: ['entity'],
+            groupNames: [Monster1.groupName],
+            //ignoreCollisionWithGroupNames: [Burster.groupName],
             //debug: true
         });
         this.idleAnimation.play();

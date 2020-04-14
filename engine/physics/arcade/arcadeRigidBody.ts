@@ -65,6 +65,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
     public readonly _halfSize:Size = new Size();
     public readonly collisionFlags:ICollisionFlags = new CollisionFlags();
     public _pos:Point2d;
+    public _oldPos:Point2d;
     public _rect:Rect;
 
     private model:RenderableModel;
@@ -77,6 +78,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
     }
 
     public nextTick():void {
+        this._oldPos.set(this._pos);
         const delta:number = this.game.getDeltaTime() / 1000;
         (this.collisionFlags as CollisionFlags).reset();
         switch (this._modelType) {
@@ -99,6 +101,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
         model.revalidate();
         this.model = model;
         this._pos = model.pos;
+        this._oldPos = this._pos.clone();
         if (!this._rect) this._rect = new Rect(0,0,model.size.width,model.size.height);
         this._halfSize.width = this._rect.width/2;
         this._halfSize.height = this._rect.height/2;

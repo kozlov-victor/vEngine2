@@ -1,6 +1,5 @@
 /* tslint:disable:no-string-literal ban-types*/
 
-import {Clazz} from "@engine/core/declarations";
 
 if (DEBUG) {
     window.__POLYFILLS_INCLUDED__ = true;
