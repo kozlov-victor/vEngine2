@@ -2,6 +2,7 @@ import {ICloneable, IRevalidatable} from "@engine/core/declarations";
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {DebugError} from "@engine/debug/debugError";
 import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
+import {ISize} from "@engine/geometry/size";
 
 export class CellFrameAnimation extends AbstractFrameAnimation<number> implements IRevalidatable, ICloneable<CellFrameAnimation>{
 
@@ -10,9 +11,16 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
     private _numOfFramesH:number;
     private _numOfFramesV:number;
 
-    public setSpriteSheetSize(numOfFramesH:number, numOfFramesV:number):void {
-        this._numOfFramesH = numOfFramesH;
-        this._numOfFramesV = numOfFramesV;
+    public setSpriteSheetSize(size:ISize):void;
+    public setSpriteSheetSize(numOfFramesH:number, numOfFramesV:number):void;
+    public setSpriteSheetSize(sizeOrNumOfFramesH:number|ISize, numOfFramesV?:number):void {
+        if ((sizeOrNumOfFramesH as number).toFixed!==undefined) {
+            this._numOfFramesH = sizeOrNumOfFramesH as number;
+            this._numOfFramesV = numOfFramesV!;
+        } else {
+            this._numOfFramesH = (sizeOrNumOfFramesH as ISize).width;
+            this._numOfFramesV = (sizeOrNumOfFramesH as ISize).height;
+        }
     }
 
     public revalidate():void {

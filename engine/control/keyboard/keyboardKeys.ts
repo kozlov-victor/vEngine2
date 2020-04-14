@@ -37,7 +37,7 @@ export const enum KEYBOARD_KEY {
     W = 87,
     X = 88,
     Y = 89,
-    Z = 80,
+    Z = 90,
     LEFT = 37,
     UP = 38,
     RIGHT = 39,

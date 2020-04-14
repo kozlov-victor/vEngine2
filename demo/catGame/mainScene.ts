@@ -2,47 +2,71 @@ import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Source} from "@engine/resources/resourceDecorators";
-import {Hero} from "./actor/hero";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
-import {Document} from "@engine/misc/xmlUtils";
-import * as docDesc from "../physicsBasic2/level.xml";
-import {Color} from "@engine/renderer/common/color";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {Game} from "@engine/core/game";
+import {Hero} from "./actor/hero";
+import {Monster1} from "./actor/monster1";
+import {AbstractEntity, IExtraProperties} from "./actor/abstract/abstract";
+import {Wall} from "./actor/wall";
+import {Optional} from "@engine/core/declarations";
+import {Burster} from "./actor/burster";
+
+type LEVEL_SCHEMA = typeof import("./level/l1.json");
 
 export class MainScene extends Scene {
 
-    @Source.Texture('./catGame/res/sprite/hero.png')
+    @Source.Texture('./catGame/res/sprite/cat.png')
     private spriteSheetHero:ResourceLink<ITexture>;
 
+    @Source.Texture('./catGame/res/sprite/monster1.png')
+    private spriteSheetMonster1:ResourceLink<ITexture>;
+
+    private level:LEVEL_SCHEMA;
+
+    constructor(game: Game,level:LEVEL_SCHEMA) {
+        super(game);
+        this.level = level;
+    }
+
     public onReady() {
-
         this.game.setPhysicsSystem(ArcadePhysicsSystem);
-
-        const hero:Hero = new Hero(this.game,this.spriteSheetHero);
-
-        const rect2:Rectangle = new Rectangle(this.game);
-        rect2.size.setWH(500,15);
-        rect2.pos.setXY(10,200);
-        rect2.setRigidBody(this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({type:ARCADE_RIGID_BODY_TYPE.KINEMATIC}));
-        this.appendChild(rect2);
-
-        const document:Document = Document.create(docDesc);
-        document.getElementsByTagName('rect').forEach(c=>{
-            const rect: Rectangle = new Rectangle(this.game);
-            rect.pos.setXY(+c.attributes.x, +c.attributes.y);
-            rect.size.setWH(+c.attributes.width, +c.attributes.height);
-            rect.fillColor = Color.fromRGBNumeric(parseInt(c.attributes.fill.replace('#', ''), 16));
-            rect.addBehaviour(new DraggableBehaviour(this.game));
-            const rigidBody: ArcadeRigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({type:ARCADE_RIGID_BODY_TYPE.KINEMATIC});
-            rect.setRigidBody(rigidBody);
-            this.appendChild(rect);
-        });
-
-        this.size.setWH(800, 600);
+        this.loadLevel();
+        this.size.setWH(650, 480);
         this.game.getRenderer<WebGlRenderer>().setPixelPerfectMode(true);
+    }
+
+    private extractExtraProperties(properties?:({name:string,value:any})[]):IExtraProperties {
+        if (!properties) return {};
+        const obj:Record<string, any> = {};
+        properties.forEach(p=>obj[p.name]=p.value);
+        const possible = properties.find(it=>it.name===name);
+        return obj;
+    }
+
+    private loadLevel(){
+        this.level.layers[0].objects.forEach(obj=>{
+            let objCreated:Optional<AbstractEntity>;
+            const extraProperties:IExtraProperties = this.extractExtraProperties(obj.properties);
+            switch (obj.type) {
+                case 'hero':
+                    objCreated = new Hero(this.game,this.spriteSheetHero);
+                    break;
+                case 'monster1':
+                    objCreated = new Monster1(this.game,this.spriteSheetMonster1);
+                    break;
+                case 'wall':
+                    objCreated = new Wall(this.game,obj.width,obj.height,extraProperties);
+                    break;
+                default:
+                    break;
+
+            }
+            if (objCreated!==undefined) {
+                objCreated.getRenderableModel().pos.setXY(obj.x,obj.y);
+            }
+        });
+        const burster = new Burster(this.game);
     }
 
 }

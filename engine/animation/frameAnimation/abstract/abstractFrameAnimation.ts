@@ -14,7 +14,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnim
 
     public name:string;
     public duration:number = 1000;
-    public isRepeat:boolean = true;
+    public isRepeating:boolean = true;
     public frames:T[] = [];
 
     public target:AnimatedImage;
@@ -40,12 +40,13 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnim
         this.onNextFrame(0);
     }
 
-    public play():void {
+    public play():this {
         if (DEBUG && !this.target) throw new DebugError(`can not play frame animation: it is not attached to parent`);
         if (this.target.getCurrentFrameAnimation()!==this) {
             this.target.playFrameAnimation(this);
         }
         this._isPlaying = true;
+        return this;
     }
 
     public stop():void {
@@ -63,7 +64,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnim
         let currFrame:number = ~~((this.frames.length) * delta / this.duration);
         currFrame = currFrame % this.frames.length;
         if (currFrame===this._currFrame) return;
-        if (this._loopReached && !this.isRepeat) {
+        if (this._loopReached && !this.isRepeating) {
             this.stop();
             this.trigger(FRAME_ANIMATION_EVENTS.completed);
             return;
@@ -97,7 +98,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnim
     protected setClonedProperties(cloned:AbstractFrameAnimation<unknown>):void {
         cloned.frames = [...this.frames];
         cloned.duration = this.duration;
-        cloned.isRepeat = this.isRepeat;
+        cloned.isRepeating = this.isRepeating;
         cloned.name = this.name;
     }
 

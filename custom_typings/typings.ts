@@ -8,11 +8,6 @@ declare module "*.png" {
     export = value;
 }
 
-declare module "*.json" {
-    const value: string;
-    export = value;
-}
-
 declare interface IElementDescription {
     tagName:string;
     attributes:Record<string,string>;

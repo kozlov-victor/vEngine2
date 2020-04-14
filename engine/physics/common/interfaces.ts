@@ -6,9 +6,12 @@ export interface IRigidBody extends ICloneable<IRigidBody>{
     type:string;
     velocity:Point2d;
     acceleration:Point2d;
+    groupNames:string[];
+    ignoreCollisionWithGroupNames:string[];
     updateBounds(model:RenderableModel):void;
     nextTick():void;
     debugRender():void;
+    getHostModel():RenderableModel;
 }
 
 export interface IPhysicsSystem {

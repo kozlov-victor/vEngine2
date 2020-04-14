@@ -18,6 +18,8 @@ export class Device {
         });
     }
 
-    private constructor(){}
+    private constructor(){
+
+    }
 
 }

@@ -40,6 +40,7 @@ module.exports = (env={})=>{
 
 
     entry['debug'] = './engine/debug/debug.ts';
+    entry['polyfills-separate'] = './engine/misc/polyfills-separate.ts';
 
 
 

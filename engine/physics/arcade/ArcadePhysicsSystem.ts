@@ -1,7 +1,7 @@
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {IPhysicsSystem} from "@engine/physics/common/interfaces";
-import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/mathEx";
 import {Optional} from "@engine/core/declarations";
@@ -12,7 +12,17 @@ export interface ICreateRigidBodyParams {
     rect?:Rect;
     restitution?:number;
     debug?:boolean;
+    groupNames?:string[];
+    ignoreCollisionWithGroupNames?:string[];
 }
+
+const instersect = (a:string[],b:string[]):boolean=> {
+    if (a.length===0 || b.length===0) return false;
+    for (let i = 0; i < a.length; i++) {
+        if (b.indexOf(a[i])>-1) return true;
+    }
+    return false;
+};
 
 export class ArcadePhysicsSystem implements IPhysicsSystem {
 
@@ -26,6 +36,16 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
             player = entity;
             entity = tmp;
         }
+
+        // const penetrationX:number = (player._rect.width + entity._rect.width)   - Math.abs(player.getLeft() - entity.getLeft());
+        // const penetrationY:number = (player._rect.height + entity._rect.height) - Math.abs(player.getTop() - entity.getTop());
+        // if (penetrationX>penetrationY) { //If the object is approaching from the the top or bottom
+        //     if (player.getTop()<entity.getTop()) ArcadePhysicsSystem.collidePlayerWithBottom(player, entity);
+        //     else ArcadePhysicsSystem.collidePlayerWithTop(player, entity);
+        // } else {  // If the object is approaching from the sides
+        //     if (player.getLeft()<entity.getLeft()) ArcadePhysicsSystem.collidePlayerWithRight(player, entity);
+        //     else ArcadePhysicsSystem.collidePlayerWithLeft(player, entity);
+        // }
 
         // Find the mid points of the entity and player
         const pMidX:number = player.getMidX();
@@ -66,8 +86,8 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
             }
         }
 
-        // If the object is approaching from the sides
-        else if (absDX > absDY) {
+        //If the object is approaching from the sides
+        if (absDX > absDY) {
 
             // If the player is approaching from positive X
             if (dx < 0) {
@@ -87,7 +107,11 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                 ArcadePhysicsSystem.collidePlayerWithBottom(player,entity);
             }
         }
+
+
+
     }
+
 
     private static calcCommonRestitution(player:ArcadeRigidBody,entity:ArcadeRigidBody):number {
         return (player._restitution + entity._restitution)/2;
@@ -107,11 +131,22 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         }
     }
 
+    private static emitCollisionEvents(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
+        player.trigger(ARCADE_COLLISION_EVENT.COLLIDED, entity);
+        entity.trigger(ARCADE_COLLISION_EVENT.COLLIDED, player);
+    }
+
+    private static emitOverlapEvents(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
+        player.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, entity);
+        entity.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, player);
+    }
+
     private static collidePlayerWithTop(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
         player._pos.y = entity.getBottom() - player._rect.y;
         player.collisionFlags.top =
             entity.collisionFlags.bottom = true;
         ArcadePhysicsSystem.reflectVelocityY(player, entity);
+        ArcadePhysicsSystem.emitCollisionEvents(player, entity);
     }
 
     private static collidePlayerWithBottom(player:ArcadeRigidBody,entity:ArcadeRigidBody):void{
@@ -119,6 +154,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         player.collisionFlags.bottom =
             entity.collisionFlags.top = true;
         ArcadePhysicsSystem.reflectVelocityY(player, entity);
+        ArcadePhysicsSystem.emitCollisionEvents(player, entity);
     }
 
     private static collidePlayerWithLeft(player:ArcadeRigidBody,entity:ArcadeRigidBody):void{
@@ -126,6 +162,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         player.collisionFlags.left =
             entity.collisionFlags.right = true;
         ArcadePhysicsSystem.reflectVelocityX(player, entity);
+        ArcadePhysicsSystem.emitCollisionEvents(player, entity);
     }
 
     private static collidePlayerWithRight(player:ArcadeRigidBody,entity:ArcadeRigidBody):void{
@@ -133,6 +170,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         player.collisionFlags.right =
             entity.collisionFlags.left = true;
         ArcadePhysicsSystem.reflectVelocityX(player, entity);
+        ArcadePhysicsSystem.emitCollisionEvents(player, entity);
     }
 
     constructor(private game:Game) {
@@ -145,6 +183,9 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         body._restitution = params?.restitution??body._restitution;
         if (params?.rect!==undefined) body._rect = params.rect.clone();
         if (params?.debug!==undefined) body.debug = params.debug;
+        if (params?.groupNames) body.groupNames.push(...params.groupNames);
+        if (params?.ignoreCollisionWithGroupNames) body.ignoreCollisionWithGroupNames.push(...params.ignoreCollisionWithGroupNames);
+
         return body as unknown as ArcadeRigidBody;
     }
 
@@ -159,9 +200,18 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                 const entityBody:Optional<ArcadeRigidBody> = entity.getRigidBody();
                 if (entityBody===undefined) continue;
                 if (!MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) continue;
-                ArcadePhysicsSystem.resolveCollision(playerBody, entityBody);
+                if (
+                    instersect(playerBody.groupNames,entityBody.ignoreCollisionWithGroupNames) ||
+                    instersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
+                ) {
+                    ArcadePhysicsSystem.emitOverlapEvents(playerBody, entityBody);
+                } else {
+                    ArcadePhysicsSystem.resolveCollision(playerBody, entityBody);
+                }
+
             }
         }
     }
+
 
 }

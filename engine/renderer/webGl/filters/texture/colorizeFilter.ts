@@ -18,7 +18,8 @@ export class ColorizeFilter extends AbstractGlFilter{
             void main(){
                 vec4 col = texture2D(texture, v_texCoord);
                 vec3 r = vec3(col) * (1.0-uPixelColor.a) + vec3(uPixelColor) * uPixelColor.a;
-                vec4 result = vec4(r, col.a);
+                vec4 result = vec4(r,col.a);
+                result.rgb *= col.a;
                 gl_FragColor = result;
             }
         `);

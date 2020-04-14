@@ -28,7 +28,7 @@ export class MainScene extends Scene {
         animatedImage.blendMode = BLEND_MODE.ADDITIVE;
         const anim:CellFrameAnimation = new CellFrameAnimation(this.game);
         anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
-        anim.isRepeat = true;
+        anim.isRepeating = true;
         anim.duration = 1400;
         anim.setSpriteSheetSize(4,4);
         animatedImage.addFrameAnimation('animation',anim);
@@ -54,7 +54,7 @@ export class MainScene extends Scene {
             const particleAnim:CellFrameAnimation = new CellFrameAnimation(this.game);
             particleAnim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
             particleAnim.duration = 1400;
-            particleAnim.isRepeat = true;
+            particleAnim.isRepeating = true;
             particleAnim.setSpriteSheetSize(4,4);
             particle.addFrameAnimation('animation',particleAnim);
             particle.playFrameAnimation(particleAnim);

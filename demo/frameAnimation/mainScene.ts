@@ -22,7 +22,7 @@ export class MainScene extends Scene {
         animatedImage.setResourceLink(this.resourceLink);
         const anim:CellFrameAnimation = new CellFrameAnimation(this.game);
         anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
-        anim.isRepeat = true;
+        anim.isRepeating = true;
         anim.setSpriteSheetSize(5,3);
         animatedImage.addFrameAnimation('animation',anim);
         animatedImage.playFrameAnimation('animation');

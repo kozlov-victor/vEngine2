@@ -20,7 +20,7 @@ export class MainScene extends Scene {
     public onReady() {
         const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
         anim.frames = this.resourceLinks;
-        anim.isRepeat = true;
+        anim.isRepeating = true;
         const animatedImage:AnimatedImage = new AnimatedImage(this.game);
         animatedImage.addFrameAnimation('animation',anim);
         animatedImage.playFrameAnimation('animation');

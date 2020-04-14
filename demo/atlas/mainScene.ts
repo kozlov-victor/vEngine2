@@ -48,10 +48,10 @@ export class MainScene extends Scene {
             toFrame(framesRaw["run-08.png"]),
         ];
 
-        animRun.isRepeat = true;
+        animRun.isRepeating = true;
 
         const animJump: AtlasFrameAnimation = new AtlasFrameAnimation(this.game);
-        animJump.isRepeat = false;
+        animJump.isRepeating = false;
         animJump.frames = [
             toFrame(framesRaw["jump-down.png"]),
             toFrame(framesRaw["jump-up.png"]),

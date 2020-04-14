@@ -8,10 +8,10 @@ import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
 import {IRect, Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ICloneable} from "@engine/core/declarations";
+import {ICloneable, IEventemittable} from "@engine/core/declarations";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
+import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 
 export enum ARCADE_RIGID_BODY_TYPE {
     // Kinematic entities are not affected by gravity, and
@@ -22,6 +22,11 @@ export enum ARCADE_RIGID_BODY_TYPE {
     // Dynamic entities will be completely changing and are
     // affected by all aspects of the physics system
     DYNAMIC
+}
+
+export const enum ARCADE_COLLISION_EVENT {
+    COLLIDED = 'collided',
+    OVERLAPPED = 'overlapped',
 }
 
 export interface ICollisionFlags {
@@ -42,13 +47,15 @@ class CollisionFlags implements ICollisionFlags {
     }
 }
 
-export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> {
+export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>, IEventemittable {
 
     // collideWorldBounds
 
     public readonly type:'ArcadeRigidBody';
     public readonly velocity:Point2d = new Point2d();
     public readonly acceleration:Point2d = new Point2d();
+    public readonly groupNames:string[] = [];
+    public readonly ignoreCollisionWithGroupNames:string[] = [];
 
     public debug:boolean = false;
 
@@ -62,6 +69,9 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
 
     private model:RenderableModel;
     private debugRectangle:Rectangle;
+    //eventEmitter
+    private readonly _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
+
 
     private constructor(private game:Game) {
     }
@@ -143,10 +153,27 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         this.debugRectangle.render();
     }
 
+    public getHostModel(): RenderableModel {
+        return this.model;
+    }
+
     public clone():ArcadeRigidBody{
         const body:ArcadeRigidBody = new ArcadeRigidBody(this.game);
         this.setClonedProperties(body);
         return body;
+    }
+
+    public off(eventName: ARCADE_COLLISION_EVENT, callBack: (arg:ArcadeRigidBody)=>void): void {
+        this._eventEmitterDelegate.off(eventName,callBack as (arg:any)=>void);
+    }
+    public on(eventName: ARCADE_COLLISION_EVENT, callBack: (arg:ArcadeRigidBody)=>void): (arg?:unknown)=>void {
+        return this._eventEmitterDelegate.on(eventName,callBack as (arg:any)=>void);
+    }
+    public once(eventName: ARCADE_COLLISION_EVENT, callBack: (arg:ArcadeRigidBody)=>void):void {
+        this._eventEmitterDelegate.once(eventName,callBack as (arg:any)=>void);
+    }
+    public trigger(eventName: ARCADE_COLLISION_EVENT, data: ArcadeRigidBody): void {
+        this._eventEmitterDelegate.trigger(eventName,data);
     }
 
     private setClonedProperties(body:ArcadeRigidBody):void {
@@ -155,6 +182,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         body.acceleration.set(this.acceleration);
         body._restitution = this._restitution;
         body._rect = this._rect.clone();
+        body.groupNames.push(...this.groupNames);
+        body.ignoreCollisionWithGroupNames.push(...this.ignoreCollisionWithGroupNames);
         body.updateBounds(this.model);
     }
 

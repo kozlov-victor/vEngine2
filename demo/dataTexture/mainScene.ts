@@ -33,7 +33,7 @@ export class MainScene extends Scene {
         const animatedImage:AnimatedImage = new AnimatedImage(this.game);
         const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
         anim.frames = this.textureLinks;
-        anim.isRepeat = true;
+        anim.isRepeating = true;
         anim.duration = 600;
         animatedImage.addFrameAnimation('animation',anim);
         animatedImage.playFrameAnimation('animation');

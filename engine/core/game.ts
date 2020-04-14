@@ -274,6 +274,12 @@ if (DEBUG) {
     if (!window.__POLYFILLS_INCLUDED__) throw new DebugError(`polyfills module is not included!`);
 }
 
+if (DEBUG) {
+    const now = Date.now();
+    const passed = now - BUILD_AT;
+    console.log(`last compiled ${passed/1000} sec ago`);
+}
+
 const startMainLoop = (game:Game)=>{
     const updateFn:()=>void = game.update.bind(game);
     const loopFn = ()=>{

@@ -33,18 +33,18 @@ export class MainScene extends Scene {
 
         const anim1:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
         anim1.frames = this.resourceLinks1;
-        anim1.isRepeat = true;
+        anim1.isRepeating = true;
         animatedImage.addFrameAnimation('animation1',anim1);
 
         const anim2:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
         anim2.frames = this.resourceLinks2;
-        anim2.isRepeat = true;
+        anim2.isRepeating = true;
         animatedImage.addFrameAnimation('animation2',anim2);
 
 
         const anim3:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
         anim3.frames = this.resourceLinks3;
-        anim3.isRepeat = true;
+        anim3.isRepeating = true;
         animatedImage.addFrameAnimation('animation3',anim3);
 
         animatedImage.playFrameAnimation('animation1');
