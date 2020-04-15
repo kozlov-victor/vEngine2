@@ -8,7 +8,7 @@ import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
 import {IRect, Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ICloneable, IEventemittable} from "@engine/core/declarations";
+import {ICloneable, IEventemittable, Optional} from "@engine/core/declarations";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
@@ -68,11 +68,12 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
     public _oldPos:Point2d;
     public _rect:Rect;
 
+    public offsetX:number = 0; // to calculate character offset if it stands on KINEMATIC platform
+
     private model:RenderableModel;
     private debugRectangle:Rectangle;
     //eventEmitter
     private readonly _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
-
 
     private constructor(private game:Game) {
     }
@@ -90,9 +91,6 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
         }
         this._pos.x  += this.velocity.x * delta;
         this._pos.y  += this.velocity.y * delta;
-        if (this._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC && !this._oldPos.equal(this._pos.x,this._pos.y)) {
-            console.log('old>>new',this._oldPos.toJSON(),this._pos.toJSON());
-        }
     }
 
     public updateBounds(model:RenderableModel):void {
@@ -103,6 +101,14 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
         if (!this._rect) this._rect = new Rect(0,0,model.size.width,model.size.height);
         this._halfSize.width = this._rect.width/2;
         this._halfSize.height = this._rect.height/2;
+        if (this._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) {
+            let oldX:Optional<number>;
+            this._pos.observe(()=>{
+                if (oldX===undefined) oldX = this._pos.x;
+                this.offsetX = this._pos.x - oldX;
+                oldX = this._pos.x;
+            });
+        }
     }
 
     // Getters for the mid point of the rect

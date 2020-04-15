@@ -199,17 +199,12 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     }
 
     private collidePlayerWithBottom(player:ArcadeRigidBody,entity:ArcadeRigidBody):void{
-        player._pos.y = entity.getTop() - player._rect.height - player._rect.y;
+        player._pos.y = entity.getTop() - player._rect.height - player._rect.y + entity.offsetX;
+        entity.offsetX = 0;
         player.collisionFlags.bottom =
             entity.collisionFlags.top = true;
         this.reflectVelocityY(player, entity);
         this.emitCollisionEvents(player, entity);
-        // if (entity._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) {
-        //     const delta:number = this.game.getDeltaTime();
-        //     const velX:number = (entity._pos.x - entity._oldPos.x)/ delta;
-        //     const velY:number = (entity._pos.y - entity._oldPos.y)/ delta;
-        //     player.velocity.setXY(velX, velY);
-        // }
     }
 
     private collidePlayerWithLeft(player:ArcadeRigidBody,entity:ArcadeRigidBody):void{
