@@ -134,29 +134,30 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         }
     }
 
+    private resolveInterpolationInfo(){
+
+    }
+
     private interpolateAndResolveCollision(player:ArcadeRigidBody, entity:ArcadeRigidBody):void {
         if (player._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) return;
         let oldEntityPosX:number = entity._oldPos.x;
         let oldEntityPosY:number = entity._oldPos.y;
         const newEntityPosX:number = entity._pos.x;
         const newEntityPosY:number = entity._pos.y;
-        const lengthX:number = newEntityPosX - oldEntityPosX;
-        const lengthY:number = newEntityPosY - oldEntityPosY;
-        const lengthXAbs:number = Math.abs(lengthX);
-        const lengthYAbs:number = Math.abs(lengthY);
-        const lengthMax:number = Math.max(lengthXAbs,lengthYAbs);
-        const isMaxLengthX:boolean = lengthMax===lengthXAbs;
-        const deltaX:number = isMaxLengthX?Math.sign(lengthX):lengthX/lengthYAbs;
-        const deltaY:number = isMaxLengthX?lengthY/lengthXAbs:Math.sign(lengthY);
+        const entityLengthX:number = newEntityPosX - oldEntityPosX;
+        const entityLengthY:number = newEntityPosY - oldEntityPosY;
+        const entityLengthMax:number = Math.max(Math.abs(entityLengthX),Math.abs(entityLengthY));
+        const entityDeltaX:number = entityLengthX/entityLengthMax;
+        const entityDeltaY:number = entityLengthY/entityLengthMax;
         let steps:number = 0;
-        while (steps<=lengthMax) {
+        while (steps<=entityLengthMax) {
             entity._pos.setXY(oldEntityPosX,oldEntityPosY);
             if (MathEx.overlapTest(player.calcAndGetBoundRect(),entity.calcAndGetBoundRect())) {
                 this.resolveCollision(player, entity);
                 break;
             }
-            oldEntityPosX+=deltaX;
-            oldEntityPosY+=deltaY;
+            oldEntityPosX+=entityDeltaX;
+            oldEntityPosY+=entityDeltaY;
             steps++;
         }
     }
@@ -199,7 +200,8 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     }
 
     private collidePlayerWithBottom(player:ArcadeRigidBody,entity:ArcadeRigidBody):void{
-        player._pos.y = entity.getTop() - player._rect.height - player._rect.y + entity.offsetX;
+        player._pos.y = entity.getTop() - player._rect.height - player._rect.y;
+        player._pos.x+=entity.offsetX;
         entity.offsetX = 0;
         player.collisionFlags.bottom =
             entity.collisionFlags.top = true;
