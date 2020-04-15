@@ -1,9 +1,10 @@
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {Game} from "@engine/core/game";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
+import {Rect} from "@engine/geometry/rect";
 
 export class Burster {
 
@@ -21,13 +22,17 @@ export class Burster {
     constructor(private game:Game) {
         Burster.instance = this;
         this.particleSystem = new ParticleSystem(this.game);
-        const particle:Rectangle = new Rectangle(this.game);
-        particle.size.setWH(5);
-        particle.transformPoint.setXY(particle.size.width/2,particle.size.height/2);
-        (particle.fillColor as Color).setRGBA(133,200,0);
-        const body = game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({type:ARCADE_RIGID_BODY_TYPE.DYNAMIC});
-        body.groupNames.push(Burster.groupName,'entity');
-        body.ignoreCollisionWithGroupNames.push('entity');
+        const particle:Circle = new Circle(this.game);
+        particle.radius = 2;
+        particle.transformPoint.setXY(particle.radius/2,particle.radius/2);
+        (particle.fillColor as Color).setRGBA(12,100,0);
+        const body = game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
+            type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
+            debug: true,
+            rect: new Rect(0,0,2,2),
+        });
+        body.groupNames.push(Burster.groupName);
+        //body.ignoreCollisionWithGroupNames.push('entity');
         particle.setRigidBody(body);
 
         const ps: ParticleSystem = new ParticleSystem(this.game);

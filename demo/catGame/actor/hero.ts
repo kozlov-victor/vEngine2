@@ -168,10 +168,11 @@ export class Hero extends AbstractCharacter {
     }
 
     private listenCollisions():void {
-        this.rigidBody.on(ARCADE_COLLISION_EVENT.OVERLAPPED, e=>{
-            if (e.groupNames.indexOf(Monster1.groupName)>-1) {
-                this.onCollidedWithMonster(e);
-            }
+        this.rigidBody.onCollidedWithGroup(Monster1.groupName,e=>{
+            this.onCollidedWithMonster(e);
+        });
+        this.rigidBody.onCollidedWithGroup(Burster.groupName,e=>{
+            this.onCollidedWithMonster(e);
         });
     }
 

@@ -6,8 +6,8 @@ export class Circle extends Ellipse implements ICloneable<Circle>{
 
     set radius(val:number) {
         this._radius = val;
-        this.setWH(val*2);
         (this as Ellipse).radiusX = (this as Ellipse).radiusY = val;
+        this.setWH(val*2);
     }
 
     get radius():number{
@@ -17,7 +17,7 @@ export class Circle extends Ellipse implements ICloneable<Circle>{
     public radiusX:never;
     public radiusY:never;
 
-    public readonly type:string = 'Circle';
+    public readonly type:'Circle' = 'Circle';
     private _radius:number;
 
     constructor(game:Game){

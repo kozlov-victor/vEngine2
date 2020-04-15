@@ -5,6 +5,8 @@ import {Game} from "@engine/core/game";
 
 export class Ellipse extends Shape implements ICloneable<Ellipse>{
 
+    public readonly type:string = 'Ellipse';
+
     get radiusX(): number {
         return this._radiusX;
     }
@@ -25,7 +27,6 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>{
         this.center.forceTriggerChange();
     }
 
-    public readonly type:string = 'Ellipse';
     public readonly center:Point2d = new Point2d();
 
     public arcAngleFrom:number = 0;
@@ -64,6 +65,9 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>{
     protected setClonedProperties(cloned:Ellipse):void {
         cloned.radiusX = this.radiusX;
         cloned.radiusY = this.radiusY;
+        cloned.arcAngleFrom = this.arcAngleFrom;
+        cloned.arcAngleTo = this.arcAngleTo;
+        cloned.anticlockwise = this.anticlockwise;
         super.setClonedProperties(cloned);
     }
 

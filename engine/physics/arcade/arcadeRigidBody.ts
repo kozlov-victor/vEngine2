@@ -81,19 +81,17 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
         this._oldPos.set(this._pos);
         const delta:number = this.game.getDeltaTime() / 1000;
         (this.collisionFlags as CollisionFlags).reset();
-        switch (this._modelType) {
-            case ARCADE_RIGID_BODY_TYPE.DYNAMIC:
-                this.velocity.x += this.acceleration.x * delta + ArcadePhysicsSystem.gravity.x;
-                this.velocity.y += this.acceleration.y * delta + ArcadePhysicsSystem.gravity.y;
-                this._pos.x  += this.velocity.x * delta;
-                this._pos.y  += this.velocity.y * delta;
-                break;
-            case ARCADE_RIGID_BODY_TYPE.KINEMATIC:
-                this.velocity.x += this.acceleration.x * delta;
-                this.velocity.y += this.acceleration.y * delta;
-                this._pos.x  += this.velocity.x * delta;
-                this._pos.y  += this.velocity.y * delta;
-                break;
+
+        this.velocity.x += this.acceleration.x * delta;
+        this.velocity.y += this.acceleration.y * delta;
+        if (this._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
+            this.velocity.x += ArcadePhysicsSystem.gravity.x;
+            this.velocity.y += ArcadePhysicsSystem.gravity.y;
+        }
+        this._pos.x  += this.velocity.x * delta;
+        this._pos.y  += this.velocity.y * delta;
+        if (this._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC && !this._oldPos.equal(this._pos.x,this._pos.y)) {
+            console.log('old>>new',this._oldPos.toJSON(),this._pos.toJSON());
         }
     }
 
@@ -177,6 +175,13 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
     }
     public trigger(eventName: ARCADE_COLLISION_EVENT, data: ArcadeRigidBody): void {
         this._eventEmitterDelegate.trigger(eventName,data);
+    }
+    public onCollidedWithGroup(groupName:string, callBack: (arg:ArcadeRigidBody)=>void): (arg:ArcadeRigidBody)=>void {
+        return this.on(ARCADE_COLLISION_EVENT.COLLIDED,e=>{
+            if (e.groupNames.indexOf(groupName)>-1) {
+                callBack(e);
+            }
+        });
     }
 
     private setClonedProperties(body:ArcadeRigidBody):void {

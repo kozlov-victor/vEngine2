@@ -28,6 +28,8 @@ export class Wall extends AbstractEntity {
         this.game.getCurrScene().appendChild(rect);
         if (movePlatformInfo?.fromY!==undefined) {
             this.startMoveableY(movePlatformInfo);
+        } else if (movePlatformInfo?.fromX!==undefined) {
+            this.startMoveableX(movePlatformInfo);
         }
     }
 
@@ -43,6 +45,21 @@ export class Wall extends AbstractEntity {
             model.pos.y+=d;
             if (model.pos.y>movePlatformInfo.toY!) d=-1;
             else if (model.pos.y<movePlatformInfo.fromY!) d=1;
+        },20);
+    }
+
+    private startMoveableX(movePlatformInfo:IExtraProperties){
+        let d:number = 1;
+        if (movePlatformInfo.fromX!>movePlatformInfo.toX!) {
+            const tmp:Optional<number> = movePlatformInfo.fromX;
+            movePlatformInfo.fromX = movePlatformInfo.toX;
+            movePlatformInfo.toX = tmp;
+        }
+        const model:RenderableModel = this.renderableImage;
+        this.game.getCurrScene().setInterval(()=>{
+            model.pos.x+=d;
+            if (model.pos.x>movePlatformInfo.toX!) d=-1;
+            else if (model.pos.x<movePlatformInfo.fromX!) d=1;
         },20);
     }
 
