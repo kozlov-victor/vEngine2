@@ -307,6 +307,10 @@ export abstract class RenderableModel
         this._parentChildDelegate.removeChildren();
     }
 
+    public removeSelf(): void {
+        this._parentChildDelegate.removeSelf();
+    }
+
     public moveToFront():void {
         this._parentChildDelegate.moveToFront();
     }

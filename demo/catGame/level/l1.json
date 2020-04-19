@@ -53,11 +53,6 @@
                  "name":"",
                  "properties":[
                         {
-                         "name":"fromY",
-                         "type":"int",
-                         "value":381
-                        }, 
-                        {
                          "name":"toY",
                          "type":"int",
                          "value":32
@@ -66,8 +61,8 @@
                  "type":"wall",
                  "visible":true,
                  "width":45.3333333333334,
-                 "x":509.333333333333,
-                 "y":349.333333333333
+                 "x":508,
+                 "y":392
                 }, 
                 {
                  "height":353.333333333333,
@@ -191,7 +186,7 @@
                  "y":376.666666666667
                 }, 
                 {
-                 "gid":26,
+                 "gid":1,
                  "height":64,
                  "id":25,
                  "name":"",
@@ -203,51 +198,10 @@
                  "y":374.666666666667
                 }, 
                 {
-                 "gid":1,
-                 "height":50,
-                 "id":29,
-                 "name":"",
-                 "rotation":0,
-                 "type":"monster1",
-                 "visible":true,
-                 "width":50,
-                 "x":272.333333333333,
-                 "y":152.333333333333
-                }, 
-                {
-                 "gid":1,
-                 "height":50,
-                 "id":30,
-                 "name":"",
-                 "rotation":0,
-                 "type":"monster1",
-                 "visible":true,
-                 "width":50,
-                 "x":433.666666666667,
-                 "y":55
-                }, 
-                {
-                 "gid":1,
-                 "height":50,
-                 "id":33,
-                 "name":"",
-                 "rotation":0,
-                 "type":"monster1",
-                 "visible":true,
-                 "width":50,
-                 "x":93.6666666666663,
-                 "y":75
-                }, 
-                {
                  "height":28,
                  "id":50,
                  "name":"",
                  "properties":[
-                        {
-                         "name":"fromX",
-                         "type":"int",
-                         "value":75
-                        }, 
                         {
                          "name":"toX",
                          "type":"int",
@@ -259,6 +213,114 @@
                  "width":116,
                  "x":67.3333333333333,
                  "y":99.3333333333333
+                }, 
+                {
+                 "gid":257,
+                 "height":64,
+                 "id":51,
+                 "name":"",
+                 "rotation":0,
+                 "type":"monster1",
+                 "visible":true,
+                 "width":64,
+                 "x":418.666666666667,
+                 "y":85.3333333333333
+                }, 
+                {
+                 "gid":257,
+                 "height":64,
+                 "id":55,
+                 "name":"",
+                 "rotation":0,
+                 "type":"monster1",
+                 "visible":true,
+                 "width":64,
+                 "x":56,
+                 "y":60
+                }, 
+                {
+                 "gid":257,
+                 "height":64,
+                 "id":56,
+                 "name":"",
+                 "rotation":0,
+                 "type":"monster1",
+                 "visible":true,
+                 "width":64,
+                 "x":498.666666666667,
+                 "y":212
+                }, 
+                {
+                 "gid":321,
+                 "height":64,
+                 "id":60,
+                 "name":"",
+                 "rotation":0,
+                 "type":"zombie",
+                 "visible":true,
+                 "width":64,
+                 "x":386.666666666667,
+                 "y":381.333333333333
+                }, 
+                {
+                 "gid":385,
+                 "height":64,
+                 "id":63,
+                 "name":"",
+                 "rotation":0,
+                 "type":"monster2",
+                 "visible":true,
+                 "width":64,
+                 "x":216,
+                 "y":188
+                }, 
+                {
+                 "gid":417,
+                 "height":16,
+                 "id":74,
+                 "name":"",
+                 "rotation":0,
+                 "type":"bloodDrop",
+                 "visible":true,
+                 "width":16,
+                 "x":285.333333333333,
+                 "y":232
+                }, 
+                {
+                 "gid":417,
+                 "height":16,
+                 "id":76,
+                 "name":"",
+                 "rotation":0,
+                 "type":"bloodDrop",
+                 "visible":true,
+                 "width":16,
+                 "x":292,
+                 "y":34.6666666666667
+                }, 
+                {
+                 "gid":418,
+                 "height":24,
+                 "id":78,
+                 "name":"",
+                 "rotation":0,
+                 "type":"testTube",
+                 "visible":true,
+                 "width":24,
+                 "x":353.333333333333,
+                 "y":122.666666666667
+                }, 
+                {
+                 "gid":418,
+                 "height":24,
+                 "id":79,
+                 "name":"",
+                 "rotation":0,
+                 "type":"testTube",
+                 "visible":true,
+                 "width":24,
+                 "x":162.666666666667,
+                 "y":32
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -267,28 +329,15 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":51,
+ "nextobjectid":80,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.3",
  "tileheight":32,
  "tilesets":[
         {
-         "columns":5,
-         "firstgid":1,
-         "image":"..\/res\/sprite\/monster1.png",
-         "imageheight":250,
-         "imagewidth":250,
-         "margin":0,
-         "name":"monster1",
-         "spacing":0,
-         "tilecount":25,
-         "tileheight":50,
-         "tilewidth":50
-        }, 
-        {
          "columns":16,
-         "firstgid":26,
+         "firstgid":1,
          "image":"..\/res\/sprite\/cat.png",
          "imageheight":1024,
          "imagewidth":1024,
@@ -297,7 +346,180 @@
          "spacing":0,
          "tilecount":256,
          "tileheight":64,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":28.7640449438202,
+                             "id":1,
+                             "name":"",
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":16,
+                             "x":23.6546422235364,
+                             "y":25.357776463631
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
          "tilewidth":64
+        }, 
+        {
+         "columns":8,
+         "firstgid":257,
+         "image":"..\/res\/sprite\/monster1.png",
+         "imageheight":512,
+         "imagewidth":512,
+         "margin":0,
+         "name":"monster1",
+         "spacing":0,
+         "tilecount":64,
+         "tileheight":64,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":24.6008279124778,
+                             "id":1,
+                             "name":"",
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":22.5192193968066,
+                             "x":19.3021880544057,
+                             "y":29.3317563571851
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":64
+        }, 
+        {
+         "columns":8,
+         "firstgid":321,
+         "image":"..\/res\/sprite\/zombie.png",
+         "imageheight":512,
+         "imagewidth":512,
+         "margin":0,
+         "name":"skeleton",
+         "spacing":0,
+         "tilecount":64,
+         "tileheight":64,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":3,
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":40.4967474866943,
+                             "id":2,
+                             "name":"",
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":20.4376108811354,
+                             "x":21.9515079834418,
+                             "y":19.8698994677706
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":64
+        }, 
+        {
+         "columns":8,
+         "firstgid":385,
+         "image":"..\/res\/sprite\/monster2.png",
+         "imageheight":256,
+         "imagewidth":512,
+         "margin":0,
+         "name":"monster2",
+         "spacing":0,
+         "tilecount":32,
+         "tileheight":64,
+         "tiles":[
+                {
+                 "id":9,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":4,
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":37.4689532820816,
+                             "id":3,
+                             "name":"",
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":26.8716735659373,
+                             "x":18.3560023654642,
+                             "y":18.5452395032525
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":64
+        }, 
+        {
+         "columns":1,
+         "firstgid":417,
+         "image":"..\/res\/sprite\/bloodDrop.png",
+         "imageheight":16,
+         "imagewidth":16,
+         "margin":0,
+         "name":"bloodDrop",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":16,
+         "tilewidth":16
+        }, 
+        {
+         "columns":1,
+         "firstgid":418,
+         "image":"..\/res\/sprite\/testTube.png",
+         "imageheight":24,
+         "imagewidth":24,
+         "margin":0,
+         "name":"testTube",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":24,
+         "tilewidth":24
         }],
  "tilewidth":32,
  "type":"map",

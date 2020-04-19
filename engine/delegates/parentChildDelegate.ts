@@ -20,7 +20,7 @@ export class ParentChildDelegate<T extends IParentChild> {
         this.model.children.push(c);
     }
 
-    public appendChildAt(c:IParentChild,index:number){
+    public appendChildAt(c:IParentChild,index:number):void{
         if (DEBUG) {
             if (index>this.model.children.length-1) throw new DebugError(`can not insert element: index is out of range (${index},${this.model.children.length-1})`);
         }
@@ -28,7 +28,7 @@ export class ParentChildDelegate<T extends IParentChild> {
         this.model.children.splice(index,0,c);
     }
 
-    public appendChildAfter(modelAfter:IParentChild,newChild:IParentChild){
+    public appendChildAfter(modelAfter:IParentChild,newChild:IParentChild):void{
         const afterIndex:number = this.model.children.indexOf(modelAfter);
         if (DEBUG) {
             if (afterIndex===-1) throw new DebugError(`can not insert element: object is detached`);
@@ -37,7 +37,7 @@ export class ParentChildDelegate<T extends IParentChild> {
         else this.appendChildAt(newChild,afterIndex+1);
     }
 
-    public appendChildBefore(modelBefore:IParentChild,newChild:IParentChild){
+    public appendChildBefore(modelBefore:IParentChild,newChild:IParentChild):void{
         const beforeIndex:number = this.model.children.indexOf(modelBefore);
         if (DEBUG) {
             if (beforeIndex===-1) throw new DebugError(`can not insert element: object is detached`);
@@ -52,7 +52,7 @@ export class ParentChildDelegate<T extends IParentChild> {
         this.model.children.unshift(c);
     }
 
-    public removeChildAt(i:number){
+    public removeChildAt(i:number):void{
         const c:IParentChild = this.model.children[i];
         if (DEBUG && !c) throw new DebugError(`can not remove children with index ${i}`);
         if (DEBUG && c.parent===undefined) throw new DebugError(`can not remove children with index ${i}: parent is undefined`);
@@ -67,7 +67,12 @@ export class ParentChildDelegate<T extends IParentChild> {
         else return removeFromArray(children,it=>it===c)>0;
     }
 
-    public removeChildren(){
+    public removeSelf():void {
+        const parent:IParentChild = this.model.getParent() as IParentChild;
+        parent.removeChild(this.model as RenderableModel);
+    }
+
+    public removeChildren():void{
         for (let i:number = this.model.children.length-1; i >= 0; i--) {
             const c:IParentChild = this.model.children[i];
             this.removeChildAt(i);

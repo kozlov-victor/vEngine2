@@ -53,8 +53,12 @@ export class Layer implements IParentChild {
         this._parentChildDelegate.removeChildAt(i);
     }
 
-    public removeChild(c:RenderableModel){
+    public removeChild(c:RenderableModel):boolean{
         return this._parentChildDelegate.removeChild(this.children,c);
+    }
+
+    public removeSelf(): void {
+        this._parentChildDelegate.removeSelf();
     }
 
     public removeChildren(){

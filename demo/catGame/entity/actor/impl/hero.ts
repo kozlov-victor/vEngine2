@@ -4,17 +4,19 @@ import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnim
 import {Game} from "@engine/core/game";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {ARCADE_COLLISION_EVENT, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {Rect} from "@engine/geometry/rect";
-import {AbstractCharacter} from "./abstract/abstract";
+import {AbstractCharacter} from "../abstract/abstractCharacter";
 import {Size} from "@engine/geometry/size";
-import {Monster1} from "./monster1";
-import {Burster} from "./burster";
+import {Burster} from "../../misc/burster";
+import {AbstractMonster} from "../abstract/abstractMonster";
+import {BloodDrop} from "../../object/impl/bloodDrop";
+import {AbstractObject} from "../../object/abstract/abstractObject";
 
 export class Hero extends AbstractCharacter {
 
-    public static readonly groupName:string = 'Hero';
+    public static readonly groupName:string = 'hero';
 
     public static getCreatedInstance():Hero {
         return Hero.instance;
@@ -22,15 +24,11 @@ export class Hero extends AbstractCharacter {
 
     private static instance:Hero;
 
-    private idleAnimation:CellFrameAnimation;
-    private jumpAnimation:CellFrameAnimation;
     private rotateAnimation:CellFrameAnimation;
     private fallAnimation:CellFrameAnimation;
-    private walkAnimation:CellFrameAnimation;
     private highKickAnimation:CellFrameAnimation;
     private downKickAnimation:CellFrameAnimation;
 
-    private rigidBody:ArcadeRigidBody;
     private hurt:boolean = false;
     private hurtCnt:number = 0;
     private beating:boolean = false;
@@ -81,14 +79,17 @@ export class Hero extends AbstractCharacter {
         this.downKickAnimation.isRepeating = false;
 
         this.game.camera.followTo(this.renderableImage);
-        this.rigidBody = this.createRigidBody({
+        this.createRigidBody({
             restitution: 0.2,
             rect: new Rect(23,20,15,33),
             //debug: true,
             groupNames: [Hero.groupName],
             //ignoreCollisionWithGroupNames: [Burster.groupName],
         });
-        this.appendToScene();
+
+
+        this.velocity = 90;
+        this.postConstruct();
 
         this.rotateAnimation.
             play().
@@ -100,6 +101,7 @@ export class Hero extends AbstractCharacter {
 
     private damage():void {
         this.hurt = true;
+        this.beating = false;
         const tmr = this.getRenderableModel().setInterval(()=>{
             this.getRenderableModel().visible=!this.getRenderableModel().visible;
             this.hurtCnt++;
@@ -113,40 +115,42 @@ export class Hero extends AbstractCharacter {
     }
 
     private listenKeys():void {
-        const velocity:number = 90;
         const jumpVelocity:number = 200;
         this.game.getCurrScene().on(KEYBOARD_EVENTS.keyHold, e=>{
             switch (e.key) {
                 case KEYBOARD_KEY.Z:
                     this.beating = true;
-                    this.highKickAnimation.play().once(FRAME_ANIMATION_EVENTS.completed, ev=>{
+                    this.highKickAnimation.play();
+                    this.highKickAnimation.once(FRAME_ANIMATION_EVENTS.completed, ev=>{
                         this.beating = false;
-                        this.idleAnimation.play();
+                        this.idle();
+                    });
+                    this.highKickAnimation.once(FRAME_ANIMATION_EVENTS.canceled, ev=>{
+                        this.beating = false;
+                        this.idle();
                     });
                     break;
                 case KEYBOARD_KEY.X:
                     this.beating = true;
-                    this.downKickAnimation.play().once(FRAME_ANIMATION_EVENTS.completed, ev=>{
+                    this.downKickAnimation.play();
+                    this.downKickAnimation.once(FRAME_ANIMATION_EVENTS.completed, ev=>{
                         this.beating = false;
-                        this.idleAnimation.play();
+                        this.idle();
+                    });
+                    this.downKickAnimation.once(FRAME_ANIMATION_EVENTS.canceled, ev=>{
+                        this.beating = false;
+                        this.idle();
                     });
                     break;
                 case KEYBOARD_KEY.LEFT:
-                    this.renderableImage.getRigidBody()!.velocity.x = -velocity;
-                    this.renderableImage.scale.x = -1;
-                    this.renderableImage.anchorPoint.x = 3;
-                    if (this.rigidBody.collisionFlags.bottom && !this.beating) this.walkAnimation.play();
+                    if (!this.beating) this.goLeft();
                     break;
                 case KEYBOARD_KEY.RIGHT:
-                    this.renderableImage.getRigidBody()!.velocity.x = velocity;
-                    this.renderableImage.scale.x = 1;
-                    this.renderableImage.anchorPoint.x = 0;
-                    if (this.rigidBody.collisionFlags.bottom && !this.beating) this.walkAnimation.play();
+                    if (!this.beating) this.goRight();
                     break;
                 case KEYBOARD_KEY.SPACE:
                     if (this.renderableImage.getRigidBody<ArcadeRigidBody>()!.collisionFlags.bottom) {
-                        this.renderableImage.getRigidBody()!.velocity.y = -jumpVelocity;
-                        this.jumpAnimation.play().once(FRAME_ANIMATION_EVENTS.completed, ev=>this.idleAnimation.play());
+                        this.jump(jumpVelocity);
                     }
                     break;
 
@@ -156,8 +160,7 @@ export class Hero extends AbstractCharacter {
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
-                    this.renderableImage.getRigidBody()!.velocity.x = 0;
-                    this.idleAnimation.play();
+                    this.idle();
                     break;
             }
         });
@@ -168,11 +171,14 @@ export class Hero extends AbstractCharacter {
     }
 
     private listenCollisions():void {
-        this.rigidBody.onCollidedWithGroup(Monster1.groupName,e=>{
+        this.body.onCollidedWithGroup(AbstractMonster.abstractMonsterGroup,e=>{
             this.onCollidedWithMonster(e);
         });
-        this.rigidBody.onCollidedWithGroup(Burster.groupName,e=>{
+        this.body.onCollidedWithGroup(Burster.groupName,e=>{
             this.onCollidedWithMonster(e);
+        });
+        this.body.onCollidedWithGroup(AbstractObject.collectableGroupName,e=>{
+            e.getHostModel().getParent()!.removeChild(e.getHostModel());
         });
     }
 

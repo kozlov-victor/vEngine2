@@ -29,14 +29,14 @@ export const enum ARCADE_COLLISION_EVENT {
     OVERLAPPED = 'overlapped',
 }
 
-export interface ICollisionFlags {
+export interface ICollisionWith {
     left: boolean;
     right: boolean;
     top: boolean;
     bottom: boolean;
 }
 
-class CollisionFlags implements ICollisionFlags {
+class CollisionFlags implements ICollisionWith {
     public left: boolean = false;
     public right: boolean = false;
     public top: boolean = false;
@@ -44,6 +44,13 @@ class CollisionFlags implements ICollisionFlags {
 
     public reset(){
         this.left = this.right = this.top = this.bottom = false;
+    }
+
+    public copyFrom(source:CollisionFlags):void {
+        this.left = source.left;
+        this.right = source.right;
+        this.top = source.top;
+        this.bottom = source.bottom;
     }
 }
 
@@ -63,7 +70,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
     public readonly _boundRect:Rect = new Rect();
     public _restitution:number = 0.5;
     public readonly _halfSize:Size = new Size();
-    public readonly collisionFlags:ICollisionFlags = new CollisionFlags();
+    public readonly collisionFlags:ICollisionWith = new CollisionFlags();
+    public readonly _collisionFlagsOld:ICollisionWith = new CollisionFlags();
     public _pos:Point2d;
     public _oldPos:Point2d;
     public _rect:Rect;
@@ -81,13 +89,14 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
     public nextTick():void {
         this._oldPos.set(this._pos);
         const delta:number = this.game.getDeltaTime() / 1000;
+        (this._collisionFlagsOld as CollisionFlags).copyFrom(this.collisionFlags as CollisionFlags);
         (this.collisionFlags as CollisionFlags).reset();
 
         this.velocity.x += this.acceleration.x * delta;
         this.velocity.y += this.acceleration.y * delta;
         if (this._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
             this.velocity.x += ArcadePhysicsSystem.gravity.x;
-            this.velocity.y += ArcadePhysicsSystem.gravity.y;
+            if (!this.collisionFlags.bottom) this.velocity.y += ArcadePhysicsSystem.gravity.y;
         }
         this._pos.x  += this.velocity.x * delta;
         this._pos.y  += this.velocity.y * delta;

@@ -6,6 +6,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/mathEx";
 import {Optional} from "@engine/core/declarations";
 import {Rect} from "@engine/geometry/rect";
+import {finished} from "stream";
 
 export interface ICreateRigidBodyParams {
     type?: ARCADE_RIGID_BODY_TYPE;
@@ -46,24 +47,27 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     }
 
     public nextTick():void {
-        const all:RenderableModel[] = this.game.getCurrScene().getLayers()[0].children; // todo
-        for (let i:number = 0; i < all.length; i++) {
-            const player:RenderableModel = all[i];
-            const playerBody:Optional<ArcadeRigidBody> = player.getRigidBody();
-            if (playerBody===undefined) continue;
-            for (let j:number = i + 1; j < all.length; j++) {
-                const entity:RenderableModel = all[j];
-                const entityBody:Optional<ArcadeRigidBody> = entity.getRigidBody();
-                if (entityBody===undefined) continue;
-                if (!MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) continue;
-                if (
-                    instersect(playerBody.groupNames,entityBody.ignoreCollisionWithGroupNames) ||
-                    instersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
-                ) {
-                    this.emitOverlapEvents(playerBody, entityBody);
-                } else {
-                    this.interpolateAndResolveCollision(playerBody, entityBody);
-                    this.interpolateAndResolveCollision(entityBody, playerBody);
+
+        for (let ind = 0; ind < this.game.getCurrScene().getLayers().length; ind++) {
+            const all:RenderableModel[] = this.game.getCurrScene().getLayerAtIndex(ind).children;
+            for (let i:number = 0; i < all.length; i++) {
+                const player:RenderableModel = all[i];
+                const playerBody:Optional<ArcadeRigidBody> = player.getRigidBody();
+                if (playerBody===undefined) continue;
+                for (let j:number = i + 1; j < all.length; j++) {
+                    const entity:RenderableModel = all[j];
+                    const entityBody:Optional<ArcadeRigidBody> = entity.getRigidBody();
+                    if (entityBody===undefined) continue;
+                    if (!MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) continue;
+                    if (
+                        instersect(playerBody.groupNames,entityBody.ignoreCollisionWithGroupNames) ||
+                        instersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
+                    ) {
+                        this.emitOverlapEvents(playerBody, entityBody);
+                    } else {
+                        this.interpolateAndResolveCollision(playerBody, entityBody);
+                        this.interpolateAndResolveCollision(entityBody, playerBody);
+                    }
                 }
             }
         }
@@ -134,14 +138,10 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         }
     }
 
-    private resolveInterpolationInfo(){
-
-    }
-
     private interpolateAndResolveCollision(player:ArcadeRigidBody, entity:ArcadeRigidBody):void {
         if (player._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) return;
-        let oldEntityPosX:number = entity._oldPos.x;
-        let oldEntityPosY:number = entity._oldPos.y;
+        let oldEntityPosX:number = entity._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entity._pos.x:entity._oldPos.x;
+        let oldEntityPosY:number = entity._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entity._pos.y:entity._oldPos.y;
         const newEntityPosX:number = entity._pos.x;
         const newEntityPosY:number = entity._pos.y;
         const entityLengthX:number = newEntityPosX - oldEntityPosX;
@@ -167,18 +167,20 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         return (player._restitution + entity._restitution)/2;
     }
 
+    private getComparedToSticky(val:number):number {
+        if (Math.abs(val) < ArcadePhysicsSystem.STICKY_THRESHOLD) {
+            return 0;
+        } else return val;
+    }
+
     private reflectVelocityY(player:ArcadeRigidBody,entity:ArcadeRigidBody){
-        player.velocity.y = -player.velocity.y * this.calcCommonRestitution(player, entity);
-        if (Math.abs(player.velocity.y) < ArcadePhysicsSystem.STICKY_THRESHOLD) {
-            player.velocity.y = 0;
-        }
+        const restitution:number = this.calcCommonRestitution(player, entity);
+        player.velocity.y = this.getComparedToSticky(-player.velocity.y * restitution);
     }
 
     private reflectVelocityX(player:ArcadeRigidBody,entity:ArcadeRigidBody){
-        player.velocity.x = -player.velocity.x * this.calcCommonRestitution(player, entity);
-        if (Math.abs(player.velocity.x) < ArcadePhysicsSystem.STICKY_THRESHOLD) {
-            player.velocity.x = 0;
-        }
+        const restitution:number = this.calcCommonRestitution(player, entity);
+        player.velocity.x = this.getComparedToSticky(-player.velocity.x * restitution);
     }
 
     private emitCollisionEvents(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
@@ -192,7 +194,9 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     }
 
     private collidePlayerWithTop(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
-        player._pos.y = entity.getBottom() - player._rect.y;
+        if (!player._collisionFlagsOld.bottom) { // check to prevent penetration through floor
+            player._pos.y = entity.getBottom() - player._rect.y;
+        }
         player.collisionFlags.top =
             entity.collisionFlags.bottom = true;
         this.reflectVelocityY(player, entity);

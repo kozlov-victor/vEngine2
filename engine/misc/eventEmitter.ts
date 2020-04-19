@@ -36,11 +36,11 @@ export class EventEmitter{
     }
 
     public trigger(eventName:string,data:unknown):void {
-        const es:((arg?:unknown)=>void)[] = this.events[eventName];
-        if (!es) return;
-        let l:number = es.length;
+        const evnts:((arg?:unknown)=>void)[] = this.events[eventName];
+        if (!evnts) return;
+        let l:number = evnts.length;
         while(l--){
-            es[l](data);
+            if (evnts[l]!==undefined) evnts[l](data);
         }
     }
 

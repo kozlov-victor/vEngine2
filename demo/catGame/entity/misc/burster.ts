@@ -14,13 +14,16 @@ export class Burster {
         return Burster.instance;
     }
 
+    public static instantiate(game:Game):void {
+        Burster.instance = new Burster(game);
+    }
+
     private static instance:Burster;
 
     private particleSystem:ParticleSystem;
 
 
-    constructor(private game:Game) {
-        Burster.instance = this;
+    private constructor(private game:Game) {
         this.particleSystem = new ParticleSystem(this.game);
         const particle:Circle = new Circle(this.game);
         particle.radius = 2;
@@ -46,7 +49,7 @@ export class Burster {
         ps.particleVelocity = {from: 50, to: 100};
         ps.particleAngle = {from:0,to:2*Math.PI};
         ps.emitAuto = false;
-        game.getCurrScene().appendChild(ps);
+        game.getCurrScene().getLayerAtIndex(1).appendChild(ps);
         this.particleSystem = ps;
     }
 

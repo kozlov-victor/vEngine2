@@ -88,6 +88,10 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         return undefined;
     }
 
+    public getLayerAtIndex(index:number):Layer {
+        return this._layers[index];
+    }
+
     public addLayer(layer:Layer):void {
         layer.setScene(this);
         this._layers.push(layer);
@@ -104,7 +108,9 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     public removeChild(c:RenderableModel):void{
         for (let i = 0; i < this._layers.length; i++) {
-            if (this._layers[i].removeChild(c)) break;
+            if (this._layers[i].removeChild(c)) {
+                break;
+            }
         }
     }
 

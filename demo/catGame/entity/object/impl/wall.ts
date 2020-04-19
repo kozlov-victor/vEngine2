@@ -1,31 +1,37 @@
 import {Game} from "@engine/core/game";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
-import {AbstractEntity, IExtraProperties} from "./abstract/abstract";
+import {IExtraProperties} from "../../actor/abstract/abstractCharacter";
 import {Color} from "@engine/renderer/common/color";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Optional} from "@engine/core/declarations";
+import {Size} from "@engine/geometry/size";
+import {ITexture} from "@engine/renderer/common/texture";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
+import {AbstractEntity} from "../../abstract/abstractEntity";
+import {AbstractObject} from "../abstract/abstractObject";
 
 
-export class Wall extends AbstractEntity {
+export class Wall extends AbstractObject {
 
-    public static readonly groupName:string = 'Wall';
+    public static readonly groupName:string = 'wall';
 
-    constructor(private game:Game, width:number,height:number,movePlatformInfo?:IExtraProperties) {
-        super();
-        const rect: Rectangle = new Rectangle(this.game);
-        this.renderableImage = rect;
+    constructor(protected game:Game,size:Size,resource:ResourceLink<ITexture>,movePlatformInfo?:IExtraProperties) {
+        super(game, resource);
+        const rect:Image = this.getRenderableModel() as Image;
+        rect.size.set(size);
+        rect.setResourceLink(resource);
+        rect.stretchMode = STRETCH_MODE.REPEAT;
+        rect.lineWidth = 2;
+        rect.borderRadius = 5;
 
-        rect.size.setWH(width,height);
-        rect.fillColor = Color.NONE;
-        rect.color = Color.RGB(122);
-        const rigidBody: ArcadeRigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
-                groupNames: [Wall.groupName],
-                type:ARCADE_RIGID_BODY_TYPE.KINEMATIC
-            });
-        rect.setRigidBody(rigidBody);
-        this.game.getCurrScene().appendChild(rect);
+        this.createRigidBody({
+            groupNames: [Wall.groupName],
+            type:ARCADE_RIGID_BODY_TYPE.KINEMATIC
+        });
+
+
         if (movePlatformInfo?.fromY!==undefined) {
             this.startMoveableY(movePlatformInfo);
         } else if (movePlatformInfo?.fromX!==undefined) {
