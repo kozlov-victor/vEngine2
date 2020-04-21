@@ -254,6 +254,7 @@ export class Game {
             this._renderer.cancelFullScreen();
             this._renderer.destroy();
         }
+        if (this.getAudioPlayer()) this.getAudioPlayer().stopAll();
     }
 
     public revalidate():void {

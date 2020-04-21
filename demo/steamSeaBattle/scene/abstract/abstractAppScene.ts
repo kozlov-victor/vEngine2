@@ -68,7 +68,7 @@ export abstract class AbstractAppScene extends Scene {
         if (!layerElements.length) throw new Error(`no layer provided to scene`);
         layerElements.forEach((lel:Element)=>{
             const layer:Layer = new Layer(this.game);
-            this.addLayer(layer);
+            this.appendChild(layer);
             this.resolveChildren(layer,lel.children);
         });
     }

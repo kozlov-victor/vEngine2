@@ -15,6 +15,17 @@
          "name":"objects",
          "objects":[
                 {
+                 "height":28,
+                 "id":80,
+                 "name":"",
+                 "rotation":0,
+                 "type":"lava",
+                 "visible":true,
+                 "width":680,
+                 "x":-12,
+                 "y":458.666666666667
+                }, 
+                {
                  "height":22,
                  "id":1,
                  "name":"",
@@ -73,18 +84,7 @@
                  "visible":true,
                  "width":24,
                  "x":588,
-                 "y":13.3333333333333
-                }, 
-                {
-                 "height":28,
-                 "id":9,
-                 "name":"",
-                 "rotation":0,
-                 "type":"wall",
-                 "visible":true,
-                 "width":28,
-                 "x":22.6666666666667,
-                 "y":401.333333333333
+                 "y":-68
                 }, 
                 {
                  "height":28,
@@ -194,8 +194,8 @@
                  "type":"hero",
                  "visible":true,
                  "width":64,
-                 "x":301.333333333333,
-                 "y":374.666666666667
+                 "x":456,
+                 "y":42.6666666666671
                 }, 
                 {
                  "height":28,
@@ -223,8 +223,8 @@
                  "type":"monster1",
                  "visible":true,
                  "width":64,
-                 "x":418.666666666667,
-                 "y":85.3333333333333
+                 "x":386.666666666667,
+                 "y":94.6666666666666
                 }, 
                 {
                  "gid":257,
@@ -321,6 +321,39 @@
                  "width":24,
                  "x":162.666666666667,
                  "y":32
+                }, 
+                {
+                 "height":43.9999999999999,
+                 "id":82,
+                 "name":"",
+                 "rotation":0,
+                 "type":"water",
+                 "visible":true,
+                 "width":268,
+                 "x":685.333333333333,
+                 "y":417.333333333333
+                }, 
+                {
+                 "height":18.6667,
+                 "id":83,
+                 "name":"",
+                 "rotation":0,
+                 "type":"wall",
+                 "visible":true,
+                 "width":268,
+                 "x":687.333333333333,
+                 "y":455.999983333333
+                }, 
+                {
+                 "height":429.333333333333,
+                 "id":84,
+                 "name":"",
+                 "rotation":0,
+                 "type":"lava",
+                 "visible":true,
+                 "width":32,
+                 "x":928,
+                 "y":-7.33333333333339
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -329,7 +362,7 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":80,
+ "nextobjectid":85,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.3",
@@ -524,5 +557,5 @@
  "tilewidth":32,
  "type":"map",
  "version":1.2,
- "width":20
+ "width":30
 }

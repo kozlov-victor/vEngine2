@@ -198,6 +198,13 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
             }
         });
     }
+    public onOverlappedWithGroup(groupName:string, callBack: (arg:ArcadeRigidBody)=>void): (arg:ArcadeRigidBody)=>void {
+        return this.on(ARCADE_COLLISION_EVENT.OVERLAPPED,e=>{
+            if (e.groupNames.indexOf(groupName)>-1) {
+                callBack(e);
+            }
+        });
+    }
 
     private setClonedProperties(body:ArcadeRigidBody):void {
         body._modelType = this._modelType;

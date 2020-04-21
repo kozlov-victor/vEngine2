@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {Image} from "../general/image";
+import {Image} from "./image";
 import {DebugError} from "@engine/debug/debugError";
 import {Size} from "@engine/geometry/size";
 import {Texture} from "@engine/renderer/webGl/base/texture";

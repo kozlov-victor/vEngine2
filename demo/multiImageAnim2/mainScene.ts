@@ -3,7 +3,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MultiImageFrameAnimation} from "@engine/animation/frameAnimation/multiImageFrameAnimation";
 import {ITexture} from "@engine/renderer/common/texture";
-import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 
 
 export class MainScene extends Scene {

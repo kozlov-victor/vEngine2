@@ -6,7 +6,7 @@ import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
-import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 
 
 export class MainScene extends Scene {

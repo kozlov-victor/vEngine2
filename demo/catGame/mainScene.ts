@@ -22,110 +22,146 @@ import {Monster2} from "./entity/actor/impl/monster2";
 import {AbstractEntity} from "./entity/abstract/abstractEntity";
 import {BloodDrop} from "./entity/object/impl/bloodDrop";
 import {TestTube} from "./entity/object/impl/testTube";
+import {Lava} from "./entity/object/impl/lava";
+import {Water} from "./entity/object/impl/water";
+import {Bullet} from "./entity/object/impl/bullet";
+import {Sound} from "@engine/media/sound";
 
 type LEVEL_SCHEMA = typeof import("./level/l1.json");
 
 export class MainScene extends Scene {
 
     @Source.Texture('./catGame/res/sprite/cat.png')
-    private spriteSheetHero:ResourceLink<ITexture>;
+    private spriteSheetHero: ResourceLink<ITexture>;
 
     @Source.Texture('./catGame/res/sprite/wall1.png')
-    private wall1:ResourceLink<ITexture>;
+    private wall1: ResourceLink<ITexture>;
 
     @Source.Texture('./catGame/res/sprite/wall2.png')
-    private wall2:ResourceLink<ITexture>;
+    private wall2: ResourceLink<ITexture>;
 
     @Source.Texture('./catGame/res/sprite/monster1.png')
-    private spriteSheetMonster1:ResourceLink<ITexture>;
+    private spriteSheetMonster1: ResourceLink<ITexture>;
+
+    @Source.Texture('./catGame/res/sprite/lava.png')
+    private spriteSheetLava: ResourceLink<ITexture>;
+
+    @Source.Texture('./catGame/res/sprite/water.png')
+    private spriteSheetWater: ResourceLink<ITexture>;
 
     @Source.Texture('./catGame/res/sprite/monster2.png')
-    private spriteSheetMonster2:ResourceLink<ITexture>;
+    private spriteSheetMonster2: ResourceLink<ITexture>;
 
     @Source.Texture('./catGame/res/sprite/zombie.png')
-    private spriteSheetZombie:ResourceLink<ITexture>;
+    private spriteSheetZombie: ResourceLink<ITexture>;
 
     @Source.Texture('./catGame/res/sprite/bloodDrop.png')
-    private spriteSheetBloodDrop:ResourceLink<ITexture>;
+    private spriteSheetBloodDrop: ResourceLink<ITexture>;
 
     @Source.Texture('./catGame/res/sprite/testTube.png')
-    private spriteSheetTestTube:ResourceLink<ITexture>;
+    private spriteSheetTestTube: ResourceLink<ITexture>;
 
-    private level:LEVEL_SCHEMA;
+    @Source.Texture('./catGame/res/sprite/bullet.png')
+    private spriteSheetBullet: ResourceLink<ITexture>;
 
-    constructor(game: Game,level:LEVEL_SCHEMA) {
+    @Source.Sound('./catGame/res/sound/theme1.ogg')
+    private soundTheme1: ResourceLink<void>;
+
+    private level: LEVEL_SCHEMA;
+
+    constructor(game: Game, level: LEVEL_SCHEMA) {
         super(game);
         this.level = level;
     }
 
     public onReady() {
         this.game.setPhysicsSystem(ArcadePhysicsSystem);
+        this.setBg();
+        this.playTheme();
         this.loadLevel();
-        this.size.setWH(650, 480);
         this.game.getRenderer<WebGlRenderer>().setPixelPerfectMode(true);
     }
 
-    private extractExtraProperties(properties?:({name:string,value:any})[]):IExtraProperties {
+    private extractExtraProperties(properties?: ({ name: string, value: any })[]): IExtraProperties {
         if (!properties) return {};
-        const obj:Record<string, any> = {};
-        properties.forEach(p=>obj[p.name]=p.value);
-        const possible = properties.find(it=>it.name===name);
+        const obj: Record<string, any> = {};
+        properties.forEach(p => obj[p.name] = p.value);
+        const possible = properties.find(it => it.name === name);
         return obj;
     }
 
-    private loadLevel(){
+    private playTheme():void {
+        const sound:Sound = new Sound(this.game);
+        sound.setResourceLink(this.soundTheme1);
+        sound.loop = true;
+        sound.play();
+    }
 
-        const bgLayer:Layer = new Layer(this.game);
+    private setBg():void {
+        const bgLayer: Layer = new Layer(this.game);
         bgLayer.transformType = LayerTransformType.STICK_TO_CAMERA;
-        const bgImage:Rectangle = new Rectangle(this.game);
+        const bgImage: Rectangle = new Rectangle(this.game);
         bgImage.lineWidth = 0;
         bgImage.size.set(this.game.size);
-        const grad:LinearGradient = new LinearGradient();
-        grad.colorFrom = Color.RGB(219,230,255);
-        grad.colorTo = Color.RGB(208,202,202);
+        const grad: LinearGradient = new LinearGradient();
+        grad.colorFrom = Color.RGB(219, 230, 255);
+        grad.colorTo = Color.RGB(208, 202, 202);
         grad.angle = -MathEx.degToRad(90);
         bgImage.fillColor = grad;
         bgLayer.appendChild(bgImage);
-        this.addLayer(bgLayer);
-        this.addLayer(new Layer(this.game));
+        this.appendChild(bgLayer);
+        this.appendChild(new Layer(this.game));
+    }
 
-        this.level.layers[0].objects.forEach(obj=>{
-            let objCreated:Optional<AbstractEntity>;
-            const extraProperties:IExtraProperties = this.extractExtraProperties(obj.properties);
+    private loadLevel() {
+
+
+        this.level.layers[0].objects.forEach(obj => {
+            let objCreated: Optional<AbstractEntity>;
+            const extraProperties: IExtraProperties = this.extractExtraProperties(obj.properties);
             switch (obj.type) {
                 case Hero.groupName:
-                    objCreated = new Hero(this.game,this.spriteSheetHero);
+                    objCreated = new Hero(this.game, this.spriteSheetHero);
                     break;
                 case Monster1.groupName:
-                    objCreated = new Monster1(this.game,this.spriteSheetMonster1);
+                    objCreated = new Monster1(this.game, this.spriteSheetMonster1);
                     break;
                 case Monster2.groupName:
-                    objCreated = new Monster2(this.game,this.spriteSheetMonster2);
+                    objCreated = new Monster2(this.game, this.spriteSheetMonster2);
                     break;
                 case Zombie.groupName:
-                    objCreated = new Zombie(this.game,this.spriteSheetZombie);
+                    objCreated = new Zombie(this.game, this.spriteSheetZombie);
                     break;
                 case BloodDrop.groupName:
-                    objCreated = new BloodDrop(this.game,this.spriteSheetBloodDrop);
+                    objCreated = new BloodDrop(this.game, this.spriteSheetBloodDrop);
                     break;
                 case TestTube.groupName:
-                    objCreated = new TestTube(this.game,this.spriteSheetTestTube);
+                    objCreated = new TestTube(this.game, this.spriteSheetTestTube);
+                    break;
+                case Lava.groupName:
+                    objCreated = new Lava(this.game, this.spriteSheetLava, new Size(obj.width, obj.height));
+                    break;
+                case Water.groupName:
+                    objCreated = new Water(this.game, this.spriteSheetWater, new Size(obj.width, obj.height));
                     break;
                 case Wall.groupName:
                     if (extraProperties.toX) extraProperties.fromX = obj.x;
                     if (extraProperties.toY) extraProperties.fromY = obj.y;
-                    const wallResource:ResourceLink<ITexture> = (extraProperties.toX || extraProperties.toY)?
-                        this.wall2:this.wall1;
-                    objCreated = new Wall(this.game,new Size(obj.width,obj.height),wallResource,extraProperties);
+                    const wallResource: ResourceLink<ITexture> = (extraProperties.toX || extraProperties.toY) ?
+                        this.wall2 : this.wall1;
+                    objCreated = new Wall(this.game, new Size(obj.width, obj.height), wallResource, extraProperties);
                     break;
                 default:
                     break;
             }
-            if (objCreated!==undefined) {
-                objCreated.getRenderableModel().pos.setXY(obj.x,obj.y);
+            if (objCreated !== undefined) {
+                objCreated.getRenderableModel().pos.setXY(obj.x, obj.y);
             }
         });
         Burster.instantiate(this.game);
+        Bullet.init(this.spriteSheetBullet);
+        this.fitSizeToChildren();
     }
-
 }
+
+

@@ -1,11 +1,13 @@
 import {Game} from "@engine/core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
-import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 import {Size} from "@engine/geometry/size";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {AbstractEntity} from "../../abstract/abstractEntity";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {ICreateRigidBodyParams} from "@engine/physics/arcade/ArcadePhysicsSystem";
 
 
 export interface IExtraProperties {
@@ -17,6 +19,8 @@ export interface IExtraProperties {
 
 export abstract class AbstractCharacter extends AbstractEntity {
 
+    public static readonly groupName:string = 'abstractCharacter';
+
     protected renderableImage:AnimatedImage;
 
     protected walkAnimation:CellFrameAnimation;
@@ -26,11 +30,15 @@ export abstract class AbstractCharacter extends AbstractEntity {
 
     protected velocity:number = 10;
 
-    protected constructor(protected game:Game, spr:ResourceLink<ITexture>) {
-        super(game);
-        const img:AnimatedImage = new AnimatedImage(game);
-        this.renderableImage = img;
-        img.setResourceLink(spr);
+    protected constructor(protected game:Game, spr:ResourceLink<ITexture>,params:ICreateRigidBodyParams) {
+        super(game,spr,params);
+        this.idle();
+    }
+
+    protected onCreatedRenderableModel(spriteSheet: ResourceLink<ITexture>): RenderableModel {
+        const img:AnimatedImage = new AnimatedImage(this.game);
+        img.setResourceLink(spriteSheet);
+        return img;
     }
 
     protected createFrameAnimation(name:string,frames:number[], duration:number, spriteSheetSize:Size):CellFrameAnimation {
@@ -40,11 +48,6 @@ export abstract class AbstractCharacter extends AbstractEntity {
         animation.setSpriteSheetSize(spriteSheetSize);
         this.renderableImage.addFrameAnimation(name,animation);
         return animation;
-    }
-
-    protected appendToScene(){
-        this.game.getCurrScene().getLayerAtIndex(1).appendChild(this.renderableImage);
-        this.renderableImage.transformPoint.setToCenter();
     }
 
     protected goLeft():void {
@@ -69,11 +72,6 @@ export abstract class AbstractCharacter extends AbstractEntity {
         if (this.jumpAnimation!==undefined) {
             this.jumpAnimation.play().once(FRAME_ANIMATION_EVENTS.completed, ev=>this.idleAnimation.play());
         }
-    }
-
-    protected postConstruct(){
-        this.idle();
-        this.appendToScene();
     }
 
 

@@ -5,6 +5,8 @@ import {Size} from "@engine/geometry/size";
 import {Rect} from "@engine/geometry/rect";
 import {MathEx} from "@engine/misc/mathEx";
 import {AbstractMonster} from "../abstract/abstractMonster";
+import {AbstractEntity} from "../../abstract/abstractEntity";
+import {AbstractCharacter} from "../abstract/abstractCharacter";
 
 export class Monster2 extends AbstractMonster {
 
@@ -13,10 +15,26 @@ export class Monster2 extends AbstractMonster {
     private baseVelocity:number = 90;
 
     constructor(protected game: Game, spr: ResourceLink<ITexture>) {
-        super(game, spr);
+        super(game, spr,{
+            restitution: 0.9,
+            rect: new Rect(20,20,23,33),
+            groupNames: [Monster2.groupName,AbstractMonster.groupName, AbstractCharacter.groupName],
+            //ignoreCollisionWithGroupNames: [Burster.groupName],
+            //debug: true
+        });
 
         this.burstColor.setRGBA(200,255,200,100);
 
+        this.game.getCurrScene().setInterval(()=>{
+            this.trackPositionByHero();
+        },2000);
+
+        this.scheduleBurst();
+
+    }
+
+
+    protected onCreatedFrameAnimation(): void {
         this.idleAnimation = this.createFrameAnimation(
             'idle', [0,1,2,3,4],900 + MathEx.random(10,100),
             new Size(8,4)
@@ -29,24 +47,6 @@ export class Monster2 extends AbstractMonster {
             'attack', [8,9,10,11,12],900 + MathEx.random(10,100),
             new Size(8,4)
         );
-
-        this.createRigidBody({
-            restitution: 0.9,
-            rect: new Rect(20,20,23,33),
-            groupNames: [Monster2.groupName,AbstractMonster.abstractMonsterGroup],
-            //ignoreCollisionWithGroupNames: [Burster.groupName],
-            //debug: true
-        });
-
-
-        this.game.getCurrScene().setInterval(()=>{
-            this.trackPositionByHero();
-        },2000);
-
-        this.scheduleBurst();
-
-        this.postConstruct();
-
     }
 
     private scheduleBurst(){

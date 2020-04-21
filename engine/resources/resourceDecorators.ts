@@ -13,6 +13,14 @@ export const Source = {
             });
         };
     },
+    Sound: (src:string|IURLRequest)=> {
+        return (target: Scene, propertyKey: string):void => {
+            target.preloadingTaskFromDecorators = target.preloadingTaskFromDecorators || [];
+            target.preloadingTaskFromDecorators.push((currScene:Scene)=>{
+                (currScene as unknown as Record<string, ResourceLink<void>>)[propertyKey] = currScene.resourceLoader.loadSound(src);
+            });
+        };
+    },
     CubeTexture:  (leftSide: string|IURLRequest, rightSide:string|IURLRequest,
                    topSide: string|IURLRequest, bottomSide:string|IURLRequest,
                    frontSide: string|IURLRequest, backSide:string|IURLRequest)=>{

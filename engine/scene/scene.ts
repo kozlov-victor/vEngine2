@@ -34,9 +34,14 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
+import {DebugError} from "@engine/debug/debugError";
 
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
+
+    private static isLayerGuard(modelOrLayer:RenderableModel|Layer):modelOrLayer is Layer {
+        return modelOrLayer.type==='Layer';
+    }
 
     public readonly type:string = "Scene";
     public colorBG = Color.WHITE.clone();
@@ -77,7 +82,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
 
     public getDefaultLayer():Layer {
-        if (!this._layers.length) this.addLayer(new Layer(this.game));
+        if (!this._layers.length) this.appendChild(new Layer(this.game));
         return this._layers[this._layers.length-1];
     }
 
@@ -92,30 +97,45 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         return this._layers[index];
     }
 
-    public addLayer(layer:Layer):void {
-        layer.setScene(this);
-        this._layers.push(layer);
-    }
-
-    public removeLayer(layer:Layer):void {
-        removeFromArray(this._layers,(it)=>it===layer);
-    }
-
-    public appendChild(go:RenderableModel):void {
-        go.revalidate();
-        this.getDefaultLayer().appendChild(go);
-    }
-
-    public removeChild(c:RenderableModel):void{
-        for (let i = 0; i < this._layers.length; i++) {
-            if (this._layers[i].removeChild(c)) {
-                break;
-            }
+    public removeChild(modelOrLayer:RenderableModel|Layer):void{
+        if (Scene.isLayerGuard(modelOrLayer)) {
+            const i:number = this._layers.indexOf(modelOrLayer);
+            if (DEBUG && i===-1) throw new DebugError(`can not remove layer: is doesn't belong to target scene`);
+            this._layers.splice(i,1);
+        } else {
+            this.getDefaultLayer().removeChild(modelOrLayer);
         }
+    }
+
+    public appendChild(model:RenderableModel):void;
+    public appendChild(layer:Layer):void;
+    public appendChild(modelOrLayer:RenderableModel|Layer):void {
+        if (Scene.isLayerGuard(modelOrLayer)) {
+            modelOrLayer.setScene(this);
+            this._layers.push(modelOrLayer as Layer);
+        } else {
+            modelOrLayer.revalidate();
+            this.getDefaultLayer().appendChild(modelOrLayer as RenderableModel);
+        }
+
     }
 
     public prependChild(go:RenderableModel):void {
         this.getDefaultLayer().prependChild(go);
+    }
+
+    public fitSizeToChildren():void {
+        let maxRight:number = this.game.size.width;
+        let maxBottom:number = this.game.size.height;
+        this._layers.forEach(l=>{
+            l.children.forEach(c=>{
+                const right:number = c.pos.x+c.size.width;
+                const bottom:number = c.pos.y+c.size.height;
+                if (right>maxRight) maxRight = right;
+                if (bottom>maxBottom) maxBottom = bottom;
+            });
+        });
+        this.size.setWH(maxRight,maxBottom);
     }
 
 
@@ -274,4 +294,5 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         for (const l of this._layers) l.update();
         this.onUpdate();
     }
+
 }

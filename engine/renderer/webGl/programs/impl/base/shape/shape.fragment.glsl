@@ -24,7 +24,8 @@ vec4 getStretchedImage(float tx,float ty){
 vec4 getRepeatedImage(float tx,float ty){
     vec2 txVec = vec2(tx,ty)*u_repeatFactor;
     txVec += fract(u_texOffset);
-    txVec = mod(txVec,vec2(ONE,ONE));
+    txVec = mod(txVec,u_texRect.zw);
+    txVec += u_texRect.xy;
     return texture2D(texture, txVec);
 }
 

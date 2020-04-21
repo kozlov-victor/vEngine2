@@ -13,8 +13,22 @@ export class Monster1 extends AbstractMonster {
     private baseVelocity:number = 70;
 
     constructor(protected game: Game, spr: ResourceLink<ITexture>) {
-        super(game, spr);
+        super(game, spr,{
+            restitution: 0.2,
+            rect: new Rect(20,20,23,33),
+            groupNames: [Monster1.groupName, AbstractMonster.groupName],
+            //ignoreCollisionWithGroupNames: [Burster.groupName],
+            //debug: true
+        });
 
+        this.game.getCurrScene().setInterval(()=>{
+            this.trackPositionByHero();
+        },2000);
+
+        this.scheduleBurst();
+    }
+
+    protected onCreatedFrameAnimation(): void {
         this.idleAnimation = this.createFrameAnimation(
             'idle', [0,1,2,3],900 + MathEx.random(10,100),
             new Size(8,8)
@@ -30,24 +44,6 @@ export class Monster1 extends AbstractMonster {
             'attack', [16,17,18,19,20,21],900 + MathEx.random(10,100),
             new Size(8,8)
         );
-
-        this.createRigidBody({
-            restitution: 0.2,
-            rect: new Rect(20,20,23,33),
-            groupNames: [Monster1.groupName, AbstractMonster.abstractMonsterGroup],
-            //ignoreCollisionWithGroupNames: [Burster.groupName],
-            //debug: true
-        });
-
-
-        this.game.getCurrScene().setInterval(()=>{
-            this.trackPositionByHero();
-        },2000);
-
-        this.scheduleBurst();
-
-        this.postConstruct();
-
     }
 
     private scheduleBurst(){

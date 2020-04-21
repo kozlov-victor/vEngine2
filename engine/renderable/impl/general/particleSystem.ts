@@ -40,7 +40,7 @@ export class ParticleSystem extends NullGameObject {
     public particleLiveTime:IParticlePropertyDesc = {from:100,to:1000};
     public emissionRadius:number = 0;
     public emissionPosition:Point2d = new Point2d();
-    public emissionTarget:ParticleSystem|Scene|Layer = this;
+    public emissionTarget:ParticleSystem|Layer|Scene = this; // remove this field
 
     private _particles:IParticleHolder[] = [];
     private _prototypes:RenderableCloneable[] = [];

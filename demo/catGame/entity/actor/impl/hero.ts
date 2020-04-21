@@ -11,8 +11,12 @@ import {AbstractCharacter} from "../abstract/abstractCharacter";
 import {Size} from "@engine/geometry/size";
 import {Burster} from "../../misc/burster";
 import {AbstractMonster} from "../abstract/abstractMonster";
-import {BloodDrop} from "../../object/impl/bloodDrop";
-import {AbstractObject} from "../../object/abstract/abstractObject";
+import {AbstractEntity} from "../../abstract/abstractEntity";
+import {Bullet} from "../../object/impl/bullet";
+import {CollectableEntity} from "../../object/abstract/collectableEntity";
+
+const LEFT:number = -1;
+const RIGHT:number = 1;
 
 export class Hero extends AbstractCharacter {
 
@@ -27,76 +31,69 @@ export class Hero extends AbstractCharacter {
     private rotateAnimation:CellFrameAnimation;
     private fallAnimation:CellFrameAnimation;
     private highKickAnimation:CellFrameAnimation;
-    private downKickAnimation:CellFrameAnimation;
 
     private hurt:boolean = false;
     private hurtCnt:number = 0;
     private beating:boolean = false;
+    private direction:number = RIGHT;
 
     constructor(protected game:Game, spr:ResourceLink<ITexture>) {
-        super(game,spr);
+        super(game,spr,{
+            restitution: 0.2,
+            rect: new Rect(23,20,15,33),
+            //debug: true,
+            groupNames: [Hero.groupName, AbstractCharacter.groupName],
+            //ignoreCollisionWithGroupNames: [Burster.groupName],
+        });
         Hero.instance = this;
 
+        this.game.camera.followTo(this.renderableImage);
+        this.velocity = 90;
+
+        this.rotateAnimation.
+            play().
+            once(FRAME_ANIMATION_EVENTS.completed, e=>this.idleAnimation.play());
+
+        this.listenKeys();
+        this.listenCollisions();
+    }
+
+    protected onCreatedFrameAnimation(): void {
         this.idleAnimation = this.createFrameAnimation(
             'idle', [0,1,2,3],1000,
             new Size(16,16)
         );
 
         this.jumpAnimation = this.createFrameAnimation(
-            'jump', [32,33,34,35,36,37,38,39], 1000,
+            'jump', this.createRange(32,39), 1000,
             new Size(16,16)
         );
         this.jumpAnimation.isRepeating = false;
 
         this.rotateAnimation = this.createFrameAnimation(
-            'rotate', [128,129,130,131,132,133,134,135,136,137,138,139,140], 1000,
+            'rotate', this.createRange(128,140), 1000,
             new Size(16,16)
         );
         this.rotateAnimation.isRepeating = false;
 
 
         this.fallAnimation = this.createFrameAnimation(
-            'fall', [80,81,82,83,84,85,86], 1000,
+            'fall', this.createRange(80,86), 1000,
             new Size(16,16)
         );
         this.fallAnimation.isRepeating = false;
 
         this.walkAnimation = this.createFrameAnimation(
-            'walk', [16,17,18,19,20,21,22,23], 1000,
+            'walk', this.createRange(16,23), 1000,
             new Size(16,16)
         );
 
         this.highKickAnimation = this.createFrameAnimation(
-            'highKick', [176,177,178,179,180,181], 1000,
+            'highKick', this.createRange(176,181), 200,
             new Size(16,16)
         );
         this.highKickAnimation.isRepeating = false;
 
-        this.downKickAnimation = this.createFrameAnimation(
-            'downKick', [192,193,194,195,196,197,198,199], 1000,
-            new Size(16,16)
-        );
-        this.downKickAnimation.isRepeating = false;
-
-        this.game.camera.followTo(this.renderableImage);
-        this.createRigidBody({
-            restitution: 0.2,
-            rect: new Rect(23,20,15,33),
-            //debug: true,
-            groupNames: [Hero.groupName],
-            //ignoreCollisionWithGroupNames: [Burster.groupName],
-        });
-
-
-        this.velocity = 90;
-        this.postConstruct();
-
-        this.rotateAnimation.
-            play().
-            once(FRAME_ANIMATION_EVENTS.completed, e=>this.idleAnimation.play());
-        this.renderableImage.pos.x = 100;
-        this.listenKeys();
-        this.listenCollisions();
     }
 
     private damage():void {
@@ -114,39 +111,23 @@ export class Hero extends AbstractCharacter {
         },200);
     }
 
+    private shoot():void {
+        const bullet:Bullet = Bullet.emit(this.game);
+        bullet.getRenderableModel().pos.setXY(this.getRenderableModel().pos.x + 20,this.getRenderableModel().pos.y + 35);
+        bullet.getRenderableModel().getRigidBody<ArcadeRigidBody>()!.velocity.x = 150 * this.direction;
+    }
+
     private listenKeys():void {
         const jumpVelocity:number = 200;
         this.game.getCurrScene().on(KEYBOARD_EVENTS.keyHold, e=>{
             switch (e.key) {
-                case KEYBOARD_KEY.Z:
-                    this.beating = true;
-                    this.highKickAnimation.play();
-                    this.highKickAnimation.once(FRAME_ANIMATION_EVENTS.completed, ev=>{
-                        this.beating = false;
-                        this.idle();
-                    });
-                    this.highKickAnimation.once(FRAME_ANIMATION_EVENTS.canceled, ev=>{
-                        this.beating = false;
-                        this.idle();
-                    });
-                    break;
-                case KEYBOARD_KEY.X:
-                    this.beating = true;
-                    this.downKickAnimation.play();
-                    this.downKickAnimation.once(FRAME_ANIMATION_EVENTS.completed, ev=>{
-                        this.beating = false;
-                        this.idle();
-                    });
-                    this.downKickAnimation.once(FRAME_ANIMATION_EVENTS.canceled, ev=>{
-                        this.beating = false;
-                        this.idle();
-                    });
-                    break;
                 case KEYBOARD_KEY.LEFT:
                     if (!this.beating) this.goLeft();
+                    this.direction = LEFT;
                     break;
                 case KEYBOARD_KEY.RIGHT:
                     if (!this.beating) this.goRight();
+                    this.direction = RIGHT;
                     break;
                 case KEYBOARD_KEY.SPACE:
                     if (this.renderableImage.getRigidBody<ArcadeRigidBody>()!.collisionFlags.bottom) {
@@ -164,6 +145,23 @@ export class Hero extends AbstractCharacter {
                     break;
             }
         });
+        this.game.getCurrScene().on(KEYBOARD_EVENTS.keyPressed, e=>{
+            switch (e.key) {
+                case KEYBOARD_KEY.Z:
+                    this.beating = true;
+                    this.highKickAnimation.play();
+                    this.shoot();
+                    this.highKickAnimation.once(FRAME_ANIMATION_EVENTS.completed, ev=>{
+                        this.beating = false;
+                        this.idle();
+                    });
+                    this.highKickAnimation.once(FRAME_ANIMATION_EVENTS.canceled, ev=>{
+                        this.beating = false;
+                        this.idle();
+                    });
+                    break;
+            }
+        });
     }
 
     private onCollidedWithMonster(monsterBody:ArcadeRigidBody):void {
@@ -171,14 +169,14 @@ export class Hero extends AbstractCharacter {
     }
 
     private listenCollisions():void {
-        this.body.onCollidedWithGroup(AbstractMonster.abstractMonsterGroup,e=>{
+        this.body.onCollidedWithGroup(AbstractMonster.groupName, e=>{
             this.onCollidedWithMonster(e);
         });
         this.body.onCollidedWithGroup(Burster.groupName,e=>{
             this.onCollidedWithMonster(e);
         });
-        this.body.onCollidedWithGroup(AbstractObject.collectableGroupName,e=>{
-            e.getHostModel().getParent()!.removeChild(e.getHostModel());
+        this.body.onCollidedWithGroup(CollectableEntity.groupName,e=>{
+            e.getHostModel().removeSelf();
         });
     }
 

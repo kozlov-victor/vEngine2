@@ -52,10 +52,12 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
             const all:RenderableModel[] = this.game.getCurrScene().getLayerAtIndex(ind).children;
             for (let i:number = 0; i < all.length; i++) {
                 const player:RenderableModel = all[i];
+                //if (player.isDetached()) continue;
                 const playerBody:Optional<ArcadeRigidBody> = player.getRigidBody();
                 if (playerBody===undefined) continue;
                 for (let j:number = i + 1; j < all.length; j++) {
                     const entity:RenderableModel = all[j];
+                    //if (entity.isDetached()) continue;
                     const entityBody:Optional<ArcadeRigidBody> = entity.getRigidBody();
                     if (entityBody===undefined) continue;
                     if (!MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) continue;
@@ -90,30 +92,6 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         // Calculate the absolute change in x and y
         const absDX:number = Math.abs(dx);
         const absDY:number = Math.abs(dy);
-
-        // If the distance between the normalized x and y
-        // position is less than a small threshold (.1 in this case)
-        // then this object is approaching from a corner
-        // if (Math.abs(absDX - absDY) < .1) {
-        //     // If the player is approaching from positive X
-        //     if (dx < 0) {
-        //         // Set the player x to the right side
-        //         ArcadePhysicsSystem.collidePlayerWithLeft(player, entity);
-        //         // If the player is approaching from negative X
-        //     } else {
-        //         // Set the player x to the left side
-        //         ArcadePhysicsSystem.collidePlayerWithRight(player, entity);
-        //     }
-        //     // If the player is approaching from positive Y
-        //     if (dy < 0) {
-        //         // Set the player y to the bottom
-        //         ArcadePhysicsSystem.collidePlayerWithTop(player, entity);
-        //         // If the player is approaching from negative Y
-        //     } else {
-        //         // Set the player y to the top
-        //         ArcadePhysicsSystem.collidePlayerWithBottom(player, entity);
-        //     }
-        // }
 
         //If the object is approaching from the sides
         if (absDX > absDY) {
@@ -184,11 +162,13 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     }
 
     private emitCollisionEvents(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
+        if (player.getHostModel().isDetached() || entity.getHostModel().isDetached()) return;
         player.trigger(ARCADE_COLLISION_EVENT.COLLIDED, entity);
         entity.trigger(ARCADE_COLLISION_EVENT.COLLIDED, player);
     }
 
     private emitOverlapEvents(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
+        if (player.getHostModel().isDetached() || entity.getHostModel().isDetached()) return;
         player.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, entity);
         entity.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, player);
     }

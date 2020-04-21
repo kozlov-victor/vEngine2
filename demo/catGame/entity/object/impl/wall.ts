@@ -1,8 +1,6 @@
 import {Game} from "@engine/core/game";
-import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
-import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
 import {IExtraProperties} from "../../actor/abstract/abstractCharacter";
-import {Color} from "@engine/renderer/common/color";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Optional} from "@engine/core/declarations";
 import {Size} from "@engine/geometry/size";
@@ -10,27 +8,25 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {AbstractEntity} from "../../abstract/abstractEntity";
-import {AbstractObject} from "../abstract/abstractObject";
+import {Rect} from "@engine/geometry/rect";
 
 
-export class Wall extends AbstractObject {
+export class Wall extends AbstractEntity {
 
     public static readonly groupName:string = 'wall';
 
     constructor(protected game:Game,size:Size,resource:ResourceLink<ITexture>,movePlatformInfo?:IExtraProperties) {
-        super(game, resource);
+        super(game, resource, {
+            groupNames: [Wall.groupName],
+            type:ARCADE_RIGID_BODY_TYPE.KINEMATIC,
+            rect: new Rect(0,0,size.width,size.height)
+        });
         const rect:Image = this.getRenderableModel() as Image;
         rect.size.set(size);
         rect.setResourceLink(resource);
         rect.stretchMode = STRETCH_MODE.REPEAT;
         rect.lineWidth = 2;
         rect.borderRadius = 5;
-
-        this.createRigidBody({
-            groupNames: [Wall.groupName],
-            type:ARCADE_RIGID_BODY_TYPE.KINEMATIC
-        });
-
 
         if (movePlatformInfo?.fromY!==undefined) {
             this.startMoveableY(movePlatformInfo);

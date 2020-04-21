@@ -72,7 +72,7 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
         <style>
             .errorHeader {text-align: center;}
             .errorText {
-                color: #f3170d;
+                color: #ff8882;
                 white-space: pre-wrap;
             }
             .errorCol {color: #f30000;text-decoration: underline;}
@@ -84,12 +84,13 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
                 position: absolute;
                 left: 0;top:0;right:0;
                 border: 1px solid grey;
-                background-color: rgba(255,215,200,0.99);
+                background-color: rgba(21, 15, 121, 0.88);
                 font-family: monospace;
                 padding: 10px;
                 -webkit-touch-callout: default;
                 -webkit-user-select: text;
                 user-select: text;
+                color: #fffef8;
             }
             .errorClose {
                 position: absolute;
@@ -99,7 +100,7 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
                 width: 20px;
                 height: 20px;
                 cursor: pointer;
-                color: black;
+                color: white;
             }
        </style>
        <div class="errorClose" onclick="this.closest('.errorBlockHolder').remove();">x</div>

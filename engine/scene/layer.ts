@@ -11,13 +11,13 @@ export const enum LayerTransformType {
 
 export class Layer implements IParentChild {
 
-    public readonly type:string = 'Layer';
+    public readonly type:'Layer' = 'Layer';
     public transformType:LayerTransformType = LayerTransformType.TRANSFORM;
     public readonly children:RenderableModel[] = [];
     public readonly parent:IParentChild;
     public id:string;
 
-    private _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate(this);
+    private _parentChildDelegate:ParentChildDelegate<Layer|RenderableModel> = new ParentChildDelegate(this);
     private _scene:Scene;
 
     constructor(protected game:Game) {
@@ -53,8 +53,8 @@ export class Layer implements IParentChild {
         this._parentChildDelegate.removeChildAt(i);
     }
 
-    public removeChild(c:RenderableModel):boolean{
-        return this._parentChildDelegate.removeChild(this.children,c);
+    public removeChild(c:RenderableModel):void{
+        this._parentChildDelegate.removeChild(c);
     }
 
     public removeSelf(): void {

@@ -1,7 +1,7 @@
 import {ICloneable, IRevalidatable} from "@engine/core/declarations";
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {DebugError} from "@engine/debug/debugError";
-import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 import {ISize} from "@engine/geometry/size";
 
 export class CellFrameAnimation extends AbstractFrameAnimation<number> implements IRevalidatable, ICloneable<CellFrameAnimation>{

@@ -6,7 +6,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Color} from "@engine/renderer/common/color";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
-import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 
 
 export class MainScene extends Scene {

@@ -4,78 +4,91 @@ import {Layer} from "@engine/scene/layer";
 import {IParentChild, Optional} from "@engine/core/declarations";
 import {removeFromArray} from "@engine/misc/object";
 
+type OnTreeModifiedCallback<T> = (c:T)=>void;
+
 export class ParentChildDelegate<T extends IParentChild> {
 
-    constructor(private model:IParentChild) {}
+    constructor(private model:T) {}
 
-    public appendChild(c:IParentChild):void {
+    public appendChild(c:T,afterAppended?:OnTreeModifiedCallback<T>):void {
         if (DEBUG) {
             if (c===this.model) throw new DebugError(`parent and child objects are the same`);
             if (this.model.children.find((it:IParentChild)=>it===c)) {
                 console.error(c);
-                throw new DebugError(`this children already added`);
+                throw new DebugError(`this children is already added`);
             }
         }
         c.parent = this.model;
         this.model.children.push(c);
+        if (afterAppended!==undefined) afterAppended(c);
     }
 
-    public appendChildAt(c:IParentChild,index:number):void{
+    public appendChildAt(c:T,index:number,afterAppended?:OnTreeModifiedCallback<T>):void{
         if (DEBUG) {
             if (index>this.model.children.length-1) throw new DebugError(`can not insert element: index is out of range (${index},${this.model.children.length-1})`);
         }
         c.parent = this.model;
         this.model.children.splice(index,0,c);
+        if (afterAppended!==undefined) afterAppended(c);
     }
 
-    public appendChildAfter(modelAfter:IParentChild,newChild:IParentChild):void{
+    public appendChildAfter(modelAfter:T,newChild:T,afterAppended?:OnTreeModifiedCallback<T>):void{
         const afterIndex:number = this.model.children.indexOf(modelAfter);
         if (DEBUG) {
             if (afterIndex===-1) throw new DebugError(`can not insert element: object is detached`);
         }
-        if (afterIndex===this.model.children.length-1) this.appendChild(newChild);
-        else this.appendChildAt(newChild,afterIndex+1);
+        if (afterIndex===this.model.children.length-1) this.appendChild(newChild,afterAppended);
+        else this.appendChildAt(newChild,afterIndex+1,afterAppended);
     }
 
-    public appendChildBefore(modelBefore:IParentChild,newChild:IParentChild):void{
+    public appendChildBefore(modelBefore:T,newChild:T,afterAppended?:OnTreeModifiedCallback<T>):void{
         const beforeIndex:number = this.model.children.indexOf(modelBefore);
         if (DEBUG) {
             if (beforeIndex===-1) throw new DebugError(`can not insert element: object is detached`);
         }
-        if (beforeIndex===0) this.prependChild(newChild);
-        else this.appendChildAt(newChild,beforeIndex-1);
+        if (beforeIndex===0) this.prependChild(newChild,afterAppended);
+        else this.appendChildAt(newChild,beforeIndex-1,afterAppended);
     }
 
 
-    public prependChild(c:IParentChild):void {
+    public prependChild(c:T,afterAppended?:OnTreeModifiedCallback<T>):void {
         c.parent = this.model;
         this.model.children.unshift(c);
+        if (afterAppended!==undefined) afterAppended(c);
     }
 
-    public removeChildAt(i:number):void{
+    public removeChildAt(i:number,afterRemoved?:OnTreeModifiedCallback<T>):void{
         const c:IParentChild = this.model.children[i];
         if (DEBUG && !c) throw new DebugError(`can not remove children with index ${i}`);
-        if (DEBUG && c.parent===undefined) throw new DebugError(`can not remove children with index ${i}: parent is undefined`);
+        if (DEBUG && c.parent===undefined) throw new DebugError(`can not remove children with index ${i}: it is already detached`);
         c.parent!.children.splice(i,1);
         c.parent = undefined;
+        if (afterRemoved!==undefined) afterRemoved(c as T);
     }
 
-    public removeChild(children:IParentChild[],c:IParentChild):boolean{
-        const parent:IParentChild = c.getParent() as IParentChild;
-        const i:number = parent.children.indexOf(c);
-        if (i===-1) return this.removeChild(c.children,c);
-        else return removeFromArray(children,it=>it===c)>0;
+    public removeChild(child:T,afterRemoved?:OnTreeModifiedCallback<T>):void{
+        const parent:IParentChild = child.getParent() as IParentChild;
+        const i:number = parent.children.indexOf(child);
+        if (DEBUG && i===-1) throw new DebugError(`can not remove child: it doesn't belong to parent`);
+        parent.children.splice(i,1);
+        child.parent = undefined;
+        if (afterRemoved!==undefined) afterRemoved(child);
     }
 
-    public removeSelf():void {
+    public removeSelf(afterRemoved?:OnTreeModifiedCallback<T>):void {
         const parent:IParentChild = this.model.getParent() as IParentChild;
-        parent.removeChild(this.model as RenderableModel);
+        if (DEBUG && parent===undefined) throw new DebugError(`can not remove child: it is already detached`);
+        const i:number = parent.children.indexOf(this.model);
+        if (DEBUG && i===-1) throw new DebugError(`can not remove child: it doesn't belong to parent`);
+        parent.children.splice(i,1);
+        this.model.parent = undefined;
+        if (afterRemoved!==undefined) afterRemoved(this.model);
     }
 
-    public removeChildren():void{
+    public removeChildren(afterRemoved?:OnTreeModifiedCallback<T>):void{
         for (let i:number = this.model.children.length-1; i >= 0; i--) {
             const c:IParentChild = this.model.children[i];
-            this.removeChildAt(i);
+            this.removeChildAt(i,afterRemoved);
         }
     }
 
@@ -103,11 +116,7 @@ export class ParentChildDelegate<T extends IParentChild> {
         parentArray.unshift(this.model);
     }
 
-    public getParent():Optional<T>{
-        return this.model.parent as T;
-    }
-
-    public findChildById<U extends RenderableModel>(id:string):Optional<U>{
+    public findChildById<U extends T>(id:string):Optional<U>{
         if (id===this.model.id) return this.model as U;
         for (const c of this.model.children) {
             const possibleObject:Optional<IParentChild> = c.findChildById(id);

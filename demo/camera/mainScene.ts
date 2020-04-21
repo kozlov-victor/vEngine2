@@ -49,7 +49,7 @@ export class MainScene extends Scene {
         (infoRect.fillColor as Color).setRGB(12,100,55);
         infoRect.addBehaviour(new DraggableBehaviour(this.game));
         uiLayer.appendChild(infoRect);
-        this.addLayer(uiLayer);
+        this.appendChild(uiLayer);
 
         this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {

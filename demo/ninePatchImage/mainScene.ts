@@ -5,7 +5,7 @@ import {Color} from "@engine/renderer/common/color";
 import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {NinePatchImage} from "@engine/renderable/impl/geometry/ninePatchImage";
+import {NinePatchImage} from "@engine/renderable/impl/general/ninePatchImage";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 
 export class MainScene extends Scene {

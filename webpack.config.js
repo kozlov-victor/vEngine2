@@ -109,6 +109,7 @@ module.exports = (env={})=>{
                                         ]
                                     }
                                 },
+                                transpileOnly: true
                             },
                         },
                     ]

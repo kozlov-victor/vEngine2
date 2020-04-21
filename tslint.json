@@ -27,6 +27,7 @@
     "comment-format": false,
     "no-consecutive-blank-lines": false,
     "jsdoc-format": false,
+    "unified-signatures": false,
     "no-console": {
       "severity": "off",
       "options": ["debug", "info", "log", "time", "timeEnd", "trace"]

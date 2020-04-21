@@ -2,7 +2,7 @@ import {IEventemittable} from "@engine/core/declarations";
 import {Game} from "@engine/core/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";
-import {AnimatedImage} from "@engine/renderable/impl/geometry/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 import {IAnimation} from "@engine/animation/iAnimation";
 
 export const enum FRAME_ANIMATION_EVENTS {
