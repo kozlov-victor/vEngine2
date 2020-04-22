@@ -28,8 +28,8 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
     private free: boolean = true;
     private _ctx: HTMLAudioElement;
 
-    constructor(game:Game) {
-        super(game);
+    constructor(protected game:Game,protected audioPlayer:AudioPlayer) {
+        super(game,audioPlayer);
         this._ctx = CtxHolder.getCtx();
     }
     public async load(buffer:ArrayBuffer,link:ResourceLink<void>):Promise<void> {
@@ -78,7 +78,7 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
     }
 
     public clone():HtmlAudioContext{
-        return new HtmlAudioContext(this.game);
+        return new HtmlAudioContext(this.game,this.audioPlayer);
     }
 
 

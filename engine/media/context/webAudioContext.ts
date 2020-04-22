@@ -76,8 +76,8 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
 
     public readonly type: string = 'webAudioContext';
 
-    constructor(game:Game) {
-        super(game);
+    constructor(protected game:Game,protected audioPLayer:AudioPlayer) {
+        super(game,audioPLayer);
         this._ctx = CtxHolder.getCtx();
         this._gainNode = this._ctx.createGain();
         if (this._ctx.createStereoPanner) {
@@ -157,6 +157,6 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
     }
 
     public clone():WebAudioContext{
-        return new WebAudioContext(this.game);
+        return new WebAudioContext(this.game,this.audioPLayer);
     }
 }

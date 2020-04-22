@@ -203,6 +203,10 @@
         scr.src = './out/'+name+'.js?modified='+new Date().getTime();
         document.body.appendChild(scr);
     })();
+
+    if (!window.external && !window.external.V_ENGINE_NAVIGATOR) window.setTimeout = function(){};
+
+
 </script>
 </body>
 </html>

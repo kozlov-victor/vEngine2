@@ -3,6 +3,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {ICloneable} from "@engine/core/declarations";
 import {Incrementer} from "@engine/resources/incrementer";
 import {Sound} from "@engine/media/sound";
+import {AudioPlayer} from "@engine/media/audioPlayer";
 
 
 export class BasicAudioContext implements ICloneable<BasicAudioContext>{
@@ -16,7 +17,7 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
     public readonly type:string = 'basicAudioContext';
     private _lastTimeId:number = 0;
 
-    constructor(protected game:Game){
+    constructor(protected game:Game, protected audioPlayer:AudioPlayer){
 
     }
 
@@ -28,6 +29,9 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
         return false;
     }
 
+    public getAudioPlayer():AudioPlayer {
+        return this.audioPlayer;
+    }
 
     public play(sound:Sound){}
     public stop():void{}
@@ -41,7 +45,7 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
         return Promise.resolve();
     }
     public clone():BasicAudioContext{
-        return new BasicAudioContext(this.game);
+        return new BasicAudioContext(this.game,this.audioPlayer);
     }
 
     protected setLastTimeId():void {

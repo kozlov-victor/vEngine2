@@ -11,9 +11,9 @@ import {AbstractCharacter} from "../abstract/abstractCharacter";
 import {Size} from "@engine/geometry/size";
 import {Burster} from "../../misc/burster";
 import {AbstractMonster} from "../abstract/abstractMonster";
-import {AbstractEntity} from "../../abstract/abstractEntity";
 import {Bullet} from "../../object/impl/bullet";
 import {CollectableEntity} from "../../object/abstract/collectableEntity";
+import {Sound} from "@engine/media/sound";
 
 const LEFT:number = -1;
 const RIGHT:number = 1;
@@ -37,6 +37,11 @@ export class Hero extends AbstractCharacter {
     private beating:boolean = false;
     private direction:number = RIGHT;
 
+    private soundHurt = new Sound(this.game);
+    private soundShoot = new Sound(this.game);
+    private soundJump = new Sound(this.game);
+    private soundPick = new Sound(this.game);
+
     constructor(protected game:Game, spr:ResourceLink<ITexture>) {
         super(game,spr,{
             restitution: 0.2,
@@ -56,6 +61,20 @@ export class Hero extends AbstractCharacter {
 
         this.listenKeys();
         this.listenCollisions();
+    }
+
+    public injectResources(
+        res:
+            {
+                soundShoot:ResourceLink<void>,
+                soundHurt:ResourceLink<void>,
+                soundJump:ResourceLink<void>,
+                soundPick:ResourceLink<void>
+        }){
+        this.soundShoot.setResourceLink(res.soundShoot);
+        this.soundHurt.setResourceLink(res.soundHurt);
+        this.soundJump.setResourceLink(res.soundJump);
+        this.soundPick.setResourceLink(res.soundPick);
     }
 
     protected onCreatedFrameAnimation(): void {
@@ -97,8 +116,10 @@ export class Hero extends AbstractCharacter {
     }
 
     private damage():void {
+        if (this.hurt) return;
         this.hurt = true;
         this.beating = false;
+        this.soundHurt.play();
         const tmr = this.getRenderableModel().setInterval(()=>{
             this.getRenderableModel().visible=!this.getRenderableModel().visible;
             this.hurtCnt++;
@@ -115,6 +136,7 @@ export class Hero extends AbstractCharacter {
         const bullet:Bullet = Bullet.emit(this.game);
         bullet.getRenderableModel().pos.setXY(this.getRenderableModel().pos.x + 20,this.getRenderableModel().pos.y + 35);
         bullet.getRenderableModel().getRigidBody<ArcadeRigidBody>()!.velocity.x = 150 * this.direction;
+        this.soundShoot.play();
     }
 
     private listenKeys():void {
@@ -132,6 +154,7 @@ export class Hero extends AbstractCharacter {
                 case KEYBOARD_KEY.SPACE:
                     if (this.renderableImage.getRigidBody<ArcadeRigidBody>()!.collisionFlags.bottom) {
                         this.jump(jumpVelocity);
+                        this.soundJump.play();
                     }
                     break;
 
@@ -165,7 +188,7 @@ export class Hero extends AbstractCharacter {
     }
 
     private onCollidedWithMonster(monsterBody:ArcadeRigidBody):void {
-        if (!this.hurt) this.damage();
+        this.damage();
     }
 
     private listenCollisions():void {
@@ -176,6 +199,7 @@ export class Hero extends AbstractCharacter {
             this.onCollidedWithMonster(e);
         });
         this.body.onCollidedWithGroup(CollectableEntity.groupName,e=>{
+            this.soundPick.play();
             e.getHostModel().removeSelf();
         });
     }

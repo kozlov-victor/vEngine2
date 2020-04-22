@@ -12,8 +12,8 @@ export class Monster1 extends AbstractMonster {
 
     private baseVelocity:number = 70;
 
-    constructor(protected game: Game, spr: ResourceLink<ITexture>) {
-        super(game, spr,{
+    constructor(protected game: Game, spr: ResourceLink<ITexture>,hurtSound:ResourceLink<void>) {
+        super(game, spr,hurtSound,{
             restitution: 0.2,
             rect: new Rect(20,20,23,33),
             groupNames: [Monster1.groupName, AbstractMonster.groupName],

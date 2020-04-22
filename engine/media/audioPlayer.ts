@@ -5,26 +5,27 @@ import {Sound} from "./sound";
 import {AudioNode} from "./audioNode";
 import {Game} from "../core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
-import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
+import {FREE_AUDIO_NODE_SEARCH_STRATEGY, IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
 import {Optional} from "@engine/core/declarations";
-
+import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 
 export  class AudioPlayer implements IAudioPlayer {
 
     public static cache:{[key:string]:AudioBuffer|string} = {};
     public static DEFAULT_AUDIO_NODES_COUNT:number = 6;
 
+    public freeNodeSearchStrategy:FREE_AUDIO_NODE_SEARCH_STRATEGY = FREE_AUDIO_NODE_SEARCH_STRATEGY.GET_OLDEST;
+
     private readonly audioContext:BasicAudioContext;
     private audioNodeSet:AudioNodeSet;
 
     constructor(private game:Game) {
         if (WebAudioContext.isAcceptable()) {
-            this.audioContext = new WebAudioContext(game);
+            this.audioContext = new WebAudioContext(game,this);
         } else if (HtmlAudioContext.isAcceptable()) {
-            this.audioContext = new HtmlAudioContext(game);
+            this.audioContext = new HtmlAudioContext(game,this);
         } else {
-            this.audioContext = new BasicAudioContext(game);
+            this.audioContext = new BasicAudioContext(game,this);
         }
         this.audioNodeSet = new AudioNodeSet(game,this.audioContext,AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
     }

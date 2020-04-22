@@ -44,6 +44,11 @@ export class AudioNode {
         return this.context.isFree();
     }
 
+    public isLooped():boolean {
+        if (this.currSound===undefined) return false;
+        return this.currSound.loop;
+    }
+
     public getCurrSound():Optional<Sound> {
         return this.currSound;
     }

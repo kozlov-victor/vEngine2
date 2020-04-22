@@ -36,6 +36,11 @@ import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {DebugError} from "@engine/debug/debugError";
 
+export const enum SCENE_EVENTS {
+    PROGRESS = 'progress',
+    COMPLETED = 'completed',
+    CONTINUE = 'continue',
+}
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
 
@@ -181,12 +186,14 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public on(eventName:MOUSE_EVENTS,callBack:(e:ISceneMouseEvent)=>void):(e:ISceneMouseEvent)=>void;
     public on(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):(e:IKeyBoardEvent)=>void;
     public on(eventName:GAME_PAD_EVENTS,callBack:(e:IGamePadEvent)=>void):(e:IGamePadEvent)=>void;
+    public on(eventName:SCENE_EVENTS,callBack:(e:IGamePadEvent)=>void):(e:void)=>void;
     public on(eventName: string, callBack: (arg?:any)=>void): (arg?:any)=>void {
         return this._eventEmitterDelegate.on(eventName,callBack);
     }
     public once(eventName:MOUSE_EVENTS,callBack:(e:ISceneMouseEvent)=>void):void;
     public once(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):void;
     public once(eventName:GAME_PAD_EVENTS,callBack:(e:IGamePadEvent)=>void):void;
+    public once(eventName:SCENE_EVENTS,callBack:(e:void)=>void):void;
     public once(eventName: string, callBack: (arg?:any)=>void):void {
         this._eventEmitterDelegate.once(eventName,callBack);
     }

@@ -9,6 +9,7 @@ import {Hero} from "../impl/hero";
 import {AbstractCharacter} from "./abstractCharacter";
 import {ICreateRigidBodyParams} from "@engine/physics/arcade/ArcadePhysicsSystem";
 import {Bullet} from "../../object/impl/bullet";
+import {Sound} from "@engine/media/sound";
 
 export abstract class AbstractMonster extends AbstractCharacter {
 
@@ -21,9 +22,11 @@ export abstract class AbstractMonster extends AbstractCharacter {
     private readonly colorizeFilter:ColorizeFilter;
 
     private tmr:Timer;
+    private hurtSound:Sound = new Sound(this.game);
 
-    protected constructor(game: Game, spr: ResourceLink<ITexture>,params:ICreateRigidBodyParams) {
+    protected constructor(game: Game, spr: ResourceLink<ITexture>,hurtSound:ResourceLink<void>,params:ICreateRigidBodyParams) {
         super(game, spr,params);
+        this.hurtSound.setResourceLink(hurtSound);
         this.colorizeFilter = new ColorizeFilter(game);
         this.colorizeFilter.setColor(this.burstColor);
         this.renderableImage.filters = [this.colorizeFilter];
@@ -61,6 +64,7 @@ export abstract class AbstractMonster extends AbstractCharacter {
         this.health--;
         this.colorizeFilter.setColor(this.hurtColor);
         this.colorizeFilter.enabled = true;
+        this.hurtSound.play();
         this.getRenderableModel().setTimeout(()=>{
             this.colorizeFilter.setColor(this.burstColor);
             this.colorizeFilter.enabled = false;

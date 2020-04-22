@@ -2,8 +2,7 @@ import "@engine/misc/polyfills";
 import {Camera} from "../renderer/camera";
 import {Point2d} from "../geometry/point2d";
 import {AbstractRenderer} from "../renderer/abstract/abstractRenderer";
-import {Scene} from "../scene/scene";
-import {ColliderEngine} from "../physics/unused/colliderEngine";
+import {Scene, SCENE_EVENTS} from "../scene/scene";
 import {DebugError} from "../debug/debugError";
 import {IControl} from "@engine/control/abstract/iControl";
 import {IAudioPlayer} from "@engine/media/interface/iAudioPlayer";
@@ -170,14 +169,17 @@ export class Game {
             scene.onPreloading();
             scene.resourceLoader.onProgress(()=>{
                 scene.onProgress(scene.resourceLoader.getProgress());
+                this._currScene.trigger(SCENE_EVENTS.PROGRESS);
             });
             scene.resourceLoader.onCompleted(()=>{
                 this._currScene.onReady();
                 this._currScene.onContinue();
+                this._currScene.trigger(SCENE_EVENTS.COMPLETED);
             });
             scene.resourceLoader.startLoading();
         } else {
             this._currScene.onContinue();
+            this._currScene.trigger(SCENE_EVENTS.CONTINUE);
         }
         if (!this._running) {
             startMainLoop(this);

@@ -61,11 +61,26 @@ export class MainScene extends Scene {
     @Source.Texture('./catGame/res/sprite/testTube.png')
     private spriteSheetTestTube: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/bullet.png')
+    @Source.Texture('./catGame/res/sprite/bullet3.png')
     private spriteSheetBullet: ResourceLink<ITexture>;
 
-    @Source.Sound('./catGame/res/sound/theme1.ogg')
-    private soundTheme1: ResourceLink<void>;
+    @Source.Sound('./catGame/res/sound/theme2.ogg')
+    private soundTheme1Res: ResourceLink<void>;
+
+    @Source.Sound('./catGame/res/sound/hurt.ogg')
+    private soundHurt: ResourceLink<void>;
+
+    @Source.Sound('./catGame/res/sound/hurt.ogg')
+    private soundHurt2: ResourceLink<void>;
+
+    @Source.Sound('./catGame/res/sound/shoot.ogg')
+    private soundShoot: ResourceLink<void>;
+
+    @Source.Sound('./catGame/res/sound/jump.ogg')
+    private soundJump: ResourceLink<void>;
+
+    @Source.Sound('./catGame/res/sound/pick.ogg')
+    private soundPick: ResourceLink<void>;
 
     private level: LEVEL_SCHEMA;
 
@@ -75,6 +90,7 @@ export class MainScene extends Scene {
     }
 
     public onReady() {
+
         this.game.setPhysicsSystem(ArcadePhysicsSystem);
         this.setBg();
         this.playTheme();
@@ -92,7 +108,7 @@ export class MainScene extends Scene {
 
     private playTheme():void {
         const sound:Sound = new Sound(this.game);
-        sound.setResourceLink(this.soundTheme1);
+        sound.setResourceLink(this.soundTheme1Res);
         sound.loop = true;
         sound.play();
     }
@@ -121,16 +137,23 @@ export class MainScene extends Scene {
             const extraProperties: IExtraProperties = this.extractExtraProperties(obj.properties);
             switch (obj.type) {
                 case Hero.groupName:
-                    objCreated = new Hero(this.game, this.spriteSheetHero);
+                    const hero:Hero = new Hero(this.game, this.spriteSheetHero);
+                    hero.injectResources({
+                        soundShoot:this.soundShoot,
+                        soundHurt:this.soundHurt,
+                        soundJump: this.soundJump,
+                        soundPick: this.soundPick,
+                    });
+                    objCreated = hero;
                     break;
                 case Monster1.groupName:
-                    objCreated = new Monster1(this.game, this.spriteSheetMonster1);
+                    objCreated = new Monster1(this.game, this.spriteSheetMonster1,this.soundHurt2);
                     break;
                 case Monster2.groupName:
-                    objCreated = new Monster2(this.game, this.spriteSheetMonster2);
+                    objCreated = new Monster2(this.game, this.spriteSheetMonster2,this.soundHurt2);
                     break;
                 case Zombie.groupName:
-                    objCreated = new Zombie(this.game, this.spriteSheetZombie);
+                    objCreated = new Zombie(this.game, this.spriteSheetZombie,this.soundHurt2);
                     break;
                 case BloodDrop.groupName:
                     objCreated = new BloodDrop(this.game, this.spriteSheetBloodDrop);

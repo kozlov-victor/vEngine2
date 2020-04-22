@@ -14,8 +14,8 @@ export class Zombie extends AbstractMonster {
 
     public static readonly groupName:string = 'zombie';
 
-    constructor(game: Game, spr: ResourceLink<ITexture>) {
-        super(game, spr,{
+    constructor(game: Game, spr: ResourceLink<ITexture>,hurtSound:ResourceLink<void>) {
+        super(game, spr,hurtSound,{
             restitution: 0.2,
             rect: new Rect(20,20,23,41),
             groupNames: [Zombie.groupName,AbstractMonster.groupName, AbstractCharacter.groupName],

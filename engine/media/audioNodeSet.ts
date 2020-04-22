@@ -3,13 +3,17 @@ import {Sound} from "./sound";
 import {Game} from "../core/game";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {Optional} from "@engine/core/declarations";
+import {FREE_AUDIO_NODE_SEARCH_STRATEGY} from "@engine/media/interface/iAudioPlayer";
 
+const nodeComparator = (a:AudioNode,b:AudioNode):1|-1=>{
+    return a.context.getLastValueId()>b.context.getLastValueId()?1:-1;
+};
 
 export class AudioNodeSet {
 
     public readonly nodes:AudioNode[] = [] as AudioNode[];
 
-    constructor(game: Game,context:BasicAudioContext,private numOfNodes:number){
+    constructor(game: Game,private context:BasicAudioContext,private numOfNodes:number){
         for (let i = 0;i<numOfNodes;i++) {
             this.nodes.push(new AudioNode(context.clone()));
         }
@@ -19,10 +23,17 @@ export class AudioNodeSet {
         for (let i = 0;i<this.numOfNodes;i++) {
             if (this.nodes[i].isFree()) return this.nodes[i];
         }
-        // getting the oldest
-        return this.nodes.sort((a:AudioNode,b:AudioNode)=>{
-            return a.context.getLastValueId()>b.context.getLastValueId()?1:-1;
-        })[0];
+        switch (this.context.getAudioPlayer().freeNodeSearchStrategy) {
+            case FREE_AUDIO_NODE_SEARCH_STRATEGY.GET_OLDEST:
+                return this.nodes.sort(nodeComparator)[0];
+            case FREE_AUDIO_NODE_SEARCH_STRATEGY.GET_OLDEST_NOT_LOOP:
+                return this.nodes.filter(it=>!it.isLooped()).sort(nodeComparator)[0];
+            case FREE_AUDIO_NODE_SEARCH_STRATEGY.SKIP_IF_NOT_FREE:
+                return undefined;
+            default:
+                return undefined;
+        }
+
     }
 
     public stopAll():void{
