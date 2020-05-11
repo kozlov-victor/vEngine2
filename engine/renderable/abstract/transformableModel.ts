@@ -9,10 +9,8 @@ import {ITransformable} from "@engine/core/declarations";
 
 class AnglePoint3d {
 
-
     private _x:number = 0;
     private _y:number = 0;
-
     private _z:number = 0;
 
     constructor(private m:TransformableModel,private zProperty:'angle'|'angleVelocity'){}
@@ -25,7 +23,6 @@ class AnglePoint3d {
     get z():number{
         return this._z;
     }
-
 
     get x(): number {
         return this._x;
