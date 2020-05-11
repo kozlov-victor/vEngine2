@@ -1,4 +1,3 @@
-/* tslint:disable:no-string-literal ban-types*/
 
 
 if (DEBUG) {
@@ -20,8 +19,8 @@ if (!globalThis.cancelAnimationFrame) {
     globalThis.cancelAnimationFrame = (id) => clearTimeout(id);
 }
 
-if (!Array.prototype['find']) {
-    Array.prototype['find'] = function(predicate:Function) {
+if (!Array.prototype.find) {
+    Array.prototype.find = function(predicate:(value:any,i:number,list:any)=>any) {
         if (!this && DEBUG) {
             throw new TypeError('Array.prototype.find called on null or undefined');
         }
@@ -29,7 +28,7 @@ if (!Array.prototype['find']) {
             throw new TypeError('predicate must be a function');
         }
         const list = Object(this);
-        const length = list['length'] >>> 0;
+        const length = list.length >>> 0;
         const thisArg = arguments[1];
         let value;
 
@@ -42,3 +41,4 @@ if (!Array.prototype['find']) {
         return undefined;
     };
 }
+

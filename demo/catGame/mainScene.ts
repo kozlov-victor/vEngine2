@@ -26,6 +26,7 @@ import {Lava} from "./entity/object/impl/lava";
 import {Water} from "./entity/object/impl/water";
 import {Bullet} from "./entity/object/impl/bullet";
 import {Sound} from "@engine/media/sound";
+import {InfoPanel} from "./entity/object/impl/infoPanel";
 
 type LEVEL_SCHEMA = typeof import("./level/l1.json");
 
@@ -95,6 +96,7 @@ export class MainScene extends Scene {
         this.setBg();
         this.playTheme();
         this.loadLevel();
+        this.createUI();
         this.game.getRenderer<WebGlRenderer>().setPixelPerfectMode(true);
     }
 
@@ -130,7 +132,6 @@ export class MainScene extends Scene {
     }
 
     private loadLevel() {
-
 
         this.level.layers[0].objects.forEach(obj => {
             let objCreated: Optional<AbstractEntity>;
@@ -185,6 +186,14 @@ export class MainScene extends Scene {
         Bullet.init(this.spriteSheetBullet);
         this.fitSizeToChildren();
     }
+
+    private createUI(): void{
+        const uiLayer: Layer = new Layer(this.game);
+        uiLayer.transformType = LayerTransformType.STICK_TO_CAMERA;
+        this.appendChild(uiLayer);
+        InfoPanel.instantiate(this.game,this.spriteSheetHero);
+    }
+
 }
 
 

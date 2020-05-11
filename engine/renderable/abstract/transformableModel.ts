@@ -8,8 +8,10 @@ import Mat16Holder = mat4.Mat16Holder;
 import {ITransformable} from "@engine/core/declarations";
 
 class AnglePoint3d {
-    public x:number = 0;
-    public y:number = 0;
+
+
+    private _x:number = 0;
+    private _y:number = 0;
 
     private _z:number = 0;
 
@@ -17,20 +19,41 @@ class AnglePoint3d {
 
     set z(val:number) {
         this.m[this.zProperty] = val;
+        this.m.worldTransformDirty = true;
     }
 
     get z():number{
         return this._z;
     }
 
+
+    get x(): number {
+        return this._x;
+    }
+
+    set x(value: number) {
+        this._x = value;
+        this.m.worldTransformDirty = true;
+    }
+
+    get y(): number {
+        return this._y;
+    }
+
+    set y(value: number) {
+        this._y = value;
+        this.m.worldTransformDirty = true;
+    }
+
     public _setZSilently(val:number){
         this._z = val;
+        this.m.worldTransformDirty = true;
     }
 
     public clone(m:TransformableModel):AnglePoint3d{
         const a:AnglePoint3d = new AnglePoint3d(m,this.zProperty);
-        a.x = this.x;
-        a.y = this.y;
+        a._x = this._x;
+        a._y = this._y;
         a.z = this.z;
         return a;
     }
@@ -55,12 +78,16 @@ class ModelPoint2d extends Point2d {
 export abstract class TransformableModel extends BaseModel implements ITransformable{
 
     public readonly worldTransformMatrix:Mat16Holder = new Mat16Holder();
+    public worldTransformDirty:boolean = true;
+
+    public readonly children:TransformableModel[] = [];
 
     get angle():number{
         return this._angle;
     }
 
     set angle(val:number){
+        if (this._angle!==val) this.worldTransformDirty = true;
         this._angle = val;
         this.angle3d._setZSilently(val);
     }
@@ -87,6 +114,14 @@ export abstract class TransformableModel extends BaseModel implements ITransform
 
     protected constructor(protected game:Game){
         super(game);
+        const observer = ()=>{
+            this.worldTransformDirty = true;
+            this.children.forEach(c=>c.worldTransformDirty = true);
+        };
+        this.pos.observe(observer);
+        this.scale.observe(observer);
+        this.transformPoint.observe(observer);
+        this.anchorPoint.observe(observer);
     }
 
 

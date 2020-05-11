@@ -112,16 +112,17 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         this._free = false;
         const currSource:AudioBufferSourceNode = this._ctx.createBufferSource();
         currSource.buffer = AudioPlayer.cache[sound.getResourceLink().getUrl()] as AudioBuffer;
-        currSource.loop = sound.loop;
         currSource.connect(this._gainNode);
         currSource.start(0,sound.offset,sound.duration);
-        currSource.playbackRate.value = sound.velocity;
-        this._gainNode.gain.value = sound.gain;
-        if (this._stereoPanNode!==undefined) this._stereoPanNode.pan.value = sound.stereoPan;
+        this._currSource = currSource;
         currSource.onended = ()=> {
             this.stop();
         };
-        this._currSource = currSource;
+
+        this.loop(sound.loop);
+        this.setGain(sound.gain);
+        this.setStereoPan(sound.stereoPan);
+
     }
 
     public stop():void {
@@ -146,6 +147,10 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
 
     public setStereoPan(val:number):void {
         if (this._stereoPanNode!==undefined) this._stereoPanNode.pan.value = val;
+    }
+
+    public loop(val:boolean):void {
+        this._currSource!.loop = val;
     }
 
     public pause():void {

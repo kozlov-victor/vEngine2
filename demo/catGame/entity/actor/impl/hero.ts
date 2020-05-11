@@ -12,8 +12,13 @@ import {Size} from "@engine/geometry/size";
 import {Burster} from "../../misc/burster";
 import {AbstractMonster} from "../abstract/abstractMonster";
 import {Bullet} from "../../object/impl/bullet";
-import {CollectableEntity} from "../../object/abstract/collectableEntity";
 import {Sound} from "@engine/media/sound";
+import {TestTube} from "../../object/impl/testTube";
+import {BloodDrop} from "../../object/impl/bloodDrop";
+import {Lava} from "../../object/impl/lava";
+import {GameManager} from "../../../gameManager";
+import {Virus} from "../../object/impl/virus";
+import {Fan} from "../../object/impl/fan";
 
 const LEFT:number = -1;
 const RIGHT:number = 1;
@@ -48,7 +53,7 @@ export class Hero extends AbstractCharacter {
             rect: new Rect(23,20,15,33),
             //debug: true,
             groupNames: [Hero.groupName, AbstractCharacter.groupName],
-            //ignoreCollisionWithGroupNames: [Burster.groupName],
+            ignoreCollisionWithGroupNames: [Fan.groupName],
         });
         Hero.instance = this;
 
@@ -61,6 +66,7 @@ export class Hero extends AbstractCharacter {
 
         this.listenKeys();
         this.listenCollisions();
+        this.listenFallToHole();
     }
 
     public injectResources(
@@ -115,8 +121,14 @@ export class Hero extends AbstractCharacter {
 
     }
 
-    private damage():void {
+    private damage(val:number):void {
         if (this.hurt) return;
+        this.blink();
+        GameManager.getCreatedInstance().decrementPower(val,this.onLiveDecrementedOnDamage.bind(this));
+
+    }
+
+    private blink():void {
         this.hurt = true;
         this.beating = false;
         this.soundHurt.play();
@@ -130,6 +142,11 @@ export class Hero extends AbstractCharacter {
                 tmr.kill();
             }
         },200);
+    }
+
+    private onLiveDecrementedOnDamage():void {
+        this.getRenderableModel().pos.y-=120;
+        this.body.velocity.y = -100;
     }
 
     private shoot():void {
@@ -188,7 +205,7 @@ export class Hero extends AbstractCharacter {
     }
 
     private onCollidedWithMonster(monsterBody:ArcadeRigidBody):void {
-        this.damage();
+        this.damage(20);
     }
 
     private listenCollisions():void {
@@ -198,10 +215,42 @@ export class Hero extends AbstractCharacter {
         this.body.onCollidedWithGroup(Burster.groupName,e=>{
             this.onCollidedWithMonster(e);
         });
-        this.body.onCollidedWithGroup(CollectableEntity.groupName,e=>{
-            this.soundPick.play();
+        this.body.onCollidedWithGroup(Burster.groupName,e=>{
+            this.onCollidedWithMonster(e);
+        });
+        this.body.onCollidedWithGroup(Lava.groupName,e=>{
+            this.damage(30);
+        });
+        this.body.onCollidedWithGroup(Virus.groupName,e=>{
+            this.damage(40);
             e.getHostModel().removeSelf();
         });
+        this.body.onOverlappedWithGroup(Fan.groupName,e=>{
+            this.body.velocity.y-=20;
+        });
+        this.body.onCollidedWithGroup(BloodDrop.groupName,e=>{
+            this.soundPick.play();
+            e.getHostModel().removeSelf();
+            GameManager.getCreatedInstance().incrementNumOfLives();
+        });
+        this.body.onCollidedWithGroup(TestTube.groupName,e=>{
+            this.soundPick.play();
+            //GameManager.getCreatedInstance().incrementPower();
+            GameManager.getCreatedInstance().onObjectPicked();
+            e.getHostModel().removeSelf();
+        });
+    }
+
+    private listenFallToHole():void {
+        this.getRenderableModel().setInterval(()=>{
+            if (this.getRenderableModel().pos.y>this.game.getCurrScene().size.height + 1000) {
+                this.damage(100);
+                this.getRenderableModel().pos.x = 100;
+                this.getRenderableModel().pos.y = 100;
+                this.body.velocity.setXY(0,0);
+                this.body.acceleration.setXY(0,0);
+            }
+        },1000);
     }
 
 }

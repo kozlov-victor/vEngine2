@@ -24,15 +24,24 @@ Object.keys(css).forEach((key:string)=>devConsole.style.setProperty(key,''+css[k
 const fpsLabel:HTMLElement = document.createElement('span');
 fpsLabel.style.cssText = 'color:white;user-select: none;';
 devConsole.appendChild(fpsLabel);
+let tmr:number;
 
-window.addEventListener('load',(e:Event)=>{
+const onLoad = (fn:()=>void)=>{
+    if (document.readyState==='complete') fn();
+    else {
+        window.addEventListener('load',(e:Event)=>{
+            fn();
+        });
+    }
+};
+
+onLoad(()=>{
     document.body.appendChild(devConsole);
-    const game:Game = (window as unknown as IGameHolder).game;
-    if (!game) return;
-    setInterval(()=>{
+    tmr = setInterval(()=>{
+        const game:Game = (window as unknown as IGameHolder).game;
+        if (!game) return;
         fpsLabel.textContent = 'fps:'+`${game.fps}`||`?`;
-    },1000);
-
+    },1000) as unknown as number;
 });
 
 
@@ -68,7 +77,6 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
 
     const tmpl:string = `
 
-  <div class="errorBlock">
         <style>
             .errorHeader {text-align: center;}
             .errorText {
@@ -79,6 +87,15 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
             .errorRow {
                 color: #bf1313;
                 font-weight: bold;
+            }
+            .errorBlockHolder {
+                background: #615f5fb8;
+                height: 100%;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: 0;
+                position: absolute;
             }
             .errorBlock {
                 position: absolute;
@@ -92,9 +109,13 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
                 user-select: text;
                 color: #fffef8;
             }
+            .errorBlockInternal {
+                padding: 5px;
+                border: 1px solid #8f9624;
+            }
             .errorClose {
                 position: absolute;
-                top: 5px;
+                top: 15px;
                 right: 5px;
                 content: 'x';
                 width: 20px;
@@ -103,12 +124,16 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
                 color: white;
             }
        </style>
-       <div class="errorClose" onclick="this.closest('.errorBlockHolder').remove();">x</div>
-       <h1 class="errorHeader">Runtime error!</h1>
-       <h3 class="errorText">${runtimeInfo}</h3>
-       <div>${filename?filename:''}</div>
-       <div>-------------------</div>
-       <pre>$_content</pre>
+
+  <div class="errorBlock">
+        <div class="errorBlockInternal">
+            <div class="errorClose" onclick="this.closest('.errorBlockHolder').remove();">x</div>
+            <h1 class="errorHeader">Runtime error!</h1>
+            <h3 class="errorText">${runtimeInfo}</h3>
+            <div>${filename?filename:''}</div>
+            <div>-------------------</div>
+           <pre>$_content</pre>
+        </div>
   </div>
 
 `;
@@ -117,11 +142,12 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
     errDiv.innerHTML = tmpl.replace('$_content',debugInfo);
     document.body.appendChild(errDiv);
     document.title = 'runtime error!';
-    fpsLabel.textContent = 'stopped';
+    devConsole.style.display = 'none';
 };
 
 
 const stopGame = ()=>{
+    clearInterval(tmr);
     const game:Game = (window as unknown as IGameHolder).game as Game;
     if (game) {
         try {

@@ -6,6 +6,7 @@ import {Optional} from "@engine/core/declarations";
 export class AudioNode {
 
     private currSound:Optional<Sound>;
+    private lastPlayedUrl:Optional<string>;
 
     constructor(public context:BasicAudioContext){}
 
@@ -13,6 +14,7 @@ export class AudioNode {
         this.stop();
         this.context.play(sound);
         this.currSound = sound;
+        this.lastPlayedUrl = sound.getResourceLink().url;
     }
 
     public stop():void {
@@ -36,12 +38,20 @@ export class AudioNode {
         this.context.pause();
     }
 
+    public loop(val:boolean):void{
+        this.context.loop(val);
+    }
+
     public resume():void {
         this.context.resume();
     }
 
     public isFree():boolean {
         return this.context.isFree();
+    }
+
+    public getLastPlayedUrl():Optional<string> {
+        return this.lastPlayedUrl;
     }
 
     public isLooped():boolean {

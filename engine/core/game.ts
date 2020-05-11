@@ -11,6 +11,7 @@ import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransiti
 import {Stack} from "@engine/misc/collection/stack";
 import {ISize, Size} from "@engine/geometry/size";
 import {IPhysicsSystem} from "@engine/physics/common/interfaces";
+import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 
 
 export const enum SCALE_STRATEGY {
@@ -62,6 +63,7 @@ export class Game {
     private _controls:IControl[] = [];
     private audioPlayer:IAudioPlayer;
     private physicsSystem:IPhysicsSystem;
+    private mainLoop:MainLoop = new MainLoop(this);
 
 
     constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT}:IGameConstructorParams = {}){
@@ -89,6 +91,19 @@ export class Game {
         instance.listenTo();
     }
 
+    public hasControl(type:string):boolean {
+        return this.getControl(type)!==undefined;
+    }
+
+    public getControl<T extends IControl>(type:string):Optional<T> {
+        for (const c of this._controls) {
+            if (c.type===type) {
+                return c as T;
+            }
+        }
+        return undefined;
+    }
+
     public setPhysicsSystem(s:ClazzEx<IPhysicsSystem,Game>){
         this.physicsSystem = new s(this);
     }
@@ -98,6 +113,9 @@ export class Game {
         return this.physicsSystem as T;
     }
 
+    public hasPhysicsSystem():boolean {
+        return this.physicsSystem!==undefined;
+    }
 
     public setAudioPLayer(p:ClazzEx<IAudioPlayer,Game>):void{
         this.audioPlayer = new p(this);
@@ -110,14 +128,6 @@ export class Game {
         return this.audioPlayer as T;
     }
 
-    public hasControl(type:string):boolean {
-        for (const c of this._controls) {
-            if (c.type===type) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public getCurrentTime():number{
         return this._lastTime;
@@ -152,6 +162,11 @@ export class Game {
     public runScene(scene:Scene, transition?:Optional<ISceneTransition>,replaceStack:boolean = true):void{
         if (replaceStack) this._sceneStack.replaceLast({scene,transition});
         this._prevScene = this._currScene;
+        if (this._prevScene!==undefined) {
+            this._prevScene.trigger(SCENE_EVENTS.INACTIVATED, undefined!);
+            this._prevScene.onInactivated();
+            (this._currScene as {lifeCycleState:SceneLifeCycleState}).lifeCycleState = SceneLifeCycleState.INACTIVATED;
+        }
         this._currScene = scene;
         if (this._currSceneTransition!==undefined) {
             this._currSceneTransition.complete();
@@ -165,24 +180,27 @@ export class Game {
 
         this.revalidate();
         if (!scene.resourceLoader.isCompleted()) {
+            this._currScene.trigger(SCENE_EVENTS.PRELOADING);
             scene?.preloadingTaskFromDecorators?.forEach(cb=>cb(scene));
             scene.onPreloading();
             scene.resourceLoader.onProgress(()=>{
-                scene.onProgress(scene.resourceLoader.getProgress());
                 this._currScene.trigger(SCENE_EVENTS.PROGRESS);
+                scene.onProgress(scene.resourceLoader.getProgress());
+                (this._currScene as {lifeCycleState:SceneLifeCycleState}).lifeCycleState = SceneLifeCycleState.PRELOADING;
             });
             scene.resourceLoader.onCompleted(()=>{
                 this._currScene.onReady();
                 this._currScene.onContinue();
                 this._currScene.trigger(SCENE_EVENTS.COMPLETED);
+                (this._currScene as {lifeCycleState:SceneLifeCycleState}).lifeCycleState = SceneLifeCycleState.COMPLETED;
             });
             scene.resourceLoader.startLoading();
         } else {
-            this._currScene.onContinue();
             this._currScene.trigger(SCENE_EVENTS.CONTINUE);
+            this._currScene.onContinue();
         }
         if (!this._running) {
-            startMainLoop(this);
+            this.mainLoop.start();
             this._running = true;
         }
     }
@@ -232,7 +250,6 @@ export class Game {
             if (this._currSceneTransition!==undefined) this._currSceneTransition.update();
             else currentScene.update();
 
-            if (this.physicsSystem!==undefined) this.physicsSystem.nextTick();
             for (const c of this._controls) {
                 c.update();
             }
@@ -245,9 +262,12 @@ export class Game {
 
         if (this._currSceneTransition!==undefined) this._currSceneTransition.render();
         else currentScene.render();
+
+        this.camera.worldTransformDirty = false;
     }
 
     public destroy():void{
+        this.mainLoop.stop();
         this._destroyed = true;
         for (const c of this._controls) {
             c.destroy();
@@ -283,11 +303,25 @@ if (DEBUG) {
     console.log(`last compiled ${passed/1000} sec ago`);
 }
 
-const startMainLoop = (game:Game)=>{
-    const updateFn:()=>void = game.update.bind(game);
-    const loopFn = ()=>{
-        updateFn();
-        requestAnimationFrame(loopFn);
-    };
-    loopFn();
-};
+class MainLoop {
+
+    private timerId:number;
+
+    constructor(private game:Game) {
+    }
+
+    public start():void{
+        const game:Game = this.game;
+        const updateFn:()=>void = game.update.bind(game);
+        const loopFn = ()=>{
+            updateFn();
+            this.timerId = requestAnimationFrame(loopFn);
+        };
+        this.timerId = requestAnimationFrame(loopFn);
+    }
+
+    public stop():void {
+        cancelAnimationFrame(this.timerId);
+    }
+
+}

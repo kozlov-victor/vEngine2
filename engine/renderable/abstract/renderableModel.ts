@@ -183,12 +183,19 @@ export abstract class RenderableModel
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (renderer.getAlphaBlend()===0) return;
 
-        renderer.transformSave();
         renderer.saveAlphaBlend();
+        renderer.transformSave();
 
-        this.translate();
-        this.transform();
-        this.worldTransformMatrix.fromMat16(renderer.transformGet());
+        if (this.game.camera.worldTransformDirty || this.worldTransformDirty) {
+            this.translate();
+            this.transform();
+            this.worldTransformMatrix.fromMat16(renderer.transformGet());
+            this.worldTransformDirty = false;
+        } else {
+            renderer.transformSet(...this.worldTransformMatrix.mat16);
+        }
+
+
         renderer.setAlphaBlend(this.alpha);
         const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(this.filters,this.forceDrawChildrenOnNewSurface);
 

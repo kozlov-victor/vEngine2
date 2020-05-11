@@ -47,7 +47,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     public debugTextField:TextField;
     public clearBeforeRender:boolean = true;
     public readonly clearColor:Color = Color.RGB(0,0,0);
-    public readonly containerSize = new Size();
+    public readonly viewPortSize = new Size();
 
     protected abstract rendererHelper: RendererHelper;
 
@@ -246,7 +246,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         else if (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH) {
             container.style.width = `${innerWidth}px`;
             container.style.height = `${innerHeight}px`;
-            this.containerSize.setWH(innerWidth,innerHeight);
+            this.viewPortSize.setWH(innerWidth,innerHeight);
             this.game.scale.setXY(innerWidth/this.game.size.width,innerHeight/this.game.size.height);
             this.game.pos.setXY(0);
         } else {
@@ -274,7 +274,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
             this.container.style.height = height + 'px';
             this.container.style.marginTop = `${this.game.pos.y}px`;
 
-            this.containerSize.setWH(width,height);
+            this.viewPortSize.setWH(width,height);
         }
 
     }

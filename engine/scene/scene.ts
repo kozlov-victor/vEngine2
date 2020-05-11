@@ -12,7 +12,6 @@ import {
 } from "@engine/core/declarations";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {TweenMovie} from "@engine/animation/tweenMovie";
-import {removeFromArray} from "@engine/misc/object";
 import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {Timer} from "@engine/misc/timer";
@@ -22,7 +21,7 @@ import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
+import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {Point2d} from "@engine/geometry/point2d";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 import {Rect} from "@engine/geometry/rect";
@@ -32,14 +31,17 @@ import {IAnimation} from "@engine/animation/iAnimation";
 import {mat4} from "@engine/geometry/mat4";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
-import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {DebugError} from "@engine/debug/debugError";
+import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
+import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
 
 export const enum SCENE_EVENTS {
+    PRELOADING = 'preloading',
     PROGRESS = 'progress',
     COMPLETED = 'completed',
     CONTINUE = 'continue',
+    INACTIVATED = 'inactivated'
 }
 
 export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
@@ -56,10 +58,12 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public filters:IFilter[] = [];
     public alpha:number = 1;
     public preloadingTaskFromDecorators:((scene:Scene)=>void)[];
+    public readonly lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED;
 
     protected preloadingGameObject!:RenderableModel;
     private _layers:Layer[] = [];
     private _propertyAnimations:IAnimation[] = [];
+
 
     // addTween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
@@ -186,7 +190,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public on(eventName:MOUSE_EVENTS,callBack:(e:ISceneMouseEvent)=>void):(e:ISceneMouseEvent)=>void;
     public on(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):(e:IKeyBoardEvent)=>void;
     public on(eventName:GAME_PAD_EVENTS,callBack:(e:IGamePadEvent)=>void):(e:IGamePadEvent)=>void;
-    public on(eventName:SCENE_EVENTS,callBack:(e:IGamePadEvent)=>void):(e:void)=>void;
+    public on(eventName:SCENE_EVENTS,callBack:(e:void)=>void):(e:void)=>void;
     public on(eventName: string, callBack: (arg?:any)=>void): (arg?:any)=>void {
         return this._eventEmitterDelegate.on(eventName,callBack);
     }
@@ -208,11 +212,6 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         }
         return undefined;
     }
-
-    public destroy():void {
-        this.onDestroy();
-    }
-
 
     public onPreloading():void {
         const rect = new Rectangle(this.game);
@@ -237,8 +236,15 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         renderer.saveAlphaBlend();
         renderer.clearColor.set(this.colorBG);
         const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters); // todo blend mode for scene
-        this.game.camera.translate();
-        this.game.camera.transform();
+
+        if (this.game.camera.worldTransformDirty) {
+            this.game.camera.translate();
+            this.game.camera.transform();
+            this.game.camera.worldTransformMatrix.set(...this.game.getRenderer().transformGet());
+        } else {
+            this.game.getRenderer().transformSet(...this.game.camera.worldTransformMatrix.mat16);
+        }
+
         this.translate();
         this.transform();
         renderer.setAlphaBlend(this.alpha);
@@ -286,11 +292,11 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         renderer.unsetLockRect();
     }
 
+    public onInactivated():void {}
+
     protected onUpdate():void {}
 
     protected onRender():void {}
-
-    protected onDestroy():void {}
 
 
     private updateFrame():void {
@@ -299,6 +305,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
         this._timerDelegate.update();
         for (const a of this._propertyAnimations) a.update();
         for (const l of this._layers) l.update();
+        if (this.game.hasPhysicsSystem()) this.game.getPhysicsSystem().nextTick(this);
         this.onUpdate();
     }
 

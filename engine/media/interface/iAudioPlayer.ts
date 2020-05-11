@@ -15,6 +15,9 @@ export interface IAudioPlayer {
     loadSound(buffer:ArrayBuffer, link:ResourceLink<void>):Promise<void>;
     play(sound:Sound):void;
     stop(sound:Sound):void;
+    loop(sound:Sound):void;
+    setGain(sound:Sound):void;
+    setStereoPan(sound:Sound):void;
     stopAll():void;
     pauseAll():void;
     resumeAll():void;

@@ -18,10 +18,6 @@ const addUrlParameter = (url:string,param:string,value:string|number):string=>{
     return `${url}${param}=${value}`;
 };
 
-interface IWindow extends Window{
-    jsonpHandler: Record<string,(data:ArrayBuffer|string)=>void>;
-}
-
 const loadBase64 = (urlRequest:IURLRequest):Promise<string>=>{
     return Promise.resolve(urlRequest.url);
 };

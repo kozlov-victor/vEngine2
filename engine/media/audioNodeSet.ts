@@ -19,10 +19,16 @@ export class AudioNodeSet {
         }
     }
 
-    public getFreeNode():Optional<AudioNode>{
+    public getFreeNode(url:string):Optional<AudioNode>{
+        let possibleFreeNode:Optional<AudioNode>;
         for (let i = 0;i<this.numOfNodes;i++) {
-            if (this.nodes[i].isFree()) return this.nodes[i];
+            const node:AudioNode = this.nodes[i];
+            if (node.isFree()) {
+                possibleFreeNode = node;
+                if (possibleFreeNode.getLastPlayedUrl()===url) return node;
+            }
         }
+        if (possibleFreeNode!==undefined) return possibleFreeNode;
         switch (this.context.getAudioPlayer().freeNodeSearchStrategy) {
             case FREE_AUDIO_NODE_SEARCH_STRATEGY.GET_OLDEST:
                 return this.nodes.sort(nodeComparator)[0];

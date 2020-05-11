@@ -5,6 +5,8 @@ import {IFilter} from "@engine/renderer/common/ifilter";
 import {Layer} from "@engine/scene/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Scene} from "@engine/scene/scene";
+import {mat4} from "@engine/geometry/mat4";
+import Mat16Holder = mat4.Mat16Holder;
 
 export type Clazz<T> = new() => T;
 export type ClazzEx<T,U> = new(arg:U) => T;
@@ -57,6 +59,8 @@ export interface IUpdatable {
 }
 
 export interface ITransformable {
+    worldTransformDirty:boolean;
+    worldTransformMatrix:Mat16Holder;
     transform():void;
     translate():void;
 }

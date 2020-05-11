@@ -7,6 +7,16 @@ import {Base64, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
 import createImageFromData = ResourceUtil.createImageFromData;
 
+namespace resourceCache {
+
+    export const cache:Record<string, ITexture> = {};
+
+    export const clear = ():void=>{
+        const keys:string[] = Object.keys(cache);
+        keys.forEach(k=>delete cache[k]);
+    };
+
+}
 
 export class ResourceLoader {
 
@@ -20,17 +30,25 @@ export class ResourceLoader {
 
     public readonly q: Queue = new Queue();
 
-    constructor(private game: Game) {
+
+
+    public constructor(private game: Game) {
         this.game = game;
     }
 
     public loadTexture(req: string|IURLRequest): ResourceLink<ITexture> {
         const link: ResourceLink<ITexture> = new ResourceLink(req as string);
+        if (resourceCache.cache[(req as IURLRequest).url??req]!==undefined) {
+            link.setTarget(resourceCache.cache[(req as IURLRequest).url??req] as ITexture);
+            return link;
+        }
         const taskRef:TaskRef = this.q.addTask(async () => {
             try {
                 const img:HTMLImageElement|ImageBitmap = await createImageFromData(req as (URI|Base64|IURLRequest),this.q,taskRef);
                 const texture:ITexture = this.game.getRenderer().createTexture(img);
                 link.setTarget(texture);
+                resourceCache.cache[(req as IURLRequest).url??req] = texture;
+                console.log(resourceCache.cache);
                 this.q.resolveTask(taskRef);
             } catch (e) {
                 console.error(e);
@@ -124,6 +142,10 @@ export class ResourceLoader {
             task();
             this.q.resolveTask(taskRef);
         });
+    }
+
+    public clearCache():void {
+        resourceCache.clear();
     }
 
     public startLoading(): void {

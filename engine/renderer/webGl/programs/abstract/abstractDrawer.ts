@@ -58,7 +58,7 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         if (this.uniformCache.has(name) && isEqual(this.uniformCache.get(name)!.value,value)) return;
         if (isArray(value)) {
             if (!this.uniformCache.has(name)) {
-                // todo how to define Float32Array of Int32Array???
+                // todo how to define Float32Array or Int32Array???
                 this.uniformCache.put(name,{value:new Float32Array(value.length),dirty:true});
             }
             const uniformInCache:IUniformValue = this.uniformCache.get(name) as IUniformValue;

@@ -22,7 +22,6 @@ export class Image extends RenderableModel implements ICloneable<Image>,IResourc
     public stretchMode:STRETCH_MODE = STRETCH_MODE.STRETCH;
     public color:Color = Color.NONE.clone();
     public lineWidth:number = 0;
-    public filters: IFilter[] = [];
     private _pixelPerfect:boolean = false;
 
     // resource
@@ -72,6 +71,7 @@ export class Image extends RenderableModel implements ICloneable<Image>,IResourc
             throw new DebugError(`can not set resource link: link is not passed`);
         }
         this._resourceLink = link;
+        this.revalidate();
     }
 
     public getResourceLink():ResourceLink<ITexture>{
@@ -87,9 +87,14 @@ export class Image extends RenderableModel implements ICloneable<Image>,IResourc
     }
 
     protected setClonedProperties(cloned:Image):void {
+        cloned._srcRect.set(this._srcRect);
+        cloned.size.set(this.size);
         cloned.borderRadius = this.borderRadius;
         cloned.offset.set(this.offset);
         cloned.stretchMode = this.stretchMode;
+        cloned.color = this.color.clone();
+        cloned.lineWidth = this.lineWidth;
+        cloned._pixelPerfect = this._pixelPerfect;
         cloned.setResourceLink(this.getResourceLink());
         super.setClonedProperties(cloned);
     }

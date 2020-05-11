@@ -68,7 +68,7 @@ export abstract class AbstractMonster extends AbstractCharacter {
         this.getRenderableModel().setTimeout(()=>{
             this.colorizeFilter.setColor(this.burstColor);
             this.colorizeFilter.enabled = false;
-            if (this.health<0) this.getRenderableModel().removeSelf();
+            if (this.health<0) if (!this.getRenderableModel().isDetached()) this.getRenderableModel().removeSelf();
         },200);
     }
 

@@ -6,7 +6,8 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/mathEx";
 import {Optional} from "@engine/core/declarations";
 import {Rect} from "@engine/geometry/rect";
-import {finished} from "stream";
+import {Scene} from "@engine/scene/scene";
+import {Layer} from "@engine/scene/layer";
 
 export interface ICreateRigidBodyParams {
     type?: ARCADE_RIGID_BODY_TYPE;
@@ -46,18 +47,16 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         return body as unknown as ArcadeRigidBody;
     }
 
-    public nextTick():void {
-
-        for (let ind = 0; ind < this.game.getCurrScene().getLayers().length; ind++) {
-            const all:RenderableModel[] = this.game.getCurrScene().getLayerAtIndex(ind).children;
+    public nextTick(scene:Scene):void {
+        for (let ind:number = 0, layerLength:number = scene.getLayers().length; ind < layerLength; ind++) {
+            const layer:Layer = scene.getLayers()[ind];
+            const all:RenderableModel[] = layer.children;
             for (let i:number = 0; i < all.length; i++) {
                 const player:RenderableModel = all[i];
-                //if (player.isDetached()) continue;
                 const playerBody:Optional<ArcadeRigidBody> = player.getRigidBody();
                 if (playerBody===undefined) continue;
                 for (let j:number = i + 1; j < all.length; j++) {
                     const entity:RenderableModel = all[j];
-                    //if (entity.isDetached()) continue;
                     const entityBody:Optional<ArcadeRigidBody> = entity.getRigidBody();
                     if (entityBody===undefined) continue;
                     if (!MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) continue;
@@ -131,13 +130,13 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         while (steps<=entityLengthMax) {
             entity._pos.setXY(oldEntityPosX,oldEntityPosY);
             if (MathEx.overlapTest(player.calcAndGetBoundRect(),entity.calcAndGetBoundRect())) {
-                this.resolveCollision(player, entity);
                 break;
             }
             oldEntityPosX+=entityDeltaX;
             oldEntityPosY+=entityDeltaY;
             steps++;
         }
+        this.resolveCollision(player, entity);
     }
 
 

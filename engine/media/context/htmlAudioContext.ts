@@ -54,8 +54,9 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
 
         this.free = false;
         this._ctx.src = url;
-        this._ctx.play();
-        this._ctx.loop = sound.loop;
+        this._ctx.play()?.catch(e=>{});
+        this.loop(sound.loop);
+        this.setGain(sound.gain);
         this._ctx.onended = () => {
             this.stop();
         };
@@ -63,10 +64,17 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
 
     public stop():void {
         this.free = true;
+        // tslint:disable-next-line:no-null-keyword
+        this._ctx.onended = null;
     }
 
     public setGain(val: number):void {
         this._ctx.volume = val;
+    }
+
+
+    public loop(val: boolean): void {
+        this._ctx.loop = val;
     }
 
     public pause():void {

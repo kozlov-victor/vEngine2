@@ -17,12 +17,6 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
     private keyDownListener:(e:KeyboardEvent)=>void;
     private keyUpListener:(e:KeyboardEvent)=>void;
 
-    public isPressed(key:number):boolean{
-        const event:Optional<KeyBoardEvent> = this.findEvent(key);
-        if (event===undefined) return false;
-        return event.keyState>=KEY_STATE.KEY_PRESSED;
-    }
-
     public isJustPressed(key:number):boolean{
         const event:Optional<KeyBoardEvent> = this.findEvent(key);
         if (event===undefined) return false;
@@ -47,32 +41,45 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
             e.preventDefault();
             e.stopPropagation(); // to prevent page scroll
             const code:number = e.keyCode;
-            if (this.isPressed(code)) return; // keyboard generate repeated events when key is pressed - ignore it
-
-            const eventFromBuffer:Optional<KeyBoardEvent> = KeyBoardEvent.fromPool();
-            if (eventFromBuffer===undefined) {
-                if (DEBUG) console.warn('keyboard pool is full');
-                return;
-            }
-            eventFromBuffer.key = code;
-            this.press(eventFromBuffer);
-
+            this.triggerKeyPress(code);
         };
 
         this.keyUpListener  = (e:KeyboardEvent)=>{
             const code:number = e.keyCode;
-            const eventFromBuffer:Optional<KeyBoardEvent> = this.findEvent(code);
-            if (eventFromBuffer===undefined) return;
-            this.release(eventFromBuffer);
+            this.triggerKeyRelease(code);
         };
 
         globalThis.addEventListener('keydown',this.keyDownListener);
         globalThis.addEventListener('keyup',this.keyUpListener);
     }
 
+    public triggerKeyPress(code:number):void {
+        if (this.isPressed(code)) return; // keyboard generate repeated events when key is pressed - ignore it
+
+        const eventFromBuffer:Optional<KeyBoardEvent> = KeyBoardEvent.fromPool();
+        if (eventFromBuffer===undefined) {
+            if (DEBUG) console.warn('keyboard pool is full');
+            return;
+        }
+        eventFromBuffer.key = code;
+        this.press(eventFromBuffer);
+    }
+
+    public triggerKeyRelease(code:number):void {
+        const eventFromBuffer:Optional<KeyBoardEvent> = this.findEvent(code);
+        if (eventFromBuffer===undefined) return;
+        this.release(eventFromBuffer);
+    }
+
     public destroy():void{
         globalThis.removeEventListener('keydown',this.keyDownListener);
         globalThis.removeEventListener('keyup',this.keyUpListener);
+    }
+
+    public isPressed(key:number):boolean{
+        const event:Optional<KeyBoardEvent> = this.findEvent(key);
+        if (event===undefined) return false;
+        return event.keyState>=KEY_STATE.KEY_PRESSED;
     }
 
     private findEvent(key:number):Optional<KeyBoardEvent> {

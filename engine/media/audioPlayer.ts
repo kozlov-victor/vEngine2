@@ -42,7 +42,7 @@ export  class AudioPlayer implements IAudioPlayer {
 
         if (DEBUG) sound.revalidate();
 
-        const node:Optional<AudioNode> = this.audioNodeSet.getFreeNode();
+        const node:Optional<AudioNode> = this.audioNodeSet.getFreeNode(sound.getResourceLink().url);
 
         if (node===undefined) {
             if (DEBUG) {
@@ -59,8 +59,26 @@ export  class AudioPlayer implements IAudioPlayer {
         node.stop();
     }
 
+    public loop(sound:Sound):void {
+        const node:Optional<AudioNode> = this.audioNodeSet.getNodeBySound(sound);
+        if (node===undefined) return;
+        node.loop(sound.loop);
+    }
+
     public getContext():BasicAudioContext {
         return this.audioContext;
+    }
+
+    public setGain(sound: Sound): void {
+        const node:Optional<AudioNode> = this.audioNodeSet.getNodeBySound(sound);
+        if (node===undefined) return;
+        node.setGain(sound.velocity);
+    }
+
+    public setStereoPan(sound: Sound): void {
+        const node:Optional<AudioNode> = this.audioNodeSet.getNodeBySound(sound);
+        if (node===undefined) return;
+        node.setStereoPan(sound.stereoPan);
     }
 
     public stopAll():void {

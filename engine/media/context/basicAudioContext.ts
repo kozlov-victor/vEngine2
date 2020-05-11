@@ -39,6 +39,7 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
     public setGain(val:number):void{}
     public setVelocity(val:number):void{}
     public setStereoPan(val:number):void{}
+    public loop(val:boolean):void{}
     public pause():void{}
     public resume():void{}
     public load(buffer:ArrayBuffer,link:ResourceLink<void>):Promise<void>{

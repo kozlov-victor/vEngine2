@@ -55,7 +55,7 @@ export class FrameBuffer implements IRenderTarget {
         }
         if (FrameBuffer.currInstance===this) return;
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.glFrameBuffer);
-        this.gl.viewport(0, 0, this.width,this.height);
+        this.gl.viewport(0, 0, ~~this.width,~~this.height);
         FrameBuffer.currInstance = this;
     }
 

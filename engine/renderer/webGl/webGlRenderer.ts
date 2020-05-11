@@ -408,7 +408,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             if (this._lockRect!==undefined) {
                 const rect = this._lockRect;
                 this.gl.enable(this.gl.SCISSOR_TEST);
-                this.gl.scissor(rect.x, this.game.size.height - rect.height - rect.y, rect.width,rect.height);
+                this.gl.scissor(~~rect.x, ~~(this.game.size.height - rect.height - rect.y), ~~rect.width,~~rect.height);
             }
             this.currFrameBufferStack.renderToScreen();
             this.gl.disable(this.gl.SCISSOR_TEST);
@@ -472,8 +472,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     protected onResize(): void {
         super.onResize();
         if (this._pixelPerfectMode && (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH || this.game.scaleStrategy===SCALE_STRATEGY.FIT)) {
-            this.container.width = this.containerSize.width;
-            this.container.height = this.containerSize.height;
+            this.container.width = this.viewPortSize.width;
+            this.container.height = this.viewPortSize.height;
         } else {
             this.container.width = this.game.size.width;
             this.container.height = this.game.size.height;

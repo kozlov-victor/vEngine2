@@ -29,6 +29,8 @@ export class Camera implements IUpdatable, ITransformable  {
     public readonly pos:Point2d = new Point2d(0,0);
     public posZ:number = 0; // todo
     public readonly scale:Point2d = new Point2d(1,1);
+    public worldTransformDirty:boolean = true;
+    public readonly worldTransformMatrix:Mat16Holder = new Mat16Holder();
 
     private objFollowTo:Optional<RenderableModel>;
     private objFollowToPrevPos:Point2d;
@@ -42,11 +44,16 @@ export class Camera implements IUpdatable, ITransformable  {
     };
 
     constructor(protected game:Game){
+        const observer = ()=>this.worldTransformDirty = true;
+        this.pos.observe(observer);
+        this.scale.observe(observer);
+        this._rect.observe(observer);
     }
 
 
     public revalidate():void{
         this._rect.setSize(this.game.size);
+        this.worldTransformDirty = true;
     }
 
 
