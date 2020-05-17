@@ -48,7 +48,6 @@ export class ResourceLoader {
                 const texture:ITexture = this.game.getRenderer().createTexture(img);
                 link.setTarget(texture);
                 resourceCache.cache[(req as IURLRequest).url??req] = texture;
-                console.log(resourceCache.cache);
                 this.q.resolveTask(taskRef);
             } catch (e) {
                 console.error(e);

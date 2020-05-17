@@ -8,7 +8,6 @@ import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFil
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
-import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {Source} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {

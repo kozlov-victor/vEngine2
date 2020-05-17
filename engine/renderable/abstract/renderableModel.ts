@@ -190,7 +190,6 @@ export abstract class RenderableModel
             this.translate();
             this.transform();
             this.worldTransformMatrix.fromMat16(renderer.transformGet());
-            this.worldTransformDirty = false;
         } else {
             renderer.transformSet(...this.worldTransformMatrix.mat16);
         }
@@ -205,8 +204,10 @@ export abstract class RenderableModel
             renderer.transformSave();
             renderer.saveAlphaBlend();
             renderer.transformTranslate(this.anchorPoint.x,this.anchorPoint.y);
-            for(let i=0,max=this.children.length;i<max;i++) {
-                this.children[i].render();
+            for(let i:number=0,max=this.children.length;i<max;i++) {
+                const c:RenderableModel = this.children[i];
+                c.worldTransformDirty = this.worldTransformDirty || c.worldTransformDirty;
+                c.render();
             }
             renderer.transformRestore();
             renderer.restoreAlphaBlend();
@@ -216,6 +217,7 @@ export abstract class RenderableModel
 
         renderer.transformRestore();
         renderer.restoreAlphaBlend();
+        this.worldTransformDirty = false;
 
         if (DEBUG && this._rigidBody!==undefined) this._rigidBody.debugRender();
     }

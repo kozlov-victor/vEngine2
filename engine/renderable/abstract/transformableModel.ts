@@ -6,18 +6,24 @@ import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
 import {ITransformable} from "@engine/core/declarations";
+import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 
-class AnglePoint3d {
+class AnglePoint3d extends ObservableEntity{
 
     private _x:number = 0;
     private _y:number = 0;
     private _z:number = 0;
 
-    constructor(private m:TransformableModel,private zProperty:'angle'|'angleVelocity'){}
+    constructor(private m:TransformableModel,private zProperty:'angle'|'angleVelocity'){
+        super();
+    }
 
     set z(val:number) {
-        this.m[this.zProperty] = val;
-        this.m.worldTransformDirty = true;
+        if (val!==this.m[this.zProperty]) {
+            this.m[this.zProperty] = val;
+            this.triggerObservable();
+        }
+
     }
 
     get z():number{
@@ -29,8 +35,11 @@ class AnglePoint3d {
     }
 
     set x(value: number) {
-        this._x = value;
-        this.m.worldTransformDirty = true;
+        if (this._x!==value) {
+            this._x = value;
+            this.triggerObservable();
+        }
+
     }
 
     get y(): number {
@@ -38,13 +47,15 @@ class AnglePoint3d {
     }
 
     set y(value: number) {
-        this._y = value;
-        this.m.worldTransformDirty = true;
+        if (this._y!==value) {
+            this._y = value;
+            this.triggerObservable();
+        }
+
     }
 
     public _setZSilently(val:number){
         this._z = val;
-        this.m.worldTransformDirty = true;
     }
 
     public clone(m:TransformableModel):AnglePoint3d{
@@ -90,12 +101,11 @@ export abstract class TransformableModel extends BaseModel implements ITransform
     }
 
     get angleVelocity():number{
-        return this._angle;
+        return this._angleVelocity3d.z;
     }
 
     set angleVelocity(val:number){
-        this._angle = val;
-        this._angleVelocity3d._setZSilently(val);
+        this._angleVelocity3d.z = val;
     }
 
     public readonly scale:Point2d = new Point2d(1,1);
@@ -113,12 +123,12 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         super(game);
         const observer = ()=>{
             this.worldTransformDirty = true;
-            this.children.forEach(c=>c.worldTransformDirty = true);
         };
         this.pos.observe(observer);
         this.scale.observe(observer);
         this.transformPoint.observe(observer);
         this.anchorPoint.observe(observer);
+        this.angle3d.observe(observer);
     }
 
 
