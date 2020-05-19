@@ -24,6 +24,8 @@ declare module "*.glsl" {
     export = value;
 }
 
+
+
 declare const DEBUG:boolean;
 declare const BUILD_AT:number;
 declare type byte =

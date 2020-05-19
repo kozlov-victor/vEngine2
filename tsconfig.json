@@ -27,9 +27,17 @@
         },
         "incremental": true,
         "stripInternal": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "jsx": "react",
+        "jsxFactory": "VEngineReact.createElement"
     },
     "exclude": [
         "node_modules"
-    ]
+    ],
+    "awesomeTypescriptLoaderOptions": {
+        "transpileOnly": false,
+        "useCache": true,
+        "cacheDirectory": "./node_modules/.cache/awesome-typescript-loader",
+        "useTranspileModule": true
+    }
 }

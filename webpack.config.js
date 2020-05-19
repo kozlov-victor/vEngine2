@@ -88,6 +88,14 @@ module.exports = (env={})=>{
                     ]
                 },
                 {
+                    test: /\.(tsx)$/,
+                    use: [
+                        {
+                            loader: 'awesome-typescript-loader',
+                        },
+                    ],
+                },
+                {
                     test: /\.ts$/,
                     enforce: 'pre',
                     use: [
@@ -101,7 +109,7 @@ module.exports = (env={})=>{
                     test: /\.ts$/,
                     use: [
                         {
-                            loader: "ts-loader",options: {
+                            loader: "awesome-typescript-loader",options: {
                                 getCustomTransformers: program => {
                                     return {
                                         before: [
@@ -116,7 +124,7 @@ module.exports = (env={})=>{
             ]
         },
         resolve: {
-            extensions: ['.ts'],
+            extensions: ['.ts','.tsx'],
             modules: [
                 path.resolve(__dirname, 'node_modules'),
             ],
