@@ -1,7 +1,6 @@
 import {ICloneable, IRevalidatable} from "@engine/core/declarations";
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {DebugError} from "@engine/debug/debugError";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 import {ISize} from "@engine/geometry/size";
 
 export class CellFrameAnimation extends AbstractFrameAnimation<number> implements IRevalidatable, ICloneable<CellFrameAnimation>{
@@ -25,7 +24,7 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
 
     public revalidate():void {
         if (DEBUG) {
-            if (!this.target) throw new DebugError(`cellFrameAnimation is not attached to target! Invoke animatedImage.setFrameAnimation() method`);
+            if (!this.target) throw new DebugError(`cellFrameAnimation is not attached to target!`);
             if (this._numOfFramesV<=0 || this._numOfFramesH<=0) {
                 throw new DebugError(`can not play CellFrameAnimation: cellFrameAnimation.setSpriteSheetSize() not invoked or invoked with wrong parameters`);
             }
@@ -42,11 +41,6 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
         const cloned:CellFrameAnimation = new CellFrameAnimation(this.game);
         this.setClonedProperties(cloned);
         return cloned as this;
-    }
-
-    public afterCloned(g: AnimatedImage): void {
-        super.afterCloned(g);
-        this.setSpriteSheetSize(this._numOfFramesH,this._numOfFramesV);
     }
 
     protected onNextFrame(i:number){

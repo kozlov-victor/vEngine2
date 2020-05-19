@@ -71,19 +71,13 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
 
 
     protected setClonedProperties(cloned:AnimatedImage):void {
-
-        if (DEBUG && !('clone' in this)) {
-            console.error(this);
-            throw new DebugError(`can not clone sprite: cloneable interface is not implemented`);
-        }
+        super.setClonedProperties(cloned);
         Object.keys(this._frameAnimations).forEach((key:string)=>{
             const fr:AbstractFrameAnimation<any> = this._frameAnimations[key].clone();
-            fr.afterCloned(cloned);
             cloned.addFrameAnimation(key,fr);
         });
         if (this._currFrameAnimation) {
             cloned.playFrameAnimation(this._currFrameAnimation.name);
         }
-        super.setClonedProperties(cloned);
     }
 }

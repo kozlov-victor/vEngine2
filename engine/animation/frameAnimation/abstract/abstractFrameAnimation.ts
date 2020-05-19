@@ -1,4 +1,4 @@
-import {IEventemittable} from "@engine/core/declarations";
+import {ICloneable, IEventemittable} from "@engine/core/declarations";
 import {Game} from "@engine/core/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";
@@ -11,7 +11,7 @@ export const enum FRAME_ANIMATION_EVENTS {
     loop      =  'loop',
 }
 
-export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnimation {
+export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnimation, ICloneable<AbstractFrameAnimation<T>> {
 
     public name:string;
     public duration:number = 1000;
@@ -94,9 +94,6 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnim
         this._eventEmitterDelegate.trigger(eventName,data);
     }
 
-    /*@internal*/
-    public afterCloned(g:AnimatedImage):void{}
-
     protected abstract onNextFrame(i:number):void;
 
     protected setClonedProperties(cloned:AbstractFrameAnimation<unknown>):void {
@@ -104,6 +101,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnim
         cloned.duration = this.duration;
         cloned.isRepeating = this.isRepeating;
         cloned.name = this.name;
+        cloned.target = undefined!;
     }
 
 }

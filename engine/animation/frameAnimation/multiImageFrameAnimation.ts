@@ -14,9 +14,10 @@ export class MultiImageFrameAnimation extends AbstractFrameAnimation<ResourceLin
         super(game);
     }
 
-
-    public clone(): this { // todo
-        return this;
+    public clone(): this {
+        const cloned:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
+        this.setClonedProperties(cloned);
+        return cloned as this;
     }
 
     public revalidate(): void {

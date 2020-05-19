@@ -11,7 +11,9 @@ export class MultiImageAtlasFrameAnimation extends AbstractFrameAnimation<{resou
     }
 
     public clone(): this {
-        return this;
+        const cloned:MultiImageAtlasFrameAnimation = new MultiImageAtlasFrameAnimation(this.game);
+        this.setClonedProperties(cloned);
+        return cloned as this;
     }
 
     public revalidate(): void {

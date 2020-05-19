@@ -97,6 +97,10 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
                 top: 0;
                 position: absolute;
             }
+            ::selection {
+                    color: #efff00;
+                    background-color: #127315;
+            }
             .errorBlock {
                 position: absolute;
                 left: 0;top:0;right:0;
@@ -105,13 +109,15 @@ const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
                 font-family: monospace;
                 padding: 10px;
                 -webkit-touch-callout: default;
-                -webkit-user-select: text;
-                user-select: text;
                 color: #fffef8;
+            }
+            .errorBlock, .errorBlock * {
+                user-select: text;
             }
             .errorBlockInternal {
                 padding: 5px;
                 border: 1px solid #8f9624;
+                user-select: text;
             }
             .errorClose {
                 position: absolute;

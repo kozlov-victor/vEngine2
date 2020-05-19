@@ -70,8 +70,12 @@ export class Image extends RenderableModel implements ICloneable<Image>,IResourc
         if (DEBUG && !link) {
             throw new DebugError(`can not set resource link: link is not passed`);
         }
+        const oldLink:ResourceLink<ITexture> = this._resourceLink;
         this._resourceLink = link;
-        this.revalidate();
+        const canBeRevalidated:boolean =
+            (oldLink===undefined || this._resourceLink!==link) &&
+            link.getTarget()!==undefined;
+        if (canBeRevalidated) this.revalidate();
     }
 
     public getResourceLink():ResourceLink<ITexture>{

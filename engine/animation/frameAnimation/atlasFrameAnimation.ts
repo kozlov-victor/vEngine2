@@ -15,7 +15,9 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
     }
 
     public clone():this{
-        return this; // todo
+        const cloned:AtlasFrameAnimation = new AtlasFrameAnimation(this.game);
+        this.setClonedProperties(cloned);
+        return cloned as this;
     }
 
     protected onNextFrame(i: number): void {
@@ -23,6 +25,10 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
         this.target.getSrcRect().fromJSON(currRect);
         const rect:Rect = this.target.getSrcRect();
         this.target.size.setWH(rect.width,rect.height);
+    }
+
+    protected setClonedProperties(cloned: AbstractFrameAnimation<unknown>): void {
+        super.setClonedProperties(cloned);
     }
 
 
