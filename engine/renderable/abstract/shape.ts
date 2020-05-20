@@ -12,7 +12,6 @@ export abstract class Shape extends RenderableModel {
     public color:Color = Color.BLACK.clone();
     public lineWidth:number = 0;
     public fillColor:Color|LinearGradient = Color.RGB(100,100,100);
-    public filters: IFilter[] = [];
 
     protected constructor(game:Game){
         super(game);
