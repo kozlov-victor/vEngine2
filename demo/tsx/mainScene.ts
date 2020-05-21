@@ -9,7 +9,9 @@ export class MainScene extends Scene {
     private link:ResourceLink<ITexture>;
 
     public onReady() {
-        this.appendChild(new MainSceneUi().render());
+        const mainSceneUI = new MainSceneUi();
+        const root = mainSceneUI.render();
+        this.appendChild(root);
     }
 
 }

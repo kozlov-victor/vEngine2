@@ -63,7 +63,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         const circle:Circle = new Circle(this.game);
         circle.radius = 2;
         circle.transformPoint.setXY(circle.radius/2,circle.radius/2);
-        (circle.fillColor as Color).setRGBA(122,200,0);
+        circle.fillColor.setRGBA(122,200,0);
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticle(circle);

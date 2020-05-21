@@ -12,7 +12,7 @@ export class SecondScene extends Scene {
         for (let i:number = 0;i<60;i++) { fakeLongLoadingFn(this.resourceLoader); }
         const rect = new Rectangle(this.game);
         rect.borderRadius = 5;
-        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.fillColor.setRGB(10,100,100);
         rect.pos.y = 50;
         rect.size.height = 20;
         this.preloadingGameObject = rect;

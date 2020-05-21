@@ -66,7 +66,7 @@ export class MainScene extends Scene {
         gradient.angle = 0.2;
         gradient.colorFrom = Color.RGBA(100,0,20,122);
         gradient.colorTo = Color.RGBA(200,111,1,254);
-        rect.fillColor = gradient;
+        rect.fillGradient = gradient;
         rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);
         rect.lineWidth = 4;

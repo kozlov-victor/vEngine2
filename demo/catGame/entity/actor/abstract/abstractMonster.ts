@@ -35,12 +35,12 @@ export abstract class AbstractMonster extends AbstractCharacter {
     }
 
     protected burstWithParticles():void{
-        let r:number = 255;
+        let r:byte = 255;
         this.colorizeFilter.enabled = true;
         if (this.tmr!==undefined) this.tmr.kill();
         this.tmr = this.getRenderableModel().setInterval(()=>{
-            this.burstColor.setG(r as byte);
-            this.burstColor.setB(r as byte);
+            this.burstColor.g = r;
+            this.burstColor.b = r;
             r--;
             this.colorizeFilter.setColor(this.burstColor);
             if (r<50) {

@@ -46,7 +46,7 @@ export class MainScene extends Scene {
         const infoRect:Rectangle = new Rectangle(this.game);
         infoRect.size.setWH(600,50);
         infoRect.color.setRGB(200,12,22);
-        (infoRect.fillColor as Color).setRGB(12,100,55);
+        infoRect.fillColor.setRGB(12,100,55);
         infoRect.addBehaviour(new DraggableBehaviour(this.game));
         uiLayer.appendChild(infoRect);
         this.appendChild(uiLayer);

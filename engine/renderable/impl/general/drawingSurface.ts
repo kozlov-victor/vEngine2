@@ -25,7 +25,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     private static normalizeColor(col:byte|number, g?:byte, b?:byte, a:byte = 255):Color {
         if (b===undefined) {
             const color:Color = Color.fromRGBNumeric(col as number);
-            color.setA(g!);
+            color.a = g!;
             return color;
         } else {
             return new Color(col as byte,g!,b!,a);

@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     protected onUpdate(): void {
 
         const newParticle:Particle = new Particle(this.game);
-        (newParticle.fillColor as Color) = Color.fromRGBNumeric(0x0000ff);
+        newParticle.fillColor = Color.fromRGBNumeric(0x0000ff);
         newParticle.pos.setXY(0,0);
         newParticle.acc_x = 0;
         newParticle.acc_y = 0.5;

@@ -28,7 +28,7 @@ export class Burster {
         const particle:Circle = new Circle(this.game);
         particle.radius = 2;
         particle.transformPoint.setXY(particle.radius/2,particle.radius/2);
-        (particle.fillColor as Color).setRGBA(12,100,0);
+        particle.fillColor.setRGBA(12,100,0);
         const body = game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
             type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
             debug: true,

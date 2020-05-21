@@ -44,7 +44,7 @@ export class MainScene extends Scene {
 
         const rect:Rectangle = new Rectangle(this.game);
         rect.size.set(this.game.size);
-        (rect.fillColor as Color).setRGB(244,122,2);
+        rect.fillColor.setRGB(244,122,2);
         rect.filters = [lightFilter];
 
         this.on(MOUSE_EVENTS.mouseMove,(e:ISceneMouseEvent)=>{

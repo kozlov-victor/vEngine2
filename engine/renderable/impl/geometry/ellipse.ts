@@ -3,7 +3,7 @@ import {ICloneable} from "@engine/core/declarations";
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 
-export class Ellipse extends Shape implements ICloneable<Ellipse>{
+export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps{
 
     public readonly type:string = 'Ellipse';
 
@@ -13,7 +13,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>{
 
     set radiusX(value: number) {
         this._radiusX = value;
-        this.size.width = this._getMaxRadius()*2;
+        this.size.setWH(this._getMaxRadius()*2);
         this.center.forceTriggerChange();
     }
 
@@ -23,7 +23,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>{
 
     set radiusY(value: number) {
         this._radiusY = value;
-        this.size.height = this._getMaxRadius()*2;
+        this.size.setWH(this._getMaxRadius()*2);
         this.center.forceTriggerChange();
     }
 
@@ -60,6 +60,16 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>{
         const cloned:Ellipse = new Ellipse(this.game);
         this.setClonedProperties(cloned);
         return cloned;
+    }
+
+    public setProps(props:IEllipseProps):void {
+        super.setProps(props);
+        if (props.center!==undefined) this.center.setXY(props.center.x,props.center.y);
+        if (props.arcAngleFrom!==undefined) this.arcAngleFrom=props.arcAngleFrom;
+        if (props.arcAngleTo!==undefined) this.arcAngleTo=props.arcAngleTo;
+        if (props.anticlockwise!==undefined) this.anticlockwise=props.anticlockwise;
+        if (props.radiusX) this.radiusX = props.radiusX;
+        if (props.radiusY) this.radiusY = props.radiusY;
     }
 
     protected setClonedProperties(cloned:Ellipse):void {

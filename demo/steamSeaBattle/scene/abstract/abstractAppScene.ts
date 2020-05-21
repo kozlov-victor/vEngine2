@@ -23,7 +23,7 @@ export abstract class AbstractAppScene extends Scene {
         const assetsFolder:string = 'data';
         const assetsPostfix:string = '';
         const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         rect.pos.setY(200);
         this.preloadingGameObject = rect;
@@ -145,7 +145,7 @@ export abstract class AbstractAppScene extends Scene {
                         this.getNumber(child.attributes.width),
                         this.getNumber(child.attributes.height)
                     );
-                    (r.fillColor as Color).setRGBA(82,54,136,122); // todo
+                    r.fillColor.setRGBA(82,54,136,122);
                     this.afterObjectCreated(root,r,child);
                     break;
                 }

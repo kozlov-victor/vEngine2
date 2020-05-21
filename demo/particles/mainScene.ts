@@ -23,13 +23,13 @@ export class MainScene extends Scene {
         const circle:Circle = new Circle(this.game);
         circle.radius = 3;
         circle.transformPoint.setXY(circle.radius/2,circle.radius/2);
-        (circle.fillColor as Color).setRGBA(122,200,0);
+        circle.fillColor.setRGBA(122,200,0);
         circle.blendMode = BLEND_MODE.ADDITIVE;
 
         const rect:Rectangle = new Rectangle(this.game);
         rect.size.setWH(MathEx.random(1,3));
         rect.transformPoint.setXY(rect.size.width/2,rect.size.height/2);
-        (rect.fillColor as Color).setRGBA(133,200,0);
+        rect.fillColor.setRGBA(133,200,0);
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticle(circle);

@@ -10,7 +10,14 @@ export interface IColorJSON {
     a:byte;
 }
 
-export class Color extends ObservableEntity implements ICloneable<Color>{
+export interface IColorFrozen extends Color{
+    readonly r:byte;
+    readonly g:byte;
+    readonly b:byte;
+    readonly a:byte;
+}
+
+export class Color extends ObservableEntity implements ICloneable<Color>, IColorJSON{
 
     public static WHITE = Color.RGB(255,255,255).freeze();
     public static GREY  = Color.RGB(127,127,127).freeze();
@@ -46,10 +53,10 @@ export class Color extends ObservableEntity implements ICloneable<Color>{
 
     public readonly type:'Color' = 'Color';
 
-    private r:byte;
-    private g:byte;
-    private b:byte;
-    private a:byte;
+    private _r:byte;
+    private _g:byte;
+    private _b:byte;
+    private _a:byte;
 
     private rNorm:number;
     private gNorm:number;
@@ -66,12 +73,12 @@ export class Color extends ObservableEntity implements ICloneable<Color>{
 
     public setRGBA(r:byte,g:byte,b:byte,a:byte = 255):void{
         this.checkFriezed();
-        const changed:boolean = this.r!==r || this.g!==g || this.b!==b || this.a!==a;
+        const changed:boolean = this._r!==r || this._g!==g || this._b!==b || this._a!==a;
         if (!changed) return;
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.a = a;
+        this._r = r;
+        this._g = g;
+        this._b = b;
+        this._a = a;
         this.triggerObservable();
         this.normalizeToZeroOne();
     }
@@ -123,38 +130,50 @@ export class Color extends ObservableEntity implements ICloneable<Color>{
         this.setHSLA(h,s,l,255);
     }
 
-    public getR():byte {return this.r;}
-    public getG():byte {return this.g;}
-    public getB():byte {return this.b;}
-    public getA():byte {return this.a;}
 
-    public setR(val:byte):void{
-        this.setRGBA(val,this.g,this.b,this.a);
+    get r(): byte {
+        return this._r;
     }
 
-    public setG(val:byte):void{
-        this.setRGBA(this.r,val,this.b,this.a);
+    set r(value: byte) {
+        this.setRGBA(value,this._g,this._b,this._a);
     }
 
-    public setB(val:byte):void{
-        this.setRGBA(this.r,this.g,val,this.a);
+    get g(): byte {
+        return this._g;
     }
 
-    public setA(val:byte):void{
-        this.setRGBA(this.r,this.g,this.b,val);
+    set g(value: byte) {
+        this.setRGBA(this._r,value,this._b,this._a);
+    }
+
+    get b(): byte {
+        return this._b;
+    }
+
+    set b(value: byte) {
+        this.setRGBA(this._r,this._g,value,this._a);
+    }
+
+    get a(): byte {
+        return this._a;
+    }
+
+    set a(value: byte) {
+        this.setRGBA(this._r,this._g,this._b,value);
     }
 
     public set(another:Color):void{
-        this.setRGBA(another.r,another.g,another.b,another.a);
+        this.setRGBA(another._r,another._g,another._b,another._a);
     }
 
     public clone():Color{
-        return new Color(this.r,this.g,this.b,this.a);
+        return new Color(this._r,this._g,this._b,this._a);
     }
 
-    public freeze():this{
+    public freeze():IColorFrozen{
         this._friezed = true;
-        return this;
+        return this as IColorFrozen;
     }
 
 
@@ -168,15 +187,15 @@ export class Color extends ObservableEntity implements ICloneable<Color>{
     }
 
     public asCSS():string{
-        return `rgba(${this.r},${this.g},${this.b},${this.a/255})`;
+        return `rgba(${this._r},${this._g},${this._b},${this._a/255})`;
     }
 
     public asRGBNumeric():number {
-        return (this.r<<16)|(this.g<<8)|this.b;
+        return (this._r<<16)|(this._g<<8)|this._b;
     }
 
     public toJSON():IColorJSON{
-        return {r:this.r,g:this.g,b:this.b,a:this.a};
+        return {r:this._r,g:this._g,b:this._b,a:this._a};
     }
 
     public fromJSON(json:IColorJSON) {
@@ -195,10 +214,10 @@ export class Color extends ObservableEntity implements ICloneable<Color>{
     }
 
     private normalizeToZeroOne():void{
-        this.rNorm = this.r / 0xff;
-        this.gNorm = this.g / 0xff;
-        this.bNorm = this.b / 0xff;
-        this.aNorm = this.a / 0xff;
+        this.rNorm = this._r / 0xff;
+        this.gNorm = this._g / 0xff;
+        this.bNorm = this._b / 0xff;
+        this.aNorm = this._a / 0xff;
     }
 
 }

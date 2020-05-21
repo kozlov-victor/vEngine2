@@ -77,7 +77,7 @@ export class MainScene extends Scene {
         const particle:Rectangle = new Rectangle(this.game);
         particle.size.setWH(5);
         particle.transformPoint.setXY(particle.size.width/2,particle.size.height/2);
-        (particle.fillColor as Color).setRGBA(133,200,0);
+        particle.fillColor.setRGBA(133,200,0);
         particle.setRigidBody(physicsSystem.createRigidBody({type: ARCADE_RIGID_BODY_TYPE.DYNAMIC}));
 
         const ps: ParticleSystem = new ParticleSystem(this.game);

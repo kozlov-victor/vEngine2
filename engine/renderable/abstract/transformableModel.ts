@@ -83,7 +83,7 @@ class ModelPoint2d extends Point2d {
 
 }
 
-export abstract class TransformableModel extends BaseModel implements ITransformable{
+export abstract class TransformableModel extends BaseModel implements ITransformable, ITransformableProps{
 
     public readonly worldTransformMatrix:Mat16Holder = new Mat16Holder();
     public worldTransformDirty:boolean = true;
@@ -153,6 +153,12 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         renderer.transformSkewY(this.skew.y);
         renderer.transformTranslate(-this.transformPoint.x,-this.transformPoint.y);
         if (this.billBoard) renderer.transformRotationReset();
+    }
+
+    public setProps(props:ITransformableProps):void{
+        if (props.pos!==undefined) this.pos.set(props.pos);
+        if (props.size!==undefined) this.size.set(props.size);
+        if (props.scale!==undefined) this.scale.set(props.scale);
     }
 
     protected setClonedProperties(cloned:TransformableModel){

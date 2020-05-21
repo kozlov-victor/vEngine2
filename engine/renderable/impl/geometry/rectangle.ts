@@ -1,9 +1,8 @@
 import {Game} from "@engine/core/game";
 import {Shape} from "../../abstract/shape";
 import {ICloneable} from "@engine/core/declarations";
-import {Line} from "@engine/renderable/impl/geometry/line";
 
-export class Rectangle extends Shape implements ICloneable<Rectangle>{
+export class Rectangle extends Shape implements ICloneable<Rectangle>, IRectangleProps{
 
     public readonly type:string = 'Rectangle';
     public borderRadius:number = 0;
@@ -22,6 +21,11 @@ export class Rectangle extends Shape implements ICloneable<Rectangle>{
         const cloned:Rectangle = new Rectangle(this.game);
         this.setClonedProperties(cloned);
         return cloned;
+    }
+
+    public setProps(props: IRectangleProps): void {
+        super.setProps(props);
+        if (props.borderRadius!==undefined) this.borderRadius = props.borderRadius;
     }
 
     protected setClonedProperties(cloned:Rectangle):void{

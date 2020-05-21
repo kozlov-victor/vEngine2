@@ -13,7 +13,7 @@ export class MainScene extends Scene {
 
         const circle:Circle = new Circle(this.game);
         circle.radius = 3;
-        (circle.fillColor as Color).setRGBA(122,200,0);
+        circle.fillColor.setRGBA(122,200,0);
         circle.blendMode = BLEND_MODE.ADDITIVE;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);

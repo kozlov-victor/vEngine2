@@ -39,7 +39,7 @@ export class MainScene extends Scene {
     private createControlCircle(){
         const c = new Circle(this.game);
         c.radius = 30;
-        (c.fillColor as Color).setRGB(23,20,200);
+        c.fillColor.setRGB(23,20,200);
         const d = c.radius*2;
         c.pos.setXY(
             MathEx.random(d,this.game.size.width - d),

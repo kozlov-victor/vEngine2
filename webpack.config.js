@@ -88,15 +88,7 @@ module.exports = (env={})=>{
                     ]
                 },
                 {
-                    test: /\.(tsx)$/,
-                    use: [
-                        {
-                            loader: 'awesome-typescript-loader',
-                        },
-                    ],
-                },
-                {
-                    test: /\.ts$/,
+                    test: /\.tsx?$/,
                     enforce: 'pre',
                     use: [
                         {
@@ -106,7 +98,7 @@ module.exports = (env={})=>{
                     ]
                 },
                 {
-                    test: /\.ts$/,
+                    test: /\.tsx?$/,
                     use: [
                         {
                             loader: "awesome-typescript-loader",options: {

@@ -215,7 +215,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     public onPreloading():void {
         const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }

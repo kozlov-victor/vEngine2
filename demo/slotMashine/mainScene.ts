@@ -35,7 +35,7 @@ export class MainScene extends Scene {
         this.wheelLink = this.resourceLoader.loadTexture(`./slotMashine/resources/wheel.png?1`);
 
         const rect:Rectangle = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }

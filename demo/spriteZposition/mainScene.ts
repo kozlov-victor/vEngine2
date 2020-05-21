@@ -22,7 +22,7 @@ export class MainScene extends Scene {
         this.colorBG = Color.RGB(0);
         this.spriteLink = this.resourceLoader.loadTexture('./assets/star.png');
         const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }

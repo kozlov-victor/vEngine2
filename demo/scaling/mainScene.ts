@@ -16,7 +16,7 @@ export class MainScene extends Scene {
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
         const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }

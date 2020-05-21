@@ -108,7 +108,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
 
     public drawRectangle(rectangle:Rectangle):void{
-        this.ctx.fillStyle = (rectangle.fillColor as Color).asCSS();
+        this.ctx.fillStyle = rectangle.fillColor.asCSS();
         this.ctx.strokeStyle = rectangle.color.asCSS();
         this.ctx.lineWidth = rectangle.lineWidth;
         this.ctx.fillRect(0,0,rectangle.size.width,rectangle.size.height);

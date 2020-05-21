@@ -49,7 +49,7 @@ class TabStrip {
     constructor(private game:Game){
         this.root.pos.setXY(0,250);
         this.root.size.setWH(0,400);
-        (this.root.fillColor as Color).setRGB(12,12,12);
+        this.root.fillColor.setRGB(12,12,12);
     }
 
     public preload(){
@@ -124,7 +124,7 @@ class TabStrip {
         const currSize:number = this.root.size.width;
         this.root.size.setW(currSize+this.CELL_WIDTH);
         const rectWrap:Rectangle = new Rectangle(this.game);
-        (rectWrap.fillColor as Color).setRGB(44,44,2);
+        rectWrap.fillColor.setRGB(44,44,2);
         rectWrap.color.setRGB(0,0,0);
         rectWrap.size.setWH(this.CELL_WIDTH,this.CELL_HEIGHT);
         rectWrap.pos.setX(currSize);

@@ -10,7 +10,7 @@ export abstract class MkAbstractScene extends Scene {
         this.colorBG.set(Color.BLACK);
         loadFont(this.game,'./mk-alfa/assets/fonts/MK4.TTF','MK4');
         const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(22,222,12);
+        rect.fillColor.setRGB(22,222,12);
         rect.size.height = 50;
         rect.pos.setY(this.game.size.height - rect.size.height);
         this.preloadingGameObject = rect;

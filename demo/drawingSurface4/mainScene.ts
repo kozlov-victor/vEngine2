@@ -1,6 +1,5 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
@@ -8,7 +7,7 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }

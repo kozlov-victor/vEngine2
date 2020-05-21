@@ -17,7 +17,7 @@ export class MainScene extends Scene {
         this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
         this.offsetMapLink =  this.resourceLoader.loadTexture('./offsetMap/glass.jpg');
         const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }

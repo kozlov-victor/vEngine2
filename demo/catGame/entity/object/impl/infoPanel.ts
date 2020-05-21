@@ -126,9 +126,9 @@ export class InfoPanel {
     }
 
     private updateLifeBar(){
-        if (this.life<30) (this.lifeBarContainer.fillColor as Color).setRGB(123,22,23);
-        else if (this.life<50) (this.lifeBarContainer.fillColor as Color).setRGB(123,123,23);
-        else (this.lifeBarContainer.fillColor as Color).setRGB(23,123,23);
+        if (this.life<30) this.lifeBarContainer.fillColor.setRGB(123,22,23);
+        else if (this.life<50) this.lifeBarContainer.fillColor.setRGB(123,123,23);
+        else this.lifeBarContainer.fillColor.setRGB(23,123,23);
         this.lifeBarContainer.size.width = this.lifeBarWidth*this.life/100;
     }
 

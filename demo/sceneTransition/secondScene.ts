@@ -7,8 +7,6 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderer/common/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {fakeLongLoadingFn} from "../longLoading/mainScene";
-import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
-import {ColorizeFilter} from "@engine/renderer/webGl/filters/texture/colorizeFilter";
 
 export class SecondScene extends Scene {
 
@@ -29,7 +27,7 @@ export class SecondScene extends Scene {
 
         const rect = new Rectangle(this.game);
         rect.borderRadius = 5;
-        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.fillColor.setRGB(10,100,100);
         rect.pos.y = 50;
         rect.size.height = 20;
         this.preloadingGameObject = rect;
@@ -56,7 +54,7 @@ export class SecondScene extends Scene {
         gradient.angle = 0.2;
         gradient.colorFrom = Color.RGB(100,0,20);
         gradient.colorTo = Color.RGB(200,111,1);
-        rect.fillColor = gradient;
+        rect.fillGradient = gradient;
         rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);
         rect.lineWidth = 4;

@@ -2,7 +2,7 @@ import {Ellipse} from "./ellipse";
 import {ICloneable} from "@engine/core/declarations";
 import {Game} from "@engine/core/game";
 
-export class Circle extends Ellipse implements ICloneable<Circle>{
+export class Circle extends Ellipse implements ICloneable<Circle>, ICircleProps{
 
     set radius(val:number) {
         this._radius = val;
@@ -33,6 +33,11 @@ export class Circle extends Ellipse implements ICloneable<Circle>{
         const cloned:Circle = new Circle(this.game);
         this.setClonedProperties(cloned);
         return cloned;
+    }
+
+    public setProps(props:ICircleProps):void{
+        super.setProps(props);
+        if (props.radius!==undefined) this.radius = props.radius;
     }
 
     protected setClonedProperties(cloned:Circle):void {

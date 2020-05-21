@@ -56,7 +56,7 @@ export abstract class BaseAbstractIntroScene extends Scene {
         grad.colorFrom = Color.RGB(219, 230, 255);
         grad.colorTo = Color.RGB(198, 202, 202);
         grad.angle = -MathEx.degToRad(90);
-        bgImage.fillColor = grad;
+        bgImage.fillGradient = grad;
         bgLayer.appendChild(bgImage);
         this.appendChild(bgLayer);
         this.appendChild(new Layer(this.game));

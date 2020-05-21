@@ -2,7 +2,6 @@ import {Scene} from "@engine/scene/scene";
 import {MoveByPathAnimation} from "@engine/animation/propertyAnimation/moveByPathAnimation";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 
 export class MainScene extends Scene {
 
@@ -11,7 +10,7 @@ export class MainScene extends Scene {
         const model = new Rectangle(this.game);
         model.size.setWH(20);
         model.color.setRGB(0,222,0);
-        (model.fillColor as Color).setRGB(0,0,0);
+        model.fillColor.setRGB(0,0,0);
         model.lineWidth = 2;
         this.appendChild(model);
         model.anchorPoint.setToCenter();

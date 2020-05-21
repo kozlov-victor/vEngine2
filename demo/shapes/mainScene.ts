@@ -17,7 +17,7 @@ export class MainScene extends Scene {
         gradient.angle = 0.2;
         gradient.colorFrom = Color.RGB(100,0,20);
         gradient.colorTo = Color.RGB(200,111,1);
-        rect.fillColor = gradient;
+        rect.fillGradient = gradient;
         rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);
         rect.lineWidth = 4;
@@ -43,7 +43,7 @@ export class MainScene extends Scene {
         gradient = new LinearGradient();
         gradient.colorFrom = Color.RGBA(100,0,222,200);
         gradient.colorTo = Color.RGB(12,20,222);
-        ellipse.fillColor = gradient;
+        ellipse.fillGradient = gradient;
         ellipse.color = Color.BLACK;
         ellipse.lineWidth = 5;
         ellipse.center.setXY(50,50);

@@ -109,7 +109,8 @@ export class MouseControl implements IControl {
         goRect.release();
         screenPoint.release();
         for (const ch of go.children) {
-            res = res || MouseControl.triggerGameObjectEvent(e,eventName,mousePoint,ch);
+            const childRes:boolean =  MouseControl.triggerGameObjectEvent(e,eventName,mousePoint,ch);
+            res = res || childRes;
         }
         return res;
     }

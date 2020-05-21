@@ -65,7 +65,7 @@ export class MainScene extends Scene {
 
         this.on(MOUSE_EVENTS.click, e=>{
             const rect = new Rectangle(this.game);
-            (rect.fillColor as Color) = Color.RGB(122,12,33);
+            rect.fillColor = Color.RGB(122,12,33);
             rect.pos.setXY(e.sceneX,e.sceneY);
             this.getLayers()[0].appendChild(rect);
             console.log(e,rect);

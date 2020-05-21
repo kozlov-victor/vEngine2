@@ -17,7 +17,7 @@ export class MainScene extends Scene {
         this.plasmaLink = this.resourceLoader.loadTexture('./plasma/Plasma_effect.jpg');
         this.palletLink = this.resourceLoader.loadTexture('./plasma/gradient.png');
         const rect = new Rectangle(this.game);
-        (rect.fillColor as Color).setRGB(10,100,100);
+        rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }
