@@ -265,7 +265,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public drawRectangle(rectangle:Rectangle):void{
 
-        if (rectangle.lineWidth===0 && rectangle.borderRadius===0 && rectangle.fillColor.type==='Color') {
+        if (rectangle.lineWidth===0 && rectangle.borderRadius===0 && rectangle.fillGradient===undefined) {
             this.drawSimpleColoredRectangle(rectangle); // optimise drawing of simple rectangle with very simple gl program
         } else {
             const {width:rw,height:rh} = rectangle.size;

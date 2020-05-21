@@ -50,7 +50,6 @@ export abstract class BaseAbstractIntroScene extends Scene {
         const bgLayer: Layer = new Layer(this.game);
         bgLayer.transformType = LayerTransformType.STICK_TO_CAMERA;
         const bgImage: Rectangle = new Rectangle(this.game);
-        bgImage.lineWidth = 0;
         bgImage.size.set(this.game.size);
         const grad: LinearGradient = new LinearGradient();
         grad.colorFrom = Color.RGB(219, 230, 255);
