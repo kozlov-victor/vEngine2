@@ -7,11 +7,10 @@ import {Game} from "@engine/core/game";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 
 
-export class Line extends Shape implements ICloneable<Line> {
+export class Line extends Shape implements ICloneable<Line>, ILineProps {
 
     public borderRadius:number = 0;
     public readonly pointTo:Point2d = new Point2d(0,0,()=>this.onPointChanged());
-    public vectorScaleFactor:number = 1;
 
     private readonly rectangleRepresentation:Rectangle = new Rectangle(this.game);
 
@@ -22,8 +21,8 @@ export class Line extends Shape implements ICloneable<Line> {
     }
 
     public setXYX1Y1(x:number,y:number,x1:number,y1:number){
-        this.pos.setXY(x*this.vectorScaleFactor,y*this.vectorScaleFactor);
-        this.pointTo.setXY(x1*this.vectorScaleFactor,y1*this.vectorScaleFactor);
+        this.pos.setXY(x,y);
+        this.pointTo.setXY(x1,y1);
         const dx:number = this.pointTo.x - this.pos.x;
         const dy:number = this.pointTo.y - this.pos.y;
         this.pointTo.setXY(dx,dy);
@@ -50,6 +49,12 @@ export class Line extends Shape implements ICloneable<Line> {
         return this.rectangleRepresentation;
     }
 
+    public setProps(props:ILineProps):void {
+        super.setProps(props);
+        this.setXYX1Y1(props.pos?.x??0,props.pos?.y??0,props.pointTo.x,props.pointTo.y);
+        if (props.borderRadius) this.borderRadius = props.borderRadius;
+    }
+
     protected setClonedProperties(cloned:Line):void{
         cloned.borderRadius = this.borderRadius;
         cloned.pointTo.set(this.pointTo);
@@ -62,6 +67,7 @@ export class Line extends Shape implements ICloneable<Line> {
         const h:number = Math.abs(this.pointTo.y);
         const l:number = Math.sqrt(w*w+h*h) + this.lineWidth/2;
         this.size.setWH(w,h+this.lineWidth);
+        // noinspection JSSuspiciousNameCombination
         this.rectangleRepresentation.size.setWH(l,this.lineWidth);
         this.angle = Math.atan2(this.pointTo.y,this.pointTo.x);
         this.transformPoint.setXY(0,this.lineWidth/2);

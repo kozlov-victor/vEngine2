@@ -1,9 +1,13 @@
-
 interface IColor {
     r:byte;
     g:byte;
     b:byte;
     a?:byte;
+}
+
+interface IPoint {
+    x:number;
+    y:number;
 }
 
 interface IGenericProps<T> {
@@ -12,7 +16,7 @@ interface IGenericProps<T> {
 }
 
 interface ITransformableProps extends IGenericProps<unknown>{
-    pos?:{x:number,y:number};
+    pos?:IPoint;
     size?:{width:number,height:number};
     scale?:{x:number,y:number};
 }
@@ -43,11 +47,26 @@ interface IRectangleProps extends IShapeProps {
     borderRadius?: number;
 }
 
+interface ILineProps extends IShapeProps {
+    pointTo: IPoint;
+    borderRadius?: number;
+}
+
+interface IImageProps extends ITransformableProps {
+    borderRadius?:number;
+    color?:IColor;
+    lineWidth?:number;
+    resourceLink:{type:'ResourceLink'};
+}
+
 declare namespace JSX {
     // tslint:disable-next-line:interface-name
     export interface IntrinsicElements {
-        v_circle: ICircleProps;
-        v_ellipse: IEllipseProps;
-        v_rectangle: IRectangleProps;
+        v_null_game_object: ITransformableProps;
+        v_circle:           ICircleProps;
+        v_ellipse:          IEllipseProps;
+        v_rectangle:        IRectangleProps;
+        v_line:             ILineProps;
+        v_image:            IImageProps;
     }
 }

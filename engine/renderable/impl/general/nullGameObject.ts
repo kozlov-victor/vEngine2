@@ -9,5 +9,4 @@ export class NullGameObject extends RenderableModel {
     }
 
     public draw():void{}
-
 }

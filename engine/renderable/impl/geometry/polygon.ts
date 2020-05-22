@@ -57,7 +57,7 @@ export class Polygon extends Mesh {
             vertices.push(l.pos.x,l.pos.y);
         });
 
-        //if (DEBUG && vertices.length<=2) throw new DebugError(`can not create polygon from polyline with vertices [${vertices}]`);
+        if (DEBUG && vertices.length<=2) throw new DebugError(`can not create polygon from polyline with vertices [${vertices}]`);
 
         const triangulator:EarClippingTriangulator = new EarClippingTriangulator();
         const triangulatedIndices:number[] = triangulator.computeTriangles(vertices);

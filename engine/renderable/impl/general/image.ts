@@ -7,7 +7,6 @@ import {ICloneable, IResource} from "@engine/core/declarations";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {RenderableModel} from "../../abstract/renderableModel";
-import {IFilter} from "@engine/renderer/common/ifilter";
 
 export const enum STRETCH_MODE {
     STRETCH,
@@ -60,6 +59,14 @@ export class Image extends RenderableModel implements ICloneable<Image>,IResourc
         const cloned:Image = new Image(this.game);
         this.setClonedProperties(cloned);
         return cloned;
+    }
+
+    public setProps(props:IImageProps):void{
+        this.setResourceLink(props.resourceLink as ResourceLink<ITexture>);
+        super.setProps(props);
+        if (props.borderRadius!==undefined) this.borderRadius = props.borderRadius;
+        if (props.color!==undefined) this.color.setRGBA(props.color.r,props.color.g,props.color.b,props.color.a);
+        if (props.lineWidth!==undefined) this.lineWidth = props.lineWidth;
     }
 
     public getSrcRect():Rect{

@@ -5,6 +5,9 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {DebugError} from "@engine/debug/debugError";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Line} from "@engine/renderable/impl/geometry/line";
+import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {Image} from "@engine/renderable/impl/general/image";
 
 export interface IElementRef<T> {
     current:T;
@@ -33,6 +36,15 @@ export class VEngineReact {
                 break;
             case 'v_rectangle':
                 element = new Rectangle(game);
+                break;
+            case 'v_line':
+                element = new Line(game);
+                break;
+            case 'v_null_game_object':
+                element = new NullGameObject(game);
+                break;
+            case 'v_image':
+                element = new Image(game);
                 break;
             default:
                 if (DEBUG) throw new DebugError(`unknown jsx tag: ${item}`);

@@ -1,12 +1,14 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {VEngineReact} from "@engine/renderable/jsx/jsxFactory.h";
+import {VEngineReact} from "@engine/renderable/tsx/tsxFactory.h";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export class MainSceneUi {
 
     private circleRefInternal = VEngineReact.createRef<Ellipse>();
 
-    constructor() {
+    constructor(private resourceLink:ResourceLink<ITexture>) {
     }
 
     public render():RenderableModel {
@@ -18,6 +20,7 @@ export class MainSceneUi {
                 borderRadius={5}
                 size={{width:300,height:220}}
             >
+
                 <v_circle
                     center={{x:122,y:102}}
                     fillColor={{r:22,g:133,b:43}}
@@ -36,6 +39,21 @@ export class MainSceneUi {
                     click={this.onInternalCircleClick.bind(this)}
                     ref={this.circleRefInternal}
                 />
+
+                <v_null_game_object pos={{x:30,y:50}}>
+                    <v_line
+                        pos={{x:10,y:10}}
+                        lineWidth={5}
+                        borderRadius={2}
+                        color={{r:0,g:200,b:0}}
+                        pointTo={{x:100,y:100}}
+                    />
+                    <v_image
+                        pos={{x:20,y:20}}
+                        resourceLink={this.resourceLink}/>
+                </v_null_game_object>
+
+
 
             </v_rectangle>
 
