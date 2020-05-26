@@ -8,9 +8,15 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {Image} from "@engine/renderable/impl/general/image";
+import {ClazzEx} from "@engine/core/declarations";
 
 export interface IElementRef<T> {
     current:T;
+}
+
+class VirtualNode {
+    public elementConstructor:ClazzEx<Game,RenderableModel>;
+    public props:Record<string, any>;
 }
 
 export class VEngineReact {
@@ -54,6 +60,10 @@ export class VEngineReact {
         VEngineReact.setGenericProps(element,props);
         children.forEach(c=>element.appendChild(c));
         return element;
+    }
+
+    public static render():void{
+
     }
 
     private static game:Game;
