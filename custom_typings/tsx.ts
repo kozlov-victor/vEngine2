@@ -12,7 +12,7 @@ interface IPoint {
 
 interface IGenericProps<T> {
     ref?:{current:T};
-    click?:()=>void;
+    click?:(e?:any)=>void;
 }
 
 interface ITransformableProps extends IGenericProps<unknown>{

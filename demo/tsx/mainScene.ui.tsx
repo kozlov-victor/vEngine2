@@ -1,17 +1,29 @@
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {VEngineReact} from "@engine/renderable/tsx/tsxFactory.h";
-import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
+import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
+import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
 
-export class MainSceneUi {
+interface IState {
+    ellipseRadiusX: number;
+    ellipseRadiusY: number;
+    ellipsePosX: number;
+    ellipsePosY: number;
+}
 
-    private circleRefInternal = VEngineReact.createRef<Ellipse>();
+export class MainSceneUi extends VEngineTsxComponent<IState> {
 
     constructor(private resourceLink:ResourceLink<ITexture>) {
+        super();
+        this.state = {
+            ellipsePosX: 10,
+            ellipsePosY: 10,
+            ellipseRadiusX: 20,
+            ellipseRadiusY: 50
+        };
     }
 
-    public render():RenderableModel {
+    public render():VirtualNode {
         return (
 
             <v_rectangle
@@ -26,18 +38,17 @@ export class MainSceneUi {
                     fillColor={{r:22,g:133,b:43}}
                     radius={22}
                     lineWidth={1}
-                    click={this.onExternalCircleClick.bind(this)}
+                    click={this.onCircleClick.bind(this)}
                 >
                 </v_circle>
 
                 <v_ellipse
-                    center={{x:120,y:50}}
+                    center={{x:this.state.ellipsePosX,y:this.state.ellipsePosY}}
                     fillColor={{r:12,g:222,b:43}}
-                    radiusX={20}
-                    radiusY={50}
+                    radiusX={this.state.ellipseRadiusX}
+                    radiusY={this.state.ellipseRadiusY}
                     lineWidth={2}
-                    click={this.onInternalCircleClick.bind(this)}
-                    ref={this.circleRefInternal}
+                    click={this.onEllipseClick.bind(this)}
                 />
 
                 <v_null_game_object pos={{x:30,y:50}}>
@@ -53,21 +64,18 @@ export class MainSceneUi {
                         resourceLink={this.resourceLink}/>
                 </v_null_game_object>
 
-
-
             </v_rectangle>
-
-
 
         );
     }
 
-    private onExternalCircleClick(){
-        this.circleRefInternal.current.center.x+=1;
+    private onCircleClick(){
+        console.log('on circle click');
+        this.setState({ellipsePosX:this.state.ellipsePosX+1});
     }
 
-    private onInternalCircleClick(){
-        this.circleRefInternal.current.radiusX+=1;
+    private onEllipseClick(){
+        this.setState({ellipseRadiusX:this.state.ellipseRadiusX+1});
     }
 
 }
