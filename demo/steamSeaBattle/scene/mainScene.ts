@@ -93,6 +93,7 @@ export class MainScene extends BaseScene {
         this.psBullet.particleLiveTime = {from:1000,to:5000};
         this.psBullet.emissionRadius = 10;
         this.psBullet.particleAngle = {from:MathEx.degToRad(90-10),to:MathEx.degToRad(90+10)};
+        this.psBullet.emitAuto = false;
         this.psBullet.addParticle(particle);
 
         this.bulletContainer.appendChild(this.psBullet);

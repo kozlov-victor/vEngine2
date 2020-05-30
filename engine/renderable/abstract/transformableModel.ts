@@ -23,7 +23,6 @@ class AnglePoint3d extends ObservableEntity{
             this.m[this.zProperty] = val;
             this.triggerObservable();
         }
-
     }
 
     get z():number{
@@ -105,7 +104,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
     }
 
     set angleVelocity(val:number){
-        this._angleVelocity3d.z = val;
+        this._angleVelocity3d._setZSilently(val);
     }
 
     public readonly scale:Point2d = new Point2d(1,1);
