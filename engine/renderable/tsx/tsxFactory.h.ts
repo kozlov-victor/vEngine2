@@ -52,7 +52,9 @@ export class VEngineReact {
                 if (DEBUG) throw new DebugError(`unknown jsx tag: ${item}`);
                 return undefined!;
         }
-        element.children = flattenDeep(children);
+        element.children =
+            flattenDeep(children). // flat
+            filter(it=>!!it); // remove null, undefined and ''
         return element;
     }
 
