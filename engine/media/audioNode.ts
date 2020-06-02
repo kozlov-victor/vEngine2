@@ -5,21 +5,21 @@ import {Optional} from "@engine/core/declarations";
 
 export class AudioNode {
 
-    private currSound:Optional<Sound>;
-    private lastPlayedUrl:Optional<string>;
+    private _currSound:Optional<Sound>;
+    private _lastPlayedUrl:Optional<string>;
 
     constructor(public context:BasicAudioContext){}
 
     public play(sound:Sound):void {
         this.stop();
         this.context.play(sound);
-        this.currSound = sound;
-        this.lastPlayedUrl = sound.getResourceLink().url;
+        this._currSound = sound;
+        this._lastPlayedUrl = sound.getResourceLink().url;
     }
 
     public stop():void {
         this.context.stop();
-        this.currSound = undefined;
+        this._currSound = undefined;
     }
 
     public setGain(val:number):void {
@@ -51,16 +51,16 @@ export class AudioNode {
     }
 
     public getLastPlayedUrl():Optional<string> {
-        return this.lastPlayedUrl;
+        return this._lastPlayedUrl;
     }
 
     public isLooped():boolean {
-        if (this.currSound===undefined) return false;
-        return this.currSound.loop;
+        if (this._currSound===undefined) return false;
+        return this._currSound.loop;
     }
 
     public getCurrSound():Optional<Sound> {
-        return this.currSound;
+        return this._currSound;
     }
 
 }

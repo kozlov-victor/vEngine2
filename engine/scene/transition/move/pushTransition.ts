@@ -13,7 +13,7 @@ import {Scene} from "@engine/scene/scene";
 
 export class PushTransition extends AbstractSceneTransition {
 
-    private lockingRect:Rect = new Rect();
+    private _lockingRect:Rect = new Rect();
 
     constructor(
         private readonly game:Game,
@@ -28,8 +28,8 @@ export class PushTransition extends AbstractSceneTransition {
         if (this._prevScene!==undefined) this._prevScene.render();
 
         const scene:Scene = this._currScene;
-        this.lockingRect.setXYWH(scene.pos.x,scene.pos.y,scene.size.width,scene.size.height);
-        scene.lockingRect = this.lockingRect;
+        this._lockingRect.setXYWH(scene.pos.x,scene.pos.y,scene.size.width,scene.size.height);
+        scene.lockingRect = this._lockingRect;
         scene.render();
     }
 

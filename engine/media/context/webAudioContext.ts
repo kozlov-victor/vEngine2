@@ -22,11 +22,11 @@ export class WebAudioContextHolder {
 class CtxHolder {
 
     public static getCtx():AudioContext{
-        if (CtxHolder.ctx && !CtxHolder.res) {
-            CtxHolder.res = new CtxHolder.ctx();
-            CtxHolder.fixAutoPlayPolicy(CtxHolder.res);
+        if (CtxHolder._ctx && !CtxHolder._res) {
+            CtxHolder._res = new CtxHolder._ctx();
+            CtxHolder.fixAutoPlayPolicy(CtxHolder._res);
         }
-        return CtxHolder.res;
+        return CtxHolder._res;
     }
 
     public static fixAutoPlayPolicy(res:AudioContext):void { // chrome allow playing only with user gesture
@@ -36,8 +36,8 @@ class CtxHolder {
         };
         document.addEventListener('click',listener);
     }
-    private static ctx:Clazz<AudioContext> = WebAudioContextHolder.getAudioContextClass();
-    private static res:AudioContext;
+    private static _ctx:Clazz<AudioContext> = WebAudioContextHolder.getAudioContextClass();
+    private static _res:AudioContext;
 }
 
 

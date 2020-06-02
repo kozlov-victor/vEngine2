@@ -14,8 +14,8 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
 
     protected buffer:KeyBoardEvent[];
 
-    private keyDownListener:(e:KeyboardEvent)=>void;
-    private keyUpListener:(e:KeyboardEvent)=>void;
+    private _keyDownListener:(e:KeyboardEvent)=>void;
+    private _keyUpListener:(e:KeyboardEvent)=>void;
 
     public isJustPressed(key:number):boolean{
         const event:Optional<KeyBoardEvent> = this.findEvent(key);
@@ -37,20 +37,20 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
 
     public listenTo():void {
 
-        this.keyDownListener = (e:KeyboardEvent)=>{
+        this._keyDownListener = (e:KeyboardEvent)=>{
             e.preventDefault();
             e.stopPropagation(); // to prevent page scroll
             const code:number = e.keyCode;
             this.triggerKeyPress(code);
         };
 
-        this.keyUpListener  = (e:KeyboardEvent)=>{
+        this._keyUpListener  = (e:KeyboardEvent)=>{
             const code:number = e.keyCode;
             this.triggerKeyRelease(code);
         };
 
-        globalThis.addEventListener('keydown',this.keyDownListener);
-        globalThis.addEventListener('keyup',this.keyUpListener);
+        globalThis.addEventListener('keydown',this._keyDownListener);
+        globalThis.addEventListener('keyup',this._keyUpListener);
     }
 
     public triggerKeyPress(code:number):void {
@@ -72,8 +72,8 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
     }
 
     public destroy():void{
-        globalThis.removeEventListener('keydown',this.keyDownListener);
-        globalThis.removeEventListener('keyup',this.keyUpListener);
+        globalThis.removeEventListener('keydown',this._keyDownListener);
+        globalThis.removeEventListener('keyup',this._keyUpListener);
     }
 
     public isPressed(key:number):boolean{

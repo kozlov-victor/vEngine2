@@ -14,24 +14,24 @@ export class Blender {
     private _lastMode:Optional<BLEND_MODE>;
     private _enabled:Optional<boolean>;
 
-    private constructor(private gl:WebGLRenderingContext){}
+    private constructor(private readonly _gl:WebGLRenderingContext){}
 
     public enable():void{
         if (this._enabled) return;
         this._enabled = true;
-        this.gl.enable(this.gl.BLEND);
+        this._gl.enable(this._gl.BLEND);
     }
 
     public disable():void{
         if (this._enabled===false) return;
         this._enabled = false;
-        this.gl.disable(this.gl.BLEND);
+        this._gl.disable(this._gl.BLEND);
     }
 
     public setBlendMode(blendMode:BLEND_MODE):void {
         if (blendMode===this._lastMode) return;
         this._lastMode = blendMode;
-        const gl:WebGLRenderingContext = this.gl;
+        const gl:WebGLRenderingContext = this._gl;
         switch (blendMode) {
             case BLEND_MODE.NORMAL:
                 gl.blendEquation(gl.FUNC_ADD);

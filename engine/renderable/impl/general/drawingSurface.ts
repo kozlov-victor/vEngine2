@@ -37,34 +37,34 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
     private canvasImage:Image = new Image(this.game);
 
-    private rect:Rectangle = new Rectangle(this.game);
-    private ellipse:Ellipse = new Ellipse(this.game);
-    private line:Line = new Line(this.game);
-    private nullGameObject:NullGameObject = new NullGameObject(this.game);
+    private _rect:Rectangle = new Rectangle(this.game);
+    private _ellipse:Ellipse = new Ellipse(this.game);
+    private _line:Line = new Line(this.game);
+    private _nullGameObject:NullGameObject = new NullGameObject(this.game);
 
     private fillColor:Color = Color.RGBA(0,0,0,255);
     private drawColor:Color = Color.RGBA(0,0,0,255);
-    private lineWidth:number = 1;
-    private pointMoveTo:Point2d = new Point2d();
+    private _lineWidth:number = 1;
+    private _pointMoveTo:Point2d = new Point2d();
 
     private _matrixStack:MatrixStack = new MatrixStack();
 
-    private readonly renderTarget:IRenderTarget;
-    private omitSelfOnRendering:boolean = false;
+    private readonly _renderTarget:IRenderTarget;
+    private _omitSelfOnRendering:boolean = false;
 
     constructor(game:Game,size:ISize){
         super(game);
         this.size.set(size);
         this.canvasImage.size.set(this.size);
-        this.renderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,size);
-        this.canvasImage.setResourceLink(this.renderTarget.getResourceLink());
+        this._renderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,size);
+        this.canvasImage.setResourceLink(this._renderTarget.getResourceLink());
         this.canvasImage.revalidate();
     }
 
     public clone(): DrawingSurface {return undefined!;}
 
     public draw(): void {
-        if (this.omitSelfOnRendering) return;
+        if (this._omitSelfOnRendering) return;
         this.game.getRenderer().drawImage(this.canvasImage);
     }
 
@@ -85,7 +85,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public setLineWidth(v:number):void {
-        this.lineWidth = v;
+        this._lineWidth = v;
     }
 
     public transformReset(): void {
@@ -140,20 +140,20 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
 
     public clear():void{
-        this.drawModel(this.nullGameObject,Color.NONE);
+        this.drawModel(this._nullGameObject,Color.NONE);
     }
 
 
     public drawRoundedRect(x:number,y:number,width:number,height:number, radius:number):void {
-        this.rect.borderRadius = radius;
+        this._rect.borderRadius = radius;
         this.drawRect(x,y,width,height);
     }
 
     public drawRect(x:number,y:number,width:number,height:number):void {
-        this.rect.pos.setXY(x,y);
-        this.rect.size.setWH(width,height);
-        this.drawSimpleShape(this.rect);
-        this.rect.borderRadius = 0;
+        this._rect.pos.setXY(x,y);
+        this._rect.size.setWH(width,height);
+        this.drawSimpleShape(this._rect);
+        this._rect.borderRadius = 0;
     }
 
     public drawCircle(cx:number,cy:number,radius:number):void {
@@ -161,24 +161,24 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public drawEllipse(cx:number,cy:number,radiusX:number,radiusY:number):void {
-        this.ellipse.radiusX = radiusX;
-        this.ellipse.radiusY = radiusY;
-        this.ellipse.center.setXY(cx,cy);
-        this.ellipse.arcAngleFrom = 0;
-        this.ellipse.arcAngleTo = 0;
-        this.drawSimpleShape(this.ellipse);
+        this._ellipse.radiusX = radiusX;
+        this._ellipse.radiusY = radiusY;
+        this._ellipse.center.setXY(cx,cy);
+        this._ellipse.arcAngleFrom = 0;
+        this._ellipse.arcAngleTo = 0;
+        this.drawSimpleShape(this._ellipse);
     }
 
     public drawArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {
-        this.ellipse.radiusX = radius;
-        this.ellipse.radiusY = radius;
-        this.ellipse.center.setXY(cx,cy);
-        this.ellipse.arcAngleFrom = startAngle;
-        this.ellipse.arcAngleTo = endAngle;
-        this.ellipse.anticlockwise = anticlockwise;
+        this._ellipse.radiusX = radius;
+        this._ellipse.radiusY = radius;
+        this._ellipse.center.setXY(cx,cy);
+        this._ellipse.arcAngleFrom = startAngle;
+        this._ellipse.arcAngleTo = endAngle;
+        this._ellipse.anticlockwise = anticlockwise;
         const fillColor:Color = this.fillColor;
         this.fillColor = Color.NONE;
-        this.drawSimpleShape(this.ellipse);
+        this.drawSimpleShape(this._ellipse);
         this.fillColor = fillColor;
     }
 
@@ -190,10 +190,10 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
                    Math.abs(endAngle%(Math.PI*2))
             )<=0.001
         ) {
-            const lineWidth:number = this.lineWidth;
-            this.lineWidth = 0;
+            const lineWidth:number = this._lineWidth;
+            this._lineWidth = 0;
             this.drawCircle(cx,cy,radius);
-            this.lineWidth = lineWidth;
+            this._lineWidth = lineWidth;
         } else {
             if (anticlockwise) {
                 const tmp:number = startAngle;
@@ -210,12 +210,12 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public moveTo(x:number,y:number):void {
-        this.pointMoveTo.setXY(x,y);
+        this._pointMoveTo.setXY(x,y);
     }
 
     public lineTo(x:number,y:number):void {
-        this.line.setXYX1Y1(this.pointMoveTo.x,this.pointMoveTo.y,x,y);
-        this.drawSimpleShape(this.line);
+        this._line.setXYX1Y1(this._pointMoveTo.x,this._pointMoveTo.y,x,y);
+        this.drawSimpleShape(this._line);
     }
 
     public drawPolygon(pathOrVertices:string|number[]){
@@ -230,7 +230,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         const p:PolyLine = PolyLine.fromSvgPath(this.game,svgPath);
         p.fillColor = this.fillColor;
         p.color = this.drawColor;
-        p.lineWidth = this.lineWidth;
+        p.lineWidth = this._lineWidth;
         this.drawModel(p);
     }
 
@@ -239,15 +239,15 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         renderer.transformSave();
         renderer.transformSet(...this._matrixStack.getCurrentValue().mat16);
         this.appendChild(model);
-        this.omitSelfOnRendering = true;
-        this.renderToTexture(this.renderTarget,clearColor);
-        this.omitSelfOnRendering = false;
+        this._omitSelfOnRendering = true;
+        this.renderToTexture(this._renderTarget,clearColor);
+        this._omitSelfOnRendering = false;
         this.removeChild(model);
         renderer.transformRestore();
     }
 
     public destroy() {
-        this.renderTarget.destroy();
+        this._renderTarget.destroy();
     }
 
     private drawPolygonFromSvgPath(svgPath:string) {
@@ -257,10 +257,10 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
             pg.fillColor = this.fillColor;
             this.drawModel(pg);
         });
-        if (this.lineWidth>0) {
+        if (this._lineWidth>0) {
             polyLines.forEach((pl:PolyLine)=>{
                 pl.color = this.drawColor;
-                pl.lineWidth = this.lineWidth;
+                pl.lineWidth = this._lineWidth;
                 this.drawModel(pl);
             });
         }
@@ -280,8 +280,8 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         const pg:Polygon = Polygon.fromPolyline(this.game,pl);
         pg.fillColor = this.fillColor;
         this.drawModel(pg);
-        if (this.lineWidth>0) {
-            pl.lineWidth = this.lineWidth;
+        if (this._lineWidth>0) {
+            pl.lineWidth = this._lineWidth;
             this.drawModel(pl);
         }
     }
@@ -289,7 +289,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
     private prepareShape(shape:Shape){
         shape.fillColor = this.fillColor;
-        shape.lineWidth = this.lineWidth;
+        shape.lineWidth = this._lineWidth;
         shape.color = this.drawColor;
         shape.blendMode = BLEND_MODE.NORMAL_SEPARATE;
     }

@@ -22,16 +22,16 @@ export interface IMatrixTransformable {
 
 export class MatrixStack implements IPropertyStack<Mat16Holder>{
 
-    private readonly stack:Stack<Mat16Holder> = new Stack();
+    private readonly _stack:Stack<Mat16Holder> = new Stack();
 
     constructor(){
        this.restore();
     }
 
     public restore():void {
-       if (this.stack.isEmpty()) this.setIdentity();
+       if (this._stack.isEmpty()) this.setIdentity();
        else {
-           const last:Optional<Mat16Holder> = this.stack.pop()!;
+           const last:Optional<Mat16Holder> = this._stack.pop()!;
            last.release();
        }
     }
@@ -39,15 +39,15 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     public save():void {
         const copy:Mat16Holder = Mat16Holder.fromPool();
         copy.fromMat16(this.getCurrentValue().mat16);
-        this.stack.push(copy);
+        this._stack.push(copy);
     }
 
     public getCurrentValue():Mat16Holder {
-        return this.stack.getLast()!;
+        return this._stack.getLast()!;
     }
 
     public setCurrentValue(m:Mat16Holder) {
-        return this.stack.replaceLast(m);
+        return this._stack.replaceLast(m);
     }
 
     public translate(x:number, y:number, z:number = 0):MatrixStack {
@@ -147,8 +147,8 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
     public release():MatrixStack{
-        for (let i:number=0,max:number = this.stack.size();i<max;i++) {
-            this.stack.getAt(i)!.release();
+        for (let i:number=0,max:number = this._stack.size();i<max;i++) {
+            this._stack.getAt(i)!.release();
         }
         return this;
     }
@@ -156,7 +156,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     private setIdentity(){
         const ident:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeIdentity(ident);
-        this.stack.push(ident);
+        this._stack.push(ident);
     }
 
     private _rotate(rotMat:Mat16Holder){

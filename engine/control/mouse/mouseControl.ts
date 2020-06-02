@@ -116,23 +116,21 @@ export class MouseControl implements IControl {
     }
 
     public readonly type:string = 'MouseControl';
-    private objectsCaptured:{[pointId:number]:RenderableModel|Scene} = {};
-    private objectsHovered:{[pointId:number]:RenderableModel|Scene} = {};
-    private objectsFirstHovered:{[pointId:number]:RenderableModel|Scene} = {};
-    private container:HTMLElement;
-    private readonly game:Game;
+    private _objectsCaptured:{[pointId:number]:RenderableModel|Scene} = {};
+    private _objectsHovered:{[pointId:number]:RenderableModel|Scene} = {};
+    private _objectsFirstHovered:{[pointId:number]:RenderableModel|Scene} = {};
+    private _container:HTMLElement;
 
-    constructor(game:Game){
-        this.game = game;
+    constructor(private _game:Game){
     }
 
     public listenTo():void {
-        if (DEBUG && !this.game.getRenderer()) {
+        if (DEBUG && !this._game.getRenderer()) {
             throw new DebugError(`can not initialize mouse control: renderer is not set`);
         }
-        const container:HTMLElement = this.game.getRenderer().container;
+        const container:HTMLElement = this._game.getRenderer().container;
 
-        this.container = container;
+        this._container = container;
         // mouseDown
         container.ontouchstart = (e:TouchEvent)=>{
             // to prevent "mouse" events on touch devices - https://www.html5rocks.com/en/mobile/touchandmouse/
@@ -183,24 +181,24 @@ export class MouseControl implements IControl {
     public update():void{}
 
     public destroy():void {
-            if (!this.container) return;
+            if (!this._container) return;
             [
             'mouseMove','ontouchstart','onmousedown',
             'ontouchend','onmouseup','ontouchmove',
             'onmousemove','ondblclick'].forEach((evtName:string)=>{
                 // tslint:disable-next-line:no-null-keyword
-            (this.container as unknown as Record<string,null>)[evtName] = null;
+            (this._container as unknown as Record<string,null>)[evtName] = null;
         });
     }
 
     private resolveSceneCoordinates(mousePoint:MousePoint,layer:Layer):void{
-        const worldPoint:Point2d = this.game.camera.screenToWorld(mousePoint.screenCoordinate,layer.transformType);
+        const worldPoint:Point2d = this._game.camera.screenToWorld(mousePoint.screenCoordinate,layer.transformType);
         mousePoint.sceneCoordinate.set(worldPoint);
         worldPoint.release();
     }
 
     private resolvePoint(e:MouseEvent|Touch|PointerEvent):MousePoint{
-        const game:Game = this.game;
+        const game:Game = this._game;
         const clientX:number = e.clientX;
         const clientY:number = e.clientY;
 
@@ -221,7 +219,7 @@ export class MouseControl implements IControl {
 
 
     private triggerEvent(e:MouseEvent|Touch, mouseEvent:MOUSE_EVENTS, isMouseDown:boolean = false):MousePoint{
-        const scene:Scene = this.game.getCurrScene();
+        const scene:Scene = this._game.getCurrScene();
         const mousePoint:MousePoint = this.resolvePoint(e);
         mousePoint.isMouseDown = isMouseDown;
 
@@ -261,44 +259,44 @@ export class MouseControl implements IControl {
     private resolveClick(e:Touch|MouseEvent):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.click);
         this.triggerEvent(e,MOUSE_EVENTS.mouseDown).release();
-        this.objectsCaptured[point.id] = point.target;
+        this._objectsCaptured[point.id] = point.target;
         point.release();
     }
 
     private resolveButtonPressed(e:Touch|MouseEvent):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.click);
         this.triggerEvent(e,MOUSE_EVENTS.mousePressed).release();
-        this.objectsCaptured[point.id] = point.target;
+        this._objectsCaptured[point.id] = point.target;
         point.release();
     }
 
     private resolveMouseMove(e:Touch|MouseEvent,isMouseDown:boolean):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,isMouseDown);
-        const lastHoveredObject:RenderableModel|Scene = this.objectsHovered[point.id];
+        const lastHoveredObject:RenderableModel|Scene = this._objectsHovered[point.id];
         if (lastHoveredObject!==undefined) {
             if (lastHoveredObject!==point.target) {
                 lastHoveredObject.trigger(MOUSE_EVENTS.mouseLeave,point);
-                delete this.objectsFirstHovered[point.id];
+                delete this._objectsFirstHovered[point.id];
             } else {
-                if (this.objectsFirstHovered[point.id]===undefined) {
+                if (this._objectsFirstHovered[point.id]===undefined) {
                     lastHoveredObject.trigger(MOUSE_EVENTS.mouseEnter,point);
-                    this.objectsFirstHovered[point.id] = point.target;
+                    this._objectsFirstHovered[point.id] = point.target;
                 }
 
             }
         }
-        this.objectsHovered[point.id] = point.target;
+        this._objectsHovered[point.id] = point.target;
         point.release();
     }
 
     private resolveMouseUp(e:MouseEvent|Touch):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseUp);
-        const lastCapturedObject = this.objectsCaptured[point.id];
+        const lastCapturedObject = this._objectsCaptured[point.id];
         if (lastCapturedObject!==undefined && point.target!==lastCapturedObject) {
             lastCapturedObject.trigger(MOUSE_EVENTS.mouseUp,point);
         }
-        delete this.objectsCaptured[point.id];
-        delete this.objectsHovered[point.id];
+        delete this._objectsCaptured[point.id];
+        delete this._objectsHovered[point.id];
         point.release();
     }
 

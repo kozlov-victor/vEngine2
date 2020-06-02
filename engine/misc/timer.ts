@@ -4,22 +4,22 @@ import {removeFromArray} from "@engine/misc/object";
 
 export class Timer {
 
-    private lastTime:number = 0;
-    private readonly callback:()=>void;
-    private readonly interval:number;
+    private _lastTime:number = 0;
+    private readonly _callback:()=>void;
+    private readonly _interval:number;
 
     constructor(private parent:TimerDelegate,callback:()=>void,interval:number,private once:boolean){
-        this.interval = interval;
-        this.callback = callback;
+        this._interval = interval;
+        this._callback = callback;
     }
 
     public onUpdate():void {
         const time:number = Game.getInstance().getCurrentTime();
-        if (!this.lastTime) this.lastTime = time;
-        const delta:number = time - this.lastTime;
-        if (delta !==0 && delta>this.interval) {
-            this.lastTime = time;
-            this.callback();
+        if (!this._lastTime) this._lastTime = time;
+        const delta:number = time - this._lastTime;
+        if (delta !==0 && delta>this._interval) {
+            this._lastTime = time;
+            this._callback();
             if (this.once) this.kill();
         }
     }

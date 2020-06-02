@@ -12,12 +12,12 @@ export class Queue {
     public onResolved:()=>void;
     public onProgress:(n:number)=>void;
 
-    private tasksResolved:number = 0;
-    private tasks:(()=>void)[] = [];
-    private tasksProgressById:{[taskId:string]:number} = {};
-    private completed:boolean = false;
-    private nextTaskIndex:number = 0;
-    private currProgress:number = 0;
+    private _tasksResolved:number = 0;
+    private _tasks:(()=>void)[] = [];
+    private _tasksProgressById:{[taskId:string]:number} = {};
+    private _completed:boolean = false;
+    private _nextTaskIndex:number = 0;
+    private _currProgress:number = 0;
 
     constructor(){
 
@@ -26,53 +26,53 @@ export class Queue {
     public progressTask(taskRef:TaskRef,progress:number):void{
         if (progress===1) return; // this task will be processed by "resolveTask" fn
         const taskId:number = taskRef.id;
-        this.tasksProgressById[taskId] = progress;
+        this._tasksProgressById[taskId] = progress;
         if (this.onProgress) this.onProgress(this.calcProgress());
     }
 
     public resolveTask(taskRef:TaskRef):void{
         const taskId:number = taskRef.id;
         if (DEBUG) {
-            if (this.tasksProgressById[taskId]===undefined) throw new DebugError(`can not resolve task: no task with id ${taskId}`);
-            if (this.tasksProgressById[taskId]===1) throw new DebugError(`task with id ${taskId} resolved already`);
+            if (this._tasksProgressById[taskId]===undefined) throw new DebugError(`can not resolve task: no task with id ${taskId}`);
+            if (this._tasksProgressById[taskId]===1) throw new DebugError(`task with id ${taskId} resolved already`);
         }
-        this.tasksResolved++;
-        this.tasksProgressById[taskId] = 1;
-        if (this.tasks.length===this.tasksResolved) {
+        this._tasksResolved++;
+        this._tasksProgressById[taskId] = 1;
+        if (this._tasks.length===this._tasksResolved) {
             if (this.onProgress) this.onProgress(1);
-            this.completed = true;
+            this._completed = true;
             if (this.onResolved) this.onResolved();
         } else {
             if (this.onProgress) this.onProgress(this.calcProgress());
-            this.tasks[this.nextTaskIndex++]();
+            this._tasks[this._nextTaskIndex++]();
         }
     }
     public addTask(taskFn:()=>void):TaskRef {
         const taskRef:TaskRef = new TaskRef();
-        this.tasks.push(taskFn);
-        this.tasksProgressById[taskRef.id] = 0;
+        this._tasks.push(taskFn);
+        this._tasksProgressById[taskRef.id] = 0;
         return taskRef;
     }
     public isCompleted():boolean{
-        return this.completed;
+        return this._completed;
     }
 
     public calcProgress():number{
         let sum:number = 0;
-        Object.keys(this.tasksProgressById).forEach((taskId:string)=>{
-            sum+=this.tasksProgressById[taskId]||0;
+        Object.keys(this._tasksProgressById).forEach((taskId:string)=>{
+            sum+=this._tasksProgressById[taskId]||0;
         });
-        const progress = sum/this.tasks.length;
-        if (progress>this.currProgress) this.currProgress = progress; // avoid progress reducing if task were aded dynamically
-        return this.currProgress;
+        const progress = sum/this._tasks.length;
+        if (progress>this._currProgress) this._currProgress = progress; // avoid progress reducing if task were aded dynamically
+        return this._currProgress;
     }
 
     public start():void {
         if (this.size()===0) {
-            this.completed = true;
+            this._completed = true;
             if (this.onResolved) this.onResolved();
         } else {
-            this.tasks[this.nextTaskIndex++]();
+            this._tasks[this._nextTaskIndex++]();
         }
         // this.tasks.forEach((t:Function)=>{
         //     t && t();
@@ -80,6 +80,6 @@ export class Queue {
     }
 
     private size():number{
-        return this.tasks.length;
+        return this._tasks.length;
     }
 }

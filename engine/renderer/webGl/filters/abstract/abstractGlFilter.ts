@@ -22,7 +22,8 @@ export abstract class AbstractGlFilter implements IFilter {
 
     protected gl:WebGLRenderingContext;
     protected simpleRectDrawer:SimpleRectDrawer;
-    private uniformCache:FastMap<string,UNIFORM_VALUE_TYPE> = new FastMap();
+
+    private _uniformCache:FastMap<string,UNIFORM_VALUE_TYPE> = new FastMap();
 
 
     protected constructor(protected game:Game){
@@ -37,7 +38,7 @@ export abstract class AbstractGlFilter implements IFilter {
     }
 
     public setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
-        this.uniformCache.put(name,value);
+        this._uniformCache.put(name,value);
     }
 
     public getDrawer():AbstractDrawer{
@@ -46,10 +47,10 @@ export abstract class AbstractGlFilter implements IFilter {
 
     public doFilter(destFrameBuffer:FrameBuffer){
         destFrameBuffer.bind();
-        const keys:string[] = this.uniformCache.getKeys();
+        const keys:string[] = this._uniformCache.getKeys();
         for (let i = 0; i < keys.length; i++) {
             const name:string = keys[i];
-            const value:UNIFORM_VALUE_TYPE = this.uniformCache.get(keys[i])!;
+            const value:UNIFORM_VALUE_TYPE = this._uniformCache.get(keys[i])!;
             this.simpleRectDrawer.setUniform(name,value);
         }
         const size:ISize = this.simpleRectDrawer.getAttachedTextureAt(0).size;

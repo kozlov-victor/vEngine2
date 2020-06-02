@@ -13,33 +13,31 @@ import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractT
 
 export class FrameBuffer implements IRenderTarget {
 
-    private static currInstance:Optional<FrameBuffer>;
-    private gl:WebGLRenderingContext;
+    private static _currInstance:Optional<FrameBuffer>;
 
     private readonly texture:Texture;
     private glRenderBuffer:WebGLRenderbuffer;
     private glFrameBuffer:WebGLFramebuffer;
 
-    private readonly link:ResourceLink<ITexture>;
+    private readonly _link:ResourceLink<ITexture>;
 
-    private readonly width:number;
-    private readonly height:number;
+    private readonly _width:number;
+    private readonly _height:number;
 
-    private destroyed:boolean = false;
+    private _destroyed:boolean = false;
 
 
-    constructor(gl:WebGLRenderingContext,size:ISize){
-        if (DEBUG && !gl)
+    constructor(private readonly _gl:WebGLRenderingContext,size:ISize){
+        if (DEBUG && !_gl)
             throw new DebugError("can not create FrameBuffer, gl context not passed to constructor, expected: FrameBuffer(gl)");
 
-        this.gl = gl;
-        this.width = size.width;
-        this.height = size.height;
+        this._width = size.width;
+        this._height = size.height;
 
-        this.texture = new Texture(gl);
+        this.texture = new Texture(_gl);
         this.texture.setImage(undefined,size);
-        this._init(gl,size);
-        this.link = ResourceLink.create(this.texture);
+        this._init(_gl,size);
+        this._link = ResourceLink.create(this.texture);
     }
 
     public setInterpolationMode(mode:INTERPOLATION_MODE) {
@@ -48,35 +46,35 @@ export class FrameBuffer implements IRenderTarget {
 
     public bind():void{
         if (DEBUG) {
-            if (this.destroyed) {
+            if (this._destroyed) {
                 console.error(this);
                 throw new DebugError(`can not bind destroyed frame buffer`);
             }
         }
-        if (FrameBuffer.currInstance===this) return;
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.glFrameBuffer);
-        this.gl.viewport(0, 0, ~~this.width,~~this.height);
-        FrameBuffer.currInstance = this;
+        if (FrameBuffer._currInstance===this) return;
+        this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, this.glFrameBuffer);
+        this._gl.viewport(0, 0, ~~this._width,~~this._height);
+        FrameBuffer._currInstance = this;
     }
 
     public unbind():void{
         this._checkBound();
         // tslint:disable-next-line:no-null-keyword
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
-        FrameBuffer.currInstance = undefined;
+        this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
+        FrameBuffer._currInstance = undefined;
     }
 
     public clear(color:Color,alphaBlendValue:number = 1):void{
         this._checkBound();
         const arr:[number,number,number,number] = color.asGL();
-        this.gl.clearColor(arr[0],arr[1],arr[2],arr[3] * alphaBlendValue);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+        this._gl.clearColor(arr[0],arr[1],arr[2],arr[3] * alphaBlendValue);
+        this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
     }
 
     public destroy():void{
-        this.gl.deleteRenderbuffer(this.glRenderBuffer);
-        this.gl.deleteFramebuffer(this.glFrameBuffer);
-        this.destroyed = true;
+        this._gl.deleteRenderbuffer(this.glRenderBuffer);
+        this._gl.deleteFramebuffer(this.glFrameBuffer);
+        this._destroyed = true;
     }
 
 
@@ -85,7 +83,7 @@ export class FrameBuffer implements IRenderTarget {
     }
 
     public getResourceLink():ResourceLink<ITexture>{
-        return this.link;
+        return this._link;
     }
 
     private _init(gl:WebGLRenderingContext,size:ISize):void{
@@ -115,7 +113,7 @@ export class FrameBuffer implements IRenderTarget {
 
     private _checkBound():void{
         if (DEBUG) return;
-        if (FrameBuffer.currInstance!==this) throw new DebugError(`frame buffer is not bound; call bind() method firstly`);
+        if (FrameBuffer._currInstance!==this) throw new DebugError(`frame buffer is not bound; call bind() method firstly`);
     }
 
 }

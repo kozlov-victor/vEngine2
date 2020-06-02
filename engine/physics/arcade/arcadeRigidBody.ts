@@ -76,10 +76,10 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
     public _oldPos:Point2d;
     public _rect:Rect;
 
-    public offsetX:number = 0; // to calculate character offset if it stands on KINEMATIC platform
+    public _offsetX:number = 0; // to calculate character offset if it stands on KINEMATIC platform
 
-    private model:RenderableModel;
-    private debugRectangle:Rectangle;
+    private _model:RenderableModel;
+    private _debugRectangle:Rectangle;
     //eventEmitter
     private readonly _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
@@ -104,7 +104,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
 
     public updateBounds(model:RenderableModel):void {
         model.revalidate();
-        this.model = model;
+        this._model = model;
         this._pos = model.pos;
         this._oldPos = this._pos.clone();
         if (!this._rect) this._rect = new Rect(0,0,model.size.width,model.size.height);
@@ -114,7 +114,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
             let oldX:Optional<number>;
             this._pos.observe(()=>{
                 if (oldX===undefined) oldX = this._pos.x;
-                this.offsetX = this._pos.x - oldX;
+                this._offsetX = this._pos.x - oldX;
                 oldX = this._pos.x;
             });
         }
@@ -160,17 +160,17 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
     public debugRender():void {
         if (!DEBUG) return;
         if (!this.debug) return;
-        if (this.debugRectangle===undefined) {
-            this.debugRectangle = new Rectangle(this.game);
-            this.debugRectangle.size.setWH(this._rect.width,this._rect.height);
-            this.debugRectangle.fillColor = Color.RGBA(0,233,0,50);
+        if (this._debugRectangle===undefined) {
+            this._debugRectangle = new Rectangle(this.game);
+            this._debugRectangle.size.setWH(this._rect.width,this._rect.height);
+            this._debugRectangle.fillColor = Color.RGBA(0,233,0,50);
         }
-        this.debugRectangle.pos.setXY(this._pos.x + this._rect.x,this._pos.y + this._rect.y);
-        this.debugRectangle.render();
+        this._debugRectangle.pos.setXY(this._pos.x + this._rect.x,this._pos.y + this._rect.y);
+        this._debugRectangle.render();
     }
 
     public getHostModel(): RenderableModel {
-        return this.model;
+        return this._model;
     }
 
     public clone():ArcadeRigidBody{
@@ -214,7 +214,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
         body._rect = this._rect.clone();
         body.groupNames.push(...this.groupNames);
         body.ignoreCollisionWithGroupNames.push(...this.ignoreCollisionWithGroupNames);
-        body.updateBounds(this.model);
+        body.updateBounds(this._model);
     }
 
 }

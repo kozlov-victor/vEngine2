@@ -12,8 +12,8 @@ import {Rect} from "@engine/geometry/rect";
 
 export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTransition {
 
-    private val:number;
-    private lockingRect:Rect = new Rect();
+    private _val:number;
+    private _lockingRect:Rect = new Rect();
 
     constructor(
         protected readonly game:Game,
@@ -49,10 +49,10 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
         if (a!==undefined) {
             const dx:number = a.size.width/2, dy:number = a.size.height/2;
             a.transformPoint.setXY(dx,dy);
-            a.scale.setXY(this.val);
-            const valInv:number = 1 - this.val;
-            this.lockingRect.setXYWH(dx*valInv,dy*valInv,a.size.width*this.val,a.size.height*this.val);
-            a.lockingRect = this.lockingRect;
+            a.scale.setXY(this._val);
+            const valInv:number = 1 - this._val;
+            this._lockingRect.setXYWH(dx*valInv,dy*valInv,a.size.width*this._val,a.size.height*this._val);
+            a.lockingRect = this._lockingRect;
             a.render();
         }
     }
@@ -70,7 +70,7 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
     }
 
     protected onTransitionProgress(val: number): void {
-        this.val = val;
+        this._val = val;
     }
 
 }

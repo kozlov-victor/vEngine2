@@ -8,26 +8,26 @@ export class ImageButton extends RenderableModel {
 
     constructor(
         protected game:Game,
-        private readonly imgOn:Image,
-        private readonly imgOff:Image)
+        private readonly _imgOn:Image,
+        private readonly _imgOff:Image)
     {
         super(game);
     }
 
     public triggerOn():void {
-        this.imgOff.visible = false;
+        this._imgOff.visible = false;
     }
 
     public triggerOff():void {
-        this.imgOff.visible = true;
+        this._imgOff.visible = true;
     }
 
     public draw(): void {}
 
     public revalidate(): void {
         if (!this.children.length) {
-            this.appendChild(this.imgOn);
-            this.appendChild(this.imgOff);
+            this.appendChild(this._imgOn);
+            this.appendChild(this._imgOff);
             this.triggerOff();
             this.manageEvents();
         }

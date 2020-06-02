@@ -10,9 +10,9 @@ const objectToQuery = (o:string|number|FormData|IKeyVal<string|number|boolean>):
     const paramsArr:([string,string|number|boolean])[] = [];
     if (typeof o==='string' || typeof o==='number')
         return o.toString();
-    for (const key in o) {
+    Object.keys(o).forEach(key=>{
         paramsArr.push([key,encodeURIComponent(o[key])]);
-    }
+    });
     return paramsArr.map((item)=>[item[0]+'='+item[1]]).join('&');
 };
 

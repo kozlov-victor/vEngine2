@@ -11,23 +11,23 @@ export abstract class AbstractPropertyAnimation implements IAnimation {
 
     protected passedTime:number = 0;
 
-    private playing:boolean = true;
-    private startTime:number = 0;
+    private _playing:boolean = true;
+    private _startTime:number = 0;
 
 
     constructor(protected game: Game) {
     }
 
     public play(): void {
-        this.playing = true;
+        this._playing = true;
     }
 
     public stop(): void {
-        this.playing = false;
+        this._playing = false;
     }
 
     public reset(){
-        this.startTime = 0;
+        this._startTime = 0;
     }
 
     public onProgress(progressFn:(opts:unknown)=>void){
@@ -35,10 +35,10 @@ export abstract class AbstractPropertyAnimation implements IAnimation {
     }
 
     public update(): void {
-        if (!this.playing) return;
+        if (!this._playing) return;
         const time:number = this.game.getCurrentTime();
-        if (this.startTime===0) this.startTime = time;
-        this.passedTime = time - this.startTime;
+        if (this._startTime===0) this._startTime = time;
+        this.passedTime = time - this._startTime;
         this.onUpdate();
     }
 

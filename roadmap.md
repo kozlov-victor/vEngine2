@@ -36,3 +36,5 @@ bug: draggable with camera
 - Линейный градиент с многими точками
 - Круговой градиент
 - Заливка спрайтом (repeat | clip)
+
+- filters with accumulation

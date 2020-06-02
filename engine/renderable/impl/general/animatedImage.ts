@@ -9,7 +9,6 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
 
     public readonly type:string = 'AnimatedImage';
 
-
     private _currFrameAnimation:Optional<AbstractFrameAnimation<any>>;
     private _frameAnimations:{[name:string]:AbstractFrameAnimation<any>} = {};
 

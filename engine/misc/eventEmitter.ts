@@ -7,7 +7,7 @@ interface IEventsHolder {
 
 export class EventEmitter{
 
-    private events:IEventsHolder = {} as IEventsHolder;
+    private _events:IEventsHolder = {} as IEventsHolder;
 
     constructor(){
 
@@ -25,7 +25,7 @@ export class EventEmitter{
     }
 
     public off(eventName:string,callback:(arg?:unknown)=>void):void {
-        const es:((arg?:unknown)=>void)[]  = this.events[eventName];
+        const es:((arg?:unknown)=>void)[]  = this._events[eventName];
         if (!es) return;
         const index:number = es.indexOf(callback);
         if (DEBUG && index===-1) {
@@ -36,7 +36,7 @@ export class EventEmitter{
     }
 
     public trigger(eventName:string,data:unknown):void {
-        const evnts:((arg?:unknown)=>void)[] = this.events[eventName];
+        const evnts:((arg?:unknown)=>void)[] = this._events[eventName];
         if (!evnts) return;
         let l:number = evnts.length;
         while(l--){
@@ -45,7 +45,7 @@ export class EventEmitter{
     }
 
     private _on(name:string,callBack:(arg?:unknown)=>void):void {
-        this.events[name] = this.events[name] || [];
-        this.events[name].push(callBack);
+        this._events[name] = this._events[name] || [];
+        this._events[name].push(callBack);
     }
 }

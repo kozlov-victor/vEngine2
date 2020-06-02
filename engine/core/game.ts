@@ -34,11 +34,11 @@ interface ISceneWithTransition {
 export class Game {
 
     public static getInstance():Game{
-        return Game.instance;
+        return Game._instance;
     }
 
-    private static UPDATE_TIME_RATE:number = 20;
-    private static instance:Game;
+    private static _UPDATE_TIME_RATE:number = 20;
+    private static _instance:Game;
 
     public readonly size:ISize = new Size();
     public readonly scale:Point2d = new Point2d(1,1);
@@ -61,13 +61,13 @@ export class Game {
     private _destroyed:boolean = false;
     private _renderer:AbstractRenderer;
     private _controls:IControl[] = [];
-    private audioPlayer:IAudioPlayer;
-    private physicsSystem:IPhysicsSystem;
-    private mainLoop:MainLoop = new MainLoop(this);
+    private _audioPlayer:IAudioPlayer;
+    private _physicsSystem:IPhysicsSystem;
+    private _mainLoop:MainLoop = new MainLoop(this);
 
 
     constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT}:IGameConstructorParams = {}){
-        Game.instance = this;
+        Game._instance = this;
         if (DEBUG) (window as unknown as {game:Game}).game = this;
         (this.size as Size).setWH(width,height);
         this._scaleStrategy = scaleStrategy;
@@ -105,27 +105,27 @@ export class Game {
     }
 
     public setPhysicsSystem(s:ClazzEx<IPhysicsSystem,Game>){
-        this.physicsSystem = new s(this);
+        this._physicsSystem = new s(this);
     }
 
     public getPhysicsSystem<T extends IPhysicsSystem>():T {
-        if (DEBUG && this.physicsSystem===undefined) throw new DebugError(`Physics system is not initialized.`);
-        return this.physicsSystem as T;
+        if (DEBUG && this._physicsSystem===undefined) throw new DebugError(`Physics system is not initialized.`);
+        return this._physicsSystem as T;
     }
 
     public hasPhysicsSystem():boolean {
-        return this.physicsSystem!==undefined;
+        return this._physicsSystem!==undefined;
     }
 
     public setAudioPLayer(p:ClazzEx<IAudioPlayer,Game>):void{
-        this.audioPlayer = new p(this);
+        this._audioPlayer = new p(this);
     }
 
     public getAudioPlayer<T extends IAudioPlayer>():T{
-        if (DEBUG && !this.audioPlayer) {
+        if (DEBUG && !this._audioPlayer) {
             throw new DebugError('audio player is not set');
         }
-        return this.audioPlayer as T;
+        return this._audioPlayer as T;
     }
 
 
@@ -200,7 +200,7 @@ export class Game {
             this._currScene.onContinue();
         }
         if (!this._running) {
-            this.mainLoop.start();
+            this._mainLoop.start();
             this._running = true;
         }
     }
@@ -238,13 +238,13 @@ export class Game {
             }
         }
 
-        const numOfLoops:number = (~~(this._deltaTime / Game.UPDATE_TIME_RATE))||1;
-        this._currTime = this._currTime - numOfLoops * Game.UPDATE_TIME_RATE;
+        const numOfLoops:number = (~~(this._deltaTime / Game._UPDATE_TIME_RATE))||1;
+        this._currTime = this._currTime - numOfLoops * Game._UPDATE_TIME_RATE;
         const currentScene:Scene = this._currScene;
         let loopCnt:number = 0;
         do {
             this._lastTime = this._currTime;
-            this._currTime += Game.UPDATE_TIME_RATE;
+            this._currTime += Game._UPDATE_TIME_RATE;
             this._deltaTime = this._currTime - this._lastTime;
 
             if (this._currSceneTransition!==undefined) this._currSceneTransition.update();
@@ -267,7 +267,7 @@ export class Game {
     }
 
     public destroy():void{
-        this.mainLoop.stop();
+        this._mainLoop.stop();
         this._destroyed = true;
         for (const c of this._controls) {
             c.destroy();

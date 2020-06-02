@@ -7,14 +7,12 @@ import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractT
 
 export class DoubleFrameBuffer {
 
-    private gl:WebGLRenderingContext;
     private readonly buffers:[FrameBuffer,FrameBuffer];
 
-    constructor(gl:WebGLRenderingContext,size:ISize){
-        this.gl = gl;
+    constructor(private readonly _gl:WebGLRenderingContext,size:ISize){
         this.buffers = [
-            new FrameBuffer(gl,size),
-            new FrameBuffer(gl,size)
+            new FrameBuffer(_gl,size),
+            new FrameBuffer(_gl,size)
         ];
     }
 

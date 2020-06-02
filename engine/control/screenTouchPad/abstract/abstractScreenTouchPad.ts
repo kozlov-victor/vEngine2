@@ -7,13 +7,13 @@ import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 
 export abstract class AbstractScreenTouchPad {
 
-    private buttons:AbstractScreenTouchButton[] =[];
+    private _buttons:AbstractScreenTouchButton[] =[];
 
     protected constructor(protected game:Game) {
     }
 
     public addButton(b:AbstractScreenTouchButton):void {
-        this.buttons.push(b);
+        this._buttons.push(b);
         b.renderableModel.on(MOUSE_EVENTS.mouseDown,()=>{
             this.game.getControl<KeyboardControl>('KeyboardControl')!.triggerKeyPress(b.keyCode);
         });
@@ -26,7 +26,7 @@ export abstract class AbstractScreenTouchPad {
     }
 
     public appendTo(layer:Layer) {
-        this.buttons.forEach(b=>{
+        this._buttons.forEach(b=>{
             layer.appendChild(b.renderableModel);
         });
     }

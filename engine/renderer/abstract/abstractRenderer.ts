@@ -51,8 +51,8 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     protected abstract rendererHelper: RendererHelper;
 
-    private alphaBlendStack:AlphaBlendStack = new AlphaBlendStack();
-    private fullScreenRequested:boolean = false;
+    private _alphaBlendStack:AlphaBlendStack = new AlphaBlendStack();
+    private _fullScreenRequested:boolean = false;
 
     protected constructor(protected game:Game){
         this.game = game;
@@ -62,7 +62,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         const canRequest:boolean = this._requestFullScreen();
         if (canRequest) {
             const fn = ()=>{
-                if (this.fullScreenRequested) this._requestFullScreen();
+                if (this._fullScreenRequested) this._requestFullScreen();
                 document.body.removeEventListener('click',fn);
             };
             document.body.addEventListener('click',fn);
@@ -70,7 +70,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     }
 
     public cancelFullScreen():void {
-        this.fullScreenRequested =false;
+        this._fullScreenRequested =false;
         const doc:IDocument = globalThis.document as IDocument;
         if(doc.cancelFullScreen) {
             (doc).cancelFullScreen();
@@ -143,19 +143,19 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     public killObject(r:RenderableModel):void {}
 
     public saveAlphaBlend():void{
-        this.alphaBlendStack.save();
+        this._alphaBlendStack.save();
     }
 
     public restoreAlphaBlend():void{
-        this.alphaBlendStack.restore();
+        this._alphaBlendStack.restore();
     }
 
     public setAlphaBlend(alpha:number):void{
-        this.alphaBlendStack.mult(alpha);
+        this._alphaBlendStack.mult(alpha);
     }
 
     public getAlphaBlend():number{
-        return this.alphaBlendStack.getCurrentValue();
+        return this._alphaBlendStack.getCurrentValue();
     }
 
     public log(...args:any[]):void {
@@ -285,7 +285,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     private _requestFullScreen():boolean {
         const element:IHTMLElement = this.container as IHTMLElement;
-        this.fullScreenRequested = true;
+        this._fullScreenRequested = true;
         let canRequest:boolean = false;
         if(element.requestFullScreen) {
             element.requestFullScreen();

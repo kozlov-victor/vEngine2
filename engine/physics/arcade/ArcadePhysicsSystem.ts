@@ -184,8 +184,8 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
     private collidePlayerWithBottom(player:ArcadeRigidBody,entity:ArcadeRigidBody):void{
         player._pos.y = entity.getTop() - player._rect.height - player._rect.y;
-        player._pos.x+=entity.offsetX;
-        entity.offsetX = 0;
+        player._pos.x+=entity._offsetX;
+        entity._offsetX = 0;
         player.collisionFlags.bottom =
             entity.collisionFlags.top = true;
         this.reflectVelocityY(player, entity);

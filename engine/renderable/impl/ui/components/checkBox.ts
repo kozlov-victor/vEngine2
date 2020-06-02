@@ -11,8 +11,8 @@ export class CheckBox extends Container {
     public readonly type:string = 'CheckBox';
 
     public checked: boolean = false;
-    private readonly rNormal:Shape;
-    private readonly rChecked: Shape;
+    private readonly _rNormal:Shape;
+    private readonly _rChecked: Shape;
 
     constructor(game:Game) {
         super(game);
@@ -29,8 +29,8 @@ export class CheckBox extends Container {
         polyLine.color = new Color(50,50,50);
         rChecked.appendChild(polyLine);
 
-        this.rNormal = rNormal;
-        this.rChecked = rChecked;
+        this._rNormal = rNormal;
+        this._rChecked = rChecked;
 
         this.appendChild(rNormal);
         this.appendChild(rChecked);
@@ -52,15 +52,15 @@ export class CheckBox extends Container {
     }
 
     public onGeometryChanged():void{
-        this.rNormal.size.set(this.size);
-        this.rChecked.size.set(this.size);
+        this._rNormal.size.set(this.size);
+        this._rChecked.size.set(this.size);
         this.background.size.set(this.size);
     }
 
     public draw(){}
 
     private updateChildrenByChecked(){
-        this.rNormal.visible = !this.checked;
-        this.rChecked.visible = this.checked;
+        this._rNormal.visible = !this.checked;
+        this._rChecked.visible = this.checked;
     }
 }

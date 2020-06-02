@@ -14,11 +14,11 @@ import {Optional} from "@engine/core/declarations";
 
 export class LightFilter extends AbstractGlFilter {
 
-    private readonly uniformInfo:FastMap<string,UNIFORM_VALUE_TYPE> = new FastMap();
+    private readonly _uniformInfo:FastMap<string,UNIFORM_VALUE_TYPE> = new FastMap();
 
-    private readonly u_useNormalMap:string;
-    private readonly normalTexture:string;
-    private readonly u_dimension:string;
+    private readonly _u_useNormalMap:string;
+    private readonly _normalTexture:string;
+    private readonly _u_dimension:string;
     //private readonly size:[number,number] = [0,0];
 
     private normalMap:Optional<Texture>;
@@ -32,9 +32,9 @@ export class LightFilter extends AbstractGlFilter {
         gen.addStructFragmentUniform("PointLight",'u_pointLights[MAX_NUM_OF_POINT_LIGHTS]');
         gen.addStructFragmentUniform("AmbientLight",'u_ambientLight');
         gen.addStructFragmentUniform("Material",'u_material');
-        this.normalTexture = gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'normalTexture');
-        this.u_useNormalMap = gen.addScalarFragmentUniform(GL_TYPE.BOOL,'u_useNormalMap');
-        this.u_dimension = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_dimension');
+        this._normalTexture = gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'normalTexture');
+        this._u_useNormalMap = gen.addScalarFragmentUniform(GL_TYPE.BOOL,'u_useNormalMap');
+        this._u_dimension = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_dimension');
         gen.addScalarFragmentUniform(GL_TYPE.INT,'u_numOfPointLights');
         gen.setFragmentMainFn(mainFnSource);
         this.simpleRectDrawer.initProgram();
@@ -49,12 +49,12 @@ export class LightFilter extends AbstractGlFilter {
     }
 
     public doFilter(destFrameBuffer:FrameBuffer):void{
-        this.lightArray.setUniformsToMap(this.uniformInfo);
-        this.simpleRectDrawer.setUniformsFromMap(this.uniformInfo);
+        this.lightArray.setUniformsToMap(this._uniformInfo);
+        this.simpleRectDrawer.setUniformsFromMap(this._uniformInfo);
         const useNormalMap:boolean = this.normalMap!==undefined;
-        this.simpleRectDrawer.setUniform(this.u_useNormalMap,useNormalMap);
+        this.simpleRectDrawer.setUniform(this._u_useNormalMap,useNormalMap);
         if (useNormalMap) {
-            this.simpleRectDrawer.attachTexture(this.normalTexture,this.normalMap!);
+            this.simpleRectDrawer.attachTexture(this._normalTexture,this.normalMap!);
         }
         //const size:ISize = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         // this.size[0] = size.width;

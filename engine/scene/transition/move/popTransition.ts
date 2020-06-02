@@ -13,7 +13,7 @@ import {Scene} from "@engine/scene/scene";
 
 export class PopTransition extends AbstractSceneTransition {
 
-    private lockingRect:Rect = new Rect();
+    private _lockingRect:Rect = new Rect();
 
     constructor(
         private readonly game:Game,
@@ -25,12 +25,12 @@ export class PopTransition extends AbstractSceneTransition {
     }
 
     public render(): void {
-        this.lockingRect.setXYWH(this._currScene.pos.x,this._currScene.pos.y,this._currScene.size.width,this._currScene.size.height);
+        this._lockingRect.setXYWH(this._currScene.pos.x,this._currScene.pos.y,this._currScene.size.width,this._currScene.size.height);
         this._currScene.render();
         if (this._prevScene!==undefined) {
             const scene:Scene = this._prevScene;
-            this.lockingRect.setXYWH(scene.pos.x,scene.pos.y,scene.size.width,scene.size.height);
-            scene.lockingRect = this.lockingRect;
+            this._lockingRect.setXYWH(scene.pos.x,scene.pos.y,scene.size.width,scene.size.height);
+            scene.lockingRect = this._lockingRect;
             scene.render();
         }
     }

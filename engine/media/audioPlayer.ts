@@ -16,33 +16,33 @@ export  class AudioPlayer implements IAudioPlayer {
 
     public freeNodeSearchStrategy:FREE_AUDIO_NODE_SEARCH_STRATEGY = FREE_AUDIO_NODE_SEARCH_STRATEGY.GET_OLDEST;
 
-    private readonly audioContext:BasicAudioContext;
-    private audioNodeSet:AudioNodeSet;
+    private readonly _audioContext:BasicAudioContext;
+    private _audioNodeSet:AudioNodeSet;
 
     constructor(private game:Game) {
         if (WebAudioContext.isAcceptable()) {
-            this.audioContext = new WebAudioContext(game,this);
+            this._audioContext = new WebAudioContext(game,this);
         } else if (HtmlAudioContext.isAcceptable()) {
-            this.audioContext = new HtmlAudioContext(game,this);
+            this._audioContext = new HtmlAudioContext(game,this);
         } else {
-            this.audioContext = new BasicAudioContext(game,this);
+            this._audioContext = new BasicAudioContext(game,this);
         }
-        this.audioNodeSet = new AudioNodeSet(game,this.audioContext,AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
+        this._audioNodeSet = new AudioNodeSet(game,this._audioContext,AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
     }
 
     public async loadSound(buffer:ArrayBuffer, link:ResourceLink<void>):Promise<void> {
-        await this.audioContext.load(buffer,link);
+        await this._audioContext.load(buffer,link);
     }
 
     public isCached(link:ResourceLink<void>):boolean {
-        return this.audioContext.isCached(link);
+        return this._audioContext.isCached(link);
     }
 
     public play(sound:Sound):void {
 
         if (DEBUG) sound.revalidate();
 
-        const node:Optional<AudioNode> = this.audioNodeSet.getFreeNode(sound.getResourceLink().url);
+        const node:Optional<AudioNode> = this._audioNodeSet.getFreeNode(sound.getResourceLink().url);
 
         if (node===undefined) {
             if (DEBUG) {
@@ -54,43 +54,43 @@ export  class AudioPlayer implements IAudioPlayer {
     }
 
     public stop(sound:Sound):void {
-        const node:Optional<AudioNode> = this.audioNodeSet.getNodeBySound(sound);
+        const node:Optional<AudioNode> = this._audioNodeSet.getNodeBySound(sound);
         if (node===undefined) return;
         node.stop();
     }
 
     public loop(sound:Sound):void {
-        const node:Optional<AudioNode> = this.audioNodeSet.getNodeBySound(sound);
+        const node:Optional<AudioNode> = this._audioNodeSet.getNodeBySound(sound);
         if (node===undefined) return;
         node.loop(sound.loop);
     }
 
     public getContext():BasicAudioContext {
-        return this.audioContext;
+        return this._audioContext;
     }
 
     public setGain(sound: Sound): void {
-        const node:Optional<AudioNode> = this.audioNodeSet.getNodeBySound(sound);
+        const node:Optional<AudioNode> = this._audioNodeSet.getNodeBySound(sound);
         if (node===undefined) return;
         node.setGain(sound.velocity);
     }
 
     public setStereoPan(sound: Sound): void {
-        const node:Optional<AudioNode> = this.audioNodeSet.getNodeBySound(sound);
+        const node:Optional<AudioNode> = this._audioNodeSet.getNodeBySound(sound);
         if (node===undefined) return;
         node.setStereoPan(sound.stereoPan);
     }
 
     public stopAll():void {
-        this.audioNodeSet.stopAll();
+        this._audioNodeSet.stopAll();
     }
 
     public pauseAll():void {
-        this.audioNodeSet.pauseAll();
+        this._audioNodeSet.pauseAll();
     }
 
     public resumeAll():void {
-        this.audioNodeSet.resumeAll();
+        this._audioNodeSet.resumeAll();
     }
 
 

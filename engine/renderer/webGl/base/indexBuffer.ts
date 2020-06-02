@@ -3,16 +3,14 @@ import {DebugError} from "@engine/debug/debugError";
 
 export class IndexBuffer {
 
-    private readonly gl:WebGLRenderingContext;
-    private readonly buffer:WebGLRenderbuffer;
-    private dataLength:number;
-    
-    constructor(gl:WebGLRenderingContext){
-        if (DEBUG && !gl) throw new DebugError("can not create IndexBuffer, gl context not passed to constructor, expected: IndexBuffer(gl)");
+    private readonly _buffer:WebGLRenderbuffer;
+    private _dataLength:number;
 
-        this.gl = gl;
-        this.buffer = gl.createBuffer() as WebGLRenderbuffer;
-        if (DEBUG && !this.buffer) throw new DebugError(`can not allocate memory for index buffer`);
+    constructor(private readonly _gl:WebGLRenderingContext){
+        if (DEBUG && !_gl) throw new DebugError("can not create IndexBuffer, gl context not passed to constructor, expected: IndexBuffer(gl)");
+
+        this._buffer = _gl.createBuffer() as WebGLRenderbuffer;
+        if (DEBUG && !this._buffer) throw new DebugError(`can not allocate memory for index buffer`);
     }
 
     public setData(bufferData:number[]){
@@ -20,34 +18,34 @@ export class IndexBuffer {
             if (!bufferData) throw new DebugError('can not set data to buffer: bufferData not specified');
         }
 
-        const gl:WebGLRenderingContext = this.gl;
+        const gl:WebGLRenderingContext = this._gl;
 
-        this.dataLength = bufferData.length;
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffer);
+        this._dataLength = bufferData.length;
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._buffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(bufferData), gl.STATIC_DRAW);
         // tslint:disable-next-line:no-null-keyword
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
     }
 
     public getGlBuffer():WebGLRenderbuffer{
-        return this.buffer;
+        return this._buffer;
     }
 
     public bind():void{
-        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.buffer);
+        this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this._buffer);
     }
 
     public unbind():void{
         // tslint:disable-next-line:no-null-keyword
-        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
+        this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, null);
     }
 
     public destroy():void{
-        this.gl.deleteBuffer(this.buffer);
+        this._gl.deleteBuffer(this._buffer);
     }
 
     public getBufferLength():number{
-        return this.dataLength;
+        return this._dataLength;
     }
 
 }

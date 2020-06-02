@@ -13,8 +13,8 @@ import {Scene} from "@engine/scene/scene";
 
 export class SlideTransition extends AbstractSceneTransition {
 
-    private lockingRect:Rect = new Rect();
-    private from:number;
+    private _lockingRect:Rect = new Rect();
+    private _from:number;
 
     constructor(
         private readonly game:Game,
@@ -28,14 +28,14 @@ export class SlideTransition extends AbstractSceneTransition {
     public render(): void {
         if (this._prevScene!==undefined) {
             const s = this._prevScene;
-            this.lockingRect.setXYWH(s.pos.x,s.pos.y,s.size.width,s.size.height);
-            s.lockingRect = this.lockingRect;
+            this._lockingRect.setXYWH(s.pos.x,s.pos.y,s.size.width,s.size.height);
+            s.lockingRect = this._lockingRect;
             s.render();
         }
 
         const scene:Scene = this._currScene;
-        this.lockingRect.setXYWH(scene.pos.x,scene.pos.y,scene.size.width,scene.size.height);
-        scene.lockingRect = this.lockingRect;
+        this._lockingRect.setXYWH(scene.pos.x,scene.pos.y,scene.size.width,scene.size.height);
+        scene.lockingRect = this._lockingRect;
         scene.render();
     }
 
@@ -55,12 +55,12 @@ export class SlideTransition extends AbstractSceneTransition {
             case SIDE.RIGHT:
             case SIDE.LEFT:
                 this._currScene.pos.setX(val);
-                if (this._prevScene!==undefined) this._prevScene.pos.setX(val-this.from);
+                if (this._prevScene!==undefined) this._prevScene.pos.setX(val-this._from);
                 break;
             case SIDE.TOP:
             case SIDE.BOTTOM:
                 this._currScene.pos.setY(val);
-                if (this._prevScene!==undefined) this._prevScene.pos.setY(val-this.from);
+                if (this._prevScene!==undefined) this._prevScene.pos.setY(val-this._from);
                 break;
         }
     }
@@ -89,7 +89,7 @@ export class SlideTransition extends AbstractSceneTransition {
                 if (DEBUG) throw new DebugError(`unknown side: ${this.sideTo}`);
                 break;
         }
-        this.from = from;
+        this._from = from;
 
         return {
             target: {val: from},

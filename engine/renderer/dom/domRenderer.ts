@@ -28,26 +28,26 @@ interface ICSSStyleDeclaration extends CSSStyleDeclaration{
 class Nodes  {
     public properties:{[key:string]:string} = {};
 
-    private children: {[name:string]:VNode} = {};
+    private _children: {[name:string]:VNode} = {};
 
     constructor(private container:HTMLElement){}
 
 
     public register(id:string):void{
-        this.children[id] = new VNode();
-        if (DEBUG) this.children[id].domEl.setAttribute('data-id',id);
-        this.children[id].domEl.style.overflow = 'visible';
-        this.container.appendChild(this.children[id].domEl);
+        this._children[id] = new VNode();
+        if (DEBUG) this._children[id].domEl.setAttribute('data-id',id);
+        this._children[id].domEl.style.overflow = 'visible';
+        this.container.appendChild(this._children[id].domEl);
     }
 
     public has(id:string):boolean{
-        return !!this.children[id];
+        return !!this._children[id];
     }
 
     public kill(id:string){
-        const node:VNode = this.children[id];
+        const node:VNode = this._children[id];
         if (!node) return;
-        delete this.children[id];
+        delete this._children[id];
         this.container.removeChild(node.domEl);
     }
 
@@ -56,9 +56,9 @@ class Nodes  {
         if (r.parent && this.has(r.parent.id)) {
             const p:RenderableModel = r.parent;
             const parentEl:VNode =  this.getById(p,register);
-            parentEl.domEl.appendChild(this.children[r.id].domEl);
+            parentEl.domEl.appendChild(this._children[r.id].domEl);
         }
-        return this.children[r.id];
+        return this._children[r.id];
     }
 
 
@@ -83,30 +83,30 @@ export class DomRenderer extends AbstractRenderer {
 
     protected rendererHelper:RendererHelper = new RendererHelper(this.game);
 
-    private matrixStack:MatrixStack;
-    private nodes:Nodes;
+    private _matrixStack:MatrixStack;
+    private _nodes:Nodes;
 
 
     constructor(protected game:Game){
         super(game);
-        this.matrixStack = new MatrixStack();
+        this._matrixStack = new MatrixStack();
         const container:HTMLDivElement = document.createElement('div');
         container.style.cssText = 'position:relative';
         document.body.appendChild(container);
         this.container = container;
-        this.nodes = new Nodes(container);
+        this._nodes = new Nodes(container);
         this.registerResize();
     }
 
     public beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
-        if (this.nodes.properties.bg_color!==this.clearColor.asCSS()) {
+        if (this._nodes.properties.bg_color!==this.clearColor.asCSS()) {
             this.container.style.backgroundColor = this.clearColor.asCSS();
         }
         return undefined!;
     }
 
     public drawImage(img: Image): void {
-        const node:VNode = this.nodes.getById(img,true);
+        const node:VNode = this._nodes.getById(img,true);
         this._drawBasicElement(node,img);
         if (img.offset.x!==node.properties.offset_x) {
             node.properties.offset_x = img.offset.x;
@@ -125,7 +125,7 @@ export class DomRenderer extends AbstractRenderer {
 
 
     public drawLine(line: Line): void {
-        const node:VNode = this.nodes.getById(line,true);
+        const node:VNode = this._nodes.getById(line,true);
         this._drawBasicElement(node,line.getRectangleRepresentation());
         if (line.color.asCSS()!==node.properties.line_color) {
             node.properties.line_color=line.color.asCSS();
@@ -134,7 +134,7 @@ export class DomRenderer extends AbstractRenderer {
     }
 
     public killObject(r: RenderableModel): void {
-        this.nodes.kill(r.id);
+        this._nodes.kill(r.id);
     }
 
     public createTexture(bitmap:ImageBitmap|HTMLImageElement):ITexture {
@@ -154,38 +154,38 @@ export class DomRenderer extends AbstractRenderer {
     }
 
     public transformSave():void {
-        this.matrixStack.save();
+        this._matrixStack.save();
     }
 
     public transformScale(x:number, y:number):void {
-        this.matrixStack.scale(x,y);
+        this._matrixStack.scale(x,y);
     }
 
     public transformReset():void{
-        this.matrixStack.resetTransform();
+        this._matrixStack.resetTransform();
     }
 
     public transformRotateX(angleInRadians:number):void {
-        this.matrixStack.rotateX(angleInRadians);
+        this._matrixStack.rotateX(angleInRadians);
     }
 
     public transformRotateY(angleInRadians:number):void {
-        this.matrixStack.rotateY(angleInRadians);
+        this._matrixStack.rotateY(angleInRadians);
     }
 
     public transformRotateZ(angleInRadians:number):void {
-        this.matrixStack.rotateZ(angleInRadians);
+        this._matrixStack.rotateZ(angleInRadians);
     }
 
     public transformTranslate(x:number, y:number, z:number=0):void{
-        this.matrixStack.translate(x,y,z);
+        this._matrixStack.translate(x,y,z);
     }
 
     public transformRotationReset(): void {
     }
 
     public transformRestore():void{
-        this.matrixStack.restore();
+        this._matrixStack.restore();
     }
 
     public transformSet(

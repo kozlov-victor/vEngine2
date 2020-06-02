@@ -14,11 +14,11 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
 
     public readonly type:string = "TileMap";
 
-    private data:number[][] = [];
-    private tileWidth:number;
-    private tileHeight:number;
+    private _data:number[][] = [];
+    private _tileWidth:number;
+    private _tileHeight:number;
 
-    private readonly drawInfo = {
+    private readonly _drawInfo = {
         dirty:true,
         firstTileToDrawByX: NaN,
         firstTileToDrawByY: NaN,
@@ -37,7 +37,6 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
     private _cellImage:Image;
     private _drawingSurface:DrawingSurface;
 
-    // resource
     private _resourceLink:ResourceLink<ITexture>;
 
     constructor(protected game:Game){
@@ -46,23 +45,23 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
 
     public fromTiledJSON(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number){
         if (!mapHeight) mapHeight = source.length / mapWidth;
-        this.data = new Array<number[]>(mapHeight);
+        this._data = new Array<number[]>(mapHeight);
         let cnt:number = 0;
         for (let j:number=0;j<mapHeight;j++){
-            this.data[j] =  new Array<number>(mapWidth);
+            this._data[j] =  new Array<number>(mapWidth);
             for (let i:number=0;i<mapWidth;i++) {
-                this.data[j][i] = source[cnt++];
+                this._data[j][i] = source[cnt++];
             }
         }
 
-        this.tileWidth = tileWidth;
-        this.tileHeight = tileHeight;
+        this._tileWidth = tileWidth;
+        this._tileHeight = tileHeight;
 
         this._numOfTilesInMapByX = mapWidth;
         this._numOfTilesInMapByY = mapHeight;
 
-        this._numOfTilesInScreenByX = ~~(this.game.size.width / this.tileWidth)+3;
-        this._numOfTilesInScreenByY = ~~(this.game.size.height / this.tileHeight)+3;
+        this._numOfTilesInScreenByX = ~~(this.game.size.width / this._tileWidth)+3;
+        this._numOfTilesInScreenByY = ~~(this.game.size.height / this._tileHeight)+3;
 
         if (DEBUG) {
             const found:number = cnt;
@@ -86,22 +85,22 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
 
     public revalidate(){
 
-        this.game.getCurrScene().size.width = this._numOfTilesInMapByX * this.tileWidth;
-        this.game.getCurrScene().size.height = this._numOfTilesInMapByY * this.tileHeight;
+        this.game.getCurrScene().size.width = this._numOfTilesInMapByX * this._tileWidth;
+        this.game.getCurrScene().size.height = this._numOfTilesInMapByY * this._tileHeight;
 
         const texSize:Size = this.getResourceLink().getTarget().size;
-        this._numOfTilesInSpriteByX = ~~(texSize.width / this.tileWidth);
-        this._numOfTilesInSpriteByY = ~~(texSize.height / this.tileHeight);
+        this._numOfTilesInSpriteByX = ~~(texSize.width / this._tileWidth);
+        this._numOfTilesInSpriteByY = ~~(texSize.height / this._tileHeight);
 
         this._cellImage = new Image(this.game);
         this._cellImage.setResourceLink(this.getResourceLink());
-        this._cellImage.size.setWH(this.tileWidth,this.tileHeight);
-        this._cellImage.getSrcRect().setWH(this.tileWidth,this.tileHeight);
+        this._cellImage.size.setWH(this._tileWidth,this._tileHeight);
+        this._cellImage.getSrcRect().setWH(this._tileWidth,this._tileHeight);
         this._cellImage.revalidate();
         if (!this._drawingSurface) {
             const size:Size = new Size();
             size.set(this.game.size);
-            size.addWH(this.tileWidth*2,this.tileHeight*2);
+            size.addWH(this._tileWidth*2,this._tileHeight*2);
             this._drawingSurface = new DrawingSurface(this.game,size);
             this.appendChild(this._drawingSurface);
         }
@@ -115,7 +114,7 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
 
     public draw(): void {
 
-        if (!this.drawInfo.dirty) {
+        if (!this._drawInfo.dirty) {
             this.updateDrawingSurfacePos();
             return;
         }
@@ -123,24 +122,24 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
         this._drawingSurface.pos.setXY(0,0);
 
         for (let y:number=0;y<this._numOfTilesInScreenByY;y++) {
-            const currTileByY:number = this.drawInfo.firstTileToDrawByY + y;
+            const currTileByY:number = this._drawInfo.firstTileToDrawByY + y;
             if (currTileByY<0) continue;
             if (currTileByY>this._numOfTilesInMapByY-1) continue;
             for (let x:number=0;x<this._numOfTilesInScreenByX;x++) {
-                const currTileByX:number = this.drawInfo.firstTileToDrawByX + x;
+                const currTileByX:number = this._drawInfo.firstTileToDrawByX + x;
                 if (currTileByX<0) continue;
                 if (currTileByX>this._numOfTilesInMapByX-1) continue;
 
-                const tileVal:number =this.data[currTileByY][currTileByX];
+                const tileVal:number =this._data[currTileByY][currTileByX];
                 this._cellImage.getSrcRect().setXY(this.getFramePosX(tileVal),this.getFramePosY(tileVal));
                 this._cellImage.pos.setXY(
-                     (x * this.tileWidth),
-                     (y * this.tileHeight)
+                     (x * this._tileWidth),
+                     (y * this._tileHeight)
                 );
                 this._drawingSurface.drawModel(this._cellImage);
             }
         }
-        this.drawInfo.dirty = false;
+        this._drawInfo.dirty = false;
         this.updateDrawingSurfacePos();
     }
 
@@ -187,29 +186,29 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
     // }
 
     private getFramePosX(frameIndex:number):number {
-        return (frameIndex % this._numOfTilesInSpriteByX) * this.tileWidth;
+        return (frameIndex % this._numOfTilesInSpriteByX) * this._tileWidth;
     }
 
     private getFramePosY(frameIndex:number):number {
-        return ~~(frameIndex / this._numOfTilesInSpriteByX) * this.tileHeight;
+        return ~~(frameIndex / this._numOfTilesInSpriteByX) * this._tileHeight;
     }
 
 
     private updateDrawingSurfacePos(){
         this._drawingSurface.pos.setXY(
-            this.drawInfo.firstTileToDrawByX * this.tileWidth,
-            this.drawInfo.firstTileToDrawByY * this.tileHeight
+            this._drawInfo.firstTileToDrawByX * this._tileWidth,
+            this._drawInfo.firstTileToDrawByY * this._tileHeight
         );
     }
 
     private prepareDrawableInfo(){
         const camera:Camera = this.game.camera;
-        const firstTileToDrawByX:number = ~~((camera.pos.x) / this.tileWidth) - 1;
-        const firstTileToDrawByY:number = ~~((camera.pos.y) / this.tileHeight) - 1;
+        const firstTileToDrawByX:number = ~~((camera.pos.x) / this._tileWidth) - 1;
+        const firstTileToDrawByY:number = ~~((camera.pos.y) / this._tileHeight) - 1;
 
-        this.drawInfo.dirty = this.drawInfo.firstTileToDrawByX!==firstTileToDrawByX || this.drawInfo.firstTileToDrawByY!==firstTileToDrawByY;
-        this.drawInfo.firstTileToDrawByX = firstTileToDrawByX;
-        this.drawInfo.firstTileToDrawByY = firstTileToDrawByY;
+        this._drawInfo.dirty = this._drawInfo.firstTileToDrawByX!==firstTileToDrawByX || this._drawInfo.firstTileToDrawByY!==firstTileToDrawByY;
+        this._drawInfo.firstTileToDrawByX = firstTileToDrawByX;
+        this._drawInfo.firstTileToDrawByY = firstTileToDrawByY;
     }
 
 

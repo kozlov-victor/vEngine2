@@ -41,27 +41,27 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     private readonly _stack:IStackItem[] = [];
     private _interpolationMode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR;
 
-    private _doubleFrameBuffer:DoubleFrameBuffer = new DoubleFrameBuffer(this.gl,this.size);
+    private _doubleFrameBuffer:DoubleFrameBuffer = new DoubleFrameBuffer(this._gl,this._size);
 
     private _pixelPerfectMode:boolean = false;
-    private simpleRectDrawer:SimpleRectDrawer;
-    private blender:Blender = Blender.getSingleton(this.gl);
+    private _simpleRectDrawer:SimpleRectDrawer;
+    private _blender:Blender = Blender.getSingleton(this._gl);
 
-    private readonly resourceLink:ResourceLink<Texture>;
+    private readonly _resourceLink:ResourceLink<Texture>;
 
-    constructor(private game:Game,private gl:WebGLRenderingContext, private size:ISize){
+    constructor(protected readonly game:Game,private readonly _gl:WebGLRenderingContext, private readonly _size:ISize){
         this._stack.push({
-            frameBuffer: new FrameBuffer(this.gl,this.size),
+            frameBuffer: new FrameBuffer(this._gl,this._size),
             filters:NONE_FILTERS,
             pointer: {ptr:0}
         });
         this._stackPointer = 1;
 
-        this.simpleRectDrawer = new SimpleRectDrawer(gl);
-        this.simpleRectDrawer.initProgram();
+        this._simpleRectDrawer = new SimpleRectDrawer(_gl);
+        this._simpleRectDrawer.initProgram();
 
-        this.blender.enable();
-        this.blender.setBlendMode(BLEND_MODE.NORMAL);
+        this._blender.enable();
+        this._blender.setBlendMode(BLEND_MODE.NORMAL);
 
         const m16hResult:Mat16Holder = Mat16Holder.fromPool();
         const m16Scale:Mat16Holder = Mat16Holder.fromPool();
@@ -76,7 +76,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         m16Scale.release();
         m16Ortho.release();
 
-        this.resourceLink = ResourceLink.create(this._getFirst().frameBuffer.getTexture());
+        this._resourceLink = ResourceLink.create(this._getFirst().frameBuffer.getTexture());
 
     }
 
@@ -86,7 +86,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
             if (this.debug) console.log('state has been pushed');
             if (this._stack[this._stackPointer]===undefined) {
                 this._stack[this._stackPointer] = {
-                    frameBuffer: new FrameBuffer(this.gl,this.size),
+                    frameBuffer: new FrameBuffer(this._gl,this._size),
                     filters:NONE_FILTERS,
                     pointer: {ptr:this._stackPointer}
                 };
@@ -128,7 +128,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     public destroy(){
         this._stack.forEach(f=>f.frameBuffer.destroy());
         this._doubleFrameBuffer.destroy();
-        this.simpleRectDrawer.destroy();
+        this._simpleRectDrawer.destroy();
     }
 
     public reduceState(to:IStateStackPointer){
@@ -143,32 +143,32 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
             nextItem.frameBuffer.bind();
             nextItem.frameBuffer.setInterpolationMode(this._interpolationMode);
-            this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
+            this._simpleRectDrawer.setUniform(this._simpleRectDrawer.u_textureMatrix,IDENTITY);
             const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,this._getLast().frameBuffer.getTexture().size);
-            this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,m16h.mat16);
-            this.simpleRectDrawer.attachTexture('texture',filteredTexture);
-            this.blender.setBlendMode(BLEND_MODE.NORMAL);
-            this.simpleRectDrawer.draw();
+            this._simpleRectDrawer.setUniform(this._simpleRectDrawer.u_vertexMatrix,m16h.mat16);
+            this._simpleRectDrawer.attachTexture('texture',filteredTexture);
+            this._blender.setBlendMode(BLEND_MODE.NORMAL);
+            this._simpleRectDrawer.draw();
             m16h.release();
         }
         this._stackPointer = to.ptr + 1;
     }
 
     public renderToScreen():void{
-        this.blender.setBlendMode(BLEND_MODE.NORMAL);
+        this._blender.setBlendMode(BLEND_MODE.NORMAL);
         const needFullScreen:boolean = this._pixelPerfectMode || Device.embeddedEngine;
         const w:number = needFullScreen?this.game.getRenderer().viewPortSize.width:this.game.size.width;
         const h:number = needFullScreen?this.game.getRenderer().viewPortSize.height:this.game.size.height;
         this._getLast().frameBuffer.unbind();
-        this.gl.viewport(0, 0, ~~w,~~h);
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
-        this.simpleRectDrawer.attachTexture('texture',this._getLast().frameBuffer.getTexture());
-        this.simpleRectDrawer.draw();
+        this._gl.viewport(0, 0, ~~w,~~h);
+        this._simpleRectDrawer.setUniform(this._simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
+        this._simpleRectDrawer.setUniform(this._simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
+        this._simpleRectDrawer.attachTexture('texture',this._getLast().frameBuffer.getTexture());
+        this._simpleRectDrawer.draw();
     }
 
     public getResourceLink(): ResourceLink<Texture> {
-        return this.resourceLink;
+        return this._resourceLink;
     }
 
     private _getLast():IStackItem{

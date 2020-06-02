@@ -62,10 +62,9 @@ export class Tween<T> {
     private readonly _tweenTime: number;
     private readonly _loop: boolean;
     private _currentLoop:number = 0;
-    private _numOfLoops:number;
-    private _yoyo:boolean;
+    private readonly _numOfLoops:number;
+    private readonly _yoyo:boolean;
     private _desc:ITweenDescriptionNormalized<T>;
-
 
     /*
      new Tween({

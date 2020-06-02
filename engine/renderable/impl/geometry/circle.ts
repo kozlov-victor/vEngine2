@@ -14,10 +14,11 @@ export class Circle extends Ellipse implements ICloneable<Circle>, ICircleProps{
         return this._radius;
     }
 
+    public readonly type:'Circle' = 'Circle';
+
     public radiusX:never;
     public radiusY:never;
 
-    public readonly type:'Circle' = 'Circle';
     private _radius:number;
 
     constructor(game:Game){

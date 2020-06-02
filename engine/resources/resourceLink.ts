@@ -11,7 +11,7 @@ export class ResourceLink<T> {
 
     public type:'ResourceLink';
 
-    private target:T;
+    private _target:T;
 
     constructor(public readonly url:string){}
 
@@ -20,11 +20,11 @@ export class ResourceLink<T> {
     }
 
     public setTarget(t:T):void{
-        this.target = t;
+        this._target = t;
     }
 
     public getTarget():T{
-        return this.target;
+        return this._target;
     }
 
 }

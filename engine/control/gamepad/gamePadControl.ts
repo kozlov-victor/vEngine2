@@ -78,7 +78,7 @@ export class GamePadControl extends AbstractKeypad implements IControl{
     protected keyReleased: string = GAME_PAD_EVENTS.buttonReleased;
     protected buffer:GamePadEvent[];
 
-    private gamepads:Gamepad[];
+    private _gamepads:Gamepad[];
 
 
     constructor(game:Game){
@@ -89,10 +89,10 @@ export class GamePadControl extends AbstractKeypad implements IControl{
 
         super.update();
 
-        this.gamepads = gamePadGetter();
+        this._gamepads = gamePadGetter();
 
-        for (let i:number=0,max=this.gamepads.length;i<max;i++) {
-            const gp:Gamepad = this.gamepads[i];
+        for (let i:number=0,max=this._gamepads.length;i<max;i++) {
+            const gp:Gamepad = this._gamepads[i];
 
             if (!gp) continue;
 

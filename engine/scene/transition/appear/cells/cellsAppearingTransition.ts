@@ -12,9 +12,9 @@ import {Scene} from "@engine/scene/scene";
 
 export abstract class AbstractCellsAppearingTransition extends AbstractSceneTransition {
 
-    private val:number;
+    private _val:number;
 
-    private lockingRect:Rect = new Rect();
+    private _lockingRect:Rect = new Rect();
 
     constructor(
         protected readonly game:Game,
@@ -56,9 +56,9 @@ export abstract class AbstractCellsAppearingTransition extends AbstractSceneTran
                 for (let x:number = 0; x < this.numOfCellsX; x++) {
                     progress++;
                     const currProgressRelative:number = progress/total*100;
-                    if (currProgressRelative<this.val) {
-                        this.lockingRect.setXYWH(x*cellWidth,y*cellHeight,cellWidth+1,cellHeight+1);
-                        a.lockingRect = this.lockingRect;
+                    if (currProgressRelative<this._val) {
+                        this._lockingRect.setXYWH(x*cellWidth,y*cellHeight,cellWidth+1,cellHeight+1);
+                        a.lockingRect = this._lockingRect;
                         a.render();
                     }
                 }
@@ -81,7 +81,7 @@ export abstract class AbstractCellsAppearingTransition extends AbstractSceneTran
     }
 
     protected onTransitionProgress(val: number): void {
-        this.val = val;
+        this._val = val;
     }
 
 }

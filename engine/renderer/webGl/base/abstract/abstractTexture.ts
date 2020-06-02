@@ -18,15 +18,15 @@ export abstract class AbstractTexture implements ITexture {
     public static currentBindTextureAt:{[index:number]:AbstractTexture} = {};
 
     public static destroyAll(){
-        for (let i:number = 0; i<AbstractTexture.instances.length; i++) {
-            AbstractTexture.instances[i].destroy();
+        for (let i:number = 0; i<AbstractTexture._instances.length; i++) {
+            AbstractTexture._instances[i].destroy();
         }
         AbstractTexture.currentBindTextureAt = {};
     }
 
-    private static MAX_TEXTURE_IMAGE_UNITS:number = 0;
+    private static _MAX_TEXTURE_IMAGE_UNITS:number = 0;
 
-    private static instances:AbstractTexture[] = [];
+    private static _instances:AbstractTexture[] = [];
 
     public readonly size:Size = new Size(0,0);
 
@@ -36,15 +36,15 @@ export abstract class AbstractTexture implements ITexture {
     protected destroyed:boolean = false;
 
     private _currentTextureAt0:Optional<AbstractTexture>;
-    private interpolationMode:INTERPOLATION_MODE;
+    private _interpolationMode:INTERPOLATION_MODE;
 
     protected constructor(protected readonly gl:WebGLRenderingContext){
         if (DEBUG) {
             if (!gl) throw new DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
             // define max texture units supported
-            if (!AbstractTexture.MAX_TEXTURE_IMAGE_UNITS) {
-                AbstractTexture.MAX_TEXTURE_IMAGE_UNITS = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
-                if (DEBUG && !AbstractTexture.MAX_TEXTURE_IMAGE_UNITS) throw new DebugError(`Can not obtain MAX_TEXTURE_IMAGE_UNITS value`);
+            if (!AbstractTexture._MAX_TEXTURE_IMAGE_UNITS) {
+                AbstractTexture._MAX_TEXTURE_IMAGE_UNITS = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+                if (DEBUG && !AbstractTexture._MAX_TEXTURE_IMAGE_UNITS) throw new DebugError(`Can not obtain MAX_TEXTURE_IMAGE_UNITS value`);
             }
         }
         this.tex = gl.createTexture() as WebGLTexture;
@@ -57,9 +57,9 @@ export abstract class AbstractTexture implements ITexture {
                 console.error(this);
                 throw new DebugError(`can not bind texture: uniform name was not provided`);
             }
-            if (i>AbstractTexture.MAX_TEXTURE_IMAGE_UNITS - 1) {
+            if (i>AbstractTexture._MAX_TEXTURE_IMAGE_UNITS - 1) {
                 console.error(this);
-                throw new DebugError(`can not bind texture with index ${i}. Max supported value by device is ${AbstractTexture.MAX_TEXTURE_IMAGE_UNITS}`);
+                throw new DebugError(`can not bind texture with index ${i}. Max supported value by device is ${AbstractTexture._MAX_TEXTURE_IMAGE_UNITS}`);
             }
             if (this.destroyed) {
                 console.error(this);
@@ -84,7 +84,7 @@ export abstract class AbstractTexture implements ITexture {
 
     public destroy():void{
         this.gl.deleteTexture(this.tex);
-        AbstractTexture.instances.splice(AbstractTexture.instances.indexOf(this),1);
+        AbstractTexture._instances.splice(AbstractTexture._instances.indexOf(this),1);
         this.destroyed = true;
     }
 
@@ -93,7 +93,7 @@ export abstract class AbstractTexture implements ITexture {
     }
 
     public setInterpolationMode(mode:INTERPOLATION_MODE) {
-        if (mode===this.interpolationMode) return;
+        if (mode===this._interpolationMode) return;
         this.beforeOperation();
 
         const gl:WebGLRenderingContext = this.gl;
@@ -114,7 +114,7 @@ export abstract class AbstractTexture implements ITexture {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, glMode!);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, glMode!);
 
-        this.interpolationMode = mode;
+        this._interpolationMode = mode;
 
         this.afterOperation();
     }

@@ -68,7 +68,7 @@ export class Polygon extends Mesh {
         const pg:Polygon = new Polygon(game);
         pg.setVertices(triangulatedVertices);
         pg.size.set(p.size);
-        pg.edgeVertices = vertices;
+        pg._edgeVertices = vertices;
         return pg;
     }
 
@@ -87,7 +87,7 @@ export class Polygon extends Mesh {
 
     public readonly type:string = 'Polygon';
 
-    private edgeVertices:number[];
+    private _edgeVertices:number[];
 
     constructor(protected game:Game){
         super(game);
@@ -96,7 +96,7 @@ export class Polygon extends Mesh {
     }
 
     public extrudeToMesh(depth:number):Mesh{
-        const isClockWise:boolean = isPolylineCloseWise(this.edgeVertices);
+        const isClockWise:boolean = isPolylineCloseWise(this._edgeVertices);
         const primitive = new class extends AbstractPrimitive {
 
             public normalArr:number[] = [];
@@ -143,11 +143,11 @@ export class Polygon extends Mesh {
                 0,0,-1
             );
         }
-        for (let i = 0; i < this.edgeVertices.length-2; i+=2) {
-            let edgeVertexA1:number = this.edgeVertices[i];
-            let edgeVertexA2:number = this.edgeVertices[i+1];
-            let edgeVertexB1:number = this.edgeVertices[i+2];
-            let edgeVertexB2:number = this.edgeVertices[i+3];
+        for (let i = 0; i < this._edgeVertices.length-2; i+=2) {
+            let edgeVertexA1:number = this._edgeVertices[i];
+            let edgeVertexA2:number = this._edgeVertices[i+1];
+            let edgeVertexB1:number = this._edgeVertices[i+2];
+            let edgeVertexB2:number = this._edgeVertices[i+3];
 
             if (!isClockWise) {
                 [edgeVertexA1,edgeVertexA2,edgeVertexB1,edgeVertexB2] =

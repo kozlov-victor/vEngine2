@@ -4,7 +4,7 @@ import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 
 export class TileMapDrawer extends SimpleRectDrawer {
 
-    private u_tileSize:string;
+    private readonly u_tileSize:string;
     private readonly tileSize:[number,number] = [0,0];
 
     constructor(gl:WebGLRenderingContext) {
@@ -12,7 +12,7 @@ export class TileMapDrawer extends SimpleRectDrawer {
         const gen:ShaderGenerator = this.gen;
         this.u_tileSize = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_tileSize');
         //language=GLSL
-        gen.setFragmentMainFn(MACRO_GL_COMPRESS`            
+        gen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){
                 vec2 tileCoord = mod(v_texCoord,u_tileSize);
                 gl_FragColor = texture2D(texture, tileCoord);

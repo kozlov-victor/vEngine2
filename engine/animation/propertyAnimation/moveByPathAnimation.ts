@@ -19,38 +19,38 @@ export class MoveByPathAnimation extends AbstractMoveAnimation {
     public velocity: number = 10;
     public durationSec:Optional<number>;
 
-    private controlPoints:IControlPoint[] = [];
-    private totalLength:number = 0;
-    private oldDurationSec:Optional<number>;
+    private _controlPoints:IControlPoint[] = [];
+    private _totalLength:number = 0;
+    private _oldDurationSec:Optional<number>;
 
-    private currentControlPointIndex:number = 0;
+    private _currentControlPointIndex:number = 0;
 
     constructor(protected game:Game,polyLine:PolyLine) {
         super(game);
         const zeroPoint:Point2d = new Point2d();
         polyLine.children.forEach((c:Line)=>{
             const length:number = MathEx.getDistance(zeroPoint,c.pointTo);
-            this.controlPoints.push({
+            this._controlPoints.push({
                 length,
                 pointFrom:c.pos,
                 pointTo: {x:c.pos.x+c.pointTo.x,y:c.pos.y+c.pointTo.y},
-                from:this.totalLength,
-                to: this.totalLength + length
+                from:this._totalLength,
+                to: this._totalLength + length
             });
-            this.totalLength+=length;
+            this._totalLength+=length;
         });
     }
 
     public reset(){
         super.reset();
-        this.currentControlPointIndex = 0;
+        this._currentControlPointIndex = 0;
     }
 
 
     protected onUpdate(){
-        if (this.durationSec!==undefined && this.durationSec!==this.oldDurationSec) {
-            this.oldDurationSec = this.durationSec;
-            this.velocity = this.totalLength / this.durationSec;
+        if (this.durationSec!==undefined && this.durationSec!==this._oldDurationSec) {
+            this._oldDurationSec = this.durationSec;
+            this.velocity = this._totalLength / this.durationSec;
         }
         const lengthPassed:number = this.velocity * this.passedTime / 1000;
         const point:IControlPoint = this.getCurrentControlPoint(lengthPassed);
@@ -60,7 +60,7 @@ export class MoveByPathAnimation extends AbstractMoveAnimation {
         const x:number = point.pointFrom.x + (point.pointTo.x - point.pointFrom.x)*passedFactor;
         const y:number = point.pointFrom.y + (point.pointTo.y - point.pointFrom.y)*passedFactor;
         this.progressPoint.setXY(x,y);
-        if (lengthPassed>=this.totalLength) {
+        if (lengthPassed>=this._totalLength) {
             this.reset();
             this.numOfLoopPassed++;
         }
@@ -68,13 +68,13 @@ export class MoveByPathAnimation extends AbstractMoveAnimation {
     }
 
     private getCurrentControlPoint(lengthPassed:number):IControlPoint {
-        let result:number = this.currentControlPointIndex;
-        for (let i = this.currentControlPointIndex+1; i < this.controlPoints.length; i++) {
-            const controlPoint = this.controlPoints[i];
+        let result:number = this._currentControlPointIndex;
+        for (let i = this._currentControlPointIndex+1; i < this._controlPoints.length; i++) {
+            const controlPoint = this._controlPoints[i];
             if (lengthPassed>=controlPoint.from) result = i;
         }
-        this.currentControlPointIndex = result;
-        return this.controlPoints[result];
+        this._currentControlPointIndex = result;
+        return this._controlPoints[result];
     }
 
 }

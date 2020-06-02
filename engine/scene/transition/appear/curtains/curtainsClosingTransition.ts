@@ -11,8 +11,8 @@ import {CurtainsOpeningTransition} from "./curtainsOpeningTransition";
 
 export class CurtainsClosingTransition extends AbstractSceneTransition {
 
-    private progress:number = 0;
-    private lockingRect:Rect = new Rect();
+    private _progress:number = 0;
+    private _lockingRect:Rect = new Rect();
 
     constructor(
         private readonly game:Game,
@@ -25,14 +25,14 @@ export class CurtainsClosingTransition extends AbstractSceneTransition {
     public render(): void {
         if (this._prevScene!==undefined) this._prevScene.render();
         // left curtain
-        this._currScene.pos.setX(this.progress);
-        this.lockingRect.setXYWH(this.progress,0,this._currScene.size.width/2,this._currScene.size.height);
-        this._currScene.lockingRect = this.lockingRect;
+        this._currScene.pos.setX(this._progress);
+        this._lockingRect.setXYWH(this._progress,0,this._currScene.size.width/2,this._currScene.size.height);
+        this._currScene.lockingRect = this._lockingRect;
         this._currScene.render();
         // right curtain
-        this._currScene.pos.setX(-this.progress);
-        this.lockingRect.setXYWH(-this.progress+this._currScene.size.width/2,0,this._currScene.size.width/2,this._currScene.size.height);
-        this._currScene.lockingRect = this.lockingRect;
+        this._currScene.pos.setX(-this._progress);
+        this._lockingRect.setXYWH(-this._progress+this._currScene.size.width/2,0,this._currScene.size.width/2,this._currScene.size.height);
+        this._currScene.lockingRect = this._lockingRect;
         this._currScene.render();
     }
 
@@ -47,7 +47,7 @@ export class CurtainsClosingTransition extends AbstractSceneTransition {
     }
 
     protected onTransitionProgress(val:number): void {
-        this.progress = val;
+        this._progress = val;
     }
 
     protected describe(): SceneProgressDescription {

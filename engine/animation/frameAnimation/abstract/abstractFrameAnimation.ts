@@ -26,7 +26,6 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnim
     private _isPlaying:boolean = false;
     private _loopReached:boolean = false;
 
-
     //eventEmitter
     private readonly _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 

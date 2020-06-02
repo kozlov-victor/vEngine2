@@ -1,4 +1,4 @@
-import {AbstractCanvasFilter} from "@engine/renderer/canvas/filers/abstract/abstractCanvasFilter";
+import {AbstractCanvasFilter} from "@engine/renderer/canvas/filters/abstract/abstractCanvasFilter";
 
 export class TestFilter extends AbstractCanvasFilter {
 

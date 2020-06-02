@@ -56,28 +56,28 @@ const getPointsOnBezierCurve = (points:Readonly<v2>[], offset:number, numPoints:
 class SvgTokenizer {
     public lastCommand:string;
 
-    private pos:number = 0;
-    private lastPos:Optional<number>;
+    private _pos:number = 0;
+    private _lastPos:Optional<number>;
 
-    private readonly CHAR:string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; // to avoid regexps
-    private readonly NUM:string = '01234567890.';
+    private readonly _CHAR:string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; // to avoid regexps
+    private readonly _NUM:string = '01234567890.';
 
     constructor(private readonly path:string){
         this.path = clearString(path);
     }
 
     public isEof():boolean{
-        return this.pos===this.path.length;
+        return this._pos===this.path.length;
     }
 
     public releaseNextToken(){
-        if (DEBUG && this.lastPos===undefined) throw new DebugError(`can not release next token`);
-        this.pos = this.lastPos as number;
-        this.lastPos = undefined;
+        if (DEBUG && this._lastPos===undefined) throw new DebugError(`can not release next token`);
+        this._pos = this._lastPos as number;
+        this._lastPos = undefined;
     }
 
     public getNextCommand():string{
-        let tkn:string = this.getNextToken(this.CHAR,1);
+        let tkn:string = this.getNextToken(this._CHAR,1);
         if (!tkn) tkn = ''+this.getNextNumber();
         //console.log('next command',tkn);
         return tkn;
@@ -85,33 +85,33 @@ class SvgTokenizer {
 
     public getNextNumber():number{
         this.skipWhiteSpaces();
-        const lastPos:number = this.lastPos as number;
+        const lastPos:number = this._lastPos as number;
         let sign:number = 1;
-        if (this.path[this.pos]==='-') {
+        if (this.path[this._pos]==='-') {
             sign = -1;
-            this.pos++;
+            this._pos++;
         }
-        let s:string = this.getNextToken(this.NUM);
+        let s:string = this.getNextToken(this._NUM);
         // check for numbers  like 2.52e-4
-        if (this.path[this.pos]==='e') {
-            this.pos++;
+        if (this.path[this._pos]==='e') {
+            this._pos++;
             s+='e'+this.getNextNumber();
         }
         if (DEBUG && s.length===0) {
-            throw new DebugError(`can not read number, wrong next symbol: ${this.path[this.pos]}`);
+            throw new DebugError(`can not read number, wrong next symbol: ${this.path[this._pos]}`);
         }
         let n:number = +s;
         if (DEBUG && isNaN(n)) throw new DebugError(`can not read number: ${sign===1?'':'-'}${s}`);
         n*=sign;
-        this.lastPos = lastPos;
+        this._lastPos = lastPos;
         //console.log('next number',n);
         return n;
     }
 
     private skipWhiteSpaces():void{
         while (!this.isEof()){
-            if ([',',' '].indexOf(this.path[this.pos])===-1) break;
-            this.pos++;
+            if ([',',' '].indexOf(this.path[this._pos])===-1) break;
+            this._pos++;
         }
     }
 
@@ -120,13 +120,13 @@ class SvgTokenizer {
         let char:string;
         let res:string = '';
         this.skipWhiteSpaces();
-        this.lastPos = this.pos;
+        this._lastPos = this._pos;
         while (!this.isEof()){
-            char = this.path[this.pos];
+            char = this.path[this._pos];
             if (allowedSymbols.indexOf(char)===-1) break;
             if (limit>0 && res.length===limit) break;
             res+=char;
-            this.pos++;
+            this._pos++;
         }
         return res;
     }

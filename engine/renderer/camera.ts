@@ -32,13 +32,13 @@ export class Camera implements IUpdatable, ITransformable  {
     public worldTransformDirty:boolean = true;
     public readonly worldTransformMatrix:Mat16Holder = new Mat16Holder();
 
-    private objFollowTo:Optional<RenderableModel>;
-    private objFollowToPrevPos:Point2d;
-    private directionCorrection:DIRECTION_CORRECTION;
+    private _objFollowTo:Optional<RenderableModel>;
+    private _objFollowToPrevPos:Point2d;
+    private _directionCorrection:DIRECTION_CORRECTION;
 
     private _rect:Rect = new Rect();
-    private cameraShakeTween:Optional<Tween<ICameraTweenTarget>>;
-    private cameraPosCorrection:{current:Point2d,max:Point2d} = {
+    private _cameraShakeTween:Optional<Tween<ICameraTweenTarget>>;
+    private _cameraPosCorrection:{current:Point2d,max:Point2d} = {
         current: new Point2d(),
         max: new Point2d()
     };
@@ -59,45 +59,45 @@ export class Camera implements IUpdatable, ITransformable  {
 
     public followTo(gameObject:Optional<RenderableModel>):void {
         if (gameObject===undefined) {
-            this.objFollowTo = undefined;
+            this._objFollowTo = undefined;
             return;
         }
-        this.objFollowTo = gameObject;
-        this.objFollowToPrevPos = new Point2d();
-        this.objFollowToPrevPos.set(this.objFollowTo.pos);
+        this._objFollowTo = gameObject;
+        this._objFollowToPrevPos = new Point2d();
+        this._objFollowToPrevPos.set(this._objFollowTo.pos);
         this.revalidate();
     }
 
     public update() {
 
-        const gameObject:Optional<RenderableModel> = this.objFollowTo;
+        const gameObject:Optional<RenderableModel> = this._objFollowTo;
 
         if (gameObject!==undefined) {
 
-            if ((gameObject.pos.x - this.objFollowToPrevPos.x)>0) this.directionCorrection = DIRECTION_CORRECTION.RIGHT;
-            else if ((gameObject.pos.x - this.objFollowToPrevPos.x)<0) this.directionCorrection = DIRECTION_CORRECTION.LEFT;
+            if ((gameObject.pos.x - this._objFollowToPrevPos.x)>0) this._directionCorrection = DIRECTION_CORRECTION.RIGHT;
+            else if ((gameObject.pos.x - this._objFollowToPrevPos.x)<0) this._directionCorrection = DIRECTION_CORRECTION.LEFT;
 
-            if ((gameObject.pos.y - this.objFollowToPrevPos.y)>0) this.directionCorrection = DIRECTION_CORRECTION.DOWN;
-            else if ((gameObject.pos.y - this.objFollowToPrevPos.y)<0) this.directionCorrection = DIRECTION_CORRECTION.UP;
+            if ((gameObject.pos.y - this._objFollowToPrevPos.y)>0) this._directionCorrection = DIRECTION_CORRECTION.DOWN;
+            else if ((gameObject.pos.y - this._objFollowToPrevPos.y)<0) this._directionCorrection = DIRECTION_CORRECTION.UP;
 
-            this.objFollowToPrevPos.set(gameObject.pos);
+            this._objFollowToPrevPos.set(gameObject.pos);
 
             const {width,height} = this.getRect();
-            if (this.directionCorrection === DIRECTION_CORRECTION.RIGHT)
-                this.cameraPosCorrection.max.x=width/3;
-            else if (this.directionCorrection === DIRECTION_CORRECTION.LEFT)
-                this.cameraPosCorrection.max.x=-width/3;
-            else if (this.directionCorrection === DIRECTION_CORRECTION.DOWN)
-                this.cameraPosCorrection.max.y=height/3;
-            else if (this.directionCorrection === DIRECTION_CORRECTION.UP)
-                this.cameraPosCorrection.max.y=-height/3;
+            if (this._directionCorrection === DIRECTION_CORRECTION.RIGHT)
+                this._cameraPosCorrection.max.x=width/3;
+            else if (this._directionCorrection === DIRECTION_CORRECTION.LEFT)
+                this._cameraPosCorrection.max.x=-width/3;
+            else if (this._directionCorrection === DIRECTION_CORRECTION.DOWN)
+                this._cameraPosCorrection.max.y=height/3;
+            else if (this._directionCorrection === DIRECTION_CORRECTION.UP)
+                this._cameraPosCorrection.max.y=-height/3;
 
             const currCorrection:Point2d =
-                this.cameraPosCorrection.max.
-                substract(this.cameraPosCorrection.current).
+                this._cameraPosCorrection.max.
+                substract(this._cameraPosCorrection.current).
                 multiply(0.05);
 
-            this.cameraPosCorrection.current.add(currCorrection);
+            this._cameraPosCorrection.current.add(currCorrection);
 
             const newPos:Point2d = Point2d.fromPool();
             const pointToFollow:Point2d = Point2d.fromPool();
@@ -110,8 +110,8 @@ export class Camera implements IUpdatable, ITransformable  {
 
             pointToFollow.set(gameObject.pos);
             pointToFollow.addXY(-wDiv2,-hDiv2);
-            newPos.x = this.pos.x+(pointToFollow.x + this.cameraPosCorrection.current.x - this.pos.x)*Camera.FOLLOW_FACTOR.x;
-            newPos.y = this.pos.y+(pointToFollow.y + this.cameraPosCorrection.current.y - this.pos.y)*Camera.FOLLOW_FACTOR.y;
+            newPos.x = this.pos.x+(pointToFollow.x + this._cameraPosCorrection.current.x - this.pos.x)*Camera.FOLLOW_FACTOR.x;
+            newPos.y = this.pos.y+(pointToFollow.y + this._cameraPosCorrection.current.y - this.pos.y)*Camera.FOLLOW_FACTOR.y;
 
             if (newPos.x < 0) {
                 newPos.x = 0;
@@ -132,13 +132,13 @@ export class Camera implements IUpdatable, ITransformable  {
             pointToFollow.release();
 
         }
-        if (this.cameraShakeTween!==undefined) this.cameraShakeTween.update();
+        if (this._cameraShakeTween!==undefined) this._cameraShakeTween.update();
 
     }
 
     public shake(amplitude:number,time:number):void {
         const tweenTarget:ICameraTweenTarget = {time:0,point:new Point2d(0,0)};
-        this.cameraShakeTween = new Tween({
+        this._cameraShakeTween = new Tween({
             target:tweenTarget,
             time,
             to:{time},
@@ -147,7 +147,7 @@ export class Camera implements IUpdatable, ITransformable  {
                 const r2:number = MathEx.random(-amplitude/2,amplitude/2);
                 tweenTarget.point.setXY(r1,r2);
             },
-            complete:()=>this.cameraShakeTween = undefined
+            complete:()=>this._cameraShakeTween = undefined
         });
     }
 
@@ -169,9 +169,9 @@ export class Camera implements IUpdatable, ITransformable  {
         }
         // todo rotation does not work correctly yet
         //this.game.renderer.transformRotateZ(this.angle);
-        if (this.cameraShakeTween!==undefined) renderer.transformTranslate(
-            this.cameraShakeTween.getTarget().point.x,
-            this.cameraShakeTween.getTarget().point.y
+        if (this._cameraShakeTween!==undefined) renderer.transformTranslate(
+            this._cameraShakeTween.getTarget().point.x,
+            this._cameraShakeTween.getTarget().point.y
         );
     }
 

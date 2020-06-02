@@ -15,7 +15,7 @@ export class NinePatchImage extends RenderableModel {
     private c:number = 5;
     private d:number = 5;
 
-    private _patches:Image[] = new Array(10);
+    private _patches:Image[] = new Array(9);
 
     // resource
     private _resourceLink:ResourceLink<ITexture>;
@@ -70,7 +70,7 @@ export class NinePatchImage extends RenderableModel {
             throw new DebugError(`can not set resource link: link is not passed`);
         }
         this._resourceLink = link;
-        for (let i:number=0;i<9;i++) {
+        for (let i:number=0;i<this._patches.length;i++) {
             this._patches[i] = new Image(this.game);
             this._patches[i].setResourceLink(link);
             this.appendChild(this._patches[i]);

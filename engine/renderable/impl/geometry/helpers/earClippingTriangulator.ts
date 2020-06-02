@@ -4,8 +4,8 @@ import {DebugError} from "@engine/debug/debugError";
  */
 
 export class EarClippingTriangulator {
-    private static readonly CONCAVE: number = -1;
-    private static readonly CONVEX: number = 1;
+    private static readonly _CONCAVE: number = -1;
+    private static readonly _CONVEX: number = 1;
 
     private static areVerticesClockwise(vertices: number[], offset: number, count: number): boolean {
         if (count <= 2) return false;
@@ -94,7 +94,7 @@ export class EarClippingTriangulator {
         this.triangles = triangles;
     }
 
-    /** @return {@link #CONCAVE} or {@link #CONVEX} */
+    /** @return {@link #CONCAVE} or {@link #_CONVEX} */
     private classifyVertex(index: number): number {
         const indices: number[] = this.indices;
         const previous: number = indices[this.previousIndex(index)] * 2;
@@ -113,13 +113,13 @@ export class EarClippingTriangulator {
         // Return a convex or tangential vertex if one exists.
         const vertexTypes: readonly number[] = this.vertexTypes;
         for (let i: number = 0; i < vertexCount; i++)
-            if (vertexTypes[i] !== EarClippingTriangulator.CONCAVE) return i;
+            if (vertexTypes[i] !== EarClippingTriangulator._CONCAVE) return i;
         return 0; // If all vertices are concave, just return the first one.
     }
 
     private isEarTip(earTipIndex: number): boolean {
         const vertexTypes: readonly number[] = this.vertexTypes;
-        if (vertexTypes[earTipIndex] === EarClippingTriangulator.CONCAVE) return false;
+        if (vertexTypes[earTipIndex] === EarClippingTriangulator._CONCAVE) return false;
 
         const previousIndex: number = this.previousIndex(earTipIndex);
         const nextIndex: number = this.nextIndex(earTipIndex);
@@ -137,7 +137,7 @@ export class EarClippingTriangulator {
         for (let i: number = this.nextIndex(nextIndex); i !== previousIndex; i = this.nextIndex(i)) {
             // Concave vertices can obviously be inside the candidate ear, but so can tangential vertices
             // if they coincide with one of the triangle's vertices.
-            if (vertexTypes[i] !== EarClippingTriangulator.CONVEX) {
+            if (vertexTypes[i] !== EarClippingTriangulator._CONVEX) {
                 const v: number = indices[i] * 2;
                 const vx: number = vertices[v];
                 const vy: number = vertices[v + 1];

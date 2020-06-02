@@ -21,11 +21,9 @@ export class Image extends RenderableModel implements ICloneable<Image>,IResourc
     public stretchMode:STRETCH_MODE = STRETCH_MODE.STRETCH;
     public color:Color = Color.NONE.clone();
     public lineWidth:number = 0;
+
     private _pixelPerfect:boolean = false;
-
-    // resource
     private _resourceLink:ResourceLink<ITexture>;
-
     private _srcRect:Rect = new Rect();
 
     constructor(game: Game) {

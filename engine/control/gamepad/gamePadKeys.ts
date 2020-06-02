@@ -1,7 +1,7 @@
 
 // https://github.com/photonstorm/phaser/blob/v2.4.4/src/input/Gamepad.js
 
-export enum GAME_PAD_BUTTON {
+export const enum GAME_PAD_BUTTON {
     BTN_A = 0,
     BTN_B = 1,
     BTN_X = 2,

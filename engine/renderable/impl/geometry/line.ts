@@ -12,12 +12,12 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
     public borderRadius:number = 0;
     public readonly pointTo:Point2d = new Point2d(0,0,()=>this.onPointChanged());
 
-    private readonly rectangleRepresentation:Rectangle = new Rectangle(this.game);
+    private readonly _rectangleRepresentation:Rectangle = new Rectangle(this.game);
 
     constructor(game:Game){
         super(game);
         this.lineWidth = 1;
-        this.rectangleRepresentation.lineWidth = 0;
+        this._rectangleRepresentation.lineWidth = 0;
     }
 
     public setXYX1Y1(x:number,y:number,x1:number,y1:number){
@@ -44,9 +44,9 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
     }
 
     public getRectangleRepresentation():Rectangle{
-        this.rectangleRepresentation.borderRadius = this.borderRadius;
-        this.rectangleRepresentation.fillColor = this.color;
-        return this.rectangleRepresentation;
+        this._rectangleRepresentation.borderRadius = this.borderRadius;
+        this._rectangleRepresentation.fillColor = this.color;
+        return this._rectangleRepresentation;
     }
 
     public setProps(props:ILineProps):void {
@@ -68,7 +68,7 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
         const l:number = Math.sqrt(w*w+h*h) + this.lineWidth/2;
         this.size.setWH(w,h+this.lineWidth);
         // noinspection JSSuspiciousNameCombination
-        this.rectangleRepresentation.size.setWH(l,this.lineWidth);
+        this._rectangleRepresentation.size.setWH(l,this.lineWidth);
         this.angle = Math.atan2(this.pointTo.y,this.pointTo.x);
         this.transformPoint.setXY(0,this.lineWidth/2);
     }

@@ -5,47 +5,47 @@ import {Optional} from "@engine/core/declarations";
 
 export class FastMap<T,U> {
 
-    private readonly keys:T[] = [];
-    private readonly values:U[] = [];
+    private readonly _keys:T[] = [];
+    private readonly _values:U[] = [];
 
     public put(key:T,value:U) {
-        const index:number = this.keys.indexOf(key);
+        const index:number = this._keys.indexOf(key);
         if (index===-1) {
-            this.keys.push(key);
-            this.values.push(value);
+            this._keys.push(key);
+            this._values.push(value);
         } else {
-            this.values[index] = value;
+            this._values[index] = value;
         }
     }
 
     public get(key:T):Optional<U>{
-        const index:number = this.keys.indexOf(key);
+        const index:number = this._keys.indexOf(key);
         if (index===-1) return undefined;
-        return this.values[index];
+        return this._values[index];
     }
 
     public has(key:T):boolean{
-        const index:number = this.keys.indexOf(key);
+        const index:number = this._keys.indexOf(key);
         return index>-1;
     }
 
     public remove(key:T):void{
-        const index:number = this.keys.indexOf(key);
+        const index:number = this._keys.indexOf(key);
         if (index===-1) return;
-        this.keys.splice(index,1);
-        this.values.splice(index,1);
+        this._keys.splice(index,1);
+        this._values.splice(index,1);
     }
 
     public getKeys():T[]{
-        return this.keys;
+        return this._keys;
     }
 
     public getValues():U[]{
-        return this.values;
+        return this._values;
     }
 
     public size():number{
-        return this.keys.length;
+        return this._keys.length;
     }
 
 }

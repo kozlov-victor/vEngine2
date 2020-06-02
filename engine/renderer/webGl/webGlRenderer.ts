@@ -114,20 +114,20 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     protected rendererHelper:RendererHelper = new WebGlRendererHelper(this.game);
 
-    private gl:WebGLRenderingContext;
-    private readonly matrixStack:MatrixStack = new MatrixStack();
-    private shapeDrawerHolder:InstanceHolder<ShapeDrawer> = new InstanceHolder(ShapeDrawer);
-    private coloredRectDrawer:InstanceHolder<SimpleColoredRectDrawer> = new InstanceHolder(SimpleColoredRectDrawer);
-    private meshDrawerHolder:InstanceHolder<MeshDrawer> = new InstanceHolder(MeshDrawer);
-    private tileMapDrawerHolder:InstanceHolder<TileMapDrawer> = new InstanceHolder(TileMapDrawer);
+    private _gl:WebGLRenderingContext;
+    private readonly _matrixStack:MatrixStack = new MatrixStack();
+    private _shapeDrawerHolder:InstanceHolder<ShapeDrawer> = new InstanceHolder(ShapeDrawer);
+    private _coloredRectDrawer:InstanceHolder<SimpleColoredRectDrawer> = new InstanceHolder(SimpleColoredRectDrawer);
+    private _meshDrawerHolder:InstanceHolder<MeshDrawer> = new InstanceHolder(MeshDrawer);
+    private _tileMapDrawerHolder:InstanceHolder<TileMapDrawer> = new InstanceHolder(TileMapDrawer);
 
-    private nullTexture:Texture;
-    private nullCubeMapTexture:CubeMapTexture;
+    private _nullTexture:Texture;
+    private _nullCubeMapTexture:CubeMapTexture;
 
-    private origFrameBufferStack:FrameBufferStack;
-    private currFrameBufferStack:FrameBufferStack;
+    private _origFrameBufferStack:FrameBufferStack;
+    private _currFrameBufferStack:FrameBufferStack;
 
-    private blender:Blender;
+    private _blender:Blender;
 
 
     private _lockRect:Optional<Rect>;
@@ -142,8 +142,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public setPixelPerfectMode(mode:boolean):void{
         const interpolation:INTERPOLATION_MODE = mode?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR;
-        this.currFrameBufferStack.setInterpolationMode(interpolation);
-        this.currFrameBufferStack.setPixelPerfectMode(mode);
+        this._currFrameBufferStack.setInterpolationMode(interpolation);
+        this._currFrameBufferStack.setPixelPerfectMode(mode);
         this._pixelPerfectMode = mode;
         this.onResize();
     }
@@ -166,7 +166,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const texture:Texture = (img.getResourceLink() as ResourceLink<Texture>).getTarget();
         const maxSize:number = Math.max(img.size.width,img.size.height);
 
-        const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
+        const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);
         this.prepareGeometryUniformInfo(img);
 
         sd.setUniform(sd.u_lineWidth,Math.min(img.lineWidth/maxSize,1));
@@ -205,15 +205,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public drawMesh(mesh:Mesh):void {
 
-        const md:MeshDrawer = this.meshDrawerHolder.getInstance(this.gl);
+        const md:MeshDrawer = this._meshDrawerHolder.getInstance(this._gl);
 
         md.bindModel(mesh);
         md.bind();
 
-        const modelMatrix:Mat16Holder = this.matrixStack.getCurrentValue();
+        const modelMatrix:Mat16Holder = this._matrixStack.getCurrentValue();
 
         const orthoProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        const currViewSize:ISize = this.currFrameBufferStack.getCurrentTargetSize();
+        const currViewSize:ISize = this._currFrameBufferStack.getCurrentTargetSize();
         mat4.ortho(orthoProjectionMatrix,0,currViewSize.width,0,currViewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
         const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
         mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
@@ -230,30 +230,30 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (DEBUG && isTextureUsed && mesh.modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
         md.setTextureUsed(isTextureUsed);
         if (isTextureUsed) md.setTextureMatrix(FLIP_TEXTURE_MATRIX.mat16);
-        md.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this.nullTexture);
+        md.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this._nullTexture);
 
         const isNormalsTextureUsed:boolean = mesh.normalsTexture!==undefined;
         md.setNormalsTextureUsed(isNormalsTextureUsed);
-        md.attachTexture('u_normalsTexture',isNormalsTextureUsed?mesh.normalsTexture as Texture:this.nullTexture);
+        md.attachTexture('u_normalsTexture',isNormalsTextureUsed?mesh.normalsTexture as Texture:this._nullTexture);
 
         const isHeightMapTextureUsed:boolean = mesh.heightMapTexture!==undefined;
         md.setHeightMapTextureUsed(isHeightMapTextureUsed);
-        md.attachTexture('u_heightMapTexture',isHeightMapTextureUsed?mesh.heightMapTexture as Texture:this.nullTexture);
+        md.attachTexture('u_heightMapTexture',isHeightMapTextureUsed?mesh.heightMapTexture as Texture:this._nullTexture);
         md.setHeightMapFactor(mesh.heightMapFactor);
 
         const isCubeMapTextureUsed:boolean = mesh.cubeMapTexture!==undefined;
         if (DEBUG && !isCubeMapTextureUsed && mesh.reflectivity!==0) throw new DebugError(`can not apply reflectivity without cubeMapTexture`);
         md.setCubeMapTextureUsed(isCubeMapTextureUsed);
         md.setReflectivity(mesh.reflectivity);
-        md.attachTexture('u_cubeMapTexture',isCubeMapTextureUsed?mesh.cubeMapTexture as CubeMapTexture:this.nullCubeMapTexture);
+        md.attachTexture('u_cubeMapTexture',isCubeMapTextureUsed?mesh.cubeMapTexture as CubeMapTexture:this._nullCubeMapTexture);
 
         md.setLightUsed(mesh.isLightAccepted()||false);
         md.setColor(mesh.fillColor);
         md.setColorMix(mesh.colorMix);
 
         //this.gl.enable(this.gl.CULL_FACE);
-        if (mesh.depthTest) this.gl.enable(this.gl.DEPTH_TEST);
-        else this.gl.disable(this.gl.DEPTH_TEST);
+        if (mesh.depthTest) this._gl.enable(this._gl.DEPTH_TEST);
+        else this._gl.disable(this._gl.DEPTH_TEST);
         md.draw();
         //this.gl.disable(this.gl.CULL_FACE);
         zToWMatrix.release();
@@ -270,13 +270,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         } else {
             const {width:rw,height:rh} = rectangle.size;
             const maxSize:number = Math.max(rw,rh);
-            const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
+            const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);
 
             this.prepareGeometryUniformInfo(rectangle);
             this.prepareShapeUniformInfo(rectangle);
             sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
             sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
-            sd.attachTexture('texture',this.nullTexture);
+            sd.attachTexture('texture',this._nullTexture);
             sd.draw();
         }
 
@@ -295,7 +295,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.prepareGeometryUniformInfo(ellipse);
         this.prepareShapeUniformInfo(ellipse);
 
-        const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
+        const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);
         sd.setUniform(sd.u_lineWidth,Math.min(ellipse.lineWidth/maxR,1));
         if (maxR===ellipse.radiusX) {
             sd.setUniform(sd.u_rx,0.5);
@@ -312,68 +312,68 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_arcAngleFrom,ellipse.arcAngleFrom);
         sd.setUniform(sd.u_arcAngleTo,ellipse.arcAngleTo);
         sd.setUniform(sd.u_anticlockwise,ellipse.anticlockwise);
-        sd.attachTexture('texture',this.nullTexture);
+        sd.attachTexture('texture',this._nullTexture);
         sd.draw();
 
     }
 
     public transformSave():void {
-        this.matrixStack.save();
+        this._matrixStack.save();
     }
 
     public transformScale(x:number, y:number, z: number = 1):void {
         if (x===1 && y===1 && z===1) return;
-        this.matrixStack.scale(x,y,z);
+        this._matrixStack.scale(x,y,z);
     }
 
     public transformReset():void{
-        this.matrixStack.resetTransform();
+        this._matrixStack.resetTransform();
     }
 
     public transformRotateX(angleInRadians:number):void {
         if (angleInRadians===0) return;
-        this.matrixStack.rotateX(angleInRadians);
+        this._matrixStack.rotateX(angleInRadians);
     }
 
     public transformRotateY(angleInRadians:number):void {
         if (angleInRadians===0) return;
-        this.matrixStack.rotateY(angleInRadians);
+        this._matrixStack.rotateY(angleInRadians);
     }
 
     public transformRotateZ(angleInRadians:number):void {
         if (angleInRadians===0) return;
-        this.matrixStack.rotateZ(angleInRadians);
+        this._matrixStack.rotateZ(angleInRadians);
     }
 
     public transformTranslate(x:number, y:number, z:number=0):void{
         if (x===0 && y===0 && z===0) return;
-        this.matrixStack.translate(x,y,z);
+        this._matrixStack.translate(x,y,z);
     }
 
     public transformRotationReset(){
-        this.matrixStack.rotationReset();
+        this._matrixStack.rotationReset();
     }
 
     public transformSkewX(angle:number):void{
         if (angle===0) return;
-        this.matrixStack.skewX(angle);
+        this._matrixStack.skewX(angle);
     }
 
     public transformSkewY(angle:number):void{
         if (angle===0) return;
-        this.matrixStack.skewY(angle);
+        this._matrixStack.skewY(angle);
     }
 
     public transformRestore():void{
-        this.matrixStack.restore();
+        this._matrixStack.restore();
     }
 
     public transformSet(v0: number, v1: number, v2: number, v3: number, v4: number, v5: number, v6: number, v7: number, v8: number, v9: number, v10: number, v11: number, v12: number, v13: number, v14: number, v15: number): void {
-        this.matrixStack.setMatrixValues(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
+        this._matrixStack.setMatrixValues(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
     }
 
     public transformGet(): Readonly<MAT16> {
-        return this.matrixStack.getCurrentValue().mat16;
+        return this._matrixStack.getCurrentValue().mat16;
     }
 
     public setLockRect(rect:Rect):void {
@@ -385,48 +385,48 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public beforeItemStackDraw(filters:AbstractGlFilter[],forceDrawChildrenOnNewSurface:boolean):IStateStackPointer {
-        return this.currFrameBufferStack.pushState(filters,forceDrawChildrenOnNewSurface);
+        return this._currFrameBufferStack.pushState(filters,forceDrawChildrenOnNewSurface);
     }
 
     public afterItemStackDraw(stackPointer:IStateStackPointer):void {
-        this.gl.disable(this.gl.DEPTH_TEST);
-        this.currFrameBufferStack.reduceState(stackPointer);
+        this._gl.disable(this._gl.DEPTH_TEST);
+        this._currFrameBufferStack.reduceState(stackPointer);
     }
 
 
     public beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
-        const ptr:IStateStackPointer = this.currFrameBufferStack.pushState(filters,false);
+        const ptr:IStateStackPointer = this._currFrameBufferStack.pushState(filters,false);
         if (this.clearBeforeRender) {
-            this.currFrameBufferStack.clear(this.clearColor,this.getAlphaBlend());
+            this._currFrameBufferStack.clear(this.clearColor,this.getAlphaBlend());
         }
         return ptr;
     }
 
     public afterFrameDraw(stackPointer:IStateStackPointer):void{
-        this.currFrameBufferStack.reduceState(stackPointer);
-        if (this.currFrameBufferStack===this.origFrameBufferStack) {
+        this._currFrameBufferStack.reduceState(stackPointer);
+        if (this._currFrameBufferStack===this._origFrameBufferStack) {
             if (this._lockRect!==undefined) {
                 const rect = this._lockRect;
-                this.gl.enable(this.gl.SCISSOR_TEST);
-                this.gl.scissor(~~rect.x, ~~(this.game.size.height - rect.height - rect.y), ~~rect.width,~~rect.height);
+                this._gl.enable(this._gl.SCISSOR_TEST);
+                this._gl.scissor(~~rect.x, ~~(this.game.size.height - rect.height - rect.y), ~~rect.width,~~rect.height);
             }
-            this.currFrameBufferStack.renderToScreen();
-            this.gl.disable(this.gl.SCISSOR_TEST);
+            this._currFrameBufferStack.renderToScreen();
+            this._gl.disable(this._gl.SCISSOR_TEST);
         }
     }
 
     public getError():Optional<{code:number,desc:string}>{
         if (!DEBUG) return undefined;
-        const err:number = this.gl.getError();
-        if (err!==this.gl.NO_ERROR) {
-            return {code:err,desc:glEnumToString(this.gl,err)};
+        const err:number = this._gl.getError();
+        if (err!==this._gl.NO_ERROR) {
+            return {code:err,desc:glEnumToString(this._gl,err)};
         }
         return undefined;
     }
 
 
     public createTexture(bitmap:ImageBitmap|HTMLImageElement):ITexture{
-        const texture:Texture = new Texture(this.gl);
+        const texture:Texture = new Texture(this._gl);
         texture.setImage(bitmap);
         return texture;
     }
@@ -440,32 +440,32 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         imgBack:ImageBitmap|HTMLImageElement
     ): ICubeMapTexture {
 
-        const cubeTexture:CubeMapTexture = new CubeMapTexture(this.gl);
+        const cubeTexture:CubeMapTexture = new CubeMapTexture(this._gl);
         cubeTexture.setImages(imgLeft,imgRight,imgTop,imgBottom,imgFront,imgBack);
         return cubeTexture;
     }
 
 
     public getNativeContext():WebGLRenderingContext {
-        return this.gl;
+        return this._gl;
     }
 
     public setRenderTarget(fbs:FrameBufferStack){
-        this.currFrameBufferStack = fbs;
+        this._currFrameBufferStack = fbs;
     }
 
     public setDefaultRenderTarget(){
-        this.currFrameBufferStack = this.origFrameBufferStack;
+        this._currFrameBufferStack = this._origFrameBufferStack;
     }
 
     public destroy():void{
         super.destroy();
-        this.origFrameBufferStack.destroy();
-        this.nullTexture.destroy();
-        this.nullCubeMapTexture.destroy();
-        this.shapeDrawerHolder.destroy();
-        this.meshDrawerHolder.destroy();
-        this.tileMapDrawerHolder.destroy();
+        this._origFrameBufferStack.destroy();
+        this._nullTexture.destroy();
+        this._nullCubeMapTexture.destroy();
+        this._shapeDrawerHolder.destroy();
+        this._meshDrawerHolder.destroy();
+        this._tileMapDrawerHolder.destroy();
         Texture.destroyAll();
     }
 
@@ -483,16 +483,16 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private _init():void{
         const gl:WebGLRenderingContext = getCtx(this.container as HTMLCanvasElement)!;
         if (DEBUG && gl===undefined) throw new DebugError(`WebGLRenderingContext is not supported by this device`);
-        this.gl = gl;
+        this._gl = gl;
 
-        this.nullTexture = new Texture(gl);
-        this.nullCubeMapTexture = new CubeMapTexture(gl);
-        this.nullCubeMapTexture.setAsZero();
-        this.blender = Blender.getSingleton(gl);
-        this.blender.enable();
-        this.blender.setBlendMode(BLEND_MODE.NORMAL);
+        this._nullTexture = new Texture(gl);
+        this._nullCubeMapTexture = new CubeMapTexture(gl);
+        this._nullCubeMapTexture.setAsZero();
+        this._blender = Blender.getSingleton(gl);
+        this._blender.enable();
+        this._blender.setBlendMode(BLEND_MODE.NORMAL);
 
-        this.origFrameBufferStack = new FrameBufferStack(this.game,this.getNativeContext(),this.game.size);
+        this._origFrameBufferStack = new FrameBufferStack(this.game,this.getNativeContext(),this.game.size);
         this.setDefaultRenderTarget();
 
         // gl.depthFunc(gl.LEQUAL);
@@ -503,13 +503,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     // optimised version of rectangle drawing
     private drawSimpleColoredRectangle(rectangle:Rectangle):void{
 
-        const scd:SimpleColoredRectDrawer = this.coloredRectDrawer.getInstance(this.gl);
+        const scd:SimpleColoredRectDrawer = this._coloredRectDrawer.getInstance(this._gl);
 
         const rect:Rect = Rect.fromPool();
         rect.setXYWH( 0,0,rectangle.size.width,rectangle.size.height);
         const size:Size = Size.fromPool();
-        size.set(this.currFrameBufferStack.getCurrentTargetSize());
-        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
+        size.set(this._currFrameBufferStack.getCurrentTargetSize());
+        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this._matrixStack);
         scd.setUniform(scd.u_vertexMatrix,pos16h.mat16);
         pos16h.release();
         rect.release();
@@ -530,7 +530,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const {width:rw,height:rh} = model.size;
         const maxSize:number = Math.max(rw,rh);
-        const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
+        const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);
         let offsetX:number = 0,offsetY:number = 0;
         if (maxSize===rw) {
             sd.setUniform(sd.u_width,1);
@@ -549,8 +549,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const rect:Rect = Rect.fromPool();
         rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
         const size:Size = Size.fromPool();
-        size.set(this.currFrameBufferStack.getCurrentTargetSize());
-        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this.matrixStack);
+        size.set(this._currFrameBufferStack.getCurrentTargetSize());
+        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this._matrixStack);
         sd.setUniform(sd.u_vertexMatrix,pos16h.mat16);
         pos16h.release();
         rect.release();
@@ -558,15 +558,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         sd.setUniform(sd.u_alpha,this.getAlphaBlend());
         sd.setUniform(sd.u_stretchMode,STRETCH_MODE.STRETCH);
-        this.blender.setBlendMode(model.blendMode);
-        if (model.depthTest) this.gl.enable(this.gl.DEPTH_TEST);
-        else this.gl.disable(this.gl.DEPTH_TEST);
+        this._blender.setBlendMode(model.blendMode);
+        if (model.depthTest) this._gl.enable(this._gl.DEPTH_TEST);
+        else this._gl.disable(this._gl.DEPTH_TEST);
 
     }
 
     private prepareShapeUniformInfo(model:Shape){
         const maxSize:number = Math.max(model.size.width,model.size.height);
-        const sd:ShapeDrawer = this.shapeDrawerHolder.getInstance(this.gl);
+        const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);
         sd.setUniform(sd.u_lineWidth,Math.min(model.lineWidth/maxSize,1));
         sd.setUniform(sd.u_color,model.color.asGL());
 

@@ -3,7 +3,6 @@ import {ShaderProgram} from "./shaderProgram";
 
 export class VertexBuffer {
 
-    private readonly gl:WebGLRenderingContext;
     private readonly buffer:WebGLBuffer;
     private bufferItemSize:number = 0;
     private bufferItemType:number = 0;
@@ -11,10 +10,9 @@ export class VertexBuffer {
     private attrName:string;
 
 
-    constructor(gl:WebGLRenderingContext){
-        if (DEBUG && !gl) throw new DebugError("can not create VertexBuffer, gl context not passed to constructor, expected: VertexBuffer(gl)");
-        this.gl = gl;
-        this.buffer = gl.createBuffer() as WebGLBuffer;
+    constructor(private readonly _gl:WebGLRenderingContext){
+        if (DEBUG && !_gl) throw new DebugError("can not create VertexBuffer, gl context not passed to constructor, expected: VertexBuffer(gl)");
+        this.buffer = _gl.createBuffer() as WebGLBuffer;
         if (DEBUG && !this.buffer) throw new DebugError(`can not allocate memory for vertex buffer`);
     }
 
@@ -24,7 +22,7 @@ export class VertexBuffer {
             if (!itemType) throw new DebugError('can not set data to vertex buffer: itemType is not specified');
             if (!itemSize) throw new DebugError('can not set data to vertex buffer: itemSize is not specified');
         }
-        const gl:WebGLRenderingContext = this.gl;
+        const gl:WebGLRenderingContext = this._gl;
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
         // gl.bufferSubData(gl.ARRAY_BUFFER, 0, new Float32Array(bufferSubData));
@@ -49,11 +47,11 @@ export class VertexBuffer {
 
     public unbind():void{
         // tslint:disable-next-line:no-null-keyword
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, null);
     }
 
     public destroy():void{
-        this.gl.deleteBuffer(this.buffer);
+        this._gl.deleteBuffer(this.buffer);
     }
 
     public getGlBuffer():WebGLBuffer{

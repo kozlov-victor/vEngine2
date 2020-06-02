@@ -1,9 +1,8 @@
 import {RenderableModel} from "../../../abstract/renderableModel";
-import {IRect, Rect} from "@engine/geometry/rect";
-import {Container, LAYOUT_SIZE, OVERFLOW} from "../abstract/container";
+import {IRect} from "@engine/geometry/rect";
+import {Container, LAYOUT_SIZE} from "../abstract/container";
 import {Game} from "@engine/core/game";
 import {ICloneable} from "@engine/core/declarations";
-import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 
 export class AbsoluteLayout extends Container implements ICloneable<AbsoluteLayout>{
 
