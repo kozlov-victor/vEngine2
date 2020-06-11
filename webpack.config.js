@@ -8,7 +8,21 @@ const engineTransformer = require('./node_tools/transformers/build/engineTransfo
 class WebpackDonePlugin{
     apply(compiler){
         compiler.hooks.done.tap('compilation',  (stats)=> {
-            console.log(colors.fg.Green,'---===compiled===---',colors.Reset);
+            const date = new Date();
+            const leadZero = (val)=>{
+                if ((''+val).length===1) return `0${val}`;
+                else return `${val}`;
+            };
+            const hh = leadZero(date.getHours());
+            const mm = leadZero(date.getMinutes());
+            const ss = leadZero(date.getSeconds());
+            setTimeout(()=>{
+                console.log('    ',colors.bg.Blue,colors.fg.Cyan,'╔═▓════════════════╗',colors.Reset);
+                console.log('    ',colors.bg.Blue,colors.fg.Cyan,'║--===compiled===--║',colors.Reset);
+                console.log('    ',colors.bg.Blue,colors.fg.Cyan,`║-----${hh}:${mm}:${ss}-----║`,colors.Reset);
+                console.log('    ',colors.bg.Blue,colors.fg.Cyan,'╚══════════════════╝',colors.Reset);
+            },10);
+
         });
 
     }
@@ -88,7 +102,7 @@ module.exports = (env={})=>{
                     ]
                 },
                 {
-                    test: /\.ts?$/,
+                    test: /\.ts$/,
                     enforce: 'pre',
                     use: [
                         {
