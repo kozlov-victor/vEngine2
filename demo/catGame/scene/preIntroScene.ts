@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
-import {Source} from "@engine/resources/resourceDecorators";
+import {Resource} from "@engine/resources/resourceDecorators";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
@@ -11,10 +11,9 @@ import {EasingElastic} from "@engine/misc/easing/functions/elastic";
 import {PosterizeFilter} from "@engine/renderer/webGl/filters/texture/posterizeFilter";
 import {PixelFilter} from "@engine/renderer/webGl/filters/texture/pixelFilter";
 
-
 export class PreIntroScene extends Scene {
 
-    @Source.Texture('./catGame/res/sprite/contest.png')
+    @Resource.Texture('./catGame/res/sprite/contest.png')
     private spriteSheetLogo: ResourceLink<ITexture>;
 
 

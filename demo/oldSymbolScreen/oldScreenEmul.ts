@@ -208,7 +208,7 @@ export class BasicEnv {
                 // already performed instruction like DATA
                 return;
             }
-            if ((p[k] as unknown as any[]).splice) {
+            if ((p[k] as unknown as any[]).splice!==undefined) {
                 (p[k] as unknown as any[]).forEach((instr,i)=>{
                     const pi:ProgramInstruction = new ProgramInstruction();
                     pi.number = k;

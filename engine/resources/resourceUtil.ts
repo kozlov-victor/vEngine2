@@ -1,5 +1,4 @@
 import {Base64, URI} from "@engine/core/declarations";
-import {DebugError} from "@engine/debug/debugError";
 import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {Queue, TaskRef} from "@engine/resources/queue";
 

@@ -5,14 +5,14 @@ import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {Source} from "@engine/resources/resourceDecorators";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    @Source.Texture('./assets/repeat.jpg')
+    @Resource.Texture('./assets/repeat.jpg')
     private baseTextureLink:ResourceLink<ITexture>;
 
-    @Source.CubeTexture(
+    @Resource.CubeTexture(
         './cubeMapTexture/textures/cm_left.jpg',
         './cubeMapTexture/textures/cm_right.jpg',
         './cubeMapTexture/textures/cm_top.jpg',

@@ -13,7 +13,7 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {Shape} from "@engine/renderable/abstract/shape";
-import {ResourceLink} from "@engine/resources/resourceLink";
+import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {mat4} from "@engine/geometry/mat4";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
@@ -157,6 +157,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             if (!img.getResourceLink().getTarget()) {
                 console.error(img);
                 throw new DebugError(`no target associated with resource link`);
+            }
+            if (img.getResourceLink().state!==ResourceLinkState.COMPLETED) {
+                throw new DebugError(`can not access resource link: it has wrong state ${img.getResourceLink().state}, ${ResourceLinkState.COMPLETED} state is expected`);
             }
         }
 

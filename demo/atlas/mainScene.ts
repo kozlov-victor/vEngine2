@@ -7,20 +7,19 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 
 export class MainScene extends Scene {
 
+    @Resource.Texture("./atlas/player.png")
     private spriteLink: ResourceLink<ITexture>;
+
+    @Resource.Text("./atlas/player.atlas")
     private atlasLink: ResourceLink<string>;
 
     constructor(protected game:Game){
         super(game);
-    }
-
-    public onPreloading() {
-        this.spriteLink = this.resourceLoader.loadTexture("./atlas/player.png");
-        this.atlasLink = this.resourceLoader.loadText("./atlas/player.atlas");
     }
 
 

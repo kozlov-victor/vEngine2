@@ -88,6 +88,15 @@ module.exports = (env={})=>{
                     ]
                 },
                 {
+                    test: /\.ts?$/,
+                    enforce: 'pre',
+                    use: [
+                        {
+                            loader: "ts-engine-precompiler/ts-engine-precompiler"
+                        },
+                    ]
+                },
+                {
                     test: /\.tsx?$/,
                     enforce: 'pre',
                     use: [

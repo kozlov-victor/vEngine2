@@ -8,11 +8,11 @@ import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFil
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
-import {Source} from "@engine/resources/resourceDecorators";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    @Source.Texture('./assets/star.png')
+    @Resource.Texture('./assets/star.png')
     private textureResourceLink:ResourceLink<ITexture>;
 
 

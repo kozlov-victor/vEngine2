@@ -24,7 +24,6 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
     }
 
 
-
     public complete(): void {
         if (this._currScene!==undefined) {
             this._currScene.scale.setXY(1);

@@ -1,29 +1,20 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Image} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
-import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
-import {Source} from "@engine/resources/resourceDecorators";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
-import {LogoPrefab} from "./logoPrefab";
+import {LogoResources} from "./logoResources";
 
 export class MainScene extends Scene {
 
-    @Source.Texture('./assets/logo.png')
-    private logoLink:ResourceLink<ITexture>;
-
-    public onPreloading(): void {
-        //const  p = PrefabFactory.createPrefab(this.game,LogoPrefab);
-        //console.log(p);
-    }
+    private logoRes:LogoResources = new LogoResources(this);
 
     public onReady() {
 
         const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        spr.setResourceLink(this.logoRes.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         spr.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(spr);

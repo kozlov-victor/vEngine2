@@ -1,16 +1,14 @@
 import {Game} from "@engine/core/game";
 import {Image} from "@engine/renderable/impl/general/image";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
 import {Camera} from "@engine/renderer/camera";
 import {Size} from "@engine/geometry/size";
-import {IResource, Optional} from "@engine/core/declarations";
-import {ITexture} from "@engine/renderer/common/texture";
-import {ResourceLink} from "@engine/resources/resourceLink";
+import {Optional} from "@engine/core/declarations";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
+import {RenderableModelWithResourceLink} from "@engine/renderable/abstract/renderableModelWithResourceLink";
 
 
-export class TileMap extends RenderableModel implements IResource<ITexture> {
+export class TileMap extends RenderableModelWithResourceLink {
 
     public readonly type:string = "TileMap";
 
@@ -36,8 +34,6 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
 
     private _cellImage:Image;
     private _drawingSurface:DrawingSurface;
-
-    private _resourceLink:ResourceLink<ITexture>;
 
     constructor(protected game:Game){
         super(game);
@@ -70,17 +66,6 @@ export class TileMap extends RenderableModel implements IResource<ITexture> {
                 throw new DebugError(`Incorrect mapWidth/mapHeight provided. Expected ${expected} tiles, but ${found} found (${mapWidth}*${mapHeight}=${mapWidth*mapHeight})`);
             }
         }
-    }
-
-    public setResourceLink(link:ResourceLink<ITexture>):void{
-        if (DEBUG && !link) {
-            throw new DebugError(`can not set resource link: link is not passed`);
-        }
-        this._resourceLink = link;
-    }
-
-    public getResourceLink():ResourceLink<ITexture>{
-        return this._resourceLink;
     }
 
     public revalidate(){

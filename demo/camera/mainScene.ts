@@ -1,30 +1,26 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
-import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Source} from "@engine/resources/resourceDecorators";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
+import {ResourceHolder} from "./resources/resourceHolder";
 
 export class MainScene extends Scene {
 
-    @Source.Texture('./assets/logo.png') private logoLink:ResourceLink<ITexture>;
-    @Source.Texture('./assets/repeat.jpg')  private bgLink:ResourceLink<ITexture>;
+    private resourceHolder:ResourceHolder = new ResourceHolder(this);
 
     public onReady() {
 
         this.size.setWH(1100,2100);
 
         const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        spr.setResourceLink(this.resourceHolder.logoLink);
         spr.size.setWH(250,300);
         spr.stretchMode = STRETCH_MODE.REPEAT;
         spr.offset.setXY(1,1);
@@ -32,7 +28,7 @@ export class MainScene extends Scene {
         this.appendChild(spr);
 
         const bg:Image = new Image(this.game);
-        bg.setResourceLink(this.bgLink);
+        bg.setResourceLink(this.resourceHolder.bgLink);
         bg.size.setWH(1000,2000);
         bg.stretchMode = STRETCH_MODE.STRETCH;
         this.appendChild(bg);

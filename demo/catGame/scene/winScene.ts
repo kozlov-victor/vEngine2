@@ -3,18 +3,15 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IntroScene} from "./introScene";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class WinScene extends BaseAbstractIntroScene {
 
-
+    @Resource.Sound('./catGame/res/sound/win.mp3')
     protected soundThemeRes: ResourceLink<void>;
+
+    @Resource.Texture('./catGame/res/sprite/win.png')
     protected spriteSheetLabel: ResourceLink<ITexture>;
-
-
-    public onPreloading(): void {
-        this.soundThemeRes = this.resourceLoader.loadSound('./catGame/res/sound/win.mp3');
-        this.spriteSheetLabel = this.resourceLoader.loadTexture('./catGame/res/sprite/win.png');
-    }
 
     protected startSound(): void {
         super.startSound();

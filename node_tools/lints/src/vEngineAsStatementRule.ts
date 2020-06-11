@@ -19,7 +19,7 @@ class LintWalker extends Lint.AbstractWalker {
             if (ts.isAsExpression(node)) {
                 this.checkStatement(node);
             } else {
-                // Continue rescursion: call function `cb` for all children of the current node.
+                // Continue recursion: call function `cb` for all children of the current node.
                 return ts.forEachChild(node, cb);
             }
         };

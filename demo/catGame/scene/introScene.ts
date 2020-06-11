@@ -3,16 +3,17 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {BaseAbstractIntroScene} from "./abstracts/baseAbstractIntroScene";
 import {GameManager} from "../gameManager";
+import {Resource} from "@engine/resources/resourceDecorators";
+
 
 export class IntroScene extends BaseAbstractIntroScene {
 
+    @Resource.Sound('./catGame/res/sound/theme1.mp3')
     protected soundThemeRes: ResourceLink<void>;
+
+    @Resource.Texture('./catGame/res/sprite/pressKeyToStart.png')
     protected spriteSheetLabel: ResourceLink<ITexture>;
 
-    public onPreloading(): void {
-        this.soundThemeRes = this.resourceLoader.loadSound('./catGame/res/sound/theme1.mp3');
-        this.spriteSheetLabel = this.resourceLoader.loadTexture('./catGame/res/sprite/pressKeyToStart.png');
-    }
 
     protected listenUI():void {
         this.on(MOUSE_EVENTS.click, e=>{

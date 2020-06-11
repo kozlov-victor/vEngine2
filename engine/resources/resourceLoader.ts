@@ -1,4 +1,4 @@
-import {ResourceLink} from "@engine/resources/resourceLink";
+import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
 import {Game} from "../core/game";
 import {Queue, TaskRef} from "./queue";
 import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
@@ -44,12 +44,14 @@ export class ResourceLoader {
         }
         const taskRef:TaskRef = this.q.addTask(async () => {
             try {
+                link.state = ResourceLinkState.PENDING;
                 const img:HTMLImageElement|ImageBitmap = await createImageFromData(req as (URI|Base64|IURLRequest),this.q,taskRef);
                 const texture:ITexture = this.game.getRenderer().createTexture(img);
                 link.setTarget(texture);
                 resourceCache.cache[(req as IURLRequest).url??req] = texture;
                 this.q.resolveTask(taskRef);
             } catch (e) {
+                link.state = ResourceLinkState.PENDING_ERROR;
                 console.error(e);
                 throw e;
             }
@@ -66,20 +68,26 @@ export class ResourceLoader {
         const link: ResourceLink<ICubeMapTexture> = new ResourceLink('');
 
         const taskRef:TaskRef = this.q.addTask(async () => {
-            const imgLeft:HTMLImageElement|ImageBitmap = await createImageFromData(leftSide as (URI|Base64|IURLRequest),this.q,taskRef);
-            const imgRight:HTMLImageElement|ImageBitmap = await createImageFromData(rightSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[0]);
-            this.q.resolveTask(taskRefsAdditionals[0]);
-            const imgTop:HTMLImageElement|ImageBitmap = await createImageFromData(topSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[1]);
-            this.q.resolveTask(taskRefsAdditionals[1]);
-            const imgBottom:HTMLImageElement|ImageBitmap = await createImageFromData(bottomSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[2]);
-            this.q.resolveTask(taskRefsAdditionals[2]);
-            const imgFront:HTMLImageElement|ImageBitmap = await createImageFromData(frontSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[3]);
-            this.q.resolveTask(taskRefsAdditionals[3]);
-            const imgBack:HTMLImageElement|ImageBitmap = await createImageFromData(backSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[4]);
-            this.q.resolveTask(taskRefsAdditionals[4]);
-            const texture:ICubeMapTexture = this.game.getRenderer().createCubeTexture(imgLeft,imgRight,imgTop,imgBottom,imgFront,imgBack);
-            link.setTarget(texture);
-            this.q.resolveTask(taskRef);
+            link.state = ResourceLinkState.PENDING;
+            try {
+                const imgLeft:HTMLImageElement|ImageBitmap = await createImageFromData(leftSide as (URI|Base64|IURLRequest),this.q,taskRef);
+                const imgRight:HTMLImageElement|ImageBitmap = await createImageFromData(rightSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[0]);
+                this.q.resolveTask(taskRefsAdditionals[0]);
+                const imgTop:HTMLImageElement|ImageBitmap = await createImageFromData(topSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[1]);
+                this.q.resolveTask(taskRefsAdditionals[1]);
+                const imgBottom:HTMLImageElement|ImageBitmap = await createImageFromData(bottomSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[2]);
+                this.q.resolveTask(taskRefsAdditionals[2]);
+                const imgFront:HTMLImageElement|ImageBitmap = await createImageFromData(frontSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[3]);
+                this.q.resolveTask(taskRefsAdditionals[3]);
+                const imgBack:HTMLImageElement|ImageBitmap = await createImageFromData(backSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[4]);
+                this.q.resolveTask(taskRefsAdditionals[4]);
+                const texture:ICubeMapTexture = this.game.getRenderer().createCubeTexture(imgLeft,imgRight,imgTop,imgBottom,imgFront,imgBack);
+                link.setTarget(texture);
+                this.q.resolveTask(taskRef);
+            } catch (e) {
+                link.state = ResourceLinkState.PENDING_ERROR;
+                throw e;
+            }
         });
 
         const taskRefsAdditionals:[TaskRef,TaskRef,TaskRef,TaskRef,TaskRef]
@@ -105,9 +113,11 @@ export class ResourceLoader {
         const link: ResourceLink<void> = new ResourceLink(loader.getUrl());
         const taskRef:TaskRef = this.q.addTask(async () =>{
             try {
+                link.state = ResourceLinkState.PENDING;
                 const buff:ArrayBuffer = await loader.load();
                 await this.game.getAudioPlayer().loadSound(buff,link);
                 this.q.resolveTask(taskRef);
+                link.setTarget(undefined);
             } catch (e) {
                 console.error(e);
                 throw e;
@@ -123,6 +133,7 @@ export class ResourceLoader {
         loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
         const taskRef:TaskRef = this.q.addTask(async () => {
             try {
+                link.state = ResourceLinkState.PENDING;
                 const buff:ArrayBuffer = await loader.load();
                 link.setTarget(buff as ArrayBuffer);
                 this.q.resolveTask(taskRef);

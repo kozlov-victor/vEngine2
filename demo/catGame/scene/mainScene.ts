@@ -1,7 +1,7 @@
 import {Scene, SCENE_EVENTS} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Source} from "@engine/resources/resourceDecorators";
+import {Resource} from "@engine/resources/resourceDecorators";
 import {Game} from "@engine/core/game";
 import {Hero} from "../entity/actor/impl/hero";
 import {Monster1} from "../entity/actor/impl/monster1";
@@ -34,79 +34,81 @@ type LEVEL_SCHEMA = typeof import("../level/l1.json");
 
 export class MainScene extends Scene {
 
-    @Source.Texture('./catGame/res/sprite/cat.png')
+    @Resource.Texture('./catGame/res/sprite/cat.png')
     private spriteSheetHero: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/wall1.png')
+    @Resource.Texture('./catGame/res/sprite/wall1.png')
     private wall1: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/wall2.png')
+    @Resource.Texture('./catGame/res/sprite/wall2.png')
     private wall2: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/monster1.png')
+    @Resource.Texture('./catGame/res/sprite/monster1.png')
     private spriteSheetMonster1: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/lava.png')
+    @Resource.Texture('./catGame/res/sprite/lava.png')
     private spriteSheetLava: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/water.png')
+    @Resource.Texture('./catGame/res/sprite/water.png')
     private spriteSheetWater: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/monster2.png')
+    @Resource.Texture('./catGame/res/sprite/monster2.png')
     private spriteSheetMonster2: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/virus.png')
+    @Resource.Texture('./catGame/res/sprite/virus.png')
     private spriteSheetVirus: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/zombie.png')
+    @Resource.Texture('./catGame/res/sprite/zombie.png')
     private spriteSheetZombie: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/fan.png')
+    @Resource.Texture('./catGame/res/sprite/fan.png')
     private spriteSheetFan: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/bloodDrop.png')
+    @Resource.Texture('./catGame/res/sprite/bloodDrop.png')
     private spriteSheetBloodDrop: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/cloud.png')
+    @Resource.Texture('./catGame/res/sprite/cloud.png')
     private spriteSheetCloud: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/ironCar.png')
+    @Resource.Texture('./catGame/res/sprite/ironCar.png')
     private spriteSheetIronCar: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/car.png')
+    @Resource.Texture('./catGame/res/sprite/car.png')
     private spriteSheetCar: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/testTube.png')
+    @Resource.Texture('./catGame/res/sprite/testTube.png')
     private spriteSheetTestTube: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/bullet3.png')
+    @Resource.Texture('./catGame/res/sprite/bullet3.png')
     private spriteSheetBullet: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/tree.png')
+    @Resource.Texture('./catGame/res/sprite/tree.png')
     private spriteSheetTree: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/table.png')
+    @Resource.Texture('./catGame/res/sprite/table.png')
     private spriteSheetTable: ResourceLink<ITexture>;
 
-    @Source.Sound('./catGame/res/sound/theme2.mp3')
+    @Resource.Sound('./catGame/res/sound/theme2.mp3')
     private soundThemeRes: ResourceLink<void>;
 
-    @Source.Sound('./catGame/res/sound/hurt.mp3')
+    @Resource.Sound('./catGame/res/sound/hurt.mp3')
     private soundHurt: ResourceLink<void>;
 
-    @Source.Sound('./catGame/res/sound/hurt.mp3')
+    @Resource.Sound('./catGame/res/sound/hurt.mp3')
     private soundHurt2: ResourceLink<void>;
 
-    @Source.Sound('./catGame/res/sound/shoot.mp3')
+    @Resource.Sound('./catGame/res/sound/shoot.mp3')
     private soundShoot: ResourceLink<void>;
 
-    @Source.Sound('./catGame/res/sound/jump.mp3')
+    @Resource.Sound('./catGame/res/sound/jump.mp3')
     private soundJump: ResourceLink<void>;
 
-    @Source.Sound('./catGame/res/sound/pick.mp3')
+    @Resource.Sound('./catGame/res/sound/pick.mp3')
     private soundPick: ResourceLink<void>;
 
     private level: LEVEL_SCHEMA;
+
+    private touchPad:SimpleTouchPad;
 
     constructor(game: Game, level: LEVEL_SCHEMA, private numOfLives:number){
         super(game);
@@ -120,7 +122,12 @@ export class MainScene extends Scene {
         this.setUpClouds();
         this.loadLevel();
         this.createUI();
-        //this.createTouchPad();
+        this.createTouchPad();
+    }
+
+    public onInactivated(): void {
+        super.onInactivated();
+        if (this.touchPad!==undefined) this.touchPad.releaseAllButtons();
     }
 
     private extractExtraProperties(properties?: ({ name: string, value: any })[]): IExtraProperties {
@@ -266,8 +273,8 @@ export class MainScene extends Scene {
         const touchPadLayer:Layer = new Layer(this.game);
         touchPadLayer.transformType = LayerTransformType.STICK_TO_CAMERA;
         this.appendChild(touchPadLayer);
-        const touchPad:SimpleTouchPad = new SimpleTouchPad(this.game);
-        touchPad.appendTo(touchPadLayer);
+        this.touchPad  = new SimpleTouchPad(this.game);
+        this.touchPad.appendTo(touchPadLayer);
     }
 
 }

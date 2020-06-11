@@ -5,25 +5,27 @@
   ],
   "version": "0.1.0",
   "devDependencies": {
-    "@types/node": "12.7.5",
+    "@types/node": "14.0.11",
     "global": "4.4.0",
-    "rollup": "1.19.4",
+    "rollup": "2.13.1",
     "rollup-plugin-replace": "^2.2.0",
-    "rollup-plugin-typescript2": "0.22.1",
-    "rollup-plugin-uglify": "6.0.2",
+    "rollup-plugin-typescript2": "0.27.1",
+    "rollup-plugin-uglify": "6.0.4",
     "awesome-typescript-loader": "5.2.1",
-    "tslint": "5.20.1",
+    "tslint": "6.1.2",
     "tslint-loader": "^3.5.4",
-    "typescript": "3.8.3",
-    "uglify-js": "3.7.3",
-    "url-loader": "3.0.0",
-    "webpack": "4.41.5",
+    "typescript": "3.9.5",
+    "uglify-js": "3.9.4",
+    "url-loader": "4.1.0",
+    "webpack": "4.43.0",
     "webpack-build": "1.0.1",
-    "webpack-cli": "3.3.10"
+    "webpack-cli": "3.3.11"
   },
   "dependencies": {
+    "@phenomnomnominal/tsquery": "^4.1.0",
+    "@phenomnomnominal/tstemplate": "^0.1.0",
     "ts-loader": "^6.2.1",
-    "tslib": "1.10.0"
+    "tslib": "2.0.0"
   },
   "scripts": {
     "start": "webpack --env.debug=true -w",

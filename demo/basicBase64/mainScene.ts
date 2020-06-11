@@ -5,11 +5,11 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Image} from "@engine/renderable/impl/general/image";
 import * as logoBase64 from "../assets/engine.jpg";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Source} from "@engine/resources/resourceDecorators";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    @Source.Texture(logoBase64)
+    @Resource.Texture(logoBase64)
     private resourceLink: ResourceLink<ITexture>;
 
     public onReady() {

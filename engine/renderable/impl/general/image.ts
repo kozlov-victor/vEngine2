@@ -3,17 +3,17 @@ import {Rect} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
 import {Color} from "@engine/renderer/common/color";
 import {Point2d} from "@engine/geometry/point2d";
-import {ICloneable, IResource} from "@engine/core/declarations";
+import {ICloneable} from "@engine/core/declarations";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
-import {RenderableModel} from "../../abstract/renderableModel";
+import {RenderableModelWithResourceLink} from "@engine/renderable/abstract/renderableModelWithResourceLink";
 
 export const enum STRETCH_MODE {
     STRETCH,
     REPEAT
 }
 
-export class Image extends RenderableModel implements ICloneable<Image>,IResource<ITexture>{
+export class Image extends RenderableModelWithResourceLink implements ICloneable<Image>{
 
     public readonly type:string = 'Image';
     public borderRadius:number = 0;
@@ -23,7 +23,6 @@ export class Image extends RenderableModel implements ICloneable<Image>,IResourc
     public lineWidth:number = 0;
 
     private _pixelPerfect:boolean = false;
-    private _resourceLink:ResourceLink<ITexture>;
     private _srcRect:Rect = new Rect();
 
     constructor(game: Game) {
@@ -72,19 +71,12 @@ export class Image extends RenderableModel implements ICloneable<Image>,IResourc
     }
 
     public setResourceLink(link:ResourceLink<ITexture>):void{
-        if (DEBUG && !link) {
-            throw new DebugError(`can not set resource link: link is not passed`);
-        }
-        const oldLink:ResourceLink<ITexture> = this._resourceLink;
-        this._resourceLink = link;
+        super.setResourceLink(link);
+        const oldLink:ResourceLink<ITexture> = this.getResourceLink();
         const canBeRevalidated:boolean =
-            (oldLink===undefined || this._resourceLink!==link) &&
+            (oldLink===undefined || oldLink!==link) &&
             link.getTarget()!==undefined;
         if (canBeRevalidated) this.revalidate();
-    }
-
-    public getResourceLink():ResourceLink<ITexture>{
-        return this._resourceLink;
     }
 
     public setPixelPerfect(val:boolean):void{

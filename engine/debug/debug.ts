@@ -75,80 +75,93 @@ const prepareMessage = (e:any,lineNum:number)=>{
 
 const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
 
-    const tmpl:string = `
+    document.title = 'runtime error!';
+    devConsole.style.display = 'none';
 
-        <style>
-            .errorHeader {text-align: center;}
-            .errorText {
-                color: #ff8882;
-                white-space: pre-wrap;
-            }
-            .errorCol {color: #f30000;text-decoration: underline;}
-            .errorRow {
-                color: #bf1313;
-                font-weight: bold;
-            }
-            .errorBlockHolder {
-                background: #615f5fb8;
-                height: 100%;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                top: 0;
-                position: absolute;
-            }
-            ::selection {
-                    color: #efff00;
-                    background-color: #127315;
-            }
-            .errorBlock {
-                position: absolute;
-                left: 0;top:0;right:0;
-                border: 1px solid grey;
-                background-color: rgba(21, 15, 121, 0.88);
-                font-family: monospace;
-                padding: 10px;
-                -webkit-touch-callout: default;
-                color: #fffef8;
-            }
-            .errorBlock, .errorBlock * {
-                user-select: text;
-            }
-            .errorBlockInternal {
-                padding: 5px;
-                border: 1px solid #8f9624;
-                user-select: text;
-            }
-            .errorClose {
-                position: absolute;
-                top: 15px;
-                right: 5px;
-                content: 'x';
-                width: 20px;
-                height: 20px;
-                cursor: pointer;
-                color: white;
-            }
-       </style>
+    if (!document.querySelector('.errorBlockHolder')) {
+        const tmpl:string = `
 
-  <div class="errorBlock">
+            <style>
+                .errorHeader {text-align: center;}
+                .errorText {
+                    color: #ff8882;
+                    white-space: pre-wrap;
+                }
+                .errorCol {color: #f30000;text-decoration: underline;}
+                .errorRow {
+                    color: #bf1313;
+                    font-weight: bold;
+                }
+                .errorBlockHolder {
+                    background: #615f5fb8;
+                    height: 100%;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    position: absolute;
+                }
+                ::selection {
+                        color: #efff00;
+                        background-color: #127315;
+                }
+                .errorBlock {
+                    border: 1px solid grey;
+                    background-color: rgba(21, 15, 121, 0.88);
+                    font-family: monospace;
+                    -webkit-touch-callout: default;
+                    color: #fffef8;
+                }
+                .errorBlock, .errorBlock * {
+                    user-select: text;
+                }
+                .errorBlockInternal {
+                    position: relative;
+                    padding: 5px;
+                    margin: 5px;
+                    border: 1px solid #8f9624;
+                    user-select: text;
+                }
+                .errorClose {
+                    position: absolute;
+                    top: 15px;
+                    right: 5px;
+                    content: 'x';
+                    width: 20px;
+                    height: 20px;
+                    cursor: pointer;
+                    color: white;
+                }
+            </style>
+
+            <div class="errorBlock">
+
+            </div>
+
+        `;
+        const errDiv:HTMLElement = document.createElement('div');
+        errDiv.className = 'errorBlockHolder';
+        errDiv.innerHTML = tmpl;
+        document.body.appendChild(errDiv);
+    }
+
+    const errorBlockTmpl = `
         <div class="errorBlockInternal">
-            <div class="errorClose" onclick="this.closest('.errorBlockHolder').remove();">x</div>
-            <h1 class="errorHeader">Runtime error!</h1>
+            <div class="errorClose"
+            onclick="
+                this.closest('.errorBlockInternal').remove();
+                if (!document.querySelector('.errorBlockInternal')) document.querySelector('.errorBlockHolder').remove();"
+            >x</div>
             <h3 class="errorText">${runtimeInfo}</h3>
             <div>${filename?filename:''}</div>
             <div>-------------------</div>
-           <pre>$_content</pre>
+            <pre>${debugInfo}</pre>
+            </div>
         </div>
-  </div>
-
-`;
-    const errDiv:HTMLElement = document.createElement('div');
-    errDiv.className = 'errorBlockHolder';
-    errDiv.innerHTML = tmpl.replace('$_content',debugInfo);
-    document.body.appendChild(errDiv);
-    document.title = 'runtime error!';
-    devConsole.style.display = 'none';
+    `;
+    const d = document.createElement('div');
+    d.innerHTML = errorBlockTmpl;
+    document.querySelector('.errorBlock')!.appendChild(d);
 };
 
 

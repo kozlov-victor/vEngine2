@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Source} from "@engine/resources/resourceDecorators";
+import {Resource} from "@engine/resources/resourceDecorators";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {Game} from "@engine/core/game";
@@ -32,55 +32,55 @@ type LEVEL_SCHEMA = typeof import("./level/l1.json");
 
 export class MainScene extends Scene {
 
-    @Source.Texture('./catGame/res/sprite/cat.png')
+    @Resource.Texture('./catGame/res/sprite/cat.png')
     private spriteSheetHero: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/wall1.png')
+    @Resource.Texture('./catGame/res/sprite/wall1.png')
     private wall1: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/wall2.png')
+    @Resource.Texture('./catGame/res/sprite/wall2.png')
     private wall2: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/monster1.png')
+    @Resource.Texture('./catGame/res/sprite/monster1.png')
     private spriteSheetMonster1: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/lava.png')
+    @Resource.Texture('./catGame/res/sprite/lava.png')
     private spriteSheetLava: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/water.png')
+    @Resource.Texture('./catGame/res/sprite/water.png')
     private spriteSheetWater: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/monster2.png')
+    @Resource.Texture('./catGame/res/sprite/monster2.png')
     private spriteSheetMonster2: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/zombie.png')
+    @Resource.Texture('./catGame/res/sprite/zombie.png')
     private spriteSheetZombie: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/bloodDrop.png')
+    @Resource.Texture('./catGame/res/sprite/bloodDrop.png')
     private spriteSheetBloodDrop: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/testTube.png')
+    @Resource.Texture('./catGame/res/sprite/testTube.png')
     private spriteSheetTestTube: ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/bullet3.png')
+    @Resource.Texture('./catGame/res/sprite/bullet3.png')
     private spriteSheetBullet: ResourceLink<ITexture>;
 
-    @Source.Sound('./catGame/res/sound/theme2.ogg')
+    @Resource.Sound('./catGame/res/sound/theme2.ogg')
     private soundTheme1Res: ResourceLink<void>;
 
-    @Source.Sound('./catGame/res/sound/hurt.ogg')
+    @Resource.Sound('./catGame/res/sound/hurt.ogg')
     private soundHurt: ResourceLink<void>;
 
-    @Source.Sound('./catGame/res/sound/hurt.ogg')
+    @Resource.Sound('./catGame/res/sound/hurt.ogg')
     private soundHurt2: ResourceLink<void>;
 
-    @Source.Sound('./catGame/res/sound/shoot.ogg')
+    @Resource.Sound('./catGame/res/sound/shoot.ogg')
     private soundShoot: ResourceLink<void>;
 
-    @Source.Sound('./catGame/res/sound/jump.ogg')
+    @Resource.Sound('./catGame/res/sound/jump.ogg')
     private soundJump: ResourceLink<void>;
 
-    @Source.Sound('./catGame/res/sound/pick.ogg')
+    @Resource.Sound('./catGame/res/sound/pick.ogg')
     private soundPick: ResourceLink<void>;
 
     private level: LEVEL_SCHEMA;

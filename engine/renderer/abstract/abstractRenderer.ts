@@ -29,9 +29,9 @@ interface IHTMLElement extends HTMLElement{
 }
 
 interface IDocument extends Document {
-    cancelFullScreen:()=>void;
-    mozCancelFullScreen:()=>void;
-    webkitCancelFullScreen:()=>void;
+    cancelFullScreen?:()=>void;
+    mozCancelFullScreen?:()=>void;
+    webkitCancelFullScreen?:()=>void;
 }
 
 export interface IRenderTarget {
@@ -72,11 +72,11 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     public cancelFullScreen():void {
         this._fullScreenRequested =false;
         const doc:IDocument = globalThis.document as IDocument;
-        if(doc.cancelFullScreen) {
+        if(doc.cancelFullScreen!==undefined) {
             (doc).cancelFullScreen();
-        } else if(doc.mozCancelFullScreen) {
+        } else if(doc.mozCancelFullScreen!==undefined) {
             doc.mozCancelFullScreen();
-        } else if(doc.webkitCancelFullScreen) {
+        } else if(doc.webkitCancelFullScreen!==undefined) {
             doc.webkitCancelFullScreen();
         }
     }

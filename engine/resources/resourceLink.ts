@@ -1,4 +1,10 @@
 
+export const enum ResourceLinkState {
+    CREATED = 'CREATED',
+    PENDING = 'PENDING',
+    COMPLETED = 'COMPLETED',
+    PENDING_ERROR = 'PENDING_ERROR'
+}
 
 export class ResourceLink<T> {
 
@@ -10,6 +16,7 @@ export class ResourceLink<T> {
     }
 
     public type:'ResourceLink';
+    public state:ResourceLinkState = ResourceLinkState.CREATED;
 
     private _target:T;
 
@@ -21,6 +28,7 @@ export class ResourceLink<T> {
 
     public setTarget(t:T):void{
         this._target = t;
+        this.state = ResourceLinkState.COMPLETED;
     }
 
     public getTarget():T{

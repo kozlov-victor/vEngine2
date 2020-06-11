@@ -4,10 +4,11 @@ import {DebugError} from "@engine/debug/debugError";
 import {Size} from "@engine/geometry/size";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ResourceLink} from "@engine/resources/resourceLink";
+import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
+import {RenderableModelWithResourceLink} from "@engine/renderable/abstract/renderableModelWithResourceLink";
 
-export class NinePatchImage extends RenderableModel {
+export class NinePatchImage extends RenderableModelWithResourceLink {
 
     public readonly type:string = 'NinePatchImage';
     private a:number = 5;
@@ -17,8 +18,6 @@ export class NinePatchImage extends RenderableModel {
 
     private _patches:Image[] = new Array(9);
 
-    // resource
-    private _resourceLink:ResourceLink<ITexture>;
 
     /**
      *
@@ -66,19 +65,12 @@ export class NinePatchImage extends RenderableModel {
     }
 
     public setResourceLink(link:ResourceLink<ITexture>):void{
-        if (DEBUG && !link) {
-            throw new DebugError(`can not set resource link: link is not passed`);
-        }
-        this._resourceLink = link;
+        super.setResourceLink(link);
         for (let i:number=0;i<this._patches.length;i++) {
             this._patches[i] = new Image(this.game);
             this._patches[i].setResourceLink(link);
             this.appendChild(this._patches[i]);
         }
-    }
-
-    public getResourceLink():ResourceLink<ITexture>{
-        return this._resourceLink;
     }
 
     public draw():void{}

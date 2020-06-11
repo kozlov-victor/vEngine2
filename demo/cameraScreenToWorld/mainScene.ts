@@ -5,7 +5,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Source} from "@engine/resources/resourceDecorators";
+import {Resource} from "@engine/resources/resourceDecorators";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
@@ -13,8 +13,8 @@ import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 
 export class MainScene extends Scene {
 
-    @Source.Texture('./assets/logo.png') private logoLink:ResourceLink<ITexture>;
-    @Source.Texture('./assets/repeat.jpg')  private bgLink:ResourceLink<ITexture>;
+    @Resource.Texture('./assets/logo.png') private logoLink:ResourceLink<ITexture>;
+    @Resource.Texture('./assets/repeat.jpg')  private bgLink:ResourceLink<ITexture>;
 
     public onReady() {
 

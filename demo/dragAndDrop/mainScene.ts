@@ -3,12 +3,12 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Source} from "@engine/resources/resourceDecorators";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 
 export class MainScene extends Scene {
 
-    @Source.Texture('./assets/logo.png')
+    @Resource.Texture('./assets/logo.png')
     private logoLink:ResourceLink<ITexture>;
 
 

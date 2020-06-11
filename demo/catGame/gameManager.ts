@@ -86,6 +86,7 @@ export class GameManager {
             else {
                 const numOfLives:number = InfoPanel.getCreatedInstance().getNumOfLives();
                 const levelCompletedScene =new LevelCompletedScene(this.game);
+                console.log(levelCompletedScene);
                 this.game.runScene(levelCompletedScene,new CellsAppearingTransition(this.game));
                 levelCompletedScene.on(SCENE_EVENTS.COMPLETED, e=>{
                     this.game.getCurrScene().setTimeout(()=>{

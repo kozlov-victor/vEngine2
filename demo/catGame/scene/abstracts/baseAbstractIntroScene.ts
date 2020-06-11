@@ -12,8 +12,9 @@ import {Size} from "@engine/geometry/size";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import * as intro from "../../level/intro.json";
-import {Source} from "@engine/resources/resourceDecorators";
 import {ITexture} from "@engine/renderer/common/texture";
+import {Game} from "@engine/core/game";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 type LEVEL_SCHEMA = typeof import("../../level/l1.json");
 
@@ -24,11 +25,10 @@ export abstract class BaseAbstractIntroScene extends Scene {
     protected abstract soundThemeRes:ResourceLink<void>;
     protected abstract spriteSheetLabel:ResourceLink<ITexture>;
 
-    @Source.Texture('./catGame/res/sprite/wall1.png')
+    @Resource.Texture('./catGame/res/sprite/wall1.png')
     private wall1: ResourceLink<ITexture>;
 
     private level: LEVEL_SCHEMA = intro as unknown as LEVEL_SCHEMA;
-
 
     public onReady(): void {
         this.setBg();
@@ -36,6 +36,10 @@ export abstract class BaseAbstractIntroScene extends Scene {
         this.startSound();
         this.createUI();
         this.listenUI();
+    }
+
+    constructor(game:Game) {
+        super(game);
     }
 
     protected startSound():void {

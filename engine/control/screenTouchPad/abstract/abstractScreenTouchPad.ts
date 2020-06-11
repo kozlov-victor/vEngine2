@@ -12,22 +12,29 @@ export abstract class AbstractScreenTouchPad {
     protected constructor(protected game:Game) {
     }
 
-    public addButton(b:AbstractScreenTouchButton):void {
+    protected addButton(b:AbstractScreenTouchButton):void {
         this._buttons.push(b);
+        const kbControl:KeyboardControl = this.game.getControl<KeyboardControl>('KeyboardControl')!;
         b.renderableModel.on(MOUSE_EVENTS.mouseDown,()=>{
-            this.game.getControl<KeyboardControl>('KeyboardControl')!.triggerKeyPress(b.keyCode);
+            kbControl.triggerKeyPress(b.keyCode);
         });
         b.renderableModel.on(MOUSE_EVENTS.mouseLeave,()=>{
-            this.game.getControl<KeyboardControl>('KeyboardControl')!.triggerKeyRelease(b.keyCode);
+            kbControl.triggerKeyRelease(b.keyCode);
         });
         b.renderableModel.on(MOUSE_EVENTS.mouseUp,()=>{
-            this.game.getControl<KeyboardControl>('KeyboardControl')!.triggerKeyRelease(b.keyCode);
+            kbControl.triggerKeyRelease(b.keyCode);
         });
     }
 
     public appendTo(layer:Layer) {
         this._buttons.forEach(b=>{
             layer.appendChild(b.renderableModel);
+        });
+    }
+
+    public releaseAllButtons():void{
+        this._buttons.forEach(b=>{
+            this.game.getControl<KeyboardControl>('KeyboardControl')!.triggerKeyRelease(b.keyCode);
         });
     }
 
