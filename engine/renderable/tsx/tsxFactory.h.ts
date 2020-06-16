@@ -8,6 +8,7 @@ import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
+import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
 
 export interface IElementRef<T> {
     current:T;
@@ -27,26 +28,29 @@ export class VEngineReact {
         return {current:undefined!};
     }
 
-    public static createElement(item:string, props:Record<string, any>,...children: VirtualNode[]):VirtualNode{
+    public static createElement(item:string|typeof VEngineTsxComponent, props:Record<string, any>,...children: VirtualNode[]):VirtualNode|typeof VEngineTsxComponent{
+        if ((item as typeof VEngineTsxComponent).bind!==undefined) {
+            return new VirtualNode(props,{type:'component',ctor:item});
+        }
         let element:VirtualNode;
         switch (item) {
             case 'v_circle':
-                element = new VirtualNode(props,Circle);
+                element = new VirtualNode(props,{type:'node',ctor:Circle});
                 break;
             case 'v_ellipse':
-                element = new VirtualNode(props,Ellipse);
+                element = new VirtualNode(props,{type:'node',ctor:Ellipse});
                 break;
             case 'v_rectangle':
-                element = new VirtualNode(props,Rectangle);
+                element = new VirtualNode(props,{type:'node',ctor:Rectangle});
                 break;
             case 'v_line':
-                element = new VirtualNode(props,Line);
+                element = new VirtualNode(props,{type:'node',ctor:Line});
                 break;
             case 'v_null_game_object':
-                element = new VirtualNode(props,NullGameObject);
+                element = new VirtualNode(props,{type:'node',ctor:NullGameObject});
                 break;
             case 'v_image':
-                element = new VirtualNode(props,Image);
+                element = new VirtualNode(props,{type:'node',ctor:Image});
                 break;
             default:
                 if (DEBUG) throw new DebugError(`unknown jsx tag: ${item}`);

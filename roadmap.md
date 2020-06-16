@@ -38,3 +38,90 @@ bug: draggable with camera
 - Заливка спрайтом (repeat | clip)
 
 - filters with accumulation
+- physics body maxVelocity
+- debug panel with embedded fonts
+
+
+window.document.addEventListener("touchmove", disableSwipeFn, false);
+var disableSwipeFn = function disableSwipeFn(e) {
+ e.preventDefault();
+
+ if (typeof window.scroll === "function") {
+   window.scroll(0, 0);
+ }
+
+ return false;
+};
+
+
+api.getMaxShaderPrecision = function (gl) {
+ if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT).precision > 0 && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0) {
+   return "highp";
+ }
+
+ if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT).precision > 0 && gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT).precision > 0) {
+   return "mediump";
+ }
+
+ return "lowp";
+};
+
+
+
+api.mergeGroup = true;
+       /**
+        * Specify the property to be used when sorting entities.
+        * Accepted values : "x", "y", "z"
+        * @public
+        * @type {string}
+        * @default "z"
+        * @name sortOn
+        * @memberOf me.game
+        */
+        
+        
+mergeGroup 
+renderer.flush();
+
+/**
+        * Specify whether to pause the game when losing focus.<br>
+        * @type {Boolean}
+        * @default true
+        * @memberOf me.sys
+        */
+       pauseOnBlur: true,
+       
+       
+       
+       
+/**
+       * Specify the rendering method for layers <br>
+       * if false, visible part of the layers are rendered dynamically<br>
+       * if true, the entire layers are first rendered into an offscreen
+       * canvas<br>
+       * the "best" rendering method depends of your game<br>
+       * (amount of layer, layer size, amount of tiles per layer, etc.)<br>
+       * note : rendering method is also configurable per layer by adding this
+       * property to your layer (in Tiled)<br>
+       * @type {Boolean}
+       * @default false
+       * @memberOf me.sys
+       */
+preRender: false 
+
+
+
+
+/**
+* Convert this vector into isometric coordinate space
+* @name toIso
+* @memberOf me.Vector2d
+* @function
+* @return {me.Vector2d} Reference to this object for method chaining
+*/
+toIso: function toIso() {
+ return this._set(this.x - this.y, (this.x + this.y) * 0.5);
+},
+        
+        
+

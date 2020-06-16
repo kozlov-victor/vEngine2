@@ -2,8 +2,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
-const colors = require('./node_tools/colors');
+const cliUI = require('./node_tools/cliUI');
 const engineTransformer = require('./node_tools/transformers/build/engineTransformer').engineTransformer;
+
 
 class WebpackDonePlugin{
     apply(compiler){
@@ -17,10 +18,12 @@ class WebpackDonePlugin{
             const mm = leadZero(date.getMinutes());
             const ss = leadZero(date.getSeconds());
             setTimeout(()=>{
-                console.log('    ',colors.bg.Blue,colors.fg.Cyan,'╔═▓════════════════╗',colors.Reset);
-                console.log('    ',colors.bg.Blue,colors.fg.Cyan,'║--===compiled===--║',colors.Reset);
-                console.log('    ',colors.bg.Blue,colors.fg.Cyan,`║-----${hh}:${mm}:${ss}-----║`,colors.Reset);
-                console.log('    ',colors.bg.Blue,colors.fg.Cyan,'╚══════════════════╝',colors.Reset);
+                cliUI.showWindow(
+                    [
+                        `--===compiled===--`,
+                        `-----${hh}:${mm}:${ss}-----`
+                    ]
+                );
             },10);
 
         });
@@ -28,9 +31,16 @@ class WebpackDonePlugin{
     }
 }
 
-module.exports = (env={})=>{
+module.exports = async (env={})=>{
 
     console.log('env',env);
+    const project = await cliUI.prompt(
+        [
+            ` --===started===-- `,
+            `--vEngine compiler--`,
+            `enter project name`,
+            `or leave empty`]
+    );
 
     const debug = env.debug==='true';
 
@@ -41,8 +51,8 @@ module.exports = (env={})=>{
         //chunkFilename: "[name].chunk.js",
     };
 
-    if (env.project) {
-        entry[env.project] = [`./demo/${env.project}/index.ts`]
+    if (project) {
+        entry[project] = [`./demo/${project}/index.ts`]
     } else {
         let dirs = fs.readdirSync('./demo');
         dirs.forEach((dir)=>{

@@ -10,50 +10,41 @@ export class VEngineTsxDOM {
 
     public static render(component:VEngineTsxComponent<any>, root:RenderableModel):void{
         (component as unknown as {rootNativeElement:RenderableModel}).rootNativeElement = root;
-        const virtualNode:VirtualNode = component.render();
-        VEngineTsxDOM.compareAndRenderRoot(VEngineReact.getGame(),virtualNode,root);
+        const newVirtualDom:VirtualNode = new VirtualNode({},{type:"node",ctor:undefined});
+        newVirtualDom.children = [component.render()];
+        const oldVirtualDom:VirtualNode =
+            ((component as unknown as {oldVirtualDom:VirtualNode}).oldVirtualDom) ??
+            new VirtualNode({},{type:"node",ctor:undefined});
+        VEngineTsxDOM.compareAndRenderChildren(VEngineReact.getGame(),newVirtualDom,oldVirtualDom,root);
+        (component as unknown as {oldVirtualDom:VirtualNode}).oldVirtualDom = newVirtualDom;
     }
 
-    private static compareAndRenderRoot(game:Game,virtualNode:VirtualNode,parent:RenderableModel):void{
-        let realNode:RenderableModel = parent.children[0];
-        if (realNode===undefined) {
-            realNode = new virtualNode.elementConstructor(game);
-            realNode.setProps(virtualNode.props);
-            VEngineTsxDOM.setGenericProps(realNode,virtualNode.props);
-            parent.appendChild(realNode);
-        } else realNode.setProps(virtualNode.props);
-        VEngineTsxDOM.compareAndRenderChildren(game,virtualNode,realNode);
-    }
 
-    private static compareAndRenderChildren(game:Game,virtualParent:VirtualNode,realParent:RenderableModel):void{
-        const maxNumOfChild:number = Math.max(virtualParent?.children?.length??0,realParent?.children?.length??0);
+    private static compareAndRenderChildren(game:Game,newVirtualDom:VirtualNode,oldVirtualDom:VirtualNode,parent:RenderableModel):void{
+        const maxNumOfChild:number = Math.max(newVirtualDom?.children?.length??0,oldVirtualDom?.children?.length??0);
         for (let i:number = 0;i<maxNumOfChild;i++) {
-            const virtualChild:Optional<VirtualNode> = virtualParent.children[i];
-            let realChild:Optional<RenderableModel> = realParent.children[i];
-            if (virtualChild===undefined && realChild!==undefined) {  // remove real node
-                realChild.removeSelf();
-                i--;
-            } else if (virtualChild!==undefined && realChild!==undefined) {
-                if (virtualChild.elementConstructor!==realChild.constructor) { // replace real node
-                    realChild.removeSelf();
-                    i--;
-                    realChild = new virtualChild.elementConstructor(game);
-                    realChild!.setProps(virtualChild.props);
-                    realParent.appendChild(realChild!);
-                    VEngineTsxDOM.setGenericProps(realChild!,virtualChild.props);
+            const newVirtualChild:Optional<VirtualNode> = newVirtualDom?.children?.[i];
+            const oldVirtualChild:Optional<VirtualNode> = oldVirtualDom?.children?.[i];
+            let realChild:Optional<RenderableModel> = parent.children[i];
+            if (newVirtualChild===undefined && oldVirtualChild!==undefined) {  // remove real node
+                realChild?.removeSelf();
+            } else if (newVirtualChild!==undefined && oldVirtualChild!==undefined) {
+                if (newVirtualChild.elementConstructor!==oldVirtualChild.elementConstructor) { // replace real node
+                    realChild?.removeSelf();
+                    realChild = new newVirtualChild.elementConstructor.ctor(game);
+                    realChild!.setProps(newVirtualChild.props);
+                    parent.appendChild(realChild!);
+                    VEngineTsxDOM.setGenericProps(realChild!,newVirtualChild.props);
                 } else {
-                    realChild.setProps(virtualChild.props); // update real node
+                    realChild.setProps(newVirtualChild.props); // update real node
                 }
-            } else if ((virtualChild!==undefined && realChild===undefined)){ // (virtualChild!==undefined && realChild==undefined)  create new real node
-                realChild = new virtualChild.elementConstructor(game);
-                realChild!.setProps(virtualChild.props);
-                realParent.appendChild(realChild!);
-                VEngineTsxDOM.setGenericProps(realChild!,virtualChild.props);
-            } else {
-                // virtual and real node is undefined due to removing, ignore
-                continue;
+            } else if ((newVirtualChild!==undefined && oldVirtualChild===undefined)){ // create new real node
+                realChild = new newVirtualChild.elementConstructor.ctor(game);
+                realChild!.setProps(newVirtualChild.props);
+                parent.appendChild(realChild!);
+                VEngineTsxDOM.setGenericProps(realChild!,newVirtualChild.props);
             }
-            VEngineTsxDOM.compareAndRenderChildren(game,virtualChild,realChild!);
+            VEngineTsxDOM.compareAndRenderChildren(game,newVirtualChild,oldVirtualChild,realChild!);
         }
     }
 

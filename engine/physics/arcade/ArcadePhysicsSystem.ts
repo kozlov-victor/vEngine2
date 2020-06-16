@@ -18,7 +18,7 @@ export interface ICreateRigidBodyParams {
     ignoreCollisionWithGroupNames?:string[];
 }
 
-const instersect = (a:string[],b:string[]):boolean=> {
+const intersect = (a:string[],b:string[]):boolean=> {
     if (a.length===0 || b.length===0) return false;
     for (let i = 0; i < a.length; i++) {
         if (b.indexOf(a[i])>-1) return true;
@@ -61,8 +61,8 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                     if (entityBody===undefined) continue;
                     if (!MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) continue;
                     if (
-                        instersect(playerBody.groupNames,entityBody.ignoreCollisionWithGroupNames) ||
-                        instersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
+                        intersect(playerBody.groupNames,entityBody.ignoreCollisionWithGroupNames) ||
+                        intersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
                     ) {
                         this.emitOverlapEvents(playerBody, entityBody);
                     } else {
