@@ -11,7 +11,7 @@ interface IState {
 
 export class ChildComponent extends VEngineTsxComponent<IState> {
 
-    public ind:number;
+    public ind:number = 0;
 
     public onCircleClick(e:MousePoint):void{
         (e.target as Circle).radius+=1;

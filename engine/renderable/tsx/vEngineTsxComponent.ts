@@ -7,8 +7,8 @@ export abstract class VEngineTsxComponent<T extends Record<string, any>> {
 
     public state:T;
 
-    private rootNativeElement:RenderableModel;
-    private oldVirtualDom:VirtualNode;
+    public rootNativeElement:RenderableModel;
+    public oldVirtualDom:VirtualNode;
 
     protected constructor() {
     }

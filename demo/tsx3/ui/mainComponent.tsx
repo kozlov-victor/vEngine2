@@ -35,7 +35,7 @@ export class MainComponent extends VEngineTsxComponent<IState> {
                     lineWidth={1}
                 />
 
-                {arr.map((it,ind)=><ChildComponent/>)}
+                {arr.map((it,ind)=><ChildComponent ind={ind}/>)}
 
                 <v_rectangle
                     pos={{x:20,y:100}}
