@@ -10,10 +10,6 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
 import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
 
-export interface IElementRef<T> {
-    current:T;
-}
-
 const flattenDeep = (arr:any[]):any[]=> {
     return arr.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
 };
