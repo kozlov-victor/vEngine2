@@ -24,15 +24,20 @@ export class EventEmitter{
 
     }
 
-    public off(eventName:string,callback:(arg?:unknown)=>void):void {
-        const es:((arg?:unknown)=>void)[]  = this._events[eventName];
-        if (!es) return;
-        const index:number = es.indexOf(callback);
-        if (DEBUG && index===-1) {
-            console.error(callback);
-            throw new DebugError(`can not remove event listener ${eventName}`);
+    public off(eventName:string,callback?:(arg?:unknown)=>void):void {
+        if (callback===undefined) {
+            if (this._events[eventName]!==undefined) this._events[eventName].length = 0;
+        } else {
+            const es:((arg?:unknown)=>void)[]  = this._events[eventName];
+            if (!es) return;
+            const index:number = es.indexOf(callback);
+            if (DEBUG && index===-1) {
+                console.error(callback);
+                throw new DebugError(`can not remove event listener ${eventName}`);
+            }
+            es.splice(index,1);
         }
-        es.splice(index,1);
+
     }
 
     public trigger(eventName:string,data:unknown):void {

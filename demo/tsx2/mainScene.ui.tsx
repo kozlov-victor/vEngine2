@@ -22,6 +22,7 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
     public render():VirtualNode {
         const arr:number[] = this.state.numOfCircles>0?new Array(this.state.numOfCircles):[];
         arr.fill(0);
+        console.log({arr});
         return (
             <v_rectangle
                 pos={{x:10,y:10}}
@@ -37,7 +38,6 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
                 />
 
 
-
                 {arr.map((it,ind)=>
                     <v_circle
                         center={{x:40+ind*45,y:50}}
@@ -45,9 +45,6 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
                         lineWidth={1}
                         click={this.onCircleClick.bind(this)}
                     >
-                        <v_rectangle
-                            size={{width:10,height:10}}
-                        />
                     </v_circle>
                 )}
 
@@ -69,10 +66,12 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
     }
 
     public onMinusClick():void{
+        console.log('onMinusClick');
         this.setState({numOfCircles:this.state.numOfCircles-1});
     }
 
     public onPlusClick():void{
+        console.log('onPlusClick');
         this.setState({numOfCircles:this.state.numOfCircles+1});
     }
 

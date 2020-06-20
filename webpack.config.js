@@ -18,12 +18,22 @@ class WebpackDonePlugin{
             const mm = leadZero(date.getMinutes());
             const ss = leadZero(date.getSeconds());
             setTimeout(()=>{
-                cliUI.showWindow(
-                    [
-                        `--===compiled===--`,
-                        `-----${hh}:${mm}:${ss}-----`
-                    ]
-                );
+                if (stats.compilation.errors && stats.compilation.errors.length) {
+                    cliUI.showErrorWindow(
+                        [
+                            `--===compiled with errors===--`,
+                            `-----${hh}:${mm}:${ss}-----`
+                        ]
+                    );
+                } else {
+                    cliUI.showInfoWindow(
+                        [
+                            `--===compiled===--`,
+                            `-----${hh}:${mm}:${ss}-----`
+                        ]
+                    );
+                }
+
             },10);
 
         });

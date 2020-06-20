@@ -74,6 +74,7 @@ export interface IParentChild {
     appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel):void;
     appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel):void;
     prependChild(c:RenderableModel):void;
+    replaceChild(c:RenderableModel,newChild:RenderableModel):void;
     removeChildAt(i:number):void;
     removeChild(c:RenderableModel):void;
     removeSelf():void;

@@ -58,7 +58,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public filters:IFilter[] = [];
     public alpha:number = 1;
     public preloadingTaskFromDecorators:((scene:Scene)=>void)[];
-    public readonly lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED;
+    public readonly lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED; // todo
 
     protected preloadingGameObject!:RenderableModel;
     private _layers:Layer[] = [];

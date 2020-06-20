@@ -20,7 +20,7 @@ export class ChildComponent extends VEngineTsxComponent<IState> {
     public render(): VirtualNode {
         return (
             <v_circle
-                center={{x:45+this.ind*45,y:50}}
+                center={{x:this.ind*45,y:50}}
                 fillColor={{r:32,g:233,b:53}}
                 lineWidth={3}
                 click={this.onCircleClick.bind(this)}

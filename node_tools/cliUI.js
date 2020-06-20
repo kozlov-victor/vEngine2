@@ -26,21 +26,29 @@ const getLine = (symbol,length)=>{
     return new Array(length).fill(symbol).join('');
 };
 
-const showWindow = (text)=>{
+const showWindow = (text,colorBg,colorFg)=>{
     const strings = text.substr?text.split('\n'):text;
     let maxLength = Math.max(...strings.map(it=>it.length));
     if (maxLength<3) maxLength = 3;
 
-    console.log('    ',colors.bg.Blue,colors.fg.Cyan,`╔═▓${getLine('═',maxLength-2)}╗`,colors.Reset);
+    console.log('    ',colorBg,colorFg,`╔═▓${getLine('═',maxLength-2)}╗`,colors.Reset);
     for (const string of strings) {
-        console.log('    ',colors.bg.Blue,colors.fg.Cyan,`║${centerPad(string,maxLength)}║`,colors.Reset);
+        console.log('    ',colorBg,colorFg,`║${centerPad(string,maxLength)}║`,colors.Reset);
     }
-    console.log('    ',colors.bg.Blue,colors.fg.Cyan,`╚${getLine('═',maxLength)}╝`,colors.Reset);
+    console.log('    ',colorBg,colorFg,`╚${getLine('═',maxLength)}╝`,colors.Reset);
+};
+
+const showInfoWindow = (text)=>{
+   showWindow(text,colors.bg.Blue,colors.fg.Cyan);
+};
+
+const showErrorWindow = (text)=>{
+    showWindow(text,colors.bg.Magenta,colors.fg.White);
 };
 
 const prompt = (text,cb)=>{
     return new Promise((resolve)=>{
-        showWindow(text);
+        showInfoWindow(text);
         console.log(colors.fg.Green);
         readline.question('>', val => {
             readline.close();
@@ -53,4 +61,6 @@ const prompt = (text,cb)=>{
 };
 
 module.exports.showWindow = showWindow;
+module.exports.showInfoWindow = showInfoWindow;
+module.exports.showErrorWindow = showErrorWindow;
 module.exports.prompt = prompt;

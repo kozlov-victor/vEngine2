@@ -128,7 +128,6 @@ export class Game {
         return this._audioPlayer as T;
     }
 
-
     public getCurrentTime():number{
         return this._lastTime;
     }
@@ -276,7 +275,7 @@ export class Game {
             this._renderer.cancelFullScreen();
             this._renderer.destroy();
         }
-        if (this.getAudioPlayer()) this.getAudioPlayer().stopAll();
+        if (this._audioPlayer) this._audioPlayer.stopAll();
     }
 
     public revalidate():void {

@@ -7,7 +7,7 @@ import {ChildComponent} from "./childComponent";
 import {MousePoint} from "@engine/control/mouse/mousePoint";
 
 interface IState {
-    numOfCircles:number;
+    radius:number;
 }
 
 export class MainComponent extends VEngineTsxComponent<IState> {
@@ -15,13 +15,11 @@ export class MainComponent extends VEngineTsxComponent<IState> {
     constructor(private resourceLink:ResourceLink<ITexture>) {
         super();
         this.state = {
-            numOfCircles : 2
+            radius : 20
         };
     }
 
     public render():VirtualNode {
-        const arr:number[] = this.state.numOfCircles>0?new Array(this.state.numOfCircles):[];
-        arr.fill(0);
         return (
             <v_rectangle
                 pos={{x:10,y:10}}
@@ -30,24 +28,12 @@ export class MainComponent extends VEngineTsxComponent<IState> {
                 size={{width:300,height:220}}
             >
 
-                <v_circle
-                    center={{x:0,y:50}}
-                    fillColor={{r:22,g:233,b:43}}
-                    lineWidth={1}
-                />
-
-                {arr.map((it,ind)=><ChildComponent ind={ind}/>)}
-
-                <v_rectangle
-                    pos={{x:20,y:100}}
-                    size={{width:50,height:50}}
-                    click={this.onMinusClick.bind(this)}
-                />
+                <ChildComponent radius={this.state.radius}/>
 
                 <v_rectangle
                     pos={{x:120,y:100}}
                     size={{width:50,height:50}}
-                    click={this.onPlusClick.bind(this)}
+                    click={this.btnClick.bind(this)}
                 />
 
             </v_rectangle>
@@ -55,14 +41,9 @@ export class MainComponent extends VEngineTsxComponent<IState> {
         );
     }
 
-    public onMinusClick(e:MousePoint):void{
-        this.setState({numOfCircles:this.state.numOfCircles-1});
+    public btnClick(e:MousePoint):void{
+        this.setState({radius:this.state.radius+1});
     }
-
-    public onPlusClick(e:MousePoint):void{
-        this.setState({numOfCircles:this.state.numOfCircles+1});
-    }
-
 
 
 }

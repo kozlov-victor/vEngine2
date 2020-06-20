@@ -28,7 +28,8 @@ export class VEngineReact {
         return {current:undefined!};
     }
 
-    public static createElement(item:string|typeof VEngineTsxComponent, props:Record<string, any>,...children: VirtualNode[]):VirtualNode|typeof VEngineTsxComponent{
+    public static createElement(item:string|typeof VEngineTsxComponent, props:Record<string, any>|null,...children: VirtualNode[]):VirtualNode|typeof VEngineTsxComponent{
+        if (props===null) props = {};
         if ((item as typeof VEngineTsxComponent).bind!==undefined) {
             return new VirtualNode(props,{type:'component',ctor:item});
         }

@@ -10,7 +10,10 @@ export class ParentChildDelegate<T extends IParentChild> {
 
     constructor(private model:T) {}
 
-    public appendChild(c:T,afterAppended?:OnTreeModifiedCallback<T>):void {
+    public afterChildAppended?:OnTreeModifiedCallback<T>;
+    public afterChildRemoved?:OnTreeModifiedCallback<T>;
+
+    public appendChild(c:T):void {
         if (DEBUG) {
             if (c===this.model) throw new DebugError(`parent and child objects are the same`);
             if (this.model.children.find((it:IParentChild)=>it===c)) {
@@ -20,76 +23,85 @@ export class ParentChildDelegate<T extends IParentChild> {
         }
         c.parent = this.model;
         this.model.children.push(c);
-        if (afterAppended!==undefined) afterAppended(c);
+        if (this.afterChildAppended!==undefined) this.afterChildAppended(c);
     }
 
-    public appendChildAt(c:T,index:number,afterAppended?:OnTreeModifiedCallback<T>):void{
+    public appendChildAt(c:T,index:number):void{
         if (DEBUG) {
             if (index>this.model.children.length-1) throw new DebugError(`can not insert element: index is out of range (${index},${this.model.children.length-1})`);
         }
         c.parent = this.model;
         this.model.children.splice(index,0,c);
-        if (afterAppended!==undefined) afterAppended(c);
+        if (this.afterChildAppended!==undefined) this.afterChildAppended(c);
     }
 
-    public appendChildAfter(modelAfter:T,newChild:T,afterAppended?:OnTreeModifiedCallback<T>):void{
+    public appendChildAfter(modelAfter:T,newChild:T):void{
         const afterIndex:number = this.model.children.indexOf(modelAfter);
         if (DEBUG) {
             if (afterIndex===-1) throw new DebugError(`can not insert element: object is detached`);
         }
-        if (afterIndex===this.model.children.length-1) this.appendChild(newChild,afterAppended);
-        else this.appendChildAt(newChild,afterIndex+1,afterAppended);
+        if (afterIndex===this.model.children.length-1) this.appendChild(newChild);
+        else this.appendChildAt(newChild,afterIndex+1);
     }
 
-    public appendChildBefore(modelBefore:T,newChild:T,afterAppended?:OnTreeModifiedCallback<T>):void{
+    public appendChildBefore(modelBefore:T,newChild:T):void{
         const beforeIndex:number = this.model.children.indexOf(modelBefore);
         if (DEBUG) {
             if (beforeIndex===-1) throw new DebugError(`can not insert element: object is detached`);
         }
-        if (beforeIndex===0) this.prependChild(newChild,afterAppended);
-        else this.appendChildAt(newChild,beforeIndex-1,afterAppended);
+        if (beforeIndex===0) this.prependChild(newChild);
+        else this.appendChildAt(newChild,beforeIndex-1);
     }
 
 
-    public prependChild(c:T,afterAppended?:OnTreeModifiedCallback<T>):void {
+    public prependChild(c:T):void {
         c.parent = this.model;
         this.model.children.unshift(c);
-        if (afterAppended!==undefined) afterAppended(c);
+        if (this.afterChildAppended!==undefined) this.afterChildAppended(c);
     }
 
-    public removeChildAt(i:number,afterRemoved?:OnTreeModifiedCallback<T>):void{
+    public removeChildAt(i:number):void{
         const c:IParentChild = this.model.children[i];
         if (DEBUG && !c) throw new DebugError(`can not remove children with index ${i}`);
         if (DEBUG && c.parent===undefined) throw new DebugError(`can not remove children with index ${i}: it is already detached`);
         c.parent!.children.splice(i,1);
         c.parent = undefined;
-        if (afterRemoved!==undefined) afterRemoved(c as T);
+        if (this.afterChildRemoved!==undefined) this.afterChildRemoved(c as T);
     }
 
-    public removeChild(child:T,afterRemoved?:OnTreeModifiedCallback<T>):void{
+    public removeChild(child:T):void{
         const parent:IParentChild = child.getParent() as IParentChild;
         const i:number = parent.children.indexOf(child);
         if (DEBUG && i===-1) throw new DebugError(`can not remove child: it doesn't belong to parent`);
         parent.children.splice(i,1);
         child.parent = undefined;
-        if (afterRemoved!==undefined) afterRemoved(child);
+        if (this.afterChildRemoved!==undefined) this.afterChildRemoved(child);
     }
 
-    public removeSelf(afterRemoved?:OnTreeModifiedCallback<T>):void {
+    public removeSelf():void {
         const parent:IParentChild = this.model.getParent() as IParentChild;
         if (DEBUG && parent===undefined) throw new DebugError(`can not remove child: it is already detached`);
         const i:number = parent.children.indexOf(this.model);
         if (DEBUG && i===-1) throw new DebugError(`can not remove child: it doesn't belong to parent`);
         parent.children.splice(i,1);
         this.model.parent = undefined;
-        if (afterRemoved!==undefined) afterRemoved(this.model);
+        if (this.afterChildRemoved!==undefined) this.afterChildRemoved(this.model);
     }
 
-    public removeChildren(afterRemoved?:OnTreeModifiedCallback<T>):void{
+    public removeChildren():void{
         for (let i:number = this.model.children.length-1; i >= 0; i--) {
-            const c:IParentChild = this.model.children[i];
-            this.removeChildAt(i,afterRemoved);
+            this.removeChildAt(i);
         }
+    }
+
+    public replaceChild(c:T,newChild:T):void{
+        const indexOf:number = this.model.children.indexOf(c);
+        if (DEBUG && indexOf===-1) throw new DebugError(`can not replace child: destination node doesn't belong to element`);
+        this.model.children[indexOf] = newChild;
+        c.parent = undefined;
+        newChild.parent = this.model;
+        if (this.afterChildRemoved!==undefined) this.afterChildRemoved(c);
+        if (this.afterChildAppended!==undefined) this.afterChildAppended(newChild);
     }
 
     public moveToFront():void {

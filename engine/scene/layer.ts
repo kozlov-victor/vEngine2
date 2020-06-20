@@ -17,36 +17,37 @@ export class Layer implements IParentChild {
     public readonly parent:IParentChild;
     public id:string;
 
-    private _parentChildDelegate:ParentChildDelegate<Layer|RenderableModel> = new ParentChildDelegate(this);
+    private _parentChildDelegate:ParentChildDelegate<IParentChild> = new ParentChildDelegate<IParentChild>(this);
     private _scene:Scene;
 
     constructor(protected game:Game) {
-
+        this._parentChildDelegate.afterChildAppended = (c:IParentChild)=>{
+            const m:RenderableModel = c as RenderableModel;
+            m.setLayer(this);
+            m.setScene(this.game.getCurrScene());
+            (c as IParentChild).parent = undefined;
+            m.revalidate();
+        }
     }
 
     public appendChild(newChild:RenderableModel):void {
         this._parentChildDelegate.appendChild(newChild);
-        this._afterChildAppended(newChild);
     }
 
     public appendChildAt(newChild:RenderableModel,index:number){
         this._parentChildDelegate.appendChildAt(newChild,index);
-        this._afterChildAppended(newChild);
     }
 
     public appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel){
         this._parentChildDelegate.appendChildAfter(modelAfter,newChild);
-        this._afterChildAppended(newChild);
     }
 
     public appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel){
         this._parentChildDelegate.appendChildBefore(modelBefore,newChild);
-        this._afterChildAppended(newChild);
     }
 
     public prependChild(newChild:RenderableModel):void {
         this._parentChildDelegate.prependChild(newChild);
-        this._afterChildAppended(newChild);
     }
 
     public removeChildAt(i:number){
@@ -55,6 +56,10 @@ export class Layer implements IParentChild {
 
     public removeChild(c:RenderableModel):void{
         this._parentChildDelegate.removeChild(c);
+    }
+
+    public replaceChild(c:RenderableModel,newChild:RenderableModel):void{
+        this._parentChildDelegate.replaceChild(c,newChild);
     }
 
     public removeSelf(): void {
@@ -97,13 +102,6 @@ export class Layer implements IParentChild {
         for (const obj of this.children) {
             obj.render();
         }
-    }
-
-    private _afterChildAppended(newChild:RenderableModel):void{
-        newChild.setLayer(this);
-        newChild.setScene(this.game.getCurrScene());
-        (newChild as IParentChild).parent = undefined;
-        newChild.revalidate();
     }
 
 }

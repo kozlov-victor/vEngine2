@@ -56,11 +56,6 @@ export abstract class RenderableModel
         IAlphaBlendable, IFilterable,
         IUpdatable, IDestroyable  {
 
-    private static _afterChildRemoved(child:RenderableModel):void{
-        child.setLayer(undefined!);
-        child.setScene(undefined!);
-    }
-
     public id:string;
 
     public alpha:number = 1;
@@ -94,11 +89,20 @@ export abstract class RenderableModel
     private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
     // parent-child
-    private _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate(this);
+    private _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate<RenderableModel>(this);
 
     protected constructor(protected game:Game){
         super(game);
         this.id = `object_${Incrementer.getValue()}`;
+        this._parentChildDelegate.afterChildAppended = (child:RenderableModel)=>{
+            child.setLayer(this._layer!);
+            child.setScene(this.game.getCurrScene());
+            child.revalidate();
+        };
+        this._parentChildDelegate.afterChildRemoved = (child:RenderableModel)=>{
+            child.setLayer(undefined!);
+            child.setScene(undefined!);
+        }
     }
 
     public revalidate():void{
@@ -267,7 +271,7 @@ export abstract class RenderableModel
         return this._timerDelegate.setInterval(callback,interval);
     }
 
-    public off(eventName: string, callBack: (arg?:any)=>void): void {
+    public off(eventName: string, callBack?: (arg?:any)=>void): void {
         this._eventEmitterDelegate.off(eventName,callBack);
     }
     public on(eventName:MOUSE_EVENTS,callBack:(e:IObjectMouseEvent)=>void):()=>void;
@@ -285,39 +289,39 @@ export abstract class RenderableModel
     }
 
     public appendChild(newChild:RenderableModel):void {
-        this._parentChildDelegate.appendChild(newChild,this._afterChildAppended.bind(this));
+        this._parentChildDelegate.appendChild(newChild);
     }
 
     public appendChildAt(newChild:RenderableModel,index:number):void{
-        this._parentChildDelegate.appendChildAt(newChild,index,this._afterChildAppended.bind(this));
+        this._parentChildDelegate.appendChildAt(newChild,index);
     }
 
     public appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel):void{
-        this._parentChildDelegate.appendChildAfter(modelAfter,newChild,this._afterChildAppended.bind(this));
+        this._parentChildDelegate.appendChildAfter(modelAfter,newChild);
     }
 
     public appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel):void{
-        this._parentChildDelegate.appendChildBefore(modelBefore,newChild,this._afterChildAppended.bind(this));
+        this._parentChildDelegate.appendChildBefore(modelBefore,newChild);
     }
 
     public prependChild(newChild:RenderableModel):void {
-        this._parentChildDelegate.prependChild(newChild,this._afterChildAppended.bind(this));
+        this._parentChildDelegate.prependChild(newChild);
     }
 
     public removeChild(c:RenderableModel):void {
-        this._parentChildDelegate.removeChild(c,RenderableModel._afterChildRemoved);
+        this._parentChildDelegate.removeChild(c);
     }
 
     public removeChildAt(i:number):void{
-        this._parentChildDelegate.removeChildAt(i,RenderableModel._afterChildRemoved);
+        this._parentChildDelegate.removeChildAt(i);
     }
 
     public removeChildren():void{
-        this._parentChildDelegate.removeChildren(RenderableModel._afterChildRemoved);
+        this._parentChildDelegate.removeChildren();
     }
 
     public removeSelf(): void {
-        this._parentChildDelegate.removeSelf(RenderableModel._afterChildRemoved);
+        this._parentChildDelegate.removeSelf();
     }
 
     public moveToFront():void {
@@ -330,6 +334,10 @@ export abstract class RenderableModel
 
     public findChildById(id:string):Optional<RenderableModel>{
         return this._parentChildDelegate.findChildById(id);
+    }
+
+    public replaceChild(c:RenderableModel,newChild:RenderableModel):void{
+        this._parentChildDelegate.replaceChild(c,newChild);
     }
 
     public getParent():Optional<RenderableModel|Layer>{
@@ -367,12 +375,6 @@ export abstract class RenderableModel
         });
         cloned.game = this.game;
         super.setClonedProperties(cloned);
-    }
-
-    private _afterChildAppended(newChild:RenderableModel):void{
-        newChild.setLayer(this._layer!);
-        newChild.setScene(this.game.getCurrScene());
-        newChild.revalidate();
     }
 
 }

@@ -48,7 +48,7 @@ export class EventEmitterDelegate implements IEventemittable {
             callBack(_args);
         });
     }
-    public off(eventName:string,callBack:(arg?:unknown)=>void):void{
+    public off(eventName:string,callBack?:(arg?:unknown)=>void):void{
         if (this._emitter!==undefined)this._emitter.off(eventName,callBack);
     }
     public trigger(eventName:string,data?:unknown):void{
