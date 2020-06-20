@@ -3,7 +3,7 @@ import {VEngineReact} from "@engine/renderable/tsx/tsxFactory.h";
 import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
 
 interface IState {
-    numOfCircles:number;
+    noop:number;
 }
 
 
@@ -14,18 +14,17 @@ export class ChildComponent extends VEngineTsxComponent<IState> {
     public render(): VirtualNode {
         return (
             <v_null_game_object>
-                <v_circle
-                    center={{x:0,y:50}}
-                    fillColor={{r:32,g:233,b:53}}
-                    lineWidth={3}
-                    radius={this.radius}
+                <v_rectangle
+                    size={{width:60,height:80}}
                 >
-                    <v_rectangle
-                        size={{width:10,height:10}}
+                    <v_circle
+                        center={{x:0,y:50}}
+                        fillColor={{r:32,g:233,b:53}}
+                        lineWidth={3}
+                        radius={this.radius}
                     />
-                </v_circle>
+                </v_rectangle>
             </v_null_game_object>
-
         );
 
     }

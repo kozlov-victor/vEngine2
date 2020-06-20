@@ -1,13 +1,13 @@
 import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {VEngineTsxDOM} from "@engine/renderable/tsx/vEngineTsxDOM";
+import {IRealNode} from "@engine/renderable/tsx/realNode";
 
 
 export abstract class VEngineTsxComponent<T extends Record<string, any>> {
 
     public state:T;
 
-    public rootNativeElement:RenderableModel;
+    public rootNativeElement:IRealNode;
     public oldVirtualDom:VirtualNode;
 
     protected constructor() {

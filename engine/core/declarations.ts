@@ -69,20 +69,20 @@ export interface IParentChild {
     id:string;
     parent:Optional<IParentChild>;
     children:IParentChild[];
-    appendChild(c:RenderableModel):void;
-    appendChildAt(c:RenderableModel,index:number):void;
-    appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel):void;
-    appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel):void;
-    prependChild(c:RenderableModel):void;
-    replaceChild(c:RenderableModel,newChild:RenderableModel):void;
+    appendChild(c:IParentChild):void;
+    appendChildAt(c:IParentChild,index:number):void;
+    appendChildAfter(modelAfter:IParentChild,newChild:IParentChild):void;
+    appendChildBefore(modelBefore:IParentChild,newChild:IParentChild):void;
+    prependChild(c:IParentChild):void;
+    replaceChild(c:IParentChild,newChild:IParentChild):void;
     removeChildAt(i:number):void;
-    removeChild(c:RenderableModel):void;
+    removeChild(c:IParentChild):void;
     removeSelf():void;
     removeChildren():void;
     moveToFront():void;
     moveToBack():void;
-    findChildById(id:string):Optional<RenderableModel>;
-    getParent():Optional<RenderableModel|Layer|Scene>;
+    findChildById(id:string):Optional<IParentChild>;
+    getParent():Optional<IParentChild|Layer|Scene>;
 }
 
 type Brand<K,T> = K & {__brand: T};

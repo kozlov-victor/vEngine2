@@ -4,7 +4,8 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
 import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
 import {ChildComponent} from "./childComponent";
-import {MousePoint} from "@engine/control/mouse/mousePoint";
+import {ISceneMouseEvent, MousePoint} from "@engine/control/mouse/mousePoint";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 interface IState {
     radius:number;
@@ -20,6 +21,7 @@ export class MainComponent extends VEngineTsxComponent<IState> {
     }
 
     public render():VirtualNode {
+
         return (
             <v_rectangle
                 pos={{x:10,y:10}}

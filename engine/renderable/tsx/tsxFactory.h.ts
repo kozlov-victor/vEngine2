@@ -24,14 +24,10 @@ export class VEngineReact {
         VEngineReact.game = game;
     }
 
-    public static createRef<T extends RenderableModel>():IElementRef<T>{
-        return {current:undefined!};
-    }
-
-    public static createElement(item:string|typeof VEngineTsxComponent, props:Record<string, any>|null,...children: VirtualNode[]):VirtualNode|typeof VEngineTsxComponent{
+    public static createElement(item:string|{new():VEngineTsxComponent<any>}, props:Record<string, any>|null,...children: VirtualNode[]):VirtualNode|typeof VEngineTsxComponent{
         if (props===null) props = {};
         if ((item as typeof VEngineTsxComponent).bind!==undefined) {
-            return new VirtualNode(props,{type:'component',ctor:item});
+            return new VirtualNode(props,{type:'component',ctor:item as {new():VEngineTsxComponent<any>}});
         }
         let element:VirtualNode;
         switch (item) {
@@ -59,6 +55,11 @@ export class VEngineReact {
         }
         element.children =
             flattenDeep(children). // flat
+            map(it=>{
+                if (!DEBUG) return it;
+                if (it?.substr) throw new DebugError(`wrong tsx node: "${it}". Text nodes are not supported`);
+                return it;
+            }).
             filter(it=>!!it); // remove null, undefined and ''
         return element;
     }

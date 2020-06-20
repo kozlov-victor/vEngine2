@@ -48,6 +48,10 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
                     </v_circle>
                 )}
 
+                {arr.length%2===0?
+                    <v_circle/>:false
+                }
+
                 <v_rectangle
                     pos={{x:20,y:100}}
                     size={{width:50,height:50}}
