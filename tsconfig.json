@@ -29,7 +29,7 @@
         "stripInternal": true,
         "resolveJsonModule": true,
         "jsx": "react",
-        "jsxFactory": "VEngineReact.createElement"
+        "jsxFactory": "VEngineTsxFactory.createElement"
     },
     "exclude": [
         "node_modules"

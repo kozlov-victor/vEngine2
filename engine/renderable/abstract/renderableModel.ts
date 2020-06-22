@@ -312,6 +312,10 @@ export abstract class RenderableModel
         this._parentChildDelegate.removeChild(c);
     }
 
+    getParentNode(): RenderableModel {
+        return undefined!; // only for type compatibility
+    }
+
     public removeChildAt(i:number):void{
         this._parentChildDelegate.removeChildAt(i);
     }
@@ -343,6 +347,16 @@ export abstract class RenderableModel
     public getParent():Optional<RenderableModel|Layer>{
         return this.parent||this._layer;
     }
+
+    public getChildAt(index: number): IParentChild {
+        return this.children[index];
+    }
+
+    public getChildren(): IParentChild[] {
+        return this.children;
+    }
+
+
 
     public renderToTexture(target:IRenderTarget,clearColor?:Color):void{
         this.game.getRenderer().getHelper().renderModelToTexture(this,target,clearColor);

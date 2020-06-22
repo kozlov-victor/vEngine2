@@ -7,7 +7,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Scene} from "@engine/scene/scene";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
-import {IRealNode} from "@engine/renderable/tsx/realNode";
+import {IRealNode} from "@engine/renderable/tsx/genetic/realNode";
 
 export type Clazz<T> = new() => T;
 export type ClazzEx<T,U> = new(arg:U) => T;
@@ -78,12 +78,15 @@ export interface IParentChild {
     replaceChild(c:IParentChild,newChild:IParentChild):void;
     removeChildAt(i:number):void;
     removeChild(c:IParentChild):void;
+    getChildAt(index:number):IParentChild;
     removeSelf():void;
     removeChildren():void;
     moveToFront():void;
     moveToBack():void;
     findChildById(id:string):Optional<IParentChild>;
     getParent():Optional<IParentChild|Layer|Scene>;
+    getParentNode():IParentChild;
+    getChildren():IParentChild[];
 }
 
 type Brand<K,T> = K & {__brand: T};

@@ -1,10 +1,10 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
-import {MainComponent} from "./ui/mainComponent";
+import {MainWidget} from "./ui/mainWidget";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
-import {VEngineTsxDOM} from "@engine/renderable/tsx/vEngineTsxDOM";
+import {AbstractTsxDOMRenderer} from "@engine/renderable/tsx/genetic/abstractTsxDOMRenderer";
 
 
 export class MainScene extends Scene {
@@ -16,8 +16,8 @@ export class MainScene extends Scene {
         const root = new NullGameObject(this.game);
         this.appendChild(root);
 
-        const mainSceneUI = new MainComponent(this.link);
-        VEngineTsxDOM.render(mainSceneUI,root);
+        const mainSceneUI = new MainWidget(this.game);
+        mainSceneUI.mountTo(root);
     }
 
 }

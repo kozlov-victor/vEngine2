@@ -1,7 +1,7 @@
 import {httpClient} from "@engine/debug/httpClient";
 import {IKeyVal} from "@engine/misc/object";
 import {Game} from "@engine/core/game";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
+import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 
 interface IGameHolder {
     game: Game;

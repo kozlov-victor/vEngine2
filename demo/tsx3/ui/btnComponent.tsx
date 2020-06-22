@@ -1,37 +1,11 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
-import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
-import {VEngineReact} from "@engine/renderable/tsx/tsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 
-export class BtnComponent extends VEngineTsxComponent<{}> {
-
-    public x:number;
-    public y:number;
-    public height:number;
-    public onClick:()=>void = ():void=>{};
-
-    constructor() {
-        super();
-        this.state = {
-            height: 10,
-        }
-    }
-
-    private triggerClick(){
-        this.onClick();
-    }
-
-    render(): VirtualNode {
-        return (
-            <v_rectangle
-                pos={{x:this.x,y:this.y}}
-                size={{width:50,height:this.height}}
-                click={this.triggerClick.bind(this)}
-            />
-        );
-    }
-
-}
-
-export const Test = (props:{a:number}):VirtualNode=>{
-    return <v_rectangle/>
+export const BtnComponent = (props:{x:number,y:number,height:number,onClick:()=>void})=>{
+    return (
+        <v_rectangle
+            pos={{x:props.x,y:props.y}}
+            size={{width:50,height:props.height}}
+            click={props.onClick}
+        />
+    );
 };

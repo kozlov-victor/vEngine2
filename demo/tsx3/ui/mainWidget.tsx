@@ -1,11 +1,12 @@
-import {VEngineReact} from "@engine/renderable/tsx/tsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
-import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
+import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {ChildComponent} from "./childComponent";
-import {MousePoint} from "@engine/control/mouse/mousePoint";
 import {BtnComponent} from "./btnComponent";
+import {Game} from "@engine/core/game";
+import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
 
 interface IState {
     circles:{radius:number}[];
@@ -13,12 +14,13 @@ interface IState {
     btnRemove: {height:number},
 }
 
-export class MainComponent extends VEngineTsxComponent<IState> {
+export class MainWidget extends VEngineTsxComponent<IState> {
 
-    constructor(private resourceLink:ResourceLink<ITexture>) {
-        super();
+    constructor(private game:Game) {
+        super(new VEngineTsxDOMRenderer(game));
         this.state = {
             circles : [
+                {radius:10},
                 {radius:10}
             ],
             btnAdd: {height:10},

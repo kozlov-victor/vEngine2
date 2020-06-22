@@ -1,8 +1,10 @@
-import {VEngineReact} from "@engine/renderable/tsx/tsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
-import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
+import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
+import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
+import {Game} from "@engine/core/game";
 
 interface IState {
     ellipseRadiusX: number;
@@ -13,8 +15,8 @@ interface IState {
 
 export class MainSceneUi extends VEngineTsxComponent<IState> {
 
-    constructor(private resourceLink:ResourceLink<ITexture>) {
-        super();
+    constructor(private game:Game,private resourceLink:ResourceLink<ITexture>) {
+        super(new VEngineTsxDOMRenderer(game));
         this.state = {
             ellipsePosX: 10,
             ellipsePosY: 10,

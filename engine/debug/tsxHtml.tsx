@@ -1,5 +1,5 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
-import {VEngineReact} from "@engine/renderable/tsx/tsxFactory.h";
+import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 
 const div = document.createElement('div');
 document.body.appendChild(div);

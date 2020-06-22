@@ -86,6 +86,21 @@ export class Layer implements IParentChild {
         return this._scene;
     }
 
+    getParentNode(): IParentChild {
+        return this.parent;
+    }
+
+
+
+    getChildAt(index: number): IParentChild {
+        return this.children[index];
+    }
+
+    getChildren(): IParentChild[] {
+        return this.children;
+    }
+
+
     /*** @internal */
     public setScene(scene:Scene):void{
         this._scene = scene;
