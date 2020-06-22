@@ -10,8 +10,21 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
 import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
 
+const checkKeyPropertyForNodeInArray = (val:any[]):void=>{
+    val.forEach(v=>{
+        if (v && v?.props?.key===undefined) {
+            throw new DebugError(`tsx element in array or loop must be tracked by "key" property`);
+        }
+    });
+};
+
 const flattenDeep = (arr:any[]):any[]=> {
-    return arr.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
+    return arr.reduce((acc, val) => {
+        if (Array.isArray(val)) {
+            checkKeyPropertyForNodeInArray(val);
+            return acc.concat(flattenDeep(val));
+        } else return acc.concat(val);
+    }, []);
 };
 
 export class VEngineReact {
@@ -51,18 +64,21 @@ export class VEngineReact {
         }
         element.children =
             flattenDeep(children). // flat
-            map(it=>{
-                if (!DEBUG) return it;
-                if (it?.substr) throw new DebugError(`wrong tsx node: "${it}". Text nodes are not supported`);
+            map((it,i)=>{
+                if (DEBUG && it?.substr) throw new DebugError(`wrong tsx node: "${it}". Text nodes are not supported`);
+                if (it) {
+                    it.index = i;
+                    it.parent = element;
+                }
                 return it;
             }).
-            filter(it=>!!it); // remove null, undefined and ''
+            filter(it=>!!it); // remove null, false and undefined
         return element;
     }
 
     public static getGame():Game{
         if (DEBUG && !VEngineReact.game) {
-            throw new DebugError(`bad VEngineReact context: VEngineReact.init() not called, or called after VEngineReact.createElement()`);
+            throw new DebugError(`wrong VEngineReact context: VEngineReact.init() not called, or called after VEngineReact.createElement()`);
         }
         return VEngineReact.game;
     }

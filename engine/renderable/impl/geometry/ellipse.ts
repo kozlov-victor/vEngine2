@@ -12,6 +12,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
     }
 
     set radiusX(value: number) {
+        if (this._radiusX===value) return;
         this._radiusX = value;
         this.size.setWH(this._getMaxRadius()*2);
         this.center.forceTriggerChange();
@@ -22,6 +23,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
     }
 
     set radiusY(value: number) {
+        if (this._radiusY===value) return;
         this._radiusY = value;
         this.size.setWH(this._getMaxRadius()*2);
         this.center.forceTriggerChange();
@@ -33,11 +35,13 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
     public arcAngleTo:number = 0;
     public anticlockwise:boolean = false;
 
-    private _radiusX: number = 10;
-    private _radiusY: number = 20;
+    private _radiusX: number;
+    private _radiusY: number;
 
     constructor(protected game:Game) {
         super(game);
+        this.radiusX = 10;
+        this.radiusY = 20;
         this.center.observe(()=>{
             const maxR:number = this._getMaxRadius();
             this.pos.setXY(this.center.x - maxR,this.center.y - maxR);
@@ -68,8 +72,8 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
         if (props.arcAngleFrom!==undefined) this.arcAngleFrom=props.arcAngleFrom;
         if (props.arcAngleTo!==undefined) this.arcAngleTo=props.arcAngleTo;
         if (props.anticlockwise!==undefined) this.anticlockwise=props.anticlockwise;
-        if (props.radiusX) this.radiusX = props.radiusX;
-        if (props.radiusY) this.radiusY = props.radiusY;
+        if (props.radiusX!==undefined) this.radiusX = props.radiusX;
+        if (props.radiusY!==undefined) this.radiusY = props.radiusY;
     }
 
     protected setClonedProperties(cloned:Ellipse):void {

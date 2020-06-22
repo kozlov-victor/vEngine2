@@ -5,6 +5,7 @@ import {Game} from "@engine/core/game";
 export class Circle extends Ellipse implements ICloneable<Circle>, ICircleProps{
 
     set radius(val:number) {
+        if (this._radius===val) return;
         this._radius = val;
         (this as Ellipse).radiusX = (this as Ellipse).radiusY = val;
         this.setWH(val*2);

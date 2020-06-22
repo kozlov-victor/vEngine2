@@ -6,6 +6,7 @@ import {IRealNode} from "@engine/renderable/tsx/realNode";
 export abstract class VEngineTsxComponent<T extends Record<string, any>> {
 
     public state:T;
+    public key:number|string;
 
     public rootNativeElement:IRealNode;
     public oldVirtualDom:VirtualNode;

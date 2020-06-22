@@ -5,6 +5,7 @@ import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
 import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
 import {ChildComponent} from "./childComponent";
 import {MousePoint} from "@engine/control/mouse/mousePoint";
+import {BtnComponent} from "./btnComponent";
 
 interface IState {
     numOfCircles:number;
@@ -31,24 +32,39 @@ export class MainComponent extends VEngineTsxComponent<IState> {
             >
 
                 <v_circle
-                    center={{x:0,y:50}}
+                    radius={12}
+                    center={{x:0,y:70}}
                     fillColor={{r:22,g:233,b:43}}
                     lineWidth={1}
                 />
 
-                {arr.map((it,ind)=><ChildComponent ind={ind}/>)}
 
-                <v_rectangle
-                    pos={{x:20,y:100}}
-                    size={{width:50,height:50}}
-                    click={this.onMinusClick.bind(this)}
-                />
+                {arr.length%2===0?
+                    <v_circle
+                        radius={15}
+                        fillColor={{r:12,g:12,b:12}}
+                        lineWidth={1}
+                        center={{x:0,y:0}}/>:false
+                }
 
-                <v_rectangle
-                    pos={{x:120,y:100}}
-                    size={{width:50,height:50}}
-                    click={this.onPlusClick.bind(this)}
-                />
+                <v_null_game_object>
+                    {arr.map((it,ind)=><ChildComponent ind={ind} key={ind}/>)}
+                </v_null_game_object>
+
+                <v_null_game_object>
+                    {arr.length%2!==0?
+                        <v_circle
+                            fillColor={{r:82,g:12,b:12}}
+                            lineWidth={1}
+                            pos={{x:120,y:0}}/>:<v_rectangle lineWidth={2} pos={{x:120,y:0}}/>
+                    }
+                </v_null_game_object>
+
+                <v_null_game_object>
+                    <BtnComponent x={20} y={100} onClick={this.onMinusClick.bind(this)}/>
+                </v_null_game_object>
+
+                <BtnComponent x={120} y={100} onClick={this.onPlusClick.bind(this)}/>
 
             </v_rectangle>
 

@@ -15,14 +15,13 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
     constructor(private resourceLink:ResourceLink<ITexture>) {
         super();
         this.state = {
-            numOfCircles : 2
+            numOfCircles : 1
         };
     }
 
     public render():VirtualNode {
         const arr:number[] = this.state.numOfCircles>0?new Array(this.state.numOfCircles):[];
         arr.fill(0);
-        console.log({arr});
         return (
             <v_rectangle
                 pos={{x:10,y:10}}
@@ -31,15 +30,9 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
                 size={{width:300,height:220}}
             >
 
-                <v_circle
-                    center={{x:0,y:50}}
-                    fillColor={{r:22,g:233,b:43}}
-                    lineWidth={1}
-                />
-
-
                 {arr.map((it,ind)=>
                     <v_circle
+                        key={ind}
                         center={{x:40+ind*45,y:50}}
                         fillColor={{r:22,g:133,b:43}}
                         lineWidth={1}
@@ -49,7 +42,11 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
                 )}
 
                 {arr.length%2===0?
-                    <v_circle/>:false
+                    <v_circle
+                        fillColor={{r:12,g:12,b:12}}
+                        lineWidth={1}
+                        radius={15}
+                        center={{x:0,y:0}}/>:false
                 }
 
                 <v_rectangle

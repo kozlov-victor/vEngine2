@@ -11,6 +11,7 @@ interface IPoint {
 }
 
 interface IGenericProps<T> {
+    key?:number|string;
     ref?:(el:T)=>void; // <input ref={(input) => { this.textInput = input; }} />
     click?:(e?:any)=>void;
 }
