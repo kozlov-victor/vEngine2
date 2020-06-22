@@ -16,13 +16,16 @@ interface IGenericProps<T> {
     click?:(e?:any)=>void;
 }
 
-interface ITransformableProps extends IGenericProps<unknown>{
+interface IPositionableProps {
     pos?:IPoint;
+}
+
+interface ITransformableProps extends IGenericProps<unknown>{
     size?:{width:number,height:number};
     scale?:{x:number,y:number};
 }
 
-interface IShapeProps extends ITransformableProps {
+interface IShapeProps extends ITransformableProps{
     color?:IColor;
     lineWidth?:number;
     fillColor?:IColor;
@@ -44,16 +47,16 @@ interface IEllipseProps extends IEllipseCommonProps{
     radiusY?:number;
 }
 
-interface IRectangleProps extends IShapeProps {
+interface IRectangleProps extends IShapeProps, IPositionableProps {
     borderRadius?: number;
 }
 
-interface ILineProps extends IShapeProps {
+interface ILineProps extends IShapeProps,IPositionableProps {
     pointTo: IPoint;
     borderRadius?: number;
 }
 
-interface IImageProps extends ITransformableProps {
+interface IImageProps extends ITransformableProps, IPositionableProps {
     borderRadius?:number;
     color?:IColor;
     lineWidth?:number;
@@ -63,7 +66,7 @@ interface IImageProps extends ITransformableProps {
 declare namespace JSX {
     // tslint:disable-next-line:interface-name
     export interface IntrinsicElements {
-        v_null_game_object: ITransformableProps;
+        v_null_game_object: ITransformableProps & IPositionableProps;
         v_circle:           ICircleProps;
         v_ellipse:          IEllipseProps;
         v_rectangle:        IRectangleProps;

@@ -24,18 +24,17 @@ export class VEngineTsxDOM {
     }
 
     private static replaceNode(game:Game,node:IRealNode,newVirtualNode:VirtualNode,parent:IRealNode):Optional<IRealNode>{
+        console.log('replacing',newVirtualNode);
         if (newVirtualNode.elementConstructor.type==='component') {
             const component:VEngineTsxComponent<any> = VEngineTsxDOM.instantiateComponent(newVirtualNode);
             node.removeChildren();
             const newNode:IRealNode = VEngineTsxDOM.render(component,node);
-            console.log('replacing component',newNode,node);
             parent.replaceChild(node,newNode);
             return undefined;
         } else {
             const newNode:IRealNode = new newVirtualNode.elementConstructor.ctor(game);
             newNode.setProps(newVirtualNode.props);
             VEngineTsxDOM.setGenericProps(newNode,newVirtualNode.props);
-            console.log('replacing node',newNode,node);
             parent.replaceChild(node,newNode);
             return newNode;
         }
@@ -44,20 +43,18 @@ export class VEngineTsxDOM {
     private static instantiateComponent(virtualNode:VirtualNode):VEngineTsxComponent<any> {
         const component:VEngineTsxComponent<any> = new virtualNode.elementConstructor.ctor() as VEngineTsxComponent<any>;
         Object.keys(virtualNode.props).forEach(p=>(component as Record<string, any>)[p]=virtualNode.props[p]);
-        virtualNode.lastComponentInstance = component;
         return component;
     }
 
     private static updateNode(game:Game,node:IRealNode,newVirtualNode:VirtualNode,oldVirtualNode:VirtualNode):void{
+        console.log('updaing component',newVirtualNode);
         if (newVirtualNode.elementConstructor.type==='component') {
             const componentNew:VEngineTsxComponent<any> = VEngineTsxDOM.instantiateComponent(newVirtualNode);
             const componentOld:VEngineTsxComponent<any> = VEngineTsxDOM.instantiateComponent(oldVirtualNode);
             VEngineTsxDOM.compareAndRenderElement(game,componentNew.render(),componentOld.render(),node,node.parent);
-            console.log('updated component',componentNew);
         } else {
             node.setProps(newVirtualNode.props);
             VEngineTsxDOM.setGenericProps(node,newVirtualNode.props);
-            console.log('updated node',node,newVirtualNode.props);
         }
     }
 
@@ -83,18 +80,17 @@ export class VEngineTsxDOM {
         oldVirtualNode:Optional<VirtualNode>,realNode:IRealNode,
         parent:IRealNode):Optional<IRealNode>{
 
-        console.log({newVirtualNode,oldVirtualNode,realNode});
-
         //render node
         let newRealNode:Optional<IRealNode> = realNode;
         if (newVirtualNode===undefined && oldVirtualNode!==undefined) {  // remove node
             if (newRealNode!==undefined) VEngineTsxDOM.removeNode(newRealNode);
         } else if (newVirtualNode!==undefined && oldVirtualNode!==undefined && newRealNode!==undefined) {
+            console.log({newVirtualNode,oldVirtualNode});
             if (
                 newVirtualNode.index !==oldVirtualNode.index ||
                 newVirtualNode.key!==oldVirtualNode.key ||
                 newVirtualNode.elementConstructor.ctor!==oldVirtualNode.elementConstructor.ctor ||
-                newRealNode.constructor !==newVirtualNode.elementConstructor.ctor
+                (newVirtualNode.elementConstructor.type==='node' && newRealNode.constructor !==newVirtualNode.elementConstructor.ctor)
             ) { // replace node
                 newRealNode = VEngineTsxDOM.replaceNode(game,newRealNode,newVirtualNode,parent);
             } else {

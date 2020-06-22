@@ -2,11 +2,15 @@ import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
 import {VirtualNode} from "@engine/renderable/tsx/virtualNode";
 import {VEngineReact} from "@engine/renderable/tsx/tsxFactory.h";
 
-export class BtnComponent extends VEngineTsxComponent<{}> {
+// tslint:disable-next-line:no-empty-interface
+interface IState {
+    height: number;
+}
+
+export class BtnComponent extends VEngineTsxComponent<IState> {
 
     public x:number;
     public y:number;
-    public height:number;
     public onClick:()=>void = ():void=>{};
 
     constructor() {
@@ -16,7 +20,11 @@ export class BtnComponent extends VEngineTsxComponent<{}> {
         }
     }
 
+
     private triggerClick(){
+        let height = this.state.height+10;
+        if (height>90) height = 10;
+        this.setState({height});
         this.onClick();
     }
 
@@ -24,14 +32,10 @@ export class BtnComponent extends VEngineTsxComponent<{}> {
         return (
             <v_rectangle
                 pos={{x:this.x,y:this.y}}
-                size={{width:50,height:this.height}}
+                size={{width:50,height:this.state.height}}
                 click={this.triggerClick.bind(this)}
             />
         );
     }
 
 }
-
-export const Test = (props:{a:number}):VirtualNode=>{
-    return <v_rectangle/>
-};

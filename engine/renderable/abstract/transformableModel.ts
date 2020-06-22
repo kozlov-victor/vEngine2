@@ -82,7 +82,7 @@ class ModelPoint2d extends Point2d {
 
 }
 
-export abstract class TransformableModel extends BaseModel implements ITransformable, ITransformableProps{
+export abstract class TransformableModel extends BaseModel implements ITransformable, ITransformableProps, IPositionableProps {
 
     public readonly worldTransformMatrix:Mat16Holder = new Mat16Holder();
     public worldTransformDirty:boolean = true;
@@ -152,7 +152,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         if (this.billBoard) renderer.transformRotationReset();
     }
 
-    public setProps(props:ITransformableProps):void{
+    public setProps(props:ITransformableProps&IPositionableProps):void{
         if (props.pos!==undefined) this.pos.set(props.pos);
         if (props.size!==undefined) this.size.set(props.size);
         if (props.scale!==undefined) this.scale.set(props.scale);

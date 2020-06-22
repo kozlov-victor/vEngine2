@@ -6,11 +6,10 @@ import {VEngineTsxComponent} from "@engine/renderable/tsx/vEngineTsxComponent";
 import {ChildComponent} from "./childComponent";
 import {MousePoint} from "@engine/control/mouse/mousePoint";
 import {BtnComponent} from "./btnComponent";
+import {Test} from "../../tsx3/ui/btnComponent";
 
 interface IState {
-    circles:{radius:number}[];
-    btnAdd: {height:number},
-    btnRemove: {height:number},
+    numOfCircles: number
 }
 
 export class MainComponent extends VEngineTsxComponent<IState> {
@@ -18,20 +17,14 @@ export class MainComponent extends VEngineTsxComponent<IState> {
     constructor(private resourceLink:ResourceLink<ITexture>) {
         super();
         this.state = {
-            circles : [
-                {radius:10}
-            ],
-            btnAdd: {height:10},
-            btnRemove: {height:10},
+            numOfCircles: 2
         };
     }
 
-    private updateCircleRadius(index:number):void {
-        this.state.circles[index].radius+=1;
-        this.setState({...this.state});
-    }
-
     public render():VirtualNode {
+        const arr:number[] = this.state.numOfCircles>0?new Array(this.state.numOfCircles):[];
+        arr.fill(0);
+
         return (
             <v_rectangle
                 pos={{x:10,y:10}}
@@ -39,6 +32,8 @@ export class MainComponent extends VEngineTsxComponent<IState> {
                 borderRadius={5}
                 size={{width:300,height:220}}
             >
+
+                <Test a={3}/>
 
                 <v_circle
                     radius={12}
@@ -48,7 +43,7 @@ export class MainComponent extends VEngineTsxComponent<IState> {
                 />
 
 
-                {this.state.circles.length%2===0?
+                {arr.length%2===0?
                     <v_circle
                         radius={15}
                         fillColor={{r:12,g:12,b:12}}
@@ -57,17 +52,11 @@ export class MainComponent extends VEngineTsxComponent<IState> {
                 }
 
                 <v_null_game_object>
-                    {this.state.circles.map((it,ind)=>
-                        <ChildComponent
-                            ind={ind}
-                            onClick={this.updateCircleRadius.bind(this)}
-                            radius={it.radius}
-                            key={ind}/>)
-                    }
+                    {arr.map((it,ind)=><ChildComponent ind={ind} key={ind}/>)}
                 </v_null_game_object>
 
                 <v_null_game_object>
-                    {this.state.circles.length%2!==0?
+                    {arr.length%2!==0?
                         <v_circle
                             fillColor={{r:82,g:12,b:12}}
                             lineWidth={1}
@@ -76,26 +65,22 @@ export class MainComponent extends VEngineTsxComponent<IState> {
                 </v_null_game_object>
 
                 <v_null_game_object>
-                    <BtnComponent x={20} y={100} height={this.state.btnRemove.height} onClick={this.onMinusClick.bind(this)}/>
+                    <BtnComponent x={20} y={100} onClick={this.onMinusClick.bind(this)}/>
                 </v_null_game_object>
 
-                <BtnComponent x={120} y={100} height={this.state.btnAdd.height} onClick={this.onPlusClick.bind(this)}/>
+                <BtnComponent x={120} y={100} onClick={this.onPlusClick.bind(this)}/>
 
             </v_rectangle>
 
         );
     }
 
-    public onMinusClick():void{
-        this.state.btnRemove.height+=1;
-        this.state.circles.push({radius:10});
-        this.setState({...this.state});
+    public onMinusClick(e:MousePoint):void{
+        this.setState({numOfCircles:this.state.numOfCircles-1});
     }
 
-    public onPlusClick():void{
-        this.state.btnAdd.height+=1;
-        this.state.circles.splice(-1,1);
-        this.setState({...this.state});
+    public onPlusClick(e:MousePoint):void{
+        this.setState({numOfCircles:this.state.numOfCircles+1});
     }
 
 

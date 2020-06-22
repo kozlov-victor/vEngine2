@@ -7,7 +7,6 @@ export class VirtualNode {
     public children:VirtualNode[];
     public index:number = 0;
     public key:number|string;
-    public parent:VirtualNode;
     public lastComponentInstance:VEngineTsxComponent<any>;
 
     constructor(
