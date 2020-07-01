@@ -117,7 +117,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         return this._getLast().frameBuffer.getTexture().size;
     }
 
-    public setPixelPerfectMode(mode:boolean):void {
+    public setPixelPerfect(mode:boolean):void {
         this._pixelPerfectMode = mode;
     }
 

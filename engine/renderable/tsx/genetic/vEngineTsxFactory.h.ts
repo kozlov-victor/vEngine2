@@ -19,26 +19,15 @@ export class VEngineTsxFactory<T> {
             return (item as (arg:any)=>VirtualNode)(props);
         }
         const element:VirtualNode = new VirtualNode(props,item as string);
-        let text = '';
         element.children =
             flattenDeep(children). // flat
             map((it,i)=>{
-                if (it) {
-                    if (it.type==='virtualNode') it.index = i;
-                }
-                return it;
-            }).
-            filter(it=>{
-                if ((it as unknown as string).substr!==undefined) {
-                    text+=(it as unknown as string);
-                    return false;
-                } else if ((it as unknown as number).toFixed!==undefined) {
-                    text += (it as unknown as number);
-                    return false;
-                }
-                else return !!it;
-            }); // remove null, false and undefined
-        element.text = text;
+                if ((it as unknown as string)?.substr!==undefined || (it as unknown as number)?.toFixed!==undefined) {
+                    const textNode = new VirtualNode({}, undefined!);
+                    textNode.text = String(it);
+                    return textNode;
+                } else return it;
+            }).filter(it=>!!it); // remove null, false and undefined
         return element;
     }
 

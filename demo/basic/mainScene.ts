@@ -8,6 +8,7 @@ import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {DebugError} from "@engine/debug/debugError";
 
 export class MainScene extends Scene {
 
@@ -42,6 +43,7 @@ export class MainScene extends Scene {
         this.on(GAME_PAD_EVENTS.buttonPressed, e=>{
             console.log(e);
         });
+        throw new DebugError('err'+new Date().getSeconds());
     }
 
 }

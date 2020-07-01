@@ -7,7 +7,7 @@ import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 
 const game = new Game({width:128,height:64});
 game.setRenderer(WebGlRenderer);
-(game.getRenderer() as WebGlRenderer).setPixelPerfectMode(true);
+(game.getRenderer() as WebGlRenderer).setPixelPerfect(true);
 game.addControl(KeyboardControl);
 game.addControl(GamePadControl);
 const mainScene:Scene = new MainScene(game);

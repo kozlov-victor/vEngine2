@@ -4,6 +4,8 @@ import {Optional} from "@engine/core/declarations";
 import {IRealNode} from "@engine/renderable/tsx/genetic/realNode";
 import {AbstractElementCreator} from "@engine/renderable/tsx/genetic/abstractElementCreator";
 
+const debug = false;
+
 export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
 
     protected constructor(private elementCreator:AbstractElementCreator<T>) {
@@ -11,35 +13,35 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
 
     public render(component:VEngineTsxComponent<any>, root:T):void{
         component.rootNativeElement = root;
-        console.log('before render');
+        if (debug) console.log('before render');
         const newVirtualDom:Optional<VirtualNode> = component.render();
         const oldVirtualDom:Optional<VirtualNode> = component.oldVirtualDom;
-        console.log('erendere',{component,oldVirtualDom,newVirtualDom});
+        if (debug) console.log('erendere',{component,oldVirtualDom,newVirtualDom});
         this.compareAndRenderElement(newVirtualDom,oldVirtualDom,root.getChildAt(0) as T,root);
         component.oldVirtualDom = newVirtualDom;
     }
 
     private removeNode(node:T):void {
-        console.log('remove',node);
+        if (debug) console.log('remove',node);
         node.removeSelf();
     }
 
     private replaceNode(node:T,newVirtualNode:VirtualNode,parent:T):Optional<T>{
-        console.log('replacing',newVirtualNode);
-        const newNode:T = this.elementCreator.createElementByTagName(newVirtualNode.tagName);
+        if (debug) console.log('replacing',newVirtualNode);
+        const newNode:T = this.elementCreator.createElementByTagName(newVirtualNode);
         this.setGenericProps(newNode,newVirtualNode);
         parent.replaceChild(node,newNode);
         return newNode;
     }
 
     private updateNode(node:T,newVirtualNode:VirtualNode):void{
-        console.log('updating',newVirtualNode);
+        if (debug) console.log('updating',newVirtualNode);
         this.setGenericProps(node,newVirtualNode);
     }
 
     private createNode(newVirtualNode:VirtualNode,parent:T):Optional<T>{
-        console.log('created node',newVirtualNode);
-        const node:T = this.elementCreator.createElementByTagName(newVirtualNode.tagName);
+        if (debug) console.log('created node',newVirtualNode);
+        const node:T = this.elementCreator.createElementByTagName(newVirtualNode);
         parent.appendChild(node);
         this.setGenericProps(node,newVirtualNode);
         return node;

@@ -49,7 +49,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     // https://miguelmota.com/blog/pixelate-images-with-canvas/demo/
-    public setPixelPerfectMode(){ // todo
+    public setPixelPerfect(){ // todo
 
         this.container.style.cssText += 'image-rendering: optimizeSpeed;' + // FireFox < 6.0
             'image-rendering: -moz-crisp-edges;' + // FireFox

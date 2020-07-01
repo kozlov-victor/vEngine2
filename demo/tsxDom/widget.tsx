@@ -3,7 +3,7 @@ import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactor
 import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
 
 interface IState {
-    items:any[]
+    items:{number:number}[]
 }
 
 export class Widget extends VEngineTsxComponent<IState> {
@@ -12,30 +12,39 @@ export class Widget extends VEngineTsxComponent<IState> {
     constructor() {
         super(new HtmlTsxDOMRenderer());
         this.state = {
-            items: [{}, {}, {}]
-        }
+            items: []
+        };
+        this.add();
+        this.add();
+        this.add();
     }
 
+    add(){
+        this.state.items.push({number:this.state.items.length-1});
+        this.setState({...this.state});
+    }
+    remove(){
+        this.state.items.splice(-1);
+        this.setState({...this.state});
+    }
+    removeAt(i:number){
+        this.state.items.splice(i,1);
+        this.setState({...this.state});
+    };
+
     render() {
-        const add = ()=>{
-            this.state.items.push([]);
-            this.setState({...this.state});
-        };
-        const remove = ()=>{
-            this.state.items.splice(-1);
-            this.setState({...this.state});
-        };
+
         const style = 'button {margin: 10px}';
         return(
             <div>
                 <style>{style}</style>
+                <button onClick={()=>this.add()}>add</button>
+                <button onClick={()=>this.remove()}>remove</button>
                 <ul>
                     {
-                        this.state.items.map((it,i)=><li>{i}</li>)
+                        this.state.items.map((it,i)=><li><button onClick={()=>this.removeAt(i)}>-</button>the number is !!<b>{it.number}</b>!!</li>)
                     }
                 </ul>
-                <button click={add}>add</button>
-                <button click={remove}>remove</button>
             </div>
 
         );

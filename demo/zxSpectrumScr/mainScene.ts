@@ -17,7 +17,7 @@ export class MainScene extends Scene {
     private screen:Image;
 
     public onPreloading() {
-        (this.game.getRenderer() as WebGlRenderer).setPixelPerfectMode(true);
+        (this.game.getRenderer() as WebGlRenderer).setPixelPerfect(true);
         const screen = new Image(this.game);
         const border = new Image(this.game);
         border.scale.setXY(SCALE);

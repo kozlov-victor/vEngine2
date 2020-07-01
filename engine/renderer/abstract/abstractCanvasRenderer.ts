@@ -18,6 +18,6 @@ export abstract class AbstractCanvasRenderer extends AbstractRenderer {
         this.container = container;
     }
 
-    public abstract setPixelPerfectMode(mode:boolean):void;
+    public abstract setPixelPerfect(mode:boolean):void;
 
 }

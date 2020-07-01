@@ -1,7 +1,7 @@
 import {httpClient} from "@engine/debug/httpClient";
 import {IKeyVal} from "@engine/misc/object";
 import {Game} from "@engine/core/game";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
+import {renderError} from "@engine/debug/errorWidget";
 
 interface IGameHolder {
     game: Game;
@@ -74,97 +74,6 @@ const prepareMessage = (e:any,lineNum:number)=>{
     return msg;
 };
 
-const renderError = (filename:string,runtimeInfo:string,debugInfo:string)=>{
-
-    document.title = 'runtime error!';
-    devConsole.style.display = 'none';
-
-    if (!document.querySelector('.errorBlockHolder')) {
-        const tmpl:string = `
-
-            <style>
-                .errorHeader {text-align: center;}
-                .errorText {
-                    color: #ff8882;
-                    white-space: pre-wrap;
-                }
-                .errorCol {color: #f30000;text-decoration: underline;}
-                .errorRow {
-                    color: #bf1313;
-                    font-weight: bold;
-                }
-                .errorBlockHolder {
-                    background: #615f5fb8;
-                    height: 100%;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    top: 0;
-                    position: absolute;
-                }
-                ::selection {
-                        color: #efff00;
-                        background-color: #127315;
-                }
-                .errorBlock {
-                    border: 1px solid grey;
-                    background-color: rgba(21, 15, 121, 0.88);
-                    font-family: monospace;
-                    -webkit-touch-callout: default;
-                    color: #fffef8;
-                }
-                .errorBlock, .errorBlock * {
-                    user-select: text;
-                }
-                .errorBlockInternal {
-                    position: relative;
-                    padding: 5px;
-                    margin: 5px;
-                    border: 1px solid #8f9624;
-                    user-select: text;
-                }
-                .errorClose {
-                    position: absolute;
-                    top: 15px;
-                    right: 5px;
-                    content: 'x';
-                    width: 20px;
-                    height: 20px;
-                    cursor: pointer;
-                    color: white;
-                }
-            </style>
-
-            <div class="errorBlock">
-
-            </div>
-
-        `;
-        const errDiv:HTMLElement = document.createElement('div');
-        errDiv.className = 'errorBlockHolder';
-        errDiv.innerHTML = tmpl;
-        document.body.appendChild(errDiv);
-    }
-
-    const errorBlockTmpl = `
-        <div class="errorBlockInternal">
-            <div class="errorClose"
-            onclick="
-                this.closest('.errorBlockInternal').remove();
-                if (!document.querySelector('.errorBlockInternal')) document.querySelector('.errorBlockHolder').remove();"
-            >x</div>
-            <h3 class="errorText">${runtimeInfo}</h3>
-            <div>${filename?filename:''}</div>
-            <div>-------------------</div>
-            <pre>${debugInfo}</pre>
-            </div>
-        </div>
-    `;
-    const d = document.createElement('div');
-    d.innerHTML = errorBlockTmpl;
-    document.querySelector('.errorBlock')!.appendChild(d);
-};
-
 
 const stopGame = ()=>{
     clearInterval(tmr);
@@ -178,49 +87,22 @@ const stopGame = ()=>{
     }
 };
 
-const handleCatchError = (e:ErrorEvent)=>{
+const handleCatchError = async (e:ErrorEvent)=>{
     const lineNum:number = e.lineno;
+    const runtimeInfo:string = prepareMessage(e,lineNum);
     const colNum:number = e.colno;
     const filename:string = e.filename;
-    const runtimeInfo:string = prepareMessage(e,lineNum);
 
     if (filename) {
         try {
-            httpClient.get(filename,{r:Math.random()},
-                (file)=>{
-                    if (!file) return;
-                    try {
-                        const strings:string[] = (file as string).split('\n');
-                        const linesAfter:number = 5;
-                        const linesBefore:number = 5;
-                        let errorString:string = strings[lineNum - 1] || '';
-                        errorString = `${errorString.substr(0,colNum-1)}<span class="errorCol">${errorString[colNum-1]}</span>${errorString.substr(colNum)}`;
-                        errorString=`<span class="errorRow">${errorString}</span>\n`;
-                        let debugInfo:string='';
-                        for (let i=-linesBefore;i<linesAfter;i++) {
-                            const index = lineNum + i;
-                            if (index<0 || index>strings.length-1) continue;
-                            const s = strings[index];
-                            if (index===lineNum-1) debugInfo+=errorString;
-                            else debugInfo+=s+'\n';
-                        }
-                        renderError(filename,runtimeInfo,debugInfo);
-                    } catch (e) {
-                        console.error(e);
-                        renderError('',runtimeInfo,'');
-                    }
-                },
-                (err)=>{
-                    console.error(err);
-                    renderError('',runtimeInfo,'');
-                }
-            );
+            const file = await httpClient.get<string>(filename,{r:Math.random()});
+            if (!file) return;
+            renderError({filename,runtimeInfo,debugInfo:{file,colNum,lineNum}});
         } catch (e) {
-            renderError('',runtimeInfo,'');
+            renderError({runtimeInfo});
         }
-
     } else {
-        renderError('',runtimeInfo,'');
+        renderError({runtimeInfo});
     }
 };
 
@@ -233,13 +115,13 @@ const extractPromiseError = (e:any):string=>{
     return r;
 };
 
-window.addEventListener('error',(e:ErrorEvent)=>{
+window.addEventListener('error',async (e:ErrorEvent)=>{
     stopGame();
-    handleCatchError(e);
+    await handleCatchError(e);
 },true);
 
 window.addEventListener('unhandledrejection', (e:PromiseRejectionEvent)=> {
     stopGame();
-    renderError('',extractPromiseError(e.reason),'');
+    renderError({filename:'',runtimeInfo:extractPromiseError(e.reason)});
 });
 

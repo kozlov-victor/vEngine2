@@ -17,10 +17,10 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
         super();
     }
 
-    public createElementByTagName(tagName: string): RenderableModel {
+    public createElementByTagName(node: VirtualNode): RenderableModel {
         let element:RenderableModel;
         const game:Game = this.game;
-        switch (tagName) {
+        switch (node.tagName) {
             case 'v_circle':
                 element = new Circle(game);
                 break;
@@ -39,8 +39,12 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
             case 'v_image':
                 element = new Image(game);
                 break;
+            case undefined: {
+                if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);
+                return undefined!;
+            }
             default:
-                if (DEBUG) throw new DebugError(`unknown jsx tag: ${tagName}`);
+                if (DEBUG) throw new DebugError(`unknown jsx tag: ${node.tagName}`);
                 return undefined!;
         }
         return element;

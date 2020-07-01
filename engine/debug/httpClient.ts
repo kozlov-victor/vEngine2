@@ -27,16 +27,16 @@ interface IRequestData {
     ontimeout?: ()=>void;
 }
 
-const request = (data:IRequestData)=> {
+const request = <T>(data:IRequestData):Promise<T>=> {
     let abortTmr:number;
     let resolved = false;
     data.method = data.method || 'get';
     if (data.data && data.method==='get') data.url+='?'+objectToQuery(data.data);
     const xhr=new XMLHttpRequest();
-    let resolveFn = noop, rejectFn = noop;
+    let resolveFn = noop as (arg:T)=>void, rejectFn = noop;
     let promise;
     if (window.Promise) {
-        promise = new Promise((resolve,reject)=>{
+        promise = new Promise<T>((resolve,reject)=>{
             resolveFn = resolve;
             rejectFn = reject;
         });
@@ -50,7 +50,7 @@ const request = (data:IRequestData)=> {
                 if (data.success) {
                     data.success(resp);
                 }
-                resolveFn(resp);
+                resolveFn(resp as unknown as T);
             } else {
                 if (data.error) data.error({status:xhr.status,error:xhr.statusText});
                 rejectFn(xhr.statusText);
@@ -77,7 +77,7 @@ const request = (data:IRequestData)=> {
             rejectFn('timeout');
         },data.timeout);
     }
-    return promise;
+    return promise as Promise<T>;
 };
 
 
@@ -85,8 +85,8 @@ const request = (data:IRequestData)=> {
 
 export namespace httpClient {
 
-    export const get = (url:string,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void)=>{
-        return request({
+    export const get = <T>(url:string,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void)=>{
+        return request<T>({
             method:'get',
             url,
             data,
@@ -95,8 +95,8 @@ export namespace httpClient {
         });
     };
 
-    export const  post = (url:string,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void)=>{
-        return request({
+    export const  post = <T>(url:string,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void)=>{
+        return request<T>({
             method:'post',
             url,
             data,
@@ -106,7 +106,7 @@ export namespace httpClient {
         });
     };
 
-    export const  postMultiPart = (url:string,file:File,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void)=>{
+    export const  postMultiPart = <T>(url:string,file:File,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void)=>{
         const formData = new FormData();
         Object.keys(data).forEach((key)=>{
             formData.append(key,data[key] as string);
