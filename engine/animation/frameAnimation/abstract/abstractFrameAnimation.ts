@@ -41,7 +41,9 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnim
     }
 
     public play():this {
-        if (DEBUG && !this.target) throw new DebugError(`can not play frame animation: it is not attached to parent`);
+        if (DEBUG) {
+            if (!this.target) throw new DebugError(`can not play frame animation: it is not attached to parent`);
+        }
         if (this.target.getCurrentFrameAnimation()?._isPlaying) {
             this.target.getCurrentFrameAnimation()!.trigger(FRAME_ANIMATION_EVENTS.canceled);
         }
