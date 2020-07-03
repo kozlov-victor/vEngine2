@@ -4,26 +4,50 @@ import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
-    @Resource.Texture('./pixelPerfectStretch2/pig.png')
-    private img:ResourceLink<ITexture>;
+    @Resource.Texture('./pixelPerfectStretch2/images/pig.png')
+    private img1:ResourceLink<ITexture>;
 
 
+    @Resource.Texture('./pixelPerfectStretch2/images/cow.png')
+    private img2:ResourceLink<ITexture>;
 
-    public onReady() {
+    @Resource.Texture('./pixelPerfectStretch2/images/dog.png')
+    private img3:ResourceLink<ITexture>;
 
+    @Resource.Texture('./pixelPerfectStretch2/images/girl.png')
+    private img4:ResourceLink<ITexture>;
+
+    private cnt:number = 0;
+    private links:ResourceLink<ITexture>[];
+
+    private nextImage():void {
         const sprLogo:Image = new Image(this.game);
-        sprLogo.setResourceLink(this.img);
+        sprLogo.setResourceLink(this.links[(this.cnt++)%this.links.length]);
         sprLogo.setPixelPerfect(true);
-        this.appendChild(sprLogo);
 
         const container:NullGameObject = new NullGameObject(this.game);
         container.appendChild(sprLogo);
-        container.scale.setXY(10);
+        container.scale.setXY(9);
 
         this.appendChild(container);
+
+        sprLogo.on(MOUSE_EVENTS.click, e=>{
+            container.removeSelf();
+            this.nextImage();
+        });
+    }
+
+    public onReady() {
+
+        this.links = [
+            this.img1, this.img2, this.img3, this.img4
+        ];
+
+        this.nextImage();
 
     }
 

@@ -43,7 +43,7 @@ export class MainScene extends Scene {
         this.on(GAME_PAD_EVENTS.buttonPressed, e=>{
             console.log(e);
         });
-        throw new DebugError('err'+new Date().getSeconds());
+        //throw new DebugError('err'+new Date().getSeconds());
     }
 
 }
