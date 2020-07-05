@@ -38,11 +38,11 @@ export class Widget extends VEngineTsxComponent<IState> {
         return(
             <div>
                 <style>{style}</style>
-                <button onClick={()=>this.add()}>add</button>
-                <button onClick={()=>this.remove()}>remove</button>
+                <button onclick={()=>this.add()}>add</button>
+                <button onclick={()=>this.remove()}>remove</button>
                 <ul>
                     {
-                        this.state.items.map((it,i)=><li><button onClick={()=>this.removeAt(i)}>-</button>the number is !!<b>{it.number}</b>!!</li>)
+                        this.state.items.map((it,i)=><li><button onclick={()=>this.removeAt(i)}>-</button>the number is !!<b>{it.number}</b>!!</li>)
                     }
                 </ul>
             </div>

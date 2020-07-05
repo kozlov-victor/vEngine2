@@ -106,7 +106,7 @@ export class Widget extends VEngineTsxComponent<{}> {
                 <div className="up">
                     <div id="frameLoadingInfo">{this.loadingInfo}</div>
                     <iframe
-                        onLoad={()=>this.onFrameLoaded()}
+                        onload={()=>this.onFrameLoaded()}
                         src={this.selectedItem?'./demo.html?name='+this.selectedItem:undefined}
                         frameBorder="0" id="frame"/>
                 </div>
@@ -117,7 +117,7 @@ export class Widget extends VEngineTsxComponent<{}> {
                             {
                                 this.items.map((it,index)=>
                                     <li className={it===this.selectedItem?'active':undefined}>
-                                        <a onClick={(e)=>this.selectItem(e,index)} target="_blank" href="#">{it}</a>
+                                        <a onclick={(e)=>this.selectItem(e,index)} target="_blank" href="#">{it}</a>
                                         <a target="_blank" href={'./demo.html?name='+it}> . </a>
                                     </li>
                                 )

@@ -119,7 +119,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
             this._stereoPanNode.pan.value = 0.5;
             this._nodeChain.addNode(this._stereoPanNode);
         }
-        const delayNode = createFeedBackDelayNode(this._ctx,1000,0.5);
+        const delayNode = createFeedBackDelayNode(this._ctx,0.1,0.5);
         this._nodeChain.addNode(delayNode);
     }
 

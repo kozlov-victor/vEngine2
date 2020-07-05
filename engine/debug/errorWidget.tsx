@@ -129,7 +129,7 @@ export class ErrorWidget extends VEngineTsxComponent<IState> {
                         this.state.errors.map((err,i)=>
                             <div className="errorBlock">
                                 <div className="errorBlockInternal">
-                                    <div className="errorClose" onClick={()=>this.removeItem(i)}>x</div>
+                                    <div className="errorClose" onclick={()=>this.removeItem(i)}>x</div>
                                     <h3 className="errorText">{err.runtimeInfo}</h3>
                                     <div>{err.filename}</div>
                                     <div>-------------------</div>

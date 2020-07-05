@@ -15,12 +15,12 @@ export class MainScene extends Scene {
         const sound:Sound = new Sound(this.game);
         sound.setResourceLink(this.resourceLink);
 
-        this.setInterval(()=>{
-            sound.stereoPan = MathEx.random(-1,1);
-            sound.velocity = MathEx.random(0.1,1.1);
-            sound.gain = MathEx.random(0.5,1);
-            sound.play();
-        },800);
+        // this.setInterval(()=>{
+        //     sound.stereoPan = MathEx.random(-1,1);
+        //     sound.velocity = MathEx.random(0.1,1.1);
+        //     sound.gain = MathEx.random(0.5,1);
+        //     sound.play();
+        // },800);
 
         this.on(MOUSE_EVENTS.mouseDown,()=>{
             sound.stereoPan = MathEx.random(-1,1);
