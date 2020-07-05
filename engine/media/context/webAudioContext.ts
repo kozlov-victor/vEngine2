@@ -7,13 +7,15 @@ import {Clazz, ICloneable, Optional} from "@engine/core/declarations";
 import {Sound} from "@engine/media/sound";
 
 export class WebAudioContextHolder {
-    public static getAudioContextClass():Clazz<AudioContext>{
+    public static getAudioContextClass():Optional<Clazz<AudioContext>>{
         return (window as any).AudioContext ||
-            (window as any).webkitAudioContext;
+            (window as any).webkitAudioContext || undefined;
     }
 
-    public static getNewAudioContext():AudioContext{
-        const c:AudioContext = new (WebAudioContextHolder.getAudioContextClass())();
+    public static getNewAudioContext():Optional<AudioContext>{
+        const clazz = WebAudioContextHolder.getAudioContextClass();
+        if (clazz===undefined) return undefined;
+        const c:AudioContext = new clazz();
         CtxHolder.fixAutoPlayPolicy(c);
         return c;
     }
@@ -21,7 +23,7 @@ export class WebAudioContextHolder {
 
 class CtxHolder {
 
-    public static getCtx():AudioContext{
+    public static getCtx():Optional<AudioContext>{
         if (CtxHolder._ctx && !CtxHolder._res) {
             CtxHolder._res = new CtxHolder._ctx();
             CtxHolder.fixAutoPlayPolicy(CtxHolder._res);
@@ -36,7 +38,7 @@ class CtxHolder {
         };
         document.addEventListener('click',listener);
     }
-    private static _ctx:Clazz<AudioContext> = WebAudioContextHolder.getAudioContextClass();
+    private static _ctx:Optional<Clazz<AudioContext>> = WebAudioContextHolder.getAudioContextClass();
     private static _res:AudioContext;
 }
 
@@ -44,7 +46,7 @@ class CtxHolder {
 
 const decode =(buffer:ArrayBuffer):Promise<AudioBuffer>=>{
     return new Promise<AudioBuffer>((resolve, reject)=>{
-        CtxHolder.getCtx().decodeAudioData(
+        CtxHolder.getCtx()!.decodeAudioData(
             buffer,
             (decoded:AudioBuffer)=> {
                 resolve(decoded);
@@ -57,6 +59,34 @@ const decode =(buffer:ArrayBuffer):Promise<AudioBuffer>=>{
 
 };
 
+class NodeChain {
+
+    private _currentRoot:AudioNode;
+
+    constructor(private readonly root:AudioNode) {
+        this._currentRoot = root;
+    }
+
+    public getLastNode():AudioNode{
+        return this._currentRoot;
+    }
+
+    addNode(node:AudioNode):void{
+        node.connect(this._currentRoot);
+        this._currentRoot = node;
+    }
+
+}
+
+const createFeedBackDelayNode = (context:AudioContext,delayTime:number,feedback:number):AudioNode=>{
+    const delay = context.createDelay(delayTime + 1);
+    delay.delayTime.value = delayTime;
+    const gainNode = context.createGain();
+    gainNode.gain.value = feedback;
+    delay.connect(gainNode);
+    return delay;
+};
+
 
 export class WebAudioContext extends BasicAudioContext implements ICloneable<WebAudioContext>{
 
@@ -64,31 +94,33 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         return !!(window && CtxHolder.getCtx());
     }
 
-    public static createContext():AudioContext{
-        return CtxHolder.getCtx();
+    public static getContext():AudioContext{
+        return CtxHolder.getCtx()!;
     }
 
-    public _ctx: AudioContext;
-    public _currSource: Optional<AudioBufferSourceNode>;
-    public _gainNode: GainNode;
-    public _stereoPanNode: Optional<StereoPannerNode>;
-    public _free: boolean = true;
+    private _ctx: AudioContext;
+    private _currSource: Optional<AudioBufferSourceNode>;
+    private readonly _gainNode: GainNode;
+    private readonly _stereoPanNode: Optional<StereoPannerNode>;
+    private _free: boolean = true;
 
     public readonly type: string = 'webAudioContext';
 
+    private _nodeChain:NodeChain;
+
     constructor(protected game:Game,protected audioPLayer:AudioPlayer) {
         super(game,audioPLayer);
-        this._ctx = CtxHolder.getCtx();
+        this._ctx = CtxHolder.getCtx()!;
+        this._nodeChain = new NodeChain(this._ctx.destination);
         this._gainNode = this._ctx.createGain();
+        this._nodeChain.addNode(this._gainNode);
         if (this._ctx.createStereoPanner) {
             this._stereoPanNode = this._ctx.createStereoPanner();
             this._stereoPanNode.pan.value = 0.5;
-            this._stereoPanNode.connect(this._ctx.destination);
-            this._gainNode.connect(this._stereoPanNode);
-        } else {
-            this._gainNode.connect(this._ctx.destination);
+            this._nodeChain.addNode(this._stereoPanNode);
         }
-
+        const delayNode = createFeedBackDelayNode(this._ctx,1000,0.5);
+        this._nodeChain.addNode(delayNode);
     }
 
     public async load(buffer:ArrayBuffer, link:ResourceLink<void>):Promise<void> {
@@ -112,16 +144,13 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         this._free = false;
         const currSource:AudioBufferSourceNode = this._ctx.createBufferSource();
         currSource.buffer = AudioPlayer.cache[sound.getResourceLink().getUrl()] as AudioBuffer;
-        currSource.connect(this._gainNode);
+        currSource.connect(this._nodeChain.getLastNode());
         currSource.start(0,sound.offset,sound.duration);
         this._currSource = currSource;
         currSource.onended = ()=> {
             this.stop();
         };
-
-        this.loop(sound.loop);
-        this.setGain(sound.gain);
-        this.setStereoPan(sound.stereoPan);
+        super.play(sound);
 
     }
 
@@ -129,7 +158,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         const currSource:Optional<AudioBufferSourceNode> = this._currSource;
         if (currSource!==undefined) {
             currSource.stop();
-            currSource.disconnect(this._gainNode);
+            currSource.disconnect(this._nodeChain.getLastNode());
             // tslint:disable-next-line:no-null-keyword
             currSource.onended = null;
         }

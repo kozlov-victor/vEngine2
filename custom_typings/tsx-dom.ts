@@ -1,14 +1,28 @@
 
 interface IHTMLElementProps {
+    style?:string;
+    id?:string|number;
     onClick?:(e:Event)=>void;
     className?: string;
     htmlFor?: string;
 }
 
+interface IIFrameProps extends IHTMLElementProps{
+    frameBorder?:number|string;
+    src?:string;
+    onLoad?:(e:Event)=>void;
+    onError?:(e:Event)=>void;
+}
+
+interface ILInkProps extends IHTMLElementProps{
+    href?:string;
+    target?:string;
+}
+
 declare namespace JSX {
     // tslint:disable-next-line:interface-name
     export interface IntrinsicElements {
-        a:IHTMLElementProps;
+        a:ILInkProps;
         abbr:IHTMLElementProps;
         acronym:IHTMLElementProps;
         address:IHTMLElementProps;
@@ -69,7 +83,7 @@ declare namespace JSX {
         hr:IHTMLElementProps;
         html:IHTMLElementProps;
         i:IHTMLElementProps;
-        iframe:IHTMLElementProps;
+        iframe:IIFrameProps;
         img:IHTMLElementProps;
         input:IHTMLElementProps;
         ins:IHTMLElementProps;

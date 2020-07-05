@@ -58,16 +58,16 @@ export class DomElementCreator extends AbstractElementCreator<HTMLElementWrap>{
             }
         } else {
             const htmlEl:HTMLElement = el as HTMLElement;
-            for (let key of Object.keys(props)) {
+            for (const key of Object.keys(props)) {
                 if (key.indexOf('on')===0) {// events
                     (htmlEl as Record<string, any>)[key.toLowerCase()] = props[key];
-                    return;
                 }
-
-                else if (key==='htmlFor') key = 'for';
-                if (model.attributes[key]!==props[key]) {
+                else if (model.attributes[key]!==props[key]) {
                     model.attributes[key] = props[key];
-                    (htmlEl as Record<string, any>)[key] = props[key];
+                    let attrName = key.toLowerCase();
+                    if (key==='htmlFor') attrName = 'for';
+                    else if (key==='className') attrName = 'class';
+                    htmlEl.setAttribute(attrName,props[key]);
                 }
             }
 

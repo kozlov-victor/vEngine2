@@ -63,7 +63,7 @@ export class Queue {
             sum+=this._tasksProgressById[taskId]||0;
         });
         const progress = sum/this._tasks.length;
-        if (progress>this._currProgress) this._currProgress = progress; // avoid progress reducing if task were aded dynamically
+        if (progress>this._currProgress) this._currProgress = progress; // avoid progress reducing if task were added dynamically
         return this._currProgress;
     }
 

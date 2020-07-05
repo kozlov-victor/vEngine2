@@ -23,6 +23,10 @@ export abstract class VEngineTsxComponent<T extends Record<string, any>> {
         if (this.rootNativeElement!==undefined) this.tsxDOMRenderer.render(this,this.rootNativeElement);
     }
 
+    public triggerRendering(){
+        this.tsxDOMRenderer.render(this,this.rootNativeElement);
+    }
+
     public mountTo(root:IRealNode):void {
         root.removeChildren();
         this.tsxDOMRenderer.render(this,root);

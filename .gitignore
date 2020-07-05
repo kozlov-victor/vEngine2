@@ -7,6 +7,5 @@
 package-lock.json
 yarn.lock
 demo/out/**
-demo/index.html
 node_tools/lints/build/*
 node_tools/transformers/build/*

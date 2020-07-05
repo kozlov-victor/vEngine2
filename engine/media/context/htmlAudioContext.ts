@@ -60,6 +60,7 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         this._ctx.onended = () => {
             this.stop();
         };
+        super.play(sound);
     }
 
     public stop():void {

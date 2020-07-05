@@ -116,11 +116,13 @@ const extractPromiseError = (e:any):string=>{
 };
 
 window.addEventListener('error',async (e:ErrorEvent)=>{
+    console.error(e);
     stopGame();
     await handleCatchError(e);
 },true);
 
 window.addEventListener('unhandledrejection', (e:PromiseRejectionEvent)=> {
+    console.error(e);
     stopGame();
     renderError({filename:'',runtimeInfo:extractPromiseError(e.reason)});
 });

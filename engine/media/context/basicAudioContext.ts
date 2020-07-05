@@ -33,7 +33,12 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
         return this.audioPlayer;
     }
 
-    public play(sound:Sound){}
+    public play(sound:Sound){
+        this.loop(sound.loop);
+        this.setGain(sound.gain);
+        this.setVelocity(sound.velocity);
+        this.setStereoPan(sound.stereoPan);
+    }
     public stop():void{}
     public isFree():boolean{return false;}
     public setGain(val:number):void{}
