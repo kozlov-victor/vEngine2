@@ -95,7 +95,7 @@ export namespace httpClient {
         });
     };
 
-    export const  post = <T>(url:string,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void)=>{
+    export const  post = <T>(url:string,data?:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void)=>{
         return request<T>({
             method:'post',
             url,

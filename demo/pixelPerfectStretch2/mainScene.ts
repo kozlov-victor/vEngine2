@@ -21,6 +21,9 @@ export class MainScene extends Scene {
     @Resource.Texture('./pixelPerfectStretch2/images/girl.png')
     private img4:ResourceLink<ITexture>;
 
+    @Resource.Texture('./pixelPerfectStretch2/images/eagle.png')
+    private img5:ResourceLink<ITexture>;
+
     private cnt:number = 0;
     private links:ResourceLink<ITexture>[];
 
@@ -44,7 +47,7 @@ export class MainScene extends Scene {
     public onReady() {
 
         this.links = [
-            this.img1, this.img2, this.img3, this.img4
+            this.img1, this.img2, this.img3, this.img4, this.img5
         ];
 
         this.nextImage();
