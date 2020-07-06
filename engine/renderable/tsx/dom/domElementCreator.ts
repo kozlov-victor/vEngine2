@@ -51,6 +51,7 @@ export class DomElementCreator extends AbstractElementCreator<HTMLElementWrap>{
     setProps(model: HTMLElementWrap, virtualNode:VirtualNode): void {
         const props = virtualNode.props;
         const el = model.htmlElement;
+        if (virtualNode.props.ref!==undefined) virtualNode.props.ref(el);
         if (el.nodeType===3) {
             if (virtualNode.text!==model.attributes.text) {
                 model.attributes.text = virtualNode.text;

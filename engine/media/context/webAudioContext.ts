@@ -84,7 +84,8 @@ const createFeedBackDelayNode = (context:AudioContext,delayTime:number,feedback:
     const gainNode = context.createGain();
     gainNode.gain.value = feedback;
     delay.connect(gainNode);
-    return delay;
+    gainNode.connect(delay);
+    return gainNode;
 };
 
 
@@ -98,7 +99,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         return CtxHolder.getCtx()!;
     }
 
-    private _ctx: AudioContext;
+    private readonly _ctx: AudioContext;
     private _currSource: Optional<AudioBufferSourceNode>;
     private readonly _gainNode: GainNode;
     private readonly _stereoPanNode: Optional<StereoPannerNode>;
@@ -119,7 +120,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
             this._stereoPanNode.pan.value = 0.5;
             this._nodeChain.addNode(this._stereoPanNode);
         }
-        const delayNode = createFeedBackDelayNode(this._ctx,0.1,0.5);
+        const delayNode = createFeedBackDelayNode(this._ctx,1,0.5);
         this._nodeChain.addNode(delayNode);
     }
 

@@ -49,7 +49,7 @@ export class Game {
 
     private readonly _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
 
-    private _startedTime:number = 0;
+    private readonly _startedTime:number = 0;
     private _lastTime:number = 0;
     private _currTime:number = 0;
     private _deltaTime:number = 0;
@@ -164,7 +164,7 @@ export class Game {
         if (this._prevScene!==undefined) {
             this._prevScene.trigger(SCENE_EVENTS.INACTIVATED, undefined!);
             this._prevScene.onInactivated();
-            (this._currScene as {lifeCycleState:SceneLifeCycleState}).lifeCycleState = SceneLifeCycleState.INACTIVATED;
+            (this._prevScene as {lifeCycleState:SceneLifeCycleState}).lifeCycleState = SceneLifeCycleState.INACTIVATED;
         }
         this._currScene = scene;
         if (this._currSceneTransition!==undefined) {
@@ -180,7 +180,6 @@ export class Game {
         this.revalidate();
         if (!scene.resourceLoader.isCompleted()) {
             this._currScene.trigger(SCENE_EVENTS.PRELOADING);
-            scene?.preloadingTaskFromDecorators?.forEach(cb=>cb(scene));
             scene.onPreloading();
             scene.resourceLoader.onProgress(()=>{
                 this._currScene.trigger(SCENE_EVENTS.PROGRESS);
@@ -196,6 +195,7 @@ export class Game {
             scene.resourceLoader.startLoading();
         } else {
             this._currScene.trigger(SCENE_EVENTS.CONTINUE);
+            (this._currScene as {lifeCycleState:SceneLifeCycleState}).lifeCycleState = SceneLifeCycleState.COMPLETED;
             this._currScene.onContinue();
         }
         if (!this._running) {
@@ -213,7 +213,8 @@ export class Game {
         const last:ISceneWithTransition = this._sceneStack.pop()!;
         if (DEBUG && !last) throw new DebugError(`can not pop scene: no scene in stack`);
         const transition = last.transition?last.transition.getOppositeTransition():undefined;
-        this.runScene(this._sceneStack.getLast()!.scene,transition);
+        const prevScene = this._sceneStack.getLast()!.scene;
+        this.runScene(prevScene,transition);
     }
 
     public getCurrScene():Scene{

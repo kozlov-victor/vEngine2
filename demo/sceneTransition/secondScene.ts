@@ -40,6 +40,8 @@ export class SecondScene extends Scene {
 
     public onReady() {
 
+        console.log('scene 2 on ready');
+
         const tf:TextField = new TextField(this.game);
         tf.pos.setXY(10,40);
         tf.setText("< back");

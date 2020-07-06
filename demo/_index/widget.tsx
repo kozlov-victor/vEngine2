@@ -76,6 +76,7 @@ export class Widget extends VEngineTsxComponent<{}> {
     private selectedItem:string;
     private listLoading:boolean = true;
     private items:string[];
+    private frameRef:HTMLIFrameElement;
 
     constructor() {
         super(new HtmlTsxDOMRenderer());
@@ -90,6 +91,7 @@ export class Widget extends VEngineTsxComponent<{}> {
 
     private selectItem(e:Event,index:number){
         e.preventDefault();
+        if (this.selectedItem===this.items[index]) this.frameRef.contentDocument!.location.reload();
         this.selectedItem = this.items[index];
         this.loadingInfo = 'loading...';
         this.triggerRendering();
@@ -106,6 +108,7 @@ export class Widget extends VEngineTsxComponent<{}> {
                 <div className="up">
                     <div id="frameLoadingInfo">{this.loadingInfo}</div>
                     <iframe
+                        ref={(el)=>this.frameRef = el}
                         onload={()=>this.onFrameLoaded()}
                         src={this.selectedItem?'./demo.html?name='+this.selectedItem:undefined}
                         frameBorder="0" id="frame"/>
@@ -117,7 +120,9 @@ export class Widget extends VEngineTsxComponent<{}> {
                             {
                                 this.items.map((it,index)=>
                                     <li className={it===this.selectedItem?'active':undefined}>
-                                        <a onclick={(e)=>this.selectItem(e,index)} target="_blank" href="#">{it}</a>
+                                        <a onclick={(e)=>this.selectItem(e,index)} target="_blank" href="#">
+                                            {(it===this.selectedItem?'<':'') + it + (it===this.selectedItem?'>':'')}
+                                        </a>
                                         <a target="_blank" href={'./demo.html?name='+it}> . </a>
                                     </li>
                                 )

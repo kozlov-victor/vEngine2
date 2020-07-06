@@ -25,6 +25,7 @@ export class PushTransition extends AbstractSceneTransition {
     }
 
     public render(): void {
+        this.game.camera.worldTransformDirty = true; // todo temporary solution
         if (this._prevScene!==undefined) this._prevScene.render();
 
         const scene:Scene = this._currScene;

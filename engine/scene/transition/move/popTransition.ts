@@ -25,6 +25,7 @@ export class PopTransition extends AbstractSceneTransition {
     }
 
     public render(): void {
+        this.game.camera.worldTransformDirty = true; // todo temporary solution
         this._lockingRect.setXYWH(this._currScene.pos.x,this._currScene.pos.y,this._currScene.size.width,this._currScene.size.height);
         this._currScene.render();
         if (this._prevScene!==undefined) {
