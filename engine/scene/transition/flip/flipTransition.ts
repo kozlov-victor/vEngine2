@@ -91,7 +91,8 @@ export class FlipVerticalInTransition extends AbstractVerticalFlipTransition {
     }
 }
 
-export class FlipVerticalOutTransition extends AbstractFlipTransition {
+export class FlipVerticalOutTransition extends AbstractVerticalFlipTransition {
+
     protected getBottomAndTopImages(): [Image, Image] {
         return [this._prevSceneImage,this._currSceneImage];
     }
