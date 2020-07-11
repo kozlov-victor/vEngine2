@@ -14,8 +14,6 @@ export class SecondScene extends Scene {
 
     public onPreloading(){
 
-        for (let i:number = 0;i<20;i++) { fakeLongLoadingFn(this.resourceLoader); }
-
         this.colorBG = Color.RGB(241,244,244);
 
         const fnt:Font = new Font(this.game);

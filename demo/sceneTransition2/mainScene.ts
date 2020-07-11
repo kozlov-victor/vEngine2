@@ -15,6 +15,15 @@ import {
     FadeOutAppearanceTransition
 } from "@engine/scene/transition/appear/fade/fadeAppearanceTransition";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
+import {
+    RandomCellsAppearingTransition,
+    RandomCellsDisapearingTransition
+} from "@engine/scene/transition/appear/cells/randomCellsAppearingTransition";
+import {
+    FlipHorizontalInTransition, FlipHorizontalOutTransition,
+    FlipVerticalInTransition,
+    FlipVerticalOutTransition
+} from "@engine/scene/transition/flip/flipTransition";
 
 
 export class MainScene extends Scene {
@@ -40,6 +49,12 @@ export class MainScene extends Scene {
         this.createFadeTransitionButton('fade out',false);
         this.createScaleTransitionButton('scale in',true);
         this.createScaleTransitionButton('scale out',false);
+        this.createRandomCellTransitionButton('random cell appear',true);
+        this.createRandomCellTransitionButton('random cell disappear',false);
+        this.createFlipVerticalTransitionButton('flip vertical in',true);
+        this.createFlipVerticalTransitionButton('flip vertical out',false);
+        this.createFlipHorizontalTransitionButton('flip horizontal in',true);
+        this.createFlipHorizontalTransitionButton('flip horizontal out',false);
     }
 
     private createFadeTransitionButton(text:string,isAppearing:boolean){
@@ -55,6 +70,30 @@ export class MainScene extends Scene {
             isAppearing?
                 new ScaleInAppearanceTransition(this.game,1000,EasingBounce.Out):
                 new ScaleOutAppearanceTransition(this.game,1000,EasingBounce.Out);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createRandomCellTransitionButton(text:string,isAppearing:boolean){
+        const transition:ISceneTransition =
+            isAppearing?
+                new RandomCellsAppearingTransition(this.game,1000):
+                new RandomCellsDisapearingTransition(this.game,1000);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createFlipVerticalTransitionButton(text:string,isAppearing:boolean){
+        const transition:ISceneTransition =
+            isAppearing?
+                new FlipVerticalInTransition(this.game,1000):
+                new FlipVerticalOutTransition(this.game,1000);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createFlipHorizontalTransitionButton(text:string,isAppearing:boolean){
+        const transition:ISceneTransition =
+            isAppearing?
+                new FlipHorizontalInTransition(this.game,1000):
+                new FlipHorizontalOutTransition(this.game,1000);
         this.createTransitionButton(text,transition);
     }
 

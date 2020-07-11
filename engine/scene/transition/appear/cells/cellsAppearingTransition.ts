@@ -7,7 +7,7 @@ import {Image} from "@engine/renderable/impl/general/image";
 
 export abstract class AbstractCellsAppearingTransition extends AbstractSceneTransition {
 
-    private readonly _cells:Image[] = [];
+    protected readonly _cells:Image[] = [];
 
     constructor(
         protected readonly game:Game,
