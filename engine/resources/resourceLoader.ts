@@ -30,8 +30,6 @@ export class ResourceLoader {
 
     public readonly q: Queue = new Queue();
 
-
-
     public constructor(private game: Game) {
         this.game = game;
     }

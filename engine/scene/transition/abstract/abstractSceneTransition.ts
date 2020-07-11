@@ -2,6 +2,9 @@ import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {Scene} from "@engine/scene/scene";
 import {Optional} from "@engine/core/declarations";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
+import {Image} from "@engine/renderable/impl/general/image";
+import {Game} from "@engine/core/game";
+import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 
 export interface ISceneTransitionValue {
     val: number;
@@ -9,16 +12,27 @@ export interface ISceneTransitionValue {
 
 export type SceneProgressDescription = Omit<ITweenDescription<ISceneTransitionValue>,'progress|complete'>;
 
+class ImageWithRenderTarget extends Image {
+
+    public renderTarget:IRenderTarget;
+
+}
+
 export abstract class AbstractSceneTransition implements ISceneTransition{
 
     protected _prevScene: Optional<Scene>;
     protected _currScene!: Scene;
     protected _onComplete!: () => void;
+
+    protected readonly _prevSceneImage:ImageWithRenderTarget = this._createImageWithRenderTarget();
+    protected readonly _currSceneImage:ImageWithRenderTarget = this._createImageWithRenderTarget();
+    protected readonly _transitionScene:Scene = new Scene(this.game);
+
     private _tween!:Tween<ISceneTransitionValue>;
     private _completed:boolean = false;
 
-    protected constructor() {
-
+    protected constructor(protected game:Game) {
+        this._transitionScene.resourceLoader.q.completeForced();
     }
 
     public onComplete(fn: () => void): void {
@@ -43,10 +57,14 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
         this._tween = t;
     }
 
-    public abstract render(): void;
+    public render(): void {
+        //this.game.camera.pos.setXY(0); // todo?????
+        if (this._prevScene!==undefined) this._prevScene.renderToTexture(this._prevSceneImage.renderTarget);
+        this._currScene.renderToTexture(this._currSceneImage.renderTarget);
+    }
 
     public update():void {
-        if (this._currScene!==undefined) this._currScene.update();
+        this._currScene.update();
         if (this._prevScene!==undefined) this._prevScene.update();
         this._tween.update();
     }
@@ -63,5 +81,12 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
 
     protected abstract onTransitionProgress(val:number): void;
 
+    private _createImageWithRenderTarget():ImageWithRenderTarget{
+        const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,this.game.size);
+        const image:ImageWithRenderTarget = new ImageWithRenderTarget(this.game);
+        image.setResourceLink(renderTarget.getResourceLink());
+        image.renderTarget = renderTarget;
+        return image;
+    }
 
 }

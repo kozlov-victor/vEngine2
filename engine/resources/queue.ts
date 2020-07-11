@@ -67,6 +67,11 @@ export class Queue {
         return this._currProgress;
     }
 
+    public completeForced():void {
+        this._completed = true;
+        if (this.onResolved!==undefined) this.onResolved();
+    }
+
     public start():void {
         if (this.size()===0) {
             this._completed = true;

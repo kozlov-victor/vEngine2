@@ -8,42 +8,30 @@ import {DebugError} from "@engine/debug/debugError";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
-import {Rect} from "@engine/geometry/rect";
-import {Scene} from "@engine/scene/scene";
 
 export class SlideTransition extends AbstractSceneTransition {
 
-    private _lockingRect:Rect = new Rect();
     private _from:number;
 
     constructor(
-        private readonly game:Game,
+        protected readonly game:Game,
         private readonly sideTo:SIDE = SIDE.BOTTOM,
         private readonly time:number = 1000,
         private readonly easeFn:EaseFn = EasingLinear)
     {
-        super();
+        super(game);
+        this._transitionScene.appendChild(this._currSceneImage);
+        this._transitionScene.appendChild(this._prevSceneImage);
     }
 
     public render(): void {
-        if (this._prevScene!==undefined) {
-            const s = this._prevScene;
-            this._lockingRect.setXYWH(s.pos.x,s.pos.y,s.size.width,s.size.height);
-            s.lockingRect = this._lockingRect;
-            s.render();
-        }
-
-        const scene:Scene = this._currScene;
-        this._lockingRect.setXYWH(scene.pos.x,scene.pos.y,scene.size.width,scene.size.height);
-        scene.lockingRect = this._lockingRect;
-        scene.render();
+        super.render();
+        this._transitionScene.render();
     }
 
     public complete(): void {
         super.complete();
-        this._currScene.pos.setXY(0);
-        this._currScene.lockingRect = undefined;
-        if (this._prevScene!==undefined) this._prevScene.lockingRect = undefined;
+        this._prevSceneImage.pos.setXY(0);
     }
 
     public getOppositeTransition(): ISceneTransition {
@@ -54,13 +42,13 @@ export class SlideTransition extends AbstractSceneTransition {
         switch (this.sideTo) {
             case SIDE.RIGHT:
             case SIDE.LEFT:
-                this._currScene.pos.setX(val);
-                if (this._prevScene!==undefined) this._prevScene.pos.setX(val-this._from);
+                this._currSceneImage.pos.setX(val);
+                if (this._prevScene!==undefined) this._prevSceneImage.pos.setX(val-this._from);
                 break;
             case SIDE.TOP:
             case SIDE.BOTTOM:
-                this._currScene.pos.setY(val);
-                if (this._prevScene!==undefined) this._prevScene.pos.setY(val-this._from);
+                this._currSceneImage.pos.setY(val);
+                if (this._prevScene!==undefined) this._prevSceneImage.pos.setY(val-this._from);
                 break;
         }
     }

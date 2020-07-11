@@ -1,54 +1,10 @@
-import {
-    AbstractSceneTransition,
-    SceneProgressDescription
-} from "../../abstract/abstractSceneTransition";
-import {Game} from "@engine/core/game";
-import {EaseFn} from "@engine/misc/easing/type";
-import {EasingLinear} from "@engine/misc/easing/functions/linear";
-import {ISceneTransition} from "../../abstract/iSceneTransition";
-import {Rect} from "@engine/geometry/rect";
-import {CurtainsOpeningTransition} from "./curtainsOpeningTransition";
+import {SceneProgressDescription} from "../../abstract/abstractSceneTransition";
+import {AbstractCurtainsTransition} from "@engine/scene/transition/appear/curtains/abstractCurtainsTransition";
+import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
+import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
+import {Image} from "@engine/renderable/impl/general/image";
 
-export class CurtainsClosingTransition extends AbstractSceneTransition {
-
-    private _progress:number = 0;
-    private _lockingRect:Rect = new Rect();
-
-    constructor(
-        private readonly game:Game,
-        private readonly time:number = 1000,
-        private readonly easeFn:EaseFn = EasingLinear)
-    {
-        super();
-    }
-
-    public render(): void {
-        if (this._prevScene!==undefined) this._prevScene.render();
-        // left curtain
-        this._currScene.pos.setX(this._progress);
-        this._lockingRect.setXYWH(this._progress,0,this._currScene.size.width/2,this._currScene.size.height);
-        this._currScene.lockingRect = this._lockingRect;
-        this._currScene.render();
-        // right curtain
-        this._currScene.pos.setX(-this._progress);
-        this._lockingRect.setXYWH(-this._progress+this._currScene.size.width/2,0,this._currScene.size.width/2,this._currScene.size.height);
-        this._currScene.lockingRect = this._lockingRect;
-        this._currScene.render();
-    }
-
-    public complete(): void {
-        super.complete();
-        this._currScene.pos.setXY(0);
-        this._currScene.lockingRect = undefined;
-    }
-
-    public getOppositeTransition(): ISceneTransition {
-        return new CurtainsOpeningTransition(this.game,this.time,this.easeFn);
-    }
-
-    protected onTransitionProgress(val:number): void {
-        this._progress = val;
-    }
+export class CurtainsClosingTransition extends AbstractCurtainsTransition {
 
     protected describe(): SceneProgressDescription {
         const from:number = -this.game.size.width/2;
@@ -60,6 +16,14 @@ export class CurtainsClosingTransition extends AbstractSceneTransition {
             time: this.time,
             ease: this.easeFn
         };
+    }
+
+    public getOppositeTransition(): ISceneTransition {
+        return new CurtainsOpeningTransition(this.game,this.time,this.easeFn);
+    }
+
+    protected getBottomAndTopImages(): [Image, Image] {
+        return [this._prevSceneImage, this._currSceneImage];
     }
 
 }

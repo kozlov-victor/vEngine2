@@ -5,56 +5,41 @@ import {
 import {Game} from "@engine/core/game";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
-import {Optional} from "@engine/core/declarations";
-import {Scene} from "@engine/scene/scene";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
-import {Rect} from "@engine/geometry/rect";
+import {Image} from "@engine/renderable/impl/general/image";
 
 export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTransition {
 
-    private _val:number;
-    private _lockingRect:Rect = new Rect();
+    protected _transformationTarget:Image;
 
     constructor(
         protected readonly game:Game,
         protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear)
+        protected readonly easeFn:EaseFn = EasingLinear,
+    )
     {
-        super();
+        super(game);
+        const [imageOnBottom,imageOnTop] = this.getBottomAndTopImages();
+        this._transitionScene.appendChild(imageOnBottom);
+        this._transitionScene.appendChild(imageOnTop);
+        this._transformationTarget = imageOnTop;
+        this._transformationTarget.transformPoint.setToCenter();
     }
 
+    protected abstract getBottomAndTopImages():[Image,Image];
+
+    public render(): void {
+        super.render();
+        this._transitionScene.render();
+    }
 
     public complete(): void {
-        if (this._currScene!==undefined) {
-            this._currScene.scale.setXY(1);
-            this._currScene.transformPoint.setXY(0);
-            this._currScene.lockingRect = undefined;
-        }
-        if (this._prevScene!==undefined) {
-            this._prevScene.scale.setXY(1);
-            this._prevScene.transformPoint.setXY(0);
-            this._prevScene.lockingRect = undefined;
-        }
         super.complete();
+        this._prevSceneImage.scale.setXY(1);
+        this._currSceneImage.scale.setXY(1);
     }
 
     protected abstract getFromTo():{from:number,to:number};
-
-
-    protected renderScenes(a:Optional<Scene>,b:Optional<Scene>): void {
-        if (b!==undefined) {
-            b.render();
-        }
-        if (a!==undefined) {
-            const dx:number = a.size.width/2, dy:number = a.size.height/2;
-            a.transformPoint.setXY(dx,dy);
-            a.scale.setXY(this._val);
-            const valInv:number = 1 - this._val;
-            this._lockingRect.setXYWH(dx*valInv,dy*valInv,a.size.width*this._val,a.size.height*this._val);
-            a.lockingRect = this._lockingRect;
-            a.render();
-        }
-    }
 
     protected describe(): SceneProgressDescription {
         const from:number = this.getFromTo().from;
@@ -69,32 +54,36 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
     }
 
     protected onTransitionProgress(val: number): void {
-        this._val = val;
+        this._transformationTarget.scale.setXY(val);
     }
 
 }
 
 export class ScaleInAppearanceTransition extends AbstractScaleAppearanceTransition {
-    public getOppositeTransition(): ISceneTransition {
-        return new ScaleOutAppearanceTransition(this.game,this.time,this.easeFn);
+
+
+    protected getBottomAndTopImages(): [Image, Image] {
+        return [this._prevSceneImage,this._currSceneImage];
     }
 
-    public render(): void {
-        this.renderScenes(this._currScene,this._prevScene);
+    public getOppositeTransition(): ISceneTransition {
+        return new ScaleOutAppearanceTransition(this.game,this.time,this.easeFn);
     }
 
     protected getFromTo(): { from: number; to: number } {
         return {from: 0,to: 1};
     }
+
 }
 
 export class ScaleOutAppearanceTransition extends AbstractScaleAppearanceTransition {
-    public getOppositeTransition(): ISceneTransition {
-        return new ScaleInAppearanceTransition(this.game,this.time,this.easeFn);
+
+    protected getBottomAndTopImages(): [Image, Image] {
+        return [this._currSceneImage,this._prevSceneImage];
     }
 
-    public render(): void {
-        this.renderScenes(this._prevScene,this._currScene);
+    public getOppositeTransition(): ISceneTransition {
+        return new ScaleInAppearanceTransition(this.game,this.time,this.easeFn);
     }
 
     protected getFromTo(): { from: number; to: number } {

@@ -78,14 +78,19 @@ class NodeChain {
 
 }
 
-const createFeedBackDelayNode = (context:AudioContext,delayTime:number,feedback:number):AudioNode=>{
-    const delay = context.createDelay(delayTime + 1);
-    delay.delayTime.value = delayTime;
+// todo doesnt work yet
+const createFeedBackDelayNodePair = (context:AudioContext):Optional<{delayNode: DelayNode, gainNode: GainNode }>=>{
+    if (context.createDelay===undefined) return undefined;
+    const delayNode = context.createDelay(1);
+    delayNode.delayTime.value = 0;
     const gainNode = context.createGain();
-    gainNode.gain.value = feedback;
-    delay.connect(gainNode);
-    gainNode.connect(delay);
-    return gainNode;
+    gainNode.gain.value = 0;
+    delayNode.connect(gainNode);
+    gainNode.connect(delayNode);
+    const rootGainNode = context.createGain();
+    rootGainNode.gain.value = 1;
+    gainNode.connect(rootGainNode);
+    return {delayNode,gainNode};
 };
 
 
@@ -104,6 +109,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
     private readonly _gainNode: GainNode;
     private readonly _stereoPanNode: Optional<StereoPannerNode>;
     private _free: boolean = true;
+    private readonly _feedBackDelayNodePair:Optional<{delayNode: DelayNode, gainNode: GainNode }>;
 
     public readonly type: string = 'webAudioContext';
 
@@ -120,8 +126,8 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
             this._stereoPanNode.pan.value = 0.5;
             this._nodeChain.addNode(this._stereoPanNode);
         }
-        const delayNode = createFeedBackDelayNode(this._ctx,1,0.5);
-        this._nodeChain.addNode(delayNode);
+        this._feedBackDelayNodePair = createFeedBackDelayNodePair(this._ctx);
+        if (this._feedBackDelayNodePair!==undefined) this._nodeChain.addNode(this._feedBackDelayNodePair.gainNode);
     }
 
     public async load(buffer:ArrayBuffer, link:ResourceLink<void>):Promise<void> {
@@ -169,6 +175,13 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
 
     public setGain(val:number):void {
         this._gainNode.gain.value = val;
+    }
+
+    public setFeedbackDelay(delayTime:number,gain:number):void {
+        if (this._feedBackDelayNodePair!==undefined) {
+            this._feedBackDelayNodePair.delayNode.delayTime.value = delayTime;
+            this._feedBackDelayNodePair.gainNode.gain.value = gain;
+        }
     }
 
     public setVelocity(val:number):void {

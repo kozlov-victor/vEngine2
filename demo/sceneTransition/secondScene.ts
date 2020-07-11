@@ -60,7 +60,7 @@ export class SecondScene extends Scene {
         rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);
         rect.lineWidth = 4;
-        rect.size.setWH(220,160);
+        rect.size.setWH(220,560);
         rect.pos.setXY(100,100);
         rect.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(rect);

@@ -52,7 +52,6 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
 
     public readonly type:string = "Scene";
     public colorBG = Color.WHITE.clone();
-    public lockingRect:Optional<Rect>;
     public readonly resourceLoader: ResourceLoader;
     public readonly pos:Point2d = new Point2d();
     public filters:IFilter[] = [];
@@ -285,10 +284,8 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
             }
         }
 
-        if (this.lockingRect!==undefined) renderer.setLockRect(this.lockingRect);
         renderer.afterFrameDraw(statePointer);
         renderer.transformRestore();
-        renderer.unsetLockRect();
     }
 
     public onInactivated():void {}

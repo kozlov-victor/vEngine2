@@ -38,6 +38,7 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
         this.setGain(sound.gain);
         this.setVelocity(sound.velocity);
         this.setStereoPan(sound.stereoPan);
+        this.setFeedbackDelay(sound.feedbackDelay.delayTime,sound.feedbackDelay.gain);
     }
     public stop():void{}
     public isFree():boolean{return false;}
@@ -47,6 +48,7 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
     public loop(val:boolean):void{}
     public pause():void{}
     public resume():void{}
+    public setFeedbackDelay(delayTime:number,gain:number):void {}
     public load(buffer:ArrayBuffer,link:ResourceLink<void>):Promise<void>{
         return Promise.resolve();
     }
