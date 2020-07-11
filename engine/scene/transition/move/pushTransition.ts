@@ -22,16 +22,6 @@ export class PushTransition extends AbstractSceneTransition {
         this._transitionScene.appendChild(this._currSceneImage);
     }
 
-    public render(): void {
-        super.render();
-        this._transitionScene.render();
-    }
-
-    public complete(): void {
-        super.complete();
-        this._currSceneImage.pos.setXY(0);
-    }
-
     public getOppositeTransition(): ISceneTransition {
         return new PushTransition(this.game,OPPOSITE_SIDE.resolve(this.sideTo),this.time,this.easeFn);
     }

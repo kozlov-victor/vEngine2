@@ -28,17 +28,6 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
 
     protected abstract getBottomAndTopImages():[Image,Image];
 
-    public render(): void {
-        super.render();
-        this._transitionScene.render();
-    }
-
-    public complete(): void {
-        super.complete();
-        this._prevSceneImage.scale.setXY(1);
-        this._currSceneImage.scale.setXY(1);
-    }
-
     protected abstract getFromTo():{from:number,to:number};
 
     protected describe(): SceneProgressDescription {
@@ -60,7 +49,6 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
 }
 
 export class ScaleInAppearanceTransition extends AbstractScaleAppearanceTransition {
-
 
     protected getBottomAndTopImages(): [Image, Image] {
         return [this._prevSceneImage,this._currSceneImage];

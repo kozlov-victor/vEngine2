@@ -58,9 +58,10 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
     }
 
     public render(): void {
-        //this.game.camera.pos.setXY(0); // todo?????
+        this.game.camera.pos.setXY(0);
         if (this._prevScene!==undefined) this._prevScene.renderToTexture(this._prevSceneImage.renderTarget);
         this._currScene.renderToTexture(this._currSceneImage.renderTarget);
+        this._transitionScene.render();
     }
 
     public update():void {

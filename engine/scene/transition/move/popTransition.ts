@@ -22,16 +22,6 @@ export class PopTransition extends AbstractSceneTransition {
         this._transitionScene.appendChild(this._prevSceneImage);
     }
 
-    public render(): void {
-        super.render();
-        this._transitionScene.render();
-    }
-
-    public complete(): void {
-        super.complete();
-        this._prevSceneImage.pos.setXY(0);
-    }
-
     public getOppositeTransition(): ISceneTransition {
         return new PopTransition(this.game,OPPOSITE_SIDE.resolve(this.sideTo),this.time,this.easeFn);
     }

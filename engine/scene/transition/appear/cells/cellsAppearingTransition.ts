@@ -37,15 +37,6 @@ export abstract class AbstractCellsAppearingTransition extends AbstractSceneTran
         }
     }
 
-    public render(): void {
-        super.render();
-        this._transitionScene.render();
-    }
-
-    public complete(): void {
-        super.complete();
-    }
-
     protected abstract getFromTo():{from:number,to:number};
 
     protected describe(): SceneProgressDescription {
@@ -100,7 +91,7 @@ export class CellsDisappearingTransition extends AbstractCellsAppearingTransitio
     }
 
     protected getBottomAndTopImages(): [Image, Image] {
-        return [this._prevSceneImage,this._currSceneImage];
+        return [this._currSceneImage,this._prevSceneImage];
     }
 
 }
