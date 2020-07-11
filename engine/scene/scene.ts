@@ -23,8 +23,6 @@ import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {Point2d} from "@engine/geometry/point2d";
-import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
-import {Rect} from "@engine/geometry/rect";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation} from "@engine/animation/iAnimation";
@@ -34,6 +32,7 @@ import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {DebugError} from "@engine/debug/debugError";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
+import {Size} from "@engine/geometry/size";
 import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
 
 export const enum SCENE_EVENTS {
@@ -44,7 +43,7 @@ export const enum SCENE_EVENTS {
     INACTIVATED = 'inactivated'
 }
 
-export class Scene extends TransformableModel implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
+export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
 
     private static isLayerGuard(modelOrLayer:RenderableModel|Layer):modelOrLayer is Layer {
         return modelOrLayer.type==='Layer';
@@ -56,6 +55,7 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     public readonly pos:Point2d = new Point2d();
     public filters:IFilter[] = [];
     public alpha:number = 1;
+    public readonly size:Size = new Size();
     public readonly lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED;
 
     protected preloadingGameObject!:RenderableModel;
@@ -73,7 +73,6 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
     private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
     constructor(protected game:Game) {
-        super(game);
         this.resourceLoader = new ResourceLoader(game);
         this.size.set(this.game.size);
     }
@@ -243,8 +242,6 @@ export class Scene extends TransformableModel implements IRevalidatable, ITweena
             this.game.getRenderer().transformSet(...this.game.camera.worldTransformMatrix.mat16);
         }
 
-        this.translate();
-        this.transform();
         renderer.setAlphaBlend(this.alpha);
 
         if (!this.resourceLoader.isCompleted()) {
