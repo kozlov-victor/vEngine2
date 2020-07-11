@@ -5,12 +5,11 @@ import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransiti
 import {Image} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
+import {EaseFn} from "@engine/misc/easing/type";
 
 export interface ISceneTransitionValue {
     val: number;
 }
-
-export type SceneProgressDescription = Omit<ITweenDescription<ISceneTransitionValue>,'progress|complete'>;
 
 class ImageWithRenderTarget extends Image {
 
@@ -31,7 +30,7 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
     private _tween!:Tween<ISceneTransitionValue>;
     private _completed:boolean = false;
 
-    protected constructor(protected game:Game) {
+    protected constructor(protected game:Game,protected readonly time:number, protected readonly easeFn:EaseFn) {
         this._transitionScene.resourceLoader.q.completeForced();
     }
 
@@ -40,8 +39,13 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
     }
 
     public start(prevScene: Optional<Scene>, currScene: Scene): void {
+        const {from,to} = this.getFromTo();
         const desc:ITweenDescription<ISceneTransitionValue> = {
-            ...this.describe(),
+            target: {val: from},
+            from: {val: from},
+            to: {val: to},
+            time: this.time,
+            ease: this.easeFn,
             progress: (obj: { val: number }) => {
                 this.onTransitionProgress(obj.val);
             },
@@ -78,7 +82,7 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
 
     public abstract getOppositeTransition():ISceneTransition;
 
-    protected abstract describe():SceneProgressDescription;
+    protected abstract getFromTo():{from:number,to:number};
 
     protected abstract onTransitionProgress(val:number): void;
 

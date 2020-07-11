@@ -2,6 +2,7 @@ import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComp
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
 import {httpClient} from "@engine/debug/httpClient";
+import {Optional} from "@engine/core/declarations";
 
 const style = `
 
@@ -77,6 +78,7 @@ export class Widget extends VEngineTsxComponent<{}> {
     private listLoading:boolean = true;
     private items:string[];
     private frameRef:HTMLIFrameElement;
+    private scrollableWrapperRef:HTMLDivElement;
 
     constructor() {
         super(new HtmlTsxDOMRenderer());
@@ -91,6 +93,7 @@ export class Widget extends VEngineTsxComponent<{}> {
 
     private selectItem(e:Event,index:number){
         e.preventDefault();
+        sessionStorage.scrollTop = this.scrollableWrapperRef.scrollTop;
         if (this.selectedItem===this.items[index]) this.frameRef.contentDocument!.location.reload();
         this.selectedItem = this.items[index];
         this.loadingInfo = 'loading...';

@@ -1,7 +1,4 @@
-import {
-    AbstractSceneTransition,
-    SceneProgressDescription
-} from "@engine/scene/transition/abstract/abstractSceneTransition";
+import {AbstractSceneTransition,} from "@engine/scene/transition/abstract/abstractSceneTransition";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
 import {EaseFn} from "@engine/misc/easing/type";
@@ -17,7 +14,7 @@ export abstract class AbstractCurtainsTransition extends AbstractSceneTransition
         protected readonly time:number = 1000,
         protected readonly easeFn:EaseFn = EasingLinear)
     {
-        super(game);
+        super(game,time,easeFn);
 
         const [imageOnBottom,imageOnTop] = this.getBottomAndTopImages();
 
@@ -44,16 +41,5 @@ export abstract class AbstractCurtainsTransition extends AbstractSceneTransition
     protected abstract getBottomAndTopImages():[Image,Image];
 
     protected abstract getFromTo():{from:number,to:number};
-
-    protected describe(): SceneProgressDescription {
-        const {from,to} = this.getFromTo();
-        return {
-            target: {val: from},
-            from: {val: from},
-            to: {val: to},
-            time: this.time,
-            ease: this.easeFn
-        };
-    }
 
 }

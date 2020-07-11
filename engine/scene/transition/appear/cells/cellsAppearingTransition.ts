@@ -1,7 +1,4 @@
-import {
-    AbstractSceneTransition,
-    SceneProgressDescription
-} from "@engine/scene/transition/abstract/abstractSceneTransition";
+import {AbstractSceneTransition} from "@engine/scene/transition/abstract/abstractSceneTransition";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 import {Game} from "@engine/core/game";
 import {EaseFn} from "@engine/misc/easing/type";
@@ -19,7 +16,7 @@ export abstract class AbstractCellsAppearingTransition extends AbstractSceneTran
         protected numOfCellsY:number = 6,
         protected readonly easeFn:EaseFn = EasingLinear)
     {
-        super(game);
+        super(game,time,easeFn);
         const [imageOnBottom,imageOnTop] = this.getBottomAndTopImages();
         this._transitionScene.appendChild(imageOnBottom);
 
@@ -35,20 +32,6 @@ export abstract class AbstractCellsAppearingTransition extends AbstractSceneTran
                 image.pos.setXY(x*cellWidth,y*cellHeight);
             }
         }
-    }
-
-    protected abstract getFromTo():{from:number,to:number};
-
-    protected describe(): SceneProgressDescription {
-        const from:number = this.getFromTo().from;
-        const to:number = this.getFromTo().to;
-        return {
-            target: {val: from},
-            from: {val: from},
-            to: {val: to},
-            time: this.time,
-            ease: this.easeFn
-        };
     }
 
     protected onTransitionProgress(val: number): void {

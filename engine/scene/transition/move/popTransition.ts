@@ -1,7 +1,4 @@
-import {
-    AbstractSceneTransition,
-    SceneProgressDescription
-} from "@engine/scene/transition/abstract/abstractSceneTransition";
+import {AbstractSceneTransition} from "@engine/scene/transition/abstract/abstractSceneTransition";
 import {Game} from "@engine/core/game";
 import {OPPOSITE_SIDE, SIDE} from "@engine/scene/transition/move/side";
 import {DebugError} from "@engine/debug/debugError";
@@ -14,10 +11,10 @@ export class PopTransition extends AbstractSceneTransition {
     constructor(
         protected readonly game:Game,
         private readonly sideTo:SIDE = SIDE.BOTTOM,
-        private readonly time:number = 1000,
-        private readonly easeFn:EaseFn = EasingLinear)
+        protected readonly time:number = 1000,
+        protected readonly easeFn:EaseFn = EasingLinear)
     {
-        super(game);
+        super(game,time,easeFn);
         this._transitionScene.appendChild(this._currSceneImage);
         this._transitionScene.appendChild(this._prevSceneImage);
     }
@@ -39,7 +36,7 @@ export class PopTransition extends AbstractSceneTransition {
         }
     }
 
-    protected describe(): SceneProgressDescription {
+    protected getFromTo(): {from:number,to:number} {
 
         let from:number = 0, to:number = 0;
         switch (this.sideTo) {
@@ -64,13 +61,7 @@ export class PopTransition extends AbstractSceneTransition {
                 break;
         }
 
-        return {
-            target: {val: from},
-            from: {val: from},
-            to: {val: to},
-            time: this.time,
-            ease: this.easeFn
-        };
+        return {from,to}
     }
 
 

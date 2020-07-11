@@ -1,11 +1,12 @@
-import {AbstractSceneTransition} from "@engine/scene/transition/abstract/abstractSceneTransition";
+import {AbstractSceneTransition,} from "@engine/scene/transition/abstract/abstractSceneTransition";
+import {Image} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
-import {Image} from "@engine/renderable/impl/general/image";
 
-export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTransition {
+
+export abstract class AbstractFadeAppearanceTransition extends AbstractSceneTransition {
 
     protected _transformationTarget:Image;
 
@@ -20,7 +21,6 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
         this._transitionScene.appendChild(imageOnBottom);
         this._transitionScene.appendChild(imageOnTop);
         this._transformationTarget = imageOnTop;
-        this._transformationTarget.transformPoint.setToCenter();
     }
 
     protected abstract getBottomAndTopImages():[Image,Image];
@@ -28,19 +28,19 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
     protected abstract getFromTo():{from:number,to:number};
 
     protected onTransitionProgress(val: number): void {
-        this._transformationTarget.scale.setXY(val);
+        this._transformationTarget.alpha = val;
     }
 
 }
 
-export class ScaleInAppearanceTransition extends AbstractScaleAppearanceTransition {
+export class FadeInAppearanceTransition extends AbstractFadeAppearanceTransition {
 
     protected getBottomAndTopImages(): [Image, Image] {
         return [this._prevSceneImage,this._currSceneImage];
     }
 
     public getOppositeTransition(): ISceneTransition {
-        return new ScaleOutAppearanceTransition(this.game,this.time,this.easeFn);
+        return new FadeOutAppearanceTransition(this.game,this.time,this.easeFn);
     }
 
     protected getFromTo(): { from: number; to: number } {
@@ -49,14 +49,14 @@ export class ScaleInAppearanceTransition extends AbstractScaleAppearanceTransiti
 
 }
 
-export class ScaleOutAppearanceTransition extends AbstractScaleAppearanceTransition {
+export class FadeOutAppearanceTransition extends AbstractFadeAppearanceTransition {
 
     protected getBottomAndTopImages(): [Image, Image] {
         return [this._currSceneImage,this._prevSceneImage];
     }
 
     public getOppositeTransition(): ISceneTransition {
-        return new ScaleInAppearanceTransition(this.game,this.time,this.easeFn);
+        return new FadeInAppearanceTransition(this.game,this.time,this.easeFn);
     }
 
     protected getFromTo(): { from: number; to: number } {
