@@ -66,8 +66,11 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                     ) {
                         this.emitOverlapEvents(playerBody, entityBody);
                     } else {
-                        this.interpolateAndResolveCollision(playerBody, entityBody);
-                        this.interpolateAndResolveCollision(entityBody, playerBody);
+                        const dotProduct:number = playerBody._pos.x*entityBody._pos.x+playerBody._pos.y*entityBody._pos.y;
+                        if (dotProduct>0) {
+                            this.interpolateAndResolveCollision(playerBody, entityBody);
+                            this.interpolateAndResolveCollision(entityBody, playerBody);
+                        }
                     }
                 }
             }

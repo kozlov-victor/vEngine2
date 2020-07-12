@@ -10,7 +10,6 @@ export class MainScene extends Scene {
     // https://stackoverflow.com/questions/33622680/javascript-canvas-animated-arc
     public onReady() {
         const surface:DrawingSurface = new DrawingSurface(this.game,new Size(300,300));
-        surface.pos.setXY(40,40);
         surface.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(surface);
         surface.setLineWidth(1);

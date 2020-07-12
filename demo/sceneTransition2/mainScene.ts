@@ -17,13 +17,22 @@ import {
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
 import {
     RandomCellsAppearingTransition,
-    RandomCellsDisapearingTransition
+    RandomCellsDisappearingTransition
 } from "@engine/scene/transition/appear/cells/randomCellsAppearingTransition";
 import {
-    FlipHorizontalInTransition, FlipHorizontalOutTransition,
+    FlipHorizontalInTransition,
+    FlipHorizontalOutTransition,
     FlipVerticalInTransition,
     FlipVerticalOutTransition
 } from "@engine/scene/transition/flip/flipTransition";
+import {
+    MainDiagonalCellsAppearingTransition,
+    MainDiagonalCellsDisappearingTransition
+} from "@engine/scene/transition/appear/cells/mainDiagonalCellsAppearingTransition";
+import {
+    SideDiagonalCellsAppearingTransition,
+    SideDiagonalCellsDisappearingTransition
+} from "@engine/scene/transition/appear/cells/sideDiagonalCellsAppearingTransition";
 
 
 export class MainScene extends Scene {
@@ -55,6 +64,10 @@ export class MainScene extends Scene {
         this.createFlipVerticalTransitionButton('flip vertical out',false);
         this.createFlipHorizontalTransitionButton('flip horizontal in',true);
         this.createFlipHorizontalTransitionButton('flip horizontal out',false);
+        this.createMainDiagonalCellTransitionButton('main diagonal cell appear',true);
+        this.createMainDiagonalCellTransitionButton('main diagonal cell disappear',false);
+        this.createSideDiagonalCellTransitionButton('side diagonal cell appear',true);
+        this.createSideDiagonalCellTransitionButton('side diagonal cell disappear',false);
     }
 
     private createFadeTransitionButton(text:string,isAppearing:boolean){
@@ -76,8 +89,24 @@ export class MainScene extends Scene {
     private createRandomCellTransitionButton(text:string,isAppearing:boolean){
         const transition:ISceneTransition =
             isAppearing?
-                new RandomCellsAppearingTransition(this.game,1000):
-                new RandomCellsDisapearingTransition(this.game,1000);
+                new RandomCellsAppearingTransition(this.game,1000,20,20):
+                new RandomCellsDisappearingTransition(this.game,1000,20,20);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createMainDiagonalCellTransitionButton(text:string,isAppearing:boolean){
+        const transition:ISceneTransition =
+            isAppearing?
+                new MainDiagonalCellsAppearingTransition(this.game,1000,15,15):
+                new MainDiagonalCellsDisappearingTransition(this.game,1000,15,15);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createSideDiagonalCellTransitionButton(text:string,isAppearing:boolean){
+        const transition:ISceneTransition =
+            isAppearing?
+                new SideDiagonalCellsAppearingTransition(this.game,1000,15,15):
+                new SideDiagonalCellsDisappearingTransition(this.game,1000,15,15);
         this.createTransitionButton(text,transition);
     }
 
