@@ -35,6 +35,8 @@ import {
 } from "@engine/scene/transition/appear/cells/sideDiagonalCellsAppearingTransition";
 
 
+
+// inspired by https://www.youtube.com/watch?v=mrR9eqUNTic
 export class MainScene extends Scene {
 
     public fnt!:Font;

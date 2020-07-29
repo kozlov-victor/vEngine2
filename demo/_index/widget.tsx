@@ -2,7 +2,6 @@ import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComp
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
 import {httpClient} from "@engine/debug/httpClient";
-import {Optional} from "@engine/core/declarations";
 
 const style = `
 
@@ -116,7 +115,7 @@ export class Widget extends VEngineTsxComponent<{}> {
                         src={this.selectedItem?'./demo.html?name='+this.selectedItem:undefined}
                         frameBorder="0" id="frame"/>
                 </div>
-                <div className="down">
+                <div className="down" ref={el=>this.scrollableWrapperRef = el}>
                     {this.listLoading?
                         <div className="loading">loading...</div>:
                         <ul id="list">
