@@ -41,6 +41,15 @@ export const enum KEYBOARD_KEY {
     LEFT = 37,
     UP = 38,
     RIGHT = 39,
-    DOWN = 40
+    DOWN = 40,
 
+    ALT = 18,
+    BACKSPACE = 8,
+    CAPS_LOCK = 20,
+    ESC = 27,
+    CONTROL = 17,
+    DELETE = 46,
+    HOME = 36,
+    END = 35,
+    TAB = 9,
 }

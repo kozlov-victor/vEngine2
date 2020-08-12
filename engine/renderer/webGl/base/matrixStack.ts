@@ -50,7 +50,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this._stack.replaceLast(m);
     }
 
-    public translate(x:number, y:number, z:number = 0):MatrixStack {
+    public translate(x:number, y:number, z:number = 0):this {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeTranslation(t,x, y, z);
         const m:Mat16Holder = this.getCurrentValue();
@@ -68,12 +68,29 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         v4:number, v5:number, v6:number, v7:number,
         v8:number, v9:number, v10:number,v11:number,
         v12:number,v13:number,v14:number,v15:number
-    ):MatrixStack {
+    ):this {
         this.getCurrentValue().set(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
         return this;
     }
 
-    public skewX(angle:number):MatrixStack {
+    public translateByMatrixValues(
+        v0:number, v1:number, v2:number, v3:number,
+        v4:number, v5:number, v6:number, v7:number,
+        v8:number, v9:number, v10:number,v11:number,
+        v12:number,v13:number,v14:number,v15:number
+    ):this{
+        const t:Mat16Holder = Mat16Holder.fromPool()!;
+        t.set(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
+        const m:Mat16Holder = this.getCurrentValue();
+        const result:Mat16Holder = Mat16Holder.fromPool();
+        mat4.matrixMultiply(result,t, m);
+        this.setCurrentValue(result);
+        t.release();
+        m.release();
+        return this;
+    }
+
+    public skewX(angle:number):this {
         const t:Mat16Holder = Mat16Holder.fromPool()!;
         mat4.makeXSkew(t,angle);
         const m:Mat16Holder = this.getCurrentValue();
@@ -85,7 +102,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this;
     }
 
-    public skewY(angle:number):MatrixStack {
+    public skewY(angle:number):this {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeYSkew(t,angle);
         const m:Mat16Holder = this.getCurrentValue();
@@ -97,7 +114,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this;
     }
 
-    public rotateX(angleInRadians:number):MatrixStack {
+    public rotateX(angleInRadians:number):this {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeXRotation(t,angleInRadians);
         this._rotate(t);
@@ -105,7 +122,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this;
     }
 
-    public rotateY(angleInRadians:number):MatrixStack {
+    public rotateY(angleInRadians:number):this {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeYRotation(t,angleInRadians);
         this._rotate(t);
@@ -113,7 +130,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this;
     }
 
-    public rotateZ(angleInRadians:number):MatrixStack {
+    public rotateZ(angleInRadians:number):this {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeZRotation(t,angleInRadians);
         this._rotate(t);
@@ -121,7 +138,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this;
     }
 
-    public scale(x:number, y:number, z:number = 1):MatrixStack {
+    public scale(x:number, y:number, z:number = 1):this {
         const t:Mat16Holder =  Mat16Holder.fromPool();
         mat4.makeScale(t,x, y, z);
         const m:Mat16Holder = this.getCurrentValue();
@@ -133,7 +150,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this;
     }
 
-    public resetTransform():MatrixStack{
+    public resetTransform():this{
         this.getCurrentValue().release();
         const identity:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeIdentity(identity);
@@ -146,7 +163,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         mat4.makeRotationReset(m);
     }
 
-    public release():MatrixStack{
+    public release():this{
         for (let i:number=0,max:number = this._stack.size();i<max;i++) {
             this._stack.getAt(i)!.release();
         }

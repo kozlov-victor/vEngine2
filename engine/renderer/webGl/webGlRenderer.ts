@@ -274,7 +274,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const {width:rw,height:rh} = rectangle.size;
             const maxSize:number = Math.max(rw,rh);
             const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);
-
             this.prepareGeometryUniformInfo(rectangle);
             this.prepareShapeUniformInfo(rectangle);
             sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
@@ -312,8 +311,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_height,1);
         sd.setUniform(sd.u_rectOffsetLeft,1);
         sd.setUniform(sd.u_rectOffsetTop,1);
-        sd.setUniform(sd.u_arcAngleFrom,ellipse.arcAngleFrom);
-        sd.setUniform(sd.u_arcAngleTo,ellipse.arcAngleTo);
+        sd.setUniform(sd.u_arcAngleFrom,ellipse.arcAngleFrom % (2*Math.PI));
+        sd.setUniform(sd.u_arcAngleTo,ellipse.arcAngleTo % (2*Math.PI));
         sd.setUniform(sd.u_anticlockwise,ellipse.anticlockwise);
         sd.attachTexture('texture',this._nullTexture);
         sd.draw();
@@ -373,6 +372,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public transformSet(v0: number, v1: number, v2: number, v3: number, v4: number, v5: number, v6: number, v7: number, v8: number, v9: number, v10: number, v11: number, v12: number, v13: number, v14: number, v15: number): void {
         this._matrixStack.setMatrixValues(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
+    }
+
+    transformTranslateByMatrixValues(v0: number, v1: number, v2: number, v3: number, v4: number, v5: number, v6: number, v7: number, v8: number, v9: number, v10: number, v11: number, v12: number, v13: number, v14: number, v15: number): void {
+        this._matrixStack.translateByMatrixValues(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
     }
 
     public transformGet(): Readonly<MAT16> {

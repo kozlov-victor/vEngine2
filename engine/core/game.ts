@@ -95,7 +95,7 @@ export class Game {
         return this.getControl(type)!==undefined;
     }
 
-    public getControl<T extends IControl>(type:string):Optional<T> {
+    public getControl<T extends IControl>(type:'KeyboardControl'|'MouseControl'|string):Optional<T> {
         for (const c of this._controls) {
             if (c.type===type) {
                 return c as T;

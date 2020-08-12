@@ -196,6 +196,9 @@ export class DomRenderer extends AbstractRenderer {
     ): void {
     }
 
+    transformTranslateByMatrixValues(v0: number, v1: number, v2: number, v3: number, v4: number, v5: number, v6: number, v7: number, v8: number, v9: number, v10: number, v11: number, v12: number, v13: number, v14: number, v15: number): void {
+    }
+
     public transformGet(): Readonly<MAT16> {
         return undefined!;
     }

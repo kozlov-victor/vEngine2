@@ -16,6 +16,8 @@ import Vec4Holder = vec4.Vec4Holder;
 const pointTopLeft:Vec4Holder = new Vec4Holder();
 pointTopLeft.set(0,0,0,1);
 
+const LEFT_MOUSE_BTN  = 0 as const;
+
 export class MouseControl implements IControl {
 
     private static triggerGameObjectEvent(
@@ -141,8 +143,10 @@ export class MouseControl implements IControl {
             }
         };
         container.onmousedown = (e:MouseEvent)=>{
-            if (e.button === 0) this.resolveClick(e);
-            else this.resolveButtonPressed(e);
+            if (e.button === LEFT_MOUSE_BTN) this.resolveClick(e);
+            else {
+                this.resolveButtonPressed(e);
+            }
         };
         // mouseUp
         container.ontouchend = container.ontouchcancel = (e:TouchEvent)=>{
@@ -152,12 +156,30 @@ export class MouseControl implements IControl {
                 this.resolveMouseUp(e.changedTouches[l]);
             }
         };
+        document.body.ontouchend = document.body.ontouchcancel = (e:TouchEvent)=>{
+            let l:number = e.changedTouches.length;
+            while (l--){
+                const point:MousePoint = this.resolvePoint(e.changedTouches[l]);
+                if (this._objectsCaptured[point.id]!==undefined) {
+                    this.resolveMouseUp(e.changedTouches[l]);
+                }
+                point.release();
+            }
+        };
         container.onmouseup = (e:MouseEvent)=>{
+            e.stopPropagation(); // to prevent  document.body.onmouseup triggering
             this.resolveMouseUp(e);
+        };
+        document.body.onmouseup = (e: MouseEvent)=>{
+            const point:MousePoint = this.resolvePoint(e);
+            if (this._objectsCaptured[point.id]!==undefined) {
+                this.resolveMouseUp(e);
+            }
+            point.release();
         };
         // mouseMove
         container.ontouchmove = (e:TouchEvent)=>{
-            e.preventDefault();
+            e.preventDefault(); // to prevent canvas move
             let l:number = e.touches.length;
             while (l--){
                 this.resolveMouseMove(e.touches[l],true);
@@ -188,6 +210,8 @@ export class MouseControl implements IControl {
             'onmousemove','ondblclick'].forEach((evtName:string)=>{
                 // tslint:disable-next-line:no-null-keyword
             (this._container as unknown as Record<string,null>)[evtName] = null;
+                // tslint:disable-next-line:no-null-keyword
+            document.body.ontouchend = document.body.ontouchcancel = document.body.onmouseup = null;
         });
     }
 
@@ -209,6 +233,7 @@ export class MouseControl implements IControl {
         screenPoint.setXY(screenX,screenY);
 
         const mousePoint:MousePoint = MousePoint.fromPool();
+        mousePoint.target = undefined!;
         mousePoint.screenCoordinate.set(screenPoint);
         mousePoint.id = (e as Touch).identifier  || (e as PointerEvent).pointerId || 0;
 

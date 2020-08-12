@@ -19,6 +19,41 @@ import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {describeArc} from "@engine/renderable/impl/geometry/helpers/splineFromPoints";
 
+const drawShapeOnSurfaceWithTransformations = (game:Game,model:RenderableModel,matrixStack:MatrixStack)=>{
+    const renderer:AbstractRenderer = game.getRenderer();
+    renderer.transformSave();
+    renderer.transformTranslateByMatrixValues(...matrixStack.getCurrentValue().mat16);
+    renderer.transformTranslate(model.pos.x,model.pos.y);
+    model.pos.setXY(0);
+    model.worldTransformDirty = true;
+};
+
+class RectangleForDrawingSurface extends Rectangle {
+    constructor(game: Game, private matrixStack:MatrixStack) {super(game);}
+    render(): void {
+        drawShapeOnSurfaceWithTransformations(this.game,this,this.matrixStack);
+        super.render();
+        this.game.getRenderer().transformRestore();
+    }
+}
+
+class EllipseForDrawingSurface extends Ellipse {
+    constructor(game: Game, private matrixStack:MatrixStack) {super(game);}
+    draw(): void {
+        drawShapeOnSurfaceWithTransformations(this.game,this,this.matrixStack);
+        super.draw();
+        this.game.getRenderer().transformRestore();
+    }
+}
+
+class LineForDrawingSurface extends Line {
+    constructor(game: Game, private matrixStack:MatrixStack) {super(game);}
+    draw(): void {
+        drawShapeOnSurfaceWithTransformations(this.game,this,this.matrixStack);
+        super.draw();
+        this.game.getRenderer().transformRestore();
+    }
+}
 
 export class DrawingSurface extends RenderableModel implements ICloneable<DrawingSurface>,IResource<ITexture>, IMatrixTransformable, IDestroyable {
 
@@ -34,20 +69,19 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
     public filters: IFilter[] = [];
     public setResourceLink:never = undefined as unknown as never;
+    private _matrixStack:MatrixStack = new MatrixStack();
 
     private canvasImage:Image = new Image(this.game);
 
-    private _rect:Rectangle = new Rectangle(this.game);
-    private _ellipse:Ellipse = new Ellipse(this.game);
-    private _line:Line = new Line(this.game);
+    private _rect:Rectangle = new RectangleForDrawingSurface(this.game,this._matrixStack);
+    private _ellipse:Ellipse = new EllipseForDrawingSurface(this.game,this._matrixStack);
+    private _line:Line = new LineForDrawingSurface(this.game,this._matrixStack);
     private _nullGameObject:NullGameObject = new NullGameObject(this.game);
 
     private fillColor:Color = Color.RGBA(0,0,0,255);
     private drawColor:Color = Color.RGBA(0,0,0,255);
     private _lineWidth:number = 1;
     private _pointMoveTo:Point2d = new Point2d();
-
-    private _matrixStack:MatrixStack = new MatrixStack();
 
     private readonly _renderTarget:IRenderTarget;
     private _omitSelfOnRendering:boolean = false;
@@ -101,9 +135,8 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
 
-
     public transformRestore(): void {
-        this._matrixStack.resetTransform();
+        this._matrixStack.restore();
     }
 
     public transformRotateX(angleInRadians: number): void {
@@ -150,6 +183,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public drawRect(x:number,y:number,width:number,height:number):void {
+        if (width===0 || height===0) return;
         this._rect.pos.setXY(x,y);
         this._rect.size.setWH(width,height);
         this.drawSimpleShape(this._rect);
@@ -161,6 +195,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public drawEllipse(cx:number,cy:number,radiusX:number,radiusY:number):void {
+        if (radiusX===0 || radiusY===0) return;
         this._ellipse.radiusX = radiusX;
         this._ellipse.radiusY = radiusY;
         this._ellipse.center.setXY(cx,cy);
@@ -170,6 +205,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public drawArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {
+        if (radius===0) return;
         this._ellipse.radiusX = radius;
         this._ellipse.radiusY = radius;
         this._ellipse.center.setXY(cx,cy);
@@ -183,7 +219,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public fillArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {
-
+        if (radius===0) return;
         if ( // full circle
             Math.abs(
                 Math.abs(startAngle%(Math.PI*2)) -
@@ -226,8 +262,13 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         }
     }
 
-    public drawPolyline(svgPath:string){
-        const p:PolyLine = PolyLine.fromSvgPath(this.game,svgPath);
+    public drawPolyline(pathOrVertices:string|number[]){
+        let p:PolyLine;
+        if ((pathOrVertices as number[]).push!==undefined) {
+            p = PolyLine.fromPoints(this.game,pathOrVertices as number[]);
+        } else {
+            p = PolyLine.fromSvgPath(this.game,pathOrVertices as string);
+        }
         p.fillColor = this.fillColor;
         p.color = this.drawColor;
         p.lineWidth = this._lineWidth;
@@ -235,15 +276,11 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public drawModel(model:RenderableModel,clearColor?:Color){
-        const renderer:AbstractRenderer = this.game.getRenderer();
-        renderer.transformSave();
-        renderer.transformSet(...this._matrixStack.getCurrentValue().mat16);
         this.appendChild(model);
         this._omitSelfOnRendering = true;
         this.renderToTexture(this._renderTarget,clearColor);
         this._omitSelfOnRendering = false;
         this.removeChild(model);
-        renderer.transformRestore();
     }
 
     public destroy() {
