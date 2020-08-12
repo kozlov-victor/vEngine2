@@ -78,6 +78,14 @@ export class Game {
         return this._scaleStrategy;
     }
 
+    get width():number {
+        return this.size.width;
+    }
+
+    get height():number {
+        return this.size.height;
+    }
+
     public addControl(C:ClazzEx<IControl,Game>):void{
         const instance:IControl = new C(this);
         if (DEBUG) {

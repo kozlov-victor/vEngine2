@@ -39,18 +39,18 @@ class RectangleForDrawingSurface extends Rectangle {
 
 class EllipseForDrawingSurface extends Ellipse {
     constructor(game: Game, private matrixStack:MatrixStack) {super(game);}
-    draw(): void {
+    render(): void {
         drawShapeOnSurfaceWithTransformations(this.game,this,this.matrixStack);
-        super.draw();
+        super.render();
         this.game.getRenderer().transformRestore();
     }
 }
 
 class LineForDrawingSurface extends Line {
     constructor(game: Game, private matrixStack:MatrixStack) {super(game);}
-    draw(): void {
+    render(): void {
         drawShapeOnSurfaceWithTransformations(this.game,this,this.matrixStack);
-        super.draw();
+        super.render();
         this.game.getRenderer().transformRestore();
     }
 }

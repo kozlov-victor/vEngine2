@@ -47,7 +47,7 @@ export class MainScene extends Scene {
         this.renderScene = ()=>{
             const t = this.game.getElapsedTime() / 1000;
             x.setDrawColor(Color.HSL((t*99),79,80).asRGBNumeric(),20);
-            x.drawArc(960+S(t)*540,540+C(t)*540,1E3,0,7);
+            x.drawArc(960+S(t)*540,540+C(t)*540,1E3,0,Math.PI*2);
         };
 
     }

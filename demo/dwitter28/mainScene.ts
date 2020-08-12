@@ -26,7 +26,7 @@ export class MainScene extends Scene {
         const S = Math.sin;
         const C = Math.cos;
         const T = Math.tan;
-        const c = this.surface;
+        //const c = this.surface;
         const x = this.surface;
         // tslint:disable-next-line:no-shadowed-variable
         const R = (r:number,g:number,b:number)=>{
@@ -39,15 +39,26 @@ export class MainScene extends Scene {
             return (r<<16)|(g<<8)|(b);
         };
 
+        this.surface.setLineWidth(1);
+        let frame = 0;
 
         this.renderScene = ()=>{
             const t = this.game.getElapsedTime() / 1000;
+            // https://www.dwitter.net/d/2825
 
-            for(let i=9;i--;){
-                x.drawArc(1e3+C(i/2)*t**3,500+S(i*3)*t**3,1e3-t*t,0,Math.PI*2)
-            }
+            //x.clear();
 
-        };
+            const w=this.game.width;
+            const f=frame,p=1.618;
+            x.transformTranslate(w/2+f*0.256,w/4);
+            x.transformRotateZ(f/1.618);
+            x.drawArc(f*p,f*p,p+f/p,0,2*Math.PI);
+            x.drawRect(f*p,f*p,p+f/p,p+f/p);
+
+            x.transformReset();
+
+            frame++;
+        }
 
     }
 
