@@ -44,13 +44,17 @@ class WebpackDonePlugin{
 module.exports = async (env={})=>{
 
     console.log('env',env);
-    const project = await cliUI.prompt(
+    await cliUI.showInfoWindow(
         [
             ` --===started===-- `,
             `--vEngine compiler--`,
-            `enter project name`,
-            `or leave empty`]
+        ]
     );
+    let project;
+    const mode = await cliUI.choose('Choose option',['compile all projects','enter project name to compile']);
+    if (mode===1) {
+        project = await cliUI.prompt("Enter project name to compile")
+    }
 
     const debug = env.debug==='true';
 
