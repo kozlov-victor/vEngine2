@@ -41,6 +41,12 @@ class WebpackDonePlugin{
     }
 }
 
+const getAllProjects = ()=>{
+    return fs.readdirSync('./demo').filter((dir)=>{
+        return !['demo.html', 'assets', 'out', 'index.html', 'index.json', '.DS_Store', 'generateIndexPage.js', 'application.hta', 'VEngineNavigator.exe'].includes(dir);
+    });
+};
+
 module.exports = async (env={})=>{
 
     console.log('env',env);
@@ -51,8 +57,17 @@ module.exports = async (env={})=>{
         ]
     );
     let project;
-    const mode = await cliUI.choose('Choose option',['compile all projects','enter project name to compile']);
+    const mode = await cliUI.choose('Choose option',[
+        'Compile all projects',
+        'Choose project from list',
+        'Enter project name to compile'
+        ]
+    );
     if (mode===1) {
+        const allPROJECTS = getAllProjects();
+        const index = await cliUI.choose('Select a project',allPROJECTS);
+        project = allPROJECTS[index];
+    } if (mode===2) {
         project = await cliUI.prompt("Enter project name to compile")
     }
 
@@ -68,9 +83,7 @@ module.exports = async (env={})=>{
     if (project) {
         entry[project] = [`./demo/${project}/index.ts`]
     } else {
-        let dirs = fs.readdirSync('./demo');
-        dirs.forEach((dir)=>{
-            if (['demo.html','assets','out','index.html','index.json','.DS_Store','generateIndexPage.js','application.hta','VEngineNavigator.exe'].includes(dir)) return;
+        getAllProjects().forEach((dir)=>{
             entry[`${dir}`] = [`./demo/${dir}/index.ts`];
         });
     }

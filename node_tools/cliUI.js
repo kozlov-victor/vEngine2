@@ -28,37 +28,13 @@ const getLine = (symbol,length)=>{
 
 const getCh = ()=>{
     return new Promise((resolve,reject)=>{
-        // const stdin = process.stdin;
-        //
-        // // without this, we would only get streams once enter is pressed
-        // stdin.setRawMode( true );
-        //
-        // // resume stdin in the parent process (node app won't quit all by itself
-        // // unless an error or process.exit() happens)
-        // stdin.resume();
-        //
-        // // i don't want binary, do you?
-        // stdin.setEncoding('utf8');
-        //
-        // // on any data into stdin
-        // stdin.on( 'data', function( key ){
-        //     // ctrl-c ( end of text )
-        //     if ( key === '\u0003' ) {
-        //         reject();
-        //         process.exit();
-        //     }
-        //     // write the key to stdout all normal like
-        //     resolve(key);
-        //     process.stdout.write( key );
-        // });
-
 
         const readline = require('readline');
 
         readline.emitKeypressEvents(process.stdin);
         process.stdin.setRawMode(true);
 
-        process.stdin.on('keypress', (str, key) => {
+        process.stdin.once('keypress', (str, key) => {
             resolve(key);
         })
 
@@ -101,10 +77,29 @@ const prompt = (text)=>{
 const choose = async (message,chooseArray)=>{
     let chosenPosition = 0;
     const createPrompt = ()=>{
-        const popup = chooseArray.map((it,index)=>{
-            if (index===chosenPosition) return `<${it}>`;
-            else return ` ${it} `;
+        const maxLengthOfMessage = Math.max(...chooseArray.map(it=>it.length));
+        let startPosition = chosenPosition - 10;
+        let canScrollUp = false;
+        if (startPosition<0) {
+            startPosition = 0;
+        } else {
+            canScrollUp = true;
+        }
+        let endPosition = startPosition + 10;
+        let canScrollDown = false;
+        if (endPosition>chooseArray.length) {
+            endPosition = chooseArray.length;
+        } else {
+            canScrollDown = true;
+        }
+        const arrToShow = chooseArray.slice(startPosition,endPosition);
+        let popup = arrToShow.map((it,index)=>{
+            const paddedLine = centerPad(it,maxLengthOfMessage);
+            if (index+startPosition===chosenPosition) return `<${paddedLine}>`;
+            else return ` ${paddedLine} `;
         }).join('\n');
+        if (canScrollUp) popup = '...\n' + popup;
+        if (canScrollDown) popup+='\n...';
         console.clear();
         if (message) console.log(message);
         showInfoWindow(popup);

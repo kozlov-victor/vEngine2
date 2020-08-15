@@ -20,11 +20,8 @@ export class Polygon extends Mesh {
 
     public static fromMultiCurveSvgPath(game:Game,path:string):Polygon[]{
         const polygons:Polygon[] = [];
-        path.split('\n').join(' ').split(/(.*?z)/gi).forEach((p:string)=>{
-            if (!p.trim()) return;
-            const polygon:Polygon = Polygon.fromSvgPath(game,p);
-            polygons.push(polygon);
-        });
+        const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(game,path);
+        polyLines.forEach(p=>polygons.push(Polygon.fromPolyline(game,p)));
         return polygons;
     }
 

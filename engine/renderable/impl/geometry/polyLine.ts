@@ -155,9 +155,13 @@ export class PolyLine extends Shape {
 
     public static fromMultiCurveSvgPath(game:Game,path:string):PolyLine[]{
         const polyLines:PolyLine[] = [];
-        path.split('\n').join(' ').split(/(.*?z)/gi).forEach((p:string)=>{ // todo z and m
-            if (!p.trim()) return;
+        let prefix:string = '';
+        path.split('\n').join(' ').split(/(.*?z)/gi).forEach((p:string)=>{
+            p = p.trim();
+            if (!p) return;
+            if (p.indexOf('m')===0) p=`${prefix} ${p}`; // to resolve situation like ... z m 10 10 (demo polyline17)
             const polyLine:PolyLine = PolyLine.fromSvgPath(game,p);
+            prefix = `M ${polyLine.lastPenPoint.x} ${polyLine.lastPenPoint.y}`;
             polyLines.push(polyLine);
         });
         return polyLines;
@@ -208,6 +212,7 @@ export class PolyLine extends Shape {
     }
 
     public children:Line[];
+    public lastPenPoint:Point2d = new Point2d();
 
     private lastPoint:Optional<Point2d>;
     private firstPoint:Optional<Point2d>;
@@ -228,8 +233,11 @@ export class PolyLine extends Shape {
 
     public moveTo(x:number,y:number):void{
         if (this.children.length>0) this.complete();
-        this.lastPoint = new Point2d(x,y);
-        if (!this.firstPoint) this.firstPoint = new Point2d(x,y);
+        if (!this.lastPoint) this.lastPoint = new Point2d();
+        this.lastPoint.setXY(x,y);
+        this.lastPenPoint.setXY(x,y);
+        if (!this.firstPoint) this.firstPoint = new Point2d();
+        this.firstPoint.setXY(x,y);
 
     }
 
@@ -244,6 +252,7 @@ export class PolyLine extends Shape {
         if (!this.firstPoint) this.firstPoint = new Point2d(x,y);
         this.addSegment(this.lastPoint.x,this.lastPoint.y,x,y);
         this.lastPoint.setXY(x,y);
+        this.lastPenPoint.setXY(x,y);
     }
 
 

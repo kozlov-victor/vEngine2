@@ -1,15 +1,14 @@
-
 import {Shape} from "@engine/renderable/abstract/shape";
 import {ICloneable} from "@engine/core/declarations";
 import {Point2d} from "@engine/geometry/point2d";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Game} from "@engine/core/game";
-import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 
 
 export class Line extends Shape implements ICloneable<Line>, ILineProps {
 
     public borderRadius:number = 0;
+    public fillColor:never;
     public readonly pointTo:Point2d = new Point2d(0,0,()=>this.onPointChanged());
 
     private readonly _rectangleRepresentation:Rectangle = new Rectangle(this.game);
