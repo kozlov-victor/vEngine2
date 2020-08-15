@@ -344,7 +344,6 @@ export class PolyLine extends Shape {
     private passPropertiesToChild(l:Line){
         l.borderRadius = this.borderRadius;
         l.color = this.color;
-        l.fillColor = this.fillColor;
         l.lineWidth = this.lineWidth;
         l.pointTo.forceTriggerChange();
     }
