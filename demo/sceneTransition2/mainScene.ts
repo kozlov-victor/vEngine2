@@ -33,6 +33,10 @@ import {
     SideDiagonalCellsAppearingTransition,
     SideDiagonalCellsDisappearingTransition
 } from "@engine/scene/transition/appear/cells/sideDiagonalCellsAppearingTransition";
+import {
+    SpiralCellsAppearingTransition,
+    SpiralCellsDisappearingTransition
+} from "@engine/scene/transition/appear/cells/spiralCellApperaingTransition";
 
 
 
@@ -70,6 +74,8 @@ export class MainScene extends Scene {
         this.createMainDiagonalCellTransitionButton('main diagonal cell disappear',false);
         this.createSideDiagonalCellTransitionButton('side diagonal cell appear',true);
         this.createSideDiagonalCellTransitionButton('side diagonal cell disappear',false);
+        this.createSpiralCellTransitionButton('spiral cell appear',true);
+        this.createSpiralCellTransitionButton('spiral cell disappear',false);
     }
 
     private createFadeTransitionButton(text:string,isAppearing:boolean){
@@ -109,6 +115,14 @@ export class MainScene extends Scene {
             isAppearing?
                 new SideDiagonalCellsAppearingTransition(this.game,1000,15,15):
                 new SideDiagonalCellsDisappearingTransition(this.game,1000,15,15);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createSpiralCellTransitionButton(text:string,isAppearing:boolean){
+        const transition:ISceneTransition =
+            isAppearing?
+                new SpiralCellsAppearingTransition(this.game,3000,15,15):
+                new SpiralCellsDisappearingTransition(this.game,3000,15,15);
         this.createTransitionButton(text,transition);
     }
 
