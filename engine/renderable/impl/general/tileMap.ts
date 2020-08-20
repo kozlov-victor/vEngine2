@@ -39,7 +39,7 @@ export class TileMap extends RenderableModelWithResourceLink {
         super(game);
     }
 
-    public fromTiledJSON(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number){
+    public fromTiledJSON(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number): void{
         if (!mapHeight) mapHeight = source.length / mapWidth;
         this._data = new Array<number[]>(mapHeight);
         let cnt:number = 0;
@@ -68,7 +68,7 @@ export class TileMap extends RenderableModelWithResourceLink {
         }
     }
 
-    public revalidate(){
+    public revalidate(): void{
 
         this.game.getCurrScene().size.width = this._numOfTilesInMapByX * this._tileWidth;
         this.game.getCurrScene().size.height = this._numOfTilesInMapByY * this._tileHeight;
