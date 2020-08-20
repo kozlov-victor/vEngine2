@@ -19,41 +19,20 @@ import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {describeArc} from "@engine/renderable/impl/geometry/helpers/splineFromPoints";
 
-const drawShapeOnSurfaceWithTransformations = (game:Game,model:RenderableModel,matrixStack:MatrixStack)=>{
-    const renderer:AbstractRenderer = game.getRenderer();
-    renderer.transformSave();
-    renderer.transformTranslateByMatrixValues(...matrixStack.getCurrentValue().mat16);
-    renderer.transformTranslate(model.pos.x,model.pos.y);
-    model.pos.setXY(0);
-    model.worldTransformDirty = true;
-};
-
-class RectangleForDrawingSurface extends Rectangle {
-    constructor(game: Game, private matrixStack:MatrixStack) {super(game);}
+class ContainerForDrawingSurface extends NullGameObject {
+    constructor(protected game: Game, private matrixStack:MatrixStack) {super(game);}
     render(): void {
-        drawShapeOnSurfaceWithTransformations(this.game,this,this.matrixStack);
+        const renderer:AbstractRenderer = this.game.getRenderer();
+        renderer.transformSave();
+        renderer.transformTranslateByMatrixValues(...this.matrixStack.getCurrentValue().mat16);
+        renderer.transformTranslate(this.pos.x,this.pos.y);
+        this.pos.setXY(0);
+        this.worldTransformDirty = true;
         super.render();
         this.game.getRenderer().transformRestore();
     }
 }
 
-class EllipseForDrawingSurface extends Ellipse {
-    constructor(game: Game, private matrixStack:MatrixStack) {super(game);}
-    render(): void {
-        drawShapeOnSurfaceWithTransformations(this.game,this,this.matrixStack);
-        super.render();
-        this.game.getRenderer().transformRestore();
-    }
-}
-
-class LineForDrawingSurface extends Line {
-    constructor(game: Game, private matrixStack:MatrixStack) {super(game);}
-    render(): void {
-        drawShapeOnSurfaceWithTransformations(this.game,this,this.matrixStack);
-        super.render();
-        this.game.getRenderer().transformRestore();
-    }
-}
 
 export class DrawingSurface extends RenderableModel implements ICloneable<DrawingSurface>,IResource<ITexture>, IMatrixTransformable, IDestroyable {
 
@@ -73,10 +52,11 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
     private canvasImage:Image = new Image(this.game);
 
-    private _rect:Rectangle = new RectangleForDrawingSurface(this.game,this._matrixStack);
-    private _ellipse:Ellipse = new EllipseForDrawingSurface(this.game,this._matrixStack);
-    private _line:Line = new LineForDrawingSurface(this.game,this._matrixStack);
+    private _rect:Rectangle = new Rectangle(this.game);
+    private _ellipse:Ellipse = new Ellipse(this.game);
+    private _line:Line = new Line(this.game);
     private _nullGameObject:NullGameObject = new NullGameObject(this.game);
+    private _transformableContainer:ContainerForDrawingSurface = new ContainerForDrawingSurface(this.game,this._matrixStack);
 
     private fillColor:Color = Color.RGBA(0,0,0,255);
     private drawColor:Color = Color.RGBA(0,0,0,255);
@@ -276,11 +256,13 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public drawModel(model:RenderableModel,clearColor?:Color){
-        this.appendChild(model);
+        this.appendChild(this._transformableContainer);
+        this._transformableContainer.appendChild(model);
         this._omitSelfOnRendering = true;
         this.renderToTexture(this._renderTarget,clearColor);
         this._omitSelfOnRendering = false;
-        this.removeChild(model);
+        this.removeChild(this._transformableContainer);
+        this._transformableContainer.removeChild(model);
     }
 
     public destroy() {

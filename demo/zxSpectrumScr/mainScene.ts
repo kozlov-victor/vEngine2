@@ -30,7 +30,7 @@ export class MainScene extends Scene {
             border.setResourceLink(borderLink);
             screen.setResourceLink(screenLink);
         });
-        this.on(MOUSE_EVENTS.click, ()=>{
+        this.once(MOUSE_EVENTS.click, ()=>{
             this.game.runScene(new MainScene(this.game),new CellsAppearingTransition(this.game));
         });
         this.border = border;
