@@ -104,7 +104,7 @@ export class TileMap extends RenderableModelWithResourceLink {
             return;
         }
 
-        this._drawingSurface.pos.setXY(0,0);
+        this._drawingSurface.pos.set(this.game.camera.pos);
 
         for (let y:number=0;y<this._numOfTilesInScreenByY;y++) {
             const currTileByY:number = this._drawInfo.firstTileToDrawByY + y;
