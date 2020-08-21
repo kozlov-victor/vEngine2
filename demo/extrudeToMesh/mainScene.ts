@@ -60,7 +60,7 @@ export class MainScene extends Scene {
 
         const p:Polygon = Polygon.fromSvgPath(this.game,path);
         const m = p.extrudeToMesh(180);
-        m.setWH(150);
+        m.size.setWH(150);
         m.transformPoint.setToCenter();
         m.cubeMapTexture = this.cubeTextureLink.getTarget();
         m.reflectivity = 0.1;

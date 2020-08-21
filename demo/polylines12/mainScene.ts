@@ -26,7 +26,7 @@ export class MainScene extends Scene {
     public onReady() {
 
         const container:NullGameObject = new NullGameObject(this.game);
-        container.setWH(300,300);
+        container.size.setWH(300,300);
         container.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(container);
         container.setInterval(()=>{

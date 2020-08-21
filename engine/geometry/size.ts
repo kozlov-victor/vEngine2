@@ -62,6 +62,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         return this;
     }
 
+    // noinspection JSSuspiciousNameCombination
     public setWH(width:number,height:number = width):Size{
         const changed:boolean = this._width!==width || this._height!==height;
         if (changed) {
@@ -72,6 +73,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         return this;
     }
 
+    // noinspection JSSuspiciousNameCombination
     public addWH(width:number,height:number = width):Size{
         this.setWH(this.width+width,this.height+height);
         return this;

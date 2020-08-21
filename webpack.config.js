@@ -67,6 +67,7 @@ module.exports = async (env={})=>{
         const allPROJECTS = getAllProjects();
         const index = await cliUI.choose('Select a project',allPROJECTS);
         project = allPROJECTS[index];
+        console.log(`Selected: ${project}`);
     } if (mode===2) {
         project = await cliUI.prompt("Enter project name to compile")
     }

@@ -92,7 +92,7 @@ const choose = async (message,chooseArray)=>{
         } else {
             canScrollDown = true;
         }
-        const arrToShow = chooseArray.slice(startPosition,endPosition);
+        const arrToShow = chooseArray.slice(startPosition,endPosition + 1);
         let popup = arrToShow.map((it,index)=>{
             const paddedLine = centerPad(it,maxLengthOfMessage);
             if (index+startPosition===chosenPosition) return `<${paddedLine}>`;

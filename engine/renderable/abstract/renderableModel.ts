@@ -141,11 +141,7 @@ export abstract class RenderableModel
         this._propertyAnimations.push(animation);
     }
 
-    public setWH(w:number,h:number = w):void{ // todo remove
-        this.setXYWH(this.pos.x,this.pos.y,w,h);
-    }
-
-    public setXYWH(x:number,y:number,w:number,h:number):void{ // todo remove
+    public setPosAndSize(x:number, y:number, w:number, h:number):void{
         this.pos.setXY(x,y);
         this.size.setWH(w,h);
     }

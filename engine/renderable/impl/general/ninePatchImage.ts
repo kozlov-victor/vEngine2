@@ -83,39 +83,39 @@ export class NinePatchImage extends RenderableModelWithResourceLink {
         const a:number = this.a,b:number=this.b,c:number=this.c,d:number=this.d;
         // patch 1
         patch = this._patches[0];
-        patch.setXYWH(0,0,a,c);
+        patch.setPosAndSize(0,0,a,c);
         patch.getSrcRect().setXYWH(0,0,a,c);
         // patch 2
         patch = this._patches[1];
-        patch.setXYWH(a,0,destSize.width-a-c,c);
+        patch.setPosAndSize(a,0,destSize.width-a-c,c);
         patch.getSrcRect().setXYWH(a,0,texSize.width-a-b,c);
         // patch 3
         patch = this._patches[2];
-        patch.setXYWH(destSize.width-b,0,b,c);
+        patch.setPosAndSize(destSize.width-b,0,b,c);
         patch.getSrcRect().setXYWH(texSize.width-b,0,b,c);
         // patch 4
         patch = this._patches[3];
-        patch.setXYWH(0,c,a,destSize.height-c-d);
+        patch.setPosAndSize(0,c,a,destSize.height-c-d);
         patch.getSrcRect().setXYWH(0, c, a,texSize.height - c - d);
         // patch 5
         patch = this._patches[4];
-        patch.setXYWH(a,c,destSize.width - a - b,destSize.height-c-d);
+        patch.setPosAndSize(a,c,destSize.width - a - b,destSize.height-c-d);
         patch.getSrcRect().setXYWH(a, c, texSize.width - a - b,texSize.height - c - d);
         // patch 6
         patch = this._patches[5];
-        patch.setXYWH(destSize.width - b,c,b,destSize.height-c-d);
+        patch.setPosAndSize(destSize.width - b,c,b,destSize.height-c-d);
         patch.getSrcRect().setXYWH(texSize.width - b, c, b,texSize.height - c - d);
         // patch 7
         patch = this._patches[6];
-        patch.setXYWH(0,destSize.height - d,a,d);
+        patch.setPosAndSize(0,destSize.height - d,a,d);
         patch.getSrcRect().setXYWH(0,texSize.height - d,a,d);
         // patch 8
         patch = this._patches[7];
-        patch.setXYWH(a,destSize.height-d,destSize.width-a-b,d);
+        patch.setPosAndSize(a,destSize.height-d,destSize.width-a-b,d);
         patch.getSrcRect().setXYWH(a,texSize.height - d,texSize.width-a-b,d);
         // patch 9
         patch = this._patches[8];
-        patch.setXYWH(destSize.width-b,destSize.height-d,b,d);
+        patch.setPosAndSize(destSize.width-b,destSize.height-d,b,d);
         patch.getSrcRect().setXYWH(texSize.width-b,texSize.height-d,b,d);
     }
 

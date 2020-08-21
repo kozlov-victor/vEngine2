@@ -144,7 +144,7 @@ export abstract class Container extends RenderableModel {
         const paddedWidth:number = contentWidth  + this.paddingLeft + this.paddingRight;
         const paddedHeight:number = contentHeight +  this.paddingTop +  this.paddingBottom;
         if (this.background) {
-            this.background.setWH(paddedWidth,paddedHeight);
+            this.background.size.setWH(paddedWidth,paddedHeight);
             this.size.set(this.background.size);
         } else {
             this.size.setWH(paddedWidth,paddedHeight);
