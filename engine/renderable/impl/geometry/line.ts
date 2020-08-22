@@ -8,7 +8,7 @@ import {Game} from "@engine/core/game";
 export class Line extends Shape implements ICloneable<Line>, ILineProps {
 
     public borderRadius:number = 0;
-    public fillColor:never;
+    declare public fillColor:never;
     public readonly pointTo:Point2d = new Point2d(0,0,()=>this.onPointChanged());
 
     private readonly _rectangleRepresentation:Rectangle = new Rectangle(this.game);

@@ -21,7 +21,7 @@ export abstract class AbstractCharacter extends AbstractEntity {
 
     public static readonly groupName:string = 'abstractCharacter';
 
-    protected renderableImage:AnimatedImage;
+    declare protected renderableImage:AnimatedImage;
 
     protected walkAnimation:CellFrameAnimation;
     protected idleAnimation:CellFrameAnimation;

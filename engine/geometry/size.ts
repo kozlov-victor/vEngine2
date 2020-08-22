@@ -44,7 +44,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
     private _width:number;
     private _height:number;
 
-    private _arr:[number,number] = [this._width,this._height];
+    private _arr:[number,number] = [0,0];
 
     constructor(width:number = 0,height:number = 0,onChangedFn?:()=>void){
         super();

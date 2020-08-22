@@ -17,8 +17,10 @@ export class Circle extends Ellipse implements ICloneable<Circle>, ICircleProps{
 
     public readonly type:'Circle' = 'Circle';
 
-    public radiusX:never;
-    public radiusY:never;
+    // @ts-ignore
+    declare public radiusX:never;
+    // @ts-ignore
+    declare public radiusY:never;
 
     private _radius:number;
 

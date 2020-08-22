@@ -76,7 +76,7 @@ export class GamePadControl extends AbstractKeypad implements IControl{
     protected keyPressed: string = GAME_PAD_EVENTS.buttonPressed;
     protected keyHold: string = GAME_PAD_EVENTS.buttonHold;
     protected keyReleased: string = GAME_PAD_EVENTS.buttonReleased;
-    protected buffer:GamePadEvent[];
+    declare protected buffer:GamePadEvent[];
 
     private _gamepads:Gamepad[];
 

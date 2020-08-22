@@ -5,6 +5,7 @@
         "target": "ES5",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": false,
+        "useDefineForClassFields": true,
         "lib": [
             "dom",
             "es2015",

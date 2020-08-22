@@ -12,7 +12,7 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
     protected keyHold: string = KEYBOARD_EVENTS.keyHold;
     protected keyReleased: string = KEYBOARD_EVENTS.keyReleased;
 
-    protected buffer:KeyBoardEvent[];
+    declare protected buffer:KeyBoardEvent[];
 
     private _keyDownListener:(e:KeyboardEvent)=>void;
     private _keyUpListener:(e:KeyboardEvent)=>void;

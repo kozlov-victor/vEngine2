@@ -5,7 +5,7 @@ import {MathEx} from "@engine/misc/mathEx";
 export abstract class AbstractMoveAnimation extends AbstractPropertyAnimation {
 
     public rotate:boolean = false;
-    public onProgress:(fn:(point:Point2d,angle:number)=>void)=>void;
+    declare public onProgress:(fn:(point:Point2d,angle:number)=>void)=>void;
     public repeatCount:number = Infinity;
 
     protected numOfLoopPassed:number = 0;

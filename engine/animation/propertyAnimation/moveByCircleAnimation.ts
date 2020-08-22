@@ -10,7 +10,7 @@ export class MoveByCircleAnimation extends MoveByEllipseAnimation {
         return (this as MoveByEllipseAnimation).radiusX;
     }
 
-    public radiusX:never;
-    public radiusY:never;
+    declare public radiusX:never;
+    declare public radiusY:never;
 
 }

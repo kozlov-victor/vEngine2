@@ -9,8 +9,16 @@ import {Optional} from "@engine/core/declarations";
 
 export abstract class Shape extends RenderableModel implements IShapeProps{
 
+    get lineWidth(): number {
+        return this._lineWidth;
+    }
+
+    set lineWidth(value: number) {
+        this._lineWidth = value;
+    }
+
     public color:Color = Color.BLACK.clone();
-    public lineWidth:number = 0;
+    protected _lineWidth:number = 0;
     public fillColor:Color = Color.RGB(100,100,100);
     public fillGradient:Optional<LinearGradient>;
 
@@ -36,12 +44,12 @@ export abstract class Shape extends RenderableModel implements IShapeProps{
         super.setProps(props);
         if (props.color!==undefined) this.color.setRGBA(props.color.r,props.color.g,props.color.b,props.color.a);
         if (props.fillColor!==undefined) (this.fillColor as Color).setRGBA(props.fillColor.r,props.fillColor.g,props.fillColor.b,props.fillColor.a);
-        if (props.lineWidth!==undefined) this.lineWidth = props.lineWidth;
+        if (props.lineWidth!==undefined) this._lineWidth = props.lineWidth;
     }
 
     protected setClonedProperties(cloned:Shape):void{
         cloned.color.set(this.color);
-        cloned.lineWidth = this.lineWidth;
+        cloned._lineWidth = this._lineWidth;
         cloned.fillColor = this.fillColor.clone();
         if (this.fillGradient!==undefined) cloned.fillGradient = this.fillGradient.clone();
         cloned.filters = [...this.filters];

@@ -1,11 +1,9 @@
-
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {Point2d} from "@engine/geometry/point2d";
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
 import {arcToBezier} from "@engine/renderable/impl/geometry/helpers/arcToBezier";
-import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Optional} from "@engine/core/declarations";
 import {createSplinePathFromPoints} from "@engine/renderable/impl/geometry/helpers/splineFromPoints";
 
@@ -135,7 +133,7 @@ class SvgTokenizer {
 
 export class PolyLine extends Shape {
 
-    public get lineWidth(){
+    public get lineWidth():number{
         return this._lineWidth;
     }
 
@@ -211,14 +209,13 @@ export class PolyLine extends Shape {
         return PolyLine.fromSvgPath(game,createSplinePathFromPoints(points));
     }
 
-    public children:Line[];
+    declare public children:Line[];
     public lastPenPoint:Point2d = new Point2d();
 
     private lastPoint:Optional<Point2d>;
     private firstPoint:Optional<Point2d>;
 
     private tokenizer:SvgTokenizer;
-    private _lineWidth:number = 1;
     private _borderRadius:number = 1;
 
     private lastBezierPoint:v2;
@@ -228,6 +225,7 @@ export class PolyLine extends Shape {
 
     constructor(protected game:Game){
         super(game);
+        this._lineWidth = 1;
         this.color.addOnChangeListener(()=>this.passPropertiesChildren());
     }
 
