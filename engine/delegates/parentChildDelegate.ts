@@ -1,8 +1,5 @@
 import {DebugError} from "@engine/debug/debugError";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Layer} from "@engine/scene/layer";
 import {IParentChild, Optional} from "@engine/core/declarations";
-import {removeFromArray} from "@engine/misc/object";
 
 type OnTreeModifiedCallback<T> = (c:T)=>void;
 

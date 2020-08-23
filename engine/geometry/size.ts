@@ -1,4 +1,4 @@
-import {IReleasealable, ObjectPool} from "../misc/objectPool";
+import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 import {DebugError} from "@engine/debug/debugError";
 import {ICloneable} from "@engine/core/declarations";

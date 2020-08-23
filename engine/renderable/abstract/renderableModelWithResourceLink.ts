@@ -1,4 +1,4 @@
-import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
+import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";

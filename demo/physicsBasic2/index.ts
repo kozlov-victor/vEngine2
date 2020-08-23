@@ -4,7 +4,7 @@ import {Scene} from "@engine/scene/scene";
 import {MainScene} from "./mainScene";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
-import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
+import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 
 const game = new Game();
 game.setRenderer(WebGlRenderer);

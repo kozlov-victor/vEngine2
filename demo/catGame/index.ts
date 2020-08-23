@@ -5,7 +5,7 @@ import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {AudioPlayer} from "@engine/media/audioPlayer";
 import {FREE_AUDIO_NODE_SEARCH_STRATEGY} from "@engine/media/interface/iAudioPlayer";
-import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
+import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {PreIntroScene} from "./scene/preIntroScene";
 import {GameManager} from "./gameManager";
 

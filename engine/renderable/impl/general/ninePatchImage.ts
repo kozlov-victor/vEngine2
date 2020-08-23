@@ -3,8 +3,7 @@ import {Image} from "./image";
 import {DebugError} from "@engine/debug/debugError";
 import {Size} from "@engine/geometry/size";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
+import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {RenderableModelWithResourceLink} from "@engine/renderable/abstract/renderableModelWithResourceLink";
 

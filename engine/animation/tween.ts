@@ -55,7 +55,7 @@ export class Tween<T> {
     private _currTime:number = 0;
     private _completed:boolean = false;
     private readonly _target: T;
-    private _progressFn:Optional<((arg:T)=>void)>;
+    private readonly _progressFn:Optional<((arg:T)=>void)>;
     private readonly _delayBeforeStart:number = 0;
     private readonly _completeFn:Optional<((arg:T)=>void)>;
     private readonly _easeFn:EaseFn;
@@ -216,10 +216,5 @@ export class Tween<T> {
         });
         return normalized as ITweenDescriptionNormalized<T>;
     }
-
-    private progress(_progressFn:(val:T)=>void):void {
-        this._progressFn = _progressFn;
-    }
-
 
 }

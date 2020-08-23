@@ -36,12 +36,14 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
 
     private _arr:[number,number];
 
+    // noinspection JSSuspiciousNameCombination
     constructor(x:number = 0,y:number = x,onChangedFn?:()=>void){
         super();
         if (onChangedFn) this.addOnChangeListener(onChangedFn);
         this.setXY(x,y);
     }
 
+    // noinspection JSSuspiciousNameCombination
     public setXY(x:number,y:number = x):this{
         if (DEBUG && (Number.isNaN(x) || Number.isNaN(y))) throw new DebugError(`Point2d: wrong numeric arguments ${x},${y}`);
         const changed:boolean = this._x!==x || this._y!==y;
@@ -104,6 +106,7 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         return this;
     }
 
+    // noinspection JSSuspiciousNameCombination
     public equal(x:number,y:number = x):boolean {
         return this._x===x && this._y===y;
     }

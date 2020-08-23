@@ -2,7 +2,7 @@ import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
-import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
+import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Rect} from "@engine/geometry/rect";
 

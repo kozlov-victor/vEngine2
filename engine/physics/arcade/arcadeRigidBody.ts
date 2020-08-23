@@ -4,7 +4,7 @@
 import {Size} from "@engine/geometry/size";
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
-import {ArcadePhysicsSystem} from "@engine/physics/arcade/ArcadePhysicsSystem";
+import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {IRect, Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";

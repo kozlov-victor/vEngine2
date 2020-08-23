@@ -99,8 +99,8 @@ export class GamePadControl extends AbstractKeypad implements IControl{
             this.pollButtons(gp,i);
 
             if (gp.axes.length>=2) {
-                const axisLeftStick0:number = this.clampAxis(gp.axes[0]);
-                const axisLeftStick1:number = this.clampAxis(gp.axes[1]);
+                const axisLeftStick0:number = GamePadControl.clampAxis(gp.axes[0]);
+                const axisLeftStick1:number = GamePadControl.clampAxis(gp.axes[1]);
                 this.pollAxes(
                     axisLeftStick0,
                     axisLeftStick1,
@@ -111,8 +111,8 @@ export class GamePadControl extends AbstractKeypad implements IControl{
             }
 
             if (gp.axes.length>=4) {
-                const axisRightStick0:number = this.clampAxis(gp.axes[2]);
-                const axisRightStick1:number = this.clampAxis(gp.axes[3]);
+                const axisRightStick0:number = GamePadControl.clampAxis(gp.axes[2]);
+                const axisRightStick1:number = GamePadControl.clampAxis(gp.axes[3]);
                 this.pollAxes(
                     axisRightStick0,
                     axisRightStick1,
@@ -151,7 +151,7 @@ export class GamePadControl extends AbstractKeypad implements IControl{
 
     private releaseButton(eventFromBuffer:Optional<GamePadEvent>){
         if (eventFromBuffer!==undefined) {
-            if (!this.isReleased(eventFromBuffer)) this.release(eventFromBuffer);
+            if (!GamePadControl.isReleased(eventFromBuffer)) this.release(eventFromBuffer);
         }
     }
 
@@ -217,7 +217,7 @@ export class GamePadControl extends AbstractKeypad implements IControl{
     }
 
 
-    private isReleased(e:GamePadEvent):boolean{
+    private static isReleased(e:GamePadEvent):boolean{
         return e.keyState===KEY_STATE.KEY_RELEASED || e.keyState===KEY_STATE.KEY_JUST_RELEASED;
     }
 
@@ -228,7 +228,7 @@ export class GamePadControl extends AbstractKeypad implements IControl{
         return undefined;
     }
 
-    private clampAxis(val:number):number{
+    private static clampAxis(val:number):number{
         if (Math.abs(val)<AXIS_THRESHOLD) return 0;
         return val;
     }

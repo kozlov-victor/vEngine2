@@ -1,5 +1,4 @@
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
-import {Device} from "../../misc/device";
 import {Game, SCALE_STRATEGY} from "../../core/game";
 import {Rect} from "../../geometry/rect";
 import {Color} from "../common/color";

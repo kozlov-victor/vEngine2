@@ -1,4 +1,3 @@
-import {DebugError} from "@engine/debug/debugError";
 import {AudioPlayer} from "../audioPlayer";
 import {Game} from "../../core/game";
 import {ResourceLink} from "@engine/resources/resourceLink";

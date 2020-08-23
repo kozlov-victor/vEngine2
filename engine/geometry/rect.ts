@@ -1,5 +1,5 @@
 import {ISize} from "./size";
-import {IPoint2d, Point2d} from "./point2d";
+import {IPoint2d} from "./point2d";
 import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
 import {ICloneable} from "@engine/core/declarations";

@@ -18,6 +18,7 @@ import {IMatrixTransformable, MatrixStack} from "@engine/renderer/webGl/base/mat
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {describeArc} from "@engine/renderable/impl/geometry/helpers/splineFromPoints";
+import {isString} from "@engine/misc/object";
 
 class ContainerForDrawingSurface extends NullGameObject {
     constructor(protected game: Game, private matrixStack:MatrixStack) {super(game);}
@@ -244,10 +245,10 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
     public drawPolyline(pathOrVertices:string|number[]){
         let p:PolyLine;
-        if ((pathOrVertices as number[]).push!==undefined) {
-            p = PolyLine.fromPoints(this.game,pathOrVertices as number[]);
+        if (isString(pathOrVertices)) {
+            p = PolyLine.fromSvgPath(this.game,pathOrVertices);
         } else {
-            p = PolyLine.fromSvgPath(this.game,pathOrVertices as string);
+            p = PolyLine.fromPoints(this.game,pathOrVertices);
         }
         p.fillColor = this.fillColor;
         p.color = this.drawColor;

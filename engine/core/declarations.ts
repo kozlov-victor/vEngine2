@@ -3,11 +3,9 @@ import {TweenMovie} from "@engine/animation/tweenMovie";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {Layer} from "@engine/scene/layer";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Scene} from "@engine/scene/scene";
 import {mat4} from "@engine/geometry/mat4";
 import Mat16Holder = mat4.Mat16Holder;
-import {IRealNode} from "@engine/renderable/tsx/genetic/realNode";
 
 export type Clazz<T> = new() => T;
 export type ClazzEx<T,U> = new(arg:U) => T;

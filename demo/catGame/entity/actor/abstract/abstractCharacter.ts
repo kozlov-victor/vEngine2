@@ -7,7 +7,7 @@ import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnim
 import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {AbstractEntity} from "../../abstract/abstractEntity";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ICreateRigidBodyParams} from "@engine/physics/arcade/ArcadePhysicsSystem";
+import {ICreateRigidBodyParams} from "@engine/physics/arcade/arcadePhysicsSystem";
 
 
 export interface IExtraProperties {

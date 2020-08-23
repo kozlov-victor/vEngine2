@@ -7,7 +7,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Burster} from "../../misc/burster";
 import {Hero} from "../impl/hero";
 import {AbstractCharacter} from "./abstractCharacter";
-import {ICreateRigidBodyParams} from "@engine/physics/arcade/ArcadePhysicsSystem";
+import {ICreateRigidBodyParams} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {Bullet} from "../../object/impl/bullet";
 import {Sound} from "@engine/media/sound";
 

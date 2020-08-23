@@ -3,8 +3,12 @@ export interface IKeyVal<T> {
     [key:string]:T;
 }
 
-export const isObject = (obj:unknown):boolean=>{
+export const isObject = (obj:unknown):obj is object=>{
     return obj === Object(obj);
+};
+
+export const isString = (s:unknown):s is string=>{
+    return (s as string)?.substr!==undefined;
 };
 
 export const isCommonArray = (a:unknown):a is unknown[]=> {

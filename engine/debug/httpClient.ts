@@ -1,4 +1,3 @@
-/* tslint:disable:forin */
 import {IKeyVal, noop} from "@engine/misc/object";
 
 declare const setTimeout:(f:()=>void,t:number)=>number;
