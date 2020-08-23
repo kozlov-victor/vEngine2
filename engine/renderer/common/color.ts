@@ -62,7 +62,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
     private gNorm:number;
     private bNorm:number;
     private aNorm:number;
-    private _arr:number[];
+    private _arr:[r:number,g:number,b:number,a:number];
     private _friezed:boolean = false;
 
 
@@ -177,13 +177,13 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
     }
 
 
-    public asGL():[number,number,number,number]{
-        if (!this._arr) this._arr = new Array(3);
+    public asGL():[r:number,g:number,b:number,a:number]{
+        if (!this._arr) this._arr = [0,0,0,0];
         this._arr[0] = this.rNorm;
         this._arr[1] = this.gNorm;
         this._arr[2] = this.bNorm;
         this._arr[3] = this.aNorm;
-        return this._arr as [number,number,number,number];
+        return this._arr;
     }
 
     public asCSS():string{
