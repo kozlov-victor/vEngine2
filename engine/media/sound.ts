@@ -42,10 +42,10 @@ export class Sound implements IResource<void>,IRevalidatable {
 
     public readonly type:string = 'Sound';
     public offset:number; // start offset time of sound
-    public duration:number; // f this parameter isn't specified, the sound plays until it reaches its natural conclusion or is stopped
+    public duration:number; // if this parameter isn't specified, the sound plays until it reaches its natural conclusion or is stopped
 
     public feedbackDelay = {
-        delayTime: 300,
+        delayTime: 0,
         gain: 0.8
     };
 

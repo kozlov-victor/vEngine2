@@ -4,6 +4,7 @@ import {Game} from "../core/game";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {Optional} from "@engine/core/declarations";
 import {FREE_AUDIO_NODE_SEARCH_STRATEGY} from "@engine/media/interface/iAudioPlayer";
+import {DebugError} from "@engine/debug/debugError";
 
 const nodeComparator = (a:AudioNode,b:AudioNode):1|-1=>{
     return a.context.getLastValueId()>b.context.getLastValueId()?1:-1;
@@ -37,6 +38,9 @@ export class AudioNodeSet {
             case FREE_AUDIO_NODE_SEARCH_STRATEGY.SKIP_IF_NOT_FREE:
                 return undefined;
             default:
+                if (DEBUG) {
+                    throw new DebugError(`undefined freeNodeSearchStrategy`)
+                }
                 return undefined;
         }
 
