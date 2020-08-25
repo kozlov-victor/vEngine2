@@ -14,7 +14,6 @@ export class MainScene extends Scene {
 
     }
 
-
     public onPreloading() {
         const fnt:Font = new Font(this.game);
         fnt.fontSize = 50;

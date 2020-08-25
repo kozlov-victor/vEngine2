@@ -65,8 +65,9 @@ export abstract class RenderableModel
     public filters: IFilter[] = [];
     public forceDrawChildrenOnNewSurface:boolean = false;
 
+    public readonly children:readonly RenderableModel[] = [];
     public readonly parent:RenderableModel;
-    public readonly children:RenderableModel[] = [];
+
     public readonly velocity = new Point2d(0,0);
     public passMouseEventsThrough:boolean = false;
 
@@ -163,7 +164,7 @@ export abstract class RenderableModel
 
         if (DEBUG && !this.getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
 
-        const parentArray:RenderableModel[] = this.getParent()!.children;
+        const parentArray:RenderableModel[] = this.getParent()!.children as RenderableModel[];
         const index:number = parentArray.indexOf(this);
         if (DEBUG && index===-1) {
             console.error(this);
@@ -348,7 +349,7 @@ export abstract class RenderableModel
         return this.children[index];
     }
 
-    public getChildren(): IParentChild[] {
+    public getChildren(): readonly IParentChild[] {
         return this.children;
     }
 

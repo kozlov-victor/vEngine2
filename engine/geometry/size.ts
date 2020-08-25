@@ -4,8 +4,8 @@ import {DebugError} from "@engine/debug/debugError";
 import {ICloneable} from "@engine/core/declarations";
 
 export interface ISize {
-    readonly width: number;
-    readonly height: number;
+    width: number;
+    height: number;
 }
 
 export class Size extends ObservableEntity implements ICloneable<ISize>{
@@ -96,7 +96,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         return this.equal(0,0);
     }
 
-    public toArray():[number,number]{
+    public toArray():Readonly<[number,number]>{
         this._arr[0] = this._width;
         this._arr[1] = this._height;
         return this._arr;

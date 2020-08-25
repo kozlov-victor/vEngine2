@@ -8,13 +8,13 @@ import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ITexture} from "@engine/renderer/common/texture";
 
 export interface IRectViewJSON extends IRectJSON {
-    destOffsetX:number;
+    destOffsetX:number; // todo????? wat is this
     destOffsetY:number;
 }
 
 export interface IFontContext {
     lineHeight: number;
-    symbols: {[key:string]:IRectViewJSON};
+    symbols: Record<string, IRectViewJSON>;
     width:number;
     height:number;
 }
@@ -24,7 +24,7 @@ interface IRange {
     to:number;
 }
 
-interface IPrefixiedContext {
+interface IPrefixedContext {
     mozImageSmoothingEnabled?: boolean;
     webkitImageSmoothingEnabled?: boolean;
     msImageSmoothingEnabled?: boolean;
@@ -114,10 +114,10 @@ namespace FontFactory {
         ctx.font = strFont;
         ctx.textBaseline = "top";
         ctx.imageSmoothingEnabled = false;
-        (ctx as IPrefixiedContext).mozImageSmoothingEnabled = false; // (obsolete)
-        (ctx  as IPrefixiedContext).webkitImageSmoothingEnabled = false;
-        (ctx as IPrefixiedContext).msImageSmoothingEnabled = false;
-        (ctx as IPrefixiedContext).oImageSmoothingEnabled = false;
+        (ctx as IPrefixedContext).mozImageSmoothingEnabled = false; // (obsolete)
+        (ctx  as IPrefixedContext).webkitImageSmoothingEnabled = false;
+        (ctx as IPrefixedContext).msImageSmoothingEnabled = false;
+        (ctx as IPrefixedContext).oImageSmoothingEnabled = false;
         ctx.fillStyle = 'rgba(0,0,0,0)';
         ctx.fillRect(0,0,cnv.width,cnv.height);
         ctx.fillStyle = '#fff';
@@ -163,10 +163,9 @@ export class Font implements IResource<ITexture>, IRevalidatable {
 
     public fontSize:number=12;
     public fontFamily:string='Monospace';
-    public fontContext:IFontContext;
+    public fontContext:Readonly<IFontContext>;
     public fontColor:Color = Color.BLACK.clone();
 
-    // resource
     private _resourceLink:ResourceLink<ITexture>;
 
     constructor(protected game:Game){}
@@ -182,16 +181,6 @@ export class Font implements IResource<ITexture>, IRevalidatable {
         return `${this.fontSize}px ${this.fontFamily}`;
     }
 
-    public createContext():void {
-        const ranges:IRange[] = [{from: 32, to: 126}, {from: 1040, to: 1116}];
-        const WIDTH:number = 512;
-        this.fontContext = FontFactory.getFontContext(ranges,this.asCss(),WIDTH);
-    }
-
-    public createBitmap():string{
-        return FontFactory.getFontImageBase64(this.fontContext,this.asCss(),this.fontColor);
-    }
-
     public revalidate():void {
         if (DEBUG) {
             if (!this.fontContext) throw new DebugError(`font context is not created. Did you invoke font.generate() method?`);
@@ -205,6 +194,16 @@ export class Font implements IResource<ITexture>, IRevalidatable {
 
     public getResourceLink():ResourceLink<ITexture>{
         return this._resourceLink;
+    }
+
+    private createContext():void {
+        const ranges:IRange[] = [{from: 32, to: 126}, {from: 1040, to: 1116}];
+        const WIDTH:number = 512;
+        this.fontContext = FontFactory.getFontContext(ranges,this.asCss(),WIDTH);
+    }
+
+    private createBitmap():string{
+        return FontFactory.getFontImageBase64(this.fontContext,this.asCss(),this.fontColor);
     }
 
 }

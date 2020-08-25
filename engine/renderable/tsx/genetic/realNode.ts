@@ -5,5 +5,5 @@ export interface IRealNode {
     getChildAt(index:number):IRealNode;
     getParentNode():IRealNode;
     removeChildren():void;
-    getChildren():IRealNode[];
+    getChildren():readonly IRealNode[];
 }

@@ -14,7 +14,6 @@ export class MainScene extends Scene {
     private fntResourceLink:ResourceLink<string>;
     private sprResourceLink:ResourceLink<ITexture>;
 
-    private fnt:Font;
     private tf:TextField;
 
     public onPreloading() {

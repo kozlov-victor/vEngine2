@@ -38,7 +38,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         return Color.HSLA(h,s,l,255);
     }
 
-    public static RGBA(r:byte,g:byte = r,b:byte = r, a:byte = b):Color{
+    public static RGBA(r:byte,g:byte = r,b:byte = r, a:byte = 255):Color{
         const c:Color = new Color(0,0,0);
         c.setRGBA(r,g,b,a);
         return c;

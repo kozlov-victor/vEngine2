@@ -1,5 +1,6 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
+import {IRectJSON, Rect} from "@engine/geometry/rect";
 
 export class Container extends RenderableModel{
 
@@ -34,6 +35,7 @@ export class Container extends RenderableModel{
     private paddingBottom   :number = 0;
 
     private background?: RenderableModel;
+    private clientRect:Rect = new Rect();
 
 
     public setMargin(top:number,right?:number,bottom?:number,left?:number):void{
@@ -43,6 +45,7 @@ export class Container extends RenderableModel{
         this.marginBottom = bottom;
         this.marginLeft = left;
         this.fitBackgroundToSize();
+        this.recalculateClientRect();
     }
 
     public setBackground(background: RenderableModel):void {
@@ -61,6 +64,7 @@ export class Container extends RenderableModel{
         this.paddingBottom = bottom;
         this.paddingLeft = left;
         this.fitBackgroundToSize();
+        this.recalculateClientRect();
     }
 
     public draw(): void {}
@@ -68,6 +72,11 @@ export class Container extends RenderableModel{
     public revalidate(): void {
         super.revalidate();
         this.fitBackgroundToSize();
+        this.recalculateClientRect();
+    }
+
+    public getClientRect():Readonly<IRectJSON> {
+        return this.clientRect;
     }
 
     private fitBackgroundToSize():void {
@@ -77,6 +86,31 @@ export class Container extends RenderableModel{
             this.marginTop,
             this.size.width - this.marginRight - this.marginLeft,
             this.size.height - this.marginBottom - this.marginTop);
+        if (this.background.size.width<=0) {
+            this.background.pos.x = 0;
+            this.background.size.width = this.size.width;
+        }
+        if (this.background.size.height<=0) {
+            this.background.pos.y = 0;
+            this.background.size.height = this.size.height;
+        }
+    }
+
+    private recalculateClientRect():void {
+        this.clientRect.setXYWH(
+            this.marginLeft+this.paddingLeft,
+            this.marginTop+this.paddingTop,
+            this.size.width - this.marginLeft - this.paddingLeft - this.marginRight - this.paddingRight,
+            this.size.height - this.marginTop - this.paddingTop - this.marginBottom - this.paddingBottom,
+        );
+        if (this.clientRect.width<=0) {
+            this.clientRect.x = 0;
+            this.clientRect.width = this.size.width;
+        }
+        if (this.clientRect.height<=0) {
+            this.clientRect.y = 0;
+            this.clientRect.height = this.size.height;
+        }
     }
 
 }

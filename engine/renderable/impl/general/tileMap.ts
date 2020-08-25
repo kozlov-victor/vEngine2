@@ -117,10 +117,7 @@ export class TileMap extends RenderableModelWithResourceLink {
 
                 const tileVal:number =this._data[currTileByY][currTileByX];
                 this._cellImage.getSrcRect().setXY(this.getFramePosX(tileVal),this.getFramePosY(tileVal));
-                this._cellImage.pos.setXY(
-                     (x * this._tileWidth),
-                     (y * this._tileHeight)
-                );
+                this._cellImage.pos.setXY(x * this._tileWidth, y * this._tileHeight);
                 this._drawingSurface.drawModel(this._cellImage);
             }
         }

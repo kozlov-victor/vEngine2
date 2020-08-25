@@ -5,7 +5,7 @@ import {ObservableEntity} from "./abstract/observableEntity";
 import {ICloneable} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 
-export interface IRectJSON {
+export interface IRectJSON extends IPoint2d, ISize{
     x:number;
     y:number;
     width:number;

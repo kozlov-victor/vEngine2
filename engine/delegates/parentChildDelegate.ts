@@ -3,6 +3,7 @@ import {IParentChild, Optional} from "@engine/core/declarations";
 
 type OnTreeModifiedCallback<T> = (c:T)=>void;
 
+
 export class ParentChildDelegate<T extends IParentChild> {
 
     constructor(private model:T) {}
@@ -19,7 +20,7 @@ export class ParentChildDelegate<T extends IParentChild> {
             }
         }
         c.parent = this.model;
-        this.model.children.push(c);
+        (this.model.children as T[]).push(c);
         if (this.afterChildAppended!==undefined) this.afterChildAppended(c);
     }
 
@@ -28,7 +29,7 @@ export class ParentChildDelegate<T extends IParentChild> {
             if (index>this.model.children.length-1) throw new DebugError(`can not insert element: index is out of range (${index},${this.model.children.length-1})`);
         }
         c.parent = this.model;
-        this.model.children.splice(index,0,c);
+        (this.model.children as T[]).splice(index,0,c);
         if (this.afterChildAppended!==undefined) this.afterChildAppended(c);
     }
 
@@ -53,7 +54,7 @@ export class ParentChildDelegate<T extends IParentChild> {
 
     public prependChild(c:T):void {
         c.parent = this.model;
-        this.model.children.unshift(c);
+        (this.model.children as T[]).unshift(c);
         if (this.afterChildAppended!==undefined) this.afterChildAppended(c);
     }
 
@@ -61,7 +62,7 @@ export class ParentChildDelegate<T extends IParentChild> {
         const c:IParentChild = this.model.children[i];
         if (DEBUG && !c) throw new DebugError(`can not remove children with index ${i}`);
         if (DEBUG && c.parent===undefined) throw new DebugError(`can not remove children with index ${i}: it is already detached`);
-        c.parent!.children.splice(i,1);
+        (c.parent!.children as T[]).splice(i,1);
         c.parent = undefined;
         if (this.afterChildRemoved!==undefined) this.afterChildRemoved(c as T);
     }
@@ -70,7 +71,7 @@ export class ParentChildDelegate<T extends IParentChild> {
         const parent:IParentChild = child.getParent() as IParentChild;
         const i:number = parent.children.indexOf(child);
         if (DEBUG && i===-1) throw new DebugError(`can not remove child: it doesn't belong to parent`);
-        parent.children.splice(i,1);
+        (parent.children as T[]).splice(i,1);
         child.parent = undefined;
         if (this.afterChildRemoved!==undefined) this.afterChildRemoved(child);
     }
@@ -80,7 +81,7 @@ export class ParentChildDelegate<T extends IParentChild> {
         if (DEBUG && parent===undefined) throw new DebugError(`can not remove child: it is already detached`);
         const i:number = parent.children.indexOf(this.model);
         if (DEBUG && i===-1) throw new DebugError(`can not remove child: it doesn't belong to parent`);
-        parent.children.splice(i,1);
+        (parent.children as T[]).splice(i,1);
         this.model.parent = undefined;
         if (this.afterChildRemoved!==undefined) this.afterChildRemoved(this.model);
     }
@@ -94,7 +95,7 @@ export class ParentChildDelegate<T extends IParentChild> {
     public replaceChild(c:T,newChild:T):void{
         const indexOf:number = this.model.children.indexOf(c);
         if (DEBUG && indexOf===-1) throw new DebugError(`can not replace child: destination node doesn't belong to element`);
-        this.model.children[indexOf] = newChild;
+        (this.model.children as T[])[indexOf] = newChild;
         c.parent = undefined;
         newChild.parent = this.model;
         if (this.afterChildRemoved!==undefined) this.afterChildRemoved(c);
@@ -104,7 +105,7 @@ export class ParentChildDelegate<T extends IParentChild> {
     public moveToFront():void {
         const parent:IParentChild = this.model.getParent() as IParentChild;
         if (DEBUG && !parent) throw new DebugError(`can not move to front: object is detached`);
-        const parentArray:IParentChild[] = parent.children;
+        const parentArray:IParentChild[] = parent.children as T[];
         const index:number = parentArray.indexOf(this.model);
         if (DEBUG && index===-1)
             throw new DebugError(`can not move to front: object is not belong to current scene`);
@@ -117,7 +118,7 @@ export class ParentChildDelegate<T extends IParentChild> {
     public moveToBack():void {
         const parent:IParentChild = this.model.getParent() as IParentChild;
         if (DEBUG && !parent) throw new DebugError(`can not move to back: object is detached`);
-        const parentArray:IParentChild[] = parent.children;
+        const parentArray:IParentChild[] = parent.children as T[];
         const index:number = parentArray.indexOf(this.model);
         if (DEBUG && index===-1)
             throw new DebugError(`can not move to front: object is not belong to current scene`);

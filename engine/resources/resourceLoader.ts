@@ -6,6 +6,8 @@ import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
 import createImageFromData = ResourceUtil.createImageFromData;
+import {Font} from "@engine/renderable/impl/general/font";
+import {Color} from "@engine/renderer/common/color";
 
 namespace resourceCache {
 
@@ -142,7 +144,15 @@ export class ResourceLoader {
 
         });
         return link;
+    }
 
+    public loadFont(fontFamily:string,fontSize:number,fontColor:[r:byte,g:byte,b:byte,a?:byte]):Font{
+        const fnt:Font = new Font(this.game);
+        fnt.fontSize = fontSize;
+        fnt.fontFamily = fontFamily;
+        fnt.fontColor = Color.RGBA(...fontColor);
+        fnt.generate();
+        return fnt;
     }
 
     public addNextTask(task: () => void) {
