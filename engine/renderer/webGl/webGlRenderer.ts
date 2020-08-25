@@ -198,7 +198,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         sd.setUniform(sd.u_texRect, destArr);
 
-        const offSetArr:[number,number] = Size.fromPool().setWH(img.offset.x/maxSize,img.offset.y/maxSize).release().toArray();
+        const offSetArr:Readonly<[number,number]> = Size.fromPool().setWH(img.offset.x/maxSize,img.offset.y/maxSize).release().toArray();
         sd.setUniform(sd.u_texOffset,offSetArr);
         sd.setUniform(sd.u_stretchMode,img.stretchMode);
         sd.attachTexture('texture',texture);

@@ -67,7 +67,7 @@ export class MotionBlurFilter extends AbstractGlFilter {
 
 
     public doFilter(destFrameBuffer:FrameBuffer):void{
-        const sizeArr:[number,number] = this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray();
+        const sizeArr:Readonly<[number,number]> = this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray();
         this.setUniform(this.texSize,sizeArr);
         super.doFilter(destFrameBuffer);
     }
