@@ -11,6 +11,7 @@ export class VScroll extends Container {
 
     public maxValue:number = 0;
     public value: number = 0;
+
     private _enabled: boolean = false;
 
 

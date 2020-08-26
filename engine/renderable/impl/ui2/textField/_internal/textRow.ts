@@ -1,7 +1,7 @@
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
-import {AlignText} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {AlignText, WordBrake} from "@engine/renderable/impl/ui2/textField/simple/textField";
 import {Word} from "@engine/renderable/impl/ui2/textField/_internal/word";
 import {TextRowSet} from "@engine/renderable/impl/ui2/textField/_internal/textRowSet";
 
@@ -22,18 +22,19 @@ export class TextRow extends NullGameObject {
         return this.caret + this.spaceChar.size.width + word.size.width<=this.constrainWidth;
     }
 
-    public addWord(word:Word):void {
-        if (this.children.length!==0) this._addWord(this.spaceChar.clone());
+    public addWord(word:Word,addWhiteSpaceBeforeIfNeed:boolean):void {
+        if (this.children.length!==0 && addWhiteSpaceBeforeIfNeed) this._addWord(this.spaceChar.clone());
         this._addWord(word);
     }
 
     public complete():void {
-        this.size.height = Math.max(...this.children.map(it=>it.size.height));
+        this.size.height = Math.max(...this.children.map(it=>it.size.height),this.spaceChar.size.height);
     }
 
     public setAlignText(align:AlignText):void{
         if (this.children.length===0) return;
         if (align===this.alignText) return;
+        if (this.rowSet.getWordBrake()===WordBrake.PREDEFINED) return;
 
         switch (align) {
             case AlignText.RIGHT:

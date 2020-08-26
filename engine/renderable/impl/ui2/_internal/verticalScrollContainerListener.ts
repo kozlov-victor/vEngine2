@@ -19,7 +19,8 @@ export class VerticalScrollContainerListener {
     private readonly _OVER_SCROLL_FACTOR_DECELERATION:number = 0.99;
     private readonly _MOUSE_WHEEL_FACTOR:number = 0.1;
     private _overScrollFactor:number = 0;
-    public offset: number = 0;
+    private offset: number = 0;
+    private _onScroll:()=>void;
 
     constructor(
         private externalContainer:RenderableModel,
@@ -65,6 +66,14 @@ export class VerticalScrollContainerListener {
             this._deceleration = 0;
         }
         this._setScrollPos();
+    }
+
+    public getScrollPosition():number{
+        return this.offset;
+    }
+
+    public onScroll(listener:()=>void):void {
+        this._onScroll = listener;
     }
 
     private listenScroll():void {
@@ -135,6 +144,7 @@ export class VerticalScrollContainerListener {
         }
 
         this.internalContainer.pos.y = this.offset;
+        if (this._onScroll!==undefined) this._onScroll();
     }
 
 }

@@ -571,6 +571,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     private prepareShapeUniformInfo(model:Shape){
+
+        if (DEBUG) {
+            if (!model.size.width || !model.size.height) {
+                console.error(model);
+                throw new DebugError(`Can not render model with zero size`);
+            }
+        }
+
         const maxSize:number = Math.max(model.size.width,model.size.height);
         const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);
         sd.setUniform(sd.u_lineWidth,Math.min(model.lineWidth/maxSize,1));

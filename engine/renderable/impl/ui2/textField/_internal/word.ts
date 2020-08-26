@@ -18,7 +18,7 @@ export class Word extends NullGameObject {
             this.appendChild(char);
             this.size.width+=char.size.width;
         });
-        this.size.height = Math.max(...this.children.map(it=>it.size.height));
+        this.size.height = Math.max(...this.children.map(it=>it.size.height),0);
     }
 
     clone():Word {

@@ -11,7 +11,10 @@ export interface ISize {
 export class Size extends ObservableEntity implements ICloneable<ISize>{
 
     set width(val:number) {
-        if (DEBUG && Number.isNaN(val)) throw new DebugError(`Size: wrong numeric argument  ${val}`);
+        if (DEBUG && Number.isNaN(val)) {
+            console.trace();
+            throw new DebugError(`Size: wrong numeric argument  ${val}`);
+        }
         const changed:boolean = this._width!==val;
         if (changed) {
             this._width = val;
@@ -84,7 +87,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         return this;
     }
 
-    public equal(w:number,h:number):boolean {
+    public equal(w:number,h:number = w):boolean {
         return this._width===w && this._height===h;
     }
 

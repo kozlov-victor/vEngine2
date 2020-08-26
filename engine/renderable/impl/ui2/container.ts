@@ -2,8 +2,20 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 
-export class Container extends RenderableModel{
+interface IContainerWithMarginPadding {
+    marginLeft      :number;
+    marginTop       :number;
+    marginRight     :number;
+    marginBottom    :number;
+    paddingLeft     :number;
+    paddingTop      :number;
+    paddingRight    :number;
+    paddingBottom   :number;
+}
 
+export class Container extends RenderableModel implements IContainerWithMarginPadding{
+
+    public readonly type:string = 'Container';
 
     constructor(game: Game) {
         super(game);
@@ -25,25 +37,27 @@ export class Container extends RenderableModel{
         return {top,right:right!,bottom:bottom!,left:left!};
     }
 
-    private marginLeft      :number = 0;
-    private marginTop       :number = 0;
-    private marginRight     :number = 0;
-    private marginBottom    :number = 0;
-    private paddingLeft     :number = 0;
-    private paddingTop      :number = 0;
-    private paddingRight    :number = 0;
-    private paddingBottom   :number = 0;
+    public readonly marginLeft      :number = 0;
+    public readonly marginTop       :number = 0;
+    public readonly marginRight     :number = 0;
+    public readonly marginBottom    :number = 0;
+    public readonly paddingLeft     :number = 0;
+    public readonly paddingTop      :number = 0;
+    public readonly paddingRight    :number = 0;
+    public readonly paddingBottom   :number = 0;
 
-    private background?: RenderableModel;
+    protected background?: RenderableModel;
+
     private clientRect:Rect = new Rect();
 
 
     public setMargin(top:number,right?:number,bottom?:number,left?:number):void{
         ({top,right,bottom,left} = Container.normalizeBorders(top,right,bottom,left));
-        this.marginTop = top;
-        this.marginRight = right;
-        this.marginBottom = bottom;
-        this.marginLeft = left;
+        const thisWriteable = this as IContainerWithMarginPadding;
+        thisWriteable.marginTop = top;
+        thisWriteable.marginRight = right;
+        thisWriteable.marginBottom = bottom;
+        thisWriteable.marginLeft = left;
         this.fitBackgroundToSize();
         this.recalculateClientRect();
     }
@@ -59,10 +73,11 @@ export class Container extends RenderableModel{
 
         ({top,right,bottom,left} = Container.normalizeBorders(top,right,bottom,left));
 
-        this.paddingTop = top;
-        this.paddingRight = right;
-        this.paddingBottom = bottom;
-        this.paddingLeft = left;
+        const thisWriteable = this as IContainerWithMarginPadding;
+        thisWriteable.paddingTop = top;
+        thisWriteable.paddingRight = right;
+        thisWriteable.paddingBottom = bottom;
+        thisWriteable.paddingLeft = left;
         this.fitBackgroundToSize();
         this.recalculateClientRect();
     }
