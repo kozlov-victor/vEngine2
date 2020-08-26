@@ -46,8 +46,8 @@ export class TextField extends Container {
     }
 
     public setText(text:string){
-        if (DEBUG && this.size.width===0) {
-            throw new DebugError(`can not setText: TextField size.width is not defined`);
+        if (DEBUG && (this.size.width===0 || this.size.height===0)) {
+            throw new DebugError(`can not setText: TextField size.width and/or size.height is not defined`);
         }
         this.prepare();
         this.rowSet.setText(text);
