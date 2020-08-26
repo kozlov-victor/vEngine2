@@ -1,6 +1,7 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
+import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 
 interface IContainerWithMarginPadding {
     marginLeft      :number;
@@ -16,10 +17,6 @@ interface IContainerWithMarginPadding {
 export class Container extends RenderableModel implements IContainerWithMarginPadding{
 
     public readonly type:string = 'Container';
-
-    constructor(game: Game) {
-        super(game);
-    }
 
     private static normalizeBorders(top:number,right?:number,bottom?:number,left?:number)
         :{top:number,right:number,bottom:number,left:number} {
@@ -46,10 +43,14 @@ export class Container extends RenderableModel implements IContainerWithMarginPa
     public readonly paddingRight    :number = 0;
     public readonly paddingBottom   :number = 0;
 
-    protected background?: RenderableModel;
+    protected background: RenderableModel = new NullGameObject(this.game);
 
     private clientRect:Rect = new Rect();
 
+    constructor(game: Game) {
+        super(game);
+        this.appendChild(this.background);
+    }
 
     public setMargin(top:number,right?:number,bottom?:number,left?:number):void{
         ({top,right,bottom,left} = Container.normalizeBorders(top,right,bottom,left));
@@ -58,14 +59,13 @@ export class Container extends RenderableModel implements IContainerWithMarginPa
         thisWriteable.marginRight = right;
         thisWriteable.marginBottom = bottom;
         thisWriteable.marginLeft = left;
-        this.fitBackgroundToSize();
         this.recalculateClientRect();
+        this.fitBackgroundToSize();
     }
 
     public setBackground(background: RenderableModel):void {
-        if (this.background!==undefined) this.removeChild(this.background);
+        this.replaceChild(this.background,background);
         this.background = background;
-        this.appendChild(this.background);
         this.fitBackgroundToSize();
     }
 
@@ -78,16 +78,16 @@ export class Container extends RenderableModel implements IContainerWithMarginPa
         thisWriteable.paddingRight = right;
         thisWriteable.paddingBottom = bottom;
         thisWriteable.paddingLeft = left;
-        this.fitBackgroundToSize();
         this.recalculateClientRect();
+        this.fitBackgroundToSize();
     }
 
     public draw(): void {}
 
     public revalidate(): void {
         super.revalidate();
-        this.fitBackgroundToSize();
         this.recalculateClientRect();
+        this.fitBackgroundToSize();
     }
 
     public getClientRect():Readonly<IRectJSON> {
@@ -95,7 +95,6 @@ export class Container extends RenderableModel implements IContainerWithMarginPa
     }
 
     private fitBackgroundToSize():void {
-        if (this.background===undefined) return;
         this.background.setPosAndSize(
             this.marginLeft,
             this.marginTop,

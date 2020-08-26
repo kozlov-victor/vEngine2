@@ -26,7 +26,7 @@ export class VerticalScrollContainerListener {
         private externalContainer:RenderableModel,
         private internalContainer:RenderableModel
         ) {
-        this.listenScroll();
+        this.listenToMouse();
     }
 
     public update(delta:number):void{
@@ -61,7 +61,7 @@ export class VerticalScrollContainerListener {
         if (this._scrollVelocity > 0) this._scrollVelocity -= this._deceleration;
         else if (this._scrollVelocity < 0) this._scrollVelocity += this._deceleration;
 
-        if (MathEx.closeTo(this._scrollVelocity, 0,3)) {
+        if (MathEx.closeTo(this._scrollVelocity, 0, 3)) {
             this._scrollVelocity = 0;
             this._deceleration = 0;
         }
@@ -76,7 +76,7 @@ export class VerticalScrollContainerListener {
         this._onScroll = listener;
     }
 
-    private listenScroll():void {
+    private listenToMouse():void {
         this.externalContainer.on(MOUSE_EVENTS.mouseDown, (p: IObjectMouseEvent) => {
             this._lastPoint = {
                 point: p,
@@ -130,18 +130,21 @@ export class VerticalScrollContainerListener {
 
     private _setScrollPos():void {
 
-        if (this.offset < this.externalContainer.size.height - this.internalContainer.size.height - this._OVER_SCROLL_DELTA) {
-            this.offset = this.externalContainer.size.height - this.internalContainer.size.height - this._OVER_SCROLL_DELTA;
-            this._overScrollFactor = this._OVER_SCROLL_FACTOR;
-            this._scrollVelocity = 0;
-            this._deceleration = 0;
-        }
+        //overscoll top
         if (this.offset > this._OVER_SCROLL_DELTA) {
             this.offset = this._OVER_SCROLL_DELTA;
             this._overScrollFactor = -this._OVER_SCROLL_FACTOR;
             this._scrollVelocity = 0;
             this._deceleration = 0;
         }
+        //overscoll bottom
+        else if (this.offset < this.externalContainer.size.height - this.internalContainer.size.height - this._OVER_SCROLL_DELTA) {
+            this.offset = this.externalContainer.size.height - this.internalContainer.size.height - this._OVER_SCROLL_DELTA;
+            this._overScrollFactor = this._OVER_SCROLL_FACTOR;
+            this._scrollVelocity = 0;
+            this._deceleration = 0;
+        }
+
 
         this.internalContainer.pos.y = this.offset;
         if (this._onScroll!==undefined) this._onScroll();
