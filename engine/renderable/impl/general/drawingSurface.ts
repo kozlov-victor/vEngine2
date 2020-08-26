@@ -25,7 +25,7 @@ class ContainerForDrawingSurface extends NullGameObject {
     render(): void {
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
-        renderer.transformTranslateByMatrixValues(...this.matrixStack.getCurrentValue().mat16);
+        renderer.transformSet(...this.matrixStack.getCurrentValue().mat16);
         renderer.transformTranslate(this.pos.x,this.pos.y);
         this.pos.setXY(0);
         this.worldTransformDirty = true;
@@ -67,7 +67,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     private readonly _renderTarget:IRenderTarget;
     private _omitSelfOnRendering:boolean = false;
 
-    constructor(game:Game,size:ISize){
+    constructor(game:Game,size:Readonly<ISize>){
         super(game);
         this.size.set(size);
         this.canvasImage.size.set(this.size);

@@ -5,9 +5,9 @@ import {
     AlignText,
     AlignTextContentHorizontal,
     AlignTextContentVertical
-} from "@engine/renderable/impl/ui2/textField/textField";
-import {TextRow} from "@engine/renderable/impl/ui2/textField/internal/textRow";
-import {Word} from "@engine/renderable/impl/ui2/textField/internal/word";
+} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextRow} from "@engine/renderable/impl/ui2/textField/_internal/textRow";
+import {Word} from "@engine/renderable/impl/ui2/textField/_internal/word";
 
 export class TextRowSet extends NullGameObject {
 
@@ -95,14 +95,12 @@ export class TextRowSet extends NullGameObject {
 
     private fitWidth():void {
         this.size.width = Math.max(...this.children.map(it=>it.size.width));
-        if (this.size.width>this.constrainWidth) this.size.width = this.constrainWidth;
     }
 
     private fitHeight():void{
         let height:number = 0;
         this.children.forEach(row=>height+=row.size.height);
         this.size.height = height;
-        if (this.size.height>this.constrainHeight) this.size.height = this.constrainHeight;
     }
 
 }

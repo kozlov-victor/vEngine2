@@ -7,8 +7,9 @@ import {
     AlignTextContentHorizontal,
     AlignTextContentVertical,
     TextField
-} from "@engine/renderable/impl/ui2/textField/textField";
+} from "@engine/renderable/impl/ui2/textField/simple/textField";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {ScrollableTextField} from "@engine/renderable/impl/ui2/textField/scrollable/scrollableTextField";
 
 export class MainScene extends Scene {
 
@@ -22,7 +23,7 @@ export class MainScene extends Scene {
         bg.lineWidth = 1;
         bg.borderRadius = 10;
 
-        const tf:TextField = new TextField(this.game,this.fnt);
+        const tf:TextField = new ScrollableTextField(this.game,this.fnt);
         tf.size.setWH(450,300);
         tf.setBackground(bg);
         tf.setMargin(10,30);
@@ -30,7 +31,7 @@ export class MainScene extends Scene {
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tf.setAlignText(AlignText.JUSTIFY);
-        tf.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+        tf.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
         this.appendChild(tf);
 
     }

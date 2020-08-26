@@ -1,9 +1,9 @@
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
-import {AlignText} from "@engine/renderable/impl/ui2/textField/textField";
-import {Word} from "@engine/renderable/impl/ui2/textField/internal/word";
-import {TextRowSet} from "@engine/renderable/impl/ui2/textField/internal/textRowSet";
+import {AlignText} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {Word} from "@engine/renderable/impl/ui2/textField/_internal/word";
+import {TextRowSet} from "@engine/renderable/impl/ui2/textField/_internal/textRowSet";
 
 export class TextRow extends NullGameObject {
 

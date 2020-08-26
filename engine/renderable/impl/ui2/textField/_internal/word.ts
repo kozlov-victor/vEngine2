@@ -1,7 +1,7 @@
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
-import {Character} from "@engine/renderable/impl/ui2/textField/internal/character";
+import {Character} from "@engine/renderable/impl/ui2/textField/_internal/character";
 
 export class Word extends NullGameObject {
 

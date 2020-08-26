@@ -5,7 +5,7 @@ import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {Container} from "@engine/renderable/impl/ui2/container";
 import {IRectJSON} from "@engine/geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {TextRowSet} from "@engine/renderable/impl/ui2/textField/internal/textRowSet";
+import {TextRowSet} from "@engine/renderable/impl/ui2/textField/_internal/textRowSet";
 
 
 export enum AlignTextContentVertical {
@@ -34,8 +34,8 @@ export const enum WORD_BRAKE {
 
 export class TextField extends Container {
 
-    private rowSet:TextRowSet;
-    private rowSetContainer:RenderableModel = new NullGameObject(this.game);
+    protected rowSet:TextRowSet;
+    protected rowSetContainer:RenderableModel = new NullGameObject(this.game);
     private alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;
     private alignTextContentHorizontal:AlignTextContentHorizontal = AlignTextContentHorizontal.LEFT;
     private alignText:AlignText = AlignText.LEFT;
@@ -71,12 +71,13 @@ export class TextField extends Container {
         if (this.rowSet!==undefined) this.rowSet.setAlignText(align);
     }
 
-    private prepare():void {
+    protected prepare():void {
         if (this._ready) return;
         this.revalidate();
         const clientRect:Readonly<IRectJSON> = this.getClientRect();
         this.appendChild(this.rowSetContainer);
         this.rowSetContainer.pos.setXY(clientRect.x,clientRect.y);
+        this.rowSetContainer.size.set(clientRect);
         this.rowSet = new TextRowSet(this.game,this.font,clientRect.width,clientRect.height);
         this.rowSetContainer.appendChild(this.rowSet);
         this._ready = true;

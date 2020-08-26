@@ -1,6 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 export class MainScene extends Scene {
 
@@ -10,6 +11,7 @@ export class MainScene extends Scene {
 
     public onReady() {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
+        surface.addBehaviour(new DraggableBehaviour(this.game));
         this.surface = surface;
         surface.setLineWidth(1);
         this.appendChild(surface);

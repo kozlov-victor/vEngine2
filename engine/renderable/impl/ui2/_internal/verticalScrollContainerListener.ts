@@ -1,0 +1,140 @@
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {MathEx} from "@engine/misc/mathEx";
+
+interface IScrollPointDesc {
+    point: IObjectMouseEvent;
+    time: number;
+}
+
+export class VerticalScrollContainerListener {
+
+    private _lastPoint:IScrollPointDesc;
+    private _prevPoint:IScrollPointDesc;
+    private _scrollVelocity: number = 0;
+    private _deceleration: number = 0;
+    private readonly _OVER_SCROLL_DELTA:number = 20;
+    private readonly _OVER_SCROLL_FACTOR:number = 0.8;
+    private readonly _OVER_SCROLL_FACTOR_DECELERATION:number = 0.99;
+    private readonly _MOUSE_WHEEL_FACTOR:number = 0.1;
+    private _overScrollFactor:number = 0;
+    public offset: number = 0;
+
+    constructor(
+        private externalContainer:RenderableModel,
+        private internalContainer:RenderableModel
+        ) {
+        this.listenScroll();
+    }
+
+    public update(delta:number):void{
+
+        if (this._overScrollFactor<0) {
+            this.offset+=this._overScrollFactor;
+            this._overScrollFactor*=this._OVER_SCROLL_FACTOR_DECELERATION;
+            if (this.offset<=0) {
+                this._overScrollFactor = 0;
+                this.offset = 0;
+            }
+        }
+        else if (this._overScrollFactor>0) {
+            this.offset+=this._overScrollFactor;
+            this._overScrollFactor*=this._OVER_SCROLL_FACTOR_DECELERATION;
+            if (this.offset>=this.externalContainer.size.height - this.internalContainer.size.height) {
+                this._overScrollFactor = 0;
+                this.offset = this.externalContainer.size.height - this.internalContainer.size.height;
+            }
+        }
+
+        if (this._scrollVelocity) {
+            this.offset += this._scrollVelocity * delta /1000;
+        }
+        this._deceleration = this._deceleration + 0.5 / delta;
+
+        if (delta>1000) {
+            this._scrollVelocity = 0;
+            this._deceleration = 0;
+        }
+
+        if (this._scrollVelocity > 0) this._scrollVelocity -= this._deceleration;
+        else if (this._scrollVelocity < 0) this._scrollVelocity += this._deceleration;
+
+        if (MathEx.closeTo(this._scrollVelocity, 0,3)) {
+            this._scrollVelocity = 0;
+            this._deceleration = 0;
+        }
+        this._setScrollPos();
+    }
+
+    private listenScroll():void {
+        this.externalContainer.on(MOUSE_EVENTS.mouseDown, (p: IObjectMouseEvent) => {
+            this._lastPoint = {
+                point: p,
+                time: Date.now()
+            };
+            this._prevPoint = {
+                point: this._lastPoint.point,
+                time: this._lastPoint.time
+            };
+            this._scrollVelocity = 0;
+            this._deceleration = 0;
+            this._overScrollFactor = 0;
+        });
+        this.externalContainer.on(MOUSE_EVENTS.mouseMove, (p: IObjectMouseEvent) => {
+            if (!p.isMouseDown) return;
+            const lastPoint:IScrollPointDesc = this._lastPoint;
+            this._lastPoint = {
+                point: p,
+                time: Date.now()
+            };
+            this._prevPoint = {
+                point: lastPoint.point,
+                time: lastPoint.time,
+            };
+
+            this.offset +=
+                this._lastPoint.point.screenY - this._prevPoint.point.screenY;
+            this._setScrollPos();
+        });
+        this.externalContainer.on(MOUSE_EVENTS.scroll, (p: IObjectMouseEvent) => {
+            const wheelDelta = (p.nativeEvent as WheelEvent&{wheelDelta:number}).wheelDelta;
+            this.offset+=wheelDelta*this._MOUSE_WHEEL_FACTOR;
+            this._setScrollPos();
+        });
+        this.externalContainer.on(MOUSE_EVENTS.mouseUp, (p: IObjectMouseEvent) => {
+            if (!this._lastPoint) return;
+            if (!this._prevPoint) return;
+            if (this._lastPoint.time === this._prevPoint.time) {
+                this._scrollVelocity = 0;
+            } else if (Date.now() - this._lastPoint.time > 100) {
+                this._scrollVelocity = 0;
+            }
+            else {
+                this._scrollVelocity = 1000 *
+                    (this._lastPoint.point.screenY - this._prevPoint.point.screenY) /
+                    (this._lastPoint.time - this._prevPoint.time);
+            }
+            this._deceleration = 0;
+        });
+    }
+
+    private _setScrollPos():void {
+
+        if (this.offset < this.externalContainer.size.height - this.internalContainer.size.height - this._OVER_SCROLL_DELTA) {
+            this.offset = this.externalContainer.size.height - this.internalContainer.size.height - this._OVER_SCROLL_DELTA;
+            this._overScrollFactor = this._OVER_SCROLL_FACTOR;
+            this._scrollVelocity = 0;
+            this._deceleration = 0;
+        }
+        if (this.offset > this._OVER_SCROLL_DELTA) {
+            this.offset = this._OVER_SCROLL_DELTA;
+            this._overScrollFactor = -this._OVER_SCROLL_FACTOR;
+            this._scrollVelocity = 0;
+            this._deceleration = 0;
+        }
+
+        this.internalContainer.pos.y = this.offset;
+    }
+
+}
