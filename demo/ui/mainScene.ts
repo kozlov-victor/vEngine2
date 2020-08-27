@@ -37,7 +37,7 @@ export class MainScene extends Scene {
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
 
         tf.pos.setXY(50,50);
-        tf.size.setWH(450,200);
+        tf.size.setWH(350,200);
         tf.setAlignText(AlignText.CENTER);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         const background = new Rectangle(this.game);

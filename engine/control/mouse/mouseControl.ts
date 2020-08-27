@@ -301,13 +301,14 @@ export class MouseControl implements IControl {
         if (lastHoveredObject!==undefined) {
             if (lastHoveredObject!==point.target) {
                 lastHoveredObject.trigger(MOUSE_EVENTS.mouseLeave,point);
+                //this.triggerEvent(e,MOUSE_EVENTS.mouseLeave).release();
                 delete this._objectsFirstHovered[point.id];
             } else {
                 if (this._objectsFirstHovered[point.id]===undefined) {
                     lastHoveredObject.trigger(MOUSE_EVENTS.mouseEnter,point);
                     this._objectsFirstHovered[point.id] = point.target;
+                    //this.triggerEvent(e,MOUSE_EVENTS.mouseEnter).release();
                 }
-
             }
         }
         this._objectsHovered[point.id] = point.target;

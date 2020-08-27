@@ -53,7 +53,6 @@ export class TextField extends Container {
     }
 
     public setText(text:string|number){
-        if (this._text===text) return;
         const strText:string = text.toString();
         this._text = strText;
         if (DEBUG && (this.size.width===0 || this.size.height===0)) {
