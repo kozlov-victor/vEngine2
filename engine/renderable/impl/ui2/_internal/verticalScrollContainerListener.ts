@@ -76,6 +76,14 @@ export class VerticalScrollContainerListener {
         this._onScroll = listener;
     }
 
+    public destroy():void {
+         this.externalContainer.off(MOUSE_EVENTS.mouseDown);
+         this.externalContainer.off(MOUSE_EVENTS.mouseMove);
+         this.externalContainer.off(MOUSE_EVENTS.scroll);
+         this.externalContainer.off(MOUSE_EVENTS.mouseUp);
+
+    }
+
     private listenToMouse():void {
         this.externalContainer.on(MOUSE_EVENTS.mouseDown, (p: IObjectMouseEvent) => {
             this._lastPoint = {
@@ -96,6 +104,8 @@ export class VerticalScrollContainerListener {
             if (!canScroll) return;
 
             const lastPoint:IScrollPointDesc = this._lastPoint;
+            if (lastPoint===undefined) return;
+
             this._lastPoint = {
                 point: p,
                 time: Date.now()

@@ -2,6 +2,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {MarkableNullGameObject} from "@engine/renderable/impl/ui2/textField/_internal/markableNullGameObject";
 
 interface IContainerWithMarginPadding {
     marginLeft      :number;
@@ -14,7 +15,7 @@ interface IContainerWithMarginPadding {
     paddingBottom   :number;
 }
 
-export class Container extends RenderableModel implements IContainerWithMarginPadding{
+export class Container extends MarkableNullGameObject implements IContainerWithMarginPadding{
 
     public readonly type:string = 'Container';
 
@@ -61,6 +62,7 @@ export class Container extends RenderableModel implements IContainerWithMarginPa
         thisWriteable.marginLeft = left;
         this.recalculateClientRect();
         this.fitBackgroundToSize();
+        this.markAsDirty();
     }
 
     public setBackground(background: RenderableModel):void {
@@ -80,9 +82,8 @@ export class Container extends RenderableModel implements IContainerWithMarginPa
         thisWriteable.paddingLeft = left;
         this.recalculateClientRect();
         this.fitBackgroundToSize();
+        this.markAsDirty();
     }
-
-    public draw(): void {}
 
     public revalidate(): void {
         super.revalidate();

@@ -2,6 +2,7 @@ import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 import {DebugError} from "@engine/debug/debugError";
 import {ICloneable} from "@engine/core/declarations";
+import {isNumber, isObject} from "@engine/misc/object";
 
 export interface ISize {
     width: number;
@@ -87,8 +88,19 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         return this;
     }
 
-    public equal(w:number,h:number = w):boolean {
-        return this._width===w && this._height===h;
+    public equal(another:ISize):boolean;
+    public equal(val:number):boolean;
+    public equal(w:number,h:number):boolean;
+    public equal(wOrAnother:number|ISize,h?:number):boolean {
+        let wToCheck,hToCheck:number;
+        if (isNumber(wOrAnother)) {
+            wToCheck = wOrAnother;
+            hToCheck=h??wOrAnother;
+        } else {
+            wToCheck = wOrAnother.width;
+            hToCheck=h??wOrAnother.height;
+        }
+        return this._width===wToCheck && this._height===hToCheck;
     }
 
     public clone():Size {

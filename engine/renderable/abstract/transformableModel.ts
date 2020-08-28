@@ -122,13 +122,12 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         super(game);
         const observer = ()=>this.worldTransformDirty = true;
         this.pos.observe(observer);
+        this.size.observe(observer);
         this.scale.observe(observer);
         this.transformPoint.observe(observer);
         this.anchorPoint.observe(observer);
         this.angle3d.observe(observer);
     }
-
-
 
     public abstract revalidate():void;
 

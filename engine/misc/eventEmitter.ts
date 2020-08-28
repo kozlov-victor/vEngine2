@@ -33,11 +33,10 @@ export class EventEmitter{
             const index:number = es.indexOf(callback);
             if (DEBUG && index===-1) {
                 console.error(callback);
-                throw new DebugError(`can not remove event listener ${eventName}`);
+                throw new DebugError(`can not remove event listener ${eventName}, it does not belong to this eventEmitter`);
             }
             es.splice(index,1);
         }
-
     }
 
     public trigger(eventName:string,data:unknown):void {

@@ -2,9 +2,9 @@ import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {MarkableNullGameObject} from "@engine/renderable/impl/ui2/textField/_internal/markableNullGameObject";
 
-export class VerticalScrollBar extends NullGameObject {
+export class VerticalScrollBar extends MarkableNullGameObject {
 
     public readonly type:string = 'VerticalScrollBar';
 
@@ -14,7 +14,7 @@ export class VerticalScrollBar extends NullGameObject {
 
     set value(value: number) {
         this._value = value;
-        this.refreshScrollPosition();
+        this.markAsDirty();
     }
 
     get maxValue(): number {
@@ -23,7 +23,7 @@ export class VerticalScrollBar extends NullGameObject {
 
     set maxValue(value: number) {
         this._maxValue = value;
-        this.refreshScrollPosition();
+        this.markAsDirty();
     }
 
     private _maxValue: number = 0;
@@ -44,12 +44,13 @@ export class VerticalScrollBar extends NullGameObject {
 
     constructor(game: Game) {
         super(game);
+        this.size.setWH(1,1);
         const bg: Rectangle = new Rectangle(game);
-        bg.size.width = 5;
+        bg.size.setWH(5,1);
         bg.fillColor = new Color(50, 50, 50, 10);
         bg.color = Color.NONE.clone();
         const hnd: Rectangle = new Rectangle(game);
-        hnd.size.height = 10;
+        hnd.size.setWH(10,1);
         hnd.color = Color.NONE.clone();
         hnd.fillColor = new Color(10, 10, 10, 100);
         this.handler = hnd;
@@ -57,6 +58,7 @@ export class VerticalScrollBar extends NullGameObject {
         this.appendChild(hnd);
         this.background = bg;
         this.handler = hnd;
+        this.size.addOnChangeListener(()=>this.markAsDirty());
     }
 
     public revalidate() {

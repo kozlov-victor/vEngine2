@@ -2,7 +2,12 @@ import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {AlignText, AlignTextContentHorizontal, TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {
+    AlignText,
+    AlignTextContentHorizontal,
+    AlignTextContentVertical,
+    TextField
+} from "@engine/renderable/impl/ui2/textField/simple/textField";
 import {CheckBox} from "@engine/renderable/impl/ui2/checkBox";
 import {ScrollableTextField} from "@engine/renderable/impl/ui2/textField/scrollable/scrollableTextField";
 
@@ -37,16 +42,17 @@ export class MainScene extends Scene {
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
 
         tf.pos.setXY(50,50);
-        tf.size.setWH(450,150);
+        tf.size.setWH(450,250);
         tf.setAlignText(AlignText.JUSTIFY);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
+        tf.setAlignTextContentVertical(AlignTextContentVertical.TOP);
         const background = new Rectangle(this.game);
         background.fillColor = Color.RGB(250);
         background.borderRadius = 5;
+        tf.setText(text);
         tf.setBackground(background);
         tf.setPadding(10);
         tf.setMargin(20);
-        tf.setText(text);
         this.appendChild(tf);
 
         const chbox:CheckBox = new CheckBox(this.game);

@@ -47,7 +47,6 @@ export class TextRowSet extends NullGameObject {
 
     public setText(text:string,wordBrake:WordBrake){
         this.wordBrake = wordBrake;
-        if (text===this.rawText) return;
         this.rawText = text;
         this.clear();
         if (wordBrake===WordBrake.PREDEFINED) {
@@ -74,7 +73,7 @@ export class TextRowSet extends NullGameObject {
                     this.addWord(new Word(this.game,this.font,word),true);
                 });
         }
-        this.currentTextRow.complete();
+        if (this.currentTextRow!==undefined) this.currentTextRow.complete();
         this.fitSize();
     }
 
@@ -114,6 +113,7 @@ export class TextRowSet extends NullGameObject {
                 this.pos.setY(this.constrainHeight - this.size.height);
                 break;
         }
+        this.alignTextContentVertical = align;
     }
 
     public setAlignText(align:AlignText) {

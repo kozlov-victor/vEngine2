@@ -10,20 +10,36 @@ export class ScrollableTextField extends TextField {
     public readonly type:string = 'ScrollableTextField';
 
     private scrollContainerListener:VerticalScrollContainerListener;
-    private scrollBar: VerticalScrollBar;
+    private readonly scrollBar: VerticalScrollBar;
 
     constructor(game:Game,font:Font) {
         super(game,font);
+        this.scrollBar = new VerticalScrollBar(this.game);
+        this.rowSetContainer.appendChild(this.scrollBar);
     }
 
-    protected prepare() {
-        super.prepare();
-        this.scrollContainerListener = new VerticalScrollContainerListener(this.rowSetContainer,this.rowSet);
-        this.scrollBar = new VerticalScrollBar(this.game);
+    revalidate() {
+        super.revalidate();
+        if (this.scrollContainerListener===undefined) {
+            this.scrollContainerListener = new VerticalScrollContainerListener(this.rowSetContainer,this.rowSet);
+            this.scrollContainerListener.onScroll(()=>{
+                this.updateScrollValues();
+                this.redrawText();
+            });
+        } else {
+            if (this.rowSetContainer.isDirty()) {
+                this.scrollContainerListener.destroy();
+                this.scrollContainerListener = new VerticalScrollContainerListener(this.rowSetContainer,this.rowSet);
+                this.scrollContainerListener.onScroll(()=>{
+                    this.updateScrollValues();
+                    this.redrawText();
+                });
+            }
+        }
+
         this.scrollBar.size.setWH(5,this.rowSetContainer.size.height);
         this.scrollBar.pos.x = this.rowSetContainer.size.width - this.scrollBar.size.width + this.paddingRight;
-        this.rowSetContainer.appendChild(this.scrollBar);
-        this.scrollContainerListener.onScroll(()=>this.redrawText());
+        this.updateScrollValues();
     }
 
     public update():void {
@@ -32,10 +48,9 @@ export class ScrollableTextField extends TextField {
         this.scrollContainerListener.update(delta);
     }
 
-    protected redrawText() {
+    private updateScrollValues():void {
         this.scrollBar.maxValue = this.rowSet.size.height;
         this.scrollBar.value = - this.scrollContainerListener.getScrollPosition();
-        super.redrawText();
     }
 
 
