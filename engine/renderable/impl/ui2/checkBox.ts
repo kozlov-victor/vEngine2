@@ -6,6 +6,7 @@ import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Container} from "@engine/renderable/impl/ui2/container";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Rect} from "@engine/geometry/rect";
 
 export interface ICheckBoxWritable {
     checked:boolean;
@@ -19,36 +20,30 @@ export class CheckBox extends Container implements ICheckBoxWritable {
     private readonly _rNormal:Shape;
     private readonly _rChecked: Shape;
 
+    private readonly highLightColor:Color = Color.RGB(122,122,122);
+
     constructor(game:Game) {
         super(game);
         this.size.setWH(50);
+        this.setPadding(5);
         const rNormal:Rectangle = new Rectangle(game);
+        rNormal.borderRadius = 3;
+        rNormal.color = Color.BLACK;
         rNormal.fillColor = Color.NONE;
-        rNormal.color = Color.NONE;
 
         const rChecked:Rectangle = new Rectangle(game);
-        rChecked.fillColor = Color.NONE;
-        rChecked.color = Color.NONE;
-        const polyLine:PolyLine = PolyLine.fromSvgPath(this.game,'M14.1 27.2l7.1 7.2 16.7-16.8');
-        polyLine.lineWidth = 6;
-        polyLine.color = new Color(50,50,50);
-        rChecked.appendChild(polyLine);
+        rChecked.borderRadius = 3;
+        rChecked.color = Color.BLACK;
 
         this._rNormal = rNormal;
         this._rChecked = rChecked;
 
-        this.appendChild(rNormal);
+        this.setBackground(this._rNormal);
         this.appendChild(rChecked);
-
-        const bg:Rectangle = new Rectangle(this.game);
-        bg.borderRadius = 5;
-        bg.fillColor = Color.NONE.clone();
-        this.setBackground(bg);
-
         this.updateChildrenByChecked();
-
         this.on(MOUSE_EVENTS.click,()=>this.toggle());
     }
+
 
     public toggle(value?:boolean):void{
         if (value!==undefined) (this as ICheckBoxWritable).checked = value;
@@ -57,14 +52,19 @@ export class CheckBox extends Container implements ICheckBoxWritable {
     }
 
     public revalidate():void{
-        this._rNormal.size.set(this.size);
-        this._rChecked.size.set(this.size);
+        super.revalidate();
+        const clientRect = this.getClientRect();
+        this._rChecked.pos.set(clientRect);
+        this._rChecked.size.set(clientRect);
     }
 
     public draw(){}
 
     private updateChildrenByChecked(){
-        this._rNormal.visible = !this.checked;
-        this._rChecked.visible = this.checked;
+        if (this.checked) {
+            this._rChecked.fillColor = this.highLightColor;
+        } else {
+            this._rChecked.fillColor = Color.NONE;
+        }
     }
 }

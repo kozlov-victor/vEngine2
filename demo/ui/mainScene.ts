@@ -10,6 +10,7 @@ import {
 } from "@engine/renderable/impl/ui2/textField/simple/textField";
 import {CheckBox} from "@engine/renderable/impl/ui2/checkBox";
 import {ScrollableTextField} from "@engine/renderable/impl/ui2/textField/scrollable/scrollableTextField";
+import {Button} from "@engine/renderable/impl/ui2/button/button";
 
 const text:string=
 `Lorem ipsum dolor sit amet,\t\n\r
@@ -42,7 +43,7 @@ export class MainScene extends Scene {
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
 
         tf.pos.setXY(50,50);
-        tf.size.setWH(450,250);
+        tf.size.setWH(450,120);
         tf.setAlignText(AlignText.JUSTIFY);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.TOP);
@@ -56,18 +57,19 @@ export class MainScene extends Scene {
         this.appendChild(tf);
 
         const chbox:CheckBox = new CheckBox(this.game);
-        chbox.pos.setXY(50,200);
+        chbox.pos.setXY(50,350);
         this.appendChild(chbox);
 
-        // const btn:Button = new Button(this.game,this.fnt);
-        // btn.setText("click!");
-        // btn.pos.setXY(50,260);
-        // const bg:Rectangle = new Rectangle(this.game);
-        // bg.borderRadius = 2;
-        // bg.fillColor = Color.NONE;
-        // btn.setBackground(bg);
-        // btn.setPadding(20);
-        // this.appendChild(btn);
+        const btn:Button = new Button(this.game,this.fnt);
+        btn.setText("click!");
+        btn.pos.setXY(200,260);
+        const bg:Rectangle = new Rectangle(this.game);
+        bg.borderRadius = 2;
+        bg.fillColor = Color.NONE;
+        btn.setBackground(bg);
+        btn.setPadding(20);
+        this.appendChild(btn);
+        (window as any).b = btn;
 
 
     }

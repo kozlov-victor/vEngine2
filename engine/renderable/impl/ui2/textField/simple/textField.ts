@@ -49,10 +49,13 @@ export class TextField extends Container {
     constructor(game:Game,private font:Font) {
         super(game);
         this.appendChild(this.rowSetContainer);
+        this.size.setWH(300,100);
     }
 
     public setText(text:string|number){
-        this._text = text.toString();
+        const strText = text.toString();
+        if (strText===this._text) return;
+        this._text = strText;
         this.markAsDirty();
     }
 
