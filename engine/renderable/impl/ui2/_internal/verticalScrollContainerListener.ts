@@ -111,7 +111,12 @@ export class VerticalScrollContainerListener {
         });
         this.externalContainer.on(MOUSE_EVENTS.scroll, (p: IObjectMouseEvent) => {
             const wheelDelta = (p.nativeEvent as WheelEvent&{wheelDelta:number}).wheelDelta;
-            this.offset+=wheelDelta*this._MOUSE_WHEEL_FACTOR;
+            const newOffset:number = this.offset + wheelDelta*this._MOUSE_WHEEL_FACTOR;
+            const isOverScrolled:boolean =
+                newOffset > 0 ||
+                newOffset < this.externalContainer.size.height - this.internalContainer.size.height;
+            if(isOverScrolled) return;
+            this.offset=newOffset;
             this._setScrollPos();
         });
         this.externalContainer.on(MOUSE_EVENTS.mouseUp, (p: IObjectMouseEvent) => {

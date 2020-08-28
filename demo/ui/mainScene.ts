@@ -7,7 +7,7 @@ import {CheckBox} from "@engine/renderable/impl/ui2/checkBox";
 import {ScrollableTextField} from "@engine/renderable/impl/ui2/textField/scrollable/scrollableTextField";
 
 const text:string=
-`Lorem ipsum dolor sit amet,
+`Lorem ipsum dolor sit amet,\t\n\r
 consectetur
 adipiscing elit,
 sed do eiusmod
@@ -37,8 +37,8 @@ export class MainScene extends Scene {
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
 
         tf.pos.setXY(50,50);
-        tf.size.setWH(350,200);
-        tf.setAlignText(AlignText.CENTER);
+        tf.size.setWH(450,150);
+        tf.setAlignText(AlignText.JUSTIFY);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         const background = new Rectangle(this.game);
         background.fillColor = Color.RGB(250);

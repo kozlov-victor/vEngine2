@@ -67,9 +67,12 @@ export class TextRowSet extends NullGameObject {
                 }
             });
         } else {
-            this.rawText.split(' ').filter(it=>it.length>0).forEach(word=>{ // split to words and smart fit it
-                this.addWord(new Word(this.game,this.font,word),true);
-            });
+            this.rawText.
+                split(/[\t\n\s]/g).
+                filter(it=>it.length>0).
+                forEach(word=>{ // split to words and smart fit it
+                    this.addWord(new Word(this.game,this.font,word),true);
+                });
         }
         this.currentTextRow.complete();
         this.fitSize();

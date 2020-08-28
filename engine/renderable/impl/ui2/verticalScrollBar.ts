@@ -80,6 +80,7 @@ export class VerticalScrollBar extends NullGameObject {
         if (this.handler.pos.y + this.handler.size.height>this.size.height) {
             this.handler.size.height=this.size.height - this.handler.pos.y;
         }
+        if (this.handler.size.height===0) this.handler.size.height = 1;
     }
 }
 
