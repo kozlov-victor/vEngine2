@@ -11,9 +11,10 @@ import {
 import {CheckBox} from "@engine/renderable/impl/ui2/checkBox";
 import {ScrollableTextField} from "@engine/renderable/impl/ui2/textField/scrollable/scrollableTextField";
 import {Button} from "@engine/renderable/impl/ui2/button/button";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 const text:string=
-`Lorem ipsum dolor sit amet,\t\n\r
+`╔═▓✂️Lorem ✂ ipsum dolor sit amet,\t\n\r
 consectetur
 adipiscing elit,
 sed do eiusmod
@@ -27,16 +28,9 @@ commodo consequat.`;
 
 export class MainScene extends Scene {
 
+    @Resource.Font('monospace',15,['╔','═','═','▓','✂️','✂'])
     public fnt!:Font;
 
-    public onPreloading(){
-        const fnt:Font = new Font(this.game);
-        fnt.fontSize = 15;
-        fnt.fontFamily = 'monospace';
-        fnt.fontColor = Color.RGB(10);
-        fnt.generate();
-        this.fnt = fnt;
-    }
 
     public onReady() {
 
@@ -47,8 +41,9 @@ export class MainScene extends Scene {
         tf.setAlignText(AlignText.JUSTIFY);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.TOP);
+        tf.textColor.setRGB(12,132,255);
         const background = new Rectangle(this.game);
-        background.fillColor = Color.RGB(250);
+        background.fillColor = Color.RGB(40);
         background.borderRadius = 5;
         tf.setText(text);
         tf.setBackground(background);
@@ -63,6 +58,7 @@ export class MainScene extends Scene {
         const btn:Button = new Button(this.game,this.fnt);
         btn.setText("click!");
         btn.pos.setXY(200,260);
+        btn.textColor.setRGB(10,10,10);
         const bg:Rectangle = new Rectangle(this.game);
         bg.borderRadius = 2;
         bg.fillColor = Color.NONE;

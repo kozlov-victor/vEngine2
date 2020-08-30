@@ -17,7 +17,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
-    @Resource.Font('monospace',25,[122,244,245])
+    @Resource.Font('monospace',25)
     public fnt!:Font;
 
     public onReady() {
@@ -32,6 +32,7 @@ export class MainScene extends Scene {
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
         tf.size.setWH(450,300);
         tf.setBackground(bg);
+        tf.textColor.setRGB(122,244,245);
         tf.setMargin(10,10);
         tf.setPadding(20,10);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
@@ -46,14 +47,15 @@ export class MainScene extends Scene {
         tf3.setBackground(bg.clone());
         tf3.setMargin(10,10);
         tf3.setPadding(20,10);
+        tf3.textColor.setRGB(122,200,245);
         tf3.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf3.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tf3.setWordBrake(WordBrake.PREDEFINED);
-        tf3.setText("" +
+        tf3.setText("\n" +
             "     Lorem    ipsum dolor sit amet, consectetur \n" +
             "adipiscing     elit,     sed do eiusmod tempor incididunt \n" +
             "ut labore et dolore magna aliqua. Ut enim ad minim \n" +
-            "\n"+
+            "\n\n\n\n"+
             "1\n"+
             "\n"+
             "\n"+
@@ -75,6 +77,7 @@ export class MainScene extends Scene {
         btn.pos.setXY(150,300);
         btn.size.setWH(200,100);
         btn.setText("click me");
+        btn.textColor.setRGB(222,144,255);
         this.appendChild(btn);
 
         const tf2 = new TextField(this.game,this.fnt);
@@ -82,6 +85,7 @@ export class MainScene extends Scene {
         tf2.pos.setXY(150,430);
         tf2.setText("-==no data==-");
         this.appendChild(tf2);
+        tf2.textColor.setRGB(222,244,245);
         let cnt = 0;
         btn.on(MOUSE_EVENTS.click, e=>{
             if (checkBox.checked) cnt+=1;

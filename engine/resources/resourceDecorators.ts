@@ -31,7 +31,7 @@ export const Resource = {
             throw new DebugError(`something wrong with precompiler for CubeTexture decorator`);
         };
     },
-    Font: (fontFamily:string, fontSize:number, fontColor:[r:byte,g:byte,b:byte,a?:byte])=>{
+    Font: (fontFamily:string, fontSize:number, extraChars?:string[])=>{
         return (target: Scene, propertyKey: string):void => {
             // stub for precompiler only
             throw new DebugError(`something wrong with precompiler for Font decorator`);

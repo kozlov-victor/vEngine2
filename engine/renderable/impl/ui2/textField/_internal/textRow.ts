@@ -8,10 +8,9 @@ import {TextRowSet} from "@engine/renderable/impl/ui2/textField/_internal/textRo
 export class TextRow extends NullGameObject {
 
     public declare children: readonly Word[];
+
     private caret:number = 0;
     private alignText:AlignText = AlignText.LEFT;
-
-    private spaceChar:Word = new Word(this.game,this.font,' ');
 
     constructor(game:Game,private font:Font,private constrainWidth:number,private readonly rowSet:TextRowSet) {
         super(game);
@@ -19,16 +18,16 @@ export class TextRow extends NullGameObject {
 
     public canAddWord(word:Word):boolean{
         if (this.children.length===0) return true;
-        return this.caret + this.spaceChar.size.width + word.size.width<=this.constrainWidth;
+        return this.caret + this.rowSet.spaceChar.size.width + word.size.width<=this.constrainWidth;
     }
 
     public addWord(word:Word,addWhiteSpaceBeforeIfNeed:boolean):void {
-        if (this.children.length!==0 && addWhiteSpaceBeforeIfNeed) this._addWord(this.spaceChar.clone());
+        if (this.children.length!==0 && addWhiteSpaceBeforeIfNeed) this._addWord(this.rowSet.spaceChar.clone());
         this._addWord(word);
     }
 
     public complete():void {
-        this.size.height = Math.max(...this.children.map(it=>it.size.height),this.spaceChar.size.height);
+        this.size.height = Math.max(...this.children.map(it=>it.size.height),this.rowSet.spaceChar.size.height);
     }
 
     public setAlignText(align:AlignText):void{
@@ -53,7 +52,7 @@ export class TextRow extends NullGameObject {
                     map(it=>it.size.width).
                     reduce((it,prev)=>it+prev,0);
                 let spaceWidth:number = (this.rowSet.size.width - onlyWordsWidth)/(onlyWords.length-1);
-                if (spaceWidth>this.spaceChar.size.width*2) spaceWidth = this.spaceChar.size.width;
+                if (spaceWidth>this.rowSet.spaceChar.size.width*2) spaceWidth = this.rowSet.spaceChar.size.width;
                 this.removeChildren();
                 this.caret = 0;
 

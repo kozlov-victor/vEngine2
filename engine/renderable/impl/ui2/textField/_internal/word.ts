@@ -1,18 +1,19 @@
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
-import {Character} from "@engine/renderable/impl/ui2/textField/_internal/character";
+import {CharacterImage} from "@engine/renderable/impl/ui2/textField/_internal/characterImage";
+import {Color} from "@engine/renderer/common/color";
 
 export class Word extends NullGameObject {
 
-    public declare children: readonly Character[];
+    public declare children: readonly CharacterImage[];
 
     private caret:number = 0;
 
-    constructor(game:Game,private readonly font:Font,public readonly word:string) {
+    constructor(game:Game,private readonly font:Font,public readonly word:string, private readonly color:Color) {
         super(game);
         word.split('').forEach(c=>{
-            const char:Character = new Character(game,font,c);
+            const char:CharacterImage = new CharacterImage(game,font,c,color);
             char.pos.setX(this.caret);
             this.caret+=char.size.width;
             this.appendChild(char);
@@ -22,7 +23,7 @@ export class Word extends NullGameObject {
     }
 
     clone():Word {
-        return new Word(this.game,this.font,this.word);
+        return new Word(this.game,this.font,this.word,this.color);
     }
 
 }

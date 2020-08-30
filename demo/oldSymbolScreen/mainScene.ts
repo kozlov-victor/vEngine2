@@ -1,9 +1,9 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
-import {TextField, WORD_BRAKE} from "@engine/renderable/impl/ui/components/textField";
 import {BasicEnv} from "./oldScreenEmul";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
+import {TextField, WordBrake} from "@engine/renderable/impl/ui2/textField/simple/textField";
 
 
 // this is interpretation of
@@ -19,16 +19,16 @@ export class MainScene extends Scene {
         const fnt:Font = new Font(this.game);
         fnt.fontSize = 14;
         fnt.fontFamily = 'monospace';
-        fnt.fontColor = Color.RGB(10,100,20);
         fnt.generate();
         this.fnt = fnt;
     }
 
     public onReady() {
-        const tf:TextField = new TextField(this.game);
-        tf.pos.setXY(10);
-        tf.setFont(this.fnt);
-        tf.setWordBreak(WORD_BRAKE.PREDEFINED);
+        const tf:TextField = new TextField(this.game,this.fnt);
+        tf.size.set(this.game.size);
+        tf.setPadding(5);
+        tf.textColor.setRGB(10,100,20);
+        tf.setWordBrake(WordBrake.PREDEFINED);
         this.appendChild(tf);
         const filter = new BarrelDistortionFilter(this.game);
         this.filters = [filter];
@@ -59,7 +59,7 @@ export class MainScene extends Scene {
                 ()=>b.NEXT('i')
             ],
             130: ()=>b.GOSUB(260),
-            140: ()=>b.ASSING_VAR('l',64),
+            140: ()=>b.ASSIGN_VAR('l',64),
             160: ()=>b.PRINT(),
             170: [
                 ()=>b.READ('x'),
@@ -72,7 +72,7 @@ export class MainScene extends Scene {
             ],
             190: [
                 ()=>b.FOR('i',b.GET_VAR('x'),b.GET_VAR('y')),
-                ()=>b.ASSING_VAR('j',b.GET_VAR('i')-5*b.INT(b.GET_VAR('i')/5)),
+                ()=>b.ASSIGN_VAR('j',b.GET_VAR('i')-5*b.INT(b.GET_VAR('i')/5)),
             ],
             200: ()=>b.PRINT(
                 b.CHR$(

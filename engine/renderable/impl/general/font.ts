@@ -8,7 +8,7 @@ import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ITexture} from "@engine/renderer/common/texture";
 
 export interface IRectViewJSON extends IRectJSON {
-    destOffsetX:number; // todo????? wat is this
+    destOffsetX:number;
     destOffsetY:number;
 }
 
@@ -49,7 +49,7 @@ namespace FontFactory {
         return height;
     };
 
-    export const getFontContext = (arrFromTo:IRange[], strFont:string, w:number):IFontContext=> {
+    export const getFontContext = (arrFromTo:IRange[], extraChars:string[],strFont:string, w:number):IFontContext=> {
 
         const cnv:HTMLCanvasElement = document.createElement('canvas');
         const ctx:CanvasRenderingContext2D = getCtx(cnv);
@@ -57,53 +57,35 @@ namespace FontFactory {
         const lineHeight:number = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
         const symbols:{[key:string]:IRectViewJSON} = {};
         let currX:number = 0, currY:number = 0, cnvHeight = lineHeight;
+
+        const putCharOnContext = (char:string):void=>{
+            const context2D:CanvasRenderingContext2D = cnv.getContext('2d') as CanvasRenderingContext2D;
+            let textWidth:number = context2D.measureText(char).width;
+            textWidth += 2 * SYMBOL_PADDING;
+            if (textWidth === 0) return;
+            if (currX + textWidth > w) {
+                currX = 0;
+                currY += lineHeight;
+                cnvHeight = currY + lineHeight;
+            }
+            const symbolRect:IRectViewJSON = {} as IRectViewJSON;
+            symbolRect.x = ~~currX + SYMBOL_PADDING;
+            symbolRect.y = ~~currY + SYMBOL_PADDING;
+            symbolRect.width = ~~textWidth - 2 * SYMBOL_PADDING;
+            symbolRect.height = lineHeight - 2 * SYMBOL_PADDING;
+            symbolRect.destOffsetX = symbolRect.destOffsetY = 0;
+            symbols[char] = symbolRect;
+            currX += textWidth;
+        }
+
         for (let k:number = 0; k < arrFromTo.length; k++) {
             const arrFromToCurr:IRange = arrFromTo[k];
             for (let i:number = arrFromToCurr.from; i < arrFromToCurr.to; i++) {
-                const currentChar:string = String.fromCharCode(i);
-                const context2D:CanvasRenderingContext2D = cnv.getContext('2d') as CanvasRenderingContext2D;
-                let textWidth:number = context2D.measureText(currentChar).width;
-                textWidth += 2 * SYMBOL_PADDING;
-                if (textWidth === 0) continue;
-                if (currX + textWidth > w) {
-                    currX = 0;
-                    currY += lineHeight;
-                    cnvHeight = currY + lineHeight;
-                }
-                const symbolRect:IRectViewJSON = {} as IRectViewJSON;
-                symbolRect.x = ~~currX + SYMBOL_PADDING;
-                symbolRect.y = ~~currY + SYMBOL_PADDING;
-                symbolRect.width = ~~textWidth - 2 * SYMBOL_PADDING;
-                symbolRect.height = lineHeight - 2 * SYMBOL_PADDING;
-                symbolRect.destOffsetX = symbolRect.destOffsetY = 0;
-                symbols[currentChar] = symbolRect;
-                currX += textWidth;
+                putCharOnContext(String.fromCharCode(i));
             }
         }
+        extraChars.forEach(c=>putCharOnContext(c));
         return {symbols, width: w, height: cnvHeight,lineHeight:lineHeight - 2*SYMBOL_PADDING};
-    };
-
-    const correctColor = (canvas:HTMLCanvasElement,color:Color):void=>{
-        const {r,g,b,a} = color.toJSON();
-        const ctx:CanvasRenderingContext2D = getCtx(canvas);
-        const imgData:ImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const clamped:Uint8ClampedArray = imgData.data;
-        for (let i:number = 0; i < clamped.length; i+=4) {
-            const rIndex:number = i;
-            const gIndex:number = i+1;
-            const bIndex:number = i+2;
-            const aIndex:number = i+3;
-            const avg:number = (clamped[rIndex]+clamped[gIndex]+clamped[bIndex]+clamped[aIndex])/4;
-            if (avg<0) {
-                //clamped[aIndex] = 0;
-            } else {
-                clamped[rIndex] = r;
-                clamped[gIndex] = g;
-                clamped[bIndex] = b;
-                clamped[aIndex] = ~~(clamped[aIndex]*a/255);
-            }
-        }
-        ctx.putImageData(imgData, 0, 0);
     };
 
     export const  getFontImageBase64 = (fontContext:IFontContext, strFont:string, color:Color):string=> {
@@ -114,7 +96,7 @@ namespace FontFactory {
         ctx.font = strFont;
         ctx.textBaseline = "top";
         ctx.imageSmoothingEnabled = false;
-        (ctx as IPrefixedContext).mozImageSmoothingEnabled = false; // (obsolete)
+        (ctx as IPrefixedContext).mozImageSmoothingEnabled = false;
         (ctx  as IPrefixedContext).webkitImageSmoothingEnabled = false;
         (ctx as IPrefixedContext).msImageSmoothingEnabled = false;
         (ctx as IPrefixedContext).oImageSmoothingEnabled = false;
@@ -126,7 +108,6 @@ namespace FontFactory {
             const rect:IRectJSON = symbols[symbol];
             ctx.fillText(symbol, rect.x, rect.y);
         });
-        correctColor(cnv,color);
         return cnv.toDataURL();
     };
 
@@ -162,8 +143,12 @@ export class Font implements IResource<ITexture>, IRevalidatable {
     public readonly type:string = 'Font';
 
     public fontSize:number=12;
+    public extraChars:string[] = [];
     public fontFamily:string='Monospace';
     public fontContext:Readonly<IFontContext>;
+    /**
+     * @deprecated
+     */
     public fontColor:Color = Color.BLACK.clone();
 
     private _resourceLink:ResourceLink<ITexture>;
@@ -199,7 +184,7 @@ export class Font implements IResource<ITexture>, IRevalidatable {
     private createContext():void {
         const ranges:IRange[] = [{from: 32, to: 126}, {from: 1040, to: 1116}];
         const WIDTH:number = 512;
-        this.fontContext = FontFactory.getFontContext(ranges,this.asCss(),WIDTH);
+        this.fontContext = FontFactory.getFontContext(ranges,this.extraChars,this.asCss(),WIDTH);
     }
 
     private createBitmap():string{

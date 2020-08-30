@@ -3,7 +3,7 @@ import {Rect} from "@engine/geometry/rect";
 import {DebugError} from "@engine/debug/debugError";
 import {ScrollableContainer} from "../abstract/scrollableContainer";
 import {Image} from "../../general/image";
-import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
+import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {Game} from "@engine/core/game";
 import {Size} from "@engine/geometry/size";
 import {Point2d} from "@engine/geometry/point2d";

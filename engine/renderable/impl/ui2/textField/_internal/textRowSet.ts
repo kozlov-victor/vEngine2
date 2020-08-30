@@ -9,12 +9,15 @@ import {
 } from "@engine/renderable/impl/ui2/textField/simple/textField";
 import {TextRow} from "@engine/renderable/impl/ui2/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui2/textField/_internal/word";
+import {Color} from "@engine/renderer/common/color";
+import {ISize} from "@engine/geometry/size";
 
 export class TextRowSet extends NullGameObject {
 
     public declare children: readonly TextRow[];
-    public caret:number = 0;
+    public readonly spaceChar:Word = new Word(this.game,this.font,' ',Color.NONE);
 
+    private caret:number = 0;
     private currentTextRow:TextRow;
     private alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;
     private alignTextContentHorizontal:AlignTextContentHorizontal = AlignTextContentHorizontal.LEFT;
@@ -22,13 +25,18 @@ export class TextRowSet extends NullGameObject {
     private wordBrake:WordBrake = WordBrake.FIT;
     private rawText:string;
 
-    constructor(game:Game,private font:Font,private readonly constrainWidth:number,private readonly constrainHeight:number) {
+    constructor(
+        game:Game,
+        private font:Font,
+        private readonly constrainSize:Readonly<ISize>,
+        private readonly color:Color,
+    ) {
         super(game);
     }
 
     private addWord(word:Word,applyNewLineIfCurrentIsFull:boolean):void {
         if (this.currentTextRow===undefined) {
-            this.currentTextRow = new TextRow(this.game,this.font,this.constrainWidth,this);
+            this.currentTextRow = new TextRow(this.game,this.font,this.constrainSize.width,this);
             this.appendChild(this.currentTextRow);
         }
         if (applyNewLineIfCurrentIsFull && !this.currentTextRow.canAddWord(word)) {
@@ -38,9 +46,13 @@ export class TextRowSet extends NullGameObject {
     }
 
     private newRow():void{
-        this.currentTextRow.complete();
-        this.caret+=this.currentTextRow.size.height;
-        this.currentTextRow = new TextRow(this.game,this.font,this.constrainWidth,this);
+        if (this.currentTextRow!==undefined) {
+            this.currentTextRow.complete();
+            this.caret+=this.currentTextRow.size.height;
+        } else {
+            this.caret+=this.spaceChar.size.height;
+        }
+        this.currentTextRow = new TextRow(this.game,this.font,this.constrainSize.width,this);
         this.currentTextRow.pos.y = this.caret;
         this.appendChild(this.currentTextRow);
     }
@@ -58,10 +70,10 @@ export class TextRowSet extends NullGameObject {
                         this.newRow();
                         break;
                     case '\t':
-                        this.addWord(new Word(this.game,this.font,'    '),false);
+                        this.addWord(new Word(this.game,this.font,'    ',this.color),false);
                         break;
                     default:
-                        this.addWord(new Word(this.game,this.font,word),false);
+                        this.addWord(new Word(this.game,this.font,word,this.color),false);
                         break;
                 }
             });
@@ -70,7 +82,7 @@ export class TextRowSet extends NullGameObject {
                 split(/[\t\n\s]/g).
                 filter(it=>it.length>0).
                 forEach(word=>{ // split to words and smart fit it
-                    this.addWord(new Word(this.game,this.font,word),true);
+                    this.addWord(new Word(this.game,this.font,word,this.color),true);
                 });
         }
         if (this.currentTextRow!==undefined) this.currentTextRow.complete();
@@ -82,7 +94,7 @@ export class TextRowSet extends NullGameObject {
         if (align===this.alignTextContentHorizontal) return;
         switch (align) {
             case AlignTextContentHorizontal.CENTER:
-                let pos:number = (this.constrainWidth - this.size.width)/2;
+                let pos:number = (this.constrainSize.width - this.size.width)/2;
                 if (pos<0) pos = 0;
                 this.pos.x = pos;
                 break;
@@ -90,7 +102,7 @@ export class TextRowSet extends NullGameObject {
                 this.pos.setX(0);
                 break;
             case AlignTextContentHorizontal.RIGHT:
-                this.pos.setX(this.constrainWidth - this.size.width);
+                this.pos.setX(this.constrainSize.width - this.size.width);
                 break;
         }
         this.alignTextContentHorizontal = align;
@@ -101,7 +113,7 @@ export class TextRowSet extends NullGameObject {
         if (align===this.alignTextContentVertical) return;
         switch (align) {
             case AlignTextContentVertical.CENTER:
-                let pos:number = (this.constrainHeight - this.size.height)/2;
+                let pos:number = (this.constrainSize.height - this.size.height)/2;
                 if (pos<0) pos = 0;
                 this.pos.y = pos;
                 break;
@@ -109,8 +121,8 @@ export class TextRowSet extends NullGameObject {
                 this.pos.setY(0);
                 break;
             case AlignTextContentVertical.BOTTOM:
-                console.log(this.constrainHeight,this.size.height);
-                this.pos.setY(this.constrainHeight - this.size.height);
+                console.log(this.constrainSize.height,this.size.height);
+                this.pos.setY(this.constrainSize.height - this.size.height);
                 break;
         }
         this.alignTextContentVertical = align;
@@ -125,7 +137,7 @@ export class TextRowSet extends NullGameObject {
     public updateRowsVisibility():void {
         this.children.forEach((c)=>{
             if ((c.pos.y + this.pos.y + c.size.height) <0) c.visible = false;
-            else c.visible = (c.pos.y + this.pos.y) <= this.constrainHeight;
+            else c.visible = (c.pos.y + this.pos.y) <= this.constrainSize.height;
         });
     }
 

@@ -146,11 +146,11 @@ export class ResourceLoader {
         return link;
     }
 
-    public loadFont(fontFamily:string,fontSize:number,fontColor:[r:byte,g:byte,b:byte,a?:byte]):Font{
+    public loadFont(fontFamily:string,fontSize:number,extraChars?:string[]):Font{
         const fnt:Font = new Font(this.game);
         fnt.fontSize = fontSize;
         fnt.fontFamily = fontFamily;
-        fnt.fontColor = Color.RGBA(...fontColor);
+        if (extraChars!==undefined) fnt.extraChars = extraChars;
         fnt.generate();
         return fnt;
     }

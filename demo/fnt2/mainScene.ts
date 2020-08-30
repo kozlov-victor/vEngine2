@@ -2,10 +2,9 @@ import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Font} from "@engine/renderable/impl/general/font";
 import {TextField} from "@engine/renderable/impl/ui/components/textField";
-import {Color} from "@engine/renderer/common/color";
 import {ITexture} from "@engine/renderer/common/texture";
-import createFont = FntCreator.createFont;
 import {FntCreator} from "../fnt/FntCreator";
+import createFont = FntCreator.createFont;
 
 // data from https://pixijs.io/examples/#/text/bitmap-text.js
 

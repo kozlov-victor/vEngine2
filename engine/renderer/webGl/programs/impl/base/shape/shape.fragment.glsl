@@ -29,6 +29,10 @@ vec4 getRepeatedImage(float tx,float ty){
     return texture2D(texture, txVec);
 }
 
+vec4 mixTextureColorWithTint(vec4 texture, vec4 tint){
+    return mix(texture,tint,tint.a)*texture.a;
+}
+
 vec4 getFillColor(){
     if (u_fillType==FILL_TYPE_COLOR) return u_fillColor;
     else if (u_fillType==FILL_TYPE_LINEAR_GRADIENT) {
@@ -41,8 +45,8 @@ vec4 getFillColor(){
         float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2];
         float ty = (v_position.y-u_rectOffsetTop)/u_height*u_texRect[3];
         vec4 txVec;
-        if (u_stretchMode==STRETCH_MODE_STRETCH) txVec = getStretchedImage(tx,ty);
-        else if (u_stretchMode==STRETCH_MODE_REPEAT) txVec = getRepeatedImage(tx,ty);
+        if (u_stretchMode==STRETCH_MODE_STRETCH) txVec = mixTextureColorWithTint(getStretchedImage(tx,ty),u_color);
+        else if (u_stretchMode==STRETCH_MODE_REPEAT) txVec = mixTextureColorWithTint(getRepeatedImage(tx,ty),u_color);
         else txVec = ERROR_COLOR;
         return txVec;
     }

@@ -6,6 +6,7 @@ import {IRectJSON} from "@engine/geometry/rect";
 import {TextRowSet} from "@engine/renderable/impl/ui2/textField/_internal/textRowSet";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {MarkableNullGameObject} from "@engine/renderable/impl/ui2/textField/_internal/markableNullGameObject";
+import {Color} from "@engine/renderer/common/color";
 
 
 export enum AlignTextContentVertical {
@@ -35,6 +36,7 @@ export const enum WordBrake {
 export class TextField extends Container {
 
     public readonly type:string = 'TextField';
+    public textColor:Color = Color.RGB(122,122,122);
 
     protected rowSet:TextRowSet;
     protected rowSetContainer:MarkableNullGameObject = new MarkableNullGameObject(this.game);
@@ -50,6 +52,7 @@ export class TextField extends Container {
         super(game);
         this.appendChild(this.rowSetContainer);
         this.size.setWH(300,100);
+        this.textColor.observe(()=>this.markAsDirty());
     }
 
     public setText(text:string|number){
@@ -81,7 +84,7 @@ export class TextField extends Container {
                 this.cacheSurface = cacheSurface;
             }
         }
-        if (this.rowSet===undefined || rectIsDirty) this.rowSet = new TextRowSet(this.game,this.font,clientRect.width,clientRect.height);
+        if (this.rowSet===undefined || rectIsDirty) this.rowSet = new TextRowSet(this.game,this.font,clientRect,this.textColor);
         this._setText();
     }
 
