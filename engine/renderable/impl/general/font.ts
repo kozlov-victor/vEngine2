@@ -13,6 +13,9 @@ export interface IRectViewJSON extends IRectJSON {
 }
 
 export interface IFontContext {
+    /**
+     * @deprecated
+     */
     lineHeight: number;
     symbols: Record<string, IRectViewJSON>;
     width:number;
@@ -117,13 +120,13 @@ namespace FontFactory {
 
 export class Font implements IResource<ITexture>, IRevalidatable {
 
-    public static getSystemFont():Font{
+    public static getSystemFont(game:Game):Font{
         if (Font._systemFontInstance) return Font._systemFontInstance;
-        const f:Font = new Font(Game.getInstance());
+        const f:Font = new Font(game);
         f.fontFamily = 'monospace';
         f.fontSize = 12;
         f.createContext();
-        const resourceLoader:ResourceLoader = new ResourceLoader(Game.getInstance());
+        const resourceLoader:ResourceLoader = new ResourceLoader(game);
         const link:ResourceLink<ITexture> = resourceLoader.loadTexture(f.createBitmap());
         resourceLoader.startLoading();
         f.setResourceLink(link);

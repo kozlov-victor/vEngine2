@@ -11,11 +11,12 @@ import {TextRow} from "@engine/renderable/impl/ui2/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui2/textField/_internal/word";
 import {Color} from "@engine/renderer/common/color";
 import {ISize} from "@engine/geometry/size";
+import {stringToCharacters} from "@engine/renderable/impl/ui2/textField/_internal/characterUtil";
 
 export class TextRowSet extends NullGameObject {
 
     public declare children: readonly TextRow[];
-    public readonly spaceChar:Word = new Word(this.game,this.font,' ',Color.NONE);
+    public readonly spaceChar:Word = new Word(this.game,this.font,[{rawChar:' ',isEmoji:false}],Color.NONE);
 
     private caret:number = 0;
     private currentTextRow:TextRow;
@@ -62,18 +63,18 @@ export class TextRowSet extends NullGameObject {
         this.rawText = text;
         this.clear();
         if (wordBrake===WordBrake.PREDEFINED) {
-            this.rawText.split('').forEach(word=>{ // treat each symbol as separate word
-                switch (word) {
+            stringToCharacters(this.rawText).forEach(charInfo=>{ // treat each symbol as separate word
+                switch (charInfo.rawChar) {
                     case '\r':
                         break;
                     case '\n':
                         this.newRow();
                         break;
                     case '\t':
-                        this.addWord(new Word(this.game,this.font,'    ',this.color),false);
+                        this.addWord(new Word(this.game,this.font,[charInfo],this.color),false);
                         break;
                     default:
-                        this.addWord(new Word(this.game,this.font,word,this.color),false);
+                        this.addWord(new Word(this.game,this.font,[charInfo],this.color),false);
                         break;
                 }
             });
@@ -82,7 +83,7 @@ export class TextRowSet extends NullGameObject {
                 split(/[\t\n\s]/g).
                 filter(it=>it.length>0).
                 forEach(word=>{ // split to words and smart fit it
-                    this.addWord(new Word(this.game,this.font,word,this.color),true);
+                    this.addWord(new Word(this.game,this.font,stringToCharacters(word),this.color),true);
                 });
         }
         if (this.currentTextRow!==undefined) this.currentTextRow.complete();

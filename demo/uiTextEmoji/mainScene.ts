@@ -12,11 +12,11 @@ import {CheckBox} from "@engine/renderable/impl/ui2/checkBox";
 import {ScrollableTextField} from "@engine/renderable/impl/ui2/textField/scrollable/scrollableTextField";
 import {Button} from "@engine/renderable/impl/ui2/button/button";
 import {Resource} from "@engine/resources/resourceDecorators";
+// https://getemoji.com/
 
 const text:string=
-`Lorem ipsum dolor sit amet,\t\n\r
-consectetur
-adipiscing elit,
+`Lorem ipsum dolor sit 📯 amet,\t\n\r
+😀 🥰 consectetur 🖐 🩸 adipiscing elit,
 sed do eiusmod
 tempor incididunt ut labore et
 dolore magna aliqua.
@@ -24,11 +24,11 @@ Ut enim ad minim veniam,
 quis nostrud exercitation
 ullamco laboris nisi ut
 aliquip ex ea
-commodo consequat.`;
+commodo`;
 
 export class MainScene extends Scene {
 
-    @Resource.Font('monospace',15)
+    @Resource.Font('monospace',15,['😀','🥰','🖐','🩸','📯'])
     public fnt!:Font;
 
 

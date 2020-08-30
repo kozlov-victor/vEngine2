@@ -46,7 +46,7 @@ export class TextRow extends NullGameObject {
                 this.pos.setX(0);
                 break;
             case AlignText.JUSTIFY:
-                const onlyWords:Word[] = this.children.filter(it=>it.word!==' ');
+                const onlyWords:Word[] = this.children.filter(it=>it.rawValue!==' ');
                 const onlyWordsWidth:number =
                     onlyWords.
                     map(it=>it.size.width).
