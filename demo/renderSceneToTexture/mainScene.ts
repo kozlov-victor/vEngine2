@@ -57,7 +57,7 @@ export class MainScene extends Scene {
         const img = new Image(this.game);
         img.filters = [new BlackWhiteFilter(this.game),new NoiseHorizontalFilter(this.game)];
         img.lineWidth = 5;
-        img.color = Color.RGB(100,200,11);
+        img.color = Color.RGBA(0,255,0,100);
         img.borderRadius = 5;
         img.visible = false;
         img.setResourceLink(renderTarget.getResourceLink());

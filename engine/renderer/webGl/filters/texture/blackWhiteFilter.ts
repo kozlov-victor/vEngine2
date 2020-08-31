@@ -18,10 +18,9 @@ export class BlackWhiteFilter extends AbstractGlFilter{
                 vec4 col = texture2D(texture, v_texCoord);
                 float avg = (col.r+col.g+col.b)/3.0;
                 vec4 bw = vec4(avg);
-                vec4 result = mix(col,bw,vec4(u_mixFactor));
-                result = vec4(result.rbg, col.a);
+                vec4 result = mix(col,bw,u_mixFactor)*col.a;
                 gl_FragColor = result;
-            } 
+            }
         `);
         this.setMixFactor(0.8);
         this.simpleRectDrawer.initProgram();

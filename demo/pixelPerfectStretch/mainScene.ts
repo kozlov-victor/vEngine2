@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -39,7 +38,6 @@ export class MainScene extends Scene {
         spr.pos.setXY(10,10);
         spr.scale.setXY(10,10);
         spr.borderRadius = 9;
-        spr.color.setRGB(12,12,12);
         spr.lineWidth = 0.1;
         this.appendChild(spr);
         this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
