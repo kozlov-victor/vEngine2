@@ -27,7 +27,6 @@ export class MainScene extends Scene {
             surface.moveTo(e.screenX,e.screenY);
         });
         surface.on(MOUSE_EVENTS.mouseDown, e=>{
-            surface.moveTo(e.screenX,e.screenY);
             surface.lineTo(e.screenX,e.screenY);
         });
         surface.on(MOUSE_EVENTS.mousePressed, e=>{

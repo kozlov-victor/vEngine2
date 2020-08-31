@@ -204,7 +204,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this.fillColor = fillColor;
     }
 
-    public drawText(x:number,y:number,text:string):void {
+    public drawText(text:string|number,x:number,y:number):void {
         if (DEBUG && this._font===undefined) {
             throw new DebugError(`font is not set`);
         }
@@ -254,6 +254,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     public lineTo(x:number,y:number):void {
         this._line.setXYX1Y1(this._pointMoveTo.x,this._pointMoveTo.y,x,y);
         this.drawSimpleShape(this._line);
+        this.moveTo(x,y);
     }
 
     public drawPolygon(pathOrVertices:string|number[]){

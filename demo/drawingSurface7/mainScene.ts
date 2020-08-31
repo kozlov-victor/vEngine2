@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
@@ -25,7 +24,7 @@ export class MainScene extends Scene {
         this.setInterval(()=>{
             graphics.clear();
             graphics.transformRotateZ(0.01);
-            graphics.drawText(40,20,"test 123");
+            graphics.drawText("test 123",40,20);
         },10);
 
 

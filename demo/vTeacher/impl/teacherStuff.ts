@@ -29,7 +29,7 @@ export class TeacherStuff {
         });
         this.surface.on(MOUSE_EVENTS.mouseMove, e=>{
             if (e.isMouseDown && canvasMouseDowned) {
-                this.surface.lineTo(e.screenX,e.screenY);
+                //this.surface.lineTo(e.screenX,e.screenY);
                 this.surface.moveTo(e.screenX,e.screenY);
                 this.currentCommand.points!.push(+e.screenX.toFixed(2),+e.screenY.toFixed(2));
             }
