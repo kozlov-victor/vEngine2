@@ -47,6 +47,7 @@ export class TextField extends Container {
     private alignText:AlignText = AlignText.LEFT;
     private wordBrake:WordBrake = WordBrake.FIT;
     private _text:string = '';
+    private needTextRedraw:boolean = false;
 
     constructor(game:Game,private font:Font) {
         super(game);
@@ -95,6 +96,7 @@ export class TextField extends Container {
     public update() {
         super.update();
         if (this.isDirty()) this.revalidate();
+        if (this.needTextRedraw) this.redrawText();
     }
 
     public setAlignTextContentHorizontal(align:AlignTextContentHorizontal):void {
@@ -118,22 +120,28 @@ export class TextField extends Container {
         this.markAsDirty();
     }
 
-    protected redrawText():void {
-        this.rowSet.updateRowsVisibility();
-        this.cacheSurface.clear();
-        this.cacheSurface.drawModel(this.rowSet);
+    protected requestTextRedraw():void {
+        this.needTextRedraw = true;
     }
 
     protected onCleared() {
-        this.redrawText();
+        this.needTextRedraw = true;
     }
 
-    private _setText():void {
+    protected _setText():void {
         this.rowSet.setText(this._text,this.wordBrake);
         this.rowSet.setAlignText(this.alignText);
         this.rowSet.setAlignTextContentHorizontal(this.alignTextContentHorizontal);
         this.rowSet.setAlignTextContentVertical(this.alignTextContentVertical);
-        this.redrawText();
+        this.requestTextRedraw();
+    }
+
+    private redrawText():void {
+        if (!this.needTextRedraw) return;
+        this.rowSet.updateRowsVisibility();
+        this.cacheSurface.clear();
+        this.cacheSurface.drawModel(this.rowSet);
+        this.needTextRedraw = false;
     }
 
 }

@@ -19,6 +19,8 @@ import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {describeArc} from "@engine/renderable/impl/geometry/helpers/splineFromPoints";
 import {isString} from "@engine/misc/object";
+import {TextFieldWithoutCache} from "@engine/renderable/impl/ui2/textField/_internal/textFieldWithoutCache";
+import {Font} from "@engine/renderable/impl/general/font";
 
 class ContainerForDrawingSurface extends NullGameObject {
     constructor(protected game: Game, private matrixStack:MatrixStack) {super(game);}
@@ -56,6 +58,8 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     private _rect:Rectangle = new Rectangle(this.game);
     private _ellipse:Ellipse = new Ellipse(this.game);
     private _line:Line = new Line(this.game);
+    private _textField:TextFieldWithoutCache;
+    private _font:Font;
     private _nullGameObject:NullGameObject = new NullGameObject(this.game);
     private _transformableContainer:ContainerForDrawingSurface = new ContainerForDrawingSurface(this.game,this._matrixStack);
 
@@ -197,6 +201,10 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this.fillColor = Color.NONE;
         this.drawSimpleShape(this._ellipse);
         this.fillColor = fillColor;
+    }
+
+    public drawText(x:number,y:number,text:string):void {
+        // todo
     }
 
     public fillArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {

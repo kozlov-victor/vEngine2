@@ -345,11 +345,11 @@ export abstract class RenderableModel
         return this.parent||this._layer;
     }
 
-    public getChildAt(index: number): IParentChild {
+    public getChildAt(index: number): RenderableModel {
         return this.children[index];
     }
 
-    public getChildren(): readonly IParentChild[] {
+    public getChildren(): readonly RenderableModel[] {
         return this.children;
     }
 

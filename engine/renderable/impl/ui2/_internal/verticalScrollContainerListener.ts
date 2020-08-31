@@ -150,11 +150,15 @@ export class VerticalScrollContainerListener {
 
         this._manageOverscroll();
 
-        if (this.offsetOld===undefined) this.offsetOld = this.offset;
-        if (this.offset!==this.offsetOld) {
+        const offsetTruncated:number = ~~this.offset;
+
+        if (this.offsetOld===undefined) this.offsetOld = offsetTruncated;
+        if (offsetTruncated!==this.offsetOld) {
             this.internalContainer.pos.y = this.offset;
-            if (this._onScroll!==undefined) this._onScroll();
-            this.offsetOld = this.offset;
+            if (this._onScroll!==undefined) {
+                this._onScroll();
+            }
+            this.offsetOld = offsetTruncated;
         }
     }
 

@@ -20,23 +20,14 @@ export class ScrollableTextField extends TextField {
 
     revalidate() {
         super.revalidate();
-        if (this.scrollContainerListener===undefined) {
+        if (this.scrollContainerListener===undefined || this.rowSetContainer.isDirty()) {
+            if (this.scrollContainerListener!==undefined) this.scrollContainerListener.destroy();
             this.scrollContainerListener = new VerticalScrollContainerListener(this.rowSetContainer,this.rowSet);
             this.scrollContainerListener.onScroll(()=>{
                 this.updateScrollValues();
-                this.redrawText();
+                this.requestTextRedraw();
             });
-        } else {
-            if (this.rowSetContainer.isDirty()) {
-                this.scrollContainerListener.destroy();
-                this.scrollContainerListener = new VerticalScrollContainerListener(this.rowSetContainer,this.rowSet);
-                this.scrollContainerListener.onScroll(()=>{
-                    this.updateScrollValues();
-                    this.redrawText();
-                });
-            }
         }
-
         this.scrollBar.size.setWH(5,this.rowSetContainer.size.height);
         this.scrollBar.pos.x = this.rowSetContainer.size.width - this.scrollBar.size.width + this.paddingRight;
         this.updateScrollValues();

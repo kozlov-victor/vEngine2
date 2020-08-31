@@ -136,10 +136,11 @@ export class TextRowSet extends NullGameObject {
     }
 
     public updateRowsVisibility():void {
-        this.children.forEach((c)=>{
+        for (let i:number=0,max:number=this.children.length;i<max;i++) {
+            const c:TextRow = this.children[i];
             if ((c.pos.y + this.pos.y + c.size.height) <0) c.visible = false;
             else c.visible = (c.pos.y + this.pos.y) <= this.constrainSize.height;
-        });
+        }
     }
 
     public getWordBrake():WordBrake{
