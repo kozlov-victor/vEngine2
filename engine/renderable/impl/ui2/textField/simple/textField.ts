@@ -102,6 +102,7 @@ export class TextField extends Container {
     }
 
     public setAlignTextContentHorizontal(align:AlignTextContentHorizontal):void {
+        if (align===this.alignTextContentHorizontal) return;
         this.alignTextContentHorizontal = align;
         this.markAsDirty();
     }
@@ -113,12 +114,20 @@ export class TextField extends Container {
     }
 
     public setAlignTextContentVertical(align:AlignTextContentVertical):void {
+        if (align===this.alignTextContentVertical) return;
         this.alignTextContentVertical = align;
         this.markAsDirty();
     }
 
     public setAlignText(align:AlignText):void {
+        if (align===this.alignText) return;
         this.alignText = align;
+        this.markAsDirty();
+    }
+
+    public setFont(font:Font):void{
+        if (font===this.font) return;
+        this.font = font;
         this.markAsDirty();
     }
 
@@ -127,10 +136,11 @@ export class TextField extends Container {
     }
 
     protected onCleared() {
-        this.needTextRedraw = true;
+        this.requestTextRedraw();
     }
 
     protected _setText():void {
+        this.rowSet.setFont(this.font);
         this.rowSet.setText(this._text,this.wordBrake);
         this.rowSet.setAlignText(this.alignText);
         this.rowSet.setAlignTextContentHorizontal(this.alignTextContentHorizontal);

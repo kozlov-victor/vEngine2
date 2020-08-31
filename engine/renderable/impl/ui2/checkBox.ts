@@ -1,12 +1,9 @@
-
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Container} from "@engine/renderable/impl/ui2/container";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Rect} from "@engine/geometry/rect";
 
 export interface ICheckBoxWritable {
     checked:boolean;

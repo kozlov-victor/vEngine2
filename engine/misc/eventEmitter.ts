@@ -42,9 +42,8 @@ export class EventEmitter{
     public trigger(eventName:string,data:unknown):void {
         const evnts:((arg?:unknown)=>void)[] = this._events[eventName];
         if (!evnts) return;
-        let l:number = evnts.length;
-        while(l--){
-            if (evnts[l]!==undefined) evnts[l](data);
+        for (let i:number=0;i<evnts.length;i++) {
+            evnts[i](data);
         }
     }
 

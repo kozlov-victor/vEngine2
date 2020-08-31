@@ -58,6 +58,10 @@ export class TextRowSet extends NullGameObject {
         this.appendChild(this.currentTextRow);
     }
 
+    public setFont(font:Font):void {
+        this.font = font;
+    }
+
     public setText(text:string,wordBrake:WordBrake){
         this.wordBrake = wordBrake;
         this.rawText = text;

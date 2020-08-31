@@ -12,6 +12,7 @@ import {CheckBox} from "@engine/renderable/impl/ui2/checkBox";
 import {ScrollableTextField} from "@engine/renderable/impl/ui2/textField/scrollable/scrollableTextField";
 import {Button} from "@engine/renderable/impl/ui2/button/button";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 const text:string=
 `Lorem ipsum dolor sit amet,\t\n\r
@@ -29,7 +30,10 @@ commodo consequat.`;
 export class MainScene extends Scene {
 
     @Resource.Font('monospace',15)
-    public fnt!:Font;
+    private fnt:Font;
+
+    @Resource.Font('Times New Roman',17)
+    private fnt2:Font;
 
 
     public onReady() {
@@ -53,6 +57,11 @@ export class MainScene extends Scene {
 
         const chbox:CheckBox = new CheckBox(this.game);
         chbox.pos.setXY(50,350);
+        chbox.on(MOUSE_EVENTS.click, e=>{
+            console.log('checked',chbox.checked);
+            if (chbox.checked) tf.setFont(this.fnt2);
+            else tf.setFont(this.fnt);
+        })
         this.appendChild(chbox);
 
         const btn:Button = new Button(this.game,this.fnt);
@@ -65,8 +74,6 @@ export class MainScene extends Scene {
         btn.setBackground(bg);
         btn.setPadding(20);
         this.appendChild(btn);
-        (window as any).b = btn;
-
 
     }
 
