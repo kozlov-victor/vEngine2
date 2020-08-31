@@ -1,6 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {
+    AlignText,
     AlignTextContentHorizontal,
     AlignTextContentVertical,
     TextField,
@@ -10,6 +11,7 @@ import {ScrollableTextField} from "@engine/renderable/impl/ui2/textField/scrolla
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ResourceLink} from "@engine/resources/resourceLink";
 
+// https://lukoshko.net/story/pyatachok-sovershaet-podvig.htm
 
 export class MainScene extends Scene {
 
@@ -23,9 +25,11 @@ export class MainScene extends Scene {
     public onReady() {
 
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
-        tf.size.setWH(this.game.size.width,400);
+        tf.size.set(this.game.size);
         tf.setText(this.textLink.getTarget());
         tf.setWordBrake(WordBrake.FIT);
+        tf.setPadding(15);
+        tf.setAlignText(AlignText.JUSTIFY);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.TOP);
         tf.textColor.setRGB(12,132,255);

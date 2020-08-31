@@ -47,7 +47,9 @@ export class TextField extends Container {
     private alignText:AlignText = AlignText.LEFT;
     private wordBrake:WordBrake = WordBrake.FIT;
     private _text:string = '';
+
     private needTextRedraw:boolean = false;
+    private numOfSkippedFrames:number = 0;
 
     constructor(game:Game,private font:Font) {
         super(game);
@@ -139,9 +141,14 @@ export class TextField extends Container {
     private redrawText():void {
         if (!this.needTextRedraw) return;
         this.rowSet.updateRowsVisibility();
+        if (this.game.fps<20) { // // wait for better times
+            this.numOfSkippedFrames++;
+            if (this.numOfSkippedFrames<8) return; // no better times - redraw as is
+        }
         this.cacheSurface.clear();
         this.cacheSurface.drawModel(this.rowSet);
         this.needTextRedraw = false;
+        this.numOfSkippedFrames = 0;
     }
 
 }
