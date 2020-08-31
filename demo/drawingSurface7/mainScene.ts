@@ -19,8 +19,15 @@ export class MainScene extends Scene {
         this.appendChild(graphics);
         graphics.addBehaviour(new DraggableBehaviour(this.game));
         graphics.setFont(this.fnt);
-        graphics.setDrawColor(0xe74c3c); // Red
-        graphics.drawText(40,20,"test 123");
+        graphics.setDrawColor(0xe74c3c);
+
+
+        this.setInterval(()=>{
+            graphics.clear();
+            graphics.transformRotateZ(0.01);
+            graphics.drawText(40,20,"test 123");
+        },10);
+
 
 
     }
