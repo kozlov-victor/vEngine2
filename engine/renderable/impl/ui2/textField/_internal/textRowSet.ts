@@ -1,17 +1,16 @@
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
-import {
-    AlignText,
-    AlignTextContentHorizontal,
-    AlignTextContentVertical,
-    WordBrake
-} from "@engine/renderable/impl/ui2/textField/simple/textField";
 import {TextRow} from "@engine/renderable/impl/ui2/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui2/textField/_internal/word";
 import {Color} from "@engine/renderer/common/color";
 import {ISize} from "@engine/geometry/size";
 import {stringToCharacters} from "@engine/renderable/impl/ui2/textField/_internal/characterUtil";
+import {
+    AlignText,
+    AlignTextContentHorizontal,
+    AlignTextContentVertical, WordBrake
+} from "@engine/renderable/impl/ui2/textField/textAlign";
 
 export class TextRowSet extends NullGameObject {
 

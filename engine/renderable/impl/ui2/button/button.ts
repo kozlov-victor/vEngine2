@@ -1,13 +1,14 @@
-import {
-    AlignText,
-    AlignTextContentHorizontal,
-    AlignTextContentVertical,
-    TextField
-} from "@engine/renderable/impl/ui2/textField/simple/textField";
+
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
+import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {
+    AlignText,
+    AlignTextContentHorizontal,
+    AlignTextContentVertical
+} from "@engine/renderable/impl/ui2/textField/textAlign";
 
 export class Button extends TextField {
 

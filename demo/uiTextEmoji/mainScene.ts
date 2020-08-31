@@ -2,16 +2,16 @@ import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {
-    AlignText,
-    AlignTextContentHorizontal,
-    AlignTextContentVertical,
-    TextField
-} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
 import {CheckBox} from "@engine/renderable/impl/ui2/checkBox";
 import {ScrollableTextField} from "@engine/renderable/impl/ui2/textField/scrollable/scrollableTextField";
 import {Button} from "@engine/renderable/impl/ui2/button/button";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {
+    AlignText,
+    AlignTextContentHorizontal,
+    AlignTextContentVertical
+} from "@engine/renderable/impl/ui2/textField/textAlign";
 // https://getemoji.com/
 
 const text:string=

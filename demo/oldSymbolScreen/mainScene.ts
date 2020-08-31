@@ -3,7 +3,8 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
 import {BasicEnv} from "./oldScreenEmul";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
-import {TextField, WordBrake} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {WordBrake} from "@engine/renderable/impl/ui2/textField/textAlign";
 
 
 // this is interpretation of

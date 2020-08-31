@@ -19,8 +19,9 @@ import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {describeArc} from "@engine/renderable/impl/geometry/helpers/splineFromPoints";
 import {isString} from "@engine/misc/object";
-import {TextFieldWithoutCache} from "@engine/renderable/impl/ui2/textField/_internal/textFieldWithoutCache";
 import {Font} from "@engine/renderable/impl/general/font";
+import {DebugError} from "@engine/debug/debugError";
+import {TextFieldWithoutCache} from "@engine/renderable/impl/ui2/textField/simple/textField";
 
 class ContainerForDrawingSurface extends NullGameObject {
     constructor(protected game: Game, private matrixStack:MatrixStack) {super(game);}
@@ -204,7 +205,19 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public drawText(x:number,y:number,text:string):void {
-        // todo
+        if (DEBUG && this._font===undefined) {
+            throw new DebugError(`font is not set`);
+        }
+        if (this._textField===undefined) this._textField = new TextFieldWithoutCache(this.game,this._font);
+        this._textField.setFont(this._font);
+        this._textField.textColor.set(this.drawColor);
+        this._textField.pos.setXY(x,y);
+        this._textField.setText(text);
+        this.drawModel(this._textField);
+    }
+
+    public setFont(font:Font):void{
+        this._font = font;
     }
 
     public fillArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {

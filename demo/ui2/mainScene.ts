@@ -2,18 +2,17 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Font} from "@engine/renderable/impl/general/font";
-import {
-    AlignText,
-    AlignTextContentHorizontal,
-    AlignTextContentVertical,
-    TextField,
-    WordBrake
-} from "@engine/renderable/impl/ui2/textField/simple/textField";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ScrollableTextField} from "@engine/renderable/impl/ui2/textField/scrollable/scrollableTextField";
 import {CheckBox} from "@engine/renderable/impl/ui2/checkBox";
 import {Button} from "@engine/renderable/impl/ui2/button/button";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {
+    AlignText,
+    AlignTextContentHorizontal,
+    AlignTextContentVertical, WordBrake
+} from "@engine/renderable/impl/ui2/textField/textAlign";
 
 export class MainScene extends Scene {
 

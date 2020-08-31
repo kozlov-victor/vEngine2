@@ -4,34 +4,15 @@ import {DebugError} from "@engine/debug/debugError";
 import {Container} from "@engine/renderable/impl/ui2/container";
 import {IRectJSON} from "@engine/geometry/rect";
 import {TextRowSet} from "@engine/renderable/impl/ui2/textField/_internal/textRowSet";
-import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {MarkableNullGameObject} from "@engine/renderable/impl/ui2/textField/_internal/markableNullGameObject";
 import {Color} from "@engine/renderer/common/color";
+import {
+    AlignText,
+    AlignTextContentHorizontal,
+    AlignTextContentVertical, WordBrake
+} from "@engine/renderable/impl/ui2/textField/textAlign";
+import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 
-
-export enum AlignTextContentVertical {
-    TOP,
-    CENTER,
-    BOTTOM,
-}
-
-export enum AlignTextContentHorizontal {
-    LEFT,
-    CENTER,
-    RIGHT,
-}
-
-export enum AlignText {
-    LEFT,
-    CENTER,
-    RIGHT,
-    JUSTIFY,
-}
-
-export const enum WordBrake {
-    PREDEFINED,
-    FIT
-}
 
 export class TextField extends Container {
 
@@ -159,6 +140,40 @@ export class TextField extends Container {
         this.cacheSurface.drawModel(this.rowSet);
         this.needTextRedraw = false;
         this.numOfSkippedFrames = 0;
+    }
+
+}
+
+export class TextFieldWithoutCache extends TextField {
+
+    private readonly fnt: Font;
+
+    constructor(game: Game, font: Font) {
+        super(game, font);
+        this.fnt = font;
+        this.setWordBrake(WordBrake.PREDEFINED);
+        this.size.setWH(16,16);
+    }
+
+    revalidate() {
+        const clientRect: Readonly<IRectJSON> = this.getClientRect();
+        let rectIsDirty: boolean = true;
+        if (this.rowSet !== undefined) {
+            const currentClientRect = this.rowSet.getDestRect();
+            rectIsDirty =
+                clientRect.x !== currentClientRect.x ||
+                clientRect.y !== currentClientRect.y ||
+                clientRect.width !== currentClientRect.width ||
+                clientRect.height !== currentClientRect.height;
+        }
+        if (this.rowSet === undefined || rectIsDirty) {
+            if (this.rowSet !== undefined) this.rowSet.removeSelf();
+            this.rowSet = new TextRowSet(this.game, this.fnt, clientRect, this.textColor);
+            this.rowSetContainer.appendChild(this.rowSet);
+        }
+        this.rowSetContainer.pos.set(clientRect);
+        this.rowSetContainer.size.set(clientRect);
+        this._setText();
     }
 
 }
