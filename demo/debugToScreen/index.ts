@@ -1,4 +1,3 @@
-import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {MainScene} from "./mainScene";

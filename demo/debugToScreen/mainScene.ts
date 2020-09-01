@@ -1,22 +1,29 @@
 import {Scene} from "@engine/scene/scene";
+import {DebugLayer} from "@engine/scene/debugLayer";
 import {Rect} from "@engine/geometry/rect";
 
 export class MainScene extends Scene {
 
+    onPreloading() {
+        super.onPreloading();
+    }
+
     public onReady() {
+        const debugLayer = new DebugLayer(this.game);
+        this.appendChild(debugLayer);
         // tslint:disable-next-line:no-null-keyword
-        this.game.log(null,undefined,{test:42});
-        this.game.log('test log');
-        this.game.log(document);
-        this.game.log(document.body);
-        this.game.log(this);
-        this.game.log(this.getDefaultLayer());
-        this.game.log(Number);
-        this.game.log(new Rect());
+        debugLayer.log(null,undefined,{test:42});
+        debugLayer.log('test log');
+        debugLayer.log(document);
+        debugLayer.log(document.body);
+        debugLayer.log(this);
+        debugLayer.log(this.getDefaultLayer());
+        debugLayer.log(Number);
+        debugLayer.log(new Rect());
 
         this.setInterval(()=>{
-            this.game.log(this.game.getCurrentTime());
-        },1000);
+            debugLayer.log(this.game.getCurrentTime());
+        },500);
     }
 
 }

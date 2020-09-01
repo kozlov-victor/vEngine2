@@ -91,7 +91,6 @@ export class Layer implements IParentChild {
     }
 
 
-
     getChildAt(index: number): IParentChild {
         return this.children[index];
     }

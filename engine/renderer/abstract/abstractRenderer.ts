@@ -159,57 +159,6 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         return this._alphaBlendStack.getCurrentValue();
     }
 
-    public log(...args:any[]):void {
-        if (!DEBUG) return;
-        let textField:TextField = this.debugTextField;
-        if (!textField) {
-            textField = new TextField(this.game);
-            textField.setFont(Font.getSystemFont(this.game));
-             // todo temporary solution, refactor to debug layer creation
-            textField.revalidate();
-            this.debugTextField = textField;
-        }
-        textField.setScene(this.game.getCurrScene());
-        let res:string = '';
-        Array.prototype.slice.call(arguments).forEach((txt:any)=>{
-            if (txt===undefined) txt = 'undefined';
-            else if (txt===null) txt = 'null';
-            else if (txt instanceof HTMLElement) {
-                txt = `[object ${txt.tagName}]`;
-            }
-            else if (txt.toJSON) {
-                txt = JSON.stringify(txt.toJSON(),undefined,4);
-            }
-            else if (typeof txt==='function') {
-                txt = txt.toString();
-            }
-            else {
-                if (!(txt as string).substr) {
-                    try{
-                        txt = JSON.stringify(txt);
-                    } catch (e){
-                        if (txt.constructor && txt.constructor.name) txt = `[object ${txt.constructor.name}]`;
-                        else txt = txt.toString();
-                    }
-                }
-            }
-            res+=`${txt}\n`;
-        });
-        textField.setText(textField.getText()+res);
-        textField.onGeometryChanged();
-        while (textField.size.height>this.game.size.height) {
-            const strings:string[] = textField.getText().split('\n');
-            strings.shift();
-            textField.setText(strings.join('\n'));
-            textField.onGeometryChanged();
-        }
-    }
-
-    public clearLog():void {
-        if (!DEBUG) return;
-        if (!this.debugTextField) return;
-        this.debugTextField.setText('');
-    }
 
     public getHelper():RendererHelper{
         return this.rendererHelper;

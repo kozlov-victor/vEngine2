@@ -116,11 +116,9 @@ namespace FontFactory {
 
 }
 
-
-
 export class Font implements IResource<ITexture>, IRevalidatable {
 
-    public static getSystemFont(game:Game):Font{
+    public static async createSystemFont(game:Game):Promise<Font>{
         if (Font._systemFontInstance) return Font._systemFontInstance;
         const f:Font = new Font(game);
         f.fontFamily = 'monospace';
@@ -128,10 +126,18 @@ export class Font implements IResource<ITexture>, IRevalidatable {
         f.createContext();
         const resourceLoader:ResourceLoader = new ResourceLoader(game);
         const link:ResourceLink<ITexture> = resourceLoader.loadTexture(f.createBitmap());
-        resourceLoader.startLoading();
         f.setResourceLink(link);
-        Font._systemFontInstance = f;
-        return f;
+        let resolveFn:(font:Font)=>void;
+        resourceLoader.onCompleted(()=>{
+            resolveFn(f);
+            Font._systemFontInstance = f;
+        });
+        const p = new Promise<Font>(resolve=>{
+            resolveFn = resolve;
+        });
+        resourceLoader.startLoading();
+        return p;
+
     }
 
     public static fromAtlas(game:Game,link:ResourceLink<ITexture>,fontContext:IFontContext):Font{

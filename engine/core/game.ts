@@ -148,14 +148,6 @@ export class Game {
         return this._lastTime - this._startedTime;
     }
 
-    public log(...args:unknown[]):void{
-        if (DEBUG) this._renderer.log(...args);
-    }
-
-    public clearLog():void{
-        if (DEBUG) this._renderer.clearLog();
-    }
-
     public setRenderer(Renderer:ClazzEx<AbstractRenderer,Game>):void{
         this._renderer = new Renderer(this);
     }
@@ -296,12 +288,6 @@ export class Game {
 }
 
 if (DEBUG) {
-    let _cnt:number = 0;
-    Game.prototype.debug2  = (...val:unknown[])=>{
-        console.log(val);
-        _cnt++;
-        if (_cnt>16) throw new DebugError('too many logs');
-    };
     if (!window.__POLYFILLS_INCLUDED__) throw new DebugError(`polyfills module is not included!`);
 }
 

@@ -81,7 +81,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         this.normalizeToZeroOne();
     }
 
-    public setRGB(r:byte,g:byte,b:byte):void{
+    public setRGB(r:byte,g:byte = r,b:byte = g):void{
         this.setRGBA(r,g,b,255);
     }
 

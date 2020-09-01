@@ -17,7 +17,7 @@ import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 export class TextField extends Container {
 
     public readonly type:string = 'TextField';
-    public textColor:Color = Color.RGB(122,122,122);
+    public readonly textColor:Color = Color.RGB(122,122,122);
 
     protected rowSet:TextRowSet;
     protected rowSetContainer:MarkableNullGameObject = new MarkableNullGameObject(this.game);

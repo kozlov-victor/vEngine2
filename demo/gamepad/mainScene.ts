@@ -33,7 +33,7 @@ export class MainScene extends Scene {
         spr.scale.setXY(0.1);
         this.on(GAME_PAD_EVENTS.buttonHold, (e:IGamePadEvent)=>{
 
-            this.game.log(`${new Date().getTime()}: button:${e.button} value:${e.value} gamepad:${e.gamePadIndex}`);
+            // todo this.game.log(`${new Date().getTime()}: button:${e.button} value:${e.value} gamepad:${e.gamePadIndex}`);
 
             switch (e.button) {
                 case GAME_PAD_BUTTON.STICK_L_LEFT:

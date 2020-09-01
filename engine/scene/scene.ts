@@ -267,20 +267,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         this.onRender();
         renderer.transformRestore();
 
-        if (DEBUG) {
-            if (
-                this.game.getRenderer().debugTextField &&
-                this.game.getRenderer().debugTextField.getFont().getResourceLink() &&
-                this.game.getRenderer().debugTextField.getFont().getResourceLink().getTarget()
-            ) {
-                renderer.transformSave();
-                renderer.transformSet(...IDENTITY_HOLDER.mat16);
-                this.game.getRenderer().debugTextField.update();
-                this.game.getRenderer().debugTextField.render();
-                renderer.transformRestore();
-            }
-        }
-
         renderer.afterFrameDraw(statePointer);
         renderer.transformRestore();
     }
