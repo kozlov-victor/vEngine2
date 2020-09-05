@@ -46,12 +46,12 @@ export class TextRowSet extends NullGameObject {
     }
 
     private newRow():void{
-        if (this.currentTextRow!==undefined) {
-            this.currentTextRow.complete();
-            this.caret+=this.font.fontContext.lineHeight || this.currentTextRow.size.height;
-        } else {
-            this.caret+=(this.font.fontContext.lineHeight || this.spaceChar.size.height);
+        if (this.currentTextRow===undefined) {
+            this.currentTextRow = new TextRow(this.game,this.font,this.constrainSize.width,this);
+            this.appendChild(this.currentTextRow);
         }
+        this.currentTextRow.complete();
+        this.caret+=this.font.fontContext.lineHeight || this.spaceChar.size.height;
         this.currentTextRow = new TextRow(this.game,this.font,this.constrainSize.width,this);
         this.currentTextRow.pos.y = this.caret;
         this.appendChild(this.currentTextRow);
