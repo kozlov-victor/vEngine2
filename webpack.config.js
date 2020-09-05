@@ -123,7 +123,7 @@ module.exports = async (env={})=>{
                     ]
                 },
                 {
-                    test: /\.(xml)$/,
+                    test: /\.(xml|fnt)$/,
                     use: [
                         {loader: "xml/xml-loader",options: {debug}},
                     ]

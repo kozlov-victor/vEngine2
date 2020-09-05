@@ -17,10 +17,7 @@ export class MainScene extends Scene {
 
     public onPreloading(){
         this.colorBG = Color.RGB(10,10,30);
-        const fnt:Font = new Font(this.game);
-        fnt.fontSize = 14;
-        fnt.fontFamily = 'monospace';
-        fnt.generate();
+        const fnt:Font = new Font(this.game,{fontSize: 14});
         this.fnt = fnt;
     }
 

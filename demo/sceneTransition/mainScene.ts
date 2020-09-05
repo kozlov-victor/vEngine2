@@ -5,7 +5,6 @@ import {PushTransition} from "@engine/scene/transition/move/pushTransition";
 import {SIDE} from "@engine/scene/transition/move/side";
 import {Color} from "@engine/renderer/common/color";
 import {Font} from "@engine/renderable/impl/general/font";
-import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {SecondScene} from "./secondScene";
 import {PopTransition} from "@engine/scene/transition/move/popTransition";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";
@@ -16,25 +15,17 @@ import {
     CellsAppearingTransition,
     CellsDisappearingTransition
 } from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
-import {
-    ScaleInAppearanceTransition,
-    ScaleOutAppearanceTransition
-} from "@engine/scene/transition/appear/scale/scaleAppearanceTransition";
+import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
 
 
 export class MainScene extends Scene {
 
-    public fnt!:Font;
+    private fnt:Font;
     public colorBG: Color = Color.RGB(233);
     private btnPos:number=0;
 
     public onPreloading(){
-
-        const fnt:Font = new Font(this.game);
-        fnt.fontSize = 25;
-        fnt.fontFamily = 'monospace';
-        fnt.fontColor = Color.RGB(10);
-        fnt.generate();
+        const fnt:Font = new Font(this.game,{fontSize: 25,});
         this.fnt = fnt;
     }
 
@@ -65,8 +56,10 @@ export class MainScene extends Scene {
     }
 
     private createTransitionButton(text:string,transition:ISceneTransition){
-        const tf:TextField = new TextField(this.game);
+        const tf:TextField = new TextField(this.game,this.fnt);
+        tf.textColor.setRGB(10);
         tf.pos.setXY(10,this.btnPos+=45);
+        tf.size.setWH(this.game.width,30);
         tf.setText(text);
         tf.setFont(this.fnt);
         tf.on(MOUSE_EVENTS.click, e=>{

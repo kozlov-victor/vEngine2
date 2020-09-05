@@ -19,6 +19,11 @@ declare module "*.xml" {
     export = value;
 }
 
+declare module "*.fnt" {
+    const value:IElementDescription;
+    export = value;
+}
+
 declare module "*.glsl" {
     const value: string;
     export = value;

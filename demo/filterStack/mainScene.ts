@@ -5,10 +5,10 @@ import {Color} from "@engine/renderer/common/color";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Font} from "@engine/renderable/impl/general/font";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
-import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
+import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
 
 export class MainScene extends Scene {
 
@@ -21,11 +21,7 @@ export class MainScene extends Scene {
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
-        const fnt:Font = new Font(this.game);
-        fnt.fontSize = 50;
-        fnt.fontFamily = 'monospace';
-        fnt.fontColor = Color.RGB(255,0,0);
-        fnt.generate();
+        const fnt:Font = new Font(this.game,{fontSize:50});
         this.fnt = fnt;
 
     }
@@ -54,12 +50,12 @@ export class MainScene extends Scene {
         rect2.filters = [new NoiseFilter(this.game),new Barrel2DistortionFilter(this.game)];
         rect1.appendChild(rect2);
 
-        const tf:TextField = new TextField(this.game);
+        const tf:TextField = new TextField(this.game,this.fnt);
         tf.pos.setX(15);
         tf.pos.setY(this.game.size.height/2-40);
-        tf.setFont(this.fnt);
         tf.setText("No signal");
         tf.filters = [new WaveFilter(this.game)];
+        tf.textColor.setRGB(255,0,0);
         rect2.appendChild(tf);
 
     }

@@ -1,16 +1,16 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
-import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderer/common/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {fakeLongLoadingFn} from "../longLoading/mainScene";
+import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
 
 export class SecondScene extends Scene {
 
-    public fnt!:Font;
+    private fnt:Font;
 
     public onPreloading(){
 
@@ -18,12 +18,7 @@ export class SecondScene extends Scene {
 
         this.colorBG = Color.RGB(241,244,244);
 
-        const fnt:Font = new Font(this.game);
-        fnt.fontSize = 25;
-        fnt.fontFamily = 'monospace';
-        fnt.fontColor = Color.RGB(233,12,12);
-        fnt.generate();
-        this.fnt = fnt;
+        this.fnt = new Font(this.game, {fontSize: 25});
 
         const rect = new Rectangle(this.game);
         rect.borderRadius = 5;
@@ -42,7 +37,8 @@ export class SecondScene extends Scene {
 
         console.log('scene 2 on ready');
 
-        const tf:TextField = new TextField(this.game);
+        const tf:TextField = new TextField(this.game,this.fnt);
+        tf.textColor.setRGB(233,12,12);
         tf.pos.setXY(10,40);
         tf.setText("< back");
         tf.setFont(this.fnt);

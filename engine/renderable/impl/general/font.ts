@@ -13,9 +13,6 @@ export interface IRectViewJSON extends IRectJSON {
 }
 
 export interface IFontContext {
-    /**
-     * @deprecated
-     */
     lineHeight: number;
     symbols: Record<string, IRectViewJSON>;
     width:number;
@@ -116,13 +113,25 @@ namespace FontFactory {
 
 }
 
-export class Font implements IResource<ITexture>, IRevalidatable {
+export interface IFontParameters {
+    fontFamily: string;
+    fontSize: number;
+    extraChars:string[];
+    resourceLink:ResourceLink<ITexture>;
+    context:IFontContext;
+}
+
+const DEFAULT_FONT_PARAMS = {
+    fontFamily: 'monospace',
+    fontSize: 12,
+    extraChars:[],
+}
+
+export class Font implements IResource<ITexture> {
 
     public static async createSystemFont(game:Game):Promise<Font>{
         if (Font._systemFontInstance) return Font._systemFontInstance;
         const f:Font = new Font(game);
-        f.fontFamily = 'monospace';
-        f.fontSize = 12;
         f.createContext();
         const resourceLoader:ResourceLoader = new ResourceLoader(game);
         const link:ResourceLink<ITexture> = resourceLoader.loadTexture(f.createBitmap());
@@ -132,6 +141,7 @@ export class Font implements IResource<ITexture>, IRevalidatable {
             resolveFn(f);
             Font._systemFontInstance = f;
         });
+
         const p = new Promise<Font>(resolve=>{
             resolveFn = resolve;
         });
@@ -140,21 +150,14 @@ export class Font implements IResource<ITexture>, IRevalidatable {
 
     }
 
-    public static fromAtlas(game:Game,link:ResourceLink<ITexture>,fontContext:IFontContext):Font{
-        const fnt:Font = new Font(game);
-        fnt.setResourceLink(link);
-        fnt.fontContext = fontContext;
-        return fnt;
-    }
-
     private static _systemFontInstance:Font;
 
     public readonly type:string = 'Font';
 
-    public fontSize:number=12;
-    public extraChars:string[] = [];
-    public fontFamily:string='Monospace';
-    public fontContext:Readonly<IFontContext>;
+    public readonly fontSize:number;
+    public readonly extraChars:string[];
+    public readonly fontFamily:string='Monospace';
+    public readonly fontContext:Readonly<IFontContext>;
     /**
      * @deprecated
      */
@@ -162,24 +165,25 @@ export class Font implements IResource<ITexture>, IRevalidatable {
 
     private _resourceLink:ResourceLink<ITexture>;
 
-    constructor(protected game:Game){}
+    constructor(protected game:Game,params:Partial<IFontParameters> = {}) {
+        this.fontFamily = params.fontFamily ?? DEFAULT_FONT_PARAMS.fontFamily;
+        this.fontSize = params.fontSize ?? DEFAULT_FONT_PARAMS.fontSize;
+        this.extraChars = params.extraChars ?? DEFAULT_FONT_PARAMS.extraChars;
 
-    public generate(){
-        this.createContext();
-        const base64:string = this.createBitmap();
-        const link:ResourceLink<ITexture> = this.game.getCurrScene().resourceLoader.loadTexture(base64);
-        this.setResourceLink(link);
+        if (params.context===undefined) params.context = this.createContext();
+        this.fontContext = params.context;
+
+        if (params.resourceLink===undefined) {
+            const base64:string = this.createBitmap();
+            params.resourceLink = this.game.getCurrScene().resourceLoader.loadTexture(base64);
+        }
+        this.setResourceLink(params.resourceLink);
+
     }
+
 
     public asCss():string{
         return `${this.fontSize}px ${this.fontFamily}`;
-    }
-
-    public revalidate():void {
-        if (DEBUG) {
-            if (!this.fontContext) throw new DebugError(`font context is not created. Did you invoke font.generate() method?`);
-            if (!this.getResourceLink()) throw new DebugError(`font without resource link`);
-        }
     }
 
     public setResourceLink(link:ResourceLink<ITexture>):void{
@@ -190,10 +194,10 @@ export class Font implements IResource<ITexture>, IRevalidatable {
         return this._resourceLink;
     }
 
-    private createContext():void {
+    private createContext():IFontContext {
         const ranges:IRange[] = [{from: 32, to: 126}, {from: 1040, to: 1116}];
         const WIDTH:number = 512;
-        this.fontContext = FontFactory.getFontContext(ranges,this.extraChars,this.asCss(),WIDTH);
+        return FontFactory.getFontContext(ranges,this.extraChars,this.asCss(),WIDTH);
     }
 
     private createBitmap():string{

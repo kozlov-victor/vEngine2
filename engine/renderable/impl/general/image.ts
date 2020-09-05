@@ -4,7 +4,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {Color} from "@engine/renderer/common/color";
 import {Point2d} from "@engine/geometry/point2d";
 import {ICloneable} from "@engine/core/declarations";
-import {ResourceLink} from "@engine/resources/resourceLink";
+import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {RenderableModelWithResourceLink} from "@engine/renderable/abstract/renderableModelWithResourceLink";
 
@@ -33,6 +33,10 @@ export class Image extends RenderableModelWithResourceLink implements ICloneable
         if (DEBUG && !this.getResourceLink()) {
             console.error(this);
             throw new DebugError(`can not render Image: resourceLink is not specified`);
+        }
+        if (DEBUG && this.getResourceLink().state!==ResourceLinkState.COMPLETED) {
+            console.error(this);
+            throw new DebugError(`can not render Image: wrong resource link state: ${this.getResourceLink().state}`);
         }
         if (DEBUG && !this.getResourceLink().getTarget()) {
             console.error(this);

@@ -48,9 +48,9 @@ export class TextRowSet extends NullGameObject {
     private newRow():void{
         if (this.currentTextRow!==undefined) {
             this.currentTextRow.complete();
-            this.caret+=this.currentTextRow.size.height;
+            this.caret+=this.font.fontContext.lineHeight || this.currentTextRow.size.height;
         } else {
-            this.caret+=this.spaceChar.size.height;
+            this.caret+=(this.font.fontContext.lineHeight || this.spaceChar.size.height);
         }
         this.currentTextRow = new TextRow(this.game,this.font,this.constrainSize.width,this);
         this.currentTextRow.pos.y = this.caret;

@@ -34,14 +34,8 @@ export class MkDescribeHeroScene extends MkAbstractScene {
     public onPreloading(): void {
         super.onPreloading();
 
-        this.fnt = new Font(this.game);
-        this.fnt.fontSize = 80;
-        this.fnt.fontFamily = 'MK4';
+        this.fnt = new Font(this.game,{fontSize: 80, fontFamily: 'MK4'});
         this.fnt.fontColor = Color.RGB(233,233,60);
-
-        this.resourceLoader.addNextTask(()=>{
-            this.fnt.generate();
-        });
 
         this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
         this.sndBtnLink = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn3.mp3');

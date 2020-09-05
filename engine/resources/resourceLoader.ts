@@ -5,9 +5,9 @@ import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
-import createImageFromData = ResourceUtil.createImageFromData;
 import {Font} from "@engine/renderable/impl/general/font";
-import {Color} from "@engine/renderer/common/color";
+import {DebugError} from "@engine/debug/debugError";
+import createImageFromData = ResourceUtil.createImageFromData;
 
 namespace resourceCache {
 
@@ -21,6 +21,8 @@ namespace resourceCache {
 }
 
 export class ResourceLoader {
+
+    private completed:boolean = false;
 
     private static createUrlLoader<T extends string|ArrayBuffer>(req: URI|IURLRequest,responseType:'arraybuffer'|'text' = 'text'):UrlLoader<T>{
         let iReq:IURLRequest;
@@ -37,6 +39,7 @@ export class ResourceLoader {
     }
 
     public loadTexture(req: string|IURLRequest): ResourceLink<ITexture> {
+        this.validateState();
         const link: ResourceLink<ITexture> = new ResourceLink(req as string);
         if (resourceCache.cache[(req as IURLRequest).url??req]!==undefined) {
             link.setTarget(resourceCache.cache[(req as IURLRequest).url??req] as ITexture);
@@ -65,6 +68,7 @@ export class ResourceLoader {
         topSide: string|IURLRequest, bottomSide:string|IURLRequest,
         frontSide: string|IURLRequest, backSide:string|IURLRequest,
     ): ResourceLink<ICubeMapTexture> {
+        this.validateState();
         const link: ResourceLink<ICubeMapTexture> = new ResourceLink('');
 
         const taskRef:TaskRef = this.q.addTask(async () => {
@@ -109,6 +113,7 @@ export class ResourceLoader {
     }
 
     public loadSound(req: string|IURLRequest): ResourceLink<void> {
+        this.validateState();
         const loader:UrlLoader<ArrayBuffer> = ResourceLoader.createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
         const link: ResourceLink<void> = new ResourceLink(loader.getUrl());
         const taskRef:TaskRef = this.q.addTask(async () =>{
@@ -128,6 +133,7 @@ export class ResourceLoader {
     }
 
     public loadBinary(req: string|IURLRequest): ResourceLink<ArrayBuffer> {
+        this.validateState();
         const loader:UrlLoader<ArrayBuffer> = ResourceLoader.createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
         const link: ResourceLink<ArrayBuffer> = new ResourceLink<ArrayBuffer>(loader.getUrl());
         loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
@@ -147,15 +153,12 @@ export class ResourceLoader {
     }
 
     public loadFont(fontFamily:string,fontSize:number,extraChars?:string[]):Font{
-        const fnt:Font = new Font(this.game);
-        fnt.fontSize = fontSize;
-        fnt.fontFamily = fontFamily;
-        if (extraChars!==undefined) fnt.extraChars = extraChars;
-        fnt.generate();
-        return fnt;
+        this.validateState();
+        return new Font(this.game, {fontSize, fontFamily, extraChars});
     }
 
     public addNextTask(task: () => void) {
+        this.validateState();
         const taskRef:TaskRef =  this.q.addTask(() => {
             task();
             this.q.resolveTask(taskRef);
@@ -183,10 +186,14 @@ export class ResourceLoader {
     }
 
     public onCompleted(fn: () => void): void {
-        this.q.onResolved = fn;
+        this.q.onResolved = ()=>{
+            fn();
+            this.completed = true;
+        };
     }
 
     private _loadAndProcessText<T>(req: string|IURLRequest,postProcess:(s:string)=>T): ResourceLink<T> {
+        this.validateState();
         const url:string = (req as IURLRequest).url?(req as IURLRequest).url:req as string;
         const link: ResourceLink<T> = new ResourceLink(url);
         const loader:UrlLoader<string> = ResourceLoader.createUrlLoader<string>(req as (URI|IURLRequest));
@@ -204,6 +211,13 @@ export class ResourceLoader {
 
         });
         return link;
+    }
+
+    private validateState():void {
+        if (this.completed) {
+            if (DEBUG) throw new DebugError(`resourceLoader is already completed, use another one`);
+            else throw new Error();
+        }
     }
 
 

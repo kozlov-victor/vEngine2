@@ -6,13 +6,15 @@ export interface IElementDescription {
     children:IElementDescription[];
 }
 
+// tslint:disable-next-line:no-empty-interface
+export interface IDocumentDescription extends IElementDescription {}
+
 export class Element  {
 
     protected static fromData(data:IElementDescription):Element{
         const el:Element = new Element();
-        el.tagName = data.tagName;
+        (el as {tagName:string}).tagName = data.tagName;
         el.attributes = data.attributes;
-        el.children = [];
         if (data.children) data.children.forEach((c:IElementDescription) => {
             el.children.push(Element.fromData(c));
         });
@@ -26,9 +28,9 @@ export class Element  {
         });
     }
 
-    public children:Element[];
+    public readonly children:Element[] = [];
 
-    public tagName:string;
+    public readonly tagName:string;
     public attributes:Record<string,string> = {};
 
     public getElementById(id:string):Optional<Element>{
@@ -46,6 +48,18 @@ export class Element  {
             if (current.tagName===tagName) arr.push(current);
         });
         return arr;
+    }
+
+    public querySelector(path:string):Element{
+        return this.getElementsByTagName(path)[0];
+    }
+
+    public querySelectorAll(path:string):Element[]{
+        return this.getElementsByTagName(path);
+    }
+
+    public getAttribute(name:string):string {
+        return this.attributes[name];
     }
 
 

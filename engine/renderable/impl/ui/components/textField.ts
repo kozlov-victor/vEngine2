@@ -40,7 +40,7 @@ class TextInfo {
     public newString():void {
         this.pos.x = this.textField.paddingLeft;
         if (this._strings.length) {
-            this.pos.y += this.textField.getFont().fontContext.lineHeight;
+            this.pos.y += this.textField.getFont().fontContext.lineHeight!;
         }
         this._strings.push(new StringInfo());
     }
@@ -159,7 +159,7 @@ class StringInfo extends CharsHolder {
                 }
                 const totalSpaceWidth: number = AVAILABLE_WIDTH - totalWordsWidth;
                 const oneSpaceWidth: number = totalSpaceWidth / (words.length - 1);
-                if (oneSpaceWidth>textField.getFont().fontContext.lineHeight*2) return;
+                if (oneSpaceWidth>textField.getFont().fontContext.lineHeight!*2) return;
                 const initialPosY: number = this.chars[0].destRect.y;
                 let currXPointer: number = this.chars[0].destRect.x;
                 for (const w of words) {
@@ -214,7 +214,6 @@ export class TextField extends ScrollableContainer {
     public revalidate():void {
         super.revalidate();
         if (DEBUG && !this._font) throw new DebugError(`font is not provided`);
-        this._font.revalidate();
     }
 
     public onGeometryChanged():void {
@@ -265,7 +264,7 @@ export class TextField extends ScrollableContainer {
             }
         }
 
-        textInfo.revalidate(this._font.fontContext.lineHeight);
+        textInfo.revalidate(this._font.fontContext.lineHeight!);
         this.size.width = textInfo.size.width;
         // if (this.maxWidth && this.size.width>this.maxWidth)
         //     this.size.width = this.maxWidth;
