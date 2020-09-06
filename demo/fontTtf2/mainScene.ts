@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {fontLoader} from "../fontTtf/FontLoader";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import loadFont = fontLoader.loadFont;
 
 

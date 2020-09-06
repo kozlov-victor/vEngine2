@@ -21,7 +21,7 @@ import {describeArc} from "@engine/renderable/impl/geometry/helpers/splineFromPo
 import {isString} from "@engine/misc/object";
 import {Font} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
-import {TextFieldWithoutCache} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
 
 class ContainerForDrawingSurface extends NullGameObject {
     constructor(protected game: Game, private matrixStack:MatrixStack) {super(game);}

@@ -2,7 +2,7 @@ import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {MarkableNullGameObject} from "@engine/renderable/impl/ui2/textField/_internal/markableNullGameObject";
+import {MarkableNullGameObject} from "@engine/renderable/impl/ui/textField/_internal/markableNullGameObject";
 
 export class VerticalScrollBar extends MarkableNullGameObject {
 

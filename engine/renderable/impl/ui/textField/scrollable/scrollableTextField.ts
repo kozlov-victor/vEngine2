@@ -1,8 +1,8 @@
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
-import {VerticalScrollContainerListener} from "@engine/renderable/impl/ui2/_internal/verticalScrollContainerListener";
-import {VerticalScrollBar} from "@engine/renderable/impl/ui2/verticalScrollBar";
+import {VerticalScrollContainerListener} from "@engine/renderable/impl/ui/_internal/verticalScrollContainerListener";
+import {VerticalScrollBar} from "@engine/renderable/impl/ui/verticalScrollBar";
 
 
 export class ScrollableTextField extends TextField {

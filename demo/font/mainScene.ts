@@ -4,8 +4,8 @@ import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
-import {Button} from "@engine/renderable/impl/ui2/button/button";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {Button} from "@engine/renderable/impl/ui/button/button";
 
 
 export class MainScene extends Scene {

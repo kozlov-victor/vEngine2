@@ -15,7 +15,7 @@ import {
     CellsAppearingTransition,
     CellsDisappearingTransition
 } from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 
 
 export class MainScene extends Scene {

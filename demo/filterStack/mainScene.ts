@@ -8,7 +8,7 @@ import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 
 export class MainScene extends Scene {
 

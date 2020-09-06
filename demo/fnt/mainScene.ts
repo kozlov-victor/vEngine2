@@ -5,8 +5,8 @@ import {FntCreator} from "./FntCreator";
 import {ITexture} from "@engine/renderer/common/texture";
 import * as fntXML from "./font.fnt"
 import {Resource} from "@engine/resources/resourceDecorators";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
-import {WordBrake} from "@engine/renderable/impl/ui2/textField/textAlign";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import createFont = FntCreator.createFont;
 
 export class MainScene extends Scene {

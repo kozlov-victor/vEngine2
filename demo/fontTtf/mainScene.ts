@@ -3,7 +3,7 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {fontLoader} from "./FontLoader";
 import {Color} from "@engine/renderer/common/color";
 import loadFont = fontLoader.loadFont;
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 
 

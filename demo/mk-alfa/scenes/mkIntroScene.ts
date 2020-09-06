@@ -15,8 +15,8 @@ import {MkAbstractScene} from "./mkAbstractScene";
 import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
-import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui2/textField/textAlign";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 
 export class MkIntroScene extends MkAbstractScene {
 

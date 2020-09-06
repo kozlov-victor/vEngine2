@@ -1,7 +1,7 @@
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Container} from "@engine/renderable/impl/ui2/container";
+import {Container} from "@engine/renderable/impl/ui/container";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 

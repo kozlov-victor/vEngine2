@@ -18,8 +18,8 @@ import {SwirlFilter} from "@engine/renderer/webGl/filters/texture/swirlFilter";
 import {HEROES_DESCRIPTION, IItemDescription} from "../assets/images/heroes/description/heroesDescription";
 import {Sound} from "@engine/media/sound";
 import {MoveByCircleAnimation} from "@engine/animation/propertyAnimation/moveByCircleAnimation";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
-import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui2/textField/textAlign";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 
 
 export class MkDescribeHeroScene extends MkAbstractScene {

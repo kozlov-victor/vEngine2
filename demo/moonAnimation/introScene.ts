@@ -5,7 +5,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {MainScene} from "./mainScene";
-import {Button} from "@engine/renderable/impl/ui2/button/button";
+import {Button} from "@engine/renderable/impl/ui/button/button";
 import {Resource} from "@engine/resources/resourceDecorators";
 
 

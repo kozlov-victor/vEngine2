@@ -5,8 +5,8 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {FntCreator} from "../fnt/FntCreator";
 import * as fntXML from "./desyrel.xml"
 import {Resource} from "@engine/resources/resourceDecorators";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
-import {WordBrake} from "@engine/renderable/impl/ui2/textField/textAlign";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import createFont = FntCreator.createFont;
 
 // data from https://pixijs.io/examples/#/text/bitmap-text.js

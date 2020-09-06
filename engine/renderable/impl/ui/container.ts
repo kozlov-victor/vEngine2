@@ -2,7 +2,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
-import {MarkableNullGameObject} from "@engine/renderable/impl/ui2/textField/_internal/markableNullGameObject";
+import {MarkableNullGameObject} from "@engine/renderable/impl/ui/textField/_internal/markableNullGameObject";
 
 interface IContainerWithMarginPadding {
     marginLeft      :number;

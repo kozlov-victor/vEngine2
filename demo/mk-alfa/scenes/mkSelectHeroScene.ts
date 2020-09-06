@@ -29,8 +29,8 @@ import {HEROES_DESCRIPTION, IItemDescription} from "../assets/images/heroes/desc
 import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
-import {AlignText, AlignTextContentHorizontal} from "@engine/renderable/impl/ui2/textField/textAlign";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {AlignText, AlignTextContentHorizontal} from "@engine/renderable/impl/ui/textField/textAlign";
 
 
 class TabStrip {

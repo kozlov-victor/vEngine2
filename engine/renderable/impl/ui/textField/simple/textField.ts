@@ -1,16 +1,16 @@
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
-import {Container} from "@engine/renderable/impl/ui2/container";
+import {Container} from "@engine/renderable/impl/ui/container";
 import {IRectJSON} from "@engine/geometry/rect";
-import {TextRowSet} from "@engine/renderable/impl/ui2/textField/_internal/textRowSet";
-import {MarkableNullGameObject} from "@engine/renderable/impl/ui2/textField/_internal/markableNullGameObject";
+import {TextRowSet} from "@engine/renderable/impl/ui/textField/_internal/textRowSet";
+import {MarkableNullGameObject} from "@engine/renderable/impl/ui/textField/_internal/markableNullGameObject";
 import {Color} from "@engine/renderer/common/color";
 import {
     AlignText,
     AlignTextContentHorizontal,
     AlignTextContentVertical, WordBrake
-} from "@engine/renderable/impl/ui2/textField/textAlign";
+} from "@engine/renderable/impl/ui/textField/textAlign";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 
 

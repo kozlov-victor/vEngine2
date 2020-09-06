@@ -1,6 +1,5 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Layer} from "@engine/scene/layer";
@@ -10,9 +9,9 @@ import {Sound} from "@engine/media/sound";
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
-import {ImageButton} from "@engine/renderable/impl/ui/components/imageButton";
 import {DebugError} from "@engine/debug/debugError";
 import {Element} from "@engine/misc/xmlUtils";
+import {ImageButton} from "@engine/renderable/impl/ui/button/imageButton";
 
 
 export abstract class AbstractAppScene extends Scene {

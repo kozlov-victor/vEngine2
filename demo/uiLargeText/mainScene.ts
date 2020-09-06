@@ -1,15 +1,15 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
-import {ScrollableTextField} from "@engine/renderable/impl/ui2/textField/scrollable/scrollableTextField";
+import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {
     AlignText,
     AlignTextContentHorizontal,
     AlignTextContentVertical,
     WordBrake
-} from "@engine/renderable/impl/ui2/textField/textAlign";
+} from "@engine/renderable/impl/ui/textField/textAlign";
 
 // https://lukoshko.net/story/pyatachok-sovershaet-podvig.htm
 

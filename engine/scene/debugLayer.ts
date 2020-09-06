@@ -1,8 +1,8 @@
 import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
-import {WordBrake} from "@engine/renderable/impl/ui2/textField/textAlign";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 
 export class DebugLayer extends Layer {
 

@@ -5,7 +5,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderer/common/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 
 export class SecondScene extends Scene {
 

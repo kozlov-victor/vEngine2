@@ -36,7 +36,7 @@ import {
     SpiralCellsAppearingTransition,
     SpiralCellsDisappearingTransition
 } from "@engine/scene/transition/appear/cells/spiralCellApperaingTransition";
-import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 
 
 // inspired by https://www.youtube.com/watch?v=mrR9eqUNTic
