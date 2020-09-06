@@ -1,4 +1,3 @@
-import {TextField} from "@engine/renderable/impl/ui/components/textField";
 import {Game, SCALE_STRATEGY} from "../../core/game";
 import {Rect} from "../../geometry/rect";
 import {Color} from "../common/color";
@@ -8,7 +7,6 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mesh} from "@engine/renderable/abstract/mesh";
-import {Font} from "@engine/renderable/impl/general/font";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
@@ -43,7 +41,6 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     public abstract type:string;
 
     public container:HTMLElement;
-    public debugTextField:TextField;
     public clearBeforeRender:boolean = true;
     public readonly clearColor:Color = Color.RGB(0,0,0);
     public readonly viewPortSize = new Size();

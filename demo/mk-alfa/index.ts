@@ -5,7 +5,6 @@ import {MkIntroScene} from "./scenes/mkIntroScene";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 import {AudioPlayer} from "@engine/media/audioPlayer";
-import {MkSelectHeroScene} from "./scenes/mkSelectHeroScene";
 import {CellsAppearingTransition} from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
 
 const game = new Game({width: 1024,height: 768});

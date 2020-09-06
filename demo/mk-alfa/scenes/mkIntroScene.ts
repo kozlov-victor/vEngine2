@@ -1,6 +1,5 @@
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
-import {TEXT_ALIGN, TextField, WORD_BRAKE} from "@engine/renderable/impl/ui/components/textField";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -16,6 +15,8 @@ import {MkAbstractScene} from "./mkAbstractScene";
 import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
+import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui2/textField/textAlign";
 
 export class MkIntroScene extends MkAbstractScene {
 
@@ -26,11 +27,12 @@ export class MkIntroScene extends MkAbstractScene {
     public onPreloading(): void {
         super.onPreloading();
 
-        this.fnt = new Font(this.game,{fontSize: 80, fontFamily: 'MK4'});
-        this.fnt.fontColor = Color.RGB(110,111,10);
+        this.resourceLoader.addNextTask(()=>{
+            this.fnt = new Font(this.game,{fontSize: 80, fontFamily: 'MK4'});
 
-        this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
-        this.soundLink = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn.wav');
+            this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
+            this.soundLink = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn.wav');
+        });
 
     }
 
@@ -63,12 +65,14 @@ export class MkIntroScene extends MkAbstractScene {
         this.appendChild(nullContainer);
 
 
-        const tf:TextField = new TextField(this.game);
-        tf.setFont(this.fnt);
-        tf.setTextAlign(TEXT_ALIGN.CENTER);
-        tf.setWordBreak(WORD_BRAKE.PREDEFINED);
-        tf.pos.setXY(200,200);
-        tf.setText("Secret Santa \nAlfa 2019\n\n\nPress any key");
+        const tf:TextField = new TextField(this.game,this.fnt);
+        tf.setAlignText(AlignText.CENTER);
+        tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
+        tf.size.set(this.game.size);
+        tf.setWordBrake(WordBrake.PREDEFINED);
+        tf.pos.setY(200);
+        tf.textColor.setRGB(110,111,10);
+        tf.setText("Secret Santa\nAlfa 2019\n\n\nPress any key");
         nullContainer.appendChild(tf);
 
         this.setInterval(()=>{

@@ -1,6 +1,5 @@
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
-import {TEXT_ALIGN, TextField, WORD_BRAKE} from "@engine/renderable/impl/ui/components/textField";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
@@ -19,6 +18,8 @@ import {SwirlFilter} from "@engine/renderer/webGl/filters/texture/swirlFilter";
 import {HEROES_DESCRIPTION, IItemDescription} from "../assets/images/heroes/description/heroesDescription";
 import {Sound} from "@engine/media/sound";
 import {MoveByCircleAnimation} from "@engine/animation/propertyAnimation/moveByCircleAnimation";
+import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui2/textField/textAlign";
 
 
 export class MkDescribeHeroScene extends MkAbstractScene {
@@ -35,12 +36,14 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         super.onPreloading();
 
         this.fnt = new Font(this.game,{fontSize: 80, fontFamily: 'MK4'});
-        this.fnt.fontColor = Color.RGB(233,233,60);
 
-        this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
-        this.sndBtnLink = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn3.mp3');
+        this.resourceLoader.addNextTask(()=>{
+            this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
+            this.sndBtnLink = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn3.mp3');
 
-        //for (let i:number = 0;i<100;i++) { fakeLongLoadingFn(this.resourceLoader); }
+            //for (let i:number = 0;i<100;i++) { fakeLongLoadingFn(this.resourceLoader); }
+        });
+
 
     }
 
@@ -96,15 +99,14 @@ export class MkDescribeHeroScene extends MkAbstractScene {
             particlesFilter2.setCenter(p.x,p.y);
         });
 
-        const tf:TextField = new TextField(this.game);
-        tf.setFont(this.fnt);
-        tf.setTextAlign(TEXT_ALIGN.CENTER);
-        tf.setWordBreak(WORD_BRAKE.FIT);
+        const tf:TextField = new TextField(this.game,this.fnt);
+        tf.setAlignText(AlignText.CENTER);
+        tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
+        tf.setWordBrake(WordBrake.FIT);
         tf.pos.setY(100);
-        tf.layoutWidth = this.game.size.width;
+        tf.textColor.setRGB(233,233,60);
+        tf.size.setWH(this.game.width,this.game.height);
         this.tfInfo = tf;
-        tf.layoutWidth = this.game.size.width;
-        tf.maxWidth = this.game.size.width;
         this.appendChild(tf);
 
         this.on(GAME_PAD_EVENTS.buttonPressed, e=>{

@@ -1,7 +1,6 @@
 import {MkAbstractScene} from "./mkAbstractScene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
-import {TEXT_ALIGN, TextField, WORD_BRAKE} from "@engine/renderable/impl/ui/components/textField";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import {createScaleTweenMovie} from "../utils/miscFunctions";
@@ -30,6 +29,8 @@ import {HEROES_DESCRIPTION, IItemDescription} from "../assets/images/heroes/desc
 import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
+import {TextField} from "@engine/renderable/impl/ui2/textField/simple/textField";
+import {AlignText, AlignTextContentHorizontal} from "@engine/renderable/impl/ui2/textField/textAlign";
 
 
 class TabStrip {
@@ -223,18 +224,18 @@ export class MkSelectHeroScene extends MkAbstractScene {
 
     public onPreloading(): void {
         super.onPreloading();
+        this.resourceLoader.addNextTask(()=>{
+            this.tabStrip = new TabStrip(this.game);
+            this.tabStrip.preload();
+            this.fnt = new Font(this.game, {fontSize:80,fontFamily:'MK4'});
 
+            this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
+            this.soundLink1 = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn2.wav');
+            this.soundLink2 = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn.wav');
+            this.soundLinkTheme = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/theme.mp3');
+            this.filters = [new VignetteFilter(this.game)];
+        });
 
-        this.tabStrip = new TabStrip(this.game);
-        this.tabStrip.preload();
-        this.fnt = new Font(this.game, {fontSize:80,fontFamily:'MK4'});
-        this.fnt.fontColor = Color.RGB(255,255,10);
-
-        this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
-        this.soundLink1 = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn2.wav');
-        this.soundLink2 = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn.wav');
-        this.soundLinkTheme = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/theme.mp3');
-        this.filters = [new VignetteFilter(this.game)];
     }
 
     public onReady(): void {
@@ -272,12 +273,13 @@ export class MkSelectHeroScene extends MkAbstractScene {
         nullContainer.transformPoint.setToCenter();
         createScaleTweenMovie(this.game,0.95,1.05,800,nullContainer);
 
-        const tf:TextField = new TextField(this.game);
-        tf.setFont(this.fnt);
-        tf.setTextAlign(TEXT_ALIGN.CENTER);
-        tf.setWordBreak(WORD_BRAKE.PREDEFINED);
-        tf.pos.setXY(160,40);
+        const tf:TextField = new TextField(this.game,this.fnt);
+        tf.setAlignText(AlignText.CENTER);
+        tf.size.setWH(this.game.size.width,150);
+        tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
+        tf.pos.setY(40);
         tf.setText("Select your Hero");
+        tf.textColor.setRGB(255,255,10);
         nullContainer.appendChild(tf);
 
         this.appendChild(this.tabStrip.getRoot());

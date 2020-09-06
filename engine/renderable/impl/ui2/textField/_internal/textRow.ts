@@ -33,7 +33,6 @@ export class TextRow extends NullGameObject {
     public setAlignText(align:AlignText):void{
         if (this.children.length===0) return;
         if (align===this.alignText) return;
-        if (this.rowSet.getWordBrake()===WordBrake.PREDEFINED) return;
 
         switch (align) {
             case AlignText.RIGHT:
