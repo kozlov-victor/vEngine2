@@ -34,6 +34,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 import {Size} from "@engine/geometry/size";
 import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
+import {FrameSkipper} from "@engine/misc/frameSkipper";
 
 export const enum SCENE_EVENTS {
     PRELOADING = 'preloading',
@@ -61,7 +62,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     protected preloadingGameObject!:RenderableModel;
     private _layers:Layer[] = [];
     private _propertyAnimations:IAnimation[] = [];
-
 
     // addTween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
@@ -227,7 +227,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
 
     public render():void {
-
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
         renderer.saveAlphaBlend();
