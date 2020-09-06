@@ -1,8 +1,7 @@
 import {AssetsDocumentHolder} from "../data/assetsDocumentHolder";
 import {MathEx} from "@engine/misc/mathEx";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {BaseScene} from "./baseScene";
-import {ImageButton} from "@engine/renderable/impl/ui/components/imageButton";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {NixieDisplay} from "./object/nixieDisplay";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
@@ -14,6 +13,7 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Element} from "@engine/misc/xmlUtils";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {ImageButton} from "@engine/renderable/impl/ui2/button/imageButton";
 
 const MANOMETER_SCALE:number = MathEx.degToRad(360-111);
 const MAX_NUM_OF_SHOOTS:number = 10;
