@@ -15,10 +15,8 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         const fnt:Font = new Font(this.game,{fontSize:50});
-        fnt.fontColor = Color.RGB(255,0,0);
 
         const fnt2:Font = new Font(this.game,{fontSize:20});
-        fnt2.fontColor = Color.RGB(0,220,12);
 
         this.fnt = fnt;
         this.fnt2 = fnt2;

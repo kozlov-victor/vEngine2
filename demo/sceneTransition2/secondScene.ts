@@ -15,9 +15,7 @@ export class SecondScene extends Scene {
 
         this.colorBG = Color.RGB(241,244,244);
 
-        const fnt:Font = new Font(this.game,{fontSize:25});
-        fnt.fontColor = Color.RGB(233,12,12);
-        this.fnt = fnt;
+        this.fnt = new Font(this.game, {fontSize: 25});
 
         const rect = new Rectangle(this.game);
         rect.borderRadius = 5;

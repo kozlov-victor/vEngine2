@@ -15,14 +15,14 @@ export abstract class AbstractScreenTouchPad {
     protected addButton(b:AbstractScreenTouchButton):void {
         this._buttons.push(b);
         const kbControl:KeyboardControl = this.game.getControl<KeyboardControl>('KeyboardControl')!;
-        b.renderableModel.on(MOUSE_EVENTS.mouseDown,()=>{
-            kbControl.triggerKeyPress(b.keyCode);
+        b.renderableModel.on(MOUSE_EVENTS.mouseDown,e=>{
+            kbControl.triggerKeyPress(b.keyCode,e.nativeEvent);
         });
-        b.renderableModel.on(MOUSE_EVENTS.mouseLeave,()=>{
-            kbControl.triggerKeyRelease(b.keyCode);
+        b.renderableModel.on(MOUSE_EVENTS.mouseLeave,e=>{
+            kbControl.triggerKeyRelease(b.keyCode,e.nativeEvent);
         });
-        b.renderableModel.on(MOUSE_EVENTS.mouseUp,()=>{
-            kbControl.triggerKeyRelease(b.keyCode);
+        b.renderableModel.on(MOUSE_EVENTS.mouseUp,e=>{
+            kbControl.triggerKeyRelease(b.keyCode,e.nativeEvent);
         });
     }
 
@@ -34,7 +34,7 @@ export abstract class AbstractScreenTouchPad {
 
     public releaseAllButtons():void{
         this._buttons.forEach(b=>{
-            this.game.getControl<KeyboardControl>('KeyboardControl')!.triggerKeyRelease(b.keyCode);
+            this.game.getControl<KeyboardControl>('KeyboardControl')!.triggerKeyRelease(b.keyCode,undefined!);
         });
     }
 

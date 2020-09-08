@@ -99,7 +99,7 @@ export class MouseControl implements IControl {
                     objectY:mousePoint.sceneCoordinate.y - go.pos.y,
                     id:mousePoint.id,
                     target:go,
-                    nativeEvent: e as Event,
+                    nativeEvent: e as MouseEvent,
                     eventName,
                     isMouseDown: mousePoint.isMouseDown,
                     button: (e as MouseEvent).button,

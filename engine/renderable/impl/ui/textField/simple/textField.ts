@@ -37,7 +37,7 @@ export class TextField extends Container {
         super(game);
         this.appendChild(this.rowSetContainer);
         this.size.setWH(300,100);
-        this.textColor.observe(()=>this.markAsDirty());
+        this.textColor.observe(()=>this.requestTextRedraw());
     }
 
     public setText(text:string|number){

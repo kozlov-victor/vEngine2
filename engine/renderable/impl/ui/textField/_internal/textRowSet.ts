@@ -9,8 +9,10 @@ import {stringToCharacters} from "@engine/renderable/impl/ui/textField/_internal
 import {
     AlignText,
     AlignTextContentHorizontal,
-    AlignTextContentVertical, WordBrake
+    AlignTextContentVertical,
+    WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
+import {DebugError} from "@engine/debug/debugError";
 
 export class TextRowSet extends NullGameObject {
 
@@ -34,7 +36,7 @@ export class TextRowSet extends NullGameObject {
         super(game);
     }
 
-    private addWord(word:Word,applyNewLineIfCurrentIsFull:boolean):void {
+    private addWord(word:Word,applyNewLineIfCurrentIsFull:boolean,addWhiteSpaceBeforeIfNeed:boolean):void {
         if (this.currentTextRow===undefined) {
             this.currentTextRow = new TextRow(this.game,this.font,this.constrainSize.width,this);
             this.appendChild(this.currentTextRow);
@@ -42,7 +44,7 @@ export class TextRowSet extends NullGameObject {
         if (applyNewLineIfCurrentIsFull && !this.currentTextRow.canAddWord(word)) {
             this.newRow();
         }
-        this.currentTextRow.addWord(word,applyNewLineIfCurrentIsFull);
+        this.currentTextRow.addWord(word,addWhiteSpaceBeforeIfNeed);
     }
 
     private newRow():void{
@@ -65,29 +67,39 @@ export class TextRowSet extends NullGameObject {
         this.wordBrake = wordBrake;
         this.rawText = text;
         this.clear();
-        if (wordBrake===WordBrake.PREDEFINED) {
-            stringToCharacters(this.rawText).forEach(charInfo=>{ // treat each symbol as separate word
-                switch (charInfo.rawChar) {
-                    case '\r':
-                        break;
-                    case '\n':
-                        this.newRow();
-                        break;
-                    case '\t':
-                        this.addWord(new Word(this.game,this.font,[charInfo],this.color),false);
-                        break;
-                    default:
-                        this.addWord(new Word(this.game,this.font,[charInfo],this.color),false);
-                        break;
-                }
-            });
-        } else {
-            this.rawText.
-                split(/[\t\n\s]/g).
-                filter(it=>it.length>0).
-                forEach(word=>{ // split to words and smart fit it
-                    this.addWord(new Word(this.game,this.font,stringToCharacters(word),this.color),true);
+        switch (wordBrake) {
+            case WordBrake.PREDEFINED_BREAK_LONG_WORDS:
+            case WordBrake.PREDEFINED: {
+                const breakLongWords:boolean = this.wordBrake===WordBrake.PREDEFINED_BREAK_LONG_WORDS;
+                stringToCharacters(this.rawText).forEach(charInfo=>{ // treat each symbol as separate word
+                    switch (charInfo.rawChar) {
+                        case '\r':
+                            break;
+                        case '\n':
+                            this.newRow();
+                            break;
+                        case '\t':
+                            this.addWord(new Word(this.game,this.font,[charInfo],this.color),breakLongWords,false);
+                            break;
+                        default:
+                            this.addWord(new Word(this.game,this.font,[charInfo],this.color),breakLongWords,false);
+                            break;
+                    }
                 });
+                break;
+            }
+            case WordBrake.FIT: {
+                this.rawText.
+                    split(/[\t\n\s]/g).
+                    filter(it=>it.length>0).
+                    forEach(word=>{ // split to words and smart fit it
+                        this.addWord(new Word(this.game,this.font,stringToCharacters(word),this.color),true,true);
+                    });
+                break;
+            }
+            default: {
+                if (DEBUG) throw new DebugError(`unknown wordBrake value: ${this.wordBrake}`);
+            }
         }
         if (this.currentTextRow!==undefined) this.currentTextRow.complete();
         this.fitSize();

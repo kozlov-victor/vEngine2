@@ -17,8 +17,7 @@ export class MainScene extends Scene {
 
     public onPreloading(){
         this.colorBG = Color.RGB(10,10,30);
-        const fnt:Font = new Font(this.game,{fontSize: 14});
-        this.fnt = fnt;
+        this.fnt = new Font(this.game, {fontSize: 14});
     }
 
     public onReady() {
@@ -32,7 +31,7 @@ export class MainScene extends Scene {
         this.filters = [filter];
 
 
-        const b = new BasicEnv();
+        const b = new BasicEnv(this.game,tf);
         b.setProgram({
 
             10: [
@@ -117,12 +116,6 @@ export class MainScene extends Scene {
 
         });
         b.RUN();
-        b.onCompleted = ()=>{
-
-        };
-        b.onScreenChanged = ()=>{
-            tf.setText(b.getScreenResult());
-        };
 
 
     }

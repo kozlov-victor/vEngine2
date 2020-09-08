@@ -88,7 +88,7 @@ namespace FontFactory {
         return {symbols, width: w, height: cnvHeight,lineHeight:lineHeight - 2*SYMBOL_PADDING};
     };
 
-    export const  getFontImageBase64 = (fontContext:IFontContext, strFont:string, color:Color):string=> {
+    export const  getFontImageBase64 = (fontContext:IFontContext, strFont:string):string=> {
         const cnv:HTMLCanvasElement = document.createElement('canvas');
         cnv.width = fontContext.width;
         cnv.height = fontContext.height;
@@ -158,10 +158,6 @@ export class Font implements IResource<ITexture> {
     public readonly extraChars:string[];
     public readonly fontFamily:string='Monospace';
     public readonly fontContext:Readonly<IFontContext>;
-    /**
-     * @deprecated
-     */
-    public fontColor:Color = Color.BLACK.clone();
 
     private _resourceLink:ResourceLink<ITexture>;
 
@@ -201,7 +197,7 @@ export class Font implements IResource<ITexture> {
     }
 
     private createBitmap():string{
-        return FontFactory.getFontImageBase64(this.fontContext,this.asCss(),this.fontColor);
+        return FontFactory.getFontImageBase64(this.fontContext,this.asCss());
     }
 
 }

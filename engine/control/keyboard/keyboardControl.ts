@@ -41,19 +41,19 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
             e.preventDefault();
             e.stopPropagation(); // to prevent page scroll
             const code:number = e.keyCode;
-            this.triggerKeyPress(code);
+            this.triggerKeyPress(code,e);
         };
 
         this._keyUpListener  = (e:KeyboardEvent)=>{
             const code:number = e.keyCode;
-            this.triggerKeyRelease(code);
+            this.triggerKeyRelease(code,e);
         };
 
         globalThis.addEventListener('keydown',this._keyDownListener);
         globalThis.addEventListener('keyup',this._keyUpListener);
     }
 
-    public triggerKeyPress(code:number):void {
+    public triggerKeyPress(code:number,nativeEvent:Event):void {
         if (this.isPressed(code)) return; // keyboard generate repeated events when key is pressed - ignore it
 
         const eventFromBuffer:Optional<KeyBoardEvent> = KeyBoardEvent.fromPool();
@@ -62,12 +62,14 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
             return;
         }
         eventFromBuffer.key = code;
+        eventFromBuffer.nativeEvent = nativeEvent;
         this.press(eventFromBuffer);
     }
 
-    public triggerKeyRelease(code:number):void {
+    public triggerKeyRelease(code:number,nativeEvent:Event):void {
         const eventFromBuffer:Optional<KeyBoardEvent> = this.findEvent(code);
         if (eventFromBuffer===undefined) return;
+        eventFromBuffer.nativeEvent = nativeEvent;
         this.release(eventFromBuffer);
     }
 

@@ -16,7 +16,7 @@ export interface ISceneMouseEvent {
     sceneX:number;
     sceneY:number;
     id:number;
-    nativeEvent: Event;
+    nativeEvent: MouseEvent;
     eventName:string;
     isMouseDown: boolean;
     button:MOUSE_BUTTON;

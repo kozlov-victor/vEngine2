@@ -20,5 +20,7 @@ export enum AlignText {
 
 export const enum WordBrake {
     PREDEFINED,
-    FIT
+    FIT,
+    PREDEFINED_BREAK_LONG_WORDS
+
 }

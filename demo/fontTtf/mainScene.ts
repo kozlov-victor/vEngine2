@@ -24,10 +24,8 @@ export class MainScene extends Scene {
 
         this.resourceLoader.addNextTask(()=>{
             this.fnt = new Font(this.game,{fontSize:25,fontFamily:'pressStart2P'});
-            this.fnt.fontColor = Color.BLACK.clone();
 
             this.fnt2 = new Font(this.game,{fontSize:25,fontFamily:'vintage'});
-            this.fnt2.fontColor = Color.BLACK.clone();
         });
 
 

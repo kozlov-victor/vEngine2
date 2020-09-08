@@ -49,7 +49,7 @@ export class MainScene extends Scene {
         tf3.textColor.setRGB(122,200,245);
         tf3.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf3.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
-        tf3.setWordBrake(WordBrake.PREDEFINED);
+        tf3.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
         tf3.setText("\n" +
             "     Lorem    ipsum dolor sit amet, consectetur \n" +
             "adipiscing     elit,     sed do eiusmod tempor incididunt \n" +
