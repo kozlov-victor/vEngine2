@@ -22,25 +22,13 @@ export class MainScene extends Scene {
         tf.textColor.setRGB(10,100,20);
         tf.setWordBrake(WordBrake.PREDEFINED);
 
-        // https://sites.google.com/site/rasstudymaterial/matric-class/gw-basic-programs
-        // 10 INPUT "ENTER ANY STRING";ST$
-        // 20 FOR OUTER=1 TO LEN(ST$)
-        // 30 FOR INNER=1 TO OUTER
-        // 40 PRINT MID$(ST$,INNER,1);
-        // 50 NEXT INNER
-        // 60 PRINT
-        // 70 NEXT OUTER
-        // 80 END
+        // https://apkpure.com/gwbasic/com.RetroDoSoft.GwBasic
 
         const b = new BasicEnv(this.game,tf);
         b.setProgram({
-            10: ()=>b.INPUT("ENTER ANY STRING","ST$"),
-            20: ()=>b.FOR('OUTER',1,b.LEN(b.GET_VAR('ST$'))),
-            30: ()=>b.FOR('INNER',1,b.GET_VAR('OUTER')),
-            40: ()=>b.PRINT(b.MID(b.GET_VAR('ST$'),b.GET_VAR('INNER'),1)),
-            50: ()=>b.NEXT('INNER'),
-            60: ()=>b.PRINT(),
-            70: ()=>b.NEXT('OUTER'),
+            10: ()=>b.FOR('I',0,300, 10),
+            40: ()=>b.CIRCLE(b.GET_VAR('I'),b.GET_VAR('I'),b.GET_VAR('I')),
+            50: ()=>b.NEXT('I'),
             80: ()=>b.END()
         });
         b.RUN();

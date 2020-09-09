@@ -98,6 +98,14 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this.fillColor.set(DrawingSurface.normalizeColor(col,g,b,a));
     }
 
+    public getFillColor():Readonly<IColor>{
+        return this.fillColor;
+    }
+
+    public getDrawColor():Readonly<IColor>{
+        return this.drawColor;
+    }
+
     public setDrawColor(col:number,alpha?:number):void;
     public setDrawColor(r:byte,g:byte,b:byte,a?:byte):void;
     public setDrawColor(col:byte|number,g?:byte,b?:byte,a:byte = 255){
@@ -170,6 +178,14 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
     public drawRect(x:number,y:number,width:number,height:number):void {
         if (width===0 || height===0) return;
+        if (width<0) {
+            x-=width;
+            width=-width;
+        }
+        if (height<0) {
+            y-=height;
+            height=-height;
+        }
         this._rect.pos.setXY(x,y);
         this._rect.size.setWH(width,height);
         this.drawSimpleShape(this._rect);

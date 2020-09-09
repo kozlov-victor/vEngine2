@@ -24,7 +24,6 @@ export class MainScene extends Scene {
         tf.setPadding(5);
         tf.textColor.setRGB(10,100,20);
         tf.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
-        this.appendChild(tf);
 
         const b = new BasicEnv(this.game,tf);
         b.setProgram({

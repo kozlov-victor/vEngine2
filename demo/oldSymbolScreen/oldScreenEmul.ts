@@ -4,6 +4,8 @@ import {Game} from "@engine/core/game";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
+import {Color} from "@engine/renderer/common/color";
 
 class ProgramInstruction {
     public number:number;
@@ -35,9 +37,16 @@ export class BasicEnv {
     private loopContexts:LoopContext[] = [];
     private subroutinesStack:number[] = [];
     private ended:boolean = false;
+    private drawingSurface:DrawingSurface;
 
 
     constructor(private game:Game,private textField:TextField) {
+        game.getCurrScene().appendChild(textField);
+        this.drawingSurface = new DrawingSurface(this.game,this.game.size);
+        this.drawingSurface.setLineWidth(1);
+        this.drawingSurface.setDrawColor(Color.RGB(0,222,0).asRGBNumeric());
+        this.drawingSurface.setFillColor(Color.NONE.asRGBNumeric(),0);
+        game.getCurrScene().appendChild(this.drawingSurface);
     }
 
     public INPUT(message:string,varName:string){
@@ -266,6 +275,24 @@ export class BasicEnv {
         if (pointer===undefined) throw new Error(`unexpected RETURN`);
         this.pointer = pointer;
         this.instructionPointSet = true;
+    }
+
+
+    public CIRCLE(x:number,y:number,radius:number):void{
+        this.drawingSurface.drawCircle(x,y,radius);
+    }
+
+    public LINE(x1:number,y1:number,x2:number,y2:number,color:number,attribute:undefined|'B'|'BF'):void {
+        if (attribute===undefined) {
+            this.drawingSurface.moveTo(x1,y1);
+            this.drawingSurface.lineTo(x2,y2);
+        } else if (attribute==='B') {
+            this.drawingSurface.setFillColor(Color.NONE.asRGBNumeric(),0)
+            this.drawingSurface.drawRect(x1,y1,x2-x1,y2-y1);
+        } else if (attribute==='BF') {
+            this.drawingSurface.setFillColor(Color.RGB(255,0,0).asRGBNumeric(),255)
+            this.drawingSurface.drawRect(x1,y1,x2-x1,y2-y1);
+        }
     }
 
     public END(){

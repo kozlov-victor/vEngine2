@@ -21,7 +21,6 @@ export class MainScene extends Scene {
         tf.setPadding(5);
         tf.textColor.setRGB(10,100,20);
         tf.setWordBrake(WordBrake.PREDEFINED);
-        this.appendChild(tf);
 
         // https://sites.google.com/site/rasstudymaterial/matric-class/gw-basic-programs
         // 10 INPUT "ENTER ANY STRING";ST$

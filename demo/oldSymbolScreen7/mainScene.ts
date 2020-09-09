@@ -22,26 +22,20 @@ export class MainScene extends Scene {
         tf.textColor.setRGB(10,100,20);
         tf.setWordBrake(WordBrake.PREDEFINED);
 
-        // https://sites.google.com/site/rasstudymaterial/matric-class/gw-basic-programs
-        // 10 INPUT "ENTER ANY STRING";ST$
-        // 20 FOR OUTER=1 TO LEN(ST$)
-        // 30 FOR INNER=1 TO OUTER
-        // 40 PRINT MID$(ST$,INNER,1);
-        // 50 NEXT INNER
-        // 60 PRINT
-        // 70 NEXT OUTER
-        // 80 END
+        // https://apkpure.com/gwbasic/com.RetroDoSoft.GwBasic
 
         const b = new BasicEnv(this.game,tf);
         b.setProgram({
-            10: ()=>b.INPUT("ENTER ANY STRING","ST$"),
-            20: ()=>b.FOR('OUTER',1,b.LEN(b.GET_VAR('ST$'))),
-            30: ()=>b.FOR('INNER',1,b.GET_VAR('OUTER')),
-            40: ()=>b.PRINT(b.MID(b.GET_VAR('ST$'),b.GET_VAR('INNER'),1)),
-            50: ()=>b.NEXT('INNER'),
-            60: ()=>b.PRINT(),
-            70: ()=>b.NEXT('OUTER'),
-            80: ()=>b.END()
+            30: ()=>b.ASSIGN_VAR('P',50),
+            31: ()=>b.ASSIGN_VAR('S',50),
+            32: ()=>b.ASSIGN_VAR('O',150),
+            40: ()=>b.FOR('N',250,50,-10),
+            41: ()=>b.ASSIGN_VAR('P',b.GET_VAR('P')+10),
+            42: ()=>b.ASSIGN_VAR('S',b.GET_VAR('S')+5),
+            43: ()=>b.ASSIGN_VAR('O',b.GET_VAR('O')-5),
+            60: ()=>b.LINE(b.GET_VAR('P'),b.GET_VAR('O'),b.GET_VAR('N'),b.GET_VAR('S'),2,'B'),
+            61: ()=>b.NEXT('N'),
+            70: ()=>b.END(),
         });
         b.RUN();
 
