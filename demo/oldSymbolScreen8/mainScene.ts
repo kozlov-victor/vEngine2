@@ -22,21 +22,13 @@ export class MainScene extends Scene {
         tf.textColor.setRGB(10,100,20);
         tf.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
 
-        // https://sites.google.com/site/rasstudymaterial/matric-class/gw-basic-programs
-        // 10 INPUT "ENTER ANY STRING";ST$
-        // 20 FOR J=LEN(ST$) TO 1 STEP -1
-        // 30 PRINT MID$(ST$,J,1);
-        // 40 NEXT J
-        // 50 END
-
         const b = new BasicEnv(this.game,tf);
         b.setProgram({
-            10: ()=>[b.INPUT("ENTER ANY STRING","ST$")],
-            18: ()=>[console.log(b.LEN(b.GET_VAR('ST$')))],
-            20: ()=>b.FOR('J',b.LEN(b.GET_VAR('ST$')),1,-1),
-            30: ()=>b.PRINT(b.MID(b.GET_VAR('ST$'),b.GET_VAR('J'),1)),
-            40: ()=>b.NEXT('J'),
-            50: ()=>b.END()
+            1: ()=>b.ASSIGN_VAR('C',0),
+            10: ()=>b.PRINT("HELLO WORLD " + b.GET_VAR('C') ),
+            15: ()=>b.PRINT(),
+            16: ()=>b.ASSIGN_VAR('C',b.GET_VAR('C')+1),
+            20: ()=>b.GOTO(10),
         });
         b.RUN();
 
