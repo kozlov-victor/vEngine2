@@ -84,7 +84,7 @@ export class MainScene extends Scene {
         tf2.pos.setXY(150,430);
         tf2.setText("-==no data==-");
         this.appendChild(tf2);
-        tf2.textColor.setRGB(222,244,245);
+        tf2.textColor.setRGB(22,44,45);
         let cnt = 0;
         btn.on(MOUSE_EVENTS.click, e=>{
             if (checkBox.checked) cnt+=1;

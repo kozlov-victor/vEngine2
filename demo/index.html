@@ -74,6 +74,11 @@
     </style>
 </head>
 <body>
+    <script>
+        if (!window.Promise) {
+            document.write('<script src="./out/polyfills-separate.js"></sc'+'ript>');
+        }
+    </script>
     <script src="./out/_index.js"></script>
 </body>
 </html>

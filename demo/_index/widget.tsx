@@ -3,72 +3,6 @@ import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactor
 import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
 import {httpClient} from "@engine/debug/httpClient";
 
-const style = `
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        #frame {
-            width: 320px;
-            height: 240px;
-            box-shadow: 0 0 2px black;
-            margin: 5px;
-        }
-        #frameLoadingInfo {
-            position: absolute;
-            top: 20px;
-            left: 20px
-        }
-        .layout {
-            display: flex;
-            flex-direction: column;
-        }
-        html,body,.layout {
-            height: 100%;
-        }
-        body  {
-            position: fixed;
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-        }
-        .up,.down {
-            display: flex;
-            margin: 0 auto;
-            position: relative;
-        }
-        .up {
-            display: block;
-            dislpay: flex;
-            width: 320px;
-        }
-        .down {
-            flex: 1;
-            overflow-y: scroll;
-            -webkit-overflow-scrolling: touch;
-            width: 100%;
-        }
-        /* hide hosting ads */
-        div[style] {
-            display: none;
-        }
-        #list {
-            display: block;
-            width: 100%;
-            text-align: center;
-        }
-        #list li {
-            padding: 10px;
-        }
-        .active {
-            background-color: aqua;
-        }
-
-
-`;
-
 
 export class Widget extends VEngineTsxComponent<{}> {
 
@@ -85,7 +19,7 @@ export class Widget extends VEngineTsxComponent<{}> {
     }
 
     private async loadList(){
-        this.items = await httpClient.post<string[]>('./index.json');
+        this.items = await httpClient.get<string[]>('./index.json',{r:Math.random()});
         this.listLoading = false;
         this.triggerRendering();
     }
