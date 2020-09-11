@@ -4,7 +4,7 @@ const tstemplate = require("@phenomnomnominal/tstemplate").tstemplate;
 const ts = require("typescript");
 
 const decoratorNamesToProcess = [
-    'Texture','Sound','CubeTexture','Text', 'Font'
+    'Texture','Sound','CubeTexture','Text', 'Font', 'FontFromAtlas'
 ];
 
 module.exports = function(content) {

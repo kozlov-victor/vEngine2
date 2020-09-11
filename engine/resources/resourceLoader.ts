@@ -5,9 +5,11 @@ import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
-import {Font} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
+import {IDocumentDescription} from "@engine/misc/xmlUtils";
+import {Font, FontFactory} from "@engine/renderable/impl/general/font";
 import createImageFromData = ResourceUtil.createImageFromData;
+import createFontFromAtlas = FontFactory.createFontFromAtlas;
 
 namespace resourceCache {
 
@@ -155,6 +157,16 @@ export class ResourceLoader {
     public loadFont(fontFamily:string,fontSize:number,extraChars?:string[]):Font{
         this.validateState();
         return new Font(this.game, {fontSize, fontFamily, extraChars});
+    }
+
+    public loadFontFromAtlas(atlasUrl:string|IURLRequest,doc:IDocumentDescription):ResourceLink<Font>{
+        this.validateState();
+        const resourceLink:ResourceLink<ITexture> = this.loadTexture(atlasUrl);
+        const result:ResourceLink<Font> = ResourceLink.create(undefined!);
+        this.addNextTask(()=>{
+            result.setTarget(createFontFromAtlas(this.game, resourceLink, doc));
+        });
+        return result;
     }
 
     public addNextTask(task: () => void) {

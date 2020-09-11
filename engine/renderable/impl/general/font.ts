@@ -6,6 +6,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ITexture} from "@engine/renderer/common/texture";
+import {Document, Element, IDocumentDescription} from "@engine/misc/xmlUtils";
 
 export interface IRectViewJSON extends IRectJSON {
     destOffsetX:number;
@@ -19,10 +20,6 @@ export interface IFontContext {
     height:number;
 }
 
-interface IRange {
-    from:number;
-    to:number;
-}
 
 interface IPrefixedContext {
     mozImageSmoothingEnabled?: boolean;
@@ -35,7 +32,7 @@ const getCtx = (cnv:HTMLCanvasElement):CanvasRenderingContext2D=>{
     return cnv.getContext('2d') as CanvasRenderingContext2D;
 };
 
-namespace FontFactory {
+export namespace FontFactory {
 
     const SYMBOL_PADDING:number = 4;
 
@@ -49,7 +46,7 @@ namespace FontFactory {
         return height;
     };
 
-    export const getFontContext = (arrFromTo:IRange[], extraChars:string[],strFont:string, w:number):IFontContext=> {
+    export const getFontContext = (standartChars:string[], extraChars:string[],strFont:string, w:number):IFontContext=> {
 
         const cnv:HTMLCanvasElement = document.createElement('canvas');
         const ctx:CanvasRenderingContext2D = getCtx(cnv);
@@ -78,12 +75,7 @@ namespace FontFactory {
             currX += textWidth;
         }
 
-        for (let k:number = 0; k < arrFromTo.length; k++) {
-            const arrFromToCurr:IRange = arrFromTo[k];
-            for (let i:number = arrFromToCurr.from; i < arrFromToCurr.to; i++) {
-                putCharOnContext(String.fromCharCode(i));
-            }
-        }
+        standartChars.forEach(c=>putCharOnContext(c))
         extraChars.forEach(c=>putCharOnContext(c));
         return {symbols, width: w, height: cnvHeight,lineHeight:lineHeight - 2*SYMBOL_PADDING};
     };
@@ -111,6 +103,45 @@ namespace FontFactory {
         return cnv.toDataURL();
     };
 
+    export const createFontFromAtlas = (game:Game,resourceLink:ResourceLink<ITexture>,docDesc:IDocumentDescription):Font=>{
+
+        const doc:Document = Document.create(docDesc);
+
+        const context:IFontContext = {
+            width: resourceLink.getTarget().size.width,
+            height: resourceLink.getTarget().size.height,
+            lineHeight: 0,
+            symbols: {}
+        };
+
+        // http://www.angelcode.com/products/bmfont/doc/file_format.html
+        const lineHeight:number = +(doc.querySelector('common').getAttribute('lineHeight'));
+        const face:string = doc.querySelector('info').getAttribute('face');
+        const all:Element[] = doc.querySelectorAll('char');
+        for (let i:number=0;i<all.length;i++){
+            const el:Element = all[i];
+            const id:number = +(el.getAttribute('id'));
+            const width:number = +(el.getAttribute('width')) || ~~(lineHeight / 3) || 16;
+            const height:number = +(el.getAttribute('height')) || 0.0001;
+            const x:number = +(el.getAttribute('x'));
+            const y:number = +(el.getAttribute('y'));
+            const xOffset:number = +(el.getAttribute('xoffset')) || 0;
+            const yOffset:number = +(el.getAttribute('yoffset')) || 0;
+
+            const char:string = String.fromCharCode(id);
+            context.symbols[char] = {
+                x,
+                y,
+                width,
+                height,
+                destOffsetX: xOffset,
+                destOffsetY: yOffset
+            };
+            context.lineHeight = lineHeight;
+        }
+        return new Font(game,{fontFamily:face,fontSize:lineHeight,resourceLink,context});
+    };
+
 }
 
 export interface IFontParameters {
@@ -126,6 +157,19 @@ const DEFAULT_FONT_PARAMS = {
     fontSize: 12,
     extraChars:[],
 }
+
+const LAT_CHARS:string =
+    'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
+
+const STANDART_SYMBOLS:string =
+    '1234567890 ' +
+    '"!`?\'.,;:()[]{}<>|/@\\^$-%+=#_&~*';
+
+
+const CYR_CHARS:string =
+    'АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНн' +
+    'ОоПпРрСсТтУуФфХхЦцЧчШшЩщ' +
+    'ЫыЬьЪъЭэЮюЯя'
 
 export class Font implements IResource<ITexture> {
 
@@ -191,9 +235,8 @@ export class Font implements IResource<ITexture> {
     }
 
     private createContext():IFontContext {
-        const ranges:IRange[] = [{from: 32, to: 126}, {from: 1040, to: 1116}];
         const WIDTH:number = 512;
-        return FontFactory.getFontContext(ranges,this.extraChars,this.asCss(),WIDTH);
+        return FontFactory.getFontContext((LAT_CHARS+STANDART_SYMBOLS+CYR_CHARS).split(''),this.extraChars,this.asCss(),WIDTH);
     }
 
     private createBitmap():string{

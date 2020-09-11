@@ -2,29 +2,23 @@ import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Font} from "@engine/renderable/impl/general/font";
 import {ITexture} from "@engine/renderer/common/texture";
-import {FntCreator} from "../fnt/FntCreator";
 import * as fntXML from "./desyrel.xml"
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
-import createFont = FntCreator.createFont;
 
 // data from https://pixijs.io/examples/#/text/bitmap-text.js
 
 export class MainScene extends Scene {
 
-    @Resource.Texture('./fnt2/desyrel.png')
-    private sprResourceLink:ResourceLink<ITexture>;
-
+    @Resource.FontFromAtlas('./fnt2/desyrel.png',fntXML)
+    private fontLink:ResourceLink<Font>;
 
     public onReady() {
 
         this.colorBG.setRGB(12,12,12);
-        console.log(this.sprResourceLink,this.sprResourceLink.state);
-        const fnt:Font = createFont(this.game,this.sprResourceLink,fntXML);
-        console.log(fntXML);
 
-        const tf:TextField = new TextField(this.game,fnt);
+        const tf:TextField = new TextField(this.game,this.fontLink.getTarget());
         tf.pos.setY(23);
         //tf.setFont(fnt);
         tf.textColor.setRGBA(122,0,33,0);

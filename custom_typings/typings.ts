@@ -19,7 +19,12 @@ declare module "*.xml" {
     export = value;
 }
 
-declare module "*.fnt" {
+declare module "xml/xml-loader!*" {
+    const value:IElementDescription;
+    export = value;
+}
+
+declare module "xml/angelcode-loader!*" {
     const value:IElementDescription;
     export = value;
 }

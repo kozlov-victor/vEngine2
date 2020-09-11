@@ -10,28 +10,28 @@ import {
     AlignTextContentVertical,
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
-
-// https://lukoshko.net/story/pyatachok-sovershaet-podvig.htm
+import * as fontXml from "xml/angelcode-loader!./font.fnt"
+// https://zxpress.ru/article.php?id=8943
 
 export class MainScene extends Scene {
 
-    @Resource.Font('monospace',15)
-    private fnt!:Font;
+    @Resource.FontFromAtlas('uiLargeText2/font.png',fontXml)
+    private fontLink:ResourceLink<Font>;
 
-    @Resource.Text('uiLargeText/text.txt')
+    @Resource.Text('uiLargeText2/text.txt')
     private textLink:ResourceLink<string>;
 
 
     public onReady() {
 
-        const tf:TextField = new ScrollableTextField(this.game,this.fnt);
+        const tf:TextField = new ScrollableTextField(this.game,this.fontLink.getTarget());
         tf.size.set(this.game.size);
         tf.setText(this.textLink.getTarget());
         tf.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
         tf.setPadding(15);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.TOP);
-        tf.textColor.setRGB(12,132,255);
+        tf.textColor.setRGB(12,18,20);
         this.appendChild(tf);
     }
 

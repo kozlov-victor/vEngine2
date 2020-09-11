@@ -2,6 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {IURLRequest} from "@engine/resources/urlLoader";
 import {DebugError} from "@engine/debug/debugError";
 import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
+import {IDocumentDescription} from "@engine/misc/xmlUtils";
 
 
 export const Resource = {
@@ -32,6 +33,12 @@ export const Resource = {
         };
     },
     Font: (fontFamily:string, fontSize:number, extraChars?:string[])=>{
+        return (target: Scene, propertyKey: string):void => {
+            // stub for precompiler only
+            throw new DebugError(`something wrong with precompiler for Font decorator`);
+        };
+    },
+    FontFromAtlas: (atlasUrl:string|IURLRequest,doc:IDocumentDescription)=>{
         return (target: Scene, propertyKey: string):void => {
             // stub for precompiler only
             throw new DebugError(`something wrong with precompiler for Font decorator`);
