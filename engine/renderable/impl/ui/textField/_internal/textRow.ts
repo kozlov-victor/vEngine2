@@ -27,7 +27,7 @@ export class TextRow extends NullGameObject {
     }
 
     public complete():void {
-        this.size.height = Math.max(...this.children.map(it=>it.size.height),this.rowSet.spaceChar.size.height);
+        this.size.height = Math.max(...this.children.map(it=>it.size.height),this.rowSet.spaceChar.size.height,this.font.fontContext.lineHeight);
     }
 
     public setAlignText(align:AlignText):void{

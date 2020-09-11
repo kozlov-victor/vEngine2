@@ -15,6 +15,7 @@ export interface IRectViewJSON extends IRectJSON {
 
 export interface IFontContext {
     lineHeight: number;
+    padding:[up:number,right:number,down:number,left:number],
     symbols: Record<string, IRectViewJSON>;
     width:number;
     height:number;
@@ -46,30 +47,30 @@ export namespace FontFactory {
         return height;
     };
 
-    export const getFontContext = (standartChars:string[], extraChars:string[],strFont:string, w:number):IFontContext=> {
+    export const getFontContext = (standartChars:string[], extraChars:string[],strFont:string, width:number):IFontContext=> {
 
         const cnv:HTMLCanvasElement = document.createElement('canvas');
         const ctx:CanvasRenderingContext2D = getCtx(cnv);
         ctx.font = strFont;
-        const lineHeight:number = getFontHeight(strFont) + 2 * SYMBOL_PADDING;
+        const lineHeight:number = getFontHeight(strFont);
+        const rowHeight:number = lineHeight + 2 * SYMBOL_PADDING;
         const symbols:{[key:string]:IRectViewJSON} = {};
-        let currX:number = 0, currY:number = 0, cnvHeight = lineHeight;
+        let currX:number = 0, currY:number = 0, cnvHeight = rowHeight;
 
         const putCharOnContext = (char:string):void=>{
             const context2D:CanvasRenderingContext2D = cnv.getContext('2d') as CanvasRenderingContext2D;
-            let textWidth:number = context2D.measureText(char).width;
-            textWidth += 2 * SYMBOL_PADDING;
+            const textWidth:number = context2D.measureText(char).width + 2 * SYMBOL_PADDING;
             if (textWidth === 0) return;
-            if (currX + textWidth > w) {
+            if (currX + textWidth > width) {
                 currX = 0;
-                currY += lineHeight;
-                cnvHeight = currY + lineHeight;
+                currY += rowHeight;
+                cnvHeight +=rowHeight;
             }
             const symbolRect:IRectViewJSON = {} as IRectViewJSON;
-            symbolRect.x = ~~currX + SYMBOL_PADDING;
-            symbolRect.y = ~~currY + SYMBOL_PADDING;
-            symbolRect.width = ~~textWidth - 2 * SYMBOL_PADDING;
-            symbolRect.height = lineHeight - 2 * SYMBOL_PADDING;
+            symbolRect.x = ~~currX;
+            symbolRect.y = ~~currY;
+            symbolRect.width = ~~textWidth;
+            symbolRect.height = rowHeight;
             symbolRect.destOffsetX = symbolRect.destOffsetY = 0;
             symbols[char] = symbolRect;
             currX += textWidth;
@@ -77,7 +78,13 @@ export namespace FontFactory {
 
         standartChars.forEach(c=>putCharOnContext(c))
         extraChars.forEach(c=>putCharOnContext(c));
-        return {symbols, width: w, height: cnvHeight,lineHeight:lineHeight - 2*SYMBOL_PADDING};
+        return {
+            symbols,
+            width,
+            height: cnvHeight,
+            padding: [SYMBOL_PADDING,SYMBOL_PADDING,SYMBOL_PADDING,SYMBOL_PADDING],
+            lineHeight,
+        };
     };
 
     export const  getFontImageBase64 = (fontContext:IFontContext, strFont:string):string=> {
@@ -98,7 +105,7 @@ export namespace FontFactory {
         const symbols:{[key:string]:IRectJSON} = fontContext.symbols;
         Object.keys(symbols).forEach((symbol:string)=>{
             const rect:IRectJSON = symbols[symbol];
-            ctx.fillText(symbol, rect.x, rect.y);
+            ctx.fillText(symbol, rect.x + SYMBOL_PADDING, rect.y + SYMBOL_PADDING);
         });
         return cnv.toDataURL();
     };
@@ -107,16 +114,20 @@ export namespace FontFactory {
 
         const doc:Document = Document.create(docDesc);
 
+        const [up,right,down,left] = doc.querySelector('info').getAttribute('padding').split(',').map(it=>+it);
+
         const context:IFontContext = {
             width: resourceLink.getTarget().size.width,
             height: resourceLink.getTarget().size.height,
             lineHeight: 0,
+            padding: [up,right,down,left],
             symbols: {}
         };
 
         // http://www.angelcode.com/products/bmfont/doc/file_format.html
         const lineHeight:number = +(doc.querySelector('common').getAttribute('lineHeight'));
-        const face:string = doc.querySelector('info').getAttribute('face');
+        const fontFamily:string = doc.querySelector('info').getAttribute('face');
+        const fontSize:number = +doc.querySelector('info').getAttribute('size');
         const all:Element[] = doc.querySelectorAll('char');
         for (let i:number=0;i<all.length;i++){
             const el:Element = all[i];
@@ -139,7 +150,7 @@ export namespace FontFactory {
             };
             context.lineHeight = lineHeight;
         }
-        return new Font(game,{fontFamily:face,fontSize:lineHeight,resourceLink,context});
+        return new Font(game,{fontFamily,fontSize,resourceLink,context});
     };
 
 }

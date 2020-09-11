@@ -53,7 +53,7 @@ export class TextRowSet extends NullGameObject {
             this.appendChild(this.currentTextRow);
         }
         this.currentTextRow.complete();
-        this.caret+=this.font.fontContext.lineHeight || this.spaceChar.size.height;
+        this.caret+=this.font.fontContext.lineHeight;
         this.currentTextRow = new TextRow(this.game,this.font,this.constrainSize.width,this);
         this.currentTextRow.pos.y = this.caret;
         this.appendChild(this.currentTextRow);
