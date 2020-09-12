@@ -27,7 +27,11 @@ export class TextRow extends NullGameObject {
     }
 
     public complete():void {
-        this.size.height = Math.max(...this.children.map(it=>it.size.height),this.rowSet.spaceChar.size.height,this.font.fontContext.lineHeight);
+        this.size.height = Math.max(
+            ...this.children.map(it=>it.size.height),
+            this.rowSet.spaceChar.size.height,
+            this.font.fontContext.lineHeight + this.font.fontContext.spacing[0]
+        );
     }
 
     public setAlignText(align:AlignText):void{
@@ -70,9 +74,9 @@ export class TextRow extends NullGameObject {
 
     private _addWord(word:Word){
         word.pos.setX(this.caret);
-        this.caret+=word.size.width;
+        this.caret+=word.size.width+this.font.fontContext.spacing[0];
         this.appendChild(word);
-        this.size.width+=word.size.width;
+        this.size.width+=word.size.width+this.font.fontContext.spacing[0];
         if (this.size.width>this.constrainWidth) this.size.width = this.constrainWidth;
     }
 

@@ -1,6 +1,6 @@
 
 // http://www.angelcode.com/products/bmfont/
-//
+// http://www.angelcode.com/products/bmfont/doc/file_format.html
 
 const parseToNode = (row)=>{
     const tags = row.split(' ').map(it=>it.trim()).filter(it=>it.length);

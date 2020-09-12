@@ -16,6 +16,7 @@ export interface IRectViewJSON extends IRectJSON {
 export interface IFontContext {
     lineHeight: number;
     padding:[up:number,right:number,down:number,left:number],
+    spacing: [horizontal:number, vertical:number],
     symbols: Record<string, IRectViewJSON>;
     width:number;
     height:number;
@@ -83,6 +84,7 @@ export namespace FontFactory {
             width,
             height: cnvHeight,
             padding: [SYMBOL_PADDING,SYMBOL_PADDING,SYMBOL_PADDING,SYMBOL_PADDING],
+            spacing: [0,0],
             lineHeight,
         };
     };
@@ -115,17 +117,18 @@ export namespace FontFactory {
         const doc:Document = Document.create(docDesc);
 
         const [up,right,down,left] = doc.querySelector('info').getAttribute('padding').split(',').map(it=>+it);
-
+        const [spacingHorizontal, spacingVertical] = doc.querySelector('info').getAttribute('spacing').split(',').map(it=>+it);
+        const lineHeight:number = +(doc.querySelector('common').getAttribute('lineHeight'));
         const context:IFontContext = {
             width: resourceLink.getTarget().size.width,
             height: resourceLink.getTarget().size.height,
-            lineHeight: 0,
+            lineHeight,
             padding: [up,right,down,left],
+            spacing: [spacingHorizontal, spacingVertical],
             symbols: {}
         };
 
         // http://www.angelcode.com/products/bmfont/doc/file_format.html
-        const lineHeight:number = +(doc.querySelector('common').getAttribute('lineHeight'));
         const fontFamily:string = doc.querySelector('info').getAttribute('face');
         const fontSize:number = +doc.querySelector('info').getAttribute('size');
         const all:Element[] = doc.querySelectorAll('char');
@@ -148,7 +151,6 @@ export namespace FontFactory {
                 destOffsetX: xOffset,
                 destOffsetY: yOffset
             };
-            context.lineHeight = lineHeight;
         }
         return new Font(game,{fontFamily,fontSize,resourceLink,context});
     };
