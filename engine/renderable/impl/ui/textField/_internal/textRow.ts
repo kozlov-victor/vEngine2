@@ -72,6 +72,7 @@ export class TextRow extends NullGameObject {
 
     }
 
+
     private _addWord(word:Word){
         word.pos.setX(this.caret);
         this.caret+=word.size.width+this.font.fontContext.spacing[0];

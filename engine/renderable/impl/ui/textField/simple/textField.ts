@@ -13,6 +13,9 @@ import {
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {FrameSkipper} from "@engine/misc/frameSkipper";
+import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
+import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
+import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 
 
 export class TextField extends Container {
@@ -23,17 +26,18 @@ export class TextField extends Container {
     protected rowSet:TextRowSet;
     protected rowSetContainer:MarkableNullGameObject = new MarkableNullGameObject(this.game);
 
+    protected alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;
+    protected alignTextContentHorizontal:AlignTextContentHorizontal = AlignTextContentHorizontal.LEFT;
+    protected alignText:AlignText = AlignText.LEFT;
+    protected wordBrake:WordBrake = WordBrake.FIT;
+
     private cacheSurface:DrawingSurface;
-    private alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;
-    private alignTextContentHorizontal:AlignTextContentHorizontal = AlignTextContentHorizontal.LEFT;
-    private alignText:AlignText = AlignText.LEFT;
-    private wordBrake:WordBrake = WordBrake.FIT;
     private _text:string = '';
     private frameSkipper:FrameSkipper = new FrameSkipper(this.game);
 
     private needTextRedraw:boolean = false;
 
-    constructor(game:Game,private font:Font) {
+    constructor(game:Game,protected font:Font) {
         super(game);
         this.appendChild(this.rowSetContainer);
         this.size.setWH(300,100);
@@ -113,6 +117,21 @@ export class TextField extends Container {
         this.markAsDirty();
     }
 
+    public setItalicAt(i:number,italic:boolean):void {
+        this.findCharImageByIndex(i).setItalic(italic);
+        this.requestTextRedraw();
+    }
+
+    public setBoldAt(i:number,bold:boolean):void {
+        this.findCharImageByIndex(i).setBold(bold);
+        this.requestTextRedraw();
+    }
+
+    public setColorAt(i:number,col:IColor):void {
+        this.findCharImageByIndex(i).setColor(col);
+        this.requestTextRedraw();
+    }
+
     protected requestTextRedraw():void {
         this.needTextRedraw = true;
     }
@@ -123,11 +142,28 @@ export class TextField extends Container {
 
     protected _setText():void {
         this.rowSet.setFont(this.font);
-        this.rowSet.setText(this._text,this.wordBrake);
+        this.rowSet.setWordBrake(this.wordBrake);
+        this.rowSet.setText(this._text);
         this.rowSet.setAlignText(this.alignText);
         this.rowSet.setAlignTextContentHorizontal(this.alignTextContentHorizontal);
         this.rowSet.setAlignTextContentVertical(this.alignTextContentVertical);
         this.requestTextRedraw();
+    }
+
+    private findCharImageByIndex(i:number):CharacterImage{
+        let cnt:number = 0;
+        for (let m = 0; m < this.rowSet.children.length; m++) {
+            const row:TextRow = this.rowSet.children[m];
+            for (let j = 0; j < row.children.length; j++) {
+                const child:Word = row.children[j];
+                for (let k = 0; k < child.children.length; k++) {
+                    const char:CharacterImage = child.children[k];
+                    if (cnt===i) return char;
+                    cnt++;
+                }
+            }
+        }
+        return undefined!;
     }
 
     private redrawText():void {

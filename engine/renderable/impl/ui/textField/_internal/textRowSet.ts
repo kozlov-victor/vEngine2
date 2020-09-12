@@ -5,7 +5,7 @@ import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {Color} from "@engine/renderer/common/color";
 import {ISize} from "@engine/geometry/size";
-import {stringToCharacters} from "@engine/renderable/impl/ui/textField/_internal/characterUtil";
+import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/characterUtil";
 import {
     AlignText,
     AlignTextContentHorizontal,
@@ -63,46 +63,14 @@ export class TextRowSet extends NullGameObject {
         this.font = font;
     }
 
-    public setText(text:string,wordBrake:WordBrake){
+    public setWordBrake(wordBrake:WordBrake):void{
         this.wordBrake = wordBrake;
+    }
+
+    public setText(text:string){
         this.rawText = text;
-        this.clear();
-        switch (wordBrake) {
-            case WordBrake.PREDEFINED_BREAK_LONG_WORDS:
-            case WordBrake.PREDEFINED: {
-                const breakLongWords:boolean = this.wordBrake===WordBrake.PREDEFINED_BREAK_LONG_WORDS;
-                stringToCharacters(this.rawText).forEach(charInfo=>{ // treat each symbol as separate word
-                    switch (charInfo.rawChar) {
-                        case '\r':
-                            break;
-                        case '\n':
-                            this.newRow();
-                            break;
-                        case '\t':
-                            this.addWord(new Word(this.game,this.font,[charInfo],this.color),breakLongWords,false);
-                            break;
-                        default:
-                            this.addWord(new Word(this.game,this.font,[charInfo],this.color),breakLongWords,false);
-                            break;
-                    }
-                });
-                break;
-            }
-            case WordBrake.FIT: {
-                this.rawText.
-                    split(/[\t\n\s]/g).
-                    filter(it=>it.length>0).
-                    forEach(word=>{ // split to words and smart fit it
-                        this.addWord(new Word(this.game,this.font,stringToCharacters(word),this.color),true,true);
-                    });
-                break;
-            }
-            default: {
-                if (DEBUG) throw new DebugError(`unknown wordBrake value: ${this.wordBrake}`);
-            }
-        }
-        if (this.currentTextRow!==undefined) this.currentTextRow.complete();
-        this.fitSize();
+        const stringEx:StringEx = StringEx.fromRaw(text);
+        this.setTextFromStringEx(stringEx);
     }
 
     public setAlignTextContentHorizontal(align:AlignTextContentHorizontal):void {
@@ -162,6 +130,44 @@ export class TextRowSet extends NullGameObject {
         return this.wordBrake;
     }
 
+    public setTextFromStringEx(stringEx:StringEx){
+        this.clear();
+        switch (this.wordBrake) {
+            case WordBrake.PREDEFINED_BREAK_LONG_WORDS:
+            case WordBrake.PREDEFINED: {
+                const breakLongWords:boolean = this.wordBrake===WordBrake.PREDEFINED_BREAK_LONG_WORDS;
+                stringEx.getAllChars().forEach(charInfo=>{ // treat each symbol as separate word
+                    switch (charInfo.rawChar) {
+                        case '\r':
+                            break;
+                        case '\n':
+                            this.newRow();
+                            break;
+                        case '\t':
+                            this.addWord(new Word(this.game,this.font,[charInfo],this.color),breakLongWords,false);
+                            break;
+                        default:
+                            this.addWord(new Word(this.game,this.font,[charInfo],this.color),breakLongWords,false);
+                            break;
+                    }
+                });
+                break;
+            }
+            case WordBrake.FIT: {
+                stringEx.
+                split(['\t','\n','\r',' ']).filter(it=>it.asRaw().trim().length).
+                forEach(s=>{
+                    this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color),true,true);
+                });
+                break;
+            }
+            default: {
+                if (DEBUG) throw new DebugError(`unknown wordBrake value: ${this.wordBrake}`);
+            }
+        }
+        if (this.currentTextRow!==undefined) this.currentTextRow.complete();
+        this.fitSize();
+    }
 
     private fitSize():void {
         this.fitWidth();

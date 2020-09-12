@@ -7,7 +7,9 @@ import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/cha
 
 export class CharacterImage extends Image {
 
-    constructor(game:Game,font:Font,characterInfo:ICharacterInfo,color:Color) {
+    private colorCloned:boolean = false;
+
+    constructor(game:Game,font:Font,private characterInfo:ICharacterInfo,color:Color) {
         super(game);
         const [padUp,padRight,padDown,padLeft] = font.fontContext.padding;
         let charRect:IRectViewJSON = font.fontContext.symbols[characterInfo.rawChar] || font.fontContext.symbols['?'];
@@ -36,7 +38,30 @@ export class CharacterImage extends Image {
         this.size.set(this.getSrcRect());
         this.pos.setXY(charRect.destOffsetX,charRect.destOffsetY);
         this.setResourceLink(font.getResourceLink());
+        this.transformPoint.setToCenter();
         if (!characterInfo.isEmoji) this.color = color;
+        if (characterInfo.italic) this.setItalic(true);
+        if (characterInfo.bold) this.setBold(true);
+        if (characterInfo.color) this.setColor(characterInfo.color);
+
+    }
+
+    public setItalic(val:boolean):void {
+        if (val) this.skew.setX(val?-0.2:0);
+    }
+
+    public setBold(val:boolean):void {
+        const scale:number = val?1.2:1;
+        if (val) this.scale.setXY(scale);
+    }
+
+    public setColor(color:IColor):void {
+        if (this.characterInfo.isEmoji) return; // emoji are not colored
+        if (!this.colorCloned) {
+            this.color = this.color.clone();
+            this.colorCloned = true;
+        }
+        this.color.set(color);
     }
 
 }

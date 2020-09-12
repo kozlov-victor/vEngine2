@@ -161,8 +161,8 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         this.setRGBA(this._r,this._g,this._b,value);
     }
 
-    public set(another:Color):void{
-        this.setRGBA(another._r,another._g,another._b,another._a);
+    public set(another:IColor):void{
+        this.setRGBA(another.r,another.g,another.b,another.a);
     }
 
     public clone():Color{

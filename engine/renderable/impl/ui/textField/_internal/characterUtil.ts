@@ -3,6 +3,64 @@
 export interface ICharacterInfo {
     rawChar:string;
     isEmoji:boolean;
+    bold?:boolean;
+    italic?:boolean;
+    color?:IColor;
+}
+
+export class StringEx {
+
+    public static fromRaw(s:string):StringEx{
+        return new StringEx(stringToCharacters(s));
+    }
+
+    constructor(private chars:ICharacterInfo[]) {
+    }
+
+    public split(delimiter:string[]):StringEx[]{
+        const result:StringEx[] = [];
+        let currentChars:ICharacterInfo[] = [];
+        this.chars.forEach((c,index)=>{
+            if (delimiter.indexOf(c.rawChar)>-1) {
+                if (currentChars.length>0) {
+                    result.push(new StringEx(currentChars));
+                    currentChars = [];
+                }
+            } else {
+                currentChars.push(c);
+            }
+            if (index===this.chars.length-1 && currentChars.length>0) {
+                result.push(new StringEx(currentChars));
+            }
+        });
+        return result;
+    }
+
+    public getAllChars():readonly ICharacterInfo[]{
+        return this.chars;
+    }
+
+    public concat(str:StringEx):this {
+        this.chars.push(...str.chars);
+        return this;
+    }
+
+    public asRaw():string{
+        return this.chars.map(it=>it.rawChar).join('');
+    }
+
+    public setBold(val:boolean){
+        this.chars.forEach(c=>c.bold=val);
+    }
+
+    public setItalic(val:boolean){
+        this.chars.forEach(c=>c.italic=val);
+    }
+
+    public setColor(col:IColor){
+        this.chars.forEach(c=>c.color=col);
+    }
+
 }
 
 export const stringToCharacters = (str:string):ICharacterInfo[]=> {
@@ -23,3 +81,5 @@ export const stringToCharacters = (str:string):ICharacterInfo[]=> {
     }
     return output;
 }
+
+
