@@ -12,29 +12,16 @@ interface ITextFragment {
 
 export class RichTextField extends ScrollableTextField {
 
-    private currStr:StringEx;
-
     public setRichText(node:VirtualNode):void{
         const fragments:ITextFragment[] = [];
         this.traverseNode(node,fragments);
-        this.currStr = this.textFragmentToStringEx(fragments);
+        this._textEx = this.textFragmentToStringEx(fragments);
         this.markAsDirty();
     }
 
     public getText(): string {
-        if (this.currStr===undefined) return "";
-        return this.currStr.asRaw();
-    }
-
-    protected _setText():void {
-        this.rowSet.setFont(this.font);
-        this.rowSet.setWordBrake(this.wordBrake);
-        if (this.currStr!==undefined) this.rowSet.setTextFromStringEx(this.currStr);
-        else this.rowSet.setText(this.getText());
-        this.rowSet.setAlignText(this.alignText);
-        this.rowSet.setAlignTextContentHorizontal(this.alignTextContentHorizontal);
-        this.rowSet.setAlignTextContentVertical(this.alignTextContentVertical);
-        this.requestTextRedraw();
+        if (this._textEx===undefined) return super.getText();
+        else return this._textEx.asRaw();
     }
 
     private traverseNode(node:VirtualNode,fragments:ITextFragment[]):void {

@@ -67,11 +67,6 @@ export class TextRowSet extends NullGameObject {
         this.wordBrake = wordBrake;
     }
 
-    public setText(text:string){
-        this.rawText = text;
-        const stringEx:StringEx = StringEx.fromRaw(text);
-        this.setTextFromStringEx(stringEx);
-    }
 
     public setAlignTextContentHorizontal(align:AlignTextContentHorizontal):void {
         if (this.children.length===0) return;
@@ -130,7 +125,7 @@ export class TextRowSet extends NullGameObject {
         return this.wordBrake;
     }
 
-    public setTextFromStringEx(stringEx:StringEx){
+    public setText(stringEx:StringEx){
         this.clear();
         switch (this.wordBrake) {
             case WordBrake.PREDEFINED_BREAK_LONG_WORDS:

@@ -16,6 +16,7 @@ import {FrameSkipper} from "@engine/misc/frameSkipper";
 import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
+import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/characterUtil";
 
 
 export class TextField extends Container {
@@ -26,18 +27,19 @@ export class TextField extends Container {
     protected rowSet:TextRowSet;
     protected rowSetContainer:MarkableNullGameObject = new MarkableNullGameObject(this.game);
 
-    protected alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;
-    protected alignTextContentHorizontal:AlignTextContentHorizontal = AlignTextContentHorizontal.LEFT;
-    protected alignText:AlignText = AlignText.LEFT;
-    protected wordBrake:WordBrake = WordBrake.FIT;
+    private alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;
+    private alignTextContentHorizontal:AlignTextContentHorizontal = AlignTextContentHorizontal.LEFT;
+    private alignText:AlignText = AlignText.LEFT;
+    private wordBrake:WordBrake = WordBrake.FIT;
 
     private cacheSurface:DrawingSurface;
     private _text:string = '';
+    protected _textEx:StringEx;
     private frameSkipper:FrameSkipper = new FrameSkipper(this.game);
 
     private needTextRedraw:boolean = false;
 
-    constructor(game:Game,protected font:Font) {
+    constructor(game:Game,private font:Font) {
         super(game);
         this.appendChild(this.rowSetContainer);
         this.size.setWH(300,100);
@@ -48,6 +50,7 @@ export class TextField extends Container {
         const strText = text.toString();
         if (strText===this._text) return;
         this._text = strText;
+        this._textEx = StringEx.fromRaw(strText);
         this.markAsDirty();
     }
 
@@ -143,7 +146,7 @@ export class TextField extends Container {
     protected _setText():void {
         this.rowSet.setFont(this.font);
         this.rowSet.setWordBrake(this.wordBrake);
-        this.rowSet.setText(this._text);
+        this.rowSet.setText(this._textEx);
         this.rowSet.setAlignText(this.alignText);
         this.rowSet.setAlignTextContentHorizontal(this.alignTextContentHorizontal);
         this.rowSet.setAlignTextContentVertical(this.alignTextContentVertical);
