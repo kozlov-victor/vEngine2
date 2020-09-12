@@ -4,7 +4,7 @@ import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 
-const game = new Game();
+const game = new Game({width:800,height:480});
 const mainScene:Scene = new MainScene(game);
 game.setRenderer(WebGlRenderer);
 game.addControl(MouseControl);

@@ -184,6 +184,13 @@ const CYR_CHARS:string =
     'ОоПпРрСсТтУуФфХхЦцЧчШшЩщ' +
     'ЫыЬьЪъЭэЮюЯя'
 
+// AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz
+// 1234567890
+// "!`?'.,;:()[]{}<>|/@^$-%+=#_&~*
+// АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНн
+// ОоПпРрСсТтУуФфХхЦцЧчШшЩщ
+// ЫыЬьЪъЭэЮюЯя
+
 export class Font implements IResource<ITexture> {
 
     public static async createSystemFont(game:Game):Promise<Font>{
