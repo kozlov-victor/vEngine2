@@ -6,7 +6,7 @@ import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
 import {DebugError} from "@engine/debug/debugError";
-import {IDocumentDescription} from "@engine/misc/xmlUtils";
+import {Document} from "@engine/misc/xmlUtils";
 import {Font, FontFactory} from "@engine/renderable/impl/general/font";
 import createImageFromData = ResourceUtil.createImageFromData;
 import createFontFromAtlas = FontFactory.createFontFromAtlas;
@@ -159,7 +159,7 @@ export class ResourceLoader {
         return new Font(this.game, {fontSize, fontFamily, extraChars});
     }
 
-    public loadFontFromAtlas(atlasUrl:string|IURLRequest,doc:IDocumentDescription):ResourceLink<Font>{
+    public loadFontFromAtlas(atlasUrl:string|IURLRequest,doc:Document):ResourceLink<Font>{
         this.validateState();
         const resourceLink:ResourceLink<ITexture> = this.loadTexture(atlasUrl);
         const result:ResourceLink<Font> = ResourceLink.create(undefined!);

@@ -1,12 +1,10 @@
 import {Game} from "@engine/core/game";
 import {IRectJSON} from "@engine/geometry/rect";
-import {Color} from "@engine/renderer/common/color";
-import {IResource, IRevalidatable} from "@engine/core/declarations";
-import {DebugError} from "@engine/debug/debugError";
+import {IResource} from "@engine/core/declarations";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Document, Element, IDocumentDescription} from "@engine/misc/xmlUtils";
+import {Document, Element} from "@engine/misc/xmlUtils";
 
 export interface IRectViewJSON extends IRectJSON {
     destOffsetX:number;
@@ -112,9 +110,7 @@ export namespace FontFactory {
         return cnv.toDataURL();
     };
 
-    export const createFontFromAtlas = (game:Game,resourceLink:ResourceLink<ITexture>,docDesc:IDocumentDescription):Font=>{
-
-        const doc:Document = Document.create(docDesc);
+    export const createFontFromAtlas = (game:Game,resourceLink:ResourceLink<ITexture>,doc:Document):Font=>{
 
         const [up,right,down,left] = doc.querySelector('info').getAttribute('padding').split(',').map(it=>+it);
         const [spacingHorizontal, spacingVertical] = doc.querySelector('info').getAttribute('spacing').split(',').map(it=>+it);

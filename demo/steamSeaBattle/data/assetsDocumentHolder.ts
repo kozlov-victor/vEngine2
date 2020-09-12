@@ -6,7 +6,7 @@ export abstract class AssetsDocumentHolder {
 
     public static getDocument():Document {
         if (AssetsDocumentHolder.document===undefined) {
-            AssetsDocumentHolder.document = Document.create(docDesc);
+            AssetsDocumentHolder.document = docDesc;
         }
         return AssetsDocumentHolder.document;
     }

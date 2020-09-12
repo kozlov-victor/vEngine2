@@ -27,7 +27,10 @@ const parseToDocument = (source)=>{
 
 module.exports = function(content) {
     const document = parseToDocument(content);
-    return `module.exports = ${JSON.stringify(document)}`;
+    return `
+        var document = require('@engine/misc/xmlUtils').Document;
+        module.exports = document.create(${JSON.stringify(document)});
+    `;
 };
 
 
