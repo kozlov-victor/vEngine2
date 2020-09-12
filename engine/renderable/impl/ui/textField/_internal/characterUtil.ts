@@ -63,7 +63,7 @@ export class StringEx {
 
 }
 
-export const stringToCharacters = (str:string):ICharacterInfo[]=> {
+const stringToCharacters = (str:string):ICharacterInfo[]=> {
     let index:number = 0;
     const length:number = str.length;
     const output:ICharacterInfo[] = [];
