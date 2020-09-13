@@ -140,7 +140,7 @@ module.exports = async (env={})=>{
                     ]
                 },
                 {
-                    test: /\.ts$/,
+                    test: /\.tsx?$/,
                     enforce: 'pre',
                     use: [
                         {

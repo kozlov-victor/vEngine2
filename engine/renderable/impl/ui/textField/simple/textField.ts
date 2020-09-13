@@ -135,6 +135,22 @@ export class TextField extends Container {
         this.requestTextRedraw();
     }
 
+    protected findCharImageByIndex(i:number):CharacterImage{
+        let cnt:number = 0;
+        for (let m = 0; m < this.rowSet.children.length; m++) {
+            const row:TextRow = this.rowSet.children[m];
+            for (let j = 0; j < row.children.length; j++) {
+                const child:Word = row.children[j];
+                for (let k = 0; k < child.children.length; k++) {
+                    const char:CharacterImage = child.children[k];
+                    if (cnt===i) return char;
+                    cnt++;
+                }
+            }
+        }
+        return undefined!;
+    }
+
     protected requestTextRedraw():void {
         this.needTextRedraw = true;
     }
@@ -151,22 +167,6 @@ export class TextField extends Container {
         this.rowSet.setAlignTextContentHorizontal(this.alignTextContentHorizontal);
         this.rowSet.setAlignTextContentVertical(this.alignTextContentVertical);
         this.requestTextRedraw();
-    }
-
-    private findCharImageByIndex(i:number):CharacterImage{
-        let cnt:number = 0;
-        for (let m = 0; m < this.rowSet.children.length; m++) {
-            const row:TextRow = this.rowSet.children[m];
-            for (let j = 0; j < row.children.length; j++) {
-                const child:Word = row.children[j];
-                for (let k = 0; k < child.children.length; k++) {
-                    const char:CharacterImage = child.children[k];
-                    if (cnt===i) return char;
-                    cnt++;
-                }
-            }
-        }
-        return undefined!;
     }
 
     private redrawText():void {

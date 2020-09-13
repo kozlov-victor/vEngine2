@@ -8,7 +8,7 @@ const decoratorNamesToProcess = [
 ];
 
 module.exports = function(content) {
-    const ast = tsquery.ast(content);
+    const ast = tsquery.ast(content,undefined,2); // tsx
 
     const allClasses = tsquery(ast, `ClassDeclaration`);
     let modified = false;
