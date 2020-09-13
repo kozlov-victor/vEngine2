@@ -16,7 +16,7 @@ import {FrameSkipper} from "@engine/misc/frameSkipper";
 import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
-import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/characterUtil";
+import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 
 
 export class TextField extends Container {

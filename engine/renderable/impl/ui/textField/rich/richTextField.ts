@@ -1,7 +1,7 @@
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {Optional} from "@engine/core/declarations";
-import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/characterUtil";
+import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 
 interface ITextFragment {
     italic?: boolean;
@@ -85,7 +85,7 @@ export class RichTextField extends ScrollableTextField {
                 s.setUnderlined(isUnderlined);
                 s.setLinedThrough(isLinedThrough);
                 if (currColor!==undefined) s.setColor(currColor);
-                result.concat(s);
+                result.append(s);
             }
         });
         return result;

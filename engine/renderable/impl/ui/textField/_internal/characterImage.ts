@@ -3,7 +3,7 @@ import {Game} from "@engine/core/game";
 import {Font, IRectViewJSON} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
 import {Color} from "@engine/renderer/common/color";
-import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/characterUtil";
+import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 export class CharacterImage extends Image {

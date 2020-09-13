@@ -3,7 +3,7 @@ import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 import {Color} from "@engine/renderer/common/color";
-import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/characterUtil";
+import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 
 export class Word extends NullGameObject {
 

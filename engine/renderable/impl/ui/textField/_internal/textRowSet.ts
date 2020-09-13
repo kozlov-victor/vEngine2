@@ -5,7 +5,7 @@ import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {Color} from "@engine/renderer/common/color";
 import {ISize} from "@engine/geometry/size";
-import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/characterUtil";
+import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 import {
     AlignText,
     AlignTextContentHorizontal,
