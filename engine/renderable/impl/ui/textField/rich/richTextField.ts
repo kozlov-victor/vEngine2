@@ -8,6 +8,8 @@ interface ITextFragment {
     bold?: boolean;
     color?: IColor|false;
     text?: string;
+    linedThrough?: boolean;
+    underlined? :boolean;
 }
 
 export class RichTextField extends ScrollableTextField {
@@ -35,6 +37,8 @@ export class RichTextField extends ScrollableTextField {
             text: node.text,
             italic: node.tagName==='i'?true:undefined,
             bold: node.tagName==='b'?true:undefined,
+            underlined: node.tagName==='u'?true:undefined,
+            linedThrough: node.tagName==='s'?true:undefined,
             color,
         });
         if (node.children) node.children.forEach(c=>{
@@ -44,6 +48,8 @@ export class RichTextField extends ScrollableTextField {
             text: undefined,
             italic: node.tagName==='i'?false:undefined,
             bold: node.tagName==='b'?false:undefined,
+            underlined: node.tagName==='u'?false:undefined,
+            linedThrough: node.tagName==='s'?false:undefined,
             color:color!==undefined?false:undefined,
         });
     }
@@ -53,10 +59,14 @@ export class RichTextField extends ScrollableTextField {
         const result:StringEx = StringEx.fromRaw("");
         let isBold:boolean = false;
         let isItalic:boolean = false;
+        let isUnderlined:boolean = false;
+        let isLinedThrough:boolean = false;
         let currColor:IColor|undefined;
         fragments.forEach(f=>{
             if (f.bold!==undefined) isBold = f.bold;
             if (f.italic!==undefined) isItalic = f.italic;
+            if (f.underlined!==undefined) isUnderlined = f.underlined;
+            if (f.linedThrough!==undefined) isLinedThrough = f.linedThrough;
             if (f.color!==undefined) {
                 if ((f.color as IColor).r!==undefined) {
                     currColor = f.color as IColor;
@@ -68,9 +78,12 @@ export class RichTextField extends ScrollableTextField {
                 }
             }
             if (f.text!==undefined) {
-                const s:StringEx = StringEx.fromRaw(' '+f.text);
+                const prefix:string = (result.getAllChars()[result.getAllChars().length-1]?.rawChar===' ')?'':' '
+                const s:StringEx = StringEx.fromRaw(prefix+f.text);
                 s.setBold(isBold);
                 s.setItalic(isItalic);
+                s.setUnderlined(isUnderlined);
+                s.setLinedThrough(isLinedThrough);
                 if (currColor!==undefined) s.setColor(currColor);
                 result.concat(s);
             }

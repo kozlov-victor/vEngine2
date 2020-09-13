@@ -4,12 +4,14 @@ import {Font, IRectViewJSON} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
 import {Color} from "@engine/renderer/common/color";
 import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/characterUtil";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 export class CharacterImage extends Image {
 
     private colorCloned:boolean = false;
+    private textDecoratorLine:Rectangle;
 
-    constructor(game:Game,font:Font,private characterInfo:ICharacterInfo,color:Color) {
+    constructor(game:Game,private font:Font,private characterInfo:ICharacterInfo,color:Color) {
         super(game);
         const [padUp,padRight,padDown,padLeft] = font.fontContext.padding;
         let charRect:IRectViewJSON = font.fontContext.symbols[characterInfo.rawChar] || font.fontContext.symbols['?'];
@@ -43,7 +45,8 @@ export class CharacterImage extends Image {
         if (characterInfo.italic) this.setItalic(true);
         if (characterInfo.bold) this.setBold(true);
         if (characterInfo.color) this.setColor(characterInfo.color);
-
+        if (characterInfo.underlined) this.setUnderLined(true);
+        if (characterInfo.linedThrough) this.setLinedThrough(true);
     }
 
     public setItalic(val:boolean):void {
@@ -62,6 +65,38 @@ export class CharacterImage extends Image {
             this.colorCloned = true;
         }
         this.color.set(color);
+        if (this.textDecoratorLine!==undefined) this.textDecoratorLine.color.set(this.color);
+    }
+
+    public setUnderLined(val:boolean):void {
+        if (val) {
+            this.createTextDecoratorLineIfNotExists();
+            this.textDecoratorLine.pos.setXY(0,this.size.height - this.textDecoratorLine.size.height - this.font.fontContext.padding[2]);
+            this.textDecoratorLine.visible = true;
+        } else {
+            if (this.textDecoratorLine) this.textDecoratorLine.visible = false;
+        }
+    }
+
+    public setLinedThrough(val:boolean):void {
+        if (val) {
+            this.createTextDecoratorLineIfNotExists();
+            this.textDecoratorLine.pos.setXY(0,(this.size.height - this.textDecoratorLine.size.height)/2);
+            this.textDecoratorLine.visible = true;
+        } else {
+            if (this.textDecoratorLine) this.textDecoratorLine.visible = false;
+        }
+    }
+
+    private createTextDecoratorLineIfNotExists():void {
+        if (this.textDecoratorLine===undefined) {
+            const textDecoratorLine = new Rectangle(this.game);
+            textDecoratorLine.size.setWH(this.size.width+this.font.fontContext.spacing[0]*2,this.font.fontContext.lineHeight/14);
+            textDecoratorLine.lineWidth = 0;
+            this.appendChild(textDecoratorLine);
+            this.textDecoratorLine = textDecoratorLine;
+        }
+        this.textDecoratorLine.fillColor.set(this.color);
     }
 
 }

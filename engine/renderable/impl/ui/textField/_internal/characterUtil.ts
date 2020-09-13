@@ -4,6 +4,8 @@ export interface ICharacterInfo {
     rawChar:string;
     isEmoji:boolean;
     bold?:boolean;
+    underlined?: boolean;
+    linedThrough?: boolean;
     italic?:boolean;
     color?:IColor;
 }
@@ -49,16 +51,24 @@ export class StringEx {
         return this.chars.map(it=>it.rawChar).join('');
     }
 
-    public setBold(val:boolean){
+    public setBold(val:boolean):void{
         this.chars.forEach(c=>c.bold=val);
     }
 
-    public setItalic(val:boolean){
+    public setItalic(val:boolean):void{
         this.chars.forEach(c=>c.italic=val);
     }
 
-    public setColor(col:IColor){
+    public setColor(col:IColor):void{
         this.chars.forEach(c=>c.color=col);
+    }
+
+    public setUnderlined(val:boolean):void {
+        this.chars.forEach(c=>c.underlined=val);
+    }
+
+    public setLinedThrough(val:boolean):void {
+        this.chars.forEach(c=>c.linedThrough=val);
     }
 
 }
