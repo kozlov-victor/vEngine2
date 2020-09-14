@@ -71,7 +71,7 @@ export class CharacterImage extends Image {
     public setUnderLined(val:boolean):void {
         if (val) {
             this.createTextDecoratorLineIfNotExists();
-            this.textDecoratorLine.pos.setXY(0,this.size.height - this.textDecoratorLine.size.height - this.font.fontContext.padding[2]);
+            this.textDecoratorLine.pos.setXY(1,this.size.height - this.textDecoratorLine.size.height - this.font.fontContext.padding[2]);
             this.textDecoratorLine.visible = true;
         } else {
             if (this.textDecoratorLine) this.textDecoratorLine.visible = false;
