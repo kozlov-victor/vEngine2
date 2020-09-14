@@ -2,6 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {fontLoader} from "../fontTtf/FontLoader";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import loadFont = fontLoader.loadFont;
 
 
@@ -25,8 +26,8 @@ export class MainScene extends Scene {
         this.tf = tf;
         this.tf.setFont(this.fnt);
         this.tf.textColor.setRGB(122,23,44);
+        this.tf.setWordBrake(WordBrake.PREDEFINED);
         this.tf.setText("zx spectrum font\nКирилица");
-
         this.appendChild(this.tf);
 
     }

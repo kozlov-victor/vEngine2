@@ -91,7 +91,8 @@ export class CharacterImage extends Image {
     private createTextDecoratorLineIfNotExists():void {
         if (this.textDecoratorLine===undefined) {
             const textDecoratorLine = new Rectangle(this.game);
-            textDecoratorLine.size.setWH(this.size.width+this.font.fontContext.spacing[0]*2,this.font.fontContext.lineHeight/14);
+            const height:number = ~~(this.font.fontContext.lineHeight/12) || 1;
+            textDecoratorLine.size.setWH(this.size.width+this.font.fontContext.spacing[0]*2,height);
             textDecoratorLine.lineWidth = 0;
             this.appendChild(textDecoratorLine);
             this.textDecoratorLine = textDecoratorLine;
