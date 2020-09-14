@@ -122,7 +122,6 @@ export namespace FontFactory {
     };
 
     export const createFontFromAtlas = (game:Game,resourceLink:ResourceLink<ITexture>,doc:Document):Font=>{
-
         const [up,right,down,left] = doc.querySelector('info').getAttribute('padding').split(',').map(it=>+it);
         const [spacingHorizontal, spacingVertical] = doc.querySelector('info').getAttribute('spacing').split(',').map(it=>+it);
         const lineHeight:number = +(doc.querySelector('common').getAttribute('lineHeight'));

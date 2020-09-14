@@ -47,7 +47,9 @@ module.exports = function(content) {
                     const statement = tsquery(tstemplate.compile(`
                     class Template {
                         public onPreloading(){
-                            this.<%=fieldName%> = this.resourceLoader.load${decoratorName}(<%=args%>);
+                            this.resourceLoader.addNextTask(()=>{
+                               this.<%=fieldName%> = this.resourceLoader.load${decoratorName}(<%=args%>);
+                            });
                         }
                     }
                     `)({
