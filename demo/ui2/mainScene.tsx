@@ -87,7 +87,7 @@ export class MainScene extends Scene {
         tf2.setText("-==no data==-");
         this.appendChild(tf2);
         tf2.textColor.setRGB(22,44,45);
-        let cnt = 0;
+        let cnt:number = 0;
         const redColor:IColor = {r:255,g:100,b:100};
         const greenColor:IColor = {r:100,g:200,b:100};
         btn.on(MOUSE_EVENTS.click, e=>{
