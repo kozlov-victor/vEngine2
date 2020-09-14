@@ -7,7 +7,7 @@ import {Base64, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
 import {DebugError} from "@engine/debug/debugError";
 import {Document} from "@engine/misc/xmlUtils";
-import {Font, FontFactory} from "@engine/renderable/impl/general/font";
+import {Font, FontFactory, IFontParameters} from "@engine/renderable/impl/general/font";
 import createImageFromData = ResourceUtil.createImageFromData;
 import createFontFromAtlas = FontFactory.createFontFromAtlas;
 
@@ -154,9 +154,9 @@ export class ResourceLoader {
         return link;
     }
 
-    public loadFont(fontFamily:string,fontSize:number,extraChars?:string[]):Font{
+    public loadFont(params:IFontParameters):Font{
         this.validateState();
-        return new Font(this.game, {fontSize, fontFamily, extraChars});
+        return new Font(this.game, params);
     }
 
     public loadFontFromAtlas(atlasUrl:string|IURLRequest,doc:Document):ResourceLink<Font>{

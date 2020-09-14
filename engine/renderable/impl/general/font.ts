@@ -46,7 +46,7 @@ export namespace FontFactory {
         return height;
     };
 
-    export const getFontContext = (standartChars:string[], extraChars:string[],strFont:string, width:number):IFontContext=> {
+    export const getFontContext = (standartChars:readonly string[], extraChars:readonly string[],strFont:string, width:number):IFontContext=> {
 
         const cnv:HTMLCanvasElement = document.createElement('canvas');
         const ctx:CanvasRenderingContext2D = getCtx(cnv);
@@ -167,9 +167,10 @@ export namespace FontFactory {
 export interface IFontParameters {
     fontFamily: string;
     fontSize: number;
-    extraChars:string[];
-    resourceLink:ResourceLink<ITexture>;
-    context:IFontContext;
+    chars?: string[];
+    extraChars?:string[];
+    resourceLink?:ResourceLink<ITexture>;
+    context?:IFontContext;
 }
 
 const DEFAULT_FONT_PARAMS = {
@@ -226,7 +227,8 @@ export class Font implements IResource<ITexture> {
     public readonly type:string = 'Font';
 
     public readonly fontSize:number;
-    public readonly extraChars:string[];
+    public readonly extraChars:Readonly<string[]>;
+    public readonly chars:Readonly<string[]>;
     public readonly fontFamily:string='Monospace';
     public readonly fontContext:Readonly<IFontContext>;
 
@@ -235,6 +237,7 @@ export class Font implements IResource<ITexture> {
     constructor(protected game:Game,params:Partial<IFontParameters> = {}) {
         this.fontFamily = params.fontFamily ?? DEFAULT_FONT_PARAMS.fontFamily;
         this.fontSize = params.fontSize ?? DEFAULT_FONT_PARAMS.fontSize;
+        this.chars = params.chars ?? (LAT_CHARS+STANDART_SYMBOLS+CYR_CHARS).split('')
         this.extraChars = params.extraChars ?? DEFAULT_FONT_PARAMS.extraChars;
 
         if (params.context===undefined) params.context = this.createContext();
@@ -263,7 +266,7 @@ export class Font implements IResource<ITexture> {
 
     private createContext():IFontContext {
         const WIDTH:number = 512;
-        return FontFactory.getFontContext((LAT_CHARS+STANDART_SYMBOLS+CYR_CHARS).split(''),this.extraChars,this.asCss(),WIDTH);
+        return FontFactory.getFontContext(this.chars,this.extraChars,this.asCss(),WIDTH);
     }
 
     private createBitmap():string{

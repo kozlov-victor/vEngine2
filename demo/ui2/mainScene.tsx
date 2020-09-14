@@ -18,7 +18,7 @@ import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactor
 
 export class MainScene extends Scene {
 
-    @Resource.Font('monospace',25)
+    @Resource.Font({fontFamily:'monospace',fontSize:25})
     public fnt!:Font;
 
     public onReady() {

@@ -15,7 +15,7 @@ import {
 
 export class MainScene extends Scene {
 
-    @Resource.Font('monospace',15)
+    @Resource.Font({fontFamily:'monospace',fontSize:15})
     private fnt!:Font;
 
     @Resource.Text('uiLargeText/text.txt')

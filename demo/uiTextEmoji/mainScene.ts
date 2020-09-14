@@ -28,7 +28,7 @@ commodo`;
 
 export class MainScene extends Scene {
 
-    @Resource.Font('monospace',15,['😀','🥰','🖐','🩸','📯'])
+    @Resource.Font({fontFamily:'monospace',fontSize:15,extraChars:['😀','🥰','🖐','🩸','📯']})
     public fnt!:Font;
 
 

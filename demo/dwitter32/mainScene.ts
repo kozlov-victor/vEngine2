@@ -9,7 +9,7 @@ export class MainScene extends Scene {
     private surface:DrawingSurface;
     private renderScene:()=>void = ():void=>{};
 
-    @Resource.Font('monospace',10)
+    @Resource.Font({fontFamily:'monospace',fontSize:10})
     private fnt:Font;
 
     public onReady() {

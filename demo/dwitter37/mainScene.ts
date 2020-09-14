@@ -9,7 +9,7 @@ export class MainScene extends Scene {
     private surface:DrawingSurface;
     private renderScene:()=>void = ():void=>{};
 
-    @Resource.Font('serif',128)
+    @Resource.Font({fontFamily:'serif',fontSize:128})
     private fnt:Font;
 
     public onReady() {

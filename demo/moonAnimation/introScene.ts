@@ -11,7 +11,8 @@ import {Resource} from "@engine/resources/resourceDecorators";
 
 export class IntroScene extends Scene {
 
-    @Resource.Font('monospace',50)
+
+    @Resource.Font({fontFamily:'monospace',fontSize:50})
     private fnt:Font;
 
     public onReady() {

@@ -29,10 +29,10 @@ commodo consequat.`;
 
 export class MainScene extends Scene {
 
-    @Resource.Font('monospace',15)
+    @Resource.Font({fontSize:15,fontFamily:'monospace'})
     private fnt:Font;
 
-    @Resource.Font('Times New Roman',17)
+    @Resource.Font({fontSize:17,fontFamily:'Times New Roman'})
     private fnt2:Font;
 
 

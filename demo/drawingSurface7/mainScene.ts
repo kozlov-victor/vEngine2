@@ -7,7 +7,7 @@ import {Font} from "@engine/renderable/impl/general/font";
 
 export class MainScene extends Scene {
 
-    @Resource.Font('monospace',20)
+    @Resource.Font({fontFamily:'monospace',fontSize:20})
     private fnt:Font;
 
     public onReady() {
