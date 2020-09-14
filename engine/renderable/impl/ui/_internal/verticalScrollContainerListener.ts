@@ -177,7 +177,6 @@ export class VerticalScrollContainerListener {
         }
         //overscoll bottom
         else if (this.offset < this.externalContainer.size.height - this.internalContainer.size.height) {
-            //this.offset = this.externalContainer.size.height - this.internalContainer.size.height;
             this._overScrollFactor = this._OVER_SCROLL_RELEASE_VELOCITY;
             this._scrollVelocity = 0;
             this._deceleration = 0;

@@ -31,6 +31,10 @@ export class StringEx {
         return new StringEx(output);
     }
 
+    public static empty():StringEx {
+        return new StringEx([]);
+    }
+
     constructor(private chars:ICharacterInfo[]) {
     }
 

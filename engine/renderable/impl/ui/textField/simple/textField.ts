@@ -34,7 +34,7 @@ export class TextField extends Container {
 
     private cacheSurface:DrawingSurface;
     private _text:string = '';
-    protected _textEx:StringEx;
+    protected _textEx:StringEx = StringEx.empty();
     private frameSkipper:FrameSkipper = new FrameSkipper(this.game);
 
     private needTextRedraw:boolean = false;

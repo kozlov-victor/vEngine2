@@ -24,7 +24,7 @@ export class DebugLayer extends Layer {
             textField.size.set(this.game.size);
             textField.setPadding(5);
             textField.textColor.setRGB(0);
-            this.numOfTextRows = ~~(textField.getClientRect().height / this.font.fontContext.symbols[' '].height);
+            this.numOfTextRows = ~~(textField.getClientRect().height / this.font.fontContext.lineHeight);
             textField.setWordBrake(WordBrake.PREDEFINED);
             this.appendChild(textField);
             this.textField = textField;

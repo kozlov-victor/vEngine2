@@ -13,6 +13,8 @@ import {
     AlignTextContentHorizontal,
     AlignTextContentVertical, WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
+import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 
 export class MainScene extends Scene {
 
@@ -79,17 +81,23 @@ export class MainScene extends Scene {
         btn.textColor.setRGB(222,144,255);
         this.appendChild(btn);
 
-        const tf2 = new TextField(this.game,this.fnt);
-        tf2.size.setWH(200,40);
+        const tf2 = new RichTextField(this.game,this.fnt);
+        tf2.size.setWH(600,40);
         tf2.pos.setXY(150,430);
         tf2.setText("-==no data==-");
         this.appendChild(tf2);
         tf2.textColor.setRGB(22,44,45);
         let cnt = 0;
+        const redColor:IColor = {r:255,g:100,b:100};
+        const greenColor:IColor = {r:100,g:200,b:100};
         btn.on(MOUSE_EVENTS.click, e=>{
             if (checkBox.checked) cnt+=1;
             else cnt-=1;
-            tf2.setText(cnt);
+            tf2.setRichText(
+                <div>
+                    clicked <font color={cnt>0?greenColor:redColor}><u>{cnt}</u></font> times
+                </div>
+            );
         });
 
     }

@@ -29,7 +29,7 @@ export class VerticalScrollBar extends MarkableNullGameObject {
     private _maxValue: number = 0;
     private _value: number = 0;
 
-    private _enabled: boolean = false;
+    private _enabled: boolean = true;
     private readonly handler: Shape;
     private readonly background: Shape;
 
@@ -73,6 +73,8 @@ export class VerticalScrollBar extends MarkableNullGameObject {
         if (this._maxValue===0) return;
         if (this._value > this._maxValue) this._value = this._maxValue;
         this.handler.size.height = this.size.height * this.size.height / this._maxValue;
+        this.visible = this._enabled && this.handler.size.height < this.size.height;
+        if (!this.visible) return;
         this.handler.pos.y =
             this.size.height * this._value / this._maxValue;
         if (this.handler.pos.y<0) {
