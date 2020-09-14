@@ -34,13 +34,13 @@ const getCtx = (cnv:HTMLCanvasElement):CanvasRenderingContext2D=>{
 
 export namespace FontFactory {
 
-    const SYMBOL_PADDING:number = 4;
+    const SYMBOL_PADDING = 4 as const;
 
     const getFontHeight = (strFont:string):number=> {
         const parent:HTMLSpanElement = document.createElement("span");
-        parent.appendChild(document.createTextNode("height!ДдЙЇ"));
+        parent.appendChild(document.createTextNode("height"));
         document.body.appendChild(parent);
-        parent.style.cssText = `font: ${strFont}; white-space: nowrap; display: inline-block;`;
+        parent.style.cssText = `font: ${strFont}; white-space: nowrap; display: inline-block;line-height:1em;`;
         const height:number = parent.offsetHeight;
         document.body.removeChild(parent);
         return height;
@@ -65,13 +65,14 @@ export namespace FontFactory {
                 currY += rowHeight;
                 cnvHeight +=rowHeight;
             }
-            const symbolRect:IRectViewJSON = {} as IRectViewJSON;
-            symbolRect.x = ~~currX;
-            symbolRect.y = ~~currY;
-            symbolRect.width = ~~textWidth;
-            symbolRect.height = rowHeight;
-            symbolRect.destOffsetX = symbolRect.destOffsetY = 0;
-            symbols[char] = symbolRect;
+            symbols[char] = {
+                x: ~~currX,
+                y: ~~currY,
+                width: ~~textWidth,
+                height: rowHeight,
+                destOffsetX: 0,
+                destOffsetY: 0,
+            };
             currX += textWidth;
         }
 
@@ -93,7 +94,7 @@ export namespace FontFactory {
         cnv.height = fontContext.height;
         const ctx:CanvasRenderingContext2D = getCtx(cnv);
         ctx.font = strFont;
-        ctx.textBaseline = "top";
+        ctx.textBaseline = 'top';
         ctx.imageSmoothingEnabled = false;
         (ctx as IPrefixedContext).mozImageSmoothingEnabled = false;
         (ctx  as IPrefixedContext).webkitImageSmoothingEnabled = false;
@@ -105,7 +106,17 @@ export namespace FontFactory {
         const symbols:{[key:string]:IRectJSON} = fontContext.symbols;
         Object.keys(symbols).forEach((symbol:string)=>{
             const rect:IRectJSON = symbols[symbol];
-            ctx.fillText(symbol, rect.x + SYMBOL_PADDING, rect.y + SYMBOL_PADDING);
+            ctx.fillText(symbol,
+                rect.x + SYMBOL_PADDING,
+                rect.y + SYMBOL_PADDING
+            );
+            //ctx.fillStyle = 'black';
+            // ctx.strokeRect(
+            //     rect.x + SYMBOL_PADDING,
+            //     rect.y + SYMBOL_PADDING,
+            //     rect.width - SYMBOL_PADDING,
+            //     rect.height - SYMBOL_PADDING);
+            // ctx.fillStyle = '#fff';
         });
         return cnv.toDataURL();
     };

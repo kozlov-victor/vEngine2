@@ -25,7 +25,6 @@ export class TextRowSet extends NullGameObject {
     private alignTextContentHorizontal:AlignTextContentHorizontal = AlignTextContentHorizontal.LEFT;
     private alignText:AlignText = AlignText.LEFT;
     private wordBrake:WordBrake = WordBrake.FIT;
-    private rawText:string;
 
     constructor(
         game:Game,

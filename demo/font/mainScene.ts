@@ -26,20 +26,20 @@ export class MainScene extends Scene {
         const tf:TextField = new TextField(this.game,this.fnt2);
         tf.pos.setY(23);
         tf.setText("no clicks");
-        tf.size.setWH(200,30);
+        tf.setAutoSize(true);
         tf.textColor.setRGB(0,220,12);
         this.appendChild(tf);
 
         const btn:Button = new Button(this.game,this.fnt);
         btn.setText("click!");
-        btn.pos.setXY(10,10);
+        btn.pos.setXY(10,110);
         btn.textColor.setRGB(255,0,0);
         const bg:Rectangle = new Rectangle(this.game);
         bg.borderRadius = 15;
         bg.fillColor = Color.RGB(0,120,1);
         btn.setBackground(bg);
-        btn.setPadding(60);
-
+        btn.setPadding(0);
+        btn.setAutoSize(true);
         let cnt:number = 0;
 
         btn.on(MOUSE_EVENTS.click, (e:IObjectMouseEvent)=>{

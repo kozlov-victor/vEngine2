@@ -10,6 +10,11 @@ export  class MarkableNullGameObject extends NullGameObject {
         this.size.addOnChangeListener(()=>this.markAsDirty());
     }
 
+    revalidate() {
+        this._dirty = false;
+        super.revalidate();
+    }
+
     public markAsDirty():void {
         this._dirty = true;
     }
@@ -24,7 +29,6 @@ export  class MarkableNullGameObject extends NullGameObject {
             this.revalidate();
             this.onCleared();
         }
-        this._dirty = false;
     }
 
     protected onCleared():void{}

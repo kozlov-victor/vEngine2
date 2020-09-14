@@ -26,6 +26,7 @@ export class TextField extends Container {
 
     protected rowSet:TextRowSet;
     protected rowSetContainer:MarkableNullGameObject = new MarkableNullGameObject(this.game);
+    protected _textEx:StringEx = StringEx.empty();
 
     private alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;
     private alignTextContentHorizontal:AlignTextContentHorizontal = AlignTextContentHorizontal.LEFT;
@@ -34,8 +35,9 @@ export class TextField extends Container {
 
     private cacheSurface:DrawingSurface;
     private _text:string = '';
-    protected _textEx:StringEx = StringEx.empty();
     private frameSkipper:FrameSkipper = new FrameSkipper(this.game);
+    private _autosize:boolean = false;
+    private measurer:TextRowSet;
 
     private needTextRedraw:boolean = false;
 
@@ -54,10 +56,16 @@ export class TextField extends Container {
         this.markAsDirty();
     }
 
+    public setAutoSize(val:boolean):void {
+        this._autosize = val;
+        this.markAsDirty();
+    }
+
     revalidate() {
-        if (DEBUG && (this.size.width===0 || this.size.height===0)) {
+        if (DEBUG && !this._autosize && (this.size.width===0 || this.size.height===0)) {
             throw new DebugError(`can not setText: TextField size.width and/or size.height is not defined`);
         }
+        if (this._autosize) this.calculateAutoSize();
         super.revalidate();
         let rectIsDirty:boolean = false;
         const clientRect:Readonly<IRectJSON> = this.getClientRect();
@@ -160,13 +168,27 @@ export class TextField extends Container {
     }
 
     protected _setText():void {
-        this.rowSet.setFont(this.font);
-        this.rowSet.setWordBrake(this.wordBrake);
-        this.rowSet.setText(this._textEx);
-        this.rowSet.setAlignText(this.alignText);
-        this.rowSet.setAlignTextContentHorizontal(this.alignTextContentHorizontal);
-        this.rowSet.setAlignTextContentVertical(this.alignTextContentVertical);
+        this.passPropertiesToRowSet(this.rowSet);
         this.requestTextRedraw();
+    }
+
+    private calculateAutoSize(){
+        if (this.measurer===undefined) this.measurer = new TextRowSet(this.game,this.font,{width:Infinity,height:Infinity},Color.NONE);
+        this.passPropertiesToRowSet(this.measurer);
+        this.measurer.setText(this._textEx);
+        this.size.setWH(
+            this.measurer.size.width + this.marginLeft + this.paddingLeft + this.marginRight + this.paddingRight,
+            this.measurer.size.height + this.marginTop + this.paddingTop + this.marginBottom + this.paddingBottom,
+        )
+    }
+
+    private passPropertiesToRowSet(rowSet:TextRowSet):void{
+        rowSet.setFont(this.font);
+        rowSet.setWordBrake(this.wordBrake);
+        rowSet.setText(this._textEx);
+        rowSet.setAlignText(this.alignText);
+        rowSet.setAlignTextContentHorizontal(this.alignTextContentHorizontal);
+        rowSet.setAlignTextContentVertical(this.alignTextContentVertical);
     }
 
     private redrawText():void {

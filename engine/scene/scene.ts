@@ -120,7 +120,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
             modelOrLayer.setScene(this);
             this._layers.push(modelOrLayer as Layer);
         } else {
-            modelOrLayer.revalidate();
             this.getDefaultLayer().appendChild(modelOrLayer as RenderableModel);
         }
 

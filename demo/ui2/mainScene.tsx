@@ -82,7 +82,7 @@ export class MainScene extends Scene {
         this.appendChild(btn);
 
         const tf2 = new RichTextField(this.game,this.fnt);
-        tf2.size.setWH(600,40);
+        tf2.setAutoSize(true);
         tf2.pos.setXY(150,430);
         tf2.setText("-==no data==-");
         this.appendChild(tf2);
