@@ -58,6 +58,14 @@ const showInfoWindow = (text)=>{
    showWindow(text,colors.bg.Blue,colors.fg.Cyan);
 };
 
+const showTable = (arr)=>{
+    let res = '';
+    const maxLengthArr = [];
+    arr.forEach((rowArr,i)=>{
+       const maxColLength = Math.max();
+    });
+};
+
 const showErrorWindow = (text)=>{
     showWindow(text,colors.bg.Magenta,colors.fg.White);
 };

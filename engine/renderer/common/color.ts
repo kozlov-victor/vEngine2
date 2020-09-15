@@ -42,6 +42,10 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         return new Color(r,g,b,a);
     }
 
+    public static from(col:IColor):Color {
+        return new Color(col.r,col.g,col.b,col.a);
+    }
+
     public static fromRGBNumeric(col:number):Color {
         const r:byte = (col & 0xFF_00_00)>>(4*4) as byte;
         const g:byte = (col & 0x00_FF_00)>>(4*2) as byte;
