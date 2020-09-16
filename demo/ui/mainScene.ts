@@ -3,7 +3,7 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
-import {CheckBox} from "@engine/renderable/impl/ui/checkBox";
+import {CheckBox} from "@engine/renderable/impl/checkBox/checkBox";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {Button} from "@engine/renderable/impl/ui/button/button";
 import {Resource} from "@engine/resources/resourceDecorators";
@@ -13,6 +13,7 @@ import {
     AlignTextContentHorizontal,
     AlignTextContentVertical
 } from "@engine/renderable/impl/ui/textField/textAlign";
+import {RadioButton} from "@engine/renderable/impl/checkBox/radioButton";
 
 const text:string=
 `Lorem ipsum dolor sit amet,\t\n\r
@@ -63,6 +64,10 @@ export class MainScene extends Scene {
             else tf.setFont(this.fnt);
         })
         this.appendChild(chbox);
+
+        const radioBtn:RadioButton = new RadioButton(this.game);
+        radioBtn.pos.setXY(100,350);
+        this.appendChild(radioBtn);
 
         const btn:Button = new Button(this.game,this.fnt);
         btn.setText("click!");

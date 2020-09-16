@@ -298,7 +298,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.prepareShapeUniformInfo(ellipse);
 
         const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);
-        sd.setUniform(sd.u_lineWidth,Math.min(ellipse.lineWidth/maxR,1));
         if (maxR===ellipse.radiusX) {
             sd.setUniform(sd.u_rx,0.5);
             sd.setUniform(sd.u_ry,ellipse.radiusY/ellipse.radiusX*0.5);
