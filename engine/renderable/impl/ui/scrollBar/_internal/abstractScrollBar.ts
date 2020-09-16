@@ -1,12 +1,16 @@
-import {Game} from "@engine/core/game";
-import {Color} from "@engine/renderer/common/color";
 import {Shape} from "@engine/renderable/abstract/shape";
+import {Game} from "@engine/core/game";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Color} from "@engine/renderer/common/color";
 import {MarkableNullGameObject} from "@engine/renderable/impl/ui/textField/_internal/markableNullGameObject";
+import {
+    assignPos,
+    assignSize,
+    Direction, getOppositeDirection, getPos,
+    getSize
+} from "@engine/renderable/impl/ui/scrollBar/_internal/sideHelperFunctions";
 
-export class VerticalScrollBar extends MarkableNullGameObject {
-
-    public readonly type:string = 'VerticalScrollBar';
+export abstract class AbstractScrollBar extends MarkableNullGameObject{
 
     get value(): number {
         return this._value;
@@ -26,13 +30,6 @@ export class VerticalScrollBar extends MarkableNullGameObject {
         this.markAsDirty();
     }
 
-    private _maxValue: number = 0;
-    private _value: number = 0;
-
-    private _enabled: boolean = true;
-    private readonly handler: Shape;
-    private readonly background: Shape;
-
     get enabled(): boolean {
         return this._enabled;
     }
@@ -41,6 +38,15 @@ export class VerticalScrollBar extends MarkableNullGameObject {
         this._enabled = value;
         this.visible = value;
     }
+
+    protected abstract getDirection():Direction;
+
+    private _maxValue: number = 0;
+    private _value: number = 0;
+
+    private _enabled: boolean = true;
+    private readonly handler: Shape;
+    private readonly background: Shape;
 
     constructor(game: Game) {
         super(game);
@@ -63,28 +69,32 @@ export class VerticalScrollBar extends MarkableNullGameObject {
 
     public revalidate() {
         super.revalidate();
+        const dOpposite:Direction = getOppositeDirection(this.getDirection());
         this.background.size.set(this.size);
-        this.handler.size.width = this.size.width;
+        assignSize(this.handler.size,getSize(this.size,dOpposite),dOpposite);
         this.refreshScrollPosition();
     }
 
     private refreshScrollPosition(): void {
         if (this.handler===undefined) return;
         if (this._maxValue===0) return;
+        const d:Direction = this.getDirection();
         if (this._value > this._maxValue) this._value = this._maxValue;
-        this.handler.size.height = this.size.height * this.size.height / this._maxValue;
-        this.visible = this._enabled && this.handler.size.height < this.size.height;
+        assignSize(this.handler.size, getSize(this.size,d) * getSize(this.size,d) / this._maxValue,d);
+        this.visible = this._enabled && getSize(this.handler.size,d) < getSize(this.size,d);
         if (!this.visible) return;
-        this.handler.pos.y =
-            this.size.height * this._value / this._maxValue;
-        if (this.handler.pos.y<0) {
-            this.handler.size.height+=this.handler.pos.y;
-            this.handler.pos.y=0;
+
+        assignPos(this.handler.pos, getSize(this.size,d) * this._value / this._maxValue,d);
+
+        if (getPos(this.handler.pos,d)<0) {
+            assignSize(this.handler.size, getSize(this.handler.size,d) + getPos(this.handler.pos,d),d);
+            assignPos(this.handler.pos,0,d);
         }
-        if (this.handler.pos.y + this.handler.size.height>this.size.height) {
-            this.handler.size.height=this.size.height - this.handler.pos.y;
+        if (getPos(this.handler.pos,d) + getSize(this.handler.size,d)>getSize(this.size,d)) {
+            assignSize(this.handler.size,getSize(this.size,d) - getPos(this.handler.pos,d),d);
         }
-        if (this.handler.size.height===0) this.handler.size.height = 1;
+        if (getSize(this.handler.size,d)===0) {
+            assignSize(this.handler.size,1,d);
+        }
     }
 }
-

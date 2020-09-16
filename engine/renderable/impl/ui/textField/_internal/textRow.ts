@@ -34,6 +34,16 @@ export class TextRow extends NullGameObject {
         );
     }
 
+    public updateWordsVisibility():void{
+        for (let i:number = 0; i < this.children.length; i++) {
+            const c:Word = this.children[i];
+            if ((c.pos.x + this.rowSet.pos.x + c.size.width) <0) c.visible = false;
+            else {
+                c.visible = (c.pos.x + this.rowSet.pos.x) <= this.constrainWidth;
+            }
+        }
+    }
+
     public setAlignText(align:AlignText):void{
         if (this.children.length===0) return;
         if (align===this.alignText) return;
@@ -78,7 +88,7 @@ export class TextRow extends NullGameObject {
         this.caret+=word.size.width+this.font.fontContext.spacing[0];
         this.appendChild(word);
         this.size.width+=word.size.width+this.font.fontContext.spacing[0];
-        if (this.size.width>this.constrainWidth) this.size.width = this.constrainWidth;
+        //if (this.size.width>this.constrainWidth) this.size.width = this.constrainWidth;
     }
 
 }

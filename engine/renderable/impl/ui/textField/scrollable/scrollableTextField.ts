@@ -1,47 +1,70 @@
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
-import {VerticalScrollContainerListener} from "@engine/renderable/impl/ui/_internal/verticalScrollContainerListener";
-import {VerticalScrollBar} from "@engine/renderable/impl/ui/verticalScrollBar";
+import {
+    HorizontalScrollContainerListener,
+    VerticalScrollContainerListener
+} from "@engine/renderable/impl/ui/scrollBar/_internal/verticalScrollContainerListener";
+import {VerticalScrollBar} from "@engine/renderable/impl/ui/scrollBar/verticalScrollBar";
+import {HorizontalScrollBar} from "@engine/renderable/impl/ui/scrollBar/horizontalScrollBar";
 
 
 export class ScrollableTextField extends TextField {
 
     public readonly type:string = 'ScrollableTextField';
 
-    private scrollContainerListener:VerticalScrollContainerListener;
-    private readonly scrollBar: VerticalScrollBar;
+    private vScrollContainerListener:VerticalScrollContainerListener;
+    private hScrollContainerListener:HorizontalScrollContainerListener;
+    private readonly vScrollBar: VerticalScrollBar;
+    private readonly hScrollBar: HorizontalScrollBar;
 
     constructor(game:Game,font:Font) {
         super(game,font);
-        this.scrollBar = new VerticalScrollBar(this.game);
-        this.rowSetContainer.appendChild(this.scrollBar);
+        this.vScrollBar = new VerticalScrollBar(this.game);
+        this.hScrollBar = new HorizontalScrollBar(this.game);
+        this.rowSetContainer.appendChild(this.vScrollBar);
+        this.rowSetContainer.appendChild(this.hScrollBar);
     }
 
     revalidate() {
         super.revalidate();
-        if (this.scrollContainerListener===undefined || this.rowSetContainer.isDirty()) {
-            if (this.scrollContainerListener!==undefined) this.scrollContainerListener.destroy();
-            this.scrollContainerListener = new VerticalScrollContainerListener(this.rowSetContainer,this.rowSet);
-            this.scrollContainerListener.onScroll(()=>{
+        if (this.vScrollContainerListener===undefined || this.rowSetContainer.isDirty()) {
+            if (this.vScrollContainerListener!==undefined) this.vScrollContainerListener.destroy();
+            this.vScrollContainerListener = new VerticalScrollContainerListener(this.rowSetContainer,this.rowSet);
+            this.vScrollContainerListener.onScroll(()=>{
                 this.updateScrollValues();
                 this.requestTextRedraw();
             });
         }
-        this.scrollBar.size.setWH(5,this.rowSetContainer.size.height);
-        this.scrollBar.pos.x = this.rowSetContainer.size.width - this.scrollBar.size.width + this.paddingRight;
+        if (this.hScrollContainerListener===undefined || this.rowSetContainer.isDirty()) {
+            if (this.hScrollContainerListener!==undefined) this.hScrollContainerListener.destroy();
+            this.hScrollContainerListener = new HorizontalScrollContainerListener(this.rowSetContainer,this.rowSet);
+            this.hScrollContainerListener.setMouseScroll(false);
+            this.hScrollContainerListener.onScroll(()=>{
+                this.updateScrollValues();
+                this.requestTextRedraw();
+            });
+        }
+
+        this.vScrollBar.size.setWH(5,this.rowSetContainer.size.height);
+        this.vScrollBar.pos.x = this.rowSetContainer.size.width - this.vScrollBar.size.width + this.paddingRight;
+        this.hScrollBar.size.setWH(this.rowSetContainer.size.width,5);
         this.updateScrollValues();
     }
 
     public update():void {
         super.update();
         const delta:number = this.game.getDeltaTime();
-        this.scrollContainerListener.update(delta);
+        this.vScrollContainerListener.update(delta);
+        this.hScrollContainerListener.update(delta);
     }
 
     private updateScrollValues():void {
-        this.scrollBar.maxValue = this.rowSet.size.height;
-        this.scrollBar.value = - this.scrollContainerListener.getScrollPosition();
+        this.vScrollBar.maxValue = this.rowSet.size.height;
+        this.vScrollBar.value = - this.vScrollContainerListener.getScrollPosition();
+
+        this.hScrollBar.maxValue = this.rowSet.size.width;
+        this.hScrollBar.value = - this.hScrollContainerListener.getScrollPosition();
     }
 
 

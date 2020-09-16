@@ -92,6 +92,11 @@ export class TextField extends Container {
         return this._text;
     }
 
+    public destroy() {
+        super.destroy();
+        this.cacheSurface.destroy();
+    }
+
     public update() {
         super.update();
         if (this.isDirty()) this.revalidate();

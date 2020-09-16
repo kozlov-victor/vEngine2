@@ -1,14 +1,20 @@
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/mathEx";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {
+    assignPos,
+    Direction,
+    getMouse,
+    getSize
+} from "@engine/renderable/impl/ui/scrollBar/_internal/sideHelperFunctions";
 
 interface IScrollPointDesc {
     point: IObjectMouseEvent;
     time: number;
 }
 
-export class VerticalScrollContainerListener {
+export abstract class AbstractScrollContainerListener {
 
     private _lastPoint:IScrollPointDesc;
     private _prevPoint:IScrollPointDesc;
@@ -21,17 +27,22 @@ export class VerticalScrollContainerListener {
     private offset: number = 0;
     private offsetOld: number = 0;
     private _onScroll:()=>void;
+    private _mouseScroll:boolean = true;
 
     constructor(
         private externalContainer:RenderableModel,
         private internalContainer:RenderableModel
-        ) {
+    ) {
         this.listenToMouse();
     }
 
-    public update(delta:number):void{
+    public setMouseScroll(val:boolean):void {
+        this._mouseScroll = val;
+    }
 
-        if (this._overScrollFactor<0) { //return to top position when overscrolled
+    public update(delta:number):void{
+        const dir:Direction = this.getDirection();
+        if (this._overScrollFactor<0) { //return to initial position when overscrolled
             this.offset+=this._overScrollFactor;
             this._overScrollFactor*=this._OVER_SCROLL_RELEASE_DECELERATION;
             if (this.offset<=0) {
@@ -39,12 +50,12 @@ export class VerticalScrollContainerListener {
                 this.offset = 0;
             }
         }
-        else if (this._overScrollFactor>0) { //return to bottom position when overscrolled
+        else if (this._overScrollFactor>0) { //return to last position when overscrolled
             this.offset+=this._overScrollFactor;
             this._overScrollFactor*=this._OVER_SCROLL_RELEASE_DECELERATION;
-            if (this.offset>=this.externalContainer.size.height - this.internalContainer.size.height) {
+            if (this.offset>=getSize(this.externalContainer.size,dir) - getSize(this.internalContainer.size,dir)) {
                 this._overScrollFactor = 0;
-                this.offset = this.externalContainer.size.height - this.internalContainer.size.height;
+                this.offset = getSize(this.externalContainer.size,dir) - getSize(this.internalContainer.size,dir);
             }
         }
 
@@ -77,14 +88,17 @@ export class VerticalScrollContainerListener {
     }
 
     public destroy():void {
-         this.externalContainer.off(MOUSE_EVENTS.mouseDown);
-         this.externalContainer.off(MOUSE_EVENTS.mouseMove);
-         this.externalContainer.off(MOUSE_EVENTS.scroll);
-         this.externalContainer.off(MOUSE_EVENTS.mouseUp);
+        this.externalContainer.off(MOUSE_EVENTS.mouseDown);
+        this.externalContainer.off(MOUSE_EVENTS.mouseMove);
+        this.externalContainer.off(MOUSE_EVENTS.scroll);
+        this.externalContainer.off(MOUSE_EVENTS.mouseUp);
 
     }
 
+    protected abstract getDirection():Direction;
+
     private listenToMouse():void {
+        const dir:Direction = this.getDirection();
         this.externalContainer.on(MOUSE_EVENTS.mouseDown, (p: IObjectMouseEvent) => {
             this._lastPoint = {
                 point: p,
@@ -100,7 +114,7 @@ export class VerticalScrollContainerListener {
         });
         this.externalContainer.on(MOUSE_EVENTS.mouseMove, (p: IObjectMouseEvent) => {
             if (!p.isMouseDown) return;
-            const canScroll:boolean = this.internalContainer.size.height > this.externalContainer.size.height;
+            const canScroll:boolean = getSize(this.internalContainer.size,dir) > getSize(this.externalContainer.size,dir);
             if (!canScroll) return;
 
             const lastPoint:IScrollPointDesc = this._lastPoint;
@@ -116,15 +130,16 @@ export class VerticalScrollContainerListener {
             };
 
             this.offset +=
-                this._lastPoint.point.screenY - this._prevPoint.point.screenY;
+                getMouse(this._lastPoint.point,dir) - getMouse(this._prevPoint.point,dir);
             this._setScrollPos();
         });
         this.externalContainer.on(MOUSE_EVENTS.scroll, (p: IObjectMouseEvent) => {
-            const wheelDelta = (p.nativeEvent as WheelEvent&{wheelDelta:number}).wheelDelta;
+            if (!this._mouseScroll) return;
+            const wheelDelta:number = (p.nativeEvent as WheelEvent&{wheelDelta:number}).wheelDelta;
             const newOffset:number = this.offset + wheelDelta*this._MOUSE_WHEEL_FACTOR;
             const isOverScrolled:boolean =
                 newOffset > 0 ||
-                newOffset < this.externalContainer.size.height - this.internalContainer.size.height;
+                newOffset < getSize(this.externalContainer.size,dir) - getSize(this.internalContainer.size,dir);
             if(isOverScrolled) return;
             this.offset=newOffset;
             this._setScrollPos();
@@ -139,7 +154,7 @@ export class VerticalScrollContainerListener {
             }
             else {
                 this._scrollVelocity = 1000 *
-                    (this._lastPoint.point.screenY - this._prevPoint.point.screenY) /
+                    (getMouse(this._lastPoint.point,dir) - getMouse(this._prevPoint.point,dir)) /
                     (this._lastPoint.time - this._prevPoint.time);
             }
             this._deceleration = 0;
@@ -147,14 +162,13 @@ export class VerticalScrollContainerListener {
     }
 
     private _setScrollPos():void {
-
         this._manageOverscroll();
 
         const offsetTruncated:number = ~~this.offset;
 
         if (this.offsetOld===undefined) this.offsetOld = offsetTruncated;
         if (offsetTruncated!==this.offsetOld) {
-            this.internalContainer.pos.y = this.offset;
+            assignPos(this.internalContainer.pos,this.offset,this.getDirection());
             if (this._onScroll!==undefined) {
                 this._onScroll();
             }
@@ -164,8 +178,10 @@ export class VerticalScrollContainerListener {
 
     private _manageOverscroll():void {
 
+        const dir:Direction = this.getDirection();
+
         const canOverScroll:boolean =
-            this.internalContainer.size.height > this.externalContainer.size.height;
+            getSize(this.internalContainer.size,dir) > getSize(this.externalContainer.size,dir);
         if (!canOverScroll) return;
 
         //overscoll top
@@ -176,7 +192,7 @@ export class VerticalScrollContainerListener {
             this._deceleration = 0;
         }
         //overscoll bottom
-        else if (this.offset < this.externalContainer.size.height - this.internalContainer.size.height) {
+        else if (this.offset < getSize(this.externalContainer.size,dir) - getSize(this.internalContainer.size,dir)) {
             this._overScrollFactor = this._OVER_SCROLL_RELEASE_VELOCITY;
             this._scrollVelocity = 0;
             this._deceleration = 0;

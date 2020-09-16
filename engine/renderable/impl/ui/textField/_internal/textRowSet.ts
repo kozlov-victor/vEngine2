@@ -116,7 +116,10 @@ export class TextRowSet extends NullGameObject {
         for (let i:number=0,max:number=this.children.length;i<max;i++) {
             const c:TextRow = this.children[i];
             if ((c.pos.y + this.pos.y + c.size.height) <0) c.visible = false;
-            else c.visible = (c.pos.y + this.pos.y) <= this.constrainSize.height;
+            else {
+                c.visible = (c.pos.y + this.pos.y) <= this.constrainSize.height;
+                if (c.visible) c.updateWordsVisibility();
+            }
         }
     }
 

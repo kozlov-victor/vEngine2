@@ -195,7 +195,6 @@ export abstract class RenderableModel
             renderer.transformSet(...this.worldTransformMatrix.mat16);
         }
 
-
         renderer.setAlphaBlend(this.alpha);
         const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(this.filters,this.forceDrawChildrenOnNewSurface);
 

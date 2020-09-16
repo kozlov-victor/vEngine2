@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
         tf.size.set(this.game.size);
         tf.setText(this.textLink.getTarget());
-        tf.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
+        tf.setWordBrake(WordBrake.PREDEFINED);
         tf.setPadding(15);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.TOP);
