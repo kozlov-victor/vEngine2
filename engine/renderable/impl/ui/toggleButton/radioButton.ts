@@ -4,6 +4,7 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {ContainerState} from "@engine/renderable/impl/ui/container";
 
 export class RadioButtonGroup {
 
@@ -28,7 +29,9 @@ export class RadioButton extends AbstractToggleButton {
 
     constructor(game:Game) {
         super(game);
-        this.on(MOUSE_EVENTS.click, ()=>this.toggle());
+        this.on(MOUSE_EVENTS.click, ()=>{
+            if (this.state!==ContainerState.DISABLED) this.toggle();
+        });
     }
 
     protected getNormalAndCheckedRenderableModel(): [normal: Shape, checked: Shape] {

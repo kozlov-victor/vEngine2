@@ -8,8 +8,6 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-        //todo doesnot work
-
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0;//-Math.PI/2;

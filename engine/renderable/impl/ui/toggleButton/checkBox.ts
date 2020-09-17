@@ -1,10 +1,13 @@
 import {Game} from "@engine/core/game";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {AbstractToggleButton, ICheckBoxWritable} from "@engine/renderable/impl/ui/toggleButton/_internal/abstractToggleButton";
+import {
+    AbstractToggleButton,
+    ICheckBoxWritable
+} from "@engine/renderable/impl/ui/toggleButton/_internal/abstractToggleButton";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Color} from "@engine/renderer/common/color";
-
+import {ContainerState} from "@engine/renderable/impl/ui/container";
 
 
 export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable {
@@ -13,7 +16,9 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
 
     constructor(game:Game) {
         super(game);
-        this.on(MOUSE_EVENTS.click,()=>this.toggle());
+        this.on(MOUSE_EVENTS.click,()=>{
+            if (this.state!==ContainerState.DISABLED) this.toggle();
+        });
     }
 
     public toggle(value?:boolean):void{
