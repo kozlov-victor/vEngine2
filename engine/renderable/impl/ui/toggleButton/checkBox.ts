@@ -1,13 +1,13 @@
 import {Game} from "@engine/core/game";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {AbstractCheckBox, ICheckBoxWritable} from "@engine/renderable/impl/ui/checkBox/_internal/abstractCheckBox";
+import {AbstractToggleButton, ICheckBoxWritable} from "@engine/renderable/impl/ui/toggleButton/_internal/abstractToggleButton";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Color} from "@engine/renderer/common/color";
 
 
 
-export class CheckBox extends AbstractCheckBox implements ICheckBoxWritable {
+export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable {
 
     public readonly type:string = 'CheckBox';
 
@@ -19,7 +19,7 @@ export class CheckBox extends AbstractCheckBox implements ICheckBoxWritable {
     public toggle(value?:boolean):void{
         if (value!==undefined) (this as ICheckBoxWritable).checked = value;
         else (this as ICheckBoxWritable).checked = !this.checked;
-        this.updateChildrenByChecked();
+        this.updateState();
     }
 
     protected getNormalAndCheckedRenderableModel(): [normal: Shape, checked: Shape] {

@@ -3,7 +3,7 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
-import {CheckBox} from "@engine/renderable/impl/ui/checkBox/checkBox";
+import {CheckBox} from "@engine/renderable/impl/ui/toggleButton/checkBox";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {Button} from "@engine/renderable/impl/ui/button/button";
 import {Resource} from "@engine/resources/resourceDecorators";
@@ -13,7 +13,7 @@ import {
     AlignTextContentHorizontal,
     AlignTextContentVertical
 } from "@engine/renderable/impl/ui/textField/textAlign";
-import {RadioButton, RadioButtonGroup} from "@engine/renderable/impl/ui/checkBox/radioButton";
+import {RadioButton, RadioButtonGroup} from "@engine/renderable/impl/ui/toggleButton/radioButton";
 
 const text:string=
 `Lorem ipsum dolor sit amet,\t\n\r

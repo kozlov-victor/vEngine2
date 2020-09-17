@@ -36,7 +36,7 @@ vec4 mixTextureColorWithTint(vec4 texture, vec4 tint){
 vec4 getFillColor(){
     if (u_fillType==FILL_TYPE_COLOR) return u_fillColor;
     else if (u_fillType==FILL_TYPE_LINEAR_GRADIENT) {
-        vec2 polarCoords = vec2(length(v_position.xy),atan(v_position.y/v_position.x));
+        vec2 polarCoords = vec2(v_position.x,atan(v_position.y/v_position.x));
         polarCoords.y+=u_fillLinearGradient[2].x;
         vec2 rectCoords = vec2(polarCoords.x*cos(polarCoords.y),polarCoords.x*sin(polarCoords.y));
         return mix(u_fillLinearGradient[0],u_fillLinearGradient[1],rectCoords.x);

@@ -39,7 +39,6 @@ import {
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 
 
-// inspired by https://www.youtube.com/watch?v=mrR9eqUNTic
 export class MainScene extends Scene {
 
     private fnt:Font;

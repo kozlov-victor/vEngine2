@@ -1,4 +1,4 @@
-import {Container} from "@engine/renderable/impl/ui/container";
+import {Container, ContainerState} from "@engine/renderable/impl/ui/container";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
@@ -7,7 +7,7 @@ export interface ICheckBoxWritable {
     checked:boolean;
 }
 
-export abstract class AbstractCheckBox extends Container {
+export abstract class AbstractToggleButton extends Container {
 
     public readonly checked: boolean = false;
 
@@ -28,8 +28,8 @@ export abstract class AbstractCheckBox extends Container {
         this._rChecked = rChecked;
 
         this.setBackground(this._rNormal);
-        this.appendChild(rChecked);
-        this.updateChildrenByChecked();
+        this.setBackgroundActive(this._rChecked);
+        this.updateState();
     }
 
     public revalidate():void{
@@ -40,11 +40,11 @@ export abstract class AbstractCheckBox extends Container {
     }
 
 
-    protected updateChildrenByChecked(){
+    protected updateState(){
         if (this.checked) {
-            this._rChecked.fillColor.set(Color.GREY);
+            this.setState(ContainerState.ACTIVE);
         } else {
-            this._rChecked.fillColor.set(Color.NONE);
+            this.setState(ContainerState.NORMAL);
         }
     }
 

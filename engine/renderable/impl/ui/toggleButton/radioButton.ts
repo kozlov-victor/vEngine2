@@ -1,4 +1,4 @@
-import {AbstractCheckBox, ICheckBoxWritable} from "@engine/renderable/impl/ui/checkBox/_internal/abstractCheckBox";
+import {AbstractToggleButton, ICheckBoxWritable} from "@engine/renderable/impl/ui/toggleButton/_internal/abstractToggleButton";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Game} from "@engine/core/game";
@@ -22,7 +22,7 @@ export class RadioButtonGroup {
 
 }
 
-export class RadioButton extends AbstractCheckBox {
+export class RadioButton extends AbstractToggleButton {
 
     private group:RadioButtonGroup;
 
@@ -44,13 +44,13 @@ export class RadioButton extends AbstractCheckBox {
 
     public toggle(){
         (this as ICheckBoxWritable).checked = true;
-        this.updateChildrenByChecked();
+        this.updateState();
         if (this.group!==undefined) this.group.notifyToggled(this);
     }
 
     public unToggle(){
         (this as ICheckBoxWritable).checked = false;
-        this.updateChildrenByChecked();
+        this.updateState();
     }
 
     public setGroup(group:RadioButtonGroup):void {
