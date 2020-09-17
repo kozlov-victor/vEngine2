@@ -91,6 +91,12 @@ export class MainScene extends Scene {
         btn.textColor.setRGB(10,10,10);
         const bg:Rectangle = new Rectangle(this.game);
         bg.borderRadius = 2;
+
+        const bgActive:Rectangle = new Rectangle(this.game);
+        bgActive.borderRadius = 2;
+        bgActive.fillColor.set(Color.GREY);
+        btn.setBackgroundActive(bgActive);
+
         btn.setPadding(20);
         this.appendChild(btn);
 

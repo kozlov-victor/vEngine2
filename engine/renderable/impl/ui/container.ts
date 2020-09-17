@@ -4,6 +4,10 @@ import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {MarkableNullGameObject} from "@engine/renderable/impl/ui/textField/_internal/markableNullGameObject";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {
+    DEFAULT_BACKGROUND_OBJECT_TYPE,
+    DefaultBackgroundObject
+} from "@engine/renderable/impl/ui/_internal/defaultBackgroundObject";
 
 interface IContainerWithMarginPadding {
     marginLeft      :number;
@@ -21,12 +25,6 @@ export enum ContainerState {
     ACTIVE,
     HOVERED,
     DISABLED,
-}
-
-const DEFAULT_BACKGROUND_OBJECT_TYPE = 'DefaultBackgroundObject' as const;
-
-class DefaultBackgroundObject extends NullGameObject {
-    type:string = DEFAULT_BACKGROUND_OBJECT_TYPE;
 }
 
 export class Container extends MarkableNullGameObject implements IContainerWithMarginPadding{
