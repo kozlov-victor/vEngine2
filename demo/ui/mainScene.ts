@@ -3,7 +3,7 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
-import {CheckBox} from "@engine/renderable/impl/checkBox/checkBox";
+import {CheckBox} from "@engine/renderable/impl/ui/checkBox/checkBox";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {Button} from "@engine/renderable/impl/ui/button/button";
 import {Resource} from "@engine/resources/resourceDecorators";
@@ -13,7 +13,7 @@ import {
     AlignTextContentHorizontal,
     AlignTextContentVertical
 } from "@engine/renderable/impl/ui/textField/textAlign";
-import {RadioButton} from "@engine/renderable/impl/checkBox/radioButton";
+import {RadioButton, RadioButtonGroup} from "@engine/renderable/impl/ui/checkBox/radioButton";
 
 const text:string=
 `Lorem ipsum dolor sit amet,\t\n\r
@@ -62,12 +62,28 @@ export class MainScene extends Scene {
             console.log('checked',chbox.checked);
             if (chbox.checked) tf.setFont(this.fnt2);
             else tf.setFont(this.fnt);
-        })
+        });
         this.appendChild(chbox);
 
-        const radioBtn:RadioButton = new RadioButton(this.game);
-        radioBtn.pos.setXY(100,350);
-        this.appendChild(radioBtn);
+        const radioBtn1:RadioButton = new RadioButton(this.game);
+        radioBtn1.pos.setXY(130,370);
+        this.appendChild(radioBtn1);
+
+        const radioBtn2:RadioButton = new RadioButton(this.game);
+        radioBtn2.pos.setXY(190,370);
+        this.appendChild(radioBtn2);
+
+        const radioBtn3:RadioButton = new RadioButton(this.game);
+        radioBtn3.pos.setXY(250,370);
+        this.appendChild(radioBtn3);
+        radioBtn3.on(MOUSE_EVENTS.click, e=>{
+            console.log(radioBtn3.checked);
+        });
+
+        const buttonGroup:RadioButtonGroup = new RadioButtonGroup();
+        buttonGroup.add(radioBtn1);
+        buttonGroup.add(radioBtn2);
+        buttonGroup.add(radioBtn3);
 
         const btn:Button = new Button(this.game,this.fnt);
         btn.setText("click!");
@@ -75,8 +91,6 @@ export class MainScene extends Scene {
         btn.textColor.setRGB(10,10,10);
         const bg:Rectangle = new Rectangle(this.game);
         bg.borderRadius = 2;
-        bg.fillColor = Color.NONE;
-        btn.setBackground(bg);
         btn.setPadding(20);
         this.appendChild(btn);
 

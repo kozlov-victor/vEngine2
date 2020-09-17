@@ -19,7 +19,7 @@ export abstract class Shape extends RenderableModel implements IShapeProps{
 
     public color:Color = Color.BLACK.clone();
     protected _lineWidth:number = 0;
-    public fillColor:Color = Color.RGB(100,100,100);
+    public fillColor:Color = Color.GREY.clone();
     public fillGradient:Optional<LinearGradient>;
 
     protected constructor(game:Game){

@@ -1,13 +1,11 @@
 import {Game} from "@engine/core/game";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {AbstractCheckBox} from "@engine/renderable/impl/checkBox/_internal/abstractCheckBox";
+import {AbstractCheckBox, ICheckBoxWritable} from "@engine/renderable/impl/ui/checkBox/_internal/abstractCheckBox";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Color} from "@engine/renderer/common/color";
 
-export interface ICheckBoxWritable {
-    checked:boolean;
-}
+
 
 export class CheckBox extends AbstractCheckBox implements ICheckBoxWritable {
 
@@ -27,10 +25,10 @@ export class CheckBox extends AbstractCheckBox implements ICheckBoxWritable {
     protected getNormalAndCheckedRenderableModel(): [normal: Shape, checked: Shape] {
         const rNormal:Rectangle = new Rectangle(this.game);
         rNormal.borderRadius = 3;
-        rNormal.color = Color.BLACK;
-        rNormal.fillColor = Color.NONE;
+        rNormal.color.set(Color.BLACK);
+        rNormal.fillColor.set(Color.NONE);
         const rChecked:Rectangle = new Rectangle(this.game);
-        rChecked.color = Color.BLACK;
+        rChecked.color.set(Color.BLACK);
         rChecked.borderRadius = 3;
         return [rNormal,rChecked];
     }

@@ -3,14 +3,16 @@ import {Shape} from "@engine/renderable/abstract/shape";
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
 
+export interface ICheckBoxWritable {
+    checked:boolean;
+}
+
 export abstract class AbstractCheckBox extends Container {
 
     public readonly checked: boolean = false;
 
     private readonly _rNormal:Shape;
     private readonly _rChecked: Shape;
-
-    private readonly highLightColor:Color = Color.RGB(122,122,122);
 
     protected abstract getNormalAndCheckedRenderableModel():[normal:Shape,checked:Shape]
 
@@ -38,12 +40,11 @@ export abstract class AbstractCheckBox extends Container {
     }
 
 
-
     protected updateChildrenByChecked(){
         if (this.checked) {
-            this._rChecked.fillColor = this.highLightColor;
+            this._rChecked.fillColor.set(Color.GREY);
         } else {
-            this._rChecked.fillColor = Color.NONE;
+            this._rChecked.fillColor.set(Color.NONE);
         }
     }
 

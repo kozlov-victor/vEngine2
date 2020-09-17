@@ -55,7 +55,9 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
             console.trace();
             throw new DebugError(`can not set uniform with name ${name} and value ${value}`);
         }
-        if (this.uniformCache.has(name) && isEqual(this.uniformCache.get(name)!.value,value)) return;
+        if (this.uniformCache.has(name) && isEqual(this.uniformCache.get(name)!.value,value)) {
+            return;
+        }
         if (isArray(value)) {
             if (!this.uniformCache.has(name)) {
                 // todo how to define Float32Array or Int32Array???

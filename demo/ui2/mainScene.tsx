@@ -4,7 +4,7 @@ import {Color} from "@engine/renderer/common/color";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
-import {CheckBox} from "@engine/renderable/impl/checkBox/checkBox";
+import {CheckBox} from "@engine/renderable/impl/ui/checkBox/checkBox";
 import {Button} from "@engine/renderable/impl/ui/button/button";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
