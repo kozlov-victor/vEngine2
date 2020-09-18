@@ -31,6 +31,7 @@ class PromisePolyfill {
         try {
             executor(this._resolve.bind(this), this._reject.bind(this));
         } catch (error) {
+            console.log(error);
             this._reject(error);
         }
     }

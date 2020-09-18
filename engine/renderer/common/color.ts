@@ -38,6 +38,12 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         return Color.HSLA(h,s,l,255);
     }
 
+    public static HSV(h:number,s:number,v:number):Color{
+        const c:Color = new Color();
+        c.setHSV(h,s,v);
+        return c;
+    }
+
     public static RGBA(r:byte,g:byte = r,b:byte = g, a:byte = 255):Color{
         return new Color(r,g,b,a);
     }
@@ -51,6 +57,49 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         const g:byte = (col & 0x00_FF_00)>>(4*2) as byte;
         const b:byte = (col & 0x00_00_FF) as byte;
         return new Color(r,g,b);
+    }
+
+    // https://stackoverflow.com/questions/11068240/what-is-the-most-efficient-way-to-parse-a-css-color-in-javascript
+    public static fromCssLiteral(literal:string):Color{
+        let r:byte = 0,g:byte = 0,b:byte = 0,a:byte = 0;
+        if (literal.substr(0,1)==="#") {
+            const numericPart:string = literal.substr(1);
+            if (numericPart.length===3) { // string like fff
+                r = ~~(parseInt(numericPart.substr(0,1),16) * 0xFF / 0xF) as byte;
+                g = ~~(parseInt(numericPart.substr(1,1),16) * 0xFF / 0xF) as byte;
+                b = ~~(parseInt(numericPart.substr(2,1),16) * 0xFF / 0xF) as byte;
+                a = 255;
+            } else if (numericPart.length===6) { // string like rrggbb
+                r = ~~(parseInt(numericPart.substr(0,2),16)) as byte;
+                g = ~~(parseInt(numericPart.substr(2,2),16)) as byte;
+                b = ~~(parseInt(numericPart.substr(4,2),16)) as byte;
+                a = 255;
+            } else if (numericPart.length===8) { // string like rrggbbaa
+                r = ~~(parseInt(numericPart.substr(0,2),16)) as byte;
+                g = ~~(parseInt(numericPart.substr(2,2),16)) as byte;
+                b = ~~(parseInt(numericPart.substr(4,2),16)) as byte;
+                a = ~~(parseInt(numericPart.substr(6,2),16)) as byte;
+            } else {
+                if (DEBUG) throw new DebugError(`unsupported or wrong color literal: ${literal}`)
+            }
+        }
+        else {
+            if (literal.indexOf('rgb')===0) {
+                [r,g,b,a] = literal.split("(")[1].split(")")[0].split(",").map(x=>+x) as [byte,byte,byte,byte];
+                if (a===undefined) a = 255 as byte;
+                else a=~~(a * 255) as byte;
+            }
+            else if (literal.indexOf('hsl')===0) {
+                let h: number, s: number, l: number, alfa: byte;
+                [h, s, l, alfa] = literal.split("(")[1].split(")")[0].split(",").map(x => parseInt(x)) as [number, number, number, byte];
+                if (alfa === undefined) alfa = 255 as byte;
+                else alfa = ~~(alfa * 255) as byte;
+                return Color.HSLA(h, s, l, alfa);
+            } else {
+                if (DEBUG) throw new DebugError(`unsupported or wrong color literal: ${literal}`)
+            }
+        }
+        return Color.RGBA(r,g,b,a);
     }
 
     public readonly type:'Color' = 'Color';
@@ -128,10 +177,64 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         this.setRGBA(rResult,gResult,bResult,a);
     }
 
+    /**
+     * @param h hue 0-100%
+     * @param s saturation 0-100%
+     * @param v value 0-100%
+     */
+    public setHSV(h:number,s:number,v:number):void{
+        h/=100;
+        s/=100;
+        v/=100;
+        let r:number = 0, g:number = 0, b:number = 0;
+
+        const i:number = Math.floor(h * 6);
+        const f:number = h * 6 - i;
+        const p:number = v * (1 - s);
+        const q:number = v * (1 - f * s);
+        const t:number = v * (1 - (1 - f) * s);
+
+        switch (i % 6) {
+            case 0: {
+                r = v; g = t;
+                b = p; break;
+            }
+            case 1: {
+                r = q; g = v;
+                b = p;
+                break;
+            }
+            case 2: {
+                r = p; g = v;
+                b = t;
+                break;
+            }
+            case 3: {
+                r = p; g = q;
+                b = v;
+                break;
+            }
+            case 4: {
+                r = t; g = p;
+                b = v;
+                break;
+            }
+            case 5: {
+                r = v; g = p;
+                b = q;
+                break;
+            }
+        }
+        this.setRGB(
+            ~~(r*255) as byte,
+            ~~(b*255) as byte,
+            ~~(b*255) as byte,
+        );
+    }
+
     public setHSL(h:number,s:number,l:number):void{
         this.setHSLA(h,s,l,255);
     }
-
 
     get r(): byte {
         return this._r;

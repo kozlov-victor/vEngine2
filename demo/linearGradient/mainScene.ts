@@ -8,11 +8,12 @@ export class MainScene extends Scene {
 
     public onReady() {
 
+        // https://cssgradient.io/
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
-        gradient.angle = 0;//-Math.PI/2;
-        gradient.colorFrom = Color.RGB(255,0,0);
-        gradient.colorTo = Color.RGB(0,255,0);
+        gradient.angle = 0;
+        gradient.colorFrom = Color.fromCssLiteral(`#c88724`);
+        gradient.colorTo = Color.fromCssLiteral(`hsl(73, 86%, 42%)`);
         rect.fillGradient = gradient;
         rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);
@@ -22,7 +23,7 @@ export class MainScene extends Scene {
         rect.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(rect);
         rect.setInterval(()=>{
-            gradient.angle+=0.1;
+            gradient.angle-=0.1;
         },100);
 
     }
