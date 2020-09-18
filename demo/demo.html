@@ -52,8 +52,8 @@
 
     if (window.external && window.external.V_ENGINE_NAVIGATOR) {
 
-        window.console = window.console || new function(){
-            this.log = this.error = function(){}
+        window.console = window.console || new function(e){
+            this.log = this.error = function(e){alert(e)}
         };
 
 
@@ -78,6 +78,7 @@
             var self = this;
             self.status = 0;
             self.url = '';
+            var respHeaders = {};
 
 
             self.setRequestHeader = function(key,val){
@@ -91,7 +92,9 @@
                 setTimeout(function(){
                     var currUrl = self.url.split('?')[0];
                     currUrl = currUrl.replace('file:///','');
-                    var resp = (self.responseType==='blob' || self.responseType==='arraybuffer')?readAsBin(currUrl):readAsText(currUrl);
+                    var asBin = (self.responseType==='blob' || self.responseType==='arraybuffer')
+                    var resp = asBin?readAsBin(currUrl):readAsText(currUrl);
+                    respHeaders['Content-Type'] = asBin?'':'application/json';
                     self.readyState = 4;
                     self.status = 200;
                     self.response = resp;
@@ -100,7 +103,9 @@
                     self.onreadystatechange && self.onreadystatechange();
                 },1);
             };
-            self.getResponseHeader = function(){};
+            self.getResponseHeader = function(key){
+                return respHeaders[key];
+            };
 
         };
 
@@ -144,32 +149,6 @@
 
     if (!window.Blob) window.Blob = undefined;
 
-
-    if ( ![].fill)  {
-        Array.prototype.fill = function( value ) {
-
-            var O = Object( this );
-            var len = parseInt( O.length, 10 );
-            var start = arguments[1];
-            var relativeStart = parseInt( start, 10 ) || 0;
-            var k = relativeStart < 0
-                ? Math.max( len + relativeStart, 0)
-                : Math.min( relativeStart, len );
-            var end = arguments[2];
-            var relativeEnd = end === undefined
-                ? len
-                : ( parseInt( end)  || 0) ;
-            var final = relativeEnd < 0
-                ? Math.max( len + relativeEnd, 0 )
-                : Math.min( relativeEnd, len );
-
-            for (; k < final; k++) {
-                O[k] = value;
-            }
-
-            return O;
-        };
-    }
 
 
 </script>

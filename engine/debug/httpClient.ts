@@ -15,11 +15,11 @@ const objectToQuery = (o:string|number|FormData|IKeyVal<string|number|boolean>):
     return paramsArr.map((item)=>[item[0]+'='+item[1]]).join('&');
 };
 
-interface IRequestData {
+interface IRequestData<T> {
     method: string;
     data?: string|number|FormData|IKeyVal<string|number|boolean>;
     url: string;
-    success?: (arg:unknown)=>void;
+    success?: (arg:T)=>void;
     error?: (opts:{status:number,error:string})=>void;
     setup?: (xhr:XMLHttpRequest)=>void,
     requestType?: string;
@@ -27,7 +27,7 @@ interface IRequestData {
     ontimeout?: ()=>void;
 }
 
-const request = <T>(data:IRequestData):Promise<T>=> {
+const request = <T>(data:IRequestData<T>):Promise<T>=> {
     let abortTmr:number;
     let resolved = false;
     data.method = data.method || 'get';
@@ -49,7 +49,7 @@ const request = <T>(data:IRequestData):Promise<T>=> {
                 const contentType = xhr.getResponseHeader("Content-Type")||'';
                 if (contentType.toLowerCase().indexOf('json')>-1) resp = JSON.parse(resp);
                 if (data.success) {
-                    data.success(resp);
+                    data.success(resp as unknown as T);
                 }
                 resolveFn(resp as unknown as T);
             } else {
@@ -86,7 +86,7 @@ const request = <T>(data:IRequestData):Promise<T>=> {
 
 export namespace httpClient {
 
-    export const get = <T>(url:string,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
+    export const get = <T>(url:string,data:IKeyVal<string|number|boolean>,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
         return request<T>({
             method:'get',
             url,
@@ -97,7 +97,7 @@ export namespace httpClient {
         });
     };
 
-    export const  post = <T>(url:string,data?:any,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
+    export const  post = <T>(url:string,data?:any,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
         return request<T>({
             method:'post',
             url,
@@ -109,7 +109,7 @@ export namespace httpClient {
         });
     };
 
-    export const  postMultiPart = <T>(url:string,file:File,data:IKeyVal<string|number|boolean>,success?:(arg:unknown)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
+    export const  postMultiPart = <T>(url:string,file:File,data:IKeyVal<string|number|boolean>,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
         const formData = new FormData();
         Object.keys(data).forEach((key)=>{
             formData.append(key,data[key] as string);

@@ -26,7 +26,6 @@ export class Widget extends VEngineTsxComponent<{}> {
 
     private selectItem(e:Event,index:number){
         e.preventDefault();
-        sessionStorage.scrollTop = this.scrollableWrapperRef.scrollTop;
         if (this.selectedItem===this.items[index]) this.frameRef.contentDocument!.location.reload();
         this.selectedItem = this.items[index];
         this.loadingInfo = 'loading...';
