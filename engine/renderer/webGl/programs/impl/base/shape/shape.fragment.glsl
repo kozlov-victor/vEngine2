@@ -38,10 +38,10 @@ vec4 getFillColor(){
     else if (u_fillType==FILL_TYPE_LINEAR_GRADIENT) {
         float r = distance(vec2(HALF, HALF), v_position.xy);
         float angle = atan(v_position.y - HALF,v_position.x - HALF);
-        angle+=u_fillLinearGradient[2].x;
+        angle+=u_fillGradient[2].x;
         float x = r*cos(angle);
         float y = r*sin(angle);
-        return mix(u_fillLinearGradient[0],u_fillLinearGradient[1],x  + HALF);
+        return mix(u_fillGradient[0],u_fillGradient[1],x  + HALF);
     }
     else if (u_fillType==FILL_TYPE_TEXTURE) {
         float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2];

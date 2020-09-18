@@ -1,6 +1,7 @@
 import {Color, IColorJSON} from "./color";
 import {DebugError} from "../../debug/debugError";
 import {ICloneable} from "../../core/declarations";
+import {MathEx} from "@engine/misc/mathEx";
 
 interface IJSON {
     colorFrom:IColorJSON;
@@ -63,7 +64,7 @@ export class LinearGradient implements ICloneable<LinearGradient>{
     }
 
     public asCSS():string{
-        return ''; // todo
+        return `linear-gradient(${-MathEx.radToDeg(this.angle)}deg, ${this.colorFrom.asCSS()} 0%, ${this.colorTo.asCSS()} 100%)`;
     }
 
     public clone():LinearGradient {

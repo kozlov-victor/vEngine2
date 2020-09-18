@@ -28,7 +28,7 @@ export class ShapeDrawer extends AbstractDrawer {
     public readonly u_borderRadius:string;
     public readonly u_color:string;
     public readonly u_alpha:string;
-    public readonly u_fillLinearGradient:string;
+    public readonly u_fillGradient:string;
     public readonly u_fillColor:string;
     public readonly u_shapeType:string;
     public readonly u_fillType:string;
@@ -68,7 +68,7 @@ export class ShapeDrawer extends AbstractDrawer {
         this.u_color = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_color');
         this.u_alpha = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
         this.u_fillColor = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillColor');
-        this.u_fillLinearGradient = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillLinearGradient[3]',true);
+        this.u_fillGradient = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillGradient[3]',true);
         // texture
         this.u_texRect = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_texRect');
         this.u_texOffset = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_texOffset');
