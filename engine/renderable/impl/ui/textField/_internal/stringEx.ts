@@ -8,6 +8,8 @@ export interface ICharacterInfo {
     linedThrough?: boolean;
     italic?:boolean;
     color?:IColor;
+    fontSize?:number;
+    scaleFromCurrFontSize:number;
 }
 
 export class StringEx {
@@ -21,12 +23,12 @@ export class StringEx {
             if (charCode >= 0xD800 && charCode <= 0xDBFF) {
                 charCode = str.charCodeAt(index + 1);
                 if (charCode >= 0xDC00 && charCode <= 0xDFFF) {
-                    output.push({rawChar:str.slice(index, index + 2),isEmoji:true});
+                    output.push({rawChar:str.slice(index, index + 2),isEmoji:true,scaleFromCurrFontSize:1});
                     ++index;
                     continue;
                 }
             }
-            output.push({rawChar:str.charAt(index),isEmoji:false});
+            output.push({rawChar:str.charAt(index),isEmoji:false,scaleFromCurrFontSize:1});
         }
         return new StringEx(output);
     }
@@ -79,6 +81,14 @@ export class StringEx {
 
     public setColor(col:IColor):void{
         this.chars.forEach(c=>c.color=col);
+    }
+
+    public setFontSize(fontSize:number):void{
+        this.chars.forEach(c=>c.fontSize = fontSize);
+    }
+
+    public setScaleFromCurrFontSize(scale:number):void {
+        this.chars.forEach(c=>c.scaleFromCurrFontSize = scale);
     }
 
     public setUnderlined(val:boolean):void {

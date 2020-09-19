@@ -22,7 +22,11 @@ export class TextRow extends NullGameObject {
     }
 
     public addWord(word:Word,addWhiteSpaceBeforeIfNeed:boolean):void {
-        if (this.children.length!==0 && addWhiteSpaceBeforeIfNeed) this._addWord(this.rowSet.spaceChar.clone());
+        if (this.children.length!==0 && addWhiteSpaceBeforeIfNeed) {
+            const space:Word = this.rowSet.spaceChar.clone();
+            space.children[0].setScaleFromCurrFontSize(word.children[word.children.length-1].getCharacterInfo().scaleFromCurrFontSize);
+            this._addWord(this.rowSet.spaceChar.clone());
+        }
         this._addWord(word);
     }
 
@@ -30,7 +34,7 @@ export class TextRow extends NullGameObject {
         this.size.height = Math.max(
             ...this.children.map(it=>it.size.height),
             this.rowSet.spaceChar.size.height,
-            this.font.fontContext.lineHeight + this.font.fontContext.spacing[0]
+            this.font.fontContext.lineHeight + this.font.fontContext.spacing[1]
         );
     }
 

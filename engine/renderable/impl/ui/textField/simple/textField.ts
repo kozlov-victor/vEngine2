@@ -41,7 +41,7 @@ export class TextField extends Container {
 
     private needTextRedraw:boolean = false;
 
-    constructor(game:Game,private font:Font) {
+    constructor(game:Game,protected font:Font) {
         super(game);
         this.appendChild(this.rowSetContainer);
         this.size.setWH(300,100);
@@ -209,11 +209,8 @@ export class TextField extends Container {
 
 export class TextFieldWithoutCache extends TextField {
 
-    private readonly fnt: Font;
-
     constructor(game: Game, font: Font) {
         super(game, font);
-        this.fnt = font;
         this.setWordBrake(WordBrake.PREDEFINED);
         this.size.setWH(16,16);
     }
@@ -231,7 +228,7 @@ export class TextFieldWithoutCache extends TextField {
         }
         if (this.rowSet === undefined || rectIsDirty) {
             if (this.rowSet !== undefined) this.rowSet.removeSelf();
-            this.rowSet = new TextRowSet(this.game, this.fnt, clientRect, this.textColor);
+            this.rowSet = new TextRowSet(this.game, this.font, clientRect, this.textColor);
             this.rowSetContainer.appendChild(this.rowSet);
         }
         this.rowSetContainer.pos.set(clientRect);

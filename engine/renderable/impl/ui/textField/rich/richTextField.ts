@@ -10,6 +10,7 @@ interface ITextFragment {
     text?: string;
     linedThrough?: boolean;
     underlined? :boolean;
+    fontSize? : number|false;
 }
 
 export class RichTextField extends ScrollableTextField {
@@ -28,9 +29,13 @@ export class RichTextField extends ScrollableTextField {
 
     private traverseNode(node:VirtualNode,fragments:ITextFragment[]):void {
         let color:Optional<IColor>;
+        let fontSize:Optional<number>;
         if (node.tagName==='font') {
             if (node.props.color!==undefined) {
                 color = node.props.color;
+            }
+            if (node.props.size!==undefined) {
+                fontSize = node.props.size;
             }
         }
         fragments.push({
@@ -39,7 +44,7 @@ export class RichTextField extends ScrollableTextField {
             bold: node.tagName==='b'?true:undefined,
             underlined: node.tagName==='u'?true:undefined,
             linedThrough: node.tagName==='s'?true:undefined,
-            color,
+            color, fontSize,
         });
         if (node.children) node.children.forEach(c=>{
             this.traverseNode(c,fragments);
@@ -51,17 +56,20 @@ export class RichTextField extends ScrollableTextField {
             underlined: node.tagName==='u'?false:undefined,
             linedThrough: node.tagName==='s'?false:undefined,
             color:color!==undefined?false:undefined,
+            fontSize:fontSize!==undefined?false:undefined,
         });
     }
 
     private textFragmentToStringEx(fragments:ITextFragment[]):StringEx{
         const colorStack:IColor[] = [];
+        const fontSizeStack:number[] = [];
         const result:StringEx = StringEx.fromRaw("");
         let isBold:boolean = false;
         let isItalic:boolean = false;
         let isUnderlined:boolean = false;
         let isLinedThrough:boolean = false;
         let currColor:IColor|undefined;
+        let currFontSize:number|undefined;
         fragments.forEach(f=>{
             if (f.bold!==undefined) isBold = f.bold;
             if (f.italic!==undefined) isItalic = f.italic;
@@ -77,6 +85,16 @@ export class RichTextField extends ScrollableTextField {
                     currColor = colorStack[colorStack.length-1];
                 }
             }
+            if (f.fontSize!==undefined) {
+                if ((f.fontSize as number).toFixed!==undefined) {
+                    currFontSize = f.fontSize = f.fontSize as number;
+                    fontSizeStack.push(f.fontSize as number);
+                }
+                else if (f.fontSize===false) {
+                    fontSizeStack.pop();
+                    currFontSize = fontSizeStack[fontSizeStack.length-1];
+                }
+            }
             if (f.text!==undefined) {
                 const prefix:string = (result.getAllChars()[result.getAllChars().length-1]?.rawChar===' ')?'':' '
                 const s:StringEx = StringEx.fromRaw(prefix+f.text);
@@ -84,6 +102,10 @@ export class RichTextField extends ScrollableTextField {
                 s.setItalic(isItalic);
                 s.setUnderlined(isUnderlined);
                 s.setLinedThrough(isLinedThrough);
+                if (currFontSize!==undefined) {
+                    s.setFontSize(currFontSize);
+                    s.setScaleFromCurrFontSize(currFontSize/this.font.fontSize);
+                }
                 if (currColor!==undefined) s.setColor(currColor);
                 result.append(s);
             }

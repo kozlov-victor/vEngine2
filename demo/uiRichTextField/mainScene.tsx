@@ -16,7 +16,8 @@ import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 const createRichText = ()=>{
     return (
         <div>
-            <b>Lorem ipsum <i>dolor sit amet,</i>
+            <b>
+                <u>L</u>orem ipsum <i>dolor sit amet,</i>
                 <font color={{r:255,g:100,b:100}}>consectetur 🥰 adipiscing elit,</font>
             </b>
             sed 🥰 do 🥰 eiusmod <u>tempor incididunt</u> ut labore et dolore magna aliqua.  eur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -24,12 +25,14 @@ const createRichText = ()=>{
             <i>sed do eiusmod tempor</i> incididunt ut labore et dolore magna aliqua.
             <s>Ut enim ad minim veniam</s>, quis nostrud exercitation ullamco laboris
             nisi ut aliquip ex ea commodo consequat.
-            <font color={{r:122,g:244,b:133}}>
+            <font color={{r:122,g:244,b:133}} size={35}>
                 Duis aute irure dolor in reprehenderit in voluptate
                 velit esse cillum dolore eu fugiat nulla pariatur.
                 <font color={{r:244,g:244,b:233}}>Excepteur sint occaecat cupidatat non proident,</font>
                 sunt in culpa qui officia deserunt
-                mollit anim id est laborum.
+                <font size={10}>
+                    mollit anim id est laborum. 3Lorem ipsum <u>dolor</u> sit amet, consectetur adipiscing elit
+                </font>
             </font>
         </div>
     );

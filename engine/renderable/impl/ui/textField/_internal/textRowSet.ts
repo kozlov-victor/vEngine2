@@ -17,7 +17,7 @@ import {DebugError} from "@engine/debug/debugError";
 export class TextRowSet extends NullGameObject {
 
     public declare children: readonly TextRow[];
-    public readonly spaceChar:Word = new Word(this.game,this.font,[{rawChar:' ',isEmoji:false}],Color.NONE);
+    public readonly spaceChar:Word = new Word(this.game,this.font,[{rawChar:' ',isEmoji:false,scaleFromCurrFontSize:1}],Color.NONE);
 
     private caret:number = 0;
     private currentTextRow:TextRow;
@@ -52,7 +52,7 @@ export class TextRowSet extends NullGameObject {
             this.appendChild(this.currentTextRow);
         }
         this.currentTextRow.complete();
-        this.caret+=this.font.fontContext.lineHeight+this.font.fontContext.spacing[1];
+        this.caret+=this.currentTextRow.size.height;
         this.currentTextRow = new TextRow(this.game,this.font,this.constrainSize.width,this);
         this.currentTextRow.pos.y = this.caret;
         this.appendChild(this.currentTextRow);

@@ -1,4 +1,4 @@
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
 import {Font, IRectViewJSON} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
@@ -13,6 +13,7 @@ export class CharacterImage extends Image {
 
     constructor(game:Game,private font:Font,private characterInfo:ICharacterInfo,color:Color) {
         super(game);
+        this.stretchMode = STRETCH_MODE.STRETCH;
         const [padUp,padRight,padDown,padLeft] = font.fontContext.padding;
         let charRect:IRectViewJSON = font.fontContext.symbols[characterInfo.rawChar] || font.fontContext.symbols['?'];
         if (charRect===undefined) {
@@ -37,7 +38,7 @@ export class CharacterImage extends Image {
         );
         if (this.getSrcRect().width<=0) this.getSrcRect().width = 0.001;
         if (this.getSrcRect().height<=0) this.getSrcRect().height = 0.001;
-        this.size.set(this.getSrcRect());
+        this.setScaleFromCurrFontSize(this.characterInfo.scaleFromCurrFontSize);
         this.pos.setXY(charRect.destOffsetX,charRect.destOffsetY);
         this.setResourceLink(font.getResourceLink());
         this.transformPoint.setToCenter();
@@ -71,7 +72,7 @@ export class CharacterImage extends Image {
     public setUnderLined(val:boolean):void {
         if (val) {
             this.createTextDecoratorLineIfNotExists();
-            this.textDecoratorLine.pos.setXY(1,this.size.height - this.textDecoratorLine.size.height - this.font.fontContext.padding[2]);
+            this.textDecoratorLine.pos.setXY(1,this.size.height - this.textDecoratorLine.size.height);
             this.textDecoratorLine.visible = true;
         } else {
             if (this.textDecoratorLine) this.textDecoratorLine.visible = false;
@@ -88,10 +89,21 @@ export class CharacterImage extends Image {
         }
     }
 
+    public setScaleFromCurrFontSize(scaleFromCurrFontSize:number){
+        this.size.setWH(
+            this.getSrcRect().width*scaleFromCurrFontSize,
+            this.getSrcRect().height*scaleFromCurrFontSize
+        );
+    }
+
+    public getCharacterInfo():Readonly<ICharacterInfo>{
+        return this.characterInfo;
+    }
+
     private createTextDecoratorLineIfNotExists():void {
         if (this.textDecoratorLine===undefined) {
             const textDecoratorLine = new Rectangle(this.game);
-            const height:number = ~~(this.font.fontContext.lineHeight/12) || 1;
+            const height:number = ~~((this.font.fontContext.lineHeight*this.characterInfo.scaleFromCurrFontSize)/12) || 1;
             textDecoratorLine.size.setWH(this.size.width+this.font.fontContext.spacing[0]*2,height);
             textDecoratorLine.lineWidth = 0;
             this.appendChild(textDecoratorLine);
