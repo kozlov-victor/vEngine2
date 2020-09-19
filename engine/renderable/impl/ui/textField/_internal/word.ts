@@ -25,12 +25,8 @@ export class Word extends NullGameObject {
         this.rawValue = chars.join('');
     }
 
-    fitSize():void{
-        this.size.width = 0;
-        this.children.forEach(c=>{
-            this.size.width+=c.size.width;
-        });
-        this.size.height = Math.max(...this.children.map(it=>it.size.height),0);
+    public getMaxCharacterFontScale(): number {
+        return Math.max(...this.chars.map(it=>it.scaleFromCurrFontSize));
     }
 
     clone():Word {

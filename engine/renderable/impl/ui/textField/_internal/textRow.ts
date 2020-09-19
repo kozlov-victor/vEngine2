@@ -4,6 +4,7 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {TextRowSet} from "@engine/renderable/impl/ui/textField/_internal/textRowSet";
 import {AlignText} from "@engine/renderable/impl/ui/textField/textAlign";
+import {Color} from "@engine/renderer/common/color";
 
 export class TextRow extends NullGameObject {
 
@@ -11,6 +12,8 @@ export class TextRow extends NullGameObject {
 
     private caret:number = 0;
     private alignText:AlignText = AlignText.LEFT;
+    public readonly DEFAULT_SPACE_CHAR_WIDTH:number =
+        new Word(this.game,this.font,[{rawChar:' ',isEmoji:false,scaleFromCurrFontSize:1}],Color.NONE).size.width;
 
     constructor(game:Game,private font:Font,private constrainWidth:number,private readonly rowSet:TextRowSet) {
         super(game);
@@ -18,16 +21,16 @@ export class TextRow extends NullGameObject {
 
     public canAddWord(word:Word):boolean{
         if (this.children.length===0) return true;
-        return this.caret + this.rowSet.spaceChar.size.width + word.size.width<=this.constrainWidth;
+        const currentSpaceSize:number = this.getMaxCharacterFontScale() * this.DEFAULT_SPACE_CHAR_WIDTH;
+        return this.caret + currentSpaceSize + word.size.width<=this.constrainWidth;
     }
 
     public addWord(word:Word,addWhiteSpaceBeforeIfNeed:boolean):void {
         if (this.children.length!==0 && addWhiteSpaceBeforeIfNeed) {
-            const space:Word = this.rowSet.spaceChar.clone();
-            space.children[0].setScaleFromCurrFontSize(
-                word.children[word.children.length-1].getCharacterInfo().scaleFromCurrFontSize
-            );
-            space.fitSize();
+            const scaleFromCurrFontSize =
+                word.children[word.children.length-1]?.getCharacterInfo()?.scaleFromCurrFontSize
+                ?? this.font.fontContext.lineHeight;
+            const space:Word = new Word(this.game,this.font,[{rawChar:' ',isEmoji:false,scaleFromCurrFontSize}],Color.NONE);
             this._addWord(space);
         }
         this._addWord(word);
@@ -52,6 +55,10 @@ export class TextRow extends NullGameObject {
         }
     }
 
+    public getMaxCharacterFontScale(): number {
+        return Math.max(...this.children.map(it=>it.getMaxCharacterFontScale()));
+    }
+
     public setAlignText(align:AlignText):void{
         if (this.children.length===0) return;
         if (align===this.alignText) return;
@@ -72,8 +79,9 @@ export class TextRow extends NullGameObject {
                     onlyWords.
                     map(it=>it.size.width).
                     reduce((it,prev)=>it+prev,0);
+                const spaceCharWidth:number = this.getMaxCharacterFontScale()*this.DEFAULT_SPACE_CHAR_WIDTH;
                 let spaceWidth:number = (this.rowSet.size.width - onlyWordsWidth)/(onlyWords.length-1);
-                if (spaceWidth>this.rowSet.spaceChar.size.width*2) spaceWidth = this.rowSet.spaceChar.size.width;
+                if (spaceWidth>spaceCharWidth*2) spaceWidth = spaceCharWidth;
                 this.removeChildren();
                 this.caret = 0;
 

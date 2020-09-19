@@ -17,7 +17,6 @@ import {DebugError} from "@engine/debug/debugError";
 export class TextRowSet extends NullGameObject {
 
     public declare children: readonly TextRow[];
-    public readonly spaceChar:Word = new Word(this.game,this.font,[{rawChar:' ',isEmoji:false,scaleFromCurrFontSize:1}],Color.NONE);
 
     private caret:number = 0;
     private currentTextRow:TextRow;
