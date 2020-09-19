@@ -99,7 +99,6 @@ export class TextRowSet extends NullGameObject {
                 this.pos.setY(0);
                 break;
             case AlignTextContentVertical.BOTTOM:
-                console.log(this.constrainSize.height,this.size.height);
                 this.pos.setY(this.constrainSize.height - this.size.height);
                 break;
         }
@@ -154,7 +153,6 @@ export class TextRowSet extends NullGameObject {
                 stringEx.
                 split(['\t','\n','\r',' ']).filter(it=>it.asRaw().trim().length).
                 forEach(s=>{
-                    console.log('adding ----',s);
                     this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color),true,true);
                 });
                 break;

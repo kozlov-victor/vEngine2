@@ -22,7 +22,7 @@ const createRichText = ()=>{
             </b>
             sed 🥰 do 🥰 eiusmod <u>tempor incididunt</u> ut labore et dolore magna aliqua.  eur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             2Lorem ipsum <b>dolor</b> sit amet, consectetur adipiscing elit,
-            <i>sed do eiusmod tempor</i> incididunt ut labore et dolore magna aliqua.
+            <i>sed do eiusmod tempor</i> incididunt <font size={35}>ut labore et <u>dolore</u> magna aliqua.</font>
             <s>Ut enim ad minim veniam</s>, quis nostrud exercitation ullamco laboris
             nisi ut aliquip ex ea commodo consequat.
             <font color={{r:122,g:244,b:133}} size={12}>
