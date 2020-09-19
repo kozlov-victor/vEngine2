@@ -90,6 +90,7 @@ export class CharacterImage extends Image {
     }
 
     public setScaleFromCurrFontSize(scaleFromCurrFontSize:number){
+        this.characterInfo.scaleFromCurrFontSize = scaleFromCurrFontSize;
         this.size.setWH(
             this.getSrcRect().width*scaleFromCurrFontSize,
             this.getSrcRect().height*scaleFromCurrFontSize

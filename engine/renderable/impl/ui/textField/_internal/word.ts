@@ -25,6 +25,14 @@ export class Word extends NullGameObject {
         this.rawValue = chars.join('');
     }
 
+    fitSize():void{
+        this.size.width = 0;
+        this.children.forEach(c=>{
+            this.size.width+=c.size.width;
+        });
+        this.size.height = Math.max(...this.children.map(it=>it.size.height),0);
+    }
+
     clone():Word {
         return new Word(this.game,this.font,this.chars,this.color);
     }

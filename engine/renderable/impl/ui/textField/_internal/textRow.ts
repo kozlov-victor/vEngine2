@@ -24,18 +24,22 @@ export class TextRow extends NullGameObject {
     public addWord(word:Word,addWhiteSpaceBeforeIfNeed:boolean):void {
         if (this.children.length!==0 && addWhiteSpaceBeforeIfNeed) {
             const space:Word = this.rowSet.spaceChar.clone();
-            space.children[0].setScaleFromCurrFontSize(word.children[word.children.length-1].getCharacterInfo().scaleFromCurrFontSize);
-            this._addWord(this.rowSet.spaceChar.clone());
+            space.children[0].setScaleFromCurrFontSize(
+                word.children[word.children.length-1].getCharacterInfo().scaleFromCurrFontSize
+            );
+            space.fitSize();
+            this._addWord(space);
         }
         this._addWord(word);
     }
 
     public complete():void {
-        this.size.height = Math.max(
+        this.size.height =
+            Math.max(
             ...this.children.map(it=>it.size.height),
-            this.rowSet.spaceChar.size.height,
-            this.font.fontContext.lineHeight + this.font.fontContext.spacing[1]
-        );
+                //this.font.fontContext.lineHeight
+            )
+            + this.font.fontContext.spacing[1];
     }
 
     public updateWordsVisibility():void{

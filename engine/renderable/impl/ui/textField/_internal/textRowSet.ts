@@ -154,6 +154,7 @@ export class TextRowSet extends NullGameObject {
                 stringEx.
                 split(['\t','\n','\r',' ']).filter(it=>it.asRaw().trim().length).
                 forEach(s=>{
+                    console.log('adding ----',s);
                     this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color),true,true);
                 });
                 break;
