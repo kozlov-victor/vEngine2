@@ -17,9 +17,9 @@ export class Word extends NullGameObject {
         chars.forEach(c=>{
             const char:CharacterImage = new CharacterImage(game,font,c,color);
             char.pos.setX(this.caret);
-            this.caret+=char.size.width;
+            this.caret+=char.size.width+font.fontContext.spacing[0];
             this.appendChild(char);
-            this.size.width+=char.size.width;
+            this.size.width+=char.size.width+font.fontContext.spacing[0];
         });
         this.size.height = Math.max(...this.children.map(it=>it.size.height),0);
         this.rawValue = chars.join('');
