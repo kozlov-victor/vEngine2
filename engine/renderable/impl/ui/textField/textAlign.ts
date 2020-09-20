@@ -22,5 +22,4 @@ export const enum WordBrake {
     PREDEFINED,
     FIT,
     PREDEFINED_BREAK_LONG_WORDS
-
 }

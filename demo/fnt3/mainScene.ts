@@ -3,7 +3,12 @@ import {Font} from "@engine/renderable/impl/general/font";
 import * as fntXML from "xml/angelcode-loader!./font.fnt"
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
-import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
+import {
+    AlignText,
+    AlignTextContentHorizontal,
+    AlignTextContentVertical,
+    WordBrake
+} from "@engine/renderable/impl/ui/textField/textAlign";
 import {ResourceLink} from "@engine/resources/resourceLink";
 
 export class MainScene extends Scene {
@@ -20,6 +25,9 @@ export class MainScene extends Scene {
         tf.size.set(this.game.size);
         tf.setPadding(10);
         tf.setWordBrake(WordBrake.PREDEFINED);
+        tf.setAlignText(AlignText.CENTER);
+        tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
+        tf.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tf.textColor.setRGBA(0,0,0,0);
         tf.setText("hello world\nnew string\ncreated with kvazars.com/littera/");
         this.appendChild(tf);

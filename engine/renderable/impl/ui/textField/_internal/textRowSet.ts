@@ -5,7 +5,7 @@ import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {Color} from "@engine/renderer/common/color";
 import {ISize} from "@engine/geometry/size";
-import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
+import {ICharacterInfo, StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 import {
     AlignText,
     AlignTextContentHorizontal,
@@ -133,19 +133,26 @@ export class TextRowSet extends NullGameObject {
         switch (this.wordBrake) {
             case WordBrake.PREDEFINED_BREAK_LONG_WORDS:
             case WordBrake.PREDEFINED: {
-                const breakLongWords:boolean = this.wordBrake===WordBrake.PREDEFINED_BREAK_LONG_WORDS;
-                stringEx.getAllChars().forEach(charInfo=>{ // treat each symbol as separate word
-                    switch (charInfo.rawChar) {
+                const applyNewLineIfCurrentIsFull:boolean = this.wordBrake===WordBrake.PREDEFINED_BREAK_LONG_WORDS;
+                stringEx.split(['\t','\n','\r',' '],true).forEach(s=>{
+                    console.log('predefined',s);
+                    switch (s.getAllChars()[0].rawChar) {
                         case '\r':
                             break;
                         case '\n':
                             this.newRow();
                             break;
+                        case ' ':
+                            this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color),applyNewLineIfCurrentIsFull,false);
+                            break;
                         case '\t':
-                            this.addWord(new Word(this.game,this.font,[charInfo],this.color),breakLongWords,false);
+                            const char:ICharacterInfo = s.getAllChars()[0];
+                            char.rawChar = ' ';
+                            // convert tab to 4 spaces
+                            this.addWord(new Word(this.game,this.font,[char,char,char,char],this.color),applyNewLineIfCurrentIsFull,false);
                             break;
                         default:
-                            this.addWord(new Word(this.game,this.font,[charInfo],this.color),breakLongWords,false);
+                            this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color),applyNewLineIfCurrentIsFull,false);
                             break;
                     }
                 });
@@ -153,7 +160,7 @@ export class TextRowSet extends NullGameObject {
             }
             case WordBrake.FIT: {
                 stringEx.
-                split(['\t','\n','\r',' ']).filter(it=>it.asRaw().trim().length).
+                split(['\t','\n','\r',' '],false).filter(it=>it.asRaw().trim().length).
                 forEach(s=>{
                     this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color),true,true);
                 });

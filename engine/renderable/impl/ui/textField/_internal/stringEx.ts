@@ -40,7 +40,7 @@ export class StringEx {
     constructor(private chars:ICharacterInfo[]) {
     }
 
-    public split(delimiter:string[]):StringEx[]{
+    public split(delimiter:string[],preserveDelimiter:boolean):StringEx[]{
         const result:StringEx[] = [];
         let currentChars:ICharacterInfo[] = [];
         this.chars.forEach((c,index)=>{
@@ -48,6 +48,9 @@ export class StringEx {
                 if (currentChars.length>0) {
                     result.push(new StringEx(currentChars));
                     currentChars = [];
+                }
+                if (preserveDelimiter) {
+                    result.push(new StringEx([c]));
                 }
             } else {
                 currentChars.push(c);
