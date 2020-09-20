@@ -6,6 +6,8 @@ import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
+import {Font} from "@engine/renderable/impl/general/font";
+import {ISize} from "@engine/geometry/size";
 
 class ProgramInstruction {
     public number:number;
@@ -19,6 +21,20 @@ class LoopContext {
     public to:number;
     public step:number;
     public currCounter:number;
+}
+
+class CliConsole {
+
+    private strings:string[] = [];
+    private readonly numOfTextRows:number;
+    private textField:TextField;
+
+
+    constructor(private game:Game,private font:Font, private size:ISize) {
+        this.textField = new TextField(this.game,font);
+        this.numOfTextRows = ~~(this.textField.getClientRect().height / this.font.fontContext.lineHeight);
+    }
+
 }
 
 export class BasicEnv {
