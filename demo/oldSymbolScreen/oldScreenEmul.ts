@@ -23,20 +23,6 @@ class LoopContext {
     public currCounter:number;
 }
 
-class CliConsole {
-
-    private strings:string[] = [];
-    private readonly numOfTextRows:number;
-    private textField:TextField;
-
-
-    constructor(private game:Game,private font:Font, private size:ISize) {
-        this.textField = new TextField(this.game,font);
-        this.numOfTextRows = ~~(this.textField.getClientRect().height / this.font.fontContext.lineHeight);
-    }
-
-}
-
 export class BasicEnv {
 
     private _data:any = [];
@@ -53,7 +39,7 @@ export class BasicEnv {
     private loopContexts:LoopContext[] = [];
     private subroutinesStack:number[] = [];
     private ended:boolean = false;
-    private drawingSurface:DrawingSurface;
+    private readonly drawingSurface:DrawingSurface;
 
 
     constructor(private game:Game,private textField:TextField) {
