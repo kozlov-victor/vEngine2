@@ -11,7 +11,8 @@ import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {
     AlignText,
     AlignTextContentHorizontal,
-    AlignTextContentVertical, WordBrake
+    AlignTextContentVertical,
+    WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
@@ -83,6 +84,8 @@ export class MainScene extends Scene {
 
         const tf2 = new RichTextField(this.game,this.fnt);
         tf2.setAutoSize(true);
+        tf2.setWordBrake(WordBrake.PREDEFINED);
+        tf2.setAlignText(AlignText.CENTER);
         tf2.pos.setXY(150,430);
         tf2.setText("-==no data==-");
         this.appendChild(tf2);
@@ -95,7 +98,9 @@ export class MainScene extends Scene {
             else cnt-=1;
             tf2.setRichText(
                 <div>
-                    clicked <font color={cnt>0?greenColor:redColor}><u>{cnt}</u></font> times
+                    clicked <font color={cnt>0?greenColor:redColor} size={50}><u>{cnt}</u></font> times
+                    {'\n'}
+                    <u>current value is</u> {cnt} (value is {cnt>0?'positive':'negative'})
                 </div>
             );
         });

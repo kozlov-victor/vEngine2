@@ -7,6 +7,7 @@ interface ITextFragment {
     italic?: boolean;
     bold?: boolean;
     color?: IColor|false;
+    specialChar?: 'BREAK';
     text?: string;
     linedThrough?: boolean;
     underlined? :boolean;
@@ -96,8 +97,8 @@ export class RichTextField extends ScrollableTextField {
                 }
             }
             if (f.text!==undefined) {
-                const prefix:string = (result.getAllChars()[result.getAllChars().length-1]?.rawChar===' ')?'':' '
-                const s:StringEx = StringEx.fromRaw(prefix+f.text);
+                //const prefix:string = (result.getAllChars()[result.getAllChars().length-1]?.rawChar===' ')?'':' '
+                const s:StringEx = StringEx.fromRaw(f.text);
                 s.setBold(isBold);
                 s.setItalic(isItalic);
                 s.setUnderlined(isUnderlined);

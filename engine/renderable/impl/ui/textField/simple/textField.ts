@@ -180,7 +180,6 @@ export class TextField extends Container {
     private calculateAutoSize(){
         if (this.measurer===undefined) this.measurer = new TextRowSet(this.game,this.font,{width:Infinity,height:Infinity},Color.NONE);
         this.passPropertiesToRowSet(this.measurer);
-        this.measurer.setText(this._textEx);
         this.size.setWH(
             this.measurer.size.width + this.marginLeft + this.paddingLeft + this.marginRight + this.paddingRight,
             this.measurer.size.height + this.marginTop + this.paddingTop + this.marginBottom + this.paddingBottom,

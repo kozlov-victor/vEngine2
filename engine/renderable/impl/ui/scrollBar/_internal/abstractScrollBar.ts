@@ -83,7 +83,6 @@ export abstract class AbstractScrollBar extends MarkableNullGameObject{
         assignSize(this.handler.size, getSize(this.size,d) * getSize(this.size,d) / this._maxValue,d);
         this.visible = this._enabled && getSize(this.handler.size,d) < getSize(this.size,d);
         if (!this.visible) return;
-
         assignPos(this.handler.pos, getSize(this.size,d) * this._value / this._maxValue,d);
 
         if (getPos(this.handler.pos,d)<0) {

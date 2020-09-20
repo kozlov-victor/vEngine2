@@ -18,6 +18,9 @@ export class TextRowSet extends NullGameObject {
 
     public declare children: readonly TextRow[];
 
+    public readonly DEFAULT_SPACE_CHAR_WIDTH:number =
+        new Word(this.game,this.font,[{rawChar:' ',multibyte:false,scaleFromCurrFontSize:1}],Color.NONE).size.width;
+
     private caret:number = 0;
     private currentTextRow:TextRow;
     private alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;
@@ -180,7 +183,6 @@ export class TextRowSet extends NullGameObject {
     }
 
     private clear():void {
-        if (this.children.length===0) return;
         this.removeChildren();
         this.caret = 0;
         this.currentTextRow = undefined!;

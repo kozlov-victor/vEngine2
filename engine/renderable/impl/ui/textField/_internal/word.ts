@@ -26,11 +26,7 @@ export class Word extends NullGameObject {
     }
 
     public getMaxCharacterFontScale(): number {
-        return Math.max(...this.chars.map(it=>it.scaleFromCurrFontSize));
-    }
-
-    clone():Word {
-        return new Word(this.game,this.font,this.chars,this.color);
+        return Math.max(...this.chars.map(it=>it.scaleFromCurrFontSize)) ?? 1;
     }
 
 }

@@ -42,30 +42,34 @@ export class CharacterImage extends Image {
         this.pos.setXY(charRect.destOffsetX,charRect.destOffsetY);
         this.setResourceLink(font.getResourceLink());
         this.transformPoint.setToCenter();
-        if (!characterInfo.isEmoji) this.color = color;
+        if (!characterInfo.multibyte) this.color = color;
         if (characterInfo.italic) this.setItalic(true);
         if (characterInfo.bold) this.setBold(true);
         if (characterInfo.color) this.setColor(characterInfo.color);
         if (characterInfo.underlined) this.setUnderLined(true);
         if (characterInfo.linedThrough) this.setLinedThrough(true);
+        this.visible = !(this.characterInfo.rawChar === ' ' && !this.characterInfo.linedThrough && !this.characterInfo.underlined);
     }
 
     public setItalic(val:boolean):void {
         if (val) this.skew.setX(val?-0.2:0);
+        this.characterInfo.italic = val;
     }
 
     public setBold(val:boolean):void {
         const scale:number = val?1.2:1;
         if (val) this.scale.setXY(scale);
+        this.characterInfo.bold = val;
     }
 
     public setColor(color:IColor):void {
-        if (this.characterInfo.isEmoji) return; // emoji are not colored
+        if (this.characterInfo.multibyte) return; // emoji are not colored
         if (!this.colorCloned) {
             this.color = this.color.clone();
             this.colorCloned = true;
         }
         this.color.set(color);
+        this.characterInfo.color = color;
         if (this.textDecoratorLine!==undefined) this.textDecoratorLine.color.set(this.color);
     }
 
@@ -77,6 +81,7 @@ export class CharacterImage extends Image {
         } else {
             if (this.textDecoratorLine) this.textDecoratorLine.visible = false;
         }
+        this.characterInfo.underlined = val;
     }
 
     public setLinedThrough(val:boolean):void {
@@ -87,6 +92,7 @@ export class CharacterImage extends Image {
         } else {
             if (this.textDecoratorLine) this.textDecoratorLine.visible = false;
         }
+        this.characterInfo.linedThrough = val;
     }
 
     public setScaleFromCurrFontSize(scaleFromCurrFontSize:number){

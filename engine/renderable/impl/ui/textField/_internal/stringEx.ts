@@ -2,7 +2,7 @@
 
 export interface ICharacterInfo {
     rawChar:string;
-    isEmoji:boolean;
+    multibyte:boolean;
     bold?:boolean;
     underlined?: boolean;
     linedThrough?: boolean;
@@ -23,12 +23,12 @@ export class StringEx {
             if (charCode >= 0xD800 && charCode <= 0xDBFF) {
                 charCode = str.charCodeAt(index + 1);
                 if (charCode >= 0xDC00 && charCode <= 0xDFFF) {
-                    output.push({rawChar:str.slice(index, index + 2),isEmoji:true,scaleFromCurrFontSize:1});
+                    output.push({rawChar:str.slice(index, index + 2),multibyte:true,scaleFromCurrFontSize:1});
                     ++index;
                     continue;
                 }
             }
-            output.push({rawChar:str.charAt(index),isEmoji:false,scaleFromCurrFontSize:1});
+            output.push({rawChar:str.charAt(index),multibyte:false,scaleFromCurrFontSize:1});
         }
         return new StringEx(output);
     }

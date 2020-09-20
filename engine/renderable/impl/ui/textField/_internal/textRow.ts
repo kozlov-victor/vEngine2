@@ -12,8 +12,6 @@ export class TextRow extends NullGameObject {
 
     private caret:number = 0;
     private alignText:AlignText = AlignText.LEFT;
-    public readonly DEFAULT_SPACE_CHAR_WIDTH:number =
-        new Word(this.game,this.font,[{rawChar:' ',isEmoji:false,scaleFromCurrFontSize:1}],Color.NONE).size.width;
 
     constructor(game:Game,private font:Font,private constrainWidth:number,private readonly rowSet:TextRowSet) {
         super(game);
@@ -21,28 +19,31 @@ export class TextRow extends NullGameObject {
 
     public canAddWord(word:Word):boolean{
         if (this.children.length===0) return true;
-        const currentSpaceSize:number = this.getMaxCharacterFontScale() * this.DEFAULT_SPACE_CHAR_WIDTH;
-        return this.caret + currentSpaceSize + word.size.width<=this.constrainWidth;
+        const currentSpaceWidth:number = word.getMaxCharacterFontScale() * this.rowSet.DEFAULT_SPACE_CHAR_WIDTH;
+        return this.caret + currentSpaceWidth + word.size.width<=this.constrainWidth;
     }
 
     public addWord(word:Word,addWhiteSpaceBeforeIfNeed:boolean):void {
         if (this.children.length!==0 && addWhiteSpaceBeforeIfNeed) {
-            const scaleFromCurrFontSize =
-                word.children[word.children.length-1]?.getCharacterInfo()?.scaleFromCurrFontSize
-                ?? this.font.fontContext.lineHeight;
-            const space:Word = new Word(this.game,this.font,[{rawChar:' ',isEmoji:false,scaleFromCurrFontSize}],Color.NONE);
+            const scaleFromCurrFontSize:number = word.getMaxCharacterFontScale();
+            const space:Word = new Word(this.game,this.font,[{rawChar:' ',multibyte:false,scaleFromCurrFontSize}],Color.NONE);
             this._addWord(space);
         }
         this._addWord(word);
     }
 
     public complete():void {
-        this.size.height =
-            Math.max(
-            ...this.children.map(it=>it.size.height),
-                //this.font.fontContext.lineHeight
-            )
-            + this.font.fontContext.spacing[1];
+        if (this.children.length===0) {
+            this.size.height = this.font.fontContext.lineHeight + this.font.fontContext.spacing[1];
+        } else {
+            this.size.height =
+                Math.max(
+                    ...this.children.map(it=>it.size.height),
+                    //this.font.fontContext.lineHeight
+                )
+                + this.font.fontContext.spacing[1];
+        }
+
     }
 
     public updateWordsVisibility():void{
@@ -56,7 +57,7 @@ export class TextRow extends NullGameObject {
     }
 
     public getMaxCharacterFontScale(): number {
-        return Math.max(...this.children.map(it=>it.getMaxCharacterFontScale()));
+        return Math.max(...this.children.map(it=>it.getMaxCharacterFontScale())) ?? 1;
     }
 
     public setAlignText(align:AlignText):void{
@@ -79,7 +80,7 @@ export class TextRow extends NullGameObject {
                     onlyWords.
                     map(it=>it.size.width).
                     reduce((it,prev)=>it+prev,0);
-                const spaceCharWidth:number = this.getMaxCharacterFontScale()*this.DEFAULT_SPACE_CHAR_WIDTH;
+                const spaceCharWidth:number = this.getMaxCharacterFontScale()*this.rowSet.DEFAULT_SPACE_CHAR_WIDTH;
                 let spaceWidth:number = (this.rowSet.size.width - onlyWordsWidth)/(onlyWords.length-1);
                 if (spaceWidth>spaceCharWidth*2) spaceWidth = spaceCharWidth;
                 this.removeChildren();
@@ -104,7 +105,6 @@ export class TextRow extends NullGameObject {
         this.caret+=word.size.width+this.font.fontContext.spacing[0];
         this.appendChild(word);
         this.size.width+=word.size.width+this.font.fontContext.spacing[0];
-        //if (this.size.width>this.constrainWidth) this.size.width = this.constrainWidth;
     }
 
 }
