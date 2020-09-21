@@ -118,7 +118,9 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
             throw new DebugError(`can not init drawer: initProgram method must be invoked!`);
         }
 
-        if (AbstractDrawer.currentInstance===this) return;
+        if (AbstractDrawer.currentInstance===this) {
+            return;
+        }
         AbstractDrawer.currentInstance?.unbind();
 
         AbstractDrawer.currentInstance = this;

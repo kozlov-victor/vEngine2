@@ -46,7 +46,6 @@ export abstract class AbstractGlFilter implements IFilter {
     }
 
     public doFilter(destFrameBuffer:FrameBuffer){
-        destFrameBuffer.bind();
         const keys:string[] = this._uniformCache.getKeys();
         for (let i = 0; i < keys.length; i++) {
             const name:string = keys[i];
@@ -58,6 +57,7 @@ export abstract class AbstractGlFilter implements IFilter {
         const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,size);
         this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,m16h.mat16);
         m16h.release();
+        destFrameBuffer.bind();
         destFrameBuffer.clear(Color.NONE);
         this.simpleRectDrawer.draw();
     }

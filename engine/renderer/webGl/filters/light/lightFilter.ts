@@ -19,7 +19,6 @@ export class LightFilter extends AbstractGlFilter {
     private readonly _u_useNormalMap:string;
     private readonly _normalTexture:string;
     private readonly _u_dimension:string;
-    //private readonly size:[number,number] = [0,0];
 
     private normalMap:Optional<Texture>;
 
@@ -56,10 +55,6 @@ export class LightFilter extends AbstractGlFilter {
         if (useNormalMap) {
             this.simpleRectDrawer.attachTexture(this._normalTexture,this.normalMap!);
         }
-        //const size:ISize = this.simpleRectDrawer.getAttachedTextureAt(0).size;
-        // this.size[0] = size.width;
-        // this.size[1] = size.height;
-        //this.simpleRectDrawer.setUniform(this.u_dimension,this.size);
         super.doFilter(destFrameBuffer);
     }
 

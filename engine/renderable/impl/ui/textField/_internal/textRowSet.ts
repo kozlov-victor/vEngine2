@@ -135,7 +135,6 @@ export class TextRowSet extends NullGameObject {
             case WordBrake.PREDEFINED: {
                 const applyNewLineIfCurrentIsFull:boolean = this.wordBrake===WordBrake.PREDEFINED_BREAK_LONG_WORDS;
                 stringEx.split(['\t','\n','\r',' '],true).forEach(s=>{
-                    console.log('predefined',s);
                     switch (s.getAllChars()[0].rawChar) {
                         case '\r':
                             break;

@@ -52,7 +52,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
 
     public translate(x:number, y:number, z:number = 0):this {
         const t:Mat16Holder = Mat16Holder.fromPool();
-        mat4.makeTranslation(t,x, y, z);
+        mat4.makeTranslation(t, x, y, z);
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
         mat4.matrixMultiply(result,t, m);

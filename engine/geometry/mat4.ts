@@ -75,10 +75,10 @@ export namespace mat4 {
 
     export const makeIdentity = (out:Mat16Holder):void => {
         out.set(
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
+             1,0, 0, 0,
+             0,1, 0, 0,
+             0,0, 1, 0,
+            0,0,0, 1
         );
     };
 
