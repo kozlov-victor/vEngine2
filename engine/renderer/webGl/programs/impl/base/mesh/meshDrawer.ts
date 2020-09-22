@@ -110,6 +110,7 @@ export class MeshDrawer extends AbstractDrawer {
     public bind():void{
         if (DEBUG && this.mesh===undefined) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
         super.bind();
+        this.bufferInfo.bind(this.program!);
         if (!this.mesh!.modelPrimitive.texCoordArr) {
             this.program!.disableAttribute(this.a_texCoord);
         } else {
