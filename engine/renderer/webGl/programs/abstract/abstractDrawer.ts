@@ -29,6 +29,10 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
 
     private static currentInstance:Optional<AbstractDrawer>;
 
+    public static unbindLastInstance():void {
+        if (this.currentInstance!==undefined) this.currentInstance.unbind();
+    }
+
     protected gl:WebGLRenderingContext;
     protected program:Optional<ShaderProgram>;
     protected uniformCache:FastMap<string,IUniformValue> = new FastMap();
@@ -108,7 +112,6 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         }
         this.texturesToBind.length = 0;
         this.drawElements();
-        this.unbind();
     }
 
     protected bind():void{

@@ -32,6 +32,7 @@ import Mat16Holder = mat4.Mat16Holder;
 import glEnumToString = debugUtil.glEnumToString;
 import MAT16 = mat4.MAT16;
 import {SimpleColoredRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleColoredRectDrawer";
+import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -456,10 +457,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public setRenderTarget(fbs:FrameBufferStack){
+        if (this._currFrameBufferStack!==fbs) {
+            AbstractDrawer.unbindLastInstance();
+        }
         this._currFrameBufferStack = fbs;
     }
 
     public setDefaultRenderTarget(){
+        AbstractDrawer.unbindLastInstance();
         this._currFrameBufferStack = this._origFrameBufferStack;
     }
 

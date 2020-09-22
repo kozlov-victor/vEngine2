@@ -156,8 +156,6 @@ export class Game {
         return this._renderer as T;
     }
 
-    public debug2?(...val:unknown[]):void;
-
     public runScene(scene:Scene, transition?:Optional<ISceneTransition>,replaceStack:boolean = true):void{
         if (replaceStack) this._sceneStack.replaceLast({scene,transition});
         this._prevScene = this._currScene;

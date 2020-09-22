@@ -352,8 +352,6 @@ export abstract class RenderableModel
         return this.children;
     }
 
-
-
     public renderToTexture(target:IRenderTarget,clearColor?:Color):void{
         this.game.getRenderer().getHelper().renderModelToTexture(this,target,clearColor);
     }
