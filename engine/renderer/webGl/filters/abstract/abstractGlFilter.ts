@@ -47,7 +47,7 @@ export abstract class AbstractGlFilter implements IFilter {
 
     public doFilter(destFrameBuffer:FrameBuffer){
         const keys:string[] = this._uniformCache.getKeys();
-        for (let i = 0; i < keys.length; i++) {
+        for (let i:number = 0; i < keys.length; i++) {
             const name:string = keys[i];
             const value:UNIFORM_VALUE_TYPE = this._uniformCache.get(keys[i])!;
             this.simpleRectDrawer.setUniform(name,value);
