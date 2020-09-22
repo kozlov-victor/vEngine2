@@ -3,6 +3,7 @@ import Mat16Holder = mat4.Mat16Holder;
 import {Optional} from "@engine/core/declarations";
 import {IPropertyStack} from "@engine/renderer/common/propertyStack";
 import {Stack} from "@engine/misc/collection/stack";
+import {mat4Special} from "@engine/geometry/mat4Special";
 
 export interface IMatrixTransformable {
     transformSave():void;
@@ -55,7 +56,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         mat4.makeTranslation(t, x, y, z);
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(result,t, m);
+        mat4Special.matrixTranslationMultiply(result,t, m);
         this.setCurrentValue(result);
         t.release();
         m.release();
@@ -95,7 +96,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         mat4.makeXSkew(t,angle);
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(result,t, m);
+        mat4Special.matrixSkewXMultiply(result,t, m);
         this.setCurrentValue(result);
         t.release();
         m.release();
@@ -107,7 +108,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         mat4.makeYSkew(t,angle);
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(result,t, m);
+        mat4Special.matrixSkewYMultiply(result,t, m);
         this.setCurrentValue(result);
         t.release();
         m.release();
@@ -117,7 +118,13 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     public rotateX(angleInRadians:number):this {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeXRotation(t,angleInRadians);
-        this._rotate(t);
+
+        const m:Mat16Holder = this.getCurrentValue();
+        const result:Mat16Holder = Mat16Holder.fromPool();
+        mat4Special.matrixRotationXMultiply(result,t, m);
+        this.setCurrentValue(result);
+        m.release();
+
         t.release();
         return this;
     }
@@ -125,7 +132,13 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     public rotateY(angleInRadians:number):this {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeYRotation(t,angleInRadians);
-        this._rotate(t);
+
+        const m:Mat16Holder = this.getCurrentValue();
+        const result:Mat16Holder = Mat16Holder.fromPool();
+        mat4Special.matrixRotationYMultiply(result,t, m);
+        this.setCurrentValue(result);
+        m.release();
+
         t.release();
         return this;
     }
@@ -133,7 +146,13 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     public rotateZ(angleInRadians:number):this {
         const t:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeZRotation(t,angleInRadians);
-        this._rotate(t);
+
+        const m:Mat16Holder = this.getCurrentValue();
+        const result:Mat16Holder = Mat16Holder.fromPool();
+        mat4Special.matrixRotationZMultiply(result,t, m);
+        this.setCurrentValue(result);
+        m.release();
+
         t.release();
         return this;
     }
@@ -143,7 +162,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         mat4.makeScale(t,x, y, z);
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(result,t, m);
+        mat4Special.matrixScaleMultiply(result,t, m);
         this.setCurrentValue(result);
         t.release();
         m.release();
@@ -176,12 +195,5 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         this._stack.push(ident);
     }
 
-    private _rotate(rotMat:Mat16Holder){
-        const m:Mat16Holder = this.getCurrentValue();
-        const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(result,rotMat, m);
-        this.setCurrentValue(result);
-        m.release();
-    }
 
 }
