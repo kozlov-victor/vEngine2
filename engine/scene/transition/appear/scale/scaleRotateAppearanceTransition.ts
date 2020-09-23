@@ -5,7 +5,7 @@ import {EasingLinear} from "@engine/misc/easing/functions/linear";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 import {Image} from "@engine/renderable/impl/general/image";
 
-export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTransition {
+export abstract class AbstractScaleRotateAppearanceTransition extends AbstractSceneTransition {
 
     protected _transformationTarget:Image;
 
@@ -13,7 +13,7 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
         protected readonly game:Game,
         protected readonly time:number = 1000,
         protected readonly easeFn:EaseFn = EasingLinear,
-        protected readonly axes: {x:boolean,y:boolean} = {x:true,y:true}
+        protected readonly numOfRotations:number = 1,
     )
     {
         super(game,time,easeFn);
@@ -29,21 +29,20 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
     protected abstract getFromTo():{from:number,to:number};
 
     protected onTransitionProgress(val: number): void {
-        const scaleByX:number = this.axes.x?val:1;
-        const scaleByY:number = this.axes.y?val:1;
-        this._transformationTarget.scale.setXY(scaleByX,scaleByY);
+        this._transformationTarget.scale.setXY(val);
+        this._transformationTarget.angle = 2*Math.PI*(1 - val)*this.numOfRotations;
     }
 
 }
 
-export class ScaleInAppearanceTransition extends AbstractScaleAppearanceTransition {
+export class ScaleRotateInAppearanceTransition extends AbstractScaleRotateAppearanceTransition {
 
     protected getBottomAndTopImages(): [Image, Image] {
         return [this._prevSceneImage,this._currSceneImage];
     }
 
     public getOppositeTransition(): ISceneTransition {
-        return new ScaleOutAppearanceTransition(this.game,this.time,this.easeFn,this.axes);
+        return new ScaleRotateOutAppearanceTransition(this.game,this.time,this.easeFn,this.numOfRotations);
     }
 
     protected getFromTo(): { from: number; to: number } {
@@ -52,14 +51,14 @@ export class ScaleInAppearanceTransition extends AbstractScaleAppearanceTransiti
 
 }
 
-export class ScaleOutAppearanceTransition extends AbstractScaleAppearanceTransition {
+export class ScaleRotateOutAppearanceTransition extends AbstractScaleRotateAppearanceTransition {
 
     protected getBottomAndTopImages(): [Image, Image] {
         return [this._currSceneImage,this._prevSceneImage];
     }
 
     public getOppositeTransition(): ISceneTransition {
-        return new ScaleInAppearanceTransition(this.game,this.time,this.easeFn,this.axes);
+        return new ScaleRotateInAppearanceTransition(this.game,this.time,this.easeFn,this.numOfRotations);
     }
 
     protected getFromTo(): { from: number; to: number } {

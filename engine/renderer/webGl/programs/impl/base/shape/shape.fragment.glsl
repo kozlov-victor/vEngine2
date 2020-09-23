@@ -29,8 +29,8 @@ vec4 getRepeatedImage(float tx,float ty){
     return texture2D(texture, txVec);
 }
 
-vec4 mixTextureColorWithTint(vec4 texture, vec4 tint){
-    return mix(texture,tint,tint.a)*texture.a;
+vec4 mixTextureColorWithTint(vec4 textureCol, vec4 tint){
+    return mix(textureCol,tint,tint.a)*textureCol.a;
 }
 
 vec4 getFillColor(){

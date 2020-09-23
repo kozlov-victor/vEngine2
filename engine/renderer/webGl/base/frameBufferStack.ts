@@ -81,7 +81,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     }
 
     public pushState(filters:AbstractGlFilter[],forceDrawChildrenOnNewSurface:boolean):IStateStackPointer{
-        const prevPointer = this._getLast().pointer;
+        const prevPointer:IStateStackPointer = this._getLast().pointer;
         if (filters.length>0 || forceDrawChildrenOnNewSurface) {
             if (this.debug) console.log('state has been pushed');
             if (this._stack[this._stackPointer]===undefined) {

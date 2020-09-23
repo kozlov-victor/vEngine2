@@ -1,11 +1,11 @@
 import {AbstractSceneTransition} from "@engine/scene/transition/abstract/abstractSceneTransition";
+import {Image} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
-import {Image} from "@engine/renderable/impl/general/image";
 
-export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTransition {
+export abstract class AbstractSizeHeightAppearanceTransition extends AbstractSceneTransition {
 
     protected _transformationTarget:Image;
 
@@ -13,7 +13,6 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
         protected readonly game:Game,
         protected readonly time:number = 1000,
         protected readonly easeFn:EaseFn = EasingLinear,
-        protected readonly axes: {x:boolean,y:boolean} = {x:true,y:true}
     )
     {
         super(game,time,easeFn);
@@ -21,7 +20,6 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
         this._transitionScene.appendChild(imageOnBottom);
         this._transitionScene.appendChild(imageOnTop);
         this._transformationTarget = imageOnTop;
-        this._transformationTarget.transformPoint.setToCenter();
     }
 
     protected abstract getBottomAndTopImages():[Image,Image];
@@ -29,40 +27,44 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
     protected abstract getFromTo():{from:number,to:number};
 
     protected onTransitionProgress(val: number): void {
-        const scaleByX:number = this.axes.x?val:1;
-        const scaleByY:number = this.axes.y?val:1;
-        this._transformationTarget.scale.setXY(scaleByX,scaleByY);
+        this._transformationTarget.pos.setY(this.game.height/2 - val);
+        this._transformationTarget.getSrcRect().setXYWH(
+             0,this.game.size.height/2 - val,
+            this.game.width,val*2
+        );
+        this._transformationTarget.size.height = val*2;
+        this._transformationTarget.visible = this._transformationTarget.size.height!==0;
     }
 
 }
 
-export class ScaleInAppearanceTransition extends AbstractScaleAppearanceTransition {
+export class SizeHeightInAppearanceTransition extends AbstractSizeHeightAppearanceTransition {
 
     protected getBottomAndTopImages(): [Image, Image] {
         return [this._prevSceneImage,this._currSceneImage];
     }
 
     public getOppositeTransition(): ISceneTransition {
-        return new ScaleOutAppearanceTransition(this.game,this.time,this.easeFn,this.axes);
+        return new SizeHeightOutAppearanceTransition(this.game,this.time,this.easeFn);
     }
 
     protected getFromTo(): { from: number; to: number } {
-        return {from: 0,to: 1};
+        return {from: 0,to: this.game.size.height/2};
     }
 
 }
 
-export class ScaleOutAppearanceTransition extends AbstractScaleAppearanceTransition {
+export class SizeHeightOutAppearanceTransition extends AbstractSizeHeightAppearanceTransition {
 
     protected getBottomAndTopImages(): [Image, Image] {
         return [this._currSceneImage,this._prevSceneImage];
     }
 
     public getOppositeTransition(): ISceneTransition {
-        return new ScaleInAppearanceTransition(this.game,this.time,this.easeFn,this.axes);
+        return new SizeHeightInAppearanceTransition(this.game,this.time,this.easeFn);
     }
 
-    protected getFromTo(): { from: number; to: number } {
-        return {from: 1,to: 0};
+    protected getFromTo(): {from: number; to: number} {
+        return {from: this.game.size.height/2,to: 0};
     }
 }

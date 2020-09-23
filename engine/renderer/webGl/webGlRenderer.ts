@@ -33,6 +33,7 @@ import glEnumToString = debugUtil.glEnumToString;
 import MAT16 = mat4.MAT16;
 import {SimpleColoredRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleColoredRectDrawer";
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
+import {mat4Special} from "@engine/geometry/mat4Special";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -67,14 +68,13 @@ const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat
     mat4.makeTranslation(translationMatrix,rect.x, rect.y, 0);
 
     const matrix1:Mat16Holder = Mat16Holder.fromPool();
-    mat4.matrixMultiply(matrix1,scaleMatrix, translationMatrix);
+    mat4Special.matrixScaleMultiply(matrix1,scaleMatrix,translationMatrix);
 
     const matrix2:Mat16Holder = Mat16Holder.fromPool();
     mat4.matrixMultiply(matrix2,matrix1, matrixStack.getCurrentValue());
 
     const matrix3:Mat16Holder = Mat16Holder.fromPool();
     mat4.matrixMultiply(matrix3,matrix2, projectionMatrix);
-
 
     const matrix4:Mat16Holder = Mat16Holder.fromPool();
     mat4.matrixMultiply(matrix4,matrix3, zToWMatrix);

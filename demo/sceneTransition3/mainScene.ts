@@ -12,6 +12,15 @@ import {
     Flip3dVerticalOutTransition
 } from "@engine/scene/transition/flip/flip3dTransition";
 import {EasingSine} from "@engine/misc/easing/functions/sine";
+import {
+    ScaleRotateInAppearanceTransition,
+    ScaleRotateOutAppearanceTransition
+} from "@engine/scene/transition/appear/scale/scaleRotateAppearanceTransition";
+import {EasingBounce} from "@engine/misc/easing/functions/bounce";
+import {
+    ScaleInAppearanceTransition,
+    ScaleOutAppearanceTransition
+} from "@engine/scene/transition/appear/scale/scaleAppearanceTransition";
 
 
 // inspired by https://www.youtube.com/watch?v=mrR9eqUNTic
@@ -41,6 +50,17 @@ export class MainScene extends Scene {
         this.createFlip3dVerticalTransitionButton('flip 3d billboard vertical in',true, true);
         this.createFlip3dVerticalTransitionButton('flip 3d billboard vertical out',false, true);
 
+        this.createScaleTransitionButton('scale x in',true, true, false);
+        this.createScaleTransitionButton('scale x out',false, true, false);
+
+        this.createScaleTransitionButton('scale y in',true, false, true);
+        this.createScaleTransitionButton('scale y out',false, false, true);
+
+        this.createScaleRotateTransitionButton('scale-rotate in',true,2);
+        this.createScaleRotateTransitionButton('scale-rotate out',false,0.25);
+
+
+
     }
 
     private createFlip3dHorizontalTransitionButton(text:string,isAppearing:boolean,billboard:boolean){
@@ -58,6 +78,23 @@ export class MainScene extends Scene {
                 new Flip3dVerticalOutTransition(this.game,billboard,1000);
         this.createTransitionButton(text,transition);
     }
+
+    private createScaleRotateTransitionButton(text:string,isAppearing:boolean,numOfRotations:number){
+        const transition:ISceneTransition =
+            isAppearing?
+                new ScaleRotateInAppearanceTransition(this.game,1000, EasingBounce.Out,numOfRotations):
+                new ScaleRotateOutAppearanceTransition(this.game,1000, EasingSine.InOut,numOfRotations);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createScaleTransitionButton(text:string,isAppearing:boolean,scaleX:boolean,scaleY:boolean){
+        const transition:ISceneTransition =
+            isAppearing?
+                new ScaleInAppearanceTransition(this.game,1000, EasingBounce.Out,{x:scaleX,y:scaleY}):
+                new ScaleOutAppearanceTransition(this.game,1000, EasingSine.InOut,{x:scaleX,y:scaleY});
+        this.createTransitionButton(text,transition);
+    }
+
 
     private createTransitionButton(text:string,transition:ISceneTransition){
         const tf:TextField = new TextField(this.game,this.fnt);
