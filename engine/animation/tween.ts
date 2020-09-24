@@ -25,6 +25,7 @@ interface IKeyVal {
 
 export interface ITweenDescription<T> {
     target:T;
+    start?:(arg:T)=>void;
     progress?:(arg:T)=>void;
     complete?:(arg:T)=>void;
     ease?:EaseFn;
@@ -52,18 +53,21 @@ export class Tween<T> {
 
     private _propsToChange:(keyof T)[] = [];
     private _startedTime:number = 0;
+    private _delayWaitTime:number = 0;
     private _currTime:number = 0;
     private _completed:boolean = false;
     private readonly _target: T;
     private readonly _progressFn:Optional<((arg:T)=>void)>;
     private readonly _delayBeforeStart:number = 0;
     private readonly _completeFn:Optional<((arg:T)=>void)>;
+    private readonly _startedFn:Optional<((arg:T)=>void)>;
     private readonly _easeFn:EaseFn;
     private readonly _tweenTime: number;
     private readonly _loop: boolean;
     private _currentLoop:number = 0;
     private readonly _numOfLoops:number;
     private readonly _yoyo:boolean;
+    private _started: boolean = false;
     private _desc:ITweenDescriptionNormalized<T>;
 
     /*
@@ -97,9 +101,10 @@ export class Tween<T> {
         this._target = tweenDesc.target;
         this._progressFn = tweenDesc.progress;
         this._completeFn = tweenDesc.complete;
+        this._startedFn = tweenDesc.start;
         this._easeFn = tweenDesc.ease || EasingLinear;
         this._delayBeforeStart = tweenDesc.delayBeforeStart || 0;
-        this._tweenTime = (tweenDesc.time || 1000) + this._delayBeforeStart;
+        this._tweenTime = (tweenDesc.time || 1000);
         if (DEBUG && tweenDesc.loop===undefined && tweenDesc.numOfLoops!==undefined) {
             throw new DebugError(`loop property need to be set to true if numOfLoops is specified`);
         }
@@ -114,14 +119,16 @@ export class Tween<T> {
 
     public update():void {
         if (this._completed) return;
-        const currTime:number = Game.getInstance().getCurrentTime();
+        const currTime:number = Game.getInstance().getCurrentTime(); // todo pass game instance
+
+        if (this._currentLoop===0 && this._delayBeforeStart>0) {
+            this._delayWaitTime = this._delayWaitTime || currTime;
+            if (currTime - this._delayWaitTime<this._delayBeforeStart) return;
+        }
+
         this._currTime = currTime;
         if (this._startedTime===0) this._startedTime = currTime;
         let curTweenTime:number = currTime - this._startedTime;
-
-        //if (curTweenTime<0) curTweenTime = currTime; // after long delay of looped tween todo?
-
-        if (this._currentLoop===0 && curTweenTime<this._delayBeforeStart) return;
 
         if (curTweenTime>this._tweenTime) {
             if (this._loop) {
@@ -143,6 +150,7 @@ export class Tween<T> {
         }
 
         let l:number = this._propsToChange.length;
+        if (this._startedFn && !this._started) this._startedFn(this._target);
         while(l--) {
             const prp:keyof T = this._propsToChange[l];
             const valFrom:number = this._desc.from[prp] as number;
@@ -155,6 +163,7 @@ export class Tween<T> {
                 this._tweenTime) as unknown as T[keyof T];
         }
         if (this._progressFn) this._progressFn(this._target);
+        this._started = true;
     }
 
     public reset():void {

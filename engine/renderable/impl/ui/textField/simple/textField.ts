@@ -9,7 +9,8 @@ import {Color} from "@engine/renderer/common/color";
 import {
     AlignText,
     AlignTextContentHorizontal,
-    AlignTextContentVertical, WordBrake
+    AlignTextContentVertical,
+    WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
 import {FrameSkipper} from "@engine/misc/frameSkipper";
@@ -41,7 +42,7 @@ export class TextField extends Container {
 
     private needTextRedraw:boolean = false;
 
-    constructor(game:Game,protected font:Font) {
+    constructor(game:Game,protected font:Font,protected useCache:boolean = true) {
         super(game);
         this.appendChild(this.rowSetContainer);
         this.size.setWH(300,100);
@@ -62,6 +63,12 @@ export class TextField extends Container {
     }
 
     revalidate() {
+        if (this.useCache) this._revalidateWithCache();
+        else this._revalidateWithoutCache();
+        super.revalidate();
+    }
+
+    private _revalidateWithCache():void {
         if (DEBUG && !this._autosize && (this.size.width===0 || this.size.height===0)) {
             throw new DebugError(`can not setText: TextField size.width and/or size.height is not defined`);
         }
@@ -88,13 +95,40 @@ export class TextField extends Container {
         this._setText();
     }
 
+    private _revalidateWithoutCache():void {
+        const clientRect: Readonly<IRectJSON> = this.getClientRect();
+        let rectIsDirty: boolean = true;
+        if (this.rowSet !== undefined) {
+            const currentClientRect = this.rowSet.getDestRect();
+            rectIsDirty =
+                clientRect.x !== currentClientRect.x ||
+                clientRect.y !== currentClientRect.y ||
+                clientRect.width !== currentClientRect.width ||
+                clientRect.height !== currentClientRect.height;
+        }
+        if (this.rowSet === undefined || rectIsDirty) {
+            if (this.rowSet !== undefined) this.rowSet.removeSelf();
+            this.rowSet = new TextRowSet(this.game, this.font, clientRect, this.textColor);
+            this.rowSetContainer.appendChild(this.rowSet);
+        }
+        this.rowSetContainer.pos.set(clientRect);
+        this.rowSetContainer.size.set(clientRect);
+        this._setText();
+        if (this._autosize) {
+            this.size.setWH(
+                this.rowSet.size.width + this.marginLeft + this.paddingLeft + this.marginRight + this.paddingRight,
+                this.rowSet.size.height + this.marginTop + this.paddingTop + this.marginBottom + this.paddingBottom,
+            );
+        }
+    }
+
     public getText():string{
         return this._text;
     }
 
     public destroy() {
         super.destroy();
-        this.cacheSurface.destroy();
+        if (this.cacheSurface!==undefined) this.cacheSurface.destroy();
     }
 
     public update() {
@@ -148,13 +182,28 @@ export class TextField extends Container {
         this.requestTextRedraw();
     }
 
+    protected collectAllChars():CharacterImage[] {
+        const result:CharacterImage[] = [];
+        for (let m:number = 0; m < this.rowSet.children.length; m++) {
+            const row:TextRow = this.rowSet.children[m];
+            for (let j:number = 0; j < row.children.length; j++) {
+                const child:Word = row.children[j];
+                for (let k:number = 0; k < child.children.length; k++) {
+                    const char:CharacterImage = child.children[k];
+                    result.push(char);
+                }
+            }
+        }
+        return result;
+    }
+
     protected findCharImageByIndex(i:number):CharacterImage{
         let cnt:number = 0;
-        for (let m = 0; m < this.rowSet.children.length; m++) {
+        for (let m:number = 0; m < this.rowSet.children.length; m++) {
             const row:TextRow = this.rowSet.children[m];
-            for (let j = 0; j < row.children.length; j++) {
+            for (let j:number = 0; j < row.children.length; j++) {
                 const child:Word = row.children[j];
-                for (let k = 0; k < child.children.length; k++) {
+                for (let k:number = 0; k < child.children.length; k++) {
                     const char:CharacterImage = child.children[k];
                     if (cnt===i) return char;
                     cnt++;
@@ -199,8 +248,10 @@ export class TextField extends Container {
         if (!this.needTextRedraw) return;
         this.rowSet.updateRowsVisibility();
         if (this.frameSkipper.willNextFrameBeSkipped()) return;
-        this.cacheSurface.clear();
-        this.cacheSurface.drawModel(this.rowSet);
+        if (this.cacheSurface!==undefined) {
+            this.cacheSurface.clear();
+            this.cacheSurface.drawModel(this.rowSet);
+        }
         this.needTextRedraw = false;
     }
 
@@ -209,30 +260,10 @@ export class TextField extends Container {
 export class TextFieldWithoutCache extends TextField {
 
     constructor(game: Game, font: Font) {
-        super(game, font);
-        this.setWordBrake(WordBrake.PREDEFINED);
-        this.size.setWH(16,16);
+        super(game, font, false);
     }
 
-    revalidate() {
-        const clientRect: Readonly<IRectJSON> = this.getClientRect();
-        let rectIsDirty: boolean = true;
-        if (this.rowSet !== undefined) {
-            const currentClientRect = this.rowSet.getDestRect();
-            rectIsDirty =
-                clientRect.x !== currentClientRect.x ||
-                clientRect.y !== currentClientRect.y ||
-                clientRect.width !== currentClientRect.width ||
-                clientRect.height !== currentClientRect.height;
-        }
-        if (this.rowSet === undefined || rectIsDirty) {
-            if (this.rowSet !== undefined) this.rowSet.removeSelf();
-            this.rowSet = new TextRowSet(this.game, this.font, clientRect, this.textColor);
-            this.rowSetContainer.appendChild(this.rowSet);
-        }
-        this.rowSetContainer.pos.set(clientRect);
-        this.rowSetContainer.size.set(clientRect);
-        this._setText();
+    protected requestTextRedraw():void {
+        // nothing to do
     }
-
 }

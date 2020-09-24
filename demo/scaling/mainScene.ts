@@ -31,13 +31,14 @@ export class MainScene extends Scene {
         this.appendChild(spr);
         spr.transformPoint.setToCenter();
         spr.anchorPoint.setToCenter();
+        spr.scale.setXY(0.7);
 
         this.addTween(new Tween<Point2d>({
-            delayBeforeStart: 200,
+            delayBeforeStart: 1200,
             target:spr.scale,
             time:800,
             from:{x:0.7,y:0.7},
-            to:{x:0.9,y:0.9},
+            to:{x:1.2,y:1.2},
             loop: true,
             yoyo: true,
             numOfLoops: 4,
