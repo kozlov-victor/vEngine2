@@ -18,6 +18,10 @@ import {
     TurnThePageBackwardTransition,
     TurnThePageForwardTransition
 } from "@engine/scene/transition/appear/page/turnThePageAppearanceTransition";
+import {
+    TurnThePageVerticalBackwardTransition,
+    TurnThePageVerticalForwardTransition
+} from "@engine/scene/transition/appear/page/turnThePageVerticalAppearanceTransition";
 
 
 // inspired by https://www.youtube.com/watch?v=mrR9eqUNTic
@@ -25,7 +29,7 @@ export class MainScene extends Scene {
 
     private fnt:Font;
     public colorBG: Color = Color.RGB(233);
-    private btnPos:number=0;
+    private btnPos:number=100;
 
     public onPreloading(){
 
@@ -45,6 +49,9 @@ export class MainScene extends Scene {
         this.createTurnPageTransitionButton('turn the next page -----   ---- --- >>>',true);
         this.createTurnPageTransitionButton('turn the prev page -----   ---- --- >>>',false);
 
+        this.createTurnPageVerticalTransitionButton('turn the next page (vertical)',true);
+        this.createTurnPageVerticalTransitionButton('turn the prev page (vertical)',false);
+
     }
 
     private createTurnPageTransitionButton(text:string,isAppearing:boolean){
@@ -52,6 +59,14 @@ export class MainScene extends Scene {
             isAppearing?
                 new TurnThePageForwardTransition(this.game,1000, EasingSine.Out):
                 new TurnThePageBackwardTransition(this.game,1000, EasingSine.Out);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createTurnPageVerticalTransitionButton(text:string,isAppearing:boolean){
+        const transition:ISceneTransition =
+            isAppearing?
+                new TurnThePageVerticalForwardTransition(this.game,1000, EasingSine.Out):
+                new TurnThePageVerticalBackwardTransition(this.game,1000, EasingSine.Out);
         this.createTransitionButton(text,transition);
     }
 
