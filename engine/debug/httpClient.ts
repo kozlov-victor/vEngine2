@@ -33,7 +33,6 @@ const request = <T>(data:IRequestData<T>):Promise<T>=> {
     data.method = data.method || 'get';
     if (data.data && data.method==='get') data.url+='?'+objectToQuery(data.data);
     const xhr=new XMLHttpRequest();
-    if (data.setup) data.setup(xhr);
     let resolveFn = noop as (arg:T)=>void, rejectFn = noop;
     let promise;
     if (window.Promise) {
@@ -47,7 +46,7 @@ const request = <T>(data:IRequestData<T>):Promise<T>=> {
             if ( (xhr.status>=200 && xhr.status<=299) || xhr.status===0) {
                 let resp = xhr.responseText;
                 const contentType = xhr.getResponseHeader("Content-Type")||'';
-                if (contentType.toLowerCase().indexOf('json')>-1) resp = JSON.parse(resp);
+                if (contentType.toLowerCase().indexOf('json')>-1 && resp && resp.substr!==undefined) resp = JSON.parse(resp);
                 if (data.success) {
                     data.success(resp as unknown as T);
                 }
@@ -61,6 +60,7 @@ const request = <T>(data:IRequestData<T>):Promise<T>=> {
         }
     };
     xhr.open(data.method,data.url,true);
+    if (data.setup) data.setup(xhr);
     if (data.requestType) {
         if (data.requestType!=='multipart/form-data') // at this case header needs to be auto generated
             xhr.setRequestHeader("Content-Type", data.requestType);

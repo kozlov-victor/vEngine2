@@ -75,9 +75,6 @@
 </head>
 <body>
     <script>
-        console.log = function(a){
-            alert(a);
-        }
         document.write('<script src="./out/debug.js?modified='+new Date().getTime()+'"></sc'+'ript>');
     </script>
 
@@ -191,7 +188,9 @@
 
     </script>
 
-    <script src="./out/_index.js"></script>
+    <script>
+        document.write('<script src="./out/_index.js?modified='+new Date().getTime()+'"></sc'+'ript>');
+    </script>
 </body>
 </html>
 

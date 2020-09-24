@@ -19,7 +19,10 @@ export class Widget extends VEngineTsxComponent<{}> {
     }
 
     private async loadList(){
-        this.items = await httpClient.get<string[]>('./index.json',{r:Math.random()});
+        this.items = await httpClient.get<string[]>('./index.json',{r:Math.random()},undefined,undefined,xhr => {
+            xhr.setRequestHeader('Content-Type','application/json')
+        });
+        if (!this.items.splice) this.items = JSON.parse(this.items as any as string);
         this.listLoading = false;
         this.triggerRendering();
     }
