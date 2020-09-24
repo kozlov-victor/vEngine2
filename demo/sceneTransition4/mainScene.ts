@@ -24,7 +24,6 @@ import {
 } from "@engine/scene/transition/appear/page/turnThePageVerticalAppearanceTransition";
 
 
-// inspired by https://www.youtube.com/watch?v=mrR9eqUNTic
 export class MainScene extends Scene {
 
     private fnt:Font;
