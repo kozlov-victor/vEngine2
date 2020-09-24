@@ -18,6 +18,7 @@ import {SimpleAppearLetterTextAnimation} from "@engine/renderable/impl/ui/textFi
 import {ScaleAppearLetterTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/scaleAppearLetterTextAnimation";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";
 import {AlphaAppearLetterTextAnimation} from "@engine/renderable/impl/ui/textField/animated/alphaAppearLetterTextAnimation";
+import {AppearFromOffsetTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearFromOffsetTextAnimation";
 
 export class MainScene extends Scene {
 
@@ -38,6 +39,8 @@ export class MainScene extends Scene {
         const animations = [
             new AppearFromPointTextAnimation({x:100,y:100},20, 100,EasingSine.Out),
             new AppearFromPointTextAnimation({x:800,y:100},200, 2000,EasingBounce.Out),
+            new AppearFromOffsetTextAnimation({x:0,y:-100},20, 300,EasingSine.Out),
+            new AppearFromOffsetTextAnimation({x:0,y:100},20, 300,EasingSine.Out),
             new RotateLetterTextAnimation(100, -3),
             new SimpleAppearLetterTextAnimation(100),
             new ScaleAppearLetterTextAnimation(100, 400,0.01,EasingBounce.Out),
