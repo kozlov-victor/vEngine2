@@ -62,7 +62,7 @@
                 var jsonArr = window.external.LoadDataAsBin(url);
                 return JSON.parse("[" + jsonArr + "]");
             } catch (e) {
-                alert('readAsBin error: ' + url + " " + e);
+                console.error('readAsBin error: ' + url + " " + e);
             }
         };
 
@@ -70,7 +70,7 @@
             try {
                 return window.external.LoadDataAsText(url);
             } catch (e) {
-                alert('readAsText error: ' + url + " " + e);
+                console.error('readAsText error: ' + url + " " + e);
             }
         };
 
@@ -149,8 +149,6 @@
 
     if (!window.Blob) window.Blob = undefined;
 
-
-
 </script>
 
 <script>
@@ -158,7 +156,6 @@
         document.write('<script src="./out/polyfills-separate.js"></sc'+'ript>');
     }
 </script>
-
 
 <script>
     document.write('<script src="./out/debug.js?modified='+new Date().getTime()+'"></sc'+'ript>');
@@ -182,10 +179,6 @@
         scr.src = './out/'+name+'.js?modified='+new Date().getTime();
         document.body.appendChild(scr);
     })();
-
-    if (!window.external && !window.external.V_ENGINE_NAVIGATOR) window.setTimeout = function(){};
-
-
 </script>
 </body>
 </html>
