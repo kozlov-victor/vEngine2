@@ -3,9 +3,9 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {Point2d} from "@engine/geometry/point2d";
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
-import {arcToBezier} from "@engine/renderable/impl/geometry/helpers/arcToBezier";
+import {arcToBezier} from "@engine/renderable/impl/geometry/_internal/arcToBezier";
 import {Optional} from "@engine/core/declarations";
-import {createSplinePathFromPoints} from "@engine/renderable/impl/geometry/helpers/splineFromPoints";
+import {createSplinePathFromPoints} from "@engine/renderable/impl/geometry/_internal/splineFromPoints";
 
 
 const clearString = (s:string):string=>{

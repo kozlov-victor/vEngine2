@@ -1,13 +1,13 @@
 import {Game} from "@engine/core/game";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
-import {EarClippingTriangulator} from "@engine/renderable/impl/geometry/helpers/earClippingTriangulator";
+import {EarClippingTriangulator} from "@engine/renderable/impl/geometry/_internal/earClippingTriangulator";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {DebugError} from "@engine/debug/debugError";
-import {calcNormal} from "@engine/renderable/impl/geometry/helpers/calcNormal";
+import {calcNormal} from "@engine/renderable/impl/geometry/_internal/calcNormal";
 import {IPoint3d} from "@engine/geometry/point3d";
-import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/helpers/isPolylineClockWise";
+import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/_internal/isPolylineClockWise";
 
 class PolygonPrimitive extends AbstractPrimitive {
     constructor(){

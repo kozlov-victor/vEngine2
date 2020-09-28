@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Sound} from "@engine/media/sound";
 import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {LinearGradient} from "@engine/renderer/common/linearGradient";
+import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Color} from "@engine/renderer/common/color";
 import {MathEx} from "@engine/misc/mathEx";
 import {Optional} from "@engine/core/declarations";

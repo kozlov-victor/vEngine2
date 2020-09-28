@@ -48,7 +48,7 @@ export class CharacterImage extends Image {
         if (characterInfo.color) this.setColor(characterInfo.color);
         if (characterInfo.underlined) this.setUnderLined(true);
         if (characterInfo.linedThrough) this.setLinedThrough(true);
-        this.visible = !(this.characterInfo.rawChar === ' ' && !this.characterInfo.linedThrough && !this.characterInfo.underlined);
+        this.updateVisibility();
     }
 
     public setItalic(val:boolean):void {
@@ -82,6 +82,7 @@ export class CharacterImage extends Image {
             if (this.textDecoratorLine) this.textDecoratorLine.visible = false;
         }
         this.characterInfo.underlined = val;
+        this.updateVisibility();
     }
 
     public setLinedThrough(val:boolean):void {
@@ -93,6 +94,7 @@ export class CharacterImage extends Image {
             if (this.textDecoratorLine) this.textDecoratorLine.visible = false;
         }
         this.characterInfo.linedThrough = val;
+        this.updateVisibility();
     }
 
     public setScaleFromCurrFontSize(scaleFromCurrFontSize:number){
@@ -101,10 +103,6 @@ export class CharacterImage extends Image {
             this.getSrcRect().width*scaleFromCurrFontSize,
             this.getSrcRect().height*scaleFromCurrFontSize
         );
-    }
-
-    public getCharacterInfo():Readonly<ICharacterInfo>{
-        return this.characterInfo;
     }
 
     private createTextDecoratorLineIfNotExists():void {
@@ -117,6 +115,10 @@ export class CharacterImage extends Image {
             this.textDecoratorLine = textDecoratorLine;
         }
         this.textDecoratorLine.fillColor.set(this.color);
+    }
+
+    private updateVisibility():void {
+        this.visible = !(this.characterInfo.rawChar === ' ' && !this.characterInfo.linedThrough && !this.characterInfo.underlined);
     }
 
 }

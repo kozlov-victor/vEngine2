@@ -5,7 +5,7 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
-import {LinearGradient} from "@engine/renderer/common/linearGradient";
+import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";

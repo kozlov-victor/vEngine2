@@ -8,7 +8,7 @@ import {TweenMovie} from "@engine/animation/tweenMovie";
 import {DropShadowFilter} from "@engine/renderer/webGl/filters/texture/dropShadowFilter";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {LinearGradient} from "@engine/renderer/common/linearGradient";
+import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {ITexture} from "@engine/renderer/common/texture";
 

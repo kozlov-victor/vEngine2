@@ -3,7 +3,7 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {LinearGradient} from "@engine/renderer/common/linearGradient";
+import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {fakeLongLoadingFn} from "../longLoading/mainScene";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";

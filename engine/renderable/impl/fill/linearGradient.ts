@@ -1,6 +1,6 @@
-import {Color, IColorJSON} from "./color";
-import {DebugError} from "../../debug/debugError";
-import {ICloneable} from "../../core/declarations";
+import {Color, IColorJSON} from "@engine/renderer/common/color";
+import {DebugError} from "@engine/debug/debugError";
+import {ICloneable} from "@engine/core/declarations";
 import {MathEx} from "@engine/misc/mathEx";
 
 interface IJSON {

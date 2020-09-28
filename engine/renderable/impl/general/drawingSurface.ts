@@ -17,7 +17,7 @@ import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {IMatrixTransformable, MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {describeArc} from "@engine/renderable/impl/geometry/helpers/splineFromPoints";
+import {describeArc} from "@engine/renderable/impl/geometry/_internal/splineFromPoints";
 import {isString} from "@engine/misc/object";
 import {Font} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
