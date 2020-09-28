@@ -24,6 +24,7 @@ export interface IGameConstructorParams {
     width?:number;
     height?:number;
     scaleStrategy?: SCALE_STRATEGY;
+    containerElement?:HTMLElement;
 }
 
 interface ISceneWithTransition {
@@ -44,6 +45,7 @@ export class Game {
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly pos:Point2d = new Point2d(0,0);
     public readonly camera:Camera = new Camera(this);
+    public readonly rootContainerElement:Optional<HTMLElement>;
 
     public fps:number = 0;
 
@@ -66,12 +68,13 @@ export class Game {
     private _mainLoop:MainLoop = new MainLoop(this);
 
 
-    constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT}:IGameConstructorParams = {}){
+    constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT, containerElement}:IGameConstructorParams = {}){
         Game._instance = this;
         if (DEBUG) (window as unknown as {game:Game}).game = this;
         (this.size as Size).setWH(width,height);
         this._scaleStrategy = scaleStrategy;
         this._startedTime = Date.now();
+        this.rootContainerElement = containerElement;
     }
 
     get scaleStrategy(): SCALE_STRATEGY {

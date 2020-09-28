@@ -32,6 +32,7 @@ export abstract class AbstractToggleButton extends Container {
     public setBackgroundChecked(backgroundChecked: RenderableModel):void {
         this.replaceChild(this.backgroundChecked,backgroundChecked);
         this.backgroundChecked = backgroundChecked;
+        this.updateState();
     }
 
     public revalidate():void{

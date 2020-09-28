@@ -14,6 +14,8 @@ import {
     AlignTextContentVertical
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {RadioButton, RadioButtonGroup} from "@engine/renderable/impl/ui/toggleButton/radioButton";
+import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
 
 const text:string=
 `Lorem ipsum dolor sit amet,\t\n\r
@@ -58,6 +60,7 @@ export class MainScene extends Scene {
 
         const chbox:CheckBox = new CheckBox(this.game);
         chbox.pos.setXY(50,350);
+        chbox.setBackgroundChecked(this.createBackgroundRect('#5c8ec3','#fff'));
         chbox.on(MOUSE_EVENTS.click, e=>{
             console.log('checked',chbox.checked);
             if (chbox.checked) tf.setFont(this.fnt2);
@@ -66,14 +69,22 @@ export class MainScene extends Scene {
         this.appendChild(chbox);
 
         const radioBtn1:RadioButton = new RadioButton(this.game);
+        radioBtn1.setBackground(this.createBackgroundCircle('#d4dfe3','#daddd7'));
+        radioBtn1.setBackgroundHover(this.createBackgroundCircle('#d4dfe3','#f7faf4'));
+        radioBtn1.setBackgroundActive(this.createBackgroundCircle('#cfebf5','#f7faf4'));
+        radioBtn1.setBackgroundChecked(this.createBackgroundCircle('#5c8ec3','#fff'));
         radioBtn1.pos.setXY(130,370);
         this.appendChild(radioBtn1);
 
         const radioBtn2:RadioButton = new RadioButton(this.game);
+        radioBtn2.setBackground(this.createBackgroundCircle('#d4dfe3','#daddd7'));
+        radioBtn2.setBackgroundChecked(this.createBackgroundCircle('#6eefdd','#fff'));
         radioBtn2.pos.setXY(190,370);
         this.appendChild(radioBtn2);
 
         const radioBtn3:RadioButton = new RadioButton(this.game);
+        radioBtn3.setBackground(this.createBackgroundCircle('#d4dfe3','#daddd7'));
+        radioBtn3.setBackgroundChecked(this.createBackgroundCircle('#a74fdd','#fff'));
         radioBtn3.pos.setXY(250,370);
         this.appendChild(radioBtn3);
         radioBtn3.on(MOUSE_EVENTS.click, e=>{
@@ -89,17 +100,34 @@ export class MainScene extends Scene {
         btn.setText("click!");
         btn.pos.setXY(200,260);
         btn.textColor.setRGB(10,10,10);
-        const bg:Rectangle = new Rectangle(this.game);
-        bg.borderRadius = 2;
-
-        const bgActive:Rectangle = new Rectangle(this.game);
-        bgActive.borderRadius = 2;
-        bgActive.fillColor.set(Color.GREY);
-        btn.setBackgroundActive(bgActive);
+        btn.setBackground(this.createBackgroundRect('#5c8ec3','#fff'));
+        btn.setBackgroundHover(this.createBackgroundRect('#6fa5e0','#fff'));
+        btn.setBackgroundActive(this.createBackgroundRect('#fff','#71a9e5'));
 
         btn.setPadding(20);
         this.appendChild(btn);
 
+    }
+
+    private createBackgroundRect(colorFrom:string,colorTo:string):Rectangle {
+        const background = new Rectangle(this.game);
+        background.borderRadius = 5;
+        const gradient:LinearGradient = new LinearGradient();
+        gradient.angle = Math.PI/2;
+        gradient.setColorAtPosition(0,Color.fromCssLiteral(colorFrom));
+        gradient.setColorAtPosition(1,Color.fromCssLiteral(colorTo));
+        background.fillGradient = gradient;
+        return background;
+    }
+
+    private createBackgroundCircle(colorFrom:string,colorTo:string):Circle {
+        const background = new Circle(this.game);
+        const gradient:LinearGradient = new LinearGradient();
+        gradient.angle = Math.PI/2;
+        gradient.setColorAtPosition(0,Color.fromCssLiteral(colorFrom));
+        gradient.setColorAtPosition(1,Color.fromCssLiteral(colorTo));
+        background.fillGradient = gradient;
+        return background;
     }
 
 }

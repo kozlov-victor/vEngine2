@@ -1,17 +1,4 @@
 
-#define HALF                            .5
-#define ZERO                            .0
-#define ONE                             1.
-#define PI                              __PI__
-#define TWO_PI                          (__PI__*2.)
-#define ERROR_COLOR                     vec4(ONE,ZERO,ZERO,ONE)
-#define STRETCH_MODE_STRETCH            __STRETCH_MODE_STRETCH__
-#define STRETCH_MODE_REPEAT             __STRETCH_MODE_REPEAT__
-#define FILL_TYPE_COLOR                 __FILL_TYPE_COLOR__
-#define FILL_TYPE_TEXTURE               __FILL_TYPE_TEXTURE__
-#define FILL_TYPE_LINEAR_GRADIENT       __FILL_TYPE_LINEAR_GRADIENT__
-#define SHAPE_TYPE_ELLIPSE              __SHAPE_TYPE_ELLIPSE__
-#define SHAPE_TYPE_RECT                 __SHAPE_TYPE_RECT__
 
 vec4 getStretchedImage(float tx,float ty){
     vec2 txVec = vec2(tx,ty);
@@ -33,15 +20,37 @@ vec4 mixTextureColorWithTint(vec4 textureCol, vec4 tint){
     return mix(textureCol,tint,tint.a)*textureCol.a;
 }
 
+vec4 getInterpolatedGradientColor(float position) {
+    GradientPoint currentLeftPoint = u_fillGradientPoints[0];
+    GradientPoint currentRightPoint = u_fillGradientPoints[MAX_NUM_OF_GRADIENT_POINTS-1];
+    for (int i=0;i<MAX_NUM_OF_GRADIENT_POINTS;i++) {
+        GradientPoint currentPointFromLtoR = u_fillGradientPoints[i];
+        GradientPoint currentPointFromRtoL = u_fillGradientPoints[MAX_NUM_OF_GRADIENT_POINTS-1-i];
+        if (!currentLeftPoint.pointActive) currentLeftPoint = currentPointFromLtoR;
+        if (!currentRightPoint.pointActive) currentRightPoint = currentPointFromRtoL;
+        if (currentPointFromLtoR.pointActive && currentPointFromLtoR.value>currentLeftPoint.value && currentPointFromLtoR.value<position) {
+            currentLeftPoint = currentPointFromLtoR;
+        }
+        if (currentPointFromRtoL.pointActive && currentPointFromRtoL.value<currentRightPoint.value && currentPointFromRtoL.value>=position) {
+            currentRightPoint = currentPointFromRtoL;
+        }
+    }
+    return mix(
+        vec4(currentLeftPoint.r,currentLeftPoint.g,currentLeftPoint.b,currentLeftPoint.a),
+        vec4(currentRightPoint.r,currentRightPoint.g,currentRightPoint.b,currentRightPoint.a),
+        (position - currentLeftPoint.value)/(currentRightPoint.value - currentLeftPoint.value+0.00001)
+    );
+}
+
 vec4 getFillColor(){
     if (u_fillType==FILL_TYPE_COLOR) return u_fillColor;
     else if (u_fillType==FILL_TYPE_LINEAR_GRADIENT) {
         float r = distance(vec2(HALF, HALF), v_position.xy);
         float angle = atan(v_position.y - HALF,v_position.x - HALF);
-        angle+=u_fillGradient[2].x;
+        angle+=u_fillGradientAngle;
         float x = r*cos(angle);
         float y = r*sin(angle);
-        return mix(u_fillGradient[0],u_fillGradient[1],x  + HALF);
+        return getInterpolatedGradientColor(x  + HALF);
     }
     else if (u_fillType==FILL_TYPE_TEXTURE) {
         float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2];

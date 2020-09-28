@@ -15,8 +15,8 @@ export class MainScene extends Scene {
         const rect:Rectangle = new Rectangle(this.game);
         let gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0.2;
-        gradient.colorFrom = Color.RGB(100,0,20);
-        gradient.colorTo = Color.RGB(200,111,1);
+        gradient.setColorAtPosition(0, Color.RGB(100,0,20));
+        gradient.setColorAtPosition(1, Color.RGB(200,111,1));
         rect.fillGradient = gradient;
         rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);
@@ -41,8 +41,9 @@ export class MainScene extends Scene {
         ellipse.radiusX = 60;
         ellipse.radiusY = 40;
         gradient = new LinearGradient();
-        gradient.colorFrom = Color.RGBA(100,0,222,200);
-        gradient.colorTo = Color.RGB(12,20,222);
+        gradient.setColorAtPosition(0,Color.RGBA(100,0,222,200));
+        gradient.setColorAtPosition(0.5,Color.RGBA(200,0,222,200));
+        gradient.setColorAtPosition(1,Color.RGB(12,20,222));
         ellipse.fillGradient = gradient;
         ellipse.color = Color.BLACK;
         ellipse.lineWidth = 5;

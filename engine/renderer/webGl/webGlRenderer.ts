@@ -589,7 +589,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sd.setUniform(sd.u_color,model.color.asGL());
 
         if (model.fillGradient!==undefined) {
-            sd.setUniform(sd.u_fillGradient,model.fillGradient.asGL());
+            model.fillGradient.setUniforms(sd);
             sd.setUniform(sd.u_fillType,FILL_TYPE.LINEAR_GRADIENT);
         } else {
             sd.setUniform(sd.u_fillColor,model.fillColor.asGL());

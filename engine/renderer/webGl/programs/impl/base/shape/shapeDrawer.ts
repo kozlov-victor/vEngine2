@@ -5,8 +5,10 @@ import {Plane} from "../../../../primitives/plane";
 import {GL_TYPE} from "../../../../base/shaderProgramUtils";
 import {ShaderGenerator} from "../../../../shaders/generators/shaderGenerator";
 import * as fragmentSource from "./shape.fragment.glsl";
+import * as fragmentStructuresSource from "./fragment-structures.glsl";
 import {parametrizeString} from "@engine/misc/object";
 import {STRETCH_MODE} from "@engine/renderable/impl/general/image";
+import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 
 export const enum SHAPE_TYPE {
     ELLIPSE,RECT
@@ -21,14 +23,11 @@ export class ShapeDrawer extends AbstractDrawer {
     public readonly u_vertexMatrix:string;
     public readonly a_position:string;
     public readonly u_lineWidth:string;
-    public readonly u_rx:string;
-    public readonly u_ry:string;
     public readonly u_width:string;
     public readonly u_height:string;
     public readonly u_borderRadius:string;
     public readonly u_color:string;
     public readonly u_alpha:string;
-    public readonly u_fillGradient:string;
     public readonly u_fillColor:string;
     public readonly u_shapeType:string;
     public readonly u_fillType:string;
@@ -36,11 +35,19 @@ export class ShapeDrawer extends AbstractDrawer {
     public readonly u_texOffset:string;
     public readonly u_rectOffsetTop: string;
     public readonly u_rectOffsetLeft: string;
+
+    public readonly u_rx:string;
+    public readonly u_ry:string;
+
     public readonly u_repeatFactor:string;
     public readonly u_stretchMode:string;
+
     public readonly u_arcAngleFrom:string;
     public readonly u_arcAngleTo:string;
     public readonly u_anticlockwise:string;
+
+    public readonly u_fillGradientPoints:string;
+    public readonly u_fillGradientAngle:string;
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
@@ -55,6 +62,17 @@ export class ShapeDrawer extends AbstractDrawer {
         this.u_vertexMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_vertexMatrix');
         this.a_position = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_position');
         gen.addVarying(GL_TYPE.FLOAT_VEC4,'v_position');
+        gen.prependFragmentCodeBlock(parametrizeString(fragmentStructuresSource,{
+            __STRETCH_MODE_STRETCH__:       STRETCH_MODE.STRETCH,
+            __STRETCH_MODE_REPEAT__:        STRETCH_MODE.REPEAT,
+            __FILL_TYPE_COLOR__:            FILL_TYPE.COLOR,
+            __FILL_TYPE_TEXTURE__:          FILL_TYPE.TEXTURE,
+            __FILL_TYPE_LINEAR_GRADIENT__:  FILL_TYPE.LINEAR_GRADIENT,
+            __SHAPE_TYPE_ELLIPSE__:         SHAPE_TYPE.ELLIPSE,
+            __SHAPE_TYPE_RECT__:            SHAPE_TYPE.RECT,
+            __PI__:                         Math.PI,
+            __MAX_NUM_OF_GRADIENT_POINTS__: AbstractGradient.MAX_NUM_OF_GRADIENT_POINTS,
+        }));
         // rect uniforms
         this.u_lineWidth = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_lineWidth');
         this.u_rx = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_rx');
@@ -68,7 +86,9 @@ export class ShapeDrawer extends AbstractDrawer {
         this.u_color = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_color');
         this.u_alpha = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
         this.u_fillColor = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillColor');
-        this.u_fillGradient = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillGradient[3]',true);
+        gen.addStructFragmentUniform("GradientPoint",`u_fillGradientPoints[MAX_NUM_OF_GRADIENT_POINTS]`);
+        this.u_fillGradientPoints = 'u_fillGradientPoints';
+        this.u_fillGradientAngle = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_fillGradientAngle');
         // texture
         this.u_texRect = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_texRect');
         this.u_texOffset = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_texOffset');
@@ -84,16 +104,7 @@ export class ShapeDrawer extends AbstractDrawer {
         this.u_stretchMode = gen.addScalarFragmentUniform(GL_TYPE.INT,'u_stretchMode');
         this.u_anticlockwise = gen.addScalarFragmentUniform(GL_TYPE.BOOL,'u_anticlockwise');
 
-        gen.setFragmentMainFn(parametrizeString(fragmentSource,{
-            __STRETCH_MODE_STRETCH__:       STRETCH_MODE.STRETCH,
-            __STRETCH_MODE_REPEAT__:        STRETCH_MODE.REPEAT,
-            __FILL_TYPE_COLOR__:            FILL_TYPE.COLOR,
-            __FILL_TYPE_TEXTURE__:          FILL_TYPE.TEXTURE,
-            __FILL_TYPE_LINEAR_GRADIENT__:  FILL_TYPE.LINEAR_GRADIENT,
-            __SHAPE_TYPE_ELLIPSE__:         SHAPE_TYPE.ELLIPSE,
-            __SHAPE_TYPE_RECT__:            SHAPE_TYPE.RECT,
-            __PI__:                         Math.PI,
-        }));
+        gen.setFragmentMainFn(fragmentSource);
         this.program = new ShaderProgram(
             gl,
             gen.getVertexSource(),

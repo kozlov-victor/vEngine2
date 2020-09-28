@@ -4,26 +4,28 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
+
 export class MainScene extends Scene {
 
     public onReady() {
-
         // https://cssgradient.io/
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0;
-        gradient.colorFrom = Color.fromCssLiteral(`#c88724`);
-        gradient.colorTo = Color.fromCssLiteral(`hsl(73, 86%, 42%)`);
+        gradient.setColorAtPosition(0,Color.fromCssLiteral(`#ffa100`));
+        gradient.setColorAtPosition(0.55,Color.fromCssLiteral(`#59a584`));
+        gradient.setColorAtPosition(0.8,Color.fromCssLiteral(`#533eca`));
+        gradient.setColorAtPosition(1,Color.fromCssLiteral(`hsl(83, 51%, 48%)`));
         rect.fillGradient = gradient;
-        rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);
-        rect.lineWidth = 4;
-        rect.size.setWH(300,400);
-        rect.pos.setXY(100,100);
+        rect.lineWidth = 0;
+        rect.size.set(this.game.size);
         rect.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(rect);
+        const divElement = document.getElementById('divElement')!;
         rect.setInterval(()=>{
-            gradient.angle-=0.1;
+            gradient.angle-=0.01;
+            divElement.style.backgroundImage = gradient.asCSS();
         },100);
 
     }

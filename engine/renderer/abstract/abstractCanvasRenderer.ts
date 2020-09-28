@@ -8,14 +8,18 @@ export abstract class AbstractCanvasRenderer extends AbstractRenderer {
 
     protected constructor(game:Game) {
         super(game);
-        const container:HTMLCanvasElement = document.createElement('canvas');
-        document.body.appendChild(container);
-        container.setAttribute('width',game.size.width.toString());
-        container.setAttribute('height',game.size.height.toString());
-        container.ondragstart = (e)=>{
+        const canvasElement:HTMLCanvasElement = document.createElement('canvas');
+        if (game.rootContainerElement!==undefined) {
+            game.rootContainerElement.appendChild(canvasElement);
+        } else {
+            document.body.appendChild(canvasElement);
+        }
+        canvasElement.setAttribute('width',game.size.width.toString());
+        canvasElement.setAttribute('height',game.size.height.toString());
+        canvasElement.ondragstart = (e)=>{
             e.preventDefault();
         };
-        this.container = container;
+        this.container = canvasElement;
     }
 
     public abstract setPixelPerfect(mode:boolean):void;

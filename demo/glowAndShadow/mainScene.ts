@@ -64,8 +64,8 @@ export class MainScene extends Scene {
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0.2;
-        gradient.colorFrom = Color.RGBA(100,0,20,122);
-        gradient.colorTo = Color.RGBA(200,111,1,254);
+        gradient.setColorAtPosition(0,Color.RGBA(100,0,20,122));
+        gradient.setColorAtPosition(1,Color.RGBA(200,111,1,254));
         rect.fillGradient = gradient;
         rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);

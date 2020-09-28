@@ -182,10 +182,12 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
         this.on(MOUSE_EVENTS.mouseEnter, e=>{
             if (this.state===ContainerState.DISABLED) return;
             this.hovered = true;
+            this.setState(ContainerState.HOVERED);
         });
         this.on(MOUSE_EVENTS.mouseLeave, e=>{
             if (this.state===ContainerState.DISABLED) return;
             this.hovered = false;
+            this.setState(ContainerState.NORMAL);
         });
     }
 

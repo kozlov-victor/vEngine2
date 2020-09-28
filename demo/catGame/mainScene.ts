@@ -122,8 +122,8 @@ export class MainScene extends Scene {
         bgImage.lineWidth = 0;
         bgImage.size.set(this.game.size);
         const grad: LinearGradient = new LinearGradient();
-        grad.colorFrom = Color.RGB(219, 230, 255);
-        grad.colorTo = Color.RGB(208, 202, 202);
+        grad.setColorAtPosition(0,Color.RGB(219, 230, 255));
+        grad.setColorAtPosition(1,Color.RGB(208, 202, 202));
         grad.angle = -MathEx.degToRad(90);
         bgImage.fillGradient = grad;
         bgLayer.appendChild(bgImage);
