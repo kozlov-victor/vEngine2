@@ -42,6 +42,13 @@ vec4 getInterpolatedGradientColor(float position) {
     );
 }
 
+float calcRadiusAtPosition(vec2 pos,vec2 center,vec2 radius) {
+    float a = atan(pos.y-center.y,pos.x-center.x);
+    float cosA = cos(a);
+    float sinA = sin(a);
+    return radius.x*radius.y/sqrt(radius.x*radius.x*sinA*sinA+radius.y*radius.y*cosA*cosA);
+}
+
 vec4 getFillColor(){
     if (u_fillType==FILL_TYPE_COLOR) return u_fillColor;
     else if (u_fillType==FILL_TYPE_LINEAR_GRADIENT) {
@@ -76,12 +83,7 @@ vec4 getFillColor(){
     }
     else return ERROR_COLOR;
 }
-float calcRadiusAtPosition(float x,float y) {
-    float a = atan(y-HALF,x-HALF);
-    float cosA = cos(a);
-    float sinA = sin(a);
-    return u_rx*u_ry/sqrt(u_rx*u_rx*sinA*sinA+u_ry*u_ry*cosA*cosA);
-}
+
 
 void _drawElliplse(float dist,float rAtCurrAngle){
     if (dist < rAtCurrAngle) {
@@ -92,7 +94,7 @@ void _drawElliplse(float dist,float rAtCurrAngle){
 
 void drawEllipse(){
     float dist = distance(vec2(HALF, HALF), v_position.xy);
-    float rAtCurrAngle = calcRadiusAtPosition(v_position.x, v_position.y);
+    float rAtCurrAngle = calcRadiusAtPosition(v_position.xy, vec2(HALF,HALF),vec2(u_rx, u_ry));
     bool isArcNotUsed = u_arcAngleFrom==u_arcAngleTo;
 
     if (dist > rAtCurrAngle) discard;

@@ -272,7 +272,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (rectangle.lineWidth===0 && rectangle.borderRadius===0 && rectangle.fillGradient===undefined) {
             this.drawSimpleColoredRectangle(rectangle); // optimise drawing of simple rectangle with very simple gl program
         } else {
-            const {width:rw,height:rh} = rectangle.size;
+            const rw:number = rectangle.size.width;
+            const rh:number = rectangle.size.height;
             const maxSize:number = Math.max(rw,rh);
             const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);
             this.prepareGeometryUniformInfo(rectangle);

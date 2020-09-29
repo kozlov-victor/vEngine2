@@ -24,10 +24,10 @@ htmlContainer.innerHTML = `
     </style>
     <div class="table">
         <div class="row">
+            <div class="cell" id="canvasElement"></div>
             <div class="cell">
                 <div id="divElement"></div>
             </div>
-            <div class="cell" id="canvasElement"></div>
         </div>
     </div>
 `;

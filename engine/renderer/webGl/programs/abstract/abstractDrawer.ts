@@ -101,10 +101,11 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         this.bind();
         const keys:string[] = this.uniformCache.getKeys();
         const values:{dirty:boolean,value:UNIFORM_VALUE_TYPE}[] = this.uniformCache.getValues();
-        for (let i:number=0;i<keys.length;i++) {
-            if (!values[i].dirty) continue;
-            this._setUniform(keys[i],values[i].value);
-            values[i].dirty = false;
+        for (let i:number=0,length:number=keys.length;i<length;i++) {
+            const v = values[i];
+            if (!v.dirty) continue;
+            this._setUniform(keys[i],v.value);
+            v.dirty = false;
         }
         for (let i:number=0,max:number = this.texturesToBind.length;i<max;i++) {
             const t:ITextureInfo = this.texturesToBind.texturesInfo[i];

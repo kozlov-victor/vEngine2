@@ -49,9 +49,5 @@ export class MainScene extends Scene {
                 x.drawRect(h*j,v*j,j,j);
             }
         }
-
-
-
-
     }
 }
