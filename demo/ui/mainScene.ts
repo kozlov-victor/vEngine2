@@ -16,6 +16,7 @@ import {
 import {RadioButton, RadioButtonGroup} from "@engine/renderable/impl/ui/toggleButton/radioButton";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
+import {RadialGradient} from "@engine/renderable/impl/fill/radialGradient";
 
 const text:string=
 `Lorem ipsum dolor sit amet,\t\n\r
@@ -122,10 +123,10 @@ export class MainScene extends Scene {
 
     private createBackgroundCircle(colorFrom:string,colorTo:string):Circle {
         const background = new Circle(this.game);
-        const gradient:LinearGradient = new LinearGradient();
-        gradient.angle = Math.PI/2;
+        const gradient:RadialGradient = new RadialGradient();
         gradient.setColorAtPosition(0,Color.fromCssLiteral(colorFrom));
         gradient.setColorAtPosition(1,Color.fromCssLiteral(colorTo));
+        gradient.center.setXY(0.1,0.1);
         background.fillGradient = gradient;
         return background;
     }

@@ -1,11 +1,11 @@
 import {RenderableModel} from "./renderableModel";
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
-import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Image} from "@engine/renderable/impl/general/image";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {Size} from "@engine/geometry/size";
 import {Optional} from "@engine/core/declarations";
+import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 
 export abstract class Shape extends RenderableModel implements IShapeProps{
 
@@ -20,7 +20,7 @@ export abstract class Shape extends RenderableModel implements IShapeProps{
     public color:Color = Color.BLACK.clone();
     protected _lineWidth:number = 0;
     public fillColor:Color = Color.GREY.clone();
-    public fillGradient:Optional<LinearGradient>;
+    public fillGradient:Optional<AbstractGradient>;
 
     protected constructor(game:Game){
         super(game);

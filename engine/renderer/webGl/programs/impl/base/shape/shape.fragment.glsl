@@ -52,6 +52,19 @@ vec4 getFillColor(){
         float y = r*sin(angle);
         return getInterpolatedGradientColor(x  + HALF);
     }
+    else if (u_fillType==FILL_TYPE_RADIAL_GRADIENT) {
+        float r = distance(vec2(u_radialGradientCenterX, u_radialGradientCenterY), v_position.xy);
+        // interpolate r to [0..1] interval
+        float radiusTopLeft = distance(vec2(u_radialGradientCenterX, u_radialGradientCenterY), vec2(ZERO,ZERO));
+        float radiusBottomLeft = distance(vec2(u_radialGradientCenterX, u_radialGradientCenterY), vec2(ZERO,ONE));
+        float radiusTopRight = distance(vec2(u_radialGradientCenterX, u_radialGradientCenterY), vec2(ONE,ZERO));
+        float radiusBottomRight = distance(vec2(u_radialGradientCenterX, u_radialGradientCenterY), vec2(ONE,ONE));
+        float maxRadius = radiusTopLeft;
+        if (radiusBottomLeft>maxRadius) maxRadius = radiusBottomLeft;
+        if (radiusTopRight>maxRadius) maxRadius = radiusTopRight;
+        if (radiusBottomRight>maxRadius) maxRadius = radiusBottomRight;
+        return getInterpolatedGradientColor(r/maxRadius);
+    }
     else if (u_fillType==FILL_TYPE_TEXTURE) {
         float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2];
         float ty = (v_position.y-u_rectOffsetTop)/u_height*u_texRect[3];

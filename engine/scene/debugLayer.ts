@@ -27,6 +27,7 @@ export class DebugLayer extends Layer {
             this.numOfTextRows = ~~(textField.getClientRect().height / this.font.fontContext.lineHeight);
             textField.setWordBrake(WordBrake.PREDEFINED);
             this.appendChild(textField);
+            textField.passMouseEventsThrough = true;
             this.textField = textField;
         })();
     }
@@ -64,6 +65,7 @@ export class DebugLayer extends Layer {
     }
 
     public clearLog():void {
+        this.logs.length = 0;
         if (this.textField!==undefined) {
             this.textField.setText('');
         }

@@ -7,13 +7,14 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
+import {RadialGradient} from "@engine/renderable/impl/fill/radialGradient";
 
 
 export class MainScene extends Scene {
 
     public onPreloading() {
         const rect:Rectangle = new Rectangle(this.game);
-        let gradient:LinearGradient  = new LinearGradient();
+        const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0.2;
         gradient.setColorAtPosition(0, Color.RGB(100,0,20));
         gradient.setColorAtPosition(1, Color.RGB(200,111,1));
@@ -40,11 +41,12 @@ export class MainScene extends Scene {
         const ellipse:Ellipse = new Ellipse(this.game);
         ellipse.radiusX = 60;
         ellipse.radiusY = 40;
-        gradient = new LinearGradient();
-        gradient.setColorAtPosition(0,Color.RGBA(100,0,222,200));
-        gradient.setColorAtPosition(0.5,Color.RGBA(200,0,222,200));
-        gradient.setColorAtPosition(1,Color.RGB(12,20,222));
-        ellipse.fillGradient = gradient;
+        const grad = new RadialGradient();
+        grad.setColorAtPosition(0,Color.RGBA(100,0,222,200));
+        grad.setColorAtPosition(0.5,Color.RGBA(200,0,222,200));
+        grad.setColorAtPosition(1,Color.RGB(12,20,222));
+        grad.center.setXY(0.1,0.2);
+        ellipse.fillGradient = grad;
         ellipse.color = Color.BLACK;
         ellipse.lineWidth = 5;
         ellipse.center.setXY(50,50);

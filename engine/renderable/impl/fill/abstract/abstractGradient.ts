@@ -1,6 +1,7 @@
 import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
 import {ShapeDrawer} from "@engine/renderer/webGl/programs/impl/base/shape/shapeDrawer";
+import {DebugError} from "@engine/debug/debugError";
 
 export interface IGradientPoint {
     value:number;
@@ -17,20 +18,26 @@ export abstract class AbstractGradient {
 
     public static MAX_NUM_OF_GRADIENT_POINTS:number = 4;
 
+    public abstract type:string;
+
     protected _points:IGradientPointInternal[] = [];
-    private _arr:number[] = [];
 
-    public fromJSON(points:IGradientPoint[]):void{
-        this._points = points.map(it=>({value: it.value, color: Color.from(it.color)}));
-    }
-
-    public toJSON():IGradientPoint[]{
-        return this._points.map(it=>({value:it.value,color: it.color.toJSON()}));
+    public set(g:AbstractGradient):void{
+        this._points = [...g._points.map(it=>({...it}))];
     }
 
     public setColorAtPosition(position:number,color:IColor):void {
+        if (DEBUG && this._points.length>AbstractGradient.MAX_NUM_OF_GRADIENT_POINTS) {
+            throw new DebugError(
+                `Maxinum number of gradient points is ${AbstractGradient.MAX_NUM_OF_GRADIENT_POINTS},
+                to use more points change AbstractGradient.MAX_NUM_OF_GRADIENT_POINTS before Game instance creation`);
+        }
         this._points.push({color:Color.from(color),value:position});
     }
+
+    public abstract asCSS():string;
+
+    public abstract clone():this;
 
     public setUniforms(sd:ShapeDrawer):void {
         for (let i:number=0; i<AbstractGradient.MAX_NUM_OF_GRADIENT_POINTS; i++) {

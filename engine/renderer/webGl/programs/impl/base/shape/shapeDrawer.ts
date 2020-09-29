@@ -15,7 +15,7 @@ export const enum SHAPE_TYPE {
 }
 
 export const enum FILL_TYPE {
-    COLOR,TEXTURE,LINEAR_GRADIENT
+    COLOR,TEXTURE,LINEAR_GRADIENT, RADIAL_GRADIENT
 }
 
 export class ShapeDrawer extends AbstractDrawer {
@@ -48,6 +48,8 @@ export class ShapeDrawer extends AbstractDrawer {
 
     public readonly u_fillGradientPoints:string;
     public readonly u_fillGradientAngle:string;
+    public readonly u_radialGradientCenterX:string;
+    public readonly u_radialGradientCenterY:string;
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
@@ -68,6 +70,7 @@ export class ShapeDrawer extends AbstractDrawer {
             __FILL_TYPE_COLOR__:            FILL_TYPE.COLOR,
             __FILL_TYPE_TEXTURE__:          FILL_TYPE.TEXTURE,
             __FILL_TYPE_LINEAR_GRADIENT__:  FILL_TYPE.LINEAR_GRADIENT,
+            __FILL_TYPE_RADIAL_GRADIENT__:  FILL_TYPE.RADIAL_GRADIENT,
             __SHAPE_TYPE_ELLIPSE__:         SHAPE_TYPE.ELLIPSE,
             __SHAPE_TYPE_RECT__:            SHAPE_TYPE.RECT,
             __PI__:                         Math.PI,
@@ -86,9 +89,12 @@ export class ShapeDrawer extends AbstractDrawer {
         this.u_color = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_color');
         this.u_alpha = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
         this.u_fillColor = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_fillColor');
+        // gradient info
         gen.addStructFragmentUniform("GradientPoint",`u_fillGradientPoints[MAX_NUM_OF_GRADIENT_POINTS]`);
         this.u_fillGradientPoints = 'u_fillGradientPoints';
         this.u_fillGradientAngle = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_fillGradientAngle');
+        this.u_radialGradientCenterX = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_radialGradientCenterX');
+        this.u_radialGradientCenterY = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_radialGradientCenterY');
         // texture
         this.u_texRect = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_texRect');
         this.u_texOffset = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_texOffset');
