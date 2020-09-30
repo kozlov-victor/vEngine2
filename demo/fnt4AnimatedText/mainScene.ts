@@ -21,6 +21,10 @@ import {AlphaAppearLetterTextAnimation} from "@engine/renderable/impl/ui/textFie
 import {AppearFromOffsetTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearFromOffsetTextAnimation";
 import {AppearFromRandomPointTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearFromRandomPointTextAnimation";
 import {AppearRandomLetterTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearRandomLetterTextAnimation";
+import {RotateLetterYTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/rotateLetterYTextAnimation";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
+import {Color} from "@engine/renderer/common/color";
 
 export class MainScene extends Scene {
 
@@ -30,7 +34,9 @@ export class MainScene extends Scene {
     public onReady() {
         this.colorBG.setRGB(12,12,12);
         const tf = new AnimatedTextField(this.game,this.fontLink.getTarget());
-        tf.size.set(this.game.size);
+        tf.size.setWH(this.game.width-30,200);
+        tf.pos.setXY(this.game.width/2,this.game.height/2);
+        tf.anchorPoint.setToCenter();
         tf.setPadding(10);
         tf.setWordBrake(WordBrake.PREDEFINED);
         tf.setAlignText(AlignText.CENTER);
@@ -38,7 +44,23 @@ export class MainScene extends Scene {
         tf.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tf.textColor.setRGBA(0,0,0,0);
 
+        const bgHover = new Rectangle(this.game);
+        bgHover.borderRadius = 30;
+        bgHover.fillColor.setRGBA(12,12,12,30);
+        tf.setBackgroundHover(bgHover);
+
+        const bgActive = new Rectangle(this.game);
+        bgActive.borderRadius = 30;
+        const grad = new LinearGradient();
+        grad.setColorAtPosition(0,Color.fromCssLiteral("rgba(109,248,98,0.2)"));
+        grad.setColorAtPosition(0.5,Color.fromCssLiteral("rgba(214,146,18,0.2)"));
+        grad.setColorAtPosition(1,Color.fromCssLiteral("rgba(109,248,98,0.2)"));
+        grad.angle = Math.PI/2;
+        bgActive.fillGradient = grad;
+        tf.setBackgroundActive(bgActive);
+
         const animations = [
+            new RotateLetterYTextAnimation(400, -Math.PI/3),
             new AppearRandomLetterTextAnimation(2000),
             new AppearFromPointTextAnimation({x:100,y:100},20, 100,EasingSine.Out),
             new AppearFromPointTextAnimation({x:800,y:100},200, 2000,EasingBounce.Out),

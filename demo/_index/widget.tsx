@@ -62,6 +62,7 @@ export class Widget extends VEngineTsxComponent<{}> {
                                             {(it===this.selectedItem?'<':'') + it + (it===this.selectedItem?'>':'')}
                                         </a>
                                         <a target="_blank" href={'./demo.html?name='+it}> . </a>
+                                        <a target="_blank" href={'vengine:out/'+it}> win </a>
                                     </li>
                                 )
                             }

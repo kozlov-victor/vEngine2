@@ -6,7 +6,6 @@ import {IResource} from "@engine/core/declarations";
 
 export abstract class RenderableModelWithResourceLink extends RenderableModel implements IResource<ITexture>{
 
-    // resource
     private _resourceLink:ResourceLink<ITexture>;
 
     public setResourceLink(link:ResourceLink<ITexture>):void{

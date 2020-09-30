@@ -42,8 +42,10 @@ class WebpackDonePlugin{
 }
 
 const getAllProjects = ()=>{
-    return fs.readdirSync('./demo').filter((dir)=>{
-        return !['demo.html', 'assets', 'out', 'index.html', 'index.json', '.DS_Store', 'generateIndexPage.js', 'application.hta', 'VEngineNavigator.exe'].includes(dir);
+    return fs.
+        readdirSync('./demo').
+        filter((dir)=>{
+            return fs.lstatSync(`./demo/${dir}`).isDirectory() && fs.existsSync(`./demo/${dir}/index.ts`)
     });
 };
 

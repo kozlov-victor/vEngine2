@@ -8,7 +8,6 @@ import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
-import {DebugError} from "@engine/debug/debugError";
 
 export class MainScene extends Scene {
 
@@ -20,6 +19,7 @@ export class MainScene extends Scene {
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
+        spr.transformPoint.setToCenter();
         spr.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(spr);
         this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{

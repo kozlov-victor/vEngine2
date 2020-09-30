@@ -18,7 +18,7 @@ export class AnimatedTextField extends TextFieldWithoutCache {
 
     revalidate() {
         super.revalidate();
-        this.animation.init(this.game,this,this.collectAllChars());
+        if (this.animation!==undefined) this.animation.init(this.game,this,this.collectAllChars());
     }
 
 }
