@@ -92,12 +92,11 @@ const handleCatchError = async (e:ErrorEvent)=>{
     const runtimeInfo:string = prepareMessage(e,lineNum);
     const colNum:number = e.colno;
     const filename:string = e.filename;
-
     if (filename) {
         try {
             const file = await httpClient.get<string>(filename,{r:Math.random()});
-            if (!file) return;
-            renderError({filename,runtimeInfo,debugInfo:{file,colNum,lineNum}});
+            if (file) renderError({filename,runtimeInfo,debugInfo:{file,colNum,lineNum}});
+            else renderError({runtimeInfo});
         } catch (e) {
             renderError({runtimeInfo});
         }

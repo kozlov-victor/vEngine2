@@ -58,11 +58,11 @@ export class Widget extends VEngineTsxComponent<{}> {
                             {
                                 this.items.map((it,index)=>
                                     <li className={it===this.selectedItem?'active':undefined}>
-                                        <a onclick={(e)=>this.selectItem(e,index)} target="_blank" href="#">
+                                        <a className="selectItem" onclick={(e)=>this.selectItem(e,index)} href="#">
                                             {(it===this.selectedItem?'<':'') + it + (it===this.selectedItem?'>':'')}
                                         </a>
-                                        <a target="_blank" href={'./demo.html?name='+it}> . </a>
-                                        <a target="_blank" href={'vengine:out/'+it}> win </a>
+                                        <a target="_blank" href={'./demo.html?name='+it}> (new window) </a>
+                                        <a target="_blank" href={'vengine:out/'+it}> (win app) </a>
                                     </li>
                                 )
                             }
