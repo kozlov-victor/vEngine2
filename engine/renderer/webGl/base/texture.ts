@@ -61,6 +61,7 @@ export class Texture extends AbstractTexture{
         const wxh:number = this.size.width*this.size.height;
 
         const fb:WebGLFramebuffer = gl.createFramebuffer()!;
+        this.beforeOperation();
         gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
         gl.framebufferTexture2D(
             gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
@@ -70,8 +71,7 @@ export class Texture extends AbstractTexture{
             throw new DebugError(`wrong framebuffer state!`);
         const pixels:Uint8Array = new Uint8Array(wxh * 4);
         gl.readPixels(0, 0, this.size.width, this.size.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-        // tslint:disable-next-line:no-null-keyword
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        this.afterOperation();
         return pixels;
     }
 

@@ -22,6 +22,7 @@ import {HexagonalFilter} from "@engine/renderer/webGl/filters/texture/hexagonalF
 import {SwirlFilter} from "@engine/renderer/webGl/filters/texture/swirlFilter";
 import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/texture/triangleBlurFilter";
 import {ITexture} from "@engine/renderer/common/texture";
+import {KernelBurnAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/kernelBurnAccumulativeFilter";
 
 
 export class MainScene extends Scene {
@@ -85,9 +86,8 @@ export class MainScene extends Scene {
         ];
         circle2.addBehaviour(new DraggableBehaviour(this.game));
 
-
         spr.filters = [
-            ps,bw
+            ps,bw,
         ];
 
         const ellipse:Ellipse = new Ellipse(this.game);
@@ -121,7 +121,9 @@ export class MainScene extends Scene {
         rect.pos.setXY(120,120);
         this.appendChild(rect);
         const triangleBlur = new TriangleBlurFilter(this.game);
-        rect.filters = [triangleBlur];
+        const kernelBurnAccumulative = new KernelBurnAccumulativeFilter(this.game);
+        kernelBurnAccumulative.setNoiseIntensity(0.8);
+        rect.filters = [triangleBlur,kernelBurnAccumulative];
 
         const tm:TweenMovie = new TweenMovie(this.game);
         tm.addTween(0,{

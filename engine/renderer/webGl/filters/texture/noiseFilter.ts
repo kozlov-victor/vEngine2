@@ -3,7 +3,6 @@ import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderG
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Game} from "@engine/core/game";
-import {Size} from "@engine/geometry/size";
 
 export class NoiseFilter extends AbstractGlFilter {
 

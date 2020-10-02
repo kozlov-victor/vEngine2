@@ -38,6 +38,8 @@ export class FrameBuffer implements IRenderTarget {
         this.texture.setImage(undefined,size);
         this._init(_gl,size);
         this._link = ResourceLink.create(this.texture);
+        this.bind();
+        this.clear(Color.RGB(0,0,0,),0);
     }
 
     public setInterpolationMode(mode:INTERPOLATION_MODE) {
