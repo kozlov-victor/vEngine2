@@ -27,6 +27,7 @@ export class AbstractKernelAccumulativeFilter extends AbstractAccumulativeFilter
     constructor(game:Game) {
         super(game);
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        // https://webglfundamentals.org/webgl/lessons/ru/webgl-image-processing-continued.html
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             float PHI = 1.61803398874989484820459;  // Φ = Golden Ratio
