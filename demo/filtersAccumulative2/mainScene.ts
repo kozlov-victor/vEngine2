@@ -9,7 +9,7 @@ import {MathEx} from "@engine/misc/mathEx";
 import {Tween} from "@engine/animation/tween";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 
-
+// inspired by https://m.habr.com/ru/post/482826/
 export class MainScene extends Scene {
 
     private logoLink:ResourceLink<ITexture>;

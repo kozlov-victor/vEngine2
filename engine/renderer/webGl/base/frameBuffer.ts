@@ -15,6 +15,10 @@ export class FrameBuffer implements IRenderTarget {
 
     private static _currInstance:Optional<FrameBuffer>;
 
+    public static getCurrent():FrameBuffer{
+        return this._currInstance!;
+    }
+
     private readonly texture:Texture;
     private glRenderBuffer:WebGLRenderbuffer;
     private glFrameBuffer:WebGLFramebuffer;
@@ -114,7 +118,7 @@ export class FrameBuffer implements IRenderTarget {
     }
 
     private _checkBound():void{
-        if (DEBUG) return;
+        if (!DEBUG) return;
         if (FrameBuffer._currInstance!==this) throw new DebugError(`frame buffer is not bound; call bind() method firstly`);
     }
 

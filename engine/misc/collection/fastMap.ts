@@ -8,7 +8,7 @@ export class FastMap<T,U> {
     private readonly _keys:T[] = [];
     private readonly _values:U[] = [];
 
-    public put(key:T,value:U) {
+    public put(key:T,value:U):void {
         const index:number = this._keys.indexOf(key);
         if (index===-1) {
             this._keys.push(key);

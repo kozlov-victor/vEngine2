@@ -49,6 +49,7 @@ const getAllProjects = ()=>{
     });
 };
 
+
 module.exports = async (env={})=>{
 
     console.log('env',env);
@@ -59,6 +60,8 @@ module.exports = async (env={})=>{
         ]
     );
     let project;
+    const allProjects = getAllProjects();
+    fs.writeFileSync('./demo/index.json',JSON.stringify(allProjects));
     const mode = await cliUI.choose('Choose option',[
         'Compile all projects',
         'Choose project from list',
@@ -66,9 +69,8 @@ module.exports = async (env={})=>{
         ]
     );
     if (mode===1) {
-        const allPROJECTS = getAllProjects();
-        const index = await cliUI.choose('Select a project',allPROJECTS);
-        project = allPROJECTS[index];
+        const index = await cliUI.choose('Select a project',allProjects);
+        project = allProjects[index];
         console.log(`Selected: ${project}`);
     } if (mode===2) {
         project = await cliUI.prompt("Enter project name to compile")
@@ -86,7 +88,7 @@ module.exports = async (env={})=>{
     if (project) {
         entry[project] = [`./demo/${project}/index.ts`]
     } else {
-        getAllProjects().forEach((dir)=>{
+        allProjects.forEach((dir)=>{
             entry[`${dir}`] = [`./demo/${dir}/index.ts`];
         });
     }

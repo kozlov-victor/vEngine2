@@ -7,6 +7,8 @@ import {ISize} from "@engine/geometry/size";
 import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
 import {mat4} from "@engine/geometry/mat4";
 import {Color} from "@engine/renderer/common/color";
+import {Blender} from "@engine/renderer/webGl/blender/blender";
+import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import Mat16Holder = mat4.Mat16Holder;
 import IDENTITY = mat4.IDENTITY;
 
@@ -36,6 +38,7 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
         // 0. prepare for accumulator drawing
         this._simpleRectCopyDrawer.setUniform(this._simpleRectCopyDrawer.u_textureMatrix,IDENTITY);
         this._simpleRectCopyDrawer.setUniform(this._simpleRectCopyDrawer.u_vertexMatrix,m16h.mat16);
+        Blender.getSingleton(this.game.getRenderer<WebGlRenderer>().getNativeContext()).setBlendMode(BLEND_MODE.NORMAL);
         // 1. copy accumulatorAfter to accumulatorBefore
         this.accumulatorBefore.bind();
         this.accumulatorBefore.clear(Color.NONE);

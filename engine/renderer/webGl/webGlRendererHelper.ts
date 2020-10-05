@@ -10,18 +10,22 @@ import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {Game} from "@engine/core/game";
 import Mat16Holder = mat4.Mat16Holder;
 import {Color} from "@engine/renderer/common/color";
+import {LruMap} from "@engine/misc/collection/lruMap";
+
+const identityPositionMatrixCache:LruMap<string, Mat16Holder> = new LruMap<string, mat4.Mat16Holder>();
 
 export const makeIdentityPositionMatrix = (dstX:number,dstY:number,destSize:ISize):Mat16Holder =>{
-    const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+    const key:string = `${dstX}_${dstY}_${destSize.width}_${destSize.height}`;
+    if (identityPositionMatrixCache.has(key)) return identityPositionMatrixCache.get(key)!;
+    const projectionMatrix:Mat16Holder = Mat16Holder.create();
     const dstWidth:number = destSize.width;
     const dstHeight:number = destSize.height;
     mat4.ortho(projectionMatrix,0,dstWidth,0,dstHeight,-1,1);
-    const scaleMatrix:Mat16Holder = Mat16Holder.fromPool();
+    const scaleMatrix:Mat16Holder = Mat16Holder.create();
     mat4.makeScale(scaleMatrix,dstWidth, dstHeight, 1);
-    const result:Mat16Holder = Mat16Holder.fromPool();
+    const result:Mat16Holder = Mat16Holder.create();
     mat4.matrixMultiply(result,scaleMatrix, projectionMatrix);
-    projectionMatrix.release();
-    scaleMatrix.release();
+    identityPositionMatrixCache.put(key,result);
     return result;
 };
 

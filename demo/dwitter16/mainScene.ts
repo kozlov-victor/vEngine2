@@ -15,7 +15,7 @@ export class MainScene extends Scene {
         this.colorBG = Color.BLACK;
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
-        surface.setLineWidth(1);
+        surface.setLineWidth(2);
         this.appendChild(surface);
 
 

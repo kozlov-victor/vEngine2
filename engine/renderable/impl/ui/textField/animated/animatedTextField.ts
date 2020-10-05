@@ -12,6 +12,7 @@ export class AnimatedTextField extends TextFieldWithoutCache {
     }
 
     public setTextWithAnimation(text: string | number, animation: AbstractTextAnimation) {
+        this.setText('');
         this.setText(text);
         this.animation = animation;
     }

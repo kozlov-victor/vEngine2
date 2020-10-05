@@ -159,7 +159,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         const needFullScreen:boolean = this._pixelPerfectMode || Device.embeddedEngine;
         const w:number = needFullScreen?this.game.getRenderer().viewPortSize.width:this.game.size.width;
         const h:number = needFullScreen?this.game.getRenderer().viewPortSize.height:this.game.size.height;
-        this._getLast().frameBuffer.unbind();
+        FrameBuffer.getCurrent().unbind();
         this._gl.viewport(0, 0, ~~w,~~h);
         this._simpleRectDrawer.setUniform(this._simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
         this._simpleRectDrawer.setUniform(this._simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
