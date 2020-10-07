@@ -65,6 +65,7 @@ export class ScrollableTextField extends TextField {
 
         this.hScrollBar.maxValue = this.rowSet.size.width;
         this.hScrollBar.value = - this.hScrollContainerListener.getScrollPosition();
+
     }
 
 

@@ -39,16 +39,17 @@ export class MainScene extends Scene {
                     {'\n'}
                     <b>Новая</b> строка 1
                     {'\n'}
-                    <font size={20} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</font>
+                    <font size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</font>
                     {'\n'}
                     <b>Новая</b> строка 3
                     {'\n'}
-                    Счетчик {++cnt}
+                    Счетчик <font size={50} color={{r:200,g:200,b:122}}>{++cnt}</font>
                     {'\n'}
                     <font color={{r:122,g:122,b:122}} size={25}>(Кликнуть для инкремента)</font>
                 </div>
             );
         });
+        tf.setText('Кликнуть');
         this.appendChild(tf);
 
     }

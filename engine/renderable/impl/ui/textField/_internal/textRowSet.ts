@@ -23,10 +23,10 @@ export class TextRowSet extends NullGameObject {
 
     private caret:number = 0;
     private currentTextRow:TextRow;
-    private alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;
-    private alignTextContentHorizontal:AlignTextContentHorizontal = AlignTextContentHorizontal.LEFT;
-    private alignText:AlignText = AlignText.LEFT;
-    private wordBrake:WordBrake = WordBrake.FIT;
+    private alignTextContentVertical:AlignTextContentVertical;
+    private alignTextContentHorizontal:AlignTextContentHorizontal;
+    private alignText:AlignText;
+    private wordBrake:WordBrake;
 
     constructor(
         game:Game,
@@ -71,7 +71,6 @@ export class TextRowSet extends NullGameObject {
 
     public setAlignTextContentHorizontal(align:AlignTextContentHorizontal):void {
         if (this.children.length===0) return;
-        if (align===this.alignTextContentHorizontal) return;
         switch (align) {
             case AlignTextContentHorizontal.CENTER:
                 let pos:number = (this.constrainSize.width - this.size.width)/2;
@@ -90,7 +89,6 @@ export class TextRowSet extends NullGameObject {
 
     public setAlignTextContentVertical(align:AlignTextContentVertical):void {
         if (this.children.length===0) return;
-        if (align===this.alignTextContentVertical) return;
         switch (align) {
             case AlignTextContentVertical.CENTER:
                 let pos:number = (this.constrainSize.height - this.size.height)/2;

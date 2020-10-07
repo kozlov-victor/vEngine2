@@ -76,12 +76,14 @@ export abstract class AbstractScrollBar extends MarkableNullGameObject{
     }
 
     private refreshScrollPosition(): void {
-        if (this.handler===undefined) return;
-        if (this._maxValue===0) return;
+        if (this._maxValue===0) {
+            this.visible = false;
+            return;
+        }
         const d:Direction = this.getDirection();
         if (this._value > this._maxValue) this._value = this._maxValue;
         assignSize(this.handler.size, getSize(this.size,d) * getSize(this.size,d) / this._maxValue,d);
-        this.visible = this._enabled && getSize(this.handler.size,d) < getSize(this.size,d);
+        this.visible = this._enabled && getSize(this.size,d)>0 && getSize(this.handler.size,d) < getSize(this.size,d);
         if (!this.visible) return;
         assignPos(this.handler.pos, getSize(this.size,d) * this._value / this._maxValue,d);
 
