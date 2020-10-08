@@ -14,7 +14,6 @@ export class MainScene extends Scene {
         surface.setLineWidth(1);
         this.appendChild(surface);
 
-
         // u(t) is called 60 times per second.
         // t: Elapsed time in seconds.
         // S: Shorthand for Math.sin.
