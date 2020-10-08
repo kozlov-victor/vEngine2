@@ -5,6 +5,10 @@ interface ICommonElement<T> {
     ref?:(el:T)=>void;
 }
 
+type Font = {
+    type: 'Font'
+}
+
 
 declare namespace JSX {
     // tslint:disable-next-line:interface-name
@@ -125,6 +129,6 @@ declare namespace JSX {
         "var": ICommonElement<HTMLElement> & Partial<HTMLElement>;
         video: ICommonElement<HTMLVideoElement> & Partial<HTMLVideoElement>;
         wbr: ICommonElement<HTMLElement> & Partial<HTMLElement>;
-        font:ICommonElement<HTMLElement> & Partial<{color:IColor, size:number}>
+        font:ICommonElement<HTMLElement> & Partial<{color:IColor, size:number,font:Font}>
     }
 }

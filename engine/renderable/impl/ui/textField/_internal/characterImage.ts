@@ -13,19 +13,20 @@ export class CharacterImage extends Image {
 
     constructor(game:Game,private font:Font,private characterInfo:ICharacterInfo,color:Color) {
         super(game);
+        const actualFont:Font = characterInfo.font || font;
         this.stretchMode = STRETCH_MODE.STRETCH;
-        const [padUp,padRight,padDown,padLeft] = font.fontContext.padding;
-        let charRect:IRectViewJSON = font.fontContext.symbols[characterInfo.rawChar] || font.fontContext.symbols['?'];
+        const [padUp,padRight,padDown,padLeft] = actualFont.fontContext.padding;
+        let charRect:IRectViewJSON = actualFont.fontContext.symbols[characterInfo.rawChar] || actualFont.fontContext.symbols['?'];
         if (charRect===undefined) {
-            const key:string = Object.keys(font.fontContext.symbols)[0];
+            const key:string = Object.keys(actualFont.fontContext.symbols)[0];
             if (DEBUG && key===undefined) {
                 throw new DebugError(`Bad fontContext has been provided`);
             }
-            charRect = font.fontContext.symbols[key];
+            charRect = actualFont.fontContext.symbols[key];
         }
         if (DEBUG) {
             if (charRect.width===0 || charRect.height===0) {
-                console.error(font.fontContext);
+                console.error(actualFont.fontContext);
                 console.error(characterInfo);
                 throw new DebugError(`font context error: wrong character rect for symbol "${characterInfo.rawChar}"`);
             }
@@ -40,7 +41,7 @@ export class CharacterImage extends Image {
         if (this.getSrcRect().height<=0) this.getSrcRect().height = 0.001;
         this.setScaleFromCurrFontSize(this.characterInfo.scaleFromCurrFontSize);
         this.pos.setXY(charRect.destOffsetX,charRect.destOffsetY);
-        this.setResourceLink(font.getResourceLink());
+        this.setResourceLink(actualFont.getResourceLink());
         this.transformPoint.setToCenter();
         if (!characterInfo.multibyte) this.color = color;
         if (characterInfo.italic) this.setItalic(true);
@@ -95,6 +96,10 @@ export class CharacterImage extends Image {
         }
         this.characterInfo.linedThrough = val;
         this.updateVisibility();
+    }
+
+    public getCharacterInfo():Readonly<ICharacterInfo>{
+        return this.characterInfo;
     }
 
     public setScaleFromCurrFontSize(scaleFromCurrFontSize:number){

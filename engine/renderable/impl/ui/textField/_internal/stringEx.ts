@@ -1,3 +1,4 @@
+import {Font} from "@engine/renderable/impl/general/font";
 
 
 export interface ICharacterInfo {
@@ -9,6 +10,7 @@ export interface ICharacterInfo {
     italic?:boolean;
     color?:IColor;
     fontSize?:number;
+    font?:Font;
     scaleFromCurrFontSize:number;
 }
 
@@ -18,13 +20,13 @@ export class StringEx {
         let index:number = 0;
         const length:number = str.length;
         const output:ICharacterInfo[] = [];
-        for (; index < length; ++index) {
+        for (; index < length; index++) {
             let charCode:number = str.charCodeAt(index);
             if (charCode >= 0xD800 && charCode <= 0xDBFF) {
                 charCode = str.charCodeAt(index + 1);
                 if (charCode >= 0xDC00 && charCode <= 0xDFFF) {
                     output.push({rawChar:str.slice(index, index + 2),multibyte:true,scaleFromCurrFontSize:1});
-                    ++index;
+                    index++;
                     continue;
                 }
             }
@@ -100,6 +102,10 @@ export class StringEx {
 
     public setLinedThrough(val:boolean):void {
         this.chars.forEach(c=>c.linedThrough=val);
+    }
+
+    public setFont(font:Font):void {
+        this.chars.forEach(c=>c.font=font);
     }
 
 }

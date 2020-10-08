@@ -5,6 +5,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Document, Element} from "@engine/misc/xmlUtils";
+import {DebugError} from "@engine/debug/debugError";
 
 export interface IRectViewJSON extends IRectJSON {
     destOffsetX:number;
@@ -121,10 +122,19 @@ export namespace FontFactory {
         return cnv.toDataURL();
     };
 
+    const querySelector = (doc:Document,path:string):Element=>{
+        const res:Element = doc.querySelector(path);
+        if (DEBUG && res===undefined) {
+            console.error(doc);
+            throw new DebugError(`can not receive node ${path} from document`);
+        }
+        return res;
+    }
+
     export const createFontFromAtlas = (game:Game,resourceLink:ResourceLink<ITexture>,doc:Document):Font=>{
-        const [up,right,down,left] = doc.querySelector('info').getAttribute('padding').split(',').map(it=>+it);
-        const [spacingHorizontal, spacingVertical] = doc.querySelector('info').getAttribute('spacing').split(',').map(it=>+it);
-        const lineHeight:number = +(doc.querySelector('common').getAttribute('lineHeight'));
+        const [up,right,down,left] = querySelector(doc,'info').getAttribute('padding').split(',').map(it=>+it);
+        const [spacingHorizontal, spacingVertical] = querySelector(doc,'info').getAttribute('spacing').split(',').map(it=>+it);
+        const lineHeight:number = +(querySelector(doc,'common').getAttribute('lineHeight'));
         const context:IFontContext = {
             width: resourceLink.getTarget().size.width,
             height: resourceLink.getTarget().size.height,
@@ -135,8 +145,8 @@ export namespace FontFactory {
         };
 
         // http://www.angelcode.com/products/bmfont/doc/file_format.html
-        const fontFamily:string = doc.querySelector('info').getAttribute('face');
-        const fontSize:number = +doc.querySelector('info').getAttribute('size');
+        const fontFamily:string = querySelector(doc,'info').getAttribute('face');
+        const fontSize:number = +querySelector(doc,'info').getAttribute('size');
         const all:Element[] = doc.querySelectorAll('char');
         for (let i:number=0;i<all.length;i++){
             const el:Element = all[i];
@@ -223,7 +233,7 @@ export class Font implements IResource<ITexture> {
 
     private static _systemFontInstance:Font;
 
-    public readonly type:string = 'Font';
+    public readonly type:'Font' = 'Font';
 
     public readonly fontSize:number;
     public readonly extraChars:Readonly<string[]>;

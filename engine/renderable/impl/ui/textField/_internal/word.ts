@@ -15,13 +15,17 @@ export class Word extends NullGameObject {
     constructor(game:Game, private readonly font:Font, public readonly chars:Readonly<ICharacterInfo[]>, private readonly color:Color) {
         super(game);
         chars.forEach(c=>{
+            const characterFont:Font = c.font || font;
             const char:CharacterImage = new CharacterImage(game,font,c,color);
             char.pos.setX(this.caret);
-            this.caret+=char.size.width+font.fontContext.spacing[0];
+            this.caret+=char.size.width+characterFont.fontContext.spacing[0];
             this.appendChild(char);
-            this.size.width+=char.size.width+font.fontContext.spacing[0];
+            this.size.width+=char.size.width+characterFont.fontContext.spacing[0];
         });
-        this.size.height = Math.max(...this.children.map(it=>it.size.height),0);
+        const maxRawHeight:number = Math.max(...this.children.map(it=>it.size.height),0);
+        const maxSpacingVertical:number =
+            Math.max(...this.chars.map(it=>it.font?it.font.fontContext.spacing[1]:0),font.fontContext.spacing[1]);
+        this.size.height = maxRawHeight + maxSpacingVertical;
         this.rawValue = chars.join('');
     }
 

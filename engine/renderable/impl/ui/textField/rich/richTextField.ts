@@ -2,6 +2,7 @@ import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {Optional} from "@engine/core/declarations";
 import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
+import {Font} from "@engine/renderable/impl/general/font";
 
 interface ITextFragment {
     italic?: boolean;
@@ -12,6 +13,7 @@ interface ITextFragment {
     linedThrough?: boolean;
     underlined? :boolean;
     fontSize? : number|false;
+    font?:Font|false;
 }
 
 export class RichTextField extends ScrollableTextField {
@@ -31,12 +33,16 @@ export class RichTextField extends ScrollableTextField {
     private traverseNode(node:VirtualNode,fragments:ITextFragment[]):void {
         let color:Optional<IColor>;
         let fontSize:Optional<number>;
+        let font:Optional<Font>;
         if (node.tagName==='font') {
             if (node.props.color!==undefined) {
                 color = node.props.color;
             }
             if (node.props.size!==undefined) {
                 fontSize = node.props.size;
+            }
+            if (node.props.font!==undefined) {
+                font = node.props.font;
             }
         }
         fragments.push({
@@ -45,7 +51,7 @@ export class RichTextField extends ScrollableTextField {
             bold: node.tagName==='b'?true:undefined,
             underlined: node.tagName==='u'?true:undefined,
             linedThrough: node.tagName==='s'?true:undefined,
-            color, fontSize,
+            color, fontSize, font
         });
         if (node.children) node.children.forEach(c=>{
             this.traverseNode(c,fragments);
@@ -58,12 +64,14 @@ export class RichTextField extends ScrollableTextField {
             linedThrough: node.tagName==='s'?false:undefined,
             color:color!==undefined?false:undefined,
             fontSize:fontSize!==undefined?false:undefined,
+            font:font!==undefined?false:undefined,
         });
     }
 
     private textFragmentToStringEx(fragments:ITextFragment[]):StringEx{
         const colorStack:IColor[] = [];
         const fontSizeStack:number[] = [];
+        const fontStack:Font[] = [];
         const result:StringEx = StringEx.fromRaw("");
         let isBold:boolean = false;
         let isItalic:boolean = false;
@@ -71,6 +79,7 @@ export class RichTextField extends ScrollableTextField {
         let isLinedThrough:boolean = false;
         let currColor:IColor|undefined;
         let currFontSize:number|undefined;
+        let currFont:Font|undefined;
         fragments.forEach(f=>{
             if (f.bold!==undefined) isBold = f.bold;
             if (f.italic!==undefined) isItalic = f.italic;
@@ -96,6 +105,15 @@ export class RichTextField extends ScrollableTextField {
                     currFontSize = fontSizeStack[fontSizeStack.length-1];
                 }
             }
+            if (f.font!==undefined) {
+                if ((f.font as Font).type!==undefined) {
+                    currFont = f.font as Font;
+                    fontStack.push(currFont);
+                } else if (f.font===false) {
+                    fontStack.pop();
+                    currFont = fontStack[fontStack.length-1];
+                }
+            }
             if (f.text!==undefined) {
                 //const prefix:string = (result.getAllChars()[result.getAllChars().length-1]?.rawChar===' ')?'':' '
                 const s:StringEx = StringEx.fromRaw(f.text);
@@ -103,9 +121,11 @@ export class RichTextField extends ScrollableTextField {
                 s.setItalic(isItalic);
                 s.setUnderlined(isUnderlined);
                 s.setLinedThrough(isLinedThrough);
+                if (currFont!==undefined) s.setFont(currFont);
                 if (currFontSize!==undefined) {
                     s.setFontSize(currFontSize);
-                    s.setScaleFromCurrFontSize(currFontSize/this.font.fontSize);
+                    const fnt:Font = currFont ?? this.font;
+                    s.setScaleFromCurrFontSize(currFontSize/fnt.fontSize);
                 }
                 if (currColor!==undefined) s.setColor(currColor);
                 result.append(s);
