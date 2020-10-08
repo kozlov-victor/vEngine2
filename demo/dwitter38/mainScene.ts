@@ -49,7 +49,7 @@ export class MainScene extends Scene {
             x.clear();
             let a,k:number;
             for(let i=300;i>=0;i--){
-                x.fillArc(960+120*C(a=.15*i+t/5)*(k=1.01**i),600+60*S(a)*k,10*k*(1+S(i/10-3*t)),0,7);
+                x.fillArc(960+120*C(a=.15*i+t/5)*(k=1.01**i),600+60*S(a)*k,10*k*(1+S(i/10-3*t)),0,Math.PI*2);
             }
 
         }
