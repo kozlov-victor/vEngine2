@@ -20,7 +20,7 @@ export class MainScene extends Scene {
 
 
     public onReady() {
-        this.colorBG.setRGB(0,0,0);
+        this.backgroundColor.setRGB(0,0,0);
         const surface = new DrawingSurface(this.game,this.game.size);
         surface.setLineWidth(2);
         surface.setDrawColor(Color.RGB(244,0,0).asRGBNumeric());

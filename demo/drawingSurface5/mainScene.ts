@@ -20,7 +20,7 @@ export class MainScene extends Scene {
     // http://scottmcdonnell.github.io/pixi-examples/index.html?s=basics&f=graphics.js&title=Graphics
     public onReady() {
 
-        this.colorBG.set(Color.BLACK);
+        this.backgroundColor.set(Color.BLACK);
 
         const graphics:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.appendChild(graphics);

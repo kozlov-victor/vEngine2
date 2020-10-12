@@ -1,5 +1,5 @@
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ICloneable, IDestroyable, IResource} from "@engine/core/declarations";
+import {ICloneable, IDestroyable, IParentChild, IResource} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {Game} from "@engine/core/game";
@@ -23,10 +23,16 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
+import {Texture} from "@engine/renderer/webGl/base/texture";
 
 
 class ContainerForDrawingSurface extends NullGameObject {
-    constructor(protected game: Game, private matrixStack:MatrixStack) {super(game);}
+    constructor(protected game: Game, private matrixStack:MatrixStack) {
+        super(game);
+        this._parentChildDelegate.afterChildAppended = undefined;
+        this._parentChildDelegate.afterChildRemoved = undefined;
+    }
     render(): void {
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
@@ -299,6 +305,8 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     public drawModel(model:RenderableModel,clearColor?:Color){
+        if (DEBUG && !model) throw new DebugError(`illegal argument`);
+        const parent:RenderableModel = model.parent;
         this.appendChild(this._transformableContainer);
         this._transformableContainer.appendChild(model);
         this._omitSelfOnRendering = true;
@@ -306,6 +314,11 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this._omitSelfOnRendering = false;
         this.removeChild(this._transformableContainer);
         this._transformableContainer.removeChild(model);
+        (model as IParentChild).parent = parent;
+    }
+
+    public setPixelPerfect(val:boolean):void {
+        this.canvasImage.setPixelPerfect(val);
     }
 
     public destroy() {

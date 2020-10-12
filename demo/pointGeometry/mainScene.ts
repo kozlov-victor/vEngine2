@@ -19,7 +19,7 @@ export class MainScene extends Scene {
 
 
     public onReady() {
-        this.colorBG.setRGB(244,244,244);
+        this.backgroundColor.setRGB(244,244,244);
         this.ship.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         this.appendChild(this.ship);
         this.ship.anchorPoint.setXY(this.ship.size.width/2,this.ship.size.height/2);

@@ -27,7 +27,7 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-        this.colorBG = Color.BLACK;
+        this.backgroundColor = Color.BLACK;
         document.body.style.backgroundColor = Color.RGB(200).asCSS();
 
         const obj:Model3d = new Model3d(this.game);

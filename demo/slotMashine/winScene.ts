@@ -20,7 +20,7 @@ export class WinScene extends Scene {
     public onReady(){
         const p:Circle = new Circle(this.game);
         p.radius = 5;
-        this.colorBG = Color.RGB(10,30,40);
+        this.backgroundColor = Color.RGB(10,30,40);
         p.blendMode = BLEND_MODE.ADDITIVE;
         p.fillColor = Color.RGB(240,10,140);
         this.emitter.numOfParticlesToEmit = {from: 10,to:50};

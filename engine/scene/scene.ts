@@ -51,7 +51,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     }
 
     public readonly type:string = "Scene";
-    public colorBG = Color.WHITE.clone();
+    public backgroundColor = Color.WHITE.clone();
     public readonly resourceLoader: ResourceLoader;
     public readonly pos:Point2d = new Point2d();
     public filters:IFilter[] = [];
@@ -118,15 +118,22 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     public appendChild(modelOrLayer:RenderableModel|Layer):void {
         if (Scene.isLayerGuard(modelOrLayer)) {
             modelOrLayer.setScene(this);
-            this._layers.push(modelOrLayer as Layer);
+            this._layers.push(modelOrLayer);
         } else {
-            this.getDefaultLayer().appendChild(modelOrLayer as RenderableModel);
+            this.getDefaultLayer().appendChild(modelOrLayer);
         }
 
     }
 
-    public prependChild(go:RenderableModel):void {
-        this.getDefaultLayer().prependChild(go);
+    public prependChild(model:RenderableModel):void;
+    public prependChild(layer:Layer):void;
+    public prependChild(modelOrLayer:RenderableModel|Layer):void {
+        if (Scene.isLayerGuard(modelOrLayer)) {
+            modelOrLayer.setScene(this);
+            this._layers.unshift(modelOrLayer);
+        } else {
+            this.getDefaultLayer().prependChild(modelOrLayer);
+        }
     }
 
     public fitSizeToChildren():void {
@@ -229,7 +236,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
         renderer.saveAlphaBlend();
-        renderer.clearColor.set(this.colorBG);
+        renderer.clearColor.set(this.backgroundColor);
         const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters); // todo blend mode for scene
 
         if (this.game.camera.worldTransformDirty) {

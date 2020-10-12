@@ -18,7 +18,7 @@ export class PreIntroScene extends Scene {
 
 
     public onPreloading(): void {
-        this.colorBG = Color.BLACK;
+        this.backgroundColor = Color.BLACK;
     }
 
     public onReady(): void {

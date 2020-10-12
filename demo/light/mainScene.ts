@@ -21,7 +21,7 @@ export class MainScene extends Scene {
         this.game.camera.scale.setXY(0.6);
         this.game.camera.pos.setXY(-5);
 
-        this.colorBG = Color.BLACK;
+        this.backgroundColor = Color.BLACK;
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         spr.pos.fromJSON({x:10,y:10});

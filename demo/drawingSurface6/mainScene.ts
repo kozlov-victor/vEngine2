@@ -20,7 +20,7 @@ export class MainScene extends Scene {
     // https://codepen.io/8Observer8/pen/qxmboV
     public onReady() {
 
-        this.colorBG.set(Color.BLACK);
+        this.backgroundColor.set(Color.BLACK);
 
         const graphics:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.appendChild(graphics);

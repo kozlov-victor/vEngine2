@@ -24,7 +24,7 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-        this.colorBG = Color.RGB(244,244,233);
+        this.backgroundColor = Color.RGB(244,244,233);
 
         const bg = new Rectangle(this.game);
         bg.fillColor = Color.RGBA(12,12,222, 255);

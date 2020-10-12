@@ -16,7 +16,7 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-        this.colorBG.setRGB(12,12,12);
+        this.backgroundColor.setRGB(12,12,12);
 
         const tf:TextField = new TextField(this.game,this.fontLink.getTarget());
         tf.pos.setY(23);

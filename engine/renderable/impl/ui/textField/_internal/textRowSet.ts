@@ -19,7 +19,7 @@ export class TextRowSet extends NullGameObject {
     public declare children: readonly TextRow[];
 
     public readonly DEFAULT_SPACE_CHAR_WIDTH:number =
-        new Word(this.game,this.font,[{rawChar:' ',multibyte:false,scaleFromCurrFontSize:1}],Color.NONE).size.width;
+        new Word(this.game,this.font,[{rawChar:' ',multibyte:false,scaleFromCurrFontSize:1}],Color.NONE,false).size.width;
 
     private caret:number = 0;
     private currentTextRow:TextRow;
@@ -27,6 +27,7 @@ export class TextRowSet extends NullGameObject {
     private alignTextContentHorizontal:AlignTextContentHorizontal;
     private alignText:AlignText;
     private wordBrake:WordBrake;
+    private pixelPerfect:boolean;
 
     constructor(
         game:Game,
@@ -68,6 +69,13 @@ export class TextRowSet extends NullGameObject {
         this.wordBrake = wordBrake;
     }
 
+    public setPixelPerfect(value:boolean):void {
+        this.pixelPerfect = value;
+    }
+
+    public isPixelPerfect():boolean {
+        return this.pixelPerfect;
+    }
 
     public setAlignTextContentHorizontal(align:AlignTextContentHorizontal):void {
         if (this.children.length===0) return;
@@ -140,16 +148,16 @@ export class TextRowSet extends NullGameObject {
                             this.newRow();
                             break;
                         case ' ':
-                            this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color),applyNewLineIfCurrentIsFull,false);
+                            this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color,this.pixelPerfect),applyNewLineIfCurrentIsFull,false);
                             break;
                         case '\t':
                             const char:ICharacterInfo = s.getAllChars()[0];
                             char.rawChar = ' ';
                             // convert tab to 4 spaces
-                            this.addWord(new Word(this.game,this.font,[char,char,char,char],this.color),applyNewLineIfCurrentIsFull,false);
+                            this.addWord(new Word(this.game,this.font,[char,char,char,char],this.color,this.pixelPerfect),applyNewLineIfCurrentIsFull,false);
                             break;
                         default:
-                            this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color),applyNewLineIfCurrentIsFull,false);
+                            this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color,this.pixelPerfect),applyNewLineIfCurrentIsFull,false);
                             break;
                     }
                 });
@@ -159,7 +167,7 @@ export class TextRowSet extends NullGameObject {
                 stringEx.
                 split(['\t','\n','\r',' '],false).filter(it=>it.asRaw().trim().length).
                 forEach(s=>{
-                    this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color),true,true);
+                    this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color,this.pixelPerfect),true,true);
                 });
                 break;
             }

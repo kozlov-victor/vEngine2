@@ -1,4 +1,3 @@
-
 import {AbstractRenderer, IRenderTarget} from "../../renderer/abstract/abstractRenderer";
 import {
     IAlphaBlendable,
@@ -6,7 +5,8 @@ import {
     IDestroyable,
     IEventemittable,
     IFilterable,
-    IParentChild, IRenderable,
+    IParentChild,
+    IRenderable,
     IRevalidatable,
     ITweenable,
     IUpdatable,
@@ -37,6 +37,7 @@ import {IAnimation} from "@engine/animation/iAnimation";
 import {Color} from "@engine/renderer/common/color";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -90,7 +91,7 @@ export abstract class RenderableModel
     private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
     // parent-child
-    private _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate<RenderableModel>(this);
+    protected _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate<RenderableModel>(this);
 
     protected constructor(protected game:Game){
         super(game);

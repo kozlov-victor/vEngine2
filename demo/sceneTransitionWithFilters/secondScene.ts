@@ -8,7 +8,7 @@ import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/ba
 export class SecondScene extends Scene {
 
     public onPreloading(){
-        this.colorBG.set(Color.BLACK);
+        this.backgroundColor.set(Color.BLACK);
         for (let i:number = 0;i<60;i++) { fakeLongLoadingFn(this.resourceLoader); }
         const rect = new Rectangle(this.game);
         rect.borderRadius = 5;

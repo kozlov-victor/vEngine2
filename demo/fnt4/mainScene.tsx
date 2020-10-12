@@ -22,7 +22,7 @@ export class MainScene extends Scene {
 
 
     public onReady() {
-        this.colorBG.setRGB(12,12,12);
+        this.backgroundColor.setRGB(12,12,12);
         const tf:RichTextField = new RichTextField(this.game,this.fontLink.getTarget());
         tf.size.set(this.game.size);
         tf.setPadding(10);

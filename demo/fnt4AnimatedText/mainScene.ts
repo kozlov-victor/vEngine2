@@ -32,7 +32,7 @@ export class MainScene extends Scene {
     private fontLink:ResourceLink<Font>;
 
     public onReady() {
-        this.colorBG.setRGB(12,12,12);
+        this.backgroundColor.setRGB(12,12,12);
         const tf = new AnimatedTextField(this.game,this.fontLink.getTarget());
         tf.size.setWH(this.game.width-30,200);
         tf.pos.setXY(this.game.width/2,this.game.height/2);

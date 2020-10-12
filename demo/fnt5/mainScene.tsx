@@ -27,7 +27,7 @@ export class MainScene extends Scene {
     private fontLink3:ResourceLink<Font>;
 
     public onReady() {
-        this.colorBG.setRGB(12,12,12);
+        this.backgroundColor.setRGB(12,12,12);
         const tf:RichTextField = new RichTextField(this.game,this.fontLink1.getTarget());
         tf.size.set(this.game.size);
         tf.setPadding(10);

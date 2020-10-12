@@ -14,7 +14,7 @@ export class MainScene extends Scene {
 
     public onPreloading(): void {
         super.onPreloading();
-        this.colorBG.set(Color.RGB(100,40,40));
+        this.backgroundColor.set(Color.RGB(100,40,40));
     }
 
 

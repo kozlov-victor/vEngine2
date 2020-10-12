@@ -21,7 +21,7 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-        this.colorBG = Color.BLACK;
+        this.backgroundColor = Color.BLACK;
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game);
         animatedImage.setResourceLink(this.resourceLink);

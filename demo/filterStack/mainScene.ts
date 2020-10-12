@@ -32,7 +32,7 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-        this.colorBG.setRGB(100,100,100);
+        this.backgroundColor.setRGB(100,100,100);
 
         const border:number = 10;
         const rect1:Rectangle = new Rectangle(this.game);

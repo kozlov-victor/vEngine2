@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     private renderScene:()=>void;
 
     public onReady() {
-        this.colorBG = Color.BLACK;
+        this.backgroundColor = Color.BLACK;
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(2);

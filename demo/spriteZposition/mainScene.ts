@@ -19,7 +19,7 @@ export class MainScene extends Scene {
     private obj:Model3d;
 
     public onPreloading() {
-        this.colorBG = Color.RGB(0);
+        this.backgroundColor = Color.RGB(0);
         this.spriteLink = this.resourceLoader.loadTexture('./assets/star.png');
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);

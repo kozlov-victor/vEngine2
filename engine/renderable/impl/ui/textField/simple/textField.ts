@@ -33,6 +33,7 @@ export class TextField extends Container {
     private alignTextContentHorizontal:AlignTextContentHorizontal = AlignTextContentHorizontal.LEFT;
     private alignText:AlignText = AlignText.LEFT;
     private wordBrake:WordBrake = WordBrake.FIT;
+    private pixelPerfect:boolean = false;
 
     private cacheSurface:DrawingSurface;
     private _text:string = '';
@@ -59,6 +60,11 @@ export class TextField extends Container {
 
     public setAutoSize(val:boolean):void {
         this._autosize = val;
+        this.markAsDirty();
+    }
+
+    public setPixelPerfect(val:boolean):void {
+        this.pixelPerfect = val;
         this.markAsDirty();
     }
 
@@ -237,6 +243,7 @@ export class TextField extends Container {
 
     private passPropertiesToRowSet(rowSet:TextRowSet):void{
         rowSet.setFont(this.font);
+        rowSet.setPixelPerfect(this.pixelPerfect);
         rowSet.setWordBrake(this.wordBrake);
         rowSet.setText(this._textEx);
         rowSet.setAlignText(this.alignText);
@@ -258,6 +265,8 @@ export class TextField extends Container {
 }
 
 export class TextFieldWithoutCache extends TextField {
+
+    public type:'TextFieldWithoutCache' = 'TextFieldWithoutCache';
 
     constructor(game: Game, font: Font) {
         super(game, font, false);

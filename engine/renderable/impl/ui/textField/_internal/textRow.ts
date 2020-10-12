@@ -27,7 +27,7 @@ export class TextRow extends NullGameObject {
     public addWord(word:Word,addWhiteSpaceBeforeIfNeed:boolean):void {
         if (this.children.length!==0 && addWhiteSpaceBeforeIfNeed) {
             const scaleFromCurrFontSize:number = word.getMaxCharacterFontScale();
-            const space:Word = new Word(this.game,this.font,[{rawChar:' ',multibyte:false,scaleFromCurrFontSize}],Color.NONE);
+            const space:Word = new Word(this.game,this.font,[{rawChar:' ',multibyte:false,scaleFromCurrFontSize}],Color.NONE,this.rowSet.isPixelPerfect());
             this._addWord(space);
         }
         this._addWord(word);

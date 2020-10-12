@@ -46,7 +46,7 @@ export class MainScene extends Scene {
 
     public onReady() {
 
-        this.colorBG = Color.RGB(100,0,0);
+        this.backgroundColor = Color.RGB(100,0,0);
         this.mashine = new Mashine(this.game,this.wheelLink);
         this.mashine.connectToScene(this);
 

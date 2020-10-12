@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     private fnt:Font;
 
     public onPreloading(){
-        this.colorBG = Color.RGB(10,10,30);
+        this.backgroundColor = Color.RGB(10,10,30);
         this.fnt = new Font(this.game, {fontSize: 14});
         const filter = new Barrel2DistortionFilter(this.game);
         this.filters = [filter];

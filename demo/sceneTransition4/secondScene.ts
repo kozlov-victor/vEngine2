@@ -13,7 +13,7 @@ export class SecondScene extends Scene {
 
     public onPreloading(){
 
-        this.colorBG = Color.RGB(222,244,244);
+        this.backgroundColor = Color.RGB(222,244,244);
 
         this.fnt = new Font(this.game, {fontSize: 25});
 

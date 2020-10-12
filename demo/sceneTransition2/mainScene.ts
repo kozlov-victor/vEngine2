@@ -42,7 +42,7 @@ import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 export class MainScene extends Scene {
 
     private fnt:Font;
-    public colorBG: Color = Color.RGB(233);
+    public backgroundColor: Color = Color.RGB(233);
     private btnPos:number=0;
 
     public onPreloading(){
