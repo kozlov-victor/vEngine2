@@ -4,6 +4,8 @@ import {Color} from "@engine/renderer/common/color";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {GameScene} from "./gameScene";
 import {BasePix32Scene} from "./base/basePix32Scene";
+import {Scene} from "@engine/scene/scene";
+import {GetReadyScene} from "./getReadyScene";
 
 
 export class IntroScene extends BasePix32Scene {
@@ -21,7 +23,7 @@ export class IntroScene extends BasePix32Scene {
         this.screen.appendChild(box);
 
         this.on(KEYBOARD_EVENTS.keyPressed, _=>{
-            this.game.runScene(new GameScene(this.game));
+            this.game.runScene(new GetReadyScene(this.game));
         });
 
         (async ()=>{

@@ -44,7 +44,6 @@ export abstract class BasePix32Scene extends Scene {
 
     protected async print(text:string,time:number,instant:boolean = false):Promise<void> {
         const tf:TextField = this.textField;
-        console.log('tf par',tf.getParent());
         tf.moveToFront();
         tf.setText(text);
         tf.revalidate();
