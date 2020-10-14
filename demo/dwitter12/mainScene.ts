@@ -45,6 +45,7 @@ export class MainScene extends Scene {
 
         let j,y,b;
         x.setFillColor(Color.BLACK.asRGBNumeric());
+        x.setLineWidth(0);
         this.renderScene = ()=>{
             const t = this.game.getElapsedTime() / 1000;
 

@@ -4,12 +4,14 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Rect} from "@engine/geometry/rect";
 import {MathEx} from "@engine/misc/mathEx";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Color} from "@engine/renderer/common/color";
 import {Tween} from "@engine/animation/tween";
-import {EasingCubic} from "@engine/misc/easing/functions/cubic";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {Timer} from "@engine/misc/timer";
+import {Optional} from "@engine/core/declarations";
 
 interface IMoveable {
     model:RenderableModel;
@@ -39,15 +41,17 @@ export class GameScene extends BasePix32Scene {
 
     private moveableObjects:IMoveable[] = [];
     private opponents:RenderableModel[] = [];
-    private carVelocity:number = 0.3;
+    private carVelocity:number = 0.05;
+    private CAR_VELOCITY_MAX:number = 1.0;
 
     private car:RenderableModel;
+    private minCarY:number = 5;
+    private maxCarY:number = 18;
+
+    private timer:Optional<Timer>;
 
 
     onReady() {
-        (window as any).v = (val:number)=>{
-            this.carVelocity = val;
-        }
         super.onReady();
         (async ()=>{
             await this.print("get ready",3000);
@@ -56,6 +60,7 @@ export class GameScene extends BasePix32Scene {
             this.createRoadParticles();
             this.createLives();
             this.createCar();
+            this.listenKeyboard();
             this.createOpponents();
             this.createStopSigns();
 
@@ -167,6 +172,8 @@ export class GameScene extends BasePix32Scene {
             if (obj.onMove) obj.onMove(obj.model);
             if (obj.model.pos.x < -10) obj.onDisappear(obj.model);
         });
+        this.carVelocity+=0.001;
+        if (this.carVelocity>this.CAR_VELOCITY_MAX) this.carVelocity=this.CAR_VELOCITY_MAX;
     }
 
     private calcMyPosition():number{
@@ -175,6 +182,67 @@ export class GameScene extends BasePix32Scene {
             if (o.pos.x>this.car.pos.x) myPos++;
         });
         return myPos;
+    }
+
+    private listenKeyboard():void{
+        const moveUp = ()=>{
+            this.car.pos.y-=1;
+            if (this.car.pos.y<this.minCarY) this.car.pos.y = this.minCarY;
+        };
+        const moveDown = ()=>{
+            this.car.pos.y+=1;
+            if (this.car.pos.y>this.maxCarY) this.car.pos.y = this.maxCarY;
+        };
+        // const speedUp = ()=>{
+        //     this.carVelocity+=0.05;
+        //     if (this.carVelocity>this.CAR_VELOCITY_MAX) this.carVelocity = this.CAR_VELOCITY_MAX;
+        // };
+        const speedDown = ()=>{
+            this.carVelocity-=0.05;
+            if (this.carVelocity<0) this.carVelocity = 0;
+        }
+        this.on(KEYBOARD_EVENTS.keyPressed, e=>{
+            switch (e.key) {
+                case KEYBOARD_KEY.UP: {
+                    moveUp();
+                    if (this.timer) {
+                        this.timer.kill();
+                    }
+                    this.timer = this.setInterval(moveUp,100);
+                    break;
+                }
+                case KEYBOARD_KEY.DOWN: {
+                    moveDown();
+                    if (this.timer) {
+                        this.timer.kill();
+                    }
+                    this.timer = this.setInterval(moveDown,100);
+                    break;
+                }
+                case KEYBOARD_KEY.LEFT: {
+                    speedDown();
+                    if (this.timer) {
+                        this.timer.kill();
+                    }
+                    this.timer = this.setInterval(speedDown,100);
+                    break;
+                }
+                case KEYBOARD_KEY.RIGHT: {
+                    // speedUp();
+                    // if (this.timer) {
+                    //     this.timer.kill();
+                    // }
+                    // this.timer = this.setInterval(speedUp,100);
+                    break;
+                }
+            }
+        });
+        this.on(KEYBOARD_EVENTS.keyReleased, e=>{
+            if (this.timer) {
+                this.timer.kill();
+                this.timer = undefined;
+            }
+        });
     }
 
     private static onDisappearCommon(obj:RenderableModel){
