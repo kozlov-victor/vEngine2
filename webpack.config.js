@@ -76,7 +76,7 @@ module.exports = async (env={})=>{
         project = await cliUI.prompt("Enter project name to compile")
     }
 
-    const debug = env.debug==='true';
+    const debug = false;//env.debug==='true';
 
     const entry = {};
     const output = {

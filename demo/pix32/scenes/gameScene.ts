@@ -12,17 +12,28 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Timer} from "@engine/misc/timer";
 import {Optional} from "@engine/core/declarations";
+import {Rect} from "@engine/geometry/rect";
 
 interface IMoveable {
     model:RenderableModel;
     onDisappear:(m:RenderableModel)=>void;
     onMove?:(m:RenderableModel)=>void;
+    collisionRect?: {
+        x:number,
+        y:number,
+        width: number,
+        height: number
+    },
+    onCollided?:(m:RenderableModel)=>void;
     velocity:number;
 }
 
 const XOR =(a:boolean,b:boolean):boolean=> {
     return ( a || b ) && !( a && b );
 }
+
+const r1:Rect = new Rect();
+const r2:Rect = new Rect();
 
 export class GameScene extends BasePix32Scene {
 
@@ -41,10 +52,14 @@ export class GameScene extends BasePix32Scene {
 
     private moveableObjects:IMoveable[] = [];
     private opponents:RenderableModel[] = [];
-    private carVelocity:number = 0.05;
+    private CAR_VELOCITY_INITIAL:number = 0.05;
+    private carVelocity:number = this.CAR_VELOCITY_INITIAL;
     private CAR_VELOCITY_MAX:number = 1.0;
 
     private car:RenderableModel;
+    private carCollideRect = {
+        x:0,y:3,width:10,height:3
+    };
     private minCarY:number = 5;
     private maxCarY:number = 18;
 
@@ -106,6 +121,12 @@ export class GameScene extends BasePix32Scene {
                         isOvertaken = img.pos.x<this.car.pos.x;
                         if (XOR(isOvertakenPrev,isOvertaken)) await this.print(this.calcMyPosition().toString(),5000);
                     },
+                    collisionRect: {
+                        x:0,y:3,width:10,height:3
+                    },
+                    onCollided:(_)=>{
+                        this.carVelocity = this.CAR_VELOCITY_INITIAL;
+                    }
                 });
                 this.opponents.push(img);
             })();
@@ -129,11 +150,23 @@ export class GameScene extends BasePix32Scene {
         for (let i:number=0;i<2;i++) {
             const img = new Image(this.game);
             img.setResourceLink(this.lifeLink);
-            img.pos.setXY(MathEx.random(100,1000),MathEx.random(15,22));
+            const disappear = ()=>{
+                img.pos.setXY(MathEx.random(100,1000),MathEx.random(15,22));
+            };
+            disappear();
             this.screen.appendChild(img);
-            this.moveableObjects.push({model:img,velocity:0,onDisappear:(_)=>{
-                img.pos.setXY(MathEx.random(15,22),MathEx.random(100,1000));
-            }});
+            this.moveableObjects.push(
+                {
+                    model:img,
+                    velocity:0,
+                    onDisappear:(_)=>{
+                        disappear();
+                    },
+                    onCollided:(_)=>{
+                        disappear();
+                    }
+                }
+            );
         }
     }
 
@@ -143,9 +176,18 @@ export class GameScene extends BasePix32Scene {
             img.setResourceLink(this.stopSignLink);
             img.pos.setXY(MathEx.random(100,1000),MathEx.random(8,24));
             this.screen.appendChild(img);
-            this.moveableObjects.push({model:img,velocity:0,onDisappear:(_)=>{
-                img.pos.setXY(MathEx.random(100,1000),MathEx.random(8,24));
-            }});
+            this.moveableObjects.push(
+                {
+                    model:img,
+                    velocity:0,
+                    onCollided:(_)=>{
+                        this.carVelocity = this.CAR_VELOCITY_INITIAL;
+                    },
+                    onDisappear:(_)=>{
+                        img.pos.setXY(MathEx.random(100,1000),MathEx.random(8,24));
+                    }
+                }
+            );
         }
     }
 
@@ -167,13 +209,34 @@ export class GameScene extends BasePix32Scene {
     }
 
     private moveObjects():void {
+        this.carVelocity+=0.001;
+        if (this.carVelocity>this.CAR_VELOCITY_MAX) this.carVelocity=this.CAR_VELOCITY_MAX;
         this.moveableObjects.forEach(obj=> {
             obj.model.pos.x -= this.carVelocity - obj.velocity;
             if (obj.onMove) obj.onMove(obj.model);
             if (obj.model.pos.x < -10) obj.onDisappear(obj.model);
+            r1.setXYWH(
+                this.car.pos.x+this.carCollideRect.x,
+                this.car.pos.y+this.carCollideRect.y,
+                this.carCollideRect.width,
+                this.carCollideRect.height
+            );
+            r2.setXYWH(
+                obj.model.getDestRect().x,
+                obj.model.getDestRect().y,
+                obj.model.getDestRect().width,
+                obj.model.getDestRect().height,
+            );
+            if (obj.collisionRect) {
+                r2.x+=obj.collisionRect.x;
+                r2.y+=obj.collisionRect.y;
+                r2.width = obj.collisionRect.width;
+                r2.height = obj.collisionRect.height;
+            }
+            if (obj.onCollided && MathEx.overlapTest(r1,r2)) {
+                obj.onCollided(obj.model);
+            }
         });
-        this.carVelocity+=0.001;
-        if (this.carVelocity>this.CAR_VELOCITY_MAX) this.carVelocity=this.CAR_VELOCITY_MAX;
     }
 
     private calcMyPosition():number{

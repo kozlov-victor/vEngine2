@@ -55,7 +55,7 @@ export abstract class BasePix32Scene extends Scene {
             time,
             loop: instant,
         }));
-        return await waitFor(this.game,time);
+        await waitFor(this.game,time);
     }
 
     constructor(protected game:Game){
@@ -83,7 +83,7 @@ export abstract class BasePix32Scene extends Scene {
         const palletFilter:PalletOffsetFilter = new PalletOffsetFilter(this.game,this.palletLink.getTarget());
         screen.filters = [palletFilter];
 
-        const tf:TextField = new TextFieldWithoutCache(this.game,this.fontLink.getTarget());
+        const tf:TextField = new TextField(this.game,this.fontLink.getTarget());
         tf.size.setWH(this.game.size.width*3,this.game.size.height);
         tf.setPixelPerfect(true);
         tf.setAutoSize(true);

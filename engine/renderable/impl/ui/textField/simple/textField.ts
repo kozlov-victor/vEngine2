@@ -71,7 +71,6 @@ export class TextField extends Container {
     revalidate() {
         if (this.useCache) this._revalidateWithCache();
         else this._revalidateWithoutCache();
-        super.revalidate();
     }
 
     private _revalidateWithCache():void {
@@ -91,7 +90,8 @@ export class TextField extends Container {
             if (!this.cacheSurface.size.equal(clientRect)) {
                 rectIsDirty = true;
                 this.cacheSurface.destroy();
-                const cacheSurface = new DrawingSurface(this.game,clientRect);
+                const cacheSurface:DrawingSurface = new DrawingSurface(this.game,clientRect);
+                cacheSurface.setPixelPerfect(this.pixelPerfect);
                 this.rowSetContainer.replaceChild(this.cacheSurface,cacheSurface);
                 this.rowSetContainer.markAsDirty();
                 this.cacheSurface = cacheSurface;
@@ -126,6 +126,7 @@ export class TextField extends Container {
                 this.rowSet.size.height + this.marginTop + this.paddingTop + this.marginBottom + this.paddingBottom,
             );
         }
+        super.revalidate();
     }
 
     public getText():string{
@@ -238,7 +239,9 @@ export class TextField extends Container {
         this.size.setWH(
             this.measurer.size.width + this.marginLeft + this.paddingLeft + this.marginRight + this.paddingRight,
             this.measurer.size.height + this.marginTop + this.paddingTop + this.marginBottom + this.paddingBottom,
-        )
+        );
+        if (this.size.width===0) this.size.width = 1;
+        if (this.size.height===0) this.size.height = 1;
     }
 
     private passPropertiesToRowSet(rowSet:TextRowSet):void{
