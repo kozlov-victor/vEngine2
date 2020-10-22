@@ -1,4 +1,4 @@
-import {isCommonArray, isTypedArray} from "@engine/misc/object";
+import {isCommonArray} from "@engine/misc/object";
 
 export class BinBuffer {
 

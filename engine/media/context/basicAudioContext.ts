@@ -52,8 +52,13 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
     public load(buffer:ArrayBuffer,link:ResourceLink<void>):Promise<void>{
         return Promise.resolve();
     }
+
     public clone():BasicAudioContext{
         return new BasicAudioContext(this.game,this.audioPlayer);
+    }
+
+    public getCurrentTime():number {
+        return -1;
     }
 
     protected setLastTimeId():void {

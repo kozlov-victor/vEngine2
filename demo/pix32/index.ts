@@ -1,4 +1,3 @@
-import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
@@ -12,7 +11,6 @@ const scene: Scene = new IntroScene(game);
 game.setRenderer(WebGlRenderer);
 game.setAudioPLayer(AudioPlayer);
 game.getRenderer<WebGlRenderer>().setPixelPerfect(true);
-//game.addControl(MouseControl);
 game.addControl(KeyboardControl);
 game.runScene(scene);
 

@@ -1,60 +1,24 @@
-
-import {Wave} from "./internal/wav";
 import {BinBuffer} from "./internal/binBuffer";
 import {LhaFile} from "./lha/lhaFile";
-import {isArray, isCommonArray} from "@engine/misc/object";
+import {Wave} from "./internal/wav";
+import {Optional} from "@engine/core/declarations";
 
 const LEONARD = '!LeOnArD!' as const;
 const END = 'End!' as const;
 
+export type tFrame = [
+    r0:number,r1:number,
+    r2:number,r3:number,
+    r4:number,r5:number,
+    r6:number,r7:number,
+    r8:number,r9:number,
+    r10:number,r11:number,
+    r12:number,r13:number,
+    r14:number,r15:number
+];
 
 
-const periodVoiceA = 1 as const;
-const finePeriodVoiceA = 0 as const;
-const periodVoiceB = 3 as const;
-const finePeriodVoiceB = 2 as const;
-const periodVoiceC = 5 as const;
-const finePeriodVoiceC = 4 as const;
-const noisePeriod = 6 as const;
-const mixerControl = 7 as const;
-const volumeControlA = 8 as const;
-const volumeControlB = 9 as const;
-const volumeControlC = 10 as const;
-const envelopePeriod = 11 as const;
-const envelopePeriodFine = 12 as const;
-const envelopeShape = 13 as const;
-const extendedData1 = 14 as const;
-const extendedData2 = 15 as const;
-
-
-class Oscillator {
-
-
-    constructor() {
-
-    }
-
-    public sin(fr:number, t:number):number {
-        return Math.sin((2.0 * Math.PI * t * fr));
-    }
-
-    public noise(fr:number,t:number):number {
-        return 0.5*Math.random()+0.5*this.sin(fr,t);
-    }
-
-    public square(fr:number, t:number):number {
-        const sample:number = this.sin(fr, t);
-        return  sample < 0 ? -1 : 1;
-    }
-
-    public triangle(fr:number, t:number):number {
-        return this.sin(fr, t) + 1 / 9 * this.sin(3 * fr, t) + 1 / 25 * this.sin(5 * fr, t);
-    }
-
-}
-
-export class YM {
-
+export class Ym {
     private buffer:BinBuffer;
 
     private numOfFrames:number;
@@ -64,26 +28,21 @@ export class YM {
     private authorName:string;
     private songComment:string;
     private rawFrames:number[];
-    private frames:[
-        r0:number,r1:number,
-        r2:number,r3:number,
-        r4:number,r5:number,
-        r6:number,r7:number,
-        r8:number,r9:number,
-        r10:number,r11:number,
-        r12:number,r13:number,
-        r14:number,r15:number,
-    ][] = [];
-
-    private oscillator:Oscillator = new Oscillator();
+    private frames:tFrame[] = [];
 
     private masterClock:number;
 
     constructor(arr:number[]|ArrayBuffer) {
         const bb:BinBuffer = new BinBuffer(arr);
-        const lhaFile:LhaFile = new LhaFile(bb);
-        const frames:number[] = lhaFile.getInputStreamByIndex(0).toArray();
-        this.read(frames);
+        if (bb.readString(2)==='YM') { // this is uncompressed file
+           this.read(bb.getArray());
+        } else { // lha-compressed
+            bb.resetPointer();
+            const lhaFile:LhaFile = new LhaFile(bb);
+            const body:number[] = lhaFile.getInputStreamByIndex(0).toArray();
+            this.read(body);
+        }
+
         this.readFrames();
     }
 
@@ -134,103 +93,162 @@ export class YM {
         if (cnt!==this.rawFrames.length) throw new Error(`frame reading error,expected to read ${this.rawFrames.length}, but ${cnt} is read`);
     }
 
-    private calcSampleFromRegisters(registers:number[],
-        time:number
-    ):[a:number,b:number,c:number]{
+    private currentFrameNumber:number = 0;
+    private periodA:number = 0;
+    private periodB:number = 0;
+    private periodC:number = 0;
+    private periodNoise:number = 0;
+    private volumeA:number = 0;
+    private envA:boolean = false;
+    private volumeB:number = 0;
+    private envB:boolean = false;
+    private volumeC:number = 0;
+    private envC:boolean = false;
+    private periodEnv:number = 0;
+    private attack:number = 0;
+    private hold:number = 0;
+    private alternate:number = 0;
+    private envStep:number = 0;
+    private countEnv:number = 0;
+    private holding:number = 0;
+    private volumeEnv:number = 0;
+    private divide:number = 15;
+    private countA:number = 0;
+    private outputA:number = 0;
+    private countB:number = 0;
+    private outputB:number = 0;
+    private countC:number = 0;
+    private outputC:number = 0;
+    private countNoise:number = 0;
+    private random:number = 1;
+    private outputNoise:number = 1;
+    private cA:number = 0;
+    private cB:number = 0;
+    private cC:number = 0;
+    private outA:number = 0;
+    private outB:number = 0;
+    private outC:number = 0;
+    private amplitudes:number[] = [0, 1, 2, 3, 4, 5, 6, 8, 10, 16, 22, 28, 36, 45, 53, 63];
 
-        // ((this.regs[1] & 0xF) << 8 | this.regs[0]);
-        const periodA:number = ((registers[periodVoiceA] & 0xF) << 8) | registers[finePeriodVoiceA];
-        let frA:number = 0;
-        if (periodA!==0) frA = this.masterClock/(16*periodA);
+    private sampleRate:number = 44100; // 8000 44100
 
-        let frB:number = 0;
-        const periodB:number = ((registers[periodVoiceB] & 0xF) << 8) | registers[finePeriodVoiceB];
-        if (periodB!==0) frB = this.masterClock/(16*periodB);
+    private setCurrentFrame(frameNumber:number):void{
+        this.currentFrameNumber = frameNumber;
+        const frame = this.frames[frameNumber];
+        this.periodA = (frame[1] & 0xF) << 8 | frame[0];
+        this.periodB = (frame[3] & 0xF) << 8 | frame[2];
+        this.periodC = (frame[5] & 0xF) << 8 | frame[4];
+        this.periodNoise = (frame[6] & 0x1F) * 2;
+        this.volumeA = frame[8] & 0xF;
+        this.envA = ((frame[8] & 0x10) !== 0);
+        this.volumeB = frame[9] & 0xF;
+        this.envB = ((frame[9] & 0x10) !== 0);
+        this.volumeC = frame[10] & 0xF;
+        this.envC = ((frame[10] & 0x10) !== 0);
+        this.periodEnv = (frame[12] << 8 | frame[11]) << 1;
 
-        let frC:number = 0;
-        const periodC:number = ((registers[periodVoiceC] & 0xF) << 8) | registers[finePeriodVoiceC];
-        if (periodC!==0) frC = this.masterClock/(16*periodC);
+        this.attack = ((frame[13] & 0x4) === 0) ? 0 : 15;
+        if ((frame[13] & 0x8) === 0) {
+            this.hold = 1;
+            this.alternate = this.attack;
+        } else {
+            this.hold = frame[13] & 0x1;
+            this.alternate = frame[13] & 0x2;
+        }
+        // this.envStep = 15;
+        // this.countEnv = 15;
+        // this.holding = 0;
+        this.volumeEnv = this.attack ^ 0xF;
 
-        const isLevelFixedA:boolean = !BinBuffer.isBitSet(5,registers[volumeControlA]);
-        const isLevelFixedB:boolean = !BinBuffer.isBitSet(5,registers[volumeControlB]);
-        const isLevelFixedC:boolean = !BinBuffer.isBitSet(5,registers[volumeControlC]);
+    }
 
-        const envelopePer:number = (registers[envelopePeriod]*0xff+registers[envelopePeriodFine])/32;
-        const envelopeFr:number = this.masterClock/(256*envelopePer);
-        const envelopeSample:number = this.oscillator.sin(envelopeFr,time);
+    // one processor cycle
+    private cycle():void {
+        const frame = this.frames[this.currentFrameNumber];
+        if (this.divide === 0) {
+            this.divide = 7;
+            if (++this.countA >= this.periodA) {
+                this.countA = 0;
+                this.outputA ^= 0x1;
+            }
+            if (++this.countB >= this.periodB) {
+                this.countB = 0;
+                this.outputB ^= 0x1;
+            }
+            if (++this.countC >= this.periodC) {
+                this.countC = 0;
+                this.outputC ^= 0x1;
+            }
+            if (++this.countNoise >= this.periodNoise) {
+                this.countNoise = 0;
+                if ((this.random + 1 & 0x2) !== 0) this.outputNoise ^= 0x1;
+                if ((this.random & 0x1) !== 0) this.random ^= 0x24000;
+                this.random >>= 1;
+            }
+            const enable = frame[7];
+            const enableA = (this.outputA | enable & 0x1) & (this.outputNoise | enable >> 3 & 0x1);
+            const enableB = (this.outputB | enable >> 1 & 0x1) & (this.outputNoise | enable >> 4 & 0x1);
+            const enableC = (this.outputC | enable >> 2 & 0x1) & (this.outputNoise | enable >> 5 & 0x1);
+            if (this.holding === 0 && ++this.countEnv >= this.periodEnv) {
+                this.countEnv = 0;
+                if (this.envStep === 0) {
+                    if (this.hold !== 0) {
+                        if (this.alternate !== 0) this.attack ^= 0xF;
+                        this.holding = 1;
+                    } else {
+                        if (this.alternate !== 0) this.attack ^= 0xF;
+                        this.envStep = 15;
+                    }
+                } else {
+                    this.envStep--;
+                }
+            }
+            this.volumeEnv = this.envStep ^ this.attack;
+            this.cA = enableA * (this.envA ? this.volumeEnv : this.volumeA);
+            this.cB = enableB * (this.envB ? this.volumeEnv : this.volumeB);
+            this.cC = enableC * (this.envC ? this.volumeEnv : this.volumeC);
+            this.outA = this.amplitudes[this.cA];
+            this.outB = this.amplitudes[this.cB];
+            this.outC = this.amplitudes[this.cC];
+            this.outB = ~~(this.outB * 0.75);
+        } else {
+            this.divide--;
+        }
+    }
 
-        const levelA:number = isLevelFixedA?(registers[volumeControlA]&0b111111)/0b111111:envelopeSample;
-        const levelB:number = isLevelFixedB?(registers[volumeControlB]&0b111111)/0b111111:envelopeSample;
-        const levelC:number = isLevelFixedC?(registers[volumeControlC]&0b111111)/0b111111:envelopeSample;
-
-        const noisePer:number = registers[noisePeriod]&0b11111;
-        let noiseFr:number = 0;
-        if (noisePer!==0) noiseFr = this.masterClock/(16*noisePer);
-        let sampleNoise = 0;
-        if (noiseFr!==0) sampleNoise = this.oscillator.noise(noiseFr,time);
-
-        const mixerChannelA:boolean = !BinBuffer.isBitSet(0,registers[mixerControl]);
-        const mixerChannelB:boolean = !BinBuffer.isBitSet(1,registers[mixerControl]);
-        const mixerChannelC:boolean = !BinBuffer.isBitSet(2,registers[mixerControl]);
-
-        const mixerNoiseA:boolean = !BinBuffer.isBitSet(3,registers[mixerControl]);
-        const mixerNoiseB:boolean = !BinBuffer.isBitSet(4,registers[mixerControl]);
-        const mixerNoiseC:boolean = !BinBuffer.isBitSet(5,registers[mixerControl]); // todo 5?
-
-        const sampleA:number = this.oscillator.square(frA,time);
-        const sampleB:number = this.oscillator.square(frB,time);
-        const sampleC:number = this.oscillator.square(frC,time);
-
-        let resultA:number = 0, resultB:number = 0, resultC:number = 0;
-        if (mixerNoiseA && mixerChannelA) resultA = (sampleA+sampleNoise)/2;
-        else if (mixerNoiseA) resultA = sampleNoise;
-        else if (mixerChannelA) resultA = sampleA;
-
-        if (mixerNoiseB && mixerChannelB) resultB = (sampleB+sampleNoise)/2;
-        else if (mixerNoiseB) resultB = sampleNoise;
-        else if (mixerChannelB) resultB = sampleB;
-
-        if (mixerNoiseC && mixerChannelC) resultC = (sampleC+sampleNoise)/2;
-        else if (mixerNoiseC) resultC = sampleNoise;
-        else if (mixerChannelC) resultC = sampleC;
-
-        resultA*=levelA;
-        resultB*=levelB;
-        resultC*=levelC;
-
-        return [resultA,resultB,resultC];
+    public getFrameSnapshotByTime(timeMs:number):Optional<Readonly<tFrame>>{
+        const timeForOneFrame:number = 1000/this.frameFreq;
+        const index:number = ~~(timeMs/timeForOneFrame);
+        if (this.frames[index]) return this.frames[index];
+        else return undefined;
     }
 
     public renderToBlob():Blob{
-        const sampleRate:number = 8000; // 44100
         const pcmSamples:number[] = [];
-        let currSample:number=0;
-        const frameTime:number = 1000/this.frameFreq;
-        const samplesInFrame = sampleRate/this.frameFreq;
-        const sampleTime:number = 1000/sampleRate;
+        const samplesInFrame:number = this.sampleRate/this.frameFreq;
+        const cyclesForOneSample:number = this.masterClock/this.sampleRate;
 
-        let time:number;
         for (let i:number=0;i<this.frames.length;i++) {
-            const frame:number[] = this.frames[i];
+            this.setCurrentFrame(i);
             for (let j:number = 0; j < samplesInFrame; j++) {
-                time = currSample/sampleRate;
-                const s: [a:number,b:number,c:number] = this.calcSampleFromRegisters(frame, time);
-                pcmSamples.push((s[0]+s[1])/2);
-                pcmSamples.push(s[2]);
-                currSample++;
+                for (let k:number=0;k<cyclesForOneSample;k++) this.cycle();
+                pcmSamples.push(~~((this.outA + this.outB) * 128 - 8192));
+                pcmSamples.push((~~(this.outB + this.outC) * 128 - 8192));
             }
         }
-        return Wave.encodeWAV(pcmSamples,sampleRate);
+        return Wave.encodeWAV(pcmSamples,this.sampleRate);
     }
 
-    public renderToObjectUrl():string{
-        return URL.createObjectURL(this.renderToBlob());
-    }
-
-    public renderToAudio():HTMLAudioElement{
-        const audio:HTMLAudioElement = document.createElement('audio');
-        audio.src = this.renderToObjectUrl();
-        return audio;
+    public renderToArrayBuffer():Promise<ArrayBuffer> {
+        const blob:Blob = this.renderToBlob();
+        if (blob.arrayBuffer!==undefined) return blob.arrayBuffer();
+        else return new Promise<ArrayBuffer>((resolve) => {
+            const fr:FileReader = new FileReader();
+            fr.onload = () => {
+                resolve(fr.result as ArrayBuffer);
+            };
+            fr.readAsArrayBuffer(blob);
+        })
     }
 
 }

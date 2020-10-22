@@ -2,37 +2,26 @@ import {KernelBurnAccumulativeFilter} from "@engine/renderer/webGl/filters/accum
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
-import {BasePix32Scene} from "./base/basePix32Scene";
+import {BasePix32Scene, loadSound} from "./base/basePix32Scene";
 import {GetReadyScene} from "./getReadyScene";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {YM} from "../ym-player/ym";
 import {Sound} from "@engine/media/sound";
-import {TaskRef} from "@engine/resources/queue";
-import {Game} from "@engine/core/game";
+import {Ym} from "../ym-player/ym";
+import {ChipOscilloscope} from "../misc/chipOscilloscope";
 
-const loadSoundFromBlob = (game:Game,blob:Blob): ResourceLink<void>=>{
-    const link: ResourceLink<void> = ResourceLink.create(undefined);
-    const taskRef:TaskRef = game.getCurrScene().resourceLoader.q.addTask(async () => {
-        const arrayBuffer:ArrayBuffer = await blob.arrayBuffer();
-        await game.getAudioPlayer().loadSound(arrayBuffer, link);
-        game.getCurrScene().resourceLoader.q.resolveTask(taskRef);
-    });
-    return link;
-}
 
 export class IntroScene extends BasePix32Scene {
 
     private themeAudioLink:ResourceLink<void>;
-    private themeBinAudioLink:ResourceLink<ArrayBuffer>;
+    private ym:Ym;
 
     onPreloading() {
         super.onPreloading();
-        this.themeBinAudioLink = this.resourceLoader.loadBinary('pix32/resources/music/theme.ym');
+        const binLink = this.resourceLoader.loadBinary('pix32/resources/music/theme.ym');
         this.resourceLoader.addNextTask((()=>{
-            const ym:YM = new YM(this.themeBinAudioLink.getTarget());
-            this.themeAudioLink = loadSoundFromBlob(this.game,ym.renderToBlob());
+            this.ym = new Ym(binLink.getTarget());
+            this.themeAudioLink = loadSound(this.game,this.ym);
         }));
-
     }
 
     onReady() {
@@ -53,7 +42,10 @@ export class IntroScene extends BasePix32Scene {
         box.filters = [kernelBurnAccumulative];
         this.screen.appendChild(box);
 
+        this.oscilloscope.listen(sound,this.ym);
+
         this.on(KEYBOARD_EVENTS.keyPressed, _=>{
+            sound.stop();
             this.game.runScene(new GetReadyScene(this.game));
         });
 

@@ -63,6 +63,10 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         super.play(sound);
     }
 
+    public getCurrentTime():number {
+        return this._ctx.currentTime;
+    }
+
     public stop():void {
         this.free = true;
         // tslint:disable-next-line:no-null-keyword

@@ -16,6 +16,9 @@ import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Ym} from "../../ym-player/ym";
+import {TaskRef} from "@engine/resources/queue";
+import {ChipOscilloscope} from "../../misc/chipOscilloscope";
 
 export const waitFor = (game:Game,time:number):Promise<void>=>{
     return new Promise<void>((resolve)=>{
@@ -23,6 +26,16 @@ export const waitFor = (game:Game,time:number):Promise<void>=>{
             resolve();
         },time);
     });
+}
+
+export const loadSound = (game:Game,ym:Ym): ResourceLink<void>=>{
+    const link: ResourceLink<void> = ResourceLink.create(undefined);
+    const taskRef:TaskRef = game.getCurrScene().resourceLoader.q.addTask(async () => {
+        const arrayBuffer:ArrayBuffer = await ym.renderToArrayBuffer();
+        await game.getAudioPlayer().loadSound(arrayBuffer, link);
+        game.getCurrScene().resourceLoader.q.resolveTask(taskRef);
+    });
+    return link;
 }
 
 export abstract class BasePix32Scene extends Scene {
@@ -37,10 +50,11 @@ export abstract class BasePix32Scene extends Scene {
     protected containerLink:ResourceLink<ITexture>;
 
     private btmLayer:Layer;
-    private topLayer:Layer;
-    protected screen:RenderableModel;
+    public topLayer:Layer;
+    public screen:RenderableModel;
 
     private textField:TextField;
+    protected oscilloscope:ChipOscilloscope;
 
     protected async print(text:string,time:number,instant:boolean = false):Promise<void> {
         const tf:TextField = this.textField;
@@ -56,6 +70,7 @@ export abstract class BasePix32Scene extends Scene {
             loop: instant,
         }));
         await waitFor(this.game,time);
+        if (!instant) tf.setText("");
     }
 
     constructor(protected game:Game){
@@ -110,6 +125,8 @@ export abstract class BasePix32Scene extends Scene {
             on=!on;
             indicator.fillColor = on?fillColorOn:fillColorOff;
         },2000);
+
+        this.oscilloscope = new ChipOscilloscope(this.game,this);
 
         const container:Image = new Image(this.game);
         container.setResourceLink(this.containerLink);

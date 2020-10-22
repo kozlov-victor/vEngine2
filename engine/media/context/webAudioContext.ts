@@ -113,6 +113,8 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
     public readonly type: string = 'webAudioContext';
 
     private _nodeChain:NodeChain;
+    private startedTime:number;
+    private duration:number;
 
     constructor(protected game:Game,protected audioPLayer:AudioPlayer) {
         super(game,audioPLayer);
@@ -148,16 +150,22 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
     public play(sound:Sound):void {
         this.setLastTimeId();
         this._free = false;
+        this.startedTime = ~~(this._ctx.currentTime*1000);
         const currSource:AudioBufferSourceNode = this._ctx.createBufferSource();
         currSource.buffer = AudioPlayer.cache[sound.getResourceLink().getUrl()] as AudioBuffer;
         currSource.connect(this._nodeChain.getLastNode());
         currSource.start(0,sound.offset,sound.duration);
         this._currSource = currSource;
+        this.duration = ~~(currSource.buffer.duration*1000);
         currSource.onended = ()=> {
             this.stop();
         };
         super.play(sound);
 
+    }
+
+    public getCurrentTime():number {
+        return (~~(this._ctx.currentTime*1000) - this.startedTime) % this.duration;
     }
 
     public stop():void {

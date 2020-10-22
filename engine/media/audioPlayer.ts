@@ -93,6 +93,9 @@ export  class AudioPlayer implements IAudioPlayer {
         this._audioNodeSet.resumeAll();
     }
 
+    public getNodeBySound(sound:Sound):Optional<AudioNode> {
+        return this._audioNodeSet.getNodeBySound(sound);
+    }
 
     public update(time:number,delta:number):void {
 

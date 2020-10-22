@@ -1,4 +1,4 @@
-import {BasePix32Scene, waitFor} from "./base/basePix32Scene";
+import {BasePix32Scene, loadSound, waitFor} from "./base/basePix32Scene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -13,6 +13,9 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Timer} from "@engine/misc/timer";
 import {Optional} from "@engine/core/declarations";
 import {Rect} from "@engine/geometry/rect";
+import {Ym} from "../ym-player/ym";
+import {Sound} from "@engine/media/sound";
+import {GameOverScene} from "./gameOverScene";
 
 interface IMoveable {
     model:RenderableModel;
@@ -35,6 +38,37 @@ const XOR =(a:boolean,b:boolean):boolean=> {
 const r1:Rect = new Rect();
 const r2:Rect = new Rect();
 
+class Car {
+    public CAR_VELOCITY_INITIAL:number = 0.05;
+    public carVelocity:number = this.CAR_VELOCITY_INITIAL;
+    public CAR_VELOCITY_MAX:number = 1.0;
+
+    public carModel:RenderableModel;
+    public carCollideRect = {
+        x:0,y:3,width:10,height:3
+    };
+    public minCarY:number = 5;
+    public maxCarY:number = 18;
+    public isBlinking:boolean = false;
+    public health:number = 32;
+
+    public blink(){
+        let cnt = 0;
+        if (this.isBlinking) return;
+        this.isBlinking = true;
+        const timer = this.carModel.setInterval(()=>{
+            cnt++;
+            this.carModel.visible = !this.carModel.visible;
+            if (cnt===10) {
+                timer.kill();
+                this.isBlinking = false;
+                this.carModel.visible = true;
+            }
+        },200);
+    }
+
+}
+
 export class GameScene extends BasePix32Scene {
 
     @Resource.Texture('./pix32/resources/images/car.png')
@@ -49,27 +83,44 @@ export class GameScene extends BasePix32Scene {
     @Resource.Texture('./pix32/resources/images/stopSign.png')
     private stopSignLink:ResourceLink<ITexture>;
 
+    private themeAudioLink:ResourceLink<void>;
+
 
     private moveableObjects:IMoveable[] = [];
     private opponents:RenderableModel[] = [];
-    private CAR_VELOCITY_INITIAL:number = 0.05;
-    private carVelocity:number = this.CAR_VELOCITY_INITIAL;
-    private CAR_VELOCITY_MAX:number = 1.0;
+    private healthRect:RenderableModel;
+    private step:number = 0;
+    private lap:number = 1;
 
-    private car:RenderableModel;
-    private carCollideRect = {
-        x:0,y:3,width:10,height:3
-    };
-    private minCarY:number = 5;
-    private maxCarY:number = 18;
+    private ym:Ym;
+
 
     private timer:Optional<Timer>;
+    private car:Car = new Car();
+    private sound:Sound;
 
+    onPreloading() {
+        super.onPreloading();
+        const binLink = this.resourceLoader.loadBinary('pix32/resources/music/Androids.ym');
+        this.resourceLoader.addNextTask((()=>{
+            const ym  = new Ym(binLink.getTarget());
+            this.themeAudioLink = loadSound(this.game,ym);
+            this.ym = ym;
+        }));
+    }
 
     onReady() {
         super.onReady();
         (async ()=>{
             await this.print("get ready",3000);
+
+            const sound:Sound = new Sound(this.game);
+            sound.setResourceLink(this.themeAudioLink);
+            sound.loop = true;
+            sound.play();
+            this.sound = sound;
+
+            this.oscilloscope.listen(sound,this.ym);
 
             this.createHills();
             this.createRoadParticles();
@@ -78,14 +129,14 @@ export class GameScene extends BasePix32Scene {
             this.listenKeyboard();
             this.createOpponents();
             this.createStopSigns();
+            this.createHealthBar();
 
             await waitFor(this.game,1000);
             this.addTween(new Tween({
-                target: this.car.pos,
+                target: this.car.carModel.pos,
                 time: 300,
                 to: {x:-7}
             }));
-            await this.print("lap 1",3000);
         })();
     }
 
@@ -98,7 +149,7 @@ export class GameScene extends BasePix32Scene {
         car.setResourceLink(this.carLink);
         car.pos.setXY(4,5);
         this.screen.appendChild(car);
-        this.car = car;
+        this.car.carModel = car;
     }
 
     private createOpponents(){
@@ -118,14 +169,19 @@ export class GameScene extends BasePix32Scene {
                     },
                     onMove:async(_)=>{
                         isOvertakenPrev = isOvertaken;
-                        isOvertaken = img.pos.x<this.car.pos.x;
+                        isOvertaken = img.pos.x<this.car.carModel.pos.x;
                         if (XOR(isOvertakenPrev,isOvertaken)) await this.print(this.calcMyPosition().toString(),5000);
                     },
                     collisionRect: {
                         x:0,y:3,width:10,height:3
                     },
                     onCollided:(_)=>{
-                        this.carVelocity = this.CAR_VELOCITY_INITIAL;
+                        if (!this.car.isBlinking) {
+                            this.car.carVelocity = this.car.CAR_VELOCITY_INITIAL;
+                            this.car.blink();
+                            this.updateHealthBar(-3);
+                        }
+
                     }
                 });
                 this.opponents.push(img);
@@ -164,6 +220,7 @@ export class GameScene extends BasePix32Scene {
                     },
                     onCollided:(_)=>{
                         disappear();
+                        this.updateHealthBar(1);
                     }
                 }
             );
@@ -181,7 +238,11 @@ export class GameScene extends BasePix32Scene {
                     model:img,
                     velocity:0,
                     onCollided:(_)=>{
-                        this.carVelocity = this.CAR_VELOCITY_INITIAL;
+                        if (!this.car.isBlinking) {
+                            this.car.carVelocity = this.car.CAR_VELOCITY_INITIAL;
+                            this.car.blink();
+                            this.updateHealthBar(-5);
+                        }
                     },
                     onDisappear:(_)=>{
                         img.pos.setXY(MathEx.random(100,1000),MathEx.random(8,24));
@@ -189,6 +250,29 @@ export class GameScene extends BasePix32Scene {
                 }
             );
         }
+    }
+
+    private createHealthBar(){
+        const rect = new Rectangle(this.game);
+        rect.lineWidth = 0;
+        rect.size.setWH(32,1);
+        rect.pos.setXY(0,0);
+        this.screen.appendChild(rect);
+        this.healthRect = rect;
+    }
+
+    private updateHealthBar(val:number){
+        this.car.health+=val;
+        if (this.car.health<0) {
+            this.healthRect.visible = false;
+            const scene = new GameOverScene(this.game);
+            scene.score = this.step;
+            this.sound.stop();
+            this.setTimeout(()=>this.game.runScene(scene),1000);
+        } else {
+            this.healthRect.size.width = this.car.health;
+        }
+
     }
 
     private createHills(){
@@ -209,17 +293,18 @@ export class GameScene extends BasePix32Scene {
     }
 
     private moveObjects():void {
-        this.carVelocity+=0.001;
-        if (this.carVelocity>this.CAR_VELOCITY_MAX) this.carVelocity=this.CAR_VELOCITY_MAX;
+        if ((this.step++ % 5000)===0) this.print("Lap " + (this.lap++),3000);
+        this.car.carVelocity+=0.001;
+        if (this.car.carVelocity>this.car.CAR_VELOCITY_MAX) this.car.carVelocity=this.car.CAR_VELOCITY_MAX;
         this.moveableObjects.forEach(obj=> {
-            obj.model.pos.x -= this.carVelocity - obj.velocity;
+            obj.model.pos.x -= this.car.carVelocity - obj.velocity;
             if (obj.onMove) obj.onMove(obj.model);
             if (obj.model.pos.x < -10) obj.onDisappear(obj.model);
             r1.setXYWH(
-                this.car.pos.x+this.carCollideRect.x,
-                this.car.pos.y+this.carCollideRect.y,
-                this.carCollideRect.width,
-                this.carCollideRect.height
+                this.car.carModel.pos.x+this.car.carCollideRect.x,
+                this.car.carModel.pos.y+this.car.carCollideRect.y,
+                this.car.carCollideRect.width,
+                this.car.carCollideRect.height
             );
             r2.setXYWH(
                 obj.model.getDestRect().x,
@@ -242,27 +327,27 @@ export class GameScene extends BasePix32Scene {
     private calcMyPosition():number{
         let myPos:number = 1;
         this.opponents.forEach(o=>{
-            if (o.pos.x>this.car.pos.x) myPos++;
+            if (o.pos.x>this.car.carModel.pos.x) myPos++;
         });
         return myPos;
     }
 
     private listenKeyboard():void{
         const moveUp = ()=>{
-            this.car.pos.y-=1;
-            if (this.car.pos.y<this.minCarY) this.car.pos.y = this.minCarY;
+            this.car.carModel.pos.y-=1;
+            if (this.car.carModel.pos.y<this.car.minCarY) this.car.carModel.pos.y = this.car.minCarY;
         };
         const moveDown = ()=>{
-            this.car.pos.y+=1;
-            if (this.car.pos.y>this.maxCarY) this.car.pos.y = this.maxCarY;
+            this.car.carModel.pos.y+=1;
+            if (this.car.carModel.pos.y>this.car.maxCarY) this.car.carModel.pos.y = this.car.maxCarY;
         };
         // const speedUp = ()=>{
         //     this.carVelocity+=0.05;
         //     if (this.carVelocity>this.CAR_VELOCITY_MAX) this.carVelocity = this.CAR_VELOCITY_MAX;
         // };
         const speedDown = ()=>{
-            this.carVelocity-=0.05;
-            if (this.carVelocity<0) this.carVelocity = 0;
+            this.car.carVelocity-=0.05;
+            if (this.car.carVelocity<0) this.car.carVelocity = 0;
         }
         this.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.key) {

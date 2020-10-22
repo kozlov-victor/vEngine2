@@ -237,7 +237,7 @@ export class LhaFileInputStream  {
     private count:number;
 
     public constructor(file:LhaFile, entry:LhaEntry) {
-        if ((file == null) || (entry == null))
+        if ((file === null) || (entry === null))
         throw (new Error('NullPointerException'));
 
         this.file = file;
@@ -246,7 +246,7 @@ export class LhaFileInputStream  {
     }
 
     public read_2(b:number[], off:number, len:number):number {
-        if (this.count == 0)
+        if (this.count === 0)
             return (-1);
 
         if (len > this.count) {
@@ -258,7 +258,7 @@ export class LhaFileInputStream  {
         }
 
         len = this.file.read(this.pos, b, off, len);
-        if (len == -1)
+        if (len === -1)
             throw (new LhaException("premature EOF"));
 
         this.pos += len;
@@ -268,11 +268,11 @@ export class LhaFileInputStream  {
     }
 
     public read():number {
-        if (this.count == 0)
+        if (this.count === 0)
             return (-1);
 
         const n:number = this.file.read_2(this.pos);
-        if (n == -1)
+        if (n === -1)
             throw (new LhaException("premature EOF"));
 
         ++this.pos;

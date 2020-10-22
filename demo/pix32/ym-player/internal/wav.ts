@@ -20,8 +20,8 @@ export class Wave {
         binBuffer.writeUInt32(samples.length * 2, true);
 
         for (let i:number = 0; i < samples.length; i++) {
-            const s:number = Math.max(-1, Math.min(1, samples[i])) - 1;
-            binBuffer.writeUInt16(~~(s*0x7fff), true);
+            const s:number = samples[i];
+            binBuffer.writeUInt16(s, true);
         }
 
         return new Blob([binBuffer.getView()], {type: 'audio/wav'});

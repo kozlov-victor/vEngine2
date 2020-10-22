@@ -1,6 +1,8 @@
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Sound} from "@engine/media/sound";
-import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
+import type {Sound} from "@engine/media/sound";
+import type {BasicAudioContext} from "@engine/media/context/basicAudioContext";
+import {Optional} from "@engine/core/declarations";
+import type {AudioNode} from "@engine/media/audioNode";
 
 export const enum FREE_AUDIO_NODE_SEARCH_STRATEGY  {
     GET_OLDEST,
@@ -23,5 +25,6 @@ export interface IAudioPlayer {
     resumeAll():void;
     isCached(link:ResourceLink<void>):boolean;
     getContext():BasicAudioContext;
+    getNodeBySound(sound:Sound):Optional<AudioNode>;
 
 }

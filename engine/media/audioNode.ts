@@ -63,5 +63,9 @@ export class AudioNode {
         return this._currSound;
     }
 
+    public getCurrentTime():number {
+        return this.context.getCurrentTime();
+    }
+
 }
 
