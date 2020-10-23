@@ -34,13 +34,18 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
     }
     public async load(buffer:ArrayBuffer,link:ResourceLink<void>):Promise<void> {
         const url:string = link.getUrl();
-        if (DEBUG) {
-            const type:string = url.split('.').pop()??'';
-            if (type==='') throw new DebugError(`Can not define audio type from url: ${url}`);
-            const canPlayType:CanPlayTypeResult = this._ctx.canPlayType(`audio/${type}`);
-            if (canPlayType==='') throw new DebugError(`Can not play this audio type: ${type}`);
+        if (typeof URL!==undefined && typeof Blob!==undefined) {
+            const blob:Blob = new Blob([buffer]);
+            AudioPlayer.cache[url] = URL.createObjectURL(blob);
+        } else {
+            if (DEBUG) {
+                const type:string = url.split('.').pop()??'';
+                if (type==='') throw new DebugError(`Can not define audio type from url: ${url}`);
+                const canPlayType:CanPlayTypeResult = this._ctx.canPlayType(`audio/${type}`);
+                if (canPlayType==='') throw new DebugError(`Can not play this audio type: ${type}`);
+            }
+            AudioPlayer.cache[url] = url;
         }
-        AudioPlayer.cache[url] = url;
     }
 
     public isFree(): boolean {
@@ -51,10 +56,15 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         this.setLastTimeId();
         const url:string = AudioPlayer.cache[sound.getResourceLink().getUrl()] as string;
         if (DEBUG && !url) throw new DebugError(`can not retrieve audio from cache (link id=${sound.getResourceLink().getUrl()})`);
-
         this.free = false;
         this._ctx.src = url;
-        this._ctx.play()?.catch(e=>{});
+        this._ctx.play()?.then(_=>{
+            this.duration = ~~(this._ctx.duration*1000);
+        }).catch(e=>{
+            console.log(e)
+        });
+        this.startedTime = ~~(this._ctx.currentTime*1000);
+        this.duration = -1;
         this.loop(sound.loop);
         this.setGain(sound.gain);
         this._ctx.onended = () => {
@@ -63,14 +73,17 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         super.play(sound);
     }
 
-    public getCurrentTime():number {
-        return this._ctx.currentTime;
-    }
-
     public stop():void {
         this.free = true;
         // tslint:disable-next-line:no-null-keyword
         this._ctx.onended = null;
+        this._ctx.pause();
+        this._ctx.currentTime = 0;
+
+    }
+
+    public getCurrentTime():number {
+        return (~~(this._ctx.currentTime*1000) - this.startedTime) % this.duration;
     }
 
     public setGain(val: number):void {

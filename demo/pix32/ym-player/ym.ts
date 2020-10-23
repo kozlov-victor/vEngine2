@@ -133,33 +133,62 @@ export class Ym {
     private sampleRate:number = 44100; // 8000 44100
 
     private setCurrentFrame(frameNumber:number):void{
+        const prefFrame = this.frames[this.currentFrameNumber];
         this.currentFrameNumber = frameNumber;
-        const frame = this.frames[frameNumber];
-        this.periodA = (frame[1] & 0xF) << 8 | frame[0];
-        this.periodB = (frame[3] & 0xF) << 8 | frame[2];
-        this.periodC = (frame[5] & 0xF) << 8 | frame[4];
-        this.periodNoise = (frame[6] & 0x1F) * 2;
-        this.volumeA = frame[8] & 0xF;
-        this.envA = ((frame[8] & 0x10) !== 0);
-        this.volumeB = frame[9] & 0xF;
-        this.envB = ((frame[9] & 0x10) !== 0);
-        this.volumeC = frame[10] & 0xF;
-        this.envC = ((frame[10] & 0x10) !== 0);
-        this.periodEnv = (frame[12] << 8 | frame[11]) << 1;
-
-        this.attack = ((frame[13] & 0x4) === 0) ? 0 : 15;
-        if ((frame[13] & 0x8) === 0) {
-            this.hold = 1;
-            this.alternate = this.attack;
-        } else {
-            this.hold = frame[13] & 0x1;
-            this.alternate = frame[13] & 0x2;
+        const frame:tFrame = this.frames[frameNumber];
+        for (let index:number=0;index<15;index++) {
+            if (frame[index] !== prefFrame[index]) {
+                const value = frame[index];
+                frame[index] = value;
+                switch (index) {
+                    case 0:
+                    case 1:
+                        this.periodA = (frame[1] & 0xF) << 8 | frame[0];
+                        break;
+                    case 2:
+                    case 3:
+                        this.periodB = (frame[3] & 0xF) << 8 | frame[2];
+                        break;
+                    case 4:
+                    case 5:
+                        this.periodC = (frame[5] & 0xF) << 8 | frame[4];
+                        break;
+                    case 6:
+                        this.periodNoise = (value & 0x1F) * 2;
+                        break;
+                    case 8:
+                        this.volumeA = value & 0xF;
+                        this.envA = ((value & 0x10) !== 0);
+                        break;
+                    case 9:
+                        this.volumeB = value & 0xF;
+                        this.envB = ((value & 0x10) !== 0);
+                        break;
+                    case 10:
+                        this.volumeC = value & 0xF;
+                        this.envC = ((value & 0x10) !== 0);
+                        break;
+                    case 11:
+                    case 12:
+                        this.periodEnv = (frame[12] << 8 | frame[11]) << 1;
+                        break;
+                    case 13:
+                        this.attack = ((value & 0x4) === 0) ? 0 : 15;
+                        if ((value & 0x8) === 0) {
+                            this.hold = 1;
+                            this.alternate = this.attack;
+                        } else {
+                            this.hold = value & 0x1;
+                            this.alternate = value & 0x2;
+                        }
+                        this.envStep = 15;
+                        this.countEnv = 15;
+                        this.holding = 0;
+                        this.volumeEnv = this.attack ^ 0xF;
+                        break;
+                }
+            }
         }
-        // this.envStep = 15;
-        // this.countEnv = 15;
-        // this.holding = 0;
-        this.volumeEnv = this.attack ^ 0xF;
-
     }
 
     // one processor cycle
@@ -185,10 +214,10 @@ export class Ym {
                 if ((this.random & 0x1) !== 0) this.random ^= 0x24000;
                 this.random >>= 1;
             }
-            const enable = frame[7];
-            const enableA = (this.outputA | enable & 0x1) & (this.outputNoise | enable >> 3 & 0x1);
-            const enableB = (this.outputB | enable >> 1 & 0x1) & (this.outputNoise | enable >> 4 & 0x1);
-            const enableC = (this.outputC | enable >> 2 & 0x1) & (this.outputNoise | enable >> 5 & 0x1);
+            const enable:number = frame[7];
+            const enableA:number = (this.outputA | enable & 0x1) & (this.outputNoise | enable >> 3 & 0x1);
+            const enableB:number = (this.outputB | enable >> 1 & 0x1) & (this.outputNoise | enable >> 4 & 0x1);
+            const enableC:number = (this.outputC | enable >> 2 & 0x1) & (this.outputNoise | enable >> 5 & 0x1);
             if (this.holding === 0 && ++this.countEnv >= this.periodEnv) {
                 this.countEnv = 0;
                 if (this.envStep === 0) {
@@ -228,10 +257,24 @@ export class Ym {
         const samplesInFrame:number = this.sampleRate/this.frameFreq;
         const cyclesForOneSample:number = this.masterClock/this.sampleRate;
 
+        let pitch: number;
+        const atari_st_mode: boolean = true;
+        const spectrum_mode: boolean = false;
+        let psgcycles: number;
+        if (atari_st_mode) {
+            pitch = 25000;
+        } else if (spectrum_mode) {
+            pitch = 29556;
+        } else {
+            pitch = 50000;
+        }
+        psgcycles = atari_st_mode ? ((2000000 + pitch) / this.sampleRate) : (spectrum_mode ? ((1773400 + pitch) / this.sampleRate) : ((1000000 + pitch) / this.sampleRate));
+
+
         for (let i:number=0;i<this.frames.length;i++) {
             this.setCurrentFrame(i);
             for (let j:number = 0; j < samplesInFrame; j++) {
-                for (let k:number=0;k<cyclesForOneSample;k++) this.cycle();
+                for (let k:number=0;k<psgcycles;k++) this.cycle();
                 pcmSamples.push(~~((this.outA + this.outB) * 128 - 8192));
                 pcmSamples.push((~~(this.outB + this.outC) * 128 - 8192));
             }

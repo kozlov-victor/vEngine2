@@ -113,8 +113,6 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
     public readonly type: string = 'webAudioContext';
 
     private _nodeChain:NodeChain;
-    private startedTime:number;
-    private duration:number;
 
     constructor(protected game:Game,protected audioPLayer:AudioPlayer) {
         super(game,audioPLayer);

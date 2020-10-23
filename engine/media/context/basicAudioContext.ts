@@ -15,6 +15,10 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
     }
 
     public readonly type:string = 'basicAudioContext';
+
+    protected startedTime:number = 0;
+    protected duration:number = 1;
+
     private _lastTimeId:number = 0;
 
     constructor(protected game:Game, protected audioPlayer:AudioPlayer){
@@ -58,11 +62,11 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
     }
 
     public getCurrentTime():number {
-        return -1;
+        return 0;
     }
 
     protected setLastTimeId():void {
         this._lastTimeId = Incrementer.getValue();
     }
-}
 
+}
