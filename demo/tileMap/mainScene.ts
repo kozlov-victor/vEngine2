@@ -5,15 +5,28 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {ITexture} from "@engine/renderer/common/texture";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
     private tileMap:TileMap;
     private rect:Rectangle;
 
+    @Resource.Texture('./tileMap/tiles.png')
+    private tilesLink:ResourceLink<ITexture>;
+
     public onPreloading() {
-        const tileMap:TileMap = new TileMap(this.game);
-        tileMap.setResourceLink(this.resourceLoader.loadTexture('./tileMap/tiles.png'));
+        const rect = new Rectangle(this.game);
+        rect.fillColor.setRGB(10,100,100);
+        this.rect = rect;
+
+
+    }
+
+
+    public onReady() {
 
         const data:number[] = [
             1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,
@@ -32,18 +45,11 @@ export class MainScene extends Scene {
             3,3,3,3,3,3,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,
         ];
 
+        const tileMap:TileMap = new TileMap(this.game);
+        tileMap.setResourceLink(this.resourceLoader.loadTexture('./tileMap/tiles.png'));
         tileMap.fromTiledJSON(data,30,undefined,32,32);
         this.tileMap = tileMap;
 
-        const rect = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
-        this.rect = rect;
-
-
-    }
-
-
-    public onReady() {
         this.appendChild(this.tileMap);
         this.appendChild(this.rect);
         this.game.camera.followTo(this.rect);

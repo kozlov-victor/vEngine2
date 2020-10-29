@@ -21,6 +21,7 @@ interface IWheelCommand {
 export class MainScene extends Scene {
 
     public wheelLink:ResourceLink<ITexture>;
+    public overlayLink:ResourceLink<ITexture>;
     private overlay!:Image;
     private mashine!:Mashine;
 
@@ -30,10 +31,8 @@ export class MainScene extends Scene {
     }
 
     public onPreloading() {
-        this.overlay = new Image(this.game);
-        this.overlay.setResourceLink(this.resourceLoader.loadTexture('./slotMashine/resources/overlay.png'));
+        this.overlayLink = this.resourceLoader.loadTexture('./slotMashine/resources/overlay.png');
         this.wheelLink = this.resourceLoader.loadTexture(`./slotMashine/resources/wheel.png?1`);
-
         const rect:Rectangle = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -45,6 +44,9 @@ export class MainScene extends Scene {
     }
 
     public onReady() {
+
+        this.overlay = new Image(this.game);
+        this.overlay.setResourceLink(this.overlayLink);
 
         this.backgroundColor = Color.RGB(100,0,0);
         this.mashine = new Mashine(this.game,this.wheelLink);

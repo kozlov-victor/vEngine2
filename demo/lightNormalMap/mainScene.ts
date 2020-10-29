@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         this.backgroundColor = Color.BLACK;
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
-        spr.pos.fromJSON({x:10,y:10});
+        spr.pos.setXY(10,10);
         this.appendChild(spr);
 
         const pointLight:PointLight = new PointLight(this.game);
@@ -44,7 +44,8 @@ export class MainScene extends Scene {
         const surf:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         const sprNormal:Image = new Image(this.game);
         sprNormal.setResourceLink(this.normalMapLink);
-        sprNormal.pos.fromJSON({x:10,y:10});
+        sprNormal.pos.setXY(10,10);
+        console.log(sprNormal.id,sprNormal.size.toJSON(),this.normalMapLink.state);
         surf.drawModel(sprNormal);
 
         const lightFilter:LightFilter = new LightFilter(this.game,lightSet);

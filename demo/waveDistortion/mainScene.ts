@@ -1,43 +1,32 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
-import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
-import {DropShadowFilter} from "@engine/renderer/webGl/filters/texture/dropShadowFilter";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
+    @Resource.Texture('./assets/logo.png')
     private logoLink:ResourceLink<ITexture>;
+
+    @Resource.Texture('./assets/repeat.jpg')
+    private repeatLink:ResourceLink<ITexture>;
+
     private img:Image;
 
-    public onPreloading() {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
-        //const rect = new Rectangle(this.game);
-        // (rect.fillColor as Color).setRGB(10,100,100);
-        // rect.size.height = 10;
-        // this.preloadingGameObject = rect;
-        //
-        const img = new Image(this.game);
-        img.setResourceLink(this.resourceLoader.loadTexture('./assets/repeat.jpg'));
-        this.img = img;
-
-    }
-
-    public onProgress(val: number) {
-        //this.preloadingGameObject.size.width = val*this.game.size.width;
-    }
 
     public onReady() {
+
+        this.img = new Image(this.game);
+        this.img.setResourceLink(this.repeatLink);
+
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         spr.pos.fromJSON({x:10,y:10});

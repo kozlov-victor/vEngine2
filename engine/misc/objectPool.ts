@@ -10,6 +10,7 @@ export interface IReleasealable {
 
 export class ObjectPool<T extends IReleasealable> {
 
+    private _ptr:number = 0;
     private _pool:T[] = [];
     /**
      * 16 - nice magic value for default pool size
@@ -21,11 +22,11 @@ export class ObjectPool<T extends IReleasealable> {
     }
 
     public getFreeObject(silently:boolean = false):Optional<T>{
-
-        for (let i:number=0;i<this.numberOfInstances;i++) {
-            let current:T = this._pool[i];
+        let cnt:number = 0;
+        while (cnt<this.numberOfInstances){
+            let current:T = this._pool[this._ptr];
             if (current===undefined) {
-                current = this._pool[i] = new this.Class();
+                current = this._pool[this._ptr] = new this.Class();
                 current.capture();
                 return current;
             }
@@ -33,6 +34,8 @@ export class ObjectPool<T extends IReleasealable> {
                 current.capture();
                 return current;
             }
+            cnt++;
+            this._ptr = (++this._ptr) % this.numberOfInstances;
         }
         if (DEBUG && !silently) throw new DebugError(`can not get free object: no free object in pool`);
         return undefined;

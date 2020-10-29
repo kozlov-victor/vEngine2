@@ -32,7 +32,7 @@ export class MainScene extends Scene {
 
 
         const maxRadius:number = 250;
-        for (let i:number=0;i<500;i++) {
+        for (let i:number=0;i<5000;i++) {
             const billBoardObj = MathEx.random(0,1)>0.5?new Circle(this.game):new Rectangle(this.game);
             billBoardObj.billBoard = true;
             billBoardObj.depthTest = true;

@@ -4,6 +4,7 @@ import {ICloneable} from "@engine/core/declarations";
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 import {vec4} from "@engine/geometry/vec4";
 
+
 // https://evanw.github.io/lightgl.js/docs/matrix.html
 
 export namespace mat4 {
@@ -117,9 +118,9 @@ export namespace mat4 {
             }
         }
 
-        const lr:n = 1 / (left - right),
-            bt:n = 1 / (bottom - top),
-            nf:n = 1 / (near - far);
+        const lr:n = 1.0 / (left - right),
+            bt:n = 1.0 / (bottom - top),
+            nf:n = 1.0 / (near - far);
         const outMat16:MAT16 = out.mat16 as MAT16;
         outMat16[0] = -2 * lr;
         outMat16[1] = 0;

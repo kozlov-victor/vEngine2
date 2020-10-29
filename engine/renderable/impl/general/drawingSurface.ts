@@ -239,6 +239,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this._textField.textColor.set(this.drawColor);
         this._textField.pos.setXY(x,y);
         this._textField.setText(text);
+        this._textField.revalidate();
         this.drawModel(this._textField);
     }
 

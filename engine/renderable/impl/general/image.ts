@@ -40,15 +40,7 @@ export class Image extends RenderableModelWithResourceLink implements ICloneable
         }
         if (DEBUG && !this.getResourceLink().getTarget()) {
             console.error(this);
-            throw new DebugError(`can not render Image: can not find texture by resource link`);
-        }
-        const tex:ITexture = this.getResourceLink().getTarget();
-        if (this.size.isZero()) {
-            this.size.width = tex.size.width;
-            this.size.height = tex.size.height;
-        }
-        if (this._srcRect.isZeroSize()) {
-            this._srcRect.setWH(tex.size.width,tex.size.height);
+            throw new DebugError(`can not render Image: resource link target is not defined`);
         }
     }
 
@@ -76,11 +68,8 @@ export class Image extends RenderableModelWithResourceLink implements ICloneable
 
     public setResourceLink(link:ResourceLink<ITexture>):void{
         super.setResourceLink(link);
-        const oldLink:ResourceLink<ITexture> = this.getResourceLink();
-        const canBeRevalidated:boolean =
-            (oldLink===undefined || oldLink!==link) &&
-            link.getTarget()!==undefined;
-        if (canBeRevalidated) this.revalidate();
+        if (this.size.isZero()) this.size.set(link.getTarget().size);
+        if (this._srcRect.isZeroSize()) this._srcRect.setSize(this.size);
     }
 
     public setPixelPerfect(val:boolean):void{

@@ -4,21 +4,24 @@ import {Vec2} from "@engine/geometry/vec2";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {ITexture} from "@engine/renderer/common/texture";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
     private ship:RenderableModel;
 
-
-    public onPreloading() {
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.resourceLoader.loadTexture('./pointGeometry/ship.png'));
-        this.ship = spr;
-    }
-
+    @Resource.Texture('./pointGeometry/ship.png')
+    private link:ResourceLink<ITexture>;
 
 
     public onReady() {
+
+        const spr:Image = new Image(this.game);
+        spr.setResourceLink(this.link);
+        this.ship = spr;
+
         this.backgroundColor.setRGB(244,244,244);
         this.ship.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         this.appendChild(this.ship);

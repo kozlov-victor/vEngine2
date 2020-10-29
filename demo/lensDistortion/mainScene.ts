@@ -14,18 +14,16 @@ import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 export class MainScene extends Scene {
 
     private logoLink:ResourceLink<ITexture>;
-    private img:Image;
+    private imgRepeatLink:ResourceLink<ITexture>;
+
 
     public onPreloading() {
         this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
+        this.imgRepeatLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
-
-        const img = new Image(this.game);
-        img.setResourceLink(this.resourceLoader.loadTexture('./assets/repeat.jpg'));
-        this.img = img;
 
     }
 
@@ -34,11 +32,11 @@ export class MainScene extends Scene {
     }
 
     public onReady() {
+
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
-
 
         const circle:Circle = new Circle(this.game);
         circle.radius = 90;
@@ -49,12 +47,14 @@ export class MainScene extends Scene {
         circle.arcAngleTo = 2;
         this.appendChild(circle);
 
-        const img = this.img;
+        const img = new Image(this.game);
+        img.setResourceLink(this.imgRepeatLink);
+
         img.pos.setXY(100,0);
         img.size.setWH(200);
         img.stretchMode = STRETCH_MODE.REPEAT;
         img.borderRadius = 15;
-        this.appendChild(this.img);
+        this.appendChild(img);
 
 
         this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{

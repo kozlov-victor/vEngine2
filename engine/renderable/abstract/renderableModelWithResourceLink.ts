@@ -1,4 +1,4 @@
-import {ResourceLink} from "@engine/resources/resourceLink";
+import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
@@ -12,6 +12,9 @@ export abstract class RenderableModelWithResourceLink extends RenderableModel im
         if (DEBUG) {
             if (!link) {
                 throw new DebugError(`can not set resource link: link passed is ${link}`);
+            }
+            if (link.state!==ResourceLinkState.COMPLETED) {
+                throw new DebugError(`can not set resource link: link passed is not in valid state (current: ${link.state}, expected: ${ResourceLinkState.COMPLETED})`);
             }
         }
         this._resourceLink = link;
