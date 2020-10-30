@@ -237,14 +237,14 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         renderer.transformSave();
         renderer.saveAlphaBlend();
         renderer.clearColor.set(this.backgroundColor);
-        const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters); // todo blend mode for scene
+        const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters);
 
         if (this.game.camera.worldTransformDirty) {
             this.game.camera.translate();
             this.game.camera.transform();
             this.game.camera.worldTransformMatrix.fromMat16(this.game.getRenderer().transformGet());
         } else {
-            this.game.getRenderer().transformSet(...this.game.camera.worldTransformMatrix.mat16);
+            this.game.getRenderer().transformSet(this.game.camera.worldTransformMatrix.mat16);
         }
 
         renderer.setAlphaBlend(this.alpha);
@@ -257,7 +257,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
             for (const l of this._layers) {
                 if (l.transformType===LayerTransformType.STICK_TO_CAMERA) {
                     renderer.transformSave();
-                    renderer.transformSet(...IDENTITY_HOLDER.mat16);
+                    renderer.transformSet(IDENTITY_HOLDER.mat16);
                 }
                 l.render();
                 if (l.transformType===LayerTransformType.STICK_TO_CAMERA) {

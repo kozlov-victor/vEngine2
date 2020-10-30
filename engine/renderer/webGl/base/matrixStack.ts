@@ -4,13 +4,13 @@ import {Optional} from "@engine/core/declarations";
 import {IPropertyStack} from "@engine/renderer/common/propertyStack";
 import {Stack} from "@engine/misc/collection/stack";
 import {mat4Special} from "@engine/geometry/mat4Special";
+import MAT16 = mat4.MAT16;
 
 export interface IMatrixTransformable {
     transformSave():void;
     transformReset():void;
     transformRestore():void;
-    transformSet(v0:number, v1:number, v2:number, v3:number, v4:number, v5:number, v6:number, v7:number,
-                 v8:number, v9:number, v10:number,v11:number, v12:number,v13:number,v14:number,v15:number):void;
+    transformSet(val:Readonly<MAT16>):void;
     transformScale(x:number, y:number, z?:number):void;
     transformTranslate(x:number, y:number, z?:number):void;
     transformSkewX(angle:number):void;
@@ -64,13 +64,8 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
 
-    public setMatrixValues(
-        v0:number, v1:number, v2:number, v3:number,
-        v4:number, v5:number, v6:number, v7:number,
-        v8:number, v9:number, v10:number,v11:number,
-        v12:number,v13:number,v14:number,v15:number
-    ):this {
-        this.getCurrentValue().set(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);
+    public setMatrix(val:Readonly<MAT16>):this {
+        this.getCurrentValue().fromMat16(val);
         return this;
     }
 

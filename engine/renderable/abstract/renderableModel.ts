@@ -193,7 +193,7 @@ export abstract class RenderableModel
             this.transform();
             this.worldTransformMatrix.fromMat16(renderer.transformGet());
         } else {
-            renderer.transformSet(...this.worldTransformMatrix.mat16);
+            renderer.transformSet(this.worldTransformMatrix.mat16);
         }
 
         renderer.setAlphaBlend(this.alpha);
