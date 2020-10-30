@@ -68,16 +68,16 @@ const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat
     mat4.makeTranslation(translationMatrix,rect.x, rect.y, 0);
 
     const matrix1:Mat16Holder = Mat16Holder.fromPool();
-    mat4Special.matrixScaleMultiply(matrix1,scaleMatrix,translationMatrix);
+    mat4Special.matrixScaleByAnyMultiply(matrix1,scaleMatrix,translationMatrix);
 
     const matrix2:Mat16Holder = Mat16Holder.fromPool();
     mat4.matrixMultiply(matrix2,matrix1, matrixStack.getCurrentValue());
 
     const matrix3:Mat16Holder = Mat16Holder.fromPool();
-    mat4.matrixMultiply(matrix3,matrix2, projectionMatrix);
+    mat4Special.matrixMultiplyAnyByProjection(matrix3,matrix2, projectionMatrix);
 
     const matrix4:Mat16Holder = Mat16Holder.fromPool();
-    mat4.matrixMultiply(matrix4,matrix3, zToWMatrix);
+    mat4Special.matrixMultiplyAnyByZtoW(matrix4,matrix3, zToWMatrix);
 
     projectionMatrix.release();
     scaleMatrix.release();
@@ -566,6 +566,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         pos16h.release();
         rect.release();
         size.release();
+
 
         sd.setUniform(sd.u_alpha,this.getAlphaBlend());
         sd.setUniform(sd.u_stretchMode,STRETCH_MODE.STRETCH);
