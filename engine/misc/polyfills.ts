@@ -42,3 +42,15 @@ if (!Array.prototype.find) {
     };
 }
 
+if (!Float32Array.prototype.slice) {
+    Float32Array.prototype.slice = function(begin:number, end:number) {
+        (this as any).slicedPortion = (this as any).slicedPortion || [];
+        let cnt:number = 0;
+        (this as any).slicedPortion.length = 0;
+        for (let i:number=begin;i<end;i++) {
+            (this as any).slicedPortion[cnt++] = this[i];
+        }
+        return (this as any).slicedPortion;
+    }
+}
+

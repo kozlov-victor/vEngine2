@@ -1,17 +1,5 @@
 import {mat4} from "@engine/geometry/mat4";
 
-if (!Float32Array.prototype.slice) {
-    Float32Array.prototype.slice = function(begin:number, end:number) {
-        (this as any).slicedPortion = (this as any).slicedPortion || [];
-        let cnt:number = 0;
-        (this as any).slicedPortion.length = 0;
-        for (let i:number=begin;i<end;i++) {
-            (this as any).slicedPortion[cnt++] = this[i];
-        }
-        return (this as any).slicedPortion;
-    }
-}
-
 export namespace mat4Special {
     import Mat16Holder = mat4.Mat16Holder;
     import MAT16 = mat4.MAT16;

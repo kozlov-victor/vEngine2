@@ -55,12 +55,7 @@ export namespace mat4 {
         }
 
         public fromMat16(mat16:Readonly<MAT16>):void{
-            this.set(
-                mat16[0 ],mat16[1 ],mat16[2 ],mat16[3 ],
-                mat16[4 ],mat16[5 ],mat16[6 ],mat16[7 ],
-                mat16[8 ],mat16[9 ],mat16[10],mat16[11],
-                mat16[12],mat16[13],mat16[14],mat16[15]
-            );
+            (this.mat16 as unknown as Float32Array).set(mat16,0);
         }
 
         public clone(): mat4.Mat16Holder {
@@ -74,23 +69,25 @@ export namespace mat4 {
     }
 
 
+    const identityArray = Float32Array.from([
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    ]) as unknown as Readonly<MAT16>
+
     export const makeIdentity = (out:Mat16Holder):void => {
-        out.set(
-             1,0, 0, 0,
-             0,1, 0, 0,
-             0,0, 1, 0,
-            0,0,0, 1
-        );
+        out.fromMat16(identityArray);
     };
 
 
     export const makeZToWMatrix = (out:Mat16Holder,fudgeFactor:n):void => {
-         out.set(
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, fudgeFactor,
-            0, 0, 0, 1
-        );
+        // 1, 0, 0, 0,
+        // 0, 1, 0, 0,
+        // 0, 0, 1, fudgeFactor,
+        // 0, 0, 0, 1
+        out.fromMat16(identityArray);
+        (out.mat16 as MAT16)[11] = fudgeFactor;
     };
 
     export const make2DProjection = (out: Mat16Holder,width:n, height:n, depth:n):void => {
@@ -172,67 +169,90 @@ export namespace mat4 {
 
 
     export const makeTranslation = (out:Mat16Holder,tx:n, ty:n, tz:n):void => {
-         out.set(
-            1,  0,  0,  0,
-            0,  1,  0,  0,
-            0,  0,  1,  0,
-            tx, ty, tz,  1
-        );
+
+        // 1,  0,  0,  0,
+        // 0,  1,  0,  0,
+        // 0,  0,  1,  0,
+        // tx, ty, tz,  1
+
+        out.fromMat16(identityArray);
+        (out.mat16 as MAT16)[12] = tx;
+        (out.mat16 as MAT16)[13] = ty;
+        (out.mat16 as MAT16)[14] = tz;
+
     };
 
 
     export const makeXSkew = (out:Mat16Holder,angle:n):void => {
-        out.set(
-            1,  0,  0,  0,
-            Math.tan(angle),  1,  0,  0,
-            0,  0,  1,  0,
-            0, 0, 0,  1
-        );
+
+        const t:n = Math.tan(angle);
+
+        // 1,  0,  0,  0,
+        // t,  1,  0,  0,
+        // 0,  0,  1,  0,
+        // 0,  0,  0,  1
+        out.fromMat16(identityArray);
+        (out.mat16 as MAT16)[4] = t;
     };
 
     export const makeYSkew = (out:Mat16Holder,angle:n):void => {
-        out.set(
-            1,  Math.tan(angle),  0,  0,
-            0,  1,  0,  0,
-            0,  0,  1,  0,
-            0, 0, 0,  1
-        );
+
+        const t:n = Math.tan(angle);
+
+        // 1,  t,  0,  0,
+        // 0,  1,  0,  0,
+        // 0,  0,  1,  0,
+        // 0,  0,  0,  1
+
+        out.fromMat16(identityArray);
+        (out.mat16 as MAT16)[1] = t;
     };
 
     export const makeXRotation = (out:Mat16Holder,angleInRadians:n):void=> {
         const c:n = Math.cos(angleInRadians);
         const s:n = Math.sin(angleInRadians);
 
-        out.set(
-            1, 0, 0, 0,
-            0, c, s, 0,
-            0, -s, c, 0,
-            0, 0, 0, 1
-        );
+        // 1, 0, 0, 0,
+        // 0, c, s, 0,
+        // 0, -s, c, 0,
+        // 0, 0, 0, 1
+        out.fromMat16(identityArray);
+        (out.mat16 as MAT16)[5] = c;
+        (out.mat16 as MAT16)[6] = s;
+        (out.mat16 as MAT16)[9] = -s;
+        (out.mat16 as MAT16)[10] = c;
     };
 
     export const makeYRotation = (out:Mat16Holder,angleInRadians:n):void=> {
         const c:n = Math.cos(angleInRadians);
         const s:n = Math.sin(angleInRadians);
 
-        out.set(
-            c, 0, -s, 0,
-            0, 1, 0, 0,
-            s, 0, c, 0,
-            0, 0, 0, 1
-        );
+        // c, 0, -s, 0,
+        // 0, 1, 0, 0,
+        // s, 0, c, 0,
+        // 0, 0, 0, 1
+
+        out.fromMat16(identityArray);
+        (out.mat16 as MAT16)[0]  =  c;
+        (out.mat16 as MAT16)[2]  = -s;
+        (out.mat16 as MAT16)[8]  =  s;
+        (out.mat16 as MAT16)[10] =  c;
     };
 
     export const makeZRotation = (out:Mat16Holder,angleInRadians:n):void=> {
         const c:n = Math.cos(angleInRadians);
         const s:n = Math.sin(angleInRadians);
 
-        out.set(
-            c, s, 0, 0,
-            -s, c, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        );
+        // c, s, 0, 0,
+        // -s, c, 0, 0,
+        // 0, 0, 1, 0,
+        // 0, 0, 0, 1
+
+        out.fromMat16(identityArray);
+        (out.mat16 as MAT16)[0] = c;
+        (out.mat16 as MAT16)[1] = s;
+        (out.mat16 as MAT16)[4] = -s;
+        (out.mat16 as MAT16)[5] = c;
     };
 
     export const makeRotationReset = (out:Mat16Holder):void=>{
@@ -254,12 +274,16 @@ export namespace mat4 {
     };
 
     export const makeScale = (out:Mat16Holder,sx:n, sy:n, sz:n):void=> {
-        out.set(
-            sx, 0,  0,  0,
-            0, sy,  0,  0,
-            0,  0, sz,  0,
-            0,  0,  0,  1
-        );
+
+        // sx, 0,  0,  0,
+        // 0, sy,  0,  0,
+        // 0,  0, sz,  0,
+        // 0,  0,  0,  1
+
+        out.fromMat16(identityArray);
+        (out.mat16 as MAT16)[0] = sx;
+        (out.mat16 as MAT16)[5] = sy;
+        (out.mat16 as MAT16)[9] = -sz;
     };
 
 
@@ -358,8 +382,8 @@ export namespace mat4 {
     const m16h:Mat16Holder = Mat16Holder.create();
     makeIdentity(m16h);
 
-    export const IDENTITY:Readonly<MAT16> = m16h.mat16;
-    export const IDENTITY_HOLDER = new Mat16Holder();
-    IDENTITY_HOLDER.set(...IDENTITY);
+    export const IDENTITY:Readonly<MAT16> = identityArray;
+    export const IDENTITY_HOLDER:Readonly<Mat16Holder> = new Mat16Holder();
+    IDENTITY_HOLDER.fromMat16(IDENTITY);
 }
 

@@ -242,7 +242,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         if (this.game.camera.worldTransformDirty) {
             this.game.camera.translate();
             this.game.camera.transform();
-            this.game.camera.worldTransformMatrix.set(...this.game.getRenderer().transformGet());
+            this.game.camera.worldTransformMatrix.fromMat16(this.game.getRenderer().transformGet());
         } else {
             this.game.getRenderer().transformSet(...this.game.camera.worldTransformMatrix.mat16);
         }
