@@ -6,22 +6,29 @@ import {BasePix32Scene, loadSound} from "./base/basePix32Scene";
 import {GetReadyScene} from "./getReadyScene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Sound} from "@engine/media/sound";
-import {Ym} from "../ym-player/ym";
-import {ChipOscilloscope} from "../misc/chipOscilloscope";
+import {Vtx} from "../ym-player/vtx";
+import {AbstractChipTrack} from "../ym-player/abstract/abstractChipTrack";
 
 
 export class IntroScene extends BasePix32Scene {
 
     private themeAudioLink:ResourceLink<void>;
-    private ym:Ym;
+    private track:AbstractChipTrack;
 
     onPreloading() {
         super.onPreloading();
-        const binLink = this.resourceLoader.loadBinary('pix32/resources/music/theme.ym');
+        const binLink = this.resourceLoader.loadBinary('pix32/resources/music/Eifmes.vtx');
         this.resourceLoader.addNextTask((()=>{
-            this.ym = new Ym(binLink.getTarget());
-            this.themeAudioLink = loadSound(this.game,this.ym);
+            this.track = new Vtx(binLink.getTarget());
+            this.themeAudioLink = loadSound(this.game,this.track);
         }));
+
+        // const binLink = this.resourceLoader.loadBinary('pix32/resources/music/theme.ym');
+        // this.resourceLoader.addNextTask((()=>{
+        //     this.ym = new Ym(binLink.getTarget());
+        //     this.themeAudioLink = loadSound(this.game,this.ym);
+        // }));
+
     }
 
     onReady() {
@@ -42,7 +49,7 @@ export class IntroScene extends BasePix32Scene {
         box.filters = [kernelBurnAccumulative];
         this.screen.appendChild(box);
 
-        this.oscilloscope.listen(sound,this.ym);
+        this.oscilloscope.listen(sound,this.track);
 
         this.on(KEYBOARD_EVENTS.keyPressed, _=>{
             sound.stop();

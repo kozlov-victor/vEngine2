@@ -57,6 +57,19 @@ export class BinBuffer {
         return res;
     }
 
+    public getRestArray():number[]{
+        const restSize:number = this.getByteLength() - this.getPointer();
+        const res:number[] = new Array<number>(restSize);
+        for (let i:number = 0; i < restSize; i++) {
+            res[i] = this.readByte();
+        }
+        return res;
+    }
+
+    public getByteLength():number {
+        return this.view.byteLength;
+    }
+
     private inflate(arr:number[]):void{
         for (let i = 0; i < arr.length; i++) {
             this.writeByte(arr[i]);
@@ -118,6 +131,7 @@ export class BinBuffer {
     }
 
     public readBytes(n:number):number[]{
+        if (n<0) throw new Error(`wont argument: ${n}`);
         const res:number[] = [];
         for (let i = 0; i < n; i++) {
             res.push(this.readByte());

@@ -5,7 +5,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Font} from "@engine/renderable/impl/general/font";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";
-import {TextField, TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Tween} from "@engine/animation/tween";
 import {Color} from "@engine/renderer/common/color";
 import {ImageCacheContainer} from "@engine/renderable/impl/general/imageCacheContainer";
@@ -16,9 +16,9 @@ import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Ym} from "../../ym-player/ym";
 import {TaskRef} from "@engine/resources/queue";
 import {ChipOscilloscope} from "../../misc/chipOscilloscope";
+import {AbstractChipTrack} from "../../ym-player/abstract/abstractChipTrack";
 
 export const waitFor = (game:Game,time:number):Promise<void>=>{
     return new Promise<void>((resolve)=>{
@@ -28,10 +28,10 @@ export const waitFor = (game:Game,time:number):Promise<void>=>{
     });
 }
 
-export const loadSound = (game:Game,ym:Ym): ResourceLink<void>=>{
+export const loadSound = (game:Game,track:AbstractChipTrack): ResourceLink<void>=>{
     const link: ResourceLink<void> = ResourceLink.create(undefined);
     const taskRef:TaskRef = game.getCurrScene().resourceLoader.q.addTask(async () => {
-        const arrayBuffer:ArrayBuffer = await ym.renderToArrayBuffer();
+        const arrayBuffer:ArrayBuffer = await track.renderToArrayBuffer();
         await game.getAudioPlayer().loadSound(arrayBuffer, link);
         game.getCurrScene().resourceLoader.q.resolveTask(taskRef);
     });
