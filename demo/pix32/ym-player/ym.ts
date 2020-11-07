@@ -1,6 +1,6 @@
 import {BinBuffer} from "./internal/binBuffer";
-import {LhaFile} from "./lha/lhaFile";
 import {AbstractChipTrack} from "./abstract/abstractChipTrack";
+import {LhaReader} from "./lha/light/lhaDecoderLight";
 
 const LEONARD = '!LeOnArD!' as const;
 const END = 'End!' as const;
@@ -15,18 +15,30 @@ export class Ym extends AbstractChipTrack {
         super();
         const bb:BinBuffer = new BinBuffer(arr);
         if (bb.readString(2)==='YM') { // this is uncompressed file
-           this.readyBody(bb.getArray());
+            bb.resetPointer();
+            this.buffer = bb;
+           this.readBody();
         } else { // lha-compressed
             bb.resetPointer();
-            const lhaFile:LhaFile = new LhaFile(bb);
-            const body:number[] = lhaFile.getInputStreamByIndex(0).toArray();
-            this.readyBody(body);
+            const sizeOfHeader:number = bb.readByte();
+            bb.readByte(); // Header checksum
+            const methodId:'lh4'|'lh5' = bb.readString(5).split('-').join('') as 'lh4'|'lh5';
+            if (['lh4','lh5'].indexOf(methodId)===-1) throw new Error(`unsupported method: ${methodId}`);
+            bb.readUInt32(); // compressed size
+            const unCompressedSize:number = bb.readUInt32(true);
+            bb.resetPointer();
+            // const lhaFile:LhaFile = new LhaFile(bb);
+            // const body:number[] = lhaFile.getInputStreamByIndex(0).toArray();
+            // console.log(body);
+            const lha:LhaReader = new LhaReader(bb.getArray(), methodId);
+            const unpackedData:Uint8Array = lha.extract(sizeOfHeader + 2, unCompressedSize);
+            this.buffer = new BinBuffer(unpackedData.buffer);
+            this.readBody();
         }
         this.readFrames();
     }
 
-    private readyBody(arr:number[]){
-        this.buffer = new BinBuffer(arr);
+    private readBody(){
         const format:string = this.buffer.readString(3);
         if(['YM6','YM5'].indexOf(format)===-1) throw new Error(`unsupported format:${format}`);
         if (this.buffer.readString(LEONARD.length)!==LEONARD) throw new Error(`bad header: expected "${LEONARD}" magic string`);
@@ -59,16 +71,20 @@ export class Ym extends AbstractChipTrack {
 
     private readFrames(){
         if (!this.interleavedOrder) throw new Error(`non interleaved frames are not supported`);
-        for (let i = 0; i < this.numOfFrames; i++) {
+        for (let i:number = 0; i < this.numOfFrames; i++) {
             this.frames[i] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }
         let cnt:number=0;
         for (let r:number=0;r<16;r++) {
-            for (let i = 0;i < this.numOfFrames; i++) {
+            for (let i:number = 0;i < this.numOfFrames; i++) {
                 this.frames[i][r] = this.rawFrames[cnt++];
             }
         }
         if (cnt!==this.rawFrames.length) throw new Error(`frame reading error,expected to read ${this.rawFrames.length}, but ${cnt} is read`);
+    }
+
+    public getTrackInfo():string {
+        return `${this.songName} ${this.authorName} ${this.songName}`;
     }
 
 }

@@ -13,8 +13,8 @@ export abstract class RenderableModelWithResourceLink extends RenderableModel im
             if (!link) {
                 throw new DebugError(`can not set resource link: link passed is ${link}`);
             }
-            if (link.state!==ResourceLinkState.COMPLETED) {
-                throw new DebugError(`can not set resource link: link passed is not in valid state (current: ${link.state}, expected: ${ResourceLinkState.COMPLETED})`);
+            if (link.getState()!==ResourceLinkState.COMPLETED) {
+                throw new DebugError(`can not set resource link: link passed is not in valid state (current: ${link.getState()}, expected: ${ResourceLinkState.COMPLETED})`);
             }
         }
         this._resourceLink = link;

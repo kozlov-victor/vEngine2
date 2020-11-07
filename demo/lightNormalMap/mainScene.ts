@@ -45,7 +45,7 @@ export class MainScene extends Scene {
         const sprNormal:Image = new Image(this.game);
         sprNormal.setResourceLink(this.normalMapLink);
         sprNormal.pos.setXY(10,10);
-        console.log(sprNormal.id,sprNormal.size.toJSON(),this.normalMapLink.state);
+        console.log(sprNormal.id,sprNormal.size.toJSON(),this.normalMapLink.getState());
         surf.drawModel(sprNormal);
 
         const lightFilter:LightFilter = new LightFilter(this.game,lightSet);

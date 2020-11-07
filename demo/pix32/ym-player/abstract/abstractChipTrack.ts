@@ -15,60 +15,60 @@ export type tFrame = [
 
 export abstract class AbstractChipTrack {
 
-    protected numOfFrames:number;
-    protected frameFreq:number;
-    protected interleavedOrder:boolean;
-    protected songName:string;
-    protected authorName:string;
-    protected songComment:string;
-    protected frames:tFrame[] = [];
-    protected masterClock:number;
+    protected numOfFrames: number;
+    protected frameFreq: number;
+    protected interleavedOrder: boolean;
+    protected songName: string;
+    protected authorName: string;
+    protected songComment: string;
+    protected frames: tFrame[] = [];
+    protected masterClock: number;
 
-    protected currentFrameNumber:number = 0;
-    protected periodA:number = 0;
-    protected periodB:number = 0;
-    protected periodC:number = 0;
-    protected periodNoise:number = 0;
-    protected volumeA:number = 0;
-    protected envA:boolean = false;
-    protected volumeB:number = 0;
-    protected envB:boolean = false;
-    protected volumeC:number = 0;
-    protected envC:boolean = false;
-    protected periodEnv:number = 0;
-    protected attack:number = 0;
-    protected hold:number = 0;
-    protected alternate:number = 0;
-    protected envStep:number = 0;
-    protected countEnv:number = 0;
-    protected holding:number = 0;
-    protected volumeEnv:number = 0;
-    protected divide:number = 15;
-    protected countA:number = 0;
-    protected outputA:number = 0;
-    protected countB:number = 0;
-    protected outputB:number = 0;
-    protected countC:number = 0;
-    protected outputC:number = 0;
-    protected countNoise:number = 0;
-    protected random:number = 1;
-    protected outputNoise:number = 1;
-    protected cA:number = 0;
-    protected cB:number = 0;
-    protected cC:number = 0;
-    protected outA:number = 0;
-    protected outB:number = 0;
-    protected outC:number = 0;
-    protected amplitudes:number[] = [0, 1, 2, 3, 4, 5, 6, 8, 10, 16, 22, 28, 36, 45, 53, 63];
+    protected currentFrameNumber: number = 0;
+    protected periodA: number = 0;
+    protected periodB: number = 0;
+    protected periodC: number = 0;
+    protected periodNoise: number = 0;
+    protected volumeA: number = 0;
+    protected envA: boolean = false;
+    protected volumeB: number = 0;
+    protected envB: boolean = false;
+    protected volumeC: number = 0;
+    protected envC: boolean = false;
+    protected periodEnv: number = 0;
+    protected attack: number = 0;
+    protected hold: number = 0;
+    protected alternate: number = 0;
+    protected envStep: number = 0;
+    protected countEnv: number = 0;
+    protected holding: number = 0;
+    protected volumeEnv: number = 0;
+    protected divide: number = 15;
+    protected countA: number = 0;
+    protected outputA: number = 0;
+    protected countB: number = 0;
+    protected outputB: number = 0;
+    protected countC: number = 0;
+    protected outputC: number = 0;
+    protected countNoise: number = 0;
+    protected random: number = 1;
+    protected outputNoise: number = 1;
+    protected cA: number = 0;
+    protected cB: number = 0;
+    protected cC: number = 0;
+    protected outA: number = 0;
+    protected outB: number = 0;
+    protected outC: number = 0;
+    protected amplitudes: number[] = [0, 1, 2, 3, 4, 5, 6, 8, 10, 16, 22, 28, 36, 45, 53, 63];
 
-    protected sampleRate:number = 44100; // 8000 44100
+    protected sampleRate: number = 44100; // 8000 44100
 
 
-    private setCurrentFrame(frameNumber:number):void{
+    private setCurrentFrame(frameNumber: number): void {
         const prefFrame = this.frames[this.currentFrameNumber];
         this.currentFrameNumber = frameNumber;
-        const frame:tFrame = this.frames[frameNumber];
-        for (let index:number=0;index<15;index++) {
+        const frame: tFrame = this.frames[frameNumber];
+        for (let index: number = 0; index < 15; index++) {
             if (frame[index] !== prefFrame[index]) {
                 const value = frame[index];
                 frame[index] = value;
@@ -124,8 +124,8 @@ export abstract class AbstractChipTrack {
     }
 
     // one processor cycle
-    private cycle():void {
-        const frame:tFrame = this.frames[this.currentFrameNumber];
+    private cycle(): void {
+        const frame: tFrame = this.frames[this.currentFrameNumber];
         if (this.divide === 0) {
             this.divide = 7;
             if (++this.countA >= this.periodA) {
@@ -146,10 +146,10 @@ export abstract class AbstractChipTrack {
                 if ((this.random & 0x1) !== 0) this.random ^= 0x24000;
                 this.random >>= 1;
             }
-            const enable:number = frame[7];
-            const enableA:number = (this.outputA | enable & 0x1) & (this.outputNoise | enable >> 3 & 0x1);
-            const enableB:number = (this.outputB | enable >> 1 & 0x1) & (this.outputNoise | enable >> 4 & 0x1);
-            const enableC:number = (this.outputC | enable >> 2 & 0x1) & (this.outputNoise | enable >> 5 & 0x1);
+            const enable: number = frame[7];
+            const enableA: number = (this.outputA | enable & 0x1) & (this.outputNoise | enable >> 3 & 0x1);
+            const enableB: number = (this.outputB | enable >> 1 & 0x1) & (this.outputNoise | enable >> 4 & 0x1);
+            const enableC: number = (this.outputC | enable >> 2 & 0x1) & (this.outputNoise | enable >> 5 & 0x1);
             if (this.holding === 0 && ++this.countEnv >= this.periodEnv) {
                 this.countEnv = 0;
                 if (this.envStep === 0) {
@@ -177,17 +177,17 @@ export abstract class AbstractChipTrack {
         }
     }
 
-    public getFrameSnapshotByTime(timeMs:number):Optional<Readonly<tFrame>>{
-        const timeForOneFrame:number = 1000/this.frameFreq;
-        const index:number = ~~(timeMs/timeForOneFrame);
+    public getFrameSnapshotByTime(timeMs: number): Optional<Readonly<tFrame>> {
+        const timeForOneFrame: number = 1000 / this.frameFreq;
+        const index: number = ~~(timeMs / timeForOneFrame);
         if (this.frames[index]) return this.frames[index];
         else return undefined;
     }
 
-    public renderToBlob():Blob{
-        const pcmSamples:number[] = [];
-        const samplesInFrame:number = this.sampleRate/this.frameFreq;
-        const cyclesForOneSample:number = this.masterClock/this.sampleRate;
+    public renderToBlob(): Blob {
+        const pcmSamples: number[] = [];
+        const samplesInFrame: number = this.sampleRate / this.frameFreq;
+        const cyclesForOneSample: number = this.masterClock / this.sampleRate;
 
         let pitch: number;
         const atari_st_mode: boolean = true;
@@ -203,22 +203,22 @@ export abstract class AbstractChipTrack {
         psgcycles = atari_st_mode ? ((2000000 + pitch) / this.sampleRate) : (spectrum_mode ? ((1773400 + pitch) / this.sampleRate) : ((1000000 + pitch) / this.sampleRate));
 
 
-        for (let i:number=0;i<this.frames.length;i++) {
+        for (let i: number = 0; i < this.frames.length; i++) {
             this.setCurrentFrame(i);
-            for (let j:number = 0; j < samplesInFrame; j++) {
-                for (let k:number=0;k<psgcycles;k++) this.cycle();
+            for (let j: number = 0; j < samplesInFrame; j++) {
+                for (let k: number = 0; k < psgcycles; k++) this.cycle();
                 pcmSamples.push(~~((this.outA + this.outB) * 128 - 8192));
                 pcmSamples.push((~~(this.outB + this.outC) * 128 - 8192));
             }
         }
-        return Wave.encodeWAV(pcmSamples,this.sampleRate);
+        return Wave.encodeWAV(pcmSamples, this.sampleRate);
     }
 
-    public renderToArrayBuffer():Promise<ArrayBuffer> {
-        const blob:Blob = this.renderToBlob();
-        if (blob.arrayBuffer!==undefined) return blob.arrayBuffer();
+    public renderToArrayBuffer(): Promise<ArrayBuffer> {
+        const blob: Blob = this.renderToBlob();
+        if (blob.arrayBuffer !== undefined) return blob.arrayBuffer();
         else return new Promise<ArrayBuffer>((resolve) => {
-            const fr:FileReader = new FileReader();
+            const fr: FileReader = new FileReader();
             fr.onload = () => {
                 resolve(fr.result as ArrayBuffer);
             };
@@ -226,4 +226,7 @@ export abstract class AbstractChipTrack {
         })
     }
 
+    public abstract getTrackInfo(): string;
+
 }
+

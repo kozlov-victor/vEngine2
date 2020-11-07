@@ -77,7 +77,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
         if (img.offset.x || img.offset.y) {
             const pattern:CanvasPattern = this.ctx.createPattern(
-                (img.getResourceLink() as ResourceLink<ICanvasTexture>).getTarget().source,
+                (img.getResourceLink() as unknown as ResourceLink<ICanvasTexture>).getTarget().source,
                 'repeat') as CanvasPattern;
             this.ctx.fillStyle = pattern;
 
@@ -92,7 +92,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             this.ctx.restore();
         } else {
             this.ctx.drawImage(
-                (img.getResourceLink() as ResourceLink<ICanvasTexture>).getTarget().source,
+                (img.getResourceLink() as unknown as ResourceLink<ICanvasTexture>).getTarget().source,
                 srcRect.x,
                 srcRect.y,
                 srcRect.width,

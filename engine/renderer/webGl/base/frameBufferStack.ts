@@ -17,6 +17,7 @@ import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractT
 import IDENTITY = mat4.IDENTITY;
 import Mat16Holder = mat4.Mat16Holder;
 import {Device} from "@engine/misc/device";
+import {ITexture} from "@engine/renderer/common/texture";
 
 interface IStackItem {
     frameBuffer:FrameBuffer;
@@ -47,7 +48,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     private _simpleRectDrawer:SimpleRectDrawer;
     private _blender:Blender = Blender.getSingleton(this._gl);
 
-    private readonly _resourceLink:ResourceLink<Texture>;
+    private readonly _resourceLink:ResourceLink<ITexture>;
 
     constructor(protected readonly game:Game,private readonly _gl:WebGLRenderingContext, private readonly _size:ISize){
         this._stack.push({
@@ -76,7 +77,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         m16Scale.release();
         m16Ortho.release();
 
-        this._resourceLink = ResourceLink.create(this._getFirst().frameBuffer.getTexture());
+        this._resourceLink = ResourceLink.create<ITexture>(this._getFirst().frameBuffer.getTexture());
 
     }
 
@@ -167,7 +168,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         this._simpleRectDrawer.draw();
     }
 
-    public getResourceLink(): ResourceLink<Texture> {
+    public getResourceLink(): ResourceLink<ITexture> {
         return this._resourceLink;
     }
 

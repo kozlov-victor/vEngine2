@@ -1,11 +1,15 @@
 import {BinBuffer} from "./internal/binBuffer";
-import {LhaArrayReader, LhaReader} from "./lha/lhaDecoderLight";
+import {LhaReader} from "./lha/light/lhaDecoderLight";
 import {AbstractChipTrack} from "./abstract/abstractChipTrack";
 
 
 export class Vtx extends AbstractChipTrack {
 
     private buffer:BinBuffer;
+
+    private comment1:string;
+    private comment2:string;
+    private year:number;
 
     constructor(arr:number[]|ArrayBuffer) {
         super();
@@ -38,8 +42,7 @@ export class Vtx extends AbstractChipTrack {
         this.frameFreq = this.buffer.readByte(); // todo
 
         // Year of composition creating
-        const year = this.buffer.readUInt16(true);
-        console.log(year);
+        this.year = this.buffer.readUInt16(true);
 
         // Size of not packed data
         const unpackedSize:number = this.buffer.readUInt32(true);
@@ -47,18 +50,13 @@ export class Vtx extends AbstractChipTrack {
         this.songName = this.buffer.readNTString();
         this.authorName = this.buffer.readNTString();
         this.songComment = this.buffer.readNTString();
-        const comment1:string = this.buffer.readNTString();
-        const comment2:string = this.buffer.readNTString();
+        this.comment1 = this.buffer.readNTString();
+        this.comment2 = this.buffer.readNTString();
 
-        console.log(this.songName);
-        console.log(this.authorName);
-        console.log(this.songComment);
-        console.log(comment1);
-        console.log(comment2);
 
         this.interleavedOrder = true;
 
-        const lha:LhaReader = new LhaReader(new LhaArrayReader(this.buffer.getArray()), 'lh5');
+        const lha:LhaReader = new LhaReader(this.buffer.getArray(), 'lh5');
         if (unpackedSize % 14>0) throw new Error(`wrong unpacked length: ${unpackedSize},unpacked data must be mod of 14`);
         const unpackedData:Uint8Array = lha.extract(this.buffer.getPointer(), unpackedSize);
 
@@ -86,6 +84,10 @@ export class Vtx extends AbstractChipTrack {
             }
         }
 
+    }
+
+    public getTrackInfo():string {
+        return `${this.songName} ${this.authorName} ${this.songComment} ${this.comment1} ${this.comment2} ${this.year}`;
     }
 
 }

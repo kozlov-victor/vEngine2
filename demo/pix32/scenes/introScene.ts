@@ -8,6 +8,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Sound} from "@engine/media/sound";
 import {Vtx} from "../ym-player/vtx";
 import {AbstractChipTrack} from "../ym-player/abstract/abstractChipTrack";
+import {Ym} from "../ym-player/ym";
 
 
 export class IntroScene extends BasePix32Scene {
@@ -17,17 +18,17 @@ export class IntroScene extends BasePix32Scene {
 
     onPreloading() {
         super.onPreloading();
-        const binLink = this.resourceLoader.loadBinary('pix32/resources/music/Eifmes.vtx');
+        // const binLink = this.resourceLoader.loadBinary('pix32/resources/music/Eifmes.vtx');
+        // this.resourceLoader.addNextTask((()=>{
+        //     this.track = new Vtx(binLink.getTarget());
+        //     this.themeAudioLink = loadSound(this.game,this.track);
+        // }));
+
+        const binLink = this.resourceLoader.loadBinary('pix32/resources/music/theme.ym');
         this.resourceLoader.addNextTask((()=>{
-            this.track = new Vtx(binLink.getTarget());
+            this.track = new Ym(binLink.getTarget());
             this.themeAudioLink = loadSound(this.game,this.track);
         }));
-
-        // const binLink = this.resourceLoader.loadBinary('pix32/resources/music/theme.ym');
-        // this.resourceLoader.addNextTask((()=>{
-        //     this.ym = new Ym(binLink.getTarget());
-        //     this.themeAudioLink = loadSound(this.game,this.ym);
-        // }));
 
     }
 

@@ -61,6 +61,12 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
 
     // https://stackoverflow.com/questions/11068240/what-is-the-most-efficient-way-to-parse-a-css-color-in-javascript
     public static fromCssLiteral(literal:string):Color{
+        const color:Color = new Color();
+        color.fromCSS(literal);
+        return color;
+    }
+
+    private static _calculateColorComponentsFromCss(literal:string):IColorJSON {
         let r:byte = 0,g:byte = 0,b:byte = 0,a:byte = 0;
         if (literal.substr(0,1)==="#") {
             const numericPart:string = literal.substr(1);
@@ -99,7 +105,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
                 if (DEBUG) throw new DebugError(`unsupported or wrong color literal: ${literal}`)
             }
         }
-        return Color.RGBA(r,g,b,a);
+        return {r,g,b,a};
     }
 
     public readonly type:'Color' = 'Color';
@@ -305,6 +311,11 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
 
     public fromJSON(json:IColorJSON) {
         this.setRGBA(json.r,json.g,json.b,json.a);
+    }
+
+    public fromCSS(val:string):void {
+        const json:IColorJSON = Color._calculateColorComponentsFromCss(val);
+        this.fromJSON(json);
     }
 
     private checkFriezed(){

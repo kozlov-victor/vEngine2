@@ -34,9 +34,9 @@ export class Image extends RenderableModelWithResourceLink implements ICloneable
             console.error(this);
             throw new DebugError(`can not render Image: resourceLink is not specified`);
         }
-        if (DEBUG && this.getResourceLink().state!==ResourceLinkState.COMPLETED) {
+        if (DEBUG && this.getResourceLink().getState()!==ResourceLinkState.COMPLETED) {
             console.error(this);
-            throw new DebugError(`can not render Image: wrong resource link state: ${this.getResourceLink().state}`);
+            throw new DebugError(`can not render Image: wrong resource link state: ${this.getResourceLink().getState()}`);
         }
         if (DEBUG && !this.getResourceLink().getTarget()) {
             console.error(this);

@@ -41,7 +41,7 @@ export class FrameBuffer implements IRenderTarget {
         this.texture = new Texture(_gl);
         this.texture.setImage(undefined,size);
         this._init(_gl,size);
-        this._link = ResourceLink.create(this.texture);
+        this._link = ResourceLink.create<ITexture>(this.texture);
         this.bind();
         this.clear(Color.RGB(0,0,0,),0);
     }

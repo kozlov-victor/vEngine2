@@ -159,15 +159,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
                 console.error(img);
                 throw new DebugError(`no target associated with resource link`);
             }
-            if (img.getResourceLink().state!==ResourceLinkState.COMPLETED) {
-                throw new DebugError(`can not access resource link: it has wrong state ${img.getResourceLink().state}, ${ResourceLinkState.COMPLETED} state is expected`);
+            if (img.getResourceLink().getState()!==ResourceLinkState.COMPLETED) {
+                throw new DebugError(`can not access resource link: it has wrong state ${img.getResourceLink().getState()}, ${ResourceLinkState.COMPLETED} state is expected`);
             }
         }
 
         (img.getResourceLink().getTarget() as Texture).
             setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
 
-        const texture:Texture = (img.getResourceLink() as ResourceLink<Texture>).getTarget();
+        const texture:Texture = img.getResourceLink().getTarget() as Texture;
         const maxSize:number = Math.max(img.size.width,img.size.height);
 
         const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);

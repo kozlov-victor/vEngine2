@@ -6,7 +6,7 @@
 // Hacked by Matt Westcott to unpack raw LHA streams rather than LZH archive files, and
 //  support lh5 mode
 
-export class LhaArrayReader {
+class LhaArrayReader {
 
     public static readonly SeekAbsolute = 0 as const;
     public static readonly SeekRelative = 1 as const;
@@ -37,42 +37,6 @@ export class LhaArrayReader {
         return result;
     }
 
-    private readUInt8():number {
-        if (this.offset + 1 >= this.buffer.length) return -1;
-        return this.buffer[this.offset++];
-    }
-
-    private readUInt16():number {
-        if (this.offset + 2 >= this.buffer.length)
-            return -1;
-        const value:number =
-            (this.buffer[this.offset] & 0xFF) |
-            ((this.buffer[this.offset+1] << 8) & 0xFF00);
-        this.offset += 2;
-        return value;
-    }
-
-    private readUInt32():number {
-        if (this.offset + 4 >= this.buffer.length)
-            return -1;
-        const value:number =
-            (this.buffer[this.offset] & 0xFF) |
-            ((this.buffer[this.offset+1] << 8) & 0xFF00) |
-            ((this.buffer[this.offset+2] << 16) & 0xFF0000) |
-            ((this.buffer[this.offset+3] << 24) & 0xFF000000);
-        this.offset += 4;
-        return value;
-    }
-
-    private readString(size:number):string|-1 {
-        if (this.offset + size >= this.buffer.length)
-            return -1;
-        let result = '';
-        for (let i:number = 0; i < size; i++)
-            result += String.fromCharCode(this.buffer[this.offset++]);
-        return result;
-    }
-
     public readLength():number{
         let length:number = this.readBits(3);
         if (length === -1)
@@ -98,11 +62,6 @@ export class LhaArrayReader {
                 break;
         }
     }
-
-    private getPosition():number {
-        return this.offset;
-    }
-
 
 }
 
@@ -213,8 +172,10 @@ export class LhaReader {
     private offsetTree:LhaTree = new LhaTree();
     private codeTree:LhaTree = new LhaTree();
     private ringBuffer:LhaRingBuffer;
+    private reader:LhaArrayReader;
 
-    constructor(private reader:LhaArrayReader, mode:'lh4'|'lh5') {
+    constructor(private data:number[], mode:'lh4'|'lh5') {
+        this.reader = new LhaArrayReader(data);
         if (mode === 'lh4') {
             this.ringBuffer = new LhaRingBuffer(1 << 13);
         } else if (mode === 'lh5') {
@@ -224,7 +185,7 @@ export class LhaReader {
         }
     }
 
-    public readCodeTable(){
+    private readCodeTable(){
         const reader:LhaArrayReader = this.reader;
         const codeCount:number = Math.min(reader.readBits(9), 510);
         if (codeCount <= 0) {
@@ -253,7 +214,7 @@ export class LhaReader {
         this.codeTree.build(codeLengths, 510 * 2);
     }
 
-    public readTempTable():void{
+    private readTempTable():void{
         const reader:LhaArrayReader = this.reader;
         const codeCount:number = Math.min(reader.readBits(5), 19);
         if (codeCount <= 0) {
@@ -276,7 +237,7 @@ export class LhaReader {
         this.offsetTree.build(codeLengths, 19 * 2);
     }
 
-    public readOffsetTable():void {
+    private readOffsetTable():void {
         const reader:LhaArrayReader = this.reader;
         const codeCount:number = Math.min(reader.readBits(4), 14);
         if (codeCount <= 0) {

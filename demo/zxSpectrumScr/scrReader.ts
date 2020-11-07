@@ -14,7 +14,7 @@ const INT = (n:number):number=>{
 };
 
 class Border {
-    public readonly link:ResourceLink<Texture>;
+    public readonly link:ResourceLink<ITexture>;
     private readonly texture:DataTexture;
     private pointerX:number = 0;
     private pointerY:number = 0;
@@ -27,7 +27,7 @@ class Border {
         const renderer:WebGlRenderer = game.getRenderer() as WebGlRenderer;
         const gl:WebGLRenderingContext = renderer.getNativeContext();
         this.texture = new DataTexture(game,W+BORDER*2, H+BORDER*2);
-        this.link = ResourceLink.create(this.texture);
+        this.link = ResourceLink.create<ITexture>(this.texture);
         this.reset();
     }
 
@@ -201,14 +201,14 @@ class Screen {
 
 export class ScrReader {
 
-    public links: {screenLink:ResourceLink<ITexture>,borderLink:ResourceLink<Texture>};
+    public links: {screenLink:ResourceLink<ITexture>,borderLink:ResourceLink<ITexture>};
 
     constructor(private game:Game,private data:ArrayBuffer){
         const screen = new Screen(game,data);
         screen.border = new Border(this.game);
         this.links = {screenLink:screen.link,borderLink:screen.border.link};
     }
-    
+
 
 
 }
