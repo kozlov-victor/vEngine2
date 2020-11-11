@@ -283,7 +283,7 @@ export namespace mat4 {
         out.fromMat16(identityArray);
         (out.mat16 as MAT16)[0] = sx;
         (out.mat16 as MAT16)[5] = sy;
-        (out.mat16 as MAT16)[9] = -sz;
+        (out.mat16 as MAT16)[10] = -sz;
     };
 
 

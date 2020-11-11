@@ -42,14 +42,13 @@ export class ChipOscilloscope {
             if (frB===Infinity) frB = 0;
             if (frC===Infinity) frC = 0;
 
-            const levelA = frame[8] & 0xF;
-            const levelB = frame[9] & 0xF;
-            const levelC = frame[10] & 0xF;
+            const levelA = (frame[8] & 0xF)  * 0xFF;
+            const levelB = (frame[9] & 0xF)  * 0xFF;
+            const levelC = (frame[10] & 0xF) * 0xFF;
 
             const frInfo = `${align((~~frA).toString(16),4)} ${align((~~frB).toString(16),4)} ${align((~~frC).toString(16),4)}`;
             const levelInfo = `${align((~~levelA).toString(16),4)} ${align((~~levelB).toString(16),4)} ${align((~~levelC).toString(16),4)}`;
             textField.setText(`${frInfo}\n${levelInfo}`);
-
         }),10);
     }
 

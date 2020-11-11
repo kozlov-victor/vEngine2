@@ -184,29 +184,16 @@ export abstract class AbstractChipTrack {
         else return undefined;
     }
 
+
     public renderToBlob(): Blob {
         const pcmSamples: number[] = [];
         const samplesInFrame: number = this.sampleRate / this.frameFreq;
         const cyclesForOneSample: number = this.masterClock / this.sampleRate;
 
-        let pitch: number;
-        const atari_st_mode: boolean = true;
-        const spectrum_mode: boolean = false;
-        let psgcycles: number;
-        if (atari_st_mode) {
-            pitch = 25000;
-        } else if (spectrum_mode) {
-            pitch = 29556;
-        } else {
-            pitch = 50000;
-        }
-        psgcycles = atari_st_mode ? ((2000000 + pitch) / this.sampleRate) : (spectrum_mode ? ((1773400 + pitch) / this.sampleRate) : ((1000000 + pitch) / this.sampleRate));
-
-
         for (let i: number = 0; i < this.frames.length; i++) {
             this.setCurrentFrame(i);
             for (let j: number = 0; j < samplesInFrame; j++) {
-                for (let k: number = 0; k < psgcycles; k++) this.cycle();
+                for (let k: number = 0; k < cyclesForOneSample; k++) this.cycle();
                 pcmSamples.push(~~((this.outA + this.outB) * 128 - 8192));
                 pcmSamples.push((~~(this.outB + this.outC) * 128 - 8192));
             }

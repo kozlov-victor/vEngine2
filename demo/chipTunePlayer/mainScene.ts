@@ -20,8 +20,13 @@ import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import {fontLoader} from "../fontTtf/FontLoader";
 import {ChipOscilloscope} from "./chipOscilloscope";
 import loadFont = fontLoader.loadFont;
+import {ITexture} from "@engine/renderer/common/texture";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {Image} from "@engine/renderable/impl/general/image";
+import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 
 const songUrls = [
+    'chipTunePlayer/bin/ritm-4.vtx',
     'chipTunePlayer/bin/theme.ym',
     'chipTunePlayer/bin/intro.ym',
     'chipTunePlayer/bin/Eifmes.vtx',
@@ -32,10 +37,10 @@ let cnt:number = 0;
 
 export class MainScene extends Scene {
 
-
-
-    // @Resource.Font({fontFamily:'monospace',fontSize:25})
     public fnt:Font;
+
+    @Resource.Texture('./chipTunePlayer/skin.png')
+    private skinLink:ResourceLink<ITexture>;
 
     onPreloading() {
         super.onPreloading();
@@ -72,60 +77,79 @@ export class MainScene extends Scene {
         tfIndicator.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tfIndicator.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tfIndicator.setAlignText(AlignText.JUSTIFY);
-        tfIndicator.setText("---- ---- ----");
+        tfIndicator.setText("---- ---- ----\n---- ---- ----");
         tfIndicator.filters = [new NoiseFilter(this.game)]
         this.appendChild(tfIndicator);
 
         const btn:Button = new Button(this.game,this.fnt);
         const bgBtn = new Rectangle(this.game);
-        bgBtn.fillColor = Color.fromCssLiteral(`#6e9f58`);
+        const grad = new LinearGradient();
+        grad.setColorAtPosition(1,Color.fromCssLiteral('#82d45e'));
+        grad.setColorAtPosition(0,Color.fromCssLiteral('#568c3e'));
+        grad.angle = Math.PI/2;
+        bgBtn.fillGradient = grad;
         bgBtn.lineWidth = 1;
         bgBtn.borderRadius = 10;
         btn.setBackground(bgBtn);
 
         const bgBtnActive = new Rectangle(this.game);
-        bgBtnActive.fillColor = Color.fromCssLiteral(`#82d45e`);
+        const gradActive = new LinearGradient();
+        gradActive.setColorAtPosition(0,Color.fromCssLiteral('#82d45e'));
+        gradActive.setColorAtPosition(1,Color.fromCssLiteral('#568c3e'));
+        gradActive.angle = Math.PI/2;
         bgBtnActive.lineWidth = 1;
         bgBtnActive.borderRadius = 10;
+        bgBtnActive.fillGradient = gradActive;
         btn.setBackgroundActive(bgBtnActive);
 
         btn.setPadding(8, 2 ,2);
-        btn.pos.setXY(0,400);
+        btn.pos.setXY(15,402);
         btn.setAutoSize(true);
         btn.setText("play>>");
         btn.textColor.fromCSS('#fff');
         this.appendChild(btn);
         let currSound:Sound;
+        let pending:boolean = false;
+
+        const img = new Image(this.game);
+        img.setResourceLink(this.skinLink);
+        img.passMouseEventsThrough = true;
+        this.appendChild(img);
+
         btn.on(MOUSE_EVENTS.click, async _=>{
+            if (pending) return;
+            pending = true;
             const songUrl:string = songUrls[cnt];
             cnt=(++cnt)%songUrls.length;
             tf.setText(`loading track ${songUrl}`);
-            console.log('loading...');
-            if (currSound!==undefined) currSound.stop();
-            const resourceLoader = new ResourceLoader(this.game);
-            const buff:ArrayBuffer = await resourceLoader.loadBinary(songUrl).asPromise();
-            let track;
-            const extension:string = songUrl.split('.')[1];
-            switch (extension) {
-                case 'ym':
-                    track = new Ym(buff);
-                    break;
-                case 'vtx':
-                    track = new Vtx(buff);
-                    break;
-                default:
-                    throw new Error(`unsupported extension: ${extension}`);
-            }
-            const link: ResourceLink<void> = ResourceLink.create<void>(undefined);
-            const trackArrayBuffer = await track.renderToArrayBuffer();
-            await this.game.getAudioPlayer().loadSound(trackArrayBuffer, link);
-            const sound = new Sound(this.game);
-            sound.setResourceLink(link);
-            sound.play();
-            currSound = sound;
-            tf.setText(track.getTrackInfo());
-            const oscilloscope = new ChipOscilloscope(this.game);
-            oscilloscope.listen(sound,track,tfIndicator);
+            setTimeout(async ()=>{
+                if (currSound!==undefined) currSound.stop();
+                const resourceLoader = new ResourceLoader(this.game);
+                const buff:ArrayBuffer = await resourceLoader.loadBinary(songUrl).asPromise();
+                let track;
+                const extension:string = songUrl.split('.')[1];
+                switch (extension) {
+                    case 'ym':
+                        track = new Ym(buff);
+                        break;
+                    case 'vtx':
+                        track = new Vtx(buff);
+                        break;
+                    default:
+                        throw new Error(`unsupported extension: ${extension}`);
+                }
+                const link: ResourceLink<void> = ResourceLink.create<void>(undefined);
+                const trackArrayBuffer = await track.renderToArrayBuffer();
+                await this.game.getAudioPlayer().loadSound(trackArrayBuffer, link);
+                const sound = new Sound(this.game);
+                sound.setResourceLink(link);
+                sound.play();
+                currSound = sound;
+                tf.setText(track.getTrackInfo());
+                const oscilloscope = new ChipOscilloscope(this.game);
+                oscilloscope.listen(sound,track,tfIndicator);
+                pending = false;
+            },10);
         });
 
     }
