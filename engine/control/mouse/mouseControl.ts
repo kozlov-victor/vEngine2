@@ -73,7 +73,7 @@ export class MouseControl implements IControl {
         };
         // mouseMove
         container.ontouchmove = (e:TouchEvent)=>{
-            e.preventDefault(); // to prevent canvas move
+            e.preventDefault(); // to prevent canvas moving
             let l:number = e.touches.length;
             while (l--){
                 this.resolveMouseMove(e.touches[l],true);
@@ -117,15 +117,17 @@ export class MouseControl implements IControl {
         const objectStack:RenderableModel[] = this.game.getCurrScene().renderingObjectStack.get();
         let i:number = objectStack.length; // reversed loop
         if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.clear(mousePoint.id);
+        // trigger the most top object
         while(i--) {
             const obj:RenderableModel = objectStack[i];
             const layer:Layer = obj.getLayer();
             this._helper.resolveSceneCoordinates(mousePoint,layer);
-            (mousePoint as {isPropagationStopped:boolean}).isPropagationStopped = true;
             const capturedEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e, mouseEvent, mousePoint, obj);
             if (capturedEvent!==undefined) {
                 mousePoint.target = obj;
+                // propagate event to parents
                 if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,obj);
+                break;
             }
         }
 

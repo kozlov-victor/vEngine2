@@ -24,7 +24,7 @@ export class Layer implements IParentChild {
         this._parentChildDelegate.afterChildAppended = (c:IParentChild)=>{
             const m:RenderableModel = c as RenderableModel;
             m.setLayer(this);
-            m.setScene(this._scene);
+            m.setScene(game.getCurrScene());
             (c as IParentChild).parent = undefined;
             m.revalidate();
         }

@@ -34,12 +34,6 @@ export class MousePoint extends ReleaseableEntity{
     public id:number;
     public target:RenderableModel|Scene;
     public isMouseDown:boolean;
-    public readonly isPropagationStopped:boolean = false;
-
-    public stopPropagation():void {
-        (this as {isPropagationStopped:boolean}).isPropagationStopped = true;
-    }
-
 }
 
 export class MousePointsPullHolder {

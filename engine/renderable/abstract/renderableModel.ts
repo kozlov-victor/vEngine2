@@ -185,7 +185,8 @@ export abstract class RenderableModel
 
     public render():void {
         if (!this.visible) return;
-        this._scene.renderingObjectStack.add(this);
+        // if object doesnt have _scene it doesnt belong to any scene, but to Drawing surface
+        if (this._scene!==undefined) this._scene.renderingObjectStack.add(this);
         if (this.alpha===0) return;
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (renderer.getAlphaBlend()===0) return;
