@@ -70,7 +70,11 @@ export abstract class RenderableModel
     public readonly parent:RenderableModel;
 
     public readonly velocity = new Point2d(0,0);
+    /**
+     * @deprecated
+     */
     public passMouseEventsThrough:boolean = false;
+    public interactive:boolean = false;
 
 
     private _destRect:Rect = new Rect();
@@ -181,6 +185,7 @@ export abstract class RenderableModel
 
     public render():void {
         if (!this.visible) return;
+        this._scene.renderingObjectStack.add(this);
         if (this.alpha===0) return;
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (renderer.getAlphaBlend()===0) return;

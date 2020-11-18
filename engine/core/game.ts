@@ -182,6 +182,7 @@ export class Game {
         if (!scene.resourceLoader.isCompleted()) {
             this._currScene.trigger(SCENE_EVENTS.PRELOADING);
             scene.onPreloading();
+            scene.preloadingGameObject?.setScene(scene);
             scene.resourceLoader.onProgress(()=>{
                 this._currScene.trigger(SCENE_EVENTS.PROGRESS);
                 scene.onProgress(scene.resourceLoader.getProgress());

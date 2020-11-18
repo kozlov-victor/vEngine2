@@ -28,20 +28,23 @@ export interface IObjectMouseEvent extends ISceneMouseEvent {
     target:RenderableModel;
 }
 
-
 export class MousePoint extends ReleaseableEntity{
-
-    public static fromPool():MousePoint{
-        return MousePoint.mousePointsPool.getFreeObject()!;
-    }
-
-    private static mousePointsPool:ObjectPool<MousePoint> = new ObjectPool(MousePoint);
-
     public readonly screenCoordinate:Point2d = new Point2d();
     public readonly sceneCoordinate:Point2d = new Point2d();
     public id:number;
     public target:RenderableModel|Scene;
     public isMouseDown:boolean;
+    public readonly isPropagationStopped:boolean = false;
 
+    public stopPropagation():void {
+        (this as {isPropagationStopped:boolean}).isPropagationStopped = true;
+    }
 
+}
+
+export class MousePointsPullHolder {
+    public static fromPool():MousePoint{
+        return this.mousePointsPool.getFreeObject()!;
+    }
+    private static mousePointsPool:ObjectPool<MousePoint> = new ObjectPool(MousePoint);
 }

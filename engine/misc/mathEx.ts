@@ -8,14 +8,9 @@ export namespace MathEx {
 
     import Mat16Holder = mat4.Mat16Holder;
     import Vec4Holder = vec4.Vec4Holder;
+    import VEC4 = vec4.VEC4;
 
-    export const isPointInRect = (point: Point2d, rect: Rect, angle?: number): boolean => {
-        // if  = (angle) {
-        //     const vec2 = new Vec2 = (point.x - rect.x - rect.width/2,point.y - rect.y - rect.height/2);
-        //     vec2.setAngle = (vec2.getAngle = () - angle);
-        //     point = {x:vec2.getX = () + point.x,y:vec2.getY = () + point.y};
-        //
-        // }
+    export const isPointInRect = (point: Point2d, rect: Rect): boolean => {
         return point.x > rect.x &&
         point.x < (rect.x + rect.width) &&
         point.y > rect.y &&
