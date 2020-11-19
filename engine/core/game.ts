@@ -183,24 +183,23 @@ export class Game {
             this._currScene.trigger(SCENE_EVENTS.PRELOADING);
             scene.onPreloading();
             if (scene.preloadingGameObject!==undefined) {
-                scene.preloadingGameObject.setScene(scene);
                 if (scene.preloadingGameObject.getLayer()===undefined) scene.preloadingGameObject.setLayer(scene.getDefaultLayer());
             }
             scene.resourceLoader.onProgress(()=>{
                 this._currScene.trigger(SCENE_EVENTS.PROGRESS);
                 scene.onProgress(scene.resourceLoader.getProgress());
-                (this._currScene as {lifeCycleState:SceneLifeCycleState}).lifeCycleState = SceneLifeCycleState.PRELOADING;
+                this._currScene.lifeCycleState = SceneLifeCycleState.PRELOADING;
             });
             scene.resourceLoader.onCompleted(()=>{
                 this._currScene.onReady();
                 this._currScene.onContinue();
                 this._currScene.trigger(SCENE_EVENTS.COMPLETED);
-                (this._currScene as {lifeCycleState:SceneLifeCycleState}).lifeCycleState = SceneLifeCycleState.COMPLETED;
+                this._currScene.lifeCycleState = SceneLifeCycleState.COMPLETED;
             });
             scene.resourceLoader.startLoading();
         } else {
             this._currScene.trigger(SCENE_EVENTS.CONTINUE);
-            (this._currScene as {lifeCycleState:SceneLifeCycleState}).lifeCycleState = SceneLifeCycleState.COMPLETED;
+            this._currScene.lifeCycleState = SceneLifeCycleState.COMPLETED;
             this._currScene.onContinue();
         }
         if (!this._running) {

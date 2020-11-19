@@ -35,6 +35,7 @@ import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 import {Size} from "@engine/geometry/size";
 import {RenderingObjectStack} from "@engine/control/mouse/renderingObjectStack";
 import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
+import {RenderingSessionInfo} from "@engine/scene/renderingSessionInfo";
 
 export const enum SCENE_EVENTS {
     PRELOADING = 'preloading',
@@ -57,9 +58,11 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     public filters:IFilter[] = [];
     public alpha:number = 1;
     public readonly size:Size = new Size();
-    public readonly lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED;
-    public readonly renderingObjectStack:RenderingObjectStack;
+    public lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED;
     public preloadingGameObject!:RenderableModel;
+
+    public readonly _renderingObjectStack:RenderingObjectStack;
+    public readonly _renderingSessionInfo:RenderingSessionInfo = new RenderingSessionInfo();
 
     private _layers:Layer[] = [];
     private _propertyAnimations:IAnimation[] = [];
@@ -74,7 +77,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
     constructor(protected game:Game) {
-        this.renderingObjectStack = new RenderingObjectStack();
+        this._renderingObjectStack = new RenderingObjectStack();
         this.resourceLoader = new ResourceLoader(game);
         this.size.set(this.game.size);
     }
@@ -235,7 +238,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
 
     public render():void {
-        this.renderingObjectStack.clear();
+        this._renderingObjectStack.clear();
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
         renderer.saveAlphaBlend();
@@ -258,6 +261,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
             }
         } else {
             for (const l of this._layers) {
+                this._renderingSessionInfo.currentLayer = l;
                 if (l.transformType===LayerTransformType.STICK_TO_CAMERA) {
                     renderer.transformSave();
                     renderer.transformSet(IDENTITY_HOLDER.mat16);

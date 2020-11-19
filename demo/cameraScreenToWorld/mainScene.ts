@@ -68,7 +68,7 @@ export class MainScene extends Scene {
             rect.fillColor = Color.RGB(122,12,33);
             rect.pos.setXY(e.sceneX,e.sceneY);
             this.getLayers()[0].appendChild(rect);
-            console.log(e,rect);
+            console.log(e);
         });
 
 

@@ -102,7 +102,7 @@ export abstract class RenderableModel
         this.id = `object_${Incrementer.getValue()}`;
         this._parentChildDelegate.afterChildAppended = (child:RenderableModel)=>{
             child.setLayer(this._layer!);
-            child.setScene(this.game.getCurrScene());
+            child.setScene(this._scene);
             child.revalidate();
         };
         this._parentChildDelegate.afterChildRemoved = (child:RenderableModel)=>{
@@ -185,9 +185,12 @@ export abstract class RenderableModel
 
     public render():void {
         if (!this.visible) return;
-        // if object doesnt have _scene it doesnt belong to any scene, but to Drawing surface
-        if (this._scene!==undefined) this._scene.renderingObjectStack.add(this);
+
+        if (this._scene===undefined) this._scene = this.game.getCurrScene();
+        if (this._layer===undefined) this._layer = this._scene._renderingSessionInfo.currentLayer;
+        this._scene._renderingObjectStack.add(this);
         if (this.alpha===0) return;
+
         const renderer:AbstractRenderer = this.game.getRenderer();
         if (renderer.getAlphaBlend()===0) return;
 

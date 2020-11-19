@@ -114,13 +114,14 @@ export class MouseControl implements IControl {
         const mousePoint:MousePoint = this._helper.resolvePoint(e);
         mousePoint.isMouseDown = isMouseDown;
 
-        const objectStack:RenderableModel[] = this.game.getCurrScene().renderingObjectStack.get();
+        const objectStack:RenderableModel[] = this.game.getCurrScene()._renderingObjectStack.get();
         let i:number = objectStack.length; // reversed loop
         if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.clear(mousePoint.id);
         // trigger the most top object
         while(i--) {
             const obj:RenderableModel = objectStack[i];
             const layer:Layer = obj.getLayer();
+            if (layer===undefined) continue;
             this._helper.resolveSceneCoordinates(mousePoint,layer);
             const capturedEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e, mouseEvent, mousePoint, obj);
             if (capturedEvent!==undefined) {

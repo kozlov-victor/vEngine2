@@ -7,9 +7,9 @@ import {vec4} from "@engine/geometry/vec4";
 import {Layer} from "@engine/scene/layer";
 import {IPoint2d, Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
+import {Optional} from "@engine/core/declarations";
 import Vec4Holder = vec4.Vec4Holder;
 import VEC4 = vec4.VEC4;
-import {Optional} from "@engine/core/declarations";
 
 const recycledArray:Readonly<VEC4>[] = [undefined!,undefined!,undefined!,undefined!];
 
@@ -119,14 +119,10 @@ export class MouseControlHelper {
         const screenX:number = (clientX - game.pos.x ) / game.scale.x;
         const screenY:number = (clientY - game.pos.y ) / game.scale.y;
 
-        const screenPoint:Point2d = Point2d.fromPool();
-        screenPoint.setXY(screenX,screenY);
-
         const mousePoint:MousePoint = MousePointsPullHolder.fromPool();
         mousePoint.target = undefined!;
-        mousePoint.screenCoordinate.set(screenPoint);
+        mousePoint.screenCoordinate.setXY(screenX,screenY);
         mousePoint.id = (e as Touch).identifier  || (e as PointerEvent).pointerId || 0;
-        screenPoint.release();
 
         return mousePoint;
     }
