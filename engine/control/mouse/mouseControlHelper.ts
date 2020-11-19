@@ -67,7 +67,7 @@ export class MouseControlHelper {
 
         let mouseEvent:Optional<IObjectMouseEvent>;
         if (
-            this.isPointInPolygon4(recycledArray,mousePoint.sceneCoordinate)
+            this.isPointInPolygon4(recycledArray,mousePoint.screenCoordinate)
         ) {
             mouseEvent = this.triggerEventForObject(e,eventName,mousePoint,obj);
         }

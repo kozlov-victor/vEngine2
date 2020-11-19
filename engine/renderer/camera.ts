@@ -183,7 +183,6 @@ export class Camera implements IUpdatable, ITransformable  {
         const posX:number = transformType===LayerTransformType.TRANSFORM?this.pos.x:0;
         const posY:number = transformType===LayerTransformType.TRANSFORM?this.pos.y:0;
 
-
         mat4.makeScale(mScale,scaleX,scaleY,1);
         const point2d:Point2d = MathEx.unProject(
             p, this.game.size.width,this.game.size.height,mScale);

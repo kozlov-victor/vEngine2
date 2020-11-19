@@ -120,6 +120,7 @@ export class MouseControl implements IControl {
         // trigger the most top object
         while(i--) {
             const obj:RenderableModel = objectStack[i];
+            if (obj.passMouseEventsThrough) continue;
             const layer:Layer = obj.getLayer();
             if (layer===undefined) continue;
             this._helper.resolveSceneCoordinates(mousePoint,layer);

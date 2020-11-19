@@ -70,9 +70,6 @@ export abstract class RenderableModel
     public readonly parent:RenderableModel;
 
     public readonly velocity = new Point2d(0,0);
-    /**
-     * @deprecated
-     */
     public passMouseEventsThrough:boolean = false;
     public interactive:boolean = false;
 
