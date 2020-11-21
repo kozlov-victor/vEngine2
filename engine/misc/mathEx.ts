@@ -84,31 +84,4 @@ export namespace MathEx {
     export const randomByte = (min: byte, max: byte): byte => {
         return randomInt(min,max) as byte;
     };
-
-    /**
-     * analog of glu unproject function
-     * https://github.com/bringhurst/webgl-unproject/blob/master/GLU.js
-     */
-    export const unProject = (winPoint: Point2d, width: number, height: number, viewProjectionMatrix: Mat16Holder): Point2d => {
-        const x: number = 2.0 * winPoint.x / width - 1;
-        const y: number = 2.0 * winPoint.y / height - 1;
-        const viewProjectionInverse: Mat16Holder = Mat16Holder.fromPool()!;
-        mat4.inverse(viewProjectionInverse,viewProjectionMatrix);
-
-        const point3D: Vec4Holder = Vec4Holder.fromPool();
-        point3D.set(x, y, 0, 1);
-        const res: Vec4Holder = Vec4Holder.fromPool();
-        mat4.multVecByMatrix(res,viewProjectionInverse, point3D);
-        const resultX:number = (res.x / 2 + 0.5) * width;
-        const resultY:number = (res.y / 2 + 0.5) * height;
-        const result:Point2d = Point2d.fromPool();
-        result.setXY(resultX,resultY);
-
-        point3D.release();
-        res.release();
-        viewProjectionInverse.release();
-
-        return result;
-    };
-
 }

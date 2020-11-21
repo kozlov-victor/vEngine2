@@ -123,7 +123,7 @@ export class MouseControl implements IControl {
             if (obj.passMouseEventsThrough) continue;
             const layer:Layer = obj.getLayer();
             if (layer===undefined) continue;
-            this._helper.resolveSceneCoordinates(mousePoint,layer);
+            this._helper.resolveSceneCoordinates(mousePoint,layer.transformType);
             const capturedEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e, mouseEvent, mousePoint, obj);
             if (capturedEvent!==undefined) {
                 mousePoint.target = obj;

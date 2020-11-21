@@ -18,6 +18,8 @@ export class MainScene extends Scene {
 
     public onReady() {
 
+        this.game.camera.angle = 0.1;
+
         this.size.setWH(1100,2100);
         this.game.camera.scale.setXY(0.8);
 

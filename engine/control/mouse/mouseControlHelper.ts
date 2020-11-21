@@ -4,7 +4,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Rect} from "@engine/geometry/rect";
 import {mat4} from "@engine/geometry/mat4";
 import {vec4} from "@engine/geometry/vec4";
-import {Layer} from "@engine/scene/layer";
+import {LayerTransformType} from "@engine/scene/layer";
 import {IPoint2d, Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {Optional} from "@engine/core/declarations";
@@ -105,10 +105,14 @@ export class MouseControlHelper {
         return mouseEvent;
     }
 
-    public resolveSceneCoordinates(mousePoint:MousePoint,layer:Layer):void{
-        const worldPoint:Point2d = this.game.camera.screenToWorld(mousePoint.screenCoordinate,layer.transformType);
-        mousePoint.sceneCoordinate.set(worldPoint);
-        worldPoint.release();
+    public resolveSceneCoordinates(mousePoint:MousePoint,layerTransform:LayerTransformType):void{
+        if (layerTransform===LayerTransformType.STICK_TO_CAMERA) {
+            mousePoint.sceneCoordinate.set(mousePoint.screenCoordinate);
+        } else {
+            const worldPoint:Point2d = this.game.camera.screenToWorld(mousePoint.screenCoordinate);
+            mousePoint.sceneCoordinate.set(worldPoint);
+            worldPoint.release();
+        }
     }
 
     public resolvePoint(e:MouseEvent|Touch|PointerEvent):MousePoint{

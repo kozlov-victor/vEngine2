@@ -3,6 +3,7 @@ import {ObjectPool} from "@engine/misc/objectPool";
 import {ICloneable} from "@engine/core/declarations";
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 import {vec4} from "@engine/geometry/vec4";
+import {Point2d} from "@engine/geometry/point2d";
 
 
 // https://evanw.github.io/lightgl.js/docs/matrix.html
@@ -357,16 +358,6 @@ export namespace mat4 {
         for (let i:n = 0; i < 16; i++) r[i] /= det;
     };
 
-
-    // analog of glsl function
-    // mat4 transpose(mat4 m) {
-    //     return mat4(
-    //         m[0][0], m[1][0], m[2][0], m[3][0],
-    //         m[0][1], m[1][1], m[2][1], m[3][1],
-    //         m[0][2], m[1][2], m[2][2], m[3][2],
-    //         m[0][3], m[1][3], m[2][3], m[3][3]);
-    // }
-
     export const transpose = (out:Mat16Holder,mHolder:Mat16Holder):void=>{
         const m:MAT16 = mHolder.mat16 as MAT16;
 
@@ -378,6 +369,22 @@ export namespace mat4 {
         );
 
     };
+
+    export const unproject = (x:number, y:number, projectionView:Mat16Holder):Point2d=> {
+        const vec4Holder:Vec4Holder = Vec4Holder.fromPool();
+        vec4Holder.set(x, y, 0, 1);
+        const invProjectionView:Mat16Holder = Mat16Holder.fromPool();
+        mat4.inverse(invProjectionView,projectionView);
+
+        const vec4Transformed:Vec4Holder = Vec4Holder.fromPool();
+        mat4.multVecByMatrix(vec4Transformed, invProjectionView, vec4Holder);
+        invProjectionView.release();
+        vec4Holder.release();
+        const pointResult:Point2d = Point2d.fromPool();
+        pointResult.setXY(vec4Transformed.x,vec4Transformed.y);
+        vec4Transformed.release();
+        return pointResult;
+    }
 
     const m16h:Mat16Holder = Mat16Holder.create();
     makeIdentity(m16h);
