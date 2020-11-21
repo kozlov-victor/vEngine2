@@ -38,6 +38,10 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
         this._onComplete = fn;
     }
 
+    public setBackgroundColor(color:IColor):void {
+        this._transitionScene.backgroundColor.set(color);
+    }
+
     public start(prevScene: Optional<Scene>, currScene: Scene): void {
         const {from,to} = this.getFromTo();
         const desc:ITweenDescription<ISceneTransitionValue> = {

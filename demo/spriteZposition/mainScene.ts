@@ -45,7 +45,7 @@ export class MainScene extends Scene {
                 this.game.size.width/2+radius*Math.cos(angle),
                 this.game.size.height/2+radius*Math.sin(angle)
             );
-            spr.posZ = MathEx.random(this.minZ,this.maxZ);
+            spr.pos.z = MathEx.random(this.minZ,this.maxZ);
             this.appendChild(spr);
             this.points.push(spr);
             spr.transformPoint.setToCenter();
@@ -57,7 +57,7 @@ export class MainScene extends Scene {
         obj.colorMix = 0.7;
         obj.modelPrimitive = new Torus(12,50, 3 as Int,8 as Int);
         obj.pos.setXY(200,100);
-        obj.posZ = -2000;
+        obj.pos.z = -2000;
         obj.size.setWH(100,100);
         this.appendChild(obj);
         obj.setInterval(()=>{
@@ -72,11 +72,11 @@ export class MainScene extends Scene {
         for (let i=0;i<this.numOfStarts;i++) {
             const p:Image = this.points[i];
             p.angle+=0.1;
-            p.posZ+=10;
-            if (p.posZ>this.maxZ) p.posZ = this.minZ;
+            p.pos.z+=10;
+            if (p.pos.z>this.maxZ) p.pos.z = this.minZ;
         }
-        this.obj.posZ+=10;
-        if (this.obj.posZ>this.maxZ) this.obj.posZ = this.minZ;
+        this.obj.pos.z+=10;
+        if (this.obj.pos.z>this.maxZ) this.obj.pos.z = this.minZ;
     }
 
 }

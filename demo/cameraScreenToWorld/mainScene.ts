@@ -19,9 +19,10 @@ export class MainScene extends Scene {
     public onReady() {
 
         this.game.camera.angle = 0.1;
+        this.game.camera.pos.z = 10;
 
         this.size.setWH(1100,2100);
-        this.game.camera.scale.setXY(0.8);
+        this.game.camera.scale.setXY(0.7, 0.9);
 
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
@@ -68,7 +69,7 @@ export class MainScene extends Scene {
         this.on(MOUSE_EVENTS.click, e=>{
             const rect = new Rectangle(this.game);
             rect.fillColor = Color.RGB(122,12,33);
-            rect.pos.setXY(e.sceneX,e.sceneY);
+            rect.pos.setXYZ(e.sceneX,e.sceneY,-this.game.camera.pos.z);
             this.getLayers()[0].appendChild(rect);
             console.log(e);
         });

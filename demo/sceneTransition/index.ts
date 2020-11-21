@@ -5,13 +5,17 @@ import {MainScene} from "./mainScene";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {FadeInAppearanceTransition} from "@engine/scene/transition/appear/fade/fadeAppearanceTransition";
+import {Color} from "@engine/renderer/common/color";
 
 const game = new Game({width:600,height:800});
+game.camera.angle = 0.1;
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);
 const mainScene: Scene = new MainScene(game);
-game.runScene(mainScene,new FadeInAppearanceTransition(game,3000));
+const transition = new FadeInAppearanceTransition(game,3000);
+transition.setBackgroundColor(Color.RGB(233));
+game.runScene(mainScene,transition);
 
 
 

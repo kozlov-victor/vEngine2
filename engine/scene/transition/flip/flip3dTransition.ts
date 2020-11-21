@@ -52,14 +52,14 @@ abstract class AbstractFlipHorizontal3dTransition extends AbstractFlip3dTransiti
         super(game,billboard,time,easeFn);
 
         const z:number = this.game.width / 2;
-        this._wheelContainer.posZ = -z;
+        this._wheelContainer.pos.z = -z;
 
         const [imageOnBottom,imageOnTop] = this.getBottomAndTopImages();
         imageOnBottom.anchorPoint.setXY(this.game.width/2,this.game.height/2);
         imageOnTop.anchorPoint.setXY(this.game.width/2,this.game.height/2);
         imageOnTop.pos.setX(this.game.size.width);
         imageOnTop.angle3d.y = Math.PI/2;
-        imageOnTop.posZ = imageOnBottom.posZ = z;
+        imageOnTop.pos.z = imageOnBottom.pos.z = z;
 
     }
 
@@ -81,14 +81,14 @@ abstract class AbstractFlipVertical3dTransition extends AbstractFlip3dTransition
         super(game,billboard,time,easeFn);
 
         const z:number = this.game.height / 2;
-        this._wheelContainer.posZ = -z;
+        this._wheelContainer.pos.z = -z;
 
         const [imageOnBottom,imageOnTop] = this.getBottomAndTopImages();
         imageOnBottom.anchorPoint.setXY(this.game.width/2,this.game.height/2);
         imageOnTop.anchorPoint.setXY(this.game.width/2,this.game.height/2);
         imageOnTop.pos.setY(this.game.size.height);
         imageOnTop.angle3d.x = -Math.PI/2;
-        imageOnTop.posZ = imageOnBottom.posZ = z;
+        imageOnTop.pos.z = imageOnBottom.pos.z = z;
     }
 
     protected onTransitionProgress(val: number): void {

@@ -49,8 +49,7 @@ export class MainScene extends Scene {
             const y:number = radius*Math.sin(fi)*Math.sin(theta);
             const z:number = radius*Math.cos(theta);
 
-            billBoardObj.pos.setXY(x,y);
-            billBoardObj.posZ = z;
+            billBoardObj.pos.setXYZ(x,y,z);
             container.appendChild(billBoardObj);
         }
         this.setInterval(()=>{

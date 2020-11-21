@@ -9,6 +9,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
 import {ITransformable, IUpdatable, Optional} from "@engine/core/declarations";
 import Mat16Holder = mat4.Mat16Holder;
+import {Point3d} from "@engine/geometry/point3d";
 
 interface ICameraTweenTarget {
     time:number;
@@ -25,7 +26,7 @@ const enum DIRECTION_CORRECTION {
 export class Camera implements IUpdatable, ITransformable  {
     public static readonly FOLLOW_FACTOR:Point2d = new Point2d(0.1,0.1);
 
-    public readonly pos:Point2d = new Point2d(0,0);
+    public readonly pos:Point3d = new Point3d(0,0,0);
     //public posZ:number = 0; // todo
     public readonly scale:Point2d = new Point2d(1,1);
     public worldTransformDirty:boolean = true;
@@ -163,7 +164,7 @@ export class Camera implements IUpdatable, ITransformable  {
 
     public translate():void{
         const renderer:AbstractRenderer = this.game.getRenderer();
-        renderer.transformTranslate(-this.pos.x,-this.pos.y,0);
+        renderer.transformTranslate(-this.pos.x,-this.pos.y,-this.pos.z);
     }
 
     public transform():void{

@@ -133,7 +133,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
 
     public translate():void{
         const renderer:AbstractRenderer = this.game.getRenderer();
-        renderer.transformTranslate(this.pos.x,this.pos.y,this.posZ);
+        renderer.transformTranslate(this.pos.x,this.pos.y,this.pos.z);
     }
 
     public transform():void{
