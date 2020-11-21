@@ -44,7 +44,7 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
     }
 
     // noinspection JSSuspiciousNameCombination
-    public setXY(x:number,y:number = x):this{
+    public setXY(x:number = 0,y:number = x):this{
         if (DEBUG && (Number.isNaN(x) || Number.isNaN(y))) {
             console.trace();
             throw new DebugError(`Point2d: wrong numeric arguments ${x},${y}`);

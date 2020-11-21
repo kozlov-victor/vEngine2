@@ -21,7 +21,7 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
     }
 
     // noinspection JSSuspiciousNameCombination
-    constructor(x:number,y:number=x,z:number=y,onChangedFn?:()=>void) {
+    constructor(x:number = 0,y:number=x,z:number=y,onChangedFn?:()=>void) {
         super(x,y,onChangedFn);
         this.setXYZ(x,y,z);
     }

@@ -49,6 +49,7 @@ export class Camera implements IUpdatable, ITransformable  {
         this.pos.observe(observer);
         this.scale.observe(observer);
         this._rect.observe(observer);
+        mat4.makeIdentity(this.worldTransformMatrix);
     }
 
 

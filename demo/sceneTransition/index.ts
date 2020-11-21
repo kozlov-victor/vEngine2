@@ -8,7 +8,6 @@ import {FadeInAppearanceTransition} from "@engine/scene/transition/appear/fade/f
 import {Color} from "@engine/renderer/common/color";
 
 const game = new Game({width:600,height:800});
-game.camera.angle = 0.1;
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);

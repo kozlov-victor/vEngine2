@@ -71,8 +71,6 @@ export abstract class RenderableModel
 
     public readonly velocity = new Point2d(0,0);
     public passMouseEventsThrough:boolean = false;
-    public interactive:boolean = false;
-
 
     private _destRect:Rect = new Rect();
     private _behaviours:BaseAbstractBehaviour[] = [];
