@@ -52,6 +52,10 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
         return new Point3d(this.x,this.y,this._z);
     }
 
+    public toJSON():IPoint3d{
+        return {x:this.x,y:this.y,z:this._z};
+    }
+
     public toArray():number[]{
         const arr:number[] = super.toArray();
         arr[2] = this._z;

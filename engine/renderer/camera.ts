@@ -27,7 +27,6 @@ export class Camera implements IUpdatable, ITransformable  {
     public static readonly FOLLOW_FACTOR:Point2d = new Point2d(0.1,0.1);
 
     public readonly pos:Point3d = new Point3d(0,0,0);
-    //public posZ:number = 0; // todo
     public readonly scale:Point2d = new Point2d(1,1);
     public worldTransformDirty:boolean = true;
     public readonly worldTransformMatrix:Mat16Holder = new Mat16Holder();
@@ -58,7 +57,8 @@ export class Camera implements IUpdatable, ITransformable  {
     }
 
     set angle(value: number) {
-        this.worldTransformDirty = this._angle!==value;
+        if (this._angle===value) return;
+        this.worldTransformDirty = true;
         this._angle = value;
     }
 

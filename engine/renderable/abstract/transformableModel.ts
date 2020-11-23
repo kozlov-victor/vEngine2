@@ -94,7 +94,8 @@ export abstract class TransformableModel extends BaseModel implements ITransform
     }
 
     set angle(val:number){
-        this.worldTransformDirty = this._angle!==val;
+        if (this._angle===val) return;
+        this.worldTransformDirty = true;
         this._angle = val;
         this.angle3d._setZSilently(val);
     }
@@ -124,6 +125,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         this.pos.observe(observer);
         this.size.observe(observer);
         this.scale.observe(observer);
+        this.skew.observe(observer);
         this.transformPoint.observe(observer);
         this.anchorPoint.observe(observer);
         this.angle3d.observe(observer);

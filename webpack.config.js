@@ -5,6 +5,8 @@ const fs = require('fs');
 const cliUI = require('./node_tools/cliUI');
 const engineTransformer = require('./node_tools/transformers/build/engineTransformer').engineTransformer;
 
+let project;
+let allProjects;
 
 class WebpackDonePlugin{
     apply(compiler){
@@ -29,6 +31,10 @@ class WebpackDonePlugin{
                     cliUI.showInfoWindow(
                         [
                             `--===compiled===--`,
+                            (()=>{
+                                if (project) return `-=project: ${project}=-`;
+                                else return `-=${allProjects.length} projects=-`
+                            })(),
                             `-----${hh}:${mm}:${ss}-----`
                         ]
                     );
@@ -59,8 +65,7 @@ module.exports = async (env={})=>{
             `--vEngine compiler--`,
         ]
     );
-    let project;
-    const allProjects = getAllProjects();
+    allProjects = getAllProjects();
     fs.writeFileSync('./demo/index.json',JSON.stringify(allProjects));
     const mode = await cliUI.choose('Choose option',[
         'Compile all projects',
