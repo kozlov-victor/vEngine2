@@ -179,6 +179,7 @@ export abstract class RenderableModel
     }
 
     public render():void {
+
         if (!this.visible) return;
 
         if (this._scene===undefined) this._scene = this.game.getCurrScene();
