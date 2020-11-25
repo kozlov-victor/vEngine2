@@ -46,7 +46,7 @@ export class MainScene extends Scene {
 
     public onPreloading() {
         this.emulator = new EngineEmulator(this.game);
-        this.rom = this.resourceLoader.loadBinary('./chip8/roms/BRIX');
+        this.rom = this.resourceLoader.loadBinary('./chip8/roms/octojam1title.ch8');
     }
 
     public onReady() {

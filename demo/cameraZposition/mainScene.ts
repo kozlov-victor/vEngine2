@@ -45,6 +45,12 @@ export class MainScene extends Scene {
                 case KEYBOARD_KEY.RIGHT:
                     this.game.camera.pos.x+=1;
                     break;
+                case KEYBOARD_KEY.W:
+                    this.game.camera.pos.y-=1;
+                    break;
+                case KEYBOARD_KEY.S:
+                    this.game.camera.pos.y+=1;
+                    break;
             }
         });
 

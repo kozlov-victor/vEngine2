@@ -79,6 +79,7 @@ vec4 getFillColor(){
         if (u_stretchMode==STRETCH_MODE_STRETCH) txVec = mixTextureColorWithTint(getStretchedImage(tx,ty),u_color);
         else if (u_stretchMode==STRETCH_MODE_REPEAT) txVec = mixTextureColorWithTint(getRepeatedImage(tx,ty),u_color);
         else txVec = ERROR_COLOR;
+        if (txVec.a==ZERO) discard;
         return txVec;
     }
     else return ERROR_COLOR;

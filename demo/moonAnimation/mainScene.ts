@@ -3,6 +3,7 @@ import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {SpriterObject} from "../scml/scml";
 import {Sound} from "@engine/media/sound";
+import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 
 
 export class MainScene extends Scene {
@@ -38,6 +39,8 @@ export class MainScene extends Scene {
             this.sound.play();
             this.player.nextAnimation();
         });
+
+        this.filters = [new WaveFilter(this.game)];
 
     }
 
