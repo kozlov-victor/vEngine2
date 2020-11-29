@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
+import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 export class MainScene extends Scene {
 

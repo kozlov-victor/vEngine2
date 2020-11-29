@@ -4,10 +4,8 @@ import {Game} from "@engine/core/game";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
+import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
-import {Font} from "@engine/renderable/impl/general/font";
-import {ISize} from "@engine/geometry/size";
 
 class ProgramInstruction {
     public number:number;

@@ -1,4 +1,3 @@
-
 const colors = require('./colors');
 const readline = require('readline').createInterface({
     input: process.stdin,
@@ -49,9 +48,12 @@ const showWindow = (text,colorBg,colorFg)=>{
 
     console.log('    ',colorBg,colorFg,`╔═▓${getLine('═',maxLength-2)}╗`,colors.Reset);
     for (const string of strings) {
-        console.log('    ',colorBg,colorFg,`║${centerPad(string,maxLength)}║`,colors.Reset);
+        console.log(
+            '    ',colorBg,colorFg,`║${centerPad(string,maxLength)}║`,colors.bg.Cyan,'',colors.Reset
+        );
     }
-    console.log('    ',colorBg,colorFg,`╚${getLine('═',maxLength)}╝`,colors.Reset);
+    console.log('    ',colorBg,colorFg,`╚${getLine('═',maxLength)}╝`,colors.bg.Cyan,'',colors.Reset);
+    console.log('     ',colors.bg.Cyan,` ${getLine(' ',maxLength)} `,colors.bg.Cyan,'',colors.Reset);
 };
 
 const showInfoWindow = (text)=>{

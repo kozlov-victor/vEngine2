@@ -9,7 +9,7 @@ import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
+import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 
 export class MainScene extends Scene {
 

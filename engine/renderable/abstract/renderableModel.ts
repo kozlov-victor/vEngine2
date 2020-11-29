@@ -184,7 +184,7 @@ export abstract class RenderableModel
 
         if (this._scene===undefined) this._scene = this.game.getCurrScene();
         if (this._layer===undefined) this._layer = this._scene._renderingSessionInfo.currentLayer;
-        this._scene._renderingObjectStack.add(this);
+        if (this._scene._renderingSessionInfo.drawingStackEnabled) this._scene._renderingObjectStack.add(this);
         if (this.alpha===0) return;
 
         const renderer:AbstractRenderer = this.game.getRenderer();
@@ -204,7 +204,7 @@ export abstract class RenderableModel
         renderer.setAlphaBlend(this.alpha);
         const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(this.filters,this.forceDrawChildrenOnNewSurface);
 
-        this.draw();
+        if (this._scene._renderingSessionInfo.drawingEnabled) this.draw();
 
         if (this.children.length>0) {
             renderer.transformSave();

@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KernelBlurAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/kernelBlurAccumulativeFilter";
-import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
+import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MathEx} from "@engine/misc/mathEx";

@@ -4,7 +4,7 @@ import {httpClient} from "@engine/debug/httpClient";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
+import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {History} from "./history";
 import {Game} from "@engine/core/game";
 import {Board} from "./board";

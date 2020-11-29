@@ -22,7 +22,7 @@ export class MainScene extends Scene {
         tf.setInterval(()=>{
             reverted=!reverted;
             tf.setText(RESULT(reverted));
-        },500);
+        },5000);
     }
 
 }

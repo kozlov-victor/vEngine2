@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
-import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
+import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font";

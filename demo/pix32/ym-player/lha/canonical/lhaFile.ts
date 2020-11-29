@@ -14,65 +14,8 @@ export class LhaFile {
     private size: number;
     private pos: number;
 
-    /**
-     * Opens a lha file for reading.
-     *
-     * @param file
-     *            the lha file
-     * @throws LhaException
-     *             if a lha format error has occurred
-     * @throws IOException
-     *             if an I/O error has occurred
-     */
-    // public LhaFile(File file) throws LhaException, IOException {
-    //     this(file.getPath(), LhaEntry.HD_STR_ENCODING);
-    // }
-
-    /**
-     * Opens a lha file for reading.
-     *
-     * @param name
-     *            the name of lha file
-     * @throws LhaException
-     *             if a lha format error has occurred
-     * @throws IOException
-     *             if an I/O error has occurred
-     */
-    // public LhaFile(String name) throws LhaException, IOException {
-    //     this(name, LhaEntry.HD_STR_ENCODING);
-    // }
-
-    /**
-     * Opens a lha file for reading.
-     *
-     * @param file
-     *            the lha file
-     * @param encoding
-     *            character encoding name
-     * @throws LhaException
-     *             if a lha format error has occurred
-     * @throws IOException
-     *             if an I/O error has occurred
-     */
-    // public LhaFile(File file, String encoding) throws LhaException, IOException {
-    //     this(file.getPath(), encoding);
-    // }
-
-    /**
-     * Opens a lha file for reading.
-     *
-     * @param name
-     *            the name of lha file
-     * @param encoding
-     *            character encoding name
-     * @throws LhaException
-     *             if a lha format error has occurred
-     * @throws IOException
-     *             if an I/O error has occurred
-     */
     public constructor(_in: BinBuffer) {
         this.raf = _in;
-        this.name = name;
         this.entryList = [];
         this.entryMap = {};
         this.makeEntryMap();
@@ -115,17 +58,6 @@ export class LhaFile {
         return (new LhaDecoderInputStream(new LhaFileInputStream(this, entry), entry));
     }
 
-    /**
-     * Returns an input stream for reading the contents of the specified lha
-     * file entry.
-     *
-     * @param entry
-     *            the lha file entry
-     * @return the input stream for reading the contents of the specified lha
-     *         file entry
-     * @throws IOException
-     *             if an I/O error has occurred
-     */
     public getInputStreamByIndex(index:number):LhaDecoderInputStream {
         return this.getInputStream(this.getEntryByIndex(index));
     }
@@ -136,7 +68,7 @@ export class LhaFile {
      * @return the path name of the lha file
      */
     public getName(): string {
-        return name;
+        return "";
     }
 
     /**

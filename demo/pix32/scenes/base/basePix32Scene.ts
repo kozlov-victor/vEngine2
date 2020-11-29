@@ -8,7 +8,7 @@ import {Game} from "@engine/core/game";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Tween} from "@engine/animation/tween";
 import {Color} from "@engine/renderer/common/color";
-import {ImageCacheContainer} from "@engine/renderable/impl/general/imageCacheContainer";
+import {ImageCacheSurface} from "@engine/renderable/impl/surface/imageCacheSurface";
 import {Size} from "@engine/geometry/size";
 import {PalletOffsetFilter} from "@engine/renderer/webGl/filters/texture/palletOffsetFilter";
 import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
@@ -88,7 +88,7 @@ export abstract class BasePix32Scene extends Scene {
         this.topLayer.transformType  = LayerTransformType.STICK_TO_CAMERA;
         this.appendChild(this.topLayer);
 
-        const screen:ImageCacheContainer = new ImageCacheContainer(this.game,new Size(32,32));
+        const screen:ImageCacheSurface = new ImageCacheSurface(this.game,new Size(32,32));
         screen.size.setWH(377,341);
         screen.pos.setXY(113,58);
         screen.setPixelPerfect(true);

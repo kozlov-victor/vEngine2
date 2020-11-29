@@ -1,4 +1,4 @@
-import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
+import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {History} from "./history";
 import {Comet} from "./comet";
 import {ICommand} from "./declarations";

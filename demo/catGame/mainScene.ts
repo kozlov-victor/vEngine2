@@ -104,7 +104,6 @@ export class MainScene extends Scene {
         if (!properties) return {};
         const obj: Record<string, any> = {};
         properties.forEach(p => obj[p.name] = p.value);
-        const possible = properties.find(it => it.name === name);
         return obj;
     }
 

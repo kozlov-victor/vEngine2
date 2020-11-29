@@ -116,7 +116,6 @@ export abstract class AbstractScrollContainerListener {
             if (!p.isMouseDown) return;
             const canScroll:boolean = getSize(this.internalContainer.size,dir) > getSize(this.externalContainer.size,dir);
             if (!canScroll) return;
-
             const lastPoint:IScrollPointDesc = this._lastPoint;
             if (lastPoint===undefined) return;
 

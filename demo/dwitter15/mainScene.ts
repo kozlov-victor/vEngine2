@@ -1,9 +1,8 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
+import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
 import {BrightessContrastFilter} from "@engine/renderer/webGl/filters/texture/brightessContrastFilter";
 import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/texture/triangleBlurFilter";
-import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/texture/simpleBlurFilter";
 
 export class MainScene extends Scene {
 

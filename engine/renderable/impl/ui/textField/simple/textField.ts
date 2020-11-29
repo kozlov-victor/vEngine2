@@ -12,7 +12,7 @@ import {
     AlignTextContentVertical,
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
-import {DrawingSurface} from "@engine/renderable/impl/general/drawingSurface";
+import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {FrameSkipper} from "@engine/misc/frameSkipper";
 import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
@@ -26,7 +26,7 @@ export class TextField extends Container {
     public readonly textColor:Color = Color.RGB(122,122,122);
 
     protected rowSet:TextRowSet;
-    protected rowSetContainer:MarkableNullGameObject = new MarkableNullGameObject(this.game);
+    protected readonly rowSetContainer:MarkableNullGameObject = new MarkableNullGameObject(this.game);
     protected _textEx:StringEx = StringEx.empty();
 
     private alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;
