@@ -182,9 +182,6 @@ export class Game {
         if (!scene.resourceLoader.isCompleted()) {
             this._currScene.trigger(SCENE_EVENTS.PRELOADING);
             scene.onPreloading();
-            if (scene.preloadingGameObject!==undefined) {
-                if (scene.preloadingGameObject.getLayer()===undefined) scene.preloadingGameObject.setLayer(scene.getDefaultLayer());
-            }
             scene.resourceLoader.onProgress(()=>{
                 this._currScene.trigger(SCENE_EVENTS.PROGRESS);
                 scene.onProgress(scene.resourceLoader.getProgress());
