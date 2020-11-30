@@ -19,6 +19,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TaskRef} from "@engine/resources/queue";
 import {ChipOscilloscope} from "../../misc/chipOscilloscope";
 import {AbstractChipTrack} from "../../ym-player/abstract/abstractChipTrack";
+import {ImageCacheSurface2} from "@engine/renderable/impl/surface/imageCacheSurface2";
 
 export const waitFor = (game:Game,time:number):Promise<void>=>{
     return new Promise<void>((resolve)=>{

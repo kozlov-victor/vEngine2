@@ -36,7 +36,7 @@ export class MainScene extends Scene {
             20: ()=>b.FOR('J',b.LEN(b.GET_VAR('ST$')),1,-1),
             30: ()=>b.PRINT(b.MID(b.GET_VAR('ST$'),b.GET_VAR('J'),1)),
             40: ()=>b.NEXT('J'),
-            50: ()=>b.END()
+            50: ()=>b.GOTO(10),
         });
         b.RUN();
 

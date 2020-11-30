@@ -11,8 +11,10 @@ import {Game} from "@engine/core/game";
 import Mat16Holder = mat4.Mat16Holder;
 import {Color} from "@engine/renderer/common/color";
 import {LruMap} from "@engine/misc/collection/lruMap";
+import IDENTITY = mat4.IDENTITY;
 
 const identityPositionMatrixCache:LruMap<string, Mat16Holder> = new LruMap<string, mat4.Mat16Holder>();
+const mat4Cache:Mat16Holder = new Mat16Holder();
 
 export const makeIdentityPositionMatrix = (dstX:number,dstY:number,destSize:ISize):Mat16Holder =>{
     const key:string = `${dstX}_${dstY}_${destSize.width}_${destSize.height}`;
@@ -49,6 +51,9 @@ export class WebGlRendererHelper extends RendererHelper {
         const renderer:WebGlRenderer = this.game.getRenderer() as WebGlRenderer;
         if (m.size.isZero()) m.revalidate();
         renderer.setRenderTarget(renderTarget);
+        mat4Cache.fromMat16(renderer.transformGet());
+        renderer.transformSave();
+        renderer.transformSet(IDENTITY);
         const clearBeforeRenderOrig:boolean = renderer.clearBeforeRender;
         const clearColorOrig:Color = renderer.clearColor;
         renderer.clearBeforeRender = clearColor!==undefined;
@@ -59,5 +64,6 @@ export class WebGlRendererHelper extends RendererHelper {
         renderer.setDefaultRenderTarget();
         renderer.clearBeforeRender = clearBeforeRenderOrig;
         renderer.clearColor.set(clearColorOrig);
+        renderer.transformRestore();
     }
 }

@@ -37,7 +37,6 @@ import {IAnimation} from "@engine/animation/iAnimation";
 import {Color} from "@engine/renderer/common/color";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
-import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -202,7 +201,10 @@ export abstract class RenderableModel
         }
 
         renderer.setAlphaBlend(this.alpha);
-        const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(this.filters,this.forceDrawChildrenOnNewSurface);
+        const filters:IFilter[] =
+            this._scene._renderingSessionInfo.drawingEnabled && this._scene._renderingSessionInfo.filteringEnabled?
+                this.filters:[];
+        const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(filters,this.forceDrawChildrenOnNewSurface);
 
         if (this._scene._renderingSessionInfo.drawingEnabled) this.draw();
 

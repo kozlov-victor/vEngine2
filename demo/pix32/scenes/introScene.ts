@@ -38,11 +38,11 @@ export class IntroScene extends BasePix32Scene {
         const sound:Sound = new Sound(this.game);
         sound.setResourceLink(this.themeAudioLink);
         sound.loop = true;
-        sound.play();
+        //sound.play();
 
         const box:Rectangle = new Rectangle(this.game);
         box.fillColor = Color.fromCssLiteral('#46e502');
-        box.pos.setXY(8,30);
+        box.pos.setXY(8,20);
         box.size.setWH(16,4);
 
         const kernelBurnAccumulative = new KernelBurnAccumulativeFilter(this.game);

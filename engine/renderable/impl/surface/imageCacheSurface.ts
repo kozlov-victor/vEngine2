@@ -2,6 +2,9 @@ import {Game} from "@engine/core/game";
 import {ISize} from "@engine/geometry/size";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {IFilter} from "@engine/renderer/common/ifilter";
+
+let CACHE_FILTERS:IFilter[] = [];
 
 export class ImageCacheSurface extends RenderableModel {
 
@@ -18,20 +21,23 @@ export class ImageCacheSurface extends RenderableModel {
     }
 
     render() {
+
         // two pass drawing
         // render to drawing surface
-        this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = false;
-        this.game.getCurrScene()._renderingSessionInfo.drawingEnabled = true;
-        this.draw();
-        this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = true;
-        this.game.getCurrScene()._renderingSessionInfo.drawingEnabled = false;
-
-        // recalculate word matrices
-        this.worldTransformDirty = true;
-        this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = true;
-        this.game.getCurrScene()._renderingSessionInfo.drawingEnabled = false;
+        //this.game.getCurrScene()._renderingSessionInfo.filteringEnabled = false;
+        //this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = false;
+        //this.game.getCurrScene()._renderingSessionInfo.drawingEnabled = true;
         super.render();
-        this.game.getCurrScene()._renderingSessionInfo.drawingEnabled = true;
+        //this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = true;
+        //this.game.getCurrScene()._renderingSessionInfo.drawingEnabled = false;
+
+        //recalculate word matrices
+        // this.worldTransformDirty = true;
+        // this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = true;
+        // this.game.getCurrScene()._renderingSessionInfo.drawingEnabled = false;
+        // super.render();
+        // this.game.getCurrScene()._renderingSessionInfo.drawingEnabled = true;
+
     }
 
     draw() {
@@ -42,6 +48,7 @@ export class ImageCacheSurface extends RenderableModel {
             this.drawingSurface.drawModel(c);
         }
         this.drawingSurface.render();
+        this.game.getCurrScene()._renderingSessionInfo.filteringEnabled = true;
     }
 
     public setPixelPerfect(val:boolean):void {
