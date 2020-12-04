@@ -33,11 +33,7 @@ export class MouseControlHelper {
         return result;
     }
 
-    public captureObject(
-        e:MouseEvent|TouchEvent|Touch,
-        eventName:MOUSE_EVENTS,mousePoint:MousePoint,
-        obj:RenderableModel):Optional<IObjectMouseEvent>{
-
+    private isPointInRect(mousePoint:MousePoint, obj:RenderableModel,constrainObjects?:RenderableModel[]):boolean {
         const goRect:Rect = Rect.fromPool();
 
         const pointBottomRight:Vec4Holder = Vec4Holder.fromPool();
@@ -65,12 +61,16 @@ export class MouseControlHelper {
         recycledArray[2] = pointBottomRightTransformation.vec4;
         recycledArray[3] = pointBottomLeftTransformation.vec4;
 
-        let mouseEvent:Optional<IObjectMouseEvent>;
-        if (
-            this.isPointInPolygon4(recycledArray,mousePoint.screenCoordinate)
-        ) {
-            mouseEvent = this.triggerEventForObject(e,eventName,mousePoint,obj);
+        let result:boolean = this.isPointInPolygon4(recycledArray,mousePoint.screenCoordinate);
+        if (result && constrainObjects!==undefined) {
+            for (let i:number=0;i<constrainObjects.length;i++) {
+                if (!this.isPointInRect(mousePoint,constrainObjects[i])) {
+                    result = false;
+                    break;
+                }
+            }
         }
+
         goRect.release();
 
         pointBottomRight.release();
@@ -81,8 +81,20 @@ export class MouseControlHelper {
         pointTopLeftTransformation.release();
         pointBottomLeft.release();
         pointBottomLeftTransformation.release();
+        return result;
+    }
 
-        return mouseEvent;
+    public captureObject(
+        e:MouseEvent|TouchEvent|Touch,
+        eventName:MOUSE_EVENTS,
+        mousePoint:MousePoint,
+        obj:RenderableModel,
+        constrainObjects:RenderableModel[]
+    ):Optional<IObjectMouseEvent>{
+
+        if (this.isPointInRect(mousePoint,obj,constrainObjects)) {
+            return  this.triggerEventForObject(e,eventName,mousePoint,obj);
+        } else return undefined;
     }
 
     public triggerEventForObject(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,mousePoint:MousePoint, obj:RenderableModel):IObjectMouseEvent{

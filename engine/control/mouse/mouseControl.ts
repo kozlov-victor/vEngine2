@@ -9,6 +9,7 @@ import {Layer} from "@engine/scene/layer";
 import {MouseControlHelper} from "@engine/control/mouse/mouseControlHelper";
 import {Optional} from "@engine/core/declarations";
 import {CapturedObjectsByTouchIdHolder} from "@engine/control/mouse/capturedObjectsByTouchIdHolder";
+import {RenderingObjectStackItem} from "@engine/scene/internal/renderingObjectStack";
 
 
 const LEFT_MOUSE_BTN  = 0 as const;
@@ -114,24 +115,27 @@ export class MouseControl implements IControl {
         const mousePoint:MousePoint = this._helper.resolvePoint(e);
         mousePoint.isMouseDown = isMouseDown;
 
-        const objectStack:RenderableModel[] = this.game.getCurrScene()._renderingObjectStack.get();
-        let i:number = objectStack.length; // reversed loop
+        const objectStackItems:RenderingObjectStackItem[] = this.game.getCurrScene()._renderingObjectStack.get();
+        let i:number = objectStackItems.length; // reversed loop
         if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.clear(mousePoint.id);
         // trigger the most top object
         while(i--) {
-            const obj:RenderableModel = objectStack[i];
+            const objectStackItem:RenderingObjectStackItem = objectStackItems[i];
+            const obj:RenderableModel = objectStackItem.obj;
+            const constrainObjects:RenderableModel[] = objectStackItem.constrainObjects;
             if (obj.passMouseEventsThrough) continue;
             const layer:Layer = obj.getLayer();
             if (layer===undefined) continue;
+
             this._helper.resolveSceneCoordinates(mousePoint,layer.transformType);
-            const capturedEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e, mouseEvent, mousePoint, obj);
+            const capturedEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e, mouseEvent, mousePoint, obj, constrainObjects);
             if (capturedEvent!==undefined) {
                 mousePoint.target = obj;
                 if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,obj);
                 // propagate event to parents
                 let parent:Optional<RenderableModel> = obj.parent;
                 while (parent!==undefined) {
-                    const propagationEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e,mouseEvent,mousePoint,parent);
+                    const propagationEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e,mouseEvent,mousePoint,parent, constrainObjects);
                     if (propagationEvent!==undefined) {
                         if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,parent);
                     }

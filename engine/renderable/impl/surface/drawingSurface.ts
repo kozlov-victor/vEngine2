@@ -307,7 +307,9 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this.appendChild(this._transformableContainer);
         this._transformableContainer.appendChild(model);
         this._omitSelfOnRendering = true;
+        this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = false;
         this.renderToTexture(this._renderTarget,clearColor);
+        this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = true;
         this._omitSelfOnRendering = false;
         this.removeChild(this._transformableContainer);
         this._transformableContainer.removeChild(model);

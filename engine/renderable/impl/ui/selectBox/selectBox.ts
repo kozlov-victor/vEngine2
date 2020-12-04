@@ -10,6 +10,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {NoOverflowSurface} from "@engine/renderable/impl/surface/noOverflowSurface";
 import {IRectJSON} from "@engine/geometry/rect";
 
+// todo
 export class SelectBox extends Container {
 
     private _options:(string|number)[] = [];
@@ -39,7 +40,7 @@ export class SelectBox extends Container {
         console.log(this._scrollableContainer.id);
         rect.on(MOUSE_EVENTS.click, e=>{
             console.log('clicked',e);
-        })
+        });
     }
 
     public setOptions(options:(string|number)[]) {

@@ -118,7 +118,6 @@ const choose = async (message,chooseArray)=>{
     while (loop) {
         createPrompt();
         const char = await getCh();
-        console.clear();
         if (char.name==='up') {
             chosenPosition--;
             if (chosenPosition===-1) chosenPosition = chooseArray.length -1;
@@ -128,6 +127,11 @@ const choose = async (message,chooseArray)=>{
             if (chosenPosition===chooseArray.length) chosenPosition = 0;
         }
         else if (char.name==='return') loop = false;
+        else {
+            // search by letter
+            const pos = chooseArray.findIndex(it=>it.startsWith(char.sequence));
+            if (pos>-1) chosenPosition = pos;
+        }
     }
     return chosenPosition;
 

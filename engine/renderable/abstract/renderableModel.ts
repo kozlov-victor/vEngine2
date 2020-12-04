@@ -46,6 +46,7 @@ export const enum BLEND_MODE {
     REVERSE_SUBSTRACTIVE
 }
 
+const EMPTY_FILTERS_ARR:IFilter[] = [];
 
 export abstract class RenderableModel
     extends TransformableModel
@@ -183,7 +184,9 @@ export abstract class RenderableModel
 
         if (this._scene===undefined) this._scene = this.game.getCurrScene();
         if (this._layer===undefined) this._layer = this._scene._renderingSessionInfo.currentLayer;
-        if (this._scene._renderingSessionInfo.drawingStackEnabled) this._scene._renderingObjectStack.add(this);
+        if (this._scene._renderingSessionInfo.drawingStackEnabled) {
+            this._scene._renderingObjectStack.add(this,this._scene._renderingSessionInfo.currentConstrainObjects);
+        }
         if (this.alpha===0) return;
 
         const renderer:AbstractRenderer = this.game.getRenderer();
@@ -202,8 +205,7 @@ export abstract class RenderableModel
 
         renderer.setAlphaBlend(this.alpha);
         const filters:IFilter[] =
-            this._scene._renderingSessionInfo.drawingEnabled && this._scene._renderingSessionInfo.filteringEnabled?
-                this.filters:[];
+            this._scene._renderingSessionInfo.drawingEnabled? this.filters:EMPTY_FILTERS_ARR;
         const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(filters,this.forceDrawChildrenOnNewSurface);
 
         if (this._scene._renderingSessionInfo.drawingEnabled) this.draw();

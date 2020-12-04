@@ -39,7 +39,6 @@ export class BasicEnv {
     private ended:boolean = false;
     private readonly drawingSurface:DrawingSurface;
 
-
     constructor(private game:Game,private textField:TextField) {
         game.getCurrScene().appendChild(textField);
         this.drawingSurface = new DrawingSurface(this.game,this.game.size);
@@ -242,6 +241,7 @@ export class BasicEnv {
         this.res = '';
         this.cursorPos = 0;
         this.redraw();
+        this.drawingSurface.clear();
     }
 
     public IF(res:boolean,fn:()=>void) {
@@ -293,6 +293,14 @@ export class BasicEnv {
             this.drawingSurface.setFillColor(Color.RGB(255,0,0).asRGBNumeric(),255)
             this.drawingSurface.drawRect(x1,y1,x2-x1,y2-y1);
         }
+    }
+
+    public PLOT(x:number,y:number):void {
+        this.drawingSurface.moveTo(x,y);
+    }
+
+    public DRAW(x:number,y:number):void {
+        this.drawingSurface.lineTo(x,y);
     }
 
     public END(){

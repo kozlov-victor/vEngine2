@@ -33,9 +33,9 @@ import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {DebugError} from "@engine/debug/debugError";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 import {Size} from "@engine/geometry/size";
-import {RenderingObjectStack} from "@engine/control/mouse/renderingObjectStack";
+import {RenderingObjectStack} from "@engine/scene/internal/renderingObjectStack";
 import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
-import {RenderingSessionInfo} from "@engine/scene/renderingSessionInfo";
+import {RenderingSessionInfo} from "@engine/scene/internal/renderingSessionInfo";
 
 export const enum SCENE_EVENTS {
     PRELOADING = 'preloading',
