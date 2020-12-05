@@ -1,7 +1,7 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {
     HorizontalScrollContainerListener,
-    ScrollContainerListener
+    VerticalScrollContainerListener
 } from "@engine/renderable/impl/ui/scrollBar/_internal/scrollContainerListener";
 import {VerticalScrollBar} from "@engine/renderable/impl/ui/scrollBar/verticalScrollBar";
 import {HorizontalScrollBar} from "@engine/renderable/impl/ui/scrollBar/horizontalScrollBar";
@@ -10,7 +10,7 @@ import {Container} from "@engine/renderable/impl/ui/container";
 
 export class ScrollContainerDelegate {
 
-    private vScrollContainerListener:ScrollContainerListener;
+    private vScrollContainerListener:VerticalScrollContainerListener;
     private hScrollContainerListener:HorizontalScrollContainerListener;
 
     private readonly vScrollBar: VerticalScrollBar;
@@ -21,13 +21,13 @@ export class ScrollContainerDelegate {
     constructor(
         private game:Game,
         private rootContainer:Container,
-        private constrainsContainer:RenderableModel,
+        private constrainContainer:RenderableModel,
         private scrollableContainer:RenderableModel)
     {
         this.vScrollBar = new VerticalScrollBar(this.game);
         this.hScrollBar = new HorizontalScrollBar(this.game);
-        this.constrainsContainer.appendChild(this.vScrollBar);
-        this.constrainsContainer.appendChild(this.hScrollBar);
+        this.constrainContainer.appendChild(this.vScrollBar);
+        this.constrainContainer.appendChild(this.hScrollBar);
     }
 
     public onScroll(cb:()=>void):void {
@@ -37,14 +37,14 @@ export class ScrollContainerDelegate {
     public revalidate():void {
 
         if (this.vScrollContainerListener===undefined) {
-            this.vScrollContainerListener = new ScrollContainerListener(this.constrainsContainer,this.scrollableContainer);
+            this.vScrollContainerListener = new VerticalScrollContainerListener(this.constrainContainer,this.scrollableContainer);
             this.vScrollContainerListener.onScroll(()=>{
                 this.updateScrollValues();
                 this._onScroll();
             });
         }
         if (this.hScrollContainerListener===undefined) {
-            this.hScrollContainerListener = new HorizontalScrollContainerListener(this.constrainsContainer,this.scrollableContainer);
+            this.hScrollContainerListener = new HorizontalScrollContainerListener(this.constrainContainer,this.scrollableContainer);
             this.hScrollContainerListener.setMouseScroll(false);
             this.hScrollContainerListener.onScroll(()=>{
                 this.updateScrollValues();
@@ -52,9 +52,9 @@ export class ScrollContainerDelegate {
             });
         }
 
-        this.vScrollBar.size.setWH(5,this.constrainsContainer.size.height);
-        this.vScrollBar.pos.x = this.constrainsContainer.size.width - this.vScrollBar.size.width + this.rootContainer.paddingRight;
-        this.hScrollBar.size.setWH(this.constrainsContainer.size.width,5);
+        this.vScrollBar.size.setWH(5,this.constrainContainer.size.height);
+        this.vScrollBar.pos.x = this.constrainContainer.size.width - this.vScrollBar.size.width + this.rootContainer.paddingRight;
+        this.hScrollBar.size.setWH(this.constrainContainer.size.width,5);
         this.updateScrollValues();
     }
 

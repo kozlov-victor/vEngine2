@@ -79,6 +79,13 @@ export class MainScene extends Scene {
         bg2.lineWidth = 1;
         bg2.borderRadius = 10;
         btn.setBackground(bg2);
+
+        const bg2Active = new Rectangle(this.game);
+        bg2Active.fillColor = Color.fromCssLiteral('#38774c');
+        bg2Active.lineWidth = 1;
+        bg2Active.borderRadius = 10;
+        btn.setBackgroundActive(bg2Active);
+
         btn.pos.setXY(150,300);
         btn.size.setWH(200,100);
         btn.setText("click me");

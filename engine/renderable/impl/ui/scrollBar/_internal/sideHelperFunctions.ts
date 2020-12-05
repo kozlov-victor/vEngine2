@@ -22,7 +22,7 @@ export const assignSize = (size: Size, value: number,dir:Direction):void=> {
     else size.width = value;
 };
 
-export const getMouse = (point: IObjectMouseEvent,dir:Direction):number=> {
+export const getMouse = (point: {sceneX:number, sceneY:number},dir:Direction):number=> {
     if (dir===Direction.VERTICAL) return point.sceneY;
     else return point.sceneX;
 };

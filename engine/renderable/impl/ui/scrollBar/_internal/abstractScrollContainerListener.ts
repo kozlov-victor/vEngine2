@@ -10,7 +10,7 @@ import {
 } from "@engine/renderable/impl/ui/scrollBar/_internal/sideHelperFunctions";
 
 interface IScrollPointDesc {
-    point: IObjectMouseEvent;
+    point: {sceneX:number,sceneY:number}
     time: number;
 }
 
@@ -28,10 +28,11 @@ export abstract class AbstractScrollContainerListener {
     private offsetOld: number = 0;
     private _onScroll:()=>void;
     private _mouseScroll:boolean = true;
+    private _isConstrainContainerCapturedByMouse:boolean = false;
 
     constructor(
-        private externalContainer:RenderableModel,
-        private internalContainer:RenderableModel
+        private constrainContainer:RenderableModel,
+        private scrollableContainer:RenderableModel
     ) {
         this.listenToMouse();
     }
@@ -42,20 +43,23 @@ export abstract class AbstractScrollContainerListener {
 
     public update(delta:number):void{
         const dir:Direction = this.getDirection();
-        if (this._overScrollFactor<0) { //return to initial position when overscrolled
-            this.offset+=this._overScrollFactor;
-            this._overScrollFactor*=this._OVER_SCROLL_RELEASE_DECELERATION;
-            if (this.offset<=0) {
-                this._overScrollFactor = 0;
-                this.offset = 0;
+
+        if (!this._isConstrainContainerCapturedByMouse) {
+            if (this._overScrollFactor<0) { //return to initial position when overscrolled
+                this.offset+=this._overScrollFactor;
+                this._overScrollFactor*=this._OVER_SCROLL_RELEASE_DECELERATION;
+                if (this.offset<=0) {
+                    this._overScrollFactor = 0;
+                    this.offset = 0;
+                }
             }
-        }
-        else if (this._overScrollFactor>0) { //return to last position when overscrolled
-            this.offset+=this._overScrollFactor;
-            this._overScrollFactor*=this._OVER_SCROLL_RELEASE_DECELERATION;
-            if (this.offset>=getSize(this.externalContainer.size,dir) - getSize(this.internalContainer.size,dir)) {
-                this._overScrollFactor = 0;
-                this.offset = getSize(this.externalContainer.size,dir) - getSize(this.internalContainer.size,dir);
+            else if (this._overScrollFactor>0) { //return to last position when overscrolled
+                this.offset+=this._overScrollFactor;
+                this._overScrollFactor*=this._OVER_SCROLL_RELEASE_DECELERATION;
+                if (this.offset>=getSize(this.constrainContainer.size,dir) - getSize(this.scrollableContainer.size,dir)) {
+                    this._overScrollFactor = 0;
+                    this.offset = getSize(this.constrainContainer.size,dir) - getSize(this.scrollableContainer.size,dir);
+                }
             }
         }
 
@@ -88,10 +92,11 @@ export abstract class AbstractScrollContainerListener {
     }
 
     public destroy():void {
-        this.externalContainer.off(MOUSE_EVENTS.mouseDown);
-        this.externalContainer.off(MOUSE_EVENTS.mouseMove);
-        this.externalContainer.off(MOUSE_EVENTS.scroll);
-        this.externalContainer.off(MOUSE_EVENTS.mouseUp);
+        this.constrainContainer.off(MOUSE_EVENTS.mouseDown);
+        this.constrainContainer.off(MOUSE_EVENTS.mouseMove);
+        this.constrainContainer.off(MOUSE_EVENTS.scroll);
+        this.constrainContainer.off(MOUSE_EVENTS.mouseUp);
+        this.constrainContainer.off(MOUSE_EVENTS.mouseLeave);
 
     }
 
@@ -99,9 +104,10 @@ export abstract class AbstractScrollContainerListener {
 
     private listenToMouse():void {
         const dir:Direction = this.getDirection();
-        this.externalContainer.on(MOUSE_EVENTS.mouseDown, (p: IObjectMouseEvent) => {
+        this.constrainContainer.on(MOUSE_EVENTS.mouseDown, (p: IObjectMouseEvent) => {
+            this._isConstrainContainerCapturedByMouse = true;
             this._lastPoint = {
-                point: p,
+                point: {sceneX: p.sceneX,sceneY: p.sceneY},
                 time: Date.now()
             };
             this._prevPoint = {
@@ -112,9 +118,9 @@ export abstract class AbstractScrollContainerListener {
             this._deceleration = 0;
             this._overScrollFactor = 0;
         });
-        this.externalContainer.on(MOUSE_EVENTS.mouseMove, (p: IObjectMouseEvent) => {
+        this.constrainContainer.on(MOUSE_EVENTS.mouseMove, (p: IObjectMouseEvent) => {
             if (!p.isMouseDown) return;
-            const canScroll:boolean = getSize(this.internalContainer.size,dir) > getSize(this.externalContainer.size,dir);
+            const canScroll:boolean = getSize(this.scrollableContainer.size,dir) > getSize(this.constrainContainer.size,dir);
             if (!canScroll) return;
             const lastPoint:IScrollPointDesc = this._lastPoint;
             if (lastPoint===undefined) return;
@@ -132,18 +138,19 @@ export abstract class AbstractScrollContainerListener {
                 getMouse(this._lastPoint.point,dir) - getMouse(this._prevPoint.point,dir);
             this._setScrollPos();
         });
-        this.externalContainer.on(MOUSE_EVENTS.scroll, (p: IObjectMouseEvent) => {
+        this.constrainContainer.on(MOUSE_EVENTS.scroll, (p: IObjectMouseEvent) => {
             if (!this._mouseScroll) return;
             const wheelDelta:number = (p.nativeEvent as WheelEvent&{wheelDelta:number}).wheelDelta;
             const newOffset:number = this.offset + wheelDelta*this._MOUSE_WHEEL_FACTOR;
             const isOverScrolled:boolean =
                 newOffset > 0 ||
-                newOffset < getSize(this.externalContainer.size,dir) - getSize(this.internalContainer.size,dir);
+                newOffset < getSize(this.constrainContainer.size,dir) - getSize(this.scrollableContainer.size,dir);
             if(isOverScrolled) return;
             this.offset=newOffset;
             this._setScrollPos();
         });
-        this.externalContainer.on(MOUSE_EVENTS.mouseUp, (p: IObjectMouseEvent) => {
+        this.constrainContainer.on(MOUSE_EVENTS.mouseUp, (p: IObjectMouseEvent) => {
+            this._isConstrainContainerCapturedByMouse = false;
             if (!this._lastPoint) return;
             if (!this._prevPoint) return;
             if (this._lastPoint.time === this._prevPoint.time) {
@@ -158,6 +165,9 @@ export abstract class AbstractScrollContainerListener {
             }
             this._deceleration = 0;
         });
+        this.constrainContainer.on(MOUSE_EVENTS.mouseLeave, _=>{
+            this._isConstrainContainerCapturedByMouse = false;
+        });
     }
 
     private _setScrollPos():void {
@@ -167,7 +177,7 @@ export abstract class AbstractScrollContainerListener {
 
         if (this.offsetOld===undefined) this.offsetOld = offsetTruncated;
         if (offsetTruncated!==this.offsetOld) {
-            assignPos(this.internalContainer.pos,this.offset,this.getDirection());
+            assignPos(this.scrollableContainer.pos,this.offset,this.getDirection());
             if (this._onScroll!==undefined) {
                 this._onScroll();
             }
@@ -180,18 +190,17 @@ export abstract class AbstractScrollContainerListener {
         const dir:Direction = this.getDirection();
 
         const canOverScroll:boolean =
-            getSize(this.internalContainer.size,dir) > getSize(this.externalContainer.size,dir);
+            getSize(this.scrollableContainer.size,dir) > getSize(this.constrainContainer.size,dir);
         if (!canOverScroll) return;
 
         //overscoll top
         if (this.offset > 0) {
-            //this.offset = 0;
             this._overScrollFactor = -this._OVER_SCROLL_RELEASE_VELOCITY;
             this._scrollVelocity = 0;
             this._deceleration = 0;
         }
         //overscoll bottom
-        else if (this.offset < getSize(this.externalContainer.size,dir) - getSize(this.internalContainer.size,dir)) {
+        else if (this.offset < getSize(this.constrainContainer.size,dir) - getSize(this.scrollableContainer.size,dir)) {
             this._overScrollFactor = this._OVER_SCROLL_RELEASE_VELOCITY;
             this._scrollVelocity = 0;
             this._deceleration = 0;
