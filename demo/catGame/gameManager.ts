@@ -19,13 +19,7 @@ type LEVEL_SCHEMA = typeof import("./level/l1.json");
 
 export class GameManager {
 
-    public static instantiate(game:Game):void{
-        GameManager.instance = new GameManager(game);
-    }
-
-    public static getCreatedInstance():GameManager {
-        return GameManager.instance;
-    }
+    constructor(private game:Game) {}
 
     private static instance:GameManager;
 
@@ -43,7 +37,13 @@ export class GameManager {
         l5 as unknown as LEVEL_SCHEMA,
     ];
 
-    constructor(private game:Game) {}
+    public static instantiate(game:Game):void{
+        GameManager.instance = new GameManager(game);
+    }
+
+    public static getCreatedInstance():GameManager {
+        return GameManager.instance;
+    }
 
     public incrementNumOfLives():void {
         InfoPanel.getCreatedInstance().incrementNumOfLives();

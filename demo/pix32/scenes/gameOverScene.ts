@@ -13,7 +13,7 @@ export class GameOverScene extends BasePix32Scene {
 
     private ym:Ym;
 
-    onPreloading() {
+    onPreloading():void {
         super.onPreloading();
         const binLink = this.resourceLoader.loadBinary('pix32/resources/music/intro.ym');
         this.resourceLoader.addNextTask((()=>{
@@ -23,7 +23,7 @@ export class GameOverScene extends BasePix32Scene {
         }));
     }
 
-    onReady() {
+    onReady():void {
         super.onReady();
         const sound:Sound = new Sound(this.game);
         sound.setResourceLink(this.themeAudioLink);

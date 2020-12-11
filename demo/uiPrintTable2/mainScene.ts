@@ -23,7 +23,7 @@ export class MainScene extends Scene {
     @Resource.Text('./uiPrintTable2/test.csv')
     private textLink:ResourceLink<string>;
 
-    public onReady() {
+    public onReady():void {
 
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
         tf.size.set(this.game.size);

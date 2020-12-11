@@ -47,8 +47,10 @@ export const enum SCENE_EVENTS {
 
 export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
 
-    private static isLayerGuard(modelOrLayer:RenderableModel|Layer):modelOrLayer is Layer {
-        return modelOrLayer.type==='Layer';
+    constructor(protected game:Game) {
+        this._renderingObjectStack = new RenderingObjectStack();
+        this.resourceLoader = new ResourceLoader(game);
+        this.size.set(this.game.size);
     }
 
     public readonly type:string = "Scene";
@@ -76,10 +78,8 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     // eventEmitter
     private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
-    constructor(protected game:Game) {
-        this._renderingObjectStack = new RenderingObjectStack();
-        this.resourceLoader = new ResourceLoader(game);
-        this.size.set(this.game.size);
+    private static isLayerGuard(modelOrLayer:RenderableModel|Layer):modelOrLayer is Layer {
+        return modelOrLayer.type==='Layer';
     }
 
     public revalidate():void {
@@ -170,7 +170,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         this.game.getRenderer().getHelper().renderSceneToTexture(this,target);
     }
 
-    public addPropertyAnimation(animation:IAnimation){
+    public addPropertyAnimation(animation:IAnimation):void{
         this._propertyAnimations.push(animation);
     }
 
@@ -253,7 +253,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
             this.game.getRenderer().transformSet(this.game.camera.worldTransformMatrix.mat16);
         }
 
-        renderer.setAlphaBlend(this.alpha);
+        renderer.pushAlphaBlend(this.alpha);
 
         if (!this.resourceLoader.isCompleted()) {
             if (this.preloadingGameObject!==undefined) {

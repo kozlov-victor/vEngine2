@@ -26,11 +26,11 @@ export abstract class AbstractPropertyAnimation implements IAnimation {
         this._playing = false;
     }
 
-    public reset(){
+    public reset():void{
         this._startTime = 0;
     }
 
-    public onProgress(progressFn:(opts:unknown)=>void){
+    public onProgress(progressFn:(opts:unknown)=>void):void{
         this.progress = progressFn;
     }
 

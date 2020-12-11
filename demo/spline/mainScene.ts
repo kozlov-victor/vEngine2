@@ -4,7 +4,6 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MathEx} from "@engine/misc/mathEx";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Color} from "@engine/renderer/common/color";
 
 export class MainScene extends Scene {
 
@@ -12,12 +11,12 @@ export class MainScene extends Scene {
     private controlPoints:Circle[] = [];
     private points:number[] = [];
 
-    public onPreloading() {
+    public onPreloading():void {
 
     }
 
 
-    public onReady() {
+    public onReady():void {
         for (let i:number=0;i<6;i++) {
             this.createControlCircle();
         }
@@ -25,7 +24,7 @@ export class MainScene extends Scene {
         this.updatePolyline();
     }
 
-    private updatePolyline(){
+    private updatePolyline():void{
         if (this.polyline!==undefined) {
             this.removeChild(this.polyline);
         }
@@ -36,7 +35,7 @@ export class MainScene extends Scene {
         this.prependChild(this.polyline);
     }
 
-    private createControlCircle(){
+    private createControlCircle():void{
         const c = new Circle(this.game);
         c.radius = 30;
         c.fillColor.setRGB(23,20,200);
@@ -54,7 +53,7 @@ export class MainScene extends Scene {
         });
     }
 
-    private populatePoints(){
+    private populatePoints():void{
         this.points = [];
         this.controlPoints.forEach(c=>{
             this.points.push(c.center.x,c.center.y);

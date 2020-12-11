@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private sprite:ResourceLink<ITexture>;
 
 
-    public onReady() {
+    public onReady():void {
 
         const sprLogo:AnimatedImage = new AnimatedImage(this.game);
         sprLogo.scale.setXY(5);

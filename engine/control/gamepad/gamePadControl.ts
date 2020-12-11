@@ -67,6 +67,11 @@ const [gamePadGetter,isEnabled] = gamePadGetterFactory();
 // https://www.w3.org/TR/gamepad/
 export class GamePadControl extends AbstractKeypad implements IControl{
 
+
+    constructor(game:Game){
+        super(game);
+    }
+
     public static readonly enabled:boolean = isEnabled;
 
     public static SENSITIVITY:number = 0.05;
@@ -81,11 +86,16 @@ export class GamePadControl extends AbstractKeypad implements IControl{
     private _gamepads:Gamepad[];
 
 
-    constructor(game:Game){
-        super(game);
+    private static isReleased(e:GamePadEvent):boolean{
+        return e.keyState===KEY_STATE.KEY_RELEASED || e.keyState===KEY_STATE.KEY_JUST_RELEASED;
     }
 
-    public update(){
+    private static clampAxis(val:number):number{
+        if (Math.abs(val)<AXIS_THRESHOLD) return 0;
+        return val;
+    }
+
+    public update():void{
 
         super.update();
 
@@ -131,7 +141,7 @@ export class GamePadControl extends AbstractKeypad implements IControl{
     public destroy():void {}
 
 
-    private pressButton(buton:number,value:number,gamePadIndex:number,eventFromBuffer:Optional<GamePadEvent>) {
+    private pressButton(buton:number,value:number,gamePadIndex:number,eventFromBuffer:Optional<GamePadEvent>):void {
         if (eventFromBuffer===undefined) {
             const eventJustCreated:Optional<GamePadEvent> = GamePadEvent.fromPool();
             if (eventJustCreated===undefined) {
@@ -149,7 +159,7 @@ export class GamePadControl extends AbstractKeypad implements IControl{
     }
 
 
-    private releaseButton(eventFromBuffer:Optional<GamePadEvent>){
+    private releaseButton(eventFromBuffer:Optional<GamePadEvent>):void{
         if (eventFromBuffer!==undefined) {
             if (!GamePadControl.isReleased(eventFromBuffer)) this.release(eventFromBuffer);
         }
@@ -211,14 +221,6 @@ export class GamePadControl extends AbstractKeypad implements IControl{
             this.releaseButton(eventFromBuffer);
         }
 
-
-
-
-    }
-
-
-    private static isReleased(e:GamePadEvent):boolean{
-        return e.keyState===KEY_STATE.KEY_RELEASED || e.keyState===KEY_STATE.KEY_JUST_RELEASED;
     }
 
     private findEvent(button:number,gamePadIndex:number):Optional<GamePadEvent> {
@@ -226,11 +228,6 @@ export class GamePadControl extends AbstractKeypad implements IControl{
             if (event.button===button && event.gamePadIndex === gamePadIndex) return event;
         }
         return undefined;
-    }
-
-    private static clampAxis(val:number):number{
-        if (Math.abs(val)<AXIS_THRESHOLD) return 0;
-        return val;
     }
 
 }

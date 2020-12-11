@@ -20,7 +20,7 @@ export class MainScene extends Scene {
     @Resource.Font({fontSize:15,fontFamily:'monospace'})
     private fnt:Font;
 
-    public onReady() {
+    public onReady():void {
 
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
         tf.size.set(this.game.size);

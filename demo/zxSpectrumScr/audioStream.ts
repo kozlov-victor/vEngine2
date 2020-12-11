@@ -29,17 +29,17 @@ export class AudioStream {
         });
     }
 
-    public setPointer(p:number) {
+    public setPointer(p:number):void {
         if (!this.ready) return;
         this.gainWorkletNode.port.postMessage({action: 'setPointerExternal',payload: p});
     }
 
-    public stop(){
+    public stop():void{
         if (!this.ready) return;
         this.gainWorkletNode.port.postMessage({action: 'stop'});
     }
 
-    private setMemory(arr:Int8Array) {
+    private setMemory(arr:Int8Array):void {
         this.gainWorkletNode.port.postMessage({action: 'setMemory',payload: arr});
     }
 }

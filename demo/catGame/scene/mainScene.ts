@@ -115,7 +115,7 @@ export class MainScene extends Scene {
         this.level = level;
     }
 
-    public onReady() {
+    public onReady():void {
 
         this.setBg();
         this.playTheme();
@@ -182,7 +182,7 @@ export class MainScene extends Scene {
         },1000);
     }
 
-    private loadLevel() {
+    private loadLevel():void {
 
         this.level.layers[0].objects.forEach(obj => {
             let objCreated: Optional<GenericSprite>;

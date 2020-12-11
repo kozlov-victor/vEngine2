@@ -26,8 +26,11 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         this.setY(value);
     }
 
-    public static fromPool():Point2d {
-        return Point2d.pool.getFreeObject()!;
+    // noinspection JSSuspiciousNameCombination
+    constructor(x:number = 0,y:number = x,onChangedFn?:()=>void){
+        super();
+        if (onChangedFn) this.addOnChangeListener(onChangedFn);
+        this.setXY(x,y);
     }
     private static pool = new ObjectPool<Point2d>(Point2d,4);
 
@@ -36,16 +39,14 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
 
     private _arr:[number,number];
 
-    // noinspection JSSuspiciousNameCombination
-    constructor(x:number = 0,y:number = x,onChangedFn?:()=>void){
-        super();
-        if (onChangedFn) this.addOnChangeListener(onChangedFn);
-        this.setXY(x,y);
+    public static fromPool():Point2d {
+        return Point2d.pool.getFreeObject()!;
     }
 
     // noinspection JSSuspiciousNameCombination
     public setXY(x:number = 0,y:number = x):this{
         if (DEBUG && (Number.isNaN(x) || Number.isNaN(y))) {
+            // tslint:disable-next-line:no-console
             console.trace();
             throw new DebugError(`Point2d: wrong numeric arguments ${x},${y}`);
         }
@@ -104,7 +105,7 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         return this;
     }
 
-    public negative(){
+    public negative():this{
         this.setXY(-this._x,-this._y);
         return this;
     }

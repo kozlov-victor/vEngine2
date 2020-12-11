@@ -2,6 +2,7 @@ import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComp
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
 import {httpClient} from "@engine/debug/httpClient";
+import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
 
 export class Widget extends VEngineTsxComponent<{}> {
@@ -18,16 +19,16 @@ export class Widget extends VEngineTsxComponent<{}> {
         this.loadList().then(r =>{});
     }
 
-    private async loadList(){
+    private async loadList():Promise<void>{
         this.items = await httpClient.get<string[]>('./index.json',{r:Math.random()},undefined,undefined,xhr => {
-            xhr.setRequestHeader('Content-Type','application/json')
+            xhr.setRequestHeader('Content-Type','application/json');
         });
         if (!this.items.splice) this.items = JSON.parse(this.items as any as string);
         this.listLoading = false;
         this.triggerRendering();
     }
 
-    private selectItem(e:Event,index:number){
+    private selectItem(e:Event,index:number):void{
         e.preventDefault();
         if (this.selectedItem===this.items[index]) this.frameRef.contentDocument!.location.reload();
         this.selectedItem = this.items[index];
@@ -35,12 +36,12 @@ export class Widget extends VEngineTsxComponent<{}> {
         this.triggerRendering();
     }
 
-    private onFrameLoaded(){
+    private onFrameLoaded():void{
         this.loadingInfo = '';
         this.triggerRendering();
     }
 
-    render() {
+    render():VirtualNode {
         return(
             <div className="layout">
                 <div className="up">

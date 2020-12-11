@@ -27,22 +27,22 @@ export class Layer implements IParentChild {
             m.setScene(this._scene);
             (c as IParentChild).parent = undefined;
             m.revalidate();
-        }
+        };
     }
 
     public appendChild(newChild:RenderableModel):void {
         this._parentChildDelegate.appendChild(newChild);
     }
 
-    public appendChildAt(newChild:RenderableModel,index:number){
+    public appendChildAt(newChild:RenderableModel,index:number):void{
         this._parentChildDelegate.appendChildAt(newChild,index);
     }
 
-    public appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel){
+    public appendChildAfter(modelAfter:RenderableModel,newChild:RenderableModel):void{
         this._parentChildDelegate.appendChildAfter(modelAfter,newChild);
     }
 
-    public appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel){
+    public appendChildBefore(modelBefore:RenderableModel,newChild:RenderableModel):void{
         this._parentChildDelegate.appendChildBefore(modelBefore,newChild);
     }
 
@@ -50,7 +50,7 @@ export class Layer implements IParentChild {
         this._parentChildDelegate.prependChild(newChild);
     }
 
-    public removeChildAt(i:number){
+    public removeChildAt(i:number):void{
         this._parentChildDelegate.removeChildAt(i);
     }
 
@@ -66,7 +66,7 @@ export class Layer implements IParentChild {
         this._parentChildDelegate.removeSelf();
     }
 
-    public removeChildren(){
+    public removeChildren():void{
         this._parentChildDelegate.removeChildren();
     }
 

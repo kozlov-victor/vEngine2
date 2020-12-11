@@ -12,20 +12,6 @@ import {Hero} from "../../actor/impl/hero";
 
 export class Bullet extends AbstractEntity {
 
-    public static readonly groupName:string = 'bullet';
-
-    public static init(spriteSheet: ResourceLink<ITexture>):void{
-        Bullet.spriteSheet = spriteSheet;
-    }
-
-    public static emit(game:Game):Bullet{
-        return new Bullet(game,Bullet.spriteSheet);
-    }
-
-    private static spriteSheet: ResourceLink<ITexture>;
-
-    private animation:CellFrameAnimation;
-
     private constructor(protected game: Game, spriteSheet: ResourceLink<ITexture>) {
         super(game,spriteSheet,{
             type: ARCADE_RIGID_BODY_TYPE.DYNAMIC,
@@ -39,6 +25,20 @@ export class Bullet extends AbstractEntity {
         this.game.getCurrScene().setTimeout(()=>{
             this.getRenderableModel().removeSelf();
         },2000);
+    }
+
+    public static readonly groupName:string = 'bullet';
+
+    private static spriteSheet: ResourceLink<ITexture>;
+
+    private animation:CellFrameAnimation;
+
+    public static init(spriteSheet: ResourceLink<ITexture>):void{
+        Bullet.spriteSheet = spriteSheet;
+    }
+
+    public static emit(game:Game):Bullet{
+        return new Bullet(game,Bullet.spriteSheet);
     }
 
     protected onCreatedRenderableModel(spriteSheet: ResourceLink<ITexture>): RenderableModel {

@@ -11,13 +11,13 @@ export class AnimatedTextField extends TextFieldWithoutCache {
         super(game, font);
     }
 
-    public setTextWithAnimation(text: string | number, animation: AbstractTextAnimation) {
+    public setTextWithAnimation(text: string | number, animation: AbstractTextAnimation):void {
         this.setText('');
         this.setText(text);
         this.animation = animation;
     }
 
-    revalidate() {
+    revalidate():void {
         super.revalidate();
         if (this.animation!==undefined) this.animation.init(this.game,this,this.collectAllChars());
     }

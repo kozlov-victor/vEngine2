@@ -28,7 +28,7 @@ export abstract class LhDecoder extends SlidingDicDecoder {
     this.positionLength = arr(LhDecoder.NPT);
 }
 
-    protected makeTable(nchar:number, bitLength:number[], tableBits:number, table:number[]){
+    protected makeTable(nchar:number, bitLength:number[], tableBits:number, table:number[]):void{
 
     const countTable:number[] = arr(17);
     const weightTable:number[] = arr(17);

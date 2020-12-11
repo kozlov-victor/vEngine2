@@ -13,12 +13,12 @@ export class MainScene extends Scene {
 
     private logoLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
     }
 
 
-    public onReady() {
+    public onReady():void {
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
         spr.pos.fromJSON({x:10,y:10});

@@ -8,7 +8,7 @@ export class MainScene extends Scene {
     private surface:DrawingSurface;
     private renderScene:()=>void;
 
-    public onReady() {
+    public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         surface.addBehaviour(new DraggableBehaviour(this.game));
         this.surface = surface;
@@ -45,7 +45,7 @@ export class MainScene extends Scene {
             const t = this.game.getElapsedTime() / 1000;
 
             for(let i=9;i--;){
-                x.drawArc(1e3+C(i/2)*t**3,500+S(i*3)*t**3,1e3-t*t,0,Math.PI*2)
+                x.drawArc(1e3+C(i/2)*t**3,500+S(i*3)*t**3,1e3-t*t,0,Math.PI*2);
             }
 
         };

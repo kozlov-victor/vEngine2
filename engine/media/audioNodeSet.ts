@@ -39,7 +39,7 @@ export class AudioNodeSet {
                 return undefined;
             default:
                 if (DEBUG) {
-                    throw new DebugError(`undefined freeNodeSearchStrategy`)
+                    throw new DebugError(`undefined freeNodeSearchStrategy`);
                 }
                 return undefined;
         }

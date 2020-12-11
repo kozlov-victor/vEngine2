@@ -50,7 +50,7 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
         this._simpleRectCopyDrawer.draw();
 
         // 3. apply filter to destFrameBuffer
-        this.simpleRectDrawer.attachTexture('texture',this.accumulatorBefore.getTexture())
+        this.simpleRectDrawer.attachTexture('texture',this.accumulatorBefore.getTexture());
         super.doFilter(destFrameBuffer);
 
         // 4. destFrameBuffer to accumulatorAfter

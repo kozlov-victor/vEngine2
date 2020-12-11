@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private fnt:Font;
     private tf:TextField;
 
-    public onPreloading() {
+    public onPreloading():void {
         loadFont(this.game,'./fontTtf2/zx.ttf','zx');
         this.resourceLoader.addNextTask(()=>{
             this.fnt = new Font(this.game,{fontSize:30,fontFamily:'zx'});
@@ -19,7 +19,7 @@ export class MainScene extends Scene {
 
     }
 
-    public onReady() {
+    public onReady():void {
         console.log('ready');
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.pos.setY(23);

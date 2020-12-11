@@ -16,14 +16,14 @@ export class MainScene extends Scene {
     private plasmaLink:ResourceLink<ITexture>;
     private palletLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.plasmaLink = this.resourceLoader.loadTexture('./plasma/Plasma_effect.jpg');
         this.palletLink = this.resourceLoader.loadTexture('./plasma/gradient.png');
     }
 
 
 
-    public onReady() {
+    public onReady():void {
 
         const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,new Size(320,240));
 

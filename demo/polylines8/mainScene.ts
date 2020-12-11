@@ -8,7 +8,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading() {
+    public onPreloading():void {
 
         // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
 
@@ -47,11 +47,11 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void{
 
     }
 
-    public onReady() {
+    public onReady():void {
 
     }
 

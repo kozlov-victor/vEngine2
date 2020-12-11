@@ -174,19 +174,20 @@ export class TileMap extends RenderableModelWithResourceLink {
     }
 
 
-    private updateDrawingSurfacePos(){
+    private updateDrawingSurfacePos():void{
         this._drawingSurface.pos.setXY(
             this._drawInfo.firstTileToDrawByX * this._tileWidth,
             this._drawInfo.firstTileToDrawByY * this._tileHeight
         );
     }
 
-    private prepareDrawableInfo(){
+    private prepareDrawableInfo():void{
         const camera:Camera = this.game.camera;
         const firstTileToDrawByX:number = ~~((camera.pos.x) / this._tileWidth) - 1;
         const firstTileToDrawByY:number = ~~((camera.pos.y) / this._tileHeight) - 1;
 
-        this._drawInfo.dirty = this._drawInfo.firstTileToDrawByX!==firstTileToDrawByX || this._drawInfo.firstTileToDrawByY!==firstTileToDrawByY;
+        this._drawInfo.dirty =
+            this._drawInfo.firstTileToDrawByX!==firstTileToDrawByX || this._drawInfo.firstTileToDrawByY!==firstTileToDrawByY;
         this._drawInfo.firstTileToDrawByX = firstTileToDrawByX;
         this._drawInfo.firstTileToDrawByY = firstTileToDrawByY;
     }

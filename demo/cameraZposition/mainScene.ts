@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./catGame/res/sprite/tree.png')
     private treeLink:ResourceLink<ITexture>;
 
-    public onReady() {
+    public onReady():void {
 
         const trees:RenderableModel[] = [];
 

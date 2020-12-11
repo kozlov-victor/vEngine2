@@ -16,7 +16,7 @@ export class Comet {
     //     this.currentXhr.abort();
     // }
 
-    private poll(){
+    private poll():void{
         httpClient.post('getCommands',{lastUpdated:this.lastUpdated},(resp)=>{
             const r:IResponse = resp as unknown as IResponse;
             this.lastUpdated = r.lastUpdated;

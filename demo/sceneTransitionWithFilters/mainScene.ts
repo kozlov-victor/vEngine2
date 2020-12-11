@@ -18,7 +18,7 @@ export class MainScene extends Scene {
     }
 
 
-    public onReady() {
+    public onReady():void {
         const rect:Rectangle = new Rectangle(this.game);
         rect.pos.setXY(20,20);
         rect.size.setWH(200,120);

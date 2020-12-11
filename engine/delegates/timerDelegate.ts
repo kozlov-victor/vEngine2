@@ -16,7 +16,7 @@ export class TimerDelegate {
         return this._timers;
     }
 
-    public update(){
+    public update():void{
         if (!this._timers) return;
         for (const t of this._timers) {
             t.onUpdate();

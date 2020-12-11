@@ -68,7 +68,7 @@ class SvgTokenizer {
         return this._pos===this.path.length;
     }
 
-    public releaseNextToken(){
+    public releaseNextToken():void{
         if (DEBUG && this._lastPos===undefined) throw new DebugError(`can not release next token`);
         this._pos = this._lastPos as number;
         this._lastPos = undefined;
@@ -113,7 +113,7 @@ class SvgTokenizer {
         }
     }
 
-    private getNextToken(allowedSymbols:string, limit:number = 0){
+    private getNextToken(allowedSymbols:string, limit:number = 0):string{
         if (DEBUG && this.isEof()) throw new DebugError(`unexpected end of string`);
         let char:string;
         let res:string = '';
@@ -147,9 +147,29 @@ export class PolyLine extends Shape {
         this.passPropertiesChildren();
     }
 
-    public get borderRadius(){
+    public get borderRadius():number{
         return this._borderRadius;
     }
+
+    constructor(protected game:Game){
+        super(game);
+        this._lineWidth = 1;
+        this.color.addOnChangeListener(()=>this.passPropertiesChildren());
+    }
+
+    declare public children:Line[];
+    public lastPenPoint:Point2d = new Point2d();
+
+    private lastPoint:Optional<Point2d>;
+    private firstPoint:Optional<Point2d>;
+
+    private tokenizer:SvgTokenizer;
+    private _borderRadius:number = 1;
+
+    private lastBezierPoint:v2;
+
+    private closed:boolean = false;
+    private interrupted:boolean = false;
 
     public static fromMultiCurveSvgPath(game:Game,path:string):PolyLine[]{
         const polyLines:PolyLine[] = [];
@@ -209,26 +229,6 @@ export class PolyLine extends Shape {
         return PolyLine.fromSvgPath(game,createSplinePathFromPoints(points));
     }
 
-    declare public children:Line[];
-    public lastPenPoint:Point2d = new Point2d();
-
-    private lastPoint:Optional<Point2d>;
-    private firstPoint:Optional<Point2d>;
-
-    private tokenizer:SvgTokenizer;
-    private _borderRadius:number = 1;
-
-    private lastBezierPoint:v2;
-
-    private closed:boolean = false;
-    private interrupted:boolean = false;
-
-    constructor(protected game:Game){
-        super(game);
-        this._lineWidth = 1;
-        this.color.addOnChangeListener(()=>this.passPropertiesChildren());
-    }
-
     public moveTo(x:number,y:number):void{
         if (this.children.length>0) this.complete();
         if (!this.lastPoint) this.lastPoint = new Point2d();
@@ -260,11 +260,11 @@ export class PolyLine extends Shape {
         this.lineTo(lastX+x,lastY+y);
     }
 
-    public arcTo(rx:number,ry:number,xAxisRotation:number,largeArcFlag:0|1,sweepFlag:0|1,x:number,y:number){
+    public arcTo(rx:number,ry:number,xAxisRotation:number,largeArcFlag:0|1,sweepFlag:0|1,x:number,y:number):void{
         this._arcTo(rx,ry,xAxisRotation,largeArcFlag,sweepFlag,x,y,false);
     }
 
-    public arcBy(rx:number,ry:number,xAxisRotation:number,largeArcFlag:0|1,sweepFlag:0|1,x:number,y:number){
+    public arcBy(rx:number,ry:number,xAxisRotation:number,largeArcFlag:0|1,sweepFlag:0|1,x:number,y:number):void{
         this._arcTo(rx,ry,xAxisRotation,largeArcFlag,sweepFlag,x,y,true);
     }
 
@@ -279,7 +279,7 @@ export class PolyLine extends Shape {
         return this.interrupted;
     }
 
-    public close(){
+    public close():void{
         if (DEBUG && !this.firstPoint) throw new DebugError(`can not close polyline: no first point defined`);
         this.lineTo(this!.firstPoint!.x,this!.firstPoint!.y);
         this.closed = true;
@@ -298,7 +298,7 @@ export class PolyLine extends Shape {
         super.setClonedProperties(cloned);
     }
 
-    private bezierTo(p1:v2,p2:v2,p3:v2,p4:v2){
+    private bezierTo(p1:v2,p2:v2,p3:v2,p4:v2):void{
         const l:number = length(p1,p2)+length(p2,p3)+length(p3,p4);
         const bezier:v2[] = getPointsOnBezierCurve([p1,p2,p3,p4],0,l);
         bezier.forEach((v:v2)=>{
@@ -306,7 +306,8 @@ export class PolyLine extends Shape {
         });
     }
 
-    private _arcTo(rx:number,ry:number,xAxisRotation:number,largeArcFlag:0|1,sweepFlag:0|1,x:number,y:number,isRelativeCoordinates:boolean){
+    // tslint:disable-next-line:max-line-length
+    private _arcTo(rx:number,ry:number,xAxisRotation:number,largeArcFlag:0|1,sweepFlag:0|1,x:number,y:number,isRelativeCoordinates:boolean):void{
 
         if (DEBUG && largeArcFlag!==0 && largeArcFlag!==1) throw new DebugError(`wrong largeArcFlag value: ${largeArcFlag}`);
         if (DEBUG && sweepFlag!==0 && sweepFlag!==1) throw new DebugError(`wrong largeArcFlag value: ${sweepFlag}`);
@@ -339,19 +340,19 @@ export class PolyLine extends Shape {
         this.interrupted = true;
     }
 
-    private passPropertiesToChild(l:Line){
+    private passPropertiesToChild(l:Line):void{
         l.borderRadius = this.borderRadius;
         l.color = this.color;
         l.lineWidth = this.lineWidth;
         l.pointTo.forceTriggerChange();
     }
 
-    private passPropertiesChildren(){
+    private passPropertiesChildren():void{
         this.children.forEach(l=>this.passPropertiesToChild(l));
     }
 
 
-    private addSegment(x:number,y:number,x1:number,y1:number){
+    private addSegment(x:number,y:number,x1:number,y1:number):void{
         const line:Line = new Line(this.game);
         this.passPropertiesToChild(line);
         line.setXYX1Y1(x,y,x1,y1);

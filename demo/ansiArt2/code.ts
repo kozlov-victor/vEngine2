@@ -133,7 +133,7 @@ const data:number[] = [
     0,0,17,7,7,15,12,0,0,
     0,0,119,255,207,15,12,0,0,
     0,0,119,255,0,15,0,0,0,
-]
+];
 
 const leftPad = (s:string,toLength:number):string=>{
     let pad = "";
@@ -143,7 +143,7 @@ const leftPad = (s:string,toLength:number):string=>{
 
 const toBin = (n:number)=>{
     return leftPad(n.toString(2), 8);
-}
+};
 
 const strLength = 9;
 
@@ -151,7 +151,7 @@ const strLength = 9;
 export const RESULT = (reverted:boolean):string=>{
     let str = '';
     for (let i=0;i<data.length/strLength;i++) {
-        let res = ''
+        let res = '';
         for (let j=0;j<strLength;j++) {
             res+=toBin(data[i*strLength+j]);
         }

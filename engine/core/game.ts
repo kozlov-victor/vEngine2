@@ -34,8 +34,26 @@ interface ISceneWithTransition {
 
 export class Game {
 
-    public static getInstance():Game{
-        return Game._instance;
+
+    constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT, containerElement}:IGameConstructorParams = {}){
+        Game._instance = this;
+        if (DEBUG) (window as unknown as {game:Game}).game = this;
+        (this.size as Size).setWH(width,height);
+        this._scaleStrategy = scaleStrategy;
+        this._startedTime = Date.now();
+        this.rootContainerElement = containerElement;
+    }
+
+    get scaleStrategy(): SCALE_STRATEGY {
+        return this._scaleStrategy;
+    }
+
+    get width():number {
+        return this.size.width;
+    }
+
+    get height():number {
+        return this.size.height;
     }
 
     private static _UPDATE_TIME_RATE:number = 20;
@@ -67,26 +85,8 @@ export class Game {
     private _physicsSystem:IPhysicsSystem;
     private _mainLoop:MainLoop = new MainLoop(this);
 
-
-    constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT, containerElement}:IGameConstructorParams = {}){
-        Game._instance = this;
-        if (DEBUG) (window as unknown as {game:Game}).game = this;
-        (this.size as Size).setWH(width,height);
-        this._scaleStrategy = scaleStrategy;
-        this._startedTime = Date.now();
-        this.rootContainerElement = containerElement;
-    }
-
-    get scaleStrategy(): SCALE_STRATEGY {
-        return this._scaleStrategy;
-    }
-
-    get width():number {
-        return this.size.width;
-    }
-
-    get height():number {
-        return this.size.height;
+    public static getInstance():Game{
+        return Game._instance;
     }
 
     public addControl(C:ClazzEx<IControl,Game>):void{
@@ -115,7 +115,7 @@ export class Game {
         return undefined;
     }
 
-    public setPhysicsSystem(s:ClazzEx<IPhysicsSystem,Game>){
+    public setPhysicsSystem(s:ClazzEx<IPhysicsSystem,Game>):void{
         this._physicsSystem = new s(this);
     }
 
@@ -205,7 +205,7 @@ export class Game {
         }
     }
 
-    public pushScene(scene:Scene,transition?:Optional<ISceneTransition>){
+    public pushScene(scene:Scene,transition?:Optional<ISceneTransition>):void{
         this.runScene(scene,transition,false);
         this._sceneStack.push({scene,transition});
     }

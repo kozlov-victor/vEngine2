@@ -1,4 +1,5 @@
-// solution is based on https://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order/1165943#1165943
+// solution is based on
+// https://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order/1165943#1165943
 
 export const isPolylineCloseWise = (vertices:number[]): boolean=> {
     let sum:number = 0.0;

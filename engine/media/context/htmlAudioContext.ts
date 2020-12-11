@@ -21,16 +21,16 @@ class CtxHolder {
 
 export class HtmlAudioContext extends BasicAudioContext implements ICloneable<HtmlAudioContext>{
 
-    public static isAcceptable():boolean{
-        return !!(window && (window as unknown as IWindow).Audio);
+    constructor(protected game:Game,protected audioPlayer:AudioPlayer) {
+        super(game,audioPlayer);
+        this._ctx = CtxHolder.getCtx();
     }
     public readonly type: string = 'htmlAudioContext';
     private free: boolean = true;
     private _ctx: HTMLAudioElement;
 
-    constructor(protected game:Game,protected audioPlayer:AudioPlayer) {
-        super(game,audioPlayer);
-        this._ctx = CtxHolder.getCtx();
+    public static isAcceptable():boolean{
+        return !!(window && (window as unknown as IWindow).Audio);
     }
     public async load(buffer:ArrayBuffer,link:ResourceLink<void>):Promise<void> {
         const url:string = link.getUrl();
@@ -61,7 +61,7 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         this._ctx.play()?.then(_=>{
             this.duration = ~~(this._ctx.duration*1000);
         }).catch(e=>{
-            console.log(e)
+            console.log(e);
         });
         this.startedTime = ~~(this._ctx.currentTime*1000);
         this.duration = -1;

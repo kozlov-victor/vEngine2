@@ -1,12 +1,11 @@
 import {Scene} from "@engine/scene/scene";
 import {MoveByPathAnimation} from "@engine/animation/propertyAnimation/moveByPathAnimation";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 
 export class MainScene extends Scene {
 
-    public onReady() {
+    public onReady():void {
         const model = new Circle(this.game);
         model.radius = 10;
         model.color.setRGB(255,99,71); // "tomato"

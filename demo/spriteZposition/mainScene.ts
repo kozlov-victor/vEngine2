@@ -18,7 +18,7 @@ export class MainScene extends Scene {
     private numOfStarts: number = 200;
     private obj:Model3d;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.backgroundColor = Color.RGB(0);
         this.spriteLink = this.resourceLoader.loadTexture('./assets/star.png');
         const rect = new Rectangle(this.game);
@@ -27,11 +27,11 @@ export class MainScene extends Scene {
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady() {
+    public onReady():void {
 
         for (let i=0;i<this.numOfStarts;i++) {
             const spr:Image = new Image(this.game);

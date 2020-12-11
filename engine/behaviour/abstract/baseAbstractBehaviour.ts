@@ -22,7 +22,7 @@ export abstract class BaseAbstractBehaviour implements IUpdatable{
 
     public update():void{}
 
-    public revalidate(){}
+    public revalidate():void{}
 
     public destroy():void{}
 

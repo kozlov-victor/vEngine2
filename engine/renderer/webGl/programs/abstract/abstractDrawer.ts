@@ -27,11 +27,11 @@ interface IUniformValue {
 
 export class AbstractDrawer implements IDrawer, IDestroyable{
 
-    private static currentInstance:Optional<AbstractDrawer>;
-
-    public static unbindLastInstance():void {
-        if (this.currentInstance!==undefined) this.currentInstance.unbind();
+    constructor(gl:WebGLRenderingContext){
+        this.gl = gl;
     }
+
+    private static currentInstance:Optional<AbstractDrawer>;
 
     protected gl:WebGLRenderingContext;
     protected program:Optional<ShaderProgram>;
@@ -41,8 +41,8 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
 
     protected bufferInfo:BufferInfo;
 
-    constructor(gl:WebGLRenderingContext){
-        this.gl = gl;
+    public static unbindLastInstance():void {
+        if (this.currentInstance!==undefined) this.currentInstance.unbind();
     }
 
     public destroy():void{

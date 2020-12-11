@@ -103,7 +103,7 @@ export abstract class RenderableModel
         this._parentChildDelegate.afterChildRemoved = (child:RenderableModel)=>{
             child.setLayer(undefined!);
             child.setScene(undefined!);
-        }
+        };
     }
 
     public revalidate():void{
@@ -137,7 +137,7 @@ export abstract class RenderableModel
         b.manage(this);
     }
 
-    public addPropertyAnimation(animation:IAnimation){
+    public addPropertyAnimation(animation:IAnimation):void{
         animation.target = this;
         this._propertyAnimations.push(animation);
     }
@@ -203,7 +203,7 @@ export abstract class RenderableModel
             renderer.transformSet(this.worldTransformMatrix.mat16);
         }
 
-        renderer.setAlphaBlend(this.alpha);
+        renderer.pushAlphaBlend(this.alpha);
         const filters:IFilter[] =
             this._scene._renderingSessionInfo.drawingEnabled? this.filters:EMPTY_FILTERS_ARR;
         const statePointer:IStateStackPointer = renderer.beforeItemStackDraw(filters,this.forceDrawChildrenOnNewSurface);
@@ -318,16 +318,16 @@ export abstract class RenderableModel
         this._parentChildDelegate.removeChild(c);
     }
 
-    getParentNode(): RenderableModel {
-        return undefined!; // only for type compatibility
-    }
-
     public removeChildAt(i:number):void{
         this._parentChildDelegate.removeChildAt(i);
     }
 
     public removeChildren():void{
         this._parentChildDelegate.removeChildren();
+    }
+
+    getParentNode(): RenderableModel {
+        return undefined!; // only for type compatibility
     }
 
     public removeSelf(): void {

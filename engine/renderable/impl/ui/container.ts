@@ -29,23 +29,15 @@ export enum ContainerState {
 
 export class Container extends MarkableNullGameObject implements IContainerWithMarginPadding{
 
-    public readonly type:string = 'Container';
-
-    private static normalizeBorders(top:number,right?:number,bottom?:number,left?:number)
-        :{top:number,right:number,bottom:number,left:number} {
-        if (right===undefined && bottom===undefined && left===undefined) {
-            // noinspection JSSuspiciousNameCombination
-            right = bottom = left = top;
-        }
-        else if (bottom===undefined && left===undefined) {
-            bottom = top;
-            left = right;
-        }
-        else if (left===undefined) {
-            left = right;
-        }
-        return {top,right:right!,bottom:bottom!,left:left!};
+    constructor(game: Game) {
+        super(game);
+        super.appendChild(this.background);
+        super.appendChild(this.backgroundHover);
+        super.appendChild(this.backgroundActive);
+        super.appendChild(this.backgroundDisabled);
     }
+
+    public readonly type:string = 'Container';
 
     public readonly marginLeft      :number = 0;
     public readonly marginTop       :number = 0;
@@ -69,12 +61,20 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
     private hovered:boolean = false;
     private clicked:boolean = false;
 
-    constructor(game: Game) {
-        super(game);
-        this.appendChild(this.background);
-        this.appendChild(this.backgroundHover);
-        this.appendChild(this.backgroundActive);
-        this.appendChild(this.backgroundDisabled);
+    private static normalizeBorders(top:number,right?:number,bottom?:number,left?:number)
+        :{top:number,right:number,bottom:number,left:number} {
+        if (right===undefined && bottom===undefined && left===undefined) {
+            // noinspection JSSuspiciousNameCombination
+            right = bottom = left = top;
+        }
+        else if (bottom===undefined && left===undefined) {
+            bottom = top;
+            left = right;
+        }
+        else if (left===undefined) {
+            left = right;
+        }
+        return {top,right:right!,bottom:bottom!,left:left!};
     }
 
     public setMargin(top:number,right?:number,bottom?:number,left?:number):void{
@@ -90,27 +90,27 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
     }
 
     public setBackground(background: RenderableModel):void {
-        this.replaceChild(this.background,background);
+        super.replaceChild(this.background,background);
         this.background = background;
         this.fitBackgroundToSize();
     }
 
     public setBackgroundHover(backgroundHover: RenderableModel):void {
-        this.replaceChild(this.backgroundHover,backgroundHover);
+        super.replaceChild(this.backgroundHover,backgroundHover);
         this.backgroundHover = backgroundHover;
         this.fitBackgroundToSize();
         this.listenToHoverState();
     }
 
     public setBackgroundActive(backgroundActive: RenderableModel):void {
-        this.replaceChild(this.backgroundActive,backgroundActive);
+        super.replaceChild(this.backgroundActive,backgroundActive);
         this.backgroundActive = backgroundActive;
         this.fitBackgroundToSize();
         this.listenToActiveState();
     }
 
     public setBackgroundDisabled(backgroundDisabled: RenderableModel):void {
-        this.replaceChild(this.backgroundDisabled,backgroundDisabled);
+        super.replaceChild(this.backgroundDisabled,backgroundDisabled);
         this.backgroundDisabled = backgroundDisabled;
         this.fitBackgroundToSize();
     }

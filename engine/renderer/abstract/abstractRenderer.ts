@@ -146,8 +146,12 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         this._alphaBlendStack.restore();
     }
 
-    public setAlphaBlend(alpha:number):void{
+    public pushAlphaBlend(alpha:number):void{
         this._alphaBlendStack.mult(alpha);
+    }
+
+    public setAlphaBlend(alpha:number):void{
+        this._alphaBlendStack.setCurrentValue(alpha);
     }
 
     public getAlphaBlend():number{

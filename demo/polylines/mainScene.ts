@@ -8,7 +8,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading() {
+    public onPreloading():void {
 
         const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`
             M -3 9 L -1 10 L -1 11 L 0 12 L 1.5 11 L 1.5 7
@@ -107,11 +107,11 @@ export class MainScene extends Scene {
         this.appendChild(polyLine7);
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
 
     }
 
-    public onReady() {
+    public onReady():void {
 
     }
 

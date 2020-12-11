@@ -16,7 +16,7 @@ export class MainScene extends Scene {
     private dataTextureNormalLink:ResourceLink<ITexture>;
     private dataTextureHeightLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         // https://free3d.com/ru/3d-models/obj
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj3/planet.obj');
         this.dataTextureLink = this.resourceLoader.loadTexture('./model3dFromObj3/earth.jpg');
@@ -25,7 +25,7 @@ export class MainScene extends Scene {
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         this.backgroundColor = Color.BLACK;
         document.body.style.backgroundColor = Color.RGB(200).asCSS();

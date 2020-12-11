@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private player:SpriterObject;
     private sound:Sound = new Sound(this.game);
 
-    public onPreloading() {
+    public onPreloading():void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -25,11 +25,11 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady() {
+    public onReady():void {
 
         this.sound.play();
         this.appendChild(this.player);

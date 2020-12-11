@@ -4,7 +4,7 @@ export class CapturedObjectsByTouchIdHolder {
 
     private capturedObjects:Record<number, RenderableModel[]> = {};
 
-    private _check(touchId:number){
+    private _check(touchId:number):void{
         if (this.capturedObjects[touchId]===undefined) this.capturedObjects[touchId] = [];
     }
 

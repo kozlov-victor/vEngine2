@@ -22,7 +22,7 @@ export class MainScene extends Scene {
     private textLink:ResourceLink<string>;
 
 
-    public onReady() {
+    public onReady():void {
 
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
         tf.size.set(this.game.size);

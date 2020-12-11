@@ -353,7 +353,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._matrixStack.translate(x,y,z);
     }
 
-    public transformRotationReset(){
+    public transformRotationReset():void{
         this._matrixStack.rotationReset();
     }
 
@@ -453,16 +453,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return this._gl;
     }
 
-    public setRenderTarget(fbs:FrameBufferStack){
+    public setRenderTarget(fbs:FrameBufferStack):void{
         if (this._currFrameBufferStack!==fbs) {
             AbstractDrawer.unbindLastInstance();
         }
         this._currFrameBufferStack = fbs;
     }
 
-    public setDefaultRenderTarget(){
-        AbstractDrawer.unbindLastInstance();
-        this._currFrameBufferStack = this._origFrameBufferStack;
+    public getRenderTarget():FrameBufferStack {
+        return this._currFrameBufferStack;
     }
 
     public destroy():void{
@@ -500,7 +499,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._blender.setBlendMode(BLEND_MODE.NORMAL);
 
         this._origFrameBufferStack = new FrameBufferStack(this.game,this.getNativeContext(),this.game.size);
-        this.setDefaultRenderTarget();
+        this._currFrameBufferStack = this._origFrameBufferStack;
 
         // gl.depthFunc(gl.LEQUAL);
         //gl.enable(gl.CULL_FACE);
@@ -572,7 +571,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     }
 
-    private prepareShapeUniformInfo(model:Shape){
+    private prepareShapeUniformInfo(model:Shape):void{
 
         if (DEBUG) {
             if (!model.size.width || !model.size.height) {

@@ -1,22 +1,9 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ObjParser} from "./objParser";
 import {ITexture} from "@engine/renderer/common/texture";
-
-class ScullMesh extends AbstractPrimitive {
-
-    constructor(skullData:{vertices:number[],normals:number[],faces:number[]}){
-        super();
-        this.vertexArr = skullData.vertices;
-        this.normalArr = skullData.normals;
-        this.indexArr =  skullData.faces;
-        this.texCoordArr = undefined;
-    }
-
-}
 
 
 export class MainScene extends Scene {
@@ -27,7 +14,7 @@ export class MainScene extends Scene {
 
     private dataTextureLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj/cow-nonormals.obj');
         this.data2Link = this.resourceLoader.loadText('./model3dFromObj/cube_texture2.obj');
         this.data3Link = this.resourceLoader.loadText('./model3dFromObj/diamond.obj');
@@ -36,7 +23,7 @@ export class MainScene extends Scene {
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(255,255,255);

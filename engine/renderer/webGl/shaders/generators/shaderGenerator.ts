@@ -29,7 +29,7 @@ export class ShaderGenerator {
         return this._addFragmentUniform(type,name,extractArrayName);
     }
 
-    public addStructFragmentUniform(strucName:string,uniformName:string, extractArrayName:boolean = false){
+    public addStructFragmentUniform(strucName:string,uniformName:string, extractArrayName:boolean = false):string{
         return this._addFragmentUniform(strucName,uniformName,extractArrayName);
     }
 
@@ -107,7 +107,7 @@ ${this._fragmentMainFn}
         console.log(this.getFragmentSource());
     }
 
-    private _addFragmentUniform(type:string,name:string, extractArrayName:boolean = false){
+    private _addFragmentUniform(type:string,name:string, extractArrayName:boolean = false):string{
         this._fragmentUniforms.push({type,name});
         name = normalizeUniformName(name);
         if (extractArrayName) name = name.split('[')[0];

@@ -153,12 +153,12 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         } else return val;
     }
 
-    private reflectVelocityY(player:ArcadeRigidBody,entity:ArcadeRigidBody){
+    private reflectVelocityY(player:ArcadeRigidBody,entity:ArcadeRigidBody):void{
         const restitution:number = this.calcCommonRestitution(player, entity);
         player.velocity.y = this.getComparedToSticky(-player.velocity.y * restitution);
     }
 
-    private reflectVelocityX(player:ArcadeRigidBody,entity:ArcadeRigidBody){
+    private reflectVelocityX(player:ArcadeRigidBody,entity:ArcadeRigidBody):void{
         const restitution:number = this.calcCommonRestitution(player, entity);
         player.velocity.x = this.getComparedToSticky(-player.velocity.x * restitution);
     }

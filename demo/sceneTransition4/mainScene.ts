@@ -30,13 +30,13 @@ export class MainScene extends Scene {
     public backgroundColor: Color = Color.RGB(233);
     private btnPos:number=100;
 
-    public onPreloading(){
+    public onPreloading():void{
 
         this.fnt = new Font(this.game, {fontSize: 25});
     }
 
 
-    public onReady() {
+    public onReady():void {
 
 
         this.createSizeWidthTransitionButton('size width in',true);
@@ -53,7 +53,7 @@ export class MainScene extends Scene {
 
     }
 
-    private createTurnPageTransitionButton(text:string,isAppearing:boolean){
+    private createTurnPageTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new TurnThePageForwardTransition(this.game,1000, EasingSine.Out):
@@ -61,7 +61,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createTurnPageVerticalTransitionButton(text:string,isAppearing:boolean){
+    private createTurnPageVerticalTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new TurnThePageVerticalForwardTransition(this.game,1000, EasingSine.Out):
@@ -70,7 +70,7 @@ export class MainScene extends Scene {
     }
 
 
-    private createSizeWidthTransitionButton(text:string,isAppearing:boolean){
+    private createSizeWidthTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new SizeWidthInAppearanceTransition(this.game,1000, EasingSine.InOut):
@@ -78,7 +78,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createSizeHeightTransitionButton(text:string,isAppearing:boolean){
+    private createSizeHeightTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new SizeHeightInAppearanceTransition(this.game,1000, EasingSine.InOut):
@@ -86,7 +86,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createTransitionButton(text:string,transition:ISceneTransition){
+    private createTransitionButton(text:string,transition:ISceneTransition):void{
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.textColor.setRGB(10);
         tf.pos.setXY(10,this.btnPos+=45);

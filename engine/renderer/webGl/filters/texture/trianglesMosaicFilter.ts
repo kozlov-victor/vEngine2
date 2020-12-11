@@ -29,7 +29,7 @@ export class TrianglesMosaicFilter extends AbstractGlFilter{
         this.simpleRectDrawer.initProgram();
     }
 
-    public setMosaicTileSize(x:number,y:number) {
+    public setMosaicTileSize(x:number,y:number):void {
         this.sizeArr[0] = x;
         this.sizeArr[1] = y;
         this.setUniform(this.tileSize,this.sizeArr);

@@ -43,7 +43,7 @@ export class SelectBox extends Container {
         });
     }
 
-    public setOptions(options:(string|number)[]) {
+    public setOptions(options:(string|number)[]):void {
         this._options = options;
         this.markAsDirty();
     }
@@ -62,7 +62,7 @@ export class SelectBox extends Container {
         return this._selected as T;
     }
 
-    public revalidate() {
+    public revalidate():void {
         super.revalidate();
         const clientRect:Readonly<IRectJSON> = this.getClientRect();
         this._constrainContainer.pos.set(clientRect);
@@ -85,7 +85,7 @@ export class SelectBox extends Container {
     }
 
 
-    public update() {
+    public update():void {
         super.update();
         this._scrollContainerDelegate.update();
     }

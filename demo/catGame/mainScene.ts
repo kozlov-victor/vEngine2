@@ -90,7 +90,7 @@ export class MainScene extends Scene {
         this.level = level;
     }
 
-    public onReady() {
+    public onReady():void {
 
         this.game.setPhysicsSystem(ArcadePhysicsSystem);
         this.setBg();
@@ -130,7 +130,7 @@ export class MainScene extends Scene {
         this.appendChild(new Layer(this.game));
     }
 
-    private loadLevel() {
+    private loadLevel():void {
 
         this.level.layers[0].objects.forEach(obj => {
             let objCreated: Optional<AbstractEntity>;

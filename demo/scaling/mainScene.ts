@@ -11,7 +11,7 @@ export class MainScene extends Scene {
 
     private logoLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.logoLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
@@ -19,11 +19,11 @@ export class MainScene extends Scene {
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady() {
+    public onReady():void {
 
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);

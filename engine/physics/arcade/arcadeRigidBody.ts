@@ -42,7 +42,7 @@ class CollisionFlags implements ICollisionWith {
     public top: boolean = false;
     public bottom: boolean = false;
 
-    public reset(){
+    public reset():void{
         this.left = this.right = this.top = this.bottom = false;
     }
 

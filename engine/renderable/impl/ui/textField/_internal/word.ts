@@ -12,7 +12,13 @@ export class Word extends NullGameObject {
 
     private caret:number = 0;
 
-    constructor(game:Game, private readonly font:Font, public readonly chars:Readonly<ICharacterInfo[]>, private readonly color:Color, private pixelPerfect:boolean) {
+    constructor(
+        game:Game,
+        private readonly font:Font,
+        public readonly chars:Readonly<ICharacterInfo[]>,
+        private readonly color:Color,
+        private pixelPerfect:boolean
+    ) {
         super(game);
         chars.forEach(c=>{
             const characterFont:Font = c.font || font;

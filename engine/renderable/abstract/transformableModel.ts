@@ -53,7 +53,7 @@ class AnglePoint3d extends ObservableEntity{
 
     }
 
-    public _setZSilently(val:number){
+    public _setZSilently(val:number):void{
         this._z = val;
     }
 
@@ -159,7 +159,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         if (props.scale!==undefined) this.scale.set(props.scale);
     }
 
-    protected setClonedProperties(cloned:TransformableModel){
+    protected setClonedProperties(cloned:TransformableModel):void{
         cloned.angle = this.angle;
         cloned.angleVelocity = this.angleVelocity;
         cloned.pos.set(this.pos);

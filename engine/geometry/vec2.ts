@@ -79,7 +79,7 @@ export class Vec2 extends Point2d {
         return this;
     }
 
-    public setLength(value:number) {
+    public setLength(value:number):void {
         const angle:number = this.getAngle();
         this.x = Math.cos(angle) * value;
         this.y = Math.sin(angle) * value;

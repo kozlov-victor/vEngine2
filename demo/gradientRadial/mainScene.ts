@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {RadialGradient} from "@engine/renderable/impl/fill/radialGradient";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {DebugLayer} from "@engine/scene/debugLayer";
@@ -9,7 +8,7 @@ import {DebugLayer} from "@engine/scene/debugLayer";
 
 export class MainScene extends Scene {
 
-    public onReady() {
+    public onReady():void {
         // https://cssgradient.io/
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:RadialGradient  = new RadialGradient();
@@ -35,7 +34,7 @@ export class MainScene extends Scene {
             debugLayer.clearLog();
             debugLayer.log({x,y});
             divElement.style.backgroundImage = gradient.asCSS();
-        })
+        });
 
     }
 

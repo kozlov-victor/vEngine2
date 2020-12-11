@@ -26,7 +26,7 @@ export const waitFor = (game:Game,time:number):Promise<void>=>{
             resolve();
         },time);
     });
-}
+};
 
 export const loadSound = (game:Game,track:AbstractChipTrack): ResourceLink<void>=>{
     const link: ResourceLink<void> = ResourceLink.create<void>(undefined);
@@ -36,7 +36,7 @@ export const loadSound = (game:Game,track:AbstractChipTrack): ResourceLink<void>
         game.getCurrScene().resourceLoader.q.resolveTask(taskRef);
     });
     return link;
-}
+};
 
 export abstract class BasePix32Scene extends Scene {
 
@@ -77,7 +77,7 @@ export abstract class BasePix32Scene extends Scene {
         super(game);
     }
 
-    public onReady() {
+    public onReady():void {
 
         this.backgroundColor = Color.fromCssLiteral(`#e2e2e2`);
 

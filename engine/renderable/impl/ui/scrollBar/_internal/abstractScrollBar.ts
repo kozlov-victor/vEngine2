@@ -39,15 +39,6 @@ export abstract class AbstractScrollBar extends MarkableNullGameObject{
         this.visible = value;
     }
 
-    protected abstract getDirection():Direction;
-
-    private _maxValue: number = 0;
-    private _value: number = 0;
-
-    private _enabled: boolean = true;
-    private readonly handler: Shape;
-    private readonly background: Shape;
-
     constructor(game: Game) {
         super(game);
         this.size.setWH(1,1);
@@ -67,7 +58,16 @@ export abstract class AbstractScrollBar extends MarkableNullGameObject{
         this.size.addOnChangeListener(()=>this.markAsDirty());
     }
 
-    public revalidate() {
+    private _maxValue: number = 0;
+    private _value: number = 0;
+
+    private _enabled: boolean = true;
+    private readonly handler: Shape;
+    private readonly background: Shape;
+
+    protected abstract getDirection():Direction;
+
+    public revalidate():void {
         super.revalidate();
         const dOpposite:Direction = getOppositeDirection(this.getDirection());
         this.background.size.set(this.size);

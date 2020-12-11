@@ -16,21 +16,85 @@ import {
     CellsDisappearingTransition
 } from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {LIST_VIEW_EVENTS, ListView, ListViewItem} from "@engine/renderable/impl/ui/scrollViews/listView";
+import {
+    FadeInAppearanceTransition,
+    FadeOutAppearanceTransition
+} from "@engine/scene/transition/appear/fade/fadeAppearanceTransition";
+import {EasingLinear} from "@engine/misc/easing/functions/linear";
+import {
+    ScaleInAppearanceTransition,
+    ScaleOutAppearanceTransition
+} from "@engine/scene/transition/appear/scale/scaleAppearanceTransition";
+import {
+    RandomCellsAppearingTransition,
+    RandomCellsDisappearingTransition
+} from "@engine/scene/transition/appear/cells/randomCellsAppearingTransition";
+import {
+    MainDiagonalCellsAppearingTransition,
+    MainDiagonalCellsDisappearingTransition
+} from "@engine/scene/transition/appear/cells/mainDiagonalCellsAppearingTransition";
+import {
+    SideDiagonalCellsAppearingTransition,
+    SideDiagonalCellsDisappearingTransition
+} from "@engine/scene/transition/appear/cells/sideDiagonalCellsAppearingTransition";
+import {
+    SpiralCellsAppearingTransition,
+    SpiralCellsDisappearingTransition
+} from "@engine/scene/transition/appear/cells/spiralCellApperaingTransition";
+import {
+    FlipHorizontalInTransition,
+    FlipHorizontalOutTransition,
+    FlipVerticalInTransition,
+    FlipVerticalOutTransition
+} from "@engine/scene/transition/flip/flipTransition";
+import {
+    Flip3dHorizontalInTransition,
+    Flip3dHorizontalOutTransition,
+    Flip3dVerticalInTransition,
+    Flip3dVerticalOutTransition
+} from "@engine/scene/transition/flip/flip3dTransition";
+import {EasingSine} from "@engine/misc/easing/functions/sine";
+import {
+    ScaleRotateInAppearanceTransition,
+    ScaleRotateOutAppearanceTransition
+} from "@engine/scene/transition/appear/scale/scaleRotateAppearanceTransition";
+import {
+    TurnThePageBackwardTransition,
+    TurnThePageForwardTransition
+} from "@engine/scene/transition/appear/page/turnThePageAppearanceTransition";
+import {
+    TurnThePageVerticalBackwardTransition,
+    TurnThePageVerticalForwardTransition
+} from "@engine/scene/transition/appear/page/turnThePageVerticalAppearanceTransition";
+import {
+    SizeWidthInAppearanceTransition,
+    SizeWidthOutAppearanceTransition
+} from "@engine/scene/transition/appear/size/abstractSizeWidthAppearanceTransition";
+import {
+    SizeHeightInAppearanceTransition,
+    SizeHeightOutAppearanceTransition
+} from "@engine/scene/transition/appear/size/abstractSizeHeightAppearanceTransition";
 
 
 export class MainScene extends Scene {
 
+    @Resource.Font({fontSize: 25,fontFamily:'monospace'})
     private fnt:Font;
     public backgroundColor: Color = Color.RGB(233);
-    private btnPos:number=0;
 
-    public onPreloading(){
-        const fnt:Font = new Font(this.game,{fontSize: 25,});
-        this.fnt = fnt;
-    }
+    private listView:ListView;
 
+    public onReady():void {
 
-    public onReady() {
+        this.listView = new ListView(this.game);
+        this.listView.size.set(this.game.size);
+        this.listView.setPadding(10);
+        this.listView.setMargin(10);
+        this.appendChild(this.listView);
+
+        this.backgroundColor = Color.RGB(233);
 
         this.createPushTransitionButton('push to Top',SIDE.TOP);
         this.createPushTransitionButton('push to Bottom',SIDE.BOTTOM);
@@ -53,37 +117,89 @@ export class MainScene extends Scene {
         this.createCellTransitionButton('cell appearing',true);
         this.createCellTransitionButton('cell disappearing',false);
 
+        this.createFadeTransitionButton('fade in',true);
+        this.createFadeTransitionButton('fade out',false);
+        this.createScaleTransitionButton('scale in',true);
+        this.createScaleTransitionButton('scale out',false);
+        this.createRandomCellTransitionButton('random cell appear',true);
+        this.createRandomCellTransitionButton('random cell disappear',false);
+        this.createFlipVerticalTransitionButton('flip vertical in',true);
+        this.createFlipVerticalTransitionButton('flip vertical out',false);
+        this.createFlipHorizontalTransitionButton('flip horizontal in',true);
+        this.createFlipHorizontalTransitionButton('flip horizontal out',false);
+        this.createMainDiagonalCellTransitionButton('main diagonal cell appear',true);
+        this.createMainDiagonalCellTransitionButton('main diagonal cell disappear',false);
+        this.createSideDiagonalCellTransitionButton('side diagonal cell appear',true);
+        this.createSideDiagonalCellTransitionButton('side diagonal cell disappear',false);
+        this.createSpiralCellTransitionButton('spiral cell appear',true);
+        this.createSpiralCellTransitionButton('spiral cell disappear',false);
+
+        this.createFlip3dHorizontalTransitionButton('flip 3d horizontal in',true,false);
+        this.createFlip3dHorizontalTransitionButton('flip 3d horizontal out',false, false);
+
+        this.createFlip3dVerticalTransitionButton('flip 3d vertical in',true, false);
+        this.createFlip3dVerticalTransitionButton('flip 3d vertical out',false, false);
+
+        this.createFlip3dHorizontalTransitionButton('flip 3d billboard horizontal in',true,true);
+        this.createFlip3dHorizontalTransitionButton('flip 3d billboard horizontal out',false, true);
+
+        this.createFlip3dVerticalTransitionButton('flip 3d billboard vertical in',true, true);
+        this.createFlip3dVerticalTransitionButton('flip 3d billboard vertical out',false, true);
+
+        this.createScale2TransitionButton('scale x in',true, true, false);
+        this.createScale2TransitionButton('scale x out',false, true, false);
+
+        this.createScale2TransitionButton('scale y in',true, false, true);
+        this.createScale2TransitionButton('scale y out',false, false, true);
+
+        this.createScaleRotateTransitionButton('scale-rotate in',true,2);
+        this.createScaleRotateTransitionButton('scale-rotate out',false,0.25);
+
+        this.createSizeWidthTransitionButton('size width in',true);
+        this.createSizeWidthTransitionButton('size width out',false);
+
+        this.createSizeHeightTransitionButton('size height in',true);
+        this.createSizeHeightTransitionButton('size height out',false);
+
+        this.createTurnPageTransitionButton('turn the next page -----   ---- --- >>>',true);
+        this.createTurnPageTransitionButton('turn the prev page -----   ---- --- >>>',false);
+
+        this.createTurnPageVerticalTransitionButton('turn the next page (vertical)',true);
+        this.createTurnPageVerticalTransitionButton('turn the prev page (vertical)',false);
+
     }
 
-    private createTransitionButton(text:string,transition:ISceneTransition){
+    private createTransitionButton(text:string,transition:ISceneTransition):void{
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.textColor.setRGB(10);
-        tf.pos.setXY(10,this.btnPos+=45);
-        tf.size.setWH(this.game.width,30);
+        tf.alpha = 0.6;
+        tf.size.setWH(this.game.width,40);
         tf.setText(text);
         tf.setFont(this.fnt);
-        tf.on(MOUSE_EVENTS.click, e=>{
+
+        const listViewItem:ListViewItem = new ListViewItem(tf);
+        listViewItem.on(LIST_VIEW_EVENTS.itemClick, ()=>{
             this.game.pushScene(new SecondScene(this.game),transition);
         });
-        this.appendChild(tf);
+        this.listView.addView(listViewItem);
     }
 
-    private createPushTransitionButton(text:string,side:SIDE){
+    private createPushTransitionButton(text:string,side:SIDE):void{
         const transition:ISceneTransition = new PushTransition(this.game,side,1000,EasingBounce.Out);
         this.createTransitionButton(text,transition);
     }
 
-    private createPopTransitionButton(text:string,side:SIDE){
+    private createPopTransitionButton(text:string,side:SIDE):void{
         const transition:ISceneTransition = new PopTransition(this.game,side,1000,EasingBounce.Out);
         this.createTransitionButton(text,transition);
     }
 
-    private createSlideTransitionButton(text:string,side:SIDE){
+    private createSlideTransitionButton(text:string,side:SIDE):void{
         const transition:ISceneTransition = new SlideTransition(this.game,side,1000,EasingBounce.Out);
         this.createTransitionButton(text,transition);
     }
 
-    private createCurtainTransitionButton(text:string,isOpening:boolean){
+    private createCurtainTransitionButton(text:string,isOpening:boolean):void{
         const transition:ISceneTransition =
             isOpening?
             new CurtainsOpeningTransition(this.game,1000,EasingBounce.Out):
@@ -91,11 +207,140 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createCellTransitionButton(text:string,isAppearing:boolean){
+    private createCellTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new CellsAppearingTransition(this.game,1000):
                 new CellsDisappearingTransition(this.game,1000);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createFadeTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new FadeInAppearanceTransition(this.game,1000,EasingLinear):
+                new FadeOutAppearanceTransition(this.game,1000,EasingLinear);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createScaleTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new ScaleInAppearanceTransition(this.game,1000,EasingBounce.Out):
+                new ScaleOutAppearanceTransition(this.game,1000,EasingBounce.Out);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createRandomCellTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new RandomCellsAppearingTransition(this.game,1000,20,20):
+                new RandomCellsDisappearingTransition(this.game,1000,20,20);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createMainDiagonalCellTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new MainDiagonalCellsAppearingTransition(this.game,1000,15,15):
+                new MainDiagonalCellsDisappearingTransition(this.game,1000,15,15);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createSideDiagonalCellTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new SideDiagonalCellsAppearingTransition(this.game,1000,15,15):
+                new SideDiagonalCellsDisappearingTransition(this.game,1000,15,15);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createSpiralCellTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new SpiralCellsAppearingTransition(this.game,3000,15,15):
+                new SpiralCellsDisappearingTransition(this.game,3000,15,15);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createFlipVerticalTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new FlipVerticalInTransition(this.game,1000):
+                new FlipVerticalOutTransition(this.game,1000);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createFlipHorizontalTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new FlipHorizontalInTransition(this.game,1000):
+                new FlipHorizontalOutTransition(this.game,1000);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createFlip3dHorizontalTransitionButton(text:string,isAppearing:boolean,billboard:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new Flip3dHorizontalInTransition(this.game,billboard,1000):
+                new Flip3dHorizontalOutTransition(this.game,billboard, 1000);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createFlip3dVerticalTransitionButton(text:string,isAppearing:boolean,billboard:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new Flip3dVerticalInTransition(this.game,billboard,1000, EasingSine.InOut):
+                new Flip3dVerticalOutTransition(this.game,billboard,1000);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createScaleRotateTransitionButton(text:string,isAppearing:boolean,numOfRotations:number):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new ScaleRotateInAppearanceTransition(this.game,1000, EasingBounce.Out,numOfRotations):
+                new ScaleRotateOutAppearanceTransition(this.game,1000, EasingSine.InOut,numOfRotations);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createScale2TransitionButton(text:string,isAppearing:boolean,scaleX:boolean,scaleY:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new ScaleInAppearanceTransition(this.game,1000, EasingBounce.Out,{x:scaleX,y:scaleY}):
+                new ScaleOutAppearanceTransition(this.game,1000, EasingSine.InOut,{x:scaleX,y:scaleY});
+        this.createTransitionButton(text,transition);
+    }
+
+    private createTurnPageTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new TurnThePageForwardTransition(this.game,1000, EasingSine.Out):
+                new TurnThePageBackwardTransition(this.game,1000, EasingSine.Out);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createTurnPageVerticalTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new TurnThePageVerticalForwardTransition(this.game,1000, EasingSine.Out):
+                new TurnThePageVerticalBackwardTransition(this.game,1000, EasingSine.Out);
+        this.createTransitionButton(text,transition);
+    }
+
+
+    private createSizeWidthTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new SizeWidthInAppearanceTransition(this.game,1000, EasingSine.InOut):
+                new SizeWidthOutAppearanceTransition(this.game,1000, EasingSine.InOut);
+        this.createTransitionButton(text,transition);
+    }
+
+    private createSizeHeightTransitionButton(text:string,isAppearing:boolean):void{
+        const transition:ISceneTransition =
+            isAppearing?
+                new SizeHeightInAppearanceTransition(this.game,1000, EasingSine.InOut):
+                new SizeHeightOutAppearanceTransition(this.game,1000, EasingSine.InOut);
         this.createTransitionButton(text,transition);
     }
 

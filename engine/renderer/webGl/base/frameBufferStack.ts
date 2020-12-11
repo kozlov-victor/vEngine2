@@ -102,12 +102,12 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         return prevPointer;
     }
 
-    public clear(color:Color,alphaBlend?:number){
+    public clear(color:Color,alphaBlend?:number):void{
         this._getLast().frameBuffer.bind();
         this._getLast().frameBuffer.clear(color,alphaBlend);
     }
 
-    public setInterpolationMode(interpolation:INTERPOLATION_MODE){
+    public setInterpolationMode(interpolation:INTERPOLATION_MODE):void{
         this._getLast().frameBuffer.setInterpolationMode(interpolation);
         this._doubleFrameBuffer.setInterpolationMode(interpolation);
         this._interpolationMode = interpolation;
@@ -126,13 +126,13 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         return this._stackPointer;
     }
 
-    public destroy(){
+    public destroy():void{
         this._stack.forEach(f=>f.frameBuffer.destroy());
         this._doubleFrameBuffer.destroy();
         this._simpleRectDrawer.destroy();
     }
 
-    public reduceState(to:IStateStackPointer){
+    public reduceState(to:IStateStackPointer):void{
         if (this._stackPointer===1) return;
         if (this.debug) console.log(`reducing state from ${this._stackPointer-1} to ${to.ptr}`);
         for (let i:number = this._stackPointer-1; i>to.ptr; i--) {

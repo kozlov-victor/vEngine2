@@ -1,49 +1,86 @@
 {
-  "rulesDirectory": ["./node_tools/lints/build"],
-  "extends": "tslint:recommended",
-  "rules": {
-    "no-trailing-whitespace": false,
-    "typedef-whitespace": false,
-    "whitespace": false,
-    "ordered-imports": false,
-    "no-empty": false,
-    "one-line": false,
-    "variable-name": false,
-    "array-type": false,
-    "quotemark": false,
-    "trailing-comma": false,
-    "object-literal-sort-keys": false,
-    "no-namespace": false,
-    "prefer-for-of": false,
-    "eofline": false,
-    "max-classes-per-file": false,
-    "max-line-length": false,
-    "one-variable-per-declaration": false,
-    "no-conditional-assignment": false,
-    "curly": false,
-    "new-parens": true,
-    "no-arg": true,
-    "no-bitwise": false,
-    "comment-format": false,
-    "no-consecutive-blank-lines": false,
-    "jsdoc-format": false,
-    "unified-signatures": false,
-    "no-console": {
-      "severity": "off",
-      "options": ["debug", "info", "log", "time", "timeEnd", "trace"]
-    },
-    "interface-over-type-literal": false,
-    "radix": false,
-    "arrow-parens": false,
-    "callable-types": false,
-    "no-any": false,
-    "no-null-keyword": true,
-    "adjacent-overload-signatures": false,
-    "v-engine-as-statement": false
-  },
-  "jsRules": {
-    "max-line-length": {
-      "options": [120]
+    "extends": "tslint:recommended",
+    "rulesDirectory": [
+        "./node_tools/lints/build"
+    ],
+    "rules": {
+        "align": {
+            "options": [
+                "parameters",
+                "statements"
+            ]
+        },
+        "adjacent-overload-signatures": false,
+        "array-type": false,
+        "arrow-return-shorthand": true,
+        "comment-format": false,
+        "curly": false,
+        "deprecation": {
+            "severity": "warning"
+        },
+        "eofline": false,
+        "import-spacing": true,
+        "indent": {
+            "options": [
+                "spaces"
+            ]
+        },
+        "prefer-for-of": false,
+        "max-classes-per-file": false,
+        "max-line-length": [
+            true,
+            140
+        ],
+        "member-ordering": [
+            true,
+            {
+                "order": [
+                    "static-field",
+                    "instance-field",
+                    "static-method",
+                    "instance-method"
+                ]
+            }
+        ],
+        "no-console": false,
+        "no-trailing-whitespace": false,
+        "no-empty": false,
+        "no-namespace": false,
+        "no-bitwise": false,
+        "no-inferrable-types": false,
+        "no-non-null-assertion": false,
+        "no-redundant-jsdoc": true,
+        "no-switch-case-fall-through": true,
+        "no-var-requires": false,
+        "object-literal-key-quotes": [
+            true,
+            "as-needed"
+        ],
+        "one-variable-per-declaration": false,
+        "quotemark": false,
+        "radix": false,
+        "semicolon": {
+            "options": [
+                "always"
+            ]
+        },
+        "space-before-function-paren": {
+            "options": {
+                "anonymous": "never",
+                "asyncArrow": "always",
+                "constructor": "never",
+                "method": "never",
+                "named": "never"
+            }
+        },
+        "typedef": [
+            true,
+            "call-signature"
+        ],
+        "typedef-whitespace": false,
+        "variable-name": false,
+        "unified-signatures": false,
+        "whitespace": false,
+        "v-engine-as-statement": false
     }
-  }
 }

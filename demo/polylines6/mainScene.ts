@@ -8,7 +8,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading() {
+    public onPreloading():void {
 
 
         // https://danmarshall.github.io/google-font-to-svg-path/
@@ -27,11 +27,11 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
 
     }
 
-    public onReady() {
+    public onReady():void {
 
     }
 

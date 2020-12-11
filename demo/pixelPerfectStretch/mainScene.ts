@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     private logoPixelLink:ResourceLink<ITexture>;
     private logoLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.logoPixelLink = this.resourceLoader.loadTexture('./pixelPerfectStretch/PixelArt.png');
         this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
         const rect = new Rectangle(this.game);
@@ -22,11 +22,11 @@ export class MainScene extends Scene {
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady() {
+    public onReady():void {
 
         const sprLogo:Image = new Image(this.game);
         sprLogo.setResourceLink(this.logoLink);

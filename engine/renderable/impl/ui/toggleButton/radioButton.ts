@@ -45,13 +45,13 @@ export class RadioButton extends AbstractToggleButton {
         return [rNormal,rChecked];
     }
 
-    public toggle(){
+    public toggle():void{
         (this as ICheckBoxWritable).checked = true;
         this.updateState();
         if (this.group!==undefined) this.group.notifyToggled(this);
     }
 
-    public unToggle(){
+    public unToggle():void{
         (this as ICheckBoxWritable).checked = false;
         this.updateState();
     }

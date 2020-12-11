@@ -12,13 +12,13 @@ export enum KEYBOARD_EVENTS {
 
 export class KeyBoardEvent extends KeyPadEvent implements IKeyBoardEvent {
 
-    public static fromPool():Optional<KeyBoardEvent> {
-        return KeyBoardEvent._pool.getFreeObject();
-    }
-
     private static _pool:ObjectPool<KeyBoardEvent> = new ObjectPool<KeyBoardEvent>(KeyBoardEvent);
 
     public key:KEYBOARD_KEY;
     public nativeEvent:Event;
+
+    public static fromPool():Optional<KeyBoardEvent> {
+        return KeyBoardEvent._pool.getFreeObject();
+    }
 
 }

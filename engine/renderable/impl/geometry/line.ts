@@ -19,7 +19,7 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
         this._rectangleRepresentation.lineWidth = 0;
     }
 
-    public setXYX1Y1(x:number,y:number,x1:number,y1:number){
+    public setXYX1Y1(x:number,y:number,x1:number,y1:number):void{
         this.pos.setXY(x,y);
         this.pointTo.setXY(x1,y1);
         const dx:number = this.pointTo.x - this.pos.x;
@@ -37,7 +37,7 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
         this.game.getRenderer().drawLine(this);
     }
 
-    public translate(){
+    public translate():void{
         super.translate();
         this.game.getRenderer().transformTranslate(0,-this.lineWidth/2);
     }
@@ -61,7 +61,7 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
     }
 
 
-    private onPointChanged(){
+    private onPointChanged():void{
         const w:number = Math.abs(this.pointTo.x);
         const h:number = Math.abs(this.pointTo.y);
         const l:number = Math.sqrt(w*w+h*h) + this.lineWidth/2;

@@ -9,7 +9,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading() {
+    public onPreloading():void {
 
         const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(this.game,`
             M80 80
@@ -55,11 +55,11 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
 
     }
 
-    public onReady() {
+    public onReady():void {
 
     }
 

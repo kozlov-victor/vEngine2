@@ -9,12 +9,12 @@ export class MainScene extends Scene {
 
     private resourceLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.resourceLink = this.resourceLoader.loadTexture('./frameAnimation3/air.png');
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game);
         animatedImage.setResourceLink(this.resourceLink);

@@ -9,7 +9,7 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
     public readonly type:string = 'AtlasFrameAnimation';
 
 
-    public revalidate(){
+    public revalidate():void{
         if (DEBUG && !this.target) throw new DebugError(`atlasFrameAnimation needs image sourceLink!`);
         super.revalidate();
     }

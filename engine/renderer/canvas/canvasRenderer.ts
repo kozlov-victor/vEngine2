@@ -49,7 +49,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     // https://miguelmota.com/blog/pixelate-images-with-canvas/demo/
-    public setPixelPerfect(){ // todo
+    public setPixelPerfect():void{ // todo
 
         this.container.style.cssText += 'image-rendering: optimizeSpeed;' + // FireFox < 6.0
             'image-rendering: -moz-crisp-edges;' + // FireFox
@@ -115,7 +115,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.ctx.strokeRect(0,0,rectangle.size.width,rectangle.size.height);
     }
 
-    public drawEllipse(e:Ellipse){
+    public drawEllipse(e:Ellipse):void{
         const ctx:CanvasRenderingContext2D = this.ctx;
         ctx.fillStyle = e.fillColor.asCSS();
         ctx.strokeStyle = e.color.asCSS();

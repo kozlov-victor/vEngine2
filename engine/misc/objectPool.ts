@@ -12,11 +12,7 @@ export class ObjectPool<T extends IReleasealable> {
 
     private _ptr:number = 0;
     private _pool:T[] = [];
-    /**
-     * 16 - nice magic value for default pool size
-     * @param Class
-     * @param {number} numberOfInstances
-     */
+
     constructor(private Class:Clazz<T>, private numberOfInstances = 16){
         if (DEBUG && !Class) throw new DebugError(`can not instantiate ObjectPool: class not provided in constructor`);
     }
@@ -41,7 +37,7 @@ export class ObjectPool<T extends IReleasealable> {
         return undefined;
     }
 
-    public releaseObject(obj:T){
+    public releaseObject(obj:T):void{
         const indexOf:number = this._pool.indexOf(obj);
         if (DEBUG && indexOf===-1) {
             console.error(obj);
@@ -50,7 +46,7 @@ export class ObjectPool<T extends IReleasealable> {
         this._pool[indexOf].release();
     }
 
-    public releaseAll(){
+    public releaseAll():void{
         for (let i:number=0;i<this.numberOfInstances;i++) {
             const current:Optional<IReleasealable> = this._pool[i];
             if (current!==undefined) {

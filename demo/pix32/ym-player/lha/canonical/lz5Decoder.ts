@@ -19,10 +19,10 @@ export class Lz5Decoder extends SlidingDicDecoder {
     protected decodeCode():number {
         if (this.flagCount === 0) {
             this.flagCount = 8;
-            this.flag = this._in.read()
+            this.flag = this._in.read();
         }
         --this.flagCount;
-        let c:number = this._in.read()
+        let c:number = this._in.read();
         if ((this.flag & 0x0001) === 0) {
             this.matchPosition = c;
             c = this._in.read();

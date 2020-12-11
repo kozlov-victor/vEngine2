@@ -12,19 +12,22 @@ export class MainScene extends Scene {
     private resourceLinks2:ResourceLink<ITexture>[] = [];
     private resourceLinks3:ResourceLink<ITexture>[] = [];
 
-    public onPreloading() {
+    public onPreloading():void {
         for (let i:number = 0;i<5;i++) {
-            this.resourceLinks1[i] = this.resourceLoader.loadTexture(`./multiImageAnim2/character/Attack1/1_terrorist_1_Attack1_00${i}.png`);
+            this.resourceLinks1[i] =
+                this.resourceLoader.loadTexture(`./multiImageAnim2/character/Attack1/1_terrorist_1_Attack1_00${i}.png`);
         }
         for (let i:number = 0;i<4;i++) {
-            this.resourceLinks2[i] = this.resourceLoader.loadTexture(`./multiImageAnim2/character/Attack2/1_terrorist_1_Attack2_00${i}.png`);
+            this.resourceLinks2[i] =
+                this.resourceLoader.loadTexture(`./multiImageAnim2/character/Attack2/1_terrorist_1_Attack2_00${i}.png`);
         }
         for (let i:number = 0;i<6;i++) {
-            this.resourceLinks3[i] = this.resourceLoader.loadTexture(`./multiImageAnim2/character/Attack3/1_terrorist_1_Attack3_00${i}.png`);
+            this.resourceLinks3[i] =
+                this.resourceLoader.loadTexture(`./multiImageAnim2/character/Attack3/1_terrorist_1_Attack3_00${i}.png`);
         }
     }
 
-    public onReady() {
+    public onReady():void {
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game);
         let animNum:number = 1;

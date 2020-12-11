@@ -135,7 +135,8 @@ export class MouseControl implements IControl {
                 // propagate event to parents
                 let parent:Optional<RenderableModel> = obj.parent;
                 while (parent!==undefined) {
-                    const propagationEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e,mouseEvent,mousePoint,parent, constrainObjects);
+                    const propagationEvent:Optional<IObjectMouseEvent> =
+                        this._helper.captureObject(e,mouseEvent,mousePoint,parent, constrainObjects);
                     if (propagationEvent!==undefined) {
                         if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,parent);
                     }

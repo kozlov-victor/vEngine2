@@ -53,14 +53,14 @@ class TabStrip {
         this.root.fillColor.setRGB(12,12,12);
     }
 
-    public preload(){
+    public preload():void{
         this.emptyResourceLink = this.game.getCurrScene().resourceLoader.loadTexture('./mk-alfa/assets/images/heroes/empty.jpg');
         HEROES_DESCRIPTION.forEach(it=>{
             this.linkByUrl[it.url] = this.game.getCurrScene().resourceLoader.loadTexture(`./mk-alfa/assets/images/heroes/${it.url}`);
         });
     }
 
-    public onReady(){
+    public onReady():void{
         this.cell1 = this.addCell();
         this.cell2 = this.addCell(false);
         this.cell3 = this.addCell();
@@ -105,13 +105,13 @@ class TabStrip {
         return this.root;
     }
 
-    public goNext(){
+    public goNext():void{
         this.selectedIndex++;
         if (this.selectedIndex>HEROES_DESCRIPTION.length-1) this.selectedIndex=HEROES_DESCRIPTION.length-1;
         else this.updateImages();
     }
 
-    public goPrev(){
+    public goPrev():void{
         this.selectedIndex--;
         if (this.selectedIndex<0) this.selectedIndex=0;
         else this.updateImages();
@@ -141,7 +141,7 @@ class TabStrip {
         return rectWrap;
     }
 
-    private createSplashVertical(splashContainer:NullGameObject){
+    private createSplashVertical(splashContainer:NullGameObject):void{
         const pl = new PolyLine(this.game);
         pl.lineWidth = MathEx.randomInt(2,7);
         pl.color = Color.RGB(
@@ -190,7 +190,7 @@ class TabStrip {
         this.game.getCurrScene().addTweenMovie(tm);
     }
 
-    private updateImage(desc:IItemDescription,img:Image){
+    private updateImage(desc:IItemDescription,img:Image):void{
         if (desc===undefined) {
             img.setResourceLink(this.emptyResourceLink);
         }
@@ -199,7 +199,7 @@ class TabStrip {
         }
     }
 
-    private updateImages(){
+    private updateImages():void{
         const prev = HEROES_DESCRIPTION[this.selectedIndex-1];
         const curr = HEROES_DESCRIPTION[this.selectedIndex];
         const next = HEROES_DESCRIPTION[this.selectedIndex+1];
@@ -315,7 +315,7 @@ export class MkSelectHeroScene extends MkAbstractScene {
 
     }
 
-    private gotoDescriptionScene(){
+    private gotoDescriptionScene():void{
         const sndSelect:Sound = new Sound(this.game);
         sndSelect.setResourceLink(this.soundLink2);
         sndSelect.play();

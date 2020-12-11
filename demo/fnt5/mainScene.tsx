@@ -1,8 +1,8 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
-import * as fntXML1 from "xml/angelcode-loader!../fnt4/font.fnt"
-import * as fntXML2 from "xml/angelcode-loader!../fnt3/font.fnt"
-import * as fntXML3 from "xml/xml-loader!../fnt/font.fnt"
+import * as fntXML1 from "xml/angelcode-loader!../fnt4/font.fnt";
+import * as fntXML2 from "xml/angelcode-loader!../fnt3/font.fnt";
+import * as fntXML3 from "xml/xml-loader!../fnt/font.fnt";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {
     AlignText,
@@ -26,7 +26,7 @@ export class MainScene extends Scene {
     @Resource.FontFromAtlas('./fnt/font.png',fntXML3)
     private fontLink3:ResourceLink<Font>;
 
-    public onReady() {
+    public onReady():void {
         this.backgroundColor.setRGB(12,12,12);
         const tf:RichTextField = new RichTextField(this.game,this.fontLink1.getTarget());
         tf.size.set(this.game.size);
@@ -52,6 +52,7 @@ export class MainScene extends Scene {
                     {'\n'}
                     <font color={{r:122,g:122,b:122}} size={25}>(Кликнуть для инкремента)</font>
                     {'\n'}
+                    {/* tslint:disable-next-line:max-line-length */}
                     <font font={this.fontLink2.getTarget()} color={{r:122,g:255,b:122}} size={71}>Эта <i>строка</i> с <s>тем же</s> <u>другим</u> шрифтом</font>
                     {'\n'}
                     Новая строка с <s>другим</s> <u>тем же</u> шрифтом

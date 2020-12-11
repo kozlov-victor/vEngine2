@@ -7,12 +7,13 @@ export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void = ():void=>{};
 
     @Resource.Font({fontFamily:'serif',fontSize:128})
     private fnt:Font;
 
-    public onReady() {
+    private renderScene:()=>void = ():void=>{};
+
+    public onReady():void {
 
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
@@ -56,7 +57,7 @@ export class MainScene extends Scene {
             const P=T(t)*10;
             x.setDrawColor(R(p,p/3,p),200);
             x.drawText("    Hello Dwitter",P,h+P);
-        }
+        };
     }
 
     protected onRender(): void {

@@ -14,12 +14,12 @@ export class MainScene extends Scene {
     private resourceLink!:ResourceLink<ITexture>;
 
 
-    public onPreloading() {
+    public onPreloading():void {
         this.resourceLink = this.resourceLoader.loadTexture('./particlesFire/fire-texture-atlas.jpg');
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         this.backgroundColor = Color.BLACK;
 

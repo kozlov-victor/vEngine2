@@ -91,7 +91,7 @@ export class MeshDrawer extends AbstractDrawer {
         this.setUniform(this.u_cubeMapTextureUsed,used);
     }
 
-    public setHeightMapFactor(val:number){
+    public setHeightMapFactor(val:number):void{
         this.setUniform(this.u_heightMapFactor,val);
     }
 

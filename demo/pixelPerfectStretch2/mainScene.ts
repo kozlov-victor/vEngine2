@@ -44,7 +44,7 @@ export class MainScene extends Scene {
         });
     }
 
-    public onReady() {
+    public onReady():void {
 
         this.links = [
             this.img1, this.img2, this.img3, this.img4, this.img5

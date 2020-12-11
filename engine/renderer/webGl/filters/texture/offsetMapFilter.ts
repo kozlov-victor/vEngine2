@@ -5,7 +5,6 @@ import {Game} from "@engine/core/game";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Int} from "@engine/core/declarations";
 import {Size} from "@engine/geometry/size";
 
 export class OffsetMapFilter extends AbstractGlFilter{
@@ -36,14 +35,14 @@ export class OffsetMapFilter extends AbstractGlFilter{
                 gl_FragColor = texture2D(texture, pixelWithOffsetPoint);
                 vec4 origColor = texture2D(texture, v_texCoord);
                 gl_FragColor.a = origColor.a;
-            } 
+            }
         `);
         this.setPalletTexture(pallet as Texture);
         this.simpleRectDrawer.initProgram();
         this.setForce(0.05);
     }
 
-    public doFilter(destFrameBuffer: FrameBuffer) {
+    public doFilter(destFrameBuffer: FrameBuffer):void {
         this.simpleRectDrawer.attachTexture(this.offsetTexture,this.offsetTextureGl);
         const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.pixelWidth,1/size.width);

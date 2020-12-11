@@ -14,6 +14,7 @@ const parseErrors = (log:string):IShaderErrorInfo[]=> {
     const logs:IShaderErrorInfo[] = [];
     let result:RegExpMatchArray|null;
 
+    // tslint:disable-next-line:no-conditional-assignment
     while (!!(result = log.match(/ERROR\:([^\n]+)/))) {
         if (result.index!==undefined) log = log.slice((result.index + 1));
 
@@ -216,6 +217,7 @@ export const extractUniformsFromShaderBin = (gl:WebGLRenderingContext, program:S
 
 };
 
+// tslint:disable-next-line:max-line-length
 export const extractUniformsAndAttributesFromShaderSource = (vertexSource:string,fragmentSource:string):{attributes:string[],uniforms:string[]}=>{
     const uniforms:string[] = [];
     const attributes:string[] = [];
@@ -338,7 +340,7 @@ const getUniformSetter = (size:number,type:string):UNIFORM_SETTER=>{
                 if (isArrayOfType(value,isBoolean,4)) gl.uniform4i(location, value[0], value[1], value[2], value[3]);
             };
             case GL_TYPE.FLOAT_MAT2:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
-                if (isArrayOfType(value,isNumber,2*2)) gl.uniformMatrix2fv(location, false, value as Float32List); // location, transpose (Must be false), value
+                if (isArrayOfType(value,isNumber,2*2)) gl.uniformMatrix2fv(location, false, value as Float32List);
             };
             case GL_TYPE.FLOAT_MAT3:  return (gl:GL,location:LOC,value:UNIFORM_VALUE_TYPE)=> {
                 if (isArrayOfType(value,isNumber,3*3)) gl.uniformMatrix3fv(location, false, value as Float32List);

@@ -16,7 +16,7 @@ export class Vtx extends AbstractChipTrack {
         this.read(arr);
     }
 
-    private read(arr:number[]|ArrayBuffer){
+    private read(arr:number[]|ArrayBuffer):void{
         this.buffer = new BinBuffer(arr);
         // https://github.com/demozoo/cowbell/blob/master/cowbell/ay_chip/vtx_player.js
         // https://documentation.help/AY-3-8910.12-ZX-Spectrum/ay_e0irc.htm

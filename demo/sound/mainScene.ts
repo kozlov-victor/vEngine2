@@ -9,7 +9,7 @@ export class MainScene extends Scene {
 
     private resourceLink!:ResourceLink<void>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.resourceLink = this.resourceLoader.loadSound('./sound/sound.mp3');
 
         const sound:Sound = new Sound(this.game);
@@ -31,11 +31,11 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
 
     }
 
-    public onReady() {
+    public onReady():void {
         console.log('ready');
     }
 

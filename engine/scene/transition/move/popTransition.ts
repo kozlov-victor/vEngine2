@@ -61,7 +61,7 @@ export class PopTransition extends AbstractSceneTransition {
                 break;
         }
 
-        return {from,to}
+        return {from,to};
     }
 
 

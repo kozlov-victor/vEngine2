@@ -38,7 +38,7 @@ export abstract class AbstractSprite {
         return img;
     }
 
-    private appendToScene(){
+    private appendToScene():void{
         this.game.getCurrScene().getLayerAtIndex(1).appendChild(this.renderableImage);
         this.renderableImage.transformPoint.setToCenter();
     }

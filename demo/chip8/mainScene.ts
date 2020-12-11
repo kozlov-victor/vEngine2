@@ -15,6 +15,8 @@ class EngineEmulator extends Emulator {
     constructor(game:Game) {
         super(game);
         this.img = new Image(game);
+        this.img.scale.setXY(10);
+        this.img.setPixelPerfect(true);
         const t:DataTexture = new DataTexture(game,64,32);
         this.texture = t;
         this.img.setResourceLink(t.getLink());
@@ -44,12 +46,17 @@ export class MainScene extends Scene {
     private emulator:EngineEmulator;
     private rom:ResourceLink<ArrayBuffer>;
 
-    public onPreloading() {
-        this.emulator = new EngineEmulator(this.game);
-        this.rom = this.resourceLoader.loadBinary('./chip8/roms/octojam1title.ch8');
+
+    constructor(protected game:Game, private romPath:string) {
+        super(game);
     }
 
-    public onReady() {
+    public onPreloading():void {
+        this.emulator = new EngineEmulator(this.game);
+        this.rom = this.resourceLoader.loadBinary(this.romPath);
+    }
+
+    public onReady():void {
         this.appendChild(this.emulator.getImage());
         this.emulator.setRom(new Uint8Array(this.rom.getTarget()));
 
@@ -97,6 +104,10 @@ export class MainScene extends Scene {
                 case KEYBOARD_KEY.V:
                     pressOfRelease(0xF,pressed);
                     break;
+                case KEYBOARD_KEY.ESC: {
+                    this.game.popScene();
+                    break;
+                }
                 default:
                     break;
             }

@@ -45,13 +45,13 @@ export class MainScene extends Scene {
     public backgroundColor: Color = Color.RGB(233);
     private btnPos:number=0;
 
-    public onPreloading(){
+    public onPreloading():void{
 
         this.fnt = new Font(this.game, {fontSize: 25});
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         this.createFadeTransitionButton('fade in',true);
         this.createFadeTransitionButton('fade out',false);
@@ -71,7 +71,7 @@ export class MainScene extends Scene {
         this.createSpiralCellTransitionButton('spiral cell disappear',false);
     }
 
-    private createFadeTransitionButton(text:string,isAppearing:boolean){
+    private createFadeTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new FadeInAppearanceTransition(this.game,1000,EasingLinear):
@@ -79,7 +79,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createScaleTransitionButton(text:string,isAppearing:boolean){
+    private createScaleTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new ScaleInAppearanceTransition(this.game,1000,EasingBounce.Out):
@@ -87,7 +87,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createRandomCellTransitionButton(text:string,isAppearing:boolean){
+    private createRandomCellTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new RandomCellsAppearingTransition(this.game,1000,20,20):
@@ -95,7 +95,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createMainDiagonalCellTransitionButton(text:string,isAppearing:boolean){
+    private createMainDiagonalCellTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new MainDiagonalCellsAppearingTransition(this.game,1000,15,15):
@@ -103,7 +103,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createSideDiagonalCellTransitionButton(text:string,isAppearing:boolean){
+    private createSideDiagonalCellTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new SideDiagonalCellsAppearingTransition(this.game,1000,15,15):
@@ -111,7 +111,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createSpiralCellTransitionButton(text:string,isAppearing:boolean){
+    private createSpiralCellTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new SpiralCellsAppearingTransition(this.game,3000,15,15):
@@ -119,7 +119,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createFlipVerticalTransitionButton(text:string,isAppearing:boolean){
+    private createFlipVerticalTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new FlipVerticalInTransition(this.game,1000):
@@ -127,7 +127,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createFlipHorizontalTransitionButton(text:string,isAppearing:boolean){
+    private createFlipHorizontalTransitionButton(text:string,isAppearing:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new FlipHorizontalInTransition(this.game,1000):
@@ -135,7 +135,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createTransitionButton(text:string,transition:ISceneTransition){
+    private createTransitionButton(text:string,transition:ISceneTransition):void{
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.textColor.setRGB(10);
         tf.pos.setXY(10,this.btnPos+=45);

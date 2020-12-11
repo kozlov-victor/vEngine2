@@ -15,7 +15,7 @@ export class FaceTypeToSvg {
         return n;
     }
 
-    private process(s:string,scale:number,offsetX:number,offsetY:number) {
+    private process(s:string,scale:number,offsetX:number,offsetY:number):string {
         const outline:string[] = s.split(' ').filter(it=>it.trim().length>0);
         let res:string = '';
         for (let i:number = 0,l = outline.length;i < l;) {

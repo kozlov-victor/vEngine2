@@ -32,7 +32,7 @@ export class Sum implements Checksum {
      * @param len
      *            data element array length from offset
      */
-    public update_2(b:number[], off:number, len:number) {
+    public update_2(b:number[], off:number, len:number):void {
         while (len-- > 0) {
             this.sum += b[off++];
         }

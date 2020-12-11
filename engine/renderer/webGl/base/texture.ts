@@ -88,7 +88,7 @@ export class Texture extends AbstractTexture{
 
 
 
-    protected setRawData(data:Uint8Array,width:number,height:number,mode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR){
+    protected setRawData(data:Uint8Array,width:number,height:number,mode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR):void{
         if (DEBUG) {
             const numOfBytes:number = width*height*4;
             if (data.length!==numOfBytes) {

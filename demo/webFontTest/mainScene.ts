@@ -45,7 +45,7 @@ export const loadScript = (resourceLoader:ResourceLoader)=>{
                 }
             });
 
-        }
+        };
     });
 };
 
@@ -54,11 +54,11 @@ export class MainScene extends Scene {
     @Resource.Font({fontSize:30,fontFamily:'Droid Sans'})
     private fnt:Font;
 
-    onPreloading() {
+    onPreloading():void {
         loadScript(this.resourceLoader);
     }
 
-    public onReady() {
+    public onReady():void {
 
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
 

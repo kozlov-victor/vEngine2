@@ -44,7 +44,7 @@ export class TextTable {
 
     private static getLine(symbol:string,length:number):string{
         return this.createArray(length,symbol).join('');
-    };
+    }
 
     private static normalize(arr:string[][],numOfColumns:number):void{
         arr.forEach(it=>{
@@ -60,8 +60,8 @@ export class TextTable {
         if (maxLength<3) maxLength = 3;
         let res:string = '';
         res+=(`*${this.getLine('*',maxLength)}*\n`);
-        for (const string of strings) {
-            res+=`*${this.centerPad(string,maxLength)}*\n`;
+        for (const s of strings) {
+            res+=`*${this.centerPad(s,maxLength)}*\n`;
         }
         res+=`*${this.getLine('*',maxLength)}*`;
         return res;
@@ -76,7 +76,7 @@ export class TextTable {
         const arr:string[][] = [];
         s.split('\n').forEach(line=>{
             arr.push(line.split('\t'));
-        })
+        });
         return new TextTable(arr,params);
     }
 
@@ -84,7 +84,7 @@ export class TextTable {
         const arr:string[][] = [];
         s.split('\n').forEach(line=>{
             arr.push(line.split(','));
-        })
+        });
         return new TextTable(arr,params);
     }
 

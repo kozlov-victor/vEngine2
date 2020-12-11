@@ -17,7 +17,7 @@ export class Ym extends AbstractChipTrack {
         if (bb.readString(2)==='YM') { // this is uncompressed file
             bb.resetPointer();
             this.buffer = bb;
-           this.readBody();
+            this.readBody();
         } else { // lha-compressed
             bb.resetPointer();
             const sizeOfHeader:number = bb.readByte();
@@ -38,7 +38,7 @@ export class Ym extends AbstractChipTrack {
         this.readFrames();
     }
 
-    private readBody(){
+    private readBody():void{
         const format:string = this.buffer.readString(3);
         if(['YM6','YM5'].indexOf(format)===-1) throw new Error(`unsupported format:${format}`);
         if (this.buffer.readString(LEONARD.length)!==LEONARD) throw new Error(`bad header: expected "${LEONARD}" magic string`);
@@ -69,7 +69,7 @@ export class Ym extends AbstractChipTrack {
         if (terminator!==END) throw new Error(`unexpected file terminator: ${terminator}`);
     }
 
-    private readFrames(){
+    private readFrames():void{
         if (!this.interleavedOrder) throw new Error(`non interleaved frames are not supported`);
         for (let i:number = 0; i < this.numOfFrames; i++) {
             this.frames[i] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
@@ -80,7 +80,9 @@ export class Ym extends AbstractChipTrack {
                 this.frames[i][r] = this.rawFrames[cnt++];
             }
         }
-        if (cnt!==this.rawFrames.length) throw new Error(`frame reading error,expected to read ${this.rawFrames.length}, but ${cnt} is read`);
+        if (cnt!==this.rawFrames.length) {
+            throw new Error(`frame reading error,expected to read ${this.rawFrames.length}, but ${cnt} is read`);
+        }
     }
 
     public getTrackInfo():string {

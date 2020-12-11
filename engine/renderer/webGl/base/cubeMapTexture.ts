@@ -28,7 +28,7 @@ export class CubeMapTexture extends AbstractTexture implements ICubeMapTexture{
         this.init(left,right,top,bottom,front,back);
     }
 
-    public setAsZero(){
+    public setAsZero():void{
         const gl = this.gl;
 
         const faceInfos =  [

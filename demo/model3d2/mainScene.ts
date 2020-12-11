@@ -12,13 +12,13 @@ export class MainScene extends Scene {
     private logoObj:Mesh;
     private logoLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.logoLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
     }
 
 
 
-    public onReady() {
+    public onReady():void {
         const obj:Model3d = new Model3d(this.game);
         this.logoObj = obj;
         obj.fillColor.setRGB(12,222,12);

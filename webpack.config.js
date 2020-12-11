@@ -163,7 +163,10 @@ module.exports = async (env={})=>{
                     use: [
                         {
                             loader: 'tslint-loader',
-                            options: { /* Loader options go here */ }
+                            options: {
+                                emitErrors: true,
+                                failOnHint: true
+                            }
                         }
                     ]
                 },

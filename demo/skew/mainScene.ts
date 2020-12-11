@@ -6,7 +6,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 export class MainScene extends Scene {
 
 
-    public onReady() {
+    public onReady():void {
 
         const r:Rectangle = new Rectangle(this.game);
         r.size.setWH(100);

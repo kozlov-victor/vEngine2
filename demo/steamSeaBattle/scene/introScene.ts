@@ -7,11 +7,11 @@ import {Element} from "@engine/misc/xmlUtils";
 export class IntroScene extends BaseScene {
 
 
-    public onPreloading() {
+    public onPreloading():void {
         super.onPreloading();
     }
 
-    public onReady() {
+    public onReady():void {
         super.onReady();
         this.sounds.intro.play();
         this.sounds.gear.loop = true;

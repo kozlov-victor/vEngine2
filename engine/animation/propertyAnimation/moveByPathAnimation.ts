@@ -41,13 +41,13 @@ export class MoveByPathAnimation extends AbstractMoveAnimation {
         });
     }
 
-    public reset(){
+    public reset():void{
         super.reset();
         this._currentControlPointIndex = 0;
     }
 
 
-    protected onUpdate(){
+    protected onUpdate():void{
         if (this.durationSec!==undefined && this.durationSec!==this._oldDurationSec) {
             this._oldDurationSec = this.durationSec;
             this.velocity = this._totalLength / this.durationSec;

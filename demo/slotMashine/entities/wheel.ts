@@ -25,7 +25,7 @@ export class Wheel {
 
     }
 
-    public spinTo(n:number,freeSpins:number,delayTime:number){
+    public spinTo(n:number,freeSpins:number,delayTime:number):void{
 
         if (!this.free) return;
 

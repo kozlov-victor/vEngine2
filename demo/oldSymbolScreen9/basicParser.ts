@@ -25,15 +25,15 @@ class Tokenizer {
 
 export class BasicParser {
 
-    public parse(source:string){
+    public parse(source:string):void{
         source.split('\n').forEach((it,index)=>this.parseLine(it.trim(),index));
     }
 
-    private parseLine(line:string,index:number) {
+    private parseLine(line:string,index:number):void {
         if (line.length===0) return;
         const tokenizer = new Tokenizer(line,index);
-        const number:number = tokenizer.getNextNumber();
-        console.log(number);
+        const num:number = tokenizer.getNextNumber();
+        console.log(num);
     }
 
 }

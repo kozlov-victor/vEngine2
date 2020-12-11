@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
-import * as fntXML from "xml/angelcode-loader!../fnt3/font.fnt"
+import * as fntXML from "xml/angelcode-loader!../fnt3/font.fnt";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {
     AlignText,
@@ -20,7 +20,7 @@ export class MainScene extends Scene {
     @Resource.FontFromAtlas('./fnt3/font.png',fntXML)
     private fontLink:ResourceLink<Font>;
 
-    public onReady() {
+    public onReady():void {
         this.backgroundColor.setRGB(12,12,12);
         const tf = new AnimatedTextField(this.game,this.fontLink.getTarget());
         tf.size.setWH(this.game.width-30,200);

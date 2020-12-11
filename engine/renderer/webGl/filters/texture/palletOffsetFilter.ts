@@ -29,7 +29,7 @@ export class PalletOffsetFilter extends AbstractGlFilter{
                 float palletPointRelative = palletPoint/palletTextureWidth;
                 gl_FragColor = texture2D(palletTexture, vec2(palletPointRelative,0.0));
                 gl_FragColor.a = col.a;
-            } 
+            }
         `);
         this.setPalletOffset(0);
         this.setPalletTexture(pallet as Texture);
@@ -42,7 +42,7 @@ export class PalletOffsetFilter extends AbstractGlFilter{
     }
 
 
-    public doFilter(destFrameBuffer: FrameBuffer) {
+    public doFilter(destFrameBuffer: FrameBuffer):void {
         this.simpleRectDrawer.attachTexture(this.palletTexture,this.palletTextureGl);
         super.doFilter(destFrameBuffer);
     }

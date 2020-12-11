@@ -19,7 +19,7 @@ export class TeacherStuff {
         this.listenKeyboard();
     }
 
-    private listenMouse(){
+    private listenMouse():void{
         let canvasMouseDowned:boolean = false;
         this.surface.on(MOUSE_EVENTS.mouseDown, e=>{
             canvasMouseDowned = true;
@@ -53,7 +53,7 @@ export class TeacherStuff {
         });
     }
 
-    private listenKeyboard(){
+    private listenKeyboard():void{
         const kb:KeyboardControl = this.game.getControl<KeyboardControl>('KeyboardControl')!;
         this.game.getCurrScene().on(KEYBOARD_EVENTS.keyPressed, async e=>{
             if(kb.isPressed(KEYBOARD_KEY.Z) && kb.isPressed(KEYBOARD_KEY.CONTROL)) {

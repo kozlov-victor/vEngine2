@@ -11,14 +11,14 @@ export class MainScene extends Scene {
 
     private fnt:Font;
 
-    public onPreloading(){
+    public onPreloading():void{
         this.backgroundColor = Color.RGB(10,10,30);
         this.fnt = new Font(this.game, {fontSize: 14});
         const filter = new Barrel2DistortionFilter(this.game);
         this.filters = [filter];
     }
 
-    public onReady() {
+    public onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.size.set(this.game.size);
         tf.setPadding(5);

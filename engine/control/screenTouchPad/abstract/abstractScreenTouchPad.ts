@@ -26,7 +26,7 @@ export abstract class AbstractScreenTouchPad {
         });
     }
 
-    public appendTo(layer:Layer) {
+    public appendTo(layer:Layer):void {
         this._buttons.forEach(b=>{
             layer.appendChild(b.renderableModel);
         });

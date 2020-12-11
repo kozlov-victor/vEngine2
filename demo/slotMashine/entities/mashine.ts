@@ -24,7 +24,7 @@ export class Mashine {
         this.wheels[2].image.pos.addX(-40);
     }
 
-    public connectToScene(scene:Scene){
+    public connectToScene(scene:Scene):void{
         for (let i:number = 0;i<3;i++){
             scene.appendChild(this.wheels[i].image);
         }
@@ -38,7 +38,7 @@ export class Mashine {
         return true;
     }
 
-    public onSpinCompleted(){
+    public onSpinCompleted():void{
         const result:number[] = [];
         for (let i:number = 0;i<3;i++){
             const wheel:Wheel = this.wheels[i];
@@ -61,7 +61,7 @@ export class Mashine {
 
     }
 
-    public spin(a:number,b:number,c:number){
+    public spin(a:number,b:number,c:number):void{
 
         if (!this.isFree()) return;
         if (this.locked) return;

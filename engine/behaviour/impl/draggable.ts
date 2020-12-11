@@ -24,8 +24,8 @@ interface IMouseDragPoint {
 
 export class DraggableBehaviour extends BaseAbstractBehaviour {
 
-    private static _getEventId(e:ISceneMouseEvent):Int{
-        return (e.id || 1) as Int;
+    constructor(game:Game){
+        super(game,{});
     }
 
     private _blurListener:(e:MouseEvent)=>void;
@@ -37,8 +37,8 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
     private readonly _points:{[key:number]:IMouseDragPoint} = {};
     private _gameObject:RenderableModel;
 
-    constructor(game:Game){
-        super(game,{});
+    private static _getEventId(e:ISceneMouseEvent):Int{
+        return (e.id || 1) as Int;
     }
 
     public manage(gameObject:RenderableModel):void {
@@ -51,7 +51,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
                 mX: e.objectX,
                 mY: e.objectY,
                 target: gameObject,
-                preventDefault(){
+                preventDefault():void{
                     this.defaultPrevented = true;
                 },
                 dragStartX:0,
@@ -108,7 +108,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         this.game.getRenderer().container.addEventListener('mouseleave',this._blurListener);
     }
 
-    public revalidate() {
+    public revalidate():void {
         super.revalidate();
         if (DEBUG && (this._gameObject.size.isZero())) throw new DebugError(`can not apply DraggableBehaviour ot object with zero render size. Current size is ${this._gameObject.size.toJSON()}`);
     }

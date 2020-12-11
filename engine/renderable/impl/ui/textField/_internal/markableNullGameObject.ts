@@ -10,7 +10,7 @@ export  class MarkableNullGameObject extends NullGameObject {
         this.size.addOnChangeListener(()=>this.markAsDirty());
     }
 
-    revalidate() {
+    revalidate():void {
         this._dirty = false;
         super.revalidate();
     }
@@ -23,7 +23,7 @@ export  class MarkableNullGameObject extends NullGameObject {
         return this._dirty;
     }
 
-    public update() {
+    public update():void {
         super.update();
         if (this.isDirty()) {
             this.revalidate();

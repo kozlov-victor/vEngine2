@@ -8,7 +8,6 @@ export class DirectionalLight extends PointLight {
 
     public direction:[number,number,number] = [-1,0,0];
 
-    /** @private */
     public setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>, i:number):void{
         super.setUniformsToMap(map,i);
         map.put(`u_pointLights[${i}].type`,DirectionalLight.LIGHT_TYPE);

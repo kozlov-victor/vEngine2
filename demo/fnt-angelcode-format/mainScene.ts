@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Font} from "@engine/renderable/impl/general/font";
-import * as fntXML from "xml/angelcode-loader!./test.fnt"
+import * as fntXML from "xml/angelcode-loader!./test.fnt";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     @Resource.FontFromAtlas('./fnt-angelcode-format/test.png',fntXML)
     private fontLink:ResourceLink<Font>;
 
-    public onReady() {
+    public onReady():void {
 
         this.backgroundColor.setRGB(12,12,12);
         const tf:TextField = new TextField(this.game,this.fontLink.getTarget());

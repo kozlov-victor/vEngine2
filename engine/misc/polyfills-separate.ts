@@ -13,16 +13,6 @@ interface ICallBack {
 
 class PromisePolyfill {
 
-    private static _findCallBackByState(cb:ICallBack,state:States):((result:any)=>void)|undefined{
-        if (state===States.FULFILLED) return cb.fulfilled;
-        else if (state===States.REJECTED) return cb.rejected;
-        else return undefined;
-    }
-
-    private state:States = States.PENDING;
-    private callbacks:ICallBack[] = [];
-    private value:any;
-
     constructor(executor:(resolve:(result:any)=>void,reject:(result:any)=>void)=>void) {
         this.state = States.PENDING;
         this.value = undefined;
@@ -34,6 +24,16 @@ class PromisePolyfill {
             console.log(error);
             this._reject(error);
         }
+    }
+
+    private state:States = States.PENDING;
+    private callbacks:ICallBack[] = [];
+    private value:any;
+
+    private static _findCallBackByState(cb:ICallBack,state:States):((result:any)=>void)|undefined{
+        if (state===States.FULFILLED) return cb.fulfilled;
+        else if (state===States.REJECTED) return cb.rejected;
+        else return undefined;
     }
 
     public then(onfulfilled?:(result:any)=>void, onrejected?:(result:any)=>void):PromisePolyfill {
@@ -50,7 +50,7 @@ class PromisePolyfill {
         return this.then(undefined, onrejected);
     }
 
-    private _handleState(newState:States, result:any) {
+    private _handleState(newState:States, result:any):void {
         if (result && typeof result.then === 'function') {
             return result.then(this._resolve.bind(this), this._reject.bind(this));
         }

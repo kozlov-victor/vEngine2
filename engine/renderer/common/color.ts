@@ -19,10 +19,62 @@ export interface IColorFrozen extends Color{
 
 export class Color extends ObservableEntity implements ICloneable<Color>, IColorJSON{
 
+
+    constructor(r:byte = 0,g:byte = r,b:byte = g,a:byte = 255){
+        super();
+        this.setRGBA(r,g,b,a);
+    }
+
+    get r(): byte {
+        return this._r;
+    }
+
+    set r(value: byte) {
+        this.setRGBA(value,this._g,this._b,this._a);
+    }
+
+    get g(): byte {
+        return this._g;
+    }
+
+    set g(value: byte) {
+        this.setRGBA(this._r,value,this._b,this._a);
+    }
+
+    get b(): byte {
+        return this._b;
+    }
+
+    set b(value: byte) {
+        this.setRGBA(this._r,this._g,value,this._a);
+    }
+
+    get a(): byte {
+        return this._a;
+    }
+
+    set a(value: byte) {
+        this.setRGBA(this._r,this._g,this._b,value);
+    }
+
     public static WHITE = Color.RGB(255,255,255).freeze();
     public static GREY  = Color.RGB(127,127,127).freeze();
     public static BLACK = Color.RGB(0,0,0).freeze();
     public static NONE  = Color.RGBA(0,0,0,0).freeze();
+
+    public readonly type:'Color' = 'Color';
+
+    private _r:byte;
+    private _g:byte;
+    private _b:byte;
+    private _a:byte;
+
+    private rNorm:number;
+    private gNorm:number;
+    private bNorm:number;
+    private aNorm:number;
+    private _arr:[r:number,g:number,b:number,a:number];
+    private _friezed:boolean = false;
 
     public static RGB(r:byte,g:byte = r,b:byte = r):Color{
         return Color.RGBA(r,g,b,255);
@@ -86,7 +138,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
                 b = ~~(parseInt(numericPart.substr(4,2),16)) as byte;
                 a = ~~(parseInt(numericPart.substr(6,2),16)) as byte;
             } else {
-                if (DEBUG) throw new DebugError(`unsupported or wrong color literal: ${literal}`)
+                if (DEBUG) throw new DebugError(`unsupported or wrong color literal: ${literal}`);
             }
         }
         else {
@@ -102,30 +154,10 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
                 else alfa = ~~(alfa * 255) as byte;
                 return Color.HSLA(h, s, l, alfa);
             } else {
-                if (DEBUG) throw new DebugError(`unsupported or wrong color literal: ${literal}`)
+                if (DEBUG) throw new DebugError(`unsupported or wrong color literal: ${literal}`);
             }
         }
         return {r,g,b,a};
-    }
-
-    public readonly type:'Color' = 'Color';
-
-    private _r:byte;
-    private _g:byte;
-    private _b:byte;
-    private _a:byte;
-
-    private rNorm:number;
-    private gNorm:number;
-    private bNorm:number;
-    private aNorm:number;
-    private _arr:[r:number,g:number,b:number,a:number];
-    private _friezed:boolean = false;
-
-
-    constructor(r:byte = 0,g:byte = r,b:byte = g,a:byte = 255){
-        super();
-        this.setRGBA(r,g,b,a);
     }
 
     public setRGBA(r:byte,g:byte,b:byte,a:byte = 255):void{
@@ -242,38 +274,6 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         this.setHSLA(h,s,l,255);
     }
 
-    get r(): byte {
-        return this._r;
-    }
-
-    set r(value: byte) {
-        this.setRGBA(value,this._g,this._b,this._a);
-    }
-
-    get g(): byte {
-        return this._g;
-    }
-
-    set g(value: byte) {
-        this.setRGBA(this._r,value,this._b,this._a);
-    }
-
-    get b(): byte {
-        return this._b;
-    }
-
-    set b(value: byte) {
-        this.setRGBA(this._r,this._g,value,this._a);
-    }
-
-    get a(): byte {
-        return this._a;
-    }
-
-    set a(value: byte) {
-        this.setRGBA(this._r,this._g,this._b,value);
-    }
-
     public set(another:IColor):void{
         this.setRGBA(another.r,another.g,another.b,another.a);
     }
@@ -309,7 +309,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         return {r:this._r,g:this._g,b:this._b,a:this._a};
     }
 
-    public fromJSON(json:IColorJSON) {
+    public fromJSON(json:IColorJSON):void {
         this.setRGBA(json.r,json.g,json.b,json.a);
     }
 
@@ -318,7 +318,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         this.fromJSON(json);
     }
 
-    private checkFriezed(){
+    private checkFriezed():void{
         if (this._friezed) {
             if (DEBUG) {
                 console.error(this);

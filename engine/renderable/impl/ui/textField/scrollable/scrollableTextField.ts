@@ -14,7 +14,7 @@ export class ScrollableTextField extends TextField {
         super(game,font);
     }
 
-    revalidate() {
+    revalidate():void {
         super.revalidate();
         if (this._scrollContainerDelegate===undefined || this.rowSetContainer.isDirty()) {
             if (this._scrollContainerDelegate!==undefined) this._scrollContainerDelegate.destroy();

@@ -14,6 +14,18 @@ import {Sum} from "./sum";
  * @author Nobuyasu SUEHIRO <nosue@users.sourceforge.net>
  */
 export abstract class LhaEntryReader {
+
+    /**
+     * Creates a lha header reader.
+     *
+     * @param encoding file/directory name encoding
+     */
+    constructor(encoding: string) {
+        this.encoding = encoding;
+
+        this.calcSum = new Sum();
+        this.calcCRC = new CRC16();
+    }
     /** File path separator : ms-dos,windows */
     protected static readonly HD_CHR_DELIM_MSDOS: string = '\\';
     /** File path separator : unix */
@@ -87,16 +99,30 @@ export abstract class LhaEntryReader {
     protected fileName: string = "";
     protected dirName: string = "";
 
-    /**
-     * Creates a lha header reader.
-     *
-     * @param encoding file/directory name encoding
-     */
-    constructor(encoding: string) {
-        this.encoding = encoding;
 
-        this.calcSum = new Sum();
-        this.calcCRC = new CRC16();
+    private static _strFromChars(array: number[], from: number, length: number): string {
+        let res: string = '';
+        for (let i: number = 0; i < length; i++) {
+            const code: number = array[i+from];
+            res += String.fromCharCode(code);
+        }
+        return res;
+    }
+
+    /**
+     * Fetches unsigned 16-bit value from byte array at specified offset. The
+     * bytes are assumed to be in Intel (little-endian) byte order.
+     */
+    private static get16(b: number[], off: number): number {
+        return ((b[off] & 0xFF) | ((b[off + 1] & 0xFF) << 8));
+    }
+
+    /**
+     * Fetches unsigned 32-bit value from byte array at specified offset. The
+     * bytes are assumed to be in Intel (little-endian) byte order.
+     */
+    private static get32(b: number[], off: number): number {
+        return (LhaEntryReader.get16(b, off) | (LhaEntryReader.get16(b, off + 2) << 16));
     }
 
     /**
@@ -159,16 +185,6 @@ export abstract class LhaEntryReader {
         }
 
         return (e);
-    }
-
-
-    private static _strFromChars(array: number[], from: number, length: number): string {
-        let res: string = '';
-        for (let i: number = 0; i < length; i++) {
-            const code: number = array[i+from];
-            res += String.fromCharCode(code);
-        }
-        return res;
     }
 
 
@@ -522,20 +538,4 @@ export abstract class LhaEntryReader {
      *             if an I/O error has occurred
      */
     protected abstract  _read(b: number[]): number;
-
-    /**
-     * Fetches unsigned 16-bit value from byte array at specified offset. The
-     * bytes are assumed to be in Intel (little-endian) byte order.
-     */
-    private static get16(b: number[], off: number): number {
-        return ((b[off] & 0xFF) | ((b[off + 1] & 0xFF) << 8));
-    }
-
-    /**
-     * Fetches unsigned 32-bit value from byte array at specified offset. The
-     * bytes are assumed to be in Intel (little-endian) byte order.
-     */
-    private static get32(b: number[], off: number): number {
-        return (LhaEntryReader.get16(b, off) | (LhaEntryReader.get16(b, off + 2) << 16));
-    }
 }

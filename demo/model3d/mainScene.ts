@@ -16,7 +16,7 @@ export class MainScene extends Scene {
     private logo2Link:ResourceLink<ITexture>;
     private logoNormalsLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.logoLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
         this.logo2Link = this.resourceLoader.loadTexture('./model3d/Texture-67.jpg');
         this.logoNormalsLink = this.resourceLoader.loadTexture('./model3d/normals.png');
@@ -24,7 +24,7 @@ export class MainScene extends Scene {
 
 
 
-    public onReady() {
+    public onReady():void {
         const obj:Model3d = new Model3d(this.game);
         this.logoObj = obj;
         obj.fillColor.setRGB(12,222,12);

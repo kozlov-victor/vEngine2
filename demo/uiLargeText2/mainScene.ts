@@ -10,7 +10,7 @@ import {
     AlignTextContentVertical,
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
-import * as fontXml from "xml/angelcode-loader!./font.fnt"
+import * as fontXml from "xml/angelcode-loader!./font.fnt";
 // https://zxpress.ru/article.php?id=8943
 
 export class MainScene extends Scene {
@@ -22,7 +22,7 @@ export class MainScene extends Scene {
     private textLink:ResourceLink<string>;
 
 
-    public onReady() {
+    public onReady():void {
 
         const tf:TextField = new ScrollableTextField(this.game,this.fontLink.getTarget());
         tf.size.set(this.game.size);

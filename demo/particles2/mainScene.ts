@@ -3,9 +3,13 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 
 class Particle extends Rectangle {
+    // tslint:disable-next-line:variable-name
     public acc_x:number = 0;
+    // tslint:disable-next-line:variable-name
     public acc_y:number = 0;
+    // tslint:disable-next-line:variable-name
     public vel_x:number = 0;
+    // tslint:disable-next-line:variable-name
     public vel_y:number = 0;
 }
 

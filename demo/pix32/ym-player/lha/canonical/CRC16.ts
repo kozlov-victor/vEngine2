@@ -43,7 +43,7 @@ export class CRC16 implements Checksum {
      * Creates a new CRC16 class.
      *
      */
-    public CRC16() {
+    public CRC16():void {
         this.crc = 0;
     }
 
@@ -67,7 +67,7 @@ export class CRC16 implements Checksum {
      * @param len
      *            data element array length from offset
      */
-    public update_2(b: number[], off: number, len: number) {
+    public update_2(b: number[], off: number, len: number):void {
         while (len-- > 0) {
             this.crc = CRC16.CRC_TABLE[(this.crc ^ b[off++]) & 0xFF] ^ (this.crc >>> CRC16.CHAR_BIT);
         }

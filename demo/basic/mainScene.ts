@@ -8,14 +8,13 @@ import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
-import {DebugError} from "@engine/debug/debugError";
 
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
     private logoLink:ResourceLink<ITexture>;
 
-    public onReady() {
+    public onReady():void {
 
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);

@@ -5,6 +5,12 @@
  * @author Nobuyasu SUEHIRO <nosue@users.sourceforge.net>
  */
 export class LhaEntry {
+
+    /**
+     * Creates a new lha entry.
+     */
+    public constructor() {
+    }
     // A default entry name encoding type
     public static readonly HD_STR_ENCODING: string = "MS932"; // default entry
     // name encoding
@@ -112,9 +118,39 @@ export class LhaEntry {
     protected offset: number = -1;
 
     /**
-     * Creates a new lha entry.
+     * Converts MS-DOS time to Java time.
      */
-    public constructor() {
+    private static dosToJavaTime(dtime: number): number {
+        const d: Date = new Date();
+        // public GregorianCalendar(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second)
+        d.setFullYear((((dtime >> 25) & 0x7f) + 1980));
+        d.setMonth((((dtime >> 21) & 0x0f) - 1));
+        d.setDate(((dtime >> 16) & 0x1f));
+        d.setHours(((dtime >> 11) & 0x1f));
+        d.setMinutes(((dtime >> 5) & 0x3f));
+        d.setSeconds(((dtime << 1) & 0x3e));
+        return d.getTime();
+    }
+
+    /**
+     * Converts Java time to MS-DOS time.
+     */
+    private static javaToDosTime(time: number): number {
+        const c: Date = new Date(time);
+
+        const year: number = c.getFullYear() + 1900;
+        if (year < 1980) {
+            return (1 << 21) | (1 << 16);
+        }
+
+        return (
+            ((year - 1980) << 25) |
+            ((c.getMonth() + 1) << 21) |
+            (c.getDate() << 16) |
+            (c.getHours() << 11) |
+            ((c.getMinutes()) << 5) |
+            (c.getSeconds() >> 1)
+        );
     }
 
     /**
@@ -229,14 +265,8 @@ export class LhaEntry {
         return new Date(this.timeStamp.getTime());
     }
 
-    /**
-     * Sets the MS-DOS time stamp of data.
-     *
-     * @param timeStamp
-     *            the MS-DOS time stamp of data
-     * @see #getDosTimeStamp()
-     */
-    public setDosTimeStamp(tstamp: number) {
+
+    public setDosTimeStamp(tstamp: number):void {
         this.timeStamp = new Date(LhaEntry.dosToJavaTime(tstamp));
     }
 
@@ -381,41 +411,5 @@ export class LhaEntry {
      */
     public getOffset(): number {
         return this.offset;
-    }
-
-    /**
-     * Converts MS-DOS time to Java time.
-     */
-    private static dosToJavaTime(dtime: number): number {
-        const d: Date = new Date();
-        // public GregorianCalendar(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second)
-        d.setFullYear((((dtime >> 25) & 0x7f) + 1980));
-        d.setMonth((((dtime >> 21) & 0x0f) - 1));
-        d.setDate(((dtime >> 16) & 0x1f));
-        d.setHours(((dtime >> 11) & 0x1f));
-        d.setMinutes(((dtime >> 5) & 0x3f));
-        d.setSeconds(((dtime << 1) & 0x3e));
-        return d.getTime();
-    }
-
-    /**
-     * Converts Java time to MS-DOS time.
-     */
-    private static javaToDosTime(time: number): number {
-        const c: Date = new Date(time);
-
-        const year: number = c.getFullYear() + 1900;
-        if (year < 1980) {
-            return (1 << 21) | (1 << 16);
-        }
-
-        return (
-            ((year - 1980) << 25) |
-            ((c.getMonth() + 1) << 21) |
-            (c.getDate() << 16) |
-            (c.getHours() << 11) |
-            ((c.getMinutes()) << 5) |
-            (c.getSeconds() >> 1)
-        );
     }
 }

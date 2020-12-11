@@ -42,7 +42,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./chipTunePlayer/skin.png')
     private skinLink:ResourceLink<ITexture>;
 
-    onPreloading() {
+    onPreloading():void {
         super.onPreloading();
         loadFont(this.game,'./chipTunePlayer/pixel.ttf','customFont');
         this.resourceLoader.addNextTask(()=>{
@@ -50,19 +50,19 @@ export class MainScene extends Scene {
         });
     }
 
-    public onReady() {
+    public onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);
         const bgTf = new Rectangle(this.game);
         bgTf.fillColor = Color.fromCssLiteral(`#edffe8`);
         tf.setBackground(bgTf);
         tf.size.setWH(800,300);
-        tf.textColor.fromCSS('#78cb54')
+        tf.textColor.fromCSS('#78cb54');
         tf.setPadding(50);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tf.setAlignText(AlignText.JUSTIFY);
         tf.setText("YM Chiptune player");
-        tf.filters = [new NoiseFilter(this.game)]
+        tf.filters = [new NoiseFilter(this.game)];
         this.appendChild(tf);
 
         const tfIndicator:TextField = new TextField(this.game,this.fnt);
@@ -71,14 +71,14 @@ export class MainScene extends Scene {
         tfIndicator.setBackground(bgTfIndicator);
         tfIndicator.setWordBrake(WordBrake.PREDEFINED);
         tfIndicator.size.setWH(800,80);
-        tfIndicator.textColor.fromCSS('#78cb54')
+        tfIndicator.textColor.fromCSS('#78cb54');
         tfIndicator.setPadding(3);
         tfIndicator.pos.setXY(0, 310);
         tfIndicator.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tfIndicator.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tfIndicator.setAlignText(AlignText.JUSTIFY);
         tfIndicator.setText("---- ---- ----\n---- ---- ----");
-        tfIndicator.filters = [new NoiseFilter(this.game)]
+        tfIndicator.filters = [new NoiseFilter(this.game)];
         this.appendChild(tfIndicator);
 
         const btn:Button = new Button(this.game,this.fnt);

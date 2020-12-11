@@ -1,11 +1,8 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/common/texture";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {ChildComponent} from "./childComponent";
-import {ISceneMouseEvent, MousePoint} from "@engine/control/mouse/mousePoint";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {MousePoint} from "@engine/control/mouse/mousePoint";
 import {Game} from "@engine/core/game";
 import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
 

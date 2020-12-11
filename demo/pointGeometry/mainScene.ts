@@ -16,7 +16,7 @@ export class MainScene extends Scene {
     private link:ResourceLink<ITexture>;
 
 
-    public onReady() {
+    public onReady():void {
 
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.link);

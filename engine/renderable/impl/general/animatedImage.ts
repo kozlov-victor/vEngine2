@@ -42,7 +42,7 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
         fa.target = this;
     }
 
-    public playFrameAnimation(fr:string|AbstractFrameAnimation<any>){
+    public playFrameAnimation(fr:string|AbstractFrameAnimation<any>):void{
         let frameAnimation:AbstractFrameAnimation<any>;
         if (typeof fr==='string') {
             frameAnimation = this._frameAnimations[fr];

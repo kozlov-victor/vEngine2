@@ -21,6 +21,8 @@ export class WebAudioContextHolder {
 }
 
 class CtxHolder {
+    private static _ctx:Optional<Clazz<AudioContext>> = WebAudioContextHolder.getAudioContextClass();
+    private static _res:AudioContext;
 
     public static getCtx():Optional<AudioContext>{
         if (CtxHolder._ctx && !CtxHolder._res) {
@@ -37,8 +39,6 @@ class CtxHolder {
         };
         document.addEventListener('click',listener);
     }
-    private static _ctx:Optional<Clazz<AudioContext>> = WebAudioContextHolder.getAudioContextClass();
-    private static _res:AudioContext;
 }
 
 
@@ -95,25 +95,6 @@ const createFeedBackDelayNodePair = (context:AudioContext):Optional<{delayNode: 
 
 export class WebAudioContext extends BasicAudioContext implements ICloneable<WebAudioContext>{
 
-    public static isAcceptable():boolean {
-        return !!(window && CtxHolder.getCtx());
-    }
-
-    public static getContext():AudioContext{
-        return CtxHolder.getCtx()!;
-    }
-
-    private readonly _ctx: AudioContext;
-    private _currSource: Optional<AudioBufferSourceNode>;
-    private readonly _gainNode: GainNode;
-    private readonly _stereoPanNode: Optional<StereoPannerNode>;
-    private _free: boolean = true;
-    private readonly _feedBackDelayNodePair:Optional<{delayNode: DelayNode, gainNode: GainNode }>;
-
-    public readonly type: string = 'webAudioContext';
-
-    private _nodeChain:NodeChain;
-
     constructor(protected game:Game,protected audioPLayer:AudioPlayer) {
         super(game,audioPLayer);
         this._ctx = CtxHolder.getCtx()!;
@@ -127,6 +108,25 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         }
         this._feedBackDelayNodePair = createFeedBackDelayNodePair(this._ctx);
         if (this._feedBackDelayNodePair!==undefined) this._nodeChain.addNode(this._feedBackDelayNodePair.gainNode);
+    }
+
+    private readonly _ctx: AudioContext;
+    private _currSource: Optional<AudioBufferSourceNode>;
+    private readonly _gainNode: GainNode;
+    private readonly _stereoPanNode: Optional<StereoPannerNode>;
+    private _free: boolean = true;
+    private readonly _feedBackDelayNodePair:Optional<{delayNode: DelayNode, gainNode: GainNode }>;
+
+    public readonly type: string = 'webAudioContext';
+
+    private _nodeChain:NodeChain;
+
+    public static isAcceptable():boolean {
+        return !!(window && CtxHolder.getCtx());
+    }
+
+    public static getContext():AudioContext{
+        return CtxHolder.getCtx()!;
     }
 
     public async load(buffer:ArrayBuffer, link:ResourceLink<void>):Promise<void> {

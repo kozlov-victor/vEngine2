@@ -45,7 +45,7 @@ export class MainScene extends Scene {
 
     }
 
-    public onReady() {
+    public onReady():void {
         this.links = [
             this.resourceLink1,
             this.resourceLink2

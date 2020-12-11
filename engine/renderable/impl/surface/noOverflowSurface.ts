@@ -3,7 +3,7 @@ import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 
 export class NoOverflowSurface extends ImageCacheSurface {
 
-    protected autoCalculateScale() {
+    protected autoCalculateScale():void {
         if (this.drawingSurface!==undefined) {
             this.drawingSurface.destroy();
         }

@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     @Resource.Texture(logoBase64)
     private resourceLink: ResourceLink<ITexture>;
 
-    public onReady() {
+    public onReady():void {
         const spr: Image = new Image(this.game);
         spr.setResourceLink(this.resourceLink);
         spr.pos.fromJSON({x: 10, y: 10});

@@ -11,7 +11,7 @@ export class SecondScene extends Scene {
 
     private fnt:Font;
 
-    public onPreloading(){
+    public onPreloading():void{
 
         this.backgroundColor = Color.RGB(222,244,244);
 
@@ -26,11 +26,11 @@ export class SecondScene extends Scene {
 
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady() {
+    public onReady():void {
 
         console.log('scene 2 on ready');
 

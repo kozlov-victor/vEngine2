@@ -11,7 +11,7 @@ export class MainScene extends Scene {
 
     private logoRes:LogoResources = new LogoResources(this);
 
-    public onReady() {
+    public onReady():void {
 
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoRes.logoLink);

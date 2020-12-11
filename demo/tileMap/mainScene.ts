@@ -17,7 +17,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./tileMap/tiles.png')
     private tilesLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         this.rect = rect;
@@ -26,7 +26,7 @@ export class MainScene extends Scene {
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         const data:number[] = [
             1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,

@@ -38,6 +38,6 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
         return [rNormal,rChecked];
     }
 
-    draw() {}
+    draw():void {}
 
 }

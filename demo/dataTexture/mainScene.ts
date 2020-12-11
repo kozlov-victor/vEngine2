@@ -14,7 +14,7 @@ export class MainScene extends Scene {
     private textureLinks:ResourceLink<ITexture>[] = [];
 
 
-    public onPreloading() {
+    public onPreloading():void {
 
         for (let i:number=1;i<=6;i++) {
             this.resourceLinks.push(this.resourceLoader.loadBinary(`./dataTexture/data/scatman.${i}.pbm`));
@@ -22,7 +22,7 @@ export class MainScene extends Scene {
 
     }
 
-    public onReady() {
+    public onReady():void {
 
 
         for (const rl of this.resourceLinks) {

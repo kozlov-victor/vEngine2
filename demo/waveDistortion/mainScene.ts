@@ -22,7 +22,7 @@ export class MainScene extends Scene {
     private img:Image;
 
 
-    public onReady() {
+    public onReady():void {
 
         this.img = new Image(this.game);
         this.img.setResourceLink(this.repeatLink);

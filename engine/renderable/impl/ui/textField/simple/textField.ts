@@ -50,7 +50,7 @@ export class TextField extends Container {
         this.textColor.observe(()=>this.requestTextRedraw());
     }
 
-    public setText(text:string|number){
+    public setText(text:string|number):void{
         const strText = text.toString();
         if (strText===this._text) return;
         this._text = strText;
@@ -68,7 +68,7 @@ export class TextField extends Container {
         this.markAsDirty();
     }
 
-    revalidate() {
+    revalidate():void {
         if (this.useCache) this._revalidateWithCache();
         else this._revalidateWithoutCache();
     }
@@ -133,12 +133,12 @@ export class TextField extends Container {
         return this._text;
     }
 
-    public destroy() {
+    public destroy():void {
         super.destroy();
         if (this.cacheSurface!==undefined) this.cacheSurface.destroy();
     }
 
-    public update() {
+    public update():void {
         super.update();
         if (this.isDirty()) this.revalidate();
         if (this.needTextRedraw) this.redrawText();
@@ -224,7 +224,7 @@ export class TextField extends Container {
         this.needTextRedraw = true;
     }
 
-    protected onCleared() {
+    protected onCleared():void {
         this.requestTextRedraw();
     }
 
@@ -233,7 +233,7 @@ export class TextField extends Container {
         this.requestTextRedraw();
     }
 
-    private calculateAutoSize(){
+    private calculateAutoSize():void{
         if (this.measurer===undefined) this.measurer = new TextRowSet(this.game,this.font,{width:Infinity,height:Infinity},Color.NONE);
         this.passPropertiesToRowSet(this.measurer);
         this.size.setWH(

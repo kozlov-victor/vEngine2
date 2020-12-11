@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     private cubeTextureLink:ResourceLink<ICubeMapTexture>;
 
 
-    public onPreloading() {
+    public onPreloading():void {
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj8/test.obj');
         this.cubeTextureLink = this.resourceLoader.loadCubeTexture(
             './cubeMapTexture/textures/cm_left.jpg',
@@ -26,7 +26,7 @@ export class MainScene extends Scene {
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(122,255,255);

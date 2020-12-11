@@ -37,7 +37,7 @@ export class BinBuffer {
         return this.pointer;
     }
 
-    public setPointer(n:number){
+    public setPointer(n:number):void{
         this.pointer = n;
     }
 
@@ -77,11 +77,11 @@ export class BinBuffer {
         this.resetPointer();
     }
 
-    public writeString(string:string):void {
-        for (let i = 0; i < string.length; i++) {
-            this.view.setUint8(this.pointer + i, string.charCodeAt(i));
+    public writeString(str:string):void {
+        for (let i = 0; i < str.length; i++) {
+            this.view.setUint8(this.pointer + i, str.charCodeAt(i));
         }
-        this.pointer+=string.length;
+        this.pointer+=str.length;
     }
 
     public writeUInt32(n:number,littleEndian?: boolean):void {
@@ -112,6 +112,7 @@ export class BinBuffer {
         let res:string = '';
         let size:number = 0;
         let uint8:number;
+        // tslint:disable-next-line:no-conditional-assignment
         while ((uint8 = this.view.getUint8(this.pointer + size))!==0) {
             res+=String.fromCharCode(uint8);
             size++;

@@ -21,7 +21,7 @@ export class RendererHelper {
         return undefined!;
     }
 
-    public destroyRenderTarget(t:IRenderTarget){}
+    public destroyRenderTarget(t:IRenderTarget):void {}
 
 
 }

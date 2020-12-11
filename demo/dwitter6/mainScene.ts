@@ -9,7 +9,7 @@ export class MainScene extends Scene {
     private renderScene:()=>void;
 
 
-    public onReady() {
+    public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(0);
@@ -44,6 +44,7 @@ export class MainScene extends Scene {
 
             const t = this.game.getElapsedTime() / 1000;
 
+            // tslint:disable-next-line:max-line-length
             for(d=256;--d;)for(X=-32;++X<32;x.drawRect(960+X*8e3/d,100+7e4/d-h,120,9))x.setFillColor(R(h=(C(a=d/9+t*6)+C(X/9+a/3))*35,g1=h+C(X^d)*6+90,g1/.8));
         };
     }

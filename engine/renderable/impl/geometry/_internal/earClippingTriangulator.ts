@@ -7,6 +7,12 @@ export class EarClippingTriangulator {
     private static readonly _CONCAVE: number = -1;
     private static readonly _CONVEX: number = 1;
 
+    private indices: number[] = [];
+    private vertices: number[];
+    private vertexCount: number;
+    private vertexTypes: number[] = [];
+    private triangles: number[] = [];
+
     private static areVerticesClockwise(vertices: number[], offset: number, count: number): boolean {
         if (count <= 2) return false;
         let area: number = 0, p1x, p1y, p2x, p2y:number;
@@ -33,12 +39,6 @@ export class EarClippingTriangulator {
         if (area===0) return 0;
         return area>0?1:-1;
     }
-
-    private indices: number[] = [];
-    private vertices: number[];
-    private vertexCount: number;
-    private vertexTypes: number[] = [];
-    private triangles: number[] = [];
 
 
     public computeTriangles(vertices: number[]): number[] {
@@ -94,13 +94,14 @@ export class EarClippingTriangulator {
         this.triangles = triangles;
     }
 
-    /** @return {@link #CONCAVE} or {@link #_CONVEX} */
+
     private classifyVertex(index: number): number {
         const indices: number[] = this.indices;
         const previous: number = indices[this.previousIndex(index)] * 2;
         const current: number = indices[index] * 2;
         const next: number = indices[this.nextIndex(index)] * 2;
         const vertices: number[] = this.vertices;
+        // tslint:disable-next-line:max-line-length
         return EarClippingTriangulator.computeSpannedAreaSign(vertices[previous], vertices[previous + 1], vertices[current], vertices[current + 1],
             vertices[next], vertices[next + 1]);
     }

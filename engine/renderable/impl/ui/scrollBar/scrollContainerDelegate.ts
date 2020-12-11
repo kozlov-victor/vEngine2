@@ -53,7 +53,7 @@ export class ScrollContainerDelegate {
         }
 
         this.vScrollBar.size.setWH(5,this.constrainContainer.size.height);
-        this.vScrollBar.pos.x = this.constrainContainer.size.width - this.vScrollBar.size.width + this.rootContainer.paddingRight;
+        this.vScrollBar.pos.x = this.constrainContainer.size.width - this.vScrollBar.size.width;
         this.hScrollBar.size.setWH(this.constrainContainer.size.width,5);
         this.updateScrollValues();
     }
@@ -64,7 +64,15 @@ export class ScrollContainerDelegate {
         this.hScrollContainerListener.update(delta);
     }
 
-    public destroy(){
+    public getCurrentOffsetVertical():number {
+        return this.vScrollContainerListener.getCurrentOffset();
+    }
+
+    public getCurrentOffsetHorizontal():number {
+        return this.hScrollContainerListener.getCurrentOffset();
+    }
+
+    public destroy():void{
         if (this.vScrollContainerListener!==undefined) this.vScrollContainerListener.destroy();
         if (this.hScrollContainerListener!==undefined) this.hScrollContainerListener.destroy();
         this.vScrollBar.removeSelf();

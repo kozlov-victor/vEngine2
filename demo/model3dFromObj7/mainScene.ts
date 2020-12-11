@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     private dataTextureLink:ResourceLink<ITexture>;
     private dataTextureNormalLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         //https://www.reinerstilesets.de/graphics/3d-grafiken/3d-plants/
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj7/mushroom_tube_A.obj');
         this.dataTextureLink = this.resourceLoader.loadTexture('./model3dFromObj7/mushroom_tube_tex.png');
@@ -21,7 +21,7 @@ export class MainScene extends Scene {
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(255,255,255);

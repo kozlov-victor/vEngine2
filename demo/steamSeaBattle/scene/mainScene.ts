@@ -47,11 +47,11 @@ export class MainScene extends BaseScene {
 
     private psBullet:ParticleSystem;
 
-    public onPreloading() {
+    public onPreloading():void {
         super.onPreloading();
     }
 
-    public onReady() {
+    public onReady():void {
         super.onReady();
         this.filters.push(new BarrelDistortionFilter(this.game));
         this.ship = this.findChildById('shipContainer') as RenderableModel;
@@ -112,7 +112,7 @@ export class MainScene extends BaseScene {
         return AssetsDocumentHolder.getDocument().getElementById('main')!;
     }
 
-    private waterWave(){
+    private waterWave():void{
         this.setTimeout(()=>{
             this.sounds.water.velocity = MathEx.random(0.1,1.5);
             this.sounds.water.play();
@@ -120,26 +120,26 @@ export class MainScene extends BaseScene {
         },MathEx.randomInt(2000,5000));
     }
 
-    private resetShip(){
+    private resetShip():void{
         this.ship.pos.x = 1000 + MathEx.random(0,300);
         this.ship.velocity.setX(-MathEx.random(20,60));
     }
 
-    private movePeriscope(factor:1|-1){
+    private movePeriscope(factor:1|-1):void{
         this.sounds.gear.play();
         this.seaContainer.velocity.x = 120*factor;
         this.gear1.angleVelocity = 5*factor;
         this.gear2.angleVelocity = 3;
     }
 
-    private stopPeriscope(){
+    private stopPeriscope():void{
         this.sounds.gear.stop();
         this.seaContainer.velocity.x = 0;
         this.gear1.angleVelocity = 0;
         this.gear2.angleVelocity = 0;
     }
 
-    private checkPeriscope(){
+    private checkPeriscope():void{
         if (this.seaContainer.velocity.x>0 && this.seaContainer.pos.x>this.PERISCOPES_LIMIT_LEFT) {
             this.seaContainer.pos.x=this.PERISCOPES_LIMIT_LEFT;
             this.stopPeriscope();
@@ -155,7 +155,7 @@ export class MainScene extends BaseScene {
             MANOMETER_SCALE;
     }
 
-    private checkLevelCompleted(){
+    private checkLevelCompleted():void{
         if (this.numOfShoots===0) {
             const resultScene:ResultScene = new ResultScene(this.game);
             resultScene.SCORE_TO_SET = this.score;
@@ -163,7 +163,7 @@ export class MainScene extends BaseScene {
         }
     }
 
-    private checkBullet() {
+    private checkBullet():void {
         if (!this.bullet.visible) return;
         if (this.bulletContainer.pos.y<270) {
             this.bulletContainer.velocity.y = 0;
@@ -197,7 +197,7 @@ export class MainScene extends BaseScene {
     }
 
 
-    private shoot(){
+    private shoot():void{
         if (this.numOfShoots===0) return;
         if (this.bullet.visible) return;
         this.sounds.shoot.play();
@@ -211,7 +211,7 @@ export class MainScene extends BaseScene {
     }
 
 
-    private listenControls(){
+    private listenControls():void{
         this.on(KEYBOARD_EVENTS.keyPressed,(e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT: {

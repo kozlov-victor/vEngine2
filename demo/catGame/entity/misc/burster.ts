@@ -1,26 +1,11 @@
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {Game} from "@engine/core/game";
-import {Color} from "@engine/renderer/common/color";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Rect} from "@engine/geometry/rect";
 
 export class Burster {
-
-    public static readonly groupName:string = 'particle';
-
-    public static getCreatedInstance():Burster {
-        return Burster.instance;
-    }
-
-    public static instantiate(game:Game):void {
-        Burster.instance = new Burster(game);
-    }
-
-    private static instance:Burster;
-
-    private particleSystem:ParticleSystem;
 
 
     private constructor(private game:Game) {
@@ -51,6 +36,20 @@ export class Burster {
         ps.emitAuto = false;
         game.getCurrScene().getLayerAtIndex(1).appendChild(ps);
         this.particleSystem = ps;
+    }
+
+    public static readonly groupName:string = 'particle';
+
+    private static instance:Burster;
+
+    private particleSystem:ParticleSystem;
+
+    public static getCreatedInstance():Burster {
+        return Burster.instance;
+    }
+
+    public static instantiate(game:Game):void {
+        Burster.instance = new Burster(game);
     }
 
     public burst(x:number,y:number):void {

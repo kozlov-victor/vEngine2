@@ -23,7 +23,7 @@ export class MainScene extends Scene {
     }
 
 
-    public onReady() {
+    public onReady():void {
         const framesRaw: Record<string,{frame:{x:number,y:number,w:number,h:number}}> = JSON.parse(this.atlasLink.getTarget()).frames;
 
         const toFrame = (frameInfo: {frame:{x:number,y:number,w:number,h:number}}): IRectJSON => {

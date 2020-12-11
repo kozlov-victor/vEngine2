@@ -14,7 +14,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/repeat.jpg')
     private link:ResourceLink<ITexture>;
 
-    public onReady() {
+    public onReady():void {
 
         this.img1 = new Image(this.game);
         this.img1.setResourceLink(this.link);
@@ -38,7 +38,7 @@ export class MainScene extends Scene {
 
     }
 
-    public onUpdate() {
+    public onUpdate():void {
         this.img1.offset.x+=1;
         this.img1.offset.y+=.5;
     }

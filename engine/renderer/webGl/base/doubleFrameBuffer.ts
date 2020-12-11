@@ -16,7 +16,7 @@ export class DoubleFrameBuffer {
         ];
     }
 
-    public setInterpolationMode(mode:INTERPOLATION_MODE) {
+    public setInterpolationMode(mode:INTERPOLATION_MODE):void {
         this.buffers[0].getTexture().setInterpolationMode(mode);
         this.buffers[1].getTexture().setInterpolationMode(mode);
     }

@@ -12,7 +12,7 @@ game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);
 const mainScene: Scene = new MainScene(game);
-const transition = new FadeInAppearanceTransition(game,3000);
+const transition = new FadeInAppearanceTransition(game,1000);
 transition.setBackgroundColor(Color.RGB(233));
 game.runScene(mainScene,transition);
 

@@ -46,16 +46,16 @@ class ContainerForDrawingSurface extends NullGameObject {
 }
 
 
+// tslint:disable-next-line:max-line-length
 export class DrawingSurface extends RenderableModel implements ICloneable<DrawingSurface>,IResource<ITexture>, IMatrixTransformable, IDestroyable {
 
-    private static normalizeColor(col:byte|number, g?:byte, b?:byte, a:byte = 255):Color {
-        if (b===undefined) {
-            const color:Color = Color.fromRGBNumeric(col as number);
-            color.a = g!;
-            return color;
-        } else {
-            return new Color(col as byte,g!,b!,a);
-        }
+    constructor(game:Game,size:Readonly<ISize>){
+        super(game);
+        this.size.set(size);
+        this.canvasImage.size.set(this.size);
+        this._renderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,size);
+        this.canvasImage.setResourceLink(this._renderTarget.getResourceLink());
+        this.canvasImage.revalidate();
     }
 
     public filters: IFilter[] = [];
@@ -80,13 +80,14 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     private readonly _renderTarget:IRenderTarget;
     private _omitSelfOnRendering:boolean = false;
 
-    constructor(game:Game,size:Readonly<ISize>){
-        super(game);
-        this.size.set(size);
-        this.canvasImage.size.set(this.size);
-        this._renderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,size);
-        this.canvasImage.setResourceLink(this._renderTarget.getResourceLink());
-        this.canvasImage.revalidate();
+    private static normalizeColor(col:byte|number, g?:byte, b?:byte, a:byte = 255):Color {
+        if (b===undefined) {
+            const color:Color = Color.fromRGBNumeric(col as number);
+            color.a = g!;
+            return color;
+        } else {
+            return new Color(col as byte,g!,b!,a);
+        }
     }
 
     public clone(): DrawingSurface {return undefined!;}
@@ -102,7 +103,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
     public setFillColor(col:number,alpha?:byte):void;
     public setFillColor(r:byte,g:byte,b:byte,a?:byte):void;
-    public setFillColor(col:byte|number,g?:byte,b?:byte,a:byte = 255){
+    public setFillColor(col:byte|number,g?:byte,b?:byte,a:byte = 255):void{
         this.fillColor.set(DrawingSurface.normalizeColor(col,g,b,a));
     }
 
@@ -116,7 +117,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
 
     public setDrawColor(col:number,alpha?:number):void;
     public setDrawColor(r:byte,g:byte,b:byte,a?:byte):void;
-    public setDrawColor(col:byte|number,g?:byte,b?:byte,a:byte = 255){
+    public setDrawColor(col:byte|number,g?:byte,b?:byte,a:byte = 255):void{
         this.drawColor.set(DrawingSurface.normalizeColor(col,g,b,a));
     }
 
@@ -131,7 +132,6 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     public transformSet(val:Readonly<MAT16>): void {
         this._matrixStack.setMatrix(val);
     }
-
 
     public transformRestore(): void {
         this._matrixStack.restore();
@@ -266,8 +266,6 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
             polygon.fillColor = this.fillColor;
             this.drawModel(polygon);
         }
-
-
     }
 
     public moveTo(x:number,y:number):void {
@@ -280,7 +278,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this.moveTo(x,y);
     }
 
-    public drawPolygon(pathOrVertices:string|number[]){
+    public drawPolygon(pathOrVertices:string|number[]):void{
         if ((pathOrVertices as number[]).push!==undefined) {
             this.drawPolygonFromVertices(pathOrVertices as number[]);
         } else {
@@ -288,7 +286,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         }
     }
 
-    public drawPolyline(pathOrVertices:string|number[]){
+    public drawPolyline(pathOrVertices:string|number[]):void{
         let p:PolyLine;
         if (isString(pathOrVertices)) {
             p = PolyLine.fromSvgPath(this.game,pathOrVertices);
@@ -301,7 +299,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this.drawModel(p);
     }
 
-    public drawModel(model:RenderableModel,clearColor?:Color){
+    public drawModel(model:RenderableModel,clearColor?:Color):void{
         if (DEBUG && !model) throw new DebugError(`illegal argument`);
         const parent:RenderableModel = model.parent;
         this.appendChild(this._transformableContainer);
@@ -320,11 +318,11 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         this.canvasImage.setPixelPerfect(val);
     }
 
-    public destroy() {
+    public destroy():void {
         this._renderTarget.destroy();
     }
 
-    private drawPolygonFromSvgPath(svgPath:string) {
+    private drawPolygonFromSvgPath(svgPath:string):void {
         const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(this.game,svgPath);
         polyLines.forEach((pl:PolyLine)=>{
             const pg:Polygon = Polygon.fromPolyline(this.game,pl);
@@ -340,7 +338,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         }
     }
 
-    private drawPolygonFromVertices(vertices:number[]){
+    private drawPolygonFromVertices(vertices:number[]):void{
         const prev:number = vertices[vertices.length-2];
         const last:number = vertices[vertices.length-1];
 
@@ -361,14 +359,14 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
 
-    private prepareShape(shape:Shape){
+    private prepareShape(shape:Shape):void{
         shape.fillColor = this.fillColor;
         shape.lineWidth = this._lineWidth;
         shape.color = this.drawColor;
         shape.blendMode = BLEND_MODE.NORMAL_SEPARATE;
     }
 
-    private drawSimpleShape(shape:Shape){
+    private drawSimpleShape(shape:Shape):void{
         this.prepareShape(shape);
         this.drawModel(shape);
     }

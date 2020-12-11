@@ -10,13 +10,13 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<ITexture>;
     private normalsLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.logoLink = this.resourceLoader.loadTexture('./model3dCubeNormalMap/wood.png');
         this.normalsLink = this.resourceLoader.loadTexture('./model3dCubeNormalMap/wood_normal.png');
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(255,255,255);

@@ -210,7 +210,7 @@ export abstract class AbstractChipTrack {
                 resolve(fr.result as ArrayBuffer);
             };
             fr.readAsArrayBuffer(blob);
-        })
+        });
     }
 
     public abstract getTrackInfo(): string;

@@ -6,19 +6,19 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 export class MainScene extends Scene {
 
-    public onPreloading() {
+    public onPreloading():void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     // https://codepen.io/8Observer8/pen/qxmboV
-    public onReady() {
+    public onReady():void {
 
         this.backgroundColor.set(Color.BLACK);
 

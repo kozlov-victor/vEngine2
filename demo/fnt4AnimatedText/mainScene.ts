@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
-import * as fntXML from "xml/angelcode-loader!../fnt3/font.fnt"
+import * as fntXML from "xml/angelcode-loader!../fnt3/font.fnt";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {
     AlignText,
@@ -14,6 +14,7 @@ import {AppearFromPointTextAnimation} from "@engine/renderable/impl/ui/textField
 import {EasingSine} from "@engine/misc/easing/functions/sine";
 import {RotateLetterTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/rotateLetterTextAnimation";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+// tslint:disable-next-line:max-line-length
 import {SimpleAppearLetterTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/simpletAppearLetterTextAnimation";
 import {ScaleAppearLetterTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/scaleAppearLetterTextAnimation";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";
@@ -31,7 +32,7 @@ export class MainScene extends Scene {
     @Resource.FontFromAtlas('./fnt3/font.png',fntXML)
     private fontLink:ResourceLink<Font>;
 
-    public onReady() {
+    public onReady():void {
         this.backgroundColor.setRGB(12,12,12);
         const tf = new AnimatedTextField(this.game,this.fontLink.getTarget());
         tf.size.setWH(this.game.width-30,200);
@@ -77,6 +78,7 @@ export class MainScene extends Scene {
         let i:number = 0;
 
         const setNextAnimation = ()=>{
+            // tslint:disable-next-line:max-line-length
             tf.setTextWithAnimation(`This is animated text\nEnjoy it!\n(click to change animation)\n(animation index: ${i})`, animations[i]);
             i = (++i)%animations.length;
         };

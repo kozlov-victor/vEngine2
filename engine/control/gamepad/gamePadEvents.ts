@@ -13,14 +13,14 @@ export enum GAME_PAD_EVENTS {
 
 export class GamePadEvent extends KeyPadEvent implements IGamePadEvent {
 
-    public static fromPool():Optional<GamePadEvent> {
-        return GamePadEvent.pool.getFreeObject(true);
-    }
-
     private static pool:ObjectPool<GamePadEvent> = new ObjectPool<GamePadEvent>(GamePadEvent);
 
     public button: GAME_PAD_BUTTON;
     public gamePadIndex:number;
     public value:number;
+
+    public static fromPool():Optional<GamePadEvent> {
+        return GamePadEvent.pool.getFreeObject(true);
+    }
 
 }

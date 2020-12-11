@@ -48,7 +48,7 @@ export class BasicEnv {
         game.getCurrScene().appendChild(this.drawingSurface);
     }
 
-    public INPUT(message:string,varName:string){
+    public INPUT(message:string,varName:string):void{
         this.PRINT();
         this.PRINT(message+"? ");
         this.userInputMode = true;
@@ -100,12 +100,12 @@ export class BasicEnv {
         });
     }
 
-    public DATA(arr:any[]){
+    public DATA(arr:any[]):void{
         if (this.skipCommandsWhile!==undefined) return;
         this._data.push(...arr);
     }
 
-    public PRINT_TAB(n:number){
+    public PRINT_TAB(n:number):void{
         if (this.skipCommandsWhile!==undefined) return;
         let numOfSpaces:number;
         if (n<this.cursorPos) {
@@ -120,7 +120,7 @@ export class BasicEnv {
         this.redraw();
     }
 
-    public REM(s?:string){
+    public REM(s?:string):void{
 
     }
 
@@ -132,7 +132,7 @@ export class BasicEnv {
         return s.substr(from - 1,length);
     }
 
-    public READ(varName:string,index?:number) {
+    public READ(varName:string,index?:number):void {
         if (this.skipCommandsWhile!==undefined) return;
         const data = this._data.shift();
         if (data===undefined) throw new Error(`nothing to READ`);
@@ -143,7 +143,7 @@ export class BasicEnv {
         return String.fromCharCode(n);
     }
 
-    public PRINT(s?:string){
+    public PRINT(s?:string):void{
         if (this.skipCommandsWhile!==undefined) return;
         if (!s) {
             this.cursorPos = 0;
@@ -160,7 +160,7 @@ export class BasicEnv {
         this.redraw();
     }
 
-    public FOR(varName:string,from:number,to:number,step:number = 1){
+    public FOR(varName:string,from:number,to:number,step:number = 1):void{
         if (this.skipCommandsWhile!==undefined) return;
         if (step>0) {
             if (from>to) {
@@ -183,7 +183,7 @@ export class BasicEnv {
         this.loopContexts.push(lc);
     }
 
-    public NEXT(varName:string) {
+    public NEXT(varName:string):void {
         if (this.skipCommandsWhile===varName) {
             this.skipCommandsWhile = undefined;
             return;
@@ -203,8 +203,8 @@ export class BasicEnv {
         }
     }
 
-    public GET_VAR(varName:string,index?:number) {
-        if (this.skipCommandsWhile!==undefined) return;
+    public GET_VAR(varName:string,index?:number):any {
+        if (this.skipCommandsWhile!==undefined) return undefined!;
         if (this.variables[varName]===undefined) throw new Error(`no such variable: ${varName}`);
         if (index===undefined) {
             if (this.variables[varName].splice) throw new Error(`${varName}: wrong variable invocation: index is expected`);
@@ -219,8 +219,10 @@ export class BasicEnv {
         return val;
     }
 
-    public ASSIGN_VAR(varName:string, value:any, index?:number) {
-        if (value===undefined) throw new Error(`can not assign value to ${varName}${index===undefined?'':`[${index}]`}: bad value to assign`);
+    public ASSIGN_VAR(varName:string, value:any, index?:number):void {
+        if (value===undefined) {
+            throw new Error(`can not assign value to ${varName}${index===undefined?'':`[${index}]`}: bad value to assign`);
+        }
         if (this.skipCommandsWhile!==undefined) return;
         if (index===undefined) this.variables[varName] = value;
         else {
@@ -229,7 +231,7 @@ export class BasicEnv {
         }
     }
 
-    public GOTO(n:number){
+    public GOTO(n:number):void{
         if (this.skipCommandsWhile!==undefined) return;
         const line = this.program.findIndex(it=>it.number===n);
         if (line===-1) throw new Error('can not GO TO line ${n}');
@@ -237,14 +239,14 @@ export class BasicEnv {
         this.instructionPointSet = true;
     }
 
-    public CLS(){
+    public CLS():void{
         this.res = '';
         this.cursorPos = 0;
         this.redraw();
         this.drawingSurface.clear();
     }
 
-    public IF(res:boolean,fn:()=>void) {
+    public IF(res:boolean,fn:()=>void):void {
         if (this.skipCommandsWhile!==undefined) return;
         if (res) fn();
     }
@@ -265,12 +267,12 @@ export class BasicEnv {
         return Math.sqrt(+n);
     }
 
-    public GOSUB(n:number){
+    public GOSUB(n:number):void{
         this.subroutinesStack.push(this.pointer+1);
         this.GOTO(n);
     }
 
-    public RETURN(){
+    public RETURN():void{
         const pointer:number = this.subroutinesStack.pop()!;
         if (pointer===undefined) throw new Error(`unexpected RETURN`);
         this.pointer = pointer;
@@ -287,10 +289,10 @@ export class BasicEnv {
             this.drawingSurface.moveTo(x1,y1);
             this.drawingSurface.lineTo(x2,y2);
         } else if (attribute==='B') {
-            this.drawingSurface.setFillColor(Color.NONE.asRGBNumeric(),0)
+            this.drawingSurface.setFillColor(Color.NONE.asRGBNumeric(),0);
             this.drawingSurface.drawRect(x1,y1,x2-x1,y2-y1);
         } else if (attribute==='BF') {
-            this.drawingSurface.setFillColor(Color.RGB(255,0,0).asRGBNumeric(),255)
+            this.drawingSurface.setFillColor(Color.RGB(255,0,0).asRGBNumeric(),255);
             this.drawingSurface.drawRect(x1,y1,x2-x1,y2-y1);
         }
     }
@@ -303,15 +305,15 @@ export class BasicEnv {
         this.drawingSurface.lineTo(x,y);
     }
 
-    public END(){
+    public END():void{
         this.ended = true;
     }
 
-    public DEBUG(){
+    public DEBUG():void{
         console.log('variables',JSON.stringify(this.variables));
     }
 
-    public setProgram(p:Record<number,((()=>void)[])|(()=>void)|void>){
+    public setProgram(p:Record<number,((()=>void)[])|(()=>void)|void>):void{
         const keys:number[] = Object.keys(p).map(s=>+s);
         // tslint:disable-next-line:no-shadowed-variable
         keys.sort((a:number,b:number):number=>{
@@ -351,7 +353,7 @@ export class BasicEnv {
         this.PRINT();
     }
 
-    public RUN(){
+    public RUN():void{
         if (this.ended) {
             this.complete();
             return;

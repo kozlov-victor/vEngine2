@@ -4,18 +4,17 @@ import {Color} from "@engine/renderer/common/color";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {BasicEnv} from "../oldSymbolScreen/oldScreenEmul";
-import {BasicParser} from "./basicParser";
 
 export class MainScene extends Scene {
 
     private fnt:Font;
 
-    public onPreloading(){
+    public onPreloading():void{
         this.backgroundColor = Color.RGB(10,10,30);
         this.fnt = new Font(this.game, {fontSize: 14});
     }
 
-    public onReady() {
+    public onReady():void {
 
         // const parser = new BasicParser();
         // parser.parse(`

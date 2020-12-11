@@ -25,28 +25,6 @@ const RIGHT:number = 1;
 
 export class Hero extends AbstractCharacter {
 
-    public static readonly groupName:string = 'hero';
-
-    public static getCreatedInstance():Hero {
-        return Hero.instance;
-    }
-
-    private static instance:Hero;
-
-    private rotateAnimation:CellFrameAnimation;
-    private fallAnimation:CellFrameAnimation;
-    private highKickAnimation:CellFrameAnimation;
-
-    private hurt:boolean = false;
-    private hurtCnt:number = 0;
-    private beating:boolean = false;
-    private direction:number = RIGHT;
-
-    private soundHurt = new Sound(this.game);
-    private soundShoot = new Sound(this.game);
-    private soundJump = new Sound(this.game);
-    private soundPick = new Sound(this.game);
-
     constructor(protected game:Game, spr:ResourceLink<ITexture>) {
         super(game,spr,{
             restitution: 0.2,
@@ -69,6 +47,28 @@ export class Hero extends AbstractCharacter {
         this.listenFallToHole();
     }
 
+    public static readonly groupName:string = 'hero';
+
+    private static instance:Hero;
+
+    private rotateAnimation:CellFrameAnimation;
+    private fallAnimation:CellFrameAnimation;
+    private highKickAnimation:CellFrameAnimation;
+
+    private hurt:boolean = false;
+    private hurtCnt:number = 0;
+    private beating:boolean = false;
+    private direction:number = RIGHT;
+
+    private soundHurt = new Sound(this.game);
+    private soundShoot = new Sound(this.game);
+    private soundJump = new Sound(this.game);
+    private soundPick = new Sound(this.game);
+
+    public static getCreatedInstance():Hero {
+        return Hero.instance;
+    }
+
     public injectResources(
         res:
             {
@@ -76,7 +76,7 @@ export class Hero extends AbstractCharacter {
                 soundHurt:ResourceLink<void>,
                 soundJump:ResourceLink<void>,
                 soundPick:ResourceLink<void>
-        }){
+        }):void{
         this.soundShoot.setResourceLink(res.soundShoot);
         this.soundHurt.setResourceLink(res.soundHurt);
         this.soundJump.setResourceLink(res.soundJump);

@@ -7,7 +7,7 @@ export class MainScene extends Scene {
     private surface:DrawingSurface;
     private renderScene:()=>void;
 
-    public onReady() {
+    public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(1);
@@ -57,7 +57,7 @@ export class MainScene extends Scene {
 
             //x.transformRestore();
 
-        }
+        };
 
     }
 

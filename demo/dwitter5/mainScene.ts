@@ -8,7 +8,7 @@ export class MainScene extends Scene {
 
 
 
-    public onReady() {
+    public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(0);
@@ -43,6 +43,7 @@ export class MainScene extends Scene {
 
         let i,d,p:number;
         c.size.width^=0;
+        // tslint:disable-next-line:no-conditional-assignment
         for(i=5e3;p=3*t+T(t/2)*i/2e3+i%4*2,i-=5;x.setFillColor(0xFF0000)) {
             d=C(p)-S(p);
             // tslint:disable-next-line:no-unused-expression

@@ -30,7 +30,7 @@ export class MainScene extends Scene {
         super(game);
     }
 
-    public onPreloading() {
+    public onPreloading():void {
         this.overlayLink = this.resourceLoader.loadTexture('./slotMashine/resources/overlay.png');
         this.wheelLink = this.resourceLoader.loadTexture(`./slotMashine/resources/wheel.png?1`);
         const rect:Rectangle = new Rectangle(this.game);
@@ -39,11 +39,11 @@ export class MainScene extends Scene {
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady() {
+    public onReady():void {
 
         this.overlay = new Image(this.game);
         this.overlay.setResourceLink(this.overlayLink);

@@ -13,13 +13,13 @@ export class MainScene extends Scene {
 
     private dataTextureLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj6/tiger.x.obj');
         this.dataTextureLink = this.resourceLoader.loadTexture('./model3dFromObj6/tiger.png');
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(255,255,255);

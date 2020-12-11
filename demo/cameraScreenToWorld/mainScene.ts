@@ -16,7 +16,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/logo.png') private logoLink:ResourceLink<ITexture>;
     @Resource.Texture('./assets/repeat.jpg')  private bgLink:ResourceLink<ITexture>;
 
-    public onReady() {
+    public onReady():void {
 
         this.game.camera.angle = 0.1;
         this.game.camera.pos.z = 10;

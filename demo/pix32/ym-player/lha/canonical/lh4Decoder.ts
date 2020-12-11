@@ -96,6 +96,7 @@ export class Lh4Decoder extends LhDecoder {
         return (j);
     }
 
+    // tslint:disable-next-line:variable-name
     private readPositionLength(nn: number, nbit: number, i_special: number): void {
         const n: number = this.getBits(nbit);
         if (n === 0) {

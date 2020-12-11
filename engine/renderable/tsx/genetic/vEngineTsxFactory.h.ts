@@ -13,7 +13,11 @@ const flattenDeep = (arr:(VirtualNode[]|VirtualNode)[]):VirtualNode[]=> {
 export class VEngineTsxFactory<T> {
 
 
-    public static createElement(item:string|((props:Record<string, any>)=>VirtualNode), props:Record<string, any>|null,...children: VirtualNode[]):VirtualNode{
+    public static createElement(
+        item:string|((props:Record<string, any>)=>VirtualNode),
+        props:Record<string, any>|null,
+        ...children: VirtualNode[]
+    ):VirtualNode{
         if (props===null) props = {};
         if ((item as (props:Record<string, any>)=>VirtualNode).call!==undefined) {
             return (item as (arg:any)=>VirtualNode)(props);

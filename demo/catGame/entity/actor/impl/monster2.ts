@@ -49,7 +49,7 @@ export class Monster2 extends AbstractMonster {
         );
     }
 
-    private scheduleBurst(){
+    private scheduleBurst():void{
         this.game.getCurrScene().setTimeout(()=>{
             this.burstWithParticles();
             this.attackAnimation.play();

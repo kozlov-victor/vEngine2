@@ -7,12 +7,13 @@ export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void = ():void=>{};
 
     @Resource.Font({fontFamily:'serif',fontSize:120})
     private fnt:Font;
 
-    public onReady() {
+    private renderScene:()=>void = ():void=>{};
+
+    public onReady():void {
 
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
@@ -51,15 +52,15 @@ export class MainScene extends Scene {
             const t = this.game.getElapsedTime() / 1000;
             // https://www.dwitter.net/d/19557
 
-            const h=560
-            const w=h*4
-            const a=T(t+2)*99
-            const P=T(t)*10+h
+            const h=560;
+            const w=h*4;
+            const a=T(t+2)*99;
+            const P=T(t)*10+h;
             x.setDrawColor(R(a,a/3,a),100);
             x.drawText(w,P,P);
             x.setDrawColor(R(h,h,h),3/h);
             x.drawText(0,0,w);
-        }
+        };
     }
 
     protected onRender(): void {

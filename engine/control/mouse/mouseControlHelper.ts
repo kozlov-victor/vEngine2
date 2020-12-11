@@ -23,8 +23,16 @@ export class MouseControlHelper {
         let result:boolean = false;
         let j:number = polygon.length - 1;
         for (let i:number = 0,max:number= polygon.length; i < max; i++) {
-            if (polygon[i][1] < testPoint.y && polygon[j][1] >= testPoint.y || polygon[j][1] < testPoint.y && polygon[i][1] >= testPoint.y) {
-                if (polygon[i][0] + (testPoint.y - polygon[i][1]) / (polygon[j][1] - polygon[i][1]) * (polygon[j][0] - polygon[i][0]) < testPoint.x) {
+            if (
+                polygon[i][1] < testPoint.y
+                && polygon[j][1] >= testPoint.y || polygon[j][1] < testPoint.y
+                && polygon[i][1] >= testPoint.y)
+            {
+                if (
+                    polygon[i][0] + (testPoint.y - polygon[i][1])
+                    /
+                    (polygon[j][1] - polygon[i][1]) * (polygon[j][0] - polygon[i][0]) < testPoint.x
+                ) {
                     result = !result;
                 }
             }
@@ -97,6 +105,7 @@ export class MouseControlHelper {
         } else return undefined;
     }
 
+    // tslint:disable-next-line:max-line-length
     public triggerEventForObject(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,mousePoint:MousePoint, obj:RenderableModel):IObjectMouseEvent{
         mousePoint.target = obj;
         const mouseEvent:Optional<IObjectMouseEvent> = {

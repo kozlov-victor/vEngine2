@@ -20,6 +20,7 @@ if (!globalThis.cancelAnimationFrame) {
 }
 
 if (!Array.prototype.find) {
+    // tslint:disable-next-line:typedef
     Array.prototype.find = function(predicate:(value:any,i:number,list:any)=>any) {
         if (!this && DEBUG) {
             throw new TypeError('Array.prototype.find called on null or undefined');
@@ -43,6 +44,7 @@ if (!Array.prototype.find) {
 }
 
 if (!Float32Array.prototype.slice) {
+    // tslint:disable-next-line:typedef
     Float32Array.prototype.slice = function(begin:number, end:number) {
         (this as any).slicedPortion = (this as any).slicedPortion || [];
         let cnt:number = 0;
@@ -51,6 +53,6 @@ if (!Float32Array.prototype.slice) {
             (this as any).slicedPortion[cnt++] = this[i];
         }
         return (this as any).slicedPortion;
-    }
+    };
 }
 

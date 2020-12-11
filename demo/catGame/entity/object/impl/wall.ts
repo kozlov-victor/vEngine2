@@ -35,7 +35,7 @@ export class Wall extends AbstractEntity {
         }
     }
 
-    private startMoveableY(movePlatformInfo:IExtraProperties){
+    private startMoveableY(movePlatformInfo:IExtraProperties):void{
         let d:number = 1;
         if (movePlatformInfo.fromY!>movePlatformInfo.toY!) {
             const tmp:Optional<number> = movePlatformInfo.fromY;
@@ -50,7 +50,7 @@ export class Wall extends AbstractEntity {
         },20);
     }
 
-    private startMoveableX(movePlatformInfo:IExtraProperties){
+    private startMoveableX(movePlatformInfo:IExtraProperties):void{
         let d:number = 1;
         if (movePlatformInfo.fromX!>movePlatformInfo.toX!) {
             const tmp:Optional<number> = movePlatformInfo.fromX;

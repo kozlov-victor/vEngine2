@@ -15,11 +15,11 @@ export class MainScene extends Scene {
 
     private normalMapLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.normalMapLink = this.resourceLoader.loadTexture('./lightNormalMap2/coin1.jpg');
     }
 
-    public onReady() {
+    public onReady():void {
 
         const pointLight:PointLight = new PointLight(this.game);
         pointLight.nearRadius = 290;

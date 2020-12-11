@@ -96,7 +96,7 @@ export class WaterRippleFilter extends AbstractGlFilter {
         super.doFilter(destFrameBuffer);
     }
 
-    public dropAt(x:number,y:number) {
+    public dropAt(x:number,y:number):void {
         const ind:Optional<number> = this.getNextPointIndex();
         if (ind===undefined) return;
         this.dropVectors[ind]     = x / this.game.size.width;

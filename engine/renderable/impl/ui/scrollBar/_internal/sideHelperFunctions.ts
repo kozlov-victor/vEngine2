@@ -15,7 +15,7 @@ export const assignPos = (pos: Point2d, value: number,dir:Direction):void=> {
 export const getPos =(pos: Point2d,dir:Direction):number=> {
     if (dir===Direction.VERTICAL) return  pos.y;
     else return pos.x;
-}
+};
 
 export const assignSize = (size: Size, value: number,dir:Direction):void=> {
     if (dir===Direction.VERTICAL) size.height = value;
@@ -30,9 +30,9 @@ export const getMouse = (point: {sceneX:number, sceneY:number},dir:Direction):nu
 export const getSize =(size: Size,dir:Direction):number=> {
     if (dir===Direction.VERTICAL) return  size.height;
     else return size.width;
-}
+};
 
 export const getOppositeDirection = (dir:Direction):Direction=> {
     if (dir===Direction.VERTICAL) return  Direction.HORIZONTAL;
     else return Direction.VERTICAL;
-}
+};

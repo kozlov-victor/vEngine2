@@ -65,7 +65,7 @@ export abstract class BaseAbstractIntroScene extends Scene {
         this.appendChild(new Layer(this.game));
     }
 
-    protected loadLevel() {
+    protected loadLevel():void {
 
         this.level.layers[0].objects.forEach(obj => {
             let objCreated: Optional<AbstractEntity>;

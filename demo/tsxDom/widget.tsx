@@ -1,9 +1,10 @@
 import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
+import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
 interface IState {
-    items:{number:number}[]
+    items:{number:number}[];
 }
 
 export class Widget extends VEngineTsxComponent<IState> {
@@ -19,20 +20,20 @@ export class Widget extends VEngineTsxComponent<IState> {
         this.add();
     }
 
-    add(){
+    add():void{
         this.state.items.push({number:this.state.items.length-1});
         this.setState({...this.state});
     }
-    remove(){
+    remove():void{
         this.state.items.splice(-1);
         this.setState({...this.state});
     }
-    removeAt(i:number){
+    removeAt(i:number):void{
         this.state.items.splice(i,1);
         this.setState({...this.state});
-    };
+    }
 
-    render() {
+    render():VirtualNode {
 
         const style = 'button {margin: 10px}';
         return(
@@ -42,6 +43,7 @@ export class Widget extends VEngineTsxComponent<IState> {
                 <button onclick={()=>this.remove()}>remove</button>
                 <ul>
                     {
+                        // tslint:disable-next-line:max-line-length
                         this.state.items.map((it,i)=><li><button onclick={()=>this.removeAt(i)}>-</button>the number is !!<b>{it.number}</b>!!</li>)
                     }
                 </ul>

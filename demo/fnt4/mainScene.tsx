@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font";
-import * as fntXML from "xml/angelcode-loader!./font.fnt"
+import * as fntXML from "xml/angelcode-loader!./font.fnt";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {
     AlignText,
@@ -21,7 +21,7 @@ export class MainScene extends Scene {
     private fontLink:ResourceLink<Font>;
 
 
-    public onReady() {
+    public onReady():void {
         this.backgroundColor.setRGB(12,12,12);
         const tf:RichTextField = new RichTextField(this.game,this.fontLink.getTarget());
         tf.size.set(this.game.size);

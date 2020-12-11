@@ -15,14 +15,22 @@ export const enum INTERPOLATION_MODE {
 
 export abstract class AbstractTexture implements ITexture {
 
-    public static currentBindTextureAt:{[index:number]:AbstractTexture} = {};
-
-    public static destroyAll(){
-        for (let i:number = 0; i<AbstractTexture._instances.length; i++) {
-            AbstractTexture._instances[i].destroy();
+    protected constructor(protected readonly gl:WebGLRenderingContext){
+        if (DEBUG) {
+            if (!gl) throw new DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
+            // define max texture units supported
+            if (!AbstractTexture._MAX_TEXTURE_IMAGE_UNITS) {
+                AbstractTexture._MAX_TEXTURE_IMAGE_UNITS = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+                if (DEBUG && !AbstractTexture._MAX_TEXTURE_IMAGE_UNITS) {
+                    throw new DebugError(`Can not obtain MAX_TEXTURE_IMAGE_UNITS value`);
+                }
+            }
         }
-        AbstractTexture.currentBindTextureAt = {};
+        this.tex = gl.createTexture() as WebGLTexture;
+        if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);
     }
+
+    public static currentBindTextureAt:{[index:number]:AbstractTexture} = {};
 
     private static _MAX_TEXTURE_IMAGE_UNITS:number = 0;
 
@@ -38,17 +46,11 @@ export abstract class AbstractTexture implements ITexture {
     private _currentTextureAt0:Optional<AbstractTexture>;
     private _interpolationMode:INTERPOLATION_MODE;
 
-    protected constructor(protected readonly gl:WebGLRenderingContext){
-        if (DEBUG) {
-            if (!gl) throw new DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
-            // define max texture units supported
-            if (!AbstractTexture._MAX_TEXTURE_IMAGE_UNITS) {
-                AbstractTexture._MAX_TEXTURE_IMAGE_UNITS = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
-                if (DEBUG && !AbstractTexture._MAX_TEXTURE_IMAGE_UNITS) throw new DebugError(`Can not obtain MAX_TEXTURE_IMAGE_UNITS value`);
-            }
+    public static destroyAll():void{
+        for (let i:number = 0; i<AbstractTexture._instances.length; i++) {
+            AbstractTexture._instances[i].destroy();
         }
-        this.tex = gl.createTexture() as WebGLTexture;
-        if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);
+        AbstractTexture.currentBindTextureAt = {};
     }
 
     public bind(name:string,i:number,program:ShaderProgram):void { // uniform eq to 0 by default
@@ -92,7 +94,7 @@ export abstract class AbstractTexture implements ITexture {
         return this.tex;
     }
 
-    public setInterpolationMode(mode:INTERPOLATION_MODE) {
+    public setInterpolationMode(mode:INTERPOLATION_MODE):void {
         if (mode===this._interpolationMode) return;
         this.beforeOperation();
 
@@ -119,13 +121,13 @@ export abstract class AbstractTexture implements ITexture {
         this.afterOperation();
     }
 
-    protected beforeOperation() {
+    protected beforeOperation():void {
         if (this._currentTextureAt0!==undefined) return;
         this._currentTextureAt0 = AbstractTexture.currentBindTextureAt[0];
         this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
     }
 
-    protected afterOperation(){
+    protected afterOperation():void{
         if (this._currentTextureAt0) this.gl.bindTexture(this.gl.TEXTURE_2D, this._currentTextureAt0.tex);
         // tslint:disable-next-line:no-null-keyword
         else this.gl.bindTexture(this.gl.TEXTURE_2D, null);
@@ -133,7 +135,7 @@ export abstract class AbstractTexture implements ITexture {
     }
 
 
-    protected setFilters(){
+    protected setFilters():void{
         const gl:WebGLRenderingContext = this.gl;
         const isPowerOfTwo:boolean = isPowerOf2(this.size.width) && isPowerOf2(this.size.height);
         // Check if the image is a power of 2 in both dimensions.

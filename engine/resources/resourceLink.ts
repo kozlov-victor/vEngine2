@@ -17,7 +17,7 @@ class PromiseHolder<T> {
 
     constructor() {
         this.promise = new Promise<T>((resolve, reject) => {
-            this.resolve = resolve
+            this.resolve = resolve;
             this.reject = reject;
         });
     }
@@ -26,12 +26,7 @@ class PromiseHolder<T> {
 
 export class ResourceLink<T> {
 
-    public static create<T>(target:T):ResourceLink<T>{
-        const url:string = 'url'+Math.random()+'_'+Math.random();
-        const link:ResourceLink<T> = new ResourceLink<T>(url);
-        link.setTarget(target);
-        return link;
-    }
+    constructor(public readonly url:string){}
 
     public type:'ResourceLink';
     private _state:ResourceLinkState = ResourceLinkState.CREATED;
@@ -40,7 +35,12 @@ export class ResourceLink<T> {
     private _promiseHolder:Optional<PromiseHolder<T>>;
     private _loader:Optional<ResourceLoader>;
 
-    constructor(public readonly url:string){}
+    public static create<T>(target:T):ResourceLink<T>{
+        const url:string = 'url'+Math.random()+'_'+Math.random();
+        const link:ResourceLink<T> = new ResourceLink<T>(url);
+        link.setTarget(target);
+        return link;
+    }
 
     public getUrl():string{
         return this.url;

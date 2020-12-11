@@ -26,7 +26,7 @@ export class MainScene extends Scene {
     private fnt:Font;
 
 
-    public onReady() {
+    public onReady():void {
 
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
 

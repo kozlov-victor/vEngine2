@@ -13,11 +13,11 @@ export class ElementFactory {
         return ElementFactory.instance;
     }
 
-    public onElementCreated(el:Text|HTMLElement){
+    public onElementCreated(el:Text|HTMLElement):void{
         this.elements.push(el);
     }
 
-    public onElementRemoved(el:Text|HTMLElement) {
+    public onElementRemoved(el:Text|HTMLElement):void {
         const indexOf:number = this.elements.indexOf(el);
         this.elements.splice(indexOf,1);
         this.wrappers.splice(indexOf,1);

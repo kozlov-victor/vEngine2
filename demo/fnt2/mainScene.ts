@@ -1,8 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Font} from "@engine/renderable/impl/general/font";
-import {ITexture} from "@engine/renderer/common/texture";
-import * as fntXML from "./desyrel.xml"
+import * as fntXML from "./desyrel.xml";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
@@ -14,7 +13,7 @@ export class MainScene extends Scene {
     @Resource.FontFromAtlas('./fnt2/desyrel.png',fntXML)
     private fontLink:ResourceLink<Font>;
 
-    public onReady() {
+    public onReady():void {
 
         this.backgroundColor.setRGB(12,12,12);
 

@@ -10,7 +10,7 @@ const align = (s:string,length:number)=>{
         const filler:string = new Array<string>(diff).fill('0').join('');
         return `${filler}${s}`;
     } else return s;
-}
+};
 
 export class ChipOscilloscope {
 
@@ -20,7 +20,7 @@ export class ChipOscilloscope {
 
     }
 
-    public listen(sound:Sound,track:AbstractChipTrack, textField:TextField){
+    public listen(sound:Sound,track:AbstractChipTrack, textField:TextField):void{
         if (this.timer!==undefined) this.timer.kill();
         this.timer = this.game.getCurrScene().setInterval((()=>{
 

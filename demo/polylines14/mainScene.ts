@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 
 
@@ -9,7 +8,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading() {
+    public onPreloading():void {
 
         // https://www.w3.org/TR/SVG/paths.html
         const polygon1:Polygon = Polygon.fromSvgPath(this.game,`
@@ -32,11 +31,11 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
 
     }
 
-    public onReady() {
+    public onReady():void {
 
     }
 

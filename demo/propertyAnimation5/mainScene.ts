@@ -2,7 +2,6 @@ import {Scene} from "@engine/scene/scene";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MoveByPathAnimation} from "@engine/animation/propertyAnimation/moveByPathAnimation";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
-import {Color} from "@engine/renderer/common/color";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MathEx} from "@engine/misc/mathEx";
@@ -10,7 +9,7 @@ import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 
 export class MainScene extends Scene {
 
-    public onReady() {
+    public onReady():void {
 
         // created with https://editor.method.ac/
         const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`

@@ -34,7 +34,7 @@ export class Board {
 
     public execCommands(commands:readonly ICommand[]):void{
         commands?.forEach(c=>this.execCommand(c));
-    };
+    }
 
     constructor(private game:Game,private surface:DrawingSurface,private isTeacher:boolean) {
         surface.setDrawColor(120,222,200);

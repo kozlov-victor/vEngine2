@@ -77,7 +77,7 @@ export class ShaderProgram {
         uniformWrapper.setter(this._gl, uniformWrapper.location, value);
     }
 
-    public bindBuffer(buffer:VertexBuffer, attrName:string) {
+    public bindBuffer(buffer:VertexBuffer, attrName:string):void {
         if (DEBUG) {
             if (!attrName) throw new DebugError(`can not find attribute location: attrName not defined`);
             if (this._attributes[attrName]===undefined) {
@@ -104,19 +104,19 @@ export class ShaderProgram {
         );
     }
 
-    public disableAttribute(attrName:string){
+    public disableAttribute(attrName:string):void{
         this.toggleAttribute(attrName,false);
     }
 
-    public enableAttribute(attrName:string){
+    public enableAttribute(attrName:string):void{
         this.toggleAttribute(attrName,true);
     }
 
-    public destroy(){
+    public destroy():void{
         this._gl.deleteProgram(this._program);
     }
 
-    private toggleAttribute(attrName:string,on:boolean){
+    private toggleAttribute(attrName:string,on:boolean):void{
         if (this._attributes[attrName]===undefined) {
             console.log(this);
             throw new DebugError(`unbind error: can not find attribute location for  ${attrName}`);

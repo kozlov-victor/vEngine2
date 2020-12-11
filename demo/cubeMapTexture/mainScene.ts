@@ -3,8 +3,6 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Cube} from "@engine/renderer/webGl/primitives/cube";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
@@ -23,7 +21,7 @@ export class MainScene extends Scene {
     private cubeTextureLink:ResourceLink<ICubeMapTexture>;
 
 
-    public onReady() {
+    public onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(12,22,122);

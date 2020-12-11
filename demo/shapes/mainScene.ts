@@ -12,7 +12,7 @@ import {RadialGradient} from "@engine/renderable/impl/fill/radialGradient";
 
 export class MainScene extends Scene {
 
-    public onPreloading() {
+    public onPreloading():void {
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0.2;
@@ -74,11 +74,11 @@ export class MainScene extends Scene {
         this.appendChild(star);
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
 
     }
 
-    public onReady() {
+    public onReady():void {
         console.log('ready');
     }
 

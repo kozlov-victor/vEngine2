@@ -40,7 +40,7 @@ export class MainScene extends Scene {
     private fnt2:Font;
 
 
-    public onReady() {
+    public onReady():void {
 
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
 

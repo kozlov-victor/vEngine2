@@ -8,10 +8,8 @@ import {AudioPlayer} from "@engine/media/audioPlayer";
 
 export class BasicAudioContext implements ICloneable<BasicAudioContext>{
 
+    constructor(protected game:Game, protected audioPlayer:AudioPlayer){
 
-    public static isAcceptable():boolean{
-        if (DEBUG) console.log('audio is not supported');
-        return true;
     }
 
     public readonly type:string = 'basicAudioContext';
@@ -21,8 +19,10 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
 
     private _lastTimeId:number = 0;
 
-    constructor(protected game:Game, protected audioPlayer:AudioPlayer){
 
+    public static isAcceptable():boolean{
+        if (DEBUG) console.log('audio is not supported');
+        return true;
     }
 
     public getLastValueId():number{
@@ -37,7 +37,7 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
         return this.audioPlayer;
     }
 
-    public play(sound:Sound){
+    public play(sound:Sound):void{
         this.loop(sound.loop);
         this.setGain(sound.gain);
         this.setVelocity(sound.velocity);

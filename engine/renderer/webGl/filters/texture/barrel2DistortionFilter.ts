@@ -33,7 +33,7 @@ export class Barrel2DistortionFilter extends AbstractGlFilter {
                 p.y = radius * sin(theta);
                 return 0.5 * (p + 1.0);
             }
-            
+
         `);
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`

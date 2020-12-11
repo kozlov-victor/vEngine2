@@ -14,8 +14,8 @@ export interface IRectViewJSON extends IRectJSON {
 
 export interface IFontContext {
     lineHeight: number;
-    padding:[up:number,right:number,down:number,left:number],
-    spacing: [horizontal:number, vertical:number],
+    padding:[up:number,right:number,down:number,left:number];
+    spacing: [horizontal:number, vertical:number];
     symbols: Record<string, IRectViewJSON>;
     width:number;
     height:number;
@@ -47,6 +47,7 @@ export namespace FontFactory {
         return height;
     };
 
+    // tslint:disable-next-line:max-line-length
     export const getFontContext = (standartChars:readonly string[], extraChars:readonly string[],strFont:string, width:number):IFontContext=> {
 
         const cnv:HTMLCanvasElement = document.createElement('canvas');
@@ -75,9 +76,9 @@ export namespace FontFactory {
                 destOffsetY: 0,
             };
             currX += textWidth;
-        }
+        };
 
-        standartChars.forEach(c=>putCharOnContext(c))
+        standartChars.forEach(c=>putCharOnContext(c));
         extraChars.forEach(c=>putCharOnContext(c));
         return {
             symbols,
@@ -129,7 +130,7 @@ export namespace FontFactory {
             throw new DebugError(`can not receive node ${path} from document`);
         }
         return res;
-    }
+    };
 
     export const createFontFromAtlas = (game:Game,resourceLink:ResourceLink<ITexture>,doc:Document):Font=>{
         const [up,right,down,left] = querySelector(doc,'info').getAttribute('padding').split(',').map(it=>+it);
@@ -186,7 +187,7 @@ const DEFAULT_FONT_PARAMS = {
     fontFamily: 'monospace',
     fontSize: 12,
     extraChars:[],
-}
+};
 
 const LAT_CHARS:string =
     'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
@@ -199,9 +200,9 @@ const STANDART_SYMBOLS:string =
 const CYR_CHARS:string =
     'АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНн' +
     'ОоПпРрСсТтУуФфХхЦцЧчШшЩщ' +
-    'ЫыЬьЪъЭэЮюЯя'
+    'ЫыЬьЪъЭэЮюЯя';
 
-/**
+/*
  AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz
  1234567890
  "!`?'.,;:()[]{}<>|/@^$-%+=#_&~*
@@ -211,6 +212,35 @@ const CYR_CHARS:string =
  */
 
 export class Font implements IResource<ITexture> {
+
+    constructor(protected game:Game,params:Partial<IFontParameters> = {}) {
+        this.fontFamily = params.fontFamily ?? DEFAULT_FONT_PARAMS.fontFamily;
+        this.fontSize = params.fontSize ?? DEFAULT_FONT_PARAMS.fontSize;
+        this.chars = params.chars ?? (LAT_CHARS+STANDART_SYMBOLS+CYR_CHARS).split('');
+        this.extraChars = params.extraChars ?? DEFAULT_FONT_PARAMS.extraChars;
+
+        if (params.context===undefined) params.context = this.createContext();
+        this.fontContext = params.context;
+
+        if (params.resourceLink===undefined) {
+            const base64:string = this.createBitmap();
+            params.resourceLink = this.game.getCurrScene().resourceLoader.loadTexture(base64);
+        }
+        this.setResourceLink(params.resourceLink);
+
+    }
+
+    private static _systemFontInstance:Font;
+
+    public readonly type:'Font' = 'Font';
+
+    public readonly fontSize:number;
+    public readonly extraChars:Readonly<string[]>;
+    public readonly chars:Readonly<string[]>;
+    public readonly fontFamily:string='Monospace';
+    public readonly fontContext:Readonly<IFontContext>;
+
+    private _resourceLink:ResourceLink<ITexture>;
 
     public static async createSystemFont(game:Game):Promise<Font>{
         if (Font._systemFontInstance) return Font._systemFontInstance;
@@ -230,35 +260,6 @@ export class Font implements IResource<ITexture> {
         });
         resourceLoader.startLoading();
         return p;
-
-    }
-
-    private static _systemFontInstance:Font;
-
-    public readonly type:'Font' = 'Font';
-
-    public readonly fontSize:number;
-    public readonly extraChars:Readonly<string[]>;
-    public readonly chars:Readonly<string[]>;
-    public readonly fontFamily:string='Monospace';
-    public readonly fontContext:Readonly<IFontContext>;
-
-    private _resourceLink:ResourceLink<ITexture>;
-
-    constructor(protected game:Game,params:Partial<IFontParameters> = {}) {
-        this.fontFamily = params.fontFamily ?? DEFAULT_FONT_PARAMS.fontFamily;
-        this.fontSize = params.fontSize ?? DEFAULT_FONT_PARAMS.fontSize;
-        this.chars = params.chars ?? (LAT_CHARS+STANDART_SYMBOLS+CYR_CHARS).split('')
-        this.extraChars = params.extraChars ?? DEFAULT_FONT_PARAMS.extraChars;
-
-        if (params.context===undefined) params.context = this.createContext();
-        this.fontContext = params.context;
-
-        if (params.resourceLink===undefined) {
-            const base64:string = this.createBitmap();
-            params.resourceLink = this.game.getCurrScene().resourceLoader.loadTexture(base64);
-        }
-        this.setResourceLink(params.resourceLink);
 
     }
 

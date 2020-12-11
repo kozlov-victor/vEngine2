@@ -7,7 +7,7 @@ export class NixieDisplay {
         private nixieTube1:RenderableModel
     ){}
 
-    public setNumber(n:number){
+    public setNumber(n:number):void{
         if (n<0) n = 0;
         const first:number = parseInt(n/10+'');
         const second = n%10;

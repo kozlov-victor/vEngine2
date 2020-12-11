@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<ITexture>;
     private fnt:Font;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
@@ -26,11 +26,11 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady() {
+    public onReady():void {
 
         this.backgroundColor.setRGB(100,100,100);
 

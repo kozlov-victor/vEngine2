@@ -6,6 +6,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {DebugError} from "@engine/debug/debugError";
 
 
+// tslint:disable-next-line:max-line-length
 export class MultiImageFrameAnimation extends AbstractFrameAnimation<ResourceLink<ITexture>> implements IRevalidatable, ICloneable<MultiImageFrameAnimation> {
 
     public readonly type:string = 'MultiImageFrameAnimation';

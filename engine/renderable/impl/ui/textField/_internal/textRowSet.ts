@@ -113,7 +113,7 @@ export class TextRowSet extends NullGameObject {
         this.alignTextContentVertical = align;
     }
 
-    public setAlignText(align:AlignText) {
+    public setAlignText(align:AlignText):void {
         if (this.children.length===0) return;
         if (align===this.alignText) return;
         this.children.forEach(c=>c.setAlignText(align));
@@ -134,7 +134,7 @@ export class TextRowSet extends NullGameObject {
         return this.wordBrake;
     }
 
-    public setText(stringEx:StringEx){
+    public setText(stringEx:StringEx):void{
         this.clear();
         switch (this.wordBrake) {
             case WordBrake.PREDEFINED_BREAK_LONG_WORDS:
@@ -148,15 +148,17 @@ export class TextRowSet extends NullGameObject {
                             this.newRow();
                             break;
                         case ' ':
+                            // tslint:disable-next-line:max-line-length
                             this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color,this.pixelPerfect),applyNewLineIfCurrentIsFull,false);
                             break;
                         case '\t':
                             const char:ICharacterInfo = s.getAllChars()[0];
                             char.rawChar = ' ';
-                            // convert tab to 4 spaces
+                            // tslint:disable-next-line:max-line-length
                             this.addWord(new Word(this.game,this.font,[char,char,char,char],this.color,this.pixelPerfect),applyNewLineIfCurrentIsFull,false);
                             break;
                         default:
+                            // tslint:disable-next-line:max-line-length
                             this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color,this.pixelPerfect),applyNewLineIfCurrentIsFull,false);
                             break;
                     }

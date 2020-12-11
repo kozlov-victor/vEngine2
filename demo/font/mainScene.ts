@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     private fnt:Font;
     private fnt2:Font;
 
-    public onPreloading() {
+    public onPreloading():void {
         const fnt:Font = new Font(this.game,{fontSize:50});
 
         const fnt2:Font = new Font(this.game,{fontSize:20});
@@ -22,7 +22,7 @@ export class MainScene extends Scene {
         this.fnt2 = fnt2;
     }
 
-    public onReady() {
+    public onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt2);
         tf.pos.setY(23);
         tf.setText("no clicks");

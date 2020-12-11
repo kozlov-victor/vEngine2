@@ -13,6 +13,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
 
     set width(val:number) {
         if (DEBUG && Number.isNaN(val)) {
+            // tslint:disable-next-line:no-console
             console.trace();
             throw new DebugError(`Size: wrong numeric argument  ${val}`);
         }
@@ -39,8 +40,10 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         return this._height;
     }
 
-    public static fromPool():Size {
-        return Size.rectPool.getFreeObject()!;
+    constructor(width:number = 0,height:number = 0,onChangedFn?:()=>void){
+        super();
+        if (onChangedFn) this.addOnChangeListener(onChangedFn);
+        this.setWH(width,height);
     }
 
     private static rectPool:ObjectPool<Size> = new ObjectPool<Size>(Size);
@@ -50,10 +53,8 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
 
     private _arr:[number,number] = [0,0];
 
-    constructor(width:number = 0,height:number = 0,onChangedFn?:()=>void){
-        super();
-        if (onChangedFn) this.addOnChangeListener(onChangedFn);
-        this.setWH(width,height);
+    public static fromPool():Size {
+        return Size.rectPool.getFreeObject()!;
     }
 
 

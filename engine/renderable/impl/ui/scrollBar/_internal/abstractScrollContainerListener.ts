@@ -10,7 +10,7 @@ import {
 } from "@engine/renderable/impl/ui/scrollBar/_internal/sideHelperFunctions";
 
 interface IScrollPointDesc {
-    point: {sceneX:number,sceneY:number}
+    point: {sceneX:number,sceneY:number};
     time: number;
 }
 
@@ -20,9 +20,8 @@ export abstract class AbstractScrollContainerListener {
     private _prevPoint:IScrollPointDesc;
     private _scrollVelocity: number = 0;
     private _deceleration: number = 0;
-    private readonly _OVER_SCROLL_RELEASE_VELOCITY:number = 4;
-    private readonly _OVER_SCROLL_RELEASE_DECELERATION:number = 0.6;
-    private readonly _MOUSE_WHEEL_FACTOR:number = 0.1;
+    private readonly _OVER_SCROLL_RELEASE_VELOCITY:number = 24;
+    private readonly _MOUSE_WHEEL_FACTOR:number = 0.2;
     private _overScrollFactor:number = 0;
     private offset: number = 0;
     private offsetOld: number = 0;
@@ -47,7 +46,6 @@ export abstract class AbstractScrollContainerListener {
         if (!this._isConstrainContainerCapturedByMouse) {
             if (this._overScrollFactor<0) { //return to initial position when overscrolled
                 this.offset+=this._overScrollFactor;
-                this._overScrollFactor*=this._OVER_SCROLL_RELEASE_DECELERATION;
                 if (this.offset<=0) {
                     this._overScrollFactor = 0;
                     this.offset = 0;
@@ -55,7 +53,6 @@ export abstract class AbstractScrollContainerListener {
             }
             else if (this._overScrollFactor>0) { //return to last position when overscrolled
                 this.offset+=this._overScrollFactor;
-                this._overScrollFactor*=this._OVER_SCROLL_RELEASE_DECELERATION;
                 if (this.offset>=getSize(this.constrainContainer.size,dir) - getSize(this.scrollableContainer.size,dir)) {
                     this._overScrollFactor = 0;
                     this.offset = getSize(this.constrainContainer.size,dir) - getSize(this.scrollableContainer.size,dir);
@@ -89,6 +86,10 @@ export abstract class AbstractScrollContainerListener {
 
     public onScroll(listener:()=>void):void {
         this._onScroll = listener;
+    }
+
+    public getCurrentOffset():number {
+        return this.offset;
     }
 
     public destroy():void {

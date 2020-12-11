@@ -13,23 +13,6 @@ import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractT
 
 export class FrameBuffer implements IRenderTarget {
 
-    private static _currInstance:Optional<FrameBuffer>;
-
-    public static getCurrent():FrameBuffer{
-        return this._currInstance!;
-    }
-
-    private readonly texture:Texture;
-    private glRenderBuffer:WebGLRenderbuffer;
-    private glFrameBuffer:WebGLFramebuffer;
-
-    private readonly _link:ResourceLink<ITexture>;
-
-    private readonly _width:number;
-    private readonly _height:number;
-
-    private _destroyed:boolean = false;
-
 
     constructor(private readonly _gl:WebGLRenderingContext,size:ISize){
         if (DEBUG && !_gl)
@@ -46,7 +29,24 @@ export class FrameBuffer implements IRenderTarget {
         this.clear(Color.RGB(0,0,0,),0);
     }
 
-    public setInterpolationMode(mode:INTERPOLATION_MODE) {
+    private static _currInstance:Optional<FrameBuffer>;
+
+    private readonly texture:Texture;
+    private glRenderBuffer:WebGLRenderbuffer;
+    private glFrameBuffer:WebGLFramebuffer;
+
+    private readonly _link:ResourceLink<ITexture>;
+
+    private readonly _width:number;
+    private readonly _height:number;
+
+    private _destroyed:boolean = false;
+
+    public static getCurrent():FrameBuffer{
+        return this._currInstance!;
+    }
+
+    public setInterpolationMode(mode:INTERPOLATION_MODE):void {
         this.texture.setInterpolationMode(mode);
     }
 

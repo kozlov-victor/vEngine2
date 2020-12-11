@@ -21,7 +21,7 @@ export class ImageCacheSurface extends RenderableModel {
     }
 
 
-    render() {
+    render():void {
 
         // two pass drawing
         const renderingSessionInfo:RenderingSessionInfo = this.game.getCurrScene()._renderingSessionInfo;
@@ -55,7 +55,7 @@ export class ImageCacheSurface extends RenderableModel {
         renderingSessionInfo.currentConstrainObjects.pop();
     }
 
-    private _drawToSurface() {
+    private _drawToSurface():void {
         this.drawingSurface.clear();
         for (let i:number=0;i<this.children.length;i++) {
             const c: RenderableModel = this.children[i];
@@ -63,7 +63,7 @@ export class ImageCacheSurface extends RenderableModel {
         }
     }
 
-    draw() {
+    draw():void {
         // nothing to do, drawingSurface already is draw
     }
 

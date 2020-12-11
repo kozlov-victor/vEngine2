@@ -24,19 +24,6 @@ export namespace mat4 {
 
     export class Mat16Holder extends ReleaseableEntity implements ICloneable<Mat16Holder>{
 
-        public static fromPool():Mat16Holder {
-            return Mat16Holder.m16hPool.getFreeObject()!;
-        }
-
-        public static create(): mat4.Mat16Holder {
-            return new Mat16Holder();
-        }
-
-
-        private static m16hPool:ObjectPool<Mat16Holder> = new ObjectPool<Mat16Holder>(Mat16Holder,256);
-
-        public readonly mat16:Readonly<MAT16> = (new Float32Array(16) as unknown) as MAT16; // exports only readonly arr
-
         public constructor(){
             super();
             this.set(
@@ -45,6 +32,19 @@ export namespace mat4 {
                 0, 0, 0, 0,
                 0, 0, 0, 0
             );
+        }
+
+
+        private static m16hPool:ObjectPool<Mat16Holder> = new ObjectPool<Mat16Holder>(Mat16Holder,256);
+
+        public readonly mat16:Readonly<MAT16> = (new Float32Array(16) as unknown) as MAT16; // exports only readonly arr
+
+        public static fromPool():Mat16Holder {
+            return Mat16Holder.m16hPool.getFreeObject()!;
+        }
+
+        public static create(): mat4.Mat16Holder {
+            return new Mat16Holder();
         }
 
         public set(v0:n,v1:n,v2:n,v3:n,v4:n,v5:n,v6:n,v7:n,v8:n,v9:n,v10:n,v11:n,v12:n,v13:n,v14:n,v15:n):void{
@@ -75,7 +75,7 @@ export namespace mat4 {
         0, 1, 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1
-    ]) as unknown as Readonly<MAT16>
+    ]) as unknown as Readonly<MAT16>;
 
     export const makeIdentity = (out:Mat16Holder):void => {
         out.fromMat16(identityArray);
@@ -384,7 +384,7 @@ export namespace mat4 {
         pointResult.setXY(vec4Transformed.x,vec4Transformed.y);
         vec4Transformed.release();
         return pointResult;
-    }
+    };
 
     const m16h:Mat16Holder = Mat16Holder.create();
     makeIdentity(m16h);

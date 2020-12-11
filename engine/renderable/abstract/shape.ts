@@ -43,6 +43,7 @@ export abstract class Shape extends RenderableModel implements IShapeProps{
     public setProps(props:IShapeProps):void{
         super.setProps(props);
         if (props.color!==undefined) this.color.setRGBA(props.color.r,props.color.g,props.color.b,props.color.a);
+        // tslint:disable-next-line:max-line-length
         if (props.fillColor!==undefined) (this.fillColor as Color).setRGBA(props.fillColor.r,props.fillColor.g,props.fillColor.b,props.fillColor.a);
         if (props.lineWidth!==undefined) this._lineWidth = props.lineWidth;
     }

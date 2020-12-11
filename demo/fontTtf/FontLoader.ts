@@ -19,8 +19,8 @@ export namespace fontLoader {
     const loadViaFontFace = (game:Game,url:string,fontFaceName:string)=>{
         const fontFace = new FontFace(fontFaceName, `url(${url})`);
         const taskRef:TaskRef = game.getCurrScene().resourceLoader.q.addTask(()=>{
-            fontFace.load().then((loaded_face:FontFace)=> {
-                (document as IDocumentEx).fonts.add(loaded_face);
+            fontFace.load().then((loadedFace:FontFace)=> {
+                (document as IDocumentEx).fonts.add(loadedFace);
                 game.getCurrScene().resourceLoader.q.resolveTask(taskRef);
             }).catch((error:Error)=> {
                 console.error(error);

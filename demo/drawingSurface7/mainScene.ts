@@ -10,7 +10,7 @@ export class MainScene extends Scene {
     @Resource.Font({fontFamily:'monospace',fontSize:20})
     private fnt:Font;
 
-    public onReady() {
+    public onReady():void {
 
         this.backgroundColor.set(Color.BLACK);
 

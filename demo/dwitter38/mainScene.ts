@@ -8,7 +8,7 @@ export class MainScene extends Scene {
     private surface:DrawingSurface;
     private renderScene:()=>void;
 
-    public onReady() {
+    public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(1);
@@ -51,7 +51,7 @@ export class MainScene extends Scene {
                 x.fillArc(960+120*C(a=.15*i+t/5)*(k=1.01**i),600+60*S(a)*k,10*k*(1+S(i/10-3*t)),0,Math.PI*2);
             }
 
-        }
+        };
 
     }
 

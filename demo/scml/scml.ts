@@ -147,19 +147,9 @@ class PoolHolder {
 
 export class ScmlObject {
 
-    public static fromDescription(desc:IScon):ScmlObject{
-        const obj = new ScmlObject();
-        obj.folders = [];
-        for (const folderDesc of desc.folder) {
-            obj.folders.push(Folder.fromDescription(folderDesc));
-        }
-        obj.entities = [];
-        for (const entityDesc of desc.entity) {
-            obj.entities.push(Entity.fromDescription(obj,entityDesc));
-        }
-        obj.activeCharacterMap = obj.folders; // only default character map is supported
-        return obj;
-    }
+    // public characterInfo:SpatialInfo = new SpatialInfo();
+
+    public constructor() {}
 
     public root:SpriterObject;
 
@@ -173,9 +163,19 @@ export class ScmlObject {
 
     private startTime:number;
 
-    // public characterInfo:SpatialInfo = new SpatialInfo();
-
-    public constructor() {}
+    public static fromDescription(desc:IScon):ScmlObject{
+        const obj = new ScmlObject();
+        obj.folders = [];
+        for (const folderDesc of desc.folder) {
+            obj.folders.push(Folder.fromDescription(folderDesc));
+        }
+        obj.entities = [];
+        for (const entityDesc of desc.entity) {
+            obj.entities.push(Entity.fromDescription(obj,entityDesc));
+        }
+        obj.activeCharacterMap = obj.folders; // only default character map is supported
+        return obj;
+    }
 
     public characherInfo():SpatialInfo{
         const identity:SpatialInfo = SpatialInfo.objectPool.getFreeObject()!;
@@ -203,7 +203,7 @@ export class ScmlObject {
         }
     }
 
-    public update(){
+    public update():void{
         if (this.currentEntity===undefined) return;
         if (this.currentAnimation===undefined) return;
         const entity:Entity = this.entities[this.currentEntity];
@@ -219,7 +219,7 @@ export class ScmlObject {
 
     }
 
-    public nextAnimation(){
+    public nextAnimation():void{
         this.startTime = 0;
         this.currentAnimation++;
         if (this.currentAnimation>this.entities[this.currentEntity].animations.length-1) {
@@ -230,6 +230,12 @@ export class ScmlObject {
 }
 
 class Folder {
+
+    private constructor() {}
+
+
+    public name:string = '';
+    public files:File[]; // <file> tags
 
     public static fromDescription(folderDesc:ISconFolder):Folder{
         const folder:Folder = new Folder();
@@ -242,15 +248,18 @@ class Folder {
         return folder;
     }
 
-
-    public name:string = '';
-    public files:File[]; // <file> tags
-
-    private constructor() {}
-
 }
 
 class File {
+
+    private constructor() {}
+
+
+    public name:string;
+    public pivotX:number=0;
+    public pivotY:number=1;
+    public width:number;
+    public height:number;
 
     public static fromDescription(fileDesc:ISconFile):File{
         const file:File = new File();
@@ -262,18 +271,15 @@ class File {
         return file;
     }
 
-
-    public name:string;
-    public pivotX:number=0;
-    public pivotY:number=1;
-    public width:number;
-    public height:number;
-
-    private constructor() {}
-
 }
 
 class Entity {
+
+    private constructor() {}
+
+    public name:string;
+    public characterMaps:CharacterMap[]; // <character_map> tags
+    public animations:Animation[]; // <animation> tags
 
     public static fromDescription(scmlObject:ScmlObject,entityDesc:ISconEntity):Entity {
         const entity = new Entity();
@@ -289,16 +295,15 @@ class Entity {
         return entity;
     }
 
-    public name:string;
-    public characterMaps:CharacterMap[]; // <character_map> tags
-    public animations:Animation[]; // <animation> tags
-
-    private constructor() {}
-
 }
 
 // not implemented
 class CharacterMap {
+
+    private constructor() {}
+
+    public name:string;
+    public maps:MapInstruction[]; // <map> tags
 
     public static fromDescription(charMapDesc:{name:string,maps?:[]}):CharacterMap{
         const c:CharacterMap = new CharacterMap();
@@ -311,11 +316,6 @@ class CharacterMap {
         }
         return c;
     }
-
-    public name:string;
-    public maps:MapInstruction[]; // <map> tags
-
-    private constructor() {}
 }
 
 // not implemented
@@ -332,6 +332,21 @@ class MapInstruction {
 
 class Animation {
 
+
+    constructor(private scmlObject: ScmlObject) {
+        this.scmlObject = scmlObject;
+    }
+
+    public name:string;
+    public length:number;
+    public loopType:'NO_LOOPING'|'LOOPING'='LOOPING'; // enum : NO_LOOPING,LOOPING
+    public mainlineKeys:MainlineKey[]; // <key> tags within a single <mainline> tag
+    public timelines:Timeline[]; // <timeline> tags
+
+
+    private transformBoneKeys:BoneTimelineKey[] = [];
+    private objectKeys:SpriteTimelineKey[] = [];
+
     public static fromDescription(scmlObject:ScmlObject,animationDesc:ISconAnimation):Animation{
         const a:Animation = new Animation(scmlObject);
         a.name = animationDesc.name;
@@ -346,21 +361,6 @@ class Animation {
             a.timelines.push(Timeline.fromDescription(scmlObject,timeLineDesc));
         }
         return a;
-    }
-
-    public name:string;
-    public length:number;
-    public loopType:'NO_LOOPING'|'LOOPING'='LOOPING'; // enum : NO_LOOPING,LOOPING
-    public mainlineKeys:MainlineKey[]; // <key> tags within a single <mainline> tag
-    public timelines:Timeline[]; // <timeline> tags
-
-
-    private transformBoneKeys:BoneTimelineKey[] = [];
-    private objectKeys:SpriteTimelineKey[] = [];
-
-
-    constructor(private scmlObject: ScmlObject) {
-        this.scmlObject = scmlObject;
     }
 
     public setCurrentTime(newTime:number):void {
@@ -402,7 +402,7 @@ class Animation {
         return keyA.interpolate(keyB,keyBTime,newTime);
     }
 
-    private updateCharacter(mainKey:MainlineKey,newTime:number) {
+    private updateCharacter(mainKey:MainlineKey,newTime:number):void {
         const transformBoneKeys = this.transformBoneKeys;
         for (let i = 0; i < transformBoneKeys.length; i++) {
             const transformBoneKey = transformBoneKeys[i];
@@ -474,6 +474,12 @@ class Animation {
 
 class Ref {
 
+    private constructor() {}
+
+    public parent:number=-1; // -1==no parent - uses ScmlObject spatialInfo as parentInfo
+    public timeline:number;
+    public key:number;
+
     public static fromDescription(refDesc:ISconBoneRef|ISconObjectRef):Ref {
         const ref:Ref = new Ref();
         if (refDesc.parent!==undefined) ref.parent = refDesc.parent;
@@ -485,15 +491,15 @@ class Ref {
         ref.key = refDesc.key;
         return ref;
     }
-
-    public parent:number=-1; // -1==no parent - uses ScmlObject spatialInfo as parentInfo
-    public timeline:number;
-    public key:number;
-
-    private constructor() {}
 }
 
 class MainlineKey {
+
+    private constructor() {}
+
+    public time: number = 0;
+    public boneRefs: Ref[]; // <bone_ref> tags
+    public objectRefs: Ref[]; // <object_ref> tags
 
     public static fromDescription(desc:ISconMainlineKey):MainlineKey{
         const m:MainlineKey = new MainlineKey();
@@ -513,16 +519,17 @@ class MainlineKey {
         return m;
     }
 
-    public time: number = 0;
-    public boneRefs: Ref[]; // <bone_ref> tags
-    public objectRefs: Ref[]; // <object_ref> tags
-
-    private constructor() {}
-
 }
 
 // edittime features
 class Timeline {
+
+    private constructor() {}
+
+    public name:string;
+    public id:number;
+    public objectType:OBJECT_TYPE = 'SPRITE'; // enum : SPRITE,BONE,BOX,POINT,SOUND,ENTITY,VARIABLE
+    public keys:TimelineKey[]; // <key> tags within <timeline> tags
 
     public static fromDescription(scmlObject:ScmlObject,timeLineDesc:ISconAnimationTimeline):Timeline{
         const t:Timeline = new Timeline();
@@ -541,27 +548,12 @@ class Timeline {
         }
         return t;
     }
-
-    public name:string;
-    public id:number;
-    public objectType:OBJECT_TYPE = 'SPRITE'; // enum : SPRITE,BONE,BOX,POINT,SOUND,ENTITY,VARIABLE
-    public keys:TimelineKey[]; // <key> tags within <timeline> tags
-
-    private constructor() {}
 }
 
 type OBJECT_TYPE = 'SPRITE'|'BONE'|'BOX'|'POINT'|'SOUND'|'ENTITY'|'VARIABLE';
 type CURVE_TYPE = 'INSTANT' | 'LINEAR' | 'QUADRATIC' | 'CUBIC'|'QUARTIC'|'QUINTIC'|'BEZIER';
 
 abstract class TimelineKey extends ReleaseableEntity{
-
-    public static fromDescription(scmlObject:ScmlObject,timeLineKeyDesc:ISconTimelineKey):Optional<TimelineKey>{
-        const objectTimeLineKeyDesc:Optional<ISconSpriteTimeLineKey> = timeLineKeyDesc.object;
-        const boneTimeLineKeyDesc:Optional<ISconBoneTimelineKey> = timeLineKeyDesc.bone;
-        if (objectTimeLineKeyDesc!==undefined) return SpriteTimelineKey.fromDescriptionSub(scmlObject,timeLineKeyDesc,objectTimeLineKeyDesc);
-        else if (boneTimeLineKeyDesc!==undefined) return BoneTimelineKey.fromDescriptionSub(scmlObject,timeLineKeyDesc,boneTimeLineKeyDesc);
-        else return undefined;
-    }
 
 
 
@@ -574,6 +566,18 @@ abstract class TimelineKey extends ReleaseableEntity{
     public c4: number;
 
     public timeLine:Timeline;
+
+    public static fromDescription(scmlObject:ScmlObject,timeLineKeyDesc:ISconTimelineKey):Optional<TimelineKey>{
+        const objectTimeLineKeyDesc:Optional<ISconSpriteTimeLineKey> = timeLineKeyDesc.object;
+        const boneTimeLineKeyDesc:Optional<ISconBoneTimelineKey> = timeLineKeyDesc.bone;
+        if (objectTimeLineKeyDesc!==undefined) {
+            return SpriteTimelineKey.fromDescriptionSub(scmlObject,timeLineKeyDesc,objectTimeLineKeyDesc);
+        }
+        else if (boneTimeLineKeyDesc!==undefined) {
+            return BoneTimelineKey.fromDescriptionSub(scmlObject,timeLineKeyDesc,boneTimeLineKeyDesc);
+        }
+        else return undefined;
+    }
 
     public interpolate(nextKey: TimelineKey, nextKeyTime: number, currentTime: number): TimelineKey {
         return this.linear(nextKey, this.getTWithNextKey(nextKey, nextKeyTime, currentTime));
@@ -617,6 +621,15 @@ class SpatialInfo extends ReleaseableEntity{
 
     public static objectPool:ObjectPool<SpatialInfo> = new ObjectPool(SpatialInfo,POOL_SIZE);
 
+
+    public x:number=0;
+    public y:number=0;
+    public angle:number=0;
+    public scaleX:number=1;
+    public scaleY:number=1;
+    public a:number=1;
+    public spin:number=1;
+
     public static fromDescription(commonKeyDesc:ISconTimelineKey,desc:ISconSpriteTimeLineKey|ISconBoneTimelineKey):SpatialInfo{
         const s:SpatialInfo = new SpatialInfo();
         if (desc.x!==undefined) s.x = desc.x;
@@ -628,15 +641,6 @@ class SpatialInfo extends ReleaseableEntity{
         if (commonKeyDesc.spin!==undefined) s.spin = commonKeyDesc.spin;
         return s;
     }
-
-
-    public x:number=0;
-    public y:number=0;
-    public angle:number=0;
-    public scaleX:number=1;
-    public scaleY:number=1;
-    public a:number=1;
-    public spin:number=1;
 
 
     public clone():SpatialInfo{
@@ -679,7 +683,19 @@ class SpatialInfo extends ReleaseableEntity{
 
 class BoneTimelineKey extends SpatialTimelineKey {
 
+
+    public constructor() {
+        super();
+    }
+
     public static objectPool:ObjectPool<BoneTimelineKey> = new ObjectPool(BoneTimelineKey,POOL_SIZE);
+
+    // unimplemented in Spriter
+    public length:number=200;
+    public height:number=10;
+    public paintDebugBones:boolean = false;
+
+    public scmlObject:ScmlObject;
 
 
     public static fromDescriptionSub(scmlObject:ScmlObject,commonKeyDesc:ISconTimelineKey,boneKeyDesc:ISconBoneTimelineKey):BoneTimelineKey{
@@ -695,18 +711,6 @@ class BoneTimelineKey extends SpatialTimelineKey {
 
         b.info = SpatialInfo.fromDescription(commonKeyDesc,boneKeyDesc);
         return b;
-    }
-
-    // unimplemented in Spriter
-    public length:number=200;
-    public height:number=10;
-    public paintDebugBones:boolean = false;
-
-    public scmlObject:ScmlObject;
-
-
-    public constructor() {
-        super();
     }
 
 
@@ -750,8 +754,27 @@ class BoneTimelineKey extends SpatialTimelineKey {
 
 class SpriteTimelineKey extends SpatialTimelineKey {
 
+
+    public constructor(){
+        super();
+    }
+
     public static objectPool:ObjectPool<SpriteTimelineKey> = new ObjectPool(SpriteTimelineKey,POOL_SIZE);
 
+
+    public folder:number = 0; // index of the folder within the ScmlObject
+    public file:number = 0;
+    // tslint:disable-next-line:variable-name
+    public pivot_x:number=0;
+    // tslint:disable-next-line:variable-name
+    public pivot_y:number=1;
+
+
+    public scmlObject:ScmlObject;
+
+    private useDefaultPivot:boolean = true; // true if missing pivot_x and pivot_y in object tag
+
+    // tslint:disable-next-line:max-line-length
     public static fromDescriptionSub(scmlObject:ScmlObject,commonKeyDesc:ISconTimelineKey,spriteKeyDesc:ISconSpriteTimeLineKey):SpriteTimelineKey {
         const s:SpriteTimelineKey = new SpriteTimelineKey();
         s.scmlObject = scmlObject;
@@ -775,22 +798,6 @@ class SpriteTimelineKey extends SpatialTimelineKey {
             s.useDefaultPivot = false;
         }
         return s;
-    }
-
-
-    public folder:number = 0; // index of the folder within the ScmlObject
-    public file:number = 0;
-    public pivot_x:number=0;
-    public pivot_y:number=1;
-
-
-    public scmlObject:ScmlObject;
-
-    private useDefaultPivot:boolean = true; // true if missing pivot_x and pivot_y in object tag
-
-
-    public constructor(){
-        super();
     }
 
 
@@ -834,6 +841,7 @@ class SpriteTimelineKey extends SpatialTimelineKey {
         const url:string = this.scmlObject.activeCharacterMap[this.folder].files[this.file].name;
         //debugPaint(url,this.scmlObject.activeCharacterMap[this.folder].files[this.file],this.info,paintPivotX,paintPivotY,this.index);
         const paintId:string = url+'_' +this.timeLine.id + '_' + this.id;
+        // tslint:disable-next-line:max-line-length
         this.scmlObject.root.paintSprite(url,this.scmlObject.activeCharacterMap[this.folder].files[this.file],this.info,paintPivotX,paintPivotY,paintId);
     }
 
@@ -903,7 +911,7 @@ export class SpriterObject extends RenderableModel {
         this.appendChild(this.rootNode);
     }
 
-    public preload(sconUrl:string|IURLRequest){
+    public preload(sconUrl:string|IURLRequest):void{
         let baseUrl:string;
         let urlRequest:IURLRequest;
         if ((sconUrl as IURLRequest).url!==undefined) {
@@ -979,7 +987,7 @@ export class SpriterObject extends RenderableModel {
         child.alpha = 1;
     }
 
-    public nextAnimation(){
+    public nextAnimation():void{
         this.scmlObject.nextAnimation();
     }
 

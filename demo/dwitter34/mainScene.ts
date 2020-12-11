@@ -7,12 +7,13 @@ export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void = ():void=>{};
 
     @Resource.Font({fontFamily:'monospace',fontSize:25,extraChars:['🐦']})
     private fnt:Font;
 
-    public onReady() {
+    private renderScene:()=>void = ():void=>{};
+
+    public onReady():void {
 
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
@@ -55,7 +56,7 @@ export class MainScene extends Scene {
             for(let i:number=40;i--;) {
                 x.drawText(i%2?`🐦 @Celebrity${String.fromCharCode(65+i)}`:"Send BTC here & get 2x back!",20,(i+t*t/9)*20%800);
             }
-        }
+        };
     }
 
     protected onRender(): void {

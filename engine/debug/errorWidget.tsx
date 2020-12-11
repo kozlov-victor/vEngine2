@@ -6,15 +6,15 @@ import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {Optional} from "@engine/core/declarations";
 
 interface IDebugInfo {
-    file:string,
-    colNum:number,
-    lineNum:number
+    file:string;
+    colNum:number;
+    lineNum:number;
 }
 
 interface IErrorInfo {
-    filename?:string,
-    runtimeInfo:string,
-    debugInfo?:IDebugInfo,
+    filename?:string;
+    runtimeInfo:string;
+    debugInfo?:IDebugInfo;
 }
 
 interface IState {
@@ -107,20 +107,20 @@ export class ErrorWidget extends VEngineTsxComponent<IState> {
         super(new HtmlTsxDOMRenderer());
         this.state = {
             errors: []
-        }
+        };
     }
 
-    public addError(err:IErrorInfo){
+    public addError(err:IErrorInfo):void{
         this.state.errors.push(err);
         this.setState({...this.state});
     }
 
-    private removeItem(i:number){
+    private removeItem(i:number):void{
         this.state.errors.splice(i,1);
         this.setState({...this.state});
     }
 
-    render() {
+    render():VirtualNode {
         return (
             <div>
                 <style>{css}</style>

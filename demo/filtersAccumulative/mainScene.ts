@@ -15,12 +15,12 @@ export class MainScene extends Scene {
 
     private logoLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
     }
 
 
-    public onReady() {
+    public onReady():void {
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
         gradient.setColorAtPosition(0, Color.RGB(200,0,20));

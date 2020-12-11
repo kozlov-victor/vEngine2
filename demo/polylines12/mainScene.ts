@@ -14,16 +14,16 @@ export class MainScene extends Scene {
     private fontJsonLink:ResourceLink<any>;
 
     // https://gero3.github.io/facetype.js/
-    public onPreloading() {
+    public onPreloading():void {
         this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Mortal Kombat 4_Regular.json');
         //this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Press Start 2P_Regular.json');
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
 
     }
 
-    public onReady() {
+    public onReady():void {
 
         const container:NullGameObject = new NullGameObject(this.game);
         container.size.setWH(300,300);

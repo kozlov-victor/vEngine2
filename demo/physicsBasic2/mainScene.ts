@@ -11,14 +11,13 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Document} from "@engine/misc/xmlUtils";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Size} from "@engine/geometry/size";
 
 export class MainScene extends Scene {
 
 
     private player: Rectangle;
 
-    public onReady() {
+    public onReady():void {
 
         Camera.FOLLOW_FACTOR.y = 0.06;
 

@@ -31,7 +31,7 @@ export abstract class Mesh extends RenderableModel {
         this.vertexItemSize = 3;
     }
 
-    public acceptLight(val:boolean){
+    public acceptLight(val:boolean):void{
         if (DEBUG && val) {
             if (!this.bufferInfo.normalBuffer) {
                 throw new DebugError(`can not accept light: normals are not specified`);

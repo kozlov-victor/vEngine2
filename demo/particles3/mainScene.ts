@@ -11,7 +11,7 @@ import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 
 export class MainScene extends Scene {
 
-    public onPreloading() {
+    public onPreloading():void {
         console.log('on preloading');
     }
 
@@ -19,7 +19,7 @@ export class MainScene extends Scene {
     //
     // }
     //
-    public onReady() {
+    public onReady():void {
 
         const container = new NullGameObject(this.game);
         container.size.set(this.game.size);

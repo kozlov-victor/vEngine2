@@ -16,14 +16,14 @@ export class MainScene extends Scene {
     private logoLink:ResourceLink<ITexture>;
     private normalMapLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
 
         this.logoLink = this.resourceLoader.loadTexture('./lightNormalMap/rocks.png');
         this.normalMapLink = this.resourceLoader.loadTexture('./lightNormalMap/rocks-normal.png');
 
     }
 
-    public onReady() {
+    public onReady():void {
         this.backgroundColor = Color.BLACK;
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);

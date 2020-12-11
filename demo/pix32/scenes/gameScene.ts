@@ -26,14 +26,14 @@ interface IMoveable {
         y:number,
         width: number,
         height: number
-    },
+    };
     onCollided?:(m:RenderableModel)=>void;
     velocity:number;
 }
 
 const XOR =(a:boolean,b:boolean):boolean=> {
     return ( a || b ) && !( a && b );
-}
+};
 
 const r1:Rect = new Rect();
 const r2:Rect = new Rect();
@@ -52,7 +52,7 @@ class Car {
     public isBlinking:boolean = false;
     public health:number = 32;
 
-    public blink(){
+    public blink():void{
         let cnt = 0;
         if (this.isBlinking) return;
         this.isBlinking = true;
@@ -99,7 +99,11 @@ export class GameScene extends BasePix32Scene {
     private car:Car = new Car();
     private sound:Sound;
 
-    onPreloading() {
+    private static onDisappearCommon(obj:RenderableModel):void{
+        if (obj.pos.x<-10) obj.pos.x = MathEx.random(32,64);
+    }
+
+    onPreloading():void {
         super.onPreloading();
         const binLink = this.resourceLoader.loadBinary('pix32/resources/music/Androids.ym');
         this.resourceLoader.addNextTask((()=>{
@@ -109,7 +113,7 @@ export class GameScene extends BasePix32Scene {
         }));
     }
 
-    onReady() {
+    onReady():void {
         super.onReady();
         (async ()=>{
             await this.print("get ready",3000);
@@ -144,7 +148,7 @@ export class GameScene extends BasePix32Scene {
         this.moveObjects();
     }
 
-    private createCar(){
+    private createCar():void{
         const car:Image = new Image(this.game);
         car.setResourceLink(this.carLink);
         car.pos.setXY(4,5);
@@ -152,7 +156,7 @@ export class GameScene extends BasePix32Scene {
         this.car.carModel = car;
     }
 
-    private createOpponents(){
+    private createOpponents():void{
         for (let i:number=0;i<6;i++) {
             (()=>{
                 const img = new Image(this.game);
@@ -167,7 +171,7 @@ export class GameScene extends BasePix32Scene {
                     onDisappear: (_)=>{
 
                     },
-                    onMove:async(_)=>{
+                    onMove:async (_)=>{
                         isOvertakenPrev = isOvertaken;
                         isOvertaken = img.pos.x<this.car.carModel.pos.x;
                         if (XOR(isOvertakenPrev,isOvertaken)) await this.print(this.calcMyPosition().toString(),5000);
@@ -190,7 +194,7 @@ export class GameScene extends BasePix32Scene {
         }
     }
 
-    private createRoadParticles(){
+    private createRoadParticles():void{
         for (let i:number=0;i<12;i++) {
             const p:Rectangle = new Rectangle(this.game);
             p.size.setWH(1);
@@ -202,7 +206,7 @@ export class GameScene extends BasePix32Scene {
         }
     }
 
-    private createLives(){
+    private createLives():void{
         for (let i:number=0;i<2;i++) {
             const img = new Image(this.game);
             img.setResourceLink(this.lifeLink);
@@ -227,7 +231,7 @@ export class GameScene extends BasePix32Scene {
         }
     }
 
-    private createStopSigns(){
+    private createStopSigns():void{
         for (let i:number=0;i<5;i++) {
             const img = new Image(this.game);
             img.setResourceLink(this.stopSignLink);
@@ -252,7 +256,7 @@ export class GameScene extends BasePix32Scene {
         }
     }
 
-    private createHealthBar(){
+    private createHealthBar():void{
         const rect = new Rectangle(this.game);
         rect.lineWidth = 0;
         rect.size.setWH(32,1);
@@ -261,7 +265,7 @@ export class GameScene extends BasePix32Scene {
         this.healthRect = rect;
     }
 
-    private updateHealthBar(val:number){
+    private updateHealthBar(val:number):void{
         this.car.health+=val;
         if (this.car.health<0) {
             this.healthRect.visible = false;
@@ -275,7 +279,7 @@ export class GameScene extends BasePix32Scene {
 
     }
 
-    private createHills(){
+    private createHills():void{
         for (let i:number=0;i<10;i++) {
             const img = new Image(this.game);
             img.setResourceLink(this.hillLink);
@@ -348,7 +352,7 @@ export class GameScene extends BasePix32Scene {
         const speedDown = ()=>{
             this.car.carVelocity-=0.05;
             if (this.car.carVelocity<0) this.car.carVelocity = 0;
-        }
+        };
         this.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.key) {
                 case KEYBOARD_KEY.UP: {
@@ -391,10 +395,6 @@ export class GameScene extends BasePix32Scene {
                 this.timer = undefined;
             }
         });
-    }
-
-    private static onDisappearCommon(obj:RenderableModel){
-        if (obj.pos.x<-10) obj.pos.x = MathEx.random(32,64);
     }
 
 

@@ -1,21 +1,16 @@
 import {Scene} from "@engine/scene/scene";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
-import {Cone} from "@engine/renderer/webGl/primitives/cone";
 import {DRAW_METHOD} from "@engine/renderer/webGl/base/bufferInfo";
 import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
 
 export class MainScene extends Scene {
 
-
-
-    public onPreloading() {
+    public onPreloading():void {
 
     }
 
-
-
-    public onReady() {
+    public onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(222,22,12);
@@ -33,9 +28,6 @@ export class MainScene extends Scene {
         this.setInterval(()=>{
             obj.angle3d.x+=0.01;
         },20);
-
-
-
 
     }
 

@@ -9,6 +9,7 @@ export namespace EasingBounce {
     export const Out:EaseFn = (t: number, b: number, c: number, d: number): number=> {
         const A:number = 7.5625;
         const B:number = 2.75;
+        // tslint:disable-next-line:no-conditional-assignment
         if ((t /= d) < (1 / B)) {
             return c * (A * t * t) + b;
         } else if (t < (2 / B)) {

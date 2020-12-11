@@ -18,6 +18,17 @@ class PolygonPrimitive extends AbstractPrimitive {
 
 export class Polygon extends Mesh {
 
+    constructor(protected game:Game){
+        super(game);
+        this.invertY = false;
+        this.vertexItemSize = 2;
+    }
+
+
+    public readonly type:string = 'Polygon';
+
+    private _edgeVertices:number[];
+
     public static fromMultiCurveSvgPath(game:Game,path:string):Polygon[]{
         const polygons:Polygon[] = [];
         const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(game,path);
@@ -79,17 +90,6 @@ export class Polygon extends Mesh {
 
     public static fromPoints(game:Game,points:number[]):Polygon {
         return Polygon.fromPolyline(game,PolyLine.fromPoints(game,points));
-    }
-
-
-    public readonly type:string = 'Polygon';
-
-    private _edgeVertices:number[];
-
-    constructor(protected game:Game){
-        super(game);
-        this.invertY = false;
-        this.vertexItemSize = 2;
     }
 
     public extrudeToMesh(depth:number):Mesh{

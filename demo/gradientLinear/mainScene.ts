@@ -8,7 +8,7 @@ import {DebugLayer} from "@engine/scene/debugLayer";
 
 export class MainScene extends Scene {
 
-    public onReady() {
+    public onReady():void {
         // https://cssgradient.io/
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();

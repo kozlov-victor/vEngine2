@@ -34,7 +34,7 @@ export class DataTexture extends Texture {
         return this._link;
     }
 
-    public setNewData(data: Uint8Array) {
+    public setNewData(data: Uint8Array):void {
         this._data = data;
         this.updateRawData();
     }
@@ -55,11 +55,11 @@ export class DataTexture extends Texture {
         rawData[position+3] = a;
     }
 
-    public flush(){
+    public flush():void{
         this.updateRawData();
     }
 
-    private updateRawData(){
+    private updateRawData():void{
         const gl:WebGLRenderingContext = this.gl;
         this.beforeOperation();
         // target: GLenum,

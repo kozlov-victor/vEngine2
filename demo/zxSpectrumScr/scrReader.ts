@@ -31,7 +31,7 @@ class Border {
         this.reset();
     }
 
-    public reset(){
+    public reset():void{
         for (let y:number=0;y<this.texture.size.height;y++) {
             for (let x:number=0;x<this.texture.size.width;x++) {
                 this.texture.setRawPixelAt(x,y,0,0,0,255);
@@ -40,7 +40,7 @@ class Border {
         this.texture.flush();
     }
 
-    public readNextByte(b:byte) {
+    public readNextByte(b:byte):void {
         for (let n:number=0;n<8;n++) {
             const bit:1|0 = (b & n) > 0?1:0;
             for (let k:number=0;k<this.pixelsPerBit;k++) {
@@ -90,7 +90,7 @@ class Screen {
         },1);
     }
 
-    public update(texture:DataTexture){
+    public update(texture:DataTexture):void{
         this.readMemory(texture);
         if (this.memoryTest2Completed) {
             if (!this.loadingCompleted) this.loadNextChunk();
@@ -98,7 +98,7 @@ class Screen {
         else this.testNextChunk();
     }
 
-    private loadNextChunk(){
+    private loadNextChunk():void{
         const chunkSize = 5;
         for (let i:number=this.pointer;i<this.pointer+chunkSize;i++) {
             if (this.pointer>this.view.length) {
@@ -114,7 +114,7 @@ class Screen {
         this.stream.setPointer(this.pointer);
     }
 
-    private testNextChunk(){
+    private testNextChunk():void{
         const chunkSize = 128;
         const testValue = this.memoryTest1Completed?0b00000000:0b00000010;
         for (let i:number=this.pointer;i<this.pointer+chunkSize;i++) {

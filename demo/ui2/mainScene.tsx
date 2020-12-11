@@ -16,7 +16,7 @@ import {
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {ScrollView} from "@engine/renderable/impl/ui/scrollView/scrollView";
+import {ScrollView} from "@engine/renderable/impl/ui/scrollViews/scrollView";
 import {Size} from "@engine/geometry/size";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 
@@ -25,7 +25,7 @@ export class MainScene extends Scene {
     @Resource.Font({fontFamily:'monospace',fontSize:25})
     public fnt!:Font;
 
-    public onReady() {
+    public onReady():void {
 
         this.backgroundColor = Color.RGB(244,244,233);
 
@@ -131,18 +131,17 @@ export class MainScene extends Scene {
         scrollView.pos.setXY(400,300);
         scrollView.size.setWH(300,100);
         scrollView.scrollableContainer.size.set(new Size(410,400));
-        const rect:Rectangle = new  Rectangle(this.game);
-        rect.pos.setXY(20,30);
-        rect.on(MOUSE_EVENTS.click, e=>{
+        scrollView.setMargin(10);
+        scrollView.setPadding(5);
+        const label:TextField = new  TextField(this.game,this.fnt);
+        label.setText("scroll");
+        label.setAutoSize(true);
+        label.alpha = 0.6;
+        label.pos.setXY(20,30);
+        label.on(MOUSE_EVENTS.click, e=>{
             console.log('rect',e);
-        })
-        scrollView.scrollableContainer.appendChild(rect);
-        const circle = new Circle(this.game);
-        circle.pos.setXY(40,40);
-        circle.on(MOUSE_EVENTS.click, e=>{
-            console.log('circle',e);
-        })
-        scrollView.scrollableContainer.appendChild(circle);
+        });
+        scrollView.scrollableContainer.appendChild(label);
         this.appendChild(scrollView);
 
 

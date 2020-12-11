@@ -141,14 +141,14 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         );
     }
 
-    private goBack(){
+    private goBack():void{
         const s = new Sound(this.game);
         s.setResourceLink(this.sndBtnLink);
         s.play();
         this.game.popScene();
     }
 
-    private  createSplashVertical(){
+    private  createSplashVertical():void{
         const pl = new PolyLine(this.game);
         pl.lineWidth = MathEx.randomInt(2,7);
         pl.color = Color.RGB(
@@ -169,7 +169,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         },MathEx.randomInt(200,2000));
     }
 
-    private  createSplashHorizontal(){
+    private  createSplashHorizontal():void{
         const pl = new PolyLine(this.game);
         pl.lineWidth = MathEx.randomInt(2,7);
         pl.color = Color.RGB(

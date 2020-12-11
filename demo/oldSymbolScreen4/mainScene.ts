@@ -10,12 +10,12 @@ export class MainScene extends Scene {
 
     private fnt:Font;
 
-    public onPreloading(){
+    public onPreloading():void{
         this.backgroundColor = Color.RGB(10,10,30);
         this.fnt = new Font(this.game, {fontSize: 14});
     }
 
-    public onReady() {
+    public onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.size.set(this.game.size);
         tf.setPadding(5);
@@ -32,8 +32,8 @@ export class MainScene extends Scene {
         const b = new BasicEnv(this.game,tf);
         b.setProgram({
             10: ()=>[b.INPUT("ENTER ANY STRING","ST$")],
-            18: ()=>[console.log(b.LEN(b.GET_VAR('ST$')))],
-            20: ()=>b.FOR('J',b.LEN(b.GET_VAR('ST$')),1,-1),
+            18: ()=>[console.log(b.LEN(b.GET_VAR('ST$') as string))],
+            20: ()=>b.FOR('J',b.LEN(b.GET_VAR('ST$') as string),1,-1),
             30: ()=>b.PRINT(b.MID(b.GET_VAR('ST$'),b.GET_VAR('J'),1)),
             40: ()=>b.NEXT('J'),
             50: ()=>b.GOTO(10),

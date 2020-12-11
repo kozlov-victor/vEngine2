@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/star.png')
     private link:ResourceLink<ITexture>;
 
-    public onReady() {
+    public onReady():void {
         const root = new NullGameObject(this.game);
         this.appendChild(root);
 

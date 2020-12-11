@@ -15,7 +15,7 @@ export class IntroScene extends Scene {
     @Resource.Font({fontFamily:'monospace',fontSize:50})
     private fnt:Font;
 
-    public onReady() {
+    public onReady():void {
         const btn:Button = new Button(this.game,this.fnt);
         btn.textColor.setRGB(255,0,0);
         btn.setText("play!");

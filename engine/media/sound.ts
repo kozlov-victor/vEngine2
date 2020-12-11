@@ -40,11 +40,7 @@ export class Sound implements IResource<void>,IRevalidatable {
         this._stereoPan = value;
     }
 
-    public getCurrentTime():number {
-        const node =  this.game.getAudioPlayer().getNodeBySound(this);
-        if (node===undefined) return -1;
-        return node.getCurrentTime();
-    }
+    constructor(protected game:Game){}
 
     public readonly type:string = 'Sound';
     public offset:number; // start offset time of sound
@@ -63,7 +59,11 @@ export class Sound implements IResource<void>,IRevalidatable {
     // resource
     private _resourceLink!:ResourceLink<void>;
 
-    constructor(protected game:Game){}
+    public getCurrentTime():number {
+        const node =  this.game.getAudioPlayer().getNodeBySound(this);
+        if (node===undefined) return -1;
+        return node.getCurrentTime();
+    }
 
     public revalidate():void {
         if (!this.getResourceLink()) throw new DebugError(`can not play sound: resource link is not set`);

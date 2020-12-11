@@ -1,8 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {NinePatchImage} from "@engine/renderable/impl/general/ninePatchImage";
@@ -13,7 +12,7 @@ export class MainScene extends Scene {
     private obj:NinePatchImage;
     private imgLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.imgLink = this.resourceLoader.loadTexture('./ninePatchImage/ninePatchImage.png');
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
@@ -21,11 +20,11 @@ export class MainScene extends Scene {
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady() {
+    public onReady():void {
         this.obj = new NinePatchImage(this.game);
         this.obj.setResourceLink(this.imgLink);
 

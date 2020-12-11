@@ -79,7 +79,7 @@ export class Camera implements IUpdatable, ITransformable  {
         this.revalidate();
     }
 
-    public update() {
+    public update():void {
 
         const gameObject:Optional<RenderableModel> = this._objFollowTo;
 

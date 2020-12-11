@@ -35,7 +35,7 @@ export class ImageButton extends RenderableModel {
         super.revalidate();
     }
 
-    private manageEvents(){
+    private manageEvents():void{
         this.on(MOUSE_EVENTS.click,()=>{
             this.triggerOn();
         });

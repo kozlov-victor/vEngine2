@@ -4,7 +4,6 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {MainWidget} from "./ui/mainWidget";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
-import {AbstractTsxDOMRenderer} from "@engine/renderable/tsx/genetic/abstractTsxDOMRenderer";
 
 
 export class MainScene extends Scene {
@@ -12,7 +11,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/star.png')
     private link:ResourceLink<ITexture>;
 
-    public onReady() {
+    public onReady():void {
         const root = new NullGameObject(this.game);
         this.appendChild(root);
 

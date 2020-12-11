@@ -18,7 +18,7 @@ export abstract class AbstractAppScene extends Scene {
     protected sounds:Record<string,Sound> = {};
     private links:Record<string,ResourceLink<ITexture>> = {};
 
-    public onPreloading() {
+    public onPreloading():void {
         const assetsFolder:string = 'data';
         const assetsPostfix:string = '';
         const rect = new Rectangle(this.game);
@@ -73,13 +73,13 @@ export abstract class AbstractAppScene extends Scene {
     }
 
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     protected abstract getSceneElement():Element;
 
-    private getNumber(val:string,defaultVal?:number){
+    private getNumber(val:string,defaultVal?:number):number{
         let n:number = +val;
         if (isNaN(n)) {
             if (defaultVal!==undefined) n = defaultVal;
@@ -97,7 +97,7 @@ export abstract class AbstractAppScene extends Scene {
         return val;
     }
 
-    private afterObjectCreated(root:RenderableModel|Layer,r:RenderableModel,el:IElementDescription){
+    private afterObjectCreated(root:RenderableModel|Layer,r:RenderableModel,el:IElementDescription):void{
         r.pos.setXY(this.getNumber(el.attributes.left),this.getNumber(el.attributes.top));
         const rotationPointX:number = this.getNumber(el.attributes.rotationPointX,0);
         const rotationPointY:number = this.getNumber(el.attributes.rotationPointY,0);
@@ -129,7 +129,7 @@ export abstract class AbstractAppScene extends Scene {
         };
     }
 
-    private resolveChildren(root:Layer|RenderableModel,children:IElementDescription[]){
+    private resolveChildren(root:Layer|RenderableModel,children:IElementDescription[]):void{
         children.forEach((child:IElementDescription)=>{
             switch (child.tagName) {
                 case 'image': {

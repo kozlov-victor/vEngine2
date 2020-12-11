@@ -12,16 +12,16 @@ export abstract class ObservableEntity extends ReleaseableEntity{
         }
     }
 
-    public addOnChangeListener(f:()=>void){
+    public addOnChangeListener(f:()=>void):void{
         this._onChanged.push(f);
     }
 
-    public removeOnChangeListener(f:()=>void){
+    public removeOnChangeListener(f:()=>void):void{
         removeFromArray(this._onChanged,(it)=>it===f);
     }
 
 
-    public observe(onChangedFn:()=>void){
+    public observe(onChangedFn:()=>void):void{
         this.addOnChangeListener(onChangedFn);
     }
 

@@ -9,21 +9,6 @@ export namespace vec4 {
 
     export class Vec4Holder extends ReleaseableEntity {
 
-        public static fromPool():Vec4Holder {
-            return Vec4Holder.pool.getFreeObject()!;
-        }
-        private static pool = new ObjectPool<Vec4Holder>(Vec4Holder,32);
-
-        public readonly vec4:Readonly<VEC4> = (new Float32Array(4) as unknown) as VEC4; // exports only readonly arr
-
-        public set(x:n,y:n,z:n,w:n) {
-            const v:VEC4 = this.vec4 as VEC4;
-            v[0] = x;
-            v[1] = y;
-            v[2] = z;
-            v[3] = w;
-        }
-
 
         get x():n{
             return (this.vec4 as VEC4)[0];
@@ -39,6 +24,21 @@ export namespace vec4 {
 
         get w():n{
             return (this.vec4 as VEC4)[3];
+        }
+        private static pool = new ObjectPool<Vec4Holder>(Vec4Holder,32);
+
+        public readonly vec4:Readonly<VEC4> = (new Float32Array(4) as unknown) as VEC4; // exports only readonly arr
+
+        public static fromPool():Vec4Holder {
+            return Vec4Holder.pool.getFreeObject()!;
+        }
+
+        public set(x:n,y:n,z:n,w:n):void{
+            const v:VEC4 = this.vec4 as VEC4;
+            v[0] = x;
+            v[1] = y;
+            v[2] = z;
+            v[3] = w;
         }
 
 

@@ -8,12 +8,13 @@ export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void = ():void=>{};
 
     @Resource.Font({fontFamily:'serif',fontSize:128,extraChars:['🎉','π']})
     private fnt:Font;
 
-    public onReady() {
+    private renderScene:()=>void = ():void=>{};
+
+    public onReady():void {
 
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
@@ -55,7 +56,7 @@ export class MainScene extends Scene {
 
             x.drawText("🎉 Congratulations Firefox 52 🎉",100,300);
             x.drawText("e ** π = "+Math.exp(1)**Math.PI,170,700);
-        }
+        };
     }
 
     protected onRender(): void {

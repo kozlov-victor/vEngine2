@@ -16,7 +16,7 @@ export class RadialGradient extends AbstractGradient {
     }
 
 
-    setUniforms(sd: ShapeDrawer) {
+    setUniforms(sd: ShapeDrawer):void {
         super.setUniforms(sd);
         sd.setUniform(sd.u_radialGradientCenterX,this.center.x);
         sd.setUniform(sd.u_radialGradientCenterY,this.center.y);

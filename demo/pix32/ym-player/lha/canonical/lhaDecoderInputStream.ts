@@ -13,13 +13,6 @@ import {Lz5Decoder} from "./lz5Decoder";
 import {LhaFileInputStream} from "./lhaFile";
 
 export class LhaDecoderInputStream {
-    private static readonly SIZE_SKIP_BUFFER:number = 512;
-
-    protected decoder:LhaDecoder;
-    protected entry:LhaEntry;
-    protected crc:Checksum;
-    protected skipBuffer:number[];
-    protected entryCount:number;
 
     /**
      * Creates a new lha input stream.
@@ -38,6 +31,46 @@ export class LhaDecoderInputStream {
         this.decoder = LhaDecoderInputStream.createDecorder(_in, this.entryCount, entry.getMethod());
 
         this.crc.reset();
+    }
+    private static readonly SIZE_SKIP_BUFFER:number = 512;
+
+    protected decoder:LhaDecoder;
+    protected entry:LhaEntry;
+    protected crc:Checksum;
+    protected skipBuffer:number[];
+    protected entryCount:number;
+
+    /**
+     * Creates a new decoder for input stream.
+     */
+    private static createDecorder(_in:LhaFileInputStream, originalSize:number, method:string):LhaDecoder {
+        if (method===(LhaEntry.METHOD_SIG_LHD)) {
+            return (new LhdDecoder());
+        } else if (method===LhaEntry.METHOD_SIG_LH0) {
+            return (new NocompressDecoder(_in, originalSize));
+        } else if (method===LhaEntry.METHOD_SIG_LH1) {
+            return (new Lh1Decoder(_in, originalSize));
+        } else if (method===LhaEntry.METHOD_SIG_LH2) {
+            throw (new LhaException("Unsupported method: " + method));
+        } else if (method===LhaEntry.METHOD_SIG_LH3) {
+            throw (new LhaException("Unsupported method: " + method));
+        } else if (method===LhaEntry.METHOD_SIG_LH4) {
+            return (new Lh4Decoder(_in, originalSize, 12, 14, 4));
+        } else if (method===LhaEntry.METHOD_SIG_LH5) {
+            return (new Lh4Decoder(_in, originalSize, 13, 14, 4));
+        } else if (method===LhaEntry.METHOD_SIG_LH6) {
+            return (new Lh4Decoder(_in, originalSize, 15, 16, 5));
+        } else if (method===LhaEntry.METHOD_SIG_LH7) {
+            return (new Lh4Decoder(_in, originalSize, 16, 17, 5));
+        } else if (method===LhaEntry.METHOD_SIG_LZS) {
+            return (new LzsDecoder(_in, originalSize));
+        } else if (method===LhaEntry.METHOD_SIG_LZ4) {
+            return (new NocompressDecoder(_in, originalSize));
+        } else if (method===LhaEntry.METHOD_SIG_LZ5) {
+            return (new Lz5Decoder(_in, originalSize));
+        }
+
+        throw (new LhaException("Unknown method: " + method));
     }
 
     /**
@@ -203,39 +236,6 @@ export class LhaDecoderInputStream {
             throw new LhaException("Data crc is not matched");
         }
         this.close();
-    }
-
-    /**
-     * Creates a new decoder for input stream.
-     */
-    private static createDecorder(_in:LhaFileInputStream, originalSize:number, method:string):LhaDecoder {
-        if (method===(LhaEntry.METHOD_SIG_LHD)) {
-            return (new LhdDecoder());
-        } else if (method===LhaEntry.METHOD_SIG_LH0) {
-            return (new NocompressDecoder(_in, originalSize));
-        } else if (method===LhaEntry.METHOD_SIG_LH1) {
-            return (new Lh1Decoder(_in, originalSize));
-        } else if (method===LhaEntry.METHOD_SIG_LH2) {
-            throw (new LhaException("Unsupported method: " + method));
-        } else if (method===LhaEntry.METHOD_SIG_LH3) {
-            throw (new LhaException("Unsupported method: " + method));
-        } else if (method===LhaEntry.METHOD_SIG_LH4) {
-            return (new Lh4Decoder(_in, originalSize, 12, 14, 4));
-        } else if (method===LhaEntry.METHOD_SIG_LH5) {
-            return (new Lh4Decoder(_in, originalSize, 13, 14, 4));
-        } else if (method===LhaEntry.METHOD_SIG_LH6) {
-            return (new Lh4Decoder(_in, originalSize, 15, 16, 5));
-        } else if (method===LhaEntry.METHOD_SIG_LH7) {
-            return (new Lh4Decoder(_in, originalSize, 16, 17, 5));
-        } else if (method===LhaEntry.METHOD_SIG_LZS) {
-            return (new LzsDecoder(_in, originalSize));
-        } else if (method===LhaEntry.METHOD_SIG_LZ4) {
-            return (new NocompressDecoder(_in, originalSize));
-        } else if (method===LhaEntry.METHOD_SIG_LZ5) {
-            return (new Lz5Decoder(_in, originalSize));
-        }
-
-        throw (new LhaException("Unknown method: " + method));
     }
 
 

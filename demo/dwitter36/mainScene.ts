@@ -7,12 +7,13 @@ export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void = ():void=>{};
 
     @Resource.Font({fontFamily:'serif',fontSize:12,chars:['❄']})
     private fnt:Font;
 
-    public onReady() {
+    private renderScene:()=>void = ():void=>{};
+
+    public onReady():void {
 
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
@@ -58,7 +59,7 @@ export class MainScene extends Scene {
                 x.alpha=e=C(t+i*5);
                 x.drawText('❄',e*75+w*j/q,(t*k/p+w*k/q)%w);
             }
-        }
+        };
     }
 
     protected onRender(): void {

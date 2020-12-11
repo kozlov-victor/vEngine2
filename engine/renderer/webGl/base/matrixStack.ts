@@ -47,7 +47,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this._stack.getLast()!;
     }
 
-    public setCurrentValue(m:Mat16Holder) {
+    public setCurrentValue(m:Mat16Holder):void {
         return this._stack.replaceLast(m);
     }
 
@@ -167,7 +167,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this;
     }
 
-    private setIdentity(){
+    private setIdentity():void{
         const ident:Mat16Holder = Mat16Holder.fromPool();
         mat4.makeIdentity(ident);
         this._stack.push(ident);

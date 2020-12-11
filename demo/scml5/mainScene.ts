@@ -16,7 +16,7 @@ export class MainScene extends Scene {
     private imp:SpriterObject;
     private brawler:SpriterObject;
 
-    public onPreloading() {
+    public onPreloading():void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -37,11 +37,11 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady() {
+    public onReady():void {
 
 
         this.appendChild(this.player);

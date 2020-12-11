@@ -1,3 +1,4 @@
+
 import {httpClient} from "@engine/debug/httpClient";
 import {IKeyVal} from "@engine/misc/object";
 import {Game} from "@engine/core/game";
@@ -9,15 +10,15 @@ interface IGameHolder {
 
 const devConsole:HTMLElement = document.createElement('div');
 const css:IKeyVal<string|number> = {
-    "position": 'absolute',
-    "right": 0,
-    "top": 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
     'background-color': 'black',
     'min-width': '20px',
     'min-height': '20px',
-    'opacity': 0.5,
+    opacity: 0.5,
     'pointer-events':'none',
-    'display':'block',
+    display:'block',
     'z-index':1000
 };
 Object.keys(css).forEach((key:string)=>devConsole.style.setProperty(key,''+css[key]));

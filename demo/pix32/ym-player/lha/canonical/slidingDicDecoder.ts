@@ -148,11 +148,7 @@ export abstract class SlidingDicDecoder implements LhaDecoder {
         return (sl - len);
     }
 
-    /**
-     *
-     * @param n
-     * @throws IOException
-     */
+
     protected fillBitBuffer(n: number): void {
         while (n > this.bitCount) {
             n -= this.bitCount;
@@ -169,12 +165,7 @@ export abstract class SlidingDicDecoder implements LhaDecoder {
         this.subBitBuffer = (this.subBitBuffer << n) & 0x00FF;
     }
 
-    /**
-     *
-     * @param n
-     * @return
-     * @throws IOException
-     */
+
     protected getBits(n: number): number {
         const x: number = this.bitBuffer >>> (2 * SlidingDicDecoder.CHAR_BIT - n);
         this.fillBitBuffer(n);

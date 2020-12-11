@@ -46,7 +46,7 @@ export class ChipOscilloscope {
 
     }
 
-    public listen(sound:Sound,track:AbstractChipTrack){
+    public listen(sound:Sound,track:AbstractChipTrack):void{
         this.scene.setInterval((()=>{
 
             const time = sound.getCurrentTime();

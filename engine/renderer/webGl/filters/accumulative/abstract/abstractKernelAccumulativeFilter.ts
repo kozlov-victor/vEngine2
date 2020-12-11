@@ -8,7 +8,7 @@ export type Kernel3x3 = [
     number,number,number,
     number,number,number,
     number,number,number
-]
+];
 
 export class AbstractKernelAccumulativeFilter extends AbstractAccumulativeFilter {
 
@@ -71,7 +71,7 @@ export class AbstractKernelAccumulativeFilter extends AbstractAccumulativeFilter
         super.doFilter(destFrameBuffer);
     }
 
-    public setKernel(kernel:Kernel3x3){
+    public setKernel(kernel:Kernel3x3):void{
         this.kernel = kernel;
         this.kernelWeight = 0;
         this.kernel.forEach(it=>this.kernelWeight+=it);

@@ -72,7 +72,7 @@ export abstract class AbstractMonster extends AbstractCharacter {
         },200);
     }
 
-    private listenCollisionWithBullets(){
+    private listenCollisionWithBullets():void{
         this.body.onCollidedWithGroup(Bullet.groupName,e=>{
             this.hurt();
         });

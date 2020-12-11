@@ -11,11 +11,11 @@ export class GetReadyScene extends BasePix32Scene {
     @Resource.Texture('./pix32/resources/images/flag.png')
     private flagLink:ResourceLink<ITexture>;
 
-    onReady() {
+    onReady():void {
         super.onReady();
         const getReady:Image = new Image(this.game);
         getReady.setResourceLink(this.flagLink);
-        getReady.pos.setXY(-12)
+        getReady.pos.setXY(-12);
         this.screen.appendChild(getReady);
         getReady.transformPoint.setToCenter();
         this.addTween(new Tween({
@@ -27,9 +27,9 @@ export class GetReadyScene extends BasePix32Scene {
             numOfLoops: 3,
             yoyo: true,
             complete:()=>{
-               this.game.runScene(new GameScene(this.game))
+               this.game.runScene(new GameScene(this.game));
             },
-        }))
+        }));
     }
 
 }

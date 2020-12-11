@@ -18,7 +18,7 @@ export class NinePatchImage extends RenderableModelWithResourceLink {
     private _patches:Image[] = new Array(9);
 
 
-    /**
+    /*
      *
      |-A-|--------|-B-|
     C|-1-|---2----|-3-|

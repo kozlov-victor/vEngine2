@@ -12,14 +12,14 @@ export class MainScene extends Scene {
 
     private dataTextureLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         // https://free3d.com/ru/3d-models/obj
         this.data1Link = this.resourceLoader.loadText('./model3dFromObj2/dog.obj');
         this.dataTextureLink = this.resourceLoader.loadTexture('./model3dFromObj2/dog.jpg');
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(255,255,255);

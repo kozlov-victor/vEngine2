@@ -16,7 +16,7 @@ export class MainScene extends Scene {
     private border:Image;
     private screen:Image;
 
-    public onPreloading() {
+    public onPreloading():void {
         (this.game.getRenderer() as WebGlRenderer).setPixelPerfect(true);
         const screen = new Image(this.game);
         const border = new Image(this.game);
@@ -40,7 +40,7 @@ export class MainScene extends Scene {
 
     }
 
-    public onReady() {
+    public onReady():void {
         this.border.appendChild(this.screen);
         this.border.setPixelPerfect(true);
         this.screen.setPixelPerfect(true);

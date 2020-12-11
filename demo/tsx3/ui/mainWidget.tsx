@@ -1,6 +1,4 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/common/texture";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {ChildComponent} from "./childComponent";
@@ -10,8 +8,8 @@ import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDO
 
 interface IState {
     circles:{radius:number}[];
-    btnAdd: {height:number},
-    btnRemove: {height:number},
+    btnAdd: {height:number};
+    btnRemove: {height:number};
 }
 
 export class MainWidget extends VEngineTsxComponent<IState> {

@@ -30,13 +30,13 @@ export class MainScene extends Scene {
     public backgroundColor: Color = Color.RGB(233);
     private btnPos:number=0;
 
-    public onPreloading(){
+    public onPreloading():void{
 
         this.fnt = new Font(this.game, {fontSize: 25});
     }
 
 
-    public onReady() {
+    public onReady():void {
 
         this.createFlip3dHorizontalTransitionButton('flip 3d horizontal in',true,false);
         this.createFlip3dHorizontalTransitionButton('flip 3d horizontal out',false, false);
@@ -63,7 +63,7 @@ export class MainScene extends Scene {
 
     }
 
-    private createFlip3dHorizontalTransitionButton(text:string,isAppearing:boolean,billboard:boolean){
+    private createFlip3dHorizontalTransitionButton(text:string,isAppearing:boolean,billboard:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new Flip3dHorizontalInTransition(this.game,billboard,1000):
@@ -71,7 +71,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createFlip3dVerticalTransitionButton(text:string,isAppearing:boolean,billboard:boolean){
+    private createFlip3dVerticalTransitionButton(text:string,isAppearing:boolean,billboard:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new Flip3dVerticalInTransition(this.game,billboard,1000, EasingSine.InOut):
@@ -79,7 +79,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createScaleRotateTransitionButton(text:string,isAppearing:boolean,numOfRotations:number){
+    private createScaleRotateTransitionButton(text:string,isAppearing:boolean,numOfRotations:number):void{
         const transition:ISceneTransition =
             isAppearing?
                 new ScaleRotateInAppearanceTransition(this.game,1000, EasingBounce.Out,numOfRotations):
@@ -87,7 +87,7 @@ export class MainScene extends Scene {
         this.createTransitionButton(text,transition);
     }
 
-    private createScaleTransitionButton(text:string,isAppearing:boolean,scaleX:boolean,scaleY:boolean){
+    private createScaleTransitionButton(text:string,isAppearing:boolean,scaleX:boolean,scaleY:boolean):void{
         const transition:ISceneTransition =
             isAppearing?
                 new ScaleInAppearanceTransition(this.game,1000, EasingBounce.Out,{x:scaleX,y:scaleY}):
@@ -96,7 +96,7 @@ export class MainScene extends Scene {
     }
 
 
-    private createTransitionButton(text:string,transition:ISceneTransition){
+    private createTransitionButton(text:string,transition:ISceneTransition):void{
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.textColor.setRGB(10);
         tf.pos.setXY(10,this.btnPos+=45);

@@ -14,7 +14,7 @@ export class MainScene extends Scene {
     private fnt2:Font;
     private tf2:TextField;
 
-    public onPreloading() {
+    public onPreloading():void {
 
         console.log('preloading');
 
@@ -30,7 +30,7 @@ export class MainScene extends Scene {
 
     }
 
-    public onReady() {
+    public onReady():void {
         console.log('ready');
 
         const tf:TextField = new TextField(this.game,this.fnt);

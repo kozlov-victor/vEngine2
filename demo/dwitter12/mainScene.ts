@@ -11,7 +11,7 @@ export class MainScene extends Scene {
 
 
     // https://www.dwitter.net/d/9060
-    public onReady() {
+    public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(0);

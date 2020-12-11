@@ -1,14 +1,8 @@
-import {IPoint2d, Point2d} from "../geometry/point2d";
+import {Point2d} from "../geometry/point2d";
 import {IRect, Rect} from "../geometry/rect";
-import {mat4} from "@engine/geometry/mat4";
-import {vec4} from "@engine/geometry/vec4";
 
 
 export namespace MathEx {
-
-    import Mat16Holder = mat4.Mat16Holder;
-    import Vec4Holder = vec4.Vec4Holder;
-    import VEC4 = vec4.VEC4;
 
     export const isPointInRect = (point: Point2d, rect: Rect): boolean => {
         return point.x > rect.x &&

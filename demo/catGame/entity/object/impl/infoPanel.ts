@@ -9,12 +9,15 @@ import {Timer} from "@engine/misc/timer";
 
 export class InfoPanel {
 
-    public static getCreatedInstance():InfoPanel {
-        return InfoPanel.instance;
-    }
 
-    public static instantiate(game:Game,heroSprite:ResourceLink<ITexture>){
-        InfoPanel.instance = new InfoPanel(game,heroSprite);
+    private constructor(private game:Game, private heroSprite:ResourceLink<ITexture>) {
+        this.container.size.setWH(this.game.size.width,60);
+        this.container.fillColor = Color.RGBA(25,25,25,150);
+        this.container.borderRadius = 5;
+        this.game.getCurrScene().appendChild(this.container);
+        this.createLifeBar();
+        this.updateLifeBar();
+        this.updateNumOfLives(0);
     }
 
     private static instance:InfoPanel;
@@ -26,15 +29,12 @@ export class InfoPanel {
     private numOfLives:number = 0;
     private lifeBarContainer:Rectangle;
 
+    public static getCreatedInstance():InfoPanel {
+        return InfoPanel.instance;
+    }
 
-    private constructor(private game:Game, private heroSprite:ResourceLink<ITexture>) {
-        this.container.size.setWH(this.game.size.width,60);
-        this.container.fillColor = Color.RGBA(25,25,25,150);
-        this.container.borderRadius = 5;
-        this.game.getCurrScene().appendChild(this.container);
-        this.createLifeBar();
-        this.updateLifeBar();
-        this.updateNumOfLives(0);
+    public static instantiate(game:Game,heroSprite:ResourceLink<ITexture>):void{
+        InfoPanel.instance = new InfoPanel(game,heroSprite);
     }
 
     public incrementNumOfLives():void {
@@ -125,7 +125,7 @@ export class InfoPanel {
         this.container.appendChild(outerRect);
     }
 
-    private updateLifeBar(){
+    private updateLifeBar():void{
         if (this.life<30) this.lifeBarContainer.fillColor.setRGB(123,22,23);
         else if (this.life<50) this.lifeBarContainer.fillColor.setRGB(123,123,23);
         else this.lifeBarContainer.fillColor.setRGB(23,123,23);

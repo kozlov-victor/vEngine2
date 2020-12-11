@@ -23,7 +23,7 @@ export class VignetteFilter extends AbstractGlFilter{
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main() {
                 vec4 color = texture2D(texture, v_texCoord);
-                
+
                 float dist = distance(v_texCoord, vec2(0.5, 0.5));
                 color.rgb *= smoothstep(0.8, size * 0.799, dist * (amount + size));
                 gl_FragColor = color;
@@ -34,11 +34,11 @@ export class VignetteFilter extends AbstractGlFilter{
         this.simpleRectDrawer.initProgram();
     }
 
-    public setSize(val:number) {
+    public setSize(val:number):void {
         this.setUniform(this.size,val);
     }
 
-    public setAmount(val:number) {
+    public setAmount(val:number):void {
         this.setUniform(this.amount,val);
     }
 

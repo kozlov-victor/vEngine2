@@ -8,7 +8,12 @@ import {EasingLinear} from "@engine/misc/easing/functions/linear";
 
 export class AlphaAppearLetterTextAnimation extends AbstractTextAnimation {
 
-    constructor(private appearTime:number,private animationTime:number,private readonly alphaFrom:number = 0.01, private readonly easeFn:EaseFn = EasingLinear) {
+    constructor(
+        private appearTime:number,
+        private animationTime:number,
+        private readonly alphaFrom:number = 0.01,
+        private readonly easeFn:EaseFn = EasingLinear
+    ) {
         super();
     }
 

@@ -14,12 +14,12 @@ export class MainScene extends Scene {
 
     public fnt!:Font;
 
-    public onPreloading(){
+    public onPreloading():void{
         this.backgroundColor = Color.RGB(10,10,30);
         this.fnt = new Font(this.game, {fontSize: 14});
     }
 
-    public onReady() {
+    public onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.size.set(this.game.size);
         tf.setPadding(5);
@@ -74,7 +74,7 @@ export class MainScene extends Scene {
                 ()=>b.FOR('T',0,40,0.25)
             ],
             120: [ // A=INT(26+25*SIN(T))
-                ()=>b.ASSIGN_VAR('A',b.INT(26+25*b.SIN(b.GET_VAR('T'))))
+                ()=>b.ASSIGN_VAR('A',b.INT(26+25*b.SIN(b.GET_VAR('T') as number)))
             ],
             130: [
                 ()=>b.PRINT_TAB(b.GET_VAR('A'))

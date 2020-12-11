@@ -10,35 +10,37 @@ export class ScrollView extends Container {
 
     private readonly _constrainContainer: RenderableModel;
     public readonly scrollableContainer: RenderableModel;
-    private _scrollContainerDelegate:ScrollContainerDelegate;
+    protected _scrollContainerDelegate: ScrollContainerDelegate;
 
     constructor(protected game: Game) {
         super(game);
-        this.size.setWH(64,64);
+        this.size.setWH(64, 64);
 
-        this._constrainContainer = new NoOverflowSurface(this.game,this.size);
+        this._constrainContainer = new NoOverflowSurface(this.game, this.size);
         this._constrainContainer.size.set(this.size);
-        this.appendChild(this._constrainContainer);
+        super.appendChild(this._constrainContainer);
 
         this.scrollableContainer = new NullGameObject(this.game);
+        this.scrollableContainer.size.observe(()=>this.markAsDirty());
         this.scrollableContainer.size.set(this.size);
         this._constrainContainer.appendChild(this.scrollableContainer);
     }
 
 
-    public revalidate() {
+    public revalidate():void {
         super.revalidate();
-        const clientRect:Readonly<IRectJSON> = this.getClientRect();
+        const clientRect: Readonly<IRectJSON> = this.getClientRect();
         this._constrainContainer.pos.set(clientRect);
         this._constrainContainer.size.set(clientRect);
         if (this._constrainContainer.size.isZero()) this._constrainContainer.size.set(this.size);
-        if (this._scrollContainerDelegate===undefined) {
-            this._scrollContainerDelegate = new ScrollContainerDelegate(this.game,this,this._constrainContainer,this.scrollableContainer);
+        if (this._scrollContainerDelegate === undefined) {
+            this._scrollContainerDelegate =
+                new ScrollContainerDelegate(this.game, this, this._constrainContainer, this.scrollableContainer);
         }
         this._scrollContainerDelegate.revalidate();
     }
 
-    public update() {
+    public update():void {
         super.update();
         this._scrollContainerDelegate.update();
     }

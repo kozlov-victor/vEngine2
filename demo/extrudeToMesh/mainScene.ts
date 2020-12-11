@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     private cubeTextureLink:ResourceLink<ICubeMapTexture>;
 
 
-    public onPreloading() {
+    public onPreloading():void {
 
 
         // https://onlinefontconverter.com/
@@ -35,11 +35,11 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
 
     }
 
-    public onReady() {
+    public onReady():void {
 
         const path = `
 

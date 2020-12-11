@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     @Resource.Font({fontFamily:'monospace',fontSize:10})
     private fnt:Font;
 
-    public onReady() {
+    public onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.setWordBrake(WordBrake.PREDEFINED);
         tf.size.set(this.game.size);

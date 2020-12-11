@@ -71,12 +71,12 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
         );
     }
 
-    private onCircleClick(){
+    private onCircleClick():void{
         console.log('on circle click');
         this.setState({ellipsePosX:this.state.ellipsePosX+1});
     }
 
-    private onEllipseClick(){
+    private onEllipseClick():void{
         this.setState({ellipseRadiusX:this.state.ellipseRadiusX+1});
     }
 

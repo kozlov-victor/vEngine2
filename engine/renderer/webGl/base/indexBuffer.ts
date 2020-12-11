@@ -13,7 +13,7 @@ export class IndexBuffer {
         if (DEBUG && !this._buffer) throw new DebugError(`can not allocate memory for index buffer`);
     }
 
-    public setData(bufferData:number[]){
+    public setData(bufferData:number[]):void{
         if (DEBUG) {
             if (!bufferData) throw new DebugError('can not set data to buffer: bufferData not specified');
         }

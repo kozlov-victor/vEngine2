@@ -6,7 +6,7 @@ export class Stack<T> {
     private _array:Optional<T>[] = new Array(16);
     private _stackPointer:number = 0;
 
-    public push(obj:T) {
+    public push(obj:T):void {
         this._array[this._stackPointer++] = obj;
     }
 

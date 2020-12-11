@@ -12,7 +12,7 @@ export class SecondScene extends Scene {
 
     private fnt:Font;
 
-    public onPreloading(){
+    public onPreloading():void{
 
         for (let i:number = 0;i<20;i++) { fakeLongLoadingFn(this.resourceLoader); }
 
@@ -29,11 +29,11 @@ export class SecondScene extends Scene {
 
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady() {
+    public onReady():void {
 
         console.log('scene 2 on ready');
 
@@ -42,6 +42,7 @@ export class SecondScene extends Scene {
         tf.pos.setXY(10,40);
         tf.setText("< back");
         tf.setFont(this.fnt);
+        tf.alpha = 0.7;
         tf.on(MOUSE_EVENTS.click, e=>{
             this.game.popScene();
         });
@@ -50,8 +51,8 @@ export class SecondScene extends Scene {
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0.2;
-        gradient.setColorAtPosition(0,Color.RGB(100,0,20));
-        gradient.setColorAtPosition(1,Color.RGB(200,111,1));
+        gradient.setColorAtPosition(0,Color.RGBA(100,0,20, 100));
+        gradient.setColorAtPosition(1,Color.RGBA(200,111,1));
         rect.fillGradient = gradient;
         rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);

@@ -23,53 +23,10 @@ export interface IRect {
 
 export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
 
-    public static fromPool():Rect {
-        return Rect.rectPool.getFreeObject()!;
-    }
-
-    private static rectPool:ObjectPool<Rect> = new ObjectPool<Rect>(Rect);
-
-    private _x:number = 0;
-    private _y: number = 0;
-    private _width:number = 0;
-    private _height:number = 0;
-
-    private _right:number;
-    private _bottom:number;
-
-    private _arr:[number,number,number,number] = [0,0,0,0];
-
     constructor(x:number = 0,y:number = 0,width:number = 0,height:number = 0,onChangedFn?:()=>void){
         super();
         if (onChangedFn) this.addOnChangeListener(onChangedFn);
         this.setXYWH(x,y,width,height);
-    }
-
-    public setXYWH(x:number,y:number,width:number,height:number):Rect{
-        if (
-            DEBUG &&
-            (
-                Number.isNaN(x) ||
-                Number.isNaN(y) ||
-                Number.isNaN(width) ||
-                Number.isNaN(height)
-            )
-        ) throw new DebugError(`Rect: wrong numeric arguments ${x},${y},${width},${height}`);
-        const oldX:number = this._x;
-        const oldY:number = this._y;
-        const oldW:number = this._width;
-        const oldH:number = this._height;
-        const changed:boolean = oldX!==x || oldY!==y || oldW!==width || oldH!==height;
-        if (changed) {
-            this._x      = x;
-            this._y      = y;
-            this._width  = width;
-            this._height = height;
-            this._right = this._x+this._width;
-            this._bottom = this._y+this._height;
-            this.triggerObservable();
-        }
-        return this;
     }
 
 
@@ -111,6 +68,49 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
 
     set height(height: number) {
         this.setWH(this.width,height);
+    }
+
+    private static rectPool:ObjectPool<Rect> = new ObjectPool<Rect>(Rect);
+
+    private _x:number = 0;
+    private _y: number = 0;
+    private _width:number = 0;
+    private _height:number = 0;
+
+    private _right:number;
+    private _bottom:number;
+
+    private _arr:[number,number,number,number] = [0,0,0,0];
+
+    public static fromPool():Rect {
+        return Rect.rectPool.getFreeObject()!;
+    }
+
+    public setXYWH(x:number,y:number,width:number,height:number):Rect{
+        if (
+            DEBUG &&
+            (
+                Number.isNaN(x) ||
+                Number.isNaN(y) ||
+                Number.isNaN(width) ||
+                Number.isNaN(height)
+            )
+        ) throw new DebugError(`Rect: wrong numeric arguments ${x},${y},${width},${height}`);
+        const oldX:number = this._x;
+        const oldY:number = this._y;
+        const oldW:number = this._width;
+        const oldH:number = this._height;
+        const changed:boolean = oldX!==x || oldY!==y || oldW!==width || oldH!==height;
+        if (changed) {
+            this._x      = x;
+            this._y      = y;
+            this._width  = width;
+            this._height = height;
+            this._right = this._x+this._width;
+            this._bottom = this._y+this._height;
+            this.triggerObservable();
+        }
+        return this;
     }
 
     public setXY(x:number,y:number):Rect{

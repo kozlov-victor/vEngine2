@@ -1,12 +1,17 @@
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
 import {ITexture} from "@engine/renderer/common/texture";
 
 export class PbmReader {
+
+    constructor(private game:Game,buff:ArrayBuffer){
+        this.file = new Int8Array(buff);
+    }
+
+    private currentPos:number = 0;
+    private readonly file:Int8Array;
 
 
     private static charAsBits(char:string):number[]{
@@ -17,13 +22,6 @@ export class PbmReader {
             arr.push((code & powOfTwo)>0?1:0);
         }
         return arr;
-    }
-
-    private currentPos:number = 0;
-    private readonly file:Int8Array;
-
-    constructor(private game:Game,buff:ArrayBuffer){
-        this.file = new Int8Array(buff);
     }
 
     public createTextureLink():ResourceLink<ITexture>{

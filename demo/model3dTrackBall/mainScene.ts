@@ -6,15 +6,11 @@ import {Torus} from "@engine/renderer/webGl/primitives/torus";
 
 export class MainScene extends Scene {
 
-
-
-    public onPreloading() {
+    public onPreloading():void {
 
     }
 
-
-
-    public onReady() {
+    public onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(222,22,12);

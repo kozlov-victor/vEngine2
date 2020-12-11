@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {PalletOffsetFilter} from "@engine/renderer/webGl/filters/texture/palletOffsetFilter";
@@ -13,7 +12,7 @@ export class MainScene extends Scene {
     private plasmaLink:ResourceLink<ITexture>;
     private palletLink:ResourceLink<ITexture>;
 
-    public onPreloading() {
+    public onPreloading():void {
         this.plasmaLink = this.resourceLoader.loadTexture('./plasma/Plasma_effect.jpg');
         this.palletLink = this.resourceLoader.loadTexture('./plasma/gradient.png');
         const rect = new Rectangle(this.game);
@@ -22,11 +21,11 @@ export class MainScene extends Scene {
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number) {
+    public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady() {
+    public onReady():void {
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.plasmaLink);
         this.appendChild(spr);

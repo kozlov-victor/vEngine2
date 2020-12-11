@@ -34,7 +34,8 @@ htmlContainer.innerHTML = `
 document.body.appendChild(htmlContainer);
 
 
-const game = new Game({width:320,height:240,scaleStrategy: SCALE_STRATEGY.NO_SCALE,containerElement:document.getElementById('canvasElement')!});
+const game =
+    new Game({width:320,height:240,scaleStrategy: SCALE_STRATEGY.NO_SCALE,containerElement:document.getElementById('canvasElement')!});
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);

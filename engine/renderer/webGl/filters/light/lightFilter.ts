@@ -39,11 +39,11 @@ export class LightFilter extends AbstractGlFilter {
         this.simpleRectDrawer.initProgram();
     }
 
-    public setNormalMap(normalMap:Texture){
+    public setNormalMap(normalMap:Texture):void{
         this.normalMap = normalMap;
     }
 
-    public unsetNormalMap(){
+    public unsetNormalMap():void{
         this.normalMap = undefined;
     }
 

@@ -17,7 +17,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/logo.png')
     private logoLink:ResourceLink<ITexture>;
 
-    public onReady() {
+    public onReady():void {
         this.game.camera.scale.setXY(0.6);
         this.game.camera.pos.setXY(-5);
 

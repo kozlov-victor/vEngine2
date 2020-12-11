@@ -7,12 +7,13 @@ export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void = ():void=>{};
 
     @Resource.Font({fontFamily:'monospace',fontSize:10})
     private fnt:Font;
 
-    public onReady() {
+    private renderScene:()=>void = ():void=>{};
+
+    public onReady():void {
 
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
@@ -55,7 +56,7 @@ export class MainScene extends Scene {
             for(let i:number=7;i--;){
                 x.drawText(String.fromCharCode(a[i]+19**S(t-i/9)),20+9*i,30);
             }
-        }
+        };
     }
 
     protected onRender(): void {

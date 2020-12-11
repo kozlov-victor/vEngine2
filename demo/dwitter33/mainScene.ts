@@ -7,12 +7,13 @@ export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void = ():void=>{};
 
     @Resource.Font({fontFamily:'monospace',fontSize:25,chars:['🥪']})
     private fnt:Font;
 
-    public onReady() {
+    private renderScene:()=>void = ():void=>{};
+
+    public onReady():void {
 
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
@@ -56,7 +57,7 @@ export class MainScene extends Scene {
                 x.setFillColor(R((i%2*99)%99));
                 x.drawText('🥪',900+C(i+t)*2e3,500+T(t+i*3)*1e3);
             }
-        }
+        };
     }
 
     protected onRender(): void {

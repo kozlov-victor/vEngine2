@@ -9,7 +9,7 @@ export class MainScene extends Scene {
 
 
 
-    public onReady() {
+    public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         this.appendChild(surface);
@@ -25,6 +25,7 @@ export class MainScene extends Scene {
 
             let i,j,v,d,p:number;
 
+            // tslint:disable-next-line:max-line-length
             c.size.width|=0;for(i=0;i<3e3;i+=50)for(j=0;j<2e3;j+=50){v=e.screenY*3-j;d=e.screenX*3.4-i;p=2e-3*(d*d+v*v)**.5;x.drawRect(i+d*p,j+v*p,9,9);}
 
         });

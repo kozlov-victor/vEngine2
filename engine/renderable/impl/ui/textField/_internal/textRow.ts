@@ -27,7 +27,8 @@ export class TextRow extends NullGameObject {
     public addWord(word:Word,addWhiteSpaceBeforeIfNeed:boolean):void {
         if (this.children.length!==0 && addWhiteSpaceBeforeIfNeed) {
             const scaleFromCurrFontSize:number = word.getMaxCharacterFontScale();
-            const space:Word = new Word(this.game,this.font,[{rawChar:' ',multibyte:false,scaleFromCurrFontSize}],Color.NONE,this.rowSet.isPixelPerfect());
+            const space:Word =
+                new Word(this.game,this.font,[{rawChar:' ',multibyte:false,scaleFromCurrFontSize}],Color.NONE,this.rowSet.isPixelPerfect());
             this._addWord(space);
         }
         this._addWord(word);
@@ -94,7 +95,7 @@ export class TextRow extends NullGameObject {
 
     }
 
-    private _addWord(word:Word){
+    private _addWord(word:Word):void{
         const lastCharacterFont:Font =
             (word.children[word.children.length-1] as CharacterImage)?.getCharacterInfo()?.font ?? this.font;
         word.pos.setX(this.caret);

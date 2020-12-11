@@ -50,7 +50,7 @@ class LhaArrayReader {
         return length;
     }
 
-    public seek(offset:number, mode:0|1){
+    public seek(offset:number, mode:0|1):void{
         switch (mode) {
             case LhaArrayReader.SeekAbsolute:
                 this.offset = offset;
@@ -92,7 +92,7 @@ class LhaTree {
         this.tree[0] = code | LhaTree.LEAF;
     }
 
-    public expand(){
+    public expand():void{
         const endOffset:number = this.allocated;
         while (this.nextEntry < endOffset) {
             this.tree[this.nextEntry] = this.allocated;
@@ -185,7 +185,7 @@ export class LhaReader {
         }
     }
 
-    private readCodeTable(){
+    private readCodeTable():void{
         const reader:LhaArrayReader = this.reader;
         const codeCount:number = Math.min(reader.readBits(9), 510);
         if (codeCount <= 0) {

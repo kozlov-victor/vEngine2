@@ -37,8 +37,8 @@ export class MousePoint extends ReleaseableEntity{
 }
 
 export class MousePointsPullHolder {
+    private static mousePointsPool:ObjectPool<MousePoint> = new ObjectPool(MousePoint);
     public static fromPool():MousePoint{
         return this.mousePointsPool.getFreeObject()!;
     }
-    private static mousePointsPool:ObjectPool<MousePoint> = new ObjectPool(MousePoint);
 }

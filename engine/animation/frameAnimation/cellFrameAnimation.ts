@@ -43,7 +43,7 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
         return cloned as this;
     }
 
-    protected onNextFrame(i:number){
+    protected onNextFrame(i:number):void{
         this.setFrameIndex(this.frames[i]);
     }
 

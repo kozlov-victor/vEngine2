@@ -6,7 +6,6 @@ import {BasePix32Scene, loadSound} from "./base/basePix32Scene";
 import {GetReadyScene} from "./getReadyScene";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {Sound} from "@engine/media/sound";
-import {Vtx} from "../ym-player/vtx";
 import {AbstractChipTrack} from "../ym-player/abstract/abstractChipTrack";
 import {Ym} from "../ym-player/ym";
 
@@ -16,7 +15,7 @@ export class IntroScene extends BasePix32Scene {
     private themeAudioLink:ResourceLink<void>;
     private track:AbstractChipTrack;
 
-    onPreloading() {
+    onPreloading():void {
         super.onPreloading();
         // const binLink = this.resourceLoader.loadBinary('pix32/resources/music/Eifmes.vtx');
         // this.resourceLoader.addNextTask((()=>{
@@ -32,7 +31,7 @@ export class IntroScene extends BasePix32Scene {
 
     }
 
-    onReady() {
+    onReady():void {
         super.onReady();
 
         const sound:Sound = new Sound(this.game);
