@@ -14,7 +14,6 @@ import {AppearFromPointTextAnimation} from "@engine/renderable/impl/ui/textField
 import {EasingSine} from "@engine/misc/easing/functions/sine";
 import {RotateLetterTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/rotateLetterTextAnimation";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-// tslint:disable-next-line:max-line-length
 import {SimpleAppearLetterTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/simpletAppearLetterTextAnimation";
 import {ScaleAppearLetterTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/scaleAppearLetterTextAnimation";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";
@@ -78,7 +77,6 @@ export class MainScene extends Scene {
         let i:number = 0;
 
         const setNextAnimation = ()=>{
-            // tslint:disable-next-line:max-line-length
             tf.setTextWithAnimation(`This is animated text\nEnjoy it!\n(click to change animation)\n(animation index: ${i})`, animations[i]);
             i = (++i)%animations.length;
         };

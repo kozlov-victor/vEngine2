@@ -47,7 +47,6 @@ export namespace FontFactory {
         return height;
     };
 
-    // tslint:disable-next-line:max-line-length
     export const getFontContext = (standartChars:readonly string[], extraChars:readonly string[],strFont:string, width:number):IFontContext=> {
 
         const cnv:HTMLCanvasElement = document.createElement('canvas');

@@ -148,17 +148,14 @@ export class TextRowSet extends NullGameObject {
                             this.newRow();
                             break;
                         case ' ':
-                            // tslint:disable-next-line:max-line-length
                             this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color,this.pixelPerfect),applyNewLineIfCurrentIsFull,false);
                             break;
                         case '\t':
                             const char:ICharacterInfo = s.getAllChars()[0];
                             char.rawChar = ' ';
-                            // tslint:disable-next-line:max-line-length
                             this.addWord(new Word(this.game,this.font,[char,char,char,char],this.color,this.pixelPerfect),applyNewLineIfCurrentIsFull,false);
                             break;
                         default:
-                            // tslint:disable-next-line:max-line-length
                             this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color,this.pixelPerfect),applyNewLineIfCurrentIsFull,false);
                             break;
                     }

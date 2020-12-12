@@ -105,7 +105,6 @@ export class MouseControlHelper {
         } else return undefined;
     }
 
-    // tslint:disable-next-line:max-line-length
     public triggerEventForObject(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,mousePoint:MousePoint, obj:RenderableModel):IObjectMouseEvent{
         mousePoint.target = obj;
         const mouseEvent:Optional<IObjectMouseEvent> = {

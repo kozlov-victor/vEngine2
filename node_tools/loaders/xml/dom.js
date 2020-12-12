@@ -306,6 +306,9 @@ class Comment {
     constructor(text){
         this.data = text;
     }
+    toJSON(){
+        return this.data;
+    }
 }
 
 class Document extends Element {

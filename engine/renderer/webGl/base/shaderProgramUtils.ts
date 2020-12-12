@@ -217,7 +217,6 @@ export const extractUniformsFromShaderBin = (gl:WebGLRenderingContext, program:S
 
 };
 
-// tslint:disable-next-line:max-line-length
 export const extractUniformsAndAttributesFromShaderSource = (vertexSource:string,fragmentSource:string):{attributes:string[],uniforms:string[]}=>{
     const uniforms:string[] = [];
     const attributes:string[] = [];

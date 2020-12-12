@@ -115,9 +115,15 @@ const choose = async (message,chooseArray)=>{
         showInfoWindow(popup);
     };
     let loop = true;
+    let enteredString = '';
+    let lastEnteredTime = 0;
     while (loop) {
         createPrompt();
         const char = await getCh();
+        const enteredTime = new Date().getTime();
+        const delta = enteredTime - lastEnteredTime;
+        lastEnteredTime = enteredTime;
+
         if (char.name==='up') {
             chosenPosition--;
             if (chosenPosition===-1) chosenPosition = chooseArray.length -1;
@@ -129,7 +135,10 @@ const choose = async (message,chooseArray)=>{
         else if (char.name==='return') loop = false;
         else {
             // search by letter
-            const pos = chooseArray.findIndex(it=>it.startsWith(char.sequence));
+            if (delta<300) enteredString+=char.sequence;
+            else enteredString = char.sequence;
+
+            const pos = chooseArray.findIndex(it=>it.startsWith(enteredString));
             if (pos>-1) chosenPosition = pos;
         }
     }

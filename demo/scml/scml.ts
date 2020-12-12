@@ -774,7 +774,6 @@ class SpriteTimelineKey extends SpatialTimelineKey {
 
     private useDefaultPivot:boolean = true; // true if missing pivot_x and pivot_y in object tag
 
-    // tslint:disable-next-line:max-line-length
     public static fromDescriptionSub(scmlObject:ScmlObject,commonKeyDesc:ISconTimelineKey,spriteKeyDesc:ISconSpriteTimeLineKey):SpriteTimelineKey {
         const s:SpriteTimelineKey = new SpriteTimelineKey();
         s.scmlObject = scmlObject;
@@ -841,7 +840,6 @@ class SpriteTimelineKey extends SpatialTimelineKey {
         const url:string = this.scmlObject.activeCharacterMap[this.folder].files[this.file].name;
         //debugPaint(url,this.scmlObject.activeCharacterMap[this.folder].files[this.file],this.info,paintPivotX,paintPivotY,this.index);
         const paintId:string = url+'_' +this.timeLine.id + '_' + this.id;
-        // tslint:disable-next-line:max-line-length
         this.scmlObject.root.paintSprite(url,this.scmlObject.activeCharacterMap[this.folder].files[this.file],this.info,paintPivotX,paintPivotY,paintId);
     }
 

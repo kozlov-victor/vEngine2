@@ -34,7 +34,6 @@ export namespace ResourceUtil {
         });
     };
 
-    // tslint:disable-next-line:max-line-length
     export const createImageFromData = async (imageData:Base64|URI|IURLRequest, q:Queue,taskRef:TaskRef):Promise<ImageBitmap|HTMLImageElement>=> {
 
         const isBase64: boolean = (imageData as string).substr!==undefined && (imageData as string).indexOf('data:image/') === 0;

@@ -44,7 +44,6 @@ export class MainScene extends Scene {
             const theta:number = MathEx.random(0,Math.PI);
             const radius:number = maxRadius+MathEx.random(-40,10);
 
-            // tslint:disable-next-line:max-line-length
             // https://ru.wikipedia.org/wiki/%D0%A1%D1%84%D0%B5%D1%80%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B0%D1%8F_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0_%D0%BA%D0%BE%D0%BE%D1%80%D0%B4%D0%B8%D0%BD%D0%B0%D1%82
             const x:number = radius*Math.cos(fi)*Math.sin(theta);
             const y:number = radius*Math.sin(fi)*Math.sin(theta);

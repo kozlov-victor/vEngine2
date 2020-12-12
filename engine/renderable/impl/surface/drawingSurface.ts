@@ -46,7 +46,6 @@ class ContainerForDrawingSurface extends NullGameObject {
 }
 
 
-// tslint:disable-next-line:max-line-length
 export class DrawingSurface extends RenderableModel implements ICloneable<DrawingSurface>,IResource<ITexture>, IMatrixTransformable, IDestroyable {
 
     constructor(game:Game,size:Readonly<ISize>){

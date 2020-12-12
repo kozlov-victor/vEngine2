@@ -306,7 +306,6 @@ export class PolyLine extends Shape {
         });
     }
 
-    // tslint:disable-next-line:max-line-length
     private _arcTo(rx:number,ry:number,xAxisRotation:number,largeArcFlag:0|1,sweepFlag:0|1,x:number,y:number,isRelativeCoordinates:boolean):void{
 
         if (DEBUG && largeArcFlag!==0 && largeArcFlag!==1) throw new DebugError(`wrong largeArcFlag value: ${largeArcFlag}`);

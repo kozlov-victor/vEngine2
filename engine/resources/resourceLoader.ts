@@ -32,7 +32,6 @@ export class ResourceLoader {
 
     public readonly q: Queue = new Queue();
 
-    // tslint:disable-next-line:max-line-length
     private static createUrlLoader<T extends string|ArrayBuffer>(req: URI|IURLRequest,responseType:'arraybuffer'|'text' = 'text'):UrlLoader<T>{
         let iReq:IURLRequest;
         if ((req as string).substr!==undefined){

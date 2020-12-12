@@ -20,7 +20,6 @@ const createRichText = ()=>{
                 <u>L</u>orem ipsum <i>dolor sit amet,</i>
                 <font color={{r:255,g:100,b:100}}>consectetur 🥰 adipiscing elit,</font>
             </b>
-            {/* tslint:disable-next-line:max-line-length */}
             sed 🥰 do 🥰 eiusmod <u>tempor incididunt</u> ut labore et dolore magna aliqua.  eur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             2Lorem ipsum <b>dolor</b> sit amet, consectetur adipiscing elit,
             <i>sed do eiusmod tempor</i> incididunt <font size={35}>ut labore et <u>dolore</u> magna aliqua.</font>
@@ -61,7 +60,6 @@ export class MainScene extends Scene {
         tf.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tf.setAlignText(AlignText.JUSTIFY);
         const richText:VirtualNode = createRichText();
-        // tslint:disable-next-line:max-line-length
         //tf.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
         tf.setRichText(richText);
         this.appendChild(tf);

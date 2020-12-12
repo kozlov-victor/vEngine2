@@ -43,7 +43,6 @@ export class Widget extends VEngineTsxComponent<IState> {
                 <button onclick={()=>this.remove()}>remove</button>
                 <ul>
                     {
-                        // tslint:disable-next-line:max-line-length
                         this.state.items.map((it,i)=><li><button onclick={()=>this.removeAt(i)}>-</button>the number is !!<b>{it.number}</b>!!</li>)
                     }
                 </ul>

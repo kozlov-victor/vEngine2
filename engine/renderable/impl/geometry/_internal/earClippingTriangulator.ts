@@ -101,7 +101,6 @@ export class EarClippingTriangulator {
         const current: number = indices[index] * 2;
         const next: number = indices[this.nextIndex(index)] * 2;
         const vertices: number[] = this.vertices;
-        // tslint:disable-next-line:max-line-length
         return EarClippingTriangulator.computeSpannedAreaSign(vertices[previous], vertices[previous + 1], vertices[current], vertices[current + 1],
             vertices[next], vertices[next + 1]);
     }

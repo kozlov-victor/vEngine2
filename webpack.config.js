@@ -138,7 +138,7 @@ module.exports = async (env={})=>{
                     ]
                 },
                 {
-                    test: /\.(png|jpe?g|svg)$/,
+                    test: /\.(png|jpe?g)$/,
                     use: [
                         {
                             loader: 'url-loader',

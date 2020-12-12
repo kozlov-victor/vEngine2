@@ -86,7 +86,6 @@ const request = <T>(data:IRequestData<T>):Promise<T>=> {
 
 export namespace httpClient {
 
-    // tslint:disable-next-line:max-line-length
     export const get = <T>(url:string,data:IKeyVal<string|number|boolean>,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
         return request<T>({
             method:'get',
@@ -98,7 +97,6 @@ export namespace httpClient {
         });
     };
 
-    // tslint:disable-next-line:max-line-length
     export const  post = <T>(url:string,data?:any,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
         return request<T>({
             method:'post',
@@ -111,7 +109,6 @@ export namespace httpClient {
         });
     };
 
-    // tslint:disable-next-line:max-line-length
     export const  postMultiPart = <T>(url:string,file:File,data:IKeyVal<string|number|boolean>,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
         const formData = new FormData();
         Object.keys(data).forEach((key)=>{

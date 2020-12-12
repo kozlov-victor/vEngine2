@@ -52,7 +52,6 @@ export class MainScene extends Scene {
                     {'\n'}
                     <font color={{r:122,g:122,b:122}} size={25}>(Кликнуть для инкремента)</font>
                     {'\n'}
-                    {/* tslint:disable-next-line:max-line-length */}
                     <font font={this.fontLink2.getTarget()} color={{r:122,g:255,b:122}} size={71}>Эта <i>строка</i> с <s>тем же</s> <u>другим</u> шрифтом</font>
                     {'\n'}
                     Новая строка с <s>другим</s> <u>тем же</u> шрифтом
