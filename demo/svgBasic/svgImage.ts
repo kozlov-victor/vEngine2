@@ -177,9 +177,13 @@ const getNumber = (literal:string,defaultValue:number):number=>{
 
 class SvgElementRenderer {
 
-    constructor(private game:Game) {}
+    private rootStyle:Record<string, string>;
 
-    private static getFillStrokeParams(el:Element):{lineWidth:number,fillColor:Color,drawColor:Color} {
+    constructor(private game:Game, private rootSvgTag:Element) {
+        this.rootStyle = this.styleAttrToMap(rootSvgTag.attributes.style);
+    }
+
+    private getFillStrokeParams(el:Element):{lineWidth:number,fillColor:Color,drawColor:Color} {
 
         const style:Record<string, string> = this.styleAttrToMap(el.attributes.style);
 
@@ -204,7 +208,7 @@ class SvgElementRenderer {
         return {lineWidth,fillColor,drawColor};
     }
 
-    private static styleAttrToMap(style:string):Record<string, string> {
+    private styleAttrToMap(style:string):Record<string, string> {
         const res:Record<string, string> = {};
         if (!style) return res;
         style.split(';').forEach(pair=>{
@@ -214,15 +218,15 @@ class SvgElementRenderer {
         return res;
     }
 
-    private static lookUpProperty(el:Element,style:Record<string,string>,propName:string):string{
-        return style[propName] ?? el.attributes[propName];
+    private lookUpProperty(el:Element,style:Record<string,string>,propName:string):string{
+        return style[propName] ?? el.attributes[propName] ?? this.rootStyle[propName] ?? this.rootSvgTag.attributes[propName];
     }
 
     private renderPath(view:RenderableModel,el:Element):void {
         const data:string = el.attributes.d;
         if (!data) return undefined;
 
-        const {lineWidth,fillColor,drawColor} = SvgElementRenderer.getFillStrokeParams(el);
+        const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
 
         Polygon.fromMultiCurveSvgPath(this.game,data).forEach(p=>{
             p.fillColor = fillColor;
@@ -239,7 +243,7 @@ class SvgElementRenderer {
     }
 
     private renderCircle(view:RenderableModel,el:Element):void {
-        const {lineWidth,fillColor,drawColor} = SvgElementRenderer.getFillStrokeParams(el);
+        const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
         const cx:number = getNumber(el.attributes.cx,0);
         const cy:number = getNumber(el.attributes.cy,0);
         const r:number = getNumber(el.attributes.r,10);
@@ -254,7 +258,7 @@ class SvgElementRenderer {
     }
 
     private renderEllipse(view:RenderableModel,el:Element):void {
-        const {lineWidth,fillColor,drawColor} = SvgElementRenderer.getFillStrokeParams(el);
+        const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
         const cx:number = getNumber(el.attributes.cx,0);
         const cy:number = getNumber(el.attributes.cy,0);
         const rx:number = getNumber(el.attributes.rx,10);
@@ -272,7 +276,7 @@ class SvgElementRenderer {
 
     // ry not supported
     private renderRect(view:RenderableModel,el:Element):void {
-        const {lineWidth,fillColor,drawColor} = SvgElementRenderer.getFillStrokeParams(el);
+        const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
         const x:number = getNumber(el.attributes.x,0);
         const y:number = getNumber(el.attributes.y,0);
         const width:number = getNumber(el.attributes.width,1);
@@ -290,7 +294,7 @@ class SvgElementRenderer {
     }
 
     private renderLine(view:RenderableModel,el:Element):void {
-        const {lineWidth,fillColor,drawColor} = SvgElementRenderer.getFillStrokeParams(el);
+        const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
         const x1:number = getNumber(el.attributes.x1,0);
         const y1:number = getNumber(el.attributes.y1,0);
         const x2:number = getNumber(el.attributes.x2,1);
@@ -337,13 +341,14 @@ class SvgElementRenderer {
 
 export class SvgImage extends NullGameObject {
 
-    private svgElementRenderer:SvgElementRenderer = new SvgElementRenderer(this.game);
+    private svgElementRenderer:SvgElementRenderer;
 
     constructor(protected game:Game, private doc:Element) {
         super(game);
-        const root = doc.querySelector('svg');
-        const width:number = getNumber(root.attributes.width,100);
-        const height:number = getNumber(root.attributes.height,100);
+        const rootSvgTag = doc.querySelector('svg');
+        this.svgElementRenderer = new SvgElementRenderer(this.game,rootSvgTag);
+        const width:number = getNumber(rootSvgTag.attributes.width,100);
+        const height:number = getNumber(rootSvgTag.attributes.height,100);
         const drawingSurface = new DrawingSurface(this.game,new Size(width,height));
         this.size.setWH(width,height);
         const rootView:RenderableModel = new NullGameObject(this.game);
