@@ -12,8 +12,7 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Line} from "@engine/renderable/impl/geometry/line";
-
-// https://www.w3schools.com/graphics/svg_circle.asp
+import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
 
 const NAMED_COLOR_TABLE:Record<string, string> =
     {
@@ -166,6 +165,11 @@ const getColor = (literal:string)=>{
     return Color.fromCssLiteral(literal);
 };
 
+const getString = (literal:string,defaultValue:string):string=>{
+    if (!literal) return defaultValue;
+    else return literal;
+};
+
 const getNumber = (literal:string,defaultValue:number):number=>{
     if (!literal) return defaultValue;
     const val:number = parseFloat(literal);
@@ -274,7 +278,7 @@ class SvgElementRenderer {
         view.appendChild(ellipse);
     }
 
-    // ry not supported
+    // ry is not supported
     private renderRect(view:RenderableModel,el:Element):void {
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
         const x:number = getNumber(el.attributes.x,0);
@@ -308,6 +312,37 @@ class SvgElementRenderer {
         view.appendChild(line);
     }
 
+    private renderPolygon(view:RenderableModel,el:Element):void {
+        const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
+        const points:string = getString(el.attributes.points,'');
+        if (!points) return;
+        const vertices:number[] = closePolylinePoints(points);
+        const polygon:Polygon = Polygon.fromPoints(this.game,vertices);
+
+        polygon.fillColor = fillColor;
+        view.appendChild(polygon);
+
+        if (lineWidth>0 && drawColor.a>0) {
+            const polyline:PolyLine = PolyLine.fromPoints(this.game,vertices);
+            polyline.lineWidth = lineWidth;
+            polyline.color = drawColor;
+            view.appendChild(polyline);
+        }
+    }
+
+    private renderPolyline(view:RenderableModel,el:Element):void {
+        const {lineWidth,drawColor} = this.getFillStrokeParams(el);
+        const points:string = getString(el.attributes.points,'');
+        if (!points) return;
+
+        if (lineWidth>0 && drawColor.a>0) {
+            const polyline:PolyLine = PolyLine.fromPoints(this.game,points);
+            polyline.lineWidth = lineWidth;
+            polyline.color.set(drawColor);
+            view.appendChild(polyline);
+        }
+    }
+
     public renderTag(view:RenderableModel,el:Element):Optional<RenderableModel> {
         switch (el.tagName) {
             case 'path': {
@@ -328,6 +363,14 @@ class SvgElementRenderer {
             }
             case 'line': {
                 this.renderLine(view,el);
+                return undefined;
+            }
+            case 'polygon': {
+                this.renderPolygon(view,el);
+                return undefined;
+            }
+            case 'polyline': {
+                this.renderPolyline(view,el);
                 return undefined;
             }
             default: {

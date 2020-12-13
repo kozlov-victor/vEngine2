@@ -8,6 +8,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {calcNormal} from "@engine/renderable/impl/geometry/_internal/calcNormal";
 import {IPoint3d} from "@engine/geometry/point3d";
 import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/_internal/isPolylineClockWise";
+import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
 
 class PolygonPrimitive extends AbstractPrimitive {
     constructor(){
@@ -88,8 +89,9 @@ export class Polygon extends Mesh {
         return Polygon.fromPolyline(game,polyline);
     }
 
-    public static fromPoints(game:Game,points:number[]):Polygon {
-        return Polygon.fromPolyline(game,PolyLine.fromPoints(game,points));
+    public static fromPoints(game:Game,points:number[]|string):Polygon {
+        const vertices:number[] = closePolylinePoints(points);
+        return Polygon.fromPolyline(game,PolyLine.fromPoints(game,vertices));
     }
 
     public extrudeToMesh(depth:number):Mesh{

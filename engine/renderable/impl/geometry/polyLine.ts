@@ -6,11 +6,8 @@ import {Game} from "@engine/core/game";
 import {arcToBezier} from "@engine/renderable/impl/geometry/_internal/arcToBezier";
 import {Optional} from "@engine/core/declarations";
 import {createSplinePathFromPoints} from "@engine/renderable/impl/geometry/_internal/splineFromPoints";
+import {clearSvgString} from "@engine/renderable/impl/geometry/_internal/clearSvgString";
 
-
-const clearString = (s:string):string=>{
-    return s.replace(/\s\s+/g, ' ').trim();
-};
 
 type v2 = [number,number];
 
@@ -61,7 +58,7 @@ class SvgTokenizer {
     private readonly _NUM:string = '01234567890.';
 
     constructor(private readonly path:string){
-        this.path = clearString(path);
+        this.path = clearSvgString(path);
     }
 
     public isEof():boolean{
@@ -187,7 +184,7 @@ export class PolyLine extends Shape {
 
     public static fromPoints(game:Game,points:number[]|string):PolyLine{
         if (typeof points === 'string') {
-            points = clearString(points).split(/[ |,]/).map((it:string)=>{
+            points = clearSvgString(points).split(/[ |,]/).map((it:string)=>{
                 const n:number = parseFloat(it);
                 if (DEBUG && isNaN(n)) throw new DebugError(`can not parse vertex array ${points}: unexpected value ${it}`);
                 return n;

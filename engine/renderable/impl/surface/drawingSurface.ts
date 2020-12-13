@@ -25,6 +25,7 @@ import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {mat4} from "@engine/geometry/mat4";
 import MAT16 = mat4.MAT16;
+import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
 
 
 class ContainerForDrawingSurface extends NullGameObject {
@@ -338,13 +339,8 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     private drawPolygonFromVertices(vertices:number[]):void{
-        const prev:number = vertices[vertices.length-2];
-        const last:number = vertices[vertices.length-1];
 
-        const first:number = vertices[0];
-        const next:number = vertices[1];
-
-        if (last!==next && prev!==first) vertices = [...vertices,first,next];
+        vertices = closePolylinePoints(vertices);
 
         const pl:PolyLine = PolyLine.fromPoints(this.game,vertices);
         pl.color = this.drawColor;
