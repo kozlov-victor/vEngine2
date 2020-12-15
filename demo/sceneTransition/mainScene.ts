@@ -17,7 +17,7 @@ import {
 } from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {LIST_VIEW_EVENTS, ListView, ListViewItem} from "@engine/renderable/impl/ui/scrollViews/listView";
+import {LIST_VIEW_EVENTS, VerticalListView, ListViewItem} from "@engine/renderable/impl/ui/scrollViews/verticalListView";
 import {
     FadeInAppearanceTransition,
     FadeOutAppearanceTransition
@@ -84,11 +84,11 @@ export class MainScene extends Scene {
     private fnt:Font;
     public backgroundColor: Color = Color.RGB(233);
 
-    private listView:ListView;
+    private listView:VerticalListView;
 
     public onReady():void {
 
-        this.listView = new ListView(this.game);
+        this.listView = new VerticalListView(this.game);
         this.listView.size.set(this.game.size);
         this.listView.setPadding(10);
         this.listView.setMargin(10);

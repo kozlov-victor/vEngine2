@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font";
-import {LIST_VIEW_EVENTS, ListView, ListViewItem} from "@engine/renderable/impl/ui/scrollViews/listView";
+import {LIST_VIEW_EVENTS, VerticalListView, ListViewItem} from "@engine/renderable/impl/ui/scrollViews/verticalListView";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MainScene} from "./mainScene";
@@ -26,11 +26,11 @@ export class MenuScene extends Scene {
     @Resource.Font({fontSize: 25,fontFamily:'monospace'})
     private fnt:Font;
 
-    private listView:ListView;
+    private listView:VerticalListView;
 
     public onReady():void {
 
-        this.listView = new ListView(this.game);
+        this.listView = new VerticalListView(this.game);
         this.listView.size.set(this.game.size);
         this.listView.setPadding(10);
         this.listView.setMargin(10);

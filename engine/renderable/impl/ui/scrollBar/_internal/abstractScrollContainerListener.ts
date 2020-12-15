@@ -92,6 +92,11 @@ export abstract class AbstractScrollContainerListener {
         return this.offset;
     }
 
+    public setCurrentOffset(val:number):void {
+        this.offset = val;
+        this._setScrollPos();
+    }
+
     public destroy():void {
         this.constrainContainer.off(MOUSE_EVENTS.mouseDown);
         this.constrainContainer.off(MOUSE_EVENTS.mouseMove);

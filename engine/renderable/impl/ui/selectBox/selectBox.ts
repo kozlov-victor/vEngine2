@@ -1,93 +1,99 @@
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
-import {Color} from "@engine/renderer/common/color";
-import {Container} from "@engine/renderable/impl/ui/container";
-import {ScrollContainerDelegate} from "@engine/renderable/impl/ui/scrollBar/scrollContainerDelegate";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {
+    LIST_VIEW_EVENTS,
+    ListViewItem,
+    VerticalListView
+} from "@engine/renderable/impl/ui/scrollViews/verticalListView";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Color} from "@engine/renderer/common/color";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {NoOverflowSurface} from "@engine/renderable/impl/surface/noOverflowSurface";
-import {IRectJSON} from "@engine/geometry/rect";
 
-// todo
-export class SelectBox extends Container {
+
+export class SelectBox extends VerticalListView {
+
+    public readonly selectedBackground:RenderableModel;
 
     private _options:(string|number)[] = [];
-    private _selected:string|number;
+    private _textFields:TextField[] = [];
+    private _selectedIndex:number = -1;
 
-    public readonly selectedColor:Color = Color.WHITE.clone();
+    private backgroundSelected: RenderableModel = new NullGameObject(this.game);
+    private lastSelectedView:TextField;
 
-    private readonly _constrainContainer: RenderableModel;
-    private readonly _scrollableContainer: RenderableModel;
-    private _scrollContainerDelegate:ScrollContainerDelegate;
+    private textColor:Color = Color.BLACK.clone();
+
+    private readonly defaultBackground:RenderableModel = new NullGameObject(this.game);
+
 
     constructor(protected game: Game, protected font: Font) {
         super(game);
-        this.size.setWH(160,60);
-
-        this._constrainContainer = new NoOverflowSurface(this.game,this.size);
-        this._constrainContainer.size.set(this.size);
-        this.appendChild(this._constrainContainer);
-
-        this._scrollableContainer = new NullGameObject(this.game);
-        this._scrollableContainer.size.setWH(this.size.width,400);
-        this._constrainContainer.appendChild(this._scrollableContainer);
-
-        const rect = new Rectangle(this.game);
-        rect.pos.setXY(100,100);
-        this._scrollableContainer.appendChild(rect);
-        console.log(this._scrollableContainer.id);
-        rect.on(MOUSE_EVENTS.click, e=>{
-            console.log('clicked',e);
-        });
+        const bg = new Rectangle(this.game);
+        bg.fillColor = Color.fromCssLiteral('#f3f3f3');
+        this.selectedBackground = bg;
     }
 
     public setOptions(options:(string|number)[]):void {
+        if (this._selectedIndex<0 || this._selectedIndex>options.length-1) this._selectedIndex = - 1;
+        this.lastSelectedView = undefined!;
         this._options = options;
-        this.markAsDirty();
+        this.empty();
+        this._textFields.length = 0;
+        this.revalidate();
+        const clientRect = this.getClientRect();
+        options.forEach((it,index)=>{
+            const tf:TextField = new TextField(this.game,this.font);
+            tf.size.setWH(clientRect.width,this.font.fontContext.lineHeight);
+            tf.setText(it);
+            this._textFields.push(tf);
+            const listViewItem:ListViewItem = new ListViewItem(tf);
+            listViewItem.on(LIST_VIEW_EVENTS.itemClick, ()=>{
+                this.select(index);
+            });
+            this.addView(listViewItem);
+        });
+        this.passPropertiesToChildren();
+        this.select(this._selectedIndex);
+        this.moveSelectedIntoViewRect();
     }
 
-    public setSelected(val:string|number):void {
-        this._selected = val;
-        this.markAsDirty();
+    setBackgroundSelected(background: RenderableModel):void {
+        this.backgroundSelected = background;
+        this.select(this._selectedIndex);
     }
 
     public setSelectedIndex(index:number):void {
-        this._selected = this._options[index];
-        this.markAsDirty();
+        this.select(index);
+        this.moveSelectedIntoViewRect();
     }
 
-    public getSelected<T extends string|number>():T {
-        return this._selected as T;
+    public getSelectedIndex():number {
+        return this._selectedIndex;
     }
 
-    public revalidate():void {
-        super.revalidate();
-        const clientRect:Readonly<IRectJSON> = this.getClientRect();
-        this._constrainContainer.pos.set(clientRect);
-        this._constrainContainer.size.set(clientRect);
-        if (this._constrainContainer.size.isZero()) this._constrainContainer.size.set(this.size);
-        if (this._scrollContainerDelegate===undefined) {
-            this._scrollContainerDelegate = new ScrollContainerDelegate(this.game,this,this._constrainContainer,this._scrollableContainer);
-        }
-        this._scrollContainerDelegate.revalidate();
-
-        // const clientRect = this.getClientRect();
-        // const selectedIndex:number = this._options.indexOf(this._selected);
-        // if (selectedIndex===-1) {
-        //     this._selected = undefined!;
-        //     return;
-        // }
-        // const textRow:TextRow = this._textField.findRowByIndex(selectedIndex);
-        // console.log({textRow});
-        // if (textRow===undefined) return;
+    private passPropertiesToChildren():void {
+        this._textFields.forEach((tf,index)=>{
+            tf.textColor.set(this.textColor);
+        });
     }
 
+    private select(index:number):void{
+        if (index===-1) return;
+        this._selectedIndex = index;
+        const tf:TextField = this._textFields[index];
+        if (tf===undefined) return;
+        if (this.lastSelectedView!==undefined) this.lastSelectedView.setBackground(this.defaultBackground);
+        tf.setBackground(this.backgroundSelected);
+        this.lastSelectedView = tf;
+    }
 
-    public update():void {
-        super.update();
-        this._scrollContainerDelegate.update();
+    private moveSelectedIntoViewRect():void {
+        const view:TextField = this.lastSelectedView;
+        if (view===undefined) return;
+        const newOffset:number = -view.size.height*this._selectedIndex;
+        this._scrollContainerDelegate.setCurrentOffsetVertical(newOffset);
     }
 
 }

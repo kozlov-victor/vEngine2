@@ -68,8 +68,16 @@ export class ScrollContainerDelegate {
         return this.vScrollContainerListener.getCurrentOffset();
     }
 
+    public setCurrentOffsetVertical(val:number):void {
+        this.vScrollContainerListener.setCurrentOffset(val);
+    }
+
     public getCurrentOffsetHorizontal():number {
         return this.hScrollContainerListener.getCurrentOffset();
+    }
+
+    public setCurrentOffsetHorizontal(val:number):void {
+        this.hScrollContainerListener.setCurrentOffset(val);
     }
 
     public destroy():void{

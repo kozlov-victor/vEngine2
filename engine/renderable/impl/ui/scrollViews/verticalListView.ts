@@ -31,7 +31,7 @@ export class ListViewItem {
 
 }
 
-export class ListView extends ScrollView {
+export class VerticalListView extends ScrollView {
 
     private pointerY:number = 0;
 
@@ -60,6 +60,11 @@ export class ListView extends ScrollView {
             lastOffset = currentOffset;
             if (delta<10) listViewItem.trigger(LIST_VIEW_EVENTS.itemClick);
         });
+    }
+
+    protected empty():void {
+        this.pointerY = 0;
+        this.scrollableContainer.removeChildren();
     }
 
 

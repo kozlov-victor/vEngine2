@@ -18,7 +18,7 @@ import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextF
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {ScrollView} from "@engine/renderable/impl/ui/scrollViews/scrollView";
 import {Size} from "@engine/geometry/size";
-import {Circle} from "@engine/renderable/impl/geometry/circle";
+import {SelectBox} from "@engine/renderable/impl/ui/selectBox/selectBox";
 
 export class MainScene extends Scene {
 
@@ -144,6 +144,27 @@ export class MainScene extends Scene {
         scrollView.scrollableContainer.appendChild(label);
         this.appendChild(scrollView);
 
+        const selectBox = new SelectBox(this.game,this.fnt);
+        const selectBoxBg = new Rectangle(this.game);
+        selectBoxBg.fillColor = Color.fromCssLiteral(`#adb4ff`);
+        selectBox.setBackground(selectBoxBg);
+
+        const selectBoxBgSelected = new Rectangle(this.game);
+        selectBoxBgSelected.fillColor = Color.fromCssLiteral(`#49ef6e`);
+        selectBox.setBackgroundSelected(selectBoxBgSelected);
+
+        selectBox.size.setWH(130,100);
+        selectBox.pos.setXY(370,500);
+        selectBox.setSelectedIndex(3);
+        selectBox.setOptions([
+            'Volkswagen Passat',
+            'Subaru Legacy',
+            'Hyundai Elantra',
+            'Honda Civic',
+            'Audi A6',
+            'AutoZAZ DAEWOO'
+        ]);
+        this.appendChild(selectBox);
 
     }
 

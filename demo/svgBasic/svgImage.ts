@@ -298,7 +298,7 @@ class SvgElementRenderer {
     }
 
     private renderLine(view:RenderableModel,el:Element):void {
-        const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
+        const {lineWidth,drawColor} = this.getFillStrokeParams(el);
         const x1:number = getNumber(el.attributes.x1,0);
         const y1:number = getNumber(el.attributes.y1,0);
         const x2:number = getNumber(el.attributes.x2,1);
