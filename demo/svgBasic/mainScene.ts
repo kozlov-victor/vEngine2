@@ -19,6 +19,11 @@ import * as svgEx2 from "xml/xml-loader!./examples/ex2.svg";
 import * as svgEx3 from "xml/xml-loader!./examples/ex3.svg";
 import * as svgEx4 from "xml/xml-loader!./examples/ex4.svg";
 import * as svgEx5 from "xml/xml-loader!./examples/ex5.svg";
+import * as svgEx6 from "xml/xml-loader!./examples/ex6.svg";
+import * as svgEx7 from "xml/xml-loader!./examples/ex7.svg";
+import * as svgEx8 from "xml/xml-loader!./examples/ex8.svg";
+import * as svgEx9 from "xml/xml-loader!./examples/ex9.svg";
+import * as svgEx10 from "xml/xml-loader!./examples/ex10.svg";
 
 
 import {Scene} from "@engine/scene/scene";
@@ -27,6 +32,8 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Element} from "@engine/misc/xmlUtils";
 
 const images:Element[] = [
+    svgEx6,svgEx7,svgEx8,
+    svgEx9,svgEx10,
     svgPolyline1,
     svgPolygon1,
     svgEx4,svgEx5,

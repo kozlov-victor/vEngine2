@@ -13,6 +13,9 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
+import {BasicStringTokenizer} from "@engine/renderable/impl/geometry/_internal/basicStringTokenizer";
+import {MathEx} from "@engine/misc/mathEx";
+import {FastMap} from "@engine/misc/collection/fastMap";
 
 const NAMED_COLOR_TABLE:Record<string, string> =
     {
@@ -177,39 +180,31 @@ const getNumber = (literal:string,defaultValue:number):number=>{
     else return val;
 };
 
-
-
-class SvgElementRenderer {
-
-    private rootStyle:Record<string, string>;
-
-    constructor(private game:Game, private rootSvgTag:Element) {
-        this.rootStyle = this.styleAttrToMap(rootSvgTag.attributes.style);
+const getNumberArray = <T>(literal:string,size:number,defaultItemValue:number):T=>{
+    let arr:number[];
+    if (!literal) {
+        arr = Array(size);
+        arr.fill(defaultItemValue);
+        return arr as unknown as T;
     }
+    arr = literal.split(' ').map(it=>parseFloat(it));
+    for (let i:number=0;i<size;i++) {
+        if (!arr[i]) arr[i] = defaultItemValue;
+    }
+    return arr as unknown as T;
+};
 
-    private getFillStrokeParams(el:Element):{lineWidth:number,fillColor:Color,drawColor:Color} {
+class ElementStylesHolder {
 
-        const style:Record<string, string> = this.styleAttrToMap(el.attributes.style);
+    private map:FastMap<Element, Record<string, string>> = new FastMap<Element, Record<string, string>>();
 
-        const rawStrokeValue:string = this.lookUpProperty(el,style,'stroke');
-        const rawFillValue:string = this.lookUpProperty(el,style,'fill');
-
-        let lineWidth:number = 0;
-        if (!rawStrokeValue) lineWidth = 0;
-        else {
-            lineWidth = getNumber(this.lookUpProperty(el,style,'stroke-width'),1);
+    public getStyle(el:Element):Record<string, string> {
+        let styleMap = this.map.get(el);
+        if (styleMap===undefined) {
+            styleMap = this.styleAttrToMap(el.attributes.style);
+            this.map.put(el,styleMap);
         }
-
-        const fillColor:Color = getColor(rawFillValue ?? '#000000');
-        const drawColor:Color = getColor(rawStrokeValue);
-
-        const fillOpacity:number = getNumber(this.lookUpProperty(el,style,'fill-opacity'),1);
-        const strokeOpacity:number = getNumber(this.lookUpProperty(el,style,'stroke-opacity'),1);
-
-        if (rawFillValue!=='none') fillColor.a = ~~(fillOpacity*255) as byte;
-        if (rawStrokeValue!=='none') drawColor.a = ~~(strokeOpacity*255) as byte;
-
-        return {lineWidth,fillColor,drawColor};
+        return styleMap;
     }
 
     private styleAttrToMap(style:string):Record<string, string> {
@@ -222,15 +217,101 @@ class SvgElementRenderer {
         return res;
     }
 
-    private lookUpProperty(el:Element,style:Record<string,string>,propName:string):string{
-        return style[propName] ?? el.attributes[propName] ?? this.rootStyle[propName] ?? this.rootSvgTag.attributes[propName];
+}
+
+class SvgElementRenderer {
+
+    private elementStylesHolder:ElementStylesHolder = new ElementStylesHolder();
+
+    constructor(private game:Game) {
+    }
+
+    private getFillStrokeParams(el:Element):{lineWidth:number,fillColor:Color,drawColor:Color} {
+
+        const rawStrokeValue:string = this.lookUpProperty(el,'stroke');
+        const rawFillValue:string = this.lookUpProperty(el,'fill');
+
+        let lineWidth:number = 0;
+        if (!rawStrokeValue) lineWidth = 0;
+        else {
+            lineWidth = getNumber(this.lookUpProperty(el,'stroke-width'),1);
+        }
+
+        const fillColor:Color = getColor(rawFillValue ?? '#000000');
+        const drawColor:Color = getColor(rawStrokeValue);
+
+        const fillOpacity:number = getNumber(this.lookUpProperty(el,'fill-opacity'),1);
+        const strokeOpacity:number = getNumber(this.lookUpProperty(el,'stroke-opacity'),1);
+
+        if (rawFillValue!=='none') fillColor.a = ~~(fillOpacity*255) as byte;
+        if (rawStrokeValue!=='none') drawColor.a = ~~(strokeOpacity*255) as byte;
+
+        return {lineWidth,fillColor,drawColor};
+    }
+
+
+    private resolveTransformations(view:RenderableModel, el:Element):RenderableModel {
+        let lastView:RenderableModel = view;
+        const transform:string = this.lookUpProperty(el,'transform');
+        if (!transform) return lastView;
+        const stringTokenizer:BasicStringTokenizer = new BasicStringTokenizer(transform.trim());
+        while (!stringTokenizer.isEof()) {
+            const token:string = stringTokenizer.getNextToken(stringTokenizer._CHAR);
+            //console.log({token});
+            if (token==='translate') {
+                stringTokenizer.skipCharacter('(');
+                const x:number = stringTokenizer.getNextNumber();
+                const y:number = stringTokenizer.getNextNumber(0);
+                stringTokenizer.skipCharacter(')');
+                const transformed:RenderableModel = new NullGameObject(this.game);
+                transformed.pos.setXY(x,y);
+                lastView.appendChild(transformed);
+                lastView = transformed;
+            } else if (token==='scale') {
+                stringTokenizer.skipCharacter('(');
+                const x:number = stringTokenizer.getNextNumber();
+                const y:number = stringTokenizer.getNextNumber(x);
+                stringTokenizer.skipCharacter(')');
+                const transformed:RenderableModel = new NullGameObject(this.game);
+                transformed.scale.setXY(x,y);
+                lastView.appendChild(transformed);
+                lastView = transformed;
+            } else if (token==='rotate') {
+                stringTokenizer.skipCharacter('(');
+                const x:number = stringTokenizer.getNextNumber();
+                stringTokenizer.skipCharacter(')');
+                const transformed:RenderableModel = new NullGameObject(this.game);
+                transformed.angle = MathEx.degToRad(x);
+                lastView.appendChild(transformed);
+                lastView = transformed;
+            } else {
+                throw new Error(`unknown transform function: ${transform}`);
+            }
+        }
+        return lastView;
+    }
+
+    private lookUpProperty(el:Element,propName:string):string{
+        let currentNode:Element = el;
+        let result:string = undefined!;
+        while (currentNode!==undefined) {
+           result = this.elementStylesHolder.getStyle(currentNode)[propName];
+           if (!result) result = currentNode.attributes[propName];
+           if (result) break;
+           currentNode = currentNode.parent;
+        }
+        if (result===undefined) result = '';
+        return result;
     }
 
     private renderPath(view:RenderableModel,el:Element):void {
         const data:string = el.attributes.d;
         if (!data) return undefined;
 
+        view = this.resolveTransformations(view,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
+
+        console.log({lineWidth,fillColor,drawColor});
 
         Polygon.fromMultiCurveSvgPath(this.game,data).forEach(p=>{
             p.fillColor = fillColor;
@@ -240,13 +321,14 @@ class SvgElementRenderer {
         if (lineWidth!==0) {
             PolyLine.fromMultiCurveSvgPath(this.game,data).forEach(p=>{
                 p.lineWidth = lineWidth;
-                p.color = drawColor;
+                p.color.set(drawColor);
                 view.appendChild(p);
             });
         }
     }
 
     private renderCircle(view:RenderableModel,el:Element):void {
+        view = this.resolveTransformations(view,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
         const cx:number = getNumber(el.attributes.cx,0);
         const cy:number = getNumber(el.attributes.cy,0);
@@ -262,6 +344,7 @@ class SvgElementRenderer {
     }
 
     private renderEllipse(view:RenderableModel,el:Element):void {
+        view = this.resolveTransformations(view,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
         const cx:number = getNumber(el.attributes.cx,0);
         const cy:number = getNumber(el.attributes.cy,0);
@@ -280,6 +363,7 @@ class SvgElementRenderer {
 
     // ry is not supported
     private renderRect(view:RenderableModel,el:Element):void {
+        view = this.resolveTransformations(view,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
         const x:number = getNumber(el.attributes.x,0);
         const y:number = getNumber(el.attributes.y,0);
@@ -298,6 +382,7 @@ class SvgElementRenderer {
     }
 
     private renderLine(view:RenderableModel,el:Element):void {
+        view = this.resolveTransformations(view,el);
         const {lineWidth,drawColor} = this.getFillStrokeParams(el);
         const x1:number = getNumber(el.attributes.x1,0);
         const y1:number = getNumber(el.attributes.y1,0);
@@ -313,6 +398,7 @@ class SvgElementRenderer {
     }
 
     private renderPolygon(view:RenderableModel,el:Element):void {
+        view = this.resolveTransformations(view,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
         const points:string = getString(el.attributes.points,'');
         if (!points) return;
@@ -331,6 +417,7 @@ class SvgElementRenderer {
     }
 
     private renderPolyline(view:RenderableModel,el:Element):void {
+        view = this.resolveTransformations(view,el);
         const {lineWidth,drawColor} = this.getFillStrokeParams(el);
         const points:string = getString(el.attributes.points,'');
         if (!points) return;
@@ -343,39 +430,52 @@ class SvgElementRenderer {
         }
     }
 
-    public renderTag(view:RenderableModel,el:Element):Optional<RenderableModel> {
+    private renderGroup(view:RenderableModel,el:Element):void {
+        let group:RenderableModel = new NullGameObject(this.game);
+        group = this.resolveTransformations(group,el);
+        el.children.forEach(c=>{
+            this.renderTag(group,c);
+        });
+        view.appendChild(group);
+    }
+
+    public renderTag(view:RenderableModel,el:Element):void {
         switch (el.tagName) {
             case 'path': {
                 this.renderPath(view,el);
-                return undefined;
+                break;
             }
             case 'circle': {
                 this.renderCircle(view,el);
-                return undefined;
+                break;
             }
             case 'ellipse': {
                 this.renderEllipse(view,el);
-                return undefined;
+                break;
             }
             case 'rect': {
                 this.renderRect(view,el);
-                return undefined;
+                break;
             }
             case 'line': {
                 this.renderLine(view,el);
-                return undefined;
+                break;
             }
             case 'polygon': {
                 this.renderPolygon(view,el);
-                return undefined;
+                break;
             }
             case 'polyline': {
                 this.renderPolyline(view,el);
-                return undefined;
+                break;
+            }
+            case 'g': {
+                this.renderGroup(view,el);
+                break;
             }
             default: {
                 console.log(`unknown tag: ${el.tagName}`);
-                return undefined;
+                break;
             }
         }
     }
@@ -389,22 +489,28 @@ export class SvgImage extends NullGameObject {
     constructor(protected game:Game, private doc:Element) {
         super(game);
         const rootSvgTag = doc.querySelector('svg');
-        this.svgElementRenderer = new SvgElementRenderer(this.game,rootSvgTag);
-        const width:number = getNumber(rootSvgTag.attributes.width,100);
-        const height:number = getNumber(rootSvgTag.attributes.height,100);
+        this.svgElementRenderer = new SvgElementRenderer(this.game);
+
+        const viewBox:[number,number,number,number] = getNumberArray(rootSvgTag.attributes.viewBox,4,0);
+        let width:number = getNumber(rootSvgTag.attributes.width,0) || viewBox[2];
+        let height:number = getNumber(rootSvgTag.attributes.height,0) || viewBox[3];
+        if (width===0) width = 100;
+        if (height===0) height = 100;
+        if (viewBox[2]===0) viewBox[2] = width;
+        if (viewBox[3]===0) viewBox[3] = height;
+
         const drawingSurface = new DrawingSurface(this.game,new Size(width,height));
         this.size.setWH(width,height);
         const rootView:RenderableModel = new NullGameObject(this.game);
+        rootView.pos.setXY(-viewBox[0],-viewBox[1]);
         this.traverseDocument(rootView,doc);
         drawingSurface.drawModel(rootView);
         this.appendChild(drawingSurface);
     }
 
     private traverseDocument(view:RenderableModel,el:Element):void {
-        let childNode:RenderableModel = view;
-        const possibleChildContainer:Optional<RenderableModel> = this.svgElementRenderer.renderTag(view,el);
-        if (possibleChildContainer!==undefined) childNode = possibleChildContainer;
-        el.children.forEach(c=>this.traverseDocument(childNode,c));
+        this.svgElementRenderer.renderTag(view,el);
+        el.children.forEach(c=>this.traverseDocument(view,c));
     }
 
 }

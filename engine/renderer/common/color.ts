@@ -119,6 +119,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
     }
 
     private static _calculateColorComponentsFromCss(literal:string):IColorJSON {
+        literal = literal.trim();
         let r:byte = 0,g:byte = 0,b:byte = 0,a:byte = 0;
         if (literal.substr(0,1)==="#") {
             const numericPart:string = literal.substr(1);

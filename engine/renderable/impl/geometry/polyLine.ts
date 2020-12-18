@@ -7,6 +7,7 @@ import {arcToBezier} from "@engine/renderable/impl/geometry/_internal/arcToBezie
 import {Optional} from "@engine/core/declarations";
 import {createSplinePathFromPoints} from "@engine/renderable/impl/geometry/_internal/splineFromPoints";
 import {clearSvgString} from "@engine/renderable/impl/geometry/_internal/clearSvgString";
+import {BasicStringTokenizer} from "@engine/renderable/impl/geometry/_internal/basicStringTokenizer";
 
 
 type v2 = [number,number];
@@ -48,22 +49,10 @@ const getPointsOnBezierCurve = (points:Readonly<v2>[], offset:number, numPoints:
     return cPoints;
 };
 
-class SvgTokenizer {
+
+class SvgTokenizer extends BasicStringTokenizer {
+
     public lastCommand:string;
-
-    private _pos:number = 0;
-    private _lastPos:Optional<number>;
-
-    private readonly _CHAR:string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; // to avoid regexps
-    private readonly _NUM:string = '01234567890.';
-
-    constructor(private readonly path:string){
-        this.path = clearSvgString(path);
-    }
-
-    public isEof():boolean{
-        return this._pos===this.path.length;
-    }
 
     public releaseNextToken():void{
         if (DEBUG && this._lastPos===undefined) throw new DebugError(`can not release next token`);
@@ -77,55 +66,6 @@ class SvgTokenizer {
         //console.log('next command',tkn);
         return tkn;
     }
-
-    public getNextNumber():number{
-        this.skipWhiteSpaces();
-        const lastPos:number = this._lastPos as number;
-        let sign:number = 1;
-        if (this.path[this._pos]==='-') {
-            sign = -1;
-            this._pos++;
-        }
-        let s:string = this.getNextToken(this._NUM);
-        // check for numbers  like 2.52e-4
-        if (this.path[this._pos]==='e') {
-            this._pos++;
-            s+='e'+this.getNextNumber();
-        }
-        if (DEBUG && s.length===0) {
-            throw new DebugError(`can not read number, wrong next symbol: ${this.path[this._pos]}`);
-        }
-        let n:number = +s;
-        if (DEBUG && isNaN(n)) throw new DebugError(`can not read number: ${sign===1?'':'-'}${s}`);
-        n*=sign;
-        this._lastPos = lastPos;
-        //console.log('next number',n);
-        return n;
-    }
-
-    private skipWhiteSpaces():void{
-        while (!this.isEof()){
-            if ([',',' '].indexOf(this.path[this._pos])===-1) break;
-            this._pos++;
-        }
-    }
-
-    private getNextToken(allowedSymbols:string, limit:number = 0):string{
-        if (DEBUG && this.isEof()) throw new DebugError(`unexpected end of string`);
-        let char:string;
-        let res:string = '';
-        this.skipWhiteSpaces();
-        this._lastPos = this._pos;
-        while (!this.isEof()){
-            char = this.path[this._pos];
-            if (allowedSymbols.indexOf(char)===-1) break;
-            if (limit>0 && res.length===limit) break;
-            res+=char;
-            this._pos++;
-        }
-        return res;
-    }
-
 }
 
 export class PolyLine extends Shape {
@@ -168,6 +108,7 @@ export class PolyLine extends Shape {
     private closed:boolean = false;
     private interrupted:boolean = false;
 
+    // error with path like 3,2c0,0-2-1-2-3M1 - https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/cartman.svg
     public static fromMultiCurveSvgPath(game:Game,path:string):PolyLine[]{
         const polyLines:PolyLine[] = [];
         let prefix:string = '';

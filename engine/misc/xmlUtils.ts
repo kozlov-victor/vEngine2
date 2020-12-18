@@ -12,6 +12,7 @@ export interface IDocumentDescription extends IElementDescription {}
 export class Element  {
 
     public readonly children:Element[] = [];
+    public readonly parent:Element;
 
     public readonly tagName:string;
     public attributes:Record<string,string> = {};
@@ -19,9 +20,11 @@ export class Element  {
     protected static fromData(data:IElementDescription):Element{
         const el:Element = new Element();
         (el as {tagName:string}).tagName = data.tagName;
-        el.attributes = data.attributes;
+        el.attributes = data.attributes ?? {};
         if (data.children) data.children.forEach((c:IElementDescription) => {
-            el.children.push(Element.fromData(c));
+            const child:Element = Element.fromData(c);
+            (child as {parent:Element}).parent = el;
+            el.children.push(child);
         });
         return el;
     }
