@@ -151,7 +151,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
 
     private createSplashVertical():void{
         let height:number = 0;
-        let x=0;
+        let x:number = 0;
         const points:Point2d[] = [];
         while (height<this.game.size.height) {
             points.push(new Point2d(x,height));
@@ -160,11 +160,11 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         }
         const pl = PolyLine.fromPoints(this.game,points);
         pl.lineWidth = MathEx.randomInt(2,7);
-        pl.color = Color.RGB(
+        pl.color.set(Color.RGB(
             MathEx.randomInt(100,122) as byte,
             MathEx.randomInt(100,122) as byte,
             MathEx.randomInt(150,255) as byte,
-        );
+        ));
         pl.pos.setX(MathEx.randomInt(0,this.game.size.width));
         this.lightContainer.appendChild(pl);
         this.setTimeout(()=>{
@@ -174,7 +174,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
 
     private  createSplashHorizontal():void{
         let width:number = 0;
-        let y=0;
+        let y:number = 0;
         const points:Point2d[] = [];
         while (width<this.game.size.width) {
             points.push(new Point2d(width,y));
@@ -183,11 +183,11 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         }
         const pl = PolyLine.fromPoints(this.game,points);
         pl.lineWidth = MathEx.randomInt(2,7);
-        pl.color = Color.RGB(
+        pl.color.set(Color.RGB(
             MathEx.randomInt(100,122) as byte,
             MathEx.randomInt(100,122) as byte,
             MathEx.randomInt(150,255) as byte,
-        );
+        ));
         pl.pos.setY(MathEx.randomInt(0,this.game.size.height));
         this.lightContainer.appendChild(pl);
         this.setTimeout(()=>{

@@ -64,7 +64,7 @@ class SvgTokenizer extends BasicStringTokenizer {
     }
 }
 
-export class SvgPathCreator {
+export class SvgPathToVertexArray {
 
     private lastPoint:Optional<Point2d>;
     private firstPoint:Optional<Point2d>;
@@ -73,33 +73,14 @@ export class SvgPathCreator {
     public lastPenPoint:Point2d = new Point2d();
 
     private tokenizer:SvgTokenizer;
-    private currentPolyline:PolyLine;
-    private result:PolyLine[] = [];
-
-    public static passPropertiesToChild(p:PolyLine, l:Line):void{
-        l.borderRadius = p.borderRadius;
-        l.color = p.color;
-        l.lineWidth = p.lineWidth;
-        l.pointTo.forceTriggerChange();
-    }
-
-    private static calcSize(p:PolyLine):void {
-        let maxW:number = p.children[0].pos.x+p.children[0].size.width;
-        let maxH:number = p.children[0].pos.y+p.children[0].size.height;
-        for (let i:number=1;i<p.children.length;i++){
-            if (p.pos.x+p.children[i].size.width>maxW)
-                maxW = p.children[i].pos.x + p.children[i].size.width;
-            if (p.children[i].pos.y+p.children[i].size.height>maxH)
-                maxH = p.children[i].pos.y + p.children[i].size.height;
-        }
-        p.size.setWH(maxW,maxH);
-    }
+    private currentVertexArray:number[] = [];
+    private result:number[][] = [];
 
     constructor(private game:Game) {
-        this.createNextPolyline();
+        this.result.push(this.currentVertexArray);
     }
 
-    public parsePolylines(path:string,close:boolean):PolyLine[]{
+    public parsePolylines(path:string,close:boolean):number[][]{
         this.tokenizer = new SvgTokenizer(path);
         let lastCommand:Optional<string>;
         while (!this.tokenizer.isEof()) {
@@ -115,25 +96,21 @@ export class SvgPathCreator {
             }
         }
         if (close) this.close();
-        this.result.forEach(p=>{
-            SvgPathCreator.calcSize(p);
-        });
+        if (this.result.indexOf(this.currentVertexArray)===-1) this.result.push(this.currentVertexArray);
         return this.result;
     }
 
-    public getLastResult():PolyLine {
-        SvgPathCreator.calcSize(this.currentPolyline);
-        return this.currentPolyline;
+    public getLastResult():number[] {
+        return this.currentVertexArray;
     }
 
     public moveTo(x:number,y:number):void{
-        if (this.currentPolyline.children.length>0) this.complete();
+        if (this.currentVertexArray.length>0) this.complete();
         if (!this.lastPoint) this.lastPoint = new Point2d();
         this.lastPoint.setXY(x,y);
         this.lastPenPoint.setXY(x,y);
         if (!this.firstPoint) this.firstPoint = new Point2d();
         this.firstPoint.setXY(x,y);
-
     }
 
     public moveBy(x:number,y:number):void{
@@ -172,10 +149,11 @@ export class SvgPathCreator {
         this.complete();
     }
 
-    private createNextPolyline():void {
-        this.currentPolyline = new PolyLine(this.game);
-        this.currentPolyline.passMouseEventsThrough = true;
-        this.result.push(this.currentPolyline);
+    private createNextVertexArray():void {
+        // const p:PolyLine = PolyLine.fromVertices(this.game,this.currentVertexArray);
+        // p.passMouseEventsThrough = true;
+        this.result.push(this.currentVertexArray);
+        this.currentVertexArray = [];
     }
 
     private bezierTo(p1:v2,p2:v2,p3:v2,p4:v2):void{
@@ -214,16 +192,15 @@ export class SvgPathCreator {
     }
 
     private complete():void {
-        //this.lastPoint = undefined;
         this.firstPoint = undefined;
-        if (this.tokenizer===undefined || !this.tokenizer.isEof()) this.createNextPolyline();
+        if (this.tokenizer===undefined || !this.tokenizer.isEof()) this.createNextVertexArray();
     }
 
     private addSegment(x:number,y:number,x1:number,y1:number):void{
-        const line:Line = new Line(this.game);
-        SvgPathCreator.passPropertiesToChild(this.currentPolyline,line);
-        line.setXYX1Y1(x,y,x1,y1);
-        this.currentPolyline.appendChild(line);
+        // const line:Line = new Line(this.game);
+        // line.setXYX1Y1(x,y,x1,y1);
+        if (this.currentVertexArray.length===0) this.currentVertexArray.push(x,y);
+        this.currentVertexArray.push(x1,y1);
     }
 
     // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths

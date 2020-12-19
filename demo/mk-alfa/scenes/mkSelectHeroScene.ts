@@ -153,11 +153,11 @@ class TabStrip {
         }
         const pl = PolyLine.fromPoints(this.game,points);
         pl.lineWidth = MathEx.randomInt(2,7);
-        pl.color = Color.RGB(
+        pl.color.set(Color.RGB(
             MathEx.randomInt(200,222) as byte,
             MathEx.randomInt(200,222) as byte,
             MathEx.randomInt(15,25) as byte,
-        );
+        ));
         pl.pos.setX(MathEx.randomInt(0,this.game.size.width));
         splashContainer.appendChild(pl);
         this.game.getCurrScene().setTimeout(()=>{

@@ -4,7 +4,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
 import {createSplinePathFromPoints} from "@engine/renderable/impl/geometry/_internal/splineFromPoints";
 import {clearSvgString} from "@engine/renderable/impl/geometry/_internal/clearSvgString";
-import {SvgPathCreator} from "@engine/renderable/impl/geometry/_internal/svgPathCreator";
+import {SvgPathToVertexArray} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArray";
 import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
 import {Point2d} from "@engine/geometry/point2d";
 
@@ -29,7 +29,7 @@ export class PolyLine extends Shape {
         return this._borderRadius;
     }
 
-    constructor(protected game:Game){
+    private constructor(protected game:Game){
         super(game);
         this._lineWidth = 1;
         this.color.addOnChangeListener(()=>this.passPropertiesChildren());
@@ -53,25 +53,28 @@ export class PolyLine extends Shape {
 
         if (close) vertices = closePolylinePoints(vertices);
 
-        const pathCreator:SvgPathCreator = new SvgPathCreator(game);
-        pathCreator.moveTo(vertices[0],vertices[1]);
-        for (let i:number=2;i<vertices.length;i+=2) {
-            pathCreator.lineTo(vertices[i],vertices[i+1]);
+        const p:PolyLine = new PolyLine(game);
+        for (let i:number=0;i<vertices.length-2;i+=2) {
+            const line:Line = new Line(game);
+            line.setXYX1Y1(vertices[i],vertices[i+1],vertices[i+2],vertices[i+3]);
+            p.appendChild(line);
         }
-        return pathCreator.getLastResult();
+        p.calcSize();
+        return p;
     }
 
     public static fromPoints(game:Game,poins:Point2d[],close:boolean = false):PolyLine{
         const vertices:number[] = [];
-        poins.forEach(p=>{
-            vertices.push(p.x,p.y);
-        });
+        for (const p of poins) vertices.push(p.x,p.y);
         return this.fromVertices(game,vertices,close);
     }
 
 
     public static fromMultiCurveSvgPath(game:Game,path:string, close:boolean = false):PolyLine[]{
-        return new SvgPathCreator(game).parsePolylines(path, close);
+        const arr:number[][] = new SvgPathToVertexArray(game).parsePolylines(path, close);
+        const result:PolyLine[] = [];
+        for (const vertices of arr) result.push(this.fromVertices(game,vertices));
+        return result;
     }
 
     // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
@@ -97,8 +100,27 @@ export class PolyLine extends Shape {
         super.setClonedProperties(cloned);
     }
 
+    private passPropertiesToChild(l:Line):void{
+        l.borderRadius = this.borderRadius;
+        l.color = this.color;
+        l.lineWidth = this.lineWidth;
+        l.pointTo.forceTriggerChange();
+    }
+
     private passPropertiesChildren():void{
-        this.children.forEach(l=>SvgPathCreator.passPropertiesToChild(this,l));
+        for (const p of this.children) this.passPropertiesToChild(p);
+    }
+
+    private calcSize():void {
+        let maxW:number = this.children[0].pos.x+this.children[0].size.width;
+        let maxH:number = this.children[0].pos.y+this.children[0].size.height;
+        for (let i:number=1;i<this.children.length;i++){
+            if (this.pos.x+this.children[i].size.width>maxW)
+                maxW = this.children[i].pos.x + this.children[i].size.width;
+            if (this.children[i].pos.y+this.children[i].size.height>maxH)
+                maxH = this.children[i].pos.y + this.children[i].size.height;
+        }
+        this.size.setWH(maxW,maxH);
     }
 
 }
