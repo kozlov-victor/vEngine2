@@ -115,7 +115,7 @@ export class PolyLine extends Shape {
         let maxW:number = this.children[0].pos.x+this.children[0].size.width;
         let maxH:number = this.children[0].pos.y+this.children[0].size.height;
         for (let i:number=1;i<this.children.length;i++){
-            if (this.pos.x+this.children[i].size.width>maxW)
+            if (this.children[i].pos.x+this.children[i].size.width>maxW)
                 maxW = this.children[i].pos.x + this.children[i].size.width;
             if (this.children[i].pos.y+this.children[i].size.height>maxH)
                 maxH = this.children[i].pos.y + this.children[i].size.height;
