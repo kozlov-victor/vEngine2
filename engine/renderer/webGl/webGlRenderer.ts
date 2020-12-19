@@ -258,6 +258,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         //this.gl.enable(this.gl.CULL_FACE);
         if (mesh.depthTest) this._gl.enable(this._gl.DEPTH_TEST);
         else this._gl.disable(this._gl.DEPTH_TEST);
+        this._blender.setBlendMode(mesh.blendMode);
         md.draw();
         //this.gl.disable(this.gl.CULL_FACE);
         zToWMatrix.release();

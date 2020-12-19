@@ -24,7 +24,24 @@ import * as svgEx7 from "xml/xml-loader!./examples/ex7.svg";
 import * as svgEx8 from "xml/xml-loader!./examples/ex8.svg";
 import * as svgEx9 from "xml/xml-loader!./examples/ex9.svg";
 import * as svgEx10 from "xml/xml-loader!./examples/ex10.svg";
+import * as svgEx11 from "xml/xml-loader!./examples/ex11.svg";
+import * as svgEx12 from "xml/xml-loader!./examples/ex12.svg";
+import * as svgEx13 from "xml/xml-loader!./examples/ex13.svg";
+import * as svgEx14 from "xml/xml-loader!./examples/ex14.svg";
+import * as svgEx15 from "xml/xml-loader!./examples/ex15.svg";
+import * as svgEx16 from "xml/xml-loader!./examples/ex16.svg";
+import * as svgEx17 from "xml/xml-loader!./examples/ex17.svg";
+import * as svgEx18 from "xml/xml-loader!./examples/ex18.svg";
+import * as svgEx19 from "xml/xml-loader!./examples/ex19.svg";
+import * as svgEx20 from "xml/xml-loader!./examples/ex20.svg";
+import * as svgEx21 from "xml/xml-loader!./examples/ex21.svg";
+import * as svgEx22 from "xml/xml-loader!./examples/ex22.svg";
+import * as svgEx23 from "xml/xml-loader!./examples/ex23.svg";
+import * as svgEx24 from "xml/xml-loader!./examples/ex24.svg";
+import * as svgEx25 from "xml/xml-loader!./examples/ex25.svg";
+import * as svgEx26 from "xml/xml-loader!./examples/ex26.svg";
 
+// https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/svg.svg - "use" is not supported
 
 import {Scene} from "@engine/scene/scene";
 import {SvgImage} from "./svgImage";
@@ -32,6 +49,10 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Element} from "@engine/misc/xmlUtils";
 
 const images:Element[] = [
+    svgEx11, svgEx12, svgEx13,svgEx14,
+    svgEx15, svgEx16, svgEx17,svgEx18,
+    svgEx19, svgEx20, svgEx21, svgEx22,
+    svgEx23, svgEx24, svgEx25, svgEx26,
     svgEx6,svgEx7,svgEx8,
     svgEx9,svgEx10,
     svgPolyline1,

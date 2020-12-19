@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         // </svg>
 
 
-        const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`
+        PolyLine.fromMultiCurveSvgPath(this.game,`
                 M10 10 C 20 20, 40 20, 50 10
                 M70 10 C 70 20, 120 20, 120 10
                 M130 10 C 120 20, 180 20, 170 10
@@ -37,13 +37,14 @@ export class MainScene extends Scene {
                 M10 110 C 20 140, 40 140, 50 110
                 M70 110 C 70 140, 110 140, 110 110
                 M130 110 C 120 140, 180 140, 170 110
-        `);
+        `).forEach(p=>{
+            p.pos.setXY(0,0);
+            p.color = Color.RGB(100,20,222);
+            p.lineWidth = 2;
+            this.appendChild(p);
+        });
 
-        polyLine1.pos.setXY(0,0);
-        polyLine1.color = Color.RGB(100,20,222);
-        polyLine1.lineWidth = 2;
-        this.appendChild(polyLine1);
-        polyLine1.addBehaviour(new DraggableBehaviour(this.game));
+
 
     }
 

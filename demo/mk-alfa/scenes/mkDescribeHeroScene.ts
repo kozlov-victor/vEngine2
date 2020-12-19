@@ -20,6 +20,7 @@ import {Sound} from "@engine/media/sound";
 import {MoveByCircleAnimation} from "@engine/animation/propertyAnimation/moveByCircleAnimation";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
+import {Point2d} from "@engine/geometry/point2d";
 
 
 export class MkDescribeHeroScene extends MkAbstractScene {
@@ -148,20 +149,22 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         this.game.popScene();
     }
 
-    private  createSplashVertical():void{
-        const pl = new PolyLine(this.game);
+    private createSplashVertical():void{
+        let height:number = 0;
+        let x=0;
+        const points:Point2d[] = [];
+        while (height<this.game.size.height) {
+            points.push(new Point2d(x,height));
+            x+=MathEx.randomInt(-50,50);
+            height+=MathEx.randomInt(10,100);
+        }
+        const pl = PolyLine.fromPoints(this.game,points);
         pl.lineWidth = MathEx.randomInt(2,7);
         pl.color = Color.RGB(
             MathEx.randomInt(100,122) as byte,
             MathEx.randomInt(100,122) as byte,
             MathEx.randomInt(150,255) as byte,
         );
-        let height:number = 0;
-        while (height<this.game.size.height) {
-            const dh:number = MathEx.randomInt(10,100);
-            pl.lineBy(MathEx.randomInt(-50,50),dh);
-            height+=dh;
-        }
         pl.pos.setX(MathEx.randomInt(0,this.game.size.width));
         this.lightContainer.appendChild(pl);
         this.setTimeout(()=>{
@@ -170,19 +173,21 @@ export class MkDescribeHeroScene extends MkAbstractScene {
     }
 
     private  createSplashHorizontal():void{
-        const pl = new PolyLine(this.game);
+        let width:number = 0;
+        let y=0;
+        const points:Point2d[] = [];
+        while (width<this.game.size.width) {
+            points.push(new Point2d(width,y));
+            y+=MathEx.randomInt(-50,50);
+            width+=MathEx.randomInt(10,100);
+        }
+        const pl = PolyLine.fromPoints(this.game,points);
         pl.lineWidth = MathEx.randomInt(2,7);
         pl.color = Color.RGB(
             MathEx.randomInt(100,122) as byte,
             MathEx.randomInt(100,122) as byte,
             MathEx.randomInt(150,255) as byte,
         );
-        let width:number = 0;
-        while (width<this.game.size.width) {
-            const dw:number = MathEx.randomInt(10,100);
-            pl.lineBy(dw,MathEx.randomInt(-50,50));
-            width+=dw;
-        }
         pl.pos.setY(MathEx.randomInt(0,this.game.size.height));
         this.lightContainer.appendChild(pl);
         this.setTimeout(()=>{

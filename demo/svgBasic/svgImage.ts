@@ -1,13 +1,12 @@
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {Game} from "@engine/core/game";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Color} from "@engine/renderer/common/color";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Size} from "@engine/geometry/size";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Element} from "@engine/misc/xmlUtils";
-import {Optional} from "@engine/core/declarations";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
@@ -212,7 +211,7 @@ class ElementStylesHolder {
         if (!style) return res;
         style.split(';').forEach(pair=>{
             const pairArr:string[] = pair.split(':');
-            res[pairArr[0].trim()] = pairArr[1];
+            res[pairArr[0].trim()] = pairArr[1]?.trim();
         });
         return res;
     }
@@ -311,10 +310,11 @@ class SvgElementRenderer {
         view = this.resolveTransformations(view,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
 
-        console.log({lineWidth,fillColor,drawColor});
-
-        Polygon.fromMultiCurveSvgPath(this.game,data).forEach(p=>{
+        Polygon.fromMultiCurveSvgPath(this.game,data).forEach((p,i,arr)=>{
             p.fillColor = fillColor;
+            // if (arr.length>1 && p.isClockWise()) {
+            //     p.blendMode = BLEND_MODE.SUBSTRACTIVE;
+            // }
             view.appendChild(p);
         });
 
@@ -409,7 +409,7 @@ class SvgElementRenderer {
         view.appendChild(polygon);
 
         if (lineWidth>0 && drawColor.a>0) {
-            const polyline:PolyLine = PolyLine.fromPoints(this.game,vertices);
+            const polyline:PolyLine = PolyLine.fromVertices(this.game,vertices);
             polyline.lineWidth = lineWidth;
             polyline.color = drawColor;
             view.appendChild(polyline);
@@ -423,7 +423,7 @@ class SvgElementRenderer {
         if (!points) return;
 
         if (lineWidth>0 && drawColor.a>0) {
-            const polyline:PolyLine = PolyLine.fromPoints(this.game,points);
+            const polyline:PolyLine = PolyLine.fromVertices(this.game,points);
             polyline.lineWidth = lineWidth;
             polyline.color.set(drawColor);
             view.appendChild(polyline);

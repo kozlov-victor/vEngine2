@@ -10,7 +10,7 @@ export class MainScene extends Scene {
 
     public onPreloading():void {
 
-        const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`
+        PolyLine.fromMultiCurveSvgPath(this.game,`
             M10 80 Q 95 10 180 80
             M10 80 Q 52.5 10, 95 80 T 180 80
 
@@ -37,15 +37,12 @@ export class MainScene extends Scene {
             A 45 45, 0, 1, 1, 275 275
             L 275 230 Z
 
-        `);
-
-
-
-        polyLine1.pos.setXY(0,0);
-        polyLine1.color = Color.RGB(100,20,222);
-        polyLine1.lineWidth = 2;
-        this.appendChild(polyLine1);
-        polyLine1.addBehaviour(new DraggableBehaviour(this.game));
+        `).forEach(p=>{
+            p.pos.setXY(0,0);
+            p.color = Color.RGB(100,20,222);
+            p.lineWidth = 2;
+            this.appendChild(p);
+        });
 
 
         // test compressed path

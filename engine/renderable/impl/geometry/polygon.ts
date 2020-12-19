@@ -32,7 +32,7 @@ export class Polygon extends Mesh {
 
     public static fromMultiCurveSvgPath(game:Game,path:string):Polygon[]{
         const polygons:Polygon[] = [];
-        const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(game,path);
+        const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(game,path,true);
         polyLines.forEach(p=>polygons.push(Polygon.fromPolyline(game,p)));
         return polygons;
     }
@@ -56,7 +56,7 @@ export class Polygon extends Mesh {
 
         vertices.push(vertices[0],vertices[1]); // close path
 
-        const p:PolyLine = PolyLine.fromPoints(game,vertices);
+        const p:PolyLine = PolyLine.fromVertices(game,vertices);
         return Polygon.fromPolyline(game,p);
     }
 
@@ -82,20 +82,21 @@ export class Polygon extends Mesh {
     }
 
     public static fromSvgPath(game:Game,p:string):Polygon {
-        if (DEBUG && p.split(/z/gi).length-1>1) throw new DebugError(`multiple closing operation ('z') in one svg path. Use static method Polygon.fromMultiCurveSvgPath() instead`);
-        const polyline:PolyLine = PolyLine.fromSvgPath(game,p);
-        if (DEBUG && !polyline.isClosed()) throw new DebugError(`can not create polygon from unclosed path`);
-        if (DEBUG && !polyline.isInterrupted()) throw new DebugError(`can not create polygon from interrupted path`);
+        const polyline:PolyLine = PolyLine.fromSvgPath(game,p,true);
         return Polygon.fromPolyline(game,polyline);
     }
 
     public static fromPoints(game:Game,points:number[]|string):Polygon {
         const vertices:number[] = closePolylinePoints(points);
-        return Polygon.fromPolyline(game,PolyLine.fromPoints(game,vertices));
+        return Polygon.fromPolyline(game,PolyLine.fromVertices(game,vertices));
+    }
+
+    public isClockWise():boolean {
+        return isPolylineCloseWise(this._edgeVertices);
     }
 
     public extrudeToMesh(depth:number):Mesh{
-        const isClockWise:boolean = isPolylineCloseWise(this._edgeVertices);
+        const isClockWise:boolean = this.isClockWise();
         const primitive = new class extends AbstractPrimitive {
 
             public normalArr:number[] = [];

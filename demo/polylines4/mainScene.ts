@@ -5,6 +5,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/_internal/isPolylineClockWise";
 
 
 export class MainScene extends Scene {
@@ -27,18 +28,12 @@ export class MainScene extends Scene {
 
             `;
 
-
-        const polygons:Polygon[] = Polygon.fromMultiCurveSvgPath(this.game,path);
-        polygons.forEach(p=>{
-            p.fillColor = Color.RGB(12,200,22);
+        Polygon.fromMultiCurveSvgPath(this.game,path).forEach(p=>{
+            p.pos.setXY(0,0);
+            p.fillColor.set(Color.RGB(12,200,22));
             n.appendChild(p);
         });
 
-        const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,path);
-        polyLine1.pos.setXY(0,0);
-        polyLine1.color = Color.RGB(100,20,222);
-        polyLine1.lineWidth = 2;
-        n.appendChild(polyLine1);
 
     }
 

@@ -1,6 +1,8 @@
 
 import * as svgEx1 from "xml/xml-loader!./examples/illustrator-test-1.svg";
 import * as svgEx2 from "xml/xml-loader!./examples/illustrator-test-2.svg";
+import * as svgEx3 from "xml/xml-loader!./examples/illustractor-export-test1.svg";
+import * as svgEx4 from "xml/xml-loader!./examples/illustractor-export-test2.svg";
 
 
 import {Scene} from "@engine/scene/scene";
@@ -9,7 +11,7 @@ import {Element} from "@engine/misc/xmlUtils";
 import {SvgImage} from "../svgBasic/svgImage";
 
 const images:Element[] = [
-    svgEx1,svgEx2
+    svgEx1,svgEx2, svgEx3, svgEx4,
 ];
 
 export class MainScene extends Scene {

@@ -25,7 +25,6 @@ import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {mat4} from "@engine/geometry/mat4";
 import MAT16 = mat4.MAT16;
-import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
 
 
 class ContainerForDrawingSurface extends NullGameObject {
@@ -291,7 +290,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
         if (isString(pathOrVertices)) {
             p = PolyLine.fromSvgPath(this.game,pathOrVertices);
         } else {
-            p = PolyLine.fromPoints(this.game,pathOrVertices);
+            p = PolyLine.fromVertices(this.game,pathOrVertices);
         }
         p.fillColor = this.fillColor;
         p.color = this.drawColor;
@@ -339,10 +338,7 @@ export class DrawingSurface extends RenderableModel implements ICloneable<Drawin
     }
 
     private drawPolygonFromVertices(vertices:number[]):void{
-
-        vertices = closePolylinePoints(vertices);
-
-        const pl:PolyLine = PolyLine.fromPoints(this.game,vertices);
+        const pl:PolyLine = PolyLine.fromVertices(this.game,vertices,true);
         pl.color = this.drawColor;
         const pg:Polygon = Polygon.fromPolyline(this.game,pl);
         pg.fillColor = this.fillColor;

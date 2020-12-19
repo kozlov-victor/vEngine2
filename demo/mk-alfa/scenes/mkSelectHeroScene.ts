@@ -31,6 +31,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {AlignText, AlignTextContentHorizontal} from "@engine/renderable/impl/ui/textField/textAlign";
+import {Point2d} from "@engine/geometry/point2d";
 
 
 class TabStrip {
@@ -142,19 +143,21 @@ class TabStrip {
     }
 
     private createSplashVertical(splashContainer:NullGameObject):void{
-        const pl = new PolyLine(this.game);
+        let height:number = 0;
+        let x:number = 0;
+        const points:Point2d[] = [];
+        while (height<this.CELL_HEIGHT) {
+            points.push(new Point2d(x,height));
+            x+=MathEx.randomInt(-50,50);
+            height+=MathEx.randomInt(10,100);
+        }
+        const pl = PolyLine.fromPoints(this.game,points);
         pl.lineWidth = MathEx.randomInt(2,7);
         pl.color = Color.RGB(
             MathEx.randomInt(200,222) as byte,
             MathEx.randomInt(200,222) as byte,
             MathEx.randomInt(15,25) as byte,
         );
-        let height:number = 0;
-        while (height<this.CELL_HEIGHT) {
-            const dh:number = MathEx.randomInt(10,100);
-            pl.lineBy(MathEx.randomInt(-50,50),dh);
-            height+=dh;
-        }
         pl.pos.setX(MathEx.randomInt(0,this.game.size.width));
         splashContainer.appendChild(pl);
         this.game.getCurrScene().setTimeout(()=>{

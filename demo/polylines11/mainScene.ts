@@ -13,7 +13,7 @@ export class MainScene extends Scene {
         // https://www.w3.org/TR/SVG/images/paths/cubic02.svg
         // https://stackoverflow.com/questions/15860635/svg-path-commands-s-and-t
 
-        const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`
+        PolyLine.fromMultiCurveSvgPath(this.game,`
                M100,200 C100,100 400,100 400,200
                M100,500 C25,400 475,400 400,500
                M100,800 C175,700 325,700 400,800
@@ -22,13 +22,14 @@ export class MainScene extends Scene {
                M600,800 C625,700 725,700 750,800 S875,900 900,800
 
                M 100,100 c 25,25 75,25 100,0 s 25,125 0,100 -75,-25 -100,0
-        `);
+        `).forEach(p=>{
+            p.pos.setXY(0,0);
+            p.color = Color.RGB(100,20,222);
+            p.lineWidth = 2;
+            this.appendChild(p);
+        });
 
-        polyLine1.pos.setXY(0,0);
-        polyLine1.color = Color.RGB(100,20,222);
-        polyLine1.lineWidth = 2;
-        this.appendChild(polyLine1);
-        polyLine1.addBehaviour(new DraggableBehaviour(this.game));
+
 
     }
 
