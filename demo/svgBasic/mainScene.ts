@@ -40,6 +40,7 @@ import * as svgEx23 from "xml/xml-loader!./examples/ex23.svg";
 import * as svgEx24 from "xml/xml-loader!./examples/ex24.svg";
 import * as svgEx25 from "xml/xml-loader!./examples/ex25.svg";
 import * as svgEx26 from "xml/xml-loader!./examples/ex26.svg";
+import * as svgEx27 from "xml/xml-loader!./examples/ex27.svg";
 
 // https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/svg.svg - "use" is not supported
 
@@ -49,6 +50,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Element} from "@engine/misc/xmlUtils";
 
 const images:Element[] = [
+    svgEx27,
     svgEx11, svgEx12, svgEx13,svgEx14,
     svgEx15, svgEx16, svgEx17,svgEx18,
     svgEx19, svgEx20, svgEx21, svgEx22,
