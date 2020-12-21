@@ -199,7 +199,7 @@ module.exports = async (env={})=>{
         },
         optimization: {
             minimize: !debug,
-            emitOnErrors: false,
+            emitOnErrors: true,
            // usedExports: true
         },
     };

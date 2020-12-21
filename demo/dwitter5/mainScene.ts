@@ -43,13 +43,14 @@ export class MainScene extends Scene {
 
         let i,d,p:number;
         c.size.width^=0;
-        // tslint:disable-next-line:no-conditional-assignment
-        for(i=5e3;p=3*t+T(t/2)*i/2e3+i%4*2,i-=5;x.setFillColor(0xFF0000)) {
-            d=C(p)-S(p);
-            // tslint:disable-next-line:no-unused-expression
-            d>0&&x.drawRect(960+199*S(p)+249*C(t+i/9e4),i/4,99*d,9);
-        }
 
+        x.drawBatch(batch=>{
+            for(i=5e3;p=3*t+T(t/2)*i/2e3+i%4*2,i-=5;x.setFillColor(0xFF0000)) {
+                d=C(p)-S(p);
+                // tslint:disable-next-line:no-unused-expression
+                d>0&&batch.drawRect(960+199*S(p)+249*C(t+i/9e4),i/4,99*d,9);
+            }
+        });
 
     }
 }

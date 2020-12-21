@@ -12,6 +12,7 @@ import Mat16Holder = mat4.Mat16Holder;
 import {Color} from "@engine/renderer/common/color";
 import {LruMap} from "@engine/misc/collection/lruMap";
 import IDENTITY = mat4.IDENTITY;
+import {Stack} from "@engine/misc/collection/stack";
 
 const identityPositionMatrixCache:LruMap<string, Mat16Holder> = new LruMap<string, mat4.Mat16Holder>();
 
@@ -34,26 +35,38 @@ export const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).
 
 export class WebGlRendererHelper extends RendererHelper {
 
+    private renderTargetStack:Stack<FrameBufferStack> = new Stack<FrameBufferStack>();
+
     public createRenderTarget(game:Game,size: ISize): FrameBufferStack {
         const renderer:WebGlRenderer = this.game.getRenderer();
         return new FrameBufferStack(game,renderer.getNativeContext(),size);
     }
 
+    public saveRenderTarget():void {
+        const renderer:WebGlRenderer = this.game.getRenderer();
+        this.renderTargetStack.push(renderer.getRenderTarget());
+    }
+
+    public restoreRenderTarget():void {
+        const renderer:WebGlRenderer = this.game.getRenderer();
+        renderer.setRenderTarget(this.renderTargetStack.pop()!);
+    }
+
     public renderSceneToTexture(scene:Scene,renderTarget:FrameBufferStack): void {
         const renderer:WebGlRenderer = this.game.getRenderer();
-        const currRenderTarget:FrameBufferStack = renderer.getRenderTarget();
+        this.saveRenderTarget();
         renderer.setRenderTarget(renderTarget);
         renderer.saveAlphaBlend();
         renderer.setAlphaBlend(1);
         scene.render();
-        renderer.setRenderTarget(currRenderTarget);
+        this.restoreRenderTarget();
         renderer.restoreAlphaBlend();
     }
 
-    public renderModelToTexture(m: RenderableModel, renderTarget:FrameBufferStack, clearColor?:Color): void {
+    public renderModelToTexture(m: RenderableModel, renderTarget:FrameBufferStack, clearColor?:Color,omitSaveAndResoreRenderTaget?:boolean): void {
         const renderer:WebGlRenderer = this.game.getRenderer();
         if (m.size.isZero()) m.revalidate();
-        const currRenderTarget:FrameBufferStack = renderer.getRenderTarget();
+        if (!omitSaveAndResoreRenderTaget) this.saveRenderTarget();
         renderer.setRenderTarget(renderTarget);
         renderer.transformSave();
         renderer.transformSet(IDENTITY);
@@ -66,7 +79,7 @@ export class WebGlRendererHelper extends RendererHelper {
         const statePointer:IStateStackPointer = renderer.beforeFrameDraw(m.filters as AbstractGlFilter[]);
         m.render();
         renderer.afterFrameDraw(statePointer);
-        renderer.setRenderTarget(currRenderTarget);
+        if (!omitSaveAndResoreRenderTaget) this.restoreRenderTarget();
         renderer.clearBeforeRender = clearBeforeRenderOrig;
         renderer.clearColor.set(clearColorOrig);
         renderer.transformRestore();

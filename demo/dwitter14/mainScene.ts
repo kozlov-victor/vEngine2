@@ -1,12 +1,12 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void;
+    private renderScene:(batch:IDrawingSession)=>void;
 
     public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
@@ -41,11 +41,11 @@ export class MainScene extends Scene {
         };
 
 
-        this.renderScene = ()=>{
+        this.renderScene = (session)=>{
             const t = this.game.getElapsedTime() / 1000;
 
             for(let i=9;i--;){
-                x.drawArc(1e3+C(i/2)*t**3,500+S(i*3)*t**3,1e3-t*t,0,Math.PI*2);
+                session.drawArc(1e3+C(i/2)*t**3,500+S(i*3)*t**3,1e3-t*t,0,Math.PI*2);
             }
 
         };
@@ -57,7 +57,7 @@ export class MainScene extends Scene {
 
         //this.surface.clear();
 
-        this.renderScene();
+        this.surface.drawBatch(this.renderScene);
 
 
     }

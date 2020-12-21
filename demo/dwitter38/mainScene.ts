@@ -1,12 +1,12 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
 
 export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void;
+    private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
     public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
@@ -40,15 +40,15 @@ export class MainScene extends Scene {
 
         this.surface.setFillColor(Color.BLACK.asRGBNumeric());
 
-
-        this.renderScene = ()=>{
-            const t = this.game.getElapsedTime() / 1000;
+        this.renderScene = (session)=>{
             // https://www.dwitter.net/d/19856
+
+            const t = this.game.getElapsedTime() / 1000;
 
             x.clear();
             let a,k:number;
             for(let i=300;i>=0;i--){
-                x.fillArc(960+120*C(a=.15*i+t/5)*(k=1.01**i),600+60*S(a)*k,10*k*(1+S(i/10-3*t)),0,Math.PI*2);
+                session.fillArc(960+120*C(a=.15*i+t/5)*(k=1.01**i),600+60*S(a)*k,10*k*(1+S(i/10-3*t)),0,Math.PI*2);
             }
 
         };
@@ -58,9 +58,7 @@ export class MainScene extends Scene {
 
     protected onRender(): void {
 
-        //this.surface.clear();
-
-        this.renderScene();
+        this.surface.drawBatch(this.renderScene);
 
 
     }

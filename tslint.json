@@ -39,6 +39,7 @@
                 ]
             }
         ],
+        "no-conditional-assignment": false,
         "no-console": false,
         "no-trailing-whitespace": false,
         "no-empty": false,

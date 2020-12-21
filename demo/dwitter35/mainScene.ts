@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font";
 
@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     @Resource.Font({fontFamily:'serif',fontSize:120})
     private fnt:Font;
 
-    private renderScene:()=>void = ():void=>{};
+    private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
     public onReady():void {
 
@@ -48,8 +48,10 @@ export class MainScene extends Scene {
         x.setLineWidth(1);
         x.setFont(this.fnt);
 
-        this.renderScene = ()=> {
+        this.renderScene = (session)=> {
+
             const t = this.game.getElapsedTime() / 1000;
+
             // https://www.dwitter.net/d/19557
 
             const h=560;
@@ -57,14 +59,14 @@ export class MainScene extends Scene {
             const a=T(t+2)*99;
             const P=T(t)*10+h;
             x.setDrawColor(R(a,a/3,a),100);
-            x.drawText(w,P,P);
-            x.setDrawColor(R(h,h,h),3/h);
-            x.drawText(0,0,w);
+            session.drawText(w,P,P);
+            x.setDrawColor(R(h,h,h),~~(3/h) as byte);
+            session.drawText(0,0,w);
         };
     }
 
     protected onRender(): void {
-        this.renderScene();
+        this.surface.drawBatch(this.renderScene);
     }
 
 

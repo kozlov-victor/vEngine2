@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font";
 
@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     @Resource.Font({fontFamily:'serif',fontSize:12,chars:['❄']})
     private fnt:Font;
 
-    private renderScene:()=>void = ():void=>{};
+    private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
     public onReady():void {
 
@@ -48,8 +48,10 @@ export class MainScene extends Scene {
         x.setLineWidth(1);
         x.setFont(this.fnt);
 
-        this.renderScene = ()=> {
+        this.renderScene = (session)=> {
+
             const t = this.game.getElapsedTime() / 1000;
+
             // https://www.dwitter.net/d/19473
 
             x.clear();
@@ -57,13 +59,13 @@ export class MainScene extends Scene {
 
             for(w=300,j=i=1,q=65537,p=k=255;i++<w;j=j*75%q,k=k*75%q) {
                 x.alpha=e=C(t+i*5);
-                x.drawText('❄',e*75+w*j/q,(t*k/p+w*k/q)%w);
+                session.drawText('❄',e*75+w*j/q,(t*k/p+w*k/q)%w);
             }
         };
     }
 
     protected onRender(): void {
-        this.renderScene();
+        this.surface.drawBatch(this.renderScene);
     }
 
 

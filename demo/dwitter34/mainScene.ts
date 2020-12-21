@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font";
 
@@ -11,15 +11,18 @@ export class MainScene extends Scene {
     @Resource.Font({fontFamily:'monospace',fontSize:25,extraChars:['🐦']})
     private fnt:Font;
 
-    private renderScene:()=>void = ():void=>{};
+    private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
-    public onReady():void {
-
+    public onPreloading():void {
+        super.onPreloading();
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
+        surface.setLineWidth(1);
         this.surface = surface;
         surface.setLineWidth(1);
         this.appendChild(surface);
+    }
 
+    public onReady():void {
 
         // u(t) is called 60 times per second.
         // t: Elapsed time in seconds.
@@ -48,19 +51,20 @@ export class MainScene extends Scene {
         x.setLineWidth(1);
         x.setFont(this.fnt);
 
-        this.renderScene = ()=> {
+        this.renderScene = (session)=> {
+
             const t = this.game.getElapsedTime() / 1000;
             // https://www.dwitter.net/d/19573
             x.clear();
 
             for(let i:number=40;i--;) {
-                x.drawText(i%2?`🐦 @Celebrity${String.fromCharCode(65+i)}`:"Send BTC here & get 2x back!",20,(i+t*t/9)*20%800);
+                session.drawText(i%2?`🐦 @Celebrity${String.fromCharCode(65+i)}`:"Send BTC here & get 2x back!",20,(i+t*t/9)*20%800);
             }
         };
     }
 
     protected onRender(): void {
-        this.renderScene();
+        this.surface.drawBatch(this.renderScene);
     }
 
 

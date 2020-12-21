@@ -255,7 +255,9 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
         renderer.pushAlphaBlend(this.alpha);
 
-        if (!this.resourceLoader.isCompleted()) {
+        const isSceneCompleted:boolean = this.resourceLoader.isCompleted();
+
+        if (!isSceneCompleted) {
             if (this.preloadingGameObject!==undefined) {
                 this.preloadingGameObject.render();
             }
@@ -276,7 +278,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         renderer.restoreAlphaBlend();
 
         renderer.transformSave();
-        this.onRender();
+        if (isSceneCompleted) this.onRender();
         renderer.transformRestore();
 
         renderer.afterFrameDraw(statePointer);

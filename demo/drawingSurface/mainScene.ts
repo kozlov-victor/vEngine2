@@ -23,25 +23,31 @@ export class MainScene extends Scene {
         const surface:DrawingSurface = new DrawingSurface(this.game,new Size(100,100));
         surface.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(surface);
-        surface.setLineWidth(0);
-        surface.setFillColor(244,24,24);
-        surface.drawRect(0,0,100,100);
 
-        surface.setFillColor(0,24,24);
-        surface.setLineWidth(5);
-        surface.setDrawColor(6,25,255);
-        surface.drawRect(50,50,30,30);
+        surface.drawBatch(session=>{
+            surface.setLineWidth(0);
+            surface.setFillColor(244,24,24);
+            session.drawRect(0,0,100,100);
 
-        surface.setFillColor(0,0,244);
-        surface.drawCircle(33,33,34);
+            surface.setFillColor(0,24,24);
+            surface.setLineWidth(5);
+            surface.setDrawColor(6,25,255);
+            session.drawRect(50,50,30,30);
 
-        surface.setFillColor(20,90,12, 122);
-        surface.setLineWidth(0);
-        surface.drawEllipse(53,83,20,40);
+            surface.setFillColor(0,0,244);
+            session.drawCircle(33,33,34);
 
-        surface.moveTo(12,12);
-        surface.setDrawColor(0,220,0);
-        surface.lineTo(40,40);
+            surface.setFillColor(20,90,12, 122);
+            surface.setLineWidth(0);
+            session.drawEllipse(53,83,20,40);
+
+            session.moveTo(12,12);
+            surface.setDrawColor(0,220,0);
+            session.lineTo(40,40);
+        });
+
+
+
 
     }
 

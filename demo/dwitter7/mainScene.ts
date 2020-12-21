@@ -45,9 +45,14 @@ export class MainScene extends Scene {
         };
 
         x.setLineWidth(15);
-        for(let i=0;i<1920;i++) {
-            if (i===0) x.moveTo(i,400+S(t+i/127)*200);
-            x.lineTo(i,400+S(t+i/127)*200);
-        }
+
+        x.drawBatch(batch=>{
+            for(let i=0;i<1920;i++) {
+                if (i===0) batch.moveTo(i,400+S(t+i/127)*200);
+                batch.lineTo(i,400+S(t+i/127)*200);
+            }
+        });
+
+
     }
 }

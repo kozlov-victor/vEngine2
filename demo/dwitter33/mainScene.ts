@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font";
 
@@ -11,14 +11,18 @@ export class MainScene extends Scene {
     @Resource.Font({fontFamily:'monospace',fontSize:25,chars:['🥪']})
     private fnt:Font;
 
-    private renderScene:()=>void = ():void=>{};
+    private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
-    public onReady():void {
-
+    public onPreloading():void {
+        super.onPreloading();
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(1);
         this.appendChild(surface);
+    }
+    public onReady():void {
+
+        this.surface.setLineWidth(1);
 
 
         // u(t) is called 60 times per second.
@@ -48,20 +52,20 @@ export class MainScene extends Scene {
         x.setLineWidth(1);
         x.setFont(this.fnt);
 
-        this.renderScene = ()=> {
-            const t = this.game.getElapsedTime() / 1000;
+        this.renderScene = (session)=> {
             // https://www.dwitter.net/d/19707
+            const t = this.game.getElapsedTime() / 1000;
             x.clear();
             let i:number;
             for(i=0;i<1e3;i++) {
                 x.setFillColor(R((i%2*99)%99));
-                x.drawText('🥪',900+C(i+t)*2e3,500+T(t+i*3)*1e3);
+                session.drawText('🥪',900+C(i+t)*2e3,500+T(t+i*3)*1e3);
             }
         };
     }
 
     protected onRender(): void {
-        this.renderScene();
+        this.surface.drawBatch(this.renderScene);
     }
 
 

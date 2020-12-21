@@ -14,7 +14,6 @@ const parseErrors = (log:string):IShaderErrorInfo[]=> {
     const logs:IShaderErrorInfo[] = [];
     let result:RegExpMatchArray|null;
 
-    // tslint:disable-next-line:no-conditional-assignment
     while (!!(result = log.match(/ERROR\:([^\n]+)/))) {
         if (result.index!==undefined) log = log.slice((result.index + 1));
 

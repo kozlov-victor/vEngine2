@@ -48,12 +48,14 @@ export class MainScene extends Scene {
 
         const v=23;
         let l,d,r:number;
-        for(l=499;l--;) {
-            d=(l*t/9)%v*v;
-            x.setFillColor(Color.HSL(t*l-l+d,99,65).asRGBNumeric());
-            x.drawRect(960+S(r=S(t-d/444)+l/v*.4)*d,540+C(r)*d,v,v);
-        }
 
+        x.drawBatch(batch=>{
+            for(l=499;l--;) {
+                d=(l*t/9)%v*v;
+                x.setFillColor(Color.HSL(t*l-l+d,99,65).asRGBNumeric());
+                batch.drawRect(960+S(r=S(t-d/444)+l/v*.4)*d,540+C(r)*d,v,v);
+            }
+        });
 
     }
 }

@@ -162,6 +162,13 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
     }
 
     public setRGBA(r:byte,g:byte,b:byte,a:byte = 255):void{
+
+        if (DEBUG) {
+            if (r===undefined || g===undefined || b===undefined) {
+                throw new DebugError(`wrong rgb color values: ${r},${g},${b}`);
+            }
+        }
+
         this.checkFriezed();
         const changed:boolean = this._r!==r || this._g!==g || this._b!==b || this._a!==a;
         if (!changed) return;

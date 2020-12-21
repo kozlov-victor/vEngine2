@@ -1,12 +1,12 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
 
 export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void;
+    private renderScene:(session:IDrawingSession)=>void;
 
     public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
@@ -42,7 +42,7 @@ export class MainScene extends Scene {
         this.surface.setLineWidth(30);
         this.surface.setFillColor(Color.NONE.asRGBNumeric(),0);
 
-        this.renderScene = ()=>{
+        this.renderScene = (session)=>{
             const t = this.game.getElapsedTime() / 1000;
 
             // https://www.dwitter.net/d/4843
@@ -56,7 +56,7 @@ export class MainScene extends Scene {
             x.transformRotateZ(t*2.4);
             for(let i=z*3;i--;) {
                 const a=C(j*i)*z;
-                x.drawRect(S(i)*a,C(i)*a,5,5);
+                session.drawRect(S(i)*a,C(i)*a,5,5);
             }
 
             x.transformRestore();
@@ -67,9 +67,7 @@ export class MainScene extends Scene {
     // https://www.dwitter.net/d/18108
     protected onRender(): void {
 
-        //this.surface.clear();
-
-        this.renderScene();
+        this.surface.drawBatch(this.renderScene);
 
 
     }

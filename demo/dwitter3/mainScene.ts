@@ -43,11 +43,15 @@ export class MainScene extends Scene {
 
         let j,h,v = 0,z:number;
 
-        for(j=20,h=96;h--;) {
-            for(v=54;v--;) {
-                x.setFillColor(R(z=(T(t-h*v)+1)*j,z/2,z*4));
-                x.drawRect(h*j,v*j,j,j);
+        x.drawBatch(batch=>{
+            for(j=20,h=96;h--;) {
+                for(v=54;v--;) {
+                    x.setFillColor(R(z=(T(t-h*v)+1)*j,z/2,z*4));
+                    batch.drawRect(h*j,v*j,j,j);
+                }
             }
-        }
+        });
+
+
     }
 }

@@ -44,8 +44,10 @@ export class MainScene extends Scene {
 
         let i,w,a,b,g,j,s:number;
 
-        // tslint:disable-next-line:no-conditional-assignment
-        for(i=w=3e3,a=b=g=333*T(t%9/7);j=(i^a*a)%4,i--;x.drawRect(a+=g+C(j*5+t)*g-a/2-w+g,b+=g+S(j*9+t)*g-b/2-w,s,s),w=2)x.setFillColor(R(s=w*9,w,s),100);
+        x.drawBatch(batch=>{
+            for(i=w=3e3,a=b=g=333*T(t%9/7);j=(i^a*a)%4,i--;batch.drawRect(a+=g+C(j*5+t)*g-a/2-w+g,b+=g+S(j*9+t)*g-b/2-w,s,s),w=2)x.setFillColor(R(s=w*9,w,s),100);
+        });
+
 
 
 

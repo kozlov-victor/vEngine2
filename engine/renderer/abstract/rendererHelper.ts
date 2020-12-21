@@ -13,7 +13,15 @@ export class RendererHelper {
         return undefined!;
     }
 
-    public renderModelToTexture(m:RenderableModel, renderTarget:IRenderTarget, clearColor?:Color):void {
+    public saveRenderTarget():void{
+
+    }
+
+    public restoreRenderTarget():void {
+
+    }
+
+    public renderModelToTexture(m:RenderableModel, renderTarget:IRenderTarget, clearColor?:Color,omitSaveAndResoreRenderTaget?:boolean):void {
         return undefined!;
     }
 

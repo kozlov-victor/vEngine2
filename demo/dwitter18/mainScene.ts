@@ -1,11 +1,11 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 
 export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void;
+    private renderScene:(session:IDrawingSession)=>void;
 
     public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
@@ -49,23 +49,19 @@ export class MainScene extends Scene {
 
         this.surface.setLineWidth(0);
 
-        this.renderScene = ()=>{
+        this.renderScene = (session)=>{
             const t = this.game.getElapsedTime() / 1000;
             let X,Y,Z,q,i:number;
             const r =(arg?:number)=>Math.random()+0.000001;
-            for (r(), X = r(Y = r(Z = r())), i = 255; i--; x.setFillColor(R(X / Y / Z, Y / Z / X, Z / X / Y),byte(r() / 5))) x.drawRect(1920 * r() - i / 2, 1080 * r(), asNum(q = X / Y / Z ^ i), asNum(T(q) / T(i * t) * 6));
+            for (r(), X = r(Y = r(Z = r())), i = 255; i--; x.setFillColor(R(X / Y / Z, Y / Z / X, Z / X / Y),byte(r() / 5))) session.drawRect(1920 * r() - i / 2, 1080 * r(), asNum(q = X / Y / Z ^ i), asNum(T(q) / T(i * t) * 6));
         };
 
     }
 
     // https://www.dwitter.net/d/18108
     protected onRender(): void {
-
         //this.surface.clear();
-
-        this.renderScene();
-
-
+        this.surface.drawBatch(this.renderScene);
     }
 }
 

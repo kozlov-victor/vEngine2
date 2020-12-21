@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font";
 
@@ -11,14 +11,17 @@ export class MainScene extends Scene {
     @Resource.Font({fontFamily:'monospace',fontSize:10})
     private fnt:Font;
 
-    private renderScene:()=>void = ():void=>{};
+    private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
-    public onReady():void {
-
+    public onPreloading():void {
+        super.onPreloading();
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(1);
         this.appendChild(surface);
+    }
+
+    public onReady():void {
 
 
         // u(t) is called 60 times per second.
@@ -49,18 +52,18 @@ export class MainScene extends Scene {
         x.setFont(this.fnt);
 
         const a=[68,87,73,84,84,69,82];
-        this.renderScene = ()=> {
-            const t = this.game.getElapsedTime() / 1000;
+        this.renderScene = (session)=> {
             // https://www.dwitter.net/d/19692
-            x.clear();
+            const t = this.game.getElapsedTime() / 1000;
+            session.clear();
             for(let i:number=7;i--;){
-                x.drawText(String.fromCharCode(a[i]+19**S(t-i/9)),20+9*i,30);
+                session.drawText(String.fromCharCode(a[i]+19**S(t-i/9)),20+9*i,30);
             }
         };
     }
 
     protected onRender(): void {
-        this.renderScene();
+        this.surface.drawBatch(this.renderScene);
     }
 
 

@@ -39,7 +39,7 @@ export class MainScene extends Scene {
             return (r<<16)|(g<<8)|(b);
         };
 
-        let p,a,i,b,y,z,j:number;
+        let p:number,a:number,i:number,b:number,y:number,z:number,j:number;
         x.setFillColor(Color.BLACK.asRGBNumeric());
         this.renderScene = ()=>{
             const t = this.game.getElapsedTime() / 1000;
@@ -47,11 +47,15 @@ export class MainScene extends Scene {
             p=Math.PI*2;
             a=960;
             b=535;
-            for(i=0;i<a;i+=10){
-                for(j=0;j<b;j+=10) {
-                    x.drawRect(a+a/7*S((y=i/a*p)+S(t))*(z=j/b*p),b+b/2*S(z)*C(y+t),9,9);
+
+            x.drawBatch(batch=>{
+                for(i=0;i<a;i+=10){
+                    for(j=0;j<b;j+=10) {
+                        batch.drawRect(a+a/7*S((y=i/a*p)+S(t))*(z=j/b*p),b+b/2*S(z)*C(y+t),9,9);
+                    }
                 }
-            }
+            });
+
         };
 
     }

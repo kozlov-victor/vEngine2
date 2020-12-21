@@ -1,11 +1,11 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 
 export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void;
+    private renderScene:(session:IDrawingSession)=>void;
 
     public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
@@ -39,7 +39,7 @@ export class MainScene extends Scene {
         };
 
 
-        this.renderScene = ()=>{
+        this.renderScene = (session)=>{
             const t = this.game.getElapsedTime() / 1000;
 
             // x.clearRect(0,0,1920,1080)
@@ -55,7 +55,7 @@ export class MainScene extends Scene {
             x.setLineWidth(10);
             for(let a:number=50;a;a--) {
                 let c,b:number;
-                x.drawArc(960,540,10*a,c=(b=Math.PI)+t/5*a,c+b/2);
+                session.drawArc(960,540,10*a,c=(b=Math.PI)+t/5*a,c+b/2);
             }
         };
 
@@ -63,12 +63,8 @@ export class MainScene extends Scene {
 
     // https://www.dwitter.net/d/18108
     protected onRender(): void {
-
         //this.surface.clear();
-
-        this.renderScene();
-
-
+        this.surface.drawBatch(this.renderScene);
     }
 }
 

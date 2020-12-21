@@ -42,10 +42,13 @@ export class MainScene extends Scene {
             return (r<<16)|(g<<8)|(b);
         };
         let k,i,j,m,s,r:number;
-        for(k=i=960;--i;x.drawRect(k+S(i*j)*6+S(m=k*j^k)*r,540+C(m)*r,s=3e5/k*S(j*9),s)) {
-            j=i/k+t/4;r=1e5/i;
-            x.setFillColor(R(i,i/3,0));
-        }
+
+        x.drawBatch(batch=>{
+            for(k=i=960;--i;batch.drawRect(k+S(i*j)*6+S(m=k*j^k)*r,540+C(m)*r,s=3e5/k*S(j*9),s)) {
+                j=i/k+t/4;r=1e5/i;
+                x.setFillColor(R(i,i/3,0));
+            }
+        });
 
     }
 }

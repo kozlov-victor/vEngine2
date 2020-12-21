@@ -44,10 +44,14 @@ export class MainScene extends Scene {
             const t = this.game.getCurrentTime() / 1000;
 
             let j,a,m,q:number;
-            for(j=2e3;j--;x.drawRect(99+9*S(a=j/1250)*S(j)+50*S(m=t*3+a),75+25*(S(-a*5)+1)*C(j),3,7)) {
-                q=(j&128)-C(j)**3*99;
-                x.setFillColor(R(q,q,q));
-            }
+
+            x.drawBatch(batch=>{
+                for(j=2e3;j--;batch.drawRect(99+9*S(a=j/1250)*S(j)+50*S(m=t*3+a),75+25*(S(-a*5)+1)*C(j),3,7)) {
+                    q=(j&128)-C(j)**3*99;
+                    x.setFillColor(R(q,q,q));
+                }
+            });
+
         };
 
     }

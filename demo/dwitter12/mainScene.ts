@@ -48,10 +48,14 @@ export class MainScene extends Scene {
         this.renderScene = ()=>{
             const t = this.game.getElapsedTime() / 1000;
 
-            for(j=100;j--;)for(y=100;y--;) {
-                x.setFillColor(R(b=(t*99+(S(t)*(j-51)+C(t)*(y-50)^S(t)*(y-51)-C(t)*(j-50)))%99*2,b,b));
-                x.drawRect(j*9+510,y*9,9,9);
-            }
+            x.drawBatch(batch=>{
+                for(j=100;j--;)for(y=100;y--;) {
+                    x.setFillColor(R(b=(t*99+(S(t)*(j-51)+C(t)*(y-50)^S(t)*(y-51)-C(t)*(j-50)))%99*2,b,b));
+                    batch.drawRect(j*9+510,y*9,9,9);
+                }
+            });
+
+
         };
 
     }

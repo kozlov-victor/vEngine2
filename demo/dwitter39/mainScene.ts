@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     @Resource.Font({fontFamily:'serif',fontSize:128,extraChars:['🎉','π']})
     private fnt:Font;
 
-    private renderScene:()=>void = ():void=>{};
+    private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
     public onReady():void {
 
@@ -50,17 +50,19 @@ export class MainScene extends Scene {
         x.setFont(this.fnt);
         x.setDrawColor(Color.BLACK.asRGBNumeric());
 
-        this.renderScene = ()=> {
+        this.renderScene = (session)=> {
+
             const t = this.game.getElapsedTime() / 1000;
+
             // https://www.dwitter.net/d/1939
 
-            x.drawText("🎉 Congratulations Firefox 52 🎉",100,300);
-            x.drawText("e ** π = "+Math.exp(1)**Math.PI,170,700);
+            session.drawText("🎉 Congratulations Firefox 52 🎉",100,300);
+            session.drawText("e ** π = "+Math.exp(1)**Math.PI,170,700);
         };
     }
 
     protected onRender(): void {
-        this.renderScene();
+        this.surface.drawBatch(this.renderScene);
     }
 
 

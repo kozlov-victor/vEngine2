@@ -57,10 +57,13 @@ export class ImageCacheSurface extends RenderableModel {
 
     private _drawToSurface():void {
         this.drawingSurface.clear();
-        for (let i:number=0;i<this.children.length;i++) {
-            const c: RenderableModel = this.children[i];
-            this.drawingSurface.drawModel(c);
-        }
+        this.drawingSurface.drawBatch(session=>{
+            for (let i:number=0;i<this.children.length;i++) {
+                const c: RenderableModel = this.children[i];
+                this.drawingSurface.drawModel(c);
+            }
+        });
+
     }
 
     draw():void {

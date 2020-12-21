@@ -1,12 +1,12 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
 
 export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void;
+    private renderScene:(session:IDrawingSession)=>void;
 
     public onReady():void {
         this.backgroundColor = Color.BLACK;
@@ -41,10 +41,10 @@ export class MainScene extends Scene {
         };
 
 
-        this.renderScene = ()=>{
+        this.renderScene = (session)=>{
             const t = this.game.getElapsedTime() / 1000;
             x.setDrawColor(Color.HSL((t*99),79,80).asRGBNumeric(),20);
-            x.drawArc(960+S(t)*540,540+C(t)*540,1E3,0,Math.PI*2);
+            session.drawArc(960+S(t)*540,540+C(t)*540,1E3,0,Math.PI*2);
         };
 
     }
@@ -54,8 +54,7 @@ export class MainScene extends Scene {
 
         //this.surface.clear();
 
-        this.renderScene();
-
+        this.surface.drawBatch(this.renderScene);
 
     }
 }

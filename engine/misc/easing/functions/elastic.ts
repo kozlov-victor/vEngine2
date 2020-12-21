@@ -5,7 +5,6 @@ export namespace EasingElastic {
     export const In:EaseFn = (t: number, b: number, c: number, d: number): number=> {
         let s: number = 1.70158, p: number = 0, a: number = c;
         if (t === 0) return b;
-        // tslint:disable-next-line:no-conditional-assignment
         if ((t /= d) === 1) return b + c;
         if (!p) p = d * .3;
         if (a < Math.abs(c)) {
@@ -19,7 +18,6 @@ export namespace EasingElastic {
     export const Out:EaseFn = (t: number, b: number, c: number, d: number): number=> {
         let s: number = 1.70158, p: number = 0, a: number = c;
         if (t === 0) return b;
-        // tslint:disable-next-line:no-conditional-assignment
         if ((t /= d) === 1) return b + c;
         if (!p) p = d * .3;
         if (a < Math.abs(c)) {
@@ -33,7 +31,6 @@ export namespace EasingElastic {
     export const InOut:EaseFn = (t: number, b: number, c: number, d: number): number=> {
         let s: number = 1.70158, p: number = 0, a: number = c;
         if (t === 0) return b;
-        // tslint:disable-next-line:no-conditional-assignment
         if ((t /= d / 2) === 2) return b + c;
         if (!p) p = d * (.3 * 1.5);
         if (a < Math.abs(c)) {

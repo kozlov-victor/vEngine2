@@ -112,7 +112,7 @@ export class BinBuffer {
         let res:string = '';
         let size:number = 0;
         let uint8:number;
-        // tslint:disable-next-line:no-conditional-assignment
+
         while ((uint8 = this.view.getUint8(this.pointer + size))!==0) {
             res+=String.fromCharCode(uint8);
             size++;

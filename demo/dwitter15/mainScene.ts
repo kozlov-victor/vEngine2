@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
 import {BrightessContrastFilter} from "@engine/renderer/webGl/filters/texture/brightessContrastFilter";
 import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/texture/triangleBlurFilter";
@@ -8,14 +8,13 @@ export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
-    private renderScene:()=>void;
+    private renderScene:(session:IDrawingSession)=>void;
 
     public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(15);
         this.appendChild(surface);
-
 
         // u(t) is called 60 times per second.
         // t: Elapsed time in seconds.
@@ -42,14 +41,14 @@ export class MainScene extends Scene {
         };
 
 
-        this.renderScene = ()=>{
+        this.renderScene = (session)=>{
             const t = this.game.getElapsedTime() / 1000;
 
             let i:number, r: number;
 
             for(i=99;i--;) {
                 x.setDrawColor(Color.HSL(i/.275,59,40).asRGBNumeric());
-                x.drawArc(960+C(r=i/99*6.28+(t&1?t:-t))*t*99,540+S(r)*t*99,t*5,0,7);
+                session.drawArc(960+C(r=i/99*6.28+(t&1?t:-t))*t*99,540+S(r)*t*99,t*5,0,7);
             }
 
         };
@@ -65,8 +64,7 @@ export class MainScene extends Scene {
 
         //this.surface.clear();
 
-        this.renderScene();
-
+        this.surface.drawBatch(this.renderScene);
 
     }
 }

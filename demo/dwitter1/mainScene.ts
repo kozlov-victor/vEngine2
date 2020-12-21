@@ -17,7 +17,6 @@ export class MainScene extends Scene {
 
     protected onRender(): void {
 
-        this.surface.clear();
 
         // u(t) is called 60 times per second.
         // t: Elapsed time in seconds.
@@ -40,13 +39,17 @@ export class MainScene extends Scene {
             return (r<<16)|(g<<8)|(b);
         };
 
+        this.surface.clear();
         const n=20;
         const d=50;
         let k,j,s:number;
-        for(let i=20;i<n*n;i++){
-            k=i%n+1;j=(i-k)/n;s=.3*(j*k+n*n)+20+100*S(t/10);
-            x.drawRect(480+d*j,d*k,d*S(s+t),d*C(s+t));
-        }
+        this.surface.drawBatch(b=>{
+            for(let i=20;i<n*n;i++){
+                k=i%n+1;j=(i-k)/n;s=.3*(j*k+n*n)+20+100*S(t/10);
+                b.drawRect(480+d*j,d*k,d*S(s+t),d*C(s+t));
+            }
+        });
+
 
 
     }

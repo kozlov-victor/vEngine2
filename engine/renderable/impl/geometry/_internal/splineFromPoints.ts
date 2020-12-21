@@ -102,7 +102,7 @@ const polarToCartesian=(centerX:number, centerY:number, radius:number, angle:num
     };
 };
 
-export const describeArc = (x:number, y:number, radius:number, startAngle:number, endAngle:number,anticlockwise:boolean = false):string=>{
+export const describeArc = (x:number, y:number, radius:number, startAngle:number, endAngle:number):string=>{
 
     const start:IPoint2d = polarToCartesian(x, y, radius, endAngle);
     const end:IPoint2d = polarToCartesian(x, y, radius, startAngle);

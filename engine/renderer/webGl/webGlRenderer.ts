@@ -455,6 +455,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public setRenderTarget(fbs:FrameBufferStack):void{
+
+        if (DEBUG && fbs===undefined) throw new DebugError('undefined parameter: setRenderTarget(undefined)');
+
         if (this._currFrameBufferStack!==fbs) {
             AbstractDrawer.unbindLastInstance();
         }
