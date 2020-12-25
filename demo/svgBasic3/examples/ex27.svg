@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="220" height="200"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <title>Лекция 3. Элемент Path</title>
+    <desc>
+        Пример EllipticalCurve1.svg
+    </desc>
+    <!--Объект Path-->
+    <path d="M100,100 A50,25 0 1,0 150,125"
+          stroke-width="3"  stroke="green"  fill="none"/>
+    <!--Вспомогательные фигуры-->
+    <circle cx="100" cy="100"  r="4" fill="red"/>
+    <circle cx="150" cy="125"  r="4" fill="red"/>
+    <circle cx="100" cy="125"  r="2" fill="black"/>
+    <rect x ="5" y="5" width="210" height="190"
+          stroke="blue" stroke-width="2" fill="none"></rect>
+</svg>

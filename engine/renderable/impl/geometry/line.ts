@@ -21,10 +21,18 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
 
     public setXYX1Y1(x:number,y:number,x1:number,y1:number):void{
         this.pos.setXY(x,y);
-        this.pointTo.setXY(x1,y1);
-        const dx:number = this.pointTo.x - this.pos.x;
-        const dy:number = this.pointTo.y - this.pos.y;
+        const dx:number = x1 - this.pos.x;
+        const dy:number = y1 - this.pos.y;
         this.pointTo.setXY(dx,dy);
+    }
+
+    set lineWidth(value: number) {
+        this._lineWidth = value;
+        this.onPointChanged();
+    }
+
+    get lineWidth(): number {
+        return this._lineWidth;
     }
 
     public clone(): Line {

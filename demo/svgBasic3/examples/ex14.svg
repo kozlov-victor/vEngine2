@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="200" height="100"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <title>SVG графика. Лекция 2. Основные фигуры SVG – графики. </title>
+    <desc>
+        Пример sequence3.svg
+    </desc>
+    <!-- Небо -->
+    <rect x="0" y="0" width="200" height="70"  fill="skyblue"/>
+    <!--Кольца радуги -->
+    <ellipse cx="100" cy="80"  rx="105" ry="60" fill="none"
+             stroke="red" stroke-width="4"/>
+    <ellipse cx="100" cy="80"  rx="101" ry="56" fill="none"
+             stroke="orange" stroke-width="4"/>
+    <ellipse cx="100" cy="80"  rx="97" ry="52" fill="none"
+             stroke="yellow" stroke-width="4"/>
+    <ellipse cx="100" cy="80"  rx="93" ry="48" fill="none"
+             stroke="green" stroke-width="4"/>
+    <ellipse cx="100" cy="80"  rx="89" ry="44" fill="none"
+             stroke="deepskyblue" stroke-width="4"/>
+    <ellipse cx="100" cy="80"  rx="85" ry="40" fill="none"
+             stroke="blue" stroke-width="4"/>
+    <ellipse cx="100" cy="80"  rx="81" ry="36" fill="none"
+             stroke="purple" stroke-width="4"/>
+    <!--Солнце -->
+    <circle cx="12" cy="12"  r="10" fill="orangered"/>
+    <!--Лучи солнца -->
+    <line x1="12" y1="12" x2="12" y2="40"
+          stroke="orangered" stroke-width="2"  />
+    <line x1="12" y1="12" x2="40" y2="12"
+          stroke="orangered" stroke-width="2"  />
+    <line x1="12" y1="12" x2="30" y2="30"
+          stroke="orangered" stroke-width="2"  />
+    <!--Земля-->
+    <rect x="0" y="70" width="200" height="30"  fill="lightgreen"/>
+</svg>

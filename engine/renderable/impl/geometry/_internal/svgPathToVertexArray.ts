@@ -6,6 +6,7 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {Optional} from "@engine/core/declarations";
 import {Game} from "@engine/core/game";
 import {BasicStringTokenizer} from "@engine/renderable/impl/geometry/_internal/basicStringTokenizer";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
 
 type v2 = [number,number];
 
@@ -45,6 +46,8 @@ const getPointsOnBezierCurve = (points:Readonly<v2>[], offset:number, numPoints:
     cPoints[cPoints.length-1] = points[points.length-1] as v2;
     return cPoints;
 };
+
+// quadratic-bezier-to-a-cubic-one
 
 class SvgTokenizer extends BasicStringTokenizer {
 
@@ -281,45 +284,83 @@ export class SvgPathToVertexArray {
                 this.bezierTo(p1,p2,p3,p4);
                 break;
             }
-            case 'Q': { // quadratic Bézier curve
-                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
-                const p2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
-                const p3:v2 = [p2[0],p2[1]];
-                const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
-                this.lastBezierPoint = p3;
+            case 'q':
+            case 'Q': {
+                // quadratic Bézier curve
+                // https://stackoverflow.com/questions/3162645/convert-a-quadratic-bezier-to-a-cubic-one
+                //CP1 = QP0 + 2/3 *(QP1-QP0)
+                //CP2 = QP2 + 2/3 *(QP1-QP2)
+
+                const isRelative:boolean = command==='q';
+
+                const QP0:v2 = [this.lastPoint!.x,this.lastPoint!.y];
+                let QP1:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+                let QP2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+
+                if (isRelative) {
+                    QP1 = add(QP1,QP0);
+                    QP2 = add(QP2,QP0);
+                }
+
+                const p1:v2 = [...QP0];
+                const p2:v2 = [
+                    QP0[0] + 2/3*(QP1[0]-QP0[0])
+                    ,
+                    QP0[1] + 2/3*(QP1[1]-QP0[1])
+                ];
+                const p3:v2 = [
+                    QP2[0] + 2/3*(QP1[0]-QP2[0])
+                    ,
+                    QP2[1] + 2/3*(QP1[1]-QP2[1])
+                ];
+                const p4:v2 = [...QP2];
+
+                this.lastBezierPoint = QP1;
                 this.bezierTo(p1,p2,p3,p4);
                 break;
             }
-            case 'q': {
-                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
-                const p2:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
-                const p3:v2 = [p2[0],p2[1]];
-                const p4:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
-                this.lastBezierPoint = p3;
-                this.bezierTo(p1,p2,p3,p4);
-                break;
-            }
+            case 't':
             case 'T': { // smooth quadratic Bézier curve
                 // https://www.w3.org/TR/SVG/paths.html
-                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
-                if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
-                const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
-                const p3:v2 = [p2[0],p2[1]];
-                const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
-                this.lastBezierPoint = p3;
+
+                const isRelative:boolean = command==='t';
+
+                const QP0:v2 = [this.lastPoint!.x,this.lastPoint!.y];
+                if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = QP0;
+                const QP1:v2 = [2*QP0[0] - this.lastBezierPoint[0], 2*QP0[1] - this.lastBezierPoint[1]];
+                let QP2:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
+
+                if (isRelative) {
+                    QP2 = add(QP2,QP0);
+                }
+
+                const p1:v2 = [...QP0];
+                const p2:v2 = [
+                    QP0[0] + 2/3*(QP1[0]-QP0[0])
+                    ,
+                    QP0[1] + 2/3*(QP1[1]-QP0[1])
+                ];
+                const p3:v2 = [
+                    QP2[0] + 2/3*(QP1[0]-QP2[0])
+                    ,
+                    QP2[1] + 2/3*(QP1[1]-QP2[1])
+                ];
+                const p4:v2 = [...QP2];
+
+                this.lastBezierPoint = QP1;
                 this.bezierTo(p1,p2,p3,p4);
                 break;
             }
-            case 't': {
-                const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
-                if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
-                const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
-                const p3:v2 = [p2[0],p2[1]];
-                const p4:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
-                this.lastBezierPoint = p3;
-                this.bezierTo(p1,p2,p3,p4);
-                break;
-            }
+            // case 't': {
+            //     const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
+            //     if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
+            //     const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
+            //     const p3:v2 = [p2[0],p2[1]];
+            //     const p4:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
+            //     this.lastBezierPoint = p3;
+            //     this.bezierTo(p1,p2,p3,p4);
+            //     break;
+            // }
             case 'A':
             case 'a':
                 const rx:number = tokenizer.getNextNumber();
@@ -343,7 +384,7 @@ export class SvgPathToVertexArray {
         tokenizer.lastCommand = command;
     }
 
-    // private visualizePoint([x,y]:[number,number]){
+    // private visualizePoint([x,y]:[number,number]):void{
     //     const c = new Circle(this.game);
     //     c.center.setXY(x,y);
     //     this.game.getCurrScene().appendChild(c);

@@ -275,7 +275,6 @@ class DrawingSession implements IDrawingSession {
         shape.fillColor.set(this.surface.getFillColor());
         shape.lineWidth = this.surface.getLineWidth();
         shape.color.set(this.surface.getDrawColor());
-        shape.blendMode = BLEND_MODE.NORMAL;
     }
 
     private drawSimpleShape(shape:Shape):void{

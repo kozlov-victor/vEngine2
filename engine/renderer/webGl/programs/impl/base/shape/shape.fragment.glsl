@@ -42,12 +42,6 @@ vec4 getInterpolatedGradientColor(float position) {
     ) * currentLeftPoint.a;
 }
 
-float calcRadiusAtPosition(vec2 pos,vec2 center,vec2 radius) {
-    float a = atan(pos.y-center.y,pos.x-center.x);
-    float cosA = cos(a);
-    float sinA = sin(a);
-    return radius.x*radius.y/sqrt(radius.x*radius.x*sinA*sinA+radius.y*radius.y*cosA*cosA);
-}
 
 vec4 getFillColor(){
     if (u_fillType==FILL_TYPE_COLOR) return u_fillColor;
@@ -85,23 +79,30 @@ vec4 getFillColor(){
     else return ERROR_COLOR;
 }
 
+float calcRadiusAtPosition(vec2 pos,vec2 center,vec2 radius,float lineWidth) {
+    float a = atan(pos.y-center.y,pos.x-center.x);
+    float cosA = cos(a);
+    float sinA = sin(a);
+    float rx = radius.x - lineWidth;
+    float ry = radius.y - lineWidth;
+    return rx*ry/sqrt(rx*rx*sinA*sinA+ry*ry*cosA*cosA);
+}
 
-void _drawElliplse(float dist,float rAtCurrAngle){
-    if (dist < rAtCurrAngle) {
-        if (dist > rAtCurrAngle - u_lineWidth) gl_FragColor = u_color;
-        else gl_FragColor = getFillColor();
-    } else discard;
+void _drawElliplse(float dist){
+    float rInnerAtCurrAngle = calcRadiusAtPosition(v_position.xy, vec2(HALF,HALF),vec2(u_rx, u_ry),u_lineWidth);
+    if (dist > rInnerAtCurrAngle) gl_FragColor = u_color;
+    else gl_FragColor = getFillColor();
 }
 
 void drawEllipse(){
     float dist = distance(vec2(HALF, HALF), v_position.xy);
-    float rAtCurrAngle = calcRadiusAtPosition(v_position.xy, vec2(HALF,HALF),vec2(u_rx, u_ry));
+    float rAtCurrAngle = calcRadiusAtPosition(v_position.xy, vec2(HALF,HALF),vec2(u_rx, u_ry),ZERO);
     bool isArcNotUsed = u_arcAngleFrom==u_arcAngleTo;
 
     if (dist > rAtCurrAngle) discard;
 
     if (isArcNotUsed) {
-        _drawElliplse(dist,rAtCurrAngle);
+        _drawElliplse(dist);
     } else {
 
         float angle = atan(v_position.y-HALF, v_position.x-HALF);
@@ -122,11 +123,11 @@ void drawEllipse(){
         bool withinArc = (angleFrom<=angle) && (angle<=angleTo);
         if (withinArc) {
             if (anticlockwise) discard;
-            else _drawElliplse(dist,rAtCurrAngle);
+            else _drawElliplse(dist);
         }
         else {
             if (!anticlockwise) discard;
-            else _drawElliplse(dist,rAtCurrAngle);
+            else _drawElliplse(dist);
         }
     }
 }

@@ -71,8 +71,12 @@ export class BasicStringTokenizer {
         return res;
     }
 
-    public skipCharacter(char:string):void {
-        if (this.getNextToken(char)!==char) throw new Error(`character "${char}" is expected`);
+    public skipToken(tkn:string):boolean {
+        return this.getNextToken(tkn,tkn.length)===tkn;
+    }
+
+    public skipRequiredToken(tkn:string):void {
+        if (!this.skipToken(tkn)) throw new Error(`token "${tkn}" is expected`);
     }
 
 }

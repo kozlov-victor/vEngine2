@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="200" height="100"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <title>SVG графика. Лекция 2. Основные фигуры SVG – графики. </title>
+    <desc>
+        Пример polygon6.svg
+    </desc>
+    <polygon fill="dodgerblue"
+             stroke="blue" stroke-width="5"
+             points="100,10  121.6,22.5  121.6,47.5
+              100,60  78.4,47.52  78.4,22.5"/>
+</svg>

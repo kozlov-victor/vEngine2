@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="200" height="100"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <title>SVG графика. Лекция 2. Основные фигуры SVG – графики. </title>
+    <desc>
+        Пример sequence2.svg
+    </desc>
+    <circle cx="45" cy="34"  r="25" fill="none"
+            stroke="darkblue" stroke-width="4"/>
+    <circle cx="100" cy="34"  r="25" fill="none"
+            stroke="black" stroke-width="4"/>
+    <circle cx="155" cy="34"  r="25" fill="none"
+            stroke="red" stroke-width="4"/>
+    <circle cx="72" cy="67"  r="25" fill="none"
+            stroke="yellow" stroke-width="4"/>
+    <circle cx="127" cy="67"  r="25" fill="none"
+            stroke="green" stroke-width="4"/>
+</svg>

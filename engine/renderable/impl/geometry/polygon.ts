@@ -4,7 +4,6 @@ import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimi
 import {EarClippingTriangulator} from "@engine/renderable/impl/geometry/_internal/earClippingTriangulator";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {DebugError} from "@engine/debug/debugError";
 import {calcNormal} from "@engine/renderable/impl/geometry/_internal/calcNormal";
 import {IPoint3d} from "@engine/geometry/point3d";
 import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/_internal/isPolylineClockWise";
@@ -86,7 +85,7 @@ export class Polygon extends Mesh {
         return Polygon.fromPolyline(game,polyline);
     }
 
-    public static fromPoints(game:Game,points:number[]|string):Polygon {
+    public static fromPoints(game:Game,points:number[]):Polygon {
         const vertices:number[] = closePolylinePoints(points);
         return Polygon.fromPolyline(game,PolyLine.fromVertices(game,vertices));
     }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="200" height="100"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <title>Лекция 3. Элемент Path</title>
+    <desc>
+        Пример linesAndShapes5.svg
+    </desc>
+    <path d="M100,10  L105.8,27.2 123.8,27.2 109.4,38
+                     114.6,55.2 100,45 85.4,55.2 90.6,38
+                     76.2,27.2 94.2,27.2"
+          style="fill:red"/>
+</svg>

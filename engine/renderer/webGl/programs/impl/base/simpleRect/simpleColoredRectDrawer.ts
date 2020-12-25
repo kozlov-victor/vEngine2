@@ -31,7 +31,13 @@ export class SimpleColoredRectDrawer extends AbstractDrawer {
         //language=GLSL
         gen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){
-                gl_FragColor = u_color*u_alpha;
+                vec4 color = vec4(
+                    u_color.r*u_color.a,
+                    u_color.g*u_color.a,
+                    u_color.b*u_color.a,
+                    u_color.a
+                );
+                gl_FragColor = color*u_alpha;
             }
         `);
         this.initProgram();

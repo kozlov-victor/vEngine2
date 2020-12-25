@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="700" height="150"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <title>Лекция 3. Элемент Path</title>
+    <desc>
+        Пример QuadraticCurve5.svg
+    </desc>
+    <!--Объект Path-->
+    <path d="M25,75 Q100,25 175,75 T 325,75 T475, 75 T 625,75"
+          style="fill:none; stroke:green;stroke-width:3"/>
+
+    <!--Вспомогательные фигуры-->
+    <line x1="25" y1="75" x2="100" y2="25"
+          stroke-width="3"  stroke="green"/>
+    <line x1="100" y1="25" x2="175" y2="75"
+          stroke-width="3"  stroke="green"/>
+    <line x1="100" y1="25" x2="250" y2="125"
+          stroke-width="3"  stroke="green" stroke-dasharray="5"/>
+    <line x1="250" y1="125" x2="325" y2="75"
+          stroke-width="3"  stroke="blue"/>
+    <circle cx="25" cy="75"  r="4" fill="red"/>
+    <circle cx="100" cy="25"  r="4" fill="red"/>
+    <circle cx="175" cy="75"  r="4" fill="red"/>
+    <circle cx="250" cy="125"  r="4" fill="red"/>
+    <circle cx="325" cy="75"  r="4" fill="magenta"/>
+    <circle cx="475" cy="75"  r="4" fill="magenta"/>
+    <circle cx="625" cy="75"  r="4" fill="magenta"/>
+</svg>

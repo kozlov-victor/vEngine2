@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="210" height="100"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <title> Лекция 5. Рисование</title>
+    <desc>
+        Пример fill2.svg
+    </desc>
+    <rect x="0" y="25" width="210" height="50"/>
+    <rect x="10" y="0" width="10" height="100"
+          style="fill:red; fill-opacity:0.1"/>
+    <rect x="30" y="0" width="10" height="100"
+          style="fill:red; fill-opacity:0.2"></rect>
+    <rect x="50" y="0" width="10" height="100"
+          style="fill:red; fill-opacity:0.3"></rect>
+    <rect x="70" y="0" width="10" height="100"
+          style="fill:red; fill-opacity:0.4"></rect>
+    <rect x="90" y="0" width="10" height="100"
+          style="fill:red; fill-opacity:0.5"></rect>
+    <rect x="110" y="0" width="10" height="100"
+          style="fill:red; fill-opacity:0.6"></rect>
+    <rect x="130" y="0" width="10" height="100"
+          style="fill:red; fill-opacity:0.7"></rect>
+    <rect x="150" y="0" width="10" height="100"
+          style="fill:red; fill-opacity:0.8"></rect>
+    <rect x="170" y="0" width="10" height="100"
+          style="fill:red; fill-opacity:0.9"></rect>
+    <rect x="190" y="0" width="10" height="100"
+          style="fill:red; fill-opacity:1"></rect>
+</svg>

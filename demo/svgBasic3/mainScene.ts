@@ -1,19 +1,4 @@
-import * as svgTiger from "xml/xml-loader!./examples/tiger.svg";
 
-// https://www.w3schools.com/graphics/svg_circle.asp
-import * as svgCircle from "xml/xml-loader!./examples/circle.svg";
-import * as svgCircle2 from "xml/xml-loader!./examples/circle2.svg";
-import * as svgRect from "xml/xml-loader!./examples/rect.svg";
-import * as svgRect2 from "xml/xml-loader!./examples/rect2.svg";
-import * as svgRect3 from "xml/xml-loader!./examples/rect3.svg";
-import * as svgEllipse from "xml/xml-loader!./examples/ellipse.svg";
-import * as svgEllipse2 from "xml/xml-loader!./examples/ellipse2.svg";
-import * as svgEllipse3 from "xml/xml-loader!./examples/ellipse3.svg";
-import * as svgLine from "xml/xml-loader!./examples/line.svg";
-import * as svgPolygon1 from "xml/xml-loader!./examples/polygon1.svg";
-import * as svgPolyline1 from "xml/xml-loader!./examples/polyline1.svg";
-
-// https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/
 import * as svgEx1 from "xml/xml-loader!./examples/ex1.svg";
 import * as svgEx2 from "xml/xml-loader!./examples/ex2.svg";
 import * as svgEx3 from "xml/xml-loader!./examples/ex3.svg";
@@ -51,39 +36,36 @@ import * as svgEx34 from "xml/xml-loader!./examples/ex34.svg";
 import * as svgEx35 from "xml/xml-loader!./examples/ex35.svg";
 import * as svgEx36 from "xml/xml-loader!./examples/ex36.svg";
 import * as svgEx37 from "xml/xml-loader!./examples/ex37.svg";
-import * as svgEx38 from "xml/xml-loader!./examples/ex38.svg";
-import * as svgEx39 from "xml/xml-loader!./examples/ex39.svg";
-import * as svgEx40 from "xml/xml-loader!./examples/ex40.svg";
-import * as svgEx41 from "xml/xml-loader!./examples/ex41.svg";
 
-// https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/svg.svg - "use" is not supported
-// view-source:https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ubuntu.svg
-// with: 100%
+
 import {Scene} from "@engine/scene/scene";
-import {SvgImage} from "./svgImage";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Element} from "@engine/misc/xmlUtils";
+import {SvgImage} from "../svgBasic/svgImage";
 
 const images:Element[] = [
 
-    svgEx38,svgEx39,svgEx40,svgEx41,
-    svgEx34,svgEx35,svgEx36,svgEx37,
+    svgEx36,svgEx37,
 
-    svgEx28, svgEx29,  svgEx30,
-    svgEx31,svgEx32, svgEx33,
-    svgEx27,
-    svgEx11, svgEx12, svgEx13,svgEx14,
-    svgEx15, svgEx16, svgEx17,svgEx18,
-    svgEx19, svgEx20, svgEx21, svgEx22,
-    svgEx23, svgEx24, svgEx25, svgEx26,
-    svgEx6,svgEx7,svgEx8,
-    svgEx9,svgEx10,
-    svgPolyline1,
-    svgPolygon1,
-    svgEx4,svgEx5,
-    svgRect,svgRect2,svgRect3,svgTiger,svgCircle,svgCircle2,svgEllipse,
-    svgEllipse2,svgEllipse3,svgLine,
-    svgEx1,svgEx2, svgEx3,
+    svgEx34,
+    svgEx27,svgEx28,svgEx29,
+    svgEx30, svgEx31, svgEx32,
+
+    svgEx33,svgEx34,svgEx35,
+
+    svgEx22,svgEx23, svgEx24,svgEx25,
+    svgEx26,
+
+    svgEx18,svgEx19, svgEx20,svgEx21,
+
+    svgEx15,svgEx16,svgEx17,
+    svgEx12,svgEx13,svgEx14,
+    svgEx10,svgEx11, svgEx12,
+
+
+    svgEx1,svgEx2,svgEx3,svgEx4,
+    svgEx5,svgEx6,svgEx7,svgEx8,
+    svgEx9,
 ];
 
 export class MainScene extends Scene {
@@ -96,6 +78,7 @@ export class MainScene extends Scene {
             if (lastImage!==undefined) lastImage.removeSelf();
             lastImage = new SvgImage(this.game,images[i]);
             this.appendChild(lastImage);
+            console.log(lastImage);
             i++;
             i = i%images.length;
         };

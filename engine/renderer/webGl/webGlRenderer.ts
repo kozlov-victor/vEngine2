@@ -304,10 +304,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (maxR===ellipse.radiusX) {
             sd.setUniform(sd.u_rx,0.5);
             sd.setUniform(sd.u_ry,ellipse.radiusY/ellipse.radiusX*0.5);
+            console.log(ellipse.radiusY/ellipse.radiusX*0.5);
         } else {
             sd.setUniform(sd.u_ry,0.5);
             sd.setUniform(sd.u_rx,ellipse.radiusX/ellipse.radiusY*0.5);
         }
+
         sd.setUniform(sd.u_shapeType,SHAPE_TYPE.ELLIPSE);
         sd.setUniform(sd.u_width,1);
         sd.setUniform(sd.u_height,1);
