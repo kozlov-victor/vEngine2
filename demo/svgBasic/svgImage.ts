@@ -347,7 +347,7 @@ class SvgElementRenderer {
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
         const cx:number = getNumber(el.attributes.cx,0);
         const cy:number = getNumber(el.attributes.cy,0);
-        const r:number = getNumber(el.attributes.r,10);
+        const r:number = getNumber(el.attributes.r,10)+lineWidth/2;
 
         const circle:Circle = new Circle(this.game);
         circle.center.setXY(cx,cy);
@@ -363,8 +363,8 @@ class SvgElementRenderer {
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
         const cx:number = getNumber(el.attributes.cx,0);
         const cy:number = getNumber(el.attributes.cy,0);
-        const rx:number = getNumber(el.attributes.rx,10);
-        const ry:number = getNumber(el.attributes.ry,10);
+        const rx:number = getNumber(el.attributes.rx,10)+lineWidth/2;
+        const ry:number = getNumber(el.attributes.ry,10)+lineWidth/2;
 
         const ellipse:Ellipse = new Ellipse(this.game);
         ellipse.center.setXY(cx,cy);
@@ -380,8 +380,8 @@ class SvgElementRenderer {
     private renderRect(parentView:RenderableModel,el:Element):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const x:number = getNumber(el.attributes.x,0);
-        const y:number = getNumber(el.attributes.y,0);
+        const x:number = getNumber(el.attributes.x,0)-lineWidth/2;
+        const y:number = getNumber(el.attributes.y,0)-lineWidth/2;
         const width:number = getNumber(el.attributes.width,1);
         const height:number = getNumber(el.attributes.height,1);
         const borderRadius:number = getNumber(el.attributes.rx,0);

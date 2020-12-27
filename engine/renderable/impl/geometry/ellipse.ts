@@ -14,7 +14,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
     set radiusX(value: number) {
         if (this._radiusX===value) return;
         this._radiusX = value;
-        this.size.setWH(this._getMaxRadius()*2);
+        this.size.setWH(this._radiusX*2,this._radiusY*2);
         this.center.forceTriggerChange();
     }
 
@@ -25,7 +25,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
     set radiusY(value: number) {
         if (this._radiusY===value) return;
         this._radiusY = value;
-        this.size.setWH(this._getMaxRadius()*2);
+        this.size.setWH(this._radiusX*2,this._radiusY*2);
         this.center.forceTriggerChange();
     }
 
@@ -43,12 +43,10 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
         this.radiusX = 10;
         this.radiusY = 20;
         this.center.observe(()=>{
-            const maxR:number = this._getMaxRadius();
-            this.pos.setXY(this.center.x - maxR,this.center.y - maxR);
+            this.pos.setXY(this.center.x - this.radiusX,this.center.y - this.radiusY);
         });
         this.pos.observe(()=>{
-            const maxR:number = this._getMaxRadius();
-            this.center.setXY(this.pos.x+maxR,this.pos.y+maxR);
+            this.center.setXY(this.pos.x + this.radiusX,this.pos.y + this.radiusY);
         });
     }
 

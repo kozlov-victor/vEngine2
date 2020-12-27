@@ -11,7 +11,6 @@ export class MainScene extends Scene {
     public onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
-        surface.setLineWidth(1);
         this.appendChild(surface);
 
 

@@ -42,6 +42,7 @@ export class MainScene extends Scene {
             session.drawEllipse(53,83,20,40);
 
             session.moveTo(12,12);
+            surface.setLineWidth(1);
             surface.setDrawColor(0,220,0);
             session.lineTo(40,40);
         });

@@ -41,15 +41,13 @@ export class MainScene extends Scene {
 
         // draw a rounded rectangle
         graphics.setDrawColor( 0xFF00FF);
-        graphics.setFillColor(0xFF00BB, 63);
+        graphics.setFillColor(0xFF00BB, 150);
         graphics.drawRoundedRect(150, 450, 300, 100, 15);
 
         // draw a circle, set the lineStyle to zero so the circle doesn't have an outline
         graphics.setLineWidth(0);
         graphics.setFillColor(0xFFFF0B,127);
         graphics.drawCircle(470, 90,60);
-
-
 
 
         // const rect:Rectangle = new Rectangle(this.game);

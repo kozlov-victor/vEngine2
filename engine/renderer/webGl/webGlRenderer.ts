@@ -13,7 +13,7 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {Shape} from "@engine/renderable/abstract/shape";
-import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
+import {ResourceLinkState} from "@engine/resources/resourceLink";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {mat4} from "@engine/geometry/mat4";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
@@ -28,12 +28,12 @@ import {FLIP_TEXTURE_MATRIX, WebGlRendererHelper} from "@engine/renderer/webGl/w
 import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
-import Mat16Holder = mat4.Mat16Holder;
-import glEnumToString = debugUtil.glEnumToString;
-import MAT16 = mat4.MAT16;
 import {SimpleColoredRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleColoredRectDrawer";
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {mat4Special} from "@engine/geometry/mat4Special";
+import Mat16Holder = mat4.Mat16Holder;
+import glEnumToString = debugUtil.glEnumToString;
+import MAT16 = mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -295,16 +295,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
 
     public drawEllipse(ellipse:Ellipse):void{
-        const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
 
         this.prepareGeometryUniformInfo(ellipse);
         this.prepareShapeUniformInfo(ellipse);
 
         const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);
+        const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
         if (maxR===ellipse.radiusX) {
             sd.setUniform(sd.u_rx,0.5);
             sd.setUniform(sd.u_ry,ellipse.radiusY/ellipse.radiusX*0.5);
-            console.log(ellipse.radiusY/ellipse.radiusX*0.5);
         } else {
             sd.setUniform(sd.u_ry,0.5);
             sd.setUniform(sd.u_rx,ellipse.radiusX/ellipse.radiusY*0.5);
