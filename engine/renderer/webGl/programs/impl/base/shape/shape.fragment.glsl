@@ -90,6 +90,8 @@ float calcRadiusAtPosition(vec2 pos,vec2 center,vec2 radius,float lineWidth) {
     float sinA = sin(a);
     float rx = radius.x - lineWidth;
     float ry = radius.y - lineWidth;
+    if (rx<ZERO) return ZERO;
+    if (ry<ZERO) return ZERO;
     return rx*ry/sqrt(rx*rx*sinA*sinA+ry*ry*cosA*cosA);
 }
 
@@ -99,8 +101,13 @@ void _drawElliplse(){
 
     float dist = distance(vec2(HALF, HALF), v_position.xy);
     if (dist > rOutterAtCurrAngle) discard;
-    if (dist > rInnerAtCurrAngle && dist < rOutterAtCurrAngle) gl_FragColor = getFillColor();
-    else gl_FragColor = u_color;
+    else if (dist > rInnerAtCurrAngle) gl_FragColor = vec4(
+        u_color.r*u_color.a,
+        u_color.g*u_color.a,
+        u_color.b*u_color.a,
+        u_color.a
+    );
+    else gl_FragColor = getFillColor();
 }
 
 void drawEllipse(){

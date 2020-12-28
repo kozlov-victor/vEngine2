@@ -39,7 +39,7 @@ export class MainScene extends Scene {
             return (r<<16)|(g<<8)|(b);
         };
 
-        this.surface.setLineWidth(1);
+        this.surface.setLineWidth(10);
 
         this.surface.setFillColor(Color.RGB(0,0,122).asRGBNumeric());
 
