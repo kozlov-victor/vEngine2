@@ -33,7 +33,7 @@ import {TransformableModel} from "@engine/renderable/abstract/transformableModel
 import {Scene} from "@engine/scene/scene";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
-import {IAnimation} from "@engine/animation/iAnimation";
+import {IAnimation, ITargetAnimation} from "@engine/animation/iAnimation";
 import {Color} from "@engine/renderer/common/color";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
@@ -137,7 +137,7 @@ export abstract class RenderableModel
         b.manage(this);
     }
 
-    public addPropertyAnimation(animation:IAnimation):void{
+    public addPropertyAnimation(animation:ITargetAnimation):void{
         animation.target = this;
         this._propertyAnimations.push(animation);
     }

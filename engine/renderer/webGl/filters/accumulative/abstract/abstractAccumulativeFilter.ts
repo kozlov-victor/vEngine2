@@ -12,7 +12,6 @@ import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import Mat16Holder = mat4.Mat16Holder;
 import IDENTITY = mat4.IDENTITY;
 
-let img:HTMLImageElement;
 
 export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
 
@@ -27,8 +26,6 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
         this._simpleRectCopyDrawer.initProgram();
         this.accumulatorBefore = new FrameBuffer(gl,this.game.size);
         this.accumulatorAfter  = new FrameBuffer(gl,this.game.size);
-        img = document.createElement('img');
-        document.body.appendChild(img);
     }
 
     public doFilter(destFrameBuffer:FrameBuffer):void{

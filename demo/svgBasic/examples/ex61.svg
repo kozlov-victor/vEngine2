@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="210" height="110"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <title> Лекция 6. Трансформации </title>
+    <desc>
+        Пример scale_and_translate5.svg
+    </desc>
+
+    <!--Исходная фигура (Нижняя правая)-->
+    <g transform="scale(1,1) translate(0, 0)">
+        <rect x="105" y="55" width="100" height="50"
+              fill="yellow" stroke="red" stroke-width="4"/>
+        <rect x="105" y="55" width="50" height="25"
+              fill="green" stroke="red" stroke-width="4"/>
+    </g>
+
+    <!--Нижняя левая фигура -->
+    <g transform="scale(-1,1) translate(-210, 0)">
+        <rect x="105" y="55" width="100" height="50"
+              fill="yellow" stroke="red" stroke-width="4"/>
+        <rect x="105" y="55" width="50" height="25"
+              fill="green" stroke="red" stroke-width="4"/>
+    </g>
+
+    <!--Верхняя правая фигура -->
+    <g transform="scale(1,-1) translate(0, -110)">
+        <rect x="105" y="55" width="100" height="50"
+              fill="yellow" stroke="red" stroke-width="4"/>
+        <rect x="105" y="55" width="50" height="25"
+              fill="green" stroke="red" stroke-width="4"/>
+    </g>
+
+    <!--Верхняя левая фигура -->
+    <g transform="scale(-1,-1) translate(-210, -110)">
+        <rect x="105" y="55" width="100" height="50"
+              fill="yellow" stroke="red" stroke-width="4"/>
+        <rect x="105" y="55" width="50" height="25"
+              fill="green" stroke="red" stroke-width="4"/>
+    </g>
+
+</svg>

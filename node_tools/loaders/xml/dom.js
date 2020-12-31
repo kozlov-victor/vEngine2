@@ -40,6 +40,8 @@ class SimpleHtmlParser {
                 }
             }
 
+
+
             // end tag
             else if (s.substring(0, 2) === "</")
             {

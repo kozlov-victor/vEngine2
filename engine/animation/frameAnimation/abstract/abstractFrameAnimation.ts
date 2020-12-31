@@ -3,7 +3,7 @@ import {Game} from "@engine/core/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
-import {IAnimation} from "@engine/animation/iAnimation";
+import {IAnimation, ITargetAnimation} from "@engine/animation/iAnimation";
 
 export const enum FRAME_ANIMATION_EVENTS {
     completed =  'completed',
@@ -11,7 +11,7 @@ export const enum FRAME_ANIMATION_EVENTS {
     loop      =  'loop',
 }
 
-export abstract class AbstractFrameAnimation<T> implements IEventemittable,IAnimation, ICloneable<AbstractFrameAnimation<T>> {
+export abstract class AbstractFrameAnimation<T> implements IEventemittable,ITargetAnimation, ICloneable<AbstractFrameAnimation<T>> {
 
     public name:string;
     public duration:number = 1000;

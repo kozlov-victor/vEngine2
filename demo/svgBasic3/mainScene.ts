@@ -36,6 +36,8 @@ import * as svgEx34 from "xml/xml-loader!./examples/ex34.svg";
 import * as svgEx35 from "xml/xml-loader!./examples/ex35.svg";
 import * as svgEx36 from "xml/xml-loader!./examples/ex36.svg";
 import * as svgEx37 from "xml/xml-loader!./examples/ex37.svg";
+import * as svgEx38 from "xml/xml-loader!./examples/ex38.svg";
+import * as svgEx39 from "xml/xml-loader!./examples/ex39.svg";
 
 
 import {Scene} from "@engine/scene/scene";
@@ -45,7 +47,7 @@ import {SvgImage} from "../svgBasic/svgImage";
 
 const images:Element[] = [
 
-    svgEx36,svgEx37,
+    svgEx36,svgEx37,svgEx38,svgEx39,
 
     svgEx34,
     svgEx27,svgEx28,svgEx29,

@@ -8,6 +8,7 @@ import {calcNormal} from "@engine/renderable/impl/geometry/_internal/calcNormal"
 import {IPoint3d} from "@engine/geometry/point3d";
 import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/_internal/isPolylineClockWise";
 import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
+import {Point2d} from "@engine/geometry/point2d";
 
 class PolygonPrimitive extends AbstractPrimitive {
     constructor(){
@@ -18,7 +19,7 @@ class PolygonPrimitive extends AbstractPrimitive {
 
 export class Polygon extends Mesh {
 
-    constructor(protected game:Game){
+    private constructor(protected game:Game){
         super(game);
         this.invertY = false;
         this.vertexItemSize = 2;
@@ -85,13 +86,23 @@ export class Polygon extends Mesh {
         return Polygon.fromPolyline(game,polyline);
     }
 
-    public static fromPoints(game:Game,points:number[]):Polygon {
-        const vertices:number[] = closePolylinePoints(points);
+    public static fromVertices(game:Game, vertices:number[]):Polygon {
+        const verticesClosed:number[] = closePolylinePoints(vertices);
+        return Polygon.fromPolyline(game,PolyLine.fromVertices(game,verticesClosed));
+    }
+
+    public static fromPoints(game:Game, points:Point2d[]):Polygon {
+        const vertices:number[] = [];
+        for (const p of points) vertices.push(p.x,p.y);
         return Polygon.fromPolyline(game,PolyLine.fromVertices(game,vertices));
     }
 
     public isClockWise():boolean {
         return isPolylineCloseWise(this._edgeVertices);
+    }
+
+    public getEdgeVertices():number[] {
+        return this._edgeVertices;
     }
 
     public extrudeToMesh(depth:number):Mesh{

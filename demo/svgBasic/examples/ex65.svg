@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="200" height="100"
+     xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1000 950">
+    <title> Лекция 6. Трансформации </title>
+    <desc>
+        Пример skew7.svg
+    </desc>
+
+    <circle cx="500" cy="400"  r="300"
+            fill="lightskyblue"  stroke="blue" stroke-width="30"/>
+    <ellipse cx="500" cy="500"  rx="150" ry="100"
+             fill="none" stroke="blue" stroke-width="30"/>
+    <rect x="300" y="370" width="400" height="130"
+          fill="lightskyblue"/>
+    <ellipse cx="350" cy="300"  rx="100" ry="50"
+             fill="white"
+             stroke="blue" stroke-width="30"/>
+    <ellipse cx="650" cy="300"  rx="100" ry="50"
+             fill="white"
+             stroke="blue" stroke-width="30"/>
+    <circle cx="350" cy="300"  r="25"
+            fill="black"/>
+    <circle cx="650" cy="300"  r="25"
+            fill="black"/>
+
+    <g transform="translate(-500,0) skewX(20) translate(0, -400) skewY(45) ">
+
+        <circle cx="500" cy="400"  r="300" fill="lightskyblue"
+                stroke="blue" stroke-width="30"/>
+        <ellipse cx="500" cy="500"  rx="150" ry="100"
+                 fill="none" stroke="blue" stroke-width="30"/>
+        <rect x="300" y="370" width="400" height="130"
+              fill="lightskyblue"/>
+        <ellipse cx="350" cy="300"  rx="100" ry="50"
+                 fill="white" stroke="blue" stroke-width="30"/>
+        <ellipse cx="650" cy="300"  rx="100" ry="50"
+                 fill="white" stroke="blue" stroke-width="30"/>
+        <circle cx="350" cy="300"  r="25" fill="black"/>
+        <circle cx="650" cy="300"  r="25" fill="black"/>
+
+    </g>
+</svg>

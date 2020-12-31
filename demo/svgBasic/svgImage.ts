@@ -16,6 +16,8 @@ import {BasicStringTokenizer} from "@engine/renderable/impl/geometry/_internal/b
 import {MathEx} from "@engine/misc/mathEx";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {Optional} from "@engine/core/declarations";
+import {DebugError} from "@engine/debug/debugError";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 const NAMED_COLOR_TABLE:Record<string, string> =
     {
@@ -180,6 +182,22 @@ const getNumber = (literal:string,defaultValue:number):number=>{
     else return val;
 };
 
+const getNumberWithMeasure = (literal:string,containerSize:number,defaultValue:number):number=>{
+    if (!literal) return defaultValue;
+    const tokenizer = new BasicStringTokenizer(literal);
+    const val:number = tokenizer.getNextNumber();
+    const measure:string = !tokenizer.isEof()?tokenizer.getNextToken(tokenizer._CHAR+'%'):'';
+    if (!measure) return val;
+    switch (measure) {
+        case '%':
+            return val*containerSize/100;
+        case 'px':
+            return val;
+        default:
+            throw new DebugError(`unknown measure: ` + measure);
+    }
+};
+
 const getNumberArray = <T>(literal:string,size:number,defaultItemValue:number):T=>{
     let arr:number[];
     if (!literal) {
@@ -223,7 +241,7 @@ class SvgElementRenderer {
 
     private elementStylesHolder:ElementStylesHolder = new ElementStylesHolder();
 
-    constructor(private game:Game) {
+    constructor(private game:Game,private document:Element,private rootContainer:SvgImage) {
     }
 
     private getFillStrokeParams(el:Element):{lineWidth:number,fillColor:Color,drawColor:Color} {
@@ -249,12 +267,11 @@ class SvgElementRenderer {
         return {lineWidth,fillColor,drawColor};
     }
 
-
-    private resolveTransformations(view:RenderableModel, el:Element):RenderableModel {
-        let lastView:RenderableModel = view;
-        const transform:string = this.lookUpProperty(el,'transform',false);
-        if (!transform) return lastView;
-        const stringTokenizer:BasicStringTokenizer = new BasicStringTokenizer(transform.trim());
+    private _parseTransformString(parentView:RenderableModel,transform:string):RenderableModel {
+        let lastView:RenderableModel = parentView;
+        transform = transform.trim();
+        if (!transform) return parentView;
+        const stringTokenizer:BasicStringTokenizer = new BasicStringTokenizer(transform);
         while (!stringTokenizer.isEof()) {
             const token:string = stringTokenizer.getNextToken(stringTokenizer._CHAR);
             //console.log({token});
@@ -278,17 +295,76 @@ class SvgElementRenderer {
                 lastView = transformed;
             } else if (token==='rotate') {
                 stringTokenizer.skipRequiredToken('(');
-                const x:number = stringTokenizer.getNextNumber();
+                const x: number = stringTokenizer.getNextNumber();
+                const centerX: number = stringTokenizer.getNextNumber(0);
+                const centerY: number = stringTokenizer.getNextNumber(0);
+                stringTokenizer.skipOptionalToken('deg');
                 stringTokenizer.skipRequiredToken(')');
-                const transformed:RenderableModel = new NullGameObject(this.game);
+                const transformed: RenderableModel = new NullGameObject(this.game);
                 transformed.angle = MathEx.degToRad(x);
+                transformed.transformPoint.setXY(centerX,centerY);
                 lastView.appendChild(transformed);
                 lastView = transformed;
-            } else {
-                throw new Error(`unknown transform function: ${transform}`);
+            }
+            else if (token==='skewY') {
+                stringTokenizer.skipRequiredToken('(');
+                const y: number = stringTokenizer.getNextNumber();
+                stringTokenizer.skipRequiredToken(')');
+                const transformed: RenderableModel = new NullGameObject(this.game);
+                transformed.skew.setY(MathEx.degToRad(y));
+                lastView.appendChild(transformed);
+                lastView = transformed;
+            }
+            else if (token==='skewX') {
+                stringTokenizer.skipRequiredToken('(');
+                const x: number = stringTokenizer.getNextNumber();
+                stringTokenizer.skipRequiredToken(')');
+                const transformed: RenderableModel = new NullGameObject(this.game);
+                transformed.skew.setX(MathEx.degToRad(x));
+                lastView.appendChild(transformed);
+                lastView = transformed;
+            }
+            else if (token==='matrix') {
+                stringTokenizer.skipRequiredToken('(');
+                const a:number = stringTokenizer.getNextNumber();
+                const b:number = stringTokenizer.getNextNumber();
+                const c:number = stringTokenizer.getNextNumber();
+                const d:number = stringTokenizer.getNextNumber();
+                const e:number = stringTokenizer.getNextNumber();
+                const f:number = stringTokenizer.getNextNumber();
+
+                stringTokenizer.skipRequiredToken(')');
+
+                const Delta = a * d - b * c;
+
+                // https://frederic-wang.fr/decomposition-of-2d-transform-matrices.html
+
+                lastView = this._parseTransformString(lastView,`translate(${e} ${f})`);
+
+                if (a !== 0 || b !== 0) {
+                    const r = Math.sqrt(a*a+b*b);
+                    lastView = this._parseTransformString(lastView,`rotate(${MathEx.radToDeg(b > 0 ? Math.acos(a/r) : -Math.acos(a/r))})`);
+                    lastView = this._parseTransformString(lastView,`scale(${r}, ${Delta/r})`);
+                    lastView = this._parseTransformString(lastView,`skewX(${MathEx.radToDeg(Math.atan((a*c+b*d)/(r*r)))})`);
+                } else if (c !== 0 || d !== 0) {
+                    const s = Math.sqrt(c*c+d*d);
+                    lastView = this._parseTransformString(lastView,`rotate(${MathEx.radToDeg(Math.PI/2 - (d > 0 ? Math.acos(-c/s) : -Math.acos(c/s)))})`);
+                    lastView = this._parseTransformString(lastView,`scale(${Delta/s}, ${s})`);
+                    lastView = this._parseTransformString(lastView,`skewX(${MathEx.radToDeg(Math.atan((a*c+b*d)/(s*s)))})`);
+                } else { // a = b = c = d = 0
+                    lastView = this._parseTransformString(lastView,`scale(0 0)`);
+                }
+            }
+            else {
+                throw new Error(`unknown transform function: ${token}`);
             }
         }
         return lastView;
+    }
+
+    private resolveTransformations(parentView:RenderableModel, el:Element):RenderableModel {
+        const transform:string = this.lookUpProperty(el,'transform',false);
+        return this._parseTransformString(parentView,transform);
     }
 
     private resolveOpacity(el:Element):number{
@@ -318,6 +394,11 @@ class SvgElementRenderer {
         return result;
     }
 
+    private setCommonProperties(view:RenderableModel,el:Element):void {
+        const display:string = this.lookUpProperty(el,'display',false);
+        if (display==='none') view.visible = false;
+    }
+
     private renderPath(parentView:RenderableModel,el:Element):void {
         const data:string = el.attributes.d;
         if (!data) return undefined;
@@ -340,14 +421,15 @@ class SvgElementRenderer {
                 container.appendChild(p);
             });
         }
+        this.setCommonProperties(container,el);
     }
 
     private renderCircle(parentView:RenderableModel,el:Element):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const cx:number = getNumber(el.attributes.cx,0);
-        const cy:number = getNumber(el.attributes.cy,0);
-        const r:number = getNumber(el.attributes.r,10)+lineWidth/2;
+        const cx:number = getNumberWithMeasure(el.attributes.cx,this.rootContainer.size.width,0);
+        const cy:number = getNumberWithMeasure(el.attributes.cy,this.rootContainer.size.height,0);
+        const r:number = getNumberWithMeasure(el.attributes.r,this.rootContainer.size.width,10)+lineWidth/2;
 
         const circle:Circle = new Circle(this.game);
         circle.center.setXY(cx,cy);
@@ -355,16 +437,17 @@ class SvgElementRenderer {
         circle.color = drawColor;
         circle.lineWidth = lineWidth;
         circle.radius = r;
+        this.setCommonProperties(circle,el);
         container.appendChild(circle);
     }
 
     private renderEllipse(parentView:RenderableModel,el:Element):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const cx:number = getNumber(el.attributes.cx,0);
-        const cy:number = getNumber(el.attributes.cy,0);
-        const rx:number = getNumber(el.attributes.rx,10)+lineWidth/2;
-        const ry:number = getNumber(el.attributes.ry,10)+lineWidth/2;
+        const cx:number = getNumberWithMeasure(el.attributes.cx,this.rootContainer.size.width,0);
+        const cy:number = getNumberWithMeasure(el.attributes.cy,this.rootContainer.size.height,0);
+        const rx:number = getNumberWithMeasure(el.attributes.rx,this.rootContainer.size.width,10)+lineWidth/2;
+        const ry:number = getNumberWithMeasure(el.attributes.ry,this.rootContainer.size.width,10)+lineWidth/2;
 
         const ellipse:Ellipse = new Ellipse(this.game);
         ellipse.center.setXY(cx,cy);
@@ -373,6 +456,7 @@ class SvgElementRenderer {
         ellipse.lineWidth = lineWidth;
         ellipse.radiusX = rx;
         ellipse.radiusY = ry;
+        this.setCommonProperties(ellipse,el);
         container.appendChild(ellipse);
     }
 
@@ -380,34 +464,38 @@ class SvgElementRenderer {
     private renderRect(parentView:RenderableModel,el:Element):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const x:number = getNumber(el.attributes.x,0)-lineWidth/2;
-        const y:number = getNumber(el.attributes.y,0)-lineWidth/2;
-        const width:number = getNumber(el.attributes.width,1);
-        const height:number = getNumber(el.attributes.height,1);
-        const borderRadius:number = getNumber(el.attributes.rx,0);
+        const x:number = getNumberWithMeasure(el.attributes.x,this.rootContainer.size.width,0);
+        const y:number = getNumberWithMeasure(el.attributes.y,this.rootContainer.size.height,0);
+        const width:number = getNumberWithMeasure(el.attributes.width,this.rootContainer.size.width,1);
+        const height:number = getNumberWithMeasure(el.attributes.height,this.rootContainer.size.height,1);
+        const borderRadius:number = getNumberWithMeasure(el.attributes.rx,this.rootContainer.size.width,0);
+
+        if (width===0 || height===0) return;
 
         const rect:Rectangle = new Rectangle(this.game);
-        rect.size.setWH(width,height);
-        rect.pos.setXY(x,y);
+        rect.size.setWH(width+lineWidth*2,height+lineWidth*2);
+        rect.pos.setXY(x-lineWidth,y-lineWidth);
         rect.fillColor = fillColor;
         rect.color = drawColor;
         rect.lineWidth = lineWidth;
         rect.borderRadius = borderRadius;
+        this.setCommonProperties(rect,el);
         container.appendChild(rect);
     }
 
     private renderLine(parentView:RenderableModel,el:Element):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,drawColor} = this.getFillStrokeParams(el);
-        const x1:number = getNumber(el.attributes.x1,0);
-        const y1:number = getNumber(el.attributes.y1,0);
-        const x2:number = getNumber(el.attributes.x2,1);
-        const y2:number = getNumber(el.attributes.y2,1);
+        const x1:number = getNumberWithMeasure(el.attributes.x1,this.rootContainer.size.width,0);
+        const y1:number = getNumberWithMeasure(el.attributes.y1,this.rootContainer.size.height,0);
+        const x2:number = getNumberWithMeasure(el.attributes.x2,this.rootContainer.size.width,1);
+        const y2:number = getNumberWithMeasure(el.attributes.y2,this.rootContainer.size.height,1);
 
         const line:Line = new Line(this.game);
         line.setXYX1Y1(x1,y1,x2,y2);
         line.lineWidth = lineWidth;
         line.color = drawColor;
+        this.setCommonProperties(line,el);
         container.appendChild(line);
     }
 
@@ -432,7 +520,7 @@ class SvgElementRenderer {
             if (!closeInvoked) {
                 verticesToFIll = closePolylinePoints(vertices);
             } else verticesToFIll = vertices;
-            const polygon:Polygon = Polygon.fromPoints(this.game,verticesToFIll);
+            const polygon:Polygon = Polygon.fromVertices(this.game,verticesToFIll);
             polygon.fillColor.set(fillColor);
             container.appendChild(polygon);
         }
@@ -443,6 +531,7 @@ class SvgElementRenderer {
             polyline.color.set(drawColor);
             container.appendChild(polyline);
         }
+        this.setCommonProperties(container,el);
     }
 
     private renderGroup(parentView:RenderableModel,el:Element):RenderableModel {
@@ -453,7 +542,33 @@ class SvgElementRenderer {
                 container = possibleNewEl;
             }
         });
+        this.setCommonProperties(container,el);
         return container;
+    }
+
+    private renderAnchor(parentView:RenderableModel,el:Element):RenderableModel {
+        const container:RenderableModel = this.renderGroup(parentView,el);
+        // const href:Optional<string> = el.attributes.href || el.attributes['xlink:href'];
+        // if (href) {
+        //     container?.on(MOUSE_EVENTS.click,_=>{
+        //         window.open(href);
+        //     });
+        // }
+        return container;
+    }
+
+    private renderUse(parentView:RenderableModel,el:Element):Optional<RenderableModel>{
+        let idRef:string = el.attributes['xlink:href'];
+        if (idRef.indexOf('#')!==0) throw new DebugError(`wrong reference: ${idRef}`);
+        idRef = idRef.substr(1);
+        const refElement:Element = this.document.getElementById(idRef)!;
+        const refElementCloned:Element = refElement.clone();
+        Object.keys(el.attributes).forEach(key=>{
+            if (['xlink:href','id'].indexOf(key)>-1) return;
+            else refElementCloned.attributes[key]=el.attributes[key];
+        });
+        (refElementCloned as {parent:Element}).parent = el.parent;
+        return this.renderTag(parentView,refElementCloned);
     }
 
     public renderTag(view:RenderableModel,el:Element):Optional<RenderableModel> {
@@ -490,8 +605,14 @@ class SvgElementRenderer {
                 this.renderPolyline(view,el,false);
                 return undefined;
             }
+            case 'a': {
+                return this.renderAnchor(view,el);
+            }
             case 'g': {
                 return this.renderGroup(view,el);
+            }
+            case 'use': {
+                return this.renderUse(view,el);
             }
             default: {
                 console.log(`unknown tag: ${el.tagName}`);
@@ -509,11 +630,10 @@ export class SvgImage extends NullGameObject {
     constructor(protected game:Game, private doc:Element, private preferredSize?:ISize) {
         super(game);
         const rootSvgTag = doc.querySelector('svg');
-        this.svgElementRenderer = new SvgElementRenderer(this.game);
 
         const viewBox:[number,number,number,number] = getNumberArray(rootSvgTag.attributes.viewBox,4,0);
-        let width:number = getNumber(rootSvgTag.attributes.width,0) || viewBox[2];
-        let height:number = getNumber(rootSvgTag.attributes.height,0) || viewBox[3];
+        let width:number = getNumberWithMeasure(rootSvgTag.attributes.width,this.game.size.width,0) || viewBox[2];
+        let height:number = getNumberWithMeasure(rootSvgTag.attributes.height,this.game.size.height,0) || viewBox[3];
         if (width===0) width = 100;
         if (height===0) height = 100;
         if (viewBox[2]===0) viewBox[2] = width;
@@ -528,6 +648,8 @@ export class SvgImage extends NullGameObject {
         }
         const scaleByViewPort:number = Math.min(this.size.width/viewBox[2],this.size.height/viewBox[3]);
         rootView.scale.setXY(scaleByViewPort);
+
+        this.svgElementRenderer = new SvgElementRenderer(this.game,rootSvgTag,this);
 
         this.traverseDocument(rootView,rootSvgTag);
         const drawingSurface = new DrawingSurface(this.game,this.size);

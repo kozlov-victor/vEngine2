@@ -1,9 +1,9 @@
-import {IAnimation} from "@engine/animation/iAnimation";
+import {IAnimation, ITargetAnimation} from "@engine/animation/iAnimation";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Optional} from "@engine/core/declarations";
 
-export abstract class AbstractPropertyAnimation implements IAnimation {
+export abstract class AbstractPropertyAnimation implements ITargetAnimation {
 
     public readonly target:Optional<RenderableModel>;
 

@@ -1,4 +1,4 @@
-import {Optional} from "@engine/core/declarations";
+import {ICloneable, Optional} from "@engine/core/declarations";
 
 export interface IElementDescription {
     tagName:string;
@@ -9,10 +9,10 @@ export interface IElementDescription {
 // tslint:disable-next-line:no-empty-interface
 export interface IDocumentDescription extends IElementDescription {}
 
-export class Element  {
+export class Element implements ICloneable<Element>{
 
     public readonly children:Element[] = [];
-    public readonly parent:Element;
+    public readonly parent:Element = undefined!;
 
     public readonly tagName:string;
     public attributes:Record<string,string> = {};
@@ -42,7 +42,7 @@ export class Element  {
             if (current.attributes.id===id) el = current;
         });
         if (el===undefined) return undefined;
-        else return Element.fromData(el);
+        else return el;
     }
 
     public getElementsByTagName(tagName:string):Element[]{
@@ -65,7 +65,17 @@ export class Element  {
         return this.attributes[name];
     }
 
-
+    public clone():Element {
+        const el = new Element();
+        this.children.forEach(c=>{
+            const clonedChild = c.clone();
+            (clonedChild as {parent:Element}).parent = el;
+            (el as {children:Element[]}).children.push(clonedChild);
+        });
+        (el as {tagName:string}).tagName = this.tagName;
+        el.attributes = {...this.attributes};
+        return el;
+    }
 }
 
 export class Document extends Element {

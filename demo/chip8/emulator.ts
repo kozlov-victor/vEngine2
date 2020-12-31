@@ -90,6 +90,7 @@ export abstract class Emulator {
     private delayTimer: Timer = new Timer();
     private soundTimer: Timer = new Timer();
     private PC: number;
+    private waitingForKey:boolean = false;
     private readonly screen: (0 | 1)[][];
 
     // tslint:disable-next-line:variable-name
@@ -142,7 +143,7 @@ export abstract class Emulator {
         const opCode: number = (this.memory[this.PC] << 8) | this.memory[this.PC + 1];
         if (Number.isNaN(opCode)) throw new Error(`wrong opCode with PC=${this.PC}`);
         this.executeOpCode(opCode);
-        if (!this.PC_altered) this.PC += 2;
+        if (!this.PC_altered && !this.waitingForKey) this.PC += 2;
         this.PC_altered = false;
         this.flipScreen(this.screen);
         this.delayTimer.update();
@@ -387,6 +388,18 @@ export abstract class Emulator {
         }
     }
 
+    private WAIT_FOR_KEY(x: nibble):void {
+        if (this.debug) console.log(`0x${this.PC.toString(16)}: WAIT_FOR_KEY ${x}`);
+        this.waitingForKey = true;
+        for (let i:number=0;i<16;i++) {
+            if (this.keyboard.isPressed(i)) {
+                this.V[i] = 1;
+                this.waitingForKey = false;
+                return;
+            }
+        }
+    }
+
 
     private executeOpCode(opCode: number):void {
 
@@ -475,10 +488,8 @@ export abstract class Emulator {
             }
             case 0xF: {
                 if (NN === 0x7) this.LD_X_DT(X);
-                else if (NN === 0xA) {
-                    // Wait for a key press, store the value of the key in Vx.
-                    Emulator._UNKNOWN_OPCODE(opCode);
-                } else if (NN === 0x15) this.LD_DT_X(X);
+                else if (NN=== 0x0A) this.WAIT_FOR_KEY(X);
+                else if (NN === 0x15) this.LD_DT_X(X);
                 else if (NN === 0x18) this.LD_ST_X(X); //
                 else if (NN === 0x1E) this.ADD_I_X(X);
                 else if (NN === 0x29) this.LD_I_SPR_X(X);

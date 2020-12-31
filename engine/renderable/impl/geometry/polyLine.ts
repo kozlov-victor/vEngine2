@@ -3,7 +3,7 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
 import {createSplinePathFromPoints} from "@engine/renderable/impl/geometry/_internal/splineFromPoints";
-import {clearSvgString} from "@engine/renderable/impl/geometry/_internal/clearSvgString";
+import {clearString} from "@engine/renderable/impl/geometry/_internal/clearString";
 import {SvgPathToVertexArray} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArray";
 import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
 import {Point2d} from "@engine/geometry/point2d";
@@ -42,7 +42,7 @@ export class PolyLine extends Shape {
 
     public static fromVertices(game:Game, vertices:number[]|string, close:boolean = false):PolyLine{
         if (typeof vertices === 'string') {
-            vertices = clearSvgString(vertices).split(/[ |,]/).map((it:string)=>{
+            vertices = clearString(vertices).split(/[ |,]/).map((it:string)=>{
                 const n:number = parseFloat(it);
                 if (DEBUG && isNaN(n)) throw new DebugError(`can not parse vertex array ${vertices}: unexpected value ${it}`);
                 return n;
@@ -121,6 +121,10 @@ export class PolyLine extends Shape {
                 maxH = this.children[i].pos.y + this.children[i].size.height;
         }
         this.size.setWH(maxW,maxH);
+    }
+
+    private calcLength():void{
+
     }
 
 }

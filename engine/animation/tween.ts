@@ -183,6 +183,10 @@ export class Tween<T> {
         this._completed = true;
     }
 
+    public stop():void {
+        this._completed = true;
+    }
+
     public isCompleted():boolean{
         return this._completed;
     }

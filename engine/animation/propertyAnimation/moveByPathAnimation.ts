@@ -14,19 +14,14 @@ interface IControlPoint {
     length: number;
 }
 
-export class MoveByPathAnimation extends AbstractMoveAnimation {
-
-    public velocity: number = 10;
-    public durationSec:Optional<number>;
-
-    private _controlPoints:IControlPoint[] = [];
-    private _totalLength:number = 0;
-    private _oldDurationSec:Optional<number>;
+export class ControlPointByLengthPassedResolver {
 
     private _currentControlPointIndex:number = 0;
+    private _controlPoints:IControlPoint[] = [];
+    private _totalLength:number = 0;
+    private point:Point2d = new Point2d();
 
-    constructor(protected game:Game,polyLine:PolyLine) {
-        super(game);
+    constructor(polyLine:PolyLine) {
         const zeroPoint:Point2d = new Point2d();
         polyLine.children.forEach((c:Line)=>{
             const length:number = MathEx.getDistance(zeroPoint,c.pointTo);
@@ -41,40 +36,74 @@ export class MoveByPathAnimation extends AbstractMoveAnimation {
         });
     }
 
-    public reset():void{
-        super.reset();
-        this._currentControlPointIndex = 0;
+    private getCurrentControlPoint(lengthPassed:number):IControlPoint {
+        let result:number = this._currentControlPointIndex;
+        for (let i:number = this._currentControlPointIndex+1; i < this._controlPoints.length; i++) {
+            const controlPoint:IControlPoint = this._controlPoints[i];
+            if (lengthPassed>=controlPoint.from) result = i;
+        }
+        this._currentControlPointIndex = result;
+        return this._controlPoints[result];
     }
 
-
-    protected onUpdate():void{
-        if (this.durationSec!==undefined && this.durationSec!==this._oldDurationSec) {
-            this._oldDurationSec = this.durationSec;
-            this.velocity = this._totalLength / this.durationSec;
-        }
-        const lengthPassed:number = this.velocity * this.passedTime / 1000;
+    public getPointByLengthPassed(lengthPassed:number):IPoint2d {
         const point:IControlPoint = this.getCurrentControlPoint(lengthPassed);
         const lengthPassedRelative:number = lengthPassed - point.from;
         const passedFactor:number =
             point.length===0? 0: lengthPassedRelative/point.length;
         const x:number = point.pointFrom.x + (point.pointTo.x - point.pointFrom.x)*passedFactor;
         const y:number = point.pointFrom.y + (point.pointTo.y - point.pointFrom.y)*passedFactor;
-        this.progressPoint.setXY(x,y);
-        if (lengthPassed>=this._totalLength) {
+        this.point.setXY(x,y);
+        return this.point;
+    }
+
+    public getPointByLengthPassedRelative(lengthPassedRelative:number /*0...1**/):IPoint2d {
+        return this.getPointByLengthPassed(lengthPassedRelative*this._totalLength);
+    }
+
+    public reset():void{
+        this._currentControlPointIndex = 0;
+    }
+
+    public getTotalLength():number {
+        return this._totalLength;
+    }
+}
+
+export class MoveByPathAnimation extends AbstractMoveAnimation {
+
+    public velocity: number = 10;
+    public durationSec:Optional<number>;
+
+    private _oldDurationSec:Optional<number>;
+    private _controlPointResolver:ControlPointByLengthPassedResolver;
+
+
+
+    constructor(protected game:Game,polyLine:PolyLine) {
+        super(game);
+        this._controlPointResolver = new ControlPointByLengthPassedResolver(polyLine);
+    }
+
+    public reset():void{
+        super.reset();
+        this._controlPointResolver.reset();
+    }
+
+
+    protected onUpdate():void{
+        if (this.durationSec!==undefined && this.durationSec!==this._oldDurationSec) {
+            this._oldDurationSec = this.durationSec;
+            this.velocity = this._controlPointResolver.getTotalLength() / this.durationSec;
+        }
+        const lengthPassed:number = this.velocity * this.passedTime / 1000;
+        const point:IPoint2d = this._controlPointResolver.getPointByLengthPassed(lengthPassed);
+        this.progressPoint.set(point);
+        if (lengthPassed>=this._controlPointResolver.getTotalLength()) {
             this.reset();
             this.numOfLoopPassed++;
         }
         super.onUpdate();
-    }
-
-    private getCurrentControlPoint(lengthPassed:number):IControlPoint {
-        let result:number = this._currentControlPointIndex;
-        for (let i = this._currentControlPointIndex+1; i < this._controlPoints.length; i++) {
-            const controlPoint = this._controlPoints[i];
-            if (lengthPassed>=controlPoint.from) result = i;
-        }
-        this._currentControlPointIndex = result;
-        return this._controlPoints[result];
     }
 
 }

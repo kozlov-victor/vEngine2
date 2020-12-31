@@ -6,6 +6,7 @@ import * as svgEx4 from "xml/xml-loader!./examples/illustractor-export-test2.svg
 import * as svgEx5 from "xml/xml-loader!./examples/heart.svg";
 import * as svgEx6 from "xml/xml-loader!./examples/dragon.svg";
 import * as svgEx7 from "xml/xml-loader!./examples/dragon2.svg";
+import * as svgEx8 from "xml/xml-loader!./examples/icon-2.svg";
 
 
 import {Scene} from "@engine/scene/scene";
@@ -14,7 +15,7 @@ import {Element} from "@engine/misc/xmlUtils";
 import {SvgImage} from "../svgBasic/svgImage";
 
 const images:Element[] = [
-    svgEx6,svgEx7,
+    svgEx6,svgEx7,svgEx8,
     svgEx1,svgEx2, svgEx3, svgEx4, svgEx5,
 ];
 
