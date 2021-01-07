@@ -89,4 +89,22 @@ export class BasicStringTokenizer {
         }
     }
 
+    public readUntilSymbol(symbol:string):string{
+        if (DEBUG && this.isEof()) {
+            console.error(this.source);
+            throw new DebugError(`unexpected end of string, expected: ${symbol}`);
+        }
+        let char:string;
+        let res:string = '';
+        this.skipWhiteSpaces();
+        this._lastPos = this._pos;
+        while (!this.isEof()){
+            char = this.source[this._pos];
+            if (char===symbol) break;
+            res+=char;
+            this._pos++;
+        }
+        return res;
+    }
+
 }

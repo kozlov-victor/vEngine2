@@ -351,16 +351,6 @@ export class SvgPathToVertexArray {
                 this.bezierTo(p1,p2,p3,p4);
                 break;
             }
-            // case 't': {
-            //     const p1:v2 = [this.lastPoint!.x,this.lastPoint!.y];
-            //     if (!this.lastBezierPoint || ['q','Q','T','t'].indexOf(tokenizer.lastCommand)===-1) this.lastBezierPoint = p1;
-            //     const p2:v2 = [2*p1[0] - this.lastBezierPoint[0], 2*p1[1] - this.lastBezierPoint[1]];
-            //     const p3:v2 = [p2[0],p2[1]];
-            //     const p4:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
-            //     this.lastBezierPoint = p3;
-            //     this.bezierTo(p1,p2,p3,p4);
-            //     break;
-            // }
             case 'A':
             case 'a':
                 const rx:number = tokenizer.getNextNumber();

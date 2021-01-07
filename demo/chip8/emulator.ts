@@ -103,9 +103,12 @@ export abstract class Emulator {
     }
 
     public nextTick():void {
-        for (let i: number = 0; i < 6; i++) {
+        for (let i: number = 0; i < 9; i++) {
             this.oneTick();
         }
+        this.flipScreen(this.screen);
+        this.delayTimer.update();
+        this.soundTimer.update();
     }
 
     public setRom(rom: Uint8Array):void {
@@ -145,9 +148,6 @@ export abstract class Emulator {
         this.executeOpCode(opCode);
         if (!this.PC_altered && !this.waitingForKey) this.PC += 2;
         this.PC_altered = false;
-        this.flipScreen(this.screen);
-        this.delayTimer.update();
-        this.soundTimer.update();
     }
 
     private SYS(addr: number, opCode: number):void {

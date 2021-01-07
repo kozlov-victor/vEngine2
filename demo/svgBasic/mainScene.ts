@@ -106,8 +106,41 @@ import * as svgEx91 from "xml/xml-loader!./examples/ex91.svg";
 import * as svgEx92 from "xml/xml-loader!./examples/ex92.svg";
 import * as svgEx93 from "xml/xml-loader!./examples/ex93.svg";
 import * as svgEx94 from "xml/xml-loader!./examples/ex94.svg";
+import * as svgEx95 from "xml/xml-loader!./examples/ex95.svg";
+import * as svgEx96 from "xml/xml-loader!./examples/ex96.svg";
+import * as svgEx97 from "xml/xml-loader!./examples/ex97.svg";
+import * as svgEx98 from "xml/xml-loader!./examples/ex98.svg";
+import * as svgEx99 from "xml/xml-loader!./examples/ex99.svg";
+import * as svgEx100 from "xml/xml-loader!./examples/ex100.svg";
+import * as svgEx101 from "xml/xml-loader!./examples/ex101.svg";
+import * as svgEx102 from "xml/xml-loader!./examples/ex102.svg";
+import * as svgEx103 from "xml/xml-loader!./examples/ex103.svg";
+import * as svgEx104 from "xml/xml-loader!./examples/ex104.svg";
+import * as svgEx105 from "xml/xml-loader!./examples/ex105.svg";
+import * as svgEx106 from "xml/xml-loader!./examples/ex106.svg";
+import * as svgEx107 from "xml/xml-loader!./examples/ex107.svg";
+import * as svgEx108 from "xml/xml-loader!./examples/ex108.svg";
+import * as svgEx109 from "xml/xml-loader!./examples/ex109.svg";
+import * as svgEx110 from "xml/xml-loader!./examples/ex110.svg";
+import * as svgEx111 from "xml/xml-loader!./examples/ex111.svg";
+import * as svgEx112 from "xml/xml-loader!./examples/ex112.svg";
+import * as svgEx113 from "xml/xml-loader!./examples/ex113.svg";
+import * as svgEx114 from "xml/xml-loader!./examples/ex114.svg";
+import * as svgEx115 from "xml/xml-loader!./examples/ex115.svg";
+import * as svgEx116 from "xml/xml-loader!./examples/ex116.svg";
+import * as svgEx117 from "xml/xml-loader!./examples/ex117.svg";
+import * as svgEx118 from "xml/xml-loader!./examples/ex118.svg";
+import * as svgEx119 from "xml/xml-loader!./examples/ex119.svg";
+import * as svgEx120 from "xml/xml-loader!./examples/ex120.svg";
+import * as svgEx121 from "xml/xml-loader!./examples/ex121.svg";
+import * as svgEx122 from "xml/xml-loader!./examples/ex122.svg";
+import * as svgEx123 from "xml/xml-loader!./examples/ex123.svg";
+import * as svgEx124 from "xml/xml-loader!./examples/ex124.svg";
+import * as svgEx125 from "xml/xml-loader!./examples/ex125.svg";
+import * as svgEx126 from "xml/xml-loader!./examples/ex126.svg";
+import * as svgEx127 from "xml/xml-loader!./examples/ex127.svg";
 
-// https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/oscon.svg
+// https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/
 
 import {Scene} from "@engine/scene/scene";
 import {SvgImage} from "./svgImage";
@@ -116,7 +149,16 @@ import {Element} from "@engine/misc/xmlUtils";
 
 const images:Element[] = [
 
-    svgEx93,svgEx94,
+    svgEx127,
+    svgEx122,svgEx123,svgEx124,svgEx125,svgEx126,
+    svgEx116,svgEx117,svgEx118,svgEx119,svgEx120,svgEx121,
+
+    svgEx112,svgEx113,svgEx114,svgEx115,
+
+    svgEx96,svgEx97,svgEx98,svgEx111,
+    svgEx99,svgEx100,svgEx101,svgEx102,
+    svgEx103,svgEx104,svgEx105,svgEx106,svgEx107,svgEx108,svgEx109,svgEx110,
+    svgEx93,svgEx94,svgEx95,
     svgEx87,svgEx88,svgEx89,svgEx90,svgEx91,svgEx92,
 
     svgEx81,svgEx82,svgEx83,svgEx84,svgEx85,svgEx86,
@@ -158,11 +200,12 @@ export class MainScene extends Scene {
         let i = 0;
         let lastImage:SvgImage;
 
-        const placeNextImage = ()=>{
+        const placeNextImage = async ()=>{
             if (lastImage!==undefined) lastImage.removeSelf();
-            console.log(images[i]);
             lastImage = new SvgImage(this.game,images[i]);
+            await lastImage.parse();
             this.appendChild(lastImage);
+            console.log(lastImage);
             i++;
             i = i%images.length;
         };

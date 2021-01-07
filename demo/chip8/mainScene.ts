@@ -80,17 +80,29 @@ export class MainScene extends Scene {
                 case KEYBOARD_KEY.DIGIT_4:
                     pressOfRelease(0xC,pressed);
                     break;
-                case KEYBOARD_KEY.A:
+                case KEYBOARD_KEY.Q:
                     pressOfRelease(0x4,pressed);
                     break;
-                case KEYBOARD_KEY.S:
+                case KEYBOARD_KEY.W:
                     pressOfRelease(0x5,pressed);
                     break;
-                case KEYBOARD_KEY.D:
+                case KEYBOARD_KEY.E:
                     pressOfRelease(0x6,pressed);
                     break;
-                case KEYBOARD_KEY.F:
+                case KEYBOARD_KEY.R:
                     pressOfRelease(0xD,pressed);
+                    break;
+                case KEYBOARD_KEY.A:
+                    pressOfRelease(0x7,pressed);
+                    break;
+                case KEYBOARD_KEY.S:
+                    pressOfRelease(0x8,pressed);
+                    break;
+                case KEYBOARD_KEY.D:
+                    pressOfRelease(0x9,pressed);
+                    break;
+                case KEYBOARD_KEY.F:
+                    pressOfRelease(0xE,pressed);
                     break;
                 case KEYBOARD_KEY.Z:
                     pressOfRelease(0xA,pressed);

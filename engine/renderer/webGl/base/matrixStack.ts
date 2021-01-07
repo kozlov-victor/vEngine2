@@ -56,7 +56,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         mat4.makeTranslation(t, x, y, z);
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4Special.matrixTranslationMultiply(result,t, m);
+        mat4Special.multiplyTranslationByAny(result,t, m);
         this.setCurrentValue(result);
         t.release();
         m.release();
@@ -74,7 +74,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         mat4.makeXSkew(t,angle);
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4Special.matrixSkewXByAnyMultiply(result,t, m);
+        mat4Special.multiplySkewXByAny(result,t, m);
         this.setCurrentValue(result);
         t.release();
         m.release();
@@ -86,7 +86,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         mat4.makeYSkew(t,angle);
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4Special.matrixSkewYByAnyMultiply(result,t, m);
+        mat4Special.multiplySkewYByAny(result,t, m);
         this.setCurrentValue(result);
         t.release();
         m.release();
@@ -99,7 +99,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
 
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4Special.matrixRotationXByAnyMultiply(result,t, m);
+        mat4Special.multiplyRotationXByAny(result,t, m);
         this.setCurrentValue(result);
         m.release();
 
@@ -113,7 +113,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
 
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4Special.matrixRotationYByAnyMultiply(result,t, m);
+        mat4Special.multiplyRotationYByAny(result,t, m);
         this.setCurrentValue(result);
         m.release();
 
@@ -127,7 +127,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
 
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4Special.matrixRotationZByAnyMultiply(result,t, m);
+        mat4Special.multiplyRotationZByAny(result,t, m);
         this.setCurrentValue(result);
         m.release();
 
@@ -140,7 +140,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         mat4.makeScale(t,x, y, z);
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        mat4Special.matrixScaleByAnyMultiply(result,t, m);
+        mat4Special.multiplyScaleByAny(result,t, m);
         this.setCurrentValue(result);
         t.release();
         m.release();

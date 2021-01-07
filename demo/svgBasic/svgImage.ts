@@ -1,9 +1,8 @@
 import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
 import {Game} from "@engine/core/game";
-import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Color} from "@engine/renderer/common/color";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
-import {ISize, Size} from "@engine/geometry/size";
+import {ISize} from "@engine/geometry/size";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Element} from "@engine/misc/xmlUtils";
@@ -17,6 +16,10 @@ import {MathEx} from "@engine/misc/mathEx";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
+import {ResourceLink} from "@engine/resources/resourceLink";
+import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {Image} from "@engine/renderable/impl/general/image";
+import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 const NAMED_COLOR_TABLE:Record<string, string> =
@@ -165,6 +168,10 @@ const NAMED_COLOR_TABLE:Record<string, string> =
     };
 
 const getColor = (literal:string)=>{
+    if (literal.startsWith('url')) {
+        console.log(`urls is not supported: ${literal}`);
+        return Color.NONE.clone();
+    }
     if (!literal || literal==='none') return Color.NONE.clone();
     if (NAMED_COLOR_TABLE[literal]!==undefined) literal = NAMED_COLOR_TABLE[literal];
     return Color.fromCssLiteral(literal);
@@ -182,20 +189,35 @@ const getNumber = (literal:string,defaultValue:number):number=>{
     else return val;
 };
 
-const getNumberWithMeasure = (literal:string,containerSize:number,defaultValue:number):number=>{
-    if (!literal) return defaultValue;
-    const tokenizer = new BasicStringTokenizer(literal);
-    const val:number = tokenizer.getNextNumber();
-    const measure:string = !tokenizer.isEof()?tokenizer.getNextToken(tokenizer._CHAR+'%'):'';
+// https://oreillymedia.github.io/Using_SVG/guide/units.html
+const calcNumberWithMeasure = (val:number,measure:string,containerSize:number,):number=>{
     if (!measure) return val;
     switch (measure) {
         case '%':
             return val*containerSize/100;
         case 'px':
             return val;
+        case 'mm':
+            // 1cm ≅ 37.795px or user units
+            return val*0.01*37.795;
+        case 'cm':
+            return val*37.795;
+        case 'in':
+            return val*96;
+        case 'pc':
+            return val*16;
         default:
             throw new DebugError(`unknown measure: ` + measure);
     }
+};
+
+
+const getNumberWithMeasure = (literal:string,containerSize:number,defaultValue:number):number=>{
+    if (!literal) return defaultValue;
+    const tokenizer = new BasicStringTokenizer(literal);
+    const val:number = tokenizer.getNextNumber();
+    const measure:string = !tokenizer.isEof()?tokenizer.getNextToken(tokenizer._CHAR+'%'):'';
+    return calcNumberWithMeasure(val,measure,containerSize);
 };
 
 const getNumberArray = <T>(literal:string,size:number,defaultItemValue:number):T=>{
@@ -241,7 +263,7 @@ class SvgElementRenderer {
 
     private elementStylesHolder:ElementStylesHolder = new ElementStylesHolder();
 
-    constructor(private game:Game,private document:Element,private rootContainer:SvgImage) {
+    constructor(private game:Game,private document:Element,private rootContainer:SvgImage, private preloadedResources:Record<string, ResourceLink<any>>) {
     }
 
     private getFillStrokeParams(el:Element):{lineWidth:number,fillColor:Color,drawColor:Color} {
@@ -249,7 +271,7 @@ class SvgElementRenderer {
         const rawStrokeValue:string = this.lookUpProperty(el,'stroke',true);
         const rawFillValue:string = this.lookUpProperty(el,'fill',true);
 
-        let lineWidth:number = 0;
+        let lineWidth:number;
         if (!rawStrokeValue) lineWidth = 0;
         else {
             lineWidth = getNumber(this.lookUpProperty(el,'stroke-width',true),1);
@@ -278,19 +300,29 @@ class SvgElementRenderer {
             if (token==='translate') {
                 stringTokenizer.skipRequiredToken('(');
                 const x:number = stringTokenizer.getNextNumber();
+                const measureX:string = stringTokenizer.getNextToken(stringTokenizer._CHAR+'%');
                 const y:number = stringTokenizer.getNextNumber(0);
+                const measureY:string = stringTokenizer.getNextToken(stringTokenizer._CHAR+'%');
                 stringTokenizer.skipRequiredToken(')');
                 const transformed:RenderableModel = new NullGameObject(this.game);
-                transformed.pos.setXY(x,y);
+                transformed.pos.setXY(
+                    calcNumberWithMeasure(x,measureX,this.rootContainer.size.width),
+                    calcNumberWithMeasure(y,measureY,this.rootContainer.size.height)
+                );
                 lastView.appendChild(transformed);
                 lastView = transformed;
             } else if (token==='scale') {
                 stringTokenizer.skipRequiredToken('(');
                 const x:number = stringTokenizer.getNextNumber();
+                const measureX:string = stringTokenizer.getNextToken(stringTokenizer._CHAR+'%');
                 const y:number = stringTokenizer.getNextNumber(x);
+                const measureY:string = stringTokenizer.getNextToken(stringTokenizer._CHAR+'%');
                 stringTokenizer.skipRequiredToken(')');
                 const transformed:RenderableModel = new NullGameObject(this.game);
-                transformed.scale.setXY(x,y);
+                transformed.scale.setXY(
+                    calcNumberWithMeasure(x,measureX,1),
+                    calcNumberWithMeasure(y,measureY,1)
+                );
                 lastView.appendChild(transformed);
                 lastView = transformed;
             } else if (token==='rotate') {
@@ -441,6 +473,26 @@ class SvgElementRenderer {
         container.appendChild(circle);
     }
 
+    private renderImage(parentView:RenderableModel,el:Element):void {
+        const container:RenderableModel = this.createElementContainer(parentView,el);
+        const x:number = getNumberWithMeasure(el.attributes.cx,this.rootContainer.size.width,0);
+        const y:number = getNumberWithMeasure(el.attributes.cy,this.rootContainer.size.height,0);
+        const width:number = getNumberWithMeasure(this.lookUpProperty(el,'width',false),this.rootContainer.size.width,0);
+        const height:number = getNumberWithMeasure(this.lookUpProperty(el,'height',false),this.rootContainer.size.height,0);
+        const url:string = el.attributes['xlink:href'];
+        if (!url) return;
+
+        if (this.preloadedResources[url]===undefined) throw new DebugError(`resource image is not preloaded! Invoke .preload() method`);
+        const image:Image = new Image(this.game);
+        image.setResourceLink(this.preloadedResources[url]);
+        image.pos.setXY(x,y);
+        if (width) image.scale.setX(width/image.getResourceLink().getTarget().size.width);
+        if (height) image.scale.setY(height/image.getResourceLink().getTarget().size.height);
+
+        this.setCommonProperties(image,el);
+        container.appendChild(image);
+    }
+
     private renderEllipse(parentView:RenderableModel,el:Element):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
@@ -535,12 +587,14 @@ class SvgElementRenderer {
     }
 
     private renderGroup(parentView:RenderableModel,el:Element):RenderableModel {
-        let container:RenderableModel = this.createElementContainer(parentView,el);
+        const container:RenderableModel = this.createElementContainer(parentView,el);
+        const x:number = getNumberWithMeasure(el.attributes.x,this.rootContainer.size.width,undefined!);
+        const y:number = getNumberWithMeasure(el.attributes.y,this.rootContainer.size.height,undefined!);
+        if (x!==undefined) container.pos.setX(x);
+        if (y!==undefined) container.pos.setY(y);
+
         el.children.forEach(c=>{
-            const possibleNewEl = this.renderTag(container,c);
-            if (possibleNewEl!==undefined) {
-                container = possibleNewEl;
-            }
+            this.renderTag(container,c);
         });
         this.setCommonProperties(container,el);
         return container;
@@ -550,7 +604,7 @@ class SvgElementRenderer {
         const container:RenderableModel = this.renderGroup(parentView,el);
         // const href:Optional<string> = el.attributes.href || el.attributes['xlink:href'];
         // if (href) {
-        //     container?.on(MOUSE_EVENTS.click,_=>{
+        //     this.rootContainer.on(MOUSE_EVENTS.click,_=>{
         //         window.open(href);
         //     });
         // }
@@ -605,6 +659,10 @@ class SvgElementRenderer {
                 this.renderPolyline(view,el,false);
                 return undefined;
             }
+            case 'image': {
+                this.renderImage(view,el);
+                return undefined;
+            }
             case 'a': {
                 return this.renderAnchor(view,el);
             }
@@ -627,9 +685,17 @@ export class SvgImage extends NullGameObject {
 
     private svgElementRenderer:SvgElementRenderer;
 
+    private preloadedResourceLinks:Record<string, ResourceLink<any>> = {};
+
     constructor(protected game:Game, private doc:Element, private preferredSize?:ISize) {
         super(game);
-        const rootSvgTag = doc.querySelector('svg');
+    }
+
+    async parse():Promise<void> {
+
+        await this.preload();
+
+        const rootSvgTag = this.doc.querySelector('svg');
 
         const viewBox:[number,number,number,number] = getNumberArray(rootSvgTag.attributes.viewBox,4,0);
         let width:number = getNumberWithMeasure(rootSvgTag.attributes.width,this.game.size.width,0) || viewBox[2];
@@ -649,12 +715,29 @@ export class SvgImage extends NullGameObject {
         const scaleByViewPort:number = Math.min(this.size.width/viewBox[2],this.size.height/viewBox[3]);
         rootView.scale.setXY(scaleByViewPort);
 
-        this.svgElementRenderer = new SvgElementRenderer(this.game,rootSvgTag,this);
+        this.svgElementRenderer = new SvgElementRenderer(this.game,rootSvgTag,this,this.preloadedResourceLinks);
 
         this.traverseDocument(rootView,rootSvgTag);
         const drawingSurface = new DrawingSurface(this.game,this.size);
         drawingSurface.drawModel(rootView);
         this.appendChild(drawingSurface);
+
+        //this.appendChild(rootView);
+    }
+
+    public async preload():Promise<void> {
+        return new Promise(resolve=>{
+            const resourceLoader:ResourceLoader = new ResourceLoader(this.game);
+            this.doc.querySelectorAll('image').forEach(el=>{
+                const url:string = el.attributes['xlink:href'];
+                if (!url) return;
+                this.preloadedResourceLinks[url] = resourceLoader.loadTexture(url);
+            });
+            resourceLoader.onCompleted(()=>resolve());
+            resourceLoader.startLoading();
+        });
+
+
     }
 
     private traverseDocument(view:RenderableModel,el:Element):void {

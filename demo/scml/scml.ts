@@ -134,17 +134,6 @@ interface ISconFile {
 }
 
 
-interface  ISconCharacterMap {
-    name:string;
-    maps:[];
-}
-
-class PoolHolder {
-    public spatialInfoPool:ObjectPool<SpatialInfo> = new ObjectPool(SpatialInfo,POOL_SIZE);
-    public boneTimeLineObjectPool:ObjectPool<BoneTimelineKey> = new ObjectPool(BoneTimelineKey,POOL_SIZE);
-    public spriteTimeLineObjectPool:ObjectPool<SpriteTimelineKey> = new ObjectPool(SpriteTimelineKey,POOL_SIZE);
-}
-
 export class ScmlObject {
 
     // public characterInfo:SpatialInfo = new SpatialInfo();

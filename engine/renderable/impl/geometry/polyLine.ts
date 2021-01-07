@@ -49,7 +49,7 @@ export class PolyLine extends Shape {
             });
         }
 
-        if (DEBUG && vertices.length===0) throw new DebugError(`can not create polyline from empty vertex array`);
+        if (DEBUG && vertices.length===0) return new PolyLine(game);
 
         if (close) vertices = closePolylinePoints(vertices);
 
@@ -97,6 +97,8 @@ export class PolyLine extends Shape {
     public draw():void{}
 
     protected setClonedProperties(cloned:PolyLine):void{
+        cloned.lineWidth = this.lineWidth;
+        cloned.borderRadius = this.borderRadius;
         super.setClonedProperties(cloned);
     }
 

@@ -76,9 +76,10 @@ export class MainScene extends Scene {
         let i = 0;
         let lastImage:SvgImage;
 
-        const placeNextImage = ()=>{
+        const placeNextImage = async ()=>{
             if (lastImage!==undefined) lastImage.removeSelf();
             lastImage = new SvgImage(this.game,images[i]);
+            await lastImage.parse();
             this.appendChild(lastImage);
             console.log(lastImage);
             i++;
