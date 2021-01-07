@@ -56,7 +56,7 @@ const SCENE_DEPTH:number = 1000;
 const zToWMatrix:Mat16Holder = Mat16Holder.create();
 mat4.makeZToWMatrix(zToWMatrix,1);
 
-const makePositionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat16Holder=>{
+const makeModelViewProjectionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat16Holder=>{
     // proj * modelView
     const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
     mat4.ortho(projectionMatrix,0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
@@ -516,15 +516,22 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const scd:SimpleColoredRectDrawer = this._coloredRectDrawer.getInstance(this._gl);
 
-        const rect:Rect = Rect.fromPool();
-        rect.setXYWH( 0,0,rectangle.size.width,rectangle.size.height);
-        const size:Size = Size.fromPool();
-        size.set(this._currFrameBufferStack.getCurrentTargetSize());
-        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this._matrixStack);
-        scd.setUniform(scd.u_vertexMatrix,pos16h.mat16);
-        pos16h.release();
-        rect.release();
-        size.release();
+        if (rectangle.worldTransformDirty) {
+            const rect:Rect = Rect.fromPool();
+            rect.setXYWH( 0,0,rectangle.size.width,rectangle.size.height);
+            const size:Size = Size.fromPool();
+            size.set(this._currFrameBufferStack.getCurrentTargetSize());
+            const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
+            scd.setUniform(scd.u_vertexMatrix,mvpHolder.mat16);
+            rectangle.modelViewProjectionMatrix.fromMat16(mvpHolder.mat16);
+            mvpHolder.release();
+            rect.release();
+            size.release();
+        } else {
+            scd.setUniform(scd.u_vertexMatrix,rectangle.modelViewProjectionMatrix.mat16);
+        }
+
+
         scd.setUniform(scd.u_alpha,this.getAlphaBlend());
         scd.setUniform(scd.u_color,((rectangle.fillColor) as Color).asGL());
         scd.draw();
@@ -557,15 +564,23 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             sd.setUniform(sd.u_rectOffsetTop,0);
         }
 
-        const rect:Rect = Rect.fromPool();
-        rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
-        const size:Size = Size.fromPool();
-        size.set(this._currFrameBufferStack.getCurrentTargetSize());
-        const pos16h:Mat16Holder = makePositionMatrix(rect,size,this._matrixStack);
-        sd.setUniform(sd.u_vertexMatrix,pos16h.mat16);
-        pos16h.release();
-        rect.release();
-        size.release();
+
+        if (model.worldTransformDirty) {
+            const rect:Rect = Rect.fromPool();
+            rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
+            const size:Size = Size.fromPool();
+            size.set(this._currFrameBufferStack.getCurrentTargetSize());
+            const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
+            model.modelViewProjectionMatrix.fromMat16(mvpHolder.mat16);
+            sd.setUniform(sd.u_vertexMatrix,mvpHolder.mat16);
+            mvpHolder.release();
+            rect.release();
+            size.release();
+        } else {
+            sd.setUniform(sd.u_vertexMatrix,model.modelViewProjectionMatrix.mat16);
+        }
+
+
 
 
         sd.setUniform(sd.u_alpha,this.getAlphaBlend());

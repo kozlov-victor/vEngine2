@@ -194,8 +194,9 @@ export abstract class RenderableModel
 
         renderer.saveAlphaBlend();
         renderer.transformSave();
+        if (this.game.camera.worldTransformDirty) this.worldTransformDirty = true;
 
-        if (this.game.camera.worldTransformDirty || this.worldTransformDirty) {
+        if (this.worldTransformDirty) {
             this.translate();
             this.transform();
             this.worldTransformMatrix.fromMat16(renderer.transformGet());
