@@ -18,7 +18,7 @@ export class IntroScene extends BaseAbstractIntroScene {
     protected listenUI():void {
         this.on(MOUSE_EVENTS.click, e=>{
             this.snd.stop();
-            this.game.camera.shake(5,200);
+            this.camera.shake(5,200);
             GameManager.getCreatedInstance().startGame();
         });
     }

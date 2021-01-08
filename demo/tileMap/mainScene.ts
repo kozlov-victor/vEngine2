@@ -52,7 +52,7 @@ export class MainScene extends Scene {
 
         this.appendChild(this.tileMap);
         this.appendChild(this.rect);
-        this.game.camera.followTo(this.rect);
+        this.camera.followTo(this.rect);
 
 
         const v:number = 1;

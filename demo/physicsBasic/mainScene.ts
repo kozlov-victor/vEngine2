@@ -60,7 +60,7 @@ export class MainScene extends Scene {
         });
 
         this.size.setWH(500,500);
-        this.game.camera.followTo(rect1);
+        this.camera.followTo(rect1);
 
     }
 

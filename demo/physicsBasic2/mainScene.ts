@@ -59,7 +59,7 @@ export class MainScene extends Scene {
         });
 
         this.size.setWH(800, 600);
-        this.game.camera.followTo(rect1);
+        this.camera.followTo(rect1);
 
         const document:Document = Document.create(docDesc);
         document.getElementsByTagName('rect').forEach(c=>{

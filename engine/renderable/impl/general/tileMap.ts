@@ -182,7 +182,7 @@ export class TileMap extends RenderableModelWithResourceLink {
     }
 
     private prepareDrawableInfo():void{
-        const camera:Camera = this.game.camera;
+        const camera:Camera = this.game.getCurrScene().camera;
         const firstTileToDrawByX:number = ~~((camera.pos.x) / this._tileWidth) - 1;
         const firstTileToDrawByY:number = ~~((camera.pos.y) / this._tileHeight) - 1;
 

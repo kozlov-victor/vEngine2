@@ -24,7 +24,7 @@ export class GameOverScene extends BaseAbstractIntroScene {
     protected listenUI():void {
         this.on(MOUSE_EVENTS.click, e=>{
             this.snd.stop();
-            this.game.camera.shake(5,200);
+            this.camera.shake(5,200);
             this.game.runScene(new IntroScene(this.game));
         });
     }

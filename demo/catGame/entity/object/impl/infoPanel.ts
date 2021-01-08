@@ -67,7 +67,7 @@ export class InfoPanel {
         if (lastLifeIcon!==undefined) lastLifeIcon = lastLifeIcon.clone();
 
         this.updateNumOfLives(this.numOfLives-1);
-        this.game.camera.shake(15,600);
+        this.game.getCurrScene().camera.shake(15,600);
 
         if (lastLifeIcon!==undefined) {
             this.container.appendChild(lastLifeIcon);

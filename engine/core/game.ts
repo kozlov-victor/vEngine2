@@ -62,7 +62,6 @@ export class Game {
     public readonly size:ISize = new Size();
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly pos:Point2d = new Point2d(0,0);
-    public readonly camera:Camera = new Camera(this);
     public readonly rootContainerElement:Optional<HTMLElement>;
 
     public fps:number = 0;
@@ -263,8 +262,6 @@ export class Game {
 
         if (this._currSceneTransition!==undefined) this._currSceneTransition.render();
         else currentScene.render();
-
-        this.camera.worldTransformDirty = false;
     }
 
     public destroy():void{
@@ -282,7 +279,6 @@ export class Game {
 
     public revalidate():void {
         if (DEBUG && !this._renderer) throw new DebugError(`game renderer is not set`);
-        this.camera.revalidate();
     }
 
 

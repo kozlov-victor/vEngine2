@@ -35,7 +35,7 @@ export class Hero extends AbstractCharacter {
         });
         Hero.instance = this;
 
-        this.game.camera.followTo(this.renderableImage);
+        this.game.getCurrScene().camera.followTo(this.renderableImage);
         this.velocity = 90;
 
         this.rotateAnimation.

@@ -14,8 +14,8 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
-        this.game.camera.scale.setXY(1.6);
-        this.game.camera.pos.setXY(-10,-15);
+        this.camera.scale.setXY(1.6);
+        this.camera.pos.setXY(-10,-15);
 
         const spr:Image = new Image(this.game);
         spr.scale.setXY(0.2);

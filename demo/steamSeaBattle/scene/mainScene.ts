@@ -201,7 +201,7 @@ export class MainScene extends BaseScene {
         if (this.numOfShoots===0) return;
         if (this.bullet.visible) return;
         this.sounds.shoot.play();
-        this.game.camera.shake(5,300);
+        this.camera.shake(5,300);
         this.bulletContainer.pos.x = -this.seaContainer.pos.x + 400;
         this.bulletContainer.pos.y = this.BULLET_INITIAL_POSITION;
         this.bullet.visible = true;

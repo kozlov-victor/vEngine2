@@ -58,7 +58,6 @@ const getAllProjects = ()=>{
 
 module.exports = async (env={})=>{
 
-    console.log('env',env);
     await cliUI.showInfoWindow(
         [
             ` --===started===-- `,
@@ -106,6 +105,7 @@ module.exports = async (env={})=>{
 
 
     console.log('webpack started at',new Date());
+    console.log('env',env);
     console.log({entry,output});
 
     const config = {

@@ -18,11 +18,11 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
-        this.game.camera.angle = 0.1;
-        this.game.camera.pos.z = 10;
+        this.camera.angle = 0.1;
+        this.camera.pos.z = 10;
 
         this.size.setWH(1100,2100);
-        this.game.camera.scale.setXY(0.7, 0.9);
+        this.camera.scale.setXY(0.7, 0.9);
 
         const spr:Image = new Image(this.game);
         spr.setResourceLink(this.logoLink);
@@ -40,7 +40,7 @@ export class MainScene extends Scene {
         spr.moveToFront();
         spr.addBehaviour(new DraggableBehaviour(this.game));
 
-        this.game.camera.followTo(spr);
+        this.camera.followTo(spr);
 
 
         this.on(GAME_PAD_EVENTS.buttonHold, (e:IGamePadEvent)=>{
@@ -69,7 +69,7 @@ export class MainScene extends Scene {
         this.on(MOUSE_EVENTS.click, e=>{
             const rect = new Rectangle(this.game);
             rect.fillColor = Color.RGB(122,12,33);
-            rect.pos.setXYZ(e.sceneX,e.sceneY,-this.game.camera.pos.z);
+            rect.pos.setXYZ(e.sceneX,e.sceneY,-this.camera.pos.z);
             this.getLayers()[0].appendChild(rect);
             console.log(e);
         });

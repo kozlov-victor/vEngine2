@@ -35,7 +35,7 @@ export class MainScene extends Scene {
         spr.moveToFront();
         spr.addBehaviour(new DraggableBehaviour(this.game));
 
-        this.game.camera.followTo(spr);
+        this.camera.followTo(spr);
 
         const uiLayer:Layer = new Layer(this.game);
         uiLayer.transformType = LayerTransformType.STICK_TO_CAMERA;

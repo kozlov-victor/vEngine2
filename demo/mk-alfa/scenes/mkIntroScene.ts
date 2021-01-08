@@ -76,7 +76,7 @@ export class MkIntroScene extends MkAbstractScene {
         nullContainer.appendChild(tf);
 
         this.setInterval(()=>{
-            if (MathEx.randomInt(0,50)<25) this.game.camera.shake(5,200);
+            if (MathEx.randomInt(0,50)<25) this.camera.shake(5,200);
         },1000);
 
         const snd:Sound = new Sound(this.game);

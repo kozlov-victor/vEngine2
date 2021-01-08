@@ -36,6 +36,7 @@ import {Size} from "@engine/geometry/size";
 import {RenderingObjectStack} from "@engine/scene/internal/renderingObjectStack";
 import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
 import {RenderingSessionInfo} from "@engine/scene/internal/renderingSessionInfo";
+import {Camera} from "@engine/renderer/camera";
 
 export const enum SCENE_EVENTS {
     PRELOADING = 'preloading',
@@ -62,6 +63,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     public readonly size:Size = new Size();
     public lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED;
     public preloadingGameObject!:RenderableModel;
+    public readonly camera:Camera = new Camera(this.game,this);
 
     public readonly _renderingObjectStack:RenderingObjectStack;
     public readonly _renderingSessionInfo:RenderingSessionInfo = new RenderingSessionInfo();
@@ -245,12 +247,12 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         renderer.clearColor.set(this.backgroundColor);
         const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters);
 
-        if (this.game.camera.worldTransformDirty) {
-            this.game.camera.translate();
-            this.game.camera.transform();
-            this.game.camera.worldTransformMatrix.fromMat16(this.game.getRenderer().transformGet());
+        if (this.camera.worldTransformDirty) {
+            this.camera.translate();
+            this.camera.transform();
+            this.camera.worldTransformMatrix.fromMat16(this.game.getRenderer().transformGet());
         } else {
-            this.game.getRenderer().transformSet(this.game.camera.worldTransformMatrix.mat16);
+            this.game.getRenderer().transformSet(this.camera.worldTransformMatrix.mat16);
         }
 
         renderer.pushAlphaBlend(this.alpha);
@@ -283,6 +285,8 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
         renderer.afterFrameDraw(statePointer);
         renderer.transformRestore();
+
+        this.camera.worldTransformDirty = false;
     }
 
     public onInactivated():void {}
@@ -293,7 +297,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
 
     private updateFrame():void {
-        this.game.camera.update();
+        this.camera.update();
         this._tweenDelegate.update();
         this._timerDelegate.update();
         for (const a of this._propertyAnimations) a.update();

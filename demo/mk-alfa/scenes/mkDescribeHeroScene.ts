@@ -122,7 +122,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
 
         this.setInterval(()=>{
             if (MathEx.randomInt(0,50)<25) {
-                this.game.camera.shake(5,200);
+                this.camera.shake(5,200);
                 const splashes:number = MathEx.randomInt(0,8);
                 const vertical:boolean = MathEx.randomInt(0,10)>5;
                 for (let i=0;i<splashes;i++) {

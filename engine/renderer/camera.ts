@@ -7,7 +7,7 @@ import {Scene} from "../scene/scene";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {mat4} from "@engine/geometry/mat4";
-import {ITransformable, IUpdatable, Optional} from "@engine/core/declarations";
+import {IRevalidatable, ITransformable, IUpdatable, Optional} from "@engine/core/declarations";
 import Mat16Holder = mat4.Mat16Holder;
 import {Point3d} from "@engine/geometry/point3d";
 
@@ -23,7 +23,7 @@ const enum DIRECTION_CORRECTION {
     DOWN,
 }
 
-export class Camera implements IUpdatable, ITransformable  {
+export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
     public static readonly FOLLOW_FACTOR:Point2d = new Point2d(0.1,0.1);
 
     public readonly pos:Point3d = new Point3d(0,0,0);
@@ -43,12 +43,13 @@ export class Camera implements IUpdatable, ITransformable  {
         max: new Point2d()
     };
 
-    constructor(protected game:Game){
+    constructor(protected game:Game,private scene:Scene){
         const observer = ()=>this.worldTransformDirty = true;
         this.pos.observe(observer);
         this.scale.observe(observer);
         this._rect.observe(observer);
         mat4.makeIdentity(this.worldTransformMatrix);
+        this.revalidate();
     }
 
 
@@ -112,7 +113,7 @@ export class Camera implements IUpdatable, ITransformable  {
 
             const newPos:Point2d = Point2d.fromPool();
             const pointToFollow:Point2d = Point2d.fromPool();
-            const scene:Scene = this.game.getCurrScene();
+            const scene:Scene = this.scene;
 
             const w:number = this.game.size.width;
             const h:number = this.game.size.height;

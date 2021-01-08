@@ -34,22 +34,22 @@ export class MainScene extends Scene {
             switch (e.key) {
 
                 case KEYBOARD_KEY.UP:
-                    this.game.camera.pos.z-=1;
+                    this.camera.pos.z-=1;
                     break;
                 case KEYBOARD_KEY.DOWN:
-                    this.game.camera.pos.z+=1;
+                    this.camera.pos.z+=1;
                     break;
                 case KEYBOARD_KEY.LEFT:
-                    this.game.camera.pos.x-=1;
+                    this.camera.pos.x-=1;
                     break;
                 case KEYBOARD_KEY.RIGHT:
-                    this.game.camera.pos.x+=1;
+                    this.camera.pos.x+=1;
                     break;
                 case KEYBOARD_KEY.W:
-                    this.game.camera.pos.y-=1;
+                    this.camera.pos.y-=1;
                     break;
                 case KEYBOARD_KEY.S:
-                    this.game.camera.pos.y+=1;
+                    this.camera.pos.y+=1;
                     break;
             }
         });
