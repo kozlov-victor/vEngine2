@@ -11,7 +11,7 @@ interface IState {
 const Button = (props:{onclick:()=>void,children?:VirtualNode[]})=>{
     return (
         <>
-            <button onclick={_=>props.onclick()}>{props.children}</button>
+            <button style={{color:'green'}} onclick={_=>props.onclick()}>{props.children}</button>
         </>
     );
 };
