@@ -1,4 +1,5 @@
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VirtualFragment} from "@engine/renderable/tsx/genetic/virtualFragment";
 
 const flattenDeep = (arr:(VirtualNode[]|VirtualNode)[]):VirtualNode[]=> {
     const res =  arr.reduce((acc, val) => {
@@ -30,14 +31,23 @@ export class VEngineTsxFactory<T> {
                 } else return it;
             }).
             filter(it=>!!it); // remove null, false and undefined;
+        const flattenedNoFragments:VirtualNode[] = [];
+        for (const node of flattened) {
+            if (node.type==='virtualFragment') flattenedNoFragments.push(...node.children);
+            else flattenedNoFragments.push(node);
+        }
 
         const propsFull:Record<string, any> & {children:VirtualNode[]} =
-            {...props,children:flattened};
+            {...props,children:flattenedNoFragments};
 
         if ((item as (props:Record<string, any>)=>VirtualNode).call!==undefined) {
             return (item as (arg:any)=>VirtualNode)(propsFull);
         }
-        return new VirtualNode(propsFull, item as string, flattened);
+        return new VirtualNode(propsFull, item as string, flattenedNoFragments);
+    }
+
+    public static createFragment({children}:{children: VirtualNode[]}):VirtualFragment {
+        return new VirtualFragment(children);
     }
 
 }

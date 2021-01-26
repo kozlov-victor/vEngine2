@@ -30,7 +30,8 @@
         "stripInternal": true,
         "resolveJsonModule": true,
         "jsx": "react",
-        "jsxFactory": "VEngineTsxFactory.createElement"
+        "jsxFactory": "VEngineTsxFactory.createElement",
+        "jsxFragmentFactory": "VEngineTsxFactory.createFragment"
     },
     "exclude": [
         "node_modules"

@@ -3,7 +3,7 @@ import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactor
 
 export const ChildComponent = ({radius}:{radius:number})=>{
     return (
-        <v_null_game_object>
+        <>
             <v_rectangle
                 size={{width:60,height:80}}
             >
@@ -14,6 +14,6 @@ export const ChildComponent = ({radius}:{radius:number})=>{
                     radius={radius}
                 />
             </v_rectangle>
-        </v_null_game_object>
+        </>
     );
 };

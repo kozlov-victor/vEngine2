@@ -28,21 +28,14 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
     public render():VirtualNode {
         return (
 
-            <v_rectangle
-                pos={{x:10,y:10}}
-                fillColor={{r:122,g:122,b:122,a:200}}
-                borderRadius={5}
-                size={{width:300,height:220}}
-            >
-
+            <>
                 <v_circle
                     center={{x:122,y:102}}
                     fillColor={{r:22,g:133,b:43}}
                     radius={22}
                     lineWidth={1}
                     click={this.onCircleClick.bind(this)}
-                >
-                </v_circle>
+                />
 
                 <v_ellipse
                     center={{x:this.state.ellipsePosX,y:this.state.ellipsePosY}}
@@ -66,7 +59,7 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
                         resourceLink={this.resourceLink}/>
                 </v_null_game_object>
 
-            </v_rectangle>
+            </>
 
         );
     }

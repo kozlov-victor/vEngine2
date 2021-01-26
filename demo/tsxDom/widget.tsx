@@ -10,7 +10,9 @@ interface IState {
 
 const Button = (props:{onclick:()=>void,children?:VirtualNode[]})=>{
     return (
-        <button onclick={_=>props.onclick()}>{props.children}</button>
+        <>
+            <button onclick={_=>props.onclick()}>{props.children}</button>
+        </>
     );
 };
 
@@ -48,7 +50,7 @@ export class Widget extends VEngineTsxComponent<IState> {
 
         const style = 'button {margin: 10px}';
         return(
-            <div>
+            <>
                 <style>{style}</style>
                 <Button onclick={()=>this.add()}>add</Button>
                 <Button onclick={()=>this.remove()}>remove</Button>
@@ -68,7 +70,7 @@ export class Widget extends VEngineTsxComponent<IState> {
                     <option value="2" selected={this.state.selected==='2'}>2</option>
                     <option value="3" selected={this.state.selected==='3'}>3</option>
                 </select>
-            </div>
+            </>
 
         );
     }

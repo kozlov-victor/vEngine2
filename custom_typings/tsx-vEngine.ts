@@ -72,5 +72,6 @@ declare namespace JSX {
         v_rectangle:        IRectangleProps;
         v_line:             ILineProps;
         v_image:            IImageProps;
+        v_font:             Partial<{color:IColor, size:number,font:Font}>;
     }
 }

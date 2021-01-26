@@ -34,7 +34,7 @@ export class RichTextField extends ScrollableTextField {
         let color:Optional<IColor>;
         let fontSize:Optional<number>;
         let font:Optional<Font>;
-        if (node.tagName==='font') {
+        if (node.tagName==='v_font') {
             if (node.props.color!==undefined) {
                 color = node.props.color;
             }
@@ -115,7 +115,6 @@ export class RichTextField extends ScrollableTextField {
                 }
             }
             if (f.text!==undefined) {
-                //const prefix:string = (result.getAllChars()[result.getAllChars().length-1]?.rawChar===' ')?'':' '
                 const s:StringEx = StringEx.fromRaw(f.text);
                 s.setBold(isBold);
                 s.setItalic(isItalic);

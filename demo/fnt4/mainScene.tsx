@@ -35,17 +35,17 @@ export class MainScene extends Scene {
         tf.on(MOUSE_EVENTS.click, _=>{
             tf.setRichText(
                 <div>
-                    <font color={{r:255,g:122,b:122}}><u>К</u>иррилический</font> <font color={{r:100,g:255,b:255}}>шрифт</font>
+                    <v_font color={{r:255,g:122,b:122}}><u>К</u>иррилический</v_font> <v_font color={{r:100,g:255,b:255}}>шрифт</v_font>
                     {'\n'}
                     <b>Новая</b> строка 1
                     {'\n'}
-                    <font size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</font>
+                    <v_font size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</v_font>
                     {'\n'}
                     <b>Новая</b> строка 3
                     {'\n'}
-                    Счетчик <font size={50} color={{r:200,g:200,b:122}}>{++cnt}</font>
+                    Счетчик <v_font size={50} color={{r:200,g:200,b:122}}>{++cnt}</v_font>
                     {'\n'}
-                    <font color={{r:122,g:122,b:122}} size={25}>(Кликнуть для инкремента)</font>
+                    <v_font color={{r:122,g:122,b:122}} size={25}>(Кликнуть для инкремента)</v_font>
                 </div>
             );
         });

@@ -40,19 +40,19 @@ export class MainScene extends Scene {
         tf.on(MOUSE_EVENTS.click, _=>{
             tf.setRichText(
                 <div>
-                    <u><font color={{r:255,g:122,b:122}}>Киррилический</font> <font color={{r:100,g:255,b:255}}>шрифт</font></u>
+                    <u><v_font color={{r:255,g:122,b:122}}>Киррилический</v_font> <v_font color={{r:100,g:255,b:255}}>шрифт</v_font></u>
                     {'\n'}
                     <b>Новая</b> строка 1
                     {'\n'}
-                    <font size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</font>
+                    <v_font size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</v_font>
                     {'\n'}
-                    <b>Новая</b> строка 3 <font font={this.fontLink3.getTarget()} color={{r:122,g:255,b:122}}>(another font)</font>
+                    <b>Новая</b> строка 3 <v_font font={this.fontLink3.getTarget()} color={{r:122,g:255,b:122}}>(another font)</v_font>
                     {'\n'}
-                    Счетчик <font size={80} color={{r:200,g:200,b:122}} font={this.fontLink2.getTarget()}>{++cnt}</font>
+                    Счетчик <v_font size={80} color={{r:200,g:200,b:122}} font={this.fontLink2.getTarget()}>{++cnt}</v_font>
                     {'\n'}
-                    <font color={{r:122,g:122,b:122}} size={25}>(Кликнуть для инкремента)</font>
+                    <v_font color={{r:122,g:122,b:122}} size={25}>(Кликнуть для инкремента)</v_font>
                     {'\n'}
-                    <font font={this.fontLink2.getTarget()} color={{r:122,g:255,b:122}} size={71}>Эта <i>строка</i> с <s>тем же</s> <u>другим</u> шрифтом</font>
+                    <v_font font={this.fontLink2.getTarget()} color={{r:122,g:255,b:122}} size={71}>Эта <i>строка</i> с <s>тем же</s> <u>другим</u> шрифтом</v_font>
                     {'\n'}
                     Новая строка с <s>другим</s> <u>тем же</u> шрифтом
                 </div>

@@ -129,6 +129,6 @@ declare namespace JSX {
         "var": ICommonElement<HTMLElement> & Partial<Omit<HTMLElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
         video: ICommonElement<HTMLVideoElement> & Partial<Omit<HTMLVideoElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
         wbr: ICommonElement<HTMLElement> & Partial<Omit<HTMLElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
-        font:ICommonElement<HTMLElement> & Partial<{color:IColor, size:number,font:Font}> & {style?:Partial<CSSStyleDeclaration>};
+        font:ICommonElement<HTMLFontElement>;
     }
 }

@@ -108,7 +108,7 @@ export class MainScene extends Scene {
             else cnt-=1;
             tf2.setRichText(
                 <div>
-                    clicked <font color={cnt>0?greenColor:redColor} size={50}><u>{cnt}</u></font> times
+                    clicked <v_font color={cnt>0?greenColor:redColor} size={50}><u>{cnt}</u></v_font> times
                     {'\n'}
                     <u>current value is</u> {cnt} (value is {cnt>0?'positive':'negative'})
                 </div>
