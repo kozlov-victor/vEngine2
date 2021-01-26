@@ -1,4 +1,4 @@
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "../../../general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
@@ -7,7 +7,7 @@ import {AlignText} from "@engine/renderable/impl/ui/textField/textAlign";
 import {Color} from "@engine/renderer/common/color";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 
-export class TextRow extends NullGameObject {
+export class TextRow extends SimpleGameObjectContainer {
 
     public declare children: readonly Word[];
 

@@ -1,8 +1,8 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
-import {MarkableNullGameObject} from "@engine/renderable/impl/ui/textField/_internal/markableNullGameObject";
+import {SimpleGameObjectContainer} from "../general/simpleGameObjectContainer";
+import {MarkableGameObjectContainer} from "@engine/renderable/impl/ui/textField/_internal/markableGameObjectContainer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {
     DEFAULT_BACKGROUND_OBJECT_TYPE,
@@ -27,7 +27,7 @@ export enum ContainerState {
     DISABLED,
 }
 
-export class Container extends MarkableNullGameObject implements IContainerWithMarginPadding{
+export class WidgetContainer extends MarkableGameObjectContainer implements IContainerWithMarginPadding{
 
     constructor(game: Game) {
         super(game);
@@ -35,6 +35,10 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
         super.appendChild(this.backgroundHover);
         super.appendChild(this.backgroundActive);
         super.appendChild(this.backgroundDisabled);
+
+        this.listenToHoverState();
+        this.listenToActiveState();
+
     }
 
     public readonly type:string = 'Container';
@@ -48,7 +52,7 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
     public readonly paddingRight    :number = 0;
     public readonly paddingBottom   :number = 0;
 
-    private background: RenderableModel = new NullGameObject(this.game);
+    private background: RenderableModel = new SimpleGameObjectContainer(this.game);
     private backgroundHover: RenderableModel = new DefaultBackgroundObject(this.game);
     private backgroundActive: RenderableModel = new DefaultBackgroundObject(this.game);
     private backgroundDisabled: RenderableModel = new DefaultBackgroundObject(this.game);
@@ -56,8 +60,6 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
     protected state:ContainerState = ContainerState.NORMAL;
 
     private clientRect:Rect = new Rect();
-    private hoverEffectListened:boolean = false;
-    private activeEffectListened:boolean = false;
     private hovered:boolean = false;
     private clicked:boolean = false;
 
@@ -78,7 +80,7 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
     }
 
     public setMargin(top:number,right?:number,bottom?:number,left?:number):void{
-        ({top,right,bottom,left} = Container.normalizeBorders(top,right,bottom,left));
+        ({top,right,bottom,left} = WidgetContainer.normalizeBorders(top,right,bottom,left));
         const thisWriteable = this as IContainerWithMarginPadding;
         thisWriteable.marginTop = top;
         thisWriteable.marginRight = right;
@@ -99,14 +101,12 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
         super.replaceChild(this.backgroundHover,backgroundHover);
         this.backgroundHover = backgroundHover;
         this.fitBackgroundToSize();
-        this.listenToHoverState();
     }
 
     public setBackgroundActive(backgroundActive: RenderableModel):void {
         super.replaceChild(this.backgroundActive,backgroundActive);
         this.backgroundActive = backgroundActive;
         this.fitBackgroundToSize();
-        this.listenToActiveState();
     }
 
     public setBackgroundDisabled(backgroundDisabled: RenderableModel):void {
@@ -117,7 +117,7 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
 
     public setPadding(top:number, right?:number, bottom?:number, left?:number):void{
 
-        ({top,right,bottom,left} = Container.normalizeBorders(top,right,bottom,left));
+        ({top,right,bottom,left} = WidgetContainer.normalizeBorders(top,right,bottom,left));
 
         const thisWriteable = this as IContainerWithMarginPadding;
         thisWriteable.paddingTop = top;
@@ -178,7 +178,6 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
     }
 
     private listenToHoverState():void {
-        if (this.hoverEffectListened) return;
         this.on(MOUSE_EVENTS.mouseEnter, e=>{
             if (this.state===ContainerState.DISABLED) return;
             this.hovered = true;
@@ -192,7 +191,6 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
     }
 
     private listenToActiveState():void {
-        if (this.activeEffectListened) return;
         this.on(MOUSE_EVENTS.mouseDown, e=>{
             if (this.state===ContainerState.DISABLED) return;
             this.clicked = true;
@@ -204,6 +202,13 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
             if (this.hovered) this.setState(ContainerState.HOVERED);
             else this.setState(ContainerState.NORMAL);
         });
+    }
+
+    protected fitChildSize(view:RenderableModel):void{
+        for (const c of view.children) {
+            c.size.set(this.size);
+            this.fitChildSize(c);
+        }
     }
 
     private fitBackgroundToSize():void {
@@ -232,6 +237,10 @@ export class Container extends MarkableNullGameObject implements IContainerWithM
             this.background.pos.x,this.background.pos.y,
             this.background.size.width,this.background.size.height
         );
+        this.fitChildSize(this.background);
+        this.fitChildSize(this.backgroundHover);
+        this.fitChildSize(this.backgroundActive);
+        this.fitChildSize(this.backgroundDisabled);
     }
 
     private recalculateClientRect():void {

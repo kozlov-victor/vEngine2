@@ -1,11 +1,11 @@
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "../../../general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 import {Color} from "@engine/renderer/common/color";
 import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 
-export class Word extends NullGameObject {
+export class Word extends SimpleGameObjectContainer {
 
     public declare children: readonly CharacterImage[];
     public readonly rawValue:string;

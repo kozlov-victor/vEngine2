@@ -1,10 +1,10 @@
-import {Point2d} from "../geometry/point2d";
+import {IPoint2d, Point2d} from "../geometry/point2d";
 import {IRect, Rect} from "../geometry/rect";
 
 
 export namespace MathEx {
 
-    export const isPointInRect = (point: Point2d, rect: Rect): boolean => {
+    export const isPointInRect = (point: IPoint2d, rect: IRect): boolean => {
         return point.x > rect.x &&
         point.x < (rect.x + rect.width) &&
         point.y > rect.y &&
@@ -32,19 +32,19 @@ export namespace MathEx {
         return deg * Math.PI / 180;
     };
 
-    export const rectToPolar = (point: Point2d, center: Point2d): { radius: number, angle: number } => {
+    export const rectToPolar = (point: IPoint2d, center: IPoint2d): { radius: number, angle: number } => {
         const radius:number = Math.sqrt(point.x * point.x + center.y * center.y);
         const angle:number = Math.atan2(center.y - point.y, center.x - point.x);
         return {radius, angle};
     };
 
-    export const polarToRect = (radius: number, angle: number, center: Point2d): Point2d => {
+    export const polarToRect = (radius: number, angle: number, center: IPoint2d): Point2d => {
         const x:number = radius * Math.cos(angle);
         const y:number = radius * Math.sin(angle);
         return new Point2d(center.x - x, center.y - y);
     };
 
-    export const getDistanceSquared = (p1: Point2d, p2: Point2d): number => {
+    export const getDistanceSquared = (p1: IPoint2d, p2: IPoint2d): number => {
         return Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2);
     };
 
@@ -52,11 +52,11 @@ export namespace MathEx {
         return Math.abs(a - b) <= epsilon;
     };
 
-    export const getDistance = (p1: Point2d, p2: Point2d): number => {
+    export const getDistance = (p1: IPoint2d, p2: IPoint2d): number => {
         return Math.sqrt(getDistanceSquared(p1, p2));
     };
 
-    export const getAngle = (p1: Point2d, p2: Point2d): number => {
+    export const getAngle = (p1: IPoint2d, p2: IPoint2d): number => {
         const dx: number = p1.x - p2.x;
         const dy: number = p1.y - p2.y;
         return Math.atan2(dy, dx);

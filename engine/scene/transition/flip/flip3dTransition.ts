@@ -3,7 +3,7 @@ import {Image} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 
 abstract class AbstractFlip3dTransition extends AbstractSceneTransition {
@@ -11,7 +11,7 @@ abstract class AbstractFlip3dTransition extends AbstractSceneTransition {
     protected _imageOnTop:Image;
     protected _imageOnBottom:Image;
 
-    protected readonly _wheelContainer:NullGameObject;
+    protected readonly _wheelContainer:SimpleGameObjectContainer;
 
     constructor(
         protected readonly game:Game,
@@ -21,7 +21,7 @@ abstract class AbstractFlip3dTransition extends AbstractSceneTransition {
     )
     {
         super(game,time,easeFn);
-        this._wheelContainer = new NullGameObject(this.game);
+        this._wheelContainer = new SimpleGameObjectContainer(this.game);
         this._wheelContainer.pos.setXY(this.game.size.width/2,this.game.height/2);
 
         const [imageOnBottom,imageOnTop] = this.getBottomAndTopImages();

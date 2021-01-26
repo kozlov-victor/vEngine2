@@ -1,7 +1,7 @@
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
 
-export  class MarkableNullGameObject extends NullGameObject {
+export  class MarkableGameObjectContainer extends SimpleGameObjectContainer {
 
     private _dirty:boolean = false;
 
@@ -11,7 +11,6 @@ export  class MarkableNullGameObject extends NullGameObject {
     }
 
     revalidate():void {
-        this._dirty = false;
         super.revalidate();
     }
 
@@ -27,6 +26,7 @@ export  class MarkableNullGameObject extends NullGameObject {
         super.update();
         if (this.isDirty()) {
             this.revalidate();
+            this._dirty = false;
             this.onCleared();
         }
     }

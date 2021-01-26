@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "../../engine/renderable/impl/general/simpleGameObjectContainer";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MathEx} from "@engine/misc/mathEx";
 import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
@@ -18,7 +18,7 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
-        const container:NullGameObject = new NullGameObject(this.game);
+        const container:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
         this.appendChild(container);
         container.pos.setXY(this.game.size.width/2,this.game.size.height/2);
 

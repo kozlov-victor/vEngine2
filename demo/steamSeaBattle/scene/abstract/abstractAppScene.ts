@@ -8,7 +8,7 @@ import {Image} from "@engine/renderable/impl/general/image";
 import {Sound} from "@engine/media/sound";
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {DebugError} from "@engine/debug/debugError";
 import {Element} from "@engine/misc/xmlUtils";
 import {ImageButton} from "@engine/renderable/impl/ui/button/imageButton";
@@ -167,7 +167,7 @@ export abstract class AbstractAppScene extends Scene {
                     break;
                 }
                 case 'nullGameObject': {
-                    const go:NullGameObject = new NullGameObject(this.game);
+                    const go:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
                     go.size.setWH(
                         this.getNumber(child.attributes.width),
                         this.getNumber(child.attributes.height)

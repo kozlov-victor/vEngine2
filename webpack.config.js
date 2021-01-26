@@ -2,6 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
+const TerserPlugin = require('terser-webpack-plugin');
 const cliUI = require('./node_tools/cliUI');
 const engineTransformer = require('./node_tools/transformers/build/engineTransformer').engineTransformer;
 
@@ -97,12 +98,8 @@ module.exports = async (env={})=>{
         });
     }
 
-
-
     entry['debug'] = './engine/debug/debug.ts';
     entry['polyfills-separate'] = './engine/misc/polyfills-separate.ts';
-
-
 
     console.log('webpack started at',new Date());
     console.log('env',env);
@@ -111,6 +108,7 @@ module.exports = async (env={})=>{
     const config = {
         entry,
         output,
+        target: ['web', 'es5'],
         mode: 'production', //debug ? 'development' : 'production',
         //devtool: 'inline-source-map',
         resolveLoader: {
@@ -140,12 +138,7 @@ module.exports = async (env={})=>{
                 {
                     test: /\.(png|jpe?g)$/,
                     use: [
-                        {
-                            loader: 'url-loader',
-                            options: {
-                                esModule: false,
-                            }
-                        }
+                        {loader: 'base64/base64-loader',options: {debug}}
                     ]
                 },
                 {
@@ -199,10 +192,31 @@ module.exports = async (env={})=>{
         },
         optimization: {
             minimize: !debug,
-            emitOnErrors: true,
-           // usedExports: true
+            emitOnErrors: false,
         },
     };
+
+    if (!debug) {
+
+        config.optimization.minimizer = [new TerserPlugin({
+            terserOptions: {
+                ecma: false,
+                parse: {},
+                compress: {},
+                mangle: {
+                    properties: {
+                        regex: "/^_/",
+                    },
+                },
+                module: false,
+                toplevel: true,
+                ie8: true,
+                keep_classnames: undefined,
+                keep_fnames: false,
+                safari10: true,
+            }
+        })]
+    }
 
     config.plugins = [
         new webpack.DefinePlugin({

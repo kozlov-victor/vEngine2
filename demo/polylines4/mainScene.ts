@@ -1,11 +1,8 @@
-
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
-import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/_internal/isPolylineClockWise";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 
 
 export class MainScene extends Scene {
@@ -16,7 +13,7 @@ export class MainScene extends Scene {
 
 
 
-        const n = new NullGameObject(this.game);
+        const n = new SimpleGameObjectContainer(this.game);
         n.scale.setXY(0.5);
         n.size.setWH(500);
         n.addBehaviour(new DraggableBehaviour(this.game));

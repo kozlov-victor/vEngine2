@@ -3,7 +3,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
@@ -32,7 +32,7 @@ export class MainScene extends Scene {
         sprLogo.setResourceLink(this.links[(this.cnt++)%this.links.length]);
         sprLogo.setPixelPerfect(true);
 
-        const container:NullGameObject = new NullGameObject(this.game);
+        const container:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
         container.appendChild(sprLogo);
         container.scale.setXY(9);
 

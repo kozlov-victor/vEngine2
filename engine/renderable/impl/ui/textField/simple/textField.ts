@@ -1,10 +1,10 @@
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
-import {Container} from "@engine/renderable/impl/ui/container";
+import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 import {IRectJSON} from "@engine/geometry/rect";
 import {TextRowSet} from "@engine/renderable/impl/ui/textField/_internal/textRowSet";
-import {MarkableNullGameObject} from "@engine/renderable/impl/ui/textField/_internal/markableNullGameObject";
+import {MarkableGameObjectContainer} from "@engine/renderable/impl/ui/textField/_internal/markableGameObjectContainer";
 import {Color} from "@engine/renderer/common/color";
 import {
     AlignText,
@@ -20,13 +20,13 @@ import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 
 
-export class TextField extends Container {
+export class TextField extends WidgetContainer {
 
     public readonly type:string = 'TextField';
     public readonly textColor:Color = Color.RGB(122,122,122);
 
     protected rowSet:TextRowSet;
-    protected readonly rowSetContainer:MarkableNullGameObject = new MarkableNullGameObject(this.game);
+    protected readonly rowSetContainer:MarkableGameObjectContainer = new MarkableGameObjectContainer(this.game);
     protected _textEx:StringEx = StringEx.empty();
 
     private alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;

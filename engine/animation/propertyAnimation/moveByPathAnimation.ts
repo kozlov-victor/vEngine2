@@ -14,12 +14,22 @@ interface IControlPoint {
     length: number;
 }
 
+
+export interface IPointAndAngle extends IPoint {
+    angle:number;
+}
+
+
+class PointWithAngle extends Point2d implements IPointAndAngle{
+    angle:number;
+}
+
 export class ControlPointByLengthPassedResolver {
 
     private _currentControlPointIndex:number = 0;
     private _controlPoints:IControlPoint[] = [];
     private _totalLength:number = 0;
-    private point:Point2d = new Point2d();
+    private point:PointWithAngle = new PointWithAngle();
 
     constructor(polyLine:PolyLine) {
         const zeroPoint:Point2d = new Point2d();
@@ -36,7 +46,10 @@ export class ControlPointByLengthPassedResolver {
         });
     }
 
-    private getCurrentControlPoint(lengthPassed:number):IControlPoint {
+    private getCurrentControlPoint(lengthPassed:number):Optional<IControlPoint> {
+        if (lengthPassed<0) return undefined;
+        if (lengthPassed>this._totalLength) return undefined;
+
         let result:number = this._currentControlPointIndex;
         for (let i:number = this._currentControlPointIndex+1; i < this._controlPoints.length; i++) {
             const controlPoint:IControlPoint = this._controlPoints[i];
@@ -46,19 +59,27 @@ export class ControlPointByLengthPassedResolver {
         return this._controlPoints[result];
     }
 
-    public getPointByLengthPassed(lengthPassed:number):IPoint2d {
-        const point:IControlPoint = this.getCurrentControlPoint(lengthPassed);
+    private lookupNextControlPoint():IControlPoint {
+        const nextIndex:number = (this._currentControlPointIndex+1)%this._controlPoints.length;
+        return this._controlPoints[nextIndex];
+    }
+
+    public nextPointByLengthPassed(lengthPassed:number):Optional<IPointAndAngle> {
+        const point:Optional<IControlPoint> = this.getCurrentControlPoint(lengthPassed);
+        if (point===undefined) return undefined;
         const lengthPassedRelative:number = lengthPassed - point.from;
         const passedFactor:number =
             point.length===0? 0: lengthPassedRelative/point.length;
         const x:number = point.pointFrom.x + (point.pointTo.x - point.pointFrom.x)*passedFactor;
         const y:number = point.pointFrom.y + (point.pointTo.y - point.pointFrom.y)*passedFactor;
         this.point.setXY(x,y);
+        const nextControlPoint = this.lookupNextControlPoint();
+        this.point.angle = MathEx.getAngle(nextControlPoint.pointFrom,this.point);
         return this.point;
     }
 
-    public getPointByLengthPassedRelative(lengthPassedRelative:number /*0...1**/):IPoint2d {
-        return this.getPointByLengthPassed(lengthPassedRelative*this._totalLength);
+    public nextPointByLengthPassedRelative(lengthPassedRelative:number /*0...1**/):Optional<IPointAndAngle> {
+        return this.nextPointByLengthPassed(lengthPassedRelative*this._totalLength);
     }
 
     public reset():void{
@@ -97,7 +118,8 @@ export class MoveByPathAnimation extends AbstractMoveAnimation {
             this.velocity = this._controlPointResolver.getTotalLength() / this.durationSec;
         }
         const lengthPassed:number = this.velocity * this.passedTime / 1000;
-        const point:IPoint2d = this._controlPointResolver.getPointByLengthPassed(lengthPassed);
+        const point:Optional<IPoint2d> = this._controlPointResolver.nextPointByLengthPassed(lengthPassed);
+        if (point===undefined) return;
         this.progressPoint.set(point);
         if (lengthPassed>=this._controlPointResolver.getTotalLength()) {
             this.reset();

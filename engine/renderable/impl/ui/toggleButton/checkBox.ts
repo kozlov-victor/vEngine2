@@ -7,7 +7,7 @@ import {
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Color} from "@engine/renderer/common/color";
-import {ContainerState} from "@engine/renderable/impl/ui/container";
+import {ContainerState} from "@engine/renderable/impl/ui/widgetContainer";
 
 
 export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable {

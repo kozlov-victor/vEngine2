@@ -2,7 +2,7 @@ import {Shape} from "@engine/renderable/abstract/shape";
 import {Game} from "@engine/core/game";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {MarkableNullGameObject} from "@engine/renderable/impl/ui/textField/_internal/markableNullGameObject";
+import {MarkableGameObjectContainer} from "@engine/renderable/impl/ui/textField/_internal/markableGameObjectContainer";
 import {
     assignPos,
     assignSize,
@@ -10,7 +10,7 @@ import {
     getSize
 } from "@engine/renderable/impl/ui/scrollBar/_internal/sideHelperFunctions";
 
-export abstract class AbstractScrollBar extends MarkableNullGameObject{
+export abstract class AbstractScrollBar extends MarkableGameObjectContainer{
 
     get value(): number {
         return this._value;

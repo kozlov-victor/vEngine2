@@ -2,7 +2,7 @@ import {Sound} from "@engine/media/sound";
 import {BasePix32Scene} from "../scenes/base/basePix32Scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Game} from "@engine/core/game";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Color} from "@engine/renderer/common/color";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
@@ -16,7 +16,7 @@ export class ChipOscilloscope {
 
     public constructor(private game:Game,private scene: BasePix32Scene) {
 
-        const container = new NullGameObject(game);
+        const container = new SimpleGameObjectContainer(game);
         scene.topLayer.appendChild(container);
         container.pos.setXY(110,410);
         const f = new NoiseHorizontalFilter(this.game);

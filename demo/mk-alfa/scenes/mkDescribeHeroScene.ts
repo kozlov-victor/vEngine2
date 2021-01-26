@@ -2,7 +2,7 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "../../../engine/renderable/impl/general/simpleGameObjectContainer";
 import {MathEx} from "@engine/misc/mathEx";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {MkAbstractScene} from "./mkAbstractScene";
@@ -30,7 +30,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
     private fnt:Font;
     private logoLink:ResourceLink<ITexture>;
     private sndBtnLink:ResourceLink<void>;
-    private lightContainer:NullGameObject = new NullGameObject(this.game);
+    private lightContainer:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
     private tfInfo:TextField;
 
     public onPreloading(): void {

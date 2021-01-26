@@ -14,10 +14,10 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     public render(component:VEngineTsxComponent<any>, root:T):void{
         component.rootNativeElement = root;
         if (debug) console.log('before render');
-        const newVirtualDom:Optional<VirtualNode> = component.render();
+        const newVirtualDom:VirtualNode = component.render();
         const oldVirtualDom:Optional<VirtualNode> = component.oldVirtualDom;
         if (debug) console.log('erendere',{component,oldVirtualDom,newVirtualDom});
-        this.compareAndRenderElement(newVirtualDom,oldVirtualDom,root.getChildAt(0) as T,root);
+        this.reconcile(newVirtualDom,oldVirtualDom,root.getChildAt(0) as T,root);
         component.oldVirtualDom = newVirtualDom;
     }
 
@@ -48,7 +48,7 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
 
     }
 
-    private compareAndRenderElement(
+    private reconcile(
         newVirtualNode:Optional<VirtualNode>,
         oldVirtualNode:Optional<VirtualNode>,realNode:T,
         parent:T):Optional<T>{
@@ -86,7 +86,7 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
         for (let i:number = 0;i<maxNumOfChild;i++) {
             const newVirtualChild:Optional<VirtualNode> = newVirtualNode?.children?.[i];
             const oldVirtualChild:Optional<VirtualNode> = oldVirtualNode?.children?.[i];
-            this.compareAndRenderElement(newVirtualChild,oldVirtualChild,children[i],parent);
+            this.reconcile(newVirtualChild,oldVirtualChild,children[i],parent);
         }
     }
 

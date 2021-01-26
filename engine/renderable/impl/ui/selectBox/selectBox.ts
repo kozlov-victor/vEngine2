@@ -9,7 +9,7 @@ import {
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 
 
 export class SelectBox extends VerticalListView {
@@ -20,12 +20,12 @@ export class SelectBox extends VerticalListView {
     private _textFields:TextField[] = [];
     private _selectedIndex:number = -1;
 
-    private backgroundSelected: RenderableModel = new NullGameObject(this.game);
+    private backgroundSelected: RenderableModel = new SimpleGameObjectContainer(this.game);
     private lastSelectedView:TextField;
 
     private textColor:Color = Color.BLACK.clone();
 
-    private readonly defaultBackground:RenderableModel = new NullGameObject(this.game);
+    private readonly defaultBackground:RenderableModel = new SimpleGameObjectContainer(this.game);
 
 
     constructor(protected game: Game, protected font: Font) {
@@ -71,6 +71,15 @@ export class SelectBox extends VerticalListView {
 
     public getSelectedIndex():number {
         return this._selectedIndex;
+    }
+
+    public getSelectedValue():string|number {
+        return this._options[this._selectedIndex];
+    }
+
+    protected onCleared():void {
+        super.onCleared();
+        this.fitChildSize(this.backgroundSelected);
     }
 
     private passPropertiesToChildren():void {

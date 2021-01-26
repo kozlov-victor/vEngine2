@@ -4,7 +4,7 @@ import {Image} from "@engine/renderable/impl/general/image";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {createGlowTweenFilter, createScaleTweenMovie} from "../utils/miscFunctions";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
 import {MathEx} from "@engine/misc/mathEx";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
@@ -60,7 +60,7 @@ export class MkIntroScene extends MkAbstractScene {
             createGlowTweenFilter(this.game,Color.RGB(12,100,12),0,5,2000)
         ];
 
-        const nullContainer:NullGameObject = new NullGameObject(this.game);
+        const nullContainer:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
         nullContainer.filters = [createGlowTweenFilter(this.game,Color.RGB(122,122,12),5,8,1000)];
         this.appendChild(nullContainer);
 

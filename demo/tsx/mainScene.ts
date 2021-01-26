@@ -3,7 +3,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {MainSceneUi} from "./mainScene.ui";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 
 
 export class MainScene extends Scene {
@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     private link:ResourceLink<ITexture>;
 
     public onReady():void {
-        const root = new NullGameObject(this.game);
+        const root = new SimpleGameObjectContainer(this.game);
         this.appendChild(root);
 
         const mainSceneUI = new MainSceneUi(this.game,this.link);

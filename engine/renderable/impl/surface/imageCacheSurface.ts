@@ -55,15 +55,15 @@ export class ImageCacheSurface extends RenderableModel {
         renderingSessionInfo.currentConstrainObjects.pop();
     }
 
-    private _drawToSurface():void {
+    protected _drawToSurface():void {
         this.drawingSurface.clear();
-        this.drawingSurface.drawBatch(session=>{
+        this.drawingSurface.drawBatch(_=>{
             for (let i:number=0;i<this.children.length;i++) {
                 const c: RenderableModel = this.children[i];
                 this.drawingSurface.drawModel(c);
             }
         });
-
+        console.log('drawed');
     }
 
     draw():void {

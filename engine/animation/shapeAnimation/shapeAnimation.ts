@@ -11,6 +11,7 @@ import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {MathEx} from "@engine/misc/mathEx";
 import {calcPolylineLength} from "@engine/renderable/impl/geometry/_internal/calcPolylineLength";
+import {Optional} from "@engine/core/declarations";
 
 interface IPointOnCurve {
     lengthPassed:number;
@@ -81,7 +82,8 @@ export class ShapeAnimation implements IAnimation {
         const helperPoint:Point2d = new Point2d();
         polylineFrom.children.forEach((line:Line)=>{
             const relativePassed:number = lengthPassed/polylineFromLength;
-            const p:IPoint2d = controlPointFromResolver.getPointByLengthPassedRelative(relativePassed);
+            const p:Optional<IPoint2d> = controlPointFromResolver.nextPointByLengthPassedRelative(relativePassed);
+            if (p===undefined) return;
             lengthPassed+=MathEx.getDistance(helperPoint,line.pointTo);
             pointsOfFromPoly.push({lengthPassed:relativePassed,point:new Point2d(p.x,p.y)});
         });
@@ -89,7 +91,8 @@ export class ShapeAnimation implements IAnimation {
         lengthPassed = 0;
         polyLineTo.children.forEach((line:Line)=>{
             const relativePassed:number = lengthPassed/polylineToLength;
-            const p:IPoint2d = controlPointFromResolver.getPointByLengthPassedRelative(relativePassed);
+            const p:Optional<IPoint2d> = controlPointFromResolver.nextPointByLengthPassedRelative(relativePassed);
+            if (p===undefined) return;
             lengthPassed+=MathEx.getDistance(helperPoint,line.pointTo);
             pointsOfFromPoly.push({lengthPassed:relativePassed,point:new Point2d(p.x,p.y)});
         });
@@ -98,7 +101,8 @@ export class ShapeAnimation implements IAnimation {
         const controlPointToResolver = new ControlPointByLengthPassedResolver(polyLineTo);
         polyLineTo.children.forEach((line:Line)=>{
             const relativePassed:number = lengthPassed/polylineToLength;
-            const p:IPoint2d = controlPointToResolver.getPointByLengthPassedRelative(relativePassed);
+            const p:Optional<IPoint2d> = controlPointToResolver.nextPointByLengthPassedRelative(relativePassed);
+            if (p===undefined) return;
             lengthPassed+=MathEx.getDistance(helperPoint,line.pointTo);
             pointsOfToPoly.push({lengthPassed:relativePassed,point:new Point2d(p.x,p.y)});
         });
@@ -106,7 +110,8 @@ export class ShapeAnimation implements IAnimation {
         controlPointToResolver.reset();
         polylineFrom.children.forEach((line:Line)=>{
             const relativePassed:number = lengthPassed/polylineFromLength;
-            const p:IPoint2d = controlPointToResolver.getPointByLengthPassedRelative(relativePassed);
+            const p:Optional<IPoint2d> = controlPointToResolver.nextPointByLengthPassedRelative(relativePassed);
+            if (p===undefined) return;
             lengthPassed+=MathEx.getDistance(helperPoint,line.pointTo);
             pointsOfToPoly.push({lengthPassed:relativePassed,point:new Point2d(p.x,p.y)});
         });

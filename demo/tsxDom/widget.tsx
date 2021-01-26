@@ -5,15 +5,22 @@ import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
 interface IState {
     items:{number:number}[];
+    selected:string;
 }
 
-export class Widget extends VEngineTsxComponent<IState> {
+const Button = (props:{onclick:()=>void,children?:VirtualNode[]})=>{
+    return (
+        <button onclick={_=>props.onclick()}>{props.children}</button>
+    );
+};
 
+export class Widget extends VEngineTsxComponent<IState> {
 
     constructor() {
         super(new HtmlTsxDOMRenderer());
         this.state = {
-            items: []
+            items: [],
+            selected:'1',
         };
         this.add();
         this.add();
@@ -33,19 +40,34 @@ export class Widget extends VEngineTsxComponent<IState> {
         this.setState({...this.state});
     }
 
+    onSelected(val:string):void {
+        this.setState({selected:val});
+    }
+
     render():VirtualNode {
 
         const style = 'button {margin: 10px}';
         return(
             <div>
                 <style>{style}</style>
-                <button onclick={()=>this.add()}>add</button>
-                <button onclick={()=>this.remove()}>remove</button>
-                <ul>
+                <Button onclick={()=>this.add()}>add</Button>
+                <Button onclick={()=>this.remove()}>remove</Button>
+                <ul style={{color:'red'}}>
                     {
-                        this.state.items.map((it,i)=><li><button onclick={()=>this.removeAt(i)}>-</button>the number is !!<b>{it.number}</b>!!</li>)
+                        this.state.items.map((it,i)=>
+                            <li style={{backgroundColor:'#fbfbfb'}}><Button onclick={()=>this.removeAt(i)}>-</Button>the number is !!<b>{it.number}</b>!!</li>
+                        )
                     }
                 </ul>
+                {/*test comment*/}
+                <div>
+                    selected {this.state.selected}
+                </div>
+                <select onchange={e=>this.onSelected((e.target as HTMLSelectElement).value)}>
+                    <option value="1" selected={this.state.selected==='1'}>1</option>
+                    <option value="2" selected={this.state.selected==='2'}>2</option>
+                    <option value="3" selected={this.state.selected==='3'}>3</option>
+                </select>
             </div>
 
         );

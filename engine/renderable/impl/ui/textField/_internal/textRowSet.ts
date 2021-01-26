@@ -1,4 +1,4 @@
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "../../../general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
 import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
@@ -14,7 +14,7 @@ import {
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {DebugError} from "@engine/debug/debugError";
 
-export class TextRowSet extends NullGameObject {
+export class TextRowSet extends SimpleGameObjectContainer {
 
     public declare children: readonly TextRow[];
 

@@ -5,7 +5,7 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Image} from "@engine/renderable/impl/general/image";
 import {DebugError} from "@engine/debug/debugError";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
@@ -34,7 +34,7 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 element = new Line(game);
                 break;
             case 'v_null_game_object':
-                element = new NullGameObject(game);
+                element = new SimpleGameObjectContainer(game);
                 break;
             case 'v_image':
                 element = new Image(game);

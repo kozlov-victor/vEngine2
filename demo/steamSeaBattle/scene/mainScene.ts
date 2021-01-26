@@ -8,7 +8,7 @@ import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/bar
 import {ResultScene} from "./resultScene";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Element} from "@engine/misc/xmlUtils";
@@ -24,7 +24,7 @@ export class MainScene extends BaseScene {
     private seaContainer:RenderableModel;
     private gear1:RenderableModel;
     private gear2:RenderableModel;
-    private bulletContainer:NullGameObject;
+    private bulletContainer:SimpleGameObjectContainer;
     private bullet:RenderableModel;
     private manometerArrow:RenderableModel;
     private btnLeft:ImageButton;
@@ -58,7 +58,7 @@ export class MainScene extends BaseScene {
         this.seaContainer = this.findChildById('seaContainer') as RenderableModel;
         this.gear1 = this.findChildById('gear1') as RenderableModel;
         this.gear2 = this.findChildById('gear2') as RenderableModel;
-        this.bulletContainer = this.findChildById('bulletContainer') as NullGameObject;
+        this.bulletContainer = this.findChildById('bulletContainer') as SimpleGameObjectContainer;
         this.bullet = this.findChildById('bullet') as RenderableModel;
         this.BULLET_INITIAL_POSITION = this.bulletContainer.pos.y;
         this.btnLeft = this.findChildById<ImageButton>('btnLeft')!;

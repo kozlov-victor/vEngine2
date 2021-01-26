@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 
 
 export class MainScene extends Scene {
@@ -24,7 +24,7 @@ export class MainScene extends Scene {
                 "m376,107.4375c0,0 -3.693451,0.458801 -5,1c-0.923889,0.382683 -1.877808,1.007492 -2,2c-0.503784,4.092216 -1,5 -1,6c0,1 0,3 0,4c0,2 2.412079,2.968552 6,5c1.230652,0.696785 2.292908,1.707108 3,1c2.121307,-2.121323 0,-4 0,-8c0,-3 -0.173096,-4.85273 -1,-6c-1.307465,-1.813995 -4,-4 -5,-6l-1,-1",
             ];
 
-        const container:NullGameObject = new NullGameObject(this.game);
+        const container:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
         container.size.setWH(200,200);
         container.addBehaviour(new DraggableBehaviour(this.game));
         container.pos.setXY(40,40);

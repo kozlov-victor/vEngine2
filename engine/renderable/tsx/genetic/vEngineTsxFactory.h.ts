@@ -19,20 +19,25 @@ export class VEngineTsxFactory<T> {
         ...children: VirtualNode[]
     ):VirtualNode{
         if (props===null) props = {};
-        if ((item as (props:Record<string, any>)=>VirtualNode).call!==undefined) {
-            return (item as (arg:any)=>VirtualNode)(props);
-        }
-        const element:VirtualNode = new VirtualNode(props,item as string);
-        element.children =
-            flattenDeep(children). // flat
+
+        const flattened:VirtualNode[] =
+            flattenDeep(children).
             map((it,i)=>{
                 if ((it as unknown as string)?.substr!==undefined || (it as unknown as number)?.toFixed!==undefined) {
-                    const textNode = new VirtualNode({}, undefined!);
+                    const textNode = new VirtualNode({children: undefined!}, undefined!,undefined!);
                     textNode.text = String(it);
                     return textNode;
                 } else return it;
-            }).filter(it=>!!it); // remove null, false and undefined
-        return element;
+            }).
+            filter(it=>!!it); // remove null, false and undefined;
+
+        const propsFull:Record<string, any> & {children:VirtualNode[]} =
+            {...props,children:flattened};
+
+        if ((item as (props:Record<string, any>)=>VirtualNode).call!==undefined) {
+            return (item as (arg:any)=>VirtualNode)(propsFull);
+        }
+        return new VirtualNode(propsFull, item as string, flattened);
     }
 
 }

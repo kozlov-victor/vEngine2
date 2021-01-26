@@ -5,8 +5,9 @@ import {DebugError} from "@engine/debug/debugError";
 import {Color} from "@engine/renderer/common/color";
 import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {ICloneable} from "@engine/core/declarations";
 
-export class CharacterImage extends Image {
+export class CharacterImage extends Image implements ICloneable<CharacterImage>{
 
     private colorCloned:boolean = false;
     private textDecoratorLine:Rectangle;
@@ -108,6 +109,16 @@ export class CharacterImage extends Image {
             this.getSrcRect().width*scaleFromCurrFontSize,
             this.getSrcRect().height*scaleFromCurrFontSize
         );
+    }
+
+    public clone(): CharacterImage {
+        const cloned:CharacterImage = new CharacterImage(this.game,this.font,this.characterInfo,this.color.clone());
+        this.setClonedProperties(cloned);
+        return cloned;
+    }
+
+    protected setClonedProperties(cloned:CharacterImage):void {
+        super.setClonedProperties(cloned);
     }
 
     private createTextDecoratorLineIfNotExists():void {

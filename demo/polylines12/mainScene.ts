@@ -1,12 +1,9 @@
-
 import {Scene} from "@engine/scene/scene";
-import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {FaceTypeToSvg} from "./FaceTypeToSvg";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 
 export class MainScene extends Scene {
@@ -25,7 +22,7 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
-        const container:NullGameObject = new NullGameObject(this.game);
+        const container:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
         container.size.setWH(300,300);
         container.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(container);

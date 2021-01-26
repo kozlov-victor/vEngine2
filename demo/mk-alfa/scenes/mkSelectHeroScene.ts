@@ -1,7 +1,7 @@
 import {MkAbstractScene} from "./mkAbstractScene";
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import {createScaleTweenMovie} from "../utils/miscFunctions";
 import {Game} from "@engine/core/game";
@@ -69,7 +69,7 @@ class TabStrip {
         this.updateImages();
         this.animateSelected();
 
-        const splashContainer = new NullGameObject(this.game);
+        const splashContainer = new SimpleGameObjectContainer(this.game);
         this.game.getCurrScene().appendChild(splashContainer);
         const glow = new GlowFilter(this.game,0.01,10);
         splashContainer.filters = [glow];
@@ -142,7 +142,7 @@ class TabStrip {
         return rectWrap;
     }
 
-    private createSplashVertical(splashContainer:NullGameObject):void{
+    private createSplashVertical(splashContainer:SimpleGameObjectContainer):void{
         let height:number = 0;
         let x:number = 0;
         const points:Point2d[] = [];
@@ -267,7 +267,7 @@ export class MkSelectHeroScene extends MkAbstractScene {
             logoFilter.enabled = MathEx.randomInt(0,10)>5;
         },100);
 
-        const nullContainer = new NullGameObject(this.game);
+        const nullContainer = new SimpleGameObjectContainer(this.game);
         this.appendChild(nullContainer);
         const nf = new NoiseFilter(this.game);
         nf.setIntensivity(0.3);

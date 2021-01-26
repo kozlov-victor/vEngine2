@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {ShapeAnimation} from "@engine/animation/shapeAnimation/shapeAnimation";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Color} from "@engine/renderer/common/color";
 import {EasingElastic} from "@engine/misc/easing/functions/elastic";
 
@@ -11,7 +11,7 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
-        const container:RenderableModel = new NullGameObject(this.game);
+        const container:RenderableModel = new SimpleGameObjectContainer(this.game);
         this.appendChild(container);
         //const from = 'M210 410 h 10 v 10 h -10 v -10';
         const from = 'M322.8025360053676,274.8393559205641 L388.1191875159626,274.8393559205641 L408.3025354350115,207.6131438189987 L428.48589483057646,274.8393559205641 L493.80253486465296,274.8393559205641 L440.9603504856112,316.3869643244233 L461.1447427670713,383.6131764259892 L408.3025354350115,342.0644365489424 L355.46033957946094,383.6131764259892 L375.6447375991793,316.3869643244233 L322.8025360053676,274.8393559205641 z';

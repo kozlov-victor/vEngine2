@@ -1,4 +1,4 @@
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Color} from "@engine/renderer/common/color";
@@ -19,8 +19,8 @@ import {DebugError} from "@engine/debug/debugError";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Image} from "@engine/renderable/impl/general/image";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {LazyImageCacheSurface} from "@engine/renderable/impl/surface/lazyImageCacheSurface";
 
 const NAMED_COLOR_TABLE:Record<string, string> =
     {
@@ -304,7 +304,7 @@ class SvgElementRenderer {
                 const y:number = stringTokenizer.getNextNumber(0);
                 const measureY:string = stringTokenizer.getNextToken(stringTokenizer._CHAR+'%');
                 stringTokenizer.skipRequiredToken(')');
-                const transformed:RenderableModel = new NullGameObject(this.game);
+                const transformed:RenderableModel = new SimpleGameObjectContainer(this.game);
                 transformed.pos.setXY(
                     calcNumberWithMeasure(x,measureX,this.rootContainer.size.width),
                     calcNumberWithMeasure(y,measureY,this.rootContainer.size.height)
@@ -318,7 +318,7 @@ class SvgElementRenderer {
                 const y:number = stringTokenizer.getNextNumber(x);
                 const measureY:string = stringTokenizer.getNextToken(stringTokenizer._CHAR+'%');
                 stringTokenizer.skipRequiredToken(')');
-                const transformed:RenderableModel = new NullGameObject(this.game);
+                const transformed:RenderableModel = new SimpleGameObjectContainer(this.game);
                 transformed.scale.setXY(
                     calcNumberWithMeasure(x,measureX,1),
                     calcNumberWithMeasure(y,measureY,1)
@@ -332,7 +332,7 @@ class SvgElementRenderer {
                 const centerY: number = stringTokenizer.getNextNumber(0);
                 stringTokenizer.skipOptionalToken('deg');
                 stringTokenizer.skipRequiredToken(')');
-                const transformed: RenderableModel = new NullGameObject(this.game);
+                const transformed: RenderableModel = new SimpleGameObjectContainer(this.game);
                 transformed.angle = MathEx.degToRad(x);
                 transformed.transformPoint.setXY(centerX,centerY);
                 lastView.appendChild(transformed);
@@ -342,7 +342,7 @@ class SvgElementRenderer {
                 stringTokenizer.skipRequiredToken('(');
                 const y: number = stringTokenizer.getNextNumber();
                 stringTokenizer.skipRequiredToken(')');
-                const transformed: RenderableModel = new NullGameObject(this.game);
+                const transformed: RenderableModel = new SimpleGameObjectContainer(this.game);
                 transformed.skew.setY(MathEx.degToRad(y));
                 lastView.appendChild(transformed);
                 lastView = transformed;
@@ -351,7 +351,7 @@ class SvgElementRenderer {
                 stringTokenizer.skipRequiredToken('(');
                 const x: number = stringTokenizer.getNextNumber();
                 stringTokenizer.skipRequiredToken(')');
-                const transformed: RenderableModel = new NullGameObject(this.game);
+                const transformed: RenderableModel = new SimpleGameObjectContainer(this.game);
                 transformed.skew.setX(MathEx.degToRad(x));
                 lastView.appendChild(transformed);
                 lastView = transformed;
@@ -367,7 +367,7 @@ class SvgElementRenderer {
 
                 stringTokenizer.skipRequiredToken(')');
 
-                const Delta = a * d - b * c;
+                const delta:number = a * d - b * c;
 
                 // https://frederic-wang.fr/decomposition-of-2d-transform-matrices.html
 
@@ -376,12 +376,12 @@ class SvgElementRenderer {
                 if (a !== 0 || b !== 0) {
                     const r = Math.sqrt(a*a+b*b);
                     lastView = this._parseTransformString(lastView,`rotate(${MathEx.radToDeg(b > 0 ? Math.acos(a/r) : -Math.acos(a/r))})`);
-                    lastView = this._parseTransformString(lastView,`scale(${r}, ${Delta/r})`);
+                    lastView = this._parseTransformString(lastView,`scale(${r}, ${delta/r})`);
                     lastView = this._parseTransformString(lastView,`skewX(${MathEx.radToDeg(Math.atan((a*c+b*d)/(r*r)))})`);
                 } else if (c !== 0 || d !== 0) {
                     const s = Math.sqrt(c*c+d*d);
                     lastView = this._parseTransformString(lastView,`rotate(${MathEx.radToDeg(Math.PI/2 - (d > 0 ? Math.acos(-c/s) : -Math.acos(c/s)))})`);
-                    lastView = this._parseTransformString(lastView,`scale(${Delta/s}, ${s})`);
+                    lastView = this._parseTransformString(lastView,`scale(${delta/s}, ${s})`);
                     lastView = this._parseTransformString(lastView,`skewX(${MathEx.radToDeg(Math.atan((a*c+b*d)/(s*s)))})`);
                 } else { // a = b = c = d = 0
                     lastView = this._parseTransformString(lastView,`scale(0 0)`);
@@ -405,7 +405,7 @@ class SvgElementRenderer {
     }
 
     private createElementContainer(parentView:RenderableModel,el:Element):RenderableModel{
-        let container:RenderableModel = new NullGameObject(this.game);
+        let container:RenderableModel = new SimpleGameObjectContainer(this.game);
         parentView.appendChild(container);
         container.alpha = this.resolveOpacity(el);
         container = this.resolveTransformations(container,el);
@@ -602,12 +602,12 @@ class SvgElementRenderer {
 
     private renderAnchor(parentView:RenderableModel,el:Element):RenderableModel {
         const container:RenderableModel = this.renderGroup(parentView,el);
-        // const href:Optional<string> = el.attributes.href || el.attributes['xlink:href'];
-        // if (href) {
-        //     this.rootContainer.on(MOUSE_EVENTS.click,_=>{
-        //         window.open(href);
-        //     });
-        // }
+        const href:Optional<string> = el.attributes.href || el.attributes['xlink:href'];
+        if (href) {
+            this.rootContainer.on(MOUSE_EVENTS.click,_=>{
+                window.open(href);
+            });
+        }
         return container;
     }
 
@@ -681,7 +681,7 @@ class SvgElementRenderer {
 
 }
 
-export class SvgImage extends NullGameObject {
+export class SvgImage extends SimpleGameObjectContainer {
 
     private svgElementRenderer:SvgElementRenderer;
 
@@ -705,7 +705,7 @@ export class SvgImage extends NullGameObject {
         if (viewBox[2]===0) viewBox[2] = width;
         if (viewBox[3]===0) viewBox[3] = height;
 
-        const rootView:RenderableModel = new NullGameObject(this.game);
+        const rootView:RenderableModel = new SimpleGameObjectContainer(this.game);
         rootView.pos.setXY(-viewBox[0],-viewBox[1]);
         if (this.preferredSize!==undefined) {
             this.size.set(this.preferredSize);
@@ -718,8 +718,9 @@ export class SvgImage extends NullGameObject {
         this.svgElementRenderer = new SvgElementRenderer(this.game,rootSvgTag,this,this.preloadedResourceLinks);
 
         this.traverseDocument(rootView,rootSvgTag);
-        const drawingSurface = new DrawingSurface(this.game,this.size);
-        drawingSurface.drawModel(rootView);
+        const drawingSurface = new LazyImageCacheSurface(this.game,this.size);
+        drawingSurface.appendChild(rootView);
+        drawingSurface.requestRedraw();
         this.appendChild(drawingSurface);
 
         //this.appendChild(rootView);

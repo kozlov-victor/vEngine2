@@ -1,4 +1,4 @@
-import {Container} from "@engine/renderable/impl/ui/container";
+import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
@@ -8,7 +8,7 @@ export interface ICheckBoxWritable {
     checked:boolean;
 }
 
-export abstract class AbstractToggleButton extends Container {
+export abstract class AbstractToggleButton extends WidgetContainer {
 
     public readonly checked: boolean = false;
 

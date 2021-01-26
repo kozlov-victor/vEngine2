@@ -6,7 +6,7 @@ import {
 import {VerticalScrollBar} from "@engine/renderable/impl/ui/scrollBar/verticalScrollBar";
 import {HorizontalScrollBar} from "@engine/renderable/impl/ui/scrollBar/horizontalScrollBar";
 import {Game} from "@engine/core/game";
-import {Container} from "@engine/renderable/impl/ui/container";
+import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 
 export class ScrollContainerDelegate {
 
@@ -20,7 +20,7 @@ export class ScrollContainerDelegate {
 
     constructor(
         private game:Game,
-        private rootContainer:Container,
+        private rootContainer:WidgetContainer,
         private constrainContainer:RenderableModel,
         private scrollableContainer:RenderableModel)
     {

@@ -1,12 +1,12 @@
 import {Scene} from "@engine/scene/scene";
 import {MainSceneUi} from "./mainScene.ui";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 
 
 export class MainScene extends Scene {
 
     public onReady():void {
-        const root = new NullGameObject(this.game);
+        const root = new SimpleGameObjectContainer(this.game);
         this.appendChild(root);
 
         const mainSceneUI = new MainSceneUi(this.game);

@@ -2,6 +2,9 @@ import {AbstractElementCreator} from "@engine/renderable/tsx/genetic/abstractEle
 import {HTMLElementWrap} from "@engine/renderable/tsx/dom/HTMLElementWrap";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
+const ELEMENT_PROPERTIES = ['value','checked','selected','focus','disabled','readonly'];
+const SPECIAL_ATTRIBUTES = ['children'];
+
 export class ElementFactory {
 
     private static instance:ElementFactory = new ElementFactory();
@@ -65,15 +68,32 @@ export class DomElementCreator extends AbstractElementCreator<HTMLElementWrap>{
                 else if (model.attributes[key]!==props[key]) {
                     model.attributes[key] = props[key];
                     let attrName = key.toLowerCase();
+                    if (SPECIAL_ATTRIBUTES.indexOf(attrName)>-1) continue;
+                    if (attrName==='style') {
+                        const styleDeclarationNew = props[key];
+                        const styleDeclarationOld = virtualNode.props.style;
+                        Object.keys(styleDeclarationNew).forEach(k=>(htmlEl.style as any)[k]=styleDeclarationNew[k]);
+                        Object.keys(styleDeclarationOld).forEach(k=>{
+                            if (styleDeclarationNew[k]===undefined) (htmlEl.style as any)[k]=undefined;
+                        });
+                        continue;
+                    }
+
                     if (key==='htmlFor') attrName = 'for';
                     else if (key==='className') attrName = 'class';
                     else if (key==='ref') {
                         virtualNode.props.ref(el);
                         continue;
                     }
-                    const value = props[key];
-                    if (value===null || value===undefined) htmlEl.removeAttribute(attrName);
-                    else htmlEl.setAttribute(attrName,props[key]);
+
+                    if (ELEMENT_PROPERTIES.indexOf(key)>-1) { // property
+                        (htmlEl as any)[key] = props[key];
+                    } else { // attribute
+                        const value = props[key];
+                        if (value===null || value===undefined) htmlEl.removeAttribute(attrName);
+                        else htmlEl.setAttribute(attrName,props[key]);
+                    }
+
                 }
             }
 

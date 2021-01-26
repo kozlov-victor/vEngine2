@@ -15,9 +15,8 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {IMatrixTransformable, MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {ResourceLink} from "@engine/resources/resourceLink";
-import {describeArc} from "@engine/renderable/impl/geometry/_internal/splineFromPoints";
 import {isNumber, isObject, isString} from "@engine/misc/object";
 import {Font} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
@@ -25,9 +24,10 @@ import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {mat4} from "@engine/geometry/mat4";
 import MAT16 = mat4.MAT16;
+import {arcToSvgCurve} from "@engine/renderable/impl/geometry/_internal/arcToSvgCurve";
 
 
-class ContainerForDrawingSurface extends NullGameObject {
+class ContainerForDrawingSurface extends SimpleGameObjectContainer {
     constructor(protected game: Game, private matrixStack:MatrixStack) {
         super(game);
         this._parentChildDelegate.afterChildAppended = undefined;
@@ -66,7 +66,7 @@ class DrawingSession implements IDrawingSession {
     private _ellipse:Ellipse = new Ellipse(this.game);
     private _line:Line = new Line(this.game);
     private _textField:TextFieldWithoutCache;
-    private _nullGameObject:NullGameObject = new NullGameObject(this.game);
+    private _nullGameObject:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
     private _transformableContainer:ContainerForDrawingSurface = new ContainerForDrawingSurface(this.game,this._matrixStack);
     private _pointMoveTo:Point2d = new Point2d();
 
@@ -156,7 +156,7 @@ class DrawingSession implements IDrawingSession {
                 startAngle = endAngle;
                 endAngle = tmp + 2*Math.PI;
             }
-            const path:string = describeArc(cx,cy,radius,startAngle,endAngle)+` z`;
+            const path:string = arcToSvgCurve(cx,cy,radius,startAngle,endAngle)+` z`;
             const polygon:Polygon = Polygon.fromSvgPath(this.game,path);
             polygon.fillColor.set(this.surface.getFillColor());
             this.drawModel(polygon);

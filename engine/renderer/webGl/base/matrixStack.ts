@@ -69,6 +69,14 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
         return this;
     }
 
+    public transform(val:Mat16Holder):void {
+        const m:Mat16Holder = this.getCurrentValue();
+        const result:Mat16Holder = Mat16Holder.fromPool();
+        mat4.matrixMultiply(result,val, m);
+        this.setCurrentValue(result);
+        m.release();
+    }
+
     public skewX(angle:number):this {
         const t:Mat16Holder = Mat16Holder.fromPool()!;
         mat4.makeXSkew(t,angle);

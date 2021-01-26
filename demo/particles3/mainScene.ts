@@ -6,7 +6,7 @@ import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {KernelBurnAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/kernelBurnAccumulativeFilter";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 
 
 export class MainScene extends Scene {
@@ -21,7 +21,7 @@ export class MainScene extends Scene {
     //
     public onReady():void {
 
-        const container = new NullGameObject(this.game);
+        const container = new SimpleGameObjectContainer(this.game);
         container.size.set(this.game.size);
         this.appendChild(container);
 

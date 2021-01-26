@@ -13,7 +13,7 @@ import {EasingQuart} from "@engine/misc/easing/functions/quart";
 import {EasingQuint} from "@engine/misc/easing/functions/quint";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {NullGameObject} from "@engine/renderable/impl/general/nullGameObject";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 
 const POOL_SIZE:number = 128;
@@ -890,7 +890,7 @@ export class SpriterObject extends RenderableModel {
 
     private scmlObject:ScmlObject;
     private resourceLinks:Record<string,ResourceLink<ITexture>> = {};
-    private readonly rootNode:RenderableModel = new NullGameObject(this.game);
+    private readonly rootNode:RenderableModel = new SimpleGameObjectContainer(this.game);
 
     constructor(protected game:Game) {
         super(game);
