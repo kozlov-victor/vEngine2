@@ -49,7 +49,20 @@ export class Widget extends VEngineTsxComponent<IState> {
     render():VirtualNode {
 
         const style = 'button {margin: 10px}';
-        return(
+        if (this.state.selected==='1') {
+            return (
+                <div>
+                    <div>
+                        selected {this.state.selected}
+                    </div>
+                    <select onchange={e=>this.onSelected((e.target as HTMLSelectElement).value)}>
+                        <option value="1" selected={this.state.selected==='1'}>1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+            );
+        } else return(
             <>
                 <style>{style}</style>
                 <Button onclick={()=>this.add()}>add</Button>

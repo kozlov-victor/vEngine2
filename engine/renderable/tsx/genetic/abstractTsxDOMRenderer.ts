@@ -8,8 +8,7 @@ const debug = false;
 
 export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
 
-    private newVirtualDomNodes:VirtualNode[] = [];
-    private oldVirtualDomNodes:VirtualNode[] = [];
+    private oldVirtualDom:VirtualNode;
 
     protected constructor(private elementCreator:AbstractElementCreator<T>) {
     }
@@ -17,19 +16,16 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     public render(component:VEngineTsxComponent<any>, root:T):void{
         component.rootNativeElement = root;
         if (debug) console.log('before render');
-        this.newVirtualDomNodes.length = 0;
-        const newVirtualDom:VirtualNode = component.render();
-        if (newVirtualDom.type==='virtualFragment') {
-            this.newVirtualDomNodes.push(...newVirtualDom.children);
+        const newVirtualNode:VirtualNode = component.render();
+        const newVirtualNodeChildren:VirtualNode[] = [];
+        if (newVirtualNode.type==='virtualFragment') {
+            newVirtualNodeChildren.push(...newVirtualNode.children);
         } else {
-            this.newVirtualDomNodes.push(newVirtualDom);
+            newVirtualNodeChildren.push(newVirtualNode);
         }
-        const maxLength:number = Math.max(this.newVirtualDomNodes.length,this.oldVirtualDomNodes?.length??0);
-        for (let i:number=0;i<maxLength;i++) {
-            this.reconcile(this.newVirtualDomNodes[i],this.oldVirtualDomNodes[i],root.getChildAt(i) as T,root);
-        }
-        this.oldVirtualDomNodes.length = 0;
-        this.oldVirtualDomNodes.push(...this.newVirtualDomNodes);
+        const newVirtualDom:VirtualNode = new VirtualNode({},"root",newVirtualNodeChildren);
+        this.reconcileChildren(newVirtualDom,this.oldVirtualDom,root);
+        this.oldVirtualDom = newVirtualDom;
     }
 
     private removeNode(node:T):void {

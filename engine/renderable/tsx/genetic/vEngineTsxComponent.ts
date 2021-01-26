@@ -5,9 +5,8 @@ import {IRealNode} from "@engine/renderable/tsx/genetic/realNode";
 
 export abstract class VEngineTsxComponent<T extends Record<string, any>> {
 
-    public state:T;
+    protected state:T;
     public rootNativeElement:IRealNode;
-    public oldVirtualDom:VirtualNode;
 
     protected constructor(
         private tsxDOMRenderer:AbstractTsxDOMRenderer<any>
