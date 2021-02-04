@@ -25,6 +25,7 @@ import {RotateLetterYTextAnimation} from "@engine/renderable/impl/ui/textField/a
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Color} from "@engine/renderer/common/color";
+import {FallLettersTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/fallLettersTextAnimation";
 
 export class MainScene extends Scene {
 
@@ -60,6 +61,7 @@ export class MainScene extends Scene {
         tf.setBackgroundActive(bgActive);
 
         const animations = [
+            new FallLettersTextAnimation(),
             new RotateLetterYTextAnimation(400, -Math.PI/3),
             new AppearRandomLetterTextAnimation(2000),
             new AppearFromPointTextAnimation({x:100,y:100},20, 100,EasingSine.Out),

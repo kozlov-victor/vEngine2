@@ -67,7 +67,7 @@ class SvgTokenizer extends BasicStringTokenizer {
     }
 }
 
-export class SvgPathToVertexArray {
+export class SvgPathToVertexArrayBuilder {
 
     private lastPoint:Optional<Point2d>;
     private firstPoint:Optional<Point2d>;
@@ -145,6 +145,28 @@ export class SvgPathToVertexArray {
         this._arcTo(rx,ry,xAxisRotation,largeArcFlag,sweepFlag,x,y,true);
     }
 
+    public bezierCurveTo(x1:number,y1:number,x2:number,y2:number,x3:number,y3:number):void{
+        this._bezierTo([this.lastPoint?.x??0,this.lastPoint?.y??0],[x1,y1],[x2,y2],[x3,y3]);
+    }
+
+    public quadraticCurveTo(x1:number,y1:number,x2:number,y2:number):void {
+        const QP0:v2 = [this.lastPoint!.x,this.lastPoint!.y];
+        const QP1:v2 = [x1,y1];
+        const QP2:v2 = [x2,y2];
+        const p1:v2 = [...QP0];
+        const p2:v2 = [
+            QP0[0] + 2/3*(QP1[0]-QP0[0])
+            ,
+            QP0[1] + 2/3*(QP1[1]-QP0[1])
+        ];
+        const p3:v2 = [
+            QP2[0] + 2/3*(QP1[0]-QP2[0])
+            ,
+            QP2[1] + 2/3*(QP1[1]-QP2[1])
+        ];
+        const p4:v2 = [...QP2];
+        this._bezierTo(p1,p2,p3,p4);
+    }
 
     public close():void{
         if (!this.firstPoint) return;
@@ -159,7 +181,7 @@ export class SvgPathToVertexArray {
         this.currentVertexArray = [];
     }
 
-    private bezierTo(p1:v2,p2:v2,p3:v2,p4:v2):void{
+    private _bezierTo(p1:v2,p2:v2,p3:v2,p4:v2):void{
         const l:number = length(p1,p2)+length(p2,p3)+length(p3,p4);
         const bezier:v2[] = getPointsOnBezierCurve([p1,p2,p3,p4],0,l);
         bezier.forEach((v:v2)=>{
@@ -190,7 +212,7 @@ export class SvgPathToVertexArray {
                 xTo = x;
                 yTo = y;
             }
-            this.bezierTo([this.lastPoint!.x,this.lastPoint!.y],[arc.x1,arc.y1],[arc.x2,arc.y2],[xTo,yTo]);
+            this._bezierTo([this.lastPoint!.x,this.lastPoint!.y],[arc.x1,arc.y1],[arc.x2,arc.y2],[xTo,yTo]);
         });
     }
 
@@ -250,7 +272,7 @@ export class SvgPathToVertexArray {
                 const p3:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 this.lastBezierPoint = p3;
-                this.bezierTo(p1,p2,p3,p4);
+                this._bezierTo(p1,p2,p3,p4);
                 break;
             }
             case 'c': { // cubic Bézier curve
@@ -259,7 +281,7 @@ export class SvgPathToVertexArray {
                 const p3:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 this.lastBezierPoint = add(p1,p3);
-                this.bezierTo(p1,add(p1,p2),add(p1,p3),add(p1,p4));
+                this._bezierTo(p1,add(p1,p2),add(p1,p3),add(p1,p4));
                 break;
             }
             case 'S': { // smooth cubic Bézier curve
@@ -271,7 +293,7 @@ export class SvgPathToVertexArray {
                 const p3:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 const p4:v2 = [tokenizer.getNextNumber(),tokenizer.getNextNumber()];
                 this.lastBezierPoint = p3;
-                this.bezierTo(p1,p2,p3,p4);
+                this._bezierTo(p1,p2,p3,p4);
                 break;
             }
             case 's': {
@@ -281,7 +303,7 @@ export class SvgPathToVertexArray {
                 const p3:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
                 const p4:v2 = add(p1,[tokenizer.getNextNumber(),tokenizer.getNextNumber()]);
                 this.lastBezierPoint = p3;
-                this.bezierTo(p1,p2,p3,p4);
+                this._bezierTo(p1,p2,p3,p4);
                 break;
             }
             case 'q':
@@ -316,7 +338,7 @@ export class SvgPathToVertexArray {
                 const p4:v2 = [...QP2];
 
                 this.lastBezierPoint = QP1;
-                this.bezierTo(p1,p2,p3,p4);
+                this._bezierTo(p1,p2,p3,p4);
                 break;
             }
             case 't':
@@ -348,7 +370,7 @@ export class SvgPathToVertexArray {
                 const p4:v2 = [...QP2];
 
                 this.lastBezierPoint = QP1;
-                this.bezierTo(p1,p2,p3,p4);
+                this._bezierTo(p1,p2,p3,p4);
                 break;
             }
             case 'A':

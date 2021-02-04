@@ -4,7 +4,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
 import {createSplinePathFromPoints} from "@engine/renderable/impl/geometry/_internal/splineFromPoints";
 import {clearString} from "@engine/renderable/impl/geometry/_internal/clearString";
-import {SvgPathToVertexArray} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArray";
+import {SvgPathToVertexArrayBuilder} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArrayBuilder";
 import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
 import {Point2d} from "@engine/geometry/point2d";
 
@@ -71,7 +71,7 @@ export class PolyLine extends Shape {
 
 
     public static fromMultiCurveSvgPath(game:Game,path:string, close:boolean = false):PolyLine[]{
-        const arr:number[][] = new SvgPathToVertexArray(game).parsePolylines(path, close);
+        const arr:number[][] = new SvgPathToVertexArrayBuilder(game).parsePolylines(path, close);
         const result:PolyLine[] = [];
         for (const vertices of arr) result.push(this.fromVertices(game,vertices));
         return result;
