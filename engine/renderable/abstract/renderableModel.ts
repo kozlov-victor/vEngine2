@@ -364,7 +364,9 @@ export abstract class RenderableModel
     }
 
     public renderToTexture(target:IRenderTarget,clearColor?:Color,omitSaveAndResoreRenderTaget?:boolean):void{
+        this.worldTransformDirty = true;
         this.game.getRenderer().getHelper().renderModelToTexture(this,target,clearColor,omitSaveAndResoreRenderTaget);
+        this.worldTransformDirty = true;
     }
 
     public isDetached():boolean {

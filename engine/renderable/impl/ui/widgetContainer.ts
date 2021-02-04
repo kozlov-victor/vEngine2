@@ -36,9 +36,14 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         super.appendChild(this.backgroundActive);
         super.appendChild(this.backgroundDisabled);
 
-        this.listenToHoverState();
-        this.listenToActiveState();
-
+        if (game.hasControl('mouseControl')) {
+            this.listenToHoverState();
+            this.listenToActiveState();
+        } else {
+            if (DEBUG) {
+                console.log('hover effects are not awailable for ui elements without mouseControl module');
+            }
+        }
     }
 
     public readonly type:string = 'Container';

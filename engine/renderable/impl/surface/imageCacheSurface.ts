@@ -63,7 +63,6 @@ export class ImageCacheSurface extends RenderableModel {
                 this.drawingSurface.drawModel(c);
             }
         });
-        console.log('drawed');
     }
 
     draw():void {

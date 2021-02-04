@@ -17,11 +17,6 @@ export class IntroScene extends BasePix32Scene {
 
     onPreloading():void {
         super.onPreloading();
-        // const binLink = this.resourceLoader.loadBinary('pix32/resources/music/Eifmes.vtx');
-        // this.resourceLoader.addNextTask((()=>{
-        //     this.track = new Vtx(binLink.getTarget());
-        //     this.themeAudioLink = loadSound(this.game,this.track);
-        // }));
 
         const binLink = this.resourceLoader.loadBinary('pix32/resources/music/theme.ym');
         this.resourceLoader.addNextTask((()=>{
@@ -37,7 +32,7 @@ export class IntroScene extends BasePix32Scene {
         const sound:Sound = new Sound(this.game);
         sound.setResourceLink(this.themeAudioLink);
         sound.loop = true;
-        //sound.play();
+        sound.play();
 
         const box:Rectangle = new Rectangle(this.game);
         box.fillColor = Color.fromCssLiteral('#46e502');
