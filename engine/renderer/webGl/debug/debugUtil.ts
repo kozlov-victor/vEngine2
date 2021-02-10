@@ -1,5 +1,5 @@
 
-export namespace debugUtil {
+export namespace DebugUtil {
 
     let map:{[key:number]:string};
 

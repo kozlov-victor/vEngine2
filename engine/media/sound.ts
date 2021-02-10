@@ -1,9 +1,7 @@
 import {Game} from "@engine/core/game";
 import {DebugError} from "@engine/debug/debugError";
-import {IResource, IRevalidatable} from "@engine/core/declarations";
-import {ResourceLink} from "@engine/resources/resourceLink";
 
-export class Sound implements IResource<void>,IRevalidatable {
+export class Sound {
 
     get loop(): boolean {
         return this._loop;
@@ -40,7 +38,7 @@ export class Sound implements IResource<void>,IRevalidatable {
         this._stereoPan = value;
     }
 
-    constructor(protected game:Game){}
+    constructor(protected game:Game,private url:string){}
 
     public readonly type:string = 'Sound';
     public offset:number; // start offset time of sound
@@ -56,17 +54,10 @@ export class Sound implements IResource<void>,IRevalidatable {
     private _velocity:number = 1;
     private _stereoPan:number = 0.5;
 
-    // resource
-    private _resourceLink!:ResourceLink<void>;
-
     public getCurrentTime():number {
         const node =  this.game.getAudioPlayer().getNodeBySound(this);
         if (node===undefined) return -1;
         return node.getCurrentTime();
-    }
-
-    public revalidate():void {
-        if (!this.getResourceLink()) throw new DebugError(`can not play sound: resource link is not set`);
     }
 
     public play():void {
@@ -78,13 +69,8 @@ export class Sound implements IResource<void>,IRevalidatable {
     public pause():void {
         throw new DebugError('not implemented');
     }
-
-    public setResourceLink(link:ResourceLink<void>):void{
-        this._resourceLink = link;
-    }
-
-    public getResourceLink():ResourceLink<void>{
-        return this._resourceLink;
+    public getUrl():string {
+        return this.url;
     }
 
 }

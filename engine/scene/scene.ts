@@ -26,7 +26,7 @@ import {Point2d} from "@engine/geometry/point2d";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation} from "@engine/animation/iAnimation";
-import {mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/geometry/mat4";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
@@ -34,7 +34,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 import {Size} from "@engine/geometry/size";
 import {RenderingObjectStack} from "@engine/scene/internal/renderingObjectStack";
-import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
+import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 import {RenderingSessionInfo} from "@engine/scene/internal/renderingSessionInfo";
 import {Camera} from "@engine/renderer/camera";
 

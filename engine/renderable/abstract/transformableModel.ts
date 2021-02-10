@@ -3,8 +3,8 @@ import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
 import {BaseModel} from "@engine/core/baseModel";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
-import {mat4} from "@engine/geometry/mat4";
-import Mat16Holder = mat4.Mat16Holder;
+import {Mat4} from "@engine/geometry/mat4";
+import Mat16Holder = Mat4.Mat16Holder;
 import {ITransformable} from "@engine/core/declarations";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 

@@ -25,12 +25,12 @@ module.exports = function(content) {
         let preloadingMethod = preloadingMethods[0];
         if (preloadingMethod===undefined) {
             preloadingMethod = tsquery(tstemplate.compile(`
-            class Template {
-                public onPreloading(){
-                    super.onPreloading();
+                class Template {
+                    public onPreloading(){
+                        super.onPreloading();
+                    }
                 }
-            }
-        `)({}),`MethodDeclaration:has(Identifier[name="onPreloading"])`)[0];
+            `)({}),`MethodDeclaration:has(Identifier[name="onPreloading"])`)[0];
             cl.members.push(preloadingMethod);
         }
         const statements = [];
@@ -63,10 +63,19 @@ module.exports = function(content) {
             });
             f.decorators = newDecorators;
         });
+
+        const internalMethod = tsquery(tstemplate.compile(`
+                class Template {
+                    public __getNumberOfResourcesToPreload():number{
+                        return <%=n%>;
+                    }
+                }
+            `)({n:ts.createLiteral(statements.length)}),`MethodDeclaration:has(Identifier[name="__getNumberOfResourcesToPreload"])`)[0];
+        cl.members.push(internalMethod);
+
         preloadingMethod.body.statements = [...preloadingMethod.body.statements, ...statements];
 
     });
     if (!modified) return content;
-    const result = ts.createPrinter().printFile(ast);
-    return result;
+    return ts.createPrinter().printFile(ast);
 };

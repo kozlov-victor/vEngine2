@@ -1,17 +1,14 @@
-import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
 import {Game} from "../core/game";
-import {Queue, TaskRef} from "./queue";
 import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
-import {Base64, URI} from "@engine/core/declarations";
+import {Base64, Optional, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
-import {DebugError} from "@engine/debug/debugError";
 import {Document} from "@engine/misc/xmlUtils";
-import {Font, FontFactory, IFontParameters} from "@engine/renderable/impl/general/font";
+import {Font, FontFactory, ICssFontParameters} from "@engine/renderable/impl/general/font";
 import createImageFromData = ResourceUtil.createImageFromData;
-import createFontFromAtlas = FontFactory.createFontFromAtlas;
+import {Sound} from "@engine/media/sound";
 
-namespace resourceCache {
+namespace ResourceCache {
 
     export const cache:Record<string, ITexture> = {};
 
@@ -24,13 +21,9 @@ namespace resourceCache {
 
 export class ResourceLoader {
 
-    public constructor(private game: Game) {
+    public constructor(private readonly game: Game) {
         this.game = game;
     }
-
-    private completed:boolean = false;
-
-    public readonly q: Queue = new Queue();
 
     private static createUrlLoader<T extends string|ArrayBuffer>(req: URI|IURLRequest,responseType:'arraybuffer'|'text' = 'text'):UrlLoader<T>{
         let iReq:IURLRequest;
@@ -40,210 +33,78 @@ export class ResourceLoader {
         return new UrlLoader(iReq);
     }
 
-    public loadTexture(req: string|IURLRequest): ResourceLink<ITexture> {
-        this.validateState();
-        const link: ResourceLink<ITexture> = new ResourceLink(req as string);
-        link.setResourceLoader(this);
-        if (resourceCache.cache[(req as IURLRequest).url??req]!==undefined) {
-            link.setTarget(resourceCache.cache[(req as IURLRequest).url??req] as ITexture);
-            return link;
-        }
-        const taskRef:TaskRef = this.q.addTask(async () => {
-            try {
-                link.setAsPending();
-                const img:HTMLImageElement|ImageBitmap = await createImageFromData(req as (URI|Base64|IURLRequest),this.q,taskRef);
-                const texture:ITexture = this.game.getRenderer().createTexture(img);
-                link.setTarget(texture);
-                resourceCache.cache[(req as IURLRequest).url??req] = texture;
-                this.q.resolveTask(taskRef);
-            } catch (e) {
-                link.rejectTarget();
-                console.error(e);
-                throw e;
-            }
-
-        });
-        return link;
+    private static async _loadAndProcessText<T>(req: string|IURLRequest, postProcess:(s:string)=>T): Promise<T> {
+        const loader:UrlLoader<string> = ResourceLoader.createUrlLoader<string>(req as (URI|IURLRequest));
+        const text:string = await loader.load();
+        return postProcess(text);
     }
 
-    public loadCubeTexture(
+    public async loadTexture(req: string|IURLRequest): Promise<ITexture> {
+        const fromCache:Optional<ITexture> = ResourceCache.cache[(req as IURLRequest).url??req];
+        if (fromCache!==undefined) {
+            return fromCache;
+        }
+        const img:HTMLImageElement|ImageBitmap = await createImageFromData(req as (URI|Base64|IURLRequest));
+        return this.game.getRenderer().createTexture(img);
+    }
+
+    public async loadCubeTexture(
         leftSide: string|IURLRequest, rightSide:string|IURLRequest,
         topSide: string|IURLRequest, bottomSide:string|IURLRequest,
         frontSide: string|IURLRequest, backSide:string|IURLRequest,
-    ): ResourceLink<ICubeMapTexture> {
-        this.validateState();
-        const link: ResourceLink<ICubeMapTexture> = new ResourceLink('');
-        link.setResourceLoader(this);
-        const taskRef:TaskRef = this.q.addTask(async () => {
-            link.setAsPending();
-            try {
-                const imgLeft:HTMLImageElement|ImageBitmap =
-                    await createImageFromData(leftSide as (URI|Base64|IURLRequest),this.q,taskRef);
-                const imgRight:HTMLImageElement|ImageBitmap =
-                    await createImageFromData(rightSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[0]);
-                this.q.resolveTask(taskRefsAdditionals[0]);
-                const imgTop:HTMLImageElement|ImageBitmap =
-                    await createImageFromData(topSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[1]);
-                this.q.resolveTask(taskRefsAdditionals[1]);
-                const imgBottom:HTMLImageElement|ImageBitmap =
-                    await createImageFromData(bottomSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[2]);
-                this.q.resolveTask(taskRefsAdditionals[2]);
-                const imgFront:HTMLImageElement|ImageBitmap =
-                    await createImageFromData(frontSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[3]);
-                this.q.resolveTask(taskRefsAdditionals[3]);
-                const imgBack:HTMLImageElement|ImageBitmap =
-                    await createImageFromData(backSide as (URI|Base64|IURLRequest),this.q,taskRefsAdditionals[4]);
-                this.q.resolveTask(taskRefsAdditionals[4]);
-                const texture:ICubeMapTexture =
-                    this.game.getRenderer().createCubeTexture(imgLeft,imgRight,imgTop,imgBottom,imgFront,imgBack);
-                link.setTarget(texture);
-                this.q.resolveTask(taskRef);
-            } catch (e) {
-                link.rejectTarget();
-                throw e;
-            }
-        });
-
-        const taskRefsAdditionals:[TaskRef,TaskRef,TaskRef,TaskRef,TaskRef]
-            = new Array(5) as [TaskRef,TaskRef,TaskRef,TaskRef,TaskRef];
-        for (let i:number=0;i<taskRefsAdditionals.length;i++) {
-            taskRefsAdditionals[i]=(this.q.addTask(()=>{}));
-        }
-
-        return link;
+    ): Promise<ICubeMapTexture> {
+        const imgLeft:HTMLImageElement|ImageBitmap =
+            await createImageFromData(leftSide as (URI|Base64|IURLRequest));
+        const imgRight:HTMLImageElement|ImageBitmap =
+            await createImageFromData(rightSide as (URI|Base64|IURLRequest));
+        const imgTop:HTMLImageElement|ImageBitmap =
+            await createImageFromData(topSide as (URI|Base64|IURLRequest));
+        const imgBottom:HTMLImageElement|ImageBitmap =
+            await createImageFromData(bottomSide as (URI|Base64|IURLRequest));
+        const imgFront:HTMLImageElement|ImageBitmap =
+            await createImageFromData(frontSide as (URI|Base64|IURLRequest));
+        const imgBack:HTMLImageElement|ImageBitmap =
+            await createImageFromData(backSide as (URI|Base64|IURLRequest));
+        return this.game.getRenderer().createCubeTexture(imgLeft,imgRight,imgTop,imgBottom,imgFront,imgBack);
     }
 
-    public loadText(req: string|IURLRequest): ResourceLink<string> {
-        return this._loadAndProcessText(req,t=>t);
+    public async loadText(req: string|IURLRequest): Promise<string> {
+        return await ResourceLoader._loadAndProcessText(req, t=>t);
     }
 
-    public loadJSON<T>(req: string|IURLRequest): ResourceLink<T> {
+    public async loadJSON<T>(req: string|IURLRequest): Promise<T> {
         const postPrecessFn:(t:string)=>T = t=>JSON.parse(t);
-        return this._loadAndProcessText<T>(req,postPrecessFn);
+        return await ResourceLoader._loadAndProcessText<T>(req,postPrecessFn);
     }
 
-    public loadSound(req: string|IURLRequest): ResourceLink<void> {
-        this.validateState();
+    public async loadSound(req: string|IURLRequest): Promise<Sound> {
         const loader:UrlLoader<ArrayBuffer> = ResourceLoader.createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
-        const link: ResourceLink<void> = new ResourceLink(loader.getUrl());
-        link.setResourceLoader(this);
-        const taskRef:TaskRef = this.q.addTask(async () =>{
-            try {
-                link.setAsPending();
-                const buff:ArrayBuffer = await loader.load();
-                await this.game.getAudioPlayer().loadSound(buff,link);
-                this.q.resolveTask(taskRef);
-                link.setTarget(undefined);
-            } catch (e) {
-                console.error(e);
-                link.rejectTarget();
-                throw e;
-            }
-        });
-        loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
-        return link;
+        const buff:ArrayBuffer = await loader.load();
+        const url:string = ((req as string).substr!==undefined)?req as string: (req as IURLRequest).url;
+        await this.game.getAudioPlayer().uploadBufferToContext(url,buff);
+        return new Sound(this.game,url);
     }
 
-    public loadBinary(req: string|IURLRequest): ResourceLink<ArrayBuffer> {
-        this.validateState();
+    public async loadBinary(req: string|IURLRequest): Promise<ArrayBuffer> {
         const loader:UrlLoader<ArrayBuffer> = ResourceLoader.createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
-        const link: ResourceLink<ArrayBuffer> = new ResourceLink<ArrayBuffer>(loader.getUrl());
-        link.setResourceLoader(this);
-        loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
-        const taskRef:TaskRef = this.q.addTask(async () => {
-            try {
-                link.setAsPending();
-                const buff:ArrayBuffer = await loader.load();
-                link.setTarget(buff as ArrayBuffer);
-                this.q.resolveTask(taskRef);
-            } catch (e) {
-                console.error(e);
-                link.rejectTarget();
-                throw e;
-            }
-
-        });
-        return link;
+        return await loader.load();
     }
 
-    public loadFont(params:IFontParameters):Font{
-        this.validateState();
-        return new Font(this.game, params);
+    public async loadFont(params:ICssFontParameters):Promise<Font>{
+        return await FontFactory.createFontFromCssDescription(this.game,params);
     }
 
-    public loadFontFromAtlas(atlasUrl:string|IURLRequest,doc:Document):ResourceLink<Font>{
-        this.validateState();
-        const link:ResourceLink<ITexture> = this.loadTexture(atlasUrl);
-        link.setResourceLoader(this);
-        const result:ResourceLink<Font> = ResourceLink.create<Font>(undefined!);
-        this.addNextTask(()=>{
-            result.setTarget(createFontFromAtlas(this.game, link, doc));
-        });
-        return result;
-    }
-
-    public addNextTask(task: () => void):void {
-        this.validateState();
-        const taskRef:TaskRef =  this.q.addTask(() => {
-            task();
-            this.q.resolveTask(taskRef);
-        });
+    public async loadFontFromAtlas(atlasPageUrls:(string|IURLRequest)[],doc:Document):Promise<Font>{
+        const texturePages:ITexture[] = [];
+        for (const atlasPageUrl of atlasPageUrls) {
+            const texturePage:ITexture = await this.loadTexture(atlasPageUrl);
+            texturePages.push(texturePage);
+        }
+        return await FontFactory.createFontFromAtlas(this.game,texturePages,doc);
     }
 
     public clearCache():void {
-        resourceCache.clear();
-    }
-
-    public startLoading(): void {
-        this.q.start();
-    }
-
-    public isCompleted(): boolean {
-        return this.q.isCompleted();
-    }
-
-    public getProgress(): number {
-        return this.q.calcProgress();
-    }
-
-    public onProgress(fn: () => void): void {
-        this.q.onProgress = fn;
-    }
-
-    public onCompleted(fn: () => void): void {
-        this.q.onResolved = ()=>{
-            fn();
-            this.completed = true;
-        };
-    }
-
-    private _loadAndProcessText<T>(req: string|IURLRequest,postProcess:(s:string)=>T): ResourceLink<T> {
-        this.validateState();
-        const url:string = (req as IURLRequest).url?(req as IURLRequest).url:req as string;
-        const link: ResourceLink<T> = new ResourceLink(url);
-        const loader:UrlLoader<string> = ResourceLoader.createUrlLoader<string>(req as (URI|IURLRequest));
-        link.setResourceLoader(this);
-        loader.onProgress = (n:number)=>this.q.progressTask(taskRef,n);
-        const taskRef:TaskRef = this.q.addTask(async () => {
-            try {
-                const text:string = await loader.load();
-                const data:T = postProcess(text);
-                link.setTarget(data);
-                this.q.resolveTask(taskRef);
-            } catch (e) {
-                console.error(e);
-                throw e;
-            }
-
-        });
-        return link;
-    }
-
-    private validateState():void {
-        if (this.completed) {
-            if (DEBUG) throw new DebugError(`resourceLoader is already completed, use another one`);
-            else throw new Error();
-        }
+        ResourceCache.clear();
     }
 
 

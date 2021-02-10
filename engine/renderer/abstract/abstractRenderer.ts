@@ -16,8 +16,8 @@ import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
-import {mat4} from "@engine/geometry/mat4";
-import MAT16 = mat4.MAT16;
+import {Mat4} from "@engine/geometry/mat4";
+import MAT16 = Mat4.MAT16;
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>Promise<void>;

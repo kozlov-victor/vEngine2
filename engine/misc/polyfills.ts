@@ -56,3 +56,13 @@ if (!Float32Array.prototype.slice) {
     };
 }
 
+console.log(Float32Array.from);
+
+if (!Float32Array.from) {
+    // @ts-ignore
+    Float32Array.from = (arr:number[])=> {
+        return new Float32Array(arr);
+    };
+}
+
+console.log(Float32Array.from);

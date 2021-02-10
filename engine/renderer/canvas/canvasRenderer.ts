@@ -14,8 +14,8 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
-import {mat4} from "@engine/geometry/mat4";
-import MAT16 = mat4.MAT16;
+import {Mat4} from "@engine/geometry/mat4";
+import MAT16 = Mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{

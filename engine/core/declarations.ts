@@ -1,11 +1,10 @@
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {Layer} from "@engine/scene/layer";
 import {Scene} from "@engine/scene/scene";
-import {mat4} from "@engine/geometry/mat4";
-import Mat16Holder = mat4.Mat16Holder;
+import {Mat4} from "@engine/geometry/mat4";
+import Mat16Holder = Mat4.Mat16Holder;
 
 export type Clazz<T> = new() => T;
 export type ClazzEx<T,U> = new(arg:U) => T;
@@ -34,11 +33,6 @@ export interface IEventemittable {
     once(eventName:string,callBack:(arg?:any)=>void):void;
     off(eventName:string,callBack:(arg?:any)=>void):void;
     trigger(eventName:string,data?:any):void;
-}
-
-export interface IResource<T> {
-    setResourceLink(link:ResourceLink<T>):void;
-    getResourceLink():ResourceLink<T>;
 }
 
 export interface IFilterable {

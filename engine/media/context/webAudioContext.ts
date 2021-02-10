@@ -129,11 +129,11 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         return CtxHolder.getCtx()!;
     }
 
-    public async load(buffer:ArrayBuffer, link:ResourceLink<void>):Promise<void> {
-        if (AudioPlayer.cache[link.getUrl()]) {
+    public async uploadBufferToContext(url:string, buffer:ArrayBuffer):Promise<void> {
+        if (AudioPlayer.cache[url]) {
             return undefined;
         }
-        AudioPlayer.cache[link.getUrl()] = await decode(buffer);
+        AudioPlayer.cache[url] = await decode(buffer);
     }
 
 

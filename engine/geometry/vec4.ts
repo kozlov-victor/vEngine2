@@ -1,7 +1,7 @@
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 import {ObjectPool} from "@engine/misc/objectPool";
 
-export namespace vec4 {
+export namespace Vec4 {
 
     type n = number;
 

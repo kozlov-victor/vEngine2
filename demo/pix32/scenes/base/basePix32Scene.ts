@@ -32,7 +32,7 @@ export const loadSound = (game:Game,track:AbstractChipTrack): ResourceLink<void>
     const link: ResourceLink<void> = ResourceLink.create<void>(undefined);
     const taskRef:TaskRef = game.getCurrScene().resourceLoader.q.addTask(async () => {
         const arrayBuffer:ArrayBuffer = await track.renderToArrayBuffer();
-        await game.getAudioPlayer().loadSound(arrayBuffer, link);
+        await game.getAudioPlayer().uploadBufferToContext(arrayBuffer, link);
         game.getCurrScene().resourceLoader.q.resolveTask(taskRef);
     });
     return link;

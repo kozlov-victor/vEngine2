@@ -18,6 +18,7 @@ export class Queue {
     private _completed:boolean = false;
     private _nextTaskIndex:number = 0;
     private _currProgress:number = 0;
+    private _isStarted:boolean = false;
 
     constructor(){
 
@@ -56,6 +57,9 @@ export class Queue {
     public isCompleted():boolean{
         return this._completed;
     }
+    public isStarted():boolean{
+        return this._isStarted;
+    }
 
     public calcProgress():number{
         let sum:number = 0;
@@ -73,6 +77,7 @@ export class Queue {
     }
 
     public start():void {
+        this._isStarted = true;
         if (this.size()===0) {
             this._completed = true;
             if (this.onResolved) this.onResolved();

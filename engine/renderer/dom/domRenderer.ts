@@ -9,15 +9,14 @@ import {MathEx} from "@engine/misc/mathEx";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Rect} from "@engine/geometry/rect";
 import {Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {DebugError} from "@engine/debug/debugError";
-import {mat4} from "@engine/geometry/mat4";
-import MAT16 = mat4.MAT16;
+import {Mat4} from "@engine/geometry/mat4";
+import MAT16 = Mat4.MAT16;
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{

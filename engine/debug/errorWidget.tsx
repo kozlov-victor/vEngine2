@@ -122,7 +122,7 @@ export class ErrorWidget extends VEngineTsxComponent<IState> {
 
     render():VirtualNode {
         return (
-            <div>
+            <>
                 <style>{css}</style>
                 <div className={this.state.errors.length>0?'errorBlockHolder':''}>
                     {
@@ -139,7 +139,7 @@ export class ErrorWidget extends VEngineTsxComponent<IState> {
                         )
                     }
                 </div>
-            </div>
+            </>
         );
     }
 

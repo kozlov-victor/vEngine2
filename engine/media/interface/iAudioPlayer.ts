@@ -14,7 +14,7 @@ export interface IAudioPlayer {
 
     freeNodeSearchStrategy:FREE_AUDIO_NODE_SEARCH_STRATEGY;
 
-    loadSound(buffer:ArrayBuffer, link:ResourceLink<void>):Promise<void>;
+    uploadBufferToContext(url:string, buffer:ArrayBuffer):Promise<void>;
     play(sound:Sound):void;
     stop(sound:Sound):void;
     loop(sound:Sound):void;

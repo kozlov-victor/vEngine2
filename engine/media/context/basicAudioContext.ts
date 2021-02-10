@@ -53,7 +53,7 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
     public pause():void{}
     public resume():void{}
     public setFeedbackDelay(delayTime:number,gain:number):void {}
-    public load(buffer:ArrayBuffer,link:ResourceLink<void>):Promise<void>{
+    public uploadBufferToContext(url:string, buffer:ArrayBuffer):Promise<void>{
         return Promise.resolve();
     }
 

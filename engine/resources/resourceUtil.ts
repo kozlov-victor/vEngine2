@@ -4,13 +4,13 @@ import {Queue, TaskRef} from "@engine/resources/queue";
 
 export namespace ResourceUtil {
 
-    const loadArrayBuffer = async (req: string|IURLRequest,q:Queue,taskRef:TaskRef):Promise<ArrayBuffer>=>{
+    const loadArrayBuffer = async (req: string|IURLRequest):Promise<ArrayBuffer>=>{
         let iReq:IURLRequest;
         if ((req as string).substr!==undefined){
             iReq = {url:req as string,responseType:'arraybuffer',method:'GET'};
         } else iReq = req as IURLRequest;
         const loader:UrlLoader<ArrayBuffer> = new UrlLoader(iReq);
-        loader.onProgress = (n:number)=>q.progressTask(taskRef,n);
+        //loader.onProgress = (n:number)=>{};
         return await loader.load();
     };
 
@@ -34,14 +34,14 @@ export namespace ResourceUtil {
         });
     };
 
-    export const createImageFromData = async (imageData:Base64|URI|IURLRequest, q:Queue,taskRef:TaskRef):Promise<ImageBitmap|HTMLImageElement>=> {
+    export const createImageFromData = async (imageData:Base64|URI|IURLRequest):Promise<ImageBitmap|HTMLImageElement>=> {
 
         const isBase64: boolean = (imageData as string).substr!==undefined && (imageData as string).indexOf('data:image/') === 0;
 
         if (isBase64) return await createHTMLImageFromUrl(imageData as Base64);
         if (globalThis.createImageBitmap===undefined) return await createHTMLImageFromUrl(imageData as URI|IURLRequest);
 
-        const arrayBuffer: ArrayBuffer = await loadArrayBuffer(imageData as (URI|IURLRequest),q,taskRef);
+        const arrayBuffer: ArrayBuffer = await loadArrayBuffer(imageData as (URI|IURLRequest));
         const arrayBufferView: Uint8Array = new Uint8Array(arrayBuffer);
         const imgBlob: Blob = new Blob([arrayBufferView]);
         return  await createBitmapFromBlob(imgBlob);

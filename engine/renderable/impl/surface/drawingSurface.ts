@@ -22,8 +22,8 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
-import {mat4} from "@engine/geometry/mat4";
-import MAT16 = mat4.MAT16;
+import {Mat4} from "@engine/geometry/mat4";
+import MAT16 = Mat4.MAT16;
 import {arcToSvgCurve} from "@engine/renderable/impl/geometry/_internal/arcToSvgCurve";
 
 

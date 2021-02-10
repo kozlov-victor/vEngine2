@@ -30,8 +30,8 @@ export  class AudioPlayer implements IAudioPlayer {
         this._audioNodeSet = new AudioNodeSet(game,this._audioContext,AudioPlayer.DEFAULT_AUDIO_NODES_COUNT);
     }
 
-    public async loadSound(buffer:ArrayBuffer, link:ResourceLink<void>):Promise<void> {
-        await this._audioContext.load(buffer,link);
+    public async uploadBufferToContext(url:string, buffer:ArrayBuffer):Promise<void> {
+        await this._audioContext.uploadBufferToContext(url,buffer);
     }
 
     public isCached(link:ResourceLink<void>):boolean {
@@ -40,9 +40,7 @@ export  class AudioPlayer implements IAudioPlayer {
 
     public play(sound:Sound):void {
 
-        if (DEBUG) sound.revalidate();
-
-        const node:Optional<AudioNode> = this._audioNodeSet.getFreeNode(sound.getResourceLink().url);
+        const node:Optional<AudioNode> = this._audioNodeSet.getFreeNode(sound.getUrl());
 
         if (node===undefined) {
             if (DEBUG) {

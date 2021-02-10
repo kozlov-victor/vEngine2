@@ -17,5 +17,4 @@ export class MainScene extends Scene {
         this.appendChild(tf);
     }
 
-
 }

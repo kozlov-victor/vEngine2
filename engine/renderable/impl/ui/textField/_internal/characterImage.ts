@@ -1,6 +1,6 @@
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
-import {Font, IRectViewJSON} from "@engine/renderable/impl/general/font";
+import {Font, IFontSymbolInfo} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
 import {Color} from "@engine/renderer/common/color";
 import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
@@ -17,7 +17,7 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
         const actualFont:Font = characterInfo.font || font;
         this.stretchMode = STRETCH_MODE.STRETCH;
         const [padUp,padRight,padDown,padLeft] = actualFont.fontContext.padding;
-        let charRect:IRectViewJSON = actualFont.fontContext.symbols[characterInfo.rawChar] || actualFont.fontContext.symbols['?'];
+        let charRect:IFontSymbolInfo = actualFont.fontContext.symbols[characterInfo.rawChar] || actualFont.fontContext.symbols['?'];
         if (charRect===undefined) {
             const key:string = Object.keys(actualFont.fontContext.symbols)[0];
             if (DEBUG && key===undefined) {
@@ -42,7 +42,7 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
         if (this.getSrcRect().height<=0) this.getSrcRect().height = 0.001;
         this.setScaleFromCurrFontSize(this.characterInfo.scaleFromCurrFontSize);
         this.pos.setXY(charRect.destOffsetX,charRect.destOffsetY);
-        this.setResourceLink(actualFont.getResourceLink());
+        this.setResourceLink(actualFont.getResourceLinkByChar(characterInfo.rawChar));
         this.transformPoint.setToCenter();
         if (!characterInfo.multibyte) this.color = color;
         if (characterInfo.italic) this.setItalic(true);

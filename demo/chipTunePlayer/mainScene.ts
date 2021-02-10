@@ -140,7 +140,7 @@ export class MainScene extends Scene {
                 }
                 const link: ResourceLink<void> = ResourceLink.create<void>(undefined);
                 const trackArrayBuffer = await track.renderToArrayBuffer();
-                await this.game.getAudioPlayer().loadSound(trackArrayBuffer, link);
+                await this.game.getAudioPlayer().uploadBufferToContext(trackArrayBuffer, link);
                 const sound = new Sound(this.game);
                 sound.setResourceLink(link);
                 sound.play();

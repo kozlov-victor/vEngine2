@@ -1,6 +1,6 @@
 import {ICommand} from "./declarations";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {httpClient} from "@engine/debug/httpClient";
+import {HttpClient} from "@engine/debug/httpClient";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
@@ -40,7 +40,7 @@ export class TeacherStuff {
             this.teacherCommands.push(this.currentCommand);
             this.history.addCommand(this.currentCommand);
             this.currentCommand = {points:[]};
-            await httpClient.post('addCommands',this.teacherCommands);
+            await HttpClient.post('addCommands',this.teacherCommands);
             this.teacherCommands = [];
         });
         this.surface.on(MOUSE_EVENTS.mousePressed, async e=>{
@@ -48,7 +48,7 @@ export class TeacherStuff {
             this.currentCommand = {points:[]};
             this.teacherCommands = [{extra:'clear'}];
             this.history.clear();
-            await httpClient.post('addCommands',this.teacherCommands);
+            await HttpClient.post('addCommands',this.teacherCommands);
             this.teacherCommands = [];
         });
     }
@@ -62,7 +62,7 @@ export class TeacherStuff {
                 const historyCommands:readonly ICommand[] = this.history.getCurrentCommands();
                 this.board.execCommands(historyCommands);
                 this.teacherCommands.push({extra:historyCommands.length?'undo':'clear'});
-                await httpClient.post('addCommands',this.teacherCommands);
+                await HttpClient.post('addCommands',this.teacherCommands);
                 this.teacherCommands = [];
             }
         });

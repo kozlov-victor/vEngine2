@@ -5,16 +5,16 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ISize} from "@engine/geometry/size";
 import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
-import {mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/geometry/mat4";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {Game} from "@engine/core/game";
-import Mat16Holder = mat4.Mat16Holder;
+import Mat16Holder = Mat4.Mat16Holder;
 import {Color} from "@engine/renderer/common/color";
 import {LruMap} from "@engine/misc/collection/lruMap";
-import IDENTITY = mat4.IDENTITY;
+import IDENTITY = Mat4.IDENTITY;
 import {Stack} from "@engine/misc/collection/stack";
 
-const identityPositionMatrixCache:LruMap<string, Mat16Holder> = new LruMap<string, mat4.Mat16Holder>();
+const identityPositionMatrixCache:LruMap<string, Mat16Holder> = new LruMap<string, Mat4.Mat16Holder>();
 
 export const makeIdentityPositionMatrix = (dstX:number,dstY:number,destSize:ISize):Mat16Holder =>{
     const key:string = `${dstX}_${dstY}_${destSize.width}_${destSize.height}`;
@@ -22,11 +22,11 @@ export const makeIdentityPositionMatrix = (dstX:number,dstY:number,destSize:ISiz
     const projectionMatrix:Mat16Holder = Mat16Holder.create();
     const dstWidth:number = destSize.width;
     const dstHeight:number = destSize.height;
-    mat4.ortho(projectionMatrix,0,dstWidth,0,dstHeight,-1,1);
+    Mat4.ortho(projectionMatrix,0,dstWidth,0,dstHeight,-1,1);
     const scaleMatrix:Mat16Holder = Mat16Holder.create();
-    mat4.makeScale(scaleMatrix,dstWidth, dstHeight, 1);
+    Mat4.makeScale(scaleMatrix,dstWidth, dstHeight, 1);
     const result:Mat16Holder = Mat16Holder.create();
-    mat4.matrixMultiply(result,scaleMatrix, projectionMatrix);
+    Mat4.matrixMultiply(result,scaleMatrix, projectionMatrix);
     identityPositionMatrixCache.put(key,result);
     return result;
 };

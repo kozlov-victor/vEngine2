@@ -79,7 +79,7 @@ export class ResourceLink<T> {
             throw new DebugError(`resourceLoader must be set for asPromise() method`);
         }
         setTimeout(()=>{
-            this._loader!.q.start();
+            if (!this._loader!.isStarted()) this._loader!.q.start();
         },1);
         if (this._state===ResourceLinkState.COMPLETED) {
             return Promise.resolve(this._target);

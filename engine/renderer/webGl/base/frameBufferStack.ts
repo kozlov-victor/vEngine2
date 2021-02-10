@@ -7,15 +7,15 @@ import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
-import {mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/geometry/mat4";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
 import {Game} from "@engine/core/game";
 import {FLIP_TEXTURE_MATRIX, makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
-import IDENTITY = mat4.IDENTITY;
-import Mat16Holder = mat4.Mat16Holder;
+import IDENTITY = Mat4.IDENTITY;
+import Mat16Holder = Mat4.Mat16Holder;
 import {Device} from "@engine/misc/device";
 import {ITexture} from "@engine/renderer/common/texture";
 
@@ -66,11 +66,11 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
         const m16hResult:Mat16Holder = Mat16Holder.fromPool();
         const m16Scale:Mat16Holder = Mat16Holder.fromPool();
-        mat4.makeScale(m16Scale,this.game.size.width, this.game.size.height, 1);
+        Mat4.makeScale(m16Scale,this.game.size.width, this.game.size.height, 1);
         const m16Ortho:Mat16Holder = Mat16Holder.fromPool();
-        mat4.ortho(m16Ortho,0,this.game.size.width,0,this.game.size.height,-1,1);
+        Mat4.ortho(m16Ortho,0,this.game.size.width,0,this.game.size.height,-1,1);
 
-        mat4.matrixMultiply(m16hResult, m16Scale, m16Ortho);
+        Mat4.matrixMultiply(m16hResult, m16Scale, m16Ortho);
         FLIP_POSITION_MATRIX = m16hResult.clone();
 
         m16hResult.release();

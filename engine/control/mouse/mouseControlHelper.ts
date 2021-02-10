@@ -2,14 +2,13 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IObjectMouseEvent, MousePoint, MousePointsPullHolder} from "@engine/control/mouse/mousePoint";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Rect} from "@engine/geometry/rect";
-import {mat4} from "@engine/geometry/mat4";
-import {vec4} from "@engine/geometry/vec4";
+import {Mat4} from "@engine/geometry/mat4";
+import {Vec4} from "@engine/geometry/vec4";
 import {LayerTransformType} from "@engine/scene/layer";
 import {IPoint2d, Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {Optional} from "@engine/core/declarations";
-import Vec4Holder = vec4.Vec4Holder;
-import VEC4 = vec4.VEC4;
+import Vec4Holder = Vec4.Vec4Holder;
 
 const recycledArray:Readonly<VEC4>[] = [undefined!,undefined!,undefined!,undefined!];
 
@@ -47,22 +46,22 @@ export class MouseControlHelper {
         const pointBottomRight:Vec4Holder = Vec4Holder.fromPool();
         pointBottomRight.set(obj.size.width,obj.size.height,0,1);
         const pointBottomRightTransformation:Vec4Holder = Vec4Holder.fromPool();
-        mat4.multVecByMatrix(pointBottomRightTransformation,obj.worldTransformMatrix,pointBottomRight);
+        Mat4.multVecByMatrix(pointBottomRightTransformation,obj.worldTransformMatrix,pointBottomRight);
 
         const pointTopRight:Vec4Holder = Vec4Holder.fromPool();
         pointTopRight.set(obj.size.width,0,0,1);
         const pointTopRightTransformation:Vec4Holder = Vec4Holder.fromPool();
-        mat4.multVecByMatrix(pointTopRightTransformation,obj.worldTransformMatrix,pointTopRight);
+        Mat4.multVecByMatrix(pointTopRightTransformation,obj.worldTransformMatrix,pointTopRight);
 
         const pointTopLeft:Vec4Holder = Vec4Holder.fromPool();
         pointTopLeft.set(0,0,0,1);
         const pointTopLeftTransformation:Vec4Holder = Vec4Holder.fromPool();
-        mat4.multVecByMatrix(pointTopLeftTransformation,obj.worldTransformMatrix,pointTopLeft);
+        Mat4.multVecByMatrix(pointTopLeftTransformation,obj.worldTransformMatrix,pointTopLeft);
 
         const pointBottomLeft:Vec4Holder = Vec4Holder.fromPool();
         pointBottomLeft.set(0,obj.size.height,0,1);
         const pointBottomLeftTransformation:Vec4Holder = Vec4Holder.fromPool();
-        mat4.multVecByMatrix(pointBottomLeftTransformation,obj.worldTransformMatrix,pointBottomLeft);
+        Mat4.multVecByMatrix(pointBottomLeftTransformation,obj.worldTransformMatrix,pointBottomLeft);
 
         recycledArray[0] = pointTopLeftTransformation.vec4;
         recycledArray[1] = pointTopRightTransformation.vec4;

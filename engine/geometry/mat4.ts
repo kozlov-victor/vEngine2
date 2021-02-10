@@ -2,16 +2,16 @@ import {DebugError} from "../debug/debugError";
 import {ObjectPool} from "@engine/misc/objectPool";
 import {ICloneable} from "@engine/core/declarations";
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
-import {vec4} from "@engine/geometry/vec4";
+import {Vec4} from "@engine/geometry/vec4";
 import {Point2d} from "@engine/geometry/point2d";
 
 
 // https://evanw.github.io/lightgl.js/docs/matrix.html
 
-export namespace mat4 {
+export namespace Mat4 {
 
-    import Vec4Holder = vec4.Vec4Holder;
-    import VEC4 = vec4.VEC4;
+    import Vec4Holder = Vec4.Vec4Holder;
+    import VEC4 = Vec4.VEC4;
 
     type n = number;
 
@@ -43,7 +43,7 @@ export namespace mat4 {
             return Mat16Holder.m16hPool.getFreeObject()!;
         }
 
-        public static create(): mat4.Mat16Holder {
+        public static create(): Mat4.Mat16Holder {
             return new Mat16Holder();
         }
 
@@ -59,7 +59,7 @@ export namespace mat4 {
             (this.mat16 as unknown as Float32Array).set(mat16,0);
         }
 
-        public clone(): mat4.Mat16Holder {
+        public clone(): Mat4.Mat16Holder {
             const m:Mat16Holder = new Mat16Holder();
             for (let i:n=0;i<this.mat16.length;i++) {
                 (m.mat16 as MAT16)[i] = this.mat16[i];
@@ -374,10 +374,10 @@ export namespace mat4 {
         const vec4Holder:Vec4Holder = Vec4Holder.fromPool();
         vec4Holder.set(x, y, 0, 1);
         const invProjectionView:Mat16Holder = Mat16Holder.fromPool();
-        mat4.inverse(invProjectionView,projectionView);
+        Mat4.inverse(invProjectionView,projectionView);
 
         const vec4Transformed:Vec4Holder = Vec4Holder.fromPool();
-        mat4.multVecByMatrix(vec4Transformed, invProjectionView, vec4Holder);
+        Mat4.multVecByMatrix(vec4Transformed, invProjectionView, vec4Holder);
         invProjectionView.release();
         vec4Holder.release();
         const pointResult:Point2d = Point2d.fromPool();

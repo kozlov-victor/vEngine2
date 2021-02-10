@@ -8,10 +8,8 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 
 export class MainScene extends Scene {
 
-
     @Resource.FontFromAtlas('./fnt/font.png',fntXML)
     private fontLink:ResourceLink<Font>;
-
 
     public onReady():void {
         this.backgroundColor.setRGB(12,12,12);

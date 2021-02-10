@@ -1,10 +1,10 @@
-import {mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/geometry/mat4";
 
 // some special cases of matrix multiplication
 
-export namespace mat4Special {
-    import Mat16Holder = mat4.Mat16Holder;
-    import MAT16 = mat4.MAT16;
+export namespace Mat4Special {
+    import Mat16Holder = Mat4.Mat16Holder;
+    import MAT16 = Mat4.MAT16;
 
     /**
      * multiply translation matrix by any matrix

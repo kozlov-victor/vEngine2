@@ -5,12 +5,12 @@ import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {ISize} from "@engine/geometry/size";
 import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
-import {mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/geometry/mat4";
 import {Color} from "@engine/renderer/common/color";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
-import Mat16Holder = mat4.Mat16Holder;
-import IDENTITY = mat4.IDENTITY;
+import Mat16Holder = Mat4.Mat16Holder;
+import IDENTITY = Mat4.IDENTITY;
 
 
 export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
