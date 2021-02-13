@@ -6,14 +6,14 @@ import {Point2d} from "@engine/geometry/point2d";
 import {ICloneable} from "@engine/core/declarations";
 import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
-import {RenderableModelWithResourceLink} from "@engine/renderable/abstract/renderableModelWithResourceLink";
+import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
 
 export const enum STRETCH_MODE {
     STRETCH,
     REPEAT
 }
 
-export class Image extends RenderableModelWithResourceLink implements ICloneable<Image>{
+export class Image extends RenderableModelWithTexture implements ICloneable<Image>{
 
     public readonly type:string = 'Image';
     public borderRadius:number = 0;
@@ -25,23 +25,11 @@ export class Image extends RenderableModelWithResourceLink implements ICloneable
     private _pixelPerfect:boolean = false;
     private _srcRect:Rect = new Rect();
 
-    constructor(game: Game) {
+    constructor(game: Game,texture:ITexture) {
         super(game);
-    }
-
-    public revalidate():void {
-        if (DEBUG && !this.getResourceLink()) {
-            console.error(this);
-            throw new DebugError(`can not render Image: resourceLink is not specified`);
-        }
-        if (DEBUG && this.getResourceLink().getState()!==ResourceLinkState.COMPLETED) {
-            console.error(this);
-            throw new DebugError(`can not render Image: wrong resource link state: ${this.getResourceLink().getState()}`);
-        }
-        if (DEBUG && !this.getResourceLink().getTarget()) {
-            console.error(this);
-            throw new DebugError(`can not render Image: resource link target is not defined`);
-        }
+        this.setTexture(texture);
+        this.size.set(texture.size);
+        this._srcRect.setSize(this.size);
     }
 
     public draw():void{
@@ -49,13 +37,12 @@ export class Image extends RenderableModelWithResourceLink implements ICloneable
     }
 
     public clone():Image {
-        const cloned:Image = new Image(this.game);
+        const cloned:Image = new Image(this.game,this.getTexture());
         this.setClonedProperties(cloned);
         return cloned;
     }
 
     public setProps(props:IImageProps):void{
-        this.setResourceLink(props.resourceLink as ResourceLink<ITexture>);
         super.setProps(props);
         if (props.borderRadius!==undefined) this.borderRadius = props.borderRadius;
         if (props.color!==undefined) this.color.setRGBA(props.color.r,props.color.g,props.color.b,props.color.a);
@@ -64,12 +51,6 @@ export class Image extends RenderableModelWithResourceLink implements ICloneable
 
     public getSrcRect():Rect{
         return this._srcRect;
-    }
-
-    public setResourceLink(link:ResourceLink<ITexture>):void{
-        super.setResourceLink(link);
-        if (this.size.isZero()) this.size.set(link.getTarget().size);
-        if (this._srcRect.isZeroSize()) this._srcRect.setSize(this.size);
     }
 
     public setPixelPerfect(val:boolean):void{
@@ -89,7 +70,6 @@ export class Image extends RenderableModelWithResourceLink implements ICloneable
         cloned.color = this.color.clone();
         cloned.lineWidth = this.lineWidth;
         cloned._pixelPerfect = this._pixelPerfect;
-        cloned.setResourceLink(this.getResourceLink());
         super.setClonedProperties(cloned);
     }
 

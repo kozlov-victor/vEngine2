@@ -29,7 +29,7 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
                 throw new DebugError(`can not play CellFrameAnimation: cellFrameAnimation.setSpriteSheetSize() not invoked or invoked with wrong parameters`);
             }
         }
-        const {width,height} = this.target.getResourceLink().getTarget().size;
+        const {width,height} = this.target.getTexture().size;
         const frameWidth:number = ~~(width / this._numOfFramesH);
         const frameHeight:number = ~~(height / this._numOfFramesV);
         this.target.getSrcRect().setWH(frameWidth,frameHeight);

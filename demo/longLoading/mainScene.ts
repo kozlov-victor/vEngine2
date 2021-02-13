@@ -1,29 +1,40 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Image} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
-import {TaskRef} from "@engine/resources/queue";
 import {ITexture} from "@engine/renderer/common/texture";
 
-
-export const fakeLongLoadingFn = (resourceLoader:ResourceLoader)=>{
-    const taskRef:TaskRef = resourceLoader.q.addTask(()=>{
-        setTimeout(()=>{
-            resourceLoader.q.resolveTask(taskRef);
-        },50);
+export const wait = (progress:(n:number)=>void):Promise<void>=>{
+    return new Promise<void>(resolve=>{
+        let cnt = 0;
+        const tmr =setInterval(()=>{
+            cnt++;
+            progress(cnt/10);
+            if (cnt===10) {
+                clearInterval(tmr);
+                resolve();
+            }
+        },100);
     });
 };
 
-
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
+    private logoTexture:ITexture;
 
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
-        for (let i:number = 0;i<100;i++) { fakeLongLoadingFn(this.resourceLoader); }
+    public onPreloading(resourceLoader:ResourceLoader):void {
+
+        resourceLoader.addNextTask(async progress=>{
+            this.logoTexture = await resourceLoader.loadTexture('./assets/logo.png');
+        });
+        for (let i:number = 0;i<100;i++) {
+            resourceLoader.addNextTask(async onProgressCallBack=>{
+                await wait(onProgressCallBack);
+                console.log('tick');
+            });
+        }
+
         const rect = new Rectangle(this.game);
         rect.borderRadius = 5;
         rect.fillColor.setRGB(10,100,100);
@@ -37,15 +48,13 @@ export class MainScene extends Scene {
     }
 
     public onReady():void {
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoTexture);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
 
         this.on(KEYBOARD_EVENTS.keyHold, (e)=>{
             console.log(e);
         });
-
     }
 
 }

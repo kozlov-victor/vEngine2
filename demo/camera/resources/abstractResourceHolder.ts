@@ -6,9 +6,6 @@ import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
 
 export abstract class AbstractResourceHolder extends ResourceAutoHolder {
 
-    @Resource.Texture('./assets/logo.png') public logoLink:ResourceLink<ITexture>;
+    @Resource.Texture('./assets/logo.png') public logoTexture:ITexture;
 
-    protected constructor(scene:Scene) {
-        super(scene);
-    }
 }

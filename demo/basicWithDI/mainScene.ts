@@ -13,8 +13,7 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoRes.logoLink);
+        const spr:Image = new Image(this.game,this.logoRes.logoTexture);
         spr.pos.fromJSON({x:10,y:10});
         spr.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(spr);

@@ -12,7 +12,7 @@ export abstract class AbstractEntity extends AbstractSprite {
 
     protected body:ArcadeRigidBody;
 
-    protected constructor(protected game: Game, spriteSheet: ResourceLink<ITexture>,params:ICreateRigidBodyParams) {
+    protected constructor(protected game: Game, spriteSheet: ITexture,params:ICreateRigidBodyParams) {
         super(game,spriteSheet);
         this.body = this.onCreatedRigidBody(params);
     }

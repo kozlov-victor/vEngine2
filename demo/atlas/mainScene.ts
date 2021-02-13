@@ -3,36 +3,34 @@ import {IRectJSON} from "@engine/geometry/rect";
 import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAnimation";
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Resource} from "@engine/resources/resourceDecorators";
 
 
 export class MainScene extends Scene {
 
     @Resource.Texture("./atlas/player.png")
-    private spriteLink: ResourceLink<ITexture>;
+    private spriteTexture: ITexture;
 
     @Resource.Text("./atlas/player.atlas")
-    private atlasLink: ResourceLink<string>;
+    private atlas: string;
 
     constructor(protected game:Game){
         super(game);
     }
 
-
     public onReady():void {
-        const framesRaw: Record<string,{frame:{x:number,y:number,w:number,h:number}}> = JSON.parse(this.atlasLink.getTarget()).frames;
+        const framesRaw: Record<string,{frame:{x:number,y:number,w:number,h:number}}> = JSON.parse(this.atlas).frames;
 
         const toFrame = (frameInfo: {frame:{x:number,y:number,w:number,h:number}}): IRectJSON => {
             const frame:typeof frameInfo.frame = frameInfo.frame;
             return {x: frame.x, y: frame.y, width: frame.w, height: frame.h} as IRectJSON;
         };
 
-        const animatedImage: AnimatedImage = new AnimatedImage(this.game);
-        animatedImage.setResourceLink(this.spriteLink);
+        const animatedImage: AnimatedImage = new AnimatedImage(this.game,this.spriteTexture);
 
         const animRun: AtlasFrameAnimation = new AtlasFrameAnimation(this.game);
 

@@ -8,7 +8,7 @@ export class Fan extends AbstractEntity {
 
     public static readonly groupName:string = 'fan';
 
-    constructor(protected game:Game,resource:ResourceLink<ITexture>) {
+    constructor(protected game:Game,resource:ITexture) {
         super(game, resource, {
             groupNames: [Fan.groupName],
             type:ARCADE_RIGID_BODY_TYPE.KINEMATIC,

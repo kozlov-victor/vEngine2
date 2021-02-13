@@ -32,10 +32,9 @@ export abstract class Shape extends RenderableModel implements IShapeProps{
             this.game.getRenderer().getHelper().
             createRenderTarget(this.game,sizeInt);
 
-        const image:Image = new Image(this.game);
+        const image:Image = new Image(this.game,renderTarget.getTexture());
         image.size.set(sizeInt);
         this.renderToTexture(renderTarget,Color.NONE);
-        image.setResourceLink(renderTarget.getResourceLink());
         renderTarget.destroy();
         return image;
     }

@@ -5,10 +5,10 @@ import {Camera} from "@engine/renderer/camera";
 import {Size} from "@engine/geometry/size";
 import {Optional} from "@engine/core/declarations";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
-import {RenderableModelWithResourceLink} from "@engine/renderable/abstract/renderableModelWithResourceLink";
+import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
 
 
-export class TileMap extends RenderableModelWithResourceLink {
+export class TileMap extends RenderableModelWithTexture {
 
     public readonly type:string = "TileMap";
 

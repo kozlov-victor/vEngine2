@@ -4,20 +4,21 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {BaseAbstractIntroScene} from "./abstracts/baseAbstractIntroScene";
 import {GameManager} from "../gameManager";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {Sound} from "@engine/media/sound";
 
 
 export class IntroScene extends BaseAbstractIntroScene {
 
     @Resource.Sound('./catGame/res/sound/theme1.mp3')
-    protected soundThemeRes: ResourceLink<void>;
+    protected soundTheme: Sound;
 
     @Resource.Texture('./catGame/res/sprite/pressKeyToStart.png')
-    protected spriteSheetLabel: ResourceLink<ITexture>;
+    protected spriteSheetLabel: ITexture;
 
 
     protected listenUI():void {
         this.on(MOUSE_EVENTS.click, e=>{
-            this.snd.stop();
+            this.soundTheme.stop();
             this.camera.shake(5,200);
             GameManager.getCreatedInstance().startGame();
         });

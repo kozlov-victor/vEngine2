@@ -5,9 +5,9 @@ import {Size} from "@engine/geometry/size";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
-import {RenderableModelWithResourceLink} from "@engine/renderable/abstract/renderableModelWithResourceLink";
+import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
 
-export class NinePatchImage extends RenderableModelWithResourceLink {
+export class NinePatchImage extends RenderableModelWithTexture {
 
     public readonly type:string = 'NinePatchImage';
     private a:number = 5;

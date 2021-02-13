@@ -124,7 +124,7 @@ export class RichTextField extends ScrollableTextField {
                 if (currFontSize!==undefined) {
                     s.setFontSize(currFontSize);
                     const fnt:Font = currFont ?? this.font;
-                    s.setScaleFromCurrFontSize(currFontSize/fnt.fontSize);
+                    s.setScaleFromCurrFontSize(currFontSize/fnt.getSize());
                 }
                 if (currColor!==undefined) s.setColor(currColor);
                 result.append(s);

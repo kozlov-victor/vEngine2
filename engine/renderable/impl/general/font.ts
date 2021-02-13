@@ -249,7 +249,7 @@ export namespace FontFactory {
         return new Font(game,context);
     };
 
-    export const createFontFromCssDescription = async (game:Game,params:ICssFontParameters)=>{
+    export const createFontFromCssDescription = async (game:Game,params:ICssFontParameters,progress?:(n:number)=>void)=>{
 
         const fontFamily:string = params.fontFamily ?? DEFAULT_FONT_PARAMS.fontFamily;
         const fontSize:number = params.fontSize ?? DEFAULT_FONT_PARAMS.fontSize;
@@ -269,8 +269,13 @@ export namespace FontFactory {
         const texturePages:ITexture[] = [];
 
         const resourceLoader:ResourceLoader = new ResourceLoader(game);
+        let currProgress:number = 0;
+        const progressCallback = (n:number)=>{
+            currProgress+=n;
+            if (progress!==undefined) progress(currProgress/bitmapUrls.length);
+        };
         for (const bitmapUrl of bitmapUrls) {
-            const texture:ITexture = await resourceLoader.loadTexture(bitmapUrl);
+            const texture:ITexture = await resourceLoader.loadTexture(bitmapUrl,progressCallback);
             texturePages.push(texture);
         }
 
@@ -324,6 +329,14 @@ export class Font {
             throw new DebugError(`wrong page index for character "${char}"`);
         }
         return this.context.texturePages[pageIndex];
+    }
+
+    public getSize():number {
+        return this.context.fontSize;
+    }
+
+    public getFontFamily():string {
+        return this.context.fontFamily;
     }
 
 }

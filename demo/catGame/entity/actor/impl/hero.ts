@@ -25,7 +25,7 @@ const RIGHT:number = 1;
 
 export class Hero extends AbstractCharacter {
 
-    constructor(protected game:Game, spr:ResourceLink<ITexture>) {
+    constructor(protected game:Game, spr:ITexture) {
         super(game,spr,{
             restitution: 0.2,
             rect: new Rect(23,20,15,33),
@@ -60,10 +60,10 @@ export class Hero extends AbstractCharacter {
     private beating:boolean = false;
     private direction:number = RIGHT;
 
-    private soundHurt = new Sound(this.game);
-    private soundShoot = new Sound(this.game);
-    private soundJump = new Sound(this.game);
-    private soundPick = new Sound(this.game);
+    private soundHurt:Sound;
+    private soundShoot:Sound;
+    private soundJump:Sound;
+    private soundPick:Sound;
 
     public static getCreatedInstance():Hero {
         return Hero.instance;
@@ -72,15 +72,15 @@ export class Hero extends AbstractCharacter {
     public injectResources(
         res:
             {
-                soundShoot:ResourceLink<void>,
-                soundHurt:ResourceLink<void>,
-                soundJump:ResourceLink<void>,
-                soundPick:ResourceLink<void>
+                soundShoot:Sound,
+                soundHurt:Sound,
+                soundJump:Sound,
+                soundPick:Sound
         }):void{
-        this.soundShoot.setResourceLink(res.soundShoot);
-        this.soundHurt.setResourceLink(res.soundHurt);
-        this.soundJump.setResourceLink(res.soundJump);
-        this.soundPick.setResourceLink(res.soundPick);
+        this.soundShoot = res.soundShoot;
+        this.soundHurt = res.soundHurt;
+        this.soundJump = res.soundJump;
+        this.soundPick = res.soundPick;
     }
 
     protected onCreatedFrameAnimation(): void {

@@ -5,6 +5,7 @@ import {Size} from "@engine/geometry/size";
 import {Rect} from "@engine/geometry/rect";
 import {MathEx} from "@engine/misc/mathEx";
 import {AbstractMonster} from "../abstract/abstractMonster";
+import {Sound} from "@engine/media/sound";
 
 export class Monster1 extends AbstractMonster {
 
@@ -12,7 +13,7 @@ export class Monster1 extends AbstractMonster {
 
     private baseVelocity:number = 70;
 
-    constructor(protected game: Game, spr: ResourceLink<ITexture>,hurtSound:ResourceLink<void>) {
+    constructor(protected game: Game, spr: ITexture,hurtSound:Sound) {
         super(game, spr,hurtSound,{
             restitution: 0.2,
             rect: new Rect(20,20,23,33),

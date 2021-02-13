@@ -20,13 +20,11 @@ type LEVEL_SCHEMA = typeof import("../../level/l1.json");
 
 export abstract class BaseAbstractIntroScene extends Scene {
 
-    protected snd:Sound;
-
-    protected abstract soundThemeRes:ResourceLink<void>;
-    protected abstract spriteSheetLabel:ResourceLink<ITexture>;
+    protected abstract soundTheme:Sound;
+    protected abstract spriteSheetLabel:ITexture;
 
     @Resource.Texture('./catGame/res/sprite/wall1.png')
-    private wall1: ResourceLink<ITexture>;
+    private wall1: ITexture;
 
     private level: LEVEL_SCHEMA = intro as unknown as LEVEL_SCHEMA;
 
@@ -43,11 +41,8 @@ export abstract class BaseAbstractIntroScene extends Scene {
     }
 
     protected startSound():void {
-        const snd:Sound = new Sound(this.game);
-        snd.setResourceLink(this.soundThemeRes);
-        snd.loop = true;
-        snd.play();
-        this.snd = snd;
+        this.soundTheme.loop = true;
+        this.soundTheme.play();
     }
 
     protected setBg():void {
@@ -91,8 +86,7 @@ export abstract class BaseAbstractIntroScene extends Scene {
         rectangle.borderRadius = 10;
         this.appendChild(rectangle);
 
-        const img:Image = new Image(this.game);
-        img.setResourceLink(this.spriteSheetLabel);
+        const img:Image = new Image(this.game,this.spriteSheetLabel);
         this.appendChild(img);
         img.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         img.anchorPoint.setToCenter();

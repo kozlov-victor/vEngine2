@@ -24,13 +24,12 @@ export class PbmReader {
         return arr;
     }
 
-    public createTextureLink():ResourceLink<ITexture>{
-
+    public createTexture():ITexture{
         const {width,height} = this.readHead();
         const t:DataTexture = new DataTexture(this.game,width,height);
         const bitmap = this.read(width,height);
         t.setNewData(new Uint8Array(bitmap));
-        return t.getLink();
+        return t;
     }
 
     private isEOF():boolean{

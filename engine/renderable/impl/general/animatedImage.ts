@@ -3,6 +3,7 @@ import {ICloneable, Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {Image} from "@engine/renderable/impl/general/image";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
 export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
@@ -12,8 +13,8 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
     private _currFrameAnimation:Optional<AbstractFrameAnimation<any>>;
     private _frameAnimations:{[name:string]:AbstractFrameAnimation<any>} = {};
 
-    constructor(game:Game){
-        super(game);
+    constructor(game:Game,texture:ITexture){
+        super(game,texture);
     }
 
     public revalidate():void {
@@ -24,7 +25,7 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
     }
 
     public clone():AnimatedImage {
-        const cloned:AnimatedImage = new AnimatedImage(this.game);
+        const cloned:AnimatedImage = new AnimatedImage(this.game,this.getTexture());
         this.setClonedProperties(cloned);
         return cloned;
     }

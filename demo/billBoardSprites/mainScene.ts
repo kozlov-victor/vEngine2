@@ -1,11 +1,10 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {SimpleGameObjectContainer} from "../../engine/renderable/impl/general/simpleGameObjectContainer";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MathEx} from "@engine/misc/mathEx";
 import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Resource} from "@engine/resources/resourceDecorators";
@@ -13,7 +12,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/star.png')
-    private textureResourceLink:ResourceLink<ITexture>;
+    private textureResource:ITexture;
 
 
     public onReady():void {
@@ -22,8 +21,7 @@ export class MainScene extends Scene {
         this.appendChild(container);
         container.pos.setXY(this.game.size.width/2,this.game.size.height/2);
 
-        const image:Image = new Image(this.game);
-        image.setResourceLink(this.textureResourceLink);
+        const image:Image = new Image(this.game,this.textureResource);
         container.appendChild(image);
         image.anchorPoint.setToCenter();
         image.transformPoint.setToCenter();

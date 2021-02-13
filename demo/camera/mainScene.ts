@@ -10,25 +10,28 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {ResourceHolder} from "./resources/resourceHolder";
+import {ResourceLoader} from "@engine/resources/resourceLoader";
 
 export class MainScene extends Scene {
 
     private resourceHolder:ResourceHolder = new ResourceHolder(this);
 
+    onPreloading(resourceLoader: ResourceLoader):void {
+        super.onPreloading(resourceLoader);
+    }
+
     public onReady():void {
 
         this.size.setWH(1100,2100);
 
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.resourceHolder.logoLink);
+        const spr:Image = new Image(this.game,this.resourceHolder.logoTexture);
         spr.size.setWH(250,300);
         spr.stretchMode = STRETCH_MODE.REPEAT;
         spr.offset.setXY(1,1);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
 
-        const bg:Image = new Image(this.game);
-        bg.setResourceLink(this.resourceHolder.bgLink);
+        const bg:Image = new Image(this.game,this.resourceHolder.bgTexture);
         bg.size.setWH(1000,2000);
         bg.stretchMode = STRETCH_MODE.STRETCH;
         this.appendChild(bg);

@@ -9,7 +9,7 @@ export class BloodDrop extends CollectableEntity {
 
     public static readonly groupName:string = 'bloodDrop';
 
-    constructor(protected game: Game, spriteSheet: ResourceLink<ITexture>) {
+    constructor(protected game: Game, spriteSheet: ITexture) {
         super(game,spriteSheet,{
             groupNames: [BloodDrop.groupName,CollectableEntity.groupName],
         });

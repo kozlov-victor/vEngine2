@@ -6,6 +6,7 @@ import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {ResourceLoader} from "@engine/resources/resourceLoader";
 
 class EngineEmulator extends Emulator {
 
@@ -14,12 +15,11 @@ class EngineEmulator extends Emulator {
 
     constructor(game:Game) {
         super(game);
-        this.img = new Image(game);
+        const t:DataTexture = new DataTexture(game,64,32);
+        this.img = new Image(game,t);
         this.img.scale.setXY(10);
         this.img.setPixelPerfect(true);
-        const t:DataTexture = new DataTexture(game,64,32);
         this.texture = t;
-        this.img.setResourceLink(t.getLink());
     }
 
     public getImage():Image{
@@ -44,21 +44,25 @@ class EngineEmulator extends Emulator {
 export class MainScene extends Scene {
 
     private emulator:EngineEmulator;
-    private rom:ResourceLink<ArrayBuffer>;
+    private rom:ArrayBuffer;
 
 
     constructor(protected game:Game, private romPath:string) {
         super(game);
     }
 
-    public onPreloading():void {
-        this.emulator = new EngineEmulator(this.game);
-        this.rom = this.resourceLoader.loadBinary(this.romPath);
+    public onPreloading(resourceLoader:ResourceLoader):void {
+        super.onPreloading(resourceLoader);
+        resourceLoader.addNextTask(async _=>{
+            this.emulator = new EngineEmulator(this.game);
+            this.rom = await resourceLoader.loadBinary(this.romPath);
+        });
+
     }
 
     public onReady():void {
         this.appendChild(this.emulator.getImage());
-        this.emulator.setRom(new Uint8Array(this.rom.getTarget()));
+        this.emulator.setRom(new Uint8Array(this.rom));
 
 
         const pressOfRelease = (code:number,pressed:boolean)=>{

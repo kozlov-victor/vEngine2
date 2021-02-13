@@ -10,7 +10,7 @@ import {Game} from "@engine/core/game";
 import {Optional} from "@engine/core/declarations";
 import Vec4Holder = Vec4.Vec4Holder;
 
-const recycledArray:Readonly<VEC4>[] = [undefined!,undefined!,undefined!,undefined!];
+const recycledArray:Readonly<Vec4.VEC4>[] = [undefined!,undefined!,undefined!,undefined!];
 
 export class MouseControlHelper {
 

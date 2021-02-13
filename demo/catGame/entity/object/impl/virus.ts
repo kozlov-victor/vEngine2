@@ -12,7 +12,7 @@ export class Virus extends CollectableEntity {
     public static readonly groupName:string = 'virus';
     private life:number = 5;
 
-    constructor(protected game: Game, spriteSheet: ResourceLink<ITexture>) {
+    constructor(protected game: Game, spriteSheet: ITexture) {
         super(game,spriteSheet,{
             groupNames: [Virus.groupName],
             rect: new Rect(5,5,35,35)

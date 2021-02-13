@@ -40,13 +40,13 @@ export class MainScene extends Scene {
     public fnt:Font;
 
     @Resource.Texture('./chipTunePlayer/skin.png')
-    private skinLink:ResourceLink<ITexture>;
+    private skinTexture:ITexture;
 
-    onPreloading():void {
-        super.onPreloading();
-        loadFont(this.game,'./chipTunePlayer/pixel.ttf','customFont');
-        this.resourceLoader.addNextTask(()=>{
-            this.fnt = new Font(this.game,{fontSize:25,fontFamily:'customFont'});
+    onPreloading(resourceLoader:ResourceLoader):void {
+        super.onPreloading(resourceLoader);
+        loadFont(this.game,resourceLoader,'./chipTunePlayer/pixel.ttf','customFont');
+        resourceLoader.addNextTask(async progress=>{
+            this.fnt = await resourceLoader.loadFontFromCssDescription({fontSize:25,fontFamily:'customFont'},progress);
         });
     }
 
@@ -111,8 +111,7 @@ export class MainScene extends Scene {
         let currSound:Sound;
         let pending:boolean = false;
 
-        const img = new Image(this.game);
-        img.setResourceLink(this.skinLink);
+        const img = new Image(this.game,this.skinTexture);
         img.passMouseEventsThrough = true;
         this.appendChild(img);
 
@@ -125,7 +124,8 @@ export class MainScene extends Scene {
             setTimeout(async ()=>{
                 if (currSound!==undefined) currSound.stop();
                 const resourceLoader = new ResourceLoader(this.game);
-                const buff:ArrayBuffer = await resourceLoader.loadBinary(songUrl).asPromise();
+                const buff:ArrayBuffer = await resourceLoader.loadBinary(songUrl);
+                resourceLoader.start();
                 let track;
                 const extension:string = songUrl.split('.')[1];
                 switch (extension) {
@@ -138,11 +138,9 @@ export class MainScene extends Scene {
                     default:
                         throw new Error(`unsupported extension: ${extension}`);
                 }
-                const link: ResourceLink<void> = ResourceLink.create<void>(undefined);
                 const trackArrayBuffer = await track.renderToArrayBuffer();
-                await this.game.getAudioPlayer().uploadBufferToContext(trackArrayBuffer, link);
-                const sound = new Sound(this.game);
-                sound.setResourceLink(link);
+                await this.game.getAudioPlayer().uploadBufferToContext(songUrl,trackArrayBuffer);
+                const sound = new Sound(this.game,songUrl);
                 sound.play();
                 currSound = sound;
                 tf.setText(track.getTrackInfo());

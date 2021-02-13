@@ -15,7 +15,7 @@ export class Wall extends AbstractEntity {
 
     public static readonly groupName:string = 'wall';
 
-    constructor(protected game:Game,size:Size,resource:ResourceLink<ITexture>,movePlatformInfo?:IExtraProperties) {
+    constructor(protected game:Game,size:Size,resource:ITexture,movePlatformInfo?:IExtraProperties) {
         super(game, resource, {
             groupNames: [Wall.groupName],
             type:ARCADE_RIGID_BODY_TYPE.KINEMATIC,
@@ -23,7 +23,6 @@ export class Wall extends AbstractEntity {
         });
         const rect:Image = this.getRenderableModel() as Image;
         rect.size.set(size);
-        rect.setResourceLink(resource);
         rect.stretchMode = STRETCH_MODE.REPEAT;
         rect.lineWidth = 2;
         rect.borderRadius = 5;

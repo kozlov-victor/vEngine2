@@ -30,15 +30,13 @@ export abstract class AbstractCharacter extends AbstractEntity {
 
     protected velocity:number = 10;
 
-    protected constructor(protected game:Game, spr:ResourceLink<ITexture>,params:ICreateRigidBodyParams) {
+    protected constructor(protected game:Game, spr:ITexture,params:ICreateRigidBodyParams) {
         super(game,spr,params);
         this.idle();
     }
 
-    protected onCreatedRenderableModel(spriteSheet: ResourceLink<ITexture>): RenderableModel {
-        const img:AnimatedImage = new AnimatedImage(this.game);
-        img.setResourceLink(spriteSheet);
-        return img;
+    protected onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
+        return new AnimatedImage(this.game, spriteSheet);
     }
 
     protected createFrameAnimation(name:string,frames:number[], duration:number, spriteSheetSize:Size):CellFrameAnimation {

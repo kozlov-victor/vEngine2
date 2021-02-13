@@ -7,6 +7,23 @@ const decoratorNamesToProcess = [
     'Texture','Sound','CubeTexture','Text', 'Font', 'FontFromAtlas'
 ];
 
+const createStatementsForPreloadingMethod = (template,params)=>{
+
+    const compiledTemplate =
+        tstemplate.compile(`
+            class Template {
+                public templateMethod():void{
+                    ${template}
+                }
+            }`
+        )(params);
+
+    return tsquery(
+        compiledTemplate,
+        `MethodDeclaration:has(Identifier[name="templateMethod"])`
+    )[0].body.statements;
+}
+
 module.exports = function(content) {
     const ast = tsquery.ast(content,undefined,2); // tsx
 
@@ -21,13 +38,12 @@ module.exports = function(content) {
         );
         if (allDecoratedFields.length===0) return;
         modified = true;
-        const preloadingMethods = tsquery(cl, `MethodDeclaration:has(Identifier[name="onPreloading"])`);
-        let preloadingMethod = preloadingMethods[0];
+        let preloadingMethod = tsquery(cl, `MethodDeclaration:has(Identifier[name="onPreloading"])`)[0];
         if (preloadingMethod===undefined) {
             preloadingMethod = tsquery(tstemplate.compile(`
                 class Template {
-                    public onPreloading(){
-                        super.onPreloading();
+                    public onPreloading(resourceLoader):void{
+                        super.onPreloading(resourceLoader);
                     }
                 }
             `)({}),`MethodDeclaration:has(Identifier[name="onPreloading"])`)[0];
@@ -44,19 +60,19 @@ module.exports = function(content) {
                     d.expression.expression.name.escapedText;
                 if (decoratorName && decoratorNamesToProcess.includes(decoratorName)) {
                     const decoratorArgs = d.expression.arguments;
-                    const statement = tsquery(tstemplate.compile(`
-                    class Template {
-                        public onPreloading(){
-                            this.resourceLoader.addNextTask(()=>{
-                               this.<%=fieldName%> = this.resourceLoader.load${decoratorName}(<%=args%>);
-                            });
+                    const loadingStatements = createStatementsForPreloadingMethod(
+                        `
+                         resourceLoader.addNextTask(async (progress:(n:number)=>void):Promise<void>=>{
+                            this.<%=fieldName%> = await resourceLoader.load${decoratorName}(<%=args%>,progress);
+                        });
+                        `,
+                        {
+                            fieldName: ts.createIdentifier(f.name.escapedText),
+                            args: decoratorArgs,
+                            cnt: ts.createIdentifier('cnt')
                         }
-                    }
-                    `)({
-                        fieldName: ts.createIdentifier(f.name.escapedText),
-                        args: decoratorArgs
-                    }), `MethodDeclaration:has(Identifier[name="onPreloading"])`)[0].body.statements[0];
-                    statements.push(statement);
+                    );
+                    statements.push(...loadingStatements);
                 } else {
                     newDecorators.push(d);
                 }
@@ -64,14 +80,8 @@ module.exports = function(content) {
             f.decorators = newDecorators;
         });
 
-        const internalMethod = tsquery(tstemplate.compile(`
-                class Template {
-                    public __getNumberOfResourcesToPreload():number{
-                        return <%=n%>;
-                    }
-                }
-            `)({n:ts.createLiteral(statements.length)}),`MethodDeclaration:has(Identifier[name="__getNumberOfResourcesToPreload"])`)[0];
-        cl.members.push(internalMethod);
+        const autoHolderDecoratedFields = tsquery(cl, `PropertyDeclaration:has(Decorator:has(Identifier[name="ResourceAutoHolder"]))`);
+        console.log('-------------------------->',autoHolderDecoratedFields);
 
         preloadingMethod.body.statements = [...preloadingMethod.body.statements, ...statements];
 

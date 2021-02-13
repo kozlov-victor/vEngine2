@@ -9,7 +9,7 @@ export class TestTube extends CollectableEntity {
 
     public static readonly groupName:string = 'testTube';
 
-    constructor(protected game: Game, spriteSheet: ResourceLink<ITexture>) {
+    constructor(protected game: Game, spriteSheet: ITexture) {
         super(game,spriteSheet,{
             groupNames: [TestTube.groupName,CollectableEntity.groupName],
         });

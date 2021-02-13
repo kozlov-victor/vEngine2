@@ -32,7 +32,7 @@ interface IDocument extends Document {
 }
 
 export interface IRenderTarget {
-    getResourceLink():ResourceLink<ITexture>;
+    getTexture():ITexture;
     destroy():void;
 }
 

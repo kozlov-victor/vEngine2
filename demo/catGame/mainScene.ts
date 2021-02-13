@@ -33,55 +33,55 @@ type LEVEL_SCHEMA = typeof import("./level/l1.json");
 export class MainScene extends Scene {
 
     @Resource.Texture('./catGame/res/sprite/cat.png')
-    private spriteSheetHero: ResourceLink<ITexture>;
+    private spriteSheetHero: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/wall1.png')
-    private wall1: ResourceLink<ITexture>;
+    private wall1: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/wall2.png')
-    private wall2: ResourceLink<ITexture>;
+    private wall2: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/monster1.png')
-    private spriteSheetMonster1: ResourceLink<ITexture>;
+    private spriteSheetMonster1: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/lava.png')
-    private spriteSheetLava: ResourceLink<ITexture>;
+    private spriteSheetLava: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/water.png')
-    private spriteSheetWater: ResourceLink<ITexture>;
+    private spriteSheetWater: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/monster2.png')
-    private spriteSheetMonster2: ResourceLink<ITexture>;
+    private spriteSheetMonster2: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/zombie.png')
-    private spriteSheetZombie: ResourceLink<ITexture>;
+    private spriteSheetZombie: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/bloodDrop.png')
-    private spriteSheetBloodDrop: ResourceLink<ITexture>;
+    private spriteSheetBloodDrop: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/testTube.png')
-    private spriteSheetTestTube: ResourceLink<ITexture>;
+    private spriteSheetTestTube: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/bullet3.png')
-    private spriteSheetBullet: ResourceLink<ITexture>;
+    private spriteSheetBullet: ITexture;
 
     @Resource.Sound('./catGame/res/sound/theme2.ogg')
-    private soundTheme1Res: ResourceLink<void>;
+    private soundTheme1: Sound;
 
     @Resource.Sound('./catGame/res/sound/hurt.ogg')
-    private soundHurt: ResourceLink<void>;
+    private soundHurt: Sound;
 
     @Resource.Sound('./catGame/res/sound/hurt.ogg')
-    private soundHurt2: ResourceLink<void>;
+    private soundHurt2: Sound;
 
     @Resource.Sound('./catGame/res/sound/shoot.ogg')
-    private soundShoot: ResourceLink<void>;
+    private soundShoot: Sound;
 
     @Resource.Sound('./catGame/res/sound/jump.ogg')
-    private soundJump: ResourceLink<void>;
+    private soundJump: Sound;
 
     @Resource.Sound('./catGame/res/sound/pick.ogg')
-    private soundPick: ResourceLink<void>;
+    private soundPick: Sound;
 
     private level: LEVEL_SCHEMA;
 
@@ -108,8 +108,7 @@ export class MainScene extends Scene {
     }
 
     private playTheme():void {
-        const sound:Sound = new Sound(this.game);
-        sound.setResourceLink(this.soundTheme1Res);
+        const sound:Sound = this.soundTheme1;
         sound.loop = true;
         sound.play();
     }
@@ -170,7 +169,7 @@ export class MainScene extends Scene {
                 case Wall.groupName:
                     if (extraProperties.toX) extraProperties.fromX = obj.x;
                     if (extraProperties.toY) extraProperties.fromY = obj.y;
-                    const wallResource: ResourceLink<ITexture> = (extraProperties.toX || extraProperties.toY) ?
+                    const wallResource: ITexture = (extraProperties.toX || extraProperties.toY) ?
                         this.wall2 : this.wall1;
                     objCreated = new Wall(this.game, new Size(obj.width, obj.height), wallResource, extraProperties);
                     break;

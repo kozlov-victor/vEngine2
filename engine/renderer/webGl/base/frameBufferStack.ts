@@ -48,7 +48,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     private _simpleRectDrawer:SimpleRectDrawer;
     private _blender:Blender = Blender.getSingleton(this._gl);
 
-    private readonly _resourceLink:ResourceLink<ITexture>;
+    private readonly _resourceTexture:ITexture;
 
     constructor(protected readonly game:Game,private readonly _gl:WebGLRenderingContext, private readonly _size:ISize){
         this._stack.push({
@@ -77,7 +77,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         m16Scale.release();
         m16Ortho.release();
 
-        this._resourceLink = ResourceLink.create<ITexture>(this._getFirst().frameBuffer.getTexture());
+        this._resourceTexture = this._getFirst().frameBuffer.getTexture();
 
     }
 
@@ -168,8 +168,8 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         this._simpleRectDrawer.draw();
     }
 
-    public getResourceLink(): ResourceLink<ITexture> {
-        return this._resourceLink;
+    public getTexture(): ITexture {
+        return this._resourceTexture;
     }
 
     private _getLast():IStackItem{

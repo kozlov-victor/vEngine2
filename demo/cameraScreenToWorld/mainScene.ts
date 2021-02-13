@@ -13,8 +13,8 @@ import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 
 export class MainScene extends Scene {
 
-    @Resource.Texture('./assets/logo.png') private logoLink:ResourceLink<ITexture>;
-    @Resource.Texture('./assets/repeat.jpg')  private bgLink:ResourceLink<ITexture>;
+    @Resource.Texture('./assets/logo.png') private logoTexture:ITexture;
+    @Resource.Texture('./assets/repeat.jpg')  private bgTexture:ITexture;
 
     public onReady():void {
 
@@ -24,16 +24,14 @@ export class MainScene extends Scene {
         this.size.setWH(1100,2100);
         this.camera.scale.setXY(0.7, 0.9);
 
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoTexture);
         spr.size.setWH(250,300);
         spr.stretchMode = STRETCH_MODE.REPEAT;
         spr.offset.setXY(1,1);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
 
-        const bg:Image = new Image(this.game);
-        bg.setResourceLink(this.bgLink);
+        const bg:Image = new Image(this.game,this.bgTexture);
         bg.size.setWH(1000,2000);
         bg.stretchMode = STRETCH_MODE.STRETCH;
         this.appendChild(bg);

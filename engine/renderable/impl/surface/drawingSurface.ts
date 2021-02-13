@@ -1,5 +1,5 @@
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ICloneable, IDestroyable, IParentChild, IResource} from "@engine/core/declarations";
+import {ICloneable, IDestroyable, IParentChild} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {Game} from "@engine/core/game";
@@ -16,7 +16,6 @@ import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {IMatrixTransformable, MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {isNumber, isObject, isString} from "@engine/misc/object";
 import {Font} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
@@ -73,12 +72,12 @@ class DrawingSession implements IDrawingSession {
     private readonly _renderTarget:IRenderTarget;
     private _omitSelfOnRendering:boolean = false;
 
-    private canvasImage:Image = new Image(this.game);
+    private readonly canvasImage:Image;
 
     constructor(private game:Game,private surface:DrawingSurface,private _matrixStack:MatrixStack) {
         this._renderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,this.surface.size);
+        this.canvasImage = new Image(this.game,this._renderTarget.getTexture());
         this.canvasImage.size.set(surface.size);
-        this.canvasImage.setResourceLink(this._renderTarget.getResourceLink());
         this.canvasImage.revalidate();
     }
 
@@ -225,8 +224,8 @@ class DrawingSession implements IDrawingSession {
         (model as IParentChild).parent = parent;
     }
 
-    public _getResourceLink():ResourceLink<ITexture>{
-        return this.canvasImage.getResourceLink();
+    public _getTexture():ITexture{
+        return this.canvasImage.getTexture();
     }
 
     public _draw():void {
@@ -287,7 +286,7 @@ class DrawingSession implements IDrawingSession {
 export class DrawingSurface
     extends RenderableModel
     implements
-        ICloneable<DrawingSurface>,IResource<ITexture>,
+        ICloneable<DrawingSurface>,
         IMatrixTransformable, IDestroyable,
         IDrawingSession {
 
@@ -327,8 +326,8 @@ export class DrawingSurface
         this._drawingSession._draw();
     }
 
-    public getResourceLink(): ResourceLink<ITexture> {
-        return this._drawingSession._getResourceLink();
+    public getTexture(): ITexture {
+        return this._drawingSession._getTexture();
     }
 
     public setFillColor(col:number,alpha?:byte):void;

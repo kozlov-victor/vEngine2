@@ -33,8 +33,6 @@ export class MainScene extends Scene {
         this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
     }
 
-
-
     public onReady():void {
         console.log('ready');
         const spr:Image = new Image(this.game);

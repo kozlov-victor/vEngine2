@@ -1,6 +1,7 @@
 import {Game} from "@engine/core/game";
 import {DebugError} from "@engine/debug/debugError";
 import {TaskRef} from "@engine/resources/queue";
+import {ResourceLoader} from "@engine/resources/resourceLoader";
 
 declare class FontFace {
     constructor(fontFaceName: string, url: string);
@@ -16,24 +17,26 @@ interface IDocumentEx extends Document{
 
 export namespace fontLoader {
 
-    const loadViaFontFace = (game:Game,url:string,fontFaceName:string)=>{
+    const loadViaFontFace = (game:Game,resourceLoader:ResourceLoader,url:string,fontFaceName:string)=>{
         const fontFace = new FontFace(fontFaceName, `url(${url})`);
-        const taskRef:TaskRef = game.getCurrScene().resourceLoader.q.addTask(()=>{
-            fontFace.load().then((loadedFace:FontFace)=> {
+
+        resourceLoader.addNextTask(async _=>{
+            try {
+                const loadedFace:FontFace = await fontFace.load();
                 (document as IDocumentEx).fonts.add(loadedFace);
-                game.getCurrScene().resourceLoader.q.resolveTask(taskRef);
-            }).catch((error:Error)=> {
-                console.error(error);
+            } catch (e:any) {
+                console.error(e);
                 const event = new Event('error');
                 (event as Event&{message:string}).message = `can not load font: ${url}`;
                 window.dispatchEvent(event);
                 throw new DebugError(`can not load font: ${url}`);
-            });
+            }
         });
     };
 
-    const loadViaDomCss = (game:Game,url:string,fontFaceName:string)=>{
-        const taskRef:TaskRef = game.getCurrScene().resourceLoader.q.addTask(()=>{
+    const loadViaDomCss = (game:Game,resourceLoader:ResourceLoader,url:string,fontFaceName:string)=>{
+
+        resourceLoader.addNextTask(async _=>{
             const cssNode = document.createElement('style');
             cssNode.innerHTML = `
                   @font-face {
@@ -43,19 +46,17 @@ export namespace fontLoader {
             `;
             document.head.appendChild(cssNode);
 
-            setTimeout(()=>{
-                game.getCurrScene().resourceLoader.q.resolveTask(taskRef);
-            },100);
-
-        });
-
+            return new Promise<void>(resolve=>{
+                setTimeout(resolve,100);
+            });
+       });
     };
 
-    export const loadFont = (game:Game,url:string,fontFaceName:string):void=>{
+    export const loadFont = (game:Game,resourceLoader:ResourceLoader,url:string,fontFaceName:string):void=>{
         if ((window as unknown as {FontFace:{}}).FontFace!==undefined) {
-            loadViaFontFace(game,url,fontFaceName);
+            loadViaFontFace(game,resourceLoader,url,fontFaceName);
         } else {
-            loadViaDomCss(game,url,fontFaceName);
+            loadViaDomCss(game,resourceLoader,url,fontFaceName);
         }
     };
 

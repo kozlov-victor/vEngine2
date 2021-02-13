@@ -16,7 +16,7 @@ export class Lava extends AbstractEntity {
 
     private animation:CellFrameAnimation;
 
-    constructor(protected game: Game, spriteSheet: ResourceLink<ITexture>,size:Size) {
+    constructor(protected game: Game, spriteSheet: ITexture,size:Size) {
         super(game,spriteSheet,{
             type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
             groupNames: [Lava.groupName],
@@ -26,9 +26,8 @@ export class Lava extends AbstractEntity {
         this.animation.play();
     }
 
-    protected onCreatedRenderableModel(spriteSheet: ResourceLink<ITexture>): RenderableModel {
-        const img:AnimatedImage = new AnimatedImage(this.game);
-        img.setResourceLink(spriteSheet);
+    protected onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
+        const img:AnimatedImage = new AnimatedImage(this.game,spriteSheet);
         const animation:CellFrameAnimation = new CellFrameAnimation(this.game);
         animation.frames = this.createRange(0,44);
         animation.duration = 5000;

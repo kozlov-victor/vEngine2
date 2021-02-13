@@ -56,8 +56,6 @@ if (!Float32Array.prototype.slice) {
     };
 }
 
-console.log(Float32Array.from);
-
 if (!Float32Array.from) {
     // @ts-ignore
     Float32Array.from = (arr:number[])=> {
@@ -65,4 +63,3 @@ if (!Float32Array.from) {
     };
 }
 
-console.log(Float32Array.from);

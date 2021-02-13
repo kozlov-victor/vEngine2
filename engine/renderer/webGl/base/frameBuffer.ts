@@ -88,10 +88,6 @@ export class FrameBuffer implements IRenderTarget {
         return this.texture;
     }
 
-    public getResourceLink():ResourceLink<ITexture>{
-        return this._link;
-    }
-
     private _init(gl:WebGLRenderingContext,size:ISize):void{
         // Init Render Buffer
         this.glRenderBuffer = gl.createRenderbuffer() as WebGLRenderbuffer;
