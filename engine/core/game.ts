@@ -12,6 +12,7 @@ import {ISize, Size} from "@engine/geometry/size";
 import {IPhysicsSystem} from "@engine/physics/common/interfaces";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export const enum SCALE_STRATEGY {
@@ -182,7 +183,8 @@ export class Game {
             const resourceLoader:ResourceLoader = new ResourceLoader(this);
             this._currScene.lifeCycleState = SceneLifeCycleState.PRELOADING;
             this._currScene.trigger(SCENE_EVENTS.PRELOADING,resourceLoader);
-            scene.onPreloading(resourceLoader);
+            const taskQueue:TaskQueue = new TaskQueue(resourceLoader);
+            scene.onPreloading(taskQueue);
             resourceLoader.onProgress((n:number)=>{
                 this._currScene.trigger(SCENE_EVENTS.PROGRESS);
                 scene.onProgress(n);

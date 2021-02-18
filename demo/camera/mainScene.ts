@@ -10,15 +10,10 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {ResourceHolder} from "./resources/resourceHolder";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
 
 export class MainScene extends Scene {
 
     private resourceHolder:ResourceHolder = new ResourceHolder(this);
-
-    onPreloading(resourceLoader: ResourceLoader):void {
-        super.onPreloading(resourceLoader);
-    }
 
     public onReady():void {
 

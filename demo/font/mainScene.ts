@@ -6,6 +6,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Button} from "@engine/renderable/impl/ui/button/button";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
@@ -13,13 +14,14 @@ export class MainScene extends Scene {
     private fnt:Font;
     private fnt2:Font;
 
-    public onPreloading():void {
-        const fnt:Font = new Font(this.game,{fontSize:50});
+    public onPreloading(taskQueue:TaskQueue):void {
 
-        const fnt2:Font = new Font(this.game,{fontSize:20});
-
-        this.fnt = fnt;
-        this.fnt2 = fnt2;
+        taskQueue.addNextTask(async progress => {
+            this.fnt = await taskQueue.getLoader().loadFontFromCssDescription({fontSize: 50}, progress);
+        });
+        taskQueue.addNextTask(async progress => {
+            this.fnt2 = await taskQueue.getLoader().loadFontFromCssDescription({fontSize: 20}, progress);
+        });
     }
 
     public onReady():void {

@@ -25,6 +25,12 @@ export const Resource = {
             throw new DebugError(`something wrong with precompiler for Text decorator`);
         };
     },
+    JSON: (src:string|IURLRequest)=> {
+        return (target: Scene|ResourceAutoHolder, fieldName: string):void => {
+            // stub for precompiler only
+            throw new DebugError(`something wrong with precompiler for Text decorator`);
+        };
+    },
     CubeTexture:  (leftSide: string|IURLRequest, rightSide:string|IURLRequest,
                    topSide: string|IURLRequest, bottomSide:string|IURLRequest,
                    frontSide: string|IURLRequest, backSide:string|IURLRequest)=>{

@@ -10,13 +10,16 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    private normalMapLink:ResourceLink<ITexture>;
+    private normalMapLink:ITexture;
 
-    public onPreloading():void {
-        this.normalMapLink = this.resourceLoader.loadTexture('./lightNormalMap2/coin1.jpg');
+    public onPreloading(taskQueue:TaskQueue):void {
+        taskQueue.addNextTask(async progress=>{
+            this.normalMapLink = await taskQueue.getLoader().loadTexture('./lightNormalMap2/coin1.jpg');
+        });
     }
 
     public onReady():void {
@@ -33,12 +36,11 @@ export class MainScene extends Scene {
         lightSet.ambientLight.intensity = 0.9;
 
         const surf:DrawingSurface = new DrawingSurface(this.game,this.game.size);
-        const sprNormal:Image = new Image(this.game);
-        sprNormal.setResourceLink(this.normalMapLink);
+        const sprNormal:Image = new Image(this.game,this.normalMapLink);
         surf.drawModel(sprNormal);
 
         const lightFilter:LightFilter = new LightFilter(this.game,lightSet);
-        lightFilter.setNormalMap(surf.getResourceLink().getTarget() as Texture);
+        lightFilter.setNormalMap(surf.getTexture());
 
 
         const rect:Rectangle = new Rectangle(this.game);

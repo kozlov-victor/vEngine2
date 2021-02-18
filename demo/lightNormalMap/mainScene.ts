@@ -10,23 +10,26 @@ import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
-    private normalMapLink:ResourceLink<ITexture>;
+    private logoLink:ITexture;
+    private normalMapLink:ITexture;
 
-    public onPreloading():void {
+    public onPreloading(taskQueue:TaskQueue):void {
 
-        this.logoLink = this.resourceLoader.loadTexture('./lightNormalMap/rocks.png');
-        this.normalMapLink = this.resourceLoader.loadTexture('./lightNormalMap/rocks-normal.png');
-
+        taskQueue.addNextTask(async process=>{
+            this.logoLink = await taskQueue.getLoader().loadTexture('./lightNormalMap/rocks.png',process);
+        });
+        taskQueue.addNextTask(async process=>{
+            this.normalMapLink = await taskQueue.getLoader().loadTexture('./lightNormalMap/rocks-normal.png',process);
+        });
     }
 
     public onReady():void {
         this.backgroundColor = Color.BLACK;
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.setXY(10,10);
         this.appendChild(spr);
 
@@ -42,14 +45,12 @@ export class MainScene extends Scene {
         lightSet.ambientLight.intensity = 0.9;
 
         const surf:DrawingSurface = new DrawingSurface(this.game,this.game.size);
-        const sprNormal:Image = new Image(this.game);
-        sprNormal.setResourceLink(this.normalMapLink);
+        const sprNormal:Image = new Image(this.game,this.normalMapLink);
         sprNormal.pos.setXY(10,10);
-        console.log(sprNormal.id,sprNormal.size.toJSON(),this.normalMapLink.getState());
         surf.drawModel(sprNormal);
 
         const lightFilter:LightFilter = new LightFilter(this.game,lightSet);
-        lightFilter.setNormalMap(surf.getResourceLink().getTarget() as Texture);
+        lightFilter.setNormalMap(surf.getTexture());
 
 
         spr.filters = [lightFilter];

@@ -4,6 +4,7 @@ import {fontLoader} from "../fontTtf/FontLoader";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import loadFont = fontLoader.loadFont;
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
@@ -11,10 +12,10 @@ export class MainScene extends Scene {
     private fnt:Font;
     private tf:TextField;
 
-    public onPreloading():void {
-        loadFont(this.game,'./fontTtf2/zx.ttf','zx');
-        this.resourceLoader.addNextTask(()=>{
-            this.fnt = new Font(this.game,{fontSize:30,fontFamily:'zx'});
+    public onPreloading(taskQueue:TaskQueue):void {
+        loadFont(this.game,taskQueue,'./fontTtf2/zx.ttf','zx');
+        taskQueue.addNextTask(async _=>{
+            this.fnt = await taskQueue.getLoader().loadFontFromCssDescription({fontSize:30,fontFamily:'zx'});
         });
 
     }

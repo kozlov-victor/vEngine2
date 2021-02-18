@@ -8,14 +8,17 @@ import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MathEx} from "@engine/misc/mathEx";
 import {Tween} from "@engine/animation/tween";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 // inspired by https://m.habr.com/ru/post/482826/
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
+    private logoTexture:ITexture;
 
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
+    public onPreloading(taskQueue:TaskQueue):void {
+        taskQueue.addNextTask(async progress=>{
+            this.logoTexture = await taskQueue.getLoader().loadTexture('./assets/logo.png');
+        });
     }
 
 

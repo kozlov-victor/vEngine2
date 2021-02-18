@@ -3,12 +3,13 @@ import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {fontLoader} from "../../fontTtf/FontLoader";
 import loadFont = fontLoader.loadFont;
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export abstract class MkAbstractScene extends Scene {
 
-    public onPreloading(): void {
+    public onPreloading(taskQueue:TaskQueue): void {
         this.backgroundColor.set(Color.BLACK);
-        loadFont(this.game,'./mk-alfa/assets/fonts/MK4.TTF','MK4');
+        loadFont(this.game,taskQueue,'./mk-alfa/assets/fonts/MK4.TTF','MK4');
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(22,222,12);
         rect.size.height = 50;

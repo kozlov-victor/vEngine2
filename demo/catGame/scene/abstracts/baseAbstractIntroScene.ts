@@ -10,7 +10,6 @@ import {AbstractEntity} from "../../entity/abstract/abstractEntity";
 import {Wall} from "../../entity/object/impl/wall";
 import {Size} from "@engine/geometry/size";
 import {Image} from "@engine/renderable/impl/general/image";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import * as intro from "../../level/intro.json";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";

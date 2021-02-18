@@ -21,38 +21,35 @@ import {MoveByCircleAnimation} from "@engine/animation/propertyAnimation/moveByC
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {Point2d} from "@engine/geometry/point2d";
+import {TaskQueue} from "@engine/resources/taskQueue";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 
 export class MkDescribeHeroScene extends MkAbstractScene {
 
     public selectedIndex:number = 0;
 
+
+    @Resource.Font({fontSize: 80, fontFamily: 'MK4'})
     private fnt:Font;
-    private logoLink:ResourceLink<ITexture>;
-    private sndBtnLink:ResourceLink<void>;
+
+    private logoLink:ITexture;
+
+    @Resource.Sound('./mk-alfa/assets/sounds/btn3.mp3')
+    private sndBtn:Sound;
+
     private lightContainer:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
     private tfInfo:TextField;
 
-    public onPreloading(): void {
-        super.onPreloading();
-
-        this.fnt = new Font(this.game,{fontSize: 80, fontFamily: 'MK4'});
-
-        this.resourceLoader.addNextTask(()=>{
-            this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
-            this.sndBtnLink = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn3.mp3');
-
-            //for (let i:number = 0;i<100;i++) { fakeLongLoadingFn(this.resourceLoader); }
+    public onPreloading(taskQueue:TaskQueue): void {
+        super.onPreloading(taskQueue);
+        taskQueue.addNextTask(async progress => {
+            this.logoLink = await taskQueue.getLoader().loadTexture('./mk-alfa/assets/images/mkLogo.png',progress);
         });
-
-
     }
 
-
     public onReady(): void {
-
         super.onReady();
-
         this.appendChild(this.lightContainer);
         const lightFilter = new WaveFilter(this.game);
         lightFilter.setAmplitude(0.1);
@@ -143,9 +140,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
     }
 
     private goBack():void{
-        const s = new Sound(this.game);
-        s.setResourceLink(this.sndBtnLink);
-        s.play();
+        this.sndBtn.play();
         this.game.popScene();
     }
 

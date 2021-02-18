@@ -1,7 +1,6 @@
 import {Game} from "@engine/core/game";
 import {DebugError} from "@engine/debug/debugError";
-import {TaskRef} from "@engine/resources/queue";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 declare class FontFace {
     constructor(fontFaceName: string, url: string);
@@ -17,10 +16,10 @@ interface IDocumentEx extends Document{
 
 export namespace fontLoader {
 
-    const loadViaFontFace = (game:Game,resourceLoader:ResourceLoader,url:string,fontFaceName:string)=>{
+    const loadViaFontFace = (game:Game,taskQueue:TaskQueue,url:string,fontFaceName:string)=>{
         const fontFace = new FontFace(fontFaceName, `url(${url})`);
 
-        resourceLoader.addNextTask(async _=>{
+        taskQueue.addNextTask(async _=>{
             try {
                 const loadedFace:FontFace = await fontFace.load();
                 (document as IDocumentEx).fonts.add(loadedFace);
@@ -34,9 +33,9 @@ export namespace fontLoader {
         });
     };
 
-    const loadViaDomCss = (game:Game,resourceLoader:ResourceLoader,url:string,fontFaceName:string)=>{
+    const loadViaDomCss = (game:Game,taskQueue:TaskQueue,url:string,fontFaceName:string)=>{
 
-        resourceLoader.addNextTask(async _=>{
+        taskQueue.addNextTask(async _=>{
             const cssNode = document.createElement('style');
             cssNode.innerHTML = `
                   @font-face {
@@ -52,11 +51,11 @@ export namespace fontLoader {
        });
     };
 
-    export const loadFont = (game:Game,resourceLoader:ResourceLoader,url:string,fontFaceName:string):void=>{
+    export const loadFont = (game:Game,taskQueue:TaskQueue,url:string,fontFaceName:string):void=>{
         if ((window as unknown as {FontFace:{}}).FontFace!==undefined) {
-            loadViaFontFace(game,resourceLoader,url,fontFaceName);
+            loadViaFontFace(game,taskQueue,url,fontFaceName);
         } else {
-            loadViaDomCss(game,resourceLoader,url,fontFaceName);
+            loadViaDomCss(game,taskQueue,url,fontFaceName);
         }
     };
 

@@ -4,7 +4,7 @@ const tstemplate = require("@phenomnomnominal/tstemplate").tstemplate;
 const ts = require("typescript");
 
 const decoratorNamesToProcess = [
-    'Texture','Sound','CubeTexture','Text', 'Font', 'FontFromAtlas'
+    'Texture', 'Sound', 'CubeTexture', 'Text', 'JSON', 'Font', 'FontFromAtlas'
 ];
 
 const createStatementsForPreloadingMethod = (template,params)=>{
@@ -42,8 +42,8 @@ module.exports = function(content) {
         if (preloadingMethod===undefined) {
             preloadingMethod = tsquery(tstemplate.compile(`
                 class Template {
-                    public onPreloading(resourceLoader):void{
-                        super.onPreloading(resourceLoader);
+                    public onPreloading(taskQueue):void{
+                        super.onPreloading(taskQueue);
                     }
                 }
             `)({}),`MethodDeclaration:has(Identifier[name="onPreloading"])`)[0];
@@ -63,7 +63,7 @@ module.exports = function(content) {
                     const loadingStatements = createStatementsForPreloadingMethod(
                         `
                          resourceLoader.addNextTask(async (progress:(n:number)=>void):Promise<void>=>{
-                            this.<%=fieldName%> = await resourceLoader.load${decoratorName}(<%=args%>,progress);
+                            this.<%=fieldName%> = await taskQueue.getResourceLoader().load${decoratorName}(<%=args%>,progress);
                         });
                         `,
                         {

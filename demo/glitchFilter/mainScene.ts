@@ -8,17 +8,22 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {VideoGlitchFilter} from "@engine/renderer/webGl/filters/texture/videoGlitchFilter";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
+    private logoLink:ITexture;
 
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
+    public onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
+
+        taskQueue.addNextTask(async progress=>{
+            this.logoLink = await taskQueue.getLoader().loadTexture('./assets/logo.png',progress);
+        });
+
     }
 
     public onProgress(val: number):void {
@@ -26,8 +31,7 @@ export class MainScene extends Scene {
     }
 
     public onReady():void {
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
         this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{

@@ -11,14 +11,16 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {ITexture} from "@engine/renderer/common/texture";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
+    private logoLink:ITexture;
 
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
-
+    public onPreloading(taskQueue:TaskQueue):void {
+        taskQueue.addNextTask(async progress=>{
+            this.logoLink = await taskQueue.getLoader().loadTexture('./assets/logo.png',progress);
+        });
     }
 
 

@@ -11,6 +11,7 @@ import {EasingElastic} from "@engine/misc/easing/functions/elastic";
 import {PosterizeFilter} from "@engine/renderer/webGl/filters/texture/posterizeFilter";
 import {PixelFilter} from "@engine/renderer/webGl/filters/texture/pixelFilter";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class PreIntroScene extends Scene {
 
@@ -18,8 +19,8 @@ export class PreIntroScene extends Scene {
     private spriteSheetLogo: ITexture;
 
 
-    public onPreloading(resourceLoader:ResourceLoader): void {
-        super.onPreloading(resourceLoader);
+    public onPreloading(taskQueue:TaskQueue): void {
+        super.onPreloading(taskQueue);
         this.backgroundColor = Color.BLACK;
     }
 

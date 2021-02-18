@@ -10,21 +10,26 @@ import {LensDistortionFilter} from "@engine/renderer/webGl/filters/texture/lensD
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
-    private imgRepeatLink:ResourceLink<ITexture>;
+    private logoLink:ITexture;
+    private imgRepeatLink:ITexture;
 
 
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
-        this.imgRepeatLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
+    public onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
 
+        taskQueue.addNextTask(async process=>{
+            this.logoLink = await taskQueue.getLoader().loadTexture('./assets/logo.png',process);
+        });
+        taskQueue.addNextTask(async process=>{
+            this.imgRepeatLink = await taskQueue.getLoader().loadTexture('./assets/repeat.jpg',process);
+        });
     }
 
     public onProgress(val: number):void {
@@ -33,8 +38,7 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
 
@@ -47,9 +51,7 @@ export class MainScene extends Scene {
         circle.arcAngleTo = 2;
         this.appendChild(circle);
 
-        const img = new Image(this.game);
-        img.setResourceLink(this.imgRepeatLink);
-
+        const img = new Image(this.game,this.imgRepeatLink);
         img.pos.setXY(100,0);
         img.size.setWH(200);
         img.stretchMode = STRETCH_MODE.REPEAT;

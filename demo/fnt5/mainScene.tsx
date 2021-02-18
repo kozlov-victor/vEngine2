@@ -18,17 +18,17 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 export class MainScene extends Scene {
 
     @Resource.FontFromAtlas('./fnt4/font.png',fntXML1)
-    private fontLink1:ResourceLink<Font>;
+    private font1:Font;
 
     @Resource.FontFromAtlas('./fnt3/font.png',fntXML2)
-    private fontLink2:ResourceLink<Font>;
+    private font2:Font;
 
     @Resource.FontFromAtlas('./fnt/font.png',fntXML3)
-    private fontLink3:ResourceLink<Font>;
+    private font3:Font;
 
     public onReady():void {
         this.backgroundColor.setRGB(12,12,12);
-        const tf:RichTextField = new RichTextField(this.game,this.fontLink1.getTarget());
+        const tf:RichTextField = new RichTextField(this.game,this.font1);
         tf.size.set(this.game.size);
         tf.setPadding(10);
         tf.setWordBrake(WordBrake.PREDEFINED);
@@ -46,13 +46,13 @@ export class MainScene extends Scene {
                     {'\n'}
                     <v_font size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</v_font>
                     {'\n'}
-                    <b>Новая</b> строка 3 <v_font font={this.fontLink3.getTarget()} color={{r:122,g:255,b:122}}>(another font)</v_font>
+                    <b>Новая</b> строка 3 <v_font font={this.font2} color={{r:122,g:255,b:122}}>(another font)</v_font>
                     {'\n'}
-                    Счетчик <v_font size={80} color={{r:200,g:200,b:122}} font={this.fontLink2.getTarget()}>{++cnt}</v_font>
+                    Счетчик <v_font size={80} color={{r:200,g:200,b:122}} font={this.font2}>{++cnt}</v_font>
                     {'\n'}
                     <v_font color={{r:122,g:122,b:122}} size={25}>(Кликнуть для инкремента)</v_font>
                     {'\n'}
-                    <v_font font={this.fontLink2.getTarget()} color={{r:122,g:255,b:122}} size={71}>Эта <i>строка</i> с <s>тем же</s> <u>другим</u> шрифтом</v_font>
+                    <v_font font={this.font3} color={{r:122,g:255,b:122}} size={71}>Эта <i>строка</i> с <s>тем же</s> <u>другим</u> шрифтом</v_font>
                     {'\n'}
                     Новая строка с <s>другим</s> <u>тем же</u> шрифтом
                 </div>

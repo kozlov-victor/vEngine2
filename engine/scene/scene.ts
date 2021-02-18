@@ -37,6 +37,7 @@ import {RenderingObjectStack} from "@engine/scene/internal/renderingObjectStack"
 import {RenderingSessionInfo} from "@engine/scene/internal/renderingSessionInfo";
 import {Camera} from "@engine/renderer/camera";
 import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export const enum SCENE_EVENTS {
     PRELOADING = 'preloading',
@@ -199,7 +200,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     public on(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):(e:IKeyBoardEvent)=>void;
     public on(eventName:GAME_PAD_EVENTS,callBack:(e:IGamePadEvent)=>void):(e:IGamePadEvent)=>void;
     public on(eventName:SCENE_EVENTS,callBack:(e:void)=>void):(e:void)=>void;
-    public on(eventName:SCENE_EVENTS.PRELOADING,callBack:(resourceLoader:ResourceLoader)=>void):(e:ResourceLoader)=>void;
+    public on(eventName:SCENE_EVENTS.PRELOADING,callBack:(taskQeue:TaskQueue)=>void):(e:TaskQueue)=>void;
     public on(eventName: string, callBack: (arg?:any)=>void): (arg?:any)=>void {
         return this._eventEmitterDelegate.on(eventName,callBack);
     }
@@ -222,7 +223,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         return undefined;
     }
 
-    public onPreloading(resourceLoader:ResourceLoader):void {
+    public onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;

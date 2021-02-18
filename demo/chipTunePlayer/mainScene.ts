@@ -24,6 +24,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Image} from "@engine/renderable/impl/general/image";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 const songUrls = [
     'chipTunePlayer/bin/ritm-4.vtx',
@@ -42,9 +43,9 @@ export class MainScene extends Scene {
     @Resource.Texture('./chipTunePlayer/skin.png')
     private skinTexture:ITexture;
 
-    onPreloading(resourceLoader:ResourceLoader):void {
-        super.onPreloading(resourceLoader);
-        loadFont(this.game,resourceLoader,'./chipTunePlayer/pixel.ttf','customFont');
+    onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
+        loadFont(this.game,taskQueue,'./chipTunePlayer/pixel.ttf','customFont');
         resourceLoader.addNextTask(async progress=>{
             this.fnt = await resourceLoader.loadFontFromCssDescription({fontSize:25,fontFamily:'customFont'},progress);
         });

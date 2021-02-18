@@ -4,6 +4,7 @@ import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ICubeMapTexture} from "@engine/renderer/common/texture";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
@@ -12,14 +13,13 @@ export class MainScene extends Scene {
     private cubeTexture:ICubeMapTexture;
 
 
-    public onPreloading(resourceLoader:ResourceLoader):void {
-
+    public onPreloading(taskQueue:TaskQueue):void {
 
         // https://onlinefontconverter.com/
         // https://gero3.github.io/facetype.js/
 
-        resourceLoader.addNextTask(async progress=>{
-            this.cubeTexture = await resourceLoader.loadCubeTexture(
+        taskQueue.addNextTask(async progress=>{
+            this.cubeTexture = await taskQueue.getLoader().loadCubeTexture(
                 './cubeMapTexture/textures/cm_left.jpg',
                 './cubeMapTexture/textures/cm_right.jpg',
                 './cubeMapTexture/textures/cm_top.jpg',

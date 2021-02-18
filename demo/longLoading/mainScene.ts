@@ -4,6 +4,7 @@ import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Image} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export const wait = (progress:(n:number)=>void):Promise<void>=>{
     return new Promise<void>(resolve=>{
@@ -23,14 +24,14 @@ export class MainScene extends Scene {
 
     private logoTexture:ITexture;
 
-    public onPreloading(resourceLoader:ResourceLoader):void {
+    public onPreloading(taskQueue:TaskQueue):void {
 
-        resourceLoader.addNextTask(async progress=>{
-            this.logoTexture = await resourceLoader.loadTexture('./assets/logo.png');
+        taskQueue.addNextTask(async progress=>{
+            this.logoTexture = await taskQueue.getLoader().loadTexture('./assets/logo.png');
         });
         for (let i:number = 0;i<100;i++) {
-            resourceLoader.addNextTask(async onProgressCallBack=>{
-                await wait(onProgressCallBack);
+            taskQueue.addNextTask(async progress=>{
+                await wait(progress);
                 console.log('tick');
             });
         }

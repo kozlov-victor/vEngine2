@@ -15,15 +15,14 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoLink:ResourceLink<ITexture>;
+    private logoLink:ITexture;
 
     public onReady():void {
         this.camera.scale.setXY(0.6);
         this.camera.pos.setXY(-5);
 
         this.backgroundColor = Color.BLACK;
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
 

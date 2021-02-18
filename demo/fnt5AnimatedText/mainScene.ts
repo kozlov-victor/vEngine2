@@ -18,11 +18,11 @@ import {KernelBlurAccumulativeFilter} from "@engine/renderer/webGl/filters/accum
 export class MainScene extends Scene {
 
     @Resource.FontFromAtlas('./fnt3/font.png',fntXML)
-    private fontLink:ResourceLink<Font>;
+    private font:Font;
 
     public onReady():void {
         this.backgroundColor.setRGB(12,12,12);
-        const tf = new AnimatedTextField(this.game,this.fontLink.getTarget());
+        const tf = new AnimatedTextField(this.game,this.font);
         tf.size.setWH(this.game.width-30,200);
         tf.pos.setXY(this.game.width/2,this.game.height/2);
         tf.anchorPoint.setToCenter();

@@ -28,12 +28,16 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
     constructor(game: Game,texture:ITexture) {
         super(game);
         this.setTexture(texture);
-        this.size.set(texture.size);
-        this._srcRect.setSize(this.size);
     }
 
     public draw():void{
         this.game.getRenderer().drawImage(this);
+    }
+
+    public setTexture(texture:ITexture):void {
+        super.setTexture(texture);
+        if (this.size.isZero()) this.size.set(texture.size);
+        if (this._srcRect.width===0 || this._srcRect.height===0) this._srcRect.setSize(this.size);
     }
 
     public clone():Image {

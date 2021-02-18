@@ -7,6 +7,7 @@ import {ResourceLink} from "@engine/resources/resourceLink";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 class EngineEmulator extends Emulator {
 
@@ -51,11 +52,11 @@ export class MainScene extends Scene {
         super(game);
     }
 
-    public onPreloading(resourceLoader:ResourceLoader):void {
-        super.onPreloading(resourceLoader);
-        resourceLoader.addNextTask(async _=>{
+    public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
+        taskQueue.addNextTask(async _=>{
             this.emulator = new EngineEmulator(this.game);
-            this.rom = await resourceLoader.loadBinary(this.romPath);
+            this.rom = await taskQueue.getLoader().loadBinary(this.romPath);
         });
 
     }
