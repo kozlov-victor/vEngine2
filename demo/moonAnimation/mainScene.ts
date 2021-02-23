@@ -4,24 +4,27 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {SpriterObject} from "../scml/scml";
 import {Sound} from "@engine/media/sound";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
 
     private player:SpriterObject;
-    private sound:Sound = new Sound(this.game);
 
-    public onPreloading():void {
+    @Resource.Sound('./moonAnimation/moon_sound.wav')
+    private sound:Sound;
+
+    public async onPreloading(taskQueue:TaskQueue):Promise<void> {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
-
-
-        this.player = new SpriterObject(this.game);
-        this.player.preload({url:'./moonAnimation/moon/moon.scon',headers:[{name:'test-header',value:'nonsense'}],responseType:'text'});
-
-        this.sound.setResourceLink(this.resourceLoader.loadSound('./moonAnimation/moon_sound.wav'));
+        this.player =
+            await SpriterObject.create(
+                this.game,taskQueue,
+                {url:'./moonAnimation/moon/moon.scon',headers:[{name:'test-header',value:'nonsense'}],responseType:'text'}
+        );
 
     }
 

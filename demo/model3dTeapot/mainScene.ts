@@ -6,6 +6,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {ITexture} from "@engine/renderer/common/texture";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 class Teapot extends AbstractPrimitive {
 
@@ -22,12 +23,9 @@ class Teapot extends AbstractPrimitive {
 export class MainScene extends Scene {
 
     private logoObj:Mesh;
-    private logoLink:ResourceLink<ITexture>;
 
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./model3d/Texture-67.jpg');
-    }
-
+    @Resource.Texture('./model3d/Texture-67.jpg')
+    private logoLink:ITexture;
 
 
     public onReady():void {
@@ -35,7 +33,7 @@ export class MainScene extends Scene {
         this.logoObj = obj;
         obj.fillColor.setRGB(233,23,12);
         obj.modelPrimitive = new Teapot();
-        obj.texture = this.logoLink.getTarget();
+        obj.texture = this.logoLink;
         obj.pos.setXY(400,200);
         obj.size.setWH(100,100);
         obj.scale.setXYZ(20,40,15);

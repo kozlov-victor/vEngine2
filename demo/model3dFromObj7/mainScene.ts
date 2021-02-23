@@ -4,33 +4,31 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
 import {ObjParser} from "../model3dFromObj/objParser";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 
 export class MainScene extends Scene {
 
-    private data1Link:ResourceLink<string>;
+    @Resource.Text('./model3dFromObj7/mushroom_tube_A.obj')
+    private data1Link:string;
 
-    private dataTextureLink:ResourceLink<ITexture>;
-    private dataTextureNormalLink:ResourceLink<ITexture>;
+    @Resource.Texture('./model3dFromObj7/mushroom_tube_tex.png')
+    private dataTextureLink:ITexture;
 
-    public onPreloading():void {
-        //https://www.reinerstilesets.de/graphics/3d-grafiken/3d-plants/
-        this.data1Link = this.resourceLoader.loadText('./model3dFromObj7/mushroom_tube_A.obj');
-        this.dataTextureLink = this.resourceLoader.loadTexture('./model3dFromObj7/mushroom_tube_tex.png');
-        this.dataTextureNormalLink = this.resourceLoader.loadTexture('./model3dFromObj7/mushroom_tube_NM.png');
-    }
-
+    // //https://www.reinerstilesets.de/graphics/3d-grafiken/3d-plants/
+    @Resource.Texture('./model3dFromObj7/mushroom_tube_NM.png')
+    private dataTextureNormalLink:ITexture;
 
     public onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(255,255,255);
-        obj.modelPrimitive = new ObjParser().parse(this.data1Link.getTarget() as string);
+        obj.modelPrimitive = new ObjParser().parse(this.data1Link);
         obj.pos.setXY(200,250);
         obj.size.setWH(200,200);
         obj.scale.setXYZ(60);
-        obj.texture = this.dataTextureLink.getTarget();
-        obj.normalsTexture = this.dataTextureNormalLink.getTarget();
+        obj.texture = this.dataTextureLink;
+        obj.normalsTexture = this.dataTextureNormalLink;
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{

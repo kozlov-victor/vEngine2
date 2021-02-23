@@ -6,14 +6,17 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {NinePatchImage} from "@engine/renderable/impl/general/ninePatchImage";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
     private obj:NinePatchImage;
-    private imgLink:ResourceLink<ITexture>;
 
-    public onPreloading():void {
-        this.imgLink = this.resourceLoader.loadTexture('./ninePatchImage/ninePatchImage.png');
+    @Resource.Texture('./ninePatchImage/ninePatchImage.png')
+    private imgLink:ITexture;
+
+    public onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -25,8 +28,7 @@ export class MainScene extends Scene {
     }
 
     public onReady():void {
-        this.obj = new NinePatchImage(this.game);
-        this.obj.setResourceLink(this.imgLink);
+        this.obj = new NinePatchImage(this.game,this.imgLink);
 
         this.obj.size.setWH(200,200);
         this.obj.setABCD(20);

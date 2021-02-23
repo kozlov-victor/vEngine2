@@ -79,6 +79,7 @@
         "variable-name": false,
         "unified-signatures": false,
         "whitespace": false,
-        "v-engine-as-statement": false
+        "v-engine-as-statement": false,
+        "v-engine-resource-decorator": true
     }
 }

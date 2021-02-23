@@ -4,15 +4,18 @@ import {Color} from "@engine/renderer/common/color";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {BasicEnv} from "../oldSymbolScreen/oldScreenEmul";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {TaskQueue} from "@engine/resources/taskQueue";
+import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
 
 
 export class MainScene extends Scene {
 
+    @Resource.Font({fontSize:14})
     private fnt:Font;
 
-    public onPreloading():void{
+    public onPreloading(taskQueue:TaskQueue):void{
         this.backgroundColor = Color.RGB(10,10,30);
-        this.fnt = new Font(this.game, {fontSize: 14});
     }
 
     public onReady():void {

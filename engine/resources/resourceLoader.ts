@@ -138,5 +138,9 @@ export class ResourceLoader {
         ResourceCache.clear();
     }
 
+    public isResolved():boolean {
+        return this.q.isResolved();
+    }
+
 
 }

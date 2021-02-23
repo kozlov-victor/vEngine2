@@ -2,10 +2,16 @@ import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {Game} from "@engine/core/game";
 
 export abstract class RenderableModelWithTexture extends RenderableModel {
 
     private _texture:ITexture;
+
+    constructor(game:Game,texture:ITexture) {
+        super(game);
+        this.setTexture(texture);
+    }
 
     public setTexture(texture:ITexture):void{
         if (DEBUG) {

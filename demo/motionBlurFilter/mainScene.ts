@@ -1,7 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -9,17 +7,20 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
+    @Resource.Texture('./assets/logo.png')
+    private logoLink:ITexture;
 
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
+    public onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
+        super.onPreloading(taskQueue);
     }
 
     public onProgress(val: number):void {
@@ -27,8 +28,7 @@ export class MainScene extends Scene {
     }
 
     public onReady():void {
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
         this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{

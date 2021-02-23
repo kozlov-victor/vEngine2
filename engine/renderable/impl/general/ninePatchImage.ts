@@ -1,7 +1,7 @@
 import {Game} from "@engine/core/game";
 import {Image} from "./image";
 import {DebugError} from "@engine/debug/debugError";
-import {Size} from "@engine/geometry/size";
+import {ISize, Size} from "@engine/geometry/size";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -29,25 +29,15 @@ export class NinePatchImage extends RenderableModelWithTexture {
     D|-7-|---8----|-9-|
      |---|--------|---|
      */
-    constructor(game: Game) {
-        super(game);
+    constructor(game: Game,texture:ITexture) {
+        super(game,texture);
         this.size.observe(()=>{this.revalidate();});
     }
 
     public revalidate():void {
-        if (DEBUG && !this.getResourceLink()) {
-            throw new DebugError(`can not render Image: resource link is not specified`);
-        }
-        let {width,height} = this.size;
-
-        const t:Texture = this.getResourceLink().getTarget() as Texture;
-        if (DEBUG && !t) {
-            console.log(this.getResourceLink());
-            throw new DebugError(`can not find texture by link provided`);
-        }
-
-        if (width===0) width = t.size.width;
-        if (height===0) height = t.size.height;
+        const t:ITexture = this.getTexture();
+        let width:number = t.size.width;
+        let height:number = t.size.height;
 
         if (width<this.a+this.b) width = this.a + this.b;
         if (height<this.c+this.d) height = this.c + this.d;
@@ -63,11 +53,10 @@ export class NinePatchImage extends RenderableModelWithTexture {
         this.revalidate();
     }
 
-    public setResourceLink(link:ResourceLink<ITexture>):void{
-        super.setResourceLink(link);
+    public setTexture(texture:ITexture):void{
+        super.setTexture(texture);
         for (let i:number=0;i<this._patches.length;i++) {
-            this._patches[i] = new Image(this.game);
-            this._patches[i].setResourceLink(link);
+            this._patches[i] = new Image(this.game,texture);
             this.appendChild(this._patches[i]);
         }
     }
@@ -75,9 +64,9 @@ export class NinePatchImage extends RenderableModelWithTexture {
     public draw():void{}
 
     private _revalidatePatches():void{
-        const t:Texture = this.getResourceLink().getTarget() as Texture;
-        const texSize:Size = t.size;
-        const destSize:Size = this.size;
+        const t:ITexture = this.getTexture();
+        const texSize:ISize = t.size;
+        const destSize:ISize = this.size;
         let patch:Image;
         const a:number = this.a,b:number=this.b,c:number=this.c,d:number=this.d;
         // patch 1

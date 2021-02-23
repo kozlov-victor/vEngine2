@@ -5,6 +5,8 @@ import {BasicEnv} from "./oldScreenEmul";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 // this is interpretation of
@@ -13,11 +15,12 @@ import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 
 export class MainScene extends Scene {
 
-    public fnt!:Font;
+    @Resource.Font({fontSize:14})
+    public fnt:Font;
 
-    public onPreloading():void{
+    public onPreloading(taskQueue:TaskQueue):void{
+        super.onPreloading(taskQueue);
         this.backgroundColor = Color.RGB(10,10,30);
-        this.fnt = new Font(this.game, {fontSize: 14});
     }
 
     public onReady():void {

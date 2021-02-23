@@ -80,8 +80,7 @@ module.exports = function(content) {
             f.decorators = newDecorators;
         });
 
-        const autoHolderDecoratedFields = tsquery(cl, `PropertyDeclaration:has(Decorator:has(Identifier[name="ResourceAutoHolder"]))`);
-        console.log('-------------------------->',autoHolderDecoratedFields);
+        //const autoHolderDecoratedFields = tsquery(cl, `PropertyDeclaration:has(Decorator:has(Identifier[name="ResourceAutoHolder"]))`);
 
         preloadingMethod.body.statements = [...preloadingMethod.body.statements, ...statements];
 

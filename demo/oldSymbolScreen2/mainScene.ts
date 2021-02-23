@@ -5,6 +5,8 @@ import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {BasicEnv} from "../oldSymbolScreen/oldScreenEmul";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 // this is interpretation of
@@ -12,11 +14,11 @@ import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/nois
 
 export class MainScene extends Scene {
 
-    public fnt!:Font;
+    @Resource.Font({fontSize:14})
+    public fnt:Font;
 
-    public onPreloading():void{
+    public onPreloading(taskQueue:TaskQueue):void{
         this.backgroundColor = Color.RGB(10,10,30);
-        this.fnt = new Font(this.game, {fontSize: 14});
     }
 
     public onReady():void {

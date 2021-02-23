@@ -18,7 +18,7 @@
         "tslib": "2.0.3"
     },
     "scripts": {
-        "start": "node node_modules/webpack/bin/webpack.js --env debug=true -w",
+        "start": "node --inspect node_modules/webpack/bin/webpack.js --env debug=true -w",
         "build": "node node_modules/webpack/bin/webpack.js",
         "build-lints": "node node_tools/lints/buildRules",
         "build-transformers": "node node_tools/transformers/buildTransformers"

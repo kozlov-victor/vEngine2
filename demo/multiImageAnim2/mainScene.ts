@@ -4,32 +4,40 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MultiImageFrameAnimation} from "@engine/animation/frameAnimation/multiImageFrameAnimation";
 import {ITexture} from "@engine/renderer/common/texture";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
 
-    private resourceLinks1:ResourceLink<ITexture>[] = [];
-    private resourceLinks2:ResourceLink<ITexture>[] = [];
-    private resourceLinks3:ResourceLink<ITexture>[] = [];
+    private resourceLinks1:ITexture[] = [];
+    private resourceLinks2:ITexture[] = [];
+    private resourceLinks3:ITexture[] = [];
 
-    public onPreloading():void {
+    public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
         for (let i:number = 0;i<5;i++) {
-            this.resourceLinks1[i] =
-                this.resourceLoader.loadTexture(`./multiImageAnim2/character/Attack1/1_terrorist_1_Attack1_00${i}.png`);
+            taskQueue.addNextTask(async progress=>{
+                this.resourceLinks1[i] =
+                    await taskQueue.getLoader().loadTexture(`./multiImageAnim2/character/Attack1/1_terrorist_1_Attack1_00${i}.png`,progress);
+            });
         }
         for (let i:number = 0;i<4;i++) {
-            this.resourceLinks2[i] =
-                this.resourceLoader.loadTexture(`./multiImageAnim2/character/Attack2/1_terrorist_1_Attack2_00${i}.png`);
+            taskQueue.addNextTask(async progress=>{
+                this.resourceLinks2[i] =
+                    await taskQueue.getLoader().loadTexture(`./multiImageAnim2/character/Attack2/1_terrorist_1_Attack2_00${i}.png`,progress);
+            });
         }
         for (let i:number = 0;i<6;i++) {
-            this.resourceLinks3[i] =
-                this.resourceLoader.loadTexture(`./multiImageAnim2/character/Attack3/1_terrorist_1_Attack3_00${i}.png`);
+            taskQueue.addNextTask(async progress=>{
+                this.resourceLinks3[i] =
+                    await taskQueue.getLoader().loadTexture(`./multiImageAnim2/character/Attack3/1_terrorist_1_Attack3_00${i}.png`,progress);
+            });
         }
     }
 
     public onReady():void {
 
-        const animatedImage:AnimatedImage = new AnimatedImage(this.game);
+        const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.resourceLinks1[0]);
         let animNum:number = 1;
         animatedImage.pos.setXY(10,10);
         animatedImage.scale.setXY(0.8);
