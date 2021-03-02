@@ -1,6 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/general/model3d";

@@ -3,6 +3,7 @@ import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class DebugLayer extends Layer {
 
@@ -19,12 +20,13 @@ export class DebugLayer extends Layer {
 
     private loadFont():void {
         (async () => {
-            this.font = await Font.createSystemFont(this.game);
+            const queue:TaskQueue = new TaskQueue(this.game);
+            this.font = await queue.getLoader().loadFontFromCssDescription({fontFamily: 'monospace',fontSize: 14});
             const textField = new TextField(this.game,this.font);
             textField.size.set(this.game.size);
             textField.setPadding(5);
             textField.textColor.setRGB(0);
-            this.numOfTextRows = ~~(textField.getClientRect().height / this.font.fontContext.lineHeight);
+            this.numOfTextRows = ~~(textField.getClientRect().height / this.font.context.lineHeight);
             textField.setWordBrake(WordBrake.PREDEFINED);
             this.appendChild(textField);
             textField.passMouseEventsThrough = true;

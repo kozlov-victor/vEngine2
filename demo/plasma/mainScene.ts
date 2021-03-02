@@ -1,20 +1,22 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {PalletOffsetFilter} from "@engine/renderer/webGl/filters/texture/palletOffsetFilter";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    private plasmaLink:ResourceLink<ITexture>;
-    private palletLink:ResourceLink<ITexture>;
+    @Resource.Texture('./plasma/Plasma_effect.jpg')
+    private plasmaLink:ITexture;
 
-    public onPreloading():void {
-        this.plasmaLink = this.resourceLoader.loadTexture('./plasma/Plasma_effect.jpg');
-        this.palletLink = this.resourceLoader.loadTexture('./plasma/gradient.png');
+    @Resource.Texture('./plasma/gradient.png')
+    private palletLink:ITexture;
+
+    public onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -26,13 +28,12 @@ export class MainScene extends Scene {
     }
 
     public onReady():void {
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.plasmaLink);
+        const spr:Image = new Image(this.game,this.plasmaLink);
         this.appendChild(spr);
         spr.pos.setXY(20);
         spr.addBehaviour(new DraggableBehaviour(this.game));
 
-        const palletFilter:PalletOffsetFilter = new PalletOffsetFilter(this.game,this.palletLink.getTarget());
+        const palletFilter:PalletOffsetFilter = new PalletOffsetFilter(this.game,this.palletLink);
         const waveFilter = new WaveFilter(this.game);
         waveFilter.setAmplitude(0.01);
         spr.filters = [palletFilter, waveFilter];

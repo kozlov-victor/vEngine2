@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Cube} from "@engine/renderer/webGl/primitives/cube";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ITexture} from "@engine/renderer/common/texture";

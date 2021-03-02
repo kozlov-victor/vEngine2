@@ -10,7 +10,6 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {Button} from "@engine/renderable/impl/ui/button/button";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Ym} from "../pix32/ym-player/ym";
@@ -19,12 +18,13 @@ import {Vtx} from "../pix32/ym-player/vtx";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import {fontLoader} from "../fontTtf/FontLoader";
 import {ChipOscilloscope} from "./chipOscilloscope";
-import loadFont = fontLoader.loadFont;
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Image} from "@engine/renderable/impl/general/image";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import loadFont = fontLoader.loadFont;
+import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
 
 const songUrls = [
     'chipTunePlayer/bin/ritm-4.vtx',
@@ -46,8 +46,8 @@ export class MainScene extends Scene {
     onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         loadFont(this.game,taskQueue,'./chipTunePlayer/pixel.ttf','customFont');
-        resourceLoader.addNextTask(async progress=>{
-            this.fnt = await resourceLoader.loadFontFromCssDescription({fontSize:25,fontFamily:'customFont'},progress);
+        taskQueue.addNextTask(async progress=>{
+            this.fnt = await taskQueue.getLoader().loadFontFromCssDescription({fontSize:25,fontFamily:'customFont'},progress);
         });
     }
 
@@ -140,8 +140,8 @@ export class MainScene extends Scene {
                         throw new Error(`unsupported extension: ${extension}`);
                 }
                 const trackArrayBuffer = await track.renderToArrayBuffer();
-                await this.game.getAudioPlayer().uploadBufferToContext(songUrl,trackArrayBuffer);
-                const sound = new Sound(this.game,songUrl);
+                const link:UploadedSoundLink = await this.game.getAudioPlayer().uploadBufferToContext(songUrl,trackArrayBuffer);
+                const sound = new Sound(this.game,link);
                 sound.play();
                 currSound = sound;
                 tf.setText(track.getTrackInfo());

@@ -1,31 +1,22 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {FindFreePointStrategy, WaterRippleFilter} from "@engine/renderer/webGl/filters/texture/waterRippleFilter";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MathEx} from "@engine/misc/mathEx";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
-
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
-        const rect = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-    }
+    @Resource.Texture('./assets/repeat.jpg')
+    private logoLink:ITexture;
 
     public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     public onReady():void {
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoLink);
         spr.size.setWH(this.game.size.width,this.game.size.height);
         this.appendChild(spr);
 

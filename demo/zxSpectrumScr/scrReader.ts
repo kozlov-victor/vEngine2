@@ -1,12 +1,8 @@
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
-import {Texture} from "@engine/renderer/webGl/base/texture";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
 import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
-import {H, W, BORDER} from "./index";
+import {BORDER, H, W} from "./index";
 import {AudioStream} from "./audioStream";
 import {ITexture} from "@engine/renderer/common/texture";
-
 
 
 const INT = (n:number):number=>{
@@ -14,7 +10,6 @@ const INT = (n:number):number=>{
 };
 
 class Border {
-    public readonly link:ResourceLink<ITexture>;
     private readonly texture:DataTexture;
     private pointerX:number = 0;
     private pointerY:number = 0;
@@ -24,11 +19,12 @@ class Border {
     private readonly BORDER_OFF:[byte,byte,byte,byte] = [100,100,0,255];
 
     constructor(game:Game){
-        const renderer:WebGlRenderer = game.getRenderer() as WebGlRenderer;
-        const gl:WebGLRenderingContext = renderer.getNativeContext();
         this.texture = new DataTexture(game,W+BORDER*2, H+BORDER*2);
-        this.link = ResourceLink.create<ITexture>(this.texture);
         this.reset();
+    }
+
+    public getTexture():ITexture {
+        return this.texture;
     }
 
     public reset():void{
@@ -65,7 +61,7 @@ class Border {
 class Screen {
 
     public border:Border;
-    public link:ResourceLink<ITexture>;
+    public texture:ITexture;
     public stream:AudioStream;
 
     private flashOn:boolean = false;
@@ -79,7 +75,7 @@ class Screen {
     constructor(private game:Game,private data:ArrayBuffer){
 
         const t:DataTexture = new DataTexture(this.game,W,H);
-        this.link = t.getLink();
+        this.texture = t;
         this.stream = new AudioStream(this.view);
 
         game.getCurrScene().setInterval(()=>{
@@ -201,12 +197,12 @@ class Screen {
 
 export class ScrReader {
 
-    public links: {screenLink:ResourceLink<ITexture>,borderLink:ResourceLink<ITexture>};
+    public textures: {screen:ITexture,border:ITexture};
 
     constructor(private game:Game,private data:ArrayBuffer){
         const screen = new Screen(game,data);
         screen.border = new Border(this.game);
-        this.links = {screenLink:screen.link,borderLink:screen.border.link};
+        this.textures = {screen:screen.texture,border:screen.border.getTexture()};
     }
 
 

@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {IntroScene} from "./introScene";
@@ -10,7 +9,6 @@ import {Tween} from '@engine/animation/tween';
 import {EasingElastic} from "@engine/misc/easing/functions/elastic";
 import {PosterizeFilter} from "@engine/renderer/webGl/filters/texture/posterizeFilter";
 import {PixelFilter} from "@engine/renderer/webGl/filters/texture/pixelFilter";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class PreIntroScene extends Scene {

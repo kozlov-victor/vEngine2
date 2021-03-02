@@ -6,11 +6,6 @@ import {Element} from "@engine/misc/xmlUtils";
 
 export class IntroScene extends BaseScene {
 
-
-    public onPreloading():void {
-        super.onPreloading();
-    }
-
     public onReady():void {
         super.onReady();
         this.sounds.intro.play();

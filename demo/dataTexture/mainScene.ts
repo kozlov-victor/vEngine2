@@ -1,11 +1,10 @@
 import {Scene} from "@engine/scene/scene";
-import {Texture} from "@engine/renderer/webGl/base/texture";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {PbmReader} from "./pbmReader";
 import {MultiImageFrameAnimation} from "@engine/animation/frameAnimation/multiImageFrameAnimation";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 import {ITexture} from "@engine/renderer/common/texture";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 // https://www.twobitarcade.net/article/displaying-images-oled-displays/
 
@@ -14,15 +13,15 @@ export class MainScene extends Scene {
     private textures:ITexture[] = [];
 
 
-    public onPreloading(resourceLoader:ResourceLoader):void {
-        super.onPreloading(resourceLoader);
+    public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
         const resources: ArrayBuffer[] = [];
         for (let i: number = 1; i <= 6; i++) {
-            resourceLoader.addNextTask(async progress => {
-                resources[i - 1] = await resourceLoader.loadBinary(`./dataTexture/data/scatman.${i}.pbm`, progress);
+            taskQueue.addNextTask(async progress => {
+                resources[i - 1] = await taskQueue.getLoader().loadBinary(`./dataTexture/data/scatman.${i}.pbm`, progress);
             });
         }
-        resourceLoader.addNextTask(async _ => {
+        taskQueue.getLoader().addNextTask(async _ => {
             for (let i: number = 0; i < resources.length; i++) {
                 const pbmReader: PbmReader = new PbmReader(this.game, resources[i]);
                 this.textures.push(pbmReader.createTexture());

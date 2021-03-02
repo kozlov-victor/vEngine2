@@ -4,7 +4,6 @@ import {Vec2} from "@engine/geometry/vec2";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 
@@ -13,14 +12,12 @@ export class MainScene extends Scene {
     private ship:RenderableModel;
 
     @Resource.Texture('./pointGeometry/ship.png')
-    private link:ResourceLink<ITexture>;
+    private link:ITexture;
 
 
     public onReady():void {
 
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.link);
-        this.ship = spr;
+        this.ship = new Image(this.game, this.link);
 
         this.backgroundColor.setRGB(244,244,244);
         this.ship.pos.setXY(this.game.size.width/2,this.game.size.height/2);

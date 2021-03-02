@@ -67,7 +67,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     public readonly _renderingObjectStack:RenderingObjectStack;
     public readonly _renderingSessionInfo:RenderingSessionInfo = new RenderingSessionInfo();
 
-    private _layers:Layer[] = [];
+    private _layers: Layer[] = [];
     private _propertyAnimations:IAnimation[] = [];
 
     // addTween
@@ -257,7 +257,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
         renderer.pushAlphaBlend(this.alpha);
 
-        if (this.lifeCycleState!==SceneLifeCycleState.COMPLETED) {
+        if (this.lifeCycleState===SceneLifeCycleState.PRELOADING) {
             if (this.preloadingGameObject!==undefined) {
                 this.preloadingGameObject.render();
             }

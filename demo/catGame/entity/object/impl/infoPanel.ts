@@ -1,5 +1,4 @@
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";

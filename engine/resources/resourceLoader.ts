@@ -8,6 +8,7 @@ import {Font, FontFactory, ICssFontParameters} from "@engine/renderable/impl/gen
 import createImageFromData = ResourceUtil.createImageFromData;
 import {Sound} from "@engine/media/sound";
 import {ITask, Queue} from "@engine/resources/queue";
+import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
 
 namespace ResourceCache {
 
@@ -95,8 +96,8 @@ export class ResourceLoader {
         if (progress!==undefined) loader.onProgress = progress;
         const buff:ArrayBuffer = await loader.load();
         const url:string = ((req as string).substr!==undefined)?req as string: (req as IURLRequest).url;
-        await this.game.getAudioPlayer().uploadBufferToContext(url,buff);
-        return new Sound(this.game,url);
+        const ref:UploadedSoundLink = await this.game.getAudioPlayer().uploadBufferToContext(url,buff);
+        return new Sound(this.game,ref);
     }
 
     public async loadBinary(req: string|IURLRequest,progress?:(n:number)=>void): Promise<ArrayBuffer> {
@@ -109,10 +110,16 @@ export class ResourceLoader {
         return await FontFactory.createFontFromCssDescription(this.game,params,progress);
     }
 
-    public async loadFontFromAtlas(atlasPageUrls:(string|IURLRequest)[],doc:Document):Promise<Font>{ // todo progress
+    public async loadFontFromAtlas(atlasPageUrls:((string|IURLRequest)[])|(string|IURLRequest),doc:Document,progress?:(n:number)=>void):Promise<Font>{
         const texturePages:ITexture[] = [];
-        for (const atlasPageUrl of atlasPageUrls) {
-            const texturePage:ITexture = await this.loadTexture(atlasPageUrl);
+        let urls:(IURLRequest|string)[];
+        if ((atlasPageUrls as any[]).join!==undefined) urls = atlasPageUrls as (IURLRequest|string)[];
+        else urls = [atlasPageUrls as (IURLRequest|string)];
+        for (const atlasPageUrl of urls) {
+            const texturePage:ITexture =
+                await this.loadTexture(atlasPageUrl,n=>{
+                    if (progress!==undefined) progress(n/urls.length);
+                });
             texturePages.push(texturePage);
         }
         return await FontFactory.createFontFromAtlas(this.game,texturePages,doc);
@@ -127,7 +134,7 @@ export class ResourceLoader {
     }
 
     public onResolved(fn:()=>void):void{
-        this.q.onResolved = fn;
+        this.q.onResolved.push(fn);
     }
 
     public start():void{

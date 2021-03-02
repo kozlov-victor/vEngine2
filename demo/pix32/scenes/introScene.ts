@@ -4,33 +4,33 @@ import {Color} from "@engine/renderer/common/color";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {BasePix32Scene, loadSound} from "./base/basePix32Scene";
 import {GetReadyScene} from "./getReadyScene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Sound} from "@engine/media/sound";
 import {AbstractChipTrack} from "../ym-player/abstract/abstractChipTrack";
 import {Ym} from "../ym-player/ym";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class IntroScene extends BasePix32Scene {
 
-    private themeAudioLink:ResourceLink<void>;
+    private themeAudioLink:Sound;
     private track:AbstractChipTrack;
 
-    onPreloading():void {
-        super.onPreloading();
-
-        const binLink = this.resourceLoader.loadBinary('pix32/resources/music/theme.ym');
-        this.resourceLoader.addNextTask((()=>{
-            this.track = new Ym(binLink.getTarget());
-            this.themeAudioLink = loadSound(this.game,this.track);
-        }));
-
+    onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
+        let bin:ArrayBuffer;
+        taskQueue.addNextTask(async process=>{
+            bin = await taskQueue.getLoader().loadBinary('pix32/resources/music/theme.ym',process);
+        });
+        taskQueue.getLoader().addNextTask(async _=>{
+            this.track = new Ym(bin);
+            this.themeAudioLink = await loadSound(this.game,this.track);
+        });
     }
 
     onReady():void {
         super.onReady();
 
-        const sound:Sound = new Sound(this.game);
-        sound.setResourceLink(this.themeAudioLink);
+        const sound:Sound = this.themeAudioLink;
         sound.loop = true;
         sound.play();
 

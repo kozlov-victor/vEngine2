@@ -1,4 +1,3 @@
-
 import {Optional} from "@engine/core/declarations";
 import {Wave} from "../internal/wav";
 

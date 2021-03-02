@@ -7,7 +7,7 @@ import {Tween} from "@engine/animation/tween";
 
 export class MainScene extends Scene {
 
-    @Resource.Font({fontFamily:'monospace',fontSize:35})
+    @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:35})
     private fnt:Font;
 
     public onReady():void {

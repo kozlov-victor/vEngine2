@@ -1,6 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
@@ -10,18 +8,15 @@ import {PalletOffsetFilter} from "@engine/renderer/webGl/filters/texture/palletO
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {Size} from "@engine/geometry/size";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private plasmaLink:ResourceLink<ITexture>;
-    private palletLink:ResourceLink<ITexture>;
+    @Resource.Texture('./plasma/Plasma_effect.jpg')
+    private plasmaLink:ITexture;
 
-    public onPreloading():void {
-        this.plasmaLink = this.resourceLoader.loadTexture('./plasma/Plasma_effect.jpg');
-        this.palletLink = this.resourceLoader.loadTexture('./plasma/gradient.png');
-    }
-
-
+    @Resource.Texture('./plasma/gradient.png')
+    private palletLink:ITexture;
 
     public onReady():void {
 
@@ -33,7 +28,7 @@ export class MainScene extends Scene {
         );
         obj.pos.setXY(140,140);
         obj.size.setWH(100,100);
-        obj.texture = renderTarget.getResourceLink().getTarget();
+        obj.texture = renderTarget.getTexture();
         obj.heightMapTexture = obj.texture;
         obj.heightMapFactor = 15;
         this.appendChild(obj);
@@ -42,10 +37,9 @@ export class MainScene extends Scene {
             obj.angle3d.x+=0.01;
         },20);
 
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.plasmaLink);
+        const spr:Image = new Image(this.game,this.plasmaLink);
 
-        const palletFilter:PalletOffsetFilter = new PalletOffsetFilter(this.game,this.palletLink.getTarget());
+        const palletFilter:PalletOffsetFilter = new PalletOffsetFilter(this.game,this.palletLink);
         const waveFilter = new WaveFilter(this.game);
         waveFilter.setAmplitude(0.005);
         spr.filters = [palletFilter, waveFilter];

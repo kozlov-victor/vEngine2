@@ -18,7 +18,7 @@ export class MouseControlHelper {
     }
 
     // https://stackoverflow.com/questions/39853481/is-point-inside-polygon
-    private isPointInPolygon4 = (polygon:Readonly<VEC4>[],testPoint:IPoint2d):boolean=>{
+    private isPointInPolygon4 = (polygon:Readonly<Vec4.VEC4>[],testPoint:IPoint2d):boolean=>{
         let result:boolean = false;
         let j:number = polygon.length - 1;
         for (let i:number = 0,max:number= polygon.length; i < max; i++) {

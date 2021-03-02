@@ -1,5 +1,4 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
@@ -15,7 +14,7 @@ interface IState {
 
 export class MainSceneUi extends VEngineTsxComponent<IState> {
 
-    constructor(private game:Game,private resourceLink:ResourceLink<ITexture>) {
+    constructor(private game:Game,private resourceLink:ITexture) {
         super(new VEngineTsxDOMRenderer(game));
         this.state = {
             ellipsePosX: 10,
@@ -56,7 +55,7 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
                     />
                     <v_image
                         pos={{x:20,y:20}}
-                        resourceLink={this.resourceLink}/>
+                        texture={this.resourceLink}/>
                 </v_null_game_object>
 
             </>

@@ -9,7 +9,7 @@ export class MainScene extends Scene {
 
     private surface:DrawingSurface;
 
-    @Resource.Font({fontFamily:'serif',fontSize:128,extraChars:['🎉','π']})
+    @Resource.FontFromCssDescription({fontFamily:'serif',fontSize:128,extraChars:['🎉','π']})
     private fnt:Font;
 
     private renderScene:(session:IDrawingSession)=>void = ():void=>{};

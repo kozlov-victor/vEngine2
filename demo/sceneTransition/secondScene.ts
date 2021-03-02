@@ -5,20 +5,27 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {fakeLongLoadingFn} from "../longLoading/mainScene";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {TaskQueue} from "@engine/resources/taskQueue";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {wait} from "../longLoading/mainScene";
 
 export class SecondScene extends Scene {
 
+    @Resource.FontFromCssDescription({fontSize:25})
     private fnt:Font;
 
-    public onPreloading():void{
+    public onPreloading(taskQueue:TaskQueue):void{
 
-        for (let i:number = 0;i<20;i++) { fakeLongLoadingFn(this.resourceLoader); }
+        super.onPreloading(taskQueue);
+
+        for (let i:number = 0;i<20;i++) {
+            taskQueue.addNextTask(async progress=>{
+                await wait(progress);
+            });
+        }
 
         this.backgroundColor = Color.RGB(241,244,244);
-
-        this.fnt = new Font(this.game, {fontSize: 25});
 
         const rect = new Rectangle(this.game);
         rect.borderRadius = 5;

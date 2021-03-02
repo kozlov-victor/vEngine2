@@ -6,6 +6,7 @@ import {ISize, Size} from "@engine/geometry/size";
 import {Optional} from "@engine/core/declarations";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
 export class TileMap extends RenderableModelWithTexture {
@@ -35,8 +36,9 @@ export class TileMap extends RenderableModelWithTexture {
     private _cellImage:Image;
     private _drawingSurface:DrawingSurface;
 
-    constructor(protected game:Game){
+    constructor(protected game:Game,texture:ITexture){
         super(game);
+        this.setTexture(texture);
     }
 
     public fromTiledJSON(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number): void{

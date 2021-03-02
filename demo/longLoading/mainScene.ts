@@ -1,6 +1,5 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Image} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -16,7 +15,7 @@ export const wait = (progress:(n:number)=>void):Promise<void>=>{
                 clearInterval(tmr);
                 resolve();
             }
-        },100);
+        },10);
     });
 };
 

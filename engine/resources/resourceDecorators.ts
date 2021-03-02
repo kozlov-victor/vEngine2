@@ -39,13 +39,13 @@ export const Resource = {
             throw new DebugError(`something wrong with precompiler for CubeTexture decorator`);
         };
     },
-    Font: (params:ICssFontParameters)=>{
+    FontFromCssDescription: (params:ICssFontParameters)=>{
         return (target: Scene, propertyKey: string):void => {
             // stub for precompiler only
             throw new DebugError(`something wrong with precompiler for Font decorator`);
         };
     },
-    FontFromAtlas: (atlasUrl:string|IURLRequest,doc:IDocumentDescription)=>{
+    FontFromAtlas: (atlasUrls:string|IURLRequest|string[]|IURLRequest[],doc:IDocumentDescription)=>{
         return (target: Scene, propertyKey: string):void => {
             // stub for precompiler only
             throw new DebugError(`something wrong with precompiler for Font decorator`);

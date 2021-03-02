@@ -1,5 +1,4 @@
 import {BaseAbstractIntroScene} from "./abstracts/baseAbstractIntroScene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Sound} from "@engine/media/sound";

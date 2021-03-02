@@ -1,6 +1,5 @@
 import {AbstractEntity} from "../../abstract/abstractEntity";
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";

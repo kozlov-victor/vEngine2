@@ -22,8 +22,8 @@ import {SelectBox} from "@engine/renderable/impl/ui/selectBox/selectBox";
 
 export class MainScene extends Scene {
 
-    @Resource.Font({fontFamily:'monospace',fontSize:25})
-    public fnt!:Font;
+    @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:25})
+    public fnt:Font;
 
     public onReady():void {
 

@@ -13,7 +13,6 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {Shape} from "@engine/renderable/abstract/shape";
-import {ResourceLinkState} from "@engine/resources/resourceLink";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Mat4} from "@engine/geometry/mat4";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";

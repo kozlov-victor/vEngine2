@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {LightSet} from "@engine/light/lightSet";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
 import {PointLight} from "@engine/light/impl/pointLight";

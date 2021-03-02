@@ -1,7 +1,6 @@
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {createGlowTweenFilter, createScaleTweenMovie} from "../utils/miscFunctions";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
@@ -21,13 +20,13 @@ import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MkIntroScene extends MkAbstractScene {
 
-    @Resource.Font({fontSize: 80, fontFamily: 'MK4'})
+    @Resource.FontFromCssDescription({fontSize: 80, fontFamily: 'MK4'})
     private fnt:Font;
 
     @Resource.Texture('./mk-alfa/assets/images/mkLogo.png')
     private logoLink:ITexture;
 
-    @Resource.Texture('./mk-alfa/assets/sounds/btn.wav')
+    @Resource.Sound('./mk-alfa/assets/sounds/btn.wav')
     private sound:Sound;
 
     public onReady(): void {

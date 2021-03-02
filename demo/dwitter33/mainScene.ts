@@ -2,19 +2,20 @@ import {Scene} from "@engine/scene/scene";
 import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
 
     private surface:DrawingSurface;
 
-    @Resource.Font({fontFamily:'monospace',fontSize:25,chars:['🥪']})
+    @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:25,chars:['🥪']})
     private fnt:Font;
 
     private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
-    public onPreloading():void {
-        super.onPreloading();
+    public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(1);

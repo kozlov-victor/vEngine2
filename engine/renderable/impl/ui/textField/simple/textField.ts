@@ -45,6 +45,9 @@ export class TextField extends WidgetContainer {
 
     constructor(game:Game,protected font:Font,protected useCache:boolean = true) {
         super(game);
+        if (DEBUG && !font) {
+            throw new DebugError(`can not create textField: font is not passed`);
+        }
         this.appendChild(this.rowSetContainer);
         this.size.setWH(300,100);
         this.textColor.observe(()=>this.requestTextRedraw());

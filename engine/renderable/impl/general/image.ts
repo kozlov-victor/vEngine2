@@ -1,10 +1,8 @@
 import {Game} from "@engine/core/game";
 import {Rect} from "@engine/geometry/rect";
-import {DebugError} from "@engine/debug/debugError";
 import {Color} from "@engine/renderer/common/color";
 import {Point2d} from "@engine/geometry/point2d";
 import {ICloneable} from "@engine/core/declarations";
-import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
 

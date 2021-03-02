@@ -141,11 +141,12 @@ import * as svgEx126 from "xml/xml-loader!./examples/ex126.svg";
 import * as svgEx127 from "xml/xml-loader!./examples/ex127.svg";
 
 // https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/
-
 import {Scene} from "@engine/scene/scene";
 import {SvgImage} from "./svgImage";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Element} from "@engine/misc/xmlUtils";
+import {TaskQueue} from "@engine/resources/taskQueue";
+import {ResourceLoader} from "@engine/resources/resourceLoader";
 
 const images:Element[] = [
 
@@ -202,8 +203,9 @@ export class MainScene extends Scene {
 
         const placeNextImage = async ()=>{
             if (lastImage!==undefined) lastImage.removeSelf();
-            lastImage = new SvgImage(this.game,images[i]);
-            await lastImage.parse();
+            const taskQueue:TaskQueue = new TaskQueue(this.game);
+            taskQueue.scheduleStart();
+            lastImage = await SvgImage.create(this.game,taskQueue,images[i]);
             this.appendChild(lastImage);
             console.log(lastImage);
             i++;

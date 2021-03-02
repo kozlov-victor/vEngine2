@@ -2,7 +2,6 @@ import {ColorizeFilter} from "@engine/renderer/webGl/filters/texture/colorizeFil
 import {Color} from "@engine/renderer/common/color";
 import {Timer} from "@engine/misc/timer";
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Burster} from "../../misc/burster";
 import {Hero} from "../impl/hero";

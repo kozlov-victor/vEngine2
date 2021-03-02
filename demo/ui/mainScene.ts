@@ -33,10 +33,10 @@ commodo consequat.`;
 
 export class MainScene extends Scene {
 
-    @Resource.Font({fontSize:15,fontFamily:'monospace'})
+    @Resource.FontFromCssDescription({fontSize:15,fontFamily:'monospace'})
     private fnt:Font;
 
-    @Resource.Font({fontSize:17,fontFamily:'Times New Roman'})
+    @Resource.FontFromCssDescription({fontSize:17,fontFamily:'Times New Roman'})
     private fnt2:Font;
 
 

@@ -12,12 +12,11 @@ import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simple
 import {Game} from "@engine/core/game";
 import {FLIP_TEXTURE_MATRIX, makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
-import IDENTITY = Mat4.IDENTITY;
-import Mat16Holder = Mat4.Mat16Holder;
 import {Device} from "@engine/misc/device";
 import {ITexture} from "@engine/renderer/common/texture";
+import IDENTITY = Mat4.IDENTITY;
+import Mat16Holder = Mat4.Mat16Holder;
 
 interface IStackItem {
     frameBuffer:FrameBuffer;

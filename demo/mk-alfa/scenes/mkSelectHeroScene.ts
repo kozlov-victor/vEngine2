@@ -9,7 +9,6 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
@@ -222,7 +221,7 @@ class TabStrip {
 
 export class MkSelectHeroScene extends MkAbstractScene {
 
-    @Resource.Font({fontSize:80,fontFamily:'MK4'})
+    @Resource.FontFromCssDescription({fontSize:80,fontFamily:'MK4'})
     private fnt:Font;
 
     @Resource.Texture('./mk-alfa/assets/images/mkLogo.png')

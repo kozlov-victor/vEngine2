@@ -1,24 +1,18 @@
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Scene} from "@engine/scene/scene";
 import {SpriterObject} from "../scml/scml";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
 
     private lobster:SpriterObject;
 
-    public onPreloading():void {
-        const rect = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-
-        this.lobster = new SpriterObject(this.game);
-        this.lobster.preload('./scml2/lobster/lobster.scon');
-
-
+    public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
+        taskQueue.addNextTask(async progress=>{
+            this.lobster = await SpriterObject.create(this.game,taskQueue,'./scml2/lobster/lobster.scon');
+        });
     }
 
     public onProgress(val: number):void {

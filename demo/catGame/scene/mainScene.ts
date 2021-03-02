@@ -1,5 +1,4 @@
 import {Scene, SCENE_EVENTS} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Game} from "@engine/core/game";

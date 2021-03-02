@@ -2,11 +2,9 @@ import {DebugError} from "../../debug/debugError";
 import {Game} from "../../core/game";
 import {Rect} from "../../geometry/rect";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
-import {Color} from "../common/color";
 import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Mesh} from "@engine/renderable/abstract/mesh";
@@ -68,16 +66,13 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     public drawImage(img:Image):void{
-        if (DEBUG) {
-            if (!img.getResourceLink()) throw new DebugError(`image resource link is not set`);
-        }
 
         const srcRect:Rect = img.getSrcRect();
         const dstRect:Rect = img.getSrcRect();
 
         if (img.offset.x || img.offset.y) {
             const pattern:CanvasPattern = this.ctx.createPattern(
-                (img.getResourceLink() as unknown as ResourceLink<ICanvasTexture>).getTarget().source,
+                (img.getTexture() as unknown as ICanvasTexture).source,
                 'repeat') as CanvasPattern;
             this.ctx.fillStyle = pattern;
 
@@ -92,7 +87,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             this.ctx.restore();
         } else {
             this.ctx.drawImage(
-                (img.getResourceLink() as unknown as ResourceLink<ICanvasTexture>).getTarget().source,
+                (img.getTexture() as unknown as ICanvasTexture).source,
                 srcRect.x,
                 srcRect.y,
                 srcRect.width,
@@ -194,7 +189,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public createTexture(bitmap:HTMLImageElement|ImageBitmap){
+    public createTexture(bitmap:HTMLImageElement|ImageBitmap):ICanvasTexture{
         const c:HTMLCanvasElement = document.createElement('canvas');
         c.setAttribute('width',bitmap.width.toString());
         c.setAttribute('height',bitmap.height.toString());

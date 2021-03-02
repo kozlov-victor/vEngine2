@@ -12,16 +12,15 @@ import {
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextTable} from "@engine/renderable/impl/ui/textHelpers/textTable";
-import {ResourceLink} from "@engine/resources/resourceLink";
 
 export class MainScene extends Scene {
 
-    @Resource.Font({fontSize:12,fontFamily:'monospace'})
+    @Resource.FontFromCssDescription({fontSize:12,fontFamily:'monospace'})
     private fnt:Font;
 
     // from https://www.mockaroo.com/
     @Resource.Text('./uiPrintTable2/test.csv')
-    private textLink:ResourceLink<string>;
+    private textLink:string;
 
     public onReady():void {
 
@@ -36,7 +35,7 @@ export class MainScene extends Scene {
         background.borderRadius = 5;
 
 
-        tf.setText(TextTable.fromCSV(this.textLink.getTarget()).toString());
+        tf.setText(TextTable.fromCSV(this.textLink).toString());
         tf.setBackground(background);
         tf.setWordBrake(WordBrake.PREDEFINED);
         tf.setPadding(10);

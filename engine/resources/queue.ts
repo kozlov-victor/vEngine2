@@ -7,7 +7,7 @@ export interface ITask  {
 }
 
 export class Queue {
-    public onResolved:()=>void;
+    public onResolved:(()=>void)[] = [];
     public onProgress:(n:number)=>void;
     private _tasks:ITask[] = [];
     private _tasksProgressById:{[taskId:string]:number} = {};
@@ -60,7 +60,8 @@ export class Queue {
             this._resolved = true;
             if (this.onProgress!==undefined) this.onProgress(1);
             await Promise.resolve();
-            if (this.onResolved!==undefined) this.onResolved();
+            this.onResolved.forEach(f=>f());
         })();
     }
+
 }

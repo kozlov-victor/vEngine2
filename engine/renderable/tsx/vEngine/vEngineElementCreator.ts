@@ -37,7 +37,7 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 element = new SimpleGameObjectContainer(game);
                 break;
             case 'v_image':
-                element = new Image(game);
+                //element = new Image(game); todo
                 break;
             case undefined: {
                 if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);
@@ -47,7 +47,7 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 if (DEBUG) throw new DebugError(`unknown jsx tag: ${node.tagName}`);
                 return undefined!;
         }
-        return element;
+        return element!;
     }
 
     public setProps(model: RenderableModel, virtualNode: VirtualNode): void {

@@ -20,12 +20,13 @@ export class MainScene extends Scene {
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
-        this.player =
-            await SpriterObject.create(
-                this.game,taskQueue,
-                {url:'./moonAnimation/moon/moon.scon',headers:[{name:'test-header',value:'nonsense'}],responseType:'text'}
-        );
-
+        taskQueue.addNextTask(async progress=>{
+            this.player =
+                await SpriterObject.create(
+                    this.game,taskQueue,
+                    {url:'./moonAnimation/moon/moon.scon',headers:[{name:'test-header',value:'nonsense'}],responseType:'text'}
+                );
+        });
     }
 
     public onProgress(val: number):void {

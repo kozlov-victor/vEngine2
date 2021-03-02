@@ -1,6 +1,4 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {ITexture} from "@engine/renderer/common/texture";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {MousePoint} from "@engine/control/mouse/mousePoint";

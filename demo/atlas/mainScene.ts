@@ -6,7 +6,6 @@ import {Scene} from "@engine/scene/scene";
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Resource} from "@engine/resources/resourceDecorators";
 
 

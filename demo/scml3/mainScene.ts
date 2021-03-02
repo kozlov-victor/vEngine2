@@ -1,8 +1,7 @@
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Scene} from "@engine/scene/scene";
 import {SpriterObject} from "../scml/scml";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 // https://github.com/miletbaker/spriter2moai
 
@@ -10,16 +9,10 @@ export class MainScene extends Scene {
 
     private monster:SpriterObject;
 
-    public onPreloading():void {
-        const rect = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-
-        this.monster = new SpriterObject(this.game);
-        this.monster.preload('./scml3/monster/monster.scon');
-
-
+    public onPreloading(taskQueue:TaskQueue):void {
+        taskQueue.addNextTask(async process=>{
+            this.monster = await SpriterObject.create(this.game,taskQueue,'./scml3/monster/monster.scon');
+        });
     }
 
     public onProgress(val: number):void {

@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {LightSet} from "@engine/light/lightSet";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
 import {PointLight} from "@engine/light/impl/pointLight";
@@ -7,7 +6,6 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TaskQueue} from "@engine/resources/taskQueue";

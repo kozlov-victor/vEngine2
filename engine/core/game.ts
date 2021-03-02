@@ -165,7 +165,7 @@ export class Game {
         if (this._prevScene!==undefined) {
             this._prevScene.trigger(SCENE_EVENTS.INACTIVATED, undefined!);
             this._prevScene.onInactivated();
-            (this._prevScene as {lifeCycleState:SceneLifeCycleState}).lifeCycleState = SceneLifeCycleState.INACTIVATED;
+            this._prevScene.lifeCycleState = SceneLifeCycleState.INACTIVATED;
         }
         this._currScene = scene;
         if (this._currSceneTransition!==undefined) {
@@ -179,11 +179,12 @@ export class Game {
         }
 
         this.revalidate();
-        if (this._currScene.lifeCycleState!==SceneLifeCycleState.COMPLETED) {
-            const resourceLoader:ResourceLoader = new ResourceLoader(this);
+        if (this._currScene.lifeCycleState===SceneLifeCycleState.CREATED) {
             this._currScene.lifeCycleState = SceneLifeCycleState.PRELOADING;
-            this._currScene.trigger(SCENE_EVENTS.PRELOADING,resourceLoader);
-            const taskQueue:TaskQueue = new TaskQueue(resourceLoader);
+            const taskQueue:TaskQueue = new TaskQueue(this);
+            const resourceLoader:ResourceLoader = taskQueue.getLoader();
+            taskQueue.scheduleStart();
+            this._currScene.trigger(SCENE_EVENTS.PRELOADING,taskQueue);
             scene.onPreloading(taskQueue);
             resourceLoader.onProgress((n:number)=>{
                 this._currScene.trigger(SCENE_EVENTS.PROGRESS);
@@ -195,7 +196,6 @@ export class Game {
                 this._currScene.trigger(SCENE_EVENTS.COMPLETED);
                 this._currScene.lifeCycleState = SceneLifeCycleState.COMPLETED;
             });
-            resourceLoader.start();
         } else {
             this._currScene.trigger(SCENE_EVENTS.CONTINUE);
             this._currScene.lifeCycleState = SceneLifeCycleState.COMPLETED;

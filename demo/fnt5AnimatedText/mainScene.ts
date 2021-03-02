@@ -8,7 +8,6 @@ import {
     AlignTextContentVertical,
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {AnimatedTextField} from "@engine/renderable/impl/ui/textField/animated/animatedTextField";
 import {EasingSine} from "@engine/misc/easing/functions/sine";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";

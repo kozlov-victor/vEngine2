@@ -10,7 +10,6 @@ import {
     AlignTextContentVertical,
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
@@ -52,9 +51,11 @@ export class MainScene extends Scene {
                     {'\n'}
                     <v_font color={{r:122,g:122,b:122}} size={25}>(Кликнуть для инкремента)</v_font>
                     {'\n'}
-                    <v_font font={this.font3} color={{r:122,g:255,b:122}} size={71}>Эта <i>строка</i> с <s>тем же</s> <u>другим</u> шрифтом</v_font>
+                    <v_font font={this.font3} color={{r:122,g:255,b:122}} size={41}>This is <i>string</i> with <s> the same</s> <u>another</u> font</v_font>
                     {'\n'}
-                    Новая строка с <s>другим</s> <u>тем же</u> шрифтом
+                    Новая строка
+                    {'\n'}
+                    с <s>другим</s> <u>тем же</u> шрифтом
                 </div>
             );
         });

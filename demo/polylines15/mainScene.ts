@@ -1,12 +1,13 @@
 import {Scene} from "@engine/scene/scene";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
 
 
 
-    public onPreloading():void {
+    public onPreloading(taskQueue:TaskQueue):void {
 
         // model from https://codepen.io/SaraSoueidan/pen/48caf2f5fa42a8c154fcb5dec0dbe4d5
         this.appendChild(Polygon.fromSvgPath(this.game,`

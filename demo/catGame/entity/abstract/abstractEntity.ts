@@ -1,6 +1,5 @@
 import {ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {ArcadePhysicsSystem, ICreateRigidBodyParams} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {AbstractSprite} from "./abstractSprite";

@@ -1,9 +1,7 @@
 import {MathEx} from "@engine/misc/mathEx";
-import {IReleasealable, ObjectPool} from "@engine/misc/objectPool";
+import {ObjectPool} from "@engine/misc/objectPool";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {IURLRequest} from "@engine/resources/urlLoader";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -187,8 +185,7 @@ export class ScmlObject {
             const currentMap:MapInstruction=m;
             if(currentMap.tarFolder>-1&&currentMap.tarFile>-1) {
                 const targetFolder:Folder=this.activeCharacterMap[currentMap.tarFolder];
-                const targetFile:File=targetFolder.files[currentMap.tarFile];
-                this.activeCharacterMap[m.folder].files[m.file]=targetFile;
+                this.activeCharacterMap[m.folder].files[m.file]=targetFolder.files[currentMap.tarFile];
             }
         }
     }
@@ -918,25 +915,25 @@ export class SpriterObject extends RenderableModel {
             urlRequest = {url:baseUrl,responseType:'arraybuffer'};
         }
         baseUrl = baseUrl.split('/').filter((it,index,arr)=>index<arr.length-1).join('/');
-        let scon:IScon;
-        taskQueue.addNextTask(async progress=>{
-           scon = await taskQueue.getLoader().loadJSON(sconUrl,progress);
-        });
-        taskQueue.addNextTask(async progress=>{
-            s.scmlObject = ScmlObject.fromDescription(scon);
-            s.scmlObject.root = s;
-            s.scmlObject.currentEntity = 0;
-            s.scmlObject.currentAnimation = 0;
-            for (const folder of s.scmlObject.folders) {
-                for (const file of folder.files) {
-                    urlRequest.url = `${baseUrl}/${file.name}`;
-                    urlRequest.responseType = 'arraybuffer';
-                    s.textureMap[file.name] = await taskQueue.getLoader().loadTexture({...urlRequest},n => {
-                        progress(n/(s.scmlObject.folders.length*folder.files.length));
-                    });
-                }
+        const scon:IScon = await taskQueue.getLoader().loadJSON(sconUrl,/*progress*/);
+
+        s.scmlObject = ScmlObject.fromDescription(scon);
+        s.scmlObject.root = s;
+        s.scmlObject.currentEntity = 0;
+        s.scmlObject.currentAnimation = 0;
+
+        for (const folder of s.scmlObject.folders) {
+            for (const file of folder.files) {
+                const numOfTasks:number = s.scmlObject.folders.length * folder.files.length;
+                const progressFn = (n:number)=>{
+                    //progress(n/numOfTasks);
+                };
+                urlRequest.url = `${baseUrl}/${file.name}`;
+                urlRequest.responseType = 'arraybuffer';
+                s.textureMap[file.name] = await taskQueue.getLoader().loadTexture({...urlRequest},progressFn);
             }
-        });
+        }
+
         return s;
     }
 

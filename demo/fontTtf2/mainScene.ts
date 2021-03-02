@@ -3,8 +3,8 @@ import {Font} from "@engine/renderable/impl/general/font";
 import {fontLoader} from "../fontTtf/FontLoader";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
-import loadFont = fontLoader.loadFont;
 import {TaskQueue} from "@engine/resources/taskQueue";
+import loadFont = fontLoader.loadFont;
 
 
 export class MainScene extends Scene {

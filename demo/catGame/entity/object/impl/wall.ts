@@ -5,7 +5,6 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Optional} from "@engine/core/declarations";
 import {Size} from "@engine/geometry/size";
 import {ITexture} from "@engine/renderer/common/texture";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {AbstractEntity} from "../../abstract/abstractEntity";
 import {Rect} from "@engine/geometry/rect";

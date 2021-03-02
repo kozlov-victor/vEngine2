@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 
@@ -12,20 +11,18 @@ export class MainScene extends Scene {
     private img2:Image;
 
     @Resource.Texture('./assets/repeat.jpg')
-    private link:ResourceLink<ITexture>;
+    private link:ITexture;
 
     public onReady():void {
 
-        this.img1 = new Image(this.game);
-        this.img1.setResourceLink(this.link);
+        this.img1 = new Image(this.game,this.link);
         this.img1.size.setWH(100);
         this.img1.stretchMode = STRETCH_MODE.STRETCH;
         this.img1.borderRadius = 10;
 
 
-        this.img2 = new Image(this.game);
+        this.img2 = new Image(this.game,this.link);
         this.img2.pos.setXY(100,0);
-        this.img2.setResourceLink(this.link);
         this.img2.size.setWH(600);
         this.img2.stretchMode = STRETCH_MODE.REPEAT;
         this.img2.borderRadius = 15;

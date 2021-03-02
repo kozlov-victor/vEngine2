@@ -60,7 +60,7 @@ interface IImageProps extends ITransformableProps, IPositionableProps {
     borderRadius?:number;
     color?:IColor;
     lineWidth?:number;
-    resourceLink:{type:'ResourceLink'};
+    texture:{size:{width:number,height:number}};
 }
 
 declare namespace JSX {

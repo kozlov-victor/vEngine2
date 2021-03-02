@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {MainWidget} from "./ui/mainWidget";
 import {Resource} from "@engine/resources/resourceDecorators";
@@ -9,7 +8,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/star.png')
-    private link:ResourceLink<ITexture>;
+    private link:ITexture;
 
     public onReady():void {
         const root = new SimpleGameObjectContainer(this.game);

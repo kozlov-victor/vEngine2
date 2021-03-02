@@ -1,5 +1,4 @@
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IRectJSON} from "@engine/geometry/rect";
 import {Game} from "@engine/core/game";

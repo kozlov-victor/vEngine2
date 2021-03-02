@@ -1,9 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Color} from "@engine/renderer/common/color";
-import {
-    MoveByEllipseAnimation
-} from "@engine/animation/propertyAnimation/moveByEllipseAnimation";
+import {MoveByEllipseAnimation} from "@engine/animation/propertyAnimation/moveByEllipseAnimation";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 
 export class MainScene extends Scene {

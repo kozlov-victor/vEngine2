@@ -7,7 +7,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 
 export abstract class ResourceAutoHolder {
 
-    private onPreloading(taskQueue:TaskQueue):void{
+    protected onPreloading(taskQueue:TaskQueue):void{
         //  method stub for autogenerator
     }
 
@@ -17,7 +17,9 @@ export abstract class ResourceAutoHolder {
                 throw new DebugError(`ResourceAutoHolder can be instantiated only on CREATED scene lifecycle phase`);
             }
         }
-        scene.on(SCENE_EVENTS.PRELOADING, (taskQueue:TaskQueue)=>this.onPreloading(taskQueue));
+        scene.on(SCENE_EVENTS.PRELOADING, (taskQueue:TaskQueue)=>{
+            this.onPreloading(taskQueue);
+        });
     }
 
 }

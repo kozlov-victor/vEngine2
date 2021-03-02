@@ -8,7 +8,6 @@ import {
     AlignTextContentVertical,
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";

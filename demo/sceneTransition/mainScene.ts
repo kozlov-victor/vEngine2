@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 import {PushTransition} from "@engine/scene/transition/move/pushTransition";
 import {SIDE} from "@engine/scene/transition/move/side";
@@ -17,7 +16,11 @@ import {
 } from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {LIST_VIEW_EVENTS, VerticalListView, ListViewItem} from "@engine/renderable/impl/ui/scrollViews/verticalListView";
+import {
+    LIST_VIEW_EVENTS,
+    ListViewItem,
+    VerticalListView
+} from "@engine/renderable/impl/ui/scrollViews/verticalListView";
 import {
     FadeInAppearanceTransition,
     FadeOutAppearanceTransition
@@ -80,7 +83,7 @@ import {
 
 export class MainScene extends Scene {
 
-    @Resource.Font({fontSize: 25,fontFamily:'monospace'})
+    @Resource.FontFromCssDescription({fontSize: 25,fontFamily:'monospace'})
     private fnt:Font;
     public backgroundColor: Color = Color.RGB(233);
 

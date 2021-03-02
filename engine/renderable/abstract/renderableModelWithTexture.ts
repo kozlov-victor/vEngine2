@@ -1,4 +1,3 @@
-import {ResourceLink, ResourceLinkState} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
@@ -8,9 +7,8 @@ export abstract class RenderableModelWithTexture extends RenderableModel {
 
     private _texture:ITexture;
 
-    constructor(game:Game,texture:ITexture) {
+    constructor(game:Game) {
         super(game);
-        this.setTexture(texture);
     }
 
     public setTexture(texture:ITexture):void{

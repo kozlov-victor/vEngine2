@@ -1,20 +1,17 @@
 import {Scene} from "@engine/scene/scene";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {FaceTypeToSvg} from "./FaceTypeToSvg";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private fontJsonLink:ResourceLink<any>;
+    @Resource.JSON('./polylines12/Mortal Kombat 4_Regular.json')
+    private fontJsonLink:any;
 
     // https://gero3.github.io/facetype.js/
-    public onPreloading():void {
-        this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Mortal Kombat 4_Regular.json');
-        //this.fontJsonLink = this.resourceLoader.loadJSON('./polylines12/Press Start 2P_Regular.json');
-    }
 
     public onProgress(val: number):void {
 
@@ -35,7 +32,7 @@ export class MainScene extends Scene {
         const scale:number = 0.1;
         const faceTypeToSvg:FaceTypeToSvg = new FaceTypeToSvg();
         word.split('').forEach(letter=>{
-            const path = this.fontJsonLink.getTarget().glyphs[letter].o;
+            const path = this.fontJsonLink.glyphs[letter].o;
             if (!path) {
                 offsetX+=50;
                 return;

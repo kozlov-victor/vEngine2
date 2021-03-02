@@ -1,6 +1,5 @@
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
 import {ITexture} from "@engine/renderer/common/texture";
 

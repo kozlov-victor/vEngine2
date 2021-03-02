@@ -28,8 +28,8 @@ commodo`;
 
 export class MainScene extends Scene {
 
-    @Resource.Font({fontFamily:'monospace',fontSize:15,extraChars:['😀','🥰','🖐','🩸','📯']})
-    public fnt!:Font;
+    @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:15,extraChars:['😀','🥰','🖐','🩸','📯']})
+    private fnt:Font;
 
 
     public onReady():void {

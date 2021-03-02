@@ -4,7 +4,7 @@ const tstemplate = require("@phenomnomnominal/tstemplate").tstemplate;
 const ts = require("typescript");
 
 const decoratorNamesToProcess = [
-    'Texture', 'Sound', 'CubeTexture', 'Text', 'JSON', 'Font', 'FontFromAtlas'
+    'Texture', 'Sound', 'CubeTexture', 'Text', 'JSON', 'FontFromCssDescription', 'FontFromAtlas'
 ];
 
 const createStatementsForPreloadingMethod = (template,params)=>{
@@ -42,13 +42,18 @@ module.exports = function(content) {
         if (preloadingMethod===undefined) {
             preloadingMethod = tsquery(tstemplate.compile(`
                 class Template {
-                    public onPreloading(taskQueue):void{
+                    public onPreloading(taskQueue:any):void{
                         super.onPreloading(taskQueue);
                     }
                 }
             `)({}),`MethodDeclaration:has(Identifier[name="onPreloading"])`)[0];
             cl.members.push(preloadingMethod);
         }
+        const preloadingMethodFirstArg =
+            preloadingMethod.parameters &&
+            preloadingMethod.parameters[0] &&
+            preloadingMethod.parameters[0].name;
+        //if (preloadingMethodFirstArg===undefined) throw new Error(`wrong arguments of onPreloading method`);
         const statements = [];
         allDecoratedFields.forEach(f=> {
             const newDecorators = [];
@@ -62,14 +67,14 @@ module.exports = function(content) {
                     const decoratorArgs = d.expression.arguments;
                     const loadingStatements = createStatementsForPreloadingMethod(
                         `
-                         resourceLoader.addNextTask(async (progress:(n:number)=>void):Promise<void>=>{
-                            this.<%=fieldName%> = await taskQueue.getResourceLoader().load${decoratorName}(<%=args%>,progress);
+                         <%=taskQueue%>.addNextTask(async (progress:(n:number)=>void):Promise<void>=>{
+                            this.<%=fieldName%> = await <%=taskQueue%>.getLoader().load${decoratorName}(<%=args%>,progress);
                         });
                         `,
                         {
                             fieldName: ts.createIdentifier(f.name.escapedText),
                             args: decoratorArgs,
-                            cnt: ts.createIdentifier('cnt')
+                            taskQueue:preloadingMethodFirstArg
                         }
                     );
                     statements.push(...loadingStatements);

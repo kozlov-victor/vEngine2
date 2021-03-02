@@ -1,5 +1,4 @@
 import {BaseAbstractIntroScene} from "./abstracts/baseAbstractIntroScene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IntroScene} from "./introScene";

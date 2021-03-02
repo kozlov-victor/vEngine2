@@ -1,9 +1,9 @@
 import {Game} from "../../core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ICloneable} from "@engine/core/declarations";
 import {Incrementer} from "@engine/resources/incrementer";
 import {Sound} from "@engine/media/sound";
 import {AudioPlayer} from "@engine/media/audioPlayer";
+import {UploadedSoundLink, UploadSoundLinkImpl} from "@engine/media/interface/iAudioPlayer";
 
 
 export class BasicAudioContext implements ICloneable<BasicAudioContext>{
@@ -29,7 +29,7 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
         return this._lastTimeId;
     }
 
-    public isCached(l:ResourceLink<void>):boolean{
+    public isCached(url:string):boolean{
         return false;
     }
 
@@ -53,8 +53,8 @@ export class BasicAudioContext implements ICloneable<BasicAudioContext>{
     public pause():void{}
     public resume():void{}
     public setFeedbackDelay(delayTime:number,gain:number):void {}
-    public uploadBufferToContext(url:string, buffer:ArrayBuffer):Promise<void>{
-        return Promise.resolve();
+    public uploadBufferToContext(url: string, buffer: ArrayBuffer):Promise<UploadedSoundLink>{
+        return Promise.resolve(new UploadSoundLinkImpl(url));
     }
 
     public clone():BasicAudioContext{

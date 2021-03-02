@@ -1,25 +1,22 @@
-
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {SpriterObject} from "./scml";
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
 
     private player:SpriterObject;
 
-    public onPreloading():void {
-        const rect = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-
-
-        this.player = new SpriterObject(this.game);
-        this.player.preload({url:'./scml/player/player.scon',headers:[{name:'test-header',value:'nonsense'}],responseType:'text'});
-
+    public onPreloading(taskQueue:TaskQueue):void {
+       taskQueue.addNextTask(async progress=>{
+          this.player =
+              await SpriterObject.create(
+                  this.game,
+                  taskQueue,
+                  {url:'./scml/player/player.scon',headers:[{name:'test-header',value:'nonsense'}],responseType:'text'}
+              );
+       });
     }
 
     public onProgress(val: number):void {

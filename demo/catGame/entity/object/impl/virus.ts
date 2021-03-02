@@ -1,5 +1,4 @@
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {CollectableEntity} from "../abstract/collectableEntity";
 import {Rect} from "@engine/geometry/rect";

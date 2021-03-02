@@ -2,8 +2,8 @@ import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {fontLoader} from "../../fontTtf/FontLoader";
-import loadFont = fontLoader.loadFont;
 import {TaskQueue} from "@engine/resources/taskQueue";
+import loadFont = fontLoader.loadFont;
 
 export abstract class MkAbstractScene extends Scene {
 

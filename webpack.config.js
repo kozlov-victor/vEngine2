@@ -193,7 +193,7 @@ module.exports = async (env={})=>{
         },
         optimization: {
             minimize: !debug,
-            emitOnErrors: true,
+            emitOnErrors: false,
         },
     };
 

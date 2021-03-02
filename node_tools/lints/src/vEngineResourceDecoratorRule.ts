@@ -18,7 +18,7 @@ class LintWalker extends Lint.AbstractWalker {
             // Finds specific node types and do checking.
             if (ts.isDecorator(node)) {
                 //this.checkStatement(node);
-                console.log(node);
+                //console.log(node);
             } else {
                 // Continue recursion: call function `cb` for all children of the current node.
                 return ts.forEachChild(node, cb);

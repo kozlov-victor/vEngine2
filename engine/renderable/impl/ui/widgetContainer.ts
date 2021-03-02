@@ -36,7 +36,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         super.appendChild(this.backgroundActive);
         super.appendChild(this.backgroundDisabled);
 
-        if (game.hasControl('mouseControl')) {
+        if (game.hasControl('MouseControl')) {
             this.listenToHoverState();
             this.listenToActiveState();
         } else {

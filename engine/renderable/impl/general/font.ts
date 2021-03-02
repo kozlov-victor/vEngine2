@@ -75,8 +75,8 @@ export namespace FontFactory {
     }
 
     const SYMBOL_PADDING = 4 as const;
-    const MAX_HEIGHT = 128 as const;
-    const WIDTH:number = 128 as const;
+    const MAX_HEIGHT = 512 as const;
+    const WIDTH:number = 512 as const;
 
     const getCtx = (cnv:HTMLCanvasElement):CanvasRenderingContext2D=>{
         return cnv.getContext('2d') as CanvasRenderingContext2D;
@@ -320,7 +320,7 @@ export class Font {
 
     public getResourceLinkByChar(char:string):ITexture{
         if (char===' ') return this.context.texturePages[0];
-        const symbolInfo:IFontSymbolInfo = this.context.symbols[char];
+        const symbolInfo:IFontSymbolInfo = this.context.symbols[char] || this.context.symbols['?'];
         if (DEBUG && symbolInfo===undefined) {
             throw new DebugError(`no symbol info for character "${char}"`);
         }

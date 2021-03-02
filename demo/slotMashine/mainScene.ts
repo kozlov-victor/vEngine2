@@ -1,15 +1,13 @@
 import {Scene} from "@engine/scene/scene";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
-import {Mashine} from "./entities/mashine";
+import {Machine} from "./entities/machine";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {MathEx} from "@engine/misc/mathEx";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 interface IWheelCommand {
     a:number;
@@ -20,24 +18,20 @@ interface IWheelCommand {
 
 export class MainScene extends Scene {
 
-    public wheelLink:ResourceLink<ITexture>;
-    public overlayLink:ResourceLink<ITexture>;
+    @Resource.Texture('./slotMashine/resources/overlay.png')
+    public wheelLink:ITexture;
+
+    @Resource.Texture(`./slotMashine/resources/wheel.png`)
+    public overlayLink:ITexture;
+
     private overlay!:Image;
-    private mashine!:Mashine;
+    private machine!:Machine;
 
 
     constructor(protected game:Game){
         super(game);
     }
 
-    public onPreloading():void {
-        this.overlayLink = this.resourceLoader.loadTexture('./slotMashine/resources/overlay.png');
-        this.wheelLink = this.resourceLoader.loadTexture(`./slotMashine/resources/wheel.png?1`);
-        const rect:Rectangle = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-    }
 
     public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
@@ -45,12 +39,11 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
-        this.overlay = new Image(this.game);
-        this.overlay.setResourceLink(this.overlayLink);
+        this.overlay = new Image(this.game,this.overlayLink);
 
         this.backgroundColor = Color.RGB(100,0,0);
-        this.mashine = new Mashine(this.game,this.wheelLink);
-        this.mashine.connectToScene(this);
+        this.machine = new Machine(this.game,this.wheelLink);
+        this.machine.connectToScene(this);
 
         this.appendChild(this.overlay);
 
@@ -63,15 +56,13 @@ export class MainScene extends Scene {
         window.addEventListener('message',(e:MessageEvent)=>{
             const commandObj:IWheelCommand = e.data as IWheelCommand;
             if (commandObj.command!=='spin') return;
-            this.mashine.spin(commandObj.a,commandObj.b,commandObj.c);
+            this.machine.spin(commandObj.a,commandObj.b,commandObj.c);
         });
 
-        if (window.top===window) this.on(MOUSE_EVENTS.click,()=>{
-            const a:number = ~~MathEx.random(1,5);
-            const b:number = ~~MathEx.random(1,5);
-            const c:number = ~~MathEx.random(1,5);
-            this.mashine.spin(1,1,1);
-        });
+        const a:number = ~~MathEx.random(1,5);
+        const b:number = ~~MathEx.random(1,5);
+        const c:number = ~~MathEx.random(1,5);
+        this.machine.spin(a,b,c);
 
     }
 

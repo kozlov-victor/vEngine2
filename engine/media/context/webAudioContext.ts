@@ -1,9 +1,9 @@
 import {AudioPlayer} from "../audioPlayer";
 import {Game} from "../../core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {BasicAudioContext} from "@engine/media/context/basicAudioContext";
 import {Clazz, ICloneable, Optional} from "@engine/core/declarations";
 import {Sound} from "@engine/media/sound";
+import {UploadedSoundLink, UploadSoundLinkImpl} from "@engine/media/interface/iAudioPlayer";
 
 export class WebAudioContextHolder {
     public static getAudioContextClass():Optional<Clazz<AudioContext>>{
@@ -129,16 +129,16 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         return CtxHolder.getCtx()!;
     }
 
-    public async uploadBufferToContext(url:string, buffer:ArrayBuffer):Promise<void> {
-        if (AudioPlayer.cache[url]) {
-            return undefined;
+    public async uploadBufferToContext(url: string, buffer: ArrayBuffer):Promise<UploadedSoundLink> {
+        if (!AudioPlayer.cache[url]) {
+            AudioPlayer.cache[url] = await decode(buffer);
         }
-        AudioPlayer.cache[url] = await decode(buffer);
+        return new UploadSoundLinkImpl(url);
     }
 
 
-    public isCached(l:ResourceLink<void>):boolean{
-        return !!AudioPlayer.cache[l.getUrl()];
+    public isCached(url:string):boolean{
+        return !!AudioPlayer.cache[url];
     }
 
     public isFree(): boolean {
@@ -150,7 +150,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         this._free = false;
         this.startedTime = ~~(this._ctx.currentTime*1000);
         const currSource:AudioBufferSourceNode = this._ctx.createBufferSource();
-        currSource.buffer = AudioPlayer.cache[sound.getResourceLink().getUrl()] as AudioBuffer;
+        currSource.buffer = AudioPlayer.cache[sound.getUrl()] as AudioBuffer;
         currSource.connect(this._nodeChain.getLastNode());
         currSource.start(0,sound.offset,sound.duration);
         this._currSource = currSource;

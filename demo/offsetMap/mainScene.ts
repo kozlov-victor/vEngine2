@@ -1,12 +1,9 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {OffsetMapFilter} from "@engine/renderer/webGl/filters/texture/offsetMapFilter";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TaskQueue} from "@engine/resources/taskQueue";
 

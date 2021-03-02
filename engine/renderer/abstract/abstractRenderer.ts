@@ -5,7 +5,6 @@ import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Image} from "@engine/renderable/impl/general/image";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";

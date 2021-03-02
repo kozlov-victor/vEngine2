@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
@@ -8,14 +7,13 @@ import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnim
 export class MainScene extends Scene {
 
     @Resource.Texture('./pixelPerfectStretch3/data/Sprite1.png')
-    private sprite:ResourceLink<ITexture>;
+    private sprite:ITexture;
 
 
     public onReady():void {
 
-        const sprLogo:AnimatedImage = new AnimatedImage(this.game);
+        const sprLogo:AnimatedImage = new AnimatedImage(this.game,this.sprite);
         sprLogo.scale.setXY(5);
-        sprLogo.setResourceLink(this.sprite);
         sprLogo.setPixelPerfect(true);
         const cellFrameAnimation = new CellFrameAnimation(this.game);
         cellFrameAnimation.setSpriteSheetSize(3,1);

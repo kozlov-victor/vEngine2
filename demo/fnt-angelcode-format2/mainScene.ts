@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Font} from "@engine/renderable/impl/general/font";
 import * as fntXML from "xml/angelcode-loader!./test_font.fnt";
 import {Resource} from "@engine/resources/resourceDecorators";

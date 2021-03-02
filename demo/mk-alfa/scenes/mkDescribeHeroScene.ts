@@ -1,6 +1,5 @@
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {SimpleGameObjectContainer} from "../../../engine/renderable/impl/general/simpleGameObjectContainer";
 import {MathEx} from "@engine/misc/mathEx";
@@ -30,7 +29,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
     public selectedIndex:number = 0;
 
 
-    @Resource.Font({fontSize: 80, fontFamily: 'MK4'})
+    @Resource.FontFromCssDescription({fontSize: 80, fontFamily: 'MK4'})
     private fnt:Font;
 
     private logoLink:ITexture;

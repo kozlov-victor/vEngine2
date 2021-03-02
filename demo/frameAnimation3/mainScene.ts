@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {ITexture} from "@engine/renderer/common/texture";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";

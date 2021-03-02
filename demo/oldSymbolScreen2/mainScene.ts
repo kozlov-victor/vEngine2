@@ -14,7 +14,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    @Resource.Font({fontSize:14})
+    @Resource.FontFromCssDescription({fontSize:14})
     public fnt:Font;
 
     public onPreloading(taskQueue:TaskQueue):void{

@@ -47,13 +47,12 @@ const roms:string[] = [
 
 export class MenuScene extends Scene {
 
-    @Resource.Font({fontSize: 25,fontFamily:'monospace'})
+    @Resource.FontFromCssDescription({fontSize: 25,fontFamily:'monospace'})
     private fnt:Font;
 
     private listView:VerticalListView;
 
     public onReady():void {
-
         this.listView = new VerticalListView(this.game);
         this.listView.size.set(this.game.size);
         this.listView.setPadding(10);
