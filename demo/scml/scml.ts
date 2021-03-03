@@ -892,7 +892,7 @@ export class SpriterObject extends RenderableModel {
 
     private constructor(protected game:Game) {
         super(game);
-        this.rootNode.scale.setXY(1,-1);
+        this.rootNode.scale.setXY(1, -1);
         this.appendChild(this.rootNode);
     }
 
