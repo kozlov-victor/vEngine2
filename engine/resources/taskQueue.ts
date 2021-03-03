@@ -22,14 +22,6 @@ export class TaskQueue {
         return this.resourceLoader;
     }
 
-    public async waitForAllTasks():Promise<void> { // todo
-        let resolveFn:()=>void;
-        const p = new Promise<void>(resolve=>{
-            resolveFn = resolve;
-        });
-        this.resourceLoader.onResolved(()=>resolveFn());
-        await p;
-    }
 
     public scheduleStart():void {
         this.startScheduled = true;

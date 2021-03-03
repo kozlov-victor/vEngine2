@@ -44,7 +44,7 @@ export class MainScene extends Scene {
                 const mesh:Mesh = p.extrudeToMesh(70);
                 container.appendChild(mesh);
             });
-            offsetX+=this.fontJsonLink.getTarget().glyphs[letter].x_max * scale;
+            offsetX+=this.fontJsonLink.glyphs[letter].x_max * scale;
         });
 
     }

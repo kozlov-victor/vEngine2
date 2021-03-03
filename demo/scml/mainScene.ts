@@ -9,7 +9,8 @@ export class MainScene extends Scene {
     private player:SpriterObject;
 
     public onPreloading(taskQueue:TaskQueue):void {
-       taskQueue.addNextTask(async progress=>{
+        super.onPreloading(taskQueue);
+        taskQueue.addNextTask(async progress=>{
           this.player =
               await SpriterObject.create(
                   this.game,

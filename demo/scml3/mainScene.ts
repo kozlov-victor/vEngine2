@@ -15,10 +15,6 @@ export class MainScene extends Scene {
         });
     }
 
-    public onProgress(val: number):void {
-        this.preloadingGameObject.size.width = val*this.game.size.width;
-    }
-
     public onReady():void {
 
         this.appendChild(this.monster);

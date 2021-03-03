@@ -15,6 +15,7 @@ export class MainScene extends Scene {
     private brawler:SpriterObject;
 
     public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
         taskQueue.addNextTask(async _=>{
             this.player = await SpriterObject.create(this.game,taskQueue,'./scml5/orc/orc.scon');
         });

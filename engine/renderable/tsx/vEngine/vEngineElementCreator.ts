@@ -37,7 +37,7 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 element = new SimpleGameObjectContainer(game);
                 break;
             case 'v_image':
-                //element = new Image(game); todo
+                element = new Image(game,node.props.texture);
                 break;
             case undefined: {
                 if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);

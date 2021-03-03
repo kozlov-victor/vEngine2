@@ -8,6 +8,7 @@ import {wait} from "../longLoading/mainScene";
 export class SecondScene extends Scene {
 
     public onPreloading(taskQueue:TaskQueue):void{
+        super.onPreloading(taskQueue);
         for (let i:number = 0;i<20;i++) {
             taskQueue.addNextTask(async progress=>{
                 await wait(progress);

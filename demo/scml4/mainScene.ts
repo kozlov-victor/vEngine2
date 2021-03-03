@@ -10,6 +10,7 @@ export class MainScene extends Scene {
     private player:SpriterObject;
 
     public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
         taskQueue.addNextTask(async _=>{
            this.player = await SpriterObject.create(this.game,taskQueue,'./scml4/ugly/ugly.scon');
         });

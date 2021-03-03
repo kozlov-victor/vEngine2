@@ -18,10 +18,10 @@ interface IWheelCommand {
 
 export class MainScene extends Scene {
 
-    @Resource.Texture('./slotMashine/resources/overlay.png')
+    @Resource.Texture('./slotMashine/resources/wheel.png')
     public wheelLink:ITexture;
 
-    @Resource.Texture(`./slotMashine/resources/wheel.png`)
+    @Resource.Texture(`./slotMashine/resources/overlay.png`)
     public overlayLink:ITexture;
 
     private overlay!:Image;

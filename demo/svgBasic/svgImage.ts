@@ -693,13 +693,13 @@ export class SvgImage extends SimpleGameObjectContainer {
     public static async create(game:Game, taskQueue:TaskQueue,doc:Element, preferredSize?:ISize):Promise<SvgImage> {
         const image:SvgImage = new SvgImage(game, doc, preferredSize);
         await image.preload(taskQueue);
-        await image.parse();
+        image.parse();
         return image;
     }
 
     private parse():void {
 
-        const rootSvgTag = this.doc.querySelector('svg');
+        const rootSvgTag:Element = this.doc.querySelector('svg');
 
         const viewBox:[number,number,number,number] = getNumberArray(rootSvgTag.attributes.viewBox,4,0);
         let width:number = getNumberWithMeasure(rootSvgTag.attributes.width,this.game.size.width,0) || viewBox[2];
@@ -730,8 +730,7 @@ export class SvgImage extends SimpleGameObjectContainer {
         //this.appendChild(rootView);
     }
 
-    public async preload(taskQueue:TaskQueue):Promise<void> {
-
+    private async preload(taskQueue:TaskQueue):Promise<void> {
         if (DEBUG) {
             if (taskQueue.getLoader().isResolved()) {
                 throw new DebugError(`current taskQueue is completed`);
@@ -740,12 +739,9 @@ export class SvgImage extends SimpleGameObjectContainer {
         const elements:Element[] = this.doc.querySelectorAll('image');
         for (const el of elements) {
             const url:string = el.attributes['xlink:href'];
-            if (!url) return;
-            taskQueue.addNextTask(async progress=>{
-                this.preloadedTextures[url] = await taskQueue.getLoader().loadTexture(url,progress);
-            });
+            if (!url) continue;
+            this.preloadedTextures[url] = await taskQueue.getLoader().loadTexture(url);
         }
-        await taskQueue.waitForAllTasks();
     }
 
     private traverseDocument(view:RenderableModel,el:Element):void {
