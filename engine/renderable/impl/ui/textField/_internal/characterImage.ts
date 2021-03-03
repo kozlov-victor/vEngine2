@@ -1,6 +1,6 @@
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
-import {Font, IRectViewJSON} from "@engine/renderable/impl/general/font";
+import {Font, IFontSymbolInfo} from "@engine/renderable/impl/general/font";
 import {DebugError} from "@engine/debug/debugError";
 import {Color} from "@engine/renderer/common/color";
 import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
@@ -13,21 +13,21 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
     private textDecoratorLine:Rectangle;
 
     constructor(game:Game,private font:Font,private characterInfo:ICharacterInfo,color:Color) {
-        super(game);
+        super(game,(characterInfo.font || font).getResourceLinkByChar(characterInfo.rawChar));
         const actualFont:Font = characterInfo.font || font;
         this.stretchMode = STRETCH_MODE.STRETCH;
-        const [padUp,padRight,padDown,padLeft] = actualFont.fontContext.padding;
-        let charRect:IRectViewJSON = actualFont.fontContext.symbols[characterInfo.rawChar] || actualFont.fontContext.symbols['?'];
+        const [padUp,padRight,padDown,padLeft] = actualFont.context.padding;
+        let charRect:IFontSymbolInfo = actualFont.context.symbols[characterInfo.rawChar] || actualFont.context.symbols['?'];
         if (charRect===undefined) {
-            const key:string = Object.keys(actualFont.fontContext.symbols)[0];
+            const key:string = Object.keys(actualFont.context.symbols)[0];
             if (DEBUG && key===undefined) {
                 throw new DebugError(`Bad fontContext has been provided`);
             }
-            charRect = actualFont.fontContext.symbols[key];
+            charRect = actualFont.context.symbols[key];
         }
         if (DEBUG) {
             if (charRect.width===0 || charRect.height===0) {
-                console.error(actualFont.fontContext);
+                console.error(actualFont.context);
                 console.error(characterInfo);
                 throw new DebugError(`font context error: wrong character rect for symbol "${characterInfo.rawChar}"`);
             }
@@ -42,7 +42,6 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
         if (this.getSrcRect().height<=0) this.getSrcRect().height = 0.001;
         this.setScaleFromCurrFontSize(this.characterInfo.scaleFromCurrFontSize);
         this.pos.setXY(charRect.destOffsetX,charRect.destOffsetY);
-        this.setResourceLink(actualFont.getResourceLink());
         this.transformPoint.setToCenter();
         if (!characterInfo.multibyte) this.color = color;
         if (characterInfo.italic) this.setItalic(true);
@@ -124,8 +123,8 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
     private createTextDecoratorLineIfNotExists():void {
         if (this.textDecoratorLine===undefined) {
             const textDecoratorLine = new Rectangle(this.game);
-            const height:number = ~~((this.font.fontContext.lineHeight*this.characterInfo.scaleFromCurrFontSize)/12) || 1;
-            textDecoratorLine.size.setWH(this.size.width+this.font.fontContext.spacing[0]*2,height);
+            const height:number = ~~((this.font.context.lineHeight*this.characterInfo.scaleFromCurrFontSize)/12) || 1;
+            textDecoratorLine.size.setWH(this.size.width+this.font.context.spacing[0]*2,height);
             textDecoratorLine.lineWidth = 0;
             this.appendChild(textDecoratorLine);
             this.textDecoratorLine = textDecoratorLine;
@@ -134,7 +133,7 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
     }
 
     private updateVisibility():void {
-        this.visible = !(this.characterInfo.rawChar === ' ' && !this.characterInfo.linedThrough && !this.characterInfo.underlined);
+        this.visible = this.characterInfo.rawChar !== ' ';
     }
 
 }

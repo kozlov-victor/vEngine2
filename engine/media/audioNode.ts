@@ -14,7 +14,7 @@ export class AudioNode {
         this.stop();
         this.context.play(sound);
         this._currSound = sound;
-        this._lastPlayedUrl = sound.getResourceLink().url;
+        this._lastPlayedUrl = sound.getUrl();
     }
 
     public stop():void {

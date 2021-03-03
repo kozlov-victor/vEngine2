@@ -17,7 +17,7 @@ import {TextTable} from "@engine/renderable/impl/ui/textHelpers/textTable";
 
 export class MainScene extends Scene {
 
-    @Resource.Font({fontSize:15,fontFamily:'monospace'})
+    @Resource.FontFromCssDescription({fontSize:15,fontFamily:'monospace'})
     private fnt:Font;
 
     public onReady():void {

@@ -1,8 +1,7 @@
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Tween} from "@engine/animation/tween";
-import {Mashine} from "./mashine";
+import {Machine} from "./machine";
 import {ITexture} from "@engine/renderer/common/texture";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";
 
@@ -15,14 +14,12 @@ export class Wheel {
 
     public position:number = 0;
     public image:Image;
-    public mashine!:Mashine;
+    public mashine!:Machine;
 
     private free:boolean = true;
 
-    constructor(private game:Game,public resourceLink:ResourceLink<ITexture>){
-        this.image = new Image(game);
-        this.image.setResourceLink(resourceLink);
-
+    constructor(private game:Game,public resourceLink:ITexture){
+        this.image = new Image(game,resourceLink);
     }
 
     public spinTo(n:number,freeSpins:number,delayTime:number):void{

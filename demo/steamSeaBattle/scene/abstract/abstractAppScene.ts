@@ -1,6 +1,5 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Layer} from "@engine/scene/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
@@ -12,13 +11,14 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 import {DebugError} from "@engine/debug/debugError";
 import {Element} from "@engine/misc/xmlUtils";
 import {ImageButton} from "@engine/renderable/impl/ui/button/imageButton";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export abstract class AbstractAppScene extends Scene {
     protected sounds:Record<string,Sound> = {};
-    private links:Record<string,ResourceLink<ITexture>> = {};
+    private links:Record<string,ITexture> = {};
 
-    public onPreloading():void {
+    public onPreloading(taskQueue:TaskQueue):void {
         const assetsFolder:string = 'data';
         const assetsPostfix:string = '';
         const rect = new Rectangle(this.game);
@@ -28,36 +28,45 @@ export abstract class AbstractAppScene extends Scene {
         this.preloadingGameObject = rect;
 
         this.getSceneElement().getElementsByTagName('image').forEach((el:Element)=>{
-            this.links[el.attributes.src] =
-                this.resourceLoader.loadTexture({
-                    url:`./steamSeaBattle/${assetsFolder}/images/${el.attributes.src}${assetsPostfix}`,
-                    responseType: 'arraybuffer',
-                });
+            taskQueue.addNextTask(async progress=>{
+                this.links[el.attributes.src] =
+                    await taskQueue.getLoader().loadTexture({
+                        url:`./steamSeaBattle/${assetsFolder}/images/${el.attributes.src}${assetsPostfix}`,
+                        responseType: 'arraybuffer',
+                    },progress);
+            });
         });
         this.getSceneElement().getElementsByTagName('imageButton').forEach((el:Element)=>{
-            this.links[el.attributes['src-on']] =
-                this.resourceLoader.loadTexture({
-                    url: `./steamSeaBattle/${assetsFolder}/images/${el.attributes['src-on']}${assetsPostfix}`,
-                    responseType: 'arraybuffer'
+            taskQueue.addNextTask(async progress=>{
+                this.links[el.attributes['src-on']] =
+                    await taskQueue.getLoader().loadTexture({
+                        url: `./steamSeaBattle/${assetsFolder}/images/${el.attributes['src-on']}${assetsPostfix}`,
+                        responseType: 'arraybuffer'
+                    },progress);
             });
-            this.links[el.attributes['src-off']] =
-                this.resourceLoader.loadTexture({
-                    url: `./steamSeaBattle/${assetsFolder}/images/${el.attributes['src-off']}${assetsPostfix}`,
-                    responseType: 'arraybuffer'
+            taskQueue.addNextTask(async progress=>{
+                this.links[el.attributes['src-off']] =
+                    await taskQueue.getLoader().loadTexture({
+                        url: `./steamSeaBattle/${assetsFolder}/images/${el.attributes['src-off']}${assetsPostfix}`,
+                        responseType: 'arraybuffer'
+                    },progress);
             });
         });
 
         this.getSceneElement().getElementsByTagName('sound').forEach((el:Element)=>{
-            const sound:Sound = new Sound(this.game);
-            sound.offset = this.getNumber(el.attributes.offset,0);
-            sound.gain = this.getNumber(el.attributes.gain,1);
-            sound.setResourceLink(this.resourceLoader.loadSound(
-                {
-                    url:`./steamSeaBattle/${assetsFolder}/sounds/${el.attributes.src}${assetsPostfix}`,
-                    responseType: 'arraybuffer'
-                }
-            ));
-            this.sounds[el.attributes.src.replace('.js','').split('.')[0]] = sound;
+            taskQueue.addNextTask(async progress=>{
+                const sound =
+                    await taskQueue.getLoader().loadSound(
+                        {
+                            url:`./steamSeaBattle/${assetsFolder}/sounds/${el.attributes.src}${assetsPostfix}`,
+                            responseType: 'arraybuffer'
+                        },
+                        progress
+                    );
+                sound.offset = this.getNumber(el.attributes.offset,0);
+                sound.gain = this.getNumber(el.attributes.gain,1);
+                this.sounds[el.attributes.src.replace('.js','').split('.')[0]] = sound;
+            });
         });
 
     }
@@ -133,8 +142,7 @@ export abstract class AbstractAppScene extends Scene {
         children.forEach((child:IElementDescription)=>{
             switch (child.tagName) {
                 case 'image': {
-                    const img:Image = new Image(this.game);
-                    img.setResourceLink(this.links[child.attributes.src]);
+                    const img:Image = new Image(this.game,this.links[child.attributes.src]);
                     this.afterObjectCreated(root,img,child);
                     break;
                 }
@@ -176,14 +184,12 @@ export abstract class AbstractAppScene extends Scene {
                     break;
                 }
                 case 'imageButton': {
-                    const imgOn:Image = new Image(this.game);
+                    const imgOn:Image = new Image(this.game,this.links[child.attributes['src-on']]);
                     if (DEBUG) {
                         if (child.attributes['src-on' ]===undefined) throw new DebugError('no src-on  attribute');
                         if (child.attributes['src-off']===undefined) throw new DebugError('no src-off attribute');
                     }
-                    imgOn.setResourceLink(this.links[child.attributes['src-on']]);
-                    const imgOff:Image = new Image(this.game);
-                    imgOff.setResourceLink(this.links[child.attributes['src-off']]);
+                    const imgOff:Image = new Image(this.game,this.links[child.attributes['src-off']]);
                     const btn:ImageButton = new ImageButton(this.game,imgOn,imgOff);
                     btn.size.setWH(
                         this.getNumber(child.attributes.width),

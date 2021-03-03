@@ -4,8 +4,8 @@ import {DebugError} from "@engine/debug/debugError";
 import {VertexBuffer} from "./vertexBuffer";
 import {IndexBuffer} from "./indexBuffer";
 import {ShaderProgram} from "./shaderProgram";
-import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
-import glEnumToString = debugUtil.glEnumToString;
+import {DebugUtil} from "@engine/renderer/webGl/debug/debugUtil";
+import glEnumToString = DebugUtil.glEnumToString;
 import {Optional} from "@engine/core/declarations";
 
 export interface IVertexArrayInfo {

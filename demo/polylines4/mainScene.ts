@@ -3,13 +3,14 @@ import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
 
 
 
-    public onPreloading():void {
+    public onPreloading(taskQueue:TaskQueue):void {
 
 
 

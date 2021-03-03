@@ -1,7 +1,6 @@
 import {AbstractEntity} from "../../abstract/abstractEntity";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Size} from "@engine/geometry/size";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
@@ -12,7 +11,7 @@ import {Hero} from "../../actor/impl/hero";
 
 export class Bullet extends AbstractEntity {
 
-    private constructor(protected game: Game, spriteSheet: ResourceLink<ITexture>) {
+    private constructor(protected game: Game, spriteSheet:ITexture) {
         super(game,spriteSheet,{
             type: ARCADE_RIGID_BODY_TYPE.DYNAMIC,
             groupNames: [Bullet.groupName],
@@ -29,11 +28,11 @@ export class Bullet extends AbstractEntity {
 
     public static readonly groupName:string = 'bullet';
 
-    private static spriteSheet: ResourceLink<ITexture>;
+    private static spriteSheet: ITexture;
 
     private animation:CellFrameAnimation;
 
-    public static init(spriteSheet: ResourceLink<ITexture>):void{
+    public static init(spriteSheet: ITexture):void{
         Bullet.spriteSheet = spriteSheet;
     }
 
@@ -41,9 +40,8 @@ export class Bullet extends AbstractEntity {
         return new Bullet(game,Bullet.spriteSheet);
     }
 
-    protected onCreatedRenderableModel(spriteSheet: ResourceLink<ITexture>): RenderableModel {
-        const img:AnimatedImage = new AnimatedImage(this.game);
-        img.setResourceLink(spriteSheet);
+    protected onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
+        const img:AnimatedImage = new AnimatedImage(this.game,spriteSheet);
         const animation:CellFrameAnimation = new CellFrameAnimation(this.game);
         animation.frames = [0,1,2,3,4,3,2,1];
         animation.duration = 300;

@@ -1,6 +1,5 @@
 import {BasePix32Scene} from "./base/basePix32Scene";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Tween} from "@engine/animation/tween";
@@ -9,12 +8,11 @@ import {GameScene} from "./gameScene";
 export class GetReadyScene extends BasePix32Scene {
 
     @Resource.Texture('./pix32/resources/images/flag.png')
-    private flagLink:ResourceLink<ITexture>;
+    private flagLink:ITexture;
 
     onReady():void {
         super.onReady();
-        const getReady:Image = new Image(this.game);
-        getReady.setResourceLink(this.flagLink);
+        const getReady:Image = new Image(this.game,this.flagLink);
         getReady.pos.setXY(-12);
         this.screen.appendChild(getReady);
         getReady.transformPoint.setToCenter();

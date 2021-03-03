@@ -6,9 +6,9 @@ import {Game} from "../core/game";
 import {Scene} from "../scene/scene";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/geometry/mat4";
 import {IRevalidatable, ITransformable, IUpdatable, Optional} from "@engine/core/declarations";
-import Mat16Holder = mat4.Mat16Holder;
+import Mat16Holder = Mat4.Mat16Holder;
 import {Point3d} from "@engine/geometry/point3d";
 
 interface ICameraTweenTarget {
@@ -48,7 +48,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
         this.pos.observe(observer);
         this.scale.observe(observer);
         this._rect.observe(observer);
-        mat4.makeIdentity(this.worldTransformMatrix);
+        Mat4.makeIdentity(this.worldTransformMatrix);
         this.revalidate();
     }
 
@@ -185,7 +185,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
     }
 
     public screenToWorld(p:Point2d):Point2d{
-        return mat4.unproject(p.x,p.y,this.worldTransformMatrix);
+        return Mat4.unproject(p.x,p.y,this.worldTransformMatrix);
     }
 
     private getRect():Rect{

@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Image} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -12,12 +11,11 @@ import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoLink:ResourceLink<ITexture>;
+    private logoTexture:ITexture;
 
     public onReady():void {
 
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoTexture);
         spr.pos.fromJSON({x:10,y:10});
         spr.transformPoint.setToCenter();
         spr.addBehaviour(new DraggableBehaviour(this.game));

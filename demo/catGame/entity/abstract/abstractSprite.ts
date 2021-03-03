@@ -1,6 +1,5 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {DebugError} from "@engine/debug/debugError";
@@ -9,7 +8,7 @@ export abstract class AbstractSprite {
 
     protected renderableImage:RenderableModel;
 
-    protected constructor(protected game: Game, spriteSheet: ResourceLink<ITexture>) {
+    protected constructor(protected game: Game, spriteSheet: ITexture) {
         this.renderableImage = this.onCreatedRenderableModel(spriteSheet);
         this.onCreatedFrameAnimation();
         this.appendToScene();
@@ -32,10 +31,8 @@ export abstract class AbstractSprite {
         return arr;
     }
 
-    protected onCreatedRenderableModel(spriteSheet: ResourceLink<ITexture>):RenderableModel {
-        const img: Image = new Image(this.game);
-        img.setResourceLink(spriteSheet);
-        return img;
+    protected onCreatedRenderableModel(spriteSheet: ITexture):RenderableModel {
+        return new Image(this.game, spriteSheet);
     }
 
     private appendToScene():void{

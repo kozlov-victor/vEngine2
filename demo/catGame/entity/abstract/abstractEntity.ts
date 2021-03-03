@@ -1,6 +1,5 @@
 import {ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {ArcadePhysicsSystem, ICreateRigidBodyParams} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {AbstractSprite} from "./abstractSprite";
@@ -12,7 +11,7 @@ export abstract class AbstractEntity extends AbstractSprite {
 
     protected body:ArcadeRigidBody;
 
-    protected constructor(protected game: Game, spriteSheet: ResourceLink<ITexture>,params:ICreateRigidBodyParams) {
+    protected constructor(protected game: Game, spriteSheet: ITexture,params:ICreateRigidBodyParams) {
         super(game,spriteSheet);
         this.body = this.onCreatedRigidBody(params);
     }

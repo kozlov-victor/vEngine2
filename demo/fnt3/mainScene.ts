@@ -9,19 +9,18 @@ import {
     AlignTextContentVertical,
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
-import {ResourceLink} from "@engine/resources/resourceLink";
 
 export class MainScene extends Scene {
 
 
     // created with http://kvazars.com/littera/
     @Resource.FontFromAtlas('./fnt3/font.png',fntXML)
-    private fontLink:ResourceLink<Font>;
+    private font:Font;
 
 
     public onReady():void {
         this.backgroundColor.setRGB(12,12,12);
-        const tf:TextField = new TextField(this.game,this.fontLink.getTarget());
+        const tf:TextField = new TextField(this.game,this.font);
         tf.size.set(this.game.size);
         tf.setPadding(10);
         tf.setWordBrake(WordBrake.PREDEFINED);

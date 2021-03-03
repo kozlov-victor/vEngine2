@@ -13,7 +13,7 @@ import {InsetBorder} from "@engine/renderable/impl/geometry/insetBorder";
 export class IntroScene extends Scene {
 
 
-    @Resource.Font({fontFamily:'monospace',fontSize:50})
+    @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:50})
     private fnt:Font;
 
     public onReady():void {
@@ -31,7 +31,7 @@ export class IntroScene extends Scene {
         bgNormal.appendChild(insetBorder);
 
         const bgActive:Rectangle = new Rectangle(this.game);
-        bgActive.fillColor = Color.fromCssLiteral('#cbf1cb');
+        bgActive.fillColor = Color.fromCssLiteral('#b8fab8');
         const outsetBorder:InsetBorder = new InsetBorder(this.game);
         outsetBorder.setColor1(Color.fromCssLiteral('#a4a4a4'));
         outsetBorder.setColor2(Color.fromCssLiteral('#fff'));

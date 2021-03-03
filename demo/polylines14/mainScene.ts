@@ -2,13 +2,14 @@ import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
 
 
 
-    public onPreloading():void {
+    public onPreloading(taskQueue:TaskQueue):void {
 
         // https://www.w3.org/TR/SVG/paths.html
         const polygon1:Polygon = Polygon.fromSvgPath(this.game,`

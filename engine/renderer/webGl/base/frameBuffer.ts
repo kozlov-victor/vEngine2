@@ -5,7 +5,6 @@ import {Texture} from "./texture";
 import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
 import {ISize} from "@engine/geometry/size";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
@@ -24,7 +23,6 @@ export class FrameBuffer implements IRenderTarget {
         this.texture = new Texture(_gl);
         this.texture.setImage(undefined,size);
         this._init(_gl,size);
-        this._link = ResourceLink.create<ITexture>(this.texture);
         this.bind();
         this.clear(Color.RGB(0,0,0,),0);
     }
@@ -34,8 +32,6 @@ export class FrameBuffer implements IRenderTarget {
     private readonly texture:Texture;
     private glRenderBuffer:WebGLRenderbuffer;
     private glFrameBuffer:WebGLFramebuffer;
-
-    private readonly _link:ResourceLink<ITexture>;
 
     private readonly _width:number;
     private readonly _height:number;
@@ -86,10 +82,6 @@ export class FrameBuffer implements IRenderTarget {
 
     public getTexture():Texture {
         return this.texture;
-    }
-
-    public getResourceLink():ResourceLink<ITexture>{
-        return this._link;
     }
 
     private _init(gl:WebGLRenderingContext,size:ISize):void{

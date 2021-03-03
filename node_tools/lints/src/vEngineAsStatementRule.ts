@@ -13,7 +13,7 @@ export class Rule extends Lint.Rules.AbstractRule {
 
 class LintWalker extends Lint.AbstractWalker {
 
-    public walk(sourceFile: ts.SourceFile) {
+    public walk(sourceFile: ts.SourceFile):void {
         const cb = (node: ts.Node): void => {
             // Finds specific node types and do checking.
             if (ts.isAsExpression(node)) {
@@ -28,7 +28,7 @@ class LintWalker extends Lint.AbstractWalker {
     }
 
 
-    private checkStatement(node:ts.Node) {
+    private checkStatement(node:ts.Node):void {
         this.addFailure(node.pos,node.end,`potentially unsafe statement "as"`);
     }
 

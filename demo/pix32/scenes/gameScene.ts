@@ -1,6 +1,5 @@
 import {BasePix32Scene, loadSound, waitFor} from "./base/basePix32Scene";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
@@ -16,6 +15,7 @@ import {Rect} from "@engine/geometry/rect";
 import {Ym} from "../ym-player/ym";
 import {Sound} from "@engine/media/sound";
 import {GameOverScene} from "./gameOverScene";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 interface IMoveable {
     model:RenderableModel;
@@ -72,18 +72,18 @@ class Car {
 export class GameScene extends BasePix32Scene {
 
     @Resource.Texture('./pix32/resources/images/car.png')
-    private carLink:ResourceLink<ITexture>;
+    private carLink:ITexture;
 
     @Resource.Texture('./pix32/resources/images/hill.png')
-    private hillLink:ResourceLink<ITexture>;
+    private hillLink:ITexture;
 
     @Resource.Texture('./pix32/resources/images/life.png')
-    private lifeLink:ResourceLink<ITexture>;
+    private lifeLink:ITexture;
 
     @Resource.Texture('./pix32/resources/images/stopSign.png')
-    private stopSignLink:ResourceLink<ITexture>;
+    private stopSignLink:ITexture;
 
-    private themeAudioLink:ResourceLink<void>;
+    private themeAudioLink:Sound;
 
 
     private moveableObjects:IMoveable[] = [];
@@ -103,23 +103,24 @@ export class GameScene extends BasePix32Scene {
         if (obj.pos.x<-10) obj.pos.x = MathEx.random(32,64);
     }
 
-    onPreloading():void {
-        super.onPreloading();
-        const binLink = this.resourceLoader.loadBinary('pix32/resources/music/Androids.ym');
-        this.resourceLoader.addNextTask((()=>{
-            const ym  = new Ym(binLink.getTarget());
-            this.themeAudioLink = loadSound(this.game,ym);
+    onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
+        let bin:ArrayBuffer;
+        taskQueue.addNextTask(async progress=>{
+            bin = await taskQueue.getLoader().loadBinary('pix32/resources/music/Androids.ym',progress);
+        });
+        taskQueue.addNextTask(async _=>{
+            const ym  = new Ym(bin);
+            this.themeAudioLink = await loadSound(this.game,ym);
             this.ym = ym;
-        }));
+        });
     }
 
     onReady():void {
         super.onReady();
         (async ()=>{
             await this.print("get ready",3000);
-
-            const sound:Sound = new Sound(this.game);
-            sound.setResourceLink(this.themeAudioLink);
+            const sound = this.themeAudioLink;
             sound.loop = true;
             sound.play();
             this.sound = sound;
@@ -149,8 +150,7 @@ export class GameScene extends BasePix32Scene {
     }
 
     private createCar():void{
-        const car:Image = new Image(this.game);
-        car.setResourceLink(this.carLink);
+        const car:Image = new Image(this.game,this.carLink);
         car.pos.setXY(4,5);
         this.screen.appendChild(car);
         this.car.carModel = car;
@@ -159,8 +159,7 @@ export class GameScene extends BasePix32Scene {
     private createOpponents():void{
         for (let i:number=0;i<6;i++) {
             (()=>{
-                const img = new Image(this.game);
-                img.setResourceLink(this.carLink);
+                const img = new Image(this.game,this.carLink);
                 img.pos.setXY(MathEx.random(100,1000),MathEx.random(10,18));
                 this.screen.appendChild(img);
                 let isOvertakenPrev:boolean = false;
@@ -208,8 +207,7 @@ export class GameScene extends BasePix32Scene {
 
     private createLives():void{
         for (let i:number=0;i<2;i++) {
-            const img = new Image(this.game);
-            img.setResourceLink(this.lifeLink);
+            const img = new Image(this.game,this.lifeLink);
             const disappear = ()=>{
                 img.pos.setXY(MathEx.random(100,1000),MathEx.random(15,22));
             };
@@ -233,8 +231,7 @@ export class GameScene extends BasePix32Scene {
 
     private createStopSigns():void{
         for (let i:number=0;i<5;i++) {
-            const img = new Image(this.game);
-            img.setResourceLink(this.stopSignLink);
+            const img = new Image(this.game,this.stopSignLink);
             img.pos.setXY(MathEx.random(100,1000),MathEx.random(8,24));
             this.screen.appendChild(img);
             this.moveableObjects.push(
@@ -281,15 +278,13 @@ export class GameScene extends BasePix32Scene {
 
     private createHills():void{
         for (let i:number=0;i<10;i++) {
-            const img = new Image(this.game);
-            img.setResourceLink(this.hillLink);
+            const img = new Image(this.game,this.hillLink);
             img.pos.setXY(MathEx.random(0,32),MathEx.random(0,5));
             this.screen.appendChild(img);
             this.moveableObjects.push({model:img,velocity:0,onDisappear:GameScene.onDisappearCommon});
         }
         for (let i:number=0;i<10;i++) {
-            const img = new Image(this.game);
-            img.setResourceLink(this.hillLink);
+            const img = new Image(this.game,this.hillLink);
             img.pos.setXY(MathEx.random(0,32),MathEx.random(25,30));
             this.screen.appendChild(img);
             this.moveableObjects.push({model:img,velocity:0,onDisappear:GameScene.onDisappearCommon});

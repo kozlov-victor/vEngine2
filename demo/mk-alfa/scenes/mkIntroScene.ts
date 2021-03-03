@@ -1,7 +1,6 @@
 import {Font} from "@engine/renderable/impl/general/font";
 import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {createGlowTweenFilter, createScaleTweenMovie} from "../utils/miscFunctions";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
@@ -17,24 +16,18 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MkIntroScene extends MkAbstractScene {
 
+    @Resource.FontFromCssDescription({fontSize: 80, fontFamily: 'MK4'})
     private fnt:Font;
-    private logoLink:ResourceLink<ITexture>;
-    private soundLink:ResourceLink<void>;
 
-    public onPreloading(): void {
-        super.onPreloading();
+    @Resource.Texture('./mk-alfa/assets/images/mkLogo.png')
+    private logoLink:ITexture;
 
-        this.resourceLoader.addNextTask(()=>{
-            this.fnt = new Font(this.game,{fontSize: 80, fontFamily: 'MK4'});
-
-            this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
-            this.soundLink = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn.wav');
-        });
-
-    }
+    @Resource.Sound('./mk-alfa/assets/sounds/btn.wav')
+    private sound:Sound;
 
     public onReady(): void {
 
@@ -45,8 +38,7 @@ export class MkIntroScene extends MkAbstractScene {
         });
 
 
-        const img:Image = new Image(this.game);
-        img.setResourceLink(this.logoLink);
+        const img:Image = new Image(this.game,this.logoLink);
         this.appendChild(img);
         img.transformPoint.setToCenter();
         img.pos.setXY(70,10);
@@ -79,14 +71,12 @@ export class MkIntroScene extends MkAbstractScene {
             if (MathEx.randomInt(0,50)<25) this.camera.shake(5,200);
         },1000);
 
-        const snd:Sound = new Sound(this.game);
-        snd.setResourceLink(this.soundLink);
         this.on(GAME_PAD_EVENTS.buttonPressed, (e:IGamePadEvent)=>{
-            snd.play();
+            this.sound.play();
             this.game.runScene(new MkSelectHeroScene(this.game),new CurtainsOpeningTransition(this.game));
         });
         this.on(KEYBOARD_EVENTS.keyPressed, ()=>{
-            snd.play();
+            this.sound.play();
             this.game.runScene(new MkSelectHeroScene(this.game),new CurtainsOpeningTransition(this.game));
         });
 

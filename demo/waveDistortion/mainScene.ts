@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Color} from "@engine/renderer/common/color";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -14,21 +13,19 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoLink:ResourceLink<ITexture>;
+    private logoLink:ITexture;
 
     @Resource.Texture('./assets/repeat.jpg')
-    private repeatLink:ResourceLink<ITexture>;
+    private repeatLink:ITexture;
 
     private img:Image;
 
 
     public onReady():void {
 
-        this.img = new Image(this.game);
-        this.img.setResourceLink(this.repeatLink);
+        this.img = new Image(this.game,this.repeatLink);
 
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         const nf = new NoiseFilter(this.game);
         nf.setIntensivity(0.5);
@@ -36,14 +33,12 @@ export class MainScene extends Scene {
         spr.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(spr);
 
-        const spr2:Image = new Image(this.game);
-        spr2.setResourceLink(this.logoLink);
+        const spr2:Image = new Image(this.game,this.logoLink);
         spr2.pos.setXY(30,30);
         spr2.filters = [new BlackWhiteFilter(this.game)];
         spr.appendChild(spr2);
 
-        const spr3:Image = new Image(this.game);
-        spr3.setResourceLink(this.logoLink);
+        const spr3:Image = new Image(this.game,this.logoLink);
         spr3.pos.setXY(30,30);
         spr3.filters = [new Barrel2DistortionFilter(this.game)];
         spr2.appendChild(spr3);

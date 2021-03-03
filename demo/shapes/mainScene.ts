@@ -8,11 +8,14 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {RadialGradient} from "@engine/renderable/impl/fill/radialGradient";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
 
-    public onPreloading():void {
+    public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
+
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0.2;

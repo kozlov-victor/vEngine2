@@ -1,5 +1,4 @@
 import "@engine/misc/polyfills";
-import {Camera} from "../renderer/camera";
 import {Point2d} from "../geometry/point2d";
 import {AbstractRenderer} from "../renderer/abstract/abstractRenderer";
 import {Scene, SCENE_EVENTS} from "../scene/scene";
@@ -12,6 +11,8 @@ import {Stack} from "@engine/misc/collection/stack";
 import {ISize, Size} from "@engine/geometry/size";
 import {IPhysicsSystem} from "@engine/physics/common/interfaces";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
+import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export const enum SCALE_STRATEGY {
@@ -164,7 +165,7 @@ export class Game {
         if (this._prevScene!==undefined) {
             this._prevScene.trigger(SCENE_EVENTS.INACTIVATED, undefined!);
             this._prevScene.onInactivated();
-            (this._prevScene as {lifeCycleState:SceneLifeCycleState}).lifeCycleState = SceneLifeCycleState.INACTIVATED;
+            this._prevScene.lifeCycleState = SceneLifeCycleState.INACTIVATED;
         }
         this._currScene = scene;
         if (this._currSceneTransition!==undefined) {
@@ -178,26 +179,29 @@ export class Game {
         }
 
         this.revalidate();
-        if (!scene.resourceLoader.isCompleted()) {
-            this._currScene.trigger(SCENE_EVENTS.PRELOADING);
-            scene.onPreloading();
-            scene.resourceLoader.onProgress(()=>{
+        if (this._currScene.lifeCycleState===SceneLifeCycleState.CREATED) {
+            this._currScene.lifeCycleState = SceneLifeCycleState.PRELOADING;
+            const taskQueue:TaskQueue = new TaskQueue(this);
+            const resourceLoader:ResourceLoader = taskQueue.getLoader();
+            taskQueue.scheduleStart();
+            this._currScene.trigger(SCENE_EVENTS.PRELOADING,taskQueue);
+            scene.onPreloading(taskQueue);
+            resourceLoader.onProgress((n:number)=>{
                 this._currScene.trigger(SCENE_EVENTS.PROGRESS);
-                scene.onProgress(scene.resourceLoader.getProgress());
-                this._currScene.lifeCycleState = SceneLifeCycleState.PRELOADING;
+                scene.onProgress(n);
             });
-            scene.resourceLoader.onCompleted(()=>{
+            resourceLoader.onResolved(()=>{
                 this._currScene.onReady();
                 this._currScene.onContinue();
                 this._currScene.trigger(SCENE_EVENTS.COMPLETED);
                 this._currScene.lifeCycleState = SceneLifeCycleState.COMPLETED;
             });
-            scene.resourceLoader.startLoading();
         } else {
             this._currScene.trigger(SCENE_EVENTS.CONTINUE);
             this._currScene.lifeCycleState = SceneLifeCycleState.COMPLETED;
             this._currScene.onContinue();
         }
+
         if (!this._running) {
             this._mainLoop.start();
             this._running = true;

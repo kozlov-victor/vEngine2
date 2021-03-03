@@ -9,7 +9,6 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
@@ -32,19 +31,21 @@ import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {AlignText, AlignTextContentHorizontal} from "@engine/renderable/impl/ui/textField/textAlign";
 import {Point2d} from "@engine/geometry/point2d";
+import {TaskQueue} from "@engine/resources/taskQueue";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 
 class TabStrip {
 
 
-    private linkByUrl: Record<string,ResourceLink<ITexture>> = {};
+    private linkByUrl: Record<string,ITexture> = {};
 
     private root:Rectangle = new Rectangle(this.game);
     private cell1:RenderableModel;
     private cell2:RenderableModel;
     private cell3:RenderableModel;
     private selectedIndex:number = 2;
-    private emptyResourceLink:ResourceLink<ITexture>;
+    private emptyResourceLink:ITexture;
     private readonly CELL_WIDTH:number = 340;
     private readonly CELL_HEIGHT:number = 400;
 
@@ -54,10 +55,14 @@ class TabStrip {
         this.root.fillColor.setRGB(12,12,12);
     }
 
-    public preload():void{
-        this.emptyResourceLink = this.game.getCurrScene().resourceLoader.loadTexture('./mk-alfa/assets/images/heroes/empty.jpg');
+    public preload(taskQueue:TaskQueue):void{
+        taskQueue.addNextTask(async progress=>{
+            this.emptyResourceLink = await taskQueue.getLoader().loadTexture('./mk-alfa/assets/images/heroes/empty.jpg',progress);
+        });
         HEROES_DESCRIPTION.forEach(it=>{
-            this.linkByUrl[it.url] = this.game.getCurrScene().resourceLoader.loadTexture(`./mk-alfa/assets/images/heroes/${it.url}`);
+            taskQueue.addNextTask(async progress=>{
+                this.linkByUrl[it.url] = await taskQueue.getLoader().loadTexture(`./mk-alfa/assets/images/heroes/${it.url}`);
+            });
         });
     }
 
@@ -134,8 +139,7 @@ class TabStrip {
         rectWrap.transformPoint.setToCenter();
         if (withFilters) rectWrap.filters = [new NoiseHorizontalFilter(this.game), new BlackWhiteFilter(this.game)];
 
-        const img:Image = new Image(this.game);
-        img.setResourceLink(this.emptyResourceLink);
+        const img:Image = new Image(this.game,this.emptyResourceLink);
         img.borderRadius = 20;
         rectWrap.appendChild(img);
 
@@ -195,10 +199,10 @@ class TabStrip {
 
     private updateImage(desc:IItemDescription,img:Image):void{
         if (desc===undefined) {
-            img.setResourceLink(this.emptyResourceLink);
+            img.setTexture(this.emptyResourceLink);
         }
         else {
-            img.setResourceLink(this.linkByUrl[desc.url]);
+            img.setTexture(this.linkByUrl[desc.url]);
         }
     }
 
@@ -217,28 +221,30 @@ class TabStrip {
 
 export class MkSelectHeroScene extends MkAbstractScene {
 
+    @Resource.FontFromCssDescription({fontSize:80,fontFamily:'MK4'})
     private fnt:Font;
-    private logoLink:ResourceLink<ITexture>;
-    private soundLink1:ResourceLink<void>;
-    private soundLink2:ResourceLink<void>;
-    private soundLinkTheme:ResourceLink<void>;
+
+    @Resource.Texture('./mk-alfa/assets/images/mkLogo.png')
+    private logoLink:ITexture;
+
+    @Resource.Sound('./mk-alfa/assets/sounds/btn2.wav')
+    private soundLink1:Sound;
+
+    @Resource.Sound('./mk-alfa/assets/sounds/btn.wav')
+    private soundLink2:Sound;
+
+    @Resource.Sound('./mk-alfa/assets/sounds/theme.mp3')
+    private soundLinkTheme:Sound;
+
     private tabStrip:TabStrip;
+
     private nextScene:MkDescribeHeroScene;
 
-    public onPreloading(): void {
-        super.onPreloading();
-        this.resourceLoader.addNextTask(()=>{
-            this.tabStrip = new TabStrip(this.game);
-            this.tabStrip.preload();
-            this.fnt = new Font(this.game, {fontSize:80,fontFamily:'MK4'});
-
-            this.logoLink = this.resourceLoader.loadTexture('./mk-alfa/assets/images/mkLogo.png');
-            this.soundLink1 = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn2.wav');
-            this.soundLink2 = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/btn.wav');
-            this.soundLinkTheme = this.resourceLoader.loadSound('./mk-alfa/assets/sounds/theme.mp3');
-            this.filters = [new VignetteFilter(this.game)];
-        });
-
+    public onPreloading(taskQueue:TaskQueue): void {
+        super.onPreloading(taskQueue);
+        this.tabStrip = new TabStrip(this.game);
+        this.tabStrip.preload(taskQueue);
+        this.filters = [new VignetteFilter(this.game)];
     }
 
     public onReady(): void {
@@ -249,13 +255,9 @@ export class MkSelectHeroScene extends MkAbstractScene {
             this.game.getRenderer().requestFullScreen();
         });
 
-        const theme:Sound = new Sound(this.game);
-        theme.loop = true;
-        theme.setResourceLink(this.soundLinkTheme);
-        theme.play();
+        this.soundLinkTheme.play();
 
-        const img:Image = new Image(this.game);
-        img.setResourceLink(this.logoLink);
+        const img:Image = new Image(this.game,this.logoLink);
         this.appendChild(img);
         img.transformPoint.setToCenter();
         img.pos.setXY(70,10);
@@ -287,16 +289,14 @@ export class MkSelectHeroScene extends MkAbstractScene {
 
         this.appendChild(this.tabStrip.getRoot());
 
-        const sndSelect:Sound = new Sound(this.game);
-        sndSelect.setResourceLink(this.soundLink1);
         this.on(GAME_PAD_EVENTS.buttonPressed, e=>{
             if (e.button===GAME_PAD_BUTTON.STICK_L_LEFT || e.button===GAME_PAD_BUTTON.D_PAD_LEFT) {
                 this.tabStrip.goPrev();
-                sndSelect.play();
+                this.soundLink1.play();
             }
             else if (e.button===GAME_PAD_BUTTON.STICK_L_RIGHT  || e.button===GAME_PAD_BUTTON.D_PAD_RIGHT) {
                 this.tabStrip.goNext();
-                sndSelect.play();
+                this.soundLink1.play();
             }
             else if (e.button===GAME_PAD_BUTTON.BTN_A) {
                 this.gotoDescriptionScene();
@@ -305,11 +305,11 @@ export class MkSelectHeroScene extends MkAbstractScene {
         this.on(KEYBOARD_EVENTS.keyPressed, (e)=>{
             if (e.key===KEYBOARD_KEY.LEFT) {
                 this.tabStrip.goPrev();
-                sndSelect.play();
+                this.soundLink1.play();
             }
             else if (e.key===KEYBOARD_KEY.RIGHT) {
                 this.tabStrip.goNext();
-                sndSelect.play();
+                this.soundLink1.play();
             }
             else if (e.key===KEYBOARD_KEY.ENTER) {
                 this.gotoDescriptionScene();
@@ -319,9 +319,7 @@ export class MkSelectHeroScene extends MkAbstractScene {
     }
 
     private gotoDescriptionScene():void{
-        const sndSelect:Sound = new Sound(this.game);
-        sndSelect.setResourceLink(this.soundLink2);
-        sndSelect.play();
+        this.soundLink2.play();
         if (this.nextScene===undefined) this.nextScene = new MkDescribeHeroScene(this.game);
         this.nextScene.selectedIndex = this.tabStrip.getSelectedIndex();
         this.game.pushScene(this.nextScene,new CurtainsOpeningTransition(this.game));

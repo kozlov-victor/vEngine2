@@ -1,10 +1,8 @@
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {DebugError} from "@engine/debug/debugError";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
-import {ITexture} from "@engine/renderer/common/texture";
 
 const asGlRenderer = (game:Game):WebGlRenderer|undefined=>{
     const renderer:AbstractRenderer = game.getRenderer();
@@ -16,7 +14,6 @@ const asGlRenderer = (game:Game):WebGlRenderer|undefined=>{
 export class DataTexture extends Texture {
 
     private _data:Uint8Array;
-    private readonly _link:ResourceLink<ITexture>;
 
     constructor(game:Game,width:number,height:number){
         super(asGlRenderer(game)!.getNativeContext());
@@ -27,12 +24,8 @@ export class DataTexture extends Texture {
         this._data = new Uint8Array(this.size.width*this.size.height*4);
         super.setRawData(this._data,width,height);
 
-        this._link = ResourceLink.create<ITexture>(this);
     }
 
-    public getLink():ResourceLink<ITexture>{
-        return this._link;
-    }
 
     public setNewData(data: Uint8Array):void {
         this._data = data;

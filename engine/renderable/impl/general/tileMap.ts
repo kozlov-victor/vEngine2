@@ -2,13 +2,14 @@ import {Game} from "@engine/core/game";
 import {Image} from "@engine/renderable/impl/general/image";
 import {DebugError} from "@engine/debug/debugError";
 import {Camera} from "@engine/renderer/camera";
-import {Size} from "@engine/geometry/size";
+import {ISize, Size} from "@engine/geometry/size";
 import {Optional} from "@engine/core/declarations";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
-import {RenderableModelWithResourceLink} from "@engine/renderable/abstract/renderableModelWithResourceLink";
+import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
-export class TileMap extends RenderableModelWithResourceLink {
+export class TileMap extends RenderableModelWithTexture {
 
     public readonly type:string = "TileMap";
 
@@ -35,8 +36,9 @@ export class TileMap extends RenderableModelWithResourceLink {
     private _cellImage:Image;
     private _drawingSurface:DrawingSurface;
 
-    constructor(protected game:Game){
+    constructor(protected game:Game,texture:ITexture){
         super(game);
+        this.setTexture(texture);
     }
 
     public fromTiledJSON(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number): void{
@@ -73,12 +75,11 @@ export class TileMap extends RenderableModelWithResourceLink {
         this.game.getCurrScene().size.width = this._numOfTilesInMapByX * this._tileWidth;
         this.game.getCurrScene().size.height = this._numOfTilesInMapByY * this._tileHeight;
 
-        const texSize:Size = this.getResourceLink().getTarget().size;
+        const texSize:ISize = this.getTexture().size;
         this._numOfTilesInSpriteByX = ~~(texSize.width / this._tileWidth);
         this._numOfTilesInSpriteByY = ~~(texSize.height / this._tileHeight);
 
-        this._cellImage = new Image(this.game);
-        this._cellImage.setResourceLink(this.getResourceLink());
+        this._cellImage = new Image(this.game,this.getTexture());
         this._cellImage.size.setWH(this._tileWidth,this._tileHeight);
         this._cellImage.getSrcRect().setWH(this._tileWidth,this._tileHeight);
         this._cellImage.revalidate();

@@ -2,13 +2,14 @@ import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
 
 
 
-    public onPreloading():void {
+    public onPreloading(taskQueue:TaskQueue):void {
 
 
 

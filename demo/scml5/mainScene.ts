@@ -1,9 +1,7 @@
-
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {SpriterObject} from "../scml/scml";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 // models: https://github.com/treefortress/SpriterAS
 // https://github.com/ibilon/HaxePunk-Spriter/tree/master/demo/assets/sprites
@@ -16,25 +14,20 @@ export class MainScene extends Scene {
     private imp:SpriterObject;
     private brawler:SpriterObject;
 
-    public onPreloading():void {
-        const rect = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-
-
-        this.player = new SpriterObject(this.game);
-        this.player.preload('./scml5/orc/orc.scon');
-
-        this.mage = new SpriterObject(this.game);
-        this.mage.preload('./scml5/mage/mage.scon');
-
-        this.imp = new SpriterObject(this.game);
-        this.imp.preload('./scml5/imp/imp.scon');
-
-        this.brawler = new SpriterObject(this.game);
-        this.brawler.preload('./scml5/brawler/brawler.scon');
-
+    public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
+        taskQueue.addNextTask(async _=>{
+            this.player = await SpriterObject.create(this.game,taskQueue,'./scml5/orc/orc.scon');
+        });
+        taskQueue.addNextTask(async _=>{
+            this.mage = await SpriterObject.create(this.game,taskQueue,'./scml5/mage/mage.scon');
+        });
+        taskQueue.addNextTask(async _=>{
+            this.imp =await SpriterObject.create(this.game,taskQueue,'./scml5/imp/imp.scon');
+        });
+        taskQueue.addNextTask(async _=>{
+            this.brawler = await SpriterObject.create(this.game,taskQueue,'./scml5/brawler/brawler.scon');
+        });
     }
 
     public onProgress(val: number):void {

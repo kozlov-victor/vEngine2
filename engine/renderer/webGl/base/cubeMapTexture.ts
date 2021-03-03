@@ -22,7 +22,7 @@ export class CubeMapTexture extends AbstractTexture implements ICubeMapTexture{
         top:HTMLImageElement|ImageBitmap,
         bottom:HTMLImageElement|ImageBitmap,
         front:HTMLImageElement|ImageBitmap,
-        back:HTMLImageElement|ImageBitmap,
+        back:HTMLImageElement|ImageBitmap
     ):void {
         this.validate(left,right,top,bottom,front,back);
         this.init(left,right,top,bottom,front,back);

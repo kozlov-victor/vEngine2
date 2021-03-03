@@ -13,14 +13,13 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {Shape} from "@engine/renderable/abstract/shape";
-import {ResourceLinkState} from "@engine/resources/resourceLink";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
-import {mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/geometry/mat4";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
-import {debugUtil} from "@engine/renderer/webGl/debug/debugUtil";
+import {DebugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import {ClazzEx, IDestroyable, Optional} from "@engine/core/declarations";
 import {TileMapDrawer} from "@engine/renderer/webGl/programs/impl/base/tileMap/tileMapDrawer";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
@@ -30,10 +29,10 @@ import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractT
 import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 import {SimpleColoredRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleColoredRectDrawer";
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
-import {mat4Special} from "@engine/geometry/mat4Special";
-import Mat16Holder = mat4.Mat16Holder;
-import glEnumToString = debugUtil.glEnumToString;
-import MAT16 = mat4.MAT16;
+import {Mat4Special} from "@engine/geometry/mat4Special";
+import Mat16Holder = Mat4.Mat16Holder;
+import glEnumToString = DebugUtil.glEnumToString;
+import MAT16 = Mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -54,30 +53,30 @@ const SCENE_DEPTH:number = 1000;
 
 
 const zToWMatrix:Mat16Holder = Mat16Holder.create();
-mat4.makeZToWMatrix(zToWMatrix,1);
+Mat4.makeZToWMatrix(zToWMatrix,1);
 
 const makeModelViewProjectionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat16Holder=>{
     // proj * modelView
     const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-    mat4.ortho(projectionMatrix,0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
+    Mat4.ortho(projectionMatrix,0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
 
     const scaleMatrix:Mat16Holder = Mat16Holder.fromPool();
-    mat4.makeScale(scaleMatrix,rect.width, rect.height, 1);
+    Mat4.makeScale(scaleMatrix,rect.width, rect.height, 1);
 
     const translationMatrix:Mat16Holder = Mat16Holder.fromPool();
-    mat4.makeTranslation(translationMatrix,rect.x, rect.y, 0);
+    Mat4.makeTranslation(translationMatrix,rect.x, rect.y, 0);
 
     const matrix1:Mat16Holder = Mat16Holder.fromPool();
-    mat4Special.multiplyScaleByAny(matrix1,scaleMatrix,translationMatrix);
+    Mat4Special.multiplyScaleByAny(matrix1,scaleMatrix,translationMatrix);
 
     const matrix2:Mat16Holder = Mat16Holder.fromPool();
-    mat4.matrixMultiply(matrix2,matrix1, matrixStack.getCurrentValue());
+    Mat4.matrixMultiply(matrix2,matrix1, matrixStack.getCurrentValue());
 
     const matrix3:Mat16Holder = Mat16Holder.fromPool();
-    mat4Special.multiplyAnyByProjection(matrix3,matrix2, projectionMatrix);
+    Mat4Special.multiplyAnyByProjection(matrix3,matrix2, projectionMatrix);
 
     const matrix4:Mat16Holder = Mat16Holder.fromPool();
-    mat4Special.multiplyAnyByZtoW(matrix4,matrix3, zToWMatrix);
+    Mat4Special.multiplyAnyByZtoW(matrix4,matrix3, zToWMatrix);
 
     projectionMatrix.release();
     scaleMatrix.release();
@@ -151,23 +150,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
 
     public drawImage(img:Image):void{
-        if (DEBUG) {
-            if (!img.getResourceLink()) {
-                throw new DebugError(`image resource link is not set`);
-            }
-            if (!img.getResourceLink().getTarget()) {
-                console.error(img);
-                throw new DebugError(`no target associated with resource link`);
-            }
-            if (img.getResourceLink().getState()!==ResourceLinkState.COMPLETED) {
-                throw new DebugError(`can not access resource link: it has wrong state ${img.getResourceLink().getState()}, ${ResourceLinkState.COMPLETED} state is expected`);
-            }
-        }
 
-        (img.getResourceLink().getTarget() as Texture).
-            setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
-
-        const texture:Texture = img.getResourceLink().getTarget() as Texture;
+        const texture:Texture = img.getTexture() as Texture;
+        texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
         const maxSize:number = Math.max(img.size.width,img.size.height);
 
         const sd:ShapeDrawer = this._shapeDrawerHolder.getInstance(this._gl);
@@ -218,13 +203,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const orthoProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
         const currViewSize:ISize = this._currFrameBufferStack.getCurrentTargetSize();
-        mat4.ortho(orthoProjectionMatrix,0,currViewSize.width,0,currViewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
+        Mat4.ortho(orthoProjectionMatrix,0,currViewSize.width,0,currViewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
         const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
+        Mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
 
         const inverseTransposeModelMatrix:Mat16Holder = Mat16Holder.fromPool();
-        mat4.inverse(inverseTransposeModelMatrix,modelMatrix);
-        mat4.transpose(inverseTransposeModelMatrix,inverseTransposeModelMatrix);
+        Mat4.inverse(inverseTransposeModelMatrix,modelMatrix);
+        Mat4.transpose(inverseTransposeModelMatrix,inverseTransposeModelMatrix);
 
         md.setModelMatrix(modelMatrix.mat16);
         md.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);

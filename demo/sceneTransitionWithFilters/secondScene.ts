@@ -1,22 +1,19 @@
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {fakeLongLoadingFn} from "../longLoading/mainScene";
-import {Color} from "@engine/renderer/common/color";
 import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
+import {TaskQueue} from "@engine/resources/taskQueue";
+import {wait} from "../longLoading/mainScene";
 
 export class SecondScene extends Scene {
 
-    public onPreloading():void{
-        this.backgroundColor.set(Color.BLACK);
-        for (let i:number = 0;i<60;i++) { fakeLongLoadingFn(this.resourceLoader); }
-        const rect = new Rectangle(this.game);
-        rect.borderRadius = 5;
-        rect.fillColor.setRGB(10,100,100);
-        rect.pos.y = 50;
-        rect.size.height = 20;
-        this.preloadingGameObject = rect;
-
+    public onPreloading(taskQueue:TaskQueue):void{
+        super.onPreloading(taskQueue);
+        for (let i:number = 0;i<20;i++) {
+            taskQueue.addNextTask(async progress=>{
+                await wait(progress);
+            });
+        }
     }
 
     public onProgress(val: number):void {

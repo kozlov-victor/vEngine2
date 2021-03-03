@@ -45,7 +45,7 @@ export class SelectBox extends VerticalListView {
         const clientRect = this.getClientRect();
         options.forEach((it,index)=>{
             const tf:TextField = new TextField(this.game,this.font);
-            tf.size.setWH(clientRect.width,this.font.fontContext.lineHeight);
+            tf.size.setWH(clientRect.width,this.font.context.lineHeight);
             tf.setText(it);
             this._textFields.push(tf);
             const listViewItem:ListViewItem = new ListViewItem(tf);

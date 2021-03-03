@@ -99,6 +99,7 @@ module.exports = async (env={})=>{
     }
 
     entry['debug'] = './engine/debug/debug.ts';
+    entry['inspector'] = './engine/debug/inspector.tsx';
     entry['polyfills-separate'] = './engine/misc/polyfills-separate.ts';
 
     console.log('webpack started at',new Date());

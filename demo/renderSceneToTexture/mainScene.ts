@@ -1,6 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
@@ -10,26 +8,20 @@ import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhit
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
+    @Resource.Texture('./assets/logo.png')
+    private logoLink:ITexture;
 
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
-        const rect = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-    }
 
     public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     public onReady():void {
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
         this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
@@ -54,13 +46,12 @@ export class MainScene extends Scene {
 
 
         const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,this.size);
-        const img = new Image(this.game);
+        const img = new Image(this.game,renderTarget.getTexture());
         img.filters = [new BlackWhiteFilter(this.game),new NoiseHorizontalFilter(this.game)];
         img.lineWidth = 5;
         img.color = Color.RGBA(0,255,0,100);
         img.borderRadius = 5;
         img.visible = false;
-        img.setResourceLink(renderTarget.getResourceLink());
         img.visible = true;
         this.appendChild(img);
         img.scale.setXY(0.2);

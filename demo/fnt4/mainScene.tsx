@@ -8,7 +8,6 @@ import {
     AlignTextContentVertical,
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
@@ -18,12 +17,12 @@ export class MainScene extends Scene {
 
     // created with http://kvazars.com/littera/
     @Resource.FontFromAtlas('./fnt4/font.png',fntXML)
-    private fontLink:ResourceLink<Font>;
+    private font:Font;
 
 
     public onReady():void {
         this.backgroundColor.setRGB(12,12,12);
-        const tf:RichTextField = new RichTextField(this.game,this.fontLink.getTarget());
+        const tf:RichTextField = new RichTextField(this.game,this.font);
         tf.size.set(this.game.size);
         tf.setPadding(10);
         tf.setWordBrake(WordBrake.PREDEFINED);

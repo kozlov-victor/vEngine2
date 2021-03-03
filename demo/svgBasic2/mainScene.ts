@@ -18,6 +18,7 @@ import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Element} from "@engine/misc/xmlUtils";
 import {SvgImage} from "../svgBasic/svgImage";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 const images:Element[] = [
     svgEx12,svgEx11,svgEx13,svgEx14,
@@ -35,8 +36,9 @@ export class MainScene extends Scene {
 
         const placeNextImage = async ()=>{
             if (lastImage!==undefined) lastImage.removeSelf();
-            lastImage = new SvgImage(this.game,images[i]);
-            await lastImage.parse();
+            const queue:TaskQueue = new TaskQueue(this.game);
+            queue.scheduleStart();
+            lastImage = await SvgImage.create(this.game,queue,images[i]);
             this.appendChild(lastImage);
             i++;
             i = i%images.length;

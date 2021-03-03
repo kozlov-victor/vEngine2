@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -9,22 +8,29 @@ import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/nois
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
+    private logoLink:ITexture;
     private fnt:Font;
 
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
+    public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
         const rect = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
+        rect.fillColor.setRGB(10, 100, 100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
-        const fnt:Font = new Font(this.game,{fontSize:50});
-        this.fnt = fnt;
 
+        taskQueue.addNextTask(async progress => {
+            this.logoLink = await taskQueue.getLoader().loadTexture('./assets/logo.png', progress);
+        });
+        taskQueue.addNextTask(async progress=>{
+            this.fnt = await taskQueue.getLoader().loadFontFromCssDescription({fontSize: 50},progress);
+        });
     }
+
+
 
     public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;

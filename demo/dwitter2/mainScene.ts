@@ -2,6 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Point2d} from "@engine/geometry/point2d";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
@@ -10,8 +11,8 @@ export class MainScene extends Scene {
     private renderScene:(session:IDrawingSession)=>void;
     private lastPoint:Point2d = new Point2d();
 
-    public onPreloading():void {
-        super.onPreloading();
+    public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         surface.setLineWidth(1);
         this.surface = surface;

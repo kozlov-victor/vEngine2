@@ -22,7 +22,7 @@ commodo consequat.`;
 
 export class MainScene extends Scene {
 
-    @Resource.Font({fontSize:20,fontFamily:'monospace'})
+    @Resource.FontFromCssDescription({fontSize:20,fontFamily:'monospace'})
     private fnt:Font;
 
 

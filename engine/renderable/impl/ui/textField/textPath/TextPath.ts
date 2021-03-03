@@ -83,7 +83,7 @@ export class TextPath extends MarkableGameObjectContainer {
                 c.pos.set(point);
                 c.angle  = point.angle;
             }
-            offset+=c.size.width+this.font.fontContext.spacing[0];
+            offset+=c.size.width+this.font.context.spacing[0];
         });
     }
 

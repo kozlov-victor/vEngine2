@@ -16,11 +16,11 @@ import {MathEx} from "@engine/misc/mathEx";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Image} from "@engine/renderable/impl/general/image";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {LazyImageCacheSurface} from "@engine/renderable/impl/surface/lazyImageCacheSurface";
+import {ITexture} from "@engine/renderer/common/texture";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 const NAMED_COLOR_TABLE:Record<string, string> =
     {
@@ -263,7 +263,7 @@ class SvgElementRenderer {
 
     private elementStylesHolder:ElementStylesHolder = new ElementStylesHolder();
 
-    constructor(private game:Game,private document:Element,private rootContainer:SvgImage, private preloadedResources:Record<string, ResourceLink<any>>) {
+    constructor(private game:Game,private document:Element,private rootContainer:SvgImage, private preloadedResources:Record<string, ITexture>) {
     }
 
     private getFillStrokeParams(el:Element):{lineWidth:number,fillColor:Color,drawColor:Color} {
@@ -483,11 +483,10 @@ class SvgElementRenderer {
         if (!url) return;
 
         if (this.preloadedResources[url]===undefined) throw new DebugError(`resource image is not preloaded! Invoke .preload() method`);
-        const image:Image = new Image(this.game);
-        image.setResourceLink(this.preloadedResources[url]);
+        const image:Image = new Image(this.game,this.preloadedResources[url]);
         image.pos.setXY(x,y);
-        if (width) image.scale.setX(width/image.getResourceLink().getTarget().size.width);
-        if (height) image.scale.setY(height/image.getResourceLink().getTarget().size.height);
+        if (width) image.scale.setX(width/image.getTexture().size.width);
+        if (height) image.scale.setY(height/image.getTexture().size.height);
 
         this.setCommonProperties(image,el);
         container.appendChild(image);
@@ -683,19 +682,24 @@ class SvgElementRenderer {
 
 export class SvgImage extends SimpleGameObjectContainer {
 
-    private svgElementRenderer:SvgElementRenderer;
-
-    private preloadedResourceLinks:Record<string, ResourceLink<any>> = {};
-
-    constructor(protected game:Game, private doc:Element, private preferredSize?:ISize) {
+    private constructor(protected game:Game, private doc:Element, private preferredSize?:ISize) {
         super(game);
     }
 
-    async parse():Promise<void> {
+    private svgElementRenderer:SvgElementRenderer;
 
-        await this.preload();
+    private preloadedTextures:Record<string,ITexture> = {};
 
-        const rootSvgTag = this.doc.querySelector('svg');
+    public static async create(game:Game, taskQueue:TaskQueue,doc:Element, preferredSize?:ISize):Promise<SvgImage> {
+        const image:SvgImage = new SvgImage(game, doc, preferredSize);
+        await image.preload(taskQueue);
+        image.parse();
+        return image;
+    }
+
+    private parse():void {
+
+        const rootSvgTag:Element = this.doc.querySelector('svg');
 
         const viewBox:[number,number,number,number] = getNumberArray(rootSvgTag.attributes.viewBox,4,0);
         let width:number = getNumberWithMeasure(rootSvgTag.attributes.width,this.game.size.width,0) || viewBox[2];
@@ -715,7 +719,7 @@ export class SvgImage extends SimpleGameObjectContainer {
         const scaleByViewPort:number = Math.min(this.size.width/viewBox[2],this.size.height/viewBox[3]);
         rootView.scale.setXY(scaleByViewPort);
 
-        this.svgElementRenderer = new SvgElementRenderer(this.game,rootSvgTag,this,this.preloadedResourceLinks);
+        this.svgElementRenderer = new SvgElementRenderer(this.game,rootSvgTag,this,this.preloadedTextures);
 
         this.traverseDocument(rootView,rootSvgTag);
         const drawingSurface = new LazyImageCacheSurface(this.game,this.size);
@@ -726,19 +730,18 @@ export class SvgImage extends SimpleGameObjectContainer {
         //this.appendChild(rootView);
     }
 
-    public async preload():Promise<void> {
-        return new Promise(resolve=>{
-            const resourceLoader:ResourceLoader = new ResourceLoader(this.game);
-            this.doc.querySelectorAll('image').forEach(el=>{
-                const url:string = el.attributes['xlink:href'];
-                if (!url) return;
-                this.preloadedResourceLinks[url] = resourceLoader.loadTexture(url);
-            });
-            resourceLoader.onCompleted(()=>resolve());
-            resourceLoader.startLoading();
-        });
-
-
+    private async preload(taskQueue:TaskQueue):Promise<void> {
+        if (DEBUG) {
+            if (taskQueue.getLoader().isResolved()) {
+                throw new DebugError(`current taskQueue is completed`);
+            }
+        }
+        const elements:Element[] = this.doc.querySelectorAll('image');
+        for (const el of elements) {
+            const url:string = el.attributes['xlink:href'];
+            if (!url) continue;
+            this.preloadedTextures[url] = await taskQueue.getLoader().loadTexture(url);
+        }
     }
 
     private traverseDocument(view:RenderableModel,el:Element):void {

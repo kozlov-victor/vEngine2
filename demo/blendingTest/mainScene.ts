@@ -2,7 +2,6 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 
 export class MainScene extends Scene {
 

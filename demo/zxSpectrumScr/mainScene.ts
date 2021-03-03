@@ -6,6 +6,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {BORDER, SCALE} from "./index";
 import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
 import {CellsAppearingTransition} from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 const files =
     'AAA - AY Megademo 3 Menu (2019),athena,brunilda,cauldron,dlair,example,Gauntlet,KValley,Phantis,test,wtss'.split(',').map(it=>`./zxSpectrumScr/files/${it}.scr`);
@@ -16,28 +17,25 @@ export class MainScene extends Scene {
     private border:Image;
     private screen:Image;
 
-    public onPreloading():void {
+    public onPreloading(taskQueue:TaskQueue):void {
         (this.game.getRenderer() as WebGlRenderer).setPixelPerfect(true);
-        const screen = new Image(this.game);
-        const border = new Image(this.game);
-        border.scale.setXY(SCALE);
-        screen.pos.setXY(BORDER);
-        const binary = this.resourceLoader.loadBinary(files[ptr++]);
-        if (ptr>files.length-1) ptr = 0;
-        this.resourceLoader.addNextTask(()=>{
-            const reader = new ScrReader(this.game,binary.getTarget());
-            const {borderLink,screenLink} = reader.links;
-            border.setResourceLink(borderLink);
-            screen.setResourceLink(screenLink);
+        let binary:ArrayBuffer;
+        taskQueue.addNextTask(async progress=>{
+            binary = await taskQueue.getLoader().loadBinary(files[ptr++],progress);
+            if (ptr>files.length-1) ptr = 0;
+        });
+        taskQueue.addNextTask(async _=>{
+            const reader = new ScrReader(this.game,binary);
+            const {border,screen} = reader.textures;
+            this.border = new Image(this.game,border);
+            this.screen = new Image(this.game,screen);
+            this.border.scale.setXY(SCALE);
+            this.screen.pos.setXY(BORDER);
         });
         this.once(MOUSE_EVENTS.click, ()=>{
             this.game.runScene(new MainScene(this.game),new CellsAppearingTransition(this.game));
         });
-        this.border = border;
-        this.screen = screen;
-
         this.filters = [new Barrel2DistortionFilter(this.game)];
-
     }
 
     public onReady():void {

@@ -5,7 +5,6 @@ import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Image} from "@engine/renderable/impl/general/image";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
@@ -16,8 +15,8 @@ import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
-import {mat4} from "@engine/geometry/mat4";
-import MAT16 = mat4.MAT16;
+import {Mat4} from "@engine/geometry/mat4";
+import MAT16 = Mat4.MAT16;
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>Promise<void>;
@@ -32,7 +31,7 @@ interface IDocument extends Document {
 }
 
 export interface IRenderTarget {
-    getResourceLink():ResourceLink<ITexture>;
+    getTexture():ITexture;
     destroy():void;
 }
 

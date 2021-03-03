@@ -1,0 +1,37 @@
+import * as ts from 'typescript';
+import * as Lint from 'tslint';
+
+// noinspection JSUnusedGlobalSymbols
+export class Rule extends Lint.Rules.AbstractRule {
+    // noinspection JSUnusedGlobalSymbols
+    public static FAILURE_STRING = 'wrong resource annotation:';
+
+    public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
+        return this.applyWithWalker(new LintWalker(sourceFile, 'v-engine-as-statement',undefined));
+    }
+}
+
+class LintWalker extends Lint.AbstractWalker {
+
+    public walk(sourceFile: ts.SourceFile):void {
+        const cb = (node: ts.Node): void => {
+            // Finds specific node types and do checking.
+            if (ts.isDecorator(node)) {
+                //this.checkStatement(node);
+                //console.log(node);
+            } else {
+                // Continue recursion: call function `cb` for all children of the current node.
+                return ts.forEachChild(node, cb);
+            }
+        };
+        // Start recursion for all children of `sourceFile`.
+        return ts.forEachChild(sourceFile, cb);
+    }
+
+
+    // private checkStatement(node:ts.Node):void {
+    //     this.addFailure(node.pos,node.end,`potentially unsafe statement "as"`);
+    // }
+
+}
+

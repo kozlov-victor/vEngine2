@@ -1,13 +1,12 @@
 import {Scene} from "@engine/scene/scene";
 import {TileMap} from "@engine/renderable/impl/general/tileMap";
-import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
@@ -15,9 +14,9 @@ export class MainScene extends Scene {
     private rect:Rectangle;
 
     @Resource.Texture('./tileMap/tiles.png')
-    private tilesLink:ResourceLink<ITexture>;
+    private tilesLink:ITexture;
 
-    public onPreloading():void {
+    public onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         this.rect = rect;
@@ -45,8 +44,7 @@ export class MainScene extends Scene {
             3,3,3,3,3,3,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,
         ];
 
-        const tileMap:TileMap = new TileMap(this.game);
-        tileMap.setResourceLink(this.resourceLoader.loadTexture('./tileMap/tiles.png'));
+        const tileMap:TileMap = new TileMap(this.game,this.tilesLink);
         tileMap.fromTiledJSON(data,30,undefined,32,32);
         this.tileMap = tileMap;
 

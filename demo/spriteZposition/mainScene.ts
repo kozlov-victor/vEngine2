@@ -1,6 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -8,35 +6,26 @@ import {MathEx} from "@engine/misc/mathEx";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {Torus} from "@engine/renderer/webGl/primitives/torus";
 import {Int} from "@engine/core/declarations";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private spriteLink:ResourceLink<ITexture>;
+    @Resource.Texture('./assets/star.png')
+    private spriteLink:ITexture;
+
     private points:Image[] = [];
     private minZ:number = -6000;
     private maxZ:number = 1000;
     private numOfStarts: number = 200;
     private obj:Model3d;
 
-    public onPreloading():void {
-        this.backgroundColor = Color.RGB(0);
-        this.spriteLink = this.resourceLoader.loadTexture('./assets/star.png');
-        const rect = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-    }
-
-    public onProgress(val: number):void {
-        this.preloadingGameObject.size.width = val*this.game.size.width;
-    }
+    public backgroundColor:Color = Color.RGB(0);
 
     public onReady():void {
 
-        for (let i=0;i<this.numOfStarts;i++) {
-            const spr:Image = new Image(this.game);
+        for (let i:number=0;i<this.numOfStarts;i++) {
+            const spr:Image = new Image(this.game,this.spriteLink);
             spr.scale.setXY(3);
-            spr.setResourceLink(this.spriteLink);
             const radiusMin = Math.max(this.game.size.width,this.game.size.height)/2;
             const radiusDelta = MathEx.random(0,200);
             const radius = radiusMin + radiusDelta - 150;

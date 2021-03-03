@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
@@ -7,15 +6,18 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {TaskQueue} from "@engine/resources/taskQueue";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private logoPixelLink:ResourceLink<ITexture>;
-    private logoLink:ResourceLink<ITexture>;
+    @Resource.Texture('./pixelPerfectStretch/PixelArt.png')
+    private logoPixelLink:ITexture;
 
-    public onPreloading():void {
-        this.logoPixelLink = this.resourceLoader.loadTexture('./pixelPerfectStretch/PixelArt.png');
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
+    @Resource.Texture('./assets/logo.png')
+    private logoLink:ITexture;
+
+    public onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -28,13 +30,11 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
-        const sprLogo:Image = new Image(this.game);
-        sprLogo.setResourceLink(this.logoLink);
+        const sprLogo:Image = new Image(this.game,this.logoLink);
         this.appendChild(sprLogo);
         sprLogo.scale.setXY(5);
 
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoPixelLink);
+        const spr:Image = new Image(this.game,this.logoPixelLink);
         spr.pos.setXY(10,10);
         spr.scale.setXY(10,10);
         spr.borderRadius = 9;

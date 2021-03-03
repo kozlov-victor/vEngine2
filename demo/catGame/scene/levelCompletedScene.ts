@@ -1,19 +1,19 @@
 import {BaseAbstractIntroScene} from "./abstracts/baseAbstractIntroScene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {Sound} from "@engine/media/sound";
 
 export class LevelCompletedScene extends BaseAbstractIntroScene {
 
     @Resource.Sound('./catGame/res/sound/levelCompleted.mp3')
-    protected soundThemeRes: ResourceLink<void>;
+    protected soundTheme: Sound;
 
     @Resource.Texture('./catGame/res/sprite/levelCompleted.png')
-    protected spriteSheetLabel: ResourceLink<ITexture>;
+    protected spriteSheetLabel: ITexture;
 
     protected startSound(): void {
         super.startSound();
-        this.snd.loop = false;
+        this.soundTheme.loop = false;
     }
 
     protected listenUI():void {

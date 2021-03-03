@@ -1,9 +1,7 @@
-
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {SpriterObject} from "../scml/scml";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 // https://github.com/loudoweb/Spriter-Example
 
@@ -11,16 +9,11 @@ export class MainScene extends Scene {
 
     private player:SpriterObject;
 
-    public onPreloading():void {
-        const rect = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-
-
-        this.player = new SpriterObject(this.game);
-        this.player.preload({url:'./scml4/ugly/ugly.scon',headers:[{name:'test-header',value:'nonsense'}],responseType:'text'});
-
+    public onPreloading(taskQueue:TaskQueue):void {
+        super.onPreloading(taskQueue);
+        taskQueue.addNextTask(async _=>{
+           this.player = await SpriterObject.create(this.game,taskQueue,'./scml4/ugly/ugly.scon');
+        });
     }
 
     public onProgress(val: number):void {
@@ -28,8 +21,6 @@ export class MainScene extends Scene {
     }
 
     public onReady():void {
-
-
         this.appendChild(this.player);
         this.player.scale.setXY(0.6);
         this.player.pos.setXY(200,200);

@@ -3,6 +3,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {IPoint3d} from "@engine/geometry/point3d";
 import {IPoint2d} from "@engine/geometry/point2d";
 import {calcNormal} from "@engine/renderable/impl/geometry/_internal/calcNormal";
+
 type FacePoint = Record<'v'|'uv'|'n',number>;
 type Face = [FacePoint,FacePoint,FacePoint];
 type IPoint2dRecord = Record<'x'|'y'|'z',number>;

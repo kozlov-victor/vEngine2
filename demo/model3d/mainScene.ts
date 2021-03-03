@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Cube} from "@engine/renderer/webGl/primitives/cube";
 import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
@@ -8,21 +7,20 @@ import {Cylinder} from "@engine/renderer/webGl/primitives/cylinder";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {Cone} from "@engine/renderer/webGl/primitives/cone";
 import {ITexture} from "@engine/renderer/common/texture";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
     private logoObj:Mesh;
-    private logoLink:ResourceLink<ITexture>;
-    private logo2Link:ResourceLink<ITexture>;
-    private logoNormalsLink:ResourceLink<ITexture>;
 
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
-        this.logo2Link = this.resourceLoader.loadTexture('./model3d/Texture-67.jpg');
-        this.logoNormalsLink = this.resourceLoader.loadTexture('./model3d/normals.png');
-    }
+    @Resource.Texture('./assets/repeat.jpg')
+    private logoLink:ITexture;
 
+    @Resource.Texture('./model3d/Texture-67.jpg')
+    private logo2Link:ITexture;
 
+    @Resource.Texture('./model3d/normals.png')
+    private logoNormalsLink:ITexture;
 
     public onReady():void {
         const obj:Model3d = new Model3d(this.game);
@@ -30,7 +28,7 @@ export class MainScene extends Scene {
         obj.fillColor.setRGB(12,222,12);
         obj.colorMix = 0.6;
         obj.modelPrimitive = new Cylinder(50,100);
-        obj.texture = this.logoLink.getTarget();
+        obj.texture = this.logoLink;
         obj.pos.setXY(200,100);
         obj.size.setWH(100,100);
         this.appendChild(obj);
@@ -46,7 +44,7 @@ export class MainScene extends Scene {
         obj2.modelPrimitive = new Cube(50);
         // obj.modelPrimitive = new Sphere(100,3);
         // obj.modelPrimitive = new Cylinder();
-        obj2.texture = this.logo2Link.getTarget();
+        obj2.texture = this.logo2Link;
         obj2.pos.setXY(120,120);
         obj2.size.setWH(100,100);
         this.appendChild(obj2);
@@ -65,7 +63,7 @@ export class MainScene extends Scene {
             20,
             50
         );
-        obj3.texture = this.logo2Link.getTarget();
+        obj3.texture = this.logo2Link;
         obj3.pos.setXY(150,150);
         obj3.size.setWH(100,100);
         this.appendChild(obj3);
@@ -82,8 +80,8 @@ export class MainScene extends Scene {
         obj4.modelPrimitive = new Sphere(
             60
         );
-        obj4.texture = this.logoLink.getTarget();
-        obj4.normalsTexture = this.logoNormalsLink.getTarget();
+        obj4.texture = this.logoLink;
+        obj4.normalsTexture = this.logoNormalsLink;
         obj4.pos.setXY(150,150);
         obj4.size.setWH(100,100);
         this.appendChild(obj4);

@@ -10,6 +10,7 @@ import {LightSet} from "@engine/light/lightSet";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Optional} from "@engine/core/declarations";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
 export class LightFilter extends AbstractGlFilter {
@@ -20,7 +21,7 @@ export class LightFilter extends AbstractGlFilter {
     private readonly _normalTexture:string;
     private readonly _u_dimension:string;
 
-    private normalMap:Optional<Texture>;
+    private normalMap:Optional<ITexture>;
 
 
     constructor(game:Game, private lightArray:LightSet) {
@@ -39,7 +40,7 @@ export class LightFilter extends AbstractGlFilter {
         this.simpleRectDrawer.initProgram();
     }
 
-    public setNormalMap(normalMap:Texture):void{
+    public setNormalMap(normalMap:ITexture):void{
         this.normalMap = normalMap;
     }
 
@@ -53,7 +54,7 @@ export class LightFilter extends AbstractGlFilter {
         const useNormalMap:boolean = this.normalMap!==undefined;
         this.simpleRectDrawer.setUniform(this._u_useNormalMap,useNormalMap);
         if (useNormalMap) {
-            this.simpleRectDrawer.attachTexture(this._normalTexture,this.normalMap!);
+            this.simpleRectDrawer.attachTexture(this._normalTexture,this.normalMap! as Texture);
         }
         super.doFilter(destFrameBuffer);
     }

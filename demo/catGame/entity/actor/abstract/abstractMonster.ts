@@ -2,7 +2,6 @@ import {ColorizeFilter} from "@engine/renderer/webGl/filters/texture/colorizeFil
 import {Color} from "@engine/renderer/common/color";
 import {Timer} from "@engine/misc/timer";
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Burster} from "../../misc/burster";
 import {Hero} from "../impl/hero";
@@ -22,11 +21,11 @@ export abstract class AbstractMonster extends AbstractCharacter {
     private readonly colorizeFilter:ColorizeFilter;
 
     private tmr:Timer;
-    private hurtSound:Sound = new Sound(this.game);
+    private hurtSound:Sound;
 
-    protected constructor(game: Game, spr: ResourceLink<ITexture>,hurtSound:ResourceLink<void>,params:ICreateRigidBodyParams) {
+    protected constructor(game: Game, spr: ITexture,hurtSound:Sound,params:ICreateRigidBodyParams) {
         super(game, spr,params);
-        this.hurtSound.setResourceLink(hurtSound);
+        this.hurtSound = hurtSound;
         this.colorizeFilter = new ColorizeFilter(game);
         this.colorizeFilter.setColor(this.burstColor);
         this.renderableImage.filters = [this.colorizeFilter];

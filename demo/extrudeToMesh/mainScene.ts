@@ -1,32 +1,32 @@
 import {Scene} from "@engine/scene/scene";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ICubeMapTexture} from "@engine/renderer/common/texture";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
 
 
-    private cubeTextureLink:ResourceLink<ICubeMapTexture>;
+    private cubeTexture:ICubeMapTexture;
 
 
-    public onPreloading():void {
-
+    public onPreloading(taskQueue:TaskQueue):void {
 
         // https://onlinefontconverter.com/
         // https://gero3.github.io/facetype.js/
 
-        this.cubeTextureLink = this.resourceLoader.loadCubeTexture(
-            './cubeMapTexture/textures/cm_left.jpg',
-            './cubeMapTexture/textures/cm_right.jpg',
-            './cubeMapTexture/textures/cm_top.jpg',
-            './cubeMapTexture/textures/cm_bottom.jpg',
-            './cubeMapTexture/textures/cm_front.jpg',
-            './cubeMapTexture/textures/cm_back.jpg',
-        );
-
-
+        taskQueue.addNextTask(async progress=>{
+            this.cubeTexture = await taskQueue.getLoader().loadCubeTexture(
+                './cubeMapTexture/textures/cm_left.jpg',
+                './cubeMapTexture/textures/cm_right.jpg',
+                './cubeMapTexture/textures/cm_top.jpg',
+                './cubeMapTexture/textures/cm_bottom.jpg',
+                './cubeMapTexture/textures/cm_front.jpg',
+                './cubeMapTexture/textures/cm_back.jpg',
+                progress
+            );
+        });
 
 
     }
@@ -58,7 +58,7 @@ export class MainScene extends Scene {
         const m = p.extrudeToMesh(180);
         m.size.setWH(150);
         m.transformPoint.setToCenter();
-        m.cubeMapTexture = this.cubeTextureLink.getTarget();
+        m.cubeMapTexture = this.cubeTexture;
         m.reflectivity = 0.1;
         m.pos.setXY(200,200);
         m.addBehaviour(new DraggableBehaviour(this.game));

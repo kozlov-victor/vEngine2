@@ -11,11 +11,6 @@ export class MainScene extends Scene {
     private controlPoints:Circle[] = [];
     private points:number[] = [];
 
-    public onPreloading():void {
-
-    }
-
-
     public onReady():void {
         for (let i:number=0;i<6;i++) {
             this.createControlCircle();

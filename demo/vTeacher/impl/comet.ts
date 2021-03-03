@@ -1,4 +1,4 @@
-import {httpClient} from "@engine/debug/httpClient";
+import {HttpClient} from "@engine/debug/httpClient";
 import {IResponse} from "./declarations";
 
 export class Comet {
@@ -17,7 +17,7 @@ export class Comet {
     // }
 
     private poll():void{
-        httpClient.post('getCommands',{lastUpdated:this.lastUpdated},(resp)=>{
+        HttpClient.post('getCommands',{lastUpdated:this.lastUpdated},(resp)=>{
             const r:IResponse = resp as unknown as IResponse;
             this.lastUpdated = r.lastUpdated;
             this.cb(r);

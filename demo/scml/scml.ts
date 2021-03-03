@@ -1,9 +1,7 @@
 import {MathEx} from "@engine/misc/mathEx";
-import {IReleasealable, ObjectPool} from "@engine/misc/objectPool";
+import {ObjectPool} from "@engine/misc/objectPool";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {IURLRequest} from "@engine/resources/urlLoader";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -15,6 +13,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 const POOL_SIZE:number = 128;
 
@@ -186,8 +185,7 @@ export class ScmlObject {
             const currentMap:MapInstruction=m;
             if(currentMap.tarFolder>-1&&currentMap.tarFile>-1) {
                 const targetFolder:Folder=this.activeCharacterMap[currentMap.tarFolder];
-                const targetFile:File=targetFolder.files[currentMap.tarFile];
-                this.activeCharacterMap[m.folder].files[m.file]=targetFile;
+                this.activeCharacterMap[m.folder].files[m.file]=targetFolder.files[currentMap.tarFile];
             }
         }
     }
@@ -889,16 +887,24 @@ export class SpriterObject extends RenderableModel {
 
 
     private scmlObject:ScmlObject;
-    private resourceLinks:Record<string,ResourceLink<ITexture>> = {};
+    private textureMap:Record<string,ITexture> = {};
     private readonly rootNode:RenderableModel = new SimpleGameObjectContainer(this.game);
 
-    constructor(protected game:Game) {
+    private constructor(protected game:Game) {
         super(game);
-        this.rootNode.scale.setXY(1,-1);
+        this.rootNode.scale.setXY(1, -1);
         this.appendChild(this.rootNode);
     }
 
-    public preload(sconUrl:string|IURLRequest):void{
+    public static async create(game:Game,taskQueue:TaskQueue,sconUrl:string|IURLRequest):Promise<SpriterObject>{
+
+        if (DEBUG) {
+            if (taskQueue.getLoader().isResolved()) {
+                throw new DebugError(`current taskQueue is completed`);
+            }
+        }
+
+        const s:SpriterObject = new SpriterObject(game);
         let baseUrl:string;
         let urlRequest:IURLRequest;
         if ((sconUrl as IURLRequest).url!==undefined) {
@@ -909,23 +915,26 @@ export class SpriterObject extends RenderableModel {
             urlRequest = {url:baseUrl,responseType:'arraybuffer'};
         }
         baseUrl = baseUrl.split('/').filter((it,index,arr)=>index<arr.length-1).join('/');
-        const resourceLoader:ResourceLoader = this.game.getCurrScene().resourceLoader;
-        const sconResourceLink:ResourceLink<IScon> = resourceLoader.loadJSON(sconUrl);
-        resourceLoader.addNextTask(()=>{
-            const scon:IScon = sconResourceLink.getTarget();
-            this.scmlObject = ScmlObject.fromDescription(scon);
-            this.scmlObject.root = this;
-            this.scmlObject.currentEntity = 0;
-            this.scmlObject.currentAnimation = 0;
-            for (const folder of this.scmlObject.folders) {
-                for (const file of folder.files) {
-                    urlRequest.url = `${baseUrl}/${file.name}`;
-                    urlRequest.responseType = 'arraybuffer';
-                    this.resourceLinks[file.name] = resourceLoader.loadTexture({...urlRequest});
-                }
-            }
-        });
+        const scon:IScon = await taskQueue.getLoader().loadJSON(sconUrl,/*progress*/);
 
+        s.scmlObject = ScmlObject.fromDescription(scon);
+        s.scmlObject.root = s;
+        s.scmlObject.currentEntity = 0;
+        s.scmlObject.currentAnimation = 0;
+
+        for (const folder of s.scmlObject.folders) {
+            for (const file of folder.files) {
+                const numOfTasks:number = s.scmlObject.folders.length * folder.files.length;
+                const progressFn = (n:number)=>{
+                    //progress(n/numOfTasks);
+                };
+                urlRequest.url = `${baseUrl}/${file.name}`;
+                urlRequest.responseType = 'arraybuffer';
+                s.textureMap[file.name] = await taskQueue.getLoader().loadTexture({...urlRequest},progressFn);
+            }
+        }
+
+        return s;
     }
 
     public update(): void {
@@ -940,11 +949,10 @@ export class SpriterObject extends RenderableModel {
     }
 
     public paintSprite(url:string, file:File, info:SpatialInfo, pivotX:number, pivotY:number, id:string):void {
-        const link:ResourceLink<ITexture> = this.resourceLinks[file.name];
+        const texture:ITexture = this.textureMap[file.name];
         let child:Image = this.rootNode.findChildById(id)! as Image;
         if (child===undefined) {
-            child = new Image(this.game);
-            child.setResourceLink(link);
+            child = new Image(this.game,texture);
             child.id = id;
             this.rootNode.appendChild(child);
         }

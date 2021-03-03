@@ -1,6 +1,5 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";

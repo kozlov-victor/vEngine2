@@ -1,5 +1,4 @@
 import {Wheel} from "./wheel";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {MathEx} from "@engine/misc/mathEx";
@@ -7,12 +6,12 @@ import {WinScene} from "../winScene";
 import {defineWinType, WIN_TYPE} from "./common";
 import {ITexture} from "@engine/renderer/common/texture";
 
-export class Mashine {
+export class Machine {
 
     public locked:boolean = false;
     private wheels:Wheel[] = [];
 
-    constructor(private game:Game,private resourceLink:ResourceLink<ITexture>){
+    constructor(private game:Game,private resourceLink:ITexture){
         const cellDeltaHeight:number = 160;
         for (let i:number = 0;i<3;i++){
             const wheel:Wheel = new Wheel(game,resourceLink);

@@ -1,34 +1,24 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {TrianglesMosaicFilter} from "@engine/renderer/webGl/filters/texture/trianglesMosaicFilter";
 import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
-
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
-        const rect = new Rectangle(this.game);
-        rect.fillColor.setRGB(10,100,100);
-        rect.size.height = 10;
-        this.preloadingGameObject = rect;
-    }
+    @Resource.Texture('./assets/logo.png')
+    private logoLink:ITexture;
 
     public onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     public onReady():void {
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
         this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{

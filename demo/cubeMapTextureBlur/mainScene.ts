@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Cube} from "@engine/renderer/webGl/primitives/cube";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
@@ -10,7 +9,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/repeat.jpg')
-    private baseTextureLink:ResourceLink<ITexture>;
+    private baseTexture:ITexture;
 
     @Resource.CubeTexture(
         './cubeMapTexture/textures/cm_left.jpg',
@@ -20,7 +19,7 @@ export class MainScene extends Scene {
         './cubeMapTexture/textures/cm_front.jpg',
         './cubeMapTexture/textures/cm_back.jpg'
     )
-    private cubeTextureLink:ResourceLink<ICubeMapTexture>;
+    private cubeTexture:ICubeMapTexture;
 
 
     public onReady():void {
@@ -28,9 +27,9 @@ export class MainScene extends Scene {
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(12,22,122);
         obj.modelPrimitive = new Cube(150);
-        obj.texture = this.baseTextureLink.getTarget();
+        obj.texture = this.baseTexture;
         obj.colorMix = 0.4;
-        obj.cubeMapTexture = this.cubeTextureLink.getTarget();
+        obj.cubeMapTexture = this.cubeTexture;
         obj.reflectivity = 0.9;
         obj.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         this.appendChild(obj);

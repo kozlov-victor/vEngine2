@@ -20,7 +20,7 @@ let currImage:number = 0;
 
 export class MainScene extends Scene {
 
-    @Resource.Font({fontFamily:'monospace',fontSize:10})
+    @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:10})
     private fnt:Font;
 
     public onReady():void {

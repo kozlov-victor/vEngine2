@@ -1,5 +1,4 @@
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
@@ -10,7 +9,7 @@ import {Timer} from "@engine/misc/timer";
 export class InfoPanel {
 
 
-    private constructor(private game:Game, private heroSprite:ResourceLink<ITexture>) {
+    private constructor(private game:Game, private heroSprite:ITexture) {
         this.container.size.setWH(this.game.size.width,60);
         this.container.fillColor = Color.RGBA(25,25,25,150);
         this.container.borderRadius = 5;
@@ -33,7 +32,7 @@ export class InfoPanel {
         return InfoPanel.instance;
     }
 
-    public static instantiate(game:Game,heroSprite:ResourceLink<ITexture>):void{
+    public static instantiate(game:Game,heroSprite:ITexture):void{
         InfoPanel.instance = new InfoPanel(game,heroSprite);
     }
 
@@ -91,8 +90,7 @@ export class InfoPanel {
         }
         this.heroIcons = [];
         for (let i:number = 0; i < val; i++) {
-            const heroIcon:Image = new Image(this.game);
-            heroIcon.setResourceLink(this.heroSprite);
+            const heroIcon:Image = new Image(this.game,this.heroSprite);
             heroIcon.getSrcRect().setWH(64,64);
             heroIcon.size.setWH(64,64);
             heroIcon.scale.setXY(0.5);

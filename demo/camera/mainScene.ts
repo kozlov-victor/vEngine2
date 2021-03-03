@@ -19,16 +19,14 @@ export class MainScene extends Scene {
 
         this.size.setWH(1100,2100);
 
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.resourceHolder.logoLink);
+        const spr:Image = new Image(this.game,this.resourceHolder.logoTexture);
         spr.size.setWH(250,300);
         spr.stretchMode = STRETCH_MODE.REPEAT;
         spr.offset.setXY(1,1);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
 
-        const bg:Image = new Image(this.game);
-        bg.setResourceLink(this.resourceHolder.bgLink);
+        const bg:Image = new Image(this.game,this.resourceHolder.bgTexture);
         bg.size.setWH(1000,2000);
         bg.stretchMode = STRETCH_MODE.STRETCH;
         this.appendChild(bg);

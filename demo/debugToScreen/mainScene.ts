@@ -4,10 +4,6 @@ import {Rect} from "@engine/geometry/rect";
 
 export class MainScene extends Scene {
 
-    onPreloading():void {
-        super.onPreloading();
-    }
-
     public onReady():void {
         const debugLayer = new DebugLayer(this.game);
         this.appendChild(debugLayer);

@@ -1,7 +1,7 @@
 import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
-import {httpClient} from "@engine/debug/httpClient";
+import {HttpClient} from "@engine/debug/httpClient";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
 
@@ -20,7 +20,7 @@ export class Widget extends VEngineTsxComponent<{}> {
     }
 
     private async loadList():Promise<void>{
-        this.items = await httpClient.get<string[]>('./index.json',{r:Math.random()},undefined,undefined,xhr => {
+        this.items = await HttpClient.get<string[]>('./index.json',{r:Math.random()},undefined,undefined, xhr => {
             xhr.setRequestHeader('Content-Type','application/json');
         });
         if (!this.items.splice) this.items = JSON.parse(this.items as any as string);

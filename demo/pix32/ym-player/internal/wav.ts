@@ -1,5 +1,5 @@
-
 import {BinBuffer} from "./binBuffer";
+
 export class Wave {
 
     public static encodeWAV(samples:number[],sampleRate:number):Blob {

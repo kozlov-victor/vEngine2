@@ -1,5 +1,5 @@
 
-import {httpClient} from "@engine/debug/httpClient";
+import {HttpClient} from "@engine/debug/httpClient";
 import {IKeyVal} from "@engine/misc/object";
 import {Game} from "@engine/core/game";
 import {renderError} from "@engine/debug/errorWidget";
@@ -95,7 +95,7 @@ const handleCatchError = async (e:ErrorEvent)=>{
     const filename:string = e.filename;
     if (filename) {
         try {
-            const file = await httpClient.get<string>(filename,{r:Math.random()});
+            const file = await HttpClient.get<string>(filename,{r:Math.random()});
             if (file) renderError({filename,runtimeInfo,debugInfo:{file,colNum,lineNum}});
             else renderError({runtimeInfo});
         } catch (e) {

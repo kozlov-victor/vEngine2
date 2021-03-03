@@ -47,10 +47,6 @@ export class MainScene extends BaseScene {
 
     private psBullet:ParticleSystem;
 
-    public onPreloading():void {
-        super.onPreloading();
-    }
-
     public onReady():void {
         super.onReady();
         this.filters.push(new BarrelDistortionFilter(this.game));

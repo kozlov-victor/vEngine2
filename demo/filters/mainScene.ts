@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Color} from "@engine/renderer/common/color";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {TweenMovie} from "@engine/animation/tweenMovie";
@@ -23,22 +22,22 @@ import {SwirlFilter} from "@engine/renderer/webGl/filters/texture/swirlFilter";
 import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/texture/triangleBlurFilter";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KernelBurnAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/kernelBurnAccumulativeFilter";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {
 
-    private logoLink:ResourceLink<ITexture>;
+    private logoTexture:ITexture;
 
-    public onPreloading():void {
-        this.logoLink = this.resourceLoader.loadTexture('./assets/logo.png');
+    public onPreloading(taskQueue:TaskQueue):void {
+        taskQueue.addNextTask(async _=>{
+            this.logoTexture = await taskQueue.getLoader().loadTexture('./assets/logo.png');
+        });
     }
-
-
 
     public onReady():void {
         console.log('ready');
-        const spr:Image = new Image(this.game);
-        spr.setResourceLink(this.logoLink);
+        const spr:Image = new Image(this.game,this.logoTexture);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
         spr.addBehaviour(new DraggableBehaviour(this.game));

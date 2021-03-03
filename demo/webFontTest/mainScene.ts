@@ -10,8 +10,7 @@ import {
     AlignTextContentHorizontal,
     AlignTextContentVertical
 } from "@engine/renderable/impl/ui/textField/textAlign";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {TaskRef} from "@engine/resources/queue";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 const text:string=
 `Lorem ipsum dolor sit amet,\t\n\r
@@ -28,8 +27,10 @@ commodo consequat.`;
 
 declare const WebFont:any;
 
-export const loadScript = (resourceLoader:ResourceLoader)=>{
-    const taskRef:TaskRef = resourceLoader.q.addTask(()=>{
+export const loadScript = (taskQueue:TaskQueue)=>{
+    taskQueue.addNextTask(async _=>{
+        let resolveFn:()=>void;
+        const p = new Promise<void>((resolve, reject) => resolveFn = resolve);
         const script = document.createElement('script');
         script.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.5.10/webfont.js';
         document.body.appendChild(script);
@@ -40,22 +41,22 @@ export const loadScript = (resourceLoader:ResourceLoader)=>{
                 },
                 active: ()=>{
                     setTimeout(()=>{
-                        resourceLoader.q.resolveTask(taskRef);
+                        resolveFn();
                     },1000);
                 }
             });
-
         };
+        return p;
     });
 };
 
 export class MainScene extends Scene {
 
-    @Resource.Font({fontSize:30,fontFamily:'Droid Sans'})
+    @Resource.FontFromCssDescription({fontSize:30,fontFamily:'Droid Sans'})
     private fnt:Font;
 
-    onPreloading():void {
-        loadScript(this.resourceLoader);
+    onPreloading(taskQueue:TaskQueue):void {
+        loadScript(taskQueue);
     }
 
     public onReady():void {

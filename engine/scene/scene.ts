@@ -26,7 +26,7 @@ import {Point2d} from "@engine/geometry/point2d";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation} from "@engine/animation/iAnimation";
-import {mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/geometry/mat4";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
@@ -34,9 +34,10 @@ import {DebugError} from "@engine/debug/debugError";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 import {Size} from "@engine/geometry/size";
 import {RenderingObjectStack} from "@engine/scene/internal/renderingObjectStack";
-import IDENTITY_HOLDER = mat4.IDENTITY_HOLDER;
 import {RenderingSessionInfo} from "@engine/scene/internal/renderingSessionInfo";
 import {Camera} from "@engine/renderer/camera";
+import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export const enum SCENE_EVENTS {
     PRELOADING = 'preloading',
@@ -50,13 +51,11 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
     constructor(protected game:Game) {
         this._renderingObjectStack = new RenderingObjectStack();
-        this.resourceLoader = new ResourceLoader(game);
         this.size.set(this.game.size);
     }
 
     public readonly type:string = "Scene";
     public backgroundColor = Color.WHITE.clone();
-    public readonly resourceLoader: ResourceLoader;
     public readonly pos:Point2d = new Point2d();
     public filters:IFilter[] = [];
     public alpha:number = 1;
@@ -68,7 +67,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     public readonly _renderingObjectStack:RenderingObjectStack;
     public readonly _renderingSessionInfo:RenderingSessionInfo = new RenderingSessionInfo();
 
-    private _layers:Layer[] = [];
+    private _layers: Layer[] = [];
     private _propertyAnimations:IAnimation[] = [];
 
     // addTween
@@ -159,7 +158,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
 
     public update():void {
-        if (!this.resourceLoader.isCompleted()) {
+        if (this.lifeCycleState!==SceneLifeCycleState.COMPLETED) {
             if (this.preloadingGameObject!==undefined) {
                 this.preloadingGameObject.update();
             }
@@ -201,6 +200,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     public on(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):(e:IKeyBoardEvent)=>void;
     public on(eventName:GAME_PAD_EVENTS,callBack:(e:IGamePadEvent)=>void):(e:IGamePadEvent)=>void;
     public on(eventName:SCENE_EVENTS,callBack:(e:void)=>void):(e:void)=>void;
+    public on(eventName:SCENE_EVENTS.PRELOADING,callBack:(taskQeue:TaskQueue)=>void):(e:TaskQueue)=>void;
     public on(eventName: string, callBack: (arg?:any)=>void): (arg?:any)=>void {
         return this._eventEmitterDelegate.on(eventName,callBack);
     }
@@ -223,7 +223,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         return undefined;
     }
 
-    public onPreloading():void {
+    public onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -257,9 +257,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
         renderer.pushAlphaBlend(this.alpha);
 
-        const isSceneCompleted:boolean = this.resourceLoader.isCompleted();
-
-        if (!isSceneCompleted) {
+        if (this.lifeCycleState===SceneLifeCycleState.PRELOADING) {
             if (this.preloadingGameObject!==undefined) {
                 this.preloadingGameObject.render();
             }
@@ -280,7 +278,7 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         renderer.restoreAlphaBlend();
 
         renderer.transformSave();
-        if (isSceneCompleted) this.onRender();
+        if (this.lifeCycleState===SceneLifeCycleState.COMPLETED) this.onRender();
         renderer.transformRestore();
 
         renderer.afterFrameDraw(statePointer);
@@ -294,7 +292,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     protected onUpdate():void {}
 
     protected onRender():void {}
-
 
     private updateFrame():void {
         this.camera.update();

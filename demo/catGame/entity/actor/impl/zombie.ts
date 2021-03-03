@@ -1,6 +1,4 @@
-
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {MathEx} from "@engine/misc/mathEx";
 import {Size} from "@engine/geometry/size";
@@ -9,12 +7,13 @@ import {Hero} from "./hero";
 import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {AbstractMonster} from "../abstract/abstractMonster";
 import {AbstractCharacter} from "../abstract/abstractCharacter";
+import {Sound} from "@engine/media/sound";
 
 export class Zombie extends AbstractMonster {
 
     public static readonly groupName:string = 'zombie';
 
-    constructor(game: Game, spr: ResourceLink<ITexture>,hurtSound:ResourceLink<void>) {
+    constructor(game: Game, spr: ITexture,hurtSound:Sound) {
         super(game, spr,hurtSound,{
             restitution: 0.2,
             rect: new Rect(20,20,23,41),

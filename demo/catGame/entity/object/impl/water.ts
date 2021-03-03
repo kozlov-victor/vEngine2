@@ -1,6 +1,5 @@
 import {AbstractEntity} from "../../abstract/abstractEntity";
 import {Game} from "@engine/core/game";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {Size} from "@engine/geometry/size";
@@ -13,7 +12,7 @@ export class Water extends AbstractEntity {
 
     public static readonly groupName:string = 'water';
 
-    constructor(protected game: Game, spriteSheet: ResourceLink<ITexture>,size:Size) {
+    constructor(protected game: Game, spriteSheet: ITexture,size:Size) {
         super(game,spriteSheet,{
             groupNames: [Water.groupName],
             ignoreCollisionWithGroupNames: [AbstractCharacter.groupName],

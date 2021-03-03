@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {IntroScene} from "./introScene";
@@ -10,21 +9,22 @@ import {Tween} from '@engine/animation/tween';
 import {EasingElastic} from "@engine/misc/easing/functions/elastic";
 import {PosterizeFilter} from "@engine/renderer/webGl/filters/texture/posterizeFilter";
 import {PixelFilter} from "@engine/renderer/webGl/filters/texture/pixelFilter";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class PreIntroScene extends Scene {
 
     @Resource.Texture('./catGame/res/sprite/contest.png')
-    private spriteSheetLogo: ResourceLink<ITexture>;
+    private spriteSheetLogo: ITexture;
 
 
-    public onPreloading(): void {
+    public onPreloading(taskQueue:TaskQueue): void {
+        super.onPreloading(taskQueue);
         this.backgroundColor = Color.BLACK;
     }
 
     public onReady(): void {
 
-        const intro:Image = new Image(this.game);
-        intro.setResourceLink(this.spriteSheetLogo);
+        const intro:Image = new Image(this.game,this.spriteSheetLogo);
         intro.anchorPoint.setToCenter();
         intro.transformPoint.setToCenter();
         intro.pos.setXY(this.game.size.width/2,this.game.size.height/2);

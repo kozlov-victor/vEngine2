@@ -1,7 +1,7 @@
-import {Size} from "../../geometry/size";
+import {ISize} from "../../geometry/size";
 
 export interface ITexture {
-    size: Size;
+    size: Readonly<ISize>;
 }
 
 export interface ICubeMapTexture extends ITexture {

@@ -3,7 +3,7 @@ import {IURLRequest} from "@engine/resources/urlLoader";
 import {DebugError} from "@engine/debug/debugError";
 import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
 import {IDocumentDescription} from "@engine/misc/xmlUtils";
-import {IFontParameters} from "@engine/renderable/impl/general/font";
+import {ICssFontParameters} from "@engine/renderable/impl/general/font";
 
 
 export const Resource = {
@@ -25,6 +25,12 @@ export const Resource = {
             throw new DebugError(`something wrong with precompiler for Text decorator`);
         };
     },
+    JSON: (src:string|IURLRequest)=> {
+        return (target: Scene|ResourceAutoHolder, fieldName: string):void => {
+            // stub for precompiler only
+            throw new DebugError(`something wrong with precompiler for Text decorator`);
+        };
+    },
     CubeTexture:  (leftSide: string|IURLRequest, rightSide:string|IURLRequest,
                    topSide: string|IURLRequest, bottomSide:string|IURLRequest,
                    frontSide: string|IURLRequest, backSide:string|IURLRequest)=>{
@@ -33,16 +39,22 @@ export const Resource = {
             throw new DebugError(`something wrong with precompiler for CubeTexture decorator`);
         };
     },
-    Font: (params:IFontParameters)=>{
+    FontFromCssDescription: (params:ICssFontParameters)=>{
         return (target: Scene, propertyKey: string):void => {
             // stub for precompiler only
             throw new DebugError(`something wrong with precompiler for Font decorator`);
         };
     },
-    FontFromAtlas: (atlasUrl:string|IURLRequest,doc:IDocumentDescription)=>{
+    FontFromAtlas: (atlasUrls:string|IURLRequest|string[]|IURLRequest[],doc:IDocumentDescription)=>{
         return (target: Scene, propertyKey: string):void => {
             // stub for precompiler only
             throw new DebugError(`something wrong with precompiler for Font decorator`);
+        };
+    },
+    ResourceAutoHolder: ()=>{
+        return (target:Scene, propertyKey:string):void => {
+            // stub for precompiler only
+            throw new DebugError(`something wrong with precompiler for ResourceAutoHolder decorator`);
         };
     }
 };

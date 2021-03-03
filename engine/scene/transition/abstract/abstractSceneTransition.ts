@@ -6,6 +6,7 @@ import {Image} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {EaseFn} from "@engine/misc/easing/type";
+import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 
 export interface ISceneTransitionValue {
     val: number;
@@ -31,7 +32,7 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
     private _completed:boolean = false;
 
     protected constructor(protected game:Game,protected readonly time:number, protected readonly easeFn:EaseFn) {
-        this._transitionScene.resourceLoader.q.completeForced();
+        this._transitionScene.lifeCycleState = SceneLifeCycleState.COMPLETED;
     }
 
     public onComplete(fn: () => void): void {
@@ -91,8 +92,7 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
 
     private _createImageWithRenderTarget():ImageWithRenderTarget{
         const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,this.game.size);
-        const image:ImageWithRenderTarget = new ImageWithRenderTarget(this.game);
-        image.setResourceLink(renderTarget.getResourceLink());
+        const image:ImageWithRenderTarget = new ImageWithRenderTarget(this.game,renderTarget.getTexture());
         image.renderTarget = renderTarget;
         return image;
     }

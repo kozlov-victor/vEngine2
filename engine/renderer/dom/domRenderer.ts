@@ -9,20 +9,24 @@ import {MathEx} from "@engine/misc/mathEx";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {TileMap} from "@engine/renderable/impl/general/tileMap";
 import {Rect} from "@engine/geometry/rect";
 import {Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {DebugError} from "@engine/debug/debugError";
-import {mat4} from "@engine/geometry/mat4";
-import MAT16 = mat4.MAT16;
+import {Mat4} from "@engine/geometry/mat4";
+import MAT16 = Mat4.MAT16;
+import {Incrementer} from "@engine/resources/incrementer";
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
     msTransformOrigin:string;
     msTransform:string;
+}
+
+interface IDomTexture extends ITexture{
+    uid:number;
 }
 
 class Nodes  {
@@ -44,7 +48,7 @@ class Nodes  {
         return !!this._children[id];
     }
 
-    public kill(id:string){
+    public kill(id:string):void{
         const node:VNode = this._children[id];
         if (!node) return;
         delete this._children[id];
@@ -116,10 +120,10 @@ export class DomRenderer extends AbstractRenderer {
             node.properties.offset_y = img.offset.y;
             node.domEl.style.backgroundPositionY = `${img.offset.y}px`;
         }
-        if (img.getResourceLink().url!==node.properties.url) {
-            node.properties.url = img.getResourceLink().url;
-            node.domEl.style.backgroundImage = `url(${img.getResourceLink().url})`;
-        }
+        // if ((img.getTexture() as IDomTexture)!==node.properties.textureId) {
+        //     node.properties.textureId = (img.getTexture() );
+        //     node.domEl.style.backgroundImage = `url(${img.getResourceLink().url})`;
+        // } todo
 
     }
 
@@ -137,8 +141,8 @@ export class DomRenderer extends AbstractRenderer {
         this._nodes.kill(r.id);
     }
 
-    public createTexture(bitmap:ImageBitmap|HTMLImageElement):ITexture {
-        return undefined!;
+    public createTexture(bitmap:ImageBitmap|HTMLImageElement):IDomTexture {
+        return {uid:Incrementer.getValue(),size:{width:bitmap.width,height:bitmap.height}};
     }
 
     public createCubeTexture(
@@ -223,7 +227,7 @@ export class DomRenderer extends AbstractRenderer {
 
 
 
-    private _drawBasicElement(node:VNode,model:RenderableModel){
+    private _drawBasicElement(node:VNode,model:RenderableModel):void{
         if (model.pos.x!==node.properties.pos_x) {
             node.properties.pos_x = model.pos.x;
             node.domEl.style.left = `${model.pos.x}px`;

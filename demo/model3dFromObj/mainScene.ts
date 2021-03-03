@@ -1,33 +1,32 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
 import {ObjParser} from "./objParser";
 import {ITexture} from "@engine/renderer/common/texture";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 
 export class MainScene extends Scene {
 
-    private data1Link:ResourceLink<string>;
-    private data2Link:ResourceLink<string>;
-    private data3Link:ResourceLink<string>;
 
-    private dataTextureLink:ResourceLink<ITexture>;
+    @Resource.Text('./model3dFromObj/cow-nonormals.obj')
+    private data1Link:string;
 
-    public onPreloading():void {
-        this.data1Link = this.resourceLoader.loadText('./model3dFromObj/cow-nonormals.obj');
-        this.data2Link = this.resourceLoader.loadText('./model3dFromObj/cube_texture2.obj');
-        this.data3Link = this.resourceLoader.loadText('./model3dFromObj/diamond.obj');
+    @Resource.Text('./model3dFromObj/cube_texture2.obj')
+    private data2Link:string;
 
-        this.dataTextureLink = this.resourceLoader.loadTexture('./assets/repeat.jpg');
-    }
+    @Resource.Text('./model3dFromObj/diamond.obj')
+    private data3Link:string;
+
+    @Resource.Texture('./assets/repeat.jpg')
+    private dataTextureLink:ITexture;
 
 
     public onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(255,255,255);
-        obj.modelPrimitive = new ObjParser().parse(this.data1Link.getTarget() as string);
+        obj.modelPrimitive = new ObjParser().parse(this.data1Link);
         obj.pos.setXY(200,250);
         obj.size.setWH(200,200);
         obj.scale.setXYZ(60);
@@ -40,7 +39,7 @@ export class MainScene extends Scene {
 
         const obj3:Model3d = new Model3d(this.game);
         obj3.fillColor.setRGB(100,250,100);
-        obj3.modelPrimitive = new ObjParser().parse(this.data3Link.getTarget() as string);
+        obj3.modelPrimitive = new ObjParser().parse(this.data3Link);
         obj3.pos.setXY(300,350);
         obj3.size.setWH(200,200);
         this.appendChild(obj3);
@@ -53,8 +52,8 @@ export class MainScene extends Scene {
 
         const obj2:Model3d = new Model3d(this.game);
         obj2.fillColor.setRGB(22,122,122);
-        obj2.modelPrimitive = new ObjParser().parse(this.data2Link.getTarget() as string);
-        obj2.texture = this.dataTextureLink.getTarget();
+        obj2.modelPrimitive = new ObjParser().parse(this.data2Link);
+        obj2.texture = this.dataTextureLink;
         obj2.pos.setXY(570,260);
         obj2.size.setWH(200,200);
         obj2.scale.setXYZ(60);

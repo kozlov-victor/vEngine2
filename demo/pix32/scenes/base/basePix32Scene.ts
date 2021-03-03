@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import * as fntXML from "xml/angelcode-loader!../../resources/font/font32.fnt";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Font} from "@engine/renderable/impl/general/font";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";
@@ -16,9 +15,10 @@ import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {TaskRef} from "@engine/resources/queue";
 import {ChipOscilloscope} from "../../misc/chipOscilloscope";
 import {AbstractChipTrack} from "../../ym-player/abstract/abstractChipTrack";
+import {Sound} from "@engine/media/sound";
+import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
 
 export const waitFor = (game:Game,time:number):Promise<void>=>{
     return new Promise<void>((resolve)=>{
@@ -28,26 +28,25 @@ export const waitFor = (game:Game,time:number):Promise<void>=>{
     });
 };
 
-export const loadSound = (game:Game,track:AbstractChipTrack): ResourceLink<void>=>{
-    const link: ResourceLink<void> = ResourceLink.create<void>(undefined);
-    const taskRef:TaskRef = game.getCurrScene().resourceLoader.q.addTask(async () => {
-        const arrayBuffer:ArrayBuffer = await track.renderToArrayBuffer();
-        await game.getAudioPlayer().loadSound(arrayBuffer, link);
-        game.getCurrScene().resourceLoader.q.resolveTask(taskRef);
-    });
-    return link;
+let cnt = 0;
+
+export const loadSound = async (game:Game,track:AbstractChipTrack):Promise<Sound>=>{
+    const arrayBuffer:ArrayBuffer = await track.renderToArrayBuffer();
+    const url = Math.random().toString() + (++cnt);
+    const link:UploadedSoundLink = await game.getAudioPlayer().uploadBufferToContext(url,arrayBuffer);
+    return new Sound(game, link);
 };
 
 export abstract class BasePix32Scene extends Scene {
 
     @Resource.FontFromAtlas('./pix32/resources/font/font32.png',fntXML)
-    private fontLink:ResourceLink<Font>;
+    private fontLink:Font;
 
     @Resource.Texture('./pix32/resources/images/pallet.png')
-    private palletLink:ResourceLink<ITexture>;
+    private palletLink:ITexture;
 
     @Resource.Texture('./pix32/resources/images/container.png')
-    protected containerLink:ResourceLink<ITexture>;
+    protected containerLink:ITexture;
 
     private btmLayer:Layer;
     public topLayer:Layer;
@@ -77,6 +76,7 @@ export abstract class BasePix32Scene extends Scene {
         super(game);
     }
 
+
     public onReady():void {
 
         this.backgroundColor = Color.fromCssLiteral(`#e2e2e2`);
@@ -95,10 +95,10 @@ export abstract class BasePix32Scene extends Scene {
         this.btmLayer.appendChild(screen);
         this.screen = screen;
 
-        const palletFilter:PalletOffsetFilter = new PalletOffsetFilter(this.game,this.palletLink.getTarget());
+        const palletFilter:PalletOffsetFilter = new PalletOffsetFilter(this.game,this.palletLink);
         screen.filters = [palletFilter];
 
-        const tf:TextField = new TextField(this.game,this.fontLink.getTarget());
+        const tf:TextField = new TextField(this.game,this.fontLink);
         tf.size.setWH(this.game.size.width*3,this.game.size.height);
         tf.setPixelPerfect(true);
         tf.setAutoSize(true);
@@ -128,8 +128,7 @@ export abstract class BasePix32Scene extends Scene {
 
         this.oscilloscope = new ChipOscilloscope(this.game,this);
 
-        const container:Image = new Image(this.game);
-        container.setResourceLink(this.containerLink);
+        const container:Image = new Image(this.game,this.containerLink);
         this.topLayer.appendChild(container);
 
     }

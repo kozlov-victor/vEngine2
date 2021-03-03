@@ -1,90 +1,67 @@
-import {DebugError} from "@engine/debug/debugError";
 import {Incrementer} from "@engine/resources/incrementer";
 
 
-export class TaskRef {
-
-    public readonly id:number = Incrementer.getValue();
-
+export interface ITask  {
+    fn:(progress:(n:number)=>void)=>Promise<void>;
+    taskId:number;
 }
 
 export class Queue {
-    public onResolved:()=>void;
+    public onResolved:(()=>void)[] = [];
     public onProgress:(n:number)=>void;
-
-    private _tasksResolved:number = 0;
-    private _tasks:(()=>void)[] = [];
+    private _tasks:ITask[] = [];
     private _tasksProgressById:{[taskId:string]:number} = {};
-    private _completed:boolean = false;
-    private _nextTaskIndex:number = 0;
+    private _resolved:boolean = false;
     private _currProgress:number = 0;
 
     constructor(){
 
     }
 
-    public progressTask(taskRef:TaskRef,progress:number):void{
-        if (progress===1) return; // this task will be processed by "resolveTask" fn
-        const taskId:number = taskRef.id;
-        this._tasksProgressById[taskId] = progress;
-        if (this.onProgress) this.onProgress(this.calcProgress());
+    public addTask(task:ITask['fn']):void {
+        const taskId:number = Incrementer.getValue();
+        this._tasks.push({fn:task,taskId});
+        this._tasksProgressById[taskId] = 0;
     }
 
-    public resolveTask(taskRef:TaskRef):void{
-        const taskId:number = taskRef.id;
-        if (DEBUG) {
-            if (this._tasksProgressById[taskId]===undefined) throw new DebugError(`can not resolve task: no task with id ${taskId}`);
-            if (this._tasksProgressById[taskId]===1) throw new DebugError(`task with id ${taskId} resolved already`);
-        }
-        this._tasksResolved++;
-        this._tasksProgressById[taskId] = 1;
-        if (this._tasks.length===this._tasksResolved) {
-            if (this.onProgress) this.onProgress(1);
-            this._completed = true;
-            if (this.onResolved) this.onResolved();
-        } else {
-            if (this.onProgress) this.onProgress(this.calcProgress());
-            this._tasks[this._nextTaskIndex++]();
-        }
-    }
-    public addTask(taskFn:()=>void):TaskRef {
-        const taskRef:TaskRef = new TaskRef();
-        this._tasks.push(taskFn);
-        this._tasksProgressById[taskRef.id] = 0;
-        return taskRef;
-    }
-    public isCompleted():boolean{
-        return this._completed;
+    public isResolved():boolean{
+        return this._resolved;
     }
 
-    public calcProgress():number{
+    private calcProgress():number{
         let sum:number = 0;
         Object.keys(this._tasksProgressById).forEach((taskId:string)=>{
             sum+=this._tasksProgressById[taskId]||0;
         });
-        const progress = sum/this._tasks.length;
+        const progress:number = sum/this._tasks.length;
         if (progress>this._currProgress) this._currProgress = progress; // avoid progress reducing if task were added dynamically
         return this._currProgress;
     }
 
-    public completeForced():void {
-        this._completed = true;
-        if (this.onResolved!==undefined) this.onResolved();
+    private progressTask(taskId:number,progress:number):void{
+        if (progress===1) return; // this task will be processed by "resolveTask" fn
+        this._tasksProgressById[taskId] = progress;
+        if (this.onProgress!==undefined) this.onProgress(this.calcProgress());
     }
 
-    public start():void {
-        if (this.size()===0) {
-            this._completed = true;
-            if (this.onResolved) this.onResolved();
-        } else {
-            this._tasks[this._nextTaskIndex++]();
-        }
-        // this.tasks.forEach((t:Function)=>{
-        //     t && t();
-        // });
+    private resolveTask(taskId:number):void{
+        this._tasksProgressById[taskId] = 1;
     }
 
-    private size():number{
-        return this._tasks.length;
+    public start():void{
+        (async _=>{
+            for (const task of this._tasks) {
+                const {taskId,fn} = task;
+                const onProgressCallBack = (n:number)=> this.progressTask(taskId,n);
+                await fn(onProgressCallBack);
+                this.resolveTask(taskId);
+                if (this.onProgress!==undefined) this.onProgress(this.calcProgress());
+            }
+            this._resolved = true;
+            if (this.onProgress!==undefined) this.onProgress(1);
+            await Promise.resolve();
+            this.onResolved.forEach(f=>f());
+        })();
     }
+
 }

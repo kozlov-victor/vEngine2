@@ -1,11 +1,11 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Mesh} from "@engine/renderable/abstract/mesh";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {Model3d} from "@engine/renderable/impl/general/model3d";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
 interface IMeshData {
     vertices:number[];
@@ -30,10 +30,11 @@ class ScullMesh extends AbstractPrimitive {
 export class MainScene extends Scene {
 
     private logoObj:Mesh;
-    private dataLink:ResourceLink<IMeshData>;
 
-    public onPreloading():void {
-        this.dataLink = this.resourceLoader.loadJSON('./model3dFromMesh/skull.json');
+    @Resource.JSON('./model3dFromMesh/skull.json')
+    private dataLink:IMeshData;
+
+    public onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -50,7 +51,7 @@ export class MainScene extends Scene {
         const obj:Model3d = new Model3d(this.game);
         this.logoObj = obj;
         obj.fillColor.setRGB(244,255,244);
-        obj.modelPrimitive = new ScullMesh(this.dataLink.getTarget());
+        obj.modelPrimitive = new ScullMesh(this.dataLink);
         obj.pos.setXY(300,450);
         obj.size.setWH(500,500);
         obj.scale.setXYZ(60);

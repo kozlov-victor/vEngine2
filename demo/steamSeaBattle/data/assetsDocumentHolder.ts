@@ -1,4 +1,3 @@
-
 import * as docDesc from './scenes.xml';
 import {Document} from "@engine/misc/xmlUtils";
 

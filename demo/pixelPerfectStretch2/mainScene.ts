@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {ResourceLink} from "@engine/resources/resourceLink";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
@@ -9,27 +8,26 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 export class MainScene extends Scene {
 
     @Resource.Texture('./pixelPerfectStretch2/images/pig.png')
-    private img1:ResourceLink<ITexture>;
+    private img1:ITexture;
 
 
     @Resource.Texture('./pixelPerfectStretch2/images/cow.png')
-    private img2:ResourceLink<ITexture>;
+    private img2:ITexture;
 
     @Resource.Texture('./pixelPerfectStretch2/images/dog.png')
-    private img3:ResourceLink<ITexture>;
+    private img3:ITexture;
 
     @Resource.Texture('./pixelPerfectStretch2/images/girl.png')
-    private img4:ResourceLink<ITexture>;
+    private img4:ITexture;
 
     @Resource.Texture('./pixelPerfectStretch2/images/eagle.png')
-    private img5:ResourceLink<ITexture>;
+    private img5:ITexture;
 
     private cnt:number = 0;
-    private links:ResourceLink<ITexture>[];
+    private links:ITexture[];
 
     private nextImage():void {
-        const sprLogo:Image = new Image(this.game);
-        sprLogo.setResourceLink(this.links[(this.cnt++)%this.links.length]);
+        const sprLogo:Image = new Image(this.game,this.links[(this.cnt++)%this.links.length]);
         sprLogo.setPixelPerfect(true);
 
         const container:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
