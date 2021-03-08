@@ -28,7 +28,7 @@ export class Word extends SimpleGameObjectContainer {
             charImage.pos.setX(this.caret);
             const symbolInfo:IFontSymbolInfo = characterFont.getSymbolInfoByChar(char.rawChar);
             const deltaWidth:number =
-                i<chars.length-1?
+                (i<chars.length-1 || char.rawChar===' ')?
                     symbolInfo.widthAdvanced+characterFont.context.spacing[0]:
                     charImage.size.width;
             this.caret+=deltaWidth;
