@@ -213,8 +213,8 @@ export namespace FontFactory {
 
     export const createFontFromAtlas = async (game:Game,texturePages:ITexture[],doc:Document):Promise<Font>=>{
         // http://www.angelcode.com/products/bmfont/doc/file_format.html
-        const [up,right,down,left] = querySelector(doc,'info').getAttribute('padding').split(',').map(it=>+it);
-        const [spacingHorizontal, spacingVertical] = querySelector(doc,'info').getAttribute('spacing').split(',').map(it=>+it);
+        const [up,right,down,left] = querySelector(doc,'info').getAttribute('padding').split(',').map(it=>+it || 0);
+        const [spacingHorizontal, spacingVertical] = querySelector(doc,'info').getAttribute('spacing').split(',').map(it=>+it || 0);
         const lineHeight:number = +(querySelector(doc,'common').getAttribute('lineHeight'));
         const fontFamily:string = querySelector(doc,'info').getAttribute('face');
         const fontSize:number = +querySelector(doc,'info').getAttribute('size');

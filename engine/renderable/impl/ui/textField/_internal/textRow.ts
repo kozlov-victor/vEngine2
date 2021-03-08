@@ -97,8 +97,6 @@ export class TextRow extends SimpleGameObjectContainer {
     }
 
     private _addWord(word:Word):void{
-        const lastCharacterFont:Font =
-            (word.children[word.children.length-1] as CharacterImage)?.getCharacterInfo()?.font ?? this.font;
         word.pos.setX(this.caret);
         this.caret+=word.size.width;
         this.appendChild(word);
