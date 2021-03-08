@@ -14,7 +14,7 @@ import * as fontXml from "xml/angelcode-loader!./font.fnt";
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromAtlas('uiLargeText2/font.png',fontXml)
+    @Resource.FontFromAtlas('uiLargeText2/',fontXml)
     private fontLink:Font;
 
     @Resource.Text('uiLargeText2/text.txt')

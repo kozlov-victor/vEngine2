@@ -16,7 +16,7 @@ import {KernelBlurAccumulativeFilter} from "@engine/renderer/webGl/filters/accum
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromAtlas('./fnt3/font.png',fntXML)
+    @Resource.FontFromAtlas('./fnt3/',fntXML)
     private font:Font;
 
     public onReady():void {

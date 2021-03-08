@@ -10,6 +10,7 @@ import {Optional} from "@engine/core/declarations";
 export interface IFontSymbolInfo extends IRectJSON {
     destOffsetX:number;
     destOffsetY:number;
+    widthAdvanced:number;
     pageIndex:number;
 }
 
@@ -46,15 +47,17 @@ const STANDART_SYMBOLS:string =
 const CYR_CHARS:string =
     'АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНн' +
     'ОоПпРрСсТтУуФфХхЦцЧчШшЩщ' +
-    'ЫыЬьЪъЭэЮюЯя';
+    'ЫыЬьЪъЭэЮюЯя' +
+    'ЇїІіЄєҐґ';
 
 /*
- AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz
- 1234567890
- "!`?'.,;:()[]{}<>|/@^$-%+=#_&~*
- АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНн
- ОоПпРрСсТтУуФфХхЦцЧчШшЩщ
- ЫыЬьЪъЭэЮюЯя
+AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz
+1234567890
+"!`?'.,;:()[]{}<>|/@^$-%+=#_&~*
+АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНн
+ОоПпРрСсТтУуФфХхЦцЧчШшЩщ
+ЫыЬьЪъЭэЮюЯя
+ЇїІіЄєҐґ
  */
 
 export namespace FontFactory {
@@ -140,6 +143,7 @@ export namespace FontFactory {
                 x: ~~currX,
                 y: ~~currY,
                 width: ~~textWidth,
+                widthAdvanced: ~~textWidth,
                 height: rowHeight,
                 destOffsetX: 0,
                 destOffsetY: 0,
@@ -229,6 +233,7 @@ export namespace FontFactory {
             const el:Element = chars[i];
             const id:number = +(el.getAttribute('id'));
             const width:number = +(el.getAttribute('width')) || ~~(lineHeight / 3) || 16;
+            const widthAdvanced:number = +(el.getAttribute('xadvance')) || width;
             const height:number = +(el.getAttribute('height')) || 0.0001;
             const x:number = +(el.getAttribute('x'));
             const y:number = +(el.getAttribute('y'));
@@ -240,6 +245,7 @@ export namespace FontFactory {
                 x,
                 y,
                 width,
+                widthAdvanced,
                 height,
                 destOffsetX: xOffset,
                 destOffsetY: yOffset,
@@ -318,13 +324,17 @@ export class Font {
         return FontFactory.fontAsCss(this.context.fontSize,this.context.fontFamily);
     }
 
-    public getResourceLinkByChar(char:string):ITexture{
-        if (char===' ') return this.context.texturePages[0];
+    public getSymbolInfoByChar(char:string):IFontSymbolInfo {
         const symbolInfo:IFontSymbolInfo = this.context.symbols[char] || this.context.symbols['?'];
         if (DEBUG && symbolInfo===undefined) {
             throw new DebugError(`no symbol info for character "${char}"`);
         }
-        const pageIndex:number = symbolInfo.pageIndex;
+        return symbolInfo;
+    }
+
+    public getResourceLinkByChar(char:string):ITexture{
+        if (char===' ') return this.context.texturePages[0];
+        const pageIndex:number = this.getSymbolInfoByChar(char).pageIndex;
         if (DEBUG && (pageIndex<0 || pageIndex>this.context.texturePages.length-1)) {
             throw new DebugError(`wrong page index for character "${char}"`);
         }

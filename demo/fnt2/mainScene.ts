@@ -9,7 +9,7 @@ import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromAtlas(['./fnt2/desyrel.png'],fntXML)
+    @Resource.FontFromAtlas('./fnt2/',fntXML)
     private font:Font;
 
     public onReady():void {

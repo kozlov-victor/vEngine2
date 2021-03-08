@@ -16,13 +16,13 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromAtlas('./fnt4/font.png',fntXML1)
+    @Resource.FontFromAtlas('./fnt4',fntXML1)
     private font1:Font;
 
-    @Resource.FontFromAtlas('./fnt3/font.png',fntXML2)
+    @Resource.FontFromAtlas('./fnt3/',fntXML2)
     private font2:Font;
 
-    @Resource.FontFromAtlas('./fnt/font.png',fntXML3)
+    @Resource.FontFromAtlas('./fnt',fntXML3)
     private font3:Font;
 
     public onReady():void {

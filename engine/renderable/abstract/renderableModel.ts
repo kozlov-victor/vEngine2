@@ -380,6 +380,7 @@ export abstract class RenderableModel
         cloned.visible = this.visible;
         cloned.filters = [...this.filters];
         cloned.forceDrawChildrenOnNewSurface = this.forceDrawChildrenOnNewSurface;
+        cloned.passMouseEventsThrough = this.passMouseEventsThrough;
         if (this.getRigidBody()!==undefined) cloned.setRigidBody(this.getRigidBody()!.clone());
 
         this.children.forEach((c:RenderableModel)=>{

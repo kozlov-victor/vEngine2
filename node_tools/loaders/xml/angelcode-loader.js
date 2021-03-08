@@ -10,7 +10,13 @@ const parseToNode = (row)=>{
        const pair = it.split('=');
        const key = pair[0].trim();
        let value = pair[1];
-       if (value) value = value.trim();
+       if (value) {
+           value = value.trim();
+           const firstSymbol = value[0];
+           if (['"',"'"].indexOf(firstSymbol)===0) {
+               value = value.substr(1,value.length-2);
+           }
+       }
        element.attributes[key] = value;
     });
     return element;

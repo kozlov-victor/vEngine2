@@ -35,11 +35,12 @@ export class TextRow extends SimpleGameObjectContainer {
     }
 
     public complete():void {
-        if (this.children.length===0) {
-            this.size.height = this.font.context.lineHeight + this.font.context.spacing[1];
-        } else {
-            this.size.height = Math.max(...this.children.map(it=>it.size.height));
-        }
+        // if (this.children.length===0) {
+        //     this.size.height = this.font.context.lineHeight + this.font.context.spacing[1];
+        // } else {
+        //     this.size.height = Math.max(...this.children.map(it=>it.size.height));
+        // }
+        this.size.height = this.font.context.lineHeight;// + this.font.context.spacing[1]; hierro fnt precalculates lineHeight
     }
 
     public updateWordsVisibility():void{

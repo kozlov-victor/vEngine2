@@ -27,6 +27,7 @@ export const isNumber = (value:unknown):value is number=> {
     return (value as number).toFixed!==undefined;
 };
 
+
 const isEqualArray = (a:Float32Array|Int32Array|unknown[],b:Float32Array|Int32Array|unknown[]):boolean=>{
     for (let i:number=0,max=a.length;i<max;i++) {
         if (a[i]!==b[i]) return false;
