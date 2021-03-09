@@ -1,6 +1,6 @@
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Game} from "@engine/core/game";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {ScrollContainerDelegate} from "@engine/renderable/impl/ui/scrollBar/scrollContainerDelegate";
 
 

@@ -2,8 +2,9 @@ import {Scene} from "@engine/scene/scene";
 import {IURLRequest} from "@engine/resources/urlLoader";
 import {DebugError} from "@engine/debug/debugError";
 import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
-import {IDocumentDescription} from "@engine/misc/xmlUtils";
-import {ICssFontParameters} from "@engine/renderable/impl/general/font";
+import {XmlDocument, IDocumentDescription} from "@engine/misc/xmlUtils";
+import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
+import ICssFontParameters = FontTypes.ICssFontParameters;
 
 
 export const Resource = {
@@ -45,7 +46,7 @@ export const Resource = {
             throw new DebugError(`something wrong with precompiler for Font decorator`);
         };
     },
-    FontFromAtlas: (baseUrl:string|IURLRequest,doc:IDocumentDescription)=>{
+    FontFromAtlas: (baseUrl:string|IURLRequest,doc:XmlDocument)=>{
         return (target: Scene|ResourceAutoHolder, propertyKey: string):void => {
             // stub for precompiler only
             throw new DebugError(`something wrong with precompiler for Font decorator`);

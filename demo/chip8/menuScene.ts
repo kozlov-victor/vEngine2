@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {
     LIST_VIEW_EVENTS,
     ListViewItem,

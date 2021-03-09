@@ -11,7 +11,7 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Element} from "@engine/misc/xmlUtils";
+import {XmlElement} from "@engine/misc/xmlUtils";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {ImageButton} from "@engine/renderable/impl/ui/button/imageButton";
 
@@ -104,7 +104,7 @@ export class MainScene extends BaseScene {
         this.checkBullet();
     }
 
-    protected getSceneElement(): Element {
+    protected getSceneElement(): XmlElement {
         return AssetsDocumentHolder.getDocument().getElementById('main')!;
     }
 

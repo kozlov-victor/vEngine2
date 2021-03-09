@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import * as fntXML from "xml/angelcode-loader!../../resources/font/font32.fnt";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";

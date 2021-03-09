@@ -2,7 +2,7 @@ import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
 import {Resource} from "@engine/resources/resourceDecorators";
 import * as themeFntXML from "xml/angelcode-loader!./font/theme/font.fnt";
 import * as btnFntXML from "xml/angelcode-loader!./font/button/button.fnt";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {ITexture} from "@engine/renderer/common/texture";
 
 export class PrayResourcesHolder extends ResourceAutoHolder{
@@ -21,5 +21,8 @@ export class PrayResourcesHolder extends ResourceAutoHolder{
 
     @Resource.Texture('./pray/texture/fire-texture-atlas.jpg')
     public fireTexture:ITexture;
+
+    @Resource.Texture('./pray/texture/bg.png')
+    public bgTexture:ITexture;
 
 }

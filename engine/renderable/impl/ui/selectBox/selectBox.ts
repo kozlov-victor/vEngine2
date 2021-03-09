@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {
     LIST_VIEW_EVENTS,

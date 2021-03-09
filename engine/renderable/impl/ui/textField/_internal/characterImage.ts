@@ -1,11 +1,13 @@
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
-import {Font, IFontSymbolInfo} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {DebugError} from "@engine/debug/debugError";
 import {Color} from "@engine/renderer/common/color";
 import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ICloneable} from "@engine/core/declarations";
+import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
+import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
 
 export class CharacterImage extends Image implements ICloneable<CharacterImage>{
 

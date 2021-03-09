@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {AbstractTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/abstarct/abstractTextAnimation";
 

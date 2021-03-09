@@ -17,7 +17,7 @@ import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {IMatrixTransformable, MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {isNumber, isObject, isString} from "@engine/misc/object";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {DebugError} from "@engine/debug/debugError";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";

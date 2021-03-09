@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import * as fntXML1 from "xml/angelcode-loader!../fnt4/font.fnt";
 import * as fntXML2 from "xml/angelcode-loader!../fnt3/font.fnt";
 import * as fntXML3 from "xml/xml-loader!../fnt/font.fnt";

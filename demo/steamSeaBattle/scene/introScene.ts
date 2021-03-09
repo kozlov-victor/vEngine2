@@ -2,7 +2,7 @@ import {AssetsDocumentHolder} from "../data/assetsDocumentHolder";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MainScene} from "./mainScene";
 import {BaseScene} from "./baseScene";
-import {Element} from "@engine/misc/xmlUtils";
+import {XmlElement} from "@engine/misc/xmlUtils";
 
 export class IntroScene extends BaseScene {
 
@@ -21,7 +21,7 @@ export class IntroScene extends BaseScene {
         });
     }
 
-    protected getSceneElement(): Element {
+    protected getSceneElement(): XmlElement {
         return AssetsDocumentHolder.getDocument().getElementById('intro')!;
     }
 

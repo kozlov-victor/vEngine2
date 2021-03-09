@@ -1,5 +1,3 @@
-import {DebugError} from "@engine/debug/debugError";
-
 export interface IURLRequestHeader {
     name:string;
     value:string;

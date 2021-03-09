@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {TextPath} from "@engine/renderable/impl/ui/textField/textPath/TextPath";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Tween} from "@engine/animation/tween";

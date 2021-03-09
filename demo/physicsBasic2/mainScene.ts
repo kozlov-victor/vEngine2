@@ -5,10 +5,10 @@ import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/ar
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Camera} from "@engine/renderer/camera";
-import * as docDesc from "./level.xml";
+import * as doc from "./level.xml";
 import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Document} from "@engine/misc/xmlUtils";
+import {XmlDocument} from "@engine/misc/xmlUtils";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
@@ -61,12 +61,11 @@ export class MainScene extends Scene {
         this.size.setWH(800, 600);
         this.camera.followTo(rect1);
 
-        const document:Document = Document.create(docDesc);
-        document.getElementsByTagName('rect').forEach(c=>{
+        doc.getElementsByTagName('rect').forEach(c=>{
             const rect: Rectangle = new Rectangle(this.game);
-            rect.pos.setXY(+c.attributes.x, +c.attributes.y);
-            rect.size.setWH(+c.attributes.width, +c.attributes.height);
-            rect.fillColor = Color.fromRGBNumeric(parseInt(c.attributes.fill.replace('#', ''), 16));
+            rect.pos.setXY(+c.getAttribute('x'), +c.getAttribute('y'));
+            rect.size.setWH(+c.getAttribute('width'), +c.getAttribute('height'));
+            rect.fillColor = Color.fromRGBNumeric(parseInt(c.getAttribute('fill').replace('#', ''), 16));
             rect.addBehaviour(new DraggableBehaviour(this.game));
             const rigidBody: ArcadeRigidBody = physicsSystem.createRigidBody({type:ARCADE_RIGID_BODY_TYPE.KINEMATIC});
             rect.setRigidBody(rigidBody);

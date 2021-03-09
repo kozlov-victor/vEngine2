@@ -1,9 +1,11 @@
 import {SimpleGameObjectContainer} from "../../../general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
-import {Font, IFontSymbolInfo} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 import {Color} from "@engine/renderer/common/color";
 import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
+import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
+import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
 
 export class Word extends SimpleGameObjectContainer {
 
@@ -27,15 +29,20 @@ export class Word extends SimpleGameObjectContainer {
             charImage.setPixelPerfect(pixelPerfect);
             charImage.pos.setX(this.caret);
             const symbolInfo:IFontSymbolInfo = characterFont.getSymbolInfoByChar(char.rawChar);
+            const kerning:number =
+                (chars.length>0 && i<chars.length-1)?
+                    characterFont.getKerning(char.rawChar,chars[i+1].rawChar):
+                    0;
             const deltaWidth:number =
                 (i<chars.length-1 || char.rawChar===' ')?
-                    symbolInfo.widthAdvanced+characterFont.context.spacing[0]:
+                    symbolInfo.widthAdvanced+characterFont.context.spacing[0]+kerning:
                     charImage.size.width;
             this.caret+=deltaWidth;
             this.appendChild(charImage);
             this.size.width+=deltaWidth;
             i++;
         }
+
         const maxRawHeight:number = Math.max(...this.children.map(it=>it.size.height),0);
         const maxSpacingVertical:number =
             Math.max(...this.chars.map(it=>it.font?it.font.context.spacing[1]:0),font.context.spacing[1]);

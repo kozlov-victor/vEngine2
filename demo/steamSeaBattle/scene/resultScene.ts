@@ -4,7 +4,7 @@ import {NixieDisplay} from "./object/nixieDisplay";
 import {Timer} from "@engine/misc/timer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IntroScene} from "./introScene";
-import {Element} from "@engine/misc/xmlUtils";
+import {XmlElement} from "@engine/misc/xmlUtils";
 
 export class ResultScene extends BaseScene {
 
@@ -37,7 +37,7 @@ export class ResultScene extends BaseScene {
 
     }
 
-    protected getSceneElement(): Element {
+    protected getSceneElement(): XmlElement {
         return AssetsDocumentHolder.getDocument().getElementById('result')!;
     }
 
