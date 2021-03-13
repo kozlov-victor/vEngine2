@@ -5,7 +5,6 @@ import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {TextRowSet} from "@engine/renderable/impl/ui/textField/_internal/textRowSet";
 import {AlignText} from "@engine/renderable/impl/ui/textField/textAlign";
 import {Color} from "@engine/renderer/common/color";
-import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 
 export class TextRow extends SimpleGameObjectContainer {
 
@@ -35,12 +34,13 @@ export class TextRow extends SimpleGameObjectContainer {
     }
 
     public complete():void {
-        // if (this.children.length===0) {
-        //     this.size.height = this.font.context.lineHeight + this.font.context.spacing[1];
-        // } else {
-        //     this.size.height = Math.max(...this.children.map(it=>it.size.height));
-        // }
-        this.size.height = this.font.context.lineHeight;// + this.font.context.spacing[1]; hierro fnt precalculates lineHeight
+        if (this.children.length===0) {
+            this.size.height = this.font.context.lineHeight;
+        } else {
+            this.size.height =
+                Math.max(...this.children.map(it=>it.getMaxCharacterLineHeight()));
+        }
+        // + this.font.context.spacing[1]; hierro fnt already goes with precalculated lineHeight
     }
 
     public updateWordsVisibility():void{

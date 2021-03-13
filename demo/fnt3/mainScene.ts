@@ -28,7 +28,7 @@ export class MainScene extends Scene {
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tf.textColor.setRGBA(0,0,0,0);
-        tf.setText("hello world\nnew string\ncreated with kvazars.com/littera/");
+        tf.setText("hello world\nnew string\ncreated with \nkvazars.com/littera/");
         this.appendChild(tf);
 
     }

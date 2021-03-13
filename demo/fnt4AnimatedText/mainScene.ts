@@ -25,6 +25,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Color} from "@engine/renderer/common/color";
 import {FallLettersTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/fallLettersTextAnimation";
+import {WaveTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/waveTextAnimation";
 
 export class MainScene extends Scene {
 
@@ -34,7 +35,7 @@ export class MainScene extends Scene {
     public onReady():void {
         this.backgroundColor.setRGB(12,12,12);
         const tf = new AnimatedTextField(this.game,this.font);
-        tf.size.setWH(this.game.width-30,200);
+        tf.size.setWH(this.game.width-30,400);
         tf.pos.setXY(this.game.width/2,this.game.height/2);
         tf.anchorPoint.setToCenter();
         tf.setPadding(10);
@@ -60,6 +61,7 @@ export class MainScene extends Scene {
         tf.setBackgroundActive(bgActive);
 
         const animations = [
+            new WaveTextAnimation(10),
             new FallLettersTextAnimation(),
             new RotateLetterYTextAnimation(400, -Math.PI/3),
             new AppearRandomLetterTextAnimation(2000),

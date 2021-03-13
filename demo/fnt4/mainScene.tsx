@@ -38,7 +38,7 @@ export class MainScene extends Scene {
                     {'\n'}
                     <b>Новая</b> строка 1
                     {'\n'}
-                    <v_font size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</v_font>
+                    <v_font size={15} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</v_font>
                     {'\n'}
                     <b>Новая</b> строка 3
                     {'\n'}

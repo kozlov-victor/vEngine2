@@ -37,9 +37,10 @@ export class Word extends SimpleGameObjectContainer {
                 (i<chars.length-1 || char.rawChar===' ')?
                     symbolInfo.widthAdvanced+characterFont.context.spacing[0]+kerning:
                     charImage.size.width;
-            this.caret+=deltaWidth;
+            const deltaWidthScaled:number = deltaWidth * char.scaleFromCurrFontSize;
+            this.caret+=deltaWidthScaled;
             this.appendChild(charImage);
-            this.size.width+=deltaWidth;
+            this.size.width+=deltaWidthScaled;
             i++;
         }
 
@@ -52,6 +53,14 @@ export class Word extends SimpleGameObjectContainer {
 
     public getMaxCharacterFontScale(): number {
         return Math.max(...this.chars.map(it=>it.scaleFromCurrFontSize)) ?? 1;
+    }
+
+    public getMaxCharacterLineHeight():number|0 {
+        return Math.max(
+            ...this.chars.map(it=>{
+                const font = it.font || this.font;
+                return font.context.lineHeight*it.scaleFromCurrFontSize;
+            }));
     }
 
 }

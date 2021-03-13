@@ -10,8 +10,22 @@ import ITextureWithId = FontTypes.ITextureWithId;
 
 export class Font {
 
-    constructor(protected game:Game,public readonly context:Readonly<IFontContext>) {
+    private readonly DEFAULT_SPACE_INFO:IFontSymbolInfo =
+        {
+            x:0,
+            y:0,
+            destOffsetX: 0,
+            destOffsetY: 0,
+            width: this.context.fontSize,
+            height: this.context.lineHeight,
+            widthAdvanced: this.context.fontSize,
+            pageId: 0
+        };
 
+    private readonly DEFAULT_SYMBOL_IN_CONTEXT:string;
+
+    constructor(protected game:Game,public readonly context:Readonly<IFontContext>) {
+        this.DEFAULT_SYMBOL_IN_CONTEXT = Object.keys(context.symbols)[0];
     }
 
     public readonly type:'Font' = 'Font';
@@ -21,12 +35,18 @@ export class Font {
     }
 
     public getSymbolInfoByChar(char:string):IFontSymbolInfo {
-        const symbolInfo:IFontSymbolInfo = this.context.symbols[char] || this.context.symbols['?'];
+        if (char===' ' && this.context.symbols[char]===undefined) return this.DEFAULT_SPACE_INFO;
+        const symbolInfo:IFontSymbolInfo =
+            this.context.symbols[char] ||
+            this.context.symbols['?']  ||
+            this.context.symbols[this.DEFAULT_SYMBOL_IN_CONTEXT]
+        ;
         if (DEBUG && symbolInfo===undefined) {
             throw new DebugError(`no symbol info for character "${char}"`);
         }
         return symbolInfo;
     }
+
 
     public getResourceLinkByChar(char:string):ITexture{
         if (DEBUG && this.context.texturePages.length===0) {

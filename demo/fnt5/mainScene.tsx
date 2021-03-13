@@ -19,8 +19,6 @@ export class MainScene extends Scene {
     @Resource.FontFromAtlas('./fnt4',fntXML1)
     private font1:Font;
 
-    @Resource.FontFromAtlas('./fnt3/',fntXML2)
-    private font2:Font;
 
     @Resource.FontFromAtlas('./fnt',fntXML3)
     private font3:Font;
@@ -43,11 +41,11 @@ export class MainScene extends Scene {
                     {'\n'}
                     <b>Новая</b> строка 1
                     {'\n'}
-                    <v_font size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</v_font>
+                    <v_font font={this.font3} size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</v_font>
+                    <v_font font={this.font3} size={10}>{'\n'}</v_font>
+                    <b>Новая</b> строка 3 <v_font color={{r:122,g:255,b:122}}>(another font)</v_font>
                     {'\n'}
-                    <b>Новая</b> строка 3 <v_font font={this.font2} color={{r:122,g:255,b:122}}>(another font)</v_font>
-                    {'\n'}
-                    Счетчик <v_font size={80} color={{r:200,g:200,b:122}} font={this.font2}>{++cnt}</v_font>
+                    Счетчик <v_font size={80} color={{r:200,g:200,b:122}}>{++cnt}</v_font>
                     {'\n'}
                     <v_font color={{r:122,g:122,b:122}} size={25}>(Кликнуть для инкремента)</v_font>
                     {'\n'}

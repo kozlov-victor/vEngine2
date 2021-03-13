@@ -19,7 +19,7 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
         const actualFont:Font = characterInfo.font || font;
         this.stretchMode = STRETCH_MODE.STRETCH;
         const [padUp,padRight,padDown,padLeft] = actualFont.context.padding;
-        let charRect:IFontSymbolInfo = actualFont.context.symbols[characterInfo.rawChar] || actualFont.context.symbols['?'];
+        let charRect:IFontSymbolInfo = actualFont.getSymbolInfoByChar(characterInfo.rawChar);
         if (charRect===undefined) {
             const key:string = Object.keys(actualFont.context.symbols)[0];
             if (DEBUG && key===undefined) {
@@ -43,7 +43,10 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
         if (this.getSrcRect().width<=0) this.getSrcRect().width = 0.001;
         if (this.getSrcRect().height<=0) this.getSrcRect().height = 0.001;
         this.setScaleFromCurrFontSize(this.characterInfo.scaleFromCurrFontSize);
-        this.pos.setXY(charRect.destOffsetX,charRect.destOffsetY);
+        this.pos.setXY(
+            charRect.destOffsetX*this.characterInfo.scaleFromCurrFontSize,
+            charRect.destOffsetY*this.characterInfo.scaleFromCurrFontSize
+        );
         this.transformPoint.setToCenter();
         if (!characterInfo.multibyte) this.color = color;
         if (characterInfo.italic) this.setItalic(true);
