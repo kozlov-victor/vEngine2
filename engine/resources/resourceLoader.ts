@@ -3,12 +3,18 @@ import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, Optional, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
-import {Document} from "@engine/misc/xmlUtils";
-import {Font, FontFactory, ICssFontParameters} from "@engine/renderable/impl/general/font";
-import createImageFromData = ResourceUtil.createImageFromData;
+import {XmlDocument, XmlElement} from "@engine/misc/xmlUtils";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {Sound} from "@engine/media/sound";
 import {ITask, Queue} from "@engine/resources/queue";
 import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
+import {DebugError} from "@engine/debug/debugError";
+import {isString} from "@engine/misc/object";
+import createImageFromData = ResourceUtil.createImageFromData;
+import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
+import ICssFontParameters = FontTypes.ICssFontParameters;
+import ITextureWithId = FontTypes.ITextureWithId;
+import {FontFactory} from "@engine/renderable/impl/general/font/fontFactory";
 
 namespace ResourceCache {
 
@@ -43,6 +49,13 @@ export class ResourceLoader {
         if (progressFn!==undefined) loader.onProgress = progressFn;
         const text:string = await loader.load();
         return postProcess(text);
+    }
+
+    private static mergeUrl(pageFile:string, baseUrl:string):string {
+        if (!baseUrl) return pageFile;
+        if (baseUrl[baseUrl.length-1]==='/') baseUrl = baseUrl.substr(0,baseUrl.length-1);
+        if (pageFile.indexOf('/')===0) pageFile = pageFile.substr(1);
+        return `${baseUrl}/${pageFile}`;
     }
 
     public async loadTexture(req: string|IURLRequest,progress?:(n:number)=>void): Promise<ITexture> {
@@ -110,17 +123,27 @@ export class ResourceLoader {
         return await FontFactory.createFontFromCssDescription(this.game,params,progress);
     }
 
-    public async loadFontFromAtlas(atlasPageUrls:((string|IURLRequest)[])|(string|IURLRequest),doc:Document,progress?:(n:number)=>void):Promise<Font>{
-        const texturePages:ITexture[] = [];
-        let urls:(IURLRequest|string)[];
-        if ((atlasPageUrls as any[]).join!==undefined) urls = atlasPageUrls as (IURLRequest|string)[];
-        else urls = [atlasPageUrls as (IURLRequest|string)];
-        for (const atlasPageUrl of urls) {
+    public async loadFontFromAtlas(baseUrl:string|IURLRequest, doc:XmlDocument, progress?:(n:number)=>void):Promise<Font>{
+        const texturePages:ITextureWithId[] = [];
+        const pages:XmlElement[] = doc.querySelectorAll('page');
+        if (DEBUG && !pages.length) throw new DebugError(`no 'page' node`);
+        for (const page of pages) {
+            let baseUrlCopy:string|IURLRequest = baseUrl;
+            const pageFile:string = page.getAttribute('file');
+            if (DEBUG && !pageFile) throw new DebugError(`no 'file' attribute for 'page' node`);
+            if (isString(baseUrlCopy)) {
+                baseUrlCopy = ResourceLoader.mergeUrl(pageFile,baseUrlCopy);
+            } else {
+                baseUrlCopy = {...baseUrlCopy};
+                baseUrlCopy.url = ResourceLoader.mergeUrl(pageFile,baseUrlCopy.url);
+            }
             const texturePage:ITexture =
-                await this.loadTexture(atlasPageUrl,n=>{
-                    if (progress!==undefined) progress(n/urls.length);
+                await this.loadTexture(baseUrlCopy,n=>{
+                    if (progress!==undefined) progress(n/pages.length);
                 });
-            texturePages.push(texturePage);
+            const pageId:number = +page.getAttribute('id');
+            if (DEBUG && Number.isNaN(pageId)) throw new DebugError(`wrong page id: ${page.getAttribute('id')}`);
+            texturePages.push({texture:texturePage,id:pageId});
         }
         return await FontFactory.createFontFromAtlas(this.game,texturePages,doc);
     }

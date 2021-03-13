@@ -33,7 +33,7 @@ export class MouseControl implements IControl {
 
         this._container = container;
         // mouseDown
-        container.ontouchstart = (e:TouchEvent)=>{
+        container.ontouchstart = (e:TouchEvent):void=>{
             // to prevent "mouse" events on touch devices - https://www.html5rocks.com/en/mobile/touchandmouse/
             e.preventDefault();
             let l = e.touches.length;
@@ -41,21 +41,21 @@ export class MouseControl implements IControl {
                 this.resolveClick((e.touches[l] as Touch));
             }
         };
-        container.onmousedown = (e:MouseEvent)=>{
+        container.onmousedown = (e:MouseEvent):void=>{
             if (e.button === LEFT_MOUSE_BTN) this.resolveClick(e);
             else {
                 this.resolveButtonPressed(e);
             }
         };
         // mouseUp
-        container.ontouchend = container.ontouchcancel = (e:TouchEvent)=>{
+        container.ontouchend = container.ontouchcancel = (e:TouchEvent):void=>{
             e.preventDefault();
             let l:number = e.changedTouches.length;
             while (l--){
                 this.resolveMouseUp(e.changedTouches[l]);
             }
         };
-        document.body.ontouchend = document.body.ontouchcancel = (e:TouchEvent)=>{
+        document.body.ontouchend = document.body.ontouchcancel = (e:TouchEvent):void=>{
             let l:number = e.changedTouches.length;
             while (l--){
                 const point:MousePoint = this._helper.resolvePoint(e.changedTouches[l]);
@@ -63,32 +63,35 @@ export class MouseControl implements IControl {
                 point.release();
             }
         };
-        container.onmouseup = (e:MouseEvent)=>{
+        container.onmouseup = (e:MouseEvent):void=>{
             e.stopPropagation(); // to prevent  document.body.onmouseup triggering
             this.resolveMouseUp(e);
         };
-        document.body.onmouseup = (e: MouseEvent)=>{
+        document.body.onmouseup = (e: MouseEvent):void=>{
             const point:MousePoint = this._helper.resolvePoint(e);
             this.resolveMouseUp(e);
             point.release();
         };
         // mouseMove
-        container.ontouchmove = (e:TouchEvent)=>{
+        container.ontouchmove = (e:TouchEvent):void=>{
             e.preventDefault(); // to prevent canvas moving
             let l:number = e.touches.length;
             while (l--){
                 this.resolveMouseMove(e.touches[l],true);
             }
         };
-        container.onmousemove = (e:MouseEvent)=>{
+        container.onmousemove = (e:MouseEvent):void=>{
             const isMouseDown:boolean = e.buttons === 1;
             this.resolveMouseMove(e,isMouseDown);
         };
+        // container.onpointermove = (e:PointerEvent):void=>{
+        //     if (e.pressure) this.resolveMouseMove(e,true);
+        // };
         // other
-        container.ondblclick = (e:MouseEvent)=>{ // todo now only on pc
+        container.ondblclick = (e:MouseEvent):void=>{ // todo now only on pc
             this.resolveDoubleClick(e);
         };
-        (container as unknown as {onmousewheel:(e:MouseEvent)=>void}).onmousewheel = (e:MouseEvent)=>{
+        (container as unknown as {onmousewheel:(e:MouseEvent)=>void}).onmousewheel = (e:MouseEvent):void=>{
             e.preventDefault();
             e.stopPropagation(); // to prevent page scroll
             this.resolveScroll(e);
@@ -174,7 +177,7 @@ export class MouseControl implements IControl {
         point.release();
     }
 
-    private resolveMouseMove(e:Touch|MouseEvent,isMouseDown:boolean):void {
+    private resolveMouseMove(e:Touch|MouseEvent|PointerEvent,isMouseDown:boolean):void {
         const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,isMouseDown);
         const capturedNew:RenderableModel[] = this._capturedObjectsByTouchIdHolder.getByTouchId(point.id);
         const capturedOld:RenderableModel[] = this._capturedObjectsByTouchIdPrevHolder.getByTouchId(point.id);

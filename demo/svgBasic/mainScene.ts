@@ -144,11 +144,11 @@ import * as svgEx127 from "xml/xml-loader!./examples/ex127.svg";
 import {Scene} from "@engine/scene/scene";
 import {SvgImage} from "./svgImage";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Element} from "@engine/misc/xmlUtils";
+import {XmlElement} from "@engine/misc/xmlUtils";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 
-const images:Element[] = [
+const images:XmlElement[] = [
 
     svgEx127,
     svgEx122,svgEx123,svgEx124,svgEx125,svgEx126,

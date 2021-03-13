@@ -1,7 +1,7 @@
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {
     AlignText,

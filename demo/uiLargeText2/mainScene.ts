@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
@@ -14,7 +14,7 @@ import * as fontXml from "xml/angelcode-loader!./font.fnt";
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromAtlas('uiLargeText2/font.png',fontXml)
+    @Resource.FontFromAtlas('uiLargeText2/',fontXml)
     private fontLink:Font;
 
     @Resource.Text('uiLargeText2/text.txt')

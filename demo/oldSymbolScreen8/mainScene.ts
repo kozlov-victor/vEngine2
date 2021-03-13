@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {Color} from "@engine/renderer/common/color";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";

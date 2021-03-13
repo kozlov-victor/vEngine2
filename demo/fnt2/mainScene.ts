@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import * as fntXML from "./desyrel.xml";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
@@ -9,7 +9,7 @@ import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromAtlas(['./fnt2/desyrel.png'],fntXML)
+    @Resource.FontFromAtlas('./fnt2/',fntXML)
     private font:Font;
 
     public onReady():void {

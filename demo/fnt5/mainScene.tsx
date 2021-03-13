@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import * as fntXML1 from "xml/angelcode-loader!../fnt4/font.fnt";
 import * as fntXML2 from "xml/angelcode-loader!../fnt3/font.fnt";
 import * as fntXML3 from "xml/xml-loader!../fnt/font.fnt";
@@ -16,13 +16,11 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromAtlas('./fnt4/font.png',fntXML1)
+    @Resource.FontFromAtlas('./fnt4',fntXML1)
     private font1:Font;
 
-    @Resource.FontFromAtlas('./fnt3/font.png',fntXML2)
-    private font2:Font;
 
-    @Resource.FontFromAtlas('./fnt/font.png',fntXML3)
+    @Resource.FontFromAtlas('./fnt',fntXML3)
     private font3:Font;
 
     public onReady():void {
@@ -43,11 +41,11 @@ export class MainScene extends Scene {
                     {'\n'}
                     <b>Новая</b> строка 1
                     {'\n'}
-                    <v_font size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</v_font>
+                    <v_font font={this.font3} size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</v_font>
+                    <v_font font={this.font3} size={10}>{'\n'}</v_font>
+                    <b>Новая</b> строка 3 <v_font color={{r:122,g:255,b:122}}>(another font)</v_font>
                     {'\n'}
-                    <b>Новая</b> строка 3 <v_font font={this.font2} color={{r:122,g:255,b:122}}>(another font)</v_font>
-                    {'\n'}
-                    Счетчик <v_font size={80} color={{r:200,g:200,b:122}} font={this.font2}>{++cnt}</v_font>
+                    Счетчик <v_font size={80} color={{r:200,g:200,b:122}}>{++cnt}</v_font>
                     {'\n'}
                     <v_font color={{r:122,g:122,b:122}} size={25}>(Кликнуть для инкремента)</v_font>
                     {'\n'}

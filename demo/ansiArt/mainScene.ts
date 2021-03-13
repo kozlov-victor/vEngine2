@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
@@ -20,7 +20,7 @@ let currImage:number = 0;
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:10})
+    @Resource.FontFromCssDescription({fontSize:10})
     private fnt:Font;
 
     public onReady():void {

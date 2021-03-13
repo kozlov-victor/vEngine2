@@ -1,11 +1,10 @@
 import {SimpleGameObjectContainer} from "../../../general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {TextRowSet} from "@engine/renderable/impl/ui/textField/_internal/textRowSet";
 import {AlignText} from "@engine/renderable/impl/ui/textField/textAlign";
 import {Color} from "@engine/renderer/common/color";
-import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 
 export class TextRow extends SimpleGameObjectContainer {
 
@@ -36,10 +35,12 @@ export class TextRow extends SimpleGameObjectContainer {
 
     public complete():void {
         if (this.children.length===0) {
-            this.size.height = this.font.context.lineHeight + this.font.context.spacing[1];
+            this.size.height = this.font.context.lineHeight;
         } else {
-            this.size.height = Math.max(...this.children.map(it=>it.size.height));
+            this.size.height =
+                Math.max(...this.children.map(it=>it.getMaxCharacterLineHeight()));
         }
+        // + this.font.context.spacing[1]; hierro fnt already goes with precalculated lineHeight
     }
 
     public updateWordsVisibility():void{
@@ -96,12 +97,10 @@ export class TextRow extends SimpleGameObjectContainer {
     }
 
     private _addWord(word:Word):void{
-        const lastCharacterFont:Font =
-            (word.children[word.children.length-1] as CharacterImage)?.getCharacterInfo()?.font ?? this.font;
         word.pos.setX(this.caret);
-        this.caret+=word.size.width+lastCharacterFont.context.spacing[0];
+        this.caret+=word.size.width;
         this.appendChild(word);
-        this.size.width+=word.size.width+lastCharacterFont.context.spacing[0];
+        this.size.width+=word.size.width;
     }
 
 }

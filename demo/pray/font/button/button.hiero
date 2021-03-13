@@ -1,0 +1,34 @@
+font.name=Microsoft YaHei
+font.size=32
+font.bold=false
+font.italic=false
+font.gamma=1.8
+font.mono=false
+
+font2.file=C:\Users\kozlo\Desktop\typeFont\letteratrentadue.ttf
+font2.use=false
+
+pad.top=0
+pad.right=2
+pad.bottom=0
+pad.left=2
+pad.advance.x=0
+pad.advance.y=0
+
+glyph.native.rendering=false
+glyph.page.width=256
+glyph.page.height=128
+glyph.text=AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz\n1234567890\n"!`?'.,;:()[]{}<>|/@^$-%+=#_&~*\nАаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНн\nОоПпРрСсТтУуФфХхЦцЧчШшЩщ\nЫыЬьЪъЭэЮюЯя\nЇїІіЄєҐґ
+
+render_type=0
+
+effect.class=com.badlogic.gdx.tools.hiero.unicodefont.effects.ColorEffect
+effect.Color=ffffff
+
+effect.class=com.badlogic.gdx.tools.hiero.unicodefont.effects.GradientEffect
+effect.Top color=ffcc00
+effect.Bottom color=669900
+effect.Offset=0
+effect.Scale=1.0
+effect.Cyclic=false
+

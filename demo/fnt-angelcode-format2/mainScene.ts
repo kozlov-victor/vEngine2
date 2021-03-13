@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import * as fntXML from "xml/angelcode-loader!./test_font.fnt";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
@@ -8,7 +8,7 @@ import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromAtlas('./fnt-angelcode-format2/test_font_0.png',fntXML)
+    @Resource.FontFromAtlas('./fnt-angelcode-format2',fntXML)
     private font:Font;
 
     public onReady():void {

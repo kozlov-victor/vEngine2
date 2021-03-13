@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {DebugError} from "@engine/debug/debugError";
 import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 import {IRectJSON} from "@engine/geometry/rect";

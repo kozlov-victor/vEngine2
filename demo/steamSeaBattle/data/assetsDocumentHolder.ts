@@ -1,5 +1,5 @@
 import * as docDesc from './scenes.xml';
-import {Document} from "@engine/misc/xmlUtils";
+import {XmlDocument} from "@engine/misc/xmlUtils";
 
 export abstract class AssetsDocumentHolder {
 
@@ -7,9 +7,9 @@ export abstract class AssetsDocumentHolder {
 
     }
 
-    private static document:Document;
+    private static document:XmlDocument;
 
-    public static getDocument():Document {
+    public static getDocument():XmlDocument {
         if (AssetsDocumentHolder.document===undefined) {
             AssetsDocumentHolder.document = docDesc;
         }

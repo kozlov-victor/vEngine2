@@ -1,6 +1,6 @@
 import {SimpleGameObjectContainer} from "../../../general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {Color} from "@engine/renderer/common/color";

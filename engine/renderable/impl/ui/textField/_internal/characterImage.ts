@@ -1,11 +1,13 @@
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {Game} from "@engine/core/game";
-import {Font, IFontSymbolInfo} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {DebugError} from "@engine/debug/debugError";
 import {Color} from "@engine/renderer/common/color";
 import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ICloneable} from "@engine/core/declarations";
+import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
+import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
 
 export class CharacterImage extends Image implements ICloneable<CharacterImage>{
 
@@ -17,7 +19,7 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
         const actualFont:Font = characterInfo.font || font;
         this.stretchMode = STRETCH_MODE.STRETCH;
         const [padUp,padRight,padDown,padLeft] = actualFont.context.padding;
-        let charRect:IFontSymbolInfo = actualFont.context.symbols[characterInfo.rawChar] || actualFont.context.symbols['?'];
+        let charRect:IFontSymbolInfo = actualFont.getSymbolInfoByChar(characterInfo.rawChar);
         if (charRect===undefined) {
             const key:string = Object.keys(actualFont.context.symbols)[0];
             if (DEBUG && key===undefined) {
@@ -41,7 +43,10 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
         if (this.getSrcRect().width<=0) this.getSrcRect().width = 0.001;
         if (this.getSrcRect().height<=0) this.getSrcRect().height = 0.001;
         this.setScaleFromCurrFontSize(this.characterInfo.scaleFromCurrFontSize);
-        this.pos.setXY(charRect.destOffsetX,charRect.destOffsetY);
+        this.pos.setXY(
+            charRect.destOffsetX*this.characterInfo.scaleFromCurrFontSize,
+            charRect.destOffsetY*this.characterInfo.scaleFromCurrFontSize
+        );
         this.transformPoint.setToCenter();
         if (!characterInfo.multibyte) this.color = color;
         if (characterInfo.italic) this.setItalic(true);

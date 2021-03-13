@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import * as fntXML from "xml/angelcode-loader!./font.fnt";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
@@ -14,7 +14,7 @@ export class MainScene extends Scene {
 
 
     // created with http://kvazars.com/littera/
-    @Resource.FontFromAtlas('./fnt3/font.png',fntXML)
+    @Resource.FontFromAtlas('./fnt3',fntXML)
     private font:Font;
 
 
@@ -28,7 +28,7 @@ export class MainScene extends Scene {
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tf.textColor.setRGBA(0,0,0,0);
-        tf.setText("hello world\nnew string\ncreated with kvazars.com/littera/");
+        tf.setText("hello world\nnew string\ncreated with \nkvazars.com/littera/");
         this.appendChild(tf);
 
     }

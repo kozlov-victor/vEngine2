@@ -3,7 +3,7 @@ import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransiti
 import {PushTransition} from "@engine/scene/transition/move/pushTransition";
 import {SIDE} from "@engine/scene/transition/move/side";
 import {Color} from "@engine/renderer/common/color";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {SecondScene} from "./secondScene";
 import {PopTransition} from "@engine/scene/transition/move/popTransition";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";

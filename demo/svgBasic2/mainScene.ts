@@ -16,11 +16,11 @@ import * as svgEx14 from "xml/xml-loader!./examples/test-2.svg";
 
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Element} from "@engine/misc/xmlUtils";
+import {XmlElement} from "@engine/misc/xmlUtils";
 import {SvgImage} from "../svgBasic/svgImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
 
-const images:Element[] = [
+const images:XmlElement[] = [
     svgEx12,svgEx11,svgEx13,svgEx14,
     svgEx9,svgEx10,
     svgEx6,svgEx7,svgEx8,

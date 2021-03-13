@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import * as fntXML from "xml/angelcode-loader!../fnt3/font.fnt";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {
@@ -16,7 +16,7 @@ import {KernelBlurAccumulativeFilter} from "@engine/renderer/webGl/filters/accum
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromAtlas('./fnt3/font.png',fntXML)
+    @Resource.FontFromAtlas('./fnt3/',fntXML)
     private font:Font;
 
     public onReady():void {

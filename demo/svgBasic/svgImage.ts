@@ -5,7 +5,7 @@ import {Color} from "@engine/renderer/common/color";
 import {ISize} from "@engine/geometry/size";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
-import {Element} from "@engine/misc/xmlUtils";
+import {XmlElement} from "@engine/misc/xmlUtils";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
@@ -236,12 +236,12 @@ const getNumberArray = <T>(literal:string,size:number,defaultItemValue:number):T
 
 class ElementStylesHolder {
 
-    private map:FastMap<Element, Record<string, string>> = new FastMap<Element, Record<string, string>>();
+    private map:FastMap<XmlElement, Record<string, string>> = new FastMap<XmlElement, Record<string, string>>();
 
-    public getStyle(el:Element):Record<string, string> {
+    public getStyle(el:XmlElement):Record<string, string> {
         let styleMap = this.map.get(el);
         if (styleMap===undefined) {
-            styleMap = this.styleAttrToMap(el.attributes.style);
+            styleMap = this.styleAttrToMap(el.getAttribute('style'));
             this.map.put(el,styleMap);
         }
         return styleMap;
@@ -263,10 +263,10 @@ class SvgElementRenderer {
 
     private elementStylesHolder:ElementStylesHolder = new ElementStylesHolder();
 
-    constructor(private game:Game,private document:Element,private rootContainer:SvgImage, private preloadedResources:Record<string, ITexture>) {
+    constructor(private game:Game, private document:XmlElement, private rootContainer:SvgImage, private preloadedResources:Record<string, ITexture>) {
     }
 
-    private getFillStrokeParams(el:Element):{lineWidth:number,fillColor:Color,drawColor:Color} {
+    private getFillStrokeParams(el:XmlElement):{lineWidth:number,fillColor:Color,drawColor:Color} {
 
         const rawStrokeValue:string = this.lookUpProperty(el,'stroke',true);
         const rawFillValue:string = this.lookUpProperty(el,'fill',true);
@@ -394,17 +394,17 @@ class SvgElementRenderer {
         return lastView;
     }
 
-    private resolveTransformations(parentView:RenderableModel, el:Element):RenderableModel {
+    private resolveTransformations(parentView:RenderableModel, el:XmlElement):RenderableModel {
         const transform:string = this.lookUpProperty(el,'transform',false);
         return this._parseTransformString(parentView,transform);
     }
 
-    private resolveOpacity(el:Element):number{
+    private resolveOpacity(el:XmlElement):number{
         const opacity:string = this.lookUpProperty(el,'opacity',false);
         return getNumber(opacity,1);
     }
 
-    private createElementContainer(parentView:RenderableModel,el:Element):RenderableModel{
+    private createElementContainer(parentView:RenderableModel,el:XmlElement):RenderableModel{
         let container:RenderableModel = new SimpleGameObjectContainer(this.game);
         parentView.appendChild(container);
         container.alpha = this.resolveOpacity(el);
@@ -412,12 +412,12 @@ class SvgElementRenderer {
         return container;
     }
 
-    private lookUpProperty(el:Element,propName:string, lookupParents:boolean):string{
-        let currentNode:Element = el;
+    private lookUpProperty(el:XmlElement, propName:string, lookupParents:boolean):string{
+        let currentNode:XmlElement = el;
         let result:string = undefined!;
         while (currentNode!==undefined) {
            result = this.elementStylesHolder.getStyle(currentNode)[propName];
-           if (!result) result = currentNode.attributes[propName];
+           if (!result) result = currentNode.getAttribute(propName);
            if (result) break;
            if (!lookupParents) break;
            currentNode = currentNode.parent;
@@ -426,13 +426,13 @@ class SvgElementRenderer {
         return result;
     }
 
-    private setCommonProperties(view:RenderableModel,el:Element):void {
+    private setCommonProperties(view:RenderableModel,el:XmlElement):void {
         const display:string = this.lookUpProperty(el,'display',false);
         if (display==='none') view.visible = false;
     }
 
-    private renderPath(parentView:RenderableModel,el:Element):void {
-        const data:string = el.attributes.d;
+    private renderPath(parentView:RenderableModel,el:XmlElement):void {
+        const data:string = el.getAttribute('d');
         if (!data) return undefined;
 
         const container:RenderableModel = this.createElementContainer(parentView,el);
@@ -456,12 +456,12 @@ class SvgElementRenderer {
         this.setCommonProperties(container,el);
     }
 
-    private renderCircle(parentView:RenderableModel,el:Element):void {
+    private renderCircle(parentView:RenderableModel,el:XmlElement):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const cx:number = getNumberWithMeasure(el.attributes.cx,this.rootContainer.size.width,0);
-        const cy:number = getNumberWithMeasure(el.attributes.cy,this.rootContainer.size.height,0);
-        const r:number = getNumberWithMeasure(el.attributes.r,this.rootContainer.size.width,10)+lineWidth/2;
+        const cx:number = getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
+        const cy:number = getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
+        const r:number = getNumberWithMeasure(el.getAttribute('r'),this.rootContainer.size.width,10)+lineWidth/2;
 
         const circle:Circle = new Circle(this.game);
         circle.center.setXY(cx,cy);
@@ -473,13 +473,13 @@ class SvgElementRenderer {
         container.appendChild(circle);
     }
 
-    private renderImage(parentView:RenderableModel,el:Element):void {
+    private renderImage(parentView:RenderableModel,el:XmlElement):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const x:number = getNumberWithMeasure(el.attributes.cx,this.rootContainer.size.width,0);
-        const y:number = getNumberWithMeasure(el.attributes.cy,this.rootContainer.size.height,0);
+        const x:number = getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
+        const y:number = getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
         const width:number = getNumberWithMeasure(this.lookUpProperty(el,'width',false),this.rootContainer.size.width,0);
         const height:number = getNumberWithMeasure(this.lookUpProperty(el,'height',false),this.rootContainer.size.height,0);
-        const url:string = el.attributes['xlink:href'];
+        const url:string = el.getAttribute('xlink:href');
         if (!url) return;
 
         if (this.preloadedResources[url]===undefined) throw new DebugError(`resource image is not preloaded! Invoke .preload() method`);
@@ -492,13 +492,13 @@ class SvgElementRenderer {
         container.appendChild(image);
     }
 
-    private renderEllipse(parentView:RenderableModel,el:Element):void {
+    private renderEllipse(parentView:RenderableModel,el:XmlElement):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const cx:number = getNumberWithMeasure(el.attributes.cx,this.rootContainer.size.width,0);
-        const cy:number = getNumberWithMeasure(el.attributes.cy,this.rootContainer.size.height,0);
-        const rx:number = getNumberWithMeasure(el.attributes.rx,this.rootContainer.size.width,10)+lineWidth/2;
-        const ry:number = getNumberWithMeasure(el.attributes.ry,this.rootContainer.size.width,10)+lineWidth/2;
+        const cx:number = getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
+        const cy:number = getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
+        const rx:number = getNumberWithMeasure(el.getAttribute('rx'),this.rootContainer.size.width,10)+lineWidth/2;
+        const ry:number = getNumberWithMeasure(el.getAttribute('ry'),this.rootContainer.size.width,10)+lineWidth/2;
 
         const ellipse:Ellipse = new Ellipse(this.game);
         ellipse.center.setXY(cx,cy);
@@ -512,14 +512,14 @@ class SvgElementRenderer {
     }
 
     // ry is not supported
-    private renderRect(parentView:RenderableModel,el:Element):void {
+    private renderRect(parentView:RenderableModel,el:XmlElement):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const x:number = getNumberWithMeasure(el.attributes.x,this.rootContainer.size.width,0);
-        const y:number = getNumberWithMeasure(el.attributes.y,this.rootContainer.size.height,0);
-        const width:number = getNumberWithMeasure(el.attributes.width,this.rootContainer.size.width,1);
-        const height:number = getNumberWithMeasure(el.attributes.height,this.rootContainer.size.height,1);
-        const borderRadius:number = getNumberWithMeasure(el.attributes.rx,this.rootContainer.size.width,0);
+        const x:number = getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,0);
+        const y:number = getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,0);
+        const width:number = getNumberWithMeasure(el.getAttribute('width'),this.rootContainer.size.width,1);
+        const height:number = getNumberWithMeasure(el.getAttribute('height'),this.rootContainer.size.height,1);
+        const borderRadius:number = getNumberWithMeasure(el.getAttribute('rx'),this.rootContainer.size.width,0);
 
         if (width===0 || height===0) return;
 
@@ -534,13 +534,13 @@ class SvgElementRenderer {
         container.appendChild(rect);
     }
 
-    private renderLine(parentView:RenderableModel,el:Element):void {
+    private renderLine(parentView:RenderableModel,el:XmlElement):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,drawColor} = this.getFillStrokeParams(el);
-        const x1:number = getNumberWithMeasure(el.attributes.x1,this.rootContainer.size.width,0);
-        const y1:number = getNumberWithMeasure(el.attributes.y1,this.rootContainer.size.height,0);
-        const x2:number = getNumberWithMeasure(el.attributes.x2,this.rootContainer.size.width,1);
-        const y2:number = getNumberWithMeasure(el.attributes.y2,this.rootContainer.size.height,1);
+        const x1:number = getNumberWithMeasure(el.getAttribute('x1'),this.rootContainer.size.width,0);
+        const y1:number = getNumberWithMeasure(el.getAttribute('y1'),this.rootContainer.size.height,0);
+        const x2:number = getNumberWithMeasure(el.getAttribute('x2'),this.rootContainer.size.width,1);
+        const y2:number = getNumberWithMeasure(el.getAttribute('y2'),this.rootContainer.size.height,1);
 
         const line:Line = new Line(this.game);
         line.setXYX1Y1(x1,y1,x2,y2);
@@ -551,10 +551,10 @@ class SvgElementRenderer {
     }
 
 
-    private renderPolyline(parentView:RenderableModel,el:Element,asPolygon:boolean):void {
+    private renderPolyline(parentView:RenderableModel, el:XmlElement, asPolygon:boolean):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const points:string = getString(el.attributes.points,'');
+        const points:string = getString(el.getAttribute('points'),'');
         if (!points) return;
         let vertices:number[] = [];
         const tokenizer:BasicStringTokenizer = new BasicStringTokenizer(points);
@@ -585,10 +585,10 @@ class SvgElementRenderer {
         this.setCommonProperties(container,el);
     }
 
-    private renderGroup(parentView:RenderableModel,el:Element):RenderableModel {
+    private renderGroup(parentView:RenderableModel,el:XmlElement):RenderableModel {
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const x:number = getNumberWithMeasure(el.attributes.x,this.rootContainer.size.width,undefined!);
-        const y:number = getNumberWithMeasure(el.attributes.y,this.rootContainer.size.height,undefined!);
+        const x:number = getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,undefined!);
+        const y:number = getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,undefined!);
         if (x!==undefined) container.pos.setX(x);
         if (y!==undefined) container.pos.setY(y);
 
@@ -599,9 +599,9 @@ class SvgElementRenderer {
         return container;
     }
 
-    private renderAnchor(parentView:RenderableModel,el:Element):RenderableModel {
+    private renderAnchor(parentView:RenderableModel,el:XmlElement):RenderableModel {
         const container:RenderableModel = this.renderGroup(parentView,el);
-        const href:Optional<string> = el.attributes.href || el.attributes['xlink:href'];
+        const href:Optional<string> = el.getAttribute('href') || el.getAttribute('xlink:href');
         if (href) {
             this.rootContainer.on(MOUSE_EVENTS.click,_=>{
                 window.open(href);
@@ -610,21 +610,21 @@ class SvgElementRenderer {
         return container;
     }
 
-    private renderUse(parentView:RenderableModel,el:Element):Optional<RenderableModel>{
-        let idRef:string = el.attributes['xlink:href'];
+    private renderUse(parentView:RenderableModel,el:XmlElement):Optional<RenderableModel>{
+        let idRef:string = el.getAttribute('xlink:href');
         if (idRef.indexOf('#')!==0) throw new DebugError(`wrong reference: ${idRef}`);
         idRef = idRef.substr(1);
-        const refElement:Element = this.document.getElementById(idRef)!;
-        const refElementCloned:Element = refElement.clone();
-        Object.keys(el.attributes).forEach(key=>{
+        const refElement:XmlElement = this.document.getElementById(idRef)!;
+        const refElementCloned:XmlElement = refElement.clone();
+        Object.keys(el.getAttributes()).forEach(key=>{
             if (['xlink:href','id'].indexOf(key)>-1) return;
-            else refElementCloned.attributes[key]=el.attributes[key];
+            else refElementCloned.setAttribute(key,el.getAttribute(key));
         });
-        (refElementCloned as {parent:Element}).parent = el.parent;
+        (refElementCloned as {parent:XmlElement}).parent = el.parent;
         return this.renderTag(parentView,refElementCloned);
     }
 
-    public renderTag(view:RenderableModel,el:Element):Optional<RenderableModel> {
+    public renderTag(view:RenderableModel,el:XmlElement):Optional<RenderableModel> {
         switch (el.tagName) {
             case 'svg': {
                 el.children.forEach(c=>this.renderTag(view,c));
@@ -682,7 +682,7 @@ class SvgElementRenderer {
 
 export class SvgImage extends SimpleGameObjectContainer {
 
-    private constructor(protected game:Game, private doc:Element, private preferredSize?:ISize) {
+    private constructor(protected game:Game, private doc:XmlElement, private preferredSize?:ISize) {
         super(game);
     }
 
@@ -690,7 +690,7 @@ export class SvgImage extends SimpleGameObjectContainer {
 
     private preloadedTextures:Record<string,ITexture> = {};
 
-    public static async create(game:Game, taskQueue:TaskQueue,doc:Element, preferredSize?:ISize):Promise<SvgImage> {
+    public static async create(game:Game, taskQueue:TaskQueue, doc:XmlElement, preferredSize?:ISize):Promise<SvgImage> {
         const image:SvgImage = new SvgImage(game, doc, preferredSize);
         await image.preload(taskQueue);
         image.parse();
@@ -699,11 +699,11 @@ export class SvgImage extends SimpleGameObjectContainer {
 
     private parse():void {
 
-        const rootSvgTag:Element = this.doc.querySelector('svg');
+        const rootSvgTag:XmlElement = this.doc.querySelector('svg');
 
-        const viewBox:[number,number,number,number] = getNumberArray(rootSvgTag.attributes.viewBox,4,0);
-        let width:number = getNumberWithMeasure(rootSvgTag.attributes.width,this.game.size.width,0) || viewBox[2];
-        let height:number = getNumberWithMeasure(rootSvgTag.attributes.height,this.game.size.height,0) || viewBox[3];
+        const viewBox:[number,number,number,number] = getNumberArray(rootSvgTag.getAttribute('viewBox'),4,0);
+        let width:number = getNumberWithMeasure(rootSvgTag.getAttribute('width'),this.game.size.width,0) || viewBox[2];
+        let height:number = getNumberWithMeasure(rootSvgTag.getAttribute('height'),this.game.size.height,0) || viewBox[3];
         if (width===0) width = 100;
         if (height===0) height = 100;
         if (viewBox[2]===0) viewBox[2] = width;
@@ -736,15 +736,15 @@ export class SvgImage extends SimpleGameObjectContainer {
                 throw new DebugError(`current taskQueue is completed`);
             }
         }
-        const elements:Element[] = this.doc.querySelectorAll('image');
+        const elements:XmlElement[] = this.doc.querySelectorAll('image');
         for (const el of elements) {
-            const url:string = el.attributes['xlink:href'];
+            const url:string = el.getAttribute('xlink:href');
             if (!url) continue;
             this.preloadedTextures[url] = await taskQueue.getLoader().loadTexture(url);
         }
     }
 
-    private traverseDocument(view:RenderableModel,el:Element):void {
+    private traverseDocument(view:RenderableModel,el:XmlElement):void {
         this.svgElementRenderer.renderTag(view,el);
     }
 

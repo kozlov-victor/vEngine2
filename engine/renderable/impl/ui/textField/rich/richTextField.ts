@@ -2,7 +2,7 @@ import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {Optional} from "@engine/core/declarations";
 import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 
 interface ITextFragment {
     italic?: boolean;

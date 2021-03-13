@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import * as fntXML from "xml/angelcode-loader!./font.fnt";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {
@@ -16,7 +16,7 @@ export class MainScene extends Scene {
 
 
     // created with http://kvazars.com/littera/
-    @Resource.FontFromAtlas('./fnt4/font.png',fntXML)
+    @Resource.FontFromAtlas('./fnt4/',fntXML)
     private font:Font;
 
 
@@ -38,7 +38,7 @@ export class MainScene extends Scene {
                     {'\n'}
                     <b>Новая</b> строка 1
                     {'\n'}
-                    <v_font size={10} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</v_font>
+                    <v_font size={15} color={{r:122,g:255,b:122}}><b>Новая</b> строка 2</v_font>
                     {'\n'}
                     <b>Новая</b> строка 3
                     {'\n'}

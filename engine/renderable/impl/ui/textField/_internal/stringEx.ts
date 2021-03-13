@@ -1,4 +1,4 @@
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 
 
 export interface ICharacterInfo {

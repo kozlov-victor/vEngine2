@@ -1,5 +1,5 @@
 import {MkAbstractScene} from "./mkAbstractScene";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {Color} from "@engine/renderer/common/color";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";

@@ -1,7 +1,7 @@
 import {Game} from "@engine/core/game";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
-import {Font} from "@engine/renderable/impl/general/font";
+import {Font} from "@engine/renderable/impl/general/font/font";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 import {
     ControlPointByLengthPassedResolver,
