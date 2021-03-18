@@ -29,5 +29,9 @@ export class ScrollableTextField extends TextField {
         this._scrollContainerDelegate.update();
     }
 
+    public addOnScrollListener(cb:()=>void):void {
+        this._scrollContainerDelegate.onScroll(cb);
+    }
+
 }
 

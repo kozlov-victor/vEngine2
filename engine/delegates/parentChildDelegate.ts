@@ -41,7 +41,7 @@ export class ParentChildDelegate<T extends IParentChild> {
         }
         const afterIndex:number = this.model.children.indexOf(modelAfter);
         if (DEBUG) {
-            if (afterIndex===-1) throw new DebugError(`can not insert element: object is detached`);
+            if (afterIndex===-1) throw new DebugError(`can not insert element: object is detached or does not belong to parent`);
         }
         if (afterIndex===this.model.children.length-1) this.appendChild(newChild);
         else this.appendChildAt(newChild,afterIndex+1);
@@ -53,7 +53,7 @@ export class ParentChildDelegate<T extends IParentChild> {
         }
         const beforeIndex:number = this.model.children.indexOf(modelBefore);
         if (DEBUG) {
-            if (beforeIndex===-1) throw new DebugError(`can not insert element: object is detached`);
+            if (beforeIndex===-1) throw new DebugError(`can not insert element: object is detached or does not belong to parent`);
         }
         if (beforeIndex===0) this.prependChild(newChild);
         else this.appendChildAt(newChild,beforeIndex-1);

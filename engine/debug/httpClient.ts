@@ -1,7 +1,12 @@
-import {IKeyVal, noop} from "@engine/misc/object";
+
 
 declare const setTimeout:(f:()=>void,t:number)=>number;
 
+interface IKeyVal<T> {
+    [key:string]:T;
+}
+
+const noop = (...args:any[])=>{};
 
 const objectToQuery = (o:string|number|FormData|IKeyVal<string|number|boolean>):string|FormData=> {
     if (o===undefined || o===null) return '';
@@ -25,66 +30,76 @@ interface IRequestData<T> {
     requestType?: string;
     timeout?: number;
     ontimeout?: ()=>void;
+    headers?:Record<string, string>;
 }
-
-const request = <T>(data:IRequestData<T>):Promise<T>=> {
-    let abortTmr:number;
-    let resolved = false;
-    data.method = data.method || 'get';
-    if (data.data && data.method==='get') data.url+='?'+objectToQuery(data.data);
-    const xhr=new XMLHttpRequest();
-    let resolveFn = noop as (arg:T)=>void, rejectFn = noop;
-    let promise;
-    if (window.Promise) {
-        promise = new Promise<T>((resolve,reject)=>{
-            resolveFn = resolve;
-            rejectFn = reject;
-        });
-    }
-    xhr.onreadystatechange=()=> {
-        if (xhr.readyState===4) {
-            if ( (xhr.status>=200 && xhr.status<=299) || xhr.status===0) {
-                let resp = xhr.responseText;
-                const contentType = xhr.getResponseHeader("Content-Type")||'';
-                if (contentType.toLowerCase().indexOf('json')>-1 && resp && resp.substr!==undefined) resp = JSON.parse(resp);
-                if (data.success) {
-                    data.success(resp as unknown as T);
-                }
-                resolveFn(resp as unknown as T);
-            } else {
-                if (data.error) data.error({status:xhr.status,error:xhr.statusText});
-                rejectFn(xhr.statusText);
-            }
-            clearTimeout(abortTmr);
-            resolved = true;
-        }
-    };
-    xhr.open(data.method,data.url,true);
-    if (data.setup) data.setup(xhr);
-    if (data.requestType) {
-        if (data.requestType!=='multipart/form-data') // at this case header needs to be auto generated
-            xhr.setRequestHeader("Content-Type", data.requestType);
-    } else {
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    }
-    if (data.requestType==='application/json')
-        data.data = data.data && JSON.stringify(data.data);
-    xhr.send(data.data as unknown as string);
-    if (data.timeout) {
-        abortTmr = setTimeout(()=>{
-            if (resolved) return;
-            xhr.abort();
-            if (data.ontimeout) data.ontimeout();
-            rejectFn('timeout');
-        },data.timeout);
-    }
-    return promise as Promise<T>;
-};
-
-
 
 
 export namespace HttpClient {
+
+    export const request = <T>(data:IRequestData<T>):Promise<T>=> {
+        let abortTmr:number;
+        let resolved = false;
+        data.method = data.method || 'get';
+        if (data.data && data.method==='get') data.url+='?'+objectToQuery(data.data);
+        const xhr=new XMLHttpRequest();
+        let resolveFn = noop as (arg:T)=>void, rejectFn = noop;
+        let promise;
+        if (window.Promise) {
+            promise = new Promise<T>((resolve,reject)=>{
+                resolveFn = resolve;
+                rejectFn = reject;
+            });
+        }
+        xhr.onreadystatechange=()=> {
+            if (xhr.readyState===4) {
+                if ( (xhr.status>=200 && xhr.status<=299) || xhr.status===0) {
+                    let resp = xhr.responseText;
+                    const contentType = xhr.getResponseHeader("Content-Type")||'';
+                    if (contentType.toLowerCase().indexOf('json')>-1 && resp && resp.substr!==undefined) {
+                        try {
+                            resp = JSON.parse(resp);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                    if (data.success) {
+                        data.success(resp as unknown as T);
+                    }
+                    resolveFn(resp as unknown as T);
+                } else {
+                    if (data.error) data.error({status:xhr.status,error:xhr.statusText});
+                    rejectFn(xhr.statusText);
+                }
+                clearTimeout(abortTmr);
+                resolved = true;
+            }
+        };
+        xhr.open(data.method,data.url,true);
+        if (data.setup) data.setup(xhr);
+        if (data.requestType) {
+            if (data.requestType!=='multipart/form-data') // at this case header needs to be auto generated
+                xhr.setRequestHeader("Content-Type", data.requestType);
+        } else {
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        }
+        if (data.headers!==undefined) {
+            Object.keys(data.headers).forEach(key=>{
+                xhr.setRequestHeader(key,data.headers![key]);
+            });
+        }
+        if (data.requestType==='application/json')
+            data.data = data.data && JSON.stringify(data.data);
+        xhr.send(data.data as unknown as string);
+        if (data.timeout) {
+            abortTmr = setTimeout(()=>{
+                if (resolved) return;
+                xhr.abort();
+                if (data.ontimeout) data.ontimeout();
+                rejectFn('timeout');
+            },data.timeout);
+        }
+        return promise as Promise<T>;
+    };
 
     export const get = <T>(url:string,data:IKeyVal<string|number|boolean>,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
         return request<T>({

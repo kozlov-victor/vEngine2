@@ -28,6 +28,7 @@ export class TextField extends WidgetContainer {
     protected rowSet:TextRowSet;
     protected readonly rowSetContainer:MarkableGameObjectContainer = new MarkableGameObjectContainer(this.game);
     protected _textEx:StringEx = StringEx.empty();
+    protected cacheSurface:DrawingSurface;
 
     private alignTextContentVertical:AlignTextContentVertical = AlignTextContentVertical.TOP;
     private alignTextContentHorizontal:AlignTextContentHorizontal = AlignTextContentHorizontal.LEFT;
@@ -35,7 +36,6 @@ export class TextField extends WidgetContainer {
     private wordBrake:WordBrake = WordBrake.FIT;
     private pixelPerfect:boolean = false;
 
-    private cacheSurface:DrawingSurface;
     private _text:string = '';
     private frameSkipper:FrameSkipper = new FrameSkipper(this.game);
     private _autosize:boolean = false;
@@ -236,6 +236,8 @@ export class TextField extends WidgetContainer {
         this.requestTextRedraw();
     }
 
+    protected beforeTextRedraw():void{}
+
     private calculateAutoSize():void{
         if (this.measurer===undefined) this.measurer = new TextRowSet(this.game,this.font,{width:Infinity,height:Infinity},Color.NONE);
         this.passPropertiesToRowSet(this.measurer);
@@ -263,6 +265,7 @@ export class TextField extends WidgetContainer {
         if (this.frameSkipper.willNextFrameBeSkipped()) return;
         if (this.cacheSurface!==undefined) {
             this.cacheSurface.clear();
+            this.beforeTextRedraw();
             this.cacheSurface.drawModel(this.rowSet);
         }
         this.needTextRedraw = false;

@@ -12,8 +12,6 @@ export class Word extends SimpleGameObjectContainer {
     public declare children: readonly CharacterImage[];
     public readonly rawValue:string;
 
-    private caret:number = 0;
-
     constructor(
         game:Game,
         private readonly font:Font,
@@ -23,11 +21,12 @@ export class Word extends SimpleGameObjectContainer {
     ) {
         super(game);
         let i:number = 0;
+        let caret:number = 0;
         for (const char of chars) {
             const characterFont:Font = char.font || font;
             const charImage:CharacterImage = new CharacterImage(game,font,char,color);
             charImage.setPixelPerfect(pixelPerfect);
-            charImage.pos.setX(this.caret);
+            charImage.pos.setX(caret);
             const symbolInfo:IFontSymbolInfo = characterFont.getSymbolInfoByChar(char.rawChar);
             const kerning:number =
                 (chars.length>0 && i<chars.length-1)?
@@ -38,7 +37,7 @@ export class Word extends SimpleGameObjectContainer {
                     symbolInfo.widthAdvanced+characterFont.context.spacing[0]+kerning:
                     charImage.size.width;
             const deltaWidthScaled:number = deltaWidth * char.scaleFromCurrFontSize;
-            this.caret+=deltaWidthScaled;
+            caret+=deltaWidthScaled;
             this.appendChild(charImage);
             this.size.width+=deltaWidthScaled;
             i++;
@@ -62,5 +61,6 @@ export class Word extends SimpleGameObjectContainer {
                 return font.context.lineHeight*it.scaleFromCurrFontSize;
             }));
     }
+
 
 }
