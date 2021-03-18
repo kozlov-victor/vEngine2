@@ -236,8 +236,6 @@ export class TextField extends WidgetContainer {
         this.requestTextRedraw();
     }
 
-    protected beforeTextRedraw():void{}
-
     private calculateAutoSize():void{
         if (this.measurer===undefined) this.measurer = new TextRowSet(this.game,this.font,{width:Infinity,height:Infinity},Color.NONE);
         this.passPropertiesToRowSet(this.measurer);
@@ -265,7 +263,6 @@ export class TextField extends WidgetContainer {
         if (this.frameSkipper.willNextFrameBeSkipped()) return;
         if (this.cacheSurface!==undefined) {
             this.cacheSurface.clear();
-            this.beforeTextRedraw();
             this.cacheSurface.drawModel(this.rowSet);
         }
         this.needTextRedraw = false;

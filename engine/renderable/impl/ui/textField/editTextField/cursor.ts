@@ -12,6 +12,8 @@ import {Optional} from "@engine/core/declarations";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {IRect} from "@engine/geometry/rect";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 export class Cursor {
 
@@ -25,6 +27,7 @@ export class Cursor {
     private blinkInterval:number = 1000;
 
     private rowSet:TextRowSet;
+    private rowSetContainer:RenderableModel;
     private cacheSurface:DrawingSurface;
     private cursorView:Rectangle = new Rectangle(this.game);
 
@@ -35,10 +38,20 @@ export class Cursor {
         (window as any).c = this;
     }
 
-    public start(textRowSet:TextRowSet,cacheSurface:DrawingSurface):void {
+    public start(textRowSet:TextRowSet,rowSetContainer:RenderableModel):void {
         this.rowSet = textRowSet;
-        this.cacheSurface = cacheSurface;
+        this.rowSetContainer = rowSetContainer;
         if (this.blinkTimer===undefined) this.startBlinkTimer();
+    }
+
+    public resizeDrawingView(rect:Readonly<IRect>):void{
+        if (this.cacheSurface!==undefined) {
+            this.cacheSurface.removeSelf();
+            this.cacheSurface.destroy();
+        }
+        this.cacheSurface = new DrawingSurface(this.game,rect);
+        this.cacheSurface.pos.set(rect);
+        this.parent.appendChildBefore(this.rowSetContainer,this.cacheSurface);
     }
 
     private listenToMouse():void {
@@ -63,7 +76,7 @@ export class Cursor {
     private nextBlink():void {
         this.visible = !this.visible;
         this.cursorView.visible = this.visible;
-        this.parent.__requestTextRedraw();
+        this.redrawCursorView();
     }
 
     private getNextWord(delta:-1|1):Optional<Word> {
@@ -117,7 +130,7 @@ export class Cursor {
         this.restartBlink();
     }
 
-    public updateCursorView():void {
+    private updateCursorViewGeometry():void {
         if (!this.visible) return;
         if (this.currentRow===undefined) {
             this.currentRow = this.rowSet.children[0];
@@ -130,9 +143,9 @@ export class Cursor {
         }
 
         const posY:number =
-            this.cacheSurface.pos.y + this.rowSet.pos.y + (this.currentRow?.pos?.y ?? 0);
+            this.rowSet.pos.y + (this.currentRow?.pos?.y ?? 0);
         const posX:number =
-            this.cacheSurface.pos.x + this.rowSet.pos.x + (this.currentRow?.pos?.x ?? 0) +
+            this.rowSet.pos.x + (this.currentRow?.pos?.x ?? 0) +
             (this.currentWord?.pos?.x ?? 0) +
             (this.currentCharImage?.pos?.x ?? 0);
 
@@ -143,6 +156,11 @@ export class Cursor {
             this.cursorView.size.setWH(this.font.context.fontSize/2,this.font.context.fontSize);
         }
 
+    }
+
+    public redrawCursorView():void {
+        this.cacheSurface.clear();
+        this.updateCursorViewGeometry();
         this.cacheSurface.drawModel(this.cursorView);
     }
 

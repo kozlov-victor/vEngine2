@@ -23,7 +23,15 @@ const text =
 `ab
 
 qw
-12 ui y`;
+12 ui y
+324
+234
+54
+tttttttttt
+y
+y
+y
+gg`;
 
 
 export class MainScene extends Scene {

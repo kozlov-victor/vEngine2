@@ -2,6 +2,7 @@ import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {ScrollContainerDelegate} from "@engine/renderable/impl/ui/scrollBar/scrollContainerDelegate";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 
 export class ScrollableTextField extends TextField {
@@ -19,7 +20,10 @@ export class ScrollableTextField extends TextField {
         if (this._scrollContainerDelegate===undefined || this.rowSetContainer.isDirty()) {
             if (this._scrollContainerDelegate!==undefined) this._scrollContainerDelegate.destroy();
             this._scrollContainerDelegate = new ScrollContainerDelegate(this.game,this,this.rowSetContainer,this.rowSet);
-            this._scrollContainerDelegate.onScroll(()=>this.requestTextRedraw());
+            this._scrollContainerDelegate.onScroll(()=>{
+                this.trigger(MOUSE_EVENTS.scroll);
+                this.requestTextRedraw();
+            });
         }
         this._scrollContainerDelegate.revalidate();
     }
