@@ -37,5 +37,21 @@ export class ScrollableTextField extends TextField {
         this._scrollContainerDelegate.onScroll(cb);
     }
 
+    public setCurrentOffsetVertical(val:number):void {
+        this._scrollContainerDelegate.setCurrentOffsetVertical(val);
+    }
+
+    public setCurrentOffsetHorizontal(val:number):void {
+        this._scrollContainerDelegate.setCurrentOffsetHorizontal(val);
+    }
+
+    public getCurrentOffsetVertical():number {
+        return this._scrollContainerDelegate.getCurrentOffsetVertical();
+    }
+
+    public getCurrentOffsetHorizontal():number {
+        return this._scrollContainerDelegate.getCurrentOffsetHorizontal();
+    }
+
 }
 

@@ -6,6 +6,7 @@ import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 
 export enum KEYBOARD_EVENTS {
     keyPressed = 'keyPressed',
+    keyRepeated = 'keyRepeated',
     keyReleased = 'keyReleased',
     keyHold = 'keyHold'
 }

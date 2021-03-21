@@ -66,7 +66,7 @@ export abstract class AbstractKeypad {
         }
     }
 
-    private notify(eventName:string,e:KeyPadEvent):void{
+    protected notify(eventName:string,e:KeyPadEvent):void{
         this.game.getCurrScene().trigger(eventName,e);
     }
 

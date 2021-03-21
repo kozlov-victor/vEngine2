@@ -283,7 +283,7 @@ export abstract class RenderableModel
     }
     public on(eventName:MOUSE_EVENTS,callBack:(e:IObjectMouseEvent)=>void):()=>void;
     public on(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):()=>void;
-    public on(eventName: string, callBack: (arg?:any)=>void): (arg:any)=>void {
+    public on(eventName: string, callBack: (arg?:any)=>void): (arg?:any)=>void {
         return this._eventEmitterDelegate.on(eventName,callBack);
     }
     public once(eventName:MOUSE_EVENTS,callBack:(e:IObjectMouseEvent)=>void):void;

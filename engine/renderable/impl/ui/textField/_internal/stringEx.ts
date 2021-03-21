@@ -72,7 +72,7 @@ export class StringEx {
         this.chars.push(...str.chars);
     }
 
-    public asRaw():string{
+    public asString():string{
         return this.chars.map(it=>it.rawChar).join('');
     }
 

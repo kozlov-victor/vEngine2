@@ -54,7 +54,6 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
     }
 
     public triggerKeyPress(code:number,nativeEvent:Event):void {
-        if (this.isPressed(code)) return; // keyboard generate repeated events when key is pressed - ignore it
 
         const eventFromBuffer:Optional<KeyBoardEvent> = KeyBoardEvent.fromPool();
         if (eventFromBuffer===undefined) {
@@ -63,6 +62,13 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
         }
         eventFromBuffer.key = code;
         eventFromBuffer.nativeEvent = nativeEvent;
+
+        if (this.isPressed(code)) {
+            this.notify(KEYBOARD_EVENTS.keyRepeated,eventFromBuffer);
+            eventFromBuffer.release();
+            return;
+        }
+
         this.press(eventFromBuffer);
     }
 
