@@ -12,6 +12,7 @@ export interface ICharacterInfo {
     fontSize?:number;
     font?:Font;
     scaleFromCurrFontSize:number;
+    uuid?:string;
 }
 
 export class StringEx {

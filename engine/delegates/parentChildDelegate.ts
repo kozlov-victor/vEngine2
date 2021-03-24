@@ -13,7 +13,7 @@ export class ParentChildDelegate<T extends IParentChild> {
 
     public appendChild(c:T):void {
         if (DEBUG) {
-            if (!c) throw new DebugError(`illegal argument`);
+            if (!c) throw new DebugError(`illegal argument: ${c}`);
             if (c===this.model) throw new DebugError(`parent and child objects are the same`);
             if (this.model.children.find((it:IParentChild)=>it===c)) {
                 console.error(c);
@@ -27,7 +27,7 @@ export class ParentChildDelegate<T extends IParentChild> {
 
     public appendChildAt(c:T,index:number):void{
         if (DEBUG) {
-            if (!c) throw new DebugError(`illegal argument`);
+            if (!c) throw new DebugError(`illegal argument: ${c}`);
             if (index>this.model.children.length-1) throw new DebugError(`can not insert element: index is out of range (${index},${this.model.children.length-1})`);
         }
         c.parent = this.model;
@@ -37,7 +37,7 @@ export class ParentChildDelegate<T extends IParentChild> {
 
     public appendChildAfter(modelAfter:T,newChild:T):void{
         if (DEBUG) {
-            if (!modelAfter || !newChild) throw new DebugError(`illegal argument`);
+            if (!modelAfter || !newChild) throw new DebugError(`illegal argument: ${modelAfter}`);
         }
         const afterIndex:number = this.model.children.indexOf(modelAfter);
         if (DEBUG) {
@@ -49,7 +49,7 @@ export class ParentChildDelegate<T extends IParentChild> {
 
     public appendChildBefore(modelBefore:T,newChild:T):void{
         if (DEBUG) {
-            if (!modelBefore || !newChild) throw new DebugError(`illegal argument`);
+            if (!modelBefore || !newChild) throw new DebugError(`illegal argument: ${modelBefore}`);
         }
         const beforeIndex:number = this.model.children.indexOf(modelBefore);
         if (DEBUG) {
@@ -62,7 +62,7 @@ export class ParentChildDelegate<T extends IParentChild> {
 
     public prependChild(c:T):void {
         if (DEBUG) {
-            if (!c) throw new DebugError(`illegal argument`);
+            if (!c) throw new DebugError(`illegal argument: ${c}`);
         }
         c.parent = this.model;
         (this.model.children as T[]).unshift(c);
@@ -80,7 +80,7 @@ export class ParentChildDelegate<T extends IParentChild> {
 
     public removeChild(child:T):void{
         if (DEBUG) {
-            if (!child) throw new DebugError(`illegal argument`);
+            if (!child) throw new DebugError(`illegal argument: ${child}`);
         }
         const parent:IParentChild = child.getParent() as IParentChild;
         const i:number = parent.children.indexOf(child);
@@ -108,7 +108,7 @@ export class ParentChildDelegate<T extends IParentChild> {
 
     public replaceChild(c:T,newChild:T):void{
         if (DEBUG) {
-            if (!c || !newChild) throw new DebugError(`illegal argument`);
+            if (!c || !newChild) throw new DebugError(`illegal argument: ${c}`);
         }
         const indexOf:number = this.model.children.indexOf(c);
         if (DEBUG && indexOf===-1) throw new DebugError(`can not replace child: destination node doesn't belong to element`);
@@ -145,7 +145,7 @@ export class ParentChildDelegate<T extends IParentChild> {
 
     public findChildById<U extends T>(id:string):Optional<U>{
         if (DEBUG) {
-            if (!id) throw new DebugError(`illegal argument`);
+            if (!id) throw new DebugError(`illegal argument: ${id}`);
         }
         if (id===this.model.id) return this.model as U;
         for (const c of this.model.children) {

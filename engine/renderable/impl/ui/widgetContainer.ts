@@ -36,6 +36,10 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         super.appendChild(this.backgroundActive);
         super.appendChild(this.backgroundDisabled);
 
+        this.clientRect.observe(()=>{
+            this.onClientRectChanged();
+        });
+
         if (game.hasControl('MouseControl')) {
             this.listenToHoverState();
             this.listenToActiveState();
@@ -181,6 +185,8 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
             }
         }
     }
+
+    protected onClientRectChanged():void {}
 
     private listenToHoverState():void {
         this.on(MOUSE_EVENTS.mouseEnter, e=>{

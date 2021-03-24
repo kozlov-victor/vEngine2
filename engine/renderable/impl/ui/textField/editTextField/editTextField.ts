@@ -8,26 +8,29 @@ import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {TextRowSet} from "@engine/renderable/impl/ui/textField/_internal/textRowSet";
+import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 
 
 export class EditTextField extends RichTextField {
 
     public readonly cursorColor:Color = Color.GREY.clone();
 
-    private readonly cursor:Cursor;
+    private cursor:Cursor;
 
     constructor(game:Game,font:Font) {
         super(game,font);
         this.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
-        this.cursor = new Cursor(this.game,this,font);
-        this.on(MOUSE_EVENTS.scroll, _=>{
-            this.cursor.redrawCursorView();
-        });
     }
 
     public revalidate():void {
         super.revalidate();
-        this.cursor.start(this.rowSetContainer);
+        if (this.cursor===undefined) {
+            this.cursor = new Cursor(this.game,this,this.font);
+            this.cursor.start(this.rowSetContainer);
+            this.on(MOUSE_EVENTS.scroll, _=>{
+                this.cursor.redrawCursorView();
+            });
+        }
     }
 
     public _scrollToTextRow(textRow:TextRow,delta:1|-1):void {
@@ -43,18 +46,24 @@ export class EditTextField extends RichTextField {
         this.setCurrentOffsetVertical(offset);
     }
 
-    protected onCleared():void {
-        super.onCleared();
-        this.cursor.resizeDrawingView(this.getClientRect());
+    protected onClientRectChanged():void {
+        if (this.cursor!==undefined) this.cursor.onClientRectChanged(this.getClientRect());
     }
 
     protected _setText():void {
         super._setText();
         for (const row of this.rowSet.children) {
-            const newLineWord = new Word(this.game,this.font,[{rawChar:'\n',multibyte:false,scaleFromCurrFontSize:1}],Color.NONE.clone(),false);
+            const newline:ICharacterInfo =
+                {
+                    rawChar:'\n',
+                    multibyte:false,
+                    scaleFromCurrFontSize:1,
+                    uuid: `new_line_${this.rowSet.children.indexOf(row)}`
+                };
+            const newLineWord:Word = new Word(this.game,this.font,[newline],Color.NONE.clone(),false);
             row.addWord(newLineWord,false);
         }
-        this.cursor.clearDirtyTyped();
+        if (this.cursor!==undefined) this.cursor.clearDirtyTyped();
     }
 
     public _getRowSet():TextRowSet {

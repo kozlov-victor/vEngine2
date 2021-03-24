@@ -50,6 +50,7 @@ export class TextField extends WidgetContainer {
         }
         this.appendChild(this.rowSetContainer);
         this.size.setWH(300,100);
+        this.rowSetContainer.size.set(this.size);
         this.textColor.observe(()=>this.requestTextRedraw());
     }
 

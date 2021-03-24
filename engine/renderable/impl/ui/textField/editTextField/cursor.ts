@@ -16,14 +16,10 @@ import {IRect} from "@engine/geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {TypeHelper} from "@engine/renderable/impl/ui/textField/editTextField/typeHelper";
 
 
 export class Cursor {
-
-    private currentRow:Optional<TextRow>;
-    private currentWord:Optional<Word>;
-    private currentCharInfo:Optional<Readonly<ICharacterInfo>>;
-    private currentCharImage:Optional<CharacterImage>;
 
     private visible:boolean = false;
     private blinkTimer:Timer;
@@ -32,8 +28,15 @@ export class Cursor {
     private rowSetContainer:RenderableModel;
     private cacheSurface:DrawingSurface;
     private cursorView:Rectangle = new Rectangle(this.game);
-    private dirtyChar:Optional<ICharacterInfo>;
-    private dirtyRowIndex:Optional<number>;
+
+    private typeHelper:TypeHelper = new TypeHelper(this,this.parent);
+
+    public currentRow:Optional<TextRow>;
+    public currentWord:Optional<Word>;
+    public currentCharInfo:Optional<Readonly<ICharacterInfo>>;
+    public currentCharImage:Optional<CharacterImage>;
+
+
 
     constructor(private game:Game,private parent:EditTextField,private font:Font) {
         this.cursorView.visible = false;
@@ -49,10 +52,11 @@ export class Cursor {
 
     public start(rowSetContainer:RenderableModel):void {
         this.rowSetContainer = rowSetContainer;
+        this.onClientRectChanged(this.parent.getClientRect());
         if (this.blinkTimer===undefined) this.startBlinkTimer();
     }
 
-    public resizeDrawingView(rect:Readonly<IRect>):void{
+    public onClientRectChanged(rect:Readonly<IRect>):void{
         if (this.cacheSurface!==undefined) {
             this.cacheSurface.removeSelf();
             this.cacheSurface.destroy();
@@ -79,7 +83,7 @@ export class Cursor {
                     this.moveToNextRow(-1);
                     break;
                 default:
-                    this.typeSymbol(e);
+                    this.typeHelper.typeSymbol(e);
                     break;
             }
         };
@@ -87,36 +91,6 @@ export class Cursor {
         this.game.getCurrScene().on(KEYBOARD_EVENTS.keyRepeated, e=>listener(e));
     }
 
-    private typeSymbol(e:IKeyBoardEvent):void {
-        if ((e.nativeEvent as KeyboardEvent).key.length>1) return;
-        if (this.dirtyChar!==undefined) return;
-        let cnt:number = 0;
-        let activeSymbolIndex:number = 0;
-        const serialized:ICharacterInfo[] = [];
-        const rowSet:TextRowSet = this.parent._getRowSet();
-        for (const row of rowSet.children) {
-            for (const word of row.children) {
-                for (let i:number=0;i<word.chars.length;i++) {
-                    const charInfo = word.chars[i];
-                    if (this.currentCharInfo === charInfo) {
-                        this.dirtyRowIndex = rowSet.children.indexOf(row);
-                        activeSymbolIndex = cnt;
-                    }
-                    serialized.push(charInfo);
-                    cnt++;
-                }
-            }
-        }
-        const newChar:ICharacterInfo = {
-            scaleFromCurrFontSize: 1,
-            multibyte: false,
-            rawChar: (e.nativeEvent as KeyboardEvent).key
-        };
-        serialized.splice(activeSymbolIndex,0,newChar);
-        this.dirtyChar = serialized[serialized.indexOf(newChar)+1]; //
-        const strEx:StringEx = new StringEx(serialized);
-        this.parent.setStringEx(strEx);
-    }
 
     private startBlinkTimer():void {
         this.blinkTimer = this.parent.setInterval(()=>{
@@ -151,7 +125,7 @@ export class Cursor {
         return this.currentRow.children[currentWordIndex];
     }
 
-    private moveToNextPosition(delta:-1|1):void{
+    public moveToNextPosition(delta:-1|1):void{
         let currentCharIndex:Optional<number> =
             (this.currentWord===undefined || this.currentCharInfo===undefined)?
                 undefined: this.currentWord.chars.indexOf(this.currentCharInfo);
@@ -176,7 +150,7 @@ export class Cursor {
         this.afterCursorMoved(delta);
     }
 
-    private moveToNextRow(delta:-1|1):void {
+    public moveToNextRow(delta:-1|1):void {
         if (this.currentRow===undefined) return;
         const rowSet:TextRowSet = this.parent._getRowSet();
         let currentRowIndex:number = rowSet.children.indexOf(this.currentRow);
@@ -241,41 +215,6 @@ export class Cursor {
         } else {
             this.cursorView.size.setWH(this.font.context.fontSize/2,this.font.context.fontSize);
         }
-
-    }
-
-    public clearDirtyTyped():void {
-        if (this.dirtyChar===undefined) return;
-        const rowSet:TextRowSet = this.parent._getRowSet();
-        if (this.dirtyChar.rawChar==='\n' && this.dirtyRowIndex!==undefined) {
-            this.currentRow = rowSet.children[this.dirtyRowIndex];
-            this.currentWord = this.currentRow.children[this.currentRow.children.length-1];
-            this.currentCharInfo = this.currentWord.chars[this.currentWord.chars.length-1];
-            this.currentCharImage = this.currentWord.children[this.currentWord.children.length-1];
-            this.dirtyRowIndex = undefined;
-            this.dirtyChar = undefined;
-            return;
-        }
-        let stopFlag:boolean = false;
-        for (const row of rowSet.children) {
-            if (stopFlag) break;
-            for (const word of row.children) {
-                if (stopFlag) break;
-                for (let i:number=0;i<word.chars.length;i++) {
-                    if (stopFlag) break;
-                    const char = word.chars[i];
-                    if (char===this.dirtyChar) {
-                        stopFlag = true;
-                        this.currentRow = row;
-                        this.currentWord = word;
-                        this.currentCharInfo = char;
-                        this.currentCharImage = word.children[i];
-                        console.log('cleared');
-                    }
-                }
-            }
-        }
-        this.dirtyChar = undefined;
     }
 
     public redrawCursorView():void {
@@ -284,7 +223,11 @@ export class Cursor {
         this.cacheSurface.drawModel(this.cursorView);
     }
 
-    private restartBlink():void {
+    public clearDirtyTyped():void {
+        this.typeHelper.clearDirtyTyped();
+    }
+
+    public restartBlink():void {
         this.visible = false;
         this.blinkTimer.reset();
         this.nextBlink();
