@@ -9,12 +9,15 @@ import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {TextRowSet} from "@engine/renderable/impl/ui/textField/_internal/textRowSet";
 import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
+import {NEWLINE_CHAR} from "@engine/renderable/impl/ui/textField/editTextField/typeHelper";
+import {Incrementer} from "@engine/resources/incrementer";
 
 
 export class EditTextField extends RichTextField {
 
     public readonly cursorColor:Color = Color.GREY.clone();
 
+    private readonly LAST_NEWLINE_ID:number = Incrementer.getValue();
     private cursor:Cursor;
 
     constructor(game:Game,font:Font) {
@@ -51,15 +54,26 @@ export class EditTextField extends RichTextField {
     }
 
     protected _setText():void {
+        const newLines:ICharacterInfo[] = [];
+        this._textEx.getAllChars().forEach(c=>{
+            if (c.rawChar===NEWLINE_CHAR) newLines.push(c);
+            c.uuid??=Incrementer.getValue();
+        });
         super._setText();
-        for (const row of this.rowSet.children) {
+        for (let i:number = 0; i < this.rowSet.children.length; i++) {
+            const row:TextRow = this.rowSet.children[i];
             const newline:ICharacterInfo =
+                newLines[i] ||
                 {
                     rawChar:'\n',
                     multibyte:false,
                     scaleFromCurrFontSize:1,
-                    uuid: `new_line_${this.rowSet.children.indexOf(row)}`
                 };
+            if (this.rowSet.children.indexOf(row)===this.rowSet.children.length-1) {
+                newline.uuid = this.LAST_NEWLINE_ID;
+            } else {
+                newline.uuid??= Incrementer.getValue();
+            }
             const newLineWord:Word = new Word(this.game,this.font,[newline],Color.NONE.clone(),false);
             row.addWord(newLineWord,false);
         }

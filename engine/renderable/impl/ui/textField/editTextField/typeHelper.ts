@@ -4,8 +4,9 @@ import {TextRowSet} from "@engine/renderable/impl/ui/textField/_internal/textRow
 import {Optional} from "@engine/core/declarations";
 import {Cursor} from "@engine/renderable/impl/ui/textField/editTextField/cursor";
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
+import {Incrementer} from "@engine/resources/incrementer";
 
-const NEWLINE_CHAR = '\n' as const;
+export const NEWLINE_CHAR = '\n' as const;
 
 enum SymbolKind {
     common,
@@ -14,67 +15,34 @@ enum SymbolKind {
 
 export class TypeHelper {
 
-    private dirtyCharId:Optional<string>;
-    private typedSymbolKind:Optional<SymbolKind>;
-
     constructor(
         private cursor:Cursor,
         private parent:EditTextField,
     ) {}
 
+    private dirtyCharId:Optional<number>;
+    private typedSymbolKind:Optional<SymbolKind>;
+
     public typeSymbol(e:IKeyBoardEvent):void {
         if (this.dirtyCharId!==undefined) return;
-        //console.log(e.nativeEvent);
-        if ((e.nativeEvent as KeyboardEvent).key==='Backspace') {
-            this.typedSymbolKind = SymbolKind.backspace;
-        } else {
-            this.typedSymbolKind = SymbolKind.common;
-            if ((e.nativeEvent as KeyboardEvent).key.length>1) return;
-        }
-        let cnt:number = 0;
-        let activeSymbolIndex:number = 0;
-        const serialized:ICharacterInfo[] = [];
-        const rowSet:TextRowSet = this.parent._getRowSet();
-        for (const row of rowSet.children) {
-            for (const word of row.children) {
-                for (let i:number=0;i<word.chars.length;i++) {
-                    const charInfo = word.chars[i];
-                    if (charInfo.rawChar!==NEWLINE_CHAR) charInfo.uuid = cnt.toString();
-                    if (this.cursor.currentCharInfo === charInfo) {
-                        activeSymbolIndex = cnt;
-                    }
-                    if (rowSet.children.indexOf(row)===rowSet.children.length-1 && charInfo.rawChar===NEWLINE_CHAR) break; // ignore new line of last row
-                    serialized.push(charInfo);
-                    cnt++;
-                }
-            }
-        }
+        if (this.cursor.currentCharInfo===undefined) return;
 
-        if (this.typedSymbolKind===SymbolKind.common) {
-            const newChar:ICharacterInfo = {
-                scaleFromCurrFontSize: 1,
-                multibyte: false,
-                rawChar: (e.nativeEvent as KeyboardEvent).key,
-                uuid: `new_char_${cnt}`
-            };
-            serialized.splice(activeSymbolIndex,0,newChar);
-            this.dirtyCharId = newChar.uuid;
-        } else if (this.typedSymbolKind===SymbolKind.backspace) {
-            const activeChar:ICharacterInfo = serialized[activeSymbolIndex];
-            if (activeChar.rawChar===NEWLINE_CHAR && this.cursor.currentRow?.children?.length===1) { // this is string with newline only
-                this.dirtyCharId = serialized[activeSymbolIndex-1].uuid;
-            } else {
-                this.dirtyCharId = activeChar.uuid;
-            }
-            serialized.splice(activeSymbolIndex-1,1);
-        }
+        const [rawChar,typedSymbolKind] = this.getTypedCharacterData(e.nativeEvent as KeyboardEvent);
+        if (rawChar===undefined) return;
 
+        const serialized:ICharacterInfo[] = this.serialize();
+        this.dirtyCharId = this.processTypedSymbol(typedSymbolKind,rawChar,serialized);
+
+        serialized.pop(); // // ignore new line of last row
         const strEx:StringEx = new StringEx(serialized);
         this.parent.setStringEx(strEx);
+        this.typedSymbolKind = typedSymbolKind;
     }
+
 
     public clearDirtyTyped():void {
         if (this.dirtyCharId===undefined) return;
+        this.cursor.currentRow = undefined;
         const rowSet:TextRowSet = this.parent._getRowSet();
         let stopFlag:boolean = false;
         for (const row of rowSet.children) {
@@ -95,11 +63,60 @@ export class TypeHelper {
             }
         }
         if (this.typedSymbolKind===SymbolKind.common) this.cursor.moveToNextPosition(1);
-        // else if (this.whatToDoAfterSymbolTyped===WhatToDoAfterSymbolTyped.goToPreviousLineEnd) {
-        //     this.cursor.moveToNextRow(-1);
-        // }
         this.dirtyCharId = undefined;
         this.cursor.restartBlink();
+    }
+
+    private serialize():ICharacterInfo[]{
+        const serialized:ICharacterInfo[] = [];
+        const rowSet:TextRowSet = this.parent._getRowSet();
+        for (const row of rowSet.children) {
+            for (const word of row.children) {
+                for (let i:number=0;i<word.chars.length;i++) {
+                    const charInfo = word.chars[i];
+                    serialized.push(charInfo);
+                }
+            }
+        }
+        return serialized;
+    }
+
+    private getTypedCharacterData(e:KeyboardEvent):[rawChar:Optional<string>,typedSymbolKind:SymbolKind]{
+        let rawChar:Optional<string> = e.key;
+        let typedSymbolKind:SymbolKind = undefined!;
+        if (rawChar==='Backspace') {
+            typedSymbolKind = SymbolKind.backspace;
+        }
+        else if (rawChar==='Enter') {
+            rawChar = NEWLINE_CHAR;
+            typedSymbolKind = SymbolKind.common;
+        }
+        else {
+            typedSymbolKind = SymbolKind.common;
+            if (e.key.length>1) rawChar = undefined;
+        }
+        return [rawChar,typedSymbolKind];
+    }
+
+    private processTypedSymbol(typedSymbolKind:SymbolKind,rawChar:string,serialized:ICharacterInfo[]):Optional<number> {
+        const activeSymbol:ICharacterInfo = this.cursor.currentCharInfo!;
+        const activeSymbolIndex:number = serialized.findIndex(it=>it.uuid===activeSymbol.uuid);
+        let dirtyCharId:number = undefined!;
+        if (typedSymbolKind===SymbolKind.common) {
+            const newChar:ICharacterInfo = {
+                scaleFromCurrFontSize: 1,
+                multibyte: false,
+                rawChar,
+                uuid: Incrementer.getValue()
+            };
+            serialized.splice(activeSymbolIndex,0,newChar);
+            dirtyCharId = newChar.uuid!;
+        } else if (typedSymbolKind===SymbolKind.backspace) {
+            if (activeSymbolIndex===0) return undefined;
+            dirtyCharId = activeSymbol.uuid!;
+            serialized.splice(activeSymbolIndex-1,1);
+        }
+        return dirtyCharId;
     }
 
 }
