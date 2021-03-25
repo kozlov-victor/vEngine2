@@ -13,17 +13,17 @@ import {
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 // https://getemoji.com/
 
-const text:string=
-`Lorem ipsum dolor sit 📯 amet,\t\n\r
-😀 🥰 consectetur 🖐 🩸 adipiscing elit,
-sed do eiusmod
-tempor incididunt ut labore et
-dolore magna aliqua.
-Ut enim ad minim veniam,
-quis nostrud exercitation
-ullamco laboris nisi ut
-aliquip ex ea
-commodo`;
+// const text:string=
+// `Lorem ipsum dolor sit 📯 amet,\t\n\r
+// 😀 🥰 consectetur 🖐 🩸 adipiscing elit,
+// sed do eiusmod
+// tempor incididunt ut labore et
+// dolore magna aliqua.
+// Ut enim ad minim veniam,
+// quis nostrud exercitation
+// ullamco laboris nisi ut
+// aliquip ex ea
+// commodo`;
 
 // const text =
 // `940 REM The IBM Personal Computer Donkey
@@ -159,19 +159,9 @@ commodo`;
 // 2250 CLS:GOTO 1540`;
 
 
-// const text =
-// `ab
-//
-// qw
-// 12 ui y
-// 324
-// 234
-// 54
-// tttttttttt
-// y
-// y
-// y
-// gg`;
+const text =
+`ab
+gg`;
 
 
 export class MainScene extends Scene {

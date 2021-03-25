@@ -189,18 +189,20 @@ export class Cursor {
         this.afterCursorMoved(delta);
     }
 
+    public placeToDefaultPosition():void {
+        this.currentRow = this.parent._getRowSet().children[0];
+        if (this.currentRow!==undefined) this.currentWord = this.currentRow.children[0];
+        if (this.currentWord!==undefined) {
+            this.currentWord = this.currentRow.children[0];
+            this.currentCharInfo = this.currentWord.chars[0];
+            this.currentCharImage = this.currentWord.children[0];
+        }
+    }
+
     private updateCursorViewGeometry():void {
         if (!this.visible) return;
         const rowSet:TextRowSet = this.parent._getRowSet();
-        if (this.currentRow===undefined) {
-            this.currentRow = rowSet.children[0];
-            if (this.currentRow!==undefined) this.currentWord = this.currentRow.children[0];
-            if (this.currentWord!==undefined) {
-                this.currentWord = this.currentRow.children[0];
-                this.currentCharInfo = this.currentWord.chars[0];
-                this.currentCharImage = this.currentWord.children[0];
-            }
-        }
+        if (this.currentRow===undefined) this.placeToDefaultPosition();
 
         const posY:number =
             rowSet.pos.y + (this.currentRow?.pos?.y ?? 0);

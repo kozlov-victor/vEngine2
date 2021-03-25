@@ -69,6 +69,10 @@ export class StringEx {
         return this.chars;
     }
 
+    public getSize():number {
+        return this.chars.length;
+    }
+
     public append(str:StringEx):void {
         this.chars.push(...str.chars);
     }

@@ -21,7 +21,6 @@ export class TypeHelper {
     ) {}
 
     private dirtyCharId:Optional<number>;
-    private typedSymbolKind:Optional<SymbolKind>;
 
     public typeSymbol(e:IKeyBoardEvent):void {
         if (this.dirtyCharId!==undefined) return;
@@ -36,13 +35,11 @@ export class TypeHelper {
         serialized.pop(); // // ignore new line of last row
         const strEx:StringEx = new StringEx(serialized);
         this.parent.setStringEx(strEx);
-        this.typedSymbolKind = typedSymbolKind;
     }
 
 
     public clearDirtyTyped():void {
         if (this.dirtyCharId===undefined) return;
-        this.cursor.currentRow = undefined;
         const rowSet:TextRowSet = this.parent._getRowSet();
         let stopFlag:boolean = false;
         for (const row of rowSet.children) {
@@ -62,7 +59,7 @@ export class TypeHelper {
                 }
             }
         }
-        if (this.typedSymbolKind===SymbolKind.common) this.cursor.moveToNextPosition(1);
+        if (this.cursor.currentCharInfo===undefined) this.cursor.placeToDefaultPosition();
         this.dirtyCharId = undefined;
         this.cursor.restartBlink();
     }
@@ -109,8 +106,8 @@ export class TypeHelper {
                 rawChar,
                 uuid: Incrementer.getValue()
             };
+            dirtyCharId = activeSymbol.uuid!;
             serialized.splice(activeSymbolIndex,0,newChar);
-            dirtyCharId = newChar.uuid!;
         } else if (typedSymbolKind===SymbolKind.backspace) {
             if (activeSymbolIndex===0) return undefined;
             dirtyCharId = activeSymbol.uuid!;
