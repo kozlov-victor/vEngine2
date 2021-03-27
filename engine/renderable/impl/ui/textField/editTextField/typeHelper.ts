@@ -30,9 +30,11 @@ export class TypeHelper {
         if (rawChar===undefined) return;
 
         const serialized:ICharacterInfo[] = this.serialize();
-        this.dirtyCharId = this.processTypedSymbol(typedSymbolKind,rawChar,serialized);
 
         serialized.pop(); // // ignore new line of last row
+
+        this.dirtyCharId = this.processTypedSymbol(typedSymbolKind,rawChar,serialized);
+        if (this.dirtyCharId===undefined) return;
         const strEx:StringEx = new StringEx(serialized);
         this.parent.setStringEx(strEx);
     }
@@ -41,16 +43,20 @@ export class TypeHelper {
     public clearDirtyTyped():void {
         if (this.dirtyCharId===undefined) return;
         const rowSet:TextRowSet = this.parent._getRowSet();
-        let stopFlag:boolean = false;
+        this.cursor.currentRow = undefined;
+        this.cursor.currentWord = undefined;
+        this.cursor.currentCharInfo = undefined;
+        this.cursor.currentCharImage = undefined;
+        let found:boolean = false;
         for (const row of rowSet.children) {
-            if (stopFlag) break;
+            if (found) break;
             for (const word of row.children) {
-                if (stopFlag) break;
+                if (found) break;
                 for (let i:number=0;i<word.chars.length;i++) {
-                    if (stopFlag) break;
+                    if (found) break;
                     const char:ICharacterInfo = word.chars[i];
                     if (char.uuid===this.dirtyCharId) {
-                        stopFlag = true;
+                        found = true;
                         this.cursor.currentRow = row;
                         this.cursor.currentWord = word;
                         this.cursor.currentCharInfo = char;
@@ -59,7 +65,7 @@ export class TypeHelper {
                 }
             }
         }
-        if (this.cursor.currentCharInfo===undefined) {
+        if (this.cursor.currentRow===undefined) {
             this.cursor.placeToDefaultPosition();
         }
         this.dirtyCharId = undefined;
@@ -82,7 +88,7 @@ export class TypeHelper {
 
     private getTypedCharacterData(e:KeyboardEvent):[rawChar:Optional<string>,typedSymbolKind:SymbolKind]{
         let rawChar:Optional<string> = e.key;
-        let typedSymbolKind:SymbolKind = undefined!;
+        let typedSymbolKind:SymbolKind;
         if (rawChar==='Backspace') {
             typedSymbolKind = SymbolKind.backspace;
         }
