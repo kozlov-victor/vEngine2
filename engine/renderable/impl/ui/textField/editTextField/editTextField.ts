@@ -36,17 +36,13 @@ export class EditTextField extends RichTextField {
         }
     }
 
-    public _scrollToTextRow(textRow:TextRow,delta:1|-1):void {
-        let offset:number;
+    public _requestFocusForTextRow(textRow:TextRow):void {
+        this.setCurrentOffsetVertical(0);
         const clientRect = this.getClientRect();
-        if (delta===1) {
-            offset =  textRow.pos.y - clientRect.height + textRow.size.height;
-            offset = -offset;
-        } else {
-            offset = textRow.pos.y;
-            offset = -offset;
+        if (textRow.pos.y + textRow.size.height - Math.abs(this.getCurrentOffsetVertical()) > clientRect.height) {
+            const offset: number = -(textRow.pos.y + textRow.size.height - clientRect.height);
+            this.setCurrentOffsetVertical(offset);
         }
-        this.setCurrentOffsetVertical(offset);
     }
 
     protected onClientRectChanged():void {

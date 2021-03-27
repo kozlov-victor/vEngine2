@@ -44,12 +44,6 @@ export class Cursor {
         this.listenToMouse();
     }
 
-    private static isRowTotallyInView(textField:ScrollableTextField, textRow:TextRow, viewHeight:number):boolean  {
-        const relativePosY:number = textRow.pos.y+textField.getCurrentOffsetVertical();
-        if (relativePosY<0) return false;
-        else return relativePosY + textRow.size.height <= viewHeight;
-    }
-
     public start(rowSetContainer:RenderableModel):void {
         this.rowSetContainer = rowSetContainer;
         this.onClientRectChanged(this.parent.getClientRect());
@@ -147,7 +141,7 @@ export class Cursor {
         }
         this.currentCharInfo = this.currentWord.chars[currentCharIndex];
         this.currentCharImage = this.currentWord.children[currentCharIndex];
-        this.afterCursorMoved(delta);
+        this.afterCursorMoved();
     }
 
     public moveToNextRow(delta:-1|1):void {
@@ -186,7 +180,7 @@ export class Cursor {
             }
             if (stopFlag) break;
         }
-        this.afterCursorMoved(delta);
+        this.afterCursorMoved();
     }
 
     public placeToDefaultPosition():void {
@@ -229,16 +223,14 @@ export class Cursor {
         this.typeHelper.clearDirtyTyped();
     }
 
-    public restartBlink():void {
+    private restartBlink():void {
         this.visible = false;
         this.blinkTimer.reset();
         this.nextBlink();
     }
 
-    private afterCursorMoved(delta:-1|1):void {
-        if (this.currentRow!==undefined && !Cursor.isRowTotallyInView(this.parent,this.currentRow,this.parent.getClientRect().height)) {
-            this.parent._scrollToTextRow(this.currentRow,delta);
-        }
+    public afterCursorMoved():void {
+        if (this.currentRow!==undefined) this.parent._requestFocusForTextRow(this.currentRow);
         this.restartBlink();
     }
 

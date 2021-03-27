@@ -59,9 +59,11 @@ export class TypeHelper {
                 }
             }
         }
-        if (this.cursor.currentCharInfo===undefined) this.cursor.placeToDefaultPosition();
+        if (this.cursor.currentCharInfo===undefined) {
+            this.cursor.placeToDefaultPosition();
+        }
         this.dirtyCharId = undefined;
-        this.cursor.restartBlink();
+        this.cursor.afterCursorMoved();
     }
 
     private serialize():ICharacterInfo[]{
