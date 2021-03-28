@@ -30,11 +30,9 @@ export class TypeHelper {
         if (rawChar===undefined) return;
 
         const serialized:ICharacterInfo[] = this.serialize();
+        this.dirtyCharId = this.processTypedSymbol(typedSymbolKind,rawChar,serialized);
 
         serialized.pop(); // // ignore new line of last row
-
-        this.dirtyCharId = this.processTypedSymbol(typedSymbolKind,rawChar,serialized);
-        if (this.dirtyCharId===undefined) return;
         const strEx:StringEx = new StringEx(serialized);
         this.parent.setStringEx(strEx);
     }
