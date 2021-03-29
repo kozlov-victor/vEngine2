@@ -36,6 +36,14 @@ export class TypeHelper {
 
         this.dirtyCharId = dirtyCharId;
         if (serialized.length>0 && serialized[serialized.length-1].rawChar===NEWLINE_CHAR) serialized.pop(); // // ignore new line of last row
+        if (serialized.length===0 && rawChar===NEWLINE_CHAR) { // to allow type newLine if field is empty
+            serialized.push({
+                scaleFromCurrFontSize: 1,
+                multibyte: false,
+                rawChar,
+                uuid: Incrementer.getValue()
+            });
+        }
         const strEx:StringEx = new StringEx(serialized);
         this.parent.setStringEx(strEx);
     }
