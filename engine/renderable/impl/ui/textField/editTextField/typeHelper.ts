@@ -15,6 +15,8 @@ enum SymbolKind {
 
 export class TypeHelper {
 
+    public static readonly LAST_NEWLINE_ID:number = Incrementer.getValue();
+
     constructor(
         private cursor:Cursor,
         private parent:EditTextField,
@@ -24,15 +26,13 @@ export class TypeHelper {
 
     public typeSymbol(e:IKeyBoardEvent):void {
         if (this.dirtyCharId!==undefined) return;
-        if (this.cursor.currentCharInfo===undefined) return;
 
         const [rawChar,typedSymbolKind] = this.getTypedCharacterData(e.nativeEvent as KeyboardEvent);
         if (rawChar===undefined) return;
 
         const serialized:ICharacterInfo[] = this.serialize();
         this.dirtyCharId = this.processTypedSymbol(typedSymbolKind,rawChar,serialized);
-
-        serialized.pop(); // // ignore new line of last row
+        if (serialized.length>0 && serialized[serialized.length-1].rawChar===NEWLINE_CHAR) serialized.pop(); // // ignore new line of last row
         const strEx:StringEx = new StringEx(serialized);
         this.parent.setStringEx(strEx);
     }
@@ -102,9 +102,13 @@ export class TypeHelper {
     }
 
     private processTypedSymbol(typedSymbolKind:SymbolKind,rawChar:string,serialized:ICharacterInfo[]):Optional<number> {
-        const activeSymbol:ICharacterInfo = this.cursor.currentCharInfo!;
-        const activeSymbolIndex:number = serialized.findIndex(it=>it.uuid===activeSymbol.uuid);
-        let dirtyCharId:number = undefined!;
+        const activeSymbol:Optional<ICharacterInfo> =
+            this.cursor.currentCharInfo;
+        const activeSymbolIndex:Optional<number> =
+            activeSymbol!==undefined?
+                serialized.findIndex(it=>it.uuid===activeSymbol.uuid):
+                undefined;
+        let dirtyCharId:Optional<number>;
         if (typedSymbolKind===SymbolKind.common) {
             const newChar:ICharacterInfo = {
                 scaleFromCurrFontSize: 1,
@@ -112,10 +116,16 @@ export class TypeHelper {
                 rawChar,
                 uuid: Incrementer.getValue()
             };
-            dirtyCharId = activeSymbol.uuid!;
-            serialized.splice(activeSymbolIndex,0,newChar);
+            dirtyCharId =
+                activeSymbol!==undefined?
+                    activeSymbol.uuid!:
+                    TypeHelper.LAST_NEWLINE_ID;
+
+            serialized.splice(activeSymbolIndex===undefined?0:activeSymbolIndex,0,newChar);
         } else if (typedSymbolKind===SymbolKind.backspace) {
-            if (activeSymbolIndex===0) return undefined;
+            if (activeSymbolIndex===undefined) return undefined;
+            if (activeSymbolIndex===-1) return undefined;
+            if (activeSymbol===undefined) return undefined;
             dirtyCharId = activeSymbol.uuid!;
             serialized.splice(activeSymbolIndex-1,1);
         }

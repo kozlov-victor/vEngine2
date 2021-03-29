@@ -9,7 +9,7 @@ import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {TextRowSet} from "@engine/renderable/impl/ui/textField/_internal/textRowSet";
 import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
-import {NEWLINE_CHAR} from "@engine/renderable/impl/ui/textField/editTextField/typeHelper";
+import {NEWLINE_CHAR, TypeHelper} from "@engine/renderable/impl/ui/textField/editTextField/typeHelper";
 import {Incrementer} from "@engine/resources/incrementer";
 
 
@@ -17,7 +17,6 @@ export class EditTextField extends RichTextField {
 
     public readonly cursorColor:Color = Color.GREY.clone();
 
-    private readonly LAST_NEWLINE_ID:number = Incrementer.getValue();
     private cursor:Cursor;
 
     constructor(game:Game,font:Font) {
@@ -66,7 +65,7 @@ export class EditTextField extends RichTextField {
                     scaleFromCurrFontSize:1,
                 };
             if (this.rowSet.children.indexOf(row)===this.rowSet.children.length-1) {
-                newline.uuid = this.LAST_NEWLINE_ID;
+                newline.uuid = TypeHelper.LAST_NEWLINE_ID;
             } else {
                 newline.uuid??= Incrementer.getValue();
             }

@@ -160,7 +160,7 @@ import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/
 
 
 const text =
-`abaca
+`abaca\n
 gg`;
 
 
@@ -180,9 +180,9 @@ export class MainScene extends Scene {
         //tf.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
         // tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         // tf.setAlignTextContentVertical(AlignTextContentVertical.TOP);
-        tf.textColor.set(Color.fromCssLiteral('#043b02'));
+        tf.textColor.set(Color.fromCssLiteral('#0cc306'));
         const background = new Rectangle(this.game);
-        background.fillColor = Color.fromCssLiteral('#dde5ff');
+        background.fillColor = Color.fromCssLiteral('#03164c');
         background.borderRadius = 5;
         tf.setText(text);
         tf.setBackground(background);
