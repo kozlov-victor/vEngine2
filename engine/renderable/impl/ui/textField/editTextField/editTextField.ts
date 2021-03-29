@@ -37,10 +37,13 @@ export class EditTextField extends RichTextField {
 
     public _requestFocusForTextRow(textRow:TextRow):void {
         this.setCurrentOffsetVertical(0);
+        const currentOffsetVertical:number = this.getCurrentOffsetVertical();
         const clientRect = this.getClientRect();
-        if (textRow.pos.y + textRow.size.height - Math.abs(this.getCurrentOffsetVertical()) > clientRect.height) {
+        //console.log({posY:textRow.pos.y,rowHeight:textRow.size.height,scrollVer:currentOffsetVertical,clientRectHeight:clientRect.height});
+        if (textRow.pos.y + textRow.size.height - Math.abs(currentOffsetVertical) > clientRect.height) {
             const offset: number = -(textRow.pos.y + textRow.size.height - clientRect.height);
             this.setCurrentOffsetVertical(offset);
+            //console.log('seted offset',{offset});
         }
     }
 
