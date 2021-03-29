@@ -31,7 +31,10 @@ export class TypeHelper {
         if (rawChar===undefined) return;
 
         const serialized:ICharacterInfo[] = this.serialize();
-        this.dirtyCharId = this.processTypedSymbol(typedSymbolKind,rawChar,serialized);
+        const dirtyCharId:Optional<number> = this.processTypedSymbol(typedSymbolKind,rawChar,serialized);
+        if (dirtyCharId===undefined) return;
+
+        this.dirtyCharId = dirtyCharId;
         if (serialized.length>0 && serialized[serialized.length-1].rawChar===NEWLINE_CHAR) serialized.pop(); // // ignore new line of last row
         const strEx:StringEx = new StringEx(serialized);
         this.parent.setStringEx(strEx);
@@ -125,6 +128,7 @@ export class TypeHelper {
         } else if (typedSymbolKind===SymbolKind.backspace) {
             if (activeSymbolIndex===undefined) return undefined;
             if (activeSymbolIndex===-1) return undefined;
+            if (activeSymbolIndex===0) return undefined;
             if (activeSymbol===undefined) return undefined;
             dirtyCharId = activeSymbol.uuid!;
             serialized.splice(activeSymbolIndex-1,1);
