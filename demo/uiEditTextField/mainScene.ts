@@ -172,7 +172,8 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
-        const tf:TextField = new EditTextField(this.game,this.fnt);
+        const tf:EditTextField = new EditTextField(this.game,this.fnt);
+        tf.cursorColor = Color.fromCssLiteral(`#ffd8d8`);
 
         tf.pos.setXY(50,50);
         tf.size.setWH(700,420);

@@ -216,6 +216,7 @@ export class Cursor {
     public redrawCursorView():void {
         this.cacheSurface.clear();
         this.updateCursorViewGeometry();
+        this.cursorView.fillColor = this.parent.cursorColor;
         this.cacheSurface.drawModel(this.cursorView);
     }
 

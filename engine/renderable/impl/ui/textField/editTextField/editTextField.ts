@@ -16,7 +16,7 @@ import {IRect} from "@engine/geometry/rect";
 
 export class EditTextField extends RichTextField {
 
-    public readonly cursorColor:Color = Color.GREY.clone();
+    public cursorColor:Color = Color.GREY.clone();
 
     private cursor:Cursor;
 
