@@ -90,10 +90,10 @@ export class ScrollContainerDelegate {
 
     private updateScrollValues():void {
         this.vScrollBar.maxValue = this.scrollableContainer.size.height;
-        this.vScrollBar.value = - this.vScrollContainerListener.getScrollPosition();
+        this.vScrollBar.value = - this.vScrollContainerListener.getCurrentOffset();
 
         this.hScrollBar.maxValue = this.scrollableContainer.size.width;
-        this.hScrollBar.value = - this.hScrollContainerListener.getScrollPosition();
+        this.hScrollBar.value = - this.hScrollContainerListener.getCurrentOffset();
 
     }
 

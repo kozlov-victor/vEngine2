@@ -38,11 +38,15 @@ export class ScrollableTextField extends TextField {
     }
 
     public setCurrentOffsetVertical(val:number):void {
+        this.rowSet.pos.y = val;
         this._scrollContainerDelegate.setCurrentOffsetVertical(val);
+        this._scrollContainerDelegate.revalidate();
     }
 
     public setCurrentOffsetHorizontal(val:number):void {
+        this.rowSet.pos.x = val;
         this._scrollContainerDelegate.setCurrentOffsetHorizontal(val);
+        this._scrollContainerDelegate.revalidate();
     }
 
     public getCurrentOffsetVertical():number {

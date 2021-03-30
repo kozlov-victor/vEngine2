@@ -80,10 +80,6 @@ export abstract class AbstractScrollContainerListener {
         this._setScrollPos();
     }
 
-    public getScrollPosition():number{
-        return this.offset;
-    }
-
     public onScroll(listener:()=>void):void {
         this._onScroll = listener;
     }

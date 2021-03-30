@@ -11,6 +11,7 @@ import {TextRowSet} from "@engine/renderable/impl/ui/textField/_internal/textRow
 import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 import {NEWLINE_CHAR, TypeHelper} from "@engine/renderable/impl/ui/textField/editTextField/typeHelper";
 import {Incrementer} from "@engine/resources/incrementer";
+import {IRect} from "@engine/geometry/rect";
 
 
 export class EditTextField extends RichTextField {
@@ -36,15 +37,14 @@ export class EditTextField extends RichTextField {
     }
 
     public _requestFocusForTextRow(textRow:TextRow):void {
-        this.setCurrentOffsetVertical(0);
-        const currentOffsetVertical:number = this.getCurrentOffsetVertical();
-        const clientRect = this.getClientRect();
-        //console.log({posY:textRow.pos.y,rowHeight:textRow.size.height,scrollVer:currentOffsetVertical,clientRectHeight:clientRect.height});
-        if (textRow.pos.y + textRow.size.height - Math.abs(currentOffsetVertical) > clientRect.height) {
-            const offset: number = -(textRow.pos.y + textRow.size.height - clientRect.height);
-            this.setCurrentOffsetVertical(offset);
-            //console.log('seted offset',{offset});
+        let currentOffsetVertical:number = this.getCurrentOffsetVertical();
+        const clientRect:Readonly<IRect> = this.getClientRect();
+        if (textRow.pos.y + textRow.size.height - Math.abs(currentOffsetVertical) > clientRect.height) { // scroll to bottom if it needs
+            currentOffsetVertical = -(textRow.pos.y + textRow.size.height - clientRect.height);
+        } else if (textRow.pos.y - Math.abs(currentOffsetVertical) < 0) { // scroll to top if it needs
+            currentOffsetVertical = - textRow.pos.y;
         }
+        this.setCurrentOffsetVertical(currentOffsetVertical);
     }
 
     protected onClientRectChanged():void {
