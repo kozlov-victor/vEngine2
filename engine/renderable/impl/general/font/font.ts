@@ -10,6 +10,10 @@ import ITextureWithId = FontTypes.ITextureWithId;
 
 export class Font {
 
+    constructor(protected game:Game,public readonly context:Readonly<IFontContext>) {
+        this.DEFAULT_SYMBOL_IN_CONTEXT = context.symbols[Object.keys(context.symbols)[0]];
+    }
+
     private readonly DEFAULT_SPACE_INFO:IFontSymbolInfo =
         {
             x:0,
@@ -22,24 +26,24 @@ export class Font {
             pageId: 0
         };
 
-    private readonly DEFAULT_SYMBOL_IN_CONTEXT:string;
-
-    constructor(protected game:Game,public readonly context:Readonly<IFontContext>) {
-        this.DEFAULT_SYMBOL_IN_CONTEXT = Object.keys(context.symbols)[0];
-    }
+    private readonly DEFAULT_SYMBOL_IN_CONTEXT:IFontSymbolInfo;
 
     public readonly type:'Font' = 'Font';
+
+    private static isDefaultChar(char:string):boolean {
+        return char===' ' || char==='\n';
+    }
 
     public asCss():string{
         return FontFactory.fontAsCss(this.context.fontSize,this.context.fontFamily);
     }
 
     public getSymbolInfoByChar(char:string):IFontSymbolInfo {
-        if (char===' ' && this.context.symbols[char]===undefined) return this.DEFAULT_SPACE_INFO;
+        if (Font.isDefaultChar(char) && this.context.symbols[char]===undefined) return this.DEFAULT_SPACE_INFO;
         const symbolInfo:IFontSymbolInfo =
             this.context.symbols[char] ||
             this.context.symbols['?']  ||
-            this.context.symbols[this.DEFAULT_SYMBOL_IN_CONTEXT]
+            this.DEFAULT_SYMBOL_IN_CONTEXT
         ;
         if (DEBUG && symbolInfo===undefined) {
             throw new DebugError(`no symbol info for character "${char}"`);
@@ -53,7 +57,7 @@ export class Font {
             throw new DebugError(`wrong texturePages array`);
         }
 
-        if (char===' ') return this.context.texturePages[0].texture;
+        if (Font.isDefaultChar(char)) return this.context.texturePages[0].texture;
 
         const pageId:number = this.getSymbolInfoByChar(char).pageId;
         if (DEBUG && (pageId<0 || pageId>this.context.texturePages.length-1)) {

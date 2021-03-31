@@ -172,12 +172,14 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
+        console.log(this.fnt);
+
         const tf:EditTextField = new EditTextField(this.game,this.fnt);
         tf.cursorColor = Color.fromCssLiteral(`#ffd8d8`);
 
         tf.pos.setXY(50,50);
         tf.size.setWH(700,420);
-        // tf.setAlignText(AlignText.JUSTIFY);
+        //tf.setAlignText(AlignText.JUSTIFY);
         //tf.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
         // tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         // tf.setAlignTextContentVertical(AlignTextContentVertical.TOP);

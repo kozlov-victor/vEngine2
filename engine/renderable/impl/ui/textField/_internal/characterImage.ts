@@ -138,8 +138,7 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
     }
 
     private updateVisibility():void {
-        //this.visible = this.characterInfo.rawChar !== ' ' && this.characterInfo.rawChar !== '\n';
-        this.visible = this.characterInfo.rawChar !== ' ';
+        this.visible = this.characterInfo.rawChar !== ' ' && this.characterInfo.rawChar !== '\n';
     }
 
 }
