@@ -21,7 +21,7 @@ export class Font {
             destOffsetX: 0,
             destOffsetY: 0,
             width: this.context.fontSize,
-            height: this.context.lineHeight,
+            height: this.context.lineHeight  + this.context.padding[0] + this.context.padding[2],
             widthAdvanced: this.context.fontSize,
             pageId: 0
         };
@@ -39,7 +39,9 @@ export class Font {
     }
 
     public getSymbolInfoByChar(char:string):IFontSymbolInfo {
-        if (Font.isDefaultChar(char) && this.context.symbols[char]===undefined) return this.DEFAULT_SPACE_INFO;
+        if (Font.isDefaultChar(char) && this.context.symbols[char]===undefined) {
+            return this.context.symbols[' '] || this.DEFAULT_SPACE_INFO;
+        }
         const symbolInfo:IFontSymbolInfo =
             this.context.symbols[char] ||
             this.context.symbols['?']  ||
