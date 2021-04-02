@@ -12,6 +12,7 @@ import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/str
 import {NEWLINE_CHAR, TypeHelper} from "@engine/renderable/impl/ui/textField/editTextField/typeHelper";
 import {Incrementer} from "@engine/resources/incrementer";
 import {IRect} from "@engine/geometry/rect";
+import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
 
 export class EditTextField extends RichTextField {
@@ -37,8 +38,10 @@ export class EditTextField extends RichTextField {
     }
 
     public _requestFocusForTextRow(textRow:TextRow):void {
-        let currentOffsetVertical:number = this.getCurrentOffsetVertical();
         const clientRect:Readonly<IRect> = this.getClientRect();
+        if (this.rowSet.size.height<clientRect.height) return;
+
+        let currentOffsetVertical:number = this.getCurrentOffsetVertical();
         if (textRow.pos.y + textRow.size.height - Math.abs(currentOffsetVertical) > clientRect.height) { // scroll to bottom if it needs
             currentOffsetVertical = -(textRow.pos.y + textRow.size.height - clientRect.height);
         } else if (textRow.pos.y - Math.abs(currentOffsetVertical) < 0) { // scroll to top if it needs
@@ -76,6 +79,16 @@ export class EditTextField extends RichTextField {
             row.addWord(newLineWord,false);
         }
         if (this.cursor!==undefined) this.cursor.clearDirtyTyped();
+    }
+
+    public setText(text: string | number):void {
+        super.setText(text);
+        if (this.cursor!==undefined) this.cursor.currentRow = undefined;
+    }
+
+    public setRichText(node: VirtualNode):void {
+        super.setRichText(node);
+        if (this.cursor!==undefined) this.cursor.currentRow = undefined;
     }
 
     public _getRowSet():TextRowSet {

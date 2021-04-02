@@ -6,7 +6,7 @@ import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
-import {ICharacterInfo, StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
+import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 import {Optional} from "@engine/core/declarations";
 import {Font} from "@engine/renderable/impl/general/font/font";
@@ -14,9 +14,10 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {IRect} from "@engine/geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {TypeHelper} from "@engine/renderable/impl/ui/textField/editTextField/typeHelper";
+import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
+import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
 
 
 export class Cursor {
@@ -63,6 +64,7 @@ export class Cursor {
     private listenToMouse():void {
 
         const listener = (e:IKeyBoardEvent)=>{
+            if (this.typeHelper.isDirty()) return;
             switch (e.key) {
                 case KEYBOARD_KEY.RIGHT:
                     this.moveToNextPosition(1);
@@ -198,18 +200,36 @@ export class Cursor {
         const rowSet:TextRowSet = this.parent._getRowSet();
         if (this.currentRow===undefined) this.placeToDefaultPosition();
 
-        const posY:number =
-            rowSet.pos.y + (this.currentRow?.pos?.y ?? 0);
-        const posX:number =
-            rowSet.pos.x + (this.currentRow?.pos?.x ?? 0) +
-            (this.currentWord?.pos?.x ?? 0) +
-            (this.currentCharImage?.pos?.x ?? 0);
+        const symbolInfo:Optional<IFontSymbolInfo> =
+            this.currentCharImage===undefined?
+                undefined:
+                this.font.getSymbolInfoByChar(this.currentCharImage.getCharacterInfo().rawChar);
 
-        this.cursorView.pos.setXY(posX,posY);
+        let posY:number = rowSet.pos.y;// + this.font.context.base/2; // todo <- experimental, to investigate!
+        if (this.currentRow!==undefined) {
+            posY+=this.currentRow.pos.y;
+        }
+
+        let posX:number = rowSet.pos.x;
+        if (this.currentWord!==undefined) {
+            posX+=this.currentWord.pos.x;
+        }
+        if (this.currentRow!==undefined) {
+            posX+=this.currentRow.pos.x;
+        }
         if (this.currentCharImage!==undefined) {
-            this.cursorView.size.set(this.currentCharImage.size);
+            posX+=this.currentCharImage.pos.x;
+        }
+        this.cursorView.pos.setXY(posX,posY);
+
+        if (this.currentCharImage!==undefined && symbolInfo!==undefined) {
+            const scaleFromCurrFontSize:number = this.currentCharImage.getCharacterInfo().scaleFromCurrFontSize;
+            this.cursorView.size.setWH(
+                symbolInfo.widthAdvanced * scaleFromCurrFontSize,
+                this.font.context.lineHeight * scaleFromCurrFontSize
+            );
         } else {
-            this.cursorView.size.setWH(this.font.context.fontSize/2,this.font.context.fontSize);
+            this.cursorView.size.setWH(this.font.context.fontSize/2,this.font.context.lineHeight);
         }
     }
 

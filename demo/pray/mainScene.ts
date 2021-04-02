@@ -21,6 +21,8 @@ import {Color} from "@engine/renderer/common/color";
 import {InsetBorder} from "@engine/renderable/impl/geometry/insetBorder";
 import {Button} from "@engine/renderable/impl/ui/button/button";
 import {Image} from "@engine/renderable/impl/general/image";
+import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
+import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 
 export class MainScene extends Scene {
 
@@ -30,10 +32,11 @@ export class MainScene extends Scene {
     public onReady():void {
 
         this.backgroundColor.setRGB(12,12,12);
-        const tf:TextField = new ScrollableTextField(this.game,this.r.themeFont);
+        this.game.addControl(KeyboardControl);
+        const tf:TextField = new EditTextField(this.game,this.r.themeFont);
         tf.size.setWH(615,500);
-        tf.setWordBrake(WordBrake.FIT);
         tf.setAlignText(AlignText.JUSTIFY);
+        tf.setWordBrake(WordBrake.FIT);
         tf.setPadding(10);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.pos.setXY(90,23);

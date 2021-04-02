@@ -201,6 +201,7 @@ export namespace FontFactory {
         const [up,right,down,left] = querySelector(doc,'info').getAttribute('padding').split(',').map(it=>+it || 0);
         const [spacingHorizontal, spacingVertical] = querySelector(doc,'info').getAttribute('spacing').split(',').map(it=>+it || 0);
         const lineHeight:number = +(querySelector(doc,'common').getAttribute('lineHeight'));
+        const base:number = +(querySelector(doc,'common').getAttribute('base') || 0);
         const fontFamily:string = querySelector(doc,'info').getAttribute('face');
         const fontSize:number = +querySelector(doc,'info').getAttribute('size');
         const kerning:Record<string, number> = {};
@@ -218,6 +219,7 @@ export namespace FontFactory {
             spacing: [spacingHorizontal, spacingVertical],
             symbols: {},
             kerning,
+            base,
         };
 
         const chars:XmlElement[] = doc.querySelectorAll('char');
@@ -289,6 +291,7 @@ export namespace FontFactory {
                 texturePages,
                 fontFamily,
                 fontSize,
+                base:0,
             };
 
         return new Font(game,fontContext);

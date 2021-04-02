@@ -48,6 +48,9 @@ export class TypeHelper {
         this.parent.setStringEx(strEx);
     }
 
+    public isDirty():boolean {
+        return this.dirtyCharId!==undefined;
+    }
 
     public clearDirtyTyped():void {
         if (this.dirtyCharId===undefined) return;
