@@ -64,6 +64,7 @@ export class Cursor {
     private listenToMouse():void {
 
         const listener = (e:IKeyBoardEvent)=>{
+            if (!this.parent.isFocused()) return;
             if (this.typeHelper.isDirty()) return;
             switch (e.key) {
                 case KEYBOARD_KEY.RIGHT:
@@ -95,7 +96,8 @@ export class Cursor {
     }
 
     private nextBlink():void {
-        this.visible = !this.visible;
+        if (!this.parent.isFocused()) this.visible = false;
+        else this.visible = !this.visible;
         this.cursorView.visible = this.visible;
         this.redrawCursorView();
     }
@@ -197,15 +199,15 @@ export class Cursor {
 
     private updateCursorViewGeometry():void {
         if (!this.visible) return;
-        const rowSet:TextRowSet = this.parent._getRowSet();
         if (this.currentRow===undefined) this.placeToDefaultPosition();
 
+        const rowSet:TextRowSet = this.parent._getRowSet();
         const symbolInfo:Optional<IFontSymbolInfo> =
             this.currentCharImage===undefined?
                 undefined:
                 this.font.getSymbolInfoByChar(this.currentCharImage.getCharacterInfo().rawChar);
 
-        let posY:number = rowSet.pos.y;// + this.font.context.base/2; // todo <- experimental, to investigate!
+        let posY:number = rowSet.pos.y + this.font.context.base - this.font.context.lineHeight;// + this.font.context.base/2; // todo <- experimental, to investigate!
         if (this.currentRow!==undefined) {
             posY+=this.currentRow.pos.y;
         }

@@ -13,9 +13,11 @@ import {NEWLINE_CHAR, TypeHelper} from "@engine/renderable/impl/ui/textField/edi
 import {Incrementer} from "@engine/resources/incrementer";
 import {IRect} from "@engine/geometry/rect";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {IKeyboardFocusable} from "@engine/renderable/impl/ui/textField/_internal/iKeyboardFocusable";
+import {CurrentIKeyBoardFocusable} from "@engine/renderable/impl/ui/textField/_internal/currentIKeyBoardFocusable";
 
 
-export class EditTextField extends RichTextField {
+export class EditTextField extends RichTextField implements IKeyboardFocusable{
 
     public cursorColor:Color = Color.GREY.clone();
 
@@ -23,6 +25,7 @@ export class EditTextField extends RichTextField {
 
     constructor(game:Game,font:Font) {
         super(game,font);
+        this.focus();
         this.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
     }
 
@@ -93,6 +96,18 @@ export class EditTextField extends RichTextField {
 
     public _getRowSet():TextRowSet {
         return this.rowSet;
+    }
+
+    public blur(): void {
+        CurrentIKeyBoardFocusable.setFocusable(undefined);
+    }
+
+    public focus(): void {
+        CurrentIKeyBoardFocusable.setFocusable(this);
+    }
+
+    public isFocused(): boolean {
+        return CurrentIKeyBoardFocusable.isFocusable(this);
     }
 
 }
