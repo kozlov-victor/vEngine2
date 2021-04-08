@@ -23,7 +23,6 @@ import {Button} from "@engine/renderable/impl/ui/button/button";
 import {Image} from "@engine/renderable/impl/general/image";
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
-import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
 
 export class MainScene extends Scene {
 
