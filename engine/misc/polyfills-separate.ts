@@ -5,17 +5,17 @@ enum States {
     REJECTED
 }
 
-interface ICallBack {
-    fulfilled?: (result:any)=>void;
-    rejected?: (result:any)=>void;
-    next: PromisePolyfill;
+interface ICallBack<T> {
+    fulfilled?: (result:T)=>void;
+    rejected?: (result:T)=>void;
+    next: PromisePolyfill<T>;
 }
 
-class PromisePolyfill {
+class PromisePolyfill<T> {
 
-    constructor(executor:(resolve:(result:any)=>void,reject:(result:any)=>void)=>void) {
+    constructor(executor:(resolve:(result:T)=>void,reject:(result:T)=>void)=>void) {
         this.state = States.PENDING;
-        this.value = undefined;
+        this.value = undefined!;
         this.callbacks = [];
 
         try {
@@ -27,26 +27,38 @@ class PromisePolyfill {
     }
 
     private state:States = States.PENDING;
-    private callbacks:ICallBack[] = [];
+    private callbacks:ICallBack<T>[] = [];
     private value:any;
 
-    private static _findCallBackByState(cb:ICallBack,state:States):((result:any)=>void)|undefined{
+    public static resolve<T>(result?:T):PromisePolyfill<T> {
+        return new PromisePolyfill((resolve)=>{
+           resolve(result!);
+        });
+    }
+
+    public static reject<T>():PromisePolyfill<T> {
+        return new PromisePolyfill((resolve,reject)=>{
+            reject(undefined!);
+        });
+    }
+
+    private static _findCallBackByState<T>(cb:ICallBack<T>,state:States):((result:T)=>void)|undefined{
         if (state===States.FULFILLED) return cb.fulfilled;
         else if (state===States.REJECTED) return cb.rejected;
         else return undefined;
     }
 
-    public then(onfulfilled?:(result:any)=>void, onrejected?:(result:any)=>void):PromisePolyfill {
-        const next = new PromisePolyfill(() => {});
+    public then(onFulfilled?:(result:T)=>void, onRejected?:(result:any)=>void):PromisePolyfill<T> {
+        const next = new PromisePolyfill<T>(() => {});
         this.callbacks.push({
-            fulfilled: onfulfilled,
-            rejected: onrejected,
+            fulfilled: onFulfilled,
+            rejected: onRejected,
             next
         });
         return next;
     }
 
-    public catch(onrejected:(result:any)=>void):PromisePolyfill {
+    public catch(onrejected:(result:T)=>void):PromisePolyfill<T> {
         return this.then(undefined, onrejected);
     }
 
