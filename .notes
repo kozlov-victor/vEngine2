@@ -5,3 +5,5 @@ https://css-live.ru/articles/rukovodstvo-po-svg-animaciyam-smil.html
 https://ts-ast-viewer.com/#
 https://webkul.com/blog/morphing-using-svg-animate-css/
 https://css-tricks.com/svg-shape-morphing-works/
+
+image-rendering: pixelated;

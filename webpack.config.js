@@ -4,10 +4,46 @@ const webpack = require('webpack');
 const fs = require('fs');
 const TerserPlugin = require('terser-webpack-plugin');
 const cliUI = require('./node_tools/cliUI');
-const engineTransformer = require('./node_tools/transformers/build/engineTransformer').engineTransformer;
 
 let project;
 let allProjects;
+
+
+class InputOutputResolver {
+
+    resolve(project,allProjects){
+        const entry = {};
+        const output = {};
+        let isToolsBuild = false;
+
+        if (project==='build_tools') {
+            isToolsBuild = true;
+            entry['xmlParser'] = './engine/misc/xml/xmlParser.ts';
+            entry['engineTransformer'] = './node_tools/transformers/src/engineTransformer.ts';
+            output.path = path.resolve('./node_tools/build');
+        } else {
+            if (!project) {
+                allProjects.forEach((dir)=>{
+                    entry[`${dir}`] = [`./demo/${dir}/index.ts`];
+                });
+            } else {
+                entry[project] = [`./demo/${project}/index.ts`];
+            }
+
+            entry['debug'] = './engine/debug/debug.ts';
+            entry['inspector'] = './engine/debug/inspector.tsx';
+            entry['polyfills-separate'] = './engine/misc/polyfills-separate.ts';
+            output.path = path.resolve('./demo/out');
+        }
+
+        output.filename = '[name].js';
+        output.chunkFilename = "[name].chunk.js";
+
+        return {entry,output,isToolsBuild};
+    }
+
+}
+
 
 class WebpackDonePlugin{
     apply(compiler){
@@ -74,8 +110,9 @@ module.exports = async (env={})=>{
         ]
     );
     if (mode===1) {
-        const index = await cliUI.choose('Select a project',allProjects);
-        project = allProjects[index];
+        const projectsToSelect = [...allProjects,'build_tools']
+        const index = await cliUI.choose('Select a project',projectsToSelect);
+        project = projectsToSelect[index];
         console.log(`Selected: ${project}`);
     } if (mode===2) {
         project = await cliUI.prompt("Enter project name to compile")
@@ -83,24 +120,7 @@ module.exports = async (env={})=>{
 
     const debug = env.debug==='true';
 
-    const entry = {};
-    const output = {
-        path: path.resolve('./demo/out'),
-        filename:'[name].js',
-        //chunkFilename: "[name].chunk.js",
-    };
-
-    if (project) {
-        entry[project] = [`./demo/${project}/index.ts`]
-    } else {
-        allProjects.forEach((dir)=>{
-            entry[`${dir}`] = [`./demo/${dir}/index.ts`];
-        });
-    }
-
-    entry['debug'] = './engine/debug/debug.ts';
-    entry['inspector'] = './engine/debug/inspector.tsx';
-    entry['polyfills-separate'] = './engine/misc/polyfills-separate.ts';
+    const {entry,output,isToolsBuild} = new InputOutputResolver().resolve(project,allProjects);
 
     console.log('webpack started at',new Date());
     console.log('env',env);
@@ -130,27 +150,37 @@ module.exports = async (env={})=>{
                         {loader: "glsl/glsl-loader",options: {debug}},
                     ]
                 },
-                {
-                    test: /\.xml$/,
-                    use: [
-                        {loader: "xml/xml-loader",options: {debug}},
-                    ]
-                },
+                (()=>{
+                    if (project!=='build_tools') {
+                        return {
+                            test: /\.xml$/,
+                            use: [
+                                {loader: "xml/xml-loader",options: {debug}},
+                            ]
+                        }
+                    }
+                    else return undefined;
+                })(),
                 {
                     test: /\.(png|jpe?g)$/,
                     use: [
                         {loader: 'base64/base64-loader',options: {debug}}
                     ]
                 },
-                {
-                    test: /\.tsx?$/,
-                    enforce: 'pre',
-                    use: [
-                        {
-                            loader: "ts-engine-precompiler/ts-engine-precompiler"
-                        },
-                    ]
-                },
+                (()=>{
+                    if (project!=='build_tools') {
+                        return {
+                            test: /\.tsx?$/,
+                            enforce: 'pre',
+                            use: [
+                                {
+                                    loader: "ts-engine-precompiler/ts-engine-precompiler"
+                                },
+                            ]
+                        }
+                    }
+                    else return undefined;
+                })(),
                 {
                     test: /\.tsx?$/,
                     enforce: 'pre',
@@ -171,9 +201,11 @@ module.exports = async (env={})=>{
                             loader: "awesome-typescript-loader",options: {
                                 getCustomTransformers: program => {
                                     return {
-                                        before: [
-                                            engineTransformer
-                                        ]
+                                        before:  (()=>{
+                                            if (isToolsBuild) return undefined;
+                                            const engineTransformer = require('./node_tools/build/engineTransformer').engineTransformer;
+                                            return [engineTransformer];
+                                        })()
                                     }
                                 },
                             },
@@ -196,6 +228,8 @@ module.exports = async (env={})=>{
             emitOnErrors: false,
         },
     };
+
+    config.module.rules = config.module.rules.filter(it=>!!it);
 
     if (!debug) {
 

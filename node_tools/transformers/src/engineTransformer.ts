@@ -1,13 +1,23 @@
-import * as ts from 'typescript';
+import {XmlParser} from "@engine/misc/xml/xmlParser";
+
+declare const __non_webpack_require__:any;
+
+const ts = __non_webpack_require__ ('typescript') as any;
+
+const stringAsClearedArray = (content:string):string[]=>{
+    return content.
+    split('\r').join('\n').
+    split('\n').
+    filter(it=>!!it.trim()).
+    filter(it=>!it.startsWith('//'));
+};
+
 
 // @ts-ignore
-import {stringAsClearedArray} from "../../common/common";
-import {tsquery} from "@phenomnomnominal/tsquery";
-import {tstemplate} from "@phenomnomnominal/tstemplate";
-
-
-export const engineTransformer = <T extends ts.Node>(context: ts.TransformationContext) => {
+const engineTransformer = <T extends ts.Node>(context: ts.TransformationContext) => {
+    // @ts-ignore
     return (rootNode: ts.SourceFile) => {
+        // @ts-ignore
         function visit(node: ts.Node): ts.Node {
             if (node.kind===ts.SyntaxKind.TaggedTemplateExpression) {
                 const [tag, template] = node.getChildren();
@@ -22,3 +32,7 @@ export const engineTransformer = <T extends ts.Node>(context: ts.TransformationC
         return ts.visitNode(rootNode, visit);
     };
 };
+
+if (typeof exports!=='undefined') {
+    exports.engineTransformer = engineTransformer;
+}

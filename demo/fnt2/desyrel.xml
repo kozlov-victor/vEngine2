@@ -64,7 +64,7 @@
         <char id="84" x="340" y="256" width="57" height="47" xoffset="-6" yoffset="21" xadvance="37" page="0" chnl="0" letter="T"/>
         <char id="104" x="398" y="256" width="52" height="47" xoffset="7" yoffset="18" xadvance="44" page="0" chnl="0" letter="h"/>
         <char id="37" x="451" y="256" width="49" height="46" xoffset="5" yoffset="25" xadvance="48" page="0" chnl="0" letter="%"/>
-        <char id="62" x="1" y="308" width="41" height="46" xoffset="2" yoffset="24" xadvance="38" page="0" chnl="0" letter=">"/>
+        <char id="62" x="1" y="308" width="41" height="46" xoffset="2" yoffset="24" xadvance="38" page="0" chnl="0" letter="&gt;"/>
         <char id="60" x="43" y="308" width="41" height="46" xoffset="2" yoffset="24" xadvance="37" page="0" chnl="0" letter="&lt;"/>
         <char id="35" x="85" y="308" width="39" height="46" xoffset="3" yoffset="24" xadvance="36" page="0" chnl="0" letter="#"/>
         <char id="105" x="125" y="308" width="33" height="46" xoffset="7" yoffset="22" xadvance="27" page="0" chnl="0" letter="i"/>

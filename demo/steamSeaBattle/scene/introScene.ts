@@ -2,7 +2,7 @@ import {AssetsDocumentHolder} from "../data/assetsDocumentHolder";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MainScene} from "./mainScene";
 import {BaseScene} from "./baseScene";
-import {XmlElement} from "@engine/misc/xmlUtils";
+import {XmlNode} from "@engine/misc/xml/xmlELements";
 
 export class IntroScene extends BaseScene {
 
@@ -11,6 +11,7 @@ export class IntroScene extends BaseScene {
         this.sounds.intro.play();
         this.sounds.gear.loop = true;
         this.sounds.gear.play();
+        console.log(this.findChildById('coin_acceptor'));
         this.findChildById('coin_acceptor')!.on(MOUSE_EVENTS.click,(e:any)=>{
             this.findChildById('coin')!.visible = true;
             this.sounds.start.play();
@@ -21,7 +22,7 @@ export class IntroScene extends BaseScene {
         });
     }
 
-    protected getSceneElement(): XmlElement {
+    protected getSceneElement(): XmlNode {
         return AssetsDocumentHolder.getDocument().getElementById('intro')!;
     }
 

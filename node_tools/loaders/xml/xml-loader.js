@@ -1,11 +1,11 @@
-
-const dom = require('./dom');
+const XmlParser = require('../../build/xmlParser').XmlParser;
 
 module.exports = function(content) {
     //console.log(this);
-    const document = dom.createDocument(content,true);
+    const parser = new XmlParser(content);
+    const node = parser.getTree();
     return `
-        var document = require('@engine/misc/xmlUtils').XmlDocument;
-        module.exports = document.create(${JSON.stringify(document.toJSON())});
+        var document = require('@engine/misc/xml/xmlElements').XmlDocument;
+        module.exports = document.create(${JSON.stringify(node.toJSON())});
     `;
 };

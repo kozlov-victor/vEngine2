@@ -164,7 +164,7 @@ export class TextRowSet extends SimpleGameObjectContainer {
             }
             case WordBrake.FIT: {
                 stringEx.
-                split(['\t','\n','\r',' '],false).filter(it=>it.asRaw().trim().length).
+                split(['\t','\n','\r',' '],false).filter(it=>it.asString().trim().length).
                 forEach(s=>{
                     this.addWord(new Word(this.game,this.font,s.getAllChars(),this.color,this.pixelPerfect),true,true);
                 });

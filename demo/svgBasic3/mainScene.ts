@@ -41,11 +41,11 @@ import * as svgEx39 from "xml/xml-loader!./examples/ex39.svg";
 
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {XmlElement} from "@engine/misc/xmlUtils";
 import {SvgImage} from "../svgBasic/svgImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {XmlDocument} from "@engine/misc/xml/xmlELements";
 
-const images:XmlElement[] = [
+const images:XmlDocument[] = [
 
     svgEx36,svgEx37,svgEx38,svgEx39,
 

@@ -23,6 +23,7 @@ export namespace FontTypes {
         texturePages: ITextureWithId[];
         fontFamily: string;
         fontSize: number;
+        base:number;
     }
 
     export interface ICssFontParameters {

@@ -7,6 +7,7 @@ import {VerticalScrollBar} from "@engine/renderable/impl/ui/scrollBar/verticalSc
 import {HorizontalScrollBar} from "@engine/renderable/impl/ui/scrollBar/horizontalScrollBar";
 import {Game} from "@engine/core/game";
 import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
+import {noop} from "@engine/misc/object";
 
 export class ScrollContainerDelegate {
 
@@ -16,7 +17,7 @@ export class ScrollContainerDelegate {
     private readonly vScrollBar: VerticalScrollBar;
     private readonly hScrollBar: HorizontalScrollBar;
 
-    private _onScroll:()=>void = ()=>{};
+    private _onScroll:()=>void = noop;
 
     constructor(
         private game:Game,
@@ -89,10 +90,10 @@ export class ScrollContainerDelegate {
 
     private updateScrollValues():void {
         this.vScrollBar.maxValue = this.scrollableContainer.size.height;
-        this.vScrollBar.value = - this.vScrollContainerListener.getScrollPosition();
+        this.vScrollBar.value = - this.vScrollContainerListener.getCurrentOffset();
 
         this.hScrollBar.maxValue = this.scrollableContainer.size.width;
-        this.hScrollBar.value = - this.hScrollContainerListener.getScrollPosition();
+        this.hScrollBar.value = - this.hScrollContainerListener.getCurrentOffset();
 
     }
 

@@ -1,6 +1,6 @@
 import {ISize} from "@engine/geometry/size";
 import {IRectJSON} from "@engine/geometry/rect";
-import {XmlDocument, XmlElement} from "@engine/misc/xmlUtils";
+import {XmlDocument, XmlNode} from "@engine/misc/xml/xmlELements";
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
@@ -187,8 +187,8 @@ export namespace FontFactory {
         return cnv.toDataURL();
     };
 
-    const querySelector = (doc:XmlDocument, path:string):XmlElement=>{
-        const res:XmlElement = doc.querySelector(path);
+    const querySelector = (doc:XmlDocument, path:string):XmlNode=>{
+        const res:XmlNode = doc.querySelector(path);
         if (DEBUG && res===undefined) {
             console.error(doc);
             throw new DebugError(`can not receive node ${path} from document`);
@@ -201,6 +201,7 @@ export namespace FontFactory {
         const [up,right,down,left] = querySelector(doc,'info').getAttribute('padding').split(',').map(it=>+it || 0);
         const [spacingHorizontal, spacingVertical] = querySelector(doc,'info').getAttribute('spacing').split(',').map(it=>+it || 0);
         const lineHeight:number = +(querySelector(doc,'common').getAttribute('lineHeight'));
+        const base:number = +(querySelector(doc,'common').getAttribute('base') || lineHeight);
         const fontFamily:string = querySelector(doc,'info').getAttribute('face');
         const fontSize:number = +querySelector(doc,'info').getAttribute('size');
         const kerning:Record<string, number> = {};
@@ -218,11 +219,12 @@ export namespace FontFactory {
             spacing: [spacingHorizontal, spacingVertical],
             symbols: {},
             kerning,
+            base,
         };
 
-        const chars:XmlElement[] = doc.querySelectorAll('char');
+        const chars:XmlNode[] = doc.querySelectorAll('char');
         for (let i:number=0;i<chars.length;i++){
-            const el:XmlElement = chars[i];
+            const el:XmlNode = chars[i];
             const id:number = +(el.getAttribute('id'));
             const width:number = +(el.getAttribute('width')) || ~~(lineHeight / 3) || 16;
             const widthAdvanced:number = +(el.getAttribute('xadvance')) || width;
@@ -285,6 +287,7 @@ export namespace FontFactory {
                 padding: partialContext.padding,
                 spacing: partialContext.spacing,
                 symbols: partialContext.symbols,
+                base:partialContext.lineHeight,
                 kerning: {},
                 texturePages,
                 fontFamily,

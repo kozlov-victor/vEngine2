@@ -12,6 +12,7 @@ export interface ICharacterInfo {
     fontSize?:number;
     font?:Font;
     scaleFromCurrFontSize:number;
+    uuid?:number;
 }
 
 export class StringEx {
@@ -68,11 +69,15 @@ export class StringEx {
         return this.chars;
     }
 
+    public getSize():number {
+        return this.chars.length;
+    }
+
     public append(str:StringEx):void {
         this.chars.push(...str.chars);
     }
 
-    public asRaw():string{
+    public asString():string{
         return this.chars.map(it=>it.rawChar).join('');
     }
 

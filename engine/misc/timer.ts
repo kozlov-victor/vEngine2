@@ -1,6 +1,7 @@
 import {Game} from "@engine/core/game";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {removeFromArray} from "@engine/misc/object";
+import {DebugError} from "@engine/debug/debugError";
 
 export class Timer {
 
@@ -9,6 +10,9 @@ export class Timer {
     private readonly _interval:number;
 
     constructor(private parent:TimerDelegate,callback:()=>void,interval:number,private once:boolean){
+        if (DEBUG) {
+            if (interval<=0) throw new DebugError(`can not create timer with interval ${interval}`);
+        }
         this._interval = interval;
         this._callback = callback;
     }
@@ -22,6 +26,10 @@ export class Timer {
             this._callback();
             if (this.once) this.kill();
         }
+    }
+
+    public reset():void {
+        this._lastTime = 0;
     }
 
     public kill():void{

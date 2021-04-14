@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {IURLRequest} from "@engine/resources/urlLoader";
 import {DebugError} from "@engine/debug/debugError";
 import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
-import {XmlDocument, IDocumentDescription} from "@engine/misc/xmlUtils";
+import {XmlDocument} from "@engine/misc/xml/xmlELements";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import ICssFontParameters = FontTypes.ICssFontParameters;
 

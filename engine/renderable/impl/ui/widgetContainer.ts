@@ -1,6 +1,6 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
-import {IRectJSON, Rect} from "@engine/geometry/rect";
+import {IRect, Rect} from "@engine/geometry/rect";
 import {SimpleGameObjectContainer} from "../general/simpleGameObjectContainer";
 import {MarkableGameObjectContainer} from "@engine/renderable/impl/ui/textField/_internal/markableGameObjectContainer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
@@ -35,6 +35,10 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         super.appendChild(this.backgroundHover);
         super.appendChild(this.backgroundActive);
         super.appendChild(this.backgroundDisabled);
+
+        this.clientRect.observe(()=>{
+            this.onClientRectChanged();
+        });
 
         if (game.hasControl('MouseControl')) {
             this.listenToHoverState();
@@ -141,7 +145,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         this.setState(this.state);
     }
 
-    public getClientRect():Readonly<IRectJSON> {
+    public getClientRect():Readonly<IRect> {
         return this.clientRect;
     }
 
@@ -181,6 +185,8 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
             }
         }
     }
+
+    protected onClientRectChanged():void {}
 
     private listenToHoverState():void {
         this.on(MOUSE_EVENTS.mouseEnter, e=>{

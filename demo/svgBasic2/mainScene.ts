@@ -12,15 +12,18 @@ import * as svgEx11 from "xml/xml-loader!./examples/frame1.svg";
 import * as svgEx12 from "xml/xml-loader!./examples/person.svg";
 import * as svgEx13 from "xml/xml-loader!./examples/test-1.svg";
 import * as svgEx14 from "xml/xml-loader!./examples/test-2.svg";
+import * as rabbit from "xml/xml-loader!./examples/rabbit.svg";
+import * as dog from "xml/xml-loader!./examples/dog.svg";
 
 
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {XmlElement} from "@engine/misc/xmlUtils";
 import {SvgImage} from "../svgBasic/svgImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {XmlDocument} from "@engine/misc/xml/xmlELements";
 
-const images:XmlElement[] = [
+const images:XmlDocument[] = [
+    rabbit, dog,
     svgEx12,svgEx11,svgEx13,svgEx14,
     svgEx9,svgEx10,
     svgEx6,svgEx7,svgEx8,

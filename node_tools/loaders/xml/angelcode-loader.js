@@ -5,7 +5,7 @@
 const parseToNode = (row)=>{
     const tags = row.split(' ').map(it=>it.trim()).filter(it=>it.length);
     const tagName = tags.shift();
-    const element = {tagName,attributes:{}};
+    const element = {tagName,attributes:{},children:[]};
     tags.forEach(it=>{
        const pair = it.split('=');
        const key = pair[0].trim();
@@ -34,7 +34,7 @@ const parseToDocument = (source)=>{
 module.exports = function(content) {
     const document = parseToDocument(content);
     return `
-        var document = require('@engine/misc/xmlUtils').XmlDocument;
+        var document = require('@engine/misc/xml/xmlElements').XmlDocument;
         module.exports = document.create(${JSON.stringify(document)});
     `;
 };

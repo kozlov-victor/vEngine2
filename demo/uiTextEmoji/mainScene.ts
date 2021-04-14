@@ -65,9 +65,6 @@ export class MainScene extends Scene {
         btn.setBackground(bg);
         btn.setPadding(20);
         this.appendChild(btn);
-        (window as any).b = btn;
-
-
     }
 
 }

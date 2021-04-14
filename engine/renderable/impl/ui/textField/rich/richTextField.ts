@@ -25,9 +25,14 @@ export class RichTextField extends ScrollableTextField {
         this.markAsDirty();
     }
 
+    public setStringEx(str:StringEx):void {
+        this._textEx = str;
+        this.markAsDirty();
+    }
+
     public getText(): string {
         if (this._textEx===undefined) return super.getText();
-        else return this._textEx.asRaw();
+        else return this._textEx.asString();
     }
 
     private traverseNode(node:VirtualNode,fragments:ITextFragment[]):void {

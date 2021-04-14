@@ -210,7 +210,7 @@ class DrawingSession implements IDrawingSession {
     }
 
     public drawModel(model:RenderableModel,clearColor?:Color):void{
-        if (DEBUG && !model) throw new DebugError(`illegal argument`);
+        if (DEBUG && !model) throw new DebugError(`illegal argument: ${model}`);
         const parent:RenderableModel = model.parent;
         this.surface.appendChild(this._transformableContainer);
         this._transformableContainer.appendChild(model);
