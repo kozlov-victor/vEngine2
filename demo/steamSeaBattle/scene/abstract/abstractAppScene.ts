@@ -9,9 +9,9 @@ import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {DebugError} from "@engine/debug/debugError";
-import {XmlElement} from "@engine/misc/xmlUtils";
 import {ImageButton} from "@engine/renderable/impl/ui/button/imageButton";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {XmlNode} from "@engine/misc/xml/xmlELements";
 
 
 export abstract class AbstractAppScene extends Scene {
@@ -27,7 +27,7 @@ export abstract class AbstractAppScene extends Scene {
         rect.pos.setY(200);
         this.preloadingGameObject = rect;
 
-        this.getSceneElement().getElementsByTagName('image').forEach((el:XmlElement)=>{
+        this.getSceneElement().getElementsByTagName('image').forEach((el:XmlNode)=>{
             taskQueue.addNextTask(async progress=>{
                 this.links[el.getAttribute('src')] =
                     await taskQueue.getLoader().loadTexture({
@@ -36,7 +36,7 @@ export abstract class AbstractAppScene extends Scene {
                     },progress);
             });
         });
-        this.getSceneElement().getElementsByTagName('imageButton').forEach((el:XmlElement)=>{
+        this.getSceneElement().getElementsByTagName('imageButton').forEach((el:XmlNode)=>{
             taskQueue.addNextTask(async progress=>{
                 this.links[el.getAttribute('src-on')] =
                     await taskQueue.getLoader().loadTexture({
@@ -53,7 +53,7 @@ export abstract class AbstractAppScene extends Scene {
             });
         });
 
-        this.getSceneElement().getElementsByTagName('sound').forEach((el:XmlElement)=>{
+        this.getSceneElement().getElementsByTagName('sound').forEach((el:XmlNode)=>{
             taskQueue.addNextTask(async progress=>{
                 const sound =
                     await taskQueue.getLoader().loadSound(
@@ -72,12 +72,13 @@ export abstract class AbstractAppScene extends Scene {
     }
 
     public onReady(): void {
-        const layerElements:XmlElement[] = this.getSceneElement().getElementsByTagName('layer');
+        const layerElements:XmlNode[] = this.getSceneElement().getElementsByTagName('layer');
         if (!layerElements.length) throw new Error(`no layer provided to scene`);
-        layerElements.forEach((el:XmlElement)=>{
+        console.log(layerElements);
+        layerElements.forEach((el:XmlNode)=>{
             const layer:Layer = new Layer(this.game);
             this.appendChild(layer);
-            this.resolveChildren(layer,el.children);
+            this.resolveChildren(layer,el.getChildNodes());
         });
     }
 
@@ -86,7 +87,7 @@ export abstract class AbstractAppScene extends Scene {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    protected abstract getSceneElement():XmlElement;
+    protected abstract getSceneElement():XmlNode;
 
     private getNumber(val:string,defaultVal?:number):number{
         let n:number = +val;
@@ -106,7 +107,7 @@ export abstract class AbstractAppScene extends Scene {
         return val;
     }
 
-    private afterObjectCreated(root:RenderableModel|Layer,r:RenderableModel,el:XmlElement):void{
+    private afterObjectCreated(root:RenderableModel|Layer,r:RenderableModel,el:XmlNode):void{
         r.pos.setXY(this.getNumber(el.getAttribute('left')),this.getNumber(el.getAttribute('top')));
         const rotationPointX:number = this.getNumber(el.getAttribute('rotationPointX'),0);
         const rotationPointY:number = this.getNumber(el.getAttribute('rotationPointY'),0);
@@ -115,7 +116,7 @@ export abstract class AbstractAppScene extends Scene {
         r.visible = !this.getBoolean(el.getAttribute('hidden'));
         r.passMouseEventsThrough = this.getBoolean(el.getAttribute('passMouseEventsThrough'));
         root.appendChild(r);
-        this.resolveChildren(r,el.children);
+        this.resolveChildren(r,el.getChildNodes());
     }
 
 
@@ -128,7 +129,7 @@ export abstract class AbstractAppScene extends Scene {
         return result;
     }
 
-    private createTweenDesc(target:Layer|RenderableModel,path:string,child:XmlElement):ITweenDescription<unknown>{
+    private createTweenDesc(target:Layer|RenderableModel,path:string,child:XmlNode):ITweenDescription<unknown>{
         return {
             target: this.getObjectByPath(path,target as unknown as Record<string,unknown>),
             from: {[child.getAttribute('property')]:this.getNumber(child.getAttribute('from'))},
@@ -138,8 +139,8 @@ export abstract class AbstractAppScene extends Scene {
         };
     }
 
-    private resolveChildren(root:Layer|RenderableModel,children:XmlElement[]):void{
-        children.forEach((child:XmlElement)=>{
+    private resolveChildren(root:Layer|RenderableModel,children:XmlNode[]):void{
+        children.forEach((child:XmlNode)=>{
             switch (child.tagName) {
                 case 'image': {
                     const img:Image = new Image(this.game,this.links[child.getAttribute('src')]);
@@ -164,7 +165,7 @@ export abstract class AbstractAppScene extends Scene {
                 }
                 case 'animationComposition': {
                     const tweenMovie:TweenMovie = new TweenMovie(this.game);
-                    child.children.forEach((c:XmlElement)=>{
+                    child.getChildNodes().forEach((c:XmlNode)=>{
                         const targetPath:string = c.getAttribute('target');
                         const tweenDesc = this.createTweenDesc(root,targetPath,c);
                         const startTime:number = this.getNumber(c.getAttribute('offset'));

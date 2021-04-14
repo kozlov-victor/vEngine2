@@ -3,7 +3,7 @@ import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, Optional, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
-import {XmlDocument, XmlElement} from "@engine/misc/xmlUtils";
+import {XmlDocument, XmlNode} from "@engine/misc/xml/xmlELements";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {Sound} from "@engine/media/sound";
 import {ITask, Queue} from "@engine/resources/queue";
@@ -125,7 +125,7 @@ export class ResourceLoader {
 
     public async loadFontFromAtlas(baseUrl:string|IURLRequest, doc:XmlDocument, progress?:(n:number)=>void):Promise<Font>{
         const texturePages:ITextureWithId[] = [];
-        const pages:XmlElement[] = doc.querySelectorAll('page');
+        const pages:XmlNode[] = doc.querySelectorAll('page');
         if (DEBUG && !pages.length) throw new DebugError(`no 'page' node`);
         for (const page of pages) {
             let baseUrlCopy:string|IURLRequest = baseUrl;

@@ -1,7 +1,9 @@
 
 const stringAsFilteredArray = require('../../common/common').stringAsClearedArray;
 
-module.exports = function(content) {
+
+module.exports = (content)=> {
+    // @ts-ignore
     const debug = !!(this.query||{}).debug;
     let arr = stringAsFilteredArray(content);
 

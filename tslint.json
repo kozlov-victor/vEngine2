@@ -1,7 +1,7 @@
 {
     "extends": "tslint:recommended",
     "rulesDirectory": [
-        "./node_tools/lints/build"
+
     ],
     "rules": {
         "align": {
@@ -79,8 +79,6 @@
         "typedef-whitespace": false,
         "variable-name": false,
         "unified-signatures": false,
-        "whitespace": false,
-        "v-engine-as-statement": false,
-        "v-engine-resource-decorator": true
+        "whitespace": false
     }
 }

@@ -8,5 +8,4 @@ package-lock.json
 yarn.lock
 demo/out/**
 demo/index.json
-node_tools/lints/build/*
-node_tools/transformers/build/*
+node_tools/build/*

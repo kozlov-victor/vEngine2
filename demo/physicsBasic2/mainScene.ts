@@ -8,7 +8,7 @@ import {Camera} from "@engine/renderer/camera";
 import * as doc from "./level.xml";
 import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {XmlDocument} from "@engine/misc/xmlUtils";
+import {XmlDocument} from "@engine/misc/xml/xmlELements";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 

@@ -18,11 +18,11 @@ import * as dog from "xml/xml-loader!./examples/dog.svg";
 
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {XmlElement} from "@engine/misc/xmlUtils";
 import {SvgImage} from "../svgBasic/svgImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {XmlDocument} from "@engine/misc/xml/xmlELements";
 
-const images:XmlElement[] = [
+const images:XmlDocument[] = [
     rabbit, dog,
     svgEx12,svgEx11,svgEx13,svgEx14,
     svgEx9,svgEx10,
