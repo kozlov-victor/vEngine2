@@ -62,9 +62,17 @@ export class TextField extends WidgetContainer {
         this.markAsDirty();
     }
 
+    public getText():string{
+        return this._text;
+    }
+
     public setAutoSize(val:boolean):void {
         this._autosize = val;
         this.markAsDirty();
+    }
+
+    public getAutoSize():boolean {
+        return this._autosize;
     }
 
     public setPixelPerfect(val:boolean):void {
@@ -72,9 +80,26 @@ export class TextField extends WidgetContainer {
         this.markAsDirty();
     }
 
-    revalidate():void {
+    public getPixelPerfect():boolean {
+        return this.pixelPerfect;
+    }
+
+    public revalidate():void {
         if (this.useCache) this._revalidateWithCache();
         else this._revalidateWithoutCache();
+    }
+
+    public setProps(props: ITextFieldProps):void {
+        super.setProps(props);
+        if (props.textColor) this.textColor.setRGBA(props.textColor.r,props.textColor.g,props.textColor.b,props.textColor.a);
+        if (props.text!==undefined) this.setText(props.text);
+        if (props.autoSize!==undefined) this.setAutoSize(props.autoSize);
+        if (props.pixelPerfect!==undefined) this.setPixelPerfect(props.pixelPerfect);
+        if (props.font!==undefined) this.setFont(props.font as Font);
+        if (props.alignText!==undefined) this.setAlignText(props.alignText);
+        if (props.alignTextContentVertical!==undefined) this.setAlignTextContentVertical(props.alignTextContentVertical);
+        if (props.alignTextContentHorizontal!==undefined) this.setAlignTextContentHorizontal(props.alignTextContentHorizontal);
+        if (props.wordBrake!==undefined) this.setWordBrake(props.wordBrake);
     }
 
     private _revalidateWithCache():void {
@@ -131,10 +156,6 @@ export class TextField extends WidgetContainer {
             );
         }
         super.revalidate();
-    }
-
-    public getText():string{
-        return this._text;
     }
 
     public destroy():void {

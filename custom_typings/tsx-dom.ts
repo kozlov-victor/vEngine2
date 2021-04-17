@@ -5,10 +5,6 @@ interface ICommonElement<T> {
     ref?:(el:T)=>void;
 }
 
-type Font = {
-    type: 'Font'
-} & {style?:Partial<CSSStyleDeclaration>};
-
 
 declare namespace JSX {
     // tslint:disable-next-line:interface-name

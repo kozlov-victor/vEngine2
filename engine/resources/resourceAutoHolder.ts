@@ -1,8 +1,6 @@
-import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {Scene, SCENE_EVENTS} from "@engine/scene/scene";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 import {DebugError} from "@engine/debug/debugError";
-import {container} from "webpack";
 import {TaskQueue} from "@engine/resources/taskQueue";
 
 export abstract class ResourceAutoHolder {

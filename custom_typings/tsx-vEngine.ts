@@ -10,10 +10,16 @@ interface IPoint {
     y:number;
 }
 
+type Font = {
+    type: 'Font'
+};
+
 interface IGenericProps<T> {
     key?:number|string;
     ref?:(el:T)=>void; // <input ref={(input) => { this.textInput = input; }} />
     click?:(e?:any)=>void;
+    mouseUp?:(e?:any)=>void;
+    mouseLeave?:(e?:any)=>void;
 }
 
 interface IPositionableProps {
@@ -63,6 +69,27 @@ interface IImageProps extends ITransformableProps, IPositionableProps {
     texture:{size:{width:number,height:number}};
 }
 
+interface IWidgetContainerProps  extends ITransformableProps, IPositionableProps {
+    margin?:[number,number,number,number]|[number,number,number]|[number,number]|[number];
+    padding?:[number,number,number,number]|[number,number,number]|[number,number]|[number];
+    background?:()=>IPositionableProps;
+    backgroundHover?:()=>IPositionableProps;
+    backgroundActive?:()=>IPositionableProps;
+    backgroundDisabled?:()=>IPositionableProps;
+}
+
+interface ITextFieldProps extends IWidgetContainerProps {
+    font: Font;
+    textColor?:IColor;
+    text?: string;
+    autoSize?:boolean;
+    pixelPerfect?:boolean;
+    alignTextContentHorizontal?:number;
+    wordBrake?:number;
+    alignTextContentVertical?:number;
+    alignText?:number;
+}
+
 declare namespace JSX {
     // tslint:disable-next-line:interface-name
     export interface IntrinsicElements {
@@ -73,5 +100,7 @@ declare namespace JSX {
         v_line:             ILineProps;
         v_image:            IImageProps;
         v_font:             Partial<{color:IColor, size:number,font:Font}>;
+        v_textField:        ITextFieldProps;
+        v_button:           ITextFieldProps;
     }
 }

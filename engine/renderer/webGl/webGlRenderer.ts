@@ -141,6 +141,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public setPixelPerfect(mode:boolean):void{
+        super.setPixelPerfect(mode);
         const interpolation:INTERPOLATION_MODE = mode?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR;
         this._currFrameBufferStack.setInterpolationMode(interpolation);
         this._currFrameBufferStack.setPixelPerfect(mode);

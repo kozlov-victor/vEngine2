@@ -8,6 +8,8 @@ import {
     DEFAULT_BACKGROUND_OBJECT_TYPE,
     DefaultBackgroundObject
 } from "@engine/renderable/impl/ui/_internal/defaultBackgroundObject";
+import {DebugError} from "@engine/debug/debugError";
+import {ICloneable} from "@engine/core/declarations";
 
 interface IContainerWithMarginPadding {
     marginLeft      :number;
@@ -72,6 +74,8 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
     private hovered:boolean = false;
     private clicked:boolean = false;
 
+    private memoizeCache:Record<string, RenderableModel> = {};
+
     private static normalizeBorders(top:number,right?:number,bottom?:number,left?:number)
         :{top:number,right:number,bottom:number,left:number} {
         if (right===undefined && bottom===undefined && left===undefined) {
@@ -88,31 +92,28 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         return {top,right:right!,bottom:bottom!,left:left!};
     }
 
-    public setMargin(top:number,right?:number,bottom?:number,left?:number):void{
-        ({top,right,bottom,left} = WidgetContainer.normalizeBorders(top,right,bottom,left));
-        const thisWriteable = this as IContainerWithMarginPadding;
-        thisWriteable.marginTop = top;
-        thisWriteable.marginRight = right;
-        thisWriteable.marginBottom = bottom;
-        thisWriteable.marginLeft = left;
-        this.recalculateClientRect();
-        this.fitBackgroundToSize();
-        this.markAsDirty();
+    private getMemoizedView(factory:()=>IPositionableProps):RenderableModel {
+        const model = factory() as RenderableModel & ICloneable<RenderableModel>;
+        this.memoizeCache[model.id] ??= model.clone();
+        return this.memoizeCache[model.id];
     }
 
     public setBackground(background: RenderableModel):void {
+        if (DEBUG && background.parent!==undefined) throw new DebugError(`can not set background: this object is already in use`);
         super.replaceChild(this.background,background);
         this.background = background;
         this.fitBackgroundToSize();
     }
 
     public setBackgroundHover(backgroundHover: RenderableModel):void {
+        if (DEBUG && backgroundHover.parent!==undefined) throw new DebugError(`can not set background: this object is already in use`);
         super.replaceChild(this.backgroundHover,backgroundHover);
         this.backgroundHover = backgroundHover;
         this.fitBackgroundToSize();
     }
 
     public setBackgroundActive(backgroundActive: RenderableModel):void {
+        if (DEBUG && backgroundActive.parent!==undefined) throw new DebugError(`can not set background: this object is already in use`);
         super.replaceChild(this.backgroundActive,backgroundActive);
         this.backgroundActive = backgroundActive;
         this.fitBackgroundToSize();
@@ -124,11 +125,38 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         this.fitBackgroundToSize();
     }
 
+    public setMargin(top:number,right?:number,bottom?:number,left?:number):void{
+        ({top,right,bottom,left} = WidgetContainer.normalizeBorders(top,right,bottom,left));
+
+        const isDirty:boolean =
+            this.marginTop !== top ||
+            this.marginRight !== right ||
+            this.marginBottom !== bottom ||
+            this.marginLeft !== left;
+        if (!isDirty) return;
+
+        const thisWriteable = this as IContainerWithMarginPadding;
+        thisWriteable.marginTop = top;
+        thisWriteable.marginRight = right;
+        thisWriteable.marginBottom = bottom;
+        thisWriteable.marginLeft = left;
+        this.recalculateClientRect();
+        this.fitBackgroundToSize();
+        this.markAsDirty();
+    }
+
     public setPadding(top:number, right?:number, bottom?:number, left?:number):void{
 
         ({top,right,bottom,left} = WidgetContainer.normalizeBorders(top,right,bottom,left));
 
         const thisWriteable = this as IContainerWithMarginPadding;
+        const isDirty:boolean =
+            this.paddingTop !== top ||
+            this.paddingRight !== right ||
+            this.paddingBottom !== bottom ||
+            this.paddingLeft !== left;
+        if (!isDirty) return;
+
         thisWriteable.paddingTop = top;
         thisWriteable.paddingRight = right;
         thisWriteable.paddingBottom = bottom;
@@ -147,6 +175,28 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
 
     public getClientRect():Readonly<IRect> {
         return this.clientRect;
+    }
+
+    public setProps(props: IWidgetContainerProps):void {
+        super.setProps(props);
+        if (props.background!==undefined) {
+            const memoized:RenderableModel = this.getMemoizedView(props.background);
+            if (memoized!==this.background) this.setBackground(memoized);
+        }
+        if (props.backgroundActive!==undefined) {
+            const memoized:RenderableModel = this.getMemoizedView(props.backgroundActive);
+            if (memoized!==this.backgroundActive) this.setBackgroundActive(memoized);
+        }
+        if (props.backgroundHover!==undefined) {
+            const memoized:RenderableModel = this.getMemoizedView(props.backgroundHover);
+            if (memoized!==this.backgroundHover) this.setBackgroundActive(memoized);
+        }
+        if (props.backgroundDisabled!==undefined) {
+            const memoized:RenderableModel = this.getMemoizedView(props.backgroundDisabled);
+            if (memoized!==this.backgroundDisabled) this.setBackgroundActive(memoized);
+        }
+        if (props.padding && props.padding.length>0) this.setPadding(...props.padding as [number]);
+        if (props.margin && props.margin.length>0) this.setMargin(...props.margin as [number]);
     }
 
     protected setState(state:ContainerState):void {

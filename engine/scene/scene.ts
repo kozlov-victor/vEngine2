@@ -92,6 +92,10 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
         return this._layers;
     }
 
+    public getGame():Game {
+        return this.game;
+    }
+
 
     public getDefaultLayer():Layer {
         if (!this._layers.length) this.appendChild(new Layer(this.game));

@@ -22,6 +22,8 @@ export abstract class AbstractCanvasRenderer extends AbstractRenderer {
         this.container = canvasElement;
     }
 
-    public abstract setPixelPerfect(mode:boolean):void;
+    public setPixelPerfect(mode:boolean):void {
+        this.container.style.imageRendering = mode?'pixelated':'';
+    }
 
 }
