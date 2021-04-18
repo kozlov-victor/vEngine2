@@ -3,6 +3,8 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
+import {MathEx} from "@engine/misc/mathEx";
+import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 
 export class ResourceHolder extends ResourceAutoHolder {
 
@@ -29,6 +31,16 @@ export class ResourceHolder extends ResourceAutoHolder {
         rect.color = Color.fromCssLiteral('#000');
         return rect;
     })();
+
+    public textFieldFilter1 = (()=>{
+        const filter = new NoiseFilter(this.scene.getGame());
+        this.scene.setInterval(()=>{
+            const r = MathEx.randomInt(0,10);
+            filter.enabled = r>5;
+        },500);
+        return filter;
+    })();
+
 
     @Resource.FontFromCssDescription({fontSize:20,fontFamily:'monospace'})
     public fnt:Font;

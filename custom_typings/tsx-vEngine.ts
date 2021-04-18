@@ -14,12 +14,17 @@ type Font = {
     type: 'Font'
 };
 
+interface IFilter {
+    type:string;
+}
+
 interface IGenericProps<T> {
     key?:number|string;
     ref?:(el:T)=>void; // <input ref={(input) => { this.textInput = input; }} />
     click?:(e?:any)=>void;
     mouseUp?:(e?:any)=>void;
     mouseLeave?:(e?:any)=>void;
+    filters?:IFilter[];
 }
 
 interface IPositionableProps {

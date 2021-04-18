@@ -92,6 +92,9 @@ export abstract class RenderableModel
     // parent-child
     protected _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate<RenderableModel>(this);
 
+    //tsx
+    private tsxEvents:Record<string, ()=>void> = {};
+
     protected constructor(protected game:Game){
         super(game);
         this.id = `object_${Incrementer.getValue()}`;
@@ -371,6 +374,26 @@ export abstract class RenderableModel
 
     public isDetached():boolean {
         return this._scene===undefined;
+    }
+
+    public setProps(props:ITransformableProps & IPositionableProps):void {
+        if (props.filters!==undefined) this.filters = props.filters;
+        if (props.click!==undefined) {
+            if (this.tsxEvents.click!==undefined) this.off(MOUSE_EVENTS.click,this.tsxEvents.click);
+            this.on(MOUSE_EVENTS.click, props.click);
+            this.tsxEvents.click = props.click;
+        }
+        if (props.mouseUp!==undefined) {
+            if (this.tsxEvents.mouseUp!==undefined) this.off(MOUSE_EVENTS.mouseUp,this.tsxEvents.mouseUp);
+            this.on(MOUSE_EVENTS.mouseUp, props.mouseUp);
+            this.tsxEvents.mouseUp = props.mouseUp;
+        }
+        if (props.mouseLeave!==undefined) {
+            if (this.tsxEvents.mouseLeave!==undefined) this.off(MOUSE_EVENTS.mouseLeave,this.tsxEvents.mouseLeave);
+            this.on(MOUSE_EVENTS.mouseLeave, props.mouseLeave);
+            this.tsxEvents.mouseLeave = props.mouseLeave;
+        }
+        super.setProps(props);
     }
 
     protected setClonedProperties(cloned:RenderableModel):void {

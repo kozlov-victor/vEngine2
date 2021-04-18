@@ -19,6 +19,7 @@ export const Button = (props:{pos:{x:number,y:number},text:string,onClick:(text:
             <v_rectangle
                 pos={{x:props.pos.x+2,y:props.pos.y+2}}
                 size={{width:50,height:50}}
+                lineWidth={0}
                 fillColor={{r:50,g:50,b:50,a:50}}
             />
             <v_button

@@ -4,9 +4,9 @@ import {Game} from "@engine/core/game";
 import {BaseModel} from "@engine/core/baseModel";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {Mat4} from "@engine/geometry/mat4";
-import Mat16Holder = Mat4.Mat16Holder;
 import {ITransformable} from "@engine/core/declarations";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
+import Mat16Holder = Mat4.Mat16Holder;
 
 class AnglePoint3d extends ObservableEntity{
 

@@ -8,7 +8,6 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Image} from "@engine/renderable/impl/general/image";
 import {DebugError} from "@engine/debug/debugError";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Button} from "@engine/renderable/impl/ui/button/button";
@@ -59,20 +58,7 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
     }
 
     public setProps(model: RenderableModel, virtualNode: VirtualNode): void {
-        const props = virtualNode.props;
-        model.setProps(props);
-        if (props.click!==undefined) {
-            model.off(MOUSE_EVENTS.click);
-            model.on(MOUSE_EVENTS.click, props.click);
-        }
-        if (props.mouseUp!==undefined) {
-            model.off(MOUSE_EVENTS.mouseUp);
-            model.on(MOUSE_EVENTS.mouseUp, props.mouseUp);
-        }
-        if (props.mouseLeave!==undefined) {
-            model.off(MOUSE_EVENTS.mouseLeave);
-            model.on(MOUSE_EVENTS.mouseLeave, props.mouseLeave);
-        }
+        model.setProps(virtualNode.props);
     }
 
 }

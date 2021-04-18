@@ -10,11 +10,12 @@ import {
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {Button} from "./components/button";
+import {Calculator} from "../calculator";
 
 
 export class MainWidget extends VEngineTsxComponent<{}> {
 
-    private text:string = '';
+    private calculator:Calculator = new Calculator();
 
     constructor(private game:Game, private resourceHolder:ResourceHolder) {
         super(new VEngineTsxDOMRenderer(game));
@@ -34,7 +35,8 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                     alignTextContentHorizontal={AlignTextContentHorizontal.RIGHT}
                     wordBrake={WordBrake.PREDEFINED}
                     alignTextContentVertical={AlignTextContentVertical.CENTER}
-                    text={this.text}/>
+                    filters={[this.resourceHolder.textFieldFilter1]}
+                    text={this.calculator.getDisplayNumber()}/>
 
                 {['7','8','9','+'].map((it,index)=>
                     <Button
@@ -78,7 +80,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
 
 
     private onClick(str:string):void {
-        this.text +=str;
+        this.calculator.keyPress(str);
         this.triggerRendering();
     }
 

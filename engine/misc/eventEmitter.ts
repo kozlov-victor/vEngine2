@@ -48,7 +48,7 @@ export class EventEmitter{
     }
 
     private _on(name:string,callBack:(arg?:unknown)=>void):void {
-        this._events[name] = this._events[name] || [];
+        this._events[name] ??= [];
         this._events[name].push(callBack);
     }
 }

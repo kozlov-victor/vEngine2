@@ -9,7 +9,6 @@ import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils
 import Mat16Holder = Mat4.Mat16Holder;
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {Color} from "@engine/renderer/common/color";
-import {IFilter} from "@engine/renderer/common/ifilter";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
 import {ISize} from "@engine/geometry/size";
