@@ -9,7 +9,6 @@ export class MainScene extends Scene {
 
     private resourceHolder:ResourceHolder = new ResourceHolder(this);
 
-
     public onReady():void {
         this.backgroundColor = Color.fromCssLiteral(`#efefef`);
         const root = new SimpleGameObjectContainer(this.game);

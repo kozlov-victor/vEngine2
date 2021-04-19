@@ -11,11 +11,15 @@ import {
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {Button} from "./components/button";
 import {Calculator} from "../calculator";
+import {CheckBox} from "@engine/renderable/impl/ui/toggleButton/checkBox";
 
 
 export class MainWidget extends VEngineTsxComponent<{}> {
 
     private calculator:Calculator = new Calculator();
+
+    private glitches:boolean = true;
+    private glitchesCheckBox:CheckBox;
 
     constructor(private game:Game, private resourceHolder:ResourceHolder) {
         super(new VEngineTsxDOMRenderer(game));
@@ -35,7 +39,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                     alignTextContentHorizontal={AlignTextContentHorizontal.RIGHT}
                     wordBrake={WordBrake.PREDEFINED}
                     alignTextContentVertical={AlignTextContentVertical.CENTER}
-                    filters={[this.resourceHolder.textFieldFilter1]}
+                    filters={this.glitches?[this.resourceHolder.textFieldFilter1]:[]}
                     text={this.calculator.getDisplayNumber()}/>
 
                 {['7','8','9','+'].map((it,index)=>
@@ -74,6 +78,17 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                     />
                 )}
 
+                <v_rectangle pos={{x:240,y:10}} lineWidth={0} size={{width:300,height:308}} fillColor={{r:12,g:12,b:12,a:10}}>
+                    <v_textField click={_=>this.glitchesCheckBox.toggle()} pos={{x:50,y:20}} font={this.resourceHolder.fnt} text={'glitches'}/>
+                    <v_checkBox
+                        ref={e=>this.glitchesCheckBox = e as CheckBox}
+                        pos={{x:150,y:20}}
+                        size={{width:20,height:20}}
+                        padding={[2]}
+                        checked={this.glitches}
+                        changed={e=>this.onGlitchChanged(e)}/>
+                </v_rectangle>
+
             </>
         );
     }
@@ -84,5 +99,9 @@ export class MainWidget extends VEngineTsxComponent<{}> {
         this.triggerRendering();
     }
 
+    private onGlitchChanged(val:boolean):void {
+        this.glitches = val;
+        this.triggerRendering();
+    }
 
 }

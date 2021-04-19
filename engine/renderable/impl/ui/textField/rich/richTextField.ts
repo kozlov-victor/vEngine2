@@ -35,6 +35,11 @@ export class RichTextField extends ScrollableTextField {
         else return this._textEx.asString();
     }
 
+    public setProps(props:ITextFieldProps & {richText?:INode}):void {
+        super.setProps(props);
+        if (props.richText!==undefined) this.setRichText(props.richText as VirtualNode);
+    }
+
     private traverseNode(node:VirtualNode,fragments:ITextFragment[]):void {
         let color:Optional<IColor>;
         let fontSize:Optional<number>;

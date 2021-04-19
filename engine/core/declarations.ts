@@ -1,6 +1,5 @@
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
-import {IFilter} from "@engine/renderer/common/ifilter";
 import {Layer} from "@engine/scene/layer";
 import {Scene} from "@engine/scene/scene";
 import {Mat4} from "@engine/geometry/mat4";

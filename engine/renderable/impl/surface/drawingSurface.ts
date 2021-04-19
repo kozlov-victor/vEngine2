@@ -1,7 +1,6 @@
-import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICloneable, IDestroyable, IParentChild} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
-import {IFilter} from "@engine/renderer/common/ifilter";
 import {Game} from "@engine/core/game";
 import {ISize} from "@engine/geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";

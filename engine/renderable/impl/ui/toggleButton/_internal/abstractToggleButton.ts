@@ -42,6 +42,14 @@ export abstract class AbstractToggleButton extends WidgetContainer {
         this.backgroundChecked.size.set(clientRect);
     }
 
+    public setProps(props: IToggleButtonProps):void {
+        super.setProps(props);
+        if (props.backgroundChecked!==undefined) {
+            const memoized:RenderableModel = this.getMemoizedView(props.backgroundChecked);
+            if (memoized!==this.backgroundChecked) this.setBackgroundChecked(memoized);
+        }
+    }
+
     protected updateState():void{
         this.backgroundChecked.visible=this.checked;
     }

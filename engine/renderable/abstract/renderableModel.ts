@@ -32,7 +32,6 @@ import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 import {Scene} from "@engine/scene/scene";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
-import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation, ITargetAnimation} from "@engine/animation/iAnimation";
 import {Color} from "@engine/renderer/common/color";
 import {IRigidBody} from "@engine/physics/common/interfaces";

@@ -24,7 +24,6 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {Point2d} from "@engine/geometry/point2d";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
-import {IFilter} from "@engine/renderer/common/ifilter";
 import {IAnimation} from "@engine/animation/iAnimation";
 import {Mat4} from "@engine/geometry/mat4";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";

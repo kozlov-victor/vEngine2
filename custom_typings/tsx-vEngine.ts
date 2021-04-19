@@ -18,9 +18,15 @@ interface IFilter {
     type:string;
 }
 
+interface INode {
+    tagName:string;
+    children:INode[];
+    type: 'virtualNode'|'virtualFragment';
+}
+
 interface IGenericProps<T> {
     key?:number|string;
-    ref?:(el:T)=>void; // <input ref={(input) => { this.textInput = input; }} />
+    ref?:(el:T)=>void;
     click?:(e?:any)=>void;
     mouseUp?:(e?:any)=>void;
     mouseLeave?:(e?:any)=>void;
@@ -83,6 +89,15 @@ interface IWidgetContainerProps  extends ITransformableProps, IPositionableProps
     backgroundDisabled?:()=>IPositionableProps;
 }
 
+interface IToggleButtonProps extends IWidgetContainerProps {
+    backgroundChecked?:()=>IPositionableProps;
+}
+
+interface ICheckBoxProps extends IToggleButtonProps {
+    checked?:boolean;
+    changed?:(e:boolean)=>void;
+}
+
 interface ITextFieldProps extends IWidgetContainerProps {
     font: Font;
     textColor?:IColor;
@@ -98,14 +113,17 @@ interface ITextFieldProps extends IWidgetContainerProps {
 declare namespace JSX {
     // tslint:disable-next-line:interface-name
     export interface IntrinsicElements {
-        v_null_game_object: ITransformableProps & IPositionableProps;
-        v_circle:           ICircleProps;
-        v_ellipse:          IEllipseProps;
-        v_rectangle:        IRectangleProps;
-        v_line:             ILineProps;
-        v_image:            IImageProps;
-        v_font:             Partial<{color:IColor, size:number,font:Font}>;
-        v_textField:        ITextFieldProps;
-        v_button:           ITextFieldProps;
+        v_null_game_object:     ITransformableProps & IPositionableProps;
+        v_circle:               ICircleProps;
+        v_ellipse:              IEllipseProps;
+        v_rectangle:            IRectangleProps;
+        v_line:                 ILineProps;
+        v_image:                IImageProps;
+        v_font:                 Partial<{color:IColor, size:number,font:Font}>;
+        v_textField:            ITextFieldProps;
+        v_scrollableTextField:  ITextFieldProps;
+        v_richTextField:        ITextFieldProps & {richText?:INode[]};
+        v_button:               ITextFieldProps;
+        v_checkBox:             ICheckBoxProps;
     }
 }

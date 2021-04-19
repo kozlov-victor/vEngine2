@@ -92,7 +92,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         return {top,right:right!,bottom:bottom!,left:left!};
     }
 
-    private getMemoizedView(factory:()=>IPositionableProps):RenderableModel {
+    protected getMemoizedView(factory:()=>IPositionableProps):RenderableModel {
         const model = factory() as RenderableModel & ICloneable<RenderableModel>;
         this.memoizeCache[model.id] ??= model.clone();
         return this.memoizeCache[model.id];

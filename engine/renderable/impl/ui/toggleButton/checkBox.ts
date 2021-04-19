@@ -14,6 +14,8 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
 
     public readonly type:string = 'CheckBox';
 
+    private _tsxChanged:(e:boolean)=>void;
+
     constructor(game:Game) {
         super(game);
         this.on(MOUSE_EVENTS.click,()=>{
@@ -21,9 +23,24 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
         });
     }
 
+    declare public on:(eventName:string,callBack:(e:any)=>void)=>()=>void;
+
     public toggle(value?:boolean):void{
+        if (this.checked===value) return;
         if (value!==undefined) (this as ICheckBoxWritable).checked = value;
         else (this as ICheckBoxWritable).checked = !this.checked;
+        this.updateState();
+        this.trigger('changed',this.checked);
+    }
+
+    public setProps(props:ICheckBoxProps):void {
+        super.setProps(props);
+        if (props.changed!==undefined) {
+            if (this._tsxChanged!==undefined) this.off('changed',this._tsxChanged);
+            this.on('changed', props.changed);
+            this._tsxChanged = props.changed;
+        }
+        (this as ICheckBoxWritable).checked = props.checked ?? false;
         this.updateState();
     }
 
