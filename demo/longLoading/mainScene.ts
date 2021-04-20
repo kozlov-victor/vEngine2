@@ -52,7 +52,7 @@ export class MainScene extends Scene {
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
 
-        this.on(KEYBOARD_EVENTS.keyHold, (e)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e)=>{
             console.log(e);
         });
     }

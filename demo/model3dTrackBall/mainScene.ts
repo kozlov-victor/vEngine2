@@ -22,7 +22,7 @@ export class MainScene extends Scene {
 
 
         let lastPoint:Optional<{x:number,y:number}>;
-        this.on(MOUSE_EVENTS.mouseMove, (e)=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, (e)=>{
             if (!e.isMouseDown) return;
             if (lastPoint===undefined) lastPoint = {x:e.sceneX,y:e.screenY};
             const offsetX:number = e.sceneX - lastPoint.x;
@@ -33,10 +33,10 @@ export class MainScene extends Scene {
             lastPoint.x = e.sceneX;
             lastPoint.y = e.sceneY;
         });
-        this.on(MOUSE_EVENTS.mouseUp, (e)=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, _=>{
             lastPoint = undefined;
         });
-        this.on(MOUSE_EVENTS.mouseLeave, (e)=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseLeave, _=>{
             lastPoint = undefined;
         });
     }

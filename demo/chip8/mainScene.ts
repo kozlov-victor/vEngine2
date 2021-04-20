@@ -128,10 +128,10 @@ export class MainScene extends Scene {
             }
         };
 
-        this.on(KEYBOARD_EVENTS.keyPressed, e=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             keyFn(e.key,true);
         });
-        this.on(KEYBOARD_EVENTS.keyReleased, e=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased, e=>{
             keyFn(e.key,false);
         });
         // this.on(MOUSE_EVENTS.click, ()=>{

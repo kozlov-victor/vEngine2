@@ -49,7 +49,7 @@ export class SelectBox extends VerticalListView {
             tf.setText(it);
             this._textFields.push(tf);
             const listViewItem:ListViewItem = new ListViewItem(tf);
-            listViewItem.on(LIST_VIEW_EVENTS.itemClick, ()=>{
+            listViewItem.listViewEventHandler.on(LIST_VIEW_EVENTS.itemClick, ()=>{
                 this.select(index);
             });
             this.addView(listViewItem);

@@ -41,7 +41,7 @@ export class MainScene extends Scene {
         ps.particleLiveTime = {from:100,to:500};
         ps.particleAngle = {from:0,to:2*Math.PI};
         this.appendChild(ps);
-        this.on(MOUSE_EVENTS.mouseMove,(e)=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e)=>{
             ps.emissionPosition.setXY(e.screenX,e.screenY);
         });
     }

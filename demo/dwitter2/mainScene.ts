@@ -38,7 +38,7 @@ export class MainScene extends Scene {
             c.size.width|=0;for(i=0;i<3e3;i+=50)for(j=0;j<2e3;j+=50){v=e.x*3-j;d=e.y*3.4-i;p=2e-3*(d*d+v*v)**.5;session.drawRect(i+d*p,j+v*p,9,9);}
         };
 
-        this.on(MOUSE_EVENTS.mouseMove, (e)=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, (e)=>{
             this.lastPoint.setXY(e.sceneX,e.sceneY);
         });
 

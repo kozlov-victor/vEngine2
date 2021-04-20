@@ -46,7 +46,7 @@ export class MainScene extends Scene {
         rect.fillColor.setRGB(244,122,2);
         rect.filters = [lightFilter];
 
-        this.on(MOUSE_EVENTS.mouseMove,(e:ISceneMouseEvent)=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e:ISceneMouseEvent)=>{
             pointLight.pos.setXY(e.screenX,e.screenY);
         });
         this.appendChild(rect);

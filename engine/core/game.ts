@@ -163,7 +163,7 @@ export class Game {
         if (replaceStack) this._sceneStack.replaceLast({scene,transition});
         this._prevScene = this._currScene;
         if (this._prevScene!==undefined) {
-            this._prevScene.trigger(SCENE_EVENTS.INACTIVATED, undefined!);
+            this._prevScene.sceneEventHandler.trigger(SCENE_EVENTS.INACTIVATED, undefined!);
             this._prevScene.onInactivated();
             this._prevScene.lifeCycleState = SceneLifeCycleState.INACTIVATED;
         }
@@ -184,20 +184,20 @@ export class Game {
             const taskQueue:TaskQueue = new TaskQueue(this);
             const resourceLoader:ResourceLoader = taskQueue.getLoader();
             taskQueue.scheduleStart();
-            this._currScene.trigger(SCENE_EVENTS.PRELOADING,taskQueue);
+            this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.PRELOADING,{taskQueue});
             scene.onPreloading(taskQueue);
             resourceLoader.onProgress((n:number)=>{
-                this._currScene.trigger(SCENE_EVENTS.PROGRESS);
+                this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.PROGRESS,{taskQueue});
                 scene.onProgress(n);
             });
             resourceLoader.onResolved(()=>{
                 this._currScene.onReady();
                 this._currScene.onContinue();
-                this._currScene.trigger(SCENE_EVENTS.COMPLETED);
+                this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.COMPLETED,{taskQueue});
                 this._currScene.lifeCycleState = SceneLifeCycleState.COMPLETED;
             });
         } else {
-            this._currScene.trigger(SCENE_EVENTS.CONTINUE);
+            this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.CONTINUE,{taskQueue:undefined!});
             this._currScene.lifeCycleState = SceneLifeCycleState.COMPLETED;
             this._currScene.onContinue();
         }

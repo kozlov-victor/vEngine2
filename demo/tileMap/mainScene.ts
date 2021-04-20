@@ -57,7 +57,7 @@ export class MainScene extends Scene {
         //this.game.camera.pos.setXY(0.5);
         this.rect.pos.setY(120);
 
-        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     this.rect.pos.addX(-v);

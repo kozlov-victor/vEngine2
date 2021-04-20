@@ -14,7 +14,7 @@ export class MainScene extends Scene {
     public onReady():void {
         console.log('ready');
         const sound = this.resourceLink;
-        this.on(MOUSE_EVENTS.mouseDown,()=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseDown,()=>{
             sound.stereoPan = MathEx.random(-1,1);
             sound.velocity = MathEx.random(0.6,1);
             sound.gain = MathEx.random(0.5,1);

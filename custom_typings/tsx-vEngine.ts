@@ -95,7 +95,7 @@ interface IToggleButtonProps extends IWidgetContainerProps {
 
 interface ICheckBoxProps extends IToggleButtonProps {
     checked?:boolean;
-    changed?:(e:boolean)=>void;
+    changed?:(e:{value:boolean,target:any})=>void;
 }
 
 interface ITextFieldProps extends IWidgetContainerProps {

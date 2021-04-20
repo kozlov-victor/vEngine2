@@ -15,7 +15,7 @@ export class MainScene extends Scene {
 
         const secondScene = new SecondScene(this.game);
 
-        this.on(MOUSE_EVENTS.click, e=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             this.game.pushScene(secondScene,new CurtainsOpeningTransition(this.game,5000));
         });
         this.appendChild(rect);

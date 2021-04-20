@@ -25,7 +25,7 @@ export class SecondScene extends Scene {
         rect.pos.setXY(50,50);
         rect.size.setWH(120,220);
 
-        this.on(MOUSE_EVENTS.click, e=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             this.game.popScene();
         });
         this.appendChild(rect);

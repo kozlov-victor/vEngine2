@@ -4,7 +4,7 @@ import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardE
 import {Optional} from "@engine/core/declarations";
 
 
-export class KeyboardControl extends AbstractKeypad implements IControl {
+export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IControl {
 
     public readonly type:string = 'KeyboardControl';
 
@@ -90,22 +90,15 @@ export class KeyboardControl extends AbstractKeypad implements IControl {
         return event.keyState>=KEY_STATE.KEY_PRESSED;
     }
 
+    protected notify(eventName: KEYBOARD_EVENTS, e: KeyBoardEvent): void {
+        this.game.getCurrScene().keyboardEventHandler.trigger(eventName,e);
+    }
+
     private findEvent(key:number):Optional<KeyBoardEvent> {
         for (const event of this.buffer) {
             if (event.key===key) return event;
         }
         return undefined;
     }
-
-    /**
-     * this method register global keyboard event, if you need register event for scene, use scene.on()
-     */
-    // public on(e:KEYBOARD_EVENTS, callback:(e:KEYBOARD_KEY)=>any):void {
-    //     this.emitter.on(e,callback);
-    // }
-    //
-    // public off(e:KEYBOARD_EVENTS, callback:(arg?:any)=>void):void{
-    //     this.emitter.off(e,callback);
-    // }
 
 }

@@ -150,7 +150,7 @@ export class MouseControl implements IControl {
         }
 
         if (mousePoint.target===undefined) mousePoint.target = scene;
-        scene.trigger(mouseEvent,{
+        scene.mouseEventHandler.trigger(mouseEvent,{
             screenX:mousePoint.screenCoordinate.x,
             screenY:mousePoint.screenCoordinate.y,
             sceneX: mousePoint.sceneCoordinate.x,

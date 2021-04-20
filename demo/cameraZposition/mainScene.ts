@@ -28,7 +28,7 @@ export class MainScene extends Scene {
         trees.sort((a,b)=>a.pos.z-b.pos.z);
         trees.forEach(it=>this.appendChild(it));
 
-        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
 
                 case KEYBOARD_KEY.UP:

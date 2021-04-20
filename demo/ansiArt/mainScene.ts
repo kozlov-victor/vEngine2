@@ -33,7 +33,7 @@ export class MainScene extends Scene {
             tf.setText(frames[currImage]?.[cnt] ?? '');
             cnt = (++cnt)%frames[currImage].length;
         },100);
-        this.on(MOUSE_EVENTS.click, e=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             currImage = (++currImage)%frames.length;
         });
     }

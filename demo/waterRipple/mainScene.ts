@@ -24,7 +24,7 @@ export class MainScene extends Scene {
         waterRipple.findFreePointStrategy = FindFreePointStrategy.GET_OLDEST;
         this.filters = [waterRipple];
 
-        this.on(MOUSE_EVENTS.click, e=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             waterRipple.dropAt(e.sceneX,e.sceneY);
         });
 

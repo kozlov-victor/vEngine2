@@ -116,7 +116,7 @@ export class MainScene extends Scene {
         img.passMouseEventsThrough = true;
         this.appendChild(img);
 
-        btn.on(MOUSE_EVENTS.click, async _=>{
+        btn.mouseEventHandler.on(MOUSE_EVENTS.click, async _=>{
             if (pending) return;
             pending = true;
             const songUrl:string = songUrls[cnt];

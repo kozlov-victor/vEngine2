@@ -1,9 +1,9 @@
 import {ICloneable, IEventemittable} from "@engine/core/declarations";
 import {Game} from "@engine/core/game";
-import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
+import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
-import {IAnimation, ITargetAnimation} from "@engine/animation/iAnimation";
+import {ITargetAnimation} from "@engine/animation/iAnimation";
 
 export const enum FRAME_ANIMATION_EVENTS {
     completed =  'completed',
@@ -11,7 +11,7 @@ export const enum FRAME_ANIMATION_EVENTS {
     loop      =  'loop',
 }
 
-export abstract class AbstractFrameAnimation<T> implements IEventemittable,ITargetAnimation, ICloneable<AbstractFrameAnimation<T>> {
+export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICloneable<AbstractFrameAnimation<T>> {
 
     public name:string;
     public duration:number = 1000;
@@ -26,9 +26,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,ITarg
     private _isPlaying:boolean = false;
     private _loopReached:boolean = false;
 
-    //eventEmitter
-    private readonly _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
-
+    public readonly animationEventHandler:EventEmitterDelegate<FRAME_ANIMATION_EVENTS,void> = new EventEmitterDelegate();
 
     constructor(protected game:Game) {}
 
@@ -45,7 +43,7 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,ITarg
             if (!this.target) throw new DebugError(`can not play frame animation: it is not attached to parent`);
         }
         if (this.target.getCurrentFrameAnimation()?._isPlaying) {
-            this.target.getCurrentFrameAnimation()!.trigger(FRAME_ANIMATION_EVENTS.canceled);
+            this.target.getCurrentFrameAnimation()!.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.canceled);
         }
         if (this.target.getCurrentFrameAnimation()!==this) {
             this.target.playFrameAnimation(this);
@@ -71,29 +69,17 @@ export abstract class AbstractFrameAnimation<T> implements IEventemittable,ITarg
         if (currFrame===this._currFrame) return;
         if (this._loopReached && !this.isRepeating) {
             this.stop();
-            this.trigger(FRAME_ANIMATION_EVENTS.completed);
+            this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.completed);
             return;
         }
         this._currFrame = currFrame;
         this.onNextFrame(currFrame);
         if (this._currFrame===this.frames.length-1) {
-            this.trigger(FRAME_ANIMATION_EVENTS.loop);
+            this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.loop);
             this._loopReached = true;
         }
     }
 
-    public off(eventName: FRAME_ANIMATION_EVENTS, callBack: (arg?:never)=>void): void {
-        this._eventEmitterDelegate.off(eventName,callBack as (arg:any)=>void);
-    }
-    public on(eventName: FRAME_ANIMATION_EVENTS, callBack: (arg?:never)=>void): (arg?:unknown)=>void {
-        return this._eventEmitterDelegate.on(eventName,callBack as (arg:any)=>void);
-    }
-    public once(eventName: FRAME_ANIMATION_EVENTS, callBack: (arg?:never)=>void):void {
-        this._eventEmitterDelegate.once(eventName,callBack as (arg:any)=>void);
-    }
-    public trigger(eventName: FRAME_ANIMATION_EVENTS, data?: never): void {
-        this._eventEmitterDelegate.trigger(eventName,data);
-    }
 
     protected abstract onNextFrame(i:number):void;
 

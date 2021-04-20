@@ -87,6 +87,6 @@ export class MainScene extends Scene {
         };
 
         placeNextImage();
-        this.on(MOUSE_EVENTS.click, ()=>placeNextImage());
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>placeNextImage());
     }
 }

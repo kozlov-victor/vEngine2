@@ -34,7 +34,7 @@ export class GameOverScene extends BasePix32Scene {
         (async ()=>{
             await this.print(`!Game Over! Your score: ${this.score}`,12000,true);
         })();
-        this.on(KEYBOARD_EVENTS.keyPressed, _=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, _=>{
             this.themeAudioLink.stop();
             this.game.runScene(new GetReadyScene(this.game));
         });

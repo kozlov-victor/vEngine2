@@ -40,7 +40,7 @@ export class MainScene extends Scene {
         this.camera.followTo(spr);
 
 
-        this.on(GAME_PAD_EVENTS.buttonHold, (e:IGamePadEvent)=>{
+        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonHold, (e:IGamePadEvent)=>{
             switch (e.button) {
                 case GAME_PAD_BUTTON.STICK_L_LEFT:
                     spr.pos.addX(-1);
@@ -63,7 +63,7 @@ export class MainScene extends Scene {
             }
         });
 
-        this.on(MOUSE_EVENTS.click, e=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             const rect = new Rectangle(this.game);
             rect.fillColor = Color.RGB(122,12,33);
             rect.pos.setXYZ(e.sceneX,e.sceneY,-this.camera.pos.z);

@@ -140,7 +140,7 @@ export class MainScene extends Scene {
         const sound:Sound = this.soundTheme;
         sound.loop = true;
         sound.play();
-        this.on(SCENE_EVENTS.INACTIVATED, ()=>{
+        this.sceneEventHandler.on(SCENE_EVENTS.INACTIVATED, ()=>{
             sound.stop();
         });
     }

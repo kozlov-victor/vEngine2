@@ -34,7 +34,7 @@ export class MainScene extends Scene {
 
         this.appendChild(animatedImage);
 
-        animatedImage.on(MOUSE_EVENTS.click,()=>{
+        animatedImage.mouseEventHandler.on(MOUSE_EVENTS.click,()=>{
             animatedImage.removeSelf();
             this.cnt++;
             if (this.cnt===this.links.length) this.cnt = 0;

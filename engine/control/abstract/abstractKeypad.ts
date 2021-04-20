@@ -14,34 +14,32 @@ export abstract class KeyPadEvent extends ObservableEntity {
     public keyState:KEY_STATE;
 }
 
-export abstract class AbstractKeypad {
+export abstract class AbstractKeypad<T extends KeyPadEvent> {
     protected game:Game;
 
     protected abstract keyPressed:string;
     protected abstract keyReleased:string;
     protected abstract keyHold:string;
 
-    protected buffer:KeyPadEvent[] = [];
+    protected buffer:T[] = [];
 
 
     constructor(game:Game) {
         this.game = game;
     }
 
-    public press(event:KeyPadEvent):void{
+    public press(event:T):void{
         event.keyState = KEY_STATE.KEY_PRESSED;
         this.buffer.push(event);
         this.notify(this.keyPressed,event);
     }
 
-    public release(event:KeyPadEvent):void{
+    public release(event:T):void{
         event.keyState = KEY_STATE.KEY_JUST_RELEASED;
         this.notify(this.keyReleased,event);
     }
 
-
     public update():void {
-
         for (const event of this.buffer) {
             if (!event.isCaptured()) continue;
             const keyVal:KEY_STATE = event.keyState;
@@ -66,8 +64,6 @@ export abstract class AbstractKeypad {
         }
     }
 
-    protected notify(eventName:string,e:KeyPadEvent):void{
-        this.game.getCurrScene().trigger(eventName,e);
-    }
+    protected abstract notify(eventName:string,e:T):void;
 
 }

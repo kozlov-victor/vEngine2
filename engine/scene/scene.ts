@@ -1,15 +1,7 @@
 import {Layer, LayerTransformType} from "./layer";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {
-    IAlphaBlendable,
-    IEventemittable,
-    IFilterable,
-    IRevalidatable,
-    ITweenable,
-    Optional
-} from "@engine/core/declarations";
+import {IAlphaBlendable, IFilterable, IRevalidatable, ITweenable, Optional} from "@engine/core/declarations";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
@@ -17,26 +9,24 @@ import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {Timer} from "@engine/misc/timer";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
-import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
-import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
+import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {Point2d} from "@engine/geometry/point2d";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IAnimation} from "@engine/animation/iAnimation";
 import {Mat4} from "@engine/geometry/mat4";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
-import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {DebugError} from "@engine/debug/debugError";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 import {Size} from "@engine/geometry/size";
 import {RenderingObjectStack} from "@engine/scene/internal/renderingObjectStack";
 import {RenderingSessionInfo} from "@engine/scene/internal/renderingSessionInfo";
 import {Camera} from "@engine/renderer/camera";
-import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {KeyboardEventEmitterDelegate} from "@engine/delegates/eventDelegates/keyboardEventEmitterDelegate";
+import {MouseEventEmitterDelegate} from "@engine/delegates/eventDelegates/mouseEventEmitterDelegate";
+import {GamepadEventEmitterDelegate} from "@engine/delegates/eventDelegates/gamepadEventEmitterDelegate";
+import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
+import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 
 export const enum SCENE_EVENTS {
     PRELOADING = 'preloading',
@@ -46,7 +36,7 @@ export const enum SCENE_EVENTS {
     INACTIVATED = 'inactivated'
 }
 
-export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilterable,IAlphaBlendable {
+export class Scene implements IRevalidatable, ITweenable,IFilterable,IAlphaBlendable {
 
     constructor(protected game:Game) {
         this._renderingObjectStack = new RenderingObjectStack();
@@ -63,6 +53,11 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     public preloadingGameObject!:RenderableModel;
     public readonly camera:Camera = new Camera(this.game,this);
 
+    public readonly keyboardEventHandler:KeyboardEventEmitterDelegate = new KeyboardEventEmitterDelegate();
+    public readonly gamepadEventHandler:GamepadEventEmitterDelegate = new GamepadEventEmitterDelegate();
+    public readonly mouseEventHandler:MouseEventEmitterDelegate<ISceneMouseEvent> = new MouseEventEmitterDelegate<ISceneMouseEvent>();
+    public readonly sceneEventHandler = new EventEmitterDelegate<SCENE_EVENTS,{taskQueue:TaskQueue}>();
+
     public readonly _renderingObjectStack:RenderingObjectStack;
     public readonly _renderingSessionInfo:RenderingSessionInfo = new RenderingSessionInfo();
 
@@ -75,8 +70,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
     // timer
     private _timerDelegate:TimerDelegate = new TimerDelegate();
 
-    // eventEmitter
-    private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
     private static isLayerGuard(modelOrLayer:RenderableModel|Layer):modelOrLayer is Layer {
         return modelOrLayer.type==='Layer';
@@ -194,28 +187,6 @@ export class Scene implements IRevalidatable, ITweenable, IEventemittable,IFilte
 
     public setInterval(callback:()=>void,interval:number):Timer {
         return this._timerDelegate.setInterval(callback,interval);
-    }
-
-    public off(eventName: string, callBack: (e:any)=>void): void {
-        this._eventEmitterDelegate.off(eventName,callBack);
-    }
-    public on(eventName:MOUSE_EVENTS,callBack:(e:ISceneMouseEvent)=>void):(e:ISceneMouseEvent)=>void;
-    public on(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):(e:IKeyBoardEvent)=>void;
-    public on(eventName:GAME_PAD_EVENTS,callBack:(e:IGamePadEvent)=>void):(e:IGamePadEvent)=>void;
-    public on(eventName:SCENE_EVENTS,callBack:(e:void)=>void):(e:void)=>void;
-    public on(eventName:SCENE_EVENTS.PRELOADING,callBack:(taskQeue:TaskQueue)=>void):(e:TaskQueue)=>void;
-    public on(eventName: string, callBack: (arg?:any)=>void): (arg?:any)=>void {
-        return this._eventEmitterDelegate.on(eventName,callBack);
-    }
-    public once(eventName:MOUSE_EVENTS,callBack:(e:ISceneMouseEvent)=>void):void;
-    public once(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):void;
-    public once(eventName:GAME_PAD_EVENTS,callBack:(e:IGamePadEvent)=>void):void;
-    public once(eventName:SCENE_EVENTS,callBack:(e:void)=>void):void;
-    public once(eventName: string, callBack: (arg?:any)=>void):void {
-        this._eventEmitterDelegate.once(eventName,callBack);
-    }
-    public trigger(eventName: string, data?: any): void {
-        this._eventEmitterDelegate.trigger(eventName,data);
     }
 
     public findChildById<T extends RenderableModel>(id:string):Optional<T>{

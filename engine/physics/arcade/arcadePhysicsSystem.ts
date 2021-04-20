@@ -165,14 +165,14 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
     private emitCollisionEvents(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
         if (player.getHostModel().isDetached() || entity.getHostModel().isDetached()) return;
-        player.trigger(ARCADE_COLLISION_EVENT.COLLIDED, entity);
-        entity.trigger(ARCADE_COLLISION_EVENT.COLLIDED, player);
+        player.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.COLLIDED, entity);
+        entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.COLLIDED, player);
     }
 
     private emitOverlapEvents(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
         if (player.getHostModel().isDetached() || entity.getHostModel().isDetached()) return;
-        player.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, entity);
-        entity.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, player);
+        player.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, entity);
+        entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, player);
     }
 
     private collidePlayerWithTop(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {

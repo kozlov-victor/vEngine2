@@ -11,7 +11,6 @@ import {
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {Button} from "./components/button";
 import {Calculator} from "../calculator";
-import {CheckBox} from "@engine/renderable/impl/ui/toggleButton/checkBox";
 
 
 export class MainWidget extends VEngineTsxComponent<{}> {
@@ -19,7 +18,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
     private calculator:Calculator = new Calculator();
 
     private glitches:boolean = true;
-    private glitchesCheckBox:CheckBox;
+    private refs:Record<string, any> = {};
 
     constructor(private game:Game, private resourceHolder:ResourceHolder) {
         super(new VEngineTsxDOMRenderer(game));
@@ -79,14 +78,14 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                 )}
 
                 <v_rectangle pos={{x:240,y:10}} lineWidth={0} size={{width:300,height:308}} fillColor={{r:12,g:12,b:12,a:10}}>
-                    <v_textField click={_=>this.glitchesCheckBox.toggle()} pos={{x:50,y:20}} font={this.resourceHolder.fnt} text={'glitches'}/>
+                    <v_textField click={_=>this.refs.glitchesCheckBox.toggle()} pos={{x:50,y:20}} font={this.resourceHolder.fnt} text={'glitches'}/>
                     <v_checkBox
-                        ref={e=>this.glitchesCheckBox = e as CheckBox}
+                        ref={e=>this.refs.glitchesCheckBox = e}
                         pos={{x:150,y:20}}
                         size={{width:20,height:20}}
                         padding={[2]}
                         checked={this.glitches}
-                        changed={e=>this.onGlitchChanged(e)}/>
+                        changed={e=>this.onGlitchChanged(e.value)}/>
                 </v_rectangle>
 
             </>

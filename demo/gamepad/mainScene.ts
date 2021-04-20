@@ -33,7 +33,7 @@ export class MainScene extends Scene {
         this.appendChild(spr);
         spr.transformPoint.setToCenter();
         spr.scale.setXY(0.1);
-        this.on(GAME_PAD_EVENTS.buttonHold, (e:IGamePadEvent)=>{
+        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonHold, (e:IGamePadEvent)=>{
 
             switch (e.button) {
                 case GAME_PAD_BUTTON.STICK_L_LEFT:

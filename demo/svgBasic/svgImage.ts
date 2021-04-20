@@ -603,7 +603,7 @@ class SvgElementRenderer {
         const container:RenderableModel = this.renderGroup(parentView,el);
         const href:Optional<string> = el.getAttribute('href') || el.getAttribute('xlink:href');
         if (href) {
-            this.rootContainer.on(MOUSE_EVENTS.click,_=>{
+            this.rootContainer.mouseEventHandler.on(MOUSE_EVENTS.click,_=>{
                 window.open(href);
             });
         }

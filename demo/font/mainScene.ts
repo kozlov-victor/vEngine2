@@ -44,7 +44,7 @@ export class MainScene extends Scene {
         btn.setAutoSize(true);
         let cnt:number = 0;
 
-        btn.on(MOUSE_EVENTS.click, (e:IObjectMouseEvent)=>{
+        btn.mouseEventHandler.on(MOUSE_EVENTS.click, (e:IObjectMouseEvent)=>{
             console.log('clicked');
             tf.setText(`clicked ${++cnt} times`);
         });

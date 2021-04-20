@@ -348,7 +348,7 @@ export class GameScene extends BasePix32Scene {
             this.car.carVelocity-=0.05;
             if (this.car.carVelocity<0) this.car.carVelocity = 0;
         };
-        this.on(KEYBOARD_EVENTS.keyPressed, e=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.key) {
                 case KEYBOARD_KEY.UP: {
                     moveUp();
@@ -384,7 +384,7 @@ export class GameScene extends BasePix32Scene {
                 }
             }
         });
-        this.on(KEYBOARD_EVENTS.keyReleased, e=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased, e=>{
             if (this.timer) {
                 this.timer.kill();
                 this.timer = undefined;

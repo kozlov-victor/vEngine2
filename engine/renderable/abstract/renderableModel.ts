@@ -23,7 +23,7 @@ import {Layer} from "@engine/scene/layer";
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
-import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
+import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {Incrementer} from "@engine/resources/incrementer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
@@ -36,6 +36,9 @@ import {IAnimation, ITargetAnimation} from "@engine/animation/iAnimation";
 import {Color} from "@engine/renderer/common/color";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {MouseEventEmitterDelegate} from "@engine/delegates/eventDelegates/mouseEventEmitterDelegate";
+import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
+import {IDragPoint} from "@engine/behaviour/impl/dragPoint";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -52,7 +55,7 @@ export abstract class RenderableModel
     implements
         IRenderable,
         IRevalidatable, ITweenable,
-        IEventemittable, IParentChild,
+        IParentChild,
         IAlphaBlendable, IFilterable,
         IUpdatable, IDestroyable  {
 
@@ -68,6 +71,9 @@ export abstract class RenderableModel
     public readonly children:readonly RenderableModel[] = [];
     public readonly parent:RenderableModel;
 
+    public readonly mouseEventHandler:MouseEventEmitterDelegate<IObjectMouseEvent> = new MouseEventEmitterDelegate();
+    public readonly dragEventHandler:EventEmitterDelegate<DRAG_EVENTS, IDragPoint> = new EventEmitterDelegate();
+
     public readonly velocity = new Point2d(0,0);
     public passMouseEventsThrough:boolean = false;
 
@@ -78,15 +84,11 @@ export abstract class RenderableModel
     private _scene:Scene;
     private _rigidBody:IRigidBody;
 
-
     // tween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
 
     // timer
     private _timerDelegate:TimerDelegate = new TimerDelegate();
-
-    // eventEmitter
-    private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
     // parent-child
     protected _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate<RenderableModel>(this);
@@ -280,23 +282,6 @@ export abstract class RenderableModel
         return this._timerDelegate.setInterval(callback,interval);
     }
 
-    public off(eventName: string, callBack?: (arg?:any)=>void): void {
-        this._eventEmitterDelegate.off(eventName,callBack);
-    }
-    public on(eventName:MOUSE_EVENTS,callBack:(e:IObjectMouseEvent)=>void):()=>void;
-    public on(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):()=>void;
-    public on(eventName: string, callBack: (arg?:any)=>void): (arg?:any)=>void {
-        return this._eventEmitterDelegate.on(eventName,callBack);
-    }
-    public once(eventName:MOUSE_EVENTS,callBack:(e:IObjectMouseEvent)=>void):void;
-    public once(eventName:KEYBOARD_EVENTS,callBack:(e:IKeyBoardEvent)=>void):void;
-    public once(eventName: string, callBack: (arg?:any)=>void):void {
-        this._eventEmitterDelegate.once(eventName,callBack);
-    }
-    public trigger(eventName: string, data?: any): void {
-        this._eventEmitterDelegate.trigger(eventName,data);
-    }
-
     public appendChild(newChild:RenderableModel):void {
         this._parentChildDelegate.appendChild(newChild);
     }
@@ -378,18 +363,18 @@ export abstract class RenderableModel
     public setProps(props:ITransformableProps & IPositionableProps):void {
         if (props.filters!==undefined) this.filters = props.filters;
         if (props.click!==undefined) {
-            if (this.tsxEvents.click!==undefined) this.off(MOUSE_EVENTS.click,this.tsxEvents.click);
-            this.on(MOUSE_EVENTS.click, props.click);
+            if (this.tsxEvents.click!==undefined) this.mouseEventHandler.off(MOUSE_EVENTS.click,this.tsxEvents.click);
+            this.mouseEventHandler.on(MOUSE_EVENTS.click, props.click);
             this.tsxEvents.click = props.click;
         }
         if (props.mouseUp!==undefined) {
-            if (this.tsxEvents.mouseUp!==undefined) this.off(MOUSE_EVENTS.mouseUp,this.tsxEvents.mouseUp);
-            this.on(MOUSE_EVENTS.mouseUp, props.mouseUp);
+            if (this.tsxEvents.mouseUp!==undefined) this.mouseEventHandler.off(MOUSE_EVENTS.mouseUp,this.tsxEvents.mouseUp);
+            this.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, props.mouseUp);
             this.tsxEvents.mouseUp = props.mouseUp;
         }
         if (props.mouseLeave!==undefined) {
-            if (this.tsxEvents.mouseLeave!==undefined) this.off(MOUSE_EVENTS.mouseLeave,this.tsxEvents.mouseLeave);
-            this.on(MOUSE_EVENTS.mouseLeave, props.mouseLeave);
+            if (this.tsxEvents.mouseLeave!==undefined) this.mouseEventHandler.off(MOUSE_EVENTS.mouseLeave,this.tsxEvents.mouseLeave);
+            this.mouseEventHandler.on(MOUSE_EVENTS.mouseLeave, props.mouseLeave);
             this.tsxEvents.mouseLeave = props.mouseLeave;
         }
         super.setProps(props);

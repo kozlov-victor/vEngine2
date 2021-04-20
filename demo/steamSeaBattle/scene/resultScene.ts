@@ -28,7 +28,7 @@ export class ResultScene extends BaseScene {
                     timer.kill();
                     if (this.SCORE_TO_SET>=5) this.sounds.win.play();
                     else this.sounds.life_lost.play();
-                    this.on(MOUSE_EVENTS.click,()=>{
+                    this.mouseEventHandler.on(MOUSE_EVENTS.click,()=>{
                         this.game.runScene(new IntroScene(this.game));
                     });
                 }

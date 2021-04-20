@@ -11,7 +11,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICloneable, IEventemittable, Optional} from "@engine/core/declarations";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
+import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 
 export enum ARCADE_RIGID_BODY_TYPE {
     // Kinematic entities are not affected by gravity, and
@@ -54,7 +54,7 @@ class CollisionFlags implements ICollisionWith {
     }
 }
 
-export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>, IEventemittable {
+export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> {
 
     // collideWorldBounds
 
@@ -63,6 +63,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
     public readonly acceleration:Point2d = new Point2d();
     public readonly groupNames:string[] = [];
     public readonly ignoreCollisionWithGroupNames:string[] = [];
+
+    public readonly collisionEventHandler:EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody> = new EventEmitterDelegate();
 
     public debug:boolean = false;
 
@@ -80,8 +82,6 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
 
     private _model:RenderableModel;
     private _debugRectangle:Rectangle;
-    //eventEmitter
-    private readonly _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
 
     private constructor(private game:Game) {
     }
@@ -179,27 +179,15 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody>,
         return body;
     }
 
-    public off(eventName: ARCADE_COLLISION_EVENT, callBack: (arg:ArcadeRigidBody)=>void): void {
-        this._eventEmitterDelegate.off(eventName,callBack as (arg:any)=>void);
-    }
-    public on(eventName: ARCADE_COLLISION_EVENT, callBack: (arg:ArcadeRigidBody)=>void): (arg?:unknown)=>void {
-        return this._eventEmitterDelegate.on(eventName,callBack as (arg:any)=>void);
-    }
-    public once(eventName: ARCADE_COLLISION_EVENT, callBack: (arg:ArcadeRigidBody)=>void):void {
-        this._eventEmitterDelegate.once(eventName,callBack as (arg:any)=>void);
-    }
-    public trigger(eventName: ARCADE_COLLISION_EVENT, data: ArcadeRigidBody): void {
-        this._eventEmitterDelegate.trigger(eventName,data);
-    }
     public onCollidedWithGroup(groupName:string, callBack: (arg:ArcadeRigidBody)=>void): (arg:ArcadeRigidBody)=>void {
-        return this.on(ARCADE_COLLISION_EVENT.COLLIDED,e=>{
+        return this.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED,e=>{
             if (e.groupNames.indexOf(groupName)>-1) {
                 callBack(e);
             }
         });
     }
     public onOverlappedWithGroup(groupName:string, callBack: (arg:ArcadeRigidBody)=>void): (arg:ArcadeRigidBody)=>void {
-        return this.on(ARCADE_COLLISION_EVENT.OVERLAPPED,e=>{
+        return this.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED,e=>{
             if (e.groupNames.indexOf(groupName)>-1) {
                 callBack(e);
             }

@@ -8,7 +8,7 @@ export class PreIntroScene extends BaseScene {
 
     public onReady(): void {
         super.onReady();
-        this.on(MOUSE_EVENTS.click,()=>this.game.runScene(new IntroScene(this.game)));
+        this.mouseEventHandler.on(MOUSE_EVENTS.click,()=>this.game.runScene(new IntroScene(this.game)));
     }
 
     protected getSceneElement(): XmlNode {

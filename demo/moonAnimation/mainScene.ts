@@ -39,7 +39,7 @@ export class MainScene extends Scene {
         this.appendChild(this.player);
         this.player.pos.setXY(this.game.size.width/2,this.game.size.height/2+40);
 
-        this.on(MOUSE_EVENTS.click, ()=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>{
             this.sound.play();
             this.player.nextAnimation();
         });

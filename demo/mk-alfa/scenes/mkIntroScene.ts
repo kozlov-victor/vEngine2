@@ -33,7 +33,7 @@ export class MkIntroScene extends MkAbstractScene {
 
         super.onReady();
 
-        this.on(MOUSE_EVENTS.click, ()=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>{
             this.game.getRenderer().requestFullScreen();
         });
 
@@ -71,11 +71,11 @@ export class MkIntroScene extends MkAbstractScene {
             if (MathEx.randomInt(0,50)<25) this.camera.shake(5,200);
         },1000);
 
-        this.on(GAME_PAD_EVENTS.buttonPressed, (e:IGamePadEvent)=>{
+        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonPressed, _=>{
             this.sound.play();
             this.game.runScene(new MkSelectHeroScene(this.game),new CurtainsOpeningTransition(this.game));
         });
-        this.on(KEYBOARD_EVENTS.keyPressed, ()=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, _=>{
             this.sound.play();
             this.game.runScene(new MkSelectHeroScene(this.game),new CurtainsOpeningTransition(this.game));
         });

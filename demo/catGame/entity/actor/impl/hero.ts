@@ -39,6 +39,7 @@ export class Hero extends AbstractCharacter {
 
         this.rotateAnimation.
             play().
+            animationEventHandler.
             once(FRAME_ANIMATION_EVENTS.completed, e=>this.idleAnimation.play());
 
         this.listenKeys();
@@ -157,7 +158,7 @@ export class Hero extends AbstractCharacter {
 
     private listenKeys():void {
         const jumpVelocity:number = 200;
-        this.game.getCurrScene().on(KEYBOARD_EVENTS.keyHold, e=>{
+        this.game.getCurrScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, e=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     if (!this.beating) this.goLeft();
@@ -176,7 +177,7 @@ export class Hero extends AbstractCharacter {
 
             }
         });
-        this.game.getCurrScene().on(KEYBOARD_EVENTS.keyReleased, e=>{
+        this.game.getCurrScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased, e=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
@@ -184,17 +185,17 @@ export class Hero extends AbstractCharacter {
                     break;
             }
         });
-        this.game.getCurrScene().on(KEYBOARD_EVENTS.keyPressed, e=>{
+        this.game.getCurrScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.key) {
                 case KEYBOARD_KEY.Z:
                     this.beating = true;
                     this.highKickAnimation.play();
                     this.shoot();
-                    this.highKickAnimation.once(FRAME_ANIMATION_EVENTS.completed, ev=>{
+                    this.highKickAnimation.animationEventHandler.once(FRAME_ANIMATION_EVENTS.completed, ev=>{
                         this.beating = false;
                         this.idle();
                     });
-                    this.highKickAnimation.once(FRAME_ANIMATION_EVENTS.canceled, ev=>{
+                    this.highKickAnimation.animationEventHandler.once(FRAME_ANIMATION_EVENTS.canceled, ev=>{
                         this.beating = false;
                         this.idle();
                     });

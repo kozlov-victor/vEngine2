@@ -42,7 +42,7 @@ export class IntroScene extends Scene {
         btn.setBackgroundActive(bgActive);
         btn.setPadding(15);
 
-        btn.on(MOUSE_EVENTS.mouseUp, (e:IObjectMouseEvent)=>{
+        btn.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, (e:IObjectMouseEvent)=>{
             if (e.button===MOUSE_BUTTON.LEFT) this.game.runScene(new MainScene(this.game));
         });
         this.appendChild(btn);

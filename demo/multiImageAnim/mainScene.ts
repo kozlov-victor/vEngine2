@@ -31,7 +31,7 @@ export class MainScene extends Scene {
 
         let playing:boolean = true;
 
-        this.on(MOUSE_EVENTS.click,()=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click,_=>{
            playing = !playing;
            if (playing) { animatedImage.playFrameAnimation('animation'); }
            else { animatedImage.stopFrameAnimation(); }

@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         const debugLayer = new DebugLayer(this.game);
         this.appendChild(debugLayer);
 
-        this.on(MOUSE_EVENTS.mouseMove, e=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, e=>{
             const x = e.sceneX / this.game.width;
             const y = e.sceneY / this.game.height;
             gradient.center.setXY(x,y);

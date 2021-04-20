@@ -251,7 +251,7 @@ export class MkSelectHeroScene extends MkAbstractScene {
         super.onReady();
         this.tabStrip.onReady();
 
-        this.on(MOUSE_EVENTS.doubleClick, ()=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.doubleClick, ()=>{
             this.game.getRenderer().requestFullScreen();
         });
 
@@ -289,7 +289,7 @@ export class MkSelectHeroScene extends MkAbstractScene {
 
         this.appendChild(this.tabStrip.getRoot());
 
-        this.on(GAME_PAD_EVENTS.buttonPressed, e=>{
+        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonPressed, e=>{
             if (e.button===GAME_PAD_BUTTON.STICK_L_LEFT || e.button===GAME_PAD_BUTTON.D_PAD_LEFT) {
                 this.tabStrip.goPrev();
                 this.soundLink1.play();
@@ -302,7 +302,7 @@ export class MkSelectHeroScene extends MkAbstractScene {
                 this.gotoDescriptionScene();
             }
         });
-        this.on(KEYBOARD_EVENTS.keyPressed, (e)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, (e)=>{
             if (e.key===KEYBOARD_KEY.LEFT) {
                 this.tabStrip.goPrev();
                 this.soundLink1.play();

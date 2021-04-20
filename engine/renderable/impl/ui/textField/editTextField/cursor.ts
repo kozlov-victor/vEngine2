@@ -84,8 +84,8 @@ export class Cursor {
                     break;
             }
         };
-        this.game.getCurrScene().on(KEYBOARD_EVENTS.keyPressed, e=>listener(e));
-        this.game.getCurrScene().on(KEYBOARD_EVENTS.keyRepeated, e=>listener(e));
+        this.game.getCurrScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>listener(e));
+        this.game.getCurrScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyRepeated, e=>listener(e));
     }
 
 

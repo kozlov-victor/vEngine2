@@ -3,6 +3,9 @@ import {Shape} from "@engine/renderable/abstract/shape";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {DefaultBackgroundObject} from "@engine/renderable/impl/ui/_internal/defaultBackgroundObject";
+import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
+import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
+import {IToggleButtonEvent} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvent";
 
 export interface ICheckBoxWritable {
     checked:boolean;
@@ -11,6 +14,8 @@ export interface ICheckBoxWritable {
 export abstract class AbstractToggleButton extends WidgetContainer {
 
     public readonly checked: boolean = false;
+
+    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IToggleButtonEvent> = new EventEmitterDelegate();
 
     private backgroundChecked: RenderableModel = new DefaultBackgroundObject(this.game);
 

@@ -88,7 +88,7 @@ export class GameManager {
                 const levelCompletedScene =new LevelCompletedScene(this.game);
                 console.log(levelCompletedScene);
                 this.game.runScene(levelCompletedScene,new CellsAppearingTransition(this.game));
-                levelCompletedScene.on(SCENE_EVENTS.COMPLETED, e=>{
+                levelCompletedScene.sceneEventHandler.on(SCENE_EVENTS.COMPLETED, _=>{
                     this.game.getCurrScene().setTimeout(()=>{
                         this._nextLevel(numOfLives);
                     },3000);

@@ -26,7 +26,7 @@ export class MainScene extends Scene {
         this.appendChild(this.lobster);
         this.lobster.pos.setXY(120,120);
 
-        this.on(MOUSE_EVENTS.click, ()=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>{
             this.lobster.nextAnimation();
         });
 

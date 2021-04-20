@@ -4,6 +4,7 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MathEx} from "@engine/misc/mathEx";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
 
 export class MainScene extends Scene {
 
@@ -42,7 +43,7 @@ export class MainScene extends Scene {
         this.appendChild(c);
         this.controlPoints.push(c);
         c.addBehaviour(new DraggableBehaviour(this.game));
-        c.on(MOUSE_EVENTS.dragMove,e=>{
+        c.dragEventHandler.on(DRAG_EVENTS.dragMove,e=>{
             this.populatePoints();
             this.updatePolyline();
         });

@@ -13,7 +13,7 @@ export class EventEmitter{
 
     }
 
-    public on(eventNameOrList:string|string[],callBack:(arg?:unknown)=>void):void {
+    public on(eventNameOrList:string|string[],callBack:(arg?:any)=>void):void {
         if (typeof  eventNameOrList === 'string') {
             this._on(eventNameOrList,callBack);
         } else if (eventNameOrList.splice!==undefined) {
@@ -24,7 +24,7 @@ export class EventEmitter{
 
     }
 
-    public off(eventName:string,callback?:(arg?:unknown)=>void):void {
+    public off(eventName:string,callback?:(arg?:any)=>void):void {
         if (callback===undefined) {
             if (this._events[eventName]!==undefined) this._events[eventName].length = 0;
         } else {

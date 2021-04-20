@@ -32,7 +32,7 @@ export class MainScene extends Scene {
             this.border.scale.setXY(SCALE);
             this.screen.pos.setXY(BORDER);
         });
-        this.once(MOUSE_EVENTS.click, ()=>{
+        this.mouseEventHandler.once(MOUSE_EVENTS.click, ()=>{
             this.game.runScene(new MainScene(this.game),new CellsAppearingTransition(this.game));
         });
         this.filters = [new Barrel2DistortionFilter(this.game)];

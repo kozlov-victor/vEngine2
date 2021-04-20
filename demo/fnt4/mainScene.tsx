@@ -31,7 +31,7 @@ export class MainScene extends Scene {
         tf.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tf.textColor.setRGB(255,255,255);
         let cnt:number = 0;
-        tf.on(MOUSE_EVENTS.click, _=>{
+        tf.mouseEventHandler.on(MOUSE_EVENTS.click, _=>{
             tf.setRichText(
                 <div>
                     <v_font color={{r:255,g:122,b:122}}><u>К</u>иррилический</v_font> <v_font color={{r:100,g:255,b:255}}>шрифт</v_font>

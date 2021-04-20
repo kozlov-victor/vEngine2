@@ -3,7 +3,6 @@ import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {Cursor} from "@engine/renderable/impl/ui/textField/editTextField/cursor";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
@@ -34,7 +33,7 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
         if (this.cursor===undefined) {
             this.cursor = new Cursor(this.game,this,this.font);
             this.cursor.start(this.rowSetContainer);
-            this.on(MOUSE_EVENTS.scroll, _=>{
+            this.scrollHandler.on('scroll', _=>{
                 this.cursor.redrawCursorView();
             });
         }

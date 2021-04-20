@@ -1,12 +1,20 @@
-import {AbstractToggleButton, ICheckBoxWritable} from "@engine/renderable/impl/ui/toggleButton/_internal/abstractToggleButton";
+import {
+    AbstractToggleButton,
+    ICheckBoxWritable
+} from "@engine/renderable/impl/ui/toggleButton/_internal/abstractToggleButton";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ContainerState} from "@engine/renderable/impl/ui/widgetContainer";
+import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
+import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
+import {IToggleButtonEvent} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvent";
 
 export class RadioButtonGroup {
+
+    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IToggleButtonEvent> = new EventEmitterDelegate();
 
     private buttons:RadioButton[] = [];
 
@@ -19,6 +27,7 @@ export class RadioButtonGroup {
         this.buttons.forEach(b=>{
             if (b!==button) b.unToggle();
         });
+        this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {target:button,value:true});
     }
 
 }
@@ -29,7 +38,7 @@ export class RadioButton extends AbstractToggleButton {
 
     constructor(game:Game) {
         super(game);
-        this.on(MOUSE_EVENTS.click, ()=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>{
             if (this.state!==ContainerState.DISABLED) this.toggle();
         });
     }
@@ -49,6 +58,7 @@ export class RadioButton extends AbstractToggleButton {
         (this as ICheckBoxWritable).checked = true;
         this.updateState();
         if (this.group!==undefined) this.group.notifyToggled(this);
+        this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {value:this.checked,target:this});
     }
 
     public unToggle():void{

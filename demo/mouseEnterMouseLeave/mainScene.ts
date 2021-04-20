@@ -4,6 +4,7 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MathEx} from "@engine/misc/mathEx";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
 
 export class MainScene extends Scene {
 
@@ -25,25 +26,24 @@ export class MainScene extends Scene {
             container.appendChild(spr);
             spr.transformPoint.setToCenter();
 
-            spr.on(MOUSE_EVENTS.mouseEnter, (e)=>{
+            spr.mouseEventHandler.on(MOUSE_EVENTS.mouseEnter, (e)=>{
                 spr.scale.setXY(1.4);
             });
-            spr.on(MOUSE_EVENTS.mouseLeave, (e)=>{
+            spr.mouseEventHandler.on(MOUSE_EVENTS.mouseLeave, (e)=>{
                 spr.scale.setXY(1);
             });
-            spr.on(MOUSE_EVENTS.dragStart, e=>{
+            spr.dragEventHandler.on(DRAG_EVENTS.dragStart, e=>{
                 spr.moveToFront();
                 spr.color.fromCSS('#eec240');
             });
-            spr.on(MOUSE_EVENTS.dragMove, e=>{
+            spr.dragEventHandler.on(DRAG_EVENTS.dragMove, e=>{
                 spr.moveToFront();
                 spr.fillColor.fromCSS('#eaacbd');
             });
-            spr.on(MOUSE_EVENTS.dragStop, e=>{
+            spr.dragEventHandler.on(DRAG_EVENTS.dragStop, e=>{
                 spr.moveToFront();
                 spr.color.fromCSS('#8340ee');
             });
-
             spr.addBehaviour(new DraggableBehaviour(this.game));
 
         }

@@ -53,7 +53,7 @@ export class MainScene extends Scene {
         this.brawler.scale.setXY(0.6);
         this.brawler.pos.setXY(500,300);
 
-        this.on(MOUSE_EVENTS.click, ()=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>{
             this.player.nextAnimation();
             this.mage.nextAnimation();
             this.imp.nextAnimation();

@@ -40,7 +40,7 @@ export class MainScene extends Scene {
         spr.borderRadius = 9;
         spr.lineWidth = 0.1;
         this.appendChild(spr);
-        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-1);
@@ -58,7 +58,7 @@ export class MainScene extends Scene {
                     spr.angle+=0.1;
             }
         });
-        this.on(MOUSE_EVENTS.click, ()=>spr.setPixelPerfect(!spr.isPixelPerfect()));
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>spr.setPixelPerfect(!spr.isPixelPerfect()));
 
     }
 

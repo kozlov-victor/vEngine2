@@ -26,7 +26,7 @@ export class Zombie extends AbstractMonster {
         this.scheduleWalk();
         this.body.onCollidedWithGroup(Hero.groupName,e=>{
             this.turnToHero();
-            this.attackAnimation.play().once(FRAME_ANIMATION_EVENTS.completed, it=>this.idle());
+            this.attackAnimation.play().animationEventHandler.once(FRAME_ANIMATION_EVENTS.completed, it=>this.idle());
         });
 
     }

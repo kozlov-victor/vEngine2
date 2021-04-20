@@ -21,14 +21,14 @@ export class MainScene extends Scene {
         this.appendChild(surface);
         surface.setDrawColor(120,222,200);
         surface.setLineWidth(2);
-        surface.on(MOUSE_EVENTS.mouseMove, e=>{
+        surface.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, e=>{
             if (e.isMouseDown) surface.lineTo(e.screenX,e.screenY);
             surface.moveTo(e.screenX,e.screenY);
         });
-        surface.on(MOUSE_EVENTS.mouseDown, e=>{
+        surface.mouseEventHandler.on(MOUSE_EVENTS.mouseDown, e=>{
             surface.lineTo(e.screenX,e.screenY);
         });
-        surface.on(MOUSE_EVENTS.mousePressed, e=>{
+        surface.mouseEventHandler.on(MOUSE_EVENTS.mousePressed, e=>{
             surface.clear();
         });
     }

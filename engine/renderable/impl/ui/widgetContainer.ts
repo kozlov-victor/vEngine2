@@ -239,12 +239,12 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
     protected onClientRectChanged():void {}
 
     private listenToHoverState():void {
-        this.on(MOUSE_EVENTS.mouseEnter, e=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseEnter, e=>{
             if (this.state===ContainerState.DISABLED) return;
             this.hovered = true;
             this.setState(ContainerState.HOVERED);
         });
-        this.on(MOUSE_EVENTS.mouseLeave, e=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseLeave, e=>{
             if (this.state===ContainerState.DISABLED) return;
             this.hovered = false;
             this.setState(ContainerState.NORMAL);
@@ -252,12 +252,12 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
     }
 
     private listenToActiveState():void {
-        this.on(MOUSE_EVENTS.mouseDown, e=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseDown, e=>{
             if (this.state===ContainerState.DISABLED) return;
             this.clicked = true;
             this.setState(ContainerState.ACTIVE);
         });
-        this.on(MOUSE_EVENTS.mouseUp, e=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, e=>{
             if (this.state===ContainerState.DISABLED) return;
             this.clicked = false;
             if (this.hovered) this.setState(ContainerState.HOVERED);

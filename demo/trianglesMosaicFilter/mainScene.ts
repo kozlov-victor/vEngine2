@@ -21,7 +21,7 @@ export class MainScene extends Scene {
         const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
-        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-1);

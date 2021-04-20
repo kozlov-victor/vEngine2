@@ -20,7 +20,7 @@ export class MainScene extends Scene {
         spr.transformPoint.setToCenter();
         spr.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(spr);
-        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-1);
@@ -38,7 +38,7 @@ export class MainScene extends Scene {
                     spr.angle+=0.1;
             }
         });
-        this.on(GAME_PAD_EVENTS.buttonPressed, e=>{
+        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonPressed, e=>{
             console.log(e);
         });
         //throw new DebugError('err'+new Date().getSeconds());

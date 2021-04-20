@@ -40,7 +40,7 @@ export class MainScene extends Scene {
         },20);
 
         let isNormalApplied:boolean = true;
-        this.on(MOUSE_EVENTS.click, ()=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>{
             isNormalApplied = !isNormalApplied;
             console.log({isNormalApplied});
             if (isNormalApplied) obj.normalsTexture = this.dataTextureNormalLink;

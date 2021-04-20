@@ -106,7 +106,7 @@ export class MouseControlHelper {
 
     public triggerEventForObject(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,mousePoint:MousePoint, obj:RenderableModel):IObjectMouseEvent{
         mousePoint.target = obj;
-        const mouseEvent:Optional<IObjectMouseEvent> = {
+        const mouseEvent:IObjectMouseEvent = {
             screenX:mousePoint.screenCoordinate.x,
             screenY:mousePoint.screenCoordinate.y,
             sceneX:mousePoint.sceneCoordinate.x,
@@ -120,7 +120,7 @@ export class MouseControlHelper {
             isMouseDown: mousePoint.isMouseDown,
             button: (e as MouseEvent).button,
         };
-        obj.trigger(eventName,mouseEvent);
+        obj.mouseEventHandler.trigger(eventName,mouseEvent);
         return mouseEvent;
     }
 

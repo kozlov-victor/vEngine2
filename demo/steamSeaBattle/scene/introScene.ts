@@ -12,7 +12,7 @@ export class IntroScene extends BaseScene {
         this.sounds.gear.loop = true;
         this.sounds.gear.play();
         console.log(this.findChildById('coin_acceptor'));
-        this.findChildById('coin_acceptor')!.on(MOUSE_EVENTS.click,(e:any)=>{
+        this.findChildById('coin_acceptor')!.mouseEventHandler.on(MOUSE_EVENTS.click,(e:any)=>{
             this.findChildById('coin')!.visible = true;
             this.sounds.start.play();
             this.sounds.gear.stop();

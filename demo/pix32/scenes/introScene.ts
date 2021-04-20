@@ -46,7 +46,7 @@ export class IntroScene extends BasePix32Scene {
 
         this.oscilloscope.listen(sound,this.track);
 
-        this.on(KEYBOARD_EVENTS.keyPressed, _=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, _=>{
             sound.stop();
             this.game.runScene(new GetReadyScene(this.game));
         });

@@ -208,7 +208,7 @@ export class MainScene extends BaseScene {
 
 
     private listenControls():void{
-        this.on(KEYBOARD_EVENTS.keyPressed,(e:IKeyBoardEvent)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed,(e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT: {
                     this.movePeriscope(1);
@@ -229,7 +229,7 @@ export class MainScene extends BaseScene {
                     break;
             }
         });
-        this.on(KEYBOARD_EVENTS.keyReleased,(e:IKeyBoardEvent)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased,(e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
@@ -244,11 +244,11 @@ export class MainScene extends BaseScene {
                     break;
             }
         });
-        this.btnLeft.on(MOUSE_EVENTS.click,()=>this.movePeriscope(1));
-        this.btnLeft.on(MOUSE_EVENTS.mouseUp,()=>this.stopPeriscope());
-        this.btnRight.on(MOUSE_EVENTS.click,()=>this.movePeriscope(-1));
-        this.btnRight.on(MOUSE_EVENTS.mouseUp,()=>this.stopPeriscope());
-        this.btnShoot.on(MOUSE_EVENTS.click,()=>this.shoot());
+        this.btnLeft.mouseEventHandler.on(MOUSE_EVENTS.click,()=>this.movePeriscope(1));
+        this.btnLeft.mouseEventHandler.on(MOUSE_EVENTS.mouseUp,()=>this.stopPeriscope());
+        this.btnRight.mouseEventHandler.on(MOUSE_EVENTS.click,()=>this.movePeriscope(-1));
+        this.btnRight.mouseEventHandler.on(MOUSE_EVENTS.mouseUp,()=>this.stopPeriscope());
+        this.btnShoot.mouseEventHandler.on(MOUSE_EVENTS.click,()=>this.shoot());
     }
 
 }

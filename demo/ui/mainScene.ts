@@ -17,6 +17,7 @@ import {RadioButton, RadioButtonGroup} from "@engine/renderable/impl/ui/toggleBu
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {RadialGradient} from "@engine/renderable/impl/fill/radialGradient";
+import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
 
 const text:string=
 `Lorem ipsum dolor sit amet,\t\n\r
@@ -62,9 +63,8 @@ export class MainScene extends Scene {
         const chbox:CheckBox = new CheckBox(this.game);
         chbox.pos.setXY(50,350);
         chbox.setBackgroundChecked(this.createBackgroundRect('#5c8ec3','#fff'));
-        chbox.on(MOUSE_EVENTS.click, e=>{
-            console.log('checked',chbox.checked);
-            if (chbox.checked) tf.setFont(this.fnt2);
+        chbox.changeEventHandler.on(TOGGLE_BUTTON_EVENTS.changed, e=>{
+            if (e.value) tf.setFont(this.fnt2);
             else tf.setFont(this.fnt);
         });
         this.appendChild(chbox);
@@ -88,7 +88,7 @@ export class MainScene extends Scene {
         radioBtn3.setBackgroundChecked(this.createBackgroundCircle('#a74fdd','#fff'));
         radioBtn3.pos.setXY(250,370);
         this.appendChild(radioBtn3);
-        radioBtn3.on(MOUSE_EVENTS.click, e=>{
+        radioBtn3.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             console.log(radioBtn3.checked);
         });
 

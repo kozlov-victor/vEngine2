@@ -36,7 +36,7 @@ export class MainScene extends Scene {
 
         this.appendChild(container);
 
-        sprLogo.on(MOUSE_EVENTS.click, e=>{
+        sprLogo.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             container.removeSelf();
             this.nextImage();
         });

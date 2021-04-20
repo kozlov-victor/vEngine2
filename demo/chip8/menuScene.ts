@@ -69,7 +69,7 @@ export class MenuScene extends Scene {
         tf.setFont(this.fnt);
 
         const listVIewItem:ListViewItem = new ListViewItem(tf);
-        listVIewItem.on(LIST_VIEW_EVENTS.itemClick, ()=>{
+        listVIewItem.listViewEventHandler.on(LIST_VIEW_EVENTS.itemClick, ()=>{
             this.game.pushScene(new MainScene(this.game,text));
         });
 

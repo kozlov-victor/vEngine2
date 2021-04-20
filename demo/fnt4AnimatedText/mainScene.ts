@@ -84,7 +84,7 @@ export class MainScene extends Scene {
             i = (++i)%animations.length;
         };
         setNextAnimation();
-        tf.on(MOUSE_EVENTS.click, _=>{
+        tf.mouseEventHandler.on(MOUSE_EVENTS.click, _=>{
             setNextAnimation();
         });
 

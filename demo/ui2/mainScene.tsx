@@ -103,7 +103,7 @@ export class MainScene extends Scene {
         let cnt:number = 0;
         const redColor:IColor = {r:255,g:100,b:100};
         const greenColor:IColor = {r:100,g:200,b:100};
-        btn.on(MOUSE_EVENTS.click, e=>{
+        btn.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             if (checkBox.checked) cnt+=1;
             else cnt-=1;
             tf2.setRichText(
@@ -138,7 +138,7 @@ export class MainScene extends Scene {
         label.setAutoSize(true);
         label.alpha = 0.6;
         label.pos.setXY(20,30);
-        label.on(MOUSE_EVENTS.click, e=>{
+        label.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             console.log('rect',e);
         });
         scrollView.scrollableContainer.appendChild(label);

@@ -50,7 +50,7 @@ export class SecondScene extends Scene {
         tf.setText("< back");
         tf.setFont(this.fnt);
         tf.alpha = 0.7;
-        tf.on(MOUSE_EVENTS.click, e=>{
+        tf.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             this.game.popScene();
         });
         this.appendChild(tf);

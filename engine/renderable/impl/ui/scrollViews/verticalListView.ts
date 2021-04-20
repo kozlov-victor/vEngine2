@@ -1,7 +1,7 @@
 import {ScrollView} from "@engine/renderable/impl/ui/scrollViews/scrollView";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {EventEmitterDelegate} from "@engine/delegates/eventEmitterDelegate";
+import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export enum LIST_VIEW_EVENTS {
@@ -10,24 +10,10 @@ export enum LIST_VIEW_EVENTS {
 
 export class ListViewItem {
 
-    private _eventEmitterDelegate:EventEmitterDelegate = new EventEmitterDelegate();
+    public readonly listViewEventHandler:EventEmitterDelegate<LIST_VIEW_EVENTS,void> = new EventEmitterDelegate();
 
     constructor(public view:RenderableModel) {
     }
-
-    public off(event: LIST_VIEW_EVENTS, callBack: ()=>void): void {
-        this._eventEmitterDelegate.off(event,callBack);
-    }
-    public on(event: LIST_VIEW_EVENTS, callBack: ()=>void): (arg?:any)=>void {
-        return this._eventEmitterDelegate.on(event,callBack);
-    }
-    public once(event: LIST_VIEW_EVENTS, callBack: ()=>void):void {
-        this._eventEmitterDelegate.once(event,callBack);
-    }
-    public trigger(event: LIST_VIEW_EVENTS): void {
-        this._eventEmitterDelegate.trigger(event);
-    }
-
 
 }
 
@@ -48,17 +34,17 @@ export class VerticalListView extends ScrollView {
 
         let lastOffset:number = 0;
         let captured:boolean = false;
-        newChild.on(MOUSE_EVENTS.mouseDown, _=>{
+        newChild.mouseEventHandler.on(MOUSE_EVENTS.mouseDown, _=>{
             captured = true;
             lastOffset = this._scrollContainerDelegate.getCurrentOffsetVertical();
         });
-        newChild.on(MOUSE_EVENTS.mouseUp, e=>{
+        newChild.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, e=>{
             if (!captured) return; // if element is not captured, but mouseUp-ed (ie after scene transition) does not trigger event
             captured = false;
             const currentOffset:number = this._scrollContainerDelegate.getCurrentOffsetVertical();
             const delta:number = Math.abs(lastOffset - currentOffset);
             lastOffset = currentOffset;
-            if (delta<10) listViewItem.trigger(LIST_VIEW_EVENTS.itemClick);
+            if (delta<10) listViewItem.listViewEventHandler.trigger(LIST_VIEW_EVENTS.itemClick);
         });
     }
 

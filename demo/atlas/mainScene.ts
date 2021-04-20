@@ -53,7 +53,7 @@ export class MainScene extends Scene {
             toFrame(framesRaw["jump-up.png"]),
         ];
 
-        animJump.on(FRAME_ANIMATION_EVENTS.completed, () => {
+        animJump.animationEventHandler.on(FRAME_ANIMATION_EVENTS.completed, () => {
             animatedImage.playFrameAnimation("run");
         });
         animJump.duration = 800;
@@ -63,7 +63,7 @@ export class MainScene extends Scene {
         animatedImage.addFrameAnimation("jump", animJump);
         animatedImage.playFrameAnimation("run");
 
-        animatedImage.on(MOUSE_EVENTS.click, () => {
+        animatedImage.mouseEventHandler.on(MOUSE_EVENTS.click, _ => {
             // animRun.stop();
             // animJump.play();
             animatedImage.stopFrameAnimation();

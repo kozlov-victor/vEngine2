@@ -61,7 +61,7 @@ export class MainScene extends Scene {
         this.appendChild(animatedImage);
 
 
-        this.on(MOUSE_EVENTS.click,()=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click,()=>{
             animNum = animNum+1;
             if (animNum===4) animNum = 1;
             animatedImage.playFrameAnimation(`animation${(animNum)}`);

@@ -15,8 +15,8 @@ export abstract class ResourceAutoHolder {
                 throw new DebugError(`ResourceAutoHolder can be instantiated only on CREATED scene lifecycle phase`);
             }
         }
-        scene.on(SCENE_EVENTS.PRELOADING, (taskQueue:TaskQueue)=>{
-            this.onPreloading(taskQueue);
+        scene.sceneEventHandler.on(SCENE_EVENTS.PRELOADING, e=>{
+            this.onPreloading(e.taskQueue!);
         });
     }
 

@@ -94,11 +94,11 @@ export abstract class AbstractScrollContainerListener {
     }
 
     public destroy():void {
-        this.constrainContainer.off(MOUSE_EVENTS.mouseDown);
-        this.constrainContainer.off(MOUSE_EVENTS.mouseMove);
-        this.constrainContainer.off(MOUSE_EVENTS.scroll);
-        this.constrainContainer.off(MOUSE_EVENTS.mouseUp);
-        this.constrainContainer.off(MOUSE_EVENTS.mouseLeave);
+        this.constrainContainer.mouseEventHandler.off(MOUSE_EVENTS.mouseDown);
+        this.constrainContainer.mouseEventHandler.off(MOUSE_EVENTS.mouseMove);
+        this.constrainContainer.mouseEventHandler.off(MOUSE_EVENTS.scroll);
+        this.constrainContainer.mouseEventHandler.off(MOUSE_EVENTS.mouseUp);
+        this.constrainContainer.mouseEventHandler.off(MOUSE_EVENTS.mouseLeave);
 
     }
 
@@ -106,7 +106,7 @@ export abstract class AbstractScrollContainerListener {
 
     private listenToMouse():void {
         const dir:Direction = this.getDirection();
-        this.constrainContainer.on(MOUSE_EVENTS.mouseDown, (p: IObjectMouseEvent) => {
+        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.mouseDown, (p: IObjectMouseEvent) => {
             this._isConstrainContainerCapturedByMouse = true;
             this._lastPoint = {
                 point: {sceneX: p.sceneX,sceneY: p.sceneY},
@@ -120,7 +120,7 @@ export abstract class AbstractScrollContainerListener {
             this._deceleration = 0;
             this._overScrollFactor = 0;
         });
-        this.constrainContainer.on(MOUSE_EVENTS.mouseMove, (p: IObjectMouseEvent) => {
+        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, (p: IObjectMouseEvent) => {
             if (!p.isMouseDown) return;
             const canScroll:boolean = getSize(this.scrollableContainer.size,dir) > getSize(this.constrainContainer.size,dir);
             if (!canScroll) return;
@@ -140,7 +140,7 @@ export abstract class AbstractScrollContainerListener {
                 getMouse(this._lastPoint.point,dir) - getMouse(this._prevPoint.point,dir);
             this._setScrollPos();
         });
-        this.constrainContainer.on(MOUSE_EVENTS.scroll, (p: IObjectMouseEvent) => {
+        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.scroll, (p: IObjectMouseEvent) => {
             if (!this._mouseScroll) return;
             const wheelDelta:number = (p.nativeEvent as WheelEvent&{wheelDelta:number}).wheelDelta;
             const newOffset:number = this.offset + wheelDelta*this._MOUSE_WHEEL_FACTOR;
@@ -151,7 +151,7 @@ export abstract class AbstractScrollContainerListener {
             this.offset=newOffset;
             this._setScrollPos();
         });
-        this.constrainContainer.on(MOUSE_EVENTS.mouseUp, (p: IObjectMouseEvent) => {
+        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, (p: IObjectMouseEvent) => {
             this._isConstrainContainerCapturedByMouse = false;
             if (!this._lastPoint) return;
             if (!this._prevPoint) return;
@@ -167,7 +167,7 @@ export abstract class AbstractScrollContainerListener {
             }
             this._deceleration = 0;
         });
-        this.constrainContainer.on(MOUSE_EVENTS.mouseLeave, _=>{
+        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.mouseLeave, _=>{
             this._isConstrainContainerCapturedByMouse = false;
         });
     }

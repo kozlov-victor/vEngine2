@@ -106,10 +106,10 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         this.tfInfo = tf;
         this.appendChild(tf);
 
-        this.on(GAME_PAD_EVENTS.buttonPressed, e=>{
+        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonPressed, e=>{
             this.goBack();
         });
-        this.on(KEYBOARD_EVENTS.keyPressed, (e)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, (e)=>{
             this.goBack();
         });
 

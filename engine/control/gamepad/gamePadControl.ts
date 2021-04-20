@@ -65,7 +65,7 @@ const gamePadGetterFactory = ():[GamePadGetter,boolean]=>{
 const [gamePadGetter,isEnabled] = gamePadGetterFactory();
 
 // https://www.w3.org/TR/gamepad/
-export class GamePadControl extends AbstractKeypad implements IControl{
+export class GamePadControl extends AbstractKeypad<GamePadEvent> implements IControl{
 
 
     constructor(game:Game){
@@ -140,6 +140,9 @@ export class GamePadControl extends AbstractKeypad implements IControl{
 
     public destroy():void {}
 
+    protected notify(eventName: GAME_PAD_EVENTS, e: GamePadEvent): void {
+        this.game.getCurrScene().gamepadEventHandler.trigger(eventName,e);
+    }
 
     private pressButton(buton:number,value:number,gamePadIndex:number,eventFromBuffer:Optional<GamePadEvent>):void {
         if (eventFromBuffer===undefined) {

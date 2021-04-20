@@ -65,7 +65,7 @@ export class BasicEnv {
             cursorShow=!cursorShow;
             redrawTextWithCursor();
         },600);
-        const handler = this.game.getCurrScene().on(KEYBOARD_EVENTS.keyPressed, (e:IKeyBoardEvent)=>{
+        const handler = this.game.getCurrScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, (e:IKeyBoardEvent)=>{
             const kbEv:KeyboardEvent = e.nativeEvent as KeyboardEvent;
             const keycode = kbEv.keyCode;
 
@@ -76,7 +76,7 @@ export class BasicEnv {
                 this.userInputString = '';
                 this.userInputMode = false;
                 this.PRINT();
-                this.game.getCurrScene().off(KEYBOARD_EVENTS.keyPressed,handler);
+                this.game.getCurrScene().keyboardEventHandler.off(KEYBOARD_EVENTS.keyPressed,handler);
                 this.redraw();
                 return;
             } else if (e.key===KEYBOARD_KEY.BACKSPACE) {

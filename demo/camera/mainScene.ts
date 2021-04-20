@@ -45,7 +45,7 @@ export class MainScene extends Scene {
         uiLayer.appendChild(infoRect);
         this.appendChild(uiLayer);
 
-        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-5);
@@ -65,7 +65,7 @@ export class MainScene extends Scene {
         });
 
 
-        this.on(GAME_PAD_EVENTS.buttonHold, (e:IGamePadEvent)=>{
+        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonHold, (e:IGamePadEvent)=>{
             switch (e.button) {
                 case GAME_PAD_BUTTON.STICK_L_LEFT:
                     spr.pos.addX(-1);

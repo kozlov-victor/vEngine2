@@ -181,7 +181,7 @@ export class MainScene extends Scene {
         tf.setFont(this.fnt);
 
         const listViewItem:ListViewItem = new ListViewItem(tf);
-        listViewItem.on(LIST_VIEW_EVENTS.itemClick, ()=>{
+        listViewItem.listViewEventHandler.on(LIST_VIEW_EVENTS.itemClick, ()=>{
             this.game.pushScene(new SecondScene(this.game),transition);
         });
         this.listView.addView(listViewItem);

@@ -34,7 +34,7 @@ export class MainScene extends Scene {
         this.obj.pos.setXY(20,20);
 
         this.appendChild(this.obj);
-        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     this.obj.size.width-=1;

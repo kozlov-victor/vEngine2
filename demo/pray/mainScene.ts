@@ -82,7 +82,7 @@ export class MainScene extends Scene {
 
         btn.setBackground(bgNormal);
         btn.setBackgroundActive(bgActive);
-        btn.on(MOUSE_EVENTS.mouseUp, e=>{
+        btn.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, e=>{
             btn.visible = false;
             tf.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
             tf.setAlignText(AlignText.CENTER);
@@ -115,7 +115,7 @@ export class MainScene extends Scene {
         ps.particleVelocity = {from:10,to:20};
 
         this.appendChild(ps);
-        this.on(MOUSE_EVENTS.mouseMove,(e)=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e)=>{
             ps.emissionPosition.setXY(e.screenX - animatedImage.size.width/2,e.screenY-animatedImage.size.height/2);
         });
 

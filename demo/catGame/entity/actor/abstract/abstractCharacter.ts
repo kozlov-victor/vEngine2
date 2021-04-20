@@ -69,7 +69,7 @@ export abstract class AbstractCharacter extends AbstractEntity {
             this.body.velocity.y -=velY;
         }
         if (this.jumpAnimation!==undefined) {
-            this.jumpAnimation.play().once(FRAME_ANIMATION_EVENTS.completed, ev=>this.idleAnimation.play());
+            this.jumpAnimation.play().animationEventHandler.once(FRAME_ANIMATION_EVENTS.completed, ev=>this.idleAnimation.play());
         }
     }
 

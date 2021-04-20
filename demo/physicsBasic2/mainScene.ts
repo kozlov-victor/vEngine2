@@ -34,7 +34,7 @@ export class MainScene extends Scene {
         this.player = rect1;
 
 
-        this.on(KEYBOARD_EVENTS.keyPressed, e => {
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e => {
 
             switch (e.key) {
                 case KEYBOARD_KEY.SPACE:
@@ -48,7 +48,7 @@ export class MainScene extends Scene {
                     break;
             }
         });
-        this.on(KEYBOARD_EVENTS.keyReleased, e => {
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased, e => {
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
@@ -91,7 +91,7 @@ export class MainScene extends Scene {
         ps.emissionTarget = this;
         this.appendChild(ps);
 
-        this.on(MOUSE_EVENTS.click,(e)=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click,(e)=>{
             ps.emissionPosition.setXY(e.sceneX,e.sceneY);
             ps.emit();
         });

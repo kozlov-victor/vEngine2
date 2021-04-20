@@ -23,7 +23,7 @@ export class MainScene extends Scene {
         this.player.scale.setXY(0.3);
         this.player.pos.setXY(200,300);
 
-        this.on(MOUSE_EVENTS.click, ()=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>{
             this.player.nextAnimation();
         });
     }

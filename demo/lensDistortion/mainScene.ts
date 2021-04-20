@@ -58,7 +58,7 @@ export class MainScene extends Scene {
         this.appendChild(img);
 
 
-        this.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-1);
@@ -79,7 +79,7 @@ export class MainScene extends Scene {
 
 
         const lensFilter:LensDistortionFilter = new LensDistortionFilter(this.game);
-        this.on(MOUSE_EVENTS.mouseMove, e=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, e=>{
             lensFilter.setMouseScreenCoordinates(e.screenX,e.screenY);
         });
         this.filters = [lensFilter];
