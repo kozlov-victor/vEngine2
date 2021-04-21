@@ -98,6 +98,15 @@ interface ICheckBoxProps extends IToggleButtonProps {
     changed?:(e:{value:boolean,target:any})=>void;
 }
 
+interface ISelectBoxProps extends IWidgetContainerProps{
+    font: Font;
+    textColor?:IColor;
+    options:(string|number)[];
+    selectedIndex?:number;
+    changed?:(e:{selectedIndex:number,target:any})=>void;
+    backgroundSelected?:()=>IPositionableProps;
+}
+
 interface ITextFieldProps extends IWidgetContainerProps {
     font: Font;
     textColor?:IColor;
@@ -125,5 +134,6 @@ declare namespace JSX {
         v_richTextField:        ITextFieldProps & {richText?:INode[]};
         v_button:               ITextFieldProps;
         v_checkBox:             ICheckBoxProps;
+        v_selectBox:            ISelectBoxProps;
     }
 }

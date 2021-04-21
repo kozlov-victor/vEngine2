@@ -17,6 +17,11 @@ export interface IColorFrozen extends Color{
     readonly a:byte;
 }
 
+const alignTo2Symbols = (val:string):string=>{
+    if (val.length===1) return `0`+val;
+    return val;
+};
+
 export class Color extends ObservableEntity implements ICloneable<Color>, IColorJSON{
 
 
@@ -305,8 +310,19 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         return this._arr;
     }
 
-    public asCSS():string{
+    public asCssRgba():string{
         return `rgba(${this._r},${this._g},${this._b},${this._a/255})`;
+    }
+
+    public asCssHex():string{
+        return (
+            '#'+([
+                alignTo2Symbols(this._r.toString(16)),
+                alignTo2Symbols(this._g.toString(16)),
+                alignTo2Symbols(this._b.toString(16)),
+                alignTo2Symbols(this._a.toString(16))
+            ].join(''))
+        );
     }
 
     public asRGBNumeric():number {

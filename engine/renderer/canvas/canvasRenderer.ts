@@ -103,8 +103,8 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
 
     public drawRectangle(rectangle:Rectangle):void{
-        this.ctx.fillStyle = rectangle.fillColor.asCSS();
-        this.ctx.strokeStyle = rectangle.color.asCSS();
+        this.ctx.fillStyle = rectangle.fillColor.asCssRgba();
+        this.ctx.strokeStyle = rectangle.color.asCssRgba();
         this.ctx.lineWidth = rectangle.lineWidth;
         this.ctx.fillRect(0,0,rectangle.size.width,rectangle.size.height);
         this.ctx.strokeRect(0,0,rectangle.size.width,rectangle.size.height);
@@ -112,8 +112,8 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     public drawEllipse(e:Ellipse):void{
         const ctx:CanvasRenderingContext2D = this.ctx;
-        ctx.fillStyle = e.fillColor.asCSS();
-        ctx.strokeStyle = e.color.asCSS();
+        ctx.fillStyle = e.fillColor.asCssRgba();
+        ctx.strokeStyle = e.color.asCssRgba();
         ctx.beginPath();
         ctx.ellipse(0,0, e.radiusX, e.radiusY, 0, 0, 2 * Math.PI);
         //ctx.arc(e.center.x, e.center.y, e.radiusX,  0, 2 * Math.PI);
@@ -183,7 +183,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     public beforeFrameDraw(filters:AbstractGlFilter[]): IStateStackPointer {
         if (!this.clearBeforeRender) return undefined!;
-        this.ctx.fillStyle = this.clearColor.asCSS();
+        this.ctx.fillStyle = this.clearColor.asCssRgba();
         this.ctx.fillRect(0,0,this.game.size.width,this.game.size.height);
         return undefined!;
     }

@@ -26,7 +26,6 @@ export class ScrollView extends WidgetContainer {
         this._constrainContainer.appendChild(this.scrollableContainer);
     }
 
-
     public revalidate():void {
         super.revalidate();
         const clientRect: Readonly<IRectJSON> = this.getClientRect();

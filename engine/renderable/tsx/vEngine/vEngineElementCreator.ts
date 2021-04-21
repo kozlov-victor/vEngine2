@@ -14,6 +14,7 @@ import {Button} from "@engine/renderable/impl/ui/button/button";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
 import {CheckBox} from "@engine/renderable/impl/ui/toggleButton/checkBox";
+import {SelectBox} from "@engine/renderable/impl/ui/selectBox/selectBox";
 
 export class VEngineElementCreator extends AbstractElementCreator<RenderableModel>{
 
@@ -57,6 +58,9 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 break;
             case 'v_checkBox':
                 element = new CheckBox(game);
+                break;
+            case 'v_selectBox':
+                element = new SelectBox(game,node.props.font);
                 break;
             case undefined: {
                 if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);

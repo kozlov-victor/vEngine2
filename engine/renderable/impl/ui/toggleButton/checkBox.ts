@@ -37,7 +37,7 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
 
     public setProps(props:ICheckBoxProps):void {
         super.setProps(props);
-        if (props.changed!==undefined) {
+        if (props.changed!==undefined && props.changed!==this._tsxChanged) {
             if (this._tsxChanged!==undefined) this.changeEventHandler.off(TOGGLE_BUTTON_EVENTS.changed,this._tsxChanged);
             this.changeEventHandler.on(TOGGLE_BUTTON_EVENTS.changed, props.changed);
             this._tsxChanged = props.changed;

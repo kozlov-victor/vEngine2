@@ -13,7 +13,7 @@ const onReleased = (target:RenderableModel)=>{
     target.anchorPoint.setXY(0);
 };
 
-export const Button = (props:{pos:{x:number,y:number},text:string,onClick:(text:string)=>void, r:ResourceHolder})=>{
+export const Button = (props:{pos:{x:number,y:number},text:string,textColor:IColor,onClick:(text:string)=>void, r:ResourceHolder})=>{
     return (
         <>
             <v_rectangle
@@ -29,6 +29,7 @@ export const Button = (props:{pos:{x:number,y:number},text:string,onClick:(text:
                 background={()=>props.r.buttonBg}
                 backgroundActive={()=>props.r.buttonBgActive}
                 font={props.r.fnt} text={props.text}
+                textColor={props.textColor}
                 click={e=>onPressed(e.target,()=>props.onClick(props.text))}
                 mouseLeave={e=>onReleased(e.target)}
                 mouseUp={e=>onReleased(e.target)}

@@ -103,8 +103,8 @@ export class DomRenderer extends AbstractRenderer {
     }
 
     public beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
-        if (this._nodes.properties.bg_color!==this.clearColor.asCSS()) {
-            this.container.style.backgroundColor = this.clearColor.asCSS();
+        if (this._nodes.properties.bg_color!==this.clearColor.asCssRgba()) {
+            this.container.style.backgroundColor = this.clearColor.asCssRgba();
         }
         return undefined!;
     }
@@ -131,9 +131,9 @@ export class DomRenderer extends AbstractRenderer {
     public drawLine(line: Line): void {
         const node:VNode = this._nodes.getById(line,true);
         this._drawBasicElement(node,line.getRectangleRepresentation());
-        if (line.color.asCSS()!==node.properties.line_color) {
-            node.properties.line_color=line.color.asCSS();
-            node.domEl.style.backgroundColor = line.color.asCSS();
+        if (line.color.asCssRgba()!==node.properties.line_color) {
+            node.properties.line_color=line.color.asCssRgba();
+            node.domEl.style.backgroundColor = line.color.asCssRgba();
         }
     }
 

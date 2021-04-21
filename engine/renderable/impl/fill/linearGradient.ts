@@ -17,7 +17,7 @@ export class LinearGradient extends AbstractGradient implements ICloneable<Linea
     }
 
     public asCSS():string{
-        return `linear-gradient(${~~(MathEx.radToDeg(-this.angle))+90}deg, ${this._points.map(it=>`${it.color.asCSS()} ${~~(it.value*100)}%`).join(',')}`;
+        return `linear-gradient(${~~(MathEx.radToDeg(-this.angle))+90}deg, ${this._points.map(it=>`${it.color.asCssRgba()} ${~~(it.value*100)}%`).join(',')}`;
     }
 
     public setUniforms(sd: ShapeDrawer):void {

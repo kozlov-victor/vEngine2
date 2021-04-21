@@ -18,6 +18,8 @@ interface ITextFragment {
 
 export class RichTextField extends ScrollableTextField {
 
+    public readonly type:string = 'RichTextField';
+
     public setRichText(node:VirtualNode):void{
         const fragments:ITextFragment[] = [];
         this.traverseNode(node,fragments);

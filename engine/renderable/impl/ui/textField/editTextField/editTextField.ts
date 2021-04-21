@@ -18,6 +18,8 @@ import {CurrentIKeyBoardFocusable} from "@engine/renderable/impl/ui/textField/_i
 
 export class EditTextField extends RichTextField implements IKeyboardFocusable{
 
+    public readonly type:string = 'EditTextField';
+
     public cursorColor:Color = Color.GREY.clone();
 
     private cursor:Cursor;

@@ -34,6 +34,8 @@ export class RadioButtonGroup {
 
 export class RadioButton extends AbstractToggleButton {
 
+    public readonly type:string = 'RadioButton';
+
     private group:RadioButtonGroup;
 
     constructor(game:Game) {

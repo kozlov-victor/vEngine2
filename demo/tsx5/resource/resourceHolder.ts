@@ -5,6 +5,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {MathEx} from "@engine/misc/mathEx";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
+import * as fntXML from "xml/angelcode-loader!./font/pixel.fnt";
 
 export class ResourceHolder extends ResourceAutoHolder {
 
@@ -42,7 +43,7 @@ export class ResourceHolder extends ResourceAutoHolder {
     })();
 
 
-    @Resource.FontFromCssDescription({fontSize:20,fontFamily:'monospace'})
+    @Resource.FontFromAtlas('./tsx5/resource/font',fntXML)
     public fnt:Font;
 
 }

@@ -44,7 +44,7 @@ export class MainScene extends Scene {
         tf.setAlignText(AlignText.CENTER);
         this.appendChild(tf);
         this.backgroundColor = Color.fromCssLiteral('#e0e6fc');
-        document.body.style.backgroundColor = this.backgroundColor.asCSS();
+        document.body.style.backgroundColor = this.backgroundColor.asCssRgba();
     }
 
 }

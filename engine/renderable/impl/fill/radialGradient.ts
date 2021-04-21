@@ -12,7 +12,7 @@ export class RadialGradient extends AbstractGradient {
     public readonly center:Point2d = new Point2d(0.5,0.5);
 
     asCSS(): string {
-        return `radial-gradient(circle at ${this.center.x*100}% ${this.center.y*100}%, ${this._points.map(it=>`${it.color.asCSS()} ${~~(it.value*100)}%`).join(',')}`;
+        return `radial-gradient(circle at ${this.center.x*100}% ${this.center.y*100}%, ${this._points.map(it=>`${it.color.asCssRgba()} ${~~(it.value*100)}%`).join(',')}`;
     }
 
 
