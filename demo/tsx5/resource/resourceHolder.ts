@@ -6,6 +6,7 @@ import {Color} from "@engine/renderer/common/color";
 import {MathEx} from "@engine/misc/mathEx";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import * as fntXML from "xml/angelcode-loader!./font/pixel.fnt";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
 
 export class ResourceHolder extends ResourceAutoHolder {
 
@@ -40,6 +41,12 @@ export class ResourceHolder extends ResourceAutoHolder {
             filter.enabled = r>5;
         },500);
         return filter;
+    })();
+
+    public checkBoxCheckedBg = (()=>{
+        const background = new Circle(this.scene.getGame());
+        background.fillColor = Color.fromCssLiteral(`#d2d5ff`);
+        return background;
     })();
 
 

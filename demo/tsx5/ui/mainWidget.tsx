@@ -128,25 +128,28 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         checked={this.textAlign===AlignTextContentHorizontal.LEFT}
                         padding={[2]}
                         size={{width:20,height:20}}
-                        changed={e=>this.onAlignTextClick(AlignTextContentHorizontal.LEFT)}
+                        changed={_=>this.onAlignTextClick(AlignTextContentHorizontal.LEFT)}
+                        backgroundChecked={()=>this.resourceHolder.checkBoxCheckedBg}
                         radioGroup={this.refs.radioGroup}/>
                     <v_textField click={_=>this.refs.radio1.toggle()} pos={{x:200,y:160}} font={this.resourceHolder.fnt} text={'left'}/>
                     <v_radioButton
                         pos={{x:170,y:190}}
                         ref={e=>this.refs.radio2 = e}
                         checked={this.textAlign===AlignTextContentHorizontal.CENTER}
-                        changed={e=>this.onAlignTextClick(AlignTextContentHorizontal.CENTER)}
+                        changed={_=>this.onAlignTextClick(AlignTextContentHorizontal.CENTER)}
                         padding={[2]}
                         size={{width:20,height:20}}
+                        backgroundChecked={()=>this.resourceHolder.checkBoxCheckedBg}
                         radioGroup={this.refs.radioGroup}/>
                     <v_textField click={_=>this.refs.radio2.toggle()} pos={{x:200,y:190}} font={this.resourceHolder.fnt} text={'center'}/>
                     <v_radioButton
                         pos={{x:170,y:220}}
                         ref={e=>this.refs.radio3 = e}
                         checked={this.textAlign===AlignTextContentHorizontal.RIGHT}
-                        changed={e=>this.onAlignTextClick(AlignTextContentHorizontal.RIGHT)}
+                        changed={_=>this.onAlignTextClick(AlignTextContentHorizontal.RIGHT)}
                         padding={[2]}
                         size={{width:20,height:20}}
+                        backgroundChecked={()=>this.resourceHolder.checkBoxCheckedBg}
                         radioGroup={this.refs.radioGroup}/>
                     <v_textField click={_=>this.refs.radio3.toggle()} pos={{x:200,y:220}} font={this.resourceHolder.fnt} text={'right'}/>
                 </v_rectangle>
