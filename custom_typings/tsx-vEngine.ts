@@ -98,6 +98,12 @@ interface ICheckBoxProps extends IToggleButtonProps {
     changed?:(e:{value:boolean,target:any})=>void;
 }
 
+interface IRadioButtonProps extends IToggleButtonProps {
+    radioGroup: {type:'RadioButtonGroup'};
+    checked?:boolean;
+    changed?:(e:{value:boolean,target:any})=>void;
+}
+
 interface ISelectBoxProps extends IWidgetContainerProps{
     font: Font;
     textColor?:IColor;
@@ -135,5 +141,6 @@ declare namespace JSX {
         v_button:               ITextFieldProps;
         v_checkBox:             ICheckBoxProps;
         v_selectBox:            ISelectBoxProps;
+        v_radioButton:          IRadioButtonProps;
     }
 }

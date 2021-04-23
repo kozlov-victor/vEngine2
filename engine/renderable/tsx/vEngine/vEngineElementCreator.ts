@@ -15,6 +15,7 @@ import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollab
 import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
 import {CheckBox} from "@engine/renderable/impl/ui/toggleButton/checkBox";
 import {SelectBox} from "@engine/renderable/impl/ui/selectBox/selectBox";
+import {RadioButton} from "@engine/renderable/impl/ui/toggleButton/radioButton";
 
 export class VEngineElementCreator extends AbstractElementCreator<RenderableModel>{
 
@@ -61,6 +62,9 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 break;
             case 'v_selectBox':
                 element = new SelectBox(game,node.props.font);
+                break;
+            case 'v_radioButton':
+                element = new RadioButton(game,node.props.radioGroup);
                 break;
             case undefined: {
                 if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);

@@ -23,6 +23,7 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
         this.mouseEventHandler.on(MOUSE_EVENTS.click,()=>{
             if (this.state!==ContainerState.DISABLED) {
                 this.toggle();
+                this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {value:this.checked,target:this});
             }
         });
     }
@@ -32,7 +33,6 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
         if (value!==undefined) (this as ICheckBoxWritable).checked = value;
         else (this as ICheckBoxWritable).checked = !this.checked;
         this.updateState();
-        this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {value:this.checked,target:this});
     }
 
     public setProps(props:ICheckBoxProps):void {
@@ -46,7 +46,7 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
         this.updateState();
     }
 
-    protected getNormalAndCheckedRenderableModel(): [normal: Shape, checked: Shape] {
+    protected getDefaultNormalAndCheckedRenderableModel(): [normal: Shape, checked: Shape] {
         const rNormal:Rectangle = new Rectangle(this.game);
         rNormal.borderRadius = 3;
         rNormal.color.set(Color.BLACK);

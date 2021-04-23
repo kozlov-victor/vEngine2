@@ -13,6 +13,7 @@ import {Button} from "./components/button";
 import {Calculator} from "../calculator";
 import {Color} from "@engine/renderer/common/color";
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBox";
+import {RadioButtonGroup} from "@engine/renderable/impl/ui/toggleButton/radioButton";
 
 
 export class MainWidget extends VEngineTsxComponent<{}> {
@@ -33,10 +34,11 @@ export class MainWidget extends VEngineTsxComponent<{}> {
     ];
     private colorLabels = this.colors.map(it=>it.asCssHex());
     private colorSelected:number = 0;
+    private textAlign:AlignTextContentHorizontal = AlignTextContentHorizontal.RIGHT;
 
     constructor(private game:Game, private resourceHolder:ResourceHolder) {
         super(new VEngineTsxDOMRenderer(game));
-
+        this.refs.radioGroup = new RadioButtonGroup();
     }
 
     public render():VirtualNode {
@@ -50,7 +52,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                     size={{width:215,height:75}}
                     background={()=>this.resourceHolder.textFieldBg}
                     pixelPerfect={true}
-                    alignTextContentHorizontal={AlignTextContentHorizontal.RIGHT}
+                    alignTextContentHorizontal={this.textAlign}
                     wordBrake={WordBrake.PREDEFINED}
                     alignTextContentVertical={AlignTextContentVertical.CENTER}
                     filters={this.glitches?[this.resourceHolder.textFieldFilter1]:[]}
@@ -119,6 +121,34 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         background={()=>this.resourceHolder.buttonBg}
                         backgroundSelected={()=>this.resourceHolder.buttonBgActive}/>
 
+                    <v_textField pos={{x:50,y:160}} font={this.resourceHolder.fnt} text={'align'}/>
+                    <v_radioButton
+                        pos={{x:170,y:160}}
+                        ref={e=>this.refs.radio1 = e}
+                        checked={this.textAlign===AlignTextContentHorizontal.LEFT}
+                        padding={[2]}
+                        size={{width:20,height:20}}
+                        changed={e=>this.onAlignTextClick(AlignTextContentHorizontal.LEFT)}
+                        radioGroup={this.refs.radioGroup}/>
+                    <v_textField click={_=>this.refs.radio1.toggle()} pos={{x:200,y:160}} font={this.resourceHolder.fnt} text={'left'}/>
+                    <v_radioButton
+                        pos={{x:170,y:190}}
+                        ref={e=>this.refs.radio2 = e}
+                        checked={this.textAlign===AlignTextContentHorizontal.CENTER}
+                        changed={e=>this.onAlignTextClick(AlignTextContentHorizontal.CENTER)}
+                        padding={[2]}
+                        size={{width:20,height:20}}
+                        radioGroup={this.refs.radioGroup}/>
+                    <v_textField click={_=>this.refs.radio2.toggle()} pos={{x:200,y:190}} font={this.resourceHolder.fnt} text={'center'}/>
+                    <v_radioButton
+                        pos={{x:170,y:220}}
+                        ref={e=>this.refs.radio3 = e}
+                        checked={this.textAlign===AlignTextContentHorizontal.RIGHT}
+                        changed={e=>this.onAlignTextClick(AlignTextContentHorizontal.RIGHT)}
+                        padding={[2]}
+                        size={{width:20,height:20}}
+                        radioGroup={this.refs.radioGroup}/>
+                    <v_textField click={_=>this.refs.radio3.toggle()} pos={{x:200,y:220}} font={this.resourceHolder.fnt} text={'right'}/>
                 </v_rectangle>
 
             </>
@@ -128,6 +158,11 @@ export class MainWidget extends VEngineTsxComponent<{}> {
 
     private onCalcButtonClick(str:string):void {
         this.calculator.keyPress(str);
+        this.triggerRendering();
+    }
+
+    private onAlignTextClick(value:AlignTextContentHorizontal):void {
+        this.textAlign = value;
         this.triggerRendering();
     }
 

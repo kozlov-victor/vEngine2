@@ -19,7 +19,7 @@ export abstract class AbstractToggleButton extends WidgetContainer {
 
     private backgroundChecked: RenderableModel = new DefaultBackgroundObject(this.game);
 
-    protected abstract getNormalAndCheckedRenderableModel():[normal:Shape,checked:Shape];
+    protected abstract getDefaultNormalAndCheckedRenderableModel():[normal:Shape,checked:Shape];
 
     protected constructor(game:Game) {
         super(game);
@@ -28,7 +28,7 @@ export abstract class AbstractToggleButton extends WidgetContainer {
         this.size.setWH(50);
         this.setPadding(5);
 
-        const [rNormal,rChecked] = this.getNormalAndCheckedRenderableModel();
+        const [rNormal,rChecked] = this.getDefaultNormalAndCheckedRenderableModel();
         this.setBackground(rNormal);
         this.setBackgroundChecked(rChecked);
         this.updateState();

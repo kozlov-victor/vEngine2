@@ -69,7 +69,9 @@ export class MainScene extends Scene {
         });
         this.appendChild(chbox);
 
-        const radioBtn1:RadioButton = new RadioButton(this.game);
+        const buttonGroup:RadioButtonGroup = new RadioButtonGroup();
+
+        const radioBtn1:RadioButton = new RadioButton(this.game,buttonGroup);
         radioBtn1.setBackground(this.createBackgroundCircle('#d4dfe3','#daddd7'));
         radioBtn1.setBackgroundHover(this.createBackgroundCircle('#d4dfe3','#f7faf4'));
         radioBtn1.setBackgroundActive(this.createBackgroundCircle('#cfebf5','#f7faf4'));
@@ -77,13 +79,13 @@ export class MainScene extends Scene {
         radioBtn1.pos.setXY(130,370);
         this.appendChild(radioBtn1);
 
-        const radioBtn2:RadioButton = new RadioButton(this.game);
+        const radioBtn2:RadioButton = new RadioButton(this.game,buttonGroup);
         radioBtn2.setBackground(this.createBackgroundCircle('#d4dfe3','#daddd7'));
         radioBtn2.setBackgroundChecked(this.createBackgroundCircle('#6eefdd','#fff'));
         radioBtn2.pos.setXY(190,370);
         this.appendChild(radioBtn2);
 
-        const radioBtn3:RadioButton = new RadioButton(this.game);
+        const radioBtn3:RadioButton = new RadioButton(this.game,buttonGroup);
         radioBtn3.setBackground(this.createBackgroundCircle('#d4dfe3','#daddd7'));
         radioBtn3.setBackgroundChecked(this.createBackgroundCircle('#a74fdd','#fff'));
         radioBtn3.pos.setXY(250,370);
@@ -92,10 +94,6 @@ export class MainScene extends Scene {
             console.log(radioBtn3.checked);
         });
 
-        const buttonGroup:RadioButtonGroup = new RadioButtonGroup();
-        buttonGroup.add(radioBtn1);
-        buttonGroup.add(radioBtn2);
-        buttonGroup.add(radioBtn3);
 
         const btn:Button = new Button(this.game,this.fnt);
         btn.setText("click!");

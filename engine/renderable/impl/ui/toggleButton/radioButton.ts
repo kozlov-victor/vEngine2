@@ -9,25 +9,23 @@ import {Color} from "@engine/renderer/common/color";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ContainerState} from "@engine/renderable/impl/ui/widgetContainer";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
-import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {IToggleButtonEvent} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvent";
+import {DebugError} from "@engine/debug/debugError";
 
 export class RadioButtonGroup {
 
-    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IToggleButtonEvent> = new EventEmitterDelegate();
+    public type:'RadioButtonGroup';
 
     private buttons:RadioButton[] = [];
 
-    public add(button:RadioButton):void{
+    public _add(button:RadioButton):void{
         this.buttons.push(button);
-        button.setGroup(this);
     }
 
-    public notifyToggled(button:RadioButton):void{
+    public _notifyToggled(button:RadioButton):void{
         this.buttons.forEach(b=>{
             if (b!==button) b.unToggle();
         });
-        this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {target:button,value:true});
     }
 
 }
@@ -36,16 +34,23 @@ export class RadioButton extends AbstractToggleButton {
 
     public readonly type:string = 'RadioButton';
 
-    private group:RadioButtonGroup;
+    private tsxChanged: (e:IToggleButtonEvent)=>void;
 
-    constructor(game:Game) {
+    constructor(game:Game,private group:RadioButtonGroup) {
         super(game);
+        if (DEBUG && !group) {
+            throw new DebugError(`group is not passed to the RadioButton constructor`);
+        }
+        group._add(this);
         this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>{
-            if (this.state!==ContainerState.DISABLED) this.toggle();
+            if (this.state!==ContainerState.DISABLED) {
+                this.toggle();
+                this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {value:true,target:this});
+            }
         });
     }
 
-    protected getNormalAndCheckedRenderableModel(): [normal: Shape, checked: Shape] {
+    protected getDefaultNormalAndCheckedRenderableModel(): [normal: Shape, checked: Shape] {
         const rNormal:Circle = new Circle(this.game);
         const rChecked:Circle = new Circle(this.game);
         rNormal.color.set(Color.BLACK);
@@ -57,9 +62,10 @@ export class RadioButton extends AbstractToggleButton {
     }
 
     public toggle():void{
+        if (this.checked) return;
         (this as ICheckBoxWritable).checked = true;
         this.updateState();
-        if (this.group!==undefined) this.group.notifyToggled(this);
+        if (this.group!==undefined) this.group._notifyToggled(this);
         this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {value:this.checked,target:this});
     }
 
@@ -68,8 +74,15 @@ export class RadioButton extends AbstractToggleButton {
         this.updateState();
     }
 
-    public setGroup(group:RadioButtonGroup):void {
-        this.group = group;
+    public setProps(props:IRadioButtonProps):void {
+        super.setProps(props);
+        if (props.checked && !this.checked) this.toggle();
+        if (props.changed!==undefined && this.tsxChanged!==props.changed) {
+            if (this.tsxChanged!==undefined) this.changeEventHandler.off(TOGGLE_BUTTON_EVENTS.changed,this.tsxChanged);
+            this.changeEventHandler.on(TOGGLE_BUTTON_EVENTS.changed, props.changed);
+            this.tsxChanged = props.changed;
+        }
+
     }
 
 }
