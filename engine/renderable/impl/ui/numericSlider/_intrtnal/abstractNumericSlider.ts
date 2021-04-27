@@ -43,6 +43,7 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
         this.appendChild(this.handler);
         this.initUI();
         this.listenToClicks();
+        this.listenToHandlerDrag();
     }
 
     public setValue(value:number):void {
@@ -69,18 +70,35 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
 
     public setHandler(handler:RenderableModel):void {
         if (DEBUG && handler.parent!==undefined) throw new DebugError(`can not set handler: this object is already in use`);
+        this.handler.dragEventHandler.off(DRAG_EVENTS.dragMove);
         this.replaceChild(this.handler,handler);
         this.handler = handler;
+        this.draggableBehaviour = new DraggableBehaviour(this.game);
+        this.handler.addBehaviour(this.draggableBehaviour);
+        this.listenToHandlerDrag();
+        //this.markAsDirty();
+        this.updateHandlerGeometry();
     }
 
-    protected onClientRectChanged():void {
-        super.onClientRectChanged();
+    // protected onClientRectChanged():void {
+    //     super.onClientRectChanged();
+    //     this.updateHandlerGeometry();
+    // }
+
+    private updateHandlerGeometry():void {
         const clientRect = this.getClientRect();
         const size:Size = Size.fromPool();
         size.set(clientRect);
+        const handlerPosToAssign = getPos(clientRect,getOppositeDirection(this.direction));
+        assignPos(this.handler.pos,handlerPosToAssign,getOppositeDirection(this.direction));
         assignSize(this.handler.size,getSize(size,getOppositeDirection(this.direction)),getOppositeDirection(this.direction));
         size.release();
         this.draggableBehaviour.updateConstrains(this.draggableConstrains);
+    }
+
+    protected onCleared():void {
+        super.onCleared();
+        this.updateHandlerGeometry();
     }
 
     private initUI():void {
@@ -120,6 +138,9 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
                 this.calcValueByHandlerPosition();
             }
         });
+    }
+
+    private listenToHandlerDrag():void {
         this.handler.dragEventHandler.on(DRAG_EVENTS.dragMove, e=>{
             this.calcValueByHandlerPosition();
         });

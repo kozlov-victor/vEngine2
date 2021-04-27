@@ -10,7 +10,6 @@ export class VerticalNumericSlider extends AbstractNumericSlider{
 
     protected onClientRectChanged():void {
         const clientRect = this.getClientRect();
-        this.handler.pos.x = clientRect.x;
         this.draggableConstrains.minY = clientRect.y;
         this.draggableConstrains.maxY = this.getClientRect().height - this.handler.size.height + clientRect.y;
         super.onClientRectChanged();
