@@ -7,6 +7,8 @@ import {MathEx} from "@engine/misc/mathEx";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import * as fntXML from "xml/angelcode-loader!./font/pixel.fnt";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
+import {Image} from "@engine/renderable/impl/general/image";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export class ResourceHolder extends ResourceAutoHolder {
 
@@ -49,6 +51,12 @@ export class ResourceHolder extends ResourceAutoHolder {
         return background;
     })();
 
+    @Resource.Image('./steamSeaBattle/data/images/btnOn.png')
+    public imgOn:Image;
+
+
+    @Resource.Image('./steamSeaBattle/data/images/btnOff.png')
+    public imgOff:Image;
 
     @Resource.FontFromAtlas('./tsx5/resource/font',fntXML)
     public fnt:Font;

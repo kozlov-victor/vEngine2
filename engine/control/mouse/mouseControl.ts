@@ -131,7 +131,7 @@ export class MouseControl implements IControl {
             if (layer===undefined) continue;
 
             this._helper.resolveSceneCoordinates(mousePoint,layer.transformType);
-            const capturedEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e, mouseEvent, mousePoint, obj, constrainObjects);
+            const capturedEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e, mouseEvent, mousePoint, obj, obj, constrainObjects);
             if (capturedEvent!==undefined) {
                 mousePoint.target = obj;
                 if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,obj);
@@ -139,7 +139,7 @@ export class MouseControl implements IControl {
                 let parent:Optional<RenderableModel> = obj.parent;
                 while (parent!==undefined) {
                     const propagationEvent:Optional<IObjectMouseEvent> =
-                        this._helper.captureObject(e,mouseEvent,mousePoint,parent, constrainObjects);
+                        this._helper.captureObject(e,mouseEvent,mousePoint,parent, obj, constrainObjects);
                     if (propagationEvent!==undefined) {
                         if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,parent);
                     }
@@ -185,14 +185,14 @@ export class MouseControl implements IControl {
         for (let i:number = 0; i < capturedNew.length; i++) {
             const obj:RenderableModel = capturedNew[i];
             if (capturedOld.indexOf(obj)===-1) {
-                this._helper.triggerEventForObject(e, MOUSE_EVENTS.mouseEnter, point, obj);
+                this._helper.triggerEventForObject(e, MOUSE_EVENTS.mouseEnter, point, obj, obj);
             }
         }
         // mouse leave
         for (let i:number = 0; i < capturedOld.length; i++) {
             const obj:RenderableModel = capturedOld[i];
             if (capturedNew.indexOf(obj)===-1) {
-                this._helper.triggerEventForObject(e, MOUSE_EVENTS.mouseLeave, point, obj);
+                this._helper.triggerEventForObject(e, MOUSE_EVENTS.mouseLeave, point, obj, obj);
             }
         }
         // swap captured objects
@@ -210,7 +210,7 @@ export class MouseControl implements IControl {
         for (let i = 0; i < capturedOld.length; i++) {
             const obj:RenderableModel = capturedOld[i];
             if (capturedNew.indexOf(obj)===-1) {
-                this._helper.triggerEventForObject(e, MOUSE_EVENTS.mouseUp, point, obj);
+                this._helper.triggerEventForObject(e, MOUSE_EVENTS.mouseUp, point, obj, obj);
             }
         }
         this._capturedObjectsByTouchIdPrevHolder.clear(point.id);

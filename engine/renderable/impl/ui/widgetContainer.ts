@@ -74,8 +74,6 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
     private hovered:boolean = false;
     private clicked:boolean = false;
 
-    private memoizeCache:Record<string, RenderableModel> = {};
-
     private static normalizeBorders(top:number,right?:number,bottom?:number,left?:number)
         :{top:number,right:number,bottom:number,left:number} {
         if (right===undefined && bottom===undefined && left===undefined) {
@@ -90,12 +88,6 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
             left = right;
         }
         return {top,right:right!,bottom:bottom!,left:left!};
-    }
-
-    protected getMemoizedView(factory:()=>IPositionableProps):RenderableModel {
-        const model = factory() as RenderableModel & ICloneable<RenderableModel>;
-        this.memoizeCache[model.id] ??= model.clone();
-        return this.memoizeCache[model.id];
     }
 
     public setBackground(background: RenderableModel):void {

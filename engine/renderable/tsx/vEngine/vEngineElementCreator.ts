@@ -16,6 +16,7 @@ import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextF
 import {CheckBox} from "@engine/renderable/impl/ui/toggleButton/checkBox";
 import {SelectBox} from "@engine/renderable/impl/ui/selectBox/selectBox";
 import {RadioButton} from "@engine/renderable/impl/ui/toggleButton/radioButton";
+import {ImageButton} from "@engine/renderable/impl/ui/button/imageButton";
 
 export class VEngineElementCreator extends AbstractElementCreator<RenderableModel>{
 
@@ -27,24 +28,6 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
         let element:RenderableModel;
         const game:Game = this.game;
         switch (node.tagName) {
-            case 'v_circle':
-                element = new Circle(game);
-                break;
-            case 'v_ellipse':
-                element = new Ellipse(game);
-                break;
-            case 'v_rectangle':
-                element = new Rectangle(game);
-                break;
-            case 'v_line':
-                element = new Line(game);
-                break;
-            case 'v_null_game_object':
-                element = new SimpleGameObjectContainer(game);
-                break;
-            case 'v_image':
-                element = new Image(game,node.props.texture);
-                break;
             case 'v_textField':
                 element = new TextField(game,node.props.font);
                 break;
@@ -65,6 +48,27 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 break;
             case 'v_radioButton':
                 element = new RadioButton(game,node.props.radioGroup);
+                break;
+            case 'v_null_game_object':
+                element = new SimpleGameObjectContainer(game);
+                break;
+            case 'v_image':
+                element = new Image(game,node.props.texture);
+                break;
+            case 'v_circle':
+                element = new Circle(game);
+                break;
+            case 'v_ellipse':
+                element = new Ellipse(game);
+                break;
+            case 'v_rectangle':
+                element = new Rectangle(game);
+                break;
+            case 'v_line':
+                element = new Line(game);
+                break;
+            case 'v_imageButton':
+                element = new ImageButton(game,node.props.imgOn(),node.props.imgOff());
                 break;
             case undefined: {
                 if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);

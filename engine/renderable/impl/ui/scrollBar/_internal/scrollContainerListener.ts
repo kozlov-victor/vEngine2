@@ -1,5 +1,5 @@
 import {AbstractScrollContainerListener} from "@engine/renderable/impl/ui/scrollBar/_internal/abstractScrollContainerListener";
-import {Direction} from "@engine/renderable/impl/ui/scrollBar/_internal/sideHelperFunctions";
+import {Direction} from "@engine/renderable/impl/ui/_internal/sideHelperFunctions";
 
 export class VerticalScrollContainerListener extends AbstractScrollContainerListener{
 

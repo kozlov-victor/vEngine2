@@ -5,9 +5,9 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {
     assignPos,
     Direction,
-    getMouse,
+    getMouseScreenCoordinates,
     getSize
-} from "@engine/renderable/impl/ui/scrollBar/_internal/sideHelperFunctions";
+} from "@engine/renderable/impl/ui/_internal/sideHelperFunctions";
 
 interface IScrollPointDesc {
     point: {sceneX:number,sceneY:number};
@@ -137,7 +137,7 @@ export abstract class AbstractScrollContainerListener {
             };
 
             this.offset +=
-                getMouse(this._lastPoint.point,dir) - getMouse(this._prevPoint.point,dir);
+                getMouseScreenCoordinates(this._lastPoint.point,dir) - getMouseScreenCoordinates(this._prevPoint.point,dir);
             this._setScrollPos();
         });
         this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.scroll, (p: IObjectMouseEvent) => {
@@ -162,7 +162,7 @@ export abstract class AbstractScrollContainerListener {
             }
             else {
                 this._scrollVelocity = 1000 *
-                    (getMouse(this._lastPoint.point,dir) - getMouse(this._prevPoint.point,dir)) /
+                    (getMouseScreenCoordinates(this._lastPoint.point,dir) - getMouseScreenCoordinates(this._prevPoint.point,dir)) /
                     (this._lastPoint.time - this._prevPoint.time);
             }
             this._deceleration = 0;

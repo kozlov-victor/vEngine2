@@ -15,6 +15,7 @@ import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import ICssFontParameters = FontTypes.ICssFontParameters;
 import ITextureWithId = FontTypes.ITextureWithId;
 import {FontFactory} from "@engine/renderable/impl/general/font/fontFactory";
+import {Image} from "@engine/renderable/impl/general/image";
 
 namespace ResourceCache {
 
@@ -65,6 +66,11 @@ export class ResourceLoader {
         }
         const img:HTMLImageElement|ImageBitmap = await createImageFromData(req as (URI|Base64|IURLRequest),progress);
         return this.game.getRenderer().createTexture(img);
+    }
+
+    public async loadImage(req: string|IURLRequest,progress?:(n:number)=>void): Promise<Image> {
+        const texture:ITexture = await this.loadTexture(req,progress);
+        return new Image(this.game,texture);
     }
 
     public async loadCubeTexture(

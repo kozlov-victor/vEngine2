@@ -153,11 +153,37 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         radioGroup={this.refs.radioGroup}/>
                     <v_textField click={_=>this.refs.radio3.toggle()} pos={{x:200,y:220}} font={this.resourceHolder.fnt} text={'right'}/>
                 </v_rectangle>
+                <v_rectangle pos={{x:0,y:330}} lineWidth={0} size={{width:540,height:100}} fillColor={{r:12,g:12,b:12,a:10}}>
+                    <v_imageButton
+                        pos={{x:10,y:10}}
+                        size={{width:50,height:50}}
+                        scale={{x:0.5,y:0.5}}
+                        click={e=>this.refs.imgButtonLabel.setText('1')}
+                        imgOn={()=>this.resourceHolder.imgOn}
+                        imgOff={()=>this.resourceHolder.imgOff}/>
+                    <v_imageButton
+                        pos={{x:50,y:10}}
+                        size={{width:50,height:50}}
+                        scale={{x:0.5,y:0.5}}
+                        click={e=>this.refs.imgButtonLabel.setText('2')}
+                        imgOn={()=>this.resourceHolder.imgOn}
+                        imgOff={()=>this.resourceHolder.imgOff}/>
+                    <v_imageButton
+                        pos={{x:90,y:10}}
+                        size={{width:50,height:50}}
+                        scale={{x:0.5,y:0.5}}
+                        click={e=>this.refs.imgButtonLabel.setText('3')}
+                        imgOn={()=>this.resourceHolder.imgOn}
+                        imgOff={()=>this.resourceHolder.imgOff}/>
+                    <v_textField
+                        ref={e=>this.refs.imgButtonLabel = e}
+                        pos={{x:130,y:10}}
+                        font={this.resourceHolder.fnt}/>
+                </v_rectangle>
 
             </>
         );
     }
-
 
     private onCalcButtonClick(str:string):void {
         this.calculator.keyPress(str);

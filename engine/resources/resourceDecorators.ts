@@ -14,6 +14,12 @@ export const Resource = {
             throw new DebugError(`something wrong with precompiler for Texture decorator`);
         };
     },
+    Image: (src:string|IURLRequest)=> {
+        return (target: Scene|ResourceAutoHolder, fieldName: string):void => {
+            // stub for precompiler only
+            throw new DebugError(`something wrong with precompiler for Image decorator`);
+        };
+    },
     Sound: (src:string|IURLRequest)=> {
         return (target: Scene|ResourceAutoHolder, fieldName: string):void => {
             // stub for precompiler only

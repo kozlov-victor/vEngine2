@@ -95,32 +95,34 @@ export class MouseControlHelper {
         e:MouseEvent|TouchEvent|Touch,
         eventName:MOUSE_EVENTS,
         mousePoint:MousePoint,
-        obj:RenderableModel,
+        currentTarget:RenderableModel,
+        initialTarget:RenderableModel,
         constrainObjects:RenderableModel[]
     ):Optional<IObjectMouseEvent>{
 
-        if (this.isPointInRect(mousePoint,obj,constrainObjects)) {
-            return  this.triggerEventForObject(e,eventName,mousePoint,obj);
+        if (this.isPointInRect(mousePoint,currentTarget,constrainObjects)) {
+            return  this.triggerEventForObject(e,eventName,mousePoint,currentTarget,initialTarget);
         } else return undefined;
     }
 
-    public triggerEventForObject(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,mousePoint:MousePoint, obj:RenderableModel):IObjectMouseEvent{
-        mousePoint.target = obj;
+    public triggerEventForObject(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,mousePoint:MousePoint, currentTarget:RenderableModel,initialTarget:RenderableModel):IObjectMouseEvent{
+        mousePoint.target = currentTarget;
         const mouseEvent:IObjectMouseEvent = {
             screenX:mousePoint.screenCoordinate.x,
             screenY:mousePoint.screenCoordinate.y,
             sceneX:mousePoint.sceneCoordinate.x,
             sceneY:mousePoint.sceneCoordinate.y,
-            objectX:mousePoint.sceneCoordinate.x - obj.pos.x,
-            objectY:mousePoint.sceneCoordinate.y - obj.pos.y,
+            objectX:mousePoint.sceneCoordinate.x - currentTarget.pos.x,
+            objectY:mousePoint.sceneCoordinate.y - currentTarget.pos.y,
             id:mousePoint.id,
-            target:obj,
+            currentTarget,
+            initialTarget,
             nativeEvent: e as MouseEvent,
             eventName,
             isMouseDown: mousePoint.isMouseDown,
             button: (e as MouseEvent).button,
         };
-        obj.mouseEventHandler.trigger(eventName,mouseEvent);
+        currentTarget.mouseEventHandler.trigger(eventName,mouseEvent);
         return mouseEvent;
     }
 

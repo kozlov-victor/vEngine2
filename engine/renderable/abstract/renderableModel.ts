@@ -96,6 +96,14 @@ export abstract class RenderableModel
     //tsx
     private tsxEvents:Record<string, ()=>void> = {};
 
+    private memoizeCache:Record<string, RenderableModel> = {};
+
+    protected getMemoizedView(factory:()=>IPositionableProps):RenderableModel {
+        const model = factory() as RenderableModel & ICloneable<RenderableModel>;
+        this.memoizeCache[model.id] ??= model.clone();
+        return this.memoizeCache[model.id];
+    }
+
     protected constructor(protected game:Game){
         super(game);
         this.id = `object_${Incrementer.getValue()}`;

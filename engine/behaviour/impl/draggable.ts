@@ -4,18 +4,34 @@ import {Scene} from "../../scene/scene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IObjectMouseEvent, ISceneMouseEvent, MOUSE_BUTTON} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Int} from "@engine/core/declarations";
+import {Int, Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {LayerTransformType} from "@engine/scene/layer";
 import {IDragPoint} from "@engine/behaviour/impl/dragPoint";
 import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
 
+export interface IDraggableBehaviourParameters {
+    constrainX?:boolean;
+    constrainY?:boolean;
+    minX?:number;
+    maxX?:number;
+    minY?:number;
+    maxY?:number;
+}
 
 export class DraggableBehaviour extends BaseAbstractBehaviour {
 
-    constructor(game:Game){
+    constructor(game:Game, params?:IDraggableBehaviourParameters){
         super(game,{});
+        if (params!==undefined) this.updateConstrains(params);
     }
+
+    private constrainX:boolean;
+    private constrainY:boolean;
+    private minX:Optional<number>;
+    private maxX:Optional<number>;
+    private minY:Optional<number>;
+    private maxY:Optional<number>;
 
     private _blurListener:(e:MouseEvent)=>void;
     private _gameObjectOnClick:(e:IObjectMouseEvent)=>void;
@@ -28,6 +44,16 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
 
     private static _getEventId(e:ISceneMouseEvent):Int{
         return (e.id || 1) as Int;
+    }
+
+    public updateConstrains(params:IDraggableBehaviourParameters):void {
+        this.constrainX = params?.constrainX ?? false;
+        this.constrainY = params?.constrainY ?? false;
+        this.minX = params?.minX;
+        this.maxX = params?.maxX;
+        this.minY = params?.minY;
+        this.maxY = params?.maxY;
+        this.applyNewPositionAndConstrains(this._gameObject.pos.x,this._gameObject.pos.y);
     }
 
     public manage(gameObject:RenderableModel):void {
@@ -77,8 +103,9 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
                 x = e.screenX;
                 y = e.screenY;
             }
-            gameObject.pos.x = x - point.mX;
-            gameObject.pos.y = y - point.mY;
+
+            this.applyNewPositionAndConstrains(x - point.mX,y - point.mY);
+
         });
         this._sceneOnMouseUp = scene.mouseEventHandler.on(MOUSE_EVENTS.mouseUp,(e:ISceneMouseEvent)=>{
             const pointId:number = DraggableBehaviour._getEventId(e);
@@ -123,6 +150,19 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         scene.mouseEventHandler.off(MOUSE_EVENTS.mouseDown,this._sceneOnMouseDown);
         scene.mouseEventHandler.off(MOUSE_EVENTS.mouseMove,this._sceneOnMouseMove);
         scene.mouseEventHandler.off(MOUSE_EVENTS.mouseDown,this._sceneOnMouseUp);
+    }
+
+    private applyNewPositionAndConstrains(newX:number,newY:number):void{
+        const gameObject = this._gameObject;
+        if (this.constrainX) newX = gameObject.pos.x;
+        if (this.constrainY) newY = gameObject.pos.y;
+        if (this.minX!==undefined) if (newX<this.minX) newX = this.minX;
+        if (this.maxX!==undefined) if (newX>this.maxX) newX = this.maxX;
+        if (this.minY!==undefined) if (newY<this.minY) newY = this.minY;
+        if (this.maxY!==undefined) if (newY>this.maxY) newY = this.maxY;
+
+        gameObject.pos.x = newX;
+        gameObject.pos.y = newY;
     }
 
 }

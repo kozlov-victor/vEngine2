@@ -125,6 +125,11 @@ interface ITextFieldProps extends IWidgetContainerProps {
     alignText?:number;
 }
 
+interface IImageButtonProps extends ITransformableProps, IPositionableProps {
+    imgOn: ()=>IPositionableProps;
+    imgOff:()=>IPositionableProps;
+}
+
 declare namespace JSX {
     // tslint:disable-next-line:interface-name
     export interface IntrinsicElements {
@@ -139,6 +144,7 @@ declare namespace JSX {
         v_scrollableTextField:  ITextFieldProps;
         v_richTextField:        ITextFieldProps & {richText?:INode[]};
         v_button:               ITextFieldProps;
+        v_imageButton:          IImageButtonProps;
         v_checkBox:             ICheckBoxProps;
         v_selectBox:            ISelectBoxProps;
         v_radioButton:          IRadioButtonProps;

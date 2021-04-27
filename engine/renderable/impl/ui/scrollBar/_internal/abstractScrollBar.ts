@@ -8,7 +8,7 @@ import {
     assignSize,
     Direction, getOppositeDirection, getPos,
     getSize
-} from "@engine/renderable/impl/ui/scrollBar/_internal/sideHelperFunctions";
+} from "@engine/renderable/impl/ui/_internal/sideHelperFunctions";
 
 export abstract class AbstractScrollBar extends MarkableGameObjectContainer{
 

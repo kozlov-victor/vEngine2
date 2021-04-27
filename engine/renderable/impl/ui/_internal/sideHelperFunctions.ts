@@ -1,6 +1,7 @@
 import {Point2d} from "@engine/geometry/point2d";
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
-import {Size} from "@engine/geometry/size";
+import {ISize, Size} from "@engine/geometry/size";
+import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 
 export enum Direction {
     HORIZONTAL,
@@ -12,7 +13,7 @@ export const assignPos = (pos: Point2d, value: number,dir:Direction):void=> {
     else pos.x = value;
 };
 
-export const getPos =(pos: Point2d,dir:Direction):number=> {
+export const getPos =(pos: IPoint,dir:Direction):number=> {
     if (dir===Direction.VERTICAL) return  pos.y;
     else return pos.x;
 };
@@ -22,12 +23,17 @@ export const assignSize = (size: Size, value: number,dir:Direction):void=> {
     else size.width = value;
 };
 
-export const getMouse = (point: {sceneX:number, sceneY:number},dir:Direction):number=> {
+export const getMouseScreenCoordinates = (point: {sceneX:number, sceneY:number}, dir:Direction):number=> {
     if (dir===Direction.VERTICAL) return point.sceneY;
     else return point.sceneX;
 };
 
-export const getSize =(size: Size,dir:Direction):number=> {
+export const getMouseObjectCoordinates = (point: {objectX:number, objectY:number}, dir:Direction):number=> {
+    if (dir===Direction.VERTICAL) return point.objectY;
+    else return point.objectX;
+};
+
+export const getSize =(size: ISize,dir:Direction):number=> {
     if (dir===Direction.VERTICAL) return  size.height;
     else return size.width;
 };
