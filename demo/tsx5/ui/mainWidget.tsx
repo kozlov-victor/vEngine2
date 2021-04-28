@@ -14,6 +14,8 @@ import {Calculator} from "../calculator";
 import {Color} from "@engine/renderer/common/color";
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBox";
 import {RadioButtonGroup} from "@engine/renderable/impl/ui/toggleButton/radioButton";
+import {IChangeNumericSliderEvent} from "@engine/renderable/impl/ui/numericSlider/_intrtnal/abstractNumericSlider";
+import {HorizontalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/horizontalNumericSlider";
 
 
 export class MainWidget extends VEngineTsxComponent<{}> {
@@ -35,6 +37,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
     private colorLabels = this.colors.map(it=>it.asCssHex());
     private colorSelected:number = 0;
     private textAlign:AlignTextContentHorizontal = AlignTextContentHorizontal.RIGHT;
+    private horizontalScrollValue:number = 50;
 
     constructor(private game:Game, private resourceHolder:ResourceHolder) {
         super(new VEngineTsxDOMRenderer(game));
@@ -179,6 +182,34 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         ref={e=>this.refs.imgButtonLabel = e}
                         pos={{x:130,y:10}}
                         font={this.resourceHolder.fnt}/>
+                    <v_horizontalNumericSlider
+                        max={100}
+                        value={this.horizontalScrollValue}
+                        changed={this.onHorizontalScrollChanged}
+                        background={()=>this.resourceHolder.buttonBg}
+                        backgroundHandler={()=>this.resourceHolder.checkBoxCheckedBg}
+                        size={{width:100,height:20}}
+                        pos={{x:10,y:50}}/>
+                    <v_textField
+                        text={this.horizontalScrollValue.toFixed(2)}
+                        pos={{x:10,y:80}}
+                        font={this.resourceHolder.fnt}/>
+
+                    <v_verticalNumericSlider
+                        background={()=>this.resourceHolder.buttonBg}
+                        backgroundHandler={()=>this.resourceHolder.checkBoxCheckedBg}
+                        size={{width:20,height:80}}
+                        pos={{x:150,y:10}}/>
+                    <v_verticalNumericSlider
+                        background={()=>this.resourceHolder.buttonBg}
+                        backgroundHandler={()=>this.resourceHolder.checkBoxCheckedBg}
+                        size={{width:20,height:80}}
+                        pos={{x:200,y:10}}/>
+                    <v_verticalNumericSlider
+                        background={()=>this.resourceHolder.buttonBg}
+                        backgroundHandler={()=>this.resourceHolder.checkBoxCheckedBg}
+                        size={{width:20,height:80}}
+                        pos={{x:250,y:10}}/>
                 </v_rectangle>
 
             </>
@@ -202,6 +233,11 @@ export class MainWidget extends VEngineTsxComponent<{}> {
 
     private onTextColorChanged = (e:IChangeSelectBoxEvent):void=> {
         this.colorSelected = e.selectedIndex;
+        this.triggerRendering();
+    }
+
+    private onHorizontalScrollChanged = (e:IChangeNumericSliderEvent):void=> {
+        this.horizontalScrollValue = e.value;
         this.triggerRendering();
     }
 

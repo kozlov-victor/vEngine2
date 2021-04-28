@@ -17,6 +17,8 @@ import {CheckBox} from "@engine/renderable/impl/ui/toggleButton/checkBox";
 import {SelectBox} from "@engine/renderable/impl/ui/selectBox/selectBox";
 import {RadioButton} from "@engine/renderable/impl/ui/toggleButton/radioButton";
 import {ImageButton} from "@engine/renderable/impl/ui/button/imageButton";
+import {HorizontalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/horizontalNumericSlider";
+import {VerticalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/verticalNumericSlider";
 
 export class VEngineElementCreator extends AbstractElementCreator<RenderableModel>{
 
@@ -69,6 +71,12 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 break;
             case 'v_imageButton':
                 element = new ImageButton(game,node.props.imgOn(),node.props.imgOff());
+                break;
+            case 'v_horizontalNumericSlider':
+                element = new HorizontalNumericSlider(game);
+                break;
+            case 'v_verticalNumericSlider':
+                element = new VerticalNumericSlider(game);
                 break;
             case undefined: {
                 if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);

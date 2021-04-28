@@ -3,6 +3,7 @@ import {Direction} from "@engine/renderable/impl/ui/_internal/sideHelperFunction
 import {IDraggableBehaviourParameters} from "@engine/behaviour/impl/draggable";
 
 export class HorizontalNumericSlider extends AbstractNumericSlider {
+
     protected direction:Direction = Direction.HORIZONTAL;
     protected draggableConstrains:IDraggableBehaviourParameters = {
         constrainY:true

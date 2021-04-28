@@ -30,9 +30,9 @@ export const Button = (props:{pos:{x:number,y:number},text:string,textColor:ICol
                 backgroundActive={()=>props.r.buttonBgActive}
                 font={props.r.fnt} text={props.text}
                 textColor={props.textColor}
-                click={e=>onPressed(e.target,()=>props.onClick(props.text))}
-                mouseLeave={e=>onReleased(e.target)}
-                mouseUp={e=>onReleased(e.target)}
+                click={e=>onPressed(e.currentTarget,()=>props.onClick(props.text))}
+                mouseLeave={e=>onReleased(e.currentTarget)}
+                mouseUp={e=>onReleased(e.currentTarget)}
             />
         </>
     );

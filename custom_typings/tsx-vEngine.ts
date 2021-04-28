@@ -104,6 +104,13 @@ interface IRadioButtonProps extends IToggleButtonProps {
     changed?:(e:{value:boolean,target:any})=>void;
 }
 
+interface INumericSliderProp extends IWidgetContainerProps {
+    value?:number;
+    max?:number;
+    changed?:(e:{value:number,target:any})=>void;
+    backgroundHandler?:()=>IPositionableProps;
+}
+
 interface ISelectBoxProps extends IWidgetContainerProps{
     font: Font;
     textColor?:IColor;
@@ -133,20 +140,22 @@ interface IImageButtonProps extends ITransformableProps, IPositionableProps {
 declare namespace JSX {
     // tslint:disable-next-line:interface-name
     export interface IntrinsicElements {
-        v_null_game_object:     ITransformableProps & IPositionableProps;
-        v_circle:               ICircleProps;
-        v_ellipse:              IEllipseProps;
-        v_rectangle:            IRectangleProps;
-        v_line:                 ILineProps;
-        v_image:                IImageProps;
-        v_font:                 Partial<{color:IColor, size:number,font:Font}>;
-        v_textField:            ITextFieldProps;
-        v_scrollableTextField:  ITextFieldProps;
-        v_richTextField:        ITextFieldProps & {richText?:INode[]};
-        v_button:               ITextFieldProps;
-        v_imageButton:          IImageButtonProps;
-        v_checkBox:             ICheckBoxProps;
-        v_selectBox:            ISelectBoxProps;
-        v_radioButton:          IRadioButtonProps;
+        v_null_game_object:         ITransformableProps & IPositionableProps;
+        v_circle:                   ICircleProps;
+        v_ellipse:                  IEllipseProps;
+        v_rectangle:                IRectangleProps;
+        v_line:                     ILineProps;
+        v_image:                    IImageProps;
+        v_font:                     Partial<{color:IColor, size:number,font:Font}>;
+        v_textField:                ITextFieldProps;
+        v_scrollableTextField:      ITextFieldProps;
+        v_richTextField:            ITextFieldProps & {richText?:INode[]};
+        v_button:                   ITextFieldProps;
+        v_imageButton:              IImageButtonProps;
+        v_checkBox:                 ICheckBoxProps;
+        v_selectBox:                ISelectBoxProps;
+        v_radioButton:              IRadioButtonProps;
+        v_horizontalNumericSlider:  INumericSliderProp;
+        v_verticalNumericSlider:    INumericSliderProp;
     }
 }

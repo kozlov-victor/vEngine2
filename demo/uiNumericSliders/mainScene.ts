@@ -28,7 +28,7 @@ export class MainScene extends Scene {
         const verticalHandler = new Rectangle(this.game);
         verticalHandler.borderRadius = 5;
         verticalHandler.fillColor = Color.fromCssLiteral(`#96b8fa`);
-        v.setHandler(verticalHandler);
+        v.setBackgroundHandler(verticalHandler);
 
         const verticalBg = new Rectangle(this.game);
         const grad = new LinearGradient();

@@ -20,14 +20,14 @@ import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
 
-export interface IChangeNumericSliderEvent<T extends AbstractNumericSlider> {
-    target: T;
+export interface IChangeNumericSliderEvent {
+    target: AbstractNumericSlider;
     value: number;
 }
 
 export abstract class AbstractNumericSlider extends WidgetContainer {
 
-    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeNumericSliderEvent<this>> = new EventEmitterDelegate();
+    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeNumericSliderEvent> = new EventEmitterDelegate();
 
     protected abstract direction:Direction;
     protected abstract draggableConstrains:IDraggableBehaviourParameters;
@@ -35,6 +35,8 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
 
     private _value:number = 0;
     private _max:number = 100;
+
+    private _tsxChanged:(e:IChangeNumericSliderEvent)=>void;
 
     private draggableBehaviour:DraggableBehaviour = new DraggableBehaviour(this.game);
 
@@ -56,8 +58,10 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
     }
 
 
-    public setTo(value:number):void {
+    public setMax(value:number):void {
+        if (this._max===value) return;
         this._max = value;
+        if (value>this._max) this.setValue(this._max);
     }
 
     public getValue():number {
@@ -68,7 +72,7 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
         return this._max;
     }
 
-    public setHandler(handler:RenderableModel):void {
+    public setBackgroundHandler(handler:RenderableModel):void {
         if (DEBUG && handler.parent!==undefined) throw new DebugError(`can not set handler: this object is already in use`);
         this.handler.dragEventHandler.off(DRAG_EVENTS.dragMove);
         this.replaceChild(this.handler,handler);
@@ -76,14 +80,25 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
         this.draggableBehaviour = new DraggableBehaviour(this.game);
         this.handler.addBehaviour(this.draggableBehaviour);
         this.listenToHandlerDrag();
-        //this.markAsDirty();
         this.updateHandlerGeometry();
+        this.calcHandlerPositionByValue();
     }
 
-    // protected onClientRectChanged():void {
-    //     super.onClientRectChanged();
-    //     this.updateHandlerGeometry();
-    // }
+    public setProps(props:INumericSliderProp):void {
+        super.setProps(props);
+        if (props.backgroundHandler!==undefined) {
+            const memoized:RenderableModel = this.getMemoizedView(props.backgroundHandler);
+            if (memoized!==this.handler) this.setBackgroundHandler(memoized);
+        }
+        if (props.max!==undefined) this.setMax(props.max);
+        if (props.value!==undefined) this.setValue(props.value);
+        if (props.changed!==undefined && props.changed!==this._tsxChanged) {
+            if (this._tsxChanged!==undefined) this.changeEventHandler.off(TOGGLE_BUTTON_EVENTS.changed,this._tsxChanged);
+            this.changeEventHandler.on(TOGGLE_BUTTON_EVENTS.changed, props.changed);
+            this._tsxChanged = props.changed;
+        }
+    }
+
 
     private updateHandlerGeometry():void {
         const clientRect = this.getClientRect();
@@ -93,6 +108,7 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
         assignPos(this.handler.pos,handlerPosToAssign,getOppositeDirection(this.direction));
         assignSize(this.handler.size,getSize(size,getOppositeDirection(this.direction)),getOppositeDirection(this.direction));
         size.release();
+        this.calcHandlerPositionByValue();
         this.draggableBehaviour.updateConstrains(this.draggableConstrains);
     }
 
