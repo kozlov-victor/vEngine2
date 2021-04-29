@@ -54,6 +54,9 @@ export class ResourceHolder extends ResourceAutoHolder {
     @Resource.Image('./steamSeaBattle/data/images/btnOn.png')
     public imgOn:Image;
 
+    @Resource.Image('./tsx5/resource/img/progressBarPattern.png')
+    public progressBarPattern:Image;
+
 
     @Resource.Image('./steamSeaBattle/data/images/btnOff.png')
     public imgOff:Image;

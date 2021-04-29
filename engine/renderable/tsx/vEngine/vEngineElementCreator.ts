@@ -19,6 +19,8 @@ import {RadioButton} from "@engine/renderable/impl/ui/toggleButton/radioButton";
 import {ImageButton} from "@engine/renderable/impl/ui/button/imageButton";
 import {HorizontalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/horizontalNumericSlider";
 import {VerticalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/verticalNumericSlider";
+import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
+import {ProgressBar} from "@engine/renderable/impl/ui/progressBar/progressBar";
 
 export class VEngineElementCreator extends AbstractElementCreator<RenderableModel>{
 
@@ -32,6 +34,9 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
         switch (node.tagName) {
             case 'v_textField':
                 element = new TextField(game,node.props.font);
+                break;
+            case 'v_editTextField':
+                element = new EditTextField(game,node.props.font);
                 break;
             case 'v_scrollableTextField':
                 element = new ScrollableTextField(game,node.props.font);
@@ -77,6 +82,9 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 break;
             case 'v_verticalNumericSlider':
                 element = new VerticalNumericSlider(game);
+                break;
+            case 'v_progressBar':
+                element = new ProgressBar(game);
                 break;
             case undefined: {
                 if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);

@@ -111,6 +111,12 @@ interface INumericSliderProp extends IWidgetContainerProps {
     backgroundHandler?:()=>IPositionableProps;
 }
 
+interface IProgressBarProps extends IWidgetContainerProps {
+    progress?:number;
+    max?:number;
+    backgroundProgress?:()=>IPositionableProps;
+}
+
 interface ISelectBoxProps extends IWidgetContainerProps{
     font: Font;
     textColor?:IColor;
@@ -132,6 +138,10 @@ interface ITextFieldProps extends IWidgetContainerProps {
     alignText?:number;
 }
 
+interface IEditTextFieldProps extends ITextFieldProps {
+    changed?:(e:{target:any})=>void;
+}
+
 interface IImageButtonProps extends ITransformableProps, IPositionableProps {
     imgOn: ()=>IPositionableProps;
     imgOff:()=>IPositionableProps;
@@ -148,6 +158,7 @@ declare namespace JSX {
         v_image:                    IImageProps;
         v_font:                     Partial<{color:IColor, size:number,font:Font}>;
         v_textField:                ITextFieldProps;
+        v_editTextField:            IEditTextFieldProps;
         v_scrollableTextField:      ITextFieldProps;
         v_richTextField:            ITextFieldProps & {richText?:INode[]};
         v_button:                   ITextFieldProps;
@@ -157,5 +168,6 @@ declare namespace JSX {
         v_radioButton:              IRadioButtonProps;
         v_horizontalNumericSlider:  INumericSliderProp;
         v_verticalNumericSlider:    INumericSliderProp;
+        v_progressBar:              IProgressBarProps;
     }
 }

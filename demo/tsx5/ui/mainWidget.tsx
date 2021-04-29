@@ -15,7 +15,6 @@ import {Color} from "@engine/renderer/common/color";
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBox";
 import {RadioButtonGroup} from "@engine/renderable/impl/ui/toggleButton/radioButton";
 import {IChangeNumericSliderEvent} from "@engine/renderable/impl/ui/numericSlider/_intrtnal/abstractNumericSlider";
-import {HorizontalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/horizontalNumericSlider";
 
 
 export class MainWidget extends VEngineTsxComponent<{}> {
@@ -155,7 +154,18 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         backgroundChecked={()=>this.resourceHolder.checkBoxCheckedBg}
                         radioGroup={this.refs.radioGroup}/>
                     <v_textField click={_=>this.refs.radio3.toggle()} pos={{x:200,y:220}} font={this.resourceHolder.fnt} text={'right'}/>
+
+                    <v_progressBar
+                        background={()=>this.resourceHolder.buttonBg}
+                        backgroundProgress={()=>this.resourceHolder.progressBarPattern}
+                        progress={this.horizontalScrollValue}
+                        max={100}
+                        padding={[5]}
+                        size={{width:200,height:30}}
+                        pos={{x:50,y:260}}/>
+
                 </v_rectangle>
+
                 <v_rectangle pos={{x:0,y:330}} lineWidth={0} size={{width:540,height:100}} fillColor={{r:12,g:12,b:12,a:10}}>
                     <v_imageButton
                         pos={{x:10,y:10}}
@@ -210,6 +220,11 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         backgroundHandler={()=>this.resourceHolder.checkBoxCheckedBg}
                         size={{width:20,height:80}}
                         pos={{x:250,y:10}}/>
+                    <v_verticalNumericSlider
+                        background={()=>this.resourceHolder.buttonBg}
+                        backgroundHandler={()=>this.resourceHolder.checkBoxCheckedBg}
+                        size={{width:20,height:80}}
+                        pos={{x:300,y:10}}/>
                 </v_rectangle>
 
             </>
