@@ -33,6 +33,7 @@ export class MainScene extends Scene {
         tf.setPadding(10);
         tf.setMargin(20);
         this.appendChild(tf);
+        tf.focus();
         this.backgroundColor = Color.fromCssLiteral('#e0e6fc');
         document.body.style.backgroundColor = this.backgroundColor.asCssRgba();
     }

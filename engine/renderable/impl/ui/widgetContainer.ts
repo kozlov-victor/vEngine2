@@ -9,7 +9,8 @@ import {
     DefaultBackgroundObject
 } from "@engine/renderable/impl/ui/_internal/defaultBackgroundObject";
 import {DebugError} from "@engine/debug/debugError";
-import {ICloneable} from "@engine/core/declarations";
+import {ICloneable, IFocusable} from "@engine/core/declarations";
+import {CurrentIKeyBoardFocusable} from "@engine/renderable/impl/ui/textField/_internal/currentIKeyBoardFocusable";
 
 interface IContainerWithMarginPadding {
     marginLeft      :number;
@@ -29,7 +30,7 @@ export enum ContainerState {
     DISABLED,
 }
 
-export class WidgetContainer extends MarkableGameObjectContainer implements IContainerWithMarginPadding{
+export class WidgetContainer extends MarkableGameObjectContainer implements IContainerWithMarginPadding, IFocusable{
 
     constructor(game: Game) {
         super(game);
@@ -191,6 +192,18 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         if (props.margin && props.margin.length>0) this.setMargin(...props.margin as [number]);
     }
 
+    public blur(): void {
+        CurrentIKeyBoardFocusable.setFocusable(undefined);
+    }
+
+    public focus(): void {
+        CurrentIKeyBoardFocusable.setFocusable(this);
+    }
+
+    public isFocused(): boolean {
+        return CurrentIKeyBoardFocusable.isFocusable(this);
+    }
+
     protected setState(state:ContainerState):void {
         this.state = state;
         switch (state) {
@@ -248,6 +261,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
             if (this.state===ContainerState.DISABLED) return;
             this.clicked = true;
             this.setState(ContainerState.ACTIVE);
+            this.focus();
         });
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, e=>{
             if (this.state===ContainerState.DISABLED) return;

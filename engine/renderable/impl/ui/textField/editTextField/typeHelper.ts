@@ -29,6 +29,7 @@ export class TypeHelper {
 
         const [rawChar,typedSymbolKind] = this.getTypedCharacterData(e.nativeEvent as KeyboardEvent);
         if (rawChar===undefined) return;
+        if (rawChar===NEWLINE_CHAR && !this.parent.multiline) return;
 
         const serialized:ICharacterInfo[] = this.serialize();
         const dirtyCharId:Optional<number> = this.processTypedSymbol(typedSymbolKind,rawChar,serialized);
@@ -46,6 +47,7 @@ export class TypeHelper {
         }
         const strEx:StringEx = new StringEx(serialized);
         this.parent.setStringEx(strEx);
+        this.parent._triggerChange();
     }
 
     public isDirty():boolean {

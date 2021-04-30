@@ -15,6 +15,7 @@ import {Color} from "@engine/renderer/common/color";
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBox";
 import {RadioButtonGroup} from "@engine/renderable/impl/ui/toggleButton/radioButton";
 import {IChangeNumericSliderEvent} from "@engine/renderable/impl/ui/numericSlider/_intrtnal/abstractNumericSlider";
+import {IChangeEditTextFieldEvent} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 
 
 export class MainWidget extends VEngineTsxComponent<{}> {
@@ -37,6 +38,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
     private colorSelected:number = 0;
     private textAlign:AlignTextContentHorizontal = AlignTextContentHorizontal.RIGHT;
     private horizontalScrollValue:number = 50;
+    private editedText:string = 'text';
 
     constructor(private game:Game, private resourceHolder:ResourceHolder) {
         super(new VEngineTsxDOMRenderer(game));
@@ -225,6 +227,22 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         backgroundHandler={()=>this.resourceHolder.checkBoxCheckedBg}
                         size={{width:20,height:80}}
                         pos={{x:300,y:10}}/>
+                    <v_editTextField
+                        multiline={false}
+                        cursorColor={{r:100,g:10,b:10}}
+                        text={this.editedText}
+                        changed={this.onEditTextChanged}
+                        pos={{x:400,y:10}}
+                        background={()=>this.resourceHolder.buttonBg}
+                        size={{width:100,height:60}}
+                        font={this.resourceHolder.fnt}/>
+                    <v_richTextField
+                        wordBrake={WordBrake.PREDEFINED}
+                        size={{width:100,height:20}}
+                        background={()=>this.resourceHolder.buttonBgActive}
+                        richText={<v_font size={12} color={{r:100,g:0,b:0}}>{this.editedText}</v_font>}
+                        pos={{x:400,y:75}}
+                        font={this.resourceHolder.fnt}/>
                 </v_rectangle>
 
             </>
@@ -253,6 +271,11 @@ export class MainWidget extends VEngineTsxComponent<{}> {
 
     private onHorizontalScrollChanged = (e:IChangeNumericSliderEvent):void=> {
         this.horizontalScrollValue = e.value;
+        this.triggerRendering();
+    }
+
+    private onEditTextChanged = (e:IChangeEditTextFieldEvent):void=> {
+        this.editedText = e.value;
         this.triggerRendering();
     }
 

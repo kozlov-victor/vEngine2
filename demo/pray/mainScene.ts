@@ -34,7 +34,7 @@ export class MainScene extends Scene {
 
         this.backgroundColor.setRGB(12,12,12);
         this.game.addControl(KeyboardControl);
-        const tf:TextField = new EditTextField(this.game,this.r.themeFont);
+        const tf:TextField = new TextField(this.game,this.r.themeFont);
         tf.size.setWH(615,500);
         tf.setAlignText(AlignText.JUSTIFY);
         tf.setWordBrake(WordBrake.FIT);

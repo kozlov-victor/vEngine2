@@ -50,6 +50,12 @@ export interface IUpdatable {
     update():void;
 }
 
+export interface IFocusable {
+    focus:()=>void;
+    blur:()=>void;
+    isFocused():boolean;
+}
+
 export interface ITransformable {
     worldTransformDirty:boolean;
     worldTransformMatrix:Mat16Holder;

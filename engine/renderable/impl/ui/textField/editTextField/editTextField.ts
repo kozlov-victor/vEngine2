@@ -13,20 +13,29 @@ import {Incrementer} from "@engine/resources/incrementer";
 import {IRect} from "@engine/geometry/rect";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {IKeyboardFocusable} from "@engine/renderable/impl/ui/textField/_internal/iKeyboardFocusable";
-import {CurrentIKeyBoardFocusable} from "@engine/renderable/impl/ui/textField/_internal/currentIKeyBoardFocusable";
+import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
+import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
 
+export interface IChangeEditTextFieldEvent {
+    target: EditTextField;
+    value: string;
+}
 
 export class EditTextField extends RichTextField implements IKeyboardFocusable{
 
     public readonly type:string = 'EditTextField';
 
     public cursorColor:Color = Color.GREY.clone();
+    public multiline:boolean = true;
+
+    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeEditTextFieldEvent> = new EventEmitterDelegate();
 
     private cursor:Cursor;
 
+    private _tsxChanged:(e:IChangeEditTextFieldEvent)=>void;
+
     constructor(game:Game,font:Font) {
         super(game,font);
-        this.focus();
         this.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
     }
 
@@ -52,6 +61,36 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
             currentOffsetVertical = - textRow.pos.y;
         }
         this.setCurrentOffsetVertical(currentOffsetVertical);
+    }
+
+    public _triggerChange():void {
+        this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {target:this,value:this.getText()});
+    }
+
+    public setProps(props: IEditTextFieldProps):void {
+        super.setProps(props);
+        if (props.changed!==undefined && props.changed!==this._tsxChanged) {
+            if (this._tsxChanged!==undefined) this.changeEventHandler.off(TOGGLE_BUTTON_EVENTS.changed,this._tsxChanged);
+            this.changeEventHandler.on(TOGGLE_BUTTON_EVENTS.changed, props.changed);
+            this._tsxChanged = props.changed;
+        }
+        if (props.text!==undefined) this.setText(props.text);
+        if (props.cursorColor!==undefined) {
+            const r = props.cursorColor.r;
+            const g = props.cursorColor.g;
+            const b = props.cursorColor.b;
+            const a = props.cursorColor.a ?? 255;
+            const dirty:boolean =
+                r!==this.cursorColor.r ||
+                g!==this.cursorColor.g ||
+                b!==this.cursorColor.b ||
+                a!==this.cursorColor.a;
+            if (dirty) {
+                this.cursorColor.set(props.cursorColor);
+                this.markAsDirty();
+            }
+        }
+        if (props.multiline!==undefined) this.multiline = props.multiline;
     }
 
     protected onClientRectChanged():void {
@@ -86,6 +125,7 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
     }
 
     public setText(text: string | number):void {
+        if (this.getText()===text) return;
         super.setText(text);
         if (this.cursor!==undefined) this.cursor.currentRow = undefined;
     }
@@ -97,18 +137,6 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
 
     public _getRowSet():TextRowSet {
         return this.rowSet;
-    }
-
-    public blur(): void {
-        CurrentIKeyBoardFocusable.setFocusable(undefined);
-    }
-
-    public focus(): void {
-        CurrentIKeyBoardFocusable.setFocusable(this);
-    }
-
-    public isFocused(): boolean {
-        return CurrentIKeyBoardFocusable.isFocusable(this);
     }
 
 }

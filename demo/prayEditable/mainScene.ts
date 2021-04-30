@@ -42,6 +42,7 @@ export class MainScene extends Scene {
         tf.pos.setXY(90,23);
         tf.textColor.setRGBA(255,255,255,0);
         tf.setText(this.r.text);
+        tf.focus();
         this.appendChild(tf);
 
         const f = new MotionBlurFilter(this.game);

@@ -139,7 +139,9 @@ interface ITextFieldProps extends IWidgetContainerProps {
 }
 
 interface IEditTextFieldProps extends ITextFieldProps {
-    changed?:(e:{target:any})=>void;
+    changed?:(e:{target:any,value:string})=>void;
+    cursorColor?:IColor;
+    multiline?:boolean;
 }
 
 interface IImageButtonProps extends ITransformableProps, IPositionableProps {
@@ -169,5 +171,6 @@ declare namespace JSX {
         v_horizontalNumericSlider:  INumericSliderProp;
         v_verticalNumericSlider:    INumericSliderProp;
         v_progressBar:              IProgressBarProps;
+        v_scrollView:               IWidgetContainerProps;
     }
 }

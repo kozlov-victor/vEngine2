@@ -21,6 +21,7 @@ import {HorizontalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/
 import {VerticalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/verticalNumericSlider";
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {ProgressBar} from "@engine/renderable/impl/ui/progressBar/progressBar";
+import {ScrollView} from "@engine/renderable/impl/ui/scrollViews/scrollView";
 
 export class VEngineElementCreator extends AbstractElementCreator<RenderableModel>{
 
@@ -85,6 +86,9 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 break;
             case 'v_progressBar':
                 element = new ProgressBar(game);
+                break;
+            case 'v_scrollView':
+                element = new ScrollView(game);
                 break;
             case undefined: {
                 if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);
