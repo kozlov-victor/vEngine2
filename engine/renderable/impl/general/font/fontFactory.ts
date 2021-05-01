@@ -29,17 +29,10 @@ const CYR_CHARS:string =
     'ЇїІіЄєҐґ';
 
 /*
-AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz
-1234567890
-"!`?'.,;:()[]{}<>|/@^$-%+=#_&~*
-АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНн
-ОоПпРрСсТтУуФфХхЦцЧчШшЩщ
-ЫыЬьЪъЭэЮюЯя
-ЇїІіЄєҐґ
+AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890"!`?'.,;:()[]{}<>| /@^$-%+=#_&~*АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЫыЬьЪъЭэЮюЯяЇїІіЄєҐґ
  */
 
 export namespace FontFactory {
-
 
     import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
     import ITextureWithId = FontTypes.ITextureWithId;

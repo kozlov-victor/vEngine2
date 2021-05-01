@@ -42,15 +42,10 @@ export class Font {
         if (Font.isDefaultChar(char) && this.context.symbols[char]===undefined) {
             return this.context.symbols[' '] || this.DEFAULT_SPACE_INFO;
         }
-        const symbolInfo:IFontSymbolInfo =
-            this.context.symbols[char] ||
-            this.context.symbols['?']  ||
-            this.DEFAULT_SYMBOL_IN_CONTEXT
-        ;
-        if (DEBUG && symbolInfo===undefined) {
-            throw new DebugError(`no symbol info for character "${char}"`);
-        }
-        return symbolInfo;
+
+        return this.context.symbols[char] ||
+            this.context.symbols['?'] ||
+            this.DEFAULT_SYMBOL_IN_CONTEXT;
     }
 
 
