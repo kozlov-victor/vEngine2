@@ -237,7 +237,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         size={{width:100,height:60}}
                         font={this.resourceHolder.fnt}/>
                     <v_richTextField
-                        wordBrake={WordBrake.PREDEFINED}
+                        wordBrake={WordBrake.FIT}
                         size={{width:100,height:20}}
                         background={()=>this.resourceHolder.buttonBgActive}
                         richText={<v_font size={12} color={{r:100,g:0,b:0}}>{this.editedText}</v_font>}
