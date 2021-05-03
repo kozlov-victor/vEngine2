@@ -117,10 +117,15 @@ interface IProgressBarProps extends IWidgetContainerProps {
     backgroundProgress?:()=>IPositionableProps;
 }
 
-interface ISelectBoxProps extends IWidgetContainerProps{
+interface IDirectionalListProps<T> extends IWidgetContainerProps {
+    data?:T[];
+    renderItem?:(arg:T)=>(ITransformableProps & IPositionableProps);
+}
+
+interface ISelectBoxProps<T> extends IDirectionalListProps<T>{
     font: Font;
     textColor?:IColor;
-    options:(string|number)[];
+    data:T[];
     selectedIndex?:number;
     changed?:(e:{selectedIndex:number,target:any})=>void;
     backgroundSelected?:()=>IPositionableProps;
@@ -166,11 +171,13 @@ declare namespace JSX {
         v_button:                   ITextFieldProps;
         v_imageButton:              IImageButtonProps;
         v_checkBox:                 ICheckBoxProps;
-        v_selectBox:                ISelectBoxProps;
+        v_selectBox:                ISelectBoxProps<any>;
         v_radioButton:              IRadioButtonProps;
         v_horizontalNumericSlider:  INumericSliderProp;
         v_verticalNumericSlider:    INumericSliderProp;
         v_progressBar:              IProgressBarProps;
         v_scrollView:               IWidgetContainerProps;
+        v_verticalList:             IDirectionalListProps<any>;
+        v_horizontalList:           IDirectionalListProps<any>;
     }
 }

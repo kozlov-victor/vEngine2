@@ -2,12 +2,11 @@ import {Scene} from "@engine/scene/scene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {
-    LIST_VIEW_EVENTS,
-    ListViewItem,
-    VerticalListView
-} from "@engine/renderable/impl/ui/scrollViews/verticalListView";
+    VerticalList
+} from "@engine/renderable/impl/ui/scrollViews/directional/verticalList";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {MainScene} from "./mainScene";
+import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/_internal/abstractDirectionalList";
 
 const roms:string[] = [
     'chip8/roms/game Animal Race.ch8',
@@ -50,15 +49,18 @@ export class MenuScene extends Scene {
     @Resource.FontFromCssDescription({fontSize: 25,fontFamily:'monospace'})
     private fnt:Font;
 
-    private listView:VerticalListView;
+    private listView:VerticalList;
 
     public onReady():void {
-        this.listView = new VerticalListView(this.game);
+        this.listView = new VerticalList(this.game);
         this.listView.size.set(this.game.size);
         this.listView.setPadding(10);
         this.listView.setMargin(10);
         this.appendChild(this.listView);
         roms.forEach(it=>this.createListItem(it));
+        this.listView.listViewEventHandler.on(LIST_VIEW_EVENTS.itemClick, e=>{
+            this.game.pushScene(new MainScene(this.game,roms[e.dataIndex]));
+        });
     }
 
     private createListItem(text:string):void{
@@ -67,13 +69,7 @@ export class MenuScene extends Scene {
         tf.size.setWH(this.game.width,40);
         tf.setText(text);
         tf.setFont(this.fnt);
-
-        const listVIewItem:ListViewItem = new ListViewItem(tf);
-        listVIewItem.listViewEventHandler.on(LIST_VIEW_EVENTS.itemClick, ()=>{
-            this.game.pushScene(new MainScene(this.game,text));
-        });
-
-        this.listView.addView(listVIewItem);
+        this.listView.addView(tf);
     }
 
 }

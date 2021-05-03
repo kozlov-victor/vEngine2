@@ -17,10 +17,8 @@ import {
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {
-    LIST_VIEW_EVENTS,
-    ListViewItem,
-    VerticalListView
-} from "@engine/renderable/impl/ui/scrollViews/verticalListView";
+    VerticalList
+} from "@engine/renderable/impl/ui/scrollViews/directional/verticalList";
 import {
     FadeInAppearanceTransition,
     FadeOutAppearanceTransition
@@ -79,6 +77,7 @@ import {
     SizeHeightInAppearanceTransition,
     SizeHeightOutAppearanceTransition
 } from "@engine/scene/transition/appear/size/abstractSizeHeightAppearanceTransition";
+import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/_internal/abstractDirectionalList";
 
 
 export class MainScene extends Scene {
@@ -87,11 +86,13 @@ export class MainScene extends Scene {
     private fnt:Font;
     public backgroundColor: Color = Color.RGB(233);
 
-    private listView:VerticalListView;
+    private listView:VerticalList;
+    private transitions:ISceneTransition[] = [];
+
 
     public onReady():void {
 
-        this.listView = new VerticalListView(this.game);
+        this.listView = new VerticalList(this.game);
         this.listView.size.set(this.game.size);
         this.listView.setPadding(10);
         this.listView.setMargin(10);
@@ -170,6 +171,10 @@ export class MainScene extends Scene {
         this.createTurnPageVerticalTransitionButton('turn the next page (vertical)',true);
         this.createTurnPageVerticalTransitionButton('turn the prev page (vertical)',false);
 
+        this.listView.listViewEventHandler.on(LIST_VIEW_EVENTS.itemClick, e=>{
+            this.game.pushScene(new SecondScene(this.game),this.transitions[e.dataIndex]);
+        });
+
     }
 
     private createTransitionButton(text:string,transition:ISceneTransition):void{
@@ -179,12 +184,8 @@ export class MainScene extends Scene {
         tf.size.setWH(this.game.width,40);
         tf.setText(text);
         tf.setFont(this.fnt);
-
-        const listViewItem:ListViewItem = new ListViewItem(tf);
-        listViewItem.listViewEventHandler.on(LIST_VIEW_EVENTS.itemClick, ()=>{
-            this.game.pushScene(new SecondScene(this.game),transition);
-        });
-        this.listView.addView(listViewItem);
+        this.listView.addView(tf);
+        this.transitions.push(transition);
     }
 
     private createPushTransitionButton(text:string,side:SIDE):void{

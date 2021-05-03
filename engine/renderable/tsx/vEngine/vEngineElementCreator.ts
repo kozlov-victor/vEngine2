@@ -22,11 +22,23 @@ import {VerticalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/ve
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {ProgressBar} from "@engine/renderable/impl/ui/progressBar/progressBar";
 import {ScrollView} from "@engine/renderable/impl/ui/scrollViews/scrollView";
+import {VerticalList} from "@engine/renderable/impl/ui/scrollViews/directional/verticalList";
+import {HorizontalList} from "@engine/renderable/impl/ui/scrollViews/directional/horizontalList";
 
 export class VEngineElementCreator extends AbstractElementCreator<RenderableModel>{
 
+    private static instance:VEngineElementCreator;
+
     constructor(protected game:Game) {
         super();
+        VEngineElementCreator.instance = this;
+    }
+
+    public static getCreatedInstance():VEngineElementCreator {
+        if (DEBUG && VEngineElementCreator.instance===undefined) {
+            throw new DebugError(`VEngineElementCreator instance has not been created yet`);
+        }
+        return VEngineElementCreator.instance;
     }
 
     public createElementByTagName(node: VirtualNode): RenderableModel {
@@ -89,6 +101,12 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 break;
             case 'v_scrollView':
                 element = new ScrollView(game);
+                break;
+            case 'v_verticalList':
+                element = new VerticalList(game);
+                break;
+            case 'v_horizontalList':
+                element = new HorizontalList(game);
                 break;
             case undefined: {
                 if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);

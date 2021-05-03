@@ -34,15 +34,20 @@ export class MainWidget extends VEngineTsxComponent<{}> {
         Color.fromCssLiteral('#697cee'),
         Color.fromCssLiteral('#efc8a5'),
     ];
-    private colorLabels = this.colors.map(it=>it.asCssHex());
     private colorSelected:number = 0;
     private textAlign:AlignTextContentHorizontal = AlignTextContentHorizontal.RIGHT;
     private horizontalScrollValue:number = 50;
     private editedText:string = 'text';
+    private listData:({index:number})[] = [];
 
     constructor(private game:Game, private resourceHolder:ResourceHolder) {
         super(new VEngineTsxDOMRenderer(game));
         this.refs.radioGroup = new RadioButtonGroup();
+
+        for (let i=0;i<100;i++) {
+            this.listData.push({index:i});
+        }
+
     }
 
     public render():VirtualNode {
@@ -119,7 +124,14 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         size={{width: 120, height:100}}
                         font={this.resourceHolder.fnt}
                         textColor={this.textColor}
-                        options={this.colorLabels}
+                        data={this.colors}
+                        renderItem={(it:Color)=>
+                            <v_textField
+                                autoSize={true}
+                                textColor={it}
+                                font={this.resourceHolder.fnt}
+                                text={it.asCssHex()}/>
+                        }
                         selectedIndex={this.colorSelected}
                         changed={this.onTextColorChanged}
                         background={()=>this.resourceHolder.buttonBg}
@@ -244,7 +256,32 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         pos={{x:400,y:75}}
                         font={this.resourceHolder.fnt}/>
                 </v_rectangle>
-
+                <v_verticalList
+                    pos={{x:550,y:10}}
+                    padding={[10]}
+                    size={{width:200,height:200}}
+                    background={()=>this.resourceHolder.buttonBgActive}
+                    data={this.listData}
+                    renderItem={(item:{index:number})=>
+                        <v_textField
+                            background={()=>this.resourceHolder.textFieldBg}
+                            text={'---->'+item.index+'<----'}
+                            font={this.resourceHolder.fnt}/>
+                    }/>
+                <v_horizontalList
+                    pos={{x:550,y:225}}
+                    padding={[10]}
+                    size={{width:200,height:90}}
+                    background={()=>this.resourceHolder.buttonBg}
+                    data={this.listData}
+                    renderItem={(item:{index:number})=>
+                        <v_textField
+                            margin={[5]}
+                            size={{width:100,height:60}}
+                            background={()=>this.resourceHolder.textFieldBg}
+                            text={'---->'+item.index+'<----'}
+                            font={this.resourceHolder.fnt}/>
+                    }/>
             </>
         );
     }

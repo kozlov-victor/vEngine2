@@ -2,10 +2,8 @@ import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {
-    LIST_VIEW_EVENTS,
-    ListViewItem,
-    VerticalListView
-} from "@engine/renderable/impl/ui/scrollViews/verticalListView";
+    VerticalList
+} from "@engine/renderable/impl/ui/scrollViews/directional/verticalList";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
@@ -13,13 +11,17 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 import {IParentChild} from "@engine/core/declarations";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
+import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VEngineElementCreator} from "@engine/renderable/tsx/vEngine/vEngineElementCreator";
+import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
+import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/_internal/abstractDirectionalList";
 
 export interface IChangeSelectBoxEvent {
     selectedIndex:number;
     target: SelectBox;
 }
 
-export class SelectBox extends VerticalListView {
+export class SelectBox extends VerticalList {
 
     public readonly type:string = 'SelectBox';
 
@@ -27,45 +29,52 @@ export class SelectBox extends VerticalListView {
     public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeSelectBoxEvent> = new EventEmitterDelegate();
 
     private _options:(string|number)[] = [];
-    private _textFields:TextField[] = [];
+    private _optionViews:WidgetContainer[] = [];
     private _selectedIndex:number = -1;
 
     private _tsxChanged:(e:IChangeSelectBoxEvent)=>void;
 
     private backgroundSelected: RenderableModel = new SimpleGameObjectContainer(this.game);
-    private lastSelectedView:TextField;
+    private lastSelectedView:WidgetContainer;
 
     private readonly textColor:Color = Color.GREY.clone();
 
     private readonly defaultBackground:RenderableModel = new SimpleGameObjectContainer(this.game);
+    private isCustomRenderer:boolean = false;
 
     constructor(protected game: Game, protected font: Font) {
         super(game);
         const bg = new Rectangle(this.game);
         bg.fillColor = Color.fromCssLiteral('#f3f3f3');
         this.selectedBackground = bg;
+        this.listViewEventHandler.on(LIST_VIEW_EVENTS.itemClick, e=>{
+            if (e.dataIndex===this._selectedIndex) return;
+            this.select(e.dataIndex);
+            this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed,{target:this,selectedIndex:e.dataIndex});
+        });
     }
 
-    public setOptions(options:(string|number)[]):void {
+    public setOptions(options:(string|number|any)[],renderItem?:(dataItem:any)=>WidgetContainer):void {
         if (this._selectedIndex<0 || this._selectedIndex>options.length-1) this._selectedIndex = - 1;
         this.lastSelectedView = undefined!;
         this._options = options;
         this.empty();
-        this._textFields.length = 0;
+        this._optionViews.length = 0;
         this.revalidate();
         const clientRect = this.getClientRect();
+        this.isCustomRenderer = renderItem!==undefined;
         options.forEach((it,index)=>{
-            const tf:TextField = new TextField(this.game,this.font);
-            tf.size.setWH(clientRect.width,this.font.context.lineHeight);
-            tf.setText(it);
-            this._textFields.push(tf);
-            const listViewItem:ListViewItem = new ListViewItem(tf);
-            listViewItem.listViewEventHandler.on(LIST_VIEW_EVENTS.itemClick, ()=>{
-                if (index===this._selectedIndex) return;
-                this.select(index);
-                this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed,{target:this,selectedIndex:index});
-            });
-            this.addView(listViewItem);
+            if (renderItem===undefined) {
+                const tf:TextField = new TextField(this.game,this.font);
+                tf.size.setWH(clientRect.width,this.font.context.lineHeight);
+                tf.setText(it);
+                this._optionViews.push(tf);
+                this.addView(tf);
+            } else {
+                const child:WidgetContainer = renderItem(it);
+                this.addView(child);
+                this._optionViews.push(child);
+            }
         });
         this.passPropertiesToChildren();
         this.select(this._selectedIndex);
@@ -101,9 +110,23 @@ export class SelectBox extends VerticalListView {
         return this._options[this._selectedIndex];
     }
 
-    public setProps(props:ISelectBoxProps):void {
+    public setProps(props:ISelectBoxProps<any>):void {
         super.setProps(props);
-        if (props.options!==undefined && this.getOptions()!==props.options) this.setOptions(props.options);
+        if (props.data!==undefined && this.getOptions()!==props.data) {
+            const renderItemFn =
+                props.renderItem===undefined?undefined:
+                (item:any):WidgetContainer=> {
+                    const node:VirtualNode = props.renderItem!(item) as VirtualNode;
+                    const model:WidgetContainer =
+                        VEngineElementCreator.getCreatedInstance().createElementByTagName(node) as WidgetContainer;
+                    VEngineElementCreator.getCreatedInstance().setProps(model,node);
+                    return model;
+                };
+            this.setOptions(
+                props.data,
+                renderItemFn
+            );
+        }
         if (props.textColor!==undefined) this.setTextColor(props.textColor);
         if (props.changed!==undefined && props.changed!==this._tsxChanged) {
             if (this._tsxChanged!==undefined) this.changeEventHandler.off(TOGGLE_BUTTON_EVENTS.changed,this._tsxChanged);
@@ -125,25 +148,26 @@ export class SelectBox extends VerticalListView {
     }
 
     private passPropertiesToChildren():void {
-        this._textFields.forEach((tf,index)=>{
-            tf.textColor.set(this.textColor);
+        if (this.isCustomRenderer) return;
+        this._optionViews.forEach((c,index)=>{
+            (c as TextField).textColor.set(this.textColor);
         });
     }
 
     private select(index:number):void{
         if (index===-1) return;
         this._selectedIndex = index;
-        const tf:TextField = this._textFields[index];
-        if (tf===undefined) return;
+        const optionContainer:WidgetContainer = this._optionViews[index];
+        if (optionContainer===undefined) return;
         (this.defaultBackground as IParentChild).parent = undefined;
         if (this.lastSelectedView!==undefined) this.lastSelectedView.setBackground(this.defaultBackground);
         (this.backgroundSelected as IParentChild).parent = undefined;
-        tf.setBackground(this.backgroundSelected);
-        this.lastSelectedView = tf;
+        optionContainer.setBackground(this.backgroundSelected);
+        this.lastSelectedView = optionContainer;
     }
 
     private moveSelectedIntoViewRect():void {
-        const view:TextField = this.lastSelectedView;
+        const view:WidgetContainer = this.lastSelectedView;
         if (view===undefined) return;
         const newOffset:number = -view.size.height*this._selectedIndex;
         this._scrollContainerDelegate.setCurrentOffsetVertical(newOffset);
