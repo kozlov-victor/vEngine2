@@ -12,10 +12,10 @@ import {
 import {Button} from "./components/button";
 import {Calculator} from "../calculator";
 import {Color} from "@engine/renderer/common/color";
-import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBox";
 import {RadioButtonGroup} from "@engine/renderable/impl/ui/toggleButton/radioButton";
 import {IChangeNumericSliderEvent} from "@engine/renderable/impl/ui/numericSlider/_intrtnal/abstractNumericSlider";
 import {IChangeEditTextFieldEvent} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
+import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBoxEvents";
 
 
 export class MainWidget extends VEngineTsxComponent<{}> {

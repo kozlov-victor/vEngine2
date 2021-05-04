@@ -1,12 +1,10 @@
 import {Scene} from "@engine/scene/scene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font/font";
-import {
-    VerticalList
-} from "@engine/renderable/impl/ui/scrollViews/directional/verticalList";
+import {VerticalList} from "@engine/renderable/impl/ui/scrollViews/directional/verticalList";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {MainScene} from "./mainScene";
-import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/_internal/abstractDirectionalList";
+import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/directionalListEvents";
 
 const roms:string[] = [
     'chip8/roms/game Animal Race.ch8',

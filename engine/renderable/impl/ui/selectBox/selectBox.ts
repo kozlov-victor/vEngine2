@@ -12,14 +12,10 @@ import {IParentChild} from "@engine/core/declarations";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
-import {VEngineElementCreator} from "@engine/renderable/tsx/vEngine/vEngineElementCreator";
 import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
-import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/_internal/abstractDirectionalList";
+import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/directionalListEvents";
+import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBoxEvents";
 
-export interface IChangeSelectBoxEvent {
-    selectedIndex:number;
-    target: SelectBox;
-}
 
 export class SelectBox extends VerticalList {
 
@@ -117,6 +113,8 @@ export class SelectBox extends VerticalList {
                 props.renderItem===undefined?undefined:
                 (item:any):WidgetContainer=> {
                     const node:VirtualNode = props.renderItem!(item) as VirtualNode;
+                    const VEngineElementCreator =
+                        require('@engine/renderable/tsx/vEngine/vEngineElementCreator').VEngineElementCreator;
                     const model:WidgetContainer =
                         VEngineElementCreator.getCreatedInstance().createElementByTagName(node) as WidgetContainer;
                     VEngineElementCreator.getCreatedInstance().setProps(model,node);

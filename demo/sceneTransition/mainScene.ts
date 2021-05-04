@@ -77,7 +77,7 @@ import {
     SizeHeightInAppearanceTransition,
     SizeHeightOutAppearanceTransition
 } from "@engine/scene/transition/appear/size/abstractSizeHeightAppearanceTransition";
-import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/_internal/abstractDirectionalList";
+import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/directionalListEvents";
 
 
 export class MainScene extends Scene {

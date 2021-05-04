@@ -4,16 +4,12 @@ import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
-import {VEngineElementCreator} from "@engine/renderable/tsx/vEngine/vEngineElementCreator";
 import {assignPos, assignSize, Direction, getSize} from "@engine/renderable/impl/ui/_internal/sideHelperFunctions";
-
-export enum LIST_VIEW_EVENTS {
-    itemClick = 'itemClick'
-}
+import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/directionalListEvents";
 
 export abstract class AbstractDirectionalList extends ScrollView {
 
-    constructor(protected game:Game) {
+    protected constructor(protected game:Game) {
         super(game);
     }
     private pointer:number = 0;
@@ -57,6 +53,8 @@ export abstract class AbstractDirectionalList extends ScrollView {
             if (props.renderItem!==undefined) {
                 for (const item of props.data) {
                     const node:VirtualNode = props.renderItem!(item) as VirtualNode;
+                    const VEngineElementCreator =
+                        require('@engine/renderable/tsx/vEngine/vEngineElementCreator').VEngineElementCreator;
                     const newChild = VEngineElementCreator.getCreatedInstance().createElementByTagName(node);
                     VEngineElementCreator.getCreatedInstance().setProps(newChild,node);
                     this.addView(newChild);
