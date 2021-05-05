@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Model3d} from "@engine/renderable/impl/general/model3d";
+import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image";
 import {PalletOffsetFilter} from "@engine/renderer/webGl/filters/texture/palletOffsetFilter";
@@ -29,8 +29,6 @@ export class MainScene extends Scene {
         obj.pos.setXY(140,140);
         obj.size.setWH(100,100);
         obj.texture = renderTarget.getTexture();
-        obj.heightMapTexture = obj.texture;
-        obj.heightMapFactor = 15;
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{

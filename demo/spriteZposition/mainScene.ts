@@ -3,7 +3,7 @@ import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {MathEx} from "@engine/misc/mathEx";
-import {Model3d} from "@engine/renderable/impl/general/model3d";
+import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {Torus} from "@engine/renderer/webGl/primitives/torus";
 import {Int} from "@engine/core/declarations";
 import {Resource} from "@engine/resources/resourceDecorators";

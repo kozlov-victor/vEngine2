@@ -13,14 +13,13 @@ export abstract class Mesh extends RenderableModel {
     public texture:Optional<ITexture>;
     public cubeMapTexture:Optional<ICubeMapTexture>;
     public normalsTexture:Optional<ITexture>;
-    public heightMapTexture:Optional<ITexture>;
-    public heightMapFactor:number = 0.01;
     public fillColor:Color = Color.BLACK.clone();
-    public colorMix:number = 0;
-    public reflectivity:number = 0;
+    public colorMix:number = 0;// 0..1
+    public reflectivity:number = 0;// 0..1
     public bufferInfo:BufferInfo;
     public vertexItemSize:2|3;
     public invertY:boolean = false;
+    public specular:number = 0; // 0..1
 
     private _lightAccepted:Optional<boolean>;
 
@@ -72,10 +71,9 @@ export abstract class Mesh extends RenderableModel {
         cloned.texture = this.texture;
         cloned.cubeMapTexture = this.cubeMapTexture;
         cloned.normalsTexture = this.normalsTexture;
-        cloned.heightMapTexture = this.heightMapTexture;
-        cloned.heightMapFactor = this.heightMapFactor;
         cloned.fillColor = this.fillColor.clone();
         cloned.colorMix = this.colorMix;
+        cloned.specular = this.specular;
         cloned.reflectivity = this.reflectivity;
         cloned.depthTest = this.depthTest;
         super.setClonedProperties(cloned);

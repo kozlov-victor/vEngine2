@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Model3d} from "@engine/renderable/impl/general/model3d";
+import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {Int, Optional} from "@engine/core/declarations";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Torus} from "@engine/renderer/webGl/primitives/torus";

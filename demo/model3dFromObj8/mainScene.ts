@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Model3d} from "@engine/renderable/impl/general/model3d";
+import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ICubeMapTexture} from "@engine/renderer/common/texture";
 import {ObjParser} from "../model3dFromObj/objParser";
 import {Resource} from "@engine/resources/resourceDecorators";

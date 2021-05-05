@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Cube} from "@engine/renderer/webGl/primitives/cube";
-import {Model3d} from "@engine/renderable/impl/general/model3d";
+import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/texture/simpleBlurFilter";
 import {TweenMovie} from "@engine/animation/tweenMovie";

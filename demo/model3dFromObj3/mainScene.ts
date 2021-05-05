@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Model3d} from "@engine/renderable/impl/general/model3d";
+import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
 import {ObjParser} from "../model3dFromObj/objParser";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
@@ -19,9 +19,6 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3dFromObj3/earth_normal.jpg')
     private dataTextureNormalLink:ITexture;
 
-    @Resource.Texture('./model3dFromObj3/earth_height.jpg')
-    private dataTextureHeightLink:ITexture;
-
     public onReady():void {
 
         this.backgroundColor = Color.BLACK;
@@ -35,8 +32,6 @@ export class MainScene extends Scene {
         obj.scale.setXYZ(1);
         obj.texture = this.dataTextureLink;
         obj.normalsTexture = this.dataTextureNormalLink;
-        obj.heightMapTexture = this.dataTextureHeightLink;
-        obj.heightMapFactor = 40;
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{

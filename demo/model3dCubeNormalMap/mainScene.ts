@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Cube} from "@engine/renderer/webGl/primitives/cube";
-import {Model3d} from "@engine/renderable/impl/general/model3d";
+import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Resource} from "@engine/resources/resourceDecorators";

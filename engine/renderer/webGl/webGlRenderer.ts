@@ -226,11 +226,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setNormalsTextureUsed(isNormalsTextureUsed);
         md.attachTexture('u_normalsTexture',isNormalsTextureUsed?mesh.normalsTexture as Texture:this._nullTexture);
 
-        const isHeightMapTextureUsed:boolean = mesh.heightMapTexture!==undefined;
-        md.setHeightMapTextureUsed(isHeightMapTextureUsed);
-        md.attachTexture('u_heightMapTexture',isHeightMapTextureUsed?mesh.heightMapTexture as Texture:this._nullTexture);
-        md.setHeightMapFactor(mesh.heightMapFactor);
-
         const isCubeMapTextureUsed:boolean = mesh.cubeMapTexture!==undefined;
         if (DEBUG && !isCubeMapTextureUsed && mesh.reflectivity!==0) throw new DebugError(`can not apply reflectivity without cubeMapTexture`);
         md.setCubeMapTextureUsed(isCubeMapTextureUsed);
@@ -240,6 +235,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setLightUsed(mesh.isLightAccepted()||false);
         md.setColor(mesh.fillColor);
         md.setColorMix(mesh.colorMix);
+        md.setSpecular(mesh.specular);
 
         //this.gl.enable(this.gl.CULL_FACE);
         if (mesh.depthTest) this._gl.enable(this._gl.DEPTH_TEST);

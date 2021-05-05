@@ -26,6 +26,7 @@ export class MeshDrawer extends AbstractDrawer {
     private readonly u_color_mix:string = 'u_color_mix';
     private readonly u_alpha:string = 'u_alpha';
     private readonly u_reflectivity:string = 'u_reflectivity';
+    private readonly u_specular:string = 'u_specular';
     private readonly u_textureUsed:string = 'u_textureUsed';
     private readonly u_normalsTextureUsed:string = 'u_normalsTextureUsed';
     private readonly u_lightUsed:string = 'u_lightUsed';
@@ -69,6 +70,10 @@ export class MeshDrawer extends AbstractDrawer {
 
     public setAlfa(a:number):void{
         this.setUniform(this.u_alpha,a);
+    }
+
+    public setSpecular(s:number):void{
+        this.setUniform(this.u_specular,s);
     }
 
     public setReflectivity(r:number):void{

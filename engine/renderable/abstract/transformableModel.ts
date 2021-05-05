@@ -7,6 +7,7 @@ import {Mat4} from "@engine/geometry/mat4";
 import {ITransformable} from "@engine/core/declarations";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 import Mat16Holder = Mat4.Mat16Holder;
+import {Point3d} from "@engine/geometry/point3d";
 
 class AnglePoint3d extends ObservableEntity{
 
@@ -109,7 +110,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         this._angleVelocity3d._setZSilently(val);
     }
 
-    public readonly scale:Point2d = new Point2d(1,1);
+    public readonly scale:Point3d = new Point3d(1,1,1);
     public readonly skew:Point2d = new Point2d(0,0);
     public readonly anchorPoint:ModelPoint2d = new ModelPoint2d(this);
     public readonly transformPoint:ModelPoint2d = new ModelPoint2d(this);

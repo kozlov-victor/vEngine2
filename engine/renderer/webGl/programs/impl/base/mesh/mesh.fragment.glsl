@@ -17,6 +17,7 @@ uniform bool  u_cubeMapTextureUsed;
 
 uniform float u_alpha;
 uniform float u_reflectivity;
+uniform float u_specular;
 uniform bool  u_lightUsed;
 uniform vec4  u_color;
 uniform float u_color_mix;
@@ -49,7 +50,7 @@ void main() {
         //gl_FragColor = vec4(normalize(v_normal)*0.5+0.5,1.0); // to debug normals
         gl_FragColor.rgb *= light;
 
-        gl_FragColor.rgb+=specular;
+        gl_FragColor.rgb+=specular*u_specular;
     }
 
     if (u_cubeMapTextureUsed) {
