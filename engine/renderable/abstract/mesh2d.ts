@@ -7,40 +7,18 @@ import {DebugError} from "@engine/debug/debugError";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Optional} from "@engine/core/declarations";
 
-export abstract class Mesh extends RenderableModel {
+export abstract class Mesh2d extends RenderableModel {
 
     public modelPrimitive:IPrimitive;
-    public texture:Optional<ITexture>;
-    public cubeMapTexture:Optional<ICubeMapTexture>;
-    public normalsTexture:Optional<ITexture>;
     public fillColor:Color = Color.BLACK.clone();
-    public colorMix:number = 0;// 0..1
-    public reflectivity:number = 0;// 0..1
     public bufferInfo:BufferInfo;
-    public vertexItemSize:2|3;
-    public invertY:boolean = false;
-    public specular:number = 0; // 0..1
-
-    private _lightAccepted:Optional<boolean>;
+    public vertexItemSize:2|3 = 2;
 
     protected constructor(
         protected game:Game,
     ) {
         super(game);
-        this.vertexItemSize = 3;
-    }
 
-    public acceptLight(val:boolean):void{
-        if (DEBUG && val) {
-            if (!this.bufferInfo.normalBuffer) {
-                throw new DebugError(`can not accept light: normals are not specified`);
-            }
-        }
-        this._lightAccepted = val;
-    }
-
-    public isLightAccepted():Optional<boolean>{
-        return this._lightAccepted;
     }
 
     public revalidate(): void {
@@ -57,25 +35,14 @@ export abstract class Mesh extends RenderableModel {
         }
     }
 
-
-    public transform(): void {
-        super.transform();
-        if (this.invertY) this.game.getRenderer().transformScale(1,-1,1);
-    }
-
     public draw():void{
-        this.game.getRenderer().drawMesh(this);
+        this.game.getRenderer().drawMesh2d(this);
     }
 
-    protected setClonedProperties(cloned: Mesh): void {
-        cloned.texture = this.texture;
-        cloned.cubeMapTexture = this.cubeMapTexture;
-        cloned.normalsTexture = this.normalsTexture;
+    protected setClonedProperties(cloned: Mesh2d): void {
         cloned.fillColor = this.fillColor.clone();
-        cloned.colorMix = this.colorMix;
-        cloned.specular = this.specular;
-        cloned.reflectivity = this.reflectivity;
         cloned.depthTest = this.depthTest;
+        cloned.bufferInfo =this.bufferInfo;
         super.setClonedProperties(cloned);
     }
 

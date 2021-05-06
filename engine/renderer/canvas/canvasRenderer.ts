@@ -7,13 +7,14 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
-import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/geometry/mat4";
 import MAT16 = Mat4.MAT16;
+import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -216,9 +217,11 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     public drawLine(line: Line): void {
     }
 
-    public drawMesh(m: Mesh): void {
+    public drawMesh3d(m: Mesh3d): void {
     }
 
+    public drawMesh2d(m: Mesh2d): void {
+    }
 
     public getError(): { code: number; desc: string } | undefined {
         return undefined;

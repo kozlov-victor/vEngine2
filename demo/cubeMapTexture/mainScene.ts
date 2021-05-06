@@ -17,7 +17,7 @@ export class MainScene extends Scene {
         './cubeMapTexture/textures/cm_front.jpg',
         './cubeMapTexture/textures/cm_back.jpg'
     )
-    private cubeTextureLink:ICubeMapTexture;
+    private cubeTexture:ICubeMapTexture;
 
 
     public onReady():void {
@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         obj.modelPrimitive = new Cube(150);
         obj.texture = this.baseTextureLink;
         obj.colorMix = 0.4;
-        obj.cubeMapTexture = this.cubeTextureLink;
+        obj.cubeMapTexture = this.cubeTexture;
         obj.reflectivity = 0.9;
         obj.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         this.appendChild(obj);

@@ -3609,7 +3609,7 @@ vt 0.471708 1.45633 0
 
 # 0 vertex normals
 
-# Mesh '$dummy_node' with 599 faces
+# Mesh2d '$dummy_node' with 599 faces
 g $dummy_node
 usemtl material1054
 f  1/1/ 2/2/ 3/3/

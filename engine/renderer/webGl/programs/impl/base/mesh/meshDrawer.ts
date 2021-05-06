@@ -1,7 +1,7 @@
 import {ShaderProgram} from "../../../../base/shaderProgram";
 import {AbstractDrawer} from "../../../abstract/abstractDrawer";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
-import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {DebugError} from "@engine/debug/debugError";
 import * as fragmentSource from "./mesh.fragment.glsl";
 import * as vertexSource from "./mesh.vertex.glsl";
@@ -9,11 +9,12 @@ import {Mat4} from "@engine/geometry/mat4";
 import MAT16 = Mat4.MAT16;
 import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
+import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 
 
 export class MeshDrawer extends AbstractDrawer {
 
-    private mesh:Optional<Mesh>;
+    private mesh:Optional<Mesh2d>;
 
     private readonly a_position:string = 'a_position';
     private readonly a_normal:string = 'a_normal';
@@ -43,12 +44,18 @@ export class MeshDrawer extends AbstractDrawer {
         );
     }
 
-    public bindModel(mesh:Mesh):void{
+    public bindMesh3d(mesh:Mesh3d):void{
         this.mesh = mesh;
         if (!this.mesh.bufferInfo) this._initBufferInfo(mesh.modelPrimitive.drawMethod,mesh.vertexItemSize);
         if (mesh.isLightAccepted()===undefined) {
             mesh.acceptLight(!!this.mesh.bufferInfo.normalBuffer);
         }
+        this.bufferInfo = this.mesh.bufferInfo;
+    }
+
+    public bindMesh2d(mesh:Mesh2d):void{
+        this.mesh = mesh;
+        if (!this.mesh.bufferInfo) this._initBufferInfo(mesh.modelPrimitive.drawMethod,mesh.vertexItemSize);
         this.bufferInfo = this.mesh.bufferInfo;
     }
 

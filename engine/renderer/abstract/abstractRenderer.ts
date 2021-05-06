@@ -5,7 +5,7 @@ import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Image} from "@engine/renderable/impl/general/image";
-import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
@@ -16,6 +16,7 @@ import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/geometry/mat4";
 import MAT16 = Mat4.MAT16;
+import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>Promise<void>;
@@ -104,7 +105,9 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     public abstract drawLine(line:Line):void;
 
-    public abstract drawMesh(m:Mesh):void;
+    public abstract drawMesh3d(m:Mesh3d):void;
+
+    public abstract drawMesh2d(m:Mesh2d):void;
 
     public abstract drawEllipse(ellispe:Ellipse):void;
 

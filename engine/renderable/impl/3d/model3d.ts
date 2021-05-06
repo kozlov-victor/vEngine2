@@ -1,9 +1,7 @@
-
-import {Mesh} from "@engine/renderable/abstract/mesh";
 import {Game} from "@engine/core/game";
-import {Point3d} from "@engine/geometry/point3d";
+import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 
-export class Model3d extends Mesh {
+export class Model3d extends Mesh3d {
 
     constructor(protected game:Game) {
         super(game);

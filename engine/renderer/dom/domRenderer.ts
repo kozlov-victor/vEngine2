@@ -7,7 +7,7 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {MathEx} from "@engine/misc/mathEx";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
-import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Rect} from "@engine/geometry/rect";
 import {Optional} from "@engine/core/declarations";
@@ -18,6 +18,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {Mat4} from "@engine/geometry/mat4";
 import MAT16 = Mat4.MAT16;
 import {Incrementer} from "@engine/resources/incrementer";
+import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
@@ -202,9 +203,11 @@ export class DomRenderer extends AbstractRenderer {
     public drawEllipse(ellispe: Ellipse): void {
     }
 
-    public drawMesh(m: Mesh): void {
+    public drawMesh3d(m: Mesh3d): void {
     }
 
+    public drawMesh2d(m: Mesh2d): void {
+    }
 
     public drawRectangle(rectangle: Rectangle): void {
     }

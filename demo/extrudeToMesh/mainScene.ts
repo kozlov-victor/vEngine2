@@ -62,6 +62,8 @@ export class MainScene extends Scene {
         m.reflectivity = 0.1;
         m.pos.setXY(200,200);
         m.addBehaviour(new DraggableBehaviour(this.game));
+        m.acceptLight(true);
+        m.specular = 1;
         this.appendChild(m);
         m.setInterval(()=>{
             m.angle3d.y+=0.01;

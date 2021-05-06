@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
@@ -29,7 +29,7 @@ class ScullMesh extends AbstractPrimitive {
 // http://www.threejsworld.com/tutorials/skeletal-animation-and-morph-targets-with-tweenjs-threejs
 export class MainScene extends Scene {
 
-    private logoObj:Mesh;
+    private logoObj:Mesh2d;
 
     @Resource.JSON('./model3dFromMesh/skull.json')
     private dataLink:IMeshData;

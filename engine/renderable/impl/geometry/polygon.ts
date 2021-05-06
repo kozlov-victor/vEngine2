@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {EarClippingTriangulator} from "@engine/renderable/impl/geometry/_internal/earClippingTriangulator";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
@@ -9,6 +9,7 @@ import {IPoint3d} from "@engine/geometry/point3d";
 import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/_internal/isPolylineClockWise";
 import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
 import {Point2d} from "@engine/geometry/point2d";
+import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 
 class PolygonPrimitive extends AbstractPrimitive {
     constructor(){
@@ -17,14 +18,11 @@ class PolygonPrimitive extends AbstractPrimitive {
     }
 }
 
-export class Polygon extends Mesh {
+export class Polygon extends Mesh2d {
 
     private constructor(protected game:Game){
         super(game);
-        this.invertY = false;
-        this.vertexItemSize = 2;
     }
-
 
     public readonly type:string = 'Polygon';
 
@@ -66,8 +64,6 @@ export class Polygon extends Mesh {
             vertices.push(l.pos.x,l.pos.y);
         });
 
-        //if (DEBUG && vertices.length<=2) throw new DebugError(`can not create polygon from polyline with vertices [${vertices}]`);
-
         const triangulator:EarClippingTriangulator = new EarClippingTriangulator();
         const triangulatedIndices:number[] = triangulator.computeTriangles(vertices);
         const triangulatedVertices:number[] = [];
@@ -105,7 +101,7 @@ export class Polygon extends Mesh {
         return this._edgeVertices;
     }
 
-    public extrudeToMesh(depth:number):Mesh{
+    public extrudeToMesh(depth:number):Mesh3d{
         const isClockWise:boolean = this.isClockWise();
         const primitive = new class extends AbstractPrimitive {
 
@@ -194,7 +190,7 @@ export class Polygon extends Mesh {
         }
 
         const game:Game = this.game;
-        const m:Mesh = new class extends Mesh {
+        const m:Mesh3d = new class extends Mesh3d {
             constructor() {
                 super(game);
                 this.invertY = true;

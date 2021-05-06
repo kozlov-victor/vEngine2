@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -9,7 +9,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private logoObj:Mesh;
+    private logoObj:Mesh2d;
 
     @Resource.Texture('./assets/repeat.jpg')
     private logoLink:ITexture;

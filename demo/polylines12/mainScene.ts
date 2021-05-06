@@ -3,7 +3,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {FaceTypeToSvg} from "./FaceTypeToSvg";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
-import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
@@ -41,7 +41,7 @@ export class MainScene extends Scene {
             const polygons:Polygon[] = Polygon.fromMultiCurveSvgPath(this.game,svgPath);
             polygons.forEach(p=>{
                 p.fillColor.setRGB(12,233,54);
-                const mesh:Mesh = p.extrudeToMesh(70);
+                const mesh:Mesh2d = p.extrudeToMesh(70);
                 container.appendChild(mesh);
             });
             offsetX+=this.fontJsonLink.glyphs[letter].x_max * scale;

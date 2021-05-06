@@ -8,7 +8,7 @@ import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Color} from "../common/color";
 import {ISize, Size} from "../../geometry/size";
 import {MeshDrawer} from "./programs/impl/base/mesh/meshDrawer";
-import {Mesh} from "@engine/renderable/abstract/mesh";
+import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
@@ -33,6 +33,7 @@ import {Mat4Special} from "@engine/geometry/mat4Special";
 import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import MAT16 = Mat4.MAT16;
+import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -193,11 +194,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     }
 
-    public drawMesh(mesh:Mesh):void {
+    public drawMesh3d(mesh:Mesh3d):void {
 
         const md:MeshDrawer = this._meshDrawerHolder.getInstance(this._gl);
 
-        md.bindModel(mesh);
+        md.bindMesh3d(mesh);
         md.bind();
 
         const modelMatrix:Mat16Holder = this._matrixStack.getCurrentValue();
@@ -232,6 +233,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setReflectivity(mesh.reflectivity);
         md.attachTexture('u_cubeMapTexture',isCubeMapTextureUsed?mesh.cubeMapTexture as CubeMapTexture:this._nullCubeMapTexture);
 
+        if (DEBUG && mesh.isLightAccepted()) {
+            if (!mesh.bufferInfo.normalBuffer) {
+                throw new DebugError(`can not accept light: normals are not specified`);
+            }
+        }
         md.setLightUsed(mesh.isLightAccepted()||false);
         md.setColor(mesh.fillColor);
         md.setColorMix(mesh.colorMix);
@@ -249,6 +255,54 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         inverseTransposeModelMatrix.release();
     }
 
+    public drawMesh2d(mesh:Mesh2d):void {
+
+        const md:MeshDrawer = this._meshDrawerHolder.getInstance(this._gl);
+
+        md.bindMesh2d(mesh);
+        md.bind();
+
+        const modelMatrix:Mat16Holder = this._matrixStack.getCurrentValue();
+
+        const orthoProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+        const currViewSize:ISize = this._currFrameBufferStack.getCurrentTargetSize();
+        Mat4.ortho(orthoProjectionMatrix,0,currViewSize.width,0,currViewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
+        const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+        Mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
+
+        const inverseTransposeModelMatrix:Mat16Holder = Mat16Holder.fromPool();
+        Mat4.inverse(inverseTransposeModelMatrix,modelMatrix);
+        Mat4.transpose(inverseTransposeModelMatrix,inverseTransposeModelMatrix);
+
+        md.setModelMatrix(modelMatrix.mat16);
+        md.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
+        md.setProjectionMatrix(zToWProjectionMatrix.mat16);
+        md.setAlfa(this.getAlphaBlend());
+        md.setTextureUsed(false);
+        md.attachTexture('u_texture',this._nullTexture);
+
+
+        md.setNormalsTextureUsed(false);
+        md.attachTexture('u_normalsTexture',this._nullTexture);
+
+        md.setCubeMapTextureUsed(false);
+        md.setReflectivity(0);
+        md.attachTexture('u_cubeMapTexture',this._nullCubeMapTexture);
+
+        md.setLightUsed(false);
+        md.setColor(mesh.fillColor);
+        md.setColorMix(0);
+        md.setSpecular(0);
+
+        if (mesh.depthTest) this._gl.enable(this._gl.DEPTH_TEST);
+        else this._gl.disable(this._gl.DEPTH_TEST);
+        this._blender.setBlendMode(mesh.blendMode);
+        md.draw();
+        zToWMatrix.release();
+        orthoProjectionMatrix.release();
+        zToWProjectionMatrix.release();
+        inverseTransposeModelMatrix.release();
+    }
 
     public drawRectangle(rectangle:Rectangle):void{
 
