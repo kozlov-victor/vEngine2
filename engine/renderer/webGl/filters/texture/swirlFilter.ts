@@ -13,7 +13,7 @@ export class SwirlFilter extends AbstractGlFilter {
     private readonly radius:string;
     private readonly texSize:string;
 
-    private readonly centerArr:[number,number] = [0,0];
+    private readonly centerArr:Float32Array = new Float32Array([0,0]);
 
     constructor(game:Game) {
         super(game);

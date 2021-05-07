@@ -17,7 +17,7 @@ export class DropShadowFilter  extends AbstractGlFilter{
     private readonly pixelHeight:string;
     private readonly distance:string;
 
-    private readonly shiftArr:[number,number] = [0,0];
+    private readonly shiftArr:Float32Array = new Float32Array([0,0]);
     private shiftX:number = 12;
     private shiftY:number = 12;
 

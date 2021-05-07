@@ -112,10 +112,10 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         return this.equal(0,0);
     }
 
-    public toArray():Float32Array{
+    public toArray():Float32Array & [number,number]{
         this._arr[0] = this._width;
         this._arr[1] = this._height;
-        return this._arr;
+        return this._arr as Float32Array & [number,number];
     }
 
     public toJSON():{width:number,height:number}{

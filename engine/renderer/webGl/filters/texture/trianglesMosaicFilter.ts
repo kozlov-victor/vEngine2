@@ -6,7 +6,7 @@ import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 // from https://www.construct.net/en/forum/extending-construct-2/effects-31/effect-triangles-mosaic-116362 with adaptation to the engine
 export class TrianglesMosaicFilter extends AbstractGlFilter{
 
-    private sizeArr:[number,number] = [0,0];
+    private sizeArr:Float32Array = new Float32Array([0,0]);
     private readonly tileSize:string;
 
     constructor(game:Game){

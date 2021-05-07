@@ -8,7 +8,7 @@ import {Game} from "@engine/core/game";
 export class TriangleBlurFilter extends AbstractGlFilter {
 
     private readonly delta:string;
-    private readonly valArr:[number,number] = [0,0];
+    private readonly valArr:Float32Array = new Float32Array([0,0]);
 
 
     constructor(protected game:Game) {

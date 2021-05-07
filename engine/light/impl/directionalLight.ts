@@ -6,7 +6,7 @@ export class DirectionalLight extends PointLight {
 
     public static readonly LIGHT_TYPE:number = 1;
 
-    public direction:[number,number,number] = [-1,0,0];
+    public direction:Float32Array = new Float32Array([-1,0,0]);
 
     public setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>, i:number):void{
         super.setUniformsToMap(map,i);

@@ -6,12 +6,10 @@ import {FastMap} from "@engine/misc/collection/fastMap";
 
 export class AmbientLight extends AbstractLight{
 
-    public direction:[number,number,number];
-
+    public direction:Float32Array = new Float32Array([0,0,-1]);
 
     constructor(protected game: Game) {
         super(game);
-        this.direction = [0,0,-1];
     }
 
     public setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>):void {

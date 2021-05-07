@@ -12,7 +12,7 @@ export class MotionBlurFilter extends AbstractGlFilter {
     private readonly strength:string;
     private readonly texSize:string;
 
-    private centerArr:[number,number] = [0,0];
+    private centerArr:Float32Array = new Float32Array([0,0]);
 
     constructor(game:Game) {
         super(game);

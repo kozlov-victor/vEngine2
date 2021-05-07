@@ -63,7 +63,7 @@ export class AbstractKernelAccumulativeFilter extends AbstractAccumulativeFilter
         const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,width);
         this.setUniform(this.rt_h,height);
-        this.setUniform(this.u_kernel,this.kernel);
+        this.setUniform(this.u_kernel,new Float32Array(this.kernel));
         this.setUniform(this.u_kernelWeight,this.kernelWeight);
         this.setUniform(this.u_noiseIntensity,this.noiseIntensity);
         this.time+=0.01;

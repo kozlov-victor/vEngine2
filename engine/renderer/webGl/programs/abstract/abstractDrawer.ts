@@ -1,4 +1,4 @@
-import {isArray, isEqual} from "@engine/misc/object";
+import {isArray, isEqualArray} from "@engine/misc/object";
 import {AbstractPrimitive} from "../../primitives/abstractPrimitive";
 import {ShaderProgram} from "../../base/shaderProgram";
 import {BufferInfo} from "../../base/bufferInfo";
@@ -59,9 +59,6 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
             console.trace();
             throw new DebugError(`can not set uniform with name ${name} and value ${value}`);
         }
-        if (this.uniformCache.has(name) && isEqual(this.uniformCache.get(name)!.value,value)) {
-            return;
-        }
         if (isArray(value)) {
             if (!this.uniformCache.has(name)) {
                 // todo how to define Float32Array or Int32Array???
@@ -69,15 +66,17 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
             }
             const uniformInCache:IUniformValue = this.uniformCache.get(name) as IUniformValue;
             const arr:Float32Array = uniformInCache.value as Float32Array;
-            arr.set(value as number[]);
-            uniformInCache.dirty = true;
+            if (!isEqualArray(arr,value)) {
+                arr.set(value as number[]);
+                uniformInCache.dirty = true;
+            }
         } else {
             if (!this.uniformCache.has(name)) {
                 this.uniformCache.put(name,{value:0,dirty:true});
             }
             const valueInCache:IUniformValue = this.uniformCache.get(name)!;
+            valueInCache.dirty = valueInCache.value!==value;
             valueInCache.value = value;
-            valueInCache.dirty = true;
         }
     }
 

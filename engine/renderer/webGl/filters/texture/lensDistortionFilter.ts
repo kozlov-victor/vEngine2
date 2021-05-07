@@ -16,7 +16,7 @@ export class LensDistortionFilter extends AbstractGlFilter {
     private readonly u_length_size:string;
     private readonly u_force:string;
 
-    private readonly coordinates:[number,number] = [0,0];
+    private readonly coordinates:Float32Array = new Float32Array([0,0]);
 
     constructor(game:Game) {
         super(game);
@@ -29,7 +29,7 @@ export class LensDistortionFilter extends AbstractGlFilter {
 
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
-            
+
             void main() {
 
                 vec2 resolution = vec2(rt_w,rt_h);
@@ -42,7 +42,7 @@ export class LensDistortionFilter extends AbstractGlFilter {
                 // distance of pixel from mouse
                 float rScreen = length(pointScreen-mouseSceen);
                 float r = length(point-mouse);
-                
+
                 vec4 col;
                 if (rScreen > u_length_size) {
                     col = texture2D(texture, v_texCoord);

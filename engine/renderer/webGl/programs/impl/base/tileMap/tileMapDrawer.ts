@@ -5,7 +5,7 @@ import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 export class TileMapDrawer extends SimpleRectDrawer {
 
     private readonly u_tileSize:string;
-    private readonly tileSize:[number,number] = [0,0];
+    private readonly tileSize:Float32Array = new Float32Array([0,0]);
 
     constructor(gl:WebGLRenderingContext) {
         super(gl);

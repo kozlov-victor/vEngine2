@@ -35,7 +35,7 @@ export class MainScene extends Scene {
         dirLight.nearRadius = 20;
         dirLight.farRadius = 100;
         dirLight.pos.setXY(100,100);
-        dirLight.direction = [-1,0,0];
+        dirLight.direction = new Float32Array([-1,0,0]);
         dirLight.color.setRGB(100,0,0);
 
         const lightSet:LightSet = new LightSet(this.game);

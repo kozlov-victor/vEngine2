@@ -20,7 +20,7 @@ export namespace Mat4 {
         n,n,n,n,
         n,n,n,n,
         n,n,n,n
-    ];
+    ] & Float32Array;
 
     export class Mat16Holder extends ReleaseableEntity implements ICloneable<Mat16Holder>{
 
@@ -56,7 +56,7 @@ export namespace Mat4 {
         }
 
         public fromMat16(mat16:Readonly<MAT16>):void{
-            (this.mat16 as unknown as Float32Array).set(mat16,0);
+            this.mat16.set(mat16,0);
         }
 
         public clone(): Mat4.Mat16Holder {

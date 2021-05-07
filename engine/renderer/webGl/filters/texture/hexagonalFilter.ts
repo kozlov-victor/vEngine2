@@ -48,13 +48,13 @@ export class HexagonalFilter extends AbstractGlFilter {
             }
         `);
         this.setSize(10);
-        this.setUniform(this.center,[0.5,0.5]);
+        this.setUniform(this.center,new Float32Array([0.5,0.5]));
         this.simpleRectDrawer.initProgram();
     }
 
 
     public setSize(val:number):void {
-        this.setUniform(this.scale,[val,val]);
+        this.setUniform(this.scale,new Float32Array([val,val]));
     }
 
 

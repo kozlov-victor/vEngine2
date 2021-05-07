@@ -21,14 +21,14 @@ export class WaterRippleFilter extends AbstractGlFilter {
     private readonly time:string;
     private readonly drops:string;
 
-    private readonly dropVectors:number[];
+    private readonly dropVectors:Float32Array;
     private currentDrop:number = 0;
 
     constructor(protected game:Game,private maxDrops:number = 32) {
         super(game);
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
 
-        this.dropVectors = new Array(3 * maxDrops);
+        this.dropVectors = new Float32Array(3 * maxDrops);
         for (let i:number = 0; i < 3 * maxDrops; i++) {
             this.dropVectors[i] = -100;
         }
@@ -136,7 +136,7 @@ export class WaterRippleFilter extends AbstractGlFilter {
 
     private animateDrops():void{
         // animate drops
-        const drops:number[] = this.dropVectors;
+        const drops:Float32Array = this.dropVectors;
         for(let i:number = 0; i < this.maxDrops; i ++){
             if(drops[i * 3 + 2] > -90){
                 drops[i * 3 + 2] += 0.1;

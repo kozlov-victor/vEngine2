@@ -12,7 +12,7 @@ export class VideoGlitchFilter extends AbstractGlFilter {
     private readonly iTime:string;
     private readonly iResolution:string;
     private time:number = 0;
-    private readonly resolution:[number,number] = [0,0];
+    private readonly resolution:Float32Array = new Float32Array([0,0]);
 
     constructor(game:Game){
         super(game);
@@ -29,7 +29,7 @@ export class VideoGlitchFilter extends AbstractGlFilter {
             //               Distributed under the MIT License. See LICENSE file.
             //               https://github.com/ashima/webgl-noise
             //               https://github.com/stegu/webgl-noise
-            // 
+            //
 
             vec3 mod289(vec3 x) {
                 return x - floor(x * (1.0 / 289.0)) * 289.0;

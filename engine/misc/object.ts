@@ -28,22 +28,11 @@ export const isNumber = (value:unknown):value is number=> {
 };
 
 
-const isEqualArray = (a:Float32Array|Int32Array|unknown[],b:Float32Array|Int32Array|unknown[]):boolean=>{
+export const isEqualArray = (a:Float32Array|Int32Array|unknown[],b:Float32Array|Int32Array|unknown[]):boolean=>{
     for (let i:number=0,max=a.length;i<max;i++) {
         if (a[i]!==b[i]) return false;
     }
     return true;
-};
-
-const isEqualObject = (a:unknown,b:unknown):boolean=>{
-    throw new Error('not implemented');
-};
-
-export const isEqual = (a:unknown,b:unknown):boolean=>{
-    if (a===null || a===undefined) return false;
-    if (isArray(a) && isArray(b)) return isEqualArray(a as unknown[],b as unknown[]);
-    else if (isObject(a) && isObject(b)) return isEqualObject(a,b);
-    return a===b;
 };
 
 export const removeFromArray = (arr:unknown[],predicate:(item:unknown)=>boolean):number=> {
