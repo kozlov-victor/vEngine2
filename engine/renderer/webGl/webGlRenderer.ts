@@ -178,7 +178,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const {x:srcRectX,y:srcRectY} = img.getSrcRect();
         const {width:destRectWidth,height:destRectHeight} = img.getSrcRect();
 
-        const destArr:[number,number,number,number] = Rect.fromPool().setXYWH(
+        const destArr:Float32Array = Rect.fromPool().setXYWH(
             srcRectX/textureWidth,
             srcRectY/textureHeight,
             destRectWidth/textureWidth,
@@ -186,7 +186,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         sd.setUniform(sd.u_texRect, destArr);
 
-        const offSetArr:Readonly<[number,number]> = Size.fromPool().setWH(img.offset.x/maxSize,img.offset.y/maxSize).release().toArray();
+        const offSetArr:Float32Array = Size.fromPool().setWH(img.offset.x/maxSize,img.offset.y/maxSize).release().toArray();
         sd.setUniform(sd.u_texOffset,offSetArr);
         sd.setUniform(sd.u_stretchMode,img.stretchMode);
         sd.attachTexture('texture',texture);

@@ -34,7 +34,7 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
     private static currentInstance:Optional<AbstractDrawer>;
 
     protected gl:WebGLRenderingContext;
-    protected program:Optional<ShaderProgram>;
+    protected program:ShaderProgram;
     protected uniformCache:FastMap<string,IUniformValue> = new FastMap();
     protected texturesToBind:ITexturesToBind = {length: 0, texturesInfo: [] as ITextureInfo[]};
     protected primitive:AbstractPrimitive;
@@ -72,7 +72,12 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
             arr.set(value as number[]);
             uniformInCache.dirty = true;
         } else {
-            this.uniformCache.put(name,{value,dirty:true});
+            if (!this.uniformCache.has(name)) {
+                this.uniformCache.put(name,{value:0,dirty:true});
+            }
+            const valueInCache:IUniformValue = this.uniformCache.get(name)!;
+            valueInCache.value = value;
+            valueInCache.dirty = true;
         }
     }
 
@@ -128,11 +133,11 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
         AbstractDrawer.currentInstance?.unbind();
 
         AbstractDrawer.currentInstance = this;
-        this.bufferInfo.bind(this.program!);
+        this.bufferInfo.bind(this.program);
     }
 
     protected unbind():void{
-        this.bufferInfo.unbind(this.program!);
+        this.bufferInfo.unbind(this.program);
         AbstractDrawer.currentInstance = undefined;
     }
 
@@ -141,7 +146,7 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
     }
 
     private _setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
-        this.program!.setUniform(name,value);
+        this.program.setUniform(name,value);
     }
 
 }

@@ -68,7 +68,7 @@ export class FrameBuffer implements IRenderTarget {
 
     public clear(color:Color,alphaBlendValue:number = 1):void{
         this._checkBound();
-        const arr:[number,number,number,number] = color.asGL();
+        const arr:Float32Array = color.asGL();
         this._gl.clearColor(arr[0],arr[1],arr[2],arr[3] * alphaBlendValue);
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
     }

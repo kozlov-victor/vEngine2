@@ -78,7 +78,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
     private gNorm:number;
     private bNorm:number;
     private aNorm:number;
-    private _arr:[r:number,g:number,b:number,a:number];
+    private _arr:Float32Array;
     private _friezed:boolean = false;
 
     public static RGB(r:byte,g:byte = r,b:byte = r):Color{
@@ -301,8 +301,8 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
     }
 
 
-    public asGL():[r:number,g:number,b:number,a:number]{
-        if (!this._arr) this._arr = [0,0,0,0];
+    public asGL():Float32Array{
+        if (!this._arr) this._arr = new Float32Array([0,0,0,0]);
         this._arr[0] = this.rNorm;
         this._arr[1] = this.gNorm;
         this._arr[2] = this.bNorm;

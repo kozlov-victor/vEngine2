@@ -147,8 +147,8 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         renderer.transformRotateZ(this.angle3d.z);
         renderer.transformRotateX(this.angle3d.x);
         renderer.transformRotateY(this.angle3d.y);
-        const [x,y,z] = this.scale.toArray();
-        renderer.transformScale(x,y,z);
+        const scaleArr = this.scale.toArray();
+        renderer.transformScale(scaleArr[0],scaleArr[1],scaleArr[2]);
         renderer.transformSkewX(this.skew.x);
         renderer.transformSkewY(this.skew.y);
         renderer.transformTranslate(-this.transformPoint.x,-this.transformPoint.y);

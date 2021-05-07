@@ -10,6 +10,8 @@ export interface IPoint3d {
 
 export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
 
+    private _arrCache:Float32Array = new Float32Array([0,0,0]);
+
     private _z:number = 0;
 
     get z(): number {
@@ -57,10 +59,11 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
         return {x:this.x,y:this.y,z:this._z};
     }
 
-    public toArray():number[]{
-        const arr:number[] = super.toArray();
-        arr[2] = this._z;
-        return arr;
+    public toArray():Float32Array{
+        this._arrCache[0] = this.x;
+        this._arrCache[1] = this.y;
+        this._arrCache[2] = this._z;
+        return this._arrCache;
     }
 
 }

@@ -64,7 +64,6 @@ export class ShaderProgram {
                 // so, ignore this uniform
                 return;
             }
-            console.error('shader program failed',this);
             console.error('uniforms',this._uniforms);
             throw new DebugError(`no uniform with name ${name} found!`);
         }
