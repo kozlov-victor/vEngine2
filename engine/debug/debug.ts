@@ -38,6 +38,7 @@ const onLoad = (fn:()=>void)=>{
 };
 
 onLoad(()=>{
+    if (!DEBUG) return;
     document.body.appendChild(devConsole);
     tmr = setInterval(()=>{
         const game:Game = (window as unknown as IGameHolder).game;

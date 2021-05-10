@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 import {ShaderProgram} from "./shaderProgram";
 import {Int, Optional} from "@engine/core/declarations";
-import {IKeyVal, isCommonArray, isTypedArray} from "@engine/misc/object";
+import {IKeyVal, isTypedArray} from "@engine/misc/object";
 
 
 interface IShaderErrorInfo {
@@ -277,10 +277,6 @@ const isArrayOfType = (val:UNIFORM_VALUE_TYPE,checker:(val:UNIFORM_VALUE_TYPE)=>
     if (!DEBUG) return true;
     else if (!val)
         throw new DebugError(`can not set uniform  value: ${val}`);
-    else if (isCommonArray(val)) {
-        console.error(val);
-        throw new DebugError(`can not use primitive array as uniform value. Use Float32Array of Int32Array instead`);
-    }
     else if (!isTypedArray(val)) {
         console.error('Can not set uniform value',val);
         throw new DebugError(`can not set uniform with value [${val}]: expected argument of type Array`);
