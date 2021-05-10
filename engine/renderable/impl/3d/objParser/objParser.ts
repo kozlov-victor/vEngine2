@@ -1,19 +1,22 @@
-import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
-import {DebugError} from "@engine/debug/debugError";
 import {IPoint3d} from "@engine/geometry/point3d";
 import {IPoint2d} from "@engine/geometry/point2d";
 import {calcNormal} from "@engine/renderable/impl/geometry/_internal/calcNormal";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
-import {MathEx} from "@engine/misc/mathEx";
-import {Color} from "@engine/renderer/common/color";
 import {ObjPrimitive, t_obj, t_vertexLib} from "@engine/renderable/impl/3d/objParser/_internal/types";
 import {DataObjReader} from "@engine/renderable/impl/3d/objParser/_internal/dataReader";
+import {ITexture} from "@engine/renderer/common/texture";
+
+export interface IObjParams {
+    meshData:string;
+    materialsData:string;
+    texture?:ITexture;
+}
 
 export class ObjParser {
 
-    private static objToPrimitive(game:Game, vertexLib:t_vertexLib, objs:t_obj[]):SimpleGameObjectContainer{
+    private static objToPrimitive(game:Game, vertexLib:t_vertexLib, objs:t_obj[],params:IObjParams):SimpleGameObjectContainer{
         const container = new SimpleGameObjectContainer(game);
         for (const obj of objs) {
             const model3d:Model3d = new Model3d(game);
@@ -21,6 +24,7 @@ export class ObjParser {
             model3d.modelPrimitive = pr;
             model3d.fillColor.set(obj.material.ambientColor);
             model3d.id = obj.name;
+            model3d.texture = params.texture;
             container.appendChild(model3d);
             container.size.setWH(10);
             let cnt:number = 0;
@@ -75,13 +79,13 @@ export class ObjParser {
         return container;
     }
 
-    private static readObj(vertexSource:string,materialSource:string):{vertexLib:t_vertexLib,objs:t_obj[]}{
-        return new DataObjReader(vertexSource,materialSource).readSource();
+    private static readObj(params:IObjParams):{vertexLib:t_vertexLib,objs:t_obj[]}{
+        return new DataObjReader(params).readSource();
     }
 
-    public parse(game:Game,vertexSource:string,materialSource:string):SimpleGameObjectContainer{
-        const primitivesData = ObjParser.readObj(vertexSource,materialSource);
-        return ObjParser.objToPrimitive(game,primitivesData.vertexLib,primitivesData.objs);
+    public parse(game:Game,params:IObjParams):SimpleGameObjectContainer{
+        const primitivesData = ObjParser.readObj(params);
+        return ObjParser.objToPrimitive(game,primitivesData.vertexLib,primitivesData.objs,params);
     }
 
 }

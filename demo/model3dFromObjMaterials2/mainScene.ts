@@ -3,27 +3,32 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
 export class MainScene extends Scene {
 
-    @Resource.Text('./model3dFromObjMaterials/chair/chair.obj')
+    @Resource.Text('./model3dFromObjMaterials2/windmill/windmill.obj')
     private meshData:string;
 
-    @Resource.Text('./model3dFromObjMaterials/chair/chair.mtl')
+    @Resource.Text('./model3dFromObjMaterials2/windmill/windmill.mtl')
     private materialData:string;
+
+    @Resource.Texture('./model3dFromObjMaterials2/windmill/windmill.jpg')
+    private texture:ITexture;
 
     public onReady():void {
 
         const obj:SimpleGameObjectContainer = new ObjParser().parse(this.game,
             {
-                meshData: this.meshData,
-                materialsData:this.materialData
+                meshData:this.meshData,
+                materialsData:this.materialData,
+                texture:this.texture
             }
         );
         obj.pos.setXY(300,450);
         obj.size.setWH(200,200);
-        obj.scale.setXYZ(60);
+        obj.scale.setXYZ(40);
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{

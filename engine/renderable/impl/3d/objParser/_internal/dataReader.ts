@@ -2,6 +2,9 @@ import {DebugError} from "@engine/debug/debugError";
 import {IPoint3d} from "@engine/geometry/point3d";
 import {IPoint2d} from "@engine/geometry/point2d";
 import {Face, MeshMaterial, t_obj, t_vertexLib} from "@engine/renderable/impl/3d/objParser/_internal/types";
+import {IObjParams} from "@engine/renderable/impl/3d/objParser/objParser";
+import {Optional} from "@engine/core/declarations";
+import {ITexture} from "@engine/renderer/common/texture";
 
 abstract class AbstractDataReader {
     protected parseLine(line:string):{commandName:string|undefined,commandArgs:string[]} {
@@ -70,9 +73,15 @@ class DataMtlReader extends AbstractDataReader{
 export class DataObjReader extends AbstractDataReader {
 
     private materialsMap:Record<string, MeshMaterial> = {};
+    private readonly vertexSource:string;
+    private readonly materialSource:string;
+    private texture:Optional<ITexture>;
 
-    constructor(private vertexSource:string,private materialSource:string) {
+    constructor(params:IObjParams) {
         super();
+        this.vertexSource = params.meshData;
+        this.materialSource = params.materialsData;
+        this.texture = params.texture;
     }
 
     private vertexLib:t_vertexLib = {
@@ -186,8 +195,10 @@ export class DataObjReader extends AbstractDataReader {
                     this.currentObject.f_arr.push(...this.readFace(commandArgs));
                     break;
                 case 'usemtl':
+                    console.log('usemtl');
                     const mtlName:string = commandArgs.join(' ');
                     const currentMtl = this.materialsMap[mtlName];
+                    console.log(currentMtl);
                     if (currentMtl!==undefined) {
                         this.currentObject.material.ambientColor = currentMtl.ambientColor;
                     } else {

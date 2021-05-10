@@ -32,7 +32,7 @@ export namespace Mat4Special {
 
         // fast version of above code block
         // destination.set(source.slice(limit), offset);
-        r.set(b.slice(0,12),0);
+        r.set(b.subarray(0,12),0);
 
         r[12] = a[12] * b[0] + a[13] * b[4] + a[14] * b[8]  + b[12];
         r[13] = a[12] * b[1] + a[13] * b[5] + a[14] * b[9]  + b[13];
@@ -134,7 +134,7 @@ export namespace Mat4Special {
 
         // fast version of above code block
         // destination.set(source.slice(limit), offset);
-        r.set(b.slice(8,16),8);
+        r.set(b.subarray(8,8+16),8);
 
     };
 
@@ -200,7 +200,7 @@ export namespace Mat4Special {
 
         // fast version of above code block
         // destination.set(source.slice(limit), offset);
-        r.set(b.slice(8,16),8);
+        r.set(b.subarray(8,8+16),8);
 
     };
 
@@ -235,7 +235,7 @@ export namespace Mat4Special {
 
         // fast version of above code block
         // destination.set(source.slice(limit), offset);
-        r.set(b.slice(4,16),4);
+        r.set(b.subarray(4,4+16),4);
 
     };
 

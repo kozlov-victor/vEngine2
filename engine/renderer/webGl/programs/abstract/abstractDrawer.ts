@@ -25,6 +25,7 @@ interface IUniformValue {
     dirty:boolean;
 }
 
+
 export class AbstractDrawer implements IDrawer, IDestroyable{
 
     constructor(gl:WebGLRenderingContext){
@@ -72,11 +73,14 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
             }
         } else {
             if (!this.uniformCache.has(name)) {
-                this.uniformCache.put(name,{value:0,dirty:true});
+                this.uniformCache.put(name,{value,dirty:true});
+            } else {
+                const valueInCache:IUniformValue = this.uniformCache.get(name)!;
+                if (valueInCache.value!==value) {
+                    valueInCache.value = value;
+                    valueInCache.dirty = true;
+                }
             }
-            const valueInCache:IUniformValue = this.uniformCache.get(name)!;
-            valueInCache.dirty = valueInCache.value!==value;
-            valueInCache.value = value;
         }
     }
 
