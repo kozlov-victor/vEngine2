@@ -126,7 +126,9 @@ export class TextField extends WidgetContainer {
                 this.cacheSurface = cacheSurface;
             }
         }
-        if (this.rowSet===undefined || rectIsDirty) this.rowSet = new TextRowSet(this.game,this.font,clientRect,this.textColor);
+        if (this.rowSet===undefined || rectIsDirty) {
+            this.rowSet = new TextRowSet(this.game,this.font,clientRect,this.textColor);
+        }
         this._setText();
     }
 

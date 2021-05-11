@@ -43,6 +43,30 @@ if (!Array.prototype.find) {
     };
 }
 
+if (!Array.prototype.findIndex) {
+    // tslint:disable-next-line:typedef
+    Array.prototype.findIndex = function(predicate) {
+        if (this == null) {
+            throw new TypeError('Array.prototype.findIndex called on null or undefined');
+        }
+        if (typeof predicate !== 'function') {
+            throw new TypeError('predicate must be a function');
+        }
+        const list = Object(this);
+        const length:number = list.length >>> 0;
+        const thisArg = arguments[1];
+        let value:number;
+
+        for (let i:number = 0; i < length; i++) {
+            value = list[i];
+            if (predicate.call(thisArg, value, i, list)) {
+                return i;
+            }
+        }
+        return -1;
+    };
+}
+
 if (!Float32Array.prototype.slice) {
     // tslint:disable-next-line:typedef
     Float32Array.prototype.slice = function(begin:number, end:number) {

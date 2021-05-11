@@ -2,6 +2,7 @@ import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
 import {ICloneable} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
+import {isNotNumber} from "@engine/misc/object";
 
 export interface IPoint2d {
     x:number;
@@ -45,7 +46,8 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
 
     // noinspection JSSuspiciousNameCombination
     public setXY(x:number = 0,y:number = x):this{
-        if (DEBUG && (Number.isNaN(x) || Number.isNaN(y))) {
+        if (DEBUG && (isNotNumber(x) || isNotNumber(y))) {
+            console.trace();
             throw new DebugError(`Point2d: wrong numeric arguments ${x},${y}`);
         }
         const changed:boolean = this._x!==x || this._y!==y;

@@ -4,6 +4,7 @@ import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "./abstract/observableEntity";
 import {ICloneable} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
+import {isNotNumber} from "@engine/misc/object";
 
 export interface IRectJSON extends IPoint2d, ISize{
     x:number;
@@ -90,10 +91,10 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         if (
             DEBUG &&
             (
-                Number.isNaN(x) ||
-                Number.isNaN(y) ||
-                Number.isNaN(width) ||
-                Number.isNaN(height)
+                isNotNumber(x) ||
+                isNotNumber(y) ||
+                isNotNumber(width) ||
+                isNotNumber(height)
             )
         ) throw new DebugError(`Rect: wrong numeric arguments ${x},${y},${width},${height}`);
         const oldX:number = this._x;

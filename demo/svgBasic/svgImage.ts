@@ -168,7 +168,7 @@ const NAMED_COLOR_TABLE:Record<string, string> =
     };
 
 const getColor = (literal:string)=>{
-    if (literal.startsWith('url')) {
+    if (literal.indexOf('url')===0) {
         console.log(`urls is not supported: ${literal}`);
         return Color.NONE.clone();
     }

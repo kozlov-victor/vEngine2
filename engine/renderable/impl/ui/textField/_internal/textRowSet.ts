@@ -79,6 +79,7 @@ export class TextRowSet extends SimpleGameObjectContainer {
 
     public setAlignTextContentHorizontal(align:AlignTextContentHorizontal):void {
         if (this.children.length===0) return;
+        if (this.constrainSize.width===Infinity) return;
         switch (align) {
             case AlignTextContentHorizontal.CENTER:
                 let pos:number = (this.constrainSize.width - this.size.width)/2;
@@ -97,6 +98,7 @@ export class TextRowSet extends SimpleGameObjectContainer {
 
     public setAlignTextContentVertical(align:AlignTextContentVertical):void {
         if (this.children.length===0) return;
+        if (this.constrainSize.height===Infinity) return;
         switch (align) {
             case AlignTextContentVertical.CENTER:
                 let pos:number = (this.constrainSize.height - this.size.height)/2;

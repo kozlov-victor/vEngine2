@@ -22,7 +22,6 @@ void main() {
     v_texCoord = (u_textureMatrix * vec4(a_texCoord,1.,1.)).xy;
     v_normal = mat3(u_inverseTransposeModelMatrix) * a_normal;
 
-
     v_position = u_projectionMatrix * u_modelMatrix * position;
 
     // compute the vector of the surface to the light

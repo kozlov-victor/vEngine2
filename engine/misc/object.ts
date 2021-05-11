@@ -24,7 +24,13 @@ export const isArray = (a:unknown):a is Float32Array|Int32Array|unknown[]=> {
 };
 
 export const isNumber = (value:unknown):value is number=> {
-    return (value as number).toFixed!==undefined;
+    if (Number.isNaN(value)) return false;
+    if (value===Infinity) return false;
+    return value !== -Infinity;
+};
+
+export const isNotNumber = (value:unknown):boolean=> {
+    return !isNumber(value);
 };
 
 

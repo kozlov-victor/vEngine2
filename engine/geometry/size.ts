@@ -2,7 +2,7 @@ import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 import {DebugError} from "@engine/debug/debugError";
 import {ICloneable} from "@engine/core/declarations";
-import {isNumber, isObject} from "@engine/misc/object";
+import {isNotNumber, isNumber, isObject} from "@engine/misc/object";
 
 export interface ISize {
     width: number;
@@ -12,10 +12,10 @@ export interface ISize {
 export class Size extends ObservableEntity implements ICloneable<ISize>{
 
     set width(val:number) {
-        if (DEBUG && Number.isNaN(val)) {
+        if (DEBUG && isNotNumber(val)) {
             // tslint:disable-next-line:no-console
             console.trace();
-            throw new DebugError(`Size: wrong numeric argument  ${val}`);
+            throw new DebugError(`Size.width: wrong numeric argument  ${val}`);
         }
         const changed:boolean = this._width!==val;
         if (changed) {
@@ -29,6 +29,11 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
     }
 
     set height(val:number) {
+        if (DEBUG && isNotNumber(val)) {
+            // tslint:disable-next-line:no-console
+            console.trace();
+            throw new DebugError(`Size.height: wrong numeric argument  ${val}`);
+        }
         const changed:boolean = this._height!==val;
         if (changed) {
             this._height = val;
@@ -51,7 +56,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
     private _width:number;
     private _height:number;
 
-    private _arr:Float32Array = new Float32Array([0,0]);
+    private _arr:Float32Array;
 
     public static fromPool():Size {
         return Size.rectPool.getFreeObject()!;
@@ -69,6 +74,10 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
 
     // noinspection JSSuspiciousNameCombination
     public setWH(width:number,height:number = width):Size{
+        if (DEBUG && (isNotNumber(width) || isNotNumber(width))) {
+            console.trace();
+            throw new DebugError(`Size.setWH: wrong numeric argument (${width},${height})`);
+        }
         const changed:boolean = this._width!==width || this._height!==height;
         if (changed) {
             this._width = width;
@@ -113,6 +122,9 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
     }
 
     public toArray():Float32Array & [number,number]{
+        if (this._arr===undefined) {
+            this._arr = new Float32Array([0,0]);
+        }
         this._arr[0] = this._width;
         this._arr[1] = this._height;
         return this._arr as Float32Array & [number,number];
