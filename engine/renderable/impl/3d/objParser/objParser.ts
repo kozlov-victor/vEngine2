@@ -6,12 +6,14 @@ import {Game} from "@engine/core/game";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ObjPrimitive, t_obj, t_vertexLib} from "@engine/renderable/impl/3d/objParser/_internal/types";
 import {DataObjReader} from "@engine/renderable/impl/3d/objParser/_internal/dataReader";
-import {ITexture} from "@engine/renderer/common/texture";
+import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 
 export interface IObjParams {
     meshData:string;
-    materialsData:string;
+    materialsData?:string;
     texture?:ITexture;
+    normalsTexture?:ITexture;
+    cubeMapTexture?:ICubeMapTexture;
 }
 
 export class ObjParser {
@@ -25,6 +27,8 @@ export class ObjParser {
             model3d.fillColor.set(obj.material.ambientColor);
             model3d.id = obj.name;
             model3d.texture = params.texture;
+            model3d.normalsTexture = params.normalsTexture;
+            model3d.cubeMapTexture = params.cubeMapTexture;
             container.appendChild(model3d);
             container.size.setWH(10);
             let cnt:number = 0;

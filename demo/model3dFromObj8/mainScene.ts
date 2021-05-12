@@ -2,14 +2,15 @@ import {Scene} from "@engine/scene/scene";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ICubeMapTexture} from "@engine/renderer/common/texture";
-import {ObjParser} from "../model3dFromObj/objParser";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
+import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 
 
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObj8/test.obj')
-    private data1Link:string;
+    private data1:string;
 
     @Resource.CubeTexture(
         './cubeMapTexture/textures/cm_left.jpg',
@@ -19,20 +20,22 @@ export class MainScene extends Scene {
         './cubeMapTexture/textures/cm_front.jpg',
         './cubeMapTexture/textures/cm_back.jpg',
     )
-    private cubeTextureLink:ICubeMapTexture;
+    private cubeTexture:ICubeMapTexture;
 
 
     public onReady():void {
 
-        const obj:Model3d = new Model3d(this.game);
-        obj.fillColor.setRGB(122,255,255);
-        obj.modelPrimitive = new ObjParser().parse(this.data1Link);
+        const obj = new ObjParser().parse(this.game,{
+            meshData: this.data1,
+            cubeMapTexture: this.cubeTexture
+        });
         obj.pos.setXY(200,250);
-        obj.cubeMapTexture = this.cubeTextureLink;
-        obj.reflectivity = 0.03;
         obj.size.setWH(200,200);
         obj.scale.setXYZ(2,2, 2);
         this.appendChild(obj);
+        obj.children.forEach(c=>{
+            (c as Mesh3d).reflectivity = 0.3;
+        });
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{
             obj.angle3d.x+=0.01;

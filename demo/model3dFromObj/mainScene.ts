@@ -1,22 +1,22 @@
 import {Scene} from "@engine/scene/scene";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
-import {ObjParser} from "./objParser";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
 
 
 export class MainScene extends Scene {
 
 
     @Resource.Text('./model3dFromObj/cow-nonormals.obj')
-    private data1Link:string;
+    private data1:string;
 
     @Resource.Text('./model3dFromObj/cube_texture2.obj')
-    private data2Link:string;
+    private data2:string;
 
     @Resource.Text('./model3dFromObj/diamond.obj')
-    private data3Link:string;
+    private data3:string;
 
     @Resource.Texture('./assets/repeat.jpg')
     private dataTextureLink:ITexture;
@@ -24,9 +24,9 @@ export class MainScene extends Scene {
 
     public onReady():void {
 
-        const obj:Model3d = new Model3d(this.game);
-        obj.fillColor.setRGB(255,255,255);
-        obj.modelPrimitive = new ObjParser().parse(this.data1Link);
+        const obj = new ObjParser().parse(this.game,{
+            meshData: this.data1
+        });
         obj.pos.setXY(200,250);
         obj.size.setWH(200,200);
         obj.scale.setXYZ(60);
@@ -37,9 +37,9 @@ export class MainScene extends Scene {
         },20);
 
 
-        const obj3:Model3d = new Model3d(this.game);
-        obj3.fillColor.setRGB(100,250,100);
-        obj3.modelPrimitive = new ObjParser().parse(this.data3Link);
+        const obj3 = new ObjParser().parse(this.game,{
+            meshData: this.data3
+        });
         obj3.pos.setXY(300,350);
         obj3.size.setWH(200,200);
         this.appendChild(obj3);
@@ -50,10 +50,11 @@ export class MainScene extends Scene {
         },20);
         obj3.scale.setXYZ(225);
 
-        const obj2:Model3d = new Model3d(this.game);
-        obj2.fillColor.setRGB(22,122,122);
-        obj2.modelPrimitive = new ObjParser().parse(this.data2Link);
-        obj2.texture = this.dataTextureLink;
+
+        const obj2 = new ObjParser().parse(this.game,{
+            meshData: this.data2,
+            texture: this.dataTextureLink
+        });
         obj2.pos.setXY(570,260);
         obj2.size.setWH(200,200);
         obj2.scale.setXYZ(60);

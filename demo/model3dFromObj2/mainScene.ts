@@ -2,26 +2,26 @@ import {Scene} from "@engine/scene/scene";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
-import {ObjParser} from "../model3dFromObj/objParser";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
 
 
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObj2/dog.obj')
-    private data1Link:string;
+    private data1:string;
 
     @Resource.Texture('./model3dFromObj2/dog.jpg')
-    private dataTextureLink:ITexture;
+    private dataTexture:ITexture;
 
     public onReady():void {
-        const obj:Model3d = new Model3d(this.game);
-        obj.fillColor.setRGB(255,255,255);
-        obj.modelPrimitive = new ObjParser().parse(this.data1Link);
+        const obj = new ObjParser().parse(this.game,{
+            meshData: this.data1,
+            texture: this.dataTexture
+        });
         obj.pos.setXY(200,250);
         obj.size.setWH(200,200);
         obj.scale.setXYZ(6);
-        obj.texture = this.dataTextureLink;
         this.appendChild(obj);
         obj.addBehaviour(new DraggableBehaviour(this.game));
         this.setInterval(()=>{

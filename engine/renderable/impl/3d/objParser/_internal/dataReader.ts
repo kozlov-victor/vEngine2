@@ -74,7 +74,7 @@ export class DataObjReader extends AbstractDataReader {
 
     private materialsMap:Record<string, MeshMaterial> = {};
     private readonly vertexSource:string;
-    private readonly materialSource:string;
+    private readonly materialSource:Optional<string>;
     private texture:Optional<ITexture>;
 
     constructor(params:IObjParams) {
@@ -113,7 +113,7 @@ export class DataObjReader extends AbstractDataReader {
     }
 
     private static readIPoint2d(s:string[]):IPoint2d{
-        if (s.length!==2) throw new DebugError(`wrong point 2d line:${s.join(' ')}`);
+        if (s.length<2) throw new DebugError(`wrong point 2d line:${s.join(' ')}`);
         const point:IPoint2d = {
             x:parseFloat(s[0]),
             y:parseFloat(s[1]),
@@ -166,6 +166,7 @@ export class DataObjReader extends AbstractDataReader {
     }
 
     private readMaterials():void{
+        if (this.materialSource===undefined) return;
         const mtlReader = new DataMtlReader(this.materialSource);
         const materials = mtlReader.readSource();
         for (const m of materials) {
@@ -175,6 +176,7 @@ export class DataObjReader extends AbstractDataReader {
 
     public readSource():{vertexLib:t_vertexLib,objs:t_obj[]}{
         this.readMaterials();
+        this.newObject('');
         this.vertexSource.split('\n').forEach((line:string)=>{
             const {commandName,commandArgs} = this.parseLine(line);
             if (commandName===undefined) return;
@@ -195,14 +197,12 @@ export class DataObjReader extends AbstractDataReader {
                     this.currentObject.f_arr.push(...this.readFace(commandArgs));
                     break;
                 case 'usemtl':
-                    console.log('usemtl');
                     const mtlName:string = commandArgs.join(' ');
                     const currentMtl = this.materialsMap[mtlName];
-                    console.log(currentMtl);
                     if (currentMtl!==undefined) {
                         this.currentObject.material.ambientColor = currentMtl.ambientColor;
                     } else {
-                        console.warn(`unknown material: ${currentMtl}`);
+                        console.warn(`unknown material: ${mtlName}`);
                     }
             }
         });

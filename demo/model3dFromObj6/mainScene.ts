@@ -1,24 +1,23 @@
 import {Scene} from "@engine/scene/scene";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
-import {ObjParser} from "../model3dFromObj/objParser";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
 
 
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObj6/tiger.x.obj')
-    private data1Link:string;
+    private data1:string;
 
     @Resource.Texture('./model3dFromObj6/tiger.png')
-    private dataTextureLink:ITexture;
+    private dataTexture:ITexture;
 
     public onReady():void {
-        const obj:Model3d = new Model3d(this.game);
-        obj.fillColor.setRGB(255,255,255);
-        obj.modelPrimitive = new ObjParser().parse(this.data1Link);
-        obj.texture = this.dataTextureLink;
+        const obj = new ObjParser().parse(this.game,{
+            meshData: this.data1,
+            texture: this.dataTexture
+        });
         obj.pos.setXY(200,250);
         obj.size.setWH(200,200);
         obj.scale.setXYZ(320);
