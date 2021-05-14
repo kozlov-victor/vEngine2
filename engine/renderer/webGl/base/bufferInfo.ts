@@ -23,6 +23,7 @@ export interface IBufferInfoDescription {
     posVertexInfo:IVertexArrayInfo;
     posIndexInfo?:IIndexArrayInfo;
     texVertexInfo?:IVertexArrayInfo;
+    colorVertexInfo?:IVertexArrayInfo;
     normalInfo?:IVertexArrayInfo;
     drawMethod:DRAW_METHOD;
 }
@@ -63,6 +64,7 @@ export class BufferInfo {
     public posVertexBuffer:Optional<VertexBuffer>;
     public posIndexBuffer:Optional<IndexBuffer>;
     public texVertexBuffer:Optional<VertexBuffer>;
+    public colorVertexBuffer:Optional<VertexBuffer>;
     public normalBuffer:Optional<VertexBuffer>;
     public drawMethod:GLenum;
     public numOfElementsToDraw:number = 0;
@@ -94,8 +96,19 @@ export class BufferInfo {
             this.texVertexBuffer.setData(
                 description.texVertexInfo.array,
                 description.texVertexInfo.type,
-                description.texVertexInfo.size);
+                description.texVertexInfo.size
+            );
             this.texVertexBuffer.setAttrName(description.texVertexInfo.attrName);
+        }
+
+        if (description.colorVertexInfo) {
+            this.colorVertexBuffer = new VertexBuffer(gl);
+            this.colorVertexBuffer.setData(
+                description.colorVertexInfo.array,
+                description.colorVertexInfo.type,
+                description.colorVertexInfo.size
+            );
+            this.colorVertexBuffer.setAttrName(description.colorVertexInfo.attrName);
         }
 
         if (description.normalInfo) {
@@ -114,6 +127,7 @@ export class BufferInfo {
         if (this.posVertexBuffer!==undefined) this.posVertexBuffer.bind(program);
         if (this.texVertexBuffer!==undefined) this.texVertexBuffer.bind(program);
         if (this.normalBuffer!==undefined) this.normalBuffer.bind(program);
+        if (this.colorVertexBuffer!==undefined) this.colorVertexBuffer.bind(program);
     }
 
     public unbind(program:ShaderProgram):void{
@@ -122,6 +136,7 @@ export class BufferInfo {
         if (this.posVertexBuffer!==undefined) this.posVertexBuffer.unbind();
         if (this.texVertexBuffer!==undefined) this.texVertexBuffer.unbind();
         if (this.normalBuffer!==undefined) this.normalBuffer.unbind();
+        if (this.colorVertexBuffer!==undefined) this.colorVertexBuffer.unbind();
     }
 
     public destroy():void{
@@ -129,6 +144,7 @@ export class BufferInfo {
         if (this.posIndexBuffer!==undefined) this.posIndexBuffer.destroy();
         if (this.texVertexBuffer!==undefined) this.texVertexBuffer.destroy();
         if (this.normalBuffer!==undefined) this.normalBuffer.destroy();
+        if (this.colorVertexBuffer!==undefined) this.colorVertexBuffer.destroy();
     }
 
     public draw():void {

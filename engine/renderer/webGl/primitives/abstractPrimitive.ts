@@ -4,6 +4,7 @@ import {DRAW_METHOD} from "@engine/renderer/webGl/base/bufferInfo";
 export interface IPrimitive {
     vertexArr:number[];
     normalArr: Optional<number[]>;
+    vertexColorArr: Optional<number[]>;
     texCoordArr: Optional<number[]>;
     indexArr: Optional<number[]>;
     drawMethod:DRAW_METHOD;
@@ -15,6 +16,7 @@ export abstract class AbstractPrimitive implements IPrimitive {
     public normalArr:Optional<number[]>;
     public texCoordArr:Optional<number[]>;
     public indexArr:Optional<number[]>;
+    public vertexColorArr:Optional<number[]>;
     public drawMethod:DRAW_METHOD;
 
     protected constructor(){

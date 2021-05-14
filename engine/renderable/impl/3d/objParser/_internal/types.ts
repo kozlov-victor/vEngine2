@@ -2,14 +2,20 @@ import {IPoint3d} from "@engine/geometry/point3d";
 import {IPoint2d} from "@engine/geometry/point2d";
 import {Color} from "@engine/renderer/common/color";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
+import {IVertexColor} from "@engine/renderable/impl/3d/objParser/_internal/dataReader";
 
-export type FacePoint = Record<'v'|'uv'|'n',number>;
+export interface FacePoint {
+   v: number;
+   uv:number;
+   n:number;
+}
 export type Face = [FacePoint,FacePoint,FacePoint];
 
 export type t_vertexLib = {
     v_arr:IPoint3d[],
     vn_arr:IPoint3d[],
     vt_arr:IPoint2d[]
+    vCol_arr:IVertexColor[];
 };
 
 

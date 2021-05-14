@@ -6,19 +6,19 @@ import {DebugError} from "@engine/debug/debugError";
 import * as fragmentSource from "./mesh.fragment.glsl";
 import * as vertexSource from "./mesh.vertex.glsl";
 import {Mat4} from "@engine/geometry/mat4";
-import MAT16 = Mat4.MAT16;
 import {Color} from "@engine/renderer/common/color";
-import {Optional} from "@engine/core/declarations";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
+import MAT16 = Mat4.MAT16;
 
 
 export class MeshDrawer extends AbstractDrawer {
 
-    private mesh:Optional<Mesh2d>;
+    private mesh:Mesh2d;
 
     private readonly a_position:string = 'a_position';
     private readonly a_normal:string = 'a_normal';
     private readonly a_texCoord:string = 'a_texCoord';
+    private readonly a_vertexColor:string = 'a_vertexColor';
     private readonly u_modelMatrix:string = 'u_modelMatrix';
     private readonly u_inverseTransposeModelMatrix:string = 'u_inverseTransposeModelMatrix';
     private readonly u_textureMatrix:string = 'u_textureMatrix';
@@ -29,9 +29,9 @@ export class MeshDrawer extends AbstractDrawer {
     private readonly u_reflectivity:string = 'u_reflectivity';
     private readonly u_specular:string = 'u_specular';
     private readonly u_textureUsed:string = 'u_textureUsed';
+    private readonly u_vertexColorUsed:string = 'u_vertexColorUsed';
     private readonly u_normalsTextureUsed:string = 'u_normalsTextureUsed';
     private readonly u_lightUsed:string = 'u_lightUsed';
-    private readonly u_heightMapTextureUsed:string = 'u_heightMapTextureUsed';
     private readonly u_cubeMapTextureUsed:string = 'u_cubeMapTextureUsed';
     private readonly u_heightMapFactor:string = 'u_heightMapFactor';
 
@@ -95,8 +95,8 @@ export class MeshDrawer extends AbstractDrawer {
         this.setUniform(this.u_normalsTextureUsed,used);
     }
 
-    public setHeightMapTextureUsed(used:boolean):void{
-        this.setUniform(this.u_heightMapTextureUsed,used);
+    public setVertexColorUsed(used:boolean):void{
+        this.setUniform(this.u_vertexColorUsed,used);
     }
 
     public setCubeMapTextureUsed(used:boolean):void{
@@ -123,46 +123,61 @@ export class MeshDrawer extends AbstractDrawer {
         if (DEBUG && this.mesh===undefined) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
         super.bind();
         this.bufferInfo.bind(this.program!);
-        if (!this.mesh!.modelPrimitive.texCoordArr) {
-            this.program!.disableAttribute(this.a_texCoord);
+        if (!this.mesh.modelPrimitive.texCoordArr) {
+            this.program.disableAttribute(this.a_texCoord);
         } else {
-            this.program!.enableAttribute(this.a_texCoord);
+            this.program.enableAttribute(this.a_texCoord);
         }
-        if (!this.mesh!.modelPrimitive.normalArr) {
-            this.program!.disableAttribute(this.a_normal);
+        if (!this.mesh.modelPrimitive.normalArr) {
+            this.program.disableAttribute(this.a_normal);
         } else {
-            this.program!.enableAttribute(this.a_normal);
+            this.program.enableAttribute(this.a_normal);
+        }
+        if (!this.mesh.modelPrimitive.vertexColorArr) {
+            this.program.disableAttribute(this.a_vertexColor);
+        } else {
+            this.program.enableAttribute(this.a_vertexColor);
         }
     }
 
     private _initBufferInfo(drawMethod:number= DRAW_METHOD.TRIANGLES,vertexSize:2|3=3):void{
         const bufferInfo:IBufferInfoDescription = {
             posVertexInfo:{
-                array:this.mesh!.modelPrimitive.vertexArr, type:this.gl.FLOAT,
+                array:this.mesh.modelPrimitive.vertexArr, type:this.gl.FLOAT,
                 size:vertexSize, attrName:this.a_position
             },
             drawMethod
         };
-        if (this.mesh!.modelPrimitive.indexArr) {
+        if (this.mesh.modelPrimitive.indexArr) {
             bufferInfo.posIndexInfo = {
-                array: this.mesh!.modelPrimitive.indexArr
+                array: this.mesh.modelPrimitive.indexArr
             };
         }
-        if (this.mesh!.modelPrimitive.normalArr) {
+        if (this.mesh.modelPrimitive.normalArr) {
             bufferInfo.normalInfo = {
-                array: this.mesh!.modelPrimitive.normalArr,
+                array: this.mesh.modelPrimitive.normalArr,
                 type:this.gl.FLOAT,
                 size:3,
                 attrName:this.a_normal
             };
         }
-        if (this.mesh!.modelPrimitive.texCoordArr) {
+        if (this.mesh.modelPrimitive.texCoordArr) {
             bufferInfo.texVertexInfo = {
-                array: this.mesh!.modelPrimitive.texCoordArr, type:this.gl.FLOAT,
-                size:2, attrName:this.a_texCoord
+                array: this.mesh.modelPrimitive.texCoordArr,
+                type:this.gl.FLOAT,
+                size:2,
+                attrName:this.a_texCoord
             };
         }
-        this.mesh!.bufferInfo = new BufferInfo(this.gl,bufferInfo);
+        if (this.mesh.modelPrimitive.vertexColorArr) {
+            bufferInfo.colorVertexInfo = {
+                array: this.mesh.modelPrimitive.vertexColorArr,
+                type:this.gl.FLOAT,
+                size:4,
+                attrName:this.a_vertexColor
+            };
+        }
+        this.mesh.bufferInfo = new BufferInfo(this.gl,bufferInfo);
     }
 
 

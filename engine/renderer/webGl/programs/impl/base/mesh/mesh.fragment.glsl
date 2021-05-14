@@ -2,6 +2,7 @@ precision mediump float;
 
 varying vec2 v_texCoord;
 varying vec3 v_normal;
+varying vec4 v_vertexColor;
 varying vec4 v_position;
 
 varying vec3 v_surfaceToLight;
@@ -14,6 +15,7 @@ uniform samplerCube u_cubeMapTexture;
 uniform bool  u_textureUsed;
 uniform bool  u_normalsTextureUsed;
 uniform bool  u_cubeMapTextureUsed;
+uniform bool  u_vertexColorUsed;
 
 uniform float u_alpha;
 uniform float u_reflectivity;
@@ -26,6 +28,8 @@ uniform mat4  u_modelMatrix;
 void main() {
 
     if (u_textureUsed) gl_FragColor = mix(texture2D(u_texture, v_texCoord),u_color,u_color_mix);
+    else if (u_vertexColorUsed) gl_FragColor = v_vertexColor;
+
     else gl_FragColor = u_color;
     if (u_lightUsed) {
         vec3 normal = normalize(v_normal);

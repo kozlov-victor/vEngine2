@@ -5,7 +5,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 import {Game} from "@engine/core/game";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ObjPrimitive, t_obj, t_vertexLib} from "@engine/renderable/impl/3d/objParser/_internal/types";
-import {DataObjReader} from "@engine/renderable/impl/3d/objParser/_internal/dataReader";
+import {DataObjReader, IVertexColor} from "@engine/renderable/impl/3d/objParser/_internal/dataReader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 
 export interface IObjParams {
@@ -23,6 +23,7 @@ export class ObjParser {
         for (const obj of objs) {
             const model3d:Model3d = new Model3d(game);
             const pr:ObjPrimitive = new ObjPrimitive();
+            pr.vertexColorArr = [];
             model3d.modelPrimitive = pr;
             model3d.fillColor.set(obj.material.ambientColor);
             model3d.id = obj.name;
@@ -45,6 +46,19 @@ export class ObjParser {
                     norm1 = calcNormal(vert1,vert2,vert3);
                     norm2 = {...norm1};
                     norm3 = {...norm1};
+                }
+
+                if (
+                    vertexLib.vCol_arr[f[0].v-1]!==undefined
+                ) {
+                    const vertexColor1:IVertexColor = vertexLib.vCol_arr[f[0].v-1];
+                    const vertexColor2:IVertexColor = vertexLib.vCol_arr[f[1].v-1];
+                    const vertexColor3:IVertexColor = vertexLib.vCol_arr[f[2].v-1];
+                    pr.vertexColorArr.push(
+                        vertexColor1.r,vertexColor1.g,vertexColor1.b,vertexColor1.a,
+                        vertexColor2.r,vertexColor2.g,vertexColor2.b,vertexColor2.a,
+                        vertexColor3.r,vertexColor3.g,vertexColor3.b,vertexColor3.a,
+                    );
                 }
 
                 const tex1:IPoint2d = vertexLib.vt_arr[f[0].uv-1];
@@ -79,6 +93,7 @@ export class ObjParser {
             if (!pr.indexArr!.length) pr.indexArr = undefined;
             if (!pr.texCoordArr!.length) pr.texCoordArr = undefined;
             if (!pr.normalArr!.length) pr.normalArr = undefined;
+            if (!pr.vertexColorArr!.length) pr.vertexColorArr = undefined;
         }
         return container;
     }

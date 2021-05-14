@@ -17,6 +17,13 @@ abstract class AbstractDataReader {
     }
 }
 
+export interface IVertexColor {
+    r:number;
+    g:number;
+    b:number;
+    a:number;
+}
+
 class DataMtlReader extends AbstractDataReader{
 
     constructor(private source:string) {
@@ -88,6 +95,7 @@ export class DataObjReader extends AbstractDataReader {
         v_arr:[],
         vn_arr:[],
         vt_arr:[],
+        vCol_arr:[],
     };
 
     private objs:t_obj[] = [];
@@ -110,6 +118,29 @@ export class DataObjReader extends AbstractDataReader {
         };
         if (Number.isNaN(point.x) || Number.isNaN(point.y) || Number.isNaN(point.z)) throw new Error(`unexpected line ${s.join(' ')}`);
         return point;
+    }
+
+    private static readIPoint3dWithPossibleColor(s:string[]):{point:IPoint3d,color?:IVertexColor}{
+        if (s.length<3) throw new DebugError(`wrong point 3d line:${s.join(' ')}`);
+        const point:IPoint3d = {
+            x:parseFloat(s[0]),
+            y:parseFloat(s[1]),
+            z:parseFloat(s[2]),
+        };
+        let color:Optional<IVertexColor>;
+        if (s[3] && s[4] && s[5]) {
+            color = {
+                r:parseFloat(s[3]),
+                g:parseFloat(s[4]),
+                b:parseFloat(s[5]),
+                a:s[6]?parseFloat(s[6]):1.,
+            };
+        }
+        if (Number.isNaN(point.x) || Number.isNaN(point.y) || Number.isNaN(point.z)) throw new Error(`unexpected line ${s.join(' ')}`);
+        if (color!==undefined) {
+            if (Number.isNaN(color.r) || Number.isNaN(color.g) || Number.isNaN(color.b) || Number.isNaN(color.a)) throw new Error(`unexpected line ${s.join(' ')}`);
+        }
+        return {point,color};
     }
 
     private static readIPoint2d(s:string[]):IPoint2d{
@@ -191,7 +222,9 @@ export class DataObjReader extends AbstractDataReader {
                     this.vertexLib.vt_arr.push(DataObjReader.readIPoint2d(commandArgs));
                     break;
                 case 'v':
-                    this.vertexLib.v_arr.push(DataObjReader.readIPoint3d(commandArgs));
+                    const vertex = DataObjReader.readIPoint3dWithPossibleColor(commandArgs);
+                    this.vertexLib.v_arr.push(vertex.point);
+                    if (vertex.color) this.vertexLib.vCol_arr.push(vertex.color);
                     break;
                 case 'f':
                     this.currentObject.f_arr.push(...this.readFace(commandArgs));

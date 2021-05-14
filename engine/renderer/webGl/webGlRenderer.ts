@@ -217,11 +217,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
         md.setProjectionMatrix(zToWProjectionMatrix.mat16);
         md.setAlfa(this.getAlphaBlend());
+
         const isTextureUsed:boolean = mesh.texture!==undefined;
         if (DEBUG && isTextureUsed && mesh.modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
         md.setTextureUsed(isTextureUsed);
         if (isTextureUsed) md.setTextureMatrix(FLIP_TEXTURE_MATRIX.mat16);
         md.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this._nullTexture);
+
+        const isVertexColorUsed:boolean = mesh.modelPrimitive.vertexColorArr!==undefined;
+        md.setVertexColorUsed(isVertexColorUsed);
 
         const isNormalsTextureUsed:boolean = mesh.normalsTexture!==undefined;
         md.setNormalsTextureUsed(isNormalsTextureUsed);
