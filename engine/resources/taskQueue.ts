@@ -23,12 +23,10 @@ export class TaskQueue {
     }
 
 
-    public scheduleStart():void {
+    public async scheduleStart():Promise<void> {
         this.startScheduled = true;
-        (async ()=>{
-            await Promise.resolve();
-            this.resourceLoader.start();
-        })();
+        await Promise.resolve();
+        await this.resourceLoader.start();
     }
 
 }

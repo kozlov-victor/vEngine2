@@ -22,7 +22,6 @@ export class ShaderProgram {
     private readonly _attributeSourceNames:string[] = [];
     private readonly _attributes:IAttributesMap;
 
-
     constructor(private readonly _gl:WebGLRenderingContext,vertexSource:string,fragmentSource:string) {
         const vShader:WebGLShader = compileShader(_gl, vertexSource, _gl.VERTEX_SHADER) as WebGLShader;
         const fShader:WebGLShader = compileShader(_gl, fragmentSource, _gl.FRAGMENT_SHADER) as WebGLShader;
@@ -118,11 +117,12 @@ export class ShaderProgram {
     private toggleAttribute(attrName:string,on:boolean):void{
         if (this._attributes[attrName]===undefined) {
             console.log(this);
-            throw new DebugError(`unbind error: can not find attribute location for  ${attrName}`);
+            throw new DebugError(`unbind error: can not find attribute location for ${attrName}`);
         }
         const attrLocation:GLuint = this._attributes[attrName];
         if (on) this._gl.enableVertexAttribArray(attrLocation);
         else this._gl.disableVertexAttribArray(attrLocation);
+
     }
 
 }

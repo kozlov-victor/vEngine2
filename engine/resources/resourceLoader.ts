@@ -166,8 +166,8 @@ export class ResourceLoader {
         this.q.onResolved.push(fn);
     }
 
-    public start():void{
-        this.q.start();
+    public async start():Promise<void>{
+        return this.q.start();
     }
 
     public clearCache():void {

@@ -126,7 +126,7 @@ export class MainScene extends Scene {
                 if (currSound!==undefined) currSound.stop();
                 const resourceLoader = new ResourceLoader(this.game);
                 const buff:ArrayBuffer = await resourceLoader.loadBinary(songUrl);
-                resourceLoader.start();
+                await resourceLoader.start();
                 let track;
                 const extension:string = songUrl.split('.')[1];
                 switch (extension) {

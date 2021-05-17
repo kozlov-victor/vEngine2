@@ -48,20 +48,18 @@ export class Queue {
         this._tasksProgressById[taskId] = 1;
     }
 
-    public start():void{
-        (async _=>{
-            for (const task of this._tasks) {
-                const {taskId,fn} = task;
-                const onProgressCallBack = (n:number)=> this.progressTask(taskId,n);
-                await fn(onProgressCallBack);
-                this.resolveTask(taskId);
-                if (this.onProgress!==undefined) this.onProgress(this.calcProgress());
-            }
-            this._resolved = true;
-            if (this.onProgress!==undefined) this.onProgress(1);
-            await Promise.resolve();
-            this.onResolved.forEach(f=>f());
-        })();
+    public async start():Promise<void>{
+        for await (const task of this._tasks) {
+            const {taskId,fn} = task;
+            const onProgressCallBack = (n:number)=> this.progressTask(taskId,n);
+            await fn(onProgressCallBack);
+            this.resolveTask(taskId);
+            if (this.onProgress!==undefined) this.onProgress(this.calcProgress());
+        }
+        this._resolved = true;
+        if (this.onProgress!==undefined) this.onProgress(1);
+        await Promise.resolve();
+        this.onResolved.forEach(f=>f());
     }
 
 }
