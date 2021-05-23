@@ -1,5 +1,4 @@
 import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ScrollContainerDelegate} from "@engine/renderable/impl/ui/scrollBar/scrollContainerDelegate";
 import {Game} from "@engine/core/game";
 import {NoOverflowSurface} from "@engine/renderable/impl/surface/noOverflowSurface";
@@ -8,8 +7,8 @@ import {IRectJSON} from "@engine/geometry/rect";
 
 export class ScrollView extends WidgetContainer {
 
-    private readonly _constrainContainer: RenderableModel;
-    public readonly scrollableContainer: RenderableModel;
+    private readonly _constrainContainer: NoOverflowSurface;
+    public readonly scrollableContainer: SimpleGameObjectContainer;
     protected _scrollContainerDelegate: ScrollContainerDelegate;
 
     constructor(protected game: Game) {

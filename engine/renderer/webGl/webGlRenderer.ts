@@ -11,7 +11,7 @@ import {MeshDrawer} from "./programs/impl/base/mesh/meshDrawer";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Mat4} from "@engine/geometry/mat4";
@@ -21,7 +21,6 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {DebugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import {ClazzEx, IDestroyable, Optional} from "@engine/core/declarations";
-import {TileMapDrawer} from "@engine/renderer/webGl/programs/impl/base/tileMap/tileMapDrawer";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {FLIP_TEXTURE_MATRIX, WebGlRendererHelper} from "@engine/renderer/webGl/webGlRendererHelper";
 import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
@@ -30,10 +29,10 @@ import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 import {SimpleColoredRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleColoredRectDrawer";
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {Mat4Special} from "@engine/geometry/mat4Special";
+import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import MAT16 = Mat4.MAT16;
-import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -120,7 +119,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private _shapeDrawerHolder:InstanceHolder<ShapeDrawer> = new InstanceHolder(ShapeDrawer);
     private _coloredRectDrawer:InstanceHolder<SimpleColoredRectDrawer> = new InstanceHolder(SimpleColoredRectDrawer);
     private _meshDrawerHolder:InstanceHolder<MeshDrawer> = new InstanceHolder(MeshDrawer);
-    private _tileMapDrawerHolder:InstanceHolder<TileMapDrawer> = new InstanceHolder(TileMapDrawer);
 
     private _nullTexture:Texture;
     private _nullCubeMapTexture:CubeMapTexture;
@@ -516,7 +514,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._nullCubeMapTexture.destroy();
         this._shapeDrawerHolder.destroy();
         this._meshDrawerHolder.destroy();
-        this._tileMapDrawerHolder.destroy();
         Texture.destroyAll();
     }
 
@@ -620,11 +617,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             sd.setUniform(sd.u_vertexMatrix,model.modelViewProjectionMatrix.mat16);
         }
 
-
-
-
         sd.setUniform(sd.u_alpha,this.getAlphaBlend());
-        sd.setUniform(sd.u_stretchMode,STRETCH_MODE.STRETCH);
         this._blender.setBlendMode(model.blendMode);
         if (model.depthTest) this._gl.enable(this._gl.DEPTH_TEST);
         else this._gl.disable(this._gl.DEPTH_TEST);

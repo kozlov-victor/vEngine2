@@ -41,7 +41,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     private readonly _stack:IStackItem[] = [];
     private _interpolationMode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR;
 
-    private _doubleFrameBuffer:DoubleFrameBuffer = new DoubleFrameBuffer(this._gl,this._size);
+    private _doubleFrameBuffer:DoubleFrameBuffer;
 
     private _pixelPerfectMode:boolean = false;
     private _simpleRectDrawer:SimpleRectDrawer;
@@ -63,19 +63,20 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         this._blender.enable();
         this._blender.setBlendMode(BLEND_MODE.NORMAL);
 
-        const m16hResult:Mat16Holder = Mat16Holder.fromPool();
-        const m16Scale:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.makeScale(m16Scale,this.game.size.width, this.game.size.height, 1);
-        const m16Ortho:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.ortho(m16Ortho,0,this.game.size.width,0,this.game.size.height,-1,1);
+        if (FLIP_POSITION_MATRIX===undefined) {
+            const m16hResult:Mat16Holder = Mat16Holder.fromPool();
+            const m16Scale:Mat16Holder = Mat16Holder.fromPool();
+            Mat4.makeScale(m16Scale,this.game.size.width, this.game.size.height, 1);
+            const m16Ortho:Mat16Holder = Mat16Holder.fromPool();
+            Mat4.ortho(m16Ortho,0,this.game.size.width,0,this.game.size.height,-1,1);
 
-        Mat4.matrixMultiply(m16hResult, m16Scale, m16Ortho);
-        FLIP_POSITION_MATRIX = m16hResult.clone();
+            Mat4.matrixMultiply(m16hResult, m16Scale, m16Ortho);
+            FLIP_POSITION_MATRIX = m16hResult.clone();
 
-        m16hResult.release();
-        m16Scale.release();
-        m16Ortho.release();
-
+            m16hResult.release();
+            m16Scale.release();
+            m16Ortho.release();
+        }
         this._resourceTexture = this._getFirst().frameBuffer.getTexture();
 
     }
@@ -108,7 +109,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     public setInterpolationMode(interpolation:INTERPOLATION_MODE):void{
         this._getLast().frameBuffer.setInterpolationMode(interpolation);
-        this._doubleFrameBuffer.setInterpolationMode(interpolation);
+        this._getDoubleFrameBuffer().setInterpolationMode(interpolation);
         this._interpolationMode = interpolation;
     }
 
@@ -127,7 +128,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     public destroy():void{
         this._stack.forEach(f=>f.frameBuffer.destroy());
-        this._doubleFrameBuffer.destroy();
+        if (this._doubleFrameBuffer!==undefined) this._doubleFrameBuffer.destroy();
         this._simpleRectDrawer.destroy();
     }
 
@@ -138,7 +139,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
             const currItem:IStackItem = this._stack[i];
             const nextItem:IStackItem = this._stack[i-1];
 
-            const filteredTexture:Texture = this._doubleFrameBuffer.applyFilters(currItem.frameBuffer.getTexture(),currItem.filters);
+            const filteredTexture:Texture = this._getDoubleFrameBuffer().applyFilters(currItem.frameBuffer.getTexture(),currItem.filters);
             currItem.filters = NONE_FILTERS;
 
             nextItem.frameBuffer.bind();
@@ -177,6 +178,11 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     private _getFirst():IStackItem{
         return this._stack[0];
+    }
+
+    private _getDoubleFrameBuffer():DoubleFrameBuffer {
+        if (this._doubleFrameBuffer===undefined) this._doubleFrameBuffer = new DoubleFrameBuffer(this._gl,this._size);
+        return this._doubleFrameBuffer;
     }
 
 

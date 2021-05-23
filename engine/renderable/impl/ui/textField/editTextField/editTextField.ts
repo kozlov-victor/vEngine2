@@ -97,13 +97,13 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
         if (this.cursor!==undefined) this.cursor.onClientRectChanged(this.getClientRect());
     }
 
-    protected _setText():void {
+    protected _applyText():void {
         const newLines:ICharacterInfo[] = [];
         this._textEx.getAllChars().forEach(c=>{
             if (c.rawChar===NEWLINE_CHAR) newLines.push(c);
             c.uuid??=Incrementer.getValue();
         });
-        super._setText();
+        super._applyText();
         for (let i:number = 0; i < this.rowSet.children.length; i++) {
             const row:TextRow = this.rowSet.children[i];
             const newline:ICharacterInfo =

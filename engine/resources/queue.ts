@@ -49,7 +49,7 @@ export class Queue {
     }
 
     public async start():Promise<void>{
-        for await (const task of this._tasks) {
+        for (const task of this._tasks) {
             const {taskId,fn} = task;
             const onProgressCallBack = (n:number)=> this.progressTask(taskId,n);
             await fn(onProgressCallBack);

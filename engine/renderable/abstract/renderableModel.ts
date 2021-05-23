@@ -194,7 +194,7 @@ export abstract class RenderableModel
 
         if (!this.visible) return;
 
-        if (this._scene===undefined) this._scene = this.game.getCurrScene();
+        if (this._scene===undefined) this._scene = Scene.currentRenderingScene;
         if (this._layer===undefined) this._layer = this._scene._renderingSessionInfo.currentLayer;
         if (this._scene._renderingSessionInfo.drawingStackEnabled) {
             this._scene._renderingObjectStack.add(this,this._scene._renderingSessionInfo.currentConstrainObjects);

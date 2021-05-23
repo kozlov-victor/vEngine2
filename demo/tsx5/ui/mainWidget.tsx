@@ -44,7 +44,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
         super(new VEngineTsxDOMRenderer(game));
         this.refs.radioGroup = new RadioButtonGroup();
 
-        for (let i=0;i<100;i++) {
+        for (let i=0;i<120;i++) {
             this.listData.push({index:i});
         }
 

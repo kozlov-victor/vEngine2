@@ -3,6 +3,7 @@ import {ISize} from "@engine/geometry/size";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {RenderingSessionInfo} from "@engine/scene/internal/renderingSessionInfo";
+import {Scene} from "@engine/scene/scene";
 
 export class ImageCacheSurface extends RenderableModel {
 
@@ -24,13 +25,13 @@ export class ImageCacheSurface extends RenderableModel {
     render():void {
 
         // two pass drawing
-        const renderingSessionInfo:RenderingSessionInfo = this.game.getCurrScene()._renderingSessionInfo;
+        const renderingSessionInfo:RenderingSessionInfo = Scene.currentRenderingScene._renderingSessionInfo;
 
         // 1. render to drawing surface
         this._drawToSurface();
 
         // 2. idle pass to recalculate word matrices (without children drawing)
-        renderingSessionInfo.drawingStackEnabled = true;
+        renderingSessionInfo.drawingStackEnabled = !this.game.hasCurrentTransition(); // true if we dont draw transition
         renderingSessionInfo.drawingEnabled = false;
         renderingSessionInfo.currentConstrainObjects.push(this);
         this.worldTransformDirty = true;
@@ -50,7 +51,7 @@ export class ImageCacheSurface extends RenderableModel {
         (this.children as RenderableModel[]) = this._childrenCache;
 
         // 5. restore drawing session state
-        renderingSessionInfo.drawingStackEnabled = true;
+        renderingSessionInfo.drawingStackEnabled = !this.game.hasCurrentTransition(); // true if we dont draw transition
         renderingSessionInfo.drawingEnabled = true;
         renderingSessionInfo.currentConstrainObjects.pop();
     }

@@ -268,6 +268,10 @@ export class Game {
         else currentScene.render();
     }
 
+    public hasCurrentTransition():boolean {
+        return this._currSceneTransition!==undefined;
+    }
+
     public destroy():void{
         this._mainLoop.stop();
         this._destroyed = true;

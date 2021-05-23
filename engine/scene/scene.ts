@@ -38,6 +38,8 @@ export const enum SCENE_EVENTS {
 
 export class Scene implements IRevalidatable, ITweenable,IFilterable,IAlphaBlendable {
 
+    public static currentRenderingScene:Scene;
+
     constructor(protected game:Game) {
         this._renderingObjectStack = new RenderingObjectStack();
         this.size.set(this.game.size);
@@ -52,6 +54,7 @@ export class Scene implements IRevalidatable, ITweenable,IFilterable,IAlphaBlend
     public lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED;
     public preloadingGameObject!:RenderableModel;
     public readonly camera:Camera = new Camera(this.game,this);
+
 
     public readonly keyboardEventHandler:KeyboardEventEmitterDelegate = new KeyboardEventEmitterDelegate();
     public readonly gamepadEventHandler:GamepadEventEmitterDelegate = new GamepadEventEmitterDelegate();
@@ -214,10 +217,12 @@ export class Scene implements IRevalidatable, ITweenable,IFilterable,IAlphaBlend
 
 
     public render():void {
+        Scene.currentRenderingScene = this;
         this._renderingObjectStack.clear();
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
         renderer.saveAlphaBlend();
+        renderer.pushAlphaBlend(this.alpha);
         renderer.clearColor.set(this.backgroundColor);
         const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters);
 

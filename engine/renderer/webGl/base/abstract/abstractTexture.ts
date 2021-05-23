@@ -100,7 +100,7 @@ export abstract class AbstractTexture implements ITexture {
 
         const gl:WebGLRenderingContext = this.gl;
 
-        let glMode:Optional<number>;
+        let glMode:number;
         switch (mode) {
             case INTERPOLATION_MODE.LINEAR:
                 glMode = gl.LINEAR;

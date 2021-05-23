@@ -21,8 +21,8 @@ import {DebugError} from "@engine/debug/debugError";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Mat4} from "@engine/geometry/mat4";
-import MAT16 = Mat4.MAT16;
 import {arcToSvgCurve} from "@engine/renderable/impl/geometry/_internal/arcToSvgCurve";
+import MAT16 = Mat4.MAT16;
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {
@@ -216,7 +216,7 @@ class DrawingSession implements IDrawingSession {
         this._omitSelfOnRendering = true;
         this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = false;
         this.surface.renderToTexture(this._renderTarget,clearColor,true);
-        this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = true;
+        this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = !this.game.hasCurrentTransition(); // true if we dont draw transition
         this._omitSelfOnRendering = false;
         this.surface.removeChild(this._transformableContainer);
         this._transformableContainer.removeChild(model);

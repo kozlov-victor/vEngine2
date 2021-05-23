@@ -129,7 +129,7 @@ export class TextField extends WidgetContainer {
         if (this.rowSet===undefined || rectIsDirty) {
             this.rowSet = new TextRowSet(this.game,this.font,clientRect,this.textColor);
         }
-        this._setText();
+        this._applyText();
     }
 
     private _revalidateWithoutCache():void {
@@ -150,7 +150,7 @@ export class TextField extends WidgetContainer {
         }
         this.rowSetContainer.pos.set(clientRect);
         this.rowSetContainer.size.set(clientRect);
-        this._setText();
+        this._applyText();
         if (this._autosize) {
             this.size.setWH(
                 this.rowSet.size.width + this.marginLeft + this.paddingLeft + this.marginRight + this.paddingRight,
@@ -255,7 +255,7 @@ export class TextField extends WidgetContainer {
         this.requestTextRedraw();
     }
 
-    protected _setText():void {
+    protected _applyText():void {
         this.passPropertiesToRowSet(this.rowSet);
         this.requestTextRedraw();
     }
