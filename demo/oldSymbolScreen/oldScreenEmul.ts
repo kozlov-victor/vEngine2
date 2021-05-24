@@ -40,12 +40,12 @@ export class BasicEnv {
     private readonly drawingSurface:DrawingSurface;
 
     constructor(private game:Game,private textField:TextField) {
-        game.getCurrScene().appendChild(textField);
+        game.getCurrentScene().appendChild(textField);
         this.drawingSurface = new DrawingSurface(this.game,this.game.size);
         this.drawingSurface.setLineWidth(1);
         this.drawingSurface.setDrawColor(Color.RGB(0,222,0).asRGBNumeric());
         this.drawingSurface.setFillColor(Color.NONE.asRGBNumeric(),0);
-        game.getCurrScene().appendChild(this.drawingSurface);
+        game.getCurrentScene().appendChild(this.drawingSurface);
     }
 
     public INPUT(message:string,varName:string):void{
@@ -65,7 +65,7 @@ export class BasicEnv {
             cursorShow=!cursorShow;
             redrawTextWithCursor();
         },600);
-        const handler = this.game.getCurrScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, (e:IKeyBoardEvent)=>{
+        const handler = this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, (e:IKeyBoardEvent)=>{
             const kbEv:KeyboardEvent = e.nativeEvent as KeyboardEvent;
             const keycode = kbEv.keyCode;
 
@@ -76,7 +76,7 @@ export class BasicEnv {
                 this.userInputString = '';
                 this.userInputMode = false;
                 this.PRINT();
-                this.game.getCurrScene().keyboardEventHandler.off(KEYBOARD_EVENTS.keyPressed,handler);
+                this.game.getCurrentScene().keyboardEventHandler.off(KEYBOARD_EVENTS.keyPressed,handler);
                 this.redraw();
                 return;
             } else if (e.key===KEYBOARD_KEY.BACKSPACE) {

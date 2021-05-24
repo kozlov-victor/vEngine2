@@ -32,7 +32,7 @@ export class Water extends AbstractEntity {
 
     private animateWater():void {
         const img:Image = this.getRenderableModel() as Image;
-        this.game.getCurrScene().setInterval(()=>{
+        this.game.getCurrentScene().setInterval(()=>{
             img.offset.x+=1;
         },10);
     }

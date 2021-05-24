@@ -49,7 +49,7 @@ export class Zombie extends AbstractMonster {
     }
 
     private scheduleWalk():void {
-        this.game.getCurrScene().setTimeout(()=>{
+        this.game.getCurrentScene().setTimeout(()=>{
             const actionID:number = MathEx.random(0,10);
             if (actionID>8) this.idle();
             else if (actionID>5) {

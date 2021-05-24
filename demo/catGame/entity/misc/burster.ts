@@ -27,14 +27,14 @@ export class Burster {
         ps.emitAuto = false;
         ps.addParticle(particle);
         ps.emissionRadius = 5;
-        ps.emissionTarget = game.getCurrScene().getLayers()[1];
+        ps.emissionTarget = game.getCurrentScene().getLayers()[1];
 
         ps.numOfParticlesToEmit = {from:1,to:5};
         ps.particleLiveTime = {from:1000,to:2000};
         ps.particleVelocity = {from: 50, to: 100};
         ps.particleAngle = {from:0,to:2*Math.PI};
         ps.emitAuto = false;
-        game.getCurrScene().getLayerAtIndex(1).appendChild(ps);
+        game.getCurrentScene().getLayerAtIndex(1).appendChild(ps);
         this.particleSystem = ps;
     }
 

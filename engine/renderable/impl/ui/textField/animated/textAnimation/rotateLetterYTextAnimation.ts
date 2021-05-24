@@ -24,7 +24,7 @@ export class RotateLetterYTextAnimation extends AbstractTextAnimation {
                 ease: this.easeFn,
                 start:()=>c.visible = true,
             });
-            game.getCurrScene().addTween(t);
+            game.getCurrentScene().addTween(t);
         });
     }
 

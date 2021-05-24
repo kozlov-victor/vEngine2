@@ -73,7 +73,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
                 dragStartY:0
             } as IDragPoint;
         });
-        const scene:Scene = this.game.getCurrScene();
+        const scene:Scene = this.game.getCurrentScene();
         this._sceneOnMouseDown = scene.mouseEventHandler.on(MOUSE_EVENTS.mouseDown,(e:ISceneMouseEvent)=>{
             const pointId:number = DraggableBehaviour._getEventId(e);
             const point:IDragPoint = this._points[pointId];
@@ -144,7 +144,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
     }
 
     public destroy():void{
-        const scene:Scene = this.game.getCurrScene();
+        const scene:Scene = this.game.getCurrentScene();
         this.game.getRenderer().container.removeEventListener('mouseleave',this._blurListener);
         this._gameObject.mouseEventHandler.off(MOUSE_EVENTS.click,this._gameObjectOnClick);
         scene.mouseEventHandler.off(MOUSE_EVENTS.mouseDown,this._sceneOnMouseDown);

@@ -91,7 +91,7 @@ export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IC
     }
 
     protected notify(eventName: KEYBOARD_EVENTS, e: KeyBoardEvent): void {
-        this.game.getCurrScene().keyboardEventHandler.trigger(eventName,e);
+        this.game.getCurrentScene().keyboardEventHandler.trigger(eventName,e);
     }
 
     private findEvent(key:number):Optional<KeyBoardEvent> {

@@ -13,7 +13,7 @@ export class InfoPanel {
         this.container.size.setWH(this.game.size.width,60);
         this.container.fillColor = Color.RGBA(25,25,25,150);
         this.container.borderRadius = 5;
-        this.game.getCurrScene().appendChild(this.container);
+        this.game.getCurrentScene().appendChild(this.container);
         this.createLifeBar();
         this.updateLifeBar();
         this.updateNumOfLives(0);
@@ -66,12 +66,12 @@ export class InfoPanel {
         if (lastLifeIcon!==undefined) lastLifeIcon = lastLifeIcon.clone();
 
         this.updateNumOfLives(this.numOfLives-1);
-        this.game.getCurrScene().camera.shake(15,600);
+        this.game.getCurrentScene().camera.shake(15,600);
 
         if (lastLifeIcon!==undefined) {
             this.container.appendChild(lastLifeIcon);
             let cnt:number = 0;
-            const tmr:Timer = this.game.getCurrScene().setInterval(()=>{
+            const tmr:Timer = this.game.getCurrentScene().setInterval(()=>{
                 lastLifeIcon!.visible = !lastLifeIcon!.visible;
                 cnt++;
                 if (cnt===8) {

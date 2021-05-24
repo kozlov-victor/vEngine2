@@ -72,8 +72,8 @@ export class TileMap extends RenderableModelWithTexture {
 
     public revalidate(): void{
 
-        this.game.getCurrScene().size.width = this._numOfTilesInMapByX * this._tileWidth;
-        this.game.getCurrScene().size.height = this._numOfTilesInMapByY * this._tileHeight;
+        this.game.getCurrentScene().size.width = this._numOfTilesInMapByX * this._tileWidth;
+        this.game.getCurrentScene().size.height = this._numOfTilesInMapByY * this._tileHeight;
 
         const texSize:ISize = this.getTexture().size;
         this._numOfTilesInSpriteByX = ~~(texSize.width / this._tileWidth);
@@ -183,7 +183,7 @@ export class TileMap extends RenderableModelWithTexture {
     }
 
     private prepareDrawableInfo():void{
-        const camera:Camera = this.game.getCurrScene().camera;
+        const camera:Camera = this.game.getCurrentScene().camera;
         const firstTileToDrawByX:number = ~~((camera.pos.x) / this._tileWidth) - 1;
         const firstTileToDrawByY:number = ~~((camera.pos.y) / this._tileHeight) - 1;
 

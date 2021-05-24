@@ -53,7 +53,7 @@ class InspectorWidget extends VEngineTsxComponent<{}>{
     render(): VirtualNode {
         return (
             <>
-                {game.getCurrScene().getLayers().map(it=><NodeWidget tagName='layer'/>)}
+                {game.getCurrentScene().getLayers().map(it=><NodeWidget tagName='layer'/>)}
             </>
         );
     }

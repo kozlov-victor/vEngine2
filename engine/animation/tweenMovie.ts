@@ -37,7 +37,7 @@ export class TweenMovie {
     }
 
     public play():void{
-        this.game.getCurrScene().addTweenMovie(this);
+        this.game.getCurrentScene().addTweenMovie(this);
     }
 
     public update():void{

@@ -214,9 +214,9 @@ class DrawingSession implements IDrawingSession {
         this.surface.appendChild(this._transformableContainer);
         this._transformableContainer.appendChild(model);
         this._omitSelfOnRendering = true;
-        this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = false;
+        this.game.getCurrentScene()._renderingSessionInfo.drawingStackEnabled = false;
         this.surface.renderToTexture(this._renderTarget,clearColor,true);
-        this.game.getCurrScene()._renderingSessionInfo.drawingStackEnabled = !this.game.hasCurrentTransition(); // true if we dont draw transition
+        this.game.getCurrentScene()._renderingSessionInfo.drawingStackEnabled = !this.game.hasCurrentTransition(); // true if we dont draw transition
         this._omitSelfOnRendering = false;
         this.surface.removeChild(this._transformableContainer);
         this._transformableContainer.removeChild(model);

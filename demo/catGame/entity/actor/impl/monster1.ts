@@ -21,7 +21,7 @@ export class Monster1 extends AbstractMonster {
             //debug: true
         });
 
-        this.game.getCurrScene().setInterval(()=>{
+        this.game.getCurrentScene().setInterval(()=>{
             this.trackPositionByHero();
         },2000);
 
@@ -47,7 +47,7 @@ export class Monster1 extends AbstractMonster {
     }
 
     private scheduleBurst():void{
-        this.game.getCurrScene().setTimeout(()=>{
+        this.game.getCurrentScene().setTimeout(()=>{
             this.burstWithParticles();
             this.attackAnimation.play();
             this.scheduleBurst();

@@ -75,11 +75,11 @@ class TabStrip {
         this.animateSelected();
 
         const splashContainer = new SimpleGameObjectContainer(this.game);
-        this.game.getCurrScene().appendChild(splashContainer);
+        this.game.getCurrentScene().appendChild(splashContainer);
         const glow = new GlowFilter(this.game,0.01,10);
         splashContainer.filters = [glow];
 
-        this.game.getCurrScene().setInterval(()=>{
+        this.game.getCurrentScene().setInterval(()=>{
             if (MathEx.randomInt(0,10)> 5) {
                 const numOfSplashes:number = MathEx.randomInt(1,5);
                 for (let i=0;i<numOfSplashes;i++) this.createSplashVertical(splashContainer);
@@ -98,10 +98,10 @@ class TabStrip {
 
         const f = new TrianglesMosaicFilter(this.game);
         this.cell2.children[0].filters = [f];
-        this.game.getCurrScene().setInterval(()=>{
+        this.game.getCurrentScene().setInterval(()=>{
             if (MathEx.randomInt(0,10)> 5) {
                 f.enabled = true;
-                this.game.getCurrScene().setTimeout(()=>{f.enabled = false;},MathEx.randomInt(20,500));
+                this.game.getCurrentScene().setTimeout(()=>{f.enabled = false;},MathEx.randomInt(20,500));
             }
         },1000);
     }
@@ -164,7 +164,7 @@ class TabStrip {
         ));
         pl.pos.setX(MathEx.randomInt(0,this.game.size.width));
         splashContainer.appendChild(pl);
-        this.game.getCurrScene().setTimeout(()=>{
+        this.game.getCurrentScene().setTimeout(()=>{
             splashContainer.removeChild(pl);
         },MathEx.randomInt(200,500));
     }
@@ -194,7 +194,7 @@ class TabStrip {
             to:{val:from},
         });
         tm.loop(true);
-        this.game.getCurrScene().addTweenMovie(tm);
+        this.game.getCurrentScene().addTweenMovie(tm);
     }
 
     private updateImage(desc:IItemDescription,img:Image):void{

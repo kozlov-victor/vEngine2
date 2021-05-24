@@ -53,7 +53,7 @@ export class Machine {
         const isWIN:boolean = defineWinType(result)!==WIN_TYPE.NO_PRISE;
         if (isWIN) {
             this.locked = true;
-            this.game.getCurrScene().setTimeout(()=>{
+            this.game.getCurrentScene().setTimeout(()=>{
                 this.game.runScene(new WinScene(this.game));
             },3000);
         }

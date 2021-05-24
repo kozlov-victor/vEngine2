@@ -180,7 +180,7 @@ export class MainScene extends Scene {
     private createTransitionButton(text:string,transition:ISceneTransition):void{
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.textColor.setRGB(10);
-        tf.alpha = 0.6;
+        tf.alpha = 0.2;
         tf.size.setWH(this.game.width,40);
         tf.setText(text);
         tf.setFont(this.fnt);

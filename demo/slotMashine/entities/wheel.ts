@@ -48,7 +48,7 @@ export class Wheel {
             },
             ease:EasingBounce.InOut
         });
-        this.game.getCurrScene().addTween(t);
+        this.game.getCurrentScene().addTween(t);
 
     }
 

@@ -28,7 +28,7 @@ export class FallLettersTextAnimation extends AbstractTextAnimation {
                 delayBeforeStart: this.delayTime + MathEx.randomInt(0,this.delaySeedTime),
                 ease: this.easeFn,
             });
-            game.getCurrScene().addTween(t);
+            game.getCurrentScene().addTween(t);
         });
     }
 

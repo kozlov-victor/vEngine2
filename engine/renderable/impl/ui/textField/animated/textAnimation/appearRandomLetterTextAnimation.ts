@@ -14,7 +14,7 @@ export class AppearRandomLetterTextAnimation extends AbstractTextAnimation {
     init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
         chars.forEach((c,index)=>{
             c.visible = false;
-            game.getCurrScene().setTimeout(()=>{
+            game.getCurrentScene().setTimeout(()=>{
                 c.visible = true;
             },MathEx.random(0,this.seed));
         });

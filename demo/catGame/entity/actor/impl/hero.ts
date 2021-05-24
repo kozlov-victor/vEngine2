@@ -34,7 +34,7 @@ export class Hero extends AbstractCharacter {
         });
         Hero.instance = this;
 
-        this.game.getCurrScene().camera.followTo(this.renderableImage);
+        this.game.getCurrentScene().camera.followTo(this.renderableImage);
         this.velocity = 90;
 
         this.rotateAnimation.
@@ -158,7 +158,7 @@ export class Hero extends AbstractCharacter {
 
     private listenKeys():void {
         const jumpVelocity:number = 200;
-        this.game.getCurrScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, e=>{
+        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, e=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                     if (!this.beating) this.goLeft();
@@ -177,7 +177,7 @@ export class Hero extends AbstractCharacter {
 
             }
         });
-        this.game.getCurrScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased, e=>{
+        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased, e=>{
             switch (e.key) {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
@@ -185,7 +185,7 @@ export class Hero extends AbstractCharacter {
                     break;
             }
         });
-        this.game.getCurrScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
+        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.key) {
                 case KEYBOARD_KEY.Z:
                     this.beating = true;
@@ -243,7 +243,7 @@ export class Hero extends AbstractCharacter {
 
     private listenFallToHole():void {
         this.getRenderableModel().setInterval(()=>{
-            if (this.getRenderableModel().pos.y>this.game.getCurrScene().size.height + 1000) {
+            if (this.getRenderableModel().pos.y>this.game.getCurrentScene().size.height + 1000) {
                 this.damage(100);
                 this.getRenderableModel().pos.x = 100;
                 this.getRenderableModel().pos.y = 100;

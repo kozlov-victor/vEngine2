@@ -41,7 +41,7 @@ export class Wall extends AbstractEntity {
             movePlatformInfo.toY = tmp;
         }
         const model:RenderableModel = this.renderableImage;
-        this.game.getCurrScene().setInterval(()=>{
+        this.game.getCurrentScene().setInterval(()=>{
             model.pos.y+=d;
             if (model.pos.y>movePlatformInfo.toY!) d=-1;
             else if (model.pos.y<movePlatformInfo.fromY!) d=1;
@@ -56,7 +56,7 @@ export class Wall extends AbstractEntity {
             movePlatformInfo.toX = tmp;
         }
         const model:RenderableModel = this.renderableImage;
-        this.game.getCurrScene().setInterval(()=>{
+        this.game.getCurrentScene().setInterval(()=>{
             model.pos.x+=d;
             if (model.pos.x>movePlatformInfo.toX!) d=-1;
             else if (model.pos.x<movePlatformInfo.fromX!) d=1;

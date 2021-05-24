@@ -21,7 +21,7 @@ export class Bullet extends AbstractEntity {
         });
         this.getRenderableModel().size.setWH(8,8);
         this.animation.play();
-        this.game.getCurrScene().setTimeout(()=>{
+        this.game.getCurrentScene().setTimeout(()=>{
             this.getRenderableModel().removeSelf();
         },2000);
     }

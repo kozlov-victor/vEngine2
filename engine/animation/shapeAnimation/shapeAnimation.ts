@@ -131,7 +131,7 @@ export class ShapeAnimation implements IAnimation {
     }
 
     play(): void {
-        this.game.getCurrScene().addTween(this.t);
+        this.game.getCurrentScene().addTween(this.t);
     }
 
     stop(): void {

@@ -28,7 +28,7 @@ export const createGlowTweenFilter = (game:Game,color:Color,glowValFrom:number,g
         to:{val:glowValFrom}
     });
     tm.loop(true);
-    game.getCurrScene().addTweenMovie(tm);
+    game.getCurrentScene().addTweenMovie(tm);
     return glow;
 };
 
@@ -53,5 +53,5 @@ export const createScaleTweenMovie = (game:Game,from:number,to:number,time:numbe
         to:{val:from},
     });
     tm.loop(true);
-    game.getCurrScene().addTweenMovie(tm);
+    game.getCurrentScene().addTweenMovie(tm);
 };

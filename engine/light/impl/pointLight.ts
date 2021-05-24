@@ -32,7 +32,7 @@ export class PointLight extends AbstractLight {
     }
 
     private getPositionRelativeToScreen():Point2d {
-        const camera:Camera = this.game.getCurrScene().camera;
+        const camera:Camera = this.game.getCurrentScene().camera;
         this._screenPoint.setXY(
             (this.pos.x - camera.pos.x),
             (this.pos.y - camera.pos.y)

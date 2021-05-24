@@ -24,7 +24,7 @@ export class Monster2 extends AbstractMonster {
 
         this.burstColor.setRGBA(200,255,200,100);
 
-        this.game.getCurrScene().setInterval(()=>{
+        this.game.getCurrentScene().setInterval(()=>{
             this.trackPositionByHero();
         },2000);
 
@@ -49,7 +49,7 @@ export class Monster2 extends AbstractMonster {
     }
 
     private scheduleBurst():void{
-        this.game.getCurrScene().setTimeout(()=>{
+        this.game.getCurrentScene().setTimeout(()=>{
             this.burstWithParticles();
             this.attackAnimation.play();
             this.scheduleBurst();

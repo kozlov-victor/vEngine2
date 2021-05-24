@@ -64,7 +64,7 @@ export class MainScene extends Scene {
             to:{val:from},
         });
         tm.loop(true);
-        this.game.getCurrScene().addTweenMovie(tm);
+        this.game.getCurrentScene().addTweenMovie(tm);
 
     }
 

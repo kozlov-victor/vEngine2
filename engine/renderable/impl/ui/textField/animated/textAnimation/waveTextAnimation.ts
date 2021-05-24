@@ -23,7 +23,7 @@ export class WaveTextAnimation extends AbstractTextAnimation {
             this.initialPositions.push(c.pos.y);
         });
         if (this.timer!==undefined) this.timer.kill();
-        this.timer = game.getCurrScene().setInterval(()=>{
+        this.timer = game.getCurrentScene().setInterval(()=>{
             chars.forEach((c,index)=>{
                 c.pos.y = this.initialPositions[index] +
                     this.amplitude*Math.sin(2*Math.PI*this.frequency*game.getCurrentTime()/1000+index*this.letterOffsetFactor);

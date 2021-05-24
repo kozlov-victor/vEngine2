@@ -78,10 +78,10 @@ class Screen {
         this.texture = t;
         this.stream = new AudioStream(this.view);
 
-        game.getCurrScene().setInterval(()=>{
+        game.getCurrentScene().setInterval(()=>{
             this.flashOn = !this.flashOn;
         },1000);
-        this.game.getCurrScene().setInterval(()=>{
+        this.game.getCurrentScene().setInterval(()=>{
             this.update(t);
         },1);
     }

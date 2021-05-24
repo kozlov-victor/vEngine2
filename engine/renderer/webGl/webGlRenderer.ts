@@ -283,7 +283,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setTextureUsed(false);
         md.attachTexture('u_texture',this._nullTexture);
 
-
         md.setNormalsTextureUsed(false);
         md.attachTexture('u_normalsTexture',this._nullTexture);
 

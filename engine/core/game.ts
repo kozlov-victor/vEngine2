@@ -216,12 +216,12 @@ export class Game {
     public popScene():void{
         const last:ISceneWithTransition = this._sceneStack.pop()!;
         if (DEBUG && !last) throw new DebugError(`can not pop scene: no scene in stack`);
-        const transition = last.transition?last.transition.getOppositeTransition():undefined;
-        const prevScene = this._sceneStack.getLast()!.scene;
+        const transition:Optional<ISceneTransition> = last.transition?last.transition.getOppositeTransition():undefined;
+        const prevScene:Scene = this._sceneStack.getLast()!.scene;
         this.runScene(prevScene,transition);
     }
 
-    public getCurrScene():Scene{
+    public getCurrentScene():Scene{
         if (DEBUG && !this._currScene) throw new DebugError(`current scene is not set yet`);
         return this._currScene;
     }

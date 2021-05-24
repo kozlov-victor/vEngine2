@@ -141,7 +141,7 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
     public destroy():void {}
 
     protected notify(eventName: GAME_PAD_EVENTS, e: GamePadEvent): void {
-        this.game.getCurrScene().gamepadEventHandler.trigger(eventName,e);
+        this.game.getCurrentScene().gamepadEventHandler.trigger(eventName,e);
     }
 
     private pressButton(buton:number,value:number,gamePadIndex:number,eventFromBuffer:Optional<GamePadEvent>):void {

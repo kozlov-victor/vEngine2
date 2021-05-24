@@ -22,7 +22,7 @@ import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
 
 export const waitFor = (game:Game,time:number):Promise<void>=>{
     return new Promise<void>((resolve)=>{
-        game.getCurrScene().setTimeout(()=>{
+        game.getCurrentScene().setTimeout(()=>{
             resolve();
         },time);
     });

@@ -30,7 +30,7 @@ export class AlphaAppearLetterTextAnimation extends AbstractTextAnimation {
                 ease: this.easeFn,
                 start: _=>c.visible = true,
             });
-            game.getCurrScene().addTween(t);
+            game.getCurrentScene().addTween(t);
         });
     }
 

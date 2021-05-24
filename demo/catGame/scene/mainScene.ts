@@ -174,7 +174,7 @@ export class MainScene extends Scene {
         }
         this.setInterval(()=>{
             clouds.forEach(c=>{
-                if (c.pos.x<-500) c.pos.x = this.game.getCurrScene().size.width+ 500;
+                if (c.pos.x<-500) c.pos.x = this.game.getCurrentScene().size.width+ 500;
             });
         },1000);
     }

@@ -22,7 +22,7 @@ export class ChipOscilloscope {
 
     public listen(sound:Sound,track:AbstractChipTrack, textField:TextField):void{
         if (this.timer!==undefined) this.timer.kill();
-        this.timer = this.game.getCurrScene().setInterval((()=>{
+        this.timer = this.game.getCurrentScene().setInterval((()=>{
 
             const time = sound.getCurrentTime();
             if (time===-1) return;
