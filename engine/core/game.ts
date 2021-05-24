@@ -160,6 +160,7 @@ export class Game {
     }
 
     public runScene(scene:Scene, transition?:Optional<ISceneTransition>,replaceStack:boolean = true):void{
+        Scene.currentRenderingScene = scene;
         if (replaceStack) this._sceneStack.replaceLast({scene,transition});
         this._prevScene = this._currScene;
         if (this._prevScene!==undefined) {

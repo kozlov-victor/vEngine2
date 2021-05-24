@@ -4,6 +4,7 @@ import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer"
 import {HttpClient} from "@engine/debug/httpClient";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
+const win32:boolean = navigator.platform==='win32';
 
 export class Widget extends VEngineTsxComponent<{}> {
 
@@ -63,7 +64,7 @@ export class Widget extends VEngineTsxComponent<{}> {
                                             {(it===this.selectedItem?'<':'') + it + (it===this.selectedItem?'>':'')}
                                         </a>
                                         <a target="_blank" href={'./demo.html?name='+it}> (new window) </a>
-                                        <a target="_blank" href={'vengine:out/'+it}> (win app) </a>
+                                        {win32?<a target="_blank" href={'vengine:out/'+it}> (win app) </a>:undefined}
                                     </li>
                                 )
                             }

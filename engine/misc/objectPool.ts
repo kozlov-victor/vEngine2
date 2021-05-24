@@ -13,27 +13,23 @@ export class ObjectPool<T extends IReleasealable> {
     private _ptr:number = 0;
     private _pool:T[] = [];
 
-    constructor(private Class:Clazz<T>, private numberOfInstances = 16){
+    constructor(private Class:Clazz<T>, private numberOfInstances = 32){
         if (DEBUG && !Class) throw new DebugError(`can not instantiate ObjectPool: class not provided in constructor`);
     }
 
     public getFreeObject(silently:boolean = false):Optional<T>{
-        let cnt:number = 0;
-        while (cnt<this.numberOfInstances){
-            let current:T = this._pool[this._ptr];
-            if (current===undefined) {
-                current = this._pool[this._ptr] = new this.Class();
-                current.capture();
-                return current;
-            }
-            else if (!current.isCaptured()) {
-                current.capture();
-                return current;
-            }
-            cnt++;
-            this._ptr = (++this._ptr) % this.numberOfInstances;
+        for (let i:number=this._ptr;i<this.numberOfInstances;i++) {
+            const possible = this._getFreeObjectAt(i);
+            if (possible!==undefined) return possible;
         }
-        if (DEBUG && !silently) throw new DebugError(`can not get free object: no free object in pool`);
+        for (let i:number=0;i<this._ptr;i++) {
+            const possible = this._getFreeObjectAt(i);
+            if (possible!==undefined) return possible;
+        }
+        if (DEBUG && !silently) {
+            console.error(this._pool);
+            throw new DebugError(`can not get free object: no free object in pool`);
+        }
         return undefined;
     }
 
@@ -53,6 +49,22 @@ export class ObjectPool<T extends IReleasealable> {
                 current.release();
             }
         }
+    }
+
+    private _getFreeObjectAt(i:number):Optional<T>{
+        let current:T = this._pool[i];
+        if (current===undefined) {
+            current = this._pool[this._ptr] = new this.Class();
+            current.capture();
+            this._ptr = (++i)%this._pool.length;
+            return current;
+        }
+        else if (!current.isCaptured()) {
+            current.capture();
+            this._ptr = (++i)%this._pool.length;
+            return current;
+        }
+        else return undefined;
     }
 
 
