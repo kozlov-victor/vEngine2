@@ -1,7 +1,7 @@
 import {Optional} from "@engine/core/declarations";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
-import {DebugError} from "@engine/debug/debugError";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
+import {MeshDrawer} from "@engine/renderer/webGl/programs/impl/base/mesh/meshDrawer";
 
 export class Mesh3d extends Mesh2d {
 
@@ -32,6 +32,8 @@ export class Mesh3d extends Mesh2d {
     public draw():void{
         this.game.getRenderer().drawMesh3d(this);
     }
+
+    public onUpdatingBuffers():void {}
 
     protected setClonedProperties(cloned: Mesh3d):void {
         super.setClonedProperties(cloned);

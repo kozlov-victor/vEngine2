@@ -1,13 +1,13 @@
 import {ShaderProgram} from "../../../../base/shaderProgram";
 import {AbstractDrawer} from "../../../abstract/abstractDrawer";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
-import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
+import type {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {DebugError} from "@engine/debug/debugError";
 import * as fragmentSource from "./mesh.fragment.glsl";
 import * as vertexSource from "./mesh.vertex.glsl";
 import {Mat4} from "@engine/geometry/mat4";
 import {Color} from "@engine/renderer/common/color";
-import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
+import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import MAT16 = Mat4.MAT16;
 
 

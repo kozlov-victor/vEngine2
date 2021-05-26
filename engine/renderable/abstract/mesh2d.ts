@@ -18,7 +18,6 @@ export abstract class Mesh2d extends RenderableModel {
         protected game:Game,
     ) {
         super(game);
-
     }
 
     public revalidate(): void {

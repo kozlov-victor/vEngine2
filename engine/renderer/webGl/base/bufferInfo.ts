@@ -11,7 +11,7 @@ import {Optional} from "@engine/core/declarations";
 export interface IVertexArrayInfo {
     array:number[];
     type:number;
-    size:number;
+    size:1|2|3|4;
     attrName:string;
 }
 
