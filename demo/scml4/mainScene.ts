@@ -9,18 +9,18 @@ export class MainScene extends Scene {
 
     private player:SpriterObject;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         taskQueue.addNextTask(async _=>{
            this.player = await SpriterObject.create(this.game,taskQueue,'./scml4/ugly/ugly.scon');
         });
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
         this.appendChild(this.player);
         this.player.scale.setXY(0.6);
         this.player.pos.setXY(200,200);

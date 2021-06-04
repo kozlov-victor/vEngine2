@@ -27,7 +27,7 @@ export abstract class BaseAbstractIntroScene extends Scene {
 
     private level: LEVEL_SCHEMA = intro as unknown as LEVEL_SCHEMA;
 
-    public onReady(): void {
+    public override onReady(): void {
         this.setBg();
         this.loadLevel();
         this.startSound();

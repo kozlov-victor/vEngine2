@@ -20,7 +20,7 @@ export class MainScene extends Scene {
     private cubeTexture:ICubeMapTexture;
 
 
-    public onReady():void {
+    public override onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(12,22,122);

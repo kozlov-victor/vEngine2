@@ -9,14 +9,14 @@ export class MainScene extends Scene {
 
     private resourceLink:ITexture;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         taskQueue.addNextTask(async progress=>{
             this.resourceLink = await taskQueue.getLoader().loadTexture('./frameAnimation3/air.png',progress);
         });
     }
 
 
-    public onReady():void {
+    public override onReady():void {
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.resourceLink);
         animatedImage.setPixelPerfect(true);

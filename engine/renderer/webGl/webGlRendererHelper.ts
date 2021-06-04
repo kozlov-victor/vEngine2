@@ -37,22 +37,22 @@ export class WebGlRendererHelper extends RendererHelper {
 
     private renderTargetStack:Stack<FrameBufferStack> = new Stack<FrameBufferStack>();
 
-    public createRenderTarget(game:Game,size: ISize): FrameBufferStack {
+    public override createRenderTarget(game:Game,size: ISize): FrameBufferStack {
         const renderer:WebGlRenderer = this.game.getRenderer();
         return new FrameBufferStack(game,renderer.getNativeContext(),size);
     }
 
-    public saveRenderTarget():void {
+    public override saveRenderTarget():void {
         const renderer:WebGlRenderer = this.game.getRenderer();
         this.renderTargetStack.push(renderer.getRenderTarget());
     }
 
-    public restoreRenderTarget():void {
+    public override restoreRenderTarget():void {
         const renderer:WebGlRenderer = this.game.getRenderer();
         renderer.setRenderTarget(this.renderTargetStack.pop()!);
     }
 
-    public renderSceneToTexture(scene:Scene,renderTarget:FrameBufferStack): void {
+    public override renderSceneToTexture(scene:Scene,renderTarget:FrameBufferStack): void {
         const renderer:WebGlRenderer = this.game.getRenderer();
         this.saveRenderTarget();
         renderer.setRenderTarget(renderTarget);
@@ -63,7 +63,7 @@ export class WebGlRendererHelper extends RendererHelper {
         renderer.restoreAlphaBlend();
     }
 
-    public renderModelToTexture(m: RenderableModel, renderTarget:FrameBufferStack, clearColor?:Color,omitSaveAndResoreRenderTaget?:boolean): void {
+    public override renderModelToTexture(m: RenderableModel, renderTarget:FrameBufferStack, clearColor?:Color,omitSaveAndResoreRenderTaget?:boolean): void {
         const renderer:WebGlRenderer = this.game.getRenderer();
         if (m.size.isZero()) m.revalidate();
         if (!omitSaveAndResoreRenderTaget) this.saveRenderTarget();

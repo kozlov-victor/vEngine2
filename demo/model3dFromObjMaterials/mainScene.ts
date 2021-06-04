@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     @Resource.Text('./model3dFromObjMaterials/chair/chair.mtl')
     private materialData:string;
 
-    public onReady():void {
+    public override onReady():void {
 
         const obj:SimpleGameObjectContainer = new ObjParser().parse(this.game,
             {

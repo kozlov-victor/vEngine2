@@ -9,12 +9,12 @@ export class LazyImageCacheSurface extends ImageCacheSurface {
         this.redrawRequested = true;
     }
 
-    protected _drawToSurface():void {
+    protected override _drawToSurface():void {
         if (!this.redrawRequested) return;
         super._drawToSurface();
     }
 
-    public render():void {
+    public override render():void {
         super.render();
         this.redrawRequested = false;
     }

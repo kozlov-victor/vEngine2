@@ -134,7 +134,7 @@ export class VideoGlitchFilter extends AbstractGlFilter {
     }
 
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         this.setUniform(this.iTime,this.time+=0.01);
         const size:ISize = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.resolution[0] = size.width;

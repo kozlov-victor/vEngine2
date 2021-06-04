@@ -9,7 +9,7 @@ export class MainScene extends Scene {
 
 
 
-    public onReady():void {
+    public override onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(0);
@@ -20,7 +20,7 @@ export class MainScene extends Scene {
     }
 
     // https://www.dwitter.net/d/6318
-    protected onRender(): void {
+    protected override onRender(): void {
 
         //this.surface.clear();
 

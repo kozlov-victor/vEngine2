@@ -42,7 +42,7 @@ export class OffsetMapFilter extends AbstractGlFilter{
         this.setForce(0.05);
     }
 
-    public doFilter(destFrameBuffer: FrameBuffer):void {
+    public override doFilter(destFrameBuffer: FrameBuffer):void {
         this.simpleRectDrawer.attachTexture(this.offsetTexture,this.offsetTextureGl);
         const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.pixelWidth,1/size.width);

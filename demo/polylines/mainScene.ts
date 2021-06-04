@@ -7,9 +7,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-
-
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`
             M -3 9 L -1 10 L -1 11 L 0 12 L 1.5 11 L 1.5 7
@@ -106,14 +104,6 @@ export class MainScene extends Scene {
             p.addBehaviour(new DraggableBehaviour(this.game));
             this.appendChild(p);
         });
-
-    }
-
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
 
     }
 

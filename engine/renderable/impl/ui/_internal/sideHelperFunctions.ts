@@ -1,7 +1,5 @@
 import {Point2d} from "@engine/geometry/point2d";
-import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {ISize, Size} from "@engine/geometry/size";
-import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 
 export enum Direction {
     HORIZONTAL,

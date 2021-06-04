@@ -15,14 +15,14 @@ export class MainScene extends Scene {
 
     private logoTexture:ITexture;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         taskQueue.addNextTask(async progress=>{
             this.logoTexture = await taskQueue.getLoader().loadTexture('./assets/logo.png',progress);
         });
     }
 
 
-    public onReady():void {
+    public override onReady():void {
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
         gradient.setColorAtPosition(0, Color.RGB(200,0,20));

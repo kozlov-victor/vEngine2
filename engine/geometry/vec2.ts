@@ -103,7 +103,7 @@ export class Vec2 extends Point2d {
         this.x = Math.cos(value) * len;
         this.y = Math.sin(value) * len;
     }
-    public clone():Vec2 {
+    public override clone():Vec2 {
         return new Vec2(this.x, this.y);
     }
 

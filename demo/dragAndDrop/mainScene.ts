@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private logoTexture:ITexture;
 
 
-    public onReady():void {
+    public override onReady():void {
 
         this.camera.scale.setXY(1.6);
         this.camera.pos.setXY(-10,-15);

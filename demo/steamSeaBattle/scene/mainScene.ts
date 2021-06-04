@@ -47,7 +47,7 @@ export class MainScene extends BaseScene {
 
     private psBullet:ParticleSystem;
 
-    public onReady():void {
+    public override onReady():void {
         super.onReady();
         this.filters.push(new BarrelDistortionFilter(this.game));
         this.ship = this.findChildById('shipContainer') as RenderableModel;
@@ -95,7 +95,7 @@ export class MainScene extends BaseScene {
         this.bulletContainer.appendChild(this.psBullet);
     }
 
-    protected onUpdate(): void {
+    protected override onUpdate(): void {
         super.onUpdate();
         if (this.ship.pos.x<-100) {
             this.resetShip();

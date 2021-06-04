@@ -5,7 +5,7 @@ import {Game} from "@engine/core/game";
 
 export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps{
 
-    public readonly type:string = 'Ellipse';
+    public override readonly type:string = 'Ellipse';
 
     get radiusX(): number {
         return this._radiusX;
@@ -38,7 +38,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
     private _radiusX: number;
     private _radiusY: number;
 
-    constructor(protected game:Game) {
+    constructor(game:Game) {
         super(game);
         this.radiusX = 10;
         this.radiusY = 20;
@@ -54,7 +54,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
         this.game.getRenderer().drawEllipse(this);
     }
 
-    public update():void {
+    public override update():void {
         super.update();
     }
 
@@ -64,7 +64,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
         return cloned;
     }
 
-    public setProps(props:IEllipseProps):void {
+    public override setProps(props:IEllipseProps):void {
         super.setProps(props);
         if (props.center!==undefined) this.center.setXY(props.center.x,props.center.y);
         if (props.arcAngleFrom!==undefined) this.arcAngleFrom=props.arcAngleFrom;
@@ -74,7 +74,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
         if (props.radiusY!==undefined) this.radiusY = props.radiusY;
     }
 
-    protected setClonedProperties(cloned:Ellipse):void {
+    protected override setClonedProperties(cloned:Ellipse):void {
         cloned.radiusX = this.radiusX;
         cloned.radiusY = this.radiusY;
         cloned.arcAngleFrom = this.arcAngleFrom;

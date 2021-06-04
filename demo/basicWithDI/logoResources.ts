@@ -8,7 +8,7 @@ export class LogoResources extends ResourceAutoHolder{
     @Resource.Texture('./assets/logo.png')
     public logoTexture:ITexture;
 
-    constructor(protected scene:Scene) {
+    constructor(scene:Scene) {
         super(scene);
     }
 

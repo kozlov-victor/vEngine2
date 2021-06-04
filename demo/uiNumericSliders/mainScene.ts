@@ -10,7 +10,7 @@ import {MathEx} from "@engine/misc/mathEx";
 export class MainScene extends Scene {
 
 
-    public onReady():void {
+    public override onReady():void {
         this.backgroundColor = Color.fromCssLiteral(`#efefef`);
 
         const h:HorizontalNumericSlider = new HorizontalNumericSlider(this.game);

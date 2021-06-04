@@ -17,7 +17,7 @@ export class AppearFromOffsetTextAnimation extends AbstractTextAnimation {
         super();
     }
 
-    init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
+    public init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
         chars.forEach((c,index)=>{
             const fromPoint:Point2d = new Point2d(
                 this.point.x,

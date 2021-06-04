@@ -15,7 +15,7 @@ export class AudioNodeSet {
     public readonly nodes:AudioNode[] = [] as AudioNode[];
 
     constructor(game: Game,private context:BasicAudioContext,private numOfNodes:number){
-        for (let i = 0;i<numOfNodes;i++) {
+        for (let i:number = 0;i<numOfNodes;i++) {
             this.nodes.push(new AudioNode(context.clone()));
         }
     }

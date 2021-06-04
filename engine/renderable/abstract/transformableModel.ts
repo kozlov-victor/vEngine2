@@ -121,7 +121,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
 
     private _angle:number = 0;
 
-    protected constructor(protected game:Game){
+    protected constructor(game:Game){
         super(game);
         const observer = ()=>this.worldTransformDirty = true;
         this.pos.observe(observer);

@@ -17,7 +17,7 @@ export class WaveTextAnimation extends AbstractTextAnimation {
         super();
     }
 
-    init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
+    public init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
         this.initialPositions = [];
         chars.forEach((c,index)=>{
             this.initialPositions.push(c.pos.y);

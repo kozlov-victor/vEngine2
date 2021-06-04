@@ -103,7 +103,7 @@ export class GameScene extends BasePix32Scene {
         if (obj.pos.x<-10) obj.pos.x = MathEx.random(32,64);
     }
 
-    onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         let bin:ArrayBuffer;
         taskQueue.addNextTask(async progress=>{
@@ -116,7 +116,7 @@ export class GameScene extends BasePix32Scene {
         });
     }
 
-    onReady():void {
+    public override onReady():void {
         super.onReady();
         (async ()=>{
             await this.print("get ready",3000);
@@ -145,7 +145,7 @@ export class GameScene extends BasePix32Scene {
         })();
     }
 
-    protected onUpdate(): void {
+    protected override onUpdate(): void {
         this.moveObjects();
     }
 

@@ -13,7 +13,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
 
         const rect:Rectangle = new Rectangle(this.game);
@@ -77,11 +77,8 @@ export class MainScene extends Scene {
         this.appendChild(star);
     }
 
-    public onProgress(val: number):void {
 
-    }
-
-    public onReady():void {
+    public override onReady():void {
         console.log('ready');
     }
 

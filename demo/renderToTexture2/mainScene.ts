@@ -18,7 +18,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./plasma/gradient.png')
     private palletLink:ITexture;
 
-    public onReady():void {
+    public override onReady():void {
 
         const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,new Size(320,240));
 

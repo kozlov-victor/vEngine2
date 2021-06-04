@@ -15,18 +15,18 @@ export class MainScene extends Scene {
     @Resource.Texture('./ninePatchImage/ninePatchImage.png')
     private imgLink:ITexture;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
         this.obj = new NinePatchImage(this.game,this.imgLink);
 
         this.obj.size.setWH(200,200);

@@ -18,7 +18,7 @@ export abstract class AbstractAppScene extends Scene {
     protected sounds:Record<string,Sound> = {};
     private links:Record<string,ITexture> = {};
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         const assetsFolder:string = 'data';
         const assetsPostfix:string = '';
         const rect = new Rectangle(this.game);
@@ -71,7 +71,7 @@ export abstract class AbstractAppScene extends Scene {
 
     }
 
-    public onReady(): void {
+    public override onReady(): void {
         const layerElements:XmlNode[] = this.getSceneElement().getElementsByTagName('layer');
         if (!layerElements.length) throw new Error(`no layer provided to scene`);
         console.log(layerElements);
@@ -83,7 +83,7 @@ export abstract class AbstractAppScene extends Scene {
     }
 
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 

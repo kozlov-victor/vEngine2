@@ -16,14 +16,14 @@ export class MainScene extends Scene {
 
     private logoLink:ITexture;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         taskQueue.addNextTask(async progress=>{
             this.logoLink = await taskQueue.getLoader().loadTexture('./assets/logo.png',progress);
         });
     }
 
 
-    public onReady():void {
+    public override onReady():void {
         const circle:Circle = new Circle(this.game);
         circle.radius = 90;
         circle.center.setXY(120,120);

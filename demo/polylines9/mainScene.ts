@@ -10,7 +10,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         // https://www.w3.org/TR/SVG/paths.html
 
@@ -38,12 +38,5 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
-
-    }
 
 }

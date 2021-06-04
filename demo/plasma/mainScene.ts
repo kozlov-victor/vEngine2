@@ -16,18 +16,18 @@ export class MainScene extends Scene {
     @Resource.Texture('./plasma/gradient.png')
     private palletLink:ITexture;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
         const spr:Image = new Image(this.game,this.plasmaLink);
         this.appendChild(spr);
         spr.pos.setXY(20);

@@ -22,7 +22,7 @@ export class ImageCacheSurface extends RenderableModel {
     }
 
 
-    render():void {
+    public override render():void {
 
         // two pass drawing
         const renderingSessionInfo:RenderingSessionInfo = Scene.currentRenderingScene._renderingSessionInfo;

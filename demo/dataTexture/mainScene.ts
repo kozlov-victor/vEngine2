@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     private textures:ITexture[] = [];
 
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         const resources: ArrayBuffer[] = [];
         for (let i: number = 1; i <= 6; i++) {
@@ -30,7 +30,7 @@ export class MainScene extends Scene {
     }
 
 
-    public onReady():void {
+    public override onReady():void {
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.textures[0]);
         const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);

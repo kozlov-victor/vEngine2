@@ -13,7 +13,7 @@ export const enum STRETCH_MODE {
 
 export class Image extends RenderableModelWithTexture implements ICloneable<Image>{
 
-    public readonly type:string = 'Image';
+    public override readonly type:string = 'Image';
     public borderRadius:number = 0;
     public offset:Point2d = new Point2d();
     public stretchMode:STRETCH_MODE = STRETCH_MODE.STRETCH;
@@ -32,7 +32,7 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
         this.game.getRenderer().drawImage(this);
     }
 
-    public setTexture(texture:ITexture):void {
+    public override setTexture(texture:ITexture):void {
         super.setTexture(texture);
         if (this.size.isZero()) this.size.set(texture.size);
         if (this._srcRect.width===0 || this._srcRect.height===0) this._srcRect.setSize(this.size);
@@ -44,7 +44,7 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
         return cloned;
     }
 
-    public setProps(props:IImageProps):void{
+    public override setProps(props:IImageProps):void{
         super.setProps(props);
         if (props.borderRadius!==undefined) this.borderRadius = props.borderRadius;
         if (props.color!==undefined) this.color.setRGBA(props.color.r,props.color.g,props.color.b,props.color.a);
@@ -63,7 +63,7 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
         return this._pixelPerfect;
     }
 
-    protected setClonedProperties(cloned:Image):void {
+    protected override setClonedProperties(cloned:Image):void {
         cloned._srcRect.set(this._srcRect);
         cloned.size.set(this.size);
         cloned.borderRadius = this.borderRadius;
@@ -74,7 +74,5 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
         cloned._pixelPerfect = this._pixelPerfect;
         super.setClonedProperties(cloned);
     }
-
-
 
 }

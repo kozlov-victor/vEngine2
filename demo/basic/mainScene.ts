@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/logo.png')
     private logoTexture:ITexture;
 
-    public onReady():void {
+    public override onReady():void {
 
         const spr:Image = new Image(this.game,this.logoTexture);
         spr.pos.fromJSON({x:10,y:10});

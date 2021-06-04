@@ -7,7 +7,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         // model from https://codepen.io/SaraSoueidan/pen/48caf2f5fa42a8c154fcb5dec0dbe4d5
         this.appendChild(Polygon.fromSvgPath(this.game,`
@@ -22,14 +22,6 @@ export class MainScene extends Scene {
             c4.3,0,7.8,3.5,7.8,7.8c0,0.2,0,0.3,0,0.5h13.1c0-0.2,0-0.3,0-0.5c0-4.3,3.5-7.8,7.8-7.8s7.8,3.5,7.8,7.8c0,0.2,0,0.3,0,0.5h8.1
             c2.4,0,4.3-1.9,4.3-4.3v-6.5C283.2,172,277.3,172,275,171.4z
         `));
-
-    }
-
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
 
     }
 

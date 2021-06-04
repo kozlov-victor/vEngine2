@@ -11,11 +11,11 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/repeat.jpg')
     private logoLink:ITexture;
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
         const spr:Image = new Image(this.game,this.logoLink);
         spr.size.setWH(this.game.size.width,this.game.size.height);
         this.appendChild(spr);

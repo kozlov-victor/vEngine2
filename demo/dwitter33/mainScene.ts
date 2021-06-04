@@ -14,14 +14,16 @@ export class MainScene extends Scene {
 
     private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(1);
         this.appendChild(surface);
     }
-    public onReady():void {
+
+
+    public override onReady():void {
 
         this.surface.setLineWidth(1);
 
@@ -65,7 +67,7 @@ export class MainScene extends Scene {
         };
     }
 
-    protected onRender(): void {
+    protected override onRender(): void {
         this.surface.drawBatch(this.renderScene);
     }
 

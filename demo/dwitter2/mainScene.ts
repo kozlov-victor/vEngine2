@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private renderScene:(session:IDrawingSession)=>void;
     private lastPoint:Point2d = new Point2d();
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         surface.setLineWidth(1);
@@ -20,7 +20,7 @@ export class MainScene extends Scene {
         this.appendChild(surface);
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         this.renderScene = (session)=> {
             session.clear();
@@ -44,7 +44,7 @@ export class MainScene extends Scene {
 
     }
 
-    protected onRender(): void {
+    protected override onRender(): void {
         this.surface.drawBatch(this.renderScene);
     }
 

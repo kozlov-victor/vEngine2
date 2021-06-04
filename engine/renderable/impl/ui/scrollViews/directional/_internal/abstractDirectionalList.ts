@@ -9,7 +9,7 @@ import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/direction
 
 export abstract class AbstractDirectionalList extends ScrollView {
 
-    protected constructor(protected game:Game) {
+    protected constructor(game:Game) {
         super(game);
     }
     private pointer:number = 0;
@@ -45,7 +45,7 @@ export abstract class AbstractDirectionalList extends ScrollView {
         });
     }
 
-    public setProps(props:IDirectionalListProps<any>):void {
+    public override setProps(props:IDirectionalListProps<any>):void {
         super.setProps(props);
         if (props.data!==undefined && props.data!==this.tsxData) {
             this.tsxData = props.data;

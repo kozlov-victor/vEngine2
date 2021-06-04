@@ -139,7 +139,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     }
 
-    public setPixelPerfect(mode:boolean):void{
+    public override setPixelPerfect(mode:boolean):void{
         super.setPixelPerfect(mode);
         const interpolation:INTERPOLATION_MODE = mode?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR;
         this._currFrameBufferStack.setInterpolationMode(interpolation);
@@ -427,17 +427,17 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
        this._lockRect = undefined;
     }
 
-    public beforeItemStackDraw(filters:AbstractGlFilter[],forceDrawChildrenOnNewSurface:boolean):IStateStackPointer {
+    public override beforeItemStackDraw(filters:AbstractGlFilter[],forceDrawChildrenOnNewSurface:boolean):IStateStackPointer {
         return this._currFrameBufferStack.pushState(filters,forceDrawChildrenOnNewSurface);
     }
 
-    public afterItemStackDraw(stackPointer:IStateStackPointer):void {
+    public override afterItemStackDraw(stackPointer:IStateStackPointer):void {
         this._gl.disable(this._gl.DEPTH_TEST);
         this._currFrameBufferStack.reduceState(stackPointer);
     }
 
 
-    public beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
+    public override beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
         const ptr:IStateStackPointer = this._currFrameBufferStack.pushState(filters,false);
         if (this.clearBeforeRender) {
             this._currFrameBufferStack.clear(this.clearColor,this.getAlphaBlend());
@@ -445,7 +445,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return ptr;
     }
 
-    public afterFrameDraw(stackPointer:IStateStackPointer):void{
+    public override afterFrameDraw(stackPointer:IStateStackPointer):void{
         this._currFrameBufferStack.reduceState(stackPointer);
         if (this._currFrameBufferStack===this._origFrameBufferStack) {
             if (this._lockRect!==undefined) {
@@ -507,7 +507,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return this._currFrameBufferStack;
     }
 
-    public destroy():void{
+    public override destroy():void{
         super.destroy();
         this._origFrameBufferStack.destroy();
         this._nullTexture.destroy();
@@ -517,7 +517,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         Texture.destroyAll();
     }
 
-    protected onResize(): void {
+    protected override onResize(): void {
         super.onResize();
         if (this._pixelPerfectMode && (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH || this.game.scaleStrategy===SCALE_STRATEGY.FIT)) {
             this.container.width = this.viewPortSize.width;

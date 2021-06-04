@@ -4,7 +4,7 @@ import {Timer} from "@engine/misc/timer";
 
 export abstract class BaseScene extends AbstractAppScene{
 
-    public onReady(): void {
+    public override onReady(): void {
         super.onReady();
         const pixelFilter:PixelFilter = new PixelFilter(this.game);
         let a = 10;

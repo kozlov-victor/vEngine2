@@ -890,7 +890,7 @@ export class SpriterObject extends RenderableModel {
     private textureMap:Record<string,ITexture> = {};
     private readonly rootNode:RenderableModel = new SimpleGameObjectContainer(this.game);
 
-    private constructor(protected game:Game) {
+    private constructor(game:Game) {
         super(game);
         this.rootNode.scale.setXY(1, -1);
         this.appendChild(this.rootNode);
@@ -937,7 +937,7 @@ export class SpriterObject extends RenderableModel {
         return s;
     }
 
-    public update(): void {
+    public override update(): void {
         super.update();
         this.scmlObject.update();
     }

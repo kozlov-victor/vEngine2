@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/logo.png') private logoTexture:ITexture;
     @Resource.Texture('./assets/repeat.jpg')  private bgTexture:ITexture;
 
-    public onReady():void {
+    public override onReady():void {
 
         this.camera.angle = 0.1;
         this.camera.pos.z = 10;

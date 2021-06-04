@@ -14,10 +14,10 @@ abstract class AbstractFlip3dTransition extends AbstractSceneTransition {
     protected readonly _wheelContainer:SimpleGameObjectContainer;
 
     constructor(
-        protected readonly game:Game,
-        protected readonly billboard:boolean,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear,
+        game:Game,
+        protected billboard:boolean,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear,
     )
     {
         super(game,time,easeFn);
@@ -36,17 +36,17 @@ abstract class AbstractFlip3dTransition extends AbstractSceneTransition {
 
     protected abstract getBottomAndTopImages():[Image,Image];
 
-    protected abstract getFromTo():{from:number,to:number};
+    protected abstract override getFromTo():{from:number,to:number};
 
 }
 
 abstract class AbstractFlipHorizontal3dTransition extends AbstractFlip3dTransition{
 
     constructor(
-        protected readonly game:Game,
-        protected readonly billboard:boolean,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear,
+        game:Game,
+        billboard:boolean,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear,
     )
     {
         super(game,billboard,time,easeFn);
@@ -72,10 +72,10 @@ abstract class AbstractFlipHorizontal3dTransition extends AbstractFlip3dTransiti
 abstract class AbstractFlipVertical3dTransition extends AbstractFlip3dTransition{
 
     constructor(
-        protected readonly game:Game,
-        protected readonly billboard:boolean = false,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear,
+        game:Game,
+        billboard:boolean = false,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear,
     )
     {
         super(game,billboard,time,easeFn);

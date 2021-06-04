@@ -9,7 +9,7 @@ export class MainScene extends Scene {
 
     private model:RenderableModel;
 
-    public onReady():void {
+    public override onReady():void {
 
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
@@ -29,7 +29,7 @@ export class MainScene extends Scene {
 
     }
 
-    public onUpdate():void{
+    public override onUpdate():void{
         this.model.angle3d.x+=0.01;
     }
 

@@ -8,7 +8,7 @@ export class Mesh3d extends Mesh2d {
     public texture:Optional<ITexture>;
     public cubeMapTexture:Optional<ICubeMapTexture>;
     public normalsTexture:Optional<ITexture>;
-    public vertexItemSize:2|3 = 3;
+    public override vertexItemSize:2|3 = 3;
     public colorMix:number = 0;// 0..1
     public reflectivity:number = 0;// 0..1
     public invertY:boolean = false;
@@ -24,18 +24,18 @@ export class Mesh3d extends Mesh2d {
         return this._lightAccepted;
     }
 
-    public transform(): void {
+    public override transform(): void {
         super.transform();
         if (this.invertY) this.game.getRenderer().transformScale(1,-1,1);
     }
 
-    public draw():void{
+    public override draw():void{
         this.game.getRenderer().drawMesh3d(this);
     }
 
     public onUpdatingBuffers():void {}
 
-    protected setClonedProperties(cloned: Mesh3d):void {
+    protected override setClonedProperties(cloned: Mesh3d):void {
         super.setClonedProperties(cloned);
         cloned.texture = this.texture;
         cloned.cubeMapTexture = this.cubeMapTexture;

@@ -10,10 +10,10 @@ export abstract class AbstractScaleRotateAppearanceTransition extends AbstractSc
     protected _transformationTarget:Image;
 
     constructor(
-        protected readonly game:Game,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear,
-        protected readonly numOfRotations:number = 1,
+        game:Game,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear,
+        public numOfRotations:number = 1,
     )
     {
         super(game,time,easeFn);
@@ -26,7 +26,7 @@ export abstract class AbstractScaleRotateAppearanceTransition extends AbstractSc
 
     protected abstract getBottomAndTopImages():[Image,Image];
 
-    protected abstract getFromTo():{from:number,to:number};
+    protected abstract override getFromTo():{from:number,to:number};
 
     protected onTransitionProgress(val: number): void {
         this._transformationTarget.scale.setXY(val);

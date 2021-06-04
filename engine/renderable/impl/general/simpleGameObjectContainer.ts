@@ -4,7 +4,7 @@ import {Game} from "@engine/core/game";
 
 export class SimpleGameObjectContainer extends RenderableModel {
 
-    constructor(protected game:Game){
+    constructor(game:Game){
         super(game);
     }
 

@@ -55,11 +55,11 @@ export class MainScene extends Scene {
     @Resource.FontFromCssDescription({fontSize:30,fontFamily:'Droid Sans'})
     private fnt:Font;
 
-    onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         loadScript(taskQueue);
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
 

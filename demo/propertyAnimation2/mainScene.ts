@@ -6,7 +6,7 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 
 export class MainScene extends Scene {
 
-    public onReady():void {
+    public override onReady():void {
         const model = new Circle(this.game);
         model.radius = 50;
         model.color.setRGB(2,244,34);

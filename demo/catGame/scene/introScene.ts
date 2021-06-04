@@ -15,7 +15,7 @@ export class IntroScene extends BaseAbstractIntroScene {
     protected spriteSheetLabel: ITexture;
 
 
-    protected listenUI():void {
+    protected override listenUI():void {
         this.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             this.soundTheme.stop();
             this.camera.shake(5,200);

@@ -11,11 +11,11 @@ import {Rect} from "@engine/geometry/rect";
 
 export class Lava extends AbstractEntity {
 
-    public static readonly groupName:string = 'lava';
+    public static override readonly groupName:string = 'lava';
 
     private animation:CellFrameAnimation;
 
-    constructor(protected game: Game, spriteSheet: ITexture,size:Size) {
+    constructor(game: Game, spriteSheet: ITexture,size:Size) {
         super(game,spriteSheet,{
             type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
             groupNames: [Lava.groupName],
@@ -25,7 +25,7 @@ export class Lava extends AbstractEntity {
         this.animation.play();
     }
 
-    protected onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
+    protected override onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
         const img:AnimatedImage = new AnimatedImage(this.game,spriteSheet);
         const animation:CellFrameAnimation = new CellFrameAnimation(this.game);
         animation.frames = this.createRange(0,44);

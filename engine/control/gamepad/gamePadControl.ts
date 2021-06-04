@@ -95,7 +95,7 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
         return val;
     }
 
-    public update():void{
+    public override update():void{
 
         super.update();
 

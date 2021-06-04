@@ -43,7 +43,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./chipTunePlayer/skin.png')
     private skinTexture:ITexture;
 
-    onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         loadFont(this.game,taskQueue,'./chipTunePlayer/pixel.ttf','customFont');
         taskQueue.addNextTask(async progress=>{
@@ -51,7 +51,7 @@ export class MainScene extends Scene {
         });
     }
 
-    public onReady():void {
+    public override onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);
         const bgTf = new Rectangle(this.game);
         bgTf.fillColor = Color.fromCssLiteral(`#edffe8`);

@@ -4,7 +4,7 @@ import {Game} from "../../core/game";
 
 export abstract class AbstractCanvasRenderer extends AbstractRenderer {
 
-    public container:HTMLCanvasElement;
+    public override container:HTMLCanvasElement;
 
     protected constructor(game:Game) {
         super(game);

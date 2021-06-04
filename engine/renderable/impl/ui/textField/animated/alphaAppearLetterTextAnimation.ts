@@ -17,7 +17,7 @@ export class AlphaAppearLetterTextAnimation extends AbstractTextAnimation {
         super();
     }
 
-    init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
+    public init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
         chars.forEach((c,index)=>{
             c.alpha = this.alphaFrom;
             c.visible = false;

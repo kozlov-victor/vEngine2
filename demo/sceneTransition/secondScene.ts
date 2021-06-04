@@ -15,7 +15,7 @@ export class SecondScene extends Scene {
     @Resource.FontFromCssDescription({fontSize:25})
     private fnt:Font;
 
-    public onPreloading(taskQueue:TaskQueue):void{
+    public override onPreloading(taskQueue:TaskQueue):void{
 
         super.onPreloading(taskQueue);
 
@@ -36,11 +36,11 @@ export class SecondScene extends Scene {
 
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         console.log('scene 2 on ready');
 

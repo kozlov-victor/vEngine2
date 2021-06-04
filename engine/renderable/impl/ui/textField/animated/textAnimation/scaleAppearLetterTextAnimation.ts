@@ -17,7 +17,7 @@ export class ScaleAppearLetterTextAnimation extends AbstractTextAnimation {
         super();
     }
 
-    init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
+    public init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
         chars.forEach((c,index)=>{
             c.scale.setXY(this.scaleFrom);
             c.visible = false;

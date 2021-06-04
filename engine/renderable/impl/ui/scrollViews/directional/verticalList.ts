@@ -11,7 +11,7 @@ export class VerticalList extends AbstractDirectionalList {
         return this._scrollContainerDelegate.getCurrentOffsetVertical();
     }
 
-    constructor(protected game:Game) {
+    constructor(game:Game) {
         super(game);
     }
 

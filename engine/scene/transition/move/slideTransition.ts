@@ -11,10 +11,10 @@ export class SlideTransition extends AbstractSceneTransition {
     private _from:number;
 
     constructor(
-        protected readonly game:Game,
-        private readonly sideTo:SIDE = SIDE.BOTTOM,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear)
+        game:Game,
+        public sideTo:SIDE = SIDE.BOTTOM,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear)
     {
         super(game,time,easeFn);
         this._transitionScene.appendChild(this._currSceneImage);

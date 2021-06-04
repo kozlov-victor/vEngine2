@@ -7,9 +7,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-
-
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         PolyLine.fromMultiCurveSvgPath(this.game,`
             M10 80 Q 95 10 180 80
@@ -55,14 +53,6 @@ export class MainScene extends Scene {
         polyLine2.lineWidth = 2;
         this.appendChild(polyLine2);
         polyLine2.addBehaviour(new DraggableBehaviour(this.game));
-
-    }
-
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
 
     }
 

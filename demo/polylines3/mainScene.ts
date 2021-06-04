@@ -10,7 +10,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(this.game,`
             M80 80
@@ -53,14 +53,6 @@ export class MainScene extends Scene {
         p.addBehaviour(new DraggableBehaviour(this.game));
         p.fillColor = Color.RGB(122,12,12);
         this.appendChild(p);
-
-    }
-
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
 
     }
 

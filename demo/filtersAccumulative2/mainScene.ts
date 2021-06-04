@@ -14,14 +14,14 @@ export class MainScene extends Scene {
 
     private logoTexture:ITexture;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         taskQueue.addNextTask(async progress=>{
             this.logoTexture = await taskQueue.getLoader().loadTexture('./assets/logo.png');
         });
     }
 
 
-    public onReady():void {
+    public override onReady():void {
         this.backgroundColor.setRGB(0,0,0);
         const surface = new DrawingSurface(this.game,this.game.size);
         surface.setLineWidth(2);

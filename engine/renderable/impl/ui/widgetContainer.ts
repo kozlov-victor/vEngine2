@@ -53,7 +53,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         }
     }
 
-    public readonly type:string = 'Container';
+    public override readonly type:string = 'Container';
 
     public readonly marginLeft      :number = 0;
     public readonly marginTop       :number = 0;
@@ -159,7 +159,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         this.markAsDirty();
     }
 
-    public revalidate(): void {
+    public override revalidate(): void {
         super.revalidate();
         this.recalculateClientRect();
         this.fitBackgroundToSize();
@@ -170,7 +170,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         return this.clientRect;
     }
 
-    public setProps(props: IWidgetContainerProps):void {
+    public override setProps(props: IWidgetContainerProps):void {
         super.setProps(props);
         if (props.background!==undefined) {
             const memoized:RenderableModel = this.getMemoizedView(props.background);

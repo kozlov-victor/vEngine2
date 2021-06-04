@@ -116,6 +116,7 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
             this._setUniform(keys[i],v.value);
             v.dirty = false;
         }
+
         for (let i:number=0,max:number = this.texturesToBind.length;i<max;i++) {
             const t:ITextureInfo = this.texturesToBind.texturesInfo[i];
             t.texture.bind(t.uniformName,i,this.program as ShaderProgram);

@@ -18,7 +18,7 @@ export interface IExtraProperties {
 
 export abstract class AbstractCharacter extends AbstractEntity {
 
-    public static readonly groupName:string = 'abstractCharacter';
+    public static override readonly groupName:string = 'abstractCharacter';
 
     declare protected renderableImage:AnimatedImage;
 
@@ -29,12 +29,12 @@ export abstract class AbstractCharacter extends AbstractEntity {
 
     protected velocity:number = 10;
 
-    protected constructor(protected game:Game, spr:ITexture,params:ICreateRigidBodyParams) {
+    protected constructor(game:Game, spr:ITexture,params:ICreateRigidBodyParams) {
         super(game,spr,params);
         this.idle();
     }
 
-    protected onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
+    protected override onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
         return new AnimatedImage(this.game, spriteSheet);
     }
 

@@ -9,7 +9,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         const curves:string[] =
             //Created with Method Draw - http://github.com/duopixel/Method-Draw/
@@ -41,12 +41,5 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
-
-    }
 
 }

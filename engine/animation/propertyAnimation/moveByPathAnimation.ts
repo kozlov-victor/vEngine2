@@ -101,18 +101,18 @@ export class MoveByPathAnimation extends AbstractMoveAnimation {
 
 
 
-    constructor(protected game:Game,polyLine:PolyLine) {
+    constructor(game:Game,polyLine:PolyLine) {
         super(game);
         this._controlPointResolver = new ControlPointByLengthPassedResolver(polyLine);
     }
 
-    public reset():void{
+    public override reset():void{
         super.reset();
         this._controlPointResolver.reset();
     }
 
 
-    protected onUpdate():void{
+    protected override onUpdate():void{
         if (this.durationSec!==undefined && this.durationSec!==this._oldDurationSec) {
             this._oldDurationSec = this.durationSec;
             this.velocity = this._controlPointResolver.getTotalLength() / this.durationSec;

@@ -4,7 +4,7 @@ import {Rect} from "@engine/geometry/rect";
 
 export class MainScene extends Scene {
 
-    public onReady():void {
+    public override onReady():void {
         const debugLayer = new DebugLayer(this.game);
         this.appendChild(debugLayer);
         // tslint:disable-next-line:no-null-keyword

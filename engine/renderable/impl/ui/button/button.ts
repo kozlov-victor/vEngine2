@@ -11,7 +11,7 @@ import {
 
 export class Button extends TextField {
 
-    public readonly type:string = 'Button';
+    public override readonly type:string = 'Button';
 
     constructor(game:Game,font:Font) {
         super(game,font);

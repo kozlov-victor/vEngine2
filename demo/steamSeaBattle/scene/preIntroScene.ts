@@ -6,7 +6,7 @@ import {XmlNode} from "@engine/misc/xml/xmlELements";
 
 export class PreIntroScene extends BaseScene {
 
-    public onReady(): void {
+    public override onReady(): void {
         super.onReady();
         this.mouseEventHandler.on(MOUSE_EVENTS.click,()=>this.game.runScene(new IntroScene(this.game)));
     }

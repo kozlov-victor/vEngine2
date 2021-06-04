@@ -14,7 +14,7 @@ export class MainScene extends Scene {
 
     private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         surface.setLineWidth(1);
@@ -23,7 +23,7 @@ export class MainScene extends Scene {
         this.appendChild(surface);
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         // u(t) is called 60 times per second.
         // t: Elapsed time in seconds.
@@ -64,7 +64,7 @@ export class MainScene extends Scene {
         };
     }
 
-    protected onRender(): void {
+    protected override onRender(): void {
         this.surface.drawBatch(this.renderScene);
     }
 

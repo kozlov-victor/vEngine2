@@ -4,7 +4,7 @@ import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer"
 import {HttpClient} from "@engine/debug/httpClient";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
-const win32:boolean = navigator.platform==='win32';
+const win32:boolean = navigator.platform==='Win32';
 
 export class Widget extends VEngineTsxComponent<{}> {
 

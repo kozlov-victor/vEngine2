@@ -13,12 +13,12 @@ export class WinScene extends BaseAbstractIntroScene {
     @Resource.Texture('./catGame/res/sprite/win.png')
     protected spriteSheetLabel: ITexture;
 
-    protected startSound(): void {
+    protected override startSound(): void {
         super.startSound();
         this.soundTheme.loop = false;
     }
 
-    protected listenUI():void {
+    protected override listenUI():void {
         this.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             this.soundTheme.stop();
             this.camera.shake(5,200);

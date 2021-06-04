@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/logo.png')
     private logoLink:ITexture;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -23,11 +23,11 @@ export class MainScene extends Scene {
         super.onPreloading(taskQueue);
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
         const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);

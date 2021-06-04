@@ -115,13 +115,13 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
         );
     }
 
-    public clone(): CharacterImage {
+    public override clone(): CharacterImage {
         const cloned:CharacterImage = new CharacterImage(this.game,this.font,this.characterInfo,this.color.clone());
         this.setClonedProperties(cloned);
         return cloned;
     }
 
-    protected setClonedProperties(cloned:CharacterImage):void {
+    protected override setClonedProperties(cloned:CharacterImage):void {
         super.setClonedProperties(cloned);
     }
 

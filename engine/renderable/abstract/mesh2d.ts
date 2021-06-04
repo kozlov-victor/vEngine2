@@ -4,8 +4,6 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {DebugError} from "@engine/debug/debugError";
-import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
-import {Optional} from "@engine/core/declarations";
 
 export abstract class Mesh2d extends RenderableModel {
 
@@ -14,13 +12,11 @@ export abstract class Mesh2d extends RenderableModel {
     public bufferInfo:BufferInfo;
     public vertexItemSize:2|3 = 2;
 
-    protected constructor(
-        protected game:Game,
-    ) {
+    protected constructor(game:Game) {
         super(game);
     }
 
-    public revalidate(): void {
+    public override revalidate(): void {
         super.revalidate();
         if (DEBUG) {
             if (!this.modelPrimitive) throw new DebugError(`model primitive is not set`);
@@ -38,7 +34,7 @@ export abstract class Mesh2d extends RenderableModel {
         this.game.getRenderer().drawMesh2d(this);
     }
 
-    protected setClonedProperties(cloned: Mesh2d): void {
+    protected override setClonedProperties(cloned: Mesh2d): void {
         cloned.fillColor = this.fillColor.clone();
         cloned.depthTest = this.depthTest;
         cloned.bufferInfo =this.bufferInfo;

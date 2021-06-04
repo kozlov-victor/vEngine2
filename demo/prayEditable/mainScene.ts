@@ -7,7 +7,6 @@ import {
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {PrayResourcesHolder} from "./prayResourcesHolder";
-import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
 import {Tween} from "@engine/animation/tween";
 import {EasingSine} from "@engine/misc/easing/functions/sine";
@@ -29,7 +28,7 @@ export class MainScene extends Scene {
     private r:PrayResourcesHolder = new PrayResourcesHolder(this);
 
 
-    public onReady():void {
+    public override onReady():void {
 
         this.backgroundColor.setRGB(12,12,12);
         this.game.addControl(KeyboardControl);

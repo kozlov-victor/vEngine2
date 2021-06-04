@@ -5,7 +5,7 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 
 export class MainScene extends Scene {
 
-    public onReady():void {
+    public override onReady():void {
         const model = new Circle(this.game);
         model.radius = 10;
         model.color.setRGB(255,99,71); // "tomato"

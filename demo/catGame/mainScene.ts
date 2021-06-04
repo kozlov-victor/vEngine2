@@ -89,7 +89,7 @@ export class MainScene extends Scene {
         this.level = level;
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         this.game.setPhysicsSystem(ArcadePhysicsSystem);
         this.setBg();

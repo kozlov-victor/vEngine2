@@ -119,7 +119,7 @@ export class MeshDrawer extends AbstractDrawer {
         this.setUniform(this.u_color_mix,val);
     }
 
-    public bind():void{
+    public override bind():void{
         if (DEBUG && this.mesh===undefined) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
         super.bind();
         this.bufferInfo.bind(this.program);
@@ -143,7 +143,7 @@ export class MeshDrawer extends AbstractDrawer {
     private _initBufferInfo(drawMethod:number= DRAW_METHOD.TRIANGLES,vertexSize:2|3=3):void{
         const bufferInfo:IBufferInfoDescription = {
             posVertexInfo:{
-                array:this.mesh.modelPrimitive.vertexArr, type:this.gl.FLOAT,
+                array:new Float32Array(this.mesh.modelPrimitive.vertexArr), type:this.gl.FLOAT,
                 size:vertexSize, attrName:this.a_position
             },
             drawMethod
@@ -155,7 +155,7 @@ export class MeshDrawer extends AbstractDrawer {
         }
         if (this.mesh.modelPrimitive.normalArr) {
             bufferInfo.normalInfo = {
-                array: this.mesh.modelPrimitive.normalArr,
+                array: new Float32Array(this.mesh.modelPrimitive.normalArr),
                 type:this.gl.FLOAT,
                 size:3,
                 attrName:this.a_normal
@@ -163,7 +163,7 @@ export class MeshDrawer extends AbstractDrawer {
         }
         if (this.mesh.modelPrimitive.texCoordArr) {
             bufferInfo.texVertexInfo = {
-                array: this.mesh.modelPrimitive.texCoordArr,
+                array: new Float32Array(this.mesh.modelPrimitive.texCoordArr),
                 type:this.gl.FLOAT,
                 size:2,
                 attrName:this.a_texCoord
@@ -171,7 +171,7 @@ export class MeshDrawer extends AbstractDrawer {
         }
         if (this.mesh.modelPrimitive.vertexColorArr) {
             bufferInfo.colorVertexInfo = {
-                array: this.mesh.modelPrimitive.vertexColorArr,
+                array: new Float32Array(this.mesh.modelPrimitive.vertexColorArr),
                 type:this.gl.FLOAT,
                 size:4,
                 attrName:this.a_vertexColor

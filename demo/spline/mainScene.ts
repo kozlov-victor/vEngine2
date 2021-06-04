@@ -3,7 +3,6 @@ import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MathEx} from "@engine/misc/mathEx";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
 
 export class MainScene extends Scene {
@@ -12,7 +11,7 @@ export class MainScene extends Scene {
     private controlPoints:Circle[] = [];
     private points:number[] = [];
 
-    public onReady():void {
+    public override onReady():void {
         for (let i:number=0;i<6;i++) {
             this.createControlCircle();
         }

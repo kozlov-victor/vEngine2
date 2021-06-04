@@ -5,7 +5,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 export class MainScene extends Scene {
 
-    public onReady():void {
+    public override onReady():void {
         const model = new Rectangle(this.game);
         model.size.setWH(30);
         model.color.setRGB(2,244,34);

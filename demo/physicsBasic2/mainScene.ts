@@ -8,7 +8,6 @@ import {Camera} from "@engine/renderer/camera";
 import * as doc from "./level.xml";
 import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {XmlDocument} from "@engine/misc/xml/xmlELements";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
@@ -17,7 +16,7 @@ export class MainScene extends Scene {
 
     private player: Rectangle;
 
-    public onReady():void {
+    public override onReady():void {
 
         Camera.FOLLOW_FACTOR.y = 0.06;
 
@@ -98,7 +97,7 @@ export class MainScene extends Scene {
 
     }
 
-    protected onUpdate(): void {
+    protected override onUpdate(): void {
         if (this.player.pos.y > this.size.height + 300) this.game.runScene(new MainScene(this.game));
     }
 }

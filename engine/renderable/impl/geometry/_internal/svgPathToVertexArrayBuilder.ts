@@ -1,12 +1,9 @@
-import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Point2d} from "@engine/geometry/point2d";
 import {DebugError} from "@engine/debug/debugError";
 import {arcToBezier} from "@engine/renderable/impl/geometry/_internal/arcToBezier";
-import {Line} from "@engine/renderable/impl/geometry/line";
 import {Optional} from "@engine/core/declarations";
 import {Game} from "@engine/core/game";
 import {BasicStringTokenizer} from "@engine/renderable/impl/geometry/_internal/basicStringTokenizer";
-import {Circle} from "@engine/renderable/impl/geometry/circle";
 
 type v2 = [number,number];
 

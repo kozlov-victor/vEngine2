@@ -12,11 +12,11 @@ export class MainScene extends Scene {
     private logoLink:ITexture;
 
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.setXY(this.game.size.width/2,this.game.size.height/2);

@@ -26,12 +26,12 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
         this.pointTo.setXY(dx,dy);
     }
 
-    set lineWidth(value: number) {
+    public override set lineWidth(value: number) {
         this._lineWidth = value;
         this.onPointChanged();
     }
 
-    get lineWidth(): number {
+    public override get lineWidth(): number {
         return this._lineWidth;
     }
 
@@ -45,7 +45,7 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
         this.game.getRenderer().drawLine(this);
     }
 
-    public translate():void{
+    public override translate():void{
         super.translate();
         this.game.getRenderer().transformTranslate(0,-this.lineWidth/2);
     }
@@ -56,13 +56,13 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
         return this._rectangleRepresentation;
     }
 
-    public setProps(props:ILineProps):void {
+    public override setProps(props:ILineProps):void {
         super.setProps(props);
         this.setXYX1Y1(props.pos?.x??0,props.pos?.y??0,props.pointTo.x,props.pointTo.y);
         if (props.borderRadius) this.borderRadius = props.borderRadius;
     }
 
-    protected setClonedProperties(cloned:Line):void{
+    protected override setClonedProperties(cloned:Line):void{
         cloned.borderRadius = this.borderRadius;
         cloned.pointTo.set(this.pointTo);
         super.setClonedProperties(cloned);

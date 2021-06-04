@@ -17,12 +17,12 @@ export class PreIntroScene extends Scene {
     private spriteSheetLogo: ITexture;
 
 
-    public onPreloading(taskQueue:TaskQueue): void {
+    public override onPreloading(taskQueue:TaskQueue): void {
         super.onPreloading(taskQueue);
         this.backgroundColor = Color.BLACK;
     }
 
-    public onReady(): void {
+    public override onReady(): void {
 
         const intro:Image = new Image(this.game,this.spriteSheetLogo);
         intro.anchorPoint.setToCenter();

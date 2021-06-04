@@ -34,7 +34,7 @@ class QuadMesh extends Mesh3d {
 
     public declare modelPrimitive: QuadPrimitive;
 
-    private _vertexBufferDataToUpdate:Optional<number[]>;
+    private _vertexBufferDataToUpdate:Optional<Float32Array>;
 
 
     constructor(game:Game) {
@@ -46,13 +46,13 @@ class QuadMesh extends Mesh3d {
         this.modelPrimitive.init(topLeft,bottomLeft,topRight,bottomRight);
     }
 
-    public onUpdatingBuffers():void {
+    public override onUpdatingBuffers():void {
         if (this._vertexBufferDataToUpdate===undefined) return;
         this.bufferInfo.posVertexBuffer!.updateDada(this._vertexBufferDataToUpdate);
         this._vertexBufferDataToUpdate = undefined;
     }
 
-    public updateVertexData(data:number[]):void {
+    public updateVertexData(data:Float32Array):void {
         this._vertexBufferDataToUpdate = data;
     }
 
@@ -67,7 +67,7 @@ export class TextureQuad extends RenderableModel {
     public readonly topRight:Point2d = new Point2d();
     public readonly bottomRight:Point2d = new Point2d();
 
-    private _vertexData:number[] = new Array(12);
+    private _vertexData:Float32Array = new Float32Array(12);
 
     constructor(game:Game,texture:ITexture) {
         super(game);

@@ -20,11 +20,11 @@ class PolygonPrimitive extends AbstractPrimitive {
 
 export class Polygon extends Mesh2d {
 
-    private constructor(protected game:Game){
+    private constructor(game:Game){
         super(game);
     }
 
-    public readonly type:string = 'Polygon';
+    public override readonly type:string = 'Polygon';
 
     private _edgeVertices:number[];
 
@@ -105,7 +105,7 @@ export class Polygon extends Mesh2d {
         const isClockWise:boolean = this.isClockWise();
         const primitive = new class extends AbstractPrimitive {
 
-            public normalArr:number[] = [];
+            public override normalArr:number[] = [];
 
             constructor() {
                 super();

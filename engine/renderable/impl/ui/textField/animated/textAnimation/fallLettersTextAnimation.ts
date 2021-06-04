@@ -18,7 +18,7 @@ export class FallLettersTextAnimation extends AbstractTextAnimation {
         super();
     }
 
-    init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
+    public init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
         chars.forEach((c,index)=>{
             const t = new Tween({
                 target: c.pos,

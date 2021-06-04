@@ -52,7 +52,7 @@ export class Barrel2DistortionFilter extends AbstractGlFilter {
         this.setUniform(this.u_distortion,val);
     }
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,width);
         this.setUniform(this.rt_h,height);

@@ -170,7 +170,7 @@ export class MainScene extends Scene {
     private fnt:Font;
 
 
-    public onReady():void {
+    public override onReady():void {
 
         const tf:EditTextField = new EditTextField(this.game,this.fnt);
         tf.cursorColor = Color.fromCssLiteral(`#ffd8d8`);

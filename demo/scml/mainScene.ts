@@ -8,23 +8,27 @@ export class MainScene extends Scene {
 
     private player:SpriterObject;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue: TaskQueue): void {
         super.onPreloading(taskQueue);
-        taskQueue.addNextTask(async progress=>{
-          this.player =
-              await SpriterObject.create(
-                  this.game,
-                  taskQueue,
-                  {url:'./scml/player/player.scon',headers:[{name:'test-header',value:'nonsense'}],responseType:'text'}
-              );
-       });
+        taskQueue.addNextTask(async progress => {
+            this.player =
+                await SpriterObject.create(
+                    this.game,
+                    taskQueue,
+                    {
+                        url: './scml/player/player.scon',
+                        headers: [{name: 'test-header', value: 'nonsense'}],
+                        responseType: 'text'
+                    }
+                );
+        });
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
 
 
         this.appendChild(this.player);

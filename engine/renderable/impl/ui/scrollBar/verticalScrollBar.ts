@@ -2,7 +2,7 @@ import {AbstractScrollBar} from "@engine/renderable/impl/ui/scrollBar/_internal/
 import {Direction} from "@engine/renderable/impl/ui/_internal/sideHelperFunctions";
 
 export class VerticalScrollBar extends AbstractScrollBar {
-    public readonly type:string = 'VerticalScrollBar';
+    public override readonly type:string = 'VerticalScrollBar';
 
     protected getDirection(): Direction {
         return Direction.VERTICAL;

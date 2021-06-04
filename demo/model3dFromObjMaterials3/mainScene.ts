@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private meshData:string;
 
 
-    public onReady():void {
+    public override onReady():void {
 
         const obj:SimpleGameObjectContainer = new ObjParser().parse(this.game,
             {

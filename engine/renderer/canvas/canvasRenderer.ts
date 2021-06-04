@@ -47,8 +47,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.ctx = getCtx(this.container as HTMLCanvasElement);
     }
 
-    // https://miguelmota.com/blog/pixelate-images-with-canvas/demo/
-    public setPixelPerfect():void{ // todo
+    public override setPixelPerfect():void{
 
         this.container.style.cssText += 'image-rendering: optimizeSpeed;' + // FireFox < 6.0
             'image-rendering: -moz-crisp-edges;' + // FireFox
@@ -182,7 +181,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.transformRestore();
     }
 
-    public beforeFrameDraw(filters:AbstractGlFilter[]): IStateStackPointer {
+    public override beforeFrameDraw(filters:AbstractGlFilter[]): IStateStackPointer {
         if (!this.clearBeforeRender) return undefined!;
         this.ctx.fillStyle = this.clearColor.asCssRgba();
         this.ctx.fillRect(0,0,this.game.size.width,this.game.size.height);

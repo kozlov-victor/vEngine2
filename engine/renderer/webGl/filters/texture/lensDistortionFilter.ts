@@ -81,7 +81,7 @@ export class LensDistortionFilter extends AbstractGlFilter {
         this.setUniform(this.u_mouse,this.coordinates);
     }
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         const size:ISize = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,size.width);
         this.setUniform(this.rt_h,size.height);

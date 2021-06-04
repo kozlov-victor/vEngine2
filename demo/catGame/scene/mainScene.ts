@@ -114,7 +114,7 @@ export class MainScene extends Scene {
         this.level = level;
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         this.setBg();
         this.playTheme();
@@ -124,7 +124,7 @@ export class MainScene extends Scene {
         this.createTouchPad();
     }
 
-    public onInactivated(): void {
+    public override onInactivated(): void {
         super.onInactivated();
         if (this.touchPad!==undefined) this.touchPad.releaseAllButtons();
     }

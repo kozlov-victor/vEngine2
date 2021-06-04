@@ -5,19 +5,19 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 export class MainScene extends Scene {
 
-    public onPreloading():void {
+    public override onPreloading():void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
     // https://svgsilh.com/3f51b5/image/2055208.html
-    public onReady():void {
+    public override onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.appendChild(surface);
         surface.setDrawColor(0,12,2);

@@ -52,7 +52,7 @@ export class SimpleBlurFilter extends AbstractGlFilter {
     }
 
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         super.doFilter(destFrameBuffer);
     }
 

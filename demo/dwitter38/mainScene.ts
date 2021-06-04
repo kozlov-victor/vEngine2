@@ -8,7 +8,7 @@ export class MainScene extends Scene {
     private surface:DrawingSurface;
     private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
-    public onReady():void {
+    public override onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(1);
@@ -56,7 +56,7 @@ export class MainScene extends Scene {
     }
 
 
-    protected onRender(): void {
+    protected override onRender(): void {
 
         this.surface.drawBatch(this.renderScene);
 

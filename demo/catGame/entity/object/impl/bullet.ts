@@ -11,7 +11,7 @@ import {Hero} from "../../actor/impl/hero";
 
 export class Bullet extends AbstractEntity {
 
-    private constructor(protected game: Game, spriteSheet:ITexture) {
+    private constructor(game: Game, spriteSheet:ITexture) {
         super(game,spriteSheet,{
             type: ARCADE_RIGID_BODY_TYPE.DYNAMIC,
             groupNames: [Bullet.groupName],
@@ -26,7 +26,7 @@ export class Bullet extends AbstractEntity {
         },2000);
     }
 
-    public static readonly groupName:string = 'bullet';
+    public static override readonly groupName:string = 'bullet';
 
     private static spriteSheet: ITexture;
 
@@ -40,7 +40,7 @@ export class Bullet extends AbstractEntity {
         return new Bullet(game,Bullet.spriteSheet);
     }
 
-    protected onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
+    protected override onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
         const img:AnimatedImage = new AnimatedImage(this.game,spriteSheet);
         const animation:CellFrameAnimation = new CellFrameAnimation(this.game);
         animation.frames = [0,1,2,3,4,3,2,1];

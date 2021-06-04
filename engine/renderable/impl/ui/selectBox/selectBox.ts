@@ -19,7 +19,7 @@ import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/select
 
 export class SelectBox extends VerticalList {
 
-    public readonly type:string = 'SelectBox';
+    public override readonly type:string = 'SelectBox';
 
     public readonly selectedBackground:RenderableModel;
     public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeSelectBoxEvent> = new EventEmitterDelegate();
@@ -38,7 +38,7 @@ export class SelectBox extends VerticalList {
     private readonly defaultBackground:RenderableModel = new SimpleGameObjectContainer(this.game);
     private isCustomRenderer:boolean = false;
 
-    constructor(protected game: Game, protected font: Font) {
+    constructor(game: Game, protected font: Font) {
         super(game);
         const bg = new Rectangle(this.game);
         bg.fillColor = Color.fromCssLiteral('#f3f3f3');
@@ -106,7 +106,7 @@ export class SelectBox extends VerticalList {
         return this._options[this._selectedIndex];
     }
 
-    public setProps(props:ISelectBoxProps<any>):void {
+    public override setProps(props:ISelectBoxProps<any>):void {
         super.setProps(props);
         if (props.data!==undefined && this.getOptions()!==props.data) {
             const renderItemFn =
@@ -140,7 +140,7 @@ export class SelectBox extends VerticalList {
         }
     }
 
-    protected onCleared():void {
+    protected override onCleared():void {
         super.onCleared();
         this.fitChildSize(this.backgroundSelected);
     }

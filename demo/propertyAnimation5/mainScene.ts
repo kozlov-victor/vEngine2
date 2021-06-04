@@ -9,7 +9,7 @@ import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 
 export class MainScene extends Scene {
 
-    public onReady():void {
+    public override onReady():void {
 
         // created with https://editor.method.ac/
         const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`

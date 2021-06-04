@@ -12,7 +12,7 @@ export class ResultScene extends BaseScene {
 
     private nixieDisplay:NixieDisplay;
 
-    public onReady(): void {
+    public override onReady(): void {
         super.onReady();
         this.sounds.gear.play();
         this.nixieDisplay = new NixieDisplay(

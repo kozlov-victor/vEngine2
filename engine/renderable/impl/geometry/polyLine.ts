@@ -11,11 +11,11 @@ import {Point2d} from "@engine/geometry/point2d";
 
 export class PolyLine extends Shape {
 
-    public get lineWidth():number{
+    public override get lineWidth():number{
         return this._lineWidth;
     }
 
-    public set lineWidth(val:number){
+    public override set lineWidth(val:number){
         this._lineWidth = val;
         this.passPropertiesChildren();
     }
@@ -29,7 +29,7 @@ export class PolyLine extends Shape {
         return this._borderRadius;
     }
 
-    private constructor(protected game:Game){
+    private constructor(game:Game){
         super(game);
         this._lineWidth = 1;
         this.color.addOnChangeListener(()=>this.passPropertiesChildren());
@@ -96,7 +96,7 @@ export class PolyLine extends Shape {
 
     public draw():void{}
 
-    protected setClonedProperties(cloned:PolyLine):void{
+    protected override setClonedProperties(cloned:PolyLine):void{
         cloned.lineWidth = this.lineWidth;
         cloned.borderRadius = this.borderRadius;
         super.setClonedProperties(cloned);

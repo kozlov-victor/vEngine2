@@ -14,7 +14,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3dCubeNormalMap/wood_normal.png')
     private normalsLink:ITexture;
 
-    public onReady():void {
+    public override onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(255,255,255);
@@ -35,9 +35,6 @@ export class MainScene extends Scene {
             if (isNormalApplied) obj.normalsTexture = this.normalsLink;
             else obj.normalsTexture = undefined;
         });
-
-
-
 
     }
 

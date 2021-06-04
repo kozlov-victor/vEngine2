@@ -34,7 +34,7 @@ export class MainScene extends Scene {
     @Resource.JSON('./model3dFromMesh/skull.json')
     private dataLink:IMeshData;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -42,12 +42,12 @@ export class MainScene extends Scene {
     }
 
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
         console.log(val);
     }
 
-    public onReady():void {
+    public override onReady():void {
         const obj:Model3d = new Model3d(this.game);
         this.logoObj = obj;
         obj.fillColor.setRGB(244,255,244);

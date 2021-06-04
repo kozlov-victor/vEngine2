@@ -15,7 +15,7 @@ export class MainScene extends Scene {
 
     private resourceHolder:ResourceHolder = new ResourceHolder(this);
 
-    public onReady():void {
+    public override onReady():void {
 
         this.size.setWH(1100,2100);
 

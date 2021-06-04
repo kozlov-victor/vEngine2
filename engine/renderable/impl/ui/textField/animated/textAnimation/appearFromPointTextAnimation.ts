@@ -17,7 +17,7 @@ export class AppearFromPointTextAnimation extends AbstractTextAnimation {
         super();
     }
 
-    init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
+    public init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
         chars.forEach((c,index)=>{
             const fromPoint:Point2d = new Point2d(
                 this.point.x - c.parent.pos.x - c.parent.parent.pos.x - c.parent.parent.parent.pos.x - textField.pos.x,

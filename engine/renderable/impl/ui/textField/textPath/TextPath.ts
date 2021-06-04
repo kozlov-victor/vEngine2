@@ -14,7 +14,7 @@ import {Color} from "@engine/renderer/common/color";
 
 class TextFieldWithoutCacheEx extends TextFieldWithoutCache {
 
-    public collectAllChars(): CharacterImage[] {
+    public override collectAllChars(): CharacterImage[] {
         return super.collectAllChars();
     }
 }
@@ -87,7 +87,7 @@ export class TextPath extends MarkableGameObjectContainer {
         });
     }
 
-    protected onCleared():void {
+    protected override onCleared():void {
         this.placeLetters();
         super.onCleared();
     }

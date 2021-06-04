@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     @Resource.FontFromAtlas('./fnt-angelcode-format2',fntXML)
     private font:Font;
 
-    public onReady():void {
+    public override onReady():void {
 
         this.backgroundColor.setRGB(12,12,12);
 

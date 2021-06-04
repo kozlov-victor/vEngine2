@@ -25,7 +25,7 @@ export class MainScene extends Scene {
     @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:25})
     public fnt:Font;
 
-    public onReady():void {
+    public override onReady():void {
 
         this.backgroundColor = Color.RGB(244,244,233);
 

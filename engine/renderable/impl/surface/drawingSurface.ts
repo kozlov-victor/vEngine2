@@ -26,12 +26,12 @@ import MAT16 = Mat4.MAT16;
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {
-    constructor(protected game: Game, private matrixStack:MatrixStack) {
+    constructor(game: Game, private matrixStack:MatrixStack) {
         super(game);
         this._parentChildDelegate.afterChildAppended = undefined;
         this._parentChildDelegate.afterChildRemoved = undefined;
     }
-    render(): void {
+    public override render(): void {
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
         renderer.transformSet(this.matrixStack.getCurrentValue().mat16);
@@ -295,7 +295,6 @@ export class DrawingSurface
         this._drawingSession = new DrawingSession(this.game,this,this._matrixStack);
     }
 
-    public filters: IFilter[] = [];
     public setResourceLink:never = undefined as unknown as never;
     private _matrixStack:MatrixStack = new MatrixStack();
 
@@ -499,7 +498,8 @@ export class DrawingSurface
         this.game.getRenderer().getHelper().restoreRenderTarget();
     }
 
-    public destroy():void {
+    public override destroy():void {
+        super.destroy();
         this._drawingSession._destroy();
     }
 

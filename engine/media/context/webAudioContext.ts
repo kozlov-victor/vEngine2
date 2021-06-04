@@ -95,7 +95,7 @@ const createFeedBackDelayNodePair = (context:AudioContext):Optional<{delayNode: 
 
 export class WebAudioContext extends BasicAudioContext implements ICloneable<WebAudioContext>{
 
-    constructor(protected game:Game,protected audioPLayer:AudioPlayer) {
+    constructor(game:Game,protected audioPLayer:AudioPlayer) {
         super(game,audioPLayer);
         this._ctx = CtxHolder.getCtx()!;
         this._nodeChain = new NodeChain(this._ctx.destination);
@@ -117,11 +117,11 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
     private _free: boolean = true;
     private readonly _feedBackDelayNodePair:Optional<{delayNode: DelayNode, gainNode: GainNode }>;
 
-    public readonly type: string = 'webAudioContext';
+    public override readonly type: string = 'webAudioContext';
 
     private _nodeChain:NodeChain;
 
-    public static isAcceptable():boolean {
+    public static override isAcceptable():boolean {
         return !!(window && CtxHolder.getCtx());
     }
 
@@ -129,7 +129,7 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         return CtxHolder.getCtx()!;
     }
 
-    public async uploadBufferToContext(url: string, buffer: ArrayBuffer):Promise<UploadedSoundLink> {
+    public override async uploadBufferToContext(url: string, buffer: ArrayBuffer):Promise<UploadedSoundLink> {
         if (!AudioPlayer.cache[url]) {
             AudioPlayer.cache[url] = await decode(buffer);
         }
@@ -137,15 +137,15 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
     }
 
 
-    public isCached(url:string):boolean{
+    public override isCached(url:string):boolean{
         return !!AudioPlayer.cache[url];
     }
 
-    public isFree(): boolean {
+    public override isFree(): boolean {
         return this._free;
     }
 
-    public play(sound:Sound):void {
+    public override play(sound:Sound):void {
         this.setLastTimeId();
         this._free = false;
         this.startedTime = ~~(this._ctx.currentTime*1000);
@@ -162,11 +162,11 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
 
     }
 
-    public getCurrentTime():number {
+    public override getCurrentTime():number {
         return (~~(this._ctx.currentTime*1000) - this.startedTime) % this.duration;
     }
 
-    public stop():void {
+    public override stop():void {
         const currSource:Optional<AudioBufferSourceNode> = this._currSource;
         if (currSource!==undefined) {
             currSource.stop();
@@ -178,38 +178,38 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
         this._free = true;
     }
 
-    public setGain(val:number):void {
+    public override setGain(val:number):void {
         this._gainNode.gain.value = val;
     }
 
-    public setFeedbackDelay(delayTime:number,gain:number):void {
+    public override setFeedbackDelay(delayTime:number,gain:number):void {
         if (this._feedBackDelayNodePair!==undefined) {
             this._feedBackDelayNodePair.delayNode.delayTime.value = delayTime;
             this._feedBackDelayNodePair.gainNode.gain.value = gain;
         }
     }
 
-    public setVelocity(val:number):void {
+    public override setVelocity(val:number):void {
         this._currSource!.playbackRate.value = val;
     }
 
-    public setStereoPan(val:number):void {
+    public override setStereoPan(val:number):void {
         if (this._stereoPanNode!==undefined) this._stereoPanNode.pan.value = val;
     }
 
-    public loop(val:boolean):void {
+    public override loop(val:boolean):void {
         this._currSource!.loop = val;
     }
 
-    public pause():void {
+    public override pause():void {
         this._ctx.suspend();
     }
 
-    public resume():void {
+    public override resume():void {
         this._ctx.resume();
     }
 
-    public clone():WebAudioContext{
+    public override clone():WebAudioContext{
         return new WebAudioContext(this.game,this.audioPLayer);
     }
 }

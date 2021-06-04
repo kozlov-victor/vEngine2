@@ -16,7 +16,7 @@ class Particle extends Rectangle {
 export class MainScene extends Scene {
 
     // https://keyreal-code.github.io/haxecoder-tutorials/61_particle_system_in_openfl_using_tilesheet.html
-    protected onUpdate(): void {
+    protected override onUpdate(): void {
 
         const newParticle:Particle = new Particle(this.game);
         newParticle.fillColor = Color.fromRGBNumeric(0x0000ff);

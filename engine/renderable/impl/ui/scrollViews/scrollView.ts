@@ -11,7 +11,7 @@ export class ScrollView extends WidgetContainer {
     public readonly scrollableContainer: SimpleGameObjectContainer;
     protected _scrollContainerDelegate: ScrollContainerDelegate;
 
-    constructor(protected game: Game) {
+    constructor(game: Game) {
         super(game);
         this.size.setWH(64, 64);
 
@@ -25,7 +25,7 @@ export class ScrollView extends WidgetContainer {
         this._constrainContainer.appendChild(this.scrollableContainer);
     }
 
-    public revalidate():void {
+    public override revalidate():void {
         super.revalidate();
         const clientRect: Readonly<IRectJSON> = this.getClientRect();
         this._constrainContainer.pos.set(clientRect);
@@ -38,7 +38,7 @@ export class ScrollView extends WidgetContainer {
         this._scrollContainerDelegate.revalidate();
     }
 
-    public update():void {
+    public override update():void {
         super.update();
         this._scrollContainerDelegate.update();
     }

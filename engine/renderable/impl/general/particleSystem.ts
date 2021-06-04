@@ -30,7 +30,7 @@ interface IParticleHolder {
 
 export class ParticleSystem extends SimpleGameObjectContainer {
 
-    public readonly type:string = 'ParticleSystem';
+    public override readonly type:string = 'ParticleSystem';
 
     public enabled:boolean = true;
     public emitAuto:boolean = true;
@@ -47,11 +47,11 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     private _onUpdateParticle:(r:RenderableModel)=>void = noop;
     private _onEmitParticle:(r:RenderableModel)=>void = noop;
 
-    constructor(protected game:Game){
+    constructor(game:Game){
         super(game);
     }
 
-    public revalidate():void {
+    public override revalidate():void {
         if (DEBUG && !this._prototypes.length) throw new DebugError(`particle system error: add at least one object to emit`);
         if (this.particleAngle.to<this.particleAngle.from) this.particleAngle.to += 2*Math.PI;
     }
@@ -66,7 +66,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     }
 
 
-    public update():void {
+    public override update():void {
         if (!this.enabled) return;
         super.update();
         const time:number = this.game.getCurrentTime();
@@ -88,9 +88,6 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     public onEmitParticle(onEmitParticle:(r:RenderableModel)=>void):void {
         this._onEmitParticle = onEmitParticle;
     }
-
-    public draw():void{}
-
 
     public emit():void {
 

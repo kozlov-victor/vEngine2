@@ -22,7 +22,7 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
         }
     }
 
-    public revalidate():void {
+    public override revalidate():void {
         if (DEBUG) {
             if (!this.target) throw new DebugError(`cellFrameAnimation is not attached to target!`);
             if (this._numOfFramesV<=0 || this._numOfFramesH<=0) {
@@ -47,7 +47,7 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
         this.setFrameIndex(this.frames[i]);
     }
 
-    protected setClonedProperties(cloned:CellFrameAnimation):void {
+    protected override setClonedProperties(cloned:CellFrameAnimation):void {
         cloned._numOfFramesH = this._numOfFramesH;
         cloned._numOfFramesV = this._numOfFramesV;
         super.setClonedProperties(cloned);

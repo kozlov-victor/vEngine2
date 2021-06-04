@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3dFromObj6/tiger.png')
     private dataTexture:ITexture;
 
-    public onReady():void {
+    public override onReady():void {
         const obj = new ObjParser().parse(this.game,{
             meshData: this.data1,
             texture: this.dataTexture

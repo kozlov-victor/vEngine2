@@ -17,11 +17,11 @@ export class MainScene extends Scene {
     @Resource.Text("./atlas/player.atlas")
     private atlas: string;
 
-    constructor(protected game:Game){
+    constructor(game:Game){
         super(game);
     }
 
-    public onReady():void {
+    public override onReady():void {
         const framesRaw: Record<string,{frame:{x:number,y:number,w:number,h:number}}> = JSON.parse(this.atlas).frames;
 
         const toFrame = (frameInfo: {frame:{x:number,y:number,w:number,h:number}}): IRectJSON => {

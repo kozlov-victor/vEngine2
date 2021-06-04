@@ -23,10 +23,10 @@ export class NoiseHorizontalFilter extends AbstractGlFilter {
         this.u_time = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_time');
 
         //language=GLSL
-        programGen.appendFragmentCodeBlock(MACRO_GL_COMPRESS`            
+        programGen.appendFragmentCodeBlock(MACRO_GL_COMPRESS`
             vec4 noise(vec2 uv) {
                 vec3 color = texture2D(texture, uv).rgb;
-                color -= abs(sin(uv.y * 100.0 + u_time * 5.0)) * 0.08; 
+                color -= abs(sin(uv.y * 100.0 + u_time * 5.0)) * 0.08;
                 color -= abs(sin(uv.y * 300.0 - u_time * 10.0)) * 0.05;
                 return vec4(color, 1.0).rgba;
             }
@@ -45,7 +45,7 @@ export class NoiseHorizontalFilter extends AbstractGlFilter {
     }
 
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,size.width);
         this.setUniform(this.rt_h,size.height);

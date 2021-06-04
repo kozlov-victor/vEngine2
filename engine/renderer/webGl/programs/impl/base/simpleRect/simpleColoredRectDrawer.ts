@@ -14,7 +14,7 @@ export class SimpleColoredRectDrawer extends AbstractDrawer {
     public readonly u_alpha:string;
 
 
-    constructor(protected gl:WebGLRenderingContext) {
+    constructor(gl:WebGLRenderingContext) {
         super(gl);
         this.gen = new ShaderGenerator();
         const gen:ShaderGenerator = this.gen;
@@ -58,7 +58,7 @@ export class SimpleColoredRectDrawer extends AbstractDrawer {
             this.gen.getFragmentSource()
         );
         this.bufferInfo = new BufferInfo(this.gl, {
-            posVertexInfo: {array: this.primitive.vertexArr, type: this.gl.FLOAT, size: 2, attrName: 'a_position'},
+            posVertexInfo: {array: new Float32Array(this.primitive.vertexArr), type: this.gl.FLOAT, size: 2, attrName: 'a_position'},
             posIndexInfo: {array: this.primitive.indexArr},
             drawMethod: DRAW_METHOD.TRIANGLE_STRIP
         } as IBufferInfoDescription);

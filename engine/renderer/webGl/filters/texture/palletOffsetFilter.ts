@@ -42,7 +42,7 @@ export class PalletOffsetFilter extends AbstractGlFilter{
     }
 
 
-    public doFilter(destFrameBuffer: FrameBuffer):void {
+    public override doFilter(destFrameBuffer: FrameBuffer):void {
         this.simpleRectDrawer.attachTexture(this.palletTexture,this.palletTextureGl);
         super.doFilter(destFrameBuffer);
     }

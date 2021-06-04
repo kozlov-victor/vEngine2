@@ -12,9 +12,9 @@ import {Rect} from "@engine/geometry/rect";
 
 export class Wall extends AbstractEntity {
 
-    public static readonly groupName:string = 'wall';
+    public static override readonly groupName:string = 'wall';
 
-    constructor(protected game:Game,size:Size,resource:ITexture,movePlatformInfo?:IExtraProperties) {
+    constructor(game:Game,size:Size,resource:ITexture,movePlatformInfo?:IExtraProperties) {
         super(game, resource, {
             groupNames: [Wall.groupName],
             type:ARCADE_RIGID_BODY_TYPE.KINEMATIC,

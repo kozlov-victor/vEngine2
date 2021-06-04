@@ -19,9 +19,9 @@ export class MainScene extends Scene {
     private numOfStarts: number = 200;
     private obj:Model3d;
 
-    public backgroundColor:Color = Color.RGB(0);
+    public override backgroundColor:Color = Color.RGB(0);
 
-    public onReady():void {
+    public override onReady():void {
 
         for (let i:number=0;i<this.numOfStarts;i++) {
             const spr:Image = new Image(this.game,this.spriteLink);
@@ -56,9 +56,9 @@ export class MainScene extends Scene {
 
     }
 
-    protected onUpdate(): void {
+    protected override onUpdate(): void {
         super.onUpdate();
-        for (let i=0;i<this.numOfStarts;i++) {
+        for (let i:number=0;i<this.numOfStarts;i++) {
             const p:Image = this.points[i];
             p.angle+=0.1;
             p.pos.z+=10;

@@ -84,7 +84,7 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
         this.calcHandlerPositionByValue();
     }
 
-    public setProps(props:INumericSliderProp):void {
+    public override setProps(props:INumericSliderProp):void {
         super.setProps(props);
         if (props.backgroundHandler!==undefined) {
             const memoized:RenderableModel = this.getMemoizedView(props.backgroundHandler);
@@ -112,7 +112,7 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
         this.draggableBehaviour.updateConstrains(this.draggableConstrains);
     }
 
-    protected onCleared():void {
+    protected override onCleared():void {
         super.onCleared();
         this.updateHandlerGeometry();
     }

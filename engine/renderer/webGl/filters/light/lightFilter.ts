@@ -48,7 +48,7 @@ export class LightFilter extends AbstractGlFilter {
         this.normalMap = undefined;
     }
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         this.lightArray.setUniformsToMap(this._uniformInfo);
         this.simpleRectDrawer.setUniformsFromMap(this._uniformInfo);
         const useNormalMap:boolean = this.normalMap!==undefined;

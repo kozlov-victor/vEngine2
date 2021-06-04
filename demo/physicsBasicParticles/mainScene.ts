@@ -8,8 +8,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 export class MainScene extends Scene {
 
 
-    public onReady():void {
-
+    public override onReady():void {
 
 
         const physicsSystem:ArcadePhysicsSystem = this.game.getPhysicsSystem();

@@ -119,7 +119,7 @@ export class ShapeDrawer extends AbstractDrawer {
         this.primitive = new Plane();
 
         this.bufferInfo = new BufferInfo(gl,{
-            posVertexInfo:{array: this.primitive.vertexArr,type:gl.FLOAT,size:2,attrName:this.a_position},
+            posVertexInfo:{array:new Float32Array(this.primitive.vertexArr),type:gl.FLOAT,size:2,attrName:this.a_position},
             posIndexInfo: {array: this.primitive.indexArr},
             drawMethod: DRAW_METHOD.TRIANGLE_STRIP,
         } as IBufferInfoDescription);

@@ -9,7 +9,7 @@ import glEnumToString = DebugUtil.glEnumToString;
 import {Optional} from "@engine/core/declarations";
 
 export interface IVertexArrayInfo {
-    array:number[];
+    array:Float32Array;
     type:number;
     size:1|2|3|4;
     attrName:string;

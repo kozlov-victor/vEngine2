@@ -18,7 +18,7 @@ export class GlowFilter extends AbstractGlFilter {
     private readonly pixelHeight:string;
 
 
-    constructor(protected game:Game,private quality:number = 0.03 /*[0..1]*/,private dist:number = 25) {
+    constructor(game:Game,private quality:number = 0.03 /*[0..1]*/,private dist:number = 25) {
         // warn! quality=1 could produce a lack of performance
         super(game);
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
@@ -82,7 +82,7 @@ export class GlowFilter extends AbstractGlFilter {
         this.setUniform(this.glowColor,c.asGL());
     }
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.pixelWidth,1/(size.width*this.quality));
         this.setUniform(this.pixelHeight,1/(size.height*this.quality));

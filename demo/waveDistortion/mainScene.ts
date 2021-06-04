@@ -21,7 +21,7 @@ export class MainScene extends Scene {
     private img:Image;
 
 
-    public onReady():void {
+    public override onReady():void {
 
         this.img = new Image(this.game,this.repeatLink);
 

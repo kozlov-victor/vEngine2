@@ -50,7 +50,7 @@ export class FastBlurFilter extends AbstractGlFilter {
     }
 
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,width);
         this.setUniform(this.rt_h,height);

@@ -8,7 +8,7 @@ export class MainScene extends Scene {
     private surface:DrawingSurface;
     private renderScene:(session:IDrawingSession)=>void;
 
-    public onReady():void {
+    public override onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         surface.addBehaviour(new DraggableBehaviour(this.game));
         this.surface = surface;
@@ -63,7 +63,7 @@ export class MainScene extends Scene {
     }
 
     // https://www.dwitter.net/d/18108
-    protected onRender(): void {
+    protected override onRender(): void {
 
         this.surface.drawBatch(this.renderScene);
 

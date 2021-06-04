@@ -9,10 +9,10 @@ import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransiti
 export class PopTransition extends AbstractSceneTransition {
 
     constructor(
-        protected readonly game:Game,
-        private readonly sideTo:SIDE = SIDE.BOTTOM,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear)
+        game:Game,
+        public sideTo:SIDE = SIDE.BOTTOM,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear)
     {
         super(game,time,easeFn);
         this._transitionScene.appendChild(this._currSceneImage);

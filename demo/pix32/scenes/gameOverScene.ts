@@ -13,7 +13,7 @@ export class GameOverScene extends BasePix32Scene {
 
     private ym:Ym;
 
-    onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         let bin:ArrayBuffer;
         taskQueue.addNextTask(async process=>{
@@ -26,7 +26,7 @@ export class GameOverScene extends BasePix32Scene {
         });
     }
 
-    onReady():void {
+    public override onReady():void {
         super.onReady();
         this.themeAudioLink.loop = true;
         this.themeAudioLink.play();

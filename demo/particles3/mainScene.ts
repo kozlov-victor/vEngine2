@@ -11,7 +11,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 
 export class MainScene extends Scene {
 
-    public onPreloading():void {
+    public override onPreloading():void {
         console.log('on preloading');
     }
 
@@ -19,7 +19,7 @@ export class MainScene extends Scene {
     //
     // }
     //
-    public onReady():void {
+    public override onReady():void {
 
         const container = new SimpleGameObjectContainer(this.game);
         container.size.set(this.game.size);

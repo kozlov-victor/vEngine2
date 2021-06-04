@@ -9,7 +9,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
-    public onPreloading():void {
+    public override onPreloading():void {
         console.log('on preloading');
     }
 
@@ -17,7 +17,7 @@ export class MainScene extends Scene {
     //
     // }
     //
-    public onReady():void {
+    public override onReady():void {
 
         const circle:Circle = new Circle(this.game);
         circle.radius = 3;

@@ -9,7 +9,7 @@ export class MainScene extends Scene {
     @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:100,chars:['🦁']})
     private fnt:Font;
 
-    public onReady():void {
+    public override onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.pos.setXY(100);
         tf.setAutoSize(true);

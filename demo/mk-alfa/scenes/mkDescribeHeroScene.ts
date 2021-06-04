@@ -40,14 +40,14 @@ export class MkDescribeHeroScene extends MkAbstractScene {
     private lightContainer:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
     private tfInfo:TextField;
 
-    public onPreloading(taskQueue:TaskQueue): void {
+    public override onPreloading(taskQueue:TaskQueue): void {
         super.onPreloading(taskQueue);
         taskQueue.addNextTask(async progress => {
             this.logoLink = await taskQueue.getLoader().loadTexture('./mk-alfa/assets/images/mkLogo.png',progress);
         });
     }
 
-    public onReady(): void {
+    public override onReady(): void {
         super.onReady();
         this.appendChild(this.lightContainer);
         const lightFilter = new WaveFilter(this.game);
@@ -130,7 +130,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
     }
 
 
-    public onContinue(): void {
+    public override onContinue(): void {
         super.onContinue();
         const hero:IItemDescription = HEROES_DESCRIPTION[this.selectedIndex];
         this.tfInfo.setText(

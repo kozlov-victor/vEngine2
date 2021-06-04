@@ -98,19 +98,14 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         return this;
     }
 
-    public equal(another:ISize):boolean;
-    public equal(val:number):boolean;
-    public equal(w:number,h:number):boolean;
-    public equal(wOrAnother:number|ISize,h?:number):boolean {
-        let wToCheck,hToCheck:number;
-        if (isNumber(wOrAnother)) {
-            wToCheck = wOrAnother;
-            hToCheck=h??wOrAnother;
-        } else {
-            wToCheck = wOrAnother.width;
-            hToCheck=h??wOrAnother.height;
-        }
-        return this._width===wToCheck && this._height===hToCheck;
+
+    // noinspection JSSuspiciousNameCombination
+    public equalsWH(width:number,height:number = width):boolean {
+        return this._width===width && this._height===height;
+    }
+
+    public equals(another:ISize):boolean {
+        return this.equalsWH(another.width,another.height);
     }
 
     public clone():Size {
@@ -118,7 +113,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
     }
 
     public isZero():boolean {
-        return this.equal(0,0);
+        return this.equalsWH(0,0);
     }
 
     public toArray():Float32Array & [number,number]{

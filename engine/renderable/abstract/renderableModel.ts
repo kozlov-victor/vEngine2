@@ -68,7 +68,7 @@ export abstract class RenderableModel
     public filters: IFilter[] = [];
     public forceDrawChildrenOnNewSurface:boolean = false;
 
-    public readonly children:readonly RenderableModel[] = [];
+    public declare readonly children:readonly RenderableModel[];
     public readonly parent:RenderableModel;
 
     public readonly mouseEventHandler:MouseEventEmitterDelegate<IObjectMouseEvent> = new MouseEventEmitterDelegate();
@@ -84,19 +84,17 @@ export abstract class RenderableModel
     private _scene:Scene;
     private _rigidBody:IRigidBody;
 
-    // tween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
 
-    // timer
     private _timerDelegate:TimerDelegate = new TimerDelegate();
 
-    // parent-child
     protected _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate<RenderableModel>(this);
 
-    //tsx
     private tsxEvents:Record<string, ()=>void> = {};
 
     private memoizeCache:Record<string, RenderableModel> = {};
+
+    private destroyed:boolean = false;
 
     protected getMemoizedView(factory:()=>IPositionableProps):RenderableModel {
         const model = factory() as RenderableModel & ICloneable<RenderableModel>;
@@ -104,7 +102,7 @@ export abstract class RenderableModel
         return this.memoizeCache[model.id];
     }
 
-    protected constructor(protected game:Game){
+    protected constructor(game:Game){
         super(game);
         this.id = `object_${Incrementer.getValue()}`;
         this._parentChildDelegate.afterChildAppended = (child:RenderableModel)=>{
@@ -174,15 +172,16 @@ export abstract class RenderableModel
 
         for (const c of this.children) c.destroy();
 
-        if (DEBUG && !this.getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
-
-        const parentArray:RenderableModel[] = this.getParent()!.children as RenderableModel[];
-        const index:number = parentArray.indexOf(this);
-        if (DEBUG && index===-1) {
-            console.error(this);
-            throw new DebugError('can not kill: object is not belong to current scene');
-        }
-        parentArray.splice(index,1);
+        // if (DEBUG && !this.getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
+        //
+        // const parentArray:RenderableModel[] = this.getParent()!.children as RenderableModel[];
+        // const index:number = parentArray.indexOf(this);
+        // if (DEBUG && index===-1) {
+        //     console.error(this);
+        //     throw new DebugError('can not kill: object is not belong to current scene');
+        // }
+        // parentArray.splice(index,1);
+        this.destroyed = true;
 
         for (const b of this._behaviours) {
             b.destroy();
@@ -193,6 +192,10 @@ export abstract class RenderableModel
     public render():void {
 
         if (!this.visible) return;
+        if (DEBUG && this.destroyed) {
+            console.error(this);
+            throw new DebugError(`can not render destroyed object`);
+        }
 
         if (this._scene===undefined) this._scene = Scene.currentRenderingScene;
         if (this._layer===undefined) this._layer = this._scene._renderingSessionInfo.currentLayer;
@@ -368,7 +371,7 @@ export abstract class RenderableModel
         return this._scene===undefined;
     }
 
-    public setProps(props:ITransformableProps & IPositionableProps):void {
+    public override setProps(props:ITransformableProps & IPositionableProps):void {
         if (props.filters!==undefined) this.filters = props.filters;
         if (props.click!==undefined && this.tsxEvents.click!==props.click) {
             if (this.tsxEvents.click!==undefined) this.mouseEventHandler.off(MOUSE_EVENTS.click,this.tsxEvents.click);
@@ -388,7 +391,7 @@ export abstract class RenderableModel
         super.setProps(props);
     }
 
-    protected setClonedProperties(cloned:RenderableModel):void {
+    protected override setClonedProperties(cloned:RenderableModel):void {
         cloned.size.set(cloned.size);
         cloned.alpha = this.alpha;
         cloned.blendMode = this.blendMode;
@@ -404,10 +407,6 @@ export abstract class RenderableModel
                 throw new DebugError(`can not clone object: cloneable interface is not implemented`);
             }
             const clonedChildren:RenderableModel = (c as unknown as ICloneable<RenderableModel>).clone();
-            if (DEBUG && ! (clonedChildren instanceof RenderableModel )) {
-                console.error(c);
-                throw new DebugError(`can not clone object: "clone"  method must return Cloneable object`);
-            }
             cloned.appendChild(clonedChildren);
         });
         cloned.game = this.game;

@@ -32,7 +32,7 @@ export class RadioButtonGroup {
 
 export class RadioButton extends AbstractToggleButton {
 
-    public readonly type:string = 'RadioButton';
+    public override readonly type:string = 'RadioButton';
 
     private tsxChanged: (e:IToggleButtonEvent)=>void;
 
@@ -74,7 +74,7 @@ export class RadioButton extends AbstractToggleButton {
         this.updateState();
     }
 
-    public setProps(props:IRadioButtonProps):void {
+    public override setProps(props:IRadioButtonProps):void {
         super.setProps(props);
         if (props.checked && !this.checked) this.toggle();
         if (props.changed!==undefined && this.tsxChanged!==props.changed) {

@@ -683,7 +683,7 @@ class SvgElementRenderer {
 
 export class SvgImage extends SimpleGameObjectContainer {
 
-    private constructor(protected game:Game, private doc:XmlDocument, private preferredSize?:ISize) {
+    private constructor(game:Game, private doc:XmlDocument, private preferredSize?:ISize) {
         super(game);
     }
 

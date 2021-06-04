@@ -39,14 +39,14 @@ export abstract class Shape extends RenderableModel implements IShapeProps{
         return image;
     }
 
-    public setProps(props:IShapeProps):void{
+    public override setProps(props:IShapeProps):void{
         super.setProps(props);
         if (props.color!==undefined) this.color.setRGBA(props.color.r,props.color.g,props.color.b,props.color.a);
         if (props.fillColor!==undefined) (this.fillColor as Color).setRGBA(props.fillColor.r,props.fillColor.g,props.fillColor.b,props.fillColor.a);
         if (props.lineWidth!==undefined) this._lineWidth = props.lineWidth;
     }
 
-    protected setClonedProperties(cloned:Shape):void{
+    protected override setClonedProperties(cloned:Shape):void{
         cloned.color.set(this.color);
         cloned._lineWidth = this._lineWidth;
         cloned.fillColor = this.fillColor.clone();

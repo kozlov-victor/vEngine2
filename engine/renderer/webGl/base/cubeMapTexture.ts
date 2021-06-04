@@ -12,7 +12,7 @@ export class CubeMapTexture extends AbstractTexture implements ICubeMapTexture{
     public readonly type:'cubeMapTexture';
     protected samplerType: GLenum = this.gl.TEXTURE_CUBE_MAP;
 
-    constructor(protected readonly gl:WebGLRenderingContext) {
+    constructor(gl:WebGLRenderingContext) {
         super(gl);
     }
 

@@ -15,7 +15,7 @@ export class Circle extends Ellipse implements ICloneable<Circle>, ICircleProps{
         return this._radius;
     }
 
-    public readonly type:'Circle' = 'Circle';
+    public override readonly type:'Circle' = 'Circle';
 
     // @ts-ignore
     declare public radiusX:never;
@@ -29,22 +29,22 @@ export class Circle extends Ellipse implements ICloneable<Circle>, ICircleProps{
         this.radius = 10;
     }
 
-    public draw():void{
+    public override draw():void{
         this.game.getRenderer().drawEllipse(this);
     }
 
-    public clone():Circle {
+    public override clone():Circle {
         const cloned:Circle = new Circle(this.game);
         this.setClonedProperties(cloned);
         return cloned;
     }
 
-    public setProps(props:ICircleProps):void{
+    public override setProps(props:ICircleProps):void{
         super.setProps(props);
         if (props.radius!==undefined) this.radius = props.radius;
     }
 
-    protected setClonedProperties(cloned:Circle):void {
+    protected override setClonedProperties(cloned:Circle):void {
         cloned.radius = this.radius;
         super.setClonedProperties(cloned);
     }

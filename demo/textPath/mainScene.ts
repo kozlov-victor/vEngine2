@@ -10,7 +10,7 @@ export class MainScene extends Scene {
     @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:35})
     private fnt:Font;
 
-    public onReady():void {
+    public override onReady():void {
 
         const polyline = PolyLine.fromSvgPath(this.game,'M19.75,99.82c16.41-13.24,33.44-26.8,53.74-32.49s44.94-1.46,57.31,15.61\n' +
             '\tc5.3,7.31,7.9,16.23,9.43,25.13c2.62,15.16,2.42,30.74,5.63,45.78s10.65,30.25,24.13,37.66c12.9,7.1,28.7,5.77,43.16,2.99\n' +

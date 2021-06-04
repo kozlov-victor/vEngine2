@@ -11,7 +11,7 @@ export class LinearGradient extends AbstractGradient implements ICloneable<Linea
 
     public angle:number = 0.1;
 
-    public set(g:LinearGradient):void{
+    public override set(g:LinearGradient):void{
         super.set(g);
         this.angle = g.angle;
     }
@@ -20,7 +20,7 @@ export class LinearGradient extends AbstractGradient implements ICloneable<Linea
         return `linear-gradient(${~~(MathEx.radToDeg(-this.angle))+90}deg, ${this._points.map(it=>`${it.color.asCssRgba()} ${~~(it.value*100)}%`).join(',')}`;
     }
 
-    public setUniforms(sd: ShapeDrawer):void {
+    public override setUniforms(sd: ShapeDrawer):void {
         super.setUniforms(sd);
         sd.setUniform(sd.u_fillGradientAngle,this.angle);
     }

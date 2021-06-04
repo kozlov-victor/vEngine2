@@ -28,16 +28,16 @@ export class MainScene extends Scene {
     private machine!:Machine;
 
 
-    constructor(protected game:Game){
+    constructor(game:Game){
         super(game);
     }
 
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         this.overlay = new Image(this.game,this.overlayLink);
 

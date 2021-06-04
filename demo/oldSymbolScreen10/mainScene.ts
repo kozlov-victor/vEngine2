@@ -12,11 +12,11 @@ export class MainScene extends Scene {
     @Resource.FontFromCssDescription({fontSize:14})
     private fnt:Font;
 
-    public onPreloading(taskQueue:TaskQueue):void{
+    public override onPreloading(taskQueue:TaskQueue):void{
         this.backgroundColor = Color.RGB(10,10,30);
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.size.set(this.game.size);

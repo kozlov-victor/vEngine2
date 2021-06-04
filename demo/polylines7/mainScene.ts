@@ -9,9 +9,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading(taskQueue:TaskQueue):void {
-
-
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`
                M 10,30
@@ -30,12 +28,5 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
-
-    }
 
 }

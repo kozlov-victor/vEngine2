@@ -22,7 +22,7 @@ import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx"
 
 export class TextField extends WidgetContainer {
 
-    public readonly type:string = 'TextField';
+    public override readonly type:string = 'TextField';
     public readonly textColor:Color = Color.RGB(122,122,122);
 
     protected rowSet:TextRowSet;
@@ -84,12 +84,12 @@ export class TextField extends WidgetContainer {
         return this.pixelPerfect;
     }
 
-    public revalidate():void {
+    public override revalidate():void {
         if (this.useCache) this._revalidateWithCache();
         else this._revalidateWithoutCache();
     }
 
-    public setProps(props: ITextFieldProps):void {
+    public override setProps(props: ITextFieldProps):void {
         super.setProps(props);
         if (props.textColor) this.textColor.setRGBA(props.textColor.r,props.textColor.g,props.textColor.b,props.textColor.a);
         if (props.text!==undefined) this.setText(props.text);
@@ -116,12 +116,12 @@ export class TextField extends WidgetContainer {
             this.cacheSurface = new DrawingSurface(this.game,clientRect);
             this.rowSetContainer.appendChild(this.cacheSurface);
         } else {
-            if (!this.cacheSurface.size.equal(clientRect)) {
+            if (!this.cacheSurface.size.equals(clientRect)) {
                 rectIsDirty = true;
-                this.cacheSurface.destroy();
                 const cacheSurface:DrawingSurface = new DrawingSurface(this.game,clientRect);
-                cacheSurface.setPixelPerfect(this.pixelPerfect);
                 this.rowSetContainer.replaceChild(this.cacheSurface,cacheSurface);
+                this.cacheSurface.destroy();
+                cacheSurface.setPixelPerfect(this.pixelPerfect);
                 this.rowSetContainer.markAsDirty();
                 this.cacheSurface = cacheSurface;
             }
@@ -160,12 +160,12 @@ export class TextField extends WidgetContainer {
         super.revalidate();
     }
 
-    public destroy():void {
+    public override destroy():void {
         super.destroy();
         if (this.cacheSurface!==undefined) this.cacheSurface.destroy();
     }
 
-    public update():void {
+    public override update():void {
         super.update();
         if (this.isDirty()) this.revalidate();
         if (this.needTextRedraw) this.redrawText();
@@ -251,7 +251,7 @@ export class TextField extends WidgetContainer {
         this.needTextRedraw = true;
     }
 
-    protected onCleared():void {
+    protected override onCleared():void {
         this.requestTextRedraw();
     }
 
@@ -296,13 +296,13 @@ export class TextField extends WidgetContainer {
 
 export class TextFieldWithoutCache extends TextField {
 
-    public type:'TextFieldWithoutCache' = 'TextFieldWithoutCache';
+    public override type:'TextFieldWithoutCache' = 'TextFieldWithoutCache';
 
     constructor(game: Game, font: Font) {
         super(game, font, false);
     }
 
-    protected requestTextRedraw():void {
+    protected override requestTextRedraw():void {
         // nothing to do
     }
 }

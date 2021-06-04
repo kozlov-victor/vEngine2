@@ -28,7 +28,7 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
         this.accumulatorAfter  = new FrameBuffer(gl,this.game.size);
     }
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         const size:ISize = destFrameBuffer.getTexture().size;
         const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,size);
 

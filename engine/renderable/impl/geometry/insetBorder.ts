@@ -14,7 +14,7 @@ export class InsetBorder extends MarkableGameObjectContainer {
     private rightPoly:Polygon;
     private bottomPoly:Polygon;
 
-    constructor(protected game:Game) {
+    constructor(game:Game) {
         super(game);
     }
 
@@ -33,7 +33,7 @@ export class InsetBorder extends MarkableGameObjectContainer {
         this.markAsDirty();
     }
 
-    protected onCleared():void {
+    protected override onCleared():void {
         super.onCleared();
         const border = this.borderWidth;
         const width = this.size.width;

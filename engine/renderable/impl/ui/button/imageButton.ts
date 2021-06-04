@@ -7,10 +7,10 @@ import {DebugError} from "@engine/debug/debugError";
 
 export class ImageButton extends SimpleGameObjectContainer {
 
-    public readonly type:string = 'ImageButton';
+    public override readonly type:string = 'ImageButton';
 
     constructor(
-        protected game:Game,
+        game:Game,
         private _imgOn:Image,
         private _imgOff:Image)
     {
@@ -35,7 +35,7 @@ export class ImageButton extends SimpleGameObjectContainer {
         this._imgOff.visible = true;
     }
 
-    public setProps(props:IImageButtonProps):void {
+    public override setProps(props:IImageButtonProps):void {
         super.setProps(props);
         if (props.imgOn!==undefined) {
             const memoized:RenderableModel = this.getMemoizedView(props.imgOn);

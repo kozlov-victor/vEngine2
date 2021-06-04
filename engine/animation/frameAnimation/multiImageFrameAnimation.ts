@@ -9,7 +9,7 @@ export class MultiImageFrameAnimation extends AbstractFrameAnimation<ITexture> i
 
     public readonly type:string = 'MultiImageFrameAnimation';
 
-    constructor(protected game:Game){
+    constructor(game:Game){
         super(game);
     }
 
@@ -19,7 +19,7 @@ export class MultiImageFrameAnimation extends AbstractFrameAnimation<ITexture> i
         return cloned as this;
     }
 
-    public revalidate(): void {
+    public override revalidate(): void {
         if (DEBUG && !this.frames.length) {
             throw new DebugError('MultiImageFrameAnimation must have at least one frame');
         }

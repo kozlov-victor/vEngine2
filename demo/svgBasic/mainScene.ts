@@ -195,7 +195,7 @@ const images:XmlDocument[] = [
 
 export class MainScene extends Scene {
 
-    onReady():void {
+    public override onReady():void {
 
         let i = 0;
         let lastImage:SvgImage;

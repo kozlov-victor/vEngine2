@@ -10,12 +10,11 @@ export abstract class AbstractCellsAppearingTransition extends AbstractSceneTran
     protected readonly _indicesToShow:number[];
 
     constructor(
-        protected readonly game:Game,
-        protected readonly time:number = 1000,
+        game:Game, time:number = 1000,
         protected numOfCellsX:number = 6,
         protected numOfCellsY:number = 6,
-        protected readonly easeFn:EaseFn = EasingLinear)
-    {
+        easeFn:EaseFn = EasingLinear
+    ) {
         super(game,time,easeFn);
         const [imageOnBottom,imageOnTop] = this.getBottomAndTopImages();
         this._transitionScene.appendChild(imageOnBottom);

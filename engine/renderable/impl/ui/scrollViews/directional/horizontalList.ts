@@ -9,7 +9,7 @@ export class HorizontalList extends AbstractDirectionalList {
         return this._scrollContainerDelegate.getCurrentOffsetHorizontal();
     }
 
-    constructor(protected game:Game) {
+    constructor(game:Game) {
         super(game);
     }
 }

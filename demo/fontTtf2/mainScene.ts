@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     private fnt:Font;
     private tf:TextField;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         loadFont(this.game,taskQueue,'./fontTtf2/zx.ttf','zx');
         taskQueue.addNextTask(async _=>{
             this.fnt = await taskQueue.getLoader().loadFontFromCssDescription({fontSize:30,fontFamily:'zx'});
@@ -20,7 +20,7 @@ export class MainScene extends Scene {
 
     }
 
-    public onReady():void {
+    public override onReady():void {
         console.log('ready');
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.pos.setY(23);

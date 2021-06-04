@@ -11,18 +11,18 @@ export class RadialGradient extends AbstractGradient {
 
     public readonly center:Point2d = new Point2d(0.5,0.5);
 
-    asCSS(): string {
+    public asCSS(): string {
         return `radial-gradient(circle at ${this.center.x*100}% ${this.center.y*100}%, ${this._points.map(it=>`${it.color.asCssRgba()} ${~~(it.value*100)}%`).join(',')}`;
     }
 
 
-    setUniforms(sd: ShapeDrawer):void {
+    public override setUniforms(sd: ShapeDrawer):void {
         super.setUniforms(sd);
         sd.setUniform(sd.u_radialGradientCenterX,this.center.x);
         sd.setUniform(sd.u_radialGradientCenterY,this.center.y);
     }
 
-    clone(): this {
+    public clone(): this {
         return undefined!;
     }
 

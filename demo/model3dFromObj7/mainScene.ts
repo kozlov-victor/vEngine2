@@ -18,7 +18,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3dFromObj7/mushroom_tube_NM.png')
     private dataTextureNormal:ITexture;
 
-    public onReady():void {
+    public override onReady():void {
 
         const obj = new ObjParser().parse(this.game,{
             meshData: this.data1,

@@ -14,7 +14,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./particlesFire/fire-texture-atlas.jpg')
     private resourceLink:ITexture;
 
-    public onReady():void {
+    public override onReady():void {
 
         this.backgroundColor = Color.BLACK;
 

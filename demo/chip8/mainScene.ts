@@ -46,11 +46,11 @@ export class MainScene extends Scene {
     private rom:ArrayBuffer;
 
 
-    constructor(protected game:Game, private romPath:string) {
+    constructor(game:Game, private romPath:string) {
         super(game);
     }
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         taskQueue.addNextTask(async _=>{
             this.emulator = new EngineEmulator(this.game);
@@ -59,7 +59,7 @@ export class MainScene extends Scene {
 
     }
 
-    public onReady():void {
+    public override onReady():void {
         this.appendChild(this.emulator.getImage());
         this.emulator.setRom(new Uint8Array(this.rom));
 
@@ -140,7 +140,7 @@ export class MainScene extends Scene {
         // (window as any).emu = this.emulator;
     }
 
-    protected onUpdate(): void {
+    protected override onUpdate(): void {
         super.onUpdate();
         this.emulator.nextTick();
     }

@@ -18,7 +18,7 @@ export class AppearFromRandomPointTextAnimation extends AbstractTextAnimation {
         super();
     }
 
-    init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
+    public init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
         chars.forEach((c,index)=>{
             const x = MathEx.random(-this.seed,this.seed);
             const y = MathEx.random(-this.seed,this.seed);

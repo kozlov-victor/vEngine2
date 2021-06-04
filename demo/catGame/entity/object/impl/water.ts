@@ -10,9 +10,9 @@ import {AbstractCharacter} from "../../actor/abstract/abstractCharacter";
 
 export class Water extends AbstractEntity {
 
-    public static readonly groupName:string = 'water';
+    public static override readonly groupName:string = 'water';
 
-    constructor(protected game: Game, spriteSheet: ITexture,size:Size) {
+    constructor(game: Game, spriteSheet: ITexture,size:Size) {
         super(game,spriteSheet,{
             groupNames: [Water.groupName],
             ignoreCollisionWithGroupNames: [AbstractCharacter.groupName],

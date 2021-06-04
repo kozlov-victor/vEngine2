@@ -7,7 +7,7 @@ import loadFont = fontLoader.loadFont;
 
 export abstract class MkAbstractScene extends Scene {
 
-    public onPreloading(taskQueue:TaskQueue): void {
+    public override onPreloading(taskQueue:TaskQueue): void {
         this.backgroundColor.set(Color.BLACK);
         loadFont(this.game,taskQueue,'./mk-alfa/assets/fonts/MK4.TTF','MK4');
         const rect = new Rectangle(this.game);
@@ -17,11 +17,11 @@ export abstract class MkAbstractScene extends Scene {
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady(): void {
+    public override onReady(): void {
 
     }
 

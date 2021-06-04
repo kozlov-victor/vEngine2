@@ -23,7 +23,7 @@ export class MainScene extends Scene {
     @Resource.FontFromAtlas('./fnt',fntXML3)
     private font3:Font;
 
-    public onReady():void {
+    public override onReady():void {
         this.backgroundColor.setRGB(12,12,12);
         const tf:RichTextField = new RichTextField(this.game,this.font1);
         tf.size.set(this.game.size);

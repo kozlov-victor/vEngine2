@@ -14,7 +14,7 @@ export class MainScene extends Scene {
     private imp:SpriterObject;
     private brawler:SpriterObject;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         taskQueue.addNextTask(async _=>{
             this.player = await SpriterObject.create(this.game,taskQueue,'./scml5/orc/orc.scon');
@@ -30,12 +30,11 @@ export class MainScene extends Scene {
         });
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
-
+    public override onReady():void {
 
         this.appendChild(this.player);
         this.player.scale.setXY(0.6);

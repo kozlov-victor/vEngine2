@@ -12,9 +12,9 @@ abstract class AbstractFlipTransition extends AbstractSceneTransition{
 
 
     constructor(
-        protected readonly game:Game,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear,
+        game:Game,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear,
     )
     {
         super(game,time,easeFn);
@@ -29,7 +29,7 @@ abstract class AbstractFlipTransition extends AbstractSceneTransition{
 
     protected abstract getBottomAndTopImages():[Image,Image];
 
-    protected abstract getFromTo():{from:number,to:number};
+    protected abstract override getFromTo():{from:number,to:number};
 
     protected onTransitionProgress(val: number): void {
         this._imageOnTop.angle3d.y = val;
@@ -42,15 +42,15 @@ abstract class AbstractFlipTransition extends AbstractSceneTransition{
 abstract class AbstractVerticalFlipTransition extends AbstractFlipTransition {
 
     constructor(
-        protected readonly game:Game,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear,
+        game:Game,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear,
     ) {
         super(game,time,easeFn);
         this._imageOnBottom.scale.x = -1;
     }
 
-    protected onTransitionProgress(val: number): void {
+    protected override onTransitionProgress(val: number): void {
         this._imageOnTop.angle3d.y = val;
         this._imageOnTop.visible = val<Math.PI/2;
         this._imageOnBottom.angle3d.y = val;
@@ -61,15 +61,15 @@ abstract class AbstractVerticalFlipTransition extends AbstractFlipTransition {
 abstract class AbstractHorizontalFlipTransition extends AbstractFlipTransition {
 
     constructor(
-        protected readonly game:Game,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear,
+        game:Game,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear,
     ) {
         super(game,time,easeFn);
         this._imageOnBottom.scale.y = -1;
     }
 
-    protected onTransitionProgress(val: number): void {
+    protected override onTransitionProgress(val: number): void {
         this._imageOnTop.angle3d.x = val;
         this._imageOnTop.visible = val<Math.PI/2;
         this._imageOnBottom.angle3d.x = val;

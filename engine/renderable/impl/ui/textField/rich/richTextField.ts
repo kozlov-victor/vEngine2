@@ -18,7 +18,7 @@ interface ITextFragment {
 
 export class RichTextField extends ScrollableTextField {
 
-    public readonly type:string = 'RichTextField';
+    public override readonly type:string = 'RichTextField';
 
     public setRichText(node:VirtualNode):void{
         const fragments:ITextFragment[] = [];
@@ -32,12 +32,12 @@ export class RichTextField extends ScrollableTextField {
         this.markAsDirty();
     }
 
-    public getText(): string {
+    public override getText(): string {
         if (this._textEx===undefined) return super.getText();
         else return this._textEx.asString();
     }
 
-    public setProps(props:ITextFieldProps & {richText?:INode}):void {
+    public override setProps(props:ITextFieldProps & {richText?:INode}):void {
         super.setProps(props);
         if (props.richText!==undefined) this.setRichText(props.richText as VirtualNode);
     }

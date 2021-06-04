@@ -7,7 +7,7 @@ import {wait} from "../longLoading/mainScene";
 
 export class SecondScene extends Scene {
 
-    public onPreloading(taskQueue:TaskQueue):void{
+    public override onPreloading(taskQueue:TaskQueue):void{
         super.onPreloading(taskQueue);
         for (let i:number = 0;i<20;i++) {
             taskQueue.addNextTask(async progress=>{
@@ -16,11 +16,11 @@ export class SecondScene extends Scene {
         }
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
         const rect:Rectangle = new Rectangle(this.game);
         rect.pos.setXY(50,50);
         rect.size.setWH(120,220);

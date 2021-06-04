@@ -11,7 +11,7 @@ import {Sound} from "@engine/media/sound";
 
 export class Zombie extends AbstractMonster {
 
-    public static readonly groupName:string = 'zombie';
+    public static override readonly groupName:string = 'zombie';
 
     constructor(game: Game, spr: ITexture,hurtSound:Sound) {
         super(game, spr,hurtSound,{
@@ -31,7 +31,7 @@ export class Zombie extends AbstractMonster {
 
     }
 
-    protected onCreatedFrameAnimation(): void {
+    protected override onCreatedFrameAnimation(): void {
         this.idleAnimation = this.createFrameAnimation(
             'idle', [0,1,2,3],900 + MathEx.random(10,100),
             new Size(8,8)

@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private resourceLink:Sound;
 
 
-    public onReady():void {
+    public override onReady():void {
         console.log('ready');
         const sound = this.resourceLink;
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseDown,()=>{

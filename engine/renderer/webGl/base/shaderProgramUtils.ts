@@ -274,23 +274,23 @@ const isBoolean = (val:UNIFORM_VALUE_TYPE):val is boolean=>{
 };
 
 const isArrayOfType = (val:UNIFORM_VALUE_TYPE,checker:(val:UNIFORM_VALUE_TYPE)=>boolean,size:number):val is Float32Array|Int32Array=> {
-    if (!DEBUG) return true;
-    else if (!val)
-        throw new DebugError(`can not set uniform  value: ${val}`);
-    else if (!isTypedArray(val)) {
-        console.error('Can not set uniform value',val);
-        throw new DebugError(`can not set uniform with value [${val}]: expected argument of type Array`);
-    }
-    if (size!==undefined && val.length!==size)
-        throw new DebugError(`can not set uniform with value [${val}]: expected array with size ${size}, but ${(val as unknown as UNIFORM_VALUE_TYPE[]).length} found`);
-    for (let i:number=0,length:number=val.length;i<length;i++) {
-        try {
-            checker(val[i]);
-        } catch (e){
-            console.error('Can not set uniform array item',val);
-            throw new DebugError(`can not set uniform array item with value [${val}]: unexpected array element type: ${(val as unknown as UNIFORM_VALUE_TYPE[])[i]}`);
-        }
-    }
+    // if (!DEBUG) return true;
+    // else if (!val)
+    //     throw new DebugError(`can not set uniform  value: ${val}`);
+    // else if (!isTypedArray(val)) {
+    //     console.error('Can not set uniform value',val);
+    //     throw new DebugError(`can not set uniform with value [${val}]: expected argument of type Array`);
+    // }
+    // if (size!==undefined && val.length!==size)
+    //     throw new DebugError(`can not set uniform with value [${val}]: expected array with size ${size}, but ${(val as unknown as UNIFORM_VALUE_TYPE[]).length} found`);
+    // for (let i:number=0,length:number=val.length;i<length;i++) {
+    //     try {
+    //         checker(val[i]);
+    //     } catch (e){
+    //         console.error('Can not set uniform array item',val);
+    //         throw new DebugError(`can not set uniform array item with value [${val}]: unexpected array element type: ${(val as unknown as UNIFORM_VALUE_TYPE[])[i]}`);
+    //     }
+    // }
     return true;
 };
 

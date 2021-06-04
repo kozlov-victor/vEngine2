@@ -9,7 +9,7 @@ import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
 export class MainScene extends Scene {
 
 
-    public onReady():void {
+    public override onReady():void {
 
         const container = new Rectangle(this.game);
         container.fillColor.fromCSS(`#d3ffb3`);

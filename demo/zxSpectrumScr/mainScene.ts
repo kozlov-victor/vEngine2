@@ -17,7 +17,7 @@ export class MainScene extends Scene {
     private border:Image;
     private screen:Image;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         (this.game.getRenderer() as WebGlRenderer).setPixelPerfect(true);
         let binary:ArrayBuffer;
         taskQueue.addNextTask(async progress=>{
@@ -38,7 +38,7 @@ export class MainScene extends Scene {
         this.filters = [new Barrel2DistortionFilter(this.game)];
     }
 
-    public onReady():void {
+    public override onReady():void {
         this.border.appendChild(this.screen);
         this.border.setPixelPerfect(true);
         this.screen.setPixelPerfect(true);

@@ -10,9 +10,9 @@ export abstract class AbstractSizeHeightAppearanceTransition extends AbstractSce
     protected _transformationTarget:Image;
 
     constructor(
-        protected readonly game:Game,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear,
+        game:Game,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear,
     )
     {
         super(game,time,easeFn);
@@ -24,7 +24,7 @@ export abstract class AbstractSizeHeightAppearanceTransition extends AbstractSce
 
     protected abstract getBottomAndTopImages():[Image,Image];
 
-    protected abstract getFromTo():{from:number,to:number};
+    protected abstract override getFromTo():{from:number,to:number};
 
     protected onTransitionProgress(val: number): void {
         this._transformationTarget.pos.setY(this.game.height/2 - val);

@@ -9,7 +9,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         // https://www.w3.org/TR/SVG/paths.html
         const polygon1:Polygon = Polygon.fromSvgPath(this.game,`
@@ -32,12 +32,5 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
-
-    }
 
 }

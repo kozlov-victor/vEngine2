@@ -10,7 +10,7 @@ export class MainScene extends Scene {
     @Resource.FontFromAtlas('./fnt/',fntXML)
     private font:Font;
 
-    public onReady():void {
+    public override onReady():void {
         this.backgroundColor.setRGB(12,12,12);
         const tf:TextField = new TextField(this.game,this.font);
         tf.size.setWH(300,200);

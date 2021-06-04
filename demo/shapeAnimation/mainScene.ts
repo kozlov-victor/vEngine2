@@ -9,7 +9,7 @@ import {EasingElastic} from "@engine/misc/easing/functions/elastic";
 export class MainScene extends Scene {
 
 
-    public onReady():void {
+    public override onReady():void {
 
         const container:RenderableModel = new SimpleGameObjectContainer(this.game);
         this.appendChild(container);

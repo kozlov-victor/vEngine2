@@ -54,7 +54,7 @@ export class PixelFilter extends AbstractGlFilter {
         this.setPixelHeight(n);
     }
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,size.width);
         this.setUniform(this.rt_h,size.height);

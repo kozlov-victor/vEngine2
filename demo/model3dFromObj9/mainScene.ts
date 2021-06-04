@@ -22,7 +22,7 @@ export class MainScene extends Scene {
     private cubeTexture:ICubeMapTexture;
 
 
-    public onReady():void {
+    public override onReady():void {
 
         const obj = new ObjParser().parse(this.game,{
             meshData: this.data1,

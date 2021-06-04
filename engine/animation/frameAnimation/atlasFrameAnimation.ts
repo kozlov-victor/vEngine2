@@ -9,7 +9,7 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
     public readonly type:string = 'AtlasFrameAnimation';
 
 
-    public revalidate():void{
+    public override revalidate():void{
         if (DEBUG && !this.target) throw new DebugError(`atlasFrameAnimation needs image sourceLink!`);
         super.revalidate();
     }
@@ -27,7 +27,7 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
         this.target.size.setWH(rect.width,rect.height);
     }
 
-    protected setClonedProperties(cloned: AbstractFrameAnimation<unknown>): void {
+    protected override setClonedProperties(cloned: AbstractFrameAnimation<unknown>): void {
         super.setClonedProperties(cloned);
     }
 

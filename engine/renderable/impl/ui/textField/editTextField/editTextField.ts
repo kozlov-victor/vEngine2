@@ -23,7 +23,7 @@ export interface IChangeEditTextFieldEvent {
 
 export class EditTextField extends RichTextField implements IKeyboardFocusable{
 
-    public readonly type:string = 'EditTextField';
+    public override readonly type:string = 'EditTextField';
 
     public cursorColor:Color = Color.GREY.clone();
     public multiline:boolean = true;
@@ -39,7 +39,7 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
         this.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
     }
 
-    public revalidate():void {
+    public override revalidate():void {
         super.revalidate();
         if (this.cursor===undefined) {
             this.cursor = new Cursor(this.game,this,this.font);
@@ -67,7 +67,7 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
         this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {target:this,value:this.getText()});
     }
 
-    public setProps(props: IEditTextFieldProps):void {
+    public override setProps(props: IEditTextFieldProps):void {
         super.setProps(props);
         if (props.changed!==undefined && props.changed!==this._tsxChanged) {
             if (this._tsxChanged!==undefined) this.changeEventHandler.off(TOGGLE_BUTTON_EVENTS.changed,this._tsxChanged);
@@ -93,11 +93,11 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
         if (props.multiline!==undefined) this.multiline = props.multiline;
     }
 
-    protected onClientRectChanged():void {
+    protected override onClientRectChanged():void {
         if (this.cursor!==undefined) this.cursor.onClientRectChanged(this.getClientRect());
     }
 
-    protected _applyText():void {
+    protected override _applyText():void {
         const newLines:ICharacterInfo[] = [];
         this._textEx.getAllChars().forEach(c=>{
             if (c.rawChar===NEWLINE_CHAR) newLines.push(c);
@@ -124,13 +124,13 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
         if (this.cursor!==undefined) this.cursor.clearDirtyTyped();
     }
 
-    public setText(text: string | number):void {
+    public override setText(text: string | number):void {
         if (this.getText()===text) return;
         super.setText(text);
         if (this.cursor!==undefined) this.cursor.currentRow = undefined;
     }
 
-    public setRichText(node: VirtualNode):void {
+    public override setRichText(node: VirtualNode):void {
         super.setRichText(node);
         if (this.cursor!==undefined) this.cursor.currentRow = undefined;
     }

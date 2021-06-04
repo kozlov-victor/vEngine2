@@ -9,7 +9,7 @@ import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
 
 export class MainScene extends Scene {
 
-    public onReady():void {
+    public override onReady():void {
 
         const circle:Circle = new Circle(this.game);
         circle.radius = 3;

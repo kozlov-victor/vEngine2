@@ -8,7 +8,7 @@ export class AmbientLight extends AbstractLight{
 
     public direction:Float32Array = new Float32Array([0,0,-1]);
 
-    constructor(protected game: Game) {
+    constructor(game: Game) {
         super(game);
     }
 

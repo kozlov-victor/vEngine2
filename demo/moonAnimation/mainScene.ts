@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     @Resource.Sound('./moonAnimation/moon_sound.wav')
     private sound:Sound;
 
-    public async onPreloading(taskQueue:TaskQueue):Promise<void> {
+    public override async onPreloading(taskQueue:TaskQueue):Promise<void> {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -29,11 +29,11 @@ export class MainScene extends Scene {
         });
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         this.sound.play();
         this.appendChild(this.player);

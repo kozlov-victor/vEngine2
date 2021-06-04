@@ -9,13 +9,13 @@ export class MainScene extends Scene {
 
     private monster:SpriterObject;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         taskQueue.addNextTask(async _=>{
             this.monster = await SpriterObject.create(this.game,taskQueue,'./scml3/monster/monster.scon');
         });
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         this.appendChild(this.monster);
         this.monster.scale.setXY(0.7);

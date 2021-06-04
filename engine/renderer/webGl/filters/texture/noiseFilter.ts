@@ -50,7 +50,7 @@ export class NoiseFilter extends AbstractGlFilter {
     }
 
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         this.time+=0.01;
         if (this.time>100) this.time = 0;
         this.setUniform(this.u_time,this.time);

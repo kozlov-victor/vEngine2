@@ -9,7 +9,7 @@ export class MainScene extends Scene {
 
 
     // https://gamesnacks.com/embed/static/media/powered_by.855b1bc9.svg
-    public onReady():void {
+    public override onReady():void {
 
         const s1 = new Ellipse(this.game);
         s1.radiusX = 100;

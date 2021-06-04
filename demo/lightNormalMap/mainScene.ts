@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     private logoLink:ITexture;
     private normalMapLink:ITexture;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         taskQueue.addNextTask(async process=>{
             this.logoLink = await taskQueue.getLoader().loadTexture('./lightNormalMap/rocks.png',process);
@@ -25,7 +25,7 @@ export class MainScene extends Scene {
         });
     }
 
-    public onReady():void {
+    public override onReady():void {
         this.backgroundColor = Color.BLACK;
         const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.setXY(10,10);

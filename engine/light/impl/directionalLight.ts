@@ -4,11 +4,11 @@ import {FastMap} from "@engine/misc/collection/fastMap";
 
 export class DirectionalLight extends PointLight {
 
-    public static readonly LIGHT_TYPE:number = 1;
+    public static override readonly LIGHT_TYPE:number = 1;
 
     public direction:Float32Array = new Float32Array([-1,0,0]);
 
-    public setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>, i:number):void{
+    public override setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>, i:number):void{
         super.setUniformsToMap(map,i);
         map.put(`u_pointLights[${i}].type`,DirectionalLight.LIGHT_TYPE);
         map.put(`u_pointLights[${i}].direction`,this.direction);

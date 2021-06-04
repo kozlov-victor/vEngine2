@@ -58,7 +58,7 @@ export class HexagonalFilter extends AbstractGlFilter {
     }
 
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         this.setUniform(this.texSize,this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray());
         super.doFilter(destFrameBuffer);
     }

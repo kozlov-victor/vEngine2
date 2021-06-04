@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     private textureResource:ITexture;
 
 
-    public onReady():void {
+    public override onReady():void {
 
         const container:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
         this.appendChild(container);

@@ -11,7 +11,7 @@ export class MainScene extends Scene {
 
     private logoRes:LogoResources = new LogoResources(this);
 
-    public onReady():void {
+    public override onReady():void {
 
         const spr:Image = new Image(this.game,this.logoRes.logoTexture);
         spr.pos.fromJSON({x:10,y:10});

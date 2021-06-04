@@ -8,18 +8,18 @@ export class MainScene extends Scene {
 
     private lobster:SpriterObject;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         taskQueue.addNextTask(async progress=>{
             this.lobster = await SpriterObject.create(this.game,taskQueue,'./scml2/lobster/lobster.scon');
         });
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         document.body.style.cssText = 'background-color:grey;';
 

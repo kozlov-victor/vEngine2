@@ -51,15 +51,15 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
         return this;
     }
 
-    public clone(): Point3d {
+    public override clone(): Point3d {
         return new Point3d(this.x,this.y,this._z);
     }
 
-    public toJSON():IPoint3d{
+    public override toJSON():IPoint3d{
         return {x:this.x,y:this.y,z:this._z};
     }
 
-    public toArray():Float32Array{
+    public override toArray():Float32Array{
         this._arrCache[0] = this.x;
         this._arrCache[1] = this.y;
         this._arrCache[2] = this._z;

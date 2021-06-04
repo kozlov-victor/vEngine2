@@ -17,7 +17,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3dFromObjMaterials2/windmill/windmill.jpg')
     private texture:ITexture;
 
-    public onReady():void {
+    public override onReady():void {
 
         const obj:SimpleGameObjectContainer = new ObjParser().parse(this.game,
             {

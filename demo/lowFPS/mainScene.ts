@@ -10,7 +10,7 @@ export class MainScene extends Scene {
     private logoLink:ITexture;
     private obj:Image;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
@@ -22,11 +22,11 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
         const spr:Image = new Image(this.game,this.logoLink);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);
@@ -36,7 +36,7 @@ export class MainScene extends Scene {
 
     }
 
-    protected onUpdate(): void {
+    protected override onUpdate(): void {
         if (this.obj.pos.x<-150) this.obj.pos.x = this.game.size.width + 50;
     }
 

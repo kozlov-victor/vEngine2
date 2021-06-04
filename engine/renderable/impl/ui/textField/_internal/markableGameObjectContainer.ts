@@ -10,7 +10,7 @@ export  class MarkableGameObjectContainer extends SimpleGameObjectContainer {
         this.size.addOnChangeListener(()=>this.markAsDirty());
     }
 
-    revalidate():void {
+    public override revalidate():void {
         super.revalidate();
     }
 
@@ -22,7 +22,7 @@ export  class MarkableGameObjectContainer extends SimpleGameObjectContainer {
         return this._dirty;
     }
 
-    public update():void {
+    public override update():void {
         super.update();
         if (this.isDirty()) {
             this.revalidate();

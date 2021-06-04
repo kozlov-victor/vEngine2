@@ -5,7 +5,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 
 export class MainScene extends Scene {
 
-    public onReady():void {
+    public override onReady():void {
         const root = new SimpleGameObjectContainer(this.game);
         this.appendChild(root);
 

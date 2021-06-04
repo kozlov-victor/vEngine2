@@ -13,7 +13,6 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MkAbstractScene} from "./mkAbstractScene";
 import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
-import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {Resource} from "@engine/resources/resourceDecorators";
@@ -29,7 +28,7 @@ export class MkIntroScene extends MkAbstractScene {
     @Resource.Sound('./mk-alfa/assets/sounds/btn.wav')
     private sound:Sound;
 
-    public onReady(): void {
+    public override onReady(): void {
 
         super.onReady();
 

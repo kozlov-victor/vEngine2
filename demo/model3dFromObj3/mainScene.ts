@@ -19,7 +19,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3dFromObj3/earth_normal.jpg')
     private dataTextureNormal:ITexture;
 
-    public onReady():void {
+    public override onReady():void {
 
         this.backgroundColor = Color.BLACK;
         document.body.style.backgroundColor = Color.RGB(200).asCssRgba();

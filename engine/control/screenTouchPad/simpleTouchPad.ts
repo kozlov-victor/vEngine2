@@ -22,7 +22,7 @@ class TouchButton extends AbstractScreenTouchButton{
 
 export class SimpleTouchPad extends AbstractScreenTouchPad {
 
-    constructor(protected game:Game) {
+    constructor(game:Game) {
         super(game);
         const btnLeft = new TouchButton(game,KEYBOARD_KEY.LEFT);
         btnLeft.renderableModel.pos.setXY(30,game.size.height - 130);

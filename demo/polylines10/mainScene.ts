@@ -9,7 +9,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths
 
@@ -26,14 +26,6 @@ export class MainScene extends Scene {
         polyLine1.lineWidth = 2;
         this.appendChild(polyLine1);
         polyLine1.addBehaviour(new DraggableBehaviour(this.game));
-
-    }
-
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
 
     }
 

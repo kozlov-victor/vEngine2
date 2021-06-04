@@ -87,7 +87,7 @@ export class DropShadowFilter  extends AbstractGlFilter{
         this.shiftY = y;
     }
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
         this.shiftArr[0]  = this.shiftX / size.width;
         this.shiftArr[1]  = this.shiftY / size.height;

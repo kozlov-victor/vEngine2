@@ -20,7 +20,7 @@ export class MainScene extends Scene {
     private dataTextureNormal:ITexture;
 
 
-    public onReady():void {
+    public override onReady():void {
 
         this.backgroundColor = Color.BLACK;
         document.body.style.backgroundColor = Color.RGB(200).asCssRgba();

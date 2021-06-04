@@ -5,7 +5,7 @@ import {Game} from "@engine/core/game";
 
 export class MultiImageAtlasFrameAnimation extends AbstractFrameAnimation<{resource:ITexture,rect:IRectJSON}> {
 
-    constructor(protected game:Game){
+    constructor(game:Game){
         super(game);
     }
 
@@ -15,7 +15,7 @@ export class MultiImageAtlasFrameAnimation extends AbstractFrameAnimation<{resou
         return cloned as this;
     }
 
-    public revalidate(): void {
+    public override revalidate(): void {
         this.target.setTexture(this.frames[0].resource);
         super.revalidate();
     }

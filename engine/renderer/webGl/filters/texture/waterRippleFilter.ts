@@ -24,7 +24,7 @@ export class WaterRippleFilter extends AbstractGlFilter {
     private readonly dropVectors:Float32Array;
     private currentDrop:number = 0;
 
-    constructor(protected game:Game,private maxDrops:number = 32) {
+    constructor(game:Game,private maxDrops:number = 32) {
         super(game);
         const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
 
@@ -89,7 +89,7 @@ export class WaterRippleFilter extends AbstractGlFilter {
         this.setUniform(this.amount,val);
     }
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         this.animateDrops();
         this.setUniform(this.drops,this.dropVectors);
         this.setUniform(this.time,this.game.getElapsedTime()/1_000);

@@ -6,7 +6,7 @@ import {XmlNode} from "@engine/misc/xml/xmlELements";
 
 export class IntroScene extends BaseScene {
 
-    public onReady():void {
+    public override onReady():void {
         super.onReady();
         this.sounds.intro.play();
         this.sounds.gear.loop = true;

@@ -15,7 +15,7 @@ export class IntroScene extends BasePix32Scene {
     private themeAudioLink:Sound;
     private track:AbstractChipTrack;
 
-    onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         let bin:ArrayBuffer;
         taskQueue.addNextTask(async process=>{
@@ -27,7 +27,7 @@ export class IntroScene extends BasePix32Scene {
         });
     }
 
-    onReady():void {
+    public override onReady():void {
         super.onReady();
 
         const sound:Sound = this.themeAudioLink;

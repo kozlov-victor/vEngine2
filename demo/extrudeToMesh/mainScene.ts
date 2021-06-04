@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private cubeTexture:ICubeMapTexture;
 
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         // https://onlinefontconverter.com/
         // https://gero3.github.io/facetype.js/
@@ -31,11 +31,8 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number):void {
 
-    }
-
-    public onReady():void {
+    public override onReady():void {
 
         const path = `
 

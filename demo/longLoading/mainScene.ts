@@ -23,7 +23,7 @@ export class MainScene extends Scene {
 
     private logoTexture:ITexture;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         taskQueue.addNextTask(async progress=>{
             this.logoTexture = await taskQueue.getLoader().loadTexture('./assets/logo.png');
@@ -43,11 +43,11 @@ export class MainScene extends Scene {
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
         const spr:Image = new Image(this.game,this.logoTexture);
         spr.pos.fromJSON({x:10,y:10});
         this.appendChild(spr);

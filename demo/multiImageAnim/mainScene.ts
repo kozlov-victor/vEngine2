@@ -10,7 +10,7 @@ export class MainScene extends Scene {
 
     private resourceLinks:ITexture[] = [];
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         for (let i: number = 0; i < 6; i++) {
             taskQueue.addNextTask(async progress => {
                 this.resourceLinks[i] = await taskQueue.getLoader().loadTexture(`./multiImageAnim/character/ninja_right_${i + 1}.png`, progress);
@@ -19,7 +19,7 @@ export class MainScene extends Scene {
     }
 
 
-    public onReady():void {
+    public override onReady():void {
         const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
         anim.frames = this.resourceLinks;
         anim.isRepeating = true;

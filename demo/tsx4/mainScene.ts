@@ -10,7 +10,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/star.png')
     private link:ITexture;
 
-    public onReady():void {
+    public override onReady():void {
         const root = new SimpleGameObjectContainer(this.game);
         this.appendChild(root);
 

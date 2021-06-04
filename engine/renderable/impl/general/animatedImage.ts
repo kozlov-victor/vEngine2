@@ -8,7 +8,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 
 export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
 
-    public readonly type:string = 'AnimatedImage';
+    public override readonly type:string = 'AnimatedImage';
 
     private _currFrameAnimation:Optional<AbstractFrameAnimation<any>>;
     private _frameAnimations:{[name:string]:AbstractFrameAnimation<any>} = {};
@@ -17,14 +17,14 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
         super(game,texture);
     }
 
-    public revalidate():void {
+    public override revalidate():void {
         Object.keys(this._frameAnimations).forEach((key:string)=>{
            this._frameAnimations[key].revalidate();
         });
         super.revalidate();
     }
 
-    public clone():AnimatedImage {
+    public override clone():AnimatedImage {
         const cloned:AnimatedImage = new AnimatedImage(this.game,this.getTexture());
         this.setClonedProperties(cloned);
         return cloned;
@@ -64,13 +64,13 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
     }
 
 
-    public update():void {
+    public override update():void {
         super.update();
         if (this._currFrameAnimation) this._currFrameAnimation.update();
     }
 
 
-    protected setClonedProperties(cloned:AnimatedImage):void {
+    protected override setClonedProperties(cloned:AnimatedImage):void {
         super.setClonedProperties(cloned);
         Object.keys(this._frameAnimations).forEach((key:string)=>{
             const fr:AbstractFrameAnimation<any> = this._frameAnimations[key].clone();

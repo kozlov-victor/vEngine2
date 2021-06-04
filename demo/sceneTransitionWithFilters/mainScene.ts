@@ -8,7 +8,7 @@ import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/nois
 
 export class MainScene extends Scene {
 
-    public onReady():void {
+    public override onReady():void {
         const rect:Rectangle = new Rectangle(this.game);
         rect.pos.setXY(20,20);
         rect.size.setWH(200,120);

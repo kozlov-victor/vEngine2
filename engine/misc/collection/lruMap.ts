@@ -8,7 +8,7 @@ export class LruMap<T,U> extends FastMap<T, U>{
         super();
     }
 
-    public put(key:T,value:U):void {
+    public override put(key:T,value:U):void {
         this.keys.push(key);
         if (this.keys.length>this.capacity) {
             this.remove(this.keys[0]);

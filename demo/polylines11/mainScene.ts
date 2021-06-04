@@ -8,7 +8,7 @@ export class MainScene extends Scene {
 
 
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         // https://www.w3.org/TR/SVG/images/paths/cubic02.svg
         // https://stackoverflow.com/questions/15860635/svg-path-commands-s-and-t
@@ -30,14 +30,6 @@ export class MainScene extends Scene {
         });
 
 
-
-    }
-
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
 
     }
 

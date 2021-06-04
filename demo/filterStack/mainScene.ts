@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     private logoLink:ITexture;
     private fnt:Font;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10, 100, 100);
@@ -32,11 +32,11 @@ export class MainScene extends Scene {
 
 
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         this.backgroundColor.setRGB(100,100,100);
 

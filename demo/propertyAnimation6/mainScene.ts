@@ -5,7 +5,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 export class MainScene extends Scene {
 
-    public onReady():void {
+    public override onReady():void {
         // reference http://localhost:63342/vEngine2/demo/propertyAnimation6/ref.html
         const model = new Rectangle(this.game);
         model.size.setWH(20);

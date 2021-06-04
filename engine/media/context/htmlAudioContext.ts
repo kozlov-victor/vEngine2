@@ -21,18 +21,18 @@ class CtxHolder {
 
 export class HtmlAudioContext extends BasicAudioContext implements ICloneable<HtmlAudioContext>{
 
-    constructor(protected game:Game,protected audioPlayer:AudioPlayer) {
+    constructor(game:Game,audioPlayer:AudioPlayer) {
         super(game,audioPlayer);
         this._ctx = CtxHolder.getCtx();
     }
-    public readonly type: string = 'htmlAudioContext';
+    public override readonly type: string = 'htmlAudioContext';
     private free: boolean = true;
     private _ctx: HTMLAudioElement;
 
-    public static isAcceptable():boolean{
+    public static override isAcceptable():boolean{
         return !!(window && (window as unknown as IWindow).Audio);
     }
-    public async uploadBufferToContext(url: string, buffer: ArrayBuffer):Promise<UploadedSoundLink> {
+    public override async uploadBufferToContext(url: string, buffer: ArrayBuffer):Promise<UploadedSoundLink> {
         if (typeof URL !== undefined && typeof Blob !== "undefined") {
             const blob: Blob = new Blob([buffer]);
             AudioPlayer.cache[url] = URL.createObjectURL(blob);
@@ -48,11 +48,11 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         return new UploadSoundLinkImpl(url);
     }
 
-    public isFree(): boolean {
+    public override isFree(): boolean {
         return this.free;
     }
 
-    public play(sound:Sound):void {
+    public override play(sound:Sound):void {
         this.setLastTimeId();
         const url:string = AudioPlayer.cache[sound.getUrl()] as string;
         if (DEBUG && !url) throw new DebugError(`can not retrieve audio from cache (link id=${sound.getUrl()})`);
@@ -73,7 +73,7 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         super.play(sound);
     }
 
-    public stop():void {
+    public override stop():void {
         this.free = true;
         // tslint:disable-next-line:no-null-keyword
         this._ctx.onended = null;
@@ -82,28 +82,28 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
 
     }
 
-    public getCurrentTime():number {
+    public override getCurrentTime():number {
         return (~~(this._ctx.currentTime*1000) - this.startedTime) % this.duration;
     }
 
-    public setGain(val: number):void {
+    public override setGain(val: number):void {
         this._ctx.volume = val;
     }
 
 
-    public loop(val: boolean): void {
+    public override loop(val: boolean): void {
         this._ctx.loop = val;
     }
 
-    public pause():void {
+    public override pause():void {
         this._ctx.pause();
     }
 
-    public resume():void {
+    public override resume():void {
         if (DEBUG) throw new Error("not implemented for now");
     }
 
-    public clone():HtmlAudioContext{
+    public override clone():HtmlAudioContext{
         return new HtmlAudioContext(this.game,this.audioPlayer);
     }
 

@@ -13,11 +13,8 @@ export class MainScene extends Scene {
 
     // https://gero3.github.io/facetype.js/
 
-    public onProgress(val: number):void {
 
-    }
-
-    public onReady():void {
+    public override onReady():void {
 
         const container:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
         container.size.setWH(300,300);

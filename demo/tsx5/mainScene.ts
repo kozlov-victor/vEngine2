@@ -10,7 +10,7 @@ export class MainScene extends Scene {
 
     private resourceHolder:ResourceHolder = new ResourceHolder(this);
 
-    public onReady():void {
+    public override onReady():void {
 
         this.resourceHolder.progressBarPattern.stretchMode = STRETCH_MODE.REPEAT;
 

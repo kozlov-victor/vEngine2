@@ -7,9 +7,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-
-
-    public onPreloading(taskQueue:TaskQueue):void{
+    public override onPreloading(taskQueue:TaskQueue):void{
 
         // https://www.w3.org/TR/SVG/paths.html
         const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`
@@ -31,14 +29,6 @@ export class MainScene extends Scene {
         polyLine2.addBehaviour(new DraggableBehaviour(this.game));
 
 
-
-    }
-
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
 
     }
 

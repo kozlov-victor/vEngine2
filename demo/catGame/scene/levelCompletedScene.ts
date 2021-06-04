@@ -11,12 +11,12 @@ export class LevelCompletedScene extends BaseAbstractIntroScene {
     @Resource.Texture('./catGame/res/sprite/levelCompleted.png')
     protected spriteSheetLabel: ITexture;
 
-    protected startSound(): void {
+    protected override startSound(): void {
         super.startSound();
         this.soundTheme.loop = false;
     }
 
-    protected listenUI():void {
+    protected override listenUI():void {
 
     }
 

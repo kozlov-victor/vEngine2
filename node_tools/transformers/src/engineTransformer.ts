@@ -1,4 +1,3 @@
-import {XmlParser} from "@engine/misc/xml/xmlParser";
 
 declare const __non_webpack_require__:any;
 

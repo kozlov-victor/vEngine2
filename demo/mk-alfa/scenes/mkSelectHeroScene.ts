@@ -240,14 +240,14 @@ export class MkSelectHeroScene extends MkAbstractScene {
 
     private nextScene:MkDescribeHeroScene;
 
-    public onPreloading(taskQueue:TaskQueue): void {
+    public override onPreloading(taskQueue:TaskQueue): void {
         super.onPreloading(taskQueue);
         this.tabStrip = new TabStrip(this.game);
         this.tabStrip.preload(taskQueue);
         this.filters = [new VignetteFilter(this.game)];
     }
 
-    public onReady(): void {
+    public override onReady(): void {
         super.onReady();
         this.tabStrip.onReady();
 

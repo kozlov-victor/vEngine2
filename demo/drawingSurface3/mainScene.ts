@@ -5,18 +5,18 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
 export class MainScene extends Scene {
 
-    public onPreloading():void {
+    public override onPreloading():void {
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(10,100,100);
         rect.size.height = 10;
         this.preloadingGameObject = rect;
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
         this.preloadingGameObject.size.width = val*this.game.size.width;
     }
 
-    public onReady():void {
+    public override onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.appendChild(surface);
         surface.setDrawColor(6,222,200);

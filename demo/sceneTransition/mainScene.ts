@@ -84,13 +84,13 @@ export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontSize: 25,fontFamily:'monospace'})
     private fnt:Font;
-    public backgroundColor: Color = Color.RGB(233);
+    public override backgroundColor: Color = Color.RGB(233);
 
     private listView:VerticalList;
     private transitions:ISceneTransition[] = [];
 
 
-    public onReady():void {
+    public override onReady():void {
 
         this.listView = new VerticalList(this.game);
         this.listView.size.set(this.game.size);

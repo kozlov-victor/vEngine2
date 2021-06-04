@@ -14,7 +14,7 @@ export class MainScene extends Scene {
     private fnt:Font;
     private fnt2:Font;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
         taskQueue.addNextTask(async progress => {
             this.fnt = await taskQueue.getLoader().loadFontFromCssDescription({fontSize: 50}, progress);
@@ -24,7 +24,7 @@ export class MainScene extends Scene {
         });
     }
 
-    public onReady():void {
+    public override onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt2);
         tf.pos.setY(23);
         tf.setText("no clicks");

@@ -198,7 +198,7 @@ module.exports = async (env={})=>{
                     test: /\.tsx?$/,
                     use: [
                         {
-                            loader: "awesome-typescript-loader",options: {
+                            loader: "ts-loader",options: {
                                 getCustomTransformers: program => {
                                     return {
                                         before:  (()=>{

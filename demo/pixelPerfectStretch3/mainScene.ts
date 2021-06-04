@@ -10,7 +10,7 @@ export class MainScene extends Scene {
     private sprite:ITexture;
 
 
-    public onReady():void {
+    public override onReady():void {
 
         const sprLogo:AnimatedImage = new AnimatedImage(this.game,this.sprite);
         sprLogo.scale.setXY(5);

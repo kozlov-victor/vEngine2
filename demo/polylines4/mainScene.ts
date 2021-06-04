@@ -9,9 +9,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 export class MainScene extends Scene {
 
 
-
-    public onPreloading(taskQueue:TaskQueue):void {
-
+    public override onPreloading(taskQueue:TaskQueue):void {
 
 
         const n = new SimpleGameObjectContainer(this.game);
@@ -35,11 +33,11 @@ export class MainScene extends Scene {
 
     }
 
-    public onProgress(val: number):void {
+    public override onProgress(val: number):void {
 
     }
 
-    public onReady():void {
+    public override onReady():void {
 
     }
 

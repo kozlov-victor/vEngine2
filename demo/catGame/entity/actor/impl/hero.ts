@@ -24,7 +24,7 @@ const RIGHT:number = 1;
 
 export class Hero extends AbstractCharacter {
 
-    constructor(protected game:Game, spr:ITexture) {
+    constructor(game:Game, spr:ITexture) {
         super(game,spr,{
             restitution: 0.2,
             rect: new Rect(23,20,15,33),
@@ -47,7 +47,7 @@ export class Hero extends AbstractCharacter {
         this.listenFallToHole();
     }
 
-    public static readonly groupName:string = 'hero';
+    public static override readonly groupName:string = 'hero';
 
     private static instance:Hero;
 
@@ -83,7 +83,7 @@ export class Hero extends AbstractCharacter {
         this.soundPick = res.soundPick;
     }
 
-    protected onCreatedFrameAnimation(): void {
+    protected override onCreatedFrameAnimation(): void {
         this.idleAnimation = this.createFrameAnimation(
             'idle', [0,1,2,3],1000,
             new Size(16,16)

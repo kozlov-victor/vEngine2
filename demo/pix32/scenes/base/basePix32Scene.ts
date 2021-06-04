@@ -72,12 +72,12 @@ export abstract class BasePix32Scene extends Scene {
         if (!instant) tf.setText("");
     }
 
-    constructor(protected game:Game){
+    constructor(game:Game){
         super(game);
     }
 
 
-    public onReady():void {
+    public override onReady():void {
 
         this.backgroundColor = Color.fromCssLiteral(`#e2e2e2`);
 

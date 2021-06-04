@@ -11,7 +11,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 
 export class TileMap extends RenderableModelWithTexture {
 
-    public readonly type:string = "TileMap";
+    public override readonly type:string = "TileMap";
 
     private _data:number[][] = [];
     private _tileWidth:number;
@@ -36,7 +36,7 @@ export class TileMap extends RenderableModelWithTexture {
     private _cellImage:Image;
     private _drawingSurface:DrawingSurface;
 
-    constructor(protected game:Game,texture:ITexture){
+    constructor(game:Game,texture:ITexture){
         super(game);
         this.setTexture(texture);
     }
@@ -70,7 +70,7 @@ export class TileMap extends RenderableModelWithTexture {
         }
     }
 
-    public revalidate(): void{
+    public override revalidate(): void{
 
         this.game.getCurrentScene().size.width = this._numOfTilesInMapByX * this._tileWidth;
         this.game.getCurrentScene().size.height = this._numOfTilesInMapByY * this._tileHeight;
@@ -93,7 +93,7 @@ export class TileMap extends RenderableModelWithTexture {
     }
 
 
-    public update(): void {
+    public override update(): void {
         this.prepareDrawableInfo();
         super.update();
     }

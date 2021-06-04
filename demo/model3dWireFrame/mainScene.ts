@@ -6,11 +6,8 @@ import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
 
 export class MainScene extends Scene {
 
-    public onPreloading():void {
 
-    }
-
-    public onReady():void {
+    public override onReady():void {
 
         const obj:Model3d = new Model3d(this.game);
         obj.fillColor.setRGB(222,22,12);

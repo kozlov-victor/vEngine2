@@ -15,7 +15,7 @@ export class MainScene extends Scene {
     private link:ITexture;
 
 
-    public onReady():void {
+    public override onReady():void {
 
         this.ship = new Image(this.game, this.link);
 

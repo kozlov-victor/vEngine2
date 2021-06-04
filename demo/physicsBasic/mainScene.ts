@@ -10,7 +10,7 @@ export class MainScene extends Scene {
 
 
 
-    public onReady():void {
+    public override onReady():void {
 
         Camera.FOLLOW_FACTOR.y = 0;
 

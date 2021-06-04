@@ -29,13 +29,13 @@ export class MainScene extends Scene {
 
     private logoTexture:ITexture;
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         taskQueue.addNextTask(async _=>{
             this.logoTexture = await taskQueue.getLoader().loadTexture('./assets/logo.png');
         });
     }
 
-    public onReady():void {
+    public override onReady():void {
         console.log('ready');
         const spr:Image = new Image(this.game,this.logoTexture);
         spr.pos.fromJSON({x:10,y:10});

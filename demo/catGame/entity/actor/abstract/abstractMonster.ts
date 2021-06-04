@@ -12,7 +12,7 @@ import {Sound} from "@engine/media/sound";
 
 export abstract class AbstractMonster extends AbstractCharacter {
 
-    public static readonly groupName:string = 'abstractMonsterGroup';
+    public static override readonly groupName:string = 'abstractMonsterGroup';
 
     protected readonly burstColor:Color = Color.RGBA(255,255,255,100);
     protected readonly hurtColor:Color = Color.RGBA(12,255,2,100);

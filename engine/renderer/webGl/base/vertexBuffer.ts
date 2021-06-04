@@ -16,7 +16,7 @@ export class VertexBuffer {
         if (DEBUG && !this.buffer) throw new DebugError(`can not allocate memory for vertex buffer`);
     }
 
-    public setData(bufferData:number[], itemType:number, itemSize:1|2|3|4):void{
+    public setData(bufferData:Float32Array, itemType:number, itemSize:1|2|3|4):void{
         if (DEBUG) {
             if (!bufferData) throw new DebugError('can not set data to vertex buffer: bufferData is not specified');
             if (!itemType) throw new DebugError('can not set data to vertex buffer: itemType is not specified');
@@ -26,7 +26,7 @@ export class VertexBuffer {
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
         // gl.bufferSubData(gl.ARRAY_BUFFER, 0, new Float32Array(bufferSubData));
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(bufferData), gl.STATIC_DRAW); // DYNAMIC_DRAW, STREAM_DRAW
+        gl.bufferData(gl.ARRAY_BUFFER, bufferData, gl.STATIC_DRAW); // DYNAMIC_DRAW, STREAM_DRAW
         // tslint:disable-next-line:no-null-keyword
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
         this.bufferItemSize = itemSize;
@@ -34,7 +34,7 @@ export class VertexBuffer {
         this.dataLength = bufferData.length;
     }
 
-    public updateDada(bufferData:number[]):void {
+    public updateDada(bufferData:Float32Array):void {
         console.log(bufferData);
         this.setData(bufferData,this.bufferItemType,this.bufferItemSize);
     }

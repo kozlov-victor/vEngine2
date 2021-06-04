@@ -46,7 +46,7 @@ export class ProgressBar extends WidgetContainer {
         this.backgroundProgress = view;
     }
 
-    public setProps(props:IProgressBarProps):void {
+    public override setProps(props:IProgressBarProps):void {
         super.setProps(props);
         if (props.max!==undefined) this.setMax(props.max);
         if (props.progress!==undefined) this.setProgress(props.progress);
@@ -56,12 +56,12 @@ export class ProgressBar extends WidgetContainer {
         }
     }
 
-    protected onClientRectChanged():void {
+    protected override onClientRectChanged():void {
         super.onClientRectChanged();
         this.updateProgressViewGeometry();
     }
 
-    protected onCleared():void {
+    protected override onCleared():void {
         super.onCleared();
         this.updateProgressViewGeometry();
     }

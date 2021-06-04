@@ -42,7 +42,7 @@ module.exports = function(content) {
         if (preloadingMethod===undefined) {
             preloadingMethod = tsquery(tstemplate.compile(`
                 class Template {
-                    public onPreloading(taskQueue:any):void{
+                    public override onPreloading(taskQueue:any):void{
                         super.onPreloading(taskQueue);
                     }
                 }

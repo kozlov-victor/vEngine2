@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     private resourceLinks2:ITexture[] = [];
     private resourceLinks3:ITexture[] = [];
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         for (let i:number = 0;i<5;i++) {
             taskQueue.addNextTask(async progress=>{
@@ -34,7 +34,7 @@ export class MainScene extends Scene {
         }
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.resourceLinks1[0]);
         let animNum:number = 1;

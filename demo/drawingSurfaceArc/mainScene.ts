@@ -6,7 +6,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 export class MainScene extends Scene {
 
     // https://developer.mozilla.org/ru/docs/Web/API/CanvasRenderingContext2D/arc
-    public onReady():void {
+    public override onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,new Size(300,300));
         surface.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(surface);

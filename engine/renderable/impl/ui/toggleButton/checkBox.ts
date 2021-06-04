@@ -14,7 +14,7 @@ import {IToggleButtonEvent} from "@engine/renderable/impl/ui/toggleButton/_inter
 
 export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable {
 
-    public readonly type:string = 'CheckBox';
+    public override readonly type:string = 'CheckBox';
 
     private _tsxChanged:(e:IToggleButtonEvent)=>void;
 
@@ -35,7 +35,7 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
         this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {value:this.checked,target:this});
     }
 
-    public setProps(props:ICheckBoxProps):void {
+    public override setProps(props:ICheckBoxProps):void {
         super.setProps(props);
         if (props.changed!==undefined && props.changed!==this._tsxChanged) {
             if (this._tsxChanged!==undefined) this.changeEventHandler.off(TOGGLE_BUTTON_EVENTS.changed,this._tsxChanged);
@@ -57,6 +57,6 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
         return [rNormal,rChecked];
     }
 
-    draw():void {}
+    public override draw():void {}
 
 }

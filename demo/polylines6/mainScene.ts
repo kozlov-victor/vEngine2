@@ -6,9 +6,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-
-
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
 
 
         // https://danmarshall.github.io/google-font-to-svg-path/
@@ -20,14 +18,6 @@ export class MainScene extends Scene {
             p.lineWidth = 2;
             this.appendChild(p);
         });
-
-    }
-
-    public onProgress(val: number):void {
-
-    }
-
-    public onReady():void {
 
     }
 

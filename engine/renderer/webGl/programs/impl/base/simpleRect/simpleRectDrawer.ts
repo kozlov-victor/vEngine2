@@ -59,9 +59,9 @@ export class SimpleRectDrawer extends AbstractDrawer {
             this.gen.getFragmentSource()
         );
         this.bufferInfo = new BufferInfo(this.gl, {
-            posVertexInfo: {array: this.primitive.vertexArr, type: this.gl.FLOAT, size: 2, attrName: 'a_position'},
+            posVertexInfo: {array: new Float32Array(this.primitive.vertexArr), type: this.gl.FLOAT, size: 2, attrName: 'a_position'},
             posIndexInfo: {array: this.primitive.indexArr},
-            texVertexInfo: {array: this.primitive.texCoordArr, type: this.gl.FLOAT, size: 2, attrName: 'a_texCoord'},
+            texVertexInfo: {array: new Float32Array(this.primitive.texCoordArr!), type: this.gl.FLOAT, size: 2, attrName: 'a_texCoord'},
             drawMethod: DRAW_METHOD.TRIANGLE_STRIP
         } as IBufferInfoDescription);
     }

@@ -11,13 +11,13 @@ export class MainScene extends Scene {
     private player:SpriterObject;
 
 
-    public onPreloading(taskQueue:TaskQueue):void {
+    public override onPreloading(taskQueue:TaskQueue):void {
         taskQueue.addNextTask(async _=>{
             this.player = await SpriterObject.create(this.game,taskQueue,'./scml6/fair/1.scon');
         });
     }
 
-    public onReady():void {
+    public override onReady():void {
 
         this.appendChild(this.player);
         this.player.scale.setXY(0.3);

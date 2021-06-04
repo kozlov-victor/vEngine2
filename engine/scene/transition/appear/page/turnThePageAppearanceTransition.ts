@@ -12,9 +12,9 @@ export abstract class AbstractTurnThePageAppearanceTransition extends AbstractSc
     protected _rightPageBackward:Image;
 
     constructor(
-        protected readonly game:Game,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear,
+        game:Game,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear,
     )
     {
         super(game,time,easeFn);
@@ -49,7 +49,7 @@ export abstract class AbstractTurnThePageAppearanceTransition extends AbstractSc
 
     protected abstract getBottomAndTopImages():[Image,Image];
 
-    protected abstract getFromTo():{from:number,to:number};
+    protected abstract override getFromTo():{from:number,to:number};
 
     protected onTransitionProgress(val: number): void {
         this._rightPageForward.angle3d.y = val;

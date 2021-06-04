@@ -24,7 +24,7 @@ export class NinePatchImage extends RenderableModelWithTexture {
         this.size.observe(()=>{this.revalidate();});
     }
 
-    public readonly type:string = 'NinePatchImage';
+    public override readonly type:string = 'NinePatchImage';
     private a:number = 5;
     private b:number = 5;
     private c:number = 5;
@@ -36,7 +36,7 @@ export class NinePatchImage extends RenderableModelWithTexture {
         patch.visible = patch.size.width>0 && patch.size.height>0;
     }
 
-    public revalidate():void {
+    public override revalidate():void {
         const t:ITexture = this.getTexture();
         let width:number = this.size.width ?? t.size.width;
         let height:number = this.size.height ?? t.size.height;
@@ -55,7 +55,7 @@ export class NinePatchImage extends RenderableModelWithTexture {
         this.revalidate();
     }
 
-    public setTexture(texture:ITexture):void{
+    public override setTexture(texture:ITexture):void{
         super.setTexture(texture);
         for (let i:number=0;i<this._patches.length;i++) {
             this._patches[i] = new Image(this.game,texture);

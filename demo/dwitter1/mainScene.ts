@@ -8,14 +8,14 @@ export class MainScene extends Scene {
 
 
 
-    public onReady():void {
+    public override onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;
         surface.setLineWidth(0);
         this.appendChild(surface);
     }
 
-    protected onRender(): void {
+    protected override onRender(): void {
 
 
         // u(t) is called 60 times per second.

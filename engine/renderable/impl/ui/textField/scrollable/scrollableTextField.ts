@@ -7,7 +7,7 @@ import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitte
 
 export class ScrollableTextField extends TextField {
 
-    public readonly type:string = 'ScrollableTextField';
+    public override readonly type:string = 'ScrollableTextField';
 
     public readonly scrollHandler:EventEmitterDelegate<'scroll', void> = new EventEmitterDelegate();
 
@@ -17,7 +17,7 @@ export class ScrollableTextField extends TextField {
         super(game,font);
     }
 
-    revalidate():void {
+    public override revalidate():void {
         super.revalidate();
         if (this._scrollContainerDelegate===undefined || this.rowSetContainer.isDirty()) {
             if (this._scrollContainerDelegate!==undefined) this._scrollContainerDelegate.destroy();
@@ -30,7 +30,7 @@ export class ScrollableTextField extends TextField {
         this._scrollContainerDelegate.revalidate();
     }
 
-    public update():void {
+    public override update():void {
         super.update();
         this._scrollContainerDelegate.update();
     }

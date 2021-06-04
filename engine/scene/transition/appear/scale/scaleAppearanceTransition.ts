@@ -10,9 +10,9 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
     protected _transformationTarget:Image;
 
     constructor(
-        protected readonly game:Game,
-        protected readonly time:number = 1000,
-        protected readonly easeFn:EaseFn = EasingLinear,
+        game:Game,
+        time:number = 1000,
+        easeFn:EaseFn = EasingLinear,
         protected readonly axes: {x:boolean,y:boolean} = {x:true,y:true}
     )
     {
@@ -26,7 +26,7 @@ export abstract class AbstractScaleAppearanceTransition extends AbstractSceneTra
 
     protected abstract getBottomAndTopImages():[Image,Image];
 
-    protected abstract getFromTo():{from:number,to:number};
+    protected abstract override getFromTo():{from:number,to:number};
 
     protected onTransitionProgress(val: number): void {
         const scaleByX:number = this.axes.x?val:1;

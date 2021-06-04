@@ -92,7 +92,7 @@ export class DomRenderer extends AbstractRenderer {
     private _nodes:Nodes;
 
 
-    constructor(protected game:Game){
+    constructor(game:Game){
         super(game);
         this._matrixStack = new MatrixStack();
         const container:HTMLDivElement = document.createElement('div');
@@ -103,7 +103,7 @@ export class DomRenderer extends AbstractRenderer {
         this.registerResize();
     }
 
-    public beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
+    public override beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
         if (this._nodes.properties.bg_color!==this.clearColor.asCssRgba()) {
             this.container.style.backgroundColor = this.clearColor.asCssRgba();
         }
@@ -138,7 +138,7 @@ export class DomRenderer extends AbstractRenderer {
         }
     }
 
-    public killObject(r: RenderableModel): void {
+    public override killObject(r: RenderableModel): void {
         this._nodes.kill(r.id);
     }
 

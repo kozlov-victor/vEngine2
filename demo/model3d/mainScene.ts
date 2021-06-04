@@ -22,7 +22,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3d/normals.png')
     private logoNormalsLink:ITexture;
 
-    public onReady():void {
+    public override onReady():void {
         const obj:Model3d = new Model3d(this.game);
         this.logoObj = obj;
         obj.fillColor.setRGB(12,222,12);

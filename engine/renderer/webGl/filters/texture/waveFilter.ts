@@ -45,7 +45,7 @@ export class WaveFilter extends AbstractGlFilter {
     }
 
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
         this.setUniform(this.u_time,this.time+=0.01);
         super.doFilter(destFrameBuffer);
     }

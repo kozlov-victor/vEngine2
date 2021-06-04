@@ -9,11 +9,11 @@ import {Sound} from "@engine/media/sound";
 
 export class Monster2 extends AbstractMonster {
 
-    public static readonly groupName:string = 'monster2';
+    public static override readonly groupName:string = 'monster2';
 
     private baseVelocity:number = 90;
 
-    constructor(protected game: Game, spr: ITexture,hurtSound:Sound) {
+    constructor(game: Game, spr: ITexture,hurtSound:Sound) {
         super(game, spr,hurtSound,{
             restitution: 0.9,
             rect: new Rect(20,20,23,33),
@@ -33,7 +33,7 @@ export class Monster2 extends AbstractMonster {
     }
 
 
-    protected onCreatedFrameAnimation(): void {
+    protected override onCreatedFrameAnimation(): void {
         this.idleAnimation = this.createFrameAnimation(
             'idle', [0,1,2,3,4],900 + MathEx.random(10,100),
             new Size(8,4)

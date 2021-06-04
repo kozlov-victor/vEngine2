@@ -56,7 +56,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         this.applyNewPositionAndConstrains(this._gameObject.pos.x,this._gameObject.pos.y);
     }
 
-    public manage(gameObject:RenderableModel):void {
+    public override manage(gameObject:RenderableModel):void {
         if (DEBUG && this._gameObject) {
             throw new DebugError(`DraggableBehaviour is already used by another renderable model`);
         }
@@ -134,7 +134,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         this.game.getRenderer().container.addEventListener('mouseleave',this._blurListener);
     }
 
-    public revalidate():void {
+    public override revalidate():void {
         super.revalidate();
         if (DEBUG && (this._gameObject.size.isZero())) {
             throw new DebugError(
@@ -143,7 +143,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         }
     }
 
-    public destroy():void{
+    public override destroy():void{
         const scene:Scene = this.game.getCurrentScene();
         this.game.getRenderer().container.removeEventListener('mouseleave',this._blurListener);
         this._gameObject.mouseEventHandler.off(MOUSE_EVENTS.click,this._gameObjectOnClick);

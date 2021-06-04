@@ -7,7 +7,7 @@ export class MainScene extends Scene {
 
 
 
-    public onReady():void {
+    public override onReady():void {
 
         const rect = new Rectangle(this.game);
         rect.fillColor = Color.fromCssLiteral('#000');

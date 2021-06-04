@@ -13,11 +13,11 @@ export class WinScene extends Scene {
 
     constructor(game:Game){super(game);}
 
-    public onPreloading():void{
+    public override onPreloading():void{
 
     }
 
-    public onReady():void{
+    public override onReady():void{
         const p:Circle = new Circle(this.game);
         p.radius = 5;
         this.backgroundColor = Color.RGB(10,30,40);

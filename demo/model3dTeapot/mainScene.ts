@@ -26,7 +26,7 @@ export class MainScene extends Scene {
     private logoLink:ITexture;
 
 
-    public onReady():void {
+    public override onReady():void {
         const obj:Model3d = new Model3d(this.game);
         this.logoObj = obj;
         obj.fillColor.setRGB(233,23,12);

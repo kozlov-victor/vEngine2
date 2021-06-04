@@ -10,7 +10,7 @@ export class GetReadyScene extends BasePix32Scene {
     @Resource.Texture('./pix32/resources/images/flag.png')
     private flagLink:ITexture;
 
-    onReady():void {
+    override onReady():void {
         super.onReady();
         const getReady:Image = new Image(this.game,this.flagLink);
         getReady.pos.setXY(-12);

@@ -7,8 +7,7 @@ const isTeacher:boolean = location.href.indexOf('teacher')>0;
 
 export class MainScene extends Scene {
 
-
-    public onReady():void {
+    public override onReady():void {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.appendChild(surface);
         const board = new Board(this.game,surface,isTeacher);

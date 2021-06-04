@@ -8,7 +8,7 @@ export class Texture extends AbstractTexture{
 
     protected samplerType: GLenum = this.gl.TEXTURE_2D;
 
-    constructor(protected gl:WebGLRenderingContext){
+    constructor(gl:WebGLRenderingContext){
         super(gl);
         // Fill the texture with a 1x1 blue pixel.
         this.setRawData(new Uint8Array([0, 255, 0, 255]),1,1);

@@ -20,7 +20,7 @@ export class MainScene extends Scene {
     private font:Font;
 
 
-    public onReady():void {
+    public override onReady():void {
         this.backgroundColor.setRGB(12,12,12);
         const tf:RichTextField = new RichTextField(this.game,this.font);
         tf.size.set(this.game.size);
