@@ -24,6 +24,8 @@ export const isArray = (a:unknown):a is Float32Array|Int32Array|unknown[]=> {
 };
 
 export const isNumber = (value:unknown):value is number=> {
+    if (value===null || value===undefined) return false;
+    if ((value as number).toFixed===undefined) return false;
     if (Number.isNaN(value)) return false;
     if (value===Infinity) return false;
     return value !== -Infinity;
