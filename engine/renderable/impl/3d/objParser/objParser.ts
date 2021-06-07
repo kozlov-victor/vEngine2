@@ -27,8 +27,6 @@ export class ObjParser {
             model3d.modelPrimitive = pr;
             model3d.fillColor.set(obj.material.ambientColor);
             model3d.id = obj.name;
-            model3d.texture = params.texture;
-            model3d.normalsTexture = params.normalsTexture;
             model3d.cubeMapTexture = params.cubeMapTexture;
             container.appendChild(model3d);
             container.size.setWH(10);
@@ -94,6 +92,14 @@ export class ObjParser {
             if (!pr.texCoordArr!.length) pr.texCoordArr = undefined;
             if (!pr.normalArr!.length) pr.normalArr = undefined;
             if (!pr.vertexColorArr!.length) pr.vertexColorArr = undefined;
+
+            if (model3d.modelPrimitive.texCoordArr!==undefined) {
+                model3d.texture = params.texture;
+            }
+            if (model3d.modelPrimitive.normalArr!==undefined) {
+                model3d.normalsTexture = params.normalsTexture;
+            }
+
         }
         return container;
     }

@@ -165,6 +165,11 @@ export class DataObjReader extends AbstractDataReader {
             face[i].uv = tripletNum[1];
             face[i].n = tripletNum[2];
             if (Number.isNaN(face[i].v)) throw new Error(`bad face value ${triplets.join(' ')}`);
+
+            if (face[i].v<0) face[i].v = this.vertexLib.v_arr.length + face[i].v + 1;
+            if (face[i].uv<0) face[i].uv = this.vertexLib.vt_arr.length + face[i].uv + 1;
+            if (face[i].n<0) face[i].n = this.vertexLib.vn_arr.length + face[i].n + 1;
+
         });
         return face;
     }
@@ -178,7 +183,13 @@ export class DataObjReader extends AbstractDataReader {
         } else if (triplets.length===4) {
             result.push(this.getFace([triplets[0],triplets[1],triplets[2]]));
             result.push(this.getFace([triplets[0],triplets[2],triplets[3]]));
-        } else throw new DebugError(`unsupported face format ${triplets.join(' ')}`);
+        } else { // fan
+            result.push(this.getFace([triplets[0],triplets[1],triplets[2]]));
+            for (let i:number=2;i<triplets.length-1;i++) {
+                result.push(this.getFace([triplets[0],triplets[i],triplets[i+1]]));
+            }
+            //throw new DebugError(`unsupported face format ${triplets.join(' ')}`);
+        }
 
         return result;
     }
@@ -237,6 +248,16 @@ export class DataObjReader extends AbstractDataReader {
                     } else {
                         console.warn(`unknown material: ${mtlName}`);
                     }
+                    break;
+                case 'mtllib':
+                    // already processed
+                case 's':
+                    // not supported
+                case '#':
+                    // comment
+                    break;
+                default:
+                    console.warn(`unknown command: ${commandName}`);
             }
         });
         return {vertexLib:this.vertexLib,objs:this.objs};

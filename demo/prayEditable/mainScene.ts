@@ -104,7 +104,7 @@ export class MainScene extends Scene {
         animatedImage.passMouseEventsThrough = true;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
-        ps.addParticle(animatedImage);
+        ps.addParticlePrefab(animatedImage);
         ps.emissionRadius = 2;
 
         const pi:number = Math.PI;

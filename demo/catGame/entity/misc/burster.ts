@@ -25,9 +25,8 @@ export class Burster {
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.emitAuto = false;
-        ps.addParticle(particle);
+        ps.addParticlePrefab(particle);
         ps.emissionRadius = 5;
-        ps.emissionTarget = game.getCurrentScene().getLayers()[1];
 
         ps.numOfParticlesToEmit = {from:1,to:5};
         ps.particleLiveTime = {from:1000,to:2000};

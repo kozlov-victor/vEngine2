@@ -10,7 +10,7 @@ import {Scene} from "@engine/scene/scene";
 import {Layer} from "@engine/scene/layer";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 
-const r:(obj:IParticlePropertyDesc)=>number
+const rnd:(obj:IParticlePropertyDesc)=>number
     = (obj:IParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
 
 interface IParticlePropertyDesc {
@@ -40,7 +40,6 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     public particleLiveTime:IParticlePropertyDesc = {from:100,to:1000};
     public emissionRadius:number = 0;
     public emissionPosition:Point2d = new Point2d();
-    public emissionTarget:ParticleSystem|Layer|Scene = this; // remove this field
 
     private _particles:IParticleHolder[] = [];
     private _prototypes:RenderableCloneable[] = [];
@@ -56,9 +55,9 @@ export class ParticleSystem extends SimpleGameObjectContainer {
         if (this.particleAngle.to<this.particleAngle.from) this.particleAngle.to += 2*Math.PI;
     }
 
-    public addParticle(renderableCloneable:RenderableCloneable):void {
+    public addParticlePrefab(renderableCloneable:RenderableCloneable):void {
         if (DEBUG && !renderableCloneable.clone) {
-            console.error(r);
+            console.error(rnd);
             throw new DebugError(`can not add particle: model does not implement cloneable interface`);
         }
         renderableCloneable.revalidate();
@@ -75,7 +74,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
             this._onUpdateParticle(holder.particle);
             if (time - holder.createdTime > holder.lifeTime) {
                 holder.active = false;
-                this.emissionTarget.removeChild(holder.particle);
+                this.removeChild(holder.particle);
             }
         }
         if (this.emitAuto) this.emit();
@@ -93,14 +92,8 @@ export class ParticleSystem extends SimpleGameObjectContainer {
 
         if (!this.enabled) return;
 
-        if (DEBUG && !this.getLayer()) {
-            console.error(this);
-            throw new DebugError(`particle system is detached`);
-        }
-
-        const num:number = r(this.numOfParticlesToEmit);
+        const num:number = rnd(this.numOfParticlesToEmit);
         for (let i:number = 0;i<num;i++) {
-
             let particle:RenderableCloneable;
             let holder:Optional<IParticleHolder> =
                 this._particles.find(it=>!it.active);
@@ -113,22 +106,21 @@ export class ParticleSystem extends SimpleGameObjectContainer {
                 particle = holder.particle;
             }
 
-            const angle:number = r(this.particleAngle);
-            const vel:number = r(this.particleVelocity);
+            const angle:number = rnd(this.particleAngle);
+            const vel:number = rnd(this.particleVelocity);
             const velocityX:number = vel*Math.cos(angle);
             const velocityY:number = vel*Math.sin(angle);
             const rigidBody:Optional<IRigidBody> = particle.getRigidBody();
             const velocity:Point2d = rigidBody===undefined?particle.velocity:rigidBody.velocity;
             velocity.setXY(velocityX,velocityY);
-            particle.pos.x = r({from:-this.emissionRadius,to:+this.emissionRadius});
-            particle.pos.y = r({from:-this.emissionRadius,to:+this.emissionRadius});
-            particle.pos.add(this.emissionPosition);
-            holder.lifeTime = r(this.particleLiveTime);
+            particle.pos.x = rnd({from:-this.emissionRadius,to:+this.emissionRadius}) + this.emissionPosition.x;
+            particle.pos.y = rnd({from:-this.emissionRadius,to:+this.emissionRadius}) + this.emissionPosition.y;
+            holder.lifeTime = rnd(this.particleLiveTime);
             holder.createdTime = this.game.getCurrentTime();
             holder.active = true;
 
             this._onEmitParticle(particle);
-            this.emissionTarget.appendChild(particle);
+            this.appendChild(particle);
         }
     }
 

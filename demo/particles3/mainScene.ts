@@ -37,8 +37,8 @@ export class MainScene extends Scene {
         rect.fillColor.setRGBA(133,200,0);
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
-        ps.addParticle(circle);
-        ps.addParticle(rect);
+        ps.addParticlePrefab(circle);
+        ps.addParticlePrefab(rect);
         ps.emissionRadius = 5;
         ps.forceDrawChildrenOnNewSurface = true;
 

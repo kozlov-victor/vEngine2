@@ -90,7 +90,7 @@ export class MainScene extends BaseScene {
         this.psBullet.emissionRadius = 10;
         this.psBullet.particleAngle = {from:MathEx.degToRad(90-10),to:MathEx.degToRad(90+10)};
         this.psBullet.emitAuto = false;
-        this.psBullet.addParticle(particle);
+        this.psBullet.addParticlePrefab(particle);
 
         this.bulletContainer.appendChild(this.psBullet);
     }

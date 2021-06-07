@@ -24,7 +24,7 @@ export class WinScene extends Scene {
         p.blendMode = BLEND_MODE.ADDITIVE;
         p.fillColor = Color.RGB(240,10,140);
         this.emitter.numOfParticlesToEmit = {from: 10,to:50};
-        this.emitter.addParticle(p);
+        this.emitter.addParticlePrefab(p);
         this.emitter.particleVelocity = {from:1,to:20};
         this.emitter.particleLiveTime = {from:100,to:500};
         this.emitter.emitAuto = false;

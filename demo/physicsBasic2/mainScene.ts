@@ -79,7 +79,7 @@ export class MainScene extends Scene {
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.emitAuto = false;
-        ps.addParticle(particle);
+        ps.addParticlePrefab(particle);
         ps.emissionRadius = 5;
         ps.forceDrawChildrenOnNewSurface = true;
 
@@ -87,7 +87,6 @@ export class MainScene extends Scene {
         ps.particleLiveTime = {from:1000,to:2000};
         ps.particleVelocity = {from: 50, to: 100};
         ps.particleAngle = {from:0,to:2*Math.PI};
-        ps.emissionTarget = this;
         this.appendChild(ps);
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click,(e)=>{

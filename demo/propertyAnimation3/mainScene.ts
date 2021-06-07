@@ -20,7 +20,7 @@ export class MainScene extends Scene {
         const f = new GlowFilter(this.game,0.05);
         f.setGlowColor(Color.RGB(122,200,0));
         ps.filters = [f];
-        ps.addParticle(circle);
+        ps.addParticlePrefab(circle);
         ps.emissionRadius = 8;
         ps.particleVelocity = {from:5,to:15};
         ps.particleLiveTime = {from:500,to:1500};

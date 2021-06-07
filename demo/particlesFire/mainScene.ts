@@ -32,7 +32,7 @@ export class MainScene extends Scene {
 
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
-        ps.addParticle(animatedImage);
+        ps.addParticlePrefab(animatedImage);
         ps.emissionRadius = 2;
 
 

@@ -60,7 +60,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         circle.fillColor.setRGBA(122,200,0);
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
-        ps.addParticle(circle);
+        ps.addParticlePrefab(circle);
         ps.emissionRadius = 5;
 
         ps.onEmitParticle((r:RenderableModel)=>{
