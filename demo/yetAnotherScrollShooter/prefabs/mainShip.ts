@@ -32,8 +32,6 @@ export class MainShip extends SimpleGameObjectContainer {
         this.size.setWH(400);
 
         obj.children.forEach(c=>{
-            //(c as Model3d).reflectivity = 0.01;
-            (c as Model3d).colorMix = 0.2;
             (c as Model3d).specular = 0.3;
         });
         const lamp = obj.children.find(it=>it.id==='light') as RenderableModel;
@@ -61,7 +59,6 @@ export class MainShip extends SimpleGameObjectContainer {
         const circle:Circle = new Circle(this.game);
         circle.radius = 6;
         circle.transformPoint.setXY(circle.radius/2,circle.radius/2);
-        circle.fillColor = Color.fromCssLiteral(`rgb(24, 64, 108)`);
         circle.blendMode = BLEND_MODE.ADDITIVE;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
@@ -75,6 +72,11 @@ export class MainShip extends SimpleGameObjectContainer {
         ps.pos.setXY(-15,-15);
         const emissionAngle = 40;
         this.scene.appendChild(ps);
+        const col1 = Color.fromCssLiteral(`rgb(24, 64, 108)`);
+        const col2 = Color.fromCssLiteral(`#000000`);
+        ps.onEmitParticle(p=>{
+            (p as Circle).fillColor = MathEx.randomInt(0,100)>50? col1:col2;
+        });
         ps.particleAngle = {from:MathEx.degToRad(-90-emissionAngle),to:MathEx.degToRad(-90+emissionAngle)};
     }
 

@@ -3,6 +3,7 @@ import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {AssetsHolder} from "./assets/assetsHolder";
 import {MainShip} from "./prefabs/mainShip";
 import {Rocket} from "./prefabs/rocket";
+import {Ring} from "./prefabs/ring";
 
 
 export class MainScene extends Scene {
@@ -40,7 +41,10 @@ export class MainScene extends Scene {
         mainShip.pos.setXY(200,250);
 
         const rocket = new Rocket(this.game,this,this.r);
-        rocket.pos.setXY(0,100);
+        rocket.pos.setXY(800,100);
+
+        const ring = new Ring(this.game,this,this.r);
+        ring.pos.setXY(200,50);
 
     }
 

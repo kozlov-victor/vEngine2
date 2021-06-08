@@ -18,6 +18,12 @@ export class AssetsHolder extends ResourceAutoHolder {
     @Resource.Text(`./${base}/assets/models/rocket/rocket.mtl`)
     public dataRocketMaterial:string;
 
+    @Resource.Text(`./${base}/assets/models/ring/ring.obj`)
+    public dataRing:string;
+
+    @Resource.Text(`./${base}/assets/models/ring/ring.mtl`)
+    public dataRingMaterial:string;
+
     @Resource.Texture(`./${base}/assets/images/pack1/bg1.png`)
     public pack1bg1:ITexture;
 
