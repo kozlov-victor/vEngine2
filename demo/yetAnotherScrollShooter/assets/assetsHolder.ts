@@ -36,6 +36,12 @@ export class AssetsHolder extends ResourceAutoHolder {
     @Resource.Text(`./${base}/assets/models/ring/ring.mtl`)
     public dataRingMaterial:string;
 
+    @Resource.Text(`./${base}/assets/models/engine/engine.obj`)
+    public dataEngine:string;
+
+    @Resource.Text(`./${base}/assets/models/engine/engine.mtl`)
+    public dataEngineMaterial:string;
+
     // pack 1
 
     @Resource.Texture(`./${base}/assets/images/pack1/bg1.png`)
@@ -48,8 +54,6 @@ export class AssetsHolder extends ResourceAutoHolder {
     public pack1bg3:ITexture;
 
     // pack 2
-    @Resource.Texture(`./${base}/assets/images/pack2/bg1.png`)
-    public pack2bg1:ITexture;
 
     @Resource.Texture(`./${base}/assets/images/pack2/cloud.png`)
     public cloud:ITexture;

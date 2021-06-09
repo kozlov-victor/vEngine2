@@ -7,7 +7,7 @@ import {Rocket} from "../prefabs/rocket";
 import {Bomb} from "../prefabs/bomb";
 import {Stone} from "../prefabs/stone";
 import {Ring} from "../prefabs/ring";
-import {FastBlurFilter} from "@engine/renderer/webGl/filters/texture/fastBlurFilter";
+import {Engine} from "../prefabs/engine";
 
 export class Scene2 extends Scene {
 
@@ -41,9 +41,13 @@ export class Scene2 extends Scene {
         const ring = new Ring(this.game,this,this.r);
         ring.pos.setXY(400,200);
 
+        const engine = new Engine(this.game,this,this.r);
+        engine.pos.setXY(400,400);
+
         const clouds:Image[] = [];
         for (let i:number=0;i<30;i++) {
             const cloud = new Image(this.game,this.r.cloud);
+            cloud.alpha = 0.6;
             cloud.passMouseEventsThrough = true;
             cloud.depthTest = true;
             cloud.pos.z = i*10;
