@@ -6,6 +6,8 @@ import {MathEx} from "@engine/misc/mathEx";
 import {Rocket} from "../prefabs/rocket";
 import {Bomb} from "../prefabs/bomb";
 import {Stone} from "../prefabs/stone";
+import {Ring} from "../prefabs/ring";
+import {FastBlurFilter} from "@engine/renderer/webGl/filters/texture/fastBlurFilter";
 
 export class Scene2 extends Scene {
 
@@ -35,6 +37,9 @@ export class Scene2 extends Scene {
 
         const stone = new Stone(this.game,this,this.r);
         stone.pos.setXY(200,200);
+
+        const ring = new Ring(this.game,this,this.r);
+        ring.pos.setXY(400,200);
 
         const clouds:Image[] = [];
         for (let i:number=0;i<30;i++) {

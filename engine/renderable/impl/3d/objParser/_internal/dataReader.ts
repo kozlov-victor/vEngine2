@@ -257,7 +257,7 @@ export class DataObjReader extends AbstractDataReader {
                     // comment
                     break;
                 default:
-                    console.warn(`unknown command: ${commandName}`);
+                    console.warn(`unknown command: ${commandName} (line:${line})`);
             }
         });
         return {vertexLib:this.vertexLib,objs:this.objs};
