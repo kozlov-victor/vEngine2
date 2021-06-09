@@ -11,8 +11,9 @@ import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderabl
 import {MathEx} from "@engine/misc/mathEx";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {Color} from "@engine/renderer/common/color";
+import {AbstractEntity} from "./common/abstractEntity";
 
-export class MainShip extends SimpleGameObjectContainer {
+export class MainShip extends AbstractEntity {
 
     constructor(game:Game,private scene:Scene,private r:AssetsHolder) {
         super(game);
@@ -43,7 +44,7 @@ export class MainShip extends SimpleGameObjectContainer {
         this.appendChild(obj);
 
         const t = new Tween({
-            target:this.angle3d,
+            target:obj.angle3d,
             from: {x:-0.2},
             to: {x:0.2},
             time: 4000,
@@ -59,7 +60,8 @@ export class MainShip extends SimpleGameObjectContainer {
         const circle:Circle = new Circle(this.game);
         circle.radius = 6;
         circle.transformPoint.setXY(circle.radius/2,circle.radius/2);
-        circle.blendMode = BLEND_MODE.ADDITIVE;
+        circle.billBoard = true;
+        //circle.blendMode = BLEND_MODE.ADDITIVE;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticlePrefab(circle);

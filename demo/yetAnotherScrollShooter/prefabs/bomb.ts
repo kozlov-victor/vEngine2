@@ -1,4 +1,3 @@
-import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {AssetsHolder} from "../assets/assetsHolder";
@@ -7,11 +6,11 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Color} from "@engine/renderer/common/color";
-import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
+import {AbstractEntity} from "./common/abstractEntity";
 
-export class Ring extends SimpleGameObjectContainer {
+export class Bomb extends AbstractEntity {
 
     constructor(game:Game,private scene:Scene,private r:AssetsHolder) {
         super(game);
@@ -21,8 +20,8 @@ export class Ring extends SimpleGameObjectContainer {
 
     private createGeometry():void {
         const obj = new ObjParser().parse(this.game,{
-            meshData: this.r.dataRing,
-            materialsData: this.r.dataRingMaterial,
+            meshData: this.r.dataBomb,
+            materialsData: this.r.dataBombMaterial,
         });
         this.addBehaviour(new DraggableBehaviour(this.game));
         this.size.setWH(400);
@@ -40,10 +39,9 @@ export class Ring extends SimpleGameObjectContainer {
     }
 
     private createParticles():void {
-        const circle:Circle = new Circle(this.game);
+        const circle = new Circle(this.game);
         circle.radius = 5;
         circle.transformPoint.setXY(circle.radius/2,circle.radius/2);
-        circle.blendMode = BLEND_MODE.ADDITIVE;
         circle.velocity.y = -120;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);

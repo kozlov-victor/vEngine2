@@ -396,8 +396,10 @@ export abstract class RenderableModel
         cloned.alpha = this.alpha;
         cloned.blendMode = this.blendMode;
         cloned.visible = this.visible;
+        cloned.depthTest = this.depthTest;
         cloned.filters = [...this.filters];
         cloned.forceDrawChildrenOnNewSurface = this.forceDrawChildrenOnNewSurface;
+        cloned.velocity.set(this.velocity);
         cloned.passMouseEventsThrough = this.passMouseEventsThrough;
         if (this.getRigidBody()!==undefined) cloned.setRigidBody(this.getRigidBody()!.clone());
 

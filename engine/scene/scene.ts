@@ -36,7 +36,7 @@ export const enum SCENE_EVENTS {
     INACTIVATED = 'inactivated'
 }
 
-export class Scene implements IRevalidatable, ITweenable,IFilterable,IAlphaBlendable {
+export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IAlphaBlendable {
 
     public static currentRenderingScene:Scene;
 

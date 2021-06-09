@@ -10,8 +10,9 @@ import {Color} from "@engine/renderer/common/color";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
+import {AbstractEntity} from "./common/abstractEntity";
 
-export class Rocket extends SimpleGameObjectContainer {
+export class Rocket extends AbstractEntity {
 
     constructor(game:Game,private scene:Scene,private r:AssetsHolder) {
         super(game);

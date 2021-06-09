@@ -1,12 +1,13 @@
 import {Scene} from "@engine/scene/scene";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
-import {AssetsHolder} from "./assets/assetsHolder";
-import {MainShip} from "./prefabs/mainShip";
-import {Rocket} from "./prefabs/rocket";
-import {Ring} from "./prefabs/ring";
+import {AssetsHolder} from "../assets/assetsHolder";
+import {MainShip} from "../prefabs/mainShip";
+import {Rocket} from "../prefabs/rocket";
+import {Bomb} from "../prefabs/bomb";
+import {Stone} from "../prefabs/stone";
 
 
-export class MainScene extends Scene {
+export class Scene1 extends Scene {
 
     private r = new AssetsHolder(this);
 
@@ -43,8 +44,11 @@ export class MainScene extends Scene {
         const rocket = new Rocket(this.game,this,this.r);
         rocket.pos.setXY(800,100);
 
-        const ring = new Ring(this.game,this,this.r);
-        ring.pos.setXY(200,50);
+        const bomb = new Bomb(this.game,this,this.r);
+        bomb.pos.setXY(200,50);
+
+        const stone = new Stone(this.game,this,this.r);
+        stone.pos.setXY(200,200);
 
     }
 

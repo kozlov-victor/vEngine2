@@ -26,7 +26,7 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
 
     protected readonly _prevSceneImage:ImageWithRenderTarget = this._createImageWithRenderTarget();
     protected readonly _currSceneImage:ImageWithRenderTarget = this._createImageWithRenderTarget();
-    protected readonly _transitionScene:Scene = new Scene(this.game);
+    protected readonly _transitionScene:Scene = new class extends Scene {}(this.game);
 
     private _tween!:Tween<ISceneTransitionValue>;
     private _completed:boolean = false;
