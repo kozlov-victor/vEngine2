@@ -2,9 +2,9 @@ import {Scene} from "@engine/scene/scene";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {AssetsHolder} from "../assets/assetsHolder";
 import {MainShip} from "../prefabs/mainShip";
-import {Rocket} from "../prefabs/rocket";
-import {Bomb} from "../prefabs/bomb";
-import {Stone} from "../prefabs/stone";
+import {Rocket} from "../prefabs/enemies/rocket";
+import {Bomb} from "../prefabs/enemies/bomb";
+import {Stone} from "../prefabs/enemies/stone";
 
 
 export class Scene1 extends Scene {

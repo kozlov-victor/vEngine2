@@ -42,6 +42,24 @@ export class AssetsHolder extends ResourceAutoHolder {
     @Resource.Text(`./${base}/assets/models/engine/engine.mtl`)
     public dataEngineMaterial:string;
 
+    @Resource.Text(`./${base}/assets/models/submarine/submarine.obj`)
+    public dataSubmarine:string;
+
+    @Resource.Text(`./${base}/assets/models/submarine/submarine.mtl`)
+    public dataSubmarineMaterial:string;
+
+    @Resource.Text(`./${base}/assets/models/submarine2/submarine2.obj`)
+    public dataSubmarine2:string;
+
+    @Resource.Text(`./${base}/assets/models/submarine2/submarine2.mtl`)
+    public dataSubmarine2Material:string;
+
+    @Resource.Text(`./${base}/assets/models/spinner/spinner.obj`)
+    public dataSpinner:string;
+
+    @Resource.Text(`./${base}/assets/models/spinner/spinner.mtl`)
+    public dataSpinnerMaterial:string;
+
     // pack 1
 
     @Resource.Texture(`./${base}/assets/images/pack1/bg1.png`)
@@ -57,5 +75,20 @@ export class AssetsHolder extends ResourceAutoHolder {
 
     @Resource.Texture(`./${base}/assets/images/pack2/cloud.png`)
     public cloud:ITexture;
+
+    // pack 3
+
+    @Resource.Texture(`./${base}/assets/images/pack3/bg2.png`)
+    public pack3bg2:ITexture;
+
+
+    // pack 4
+
+    @Resource.Texture(`./${base}/assets/images/pack4/bg1.png`)
+    public pack4bg1:ITexture;
+
+    @Resource.Texture(`./${base}/assets/images/pack4/bg2.png`)
+    public pack4bg2:ITexture;
+
 
 }

@@ -3,11 +3,11 @@ import {Scene} from "@engine/scene/scene";
 import {Image} from "@engine/renderable/impl/general/image";
 import {MainShip} from "../prefabs/mainShip";
 import {MathEx} from "@engine/misc/mathEx";
-import {Rocket} from "../prefabs/rocket";
-import {Bomb} from "../prefabs/bomb";
-import {Stone} from "../prefabs/stone";
-import {Ring} from "../prefabs/ring";
-import {Engine} from "../prefabs/engine";
+import {Rocket} from "../prefabs/enemies/rocket";
+import {Bomb} from "../prefabs/enemies/bomb";
+import {Stone} from "../prefabs/enemies/stone";
+import {Ring} from "../prefabs/enemies/ring";
+import {Engine} from "../prefabs/enemies/engine";
 
 export class Scene2 extends Scene {
 

@@ -1,16 +1,17 @@
+import {AbstractEntity} from "../common/abstractEntity";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
-import {AssetsHolder} from "../assets/assetsHolder";
+import {AssetsHolder} from "../../assets/assetsHolder";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
-import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Color} from "@engine/renderer/common/color";
+import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
-import {AbstractEntity} from "./common/abstractEntity";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
-export class Bomb extends AbstractEntity {
+export class Ring extends AbstractEntity {
 
     constructor(game:Game,private scene:Scene,private r:AssetsHolder) {
         super(game);
@@ -20,18 +21,18 @@ export class Bomb extends AbstractEntity {
 
     private createGeometry():void {
         const obj = new ObjParser().parse(this.game,{
-            meshData: this.r.dataBomb,
-            materialsData: this.r.dataBombMaterial,
+            meshData: this.r.dataRing,
+            materialsData: this.r.dataRingMaterial,
         });
         this.addBehaviour(new DraggableBehaviour(this.game));
         this.size.setWH(400);
         obj.scale.setXYZ(10);
 
         obj.children.forEach(c=>{
-            (c as Model3d).specular = 0.4;
+            (c as Model3d).specular = 0.6;
         });
         obj.setInterval(()=>{
-            obj.angle3d.y+=0.03;
+            obj.angle3d.y+=0.06;
         },1);
 
         this.appendChild(obj);
@@ -39,28 +40,24 @@ export class Bomb extends AbstractEntity {
     }
 
     private createParticles():void {
-        const circle = new Circle(this.game);
-        circle.radius = 5;
-        circle.transformPoint.setXY(circle.radius/2,circle.radius/2);
-        circle.velocity.y = -120;
+        const rectangle = new Rectangle(this.game);
+        rectangle.size.setWH(8,5);
+        rectangle.transformPoint.setToCenter();
+        rectangle.fillColor = Color.fromCssLiteral(`#ff0000`);
+        rectangle.blendMode = BLEND_MODE.SUBSTRACTIVE;
+        rectangle.velocity.y = -100;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
-        ps.addParticlePrefab(circle);
-        ps.emissionRadius = 5;
-        ps.forceDrawChildrenOnNewSurface = true;
-        ps.pos.y = -20;
+        ps.addParticlePrefab(rectangle);
+        ps.emissionRadius = 10;
+        //ps.forceDrawChildrenOnNewSurface = true;
 
         ps.numOfParticlesToEmit = {from:10,to:20};
-        ps.particleLiveTime = {from:10,to:300};
-        const emissionAngle = 15;
+        ps.particleLiveTime = {from:100,to:400};
+        const emissionAngle = 40;
         this.appendChild(ps);
         ps.particleAngle = {from:MathEx.degToRad(-90-emissionAngle),to:MathEx.degToRad(-90+emissionAngle)};
-
-        const col1 = Color.fromCssLiteral(`#ff746e`);
-        const col2 = Color.fromCssLiteral(`#0a0909`);
-        ps.onEmitParticle(p=>{
-            (p as Circle).fillColor = MathEx.randomInt(0,100)>50? col1:col2;
-        });
+        ps.emissionPosition.setXY(0,0);
     }
 
 }
