@@ -23,7 +23,7 @@ export class FrameBuffer implements IRenderTarget {
         this.texture.setImage(undefined,size);
         this._init(_gl,size);
         this.bind();
-        this.clear(Color.RGB(0,0,0,),0);
+        this.clear(Color.RGB(0,0,0,),true,0);
     }
 
     private static _currInstance:Optional<FrameBuffer>;
@@ -65,11 +65,12 @@ export class FrameBuffer implements IRenderTarget {
         FrameBuffer._currInstance = undefined;
     }
 
-    public clear(color:Color,alphaBlendValue:number = 1):void{
+    public clear(color:Color,withDepth:boolean = false,alphaBlendValue:number = 1):void{
         this._checkBound();
         const arr:Float32Array = color.asGL();
         this._gl.clearColor(arr[0],arr[1],arr[2],arr[3] * alphaBlendValue);
-        this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
+        const flag = withDepth?this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT:this._gl.COLOR_BUFFER_BIT;
+        this._gl.clear(flag);
     }
 
     public destroy():void{

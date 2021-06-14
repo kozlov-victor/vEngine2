@@ -8,6 +8,7 @@ import {Bomb} from "../prefabs/enemies/bomb";
 import {Stone} from "../prefabs/enemies/stone";
 import {Ring} from "../prefabs/enemies/ring";
 import {Engine} from "../prefabs/enemies/engine";
+import {Boss1} from "../prefabs/bosses/boss1";
 
 export class Scene2 extends Scene {
 
@@ -43,6 +44,9 @@ export class Scene2 extends Scene {
 
         const engine = new Engine(this.game,this,this.r);
         engine.pos.setXY(400,400);
+
+        const boss1 = new Boss1(this.game,this,this.r);
+        boss1.pos.setXY(400,200);
 
         const clouds:Image[] = [];
         for (let i:number=0;i<30;i++) {

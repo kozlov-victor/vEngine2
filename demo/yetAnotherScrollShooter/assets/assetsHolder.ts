@@ -6,11 +6,15 @@ const base = 'yetAnotherScrollShooter';
 
 export class AssetsHolder extends ResourceAutoHolder {
 
+    // ship
+
     @Resource.Text(`./${base}/assets/models/mainShip/mainShip.obj`)
     public dataMainShip:string;
 
     @Resource.Text(`./${base}/assets/models/mainShip/mainShip.mtl`)
     public dataMainShipMaterial:string;
+
+    // enemies
 
     @Resource.Text(`./${base}/assets/models/rocket/rocket.obj`)
     public dataRocket:string;
@@ -60,6 +64,14 @@ export class AssetsHolder extends ResourceAutoHolder {
     @Resource.Text(`./${base}/assets/models/spinner/spinner.mtl`)
     public dataSpinnerMaterial:string;
 
+    // bosses
+
+    @Resource.Text(`./${base}/assets/models/boss1/boss1.obj`)
+    public dataBoss1:string;
+
+    @Resource.Text(`./${base}/assets/models/boss1/boss1.mtl`)
+    public dataBoss1Material:string;
+
     // pack 1
 
     @Resource.Texture(`./${base}/assets/images/pack1/bg1.png`)
@@ -80,7 +92,6 @@ export class AssetsHolder extends ResourceAutoHolder {
 
     @Resource.Texture(`./${base}/assets/images/pack3/bg2.png`)
     public pack3bg2:ITexture;
-
 
     // pack 4
 

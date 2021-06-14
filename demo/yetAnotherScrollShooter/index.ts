@@ -17,7 +17,7 @@ const scene2 = new Scene2(game);
 const scene3 = new Scene3(game);
 const scene4 = new Scene4(game);
 const scene5 = new Scene5(game);
-game.runScene(scene5);
+game.runScene(scene2);
 
 
 

@@ -94,7 +94,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
             }
             this._stack[this._stackPointer].filters = filters;
             this._stack[this._stackPointer].frameBuffer.bind();
-            this._stack[this._stackPointer].frameBuffer.clear(Color.NONE);
+            this._stack[this._stackPointer].frameBuffer.clear(Color.NONE,false);
             this._stackPointer++;
         } else {
             this._getLast().frameBuffer.bind();
@@ -103,8 +103,10 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     }
 
     public clear(color:Color,alphaBlend?:number):void{
-        this._getLast().frameBuffer.bind();
-        this._getLast().frameBuffer.clear(color,alphaBlend);
+        for (const b of this._stack) {
+            b.frameBuffer.bind();
+            b.frameBuffer.clear(color,true,alphaBlend);
+        }
     }
 
     public setInterpolationMode(interpolation:INTERPOLATION_MODE):void{
