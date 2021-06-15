@@ -10,6 +10,7 @@ import {Ring} from "../prefabs/enemies/ring";
 import {Engine} from "../prefabs/enemies/engine";
 import {Boss1} from "../prefabs/bosses/boss1";
 import {Boss2} from "../prefabs/bosses/boss2";
+import {Boss3} from "../prefabs/bosses/boss3";
 
 export class Scene2 extends Scene {
 
@@ -51,6 +52,9 @@ export class Scene2 extends Scene {
 
         const boss2 = new Boss2(this.game,this,this.r);
         boss2.pos.setXY(400,400);
+
+        const boss3 = new Boss3(this.game,this,this.r);
+        boss3.pos.setXY(200,500);
 
         const clouds:Image[] = [];
         for (let i:number=0;i<30;i++) {

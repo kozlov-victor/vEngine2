@@ -64,6 +64,12 @@ export class AssetsHolder extends ResourceAutoHolder {
     @Resource.Text(`./${base}/assets/models/spinner/spinner.mtl`)
     public dataSpinnerMaterial:string;
 
+    @Resource.Text(`./${base}/assets/models/heart/heart.obj`)
+    public dataHeart:string;
+
+    @Resource.Text(`./${base}/assets/models/heart/heart.mtl`)
+    public dataHeartMaterial:string;
+
     // bosses
 
     @Resource.Text(`./${base}/assets/models/boss1/boss1.obj`)
@@ -77,6 +83,18 @@ export class AssetsHolder extends ResourceAutoHolder {
 
     @Resource.Text(`./${base}/assets/models/boss2/boss2.mtl`)
     public dataBoss2Material:string;
+
+    @Resource.Text(`./${base}/assets/models/boss3/boss3.obj`)
+    public dataBoss3:string;
+
+    @Resource.Text(`./${base}/assets/models/boss3/boss3.mtl`)
+    public dataBoss3Material:string;
+
+    @Resource.Text(`./${base}/assets/models/boss4/boss4.obj`)
+    public dataBoss4:string;
+
+    @Resource.Text(`./${base}/assets/models/boss4/boss4.mtl`)
+    public dataBoss4Material:string;
 
     // pack 1
 
