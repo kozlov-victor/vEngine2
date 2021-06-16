@@ -96,6 +96,12 @@ export class AssetsHolder extends ResourceAutoHolder {
     @Resource.Text(`./${base}/assets/models/boss4/boss4.mtl`)
     public dataBoss4Material:string;
 
+    @Resource.Text(`./${base}/assets/models/boss5/boss5.obj`)
+    public dataBoss5:string;
+
+    @Resource.Text(`./${base}/assets/models/boss5/boss5.mtl`)
+    public dataBoss5Material:string;
+
     // pack 1
 
     @Resource.Texture(`./${base}/assets/images/pack1/bg1.png`)
