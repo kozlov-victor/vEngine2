@@ -27,10 +27,9 @@ export class MainScene extends Scene {
 
 
     public override onReady():void {
-        const obj:Model3d = new Model3d(this.game);
+        const obj:Model3d = new Model3d(this.game,new Teapot());
         this.logoObj = obj;
         obj.fillColor.setRGB(233,23,12);
-        obj.modelPrimitive = new Teapot();
         obj.texture = this.logoLink;
         obj.pos.setXY(400,200);
         obj.size.setWH(100,100);

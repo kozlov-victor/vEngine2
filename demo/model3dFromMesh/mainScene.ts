@@ -48,10 +48,9 @@ export class MainScene extends Scene {
     }
 
     public override onReady():void {
-        const obj:Model3d = new Model3d(this.game);
+        const obj:Model3d = new Model3d(this.game,new ScullMesh(this.dataLink));
         this.logoObj = obj;
         obj.fillColor.setRGB(244,255,244);
-        obj.modelPrimitive = new ScullMesh(this.dataLink);
         obj.pos.setXY(300,450);
         obj.size.setWH(500,500);
         obj.scale.setXYZ(60);

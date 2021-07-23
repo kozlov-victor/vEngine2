@@ -1,6 +1,6 @@
 import {Game} from "@engine/core/game";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
-import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
+import {AbstractPrimitive, IPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {EarClippingTriangulator} from "@engine/renderable/impl/geometry/_internal/earClippingTriangulator";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
@@ -15,13 +15,14 @@ class PolygonPrimitive extends AbstractPrimitive {
     constructor(){
         super();
         this.vertexArr = [];
+        this.vertexItemSize = 2;
     }
 }
 
 export class Polygon extends Mesh2d {
 
-    private constructor(game:Game){
-        super(game);
+    private constructor(game:Game,modelPrimitive:IPrimitive){
+        super(game,modelPrimitive);
     }
 
     public override readonly type:string = 'Polygon';
@@ -70,8 +71,9 @@ export class Polygon extends Mesh2d {
         for (const ind of triangulatedIndices) {
             triangulatedVertices.push(vertices[2*ind],vertices[2*ind+1]);
         }
-        const pg:Polygon = new Polygon(game);
-        pg.setVertices(triangulatedVertices);
+        const modelPrimitive = new PolygonPrimitive();
+        modelPrimitive.vertexArr = triangulatedVertices;
+        const pg:Polygon = new Polygon(game,modelPrimitive);
         pg.size.set(p.size);
         pg._edgeVertices = vertices;
         return pg;
@@ -104,26 +106,25 @@ export class Polygon extends Mesh2d {
     public extrudeToMesh(depth:number):Mesh3d{
         const isClockWise:boolean = this.isClockWise();
         const primitive = new class extends AbstractPrimitive {
-
-            public override normalArr:number[] = [];
-
             constructor() {
                 super();
-                this.vertexArr = [];
-                this.normalArr = [];
             }
         }();
+        primitive.normalArr = [];
+        primitive.vertexArr = [];
+        primitive.vertexItemSize = 3;
+
         const d2:number = depth/2;
 
-        for (let i:number = 0; i < this.modelPrimitive.vertexArr.length; i+=6) {
-            const vertexA1:number = this.modelPrimitive.vertexArr[i];
-            const vertexA2:number = this.modelPrimitive.vertexArr[i+1];
+        for (let i:number = 0; i < this._modelPrimitive.vertexArr.length; i+=6) {
+            const vertexA1:number = this._modelPrimitive.vertexArr[i];
+            const vertexA2:number = this._modelPrimitive.vertexArr[i+1];
 
-            const vertexB1:number = this.modelPrimitive.vertexArr[i+2];
-            const vertexB2:number = this.modelPrimitive.vertexArr[i+3];
+            const vertexB1:number = this._modelPrimitive.vertexArr[i+2];
+            const vertexB2:number = this._modelPrimitive.vertexArr[i+3];
 
-            const vertexC1:number = this.modelPrimitive.vertexArr[i+4];
-            const vertexC2:number = this.modelPrimitive.vertexArr[i+5];
+            const vertexC1:number = this._modelPrimitive.vertexArr[i+4];
+            const vertexC2:number = this._modelPrimitive.vertexArr[i+5];
 
             // side a
             primitive.vertexArr.push(
@@ -186,26 +187,18 @@ export class Polygon extends Mesh2d {
                 normal.x,normal.y,normal.z,
                 normal.x,normal.y,normal.z,
             );
-
         }
 
         const game:Game = this.game;
         const m:Mesh3d = new class extends Mesh3d {
             constructor() {
-                super(game);
+                super(game,primitive);
                 this.invertY = true;
-                this.modelPrimitive = primitive;
-                this.vertexItemSize = 3;
             }
         }();
-        this.setClonedProperties(m);
         m.depthTest = true;
+        m.fillColor = this.fillColor.clone();
         return m;
-    }
-
-    private setVertices(vertices:number[]):void {
-        this.modelPrimitive = new PolygonPrimitive();
-        this.modelPrimitive.vertexArr = vertices;
     }
 
 }

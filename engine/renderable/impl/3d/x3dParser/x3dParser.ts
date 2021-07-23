@@ -440,10 +440,9 @@ export class X3dParser {
     }
 
     private createMeshModel(params:IModelParams):RenderableModel {
-        const model3d:Model3d = new Model3d(this.game);
         const pr:ObjPrimitive = new ObjPrimitive();
         pr.vertexColorArr = [];
-        model3d.modelPrimitive = pr;
+        const model3d:Model3d = new Model3d(this.game,pr);
         if (params.diffuseColor!==undefined) {
             model3d.fillColor = new Color(
                 ~~(params.diffuseColor[0]*255) as byte,

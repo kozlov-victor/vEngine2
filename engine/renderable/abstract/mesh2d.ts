@@ -4,30 +4,29 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {DebugError} from "@engine/debug/debugError";
+import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
 
 export abstract class Mesh2d extends RenderableModel {
 
-    public modelPrimitive:IPrimitive;
     public fillColor:Color = Color.BLACK.clone();
-    public bufferInfo:BufferInfo;
-    public vertexItemSize:2|3 = 2;
 
-    protected constructor(game:Game) {
+    public _modelPrimitive:IPrimitive;
+    public _bufferInfo:BufferInfo;
+
+    protected constructor(game:Game,modelPrimitive:IPrimitive,bufferInfo?:BufferInfo) {
         super(game);
-    }
-
-    public override revalidate(): void {
-        super.revalidate();
         if (DEBUG) {
-            if (!this.modelPrimitive) throw new DebugError(`model primitive is not set`);
-            if (this.modelPrimitive.vertexArr.length%this.vertexItemSize!==0) {
+            if (!modelPrimitive) throw new DebugError(`model primitive is not set`);
+            if (modelPrimitive.vertexArr.length%modelPrimitive.vertexItemSize!==0) {
                 console.error(this);
                 throw new DebugError(
-                    `Wrong vertexArr size, actual size is ${this.modelPrimitive.vertexArr.length},
-                    but number must be a multiple of ${this.vertexItemSize} `
+                    `Wrong vertexArr size, actual size is ${modelPrimitive.vertexArr.length},
+                    but number must be a multiple of ${modelPrimitive.vertexItemSize} `
                 );
             }
         }
+        this._modelPrimitive = modelPrimitive;
+        this._bufferInfo = bufferInfo ?? this.game.getRenderer<WebGlRenderer>().initBufferInfo(this);
     }
 
     public draw():void{
@@ -37,7 +36,8 @@ export abstract class Mesh2d extends RenderableModel {
     protected override setClonedProperties(cloned: Mesh2d): void {
         cloned.fillColor = this.fillColor.clone();
         cloned.depthTest = this.depthTest;
-        cloned.bufferInfo =this.bufferInfo;
+        cloned._bufferInfo = this._bufferInfo;
+        cloned._modelPrimitive = this._modelPrimitive;
         super.setClonedProperties(cloned);
     }
 

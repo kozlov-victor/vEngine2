@@ -9,14 +9,11 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
-        const obj:Model3d = new Model3d(this.game);
+        const primitive = new Sphere(120, 50);
+        primitive.drawMethod = DRAW_METHOD.LINES;
+        const obj:Model3d = new Model3d(this.game,primitive);
         obj.fillColor.setRGB(222,22,12);
         obj.colorMix = 0.5;
-        obj.modelPrimitive = new Sphere(
-            120,
-            50,
-        );
-        obj.modelPrimitive.drawMethod = DRAW_METHOD.LINES;
 
         obj.pos.setXY(150,150);
         obj.size.setWH(100,100);

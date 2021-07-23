@@ -45,18 +45,15 @@ export class MeshDrawer extends AbstractDrawer {
     }
 
     public bindMesh3d(mesh:Mesh3d):void{
-        this.mesh = mesh;
-        if (!this.mesh.bufferInfo) this._initBufferInfo(mesh.modelPrimitive.drawMethod,mesh.vertexItemSize);
         if (mesh.isLightAccepted()===undefined) {
-            mesh.acceptLight(!!this.mesh.bufferInfo.normalBuffer);
+            mesh.acceptLight(!!mesh._bufferInfo.normalBuffer);
         }
-        this.bufferInfo = this.mesh.bufferInfo;
+        this.bindMesh2d(mesh);
     }
 
     public bindMesh2d(mesh:Mesh2d):void{
         this.mesh = mesh;
-        if (!this.mesh.bufferInfo) this._initBufferInfo(mesh.modelPrimitive.drawMethod,mesh.vertexItemSize);
-        this.bufferInfo = this.mesh.bufferInfo;
+        this.bufferInfo = this.mesh._bufferInfo;
     }
 
     public setModelMatrix(m:Readonly<MAT16>):void{
@@ -123,61 +120,61 @@ export class MeshDrawer extends AbstractDrawer {
         if (DEBUG && this.mesh===undefined) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
         super.bind();
         this.bufferInfo.bind(this.program);
-        if (!this.mesh.modelPrimitive.texCoordArr) {
+        if (!this.mesh._modelPrimitive.texCoordArr) {
             this.program.disableAttribute(this.a_texCoord);
         } else {
             this.program.enableAttribute(this.a_texCoord);
         }
-        if (!this.mesh.modelPrimitive.normalArr) {
+        if (!this.mesh._modelPrimitive.normalArr) {
             this.program.disableAttribute(this.a_normal);
         } else {
             this.program.enableAttribute(this.a_normal);
         }
-        if (!this.mesh.modelPrimitive.vertexColorArr) {
+        if (!this.mesh._modelPrimitive.vertexColorArr) {
             this.program.disableAttribute(this.a_vertexColor);
         } else {
             this.program.enableAttribute(this.a_vertexColor);
         }
     }
 
-    private _initBufferInfo(drawMethod:number= DRAW_METHOD.TRIANGLES,vertexSize:2|3=3):void{
-        const bufferInfo:IBufferInfoDescription = {
+    public initBufferInfo(mesh2d:Mesh2d):BufferInfo{
+        const bufferInfoDesc:IBufferInfoDescription = {
             posVertexInfo:{
-                array:new Float32Array(this.mesh.modelPrimitive.vertexArr), type:this.gl.FLOAT,
-                size:vertexSize, attrName:this.a_position
+                array:new Float32Array(mesh2d._modelPrimitive.vertexArr), type:this.gl.FLOAT,
+                size:mesh2d._modelPrimitive.vertexItemSize, attrName:this.a_position
             },
-            drawMethod
+            drawMethod:mesh2d._modelPrimitive.drawMethod ?? DRAW_METHOD.TRIANGLES
         };
-        if (this.mesh.modelPrimitive.indexArr) {
-            bufferInfo.posIndexInfo = {
-                array: this.mesh.modelPrimitive.indexArr
+        if (mesh2d._modelPrimitive.indexArr) {
+            bufferInfoDesc.posIndexInfo = {
+                array: mesh2d._modelPrimitive.indexArr
             };
         }
-        if (this.mesh.modelPrimitive.normalArr) {
-            bufferInfo.normalInfo = {
-                array: new Float32Array(this.mesh.modelPrimitive.normalArr),
+        if (mesh2d._modelPrimitive.normalArr) {
+            bufferInfoDesc.normalInfo = {
+                array: new Float32Array(mesh2d._modelPrimitive.normalArr),
                 type:this.gl.FLOAT,
                 size:3,
                 attrName:this.a_normal
             };
         }
-        if (this.mesh.modelPrimitive.texCoordArr) {
-            bufferInfo.texVertexInfo = {
-                array: new Float32Array(this.mesh.modelPrimitive.texCoordArr),
+        if (mesh2d._modelPrimitive.texCoordArr) {
+            bufferInfoDesc.texVertexInfo = {
+                array: new Float32Array(mesh2d._modelPrimitive.texCoordArr),
                 type:this.gl.FLOAT,
                 size:2,
                 attrName:this.a_texCoord
             };
         }
-        if (this.mesh.modelPrimitive.vertexColorArr) {
-            bufferInfo.colorVertexInfo = {
-                array: new Float32Array(this.mesh.modelPrimitive.vertexColorArr),
+        if (mesh2d._modelPrimitive.vertexColorArr) {
+            bufferInfoDesc.colorVertexInfo = {
+                array: new Float32Array(mesh2d._modelPrimitive.vertexColorArr),
                 type:this.gl.FLOAT,
                 size:4,
                 attrName:this.a_vertexColor
             };
         }
-        this.mesh.bufferInfo = new BufferInfo(this.gl,bufferInfo);
+        return new BufferInfo(this.gl,bufferInfoDesc);
     }
 
 

@@ -24,9 +24,8 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
-        const obj:Model3d = new Model3d(this.game);
+        const obj:Model3d = new Model3d(this.game,new Cube(150));
         obj.fillColor.setRGB(12,22,122);
-        obj.modelPrimitive = new Cube(150);
         obj.texture = this.baseTexture;
         obj.colorMix = 0.4;
         obj.cubeMapTexture = this.cubeTexture;

@@ -103,7 +103,5 @@ export class MainShip extends AbstractEntity {
         ps.emissionPosition.setXY(-55,0);
     }
 
-    private
-
 
 }

@@ -30,6 +30,7 @@ import {SimpleColoredRectDrawer} from "@engine/renderer/webGl/programs/impl/base
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {Mat4Special} from "@engine/geometry/mat4Special";
 import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
+import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
 import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import MAT16 = Mat4.MAT16;
@@ -148,6 +149,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.onResize();
     }
 
+    public initBufferInfo(mesh2d:Mesh2d):BufferInfo {
+        return this._meshDrawerHolder.getInstance(this._gl).initBufferInfo(mesh2d);
+    }
+
 
     public drawImage(img:Image):void{
 
@@ -217,12 +222,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setAlfa(this.getAlphaBlend());
 
         const isTextureUsed:boolean = mesh.texture!==undefined;
-        if (DEBUG && isTextureUsed && mesh.modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
+        if (DEBUG && isTextureUsed && mesh._modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
         md.setTextureUsed(isTextureUsed);
         if (isTextureUsed) md.setTextureMatrix(FLIP_TEXTURE_MATRIX.mat16);
         md.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this._nullTexture);
 
-        const isVertexColorUsed:boolean = mesh.modelPrimitive.vertexColorArr!==undefined;
+        const isVertexColorUsed:boolean = mesh._modelPrimitive.vertexColorArr!==undefined;
         md.setVertexColorUsed(isVertexColorUsed);
 
         const isNormalsTextureUsed:boolean = mesh.normalsTexture!==undefined;
@@ -236,7 +241,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.attachTexture('u_cubeMapTexture',isCubeMapTextureUsed?mesh.cubeMapTexture as CubeMapTexture:this._nullCubeMapTexture);
 
         if (DEBUG && mesh.isLightAccepted()) {
-            if (!mesh.bufferInfo.normalBuffer) {
+            if (!mesh._bufferInfo.normalBuffer) {
+                console.error(mesh);
                 throw new DebugError(`can not accept light: normals are not specified`);
             }
         }

@@ -73,7 +73,7 @@ export class BufferInfo {
         this.gl = gl;
 
         if (DEBUG && description.drawMethod===undefined)
-            throw new DebugError(`can not create BufferInfo: drawMethod not defined`);
+            throw new DebugError(`can not create BufferInfo: drawMethod is not defined`);
         this.drawMethod = drawMethodToGlEnum(gl,description.drawMethod);
 
         if (DEBUG && !description.posVertexInfo)

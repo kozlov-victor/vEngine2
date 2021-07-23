@@ -8,6 +8,7 @@ export interface IPrimitive {
     texCoordArr: Optional<number[]>;
     indexArr: Optional<number[]>;
     drawMethod:DRAW_METHOD;
+    vertexItemSize:2|3;
 }
 
 export abstract class AbstractPrimitive implements IPrimitive {
@@ -18,6 +19,7 @@ export abstract class AbstractPrimitive implements IPrimitive {
     public indexArr:Optional<number[]>;
     public vertexColorArr:Optional<number[]>;
     public drawMethod:DRAW_METHOD;
+    public vertexItemSize:2|3 = 3;
 
     protected constructor(){
     }

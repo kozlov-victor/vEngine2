@@ -23,11 +23,10 @@ export class MainScene extends Scene {
     private logoNormalsLink:ITexture;
 
     public override onReady():void {
-        const obj:Model3d = new Model3d(this.game);
+        const obj:Model3d = new Model3d(this.game,new Cylinder(50,100));
         this.logoObj = obj;
         obj.fillColor.setRGB(12,222,12);
         obj.colorMix = 0.6;
-        obj.modelPrimitive = new Cylinder(50,100);
         obj.texture = this.logoLink;
         obj.pos.setXY(200,100);
         obj.size.setWH(100,100);
@@ -39,9 +38,8 @@ export class MainScene extends Scene {
         },20);
 
 
-        const obj2:Model3d = new Model3d(this.game);
+        const obj2:Model3d = new Model3d(this.game,new Cube(50));
         obj2.fillColor.setRGB(12,22,122);
-        obj2.modelPrimitive = new Cube(50);
         // obj.modelPrimitive = new Sphere(100,3);
         // obj.modelPrimitive = new Cylinder();
         obj2.texture = this.logo2Link;
@@ -54,15 +52,9 @@ export class MainScene extends Scene {
             obj2.angle3d.y+=0.01;
         },20);
 
-
-        const obj3:Model3d = new Model3d(this.game);
+        const obj3:Model3d = new Model3d(this.game,new Cone(60, 20, 50));
         obj3.fillColor.setRGB(222,22,12);
         obj.colorMix = 0.5;
-        obj3.modelPrimitive = new Cone(
-            60,
-            20,
-            50
-        );
         obj3.texture = this.logo2Link;
         obj3.pos.setXY(150,150);
         obj3.size.setWH(100,100);
@@ -74,12 +66,9 @@ export class MainScene extends Scene {
 
 
 
-        const obj4:Model3d = new Model3d(this.game);
+        const obj4:Model3d = new Model3d(this.game,new Sphere(60));
         obj4.fillColor.setRGB(3,22,233);
         obj4.colorMix = 0.8;
-        obj4.modelPrimitive = new Sphere(
-            60
-        );
         obj4.texture = this.logoLink;
         obj4.normalsTexture = this.logoNormalsLink;
         obj4.pos.setXY(150,150);

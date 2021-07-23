@@ -22,10 +22,7 @@ export class MainScene extends Scene {
 
         const renderTarget:IRenderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,new Size(320,240));
 
-        const obj:Model3d = new Model3d(this.game);
-        obj.modelPrimitive = new Sphere(
-            120
-        );
+        const obj:Model3d = new Model3d(this.game,new Sphere(120));
         obj.pos.setXY(140,140);
         obj.size.setWH(100,100);
         obj.texture = renderTarget.getTexture();

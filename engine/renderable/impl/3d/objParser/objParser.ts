@@ -21,14 +21,8 @@ export class ObjParser {
     private static objToPrimitive(game:Game, vertexLib:t_vertexLib, objs:t_obj[],params:IObjParams):SimpleGameObjectContainer{
         const container = new SimpleGameObjectContainer(game);
         for (const obj of objs) {
-            const model3d:Model3d = new Model3d(game);
             const pr:ObjPrimitive = new ObjPrimitive();
             pr.vertexColorArr = [];
-            model3d.modelPrimitive = pr;
-            model3d.fillColor.set(obj.material.ambientColor);
-            model3d.id = obj.name;
-            model3d.cubeMapTexture = params.cubeMapTexture;
-            container.appendChild(model3d);
             container.size.setWH(10);
             let cnt:number = 0;
             for (const f of obj.f_arr) {
@@ -93,10 +87,16 @@ export class ObjParser {
             if (!pr.normalArr!.length) pr.normalArr = undefined;
             if (!pr.vertexColorArr!.length) pr.vertexColorArr = undefined;
 
-            if (model3d.modelPrimitive.texCoordArr!==undefined) {
+            const model3d:Model3d = new Model3d(game,pr);
+            model3d.fillColor.set(obj.material.ambientColor);
+            model3d.id = obj.name;
+            model3d.cubeMapTexture = params.cubeMapTexture;
+            container.appendChild(model3d);
+
+            if (pr.texCoordArr!==undefined) {
                 model3d.texture = params.texture;
             }
-            if (model3d.modelPrimitive.normalArr!==undefined) {
+            if (pr.normalArr!==undefined) {
                 model3d.normalsTexture = params.normalsTexture;
             }
 

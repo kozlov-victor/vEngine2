@@ -8,10 +8,9 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
-        const obj:Model3d = new Model3d(this.game);
+        const obj:Model3d = new Model3d(this.game,new Torus(12,50, 3 as Int,8 as Int));
         obj.fillColor.setRGB(222,22,12);
         obj.colorMix = 0.5;
-        obj.modelPrimitive = new Torus(12,50, 3 as Int,8 as Int);
         obj.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         obj.size.setWH(100,100);
         this.appendChild(obj);

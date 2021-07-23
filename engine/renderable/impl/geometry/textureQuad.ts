@@ -4,15 +4,15 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {Point2d} from "@engine/geometry/point2d";
-import {MeshDrawer} from "@engine/renderer/webGl/programs/impl/base/mesh/meshDrawer";
 import {Optional} from "@engine/core/declarations";
 
 class QuadPrimitive extends AbstractPrimitive {
-    constructor() {
+    constructor(topLeft:Point2d,bottomLeft:Point2d,topRight:Point2d,bottomRight:Point2d) {
         super();
+        this.init(topLeft,bottomLeft,topRight,bottomRight);
     }
 
-    public init(topLeft:Point2d,bottomLeft:Point2d,topRight:Point2d,bottomRight:Point2d):void {
+    private init(topLeft:Point2d,bottomLeft:Point2d,topRight:Point2d,bottomRight:Point2d):void {
         this.vertexArr = [
             topLeft.x,topLeft.y,0,
             bottomLeft.x,bottomLeft.y,0,
@@ -32,23 +32,19 @@ class QuadPrimitive extends AbstractPrimitive {
 
 class QuadMesh extends Mesh3d {
 
-    public declare modelPrimitive: QuadPrimitive;
+    public declare _modelPrimitive: QuadPrimitive;
 
     private _vertexBufferDataToUpdate:Optional<Float32Array>;
 
 
-    constructor(game:Game) {
-        super(game);
-        this.modelPrimitive = new QuadPrimitive();
+    constructor(game:Game,topLeft:Point2d,bottomLeft:Point2d,topRight:Point2d,bottomRight:Point2d) {
+        super(game,new QuadPrimitive(topLeft,bottomLeft,topRight,bottomRight));
     }
 
-    public init(topLeft:Point2d,bottomLeft:Point2d,topRight:Point2d,bottomRight:Point2d):void {
-        this.modelPrimitive.init(topLeft,bottomLeft,topRight,bottomRight);
-    }
 
     public override onUpdatingBuffers():void {
         if (this._vertexBufferDataToUpdate===undefined) return;
-        this.bufferInfo.posVertexBuffer!.updateDada(this._vertexBufferDataToUpdate);
+        this._bufferInfo.posVertexBuffer!.updateDada(this._vertexBufferDataToUpdate);
         this._vertexBufferDataToUpdate = undefined;
     }
 
@@ -71,13 +67,12 @@ export class TextureQuad extends RenderableModel {
 
     constructor(game:Game,texture:ITexture) {
         super(game);
-        this.mesh = new QuadMesh(game);
-        this.size.set(texture.size);
         this.topLeft.setXY(0,0);
         this.bottomLeft.setXY(0,texture.size.height);
         this.topRight.setXY(texture.size.width,0);
         this.bottomRight.setXY(texture.size.width,texture.size.height);
-        this.mesh.init(this.topLeft,this.bottomLeft,this.topRight,this.bottomRight);
+        this.mesh = new QuadMesh(game,this.topLeft,this.bottomLeft,this.topRight,this.bottomRight);
+        this.size.set(texture.size);
         this.mesh.texture = texture;
         this.mesh.invertY = true;
 
