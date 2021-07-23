@@ -9,6 +9,7 @@ import {Heart} from "../prefabs/bonuses/heart";
 import {Boss3} from "../prefabs/bosses/boss3";
 import {Boss4} from "../prefabs/bosses/boss4";
 import {Boss5} from "../prefabs/bosses/boss5";
+import {Plus} from "../prefabs/bonuses/plus";
 
 
 export class Scene1 extends Scene {
@@ -56,6 +57,9 @@ export class Scene1 extends Scene {
 
         const heart = new Heart(this.game,this,this.r);
         heart.pos.setXY(300,400);
+
+        const plus = new Plus(this.game,this,this.r);
+        plus.pos.setXY(300,420);
 
         const boss5 = new Boss5(this.game,this,this.r);
         boss5.pos.setXY(200,500);

@@ -7,8 +7,8 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 
 export class Spinner extends AbstractEntity {
-    constructor(game:Game,private scene:Scene,private r:AssetsHolder) {
-        super(game);
+    constructor(game:Game, scene:Scene,private r:AssetsHolder) {
+        super(game,scene);
         this.createGeometry();
     }
 

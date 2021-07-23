@@ -15,8 +15,8 @@ import {AbstractEntity} from "./common/abstractEntity";
 
 export class MainShip extends AbstractEntity {
 
-    constructor(game:Game,private scene:Scene,private r:AssetsHolder) {
-        super(game);
+    constructor(game:Game,scene:Scene,private r:AssetsHolder) {
+        super(game,scene);
         this.createGeometry();
         this.createParticles();
         this.burn();
@@ -102,6 +102,8 @@ export class MainShip extends AbstractEntity {
         ps.particleAngle = {from:MathEx.degToRad(180-emissionAngle),to:MathEx.degToRad(180+emissionAngle)};
         ps.emissionPosition.setXY(-55,0);
     }
+
+    private
 
 
 }

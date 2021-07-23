@@ -9,8 +9,8 @@ import {Tween} from "@engine/animation/tween";
 import {EasingElastic} from "@engine/misc/easing/functions/elastic";
 
 export class Engine extends AbstractEntity {
-    constructor(game:Game,private scene:Scene,private r:AssetsHolder) {
-        super(game);
+    constructor(game:Game, scene:Scene,private r:AssetsHolder) {
+        super(game,scene);
         this.createGeometry();
     }
 

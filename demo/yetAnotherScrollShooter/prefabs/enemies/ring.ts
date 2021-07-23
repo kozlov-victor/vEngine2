@@ -13,8 +13,8 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 export class Ring extends AbstractEntity {
 
-    constructor(game:Game,private scene:Scene,private r:AssetsHolder) {
-        super(game);
+    constructor(game:Game, scene:Scene,private r:AssetsHolder) {
+        super(game,scene);
         this.createParticles();
         this.createGeometry();
     }
