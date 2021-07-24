@@ -53,7 +53,7 @@ export abstract class SpiralCellsAppearingDisappearingTransition extends Abstrac
     }
 }
 
-export class  SpiralCellsAppearingTransition extends SpiralCellsAppearingDisappearingTransition {
+export class SpiralCellsAppearingTransition extends SpiralCellsAppearingDisappearingTransition {
 
     public getOppositeTransition(): ISceneTransition {
         return new SpiralCellsDisappearingTransition(this.game,this.time,this.numOfCellsX,this.numOfCellsY,this.easeFn);
@@ -68,7 +68,7 @@ export class  SpiralCellsAppearingTransition extends SpiralCellsAppearingDisappe
     }
 }
 
-export class  SpiralCellsDisappearingTransition extends SpiralCellsAppearingDisappearingTransition {
+export class SpiralCellsDisappearingTransition extends SpiralCellsAppearingDisappearingTransition {
 
     public getOppositeTransition(): ISceneTransition {
         return new SpiralCellsAppearingTransition(this.game,this.time,this.numOfCellsX,this.numOfCellsY,this.easeFn);

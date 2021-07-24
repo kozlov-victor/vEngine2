@@ -51,6 +51,7 @@ export class SecondScene extends Scene {
         tf.setFont(this.fnt);
         tf.alpha = 0.5;
         tf.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
+            console.log('click');
             this.game.popScene();
         });
         this.appendChild(tf);
@@ -69,6 +70,7 @@ export class SecondScene extends Scene {
         rect.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(rect);
         rect.transformPoint.setXY(60,30);
+        rect.addBehaviour(new DraggableBehaviour(this.game));
 
     }
 

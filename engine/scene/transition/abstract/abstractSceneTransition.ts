@@ -82,6 +82,8 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
         if (this._completed) return;
         this._completed = true;
         this._tween.complete();
+        this._currScene._renderingSessionInfo.drawingStackEnabled = true;
+        this._currScene._renderingSessionInfo.drawingEnabled = true;
     }
 
     public abstract getOppositeTransition():ISceneTransition;
