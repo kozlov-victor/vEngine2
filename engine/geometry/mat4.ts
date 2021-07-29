@@ -170,90 +170,67 @@ export namespace Mat4 {
 
 
     export const makeTranslation = (out:Mat16Holder,tx:n, ty:n, tz:n):void => {
-
-        // 1,  0,  0,  0,
-        // 0,  1,  0,  0,
-        // 0,  0,  1,  0,
-        // tx, ty, tz,  1
-
-        out.fromMat16(identityArray);
-        (out.mat16 as MAT16)[12] = tx;
-        (out.mat16 as MAT16)[13] = ty;
-        (out.mat16 as MAT16)[14] = tz;
-
+        out.set(
+            1,  0,  0,  0,
+            0,  1,  0,  0,
+            0,  0,  1,  0,
+            tx, ty, tz,  1
+        );
     };
 
 
     export const makeXSkew = (out:Mat16Holder,angle:n):void => {
-
         const t:n = Math.tan(angle);
-
-        // 1,  0,  0,  0,
-        // t,  1,  0,  0,
-        // 0,  0,  1,  0,
-        // 0,  0,  0,  1
-        out.fromMat16(identityArray);
-        (out.mat16 as MAT16)[4] = t;
+        out.set(
+            1,  0,  0,  0,
+            t,  1,  0,  0,
+            0,  0,  1,  0,
+            0,  0,  0,  1
+        );
     };
 
     export const makeYSkew = (out:Mat16Holder,angle:n):void => {
-
         const t:n = Math.tan(angle);
-
-        // 1,  t,  0,  0,
-        // 0,  1,  0,  0,
-        // 0,  0,  1,  0,
-        // 0,  0,  0,  1
-
-        out.fromMat16(identityArray);
-        (out.mat16 as MAT16)[1] = t;
+        out.set(
+            1,  t,  0,  0,
+            0,  1,  0,  0,
+            0,  0,  1,  0,
+            0,  0,  0,  1
+        );
     };
 
     export const makeXRotation = (out:Mat16Holder,angleInRadians:n):void=> {
         const c:n = Math.cos(angleInRadians);
         const s:n = Math.sin(angleInRadians);
 
-        // 1, 0, 0, 0,
-        // 0, c, s, 0,
-        // 0, -s, c, 0,
-        // 0, 0, 0, 1
-        out.fromMat16(identityArray);
-        (out.mat16 as MAT16)[5] = c;
-        (out.mat16 as MAT16)[6] = s;
-        (out.mat16 as MAT16)[9] = -s;
-        (out.mat16 as MAT16)[10] = c;
+        out.set(
+            1, 0, 0, 0,
+            0, c, s, 0,
+            0, -s, c, 0,
+            0, 0, 0, 1
+        );
     };
 
     export const makeYRotation = (out:Mat16Holder,angleInRadians:n):void=> {
         const c:n = Math.cos(angleInRadians);
         const s:n = Math.sin(angleInRadians);
-
-        // c, 0, -s, 0,
-        // 0, 1, 0, 0,
-        // s, 0, c, 0,
-        // 0, 0, 0, 1
-
-        out.fromMat16(identityArray);
-        (out.mat16 as MAT16)[0]  =  c;
-        (out.mat16 as MAT16)[2]  = -s;
-        (out.mat16 as MAT16)[8]  =  s;
-        (out.mat16 as MAT16)[10] =  c;
+        out.set(
+            c, 0, -s, 0,
+            0, 1, 0, 0,
+            s, 0, c, 0,
+            0, 0, 0, 1
+        );
     };
 
     export const makeZRotation = (out:Mat16Holder,angleInRadians:n):void=> {
         const c:n = Math.cos(angleInRadians);
         const s:n = Math.sin(angleInRadians);
-
-        // c, s, 0, 0,
-        // -s, c, 0, 0,
-        // 0, 0, 1, 0,
-        // 0, 0, 0, 1
-
-        out.fromMat16(identityArray);
-        (out.mat16 as MAT16)[0] = c;
-        (out.mat16 as MAT16)[1] = s;
-        (out.mat16 as MAT16)[4] = -s;
-        (out.mat16 as MAT16)[5] = c;
+        out.set(
+            c, s, 0, 0,
+            -s, c, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        );
     };
 
     export const makeRotationReset = (out:Mat16Holder):void=>{
@@ -275,16 +252,12 @@ export namespace Mat4 {
     };
 
     export const makeScale = (out:Mat16Holder,sx:n, sy:n, sz:n):void=> {
-
-        // sx, 0,  0,  0,
-        // 0, sy,  0,  0,
-        // 0,  0, sz,  0,
-        // 0,  0,  0,  1
-
-        out.fromMat16(identityArray);
-        (out.mat16 as MAT16)[0] = sx;
-        (out.mat16 as MAT16)[5] = sy;
-        (out.mat16 as MAT16)[10] = -sz;
+        out.set(
+            sx, 0,  0,  0,
+            0, sy,  0,  0,
+            0,  0, sz,  0,
+            0,  0,  0,  1
+        );
     };
 
 
@@ -294,25 +267,31 @@ export namespace Mat4 {
         const a:MAT16 = aHolder.mat16 as MAT16;
         const b:MAT16 = bHolder.mat16 as MAT16;
 
-        r[0] = a[0] * b[0] + a[1] * b[4] + a[2] * b[8] + a[3] * b[12];
-        r[1] = a[0] * b[1] + a[1] * b[5] + a[2] * b[9] + a[3] * b[13];
-        r[2] = a[0] * b[2] + a[1] * b[6] + a[2] * b[10] + a[3] * b[14];
-        r[3] = a[0] * b[3] + a[1] * b[7] + a[2] * b[11] + a[3] * b[15];
+        const a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3], a4 = a[4], a5 = a[5], a6 = a[6] , a7 = a[7], a8 = a[8];
+        const a9 = a[9], a10 = a[10], a11 = a[11], a12 = a[12], a13 = a[13], a14 = a[14], a15 = a[15];
 
-        r[4] = a[4] * b[0] + a[5] * b[4] + a[6] * b[8] + a[7] * b[12];
-        r[5] = a[4] * b[1] + a[5] * b[5] + a[6] * b[9] + a[7] * b[13];
-        r[6] = a[4] * b[2] + a[5] * b[6] + a[6] * b[10] + a[7] * b[14];
-        r[7] = a[4] * b[3] + a[5] * b[7] + a[6] * b[11] + a[7] * b[15];
+        const b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3], b4 = b[4], b5 = b[5], b6 = b[6] , b7 = b[7], b8 = b[8];
+        const b9 = b[9], b10 = b[10], b11 = b[11], b12 = b[12], b13 = b[13], b14 = b[14], b15 = b[15];
 
-        r[8] = a[8] * b[0] + a[9] * b[4] + a[10] * b[8] + a[11] * b[12];
-        r[9] = a[8] * b[1] + a[9] * b[5] + a[10] * b[9] + a[11] * b[13];
-        r[10] = a[8] * b[2] + a[9] * b[6] + a[10] * b[10] + a[11] * b[14];
-        r[11] = a[8] * b[3] + a[9] * b[7] + a[10] * b[11] + a[11] * b[15];
+        r[0] = a0 * b0 + a1 * b4 + a2 * b8 + a3 * b12;
+        r[1] = a0 * b1 + a1 * b5 + a2 * b9 + a3 * b13;
+        r[2] = a0 * b2 + a1 * b6 + a2 * b10 + a3 * b14;
+        r[3] = a0 * b3 + a1 * b7 + a2 * b11 + a3 * b15;
 
-        r[12] = a[12] * b[0] + a[13] * b[4] + a[14] * b[8] + a[15] * b[12];
-        r[13] = a[12] * b[1] + a[13] * b[5] + a[14] * b[9] + a[15] * b[13];
-        r[14] = a[12] * b[2] + a[13] * b[6] + a[14] * b[10] + a[15] * b[14];
-        r[15] = a[12] * b[3] + a[13] * b[7] + a[14] * b[11] + a[15] * b[15];
+        r[4] = a4 * b0 + a5 * b4 + a6 * b8 + a7 * b12;
+        r[5] = a4 * b1 + a5 * b5 + a6 * b9 + a7 * b13;
+        r[6] = a4 * b2 + a5 * b6 + a6 * b10 + a7 * b14;
+        r[7] = a4 * b3 + a5 * b7 + a6 * b11 + a7 * b15;
+
+        r[8] = a8 * b0 + a9 * b4 + a10 * b8 + a11 * b12;
+        r[9] = a8 * b1 + a9 * b5 + a10 * b9 + a11 * b13;
+        r[10] = a8 * b2 + a9 * b6 + a10 * b10 + a11 * b14;
+        r[11] = a8 * b3 + a9 * b7 + a10 * b11 + a11 * b15;
+
+        r[12] = a12 * b0 + a13 * b4 + a14 * b8 + a15 * b12;
+        r[13] = a12 * b1 + a13 * b5 + a14 * b9 + a15 * b13;
+        r[14] = a12 * b2 + a13 * b6 + a14 * b10 + a15 * b14;
+        r[15] = a12 * b3 + a13 * b7 + a14 * b11 + a15 * b15;
 
     };
 
