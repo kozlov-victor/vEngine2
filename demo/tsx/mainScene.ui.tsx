@@ -4,6 +4,7 @@ import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
 import {Game} from "@engine/core/game";
+import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 
 interface IState {
     ellipseRadiusX: number;
@@ -12,7 +13,9 @@ interface IState {
     ellipsePosY: number;
 }
 
-export class MainSceneUi extends VEngineTsxComponent<IState> {
+export class MainSceneUi extends VEngineTsxComponent {
+
+    private state:IState;
 
     constructor(private game:Game,private resourceLink:ITexture) {
         super(new VEngineTsxDOMRenderer(game));
@@ -63,13 +66,15 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
         );
     }
 
-    private onCircleClick():void{
+    @ReactiveMethod()
+    private onCircleClick():void {
         console.log('on circle click');
-        this.setState({ellipsePosX:this.state.ellipsePosX+1});
+        this.state.ellipsePosX = this.state.ellipsePosX + 1;
     }
 
+     @ReactiveMethod()
     private onEllipseClick():void{
-        this.setState({ellipseRadiusX:this.state.ellipseRadiusX+1});
+        this.state.ellipseRadiusX = this.state.ellipseRadiusX+1;
     }
 
 }

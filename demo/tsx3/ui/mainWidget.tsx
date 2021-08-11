@@ -5,6 +5,7 @@ import {ChildComponent} from "./childComponent";
 import {BtnComponent} from "./btnComponent";
 import {Game} from "@engine/core/game";
 import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
+import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 
 interface IState {
     circles:{radius:number}[];
@@ -12,23 +13,19 @@ interface IState {
     btnRemove: {height:number};
 }
 
-export class MainWidget extends VEngineTsxComponent<IState> {
+export class MainWidget extends VEngineTsxComponent {
+
+    private state:IState = {
+        circles : [
+            {radius:10},
+            {radius:10}
+        ],
+        btnAdd: {height:10},
+        btnRemove: {height:10},
+    };
 
     constructor(private game:Game) {
         super(new VEngineTsxDOMRenderer(game));
-        this.state = {
-            circles : [
-                {radius:10},
-                {radius:10}
-            ],
-            btnAdd: {height:10},
-            btnRemove: {height:10},
-        };
-    }
-
-    private updateCircleRadius(index:number):void {
-        this.state.circles[index].radius+=1;
-        this.setState({...this.state});
     }
 
     public render():VirtualNode {
@@ -86,16 +83,21 @@ export class MainWidget extends VEngineTsxComponent<IState> {
         );
     }
 
+    @ReactiveMethod()
     public onMinusClick():void{
         this.state.btnRemove.height+=1;
         this.state.circles.push({radius:10});
-        this.setState({...this.state});
     }
 
+    @ReactiveMethod()
     public onPlusClick():void{
         this.state.btnAdd.height+=1;
         this.state.circles.splice(-1,1);
-        this.setState({...this.state});
+    }
+
+    @ReactiveMethod()
+    private updateCircleRadius(index:number):void {
+        this.state.circles[index].radius+=1;
     }
 
 

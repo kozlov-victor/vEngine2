@@ -23,7 +23,7 @@ interface IContainerWithMarginPadding {
     paddingBottom   :number;
 }
 
-export enum ContainerState {
+export const enum ContainerState {
     NORMAL,
     ACTIVE,
     HOVERED,

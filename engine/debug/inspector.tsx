@@ -43,11 +43,10 @@ const NodeWidget = (props:{tagName:string}):VirtualNode=>{
     );
 };
 
-class InspectorWidget extends VEngineTsxComponent<{}>{
+class InspectorWidget extends VEngineTsxComponent{
 
     constructor() {
         super(new HtmlTsxDOMRenderer());
-        this.state = {};
     }
 
     render(): VirtualNode {

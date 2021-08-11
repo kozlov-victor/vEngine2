@@ -16,9 +16,10 @@ import {RadioButtonGroup} from "@engine/renderable/impl/ui/toggleButton/radioBut
 import {IChangeNumericSliderEvent} from "@engine/renderable/impl/ui/numericSlider/_intrtnal/abstractNumericSlider";
 import {IChangeEditTextFieldEvent} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBoxEvents";
+import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 
 
-export class MainWidget extends VEngineTsxComponent<{}> {
+export class MainWidget extends VEngineTsxComponent {
 
     private calculator:Calculator = new Calculator();
 
@@ -115,7 +116,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         size={{width:20,height:20}}
                         padding={[2]}
                         checked={this.glitches}
-                        changed={this.onGlitchChanged}/>
+                        changed={e=>this.onGlitchChanged(e)}/>
 
                     <v_textField pos={{x:50,y:50}} font={this.resourceHolder.fnt} text={'text color'}/>
                     <v_selectBox
@@ -133,7 +134,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                                 text={it.asCssHex()}/>
                         }
                         selectedIndex={this.colorSelected}
-                        changed={this.onTextColorChanged}
+                        changed={e=>this.onTextColorChanged(e)}
                         background={()=>this.resourceHolder.buttonBg}
                         backgroundSelected={()=>this.resourceHolder.buttonBgActive}/>
 
@@ -209,7 +210,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                     <v_horizontalNumericSlider
                         max={100}
                         value={this.horizontalScrollValue}
-                        changed={this.onHorizontalScrollChanged}
+                        changed={e=>this.onHorizontalScrollChanged(e)}
                         background={()=>this.resourceHolder.buttonBg}
                         backgroundHandler={()=>this.resourceHolder.checkBoxCheckedBg}
                         size={{width:100,height:20}}
@@ -243,7 +244,7 @@ export class MainWidget extends VEngineTsxComponent<{}> {
                         multiline={false}
                         cursorColor={{r:100,g:10,b:10}}
                         text={this.editedText}
-                        changed={this.onEditTextChanged}
+                        changed={e=>this.onEditTextChanged(e)}
                         pos={{x:400,y:10}}
                         background={()=>this.resourceHolder.buttonBg}
                         size={{width:100,height:60}}
@@ -286,34 +287,34 @@ export class MainWidget extends VEngineTsxComponent<{}> {
         );
     }
 
+    @ReactiveMethod()
     private onCalcButtonClick(str:string):void {
         this.calculator.keyPress(str);
-        this.triggerRendering();
     }
 
+    @ReactiveMethod()
     private onAlignTextClick(value:AlignTextContentHorizontal):void {
         this.textAlign = value;
-        this.triggerRendering();
     }
 
-    private onGlitchChanged = (e:{value:boolean}):void=> {
+    @ReactiveMethod()
+    private onGlitchChanged(e:{value:boolean}):void {
         this.glitches = e.value;
-        this.triggerRendering();
     }
 
-    private onTextColorChanged = (e:IChangeSelectBoxEvent):void=> {
+    @ReactiveMethod()
+    private onTextColorChanged(e:IChangeSelectBoxEvent):void {
         this.colorSelected = e.selectedIndex;
-        this.triggerRendering();
     }
 
-    private onHorizontalScrollChanged = (e:IChangeNumericSliderEvent):void=> {
+    @ReactiveMethod()
+    private onHorizontalScrollChanged(e:IChangeNumericSliderEvent):void {
         this.horizontalScrollValue = e.value;
-        this.triggerRendering();
     }
 
-    private onEditTextChanged = (e:IChangeEditTextFieldEvent):void=> {
+    @ReactiveMethod()
+    private onEditTextChanged(e:IChangeEditTextFieldEvent):void {
         this.editedText = e.value;
-        this.triggerRendering();
     }
 
 }

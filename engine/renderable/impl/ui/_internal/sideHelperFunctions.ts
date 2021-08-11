@@ -1,7 +1,7 @@
 import {Point2d} from "@engine/geometry/point2d";
 import {ISize, Size} from "@engine/geometry/size";
 
-export enum Direction {
+export const enum Direction {
     HORIZONTAL,
     VERTICAL,
 }

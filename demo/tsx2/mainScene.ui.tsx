@@ -5,22 +5,19 @@ import {MousePoint} from "@engine/control/mouse/mousePoint";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
 import {Game} from "@engine/core/game";
+import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 
-interface IState {
-    numOfCircles:number;
-}
 
-export class MainSceneUi extends VEngineTsxComponent<IState> {
+export class MainSceneUi extends VEngineTsxComponent {
+
+    private numOfCircles = 1;
 
     constructor(private game:Game) {
         super(new VEngineTsxDOMRenderer(game));
-        this.state = {
-            numOfCircles : 1
-        };
     }
 
     public render():VirtualNode {
-        const arr:number[] = this.state.numOfCircles>0?new Array(this.state.numOfCircles):[];
+        const arr:number[] = this.numOfCircles>0?new Array(this.numOfCircles):[];
         arr.fill(0);
         return (
             <v_rectangle
@@ -66,16 +63,19 @@ export class MainSceneUi extends VEngineTsxComponent<IState> {
         );
     }
 
+    @ReactiveMethod()
     public onMinusClick():void{
         console.log('onMinusClick');
-        this.setState({numOfCircles:this.state.numOfCircles-1});
+        this.numOfCircles = this.numOfCircles-1;
     }
 
+    @ReactiveMethod()
     public onPlusClick():void{
         console.log('onPlusClick');
-        this.setState({numOfCircles:this.state.numOfCircles+1});
+        this.numOfCircles = this.numOfCircles+1;
     }
 
+    @ReactiveMethod()
     public onCircleClick(e:MousePoint):void{
         (e.target as Circle).radius+=1;
     }

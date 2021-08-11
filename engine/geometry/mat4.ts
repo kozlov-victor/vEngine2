@@ -69,7 +69,6 @@ export namespace Mat4 {
 
     }
 
-
     const identityArray = Float32Array.from([
         1, 0, 0, 0,
         0, 1, 0, 0,

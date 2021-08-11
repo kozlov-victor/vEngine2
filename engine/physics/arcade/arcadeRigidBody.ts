@@ -8,12 +8,12 @@ import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {IRect, Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ICloneable, IEventemittable, Optional} from "@engine/core/declarations";
+import {ICloneable, Optional} from "@engine/core/declarations";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 
-export enum ARCADE_RIGID_BODY_TYPE {
+export const enum ARCADE_RIGID_BODY_TYPE {
     // Kinematic entities are not affected by gravity, and
     // will not allow the solver to solve these elements
     // These entities will be our platforms in the stage

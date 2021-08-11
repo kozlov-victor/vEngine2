@@ -2,7 +2,7 @@ import {Game} from "@engine/core/game";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 import {DebugError} from "@engine/debug/debugError";
 
-export enum KEY_STATE  {
+export const enum KEY_STATE  {
     KEY_JUST_PRESSED = 2,
     KEY_PRESSED = 1,
     KEY_JUST_RELEASED = 0,

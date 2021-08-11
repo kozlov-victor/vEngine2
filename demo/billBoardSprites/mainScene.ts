@@ -2,7 +2,6 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
-import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MathEx} from "@engine/misc/mathEx";
 import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
 import {ITexture} from "@engine/renderer/common/texture";

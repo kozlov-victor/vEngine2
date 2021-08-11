@@ -5,18 +5,14 @@ import {ChildComponent} from "./childComponent";
 import {MousePoint} from "@engine/control/mouse/mousePoint";
 import {Game} from "@engine/core/game";
 import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
+import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 
-interface IState {
-    radius:number;
-}
+export class MainWidget extends VEngineTsxComponent{
 
-export class MainWidget extends VEngineTsxComponent<IState> {
+    private radius = 10;
 
     constructor(private game:Game) {
         super(new VEngineTsxDOMRenderer(game));
-        this.state = {
-            radius : 20
-        };
     }
 
     public render():VirtualNode {
@@ -29,7 +25,7 @@ export class MainWidget extends VEngineTsxComponent<IState> {
                 size={{width:300,height:220}}
             >
 
-                <ChildComponent radius={this.state.radius}/>
+                <ChildComponent radius={this.radius}/>
 
                 <v_rectangle
                     pos={{x:120,y:100}}
@@ -42,8 +38,9 @@ export class MainWidget extends VEngineTsxComponent<IState> {
         );
     }
 
+    @ReactiveMethod()
     public btnClick(e:MousePoint):void{
-        this.setState({radius:this.state.radius+1});
+        this.radius++;
     }
 
 

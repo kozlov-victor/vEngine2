@@ -13,7 +13,7 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     protected constructor(private elementCreator:AbstractElementCreator<T>) {
     }
 
-    public render(component:VEngineTsxComponent<any>, root:T):void{
+    public render(component:VEngineTsxComponent, root:T):void{
         component.rootNativeElement = root;
         if (debug) console.log('before render');
         const newVirtualNode:VirtualNode = component.render();

@@ -1,4 +1,4 @@
 
-export enum LIST_VIEW_EVENTS {
+export const enum LIST_VIEW_EVENTS {
     itemClick = 'itemClick'
 }

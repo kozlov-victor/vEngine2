@@ -1,5 +1,5 @@
 
-export enum MOUSE_EVENTS  {
+export const enum MOUSE_EVENTS  {
     click           =   'click',
     mousePressed    =   'mousePressed',
     mouseDown       =   'mouseDown',

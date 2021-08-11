@@ -1,17 +1,17 @@
 
-export enum AlignTextContentVertical {
+export const enum AlignTextContentVertical {
     TOP,
     CENTER,
     BOTTOM,
 }
 
-export enum AlignTextContentHorizontal {
+export const enum AlignTextContentHorizontal {
     LEFT,
     CENTER,
     RIGHT,
 }
 
-export enum AlignText {
+export const enum AlignText {
     LEFT,
     CENTER,
     RIGHT,

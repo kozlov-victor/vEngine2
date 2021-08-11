@@ -3,9 +3,8 @@ import {AbstractTsxDOMRenderer} from "@engine/renderable/tsx/genetic/abstractTsx
 import {IRealNode} from "@engine/renderable/tsx/genetic/realNode";
 
 
-export abstract class VEngineTsxComponent<T extends Record<string, any>> {
+export abstract class VEngineTsxComponent {
 
-    protected state:T;
     public rootNativeElement:IRealNode;
 
     protected constructor(
@@ -15,15 +14,8 @@ export abstract class VEngineTsxComponent<T extends Record<string, any>> {
 
     public abstract render():VirtualNode;
 
-    public setState(newState:Partial<T>):void{
-        Object.keys(newState).forEach(k=>{
-            (this.state as Record<string, any>)[k] = newState[k];
-        });
+    protected triggerRendering():void{
         if (this.rootNativeElement!==undefined) this.tsxDOMRenderer.render(this,this.rootNativeElement);
-    }
-
-    public triggerRendering():void{
-        this.tsxDOMRenderer.render(this,this.rootNativeElement);
     }
 
     public mountTo(root:IRealNode):void {

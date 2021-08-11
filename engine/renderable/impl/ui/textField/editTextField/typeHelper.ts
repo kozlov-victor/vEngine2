@@ -8,7 +8,7 @@ import {Incrementer} from "@engine/resources/incrementer";
 
 export const NEWLINE_CHAR = '\n' as const;
 
-enum SymbolKind {
+const enum SymbolKind {
     common,
     backspace,
 }

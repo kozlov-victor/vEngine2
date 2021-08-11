@@ -1,5 +1,5 @@
 
-enum States {
+const enum States {
     PENDING,
     FULFILLED,
     REJECTED

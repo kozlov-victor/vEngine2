@@ -4,6 +4,7 @@ import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer"
 import {HTMLElementWrap} from "@engine/renderable/tsx/dom/HTMLElementWrap";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {Optional} from "@engine/core/declarations";
+import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 
 interface IDebugInfo {
     file:string;
@@ -15,10 +16,6 @@ interface IErrorInfo {
     filename?:string;
     runtimeInfo:string;
     debugInfo?:IDebugInfo;
-}
-
-interface IState {
-    errors:IErrorInfo[];
 }
 
 const css:string = `
@@ -101,32 +98,31 @@ const prettifyDebugInfo = (debugInfo?:IDebugInfo):Optional<VirtualNode>=>{
     );
 };
 
-export class ErrorWidget extends VEngineTsxComponent<IState> {
+export class ErrorWidget extends VEngineTsxComponent {
+
+    private errors:IErrorInfo[] = [];
 
     constructor() {
         super(new HtmlTsxDOMRenderer());
-        this.state = {
-            errors: []
-        };
     }
 
+    @ReactiveMethod()
     public addError(err:IErrorInfo):void{
-        this.state.errors.push(err);
-        this.setState({...this.state});
+        this.errors.push(err);
     }
 
+    @ReactiveMethod()
     private removeItem(i:number):void{
-        this.state.errors.splice(i,1);
-        this.setState({...this.state});
+        this.errors.splice(i,1);
     }
 
     render():VirtualNode {
         return (
             <>
                 <style>{css}</style>
-                <div className={this.state.errors.length>0?'errorBlockHolder':''}>
+                <div className={this.errors.length>0?'errorBlockHolder':''}>
                     {
-                        this.state.errors.map((err,i)=>
+                        this.errors.map((err,i)=>
                             <div className="errorBlock">
                                 <div className="errorBlockInternal">
                                     <div className="errorClose" onclick={()=>this.removeItem(i)}>x</div>
