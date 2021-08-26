@@ -141,8 +141,8 @@ export class PolylineTriangulator {
             return vertices;
         }
 
-        const nextStart1 = new Vec2(0, 0);
-        const nextStart2  = new Vec2(0, 0);
+        let nextStart1 = new Vec2(0, 0);
+        let nextStart2  = new Vec2(0, 0);
         let start1 = new Vec2(0, 0);
         let start2 = new Vec2(0, 0);
         let end1 = new Vec2(0, 0);
@@ -174,8 +174,16 @@ export class PolylineTriangulator {
 
         } else if (endCapStyle === EndCapStyle.JOINT) {
             // join the last (connecting) segment and the first segment
-            this.createJoint(vertices, lastSegment, firstSegment, jointStyle,
-                pathEnd1, pathEnd2, pathStart1, pathStart2, allowOverlap);
+            const byRef = {
+                segment1:lastSegment, segment2: firstSegment,
+                end1:pathEnd1, end2:pathEnd2,
+                nextStart1:pathStart1, nextStart2: pathStart2
+            };
+            this.createJoint(vertices, jointStyle, allowOverlap, byRef);
+            pathEnd1 = byRef.end1;
+            pathEnd2 = byRef.end2;
+            pathStart1 = byRef.nextStart1;
+            pathStart2 = byRef.nextStart2;
         }
 
         // generate mesh data for path segments
@@ -195,18 +203,26 @@ export class PolylineTriangulator {
                 end2 = pathEnd2;
 
             } else {
-                this.createJoint(vertices, segment, segments[i + 1], jointStyle,
-                    end1, end2, nextStart1, nextStart2, allowOverlap);
+                const byRef = {
+                    segment1:segment, segment2: segments[i + 1],
+                    end1, end2:end1,
+                    nextStart1, nextStart2
+                };
+                this.createJoint(vertices, jointStyle, allowOverlap, byRef);
+                end1 = byRef.end1;
+                end2 = byRef.end2;
+                nextStart1 = byRef.nextStart1;
+                nextStart2 = byRef.nextStart2;
             }
 
             // emit vertices
-            vertices.push(start1);log(start1);
-            vertices.push(start2);log(start2);
-            vertices.push(end1);log(end1);
+            vertices.push(start1);debug(start1);
+            vertices.push(start2);debug(start2);
+            vertices.push(end1);debug(end1);
 
-            vertices.push(end1);log(end1);
-            vertices.push(start2);log(start2);
-            vertices.push(end2);log(end2);
+            vertices.push(end1);debug(end1);
+            vertices.push(start2);debug(start2);
+            vertices.push(end2);debug(end2);
 
             start1 = nextStart1;
             start2 = nextStart2;
@@ -216,16 +232,20 @@ export class PolylineTriangulator {
 
     }
 
+
     private static createJoint(
         vertices:Vec2[],
-        segment1:PolySegment, segment2: PolySegment,
-        jointStyle:JointStyle, end1:Vec2, end2:Vec2,
-        nextStart1:Vec2, nextStart2: Vec2,
-        allowOverlap: boolean
+        jointStyle:JointStyle,
+        allowOverlap: boolean,
+        byRef:{
+            segment1:PolySegment, segment2: PolySegment,
+            end1:Vec2, end2:Vec2,
+            nextStart1:Vec2, nextStart2: Vec2,
+        }
     ):Vec2[] {
         // calculate the angle between the two line segments
-        const dir1 = segment1.center.direction();
-        const dir2 = segment2.center.direction();
+        const dir1 = byRef.segment1.center.direction();
+        const dir2 = byRef.segment2.center.direction();
 
         const angle = Vec2.angle(dir1, dir2);
 
@@ -247,14 +267,14 @@ export class PolylineTriangulator {
         if (jointStyle === JointStyle.MITER) {
             // calculate each edge's intersection point
             // with the next segment's central line
-            const sec1 = LineSegment.intersection(segment1.edge1, segment2.edge1, true);
-            const sec2 = LineSegment.intersection(segment1.edge2, segment2.edge2, true);
+            const sec1 = LineSegment.intersection(byRef.segment1.edge1, byRef.segment2.edge1, true);
+            const sec2 = LineSegment.intersection(byRef.segment1.edge2, byRef.segment2.edge2, true);
 
-            end1 = sec1 ? sec1 : segment1.edge1.b;
-            end2 = sec2 ? sec2 : segment1.edge2.b;
+            byRef.end1 = sec1 ? sec1 : byRef.segment1.edge1.b;
+            byRef.end2 = sec2 ? sec2 : byRef.segment1.edge2.b;
 
-            nextStart1 = end1;
-            nextStart2 = end2;
+            byRef.nextStart1 = byRef.end1;
+            byRef.nextStart2 = byRef.end2;
 
         } else {
             // joint style is either BEVEL or ROUND
@@ -274,15 +294,15 @@ export class PolylineTriangulator {
             // from the central line's perspective,
             // and the second one to the right.
             if (clockwise) {
-                outer1 = segment1.edge1;
-                outer2 = segment2.edge1;
-                inner1 = segment1.edge2;
-                inner2 = segment2.edge2;
+                outer1 = byRef.segment1.edge1;
+                outer2 = byRef.segment2.edge1;
+                inner1 = byRef.segment1.edge2;
+                inner2 = byRef.segment2.edge2;
             } else {
-                outer1 = segment1.edge2;
-                outer2 = segment2.edge2;
-                inner1 = segment1.edge1;
-                inner2 = segment2.edge1;
+                outer1 = byRef.segment1.edge2;
+                outer2 = byRef.segment2.edge2;
+                inner1 = byRef.segment1.edge1;
+                inner2 = byRef.segment2.edge1;
             }
 
             // calculate the intersection point of the inner edges
@@ -305,33 +325,33 @@ export class PolylineTriangulator {
             }
 
             if (clockwise) {
-                end1 = outer1.b;
-                end2 = innerSec;
+                byRef.end1 = outer1.b;
+                byRef.end2 = innerSec;
 
-                nextStart1 = outer2.a;
-                nextStart2 = innerStart;
+                byRef.nextStart1 = outer2.a;
+                byRef.nextStart2 = innerStart;
 
             } else {
-                end1 = innerSec;
-                end2 = outer1.b;
+                byRef.end1 = innerSec;
+                byRef.end2 = outer1.b;
 
-                nextStart1 = innerStart;
-                nextStart2 = outer2.a;
+                byRef.nextStart1 = innerStart;
+                byRef.nextStart2 = outer2.a;
             }
 
             // connect the intersection points according to the joint style
 
             if (jointStyle === JointStyle.BEVEL) {
                 // simply connect the intersection points
-            vertices.push(outer1.b);log(outer1.b);
-            vertices.push(outer2.a);log(outer2.a);
-            vertices.push(innerSec);log(innerSec);
+            vertices.push(outer1.b);debug(outer1.b);
+            vertices.push(outer2.a);debug(outer2.a);
+            vertices.push(innerSec);debug(innerSec);
 
             } else if (jointStyle === JointStyle.ROUND) {
                 // draw a circle between the ends of the outer edges,
                 // centered at the actual point
                 // with half the line thickness as the radius
-                this.createTriangleFan(vertices, innerSec, segment1.center.b, outer1.b, outer2.a, clockwise);
+                this.createTriangleFan(vertices, innerSec, byRef.segment1.center.b, outer1.b, outer2.a, clockwise);
             } else {
                 throw new Error(`unexpected state`);
             }
@@ -343,6 +363,7 @@ export class PolylineTriangulator {
         vertices: Vec2[], connectTo:Vec2, origin:Vec2,
         start: Vec2, end:Vec2, clockwise: boolean
     ):Vec2[] {
+
         const point1 = Vec2.subtract(start, origin);
         const point2 = Vec2.subtract(end, origin);
 
@@ -375,22 +396,22 @@ export class PolylineTriangulator {
             if (t + 1 === numTriangles) {
                 // it's the last triangle - ensure it perfectly
                 // connects to the next line
-                endPoint = end;
+                endPoint = new Vec2(end.x,end.y);
             } else {
                 const rot = (t + 1) * triAngle;
 
                 // rotate the original point around the origin
                 endPoint.x = Math.cos(rot) * point1.x - Math.sin(rot) * point1.y;
-                endPoint.y = Math.sin(rot) * point1.x + Math.sin(rot) * point1.y;
+                endPoint.y = Math.sin(rot) * point1.x + Math.cos(rot) * point1.y;
 
                 // re-add the rotation origin to the target point
                 endPoint = Vec2.add(endPoint, origin);
             }
 
             // emit the triangle
-            vertices.push(startPoint);log(startPoint);
-            vertices.push(endPoint);log(endPoint);
-            vertices.push(connectTo);log(connectTo);
+            vertices.push(startPoint);debug(startPoint);
+            vertices.push(endPoint);debug(endPoint);
+            vertices.push(connectTo);debug(connectTo);
 
             startPoint = endPoint;
         }
@@ -402,6 +423,6 @@ export class PolylineTriangulator {
 
 }
 
-const log = (vec:Vec2):void=>{
-   if (vec.x===0 && vec.y===0) console.trace(vec);
+const debug = (vec:Vec2):void=> {
+    if (vec.x===0 && vec.y===0) console.trace(vec);
 };
