@@ -21,7 +21,7 @@ class PolygonPrimitive extends AbstractPrimitive {
 
 export class Polygon extends Mesh2d {
 
-    private constructor(game:Game,modelPrimitive:IPrimitive){
+    public constructor(game:Game,modelPrimitive:IPrimitive){
         super(game,modelPrimitive);
     }
 
