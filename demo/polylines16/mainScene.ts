@@ -3,11 +3,10 @@ import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {TaskQueue} from "@engine/resources/taskQueue";
-import {triangulatedPathFromPolyline} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 import {
-    EndCapStyle,
-    JointStyle
-} from "@engine/renderable/impl/geometry/_internal/polyline-triangulate/polylineTriangulator";
+    EndCapStyle, JointStyle,
+    triangulatedPathFromPolyline
+} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 
 
 export class MainScene extends Scene {

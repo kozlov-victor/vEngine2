@@ -1,6 +1,6 @@
 // https://github.com/CrushedPixel/Polyline2D
 
-import {Vec2} from "@engine/renderable/impl/geometry/_internal/polyline-triangulate/vec2";
+import {Vec2} from "@engine/geometry/vec2";
 import {Optional} from "@engine/core/declarations";
 
 export class LineSegment {

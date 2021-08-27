@@ -1,17 +1,27 @@
-import {Point2d} from "./point2d";
 
-export class Vec2 extends Point2d {
+export class Vec2 {
 
-
-    public static angleBetween(v1:Vec2, v2:Vec2):number {
-        v1 = v1.clone().normalize();
-        v2 = v2.clone().normalize();
-        return Math.acos(v1.dotProduct(v2));
+    public constructor(public x:number, public y:number) {
     }
 
-    public static normalBetween(v1:Vec2,v2:Vec2):Vec2 {
-        const v:Vec2 = v1.minus(v2);
-        return v.normalize();
+    public static angle(a:Vec2,b:Vec2):number {
+        return Math.acos(Vec2.dot(a, b) / (Vec2.magnitude(a) * Vec2.magnitude(b)));
+    }
+
+    public static angleTo(a:Vec2,b:Vec2):number{
+        return Math.atan2(b.y-a.y,b.x-a.x);
+    }
+
+    public static withAngle(vec:Vec2,value:number):Vec2 {
+        const len:number = Vec2.magnitude(vec);
+        const x = Math.cos(value) * len;
+        const y = Math.sin(value) * len;
+        return new Vec2(x,y);
+    }
+
+    public static normal(v1:Vec2,v2:Vec2):Vec2 {
+        const v:Vec2 = Vec2.subtract(v1,v2);
+        return Vec2.normalized(v);
     }
 
     public static distance(a:Vec2,b:Vec2):number {
@@ -24,87 +34,54 @@ export class Vec2 extends Point2d {
         return axMinusBx*axMinusBx + ayMinusBy*ayMinusBy;
     }
 
-    constructor(x:number = 0,y:number = 0){
-        // xyzw stpq rgba
-        super(x,y);
+    public static equal(a:Vec2,b:Vec2):boolean {
+        return a.x === b.x && a.y === b.y;
     }
 
-
-    // скалярное произведение
-    public dotProduct(another:Vec2):number{
-        return this.x*another.x + this.y*another.y;
+    public static multiply(a:Vec2,b:Vec2):Vec2 {
+        return new Vec2(a.x * b.x, a.y * b.y);
     }
 
-    public crossProduct(another:Vec2):number {
-        return this.x * another.y - this.y * another.x;
+    public static multiplyByScalar(vec:Vec2,factor:number):Vec2 {
+        return new Vec2(vec.x * factor, vec.y * factor);
     }
 
-    public multByScalar(scalar:number,mutateOrigin:boolean = true):Vec2{
-        if (mutateOrigin) return new Vec2(this.x*scalar,this.y*scalar);
-        this.x*=scalar;
-        this.y*=scalar;
-        return this;
+    public static divide(vec:Vec2,factor:number = 1):Vec2 {
+        return new Vec2(vec.x / factor, vec.y / factor);
     }
 
-    public divByScalar(scalar:number,mutateOrigin:boolean = true):Vec2{
-        return this.multByScalar(1/scalar,mutateOrigin);
+    public static add(a:Vec2,b:Vec2):Vec2 {
+        return new Vec2(a.x + b.x, a.y + b.y);
     }
 
-    public plus(another:Vec2,mutateOrigin:boolean = false):Vec2{
-        if (!mutateOrigin) return new Vec2(this.x+another.x,this.y+another.y);
-        this.x+=another.x;
-        this.y+=another.y;
-        return this;
+    public static subtract(a:Vec2,b:Vec2):Vec2 {
+        return new Vec2(a.x - b.x, a.y - b.y);
     }
 
-    public minus(another:Vec2,mutateOrigin:boolean = false):Vec2{
-        if (!mutateOrigin) return new Vec2(this.x-another.x,this.y-another.y);
-        this.x-=another.x;
-        this.y-=another.y;
-        return this;
+    public static magnitude(vec:Vec2):number {
+        return Math.sqrt(vec.x * vec.x + vec.y * vec.y);
     }
 
-    public getLength():number {
-        return Math.sqrt(this.getLengthSquared());
+    public static withLength(vec:Vec2,len:number):Vec2 {
+        const mag = Vec2.magnitude(vec);
+        const factor = mag / len;
+        return Vec2.divide(vec, factor);
     }
 
-    public getLengthSquared():number {
-        return (this.x * this.x) + (this.y * this.y);
+    public static normalized(vec:Vec2):Vec2 {
+        return Vec2.withLength(vec, 1);
     }
 
-    public normalize():Vec2 {
-        const l:number = this.getLength();
-        this.x = this.x / l;
-        this.y = this.y / l;
-        return this;
+    public static dot(a:Vec2,b:Vec2):number {
+        return a.x * b.x + a.y * b.y;
     }
 
-    public setLength(value:number):void {
-        const angle:number = this.getAngle();
-        this.x = Math.cos(angle) * value;
-        this.y = Math.sin(angle) * value;
-    }
-    public getAngle():number {
-        return Math.atan2(this.y, this.x);
-    }
-    public getAngleBetween(that:Vec2):number{
-        return Math.acos(
-            (this.x*that.x + this.y*that.y)/
-            this.getLength()*that.getLength()
-        );
+    public static cross(a:Vec2,b:Vec2):number {
+        return a.x * b.y - a.y * b.x;
     }
 
-    public getAngleTo(that:Vec2):number{
-        return Math.atan2(that.y-this.y,that.x-this.x);
-    }
-
-    public setAngle(value:number):void {
-        const len:number = this.getLength();
-        this.x = Math.cos(value) * len;
-        this.y = Math.sin(value) * len;
-    }
-    public override clone():Vec2 {
-        return new Vec2(this.x, this.y);
+    public clone():Vec2 {
+        return new Vec2(this.x,this.y);
     }
 
 }

@@ -1,4 +1,4 @@
-import {Vec2} from "@engine/renderable/impl/geometry/_internal/polyline-triangulate/vec2";
+import {Vec2} from "@engine/geometry/vec2";
 import {LineSegment} from "@engine/renderable/impl/geometry/_internal/polyline-triangulate/lineSegment";
 
 

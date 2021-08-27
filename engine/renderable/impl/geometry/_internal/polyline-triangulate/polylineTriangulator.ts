@@ -1,51 +1,12 @@
 
 // https://github.com/CrushedPixel/Polyline2D/blob/master/include/Polyline2D.h
 
-import {Vec2} from "@engine/renderable/impl/geometry/_internal/polyline-triangulate/vec2";
+import {Vec2} from "@engine/geometry/vec2";
 import {LineSegment} from "@engine/renderable/impl/geometry/_internal/polyline-triangulate/lineSegment";
 import {PolySegment} from "@engine/renderable/impl/geometry/_internal/polyline-triangulate/polySegment";
+import {EndCapStyle, JointStyle} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 
-export const enum JointStyle {
-    /**
-     * Corners are drawn with sharp joints.
-     * If the joint's outer angle is too large,
-     * the joint is drawn as beveled instead,
-     * to avoid the miter extending too far out.
-     */
-    MITER,
-    /**
-     * Corners are flattened.
-     */
-    BEVEL,
-    /**
-     * Corners are rounded off.
-     */
-    ROUND
-}
 
-export const enum EndCapStyle {
-    /**
-     * Path ends are drawn flat,
-     * and don't exceed the actual end point.
-     */
-    BUTT, // lol
-    /**
-     * Path ends are drawn flat,
-     * but extended beyond the end point
-     * by half the line thickness.
-     */
-    SQUARE,
-    /**
-     * Path ends are rounded off.
-     */
-    ROUND,
-    /**
-     * Path ends are connected according to the JointStyle.
-     * When using this EndCapStyle, don't specify the common start/end point twice,
-     * as Polyline2D connects the first and last input point itself.
-     */
-    JOINT
-}
 
 export class PolylineTriangulator {
 
@@ -409,9 +370,9 @@ export class PolylineTriangulator {
             }
 
             // emit the triangle
-            vertices.push(Vec2.clone(startPoint));
-            vertices.push(Vec2.clone(endPoint));
-            vertices.push(Vec2.clone(connectTo));
+            vertices.push(startPoint.clone());
+            vertices.push(endPoint.clone());
+            vertices.push(connectTo.clone());
 
             startPoint = new Vec2(endPoint.x,endPoint.y);
         }
