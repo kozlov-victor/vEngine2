@@ -7,12 +7,6 @@ declare class FontFace {
     public load():Promise<FontFace>;
 }
 
-interface IDocumentEx extends Document{
-    fonts:{
-        add:(f:FontFace)=>void
-    };
-}
-
 
 export namespace fontLoader {
 
@@ -22,7 +16,7 @@ export namespace fontLoader {
         taskQueue.addNextTask(async _=>{
             try {
                 const loadedFace:FontFace = await fontFace.load();
-                (document as IDocumentEx).fonts.add(loadedFace);
+                (document.fonts as any).add(loadedFace);
             } catch (e:any) {
                 console.error(e);
                 const event = new Event('error');

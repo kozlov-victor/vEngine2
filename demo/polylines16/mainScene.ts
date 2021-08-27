@@ -11,7 +11,6 @@ import {
 
 export class MainScene extends Scene {
 
-
     public override onPreloading(taskQueue:TaskQueue):void {
 
         // curve from https://habr.com/ru/post/450924/

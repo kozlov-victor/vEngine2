@@ -44,7 +44,7 @@ export class Machine {
             result.push(wheel.position);
         }
 
-        window.top.postMessage({
+        window.top?.postMessage({
             command:'machineCompleted',
             result
         },'*');

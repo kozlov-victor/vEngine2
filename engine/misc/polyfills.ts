@@ -12,7 +12,7 @@ const rafPolyfill = (f:FrameRequestCallback):number=>{
 
 globalThis.requestAnimationFrame =
     globalThis.requestAnimationFrame||
-    globalThis.webkitRequestAnimationFrame||
+    (globalThis as any).webkitRequestAnimationFrame||
     rafPolyfill;
 
 if (!globalThis.cancelAnimationFrame) {
