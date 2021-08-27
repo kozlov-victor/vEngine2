@@ -216,13 +216,13 @@ export class PolylineTriangulator {
             }
 
             // emit vertices
-            vertices.push(start1);debug(start1);
-            vertices.push(start2);debug(start2);
-            vertices.push(end1);debug(end1);
+            vertices.push(start1);
+            vertices.push(start2);
+            vertices.push(end1);
 
-            vertices.push(end1);debug(end1);
-            vertices.push(start2);debug(start2);
-            vertices.push(end2);debug(end2);
+            vertices.push(end1);
+            vertices.push(start2);
+            vertices.push(end2);
 
             start1 = nextStart1;
             start2 = nextStart2;
@@ -343,9 +343,9 @@ export class PolylineTriangulator {
 
             if (jointStyle === JointStyle.BEVEL) {
                 // simply connect the intersection points
-            vertices.push(outer1.b);debug(outer1.b);
-            vertices.push(outer2.a);debug(outer2.a);
-            vertices.push(innerSec);debug(innerSec);
+            vertices.push(outer1.b);
+            vertices.push(outer2.a);
+            vertices.push(innerSec);
 
             } else if (jointStyle === JointStyle.ROUND) {
                 // draw a circle between the ends of the outer edges,
@@ -390,7 +390,7 @@ export class PolylineTriangulator {
         // calculate the angle of each triangle
         const triAngle = jointAngle / numTriangles;
 
-        let startPoint:Vec2 = start;
+        let startPoint:Vec2 = new Vec2(start.x,start.y);
         let endPoint: Vec2 = new Vec2(0,0);
         for (let t = 0; t < numTriangles; t++) {
             if (t + 1 === numTriangles) {
@@ -409,11 +409,11 @@ export class PolylineTriangulator {
             }
 
             // emit the triangle
-            vertices.push(startPoint);debug(startPoint);
-            vertices.push(endPoint);debug(endPoint);
-            vertices.push(connectTo);debug(connectTo);
+            vertices.push(Vec2.clone(startPoint));
+            vertices.push(Vec2.clone(endPoint));
+            vertices.push(Vec2.clone(connectTo));
 
-            startPoint = endPoint;
+            startPoint = new Vec2(endPoint.x,endPoint.y);
         }
 
         return vertices;
@@ -423,6 +423,3 @@ export class PolylineTriangulator {
 
 }
 
-const debug = (vec:Vec2):void=> {
-    if (vec.x===0 && vec.y===0) console.trace(vec);
-};
