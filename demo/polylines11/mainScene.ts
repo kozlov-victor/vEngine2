@@ -22,10 +22,11 @@ export class MainScene extends Scene {
                M600,800 C625,700 725,700 750,800 S875,900 900,800
 
                M 100,100 c 25,25 75,25 100,0 s 25,125 0,100 -75,-25 -100,0
-        `).forEach(p=>{
+        `,{
+            lineWidth:2,
+        }).forEach(p=>{
             p.pos.setXY(0,0);
-            p.color = Color.RGB(100,20,222);
-            p.lineWidth = 2;
+            p.color.setRGB(100,20,222);
             this.appendChild(p);
         });
 

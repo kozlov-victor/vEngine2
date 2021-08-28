@@ -18,7 +18,7 @@ export class MainScene extends Scene {
         s1.pos.setXY(100,100);
         this.appendChild(s1);
         const p1 = PolyLines.createEllipse(this.game,100,50);
-        p1.fillColor = Color.fromCssLiteral('#bc3636');
+        p1.color.set(Color.fromCssLiteral('#bc3636'));
         p1.pos.setXY(100,100);
         this.appendChild(p1);
 

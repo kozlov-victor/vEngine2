@@ -35,10 +35,12 @@ export class MainScene extends Scene {
             L 172.55 152.45
             A 30 50 -45 0 1 215.1 109.9
             L 315 10
-        `);
+        `,{
+                lineWidth:2
+            }
+        );
         polyLines.forEach(pl=>{
-            pl.color = Color.RGB(100,20,222);
-            pl.lineWidth = 2;
+            pl.color.setRGB(100,20,222);
             pl.addBehaviour(new DraggableBehaviour(this.game));
             this.appendChild(pl);
         });

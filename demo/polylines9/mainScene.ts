@@ -29,10 +29,12 @@ export class MainScene extends Scene {
                  a25,100 -30 0,1 50,-25 l 50,-25
                  M100,200 C100,100 250,100 250,200
                  S400,300 400,200
-        `).forEach(p=>{
+        `,{
+                lineWidth:2,
+            }
+        ).forEach(p=>{
             p.pos.setXY(0,0);
-            p.color = Color.RGB(100,20,222);
-            p.lineWidth = 2;
+            p.color.setRGB(100,20,222);
             container.appendChild(p);
         });
 

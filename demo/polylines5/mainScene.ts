@@ -34,12 +34,13 @@ export class MainScene extends Scene {
 
             M230 230
             A 45 45, 0, 1, 1, 275 275
-            L 275 230 Z
-
-        `).forEach(p=>{
+            L 275 230 Z`,
+            {
+                lineWidth: 2,
+            }
+        ).forEach(p=>{
             p.pos.setXY(0,0);
-            p.color = Color.RGB(100,20,222);
-            p.lineWidth = 2;
+            p.color.setRGB(100,20,222);
             this.appendChild(p);
         });
 
@@ -47,10 +48,13 @@ export class MainScene extends Scene {
         // test compressed path
         const polyLine2:PolyLine = PolyLine.fromSvgPath(this.game,`
             M0,200v-50h50v-50h50v-50h50v-50h50v200z
-        `);
+        `,
+            {
+                lineWidth:2
+            }
+        );
         polyLine2.pos.setXY(0,0);
-        polyLine2.color = Color.RGB(222,20,12);
-        polyLine2.lineWidth = 2;
+        polyLine2.color.setRGB(222,20,12);
         this.appendChild(polyLine2);
         polyLine2.addBehaviour(new DraggableBehaviour(this.game));
 

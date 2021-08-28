@@ -19,11 +19,10 @@ export class MainScene extends Scene {
 
         const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`
                M10 80 Q 52.5 10, 95 80 T 180 80
-        `);
+        `,{lineWidth:2});
 
         polyLine1.pos.setXY(0,0);
-        polyLine1.color = Color.RGB(100,20,222);
-        polyLine1.lineWidth = 2;
+        polyLine1.color.setRGB(100,20,222);
         this.appendChild(polyLine1);
         polyLine1.addBehaviour(new DraggableBehaviour(this.game));
 

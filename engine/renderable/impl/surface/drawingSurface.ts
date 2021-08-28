@@ -23,6 +23,7 @@ import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple
 import {Mat4} from "@engine/geometry/mat4";
 import {arcToSvgCurve} from "@engine/renderable/impl/geometry/_internal/arcToSvgCurve";
 import MAT16 = Mat4.MAT16;
+import {ITriangulatedPathParams} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {
@@ -183,7 +184,9 @@ class DrawingSession implements IDrawingSession {
 
     public lineTo(x:number,y:number):void {
         this._line.setXYX1Y1(this._pointMoveTo.x,this._pointMoveTo.y,x,y);
-        this.drawSimpleShape(this._line);
+        this._line.color.set(this.surface.getDrawColor());
+        this._line.lineWidth = this.surface.getLineWidth();
+        this.drawModel(this._line);
         this.moveTo(x,y);
     }
 
@@ -198,13 +201,12 @@ class DrawingSession implements IDrawingSession {
     public drawPolyline(pathOrVertices:string|number[]):void{
         let p:PolyLine;
         if (isString(pathOrVertices)) {
-            p = PolyLine.fromSvgPath(this.game,pathOrVertices);
+            p = PolyLine.fromSvgPath(this.game,pathOrVertices,this.surface._pathParams);
         } else {
-            p = PolyLine.fromVertices(this.game,pathOrVertices);
+            p = PolyLine.fromVertices(this.game,pathOrVertices,this.surface._pathParams);
         }
-        p.fillColor.set(this.surface.getFillColor());
+        p.color.set(this.surface.getFillColor());
         p.color.set(this.surface.getDrawColor());
-        p.lineWidth = this.surface.getLineWidth();
         this.drawModel(p);
     }
 
@@ -241,29 +243,27 @@ class DrawingSession implements IDrawingSession {
     }
 
     private drawPolygonFromSvgPath(svgPath:string):void {
-        const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(this.game,svgPath);
-        polyLines.forEach((pl:PolyLine)=>{
+        const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(this.game,svgPath,{lineWidth:this.surface.getLineWidth()});
+        for (const pl of polyLines) {
             const pg:Polygon = Polygon.fromPolyline(this.game,pl);
             pg.fillColor.set(this.surface.getFillColor());
             this.drawModel(pg);
-        });
+        }
         if (this.surface.getLineWidth()>0) {
-            polyLines.forEach((pl:PolyLine)=>{
+            for (const pl of polyLines) {
                 pl.color.set(this.surface.getDrawColor());
-                pl.lineWidth = this.surface.getLineWidth();
                 this.drawModel(pl);
-            });
+            }
         }
     }
 
     private drawPolygonFromVertices(vertices:number[]):void{
-        const pl:PolyLine = PolyLine.fromVertices(this.game,vertices,true);
+        const pl:PolyLine = PolyLine.fromVertices(this.game,vertices,{lineWidth:this.surface.getLineWidth()},true);
         pl.color.set(this.surface.getDrawColor());
         const pg:Polygon = Polygon.fromPolyline(this.game,pl);
         pg.fillColor.set(this.surface.getFillColor());
         this.drawModel(pg);
         if (this.surface.getLineWidth()>0) {
-            pl.lineWidth = this.surface.getLineWidth();
             this.drawModel(pl);
         }
     }
@@ -303,7 +303,9 @@ export class DrawingSurface
 
     private fillColor:Color = Color.RGBA(0,0,0,255);
     private drawColor:Color = Color.RGBA(0,0,0,255);
-    private _lineWidth:number = 1;
+    public _pathParams:ITriangulatedPathParams = {
+        lineWidth:1
+    };
 
     private static normalizeColor(col:byte|number|Color, g?:byte, b?:byte, a:byte = 255):Color {
         if (isObject(col)) { // Color
@@ -351,11 +353,11 @@ export class DrawingSurface
     }
 
     public setLineWidth(v:number):void {
-        this._lineWidth = v;
+        this._pathParams.lineWidth = v;
     }
 
     public getLineWidth():number {
-        return this._lineWidth;
+        return this._pathParams.lineWidth!;
     }
 
     public transformReset(): void {

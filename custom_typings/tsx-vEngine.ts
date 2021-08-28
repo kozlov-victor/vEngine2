@@ -70,7 +70,6 @@ interface IRectangleProps extends IShapeProps, IPositionableProps {
 
 interface ILineProps extends IShapeProps,IPositionableProps {
     pointTo: IPoint;
-    borderRadius?: number;
 }
 
 interface IImageProps extends ITransformableProps, IPositionableProps {

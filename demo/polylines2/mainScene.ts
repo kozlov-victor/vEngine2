@@ -32,9 +32,8 @@ export class MainScene extends Scene {
         this.appendChild(container);
 
         curves.forEach(c=>{
-            const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(this.game,c);
+            const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(this.game,c,{lineWidth:3});
             polyLines.forEach(p=>{
-                p.lineWidth = 3;
                 container.appendChild(p);
             });
         });

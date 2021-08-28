@@ -7,8 +7,6 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-
-
     public override onPreloading(taskQueue:TaskQueue):void {
 
         // https://www.w3.org/TR/SVG/paths.html
@@ -27,8 +25,6 @@ export class MainScene extends Scene {
         polygon2.fillColor = Color.RGB(255,255,0);
         this.appendChild(polygon2);
         polygon2.addBehaviour(new DraggableBehaviour(this.game));
-
-
 
     }
 

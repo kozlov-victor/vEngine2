@@ -447,8 +447,7 @@ class SvgElementRenderer {
         });
 
         if (lineWidth!==0) {
-            PolyLine.fromMultiCurveSvgPath(this.game,data).forEach(p=>{
-                p.lineWidth = lineWidth;
+            PolyLine.fromMultiCurveSvgPath(this.game,data,{lineWidth}).forEach(p=>{
                 p.color.set(drawColor);
                 container.appendChild(p);
             });
@@ -577,8 +576,7 @@ class SvgElementRenderer {
         }
 
         if (lineWidth>0 && drawColor.a>0) {
-            const polyline:PolyLine = PolyLine.fromVertices(this.game,vertices);
-            polyline.lineWidth = lineWidth;
+            const polyline:PolyLine = PolyLine.fromVertices(this.game,vertices,{lineWidth});
             polyline.color.set(drawColor);
             container.appendChild(polyline);
         }

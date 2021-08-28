@@ -152,8 +152,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
             x+=MathEx.randomInt(-50,50);
             height+=MathEx.randomInt(10,100);
         }
-        const pl = PolyLine.fromPoints(this.game,points);
-        pl.lineWidth = MathEx.randomInt(2,7);
+        const pl = PolyLine.fromPoints(this.game,points,{lineWidth:MathEx.randomInt(2,7)});
         pl.color.set(Color.RGB(
             MathEx.randomInt(100,122) as byte,
             MathEx.randomInt(100,122) as byte,
@@ -175,8 +174,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
             y+=MathEx.randomInt(-50,50);
             width+=MathEx.randomInt(10,100);
         }
-        const pl = PolyLine.fromPoints(this.game,points);
-        pl.lineWidth = MathEx.randomInt(2,7);
+        const pl = PolyLine.fromPoints(this.game,points,{lineWidth:MathEx.randomInt(2,7)});
         pl.color.set(Color.RGB(
             MathEx.randomInt(100,122) as byte,
             MathEx.randomInt(100,122) as byte,

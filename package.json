@@ -8,7 +8,6 @@
     "dependencies": {
         "@phenomnomnominal/tsquery": "4.1.1",
         "@phenomnomnominal/tstemplate": "0.1.0",
-        "awesome-typescript-loader": "5.2.1",
         "terser-webpack-plugin": "5.1.4",
         "ts-loader": "9.2.5",
         "tslib": "2.3.1",
@@ -20,9 +19,7 @@
     },
     "scripts": {
         "start": "node --inspect node_modules/webpack/bin/webpack.js --env debug=true -w",
-        "build": "node node_modules/webpack/bin/webpack.js",
-        "build-lints": "node node_tools/lints/buildRules",
-        "build-transformers": "node node_tools/transformers/buildTransformers"
+        "build": "node node_modules/webpack/bin/webpack.js"
     },
     "main": ""
 }

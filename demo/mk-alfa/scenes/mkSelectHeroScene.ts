@@ -155,8 +155,7 @@ class TabStrip {
             x+=MathEx.randomInt(-50,50);
             height+=MathEx.randomInt(10,100);
         }
-        const pl = PolyLine.fromPoints(this.game,points);
-        pl.lineWidth = MathEx.randomInt(2,7);
+        const pl = PolyLine.fromPoints(this.game,points,{lineWidth:MathEx.randomInt(2,7)});
         pl.color.set(Color.RGB(
             MathEx.randomInt(200,222) as byte,
             MathEx.randomInt(200,222) as byte,

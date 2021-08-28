@@ -3,7 +3,6 @@ import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {AbstractPrimitive, IPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {EarClippingTriangulator} from "@engine/renderable/impl/geometry/_internal/earClippingTriangulator";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {calcNormal} from "@engine/renderable/impl/geometry/_internal/calcNormal";
 import {IPoint3d} from "@engine/geometry/point3d";
 import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/_internal/isPolylineClockWise";
@@ -31,8 +30,11 @@ export class Polygon extends Mesh2d {
 
     public static fromMultiCurveSvgPath(game:Game,path:string):Polygon[]{
         const polygons:Polygon[] = [];
-        const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(game,path,true);
-        polyLines.forEach(p=>polygons.push(Polygon.fromPolyline(game,p)));
+        const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(game,path,{},true);
+        polyLines.forEach(p=>{
+            polygons.push(Polygon.fromPolyline(game,p));
+            p.destroy();
+        });
         return polygons;
     }
 
@@ -61,10 +63,9 @@ export class Polygon extends Mesh2d {
 
     public static fromPolyline(game:Game,p:PolyLine):Polygon {
         const vertices:number[] = [];
-        p.children.forEach((l:RenderableModel)=>{
+        for (const l of p.getSegments()) {
             vertices.push(l.pos.x,l.pos.y);
-        });
-
+        }
         const triangulator:EarClippingTriangulator = new EarClippingTriangulator();
         const triangulatedIndices:number[] = triangulator.computeTriangles(vertices);
         const triangulatedVertices:number[] = [];
@@ -80,7 +81,7 @@ export class Polygon extends Mesh2d {
     }
 
     public static fromSvgPath(game:Game,p:string):Polygon {
-        const polyline:PolyLine = PolyLine.fromSvgPath(game,p,true);
+        const polyline:PolyLine = PolyLine.fromSvgPath(game,p,{},true);
         return Polygon.fromPolyline(game,polyline);
     }
 

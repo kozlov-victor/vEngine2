@@ -1,17 +1,18 @@
-import {Shape} from "@engine/renderable/abstract/shape";
 import {ICloneable} from "@engine/core/declarations";
 import {Point2d} from "@engine/geometry/point2d";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Game} from "@engine/core/game";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {Color} from "@engine/renderer/common/color";
 
 
-export class Line extends Shape implements ICloneable<Line>, ILineProps {
+export class Line extends RenderableModel implements ICloneable<Line>, ILineProps {
 
-    public borderRadius:number = 0;
-    declare public fillColor:never;
+    public color:Color = Color.BLACK.clone();
     public readonly pointTo:Point2d = new Point2d(0,0,()=>this.onPointChanged());
 
     private readonly _rectangleRepresentation:Rectangle = new Rectangle(this.game);
+    private _lineWidth:number;
 
     constructor(game:Game){
         super(game);
@@ -26,12 +27,12 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
         this.pointTo.setXY(dx,dy);
     }
 
-    public override set lineWidth(value: number) {
+    public set lineWidth(value: number) {
         this._lineWidth = value;
         this.onPointChanged();
     }
 
-    public override get lineWidth(): number {
+    public get lineWidth(): number {
         return this._lineWidth;
     }
 
@@ -51,7 +52,6 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
     }
 
     public getRectangleRepresentation():Rectangle{
-        this._rectangleRepresentation.borderRadius = this.borderRadius;
         this._rectangleRepresentation.fillColor = this.color;
         return this._rectangleRepresentation;
     }
@@ -59,11 +59,9 @@ export class Line extends Shape implements ICloneable<Line>, ILineProps {
     public override setProps(props:ILineProps):void {
         super.setProps(props);
         this.setXYX1Y1(props.pos?.x??0,props.pos?.y??0,props.pointTo.x,props.pointTo.y);
-        if (props.borderRadius) this.borderRadius = props.borderRadius;
     }
 
     protected override setClonedProperties(cloned:Line):void{
-        cloned.borderRadius = this.borderRadius;
         cloned.pointTo.set(this.pointTo);
         super.setClonedProperties(cloned);
     }

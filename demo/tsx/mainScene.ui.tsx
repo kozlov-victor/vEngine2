@@ -52,7 +52,6 @@ export class MainSceneUi extends VEngineTsxComponent {
                     <v_line
                         pos={{x:10,y:10}}
                         lineWidth={5}
-                        borderRadius={2}
                         color={{r:0,g:200,b:0}}
                         pointTo={{x:100,y:100}}
                     />

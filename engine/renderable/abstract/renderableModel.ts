@@ -3,7 +3,6 @@ import {
     IAlphaBlendable,
     ICloneable,
     IDestroyable,
-    IEventemittable,
     IFilterable,
     IParentChild,
     IRenderable,
@@ -27,7 +26,6 @@ import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitte
 import {Incrementer} from "@engine/resources/incrementer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 import {Scene} from "@engine/scene/scene";
@@ -35,7 +33,6 @@ import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IAnimation, ITargetAnimation} from "@engine/animation/iAnimation";
 import {Color} from "@engine/renderer/common/color";
 import {IRigidBody} from "@engine/physics/common/interfaces";
-import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {MouseEventEmitterDelegate} from "@engine/delegates/eventDelegates/mouseEventEmitterDelegate";
 import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
 import {IDragPoint} from "@engine/behaviour/impl/dragPoint";

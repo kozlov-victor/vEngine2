@@ -40,7 +40,7 @@ export class MainScene extends Scene {
         const placeNextImage = async ()=>{
             if (lastImage!==undefined) lastImage.removeSelf();
             const queue:TaskQueue = new TaskQueue(this.game);
-            lastImage = await SvgImage.create(this.game,queue,images[i]);
+            lastImage = await SvgImage.create(this.game,queue,images[i],{width:500,height:500});
             this.appendChild(lastImage);
             i++;
             i = i%images.length;

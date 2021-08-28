@@ -16,7 +16,10 @@ export class MainScene extends Scene {
         // curve from https://habr.com/ru/post/450924/
         const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`
             M 0 0 c 3.4 -6.8 27.8 -54.2 56 -37.7 C 73.3 -27.5 89.6 -5.1 81.9 5.9 c -5.8 8.3 -24.7 8.7 -45.4 -0.4
-            `
+            `,
+            {
+                lineWidth:2,
+            }
         );
 
         // const polyLine1:PolyLine = PolyLine.fromSvgPath(this.game,`
@@ -25,13 +28,12 @@ export class MainScene extends Scene {
         // );
 
         polyLine1.pos.setXY(100,100);
-        polyLine1.color = Color.RGB(100,20,222);
-        polyLine1.lineWidth = 2;
+        polyLine1.color.setRGB(100,20,222);
         //this.appendChild(polyLine1);
         polyLine1.addBehaviour(new DraggableBehaviour(this.game));
 
 
-        const mesh2 = triangulatedPathFromPolyline(this.game,polyLine1,{thickness:12,endCapStyle:EndCapStyle.ROUND,jointStyle:JointStyle.ROUND});
+        const mesh2 = triangulatedPathFromPolyline(this.game,polyLine1,{lineWidth:12,endCapStyle:EndCapStyle.ROUND,jointStyle:JointStyle.ROUND});
         mesh2.size.setWH(300,300);
         mesh2.addBehaviour(new DraggableBehaviour(this.game));
         mesh2.fillColor = polyLine1.color;

@@ -33,7 +33,7 @@ export class ControlPointByLengthPassedResolver {
 
     constructor(polyLine:PolyLine) {
         const zeroPoint:Point2d = new Point2d();
-        polyLine.children.forEach((c:Line)=>{
+        polyLine.getSegments().forEach((c:Readonly<Line>)=>{
             const length:number = MathEx.getDistance(zeroPoint,c.pointTo);
             this._controlPoints.push({
                 length,

@@ -26,19 +26,6 @@ export abstract class Shape extends RenderableModel implements IShapeProps{
         super(game);
     }
 
-    public cacheAsBitmap():Image {
-        const sizeInt:Size = new Size().setWH(~~this.size.width,~~this.size.height);
-        const renderTarget:IRenderTarget =
-            this.game.getRenderer().getHelper().
-            createRenderTarget(this.game,sizeInt);
-
-        const image:Image = new Image(this.game,renderTarget.getTexture());
-        image.size.set(sizeInt);
-        this.renderToTexture(renderTarget,Color.NONE);
-        renderTarget.destroy();
-        return image;
-    }
-
     public override setProps(props:IShapeProps):void{
         super.setProps(props);
         if (props.color!==undefined) this.color.setRGBA(props.color.r,props.color.g,props.color.b,props.color.a);

@@ -80,7 +80,7 @@ export class ShapeAnimation implements IAnimation {
 
         const controlPointFromResolver = new ControlPointByLengthPassedResolver(polylineFrom);
         const helperPoint:Point2d = new Point2d();
-        polylineFrom.children.forEach((line:Line)=>{
+        polylineFrom.getSegments().forEach((line:Readonly<Line>)=>{
             const relativePassed:number = lengthPassed/polylineFromLength;
             const p:Optional<IPoint2d> = controlPointFromResolver.nextPointByLengthPassedRelative(relativePassed);
             if (p===undefined) return;
@@ -89,7 +89,7 @@ export class ShapeAnimation implements IAnimation {
         });
         controlPointFromResolver.reset();
         lengthPassed = 0;
-        polyLineTo.children.forEach((line:Line)=>{
+        polyLineTo.getSegments().forEach((line:Readonly<Line>)=>{
             const relativePassed:number = lengthPassed/polylineToLength;
             const p:Optional<IPoint2d> = controlPointFromResolver.nextPointByLengthPassedRelative(relativePassed);
             if (p===undefined) return;
@@ -99,7 +99,7 @@ export class ShapeAnimation implements IAnimation {
 
         lengthPassed = 0;
         const controlPointToResolver = new ControlPointByLengthPassedResolver(polyLineTo);
-        polyLineTo.children.forEach((line:Line)=>{
+        polyLineTo.getSegments().forEach((line:Readonly<Line>)=>{
             const relativePassed:number = lengthPassed/polylineToLength;
             const p:Optional<IPoint2d> = controlPointToResolver.nextPointByLengthPassedRelative(relativePassed);
             if (p===undefined) return;
@@ -108,7 +108,7 @@ export class ShapeAnimation implements IAnimation {
         });
         lengthPassed = 0;
         controlPointToResolver.reset();
-        polylineFrom.children.forEach((line:Line)=>{
+        polylineFrom.getSegments().forEach((line:Readonly<Line>)=>{
             const relativePassed:number = lengthPassed/polylineFromLength;
             const p:Optional<IPoint2d> = controlPointToResolver.nextPointByLengthPassedRelative(relativePassed);
             if (p===undefined) return;
