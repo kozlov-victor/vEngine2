@@ -36,7 +36,7 @@ export class MainSceneUi extends VEngineTsxComponent {
                     fillColor={{r:22,g:133,b:43}}
                     radius={22}
                     lineWidth={1}
-                    click={this.onCircleClick.bind(this)}
+                    click={_=>this.onCircleClick()}
                 />
 
                 <v_ellipse
