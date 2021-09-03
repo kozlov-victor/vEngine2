@@ -1,12 +1,14 @@
 import {DebugError} from "@engine/debug/debugError";
+import {AbstractBuffer} from "@engine/renderer/webGl/base/abstract/abstractBuffer";
 
 
-export class IndexBuffer {
+export class IndexBuffer extends AbstractBuffer {
 
     private readonly _buffer:WebGLRenderbuffer;
     private _dataLength:number;
 
     constructor(private readonly _gl:WebGLRenderingContext){
+        super();
         if (DEBUG && !_gl) throw new DebugError("can not create IndexBuffer, gl context not passed to constructor, expected: IndexBuffer(gl)");
 
         this._buffer = _gl.createBuffer() as WebGLRenderbuffer;
@@ -32,6 +34,7 @@ export class IndexBuffer {
     }
 
     public bind():void{
+        this.checkDestroyed();
         this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this._buffer);
     }
 
@@ -40,8 +43,9 @@ export class IndexBuffer {
         this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, null);
     }
 
-    public destroy():void{
+    public override destroy():void{
         this._gl.deleteBuffer(this._buffer);
+        super.destroy();
     }
 
     public getBufferLength():number{

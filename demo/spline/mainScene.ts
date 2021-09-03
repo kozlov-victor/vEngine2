@@ -21,6 +21,7 @@ export class MainScene extends Scene {
 
     private updatePolyline():void{
         if (this.polyline!==undefined) {
+            this.polyline.destroy();
             this.removeChild(this.polyline);
         }
         this.polyline = PolyLine.splineFromPoints(this.game,this.points,{lineWidth:20});

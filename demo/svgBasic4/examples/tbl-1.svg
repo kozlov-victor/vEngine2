@@ -1,0 +1,326 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 770 576">
+    <defs>
+        <linearGradient id="a" x1="201" y1="250.69" x2="204" y2="250.69"
+                        gradientTransform="translate(338 776.82) rotate(180) scale(1 1.65)"
+                        gradientUnits="userSpaceOnUse">
+            <stop offset="0"/>
+            <stop offset="0.13" stop-color="#333"/>
+            <stop offset="0.87" stop-color="#ccc"/>
+            <stop offset="1" stop-color="#fff"/>
+        </linearGradient>
+        <linearGradient id="b" x1="635.91" y1="156.49" x2="633.42" y2="156.49"
+                        gradientTransform="matrix(0.76, 0, 0, -1.65, -393.41, 776.82)" gradientUnits="userSpaceOnUse">
+            <stop offset="0"/>
+            <stop offset="1" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="c" x1="513.91" y1="193.44" x2="511.93" y2="193.44"
+                        gradientTransform="matrix(0.76, 0, 0, -1.65, -301.41, 796.82)" xlink:href="#b"/>
+        <linearGradient id="d" x1="-181.09" y1="165.88" x2="-183.58" y2="165.88"
+                        gradientTransform="matrix(0.76, 0, 0, -1.65, 306.59, 636.82)" xlink:href="#a"/>
+        <linearGradient id="e" x1="-238.09" y1="262.81" x2="-240.07" y2="262.81"
+                        gradientTransform="matrix(0.76, 0, 0, -1.65, 438.59, 796.82)" xlink:href="#a"/>
+        <linearGradient id="f" x1="146" y1="248" x2="620" y2="248" gradientTransform="matrix(1, 0, 0, -1, 1, 581)"
+                        gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="blue"/>
+            <stop offset="0.25" stop-color="#3fc0c0"/>
+            <stop offset="0.5" stop-color="lime"/>
+            <stop offset="0.75" stop-color="#c0c000"/>
+            <stop offset="1" stop-color="red"/>
+        </linearGradient>
+        <linearGradient id="g" x1="635.91" y1="156.49" x2="633.42" y2="156.49"
+                        gradientTransform="matrix(0.76, 0, 0, -1.65, 146.59, 776.82)" xlink:href="#b"/>
+        <linearGradient id="h" x1="513.91" y1="193.44" x2="511.93" y2="193.44"
+                        gradientTransform="matrix(0.76, 0, 0, -1.65, 238.59, 796.82)" xlink:href="#b"/>
+        <linearGradient id="i" x1="513.91" y1="193.44" x2="511.93" y2="193.44"
+                        gradientTransform="matrix(0.76, 0, 0, -1.65, 238.59, 417.82)" xlink:href="#b"/>
+        <linearGradient id="j" x1="635.91" y1="156.49" x2="633.42" y2="156.49"
+                        gradientTransform="matrix(0.76, 0, 0, -1.65, 146.59, 315.82)" xlink:href="#b"/>
+        <linearGradient id="k" x1="513.91" y1="193.44" x2="511.93" y2="193.44"
+                        gradientTransform="matrix(0.76, 0, 0, -1.65, -301.41, 417.82)" xlink:href="#b"/>
+        <linearGradient id="l" x1="635.91" y1="156.49" x2="633.42" y2="156.49"
+                        gradientTransform="matrix(0.76, 0, 0, -1.65, -393.41, 315.82)" xlink:href="#b"/>
+        <linearGradient id="m" x1="134.91" y1="262.81" x2="136.02" y2="262.81"
+                        gradientTransform="matrix(0.76, 0, 0, -1.65, 238.59, 796.82)" xlink:href="#a"/>
+    </defs>
+    <title>tbl-1</title>
+    <rect y="17" width="25" height="2"/>
+    <rect y="49" width="25" height="30"/>
+    <rect y="109" width="25" height="30"/>
+    <rect y="169" width="25" height="30"/>
+    <rect y="229" width="25" height="30"/>
+    <rect y="289" width="25" height="30"/>
+    <rect y="349" width="25" height="30"/>
+    <rect y="409" width="25" height="30"/>
+    <rect y="469" width="25" height="30"/>
+    <rect y="529" width="25" height="30"/>
+    <rect x="10" y="16" width="2" height="544" style="fill:#fff"/>
+    <rect x="743" y="499" width="25" height="30"/>
+    <rect x="743" y="439" width="25" height="30"/>
+    <rect x="743" y="379" width="25" height="30"/>
+    <rect x="743" y="319" width="25" height="30"/>
+    <rect x="743" y="259" width="25" height="30"/>
+    <rect x="743" y="199" width="25" height="30"/>
+    <rect x="743" y="139" width="25" height="30"/>
+    <rect x="743" y="79" width="25" height="30"/>
+    <rect x="24" y="18" width="720" height="540" style="fill:#505050"/>
+    <rect x="24" y="438" width="720" height="30" style="fill:silver"/>
+    <path
+        d="M24,18V558M54,18V558M84,18V558M114,18V558M144,18V558M174,18V558M204,18V558M234,18V558M264,18V558M294,18V558M324,18V558M354,18V558M384,18V558M414,18V558M444,18V558M474,18V558M504,18V558M534,18V558M564,18V558M594,18V558M624,18V558M654,18V558M684,18V558M714,18V558M744,18V558M24,18H744M24,48H744M24,78H744M24,108H744M24,138H744M24,168H744M24,198H744M24,228H744M24,258H744M24,288H744M24,318H744M24,348H744M24,378H744M24,408H744M24,438H744M24,468H744M24,498H744M24,528H744M24,558H744"
+        style="fill:none;stroke:silver;stroke-linecap:square;stroke-width:2px"/>
+    <rect x="39" y="347" width="704" height="32" style="fill:url(#a)"/>
+    <path d="M54,437v31H174V437H54Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M173,498a59,59,0,1,1-59-59A59,59,0,0,1,173,498Z" style="fill:silver"/>
+    <path d="M84,498v13h30V498Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M84,485v13h30V485Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M114,485v13h30V485Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M114,498v13h30V498Z" style="stroke:silver;stroke-width:2px"/>
+    <g style="isolation:isolate">
+        <text transform="translate(69.12 519.58)" style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">
+            3
+        </text>
+    </g>
+    <g style="isolation:isolate">
+        <text transform="translate(69.12 489.58)" style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">
+            4
+        </text>
+    </g>
+    <rect x="85" y="510" width="58" height="17" style="fill:url(#b)"/>
+    <rect x="85" y="469" width="58" height="17" style="fill:url(#c)"/>
+    <rect x="204" y="438" width="30" height="30" style="stroke:silver;stroke-width:2px"/>
+    <path
+        d="M384,50C252.62,50,146,156.62,146,288S252.62,526,384,526,622,419.38,622,288,515.38,50,384,50ZM325,63H443V93H325Zm-90,46,298,.1.08,28H235ZM294,258h180.1v60H294ZM325,484H443v30H325Z"
+        style="fill:silver"/>
+    <rect x="157" y="347" width="470" height="32" style="fill:url(#d)"/>
+    <rect x="249.5" y="347" width="284" height="32" style="fill:url(#e)"/>
+    <rect x="445" y="346.5" width="13" height="33" style="fill:#505050"/>
+    <path d="M294,258v60h60V258H294Z" style="fill:#505050;stroke:silver;stroke-width:2px"/>
+    <rect x="25" y="199" width="30" height="30"/>
+    <path d="M414,258v60h60V258H414Z" style="fill:#505050;stroke:silver;stroke-width:2px"/>
+    <rect x="25" y="346.5" width="14" height="33" style="fill:#505050"/>
+    <path d="M55,199v30h60V199H55Z" style="fill:#1a1a1a"/>
+    <path d="M115,199v30h60V199H115Z" style="fill:#333"/>
+    <path d="M175,199v30h60V199H175Z" style="fill:#4d4d4d"/>
+    <rect x="25" y="139" width="90" height="60" style="fill:#fff"/>
+    <rect x="115" y="139" width="90" height="60" style="fill:#ffff6c"/>
+    <path d="M235,199v30h60V199H235Z" style="fill:#666"/>
+    <path d="M295,199v30h60V199H295Z" style="fill:gray"/>
+    <path d="M355,199v30h60V199H355Z" style="fill:#999"/>
+    <rect x="205" y="139" width="90" height="60" style="fill:#6cffff"/>
+    <path d="M415,199v30h60V199H415Z" style="fill:#b3b3b3"/>
+    <path d="M475,199v30h60V199H475Z" style="fill:#ccc"/>
+    <rect x="385" y="139" width="90" height="60" style="fill:#ff6cff"/>
+    <rect x="295" y="139" width="90" height="60" style="fill:#6cff6c"/>
+    <path d="M535,199v30h60V199H535Z" style="fill:#e5e5e5"/>
+    <path d="M655,199v30h90V199H655Z"/>
+    <rect x="565" y="139" width="90" height="60" style="fill:#6c6cff"/>
+    <rect x="475" y="139" width="90" height="60" style="fill:#ff6c6c"/>
+    <rect x="475" y="438" width="30" height="29"/>
+    <rect x="142.5" y="347" width="15" height="32.5" style="fill:#505050"/>
+    <g style="isolation:isolate">
+        <text transform="translate(144.02 369.68)"
+              style="isolation:isolate;font-size:18px;fill:#fff;font-family:ArialMT, Arial">3
+        </text>
+    </g>
+    <rect x="235" y="347" width="15" height="33" style="fill:#505050"/>
+    <rect x="325" y="346.5" width="15" height="33" style="fill:#505050"/>
+    <rect x="625.5" y="347" width="15" height="32.5" style="fill:#505050"/>
+    <rect x="535" y="347" width="15" height="32" style="fill:#505050"/>
+    <path d="M147,319a252.72,252.72,0,0,0,5.18,28H615.82A252.72,252.72,0,0,0,621,319Z" style="fill:url(#f)"/>
+    <rect x="323" y="287" width="2" height="2" style="fill:silver"/>
+    <rect x="443" y="287" width="2" height="2" style="fill:silver"/>
+    <g style="isolation:isolate">
+        <text transform="translate(237.12 369.68)"
+              style="isolation:isolate;font-size:18px;fill:#fff;font-family:ArialMT, Arial">4
+        </text>
+    </g>
+    <g style="isolation:isolate">
+        <text transform="translate(327.61 369.68)"
+              style="isolation:isolate;font-size:18px;fill:#fff;font-family:ArialMT, Arial">5
+        </text>
+    </g>
+    <path d="M152.19,229A252.74,252.74,0,0,0,147,257h13V229Z" style="fill:#ff6cff"/>
+    <rect x="160" y="229" width="15" height="28" style="fill:#6cff6c"/>
+    <rect x="175" y="229" width="15" height="28" style="fill:#ff6cff"/>
+    <rect x="190" y="229" width="15" height="28" style="fill:#6cff6c"/>
+    <rect x="205" y="229" width="15" height="28" style="fill:#ff6cff"/>
+    <rect x="220" y="229" width="15" height="28" style="fill:#6cff6c"/>
+    <rect x="235" y="229" width="15" height="28" style="fill:#ff6cff"/>
+    <rect x="250" y="229" width="15" height="28" style="fill:#6cff6c"/>
+    <rect x="265" y="229" width="15" height="28" style="fill:#ff6cff"/>
+    <rect x="280" y="229" width="15" height="28" style="fill:#6cff6c"/>
+    <rect x="295" y="229" width="15" height="28" style="fill:#ffff6c"/>
+    <rect x="310" y="229" width="15" height="28" style="fill:#6c6cff"/>
+    <rect x="325" y="229" width="15" height="28" style="fill:#ffff6c"/>
+    <rect x="340" y="229" width="15" height="28" style="fill:#6c6cff"/>
+    <rect x="355" y="229" width="15" height="28" style="fill:#ffff6c"/>
+    <rect x="370" y="229" width="15" height="28" style="fill:#6c6cff"/>
+    <rect x="385" y="229" width="15" height="28" style="fill:#ffff6c"/>
+    <rect x="400" y="229" width="15" height="28" style="fill:#6c6cff"/>
+    <rect x="415" y="229" width="15" height="28" style="fill:#ffff6c"/>
+    <rect x="430" y="229" width="15" height="28" style="fill:#6c6cff"/>
+    <rect x="445" y="229" width="15" height="28" style="fill:#ffff6c"/>
+    <rect x="460" y="229" width="15" height="28" style="fill:#6c6cff"/>
+    <path d="M610,229v28h11a252.74,252.74,0,0,0-5.19-28Z" style="fill:#6cffff"/>
+    <rect x="475" y="229" width="15" height="28" style="fill:#ff6c6c"/>
+    <rect x="490" y="229" width="15" height="28" style="fill:#6cffff"/>
+    <rect x="505" y="229" width="15" height="28" style="fill:#ff6c6c"/>
+    <rect x="520" y="229" width="15" height="28" style="fill:#6cffff"/>
+    <rect x="535" y="229" width="15" height="28" style="fill:#ff6c6c"/>
+    <rect x="550" y="229" width="15" height="28" style="fill:#6cffff"/>
+    <rect x="565" y="229" width="15" height="28" style="fill:#ff6c6c"/>
+    <rect x="580" y="229" width="15" height="28" style="fill:#6cffff"/>
+    <rect x="595" y="229" width="15" height="28" style="fill:#ff6c6c"/>
+    <path d="M146.78,259A235.28,235.28,0,0,0,145,287H295V259Z" style="fill:#bfbfbf"/>
+    <path d="M146.78,317A269.86,269.86,0,0,1,145,287H295v30Z" style="fill:#0c0401"/>
+    <path d="M621.22,317A235.28,235.28,0,0,0,623,289H473v28Z" style="fill:#bfbfbf"/>
+    <path d="M621.22,259A269.86,269.86,0,0,1,623,289H473V259Z" style="fill:#0c0401"/>
+    <rect x="158" y="259" width="2" height="28"/>
+    <rect x="158" y="289" width="2" height="28" style="fill:silver"/>
+    <rect x="597" y="259" width="8" height="2" style="fill:silver"/>
+    <rect x="589" y="261" width="8" height="2" style="fill:silver"/>
+    <rect x="581" y="263" width="8" height="2" style="fill:silver"/>
+    <rect x="573" y="265" width="8" height="2" style="fill:silver"/>
+    <rect x="565" y="267" width="8" height="2" style="fill:silver"/>
+    <rect x="557" y="269" width="8" height="2" style="fill:silver"/>
+    <rect x="549" y="271" width="8" height="2" style="fill:silver"/>
+    <rect x="541" y="273" width="8" height="2" style="fill:silver"/>
+    <rect x="533" y="275" width="8" height="2" style="fill:silver"/>
+    <rect x="525" y="277" width="8" height="2" style="fill:silver"/>
+    <rect x="517" y="279" width="8" height="2" style="fill:silver"/>
+    <rect x="509" y="281" width="8" height="2" style="fill:silver"/>
+    <rect x="501" y="283" width="8" height="2" style="fill:silver"/>
+    <rect x="493" y="285" width="8" height="2" style="fill:silver"/>
+    <rect x="275" y="289" width="8" height="2" style="fill:silver"/>
+    <rect x="267" y="291" width="8" height="2" style="fill:silver"/>
+    <rect x="259" y="293" width="8" height="2" style="fill:silver"/>
+    <rect x="251" y="295" width="8" height="2" style="fill:silver"/>
+    <rect x="243" y="297" width="8" height="2" style="fill:silver"/>
+    <rect x="235" y="299" width="8" height="2" style="fill:silver"/>
+    <rect x="227" y="301" width="8" height="2" style="fill:silver"/>
+    <rect x="219" y="303" width="8" height="2" style="fill:silver"/>
+    <rect x="211" y="305" width="8" height="2" style="fill:silver"/>
+    <rect x="203" y="307" width="8" height="2" style="fill:silver"/>
+    <rect x="195" y="309" width="8" height="2" style="fill:silver"/>
+    <rect x="187" y="311" width="8" height="2" style="fill:silver"/>
+    <rect x="179" y="313" width="8" height="2" style="fill:silver"/>
+    <rect x="171" y="315" width="8" height="2" style="fill:silver"/>
+    <rect x="25" y="559" width="30" height="17"/>
+    <rect x="85" y="559" width="30" height="17"/>
+    <rect x="145" y="559" width="30" height="17"/>
+    <rect x="205" y="559" width="30" height="17"/>
+    <rect x="265" y="559" width="30" height="17"/>
+    <rect x="325" y="559" width="30" height="17"/>
+    <rect x="385" y="559" width="30" height="17"/>
+    <rect x="445" y="559" width="30" height="17"/>
+    <rect x="505" y="559" width="30" height="17"/>
+    <rect x="565" y="559" width="30" height="17"/>
+    <rect x="625" y="559" width="30" height="17"/>
+    <rect x="685" y="559" width="30" height="17"/>
+    <rect x="743" y="559" width="25" height="17"/>
+    <rect x="25" width="30" height="17"/>
+    <rect x="85" width="30" height="17"/>
+    <rect x="145" width="30" height="17"/>
+    <rect x="205" width="30" height="17"/>
+    <rect x="265" width="30" height="17"/>
+    <rect x="325" width="30" height="17"/>
+    <rect x="385" width="30" height="17"/>
+    <rect x="445" width="30" height="17"/>
+    <rect x="505" width="30" height="17"/>
+    <rect x="565" width="30" height="17"/>
+    <rect x="625" width="30" height="17"/>
+    <rect x="685" width="30" height="17"/>
+    <rect x="745" y="19" width="23" height="30"/>
+    <rect x="756" y="16" width="2" height="559" style="fill:#fff"/>
+    <rect x="25" y="567" width="745" height="2" style="fill:#fff"/>
+    <rect x="20" y="7" width="745" height="2" style="fill:#fff"/>
+    <g style="isolation:isolate">
+        <text transform="translate(26.68 369.68)"
+              style="isolation:isolate;font-size:18px;fill:#fff;font-family:ArialMT, Arial">2
+        </text>
+    </g>
+    <g style="isolation:isolate">
+        <text transform="translate(627.68 369.68)"
+              style="isolation:isolate;font-size:18px;fill:#fff;font-family:ArialMT, Arial">2
+        </text>
+    </g>
+    <g style="isolation:isolate">
+        <text transform="translate(537.63 369.68)"
+              style="isolation:isolate;font-size:18px;fill:#fff;font-family:ArialMT, Arial">3
+        </text>
+    </g>
+    <g style="isolation:isolate">
+        <text transform="translate(446.02 369.68)"
+              style="isolation:isolate;font-size:18px;fill:#fff;font-family:ArialMT, Arial">4
+        </text>
+    </g>
+    <rect x="263" y="287" width="2" height="2" style="fill:silver"/>
+    <rect x="203" y="287" width="2" height="2" style="fill:silver"/>
+    <rect x="563" y="287" width="2" height="2" style="fill:silver"/>
+    <rect x="235" y="438" width="30" height="29"/>
+    <rect x="205" y="379" width="90" height="60" style="fill:aqua"/>
+    <rect x="295" y="438" width="30" height="29"/>
+    <rect x="355" y="438" width="30" height="29"/>
+    <rect x="295" y="379" width="90" height="60" style="fill:lime"/>
+    <rect x="415" y="438" width="30" height="29"/>
+    <rect x="385" y="379" width="90" height="60" style="fill:#f0f"/>
+    <rect x="475" y="379" width="90" height="60" style="fill:red"/>
+    <path d="M595,199v30h60V199H595Z" style="fill:#fff"/>
+    <path d="M594,437v31H714V437H594Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M713,498a59,59,0,1,1-59-59A59,59,0,0,1,713,498Z" style="fill:silver"/>
+    <path d="M624,498v13h30V498Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M624,485v13h30V485Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M654,485v13h30V485Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M654,498v13h30V498Z" style="stroke:silver;stroke-width:2px"/>
+    <g style="isolation:isolate">
+        <text transform="translate(609.12 519.58)" style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">
+            3
+        </text>
+    </g>
+    <g style="isolation:isolate">
+        <text transform="translate(609.12 489.58)" style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">
+            4
+        </text>
+    </g>
+    <rect x="625" y="510" width="58" height="17" style="fill:url(#g)"/>
+    <rect x="625" y="469" width="58" height="17" style="fill:url(#h)"/>
+    <rect x="565" y="379" width="90" height="60" style="fill:blue"/>
+    <rect x="503" y="287" width="2" height="2" style="fill:silver"/>
+    <rect x="655" y="139" width="90" height="60" style="fill:#404040"/>
+    <path d="M713,78a59,59,0,1,1-59-59A59,59,0,0,1,713,78Z" style="fill:silver"/>
+    <path d="M654,78V65h30V78Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M624,78V65h30V78Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M624,91V78h30V91Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M654,91V78h30V91Z" style="stroke:silver;stroke-width:2px"/>
+    <g style="isolation:isolate">
+        <text transform="translate(609.12 99.58)" style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">
+            4
+        </text>
+    </g>
+    <g style="isolation:isolate">
+        <text transform="translate(609.12 67.58)" style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">
+            3
+        </text>
+    </g>
+    <rect x="625" y="90" width="58" height="17" style="fill:url(#i)"/>
+    <rect x="625" y="49" width="58" height="17" style="fill:url(#j)"/>
+    <path d="M173,78a59,59,0,1,1-59-59A59,59,0,0,1,173,78Z" style="fill:silver"/>
+    <path d="M114,78V65h30V78Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M84,78V65h30V78Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M84,91V78h30V91Z" style="stroke:silver;stroke-width:2px"/>
+    <path d="M114,91V78h30V91Z" style="stroke:silver;stroke-width:2px"/>
+    <g style="isolation:isolate">
+        <text transform="translate(69.12 99.58)" style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">4
+        </text>
+    </g>
+    <g style="isolation:isolate">
+        <text transform="translate(69.12 67.58)" style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">3
+        </text>
+    </g>
+    <rect x="85" y="90" width="58" height="17" style="fill:url(#k)"/>
+    <rect x="85" y="49" width="58" height="17" style="fill:url(#l)"/>
+    <rect x="339" y="347" width="106" height="32" style="fill:url(#m)"/>
+    <rect x="115" y="379" width="90" height="60" style="fill:#ff0"/>
+    <rect x="25" y="379" width="90" height="60" style="fill:#fff"/>
+    <path d="M535,439v28h5.47A232.5,232.5,0,0,0,565,444.1V439Z"/>
+    <rect x="655" y="379" width="90" height="60"/>
+</svg>

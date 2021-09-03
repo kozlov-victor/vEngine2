@@ -29,9 +29,15 @@ export abstract class Mesh2d extends RenderableModel {
         this._bufferInfo = bufferInfo ?? this.game.getRenderer<WebGlRenderer>().initBufferInfo(this);
     }
 
-    public draw():void{
+    public override draw():void{
         this.game.getRenderer().drawMesh2d(this);
     }
+
+    public override destroy():void {
+        this._bufferInfo.destroy();
+        super.destroy();
+    }
+
 
     protected override setClonedProperties(cloned: Mesh2d): void {
         cloned.fillColor = this.fillColor.clone();
