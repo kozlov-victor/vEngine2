@@ -20,7 +20,8 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {LazyImageCacheSurface} from "@engine/renderable/impl/surface/lazyImageCacheSurface";
 import {ITexture} from "@engine/renderer/common/texture";
 import {TaskQueue} from "@engine/resources/taskQueue";
-import {XmlNode, XmlDocument} from "@engine/misc/xml/xmlELements";
+import {XmlDocument, XmlNode} from "@engine/misc/xml/xmlELements";
+import {EndCapStyle, JointStyle} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 
 const NAMED_COLOR_TABLE:Record<string, string> =
     {
@@ -438,16 +439,35 @@ class SvgElementRenderer {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
 
+
         Polygon.fromMultiCurveSvgPath(this.game,data).forEach((p,i,arr)=>{
             p.fillColor = fillColor;
-            // if (arr.length>1 && p.isClockWise()) {
-            //     p.blendMode = BLEND_MODE.SUBSTRACTIVE;
-            // }
             container.appendChild(p);
         });
 
         if (lineWidth!==0) {
-            PolyLine.fromMultiCurveSvgPath(this.game,data,{lineWidth}).forEach(p=>{
+            const lineCapRaw:string = this.lookUpProperty(el,'stroke-linecap',false); // butt round square
+            const lineJointRaw:string = this.lookUpProperty(el,'stroke-linejoin',false); // miter round bevel miter-clip arcs
+
+            let endCapStyle:Optional<EndCapStyle>;
+            if (lineCapRaw==='butt') endCapStyle = EndCapStyle.BUTT;
+            else if (lineCapRaw==='round') endCapStyle = EndCapStyle.ROUND;
+            else if (lineCapRaw==='square') endCapStyle = EndCapStyle.SQUARE;
+            else if (lineCapRaw!==undefined) {
+                console.warn(`unknown stroke-linecap: ${lineCapRaw}`);
+            }
+
+            let jointStyle:Optional<JointStyle>;
+            if (lineJointRaw==='miter') jointStyle = JointStyle.MITER;
+            else if (lineJointRaw==='round') jointStyle = JointStyle.ROUND;
+            else if (lineJointRaw==='bevel') jointStyle = JointStyle.BEVEL;
+            else if (lineJointRaw==='miter-clip') jointStyle = JointStyle.MITER;
+            else if (lineJointRaw==='arcs') jointStyle = JointStyle.ROUND;
+            else if (lineJointRaw!==undefined) {
+                console.warn(`unknown stroke-linejoin: ${lineJointRaw}`);
+            }
+
+            PolyLine.fromMultiCurveSvgPath(this.game,data,{lineWidth,endCapStyle,jointStyle}).forEach(p=>{
                 p.color.set(drawColor);
                 container.appendChild(p);
             });
