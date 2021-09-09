@@ -50,6 +50,7 @@ export class MainScene extends Scene {
                 Y = C(1 / i) * i;
                 session.lineTo(X + C(X) + C(X) * 799 + 960, Y + S(X) + S(X + Y - t) * 99 + 440);
             }
+            session.completePolyline();
         };
     }
 

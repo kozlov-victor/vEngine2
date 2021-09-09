@@ -45,13 +45,16 @@ export class MainScene extends Scene {
             // https://www.dwitter.net/d/19794
             x.clear();
             let i,r,a:number;
-            for(i=0;i<7;i+=.01){
-                x.setLineWidth(8);
-                r=(.5*S(5+i))*(.5*C(i-6))*2e3;
-                a=i+S(r/99+t);
-                if (i===0) x.moveTo(960+r*C(a),540+r*S(a));
-                x.lineTo(960+r*C(a),540+r*S(a));
-            }
+            x.drawBatch(session=>{
+                for(i=0;i<7;i+=.01){
+                    x.setLineWidth(8);
+                    r=(.5*S(5+i))*(.5*C(i-6))*2e3;
+                    a=i+S(r/99+t);
+                    if (i===0) x.moveTo(960+r*C(a),540+r*S(a));
+                    session.lineTo(960+r*C(a),540+r*S(a));
+                }
+                session.completePolyline();
+            });
         };
     }
 

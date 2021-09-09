@@ -30,6 +30,7 @@ if (!Array.prototype.find) {
         }
         const list = Object(this);
         const length = list.length >>> 0;
+        // eslint-disable-next-line prefer-rest-params
         const thisArg = arguments[1];
         let value;
 
@@ -54,6 +55,7 @@ if (!Array.prototype.findIndex) {
         }
         const list = Object(this);
         const length:number = list.length >>> 0;
+        // eslint-disable-next-line prefer-rest-params
         const thisArg = arguments[1];
         let value:number;
 
@@ -68,7 +70,6 @@ if (!Array.prototype.findIndex) {
 }
 
 if (!Float32Array.from) {
-    // @ts-ignore
     Float32Array.from = (arr:number[])=> {
         return new Float32Array(arr);
     };

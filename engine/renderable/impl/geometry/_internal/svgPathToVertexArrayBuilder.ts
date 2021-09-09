@@ -104,6 +104,10 @@ export class SvgPathToVertexArrayBuilder {
         return this.currentVertexArray;
     }
 
+    public getResult():number[][] {
+        return this.result;
+    }
+
     public moveTo(x:number,y:number):void{
         if (this.currentVertexArray.length>0) this.complete();
         if (!this.lastPoint) this.lastPoint = new Point2d();

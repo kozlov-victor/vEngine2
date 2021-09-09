@@ -14,7 +14,8 @@ const parseErrors = (log:string):IShaderErrorInfo[]=> {
     const logs:IShaderErrorInfo[] = [];
     let result:RegExpMatchArray|null;
 
-    while (!!(result = log.match(/ERROR\:([^\n]+)/))) {
+    // eslint-disable-next-line no-cond-assign
+    while (result = log.match(/ERROR:([^\n]+)/)) {
         if (result.index!==undefined) log = log.slice((result.index + 1));
 
         const line:string = result[1].trim();

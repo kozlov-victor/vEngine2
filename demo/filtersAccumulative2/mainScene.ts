@@ -32,6 +32,7 @@ export class MainScene extends Scene {
         surface.lineTo(7,135);
         surface.lineTo(281,153);
         surface.lineTo(30,39);
+        surface.completePolyline();
         const blurAccumulativeFilter = new KernelBlurAccumulativeFilter(this.game);
         blurAccumulativeFilter.setNoiseIntensity(10);
         surface.filters = [new NoiseHorizontalFilter(this.game),blurAccumulativeFilter, ];

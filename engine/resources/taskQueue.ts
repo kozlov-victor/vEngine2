@@ -26,7 +26,7 @@ export class TaskQueue {
     public async scheduleStart():Promise<void> {
         this.startScheduled = true;
         await Promise.resolve();
-        await this.resourceLoader.start();
+        return await this.resourceLoader.start();
     }
 
 }

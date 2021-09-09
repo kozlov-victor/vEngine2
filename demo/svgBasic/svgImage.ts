@@ -453,7 +453,7 @@ class SvgElementRenderer {
             if (lineCapRaw==='butt') endCapStyle = EndCapStyle.BUTT;
             else if (lineCapRaw==='round') endCapStyle = EndCapStyle.ROUND;
             else if (lineCapRaw==='square') endCapStyle = EndCapStyle.SQUARE;
-            else if (lineCapRaw!==undefined) {
+            else if (lineCapRaw) {
                 console.warn(`unknown stroke-linecap: ${lineCapRaw}`);
             }
 
@@ -463,7 +463,7 @@ class SvgElementRenderer {
             else if (lineJointRaw==='bevel') jointStyle = JointStyle.BEVEL;
             else if (lineJointRaw==='miter-clip') jointStyle = JointStyle.MITER;
             else if (lineJointRaw==='arcs') jointStyle = JointStyle.ROUND;
-            else if (lineJointRaw!==undefined) {
+            else if (lineJointRaw) {
                 console.warn(`unknown stroke-linejoin: ${lineJointRaw}`);
             }
 

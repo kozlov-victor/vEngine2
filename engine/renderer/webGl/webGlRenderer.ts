@@ -53,6 +53,7 @@ const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
 const SCENE_DEPTH:number = 1000;
 
 
+
 const zToWMatrix:Mat16Holder = Mat16Holder.create();
 Mat4.makeZToWMatrix(zToWMatrix,1);
 
@@ -258,7 +259,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         mesh.onUpdatingBuffers();
         md.draw();
         //this.gl.disable(this.gl.CULL_FACE);
-        zToWMatrix.release();
         orthoProjectionMatrix.release();
         zToWProjectionMatrix.release();
         inverseTransposeModelMatrix.release();

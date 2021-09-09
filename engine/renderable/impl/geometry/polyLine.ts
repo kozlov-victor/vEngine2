@@ -15,6 +15,7 @@ import {
 import {Size} from "@engine/geometry/size";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {Image} from "@engine/renderable/impl/general/image";
+import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 
 
 export class PolyLine extends RenderableModel {
@@ -48,7 +49,7 @@ export class PolyLine extends RenderableModel {
             p._segments.push(line);
         }
         p.calcSize();
-        const mesh = triangulatedPathFromPolyline(game,p,params);
+        const mesh:Polygon = triangulatedPathFromPolyline(game,p,params);
         mesh.fillColor = p.color;
         p.appendChild(mesh);
         return p;

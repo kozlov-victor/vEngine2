@@ -1,5 +1,5 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ICloneable, IDestroyable, IParentChild} from "@engine/core/declarations";
+import {ICloneable, IDestroyable, IParentChild, Optional} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";
 import {ISize} from "@engine/geometry/size";
@@ -8,22 +8,25 @@ import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
 import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {Shape} from "@engine/renderable/abstract/shape";
-import {Point2d} from "@engine/geometry/point2d";
-import {Line} from "@engine/renderable/impl/geometry/line";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {IMatrixTransformable, MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
-import {isNumber, isObject, isString} from "@engine/misc/object";
+import {isNumber, isString} from "@engine/misc/object";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {DebugError} from "@engine/debug/debugError";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Mat4} from "@engine/geometry/mat4";
 import {arcToSvgCurve} from "@engine/renderable/impl/geometry/_internal/arcToSvgCurve";
+import {
+    EndCapStyle,
+    ITriangulatedPathParams,
+    JointStyle
+} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
+import {SvgPathToVertexArrayBuilder} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArrayBuilder";
 import MAT16 = Mat4.MAT16;
-import {ITriangulatedPathParams} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {
@@ -55,6 +58,7 @@ export interface IDrawingSession {
     fillArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise?:boolean):void;
     moveTo(x:number,y:number):void;
     lineTo(x:number,y:number):void;
+    completePolyline():void;
     drawPolygon(pathOrVertices:string|number[]):void;
     drawPolyline(pathOrVertices:string|number[]):void;
 }
@@ -63,14 +67,19 @@ class DrawingSession implements IDrawingSession {
 
     private _rect:Rectangle = new Rectangle(this.game);
     private _ellipse:Ellipse = new Ellipse(this.game);
-    private _line:Line = new Line(this.game);
     private _textField:TextFieldWithoutCache;
     private _nullGameObject:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
     private _transformableContainer:ContainerForDrawingSurface = new ContainerForDrawingSurface(this.game,this._matrixStack);
-    private _pointMoveTo:Point2d = new Point2d();
+    private _svgPathToVertexArrayBuilder:Optional<SvgPathToVertexArrayBuilder>;
 
     private readonly _renderTarget:IRenderTarget;
     private _omitSelfOnRendering:boolean = false;
+
+    public pathParams:ITriangulatedPathParams = {
+        lineWidth:1
+    };
+    public fillColor:Color = Color.RGBA(0,0,0,255);
+    public drawColor:Color = Color.RGBA(0,0,0,255);
 
     private readonly canvasImage:Image;
 
@@ -135,8 +144,6 @@ class DrawingSession implements IDrawingSession {
         this.surface.setFillColor(fillColor as Color);
     }
 
-
-
     public fillArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {
         if (radius===0) return;
         if ( // full circle
@@ -179,15 +186,36 @@ class DrawingSession implements IDrawingSession {
     }
 
     public moveTo(x:number,y:number):void {
-        this._pointMoveTo.setXY(x,y);
+        if (this._svgPathToVertexArrayBuilder===undefined) {
+            this._svgPathToVertexArrayBuilder = new SvgPathToVertexArrayBuilder(this.game);
+        }
+        this._svgPathToVertexArrayBuilder.moveTo(x,y);
     }
 
     public lineTo(x:number,y:number):void {
-        this._line.setXYX1Y1(this._pointMoveTo.x,this._pointMoveTo.y,x,y);
-        this._line.color.set(this.surface.getDrawColor());
-        this._line.lineWidth = this.surface.getLineWidth();
-        this.drawModel(this._line);
-        this.moveTo(x,y);
+        if (this._svgPathToVertexArrayBuilder===undefined) {
+            this._svgPathToVertexArrayBuilder = new SvgPathToVertexArrayBuilder(this.game);
+            this._svgPathToVertexArrayBuilder.moveTo(x,y);
+        } else {
+            this._svgPathToVertexArrayBuilder.lineTo(x,y);
+        }
+    }
+
+    public completePolyline():void {
+        if (this._svgPathToVertexArrayBuilder===undefined) {
+            if (DEBUG) throw new DebugError(`can not complete polyline: no path to complete`);
+            return;
+        }
+        const polyLines:PolyLine[] = [];
+        const points:number[][] = this._svgPathToVertexArrayBuilder.getResult();
+        for (const vertices of points) polyLines.push(PolyLine.fromVertices(this.game,vertices,this.pathParams));
+        for (const p of polyLines) {
+            p.color.set(this.drawColor);
+            this.drawModel(p);
+            p.destroy();
+        }
+        this._svgPathToVertexArrayBuilder = undefined;
+
     }
 
     public drawPolygon(pathOrVertices:string|number[]):void{
@@ -201,11 +229,10 @@ class DrawingSession implements IDrawingSession {
     public drawPolyline(pathOrVertices:string|number[]):void{
         let p:PolyLine;
         if (isString(pathOrVertices)) {
-            p = PolyLine.fromSvgPath(this.game,pathOrVertices,this.surface._pathParams);
+            p = PolyLine.fromSvgPath(this.game,pathOrVertices,this.pathParams);
         } else {
-            p = PolyLine.fromVertices(this.game,pathOrVertices,this.surface._pathParams);
+            p = PolyLine.fromVertices(this.game,pathOrVertices,this.pathParams);
         }
-        p.color.set(this.surface.getFillColor());
         p.color.set(this.surface.getDrawColor());
         this.drawModel(p);
     }
@@ -301,15 +328,9 @@ export class DrawingSurface
     private _font:Font;
     private _drawingSession:DrawingSession;
 
-    private fillColor:Color = Color.RGBA(0,0,0,255);
-    private drawColor:Color = Color.RGBA(0,0,0,255);
-    public _pathParams:ITriangulatedPathParams = {
-        lineWidth:1
-    };
-
     private static normalizeColor(col:byte|number|Color, g?:byte, b?:byte, a:byte = 255):Color {
-        if (isObject(col)) { // Color
-            return col;
+        if ((col as Color).type==='Color') { // Color
+            return col as Color;
         }
         else if (isNumber(col) && b===undefined) { // numeric with alfa
             const color:Color = Color.fromRGBNumeric(col as number);
@@ -334,30 +355,38 @@ export class DrawingSurface
     public setFillColor(col:Color):void;
     public setFillColor(r:byte,g:byte,b:byte,a?:byte):void;
     public setFillColor(col:byte|number|Color,g?:byte,b?:byte,a:byte = 255):void{
-        this.fillColor = DrawingSurface.normalizeColor(col,g,b,a);
+        this._drawingSession.fillColor = DrawingSurface.normalizeColor(col,g,b,a);
     }
 
     public getFillColor():Readonly<IColor>{
-        return this.fillColor;
+        return this._drawingSession.fillColor;
     }
 
     public getDrawColor():Readonly<IColor>{
-        return this.drawColor;
+        return this._drawingSession.drawColor;
     }
 
     public setDrawColor(col:number,alpha?:byte):void;
     public setDrawColor(col:Color):void;
     public setDrawColor(r:byte,g:byte,b:byte,a?:byte):void;
     public setDrawColor(col:byte|number|Color,g?:byte,b?:byte,a:byte = 255):void{
-        this.drawColor = DrawingSurface.normalizeColor(col,g,b,a);
+        this._drawingSession.drawColor = DrawingSurface.normalizeColor(col,g,b,a);
     }
 
     public setLineWidth(v:number):void {
-        this._pathParams.lineWidth = v;
+        this._drawingSession.pathParams.lineWidth = v;
+    }
+
+    public setLineJoint(style:JointStyle):void {
+        this._drawingSession.pathParams.jointStyle = style;
+    }
+
+    public setLineCap(style:EndCapStyle):void {
+        this._drawingSession.pathParams.endCapStyle = style;
     }
 
     public getLineWidth():number {
-        return this._pathParams.lineWidth!;
+        return this._drawingSession.pathParams.lineWidth!;
     }
 
     public transformReset(): void {
@@ -477,14 +506,16 @@ export class DrawingSurface
     }
 
     public lineTo(x: number, y: number): void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
         this._drawingSession.lineTo(x,y);
-        this.game.getRenderer().getHelper().restoreRenderTarget();
     }
 
     public moveTo(x: number, y: number): void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
         this._drawingSession.moveTo(x,y);
+    }
+
+    public completePolyline():void {
+        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._drawingSession.completePolyline();
         this.game.getRenderer().getHelper().restoreRenderTarget();
     }
 

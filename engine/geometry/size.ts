@@ -2,7 +2,7 @@ import {ObjectPool} from "../misc/objectPool";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 import {DebugError} from "@engine/debug/debugError";
 import {ICloneable} from "@engine/core/declarations";
-import {isNotNumber, isNumber, isObject} from "@engine/misc/object";
+import {isNotNumber} from "@engine/misc/object";
 
 export interface ISize {
     width: number;

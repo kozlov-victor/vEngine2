@@ -154,11 +154,13 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
                 else a=~~(a * 255) as byte;
             }
             else if (literal.indexOf('hsl')===0) {
-                let h: number, s: number, l: number, alfa: byte;
+                let h: number, s: number, l: number,
+                    alfa: byte;
                 [h, s, l, alfa] = literal.split("(")[1].split(")")[0].split(",").map(x => parseInt(x)) as [number, number, number, byte];
                 if (alfa === undefined) alfa = 255 as byte;
                 else alfa = ~~(alfa * 255) as byte;
                 return Color.HSLA(h, s, l, alfa);
+
             } else {
                 if (DEBUG) throw new DebugError(`unsupported or wrong color literal: ${literal}`);
             }

@@ -4,7 +4,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {noop} from "@engine/misc/object";
 import {Point2d} from "@engine/geometry/point2d";
-import {Optional} from "@engine/core/declarations";
+import {IParentChild, Optional} from "@engine/core/declarations";
 import {SimpleGameObjectContainer} from "./simpleGameObjectContainer";
 import {Scene} from "@engine/scene/scene";
 import {Layer} from "@engine/scene/layer";
@@ -89,6 +89,14 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     }
 
     public emit():void {
+        this._emit(this);
+    }
+
+    public emitTo(parent:Scene|Layer|RenderableModel):void {
+        this._emit(parent);
+    }
+
+    private _emit(parent:Scene|Layer|RenderableModel):void {
 
         if (!this.enabled) return;
 
@@ -120,8 +128,9 @@ export class ParticleSystem extends SimpleGameObjectContainer {
             holder.active = true;
 
             this._onEmitParticle(particle);
-            this.appendChild(particle);
+            parent.appendChild(particle);
         }
+
     }
 
 }

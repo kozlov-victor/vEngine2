@@ -54,6 +54,7 @@ export class MainScene extends Scene {
             surface.setLineWidth(3);
             surface.setDrawColor(0,220,0, 200);
             session.lineTo(40,40);
+            session.completePolyline();
         });
 
 

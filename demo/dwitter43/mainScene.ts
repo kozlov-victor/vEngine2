@@ -59,8 +59,9 @@ export class MainScene extends Scene {
             for(i=w=960;i>0;i--) {
                 e=C(T(i)*3-S(t*6-C(t+i*9)-t)-t)-8;
                 if (i===960) x.moveTo(w/2+w*C(i)/3,300-(C(i)*S(i)*3)/e*w);
-                x.lineTo(w/2+w*C(i)/3,300-(C(i)*S(i)*3)/e*w);
+                session.lineTo(w/2+w*C(i)/3,300-(C(i)*S(i)*3)/e*w);
             }
+            session.completePolyline();
         };
     }
 

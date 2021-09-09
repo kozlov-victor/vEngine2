@@ -8,6 +8,7 @@ import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {History} from "./history";
 import {Game} from "@engine/core/game";
 import {Board} from "./board";
+import {Optional} from "@engine/core/declarations";
 
 export class TeacherStuff {
 
@@ -21,15 +22,20 @@ export class TeacherStuff {
 
     private listenMouse():void{
         let canvasMouseDowned:boolean = false;
+        let oldX:Optional<number> = 0;
+        let oldY:Optional<number> = 0;
         this.surface.mouseEventHandler.on(MOUSE_EVENTS.mouseDown, e=>{
             canvasMouseDowned = true;
-            this.surface.moveTo(e.screenX,e.screenY);
+            if (oldX===undefined) oldX = e.screenX;
+            if (oldY===undefined) oldY = e.screenY;
+            this.surface.moveTo(oldX,oldY);
             this.surface.lineTo(e.screenX,e.screenY);
+            oldX = e.screenX;
+            oldY = e.screenY;
             this.currentCommand.points!.push(+e.screenX.toFixed(2),+e.screenY.toFixed(2));
         });
         this.surface.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, e=>{
             if (e.isMouseDown && canvasMouseDowned) {
-                //this.surface.lineTo(e.screenX,e.screenY);
                 this.surface.moveTo(e.screenX,e.screenY);
                 this.currentCommand.points!.push(+e.screenX.toFixed(2),+e.screenY.toFixed(2));
             }
@@ -42,6 +48,8 @@ export class TeacherStuff {
             this.currentCommand = {points:[]};
             await HttpClient.post('addCommands',this.teacherCommands);
             this.teacherCommands = [];
+            oldX = undefined;
+            oldY = undefined;
         });
         this.surface.mouseEventHandler.on(MOUSE_EVENTS.mousePressed, async e=>{
             this.surface.clear();

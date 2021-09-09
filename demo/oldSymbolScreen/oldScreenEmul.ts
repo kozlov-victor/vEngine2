@@ -288,6 +288,7 @@ export class BasicEnv {
         if (attribute===undefined) {
             this.drawingSurface.moveTo(x1,y1);
             this.drawingSurface.lineTo(x2,y2);
+            this.drawingSurface.completePolyline();
         } else if (attribute==='B') {
             this.drawingSurface.setFillColor(Color.NONE.asRGBNumeric(),0);
             this.drawingSurface.drawRect(x1,y1,x2-x1,y2-y1);
@@ -303,6 +304,7 @@ export class BasicEnv {
 
     public DRAW(x:number,y:number):void {
         this.drawingSurface.lineTo(x,y);
+        this.drawingSurface.completePolyline();
     }
 
     public END():void{

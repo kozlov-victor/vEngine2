@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const fs = require('fs');
 const TerserPlugin = require('terser-webpack-plugin');
 const cliUI = require('./node_tools/cliUI');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 let project;
 let allProjects;
@@ -183,19 +184,6 @@ module.exports = async (env={})=>{
                 })(),
                 {
                     test: /\.tsx?$/,
-                    enforce: 'pre',
-                    use: [
-                        {
-                            loader: 'tslint-loader',
-                            options: {
-                                emitErrors: true,
-                                failOnHint: true
-                            }
-                        }
-                    ]
-                },
-                {
-                    test: /\.tsx?$/,
                     use: [
                         {
                             loader: "ts-loader",options: {
@@ -257,6 +245,13 @@ module.exports = async (env={})=>{
         new webpack.DefinePlugin({
             BUILD_AT: webpack.DefinePlugin.runtimeValue(() => new Date().getTime()),
             DEBUG: debug,
+        }),
+        new ESLintPlugin({
+            context: '../', // <-- change context path
+            emitError: true,
+            emitWarning: true,
+            failOnError: true,
+            extensions: ["ts", "tsx"],
         }),
         new WebpackDonePlugin()
     ];

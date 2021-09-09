@@ -184,7 +184,11 @@ export class Game {
             this._currScene.lifeCycleState = SceneLifeCycleState.PRELOADING;
             const taskQueue:TaskQueue = new TaskQueue(this);
             const resourceLoader:ResourceLoader = taskQueue.getLoader();
-            taskQueue.scheduleStart();
+            taskQueue.
+                scheduleStart().
+                catch(e=>{
+                    console.error(e);
+                });
             this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.PRELOADING,{taskQueue});
             scene.onPreloading(taskQueue);
             resourceLoader.onProgress((n:number)=>{

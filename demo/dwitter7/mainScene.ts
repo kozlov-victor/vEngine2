@@ -51,6 +51,7 @@ export class MainScene extends Scene {
                 if (i===0) batch.moveTo(i,400+S(t+i/127)*200);
                 batch.lineTo(i,400+S(t+i/127)*200);
             }
+            batch.completePolyline();
         });
 
 

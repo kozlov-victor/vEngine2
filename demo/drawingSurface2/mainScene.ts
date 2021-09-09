@@ -2,6 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {Optional} from "@engine/core/declarations";
 
 export class MainScene extends Scene {
 
@@ -21,12 +22,29 @@ export class MainScene extends Scene {
         this.appendChild(surface);
         surface.setDrawColor(120,222,200);
         surface.setLineWidth(2);
+        let oldX:Optional<number>;
+        let oldY:Optional<number>;
         surface.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, e=>{
-            if (e.isMouseDown) surface.lineTo(e.screenX,e.screenY);
-            surface.moveTo(e.screenX,e.screenY);
+            if (e.isMouseDown) {
+                if (oldX===undefined) oldX = e.screenX;
+                if (oldY===undefined) oldY = e.screenY;
+                surface.moveTo(oldX,oldY);
+                surface.lineTo(e.screenX,e.screenY);
+                surface.completePolyline();
+                oldX = e.screenX;
+                oldY = e.screenY;
+            }
         });
         surface.mouseEventHandler.on(MOUSE_EVENTS.mouseDown, e=>{
-            surface.lineTo(e.screenX,e.screenY);
+            surface.moveTo(e.screenX,e.screenY);
+        });
+        surface.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, e=>{
+            oldX = undefined;
+            oldY = undefined;
+        });
+        surface.mouseEventHandler.on(MOUSE_EVENTS.mouseLeave, e=>{
+            oldX = undefined;
+            oldY = undefined;
         });
         surface.mouseEventHandler.on(MOUSE_EVENTS.mousePressed, e=>{
             surface.clear();

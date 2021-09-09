@@ -118,12 +118,12 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         }
     }
 
-    private interpolateAndResolveCollision(player:ArcadeRigidBody, entity:ArcadeRigidBody):void {
-        if (player._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) return;
-        let oldEntityPosX:number = entity._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entity._pos.x:entity._oldPos.x;
-        let oldEntityPosY:number = entity._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entity._pos.y:entity._oldPos.y;
-        const newEntityPosX:number = entity._pos.x;
-        const newEntityPosY:number = entity._pos.y;
+    private interpolateAndResolveCollision(playerBody:ArcadeRigidBody, entityBody:ArcadeRigidBody):void {
+        if (playerBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) return;
+        let oldEntityPosX:number = entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entityBody._pos.x:entityBody._oldPos.x;
+        let oldEntityPosY:number = entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entityBody._pos.y:entityBody._oldPos.y;
+        const newEntityPosX:number = entityBody._pos.x;
+        const newEntityPosY:number = entityBody._pos.y;
         const entityLengthX:number = newEntityPosX - oldEntityPosX;
         const entityLengthY:number = newEntityPosY - oldEntityPosY;
         const entityLengthMax:number = Math.max(Math.abs(entityLengthX),Math.abs(entityLengthY));
@@ -131,15 +131,15 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         const entityDeltaY:number = entityLengthY/entityLengthMax;
         let steps:number = 0;
         while (steps<=entityLengthMax) {
-            entity._pos.setXY(oldEntityPosX,oldEntityPosY);
-            if (MathEx.overlapTest(player.calcAndGetBoundRect(),entity.calcAndGetBoundRect())) {
+            entityBody._pos.setXY(oldEntityPosX,oldEntityPosY);
+            if (MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) {
                 break;
             }
             oldEntityPosX+=entityDeltaX;
             oldEntityPosY+=entityDeltaY;
             steps++;
         }
-        this.resolveCollision(player, entity);
+        this.resolveCollision(playerBody, entityBody);
     }
 
 

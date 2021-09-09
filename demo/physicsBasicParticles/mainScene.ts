@@ -51,7 +51,7 @@ export class MainScene extends Scene {
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click,(e)=>{
             ps.emissionPosition.setXY(e.screenX,e.screenY);
-            ps.emit();
+            ps.emitTo(this);
         });
 
     }
