@@ -34,6 +34,7 @@ export class MouseControl implements IControl {
         this._container = container;
         // mouseDown
         container.ontouchstart = (e:TouchEvent):void=>{
+            console.log('ontouchstart');
             // to prevent "mouse" events on touch devices - https://www.html5rocks.com/en/mobile/touchandmouse/
             e.preventDefault();
             let l = e.touches.length;
@@ -42,6 +43,7 @@ export class MouseControl implements IControl {
             }
         };
         container.onmousedown = (e:MouseEvent):void=>{
+            console.log('onmousedown');
             if (e.button === LEFT_MOUSE_BTN) this.resolveClick(e);
             else {
                 this.resolveButtonPressed(e);
@@ -49,6 +51,7 @@ export class MouseControl implements IControl {
         };
         // mouseUp
         container.ontouchend = container.ontouchcancel = (e:TouchEvent):void=>{
+            console.log('ontouchend');
             e.preventDefault();
             let l:number = e.changedTouches.length;
             while (l--){
@@ -57,36 +60,52 @@ export class MouseControl implements IControl {
         };
         document.body.ontouchend = document.body.ontouchcancel = (e:TouchEvent):void=>{
             let l:number = e.changedTouches.length;
+            console.log('ontouchend body');
             while (l--){
                 const point:MousePoint = this._helper.resolvePoint(e.changedTouches[l]);
                 this.resolveMouseUp(e.changedTouches[l]);
                 point.release();
             }
         };
+        container.onpointerup =
+            container.onpointercancel =
+            container.onpointerleave =
+            container.onpointerup =
+                (e: MouseEvent):void=>{
+                    console.log('onpointerup');
+                    e.preventDefault();
+                    e.stopPropagation(); // to prevent  document.body.onmouseup triggering
+                    this.resolveMouseUp(e);
+                };
         container.onmouseup = (e:MouseEvent):void=>{
+            console.log('onmouseup');
             e.stopPropagation(); // to prevent  document.body.onmouseup triggering
             this.resolveMouseUp(e);
         };
-        document.body.onmouseup = (e: MouseEvent):void=>{
-            const point:MousePoint = this._helper.resolvePoint(e);
+        document.body.onpointerup = (e: MouseEvent):void=>{
             this.resolveMouseUp(e);
-            point.release();
+        };
+        document.body.onmouseup = (e: MouseEvent):void=>{
+            this.resolveMouseUp(e);
         };
         // mouseMove
         container.ontouchmove = (e:TouchEvent):void=>{
+            console.log('ontouchmove');
             e.preventDefault(); // to prevent canvas moving
             let l:number = e.touches.length;
             while (l--){
                 this.resolveMouseMove(e.touches[l],true);
             }
         };
+        container.onpointermove = (e:PointerEvent):void=>{
+            console.log('onpointermove');
+            this.resolveMouseMove(e,e.pressure>0);
+        };
         container.onmousemove = (e:MouseEvent):void=>{
+            console.log('mousemove');
             const isMouseDown:boolean = e.buttons === 1;
             this.resolveMouseMove(e,isMouseDown);
         };
-        // container.onpointermove = (e:PointerEvent):void=>{
-        //     if (e.pressure) this.resolveMouseMove(e,true);
-        // };
         // other
         container.ondblclick = (e:MouseEvent):void=>{ // todo now only on pc
             this.resolveDoubleClick(e);
@@ -105,11 +124,16 @@ export class MouseControl implements IControl {
             [
             'mouseMove','ontouchstart','onmousedown',
             'ontouchend','onmouseup','ontouchmove',
+            'onpointerup', 'onpointermove',
             'onmousemove','ondblclick'].forEach((evtName:string)=>{
                 // tslint:disable-next-line:no-null-keyword
             (this._container as unknown as Record<string,null>)[evtName] = null;
                 // tslint:disable-next-line:no-null-keyword
-            document.body.ontouchend = document.body.ontouchcancel = document.body.onmouseup = null;
+            document.body.ontouchend =
+                document.body.ontouchcancel =
+                document.body.onmouseup =
+                document.body.onpointerup =
+                null;
         });
     }
 

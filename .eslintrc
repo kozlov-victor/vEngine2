@@ -21,7 +21,9 @@
         "prefer-const": ["error", {
             "destructuring": "all",
             "ignoreReadBeforeAssign": false
-        }]
+        }],
+        "no-case-declarations": "off",
+        "no-cond-assign": "off"
 
     }
 }

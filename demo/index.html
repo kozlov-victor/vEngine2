@@ -75,28 +75,124 @@
     </style>
 </head>
 <body>
-    <script>
-        document.body.onpointermove = (e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('pointer move');
+<script>
+    document.write('<script src="./out/debug.js?modified='+new Date().getTime()+'"></sc'+'ript>');
+</script>
+
+<script>
+    if (!window.Promise) {
+        document.write('<script src="./out/polyfills-separate.js"></sc'+'ript>');
+    }
+</script>
+
+<script>
+
+    if (window.external && window.external.V_ENGINE_NAVIGATOR) {
+
+        window.console = window.console || new function(e){
+            this.log = this.error = function(e){alert(e)}
+        };
+
+
+        var readAsBin = function(url){
+            try {
+                var jsonArr = window.external.LoadDataAsBin(url);
+                return JSON.parse("[" + jsonArr + "]");
+            } catch (e) {
+                alert('readAsBin error: ' + url + " " + e);
+            }
+        };
+
+        var readAsText = function(url){
+            try {
+                return window.external.LoadDataAsText(url);
+            } catch (e) {
+                alert('readAsText error: ' + url + " " + e);
+            }
+        };
+
+        window.XMLHttpRequest = function(){
+            var self = this;
+            self.status = 0;
+            self.url = '';
+            var respHeaders = {};
+
+
+            self.setRequestHeader = function(key,val){
+
+            };
+
+            self.open = function(method,url){
+                self.url = url;
+            };
+            self.send = function(){
+                setTimeout(function(){
+                    var currUrl = self.url.split('?')[0];
+                    currUrl = currUrl.replace('file:///','');
+                    var asBin = (self.responseType==='blob' || self.responseType==='arraybuffer')
+                    var resp = asBin?readAsBin(currUrl):readAsText(currUrl);
+                    respHeaders['Content-Type'] = asBin?'':'application/json';
+                    self.readyState = 4;
+                    self.status = 200;
+                    self.response = resp;
+                    if (resp && resp.toUpperCase) self.responseText = resp;
+                    self.onload && self.onload();
+                    self.onreadystatechange && self.onreadystatechange();
+                },1);
+            };
+            self.getResponseHeader = function(key){
+                return respHeaders[key];
+            };
+
+        };
+
+    }
+
+    if ( ![].fill)  {
+        Array.prototype.fill = function( value ) {
+
+            var O = Object( this );
+            var len = parseInt( O.length, 10 );
+            var start = arguments[1];
+            var relativeStart = parseInt( start, 10 ) || 0;
+            var k = relativeStart < 0
+                ? Math.max( len + relativeStart, 0)
+                : Math.min( relativeStart, len );
+            var end = arguments[2];
+            var relativeEnd = end === undefined
+                ? len
+                : ( parseInt( end)  || 0) ;
+            var final = relativeEnd < 0
+                ? Math.max( len + relativeEnd, 0 )
+                : Math.min( relativeEnd, len );
+
+            for (; k < final; k++) {
+                O[k] = value;
+            }
+
+            return O;
+        };
+    }
+
+    if (!window.Number.isNaN) Number.isNaN = function(n){
+        return !isFinite(n);
+    };
+
+    if (!window.Math.sign) {
+        window.Math.sign = function(a) {
+            return a>=0?1:-1;
         }
-        document.body.onpointerdown = e=>{
-            e.preventDefault();
-        };
-        document.body.onmousemove = e=>{
-            e.preventDefault();
-        };
-        document.body.onmousedown = e=>{
-            e.preventDefault();
-        };
+    }
 
-        document.body.ongotpointercapture = e=>{
-            e.preventDefault();
-            console.log('pointer capture');
-        };
+    if (!window.Blob) window.Blob = undefined;
 
-    </script>
+</script>
+
+<script>
+    document.write('<script src="./out/_index.js?modified='+new Date().getTime()+'"></sc'+'ript>');
+</script>
+
+
 </body>
 </html>
 

@@ -21,13 +21,14 @@ export class MainScene extends Scene {
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.appendChild(surface);
         surface.setDrawColor(120,222,200);
-        surface.setLineWidth(2);
         let oldX:Optional<number>;
         let oldY:Optional<number>;
         surface.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, e=>{
             if (e.isMouseDown) {
                 if (oldX===undefined) oldX = e.screenX;
                 if (oldY===undefined) oldY = e.screenY;
+                const width = (e.nativeEvent as PointerEvent).pressure*5 || 2;
+                surface.setLineWidth(width);
                 surface.moveTo(oldX,oldY);
                 surface.lineTo(e.screenX,e.screenY);
                 surface.completePolyline();
