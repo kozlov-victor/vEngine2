@@ -27,7 +27,7 @@ export class MainScene extends Scene {
             if (e.isMouseDown) {
                 if (oldX===undefined) oldX = e.screenX;
                 if (oldY===undefined) oldY = e.screenY;
-                const width = (e.nativeEvent as PointerEvent).pressure*5 || 2;
+                const width = (e.nativeEvent as PointerEvent).pressure*6 || 2;
                 surface.setLineWidth(width);
                 surface.moveTo(oldX,oldY);
                 surface.lineTo(e.screenX,e.screenY);

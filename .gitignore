@@ -7,5 +7,6 @@
 package-lock.json
 yarn.lock
 demo/out/**
+demo/**.exe
 demo/index.json
 node_tools/build/*

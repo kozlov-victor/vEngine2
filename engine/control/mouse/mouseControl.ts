@@ -14,6 +14,32 @@ import {RenderingObjectStackItem} from "@engine/scene/internal/renderingObjectSt
 
 const LEFT_MOUSE_BTN  = 0 as const;
 
+class MouseEventTrottler {
+    private event:MOUSE_EVENTS;
+    private lastX:number;
+    private lastY:number;
+
+    public checkSameEventAndSet(event:MOUSE_EVENTS, x:number, y:number):boolean {
+        if (
+            this.event===event &&
+            this.lastX===x &&
+            this.lastY===y
+        ) {
+            return true;
+        } else {
+            this.event = event;
+            this.lastX = x;
+            this.lastY = y;
+            return false;
+        }
+    }
+
+    public checkSameEvent(event:MOUSE_EVENTS):boolean {
+        return this.event===event;
+    }
+
+}
+
 export class MouseControl implements IControl {
 
     public readonly type:string = 'MouseControl';
@@ -21,6 +47,7 @@ export class MouseControl implements IControl {
     private _capturedObjectsByTouchIdHolder:CapturedObjectsByTouchIdHolder = new CapturedObjectsByTouchIdHolder();
     private _capturedObjectsByTouchIdPrevHolder:CapturedObjectsByTouchIdHolder = new CapturedObjectsByTouchIdHolder();
     private _container:HTMLElement;
+    private _mouseEventTrottler = new MouseEventTrottler();
 
     constructor(private game:Game){
     }
@@ -34,16 +61,24 @@ export class MouseControl implements IControl {
         this._container = container;
         // mouseDown
         container.ontouchstart = (e:TouchEvent):void=>{
-            console.log('ontouchstart');
             // to prevent "mouse" events on touch devices - https://www.html5rocks.com/en/mobile/touchandmouse/
             e.preventDefault();
+            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseDown, e.touches[0].clientX,e.touches[0].clientY)) {
+                return;
+            }
+
+            //console.log('ontouchstart');
             let l = e.touches.length;
             while (l--){
                 this.resolveClick((e.touches[l] as Touch));
             }
         };
         container.onmousedown = (e:MouseEvent):void=>{
-            console.log('onmousedown');
+            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseDown, e.clientX,e.clientY)) {
+                return;
+            }
+
+            //console.log('onmousedown');
             if (e.button === LEFT_MOUSE_BTN) this.resolveClick(e);
             else {
                 this.resolveButtonPressed(e);
@@ -51,7 +86,11 @@ export class MouseControl implements IControl {
         };
         // mouseUp
         container.ontouchend = container.ontouchcancel = (e:TouchEvent):void=>{
-            console.log('ontouchend');
+            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.changedTouches[0].clientX,e.changedTouches[0].clientY)) {
+                return;
+            }
+
+            //console.log('ontouchend');
             e.preventDefault();
             let l:number = e.changedTouches.length;
             while (l--){
@@ -59,8 +98,12 @@ export class MouseControl implements IControl {
             }
         };
         document.body.ontouchend = document.body.ontouchcancel = (e:TouchEvent):void=>{
+            if (this._mouseEventTrottler.checkSameEvent(MOUSE_EVENTS.mouseUp)) {
+                return;
+            }
             let l:number = e.changedTouches.length;
-            console.log('ontouchend body');
+
+            //console.log('ontouchend body');
             while (l--){
                 const point:MousePoint = this._helper.resolvePoint(e.changedTouches[l]);
                 this.resolveMouseUp(e.changedTouches[l]);
@@ -72,25 +115,40 @@ export class MouseControl implements IControl {
             container.onpointerleave =
             container.onpointerup =
                 (e: MouseEvent):void=>{
-                    console.log('onpointerup');
-                    e.preventDefault();
-                    e.stopPropagation(); // to prevent  document.body.onmouseup triggering
+                    if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
+                        return;
+                    }
+
+                    //console.log('onpointerup');
                     this.resolveMouseUp(e);
                 };
         container.onmouseup = (e:MouseEvent):void=>{
-            console.log('onmouseup');
-            e.stopPropagation(); // to prevent  document.body.onmouseup triggering
+            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
+                return;
+            }
+
+            //console.log('onmouseup');
             this.resolveMouseUp(e);
         };
         document.body.onpointerup = (e: MouseEvent):void=>{
+            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
+                return;
+            }
             this.resolveMouseUp(e);
         };
         document.body.onmouseup = (e: MouseEvent):void=>{
+            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
+                return;
+            }
             this.resolveMouseUp(e);
         };
         // mouseMove
         container.ontouchmove = (e:TouchEvent):void=>{
-            console.log('ontouchmove');
+            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.touches[0].clientX,e.touches[0].clientY)) {
+                return;
+            }
+
+            //console.log('ontouchmove');
             e.preventDefault(); // to prevent canvas moving
             let l:number = e.touches.length;
             while (l--){
@@ -98,11 +156,19 @@ export class MouseControl implements IControl {
             }
         };
         container.onpointermove = (e:PointerEvent):void=>{
-            console.log('onpointermove');
+            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.clientX,e.clientY)) {
+                return;
+            }
+
+            //console.log('onpointermove',e.clientX,e.clientY);
             this.resolveMouseMove(e,e.pressure>0);
         };
         container.onmousemove = (e:MouseEvent):void=>{
-            console.log('mousemove');
+            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.clientX,e.clientY)) {
+                return;
+            }
+
+            //console.log('mousemove',e.clientX,e.clientY);
             const isMouseDown:boolean = e.buttons === 1;
             this.resolveMouseMove(e,isMouseDown);
         };
