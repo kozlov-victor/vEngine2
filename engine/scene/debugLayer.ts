@@ -35,6 +35,7 @@ export class DebugLayer extends Layer {
     }
 
     public log(...args:any[]):void {
+        // eslint-disable-next-line prefer-rest-params
         Array.prototype.slice.call(arguments).forEach((txt:any,i:number)=>{
             if (txt===undefined) txt = 'undefined';
             else if (txt===null) txt = 'null';

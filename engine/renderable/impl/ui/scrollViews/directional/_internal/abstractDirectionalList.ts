@@ -54,6 +54,7 @@ export abstract class AbstractDirectionalList extends ScrollView {
                 for (const item of props.data) {
                     const node:VirtualNode = props.renderItem!(item) as VirtualNode;
                     const VEngineElementCreator =
+                        // eslint-disable-next-line @typescript-eslint/no-var-requires
                         require('@engine/renderable/tsx/vEngine/vEngineElementCreator').VEngineElementCreator;
                     const newChild = VEngineElementCreator.getCreatedInstance().createElementByTagName(node);
                     VEngineElementCreator.getCreatedInstance().setProps(newChild,node);

@@ -114,6 +114,7 @@ export class SelectBox extends VerticalList {
                 (item:any):WidgetContainer=> {
                     const node:VirtualNode = props.renderItem!(item) as VirtualNode;
                     const VEngineElementCreator =
+                        // eslint-disable-next-line @typescript-eslint/no-var-requires
                         require('@engine/renderable/tsx/vEngine/vEngineElementCreator').VEngineElementCreator;
                     const model:WidgetContainer =
                         VEngineElementCreator.getCreatedInstance().createElementByTagName(node) as WidgetContainer;

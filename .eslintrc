@@ -23,7 +23,8 @@
             "ignoreReadBeforeAssign": false
         }],
         "no-case-declarations": "off",
-        "no-cond-assign": "off"
+        "no-cond-assign": "off",
+        "@typescript-eslint/ban-ts-comment": "off"
 
     }
 }

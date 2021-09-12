@@ -510,11 +510,6 @@ export abstract class Emulator {
     }
 
     private writeMemory(addr: number, value: byte):void {
-        const a:Record<string, any> = {};
-        const key = 'test';
-        if (a?.[key]) {
-
-        }
         if (addr > Emulator.MEMORY_SIZE - 1 || addr < Emulator.ROM_OFFSET) throw new Error(`address ${addr.toString(16)}: memory can not be write`);
         this.memory[addr] = value;
     }

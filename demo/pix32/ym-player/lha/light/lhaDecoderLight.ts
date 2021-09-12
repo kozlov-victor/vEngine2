@@ -256,6 +256,7 @@ export class LhaReader {
     public extract(offset:number, originalSize:number):Uint8Array{
         this.reader.seek(offset, LhaArrayReader.SeekAbsolute);
         const writer:LhaArrayWriter = new LhaArrayWriter(originalSize);
+        // eslint-disable-next-line no-empty
         while (this.extractBlock(writer)) {}
         return writer.data;
     }

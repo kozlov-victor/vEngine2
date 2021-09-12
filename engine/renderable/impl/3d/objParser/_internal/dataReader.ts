@@ -251,8 +251,10 @@ export class DataObjReader extends AbstractDataReader {
                     break;
                 case 'mtllib':
                     // already processed
+                // eslint-disable-next-line no-fallthrough
                 case 's':
                     // not supported
+                // eslint-disable-next-line no-fallthrough
                 case '#':
                     // comment
                     break;
