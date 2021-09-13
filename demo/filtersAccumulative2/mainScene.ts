@@ -3,7 +3,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {KernelBlurAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/kernelBlurAccumulativeFilter";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {MathEx} from "@engine/misc/mathEx";
 import {Tween} from "@engine/animation/tween";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";

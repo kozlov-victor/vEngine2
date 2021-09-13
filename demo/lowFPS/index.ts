@@ -2,7 +2,7 @@ import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {MainScene} from "./mainScene";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 
 let oneFrameTime:number = 1000;

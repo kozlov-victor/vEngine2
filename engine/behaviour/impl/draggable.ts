@@ -2,7 +2,7 @@ import {BaseAbstractBehaviour} from "../abstract/baseAbstractBehaviour";
 import {Game} from "../../core/game";
 import {Scene} from "../../scene/scene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {IObjectMouseEvent, ISceneMouseEvent, MOUSE_BUTTON} from "@engine/control/mouse/mousePoint";
+import {IObjectMouseEvent, ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Int, Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
@@ -21,7 +21,7 @@ export interface IDraggableBehaviourParameters {
 
 export class DraggableBehaviour extends BaseAbstractBehaviour {
 
-    constructor(game:Game, params?:IDraggableBehaviourParameters){
+    constructor(game:Game, private params?:IDraggableBehaviourParameters){
         super(game,{});
         if (params!==undefined) this.updateConstrains(params);
     }
@@ -164,6 +164,12 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         gameObject.pos.x = newX;
         gameObject.pos.y = newY;
     }
+
+    public clone():this {
+        return new DraggableBehaviour(this.game,this.params) as this;
+    }
+
+
 
 }
 

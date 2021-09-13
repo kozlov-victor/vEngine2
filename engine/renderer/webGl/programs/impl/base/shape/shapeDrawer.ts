@@ -3,7 +3,7 @@ import {AbstractDrawer} from "../../../abstract/abstractDrawer";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
 import {Plane} from "../../../../primitives/plane";
 import {GL_TYPE} from "../../../../base/shaderProgramUtils";
-import {ShaderGenerator} from "../../../../shaders/generators/shaderGenerator";
+import {ShaderGenerator} from "../../../../shaderGenerator/shaderGenerator";
 import * as fragmentSource from "./shape.fragment.glsl";
 import * as fragmentStructuresSource from "./fragment-structures.glsl";
 import {parametrizeString} from "@engine/misc/object";

@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {MainScene} from "./mainScene";
 import {Game} from "@engine/core/game";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {AudioPlayer} from "@engine/media/audioPlayer";
 

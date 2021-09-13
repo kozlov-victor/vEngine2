@@ -2,9 +2,9 @@ import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstract
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
 import {Game} from "@engine/core/game";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {ISize} from "@engine/geometry/size";
-import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
+import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {Mat4} from "@engine/geometry/mat4";
 import {Color} from "@engine/renderer/common/color";
 import {Blender} from "@engine/renderer/webGl/blender/blender";

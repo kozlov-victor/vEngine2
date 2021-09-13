@@ -2,19 +2,20 @@ import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstract
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
 import {Game} from "@engine/core/game";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {ISize} from "@engine/geometry/size";
-import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
+import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {Mat4} from "@engine/geometry/mat4";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import Mat16Holder = Mat4.Mat16Holder;
 import IDENTITY = Mat4.IDENTITY;
+import {Color} from "@engine/renderer/common/color";
 
 
 export abstract class AbstractCompositionFilter extends AbstractGlFilter {
 
-    private accumulatorBefore:FrameBuffer;
+    private destCopy:FrameBuffer;
     private _simpleRectCopyDrawer:SimpleRectDrawer;
 
     constructor(game:Game) {
@@ -22,7 +23,7 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         const gl:WebGLRenderingContext = this.game.getRenderer<WebGlRenderer>().getNativeContext();
         this._simpleRectCopyDrawer = new SimpleRectDrawer(gl);
         this._simpleRectCopyDrawer.initProgram();
-        this.accumulatorBefore = new FrameBuffer(gl,this.game.size);
+        this.destCopy = new FrameBuffer(gl,this.game.size);
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
@@ -33,13 +34,14 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         this._simpleRectCopyDrawer.setUniform(this._simpleRectCopyDrawer.u_textureMatrix,IDENTITY);
         this._simpleRectCopyDrawer.setUniform(this._simpleRectCopyDrawer.u_vertexMatrix,m16h.mat16);
         Blender.getSingleton(this.game.getRenderer<WebGlRenderer>().getNativeContext()).setBlendMode(BLEND_MODE.NORMAL);
-        // 2. copy current source texture to accumulatorBefore
-        this.accumulatorBefore.bind();
-        this._simpleRectCopyDrawer.attachTexture('texture',this.simpleRectDrawer.getAttachedTextureAt(0));
+        // 1. copy current destination texture to accumulatorBefore
+        this.destCopy.bind();
+        this.destCopy.clear(Color.NONE);
+        this._simpleRectCopyDrawer.attachTexture('texture',destFrameBuffer.getTexture());
         this._simpleRectCopyDrawer.draw();
-
-        // 3. apply filter to destFrameBuffer
-        this.simpleRectDrawer.attachTexture('texturePrev',this.accumulatorBefore.getTexture());
+        // 2. attach destTexture as copy of destination
+        this.simpleRectDrawer.attachTexture('destTexture',this.destCopy.getTexture());
+        // 3. filter
         super.doFilter(destFrameBuffer);
 
         m16h.release();

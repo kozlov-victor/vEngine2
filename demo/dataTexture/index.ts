@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {MainScene} from "./mainScene";
 import {Game} from "@engine/core/game";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 

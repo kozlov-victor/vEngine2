@@ -3,14 +3,14 @@ import {DebugError} from "@engine/debug/debugError";
 import {Mat4} from "@engine/geometry/mat4";
 import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
 import {Game} from "@engine/core/game";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import Mat16Holder = Mat4.Mat16Holder;
 import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
 import {Color} from "@engine/renderer/common/color";
 import {FastMap} from "@engine/misc/collection/fastMap";
-import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/webGlRendererHelper";
+import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {ISize} from "@engine/geometry/size";
 import IDENTITY = Mat4.IDENTITY;
 

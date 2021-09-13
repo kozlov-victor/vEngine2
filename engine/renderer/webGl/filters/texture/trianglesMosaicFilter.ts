@@ -1,6 +1,6 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Game} from "@engine/core/game";
-import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
+import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 
 // from https://www.construct.net/en/forum/extending-construct-2/effects-31/effect-triangles-mosaic-116362 with adaptation to the engine

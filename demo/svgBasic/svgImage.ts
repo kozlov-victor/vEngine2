@@ -460,7 +460,7 @@ class SvgElementRenderer {
             container.appendChild(p);
         });
 
-        if (lineWidth!==0) {
+        if (lineWidth!=undefined && lineWidth>0) {
             const lineCapRaw:string = this.lookUpProperty(el,'stroke-linecap',false); // butt round square
             const lineJointRaw:string = this.lookUpProperty(el,'stroke-linejoin',false); // miter round bevel miter-clip arcs
 

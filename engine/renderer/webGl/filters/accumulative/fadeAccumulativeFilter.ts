@@ -1,6 +1,6 @@
 import {AbstractAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/abstract/abstractAccumulativeFilter";
 import {Game} from "@engine/core/game";
-import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
+import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 
 export class FadeAccumulativeFilter extends AbstractAccumulativeFilter {

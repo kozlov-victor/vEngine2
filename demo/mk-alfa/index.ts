@@ -1,6 +1,6 @@
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {Game} from "@engine/core/game";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {MkIntroScene} from "./scenes/mkIntroScene";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {GamePadControl} from "@engine/control/gamepad/gamePadControl";

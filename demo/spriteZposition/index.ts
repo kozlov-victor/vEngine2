@@ -2,7 +2,7 @@ import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {MainScene} from "./mainScene";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 const game = new Game({width:800,height:640});
 game.setRenderer(WebGlRenderer);

@@ -2,7 +2,7 @@ import {Plane} from "../../../../primitives/plane";
 import {ShaderProgram} from "../../../../base/shaderProgram";
 import {AbstractDrawer} from "../../../abstract/abstractDrawer";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
-import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
+import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {DebugError} from "@engine/debug/debugError";
 

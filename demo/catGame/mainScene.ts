@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {Game} from "@engine/core/game";
 import {Hero} from "./entity/actor/impl/hero";
 import {Monster1} from "./entity/actor/impl/monster1";

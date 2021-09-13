@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {Scene1} from "./scenes/scene1";

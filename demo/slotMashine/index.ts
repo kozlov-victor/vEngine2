@@ -4,7 +4,7 @@ import {Game, SCALE_STRATEGY} from "@engine/core/game";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {Wheel} from "./entities/wheel";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 const W:number = Wheel.CELL_WIDTH*3+Wheel.CELL_PADDING*2; // 745;
 const H:number = 433;

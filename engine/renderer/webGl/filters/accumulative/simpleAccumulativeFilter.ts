@@ -1,4 +1,4 @@
-import {ShaderGenerator} from "@engine/renderer/webGl/shaders/generators/shaderGenerator";
+import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {Game} from "@engine/core/game";
 import {AbstractAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/abstract/abstractAccumulativeFilter";
 

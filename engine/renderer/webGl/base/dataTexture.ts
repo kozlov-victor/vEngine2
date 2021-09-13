@@ -1,7 +1,7 @@
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 
 const asGlRenderer = (game:Game):WebGlRenderer|undefined=>{

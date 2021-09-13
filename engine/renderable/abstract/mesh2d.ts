@@ -4,7 +4,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {DebugError} from "@engine/debug/debugError";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 export abstract class Mesh2d extends RenderableModel {
 

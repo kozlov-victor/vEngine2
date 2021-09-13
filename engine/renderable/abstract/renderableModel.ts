@@ -399,6 +399,9 @@ export abstract class RenderableModel
         cloned.velocity.set(this.velocity);
         cloned.passMouseEventsThrough = this.passMouseEventsThrough;
         if (this.getRigidBody()!==undefined) cloned.setRigidBody(this.getRigidBody()!.clone());
+        this._behaviours.forEach(b=>{
+            cloned.addBehaviour(b.clone());
+        });
 
         this.children.forEach((c:RenderableModel)=>{
             if (DEBUG && !('clone' in c)) {

@@ -1,5 +1,5 @@
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {Scene} from "@engine/scene/scene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ISize} from "@engine/geometry/size";

@@ -3,7 +3,7 @@ import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
 import {Machine} from "./entities/machine";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
-import {WebGlRenderer} from "@engine/renderer/webGl/webGlRenderer";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {MathEx} from "@engine/misc/mathEx";
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
