@@ -482,7 +482,7 @@ export class RigidRectangle extends RigidShape {
         let nearestEdge:number = 0;
         let i:number, v:Vec2;
         let circ2Pos:Vec2, projection:number;
-        for (i = 0; i < 4; i++) { // todo 4!!
+        for (i = 0; i < 4; i++) {
             //find the nearest face for center of circle
             circ2Pos = otherCir.mCenter;
             v = circ2Pos.subtract(this.mVertex[i]);

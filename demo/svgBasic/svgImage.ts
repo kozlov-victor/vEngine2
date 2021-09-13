@@ -248,6 +248,21 @@ class ElementStylesHolder {
         return styleMap;
     }
 
+    public mergeStyle(s1:string,s2:string):string {
+        const map1 = this.styleAttrToMap(s1);
+        const map2 = this.styleAttrToMap(s2);
+        Object.keys(map2).forEach(key=>{
+            map1[key] = map2[key];
+        });
+        let result = '';
+        Object.keys(map1).forEach(key=>{
+            if (!key) return;
+            const value = map1[key] ?? '';
+            result+=`${key}:${value};`;
+        });
+        return result;
+    }
+
     private styleAttrToMap(style:string):Record<string, string> {
         const res:Record<string, string> = {};
         if (!style) return res;
@@ -267,13 +282,13 @@ class SvgElementRenderer {
     constructor(private game:Game, private document:XmlNode, private rootContainer:SvgImage, private preloadedResources:Record<string, ITexture>) {
     }
 
-    private getFillStrokeParams(el:XmlNode):{lineWidth:number,fillColor:Color,drawColor:Color} {
+    private getFillStrokeParams(el:XmlNode):{lineWidth:Optional<number>,fillColor:Color,drawColor:Color} {
 
         const rawStrokeValue:string = this.lookUpProperty(el,'stroke',true);
         const rawFillValue:string = this.lookUpProperty(el,'fill',true);
 
-        let lineWidth:number;
-        if (!rawStrokeValue) lineWidth = 0;
+        let lineWidth:Optional<number>;
+        if (!rawStrokeValue) lineWidth = undefined;
         else {
             lineWidth = getNumber(this.lookUpProperty(el,'stroke-width',true),1);
         }
@@ -477,7 +492,7 @@ class SvgElementRenderer {
 
     private renderCircle(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
+        const {lineWidth = 0,fillColor,drawColor} = this.getFillStrokeParams(el);
         const cx:number = getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
         const cy:number = getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
         const r:number = getNumberWithMeasure(el.getAttribute('r'),this.rootContainer.size.width,10)+lineWidth/2;
@@ -513,7 +528,7 @@ class SvgElementRenderer {
 
     private renderEllipse(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
+        const {lineWidth = 0,fillColor,drawColor} = this.getFillStrokeParams(el);
         const cx:number = getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
         const cy:number = getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
         const rx:number = getNumberWithMeasure(el.getAttribute('rx'),this.rootContainer.size.width,10)+lineWidth/2;
@@ -533,7 +548,7 @@ class SvgElementRenderer {
     // ry is not supported
     private renderRect(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
+        const {lineWidth = 0,fillColor,drawColor} = this.getFillStrokeParams(el);
         const x:number = getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,0);
         const y:number = getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,0);
         const width:number = getNumberWithMeasure(el.getAttribute('width'),this.rootContainer.size.width,1);
@@ -555,7 +570,8 @@ class SvgElementRenderer {
 
     private renderLine(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const {lineWidth,drawColor} = this.getFillStrokeParams(el);
+        let {lineWidth,drawColor} = this.getFillStrokeParams(el);
+        if (lineWidth===undefined) lineWidth = 1;
         const x1:number = getNumberWithMeasure(el.getAttribute('x1'),this.rootContainer.size.width,0);
         const y1:number = getNumberWithMeasure(el.getAttribute('y1'),this.rootContainer.size.height,0);
         const x2:number = getNumberWithMeasure(el.getAttribute('x2'),this.rootContainer.size.width,1);
@@ -595,7 +611,7 @@ class SvgElementRenderer {
             container.appendChild(polygon);
         }
 
-        if (lineWidth>0 && drawColor.a>0) {
+        if (lineWidth!==undefined && lineWidth>0 && drawColor.a>0) {
             const polyline:PolyLine = PolyLine.fromVertices(this.game,vertices,{lineWidth});
             polyline.color.set(drawColor);
             container.appendChild(polyline);
@@ -632,11 +648,21 @@ class SvgElementRenderer {
         let idRef:string = el.getAttribute('xlink:href');
         if (idRef.indexOf('#')!==0) throw new DebugError(`wrong reference: ${idRef}`);
         idRef = idRef.substr(1);
-        console.log(this.document,idRef);
         const refElement:XmlNode = this.document.getElementById(idRef)!;
+        if (refElement.tagName==='symbol') { // render symbol as group
+            refElement.tagName = 'g';
+        }
         const refElementCloned:XmlNode = refElement.clone();
         Object.keys(el.getAttributes()).forEach(key=>{
             if (['xlink:href','id'].indexOf(key)>-1) return;
+            if (key==='style') {
+                const mergedStyle =
+                    this.elementStylesHolder.mergeStyle(
+                        refElement.getAttribute('style'),
+                        el.getAttribute('style')
+                    );
+                refElementCloned.setAttribute('style',mergedStyle);
+            }
             else refElementCloned.setAttribute(key,el.getAttribute(key));
         });
         (refElementCloned as {parent:XmlNode}).parent = el.parent;
@@ -689,6 +715,11 @@ class SvgElementRenderer {
             }
             case 'use': {
                 return this.renderUse(view,el);
+            }
+            case 'defs':
+            case 'symbol': {
+                // ignore
+                return undefined;
             }
             default: {
                 console.log(`unknown tag: ${el.tagName}`);

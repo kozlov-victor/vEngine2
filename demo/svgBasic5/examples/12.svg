@@ -1,0 +1,7 @@
+<svg width="450" height="450">
+    <symbol id="shape1">
+        <circle cx="40" cy="40" r="40" />
+    </symbol>
+
+    <use xlink:href="#shape1" x="50" y="30" />
+</svg>

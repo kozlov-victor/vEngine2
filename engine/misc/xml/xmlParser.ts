@@ -30,7 +30,7 @@ export class XmlParser {
     private patPITag = /^\s*\?/;
     private patStandardTag = /^\s*(\/?)([\w\-:.]+)\s*([\s\S]*)$/;
     private patSelfClosing = /\/\s*$/;
-    private patAttrib = new RegExp("([\\w\\-:.]+)\\s*=\\s*([\"\'])([^\\2]*?)\\2", "g");
+    private patAttrib = new RegExp("([\\w\\-:.]+)\\s*=\\s*([\"'])([^\\2]*?)\\2", "g");
     private patPINode = /^\s*\?\s*([\w\-:]+)\s*(.*)$/;
     private patNextClose = /([^>]*?)>/g;
 

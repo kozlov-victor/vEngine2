@@ -177,7 +177,6 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
         renderer.transformScale(this.scale.x,this.scale.y);
         //scew
         renderer.transformTranslate(-this.game.size.width/2,-this.game.size.height/2);
-        // todo rotation does not work correctly yet
         if (this._cameraShakeTween!==undefined) renderer.transformTranslate(
             this._cameraShakeTween.getTarget().point.x,
             this._cameraShakeTween.getTarget().point.y

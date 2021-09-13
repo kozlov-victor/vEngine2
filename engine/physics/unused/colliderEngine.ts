@@ -123,7 +123,7 @@ export class ColliderEngine {
     //
     // collision(){
     //     // let rigidObjects =
-    //     //     this.game.getCurrScene().getAllGameObjects().map((g:GameObject)=>g.rigidBody); // todo
+    //     //     this.game.getCurrScene().getAllGameObjects().map((g:GameObject)=>g.rigidBody);
     //     //     //concat(this.game.getCurrScene().tileMap.rigidBodies);
     //     //
     //     // var i:number, j:number, k:number;

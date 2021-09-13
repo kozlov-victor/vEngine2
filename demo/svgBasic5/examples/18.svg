@@ -1,0 +1,10 @@
+<svg width="200px" height="200px" viewBox="0 0 200 200">
+
+    <line x1="0" y1="0" x2="100" y2="0" style="stroke: black; stroke-width: 2"/>
+    <line x1="0" y1="0" x2="0" y2="100" style="stroke: black; stroke-width: 2;"/>
+
+    <rect x="70" y="30" width="20" height="20" style="fill: gray;"/>
+    <rect x="70" y="30" width="20" height="20"
+          transform="rotate(45)" style="fill: black;"/>
+
+</svg>

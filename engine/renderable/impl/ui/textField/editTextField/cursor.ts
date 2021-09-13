@@ -207,7 +207,7 @@ export class Cursor {
                 undefined:
                 this.font.getSymbolInfoByChar(this.currentCharImage.getCharacterInfo().rawChar);
 
-        let posY:number = rowSet.pos.y + this.font.context.base - this.font.context.lineHeight;// + this.font.context.base/2; // todo <- experimental, to investigate!
+        let posY:number = rowSet.pos.y + this.font.context.base - this.font.context.lineHeight;
         if (this.currentRow!==undefined) {
             posY+=this.currentRow.pos.y;
         }

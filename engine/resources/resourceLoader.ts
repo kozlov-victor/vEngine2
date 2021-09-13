@@ -3,7 +3,7 @@ import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, Optional, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
-import {XmlDocument, XmlNode} from "@engine/misc/xml/xmlELements";
+import type {XmlDocument, XmlNode} from "@engine/misc/xml/xmlELements";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {Sound} from "@engine/media/sound";
 import {ITask, Queue} from "@engine/resources/queue";
@@ -16,6 +16,7 @@ import ICssFontParameters = FontTypes.ICssFontParameters;
 import ITextureWithId = FontTypes.ITextureWithId;
 import {FontFactory} from "@engine/renderable/impl/general/font/fontFactory";
 import {Image} from "@engine/renderable/impl/general/image";
+import type {XmlParser} from "@engine/misc/xml/xmlParser";
 
 namespace ResourceCache {
 
@@ -103,6 +104,12 @@ export class ResourceLoader {
 
     public async loadText(req: string|IURLRequest,progress?:(n:number)=>void): Promise<string> {
         return await ResourceLoader._loadAndProcessText(req, t=>t,progress);
+    }
+
+    public async loadXML(xmlParserClass: typeof XmlParser,req: string|IURLRequest,progress?:(n:number)=>void): Promise<XmlDocument> {
+        const text = await this.loadText(req,progress);
+        const xmlParser = new xmlParserClass(text);
+        return xmlParser.getTree();
     }
 
     public async loadJSON<T>(req: string|IURLRequest,progress?:(n:number)=>void): Promise<T> {

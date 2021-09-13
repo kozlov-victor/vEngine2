@@ -1,0 +1,8 @@
+<svg height="450" width="450">
+
+    <a xlink:href="https://www.tutorialandexample.com/">
+        <circle cx="50" cy="80" r="20" style="fill: red;"/>
+        <rect x="90" y="60" width="40" height="40" style="fill: green;"/>
+    </a>
+
+</svg>

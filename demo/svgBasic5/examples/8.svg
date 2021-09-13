@@ -1,0 +1,8 @@
+<svg width="500" height="500">
+    <g>
+        <text x="30" y="30" >Using stroke: </text>
+        <path stroke="blue" d="M 50 50 L 300 50" />
+        <path stroke="orange" d="M 50 70 L 300 70" />
+        <path stroke="red" d="M 50 90 L 300 90" />
+    </g>
+</svg>

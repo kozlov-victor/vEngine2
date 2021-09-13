@@ -35,7 +35,6 @@ const NONE_FILTERS:readonly AbstractGlFilter[] = [];
 
 export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
-    private debug:boolean = false; // todo remove this flag
 
     private _stackPointer:number;
     private readonly _stack:IStackItem[] = [];
@@ -84,7 +83,6 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     public pushState(filters:AbstractGlFilter[],forceDrawChildrenOnNewSurface:boolean):IStateStackPointer{
         const prevPointer:IStateStackPointer = this._getLast().pointer;
         if (filters.length>0 || forceDrawChildrenOnNewSurface) {
-            if (this.debug) console.log('state has been pushed');
             if (this._stack[this._stackPointer]===undefined) {
                 this._stack[this._stackPointer] = {
                     frameBuffer: new FrameBuffer(this._gl,this._size),
@@ -136,7 +134,6 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     public reduceState(to:IStateStackPointer):void{
         if (this._stackPointer===1) return;
-        if (this.debug) console.log(`reducing state from ${this._stackPointer-1} to ${to.ptr}`);
         for (let i:number = this._stackPointer-1; i>to.ptr; i--) {
             const currItem:IStackItem = this._stack[i];
             const nextItem:IStackItem = this._stack[i-1];
