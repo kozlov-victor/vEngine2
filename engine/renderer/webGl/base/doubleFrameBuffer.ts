@@ -21,7 +21,7 @@ export class DoubleFrameBuffer {
         this.buffers[1].getTexture().setInterpolationMode(mode);
     }
 
-    public applyFilters(texture:Texture,filters:readonly AbstractGlFilter[]):Texture{
+    public applyFilters(texture:Texture,nextFrameBuffer:FrameBuffer,filters:readonly AbstractGlFilter[]):Texture{
         const len:number = filters.length;
         if (len===0) return texture;
 
@@ -29,12 +29,12 @@ export class DoubleFrameBuffer {
         if (!filter.enabled) return texture;
 
         filter.getDrawer().attachTexture('texture',texture);
-        filter.doFilter(this.getDestBuffer());
+        filter.doFilter(this.getDestBuffer(),nextFrameBuffer);
         for (let i:number=1;i<len;i++){
             if (!filters[i].enabled) continue;
             this.flip();
             filters[i].getDrawer().attachTexture('texture',this.getSourceBuffer().getTexture());
-            filters[i].doFilter(this.getDestBuffer());
+            filters[i].doFilter(this.getDestBuffer(),nextFrameBuffer);
         }
         this.flip();
         return this.getSourceBuffer().getTexture();

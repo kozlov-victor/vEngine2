@@ -178,7 +178,7 @@ export class SvgPathToVertexArrayBuilder {
     private createNextVertexArray():void {
         // const p:PolyLine = PolyLine.fromVertices(this.game,this.currentVertexArray);
         // p.passMouseEventsThrough = true;
-        this.result.push(this.currentVertexArray);
+        if (this.result.indexOf(this.currentVertexArray)===-1) this.result.push(this.currentVertexArray);
         this.currentVertexArray = [];
     }
 

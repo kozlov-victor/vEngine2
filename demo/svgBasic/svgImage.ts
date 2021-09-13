@@ -22,6 +22,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {XmlDocument, XmlNode} from "@engine/misc/xml/xmlELements";
 import {EndCapStyle, JointStyle} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
+import {EvenOddCompositionFilter} from "@engine/renderer/webGl/filters/composition/evenOddCompositionFilter";
 
 const NAMED_COLOR_TABLE:Record<string, string> =
     {
@@ -454,9 +455,10 @@ class SvgElementRenderer {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
 
-
+        container.forceDrawChildrenOnNewSurface = true;
         Polygon.fromMultiCurveSvgPath(this.game,data).forEach((p,i,arr)=>{
             p.fillColor = fillColor;
+            if (i>0) p.filters = [new EvenOddCompositionFilter(this.game)];
             container.appendChild(p);
         });
 

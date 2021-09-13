@@ -44,7 +44,7 @@ export abstract class AbstractGlFilter implements IFilter {
         return this.simpleRectDrawer;
     }
 
-    public doFilter(destFrameBuffer:FrameBuffer):void{
+    public doFilter(destFrameBuffer:FrameBuffer,nextFrameBuffer?:FrameBuffer):void{
         const keys:string[] = this._uniformCache.getKeys();
         for (let i:number = 0; i < keys.length; i++) {
             const name:string = keys[i];

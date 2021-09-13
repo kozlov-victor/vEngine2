@@ -5,6 +5,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {EvenOddCompositionFilter} from "@engine/renderer/webGl/filters/composition/evenOddCompositionFilter";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
+import {Color} from "@engine/renderer/common/color";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 
 export class MainScene extends Scene {
@@ -28,7 +29,14 @@ export class MainScene extends Scene {
         spr2.pos.setXY(50,150);
         spr2.addBehaviour(new DraggableBehaviour(this.game));
         spr2.filters = [new EvenOddCompositionFilter(this.game)];
-        spr.appendChild(spr2);
+        container.appendChild(spr2);
+
+        const spr3 = new Circle(this.game);
+        spr3.pos.setXY(100,150);
+        spr3.fillColor = Color.fromCssLiteral('#0f4699');
+        spr3.addBehaviour(new DraggableBehaviour(this.game));
+        spr3.filters = [new EvenOddCompositionFilter(this.game)];
+        container.appendChild(spr3);
 
     }
 

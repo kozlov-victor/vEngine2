@@ -26,7 +26,7 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         this.destCopy = new FrameBuffer(gl,this.game.size);
     }
 
-    public override doFilter(destFrameBuffer:FrameBuffer):void{
+    public override doFilter(destFrameBuffer:FrameBuffer,nextFrameBuffer:FrameBuffer):void{
         const size:ISize = destFrameBuffer.getTexture().size;
         const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,size);
 
@@ -37,14 +37,18 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         // 1. copy current destination texture to accumulatorBefore
         this.destCopy.bind();
         this.destCopy.clear(Color.NONE);
-        this._simpleRectCopyDrawer.attachTexture('texture',destFrameBuffer.getTexture());
+        this._simpleRectCopyDrawer.attachTexture('texture',nextFrameBuffer.getTexture());
         this._simpleRectCopyDrawer.draw();
-        // 2. attach destTexture as copy of destination
+        // 2. prepare nextFrameBuffer
+        nextFrameBuffer.bind();
+        nextFrameBuffer.clear(Color.NONE); // we dont require blending with this buffer, already blended
+        // 3. attach destTexture as copy of destination
         this.simpleRectDrawer.attachTexture('destTexture',this.destCopy.getTexture());
-        // 3. filter
-        super.doFilter(destFrameBuffer);
-
+        // 4. filter
+        super.doFilter(destFrameBuffer,nextFrameBuffer);
+        // 5. complete
         m16h.release();
+
     }
 
 }

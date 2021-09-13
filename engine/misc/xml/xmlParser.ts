@@ -160,6 +160,7 @@ export class XmlParser {
                     const selfClosing:boolean = !!attribsRaw.match(this.patSelfClosing);
                     const leaf:XmlNode = new XmlNode();
                     leaf.tagName = nodeName;
+                    leaf.parent = branch;
 
                     // parse attributes
                     this.patAttrib.lastIndex = 0;

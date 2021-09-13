@@ -7,6 +7,7 @@ import {XmlParser} from "@engine/misc/xml/xmlParser";
 
 // https://www.javatpoint.com/svg-tutorial
 const imageUrls:string[] = [
+    'guide', 'us-bank-icon', 'tide',
     '1','2','3', '4', '5', '6', '7', '8', '9', '10',
     '11','12','13', '14', '15', '16', '17', '18', '19', '20',
     '21',

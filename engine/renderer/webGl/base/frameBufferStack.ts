@@ -138,7 +138,12 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
             const currItem:IStackItem = this._stack[i];
             const nextItem:IStackItem = this._stack[i-1];
 
-            const filteredTexture:Texture = this._getDoubleFrameBuffer().applyFilters(currItem.frameBuffer.getTexture(),currItem.filters);
+            const filteredTexture:Texture =
+                this._getDoubleFrameBuffer().applyFilters(
+                    currItem.frameBuffer.getTexture(),
+                    nextItem.frameBuffer,
+                    currItem.filters
+                );
             currItem.filters = NONE_FILTERS;
 
             nextItem.frameBuffer.bind();
