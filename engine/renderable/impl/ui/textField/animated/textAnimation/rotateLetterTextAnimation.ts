@@ -15,7 +15,7 @@ export class RotateLetterTextAnimation extends AbstractTextAnimation {
     public init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
         chars.forEach((c,index)=>{
             c.visible = false;
-            const t = new Tween({
+            const t = new Tween(game,{
                 target: c.angle3d,
                 from: {z: this.angleFrom},
                 to: {z:0},

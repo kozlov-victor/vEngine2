@@ -137,7 +137,7 @@ export class GameScene extends BasePix32Scene {
             this.createHealthBar();
 
             await waitFor(this.game,1000);
-            this.addTween(new Tween({
+            this.addTween(new Tween(this.game,{
                 target: this.car.carModel.pos,
                 time: 300,
                 to: {x:-7}

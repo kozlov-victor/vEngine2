@@ -68,8 +68,8 @@ export abstract class RenderableModel
     public declare readonly children:readonly RenderableModel[];
     public readonly parent:RenderableModel;
 
-    public readonly mouseEventHandler:MouseEventEmitterDelegate<IObjectMouseEvent> = new MouseEventEmitterDelegate();
-    public readonly dragEventHandler:EventEmitterDelegate<DRAG_EVENTS, IDragPoint> = new EventEmitterDelegate();
+    public readonly mouseEventHandler:MouseEventEmitterDelegate<IObjectMouseEvent> = new MouseEventEmitterDelegate(this.game);
+    public readonly dragEventHandler:EventEmitterDelegate<DRAG_EVENTS, IDragPoint> = new EventEmitterDelegate(this.game);
 
     public readonly velocity = new Point2d(0,0);
     public passMouseEventsThrough:boolean = false;
@@ -81,7 +81,7 @@ export abstract class RenderableModel
     private _scene:Scene;
     private _rigidBody:IRigidBody;
 
-    private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
+    private _tweenDelegate: TweenableDelegate = new TweenableDelegate(this.game);
 
     private _timerDelegate:TimerDelegate = new TimerDelegate();
 

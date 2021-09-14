@@ -25,7 +25,7 @@ export class MainScene extends Scene {
         spr.anchorPoint.setToCenter();
         spr.scale.setXY(0.7);
 
-        this.addTween(new Tween<Point2d>({
+        this.addTween(new Tween<Point2d>(this.game,{
             delayBeforeStart: 1200,
             target:spr.scale,
             time:800,

@@ -41,7 +41,7 @@ export class ShapeAnimation implements IAnimation {
         const interpolated:Point2d[] = [];
         for (const p of pFrom) interpolated.push(new Point2d());
 
-        this.t = new Tween({
+        this.t = new Tween(this.game,{
             from: {frame:0},
             to:{frame:numberOfFrames},
             target,

@@ -27,7 +27,7 @@ export class Submarine extends AbstractEntity {
             (c as Model3d).specular = 0.4;
         });
 
-        const t = new Tween({
+        const t = new Tween(this.game,{
             target:obj.pos,
             from: {y:-15},
             to: {y:15},

@@ -20,7 +20,7 @@ export class FallLettersTextAnimation extends AbstractTextAnimation {
 
     public init(game:Game,textField:AnimatedTextField,chars: CharacterImage[]): void {
         chars.forEach((c,index)=>{
-            const t = new Tween({
+            const t = new Tween(game,{
                 target: c.pos,
                 from: {y:c.pos.y},
                 to: {y:c.pos.y+this.distance},

@@ -35,7 +35,7 @@ export class Boss5 extends SimpleGameObjectContainer {
             wheel.angle3d.x+=0.04;
         },1);
 
-        const t = new Tween({
+        const t = new Tween(this.game,{
             target:obj.angle3d,
             from: {x:-0.3},
             to: {x:0.3},

@@ -16,7 +16,7 @@ export class GetReadyScene extends BasePix32Scene {
         getReady.pos.setXY(-12);
         this.screen.appendChild(getReady);
         getReady.transformPoint.setToCenter();
-        this.addTween(new Tween({
+        this.addTween(new Tween(this.game,{
             target: getReady.scale,
             from: {x:1,y:1},
             to: {x:0.3,y:0.3},

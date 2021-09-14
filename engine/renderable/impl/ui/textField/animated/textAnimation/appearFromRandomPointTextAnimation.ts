@@ -24,7 +24,7 @@ export class AppearFromRandomPointTextAnimation extends AbstractTextAnimation {
             const y = MathEx.random(-this.seed,this.seed);
             const fromPoint:Point2d = new Point2d(x, y);
             c.visible = false;
-            const t = new Tween({
+            const t = new Tween(game,{
                 target: c.pos,
                 from: {x: fromPoint.x, y: fromPoint.y},
                 to: c.pos.toJSON(),

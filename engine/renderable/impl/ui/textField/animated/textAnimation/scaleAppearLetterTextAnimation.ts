@@ -21,7 +21,7 @@ export class ScaleAppearLetterTextAnimation extends AbstractTextAnimation {
         chars.forEach((c,index)=>{
             c.scale.setXY(this.scaleFrom);
             c.visible = false;
-            const t = new Tween({
+            const t = new Tween(game,{
                 target: c.scale,
                 from: {x:this.scaleFrom,y:this.scaleFrom},
                 to: {x:1,y:1},

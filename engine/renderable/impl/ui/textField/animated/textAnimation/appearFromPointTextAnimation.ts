@@ -24,7 +24,7 @@ export class AppearFromPointTextAnimation extends AbstractTextAnimation {
                 this.point.y - c.parent.pos.y - c.parent.parent.pos.y - c.parent.parent.parent.pos.y - textField.pos.y
             );
             c.visible = false;
-            const t = new Tween({
+            const t = new Tween(game,{
                 target: c.pos,
                 from: {x: fromPoint.x, y: fromPoint.y},
                 to: c.pos.toJSON(),

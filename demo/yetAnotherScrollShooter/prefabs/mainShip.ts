@@ -43,7 +43,7 @@ export class MainShip extends AbstractEntity {
         obj.scale.setXYZ(10);
         this.appendChild(obj);
 
-        const t = new Tween({
+        const t = new Tween(this.game,{
             target:obj.angle3d,
             from: {x:-0.2},
             to: {x:0.2},

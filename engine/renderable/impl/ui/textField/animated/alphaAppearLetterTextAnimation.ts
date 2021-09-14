@@ -21,7 +21,7 @@ export class AlphaAppearLetterTextAnimation extends AbstractTextAnimation {
         chars.forEach((c,index)=>{
             c.alpha = this.alphaFrom;
             c.visible = false;
-            const t = new Tween({
+            const t = new Tween(game,{
                 target: c,
                 from: {alpha:this.alphaFrom},
                 to: {alpha:1},

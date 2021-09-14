@@ -150,7 +150,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
 
     public shake(amplitude:number,time:number):void {
         const tweenTarget:ICameraTweenTarget = {time:0,point:new Point2d(0,0)};
-        this._cameraShakeTween = new Tween({
+        this._cameraShakeTween = new Tween(this.game,{
             target:tweenTarget,
             time,
             to:{time},

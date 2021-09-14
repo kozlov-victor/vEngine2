@@ -1,5 +1,6 @@
 import {EventEmitter} from "@engine/misc/eventEmitter";
 import {IEventemittable} from "@engine/core/declarations";
+import {Game} from "@engine/core/game";
 
 
 export const getControlErrorMessage = (controlName:string,controlClassName:string):string=>{
@@ -12,7 +13,7 @@ export class EventEmitterDelegate<T extends string, U> implements IEventemittabl
 
     private _emitter:EventEmitter;
 
-    constructor(){}
+    constructor(protected game:Game){}
 
     public on(eventName:T,callBack:(arg:U)=>void):(arg:U)=>void{
         if (this._emitter===undefined) this._emitter = new EventEmitter();

@@ -15,7 +15,7 @@ export abstract class AbstractToggleButton extends WidgetContainer {
 
     public readonly checked: boolean = false;
 
-    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IToggleButtonEvent> = new EventEmitterDelegate();
+    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IToggleButtonEvent> = new EventEmitterDelegate(this.game);
 
     private backgroundChecked: RenderableModel = new DefaultBackgroundObject(this.game);
 

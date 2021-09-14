@@ -33,7 +33,7 @@ export class Boss1 extends SimpleGameObjectContainer {
             (c as Model3d).specular = 0.4;
         });
 
-        const t = new Tween({
+        const t = new Tween(this.game,{
             target:obj.angle3d,
             from: {x:-0.3},
             to: {x:0.3},

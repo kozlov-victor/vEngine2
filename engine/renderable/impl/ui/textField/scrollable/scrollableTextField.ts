@@ -9,7 +9,7 @@ export class ScrollableTextField extends TextField {
 
     public override readonly type:string = 'ScrollableTextField';
 
-    public readonly scrollHandler:EventEmitterDelegate<'scroll', void> = new EventEmitterDelegate();
+    public readonly scrollHandler:EventEmitterDelegate<'scroll', void> = new EventEmitterDelegate(this.game);
 
     private _scrollContainerDelegate:ScrollContainerDelegate;
 

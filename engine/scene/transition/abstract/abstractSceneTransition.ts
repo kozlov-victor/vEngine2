@@ -59,7 +59,7 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
                 this._onComplete();
             }
         };
-        const t:Tween<ISceneTransitionValue> = new Tween(desc);
+        const t:Tween<ISceneTransitionValue> = new Tween(this.game,desc);
         this._currScene = currScene;
         this._prevScene = prevScene;
         t.update();

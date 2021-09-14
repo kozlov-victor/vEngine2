@@ -77,21 +77,6 @@ class NodeChain {
 
 }
 
-// todo doesnt work yet
-const createFeedBackDelayNodePair = (context:AudioContext):Optional<{delayNode: DelayNode, gainNode: GainNode }>=>{
-    if (context.createDelay===undefined) return undefined;
-    const delayNode = context.createDelay(1);
-    delayNode.delayTime.value = 0;
-    const gainNode = context.createGain();
-    gainNode.gain.value = 0;
-    delayNode.connect(gainNode);
-    gainNode.connect(delayNode);
-    const rootGainNode = context.createGain();
-    rootGainNode.gain.value = 1;
-    gainNode.connect(rootGainNode);
-    return {delayNode,gainNode};
-};
-
 
 export class WebAudioContext extends BasicAudioContext implements ICloneable<WebAudioContext>{
 
@@ -106,8 +91,6 @@ export class WebAudioContext extends BasicAudioContext implements ICloneable<Web
             this._stereoPanNode.pan.value = 0.5;
             this._nodeChain.addNode(this._stereoPanNode);
         }
-        this._feedBackDelayNodePair = createFeedBackDelayNodePair(this._ctx);
-        if (this._feedBackDelayNodePair!==undefined) this._nodeChain.addNode(this._feedBackDelayNodePair.gainNode);
     }
 
     private readonly _ctx: AudioContext;

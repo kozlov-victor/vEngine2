@@ -8,7 +8,7 @@ import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 export class GamepadEventEmitterDelegate extends EventEmitterDelegate<KEYBOARD_EVENTS|GAME_PAD_EVENTS,IGamePadEvent> {
     public override on(eventName: KEYBOARD_EVENTS | GAME_PAD_EVENTS, callBack: (arg: IGamePadEvent) => void): (arg: IGamePadEvent) => void {
         if (DEBUG) {
-            if (!Game.getInstance().hasControl('GamePadControl'))
+            if (!this.game.hasControl('GamePadControl'))
                 throw new DebugError(getControlErrorMessage('gamepad','GamePadControl'));
         }
         return super.on(eventName, callBack);

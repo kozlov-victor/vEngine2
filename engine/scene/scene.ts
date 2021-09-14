@@ -56,10 +56,10 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     public readonly camera:Camera = new Camera(this.game,this);
 
 
-    public readonly keyboardEventHandler:KeyboardEventEmitterDelegate = new KeyboardEventEmitterDelegate();
-    public readonly gamepadEventHandler:GamepadEventEmitterDelegate = new GamepadEventEmitterDelegate();
-    public readonly mouseEventHandler:MouseEventEmitterDelegate<ISceneMouseEvent> = new MouseEventEmitterDelegate<ISceneMouseEvent>();
-    public readonly sceneEventHandler = new EventEmitterDelegate<SCENE_EVENTS,{taskQueue:TaskQueue}>();
+    public readonly keyboardEventHandler:KeyboardEventEmitterDelegate = new KeyboardEventEmitterDelegate(this.game);
+    public readonly gamepadEventHandler:GamepadEventEmitterDelegate = new GamepadEventEmitterDelegate(this.game);
+    public readonly mouseEventHandler:MouseEventEmitterDelegate<ISceneMouseEvent> = new MouseEventEmitterDelegate<ISceneMouseEvent>(this.game);
+    public readonly sceneEventHandler = new EventEmitterDelegate<SCENE_EVENTS,{taskQueue:TaskQueue}>(this.game);
 
     public readonly _renderingObjectStack:RenderingObjectStack;
     public readonly _renderingSessionInfo:RenderingSessionInfo = new RenderingSessionInfo();
@@ -68,7 +68,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     private _propertyAnimations:IAnimation[] = [];
 
     // addTween
-    private _tweenDelegate: TweenableDelegate = new TweenableDelegate();
+    private _tweenDelegate: TweenableDelegate = new TweenableDelegate(this.game);
 
     // timer
     private _timerDelegate:TimerDelegate = new TimerDelegate();

@@ -17,7 +17,7 @@ export abstract class AbstractDirectionalList extends ScrollView {
 
     protected abstract direction:Direction;
 
-    public readonly listViewEventHandler:EventEmitterDelegate<LIST_VIEW_EVENTS,{dataIndex:number}> = new EventEmitterDelegate();
+    public readonly listViewEventHandler:EventEmitterDelegate<LIST_VIEW_EVENTS,{dataIndex:number}> = new EventEmitterDelegate(this.game);
     protected abstract getCurrentScrollOffset():number;
 
     public addView(newChild: RenderableModel):void {

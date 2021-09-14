@@ -32,7 +32,7 @@ export class Wheel {
         this.free = false;
 
         const target = {val:this.image.offset.y};
-        const t = new Tween({
+        const t = new Tween(this.game,{
             target,
             delayBeforeStart: delayTime,
             to: {val:

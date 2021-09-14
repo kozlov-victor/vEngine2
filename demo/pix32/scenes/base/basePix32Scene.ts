@@ -61,7 +61,7 @@ export abstract class BasePix32Scene extends Scene {
         tf.setText(text);
         tf.revalidate();
         tf.pos.setXY(0,5);
-        this.addTween(new Tween<{x:number}>({
+        this.addTween(new Tween<{x:number}>(this.game,{
             from:{x:0},
             to:{x:-tf.size.width-32},
             target:tf.pos,

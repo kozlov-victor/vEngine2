@@ -3,7 +3,6 @@ import {Game} from "@engine/core/game";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 
-// todo
 export class EvenOddCompositionFilter extends AbstractCompositionFilter {
 
     constructor(game:Game) {

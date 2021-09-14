@@ -18,7 +18,7 @@ export class TweenMovie {
     constructor(private game:Game){}
 
     public addTween<T>(startTime:number, desc:ITweenDescription<T>):TweenMovie{
-        const tween:Tween<unknown> = new Tween<T>(desc) as Tween<unknown>;
+        const tween:Tween<unknown> = new Tween<T>(this.game,desc) as Tween<unknown>;
         this._tweensInMovie.push({
             startTime,
             tween

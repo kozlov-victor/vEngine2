@@ -71,25 +71,25 @@ export class Tween<T> {
     private _desc:ITweenDescriptionNormalized<T>;
 
     /*
-     new Tween({
+     new Tween(game,{
         from :{y:5}, //<--error, only numeric properties of target can be tweenable
         target: {x:2,y:'3'},
         time: 1
     });
 
-     new Tween({
+     new Tween(game,{
         from :{a:5}, //<--error, property 'a' does not belong to target
         target: {x:2,y:'3'},
         time: 1
      });
 
-     new Tween({
+     new Tween(game,{
         from :{x:5,y:2}, //<--error, target property 'y' is not numeric
         target: {x:2,y:'3'},
         time: 1
      });
 
-     new Tween({
+     new Tween(game,{
         from :{x:5}, //<--ok
         target: {x:2,y:'3'},
         time: 1
@@ -97,7 +97,7 @@ export class Tween<T> {
      *
      *
      */
-    constructor(tweenDesc:ITweenDescription<T>){
+    constructor(private game:Game,tweenDesc:ITweenDescription<T>){
         this._target = tweenDesc.target;
         this._progressFn = tweenDesc.progress;
         this._completeFn = tweenDesc.complete;
@@ -119,7 +119,7 @@ export class Tween<T> {
 
     public update():void {
         if (this._completed) return;
-        const currTime:number = Game.getInstance().getCurrentTime(); // todo pass game instance
+        const currTime:number = this.game.getCurrentTime();
 
         if (this._currentLoop===0 && this._delayBeforeStart>0) {
             this._delayWaitTime = this._delayWaitTime || currTime;

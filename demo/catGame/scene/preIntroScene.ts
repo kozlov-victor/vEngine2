@@ -32,7 +32,7 @@ export class PreIntroScene extends Scene {
         const scale:number = 20;
         intro.scale.setXY(scale);
 
-        const tw:Tween<{val:number}> = new Tween({
+        const tw:Tween<{val:number}> = new Tween(this.game,{
             target: {val:scale},
             progress:({val})=>{
                 intro.scale.setXY(Math.abs(val));

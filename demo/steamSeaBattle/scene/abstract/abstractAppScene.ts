@@ -159,7 +159,7 @@ export abstract class AbstractAppScene extends Scene {
                 }
                 case 'animation': {
                     const targetPath:string = child.getAttribute('target');
-                    const tween = new Tween(this.createTweenDesc(root,targetPath,child));
+                    const tween = new Tween(this.game,this.createTweenDesc(root,targetPath,child));
                     this.game.getCurrentScene().addTween(tween);
                     break;
                 }

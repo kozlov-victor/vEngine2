@@ -50,7 +50,7 @@ export class MainScene extends Scene {
             ]);
         },500);
         this.addTween(
-            new Tween({
+            new Tween(this.game,{
                 target: surface.pos,
                 from: {x:15},
                 to: {x: 25},
@@ -59,7 +59,7 @@ export class MainScene extends Scene {
                 yoyo: true,
         }));
         this.addTween(
-            new Tween({
+            new Tween(this.game,{
                 target: surface.pos,
                 from: {y:-10},
                 to: {y: 10},

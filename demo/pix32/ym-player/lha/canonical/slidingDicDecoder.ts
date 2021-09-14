@@ -126,7 +126,6 @@ export abstract class SlidingDicDecoder implements LhaDecoder {
                 this.decodeCount += matchLength;
 
                 for (let k: number = 0; k < matchLength; ++k) {
-                    // todo (byte) (dictionaryBuffer[])
                     const t = this.dictionaryBuffer[(matchPosition + k) & this.dictionaryMask] & 0xFF;
                     this.dictionaryBuffer[this.bufferPointerEnd++] = t;
                     if (len > 0) {

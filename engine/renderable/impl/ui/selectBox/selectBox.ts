@@ -22,7 +22,7 @@ export class SelectBox extends VerticalList {
     public override readonly type:string = 'SelectBox';
 
     public readonly selectedBackground:RenderableModel;
-    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeSelectBoxEvent> = new EventEmitterDelegate();
+    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeSelectBoxEvent> = new EventEmitterDelegate(this.game);
 
     private _options:(string|number)[] = [];
     private _optionViews:WidgetContainer[] = [];

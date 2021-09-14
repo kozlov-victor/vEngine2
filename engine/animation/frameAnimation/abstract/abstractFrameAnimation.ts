@@ -26,7 +26,7 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
     private _isPlaying:boolean = false;
     private _loopReached:boolean = false;
 
-    public readonly animationEventHandler:EventEmitterDelegate<FRAME_ANIMATION_EVENTS,void> = new EventEmitterDelegate();
+    public readonly animationEventHandler:EventEmitterDelegate<FRAME_ANIMATION_EVENTS,void> = new EventEmitterDelegate(this.game);
 
     constructor(protected game:Game) {}
 

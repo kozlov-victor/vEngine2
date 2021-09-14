@@ -9,7 +9,7 @@ export class KeyboardEventEmitterDelegate extends EventEmitterDelegate<KEYBOARD_
 
     public override on(eventName: KEYBOARD_EVENTS, callBack: (arg: IKeyBoardEvent) => void): (arg: IKeyBoardEvent) => void {
         if (DEBUG) {
-            if (!Game.getInstance().hasControl('KeyboardControl'))
+            if (!this.game.hasControl('KeyboardControl'))
                 throw new DebugError(getControlErrorMessage('keyboard','KeyboardControl'));
         }
         return super.on(eventName, callBack);

@@ -1,5 +1,6 @@
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
+import {Game} from "@engine/core/game";
 
 
 export class TweenableDelegate {
@@ -7,8 +8,11 @@ export class TweenableDelegate {
     private _tweens:Tween<unknown>[];
     private _tweenMovies:TweenMovie[];
 
+    public constructor(private game:Game) {
+    }
+
     public tween<T>(desc:ITweenDescription<T>):Tween<T>{
-        const t = new Tween(desc);
+        const t = new Tween(this.game,desc);
         this.addTween(t);
         return t;
     }

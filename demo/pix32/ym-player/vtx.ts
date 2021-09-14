@@ -39,7 +39,7 @@ export class Vtx extends AbstractChipTrack {
         if (this.masterClock<100000 || this.masterClock>100000000) throw new Error(`wrong master clock frequency (${this.masterClock})`);
 
         // Player frequency (VBL per sec)
-        this.frameFreq = this.buffer.readByte(); // todo
+        this.frameFreq = this.buffer.readByte();
 
         // Year of composition creating
         this.year = this.buffer.readUInt16(true);

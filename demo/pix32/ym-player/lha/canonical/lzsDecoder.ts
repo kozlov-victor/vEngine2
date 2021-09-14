@@ -12,7 +12,6 @@ export class LzsDecoder extends SlidingDicDecoder {
     private matchPosition:number = 0;
 
     public constructor(_in:LhaFileInputStream, originalSize:number) {
-        // TODO dictionaryBit
         super(_in, originalSize, 11, 256 - 2);
     }
 

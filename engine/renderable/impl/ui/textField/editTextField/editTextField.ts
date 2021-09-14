@@ -28,7 +28,7 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
     public cursorColor:Color = Color.GREY.clone();
     public multiline:boolean = true;
 
-    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeEditTextFieldEvent> = new EventEmitterDelegate();
+    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeEditTextFieldEvent> = new EventEmitterDelegate(this.game);
 
     private cursor:Cursor;
 

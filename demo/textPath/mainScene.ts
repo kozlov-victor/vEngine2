@@ -24,7 +24,7 @@ export class MainScene extends Scene {
         this.appendChild(polyline);
 
         const tweenObj = {offset:0};
-        this.addTween(new Tween({
+        this.addTween(new Tween(this.game,{
             target: tweenObj,
             from: {offset: -500},
             to:  {offset: 500},

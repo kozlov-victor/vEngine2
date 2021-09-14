@@ -45,7 +45,7 @@ export class MainScene extends Scene {
         const f = new MotionBlurFilter(this.game);
         this.filters = [f];
         const strength = {val:0.5};
-        this.addTween(new Tween({
+        this.addTween(new Tween(this.game,{
             target: strength,
             to: {val:0},
             time: 3000,
