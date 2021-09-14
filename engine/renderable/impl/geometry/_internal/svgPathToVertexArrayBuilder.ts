@@ -88,6 +88,8 @@ export class SvgPathToVertexArrayBuilder {
             //console.log({command});
             if (isFinite(+command) && lastCommand) {
                 this.tokenizer.releaseNextToken();
+                if (lastCommand==='M') lastCommand = 'L';
+                else if (lastCommand==='m') lastCommand = 'l'; // to solve situation like "M25,225 25,25 225,25 225,225z" (implicit L command)
                 this.executeCommand(lastCommand);
             }
             else {

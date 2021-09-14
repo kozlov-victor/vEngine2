@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="360"
+     viewBox="0 0 360 360">
+
+    <path d="M25,225 25,25 225,25 225,225z
+       M25,185 185,185 225,65z
+       M70,145 145,145 145,90 90,90z"
+          style="stroke:blue; stroke-width:2;  fill:dodgerblue; fill-rule:evenodd;fill-opacity:0.6;"/>
+
+</svg>

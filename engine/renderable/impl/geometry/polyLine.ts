@@ -61,7 +61,6 @@ export class PolyLine extends RenderableModel {
         return this.fromVertices(game,vertices,params,close);
     }
 
-
     public static fromMultiCurveSvgPath(game:Game,path:string, params:ITriangulatedPathParams = {},close:boolean = false):PolyLine[]{
         const arr:number[][] = new SvgPathToVertexArrayBuilder(game).parsePolylines(path, close);
         const result:PolyLine[] = [];
