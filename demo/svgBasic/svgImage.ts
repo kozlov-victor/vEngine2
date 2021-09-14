@@ -454,11 +454,20 @@ class SvgElementRenderer {
 
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
+        let fillRule = this.lookUpProperty(el,'fill-rule',true);
+        if (['nonzero','evenodd'].indexOf(fillRule)===-1) fillRule = 'nonzero';
 
+        // https://developer.mozilla.org/ru/docs/Web/SVG/Attribute/fill-rule
         container.forceDrawChildrenOnNewSurface = true;
+        let directionOfBaseShapeIsCc:boolean;
         Polygon.fromMultiCurveSvgPath(this.game,data).forEach((p,i,arr)=>{
             p.fillColor = fillColor;
-            if (i>0) p.filters = [new EvenOddCompositionFilter(this.game)];
+            if (i==0 && fillRule==='nonzero') directionOfBaseShapeIsCc = p.isClockWise();
+            if (i>0) {
+                if (fillRule==='evenodd' || p.isClockWise()!==directionOfBaseShapeIsCc) {
+                    p.filters = [new EvenOddCompositionFilter(this.game)];
+                }
+            }
             container.appendChild(p);
         });
 
