@@ -8,9 +8,10 @@ import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlR
 import {Mat4} from "@engine/geometry/mat4";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
+import {Color} from "@engine/renderer/common/color";
+import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import Mat16Holder = Mat4.Mat16Holder;
 import IDENTITY = Mat4.IDENTITY;
-import {Color} from "@engine/renderer/common/color";
 
 
 export abstract class AbstractCompositionFilter extends AbstractGlFilter {
@@ -24,6 +25,7 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         this._simpleRectCopyDrawer = new SimpleRectDrawer(gl);
         this._simpleRectCopyDrawer.initProgram();
         this.destCopy = new FrameBuffer(gl,this.game.size);
+        this.simpleRectDrawer.gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'destTexture');
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer,nextFrameBuffer:FrameBuffer):void{

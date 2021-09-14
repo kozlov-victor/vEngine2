@@ -15,23 +15,26 @@ export class DebugLayer extends Layer {
     constructor(game:Game) {
         super(game);
         this.transformType = LayerTransformType.STICK_TO_CAMERA;
-        this.loadFont();
+        this.loadFont().catch(e=>console.error(e));
     }
 
-    private loadFont():void {
-        (async () => {
-            const queue:TaskQueue = new TaskQueue(this.game);
-            this.font = await queue.getLoader().loadFontFromCssDescription({fontFamily: 'monospace',fontSize: 14});
-            const textField = new TextField(this.game,this.font);
-            textField.size.set(this.game.size);
-            textField.setPadding(5);
-            textField.textColor.setRGB(0);
-            this.numOfTextRows = ~~(textField.getClientRect().height / this.font.context.lineHeight);
-            textField.setWordBrake(WordBrake.PREDEFINED);
-            this.appendChild(textField);
-            textField.passMouseEventsThrough = true;
-            this.textField = textField;
-        })();
+    private async loadFont():Promise<void> {
+        const queue:TaskQueue = new TaskQueue(this.game);
+        this.font = await queue.getLoader().loadFontFromCssDescription({fontFamily: 'monospace',fontSize: 14});
+        const textField = new TextField(this.game,this.font);
+        textField.size.set(this.game.size);
+        textField.setPadding(5);
+        textField.textColor.setRGB(0);
+        this.numOfTextRows = ~~(textField.getClientRect().height / this.font.context.lineHeight);
+        textField.setWordBrake(WordBrake.PREDEFINED);
+        this.appendChild(textField);
+        textField.passMouseEventsThrough = true;
+        this.textField = textField;
+
+        this.logs = this.logs.slice(-this.numOfTextRows);
+        const textToSet:string = (this.logs.join('\n'));
+        this.textField.setText(textToSet);
+
     }
 
     public log(...args:any[]):void {
