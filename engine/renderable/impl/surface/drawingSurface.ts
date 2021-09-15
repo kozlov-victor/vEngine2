@@ -58,6 +58,8 @@ export interface IDrawingSession {
     fillArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise?:boolean):void;
     moveTo(x:number,y:number):void;
     lineTo(x:number,y:number):void;
+    quadraticCurveTo(x1:number,y1:number,x2:number,y2:number):void;
+    closePolyline():void;
     completePolyline():void;
     drawPolygon(pathOrVertices:string|number[]):void;
     drawPolyline(pathOrVertices:string|number[]):void;
@@ -201,6 +203,19 @@ class DrawingSession implements IDrawingSession {
         }
     }
 
+    public quadraticCurveTo(x1:number,y1:number,x2:number,y2:number):void {
+        if (this._svgPathToVertexArrayBuilder===undefined) {
+            this._svgPathToVertexArrayBuilder = new SvgPathToVertexArrayBuilder(this.game);
+            this._svgPathToVertexArrayBuilder.moveTo(0,0);
+        } else {
+            this._svgPathToVertexArrayBuilder.quadraticCurveTo(x1,y1,x2,y2);
+        }
+    }
+
+    public closePolyline():void {
+        this._svgPathToVertexArrayBuilder?.close();
+    }
+
     public completePolyline():void {
         if (this._svgPathToVertexArrayBuilder===undefined) {
             if (DEBUG) throw new DebugError(`can not complete polyline: no path to complete`);
@@ -215,7 +230,6 @@ class DrawingSession implements IDrawingSession {
             p.destroy();
         }
         this._svgPathToVertexArrayBuilder = undefined;
-
     }
 
     public drawPolygon(pathOrVertices:string|number[]):void{
@@ -509,8 +523,16 @@ export class DrawingSurface
         this._drawingSession.lineTo(x,y);
     }
 
+    public quadraticCurveTo(x1:number,y1:number,x2:number,y2:number):void {
+        this._drawingSession.quadraticCurveTo(x1,y1,x2,y2);
+    }
+
     public moveTo(x: number, y: number): void {
         this._drawingSession.moveTo(x,y);
+    }
+
+    public closePolyline(): void {
+        this._drawingSession.closePolyline();
     }
 
     public completePolyline():void {
