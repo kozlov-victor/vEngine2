@@ -15,7 +15,6 @@ export class Texture extends AbstractTexture{
     }
 
     // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true); for bitmap textures
-    // gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     /**
      * @param img - if image is undefined, width and height must be specified
      * @param size -unused if image specified

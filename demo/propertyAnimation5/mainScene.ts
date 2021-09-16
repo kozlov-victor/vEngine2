@@ -22,7 +22,7 @@ export class MainScene extends Scene {
         circle.radius = 6;
         circle.transformPoint.setXY(circle.radius/2,circle.radius/2);
         circle.fillColor.setRGBA(200,122,0);
-        circle.blendMode = BLEND_MODE.ADDITIVE;
+        circle.blendMode = BLEND_MODE.SCREEN;
 
         const rect:Rectangle = new Rectangle(this.game);
         rect.size.setWH(MathEx.random(1,3));

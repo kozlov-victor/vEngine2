@@ -18,18 +18,30 @@ export class MainScene extends Scene {
         const xmlRaw = await new ResourceLoader(this.game).loadText('./polylinesSvgFont/zx.svg');
         const document = new XmlParser(xmlRaw).getTree();
 
-        const string = 'hello svg fonts world, WOW';
+        const string = '-=hello svg fonts world, WOW@%=-';
         let posX = 0;
+        const scale = 0.05;
+
+        const hexEntityToStr = (str:string = ''):string=>{
+            if (str.indexOf('&#x')===0) {
+                str = str.replace('&#x','');
+                return String.fromCharCode(Number.parseInt(str,16));
+            } else {
+                return str;
+            }
+        }
+
         string.split('').forEach(c=>{
             if (c===' ') {
                 posX+=25;
                 return;
             }
-            const node = document.getElementsByTagName('glyph').find(it=>it.getAttribute('glyph-name')===c);
+            const node = document.getElementsByTagName('glyph').find(it=>hexEntityToStr(it.getAttribute('unicode'))===c);
             if (!node) return;
             const path = node.getAttribute('d');
             if (!path) return;
             const polygons = Polygon.fromMultiCurveSvgPath(this.game,path);
+            if (!polygons.length) return;
             polygons.forEach(p=>{
                 p.scale.setXY(0.05,-0.05);
                 p.pos.x = posX;
@@ -37,7 +49,7 @@ export class MainScene extends Scene {
                 p.filters = [new EvenOddCompositionFilter(this.game)];
                 drawingSurface.drawModel(p);
             });
-            posX+=25;
+            posX+=polygons[0].size.width*scale;
         });
 
     }

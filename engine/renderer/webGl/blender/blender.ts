@@ -53,6 +53,10 @@ export class Blender {
                 gl.blendEquation(gl.FUNC_REVERSE_SUBTRACT);
                 gl.blendFunc(gl.ONE,gl.ONE);
                 break;
+            case BLEND_MODE.SCREEN:
+                gl.blendEquation(gl.FUNC_ADD);
+                gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_COLOR);
+                break;
             default:
                 if (DEBUG) {
                     throw new DebugError(`unknown blend mode: ${blendMode}`);

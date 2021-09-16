@@ -14,9 +14,10 @@ import createImageFromData = ResourceUtil.createImageFromData;
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import ICssFontParameters = FontTypes.ICssFontParameters;
 import ITextureWithId = FontTypes.ITextureWithId;
-import {FontFactory} from "@engine/renderable/impl/general/font/fontFactory";
 import {Image} from "@engine/renderable/impl/general/image";
 import type {XmlParser} from "@engine/misc/xml/xmlParser";
+import {createFontFromAtlas} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromAtlas";
+import {createFontFromCssDescription} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
 
 namespace ResourceCache {
 
@@ -133,7 +134,7 @@ export class ResourceLoader {
     }
 
     public async loadFontFromCssDescription(params:ICssFontParameters,progress?:(n:number)=>void):Promise<Font>{
-        return await FontFactory.createFontFromCssDescription(this.game,params,progress);
+        return await createFontFromCssDescription(this.game,params,progress);
     }
 
     public async loadFontFromAtlas(baseUrl:string|IURLRequest, doc:XmlDocument, progress?:(n:number)=>void):Promise<Font>{
@@ -158,7 +159,7 @@ export class ResourceLoader {
             if (DEBUG && Number.isNaN(pageId)) throw new DebugError(`wrong page id: ${page.getAttribute('id')}`);
             texturePages.push({texture:texturePage,id:pageId});
         }
-        return await FontFactory.createFontFromAtlas(this.game,texturePages,doc);
+        return await createFontFromAtlas(this.game,texturePages,doc);
     }
 
     public addNextTask(task:ITask["fn"]):void {

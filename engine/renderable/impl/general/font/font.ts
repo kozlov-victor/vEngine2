@@ -3,10 +3,10 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {DebugError} from "@engine/debug/debugError";
 import {Optional} from "@engine/core/declarations";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
-import {FontFactory} from "@engine/renderable/impl/general/font/fontFactory";
 import IFontContext = FontTypes.IFontContext;
 import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
 import ITextureWithId = FontTypes.ITextureWithId;
+import {fontAsCss} from "@engine/renderable/impl/general/font/helpers";
 
 export class Font {
 
@@ -35,7 +35,7 @@ export class Font {
     }
 
     public asCss():string{
-        return FontFactory.fontAsCss(this.context.fontSize,this.context.fontFamily);
+        return fontAsCss(this.context.fontSize,this.context.fontFamily);
     }
 
     public getSymbolInfoByChar(char:string):IFontSymbolInfo {

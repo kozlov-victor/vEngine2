@@ -1,7 +1,17 @@
 import {IRectJSON} from "@engine/geometry/rect";
 import {ITexture} from "@engine/renderer/common/texture";
+import {ISize} from "@engine/geometry/size";
 
 export namespace FontTypes {
+
+    export interface IPartialFontContext {
+        symbols: Record<string, IFontSymbolInfo>;
+        pageRects:ISize[];
+        padding: [up:number,right:number,down:number,left:number];
+        spacing: [horizontal:number, vertical:number];
+        lineHeight: number;
+    }
+
     export interface IFontSymbolInfo extends IRectJSON {
         destOffsetX: number;
         destOffsetY: number;
