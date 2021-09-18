@@ -6,6 +6,8 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {SvgImage} from "../svgBasic/svgImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {XmlDocument} from "@engine/misc/xml/xmlELements";
+import {CrtScreenFilter} from "@engine/renderer/webGl/filters/texture/crtScreenFilter";
+import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 
 const images:XmlDocument[] = [
     tbl
@@ -14,6 +16,12 @@ const images:XmlDocument[] = [
 export class MainScene extends Scene {
 
     public override onReady():void {
+
+        this.filters = [new CrtScreenFilter(this.game),new NoiseHorizontalFilter(this.game)];
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, _=>{
+           this.game.getRenderer().requestFullScreen();
+        });
+
         let i = 0;
         let lastImage:SvgImage;
 
