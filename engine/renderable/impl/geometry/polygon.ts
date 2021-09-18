@@ -31,6 +31,7 @@ export class Polygon extends Mesh2d {
     public static fromMultiCurveSvgPath(game:Game,path:string):Polygon[]{
         const polygons:Polygon[] = [];
         const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(game,path,{},true);
+        console.log(polyLines);
         polyLines.forEach(p=>{
             polygons.push(Polygon.fromPolyline(game,p));
             p.destroy();

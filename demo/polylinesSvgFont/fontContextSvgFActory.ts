@@ -7,6 +7,7 @@ import {ISize} from "@engine/geometry/size";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {Color} from "@engine/renderer/common/color";
+import {Font} from "@engine/renderable/impl/general/font/font";
 
 export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSurface> {
 
@@ -14,6 +15,12 @@ export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSur
 
     constructor(game:Game, private fontDocument:XmlDocument,private scale:number) {
         super(game);
+    }
+
+    public override createFont(standardChars: readonly string[], extraChars: readonly string[], fontFamily: string, fontSize: number): Font {
+        const font = super.createFont(standardChars, extraChars, fontFamily, fontSize);
+        this.evenOddCompositionFilter.destroy();
+        return font;
     }
 
     public static hexEntityToStr(str:string = ''):string{

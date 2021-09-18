@@ -45,10 +45,13 @@ export class PolyLine extends RenderableModel {
         const p:PolyLine = new PolyLine(game);
         for (let i:number=0;i<vertices.length-2;i+=2) {
             const line:Line = new Line(game);
-            line.setXYX1Y1(vertices[i],vertices[i+1],vertices[i+2],vertices[i+3]);
+            const x1 = vertices[i], y1 = vertices[i+1];
+            const x2 = vertices[i+2], y2 = vertices[i+3];
+            line.setXYX1Y1(x1,y1,x2,y2);
             p._segments.push(line);
+            p.updateSizeIfRequired(x1,y1);
+            p.updateSizeIfRequired(x2,y2);
         }
-        p.calcSize();
         const mesh:Polygon = triangulatedPathFromPolyline(game,p,params);
         mesh.fillColor = p.color;
         p.appendChild(mesh);
@@ -104,16 +107,11 @@ export class PolyLine extends RenderableModel {
 
     public draw():void{}
 
-    private calcSize():void {
-        let maxW:number = this._segments[0].pos.x+this._segments[0].size.width;
-        let maxH:number = this._segments[0].pos.y+this._segments[0].size.height;
-        for (let i:number=1;i<this._segments.length;i++){
-            if (this._segments[i].pos.x+this._segments[i].size.width>maxW)
-                maxW = this._segments[i].pos.x + this._segments[i].size.width;
-            if (this._segments[i].pos.y+this._segments[i].size.height>maxH)
-                maxH = this._segments[i].pos.y + this._segments[i].size.height;
-        }
-        this.size.setWH(maxW,maxH);
+
+    private updateSizeIfRequired(x:number,y:number):void {
+        if (this.size.width<x) this.size.width = x;
+        if (this.size.height<y) this.size.height = y;
     }
+
 
 }
