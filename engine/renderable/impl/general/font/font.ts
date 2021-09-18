@@ -7,8 +7,19 @@ import IFontContext = FontTypes.IFontContext;
 import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
 import ITextureWithId = FontTypes.ITextureWithId;
 import {fontAsCss} from "@engine/renderable/impl/general/font/helpers";
+import ICssFontParameters = FontTypes.ICssFontParameters;
+import {createFontFromCssDescription} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
+import {createSystemFont} from "@engine/renderable/impl/general/font/createFontMethods/createSystemFont";
 
 export class Font {
+
+    public static fromCssDescription(game:Game,desc:ICssFontParameters) {
+        return createFontFromCssDescription(game,desc);
+    }
+
+    public static getSystemFont(game:Game):Font {
+        return createSystemFont(game);
+    }
 
     constructor(protected game:Game,public readonly context:Readonly<IFontContext>) {
         this.DEFAULT_SYMBOL_IN_CONTEXT = context.symbols[Object.keys(context.symbols)[0]];

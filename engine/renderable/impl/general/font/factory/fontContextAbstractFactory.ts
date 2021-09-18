@@ -3,6 +3,11 @@ import {IRectJSON} from "@engine/geometry/rect";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
 import IPartialFontContext = FontTypes.IPartialFontContext;
+import {Font} from "@engine/renderable/impl/general/font/font";
+import ITextureWithId = FontTypes.ITextureWithId;
+import IFontContext = FontTypes.IFontContext;
+import {ITexture} from "@engine/renderer/common/texture";
+import {Game} from "@engine/core/game";
 
 export abstract class FontContextAbstractFactory<T> {
 
@@ -14,7 +19,11 @@ export abstract class FontContextAbstractFactory<T> {
     protected abstract getLetterWidth(letter:string):number;
     protected abstract getFontHeight():number;
     protected abstract createTexturePage(size:ISize):T;
+    protected abstract texturePageToTexture(page:T):ITexture;
     protected abstract drawLetter(context:T,letter:string,x:number,y:number):void;
+
+    private fontFamily:string;
+    private fontSize:number;
 
     private partialContext:IPartialFontContext;
     private readonly pageRects:ISize[] = [];
@@ -25,6 +34,9 @@ export abstract class FontContextAbstractFactory<T> {
     private currY:number = 0;
     private symbols:{[key:string]:IFontSymbolInfo} = {};
     private texturePages:T[] = [];
+
+    protected constructor(protected game:Game) {
+    }
 
     private newPage():void {
         if (this.currentPageRect!==undefined) this.pageRects.push(this.currentPageRect);
@@ -62,12 +74,16 @@ export abstract class FontContextAbstractFactory<T> {
         this.currX += textWidthPlusPadding;
     }
 
-    public createPartialFontContext(
+    public createFont(
         standardChars:readonly string[],
         extraChars:readonly string[],
-    ):void {
+        fontFamily:string,
+        fontSize:number
+    ):Font {
         const lineHeight:number = this.getFontHeight();
         this.rowHeight = lineHeight + 2 * this.SYMBOL_PADDING;
+        this.fontFamily = fontFamily;
+        this.fontSize = fontSize;
 
         this.newPage();
         standardChars.forEach(c=>this.putCharOnContext(c));
@@ -87,6 +103,7 @@ export abstract class FontContextAbstractFactory<T> {
             lineHeight,
         };
         this.partialContext.pageRects.forEach((size:ISize,i:number)=>this.generateTexturePage(i,size));
+        return this._createFont();
     }
 
     private generateTexturePage(pageId:number,size:ISize):void {
@@ -107,12 +124,29 @@ export abstract class FontContextAbstractFactory<T> {
         });
     }
 
-    public getPartialContext():IPartialFontContext {
-        return this.partialContext;
-    }
+    private _createFont():Font {
+        const partialContext:IPartialFontContext = this.partialContext;
 
-    public getTexturePages():T[] {
-        return this.texturePages;
+        const texturePages:ITextureWithId[] = [];
+        let cnt:number = 0;
+        for (const texturePage of this.texturePages) {
+            const texture = this.texturePageToTexture(texturePage);
+            texturePages.push({texture,id:cnt});
+            cnt++;
+        }
+        const fontContext:IFontContext =
+            {
+                lineHeight: partialContext.lineHeight,
+                padding: partialContext.padding,
+                spacing: partialContext.spacing,
+                symbols: partialContext.symbols,
+                base:partialContext.lineHeight,
+                kerning: {},
+                texturePages,
+                fontFamily:this.fontFamily,
+                fontSize:this.fontSize,
+            };
+        return new Font(this.game,fontContext);
     }
 
 }

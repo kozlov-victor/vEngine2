@@ -1,5 +1,7 @@
 import {ISize} from "@engine/geometry/size";
 import {FontContextAbstractFactory} from "@engine/renderable/impl/general/font/factory/fontContextAbstractFactory";
+import {Game} from "@engine/core/game";
+import {ITexture} from "@engine/renderer/common/texture";
 
 interface IPrefixedContext {
     mozImageSmoothingEnabled?: boolean;
@@ -12,14 +14,14 @@ export class FontContextCanvasFactory extends FontContextAbstractFactory<CanvasR
 
     private measureCanvas:CanvasRenderingContext2D;
 
-    constructor(private strFont:string) {
-        super();
+    constructor(game:Game,private strFont:string) {
+        super(game);
         const el = document.createElement('canvas');
         this.measureCanvas = el.getContext('2d')!;
         this.measureCanvas.font = strFont;
     }
 
-    protected getFontHeight(): number {
+    protected override getFontHeight(): number {
         const parent:HTMLSpanElement = document.createElement("span");
         parent.appendChild(document.createTextNode("height"));
         document.body.appendChild(parent);
@@ -29,11 +31,15 @@ export class FontContextCanvasFactory extends FontContextAbstractFactory<CanvasR
         return height;
     }
 
-    protected getLetterWidth(letter: string): number {
+    protected override getLetterWidth(letter: string): number {
         return ~~this.measureCanvas.measureText(letter).width;
     }
 
-    protected createTexturePage(size: ISize): CanvasRenderingContext2D {
+    protected override texturePageToTexture(page: CanvasRenderingContext2D): ITexture {
+        return this.game.getRenderer().createTexture(page.canvas);
+    }
+
+    protected override createTexturePage(size: ISize): CanvasRenderingContext2D {
         const cnv:HTMLCanvasElement = document.createElement('canvas');
         cnv.width = size.width;
         cnv.height = size.height;

@@ -24,11 +24,23 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         const gl:WebGLRenderingContext = this.game.getRenderer<WebGlRenderer>().getNativeContext();
         this._simpleRectCopyDrawer = new SimpleRectDrawer(gl);
         this._simpleRectCopyDrawer.initProgram();
-        this.destCopy = new FrameBuffer(gl,this.game.size);
         this.simpleRectDrawer.gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'destTexture');
     }
 
+    private watchFrameBuffer(destFrameBuffer:FrameBuffer):void {
+        const gl:WebGLRenderingContext = this.game.getRenderer<WebGlRenderer>().getNativeContext();
+        if (this.destCopy===undefined) {
+            this.destCopy = new FrameBuffer(gl,destFrameBuffer.getTexture().size);
+        } else if (!this.destCopy.getTexture().size.equals(destFrameBuffer.getTexture().size)) {
+            this.destCopy.destroy();
+            this.destCopy = new FrameBuffer(gl,destFrameBuffer.getTexture().size);
+        }
+    }
+
     public override doFilter(destFrameBuffer:FrameBuffer,nextFrameBuffer:FrameBuffer):void{
+
+        this.watchFrameBuffer(destFrameBuffer);
+
         const size:ISize = destFrameBuffer.getTexture().size;
         const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,size);
 
@@ -51,6 +63,10 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         // 5. complete
         m16h.release();
 
+    }
+
+    public override destroy():void {
+        this.destCopy?.destroy();
     }
 
 }

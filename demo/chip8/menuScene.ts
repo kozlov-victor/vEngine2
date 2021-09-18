@@ -44,8 +44,7 @@ const roms:string[] = [
 
 export class MenuScene extends Scene {
 
-    @Resource.FontFromCssDescription({fontSize: 25,fontFamily:'monospace'})
-    private fnt:Font;
+    private fnt:Font = Font.fromCssDescription(this.game,{fontSize: 25,fontFamily:'monospace'});
 
     private listView:VerticalList;
 

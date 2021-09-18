@@ -1,16 +1,12 @@
 import {Scene} from "@engine/scene/scene";
 import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
-import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-
     private surface:DrawingSurface;
-
-    @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:10})
-    private fnt:Font;
+    private fnt:Font = Font.fromCssDescription(this.game,{fontFamily:'monospace',fontSize:10});
 
     private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 

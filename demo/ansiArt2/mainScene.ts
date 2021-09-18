@@ -8,8 +8,7 @@ import {RESULT} from "./code";
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:10})
-    private fnt:Font;
+    private fnt:Font = Font.fromCssDescription(this.game,{fontFamily:'monospace',fontSize:10});
 
     public override onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);

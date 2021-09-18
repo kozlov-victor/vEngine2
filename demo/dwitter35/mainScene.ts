@@ -5,11 +5,8 @@ import {Font} from "@engine/renderable/impl/general/font/font";
 
 export class MainScene extends Scene {
 
-
     private surface:DrawingSurface;
-
-    @Resource.FontFromCssDescription({fontFamily:'serif',fontSize:120})
-    private fnt:Font;
+    private fnt:Font = Font.fromCssDescription(this.game,{fontFamily:'serif',fontSize:120});
 
     private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 

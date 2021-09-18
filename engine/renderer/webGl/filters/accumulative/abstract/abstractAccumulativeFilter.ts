@@ -28,7 +28,23 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
         this.accumulatorAfter  = new FrameBuffer(gl,this.game.size);
     }
 
+    private watchFrameBuffer(destFrameBuffer:FrameBuffer):void {
+        const gl:WebGLRenderingContext = this.game.getRenderer<WebGlRenderer>().getNativeContext();
+        if (this.accumulatorBefore===undefined) {
+            this.accumulatorBefore = new FrameBuffer(gl,destFrameBuffer.getTexture().size);
+            this.accumulatorAfter = new FrameBuffer(gl,destFrameBuffer.getTexture().size);
+        } else if (!this.accumulatorBefore.getTexture().size.equals(destFrameBuffer.getTexture().size)) {
+            this.accumulatorBefore.destroy();
+            this.accumulatorAfter.destroy();
+            this.accumulatorBefore = new FrameBuffer(gl,destFrameBuffer.getTexture().size);
+            this.accumulatorAfter = new FrameBuffer(gl,destFrameBuffer.getTexture().size);
+        }
+    }
+
     public override doFilter(destFrameBuffer:FrameBuffer):void{
+
+        this.watchFrameBuffer(destFrameBuffer);
+
         const size:ISize = destFrameBuffer.getTexture().size;
         const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,size);
 
@@ -56,6 +72,11 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
         this._simpleRectCopyDrawer.attachTexture('texture',destFrameBuffer.getTexture());
         this._simpleRectCopyDrawer.draw();
         m16h.release();
+    }
+
+    public override destroy() {
+        this.accumulatorBefore?.destroy();
+        this.accumulatorAfter?.destroy();
     }
 
 }

@@ -13,8 +13,9 @@ import {FastMap} from "@engine/misc/collection/fastMap";
 import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {ISize} from "@engine/geometry/size";
 import IDENTITY = Mat4.IDENTITY;
+import {IDestroyable} from "@engine/core/declarations";
 
-export abstract class AbstractGlFilter implements IFilter {
+export abstract class AbstractGlFilter implements IFilter,IDestroyable {
 
     public readonly type:string = 'WebglFilter';
     public enabled:boolean = true;
@@ -59,6 +60,10 @@ export abstract class AbstractGlFilter implements IFilter {
         destFrameBuffer.bind();
         destFrameBuffer.clear(Color.NONE);
         this.simpleRectDrawer.draw();
+    }
+
+    public destroy():void {
+
     }
 
 }

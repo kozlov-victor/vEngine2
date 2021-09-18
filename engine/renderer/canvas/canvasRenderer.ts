@@ -189,7 +189,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public createTexture(bitmap:HTMLImageElement|ImageBitmap):ICanvasTexture{
+    public createTexture(bitmap:HTMLImageElement|ImageBitmap|HTMLCanvasElement):ICanvasTexture{
         const c:HTMLCanvasElement = document.createElement('canvas');
         c.setAttribute('width',bitmap.width.toString());
         c.setAttribute('height',bitmap.height.toString());

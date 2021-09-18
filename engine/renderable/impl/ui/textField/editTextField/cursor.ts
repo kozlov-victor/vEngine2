@@ -224,7 +224,7 @@ export class Cursor {
         }
         this.cursorView.pos.setXY(posX,posY);
 
-        if (this.currentCharImage!==undefined && symbolInfo!==undefined) {
+        if (this.currentCharImage!==undefined && symbolInfo!==undefined && symbolInfo.widthAdvanced>0) {
             const scaleFromCurrFontSize:number = this.currentCharImage.getCharacterInfo().scaleFromCurrFontSize;
             this.cursorView.size.setWH(
                 symbolInfo.widthAdvanced * scaleFromCurrFontSize,

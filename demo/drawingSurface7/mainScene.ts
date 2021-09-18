@@ -2,13 +2,11 @@ import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font/font";
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:20})
-    private fnt:Font;
+    private fnt:Font = Font.fromCssDescription(this.game,{fontFamily:'monospace',fontSize:20});
 
     public override onReady():void {
 

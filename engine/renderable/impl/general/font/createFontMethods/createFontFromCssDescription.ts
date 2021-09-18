@@ -15,50 +15,18 @@ import {
 } from "@engine/renderable/impl/general/font/createFontMethods/params/createFontParams";
 import {fontAsCss} from "@engine/renderable/impl/general/font/helpers";
 
-export const createFontFromCssDescription = async (game:Game,params:ICssFontParameters,progress?:(n:number)=>void)=>{
+export const createFontFromCssDescription = (game:Game,params:ICssFontParameters):Font=>{
 
     const fontFamily:string = params.fontFamily ?? DEFAULT_FONT_PARAMS.fontFamily;
     const fontSize:number = params.fontSize ?? DEFAULT_FONT_PARAMS.fontSize;
 
     const cssFontDescription:string = fontAsCss(fontSize,fontFamily);
 
-    const fontFactory = new FontContextCanvasFactory(cssFontDescription);
-    fontFactory.createPartialFontContext(
+    const fontFactory = new FontContextCanvasFactory(game,cssFontDescription);
+    return fontFactory.createFont(
         params.chars ?? (LAT_CHARS + STANDARD_SYMBOLS + CYR_CHARS).split(''),
-        params.extraChars ?? []
+        params.extraChars ?? [],
+        fontFamily, fontSize
     );
-    const partialContext:IPartialFontContext = fontFactory.getPartialContext();
-    const bitmapUrls:string[] =
-        fontFactory.getTexturePages().map(c=>c.canvas.toDataURL());
-
-    const texturePages:ITextureWithId[] = [];
-
-    const resourceLoader:ResourceLoader = new ResourceLoader(game);
-    let currProgress:number = 0;
-    const progressCallback = (n:number)=>{
-        currProgress+=n;
-        if (progress!==undefined) progress(currProgress/bitmapUrls.length);
-    };
-    let cnt:number = 0;
-    for (const bitmapUrl of bitmapUrls) {
-        const texture:ITexture = await resourceLoader.loadTexture(bitmapUrl,progressCallback);
-        texturePages.push({texture,id:cnt});
-        cnt++;
-    }
-
-    const fontContext:IFontContext =
-        {
-            lineHeight: partialContext.lineHeight,
-            padding: partialContext.padding,
-            spacing: partialContext.spacing,
-            symbols: partialContext.symbols,
-            base:partialContext.lineHeight,
-            kerning: {},
-            texturePages,
-            fontFamily,
-            fontSize,
-        };
-
-    return new Font(game,fontContext);
 
 };

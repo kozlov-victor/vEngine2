@@ -6,9 +6,9 @@ import {DEFAULT_FONT_PARAMS} from "@engine/renderable/impl/general/font/createFo
 
 let _systemFontInstance:Optional<Font>;
 
-export const createSystemFont = async (game:Game):Promise<Font>=> {
+export const createSystemFont = (game:Game):Font=> {
     _systemFontInstance =
         _systemFontInstance ||
-        await createFontFromCssDescription(game,{fontSize:DEFAULT_FONT_PARAMS.fontSize,fontFamily:DEFAULT_FONT_PARAMS.fontFamily});
+        createFontFromCssDescription(game,{fontSize:DEFAULT_FONT_PARAMS.fontSize,fontFamily:DEFAULT_FONT_PARAMS.fontFamily});
     return _systemFontInstance;
 };

@@ -11,18 +11,8 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    private fnt:Font;
-    private fnt2:Font;
-
-    public override onPreloading(taskQueue:TaskQueue):void {
-
-        taskQueue.addNextTask(async progress => {
-            this.fnt = await taskQueue.getLoader().loadFontFromCssDescription({fontSize: 50}, progress);
-        });
-        taskQueue.addNextTask(async progress => {
-            this.fnt2 = await taskQueue.getLoader().loadFontFromCssDescription({fontSize: 20}, progress);
-        });
-    }
+    private fnt:Font = Font.fromCssDescription(this.game,{fontSize:50});
+    private fnt2:Font = Font.fromCssDescription(this.game,{fontSize:20});
 
     public override onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt2);

@@ -473,8 +473,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return undefined;
     }
 
-
-    public createTexture(bitmap:ImageBitmap|HTMLImageElement):ITexture{
+    public createTexture(bitmap:ImageBitmap|HTMLImageElement|HTMLCanvasElement):ITexture{
         const texture:Texture = new Texture(this._gl);
         texture.setImage(bitmap);
         return texture;

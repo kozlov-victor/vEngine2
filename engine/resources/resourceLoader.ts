@@ -134,7 +134,7 @@ export class ResourceLoader {
     }
 
     public async loadFontFromCssDescription(params:ICssFontParameters,progress?:(n:number)=>void):Promise<Font>{
-        return await createFontFromCssDescription(this.game,params,progress);
+        return createFontFromCssDescription(this.game, params);
     }
 
     public async loadFontFromAtlas(baseUrl:string|IURLRequest, doc:XmlDocument, progress?:(n:number)=>void):Promise<Font>{

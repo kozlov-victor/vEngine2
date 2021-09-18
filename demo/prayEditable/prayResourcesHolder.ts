@@ -13,8 +13,7 @@ export class PrayResourcesHolder extends ResourceAutoHolder{
     @Resource.FontFromAtlas('./pray/font/button/',btnFntXML)
     public buttonFont:Font;
 
-    @Resource.FontFromCssDescription({fontSize: 35})
-    public buttonFont2:Font;
+    public buttonFont2:Font = Font.fromCssDescription(this.scene.getGame(),{fontSize: 35});
 
     @Resource.Text('./pray/text.txt')
     public text:string;

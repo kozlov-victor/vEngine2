@@ -4,36 +4,32 @@ import {Font} from "@engine/renderable/impl/general/font/font";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {createFontFromCssDescription} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
+import {createSystemFont} from "@engine/renderable/impl/general/font/createFontMethods/createSystemFont";
 
 export class DebugLayer extends Layer {
 
     private textField:TextField;
-    private font:Font;
     private numOfTextRows:number;
     private logs:string[] = [];
 
     constructor(game:Game) {
         super(game);
         this.transformType = LayerTransformType.STICK_TO_CAMERA;
-        this.loadFont().catch(e=>console.error(e));
+        this.createTextField();
     }
 
-    private async loadFont():Promise<void> {
-        const queue:TaskQueue = new TaskQueue(this.game);
-        this.font = await queue.getLoader().loadFontFromCssDescription({fontFamily: 'monospace',fontSize: 14});
-        const textField = new TextField(this.game,this.font);
+    private createTextField():void {
+        const font = Font.getSystemFont(this.game);
+        const textField = new TextField(this.game,font);
         textField.size.set(this.game.size);
         textField.setPadding(5);
         textField.textColor.setRGB(0);
-        this.numOfTextRows = ~~(textField.getClientRect().height / this.font.context.lineHeight);
+        this.numOfTextRows = ~~(textField.getClientRect().height / font.context.lineHeight);
         textField.setWordBrake(WordBrake.PREDEFINED);
         this.appendChild(textField);
         textField.passMouseEventsThrough = true;
         this.textField = textField;
-
-        this.logs = this.logs.slice(-this.numOfTextRows);
-        const textToSet:string = (this.logs.join('\n'));
-        this.textField.setText(textToSet);
 
     }
 
@@ -63,18 +59,14 @@ export class DebugLayer extends Layer {
             }
             this.logs.push(...txt.split('\n'));
         });
-        if (this.textField!==undefined)  {
-            this.logs = this.logs.slice(-this.numOfTextRows);
-            const textToSet:string = (this.logs.join('\n'));
-            this.textField.setText(textToSet);
-        }
+        this.logs = this.logs.slice(-this.numOfTextRows);
+        const textToSet:string = (this.logs.join('\n'));
+        this.textField.setText(textToSet);
     }
 
     public clearLog():void {
         this.logs.length = 0;
-        if (this.textField!==undefined) {
-            this.textField.setText('');
-        }
+        this.textField.setText('');
     }
 
 }

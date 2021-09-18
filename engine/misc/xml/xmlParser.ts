@@ -1,4 +1,5 @@
 import {IXmlTextNode, XmlNode} from "@engine/misc/xml/xmlELements";
+import {DebugError} from "@engine/debug/debugError";
 
 interface IParseError {
     key: string;
@@ -11,9 +12,11 @@ export class XmlParser {
 
     constructor(text:string) {
         this.text = text;
-        if (this.text) {
+        if (this.text.trim()) {
             this.parse();
             this.afterParsed();
+        } else {
+            if (DEBUG && !text.trim()) throw new DebugError(`can not parse xml: string is empty`);
         }
     }
 

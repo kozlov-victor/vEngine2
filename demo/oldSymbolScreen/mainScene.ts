@@ -15,8 +15,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromCssDescription({fontSize:14})
-    public fnt:Font;
+    public fnt:Font = Font.fromCssDescription(this.game,{fontSize:14});
 
     public override onPreloading(taskQueue:TaskQueue):void{
         super.onPreloading(taskQueue);

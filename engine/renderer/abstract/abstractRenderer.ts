@@ -164,7 +164,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         return this.rendererHelper;
     }
 
-    public abstract createTexture(bitmap:ImageBitmap|HTMLImageElement):ITexture;
+    public abstract createTexture(bitmap:ImageBitmap|HTMLImageElement|HTMLCanvasElement):ITexture;
 
     public abstract createCubeTexture(
         imgLeft:ImageBitmap|HTMLImageElement,

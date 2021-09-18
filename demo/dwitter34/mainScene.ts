@@ -6,11 +6,8 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 
 export class MainScene extends Scene {
 
-
     private surface:DrawingSurface;
-
-    @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:25,extraChars:['🐦']})
-    private fnt:Font;
+    private fnt:Font = Font.fromCssDescription(this.game,{fontFamily:'monospace',fontSize:25,extraChars:['🐦']});
 
     private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 

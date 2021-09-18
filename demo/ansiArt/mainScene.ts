@@ -20,8 +20,7 @@ let currImage:number = 0;
 
 export class MainScene extends Scene {
 
-    @Resource.FontFromCssDescription({fontSize:10})
-    private fnt:Font;
+    private fnt:Font = Font.fromCssDescription(this.game,{fontSize:10});
 
     public override onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);

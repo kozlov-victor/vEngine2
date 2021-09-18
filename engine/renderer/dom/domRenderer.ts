@@ -142,7 +142,7 @@ export class DomRenderer extends AbstractRenderer {
         this._nodes.kill(r.id);
     }
 
-    public createTexture(bitmap:ImageBitmap|HTMLImageElement):IDomTexture {
+    public createTexture(bitmap:ImageBitmap|HTMLImageElement|HTMLCanvasElement):IDomTexture {
         return {uid:Incrementer.getValue(),size:{width:bitmap.width,height:bitmap.height}};
     }
 
