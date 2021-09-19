@@ -169,6 +169,7 @@ export namespace Mat4 {
 
 
     export const makeTranslation = (out:Mat16Holder,tx:n, ty:n, tz:n):void => {
+        const m:MAT16 = out.mat16 as MAT16;
         out.set(
             1,  0,  0,  0,
             0,  1,  0,  0,

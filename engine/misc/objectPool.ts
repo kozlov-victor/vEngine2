@@ -4,8 +4,9 @@ import {Clazz, Optional} from "@engine/core/declarations";
 
 export interface IReleasealable {
     release():this;
-    capture():this;
+    capture(i:number):this;
     isCaptured():boolean;
+    getCapturedIndex():number;
 }
 
 export class ObjectPool<T extends IReleasealable> {
@@ -34,7 +35,7 @@ export class ObjectPool<T extends IReleasealable> {
     }
 
     public releaseObject(obj:T):void{
-        const indexOf:number = this._pool.indexOf(obj);
+        const indexOf:number = obj.getCapturedIndex();
         if (DEBUG && indexOf===-1) {
             console.error(obj);
             throw new DebugError(`can not release the object: it does not belong to the pool`);
@@ -55,12 +56,12 @@ export class ObjectPool<T extends IReleasealable> {
         let current:T = this._pool[i];
         if (current===undefined) {
             current = this._pool[this._ptr] = new this.Class();
-            current.capture();
+            current.capture(i);
             this._ptr = (++i)%this._pool.length;
             return current;
         }
         else if (!current.isCaptured()) {
-            current.capture();
+            current.capture(i);
             this._ptr = (++i)%this._pool.length;
             return current;
         }
