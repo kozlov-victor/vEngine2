@@ -15,6 +15,10 @@ export namespace Mat4 {
 
     type n = number;
 
+    const sin = Math.sin;
+    const cos = Math.cos;
+    const tan = Math.tan;
+
     export type MAT16 = [
         n,n,n,n,
         n,n,n,n,
@@ -119,25 +123,15 @@ export namespace Mat4 {
             bt:n = 1.0 / (bottom - top),
             nf:n = 1.0 / (near - far);
         const outMat16:MAT16 = out.mat16 as MAT16;
+        outMat16.set(identityArray);
+
         outMat16[0] = -2 * lr;
-        outMat16[1] = 0;
-        outMat16[2] = 0;
-        outMat16[3] = 0;
-
-        outMat16[4] = 0;
         outMat16[5] = -2 * bt;
-        outMat16[6] = 0;
-        outMat16[7] = 0;
-
-        outMat16[8] = 0;
-        outMat16[9] = 0;
         outMat16[10] = 2 * nf;
-        outMat16[11] = 0;
 
         outMat16[12] = (left + right) * lr;
         outMat16[13] = (top + bottom) * bt;
-        outMat16[14] = (far + near) * nf;
-        outMat16[15] = 1;
+        outMat16[14] = (near + far) * nf;
     };
 
     export const perspective = (out:Mat16Holder,fovy:n, aspect:n, near:n, far:n):void => {
@@ -170,67 +164,108 @@ export namespace Mat4 {
 
     export const makeTranslation = (out:Mat16Holder,tx:n, ty:n, tz:n):void => {
         const m:MAT16 = out.mat16 as MAT16;
-        out.set(
-            1,  0,  0,  0,
-            0,  1,  0,  0,
-            0,  0,  1,  0,
-            tx, ty, tz,  1
-        );
+
+        // out.set(
+        //     1,  0,  0,  0,
+        //     0,  1,  0,  0,
+        //     0,  0,  1,  0,
+        //     tx, ty, tz,  1
+        // );
+
+        m.set(identityArray);
+        m[12] = tx;
+        m[13] = ty;
+        m[14] = tz;
     };
 
 
     export const makeXSkew = (out:Mat16Holder,angle:n):void => {
-        const t:n = Math.tan(angle);
-        out.set(
-            1,  0,  0,  0,
-            t,  1,  0,  0,
-            0,  0,  1,  0,
-            0,  0,  0,  1
-        );
+        const t:n = tan(angle);
+
+        // out.set(
+        //     1,  0,  0,  0,
+        //     t,  1,  0,  0,
+        //     0,  0,  1,  0,
+        //     0,  0,  0,  1
+        // );
+
+        const m:MAT16 = out.mat16 as MAT16;
+        m.set(identityArray);
+        m[4] = t;
+
     };
 
     export const makeYSkew = (out:Mat16Holder,angle:n):void => {
-        const t:n = Math.tan(angle);
-        out.set(
-            1,  t,  0,  0,
-            0,  1,  0,  0,
-            0,  0,  1,  0,
-            0,  0,  0,  1
-        );
+        const t:n = tan(angle);
+
+        // out.set(
+        //     1,  t,  0,  0,
+        //     0,  1,  0,  0,
+        //     0,  0,  1,  0,
+        //     0,  0,  0,  1
+        // );
+
+        const m:MAT16 = out.mat16 as MAT16;
+        m.set(identityArray);
+        m[1] = t;
+
     };
 
     export const makeXRotation = (out:Mat16Holder,angleInRadians:n):void=> {
-        const c:n = Math.cos(angleInRadians);
-        const s:n = Math.sin(angleInRadians);
+        const c:n = cos(angleInRadians);
+        const s:n = sin(angleInRadians);
 
-        out.set(
-            1, 0, 0, 0,
-            0, c, s, 0,
-            0, -s, c, 0,
-            0, 0, 0, 1
-        );
+        // out.set(
+        //     1, 0, 0, 0,
+        //     0, c, s, 0,
+        //     0, -s, c, 0,
+        //     0, 0, 0, 1
+        // );
+
+        const m:MAT16 = out.mat16 as MAT16;
+        m.set(identityArray);
+        m[5] = c;
+        m[6] = s;
+        m[9] = -s;
+        m[10] = c;
     };
 
     export const makeYRotation = (out:Mat16Holder,angleInRadians:n):void=> {
-        const c:n = Math.cos(angleInRadians);
-        const s:n = Math.sin(angleInRadians);
-        out.set(
-            c, 0, -s, 0,
-            0, 1, 0, 0,
-            s, 0, c, 0,
-            0, 0, 0, 1
-        );
+        const c:n = cos(angleInRadians);
+        const s:n = sin(angleInRadians);
+
+        // out.set(
+        //     c, 0, -s, 0,
+        //     0, 1, 0, 0,
+        //     s, 0, c, 0,
+        //     0, 0, 0, 1
+        // );
+
+        const m:MAT16 = out.mat16 as MAT16;
+        m.set(identityArray);
+        m[0] = c;
+        m[2] = -s;
+        m[8] = s;
+        m[10] = c;
     };
 
     export const makeZRotation = (out:Mat16Holder,angleInRadians:n):void=> {
-        const c:n = Math.cos(angleInRadians);
-        const s:n = Math.sin(angleInRadians);
-        out.set(
-            c, s, 0, 0,
-            -s, c, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        );
+        const c:n = cos(angleInRadians);
+        const s:n = sin(angleInRadians);
+
+        // out.set(
+        //     c, s, 0, 0,
+        //     -s, c, 0, 0,
+        //     0, 0, 1, 0,
+        //     0, 0, 0, 1
+        // );
+
+        const m:MAT16 = out.mat16 as MAT16;
+        m.set(identityArray);
+        m[0] = c;
+        m[1] = s;
+        m[4] = -s;
+        m[5] = c;
     };
 
     export const makeRotationReset = (out:Mat16Holder):void=>{

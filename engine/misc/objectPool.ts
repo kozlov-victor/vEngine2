@@ -14,7 +14,7 @@ export class ObjectPool<T extends IReleasealable> {
     private _ptr:number = 0;
     private _pool:T[] = [];
 
-    constructor(private Class:Clazz<T>, private numberOfInstances = 32){
+    constructor(private Class:Clazz<T>, private readonly numberOfInstances = 32){
         if (DEBUG && !Class) throw new DebugError(`can not instantiate ObjectPool: class not provided in constructor`);
     }
 
