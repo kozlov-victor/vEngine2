@@ -27,7 +27,6 @@ export class MainScene extends Scene {
 
     private r:PrayResourcesHolder = new PrayResourcesHolder(this);
 
-
     public override onReady():void {
 
         this.backgroundColor.setRGB(12,12,12);
@@ -54,7 +53,6 @@ export class MainScene extends Scene {
             progress: e=>f.setStrength(e.val),
             ease: EasingSine.Out,
         }));
-
 
         const btn = new Button(this.game,this.r.buttonFont);
         btn.textColor.setRGB(255,0,0);
@@ -88,7 +86,6 @@ export class MainScene extends Scene {
             tf.setText('Йдіть з миром та благословенні будьте у Господі');
         });
         this.appendChild(btn);
-
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.r.fireTexture);
         animatedImage.blendMode = BLEND_MODE.SCREEN;
