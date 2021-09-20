@@ -91,7 +91,7 @@ export class MainScene extends Scene {
 
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.r.fireTexture);
-        animatedImage.blendMode = BLEND_MODE.ADDITIVE;
+        animatedImage.blendMode = BLEND_MODE.SCREEN;
         const anim:CellFrameAnimation = new CellFrameAnimation(this.game);
         anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
         anim.isRepeating = true;
@@ -105,11 +105,11 @@ export class MainScene extends Scene {
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticlePrefab(animatedImage);
-        ps.emissionRadius = 2;
+        ps.emissionRadius = 4;
 
         const pi:number = Math.PI;
-        ps.numOfParticlesToEmit = {from:1,to:1};
-        ps.particleLiveTime = {from:300,to:500};
+        ps.numOfParticlesToEmit = {from:1,to:5};
+        ps.particleLiveTime = {from:300,to:800};
         ps.particleAngle = {from:-pi/2 - pi/16,to:pi/2 + pi/16};
         ps.particleVelocity = {from:10,to:20};
 
