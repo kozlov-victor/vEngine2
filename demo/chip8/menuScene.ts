@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {VerticalList} from "@engine/renderable/impl/ui/scrollViews/directional/verticalList";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
@@ -7,6 +6,8 @@ import {MainScene} from "./mainScene";
 import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/directionalListEvents";
 
 const roms:string[] = [
+    'chip8/roms/Airplane.c8',
+    'chip8/roms/Bounce [Les Harris].sc',
     'chip8/roms/game Animal Race.ch8',
     'chip8/roms/BRIX',
     'chip8/roms/15PUZZLE',

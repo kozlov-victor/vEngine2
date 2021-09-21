@@ -68,8 +68,8 @@ export abstract class AbstractTexture implements ITexture {
                 throw new DebugError(`can not bind destroyed texture`);
             }
         }
-        program.setUniform(name,i);
         if (AbstractTexture.currentBindTextureAt[i]===this) return;
+        program.setUniform(name,i);
         const gl:WebGLRenderingContext = this.gl;
         gl.activeTexture(gl.TEXTURE0+i);
         gl.bindTexture(this.samplerType, this.tex);

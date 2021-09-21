@@ -1,4 +1,4 @@
-import {ICloneable, IEventemittable} from "@engine/core/declarations";
+import {ICloneable} from "@engine/core/declarations";
 import {Game} from "@engine/core/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";

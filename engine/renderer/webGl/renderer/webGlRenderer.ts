@@ -573,7 +573,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             scd.setUniform(scd.u_vertexMatrix,rectangle.modelViewProjectionMatrix.mat16);
         }
 
-
         scd.setUniform(scd.u_alpha,this.getAlphaBlend());
         scd.setUniform(scd.u_color,((rectangle.fillColor) as Color).asGL());
         scd.draw();
