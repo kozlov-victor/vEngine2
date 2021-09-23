@@ -29,7 +29,6 @@ export class VertexBuffer extends AbstractBuffer {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
         // gl.bufferSubData(gl.ARRAY_BUFFER, 0, new Float32Array(bufferSubData));
         gl.bufferData(gl.ARRAY_BUFFER, bufferData, gl.STATIC_DRAW); // DYNAMIC_DRAW, STREAM_DRAW
-        // tslint:disable-next-line:no-null-keyword
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
         this.bufferItemSize = itemSize;
         this.bufferItemType = itemType; // BYTE, FLOAT, INT, UNSIGNED_SHORT ...
@@ -54,7 +53,6 @@ export class VertexBuffer extends AbstractBuffer {
     }
 
     public unbind():void{
-        // tslint:disable-next-line:no-null-keyword
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, null);
     }
 

@@ -47,7 +47,6 @@ export class ShaderProgram {
     }
 
     public unbind():void {
-        // tslint:disable-next-line:no-null-keyword
         this._gl.useProgram(null);
         ShaderProgram.currentProgram = undefined;
     }

@@ -101,6 +101,7 @@ export class XmlParser {
         if (!name) name = '';
         branch.tagName = name;
         let foundClosing:boolean = false;
+        // eslint-disable-next-line @typescript-eslint/ban-types
         let matches:RegExpMatchArray|null = null;
 
         // match each tag, plus preceding text
@@ -200,6 +201,7 @@ export class XmlParser {
     private throwParseError(key:string, tag:string):never {
         // log error and locate current line number in source XmlParser document
         const parsedSource:string = this.text.substring(0, this.patTag.lastIndex);
+        // eslint-disable-next-line @typescript-eslint/ban-types
         const eolMatch:RegExpMatchArray|null = parsedSource.match(/\n/g);
         let lineNum:number = (eolMatch ? eolMatch.length : 0) + 1;
         lineNum -= tag.match(/\n/) ? tag.match(/\n/g)!.length : 0;
@@ -235,6 +237,7 @@ export class XmlParser {
 
     private parseCommentNode(tag:string):string {
         // Parse Comment Node, e.g. <!-- hello -->
+        // eslint-disable-next-line @typescript-eslint/ban-types
         let matches:RegExpMatchArray|null = null;
         this.patNextClose.lastIndex = this.patTag.lastIndex;
 
@@ -284,6 +287,7 @@ export class XmlParser {
 
     private parseCDATANode(tag:string):string {
         // Parse CDATA Node, e.g. <![CDATA[Brooks & Shields]]>
+        // eslint-disable-next-line @typescript-eslint/ban-types
         let matches:RegExpMatchArray | null = null;
         this.patNextClose.lastIndex = this.patTag.lastIndex;
 

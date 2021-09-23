@@ -60,7 +60,6 @@ export class FrameBuffer implements IRenderTarget {
 
     public unbind():void{
         this._checkBound();
-        // tslint:disable-next-line:no-null-keyword
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
         FrameBuffer._currInstance = undefined;
     }
@@ -103,9 +102,7 @@ export class FrameBuffer implements IRenderTarget {
         }
         // Clean up
         this.texture.unbind();
-        // tslint:disable-next-line:no-null-keyword
         gl.bindRenderbuffer(gl.RENDERBUFFER, null);
-        // tslint:disable-next-line:no-null-keyword
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 

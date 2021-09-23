@@ -13,7 +13,6 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
 
     set width(val:number) {
         if (DEBUG && isNotNumber(val)) {
-            // tslint:disable-next-line:no-console
             console.trace();
             throw new DebugError(`Size.width: wrong numeric argument  ${val}`);
         }
@@ -30,7 +29,6 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
 
     set height(val:number) {
         if (DEBUG && isNotNumber(val)) {
-            // tslint:disable-next-line:no-console
             console.trace();
             throw new DebugError(`Size.height: wrong numeric argument  ${val}`);
         }

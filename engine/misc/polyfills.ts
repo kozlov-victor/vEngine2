@@ -20,7 +20,6 @@ if (!globalThis.cancelAnimationFrame) {
 }
 
 if (!Array.prototype.find) {
-    // tslint:disable-next-line:typedef
     Array.prototype.find = function(predicate:(value:any,i:number,list:any)=>any) {
         if (!this && DEBUG) {
             throw new TypeError('Array.prototype.find called on null or undefined');
@@ -45,7 +44,6 @@ if (!Array.prototype.find) {
 }
 
 if (!Array.prototype.findIndex) {
-    // tslint:disable-next-line:typedef
     Array.prototype.findIndex = function(predicate) {
         if (this == null) {
             throw new TypeError('Array.prototype.findIndex called on null or undefined');

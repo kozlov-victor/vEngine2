@@ -192,9 +192,8 @@ export class MouseControl implements IControl {
             'ontouchend','onmouseup','ontouchmove',
             'onpointerup', 'onpointermove',
             'onmousemove','ondblclick'].forEach((evtName:string)=>{
-                // tslint:disable-next-line:no-null-keyword
+                // eslint-disable-next-line @typescript-eslint/ban-types
             (this._container as unknown as Record<string,null>)[evtName] = null;
-                // tslint:disable-next-line:no-null-keyword
             document.body.ontouchend =
                 document.body.ontouchcancel =
                 document.body.onmouseup =

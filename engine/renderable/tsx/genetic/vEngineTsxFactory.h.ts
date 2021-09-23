@@ -16,6 +16,7 @@ export class VEngineTsxFactory<T> {
 
     public static createElement(
         item:string|((props:Record<string, any>)=>VirtualNode),
+        // eslint-disable-next-line @typescript-eslint/ban-types
         props:Record<string, any>|null,
         ...children: VirtualNode[]
     ):VirtualNode{

@@ -79,7 +79,6 @@ export abstract class AbstractTexture implements ITexture {
     public unbind(i:number = 0):void {
         const gl:WebGLRenderingContext = this.gl;
         gl.activeTexture(gl.TEXTURE0+i);
-        // tslint:disable-next-line:no-null-keyword
         gl.bindTexture(gl.TEXTURE_2D, null);
         delete AbstractTexture.currentBindTextureAt[i];
     }
@@ -129,7 +128,6 @@ export abstract class AbstractTexture implements ITexture {
 
     protected afterOperation():void{
         if (this._currentTextureAt0) this.gl.bindTexture(this.gl.TEXTURE_2D, this._currentTextureAt0.tex);
-        // tslint:disable-next-line:no-null-keyword
         else this.gl.bindTexture(this.gl.TEXTURE_2D, null);
         this._currentTextureAt0 = undefined;
     }

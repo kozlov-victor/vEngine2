@@ -27,7 +27,11 @@
         }],
         "no-case-declarations": "off",
         "no-cond-assign": "off",
-        "@typescript-eslint/ban-ts-comment": "off"
-
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/ban-types": ["error", {
+            "types": {
+                "null": "Use 'undefined' instead of 'null'"
+            }
+        }]
     }
 }

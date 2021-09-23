@@ -44,7 +44,6 @@ export class Texture extends AbstractTexture{
         if (img) {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
         } else {
-            // tslint:disable-next-line:no-null-keyword
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, size.width, size.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         }
         this.setFilters();

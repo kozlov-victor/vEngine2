@@ -34,7 +34,6 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
         this.x = x;
         this.y = y;
         if (DEBUG && (Number.isNaN(z))) {
-            // tslint:disable-next-line:no-console
             console.trace();
             throw new DebugError(`Point3d: wrong numeric arguments ${x},${y},${z}`);
         }

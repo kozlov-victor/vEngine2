@@ -75,7 +75,6 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
 
     public override stop():void {
         this.free = true;
-        // tslint:disable-next-line:no-null-keyword
         this._ctx.onended = null;
         this._ctx.pause();
         this._ctx.currentTime = 0;

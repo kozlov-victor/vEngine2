@@ -44,12 +44,10 @@ export class CubeMapTexture extends AbstractTexture implements ICubeMapTexture{
 
         faceInfos.forEach((faceInfo) => {
             gl.bindTexture(gl.TEXTURE_CUBE_MAP, this.tex);
-            // tslint:disable-next-line:no-null-keyword
             gl.texImage2D(faceInfo, 0, gl.RGBA, 2, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         });
         gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
         gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-        // tslint:disable-next-line:no-null-keyword
         gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
     }
 
@@ -147,7 +145,6 @@ export class CubeMapTexture extends AbstractTexture implements ICubeMapTexture{
             gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
         }
         gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-        // tslint:disable-next-line:no-null-keyword
         gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
     }
 
