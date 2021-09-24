@@ -19,7 +19,8 @@ export class MainScene extends Scene {
                         url: './scml/player/player.scon',
                         headers: [{name: 'test-header', value: 'nonsense'}],
                         responseType: 'text'
-                    }
+                    },
+                    progress
                 );
         });
     }

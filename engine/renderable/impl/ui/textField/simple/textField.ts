@@ -67,6 +67,7 @@ export class TextField extends WidgetContainer {
     }
 
     public setAutoSize(val:boolean):void {
+        if (this._autosize===val) return;
         this._autosize = val;
         this.markAsDirty();
     }

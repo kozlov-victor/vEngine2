@@ -24,7 +24,8 @@ export class MainScene extends Scene {
             this.player =
                 await SpriterObject.create(
                     this.game,taskQueue,
-                    {url:'./moonAnimation/moon/moon.scon',headers:[{name:'test-header',value:'nonsense'}],responseType:'text'}
+                    {url:'./moonAnimation/moon/moon.scon',headers:[{name:'test-header',value:'nonsense'}],responseType:'text'},
+                    progress
                 );
         });
     }

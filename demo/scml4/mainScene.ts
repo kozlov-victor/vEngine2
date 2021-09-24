@@ -11,8 +11,8 @@ export class MainScene extends Scene {
 
     public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
-        taskQueue.addNextTask(async _=>{
-           this.player = await SpriterObject.create(this.game,taskQueue,'./scml4/ugly/ugly.scon');
+        taskQueue.addNextTask(async progress=>{
+           this.player = await SpriterObject.create(this.game,taskQueue,'./scml4/ugly/ugly.scon',progress);
         });
     }
 

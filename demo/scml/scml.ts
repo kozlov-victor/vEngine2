@@ -14,6 +14,7 @@ import {Color} from "@engine/renderer/common/color";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {noop} from "@engine/misc/object";
 
 const POOL_SIZE:number = 128;
 
@@ -133,11 +134,11 @@ interface ISconFile {
 }
 
 
-export class ScmlObject {
+class ScmlObject {
 
     // public characterInfo:SpatialInfo = new SpatialInfo();
 
-    public constructor() {}
+    private constructor() {}
 
     public root:SpriterObject;
 
@@ -896,7 +897,7 @@ export class SpriterObject extends RenderableModel {
         this.appendChild(this.rootNode);
     }
 
-    public static async create(game:Game,taskQueue:TaskQueue,sconUrl:string|IURLRequest):Promise<SpriterObject>{
+    public static async create(game:Game,taskQueue:TaskQueue,sconUrl:string|IURLRequest,progress:(n:number)=>void = noop):Promise<SpriterObject>{
 
         if (DEBUG) {
             if (taskQueue.getLoader().isResolved()) {
@@ -926,7 +927,7 @@ export class SpriterObject extends RenderableModel {
             for (const file of folder.files) {
                 const numOfTasks:number = s.scmlObject.folders.length * folder.files.length;
                 const progressFn = (n:number)=>{
-                    //progress(n/numOfTasks);
+                    progress(n/numOfTasks);
                 };
                 urlRequest.url = `${baseUrl}/${file.name}`;
                 urlRequest.responseType = 'arraybuffer';

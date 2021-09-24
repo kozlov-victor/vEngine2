@@ -9,6 +9,7 @@ import {isPolylineCloseWise} from "@engine/renderable/impl/geometry/_internal/is
 import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
 import {Point2d} from "@engine/geometry/point2d";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
+import {earCut} from "@engine/renderable/impl/geometry/_internal/earCut";
 
 class PolygonPrimitive extends AbstractPrimitive {
     constructor(){
@@ -67,8 +68,7 @@ export class Polygon extends Mesh2d {
         for (const l of p.getSegments()) {
             vertices.push(l.pos.x,l.pos.y);
         }
-        const triangulator:EarClippingTriangulator = new EarClippingTriangulator();
-        const triangulatedIndices:number[] = triangulator.computeTriangles(vertices);
+        const triangulatedIndices:number[] = earCut(vertices);
         const triangulatedVertices:number[] = [];
         for (const ind of triangulatedIndices) {
             triangulatedVertices.push(vertices[2*ind],vertices[2*ind+1]);

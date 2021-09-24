@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
         taskQueue.addNextTask(async progress=>{
-            this.lobster = await SpriterObject.create(this.game,taskQueue,'./scml2/lobster/lobster.scon');
+            this.lobster = await SpriterObject.create(this.game,taskQueue,'./scml2/lobster/lobster.scon',progress);
         });
     }
 

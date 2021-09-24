@@ -3,6 +3,9 @@ import {DebugError} from "@engine/debug/debugError";
  * adopted from https://raw.githubusercontent.com/libgdx/libgdx/master/gdx/src/com/badlogic/gdx/math/EarClippingTriangulator.java
  */
 
+/**
+ * @deprecated
+ */
 export class EarClippingTriangulator {
     private static readonly _CONCAVE: number = -1;
     private static readonly _CONVEX: number = 1;
@@ -41,6 +44,10 @@ export class EarClippingTriangulator {
     }
 
 
+    /**
+     * @deprecated
+     * use earCut function
+     */
     public computeTriangles(vertices: number[]): number[] {
         this.vertices = vertices;
         const offset:number = 0;

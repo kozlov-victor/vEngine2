@@ -16,17 +16,17 @@ export class MainScene extends Scene {
 
     public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);
-        taskQueue.addNextTask(async _=>{
-            this.player = await SpriterObject.create(this.game,taskQueue,'./scml5/orc/orc.scon');
+        taskQueue.addNextTask(async progress=>{
+            this.player = await SpriterObject.create(this.game,taskQueue,'./scml5/orc/orc.scon',progress);
         });
-        taskQueue.addNextTask(async _=>{
-            this.mage = await SpriterObject.create(this.game,taskQueue,'./scml5/mage/mage.scon');
+        taskQueue.addNextTask(async progress=>{
+            this.mage = await SpriterObject.create(this.game,taskQueue,'./scml5/mage/mage.scon',progress);
         });
-        taskQueue.addNextTask(async _=>{
-            this.imp =await SpriterObject.create(this.game,taskQueue,'./scml5/imp/imp.scon');
+        taskQueue.addNextTask(async progress=>{
+            this.imp =await SpriterObject.create(this.game,taskQueue,'./scml5/imp/imp.scon',progress);
         });
-        taskQueue.addNextTask(async _=>{
-            this.brawler = await SpriterObject.create(this.game,taskQueue,'./scml5/brawler/brawler.scon');
+        taskQueue.addNextTask(async progress=>{
+            this.brawler = await SpriterObject.create(this.game,taskQueue,'./scml5/brawler/brawler.scon',progress);
         });
     }
 
