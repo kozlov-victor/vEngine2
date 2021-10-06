@@ -6,7 +6,7 @@ import {
     compileShader,
     createProgram,
     extractAttributes,
-    extractUniformsFromShaderBin, UNIFORM_VALUE_TYPE,
+    extractUniformsFromShader, UNIFORM_VALUE_TYPE,
     IUniformsMap, IUniformWrapper, extractUniformsAndAttributesFromShaderSource
 } from "./shaderProgramUtils";
 import {VertexBuffer} from "./vertexBuffer";
@@ -28,7 +28,7 @@ export class ShaderProgram {
         this._program = createProgram(_gl, vShader, fShader);
         _gl.deleteShader(vShader);
         _gl.deleteShader(fShader);
-        this._uniforms = extractUniformsFromShaderBin(_gl, this);
+        this._uniforms = extractUniformsFromShader(_gl, this);
         this._attributes = extractAttributes(_gl,this);
         const sourceExtracted:{attributes:string[],uniforms:string[]} =
             extractUniformsAndAttributesFromShaderSource(vertexSource,fragmentSource);

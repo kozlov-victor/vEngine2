@@ -11,12 +11,12 @@ export const earCut = (data:number[], holeIndices:number[] = [], dim: number = 2
 
         if (!outerNode || outerNode.next === outerNode.prev) return triangles;
 
-        let minX:number, minY:number, maxX:number, maxY:number, x:number, y:number, invSize:number;
+        let minX:number = 0, minY:number = 0, maxX:number, maxY:number, x:number, y:number, invSize:number =0;
 
         if (hasHoles) outerNode = eliminateHoles(data, holeIndices, outerNode, dim);
 
         // if the shape is not too simple, we'll use z-order curve hash later; calculate polygon bbox
-        //if (data.length > 80 * dim) {
+        if (data.length > 80 * dim) {
             minX = maxX = data[0];
             minY = maxY = data[1];
 
@@ -32,7 +32,7 @@ export const earCut = (data:number[], holeIndices:number[] = [], dim: number = 2
             // minX, minY and invSize are later used to transform coords into integers for z-order calculation
             invSize = Math.max(maxX - minX, maxY - minY);
             invSize = invSize !== 0 ? 1 / invSize : 0;
-        //}
+        }
 
         earcutLinked(outerNode, triangles, dim, minX, minY, invSize);
 

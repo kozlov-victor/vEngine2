@@ -188,7 +188,7 @@ export  const normalizeUniformName =(s:string):string=>{
 };
 
 
-export const extractUniformsFromShaderBin = (gl:WebGLRenderingContext, program:ShaderProgram):IUniformsMap=> {
+export const extractUniformsFromShader = (gl:WebGLRenderingContext, program:ShaderProgram):IUniformsMap=> {
     const glProgram:WebGLProgram = program.getProgram();
     const activeUniforms:Int = gl.getProgramParameter(glProgram, gl.ACTIVE_UNIFORMS) as Int;
     const uniforms:IUniformsMap = {};

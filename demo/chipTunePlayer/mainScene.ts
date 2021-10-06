@@ -27,6 +27,9 @@ import loadFont = fontLoader.loadFont;
 import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
 
 const songUrls = [
+    'chipTunePlayer/bin/JeRrS - Zxfiles (2005).vtx',
+    'chipTunePlayer/bin/Noro - Twilight - credits (1995).vtx',
+    'chipTunePlayer/bin/ZiutekLyraII.vtx',
     'chipTunePlayer/bin/ritm-4.vtx',
     'chipTunePlayer/bin/theme.ym',
     'chipTunePlayer/bin/intro.ym',
@@ -122,33 +125,33 @@ export class MainScene extends Scene {
             const songUrl:string = songUrls[cnt];
             cnt=(++cnt)%songUrls.length;
             tf.setText(`loading track ${songUrl}`);
-            setTimeout(async ()=>{
-                if (currSound!==undefined) currSound.stop();
-                const resourceLoader = new ResourceLoader(this.game);
-                const buff:ArrayBuffer = await resourceLoader.loadBinary(songUrl);
-                await resourceLoader.start();
-                let track;
-                const extension:string = songUrl.split('.')[1];
-                switch (extension) {
-                    case 'ym':
-                        track = new Ym(buff);
-                        break;
-                    case 'vtx':
-                        track = new Vtx(buff);
-                        break;
-                    default:
-                        throw new Error(`unsupported extension: ${extension}`);
-                }
-                const trackArrayBuffer = await track.renderToArrayBuffer();
-                const link:UploadedSoundLink = await this.game.getAudioPlayer().uploadBufferToContext(songUrl,trackArrayBuffer);
-                const sound = new Sound(this.game,link);
-                sound.play();
-                currSound = sound;
-                tf.setText(track.getTrackInfo());
-                const oscilloscope = new ChipOscilloscope(this.game);
-                oscilloscope.listen(sound,track,tfIndicator);
-                pending = false;
-            },10);
+
+            if (currSound!==undefined) currSound.stop();
+            const resourceLoader = new ResourceLoader(this.game);
+            const buff:ArrayBuffer = await resourceLoader.loadBinary(songUrl);
+            await resourceLoader.start();
+            let track;
+            const extension:string = songUrl.split('.')[1];
+            switch (extension) {
+                case 'ym':
+                    track = new Ym(buff);
+                    break;
+                case 'vtx':
+                    track = new Vtx(buff);
+                    break;
+                default:
+                    throw new Error(`unsupported extension: ${extension}`);
+            }
+            const trackArrayBuffer = await track.renderToArrayBuffer();
+            const link:UploadedSoundLink = await this.game.getAudioPlayer().uploadBufferToContext(songUrl,trackArrayBuffer);
+            const sound = new Sound(this.game,link);
+            sound.play();
+            currSound = sound;
+            tf.setText(track.getTrackInfo());
+            const oscilloscope = new ChipOscilloscope(this.game);
+            oscilloscope.listen(sound,track,tfIndicator);
+            pending = false;
+
         });
 
     }
