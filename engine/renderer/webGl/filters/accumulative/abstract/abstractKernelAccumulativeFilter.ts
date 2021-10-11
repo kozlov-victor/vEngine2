@@ -26,7 +26,7 @@ export class AbstractKernelAccumulativeFilter extends AbstractAccumulativeFilter
 
     constructor(game:Game) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         // https://webglfundamentals.org/webgl/lessons/ru/webgl-image-processing-continued.html
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
@@ -56,11 +56,11 @@ export class AbstractKernelAccumulativeFilter extends AbstractAccumulativeFilter
         this.u_noiseIntensity = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_noiseIntensity');
         this.u_time = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_time');
         this.setKernel([0,0,0,0,0,0,0,0,0]);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
-        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        const {width,height} = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,width);
         this.setUniform(this.rt_h,height);
         this.setUniform(this.u_kernel,new Float32Array(this.kernel));

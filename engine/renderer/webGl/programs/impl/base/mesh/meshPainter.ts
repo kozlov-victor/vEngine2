@@ -117,7 +117,7 @@ export class MeshPainter extends AbstractPainter {
     }
 
     public override bind():void{
-        if (DEBUG && this.mesh===undefined) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
+        if (DEBUG && this.mesh===undefined) throw new DebugError(`can not bind modelPainter; bindModel must be invoked firstly`);
         super.bind();
         this.bufferInfo.bind(this.program);
         if (!this.mesh._modelPrimitive.texCoordArr) {

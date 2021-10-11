@@ -21,7 +21,7 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
     public enabled:boolean = true;
 
     protected gl:WebGLRenderingContext;
-    protected simpleRectDrawer:SimpleRectPainter;
+    protected simpleRectPainter:SimpleRectPainter;
 
     private _uniformCache:FastMap<string,UNIFORM_VALUE_TYPE> = new FastMap();
 
@@ -34,15 +34,15 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
         }
 
         this.gl = (game.getRenderer() as any as WebGlRenderer).getNativeContext();
-        this.simpleRectDrawer = new SimpleRectPainter(this.gl);
+        this.simpleRectPainter = new SimpleRectPainter(this.gl);
     }
 
     public setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
         this._uniformCache.put(name,value);
     }
 
-    public getDrawer():AbstractPainter{
-        return this.simpleRectDrawer;
+    public getPainter():AbstractPainter{
+        return this.simpleRectPainter;
     }
 
     public doFilter(destFrameBuffer:FrameBuffer,nextFrameBuffer?:FrameBuffer):void{
@@ -50,16 +50,16 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
         for (let i:number = 0; i < keys.length; i++) {
             const name:string = keys[i];
             const value:UNIFORM_VALUE_TYPE = this._uniformCache.get(keys[i])!;
-            this.simpleRectDrawer.setUniform(name,value);
+            this.simpleRectPainter.setUniform(name,value);
         }
-        const size:ISize = this.simpleRectDrawer.getAttachedTextureAt(0).size;
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_textureMatrix,IDENTITY);
+        const size:ISize = this.simpleRectPainter.getAttachedTextureAt(0).size;
+        this.simpleRectPainter.setUniform(this.simpleRectPainter.u_textureMatrix,IDENTITY);
         const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,size);
-        this.simpleRectDrawer.setUniform(this.simpleRectDrawer.u_vertexMatrix,m16h.mat16);
+        this.simpleRectPainter.setUniform(this.simpleRectPainter.u_vertexMatrix,m16h.mat16);
         m16h.release();
         destFrameBuffer.bind();
         destFrameBuffer.clear(Color.NONE);
-        this.simpleRectDrawer.draw();
+        this.simpleRectPainter.draw();
     }
 
     public destroy():void {

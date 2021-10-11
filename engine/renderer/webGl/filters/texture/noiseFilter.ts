@@ -13,7 +13,7 @@ export class NoiseFilter extends AbstractGlFilter {
 
     constructor(game:Game) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.u_time = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_time');
         this.u_noise_intensity = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_noise_intensity');
 
@@ -40,7 +40,7 @@ export class NoiseFilter extends AbstractGlFilter {
             `
         );
         this.setIntensivity(0.1);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
 
     }
 

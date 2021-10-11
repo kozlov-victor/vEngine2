@@ -17,13 +17,13 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
 
     private accumulatorBefore:FrameBuffer;
     private accumulatorAfter:FrameBuffer;
-    private _simpleRectCopyDrawer:SimpleRectPainter;
+    private _simpleRectCopyPainter:SimpleRectPainter;
 
     constructor(game:Game) {
         super(game);
         const gl:WebGLRenderingContext = this.game.getRenderer<WebGlRenderer>().getNativeContext();
-        this._simpleRectCopyDrawer = new SimpleRectPainter(gl);
-        this._simpleRectCopyDrawer.initProgram();
+        this._simpleRectCopyPainter = new SimpleRectPainter(gl);
+        this._simpleRectCopyPainter.initProgram();
         this.accumulatorBefore = new FrameBuffer(gl,this.game.size);
         this.accumulatorAfter  = new FrameBuffer(gl,this.game.size);
     }
@@ -49,28 +49,28 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
         const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,size);
 
         // 0. prepare for accumulator drawing
-        this._simpleRectCopyDrawer.setUniform(this._simpleRectCopyDrawer.u_textureMatrix,IDENTITY);
-        this._simpleRectCopyDrawer.setUniform(this._simpleRectCopyDrawer.u_vertexMatrix,m16h.mat16);
+        this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_textureMatrix,IDENTITY);
+        this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_vertexMatrix,m16h.mat16);
         Blender.getSingleton(this.game.getRenderer<WebGlRenderer>().getNativeContext()).setBlendMode(BLEND_MODE.NORMAL);
         // 1. copy accumulatorAfter to accumulatorBefore
         this.accumulatorBefore.bind();
         this.accumulatorBefore.clear(Color.NONE);
-        this._simpleRectCopyDrawer.attachTexture('texture',this.accumulatorAfter.getTexture());
-        this._simpleRectCopyDrawer.draw();
+        this._simpleRectCopyPainter.attachTexture('texture',this.accumulatorAfter.getTexture());
+        this._simpleRectCopyPainter.draw();
         // 2. copy current source texture to accumulatorBefore
         this.accumulatorBefore.bind();
-        this._simpleRectCopyDrawer.attachTexture('texture',this.simpleRectDrawer.getAttachedTextureAt(0));
-        this._simpleRectCopyDrawer.draw();
+        this._simpleRectCopyPainter.attachTexture('texture',this.simpleRectPainter.getAttachedTextureAt(0));
+        this._simpleRectCopyPainter.draw();
 
         // 3. apply filter to destFrameBuffer
-        this.simpleRectDrawer.attachTexture('texture',this.accumulatorBefore.getTexture());
+        this.simpleRectPainter.attachTexture('texture',this.accumulatorBefore.getTexture());
         super.doFilter(destFrameBuffer);
 
         // 4. destFrameBuffer to accumulatorAfter
         this.accumulatorAfter.bind();
         this.accumulatorAfter.clear(Color.NONE);
-        this._simpleRectCopyDrawer.attachTexture('texture',destFrameBuffer.getTexture());
-        this._simpleRectCopyDrawer.draw();
+        this._simpleRectCopyPainter.attachTexture('texture',destFrameBuffer.getTexture());
+        this._simpleRectCopyPainter.draw();
         m16h.release();
     }
 

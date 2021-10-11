@@ -10,7 +10,7 @@ export class BlackWhiteFilter extends AbstractGlFilter{
     constructor(game:Game){
         super(game);
 
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.u_mixFactor = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_mixFactor');
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
@@ -23,7 +23,7 @@ export class BlackWhiteFilter extends AbstractGlFilter{
             }
         `);
         this.setMixFactor(0.8);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setMixFactor(n:number):void {

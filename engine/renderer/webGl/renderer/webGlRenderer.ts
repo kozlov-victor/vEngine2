@@ -111,16 +111,15 @@ class InstanceHolder<T extends IDestroyable> {
 
 export class WebGlRenderer extends AbstractCanvasRenderer {
 
-
     public readonly type:string = 'WebGlRenderer';
 
     protected rendererHelper:RendererHelper = new WebGlRendererHelper(this.game);
 
     private _gl:WebGLRenderingContext;
     private readonly _matrixStack:MatrixStack = new MatrixStack();
-    private _shapeDrawerHolder:InstanceHolder<ShapePainter> = new InstanceHolder(ShapePainter);
-    private _coloredRectDrawer:InstanceHolder<SimpleColoredRectPainter> = new InstanceHolder(SimpleColoredRectPainter);
-    private _meshDrawerHolder:InstanceHolder<MeshPainter> = new InstanceHolder(MeshPainter);
+    private _shapePainterHolder:InstanceHolder<ShapePainter> = new InstanceHolder(ShapePainter);
+    private _coloredRectPainterHolder:InstanceHolder<SimpleColoredRectPainter> = new InstanceHolder(SimpleColoredRectPainter);
+    private _meshPainterHolder:InstanceHolder<MeshPainter> = new InstanceHolder(MeshPainter);
 
     private _nullTexture:Texture;
     private _nullCubeMapTexture:CubeMapTexture;
@@ -151,7 +150,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public initBufferInfo(mesh2d:Mesh2d):BufferInfo {
-        return this._meshDrawerHolder.getInstance(this._gl).initBufferInfo(mesh2d);
+        return this._meshPainterHolder.getInstance(this._gl).initBufferInfo(mesh2d);
     }
 
 
@@ -161,7 +160,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
         const maxSize:number = Math.max(img.size.width,img.size.height);
 
-        const sd:ShapePainter = this._shapeDrawerHolder.getInstance(this._gl);
+        const sd:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         this.prepareGeometryUniformInfo(img);
 
         sd.setUniform(sd.u_lineWidth,Math.min(img.lineWidth/maxSize,1));
@@ -200,7 +199,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public drawMesh3d(mesh:Mesh3d):void {
 
-        const md:MeshPainter = this._meshDrawerHolder.getInstance(this._gl);
+        const md:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
 
         md.bindMesh3d(mesh);
         md.bind();
@@ -266,7 +265,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public drawMesh2d(mesh:Mesh2d):void {
 
-        const md:MeshPainter = this._meshDrawerHolder.getInstance(this._gl);
+        const md:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
 
         md.bindMesh2d(mesh);
         md.bind();
@@ -320,7 +319,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const rw:number = rectangle.size.width;
             const rh:number = rectangle.size.height;
             const maxSize:number = Math.max(rw,rh);
-            const sd:ShapePainter = this._shapeDrawerHolder.getInstance(this._gl);
+            const sd:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
             this.prepareGeometryUniformInfo(rectangle);
             this.prepareShapeUniformInfo(rectangle);
             sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
@@ -343,7 +342,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.prepareGeometryUniformInfo(ellipse);
         this.prepareShapeUniformInfo(ellipse);
 
-        const sd:ShapePainter = this._shapeDrawerHolder.getInstance(this._gl);
+        const sd:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
         if (maxR===ellipse.radiusX) {
             sd.setUniform(sd.u_rx,0.5);
@@ -517,8 +516,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._origFrameBufferStack.destroy();
         this._nullTexture.destroy();
         this._nullCubeMapTexture.destroy();
-        this._shapeDrawerHolder.destroy();
-        this._meshDrawerHolder.destroy();
+        this._shapePainterHolder.destroy();
+        this._meshPainterHolder.destroy();
         Texture.destroyAll();
     }
 
@@ -556,7 +555,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     // optimised version of rectangle drawing
     private drawSimpleColoredRectangle(rectangle:Rectangle):void{
 
-        const scd:SimpleColoredRectPainter = this._coloredRectDrawer.getInstance(this._gl);
+        const scd:SimpleColoredRectPainter = this._coloredRectPainterHolder.getInstance(this._gl);
 
         if (rectangle.worldTransformDirty) {
             const rect:Rect = Rect.fromPool();
@@ -589,7 +588,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const {width:rw,height:rh} = model.size;
         const maxSize:number = Math.max(rw,rh);
-        const sd:ShapePainter = this._shapeDrawerHolder.getInstance(this._gl);
+        const sd:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         let offsetX:number = 0,offsetY:number = 0;
         if (maxSize===rw) {
             sd.setUniform(sd.u_width,1);
@@ -638,7 +637,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         }
 
         const maxSize:number = Math.max(model.size.width,model.size.height);
-        const sd:ShapePainter = this._shapeDrawerHolder.getInstance(this._gl);
+        const sd:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         sd.setUniform(sd.u_lineWidth,Math.min(model.lineWidth/maxSize,1));
         sd.setUniform(sd.u_color,model.color.asGL());
 

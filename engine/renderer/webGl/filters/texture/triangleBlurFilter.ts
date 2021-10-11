@@ -13,7 +13,7 @@ export class TriangleBlurFilter extends AbstractGlFilter {
 
     constructor(game:Game) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.delta = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'delta');
 
         //language=GLSL
@@ -36,7 +36,7 @@ export class TriangleBlurFilter extends AbstractGlFilter {
             }
         `);
         this.setValue(0.025);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     // 0...1

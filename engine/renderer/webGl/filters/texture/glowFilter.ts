@@ -21,7 +21,7 @@ export class GlowFilter extends AbstractGlFilter {
     constructor(game:Game,private quality:number = 0.03 /*[0..1]*/,private dist:number = 25) {
         // warn! quality=1 could produce a lack of performance
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
 
         this.quality = Math.pow(this.quality, 1/3);
         this.dist *= this.quality;
@@ -67,7 +67,7 @@ export class GlowFilter extends AbstractGlFilter {
         this.setOuterStrength(4);
         this.setGlowColor(Color.WHITE);
         this.setDistance(this.dist);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setInnerStrength(n:number):void{
@@ -83,7 +83,7 @@ export class GlowFilter extends AbstractGlFilter {
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
-        const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        const size:Size = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.setUniform(this.pixelWidth,1/(size.width*this.quality));
         this.setUniform(this.pixelHeight,1/(size.height*this.quality));
         super.doFilter(destFrameBuffer);

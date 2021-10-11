@@ -16,7 +16,7 @@ export class LowResolutionFilter extends AbstractGlFilter {
 
     constructor(game:Game) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.rt_w = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
         this.rt_h = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
         this.u_resolution = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_resolution');
@@ -43,7 +43,7 @@ export class LowResolutionFilter extends AbstractGlFilter {
             `
         );
         this.setResolution(0.1);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setResolution(val:number):void{
@@ -52,7 +52,7 @@ export class LowResolutionFilter extends AbstractGlFilter {
 
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
-        const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        const size:Size = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,size.width);
         this.setUniform(this.rt_h,size.height);
         super.doFilter(destFrameBuffer);

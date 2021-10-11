@@ -47,7 +47,7 @@ export class SimpleColoredRectPainter extends AbstractPainter {
 
         if (DEBUG) {
             if (!this.gen) throw new DebugError(
-                `can not init simpleRectDrawer instance: ShaderGenerator must be created`
+                `can not init simpleRectPainter instance: ShaderGenerator must be created`
             );
         }
 

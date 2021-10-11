@@ -16,7 +16,7 @@ export class VignetteFilter extends AbstractGlFilter{
     constructor(game:Game){
         super(game);
 
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.size = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'size');
         this.amount = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'amount');
         //language=GLSL
@@ -31,7 +31,7 @@ export class VignetteFilter extends AbstractGlFilter{
         `);
         this.setSize(0.2);
         this.setAmount(0.8);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setSize(val:number):void {

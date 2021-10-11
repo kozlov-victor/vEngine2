@@ -15,7 +15,7 @@ export class WaveFilter extends AbstractGlFilter {
     constructor(game:Game) {
         super(game);
 
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
                     const float PI_MULT_2 = 2.0*3.14;
@@ -33,7 +33,7 @@ export class WaveFilter extends AbstractGlFilter {
         this.u_frequency = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_frequency');
         this.setFrequency(1.5);
         this.setAmplitude(0.001);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setFrequency(val:number):void{

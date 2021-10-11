@@ -14,7 +14,7 @@ export class PosterizeFilter extends AbstractGlFilter {
     constructor(game:Game) {
         super(game);
 
-        const programGen = this.simpleRectDrawer.gen;
+        const programGen = this.simpleRectPainter.gen;
         this.gamma = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'gamma');
         this.numColors = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'numColors');
         //language=GLSL
@@ -33,7 +33,7 @@ export class PosterizeFilter extends AbstractGlFilter {
         );
         this.setGamma(0.6);
         this.setNumOfColors(8);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
 

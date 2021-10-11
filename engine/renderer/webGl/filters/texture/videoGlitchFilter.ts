@@ -17,7 +17,7 @@ export class VideoGlitchFilter extends AbstractGlFilter {
     constructor(game:Game){
         super(game);
 
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
             //
@@ -130,13 +130,13 @@ export class VideoGlitchFilter extends AbstractGlFilter {
         );
         this.iTime = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'iTime');
         this.iResolution = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'iResolution');
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
         this.setUniform(this.iTime,this.time+=0.01);
-        const size:ISize = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        const size:ISize = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.resolution[0] = size.width;
         this.resolution[1] = size.height;
         this.setUniform(this.iResolution,this.resolution);

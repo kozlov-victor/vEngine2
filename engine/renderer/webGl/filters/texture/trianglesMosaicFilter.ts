@@ -12,7 +12,7 @@ export class TrianglesMosaicFilter extends AbstractGlFilter{
     constructor(game:Game){
         super(game);
 
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.tileSize = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'tileSize');
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
@@ -26,7 +26,7 @@ export class TrianglesMosaicFilter extends AbstractGlFilter{
             }
         `);
         this.setMosaicTileSize(40,40);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setMosaicTileSize(x:number,y:number):void {

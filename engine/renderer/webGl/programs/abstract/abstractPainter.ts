@@ -129,7 +129,7 @@ export class AbstractPainter implements IPainter, IDestroyable{
 
         if (DEBUG && this.program===undefined) {
             console.error(this);
-            throw new DebugError(`can not init drawer: initProgram method must be invoked!`);
+            throw new DebugError(`can not init painter: initProgram method must be invoked!`);
         }
 
         if (AbstractPainter.currentInstance===this) return;

@@ -14,7 +14,7 @@ export class HexagonalFilter extends AbstractGlFilter {
 
     constructor(game:Game) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.scale = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'scale');
         this.center = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
         this.texSize = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
@@ -49,7 +49,7 @@ export class HexagonalFilter extends AbstractGlFilter {
         `);
         this.setSize(10);
         this.setUniform(this.center,new Float32Array([0.5,0.5]));
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
 
@@ -59,7 +59,7 @@ export class HexagonalFilter extends AbstractGlFilter {
 
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
-        this.setUniform(this.texSize,this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray());
+        this.setUniform(this.texSize,this.simpleRectPainter.getAttachedTextureAt(0).size.toArray());
         super.doFilter(destFrameBuffer);
     }
 
