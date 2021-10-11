@@ -4,9 +4,9 @@ import {DebugError} from "@engine/debug/debugError";
 import {Plane} from "@engine/renderer/webGl/primitives/plane";
 import {ShaderProgram} from "@engine/renderer/webGl/base/shaderProgram";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/bufferInfo";
-import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
+import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
 
-export class SimpleColoredRectDrawer extends AbstractDrawer {
+export class SimpleColoredRectPainter extends AbstractPainter {
 
     public gen:ShaderGenerator;
     public readonly u_vertexMatrix:string;

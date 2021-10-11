@@ -1,7 +1,7 @@
 import {ICloneable} from "@engine/core/declarations";
 import {MathEx} from "@engine/misc/mathEx";
 import {AbstractGradient, IGradientPoint} from "@engine/renderable/impl/fill/abstract/abstractGradient";
-import {ShapeDrawer} from "@engine/renderer/webGl/programs/impl/base/shape/shapeDrawer";
+import {ShapePainter} from "@engine/renderer/webGl/programs/impl/base/shape/shapePainter";
 import {Color} from "@engine/renderer/common/color";
 
 
@@ -20,7 +20,7 @@ export class LinearGradient extends AbstractGradient implements ICloneable<Linea
         return `linear-gradient(${~~(MathEx.radToDeg(-this.angle))+90}deg, ${this._points.map(it=>`${it.color.asCssRgba()} ${~~(it.value*100)}%`).join(',')}`;
     }
 
-    public override setUniforms(sd: ShapeDrawer):void {
+    public override setUniforms(sd: ShapePainter):void {
         super.setUniforms(sd);
         sd.setUniform(sd.u_fillGradientAngle,this.angle);
     }

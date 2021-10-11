@@ -1,5 +1,5 @@
 import {ShaderProgram} from "../../../../base/shaderProgram";
-import {AbstractDrawer} from "../../../abstract/abstractDrawer";
+import {AbstractPainter} from "../../../abstract/abstractPainter";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
 import {Plane} from "../../../../primitives/plane";
 import {GL_TYPE} from "../../../../base/shaderProgramUtils";
@@ -18,7 +18,7 @@ export const enum FILL_TYPE {
     COLOR,TEXTURE,LINEAR_GRADIENT, RADIAL_GRADIENT
 }
 
-export class ShapeDrawer extends AbstractDrawer {
+export class ShapePainter extends AbstractPainter {
 
     public readonly u_vertexMatrix:string;
     public readonly a_position:string;

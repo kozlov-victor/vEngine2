@@ -2,7 +2,7 @@ import {isEqualArray, isTypedArray} from "@engine/misc/object";
 import {AbstractPrimitive} from "../../primitives/abstractPrimitive";
 import {ShaderProgram} from "../../base/shaderProgram";
 import {BufferInfo} from "../../base/bufferInfo";
-import {IDrawer} from "../interface/iDrawer";
+import {IPainter} from "../interface/iPainter";
 import {DebugError} from "@engine/debug/debugError";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {IDestroyable, Optional} from "@engine/core/declarations";
@@ -26,13 +26,13 @@ interface IUniformValue {
 }
 
 
-export class AbstractDrawer implements IDrawer, IDestroyable{
+export class AbstractPainter implements IPainter, IDestroyable{
 
     constructor(gl:WebGLRenderingContext){
         this.gl = gl;
     }
 
-    private static currentInstance:Optional<AbstractDrawer>;
+    private static currentInstance:Optional<AbstractPainter>;
 
     protected gl:WebGLRenderingContext;
     protected program:ShaderProgram;
@@ -132,17 +132,17 @@ export class AbstractDrawer implements IDrawer, IDestroyable{
             throw new DebugError(`can not init drawer: initProgram method must be invoked!`);
         }
 
-        if (AbstractDrawer.currentInstance===this) return;
+        if (AbstractPainter.currentInstance===this) return;
 
-        AbstractDrawer.currentInstance?.unbind();
+        AbstractPainter.currentInstance?.unbind();
 
-        AbstractDrawer.currentInstance = this;
+        AbstractPainter.currentInstance = this;
         this.bufferInfo.bind(this.program);
     }
 
     protected unbind():void{
         this.bufferInfo.unbind(this.program);
-        AbstractDrawer.currentInstance = undefined;
+        AbstractPainter.currentInstance = undefined;
     }
 
     protected drawElements():void{

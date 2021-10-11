@@ -8,7 +8,7 @@ import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Mat4} from "@engine/geometry/mat4";
-import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
+import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
 import {FLIP_TEXTURE_MATRIX, makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
@@ -43,7 +43,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     private _doubleFrameBuffer:DoubleFrameBuffer;
 
     private _pixelPerfectMode:boolean = false;
-    private _simpleRectDrawer:SimpleRectDrawer;
+    private _simpleRectDrawer:SimpleRectPainter;
     private _blender:Blender = Blender.getSingleton(this._gl);
 
     private readonly _resourceTexture:ITexture;
@@ -56,7 +56,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         });
         this._stackPointer = 1;
 
-        this._simpleRectDrawer = new SimpleRectDrawer(_gl);
+        this._simpleRectDrawer = new SimpleRectPainter(_gl);
         this._simpleRectDrawer.initProgram();
 
         this._blender.enable();

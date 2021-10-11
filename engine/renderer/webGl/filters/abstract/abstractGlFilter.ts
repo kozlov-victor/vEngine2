@@ -1,13 +1,13 @@
 import {FrameBuffer} from "../../base/frameBuffer";
 import {DebugError} from "@engine/debug/debugError";
 import {Mat4} from "@engine/geometry/mat4";
-import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
+import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import Mat16Holder = Mat4.Mat16Holder;
-import {AbstractDrawer} from "@engine/renderer/webGl/programs/abstract/abstractDrawer";
+import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
 import {Color} from "@engine/renderer/common/color";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
@@ -21,7 +21,7 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
     public enabled:boolean = true;
 
     protected gl:WebGLRenderingContext;
-    protected simpleRectDrawer:SimpleRectDrawer;
+    protected simpleRectDrawer:SimpleRectPainter;
 
     private _uniformCache:FastMap<string,UNIFORM_VALUE_TYPE> = new FastMap();
 
@@ -34,14 +34,14 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
         }
 
         this.gl = (game.getRenderer() as any as WebGlRenderer).getNativeContext();
-        this.simpleRectDrawer = new SimpleRectDrawer(this.gl);
+        this.simpleRectDrawer = new SimpleRectPainter(this.gl);
     }
 
     public setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
         this._uniformCache.put(name,value);
     }
 
-    public getDrawer():AbstractDrawer{
+    public getDrawer():AbstractPainter{
         return this.simpleRectDrawer;
     }
 

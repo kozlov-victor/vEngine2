@@ -1,6 +1,6 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
-import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
+import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {ISize} from "@engine/geometry/size";
@@ -17,12 +17,12 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
 
     private accumulatorBefore:FrameBuffer;
     private accumulatorAfter:FrameBuffer;
-    private _simpleRectCopyDrawer:SimpleRectDrawer;
+    private _simpleRectCopyDrawer:SimpleRectPainter;
 
     constructor(game:Game) {
         super(game);
         const gl:WebGLRenderingContext = this.game.getRenderer<WebGlRenderer>().getNativeContext();
-        this._simpleRectCopyDrawer = new SimpleRectDrawer(gl);
+        this._simpleRectCopyDrawer = new SimpleRectPainter(gl);
         this._simpleRectCopyDrawer.initProgram();
         this.accumulatorBefore = new FrameBuffer(gl,this.game.size);
         this.accumulatorAfter  = new FrameBuffer(gl,this.game.size);
