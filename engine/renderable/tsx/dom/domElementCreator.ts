@@ -3,24 +3,25 @@ import {HTMLElementWrap} from "@engine/renderable/tsx/dom/HTMLElementWrap";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
 const ELEMENT_PROPERTIES = ['value','checked','selected','focus','disabled','readonly'];
-const SPECIAL_ATTRIBUTES = ['children'];
+const SPECIAL_ATTRIBUTES = ['children','__id'];
+const svgTags = ['svg','g','rect','path','circle'];
 
 export class ElementFactory {
 
     private static instance:ElementFactory = new ElementFactory();
 
-    private elements:(Text|HTMLElement)[] = [];
+    private elements:(Text|HTMLElement|SVGElement)[] = [];
     private wrappers:HTMLElementWrap[] = [];
 
     public static getInstance():ElementFactory{
         return ElementFactory.instance;
     }
 
-    public onElementCreated(el:Text|HTMLElement):void{
+    public onElementCreated(el:Text|HTMLElement|SVGElement):void{
         this.elements.push(el);
     }
 
-    public onElementRemoved(el:Text|HTMLElement):void {
+    public onElementRemoved(el:Text|HTMLElement|SVGElement):void {
         const indexOf:number = this.elements.indexOf(el);
         this.elements.splice(indexOf,1);
         this.wrappers.splice(indexOf,1);
@@ -41,11 +42,14 @@ export class DomElementCreator extends AbstractElementCreator<HTMLElementWrap>{
     }
 
     createElementByTagName(node:VirtualNode): HTMLElementWrap {
-        let htmlNode:Text|HTMLElement;
+        let htmlNode:Text|HTMLElement|SVGElement;
         if (node.tagName===undefined) {
             htmlNode = document.createTextNode(node.text);
         } else {
-            htmlNode = document.createElement(node.tagName);
+            if (svgTags.indexOf(node.tagName)>-1) {
+                htmlNode = document.createElementNS('http://www.w3.org/2000/svg',node.tagName);
+            }
+            else htmlNode = document.createElement(node.tagName);
         }
         ElementFactory.getInstance().onElementCreated(htmlNode);
         return new HTMLElementWrap(htmlNode);
@@ -67,15 +71,19 @@ export class DomElementCreator extends AbstractElementCreator<HTMLElementWrap>{
                 }
                 else if (model.attributes[key]!==props[key]) {
                     model.attributes[key] = props[key];
-                    let attrName = key.toLowerCase();
+                    let attrName = key;
                     if (SPECIAL_ATTRIBUTES.indexOf(attrName)>-1) continue;
                     if (attrName==='style') {
                         const styleDeclarationNew = props[key];
-                        const styleDeclarationOld = virtualNode.props.style;
-                        Object.keys(styleDeclarationNew).forEach(k=>(htmlEl.style as any)[k]=styleDeclarationNew[k]);
-                        Object.keys(styleDeclarationOld).forEach(k=>{
-                            if (styleDeclarationNew[k]===undefined) (htmlEl.style as any)[k]=undefined;
-                        });
+                        if (styleDeclarationNew?.substr) {
+                            htmlEl.setAttribute('style',styleDeclarationNew);
+                        } else {
+                            const styleDeclarationOld = virtualNode.props.style;
+                            Object.keys(styleDeclarationNew).forEach(k=>(htmlEl.style as any)[k]=styleDeclarationNew[k]);
+                            Object.keys(styleDeclarationOld).forEach(k=>{
+                                if (styleDeclarationNew[k]===undefined) (htmlEl.style as any)[k]=undefined;
+                            });
+                        }
                         continue;
                     }
 

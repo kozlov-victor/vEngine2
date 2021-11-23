@@ -19,8 +19,6 @@ export class SimpleRectPainter extends AbstractPainter {
     public readonly u_vertexMatrix:string;
     public readonly u_textureMatrix:string;
 
-    public readonly a_id:string;
-
     private readonly BATCH_SIZE = 1024;
 
     constructor(gl:WebGLRenderingContext) {
@@ -33,29 +31,18 @@ export class SimpleRectPainter extends AbstractPainter {
         this.u_textureMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_textureMatrix');
         gen.addVarying(GL_TYPE.FLOAT_VEC2,'v_texCoord');
 
-
         //language=GLSL
         gen.setVertexMainFn(MACRO_GL_COMPRESS`
             void main(){
-                vec2 pos;
-                if (a_id==0) {
-                    pos = vec2(0.0, 0.0);
-                } else if (a_id==1) {
-                    pos = vec2(1.0, 0.0);
-                } else if (a_id==2) {
-                    pos = vec2(0.0, 1.0);
-                } else {
-                    pos = vec2(1.0, 1.0);
-                }
-                gl_Position = pos;
-                //v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
+                gl_Position = u_vertexMatrix * a_position;
+                v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
             }
         `);
-        //gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');
+        gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');
         //language=GLSL
         gen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){
-                gl_FragColor = vec4(1.0,0.,0.,1.);//texture2D(texture, v_texCoord);
+                gl_FragColor = texture2D(texture, v_texCoord);
             }
         `);
     }

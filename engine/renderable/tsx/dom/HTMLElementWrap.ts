@@ -6,7 +6,7 @@ export class HTMLElementWrap implements IRealNode {
 
     public readonly attributes:Record<string, any> = {};
 
-    constructor(public readonly htmlElement:HTMLElement|Text) {
+    constructor(public readonly htmlElement:HTMLElement|Text|SVGElement) {
     }
 
     appendChild(child: HTMLElementWrap): void {

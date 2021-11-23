@@ -12,9 +12,9 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {Ym} from "../pix32/ym-player/ym";
+import {Ym} from "../pix32/ym-player/formats/ym";
 import {Sound} from "@engine/media/sound";
-import {Vtx} from "../pix32/ym-player/vtx";
+import {Vtx} from "../pix32/ym-player/formats/vtx";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import {fontLoader} from "../fontTtf/FontLoader";
 import {ChipOscilloscope} from "./chipOscilloscope";
@@ -25,8 +25,11 @@ import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import loadFont = fontLoader.loadFont;
 import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
+import {Psg} from "../pix32/ym-player/formats/psg";
 
 const songUrls = [
+    'chipTunePlayer/bin/nq - Old Tower outro (2018).psg',
+    'chipTunePlayer/bin/TmK - Some Small CompoFiller (2017) (Chaos Constructions 2017, 7).psg',
     'chipTunePlayer/bin/JeRrS - Zxfiles (2005).vtx',
     'chipTunePlayer/bin/Noro - Twilight - credits (1995).vtx',
     'chipTunePlayer/bin/ZiutekLyraII.vtx',
@@ -138,6 +141,9 @@ export class MainScene extends Scene {
                     break;
                 case 'vtx':
                     track = new Vtx(buff);
+                    break;
+                case 'psg':
+                    track = new Psg(buff);
                     break;
                 default:
                     throw new Error(`unsupported extension: ${extension}`);

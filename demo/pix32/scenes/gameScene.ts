@@ -12,7 +12,7 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Timer} from "@engine/misc/timer";
 import {Optional} from "@engine/core/declarations";
 import {Rect} from "@engine/geometry/rect";
-import {Ym} from "../ym-player/ym";
+import {Ym} from "../ym-player/formats/ym";
 import {Sound} from "@engine/media/sound";
 import {GameOverScene} from "./gameOverScene";
 import {TaskQueue} from "@engine/resources/taskQueue";

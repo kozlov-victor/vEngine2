@@ -6,7 +6,7 @@ import {BasePix32Scene, loadSound} from "./base/basePix32Scene";
 import {GetReadyScene} from "./getReadyScene";
 import {Sound} from "@engine/media/sound";
 import {AbstractChipTrack} from "../ym-player/abstract/abstractChipTrack";
-import {Ym} from "../ym-player/ym";
+import {Ym} from "../ym-player/formats/ym";
 import {TaskQueue} from "@engine/resources/taskQueue";
 
 

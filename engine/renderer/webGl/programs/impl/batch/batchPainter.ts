@@ -20,8 +20,18 @@ export class BatchPainter extends AbstractPainter {
         //language=GLSL
         gen.setVertexMainFn(MACRO_GL_COMPRESS`
             void main(){
-                v_position = a_position;
-                gl_Position = u_vertexMatrix * a_position;
+                vec2 pos;
+                if (a_id==0) {
+                    pos = vec2(0.0, 0.0);
+                } else if (a_id==1) {
+                    pos = vec2(1.0, 0.0);
+                } else if (a_id==2) {
+                    pos = vec2(0.0, 1.0);
+                } else {
+                    pos = vec2(1.0, 1.0);
+                }
+                gl_Position = pos;
+                //v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
             }
         `);
 

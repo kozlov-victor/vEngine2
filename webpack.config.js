@@ -183,6 +183,15 @@ module.exports = async (env={})=>{
                     else return undefined;
                 })(),
                 {
+                    test: /\.tsx$/,
+                    enforce: 'pre',
+                    use: [
+                        {
+                            loader: "ts-engine-precompiler/tsx-precompiler"
+                        },
+                    ]
+                },
+                {
                     test: /\.tsx?$/,
                     use: [
                         {

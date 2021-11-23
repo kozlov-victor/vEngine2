@@ -5,7 +5,7 @@ import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 
 
-const Button = (props:{onclick:()=>void,children?:VirtualNode[]})=>{
+const Button = (props:{onclick:()=>void,children?:VirtualNode[],__id?:number})=>{
     return (
         <>
             <button style={{color:'green'}} onclick={_=>props.onclick()}>{props.children}</button>

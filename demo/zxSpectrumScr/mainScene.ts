@@ -7,9 +7,10 @@ import {BORDER, SCALE} from "./index";
 import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
 import {CellsAppearingTransition} from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {CrtScreenFilter} from "@engine/renderer/webGl/filters/texture/crtScreenFilter";
 
 const files =
-    'AAA - AY Megademo 3 Menu (2019),athena,brunilda,cauldron,dlair,example,Gauntlet,KValley,Phantis,test,wtss'.split(',').map(it=>`./zxSpectrumScr/files/${it}.scr`);
+    'AAA - AY Megademo 3 Menu (2019),Grongy - Retromaniac (2021),athena,brunilda,cauldron,dlair,example,Gauntlet,KValley,Phantis,test,wtss'.split(',').map(it=>`./zxSpectrumScr/files/${it}.scr`);
 let ptr:number = 0;
 
 export class MainScene extends Scene {
@@ -35,7 +36,7 @@ export class MainScene extends Scene {
         this.mouseEventHandler.once(MOUSE_EVENTS.click, ()=>{
             this.game.runScene(new MainScene(this.game),new CellsAppearingTransition(this.game));
         });
-        this.filters = [new Barrel2DistortionFilter(this.game)];
+        this.filters = [new CrtScreenFilter(this.game)];
     }
 
     public override onReady():void {

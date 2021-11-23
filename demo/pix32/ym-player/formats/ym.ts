@@ -1,6 +1,6 @@
-import {BinBuffer} from "./internal/binBuffer";
-import {AbstractChipTrack} from "./abstract/abstractChipTrack";
-import {LhaReader} from "./lha/light/lhaDecoderLight";
+import {BinBuffer} from "../internal/binBuffer";
+import {AbstractChipTrack} from "../abstract/abstractChipTrack";
+import {LhaReader} from "../lha/light/lhaDecoderLight";
 
 const LEONARD = '!LeOnArD!' as const;
 const END = 'End!' as const;
@@ -9,7 +9,8 @@ const END = 'End!' as const;
 export class Ym extends AbstractChipTrack {
 
     private buffer:BinBuffer;
-    private rawFrames:number[];
+    private rawFrames:byte[];
+    private interleavedOrder: boolean;
 
     constructor(arr:number[]|ArrayBuffer) {
         super();
