@@ -1,6 +1,6 @@
-import {BinBuffer} from "./internal/binBuffer";
-import {LhaReader} from "./lha/light/lhaDecoderLight";
-import {AbstractChipTrack} from "./abstract/abstractChipTrack";
+import {BinBuffer} from "../internal/binBuffer";
+import {LhaReader} from "../lha/light/lhaDecoderLight";
+import {AbstractChipTrack} from "../abstract/abstractChipTrack";
 
 
 export class Vtx extends AbstractChipTrack {
@@ -36,10 +36,12 @@ export class Vtx extends AbstractChipTrack {
 
         // AY chip frequency for this melody
         this.masterClock = this.buffer.readUInt32(true); // YM master clock implementation in Hz
+        console.log(this.masterClock);
         if (this.masterClock<100000 || this.masterClock>100000000) throw new Error(`wrong master clock frequency (${this.masterClock})`);
 
         // Player frequency (VBL per sec)
         this.frameFreq = this.buffer.readByte();
+        console.log(this.frameFreq);
 
         // Year of composition creating
         this.year = this.buffer.readUInt16(true);
@@ -54,21 +56,19 @@ export class Vtx extends AbstractChipTrack {
         this.comment2 = this.buffer.readNTString();
 
 
-        this.interleavedOrder = true;
-
         const lha:LhaReader = new LhaReader(this.buffer.getArray(), 'lh5');
         if (unpackedSize % 14>0) throw new Error(`wrong unpacked length: ${unpackedSize},unpacked data must be mod of 14`);
         const unpackedData:Uint8Array = lha.extract(this.buffer.getPointer(), unpackedSize);
 
         const streamLength:number = unpackedSize / 14;
         this.numOfFrames = streamLength;
-        let lastEnvelopeVal:number = 0;
+        let lastEnvelopeVal:byte = 0;
         for (let i:number = 0; i < this.numOfFrames; i++) {
             this.frames[i] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }
         for (let i:number = 0; i < streamLength; i++) {
             for (let chan:number = 0; chan < 14; chan++) {
-                const val:number = unpackedData[chan * streamLength + i];
+                const val:byte = unpackedData[chan * streamLength + i] as byte;
                 if (chan < 13) {
                     this.frames[i][chan] = val;
                 } else {

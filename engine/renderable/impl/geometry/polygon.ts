@@ -1,7 +1,6 @@
 import {Game} from "@engine/core/game";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {AbstractPrimitive, IPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
-import {EarClippingTriangulator} from "@engine/renderable/impl/geometry/_internal/earClippingTriangulator";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {calcNormal} from "@engine/renderable/impl/geometry/_internal/calcNormal";
 import {IPoint3d} from "@engine/geometry/point3d";
@@ -32,7 +31,6 @@ export class Polygon extends Mesh2d {
     public static fromMultiCurveSvgPath(game:Game,path:string):Polygon[]{
         const polygons:Polygon[] = [];
         const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(game,path,{},true);
-        console.log(polyLines);
         polyLines.forEach(p=>{
             polygons.push(Polygon.fromPolyline(game,p));
             p.destroy();

@@ -1,13 +1,13 @@
 import {Plane} from "../../../../primitives/plane";
 import {ShaderProgram} from "../../../../base/shaderProgram";
-import {AbstractDrawer} from "../../../abstract/abstractDrawer";
+import {AbstractPainter} from "../../../abstract/abstractPainter";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {DebugError} from "@engine/debug/debugError";
+import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 
 
-export class SimpleRectDrawer extends AbstractDrawer {
+export class SimpleRectPainter extends AbstractPainter {
 
     /**
      * @internal
@@ -19,6 +19,8 @@ export class SimpleRectDrawer extends AbstractDrawer {
     public readonly u_vertexMatrix:string;
     public readonly u_textureMatrix:string;
 
+    private readonly BATCH_SIZE = 1024;
+
     constructor(gl:WebGLRenderingContext) {
         super(gl);
         this.gen = new ShaderGenerator();
@@ -28,6 +30,7 @@ export class SimpleRectDrawer extends AbstractDrawer {
         this.u_vertexMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_vertexMatrix');
         this.u_textureMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_textureMatrix');
         gen.addVarying(GL_TYPE.FLOAT_VEC2,'v_texCoord');
+
         //language=GLSL
         gen.setVertexMainFn(MACRO_GL_COMPRESS`
             void main(){
@@ -48,7 +51,7 @@ export class SimpleRectDrawer extends AbstractDrawer {
 
         if (DEBUG) {
             if (!this.gen) throw new DebugError(
-                `can not init simpleRectDrawer instance: ShaderGenerator must be created`
+                `can not init simpleRectPainter instance: ShaderGenerator must be created`
             );
         }
 

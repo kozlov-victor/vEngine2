@@ -9,7 +9,7 @@ export class DarkenCompositionFilter extends AbstractCompositionFilter {
     constructor(game:Game) {
         super(game);
         //language=GLSL
-        this.simpleRectDrawer.gen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        this.simpleRectPainter.gen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){
                 vec4 destColor = texture2D(destTexture, v_texCoord);
                 vec4 sourceColor = texture2D(texture, v_texCoord);
@@ -18,7 +18,7 @@ export class DarkenCompositionFilter extends AbstractCompositionFilter {
                 else gl_FragColor = min(destColor,sourceColor);
             }`
         );
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
 }

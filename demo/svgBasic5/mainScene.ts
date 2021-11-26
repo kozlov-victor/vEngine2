@@ -7,6 +7,7 @@ import {XmlParser} from "@engine/misc/xml/xmlParser";
 
 // https://www.javatpoint.com/svg-tutorial
 const imageUrls:string[] = [
+    'hg', 'http', 'php', 'rack',
     'info', 'glifs','flower', 'passport2',
     'guide', 'us-bank-icon', 'tide','test-fill-non-zero','test-fill-even-odd',
     '1','2','3', '4', '5', '6', '7', '8', '9', '10',

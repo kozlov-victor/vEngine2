@@ -17,7 +17,7 @@ export class SwirlFilter extends AbstractGlFilter {
 
     constructor(game:Game) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.angle = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'angle');
         this.radius = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'radius');
         this.center = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
@@ -45,7 +45,7 @@ export class SwirlFilter extends AbstractGlFilter {
         this.setAngle(2*Math.PI);
         this.setRadius(100);
         this.setCenter(this.game.size.width/2,this.game.size.height/2);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
 
@@ -65,7 +65,7 @@ export class SwirlFilter extends AbstractGlFilter {
 
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
-        const sizeArr:Float32Array = this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray();
+        const sizeArr:Float32Array = this.simpleRectPainter.getAttachedTextureAt(0).size.toArray();
         this.setUniform(this.texSize,sizeArr);
         super.doFilter(destFrameBuffer);
     }

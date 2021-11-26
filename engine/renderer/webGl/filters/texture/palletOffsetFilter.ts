@@ -17,7 +17,7 @@ export class PalletOffsetFilter extends AbstractGlFilter{
     constructor(game:Game,pallet:ITexture){
         super(game);
 
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.palletTexture = programGen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'palletTexture');
         this.palletTextureWidth = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'palletTextureWidth');
         this.palletOffset = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'palletOffset');
@@ -34,7 +34,7 @@ export class PalletOffsetFilter extends AbstractGlFilter{
         this.setPalletOffset(0);
         this.setPalletTexture(pallet as Texture);
         this.setUniform(this.palletTextureWidth,pallet.size.width);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setPalletOffset(n:number):void { // 0 - txWidth
@@ -43,7 +43,7 @@ export class PalletOffsetFilter extends AbstractGlFilter{
 
 
     public override doFilter(destFrameBuffer: FrameBuffer):void {
-        this.simpleRectDrawer.attachTexture(this.palletTexture,this.palletTextureGl);
+        this.simpleRectPainter.attachTexture(this.palletTexture,this.palletTextureGl);
         super.doFilter(destFrameBuffer);
     }
 

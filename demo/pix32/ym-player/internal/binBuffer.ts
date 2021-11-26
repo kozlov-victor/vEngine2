@@ -17,7 +17,7 @@ export class BinBuffer {
 
     public static isBitSet(nBit:number,n:number):boolean {
         const mask:number = 1<<nBit;
-        return (n & mask) >0;
+        return (n & mask) > 0;
     }
 
     constructor(arrOrSize:number|number[]|ArrayBuffer){
@@ -49,17 +49,17 @@ export class BinBuffer {
         return this.view;
     }
 
-    public getArray():number[]{
-        const res:number[] = new Array(this.view.buffer.byteLength);
+    public getArray():byte[]{
+        const res:byte[] = new Array(this.view.buffer.byteLength);
         for (let i:number = 0; i < this.view.buffer.byteLength; i++) {
-            res[i] = this.view.getInt8(i);
+            res[i] = this.view.getInt8(i) as byte;
         }
         return res;
     }
 
-    public getRestArray():number[]{
+    public getRestArray():byte[]{
         const restSize:number = this.getByteLength() - this.getPointer();
-        const res:number[] = new Array<number>(restSize);
+        const res:byte[] = new Array<byte>(restSize);
         for (let i:number = 0; i < restSize; i++) {
             res[i] = this.readByte();
         }
@@ -121,8 +121,8 @@ export class BinBuffer {
         return res;
     }
 
-    public readByte():number{
-        const res:number = this.view.getUint8(this.pointer);
+    public readByte():byte{
+        const res:byte = this.view.getUint8(this.pointer) as byte;
         this.pointer++;
         return res;
     }
@@ -131,9 +131,9 @@ export class BinBuffer {
         return this.view.getUint8(pos);
     }
 
-    public readBytes(n:number):number[]{
+    public readBytes(n:number):byte[]{
         if (n<0) throw new Error(`wont argument: ${n}`);
-        const res:number[] = [];
+        const res:byte[] = [];
         for (let i = 0; i < n; i++) {
             res.push(this.readByte());
         }

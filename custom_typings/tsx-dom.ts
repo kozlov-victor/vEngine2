@@ -3,8 +3,20 @@ interface ICommonElement<T> {
     className?: string;
     key?:number|string;
     ref?:(el:T)=>void;
+    __id?: number;
 }
 
+
+
+type Font = {
+    type: 'Font'
+} & {style?:Partial<CSSStyleDeclaration>};
+
+interface INode {
+    tagName:string;
+    children:INode[];
+    type: 'virtualNode'|'virtualFragment';
+}
 
 declare namespace JSX {
     // tslint:disable-next-line:interface-name
@@ -66,6 +78,7 @@ declare namespace JSX {
         ins: ICommonElement<HTMLModElement> & Partial<Omit<HTMLModElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
         kbd: ICommonElement<HTMLElement> & Partial<Omit<HTMLElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
         keygen: ICommonElement<HTMLElement> & Partial<Omit<HTMLElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
+        // eslint-disable-next-line @typescript-eslint/ban-types
         label: ICommonElement<HTMLLabelElement> & Partial<Omit<HTMLLabelElement,"style"> & {htmlFor?:string|null}> & {style?:Partial<CSSStyleDeclaration>};
         legend: ICommonElement<HTMLLegendElement> & Partial<Omit<HTMLLegendElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
         li: ICommonElement<HTMLLIElement> & Partial<Omit<HTMLLIElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
@@ -122,9 +135,16 @@ declare namespace JSX {
         track: ICommonElement<HTMLTrackElement> & Partial<Omit<HTMLTrackElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
         u: ICommonElement<HTMLElement> & Partial<Omit<HTMLElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
         ul: ICommonElement<HTMLUListElement> & Partial<Omit<HTMLUListElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
-        "var": ICommonElement<HTMLElement> & Partial<Omit<HTMLElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
+        var: ICommonElement<HTMLElement> & Partial<Omit<HTMLElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
         video: ICommonElement<HTMLVideoElement> & Partial<Omit<HTMLVideoElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
         wbr: ICommonElement<HTMLElement> & Partial<Omit<HTMLElement,"style">> & {style?:Partial<CSSStyleDeclaration>};
         font:ICommonElement<HTMLFontElement>;
+
+        svg:any;
+        g:any;
+        rect:any;
+        circle:any;
+        path:any;
+
     }
 }

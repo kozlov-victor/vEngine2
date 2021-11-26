@@ -1,7 +1,7 @@
 import {BasePix32Scene, loadSound} from "./base/basePix32Scene";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {GetReadyScene} from "./getReadyScene";
-import {Ym} from "../ym-player/ym";
+import {Ym} from "../ym-player/formats/ym";
 import {Sound} from "@engine/media/sound";
 import {TaskQueue} from "@engine/resources/taskQueue";
 

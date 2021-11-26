@@ -12,7 +12,7 @@ export class BrightessContrastFilter extends AbstractGlFilter{
     constructor(game:Game){
         super(game);
 
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.u_contrast = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_contrast');
         this.u_brightness = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_brightness');
         //language=GLSL
@@ -32,7 +32,7 @@ export class BrightessContrastFilter extends AbstractGlFilter{
         `);
         this.setBrightness(0);
         this.setContrast(0);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
 

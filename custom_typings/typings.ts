@@ -51,4 +51,10 @@ interface Window {
     __POLYFILLS_INCLUDED__:boolean;
 }
 
+interface INode {
+    tagName:string;
+    children:INode[];
+    type: 'virtualNode'|'virtualFragment';
+}
+
 declare const MACRO_GL_COMPRESS:(arg:TemplateStringsArray)=>string;

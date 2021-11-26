@@ -14,7 +14,7 @@ export class SimpleBlurFilter extends AbstractGlFilter {
 
     constructor(game:Game) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
 
         this.blurSize = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'blurSize');
 
@@ -42,7 +42,7 @@ export class SimpleBlurFilter extends AbstractGlFilter {
             }
             `
         );
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
         this.setSize(0.005);
     }
 

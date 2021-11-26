@@ -19,7 +19,7 @@ export class OffsetMapFilter extends AbstractGlFilter{
     constructor(game:Game,pallet:ITexture){
         super(game);
 
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.offsetTexture = programGen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'offsetTexture');
         this.offsetForce = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'offsetForce');
         this.pixelWidth = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixelWidth');
@@ -38,13 +38,13 @@ export class OffsetMapFilter extends AbstractGlFilter{
             }
         `);
         this.setPalletTexture(pallet as Texture);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
         this.setForce(0.05);
     }
 
     public override doFilter(destFrameBuffer: FrameBuffer):void {
-        this.simpleRectDrawer.attachTexture(this.offsetTexture,this.offsetTextureGl);
-        const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        this.simpleRectPainter.attachTexture(this.offsetTexture,this.offsetTextureGl);
+        const size:Size = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.setUniform(this.pixelWidth,1/size.width);
         this.setUniform(this.pixelHeight,1/size.height);
         super.doFilter(destFrameBuffer);

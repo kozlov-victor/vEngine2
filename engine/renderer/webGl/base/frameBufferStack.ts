@@ -8,7 +8,7 @@ import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Mat4} from "@engine/geometry/mat4";
-import {SimpleRectDrawer} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectDrawer";
+import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
 import {FLIP_TEXTURE_MATRIX, makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
@@ -43,7 +43,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     private _doubleFrameBuffer:DoubleFrameBuffer;
 
     private _pixelPerfectMode:boolean = false;
-    private _simpleRectDrawer:SimpleRectDrawer;
+    private _simpleRectPainter:SimpleRectPainter;
     private _blender:Blender = Blender.getSingleton(this._gl);
 
     private readonly _resourceTexture:ITexture;
@@ -56,8 +56,8 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         });
         this._stackPointer = 1;
 
-        this._simpleRectDrawer = new SimpleRectDrawer(_gl);
-        this._simpleRectDrawer.initProgram();
+        this._simpleRectPainter = new SimpleRectPainter(_gl);
+        this._simpleRectPainter.initProgram();
 
         this._blender.enable();
         this._blender.setBlendMode(BLEND_MODE.NORMAL);
@@ -129,7 +129,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     public destroy():void{
         this._stack.forEach(f=>f.frameBuffer.destroy());
         if (this._doubleFrameBuffer!==undefined) this._doubleFrameBuffer.destroy();
-        this._simpleRectDrawer.destroy();
+        this._simpleRectPainter.destroy();
     }
 
     public reduceState(to:IStateStackPointer):void{
@@ -148,12 +148,12 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
             nextItem.frameBuffer.bind();
             nextItem.frameBuffer.setInterpolationMode(this._interpolationMode);
-            this._simpleRectDrawer.setUniform(this._simpleRectDrawer.u_textureMatrix,IDENTITY);
+            this._simpleRectPainter.setUniform(this._simpleRectPainter.u_textureMatrix,IDENTITY);
             const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,this._getLast().frameBuffer.getTexture().size);
-            this._simpleRectDrawer.setUniform(this._simpleRectDrawer.u_vertexMatrix,m16h.mat16);
-            this._simpleRectDrawer.attachTexture('texture',filteredTexture);
+            this._simpleRectPainter.setUniform(this._simpleRectPainter.u_vertexMatrix,m16h.mat16);
+            this._simpleRectPainter.attachTexture('texture',filteredTexture);
             this._blender.setBlendMode(BLEND_MODE.NORMAL);
-            this._simpleRectDrawer.draw();
+            this._simpleRectPainter.draw();
             m16h.release();
         }
         this._stackPointer = to.ptr + 1;
@@ -166,10 +166,10 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         const h:number = needFullScreen?this.game.getRenderer().viewPortSize.height:this.game.size.height;
         FrameBuffer.getCurrent().unbind();
         this._gl.viewport(0, 0, ~~w,~~h);
-        this._simpleRectDrawer.setUniform(this._simpleRectDrawer.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
-        this._simpleRectDrawer.setUniform(this._simpleRectDrawer.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
-        this._simpleRectDrawer.attachTexture('texture',this._getLast().frameBuffer.getTexture());
-        this._simpleRectDrawer.draw();
+        this._simpleRectPainter.setUniform(this._simpleRectPainter.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
+        this._simpleRectPainter.setUniform(this._simpleRectPainter.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
+        this._simpleRectPainter.attachTexture('texture',this._getLast().frameBuffer.getTexture());
+        this._simpleRectPainter.draw();
     }
 
     public getTexture(): ITexture {

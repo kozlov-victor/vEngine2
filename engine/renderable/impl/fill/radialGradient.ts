@@ -3,7 +3,7 @@
 
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 import {Point2d} from "@engine/geometry/point2d";
-import {ShapeDrawer} from "@engine/renderer/webGl/programs/impl/base/shape/shapeDrawer";
+import {ShapePainter} from "@engine/renderer/webGl/programs/impl/base/shape/shapePainter";
 
 export class RadialGradient extends AbstractGradient {
 
@@ -16,7 +16,7 @@ export class RadialGradient extends AbstractGradient {
     }
 
 
-    public override setUniforms(sd: ShapeDrawer):void {
+    public override setUniforms(sd: ShapePainter):void {
         super.setUniforms(sd);
         sd.setUniform(sd.u_radialGradientCenterX,this.center.x);
         sd.setUniform(sd.u_radialGradientCenterY,this.center.y);

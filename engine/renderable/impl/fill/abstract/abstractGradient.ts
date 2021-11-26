@@ -1,6 +1,6 @@
 import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
-import {ShapeDrawer} from "@engine/renderer/webGl/programs/impl/base/shape/shapeDrawer";
+import {ShapePainter} from "@engine/renderer/webGl/programs/impl/base/shape/shapePainter";
 import {DebugError} from "@engine/debug/debugError";
 
 export interface IGradientPoint {
@@ -39,7 +39,7 @@ export abstract class AbstractGradient {
 
     public abstract clone():this;
 
-    public setUniforms(sd:ShapeDrawer):void {
+    public setUniforms(sd:ShapePainter):void {
         for (let i:number=0; i<AbstractGradient.MAX_NUM_OF_GRADIENT_POINTS; i++) {
             const possibleColorPoint:Optional<IGradientPointInternal> = this._points[i];
             sd.setUniform(`u_fillGradientPoints[${i}].pointActive`,possibleColorPoint!==undefined);

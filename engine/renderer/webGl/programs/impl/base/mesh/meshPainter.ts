@@ -1,5 +1,5 @@
 import {ShaderProgram} from "../../../../base/shaderProgram";
-import {AbstractDrawer} from "../../../abstract/abstractDrawer";
+import {AbstractPainter} from "../../../abstract/abstractPainter";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
 import type {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {DebugError} from "@engine/debug/debugError";
@@ -11,7 +11,7 @@ import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import MAT16 = Mat4.MAT16;
 
 
-export class MeshDrawer extends AbstractDrawer {
+export class MeshPainter extends AbstractPainter {
 
     private mesh:Mesh2d;
 
@@ -117,7 +117,7 @@ export class MeshDrawer extends AbstractDrawer {
     }
 
     public override bind():void{
-        if (DEBUG && this.mesh===undefined) throw new DebugError(`can not bind modelDrawer;bindModel must be invoked firstly`);
+        if (DEBUG && this.mesh===undefined) throw new DebugError(`can not bind modelPainter; bindModel must be invoked firstly`);
         super.bind();
         this.bufferInfo.bind(this.program);
         if (!this.mesh._modelPrimitive.texCoordArr) {

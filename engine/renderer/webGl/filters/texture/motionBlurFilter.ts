@@ -16,7 +16,7 @@ export class MotionBlurFilter extends AbstractGlFilter {
 
     constructor(game:Game) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.strength = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'strength');
         this.center = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'center');
         this.texSize = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'texSize');
@@ -50,7 +50,7 @@ export class MotionBlurFilter extends AbstractGlFilter {
         `);
         this.setStrength(0.3);
         this.setCenter(this.game.size.width/2,this.game.size.height/2);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
 
@@ -67,7 +67,7 @@ export class MotionBlurFilter extends AbstractGlFilter {
 
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
-        const sizeArr:Float32Array = this.simpleRectDrawer.getAttachedTextureAt(0).size.toArray();
+        const sizeArr:Float32Array = this.simpleRectPainter.getAttachedTextureAt(0).size.toArray();
         this.setUniform(this.texSize,sizeArr);
         super.doFilter(destFrameBuffer);
     }

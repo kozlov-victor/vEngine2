@@ -26,7 +26,7 @@ export class WaterRippleFilter extends AbstractGlFilter {
 
     constructor(game:Game,private maxDrops:number = 32) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
 
         this.dropVectors = new Float32Array(3 * maxDrops);
         for (let i:number = 0; i < 3 * maxDrops; i++) {
@@ -81,7 +81,7 @@ export class WaterRippleFilter extends AbstractGlFilter {
                 gl_FragColor = col;
             }
         `);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
         this.setAmount(0.1);
     }
 

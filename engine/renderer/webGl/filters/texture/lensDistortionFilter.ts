@@ -20,7 +20,7 @@ export class LensDistortionFilter extends AbstractGlFilter {
 
     constructor(game:Game) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.rt_w = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
         this.rt_h = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
         this.u_mouse = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_mouse');
@@ -64,7 +64,7 @@ export class LensDistortionFilter extends AbstractGlFilter {
         );
         this.setLengthSize(50);
         this.setForce(2);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setLengthSize(val:number):void{
@@ -82,7 +82,7 @@ export class LensDistortionFilter extends AbstractGlFilter {
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
-        const size:ISize = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        const size:ISize = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,size.width);
         this.setUniform(this.rt_h,size.height);
 

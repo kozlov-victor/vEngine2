@@ -9,14 +9,14 @@ export class ScreenCompositionFilter extends AbstractCompositionFilter {
     constructor(game:Game) {
         super(game);
         //language=GLSL
-        this.simpleRectDrawer.gen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        this.simpleRectPainter.gen.setFragmentMainFn(MACRO_GL_COMPRESS`
             void main(){
                 vec4 destColor = vec4(1.) - texture2D(destTexture, v_texCoord);
                 vec4 sourceColor = vec4(1.) - texture2D(texture, v_texCoord);
                 gl_FragColor = vec4(1.) - destColor*sourceColor;
             }`
         );
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
 }

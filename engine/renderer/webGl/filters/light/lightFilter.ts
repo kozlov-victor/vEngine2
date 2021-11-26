@@ -26,7 +26,7 @@ export class LightFilter extends AbstractGlFilter {
 
     constructor(game:Game, private lightArray:LightSet) {
         super(game);
-        const gen: ShaderGenerator = this.simpleRectDrawer.gen;
+        const gen: ShaderGenerator = this.simpleRectPainter.gen;
         gen.prependFragmentCodeBlock(structures);
         gen.appendFragmentCodeBlock(functions);
         gen.addStructFragmentUniform("PointLight",'u_pointLights[MAX_NUM_OF_POINT_LIGHTS]');
@@ -37,7 +37,7 @@ export class LightFilter extends AbstractGlFilter {
         this._u_dimension = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_dimension');
         gen.addScalarFragmentUniform(GL_TYPE.INT,'u_numOfPointLights');
         gen.setFragmentMainFn(mainFnSource);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setNormalMap(normalMap:ITexture):void{
@@ -50,11 +50,11 @@ export class LightFilter extends AbstractGlFilter {
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
         this.lightArray.setUniformsToMap(this._uniformInfo);
-        this.simpleRectDrawer.setUniformsFromMap(this._uniformInfo);
+        this.simpleRectPainter.setUniformsFromMap(this._uniformInfo);
         const useNormalMap:boolean = this.normalMap!==undefined;
-        this.simpleRectDrawer.setUniform(this._u_useNormalMap,useNormalMap);
+        this.simpleRectPainter.setUniform(this._u_useNormalMap,useNormalMap);
         if (useNormalMap) {
-            this.simpleRectDrawer.attachTexture(this._normalTexture,this.normalMap! as Texture);
+            this.simpleRectPainter.attachTexture(this._normalTexture,this.normalMap! as Texture);
         }
         super.doFilter(destFrameBuffer);
     }

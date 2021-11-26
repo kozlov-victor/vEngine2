@@ -10,7 +10,7 @@ interface IPoint {
     y:number;
 }
 
-type Font = {
+type vFont = {
     type: 'Font'
 };
 
@@ -18,13 +18,8 @@ interface IFilter {
     type:string;
 }
 
-interface INode {
-    tagName:string;
-    children:INode[];
-    type: 'virtualNode'|'virtualFragment';
-}
-
 interface IGenericProps<T> {
+    __id?: number;
     key?:number|string;
     ref?:(el:T)=>void;
     click?:(e?:any)=>void;
@@ -122,7 +117,7 @@ interface IDirectionalListProps<T> extends IWidgetContainerProps {
 }
 
 interface ISelectBoxProps<T> extends IDirectionalListProps<T>{
-    font: Font;
+    font: vFont;
     textColor?:IColor;
     data:T[];
     selectedIndex?:number;
@@ -131,7 +126,7 @@ interface ISelectBoxProps<T> extends IDirectionalListProps<T>{
 }
 
 interface ITextFieldProps extends IWidgetContainerProps {
-    font: Font;
+    font: vFont;
     textColor?:IColor;
     text?: string;
     autoSize?:boolean;
@@ -162,7 +157,7 @@ declare namespace JSX {
         v_rectangle:                IRectangleProps;
         v_line:                     ILineProps;
         v_image:                    IImageProps;
-        v_font:                     Partial<{color:IColor, size:number,font:Font}>;
+        v_font:                     Partial<{color:IColor, size:number,font:vFont, __id?:number}>;
         v_textField:                ITextFieldProps;
         v_editTextField:            IEditTextFieldProps;
         v_scrollableTextField:      ITextFieldProps;

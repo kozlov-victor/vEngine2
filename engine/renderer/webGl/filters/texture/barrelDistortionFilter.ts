@@ -15,7 +15,7 @@ export class BarrelDistortionFilter extends AbstractGlFilter {
 
     constructor(game:Game) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.rt_w = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
         this.rt_h = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
         this.u_distortion = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_distortion');
@@ -39,7 +39,7 @@ export class BarrelDistortionFilter extends AbstractGlFilter {
             `
         );
         this.setDistortion(0.1);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setDistortion(val:number):void{
@@ -47,7 +47,7 @@ export class BarrelDistortionFilter extends AbstractGlFilter {
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
-        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        const {width,height} = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,width);
         this.setUniform(this.rt_h,height);
         super.doFilter(destFrameBuffer);

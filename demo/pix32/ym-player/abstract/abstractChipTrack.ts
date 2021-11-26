@@ -2,21 +2,20 @@ import {Optional} from "@engine/core/declarations";
 import {Wave} from "../internal/wav";
 
 export type tFrame = [
-    r0:number,r1:number,
-    r2:number,r3:number,
-    r4:number,r5:number,
-    r6:number,r7:number,
-    r8:number,r9:number,
-    r10:number,r11:number,
-    r12:number,r13:number,
-    r14:number,r15:number
+    r0:byte,r1:byte,
+    r2:byte,r3:byte,
+    r4:byte,r5:byte,
+    r6:byte,r7:byte,
+    r8:byte,r9:byte,
+    r10:byte,r11:byte,
+    r12:byte,r13:byte,
+    r14:byte,r15:byte
 ];
 
 export abstract class AbstractChipTrack {
 
     protected numOfFrames: number;
     protected frameFreq: number;
-    protected interleavedOrder: boolean;
     protected songName: string;
     protected authorName: string;
     protected songComment: string;
@@ -185,6 +184,10 @@ export abstract class AbstractChipTrack {
 
 
     public renderToBlob(): Blob {
+
+        if (!this.sampleRate) throw new Error(`bad sampleRate: ${this.sampleRate}`);
+        if (!this.frameFreq) throw new Error(`bad sampleRate: ${this.frameFreq}`);
+
         const pcmSamples: number[] = [];
         const samplesInFrame: number = this.sampleRate / this.frameFreq;
         const cyclesForOneSample: number = this.masterClock / this.sampleRate;

@@ -9,7 +9,7 @@ export class FadeAccumulativeFilter extends AbstractAccumulativeFilter {
 
     constructor(game:Game) {
         super(game);
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.u_fadeValue = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT, 'u_fadeValue');
         //language=GLSL
         programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
@@ -23,11 +23,11 @@ export class FadeAccumulativeFilter extends AbstractAccumulativeFilter {
             }`
         );
         this.setFadeValue(0.01);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setFadeValue(val:number):void{
-        this.simpleRectDrawer.setUniform(this.u_fadeValue,val);
+        this.simpleRectPainter.setUniform(this.u_fadeValue,val);
     }
 
 }

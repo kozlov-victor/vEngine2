@@ -27,7 +27,7 @@ export class DropShadowFilter  extends AbstractGlFilter{
         this.quality = Math.pow(this.quality, 1/3);
         this.dist *= this.quality;
 
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
 
         this.color = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'color');
         this.shift = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'shift');
@@ -74,7 +74,7 @@ export class DropShadowFilter  extends AbstractGlFilter{
         `);
         this.setColor(Color.BLACK);
         this.setShift(this.shiftX,this.shiftY);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
 
@@ -88,7 +88,7 @@ export class DropShadowFilter  extends AbstractGlFilter{
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
-        const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        const size:Size = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.shiftArr[0]  = this.shiftX / size.width;
         this.shiftArr[1]  = this.shiftY / size.height;
         this.setUniform(this.shift,this.shiftArr);

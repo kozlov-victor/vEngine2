@@ -19,7 +19,7 @@ export class CrtScreenFilter extends AbstractGlFilter {
     constructor(game:Game) {
         super(game);
 
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.curvature = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'curvature');
         this.rt_w = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
         this.rt_h = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
@@ -80,7 +80,7 @@ export class CrtScreenFilter extends AbstractGlFilter {
         this.setScanLineOpacity(0.05,0.01);
         this.setVignetteRoundness(1);
         this.setBrightness(1);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
     public setCurvature(x:number,y:number):void {
@@ -106,7 +106,7 @@ export class CrtScreenFilter extends AbstractGlFilter {
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
-        const {width,height} = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        const {width,height} = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,width);
         this.setUniform(this.rt_h,height);
         super.doFilter(destFrameBuffer);

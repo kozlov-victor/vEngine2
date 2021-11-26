@@ -19,7 +19,7 @@ export class PixelFilter extends AbstractGlFilter {
     constructor(game:Game) {
         super(game);
 
-        const programGen:ShaderGenerator = this.simpleRectDrawer.gen;
+        const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.rt_w = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_w'); // render target width
         this.rt_h = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'rt_h'); // render target height
         this.pixel_w = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixel_w');
@@ -37,7 +37,7 @@ export class PixelFilter extends AbstractGlFilter {
             `
         );
         this.setPixelSize(5);
-        this.simpleRectDrawer.initProgram();
+        this.simpleRectPainter.initProgram();
     }
 
 
@@ -55,7 +55,7 @@ export class PixelFilter extends AbstractGlFilter {
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
-        const size:Size = this.simpleRectDrawer.getAttachedTextureAt(0).size;
+        const size:Size = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,size.width);
         this.setUniform(this.rt_h,size.height);
         super.doFilter(destFrameBuffer);
