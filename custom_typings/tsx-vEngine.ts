@@ -20,12 +20,14 @@ interface IFilter {
 
 interface IGenericProps<T> {
     __id?: number;
+    id?: string;
     key?:number|string;
     ref?:(el:T)=>void;
     click?:(e?:any)=>void;
     mouseUp?:(e?:any)=>void;
     mouseLeave?:(e?:any)=>void;
     filters?:IFilter[];
+    alpha?:number;
 }
 
 interface IPositionableProps {
@@ -38,9 +40,9 @@ interface ITransformableProps extends IGenericProps<unknown>{
 }
 
 interface IShapeProps extends ITransformableProps{
-    color?:IColor;
+    color?:IColor|string;
     lineWidth?:number;
-    fillColor?:IColor;
+    fillColor?:IColor|string;
 }
 
 interface IEllipseCommonProps extends IShapeProps{
@@ -159,6 +161,7 @@ declare namespace JSX {
         v_image:                    IImageProps;
         v_font:                     Partial<{color:IColor, size:number,font:vFont, __id?:number}>;
         v_textField:                ITextFieldProps;
+        v_animatedTextField:        ITextFieldProps;
         v_editTextField:            IEditTextFieldProps;
         v_scrollableTextField:      ITextFieldProps;
         v_richTextField:            ITextFieldProps & {richText?:INode[]};

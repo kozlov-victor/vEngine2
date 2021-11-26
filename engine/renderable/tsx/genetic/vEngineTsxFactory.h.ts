@@ -1,5 +1,6 @@
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VirtualFragment} from "@engine/renderable/tsx/genetic/virtualFragment";
+import {BaseTsxComponent} from "@engine/renderable/tsx/genetic/baseTsxComponent";
 
 const flattenDeep = (arr:(VirtualNode[]|VirtualNode)[]):VirtualNode[]=> {
     const res =  arr.reduce((acc, val) => {
@@ -13,9 +14,10 @@ const flattenDeep = (arr:(VirtualNode[]|VirtualNode)[]):VirtualNode[]=> {
 
 export class VEngineTsxFactory<T> {
 
+    private static components:Record<number, BaseTsxComponent> = {};
 
     public static createElement(
-        item:string|((props:Record<string, any>)=>VirtualNode),
+        item:string|((props:Record<string, any>)=>VirtualNode)|{new: BaseTsxComponent},
         // eslint-disable-next-line @typescript-eslint/ban-types
         props:Record<string, any>|null,
         ...children: VirtualNode[]
@@ -41,10 +43,30 @@ export class VEngineTsxFactory<T> {
         const propsFull:Record<string, any> & {children:VirtualNode[]} =
             {...props,children:flattenedNoFragments};
 
-        if ((item as (props:Record<string, any>)=>VirtualNode).call!==undefined) {
+        if ((item as any).__VEngineTsxComponent) {
+            if (VEngineTsxFactory.components[props.__id]) {
+                const instance = VEngineTsxFactory.components[props.__id];
+                return instance.render();
+            } else {
+                const instance = new (item as any)(props) as BaseTsxComponent;
+                const node = instance.render();
+                instance.onMounted();
+                VEngineTsxFactory.components[props.__id] = instance;
+                return node;
+            }
+
+        }
+        else if ((item as (props:Record<string, any>)=>VirtualNode).call!==undefined) {
             return (item as (arg:any)=>VirtualNode)(propsFull);
         }
-        return new VirtualNode(propsFull, item as string, flattenedNoFragments);
+        else return new VirtualNode(propsFull, item as string, flattenedNoFragments);
+    }
+
+    public static destroyElement(el:VirtualNode) {
+        if (this.components[el.props.__id]) {
+            delete VEngineTsxFactory.components[el.props.__id];
+        }
+        el.children.forEach(it=>this.destroyElement(el));
     }
 
     public static createFragment({children}:{children: VirtualNode[]}):VirtualFragment {

@@ -13,7 +13,7 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     protected constructor(private elementCreator:AbstractElementCreator<T>) {
     }
 
-    public render(component:VEngineTsxComponent, root:T):void{
+    public render(component:VEngineTsxComponent, root:T):VirtualNode{
         component.rootNativeElement = root;
         if (debug) console.log('before render');
         const newVirtualNode:VirtualNode = component.render();
@@ -26,6 +26,7 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
         const newVirtualDom:VirtualNode = new VirtualNode({},"root",newVirtualNodeChildren);
         this.reconcileChildren(newVirtualDom,this.oldVirtualDom,root);
         this.oldVirtualDom = newVirtualDom;
+        return newVirtualDom;
     }
 
     private removeNode(node:T):void {

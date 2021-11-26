@@ -370,6 +370,8 @@ export abstract class RenderableModel
     }
 
     public override setProps(props:ITransformableProps & IPositionableProps):void {
+        if (props.id!==undefined) this.id = props.id;
+        if (props.alpha!==undefined) this.alpha = props.alpha;
         if (props.filters!==undefined) this.filters = props.filters;
         if (props.click!==undefined && this.tsxEvents.click!==props.click) {
             if (this.tsxEvents.click!==undefined) this.mouseEventHandler.off(MOUSE_EVENTS.click,this.tsxEvents.click);

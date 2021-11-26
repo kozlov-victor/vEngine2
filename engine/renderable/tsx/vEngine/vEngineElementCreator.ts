@@ -24,6 +24,7 @@ import {ProgressBar} from "@engine/renderable/impl/ui/progressBar/progressBar";
 import {ScrollView} from "@engine/renderable/impl/ui/scrollViews/scrollView";
 import {VerticalList} from "@engine/renderable/impl/ui/scrollViews/directional/verticalList";
 import {HorizontalList} from "@engine/renderable/impl/ui/scrollViews/directional/horizontalList";
+import {AnimatedTextField} from "@engine/renderable/impl/ui/textField/animated/animatedTextField";
 
 export class VEngineElementCreator extends AbstractElementCreator<RenderableModel>{
 
@@ -56,6 +57,9 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 break;
             case 'v_richTextField':
                 element = new RichTextField(game,node.props.font);
+                break;
+            case 'v_animatedTextField':
+                element = new AnimatedTextField(game,node.props.font);
                 break;
             case 'v_button':
                 element = new Button(game,node.props.font);
