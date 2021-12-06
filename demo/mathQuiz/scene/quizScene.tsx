@@ -3,7 +3,7 @@ import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComp
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {Assets} from "../asset/assets";
-import {singleton} from "../helper";
+import {singleton, waitFor, waitForKey} from "../helper";
 import {Game} from "@engine/core/game";
 import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
 import {BgMatrix} from "../component/bgMatrix";
@@ -20,11 +20,36 @@ import {AnswerButton} from "../component/answerButton";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {IQuizQuestion, QuizRunner} from "../quizRunner";
 
 
 class QuizSceneUI extends VEngineTsxComponent {
 
-    private currentButton:0|1|2|3|undefined = 0;
+    private currentButton:0|1|2|3|undefined = undefined;
+    private answerSelected:boolean = false;
+    private answerBlink:boolean = false;
+    private correctAnswer:0|1|2|3|undefined = undefined;
+
+    private quizRunner:QuizRunner = new QuizRunner(
+        [
+            {
+                text: 'qu1',
+                answers: [{text:'a1',correct:true},{text:'a2'},{text:'a3'},{text:'a3'}]
+            },
+            {
+                text: 'qu2',
+                answers: [{text:'a1'},{text:'a2',correct:true},{text:'a3'},{text:'a3'}]
+            },
+            {
+                text: 'qu3',
+                answers: [{text:'a1'},{text:'a2'},{text:'a3',correct:true},{text:'a3'}]
+            },
+            {
+                text: 'qu4',
+                answers: [{text:'a1'},{text:'a2'},{text:'a3'},{text:'a3',correct:true}]
+            },
+        ]);
+    private currentQuestion:IQuizQuestion;
 
     private textFieldBg:Rectangle = (()=>{
         const rect = new Rectangle(this.game);
@@ -35,9 +60,31 @@ class QuizSceneUI extends VEngineTsxComponent {
 
     constructor(private game:Game, private assets:Assets) {
         super(new VEngineTsxDOMRenderer(game));
+        this.nextQuestion();
     }
 
-    override render(): VirtualNode {
+    private nextQuestion():void {
+        if (this.quizRunner.hasNextQuestion()) {
+            this.currentQuestion = this.quizRunner.nextQuestion();
+            this.currentButton = undefined;
+            this.answerSelected = false;
+            this.answerBlink = false;
+            this.correctAnswer = undefined;
+        } else {
+            alert(42);
+        }
+    }
+
+    private resolveLightUpButtonState(index:number):'blink'|'correct'|'incorrect'|'active'|undefined{
+        let state:'blink'|'correct'|'incorrect'|'active'|undefined = undefined;
+        if (index===this.currentButton) state = 'active';
+        if (index===this.currentButton && this.answerBlink) state = 'blink';
+        if (index===this.currentButton && this.correctAnswer!==undefined && this.currentButton!==this.correctAnswer) state = 'incorrect';
+        if (index===this.correctAnswer) state = 'correct';
+        return state;
+    }
+
+    public override render(): VirtualNode {
         return (
             <>
                 <BgMatrix/>
@@ -50,23 +97,43 @@ class QuizSceneUI extends VEngineTsxComponent {
                     margin={[20]}
                     textColor={{r:0,g:0,b:0,a:0}}
                     wordBrake={WordBrake.PREDEFINED}
-                    font={this.assets.font} text={'Задача номер 1 123123 вамвамвам'}
+                    font={this.assets.font} text={this.currentQuestion.text}
                 />
-                <AnswerButton click={()=>this.onAnswerClick(0)} assets={this.assets} pos={{x:100,y:300}} active={this.currentButton===0} text={'answer 1'}/>
-                <AnswerButton click={()=>this.onAnswerClick(1)} assets={this.assets} pos={{x:520,y:300}} active={this.currentButton===1} text={'answer 2'}/>
-                <AnswerButton click={()=>this.onAnswerClick(2)} assets={this.assets} pos={{x:100,y:450}} active={this.currentButton===2} text={'answer 3'}/>
-                <AnswerButton click={()=>this.onAnswerClick(3)} assets={this.assets} pos={{x:520,y:450}} active={this.currentButton===3} text={'answer 4'}/>
+                <AnswerButton
+                    click={()=>this.onAnswerClick(0)}
+                    assets={this.assets}
+                    pos={{x:100,y:300}}
+                    lightUpState={this.resolveLightUpButtonState(0)}
+                    text={this.currentQuestion.answers[0].text}/>
+                <AnswerButton
+                    click={()=>this.onAnswerClick(1)}
+                    assets={this.assets} pos={{x:520,y:300}}
+                    lightUpState={this.resolveLightUpButtonState(1)}
+                    text={this.currentQuestion.answers[1].text}/>
+                <AnswerButton
+                    click={()=>this.onAnswerClick(2)}
+                    assets={this.assets} pos={{x:100,y:450}}
+                    lightUpState={this.resolveLightUpButtonState(2)}
+                    text={this.currentQuestion.answers[2].text}/>
+                <AnswerButton
+                    click={()=>this.onAnswerClick(3)}
+                    assets={this.assets}
+                    pos={{x:520,y:450}}
+                    lightUpState={this.resolveLightUpButtonState(3)}
+                    text={this.currentQuestion.answers[3].text}/>
             </>
         );
     }
 
     @ReactiveMethod()
     private onAnswerClick(btnIndex:0|1|2|3):void {
+        if (this.answerSelected) return;
         this.currentButton = btnIndex;
     }
 
     @ReactiveMethod()
     public onLeftBtnClicked():void {
+        if (this.answerSelected) return;
         if (this.currentButton===1) this.currentButton = 0;
         else if (this.currentButton===3) this.currentButton = 2;
         else if (this.currentButton===undefined) this.currentButton = 0;
@@ -74,6 +141,7 @@ class QuizSceneUI extends VEngineTsxComponent {
 
     @ReactiveMethod()
     public onRightBtnClicked():void {
+        if (this.answerSelected) return;
         if (this.currentButton===0) this.currentButton = 1;
         else if (this.currentButton===2) this.currentButton = 3;
         else if (this.currentButton===undefined) this.currentButton = 0;
@@ -81,6 +149,7 @@ class QuizSceneUI extends VEngineTsxComponent {
 
     @ReactiveMethod()
     public onDownBtnClicked():void {
+        if (this.answerSelected) return;
         if (this.currentButton===0) this.currentButton = 2;
         else if (this.currentButton===1) this.currentButton = 3;
         else if (this.currentButton===undefined) this.currentButton = 0;
@@ -88,9 +157,28 @@ class QuizSceneUI extends VEngineTsxComponent {
 
     @ReactiveMethod()
     public onUpBtnClicked():void {
+        if (this.answerSelected) return;
         if (this.currentButton===2) this.currentButton = 0;
         else if (this.currentButton===3) this.currentButton = 1;
         else if (this.currentButton===undefined) this.currentButton = 0;
+    }
+
+    @ReactiveMethod()
+    public async onAnswerSelected() {
+        if (this.answerSelected) return;
+        this.answerSelected = true;
+        for (let i=0;i<13;i++) {
+            this.triggerRendering();
+            await waitFor(200);
+            this.answerBlink = !this.answerBlink;
+        }
+        this.answerBlink = true;
+        this.triggerRendering();
+        await waitFor(3000);
+        this.correctAnswer = this.currentQuestion.answers.findIndex(it=>it.correct) as 0|1|2|3;
+        this.triggerRendering();
+        await waitForKey(this.game,KEYBOARD_KEY.SPACE);
+        this.nextQuestion();
     }
 
 
@@ -126,6 +214,10 @@ export class QuizScene extends Scene {
                 }
                 case KEYBOARD_KEY.RIGHT: {
                     mainSceneUI.onRightBtnClicked();
+                    break;
+                }
+                case KEYBOARD_KEY.ENTER: {
+                    mainSceneUI.onAnswerSelected();
                     break;
                 }
             }

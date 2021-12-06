@@ -24,6 +24,24 @@ export class Assets extends ResourceAutoHolder{
         rect.borderRadius = 15;
         return rect;
     })();
+    public buttonBgSelected:Rectangle = (()=>{
+        const rect = new Rectangle(this.scene.getGame());
+        rect.fillColor = Color.fromCssLiteral(`rgba(35, 245, 238, 0.53)`);
+        rect.borderRadius = 15;
+        return rect;
+    })();
+    public buttonBgCorrect:Rectangle = (()=>{
+        const rect = new Rectangle(this.scene.getGame());
+        rect.fillColor = Color.fromCssLiteral(`rgba(46, 227, 1, 0.53)`);
+        rect.borderRadius = 15;
+        return rect;
+    })();
+    public buttonBgIncorrect:Rectangle = (()=>{
+        const rect = new Rectangle(this.scene.getGame());
+        rect.fillColor = Color.fromCssLiteral(`rgba(255, 0, 0, 0.61)`);
+        rect.borderRadius = 15;
+        return rect;
+    })();
 
     constructor(scene:Scene) {
         super(scene);

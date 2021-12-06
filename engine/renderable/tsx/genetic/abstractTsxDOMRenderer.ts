@@ -97,7 +97,7 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     }
 
     private setGenericProps(model:T,virtualNode:VirtualNode):void{
-        if (virtualNode.props.ref!==undefined) virtualNode.props.ref(model);
+        if (virtualNode?.props?.ref!==undefined) virtualNode.props.ref(model);
         this.elementCreator.setProps(model,virtualNode);
     }
 
