@@ -7,7 +7,14 @@ export interface IQuizAnswer {
 export interface IQuizQuestion {
     text: string;
     answers:[IQuizAnswer,IQuizAnswer,IQuizAnswer,IQuizAnswer]
+    level:number;
 }
+
+
+function shuffle(array:any[]) {
+    array.sort(() => Math.random()>0.5?1:-1);
+}
+
 
 export class QuizRunner {
 
@@ -15,6 +22,11 @@ export class QuizRunner {
     private currentQuestion:number = 0;
 
     public constructor(private questions:IQuizQuestion[]) {
+        questions.forEach(q=>{
+            q.answers = q.answers.reverse() as [IQuizQuestion,IQuizQuestion,IQuizQuestion,IQuizQuestion];
+            shuffle(q.answers);
+            shuffle(q.answers);
+        })
     }
 
     public hasNextQuestion():boolean {

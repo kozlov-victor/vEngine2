@@ -21,6 +21,7 @@ import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {IQuizQuestion, QuizRunner} from "../quizRunner";
+import {DATA} from "../asset/resource/questions";
 
 
 class QuizSceneUI extends VEngineTsxComponent {
@@ -28,27 +29,10 @@ class QuizSceneUI extends VEngineTsxComponent {
     private currentButton:0|1|2|3|undefined = undefined;
     private answerSelected:boolean = false;
     private answerBlink:boolean = false;
+    private questionBlink:boolean = false;
     private correctAnswer:0|1|2|3|undefined = undefined;
 
-    private quizRunner:QuizRunner = new QuizRunner(
-        [
-            {
-                text: 'qu1',
-                answers: [{text:'a1',correct:true},{text:'a2'},{text:'a3'},{text:'a3'}]
-            },
-            {
-                text: 'qu2',
-                answers: [{text:'a1'},{text:'a2',correct:true},{text:'a3'},{text:'a3'}]
-            },
-            {
-                text: 'qu3',
-                answers: [{text:'a1'},{text:'a2'},{text:'a3',correct:true},{text:'a3'}]
-            },
-            {
-                text: 'qu4',
-                answers: [{text:'a1'},{text:'a2'},{text:'a3'},{text:'a3',correct:true}]
-            },
-        ]);
+    private quizRunner:QuizRunner = new QuizRunner(DATA());
     private currentQuestion:IQuizQuestion;
 
     private textFieldBg:Rectangle = (()=>{
@@ -58,18 +42,31 @@ class QuizSceneUI extends VEngineTsxComponent {
         return rect;
     })();
 
+    private textFieldBgBlinked:Rectangle = (()=>{
+        const rect = new Rectangle(this.game);
+        rect.fillColor = Color.fromCssLiteral(`rgba(146, 255, 48, 0.75)`);
+        rect.borderRadius = 15;
+        return rect;
+    })();
+
     constructor(private game:Game, private assets:Assets) {
         super(new VEngineTsxDOMRenderer(game));
         this.nextQuestion();
     }
 
-    private nextQuestion():void {
+    private async nextQuestion():Promise<void> {
         if (this.quizRunner.hasNextQuestion()) {
             this.currentQuestion = this.quizRunner.nextQuestion();
             this.currentButton = undefined;
             this.answerSelected = false;
             this.answerBlink = false;
             this.correctAnswer = undefined;
+            for (let i=0;i<7;i++) {
+                this.triggerRendering();
+                await waitFor(100);
+                this.questionBlink = !this.questionBlink;
+            }
+            this.questionBlink = false;
         } else {
             alert(42);
         }
@@ -89,14 +86,14 @@ class QuizSceneUI extends VEngineTsxComponent {
             <>
                 <BgMatrix/>
                 <v_textField
-                    background={()=>this.textFieldBg}
+                    background={()=>this.questionBlink?this.textFieldBgBlinked:this.textFieldBg}
                     size={{width:this.game.width,height:this.game.height-300}}
                     alignTextContentVertical={AlignTextContentVertical.CENTER}
                     alignTextContentHorizontal={AlignTextContentHorizontal.CENTER}
                     alignText={AlignText.CENTER}
                     margin={[20]}
                     textColor={{r:0,g:0,b:0,a:0}}
-                    wordBrake={WordBrake.PREDEFINED}
+                    wordBrake={WordBrake.FIT}
                     font={this.assets.font} text={this.currentQuestion.text}
                 />
                 <AnswerButton
