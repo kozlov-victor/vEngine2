@@ -14,10 +14,10 @@ game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(GamePadControl);
 game.addControl(MouseControl);
-//const introScene: Scene = new IntroScene(game);
+const introScene: Scene = new IntroScene(game);
 const transition = new CellsAppearingTransition(game);
 transition.setBackgroundColor(Color.GREY.clone());
-game.runScene(new QuizScene(game),transition);
+game.runScene(introScene,transition);
 
 
 

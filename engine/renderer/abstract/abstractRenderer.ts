@@ -1,7 +1,7 @@
 import {Game, SCALE_STRATEGY} from "../../core/game";
 import {Rect} from "../../geometry/rect";
 import {Color} from "../common/color";
-import {Size} from "../../geometry/size";
+import {ISize, Size} from "../../geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Image} from "@engine/renderable/impl/general/image";
@@ -42,7 +42,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     public container:HTMLElement;
     public clearBeforeRender:boolean = true;
     public readonly clearColor:Color = Color.RGB(0,0,0);
-    public readonly viewPortSize = new Size();
+    public readonly viewPortSize:ISize = new Size(this.game.width,this.game.height);
 
     protected abstract rendererHelper: RendererHelper;
 
@@ -190,13 +190,13 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     protected onResize():void {
         const container:HTMLElement = this.container;
 
-        const [innerWidth,innerHeight] = this.getScreenResolution();
+        const [innerWidth,innerHeight] = AbstractRenderer.getScreenResolution();
 
         if (this.game.scaleStrategy===SCALE_STRATEGY.NO_SCALE) return;
         else if (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH) {
             container.style.width = `${innerWidth}px`;
             container.style.height = `${innerHeight}px`;
-            this.viewPortSize.setWH(innerWidth,innerHeight);
+            (this.viewPortSize as Size).setWH(innerWidth,innerHeight);
             this.game.scale.setXY(innerWidth/this.game.size.width,innerHeight/this.game.size.height);
             this.game.pos.setXY(0);
         } else {
@@ -224,12 +224,12 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
             this.container.style.height = height + 'px';
             this.container.style.marginTop = `${this.game.pos.y}px`;
 
-            this.viewPortSize.setWH(width,height);
+            (this.viewPortSize as Size).setWH(width,height);
         }
 
     }
 
-    private getScreenResolution():[number,number]{
+    private static getScreenResolution():[number,number]{
         return [globalThis.innerWidth,globalThis.innerHeight];
     }
 

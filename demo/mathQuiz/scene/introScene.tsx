@@ -22,6 +22,7 @@ import {AppearFromRandomPointTextAnimation} from "@engine/renderable/impl/ui/tex
 import {BgMatrix} from "../component/bgMatrix";
 import {QuizScene} from "./quizScene";
 import {Flip3dHorizontalInTransition} from "@engine/scene/transition/flip/flip3dTransition";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 
 class IntroSceneUI extends VEngineTsxComponent {
 
@@ -30,6 +31,9 @@ class IntroSceneUI extends VEngineTsxComponent {
 
     constructor(private game:Game,private assets:Assets) {
         super(new VEngineTsxDOMRenderer(game));
+        game.getCurrentScene().keyboardEventHandler.once(KEYBOARD_EVENTS.keyPressed, e=>{
+            this.start().catch(e=>console.log(e));
+        });
     }
 
     public render():VirtualNode {
@@ -37,7 +41,6 @@ class IntroSceneUI extends VEngineTsxComponent {
             <>
                 <BgMatrix/>
                 <v_animatedTextField
-                    click={()=>this.start()}
                     ref={(it:any)=>this.textField = it as AnimatedTextField}
                     size={{width:this.game.width,height:this.game.height}}
                     alignTextContentVertical={AlignTextContentVertical.CENTER}
