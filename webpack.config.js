@@ -111,7 +111,7 @@ module.exports = async (env={})=>{
         ]
     );
     if (mode===1) {
-        const projectsToSelect = [...allProjects,'build_tools']
+        const projectsToSelect = [...allProjects,'build_tools'];
         const index = await cliUI.choose('Select a project',projectsToSelect);
         project = projectsToSelect[index];
         console.log(`Selected: ${project}`);

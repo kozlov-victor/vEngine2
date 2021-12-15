@@ -23,7 +23,7 @@ export const AnswerButton = (props:IProps)=>{
             click={(e:any)=>props.click()}
             background={()=> bg}
             pos={props.pos}
-            size={{width:400, height:100}}
+            size={{width:400, height:130}}
             font={props.assets.font}
             text={props.text}
             textColor={props.lightUpState==='active'?btnColorActive:btnColorNormal}
