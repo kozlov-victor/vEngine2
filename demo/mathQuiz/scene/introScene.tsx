@@ -13,24 +13,26 @@ import {
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {Color} from "@engine/renderer/common/color";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {AnimatedTextField} from "@engine/renderable/impl/ui/textField/animated/animatedTextField";
 import {AppearRandomLetterTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearRandomLetterTextAnimation";
 import {singleton, waitFor} from "../helper";
 import {FallLettersTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/fallLettersTextAnimation";
 import {AppearFromRandomPointTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearFromRandomPointTextAnimation";
 import {BgMatrix} from "../component/bgMatrix";
-import {QuizScene} from "./quizScene";
 import {Flip3dHorizontalInTransition} from "@engine/scene/transition/flip/flip3dTransition";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {SelectLevelScene} from "./selectLevelScene";
+import {QuizScene} from "./quizScene";
 
 class IntroSceneUI extends VEngineTsxComponent {
 
     private textField:AnimatedTextField;
     private started:boolean = false;
+    private classLevel:number;
 
-    constructor(private game:Game,private assets:Assets) {
+    constructor(private game:Game,private assets:Assets,private level:number) {
         super(new VEngineTsxDOMRenderer(game));
+        this.classLevel = this.level===0?6:9;
         game.getCurrentScene().keyboardEventHandler.once(KEYBOARD_EVENTS.keyPressed, e=>{
             this.start().catch(e=>console.log(e));
         });
@@ -48,7 +50,7 @@ class IntroSceneUI extends VEngineTsxComponent {
                     alignText={AlignText.CENTER}
                     textColor={{r:0,g:0,b:0,a:0}}
                     wordBrake={WordBrake.PREDEFINED}
-                    font={this.assets.font} text={'Математична вікторина\nДля учнів всіх класів'}
+                    font={this.assets.font} text={`Математична вікторина\nДля учнів ${this.classLevel} класів`}
                 />
             </>
         );
@@ -72,7 +74,7 @@ class IntroSceneUI extends VEngineTsxComponent {
         await waitFor(5000);
         const transition = new Flip3dHorizontalInTransition(this.game,false);
         transition.setBackgroundColor(Color.GREY.clone());
-        this.game.runScene(new QuizScene(this.game),transition);
+        this.game.runScene(new QuizScene(this.game,this.level),transition);
     }
 
 }
@@ -82,18 +84,15 @@ export class IntroScene extends Scene {
 
     private assets:Assets = singleton(Assets.name,()=>new Assets(this));
 
-    constructor(game:Game) {
+    constructor(game:Game,private level:number) {
         super(game);
         this.backgroundColor = Color.BLACK.clone();
-        this.mouseEventHandler.once(MOUSE_EVENTS.click, _=>{
-            this.game.getRenderer().requestFullScreen();
-        })
     }
 
     public override onReady() {
         const root = new SimpleGameObjectContainer(this.game);
         this.appendChild(root);
-        const mainSceneUI = new IntroSceneUI(this.game,this.assets);
+        const mainSceneUI = new IntroSceneUI(this.game,this.assets,this.level);
         mainSceneUI.mountTo(root);
     }
 }

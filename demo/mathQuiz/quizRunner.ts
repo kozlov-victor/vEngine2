@@ -21,7 +21,7 @@ export class QuizRunner {
     private correctAnswers:number = 0;
     private currentQuestion:number = 0;
 
-    public constructor(private questions:IQuizQuestion[]) {
+    public constructor(private questions:IQuizQuestion[],level:number) {
         questions.forEach(q=>{
             q.answers = q.answers.reverse() as [IQuizQuestion,IQuizQuestion,IQuizQuestion,IQuizQuestion];
             shuffle(q.answers);
