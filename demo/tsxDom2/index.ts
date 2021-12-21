@@ -1,14 +1,7 @@
 import {HTMLElementWrap} from "@engine/renderable/tsx/dom/HTMLElementWrap";
 import {Widget} from "./widget";
 import {CommandsAttacher} from "./commandsAttacher";
-import {Game, SCALE_STRATEGY} from "@engine/core/game";
-import {DrawingScene} from "./drawingScene";
-import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
-const game = new Game({width:1024,height:800,scaleStrategy:SCALE_STRATEGY.NO_SCALE});
-game.setRenderer(WebGlRenderer);
-const drawingScene = new DrawingScene(game);
-game.runScene(drawingScene);
 
 const style = document.createElement('style');
 style.textContent =
@@ -22,9 +15,14 @@ style.textContent =
             position: relative;
             z-index: 2;
         }
-        input,input:focus{border-color: transparent;outline-color: transparent;background-color: #f4f5f4}
+        input,input:focus{border-color: transparent;outline-color: grey;background-color: #f4f5f4}
     `;
 document.head.appendChild(style);
+
+const canvas = document.createElement('canvas');
+canvas.width = 640;
+canvas.height = 480;
+document.body.appendChild(canvas);
 
 const root = document.createElement('div');
 root.id = 'root';
@@ -39,43 +37,46 @@ for (let i=0;i<allScriptNodes.length;i++) {
     codeToExecute+=allScriptNodes.item(i).textContent+'\n';
 }
 
-const commands = new CommandsAttacher(widget,drawingScene.getCanvas()).init();
+const commands = new CommandsAttacher(widget,canvas.getContext('2d')!).init();
 
 //language=javaScript
 const codeToExecuteProcessed =
     `
+    \n
     ${
         Object.keys(commands).map(key=>{
             return `var ${key}=commands.${key};`;
         }).join('\n')
     }
-    var wait = async (time)=>{
-        return new Promise(resolve=>{
-            setTimeout(resolve,time);
-        });
+
+var wait = async (time)=>{
+    return new Promise(resolve=>{
+        setTimeout(resolve,time);
+    });
+}
+(async ()=>{
+    "use strict";
+    try {
+        ${
+            (()=>{
+                let s  = codeToExecute;
+                ['input','readKey','wait','drawLine','drawCircle','drawPoint'].forEach(l=>{
+                    const re = new RegExp(`${l}[ ]*\\(`);
+                    s = s.split(re).join(`await ${l}(`);
+                });
+                return s;
+            })()
+        }
     }
-    (async ()=>{
-        "use strict";
-        try {
-            ${
-                codeToExecute
-                    .split('input(').join('await input(')
-                    .split('wait(').join('await wait(')
-                    .split('drawLine(').join('await drawLine(')
-                    .split('drawCircle(').join('await drawCircle(')
-                    .split('drawPoint(').join('await drawPoint(')
-            }
-        }
-        catch(e) {
-            catchError(e);
-        }
-    })();
+    catch(e) {
+        catchError(e);
+    }
+})();
     `;
 
 try {
     console.log(codeToExecuteProcessed);
     const fn = new Function('commands',codeToExecuteProcessed);
-    console.log(fn.toString());
     fn(commands);
 } catch (e:any) {
     widget.catchError(e);

@@ -5,9 +5,17 @@ import {Font} from "@engine/renderable/impl/general/font/font";
 import * as fntXML from "xml/angelcode-loader!./resource/main.fnt";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
+import {Sound} from "@engine/media/sound";
 
 
 export class Assets extends ResourceAutoHolder{
+
+    @Resource.Sound('./mathQuiz/asset/sound/btn1.wav') public btn1Sound:Sound;
+    @Resource.Sound('./mathQuiz/asset/sound/completed.wav') public completedSound:Sound;
+    @Resource.Sound('./mathQuiz/asset/sound/fail.wav') public failSound:Sound;
+    @Resource.Sound('./mathQuiz/asset/sound/selected.wav') public selectedSound:Sound;
+    @Resource.Sound('./mathQuiz/asset/sound/start.wav') public startSound:Sound;
+    @Resource.Sound('./mathQuiz/asset/sound/success.wav') public successSound:Sound;
 
     @Resource.FontFromAtlas('./mathQuiz/asset/resource/',fntXML)
     public font:Font;

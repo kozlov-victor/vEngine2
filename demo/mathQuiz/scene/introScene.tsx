@@ -65,12 +65,16 @@ class IntroSceneUI extends VEngineTsxComponent {
         this.started = true;
         const message = 'Готовність номер';
         this.textField.setTextWithAnimation(`${message} 3`,new AppearFromRandomPointTextAnimation(50,100,100));
+        this.assets.btn1Sound.play();
         await waitFor(5000);
         this.textField.setTextWithAnimation(`${message} 2`,new AppearFromRandomPointTextAnimation(50,100,100));
+        this.assets.btn1Sound.play();
         await waitFor(5000);
         this.textField.setTextWithAnimation(`${message} 1`,new AppearFromRandomPointTextAnimation(50,100,100));
+        this.assets.btn1Sound.play();
         await waitFor(5000);
         this.textField.setTextWithAnimation(`${message} 1`,new FallLettersTextAnimation(1,1000,1000));
+        this.assets.btn1Sound.play();
         await waitFor(5000);
         const transition = new Flip3dHorizontalInTransition(this.game,false);
         transition.setBackgroundColor(Color.GREY.clone());

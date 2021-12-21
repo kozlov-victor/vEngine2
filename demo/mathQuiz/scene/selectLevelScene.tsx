@@ -57,6 +57,7 @@ class SelectLevelSceneUI extends VEngineTsxComponent {
         if (this.answerSelected) return;
         if (this.currentButton===undefined) this.currentButton = 0;
         else if (this.currentButton===1) this.currentButton = 0;
+        this.assets.btn1Sound.play();
     }
 
     @ReactiveMethod()
@@ -64,12 +65,14 @@ class SelectLevelSceneUI extends VEngineTsxComponent {
         if (this.answerSelected) return;
         if (this.currentButton===undefined) this.currentButton = 0;
         else if (this.currentButton===0) this.currentButton = 1;
+        this.assets.btn1Sound.play();
     }
 
     public async onAnswerSelected() {
         if (this.answerSelected) return;
         this.answerSelected = true;
-        await waitFor(2000);
+        this.assets.selectedSound.play();
+        await waitFor(100);
         const transition = new Flip3dVerticalInTransition(this.game,false);
         transition.setBackgroundColor(Color.GREY.clone());
         this.game.runScene(new IntroScene(this.game,this.currentButton as number),transition);

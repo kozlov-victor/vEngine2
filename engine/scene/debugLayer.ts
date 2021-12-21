@@ -3,9 +3,6 @@ import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
-import {TaskQueue} from "@engine/resources/taskQueue";
-import {createFontFromCssDescription} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
-import {createSystemFont} from "@engine/renderable/impl/general/font/createFontMethods/createSystemFont";
 
 export class DebugLayer extends Layer {
 

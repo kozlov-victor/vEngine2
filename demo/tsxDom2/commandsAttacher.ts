@@ -10,7 +10,7 @@ const wait = async (time:number)=>{
 }
 
 export class CommandsAttacher {
-    constructor(private widget:Widget,private canvas:DrawingSurface) {
+    constructor(private widget:Widget,private ctx:CanvasRenderingContext2D) {
     }
 
     private attachCommonCommands() {
@@ -18,32 +18,32 @@ export class CommandsAttacher {
             this.widget.print(...args);
         }
 
-        const input = (prompt:string)=>{
-            const literal = this.widget.input(prompt);
+        const input = async (prompt:string)=>{
+            const literal = await this.widget.input(prompt);
             if (Number.isFinite(+literal)) return +literal;
             else return literal;
         }
+
+        const readKey = this.widget.readKey;
 
         const catchError = (e:any):void=>{
             this.widget.catchError(e);
         }
 
-        const clearScreen = ():void=>{
-            this.widget.clearScreen();
-        }
 
         return {
             print,
             input,
+            readKey,
             catchError,
-            clearScreen
         };
     }
 
     private attachGraphicsCommands() {
         const drawPoint = (x:number,y:number,col:string)=>{
-            this.canvas.setDrawColor(Color.fromCssLiteral(col));
-            this.canvas.drawRect(x,y,1,1);
+            this.ctx.strokeStyle = '';
+            this.ctx.fillStyle = (Color.fromCssLiteral(col)).asCssRgba();
+            this.ctx.fillRect(x,y,1,1);
         }
         const drawLine = async (x0:number, y0:number, x1:number, y1:number,color:string) => {
             const dx = Math.abs(x1 - x0);
@@ -100,9 +100,21 @@ export class CommandsAttacher {
             }
         }
 
+        const drawRect = (x:number,y:number,w:number,h:number,col:string)=>{
+            this.ctx.strokeStyle = (Color.fromCssLiteral(col)).asCssRgba();
+            this.ctx.strokeRect(x,y,w,h);
+        }
+
+        const clearScreen = ():void=> {
+            this.widget.clearScreen();
+            this.ctx.fillStyle = 'white';
+            this.ctx.strokeStyle = '';
+            this.ctx.fillRect(0,0,this.ctx.canvas.width,this.ctx.canvas.height);
+        }
+
 
         return {
-            drawPoint,drawLine,drawCircle
+            drawPoint,drawLine,drawCircle, clearScreen, drawRect,
         }
     }
 

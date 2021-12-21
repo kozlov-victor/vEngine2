@@ -21,7 +21,7 @@ export class Widget extends VEngineTsxComponent {
 
     @ReactiveMethod()
     public print(...args:string[]|number[]):void {
-        if (this.lines.length>1000) this.lines.shift();
+        if (this.lines.length>128) this.lines.shift();
         this.lines.push(args.join(''));
     }
 
@@ -36,6 +36,16 @@ export class Widget extends VEngineTsxComponent {
         if (prompt) this.print(prompt);
         return new Promise<string>(resolve => {
             this.resolveInputPromise = resolve;
+        });
+    }
+
+    public readKey():Promise<number> {
+        return new Promise<number>(resolve => {
+            const listener = (e:KeyboardEvent)=>{
+                window.removeEventListener('keydown',listener);
+                resolve(e.keyCode);
+            };
+            window.addEventListener('keydown',listener);
         });
     }
 

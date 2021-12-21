@@ -97,7 +97,7 @@ export const DATA:()=>IQuizQuestion[] = ()=> [
             {text: 'Половина'},
             {text: 'Одна десята'},
             {text: 'Третина'},
-            {text: 'Одна сота частина',correct: true}
+            {text: 'Одна сота',correct: true}
         ],
         level: 1
     },
@@ -152,7 +152,7 @@ export const DATA:()=>IQuizQuestion[] = ()=> [
         level: 1
     },
     {
-        text: 'Чиїм ім’ям названа теорема, що допомагає розв’язувати прямокутні трикутники?',
+        text: 'Чиїм ім\'ям названа теорема, що допомагає розв\'язувати прямокутні трикутники?',
         answers: [
             {text: 'Декарт'},
             {text: 'Піфагор',correct: true},
@@ -215,7 +215,7 @@ export const DATA:()=>IQuizQuestion[] = ()=> [
         text: 'Довжина кола обчислюється за формулою',
         answers: [
             {text: 'C=2PR',correct: true},
-            {text: 'C=2PR'},
+            {text: 'C=4PR'},
             {text: 'C=PR^2'},
             {text: 'C=2PR^2'}
         ],

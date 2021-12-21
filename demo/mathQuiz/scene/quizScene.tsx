@@ -22,6 +22,8 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {IQuizQuestion, QuizRunner} from "../quizRunner";
 import {DATA} from "../asset/resource/questions";
+import {ResultScene} from "./resultScene";
+import {Flip3dHorizontalInTransition} from "@engine/scene/transition/flip/flip3dTransition";
 
 
 class QuizSceneUI extends VEngineTsxComponent {
@@ -52,11 +54,12 @@ class QuizSceneUI extends VEngineTsxComponent {
     constructor(private game:Game, private assets:Assets,level:number) {
         super(new VEngineTsxDOMRenderer(game));
         this.quizRunner = new QuizRunner(DATA(),level);
-        this.nextQuestion();
+        this.nextQuestion().catch(e=>console.log(e));
     }
 
     private async nextQuestion():Promise<void> {
         if (this.quizRunner.hasNextQuestion()) {
+            this.assets.startSound.play();
             this.currentQuestion = this.quizRunner.nextQuestion();
             this.currentButton = undefined;
             this.answerSelected = false;
@@ -69,7 +72,11 @@ class QuizSceneUI extends VEngineTsxComponent {
             }
             this.questionBlink = false;
         } else {
-            alert(42);
+            await waitFor(3000);
+            this.game.runScene(
+                new ResultScene(this.game,this.quizRunner.getCorrectAnswersNum(),this.quizRunner.questions.length),
+                new Flip3dHorizontalInTransition(this.game,false)
+            )
         }
     }
 
@@ -135,6 +142,7 @@ class QuizSceneUI extends VEngineTsxComponent {
         if (this.currentButton===1) this.currentButton = 0;
         else if (this.currentButton===3) this.currentButton = 2;
         else if (this.currentButton===undefined) this.currentButton = 0;
+        this.assets.btn1Sound.play();
     }
 
     @ReactiveMethod()
@@ -143,6 +151,7 @@ class QuizSceneUI extends VEngineTsxComponent {
         if (this.currentButton===0) this.currentButton = 1;
         else if (this.currentButton===2) this.currentButton = 3;
         else if (this.currentButton===undefined) this.currentButton = 0;
+        this.assets.btn1Sound.play();
     }
 
     @ReactiveMethod()
@@ -151,6 +160,7 @@ class QuizSceneUI extends VEngineTsxComponent {
         if (this.currentButton===0) this.currentButton = 2;
         else if (this.currentButton===1) this.currentButton = 3;
         else if (this.currentButton===undefined) this.currentButton = 0;
+        this.assets.btn1Sound.play();
     }
 
     @ReactiveMethod()
@@ -159,11 +169,13 @@ class QuizSceneUI extends VEngineTsxComponent {
         if (this.currentButton===2) this.currentButton = 0;
         else if (this.currentButton===3) this.currentButton = 1;
         else if (this.currentButton===undefined) this.currentButton = 0;
+        this.assets.btn1Sound.play();
     }
 
     @ReactiveMethod()
     public async onAnswerSelected() {
         if (this.answerSelected) return;
+        this.assets.selectedSound.play();
         this.answerSelected = true;
         for (let i=0;i<13;i++) {
             this.triggerRendering();
@@ -174,6 +186,12 @@ class QuizSceneUI extends VEngineTsxComponent {
         this.triggerRendering();
         await waitFor(3000);
         this.correctAnswer = this.currentQuestion.answers.findIndex(it=>it.correct) as 0|1|2|3;
+        if (this.correctAnswer===this.currentButton) {
+            this.quizRunner.setAsCorrect();
+            this.assets.successSound.play();
+        } else {
+            this.assets.failSound.play();
+        }
         this.triggerRendering();
         await waitForKey(this.game,KEYBOARD_KEY.SPACE);
         this.nextQuestion();
