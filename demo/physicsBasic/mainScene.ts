@@ -37,7 +37,7 @@ export class MainScene extends Scene {
 
 
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
-            switch (e.key) {
+            switch (e.button) {
                 case KEYBOARD_KEY.SPACE:
                     if (rigidBody1.collisionFlags.bottom) rigidBody1.velocity.y+=-200;
                     break;
@@ -50,7 +50,7 @@ export class MainScene extends Scene {
             }
         });
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased,e=>{
-            switch (e.key) {
+            switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
                     rigidBody1.velocity.x = 0;

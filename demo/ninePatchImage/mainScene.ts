@@ -35,7 +35,7 @@ export class MainScene extends Scene {
 
         this.appendChild(this.obj);
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
-            switch (e.key) {
+            switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
                     this.obj.size.width-=1;
                     break;

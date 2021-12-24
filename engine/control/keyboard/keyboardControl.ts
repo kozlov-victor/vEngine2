@@ -60,7 +60,7 @@ export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IC
             if (DEBUG) console.warn('keyboard pool is full');
             return;
         }
-        eventFromBuffer.key = code;
+        eventFromBuffer.button = code;
         eventFromBuffer.nativeEvent = nativeEvent;
 
         if (this.isPressed(code)) {
@@ -90,13 +90,13 @@ export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IC
         return event.keyState>=KEY_STATE.KEY_PRESSED;
     }
 
-    protected notify(eventName: KEYBOARD_EVENTS, e: KeyBoardEvent): void {
+    protected override notify(eventName: KEYBOARD_EVENTS, e: KeyBoardEvent): void {
         this.game.getCurrentScene().keyboardEventHandler.trigger(eventName,e);
     }
 
-    private findEvent(key:number):Optional<KeyBoardEvent> {
+    private findEvent(button:number):Optional<KeyBoardEvent> {
         for (const event of this.buffer) {
-            if (event.key===key) return event;
+            if (event.button===button) return event;
         }
         return undefined;
     }

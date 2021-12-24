@@ -349,7 +349,7 @@ export class GameScene extends BasePix32Scene {
             if (this.car.carVelocity<0) this.car.carVelocity = 0;
         };
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
-            switch (e.key) {
+            switch (e.button) {
                 case KEYBOARD_KEY.UP: {
                     moveUp();
                     if (this.timer) {

@@ -66,7 +66,7 @@ export class Cursor {
         const listener = (e:IKeyBoardEvent)=>{
             if (!this.parent.isFocused()) return;
             if (this.typeHelper.isDirty()) return;
-            switch (e.key) {
+            switch (e.button) {
                 case KEYBOARD_KEY.RIGHT:
                     this.moveToNextPosition(1);
                     break;

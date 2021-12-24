@@ -69,7 +69,7 @@ export class BasicEnv {
             const kbEv:KeyboardEvent = e.nativeEvent as KeyboardEvent;
             const keycode = kbEv.keyCode;
 
-            if (e.key===KEYBOARD_KEY.ENTER) {
+            if (e.button===KEYBOARD_KEY.ENTER) {
                 clearInterval(timer);
                 this.ASSIGN_VAR(varName,this.userInputString);
                 this.res = currText + this.userInputString;
@@ -79,7 +79,7 @@ export class BasicEnv {
                 this.game.getCurrentScene().keyboardEventHandler.off(KEYBOARD_EVENTS.keyPressed,handler);
                 this.redraw();
                 return;
-            } else if (e.key===KEYBOARD_KEY.BACKSPACE) {
+            } else if (e.button===KEYBOARD_KEY.BACKSPACE) {
                 this.userInputString = this.userInputString.substr(0,this.userInputString.length-2);
                 redrawTextWithCursor();
             }

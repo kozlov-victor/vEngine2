@@ -52,6 +52,10 @@ export class QuizRunner {
         return this.currentQuestion<this.questions.length;
     }
 
+    public getCurrentQuestionIndex():number {
+        return this.currentQuestion;
+    }
+
     public nextQuestion():IQuizQuestion {
         return this.questions[this.currentQuestion++];
     }

@@ -15,7 +15,7 @@ export class KeyBoardEvent extends KeyPadEvent implements IKeyBoardEvent {
 
     private static _pool:ObjectPool<KeyBoardEvent> = new ObjectPool<KeyBoardEvent>(KeyBoardEvent);
 
-    public key:KEYBOARD_KEY;
+    public override button:KEYBOARD_KEY;
     public nativeEvent:Event;
 
     public static fromPool():Optional<KeyBoardEvent> {

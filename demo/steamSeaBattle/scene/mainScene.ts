@@ -209,7 +209,7 @@ export class MainScene extends BaseScene {
 
     private listenControls():void{
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed,(e:IKeyBoardEvent)=>{
-            switch (e.key) {
+            switch (e.button) {
                 case KEYBOARD_KEY.LEFT: {
                     this.movePeriscope(1);
                     this.btnLeft.triggerOn();
@@ -230,7 +230,7 @@ export class MainScene extends BaseScene {
             }
         });
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased,(e:IKeyBoardEvent)=>{
-            switch (e.key) {
+            switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
                     this.stopPeriscope();

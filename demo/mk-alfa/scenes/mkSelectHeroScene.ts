@@ -302,15 +302,15 @@ export class MkSelectHeroScene extends MkAbstractScene {
             }
         });
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, (e)=>{
-            if (e.key===KEYBOARD_KEY.LEFT) {
+            if (e.button===KEYBOARD_KEY.LEFT) {
                 this.tabStrip.goPrev();
                 this.soundLink1.play();
             }
-            else if (e.key===KEYBOARD_KEY.RIGHT) {
+            else if (e.button===KEYBOARD_KEY.RIGHT) {
                 this.tabStrip.goNext();
                 this.soundLink1.play();
             }
-            else if (e.key===KEYBOARD_KEY.ENTER) {
+            else if (e.button===KEYBOARD_KEY.ENTER) {
                 this.gotoDescriptionScene();
             }
         });

@@ -9,10 +9,10 @@ export const waitFor = (time:number):Promise<void>=> {
     });
 }
 
-export const waitForKey = (game:Game,key:KEYBOARD_KEY):Promise<void>=> {
+export const waitForKey = (game:Game,button:KEYBOARD_KEY):Promise<void>=> {
     return new Promise(resolve=>{
         const lst = game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, (e)=>{
-            if (e.key===key) {
+            if (e.button===button) {
                 game.getCurrentScene().keyboardEventHandler.off(KEYBOARD_EVENTS.keyPressed,lst);
                 resolve();
             }

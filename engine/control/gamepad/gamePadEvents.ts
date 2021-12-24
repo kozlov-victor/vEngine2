@@ -15,7 +15,7 @@ export class GamePadEvent extends KeyPadEvent implements IGamePadEvent {
 
     private static pool:ObjectPool<GamePadEvent> = new ObjectPool<GamePadEvent>(GamePadEvent);
 
-    public button: GAME_PAD_BUTTON;
+    public override button: GAME_PAD_BUTTON;
     public gamePadIndex:number;
     public value:number;
 

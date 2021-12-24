@@ -59,7 +59,7 @@ export class MainScene extends Scene {
 
 
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
-            switch (e.key) {
+            switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-1);
                     break;

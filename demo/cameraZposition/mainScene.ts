@@ -29,7 +29,7 @@ export class MainScene extends Scene {
         trees.forEach(it=>this.appendChild(it));
 
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
-            switch (e.key) {
+            switch (e.button) {
 
                 case KEYBOARD_KEY.UP:
                     this.camera.pos.z-=1;

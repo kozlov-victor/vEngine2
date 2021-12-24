@@ -129,10 +129,10 @@ export class MainScene extends Scene {
         };
 
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
-            keyFn(e.key,true);
+            keyFn(e.button,true);
         });
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased, e=>{
-            keyFn(e.key,false);
+            keyFn(e.button,false);
         });
         // this.on(MOUSE_EVENTS.click, ()=>{
         //     this.emulator.nextTick();

@@ -225,7 +225,7 @@ export const DATA:()=>IQuizQuestion[] = ()=> [
         text: 'Площа кола обчислюється за формулою',
         answers: [
             {text: 'C=2PR'},
-            {text: 'C=2PR'},
+            {text: 'C=4PR'},
             {text: 'C=PR^2',correct: true},
             {text: 'C=2PR^2'}
         ],

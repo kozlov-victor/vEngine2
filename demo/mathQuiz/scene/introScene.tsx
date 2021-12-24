@@ -14,21 +14,26 @@ import {
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {Color} from "@engine/renderer/common/color";
 import {AnimatedTextField} from "@engine/renderable/impl/ui/textField/animated/animatedTextField";
-import {AppearRandomLetterTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearRandomLetterTextAnimation";
+import {
+    AppearRandomLetterTextAnimation
+} from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearRandomLetterTextAnimation";
 import {singleton, waitFor} from "../helper";
-import {FallLettersTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/fallLettersTextAnimation";
-import {AppearFromRandomPointTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearFromRandomPointTextAnimation";
+import {
+    FallLettersTextAnimation
+} from "@engine/renderable/impl/ui/textField/animated/textAnimation/fallLettersTextAnimation";
+import {
+    AppearFromRandomPointTextAnimation
+} from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearFromRandomPointTextAnimation";
 import {BgMatrix} from "../component/bgMatrix";
 import {Flip3dHorizontalInTransition} from "@engine/scene/transition/flip/flip3dTransition";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
-import {SelectLevelScene} from "./selectLevelScene";
 import {QuizScene} from "./quizScene";
 
 class IntroSceneUI extends VEngineTsxComponent {
 
     private textField:AnimatedTextField;
     private started:boolean = false;
-    private classLevel:number;
+    private readonly classLevel:number;
 
     constructor(private game:Game,private assets:Assets,private level:number) {
         super(new VEngineTsxDOMRenderer(game));

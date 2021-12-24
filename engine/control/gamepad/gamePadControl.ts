@@ -140,7 +140,7 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
 
     public destroy():void {}
 
-    protected notify(eventName: GAME_PAD_EVENTS, e: GamePadEvent): void {
+    protected override notify(eventName: GAME_PAD_EVENTS, e: GamePadEvent): void {
         this.game.getCurrentScene().gamepadEventHandler.trigger(eventName,e);
     }
 

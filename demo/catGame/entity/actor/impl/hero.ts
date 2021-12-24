@@ -159,7 +159,7 @@ export class Hero extends AbstractCharacter {
     private listenKeys():void {
         const jumpVelocity:number = 200;
         this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, e=>{
-            switch (e.key) {
+            switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
                     if (!this.beating) this.goLeft();
                     this.direction = LEFT;
@@ -178,7 +178,7 @@ export class Hero extends AbstractCharacter {
             }
         });
         this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased, e=>{
-            switch (e.key) {
+            switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
                     this.idle();
@@ -186,7 +186,7 @@ export class Hero extends AbstractCharacter {
             }
         });
         this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
-            switch (e.key) {
+            switch (e.button) {
                 case KEYBOARD_KEY.Z:
                     this.beating = true;
                     this.highKickAnimation.play();

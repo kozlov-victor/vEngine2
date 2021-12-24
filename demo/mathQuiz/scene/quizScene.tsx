@@ -94,6 +94,13 @@ class QuizSceneUI extends VEngineTsxComponent {
             <>
                 <BgMatrix/>
                 <v_textField
+                    font={this.assets.font}
+                    pos={{x:0,y:0}}
+                    scale={{x:0.5,y:0.5}}
+                    autoSize={true}
+                    text={'>> Питання '+this.quizRunner.getCurrentQuestionIndex()+` із ${this.quizRunner.questions.length} <<`}
+                />
+                <v_textField
                     background={()=>this.questionBlink?this.textFieldBgBlinked:this.textFieldBg}
                     size={{width:this.game.width,height:this.game.height-300}}
                     alignTextContentVertical={AlignTextContentVertical.CENTER}
@@ -102,7 +109,8 @@ class QuizSceneUI extends VEngineTsxComponent {
                     margin={[20]}
                     textColor={{r:0,g:0,b:0,a:0}}
                     wordBrake={WordBrake.FIT}
-                    font={this.assets.font} text={this.currentQuestion.text}
+                    font={this.assets.font}
+                    text={this.currentQuestion.text}
                 />
                 <AnswerButton
                     click={()=>this.onAnswerClick(0)}
@@ -215,7 +223,7 @@ export class QuizScene extends Scene {
         const mainSceneUI = new QuizSceneUI(this.game,this.assets,this.level);
         mainSceneUI.mountTo(root);
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, k=>{
-            switch (k.key) {
+            switch (k.button) {
                 case KEYBOARD_KEY.UP: {
                     mainSceneUI.onUpBtnClicked();
                     break;

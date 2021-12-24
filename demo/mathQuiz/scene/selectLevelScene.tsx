@@ -69,6 +69,7 @@ class SelectLevelSceneUI extends VEngineTsxComponent {
     }
 
     public async onAnswerSelected() {
+        if (this.currentButton===undefined) return;
         if (this.answerSelected) return;
         this.answerSelected = true;
         this.assets.selectedSound.play();
@@ -105,7 +106,7 @@ export class SelectLevelScene extends Scene {
         const selectLevelSceneUI = new SelectLevelSceneUI(this.game,this.assets);
         selectLevelSceneUI.mountTo(root);
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, k=>{
-            switch (k.key) {
+            switch (k.button) {
                 case KEYBOARD_KEY.UP: {
                     selectLevelSceneUI.onUpBtnClicked();
                     break;
