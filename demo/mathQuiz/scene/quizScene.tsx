@@ -182,6 +182,10 @@ class QuizSceneUI extends VEngineTsxComponent {
 
     @ReactiveMethod()
     public async onAnswerSelected() {
+        if (this.currentButton===undefined) {
+            this.assets.btn1Sound.play();
+            return;
+        }
         if (this.answerSelected) return;
         this.assets.selectedSound.play();
         this.answerSelected = true;

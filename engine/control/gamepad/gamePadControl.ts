@@ -144,7 +144,7 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
         this.game.getCurrentScene().gamepadEventHandler.trigger(eventName,e);
     }
 
-    private pressButton(buton:number,value:number,gamePadIndex:number,eventFromBuffer:Optional<GamePadEvent>):void {
+    private pressButton(button:number,value:number,gamePadIndex:number,eventFromBuffer:Optional<GamePadEvent>):void {
         if (eventFromBuffer===undefined) {
             const eventJustCreated:Optional<GamePadEvent> = GamePadEvent.fromPool();
             if (eventJustCreated===undefined) {
@@ -152,7 +152,7 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
                 return;
             }
 
-            eventJustCreated.button = buton;
+            eventJustCreated.button = button;
             eventJustCreated.gamePadIndex = gamePadIndex;
             eventJustCreated.value = value;
             this.press(eventJustCreated);

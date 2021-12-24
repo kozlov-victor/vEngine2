@@ -90,8 +90,8 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
                     this.button = self.reflectKey.map![e.button]
                 }
             }
-            if (isPress) this.reflectKey.control!.press(e);
-            else this.reflectKey.control!.release(e);
+            if (isPress) this.reflectKey.control!.press(clonedEvent);
+            else this.reflectKey.control!.release(clonedEvent);
         }
     }
 

@@ -5,7 +5,7 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 
 export const waitFor = (time:number):Promise<void>=> {
     return new Promise(resolve=>{
-        setTimeout(()=>resolve(),time/1000);
+        setTimeout(()=>resolve(),time);
     });
 }
 
