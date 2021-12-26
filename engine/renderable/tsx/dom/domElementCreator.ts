@@ -4,7 +4,7 @@ import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
 const ELEMENT_PROPERTIES = ['value','checked','selected','focus','disabled','readonly'];
 const SPECIAL_ATTRIBUTES = ['children','__id'];
-const svgTags = ['svg','g','rect','path','circle'];
+const svgTags = ['svg','g','rect','path','circle','line'];
 
 export class ElementFactory {
 

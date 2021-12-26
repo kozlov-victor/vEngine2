@@ -29,7 +29,6 @@ export class Widget extends VEngineTsxComponent {
         if (!items.splice) items = JSON.parse(items as any as string);
 
         this.items = items;
-        this.triggerRendering();
 
         this.listLoading = false;
     }
@@ -54,7 +53,7 @@ export class Widget extends VEngineTsxComponent {
                     <div id="frameLoadingInfo">{this.loadingInfo}</div>
                     <iframe
                         ref={(el)=>this.frameRef = el}
-                        onload={()=>this.onFrameLoaded()}
+                        onload={()=>this.selectedItem && this.onFrameLoaded()}
                         src={this.selectedItem?'./demo.html?name='+this.selectedItem:undefined}
                         frameBorder="0" id="frame"/>
                 </div>
