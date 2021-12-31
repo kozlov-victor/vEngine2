@@ -5,7 +5,7 @@ let id = 0;
 
 module.exports = function(content) {
     const ast = tsquery.ast(content,undefined,2); // tsx
-    const allTsxNodes = tsquery(ast, `JsxOpeningElement`);
+    const allTsxNodes = tsquery(ast, `JsxOpeningElement,JsxSelfClosingElement`);
     allTsxNodes.forEach(node=>{
         node.attributes.properties.push(
             // https://ts-ast-viewer.com/#code/G4QwTgBCELwQPAEwJbAgZxgbwMwF8A+eAehWAKA

@@ -46,12 +46,14 @@ export class VEngineTsxFactory<T> {
         if ((item as any).__VEngineTsxComponent) {
             if (VEngineTsxFactory.components[props.__id]) {
                 const instance = VEngineTsxFactory.components[props.__id];
+                (instance as any).props = props;
                 return instance.render();
             } else {
                 const instance = new (item as any)(props) as BaseTsxComponent;
-                const node = instance.render();
-                instance.onMounted();
                 VEngineTsxFactory.components[props.__id] = instance;
+                const node = instance.render();
+                node.parentComponent = instance;
+                instance.onMounted();
                 return node;
             }
 

@@ -37,7 +37,7 @@ const createDraggableElement = ():HTMLDivElement=>{
 
 const game:Game = (window as any).game;
 
-const NodeWidget = (props:{tagName:string}):VirtualNode=>{
+const NodeWidget = (props:{tagName:string,__id?:number}):VirtualNode=>{
     return (
         <div>{props.tagName}</div>
     );

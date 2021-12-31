@@ -9,6 +9,7 @@ export abstract class VEngineTsxComponent extends BaseTsxComponent {
 
     public rootNativeElement:IRealNode;
     private rootVirtualElement:VirtualNode;
+    private rendering:boolean = false;
 
     protected constructor(
         private tsxDOMRenderer:AbstractTsxDOMRenderer<any>
@@ -17,9 +18,12 @@ export abstract class VEngineTsxComponent extends BaseTsxComponent {
     }
 
     protected triggerRendering():void{
+        if (this.rendering) return;
+        this.rendering = true;
         if (this.rootNativeElement!==undefined) {
             this.rootVirtualElement = this.tsxDOMRenderer.render(this,this.rootNativeElement);
         }
+        this.rendering = false;
     }
 
     public mountTo(root:IRealNode):void {

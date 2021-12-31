@@ -53,7 +53,7 @@ export class Widget extends VEngineTsxComponent {
                     <div id="frameLoadingInfo">{this.loadingInfo}</div>
                     <iframe
                         ref={(el)=>this.frameRef = el}
-                        onload={()=>this.selectedItem && this.onFrameLoaded()}
+                        onload={()=>this.onFrameLoaded()}
                         src={this.selectedItem?'./demo.html?name='+this.selectedItem:undefined}
                         frameBorder="0" id="frame"/>
                 </div>

@@ -3,7 +3,32 @@ import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactor
 import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {BaseTsxComponent} from "@engine/renderable/tsx/genetic/baseTsxComponent";
 
+class Component1 extends BaseTsxComponent {
+
+    private cnt:number = 0;
+
+    constructor(private props:{name:string,__id?:number}) {
+        super();
+    }
+
+    private inc():void {
+        this.cnt++;
+        console.log(this);
+    }
+
+    override render(): VirtualNode {
+        return(
+            <div>
+                <div>
+                    <button onclick={()=>this.inc()}>inc</button>
+                </div>
+                component: {this.props.name} {this.cnt}
+            </div>
+        );
+    }
+}
 
 const Button = (props:{onclick:()=>void,children?:VirtualNode[],__id?:number})=>{
     return (
@@ -83,6 +108,8 @@ export class Widget extends VEngineTsxComponent {
                     <option value="2" selected={this.selected==='2'}>2</option>
                     <option value="3" selected={this.selected==='3'}>3</option>
                 </select>
+                <Component1 name={'name 1'}/>
+                <Component1 name={'name 2'}/>
             </>
 
         );
