@@ -176,5 +176,6 @@ declare namespace JSX {
         v_scrollView:               IWidgetContainerProps;
         v_verticalList:             IDirectionalListProps<any>;
         v_horizontalList:           IDirectionalListProps<any>;
+        v_linearLayout:             ITransformableProps & IPositionableProps;
     }
 }

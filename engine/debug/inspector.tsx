@@ -22,7 +22,6 @@ const createDraggableElement = ():HTMLDivElement=>{
         mouseDownPoint.x = e.screenX - parseInt(el.style.left);
         mouseDownPoint.y = e.screenY -  parseInt(el.style.top);
         isMouseDown = true;
-        console.log(e,mouseDownPoint);
     };
     document.body.addEventListener('mouseup',e=>{
         isMouseDown = false;

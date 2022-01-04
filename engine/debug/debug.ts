@@ -128,3 +128,13 @@ window.addEventListener('unhandledrejection', (e:PromiseRejectionEvent)=> {
     renderError({filename:'',runtimeInfo:extractPromiseError(e.reason)});
 });
 
+// let inspectorShowed = false;
+// window.addEventListener('keyup', (e:KeyboardEvent)=> {
+//     if (inspectorShowed) return;
+//     inspectorShowed = true;
+//     if (e.ctrlKey && e.key==='i') {
+//         const script = document.createElement('script');
+//         script.src = './out/inspector.js?r'+new Date().getTime();
+//         document.body.appendChild(script);
+//     }
+// });

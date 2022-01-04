@@ -25,6 +25,7 @@ import {ScrollView} from "@engine/renderable/impl/ui/scrollViews/scrollView";
 import {VerticalList} from "@engine/renderable/impl/ui/scrollViews/directional/verticalList";
 import {HorizontalList} from "@engine/renderable/impl/ui/scrollViews/directional/horizontalList";
 import {AnimatedTextField} from "@engine/renderable/impl/ui/textField/animated/animatedTextField";
+import {LinearLayout} from "@engine/renderable/impl/ui/layouts/linearLayout";
 
 export class VEngineElementCreator extends AbstractElementCreator<RenderableModel>{
 
@@ -111,6 +112,9 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 break;
             case 'v_horizontalList':
                 element = new HorizontalList(game);
+                break;
+            case 'v_linearLayout':
+                element = new LinearLayout(game);
                 break;
             case undefined: {
                 if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);
