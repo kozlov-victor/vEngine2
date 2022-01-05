@@ -39,12 +39,31 @@ class SceneUI extends VEngineTsxComponent {
                         )
                     }
                     <v_textField
+                        margin={[5]}
                         alignTextContentVertical={AlignTextContentVertical.CENTER}
                         alignTextContentHorizontal={AlignTextContentHorizontal.CENTER}
                         background={()=>this.assets.textBg}
                         size={{width:200,height:50}}
                         text={this.result}
                         font={this.assets.fnt}/>
+
+                    <v_horizontalLayout margin={[5]} size={{width:this.game.size.width,height:100}}>
+                        {
+                            [
+                                1,2,3,4,5,6,7,8,9,10,
+                            ]
+                                .map(it=>
+                                    <v_button
+                                        background={()=>this.assets.buttonBg}
+                                        backgroundActive={()=>this.assets.buttonBgActive}
+                                        size={{width:40,height:40}}
+                                        font={this.assets.fnt}
+                                        click={e=>this.onButtonClicked(it)}
+                                        text={it.toString()}/>
+                                )
+                        }
+                    </v_horizontalLayout>
+
                 </v_linearLayout>
             </>
         );

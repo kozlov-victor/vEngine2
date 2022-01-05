@@ -1,14 +1,7 @@
-import {MarkableGameObjectContainer} from "@engine/renderable/impl/ui/textField/_internal/markableGameObjectContainer";
-import {Game} from "@engine/core/game";
+import {AbstractLayout} from "@engine/renderable/impl/ui/layouts/abstracts/abstractLayout";
 
-export class LinearLayout extends MarkableGameObjectContainer {
+export class LinearLayout extends AbstractLayout {
 
-    constructor(game:Game) {
-        super(game);
-        this._parentChildDelegate.afterChildAppended =
-            this._parentChildDelegate.afterChildRemoved =
-                _ => this.markAsDirty();
-    }
 
     protected override onCleared() {
         super.onCleared();
