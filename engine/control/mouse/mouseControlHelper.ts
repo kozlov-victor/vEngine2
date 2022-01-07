@@ -121,6 +121,7 @@ export class MouseControlHelper {
             eventName,
             isMouseDown: mousePoint.isMouseDown,
             button: (e as MouseEvent).button,
+            isPropagated:true,
         };
         currentTarget.mouseEventHandler.trigger(eventName,mouseEvent);
         return mouseEvent;

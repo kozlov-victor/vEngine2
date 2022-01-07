@@ -36,6 +36,7 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
 
     constructor(game:Game,font:Font) {
         super(game,font);
+        this.focusable = true;
         this.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
     }
 
@@ -47,6 +48,14 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
             this.scrollHandler.on('scroll', _=>{
                 this.cursor.redrawCursorView();
             });
+        }
+    }
+
+    override focus() {
+        super.focus();
+        if (!this.getText()) { // trigger cursor position recalculation
+            this.setText(' ');
+            this.setTimeout(()=>this.setText(''),1);
         }
     }
 

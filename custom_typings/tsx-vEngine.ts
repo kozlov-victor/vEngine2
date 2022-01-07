@@ -37,6 +37,8 @@ interface IPositionableProps {
 interface ITransformableProps extends IGenericProps<unknown>{
     size?:{width:number,height:number};
     scale?:{x:number,y:number};
+    anchorPoint?:IPoint;
+    transformPoint?:IPoint;
 }
 
 interface IShapeProps extends ITransformableProps{

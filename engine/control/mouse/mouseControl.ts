@@ -230,6 +230,7 @@ export class MouseControl implements IControl {
                     const propagationEvent:Optional<IObjectMouseEvent> =
                         this._helper.captureObject(e,mouseEvent,mousePoint,parent, obj, constrainObjects);
                     if (propagationEvent!==undefined) {
+                        if (!propagationEvent.isPropagated) break;
                         if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,parent);
                     }
                     parent = parent.parent;

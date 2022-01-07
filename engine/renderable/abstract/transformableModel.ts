@@ -159,6 +159,8 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         if (props.pos!==undefined) this.pos.set(props.pos);
         if (props.size!==undefined) this.size.set(props.size);
         if (props.scale!==undefined) this.scale.set(props.scale);
+        if (props.anchorPoint!==undefined) this.anchorPoint.set(props.anchorPoint);
+        if (props.transformPoint!==undefined) this.transformPoint.set(props.transformPoint);
     }
 
     protected setClonedProperties(cloned:TransformableModel):void{

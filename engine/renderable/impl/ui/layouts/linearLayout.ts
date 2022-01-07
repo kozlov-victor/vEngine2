@@ -1,17 +1,18 @@
 import {AbstractLayout} from "@engine/renderable/impl/ui/layouts/abstracts/abstractLayout";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 export class LinearLayout extends AbstractLayout {
 
-
     protected override onCleared() {
         super.onCleared();
-        let x = 0;
-        let y = 0;
+        const clientRect = this.getClientRect();
+        let x = clientRect.x;
+        let y = clientRect.y;
         let maxRowHeight = 0;
-        this.children.forEach(c=>{
-            const canBePlacedToThisRow = x+c.size.width<this.size.width;
+        this.iterateChildren((c:RenderableModel)=>{
+            const canBePlacedToThisRow = x+c.size.width<=clientRect.x+clientRect.width;
             if (!canBePlacedToThisRow) {
-                x = 0;
+                x = clientRect.x;
                 y+=maxRowHeight;
                 maxRowHeight = c.size.height;
             }

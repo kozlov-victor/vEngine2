@@ -70,6 +70,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
     private backgroundDisabled: RenderableModel = new DefaultBackgroundObject(this.game);
 
     protected state:ContainerState = ContainerState.NORMAL;
+    protected focusable:boolean = false;
 
     private clientRect:Rect = new Rect();
     private hovered:boolean = false;
@@ -262,6 +263,9 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
             this.clicked = true;
             this.setState(ContainerState.ACTIVE);
             this.focus();
+            if (this.focusable) {
+                e.isPropagated = false; // ie if editTextFiend is in container, only editTextFiend can be focused
+            }
         });
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, e=>{
             if (this.state===ContainerState.DISABLED) return;

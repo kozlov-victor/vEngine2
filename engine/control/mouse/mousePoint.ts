@@ -27,6 +27,7 @@ export interface IObjectMouseEvent extends ISceneMouseEvent {
     objectY:number;
     currentTarget:RenderableModel;
     initialTarget:RenderableModel;
+    isPropagated:boolean;
 }
 
 export class MousePoint extends ReleaseableEntity{

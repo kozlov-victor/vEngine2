@@ -42,7 +42,7 @@ export class Cursor {
     constructor(private game:Game,private parent:EditTextField,private font:Font) {
         this.cursorView.visible = false;
         this.cursorView.lineWidth = 0;
-        this.listenToMouse();
+        this.listenToKeyboard();
     }
 
     public start(rowSetContainer:RenderableModel):void {
@@ -61,7 +61,7 @@ export class Cursor {
         this.parent.appendChildBefore(this.rowSetContainer,this.cacheSurface);
     }
 
-    private listenToMouse():void {
+    private listenToKeyboard():void {
 
         const listener = (e:IKeyBoardEvent)=>{
             if (!this.parent.isFocused()) return;
