@@ -20,6 +20,7 @@ class InputOutputResolver {
         if (project==='build_tools') {
             isToolsBuild = true;
             entry['xmlParser'] = './engine/misc/xml/xmlParser.ts';
+            entry['angelCodeParser'] = './engine/misc/xml/angelCodeParser.ts';
             entry['engineTransformer'] = './node_tools/transformers/src/engineTransformer.ts';
             output.path = path.resolve('./node_tools/build');
         } else {

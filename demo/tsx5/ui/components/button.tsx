@@ -13,7 +13,7 @@ const onReleased = (target:RenderableModel)=>{
     target.anchorPoint.setXY(0);
 };
 
-export const Button = (props:{pos:{x:number,y:number},text:string,textColor:IColor,onClick:(text:string)=>void, r:ResourceHolder})=>{
+export const Button = (props:{__id?:number,pos:{x:number,y:number},text:string,textColor:IColor,onClick:(text:string)=>void, r:ResourceHolder})=>{
     return (
         <>
             <v_rectangle

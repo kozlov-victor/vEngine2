@@ -268,22 +268,23 @@ export namespace Mat4 {
         m[5] = c;
     };
 
+
     export const makeRotationReset = (out:Mat16Holder):void=>{
-        const matrix:MAT16 = out.mat16 as MAT16;
-        const d:n = Math.sqrt(matrix[0] * matrix[0] + matrix[1] * matrix[1] + matrix[2] * matrix[2]);
-        matrix[0] = d;
-        matrix[4] = 0;
-        matrix[8] = 0;
-        matrix[1] = 0;
-        matrix[5] = d;
-        matrix[9] = 0;
-        matrix[2] = 0;
-        matrix[6] = 0;
-        matrix[10] = d;
-        matrix[3] = 0;
-        matrix[7] = 0;
-        matrix[11] = 0;
-        matrix[15] = 1;
+        const m:MAT16 = out.mat16 as MAT16;
+        const d:n = Math.sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
+        m[0] = d;
+        m[1] = 0;
+        m[2] = 0;
+        m[3] = 0;
+        m[4] = 0;
+        m[5] = d;
+        m[6] = 0;
+        m[7] = 0;
+        m[8] = 0;
+        m[9] = 0;
+        m[10] = d;
+        m[11] = 0;
+        m[15] = 1;
     };
 
     export const makeScale = (out:Mat16Holder,sx:n, sy:n, sz:n):void=> {

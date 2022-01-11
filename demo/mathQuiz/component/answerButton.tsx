@@ -10,6 +10,7 @@ interface IProps {
     pos: {x:number,y:number};
     lightUpState:'blink'|'correct'|'incorrect'|'active'|undefined;
     text:string,click:()=>void;
+    __id?:number;
 }
 
 export const AnswerButton = (props:IProps)=>{

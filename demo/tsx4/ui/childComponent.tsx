@@ -1,7 +1,7 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 
 
-export const ChildComponent = ({radius}:{radius:number})=>{
+export const ChildComponent = ({radius}:{radius:number,__id?:number})=>{
     return (
         <>
             <v_rectangle

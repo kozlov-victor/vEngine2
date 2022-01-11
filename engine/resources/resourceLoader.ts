@@ -18,6 +18,7 @@ import {Image} from "@engine/renderable/impl/general/image";
 import type {XmlParser} from "@engine/misc/xml/xmlParser";
 import {createFontFromAtlas} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromAtlas";
 import {createFontFromCssDescription} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
+import {IParser} from "@engine/misc/xml/iParser";
 
 namespace ResourceCache {
 
@@ -160,6 +161,22 @@ export class ResourceLoader {
             texturePages.push({texture:texturePage,id:pageId});
         }
         return await createFontFromAtlas(this.game,texturePages,doc);
+    }
+
+    public async loadFontFromAtlasUrl(baseUrl:string|IURLRequest,docFileName:string,docParser:{new(str:string):IParser}, progress?:(n:number)=>void):Promise<Font>{
+        let docUrl:string|IURLRequest
+        if (isString(baseUrl)) {
+            docUrl = ResourceLoader.mergeUrl(docFileName,baseUrl);
+        } else {
+            docUrl = {
+                ...baseUrl,
+                url:ResourceLoader.mergeUrl(docFileName,baseUrl.url)
+            }
+        }
+        const plainText = await this.loadText(docUrl,n=>progress && progress(n/2));
+        const parser = new docParser(plainText);
+        const doc = parser.getTree() as XmlNode;
+        return this.loadFontFromAtlas(baseUrl,doc,n=>progress && progress(n/2));
     }
 
     public addNextTask(task:ITask["fn"]):void {

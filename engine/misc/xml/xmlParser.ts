@@ -1,5 +1,6 @@
 import {IXmlTextNode, XmlNode} from "@engine/misc/xml/xmlELements";
 import {DebugError} from "@engine/debug/debugError";
+import {IParser} from "@engine/misc/xml/iParser";
 
 interface IParseError {
     key: string;
@@ -8,7 +9,7 @@ interface IParseError {
     code?:string;
 }
 
-export class XmlParser {
+export class XmlParser implements IParser{
 
     constructor(text:string) {
         this.text = text;

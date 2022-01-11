@@ -1,6 +1,6 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 
-export const ChildComponent = (props:{key:number,ind:number,radius:number,onClick:(i:number)=>void})=>{
+export const ChildComponent = (props:{key:number,ind:number,radius:number,onClick:(i:number)=>void,__id?:number})=>{
     const onCircleClick = (e:MouseEvent):void=>{
         props.onClick(props.ind);
     };

@@ -19,7 +19,7 @@ interface IFilter {
 }
 
 interface IGenericProps<T> {
-    __id?: number;
+    __id?: number|never;
     id?: string;
     key?:number|string;
     ref?:(el:T)=>void;

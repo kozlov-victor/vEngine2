@@ -5,6 +5,7 @@ import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
 import {XmlDocument} from "@engine/misc/xml/xmlELements";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import ICssFontParameters = FontTypes.ICssFontParameters;
+import {IParser} from "@engine/misc/xml/iParser";
 
 
 export const Resource = {
@@ -53,6 +54,12 @@ export const Resource = {
         };
     },
     FontFromAtlas: (baseUrl:string|IURLRequest,doc:XmlDocument)=>{
+        return (target: Scene|ResourceAutoHolder, propertyKey: string):void => {
+            // stub for precompiler only
+            throw new DebugError(`something wrong with precompiler for Font decorator`);
+        };
+    },
+    FontFromAtlasUrl: (baseUrl:string|IURLRequest,fileName:string,docParser:{new(s:string):IParser})=>{
         return (target: Scene|ResourceAutoHolder, propertyKey: string):void => {
             // stub for precompiler only
             throw new DebugError(`something wrong with precompiler for Font decorator`);

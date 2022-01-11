@@ -13,7 +13,7 @@ const stringAsClearedArray = (content:string):string[]=>{
 
 
 // @ts-ignore
-const engineTransformer = <T extends ts.Node>(context: ts.TransformationContext) => {
+export const engineTransformer = <T extends ts.Node>(context: ts.TransformationContext) => {
     // @ts-ignore
     return (rootNode: ts.SourceFile) => {
         // @ts-ignore

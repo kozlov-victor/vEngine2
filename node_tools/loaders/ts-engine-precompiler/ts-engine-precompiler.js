@@ -4,7 +4,9 @@ const tstemplate = require("@phenomnomnominal/tstemplate").tstemplate;
 const ts = require("typescript");
 
 const decoratorNamesToProcess = [
-    'Texture', 'Image', 'Sound', 'CubeTexture', 'Text', 'JSON', 'FontFromCssDescription', 'FontFromAtlas'
+    'Texture', 'Image', 'Sound',
+    'CubeTexture', 'Text', 'JSON',
+    'FontFromCssDescription', 'FontFromAtlas','FontFromAtlasUrl',
 ];
 
 const createStatementsForPreloadingMethod = (template,params)=>{

@@ -2,10 +2,10 @@ import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
 import {Scene} from "@engine/scene/scene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font/font";
-import * as fntXML from "xml/angelcode-loader!./resource/main.fnt";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Sound} from "@engine/media/sound";
+import {AngelCodeParser} from "@engine/misc/xml/angelCodeParser";
 
 
 export class Assets extends ResourceAutoHolder{
@@ -17,7 +17,7 @@ export class Assets extends ResourceAutoHolder{
     @Resource.Sound('./mathQuiz/asset/sound/start.wav') public startSound:Sound;
     @Resource.Sound('./mathQuiz/asset/sound/success.wav') public successSound:Sound;
 
-    @Resource.FontFromAtlas('./mathQuiz/asset/resource/',fntXML)
+    @Resource.FontFromAtlasUrl('./mathQuiz/asset/resource/','main.fnt',AngelCodeParser)
     public font:Font;
 
     public buttonBg:Rectangle = (()=>{
