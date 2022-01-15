@@ -29,7 +29,7 @@ export class AbstractKernelAccumulativeFilter extends AbstractAccumulativeFilter
         const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         // https://webglfundamentals.org/webgl/lessons/ru/webgl-image-processing-continued.html
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             float PHI = 1.61803398874989484820459;  // Φ = Golden Ratio
             float rand(vec2 xy,float seed) {
                 return fract(tan(distance(xy*PHI, xy)*seed)*xy.x);

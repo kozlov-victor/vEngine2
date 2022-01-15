@@ -22,7 +22,7 @@ export class PalletOffsetFilter extends AbstractGlFilter{
         this.palletTextureWidth = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'palletTextureWidth');
         this.palletOffset = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'palletOffset');
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main(){
                 vec4 col = texture2D(texture, v_texCoord);
                 float palletPoint = mod(col.r * palletTextureWidth + palletOffset,palletTextureWidth);

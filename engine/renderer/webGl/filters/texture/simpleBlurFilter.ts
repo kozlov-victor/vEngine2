@@ -19,7 +19,7 @@ export class SimpleBlurFilter extends AbstractGlFilter {
         this.blurSize = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'blurSize');
 
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
 
             void main(){
                 vec4 sum = vec4(0.0);

@@ -17,7 +17,7 @@ export class TriangleBlurFilter extends AbstractGlFilter {
         this.delta = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'delta');
 
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main(){
                 vec2 texCoord = v_texCoord;
                 vec4 color=vec4(0.0);

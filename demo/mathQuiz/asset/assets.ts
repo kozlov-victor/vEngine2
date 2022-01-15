@@ -5,7 +5,7 @@ import {Font} from "@engine/renderable/impl/general/font/font";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Sound} from "@engine/media/sound";
-import {AngelCodeParser} from "@engine/misc/xml/angelCodeParser";
+import {AngelCodeParser} from "@engine/misc/parsers/angelCode/angelCodeParser";
 
 
 export class Assets extends ResourceAutoHolder{

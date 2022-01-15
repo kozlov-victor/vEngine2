@@ -28,7 +28,7 @@ export class CrtScreenFilter extends AbstractGlFilter {
         this.brightness = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'brightness');
         this.vignetteRoundness = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'vignetteRoundness');
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
 
             #define PI 3.1415926538
 

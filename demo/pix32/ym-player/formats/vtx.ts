@@ -27,7 +27,7 @@ export class Vtx extends AbstractChipTrack {
         // Bits 0-2 determine stereo mode:
         // 0 – MONO, 1 – ABC, 2 – ACB, 3 – BAC,
         // 4 – BCA, 5 – CAB, 6 – CBA (dec)
-        const stereoMode:number = this.buffer.readByte();
+        const stereoMode:number = this.buffer.readUint8();
         if (stereoMode>6) throw new Error(`bad stereo mode: ${stereoMode}`);
 
         //  Loop VBL number (from zero =
@@ -40,7 +40,7 @@ export class Vtx extends AbstractChipTrack {
         if (this.masterClock<100000 || this.masterClock>100000000) throw new Error(`wrong master clock frequency (${this.masterClock})`);
 
         // Player frequency (VBL per sec)
-        this.frameFreq = this.buffer.readByte();
+        this.frameFreq = this.buffer.readUint8();
         console.log(this.frameFreq);
 
         // Year of composition creating
@@ -56,7 +56,7 @@ export class Vtx extends AbstractChipTrack {
         this.comment2 = this.buffer.readNTString();
 
 
-        const lha:LhaReader = new LhaReader(this.buffer.getArray(), 'lh5');
+        const lha:LhaReader = new LhaReader(this.buffer.getInt8Array(), 'lh5');
         if (unpackedSize % 14>0) throw new Error(`wrong unpacked length: ${unpackedSize},unpacked data must be mod of 14`);
         const unpackedData:Uint8Array = lha.extract(this.buffer.getPointer(), unpackedSize);
 

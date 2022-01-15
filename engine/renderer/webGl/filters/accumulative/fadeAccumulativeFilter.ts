@@ -12,7 +12,7 @@ export class FadeAccumulativeFilter extends AbstractAccumulativeFilter {
         const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.u_fadeValue = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT, 'u_fadeValue');
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main(){
                 vec4 colorOrig = texture2D(texture, v_texCoord);
                 gl_FragColor = colorOrig;

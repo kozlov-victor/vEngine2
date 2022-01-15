@@ -6,7 +6,7 @@ export class EvenOddCompositionFilter extends AbstractCompositionFilter {
     constructor(game:Game) {
         super(game);
         //language=GLSL
-        this.simpleRectPainter.gen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        this.simpleRectPainter.gen.setFragmentMainFn(`
             void main(){
                 vec4 destColor = texture2D(destTexture, v_texCoord);
                 vec4 sourceColor = texture2D(texture, v_texCoord);

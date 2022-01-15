@@ -54,7 +54,7 @@ export class ShapePainter extends AbstractPainter {
     constructor(gl:WebGLRenderingContext){
         super(gl);
         const gen:ShaderGenerator = new ShaderGenerator();
-        gen.setVertexMainFn(MACRO_GL_COMPRESS`
+        gen.setVertexMainFn(`
             void main(){
                 v_position = a_position;
                 gl_Position = u_vertexMatrix * a_position;

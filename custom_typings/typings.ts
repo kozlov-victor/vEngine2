@@ -15,19 +15,19 @@ declare interface IElementDescription {
 }
 
 declare module "*.xml" {
-    import {XmlDocument} from "@engine/misc/xml/xmlELements";
+    import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
     const value:XmlDocument;
     export = value;
 }
 
 declare module "xml/xml-loader!*" {
-    import {XmlDocument} from "@engine/misc/xml/xmlELements";
+    import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
     const value:XmlDocument;
     export = value;
 }
 
 declare module "xml/angelcode-loader!*" {
-    import {XmlDocument} from "@engine/misc/xml/xmlELements";
+    import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
     const value:XmlDocument;
     export = value;
 }
@@ -56,5 +56,3 @@ interface INode {
     children:INode[];
     type: 'virtualNode'|'virtualFragment';
 }
-
-declare const MACRO_GL_COMPRESS:(arg:TemplateStringsArray)=>string;

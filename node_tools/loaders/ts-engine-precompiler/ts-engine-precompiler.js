@@ -7,6 +7,7 @@ const decoratorNamesToProcess = [
     'Texture', 'Image', 'Sound',
     'CubeTexture', 'Text', 'JSON',
     'FontFromCssDescription', 'FontFromAtlas','FontFromAtlasUrl',
+    'Binary',
 ];
 
 const createStatementsForPreloadingMethod = (template,params)=>{

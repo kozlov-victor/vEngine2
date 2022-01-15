@@ -13,7 +13,7 @@ export class BlackWhiteFilter extends AbstractGlFilter{
         const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.u_mixFactor = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_mixFactor');
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main(){
                 vec4 col = texture2D(texture, v_texCoord);
                 float avg = (col.r+col.g+col.b)/3.0;

@@ -3,7 +3,6 @@ const stringAsFilteredArray = require('../../common/common').stringAsClearedArra
 
 
 module.exports = (content)=> {
-    // @ts-ignore
     const debug = !!(this.query||{}).debug;
     let arr = stringAsFilteredArray(content);
 

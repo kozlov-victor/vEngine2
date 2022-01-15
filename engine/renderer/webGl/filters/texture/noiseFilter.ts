@@ -18,7 +18,7 @@ export class NoiseFilter extends AbstractGlFilter {
         this.u_noise_intensity = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_noise_intensity');
 
         //language=GLSL
-        programGen.appendFragmentCodeBlock(MACRO_GL_COMPRESS`
+        programGen.appendFragmentCodeBlock(`
             float PHI = 1.61803398874989484820459;  // Φ = Golden Ratio
             float rand(vec2 xy,float seed) {
                 return fract(tan(distance(xy*PHI, xy)*seed)*xy.x);
@@ -31,7 +31,7 @@ export class NoiseFilter extends AbstractGlFilter {
 
         `);
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main(){
                 gl_FragColor.rgb = noise();
                 vec4 colorOrig = texture2D(texture, v_texCoord);

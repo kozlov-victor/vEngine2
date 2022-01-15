@@ -75,7 +75,7 @@ export namespace MathEx {
         return ~~random(min,max);
     };
 
-    export const randomByte = (min: byte, max: byte): byte => {
+    export const randomByte = (min: byte = 0, max: byte= 255): byte => {
         return randomInt(min,max) as byte;
     };
 }

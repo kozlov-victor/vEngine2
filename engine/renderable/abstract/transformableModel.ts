@@ -54,6 +54,12 @@ class AnglePoint3d extends ObservableEntity{
 
     }
 
+    public setXYZ(x:number,y:number,z:number):void {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
     public _setZSilently(val:number):void{
         this._z = val;
     }

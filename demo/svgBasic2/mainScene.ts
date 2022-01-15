@@ -20,7 +20,7 @@ import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {SvgImage} from "../svgBasic/svgImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
-import {XmlDocument} from "@engine/misc/xml/xmlELements";
+import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
 
 const images:XmlDocument[] = [
     rabbit, dog,

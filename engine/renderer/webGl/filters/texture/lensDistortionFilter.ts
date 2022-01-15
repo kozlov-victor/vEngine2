@@ -28,7 +28,7 @@ export class LensDistortionFilter extends AbstractGlFilter {
         this.u_length_size = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_length_size');
 
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
 
             void main() {
 

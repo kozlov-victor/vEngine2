@@ -21,7 +21,7 @@ export class Barrel2DistortionFilter extends AbstractGlFilter {
         this.u_distortion = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_distortion');
 
         //language=GLSL
-        programGen.appendFragmentCodeBlock(MACRO_GL_COMPRESS`
+        programGen.appendFragmentCodeBlock(`
             // https://prideout.net/barrel-distortion
             // Given a vec2 in [-1,+1], generate a texture coord in [0,+1]
             vec2 distort(vec2 p)
@@ -36,7 +36,7 @@ export class Barrel2DistortionFilter extends AbstractGlFilter {
 
         `);
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main(){
                 vec2 uv = vec2(gl_FragCoord.xy / vec2(rt_w,rt_h));
                 vec2 distorted = distort(uv*2.0 - 1.0);

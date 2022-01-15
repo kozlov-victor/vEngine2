@@ -23,7 +23,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
 
     constructor(game:Game, private params?:IDraggableBehaviourParameters){
         super(game,{});
-        if (params!==undefined) this.updateConstrains(params);
+        if (params!==undefined) this.updateConstrains(params); // is needed
     }
 
     private constrainX:boolean;
@@ -53,7 +53,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         this.maxX = params?.maxX;
         this.minY = params?.minY;
         this.maxY = params?.maxY;
-        this.applyNewPositionAndConstrains(this._gameObject.pos.x,this._gameObject.pos.y);
+        if (this._gameObject) this.applyNewPositionAndConstrains(this._gameObject.pos.x,this._gameObject.pos.y);
     }
 
     public override manage(gameObject:RenderableModel):void {

@@ -87,7 +87,7 @@ export class LhaFile {
         if (pos !== this.pos)
             this.raf.setPointer(pos);
 
-        const n: number = this.raf.readBytesToArray(b, off, len);
+        const n: number = this.raf.readUints8ToArray(b, off, len);
         if (n > 0) this.pos = pos + n;
         return (n);
     }
@@ -98,7 +98,7 @@ export class LhaFile {
     public read_2(pos: number): number {
         if (pos !== this.pos) this.raf.setPointer(pos);
 
-        const n: number = this.raf.readByte();
+        const n: number = this.raf.readUint8();
         if (n > 0) this.pos = pos + 1;
 
         return (n);
@@ -136,12 +136,14 @@ export class LhaFile {
         const raf = this.raf;
         const hr = new class extends LhaEntryReader {
             protected _read(b: number[]): number {
-                return (raf.readBytesToArray_2(b));
+                return (raf.readUints8ToArray_2(b));
             }
         }(this.encoding);
 
         this.size = 0;
+        // eslint-disable-next-line no-constant-condition
         while (true) {
+            // eslint-disable-next-line @typescript-eslint/ban-types
             const e: LhaEntry | null = hr.readHeader();
 
             if (e === null)

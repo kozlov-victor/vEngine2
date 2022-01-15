@@ -19,9 +19,8 @@ class InputOutputResolver {
 
         if (project==='build_tools') {
             isToolsBuild = true;
-            entry['xmlParser'] = './engine/misc/xml/xmlParser.ts';
-            entry['angelCodeParser'] = './engine/misc/xml/angelCodeParser.ts';
-            entry['engineTransformer'] = './node_tools/transformers/src/engineTransformer.ts';
+            entry['xmlParser'] = './engine/misc/parsers/xml/xmlParser.ts';
+            entry['angelCodeParser'] = './engine/misc/parsers/angelCode/angelCodeParser.ts';
             output.path = path.resolve('./node_tools/build');
         } else {
             if (!project) {
@@ -196,24 +195,14 @@ module.exports = async (env={})=>{
                     test: /\.tsx?$/,
                     use: [
                         {
-                            loader: "ts-loader",options: {
-                                getCustomTransformers: program => {
-                                    return {
-                                        before:  (()=>{
-                                            if (isToolsBuild) return undefined;
-                                            const engineTransformer = require('./node_tools/build/engineTransformer').engineTransformer;
-                                            return [engineTransformer];
-                                        })()
-                                    }
-                                },
-                            },
+                            loader: "ts-loader",options: {},
                         },
                     ]
                 },
             ]
         },
         resolve: {
-            extensions: ['.ts','.tsx'],
+            extensions: ['.ts','.tsx','.js'],
             modules: [
                 path.resolve(__dirname, 'node_modules'),
             ],

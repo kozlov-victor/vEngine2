@@ -2,7 +2,7 @@ import {BaseScene} from "./baseScene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IntroScene} from "./introScene";
 import {AssetsDocumentHolder} from "../data/assetsDocumentHolder";
-import {XmlNode} from "@engine/misc/xml/xmlELements";
+import {XmlNode} from "@engine/misc/parsers/xml/xmlELements";
 
 export class PreIntroScene extends BaseScene {
 

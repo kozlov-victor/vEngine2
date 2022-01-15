@@ -2,10 +2,10 @@ import {Scene} from "@engine/scene/scene";
 import {IURLRequest} from "@engine/resources/urlLoader";
 import {DebugError} from "@engine/debug/debugError";
 import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
-import {XmlDocument} from "@engine/misc/xml/xmlELements";
+import {IXmlNode, XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import ICssFontParameters = FontTypes.ICssFontParameters;
-import {IParser} from "@engine/misc/xml/iParser";
+import {IParser} from "@engine/misc/parsers/iParser";
 
 
 export const Resource = {
@@ -39,6 +39,12 @@ export const Resource = {
             throw new DebugError(`something wrong with precompiler for Text decorator`);
         };
     },
+    Binary: (src:string|IURLRequest)=> {
+        return (target: Scene|ResourceAutoHolder, fieldName: string):void => {
+            // stub for precompiler only
+            throw new DebugError(`something wrong with precompiler for Text decorator`);
+        };
+    },
     CubeTexture:  (leftSide: string|IURLRequest, rightSide:string|IURLRequest,
                    topSide: string|IURLRequest, bottomSide:string|IURLRequest,
                    frontSide: string|IURLRequest, backSide:string|IURLRequest)=>{
@@ -59,7 +65,7 @@ export const Resource = {
             throw new DebugError(`something wrong with precompiler for Font decorator`);
         };
     },
-    FontFromAtlasUrl: (baseUrl:string|IURLRequest,fileName:string,docParser:{new(s:string):IParser})=>{
+    FontFromAtlasUrl: (baseUrl:string|IURLRequest,fileName:string,docParser:{new(s:string):IParser<IXmlNode>})=>{
         return (target: Scene|ResourceAutoHolder, propertyKey: string):void => {
             // stub for precompiler only
             throw new DebugError(`something wrong with precompiler for Font decorator`);

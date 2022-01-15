@@ -23,13 +23,13 @@ export class SimpleColoredRectPainter extends AbstractPainter {
         this.u_alpha = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
         this.u_color = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_color');
         //language=GLSL
-        gen.setVertexMainFn(MACRO_GL_COMPRESS`
+        gen.setVertexMainFn(`
             void main(){
                 gl_Position = u_vertexMatrix * a_position;
             }
         `);
         //language=GLSL
-        gen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        gen.setFragmentMainFn(`
             void main(){
                 vec4 color = vec4(
                     u_color.r*u_color.a,

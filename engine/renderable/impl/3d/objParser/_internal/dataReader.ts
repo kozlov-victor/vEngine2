@@ -188,7 +188,6 @@ export class DataObjReader extends AbstractDataReader {
             for (let i:number=2;i<triplets.length-1;i++) {
                 result.push(this.getFace([triplets[0],triplets[i],triplets[i+1]]));
             }
-            //throw new DebugError(`unsupported face format ${triplets.join(' ')}`);
         }
 
         return result;
@@ -253,12 +252,10 @@ export class DataObjReader extends AbstractDataReader {
                     // already processed
                 // eslint-disable-next-line no-fallthrough
                 case 's':
-                    // not supported
-                // eslint-disable-next-line no-fallthrough
-                case '#':
-                    // comment
+                    // smooth flag, not supported
                     break;
                 default:
+                    if (commandName.trim().startsWith('#')) break; // skip comment line
                     console.warn(`unknown command: ${commandName} (line:${line})`);
             }
         });

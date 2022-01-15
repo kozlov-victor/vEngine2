@@ -20,7 +20,7 @@ export class VignetteFilter extends AbstractGlFilter{
         this.size = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'size');
         this.amount = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'amount');
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main() {
                 vec4 color = texture2D(texture, v_texCoord);
 

@@ -37,10 +37,4 @@
     "exclude": [
         "node_modules"
     ],
-    "awesomeTypescriptLoaderOptions": {
-        "transpileOnly": false,
-        "useCache": true,
-        "cacheDirectory": "./node_modules/.cache/awesome-typescript-loader",
-        "useTranspileModule": true
-    }
 }

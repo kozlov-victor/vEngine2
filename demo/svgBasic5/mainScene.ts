@@ -3,7 +3,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {SvgImage} from "../svgBasic/svgImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {XmlParser} from "@engine/misc/xml/xmlParser";
+import {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 
 // https://www.javatpoint.com/svg-tutorial
 const imageUrls:string[] = [

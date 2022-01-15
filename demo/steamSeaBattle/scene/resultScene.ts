@@ -4,7 +4,7 @@ import {NixieDisplay} from "./object/nixieDisplay";
 import {Timer} from "@engine/misc/timer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IntroScene} from "./introScene";
-import {XmlNode} from "@engine/misc/xml/xmlELements";
+import {XmlNode} from "@engine/misc/parsers/xml/xmlELements";
 
 export class ResultScene extends BaseScene {
 

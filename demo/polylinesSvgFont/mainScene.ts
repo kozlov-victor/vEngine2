@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {XmlParser} from "@engine/misc/xml/xmlParser";
+import {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 import {Color} from "@engine/renderer/common/color";
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {FontContextSvgFactory} from "./fontContextSvgFActory";

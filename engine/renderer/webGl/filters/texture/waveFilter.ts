@@ -17,7 +17,7 @@ export class WaveFilter extends AbstractGlFilter {
 
         const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
                     const float PI_MULT_2 = 2.0*3.14;
                     void main(){
                         float numOfPointsPassed = v_texCoord.y*v_texCoord.x + v_texCoord.x;

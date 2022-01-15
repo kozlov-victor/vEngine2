@@ -14,7 +14,7 @@ export class ColorizeFilter extends AbstractGlFilter{
         const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.uPixelColor = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'uPixelColor');
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main(){
                 vec4 col = texture2D(texture, v_texCoord);
                 vec3 r = vec3(col) * (1.0-uPixelColor.a) + vec3(uPixelColor) * uPixelColor.a;

@@ -8,7 +8,7 @@ export class SimpleAccumulativeFilter extends AbstractAccumulativeFilter {
         super(game);
         const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main(){
                 gl_FragColor = texture2D(texture, v_texCoord);
             }`

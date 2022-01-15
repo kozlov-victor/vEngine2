@@ -32,7 +32,7 @@ export class SimpleRectPainter extends AbstractPainter {
         gen.addVarying(GL_TYPE.FLOAT_VEC2,'v_texCoord');
 
         //language=GLSL
-        gen.setVertexMainFn(MACRO_GL_COMPRESS`
+        gen.setVertexMainFn(`
             void main(){
                 gl_Position = u_vertexMatrix * a_position;
                 v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
@@ -40,7 +40,7 @@ export class SimpleRectPainter extends AbstractPainter {
         `);
         gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');
         //language=GLSL
-        gen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        gen.setFragmentMainFn(`
             void main(){
                 gl_FragColor = texture2D(texture, v_texCoord);
             }

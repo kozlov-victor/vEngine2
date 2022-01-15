@@ -22,7 +22,7 @@ export class LowResolutionFilter extends AbstractGlFilter {
         this.u_resolution = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_resolution');
 
         //language=GLSL
-        programGen.appendFragmentCodeBlock(MACRO_GL_COMPRESS`
+        programGen.appendFragmentCodeBlock(`
             vec4 lowResolution(vec2 uv) {
                 // New resolution of (nx / ny)
                 float nx = rt_w * u_resolution;

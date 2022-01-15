@@ -25,7 +25,7 @@ export class OffsetMapFilter extends AbstractGlFilter{
         this.pixelWidth = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixelWidth');
         this.pixelHeight = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'pixelHeight');
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main(){
                 float offsetPointX = texture2D(offsetTexture, v_texCoord).r - texture2D(offsetTexture, v_texCoord - vec2(v_texCoord.x - pixelWidth,v_texCoord.y)).r/2.;
                 float offsetPointY = texture2D(offsetTexture, v_texCoord).r - texture2D(offsetTexture, v_texCoord - vec2(v_texCoord.x,v_texCoord.y - pixelHeight)).r/2.;

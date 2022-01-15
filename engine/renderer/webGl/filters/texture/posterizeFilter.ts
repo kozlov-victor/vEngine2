@@ -18,7 +18,7 @@ export class PosterizeFilter extends AbstractGlFilter {
         this.gamma = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'gamma');
         this.numColors = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'numColors');
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
               void main(){
                   vec4 tex = texture2D(texture, v_texCoord.xy);
                   vec3 c = tex.rgb;

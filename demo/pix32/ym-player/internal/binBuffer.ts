@@ -49,7 +49,7 @@ export class BinBuffer {
         return this.view;
     }
 
-    public getArray():byte[]{
+    public getInt8Array():byte[]{
         const res:byte[] = new Array(this.view.buffer.byteLength);
         for (let i:number = 0; i < this.view.buffer.byteLength; i++) {
             res[i] = this.view.getInt8(i) as byte;
@@ -57,11 +57,19 @@ export class BinBuffer {
         return res;
     }
 
-    public getRestArray():byte[]{
+    public getUint8Array():byte[]{
+        const res:byte[] = new Array(this.view.buffer.byteLength);
+        for (let i:number = 0; i < this.view.buffer.byteLength; i++) {
+            res[i] = this.view.getUint8(i) as byte;
+        }
+        return res;
+    }
+
+    public getRestUints8():byte[]{
         const restSize:number = this.getByteLength() - this.getPointer();
         const res:byte[] = new Array<byte>(restSize);
         for (let i:number = 0; i < restSize; i++) {
-            res[i] = this.readByte();
+            res[i] = this.readUint8();
         }
         return res;
     }
@@ -72,7 +80,7 @@ export class BinBuffer {
 
     private inflate(arr:number[]):void{
         for (let i = 0; i < arr.length; i++) {
-            this.writeByte(arr[i]);
+            this.writeUint8(arr[i]);
         }
         this.resetPointer();
     }
@@ -94,7 +102,7 @@ export class BinBuffer {
         this.pointer+=2;
     }
 
-    public writeByte(n:number):void {
+    public writeUint8(n:number):void {
         this.view.setUint8(this.pointer,n);
         this.pointer++;
     }
@@ -121,31 +129,46 @@ export class BinBuffer {
         return res;
     }
 
-    public readByte():byte{
+    public readUint8():byte{
         const res:byte = this.view.getUint8(this.pointer) as byte;
         this.pointer++;
         return res;
     }
 
-    public readByteAt(pos:number):number{
+    public readInt8():byte{
+        const res:byte = this.view.getInt8(this.pointer) as byte;
+        this.pointer++;
+        return res;
+    }
+
+    public readUint8At(pos:number):number{
         return this.view.getUint8(pos);
     }
 
-    public readBytes(n:number):byte[]{
+    public readUints8(n:number):byte[]{
         if (n<0) throw new Error(`wont argument: ${n}`);
         const res:byte[] = [];
         for (let i = 0; i < n; i++) {
-            res.push(this.readByte());
+            res.push(this.readUint8());
         }
         return res;
     }
 
-    public readBytesToArray(arr:number[],off:number,length:number):number{
+    public readInts8(n:number):byte[]{
+        if (n<0) throw new Error(`wont argument: ${n}`);
+        const res:byte[] = [];
+        for (let i = 0; i < n; i++) {
+            res.push(this.readInt8());
+        }
+        return res;
+    }
+
+    public readUints8ToArray(arr:number[], off:number, length:number):number{
         let readed:number = 0;
         for (let i = 0; i < length; i++) {
             const pos:number = i + off;
             if (this.pointer<this.view.byteLength-1) {
-                arr[pos] = this.readByte();
+                arr[pos] = this.readUint8();
                 readed++;
             }
 
@@ -153,8 +176,14 @@ export class BinBuffer {
         return readed;
     }
 
-    public readBytesToArray_2(arr:number[]):number{
-        return this.readBytesToArray(arr,0,arr.length);
+    public readUints8ToArray_2(arr:number[]):number{
+        return this.readUints8ToArray(arr,0,arr.length);
+    }
+
+    public readUInt64(littleEndian?: boolean):bigint {
+        const data:bigint = this.view.getBigUint64(this.pointer,littleEndian);
+        this.pointer+=8;
+        return data;
     }
 
     public readUInt32(littleEndian?: boolean):number {
@@ -166,6 +195,36 @@ export class BinBuffer {
     public readUInt16(littleEndian?: boolean):number {
         const data:number = this.view.getUint16(this.pointer,littleEndian);
         this.pointer+=2;
+        return data;
+    }
+
+    public readInt64(littleEndian?: boolean):bigint {
+        const data:bigint = this.view.getBigInt64(this.pointer,littleEndian);
+        this.pointer+=8;
+        return data;
+    }
+
+    public readInt32(littleEndian?: boolean):number {
+        const data:number = this.view.getInt32(this.pointer,littleEndian);
+        this.pointer+=4;
+        return data;
+    }
+
+    public readInt16(littleEndian?: boolean):number {
+        const data:number = this.view.getInt16(this.pointer,littleEndian);
+        this.pointer+=2;
+        return data;
+    }
+
+    public readFloat64(littleEndian?: boolean):number {
+        const data:number = this.view.getFloat64(this.pointer,littleEndian);
+        this.pointer+=8;
+        return data;
+    }
+
+    public readFloat32(littleEndian?: boolean):number {
+        const data:number = this.view.getFloat32(this.pointer,littleEndian);
+        this.pointer+=4;
         return data;
     }
 

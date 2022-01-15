@@ -3,8 +3,8 @@ import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, Optional, URI} from "@engine/core/declarations";
 import {ResourceUtil} from "@engine/resources/resourceUtil";
-import type {XmlDocument, XmlNode} from "@engine/misc/xml/xmlELements";
-import {Font} from "@engine/renderable/impl/general/font/font";
+import type {IXmlNode, XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
+import type {Font} from "@engine/renderable/impl/general/font/font";
 import {Sound} from "@engine/media/sound";
 import {ITask, Queue} from "@engine/resources/queue";
 import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
@@ -15,10 +15,10 @@ import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import ICssFontParameters = FontTypes.ICssFontParameters;
 import ITextureWithId = FontTypes.ITextureWithId;
 import {Image} from "@engine/renderable/impl/general/image";
-import type {XmlParser} from "@engine/misc/xml/xmlParser";
+import type {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 import {createFontFromAtlas} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromAtlas";
 import {createFontFromCssDescription} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
-import {IParser} from "@engine/misc/xml/iParser";
+import {IParser} from "@engine/misc/parsers/iParser";
 
 namespace ResourceCache {
 
@@ -163,7 +163,7 @@ export class ResourceLoader {
         return await createFontFromAtlas(this.game,texturePages,doc);
     }
 
-    public async loadFontFromAtlasUrl(baseUrl:string|IURLRequest,docFileName:string,docParser:{new(str:string):IParser}, progress?:(n:number)=>void):Promise<Font>{
+    public async loadFontFromAtlasUrl(baseUrl:string|IURLRequest,docFileName:string,docParser:{new(str:string):IParser<IXmlNode>}, progress?:(n:number)=>void):Promise<Font>{
         let docUrl:string|IURLRequest
         if (isString(baseUrl)) {
             docUrl = ResourceLoader.mergeUrl(docFileName,baseUrl);

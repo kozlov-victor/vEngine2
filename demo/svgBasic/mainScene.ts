@@ -145,7 +145,7 @@ import {Scene} from "@engine/scene/scene";
 import {SvgImage} from "./svgImage";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {TaskQueue} from "@engine/resources/taskQueue";
-import {XmlDocument} from "@engine/misc/xml/xmlELements";
+import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
 
 const images:XmlDocument[] = [
     svgEx127,

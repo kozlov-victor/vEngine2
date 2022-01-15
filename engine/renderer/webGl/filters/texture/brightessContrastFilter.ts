@@ -16,7 +16,7 @@ export class BrightessContrastFilter extends AbstractGlFilter{
         this.u_contrast = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_contrast');
         this.u_brightness = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_brightness');
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main(){
                 vec4 pixelColor = texture2D(texture, v_texCoord);
                 // Apply contrast.

@@ -20,7 +20,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {LazyImageCacheSurface} from "@engine/renderable/impl/surface/lazyImageCacheSurface";
 import {ITexture} from "@engine/renderer/common/texture";
 import {TaskQueue} from "@engine/resources/taskQueue";
-import {XmlDocument, XmlNode} from "@engine/misc/xml/xmlELements";
+import {XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
 import {EndCapStyle, JointStyle} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 import {EvenOddCompositionFilter} from "@engine/renderer/webGl/filters/composition/evenOddCompositionFilter";
 

@@ -21,7 +21,7 @@ export class BarrelDistortionFilter extends AbstractGlFilter {
         this.u_distortion = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_distortion');
 
         //language=GLSL
-        programGen.appendFragmentCodeBlock(MACRO_GL_COMPRESS`
+        programGen.appendFragmentCodeBlock(`
             vec4 barrel(vec2 uv) {
                 vec2 pos = uv;
                 pos -= vec2(0.5, 0.5);
@@ -31,7 +31,7 @@ export class BarrelDistortionFilter extends AbstractGlFilter {
             }
         `);
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main(){
                 vec2 uv = vec2(gl_FragCoord.xy / vec2(rt_w,rt_h));
                 gl_FragColor = barrel(uv);

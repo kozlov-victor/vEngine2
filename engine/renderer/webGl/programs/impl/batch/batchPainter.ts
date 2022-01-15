@@ -18,7 +18,7 @@ export class BatchPainter extends AbstractPainter {
         gen.addVarying(GL_TYPE.FLOAT_VEC2,'v_texCoord');
 
         //language=GLSL
-        gen.setVertexMainFn(MACRO_GL_COMPRESS`
+        gen.setVertexMainFn(`
             void main(){
                 vec2 pos;
                 if (a_id==0) {
@@ -36,7 +36,7 @@ export class BatchPainter extends AbstractPainter {
         `);
 
         //language=GLSL
-        gen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        gen.setFragmentMainFn(`
             void main(){
                 gl_FragColor = texture2D(texture, v_texCoord);
             }

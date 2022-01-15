@@ -19,7 +19,7 @@ export class VideoGlitchFilter extends AbstractGlFilter {
 
         const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             //
             // Description : Array and textureless GLSL 2D simplex noise function.
             //      Author : Ian McEwan, Ashima Arts.

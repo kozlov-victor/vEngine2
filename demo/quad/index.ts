@@ -5,7 +5,7 @@ import {MainScene} from "./mainScene";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
-import {XmlParser} from "@engine/misc/xml/xmlParser";
+import {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 
 const game = new Game({width:800, height: 600});
 game.setRenderer(WebGlRenderer);

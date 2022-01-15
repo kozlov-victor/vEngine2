@@ -15,7 +15,7 @@ export class TrianglesMosaicFilter extends AbstractGlFilter{
         const programGen:ShaderGenerator = this.simpleRectPainter.gen;
         this.tileSize = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'tileSize');
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
             void main()
             {
                 vec2 uv = v_texCoord;

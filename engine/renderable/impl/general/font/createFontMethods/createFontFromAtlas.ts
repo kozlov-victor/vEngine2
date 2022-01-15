@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {XmlDocument, XmlNode} from "@engine/misc/xml/xmlELements";
+import {XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import ITextureWithId = FontTypes.ITextureWithId;

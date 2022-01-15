@@ -25,7 +25,7 @@ export class SwirlFilter extends AbstractGlFilter {
 
 
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
                     void main(){
                         vec2 texCoord = v_texCoord;
                         vec2 coord=texCoord*texSize;

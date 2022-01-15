@@ -23,7 +23,7 @@ export class NoiseHorizontalFilter extends AbstractGlFilter {
         this.u_time = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_time');
 
         //language=GLSL
-        programGen.appendFragmentCodeBlock(MACRO_GL_COMPRESS`
+        programGen.appendFragmentCodeBlock(`
             vec4 noise(vec2 uv) {
                 vec3 color = texture2D(texture, uv).rgb;
                 color -= abs(sin(uv.y * 100.0 + u_time * 5.0)) * 0.08;
@@ -32,7 +32,7 @@ export class NoiseHorizontalFilter extends AbstractGlFilter {
             }
         `);
         //language=GLSL
-        programGen.setFragmentMainFn(MACRO_GL_COMPRESS`
+        programGen.setFragmentMainFn(`
                 void main(){
                     vec2 uv = vec2(gl_FragCoord.xy / vec2(rt_w,rt_h));
                     gl_FragColor = noise(uv);

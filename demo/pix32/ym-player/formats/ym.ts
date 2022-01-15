@@ -21,8 +21,8 @@ export class Ym extends AbstractChipTrack {
             this.readBody();
         } else { // lha-compressed
             bb.resetPointer();
-            const sizeOfHeader:number = bb.readByte();
-            bb.readByte(); // Header checksum
+            const sizeOfHeader:number = bb.readUint8();
+            bb.readUint8(); // Header checksum
             const methodId:'lh4'|'lh5' = bb.readString(5).split('-').join('') as 'lh4'|'lh5';
             if (['lh4','lh5'].indexOf(methodId)===-1) throw new Error(`unsupported method: ${methodId}`);
             bb.readUInt32(); // compressed size
@@ -31,7 +31,7 @@ export class Ym extends AbstractChipTrack {
             // const lhaFile:LhaFile = new LhaFile(bb);
             // const body:number[] = lhaFile.getInputStreamByIndex(0).toArray();
             // console.log(body);
-            const lha:LhaReader = new LhaReader(bb.getArray(), methodId);
+            const lha:LhaReader = new LhaReader(bb.getInt8Array(), methodId);
             const unpackedData:Uint8Array = lha.extract(sizeOfHeader + 2, unCompressedSize);
             this.buffer = new BinBuffer(unpackedData.buffer);
             this.readBody();
@@ -64,7 +64,7 @@ export class Ym extends AbstractChipTrack {
         this.songName = this.buffer.readNTString();
         this.authorName = this.buffer.readNTString();
         this.songComment = this.buffer.readNTString();
-        this.rawFrames = this.buffer.readBytes(this.numOfFrames*16);
+        this.rawFrames = this.buffer.readUints8(this.numOfFrames*16);
 
         const terminator:string = this.buffer.readString(4);
         if (terminator!==END) throw new Error(`unexpected file terminator: ${terminator}`);

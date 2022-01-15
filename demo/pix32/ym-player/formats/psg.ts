@@ -22,13 +22,13 @@ export class Psg extends AbstractChipTrack {
         const PSG = 'PSG' as const;
         if (psg!==PSG) throw new Error(`wrong header: ${psg}, expecting: '${PSG}`);
 
-        const enfOfTExtMarker = this.buffer.readByte();
+        const enfOfTExtMarker = this.buffer.readUint8();
         const MARKER = 0x1A as const;
         if (enfOfTExtMarker!==MARKER) throw new Error(`wrong end-of-text marker: ${enfOfTExtMarker}, expecting: ${MARKER.toString(16)}`);
-        this.versionNumber = this.buffer.readByte();
-        this.buffer.readByte(); // player frequency for Player frequency (for versions 10+)
-        this.buffer.readBytes(10); // skip this block
-        const rawData = this.buffer.getRestArray();
+        this.versionNumber = this.buffer.readUint8();
+        this.buffer.readUint8(); // player frequency for Player frequency (for versions 10+)
+        this.buffer.readUints8(10); // skip this block
+        const rawData = this.buffer.getRestUints8();
         let i = 0;
         while (i<rawData.length) {
             const frame:tFrame =

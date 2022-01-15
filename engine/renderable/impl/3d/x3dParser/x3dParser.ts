@@ -1,8 +1,8 @@
-import {XmlDocument, XmlNode} from "@engine/misc/xml/xmlELements";
+import {XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
-import {XmlParser} from "@engine/misc/xml/xmlParser";
+import {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 import {DebugError} from "@engine/debug/debugError";
 import {Optional} from "@engine/core/declarations";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";

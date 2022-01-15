@@ -190,6 +190,8 @@ export abstract class RenderableModel
     public render():void {
 
         if (!this.visible) return;
+        if (this.scale.equal(0)) return;
+
         if (DEBUG && this.destroyed) {
             console.error(this);
             throw new DebugError(`can not render destroyed object`);
