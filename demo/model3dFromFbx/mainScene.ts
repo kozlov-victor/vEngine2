@@ -9,7 +9,8 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
-    @Resource.Binary('./model3dFromFbx/models/tequila.fbx') // arrows mouse generator Lp Can spitfire tequila BUTCHER binary
+    @Resource.Binary('./model3dFromFbx/models/rocket2.fbx')
+    // arrows mouse generator Lp Can spitfire tequila BUTCHER binary heartglass SM_chest
     private dataBuff:ArrayBuffer;
 
     public override onReady():void {
@@ -52,9 +53,9 @@ export class MainScene extends Scene {
 
         // scale
         this.mouseEventHandler.on(MOUSE_EVENTS.scroll, e=>{
-            const delta = (e.nativeEvent as any).wheelDelta>0?1:-1;
+            const delta = (e.nativeEvent as any).wheelDelta>0?0.1:-0.1;
             model.scale.setXYZ(
-                model.scale.x+delta
+                model.scale.x+delta*10
             );
             if (model.scale.x<=0) model.scale.setXYZ(0.01);
         });

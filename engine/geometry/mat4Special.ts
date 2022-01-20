@@ -54,6 +54,7 @@ export namespace Mat4Special {
         const a5 = a[5], a6 = a[6], a9 = a[9], a10 = a[10];
         const b4 = b[4], b5 = b[5], b6 = b[6], b7 = b[7];
         const b8 = b[8], b9 = b[9], b10 = b[10], b11 = b[11];
+
         r[0] = b[0];
         r[1] = b[1];
         r[2] = b[2];
@@ -134,18 +135,18 @@ export namespace Mat4Special {
         r[6] = a4 * b2 + a5 * b6;
         r[7] = a4 * b3 + a5 * b7;
 
-        // r[8]  = b[8];
-        // r[9]  = b[9];
-        // r[10] = b[10];
-        // r[11] = b[11];
-        //
-        // r[12] = b[12];
-        // r[13] = b[13];
-        // r[14] = b[14];
-        // r[15] = b[15];
+        r[8]  = b[8];
+        r[9]  = b[9];
+        r[10] = b[10];
+        r[11] = b[11];
+
+        r[12] = b[12];
+        r[13] = b[13];
+        r[14] = b[14];
+        r[15] = b[15];
 
         // fast version of above code block
-        r.set(b.subarray(8,8+16),8);
+        //r.set(b.subarray(8,8+16),8);
 
     };
 
