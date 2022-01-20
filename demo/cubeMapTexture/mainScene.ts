@@ -23,11 +23,11 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         const obj:Model3d = new Model3d(this.game,new Cube(150));
-        obj.fillColor.setRGB(12,22,122);
+        obj.material.diffuseColor.setRGB(12,22,122);
         obj.texture = this.baseTextureLink;
-        obj.colorMix = 0.4;
+        obj.material.diffuseColorMix = 0.4;
         obj.cubeMapTexture = this.cubeTexture;
-        obj.reflectivity = 0.9;
+        obj.material.reflectivity = 0.9;
         obj.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         this.appendChild(obj);
         this.setInterval(()=>{

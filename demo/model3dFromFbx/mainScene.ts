@@ -5,9 +5,11 @@ import {FbxBinaryParser} from "@engine/renderable/impl/3d/fbxParser/fbxBinaryPar
 import {Optional} from "@engine/core/declarations";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
+// https://sketchfab.com/3d-models/generator-4b50a06663fe44079503ca53f7eb399f
+
 export class MainScene extends Scene {
 
-    @Resource.Binary('./model3dFromFbx/models/generator.fbx') // generator Lp Can spitfire tequila BUTCHER binary
+    @Resource.Binary('./model3dFromFbx/models/tequila.fbx') // arrows mouse generator Lp Can spitfire tequila BUTCHER binary
     private dataBuff:ArrayBuffer;
 
     public override onReady():void {
@@ -16,7 +18,7 @@ export class MainScene extends Scene {
         this.appendChild(model);
         model.pos.setXY(300,300);
         model.size.setWH(400,400);
-        model.scale.setXYZ(100);
+        model.scale.setXYZ(0.2);
         //model.scale.y=-model.scale.y;
 
         let btnPressed = false;

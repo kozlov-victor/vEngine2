@@ -86,9 +86,9 @@ class TabStrip {
                 glow.enabled = MathEx.random(0,5)>3;
                 if (glow.enabled) {
                     glow.setGlowColor(Color.RGB(
-                        MathEx.randomInt(0,200) as byte,
-                        MathEx.randomInt(100,255) as byte,
-                        MathEx.randomInt(0,200) as byte,
+                        MathEx.randomInt(0,200) as Uint8,
+                        MathEx.randomInt(100,255) as Uint8,
+                        MathEx.randomInt(0,200) as Uint8,
                     ));
                 }
 
@@ -157,9 +157,9 @@ class TabStrip {
         }
         const pl = PolyLine.fromPoints(this.game,points,{lineWidth:MathEx.randomInt(2,7)});
         pl.color.set(Color.RGB(
-            MathEx.randomInt(200,222) as byte,
-            MathEx.randomInt(200,222) as byte,
-            MathEx.randomInt(15,25) as byte,
+            MathEx.randomInt(200,222) as Uint8,
+            MathEx.randomInt(200,222) as Uint8,
+            MathEx.randomInt(15,25) as Uint8,
         ));
         pl.pos.setX(MathEx.randomInt(0,this.game.size.width));
         splashContainer.appendChild(pl);

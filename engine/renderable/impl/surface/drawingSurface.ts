@@ -342,16 +342,16 @@ export class DrawingSurface
     private _font:Font;
     private _drawingSession:DrawingSession;
 
-    private static normalizeColor(col:byte|number|Color, g?:byte, b?:byte, a:byte = 255):Color {
+    private static normalizeColor(col:Uint8|number|Color, g?:Uint8, b?:Uint8, a:Uint8 = 255):Color {
         if ((col as Color).type==='Color') { // Color
             return col as Color;
         }
         else if (isNumber(col) && b===undefined) { // numeric with alfa
             const color:Color = Color.fromRGBNumeric(col as number);
-            if (g!==undefined) color.a = g as byte;
+            if (g!==undefined) color.a = g as Uint8;
             return color;
         } else { // r g b a
-            return new Color(col as byte,g!,b!,a);
+            return new Color(col as Uint8,g!,b!,a);
         }
     }
 
@@ -365,10 +365,10 @@ export class DrawingSurface
         return this._drawingSession._getTexture();
     }
 
-    public setFillColor(col:number,alpha?:byte):void;
+    public setFillColor(col:number,alpha?:Uint8):void;
     public setFillColor(col:Color):void;
-    public setFillColor(r:byte,g:byte,b:byte,a?:byte):void;
-    public setFillColor(col:byte|number|Color,g?:byte,b?:byte,a:byte = 255):void{
+    public setFillColor(r:Uint8, g:Uint8, b:Uint8, a?:Uint8):void;
+    public setFillColor(col:Uint8|number|Color, g?:Uint8, b?:Uint8, a:Uint8 = 255):void{
         this._drawingSession.fillColor = DrawingSurface.normalizeColor(col,g,b,a);
     }
 
@@ -380,10 +380,10 @@ export class DrawingSurface
         return this._drawingSession.drawColor;
     }
 
-    public setDrawColor(col:number,alpha?:byte):void;
+    public setDrawColor(col:number,alpha?:Uint8):void;
     public setDrawColor(col:Color):void;
-    public setDrawColor(r:byte,g:byte,b:byte,a?:byte):void;
-    public setDrawColor(col:byte|number|Color,g?:byte,b?:byte,a:byte = 255):void{
+    public setDrawColor(r:Uint8, g:Uint8, b:Uint8, a?:Uint8):void;
+    public setDrawColor(col:Uint8|number|Color, g?:Uint8, b?:Uint8, a:Uint8 = 255):void{
         this._drawingSession.drawColor = DrawingSurface.normalizeColor(col,g,b,a);
     }
 

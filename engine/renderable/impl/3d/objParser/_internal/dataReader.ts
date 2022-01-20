@@ -1,10 +1,12 @@
 import {DebugError} from "@engine/debug/debugError";
 import {IPoint3d} from "@engine/geometry/point3d";
 import {IPoint2d} from "@engine/geometry/point2d";
-import {Face, MeshMaterial, t_obj, t_vertexLib} from "@engine/renderable/impl/3d/objParser/_internal/types";
+import {Face, ObjMeshMaterial, t_obj, t_vertexLib} from "@engine/renderable/impl/3d/objParser/_internal/types";
 import {IObjParams} from "@engine/renderable/impl/3d/objParser/objParser";
 import {Optional} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
+import {MeshMaterial} from "@engine/renderable/impl/3d/meshMaterial";
+import {Color} from "@engine/renderer/common/color";
 
 abstract class AbstractDataReader {
     protected parseLine(line:string):{commandName:string|undefined,commandArgs:string[]} {
@@ -30,15 +32,15 @@ class DataMtlReader extends AbstractDataReader{
         super();
     }
 
-    private materials:MeshMaterial[] = [];
-    private currentMaterial:MeshMaterial = new MeshMaterial('');
+    private materials:ObjMeshMaterial[] = [];
+    private currentMaterial:ObjMeshMaterial = new ObjMeshMaterial('');
 
-    private static readAmbientColor(s:string[]):IColor {
+    private static readColor(s:string[]):IColor {
         if (s.length<3) throw new DebugError(`wrong color: ${s.join(' ')}`);
         const color:IColor = {
-            r: ~~(parseFloat(s[0])*255) as byte,
-            g: ~~(parseFloat(s[1])*255) as byte,
-            b: ~~(parseFloat(s[2])*255) as byte,
+            r: ~~(parseFloat(s[0])*255) as Uint8,
+            g: ~~(parseFloat(s[1])*255) as Uint8,
+            b: ~~(parseFloat(s[2])*255) as Uint8,
         };
         if (Number.isNaN(color.r) || Number.isNaN(color.g) || Number.isNaN(color.b)) throw new Error(`unexpected line ${s.join(' ')}`);
         return color;
@@ -51,11 +53,11 @@ class DataMtlReader extends AbstractDataReader{
     }
 
     private newMaterial(name:string):void {
-        this.currentMaterial = new MeshMaterial(name);
+        this.currentMaterial = new ObjMeshMaterial(name);
         this.materials.push(this.currentMaterial);
     }
 
-    public readSource():MeshMaterial[]{
+    public readSource():ObjMeshMaterial[]{
         this.source.split('\n').forEach((line:string)=> {
             const {commandName,commandArgs} = this.parseLine(line);
             if (commandName===undefined) return;
@@ -64,8 +66,8 @@ class DataMtlReader extends AbstractDataReader{
                     this.newMaterial(commandArgs.join(' '));
                     break;
                 case 'Kd':
-                    const color = DataMtlReader.readAmbientColor(commandArgs);
-                    this.currentMaterial.ambientColor = color;
+                    const color = DataMtlReader.readColor(commandArgs);
+                    this.currentMaterial.diffuseColor = Color.from(color);
                     break;
                 case 'Ns':
                     const specular:number = DataMtlReader.readSpecular(commandArgs.join(''));
@@ -195,14 +197,14 @@ export class DataObjReader extends AbstractDataReader {
 
     private newObject(name:string):void{
         if (this.currentObject===undefined) {
-            this.currentObject = {f_arr:[],name,material:new MeshMaterial('')};
+            this.currentObject = {f_arr:[],name,material:new ObjMeshMaterial('')};
             this.objs.push(this.currentObject);
         }
         if (this.currentObject.f_arr.length===0) {
             this.currentObject.name = name;
             return;
         }
-        this.currentObject = {f_arr:[],name,material:new MeshMaterial('')};
+        this.currentObject = {f_arr:[],name,material:new ObjMeshMaterial('')};
         this.objs.push(this.currentObject);
     }
 
@@ -243,7 +245,7 @@ export class DataObjReader extends AbstractDataReader {
                     const mtlName:string = commandArgs.join(' ');
                     const currentMtl = this.materialsMap[mtlName];
                     if (currentMtl!==undefined) {
-                        this.currentObject.material.ambientColor = currentMtl.ambientColor;
+                        this.currentObject.material.diffuseColor = currentMtl.diffuseColor;
                     } else {
                         console.warn(`unknown material: ${mtlName}`);
                     }

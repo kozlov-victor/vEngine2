@@ -62,13 +62,13 @@ export class Vtx extends AbstractChipTrack {
 
         const streamLength:number = unpackedSize / 14;
         this.numOfFrames = streamLength;
-        let lastEnvelopeVal:byte = 0;
+        let lastEnvelopeVal:Uint8 = 0;
         for (let i:number = 0; i < this.numOfFrames; i++) {
             this.frames[i] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }
         for (let i:number = 0; i < streamLength; i++) {
             for (let chan:number = 0; chan < 14; chan++) {
-                const val:byte = unpackedData[chan * streamLength + i] as byte;
+                const val:Uint8 = unpackedData[chan * streamLength + i] as Uint8;
                 if (chan < 13) {
                     this.frames[i][chan] = val;
                 } else {

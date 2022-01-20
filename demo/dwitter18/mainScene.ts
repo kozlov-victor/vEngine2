@@ -43,8 +43,8 @@ export class MainScene extends Scene {
             return val;
         };
 
-        const byte = (val:number):byte=>{
-            return ~~(val*255) as byte;
+        const byte = (val:number):Uint8=>{
+            return ~~(val*255) as Uint8;
         };
 
         this.surface.setLineWidth(0);

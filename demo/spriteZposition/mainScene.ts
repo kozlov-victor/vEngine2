@@ -42,8 +42,8 @@ export class MainScene extends Scene {
 
         const obj:Model3d = new Model3d(this.game,new Torus(12,50, 3 as Int,8 as Int));
         this.obj = obj;
-        obj.fillColor.setRGB(12,222,12);
-        obj.colorMix = 0.7;
+        obj.material.diffuseColor.setRGB(12,222,12);
+        obj.material.diffuseColorMix = 0.7;
         obj.pos.setXY(200,100);
         obj.pos.z = -2000;
         obj.size.setWH(100,100);

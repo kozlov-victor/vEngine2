@@ -15,8 +15,8 @@ class Border {
     private pointerY:number = 0;
 
     private readonly pixelsPerBit:number = 1000;
-    private readonly BORDER_ON:[byte,byte,byte,byte] = [0,0,100,255];
-    private readonly BORDER_OFF:[byte,byte,byte,byte] = [100,100,0,255];
+    private readonly BORDER_ON:[Uint8,Uint8,Uint8,Uint8] = [0,0,100,255];
+    private readonly BORDER_OFF:[Uint8,Uint8,Uint8,Uint8] = [100,100,0,255];
 
     constructor(game:Game){
         this.texture = new DataTexture(game,W+BORDER*2, H+BORDER*2);
@@ -36,7 +36,7 @@ class Border {
         this.texture.flush();
     }
 
-    public readNextByte(b:byte):void {
+    public readNextByte(b:Uint8):void {
         for (let n:number=0;n<8;n++) {
             const bit:1|0 = (b & n) > 0?1:0;
             for (let k:number=0;k<this.pixelsPerBit;k++) {
@@ -66,7 +66,7 @@ class Screen {
 
     private flashOn:boolean = false;
     private view:Int8Array = new Int8Array(this.data);
-    private videoMemory:byte[] = new Array(this.data.byteLength).fill(0);
+    private videoMemory:Uint8[] = new Array(this.data.byteLength).fill(0);
     private pointer:number = 0;
     private loadingCompleted:boolean = false;
     private memoryTest1Completed:boolean = false;
@@ -103,7 +103,7 @@ class Screen {
                 this.stream.stop();
                 return;
             }
-            this.videoMemory[i] = this.view[i] as byte;
+            this.videoMemory[i] = this.view[i] as Uint8;
             this.border.readNextByte(this.videoMemory[i]);
         }
         this.pointer+=chunkSize;
@@ -158,13 +158,13 @@ class Screen {
 
                 const brightness = (attributeValue & 0b1000000)>0?255:200;
 
-                const colorOn:[byte,byte,byte] = [
+                const colorOn:[Uint8,Uint8,Uint8] = [
                     (attributeValue & 0b001)>0?brightness:0,
                     (attributeValue & 0b010)>0?brightness:0,
                     (attributeValue & 0b100)>0?brightness:0,
                 ];
 
-                const colorOff:[byte,byte,byte] = [
+                const colorOff:[Uint8,Uint8,Uint8] = [
                     (attributeValue & 0b001000)>0?255:0,
                     (attributeValue & 0b010000)>0?255:0,
                     (attributeValue & 0b100000)>0?255:0,
@@ -173,8 +173,8 @@ class Screen {
                 const flash = (attributeValue & 0b10000000)>0?1:0;
                 if (flash===1 && this.flashOn) pixelSet = pixelSet===1?0:1;
 
-                let r:byte,g:byte,b:byte;
-                const a:byte = 255;
+                let r:Uint8,g:Uint8,b:Uint8;
+                const a:Uint8 = 255;
 
                 if (pixelSet) {
                     r = colorOn[1]; // r

@@ -36,7 +36,7 @@ export class DataTexture extends Texture {
         return this._data;
     }
 
-    public setRawPixelAt(x:number,y:number,r:byte,g:byte,b:byte,a:byte):void {
+    public setRawPixelAt(x:number, y:number, r:Uint8, g:Uint8, b:Uint8, a:Uint8):void {
         const position = (y*this.size.width + x)*4;
         const rawData:Uint8Array = this.getData();
         if (DEBUG && (position<0 || position>rawData.length-1)) {

@@ -30,7 +30,7 @@ export class Rocket extends AbstractEntity {
         obj.scale.setXYZ(10);
 
         obj.children.forEach(c=>{
-            (c as Model3d).specular = 0.3;
+            (c as Model3d).material.specular = 0.3;
         });
         obj.setInterval(()=>{
             obj.angle3d.x+=0.01;

@@ -9,7 +9,7 @@ const END = 'End!' as const;
 export class Ym extends AbstractChipTrack {
 
     private buffer:BinBuffer;
-    private rawFrames:byte[];
+    private rawFrames:Uint8[];
     private interleavedOrder: boolean;
 
     constructor(arr:number[]|ArrayBuffer) {

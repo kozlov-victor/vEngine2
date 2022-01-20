@@ -57,7 +57,7 @@ export class MainScene extends Scene {
             const P=T(t)*10+h;
             x.setDrawColor(R(a,a/3,a),100);
             session.drawText(w,P,P);
-            x.setDrawColor(R(h,h,h),~~(3/h) as byte);
+            x.setDrawColor(R(h,h,h),~~(3/h) as Uint8);
             session.drawText(0,0,w);
         };
     }

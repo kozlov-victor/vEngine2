@@ -3,6 +3,7 @@ import {IPoint2d} from "@engine/geometry/point2d";
 import {Color} from "@engine/renderer/common/color";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {IVertexColor} from "@engine/renderable/impl/3d/objParser/_internal/dataReader";
+import {MeshMaterial} from "@engine/renderable/impl/3d/meshMaterial";
 
 export interface FacePoint {
    v: number;
@@ -19,18 +20,18 @@ export type t_vertexLib = {
 };
 
 
-export class MeshMaterial {
-    public ambientColor:IColor = Color.WHITE.clone();
-    public specular:number = 1;
-
+export class ObjMeshMaterial extends MeshMaterial {
     constructor(public name:string) {
+        super();
+        this.diffuseColor = Color.WHITE.clone();
+        this.specular = 1;
     }
 }
 
 export type t_obj = {
     f_arr:Face[],
     name:string,
-    material:MeshMaterial;
+    material:ObjMeshMaterial;
 };
 
 export class ObjPrimitive extends AbstractPrimitive {

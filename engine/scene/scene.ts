@@ -29,11 +29,11 @@ import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 
 export const enum SCENE_EVENTS {
-    PRELOADING = 'preloading',
-    PROGRESS = 'progress',
-    COMPLETED = 'completed',
-    CONTINUE = 'continue',
-    INACTIVATED = 'inactivated'
+    PRELOADING = 'PRELOADING',
+    PROGRESS = 'PROGRESS',
+    LOADING_COMPLETED = 'LOADING_COMPLETED',
+    CONTINUE = 'CONTINUE',
+    INACTIVATED = 'INACTIVATED'
 }
 
 export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IAlphaBlendable {

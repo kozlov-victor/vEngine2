@@ -74,9 +74,9 @@ export class MainScene extends Scene {
                 for(i=4;i--;) {
                     n=f(t,i);
                     m=f(t,i+1);
-                    let color = ~~(i%2?k:99-k) as byte;
-                    if (color>255 - 40) color = (255 - 40) as byte;
-                    x.setFillColor(Color.from({r:color,g:(color+40) as byte,b:color}));
+                    let color = ~~(i%2?k:99-k) as Uint8;
+                    if (color>255 - 40) color = (255 - 40) as Uint8;
+                    x.setFillColor(Color.from({r:color,g:(color+40) as Uint8,b:color}));
                     n-m<5&&x.drawRect(n+f(t,y/255)+940,y,k=m-n,24);
                 }
             }

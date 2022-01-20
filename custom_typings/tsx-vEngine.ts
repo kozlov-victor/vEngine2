@@ -1,8 +1,8 @@
 interface IColor {
-    r:byte;
-    g:byte;
-    b:byte;
-    a?:byte;
+    r:Uint8;
+    g:Uint8;
+    b:Uint8;
+    a?:Uint8;
 }
 
 interface IPoint {

@@ -235,9 +235,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.attachTexture('u_normalsTexture',isNormalsTextureUsed?mesh.normalsTexture as Texture:this._nullTexture);
 
         const isCubeMapTextureUsed:boolean = mesh.cubeMapTexture!==undefined;
-        if (DEBUG && !isCubeMapTextureUsed && mesh.reflectivity!==0) throw new DebugError(`can not apply reflectivity without cubeMapTexture`);
+        if (DEBUG && !isCubeMapTextureUsed && mesh.material.reflectivity!==0) throw new DebugError(`can not apply reflectivity without cubeMapTexture`);
         md.setCubeMapTextureUsed(isCubeMapTextureUsed);
-        md.setReflectivity(mesh.reflectivity);
+        md.setReflectivity(mesh.material.reflectivity);
         md.attachTexture('u_cubeMapTexture',isCubeMapTextureUsed?mesh.cubeMapTexture as CubeMapTexture:this._nullCubeMapTexture);
 
         if (DEBUG && mesh.isLightAccepted()) {
@@ -247,9 +247,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             }
         }
         md.setLightUsed(mesh.isLightAccepted()||false);
-        md.setColor(mesh.fillColor);
-        md.setColorMix(mesh.colorMix);
-        md.setSpecular(mesh.specular);
+        md.setColor(mesh.material.diffuseColor);
+        md.setColorMix(mesh.material.diffuseColorMix);
+        md.setSpecular(mesh.material.specular);
 
         //this.gl.enable(this.gl.CULL_FACE);
         if (mesh.depthTest) this._gl.enable(this._gl.DEPTH_TEST);

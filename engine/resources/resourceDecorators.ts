@@ -9,6 +9,12 @@ import {IParser} from "@engine/misc/parsers/iParser";
 
 
 export const Resource = {
+    // Inject: ()=>{
+    //     return (target: Scene, fieldName: string):void => {
+    //         // stub for precompiler only
+    //         throw new DebugError(`something wrong with precompiler for Texture decorator`);
+    //     };
+    // },
     Texture: (src:string|IURLRequest)=> {
         return (target: Scene|ResourceAutoHolder, fieldName: string):void => {
             // stub for precompiler only

@@ -24,7 +24,7 @@ export class Submarine2 extends AbstractEntity {
         obj.scale.setXYZ(10);
 
         obj.children.forEach(c=>{
-            (c as Model3d).specular = 0.4;
+            (c as Model3d).material.specular = 0.4;
         });
 
         const t = new Tween(this.game,{

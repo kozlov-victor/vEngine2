@@ -154,9 +154,9 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         }
         const pl = PolyLine.fromPoints(this.game,points,{lineWidth:MathEx.randomInt(2,7)});
         pl.color.set(Color.RGB(
-            MathEx.randomInt(100,122) as byte,
-            MathEx.randomInt(100,122) as byte,
-            MathEx.randomInt(150,255) as byte,
+            MathEx.randomInt(100,122) as Uint8,
+            MathEx.randomInt(100,122) as Uint8,
+            MathEx.randomInt(150,255) as Uint8,
         ));
         pl.pos.setX(MathEx.randomInt(0,this.game.size.width));
         this.lightContainer.appendChild(pl);
@@ -176,9 +176,9 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         }
         const pl = PolyLine.fromPoints(this.game,points,{lineWidth:MathEx.randomInt(2,7)});
         pl.color.set(Color.RGB(
-            MathEx.randomInt(100,122) as byte,
-            MathEx.randomInt(100,122) as byte,
-            MathEx.randomInt(150,255) as byte,
+            MathEx.randomInt(100,122) as Uint8,
+            MathEx.randomInt(100,122) as Uint8,
+            MathEx.randomInt(150,255) as Uint8,
         ));
         pl.pos.setY(MathEx.randomInt(0,this.game.size.height));
         this.lightContainer.appendChild(pl);

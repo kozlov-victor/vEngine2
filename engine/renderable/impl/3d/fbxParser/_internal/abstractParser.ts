@@ -7,11 +7,17 @@ import {MathEx} from "@engine/misc/mathEx";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
+import {MeshMaterial} from "@engine/renderable/impl/3d/meshMaterial";
 
 export interface IFbxParams {
     texture?:ITexture;
     normalsTexture?:ITexture;
     cubeMapTexture?:ICubeMapTexture;
+}
+
+interface IMaterial {
+    color: IColor;
+    specular: number;
 }
 
 type ReferenceType = 'Direct'|'IndexToDirect';
@@ -41,6 +47,13 @@ const findProperty = (node:FBXNode,path:string)=>{
     return node?.props?.[0] as any;
 }
 
+const findProperty70 = (node:FBXNode,name:string):undefined|any[]=>{
+    for (const nodeElement of node.nodes) {
+        if (nodeElement.props[0]===name) return nodeElement.props as any[];
+    }
+    return undefined;
+}
+
 const findFaces = (indices:number[]):number[][]=> {
     const faces:number[][] = [];
     let currFace:number[] = [];
@@ -61,35 +74,76 @@ const findFaces = (indices:number[]):number[][]=> {
 const getVertexByIndex = (index:number,vertexSize:number,vertices:number[]):[number,number,number]=>{
     const pos = index*vertexSize;
     return [
-        vertices[pos],
-        vertices[pos+1],
         vertices[pos+2],
+        vertices[pos+0],
+        vertices[pos+1],
     ]
+}
+
+interface IFbxNode {
+    tag: string;
+    uuid:number;
+}
+
+class FbxModel3d extends Model3d implements IFbxNode{
+    public tag:string;
+    public uuid:number;
+}
+
+class FbxModelContainer extends SimpleGameObjectContainer  implements IFbxNode{
+    public tag:string;
+    public uuid:number;
+}
+
+class FbxMaterial extends MeshMaterial  implements IFbxNode {
+    public tag:string;
+    public uuid:number;
 }
 
 export abstract class AbstractParser {
 
-    private readonly container:RenderableModel;
+    private readonly container:FbxModelContainer;
     private unitScaleFactor:number = 1;
+    private upAxisSign:number = 1; // UpAxis +Z, FrontAxis -Y, CoordAxis +X.
+    private frontAxisSign:number = 1;
+    private coordAxisSign:number = 1;
+
+    private upAxis:number = 1;
+    private frontAxis:number = 0;
+    private coordAxis:number = 2;
 
     protected constructor(private game:Game,private reader:FbxReader) {
-        this.container = new SimpleGameObjectContainer(game);
+        this.container = new FbxModelContainer(game);
+        this.container.tag = 'root';
+        this.container.uuid = 0;
         this._parse();
     }
 
     private _parseGlobalSettings():void {
         const globalSettings = findNode(this.reader.rootNode,'GlobalSettings');
-        const properties = findNode(globalSettings,'Properties70');
-        if (!properties) return;
-        properties.nodes.forEach(n=>{
-            if (n.props[0]==='UnitScaleFactor') {
-                this.unitScaleFactor = n.props[4] as number ?? 1;
-            }
-        });
+        const properties70 = findNode(globalSettings,'Properties70');
+        if (!properties70) return;
+        const scaleFactor = findProperty70(properties70,'UnitScaleFactor');
+        if (scaleFactor) {
+            this.unitScaleFactor = scaleFactor[4] as number ?? 1;
+        }
+        const upAxis = findProperty70(properties70,'UpAxis');
+        const frontAxis = findProperty70(properties70,'FrontAxis');
+        const coordAxis = findProperty70(properties70,'CoordAxis');
+        this.upAxis = upAxis?.[4] ?? this.upAxis;
+        this.frontAxis = frontAxis?.[4] ?? this.frontAxis;
+        this.coordAxis = coordAxis?.[4] ?? this.coordAxis;
+
+        const upAxisSign = findProperty70(properties70,'UpAxisSign');
+        const frontAxisSign = findProperty70(properties70,'FrontAxisSign');
+        const coordAxisSign = findProperty70(properties70,'CoordAxisSign');
+        this.upAxisSign = upAxisSign?.[4] || this.upAxisSign;
+        this.frontAxisSign = frontAxisSign?.[4] || this.frontAxisSign;
+        this.coordAxisSign = coordAxisSign?.[4] || this.coordAxisSign;
     }
 
-    private _parseGeometries():ObjPrimitive[]{
-        const result:ObjPrimitive[] = [];
+    private _parseGeometries():FbxModel3d[]{
+        const result:FbxModel3d[] = [];
         findNodes(this.reader.rootNode,'Objects').forEach(o=>{
             findNodes(o,'Geometry').forEach((g,i)=>{
                 //https://banexdevblog.wordpress.com/2014/06/23/a-quick-tutorial-about-the-fbx-ascii-format/amp/#top
@@ -112,11 +166,11 @@ export abstract class AbstractParser {
                 const verticesProcessed:number[] = [];
                 const normalsProcessed:number[] = []; // ByPolygonVertex
 
-                if (i===0) console.log({name,faces,normals,vertices,indices});
-
                 let faceVertexIndex = 0;
                 for (let i = 0; i < faces.length; i++) {
                     const face:number[] = faces[i];
+                    if (face.length<3) throw new Error(`wrong face`);
+
                     // first triangle
                     verticesProcessed.push(
                         ...getVertexByIndex(face[0],3,vertices),
@@ -152,63 +206,132 @@ export abstract class AbstractParser {
                     }
                 }
 
-                const pr:ObjPrimitive = new ObjPrimitive();
+                const pr = new ObjPrimitive();
                 pr.vertexArr = verticesProcessed;
                 pr.indexArr = undefined;
                 pr.normalArr = normalsProcessed;
                 pr.texCoordArr = undefined;
-                result.push(pr);
+
+                const model3d = new FbxModel3d(this.game,pr);
+                model3d.material.diffuseColor.setRGB(0xff);
+                model3d.tag = name;
+                model3d.uuid = uuid;
+                result.push(model3d);
             });
         });
         return result;
     }
 
-    private _parseModels():SimpleGameObjectContainer[] {
-        const res:SimpleGameObjectContainer[] = [];
+    private _parseModels():FbxModelContainer[] {
+        const res:FbxModelContainer[] = [];
         findNodes(this.reader.rootNode,'Objects').forEach(o=>{
             findNodes(o,'Model').forEach(m=>{
+                const uuid = m.props[0] as number;
                 const name = (m.props[1] as string || '').replace('Model::','');
-                const m3dContainer = new SimpleGameObjectContainer(this.game);
-                res.push(m3dContainer);
+                const modelContainer = new FbxModelContainer(this.game);
+                res.push(modelContainer);
 
-                const translationNode = new SimpleGameObjectContainer(this.game);
-                const rotationNode = new SimpleGameObjectContainer(this.game);
-                const scaleNode = new SimpleGameObjectContainer(this.game);
-
-                m3dContainer.appendChild(translationNode);
-                translationNode.appendChild(rotationNode);
-                rotationNode.appendChild(scaleNode);
-                scaleNode.id = 'lastNode';
-
-                m3dContainer.id = name;
-                const propNodes = findNode(m,'Properties70');
-                propNodes.nodes.forEach(pn=>{
-                    if (pn.props[0]==='Lcl Translation') {
-                        translationNode.pos.setXYZ(
-                            pn.props[4] as number,
-                            pn.props[5] as number,
-                            -pn.props[6] as number, // -
-                        );
-                        console.log('translation',pn.props[4],pn.props[5],pn.props[6]);
-                    } else if (pn.props[0]==='Lcl Rotation') {
-                        rotationNode.angle3d.setXYZ(
-                            MathEx.degToRad(pn.props[4] as number),
-                            MathEx.degToRad(pn.props[5] as number),
-                            -MathEx.degToRad(pn.props[6] as number) // -
-                        );
-                        console.log('rotation',pn.props[4],pn.props[5],pn.props[6]);
-                    } else if (pn.props[0]==='Lcl Scaling') {
-                        scaleNode.scale.setXYZ(
-                            pn.props[4] as number / this.unitScaleFactor,
-                            pn.props[5] as number / this.unitScaleFactor,
-                            pn.props[6] as number / this.unitScaleFactor
-                        );
-                        console.log('scale',pn.props[4],pn.props[5],pn.props[6]);
-                    }
-                });
+                modelContainer.uuid = uuid;
+                modelContainer.tag = name;
+                const properties70 = findNode(m,'Properties70');
+                const translation = findProperty70(properties70,'Lcl Translation');
+                if (translation) {
+                    console.log(modelContainer.tag,translation);
+                    const x = (translation[4+2] as number);
+                    const y = -(translation[4+0] as number);
+                    const z = (translation[4+1] as number);
+                    modelContainer.pos.setXYZ(x,y,z);
+                }
+                const rotation = findProperty70(properties70,'Lcl Rotation');
+                if (rotation) {
+                    modelContainer.angle3d.setXYZ(
+                        -MathEx.degToRad(rotation[4+2] as number),
+                        MathEx.degToRad(rotation[4+0] as number),
+                        MathEx.degToRad(rotation[4+1] as number) // -
+                    );
+                }
+                const scale = findProperty70(properties70,'Lcl Scaling');
+                if (scale) {
+                    modelContainer.scale.setXYZ(
+                        scale[4+2] as number / this.unitScaleFactor,
+                        scale[4+0] as number / this.unitScaleFactor,
+                        scale[4+1] as number / this.unitScaleFactor
+                    );
+                }
             });
         });
         return res;
+    }
+
+    private _parseMaterials():FbxMaterial[] {
+        const result:FbxMaterial[] = [];
+        findNodes(this.reader.rootNode,'Material').forEach(m=>{
+            const uuid = m.props[0] as number;
+            const name = ((m.props[1] || '') as string).replace('Material::','');
+            const material = new FbxMaterial();
+            material.tag = name;
+            material.uuid = uuid;
+            const properties70 = findNode(m,'Properties70');
+            const diffuseColor = findProperty70(properties70,'DiffuseColor');
+            if (diffuseColor) {
+                material.diffuseColor.setRGB(
+                    ~~(diffuseColor[4]*0xff) as Uint8,
+                    ~~(diffuseColor[5]*0xff) as Uint8,
+                    ~~(diffuseColor[6]*0xff) as Uint8
+                );
+            }
+            result.push(material);
+        });
+        return result;
+    }
+
+    private _parseConnections():[number,number][] {
+        const result:[number,number][] = [];
+        const connections = findNode(this.reader.rootNode,'Connections');
+        if (!connections) return result;
+        connections.nodes.forEach(c=>{
+            const cn:[number,number] = [
+                c.props[1] as  number,
+                c.props[2] as number
+            ];
+            result.push(cn);
+        });
+        return result;
+    }
+
+    private _applyMaterialsToGeometries(geometries:FbxModel3d[],materials:FbxMaterial[],connections:[number,number][]):void {
+        const materialIds = materials.map(it=>it.uuid);
+        geometries.forEach(g=> {
+            const connectionPair = connections.find(c => c[0] === g.uuid);
+            if (!connectionPair) return;
+            const materialId = (connections.filter(c=>c[1]===connectionPair[1]).filter(c=>materialIds.includes(c[0])))[0]?.[0];
+            if (!materialId) return;
+            const material = materials.find(g => g.uuid === materialId);
+            if (!material) return;
+            g.material = material.clone();
+        });
+    }
+
+    private _applyGeometriesToModels(geometries:FbxModel3d[],models:FbxModelContainer[],connections:[number,number][]):void {
+        geometries.forEach(g=>{
+            const connectionPair = connections.find(c => c[0] === g.uuid);
+            if (!connectionPair) return;
+            const model = models.find(it=>it.uuid===connectionPair[1]);
+            if (!model) return;
+            model.appendChild(g);
+        });
+    }
+
+    private _buildModelGraph(models:FbxModelContainer[],connections:[number,number][]):void {
+        models.forEach(m=>{
+            const connectionPair = connections.find(c => c[0] === m.uuid);
+            if (!connectionPair) return;
+            const parentModel = connectionPair[1]===0?
+                this.container:
+                models.find(it=>it.uuid===connectionPair[1]);
+            if (!parentModel) return;
+            parentModel.appendChild(m);
+        });
     }
 
     private _parse():void {
@@ -218,17 +341,11 @@ export abstract class AbstractParser {
 
         const geometries = this._parseGeometries();
         const models = this._parseModels();
-
-        for (let i = 0; i < models.length; i++) {
-            const model = models[i];
-            const geometry = geometries[i];
-            if (!geometry) break;
-
-            const model3d = new Model3d(this.game,geometry);
-            model3d.fillColor.setRGB(MathEx.randomByte(),MathEx.randomByte(),MathEx.randomByte());
-            model.findChildById('lastNode')!.appendChild(model3d);
-            this.container.appendChild(model);
-        }
+        const materials = this._parseMaterials();
+        const connections = this._parseConnections();
+        this._applyMaterialsToGeometries(geometries,materials,connections);
+        this._applyGeometriesToModels(geometries,models,connections);
+        this._buildModelGraph(models,connections);
     }
 
     public getModel():RenderableModel {

@@ -197,7 +197,7 @@ export class Polygon extends Mesh2d {
             }
         }();
         m.depthTest = true;
-        m.fillColor = this.fillColor.clone();
+        m.material.diffuseColor = this.fillColor.clone();
         return m;
     }
 

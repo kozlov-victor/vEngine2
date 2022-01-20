@@ -2,14 +2,14 @@ import {Optional} from "@engine/core/declarations";
 import {Wave} from "../internal/wav";
 
 export type tFrame = [
-    r0:byte,r1:byte,
-    r2:byte,r3:byte,
-    r4:byte,r5:byte,
-    r6:byte,r7:byte,
-    r8:byte,r9:byte,
-    r10:byte,r11:byte,
-    r12:byte,r13:byte,
-    r14:byte,r15:byte
+    r0:Uint8,r1:Uint8,
+    r2:Uint8,r3:Uint8,
+    r4:Uint8,r5:Uint8,
+    r6:Uint8,r7:Uint8,
+    r8:Uint8,r9:Uint8,
+    r10:Uint8,r11:Uint8,
+    r12:Uint8,r13:Uint8,
+    r14:Uint8,r15:Uint8
 ];
 
 export abstract class AbstractChipTrack {

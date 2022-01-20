@@ -5,7 +5,7 @@ export class Psg extends AbstractChipTrack {
 
     private readonly buffer:BinBuffer;
 
-    private versionNumber:byte;
+    private versionNumber:Uint8;
 
     constructor(arr:number[]|ArrayBuffer) {
         super();
@@ -58,7 +58,7 @@ export class Psg extends AbstractChipTrack {
         this.masterClock = 2000000; // БК-0010 processor frequency (3mHz, but 2 is more similar to original sound from emulator )
     }
 
-    private static ay_out(port:byte, data:byte, frame:byte[]):void {
+    private static ay_out(port:Uint8, data:Uint8, frame:Uint8[]):void {
         if (port>16) {
             return;
         }

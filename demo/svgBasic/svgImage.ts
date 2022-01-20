@@ -300,8 +300,8 @@ class SvgElementRenderer {
         const fillOpacity:number = getNumber(this.lookUpProperty(el,'fill-opacity',true),1);
         const strokeOpacity:number = getNumber(this.lookUpProperty(el,'stroke-opacity',true),1);
 
-        if (rawFillValue!=='none') fillColor.a = ~~(fillOpacity*255) as byte;
-        if (rawStrokeValue!=='none') drawColor.a = ~~(strokeOpacity*255) as byte;
+        if (rawFillValue!=='none') fillColor.a = ~~(fillOpacity*255) as Uint8;
+        if (rawStrokeValue!=='none') drawColor.a = ~~(strokeOpacity*255) as Uint8;
 
         return {lineWidth,fillColor,drawColor};
     }

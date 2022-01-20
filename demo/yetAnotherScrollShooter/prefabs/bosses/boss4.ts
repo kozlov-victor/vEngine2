@@ -30,7 +30,7 @@ export class Boss4 extends SimpleGameObjectContainer {
         obj.scale.setXYZ(30);
 
         obj.children.forEach(c=>{
-            (c as Model3d).specular = 0.4;
+            (c as Model3d).material.specular = 0.4;
         });
 
         obj.setInterval(()=>{

@@ -22,7 +22,7 @@ export class Spinner extends AbstractEntity {
         obj.scale.setXYZ(10);
 
         obj.children.forEach(c=>{
-            (c as Model3d).specular = 0.5;
+            (c as Model3d).material.specular = 0.5;
         });
         obj.setInterval(()=>{
             obj.angle3d.y+=0.02;

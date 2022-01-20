@@ -444,10 +444,10 @@ export class X3dParser {
         pr.vertexColorArr = [];
         const model3d:Model3d = new Model3d(this.game,pr);
         if (params.diffuseColor!==undefined) {
-            model3d.fillColor = new Color(
-                ~~(params.diffuseColor[0]*255) as byte,
-                ~~(params.diffuseColor[0]*255) as byte,
-                ~~(params.diffuseColor[0]*255) as byte,
+            model3d.material.diffuseColor = new Color(
+                ~~(params.diffuseColor[0]*255) as Uint8,
+                ~~(params.diffuseColor[0]*255) as Uint8,
+                ~~(params.diffuseColor[0]*255) as Uint8,
             );
         }
 
@@ -632,6 +632,7 @@ export class X3dParser {
                 break;
             }
             default: {
+                //
             }
         }
         node.getChildNodes().forEach(childNode=>{

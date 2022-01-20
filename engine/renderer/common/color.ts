@@ -4,17 +4,17 @@ import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 
 
 export interface IColorJSON {
-    r:byte;
-    g:byte;
-    b:byte;
-    a:byte;
+    r:Uint8;
+    g:Uint8;
+    b:Uint8;
+    a:Uint8;
 }
 
 export interface IColorFrozen extends Color{
-    readonly r:byte;
-    readonly g:byte;
-    readonly b:byte;
-    readonly a:byte;
+    readonly r:Uint8;
+    readonly g:Uint8;
+    readonly b:Uint8;
+    readonly a:Uint8;
 }
 
 const alignTo2Symbols = (val:string):string=>{
@@ -25,40 +25,40 @@ const alignTo2Symbols = (val:string):string=>{
 export class Color extends ObservableEntity implements ICloneable<Color>, IColorJSON{
 
 
-    constructor(r:byte = 0,g:byte = r,b:byte = g,a:byte = 255){
+    constructor(r:Uint8 = 0, g:Uint8 = r, b:Uint8 = g, a:Uint8 = 255){
         super();
         this.setRGBA(r,g,b,a);
     }
 
-    get r(): byte {
+    get r(): Uint8 {
         return this._r;
     }
 
-    set r(value: byte) {
+    set r(value: Uint8) {
         this.setRGBA(value,this._g,this._b,this._a);
     }
 
-    get g(): byte {
+    get g(): Uint8 {
         return this._g;
     }
 
-    set g(value: byte) {
+    set g(value: Uint8) {
         this.setRGBA(this._r,value,this._b,this._a);
     }
 
-    get b(): byte {
+    get b(): Uint8 {
         return this._b;
     }
 
-    set b(value: byte) {
+    set b(value: Uint8) {
         this.setRGBA(this._r,this._g,value,this._a);
     }
 
-    get a(): byte {
+    get a(): Uint8 {
         return this._a;
     }
 
-    set a(value: byte) {
+    set a(value: Uint8) {
         this.setRGBA(this._r,this._g,this._b,value);
     }
 
@@ -69,10 +69,10 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
 
     public readonly type:'Color' = 'Color';
 
-    private _r:byte;
-    private _g:byte;
-    private _b:byte;
-    private _a:byte;
+    private _r:Uint8;
+    private _g:Uint8;
+    private _b:Uint8;
+    private _a:Uint8;
 
     private rNorm:number;
     private gNorm:number;
@@ -81,11 +81,11 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
     private _arr:Float32Array;
     private _friezed:boolean = false;
 
-    public static RGB(r:byte,g:byte = r,b:byte = r):Color{
+    public static RGB(r:Uint8, g:Uint8 = r, b:Uint8 = r):Color{
         return Color.RGBA(r,g,b,255);
     }
 
-    public static HSLA(h:number,s:number,l:number,a:byte):Color{
+    public static HSLA(h:number,s:number,l:number,a:Uint8):Color{
         const c:Color = new Color();
         c.setHSLA(h,s,l,a);
         return c;
@@ -101,7 +101,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         return c;
     }
 
-    public static RGBA(r:byte,g:byte = r,b:byte = g, a:byte = 255):Color{
+    public static RGBA(r:Uint8, g:Uint8 = r, b:Uint8 = g, a:Uint8 = 255):Color{
         return new Color(r,g,b,a);
     }
 
@@ -110,9 +110,9 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
     }
 
     public static fromRGBNumeric(col:number):Color {
-        const r:byte = (col & 0xFF_00_00)>>(4*4) as byte;
-        const g:byte = (col & 0x00_FF_00)>>(4*2) as byte;
-        const b:byte = (col & 0x00_00_FF) as byte;
+        const r:Uint8 = (col & 0xFF_00_00)>>(4*4) as Uint8;
+        const g:Uint8 = (col & 0x00_FF_00)>>(4*2) as Uint8;
+        const b:Uint8 = (col & 0x00_00_FF) as Uint8;
         return new Color(r,g,b);
     }
 
@@ -125,40 +125,40 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
 
     private static _calculateColorComponentsFromCss(literal:string):IColorJSON {
         literal = literal.trim();
-        let r:byte = 0,g:byte = 0,b:byte = 0,a:byte = 0;
+        let r:Uint8 = 0,g:Uint8 = 0,b:Uint8 = 0,a:Uint8 = 0;
         if (literal.substr(0,1)==="#") {
             const numericPart:string = literal.substr(1);
             if (numericPart.length===3) { // string like fff
-                r = ~~(parseInt(numericPart.substr(0,1),16) * 0xFF / 0xF) as byte;
-                g = ~~(parseInt(numericPart.substr(1,1),16) * 0xFF / 0xF) as byte;
-                b = ~~(parseInt(numericPart.substr(2,1),16) * 0xFF / 0xF) as byte;
+                r = ~~(parseInt(numericPart.substr(0,1),16) * 0xFF / 0xF) as Uint8;
+                g = ~~(parseInt(numericPart.substr(1,1),16) * 0xFF / 0xF) as Uint8;
+                b = ~~(parseInt(numericPart.substr(2,1),16) * 0xFF / 0xF) as Uint8;
                 a = 255;
             } else if (numericPart.length===6) { // string like rrggbb
-                r = ~~(parseInt(numericPart.substr(0,2),16)) as byte;
-                g = ~~(parseInt(numericPart.substr(2,2),16)) as byte;
-                b = ~~(parseInt(numericPart.substr(4,2),16)) as byte;
+                r = ~~(parseInt(numericPart.substr(0,2),16)) as Uint8;
+                g = ~~(parseInt(numericPart.substr(2,2),16)) as Uint8;
+                b = ~~(parseInt(numericPart.substr(4,2),16)) as Uint8;
                 a = 255;
             } else if (numericPart.length===8) { // string like rrggbbaa
-                r = ~~(parseInt(numericPart.substr(0,2),16)) as byte;
-                g = ~~(parseInt(numericPart.substr(2,2),16)) as byte;
-                b = ~~(parseInt(numericPart.substr(4,2),16)) as byte;
-                a = ~~(parseInt(numericPart.substr(6,2),16)) as byte;
+                r = ~~(parseInt(numericPart.substr(0,2),16)) as Uint8;
+                g = ~~(parseInt(numericPart.substr(2,2),16)) as Uint8;
+                b = ~~(parseInt(numericPart.substr(4,2),16)) as Uint8;
+                a = ~~(parseInt(numericPart.substr(6,2),16)) as Uint8;
             } else {
                 if (DEBUG) throw new DebugError(`unsupported or wrong color literal: ${literal}`);
             }
         }
         else {
             if (literal.indexOf('rgb')===0) {
-                [r,g,b,a] = literal.split("(")[1].split(")")[0].split(",").map(x=>+x) as [byte,byte,byte,byte];
-                if (a===undefined) a = 255 as byte;
-                else a=~~(a * 255) as byte;
+                [r,g,b,a] = literal.split("(")[1].split(")")[0].split(",").map(x=>+x) as [Uint8,Uint8,Uint8,Uint8];
+                if (a===undefined) a = 255 as Uint8;
+                else a=~~(a * 255) as Uint8;
             }
             else if (literal.indexOf('hsl')===0) {
                 let h: number, s: number, l: number,
-                    alfa: byte;
-                [h, s, l, alfa] = literal.split("(")[1].split(")")[0].split(",").map(x => parseInt(x)) as [number, number, number, byte];
-                if (alfa === undefined) alfa = 255 as byte;
-                else alfa = ~~(alfa * 255) as byte;
+                    alfa: Uint8;
+                [h, s, l, alfa] = literal.split("(")[1].split(")")[0].split(",").map(x => parseInt(x)) as [number, number, number, Uint8];
+                if (alfa === undefined) alfa = 255 as Uint8;
+                else alfa = ~~(alfa * 255) as Uint8;
                 return Color.HSLA(h, s, l, alfa);
 
             } else {
@@ -168,7 +168,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         return {r,g,b,a};
     }
 
-    public setRGBA(r:byte,g:byte,b:byte,a:byte = 255):void{
+    public setRGBA(r:Uint8, g:Uint8, b:Uint8, a:Uint8 = 255):void{
 
         if (DEBUG) {
             if (r===undefined || g===undefined || b===undefined) {
@@ -187,7 +187,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         this.normalizeToZeroOne();
     }
 
-    public setRGB(r:byte,g:byte = r,b:byte = g):void{
+    public setRGB(r:Uint8, g:Uint8 = r, b:Uint8 = g):void{
         this.setRGBA(r,g,b,255);
     }
 
@@ -197,7 +197,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
      * @param l light 0-100%
      * @param a alpha 0-255
      */
-    public setHSLA(h:number,s:number,l:number,a:byte):void{
+    public setHSLA(h:number,s:number,l:number,a:Uint8):void{
 
         h = (h%360)/360;
         s/=100;
@@ -224,9 +224,9 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
             b = hue2rgb(p, q, h - 1/3);
         }
 
-        const rResult:byte = Math.round(r * 255) as byte;
-        const gResult:byte = Math.round(g * 255) as byte;
-        const bResult:byte = Math.round(b * 255) as byte;
+        const rResult:Uint8 = Math.round(r * 255) as Uint8;
+        const gResult:Uint8 = Math.round(g * 255) as Uint8;
+        const bResult:Uint8 = Math.round(b * 255) as Uint8;
         this.setRGBA(rResult,gResult,bResult,a);
     }
 
@@ -279,9 +279,9 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
             }
         }
         this.setRGB(
-            ~~(r*255) as byte,
-            ~~(b*255) as byte,
-            ~~(b*255) as byte,
+            ~~(r*255) as Uint8,
+            ~~(b*255) as Uint8,
+            ~~(b*255) as Uint8,
         );
     }
 

@@ -30,7 +30,7 @@ export class MainScene extends Scene {
         });
         obj.pos.setXY(200,250);
         obj.children.forEach(c=>{
-            (c as Model3d).reflectivity = 0.5;
+            (c as Model3d).material.reflectivity = 0.5;
         });
         obj.size.setWH(200,200);
         obj.scale.setXYZ(800);

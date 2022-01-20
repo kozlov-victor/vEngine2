@@ -2,7 +2,7 @@ import {Game} from "@engine/core/game";
 
 declare type nibble = 0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15;
 
-const ROM:byte[] = [
+const ROM:Uint8[] = [
     0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
     0x20, 0x60, 0x20, 0x20, 0x70, // 1
     0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
@@ -82,8 +82,8 @@ export abstract class Emulator {
     private static readonly ROM_OFFSET: number = 0x200;
     public readonly keyboard: Keyboard = new Keyboard();
 
-    private memory: byte[] = new Array(Emulator.MEMORY_SIZE);
-    private V: byte[] = new Array(0xF + 1);
+    private memory: Uint8[] = new Array(Emulator.MEMORY_SIZE);
+    private V: Uint8[] = new Array(0xF + 1);
     private I: number;
     private stack: number[] = new Array(Emulator.STACK_SIZE);
     private SP: number;
@@ -114,7 +114,7 @@ export abstract class Emulator {
     public setRom(rom: Uint8Array):void {
         if (this.debug) console.log({rom});
         for (let i = 0; i < rom.length; i++) {
-            this.memory[Emulator.ROM_OFFSET + i] = rom[i] as byte;
+            this.memory[Emulator.ROM_OFFSET + i] = rom[i] as Uint8;
         }
         this.oneTick();
         if (this.debug) console.log({memory: this.memory});
@@ -205,7 +205,7 @@ export abstract class Emulator {
         }
     }
 
-    private SNE_X_NN(x: nibble, nn: byte):void {
+    private SNE_X_NN(x: nibble, nn: Uint8):void {
         if (this.debug) console.log(`0x${this.PC.toString(16)}: SNE_X_NN ${x} ${nn} (v[${x}]=${this.V[x].toString(16)})`);
         if (this.V[x] !== nn) {
             this.PC_altered = true;
@@ -221,8 +221,8 @@ export abstract class Emulator {
         }
     }
 
-    private LD_X_NN(x: nibble, nn: byte):void {
-        this.V[x] = (nn & 0xFF) as byte;
+    private LD_X_NN(x: nibble, nn: Uint8):void {
+        this.V[x] = (nn & 0xFF) as Uint8;
         if (this.debug) console.log(`0x${this.PC.toString(16)}: LD_X_NN ${x} ${nn} (v[${x}]=${this.V[x].toString(16)})`);
     }
 
@@ -242,13 +242,13 @@ export abstract class Emulator {
     }
 
     private LD_B_X(x: nibble):void {
-        const vx: byte = this.V[x];
+        const vx: Uint8 = this.V[x];
         const hundreds: number = ~~(vx / 100);
         const tens: number = ~~((vx - 100 * hundreds) / 10);
         const ones: number = (vx - 100 * hundreds - 10 * tens);
-        this.writeMemory(this.I, (hundreds & 0xFF) as byte);
-        this.writeMemory(this.I + 1, (tens & 0xFF) as byte);
-        this.writeMemory(this.I + 2, (ones & 0xFF) as byte);
+        this.writeMemory(this.I, (hundreds & 0xFF) as Uint8);
+        this.writeMemory(this.I + 1, (tens & 0xFF) as Uint8);
+        this.writeMemory(this.I + 2, (ones & 0xFF) as Uint8);
         if (this.debug) console.log(`0x${this.PC.toString(16)}: LD_B_X ${x}`);
     }
 
@@ -266,16 +266,16 @@ export abstract class Emulator {
         }
     }
 
-    private ADD_X_NN(x: nibble, nn: byte):void {
-        this.V[x] = ((this.V[x] + nn) & 0xFF) as byte;
+    private ADD_X_NN(x: nibble, nn: Uint8):void {
+        this.V[x] = ((this.V[x] + nn) & 0xFF) as Uint8;
         if (this.debug) console.log(`0x${this.PC.toString(16)}: ADD_X_NN ${x} ${nn} (x[${x}]=${this.V[x].toString(16)})`);
     }
 
     private ADD_X_Y(x: nibble, y: nibble):void {
-        this.V[x] = (this.V[x] + this.V[y]) as byte;
+        this.V[x] = (this.V[x] + this.V[y]) as Uint8;
         if (this.V[x] > 0xFF) {
             this.V[0xF] = 0x1;
-            this.V[x] = (this.V[x] & 0xFF) as byte;
+            this.V[x] = (this.V[x] & 0xFF) as Uint8;
         } else {
             this.V[0xF] = 0x0;
         }
@@ -288,48 +288,48 @@ export abstract class Emulator {
     }
 
     private OR(x: nibble, y: nibble):void {
-        this.V[x] = ((this.V[x] | this.V[y]) & 0xFF) as byte;
+        this.V[x] = ((this.V[x] | this.V[y]) & 0xFF) as Uint8;
         if (this.debug) console.log(`OR ${x} ${y} (x[${x}]=${this.V[x].toString(16)}`);
     }
 
     private AND(x: nibble, y: nibble):void {
-        this.V[x] = ((this.V[x] & this.V[y]) & 0xFF) as byte;
+        this.V[x] = ((this.V[x] & this.V[y]) & 0xFF) as Uint8;
         if (this.debug) console.log(`0x${this.PC.toString(16)}: AND ${x} ${y} (x[${x}]=${this.V[x].toString(16)})`);
     }
 
     private XOR(x: nibble, y: nibble):void {
-        this.V[x] = ((this.V[x] ^ this.V[y]) & 0xFF) as byte;
+        this.V[x] = ((this.V[x] ^ this.V[y]) & 0xFF) as Uint8;
         if (this.debug) console.log(`0x${this.PC.toString(16)}: XOR ${x} ${y} (x[${x}]=${this.V[x].toString(16)})`);
     }
 
     private SUB(x: nibble, y: nibble):void {
         if (this.V[x] > this.V[y]) this.V[0xF] = 0x1;
         else this.V[0xF] = 0x0;
-        this.V[x] = ((this.V[x] - this.V[y]) & 0xFF) as byte;
+        this.V[x] = ((this.V[x] - this.V[y]) & 0xFF) as Uint8;
         if (this.debug) console.log(`0x${this.PC.toString(16)}: SUB ${x} ${y} (x[${x}]=${this.V[x].toString(16)} v[0xf]=${this.V[0xF]})`);
     }
 
     private SUBN(x: nibble, y: nibble):void {
         if (this.V[y] > this.V[x]) this.V[0xF] = 0x1;
         else this.V[0xF] = 0x0;
-        this.V[x] = ((this.V[y] - this.V[x]) & 0xFF) as byte;
+        this.V[x] = ((this.V[y] - this.V[x]) & 0xFF) as Uint8;
         if (this.debug) console.log(`0x${this.PC.toString(16)}: SUBN ${x} ${y} (x[${x}]=${this.V[x].toString(16)} v[0xf]=${this.V[0xF]})`);
     }
 
     private SHR(x: nibble):void {
-        this.V[0xF] = (this.V[x] & 0b0000_0001) as byte;
-        this.V[x] = ((this.V[x] >> 1) & 0xFF) as byte;
+        this.V[0xF] = (this.V[x] & 0b0000_0001) as Uint8;
+        this.V[x] = ((this.V[x] >> 1) & 0xFF) as Uint8;
         if (this.debug) console.log(`0x${this.PC.toString(16)}: SHR ${x} (x[${x}]=${this.V[x].toString(16)})`);
     }
 
     private SHL(x: nibble):void {
-        this.V[0xF] = (this.V[x] & 0b0000_0001) as byte;
-        this.V[x] = ((this.V[x] << 1) & 0xFF) as byte;
+        this.V[0xF] = (this.V[x] & 0b0000_0001) as Uint8;
+        this.V[x] = ((this.V[x] << 1) & 0xFF) as Uint8;
         if (this.debug) console.log(`0x${this.PC.toString(16)}: SHL ${x} (x[${x}]=${this.V[x].toString(16)} v[0xf]=${this.V[0xF]})`);
     }
 
-    private RND(x: nibble, nn: byte):void {
-        this.V[x] = ((~~(Math.random() * 256)) & nn) as byte;
+    private RND(x: nibble, nn: Uint8):void {
+        this.V[x] = ((~~(Math.random() * 256)) & nn) as Uint8;
         if (this.debug) console.log(`0x${this.PC.toString(16)}: RND ${x} ${x} ${nn} ((x[${x}]=${this.V[x].toString(16)}))`);
     }
 
@@ -340,7 +340,7 @@ export abstract class Emulator {
         let flipped: boolean = false;
         if (this.debug) console.log('for', this.I, this.I + n);
         for (let b: number = this.I; b < this.I + n; b++) {
-            const currByte: byte = this.readMemory(b);
+            const currByte: Uint8 = this.readMemory(b);
             if (this.debug) console.log(currByte.toString(2));
             for (let i: number = 7; i >= 0; i--) {
                 const powOfTwo: number = Math.pow(2, i);
@@ -359,7 +359,7 @@ export abstract class Emulator {
 
     private LD_X_DT(x: nibble):void {
         if (this.debug) console.log(`0x${this.PC.toString(16)}: LD_X_DT ${x}`);
-        this.V[x] = (this.delayTimer.getValue() & 0xFF) as byte;
+        this.V[x] = (this.delayTimer.getValue() & 0xFF) as Uint8;
     }
 
     private LD_DT_X(x: nibble):void {
@@ -405,7 +405,7 @@ export abstract class Emulator {
 
         const lastNibble: nibble = ((opCode & 0b1111_0000_0000_0000) >> 0xC) as nibble;
         const NNN: number = opCode & 0b0000_1111_1111_1111;
-        const NN: byte = (opCode & 0b0000_0000_1111_1111) as byte;
+        const NN: Uint8 = (opCode & 0b0000_0000_1111_1111) as Uint8;
         const N: nibble = (opCode & 0b0000_0000_0000_1111) as nibble;
         const X: nibble = ((opCode & 0b0000_1111_0000_0000) >> 0x8) as nibble;
         const Y: nibble = ((opCode & 0b0000_0000_1111_0000) >> 0x4) as nibble;
@@ -504,12 +504,12 @@ export abstract class Emulator {
         }
     }
 
-    private readMemory(addr: number):byte {
+    private readMemory(addr: number):Uint8 {
         if (addr > Emulator.MEMORY_SIZE - 1) throw new Error(`address ${addr.toString(16)}: memory can not be read`);
         return this.memory[addr];
     }
 
-    private writeMemory(addr: number, value: byte):void {
+    private writeMemory(addr: number, value: Uint8):void {
         if (addr > Emulator.MEMORY_SIZE - 1 || addr < Emulator.ROM_OFFSET) throw new Error(`address ${addr.toString(16)}: memory can not be write`);
         this.memory[addr] = value;
     }

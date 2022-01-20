@@ -49,25 +49,25 @@ export class BinBuffer {
         return this.view;
     }
 
-    public getInt8Array():byte[]{
-        const res:byte[] = new Array(this.view.buffer.byteLength);
+    public getInt8Array():Uint8[]{
+        const res:Uint8[] = new Array(this.view.buffer.byteLength);
         for (let i:number = 0; i < this.view.buffer.byteLength; i++) {
-            res[i] = this.view.getInt8(i) as byte;
+            res[i] = this.view.getInt8(i) as Uint8;
         }
         return res;
     }
 
-    public getUint8Array():byte[]{
-        const res:byte[] = new Array(this.view.buffer.byteLength);
+    public getUint8Array():Uint8[]{
+        const res:Uint8[] = new Array(this.view.buffer.byteLength);
         for (let i:number = 0; i < this.view.buffer.byteLength; i++) {
-            res[i] = this.view.getUint8(i) as byte;
+            res[i] = this.view.getUint8(i) as Uint8;
         }
         return res;
     }
 
-    public getRestUints8():byte[]{
+    public getRestUints8():Uint8[]{
         const restSize:number = this.getByteLength() - this.getPointer();
-        const res:byte[] = new Array<byte>(restSize);
+        const res:Uint8[] = new Array<Uint8>(restSize);
         for (let i:number = 0; i < restSize; i++) {
             res[i] = this.readUint8();
         }
@@ -129,14 +129,14 @@ export class BinBuffer {
         return res;
     }
 
-    public readUint8():byte{
-        const res:byte = this.view.getUint8(this.pointer) as byte;
+    public readUint8():Uint8{
+        const res:Uint8 = this.view.getUint8(this.pointer) as Uint8;
         this.pointer++;
         return res;
     }
 
-    public readInt8():byte{
-        const res:byte = this.view.getInt8(this.pointer) as byte;
+    public readInt8():Uint8{
+        const res:Uint8 = this.view.getInt8(this.pointer) as Uint8;
         this.pointer++;
         return res;
     }
@@ -145,18 +145,18 @@ export class BinBuffer {
         return this.view.getUint8(pos);
     }
 
-    public readUints8(n:number):byte[]{
+    public readUints8(n:number):Uint8[]{
         if (n<0) throw new Error(`wont argument: ${n}`);
-        const res:byte[] = [];
+        const res:Uint8[] = [];
         for (let i = 0; i < n; i++) {
             res.push(this.readUint8());
         }
         return res;
     }
 
-    public readInts8(n:number):byte[]{
+    public readInts8(n:number):Uint8[]{
         if (n<0) throw new Error(`wont argument: ${n}`);
-        const res:byte[] = [];
+        const res:Uint8[] = [];
         for (let i = 0; i < n; i++) {
             res.push(this.readInt8());
         }

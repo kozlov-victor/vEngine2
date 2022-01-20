@@ -13,6 +13,7 @@ import {IPhysicsSystem} from "@engine/physics/common/interfaces";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 
 
 export const enum SCALE_STRATEGY {
@@ -33,8 +34,13 @@ interface ISceneWithTransition {
     transition:Optional<ISceneTransition>;
 }
 
+export const enum GAME_EVENTS {
+    PRELOADING = 'PRELOADING',
+}
+
 export class Game {
 
+    public readonly loadEventHandler = new EventEmitterDelegate<GAME_EVENTS,{taskQueue:TaskQueue}>(this);
 
     constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT, containerElement}:IGameConstructorParams = {}){
         Game._instance = this;
@@ -190,6 +196,7 @@ export class Game {
                     console.error(e);
                 });
             this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.PRELOADING,{taskQueue});
+            this.loadEventHandler.trigger(GAME_EVENTS.PRELOADING,{taskQueue});
             scene.onPreloading(taskQueue);
             resourceLoader.onProgress((n:number)=>{
                 this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.PROGRESS,{taskQueue});
@@ -198,7 +205,7 @@ export class Game {
             resourceLoader.onResolved(()=>{
                 this._currScene.onReady();
                 this._currScene.onContinue();
-                this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.COMPLETED,{taskQueue});
+                this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.LOADING_COMPLETED,{taskQueue});
                 this._currScene.lifeCycleState = SceneLifeCycleState.COMPLETED;
             });
         } else {

@@ -17,7 +17,7 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         const obj:Model3d = new Model3d(this.game,new Cube(150));
-        obj.fillColor.setRGB(255,255,255);
+        obj.material.diffuseColor.setRGB(255,255,255);
         obj.texture = this.logoLink;
         obj.normalsTexture = this.normalsLink;
         obj.pos.setXY(this.game.size.width/2,this.game.size.height/2);

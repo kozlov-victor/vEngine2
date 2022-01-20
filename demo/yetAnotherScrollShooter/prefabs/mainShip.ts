@@ -33,7 +33,7 @@ export class MainShip extends AbstractEntity {
         this.size.setWH(400);
 
         obj.children.forEach(c=>{
-            (c as Model3d).specular = 0.3;
+            (c as Model3d).material.specular = 0.3;
         });
         const lamp = obj.children.find(it=>it.id==='light') as RenderableModel;
         this.setInterval(()=>{
