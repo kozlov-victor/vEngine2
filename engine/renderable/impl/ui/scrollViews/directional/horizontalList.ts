@@ -3,9 +3,9 @@ import {Direction} from "@engine/renderable/impl/ui/_internal/sideHelperFunction
 import {Game} from "@engine/core/game";
 
 export class HorizontalList extends AbstractDirectionalList {
-    protected direction: Direction = Direction.HORIZONTAL;
+    protected override _direction: Direction = Direction.HORIZONTAL;
 
-    protected getCurrentScrollOffset(): number {
+    protected override _getCurrentScrollOffset(): number {
         return this._scrollContainerDelegate.getCurrentOffsetHorizontal();
     }
 

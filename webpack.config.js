@@ -48,6 +48,7 @@ class InputOutputResolver {
 
 class WebpackDonePlugin{
     apply(compiler){
+
         compiler.hooks.done.tap('compilation',  (stats)=> {
             const date = new Date();
             const leadZero = (val)=>{

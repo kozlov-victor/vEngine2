@@ -11,10 +11,17 @@ export abstract class AbstractLayout extends WidgetContainer {
     }
 
     protected iterateChildren(cb:(c:RenderableModel)=>void):void {
-        this.children.forEach((c,i)=>{
-            if (i<=3) return;
+        this._children.forEach((c, i)=>{
+            if (i<=WidgetContainer.INTERNAL_CHILD_OFFSET_INDEX-1) return;
             cb(c);
         });
     }
 
+    public override getChildrenCount(): number {
+        return super.getChildrenCount() - WidgetContainer.INTERNAL_CHILD_OFFSET_INDEX;
+    }
+
+    public override getChildAt(index: number): this {
+        return super.getChildAt(index + WidgetContainer.INTERNAL_CHILD_OFFSET_INDEX);
+    }
 }

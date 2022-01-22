@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         newParticle.vel_y = Math.random() * 5;
         this.appendChild(newParticle);
 
-        for (const particle of (this.getLayers()[0].children  as Particle[])) {
+        for (const particle of (this.getLayers()[0]._children  as Particle[])) {
             if (particle.pos.x > this.size.width) {
                 this.removeChild(particle);
             } else {

@@ -33,7 +33,7 @@ export class MainScene extends Scene {
         obj.size.setWH(200,200);
         obj.scale.setXYZ(2,2, 2);
         this.appendChild(obj);
-        obj.children.forEach(c=>{
+        obj._children.forEach(c=>{
             (c as Mesh3d).material.reflectivity = 0.3;
         });
         obj.addBehaviour(new DraggableBehaviour(this.game));

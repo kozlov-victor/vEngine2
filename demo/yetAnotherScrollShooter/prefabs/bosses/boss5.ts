@@ -29,7 +29,7 @@ export class Boss5 extends SimpleGameObjectContainer {
         this.size.setWH(400);
         obj.scale.setXYZ(30);
 
-        const wheel = obj.children.find(it=>it.id.indexOf('wheel')>-1)!;
+        const wheel = obj._children.find(it=>it.id.indexOf('wheel')>-1)!;
 
         obj.setInterval(()=>{
             wheel.angle3d.x+=0.04;

@@ -21,7 +21,7 @@ export class Plus extends SimpleGameObjectContainer {
         this.size.setWH(400);
         obj.scale.setXYZ(1);
 
-        const cross = obj.children.find(it=>it.id.indexOf('cross')>-1)!;
+        const cross = obj._children.find(it=>it.id.indexOf('cross')>-1)!;
 
         obj.setInterval(()=>{
             cross.angle3d.y+=0.03;

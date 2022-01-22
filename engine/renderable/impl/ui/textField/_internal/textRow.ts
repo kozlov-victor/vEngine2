@@ -8,7 +8,7 @@ import {Color} from "@engine/renderer/common/color";
 
 export class TextRow extends SimpleGameObjectContainer {
 
-    public declare children: readonly Word[];
+    public declare _children:Word[];
 
     private caret:number = 0;
     private alignText:AlignText = AlignText.LEFT;
@@ -18,13 +18,13 @@ export class TextRow extends SimpleGameObjectContainer {
     }
 
     public canAddWord(word:Word):boolean{
-        if (this.children.length===0) return true;
+        if (this._children.length===0) return true;
         const currentSpaceWidth:number = word.getMaxCharacterFontScale() * this.rowSet.DEFAULT_SPACE_CHAR_WIDTH;
         return this.caret + currentSpaceWidth + word.size.width<=this.constrainWidth;
     }
 
     public addWord(word:Word,addWhiteSpaceBeforeIfNeed:boolean):void {
-        if (this.children.length!==0 && addWhiteSpaceBeforeIfNeed) {
+        if (this._children.length!==0 && addWhiteSpaceBeforeIfNeed) {
             const scaleFromCurrFontSize:number = word.getMaxCharacterFontScale();
             const space:Word =
                 new Word(this.game,this.font,[{rawChar:' ',multibyte:false,scaleFromCurrFontSize}],Color.NONE,this.rowSet.isPixelPerfect());
@@ -34,18 +34,18 @@ export class TextRow extends SimpleGameObjectContainer {
     }
 
     public complete():void {
-        if (this.children.length===0) {
+        if (this._children.length===0) {
             this.size.height = this.font.context.lineHeight;
         } else {
             this.size.height =
-                Math.max(...this.children.map(it=>it.getMaxCharacterLineHeight()));
+                Math.max(...this._children.map(it=>it.getMaxCharacterLineHeight()));
         }
         // + this.font.context.spacing[1]; hierro fnt already goes with precalculated lineHeight
     }
 
     public updateWordsVisibility():void{
-        for (let i:number = 0; i < this.children.length; i++) {
-            const c:Word = this.children[i];
+        for (let i:number = 0; i < this._children.length; i++) {
+            const c:Word = this._children[i];
             if ((c.pos.x + this.rowSet.pos.x + c.size.width) <0) c.visible = false;
             else {
                 c.visible = (c.pos.x + this.rowSet.pos.x) <= this.constrainWidth;
@@ -54,11 +54,11 @@ export class TextRow extends SimpleGameObjectContainer {
     }
 
     public getMaxCharacterFontScale(): number {
-        return Math.max(...this.children.map(it=>it.getMaxCharacterFontScale())) ?? 1;
+        return Math.max(...this._children.map(it=>it.getMaxCharacterFontScale())) ?? 1;
     }
 
     public setAlignText(align:AlignText):void{
-        if (this.children.length===0) return;
+        if (this._children.length===0) return;
         if (align===this.alignText) return;
 
         switch (align) {
@@ -72,7 +72,7 @@ export class TextRow extends SimpleGameObjectContainer {
                 this.pos.setX(0);
                 break;
             case AlignText.JUSTIFY:
-                const onlyWords:Word[] = this.children.filter(it=>it.rawValue!==' ');
+                const onlyWords:Word[] = this._children.filter(it=>it.rawValue!==' ');
                 const onlyWordsWidth:number =
                     onlyWords.
                     map(it=>it.size.width).
@@ -84,7 +84,7 @@ export class TextRow extends SimpleGameObjectContainer {
                 this.caret = 0;
 
                 onlyWords.forEach(w=>{
-                    if (this.children.length!==0) {
+                    if (this._children.length!==0) {
                         this.caret+=spaceWidth;
                     }
                     this._addWord(w);

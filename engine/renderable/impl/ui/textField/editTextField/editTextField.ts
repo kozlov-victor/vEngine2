@@ -113,8 +113,8 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
             c.uuid??=Incrementer.getValue();
         });
         super._applyText();
-        for (let i:number = 0; i < this.rowSet.children.length; i++) {
-            const row:TextRow = this.rowSet.children[i];
+        for (let i:number = 0; i < this.rowSet._children.length; i++) {
+            const row:TextRow = this.rowSet._children[i];
             const newline:ICharacterInfo =
                 newLines[i] ||
                 {
@@ -122,7 +122,7 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
                     multibyte:false,
                     scaleFromCurrFontSize:1,
                 };
-            if (this.rowSet.children.indexOf(row)===this.rowSet.children.length-1) {
+            if (this.rowSet._children.indexOf(row)===this.rowSet._children.length-1) {
                 newline.uuid = TypeHelper.LAST_NEWLINE_ID;
             } else {
                 newline.uuid??= Incrementer.getValue();

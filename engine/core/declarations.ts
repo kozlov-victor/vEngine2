@@ -66,7 +66,9 @@ export interface ITransformable {
 export interface IParentChild {
     id:string;
     parent:Optional<IParentChild>;
-    children:readonly IParentChild[];
+    _children:IParentChild[];
+    getChildAt(index:number):IParentChild;
+    getChildrenCount():number;
     appendChild(c:IParentChild):void;
     appendChildAt(c:IParentChild,index:number):void;
     appendChildAfter(modelAfter:IParentChild,newChild:IParentChild):void;
@@ -83,7 +85,6 @@ export interface IParentChild {
     findChildById(id:string):Optional<IParentChild>;
     getParent():Optional<IParentChild|Layer|Scene>;
     getParentNode():IParentChild;
-    getChildren():readonly IParentChild[];
 }
 
 type Brand<K,T> = K & {__brand: T};

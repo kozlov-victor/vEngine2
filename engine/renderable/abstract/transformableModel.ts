@@ -95,7 +95,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
     public readonly modelViewProjectionMatrix:Mat16Holder = new Mat16Holder();
     public worldTransformDirty:boolean = true;
 
-    public readonly children:readonly TransformableModel[] = [];
+    public readonly _children:TransformableModel[] = [];
 
     get angle():number{
         return this._angle;

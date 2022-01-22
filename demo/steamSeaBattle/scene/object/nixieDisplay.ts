@@ -11,10 +11,10 @@ export class NixieDisplay {
         if (n<0) n = 0;
         const first:number = parseInt(n/10+'');
         const second = n%10;
-        this.nixieTube0.children.forEach((c:RenderableModel)=>c.visible=false);
-        this.nixieTube1.children.forEach((c:RenderableModel)=>c.visible=false);
-        this.nixieTube0.children[first].visible = true;
-        this.nixieTube1.children[second].visible = true;
+        this.nixieTube0._children.forEach((c:RenderableModel)=>c.visible=false);
+        this.nixieTube1._children.forEach((c:RenderableModel)=>c.visible=false);
+        this.nixieTube0._children[first].visible = true;
+        this.nixieTube1._children[second].visible = true;
     }
 
 }

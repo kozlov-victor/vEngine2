@@ -9,7 +9,7 @@ import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
 
 export class Word extends SimpleGameObjectContainer {
 
-    public declare children: readonly CharacterImage[];
+    public declare readonly _children: CharacterImage[];
     public readonly rawValue:string;
 
     constructor(
@@ -43,7 +43,7 @@ export class Word extends SimpleGameObjectContainer {
             i++;
         }
 
-        const maxRawHeight:number = Math.max(...this.children.map(it=>it.size.height),0);
+        const maxRawHeight:number = Math.max(...this._children.map(it=>it.size.height),0);
         const maxSpacingVertical:number =
             Math.max(...this.chars.map(it=>it.font?it.font.context.spacing[1]:0),font.context.spacing[1]);
         this.size.height = maxRawHeight + maxSpacingVertical;

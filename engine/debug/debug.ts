@@ -3,6 +3,7 @@ import {HttpClient} from "@engine/debug/httpClient";
 import {IKeyVal} from "@engine/misc/object";
 import {Game} from "@engine/core/game";
 import {renderError} from "@engine/debug/errorWidget";
+import {extensionRegex} from "ts-loader/dist/constants";
 
 interface IGameHolder {
     game: Game;
@@ -48,14 +49,14 @@ onLoad(()=>{
 });
 
 
-const prepareMessage = (e:any,lineNum:number)=>{
+const prepareMessage = (e:any,lineNum?:number):string=>{
     //console.log(e);
-    let msg;
+    let msg:string|ErrorEvent;
     if (typeof e === 'string') {
         msg = e;
     }
     else msg = e.message || e.reason || e.error;
-    if (msg && msg.message) msg = msg.message;
+    if (msg && (msg as ErrorEvent).message) msg = (msg as ErrorEvent).message;
     if (!msg) {
         if (e.target) {
             ['img','audio','link','script'].some((it:string)=>{
@@ -68,12 +69,12 @@ const prepareMessage = (e:any,lineNum:number)=>{
         }
     }
     if (!msg) msg = '';
-    if (msg.indexOf('Uncaught')===0) msg = msg.replace('Uncaught','').trim();
+    if (typeof msg ==='string' && msg.indexOf('Uncaught')===0) msg = msg.replace('Uncaught','').trim();
     if (!msg) {
         msg = 'Unknown error: ' + e.toString();
     }
     if (lineNum) msg=`error in line ${lineNum}:  ${msg}`;
-    return msg;
+    return msg.toString();
 };
 
 
@@ -127,6 +128,10 @@ window.addEventListener('unhandledrejection', (e:PromiseRejectionEvent)=> {
     stopGame();
     renderError({filename:'',runtimeInfo:extractPromiseError(e.reason)});
 });
+
+window.onerror = (event: Event | string)=>{
+    renderError({runtimeInfo:prepareMessage(event)});
+};
 
 // let inspectorShowed = false;
 // window.addEventListener('keyup', (e:KeyboardEvent)=> {

@@ -88,11 +88,11 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
             const l:number = oldVirtualNode.children?.length ?? 0;
             if (l>maxNumOfChild) maxNumOfChild = l;
         }
-        const children:T[] = [...parent.getChildren()] as T[];
+        //const children:T[] = (parent as any)._getChildren() as T[];
         for (let i:number = 0;i<maxNumOfChild;i++) {
             const newVirtualChild:Optional<VirtualNode> = newVirtualNode?.children?.[i];
             const oldVirtualChild:Optional<VirtualNode> = oldVirtualNode?.children?.[i];
-            this.reconcile(newVirtualChild,oldVirtualChild,children[i],parent);
+            this.reconcile(newVirtualChild,oldVirtualChild,parent.getChildAt(i) as T,parent);
         }
     }
 

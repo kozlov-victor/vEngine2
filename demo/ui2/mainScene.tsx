@@ -130,7 +130,7 @@ export class MainScene extends Scene {
 
         scrollView.pos.setXY(400,300);
         scrollView.size.setWH(300,100);
-        scrollView.scrollableContainer.size.set(new Size(410,400));
+        scrollView._scrollableContainer.size.set(new Size(410,400));
         scrollView.setMargin(10);
         scrollView.setPadding(5);
         const label:TextField = new  TextField(this.game,this.fnt);
@@ -141,7 +141,7 @@ export class MainScene extends Scene {
         label.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
             console.log('rect',e);
         });
-        scrollView.scrollableContainer.appendChild(label);
+        scrollView._scrollableContainer.appendChild(label);
         this.appendChild(scrollView);
 
         const selectBox = new SelectBox(this.game,this.fnt);

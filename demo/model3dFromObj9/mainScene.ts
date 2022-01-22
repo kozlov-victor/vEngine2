@@ -29,7 +29,7 @@ export class MainScene extends Scene {
             cubeMapTexture: this.cubeTexture
         });
         obj.pos.setXY(200,250);
-        obj.children.forEach(c=>{
+        obj._children.forEach(c=>{
             (c as Model3d).material.reflectivity = 0.5;
         });
         obj.size.setWH(200,200);

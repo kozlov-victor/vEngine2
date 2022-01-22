@@ -944,7 +944,7 @@ export class SpriterObject extends RenderableModel {
     }
 
     public clear():void {
-        for (const child of this.rootNode.children) {
+        for (const child of this.rootNode._children) {
             child.visible = false;
         }
     }

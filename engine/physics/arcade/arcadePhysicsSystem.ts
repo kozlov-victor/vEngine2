@@ -50,7 +50,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     public nextTick(scene:Scene):void {
         for (let ind:number = 0, layerLength:number = scene.getLayers().length; ind < layerLength; ind++) {
             const layer:Layer = scene.getLayers()[ind];
-            const all:RenderableModel[] = layer.children;
+            const all:RenderableModel[] = layer._children;
             for (let i:number = 0; i < all.length; i++) {
                 const player:RenderableModel = all[i];
                 const playerBody:Optional<ArcadeRigidBody> = player.getRigidBody();

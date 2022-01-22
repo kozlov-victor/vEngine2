@@ -43,12 +43,12 @@ export class ImageCacheSurface extends RenderableModel {
 
         // 4. render only one children (drawingSurface)
         this.worldTransformDirty = true;
-        this._childrenCache = (this.children as RenderableModel[]);
+        this._childrenCache = (this._children as RenderableModel[]);
         this._drawingSurfaceArr.push(this.drawingSurface);
-        (this.children as RenderableModel[]) = this._drawingSurfaceArr;
+        (this._children as RenderableModel[]) = this._drawingSurfaceArr;
         super.render();
         this._drawingSurfaceArr.length = 0;
-        (this.children as RenderableModel[]) = this._childrenCache;
+        (this._children as RenderableModel[]) = this._childrenCache;
 
         // 5. restore drawing session state
         renderingSessionInfo.drawingStackEnabled = !this.game.hasCurrentTransition(); // true if we dont draw transition
@@ -59,8 +59,8 @@ export class ImageCacheSurface extends RenderableModel {
     protected _drawToSurface():void {
         this.drawingSurface.clear();
         this.drawingSurface.drawBatch(_=>{
-            for (let i:number=0;i<this.children.length;i++) {
-                const c: RenderableModel = this.children[i];
+            for (let i:number=0; i<this._children.length; i++) {
+                const c: RenderableModel = this._children[i];
                 this.drawingSurface.drawModel(c);
             }
         });

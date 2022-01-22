@@ -32,6 +32,8 @@ export const enum ContainerState {
 
 export class WidgetContainer extends MarkableGameObjectContainer implements IContainerWithMarginPadding, IFocusable{
 
+    public static readonly INTERNAL_CHILD_OFFSET_INDEX = 4;
+
     constructor(game: Game) {
         super(game);
         super.appendChild(this.background);
@@ -276,7 +278,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
     }
 
     protected fitChildSize(view:RenderableModel):void{
-        for (const c of view.children) {
+        for (const c of view._children) {
             c.size.set(this.size);
             this.fitChildSize(c);
         }

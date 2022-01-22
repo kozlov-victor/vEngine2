@@ -32,10 +32,10 @@ export class MainShip extends AbstractEntity {
         this.addBehaviour(new DraggableBehaviour(this.game));
         this.size.setWH(400);
 
-        obj.children.forEach(c=>{
+        obj._children.forEach(c=>{
             (c as Model3d).material.specular = 0.3;
         });
-        const lamp = obj.children.find(it=>it.id==='light') as RenderableModel;
+        const lamp = obj._children.find(it=>it.id==='light') as RenderableModel;
         this.setInterval(()=>{
             lamp.alpha = lamp.alpha===1?0:1;
         },1000);

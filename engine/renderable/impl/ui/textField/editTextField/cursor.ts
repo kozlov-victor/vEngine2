@@ -106,21 +106,21 @@ export class Cursor {
         const rowSet:TextRowSet = this.parent._getRowSet();
         if (this.currentRow===undefined) return undefined;
         let currentWordIndex:Optional<number> =
-            this.currentWord===undefined?undefined: this.currentRow.children.indexOf(this.currentWord);
+            this.currentWord===undefined?undefined: this.currentRow._children.indexOf(this.currentWord);
         if (currentWordIndex!==undefined) currentWordIndex+=delta;
-        if (currentWordIndex===undefined || currentWordIndex<0 || currentWordIndex>this.currentRow.children.length-1) {
-            let currentRowIndex:number = rowSet.children.indexOf(this.currentRow);
+        if (currentWordIndex===undefined || currentWordIndex<0 || currentWordIndex>this.currentRow._children.length-1) {
+            let currentRowIndex:number = rowSet._children.indexOf(this.currentRow);
             currentRowIndex+=delta;
-            if (currentRowIndex<0 || currentRowIndex>rowSet.children.length-1) return undefined;
-            this.currentRow = rowSet.children[currentRowIndex];
+            if (currentRowIndex<0 || currentRowIndex>rowSet._children.length-1) return undefined;
+            this.currentRow = rowSet._children[currentRowIndex];
             if (delta===1) {
-                return this.currentRow.children[0];
+                return this.currentRow._children[0];
             }
             else {
-                return this.currentRow.children[this.currentRow.children.length-1];
+                return this.currentRow._children[this.currentRow._children.length-1];
             }
         }
-        return this.currentRow.children[currentWordIndex];
+        return this.currentRow._children[currentWordIndex];
     }
 
     public moveToNextPosition(delta:-1|1):void{
@@ -131,7 +131,7 @@ export class Cursor {
         if (currentCharIndex===undefined || this.currentWord===undefined || currentCharIndex<0 || currentCharIndex>this.currentWord.chars.length-1) {
             const nextWord:Optional<Word> = this.getNextWord(delta);
             if (nextWord===undefined) { // this is empty row
-                if (this.currentRow!==undefined && this.currentRow.children.length===0) {
+                if (this.currentRow!==undefined && this.currentRow._children.length===0) {
                     this.currentWord = undefined;
                     this.currentCharInfo = undefined;
                     this.currentCharImage = undefined;
@@ -141,22 +141,22 @@ export class Cursor {
             }
             this.currentWord = nextWord;
             if (delta===1) currentCharIndex = 0;
-            else currentCharIndex = this.currentWord.children.length-1;
+            else currentCharIndex = this.currentWord._children.length-1;
         }
         this.currentCharInfo = this.currentWord.chars[currentCharIndex];
-        this.currentCharImage = this.currentWord.children[currentCharIndex];
+        this.currentCharImage = this.currentWord._children[currentCharIndex];
         this.afterCursorMoved();
     }
 
     public moveToNextRow(delta:-1|1):void {
         if (this.currentRow===undefined) return;
         const rowSet:TextRowSet = this.parent._getRowSet();
-        let currentRowIndex:number = rowSet.children.indexOf(this.currentRow);
+        let currentRowIndex:number = rowSet._children.indexOf(this.currentRow);
         if (delta===-1 && currentRowIndex===0) return;
-        if (delta===1 && currentRowIndex===rowSet.children.length-1) return;
+        if (delta===1 && currentRowIndex===rowSet._children.length-1) return;
 
         let cntForCurrentRow:number = 0;
-        for (const word of this.currentRow.children) {
+        for (const word of this.currentRow._children) {
             for (let i:number=0;i<word.chars.length;i++) {
                 const charInfo = word.chars[i];
                 if (charInfo===this.currentCharInfo) break;
@@ -165,17 +165,17 @@ export class Cursor {
             if (word===this.currentWord) break;
         }
         currentRowIndex+=delta;
-        this.currentRow = rowSet.children[currentRowIndex];
+        this.currentRow = rowSet._children[currentRowIndex];
         this.currentWord = undefined;
         this.currentCharInfo = undefined;
         this.currentCharImage = undefined;
         let cntForNextRow:number = 0;
         let stopFlag:boolean = false;
-        for (const word of this.currentRow.children) {
+        for (const word of this.currentRow._children) {
             this.currentWord = word;
             for (let i:number=0;i<word.chars.length;i++) {
                 this.currentCharInfo = word.chars[i];
-                this.currentCharImage = word.children[i];
+                this.currentCharImage = word._children[i];
                 cntForNextRow++;
                 if (cntForNextRow>cntForCurrentRow) {
                     stopFlag = true;
@@ -188,12 +188,12 @@ export class Cursor {
     }
 
     public placeToDefaultPosition():void {
-        this.currentRow = this.parent._getRowSet().children[0];
-        if (this.currentRow!==undefined) this.currentWord = this.currentRow.children[0];
+        this.currentRow = this.parent._getRowSet()._children[0];
+        if (this.currentRow!==undefined) this.currentWord = this.currentRow._children[0];
         if (this.currentWord!==undefined) {
-            this.currentWord = this.currentRow.children[0];
+            this.currentWord = this.currentRow._children[0];
             this.currentCharInfo = this.currentWord.chars[0];
-            this.currentCharImage = this.currentWord.children[0];
+            this.currentCharImage = this.currentWord._children[0];
         }
     }
 

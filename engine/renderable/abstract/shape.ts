@@ -1,9 +1,6 @@
 import {RenderableModel} from "./renderableModel";
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
-import {Image} from "@engine/renderable/impl/general/image";
-import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
-import {Size} from "@engine/geometry/size";
 import {Optional} from "@engine/core/declarations";
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 

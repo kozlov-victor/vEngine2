@@ -23,7 +23,7 @@ export class Engine extends AbstractEntity {
         this.size.setWH(400);
         obj.scale.setXYZ(10);
 
-        obj.children.forEach(c=>{
+        obj._children.forEach(c=>{
             (c as Model3d).material.specular = 0.4;
         });
 

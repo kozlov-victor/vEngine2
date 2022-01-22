@@ -97,7 +97,7 @@ class TabStrip {
 
 
         const f = new TrianglesMosaicFilter(this.game);
-        this.cell2.children[0].filters = [f];
+        this.cell2._children[0].filters = [f];
         this.game.getCurrentScene().setInterval(()=>{
             if (MathEx.randomInt(0,10)> 5) {
                 f.enabled = true;
@@ -209,9 +209,9 @@ class TabStrip {
         const prev = HEROES_DESCRIPTION[this.selectedIndex-1];
         const curr = HEROES_DESCRIPTION[this.selectedIndex];
         const next = HEROES_DESCRIPTION[this.selectedIndex+1];
-        this.updateImage(prev,this.cell1.children[0] as Image);
-        this.updateImage(curr,this.cell2.children[0] as Image);
-        this.updateImage(next,this.cell3.children[0] as Image);
+        this.updateImage(prev,this.cell1._children[0] as Image);
+        this.updateImage(curr,this.cell2._children[0] as Image);
+        this.updateImage(next,this.cell3._children[0] as Image);
     }
 
 

@@ -9,7 +9,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
-    @Resource.Binary('./model3dFromFbx/models/rocket2.fbx')
+    @Resource.Binary('./model3dFromFbx/models/heart.fbx')
     // arrows mouse generator Lp Can spitfire tequila BUTCHER binary heartglass SM_chest
     private dataBuff:ArrayBuffer;
 

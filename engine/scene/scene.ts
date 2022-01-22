@@ -122,7 +122,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     public appendChild(layer:Layer):void;
     public appendChild(modelOrLayer:RenderableModel|Layer):void {
         if (Scene.isLayerGuard(modelOrLayer)) {
-            modelOrLayer.setScene(this);
+            modelOrLayer._setScene(this);
             this._layers.push(modelOrLayer);
         } else {
             this.getDefaultLayer().appendChild(modelOrLayer);
@@ -134,7 +134,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     public prependChild(layer:Layer):void;
     public prependChild(modelOrLayer:RenderableModel|Layer):void {
         if (Scene.isLayerGuard(modelOrLayer)) {
-            modelOrLayer.setScene(this);
+            modelOrLayer._setScene(this);
             this._layers.unshift(modelOrLayer);
         } else {
             this.getDefaultLayer().prependChild(modelOrLayer);
@@ -145,7 +145,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         let maxRight:number = this.game.size.width;
         let maxBottom:number = this.game.size.height;
         this._layers.forEach(l=>{
-            l.children.forEach(c=>{
+            l._children.forEach(c=>{
                 const right:number = c.pos.x+c.size.width;
                 const bottom:number = c.pos.y+c.size.height;
                 if (right>maxRight) maxRight = right;

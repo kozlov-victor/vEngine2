@@ -5,9 +5,9 @@ import {Direction} from "@engine/renderable/impl/ui/_internal/sideHelperFunction
 
 export class VerticalList extends AbstractDirectionalList {
 
-    protected direction: Direction = Direction.VERTICAL;
+    protected _direction: Direction = Direction.VERTICAL;
 
-    protected getCurrentScrollOffset(): number {
+    protected _getCurrentScrollOffset(): number {
         return this._scrollContainerDelegate.getCurrentOffsetVertical();
     }
 

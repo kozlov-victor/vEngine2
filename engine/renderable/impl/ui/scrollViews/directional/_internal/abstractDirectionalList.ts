@@ -7,49 +7,52 @@ import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {assignPos, assignSize, Direction, getSize} from "@engine/renderable/impl/ui/_internal/sideHelperFunctions";
 import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/directionalListEvents";
 
+
 export abstract class AbstractDirectionalList extends ScrollView {
+
+    private _pointer:number = 0;
+    private _tsxData:any[];
+
+    protected abstract _direction:Direction;
+
+    public readonly listViewEventHandler:EventEmitterDelegate<LIST_VIEW_EVENTS,{dataIndex:number}> = new EventEmitterDelegate(this.game);
+    protected abstract _getCurrentScrollOffset():number;
 
     protected constructor(game:Game) {
         super(game);
     }
-    private pointer:number = 0;
-    private tsxData:any[];
-
-    protected abstract direction:Direction;
-
-    public readonly listViewEventHandler:EventEmitterDelegate<LIST_VIEW_EVENTS,{dataIndex:number}> = new EventEmitterDelegate(this.game);
-    protected abstract getCurrentScrollOffset():number;
 
     public addView(newChild: RenderableModel):void {
-        this.scrollableContainer.appendChild(newChild);
+        this._scrollableContainer.appendChild(newChild);
         newChild.pos.setXY(0);
-        assignPos(newChild.pos,this.pointer,this.direction);
-        this.pointer+=getSize(newChild.size,this.direction);
-        assignSize(this.scrollableContainer.size,this.pointer,this.direction);
+        assignPos(newChild.pos,this._pointer,this._direction);
+        this._pointer+=getSize(newChild.size,this._direction);
+        assignSize(this._scrollableContainer.size,this._pointer,this._direction);
 
         let lastOffset:number = 0;
         let captured:boolean = false;
         newChild.mouseEventHandler.on(MOUSE_EVENTS.mouseDown, _=>{
             captured = true;
-            lastOffset = this.getCurrentScrollOffset();
+            lastOffset = this._getCurrentScrollOffset();
         });
         newChild.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, e=>{
             if (!captured) return; // if element is not captured, but mouseUp-ed (ie after scene transition) does not trigger event
             captured = false;
-            const currentOffset:number = this.getCurrentScrollOffset();
+            const currentOffset:number = this._getCurrentScrollOffset();
             const delta:number = Math.abs(lastOffset - currentOffset);
             lastOffset = currentOffset;
             if (delta<10) {
-                this.listViewEventHandler.trigger(LIST_VIEW_EVENTS.itemClick,{dataIndex:this.scrollableContainer.children.indexOf(newChild)});
+                const dataIndex = (this._scrollableContainer)._children.indexOf(newChild);
+                this.listViewEventHandler.trigger(LIST_VIEW_EVENTS.itemClick,{dataIndex});
             }
         });
     }
 
     public override setProps(props:IDirectionalListProps<any>):void {
         super.setProps(props);
-        if (props.data!==undefined && props.data!==this.tsxData) {
-            this.tsxData = props.data;
-            this.empty();
+        if (props.data!==undefined && props.data!==this._tsxData) {
+            this._tsxData = props.data;
+            this._empty();
             if (props.renderItem!==undefined) {
                 for (const item of props.data) {
                     const node:VirtualNode = props.renderItem!(item) as VirtualNode;
@@ -64,8 +67,8 @@ export abstract class AbstractDirectionalList extends ScrollView {
         }
     }
 
-    protected empty():void {
-        this.pointer = 0;
-        this.scrollableContainer.removeChildren();
+    protected _empty():void {
+        this._pointer = 0;
+        this._scrollableContainer.removeChildren();
     }
 }

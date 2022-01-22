@@ -62,9 +62,9 @@ export class TypeHelper {
         this.cursor.currentCharInfo = undefined;
         this.cursor.currentCharImage = undefined;
         let found:boolean = false;
-        for (const row of rowSet.children) {
+        for (const row of rowSet._children) {
             if (found) break;
-            for (const word of row.children) {
+            for (const word of row._children) {
                 if (found) break;
                 for (let i:number=0;i<word.chars.length;i++) {
                     if (found) break;
@@ -74,7 +74,7 @@ export class TypeHelper {
                         this.cursor.currentRow = row;
                         this.cursor.currentWord = word;
                         this.cursor.currentCharInfo = char;
-                        this.cursor.currentCharImage = word.children[i];
+                        this.cursor.currentCharImage = word._children[i];
                     }
                 }
             }
@@ -89,8 +89,8 @@ export class TypeHelper {
     private serialize():ICharacterInfo[]{
         const serialized:ICharacterInfo[] = [];
         const rowSet:TextRowSet = this.parent._getRowSet();
-        for (const row of rowSet.children) {
-            for (const word of row.children) {
+        for (const row of rowSet._children) {
+            for (const word of row._children) {
                 for (let i:number=0;i<word.chars.length;i++) {
                     const charInfo = word.chars[i];
                     serialized.push(charInfo);

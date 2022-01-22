@@ -66,7 +66,6 @@ export abstract class RenderableModel
     public filters: IFilter[] = [];
     public forceDrawChildrenOnNewSurface:boolean = false;
 
-    public declare readonly children:readonly RenderableModel[];
     public readonly parent:RenderableModel;
 
     public readonly mouseEventHandler:MouseEventEmitterDelegate<IObjectMouseEvent> = new MouseEventEmitterDelegate(this.game);
@@ -83,16 +82,13 @@ export abstract class RenderableModel
     private _rigidBody:IRigidBody;
 
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate(this.game);
-
     private _timerDelegate:TimerDelegate = new TimerDelegate();
+    private tsxEvents:Record<string, ()=>void> = {};
+    private memoizeCache:Record<string, RenderableModel> = {};
+    private destroyed:boolean = false;
 
     protected _parentChildDelegate:ParentChildDelegate<RenderableModel> = new ParentChildDelegate<RenderableModel>(this);
-
-    private tsxEvents:Record<string, ()=>void> = {};
-
-    private memoizeCache:Record<string, RenderableModel> = {};
-
-    private destroyed:boolean = false;
+    public declare readonly _children:RenderableModel[];
 
     protected getMemoizedView(factory:()=>IPositionableProps):RenderableModel {
         const model = factory() as RenderableModel & ICloneable<RenderableModel>;
@@ -104,13 +100,13 @@ export abstract class RenderableModel
         super(game);
         this.id = `object_${Incrementer.getValue()}`;
         this._parentChildDelegate.afterChildAppended = (child:RenderableModel)=>{
-            child.setLayer(this._layer!);
-            child.setScene(this._scene);
+            child._setLayer(this._layer!);
+            child._setScene(this._scene);
             child.revalidate();
         };
         this._parentChildDelegate.afterChildRemoved = (child:RenderableModel)=>{
-            child.setLayer(undefined!);
-            child.setScene(undefined!);
+            child._setLayer(undefined!);
+            child._setScene(undefined!);
         };
     }
 
@@ -122,7 +118,7 @@ export abstract class RenderableModel
         return this._layer!;
     }
 
-    public setLayer(value: Layer):void {
+    public _setLayer(value: Layer):void {
         this._layer = value;
     }
 
@@ -130,7 +126,7 @@ export abstract class RenderableModel
         return this._scene!;
     }
 
-    public setScene(value: Scene):void {
+    public _setScene(value: Scene):void {
         this._scene = value;
     }
 
@@ -148,6 +144,14 @@ export abstract class RenderableModel
     public addPropertyAnimation(animation:ITargetAnimation):void{
         animation.target = this;
         this._propertyAnimations.push(animation);
+    }
+
+    public getChildrenCount(): number {
+        return this._children.length;
+    }
+
+    public getChildAt(index:number):this {
+        return this._children[index] as this;
     }
 
     public setPosAndSize(x:number, y:number, w:number, h:number):void{
@@ -168,7 +172,7 @@ export abstract class RenderableModel
 
     public destroy():void {
 
-        for (const c of this.children) c.destroy();
+        for (const c of this._children) c.destroy();
 
         // if (DEBUG && !this.getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
         //
@@ -226,12 +230,12 @@ export abstract class RenderableModel
 
         if (this._scene._renderingSessionInfo.drawingEnabled) this.draw();
 
-        if (this.children.length>0) {
+        if (this._children.length>0) {
             renderer.transformSave();
             renderer.saveAlphaBlend();
             //renderer.transformTranslate(this.anchorPoint.x,this.anchorPoint.y);
-            for(let i:number=0,max=this.children.length;i<max;i++) {
-                const c:RenderableModel = this.children[i];
+            for(let i:number=0,max=this._children.length; i<max; i++) {
+                const c:RenderableModel = this._children[i];
                 c.worldTransformDirty = this.worldTransformDirty || c.worldTransformDirty;
                 c.render();
             }
@@ -268,7 +272,7 @@ export abstract class RenderableModel
         if (this._angleVelocity3d.y) this.angle3d.y+=this._angleVelocity3d.y * delta / 1000;
         if (this._angleVelocity3d.z) this.angle3d.z+=this._angleVelocity3d.z * delta / 1000;
 
-        for (const c of this.children) {
+        for (const c of this._children) {
             c.update();
         }
 
@@ -325,7 +329,7 @@ export abstract class RenderableModel
         this._parentChildDelegate.removeChildren();
     }
 
-    getParentNode(): RenderableModel {
+    public getParentNode(): RenderableModel {
         return undefined!; // only for type compatibility
     }
 
@@ -351,14 +355,6 @@ export abstract class RenderableModel
 
     public getParent():Optional<RenderableModel|Layer>{
         return this.parent||this._layer;
-    }
-
-    public getChildAt(index: number): RenderableModel {
-        return this.children[index];
-    }
-
-    public getChildren(): readonly RenderableModel[] {
-        return this.children;
     }
 
     public renderToTexture(target:IRenderTarget,clearColor?:Color,omitSaveAndResoreRenderTaget?:boolean):void{
@@ -408,7 +404,7 @@ export abstract class RenderableModel
             cloned.addBehaviour(b.clone());
         });
 
-        this.children.forEach((c:RenderableModel)=>{
+        this._children.forEach((c:RenderableModel)=>{
             if (DEBUG && !('clone' in c)) {
                 console.error(c);
                 throw new DebugError(`can not clone object: cloneable interface is not implemented`);

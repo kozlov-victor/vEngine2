@@ -52,7 +52,7 @@ export class MainScene extends Scene {
             let V,s:number;
             x.setFillColor(R(V=C(t*9)*99+99,C(V)*99,99-V),100);
             session.drawRect(s=59*t%6e2,s,s,s);
-            x.transformRotateZ(S(t*2)/s*3);
+            if (s!==0) x.transformRotateZ(S(t*2)/s*3);
             session.drawRect(s,s,s,s);
 
             //x.transformRestore();

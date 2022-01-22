@@ -8,7 +8,7 @@ import {IRectJSON} from "@engine/geometry/rect";
 export class ScrollView extends WidgetContainer {
 
     private readonly _constrainContainer: NoOverflowSurface;
-    public readonly scrollableContainer: SimpleGameObjectContainer;
+    public readonly _scrollableContainer: SimpleGameObjectContainer;
     protected _scrollContainerDelegate: ScrollContainerDelegate;
 
     constructor(game: Game) {
@@ -19,10 +19,10 @@ export class ScrollView extends WidgetContainer {
         this._constrainContainer.size.set(this.size);
         super.appendChild(this._constrainContainer);
 
-        this.scrollableContainer = new SimpleGameObjectContainer(this.game);
-        this.scrollableContainer.size.observe(()=>this.markAsDirty());
-        this.scrollableContainer.size.set(this.size);
-        this._constrainContainer.appendChild(this.scrollableContainer);
+        this._scrollableContainer = new SimpleGameObjectContainer(this.game);
+        this._scrollableContainer.size.observe(()=>this.markAsDirty());
+        this._scrollableContainer.size.set(this.size);
+        this._constrainContainer.appendChild(this._scrollableContainer);
     }
 
     public override revalidate():void {
@@ -33,7 +33,7 @@ export class ScrollView extends WidgetContainer {
         if (this._constrainContainer.size.isZero()) this._constrainContainer.size.set(this.size);
         if (this._scrollContainerDelegate === undefined) {
             this._scrollContainerDelegate =
-                new ScrollContainerDelegate(this.game, this, this._constrainContainer, this.scrollableContainer);
+                new ScrollContainerDelegate(this.game, this, this._constrainContainer, this._scrollableContainer);
         }
         this._scrollContainerDelegate.revalidate();
     }

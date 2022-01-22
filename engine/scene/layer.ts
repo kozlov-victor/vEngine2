@@ -13,9 +13,9 @@ export class Layer implements IParentChild {
 
     public readonly type:'Layer' = 'Layer';
     public transformType:LayerTransformType = LayerTransformType.TRANSFORM;
-    public readonly children:RenderableModel[] = [];
     public readonly parent:IParentChild;
     public id:string;
+    public readonly _children:RenderableModel[] = [];
 
     private _parentChildDelegate:ParentChildDelegate<IParentChild> = new ParentChildDelegate<IParentChild>(this);
     private _scene:Scene;
@@ -23,8 +23,8 @@ export class Layer implements IParentChild {
     constructor(protected game:Game) {
         this._parentChildDelegate.afterChildAppended = (c:IParentChild)=>{
             const m:RenderableModel = c as RenderableModel;
-            m.setLayer(this);
-            m.setScene(this._scene);
+            m._setLayer(this);
+            m._setScene(this._scene);
             (c as IParentChild).parent = undefined;
             m.revalidate();
         };
@@ -86,34 +86,32 @@ export class Layer implements IParentChild {
         return this._scene;
     }
 
-    getParentNode(): IParentChild {
+    public getParentNode(): IParentChild {
         return this.parent;
     }
 
-
-    getChildAt(index: number): IParentChild {
-        return this.children[index];
+    public getChildrenCount(): number {
+        return this._children.length;
     }
 
-    getChildren(): IParentChild[] {
-        return this.children;
+    public getChildAt(index: number): RenderableModel {
+        return this._children[index];
     }
 
 
-    /*** @internal */
-    public setScene(scene:Scene):void{
+    public _setScene(scene:Scene):void{
         this._scene = scene;
     }
 
     public update():void {
-        const all:RenderableModel[] = this.children;
+        const all:RenderableModel[] = this._children;
         for (const obj of all) {
             obj.update();
         }
     }
 
     public render():void {
-        for (const obj of this.children) {
+        for (const obj of this._children) {
             obj.render();
         }
     }

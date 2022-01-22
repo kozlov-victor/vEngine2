@@ -21,9 +21,9 @@ export class SelectBox extends VerticalList {
 
     public override readonly type:string = 'SelectBox';
 
-    public readonly selectedBackground:RenderableModel;
     public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeSelectBoxEvent> = new EventEmitterDelegate(this.game);
 
+    private readonly _selectedBackground:RenderableModel;
     private _options:(string|number)[] = [];
     private _optionViews:WidgetContainer[] = [];
     private _selectedIndex:number = -1;
@@ -42,7 +42,7 @@ export class SelectBox extends VerticalList {
         super(game);
         const bg = new Rectangle(this.game);
         bg.fillColor = Color.fromCssLiteral('#f3f3f3');
-        this.selectedBackground = bg;
+        this._selectedBackground = bg;
         this.listViewEventHandler.on(LIST_VIEW_EVENTS.itemClick, e=>{
             if (e.dataIndex===this._selectedIndex) return;
             this.select(e.dataIndex);
@@ -54,7 +54,7 @@ export class SelectBox extends VerticalList {
         if (this._selectedIndex<0 || this._selectedIndex>options.length-1) this._selectedIndex = - 1;
         this.lastSelectedView = undefined!;
         this._options = options;
-        this.empty();
+        this._empty();
         this._optionViews.length = 0;
         this.revalidate();
         const clientRect = this.getClientRect();

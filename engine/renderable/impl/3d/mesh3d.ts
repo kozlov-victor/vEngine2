@@ -4,7 +4,6 @@ import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {Game} from "@engine/core/game";
 import {IPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
-import {Color} from "@engine/renderer/common/color";
 import {MeshMaterial} from "@engine/renderable/impl/3d/meshMaterial";
 
 export abstract class Mesh3d extends Mesh2d {

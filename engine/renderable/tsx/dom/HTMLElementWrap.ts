@@ -6,46 +6,52 @@ export class HTMLElementWrap implements IRealNode {
 
     public readonly attributes:Record<string, any> = {};
 
+    private _childrenCache:HTMLElementWrap[] = [];
+
     constructor(public readonly htmlElement:HTMLElement|Text|SVGElement) {
     }
 
-    appendChild(child: HTMLElementWrap): void {
+    public appendChild(child: HTMLElementWrap): void {
         if ((this.htmlElement as any).styleSheet && !(this.htmlElement as any).sheet) { // ie8
             (this.htmlElement as any).styleSheet.cssText=(child.htmlElement as any).data;
         }
         else this.htmlElement.appendChild(child.htmlElement);
     }
 
-    removeSelf(): void {
+    public removeSelf(): void {
         this.htmlElement.parentNode!.removeChild(this.htmlElement);
         ElementFactory.getInstance().onElementRemoved(this.htmlElement);
     }
 
-    replaceChild(oldNode: HTMLElementWrap, newNode: HTMLElementWrap): void {
+    public replaceChild(oldNode: HTMLElementWrap, newNode: HTMLElementWrap): void {
         ElementFactory.getInstance().onElementRemoved(oldNode.htmlElement);
         this.htmlElement.replaceChild(newNode.htmlElement,oldNode.htmlElement);
     }
 
-    getChildAt(index:number):HTMLElementWrap{
+    public getChildAt(index:number):HTMLElementWrap{
         if (this.htmlElement.nodeType===3) return undefined!;
-        return wrap(this.htmlElement.childNodes[index] as HTMLElement);
+        return this._getChildren()[index];
     }
 
-    getChildren(): HTMLElementWrap[] {
-        const arr:HTMLElementWrap[] = [];
-        if (this.htmlElement.nodeType===3) return arr;
+    private _getChildren(): HTMLElementWrap[] {
+        this._childrenCache.length = 0;
         for (let i:number=0,l:number=this.htmlElement.childNodes.length;i<l;i++) {
             const c = this.htmlElement.childNodes[i];
-            arr.push(wrap(c as HTMLElement));
+            this._childrenCache.push(wrap(c as HTMLElement));
         }
-        return arr;
+        return this._childrenCache;
     }
 
-    getParentNode(): IRealNode {
+    public getChildrenCount(): number {
+        if (this.htmlElement.nodeType===3) return 0;
+        return this.htmlElement.childNodes.length;
+    }
+
+    public getParentNode(): IRealNode {
         return wrap(this.htmlElement.parentElement as HTMLElement);
     }
 
-    removeChildren(): void {
+    public removeChildren(): void {
         if (this.htmlElement.nodeType===3) {
             (this.htmlElement as Text).data = '';
         }

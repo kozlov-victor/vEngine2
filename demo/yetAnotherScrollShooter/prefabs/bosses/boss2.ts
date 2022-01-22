@@ -29,7 +29,7 @@ export class Boss2 extends SimpleGameObjectContainer {
         this.size.setWH(400);
         obj.scale.setXYZ(30);
 
-        obj.children.forEach(c=>{
+        obj._children.forEach(c=>{
             (c as Model3d).material.specular = 0.4;
         });
 

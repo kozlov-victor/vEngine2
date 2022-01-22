@@ -219,12 +219,12 @@ export class TextField extends WidgetContainer {
 
     protected collectAllChars():CharacterImage[] {
         const result:CharacterImage[] = [];
-        for (let m:number = 0; m < this.rowSet.children.length; m++) {
-            const row:TextRow = this.rowSet.children[m];
-            for (let j:number = 0; j < row.children.length; j++) {
-                const child:Word = row.children[j];
-                for (let k:number = 0; k < child.children.length; k++) {
-                    const char:CharacterImage = child.children[k];
+        for (let m:number = 0; m < this.rowSet._children.length; m++) {
+            const row:TextRow = this.rowSet._children[m];
+            for (let j:number = 0; j < row._children.length; j++) {
+                const child:Word = row._children[j];
+                for (let k:number = 0; k < child._children.length; k++) {
+                    const char:CharacterImage = child._children[k];
                     result.push(char);
                 }
             }
@@ -234,12 +234,12 @@ export class TextField extends WidgetContainer {
 
     protected findCharImageByIndex(i:number):CharacterImage{
         let cnt:number = 0;
-        for (let m:number = 0; m < this.rowSet.children.length; m++) {
-            const row:TextRow = this.rowSet.children[m];
-            for (let j:number = 0; j < row.children.length; j++) {
-                const child:Word = row.children[j];
-                for (let k:number = 0; k < child.children.length; k++) {
-                    const char:CharacterImage = child.children[k];
+        for (let m:number = 0; m < this.rowSet._children.length; m++) {
+            const row:TextRow = this.rowSet._children[m];
+            for (let j:number = 0; j < row._children.length; j++) {
+                const child:Word = row._children[j];
+                for (let k:number = 0; k < child._children.length; k++) {
+                    const char:CharacterImage = child._children[k];
                     if (cnt===i) return char;
                     cnt++;
                 }

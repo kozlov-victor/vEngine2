@@ -16,7 +16,7 @@ import {DebugError} from "@engine/debug/debugError";
 
 export class TextRowSet extends SimpleGameObjectContainer {
 
-    public declare children: readonly TextRow[];
+    public declare _children: TextRow[];
 
     public readonly DEFAULT_SPACE_CHAR_WIDTH:number =
         new Word(this.game,this.font,[{rawChar:' ',multibyte:false,scaleFromCurrFontSize:1}],Color.NONE,false).size.width;
@@ -78,7 +78,7 @@ export class TextRowSet extends SimpleGameObjectContainer {
     }
 
     public setAlignTextContentHorizontal(align:AlignTextContentHorizontal):void {
-        if (this.children.length===0) return;
+        if (this._children.length===0) return;
         if (this.constrainSize.width===Infinity) return;
         switch (align) {
             case AlignTextContentHorizontal.CENTER:
@@ -97,7 +97,7 @@ export class TextRowSet extends SimpleGameObjectContainer {
     }
 
     public setAlignTextContentVertical(align:AlignTextContentVertical):void {
-        if (this.children.length===0) return;
+        if (this._children.length===0) return;
         if (this.constrainSize.height===Infinity) return;
         switch (align) {
             case AlignTextContentVertical.CENTER:
@@ -116,14 +116,14 @@ export class TextRowSet extends SimpleGameObjectContainer {
     }
 
     public setAlignText(align:AlignText):void {
-        if (this.children.length===0) return;
+        if (this._children.length===0) return;
         if (align===this.alignText) return;
-        this.children.forEach(c=>c.setAlignText(align));
+        this._children.forEach(c=>c.setAlignText(align));
     }
 
     public updateRowsVisibility():void {
-        for (let i:number=0,max:number=this.children.length;i<max;i++) {
-            const c:TextRow = this.children[i];
+        for (let i:number=0,max:number=this._children.length; i<max; i++) {
+            const c:TextRow = this._children[i];
             if ((c.pos.y + this.pos.y + c.size.height) <0) c.visible = false;
             else {
                 c.visible = (c.pos.y + this.pos.y) <= this.constrainSize.height;
@@ -186,12 +186,12 @@ export class TextRowSet extends SimpleGameObjectContainer {
     }
 
     private fitWidth():void {
-        this.size.width = Math.max(...this.children.map(it=>it.size.width),0);
+        this.size.width = Math.max(...this._children.map(it=>it.size.width),0);
     }
 
     private fitHeight():void{
         let height:number = 0;
-        this.children.forEach(row=>height+=row.size.height);
+        this._children.forEach(row=>height+=row.size.height);
         this.size.height = height;
     }
 

@@ -4,7 +4,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {noop} from "@engine/misc/object";
 import {Point2d} from "@engine/geometry/point2d";
-import {IParentChild, Optional} from "@engine/core/declarations";
+import {Optional} from "@engine/core/declarations";
 import {SimpleGameObjectContainer} from "./simpleGameObjectContainer";
 import {Scene} from "@engine/scene/scene";
 import {Layer} from "@engine/scene/layer";

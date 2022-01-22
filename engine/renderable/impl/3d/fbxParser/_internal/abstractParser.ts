@@ -160,8 +160,8 @@ export abstract class AbstractParser {
 
                 //console.log(findNode(g,'LayerElementNormal'));
                 //console.log({normalReferenceType,normalMappingType});
-                if (normalMappingType!=='ByPolygonVertex') throw new Error(`not supported: ${normalMappingType}`)
-                if (normalReferenceType!=='Direct') throw new Error(`not supported: ${normalReferenceType}`)
+                if (normalMappingType!=='ByPolygonVertex') throw new Error(`normalMappingType is not supported: ${normalMappingType}`)
+                if (normalReferenceType!=='Direct') throw new Error(`normalReferenceType is not supported: ${normalReferenceType}`)
 
                 const verticesProcessed:number[] = [];
                 const normalsProcessed:number[] = []; // ByPolygonVertex

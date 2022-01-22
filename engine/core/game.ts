@@ -193,7 +193,8 @@ export class Game {
             taskQueue.
                 scheduleStart().
                 catch(e=>{
-                    console.error(e);
+                    if (window.onerror) window.onerror(e);
+                    console.trace(e);
                 });
             this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.PRELOADING,{taskQueue});
             this.loadEventHandler.trigger(GAME_EVENTS.PRELOADING,{taskQueue});
