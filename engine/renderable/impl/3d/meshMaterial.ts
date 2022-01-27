@@ -6,12 +6,16 @@ export class MeshMaterial {
     public reflectivity:number = 0;// 0..1
     public diffuseColor:Color = Color.BLACK.clone();
 
-    public clone():MeshMaterial {
-        const cloned = new MeshMaterial();
+    protected setClonedProperties(cloned:MeshMaterial):void {
         cloned.specular = this.specular;
         cloned.diffuseColorMix = this.diffuseColorMix;
         cloned.reflectivity = this.reflectivity;
         cloned.diffuseColor = this.diffuseColor.clone();
+    }
+
+    public clone():MeshMaterial {
+        const cloned = new MeshMaterial();
+        this.setClonedProperties(cloned);
         return cloned;
     }
 

@@ -4,6 +4,6 @@ import {Game} from "@engine/core/game";
 
 export class FbxAsciiParser extends AbstractParser{
     constructor(game:Game,text:string,params:IFbxParams = {}) {
-        super(game,new FbxReader(parseText(text)));
+        super(game,new FbxReader(parseText(text)),params);
     }
 }

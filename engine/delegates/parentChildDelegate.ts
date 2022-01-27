@@ -1,5 +1,6 @@
 import {DebugError} from "@engine/debug/debugError";
 import {IParentChild, Optional} from "@engine/core/declarations";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 type OnTreeModifiedCallback<T> = (c:T)=>void;
 
@@ -11,7 +12,7 @@ export class ParentChildDelegate<T extends IParentChild> {
     public afterChildAppended?:OnTreeModifiedCallback<T>;
     public afterChildRemoved?:OnTreeModifiedCallback<T>;
 
-    public appendChild(c:T):void {
+    private _validateBeforeAppend(c:T):void {
         if (DEBUG) {
             if (!c) throw new DebugError(`illegal argument: ${c}`);
             if (c===this.model) throw new DebugError(`parent and child objects are the same`);
@@ -19,7 +20,14 @@ export class ParentChildDelegate<T extends IParentChild> {
                 console.error(c);
                 throw new DebugError(`this children is already added`);
             }
+            if (c.parent!==undefined) {
+                throw new DebugError(`this children is already added to another object`);
+            }
         }
+    }
+
+    public appendChild(c:T):void {
+        this._validateBeforeAppend(c);
         c.parent = this.model;
         (this.model._children as T[]).push(c);
         if (this.afterChildAppended!==undefined) this.afterChildAppended(c);
@@ -30,6 +38,7 @@ export class ParentChildDelegate<T extends IParentChild> {
             if (!c) throw new DebugError(`illegal argument: ${c}`);
             if (index>this.model._children.length-1) throw new DebugError(`can not insert element: index is out of range (${index},${this.model._children.length-1})`);
         }
+        this._validateBeforeAppend(c);
         c.parent = this.model;
         (this.model._children as T[]).splice(index,0,c);
         if (this.afterChildAppended!==undefined) this.afterChildAppended(c);
@@ -64,6 +73,7 @@ export class ParentChildDelegate<T extends IParentChild> {
         if (DEBUG) {
             if (!c) throw new DebugError(`illegal argument: ${c}`);
         }
+        this._validateBeforeAppend(c);
         c.parent = this.model;
         (this.model._children as T[]).unshift(c);
         if (this.afterChildAppended!==undefined) this.afterChildAppended(c);

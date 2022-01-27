@@ -4,6 +4,6 @@ import {Game} from "@engine/core/game";
 
 export class FbxBinaryParser extends AbstractParser{
     constructor(game:Game,buff:ArrayBuffer,params:IFbxParams = {}) {
-        super(game,new FbxReader(parseBinary(buff)));
+        super(game,new FbxReader(parseBinary(buff)),params);
     }
 }
