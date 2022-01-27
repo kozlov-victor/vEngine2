@@ -149,6 +149,7 @@ class FbxTexture implements IFbxNode {
 export abstract class AbstractParser {
 
     private readonly container:FbxModelContainer;
+    private readonly containerTransformWrap:SimpleGameObjectContainer;
     private unitScaleFactor:number = 1;
     private upAxisSign:number = 1; // UpAxis +Z, FrontAxis -Y, CoordAxis +X.
     private frontAxisSign:number = 1;
@@ -162,6 +163,9 @@ export abstract class AbstractParser {
         this.container = new FbxModelContainer(game);
         this.container.tag = 'root';
         this.container.uuid = 0;
+        this.containerTransformWrap = new SimpleGameObjectContainer(game);
+        this.container.angle3d.x = MathEx.degToRad(90);
+        this.containerTransformWrap.appendChild(this.container);
         this._parse();
     }
 
@@ -454,7 +458,7 @@ export abstract class AbstractParser {
     }
 
     public getModel():RenderableModel {
-        return this.container;
+        return this.containerTransformWrap;
     }
 
 }
