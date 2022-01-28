@@ -11,8 +11,13 @@ import {MeshMaterial} from "@engine/renderable/impl/3d/meshMaterial";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Optional} from "@engine/core/declarations";
 
+interface ITextureDescription {
+    texture:ITexture,
+    type: 'color'|'normals'
+}
+
 export interface IFbxParams {
-    textures?:Record<string, ITexture>;
+    textures?:Record<string, ITextureDescription>;
     cubeMapTexture?:ICubeMapTexture;
 }
 
@@ -146,18 +151,12 @@ class FbxTexture implements IFbxNode {
     public uuid:number;
 }
 
-export abstract class AbstractParser {
+export abstract class FbxAbstractParser {
 
     private readonly container:FbxModelContainer;
     private readonly containerTransformWrap:SimpleGameObjectContainer;
     private unitScaleFactor:number = 1;
-    private upAxisSign:number = 1; // UpAxis +Z, FrontAxis -Y, CoordAxis +X.
-    private frontAxisSign:number = 1;
-    private coordAxisSign:number = 1;
 
-    private upAxis:number = 1;
-    private frontAxis:number = 0;
-    private coordAxis:number = 2;
 
     protected constructor(private game:Game,private reader:FbxReader,private params:IFbxParams) {
         this.container = new FbxModelContainer(game);
@@ -177,19 +176,6 @@ export abstract class AbstractParser {
         if (scaleFactor) {
             this.unitScaleFactor = scaleFactor[4] as number ?? 1;
         }
-        const upAxis = findProperty70(properties70,'UpAxis');
-        const frontAxis = findProperty70(properties70,'FrontAxis');
-        const coordAxis = findProperty70(properties70,'CoordAxis');
-        this.upAxis = upAxis?.[4] ?? this.upAxis;
-        this.frontAxis = frontAxis?.[4] ?? this.frontAxis;
-        this.coordAxis = coordAxis?.[4] ?? this.coordAxis;
-
-        const upAxisSign = findProperty70(properties70,'UpAxisSign');
-        const frontAxisSign = findProperty70(properties70,'FrontAxisSign');
-        const coordAxisSign = findProperty70(properties70,'CoordAxisSign');
-        this.upAxisSign = upAxisSign?.[4] || this.upAxisSign;
-        this.frontAxisSign = frontAxisSign?.[4] || this.frontAxisSign;
-        this.coordAxisSign = coordAxisSign?.[4] || this.coordAxisSign;
     }
 
     private _parseGeometries():FbxModel3d[]{
@@ -350,6 +336,11 @@ export abstract class AbstractParser {
             material.uuid = uuid;
             const properties70 = findNode(m,'Properties70');
             const diffuseColor = findProperty70(properties70,'DiffuseColor');
+            const specular = findProperty70(properties70,'Shininess');
+            let specularValue = 0;
+            if (specular && specular[4]) {
+                specularValue = specular[4]/100;
+            }
             if (diffuseColor) {
                 material.diffuseColor.setRGB(
                     ~~(diffuseColor[4]*0xff) as Uint8,
@@ -357,6 +348,7 @@ export abstract class AbstractParser {
                     ~~(diffuseColor[6]*0xff) as Uint8
                 );
             }
+            material.specular = specularValue;
             result.push(material);
         });
         return result;
@@ -398,10 +390,16 @@ export abstract class AbstractParser {
             if (!material) return;
             g.material = material.clone();
             const texturesToApply = this._findTextureByMaterialId(materialId,textures,connections);
-            if (texturesToApply.length) {
-                const tx:Optional<ITexture> = this.params?.textures?.[extractNameWithoutExtension(texturesToApply[0].tag)];
+            for (const textureToApply of texturesToApply) {
+                const tx:Optional<ITextureDescription> = this.params?.textures?.[extractNameWithoutExtension(textureToApply.tag)];
                 if (!tx) return;
-                g.texture = tx;
+                if (tx.type=='color') {
+                    g.texture = tx.texture;
+                } else if (tx.type==='normals') {
+                    g.normalsTexture = tx.texture;
+                } else {
+                    throw new Error(`unknown texture type: ${tx.type}`);
+                }
             }
         });
     }
@@ -445,7 +443,6 @@ export abstract class AbstractParser {
     private _parse():void {
         console.log(this.reader.rootNode);
         this._parseGlobalSettings();
-        console.log('unitScaleFactor',this.unitScaleFactor);
 
         const geometries = this._parseGeometries();
         const models = this._parseModels();

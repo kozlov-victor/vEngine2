@@ -48,13 +48,14 @@ void main() {
         vec3 lightDirection = normalize(directionLightPos);
         float light = max(0.,dot(normal, lightDirection));
         light += max(0.,dot(normal, surfaceToLightDirection));
-        float specular = pow(max(dot(normal, halfVector), 0.0), 2.);
+        float specular = pow(max(dot(normal, halfVector), 0.0), 32.);
+        specular*=u_specular;
 
         light = clamp(light,.5,1.0);
         //gl_FragColor = vec4(normalize(v_normal)*0.5+0.5,1.0); // to debug normals
         gl_FragColor.rgb *= light;
 
-        gl_FragColor.rgb+=specular*u_specular;
+        gl_FragColor.rgb+=specular;
     }
 
     if (u_cubeMapTextureUsed) {

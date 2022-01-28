@@ -172,6 +172,10 @@ export abstract class RenderableModel
 
     public destroy():void {
 
+        if (this.destroyed) {
+            return;
+        }
+
         for (const c of this._children) c.destroy();
 
         // if (DEBUG && !this.getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
