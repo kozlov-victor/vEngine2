@@ -1,6 +1,10 @@
 import {Timer} from "@engine/misc/timer";
+import {Game} from "@engine/core/game";
 
 export class TimerDelegate {
+
+    constructor(private game:Game) {
+    }
 
     private _timers: Timer[];
 
@@ -25,7 +29,7 @@ export class TimerDelegate {
 
 
     private _addTimer(callback:()=>void,interval:number,once:boolean):Timer{
-        const t:Timer = new Timer(this,callback,interval,once);
+        const t:Timer = new Timer(this.game,this,callback,interval,once);
         if (!this._timers) this._timers = [];
         this._timers.push(t);
         return t;

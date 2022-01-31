@@ -71,7 +71,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate(this.game);
 
     // timer
-    private _timerDelegate:TimerDelegate = new TimerDelegate();
+    private _timerDelegate:TimerDelegate = new TimerDelegate(this.game);
 
 
     private static isLayerGuard(modelOrLayer:RenderableModel|Layer):modelOrLayer is Layer {
@@ -121,6 +121,9 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     public appendChild(model:RenderableModel):void;
     public appendChild(layer:Layer):void;
     public appendChild(modelOrLayer:RenderableModel|Layer):void {
+        if (DEBUG && !modelOrLayer) {
+            throw new DebugError(`cannot append child, is is ${modelOrLayer}`);
+        }
         if (Scene.isLayerGuard(modelOrLayer)) {
             modelOrLayer._setScene(this);
             this._layers.push(modelOrLayer);

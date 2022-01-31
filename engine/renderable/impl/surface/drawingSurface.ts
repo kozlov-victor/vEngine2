@@ -27,6 +27,7 @@ import {
 } from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 import {SvgPathToVertexArrayBuilder} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArrayBuilder";
 import MAT16 = Mat4.MAT16;
+import {InfoPanel} from "../../../../demo/catGame/entity/object/impl/infoPanel";
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {
@@ -254,6 +255,7 @@ class DrawingSession implements IDrawingSession {
     public drawModel(model:RenderableModel,clearColor?:Color):void{
         if (DEBUG && !model) throw new DebugError(`illegal argument: ${model}`);
         const parent:RenderableModel = model.parent;
+        (model as IParentChild).parent = undefined;
         this.surface.appendChild(this._transformableContainer);
         this._transformableContainer.appendChild(model);
         this._omitSelfOnRendering = true;

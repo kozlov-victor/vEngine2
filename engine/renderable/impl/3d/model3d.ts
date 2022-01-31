@@ -13,7 +13,7 @@ export class Model3d extends Mesh3d implements ICloneable<Model3d>{
     }
 
     public clone(): Model3d {
-        const cloned:Model3d = new Model3d(this.game,this._modelPrimitive,this._bufferInfo);
+        const cloned:Model3d = new Model3d(this.game,this._modelPrimitive,this.getBufferInfo());
         this.setClonedProperties(cloned);
         return cloned;
     }

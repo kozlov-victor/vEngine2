@@ -46,14 +46,14 @@ export class MeshPainter extends AbstractPainter {
 
     public bindMesh3d(mesh:Mesh3d):void{
         if (mesh.isLightAccepted()===undefined) {
-            mesh.acceptLight(!!mesh._bufferInfo.normalBuffer);
+            mesh.acceptLight(!!mesh.getBufferInfo().normalBuffer);
         }
         this.bindMesh2d(mesh);
     }
 
     public bindMesh2d(mesh:Mesh2d):void{
         this.mesh = mesh;
-        this.bufferInfo = this.mesh._bufferInfo;
+        this.bufferInfo = this.mesh.getBufferInfo();
     }
 
     public setModelMatrix(m:Readonly<MAT16>):void{
@@ -135,6 +135,12 @@ export class MeshPainter extends AbstractPainter {
         } else {
             this.program.enableAttribute(this.a_vertexColor);
         }
+    }
+
+    public disableAllAttributes():void {
+        this.program.disableAttribute(this.a_texCoord);
+        this.program.disableAttribute(this.a_normal);
+        this.program.disableAttribute(this.a_vertexColor);
     }
 
     public initBufferInfo(mesh2d:Mesh2d):BufferInfo{

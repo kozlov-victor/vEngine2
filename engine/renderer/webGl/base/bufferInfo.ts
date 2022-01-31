@@ -69,6 +69,8 @@ export class BufferInfo {
     public drawMethod:GLenum;
     public numOfElementsToDraw:number = 0;
 
+    private _destroyed:boolean = false;
+
     constructor(gl:WebGLRenderingContext,description:IBufferInfoDescription){
         this.gl = gl;
 
@@ -145,6 +147,11 @@ export class BufferInfo {
         if (this.texVertexBuffer!==undefined) this.texVertexBuffer.destroy();
         if (this.normalBuffer!==undefined) this.normalBuffer.destroy();
         if (this.colorVertexBuffer!==undefined) this.colorVertexBuffer.destroy();
+        this._destroyed = true;
+    }
+
+    public isDestroyed():boolean {
+        return this._destroyed;
     }
 
     public draw():void {

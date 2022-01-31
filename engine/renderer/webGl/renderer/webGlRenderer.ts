@@ -241,7 +241,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.attachTexture('u_cubeMapTexture',isCubeMapTextureUsed?mesh.cubeMapTexture as CubeMapTexture:this._nullCubeMapTexture);
 
         if (DEBUG && mesh.isLightAccepted()) {
-            if (!mesh._bufferInfo.normalBuffer) {
+            if (!mesh.getBufferInfo().normalBuffer) {
                 console.error(mesh);
                 throw new DebugError(`can not accept light: normals are not specified`);
             }
@@ -309,6 +309,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         orthoProjectionMatrix.release();
         zToWProjectionMatrix.release();
         inverseTransposeModelMatrix.release();
+    }
+
+    public destroyMesh(mesh:Mesh2d):void {
+        const md:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
+        md.bindMesh2d(mesh);
+        md.bind();
+        md.disableAllAttributes();
+        mesh.getBufferInfo().destroy();
     }
 
     public drawRectangle(rectangle:Rectangle):void{

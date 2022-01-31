@@ -66,4 +66,9 @@ export class DebugLayer extends Layer {
         this.textField.setText('');
     }
 
+    public println(...args:any[]):void {
+        this.clearLog();
+        this.log(...args);
+    }
+
 }

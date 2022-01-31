@@ -9,16 +9,16 @@ export class Timer {
     private readonly _callback:()=>void;
     private readonly _interval:number;
 
-    constructor(private parent:TimerDelegate,callback:()=>void,interval:number,private once:boolean){
+    constructor(private game:Game,private parent:TimerDelegate,callback:()=>void,interval:number,private once:boolean){
         if (DEBUG) {
-            if (interval<=0) throw new DebugError(`can not create timer with interval ${interval}`);
+            if (interval<0) throw new DebugError(`can not create timer with negative interval: ${interval}`);
         }
         this._interval = interval;
         this._callback = callback;
     }
 
     public onUpdate():void {
-        const time:number = Game.getInstance().getCurrentTime();
+        const time:number = this.game.getCurrentTime();
         if (!this._lastTime) this._lastTime = time;
         const delta:number = time - this._lastTime;
         if (delta !==0 && delta>this._interval) {

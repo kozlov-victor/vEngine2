@@ -14,7 +14,7 @@ export class SimpleAppearLetterTextAnimation extends AbstractTextAnimation {
             c.visible = false;
             game.getCurrentScene().setTimeout(()=>{
                 c.visible = true;
-            },index*this.apperTime);
+            },(index+1)*this.apperTime);
         });
     }
 

@@ -11,7 +11,7 @@ export abstract class Mesh2d extends RenderableModel {
     public fillColor:Color = Color.BLACK.clone();
 
     public _modelPrimitive:IPrimitive;
-    public _bufferInfo:BufferInfo;
+    private _bufferInfo:BufferInfo;
 
     protected constructor(game:Game,modelPrimitive:IPrimitive,bufferInfo?:BufferInfo) {
         super(game);
@@ -26,15 +26,30 @@ export abstract class Mesh2d extends RenderableModel {
             }
         }
         this._modelPrimitive = modelPrimitive;
-        this._bufferInfo = bufferInfo ?? this.game.getRenderer<WebGlRenderer>().initBufferInfo(this);
+        this._bufferInfo = bufferInfo!;
     }
 
     public override draw():void{
         this.game.getRenderer().drawMesh2d(this);
     }
 
+    public getBufferInfo():BufferInfo {
+        if (this._bufferInfo===undefined) {
+            this._bufferInfo = this.game.getRenderer<WebGlRenderer>().initBufferInfo(this);
+        }
+        return this._bufferInfo;
+    }
+
     public override destroy():void {
-        this._bufferInfo.destroy();
+        this._modelPrimitive.texCoordArr = undefined;
+        this._modelPrimitive.normalArr = undefined;
+        this._modelPrimitive.vertexColorArr = undefined;
+        if (
+            this._bufferInfo!==undefined && // it can be uninitialized
+            !this._bufferInfo.isDestroyed())  // it can be already destroyed by cloned object, with use the same bufferInfo
+        {
+            this.game.getRenderer<WebGlRenderer>().destroyMesh(this);
+        }
         super.destroy();
     }
 
@@ -42,7 +57,7 @@ export abstract class Mesh2d extends RenderableModel {
     protected override setClonedProperties(cloned: Mesh2d): void {
         cloned.fillColor = this.fillColor.clone();
         cloned.depthTest = this.depthTest;
-        cloned._bufferInfo = this._bufferInfo;
+        cloned._bufferInfo = this.getBufferInfo();
         cloned._modelPrimitive = this._modelPrimitive;
         super.setClonedProperties(cloned);
     }

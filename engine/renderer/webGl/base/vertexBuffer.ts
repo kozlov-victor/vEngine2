@@ -10,7 +10,6 @@ export class VertexBuffer extends AbstractBuffer {
     private dataLength:number = 0;
     private attrName:string;
 
-
     constructor(private readonly _gl:WebGLRenderingContext){
         super();
         if (DEBUG && !_gl) throw new DebugError("can not create VertexBuffer, gl context not passed to constructor, expected: VertexBuffer(gl)");
@@ -57,6 +56,7 @@ export class VertexBuffer extends AbstractBuffer {
     }
 
     public override destroy():void{
+        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this.getGlBuffer());
         this._gl.deleteBuffer(this.buffer);
         super.destroy();
     }

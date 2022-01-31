@@ -95,7 +95,7 @@ const getVertex2ByIndex = (index:number,vertices:readonly number[],indices?:read
 
 const extractNameWithoutExtension = (name:string):string=>{
     const segments = name.split('.');
-    if (segments.length===0) return name;
+    if (segments.length===1) return name;
     segments.pop();
     return segments.join('.');
 };
@@ -116,7 +116,7 @@ class FbxModel3d extends Model3d implements IFbxNode{
     }
 
     public override clone(): FbxModel3d {
-        const cloned:FbxModel3d = new FbxModel3d(this.game,this._modelPrimitive,this._bufferInfo);
+        const cloned:FbxModel3d = new FbxModel3d(this.game,this._modelPrimitive,this.getBufferInfo());
         this.setClonedProperties(cloned);
         return cloned;
     }
@@ -170,7 +170,7 @@ export abstract class FbxAbstractParser {
 
     private _parseGlobalSettings():void {
         const globalSettings = findNode(this.reader.rootNode,'GlobalSettings');
-        const properties70 = findNode(globalSettings,'Properties70');
+        const properties70 = findNode(globalSettings,'Properties70') || findNode(globalSettings,'Properties60');
         if (!properties70) return;
         const scaleFactor = findProperty70(properties70,'UnitScaleFactor');
         if (scaleFactor) {
@@ -390,6 +390,7 @@ export abstract class FbxAbstractParser {
             if (!material) return;
             g.material = material.clone();
             const texturesToApply = this._findTextureByMaterialId(materialId,textures,connections);
+
             for (const textureToApply of texturesToApply) {
                 const tx:Optional<ITextureDescription> = this.params?.textures?.[extractNameWithoutExtension(textureToApply.tag)];
                 if (!tx) return;
