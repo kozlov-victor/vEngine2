@@ -336,6 +336,7 @@ export class DrawingSurface
         super(game);
         this.size.set(size);
         this._drawingSession = new DrawingSession(this.game,this,this._matrixStack);
+        this.clear();
     }
 
     public setResourceLink:never = undefined as unknown as never;

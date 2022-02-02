@@ -81,9 +81,26 @@ const getVertex3ByIndex = (index:number,vertices:readonly number[]):[number,numb
     ]
 }
 
-const getVertex2ByIndex = (index:number,vertices:readonly number[],indices?:readonly number[]):[number,number]=>{
-    // byVertex or byVertexIndex
-    if (indices) {
+const getVertex3ByIndexAndMappingType = (vertexIndex:number,faceIndex:number,mapType:MappingType,vertices:readonly number[]):[number,number,number]=>{
+    let index:number;
+    if (mapType==='ByPolygonVertex') index = vertexIndex;
+    else if (mapType==='ByVertex' || mapType==='ByVertice') {
+        index = faceIndex;
+    } else {
+        throw new Error(`unsupported mapping type: ${mapType}`);
+    }
+    return getVertex3ByIndex(index,vertices);
+}
+
+const getVertex2ByIndexAndMappingType = (vertexIndex:number,faceIndex:number,mapType:MappingType,vertices:readonly number[],indices?:readonly number[]):[number,number]=>{
+    let index:number;
+    if (mapType==='ByPolygonVertex') index = vertexIndex;
+    else if (mapType==='ByVertex' || mapType==='ByVertice') {
+        index = faceIndex;
+    } else {
+        throw new Error(`unsupported mapping type: ${mapType}`);
+    }
+    if (indices) { // // byVertex or byVertexIndex
         index = indices[index];
     }
     const pos = index*2;
@@ -188,11 +205,11 @@ export abstract class FbxAbstractParser {
                 const name = ((g.props[1] || '') as string).replace('Geometry::','');
 
                 const vertices:readonly number[] = findProperty(g,'Vertices');
-                const indices:readonly number[] = findProperty(g,'PolygonVertexIndex');
+                const vertexIndices:readonly number[] = findProperty(g,'PolygonVertexIndex');
                 const normals:readonly number[] = findProperty(g,'LayerElementNormal/Normals');
                 const normalReferenceType:ReferenceType = findProperty(g,'LayerElementNormal/ReferenceInformationType');
                 const normalMappingType:MappingType = findProperty(g,'LayerElementNormal/MappingInformationType');
-                const faces:number[][] = findFaces(indices);
+                const faces:number[][] = findFaces(vertexIndices);
 
                 const uvs:readonly number[] = findProperty(g,'LayerElementUV/UV');
                 const uvIndices:readonly number[] = findProperty(g,'LayerElementUV/UVIndex');
@@ -202,12 +219,10 @@ export abstract class FbxAbstractParser {
 
                 //console.log({vertices,indices,normals,uvs,uvIndices});
 
-                if (normalMappingType!=='ByPolygonVertex') throw new Error(`normalMappingType is not supported: ${normalMappingType}`);
                 if (normalReferenceType!=='Direct') throw new Error(`normalReferenceType is not supported: ${normalReferenceType}`);
 
                 if (useTexture) {
-                    if (uvMappingType!=='ByPolygonVertex') throw new Error(`uvReferenceType is not supported: ${uvReferenceType}`);
-                    if (uvReferenceType!=='IndexToDirect') throw new Error(`uvMappingType is not supported: ${uvMappingType}`);
+                    if (['IndexToDirect','Direct'].indexOf(uvReferenceType)===-1) throw new Error(`uvReferenceType is not supported: ${uvReferenceType}`);
                 }
 
                 const verticesProcessed:number[] = [];
@@ -231,16 +246,16 @@ export abstract class FbxAbstractParser {
                     );
                     if (useTexture) {
                         uvsProcessed.push(
-                            ...getVertex2ByIndex(i0,uvs,uvIndices),
-                            ...getVertex2ByIndex(i1,uvs,uvIndices),
-                            ...getVertex2ByIndex(i2,uvs,uvIndices),
+                            ...getVertex2ByIndexAndMappingType(i0,face[0],uvMappingType,uvs,uvIndices),
+                            ...getVertex2ByIndexAndMappingType(i1,face[1],uvMappingType,uvs,uvIndices),
+                            ...getVertex2ByIndexAndMappingType(i2,face[2],uvMappingType,uvs,uvIndices),
                         );
                     }
 
                     normalsProcessed.push(
-                        ...getVertex3ByIndex(i0,normals),
-                        ...getVertex3ByIndex(i1,normals),
-                        ...getVertex3ByIndex(i2,normals),
+                        ...getVertex3ByIndexAndMappingType(i0,face[0],normalMappingType,normals),
+                        ...getVertex3ByIndexAndMappingType(i1,face[1],normalMappingType,normals),
+                        ...getVertex3ByIndexAndMappingType(i2,face[2],normalMappingType,normals),
                     )
                     faceVertexIndex+=3;
                     if (face.length>3) {  // polygon (fan)
@@ -254,15 +269,15 @@ export abstract class FbxAbstractParser {
                             const i2n = faceVertexIndex;
                             faceVertexIndex++;
                             normalsProcessed.push(
-                                ...getVertex3ByIndex(i0,normals),
-                                ...getVertex3ByIndex(i1n,normals),
-                                ...getVertex3ByIndex(i2n,normals),
+                                ...getVertex3ByIndexAndMappingType(i0,face[0],normalMappingType,normals),
+                                ...getVertex3ByIndexAndMappingType(i1n,face[j],normalMappingType,normals),
+                                ...getVertex3ByIndexAndMappingType(i2n,face[j+1],normalMappingType,normals),
                             )
                             if (useTexture) {
                                 uvsProcessed.push(
-                                    ...getVertex2ByIndex(i0,uvs,uvIndices),
-                                    ...getVertex2ByIndex(i1n,uvs,uvIndices),
-                                    ...getVertex2ByIndex(i2n,uvs,uvIndices),
+                                    ...getVertex2ByIndexAndMappingType(i0,face[0],uvMappingType,uvs,uvIndices),
+                                    ...getVertex2ByIndexAndMappingType(i1n,face[j],uvMappingType,uvs,uvIndices),
+                                    ...getVertex2ByIndexAndMappingType(i2n,face[j+1],uvMappingType,uvs,uvIndices),
                                 );
                             }
                         }
@@ -310,7 +325,7 @@ export abstract class FbxAbstractParser {
                     modelContainer.angle3d.setXYZ(
                         -MathEx.degToRad(rotation[4+2] as number),
                         MathEx.degToRad(rotation[4+0] as number),
-                        MathEx.degToRad(rotation[4+1] as number) // -
+                        MathEx.degToRad(rotation[4+1] as number)
                     );
                 }
                 const scale = findProperty70(properties70,'Lcl Scaling');

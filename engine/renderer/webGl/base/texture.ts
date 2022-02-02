@@ -11,7 +11,7 @@ export class Texture extends AbstractTexture{
     constructor(gl:WebGLRenderingContext){
         super(gl);
         // Fill the texture with a 1x1 blue pixel.
-        this.setRawData(new Uint8Array([0, 255, 0, 255]),1,1);
+        this.setRawData(new Uint8Array([0, 0, 0, 255]),1,1);
     }
 
     // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true); for bitmap textures

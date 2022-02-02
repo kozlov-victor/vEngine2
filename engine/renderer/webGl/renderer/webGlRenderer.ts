@@ -34,6 +34,7 @@ import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
 import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import MAT16 = Mat4.MAT16;
+import {GlCachedAccessor} from "@engine/renderer/webGl/blender/glCachedAccessor";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -131,6 +132,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
 
     private _lockRect:Optional<Rect>;
+    private _glCachedAccessor:GlCachedAccessor;
     private _pixelPerfectMode:boolean = false;
 
     constructor(game:Game){
@@ -252,8 +254,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setSpecular(mesh.material.specular);
 
         //this.gl.enable(this.gl.CULL_FACE);
-        if (mesh.depthTest) this._gl.enable(this._gl.DEPTH_TEST);
-        else this._gl.disable(this._gl.DEPTH_TEST);
+        this._glCachedAccessor.setDepthTest(mesh.depthTest);
         this._blender.setBlendMode(mesh.blendMode);
         mesh.onUpdatingBuffers();
         md.draw();
@@ -301,8 +302,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setColorMix(0);
         md.setSpecular(0);
 
-        if (mesh.depthTest) this._gl.enable(this._gl.DEPTH_TEST);
-        else this._gl.disable(this._gl.DEPTH_TEST);
+        this._glCachedAccessor.setDepthTest(mesh.depthTest);
         this._blender.setBlendMode(mesh.blendMode);
         md.draw();
         zToWMatrix.release();
@@ -445,7 +445,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public override afterItemStackDraw(stackPointer:IStateStackPointer):void {
-        this._gl.disable(this._gl.DEPTH_TEST);
+        this._glCachedAccessor.setDepthTest(false);
         this._currFrameBufferStack.reduceState(stackPointer);
     }
 
@@ -545,6 +545,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (DEBUG && gl===undefined) throw new DebugError(`WebGLRenderingContext is not supported by this device`);
         this._gl = gl;
 
+        this._glCachedAccessor = new GlCachedAccessor(this._gl);
         this._nullTexture = new Texture(gl);
         this._nullCubeMapTexture = new CubeMapTexture(gl);
         this._nullCubeMapTexture.setAsZero();
@@ -557,7 +558,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         // gl.depthFunc(gl.LEQUAL);
         //gl.enable(gl.CULL_FACE);
-        //gl.enable(gl.DEPTH_TEST);
     }
 
     // optimised version of rectangle drawing
@@ -630,8 +630,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         sd.setUniform(sd.u_alpha,this.getAlphaBlend());
         this._blender.setBlendMode(model.blendMode);
-        if (model.depthTest) this._gl.enable(this._gl.DEPTH_TEST);
-        else this._gl.disable(this._gl.DEPTH_TEST);
+        this._glCachedAccessor.setDepthTest(model.depthTest);
 
     }
 

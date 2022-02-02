@@ -125,6 +125,10 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
             throw new DebugError(`cannot append child, is is ${modelOrLayer}`);
         }
         if (Scene.isLayerGuard(modelOrLayer)) {
+            if (DEBUG && this._layers.indexOf(modelOrLayer)>-1) {
+                console.error(modelOrLayer);
+                throw new DebugError(`this layer is already added to this scene`);
+            }
             modelOrLayer._setScene(this);
             this._layers.push(modelOrLayer);
         } else {

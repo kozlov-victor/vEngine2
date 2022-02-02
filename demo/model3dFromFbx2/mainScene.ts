@@ -7,14 +7,14 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DebugLayer} from "@engine/scene/debugLayer";
+import {Layer} from "@engine/scene/layer";
 
 export class MainScene extends Scene {
 
-    // 'heart'
-    // test1 - test format
 
     private models:string[] = [
         'donut','test2','test3','test4',
+        'redis','station','heart',
         'binary','BUTCHER','Can','heartglass','mouse','rocket',
         'rocket2','SM_chest','spitfire','tequila'
     ]
@@ -23,9 +23,11 @@ export class MainScene extends Scene {
     private lastModel:RenderableModel;
     private loading:boolean = false;
     private debugLayer:DebugLayer;
+    private workLayer:Layer;
 
     @Resource.Texture('./model3dFromFbx2/models/textures/TestTexture.png') private testTexture:ITexture;
     @Resource.Texture('./model3dFromFbx2/models/textures/donut1.png') private donutTexture:ITexture;
+    @Resource.Texture('./model3dFromFbx2/models/textures/wings.png') private wingsTexture:ITexture;
 
     private async loadNextModel():Promise<void>{
         if (this.loading) return;
@@ -42,7 +44,8 @@ export class MainScene extends Scene {
 
         const textureMap:Record<string, ITexture> = {
             test2: this.testTexture,
-            donut: this.donutTexture
+            donut: this.donutTexture,
+            rocket2: this.wingsTexture,
         }
 
         this.lastModel = new FbxBinaryParser(this.game,buffer,{
@@ -53,7 +56,7 @@ export class MainScene extends Scene {
                 }
             }
         }).getModel();
-        this.appendChild(this.lastModel);
+        this.workLayer.appendChild(this.lastModel);
         this.lastModel.pos.setXY(300,300);
         this.lastModel.size.setWH(400,400);
         if (!this.trackBall) this.trackBall = new TrackBall(this,this.lastModel);
@@ -67,9 +70,11 @@ export class MainScene extends Scene {
     }
 
     public override async onReady():Promise<void> {
+        this.workLayer = new Layer(this.game);
+        this.appendChild(this.workLayer);
         this.debugLayer = new DebugLayer(this.game);
-        this.appendChild(this.debugLayer);
         await this.loadNextModel();
+        this.appendChild(this.debugLayer);
         this.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.RIGHT, async _=>{
             await this.loadNextModel();
         });

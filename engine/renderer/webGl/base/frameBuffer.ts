@@ -24,6 +24,7 @@ export class FrameBuffer implements IRenderTarget {
         this._init(_gl,size);
         this.bind();
         this.clear(Color.RGB(0,0,0,),true,0);
+        this.unbind();
     }
 
     private static _currInstance:Optional<FrameBuffer>;
