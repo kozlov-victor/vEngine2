@@ -8,6 +8,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {Layer} from "@engine/scene/layer";
+import {IFbxParams} from "@engine/renderable/impl/3d/fbxParser/_internal/fbxAbstractParser";
 
 export class MainScene extends Scene {
 
@@ -28,6 +29,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3dFromFbx2/models/textures/TestTexture.png') private testTexture:ITexture;
     @Resource.Texture('./model3dFromFbx2/models/textures/donut1.png') private donutTexture:ITexture;
     @Resource.Texture('./model3dFromFbx2/models/textures/wings.png') private wingsTexture:ITexture;
+    @Resource.Texture('./model3dFromFbx2/models/textures/5.png') private redis5Texture:ITexture;
 
     private async loadNextModel():Promise<void>{
         if (this.loading) return;
@@ -42,19 +44,23 @@ export class MainScene extends Scene {
         const loader = new ResourceLoader(this.game);
         const buffer = await loader.loadBinary(`./model3dFromFbx2/models/${this.models[this.cnt]}.fbx`);
 
-        const textureMap:Record<string, ITexture> = {
-            test2: this.testTexture,
-            donut: this.donutTexture,
-            rocket2: this.wingsTexture,
+        const textureMap:Record<string, IFbxParams['textures']> = {
+            test2: {
+                TestTexture:{texture:this.testTexture}
+            },
+            donut: {
+                donut1:{texture:this.donutTexture}
+            },
+            rocket2: {
+                wings: {texture:this.wingsTexture}
+            },
+            redis: {
+                5: {texture:this.redis5Texture},
+            },
         }
 
         this.lastModel = new FbxBinaryParser(this.game,buffer,{
-            textures: {
-                base_color_texture:{
-                    texture: textureMap[this.models[this.cnt]],
-                    type: 'color'
-                }
-            }
+            textures: textureMap[this.models[this.cnt]]
         }).getModel();
         this.workLayer.appendChild(this.lastModel);
         this.lastModel.pos.setXY(300,300);

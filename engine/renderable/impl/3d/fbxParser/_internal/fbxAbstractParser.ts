@@ -10,10 +10,11 @@ import {Game} from "@engine/core/game";
 import {MeshMaterial} from "@engine/renderable/impl/3d/meshMaterial";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Optional} from "@engine/core/declarations";
+import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 
 interface ITextureDescription {
     texture:ITexture,
-    type: 'color'|'normals'
+    type?: 'color'|'normals'
 }
 
 export interface IFbxParams {
@@ -110,6 +111,12 @@ const getVertex2ByIndexAndMappingType = (vertexIndex:number,faceIndex:number,map
     ];
 }
 
+const extractFileNameFromPath = (path:string):string=>{
+    const segments = path.split('\\');
+    if (segments.length===1) return path;
+    return segments.pop()!;
+};
+
 const extractNameWithoutExtension = (name:string):string=>{
     const segments = name.split('.');
     if (segments.length===1) return name;
@@ -143,6 +150,18 @@ class FbxModel3d extends Model3d implements IFbxNode{
 class FbxModelContainer extends SimpleGameObjectContainer  implements IFbxNode{
     public tag:string;
     public uuid:number;
+    public meshes:Mesh3d[] = [];
+}
+
+class FbxModelWrapper extends SimpleGameObjectContainer {
+    constructor(game:Game,private container:FbxModelContainer) {
+        super(game);
+    }
+
+    public getMeshes():readonly Mesh3d[] {
+        return this.container.meshes;
+    }
+
 }
 
 class FbxMaterial extends MeshMaterial implements IFbxNode {
@@ -171,7 +190,7 @@ class FbxTexture implements IFbxNode {
 export abstract class FbxAbstractParser {
 
     private readonly container:FbxModelContainer;
-    private readonly containerTransformWrap:SimpleGameObjectContainer;
+    private readonly containerTransformWrap:FbxModelWrapper;
     private unitScaleFactor:number = 1;
 
 
@@ -179,7 +198,7 @@ export abstract class FbxAbstractParser {
         this.container = new FbxModelContainer(game);
         this.container.tag = 'root';
         this.container.uuid = 0;
-        this.containerTransformWrap = new SimpleGameObjectContainer(game);
+        this.containerTransformWrap = new FbxModelWrapper(game,this.container);
         this.container.angle3d.x = MathEx.degToRad(90);
         this.containerTransformWrap.appendChild(this.container);
         this._parse();
@@ -374,7 +393,12 @@ export abstract class FbxAbstractParser {
         findNodes(this.reader.rootNode,'Texture').forEach(t=>{
             const texture = new FbxTexture();
             texture.uuid = t.props[0] as number;
-            texture.tag = ((t.props[1] || '') as string).replace('Texture::','');
+            const fileNameNode = findNode(t,'FileName');
+            const fileName:string =
+                (fileNameNode?.props?.[0] as string) ??
+                ((t.props[1] || '') as string).replace('Texture::','');
+            texture.tag = extractNameWithoutExtension(extractFileNameFromPath(fileName));
+            console.log(texture.tag);
             textures.push(texture);
         });
         return textures;
@@ -407,9 +431,9 @@ export abstract class FbxAbstractParser {
             const texturesToApply = this._findTextureByMaterialId(materialId,textures,connections);
 
             for (const textureToApply of texturesToApply) {
-                const tx:Optional<ITextureDescription> = this.params?.textures?.[extractNameWithoutExtension(textureToApply.tag)];
+                const tx:Optional<ITextureDescription> = this.params?.textures?.[textureToApply.tag];
                 if (!tx) return;
-                if (tx.type=='color') {
+                if (tx.type===undefined || tx.type=='color') {
                     g.texture = tx.texture;
                 } else if (tx.type==='normals') {
                     g.normalsTexture = tx.texture;
@@ -439,6 +463,7 @@ export abstract class FbxAbstractParser {
                 let geometry = geometries.find(it=>it.uuid===connectionPair[0]);
                 if (!geometry) return;
                 geometry = geometry.clone();
+                this.container.meshes.push(geometry);
                 m.appendChild(geometry);
             });
         });
