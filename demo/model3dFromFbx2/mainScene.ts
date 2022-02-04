@@ -30,6 +30,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3dFromFbx2/models/textures/donut1.png') private donutTexture:ITexture;
     @Resource.Texture('./model3dFromFbx2/models/textures/wings.png') private wingsTexture:ITexture;
     @Resource.Texture('./model3dFromFbx2/models/textures/5.png') private redis5Texture:ITexture;
+    @Resource.Texture('./model3dFromFbx2/models/textures/plate1.png') private plateTexture:ITexture;
 
     private async loadNextModel():Promise<void>{
         if (this.loading) return;
@@ -49,7 +50,8 @@ export class MainScene extends Scene {
                 TestTexture:{texture:this.testTexture}
             },
             donut: {
-                donut1:{texture:this.donutTexture}
+                donut1:{texture:this.donutTexture},
+                plate1:{texture:this.plateTexture},
             },
             rocket2: {
                 wings: {texture:this.wingsTexture}

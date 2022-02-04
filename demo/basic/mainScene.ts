@@ -7,6 +7,8 @@ import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
+import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
+import {yamlTest} from "@engine/misc/parsers/yaml/yaml-test";
 
 export class MainScene extends Scene {
 
@@ -14,12 +16,12 @@ export class MainScene extends Scene {
     private logoTexture:ITexture;
 
     public override onReady():void {
-        const spr:Image = new Image(this.game,this.logoTexture);
-        spr.pos.fromJSON({x:10,y:10});
+        const spr: Image = new Image(this.game, this.logoTexture);
+        spr.pos.fromJSON({x: 10, y: 10});
         spr.transformPoint.setToCenter();
         spr.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(spr);
-        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e: IKeyBoardEvent) => {
             switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
                     spr.pos.addX(-1);
@@ -34,13 +36,12 @@ export class MainScene extends Scene {
                     spr.pos.addY(1);
                     break;
                 case KEYBOARD_KEY.R:
-                    spr.angle+=0.1;
+                    spr.angle += 0.1;
             }
         });
-        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonPressed, e=>{
+        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonPressed, e => {
             console.log(e);
         });
-        //throw new DebugError('err'+new Date().getSeconds());
+        yamlTest();
     }
-
 }
