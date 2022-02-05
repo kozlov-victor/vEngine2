@@ -9,7 +9,7 @@ import {FbxAsciiParser} from "@engine/renderable/impl/3d/fbxParser/fbxAsciiParse
 export class MainScene extends Scene {
 
     private models:string[] = [
-        'test_cinema_4d','test1',
+        'test_cinema_4d','test1'
     ]
     private cnt:number = 0;
     private trackBall:TrackBall;

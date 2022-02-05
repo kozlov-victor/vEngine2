@@ -119,7 +119,7 @@ function readPropertyArray(data: BinBuffer, reader: (r: BinBuffer) => FBXPropert
 
     if (encoding === 1) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const f= require('pako')
+        const f = require('pako')
         //const decompressed:number[] = [];
         const decompressed:Uint8Array = f.inflate(data.readUints8(compressedLength));
         arrayData = new BinBuffer(decompressed.buffer);
