@@ -49,10 +49,10 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
     protected getDefaultNormalAndCheckedRenderableModel(): [normal: Shape, checked: Shape] {
         const rNormal:Rectangle = new Rectangle(this.game);
         rNormal.borderRadius = 3;
-        rNormal.color.set(Color.BLACK);
-        rNormal.fillColor.set(Color.NONE);
+        rNormal.color.setFrom(Color.BLACK);
+        rNormal.fillColor.setFrom(Color.NONE);
         const rChecked:Rectangle = new Rectangle(this.game);
-        rChecked.color.set(Color.BLACK);
+        rChecked.color.setFrom(Color.BLACK);
         rChecked.borderRadius = 3;
         return [rNormal,rChecked];
     }

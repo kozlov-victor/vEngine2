@@ -8,13 +8,14 @@ import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import * as fntXML from "xml/angelcode-loader!./font/pixel.fnt";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Image} from "@engine/renderable/impl/general/image";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class ResourceHolder extends ResourceAutoHolder {
 
 
     public buttonBg = (()=>{
         const rect = new Rectangle(this.scene.getGame());
-        rect.fillColor = Color.fromCssLiteral(`#effaef`);
+        rect.fillColor = ColorFactory.fromCSS(`#effaef`);
         rect.lineWidth = 0;
         return rect;
     })();
@@ -22,16 +23,16 @@ export class ResourceHolder extends ResourceAutoHolder {
 
     public buttonBgActive = (()=>{
         const rect = new Rectangle(this.scene.getGame());
-        rect.fillColor = Color.fromCssLiteral(`#ffe0e0`);
+        rect.fillColor = ColorFactory.fromCSS(`#ffe0e0`);
         rect.lineWidth = 0;
         return rect;
     })();
 
     public textFieldBg = (()=>{
         const rect = new Rectangle(this.scene.getGame());
-        rect.fillColor = Color.fromCssLiteral(`#c6f3c9`);
+        rect.fillColor = ColorFactory.fromCSS(`#c6f3c9`);
         rect.lineWidth = 1;
-        rect.color = Color.fromCssLiteral('#000');
+        rect.color = ColorFactory.fromCSS('#000');
         return rect;
     })();
 
@@ -46,7 +47,7 @@ export class ResourceHolder extends ResourceAutoHolder {
 
     public checkBoxCheckedBg = (()=>{
         const background = new Circle(this.scene.getGame());
-        background.fillColor = Color.fromCssLiteral(`#d2d5ff`);
+        background.fillColor = ColorFactory.fromCSS(`#d2d5ff`);
         return background;
     })();
 

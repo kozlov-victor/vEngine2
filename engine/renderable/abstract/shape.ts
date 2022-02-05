@@ -26,24 +26,16 @@ export abstract class Shape extends RenderableModel implements IShapeProps{
     public override setProps(props:IShapeProps):void{
         super.setProps(props);
         if (props.color!==undefined) {
-            if (typeof props.color === "string") {
-                this.color.set(Color.fromCssLiteral(props.color));
-            } else {
-                this.color.setRGBA(props.color.r,props.color.g,props.color.b,props.color.a);
-            }
+            this.color.setRGBA(props.color.r,props.color.g,props.color.b,props.color.a);
         }
         if (props.fillColor!==undefined) {
-            if (typeof props.fillColor === "string") {
-                this.fillColor.set(Color.fromCssLiteral(props.fillColor));
-            } else {
-                this.fillColor.setRGBA(props.fillColor.r,props.fillColor.g,props.fillColor.b,props.fillColor.a);
-            }
+            this.fillColor.setRGBA(props.fillColor.r,props.fillColor.g,props.fillColor.b,props.fillColor.a);
         }
         if (props.lineWidth!==undefined) this._lineWidth = props.lineWidth;
     }
 
     protected override setClonedProperties(cloned:Shape):void{
-        cloned.color.set(this.color);
+        cloned.color.setFrom(this.color);
         cloned._lineWidth = this._lineWidth;
         cloned.fillColor = this.fillColor.clone();
         if (this.fillGradient!==undefined) cloned.fillGradient = this.fillGradient.clone();

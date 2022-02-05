@@ -7,7 +7,6 @@ import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
-import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 import {yamlTest} from "@engine/misc/parsers/yaml/yaml-test";
 
 export class MainScene extends Scene {

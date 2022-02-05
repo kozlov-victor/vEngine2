@@ -16,6 +16,7 @@ import {Ym} from "../ym-player/formats/ym";
 import {Sound} from "@engine/media/sound";
 import {GameOverScene} from "./gameOverScene";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 interface IMoveable {
     model:RenderableModel;
@@ -198,7 +199,7 @@ export class GameScene extends BasePix32Scene {
             const p:Rectangle = new Rectangle(this.game);
             p.size.setWH(1);
             p.lineWidth = 0;
-            p.fillColor = Color.fromCssLiteral(`#acabab`);
+            p.fillColor = ColorFactory.fromCSS(`#acabab`);
             p.pos.setXY(MathEx.random(0,32),MathEx.random(0,32));
             this.screen.appendChild(p);
             this.moveableObjects.push({model:p,velocity:0,onDisappear:GameScene.onDisappearCommon});

@@ -19,6 +19,7 @@ import {ChipOscilloscope} from "../../misc/chipOscilloscope";
 import {AbstractChipTrack} from "../../ym-player/abstract/abstractChipTrack";
 import {Sound} from "@engine/media/sound";
 import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export const waitFor = (game:Game,time:number):Promise<void>=>{
     return new Promise<void>((resolve)=>{
@@ -79,7 +80,7 @@ export abstract class BasePix32Scene extends Scene {
 
     public override onReady():void {
 
-        this.backgroundColor = Color.fromCssLiteral(`#e2e2e2`);
+        this.backgroundColor = ColorFactory.fromCSS(`#e2e2e2`);
 
         this.btmLayer = new Layer(this.game);
         this.appendChild(this.btmLayer);
@@ -115,8 +116,8 @@ export abstract class BasePix32Scene extends Scene {
 
         const indicator:Rectangle = new Rectangle(this.game);
         indicator.lineWidth = 0;
-        const fillColorOn = Color.fromCssLiteral(`#ff0000`);
-        const fillColorOff = Color.fromCssLiteral(`#9f0404`);
+        const fillColorOn = ColorFactory.fromCSS(`#ff0000`);
+        const fillColorOff = ColorFactory.fromCSS(`#9f0404`);
         indicator.pos.setXY(40,162);
         indicator.size.setWH(60,100);
         this.topLayer.appendChild(indicator);

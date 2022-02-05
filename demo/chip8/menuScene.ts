@@ -51,7 +51,7 @@ export class MenuScene extends Scene {
 
     public override onReady():void {
         this.listView = new VerticalList(this.game);
-        this.listView.size.set(this.game.size);
+        this.listView.size.setFrom(this.game.size);
         this.listView.setPadding(10);
         this.listView.setMargin(10);
         this.appendChild(this.listView);

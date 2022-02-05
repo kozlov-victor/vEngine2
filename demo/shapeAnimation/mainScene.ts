@@ -5,6 +5,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Color} from "@engine/renderer/common/color";
 import {EasingElastic} from "@engine/misc/easing/functions/elastic";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
@@ -19,7 +20,7 @@ export class MainScene extends Scene {
         const shapeAnimation = new ShapeAnimation(this.game,Polygon.fromSvgPath(this.game,from),Polygon.fromSvgPath(this.game,to),container,6000,EasingElastic.InOut);
         shapeAnimation.play();
         shapeAnimation.onProgress(p=>{
-            p.fillColor = Color.fromCssLiteral('#e51e1e');
+            p.fillColor = ColorFactory.fromCSS('#e51e1e');
         });
     }
 

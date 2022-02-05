@@ -1,6 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
@@ -43,7 +44,7 @@ export class MainScene extends Scene {
 
         this.renderScene = (session)=>{
             const t = this.game.getElapsedTime() / 1000;
-            x.setDrawColor(Color.HSL((t*99),79,80).asRGBNumeric(),20);
+            x.setDrawColor(ColorFactory.fromHSL((t*99),79,80).asRGBNumeric(),20);
             session.drawArc(960+S(t)*540,540+C(t)*540,1E3,0,Math.PI*2);
         };
 

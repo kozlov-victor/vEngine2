@@ -19,6 +19,7 @@ import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactor
 import {ScrollView} from "@engine/renderable/impl/ui/scrollViews/scrollView";
 import {Size} from "@engine/geometry/size";
 import {SelectBox} from "@engine/renderable/impl/ui/selectBox/selectBox";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
@@ -81,7 +82,7 @@ export class MainScene extends Scene {
         btn.setBackground(bg2);
 
         const bg2Active = new Rectangle(this.game);
-        bg2Active.fillColor = Color.fromCssLiteral('#38774c');
+        bg2Active.fillColor = ColorFactory.fromCSS('#38774c');
         bg2Active.lineWidth = 1;
         bg2Active.borderRadius = 10;
         btn.setBackgroundActive(bg2Active);
@@ -117,20 +118,20 @@ export class MainScene extends Scene {
 
         const scrollView:ScrollView = new ScrollView(this.game);
         const scrollBg = new Rectangle(this.game);
-        scrollBg.fillColor = Color.fromCssLiteral(`#fff`);
+        scrollBg.fillColor = ColorFactory.fromCSS(`#fff`);
         scrollView.setBackground(scrollBg);
 
         const scrollBgActive = new Rectangle(this.game);
-        scrollBgActive.fillColor = Color.fromCssLiteral(`#eae9e9`);
+        scrollBgActive.fillColor = ColorFactory.fromCSS(`#eae9e9`);
         scrollView.setBackgroundActive(scrollBgActive);
 
         const scrollBgHover = new Rectangle(this.game);
-        scrollBgHover.fillColor = Color.fromCssLiteral(`#efe0e0`);
+        scrollBgHover.fillColor = ColorFactory.fromCSS(`#efe0e0`);
         scrollView.setBackgroundHover(scrollBgHover);
 
         scrollView.pos.setXY(400,300);
         scrollView.size.setWH(300,100);
-        scrollView._scrollableContainer.size.set(new Size(410,400));
+        scrollView._scrollableContainer.size.setFrom(new Size(410,400));
         scrollView.setMargin(10);
         scrollView.setPadding(5);
         const label:TextField = new  TextField(this.game,this.fnt);
@@ -146,11 +147,11 @@ export class MainScene extends Scene {
 
         const selectBox = new SelectBox(this.game,this.fnt);
         const selectBoxBg = new Rectangle(this.game);
-        selectBoxBg.fillColor = Color.fromCssLiteral(`#adb4ff`);
+        selectBoxBg.fillColor = ColorFactory.fromCSS(`#adb4ff`);
         selectBox.setBackground(selectBoxBg);
 
         const selectBoxBgSelected = new Rectangle(this.game);
-        selectBoxBgSelected.fillColor = Color.fromCssLiteral(`#49ef6e`);
+        selectBoxBgSelected.fillColor = ColorFactory.fromCSS(`#49ef6e`);
         selectBox.setBackgroundSelected(selectBoxBgSelected);
 
         selectBox.size.setWH(130,100);

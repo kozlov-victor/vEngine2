@@ -3,6 +3,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export abstract class AbstractEntity extends SimpleGameObjectContainer {
 
@@ -15,7 +16,7 @@ export abstract class AbstractEntity extends SimpleGameObjectContainer {
         const bullet = new Rectangle(this.game);
         bullet.pos.set(this.pos);
         bullet.size.setWH(40,5);
-        bullet.fillColor = Color.fromCssLiteral(`#ffe406`);
+        bullet.fillColor = ColorFactory.fromCSS(`#ffe406`);
         bullet.velocity.x = 150;
         this.scene.appendChild(bullet);
     }

@@ -8,7 +8,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {Layer} from "@engine/scene/layer";
-import {IFbxParams} from "@engine/renderable/impl/3d/fbxParser/_internal/fbxAbstractParser";
+import {IFbxParams} from "@engine/renderable/impl/3d/fbxParser/_internal/types";
 
 export class MainScene extends Scene {
 
@@ -31,6 +31,7 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3dFromFbx2/models/textures/wings.png') private wingsTexture:ITexture;
     @Resource.Texture('./model3dFromFbx2/models/textures/5.png') private redis5Texture:ITexture;
     @Resource.Texture('./model3dFromFbx2/models/textures/plate1.png') private plateTexture:ITexture;
+    @Resource.Texture('./model3dFromFbx2/models/textures/nose.png') private noseTexture:ITexture;
 
     private async loadNextModel():Promise<void>{
         if (this.loading) return;
@@ -54,7 +55,8 @@ export class MainScene extends Scene {
                 plate1:{texture:this.plateTexture},
             },
             rocket2: {
-                wings: {texture:this.wingsTexture}
+                wings: {texture:this.wingsTexture},
+                nose: {texture:this.noseTexture},
             },
             redis: {
                 5: {texture:this.redis5Texture},

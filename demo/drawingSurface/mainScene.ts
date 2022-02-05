@@ -4,6 +4,7 @@ import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Size} from "@engine/geometry/size";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Color} from "@engine/renderer/common/color";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
@@ -23,7 +24,7 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         const rect = new Rectangle(this.game);
-        rect.fillColor = Color.fromCssLiteral('#5128b1');
+        rect.fillColor = ColorFactory.fromCSS('#5128b1');
         rect.pos.setXY(200);
         this.appendChild(rect);
 

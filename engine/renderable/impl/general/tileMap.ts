@@ -85,7 +85,7 @@ export class TileMap extends RenderableModelWithTexture {
         this._cellImage.revalidate();
         if (!this._drawingSurface) {
             const size:Size = new Size();
-            size.set(this.game.size);
+            size.setFrom(this.game.size);
             size.addWH(this._tileWidth*2,this._tileHeight*2);
             this._drawingSurface = new DrawingSurface(this.game,size);
             this.appendChild(this._drawingSurface);

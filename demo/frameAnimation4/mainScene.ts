@@ -7,6 +7,7 @@ import {IRectJSON} from "@engine/geometry/rect";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Color} from "@engine/renderer/common/color";
 import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 export class MainScene extends Scene {
@@ -26,7 +27,7 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
-        this.backgroundColor = Color.fromCssLiteral('#000');
+        this.backgroundColor = ColorFactory.fromCSS('#000');
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.attack);
         animatedImage.setPixelPerfect(true);

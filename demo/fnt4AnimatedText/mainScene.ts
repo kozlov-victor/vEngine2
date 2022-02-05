@@ -26,6 +26,7 @@ import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Color} from "@engine/renderer/common/color";
 import {FallLettersTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/fallLettersTextAnimation";
 import {WaveTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/waveTextAnimation";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
@@ -53,9 +54,9 @@ export class MainScene extends Scene {
         const bgActive = new Rectangle(this.game);
         bgActive.borderRadius = 30;
         const grad = new LinearGradient();
-        grad.setColorAtPosition(0,Color.fromCssLiteral("rgba(109,248,98,0.2)"));
-        grad.setColorAtPosition(0.5,Color.fromCssLiteral("rgba(214,146,18,0.2)"));
-        grad.setColorAtPosition(1,Color.fromCssLiteral("rgba(109,248,98,0.2)"));
+        grad.setColorAtPosition(0,ColorFactory.fromCSS("rgba(109,248,98,0.2)"));
+        grad.setColorAtPosition(0.5,ColorFactory.fromCSS("rgba(214,146,18,0.2)"));
+        grad.setColorAtPosition(1,ColorFactory.fromCSS("rgba(109,248,98,0.2)"));
         grad.angle = Math.PI/2;
         bgActive.fillGradient = grad;
         tf.setBackgroundActive(bgActive);

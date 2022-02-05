@@ -59,7 +59,7 @@ export class MkIntroScene extends MkAbstractScene {
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.setAlignText(AlignText.CENTER);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
-        tf.size.set(this.game.size);
+        tf.size.setFrom(this.game.size);
         tf.setWordBrake(WordBrake.PREDEFINED);
         tf.pos.setY(200);
         tf.textColor.setRGB(110,111,10);

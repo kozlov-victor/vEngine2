@@ -89,7 +89,7 @@ class DrawingSession implements IDrawingSession {
     constructor(private game:Game,private surface:DrawingSurface,private _matrixStack:MatrixStack) {
         this._renderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,this.surface.size);
         this.canvasImage = new Image(this.game,this._renderTarget.getTexture());
-        this.canvasImage.size.set(surface.size);
+        this.canvasImage.size.setFrom(surface.size);
         this.canvasImage.revalidate();
     }
 
@@ -167,7 +167,7 @@ class DrawingSession implements IDrawingSession {
             }
             const path:string = arcToSvgCurve(cx,cy,radius,startAngle,endAngle)+` z`;
             const polygon:Polygon = Polygon.fromSvgPath(this.game,path);
-            polygon.fillColor.set(this.surface.getFillColor());
+            polygon.fillColor.setFrom(this.surface.getFillColor());
             this.drawModel(polygon);
         }
     }
@@ -181,7 +181,7 @@ class DrawingSession implements IDrawingSession {
         this._textField.setFont(this.surface.getFont());
         this._textField.setAutoSize(true);
         this._textField.setWordBrake(WordBrake.PREDEFINED);
-        this._textField.textColor.set(this.surface.getDrawColor());
+        this._textField.textColor.setFrom(this.surface.getDrawColor());
         this._textField.pos.setXY(x,y);
         this._textField.setText(text);
         this._textField.revalidate();
@@ -226,7 +226,7 @@ class DrawingSession implements IDrawingSession {
         const points:number[][] = this._svgPathToVertexArrayBuilder.getResult();
         for (const vertices of points) polyLines.push(PolyLine.fromVertices(this.game,vertices,this.pathParams));
         for (const p of polyLines) {
-            p.color.set(this.drawColor);
+            p.color.setFrom(this.drawColor);
             this.drawModel(p);
             p.destroy();
         }
@@ -248,7 +248,7 @@ class DrawingSession implements IDrawingSession {
         } else {
             p = PolyLine.fromVertices(this.game,pathOrVertices,this.pathParams);
         }
-        p.color.set(this.surface.getDrawColor());
+        p.color.setFrom(this.surface.getDrawColor());
         this.drawModel(p);
     }
 
@@ -289,12 +289,12 @@ class DrawingSession implements IDrawingSession {
         const polyLines:PolyLine[] = PolyLine.fromMultiCurveSvgPath(this.game,svgPath,{lineWidth:this.surface.getLineWidth()});
         for (const pl of polyLines) {
             const pg:Polygon = Polygon.fromPolyline(this.game,pl);
-            pg.fillColor.set(this.surface.getFillColor());
+            pg.fillColor.setFrom(this.surface.getFillColor());
             this.drawModel(pg);
         }
         if (this.surface.getLineWidth()>0) {
             for (const pl of polyLines) {
-                pl.color.set(this.surface.getDrawColor());
+                pl.color.setFrom(this.surface.getDrawColor());
                 this.drawModel(pl);
             }
         }
@@ -302,9 +302,9 @@ class DrawingSession implements IDrawingSession {
 
     private drawPolygonFromVertices(vertices:number[]):void{
         const pl:PolyLine = PolyLine.fromVertices(this.game,vertices,{lineWidth:this.surface.getLineWidth()},true);
-        pl.color.set(this.surface.getDrawColor());
+        pl.color.setFrom(this.surface.getDrawColor());
         const pg:Polygon = Polygon.fromPolyline(this.game,pl);
-        pg.fillColor.set(this.surface.getFillColor());
+        pg.fillColor.setFrom(this.surface.getFillColor());
         this.drawModel(pg);
         if (this.surface.getLineWidth()>0) {
             this.drawModel(pl);
@@ -313,9 +313,9 @@ class DrawingSession implements IDrawingSession {
 
 
     private prepareShape(shape:Shape):void{
-        shape.fillColor.set(this.surface.getFillColor());
+        shape.fillColor.setFrom(this.surface.getFillColor());
         shape.lineWidth = this.surface.getLineWidth();
-        shape.color.set(this.surface.getDrawColor());
+        shape.color.setFrom(this.surface.getDrawColor());
     }
 
     private drawSimpleShape(shape:Shape):void{
@@ -334,7 +334,7 @@ export class DrawingSurface
 
     constructor(game:Game,size:Readonly<ISize>){
         super(game);
-        this.size.set(size);
+        this.size.setFrom(size);
         this._drawingSession = new DrawingSession(this.game,this,this._matrixStack);
         this.clear();
     }

@@ -74,7 +74,7 @@ export class Polygon extends Mesh2d {
         const modelPrimitive = new PolygonPrimitive();
         modelPrimitive.vertexArr = triangulatedVertices;
         const pg:Polygon = new Polygon(game,modelPrimitive);
-        pg.size.set(p.size);
+        pg.size.setFrom(p.size);
         pg._edgeVertices = vertices;
         return pg;
     }

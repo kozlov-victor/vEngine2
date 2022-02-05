@@ -22,7 +22,7 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         const container = new SimpleGameObjectContainer(this.game);
-        container.size.set(this.game.size);
+        container.size.setFrom(this.game.size);
         this.appendChild(container);
 
         const circle:Circle = new Circle(this.game);

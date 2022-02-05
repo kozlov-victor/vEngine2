@@ -5,6 +5,7 @@ import {Font} from "@engine/renderable/impl/general/font/font";
 import {Color} from "@engine/renderer/common/color";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
@@ -59,7 +60,7 @@ export class MainScene extends Scene {
         // x.setDrawColor(Color.BLACK.asRGBNumeric());
         // x.setFillColor(Color.BLACK.asRGBNumeric());
 
-        this.backgroundColor = Color.fromCssLiteral('#04290e');
+        this.backgroundColor = ColorFactory.fromCSS('#04290e');
 
         const a = Math.abs;
         let y:number,i:number,n:number,m:number,k:number;

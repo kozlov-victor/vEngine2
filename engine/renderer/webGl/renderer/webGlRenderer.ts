@@ -569,7 +569,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const rect:Rect = Rect.fromPool();
             rect.setXYWH( 0,0,rectangle.size.width,rectangle.size.height);
             const size:Size = Size.fromPool();
-            size.set(this._currFrameBufferStack.getCurrentTargetSize());
+            size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
             const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
             scd.setUniform(scd.u_vertexMatrix,mvpHolder.mat16);
             rectangle.modelViewProjectionMatrix.fromMat16(mvpHolder.mat16);
@@ -617,7 +617,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const rect:Rect = Rect.fromPool();
             rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
             const size:Size = Size.fromPool();
-            size.set(this._currFrameBufferStack.getCurrentTargetSize());
+            size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
             const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
             model.modelViewProjectionMatrix.fromMat16(mvpHolder.mat16);
             sd.setUniform(sd.u_vertexMatrix,mvpHolder.mat16);

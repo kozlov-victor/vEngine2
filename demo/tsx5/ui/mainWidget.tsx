@@ -17,6 +17,7 @@ import {IChangeNumericSliderEvent} from "@engine/renderable/impl/ui/numericSlide
 import {IChangeEditTextFieldEvent} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBoxEvents";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 export class MainWidget extends VEngineTsxComponent {
@@ -29,11 +30,11 @@ export class MainWidget extends VEngineTsxComponent {
     private textColor:IColor = Color.GREY.clone();
 
     private colors = [
-        Color.fromCssLiteral('#74b55f'),
-        Color.fromCssLiteral('#fff'),
-        Color.fromCssLiteral('#f57171'),
-        Color.fromCssLiteral('#697cee'),
-        Color.fromCssLiteral('#efc8a5'),
+        ColorFactory.fromCSS('#74b55f'),
+        ColorFactory.fromCSS('#fff'),
+        ColorFactory.fromCSS('#f57171'),
+        ColorFactory.fromCSS('#697cee'),
+        ColorFactory.fromCSS('#efc8a5'),
     ];
     private colorSelected:number = 0;
     private textAlign:AlignTextContentHorizontal = AlignTextContentHorizontal.RIGHT;

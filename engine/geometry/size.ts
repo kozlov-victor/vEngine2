@@ -86,12 +86,12 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
     }
 
     // noinspection JSSuspiciousNameCombination
-    public addWH(width:number,height:number = width):Size{
+    public addWH(width:number,height:number = width):this{
         this.setWH(this.width+width,this.height+height);
         return this;
     }
 
-    public set(another:ISize):Size{
+    public setFrom(another:ISize):this{
         this.setWH(another.width,another.height);
         return this;
     }

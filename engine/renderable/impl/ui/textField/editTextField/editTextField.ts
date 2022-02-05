@@ -95,7 +95,7 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
                 b!==this.cursorColor.b ||
                 a!==this.cursorColor.a;
             if (dirty) {
-                this.cursorColor.set(props.cursorColor);
+                this.cursorColor.setFrom(props.cursorColor);
                 this.markAsDirty();
             }
         }

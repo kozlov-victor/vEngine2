@@ -2,6 +2,7 @@ import {Widget} from "./widget";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
 import {Texture} from "@engine/renderer/webGl/base/texture";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 const wait = async (time:number)=>{
     return new Promise(resolve=>{
@@ -42,7 +43,7 @@ export class CommandsAttacher {
     private attachGraphicsCommands() {
         const drawPoint = (x:number,y:number,col:string)=>{
             this.ctx.strokeStyle = '';
-            this.ctx.fillStyle = (Color.fromCssLiteral(col)).asCssRgba();
+            this.ctx.fillStyle = ColorFactory.fromCSS(col).asCssRgba();
             this.ctx.fillRect(x,y,1,1);
         }
         const drawLine = async (x0:number, y0:number, x1:number, y1:number,color:string) => {
@@ -101,7 +102,7 @@ export class CommandsAttacher {
         }
 
         const drawRect = (x:number,y:number,w:number,h:number,col:string)=>{
-            this.ctx.strokeStyle = (Color.fromCssLiteral(col)).asCssRgba();
+            this.ctx.strokeStyle = ColorFactory.fromCSS(col).asCssRgba();
             this.ctx.strokeRect(x,y,w,h);
         }
 

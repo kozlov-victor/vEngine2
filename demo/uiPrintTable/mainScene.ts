@@ -23,7 +23,7 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         const tf:TextField = new ScrollableTextField(this.game,this.fnt);
-        tf.size.set(this.game.size);
+        tf.size.setFrom(this.game.size);
         tf.setAlignText(AlignText.LEFT);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.TOP);

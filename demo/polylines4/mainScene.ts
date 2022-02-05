@@ -26,7 +26,7 @@ export class MainScene extends Scene {
 
         Polygon.fromMultiCurveSvgPath(this.game,path).forEach(p=>{
             p.pos.setXY(0,0);
-            p.fillColor.set(Color.RGB(12,200,22));
+            p.fillColor.setFrom(Color.RGB(12,200,22));
             n.appendChild(p);
         });
 

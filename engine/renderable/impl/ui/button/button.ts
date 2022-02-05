@@ -17,7 +17,7 @@ export class Button extends TextField {
         super(game,font);
         const bg:Rectangle = new Rectangle(this.game);
         bg.lineWidth = 1;
-        bg.fillColor.set(Color.NONE);
+        bg.fillColor.setFrom(Color.NONE);
         this.setBackground(bg);
 
         this.setText("Ok");

@@ -1,6 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
@@ -14,8 +15,7 @@ export class MainScene extends Scene {
         this.surface = surface;
         surface.setLineWidth(0);
         this.appendChild(surface);
-        const c = new Color();
-        c.setHSL(12,22,44);
+        const c = ColorFactory.fromHSL(12,22,44);
         console.log(c.toJSON());
     }
 
@@ -52,7 +52,7 @@ export class MainScene extends Scene {
         x.drawBatch(batch=>{
             for(l=0;l<572;l++){
                 d=l%v*v;
-                x.setFillColor(Color.HSL((t*150-d%360),99,65).asRGBNumeric());
+                x.setFillColor(ColorFactory.fromHSL((t*150-d%360),99,65).asRGBNumeric());
                 batch.drawRect(960+S(r=S(t-d/333)+l/v*.35)*d,540+C(r)*d,v,24);
             }
         });

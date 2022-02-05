@@ -24,6 +24,7 @@ import {IQuizQuestion, QuizRunner} from "../quizRunner";
 import {DATA} from "../asset/resource/questions";
 import {ResultScene} from "./resultScene";
 import {Flip3dHorizontalInTransition} from "@engine/scene/transition/flip/flip3dTransition";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 class QuizSceneUI extends VEngineTsxComponent {
@@ -39,14 +40,14 @@ class QuizSceneUI extends VEngineTsxComponent {
 
     private textFieldBg:Rectangle = (()=>{
         const rect = new Rectangle(this.game);
-        rect.fillColor = Color.fromCssLiteral(`rgba(40, 40, 40, 0.53)`);
+        rect.fillColor = ColorFactory.fromCSS(`rgba(40, 40, 40, 0.53)`);
         rect.borderRadius = 15;
         return rect;
     })();
 
     private textFieldBgBlinked:Rectangle = (()=>{
         const rect = new Rectangle(this.game);
-        rect.fillColor = Color.fromCssLiteral(`rgba(146, 255, 48, 0.75)`);
+        rect.fillColor = ColorFactory.fromCSS(`rgba(146, 255, 48, 0.75)`);
         rect.borderRadius = 15;
         return rect;
     })();

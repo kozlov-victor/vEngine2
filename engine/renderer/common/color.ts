@@ -22,6 +22,7 @@ const alignTo2Symbols = (val:string):string=>{
     return val;
 };
 
+
 export class Color extends ObservableEntity implements ICloneable<Color>, IColorJSON{
 
 
@@ -85,21 +86,6 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         return Color.RGBA(r,g,b,255);
     }
 
-    public static HSLA(h:number,s:number,l:number,a:Uint8):Color{
-        const c:Color = new Color();
-        c.setHSLA(h,s,l,a);
-        return c;
-    }
-
-    public static HSL(h:number,s:number,l:number):Color{
-        return Color.HSLA(h,s,l,255);
-    }
-
-    public static HSV(h:number,s:number,v:number):Color{
-        const c:Color = new Color();
-        c.setHSV(h,s,v);
-        return c;
-    }
 
     public static RGBA(r:Uint8, g:Uint8 = r, b:Uint8 = g, a:Uint8 = 255):Color{
         return new Color(r,g,b,a);
@@ -114,58 +100,6 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         const g:Uint8 = (col & 0x00_FF_00)>>(4*2) as Uint8;
         const b:Uint8 = (col & 0x00_00_FF) as Uint8;
         return new Color(r,g,b);
-    }
-
-    // https://stackoverflow.com/questions/11068240/what-is-the-most-efficient-way-to-parse-a-css-color-in-javascript
-    public static fromCssLiteral(literal:string):Color{
-        const color:Color = new Color();
-        color.fromCSS(literal);
-        return color;
-    }
-
-    private static _calculateColorComponentsFromCss(literal:string):IColorJSON {
-        literal = literal.trim();
-        let r:Uint8 = 0,g:Uint8 = 0,b:Uint8 = 0,a:Uint8 = 0;
-        if (literal.substr(0,1)==="#") {
-            const numericPart:string = literal.substr(1);
-            if (numericPart.length===3) { // string like fff
-                r = ~~(parseInt(numericPart.substr(0,1),16) * 0xFF / 0xF) as Uint8;
-                g = ~~(parseInt(numericPart.substr(1,1),16) * 0xFF / 0xF) as Uint8;
-                b = ~~(parseInt(numericPart.substr(2,1),16) * 0xFF / 0xF) as Uint8;
-                a = 255;
-            } else if (numericPart.length===6) { // string like rrggbb
-                r = ~~(parseInt(numericPart.substr(0,2),16)) as Uint8;
-                g = ~~(parseInt(numericPart.substr(2,2),16)) as Uint8;
-                b = ~~(parseInt(numericPart.substr(4,2),16)) as Uint8;
-                a = 255;
-            } else if (numericPart.length===8) { // string like rrggbbaa
-                r = ~~(parseInt(numericPart.substr(0,2),16)) as Uint8;
-                g = ~~(parseInt(numericPart.substr(2,2),16)) as Uint8;
-                b = ~~(parseInt(numericPart.substr(4,2),16)) as Uint8;
-                a = ~~(parseInt(numericPart.substr(6,2),16)) as Uint8;
-            } else {
-                if (DEBUG) throw new DebugError(`unsupported or wrong color literal: ${literal}`);
-            }
-        }
-        else {
-            if (literal.indexOf('rgb')===0) {
-                [r,g,b,a] = literal.split("(")[1].split(")")[0].split(",").map(x=>+x) as [Uint8,Uint8,Uint8,Uint8];
-                if (a===undefined) a = 255 as Uint8;
-                else a=~~(a * 255) as Uint8;
-            }
-            else if (literal.indexOf('hsl')===0) {
-                let h: number, s: number, l: number,
-                    alfa: Uint8;
-                [h, s, l, alfa] = literal.split("(")[1].split(")")[0].split(",").map(x => parseInt(x)) as [number, number, number, Uint8];
-                if (alfa === undefined) alfa = 255 as Uint8;
-                else alfa = ~~(alfa * 255) as Uint8;
-                return Color.HSLA(h, s, l, alfa);
-
-            } else {
-                if (DEBUG) throw new DebugError(`unsupported or wrong color literal: ${literal}`);
-            }
-        }
-        return {r,g,b,a};
     }
 
     public setRGBA(r:Uint8, g:Uint8, b:Uint8, a:Uint8 = 255):void{
@@ -191,105 +125,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         this.setRGBA(r,g,b,255);
     }
 
-    /**
-     * @param h angle in degrees
-     * @param s saturation 0-100%
-     * @param l light 0-100%
-     * @param a alpha 0-255
-     */
-    public setHSLA(h:number,s:number,l:number,a:Uint8):void{
-
-        h = (h%360)/360;
-        s/=100;
-        l/=100;
-
-        let r, g, b:number;
-
-        if(s === 0){
-            r = g = b = l; // achromatic
-        }else{
-            const hue2rgb = (pCol:number, qCol:number, t:number)=>{
-                if(t < 0) t += 1;
-                if(t > 1) t -= 1;
-                if(t < 1/6) return pCol + (qCol - pCol) * 6 * t;
-                if(t < 1/2) return qCol;
-                if(t < 2/3) return pCol + (qCol - pCol) * (2/3 - t) * 6;
-                return pCol;
-            };
-
-            const q:number = l < 0.5 ? l * (1 + s) : l + s - l * s;
-            const p:number = 2 * l - q;
-            r = hue2rgb(p, q, h + 1/3);
-            g = hue2rgb(p, q, h);
-            b = hue2rgb(p, q, h - 1/3);
-        }
-
-        const rResult:Uint8 = Math.round(r * 255) as Uint8;
-        const gResult:Uint8 = Math.round(g * 255) as Uint8;
-        const bResult:Uint8 = Math.round(b * 255) as Uint8;
-        this.setRGBA(rResult,gResult,bResult,a);
-    }
-
-    /**
-     * @param h hue 0-100%
-     * @param s saturation 0-100%
-     * @param v value 0-100%
-     */
-    public setHSV(h:number,s:number,v:number):void{
-        h/=100;
-        s/=100;
-        v/=100;
-        let r:number = 0, g:number = 0, b:number = 0;
-
-        const i:number = Math.floor(h * 6);
-        const f:number = h * 6 - i;
-        const p:number = v * (1 - s);
-        const q:number = v * (1 - f * s);
-        const t:number = v * (1 - (1 - f) * s);
-
-        switch (i % 6) {
-            case 0: {
-                r = v; g = t;
-                b = p; break;
-            }
-            case 1: {
-                r = q; g = v;
-                b = p;
-                break;
-            }
-            case 2: {
-                r = p; g = v;
-                b = t;
-                break;
-            }
-            case 3: {
-                r = p; g = q;
-                b = v;
-                break;
-            }
-            case 4: {
-                r = t; g = p;
-                b = v;
-                break;
-            }
-            case 5: {
-                r = v; g = p;
-                b = q;
-                break;
-            }
-        }
-        this.setRGB(
-            ~~(r*255) as Uint8,
-            ~~(b*255) as Uint8,
-            ~~(b*255) as Uint8,
-        );
-    }
-
-    public setHSL(h:number,s:number,l:number):void{
-        this.setHSLA(h,s,l,255);
-    }
-
-    public set(another:IColor):void{
+    public setFrom(another:IColor):void{
         this.setRGBA(another.r,another.g,another.b,another.a);
     }
 
@@ -337,11 +173,6 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
 
     public fromJSON(json:IColorJSON):void {
         this.setRGBA(json.r,json.g,json.b,json.a);
-    }
-
-    public fromCSS(val:string):void {
-        const json:IColorJSON = Color._calculateColorComponentsFromCss(val);
-        this.fromJSON(json);
     }
 
     private checkFriezed():void{

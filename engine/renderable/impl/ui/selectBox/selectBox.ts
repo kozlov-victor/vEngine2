@@ -15,6 +15,7 @@ import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/directionalListEvents";
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBoxEvents";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 export class SelectBox extends VerticalList {
@@ -41,7 +42,7 @@ export class SelectBox extends VerticalList {
     constructor(game: Game, protected font: Font) {
         super(game);
         const bg = new Rectangle(this.game);
-        bg.fillColor = Color.fromCssLiteral('#f3f3f3');
+        bg.fillColor = ColorFactory.fromCSS('#f3f3f3');
         this._selectedBackground = bg;
         this.listViewEventHandler.on(LIST_VIEW_EVENTS.itemClick, e=>{
             if (e.dataIndex===this._selectedIndex) return;
@@ -78,7 +79,7 @@ export class SelectBox extends VerticalList {
     }
 
     public setTextColor(col:IColor):void {
-        this.textColor.set(col);
+        this.textColor.setFrom(col);
         this.passPropertiesToChildren();
     }
 
@@ -149,7 +150,7 @@ export class SelectBox extends VerticalList {
     private passPropertiesToChildren():void {
         if (this.isCustomRenderer) return;
         this._optionViews.forEach((c,index)=>{
-            (c as TextField).textColor.set(this.textColor);
+            (c as TextField).textColor.setFrom(this.textColor);
         });
     }
 

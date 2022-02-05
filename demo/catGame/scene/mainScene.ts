@@ -150,7 +150,7 @@ export class MainScene extends Scene {
         bgLayer.transformType = LayerTransformType.STICK_TO_CAMERA;
         const bgImage: Rectangle = new Rectangle(this.game);
         bgImage.lineWidth = 0;
-        bgImage.size.set(this.game.size);
+        bgImage.size.setFrom(this.game.size);
         const grad: LinearGradient = new LinearGradient();
         grad.setColorAtPosition(0, Color.RGB(219, 230, 255));
         grad.setColorAtPosition(1, Color.RGB(208, 202, 202));

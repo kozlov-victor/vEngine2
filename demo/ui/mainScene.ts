@@ -18,6 +18,7 @@ import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {RadialGradient} from "@engine/renderable/impl/fill/radialGradient";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 const text:string=
 `Lorem ipsum dolor sit amet,\t\n\r
@@ -113,8 +114,8 @@ export class MainScene extends Scene {
         background.borderRadius = 5;
         const gradient:LinearGradient = new LinearGradient();
         gradient.angle = Math.PI/2;
-        gradient.setColorAtPosition(0,Color.fromCssLiteral(colorFrom));
-        gradient.setColorAtPosition(1,Color.fromCssLiteral(colorTo));
+        gradient.setColorAtPosition(0,ColorFactory.fromCSS(colorFrom));
+        gradient.setColorAtPosition(1,ColorFactory.fromCSS(colorTo));
         background.fillGradient = gradient;
         return background;
     }
@@ -122,8 +123,8 @@ export class MainScene extends Scene {
     private createBackgroundCircle(colorFrom:string,colorTo:string):Circle {
         const background = new Circle(this.game);
         const gradient:RadialGradient = new RadialGradient();
-        gradient.setColorAtPosition(0,Color.fromCssLiteral(colorFrom));
-        gradient.setColorAtPosition(1,Color.fromCssLiteral(colorTo));
+        gradient.setColorAtPosition(0,ColorFactory.fromCSS(colorFrom));
+        gradient.setColorAtPosition(1,ColorFactory.fromCSS(colorTo));
         gradient.center.setXY(0.1,0.1);
         background.fillGradient = gradient;
         return background;

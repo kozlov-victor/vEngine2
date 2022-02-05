@@ -1,5 +1,7 @@
-import {FBXNode, FBXProperty, FBXData} from './shared'
 import {BinBuffer} from "../../../../../../demo/pix32/ym-player/internal/binBuffer";
+import {FBXData, FBXNode, FBXProperty} from "@engine/renderable/impl/3d/fbxParser/_internal/types";
+
+// based on https://github.com/picode7/fbx-parser/
 
 const MAGIC = Uint8Array.from('Kaydara FBX Binary\x20\x20\x00\x1a\x00'.split(''), (v) => v.charCodeAt(0))
 

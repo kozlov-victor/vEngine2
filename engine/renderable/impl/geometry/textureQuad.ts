@@ -72,7 +72,7 @@ export class TextureQuad extends RenderableModel {
         this.topRight.setXY(texture.size.width,0);
         this.bottomRight.setXY(texture.size.width,texture.size.height);
         this.mesh = new QuadMesh(game,this.topLeft,this.bottomLeft,this.topRight,this.bottomRight);
-        this.size.set(texture.size);
+        this.size.setFrom(texture.size);
         this.mesh.texture = texture;
         this.mesh.invertY = true;
 

@@ -26,6 +26,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 import loadFont = fontLoader.loadFont;
 import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
 import {Psg} from "../pix32/ym-player/formats/psg";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 const songUrls = [
     'chipTunePlayer/bin/nq - Old Tower outro (2018).psg',
@@ -60,10 +61,10 @@ export class MainScene extends Scene {
     public override onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);
         const bgTf = new Rectangle(this.game);
-        bgTf.fillColor = Color.fromCssLiteral(`#edffe8`);
+        bgTf.fillColor = ColorFactory.fromCSS(`#edffe8`);
         tf.setBackground(bgTf);
         tf.size.setWH(800,300);
-        tf.textColor.fromCSS('#78cb54');
+        tf.textColor.setFrom(ColorFactory.fromCSS('#78cb54'));
         tf.setPadding(50);
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
@@ -74,11 +75,11 @@ export class MainScene extends Scene {
 
         const tfIndicator:TextField = new TextField(this.game,this.fnt);
         const bgTfIndicator = new Rectangle(this.game);
-        bgTfIndicator.fillColor = Color.fromCssLiteral(`#edffe8`);
+        bgTfIndicator.fillColor = ColorFactory.fromCSS(`#edffe8`);
         tfIndicator.setBackground(bgTfIndicator);
         tfIndicator.setWordBrake(WordBrake.PREDEFINED);
         tfIndicator.size.setWH(800,80);
-        tfIndicator.textColor.fromCSS('#78cb54');
+        tfIndicator.textColor.setFrom(ColorFactory.fromCSS('#78cb54'));
         tfIndicator.setPadding(3);
         tfIndicator.pos.setXY(0, 310);
         tfIndicator.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
@@ -91,8 +92,8 @@ export class MainScene extends Scene {
         const btn:Button = new Button(this.game,this.fnt);
         const bgBtn = new Rectangle(this.game);
         const grad = new LinearGradient();
-        grad.setColorAtPosition(1,Color.fromCssLiteral('#82d45e'));
-        grad.setColorAtPosition(0,Color.fromCssLiteral('#568c3e'));
+        grad.setColorAtPosition(1,ColorFactory.fromCSS('#82d45e'));
+        grad.setColorAtPosition(0,ColorFactory.fromCSS('#568c3e'));
         grad.angle = Math.PI/2;
         bgBtn.fillGradient = grad;
         bgBtn.lineWidth = 1;
@@ -101,8 +102,8 @@ export class MainScene extends Scene {
 
         const bgBtnActive = new Rectangle(this.game);
         const gradActive = new LinearGradient();
-        gradActive.setColorAtPosition(0,Color.fromCssLiteral('#82d45e'));
-        gradActive.setColorAtPosition(1,Color.fromCssLiteral('#568c3e'));
+        gradActive.setColorAtPosition(0,ColorFactory.fromCSS('#82d45e'));
+        gradActive.setColorAtPosition(1,ColorFactory.fromCSS('#568c3e'));
         gradActive.angle = Math.PI/2;
         bgBtnActive.lineWidth = 1;
         bgBtnActive.borderRadius = 10;
@@ -113,7 +114,7 @@ export class MainScene extends Scene {
         btn.pos.setXY(15,402);
         btn.setAutoSize(true);
         btn.setText("play>>");
-        btn.textColor.fromCSS('#fff');
+        btn.textColor.setFrom(ColorFactory.fromCSS('#fff'));
         this.appendChild(btn);
         let currSound:Sound;
         let pending:boolean = false;

@@ -279,7 +279,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
 
     protected fitChildSize(view:RenderableModel):void{
         for (const c of view._children) {
-            c.size.set(this.size);
+            c.size.setFrom(this.size);
             this.fitChildSize(c);
         }
     }

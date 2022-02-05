@@ -24,7 +24,7 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         const tf:TextField = new ScrollableTextField(this.game,this.fontLink);
-        tf.size.set(this.game.size);
+        tf.size.setFrom(this.game.size);
         tf.setText(this.textLink);
         tf.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);
         tf.setPadding(15);

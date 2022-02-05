@@ -44,7 +44,7 @@ export abstract class AbstractToggleButton extends WidgetContainer {
         super.revalidate();
         const clientRect = this.getClientRect();
         this.backgroundChecked.pos.set(clientRect);
-        this.backgroundChecked.size.set(clientRect);
+        this.backgroundChecked.size.setFrom(clientRect);
     }
 
     public override setProps(props: IToggleButtonProps):void {

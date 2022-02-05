@@ -7,6 +7,7 @@ import {Color} from "@engine/renderer/common/color";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {AbstractChipTrack} from "../ym-player/abstract/abstractChipTrack";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class ChipOscilloscope {
 
@@ -24,7 +25,7 @@ export class ChipOscilloscope {
 
         const indicatorA = new Rectangle(game);
         indicatorA.size.setWH(1,10);
-        indicatorA.fillColor = Color.fromCssLiteral('#21ec3e');
+        indicatorA.fillColor = ColorFactory.fromCSS('#21ec3e');
         container.appendChild(indicatorA);
 
         const indicatorB = new Rectangle(game);

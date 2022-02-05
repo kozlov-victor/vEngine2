@@ -11,6 +11,7 @@ import {
     AlignTextContentHorizontal,
     AlignTextContentVertical
 } from "@engine/renderable/impl/ui/textField/textAlign";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 export class MainScene extends Scene {
@@ -22,13 +23,13 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         const tf:EditTextField = new EditTextField(this.game,this.fnt);
-        tf.cursorColor = Color.fromCssLiteral(`#ffd8d8`);
+        tf.cursorColor = ColorFactory.fromCSS(`#ffd8d8`);
 
         tf.pos.setXY(50,50);
         tf.size.setWH(700,420);
-        tf.textColor.set(Color.fromCssLiteral('#0cc306'));
+        tf.textColor.setFrom(ColorFactory.fromCSS('#0cc306'));
         const background = new Rectangle(this.game);
-        background.fillColor = Color.fromCssLiteral('#03164c');
+        background.fillColor = ColorFactory.fromCSS('#03164c');
         background.borderRadius = 5;
         tf.setRichText(
             <>
@@ -43,7 +44,7 @@ export class MainScene extends Scene {
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignText(AlignText.CENTER);
         this.appendChild(tf);
-        this.backgroundColor = Color.fromCssLiteral('#e0e6fc');
+        this.backgroundColor = ColorFactory.fromCSS('#e0e6fc');
         document.body.style.backgroundColor = this.backgroundColor.asCssRgba();
     }
 

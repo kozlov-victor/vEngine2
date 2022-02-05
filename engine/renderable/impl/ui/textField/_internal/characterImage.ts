@@ -74,9 +74,9 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
             this.color = this.color.clone();
             this.colorCloned = true;
         }
-        this.color.set(color);
+        this.color.setFrom(color);
         this.characterInfo.color = color;
-        if (this.textDecoratorLine!==undefined) this.textDecoratorLine.color.set(this.color);
+        if (this.textDecoratorLine!==undefined) this.textDecoratorLine.color.setFrom(this.color);
     }
 
     public setUnderLined(val:boolean):void {
@@ -134,7 +134,7 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
             this.appendChild(textDecoratorLine);
             this.textDecoratorLine = textDecoratorLine;
         }
-        this.textDecoratorLine.fillColor.set(this.color);
+        this.textDecoratorLine.fillColor.setFrom(this.color);
     }
 
     private updateVisibility():void {

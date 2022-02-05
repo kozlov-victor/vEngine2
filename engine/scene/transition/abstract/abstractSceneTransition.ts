@@ -40,7 +40,7 @@ export abstract class AbstractSceneTransition implements ISceneTransition{
     }
 
     public setBackgroundColor(color:IColor):void {
-        this._transitionScene.backgroundColor.set(color);
+        this._transitionScene.backgroundColor.setFrom(color);
     }
 
     public start(prevScene: Optional<Scene>, currScene: Scene): void {

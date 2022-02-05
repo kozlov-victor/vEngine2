@@ -70,7 +70,7 @@ export abstract class AbstractScrollBar extends MarkableGameObjectContainer{
     public override revalidate():void {
         super.revalidate();
         const dOpposite:Direction = getOppositeDirection(this.getDirection());
-        this.background.size.set(this.size);
+        this.background.size.setFrom(this.size);
         assignSize(this.handler.size,getSize(this.size,dOpposite),dOpposite);
         this.refreshScrollPosition();
     }

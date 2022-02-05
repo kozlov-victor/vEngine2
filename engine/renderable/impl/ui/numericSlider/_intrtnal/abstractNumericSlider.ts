@@ -103,7 +103,7 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
     private updateHandlerGeometry():void {
         const clientRect = this.getClientRect();
         const size:Size = Size.fromPool();
-        size.set(clientRect);
+        size.setFrom(clientRect);
         const handlerPosToAssign = getPos(clientRect,getOppositeDirection(this.direction));
         assignPos(this.handler.pos,handlerPosToAssign,getOppositeDirection(this.direction));
         assignSize(this.handler.size,getSize(size,getOppositeDirection(this.direction)),getOppositeDirection(this.direction));

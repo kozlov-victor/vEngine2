@@ -9,6 +9,7 @@ import {Color} from "@engine/renderer/common/color";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {AbstractEntity} from "../common/abstractEntity";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class Bomb extends AbstractEntity {
 
@@ -56,8 +57,8 @@ export class Bomb extends AbstractEntity {
         this.appendChild(ps);
         ps.particleAngle = {from:MathEx.degToRad(-90-emissionAngle),to:MathEx.degToRad(-90+emissionAngle)};
 
-        const col1 = Color.fromCssLiteral(`#ff746e`);
-        const col2 = Color.fromCssLiteral(`#0a0909`);
+        const col1 = ColorFactory.fromCSS(`#ff746e`);
+        const col2 = ColorFactory.fromCSS(`#0a0909`);
         ps.onEmitParticle(p=>{
             (p as Circle).fillColor = MathEx.randomInt(0,100)>50? col1:col2;
         });

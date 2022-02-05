@@ -50,7 +50,7 @@ export class TextField extends WidgetContainer {
         }
         this.appendChild(this.rowSetContainer);
         this.size.setWH(300,100);
-        this.rowSetContainer.size.set(this.size);
+        this.rowSetContainer.size.setFrom(this.size);
         this.textColor.observe(()=>this.requestTextRedraw());
     }
 
@@ -112,7 +112,7 @@ export class TextField extends WidgetContainer {
         let rectIsDirty:boolean = false;
         const clientRect:Readonly<IRectJSON> = this.getClientRect();
         this.rowSetContainer.pos.set(clientRect);
-        this.rowSetContainer.size.set(clientRect);
+        this.rowSetContainer.size.setFrom(clientRect);
         if (this.cacheSurface===undefined) {
             this.cacheSurface = new DrawingSurface(this.game,clientRect);
             this.rowSetContainer.appendChild(this.cacheSurface);
@@ -150,7 +150,7 @@ export class TextField extends WidgetContainer {
             this.rowSetContainer.appendChild(this.rowSet);
         }
         this.rowSetContainer.pos.set(clientRect);
-        this.rowSetContainer.size.set(clientRect);
+        this.rowSetContainer.size.setFrom(clientRect);
         this._applyText();
         if (this._autosize) {
             this.size.setWH(

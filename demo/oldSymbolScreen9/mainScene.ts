@@ -24,7 +24,7 @@ export class MainScene extends Scene {
         // `);
 
         const tf:TextField = new TextField(this.game,this.fnt);
-        tf.size.set(this.game.size);
+        tf.size.setFrom(this.game.size);
         tf.setPadding(5);
         tf.textColor.setRGB(10,100,20);
         tf.setWordBrake(WordBrake.PREDEFINED_BREAK_LONG_WORDS);

@@ -42,9 +42,9 @@ interface ITransformableProps extends IGenericProps<unknown>{
 }
 
 interface IShapeProps extends ITransformableProps{
-    color?:IColor|string;
+    color?:IColor;
     lineWidth?:number;
-    fillColor?:IColor|string;
+    fillColor?:IColor;
 }
 
 interface IEllipseCommonProps extends IShapeProps{

@@ -8,7 +8,6 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 import {Resource} from "@engine/resources/resourceDecorators";
 
-
 export class MainScene extends Scene {
 
     @Resource.Texture("./atlas/player.png")

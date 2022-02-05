@@ -25,7 +25,7 @@ export class MainScene extends Scene {
     public override onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.setWordBrake(WordBrake.PREDEFINED);
-        tf.size.set(this.game.size);
+        tf.size.setFrom(this.game.size);
         tf.textColor.setRGB(0,250,0);
         this.appendChild(tf);
         this.setInterval(()=>{

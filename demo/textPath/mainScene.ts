@@ -4,6 +4,7 @@ import {Font} from "@engine/renderable/impl/general/font/font";
 import {TextPath} from "@engine/renderable/impl/ui/textField/textPath/TextPath";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Tween} from "@engine/animation/tween";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
@@ -19,7 +20,7 @@ export class MainScene extends Scene {
         //const polyline = PolyLine.fromSvgPath(this.game,'M 10 10 V 400');
 
         const textPath = new TextPath(this.game,"123 456 long text by path",this.fnt,polyline);
-        textPath.fillColor.fromCSS('#313bc3');
+        textPath.fillColor.setFrom(ColorFactory.fromCSS('#313bc3'));
         this.appendChild(textPath);
         this.appendChild(polyline);
 

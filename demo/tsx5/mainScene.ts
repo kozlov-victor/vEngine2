@@ -4,6 +4,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 import {ResourceHolder} from "./resource/resourceHolder";
 import {Color} from "@engine/renderer/common/color";
 import {STRETCH_MODE} from "@engine/renderable/impl/general/image";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 export class MainScene extends Scene {
@@ -14,7 +15,7 @@ export class MainScene extends Scene {
 
         this.resourceHolder.progressBarPattern.stretchMode = STRETCH_MODE.REPEAT;
 
-        this.backgroundColor = Color.fromCssLiteral(`#efefef`);
+        this.backgroundColor = ColorFactory.fromCSS(`#efefef`);
         const root = new SimpleGameObjectContainer(this.game);
         this.appendChild(root);
 

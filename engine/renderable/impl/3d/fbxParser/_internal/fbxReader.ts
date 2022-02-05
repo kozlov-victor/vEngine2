@@ -1,4 +1,4 @@
-import {FBXData, FBXNode, FBXProperty} from './shared'
+import {FBXData, FBXNode, FBXProperty} from "@engine/renderable/impl/3d/fbxParser/_internal/types";
 
 export class FBXReaderNode {
     public fbxNode: FBXNode

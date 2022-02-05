@@ -26,7 +26,7 @@ export class MainScene extends Scene {
     public override onReady():void {
         this.backgroundColor.setRGB(12,12,12);
         const tf:RichTextField = new RichTextField(this.game,this.font1);
-        tf.size.set(this.game.size);
+        tf.size.setFrom(this.game.size);
         tf.setPadding(10);
         tf.setWordBrake(WordBrake.PREDEFINED);
         tf.setAlignText(AlignText.CENTER);

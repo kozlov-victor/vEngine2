@@ -88,7 +88,7 @@ export class ObjParser {
             if (!pr.vertexColorArr!.length) pr.vertexColorArr = undefined;
 
             const model3d:Model3d = new Model3d(game,pr);
-            model3d.material.diffuseColor.set(obj.material.diffuseColor);
+            model3d.material.diffuseColor.setFrom(obj.material.diffuseColor);
             model3d.id = obj.name;
             model3d.cubeMapTexture = params.cubeMapTexture;
             container.appendChild(model3d);

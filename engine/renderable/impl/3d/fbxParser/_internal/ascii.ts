@@ -1,4 +1,6 @@
-import {FBXData, FBXNode, FBXProperty} from './shared'
+import {FBXData, FBXNode, FBXProperty} from "@engine/renderable/impl/3d/fbxParser/_internal/types";
+
+// based on https://github.com/picode7/fbx-parser/
 
 const enum STATE {
     expectingNodeOrClose,

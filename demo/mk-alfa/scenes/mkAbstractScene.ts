@@ -8,7 +8,7 @@ import loadFont = fontLoader.loadFont;
 export abstract class MkAbstractScene extends Scene {
 
     public override onPreloading(taskQueue:TaskQueue): void {
-        this.backgroundColor.set(Color.BLACK);
+        this.backgroundColor.setFrom(Color.BLACK);
         loadFont(this.game,taskQueue,'./mk-alfa/assets/fonts/MK4.TTF','MK4');
         const rect = new Rectangle(this.game);
         rect.fillColor.setRGB(22,222,12);

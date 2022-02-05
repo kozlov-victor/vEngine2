@@ -11,6 +11,7 @@ import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {AbstractEntity} from "../common/abstractEntity";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class Rocket extends AbstractEntity {
 
@@ -44,7 +45,7 @@ export class Rocket extends AbstractEntity {
         const circle:Circle = new Circle(this.game);
         circle.radius = 5;
         circle.transformPoint.setXY(circle.radius/2,circle.radius/2);
-        circle.fillColor = Color.fromCssLiteral(`#25871b`);
+        circle.fillColor = ColorFactory.fromCSS(`#25871b`);
         circle.blendMode = BLEND_MODE.ADDITIVE;
         circle.velocity.x = 100;
 

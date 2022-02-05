@@ -6,6 +6,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Sound} from "@engine/media/sound";
 import {AngelCodeParser} from "@engine/misc/parsers/angelCode/angelCodeParser";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 export class Assets extends ResourceAutoHolder{
@@ -22,31 +23,31 @@ export class Assets extends ResourceAutoHolder{
 
     public buttonBg:Rectangle = (()=>{
         const rect = new Rectangle(this.scene.getGame());
-        rect.fillColor = Color.fromCssLiteral(`rgba(6, 125, 68, 0.53)`);
+        rect.fillColor = ColorFactory.fromCSS(`rgba(6, 125, 68, 0.53)`);
         rect.borderRadius = 15;
         return rect;
     })();
     public buttonBgActive:Rectangle = (()=>{
         const rect = new Rectangle(this.scene.getGame());
-        rect.fillColor = Color.fromCssLiteral(`rgba(255, 98, 0, 0.53)`);
+        rect.fillColor = ColorFactory.fromCSS(`rgba(255, 98, 0, 0.53)`);
         rect.borderRadius = 15;
         return rect;
     })();
     public buttonBgSelected:Rectangle = (()=>{
         const rect = new Rectangle(this.scene.getGame());
-        rect.fillColor = Color.fromCssLiteral(`rgba(35, 245, 238, 0.53)`);
+        rect.fillColor = ColorFactory.fromCSS(`rgba(35, 245, 238, 0.53)`);
         rect.borderRadius = 15;
         return rect;
     })();
     public buttonBgCorrect:Rectangle = (()=>{
         const rect = new Rectangle(this.scene.getGame());
-        rect.fillColor = Color.fromCssLiteral(`rgba(46, 227, 1, 0.53)`);
+        rect.fillColor = ColorFactory.fromCSS(`rgba(46, 227, 1, 0.53)`);
         rect.borderRadius = 15;
         return rect;
     })();
     public buttonBgIncorrect:Rectangle = (()=>{
         const rect = new Rectangle(this.scene.getGame());
-        rect.fillColor = Color.fromCssLiteral(`rgba(255, 0, 0, 0.61)`);
+        rect.fillColor = ColorFactory.fromCSS(`rgba(255, 0, 0, 0.61)`);
         rect.borderRadius = 15;
         return rect;
     })();

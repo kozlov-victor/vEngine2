@@ -3,6 +3,7 @@ import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/d
 import {Color} from "@engine/renderer/common/color";
 import {BrightessContrastFilter} from "@engine/renderer/webGl/filters/texture/brightessContrastFilter";
 import {TriangleBlurFilter} from "@engine/renderer/webGl/filters/texture/triangleBlurFilter";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
@@ -47,7 +48,7 @@ export class MainScene extends Scene {
             let i:number, r: number;
 
             for(i=99;i--;) {
-                x.setDrawColor(Color.HSL(i/.275,59,40).asRGBNumeric());
+                x.setDrawColor(ColorFactory.fromHSL(i/.275,59,40).asRGBNumeric());
                 session.drawArc(960+C(r=i/99*6.28+(t&1?t:-t))*t*99,540+S(r)*t*99,t*5,0,7);
             }
 

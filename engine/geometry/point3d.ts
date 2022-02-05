@@ -1,6 +1,7 @@
 import {Point2d} from "@engine/geometry/point2d";
 import {ICloneable} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
+import {isNotNumber} from "@engine/misc/object";
 
 export interface IPoint3d {
     readonly x:number;
@@ -33,7 +34,7 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
     public setXYZ(x:number,y:number = x,z:number = y):this{
         this.x = x;
         this.y = y;
-        if (DEBUG && (Number.isNaN(z))) {
+        if (DEBUG && (isNotNumber(z))) {
             console.trace();
             throw new DebugError(`Point3d: wrong numeric arguments ${x},${y},${z}`);
         }

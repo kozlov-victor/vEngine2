@@ -19,7 +19,7 @@ export class DebugLayer extends Layer {
     private createTextField():void {
         const font = Font.getSystemFont(this.game);
         const textField = new TextField(this.game,font);
-        textField.size.set(this.game.size);
+        textField.size.setFrom(this.game.size);
         textField.setPadding(5);
         textField.textColor.setRGB(0);
         this.numOfTextRows = ~~(textField.getClientRect().height / font.context.lineHeight);

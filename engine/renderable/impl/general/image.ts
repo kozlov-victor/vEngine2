@@ -34,7 +34,7 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
 
     public override setTexture(texture:ITexture):void {
         super.setTexture(texture);
-        if (this.size.isZero()) this.size.set(texture.size);
+        if (this.size.isZero()) this.size.setFrom(texture.size);
         if (this._srcRect.width===0 || this._srcRect.height===0) this._srcRect.setSize(this.size);
     }
 
@@ -65,7 +65,7 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
 
     protected override setClonedProperties(cloned:Image):void {
         cloned._srcRect.set(this._srcRect);
-        cloned.size.set(this.size);
+        cloned.size.setFrom(this.size);
         cloned.borderRadius = this.borderRadius;
         cloned.offset.set(this.offset);
         cloned.stretchMode = this.stretchMode;

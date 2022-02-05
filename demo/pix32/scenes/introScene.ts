@@ -8,6 +8,7 @@ import {Sound} from "@engine/media/sound";
 import {AbstractChipTrack} from "../ym-player/abstract/abstractChipTrack";
 import {Ym} from "../ym-player/formats/ym";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 export class IntroScene extends BasePix32Scene {
@@ -35,7 +36,7 @@ export class IntroScene extends BasePix32Scene {
         sound.play();
 
         const box:Rectangle = new Rectangle(this.game);
-        box.fillColor = Color.fromCssLiteral('#46e502');
+        box.fillColor = ColorFactory.fromCSS('#46e502');
         box.pos.setXY(8,20);
         box.size.setWH(16,4);
 

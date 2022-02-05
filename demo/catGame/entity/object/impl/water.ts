@@ -22,7 +22,7 @@ export class Water extends AbstractEntity {
         });
         const img:Image = this.getRenderableModel() as Image;
         img.alpha = 0.5;
-        img.size.set(size);
+        img.size.setFrom(size);
         img.stretchMode = STRETCH_MODE.REPEAT;
 
         this.animateWater();

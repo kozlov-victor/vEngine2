@@ -4,6 +4,7 @@ import {BaseTsxComponent} from "@engine/renderable/tsx/genetic/baseTsxComponent"
 import {Game} from "@engine/core/game";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class BgMatrix extends BaseTsxComponent {
 
@@ -50,7 +51,7 @@ export class BgMatrix extends BaseTsxComponent {
                             this.refs.push(e as Rectangle)
                         }}
                         lineWidth={0}
-                        fillColor={'#497607'}
+                        fillColor={ColorFactory.fromCSS('#497607')}
                         size={{width:this.cellSize,height:this.cellSize}}
                         pos={{x:x*this.cellSize,y:y*this.cellSize}}
                     />);

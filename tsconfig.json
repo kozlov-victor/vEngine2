@@ -32,7 +32,7 @@
         "resolveJsonModule": true,
         "jsx": "react",
         "jsxFactory": "VEngineTsxFactory.createElement",
-        "jsxFragmentFactory": "VEngineTsxFactory.createFragment"
+        "jsxFragmentFactory": "VEngineTsxFactory.createFragment",
     },
     "exclude": [
         "node_modules"

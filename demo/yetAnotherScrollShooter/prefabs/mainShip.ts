@@ -12,6 +12,7 @@ import {MathEx} from "@engine/misc/mathEx";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {Color} from "@engine/renderer/common/color";
 import {AbstractEntity} from "./common/abstractEntity";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainShip extends AbstractEntity {
 
@@ -74,8 +75,8 @@ export class MainShip extends AbstractEntity {
         ps.pos.setXY(-15,-15);
         const emissionAngle = 40;
         this.scene.appendChild(ps);
-        const col1 = Color.fromCssLiteral(`rgb(24, 64, 108)`);
-        const col2 = Color.fromCssLiteral(`#000000`);
+        const col1 = ColorFactory.fromCSS(`rgb(24, 64, 108)`);
+        const col2 = ColorFactory.fromCSS(`#000000`);
         ps.onEmitParticle(p=>{
             (p as Circle).fillColor = MathEx.randomInt(0,100)>50? col1:col2;
         });
@@ -86,7 +87,7 @@ export class MainShip extends AbstractEntity {
         const circle:Circle = new Circle(this.game);
         circle.radius = 3;
         circle.transformPoint.setXY(circle.radius/2,circle.radius/2);
-        circle.fillColor = Color.fromCssLiteral(`#fff900`);
+        circle.fillColor = ColorFactory.fromCSS(`#fff900`);
         circle.blendMode = BLEND_MODE.ADDITIVE;
         circle.velocity.x = -100;
 

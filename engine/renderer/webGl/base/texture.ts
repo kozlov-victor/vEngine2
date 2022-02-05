@@ -36,7 +36,7 @@ export class Texture extends AbstractTexture{
             }
         }
         if (img!==undefined) this.size.setWH(img.width,img.height);
-        else this.size.set(size);
+        else this.size.setFrom(size);
 
         this.beforeOperation();
 

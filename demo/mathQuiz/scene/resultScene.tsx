@@ -18,6 +18,7 @@ import {
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {SelectLevelScene} from "./selectLevelScene";
 import {Flip3dVerticalOutTransition} from "@engine/scene/transition/flip/flip3dTransition";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 class ResultSceneUI extends VEngineTsxComponent {
@@ -42,13 +43,13 @@ class ResultSceneUI extends VEngineTsxComponent {
                     richText={
                         <>
                             Результат:{'\n'}
-                            <v_font color={Color.fromCssLiteral('#f57b00').toJSON()}>
+                            <v_font color={ColorFactory.fromCSS('#f57b00').toJSON()}>
                                 <b>{this.correct}</b>
                             </v_font>
-                            <v_font color={Color.fromCssLiteral('#00ff05').toJSON()}>
+                            <v_font color={ColorFactory.fromCSS('#00ff05').toJSON()}>
                                 <b>{'_із_'}</b>
                             </v_font>
-                            <v_font color={Color.fromCssLiteral('#f61f03').toJSON()}>
+                            <v_font color={ColorFactory.fromCSS('#f61f03').toJSON()}>
                                 <b>{this.total}</b>
                             </v_font>
                         </>

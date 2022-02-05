@@ -4,6 +4,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {RadialGradient} from "@engine/renderable/impl/fill/radialGradient";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {DebugLayer} from "@engine/scene/debugLayer";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 export class MainScene extends Scene {
@@ -12,15 +13,15 @@ export class MainScene extends Scene {
         // https://cssgradient.io/
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:RadialGradient  = new RadialGradient();
-        gradient.setColorAtPosition(0,Color.fromCssLiteral(`#ffa100`));
-        gradient.setColorAtPosition(0.55,Color.fromCssLiteral(`#59a584`));
-        gradient.setColorAtPosition(0.8,Color.fromCssLiteral(`#533eca`));
-        gradient.setColorAtPosition(1,Color.fromCssLiteral(`hsl(83, 51%, 48%)`));
+        gradient.setColorAtPosition(0,ColorFactory.fromCSS(`#ffa100`));
+        gradient.setColorAtPosition(0.55,ColorFactory.fromCSS(`#59a584`));
+        gradient.setColorAtPosition(0.8,ColorFactory.fromCSS(`#533eca`));
+        gradient.setColorAtPosition(1,ColorFactory.fromCSS(`hsl(83, 51%, 48%)`));
         //gradient.center.setXY(0.2,0.3);
         rect.fillGradient = gradient;
         rect.color = Color.RGB(0,0,40);
         rect.lineWidth = 0;
-        rect.size.set(this.game.size);
+        rect.size.setFrom(this.game.size);
         this.appendChild(rect);
         const divElement = document.getElementById('divElement')!;
         divElement.style.backgroundImage = gradient.asCSS();

@@ -5,13 +5,14 @@ import {VerticalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/ve
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {MathEx} from "@engine/misc/mathEx";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 export class MainScene extends Scene {
 
 
     public override onReady():void {
-        this.backgroundColor = Color.fromCssLiteral(`#efefef`);
+        this.backgroundColor = ColorFactory.fromCSS(`#efefef`);
 
         const h:HorizontalNumericSlider = new HorizontalNumericSlider(this.game);
         h.pos.setXY(50,50);
@@ -27,14 +28,14 @@ export class MainScene extends Scene {
 
         const verticalHandler = new Rectangle(this.game);
         verticalHandler.borderRadius = 5;
-        verticalHandler.fillColor = Color.fromCssLiteral(`#96b8fa`);
+        verticalHandler.fillColor = ColorFactory.fromCSS(`#96b8fa`);
         v.setBackgroundHandler(verticalHandler);
 
         const verticalBg = new Rectangle(this.game);
         const grad = new LinearGradient();
         verticalBg.borderRadius = 5;
-        grad.setColorAtPosition(0,Color.fromCssLiteral(`#cd0a0a`));
-        grad.setColorAtPosition(0.6,Color.fromCssLiteral(`#215126`));
+        grad.setColorAtPosition(0,ColorFactory.fromCSS(`#cd0a0a`));
+        grad.setColorAtPosition(0.6,ColorFactory.fromCSS(`#215126`));
         grad.angle = MathEx.degToRad(-90);
         verticalBg.fillGradient = grad;
         v.setBackground(verticalBg);

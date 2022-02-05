@@ -10,6 +10,7 @@ import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class Ring extends AbstractEntity {
 
@@ -43,7 +44,7 @@ export class Ring extends AbstractEntity {
         const rectangle = new Rectangle(this.game);
         rectangle.size.setWH(8,5);
         rectangle.transformPoint.setToCenter();
-        rectangle.fillColor = Color.fromCssLiteral(`#ff0000`);
+        rectangle.fillColor = ColorFactory.fromCSS(`#ff0000`);
         rectangle.blendMode = BLEND_MODE.SUBSTRACTIVE;
         rectangle.velocity.y = -100;
 

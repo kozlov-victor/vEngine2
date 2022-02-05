@@ -47,7 +47,7 @@ export class InsetBorder extends MarkableGameObjectContainer {
             L 0 ${this.size.height}
             Z
         `);
-        leftPoly.fillColor.set(this.color1);
+        leftPoly.fillColor.setFrom(this.color1);
         this.appendChild(leftPoly);
         if (this.leftPoly!==undefined) this.removeChild(leftPoly);
         this.leftPoly = leftPoly;
@@ -61,7 +61,7 @@ export class InsetBorder extends MarkableGameObjectContainer {
             L ${border} ${border}
             Z
         `);
-        topPoly.fillColor.set(this.color1);
+        topPoly.fillColor.setFrom(this.color1);
         this.appendChild(topPoly);
         if (this.topPoly!==undefined) this.removeChild(topPoly);
         this.topPoly = topPoly;
@@ -75,7 +75,7 @@ export class InsetBorder extends MarkableGameObjectContainer {
             L ${width-border} ${border}
             Z
         `);
-        rightPoly.fillColor.set(this.color2);
+        rightPoly.fillColor.setFrom(this.color2);
         this.appendChild(rightPoly);
         if (this.rightPoly!==undefined) this.removeChild(rightPoly);
         this.rightPoly = rightPoly;
@@ -89,7 +89,7 @@ export class InsetBorder extends MarkableGameObjectContainer {
             L ${width-border} ${height-border}
             Z
         `);
-        bottomPoly.fillColor.set(this.color2);
+        bottomPoly.fillColor.setFrom(this.color2);
         this.appendChild(bottomPoly);
         if (this.bottomPoly!==undefined) this.removeChild(bottomPoly);
         this.bottomPoly = bottomPoly;

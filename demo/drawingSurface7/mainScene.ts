@@ -10,7 +10,7 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
-        this.backgroundColor.set(Color.BLACK);
+        this.backgroundColor.setFrom(Color.BLACK);
 
         const graphics:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.appendChild(graphics);

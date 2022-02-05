@@ -21,7 +21,7 @@ export class Wall extends AbstractEntity {
             rect: new Rect(0,0,size.width,size.height)
         });
         const rect:Image = this.getRenderableModel() as Image;
-        rect.size.set(size);
+        rect.size.setFrom(size);
         rect.stretchMode = STRETCH_MODE.REPEAT;
         rect.lineWidth = 2;
         rect.borderRadius = 5;

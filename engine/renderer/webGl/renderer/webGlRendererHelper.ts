@@ -75,13 +75,13 @@ export class WebGlRendererHelper extends RendererHelper {
         const clearBeforeRenderOrig:boolean = renderer.clearBeforeRender;
         const clearColorOrig:Color = renderer.clearColor;
         renderer.clearBeforeRender = clearColor!==undefined;
-        if (clearColor!==undefined) renderer.clearColor.set(clearColor);
+        if (clearColor!==undefined) renderer.clearColor.setFrom(clearColor);
         const statePointer:IStateStackPointer = renderer.beforeFrameDraw(m.filters as AbstractGlFilter[]);
         m.render();
         renderer.afterFrameDraw(statePointer);
         if (!omitSaveAndResoreRenderTaget) this.restoreRenderTarget();
         renderer.clearBeforeRender = clearBeforeRenderOrig;
-        renderer.clearColor.set(clearColorOrig);
+        renderer.clearColor.setFrom(clearColorOrig);
         renderer.transformRestore();
         renderer.restoreAlphaBlend();
     }

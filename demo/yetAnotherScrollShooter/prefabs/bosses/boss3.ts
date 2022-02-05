@@ -11,6 +11,7 @@ import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {Color} from "@engine/renderer/common/color";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class Boss3 extends SimpleGameObjectContainer {
 
@@ -68,8 +69,8 @@ export class Boss3 extends SimpleGameObjectContainer {
         ps.particleAngle = {from:MathEx.degToRad(-90-emissionAngle),to:MathEx.degToRad(-90+emissionAngle)};
         ps.emissionPosition = this.pos;
 
-        const col1 = Color.fromCssLiteral(`#35ce3a`);
-        const col2 = Color.fromCssLiteral(`#ecc340`);
+        const col1 = ColorFactory.fromCSS(`#35ce3a`);
+        const col2 = ColorFactory.fromCSS(`#ecc340`);
         ps.onEmitParticle(p=>{
             p.pos.z = -20;
             (p as Circle).fillColor = MathEx.randomInt(0,100)>50? col1:col2;

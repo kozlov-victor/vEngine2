@@ -22,6 +22,7 @@ import {Button} from "@engine/renderable/impl/ui/button/button";
 import {Image} from "@engine/renderable/impl/general/image";
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
@@ -62,18 +63,18 @@ export class MainScene extends Scene {
         btn.textColor.setRGBA(255,255,255,0);
 
         const bgNormal:Rectangle = new Rectangle(this.game);
-        bgNormal.fillColor = Color.fromCssLiteral('#5b5656');
+        bgNormal.fillColor = ColorFactory.fromCSS('#5b5656');
         const insetBorder:InsetBorder = new InsetBorder(this.game);
-        insetBorder.setColor1(Color.fromCssLiteral('#a7a5a5'));
-        insetBorder.setColor2(Color.fromCssLiteral('#6d6c6c'));
+        insetBorder.setColor1(ColorFactory.fromCSS('#a7a5a5'));
+        insetBorder.setColor2(ColorFactory.fromCSS('#6d6c6c'));
         insetBorder.setBorderWidth(5);
         bgNormal.appendChild(insetBorder);
 
         const bgActive:Rectangle = new Rectangle(this.game);
-        bgActive.fillColor = Color.fromCssLiteral('#8d8a8a');
+        bgActive.fillColor = ColorFactory.fromCSS('#8d8a8a');
         const outsetBorder:InsetBorder = new InsetBorder(this.game);
-        outsetBorder.setColor1(Color.fromCssLiteral('#6d6c6c'));
-        outsetBorder.setColor2(Color.fromCssLiteral('#a7a5a5'));
+        outsetBorder.setColor1(ColorFactory.fromCSS('#6d6c6c'));
+        outsetBorder.setColor2(ColorFactory.fromCSS('#a7a5a5'));
         outsetBorder.setBorderWidth(5);
         bgActive.appendChild(outsetBorder);
 

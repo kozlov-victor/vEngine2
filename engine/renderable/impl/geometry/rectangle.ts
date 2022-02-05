@@ -30,7 +30,7 @@ export class Rectangle extends Shape implements ICloneable<Rectangle>, IRectangl
 
     protected override setClonedProperties(cloned:Rectangle):void{
         cloned.borderRadius  = this.borderRadius;
-        cloned.size.set(this.size);
+        cloned.size.setFrom(this.size);
         cloned.lineWidth = this.lineWidth;
         super.setClonedProperties(cloned);
     }

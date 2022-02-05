@@ -53,11 +53,11 @@ export class RadioButton extends AbstractToggleButton {
     protected getDefaultNormalAndCheckedRenderableModel(): [normal: Shape, checked: Shape] {
         const rNormal:Circle = new Circle(this.game);
         const rChecked:Circle = new Circle(this.game);
-        rNormal.color.set(Color.BLACK);
+        rNormal.color.setFrom(Color.BLACK);
         rNormal.lineWidth = 1;
-        rNormal.fillColor.set(Color.RGB(222));
-        rChecked.color.set(Color.BLACK);
-        rChecked.fillColor.set(Color.BLACK);
+        rNormal.fillColor.setFrom(Color.RGB(222));
+        rChecked.color.setFrom(Color.BLACK);
+        rChecked.fillColor.setFrom(Color.BLACK);
         return [rNormal,rChecked];
     }
 

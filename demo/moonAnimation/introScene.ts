@@ -8,6 +8,7 @@ import {MainScene} from "./mainScene";
 import {Button} from "@engine/renderable/impl/ui/button/button";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {InsetBorder} from "@engine/renderable/impl/geometry/insetBorder";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 
 export class IntroScene extends Scene {
@@ -23,18 +24,18 @@ export class IntroScene extends Scene {
         btn.pos.setXY(10,10);
 
         const bgNormal:Rectangle = new Rectangle(this.game);
-        bgNormal.fillColor = Color.fromCssLiteral('#d4fad4');
+        bgNormal.fillColor = ColorFactory.fromCSS('#d4fad4');
         const insetBorder:InsetBorder = new InsetBorder(this.game);
-        insetBorder.setColor1(Color.fromCssLiteral('#fff'));
-        insetBorder.setColor2(Color.fromCssLiteral('#a4a4a4'));
+        insetBorder.setColor1(ColorFactory.fromCSS('#fff'));
+        insetBorder.setColor2(ColorFactory.fromCSS('#a4a4a4'));
         insetBorder.setBorderWidth(5);
         bgNormal.appendChild(insetBorder);
 
         const bgActive:Rectangle = new Rectangle(this.game);
-        bgActive.fillColor = Color.fromCssLiteral('#b8fab8');
+        bgActive.fillColor = ColorFactory.fromCSS('#b8fab8');
         const outsetBorder:InsetBorder = new InsetBorder(this.game);
-        outsetBorder.setColor1(Color.fromCssLiteral('#a4a4a4'));
-        outsetBorder.setColor2(Color.fromCssLiteral('#fff'));
+        outsetBorder.setColor1(ColorFactory.fromCSS('#a4a4a4'));
+        outsetBorder.setColor2(ColorFactory.fromCSS('#fff'));
         outsetBorder.setBorderWidth(5);
         bgActive.appendChild(outsetBorder);
 

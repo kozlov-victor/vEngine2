@@ -21,7 +21,7 @@ export class Lava extends AbstractEntity {
             groupNames: [Lava.groupName],
             rect: new Rect(0,0,size.width,size.height)
         });
-        this.getRenderableModel().size.set(size);
+        this.getRenderableModel().size.setFrom(size);
         this.animation.play();
     }
 

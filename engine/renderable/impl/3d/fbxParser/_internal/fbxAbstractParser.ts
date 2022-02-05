@@ -1,191 +1,23 @@
-import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {FbxReader} from "@engine/renderable/impl/3d/fbxParser/_internal/fbxReader";
-import {FBXNode} from "@engine/renderable/impl/3d/fbxParser/_internal/shared";
 import {ObjPrimitive} from "@engine/renderable/impl/3d/objParser/_internal/types";
-import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {MathEx} from "@engine/misc/mathEx";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
-import {MeshMaterial} from "@engine/renderable/impl/3d/meshMaterial";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Optional} from "@engine/core/declarations";
-import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
-
-interface ITextureDescription {
-    texture:ITexture,
-    type?: 'color'|'normals'
-}
-
-export interface IFbxParams {
-    textures?:Record<string, ITextureDescription>;
-    cubeMapTexture?:ICubeMapTexture;
-}
-
-type ReferenceType = 'Direct'|'IndexToDirect';
-type MappingType = 'ByPolygon'|'ByPolygonVertex'|'ByVertex'|'ByVertice'|'ByEdge'|'AllSame';
-
-const _findNodes = (node:FBXNode,name:string,out:FBXNode[]):FBXNode[]=>{
-    if (!node) return out;
-    if (node.name===name) out.push(node);
-    node.nodes.forEach(n=>_findNodes(n,name,out));
-    return out;
-}
-const findNodes = (node:FBXNode,name:string):FBXNode[] => {
-    const out:FBXNode[] = [];
-    _findNodes(node,name,out);
-    return out;
-}
-const findNode = (node:FBXNode,name:string):FBXNode=>{
-    return findNodes(node,name)[0];
-}
-
-const findProperty = (node:FBXNode,path:string)=>{
-    const pathSegments = path.split('/');
-    for (let i = 0; i < pathSegments.length; i++) {
-        const pathSegment = pathSegments[i];
-        node = findNode(node,pathSegment);
-    }
-    return node?.props?.[0] as any;
-}
-
-const findProperty70 = (node:FBXNode,name:string):undefined|any[]=>{
-    for (const nodeElement of node.nodes) {
-        if (nodeElement.props[0]===name) return nodeElement.props as any[];
-    }
-    return undefined;
-}
-
-const findFaces = (indices:readonly number[]):number[][]=> {
-    const faces:number[][] = [];
-    let currFace:number[] = [];
-    for (let i=0;i<indices.length;i++) {
-        let inx = indices[i];
-        if (inx<0) {
-            inx = ~inx;
-            currFace.push(inx);
-            faces.push(currFace);
-            currFace = [];
-        } else {
-            currFace.push(inx);
-        }
-    }
-    return faces;
-}
-
-const getVertex3ByIndex = (index:number,vertices:readonly number[]):[number,number,number]=>{
-    const pos = index*3;
-    return [
-        vertices[pos+2],
-        vertices[pos+0],
-        vertices[pos+1],
-    ]
-}
-
-const getVertex3ByIndexAndMappingType = (vertexIndex:number,faceIndex:number,mapType:MappingType,vertices:readonly number[]):[number,number,number]=>{
-    let index:number;
-    if (mapType==='ByPolygonVertex') index = vertexIndex;
-    else if (mapType==='ByVertex' || mapType==='ByVertice') {
-        index = faceIndex;
-    } else {
-        throw new Error(`unsupported mapping type: ${mapType}`);
-    }
-    return getVertex3ByIndex(index,vertices);
-}
-
-const getVertex2ByIndexAndMappingType = (vertexIndex:number,faceIndex:number,mapType:MappingType,vertices:readonly number[],indices?:readonly number[]):[number,number]=>{
-    let index:number;
-    if (mapType==='ByPolygonVertex') index = vertexIndex;
-    else if (mapType==='ByVertex' || mapType==='ByVertice') {
-        index = faceIndex;
-    } else {
-        throw new Error(`unsupported mapping type: ${mapType}`);
-    }
-    if (indices) { // // byVertex or byVertexIndex
-        index = indices[index];
-    }
-    const pos = index*2;
-    return [
-        vertices[pos+0],
-        vertices[pos+1],
-    ];
-}
-
-const extractFileNameFromPath = (path:string):string=>{
-    const segments = path.split('\\');
-    if (segments.length===1) return path;
-    return segments.pop()!;
-};
-
-const extractNameWithoutExtension = (name:string):string=>{
-    const segments = name.split('.');
-    if (segments.length===1) return name;
-    segments.pop();
-    return segments.join('.');
-};
-
-interface IFbxNode {
-    tag: string;
-    uuid:number;
-}
-
-class FbxModel3d extends Model3d implements IFbxNode{
-    public tag:string;
-    public uuid:number;
-
-    protected override setClonedProperties(cloned: FbxModel3d) {
-        super.setClonedProperties(cloned);
-        cloned.tag = this.tag;
-        cloned.uuid = this.uuid;
-    }
-
-    public override clone(): FbxModel3d {
-        const cloned:FbxModel3d = new FbxModel3d(this.game,this._modelPrimitive,this.getBufferInfo());
-        this.setClonedProperties(cloned);
-        return cloned;
-    }
-
-}
-
-class FbxModelContainer extends SimpleGameObjectContainer  implements IFbxNode{
-    public tag:string;
-    public uuid:number;
-    public meshes:Mesh3d[] = [];
-}
-
-class FbxModelWrapper extends SimpleGameObjectContainer {
-    constructor(game:Game,private container:FbxModelContainer) {
-        super(game);
-    }
-
-    public getMeshes():readonly Mesh3d[] {
-        return this.container.meshes;
-    }
-
-}
-
-class FbxMaterial extends MeshMaterial implements IFbxNode {
-    public tag:string;
-    public uuid:number;
-
-    protected override setClonedProperties(cloned: FbxMaterial) {
-        super.setClonedProperties(cloned);
-        cloned.tag = this.tag;
-        cloned.uuid = this.uuid;
-    }
-
-    public override clone(): FbxMaterial {
-        const cloned:FbxMaterial = new FbxMaterial();
-        this.setClonedProperties(cloned);
-        return cloned;
-    }
-
-}
-
-class FbxTexture implements IFbxNode {
-    public tag:string;
-    public uuid:number;
-}
+import {
+    FbxMaterial,
+    FbxModel3d,
+    FbxModelContainer,
+    FbxModelWrapper, FbxTexture
+} from "@engine/renderable/impl/3d/fbxParser/_internal/fbxNodes";
+import {
+    IFbxParams,
+    ITextureDescription,
+    MappingType,
+    ReferenceType
+} from "@engine/renderable/impl/3d/fbxParser/_internal/types";
+import {Utils} from "@engine/renderable/impl/3d/fbxParser/_internal/utils";
 
 export abstract class FbxAbstractParser {
 
@@ -205,10 +37,10 @@ export abstract class FbxAbstractParser {
     }
 
     private _parseGlobalSettings():void {
-        const globalSettings = findNode(this.reader.rootNode,'GlobalSettings');
-        const properties70 = findNode(globalSettings,'Properties70') || findNode(globalSettings,'Properties60');
+        const globalSettings = Utils.findNode(this.reader.rootNode,'GlobalSettings');
+        const properties70 = Utils.findNode(globalSettings,'Properties70') || Utils.findNode(globalSettings,'Properties60');
         if (!properties70) return;
-        const scaleFactor = findProperty70(properties70,'UnitScaleFactor');
+        const scaleFactor = Utils.findProperty70(properties70,'UnitScaleFactor');
         if (scaleFactor) {
             this.unitScaleFactor = scaleFactor[4] as number ?? 1;
         }
@@ -216,27 +48,25 @@ export abstract class FbxAbstractParser {
 
     private _parseGeometries():FbxModel3d[]{
         const result:FbxModel3d[] = [];
-        findNodes(this.reader.rootNode,'Objects').forEach(o=>{
-            findNodes(o,'Geometry').forEach((g,i)=>{
+        Utils.findNodes(this.reader.rootNode,'Objects').forEach(o=>{
+            Utils.findNodes(o,'Geometry').forEach((g,i)=>{
                 //https://banexdevblog.wordpress.com/2014/06/23/a-quick-tutorial-about-the-fbx-ascii-format/amp/#top
 
                 const uuid:number = g.props[0] as number;
                 const name = ((g.props[1] || '') as string).replace('Geometry::','');
 
-                const vertices:readonly number[] = findProperty(g,'Vertices');
-                const vertexIndices:readonly number[] = findProperty(g,'PolygonVertexIndex');
-                const normals:readonly number[] = findProperty(g,'LayerElementNormal/Normals');
-                const normalReferenceType:ReferenceType = findProperty(g,'LayerElementNormal/ReferenceInformationType');
-                const normalMappingType:MappingType = findProperty(g,'LayerElementNormal/MappingInformationType');
-                const faces:number[][] = findFaces(vertexIndices);
+                const vertices:readonly number[] = Utils.findProperty(g,'Vertices');
+                const vertexIndices:readonly number[] = Utils.findProperty(g,'PolygonVertexIndex');
+                const normals:readonly number[] = Utils.findProperty(g,'LayerElementNormal/Normals');
+                const normalReferenceType:ReferenceType = Utils.findProperty(g,'LayerElementNormal/ReferenceInformationType');
+                const normalMappingType:MappingType = Utils.findProperty(g,'LayerElementNormal/MappingInformationType');
+                const faces:number[][] = Utils.findFaces(vertexIndices);
 
-                const uvs:readonly number[] = findProperty(g,'LayerElementUV/UV');
-                const uvIndices:readonly number[] = findProperty(g,'LayerElementUV/UVIndex');
-                const uvReferenceType:ReferenceType = findProperty(g,'LayerElementUV/ReferenceInformationType')
-                const uvMappingType:MappingType = findProperty(g,'LayerElementUV/MappingInformationType')
+                const uvs:readonly number[] = Utils.findProperty(g,'LayerElementUV/UV');
+                const uvIndices:readonly number[] = Utils.findProperty(g,'LayerElementUV/UVIndex');
+                const uvReferenceType:ReferenceType = Utils.findProperty(g,'LayerElementUV/ReferenceInformationType')
+                const uvMappingType:MappingType = Utils.findProperty(g,'LayerElementUV/MappingInformationType')
                 const useTexture = uvs!==undefined && uvs.length>0;
-
-                //console.log({vertices,indices,normals,uvs,uvIndices});
 
                 if (normalReferenceType!=='Direct') throw new Error(`normalReferenceType is not supported: ${normalReferenceType}`);
 
@@ -259,44 +89,44 @@ export abstract class FbxAbstractParser {
                     const i1 = faceVertexIndex+1;
                     const i2 = faceVertexIndex+2;
                     verticesProcessed.push(
-                        ...getVertex3ByIndex(face[0],vertices),
-                        ...getVertex3ByIndex(face[1],vertices),
-                        ...getVertex3ByIndex(face[2],vertices),
+                        ...Utils.getVertex3ByIndex(face[0],vertices),
+                        ...Utils.getVertex3ByIndex(face[1],vertices),
+                        ...Utils.getVertex3ByIndex(face[2],vertices),
                     );
                     if (useTexture) {
                         uvsProcessed.push(
-                            ...getVertex2ByIndexAndMappingType(i0,face[0],uvMappingType,uvs,uvIndices),
-                            ...getVertex2ByIndexAndMappingType(i1,face[1],uvMappingType,uvs,uvIndices),
-                            ...getVertex2ByIndexAndMappingType(i2,face[2],uvMappingType,uvs,uvIndices),
+                            ...Utils.getVertex2ByIndexAndMappingType(i0,face[0],uvMappingType,uvs,uvIndices),
+                            ...Utils.getVertex2ByIndexAndMappingType(i1,face[1],uvMappingType,uvs,uvIndices),
+                            ...Utils.getVertex2ByIndexAndMappingType(i2,face[2],uvMappingType,uvs,uvIndices),
                         );
                     }
 
                     normalsProcessed.push(
-                        ...getVertex3ByIndexAndMappingType(i0,face[0],normalMappingType,normals),
-                        ...getVertex3ByIndexAndMappingType(i1,face[1],normalMappingType,normals),
-                        ...getVertex3ByIndexAndMappingType(i2,face[2],normalMappingType,normals),
+                        ...Utils.getVertex3ByIndexAndMappingType(i0,face[0],normalMappingType,normals),
+                        ...Utils.getVertex3ByIndexAndMappingType(i1,face[1],normalMappingType,normals),
+                        ...Utils.getVertex3ByIndexAndMappingType(i2,face[2],normalMappingType,normals),
                     )
                     faceVertexIndex+=3;
                     if (face.length>3) {  // polygon (fan)
                         for (let j:number=2;j<face.length-1;j++) {
                             verticesProcessed.push(
-                                ...getVertex3ByIndex(face[0],vertices),
-                                ...getVertex3ByIndex(face[j],vertices),
-                                ...getVertex3ByIndex(face[j+1],vertices),
+                                ...Utils.getVertex3ByIndex(face[0],vertices),
+                                ...Utils.getVertex3ByIndex(face[j],vertices),
+                                ...Utils.getVertex3ByIndex(face[j+1],vertices),
                             );
                             const i1n = faceVertexIndex-1;
                             const i2n = faceVertexIndex;
                             faceVertexIndex++;
                             normalsProcessed.push(
-                                ...getVertex3ByIndexAndMappingType(i0,face[0],normalMappingType,normals),
-                                ...getVertex3ByIndexAndMappingType(i1n,face[j],normalMappingType,normals),
-                                ...getVertex3ByIndexAndMappingType(i2n,face[j+1],normalMappingType,normals),
+                                ...Utils.getVertex3ByIndexAndMappingType(i0,face[0],normalMappingType,normals),
+                                ...Utils.getVertex3ByIndexAndMappingType(i1n,face[j],normalMappingType,normals),
+                                ...Utils.getVertex3ByIndexAndMappingType(i2n,face[j+1],normalMappingType,normals),
                             )
                             if (useTexture) {
                                 uvsProcessed.push(
-                                    ...getVertex2ByIndexAndMappingType(i0,face[0],uvMappingType,uvs,uvIndices),
-                                    ...getVertex2ByIndexAndMappingType(i1n,face[j],uvMappingType,uvs,uvIndices),
-                                    ...getVertex2ByIndexAndMappingType(i2n,face[j+1],uvMappingType,uvs,uvIndices),
+                                    ...Utils.getVertex2ByIndexAndMappingType(i0,face[0],uvMappingType,uvs,uvIndices),
+                                    ...Utils.getVertex2ByIndexAndMappingType(i1n,face[j],uvMappingType,uvs,uvIndices),
+                                    ...Utils.getVertex2ByIndexAndMappingType(i2n,face[j+1],uvMappingType,uvs,uvIndices),
                                 );
                             }
                         }
@@ -322,8 +152,8 @@ export abstract class FbxAbstractParser {
 
     private _parseModels():FbxModelContainer[] {
         const res:FbxModelContainer[] = [];
-        findNodes(this.reader.rootNode,'Objects').forEach(o=>{
-            findNodes(o,'Model').forEach(m=>{
+        Utils.findNodes(this.reader.rootNode,'Objects').forEach(o=>{
+            Utils.findNodes(o,'Model').forEach(m=>{
                 const uuid = m.props[0] as number;
                 const name = (m.props[1] as string || '').replace('Model::','');
                 const modelContainer = new FbxModelContainer(this.game);
@@ -331,15 +161,15 @@ export abstract class FbxAbstractParser {
 
                 modelContainer.uuid = uuid;
                 modelContainer.tag = name;
-                const properties70 = findNode(m,'Properties70');
-                const translation = findProperty70(properties70,'Lcl Translation');
+                const properties70 = Utils.findNode(m,'Properties70');
+                const translation = Utils.findProperty70(properties70,'Lcl Translation');
                 if (translation) {
                     const x = (translation[4+2] as number);
                     const y = -(translation[4+0] as number);
                     const z = (translation[4+1] as number);
                     modelContainer.pos.setXYZ(x,y,z);
                 }
-                const rotation = findProperty70(properties70,'Lcl Rotation');
+                const rotation = Utils.findProperty70(properties70,'Lcl Rotation');
                 if (rotation) {
                     modelContainer.angle3d.setXYZ(
                         -MathEx.degToRad(rotation[4+2] as number),
@@ -347,7 +177,7 @@ export abstract class FbxAbstractParser {
                         MathEx.degToRad(rotation[4+1] as number)
                     );
                 }
-                const scale = findProperty70(properties70,'Lcl Scaling');
+                const scale = Utils.findProperty70(properties70,'Lcl Scaling');
                 if (scale) {
                     modelContainer.scale.setXYZ(
                         scale[4+2] as number / this.unitScaleFactor,
@@ -362,15 +192,15 @@ export abstract class FbxAbstractParser {
 
     private _parseMaterials():FbxMaterial[] {
         const result:FbxMaterial[] = [];
-        findNodes(this.reader.rootNode,'Material').forEach(m=>{
+        Utils.findNodes(this.reader.rootNode,'Material').forEach(m=>{
             const uuid = m.props[0] as number;
             const name = ((m.props[1] || '') as string).replace('Material::','');
             const material = new FbxMaterial();
             material.tag = name;
             material.uuid = uuid;
-            const properties70 = findNode(m,'Properties70');
-            const diffuseColor = findProperty70(properties70,'DiffuseColor');
-            const specular = findProperty70(properties70,'Shininess');
+            const properties70 = Utils.findNode(m,'Properties70');
+            const diffuseColor = Utils.findProperty70(properties70,'DiffuseColor');
+            const specular = Utils.findProperty70(properties70,'Shininess');
             let specularValue = 0;
             if (specular && specular[4]) {
                 specularValue = specular[4]/100;
@@ -390,14 +220,14 @@ export abstract class FbxAbstractParser {
 
     private _parseTextures():FbxTexture[] {
         const textures:FbxTexture[] = [];
-        findNodes(this.reader.rootNode,'Texture').forEach(t=>{
+        Utils.findNodes(this.reader.rootNode,'Texture').forEach(t=>{
             const texture = new FbxTexture();
             texture.uuid = t.props[0] as number;
-            const fileNameNode = findNode(t,'FileName');
+            const fileNameNode = Utils.findNode(t,'FileName');
             const fileName:string =
                 (fileNameNode?.props?.[0] as string) ??
                 ((t.props[1] || '') as string).replace('Texture::','');
-            texture.tag = extractNameWithoutExtension(extractFileNameFromPath(fileName));
+            texture.tag = Utils.extractNameWithoutExtension(Utils.extractFileNameFromPath(fileName));
             console.log(texture.tag);
             textures.push(texture);
         });
@@ -406,9 +236,9 @@ export abstract class FbxAbstractParser {
 
     private _parseConnections():[number,number][] {
         const result:[number,number][] = [];
-        const connections = findNode(this.reader.rootNode,'Connections');
+        const connections = Utils.findNode(this.reader.rootNode,'Connections');
         if (!connections) return result;
-        connections.nodes.forEach(c=>{
+        connections.nodes.forEach((c:any)=>{
             const cn:[number,number] = [
                 c.props[1] as  number,
                 c.props[2] as number
