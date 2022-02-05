@@ -9,7 +9,7 @@ import {
     FbxMaterial,
     FbxModel3d,
     FbxModelContainer,
-    FbxModelWrapper, FbxTexture
+    FbxModelWrapper, FbxTexture, FbxVideo
 } from "@engine/renderable/impl/3d/fbxParser/_internal/fbxNodes";
 import {
     IFbxParams,
@@ -18,12 +18,14 @@ import {
     ReferenceType
 } from "@engine/renderable/impl/3d/fbxParser/_internal/types";
 import {Utils} from "@engine/renderable/impl/3d/fbxParser/_internal/utils";
+import {DebugError} from "@engine/debug/debugError";
 
 export abstract class FbxAbstractParser {
 
     private readonly container:FbxModelContainer;
     private readonly containerTransformWrap:FbxModelWrapper;
     private unitScaleFactor:number = 1;
+    private completed:boolean = false;
 
 
     protected constructor(private game:Game,private reader:FbxReader,private params:IFbxParams) {
@@ -33,7 +35,6 @@ export abstract class FbxAbstractParser {
         this.containerTransformWrap = new FbxModelWrapper(game,this.container);
         this.container.angle3d.x = MathEx.degToRad(90);
         this.containerTransformWrap.appendChild(this.container);
-        this._parse();
     }
 
     private _parseGlobalSettings():void {
@@ -224,6 +225,7 @@ export abstract class FbxAbstractParser {
             const texture = new FbxTexture();
             texture.uuid = t.props[0] as number;
             const fileNameNode = Utils.findNode(t,'FileName');
+            const contentNode = Utils.findNode(t,'Content');
             const fileName:string =
                 (fileNameNode?.props?.[0] as string) ??
                 ((t.props[1] || '') as string).replace('Texture::','');
@@ -232,6 +234,23 @@ export abstract class FbxAbstractParser {
             textures.push(texture);
         });
         return textures;
+    }
+
+    private _parseVideos():FbxVideo[] {
+        const videos:FbxVideo[] = [];
+        Utils.findNodes(this.reader.rootNode,'Video').forEach(t=>{
+            const video = new FbxVideo();
+            video.uuid = t.props[0] as number;
+            const fileNameNode = Utils.findNode(t,'FileName');
+            const contentNode = Utils.findNode(t,'Content');
+            video.embeddedData = contentNode?.props?.[0] as number[];
+            const fileName:string =
+                (fileNameNode?.props?.[0] as string) ??
+                ((t.props[1] || '') as string).replace('Video::','');
+            video.tag = Utils.extractNameWithoutExtension(Utils.extractFileNameFromPath(fileName));
+            videos.push(video);
+        });
+        return videos;
     }
 
     private _parseConnections():[number,number][] {
@@ -248,33 +267,42 @@ export abstract class FbxAbstractParser {
         return result;
     }
 
-    private _applyMaterialsToGeometries(geometries:FbxModel3d[],materials:FbxMaterial[],textures:FbxTexture[],connections:[number,number][]):void {
+    private async _applyMaterialsToGeometries(geometries:FbxModel3d[],materials:FbxMaterial[],textures:FbxTexture[],videos:FbxVideo[],connections:[number,number][]) {
         const materialIds = materials.map(it=>it.uuid);
-        geometries.forEach(g=> {
+        for (const g of geometries) {
             const connectionPair = connections.find(c => c[0] === g.uuid);
-            if (!connectionPair) return;
+            if (!connectionPair) continue;
             const materialId = (connections.filter(c=>c[1]===connectionPair[1]).filter(c=>materialIds.includes(c[0])))[0]?.[0];
-            if (!materialId) return;
+            if (!materialId) continue;
             const material = materials.find(g => g.uuid === materialId);
-            if (!material) return;
+            if (!material) continue;
             g.material = material.clone();
-            const texturesToApply = this._findTextureByMaterialId(materialId,textures,connections);
+            const texturesToApply = this._findTexturesByMaterialId(materialId,textures,connections);
 
             for (const textureToApply of texturesToApply) {
-                const tx:Optional<ITextureDescription> = this.params?.textures?.[textureToApply.tag];
-                if (!tx) return;
-                if (tx.type===undefined || tx.type=='color') {
-                    g.texture = tx.texture;
-                } else if (tx.type==='normals') {
-                    g.normalsTexture = tx.texture;
+                const txDesc:Optional<ITextureDescription> = this.params?.textures?.[textureToApply.tag];
+                if (!txDesc) continue;
+                let texture = txDesc.texture;
+
+                if (texture===undefined && this.params?.textures?.[textureToApply.tag]?.useEmbedded) {
+                    const embeddedData = videos.find(it=>it.tag===textureToApply.tag)?.embeddedData as number[];
+                    if (!embeddedData) continue;
+                    texture = await Utils.createTextureFromData(this.game.getRenderer(),embeddedData);
+                    if (!texture) continue;
+                }
+
+                if (txDesc.type===undefined || txDesc.type=='color') {
+                    g.texture = texture;
+                } else if (txDesc.type==='normals') {
+                    g.normalsTexture = texture;
                 } else {
-                    throw new Error(`unknown texture type: ${tx.type}`);
+                    throw new Error(`unknown texture type: ${txDesc.type}`);
                 }
             }
-        });
+        }
     }
 
-    private _findTextureByMaterialId(materialId:number,textures:FbxTexture[],connections:[number,number][]):FbxTexture[] {
+    private _findTexturesByMaterialId(materialId:number,textures:FbxTexture[],connections:[number,number][]):FbxTexture[] {
         const textureIds = textures.map(it=>it.uuid);
         const result:FbxTexture[] = [];
         connections.forEach(c=>{
@@ -311,7 +339,7 @@ export abstract class FbxAbstractParser {
         });
     }
 
-    private _parse():void {
+    public async parse() {
         console.log(this.reader.rootNode);
         this._parseGlobalSettings();
 
@@ -319,13 +347,16 @@ export abstract class FbxAbstractParser {
         const models = this._parseModels();
         const materials = this._parseMaterials();
         const textures = this._parseTextures();
+        const videos = this._parseVideos();
         const connections = this._parseConnections();
-        this._applyMaterialsToGeometries(geometries,materials,textures,connections);
+        await this._applyMaterialsToGeometries(geometries,materials,textures,videos,connections);
         this._applyGeometriesToModels(geometries,models,connections);
         this._buildModelGraph(models,connections);
+        this.completed = true;
     }
 
-    public getModel():RenderableModel {
+    public async getModel():Promise<RenderableModel> {
+        if (!this.completed) await this.parse();
         return this.containerTransformWrap;
     }
 

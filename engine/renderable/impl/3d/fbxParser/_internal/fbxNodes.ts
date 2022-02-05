@@ -4,6 +4,7 @@ import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {Game} from "@engine/core/game";
 import {MeshMaterial} from "@engine/renderable/impl/3d/meshMaterial";
 import {IFbxNode} from "@engine/renderable/impl/3d/fbxParser/_internal/types";
+import {Optional} from "@engine/core/declarations";
 
 export class FbxModel3d extends Model3d implements IFbxNode{
     public tag:string;
@@ -61,4 +62,8 @@ export class FbxMaterial extends MeshMaterial implements IFbxNode {
 export class FbxTexture implements IFbxNode {
     public tag:string;
     public uuid:number;
+}
+
+export class FbxVideo extends FbxTexture {
+    public embeddedData:Optional<number>[];
 }

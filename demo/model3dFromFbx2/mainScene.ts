@@ -61,11 +61,21 @@ export class MainScene extends Scene {
             redis: {
                 5: {texture:this.redis5Texture},
             },
+            station: {
+                9: {useEmbedded:true}
+            },
+            heart: {
+                5: {useEmbedded:true}
+            },
+            heartglass: {
+                'heartglassfortexturing_DefaultMaterial_BaseColor.1001': {useEmbedded:true}
+            },
         }
 
-        this.lastModel = new FbxBinaryParser(this.game,buffer,{
+        const parser = new FbxBinaryParser(this.game,buffer,{
             textures: textureMap[this.models[this.cnt]]
-        }).getModel();
+        });
+        this.lastModel = await parser.getModel();
         this.workLayer.appendChild(this.lastModel);
         this.lastModel.pos.setXY(300,300);
         this.lastModel.size.setWH(400,400);

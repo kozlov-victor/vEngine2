@@ -12,9 +12,9 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3dFromFbx/models/textures/generator/generatorColor.png') private generatorColor:ITexture;
     @Resource.Texture('./model3dFromFbx/models/textures/generator/generatorNormal.png') private generatorNormal:ITexture;
 
-    public override onReady():void {
+    public override async onReady() {
 
-        const model = new FbxBinaryParser(
+        const parser = new FbxBinaryParser(
             this.game,this.dataBuff,
             {
                 textures: {
@@ -22,7 +22,8 @@ export class MainScene extends Scene {
                     generatorNormal: {texture:this.generatorNormal,type:'normals'},
                 }
             }
-        ).getModel();
+        );
+        const model = await parser.getModel();
         this.appendChild(model);
         model.pos.setXY(300,300);
         model.size.setWH(400,400);

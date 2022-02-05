@@ -31,14 +31,15 @@ export class MainScene extends Scene {
         this.cnt%=this.models.length;
 
 
-        this.lastModel = new FbxAsciiParser(this.game,textData,{
+        const parser = new FbxAsciiParser(this.game,textData,{
             textures: {
                 base_color_texture:{
                     texture: undefined!,
                     type: 'color'
                 }
             }
-        }).getModel();
+        });
+        this.lastModel = await parser.getModel();
         this.appendChild(this.lastModel);
         this.lastModel.pos.setXY(300,300);
         this.lastModel.size.setWH(400,400);

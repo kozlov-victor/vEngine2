@@ -9,4 +9,5 @@ export class FbxAsciiParser extends FbxAbstractParser{
     constructor(game:Game,text:string,params:IFbxParams = {}) {
         super(game,new FbxReader(parseText(text)),params);
     }
+
 }

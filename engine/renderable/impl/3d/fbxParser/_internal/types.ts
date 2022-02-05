@@ -12,8 +12,9 @@ export type FBXProperty = boolean | number | BigInt | boolean[] | number[] | Big
 
 
 export interface ITextureDescription {
-    texture:ITexture,
-    type?: 'color'|'normals'
+    texture?:ITexture,
+    type?: 'color'|'normals',
+    useEmbedded?:boolean,
 }
 
 export interface IFbxParams {

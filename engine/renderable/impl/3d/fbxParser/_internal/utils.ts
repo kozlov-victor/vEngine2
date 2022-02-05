@@ -1,4 +1,6 @@
 import {FBXNode, MappingType} from "@engine/renderable/impl/3d/fbxParser/_internal/types";
+import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
+import {ITexture} from "@engine/renderer/common/texture";
 
 export namespace Utils {
     const _findNodes = (node:FBXNode,name:string,out:FBXNode[]):FBXNode[]=>{
@@ -101,5 +103,19 @@ export namespace Utils {
         segments.pop();
         return segments.join('.');
     };
+
+    export const createTextureFromData = async (renderer:AbstractRenderer,data:number[]):Promise<ITexture>=> {
+        return new Promise<ITexture>(resolve=>{
+            const image = new Image();
+            image.src = "data:image/png;base64," +
+                btoa(new Uint8Array(data).reduce(function (data, byte) {
+                    return data + String.fromCharCode(byte);
+                }, ''));
+            image.onload = ()=>{
+                document.body.appendChild(image);
+                resolve(renderer.createTexture(image));
+            }
+        });
+    }
 
 }
