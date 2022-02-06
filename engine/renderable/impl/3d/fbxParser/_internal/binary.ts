@@ -119,18 +119,23 @@ function readPropertyArray(data: BinBuffer, reader: (r: BinBuffer) => FBXPropert
 
     if (encoding === 1) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const f = require('pako')
-        //const decompressed:number[] = [];
-        const decompressed:Uint8Array = f.inflate(data.readUints8(compressedLength));
-        arrayData = new BinBuffer(decompressed.buffer);
+        const f = require('pako');
+        try {
+            const decompressed:Uint8Array = f.inflate(data.readUints8(compressedLength));
+            arrayData = new BinBuffer(decompressed.buffer);
+        } catch (e) {
+            console.warn('parsing data error');
+            return undefined;
+        }
     } else {
         arrayData = new BinBuffer(data.readUints8(compressedLength))
     }
 
-    const value = []
+    const value:any[] = []
     for (let i = 0; i < arrayLength; ++i) {
         value.push(reader(arrayData))
     }
+    return value;
 
-    return value
+
 }

@@ -13,6 +13,7 @@ export abstract class Mesh3d extends Mesh2d {
     public texture:Optional<ITexture>;
     public cubeMapTexture:Optional<ICubeMapTexture>;
     public normalsTexture:Optional<ITexture>;
+    public specularTexture:Optional<ITexture>;
     public invertY:boolean = false;
 
     public material:MeshMaterial = new MeshMaterial();
@@ -47,6 +48,7 @@ export abstract class Mesh3d extends Mesh2d {
         cloned.texture = this.texture;
         cloned.cubeMapTexture = this.cubeMapTexture;
         cloned.normalsTexture = this.normalsTexture;
+        cloned.specularTexture = this.specularTexture;
         cloned.material = this.material.clone();
         cloned.invertY = this.invertY;
     }

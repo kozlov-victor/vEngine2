@@ -10,10 +10,12 @@ varying vec3 v_surfaceToView;
 
 uniform sampler2D u_texture;
 uniform sampler2D u_normalsTexture;
+uniform sampler2D u_specularTexture;
 uniform samplerCube u_cubeMapTexture;
 
 uniform bool  u_textureUsed;
 uniform bool  u_normalsTextureUsed;
+uniform bool  u_specularTextureUsed;
 uniform bool  u_cubeMapTextureUsed;
 uniform bool  u_vertexColorUsed;
 
@@ -50,6 +52,9 @@ void main() {
         light += max(0.,dot(normal, surfaceToLightDirection));
         float specular = pow(max(dot(normal, halfVector), 0.0), 32.);
         specular*=u_specular;
+        if (u_specularTextureUsed) {
+            specular*=texture2D(u_specularTexture, v_texCoord).r;
+        }
 
         light = clamp(light,.5,1.0);
         //gl_FragColor = vec4(normalize(v_normal)*0.5+0.5,1.0); // to debug normals

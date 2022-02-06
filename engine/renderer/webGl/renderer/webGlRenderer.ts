@@ -236,6 +236,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setNormalsTextureUsed(isNormalsTextureUsed);
         md.attachTexture('u_normalsTexture',isNormalsTextureUsed?mesh.normalsTexture as Texture:this._nullTexture);
 
+        const isSpecularTextureUsed:boolean = mesh.specularTexture!==undefined;
+        md.setSpecularTextureUsed(isSpecularTextureUsed);
+        md.attachTexture('u_specularTexture',isSpecularTextureUsed?mesh.specularTexture as Texture:this._nullTexture);
+
         const isCubeMapTextureUsed:boolean = mesh.cubeMapTexture!==undefined;
         if (DEBUG && !isCubeMapTextureUsed && mesh.material.reflectivity!==0) throw new DebugError(`can not apply reflectivity without cubeMapTexture`);
         md.setCubeMapTextureUsed(isCubeMapTextureUsed);

@@ -9,7 +9,9 @@ import {
     FbxMaterial,
     FbxModel3d,
     FbxModelContainer,
-    FbxModelWrapper, FbxTexture, FbxVideo
+    FbxModelWrapper,
+    FbxTexture,
+    FbxVideo
 } from "@engine/renderable/impl/3d/fbxParser/_internal/fbxNodes";
 import {
     IFbxParams,
@@ -18,7 +20,6 @@ import {
     ReferenceType
 } from "@engine/renderable/impl/3d/fbxParser/_internal/types";
 import {Utils} from "@engine/renderable/impl/3d/fbxParser/_internal/utils";
-import {DebugError} from "@engine/debug/debugError";
 
 export abstract class FbxAbstractParser {
 
@@ -205,6 +206,7 @@ export abstract class FbxAbstractParser {
             let specularValue = 0;
             if (specular && specular[4]) {
                 specularValue = specular[4]/100;
+                specularValue = Math.min(specularValue,1);
             }
             if (diffuseColor) {
                 material.diffuseColor.setRGB(
@@ -225,7 +227,6 @@ export abstract class FbxAbstractParser {
             const texture = new FbxTexture();
             texture.uuid = t.props[0] as number;
             const fileNameNode = Utils.findNode(t,'FileName');
-            const contentNode = Utils.findNode(t,'Content');
             const fileName:string =
                 (fileNameNode?.props?.[0] as string) ??
                 ((t.props[1] || '') as string).replace('Texture::','');
@@ -267,6 +268,27 @@ export abstract class FbxAbstractParser {
         return result;
     }
 
+    private async _applyTexture(g:FbxModel3d,textureToApply:FbxTexture,videos:FbxVideo[],txDesc:ITextureDescription) {
+        let texture = txDesc.texture;
+
+        if (texture===undefined && txDesc.useEmbedded) {
+            const embeddedData = videos.find(it=>it.tag===textureToApply.tag)?.embeddedData as number[];
+            if (!embeddedData) return;
+            texture = await Utils.createTextureFromData(this.game.getRenderer(),embeddedData);
+            if (!texture) return;
+        }
+
+        if (txDesc.type===undefined || txDesc.type=='color') {
+            g.texture = texture;
+        } else if (txDesc.type==='normals') {
+            g.normalsTexture = texture;
+        } else if (txDesc.type==='specular') {
+            g.specularTexture = texture;
+        } else {
+            throw new Error(`unknown texture type: ${txDesc.type}`);
+        }
+    }
+
     private async _applyMaterialsToGeometries(geometries:FbxModel3d[],materials:FbxMaterial[],textures:FbxTexture[],videos:FbxVideo[],connections:[number,number][]) {
         const materialIds = materials.map(it=>it.uuid);
         for (const g of geometries) {
@@ -280,23 +302,16 @@ export abstract class FbxAbstractParser {
             const texturesToApply = this._findTexturesByMaterialId(materialId,textures,connections);
 
             for (const textureToApply of texturesToApply) {
-                const txDesc:Optional<ITextureDescription> = this.params?.textures?.[textureToApply.tag];
-                if (!txDesc) continue;
-                let texture = txDesc.texture;
+                const txDescOrArr:Optional<ITextureDescription|ITextureDescription[]> = this.params?.textures?.[textureToApply.tag];
+                if (!txDescOrArr) continue;
 
-                if (texture===undefined && this.params?.textures?.[textureToApply.tag]?.useEmbedded) {
-                    const embeddedData = videos.find(it=>it.tag===textureToApply.tag)?.embeddedData as number[];
-                    if (!embeddedData) continue;
-                    texture = await Utils.createTextureFromData(this.game.getRenderer(),embeddedData);
-                    if (!texture) continue;
-                }
-
-                if (txDesc.type===undefined || txDesc.type=='color') {
-                    g.texture = texture;
-                } else if (txDesc.type==='normals') {
-                    g.normalsTexture = texture;
+                if ((txDescOrArr as ITextureDescription[]).indexOf!==undefined) {
+                    for (const txDesc of (txDescOrArr as ITextureDescription[])) {
+                        await this._applyTexture(g,textureToApply,videos,txDesc);
+                    }
                 } else {
-                    throw new Error(`unknown texture type: ${txDesc.type}`);
+                    const txDesc = txDescOrArr as ITextureDescription;
+                    await this._applyTexture(g,textureToApply,videos,txDesc);
                 }
             }
         }

@@ -46,6 +46,12 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
         return this;
     }
 
+    // noinspection JSSuspiciousNameCombination
+    public addXYZ(x:number,y:number = x,z:number = y):this {
+        this.setXYZ(this.x+x,this.y+y,this.z+z);
+        return this;
+    }
+
     public setZ(z:number):this{
         this.setXYZ(this.x,this.y,z);
         return this;

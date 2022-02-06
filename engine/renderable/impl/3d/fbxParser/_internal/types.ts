@@ -13,12 +13,12 @@ export type FBXProperty = boolean | number | BigInt | boolean[] | number[] | Big
 
 export interface ITextureDescription {
     texture?:ITexture,
-    type?: 'color'|'normals',
+    type?: 'color'|'normals'|'specular',
     useEmbedded?:boolean,
 }
 
 export interface IFbxParams {
-    textures?:Record<string, ITextureDescription>;
+    textures?:Record<string, ITextureDescription|ITextureDescription[]>;
     cubeMapTexture?:ICubeMapTexture;
 }
 

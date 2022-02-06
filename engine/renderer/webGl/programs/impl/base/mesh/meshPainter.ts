@@ -31,6 +31,7 @@ export class MeshPainter extends AbstractPainter {
     private readonly u_textureUsed:string = 'u_textureUsed';
     private readonly u_vertexColorUsed:string = 'u_vertexColorUsed';
     private readonly u_normalsTextureUsed:string = 'u_normalsTextureUsed';
+    private readonly u_specularTextureUsed:string = 'u_specularTextureUsed';
     private readonly u_lightUsed:string = 'u_lightUsed';
     private readonly u_cubeMapTextureUsed:string = 'u_cubeMapTextureUsed';
     private readonly u_heightMapFactor:string = 'u_heightMapFactor';
@@ -90,6 +91,10 @@ export class MeshPainter extends AbstractPainter {
 
     public setNormalsTextureUsed(used:boolean):void{
         this.setUniform(this.u_normalsTextureUsed,used);
+    }
+
+    public setSpecularTextureUsed(used:boolean):void{
+        this.setUniform(this.u_specularTextureUsed,used);
     }
 
     public setVertexColorUsed(used:boolean):void{

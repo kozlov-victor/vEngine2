@@ -11,6 +11,7 @@ export class MainScene extends Scene {
     @Resource.Binary('./model3dFromFbx/models/generator.fbx') private dataBuff:ArrayBuffer;
     @Resource.Texture('./model3dFromFbx/models/textures/generator/generatorColor.png') private generatorColor:ITexture;
     @Resource.Texture('./model3dFromFbx/models/textures/generator/generatorNormal.png') private generatorNormal:ITexture;
+    @Resource.Texture('./model3dFromFbx/models/textures/generator/generatorSpecular.png') private generatorSpecular:ITexture;
 
     public override async onReady() {
 
@@ -18,7 +19,7 @@ export class MainScene extends Scene {
             this.game,this.dataBuff,
             {
                 textures: {
-                    generatorColor: {texture:this.generatorColor,type:'color'},
+                    generatorColor: [{texture:this.generatorColor},{texture:this.generatorSpecular,type:'specular'}],
                     generatorNormal: {texture:this.generatorNormal,type:'normals'},
                 }
             }

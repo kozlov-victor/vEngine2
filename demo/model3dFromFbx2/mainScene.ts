@@ -15,6 +15,7 @@ export class MainScene extends Scene {
 
     private models:string[] = [
         'donut','test2','test3','test4',
+        'skull','mine','animated-cube',
         'redis','station','heart',
         'binary','BUTCHER','Can','heartglass','mouse','rocket',
         'rocket2','SM_chest','spitfire','tequila'
@@ -70,6 +71,25 @@ export class MainScene extends Scene {
             heartglass: {
                 'heartglassfortexturing_DefaultMaterial_BaseColor.1001': {useEmbedded:true}
             },
+            mine: {
+                5: {useEmbedded:true},
+                6: {useEmbedded:true},
+                7: {useEmbedded:true},
+                8: {useEmbedded:true},
+                9: {useEmbedded:true},
+                10: {useEmbedded:true},
+                15: {useEmbedded:true},
+                16: {useEmbedded:true},
+                17: {useEmbedded:true},
+                18: {useEmbedded:true},
+                22: {useEmbedded:true},
+                23: {useEmbedded:true},
+                24: {useEmbedded:true},
+                283: {useEmbedded:true},
+            },
+            skull: {
+                27: {useEmbedded:true},
+            }
         }
 
         const parser = new FbxBinaryParser(this.game,buffer,{

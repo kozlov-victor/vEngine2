@@ -3,6 +3,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Optional} from "@engine/core/declarations";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 export class TrackBall {
 
@@ -55,6 +56,15 @@ export class TrackBall {
             if (this.model.scale.x<=0) this.model.scale.setXYZ(0.01);
         });
 
+        // fast scale
+        this.scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.NUMPAD_ADD, e=>{
+            this.model.scale.addXYZ(100);
+        });
+        this.scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.NUMPAD_SUBTRACT, e=>{
+            this.model.scale.addXYZ(-100);
+            if (this.model.scale.x<=0) this.model.scale.setXYZ(0.01);
+        });
+
         // move by mouse
         this.scene.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, (e)=>{
             if (!e.isMouseDown) return;
@@ -66,6 +76,7 @@ export class TrackBall {
                 this.model.pos.y+movementY,
             )
         });
+
     }
 
 }
