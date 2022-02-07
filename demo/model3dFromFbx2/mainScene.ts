@@ -10,6 +10,8 @@ import {DebugLayer} from "@engine/scene/debugLayer";
 import {Layer} from "@engine/scene/layer";
 import {IFbxParams} from "@engine/renderable/impl/3d/fbxParser/_internal/types";
 
+// https://free3d.com/3d-model/eyeball--33237.html
+
 export class MainScene extends Scene {
 
 
@@ -18,7 +20,7 @@ export class MainScene extends Scene {
         'skull','mine','animated-cube',
         'redis','station','heart',
         'binary','BUTCHER','Can','heartglass','mouse','rocket',
-        'rocket2','SM_chest','spitfire','tequila'
+        'rocket2','SM_chest','spitfire','tequila','eyeball'
     ]
     private cnt:number = 0;
     private trackBall:TrackBall;
@@ -33,6 +35,8 @@ export class MainScene extends Scene {
     @Resource.Texture('./model3dFromFbx2/models/textures/5.png') private redis5Texture:ITexture;
     @Resource.Texture('./model3dFromFbx2/models/textures/plate1.png') private plateTexture:ITexture;
     @Resource.Texture('./model3dFromFbx2/models/textures/nose.png') private noseTexture:ITexture;
+    @Resource.Texture('./model3dFromFbx2/models/textures/Eye_D.jpg') private eyeDTexture:ITexture;
+    @Resource.Texture('./model3dFromFbx2/models/textures/Eye_N.jpg') private eyeNTexture:ITexture;
 
     private async loadNextModel():Promise<void>{
         if (this.loading) return;
@@ -89,6 +93,10 @@ export class MainScene extends Scene {
             },
             skull: {
                 27: {useEmbedded:true},
+            },
+            eyeball: {
+                Eye_D: {texture:this.eyeDTexture},
+                Eye_N: {texture:this.eyeNTexture,type:'normals'},
             }
         }
 

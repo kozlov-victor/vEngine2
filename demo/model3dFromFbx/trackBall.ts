@@ -33,9 +33,9 @@ export class TrackBall {
             if (lastPoint===undefined) lastPoint = {x:e.sceneX,y:e.screenY};
             const offsetX:number = e.sceneX - lastPoint.x;
             const offsetY:number = e.sceneY - lastPoint.y;
-            const factor = 1.4;
+            const factor = 3;
             this.model.angle3d.x-=offsetY/this.scene.getGame().size.width*factor;
-            this.model.angle3d.y+=offsetX/this.scene.getGame().size.height*factor;
+            this.model.angle3d.y+=offsetX/this.scene.getGame().size.height*factor*3;
             lastPoint.x = e.sceneX;
             lastPoint.y = e.sceneY;
         });
