@@ -237,7 +237,6 @@ export abstract class RenderableModel
         if (this._children.length > 0) {
             renderer.transformSave();
             renderer.saveAlphaBlend();
-            //renderer.transformTranslate(this.anchorPoint.x,this.anchorPoint.y);
             for (let i: number = 0, max = this._children.length; i < max; i++) {
                 const c: RenderableModel = this._children[i];
                 c.worldTransformDirty = this.worldTransformDirty || c.worldTransformDirty;
