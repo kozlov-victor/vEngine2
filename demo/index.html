@@ -57,11 +57,12 @@
             width: 100%;
             text-align: center;
         }
-        #list li {
-            padding: 10px;
+        li {
+            marker: none;
         }
         .active {
             background-color: aqua;
+            display: inline-block;
         }
         .loading {
             text-align: center;
@@ -71,6 +72,21 @@
         .selectItem {
             display: inline-block;
             min-width: 300px;
+            padding: 10px;
+        }
+        a,a:visited {
+            color: #0303c7;
+        }
+
+        .even_odd {
+            display: inline-block;
+            padding: 5px;
+        }
+        .even {
+            background-color: rgba(240, 248, 255, 0.4);
+        }
+        .odd {
+            background-color: rgba(244, 255, 240, 0.4);
         }
     </style>
 </head>

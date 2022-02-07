@@ -96,11 +96,59 @@ class WebpackDonePlugin{
 }
 
 const getAllProjects = ()=>{
-    return fs.
+    let arr = fs.
         readdirSync('./demo').
         filter((dir)=>{
             return fs.lstatSync(`./demo/${dir}`).isDirectory() && fs.existsSync(`./demo/${dir}/index.ts`)
     });
+
+    const extractNumber = (str)=>{
+        let digits = '';
+        str.split('').forEach(c=>{
+            if (['0','1','2','3','4','5','6','7','8','9'].indexOf(c)>-1) {
+                digits+=c;
+            }
+        });
+        return parseInt(digits);
+    }
+
+    const extractText = (str)=>{
+        let text = '';
+        str.split('').forEach(c=>{
+            if (['0','1','2','3','4','5','6','7','8','9'].indexOf(c)===-1) {
+                text+=c;
+            }
+        });
+        return text;
+    }
+
+    const groupNames = arr => {
+        const map = arr.reduce((acc, val) => {
+            let char = val.charAt(0).toUpperCase();
+            acc[char] = [].concat((acc[char] || []), val);
+            return acc;
+        }, {});
+        return Object.keys(map).map(el => ({
+            letter: el,
+            names: map[el]
+        }));
+    };
+
+    arr.sort((item1, item2)=> {
+        const firstStr = extractText(item1);
+        const secondStr = extractText(item2);
+        let byText;
+        if (firstStr===secondStr) byText = 0;
+        else byText = firstStr>secondStr?1:-1;
+        if (byText!==0) return byText;
+
+        const firstInt = extractNumber(item1);
+        const secondInt = extractNumber(item2);
+        return firstInt - secondInt;
+    });
+
+
+    return groupNames(arr);
 };
 
 
@@ -113,7 +161,7 @@ module.exports = async (env={})=>{
         ]
     );
     allProjects = getAllProjects();
-    fs.writeFileSync('./demo/index.json',JSON.stringify(allProjects));
+    fs.writeFileSync('./demo/index.json',JSON.stringify(allProjects.filter(it=>it.letter!=='_'),undefined, 4));
     const mode = await cliUI.choose('Choose option',[
         'Compile all projects',
         'Choose project from list',
@@ -121,7 +169,7 @@ module.exports = async (env={})=>{
         ]
     );
     if (mode===1) {
-        const projectsToSelect = [...allProjects,'build_tools'];
+        const projectsToSelect = [...allProjects.map(it=>it.names).flatMap(it=>it),'build_tools'];
         const index = await cliUI.choose('Select a project',projectsToSelect);
         project = projectsToSelect[index];
         console.log(`Selected: ${project}`);

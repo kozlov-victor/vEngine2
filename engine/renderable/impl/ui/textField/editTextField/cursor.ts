@@ -190,7 +190,7 @@ export class Cursor {
     public placeToDefaultPosition():void {
         this.currentRow = this.parent._getRowSet()._children[0];
         if (this.currentRow!==undefined) this.currentWord = this.currentRow._children[0];
-        if (this.currentWord!==undefined) {
+        if (this.currentWord!==undefined && this.currentRow!==undefined && this.currentRow._children[0]!==undefined) {
             this.currentWord = this.currentRow._children[0];
             this.currentCharInfo = this.currentWord.chars[0];
             this.currentCharImage = this.currentWord._children[0];
