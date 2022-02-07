@@ -45,6 +45,15 @@ class InputOutputResolver {
 
 }
 
+const getCommitHash = ()=>{
+    try {
+        return require('child_process')
+            .execSync('git rev-parse HEAD')
+            .toString().trim().substr(0,6);
+    } catch (e) {
+        return '';
+    }
+}
 
 class WebpackDonePlugin{
     apply(compiler){
@@ -244,10 +253,11 @@ module.exports = async (env={})=>{
     config.plugins = [
         new webpack.DefinePlugin({
             BUILD_AT: webpack.DefinePlugin.runtimeValue(() => new Date().getTime()),
+            COMMIT_HASH: webpack.DefinePlugin.runtimeValue(() => `'${getCommitHash()}'`),
             DEBUG: debug,
         }),
         new ESLintPlugin({
-            context: '../', // <-- change context path
+            context: '../',
             emitError: true,
             emitWarning: true,
             failOnError: true,

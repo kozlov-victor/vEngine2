@@ -312,7 +312,7 @@ if (DEBUG) {
 if (DEBUG) {
     const now = Date.now();
     const passed = now - BUILD_AT;
-    console.log(`last compiled ${passed/1000} sec ago`);
+    console.log(`last compiled ${passed/1000} sec ago, ${COMMIT_HASH}`);
 }
 
 class MainLoop {
