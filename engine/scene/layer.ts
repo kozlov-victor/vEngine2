@@ -11,13 +11,13 @@ export const enum LayerTransformType {
 
 export class Layer implements IParentChild {
 
-    public readonly type:'Layer' = 'Layer';
+    public readonly type:string = 'Layer';
     public transformType:LayerTransformType = LayerTransformType.TRANSFORM;
     public readonly parent:IParentChild;
     public id:string;
     public readonly _children:RenderableModel[] = [];
 
-    private _parentChildDelegate:ParentChildDelegate<IParentChild> = new ParentChildDelegate<IParentChild>(this);
+    protected _parentChildDelegate:ParentChildDelegate<IParentChild> = new ParentChildDelegate<IParentChild>(this);
     private _scene:Scene;
 
     constructor(protected game:Game) {

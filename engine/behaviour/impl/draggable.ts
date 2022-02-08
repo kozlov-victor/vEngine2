@@ -149,7 +149,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
         this._gameObject.mouseEventHandler.off(MOUSE_EVENTS.click,this._gameObjectOnClick);
         scene.mouseEventHandler.off(MOUSE_EVENTS.mouseDown,this._sceneOnMouseDown);
         scene.mouseEventHandler.off(MOUSE_EVENTS.mouseMove,this._sceneOnMouseMove);
-        scene.mouseEventHandler.off(MOUSE_EVENTS.mouseDown,this._sceneOnMouseUp);
+        scene.mouseEventHandler.off(MOUSE_EVENTS.mouseUp,this._sceneOnMouseUp);
     }
 
     private applyNewPositionAndConstrains(newX:number,newY:number):void{

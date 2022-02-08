@@ -7,7 +7,8 @@ const cliUI = require('./node_tools/cliUI');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 let project;
-let allProjects;
+let allProjectsGrouped;
+let allProjectsFlat;
 
 
 class InputOutputResolver {
@@ -15,10 +16,8 @@ class InputOutputResolver {
     resolve(project,allProjects){
         const entry = {};
         const output = {};
-        let isToolsBuild = false;
 
         if (project==='build_tools') {
-            isToolsBuild = true;
             entry['xmlParser'] = './engine/misc/parsers/xml/xmlParser.ts';
             entry['angelCodeParser'] = './engine/misc/parsers/angelCode/angelCodeParser.ts';
             output.path = path.resolve('./node_tools/build');
@@ -40,7 +39,7 @@ class InputOutputResolver {
         output.filename = '[name].js';
         output.chunkFilename = "[name].chunk.js";
 
-        return {entry,output,isToolsBuild};
+        return {entry,output};
     }
 
 }
@@ -81,7 +80,7 @@ class WebpackDonePlugin{
                             `--===compiled===--`,
                             (()=>{
                                 if (project) return `-=project: ${project}=-`;
-                                else return `-=${allProjects.length} projects=-`
+                                else return `-=${allProjectsFlat.length} projects=-`
                             })(),
                             `-----${hh}:${mm}:${ss}-----`
                         ]
@@ -156,12 +155,13 @@ module.exports = async (env={})=>{
 
     await cliUI.showInfoWindow(
         [
-            ` --===started===-- `,
+            `--===started===--`,
             `--vEngine compiler--`,
         ]
     );
-    allProjects = getAllProjects();
-    fs.writeFileSync('./demo/index.json',JSON.stringify(allProjects.filter(it=>it.letter!=='_'),undefined, 4));
+    allProjectsGrouped = getAllProjects();
+    allProjectsFlat = allProjectsGrouped.map(it=>it.names).flatMap(it=>it);
+    fs.writeFileSync('./demo/index.json',JSON.stringify(allProjectsGrouped.filter(it=>it.letter!=='_'),undefined, 4));
     const mode = await cliUI.choose('Choose option',[
         'Compile all projects',
         'Choose project from list',
@@ -169,7 +169,7 @@ module.exports = async (env={})=>{
         ]
     );
     if (mode===1) {
-        const projectsToSelect = [...allProjects.map(it=>it.names).flatMap(it=>it),'build_tools'];
+        const projectsToSelect = [...allProjectsFlat,'build_tools'];
         const index = await cliUI.choose('Select a project',projectsToSelect);
         project = projectsToSelect[index];
         console.log(`Selected: ${project}`);
@@ -179,7 +179,7 @@ module.exports = async (env={})=>{
 
     const debug = env.debug==='true';
 
-    const {entry,output,isToolsBuild} = new InputOutputResolver().resolve(project,allProjects);
+    const {entry,output} = new InputOutputResolver().resolve(project,allProjectsFlat);
 
     console.log('webpack started at',new Date());
     console.log('env',env);

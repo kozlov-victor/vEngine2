@@ -19,6 +19,7 @@ import {Mat4} from "@engine/geometry/mat4";
 import MAT16 = Mat4.MAT16;
 import {Incrementer} from "@engine/resources/incrementer";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
+import {noop} from "@engine/misc/object";
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
@@ -143,7 +144,13 @@ export class DomRenderer extends AbstractRenderer {
     }
 
     public createTexture(bitmap:ImageBitmap|HTMLImageElement|HTMLCanvasElement):IDomTexture {
-        return {uid:Incrementer.getValue(),size:{width:bitmap.width,height:bitmap.height}};
+        return {
+            uid:Incrementer.getValue(),
+            size:{
+                width:bitmap.width,
+                height:bitmap.height
+            },
+            destroy:noop};
     }
 
     public createCubeTexture(

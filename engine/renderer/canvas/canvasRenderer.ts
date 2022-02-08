@@ -15,6 +15,7 @@ import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/geometry/mat4";
 import MAT16 = Mat4.MAT16;
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
+import {noop} from "@engine/misc/object";
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -196,7 +197,11 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         const ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
         ctx.drawImage(bitmap,0,0);
         const size:Size = new Size(bitmap.width,bitmap.height);
-        return {size,source:c};
+        return {
+            size,
+            source: c,
+            destroy: noop
+        };
     }
 
     public createCubeTexture(

@@ -2,10 +2,10 @@ import {DebugError} from "../../debug/debugError";
 import {Game} from "../../core/game";
 import {IKeyVal} from "../../misc/object";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ICloneable, IUpdatable} from "@engine/core/declarations";
+import {ICloneable, IDestroyable, IUpdatable} from "@engine/core/declarations";
 
 
-export abstract class BaseAbstractBehaviour implements IUpdatable, ICloneable<BaseAbstractBehaviour>{
+export abstract class BaseAbstractBehaviour implements IUpdatable, IDestroyable, ICloneable<BaseAbstractBehaviour>{
 
     protected game:Game;
     protected parameters:IKeyVal<unknown>;

@@ -9,6 +9,7 @@ interface IFaceInfo {
 
 export class CubeMapTexture extends AbstractTexture implements ICubeMapTexture{
 
+
     public readonly type:'cubeMapTexture';
     protected samplerType: GLenum = this.gl.TEXTURE_CUBE_MAP;
 
