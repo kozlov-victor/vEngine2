@@ -22,15 +22,6 @@ export abstract class AbstractSprite {
 
     }
 
-    protected createRange(from:number,to:number):number[] {
-        if (from>to) throw new DebugError(`can not create range with from=${from} and to=${to}`);
-        const arr:number[] = [];
-        while (from<=to) {
-            arr.push(from++);
-        }
-        return arr;
-    }
-
     protected onCreatedRenderableModel(spriteSheet: ITexture):RenderableModel {
         return new Image(this.game, spriteSheet);
     }

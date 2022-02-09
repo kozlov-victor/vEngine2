@@ -33,11 +33,13 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.textures[0]);
-        const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
-        anim.frames = this.textures;
-        anim.isRepeating = true;
-        anim.duration = 600;
-        animatedImage.addFrameAnimation('animation',anim);
+        const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game,{
+            name: 'animation',
+            frames: this.textures,
+            isRepeating: true,
+            duration: 600,
+        });
+        animatedImage.addFrameAnimation(anim);
         animatedImage.playFrameAnimation('animation');
         this.appendChild(animatedImage);
     }

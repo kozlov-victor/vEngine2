@@ -1,29 +1,30 @@
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {ITexture} from "@engine/renderer/common/texture";
 import {IRectJSON} from "@engine/geometry/rect";
-import {Game} from "@engine/core/game";
 
 export class MultiImageAtlasFrameAnimation extends AbstractFrameAnimation<{resource:ITexture,rect:IRectJSON}> {
 
-    constructor(game:Game){
-        super(game);
-    }
 
     public clone(): this {
-        const cloned:MultiImageAtlasFrameAnimation = new MultiImageAtlasFrameAnimation(this.game);
+        const cloned:MultiImageAtlasFrameAnimation = new MultiImageAtlasFrameAnimation(this.game,{
+            frames: [...this._frames],
+            duration: this._duration,
+            isRepeating: this._isRepeating,
+            name: this._name
+        });
         this.setClonedProperties(cloned);
         return cloned as this;
     }
 
     public override revalidate(): void {
-        this.target.setTexture(this.frames[0].resource);
+        this._target.setTexture(this._frames[0].resource);
         super.revalidate();
     }
 
     protected onNextFrame(i: number): void {
-        this.target.setTexture(this.frames[i].resource);
-        const currRect:IRectJSON = this.frames[i].rect;
-        this.target.getSrcRect().set(currRect);
+        this._target.setTexture(this._frames[i].resource);
+        const currRect:IRectJSON = this._frames[i].rect;
+        this._target.getSrcRect().set(currRect);
 
     }
 

@@ -11,14 +11,24 @@ export const enum FRAME_ANIMATION_EVENTS {
     loop      =  'loop',
 }
 
+export interface IFrameAnimationBaseParams {
+    name: string;
+    duration?:number;
+    isRepeating?:boolean;
+}
+
+export interface IFrameAnimationParams<T> extends IFrameAnimationBaseParams{
+    frames:T[];
+}
+
 export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICloneable<AbstractFrameAnimation<T>> {
 
-    public name:string;
-    public duration:number = 1000;
-    public isRepeating:boolean = true;
-    public frames:T[] = [];
+    public _target:AnimatedImage;
 
-    public target:AnimatedImage;
+    protected _name:string;
+    protected _duration:number = 1000;
+    protected _isRepeating:boolean = true;
+    protected _frames:T[] = [];
 
     private _currFrame:number = -1;
     private _startTime:number = 0;
@@ -28,53 +38,74 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
 
     public readonly animationEventHandler:EventEmitterDelegate<FRAME_ANIMATION_EVENTS,void> = new EventEmitterDelegate(this.game);
 
-    constructor(protected game:Game) {}
+    public constructor(protected game:Game,params:IFrameAnimationParams<T>) {
+        this._name = params.name;
+        this._frames = params.frames;
+        this._duration = params.duration ?? this._duration;
+        this._isRepeating = params.isRepeating ?? this._isRepeating;
+    }
 
     public abstract clone():this;
 
     public revalidate():void {
-        if (DEBUG && !this.frames.length) throw new DebugError(`animation frames can not be empty`);
-        this._timeForOneFrame = ~~(this.duration / this.frames.length);
+        if (DEBUG && !this._frames.length) throw new DebugError(`animation frames can not be empty`);
+        this._timeForOneFrame = ~~(this._duration / this._frames.length);
         this.onNextFrame(0);
     }
 
     public play():this {
         if (DEBUG) {
-            if (!this.target) throw new DebugError(`can not play frame animation: it is not attached to parent`);
+            if (!this._target) throw new DebugError(`can not play frame animation: it is not attached to parent`);
         }
-        if (this.target.getCurrentFrameAnimation()?._isPlaying) {
-            this.target.getCurrentFrameAnimation()!.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.canceled);
+        if (this._target.getCurrentFrameAnimation()?._isPlaying) {
+            this._target.getCurrentFrameAnimation()!.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.canceled);
         }
-        if (this.target.getCurrentFrameAnimation()!==this) {
-            this.target.playFrameAnimation(this);
+        if (this._target.getCurrentFrameAnimation()!==this) {
+            this._target.playFrameAnimation(this);
         }
         this._isPlaying = true;
         return this;
     }
 
+    public setDuration(duration:number):void {
+        this._duration = duration;
+    }
+
+    public setRepeating(repeating:boolean):void {
+        this._isRepeating = repeating;
+    }
+
+    public setDurationByOneFrame(durationOfOneFrame:number):void {
+        this._duration = durationOfOneFrame*this._frames.length;
+    }
+
     public stop():void {
-        if (DEBUG && !this.target) throw new DebugError(`can not stop frame animation: it is not attached to parent`);
+        if (DEBUG && !this._target) throw new DebugError(`can not stop frame animation: it is not attached to parent`);
         this._isPlaying = false;
         this._startTime = 0;
         this._loopReached = false;
+    }
+
+    public getName():string {
+        return this._name;
     }
 
     public update():void {
         if (!this._isPlaying) return;
         const time:number = this.game.getCurrentTime();
         if (!this._startTime) this._startTime = time;
-        const delta:number = (time - this._startTime) % this.duration;
-        let currFrame:number = ~~((this.frames.length) * delta / this.duration);
-        currFrame = currFrame % this.frames.length;
+        const delta:number = (time - this._startTime) % this._duration;
+        let currFrame:number = ~~((this._frames.length) * delta / this._duration);
+        currFrame = currFrame % this._frames.length;
         if (currFrame===this._currFrame) return;
-        if (this._loopReached && !this.isRepeating) {
+        if (this._loopReached && !this._isRepeating) {
             this.stop();
             this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.completed);
             return;
         }
         this._currFrame = currFrame;
         this.onNextFrame(currFrame);
-        if (this._currFrame===this.frames.length-1) {
+        if (this._currFrame===this._frames.length-1) {
             this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.loop);
             this._loopReached = true;
         }
@@ -84,11 +115,7 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
     protected abstract onNextFrame(i:number):void;
 
     protected setClonedProperties(cloned:AbstractFrameAnimation<unknown>):void {
-        cloned.frames = [...this.frames];
-        cloned.duration = this.duration;
-        cloned.isRepeating = this.isRepeating;
-        cloned.name = this.name;
-        cloned.target = undefined!;
+        cloned._target = undefined!;
     }
 
 }

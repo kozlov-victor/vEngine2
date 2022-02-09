@@ -84,8 +84,6 @@ export class Texture extends AbstractTexture{
         return canvas.toDataURL();
     }
 
-
-
     protected setRawData(data:Uint8Array,width:number,height:number,mode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR):void{
         if (DEBUG) {
             const numOfBytes:number = width*height*4;

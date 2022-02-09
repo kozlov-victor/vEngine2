@@ -96,17 +96,21 @@ export default async (game:Game)=>{
         animatedImage.addBehaviour(new DraggableBehaviour(game));
         animatedImage.setPixelPerfect(true);
         animatedImage.scale.setXY(10);
-        const anim: AtlasFrameAnimation = new AtlasFrameAnimation(game);
-        anim.frames = yaml.TextureImporter.spriteSheet.sprites.filter(it=>it.name.indexOf(animationName)===0).map(it=>it.rect);
-        if (anim.frames.length===0) {
-            anim.frames.push({
+
+        const frames = yaml.TextureImporter.spriteSheet.sprites.filter(it=>it.name.indexOf(animationName)===0).map(it=>it.rect);
+        if (frames.length===0) {
+            frames.push({
                 x:0,y:0,
                 width: texture.size.width,
                 height: texture.size.height,
             })
         }
-        anim.isRepeating = true;
-        animatedImage.addFrameAnimation("default",anim);
+        const anim: AtlasFrameAnimation = new AtlasFrameAnimation(game,{
+            name: 'default',
+            frames,
+            isRepeating: true,
+        });
+        animatedImage.addFrameAnimation(anim);
         animatedImage.playFrameAnimation(anim);
         workLayer.appendChild(animatedImage);
 

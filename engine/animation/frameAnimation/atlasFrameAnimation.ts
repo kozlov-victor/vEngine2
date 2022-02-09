@@ -10,21 +10,26 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
 
 
     public override revalidate():void{
-        if (DEBUG && !this.target) throw new DebugError(`atlasFrameAnimation needs image sourceLink!`);
+        if (DEBUG && !this._target) throw new DebugError(`atlasFrameAnimation needs image sourceLink!`);
         super.revalidate();
     }
 
     public clone():this{
-        const cloned:AtlasFrameAnimation = new AtlasFrameAnimation(this.game);
+        const cloned:AtlasFrameAnimation = new AtlasFrameAnimation(this.game,{
+            frames: [...this._frames],
+            duration: this._duration,
+            isRepeating: this._isRepeating,
+            name: this._name
+        });
         this.setClonedProperties(cloned);
         return cloned as this;
     }
 
     protected onNextFrame(i: number): void {
-        const currRect:IRectJSON = this.frames[i];
-        this.target.getSrcRect().fromJSON(currRect);
-        const rect:Rect = this.target.getSrcRect();
-        this.target.size.setWH(rect.width,rect.height);
+        const currRect:IRectJSON = this._frames[i];
+        this._target.getSrcRect().fromJSON(currRect);
+        const rect:Rect = this._target.getSrcRect();
+        this._target.size.setWH(rect.width,rect.height);
     }
 
     protected override setClonedProperties(cloned: AbstractFrameAnimation<unknown>): void {

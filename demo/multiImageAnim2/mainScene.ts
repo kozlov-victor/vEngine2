@@ -41,21 +41,26 @@ export class MainScene extends Scene {
         animatedImage.pos.setXY(10,10);
         animatedImage.scale.setXY(0.8);
 
-        const anim1:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
-        anim1.frames = this.resourceLinks1;
-        anim1.isRepeating = true;
-        animatedImage.addFrameAnimation('animation1',anim1);
+        const anim1:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game,{
+            name: 'animation1',
+            frames: this.resourceLinks1,
+            isRepeating: true,
+        });
+        animatedImage.addFrameAnimation(anim1);
 
-        const anim2:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
-        anim2.frames = this.resourceLinks2;
-        anim2.isRepeating = true;
-        animatedImage.addFrameAnimation('animation2',anim2);
+        const anim2:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game,{
+            name: 'animation2',
+            frames: this.resourceLinks2,
+            isRepeating: true,
+        });
+        animatedImage.addFrameAnimation(anim2);
 
-
-        const anim3:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
-        anim3.frames = this.resourceLinks3;
-        anim3.isRepeating = true;
-        animatedImage.addFrameAnimation('animation3',anim3);
+        const anim3:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game,{
+            name: 'animation3',
+            frames: this.resourceLinks3,
+            isRepeating: true,
+        });
+        animatedImage.addFrameAnimation(anim3);
 
         animatedImage.playFrameAnimation('animation1');
         this.appendChild(animatedImage);

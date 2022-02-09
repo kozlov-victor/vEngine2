@@ -5,7 +5,6 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {MultiImageAtlasFrameAnimation} from "@engine/animation/frameAnimation/multiImageAtlasFrameAnimation";
 import {IRectJSON} from "@engine/geometry/rect";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Color} from "@engine/renderer/common/color";
 import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
@@ -17,12 +16,13 @@ export class MainScene extends Scene {
     @Resource.Texture('./frameAnimation4/Flying eye/Flight.png') private flight:ITexture;
     @Resource.Texture('./frameAnimation4/Flying eye/Take Hit.png') private takeHit:ITexture;
 
-    private createAnimation(frames:{resource:ITexture,rect:IRectJSON}[],repeat:boolean,duration:number):MultiImageAtlasFrameAnimation {
-        const anim = new MultiImageAtlasFrameAnimation(this.game);
-        anim.frames = frames;
-        anim.isRepeating = repeat;
-        anim.duration = duration;
-        return anim;
+    private createAnimation(name:string,frames:{resource:ITexture,rect:IRectJSON}[],isRepeating:boolean,duration:number):MultiImageAtlasFrameAnimation {
+        return new MultiImageAtlasFrameAnimation(this.game, {
+            name,
+            frames,
+            isRepeating,
+            duration
+        });
     }
 
     public override onReady():void {
@@ -34,8 +34,8 @@ export class MainScene extends Scene {
         animatedImage.size.setWH(150*4);
 
         animatedImage.addFrameAnimation(
-            'attack',
             this.createAnimation(
+                'attack',
                 (()=>{
                     const arr = []
                     for (let i=0;i<8;i++) {
@@ -47,8 +47,8 @@ export class MainScene extends Scene {
             )
         );
         animatedImage.addFrameAnimation(
-            'death',
             this.createAnimation(
+                'death',
                 (()=>{
                     const arr = []
                     for (let i=0;i<4;i++) {
@@ -60,8 +60,8 @@ export class MainScene extends Scene {
             )
         );
         animatedImage.addFrameAnimation(
-            'flight',
             this.createAnimation(
+                'flight',
                 (()=>{
                     const arr = []
                     for (let i=0;i<8;i++) {
@@ -74,8 +74,8 @@ export class MainScene extends Scene {
         );
         let hit;
         animatedImage.addFrameAnimation(
-            'takeHit',
             hit = this.createAnimation(
+                'takeHit',
                 (()=>{
                     const arr = []
                     for (let i=0;i<4;i++) {

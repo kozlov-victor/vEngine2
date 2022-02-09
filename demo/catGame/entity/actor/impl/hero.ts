@@ -18,6 +18,7 @@ import {Lava} from "../../object/impl/lava";
 import {GameManager} from "../../../gameManager";
 import {Virus} from "../../object/impl/virus";
 import {Fan} from "../../object/impl/fan";
+import {createRange} from "@engine/misc/object";
 
 const LEFT:number = -1;
 const RIGHT:number = 1;
@@ -90,34 +91,34 @@ export class Hero extends AbstractCharacter {
         );
 
         this.jumpAnimation = this.createFrameAnimation(
-            'jump', this.createRange(32,39), 1000,
+            'jump', createRange({from:32,to:39}), 1000,
             new Size(16,16)
         );
-        this.jumpAnimation.isRepeating = false;
+        this.jumpAnimation.setRepeating(false);
 
         this.rotateAnimation = this.createFrameAnimation(
-            'rotate', this.createRange(128,140), 1000,
+            'rotate', createRange({from:128,to:140}), 1000,
             new Size(16,16)
         );
-        this.rotateAnimation.isRepeating = false;
+        this.rotateAnimation.setRepeating(false);
 
 
         this.fallAnimation = this.createFrameAnimation(
-            'fall', this.createRange(80,86), 1000,
+            'fall', createRange({from:80,to:86}), 1000,
             new Size(16,16)
         );
-        this.fallAnimation.isRepeating = false;
+        this.fallAnimation.setRepeating(false);
 
         this.walkAnimation = this.createFrameAnimation(
-            'walk', this.createRange(16,23), 1000,
+            'walk', createRange({from:16,to:23}), 1000,
             new Size(16,16)
         );
 
         this.highKickAnimation = this.createFrameAnimation(
-            'highKick', this.createRange(176,181), 200,
+            'highKick', createRange({from:176,to:181}), 200,
             new Size(16,16)
         );
-        this.highKickAnimation.isRepeating = false;
+        this.highKickAnimation.setRepeating(false);
 
     }
 

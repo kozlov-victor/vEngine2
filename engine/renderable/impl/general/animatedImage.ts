@@ -31,16 +31,15 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
     }
 
 
-    public addFrameAnimation(name:string,fa:AbstractFrameAnimation<any>):void {
-        if (DEBUG && fa.target!==undefined) {
+    public addFrameAnimation(fa:AbstractFrameAnimation<any>):void {
+        if (DEBUG && fa._target!==undefined) {
             throw new DebugError(`can not add FrameAnimation: this animation is already attached to another AnimatedImage object`);
         }
-        if (DEBUG && this._frameAnimations[name]!==undefined) {
+        if (DEBUG && this._frameAnimations[fa.getName()]!==undefined) {
             throw new DebugError(`can not add FrameAnimation: another animation with name "${name}" is already attached`);
         }
-        fa.name = name;
-        this._frameAnimations[name] = fa;
-        fa.target = this;
+        this._frameAnimations[fa.getName()] = fa;
+        fa._target = this;
     }
 
     public playFrameAnimation(fr:string|AbstractFrameAnimation<any>):void{
@@ -74,10 +73,10 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
         super.setClonedProperties(cloned);
         Object.keys(this._frameAnimations).forEach((key:string)=>{
             const fr:AbstractFrameAnimation<any> = this._frameAnimations[key].clone();
-            cloned.addFrameAnimation(key,fr);
+            cloned.addFrameAnimation(fr);
         });
         if (this._currFrameAnimation) {
-            cloned.playFrameAnimation(this._currFrameAnimation.name);
+            cloned.playFrameAnimation(this._currFrameAnimation.getName());
         }
     }
 }

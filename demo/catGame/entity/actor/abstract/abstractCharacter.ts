@@ -39,11 +39,14 @@ export abstract class AbstractCharacter extends AbstractEntity {
     }
 
     protected createFrameAnimation(name:string,frames:number[], duration:number, spriteSheetSize:Size):CellFrameAnimation {
-        const animation:CellFrameAnimation = new CellFrameAnimation(this.game);
-        animation.frames = frames;
-        animation.duration = duration;
-        animation.setSpriteSheetSize(spriteSheetSize);
-        this.renderableImage.addFrameAnimation(name,animation);
+        const animation:CellFrameAnimation = new CellFrameAnimation(this.game,{
+            name,
+            frames,
+            duration,
+            numOfFramesHorizontally: spriteSheetSize.width,
+            numOfFramesVertically: spriteSheetSize.height,
+        });
+        this.renderableImage.addFrameAnimation(animation);
         return animation;
     }
 

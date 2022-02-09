@@ -27,11 +27,14 @@ export class Lava extends AbstractEntity {
 
     protected override onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
         const img:AnimatedImage = new AnimatedImage(this.game,spriteSheet);
-        const animation:CellFrameAnimation = new CellFrameAnimation(this.game);
-        animation.frames = this.createRange(0,44);
-        animation.duration = 5000;
-        animation.setSpriteSheetSize(new Size(45,1));
-        img.addFrameAnimation('lavaAni',animation);
+        const animation:CellFrameAnimation = new CellFrameAnimation(this.game,{
+            name: 'lavaAni',
+            frames: {to:44},
+            duration: 5000,
+            numOfFramesHorizontally: 45,
+             numOfFramesVertically: 1,
+        });
+        img.addFrameAnimation(animation);
         img.stretchMode = STRETCH_MODE.REPEAT;
         this.animation = animation;
         (window as any).img = img;

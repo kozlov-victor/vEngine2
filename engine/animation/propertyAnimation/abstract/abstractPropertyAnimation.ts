@@ -5,7 +5,7 @@ import {Optional} from "@engine/core/declarations";
 
 export abstract class AbstractPropertyAnimation implements ITargetAnimation {
 
-    public readonly target:Optional<RenderableModel>;
+    public readonly _target:Optional<RenderableModel>;
 
     protected progress:Optional<(...opts:unknown[])=>void>;
 

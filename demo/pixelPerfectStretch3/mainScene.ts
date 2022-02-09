@@ -15,11 +15,14 @@ export class MainScene extends Scene {
         const sprLogo:AnimatedImage = new AnimatedImage(this.game,this.sprite);
         sprLogo.scale.setXY(5);
         sprLogo.setPixelPerfect(true);
-        const cellFrameAnimation = new CellFrameAnimation(this.game);
-        cellFrameAnimation.setSpriteSheetSize(3,1);
-        cellFrameAnimation.frames = [0,1,2];
-        cellFrameAnimation.duration = 1200;
-        sprLogo.addFrameAnimation('animation',cellFrameAnimation);
+        const cellFrameAnimation = new CellFrameAnimation(this.game,{
+            name: 'animation',
+            frames: [0,1,2],
+            duration: 1200,
+            numOfFramesHorizontally: 3,
+            numOfFramesVertically: 1,
+        });
+        sprLogo.addFrameAnimation(cellFrameAnimation);
         cellFrameAnimation.play();
 
         this.appendChild(sprLogo);

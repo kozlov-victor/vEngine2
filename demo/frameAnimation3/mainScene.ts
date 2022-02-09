@@ -20,12 +20,15 @@ export class MainScene extends Scene {
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.resourceLink);
         animatedImage.setPixelPerfect(true);
-        const anim:CellFrameAnimation = new CellFrameAnimation(this.game);
-        anim.frames = new Array(5*11-2).fill(0).map((it,i)=>i);
-        anim.isRepeating = false;
-        anim.duration = 5000;
-        anim.setSpriteSheetSize(5,11);
-        animatedImage.addFrameAnimation('animation',anim);
+        const anim:CellFrameAnimation = new CellFrameAnimation(this.game,{
+            name: 'animation',
+            frames: {to:5*11-2},
+            duration: 5000,
+            isRepeating: false,
+            numOfFramesHorizontally: 5,
+            numOfFramesVertically: 11,
+        });
+        animatedImage.addFrameAnimation(anim);
         animatedImage.playFrameAnimation('animation');
         animatedImage.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         animatedImage.anchorPoint.setToCenter();

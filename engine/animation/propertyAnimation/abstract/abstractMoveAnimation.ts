@@ -28,9 +28,9 @@ export abstract class AbstractMoveAnimation extends AbstractPropertyAnimation {
             }
             this.angle = MathEx.getAngle(this.progressPoint,this._oldPoint);
             this._oldPoint.setXY(this.progressPoint.x,this.progressPoint.y);
-            if (this.target!==undefined) this.target.angle = this.angle;
+            if (this._target!==undefined) this._target.angle = this.angle;
         }
-        if (this.target!==undefined) this.target.pos.set(this.progressPoint);
+        if (this._target!==undefined) this._target.pos.set(this.progressPoint);
         if (this.progress!==undefined) this.progress(this.progressPoint,this.angle);
     }
 }

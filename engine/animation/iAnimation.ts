@@ -8,5 +8,5 @@ export interface IAnimation extends IUpdatable{
 }
 
 export interface ITargetAnimation extends IAnimation {
-    target:Optional<RenderableModel>;
+    _target:Optional<RenderableModel>;
 }

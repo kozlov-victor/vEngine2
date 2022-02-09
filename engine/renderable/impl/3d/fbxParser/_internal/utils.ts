@@ -112,7 +112,7 @@ export namespace Utils {
                     return data + String.fromCharCode(byte);
                 }, ''));
             image.onload = ()=>{
-                document.body.appendChild(image);
+                //document.body.appendChild(image);
                 resolve(renderer.createTexture(image));
             }
         });

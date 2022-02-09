@@ -19,11 +19,14 @@ export class MainScene extends Scene {
 
     public override onReady():void {
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.resourceLink);
-        const anim:CellFrameAnimation = new CellFrameAnimation(this.game);
-        anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
-        anim.isRepeating = true;
-        anim.setSpriteSheetSize(5,3);
-        animatedImage.addFrameAnimation('animation',anim);
+        const anim:CellFrameAnimation = new CellFrameAnimation(this.game,{
+            name: 'animation',
+            frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13],
+            isRepeating: true,
+            numOfFramesHorizontally: 5,
+            numOfFramesVertically: 3,
+        });
+        animatedImage.addFrameAnimation(anim);
         animatedImage.playFrameAnimation('animation');
         animatedImage.pos.fromJSON({x:10,y:10});
         this.appendChild(animatedImage);

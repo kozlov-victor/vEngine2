@@ -90,12 +90,15 @@ export class MainScene extends Scene {
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.r.fireTexture);
         animatedImage.blendMode = BLEND_MODE.SCREEN;
-        const anim:CellFrameAnimation = new CellFrameAnimation(this.game);
-        anim.frames = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
-        anim.isRepeating = true;
-        anim.duration = 1200;
-        anim.setSpriteSheetSize(4,4);
-        animatedImage.addFrameAnimation('animation',anim);
+        const anim:CellFrameAnimation = new CellFrameAnimation(this.game,{
+            name: 'animation',
+            frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
+            isRepeating: true,
+            duration: 1200,
+            numOfFramesHorizontally: 4,
+            numOfFramesVertically: 4,
+        });
+        animatedImage.addFrameAnimation(anim);
         animatedImage.playFrameAnimation(anim);
         animatedImage.scale.setXY(0.5);
         animatedImage.transformPoint.setToCenter();

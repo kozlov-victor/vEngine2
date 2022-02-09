@@ -22,8 +22,11 @@ export class MainScene extends Scene {
     public override onReady():void {
         let i = 0;
         let lastImage:SvgImage;
+        let loading:boolean = false;
 
         const placeNextImage = async ()=>{
+            if (loading) return;
+            loading = true;
             if (lastImage!==undefined) lastImage.removeSelf();
             const queue = new TaskQueue(this.game);
             const doc = await new ResourceLoader(this.game).loadXML(XmlParser,'./svgBasic5/examples/'+imageUrls[i]+'.svg');
@@ -32,6 +35,7 @@ export class MainScene extends Scene {
             console.log(lastImage);
             i++;
             i = i%imageUrls.length;
+            loading = false;
         };
 
         placeNextImage().catch(e=>console.log(e));

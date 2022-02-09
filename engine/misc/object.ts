@@ -58,4 +58,17 @@ export const parametrizeString = (source:string,args:Record<string,string|number
     return source;
 };
 
-export const noop = (arg?:unknown)=>{};
+export const createRange = ({from,to}:{from?:number,to:number}):number[]=>{
+    from??=0;
+    const l = Math.abs(to-from);
+    const res:number[] = [];
+    const delta = from<to?1:-1;
+    let cnt = from;
+    for (let i=0;i<l;i++) {
+        res.push(cnt);
+        cnt+=delta;
+    }
+    return res;
+}
+
+export const noop = (arg?:unknown):any=>{};

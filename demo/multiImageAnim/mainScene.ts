@@ -20,11 +20,13 @@ export class MainScene extends Scene {
 
 
     public override onReady():void {
-        const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game);
-        anim.frames = this.resourceLinks;
-        anim.isRepeating = true;
+        const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game,{
+            name: 'animation',
+            frames: this.resourceLinks,
+            isRepeating: true,
+        });
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.resourceLinks[0]);
-        animatedImage.addFrameAnimation('animation',anim);
+        animatedImage.addFrameAnimation(anim);
         animatedImage.playFrameAnimation('animation');
         animatedImage.pos.fromJSON({x:10,y:10});
         this.appendChild(animatedImage);

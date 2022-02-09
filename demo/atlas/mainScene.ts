@@ -30,36 +30,37 @@ export class MainScene extends Scene {
 
         const animatedImage: AnimatedImage = new AnimatedImage(this.game,this.spriteTexture);
 
-        const animRun: AtlasFrameAnimation = new AtlasFrameAnimation(this.game);
+        const animRun: AtlasFrameAnimation = new AtlasFrameAnimation(this.game,{
+            name: 'run',
+            frames: [
+                toFrame(framesRaw["run-01.png"]),
+                toFrame(framesRaw["run-02.png"]),
+                toFrame(framesRaw["run-03.png"]),
+                toFrame(framesRaw["run-04.png"]),
+                toFrame(framesRaw["run-05.png"]),
+                toFrame(framesRaw["run-06.png"]),
+                toFrame(framesRaw["run-07.png"]),
+                toFrame(framesRaw["run-08.png"]),
+            ],
+            isRepeating: true,
+        });
 
-        animRun.frames = [
-            toFrame(framesRaw["run-01.png"]),
-            toFrame(framesRaw["run-02.png"]),
-            toFrame(framesRaw["run-03.png"]),
-            toFrame(framesRaw["run-04.png"]),
-            toFrame(framesRaw["run-05.png"]),
-            toFrame(framesRaw["run-06.png"]),
-            toFrame(framesRaw["run-07.png"]),
-            toFrame(framesRaw["run-08.png"]),
-        ];
 
-        animRun.isRepeating = true;
-
-        const animJump: AtlasFrameAnimation = new AtlasFrameAnimation(this.game);
-        animJump.isRepeating = false;
-        animJump.frames = [
-            toFrame(framesRaw["jump-down.png"]),
-            toFrame(framesRaw["jump-up.png"]),
-        ];
-
+        const animJump: AtlasFrameAnimation = new AtlasFrameAnimation(this.game,{
+            frames: [
+                toFrame(framesRaw["jump-down.png"]),
+                toFrame(framesRaw["jump-up.png"]),
+            ],
+            name: 'jump',
+            isRepeating: false,
+            duration: 800,
+        });
         animJump.animationEventHandler.on(FRAME_ANIMATION_EVENTS.completed, () => {
             animatedImage.playFrameAnimation("run");
         });
-        animJump.duration = 800;
 
-
-        animatedImage.addFrameAnimation("run", animRun);
-        animatedImage.addFrameAnimation("jump", animJump);
+        animatedImage.addFrameAnimation(animRun);
+        animatedImage.addFrameAnimation(animJump);
         animatedImage.playFrameAnimation("run");
 
         animatedImage.mouseEventHandler.on(MOUSE_EVENTS.click, _ => {

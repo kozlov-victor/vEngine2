@@ -20,12 +20,15 @@ export class MainScene extends Scene {
 
     private createNextAnimation():void {
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.links[this.cnt]);
-        const anim:CellFrameAnimation = new CellFrameAnimation(this.game);
-        anim.frames = new Array(28).fill(0).map((it,index)=>index);
-        anim.isRepeating = true;
-        anim.duration = 1300;
-        anim.setSpriteSheetSize(28,1);
-        animatedImage.addFrameAnimation('animation',anim);
+        const anim:CellFrameAnimation = new CellFrameAnimation(this.game,{
+            frames: new Array(28).fill(0).map((it,index)=>index),
+            name: 'animation',
+            isRepeating: true,
+            duration: 1300,
+            numOfFramesHorizontally: 28,
+            numOfFramesVertically: 1,
+        });
+        animatedImage.addFrameAnimation(anim);
         animatedImage.playFrameAnimation('animation');
         animatedImage.pos.setXY(10,10);
 

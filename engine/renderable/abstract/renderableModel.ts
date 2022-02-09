@@ -142,7 +142,7 @@ export abstract class RenderableModel
     }
 
     public addPropertyAnimation(animation: ITargetAnimation): void {
-        animation.target = this;
+        animation._target = this;
         this._propertyAnimations.push(animation);
     }
 
