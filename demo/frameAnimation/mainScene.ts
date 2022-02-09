@@ -25,6 +25,7 @@ export class MainScene extends Scene {
             isRepeating: true,
             numOfFramesHorizontally: 5,
             numOfFramesVertically: 3,
+            duration: 1000,
         });
         animatedImage.addFrameAnimation(anim);
         animatedImage.playFrameAnimation('animation');

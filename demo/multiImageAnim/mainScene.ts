@@ -24,6 +24,7 @@ export class MainScene extends Scene {
             name: 'animation',
             frames: this.resourceLinks,
             isRepeating: true,
+            duration: 1000,
         });
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.resourceLinks[0]);
         animatedImage.addFrameAnimation(anim);

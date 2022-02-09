@@ -45,6 +45,7 @@ export class MainScene extends Scene {
             name: 'animation1',
             frames: this.resourceLinks1,
             isRepeating: true,
+            duration: 1000,
         });
         animatedImage.addFrameAnimation(anim1);
 
@@ -52,6 +53,7 @@ export class MainScene extends Scene {
             name: 'animation2',
             frames: this.resourceLinks2,
             isRepeating: true,
+            duration: 1000,
         });
         animatedImage.addFrameAnimation(anim2);
 
@@ -59,6 +61,7 @@ export class MainScene extends Scene {
             name: 'animation3',
             frames: this.resourceLinks3,
             isRepeating: true,
+            duration: 1000,
         });
         animatedImage.addFrameAnimation(anim3);
 

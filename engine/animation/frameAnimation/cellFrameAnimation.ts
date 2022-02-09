@@ -1,7 +1,7 @@
 import {ICloneable, IRevalidatable} from "@engine/core/declarations";
 import {
-    AbstractFrameAnimation, IFrameAnimationBaseParams,
-    IFrameAnimationParams
+    AbstractFrameAnimation,
+    IFrameAnimationBaseParams, tFrameAnimationDuration
 } from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
@@ -21,12 +21,10 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
     private readonly _numOfFramesH:number;
     private readonly _numOfFramesV:number;
 
-    constructor(game: Game, params: ICellFrameAnimationParams) {
+    constructor(game: Game, params: tFrameAnimationDuration & ICellFrameAnimationParams) {
         super(game,{
-           name: params.name,
-           duration: params.duration,
-           isRepeating: params.isRepeating,
-           frames: isArray(params.frames)?params.frames:createRange(params.frames)
+           ...params,
+            frames: isArray(params.frames)?params.frames:createRange(params.frames)
         });
         this._numOfFramesH = params.numOfFramesHorizontally;
         this._numOfFramesV = params.numOfFramesVertically;

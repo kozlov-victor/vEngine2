@@ -109,6 +109,7 @@ export default async (game:Game)=>{
             name: 'default',
             frames,
             isRepeating: true,
+            duration: 1000,
         });
         animatedImage.addFrameAnimation(anim);
         animatedImage.playFrameAnimation(anim);

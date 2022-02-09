@@ -11,9 +11,10 @@ export const enum FRAME_ANIMATION_EVENTS {
     loop      =  'loop',
 }
 
+export type tFrameAnimationDuration = Required<{ duration?: number }> & { durationOfOneFrame?: number };
+
 export interface IFrameAnimationBaseParams {
     name: string;
-    duration?:number;
     isRepeating?:boolean;
 }
 
@@ -38,10 +39,13 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
 
     public readonly animationEventHandler:EventEmitterDelegate<FRAME_ANIMATION_EVENTS,void> = new EventEmitterDelegate(this.game);
 
-    public constructor(protected game:Game,params:IFrameAnimationParams<T>) {
+    public constructor(protected game:Game,params:tFrameAnimationDuration & IFrameAnimationParams<T>) {
         this._name = params.name;
         this._frames = params.frames;
-        this._duration = params.duration ?? this._duration;
+
+        if (params.duration) this._duration = params.duration;
+        else if (params.durationOfOneFrame) this.setDurationOfOneFrame(params.durationOfOneFrame);
+
         this._isRepeating = params.isRepeating ?? this._isRepeating;
     }
 
@@ -75,7 +79,7 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
         this._isRepeating = repeating;
     }
 
-    public setDurationByOneFrame(durationOfOneFrame:number):void {
+    public setDurationOfOneFrame(durationOfOneFrame:number):void {
         this._duration = durationOfOneFrame*this._frames.length;
     }
 

@@ -31,7 +31,7 @@ export class Vec2 {
     public static distanceSquared(a:Vec2, b:Vec2):number {
         const axMinusBx:number = a.x - b.x;
         const ayMinusBy:number = a.y - b.y;
-        return axMinusBx*axMinusBx + ayMinusBy*ayMinusBy;
+        return axMinusBx**2 + ayMinusBy**2;
     }
 
     public static equal(a:Vec2,b:Vec2):boolean {
@@ -64,6 +64,10 @@ export class Vec2 {
 
     public static withLength(vec:Vec2,len:number):Vec2 {
         const mag = Vec2.magnitude(vec);
+        if (mag===0) {
+            vec.x = vec.y = 0;
+            return vec;
+        }
         const factor = mag / len;
         return Vec2.divide(vec, factor);
     }

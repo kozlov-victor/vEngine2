@@ -43,6 +43,7 @@ export class MainScene extends Scene {
                 toFrame(framesRaw["run-08.png"]),
             ],
             isRepeating: true,
+            duration: 1000,
         });
 
 
