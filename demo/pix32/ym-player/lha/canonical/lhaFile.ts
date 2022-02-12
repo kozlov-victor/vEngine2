@@ -83,7 +83,7 @@ export class LhaFile {
     /**
      * Reads from the current lha entry into an array of bytes.
      */
-    public read(pos: number, b: number[], off: number, len: number): number {
+    public read(pos: number, b: Uint8[], off: number, len: number): number {
         if (pos !== this.pos)
             this.raf.setPointer(pos);
 
@@ -135,7 +135,7 @@ export class LhaFile {
 
         const raf = this.raf;
         const hr = new class extends LhaEntryReader {
-            protected _read(b: number[]): number {
+            protected _read(b: Uint8[]): number {
                 return (raf.readUints8ToArray_2(b));
             }
         }(this.encoding);
@@ -179,7 +179,7 @@ export class LhaFileInputStream  {
         this.count = entry.getCompressedSize();
     }
 
-    public read_2(b:number[], off:number, len:number):number {
+    public read_2(b:Uint8[], off:number, len:number):number {
         if (this.count === 0)
             return (-1);
 

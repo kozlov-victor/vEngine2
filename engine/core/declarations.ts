@@ -59,8 +59,8 @@ export interface IFocusable {
 export interface ITransformable {
     worldTransformDirty:boolean;
     worldTransformMatrix:Mat16Holder;
-    transform():void;
-    translate():void;
+    _transform():void;
+    _translate():void;
 }
 
 export interface IParentChild {

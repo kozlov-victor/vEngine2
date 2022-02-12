@@ -49,10 +49,10 @@ export class BinBuffer {
         return this.view;
     }
 
-    public getInt8Array():Uint8[]{
-        const res:Uint8[] = new Array(this.view.buffer.byteLength);
+    public getInt8Array():Int8[]{
+        const res:Int8[] = new Array(this.view.buffer.byteLength);
         for (let i:number = 0; i < this.view.buffer.byteLength; i++) {
-            res[i] = this.view.getInt8(i) as Uint8;
+            res[i] = this.view.getInt8(i) as Int8;
         }
         return res;
     }
@@ -135,8 +135,8 @@ export class BinBuffer {
         return res;
     }
 
-    public readInt8():Uint8{
-        const res:Uint8 = this.view.getInt8(this.pointer) as Uint8;
+    public readInt8():Int8{
+        const res:Int8 = this.view.getInt8(this.pointer) as Int8;
         this.pointer++;
         return res;
     }
@@ -154,16 +154,16 @@ export class BinBuffer {
         return res;
     }
 
-    public readInts8(n:number):Uint8[]{
+    public readInts8(n:number):Int8[]{
         if (n<0) throw new Error(`wont argument: ${n}`);
-        const res:Uint8[] = [];
+        const res:Int8[] = [];
         for (let i = 0; i < n; i++) {
             res.push(this.readInt8());
         }
         return res;
     }
 
-    public readUints8ToArray(arr:number[], off:number, length:number):number{
+    public readUints8ToArray(arr:Uint8[], off:number, length:number):number{
         let readed:number = 0;
         for (let i = 0; i < length; i++) {
             const pos:number = i + off;
@@ -176,7 +176,7 @@ export class BinBuffer {
         return readed;
     }
 
-    public readUints8ToArray_2(arr:number[]):number{
+    public readUints8ToArray_2(arr:Uint8[]):number{
         return this.readUints8ToArray(arr,0,arr.length);
     }
 

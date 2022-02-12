@@ -46,8 +46,8 @@ export class Line extends RenderableModel implements ICloneable<Line>, ILineProp
         this.game.getRenderer().drawLine(this);
     }
 
-    public override translate():void{
-        super.translate();
+    public override _translate():void{
+        super._translate();
         this.game.getRenderer().transformTranslate(0,-this.lineWidth/2);
     }
 

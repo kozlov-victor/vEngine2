@@ -6,6 +6,9 @@ import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {MathEx} from "@engine/misc/mathEx";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {createRange} from "@engine/misc/object";
 
 export class MainScene extends Scene {
 
@@ -49,6 +52,15 @@ export class MainScene extends Scene {
         ps.particleVelocity = {from: 50, to: 100};
         ps.particleAngle = {from:0,to:2*Math.PI};
         this.appendChild(ps);
+        ps.onEmitParticle(p=>{
+            const ptcl = p as Rectangle;
+            if (MathEx.randomUint8()>128) {
+                ptcl.fillColor.setFrom(ColorFactory.fromCSS(`#4fb404`));
+            } else {
+                ptcl.fillColor.setFrom(ColorFactory.fromCSS(`#ce0000`));
+            }
+        });
+        console.log(createRange({from:-128,to:127}).join('|'))
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click,(e)=>{
             ps.emissionPosition.setXY(e.screenX,e.screenY);

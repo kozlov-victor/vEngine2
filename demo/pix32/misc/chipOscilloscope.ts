@@ -3,7 +3,6 @@ import {BasePix32Scene} from "../scenes/base/basePix32Scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Game} from "@engine/core/game";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
-import {Color} from "@engine/renderer/common/color";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {AbstractChipTrack} from "../ym-player/abstract/abstractChipTrack";

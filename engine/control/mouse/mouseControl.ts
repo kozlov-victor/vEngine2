@@ -147,7 +147,6 @@ export class MouseControl implements IControl {
             if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.touches[0].clientX,e.touches[0].clientY)) {
                 return;
             }
-
             //console.log('ontouchmove');
             e.preventDefault(); // to prevent canvas moving
             let l:number = e.touches.length;
@@ -156,11 +155,10 @@ export class MouseControl implements IControl {
             }
         };
         container.onpointermove = (e:PointerEvent):void=>{
+            if (e.pointerType!=='pen') return; // only for pen support
             if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.clientX,e.clientY)) {
                 return;
             }
-
-            //console.log('onpointermove',e.clientX,e.clientY);
             this.resolveMouseMove(e,e.pressure>0);
         };
         container.onmousemove = (e:MouseEvent):void=>{
@@ -168,7 +166,7 @@ export class MouseControl implements IControl {
                 return;
             }
 
-            //console.log('mousemove',e.clientX,e.clientY);
+            //console.log('mousemove',e.clientX,e.clientY,e.buttons,e.button);
             const isMouseDown:boolean = e.buttons === 1;
             this.resolveMouseMove(e,isMouseDown);
         };
@@ -240,6 +238,7 @@ export class MouseControl implements IControl {
         }
 
         if (mousePoint.target===undefined) mousePoint.target = scene;
+        // @ts-ignore
         scene.mouseEventHandler.trigger(mouseEvent,{
             screenX:mousePoint.screenCoordinate.x,
             screenY:mousePoint.screenCoordinate.y,
@@ -248,8 +247,8 @@ export class MouseControl implements IControl {
             id:mousePoint.id,
             eventName: mouseEvent,
             nativeEvent: e as Event,
-            button: (e as MouseEvent).button,
-            isMouseDown
+            button: (e as MouseEvent).buttons,
+            isMouseDown,
         } as ISceneMouseEvent);
 
         return mousePoint;

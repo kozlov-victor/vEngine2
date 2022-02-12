@@ -32,8 +32,8 @@ export abstract class Mesh3d extends Mesh2d {
         return this._lightAccepted;
     }
 
-    public override transform(): void {
-        super.transform();
+    public override _transform(): void {
+        super._transform();
         if (this.invertY) this.game.getRenderer().transformScale(1,-1,1);
     }
 

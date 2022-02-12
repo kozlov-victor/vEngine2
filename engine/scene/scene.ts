@@ -234,8 +234,8 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters);
 
         if (this.camera.worldTransformDirty) {
-            this.camera.translate();
-            this.camera.transform();
+            this.camera._translate();
+            this.camera._transform();
             this.camera.worldTransformMatrix.fromMat16(this.game.getRenderer().transformGet());
         } else {
             this.game.getRenderer().transformSet(this.camera.worldTransformMatrix.mat16);

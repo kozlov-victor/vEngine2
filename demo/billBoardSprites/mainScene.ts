@@ -33,9 +33,9 @@ export class MainScene extends Scene {
             const billBoardObj = new Rectangle(this.game);
             billBoardObj.billBoard = true;
             billBoardObj.depthTest = true;
-            billBoardObj.fillColor = Color.RGB(MathEx.randomByte(0,122),MathEx.randomByte(12,22),MathEx.randomByte(0,255));
+            billBoardObj.fillColor = Color.RGB(MathEx.randomUint8(0,122),MathEx.randomUint8(12,22),MathEx.randomUint8(0,255));
             billBoardObj.lineWidth = 2;
-            billBoardObj.color = Color.RGB(MathEx.randomByte(0,255),MathEx.randomByte(0,255),MathEx.randomByte(0,255));
+            billBoardObj.color = Color.RGB(MathEx.randomUint8(0,255),MathEx.randomUint8(0,255),MathEx.randomUint8(0,255));
 
             const fi:number = MathEx.random(0,Math.PI*2);
             const theta:number = MathEx.random(0,Math.PI);

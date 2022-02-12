@@ -75,7 +75,7 @@ export namespace MathEx {
         return ~~random(min,max);
     };
 
-    export const randomByte = (min: Uint8 = 0, max: Uint8= 255): Uint8 => {
+    export const randomUint8 = (min: Uint8 = 0, max: Uint8= 255): Uint8 => {
         return randomInt(min,max) as Uint8;
     };
 }

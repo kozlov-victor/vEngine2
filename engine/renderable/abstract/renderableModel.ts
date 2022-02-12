@@ -220,8 +220,8 @@ export abstract class RenderableModel
         if (this._scene.camera.worldTransformDirty) this.worldTransformDirty = true;
 
         if (this.worldTransformDirty) {
-            this.translate();
-            this.transform();
+            this._translate();
+            this._transform();
             this.worldTransformMatrix.fromMat16(renderer.transformGet());
         } else {
             renderer.transformSet(this.worldTransformMatrix.mat16);
