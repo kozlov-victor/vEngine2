@@ -60,8 +60,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         const all:ArcadeRigidBody[] = this.spatialSpace.all as ArcadeRigidBody[];
         for (const playerBody of all) {
             const playerBodyRect = playerBody.calcAndGetBoundRect();
-            const playerBodyCells = this.spatialSpace.getCellsInRect(playerBodyRect);
-            for (const c of playerBodyCells) {
+            for (const c of playerBody.spacialCellsOccupied) {
                 for (const obj of c.objects) {
                     const entityBody = obj as ArcadeRigidBody;
                     if (entityBody===playerBody) continue;

@@ -12,6 +12,7 @@ import {ICloneable, Optional} from "@engine/core/declarations";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
+import {SpatialCell} from "@engine/physics/common/spatialSpace";
 
 export const enum ARCADE_RIGID_BODY_TYPE {
     // Kinematic entities are not affected by gravity, and
@@ -65,6 +66,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public readonly acceleration:Point2d = new Point2d();
     public readonly groupNames:string[] = [];
     public readonly ignoreCollisionWithGroupNames:string[] = [];
+    public readonly spacialCellsOccupied:SpatialCell[] = [];
 
     public readonly collisionEventHandler:EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody> = new EventEmitterDelegate(this.game);
 

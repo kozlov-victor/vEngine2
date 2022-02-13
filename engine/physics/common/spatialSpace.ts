@@ -21,7 +21,6 @@ export class SpatialSpace {
     private numOfCellsY:number;
 
     private readonly cells:SpatialCell[] = [];
-    private readonly _result:SpatialCell[] = [];
 
     public all:IRigidBody[] = [];
 
@@ -80,10 +79,9 @@ export class SpatialSpace {
         return this.cells[index];
     }
 
-    public getCellsInRect(rect:IRectJSON):SpatialCell[] {
+    public getCellsInRect(rect:IRectJSON,result:SpatialCell[]):void {
         const alreadyCheckedTiles:{[key:string]:boolean} = {};
 
-        this._result.length = 0;
         let x:number = rect.x,y:number;
         const maxX:number = rect.x+rect.width,
             maxY:number = rect.y+rect.height;
@@ -95,7 +93,7 @@ export class SpatialSpace {
                 const cell = this.getCellAtXY(x,y);
                 if (cell) {
                     if (!alreadyCheckedTiles[cell.id]) {
-                        this._result.push(cell);
+                        result.push(cell);
                         alreadyCheckedTiles[cell.id] = true;
                     }
                 }
@@ -107,7 +105,6 @@ export class SpatialSpace {
             x+=this.cellWith;
             if (x>maxX) x = maxX;
         }
-        return this._result;
     }
 
     public clear():void {
@@ -120,8 +117,9 @@ export class SpatialSpace {
 
     public updateSpaceByObject(body:IRigidBody, rect:IRectJSON):void {
         this.all.push(body);
-        const cells = this.getCellsInRect(rect);
-        for (const c of cells) {
+        body.spacialCellsOccupied.length = 0;
+        this.getCellsInRect(rect,body.spacialCellsOccupied);
+        for (const c of body.spacialCellsOccupied) {
             c.objects.push(body);
             c.debugView.fillColor = activeColor;
         }
