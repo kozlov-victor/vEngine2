@@ -2,12 +2,10 @@ import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {IPhysicsSystem} from "@engine/physics/common/interfaces";
 import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/mathEx";
-import {Optional} from "@engine/core/declarations";
-import {Rect} from "@engine/geometry/rect";
+import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {Scene} from "@engine/scene/scene";
-import {Layer} from "@engine/scene/layer";
+import {SpatialSpace} from "@engine/physics/common/spatialSpace";
 
 export interface ICreateRigidBodyParams {
     type?: ARCADE_RIGID_BODY_TYPE;
@@ -26,10 +24,15 @@ const intersect = (a:string[],b:string[]):boolean=> {
     return false;
 };
 
+
+const testedCollisionsCache = new Set();
+
 export class ArcadePhysicsSystem implements IPhysicsSystem {
 
     public static readonly gravity:Point2d = new Point2d(0,5);
     public static STICKY_THRESHOLD:number = 0.01;
+
+    public spatialSpace:SpatialSpace;
 
     constructor(private game:Game) {
     }
@@ -48,30 +51,60 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     }
 
     public nextTick(scene:Scene):void {
-        for (let ind:number = 0, layerLength:number = scene.getLayers().length; ind < layerLength; ind++) {
-            const layer:Layer = scene.getLayers()[ind];
-            const all:RenderableModel[] = layer._children;
-            for (let i:number = 0; i < all.length; i++) {
-                const player:RenderableModel = all[i];
-                const playerBody:Optional<ArcadeRigidBody> = player.getRigidBody();
-                if (playerBody===undefined) continue;
-                for (let j:number = i + 1; j < all.length; j++) {
-                    const entity:RenderableModel = all[j];
-                    const entityBody:Optional<ArcadeRigidBody> = entity.getRigidBody();
-                    if (entityBody===undefined) continue;
-                    if (!MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) continue;
+
+        if (this.spatialSpace===undefined) {
+            this.spatialSpace = new SpatialSpace(this.game,16,16, scene.size.width, scene.size.height);
+        }
+
+        testedCollisionsCache.clear();
+        const all:ArcadeRigidBody[] = this.spatialSpace.all as ArcadeRigidBody[];
+        for (const playerBody of all) {
+            const playerBodyRect = playerBody.calcAndGetBoundRect();
+            const playerBodyCells = this.spatialSpace.getCellsInRect(playerBodyRect);
+            for (const c of playerBodyCells) {
+                for (const obj of c.objects) {
+                    const entityBody = obj as ArcadeRigidBody;
+                    if (entityBody===playerBody) continue;
+                    const abKey = `${playerBody.id}_${entityBody.id}`;
+                    const baKey = `${entityBody.id}_${playerBody.id}`;
+                    if (testedCollisionsCache.has(abKey) || testedCollisionsCache.has(baKey)) {
+                        continue;
+                    }
+                    testedCollisionsCache.add(abKey);
+                    testedCollisionsCache.add(abKey);
+                    const entityBodyRect = entityBody.calcAndGetBoundRect();
+                    if (!MathEx.overlapTest(playerBodyRect,entityBodyRect)) continue;
                     if (
                         intersect(playerBody.groupNames,entityBody.ignoreCollisionWithGroupNames) ||
                         intersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
                     ) {
                         this.emitOverlapEvents(playerBody, entityBody);
                     } else {
-                        this.interpolateAndResolveCollision(playerBody, entityBody);
-                        this.interpolateAndResolveCollision(entityBody, playerBody);
+                        this.interpolateAndResolveCollision(playerBody, playerBodyRect, entityBody);
+                        this.interpolateAndResolveCollision(entityBody, entityBodyRect, playerBody);
                     }
                 }
             }
+
+
+            // for (let j:number = i + 1; j < all.length; j++) {
+            //     const entity:RenderableModel = all[j];
+            //     const entityBody:Optional<ArcadeRigidBody> = entity.getRigidBody();
+            //     if (entityBody===undefined) continue;
+            //     if (!MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) continue;
+            //     if (
+            //         intersect(playerBody.groupNames,entityBody.ignoreCollisionWithGroupNames) ||
+            //         intersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
+            //     ) {
+            //         this.emitOverlapEvents(playerBody, entityBody);
+            //     } else {
+            //         this.interpolateAndResolveCollision(playerBody, entityBody);
+            //         this.interpolateAndResolveCollision(entityBody, playerBody);
+            //     }
+            // }
         }
+
+        this.spatialSpace.clear();
     }
 
 
@@ -115,7 +148,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         }
     }
 
-    private interpolateAndResolveCollision(playerBody:ArcadeRigidBody, entityBody:ArcadeRigidBody):void {
+    private interpolateAndResolveCollision(playerBody:ArcadeRigidBody, playerBodyRect: IRectJSON, entityBody:ArcadeRigidBody):void {
         if (playerBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) return;
         let oldEntityPosX:number = entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entityBody._pos.x:entityBody._oldPos.x;
         let oldEntityPosY:number = entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entityBody._pos.y:entityBody._oldPos.y;
@@ -129,7 +162,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         let steps:number = 0;
         while (steps<=entityLengthMax) {
             entityBody._pos.setXY(oldEntityPosX,oldEntityPosY);
-            if (MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) {
+            if (MathEx.overlapTest(playerBodyRect,entityBody.calcAndGetBoundRect())) {
                 break;
             }
             oldEntityPosX+=entityDeltaX;

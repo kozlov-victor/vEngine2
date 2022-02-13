@@ -5,7 +5,7 @@ import {Size} from "@engine/geometry/size";
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {IRect, Rect} from "@engine/geometry/rect";
+import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICloneable, Optional} from "@engine/core/declarations";
@@ -54,6 +54,8 @@ class CollisionFlags implements ICollisionWith {
     }
 }
 
+let cnt = 0;
+
 export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> {
 
     // collideWorldBounds
@@ -67,6 +69,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public readonly collisionEventHandler:EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody> = new EventEmitterDelegate(this.game);
 
     public debug:boolean = false;
+    public readonly id:number = cnt++;
 
     public _modelType: ARCADE_RIGID_BODY_TYPE = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
     public readonly _boundRect:Rect = new Rect();
@@ -100,6 +103,11 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         }
         this._pos.x  += this.velocity.x * delta;
         this._pos.y  += this.velocity.y * delta;
+
+        const spatialSpace = this.game.getPhysicsSystem<ArcadePhysicsSystem>().spatialSpace;
+        if (spatialSpace) {
+            spatialSpace.updateSpaceByObject(this,this.calcAndGetBoundRect());
+        }
     }
 
     public updateBounds(model:RenderableModel):void {
@@ -147,7 +155,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         return this._pos.y + this._rect.y + this._rect.height;
     }
 
-    public calcAndGetBoundRect():IRect {
+    public calcAndGetBoundRect():IRectJSON {
         this._boundRect.setXYWH(
             this._pos.x + this._rect.x,
             this._pos.y + this._rect.y,
