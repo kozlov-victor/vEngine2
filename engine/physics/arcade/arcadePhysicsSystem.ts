@@ -5,7 +5,7 @@ import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@
 import {MathEx} from "@engine/misc/mathEx";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {Scene} from "@engine/scene/scene";
-import {SpatialSpace} from "@engine/physics/common/spatialSpace";
+import {SpatialCell, SpatialSpace} from "@engine/physics/common/spatialSpace";
 
 export interface ICreateRigidBodyParams {
     type?: ARCADE_RIGID_BODY_TYPE;
@@ -18,12 +18,11 @@ export interface ICreateRigidBodyParams {
 
 const intersect = (a:string[],b:string[]):boolean=> {
     if (a.length===0 || b.length===0) return false;
-    for (let i = 0; i < a.length; i++) {
+    for (let i = 0, l = a.length; i < l; i++) {
         if (b.indexOf(a[i])>-1) return true;
     }
     return false;
 };
-
 
 const testedCollisionsCache = new Set();
 
@@ -53,7 +52,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     public nextTick(scene:Scene):void {
 
         if (this.spatialSpace===undefined) {
-            this.spatialSpace = new SpatialSpace(this.game,16,16, scene.size.width, scene.size.height);
+            this.spatialSpace = new SpatialSpace(this.game,32,32, scene.size.width, scene.size.height);
         }
 
         testedCollisionsCache.clear();
@@ -61,6 +60,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         for (const playerBody of all) {
             const playerBodyRect = playerBody.calcAndGetBoundRect();
             for (const c of playerBody.spacialCellsOccupied) {
+
                 for (const obj of c.objects) {
                     const entityBody = obj as ArcadeRigidBody;
                     if (entityBody===playerBody) continue;
@@ -69,7 +69,6 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                     if (testedCollisionsCache.has(abKey) || testedCollisionsCache.has(baKey)) {
                         continue;
                     }
-                    testedCollisionsCache.add(abKey);
                     testedCollisionsCache.add(abKey);
                     const entityBodyRect = entityBody.calcAndGetBoundRect();
                     if (!MathEx.overlapTest(playerBodyRect,entityBodyRect)) continue;
@@ -85,22 +84,6 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                 }
             }
 
-
-            // for (let j:number = i + 1; j < all.length; j++) {
-            //     const entity:RenderableModel = all[j];
-            //     const entityBody:Optional<ArcadeRigidBody> = entity.getRigidBody();
-            //     if (entityBody===undefined) continue;
-            //     if (!MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) continue;
-            //     if (
-            //         intersect(playerBody.groupNames,entityBody.ignoreCollisionWithGroupNames) ||
-            //         intersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
-            //     ) {
-            //         this.emitOverlapEvents(playerBody, entityBody);
-            //     } else {
-            //         this.interpolateAndResolveCollision(playerBody, entityBody);
-            //         this.interpolateAndResolveCollision(entityBody, playerBody);
-            //     }
-            // }
         }
 
         this.spatialSpace.clear();
