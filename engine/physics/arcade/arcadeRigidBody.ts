@@ -106,7 +106,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         this._pos.x  += this.velocity.x * delta;
         this._pos.y  += this.velocity.y * delta;
 
-        const spatialSpace = this.game.getPhysicsSystem<ArcadePhysicsSystem>().spatialSpace;
+        const spatialSpace = this.game.getCurrentScene()._spatialSpace;
         if (spatialSpace) {
             spatialSpace.updateSpaceByObject(this,this.calcAndGetBoundRect());
         }

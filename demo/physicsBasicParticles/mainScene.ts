@@ -43,11 +43,11 @@ export class MainScene extends Scene {
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.emitAuto = false;
-        ps.maxParticlesInCache = 500;
+        ps.maxParticlesInCache = 1500;
         ps.addParticlePrefab(particle);
 
         ps.emissionRadius = 5;
-        ps.numOfParticlesToEmit = { from: 5, to: 20 };
+        ps.numOfParticlesToEmit = { from: 15, to: 20 };
         ps.particleLiveTime = { from: 2000, to: 10000 };
         ps.particleVelocity = { from: 50, to: 100 };
         ps.particleAngle = { from: 0, to: 2 * Math.PI };

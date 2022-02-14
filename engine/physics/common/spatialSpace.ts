@@ -13,6 +13,7 @@ export class SpatialCell {
     public readonly id = cnt++;
     public debugView:Rectangle;
     public objects:IRigidBody[] = [];
+
 }
 
 export class SpatialSpace {
@@ -22,32 +23,10 @@ export class SpatialSpace {
 
     private readonly cells:SpatialCell[] = [];
 
-    public all:IRigidBody[] = [];
+    public allBodies:IRigidBody[] = [];
 
-    constructor(private game:Game, private cellWith:number, private cellHeight:number, private spaceWidth:number, private spaceHeight:number) {
-        this.numOfCellsX = ~~(spaceWidth / cellWith) + ((cellWith % spaceWidth)===0?0:1);
-        this.numOfCellsY = ~~(spaceHeight / cellHeight) + ((cellHeight % spaceHeight)===0?0:1);
-        const l = this.numOfCellsX*this.numOfCellsY;
-
-        let x = 0;
-        let y = 0;
-        for (let i=0;i<l;i++) {
-            const cell = new SpatialCell();
-            cell.debugView = new Rectangle(game);
-            cell.debugView.pos.setXY(x*cellWith,y*cellHeight);
-            x++;
-            if (x===this.numOfCellsX) {
-                x = 0;
-                y++;
-            }
-            cell.debugView.size.setWH(cellWith,cellHeight);
-            cell.debugView.alpha = 0.1;
-            cell.debugView.fillColor = initialColor;
-            cell.debugView.passMouseEventsThrough = true;
-            //game.getCurrentScene().appendChild(cell.debugView);
-            this.cells.push(cell);
-        }
-
+    constructor(private game:Game, private cellWidth:number, private cellHeight:number, private spaceWidth:number, private spaceHeight:number) {
+        this.rebuild(cellWidth,cellHeight,spaceWidth,spaceHeight);
         // const debugRect = new Rectangle(game);
         // debugRect.passMouseEventsThrough = true;
         // debugRect.alpha = 0.6;
@@ -63,6 +42,31 @@ export class SpatialSpace {
         // });
     }
 
+    public rebuild(cellWidth:number, cellHeight:number, spaceWidth:number, spaceHeight:number):void {
+        this.numOfCellsX = ~~(spaceWidth / cellWidth) + ((cellWidth % spaceWidth)===0?0:1);
+        this.numOfCellsY = ~~(spaceHeight / cellHeight) + ((cellHeight % spaceHeight)===0?0:1);
+        const l = this.numOfCellsX*this.numOfCellsY;
+
+        let x = 0;
+        let y = 0;
+        for (let i=0;i<l;i++) {
+            const cell = new SpatialCell();
+            cell.debugView = new Rectangle(this.game);
+            cell.debugView.pos.setXY(x*cellWidth,y*cellHeight);
+            x++;
+            if (x===this.numOfCellsX) {
+                x = 0;
+                y++;
+            }
+            cell.debugView.size.setWH(cellWidth,cellHeight);
+            cell.debugView.alpha = 0.1;
+            cell.debugView.fillColor = initialColor;
+            cell.debugView.passMouseEventsThrough = true;
+            //this.game.getCurrentScene().appendChild(cell.debugView);
+            this.cells.push(cell);
+        }
+    }
+
     private debugClear():void {
         this.cells.forEach(c=>{
             c.debugView.fillColor = initialColor;
@@ -70,7 +74,7 @@ export class SpatialSpace {
     }
 
     private getCellAtXY(x:number,y:number):Optional<SpatialCell> {
-        const cellX:number = ~~(x / this.cellWith);
+        const cellX:number = ~~(x / this.cellWidth);
         if (cellX>=this.numOfCellsX) return undefined;
         const cellY:number = ~~(y / this.cellHeight);
         if (cellY>=this.numOfCellsY) return undefined;
@@ -102,13 +106,13 @@ export class SpatialSpace {
                 if (y>maxY) y = maxY;
             }
             if (x===maxX) break;
-            x+=this.cellWith;
+            x+=this.cellWidth;
             if (x>maxX) x = maxX;
         }
     }
 
     public clear():void {
-        this.all.length = 0;
+        this.allBodies.length = 0;
         for (const c of this.cells) {
             c.objects.length = 0;
             c.debugView.fillColor = initialColor;
@@ -116,7 +120,7 @@ export class SpatialSpace {
     }
 
     public updateSpaceByObject(body:IRigidBody, rect:IRectJSON):void {
-        this.all.push(body);
+        this.allBodies.push(body);
         body.spacialCellsOccupied.length = 0;
         this.getCellsInRect(rect,body.spacialCellsOccupied);
         for (const c of body.spacialCellsOccupied) {

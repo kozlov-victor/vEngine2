@@ -24,6 +24,29 @@ const intersect = (a:string[],b:string[]):boolean=> {
     return false;
 };
 
+const include = (a:string[],b:string[]):boolean=> { // true if "a" contains all elements of "b"
+    if (a.length===0 || b.length===0) return false;
+    for (let i = 0, l = b.length; i < l; i++) {
+        if (a.indexOf(b[i])===-1) return false;
+    }
+    return true;
+}
+
+const groups:string[] = [];
+const getCellGroups = (cell:SpatialCell):string[]=> {
+    groups.length = 0;
+    for (const obj of cell.objects) {
+        for (const g of obj.groupNames) {
+            if (groups.indexOf(g)===-1) groups.push(g);
+        }
+    }
+    return groups;
+}
+
+const canCellBeIgnored = (modelGroupsToIgnore:string[],cellGroups:string[]):boolean=>{
+    return include(cellGroups,modelGroupsToIgnore);
+}
+
 const testedCollisionsCache = new Set();
 
 export class ArcadePhysicsSystem implements IPhysicsSystem {
@@ -31,7 +54,6 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     public static readonly gravity:Point2d = new Point2d(0,5);
     public static STICKY_THRESHOLD:number = 0.01;
 
-    public spatialSpace:SpatialSpace;
 
     constructor(private game:Game) {
     }
@@ -51,15 +73,24 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
     public nextTick(scene:Scene):void {
 
-        if (this.spatialSpace===undefined) {
-            this.spatialSpace = new SpatialSpace(this.game,32,32, scene.size.width, scene.size.height);
+        if (scene._spatialSpace===undefined) {
+            scene._spatialSpace = new SpatialSpace(this.game,32,32, scene.size.width, scene.size.height);
         }
 
         testedCollisionsCache.clear();
-        const all:ArcadeRigidBody[] = this.spatialSpace.all as ArcadeRigidBody[];
+        const all:ArcadeRigidBody[] = scene._spatialSpace.allBodies as ArcadeRigidBody[];
         for (const playerBody of all) {
             const playerBodyRect = playerBody.calcAndGetBoundRect();
+
+            // object is out of world, ignore
+            if (!playerBody.spacialCellsOccupied.length) continue;
+
             for (const c of playerBody.spacialCellsOccupied) {
+
+                //if we can ignore the whole spatial cell
+                if (canCellBeIgnored(playerBody.ignoreCollisionWithGroupNames,getCellGroups(c))) {
+                    continue;
+                }
 
                 for (const obj of c.objects) {
                     const entityBody = obj as ArcadeRigidBody;
@@ -86,7 +117,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
         }
 
-        this.spatialSpace.clear();
+        scene._spatialSpace.clear();
     }
 
 

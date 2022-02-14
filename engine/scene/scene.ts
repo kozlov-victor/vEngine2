@@ -27,6 +27,7 @@ import {MouseEventEmitterDelegate} from "@engine/delegates/eventDelegates/mouseE
 import {GamepadEventEmitterDelegate} from "@engine/delegates/eventDelegates/gamepadEventEmitterDelegate";
 import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
+import {SpatialSpace} from "@engine/physics/common/spatialSpace";
 
 export const enum SCENE_EVENTS {
     PRELOADING = 'PRELOADING',
@@ -54,6 +55,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     public lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED;
     public preloadingGameObject!:RenderableModel;
     public readonly camera:Camera = new Camera(this.game,this);
+    public _spatialSpace:SpatialSpace;
 
 
     public readonly keyboardEventHandler:KeyboardEventEmitterDelegate = new KeyboardEventEmitterDelegate(this.game);
