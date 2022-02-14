@@ -8,11 +8,12 @@ import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ICloneable, Optional} from "@engine/core/declarations";
+import {ICloneable, Int, Optional} from "@engine/core/declarations";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {SpatialCell} from "@engine/physics/common/spatialSpace";
+import {CollisionGroup} from "@engine/physics/arcade/collisionGroup";
 
 export const enum ARCADE_RIGID_BODY_TYPE {
     // Kinematic entities are not affected by gravity, and
@@ -64,8 +65,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public readonly type:'ArcadeRigidBody';
     public readonly velocity:Point2d = new Point2d();
     public readonly acceleration:Point2d = new Point2d();
-    public readonly groupNames:string[] = [];
-    public readonly ignoreCollisionWithGroupNames:string[] = [];
+    public groupNames:Int = 0 as Int;
+    public ignoreCollisionWithGroupNames:Int = 0 as Int;
     public readonly spacialCellsOccupied:SpatialCell[] = [];
 
     public readonly collisionEventHandler:EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody> = new EventEmitterDelegate(this.game);
@@ -191,14 +192,18 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
 
     public onCollidedWithGroup(groupName:string, callBack: (arg:ArcadeRigidBody)=>void): (arg:ArcadeRigidBody)=>void {
         return this.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED,e=>{
-            if (e.groupNames.indexOf(groupName)>-1) {
+            const groupNameMask = CollisionGroup.getBitMaskByName(groupName);
+            if (groupNameMask===undefined) return;
+            if ((e.groupNames & groupNameMask)>0) {
                 callBack(e);
             }
         });
     }
     public onOverlappedWithGroup(groupName:string, callBack: (arg:ArcadeRigidBody)=>void): (arg:ArcadeRigidBody)=>void {
         return this.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED,e=>{
-            if (e.groupNames.indexOf(groupName)>-1) {
+            const groupNameMask = CollisionGroup.getBitMaskByName(groupName);
+            if (groupNameMask===undefined) return;
+            if ((e.groupNames & groupNameMask)>0) {
                 callBack(e);
             }
         });
@@ -210,8 +215,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         body.acceleration.set(this.acceleration);
         body._restitution = this._restitution;
         body._rect = this._rect.clone();
-        body.groupNames.push(...this.groupNames);
-        body.ignoreCollisionWithGroupNames.push(...this.ignoreCollisionWithGroupNames);
+        body.groupNames = this.groupNames;
+        body.ignoreCollisionWithGroupNames = this.ignoreCollisionWithGroupNames;
         body.updateBounds(this._model);
     }
 

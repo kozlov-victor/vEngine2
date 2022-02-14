@@ -18,8 +18,8 @@ export class Burster {
             type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
             debug: true,
             rect: new Rect(0,0,2,2),
+            groupNames: [Burster.groupName]
         });
-        body.groupNames.push(Burster.groupName);
         //body.ignoreCollisionWithGroupNames.push('entity');
         particle.setRigidBody(body);
 

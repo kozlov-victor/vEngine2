@@ -6,6 +6,8 @@ import {MathEx} from "@engine/misc/mathEx";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {Scene} from "@engine/scene/scene";
 import {SpatialCell, SpatialSpace} from "@engine/physics/common/spatialSpace";
+import {CollisionGroup} from "@engine/physics/arcade/collisionGroup";
+import {Int} from "@engine/core/declarations";
 
 export interface ICreateRigidBodyParams {
     type?: ARCADE_RIGID_BODY_TYPE;
@@ -16,34 +18,24 @@ export interface ICreateRigidBodyParams {
     ignoreCollisionWithGroupNames?:string[];
 }
 
-const intersect = (a:string[],b:string[]):boolean=> {
-    if (a.length===0 || b.length===0) return false;
-    for (let i = 0, l = a.length; i < l; i++) {
-        if (b.indexOf(a[i])>-1) return true;
-    }
-    return false;
+const intersect = (a:Int,b:Int):boolean=> {
+    return ((a as number) & (b as number))>0;
 };
 
-const include = (a:string[],b:string[]):boolean=> { // true if "a" contains all elements of "b"
-    if (a.length===0 || b.length===0) return false;
-    for (let i = 0, l = b.length; i < l; i++) {
-        if (a.indexOf(b[i])===-1) return false;
-    }
-    return true;
+const include = (a:Int,b:Int):boolean=> { // true if "a" contains all elements of "b"
+    if (a===0 || b===0) return false;
+    return (((a as Int) | (b as Int)) as Int)===a;
 }
 
-const groups:string[] = [];
-const getCellGroups = (cell:SpatialCell):string[]=> {
-    groups.length = 0;
+const getCellGroups = (cell:SpatialCell):Int=> {
+    let result = 0;
     for (const obj of cell.objects) {
-        for (const g of obj.groupNames) {
-            if (groups.indexOf(g)===-1) groups.push(g);
-        }
+        result|=obj.groupNames;
     }
-    return groups;
+    return result as Int;
 }
 
-const canCellBeIgnored = (modelGroupsToIgnore:string[],cellGroups:string[]):boolean=>{
+const canCellBeIgnored = (modelGroupsToIgnore:Int,cellGroups:Int):boolean=>{
     return include(cellGroups,modelGroupsToIgnore);
 }
 
@@ -65,8 +57,18 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         body._restitution = params?.restitution??body._restitution;
         if (params?.rect!==undefined) body._rect = params.rect.clone();
         if (params?.debug!==undefined) body.debug = params.debug;
-        if (params?.groupNames) body.groupNames.push(...params.groupNames);
-        if (params?.ignoreCollisionWithGroupNames) body.ignoreCollisionWithGroupNames.push(...params.ignoreCollisionWithGroupNames);
+        if (params?.groupNames) {
+            params.groupNames.forEach(g=>{
+                const mask = CollisionGroup.createGroupBitMaskByName(g);
+                body.groupNames = ((body.groupNames as number) | (mask as number)) as Int;
+            });
+        }
+        if (params?.ignoreCollisionWithGroupNames) {
+            params.ignoreCollisionWithGroupNames.forEach(g=>{
+                const mask = CollisionGroup.createGroupBitMaskByName(g);
+                body.ignoreCollisionWithGroupNames = ((body.ignoreCollisionWithGroupNames as number) | (mask as number)) as Int;
+            });
+        }
 
         return body as unknown as ArcadeRigidBody;
     }
