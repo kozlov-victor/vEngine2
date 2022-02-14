@@ -44,13 +44,15 @@ export class MainScene extends Scene {
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.emitAuto = false;
+        ps.maxParticlesInCache = 1000;
         ps.addParticlePrefab(particle);
-        ps.emissionRadius = 5;
 
-        ps.numOfParticlesToEmit = {from:5,to:20};
-        ps.particleLiveTime = {from:2000,to:10000};
-        ps.particleVelocity = {from: 50, to: 100};
-        ps.particleAngle = {from:0,to:2*Math.PI};
+        ps.emissionRadius = 5;
+        ps.numOfParticlesToEmit = { from: 5, to: 20 };
+        ps.particleLiveTime = { from: 2000, to: 10000 };
+        ps.particleVelocity = { from: 50, to: 100 };
+        ps.particleAngle = { from: 0, to: 2 * Math.PI };
+
         this.appendChild(ps);
         ps.onEmitParticle(p=>{
             const ptcl = p as Rectangle;
@@ -60,7 +62,6 @@ export class MainScene extends Scene {
                 ptcl.fillColor.setFrom(ColorFactory.fromCSS(`#ce0000`));
             }
         });
-        console.log(createRange({from:-128,to:127}).join('|'))
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click,(e)=>{
             ps.emissionPosition.setXY(e.screenX,e.screenY);

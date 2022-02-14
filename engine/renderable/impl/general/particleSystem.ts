@@ -27,6 +27,18 @@ interface IParticleHolder {
     active:boolean;
 }
 
+const getMin = <T>(arr:T[],predicate:(item:T)=>number):T=>{
+    let min = predicate(arr[0]);
+    let minItem:T = arr[0];
+    for (let i=1;i<arr.length;i++) {
+        const currMin = predicate(arr[i]);
+        if (currMin<min) {
+            min = currMin;
+            minItem = arr[i];
+        }
+    }
+    return minItem;
+}
 
 export class ParticleSystem extends SimpleGameObjectContainer {
 
@@ -40,6 +52,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     public particleLiveTime:IParticlePropertyDesc = {from:100,to:1000};
     public emissionRadius:number = 0;
     public emissionPosition:Point2d = new Point2d();
+    public maxParticlesInCache:Optional<number>;
 
     private _particles:IParticleHolder[] = [];
     private _prototypes:RenderableCloneable[] = [];
@@ -102,14 +115,22 @@ export class ParticleSystem extends SimpleGameObjectContainer {
 
         const num:number = rnd(this.numOfParticlesToEmit);
         for (let i:number = 0;i<num;i++) {
+            let append = true;
             let particle:RenderableCloneable;
             let holder:Optional<IParticleHolder> =
                 this._particles.find(it=>!it.active);
             if (holder===undefined) {
-                const particleProto:RenderableCloneable = this._prototypes[MathEx.randomInt(0,this._prototypes.length-1)];
-                particle  = particleProto.clone();
-                holder = {particle,lifeTime:0,createdTime:0,active:true};
-                this._particles.push(holder);
+                if (this.maxParticlesInCache && this._particles.length>=this.maxParticlesInCache) {
+                    holder = getMin(this._particles,item=>item.createdTime);
+                    holder.active = true;
+                    particle = holder.particle;
+                    append = false;
+                } else {
+                    const particleProto:RenderableCloneable = this._prototypes[MathEx.randomInt(0,this._prototypes.length-1)];
+                    particle  = particleProto.clone();
+                    holder = {particle,lifeTime:0,createdTime:0,active:true};
+                    this._particles.push(holder);
+                }
             } else {
                 particle = holder.particle;
             }
@@ -128,7 +149,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
             holder.active = true;
 
             this._onEmitParticle(particle);
-            parent.appendChild(particle);
+            if (append) parent.appendChild(particle);
         }
 
     }
