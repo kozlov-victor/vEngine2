@@ -27,18 +27,6 @@ const include = (a:Int,b:Int):boolean=> { // true if "a" contains all elements o
     return (((a as Int) | (b as Int)) as Int)===a;
 }
 
-const getCellGroups = (cell:SpatialCell):Int=> {
-    let result = 0;
-    for (const obj of cell.objects) {
-        result|=obj.groupNames;
-    }
-    return result as Int;
-}
-
-const canCellBeIgnored = (modelGroupsToIgnore:Int,cellGroups:Int):boolean=>{
-    return include(cellGroups,modelGroupsToIgnore);
-}
-
 const testedCollisionsCache = new Set();
 
 export class ArcadePhysicsSystem implements IPhysicsSystem {
@@ -81,16 +69,17 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
         testedCollisionsCache.clear();
         const all:ArcadeRigidBody[] = scene._spatialSpace.allBodies as ArcadeRigidBody[];
-        for (const playerBody of all) {
+        for (let i=0,max=all.length;i<max;i++) {
+            const playerBody = all[i];
             const playerBodyRect = playerBody.calcAndGetBoundRect();
 
             // object is out of world, ignore
-            if (!playerBody.spacialCellsOccupied.length) continue;
+            if (playerBody.spacialCellsOccupied.length===0) continue;
 
             for (const c of playerBody.spacialCellsOccupied) {
 
                 //if we can ignore the whole spatial cell
-                if (canCellBeIgnored(playerBody.ignoreCollisionWithGroupNames,getCellGroups(c))) {
+                if (include(c.groupNames,playerBody.ignoreCollisionWithGroupNames)) {
                     continue;
                 }
 
@@ -99,7 +88,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                     if (entityBody===playerBody) continue;
                     const abKey = `${playerBody.id}_${entityBody.id}`;
                     const baKey = `${entityBody.id}_${playerBody.id}`;
-                    if (testedCollisionsCache.has(abKey) || testedCollisionsCache.has(baKey)) {
+                    if (testedCollisionsCache.has(baKey) || testedCollisionsCache.has(abKey)) {
                         continue;
                     }
                     testedCollisionsCache.add(abKey);

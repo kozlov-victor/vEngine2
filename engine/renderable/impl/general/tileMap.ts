@@ -8,6 +8,19 @@ import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
 import {ITexture} from "@engine/renderer/common/texture";
 
+export interface ITiledJSON {
+    width: number,
+    height: number,
+    tilesets: {
+        "tileheight":number,
+        "tilewidth":number,
+    }[],
+    layers: {
+        name: string,
+        type: 'objectgroup'|'tilelayer',
+        data: number[],
+    }[]
+}
 
 export class TileMap extends RenderableModelWithTexture {
 
@@ -41,7 +54,22 @@ export class TileMap extends RenderableModelWithTexture {
         this.setTexture(texture);
     }
 
-    public fromTiledJSON(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number): void{
+    public fromData(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number): void{
+        if (DEBUG) {
+            if (!source?.length) {
+                throw new DebugError(`can not create tileMap: wrong "source" parameter`);
+            }
+            if (!mapWidth) {
+                throw new DebugError(`can not create tileMap: wrong "mapWidth" parameter: ${mapWidth}`);
+            }
+            if (!tileWidth) {
+                throw new DebugError(`can not create tileMap: wrong "tileWidth" parameter: ${tileWidth}`);
+            }
+            if (!tileHeight) {
+                throw new DebugError(`can not create tileMap: wrong "tileHeight" parameter: ${tileHeight}`);
+            }
+        }
+
         if (!mapHeight) mapHeight = source.length / mapWidth;
         this._data = new Array<number[]>(mapHeight);
         let cnt:number = 0;
@@ -68,6 +96,27 @@ export class TileMap extends RenderableModelWithTexture {
                 throw new DebugError(`Incorrect mapWidth/mapHeight provided. Expected ${expected} tiles, but ${found} found (${mapWidth}*${mapHeight}=${mapWidth*mapHeight})`);
             }
         }
+    }
+
+    public fromTiledJSON(map:ITiledJSON):void {
+        const tileMapLayer = map.layers.find(it=>it.type==='tilelayer')!;
+
+        if (DEBUG) {
+            if (!tileMapLayer) {
+                throw new DebugError('no layer with type "tilelayer"');
+            }
+            if (!map.tilesets.length) {
+                throw new DebugError(`tileSet is not provided`);
+            }
+        }
+
+        const source = tileMapLayer.data;
+        const mapWidth = map.width;
+        const mapHeight = map.height;
+        const tileWidth = map.tilesets[0].tilewidth;
+        const tileHeight = map.tilesets[0].tileheight;
+
+        this.fromData(source,mapWidth,mapHeight,tileWidth,tileHeight);
     }
 
     public override revalidate(): void{
@@ -105,6 +154,7 @@ export class TileMap extends RenderableModelWithTexture {
             return;
         }
 
+        this._drawingSurface.clear();
         for (let y:number=0;y<this._numOfTilesInScreenByY;y++) {
             const currTileByY:number = this._drawInfo.firstTileToDrawByY + y;
             if (currTileByY<0) continue;
@@ -114,7 +164,9 @@ export class TileMap extends RenderableModelWithTexture {
                 if (currTileByX<0) continue;
                 if (currTileByX>this._numOfTilesInMapByX-1) continue;
 
-                const tileVal:number =this._data[currTileByY][currTileByX];
+                let tileVal:number =this._data[currTileByY][currTileByX];
+                if (tileVal===0) continue;
+                tileVal-=1;
                 this._cellImage.getSrcRect().setXY(this.getFramePosX(tileVal),this.getFramePosY(tileVal));
                 this._cellImage.pos.setXY(x * this._tileWidth, y * this._tileHeight);
                 this._drawingSurface.drawModel(this._cellImage);

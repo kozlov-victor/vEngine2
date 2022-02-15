@@ -1,7 +1,7 @@
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Game} from "@engine/core/game";
 import {IRectJSON} from "@engine/geometry/rect";
-import {Optional} from "@engine/core/declarations";
+import {Int, Optional} from "@engine/core/declarations";
 import {Color} from "@engine/renderer/common/color";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 
@@ -13,6 +13,7 @@ export class SpatialCell {
     public readonly id = cnt++;
     public debugView:Rectangle;
     public objects:IRigidBody[] = [];
+    public groupNames:Int = 0 as Int;
 
 }
 
@@ -27,19 +28,6 @@ export class SpatialSpace {
 
     constructor(private game:Game, private cellWidth:number, private cellHeight:number, private spaceWidth:number, private spaceHeight:number) {
         this.rebuild(cellWidth,cellHeight,spaceWidth,spaceHeight);
-        // const debugRect = new Rectangle(game);
-        // debugRect.passMouseEventsThrough = true;
-        // debugRect.alpha = 0.6;
-        // debugRect.size.setWH(200,100);
-        // game.getCurrentScene().appendChild(debugRect);
-        // game.getCurrentScene().mouseEventHandler.on(MOUSE_EVENTS.mouseMove, e=>{
-        //     this.debugClear();
-        //     debugRect.pos.setXY(e.sceneX,e.sceneY);
-        //     const cells = this.getCellsInRect({x:e.sceneX,y:e.sceneY,width:200,height:100});
-        //     cells.forEach(c=>{
-        //         c.debugView.fillColor = activeColor;
-        //     });
-        // });
     }
 
     public rebuild(cellWidth:number, cellHeight:number, spaceWidth:number, spaceHeight:number):void {
@@ -115,6 +103,7 @@ export class SpatialSpace {
         this.allBodies.length = 0;
         for (const c of this.cells) {
             c.objects.length = 0;
+            c.groupNames = 0 as Int;
             c.debugView.fillColor = initialColor;
         }
     }
@@ -125,6 +114,7 @@ export class SpatialSpace {
         this.getCellsInRect(rect,body.spacialCellsOccupied);
         for (const c of body.spacialCellsOccupied) {
             c.objects.push(body);
+            (c.groupNames as number)|=body.groupNames;
             c.debugView.fillColor = activeColor;
         }
     }
