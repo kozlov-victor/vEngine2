@@ -113,14 +113,10 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         }
     }
 
-    public updateBounds(model:RenderableModel):void {
+    public setBoundsAndObserveModel(model:RenderableModel):void {
         model.revalidate();
         this._model = model;
-        this._pos = model.pos;
-        this._oldPos = this._pos.clone();
-        if (!this._rect) this._rect = new Rect(0,0,model.size.width,model.size.height);
-        this._halfSize.width = this._rect.width/2;
-        this._halfSize.height = this._rect.height/2;
+        this.setBounds(model.pos,model.size);
         if (this._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) {
             let oldX:Optional<number>;
             this._pos.observe(()=>{
@@ -129,6 +125,18 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
                 oldX = this._pos.x;
             });
         }
+    }
+
+    public setModel(model:RenderableModel):void {
+        this._model = model;
+    }
+
+    public setBounds(pos:Point2d, size:Size):void {
+        this._pos = pos;
+        this._oldPos = this._pos.clone();
+        if (!this._rect) this._rect = new Rect(0,0,size.width,size.height);
+        this._halfSize.width = this._rect.width/2;
+        this._halfSize.height = this._rect.height/2;
     }
 
     // Getters for the mid point of the rect
@@ -217,7 +225,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         body._rect = this._rect.clone();
         body.groupNames = this.groupNames;
         body.ignoreCollisionWithGroupNames = this.ignoreCollisionWithGroupNames;
-        body.updateBounds(this._model);
+        body.setBoundsAndObserveModel(this._model);
     }
 
 }

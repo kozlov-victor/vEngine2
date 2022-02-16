@@ -5,7 +5,7 @@ import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@
 import {MathEx} from "@engine/misc/mathEx";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {Scene} from "@engine/scene/scene";
-import {SpatialCell, SpatialSpace} from "@engine/physics/common/spatialSpace";
+import {SpatialSpace} from "@engine/physics/common/spatialSpace";
 import {CollisionGroup} from "@engine/physics/arcade/collisionGroup";
 import {Int} from "@engine/core/declarations";
 
@@ -28,6 +28,9 @@ const include = (a:Int,b:Int):boolean=> { // true if "a" contains all elements o
 }
 
 const testedCollisionsCache = new Set();
+
+const SKIP_EACH_N_FRAME_IF_CAN = 5 as const;
+let frameCnt = -1;
 
 export class ArcadePhysicsSystem implements IPhysicsSystem {
 
@@ -66,11 +69,21 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         if (scene._spatialSpace===undefined) {
             scene._spatialSpace = new SpatialSpace(this.game,32,32, scene.size.width, scene.size.height);
         }
+        frameCnt++;
+        if (frameCnt===SKIP_EACH_N_FRAME_IF_CAN) frameCnt=-1;
 
         testedCollisionsCache.clear();
         const all:ArcadeRigidBody[] = scene._spatialSpace.allBodies as ArcadeRigidBody[];
         for (let i=0,max=all.length;i<max;i++) {
             const playerBody = all[i];
+
+            if (
+                playerBody._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC &&
+                playerBody.velocity.x<=5 &&
+                playerBody.velocity.y<=5 &&
+                frameCnt===-1
+            ) continue;
+
             const playerBodyRect = playerBody.calcAndGetBoundRect();
 
             // object is out of world, ignore

@@ -7,6 +7,12 @@ import {Optional} from "@engine/core/declarations";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
 import {ITexture} from "@engine/renderer/common/texture";
+import {TileMapRigidBodyDelegate} from "@engine/physics/arcade/tileMapRigidBodyDelegate";
+import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
+import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
+import {Rect} from "@engine/geometry/rect";
+import {IRigidBody} from "@engine/physics/common/interfaces";
+import {Point2d} from "@engine/geometry/point2d";
 
 export interface ITiledJSON {
     width: number,
@@ -20,6 +26,15 @@ export interface ITiledJSON {
         type: 'objectgroup'|'tilelayer',
         data: number[],
     }[]
+}
+
+export interface ICollisionInfo {
+    useCollision:boolean,
+    collideWithTiles:number[]|'all',
+    exceptCollisionTiles?:number[],
+    groupNames?: string[],
+    restitution?:number,
+    ignoreCollisionsWithGroupNames?:string[],
 }
 
 export class TileMap extends RenderableModelWithTexture {
@@ -49,12 +64,29 @@ export class TileMap extends RenderableModelWithTexture {
     private _cellImage:Image;
     private _drawingSurface:DrawingSurface;
 
+    private _rigidBodyDelegate: TileMapRigidBodyDelegate;
+
+    private static _isTileCollideable(tileId:number,collisionInfo:ICollisionInfo) {
+        let result:boolean;
+        if (typeof collisionInfo.collideWithTiles ==='string') {
+            result = true;
+        } else {
+            result = collisionInfo.collideWithTiles.indexOf(tileId)>-1;
+        }
+        if (collisionInfo.exceptCollisionTiles!==undefined) {
+            if (result) {
+                result = collisionInfo.exceptCollisionTiles.indexOf(tileId)===-1;
+            }
+        }
+        return result;
+    }
+
     constructor(game:Game,texture:ITexture){
         super(game);
         this.setTexture(texture);
     }
 
-    public fromData(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number): void{
+    public fromData(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number,collisionInfo:ICollisionInfo = {useCollision:false,collideWithTiles:[]}): void{
         if (DEBUG) {
             if (!source?.length) {
                 throw new DebugError(`can not create tileMap: wrong "source" parameter`);
@@ -96,9 +128,10 @@ export class TileMap extends RenderableModelWithTexture {
                 throw new DebugError(`Incorrect mapWidth/mapHeight provided. Expected ${expected} tiles, but ${found} found (${mapWidth}*${mapHeight}=${mapWidth*mapHeight})`);
             }
         }
+        this.initCollisions(collisionInfo);
     }
 
-    public fromTiledJSON(map:ITiledJSON):void {
+    public fromTiledJSON(map:ITiledJSON,collisionInfo?:ICollisionInfo):void {
         const tileMapLayer = map.layers.find(it=>it.type==='tilelayer')!;
 
         if (DEBUG) {
@@ -116,8 +149,35 @@ export class TileMap extends RenderableModelWithTexture {
         const tileWidth = map.tilesets[0].tilewidth;
         const tileHeight = map.tilesets[0].tileheight;
 
-        this.fromData(source,mapWidth,mapHeight,tileWidth,tileHeight);
+        this.fromData(source,mapWidth,mapHeight,tileWidth,tileHeight,collisionInfo);
     }
+
+    private initCollisions(collisionInfo:ICollisionInfo):void {
+        if (!collisionInfo.useCollision) return;
+        const rigidBodies:IRigidBody[] = [];
+        for (let y:number=0;y<this._numOfTilesInMapByY;y++) {
+            for (let x:number=0;x<this._numOfTilesInMapByX;x++) {
+                const tileVal:number =this._data[y][x];
+                if (tileVal>0 && TileMap._isTileCollideable(tileVal,collisionInfo)) {
+                    const rigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
+                        type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
+                        rect: new Rect(0,0,this._tileWidth,this._tileHeight),
+                        groupNames: collisionInfo.groupNames,
+                        ignoreCollisionWithGroupNames: collisionInfo.ignoreCollisionsWithGroupNames,
+                        restitution: collisionInfo.restitution,
+                    });
+                    rigidBody.setModel(this);
+                    rigidBody.setBounds(
+                        new Point2d(x * this._tileWidth, y * this._tileHeight),
+                        new Size(this._tileWidth,this._tileHeight)
+                    );
+                    rigidBodies.push(rigidBody);
+                }
+            }
+        }
+        this._rigidBodyDelegate = new TileMapRigidBodyDelegate(rigidBodies);
+    }
+
 
     public override revalidate(): void{
 
@@ -143,6 +203,7 @@ export class TileMap extends RenderableModelWithTexture {
 
 
     public override update(): void {
+        if (this._rigidBodyDelegate!==undefined) this._rigidBodyDelegate.nextTick();
         this.prepareDrawableInfo();
         super.update();
     }
