@@ -5,7 +5,8 @@ const ts = require("typescript");
 
 const decoratorNamesToProcess = [
     'Texture', 'Image', 'Sound',
-    'CubeTexture', 'Text', 'JSON',
+    'CubeTexture', 'Text',
+    'JSON', 'XML', 'YAML',
     'FontFromCssDescription', 'FontFromAtlas','FontFromAtlasUrl',
     'Binary',
 ];

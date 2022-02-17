@@ -6,6 +6,8 @@ import {IXmlNode, XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import ICssFontParameters = FontTypes.ICssFontParameters;
 import {IParser} from "@engine/misc/parsers/iParser";
+import type {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
+import type {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 
 
 export const Resource = {
@@ -40,6 +42,18 @@ export const Resource = {
         };
     },
     JSON: (src:string|IURLRequest)=> {
+        return (target: Scene|ResourceAutoHolder, fieldName: string):void => {
+            // stub for precompiler only
+            throw new DebugError(`something wrong with precompiler for Text decorator`);
+        };
+    },
+    XML: (xmlParserClass: typeof XmlParser,req: string|IURLRequest)=> {
+        return (target: Scene|ResourceAutoHolder, fieldName: string):void => {
+            // stub for precompiler only
+            throw new DebugError(`something wrong with precompiler for Text decorator`);
+        };
+    },
+    YAML: (yamlParserClass: typeof YamlParser,req: string|IURLRequest)=> {
         return (target: Scene|ResourceAutoHolder, fieldName: string):void => {
             // stub for precompiler only
             throw new DebugError(`something wrong with precompiler for Text decorator`);

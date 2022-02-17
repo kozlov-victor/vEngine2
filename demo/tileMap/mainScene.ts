@@ -7,6 +7,8 @@ import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
+import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 
 export class MainScene extends Scene {
 
@@ -44,7 +46,7 @@ export class MainScene extends Scene {
             ]
 
         const tileMap:TileMap = new TileMap(this.game,this.tilesTexture);
-        tileMap.fromData(data,30,undefined,32,32);
+        tileMap.fromData(data,30,undefined,32,32, {useCollision:true,collideWithTiles:[10]});
         this.tileMap = tileMap;
 
         this.appendChild(this.tileMap);
@@ -52,28 +54,34 @@ export class MainScene extends Scene {
         this.camera.followTo(this.rect);
 
 
-        const v:number = 1;
+        const v:number = 50;
         //this.game.camera.pos.setXY(0.5);
         this.rect.pos.setY(120);
+        this.rect.transformPoint.setToCenter();
+        this.rect.setRigidBody(this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
+            type: ARCADE_RIGID_BODY_TYPE.DYNAMIC
+        }));
 
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
+            const body = this.rect.getRigidBody<ArcadeRigidBody>()!;
             switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
-                    this.rect.pos.addX(-v);
+                    body.velocity.setX(-v);
                     break;
                 case KEYBOARD_KEY.RIGHT:
-                    this.rect.pos.addX(v);
+                    body.velocity.setX(v);
                     break;
                 case KEYBOARD_KEY.UP:
-                    this.rect.pos.addY(-v);
+                    body.velocity.setY(-v);
                     break;
                 case KEYBOARD_KEY.DOWN:
-                    this.rect.pos.addY(v);
-                    break;
-                case KEYBOARD_KEY.R:
-                    this.rect.angle+=0.1;
+                    body.velocity.setY(v);
                     break;
             }
+        });
+        this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased, (e:IKeyBoardEvent)=>{
+            const body = this.rect.getRigidBody<ArcadeRigidBody>()!;
+            body.velocity.setXY(0);
         });
 
     }

@@ -7,12 +7,25 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Rect} from "@engine/geometry/rect";
+import {IRectJSON, Rect} from "@engine/geometry/rect";
+import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
+import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAnimation";
+
+interface IUnityMeta {
+    TextureImporter: {
+        spriteSheet: {
+            sprites: {
+                name:string,
+                rect:IRectJSON
+            }[]
+        }
+    }
+}
 
 export class MainScene extends Scene {
 
@@ -20,41 +33,69 @@ export class MainScene extends Scene {
     @Resource.Texture('./tileMap2/tiles2.png') private tilesTexture:ITexture;
     @Resource.JSON('./tileMap2/level.json') private levelData:ITiledJSON;
 
+    @Resource.Texture('./unityAssets/textures/Ninja Frog/Run (32x32).png') private heroTexture:ITexture;
+    @Resource.YAML(YamlParser,'./unityAssets/textures/Ninja Frog/Run (32x32).png.meta') private heroAnimationMeta:IUnityMeta;
+
 
     public override onReady():void {
 
         const tileMap:TileMap = new TileMap(this.game,this.tilesTexture);
         tileMap.fromTiledJSON(this.levelData,{useCollision:true,collideWithTiles:'all'});
 
-        const rect = new Rectangle(this.game);
-        this.appendChild(tileMap);
-        this.appendChild(rect);
-        this.camera.followTo(rect);
+        const hero = new AnimatedImage(this.game,this.heroTexture);
 
-        rect.pos.setXY(100,120);
-        rect.size.setWH(50);
-        rect.transformPoint.setToCenter();
+        const animationName = 'Run (32x32)';
+        const frames = this.heroAnimationMeta.TextureImporter.spriteSheet.sprites.filter(it=>it.name.indexOf(animationName)===0).map(it=>it.rect);
+        if (frames.length===0) {
+            frames.push({
+                x:0,y:0,
+                width: this.heroTexture.size.width,
+                height: this.heroTexture.size.height,
+            })
+        }
+        const anim: AtlasFrameAnimation = new AtlasFrameAnimation(this.game,{
+            name: 'run',
+            frames,
+            isRepeating: true,
+            duration: 600,
+        });
+        hero.addFrameAnimation(anim);
+
+        this.appendChild(tileMap);
+        this.appendChild(hero);
+        this.camera.followTo(hero);
+
+        hero.pos.setXY(100,120);
+        hero.size.setWH(32);
+        hero.scale.setXY(3);
+        hero.transformPoint.setToCenter();
 
         const phys = this.game.getPhysicsSystem<ArcadePhysicsSystem>();
+        hero.setRigidBody(phys.createRigidBody({
+            type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
+            ignoreCollisionWithGroupNames:['particles'],
+            rect: new Rect(0,0,30,60),
+        }));
 
-        rect.setRigidBody(phys.createRigidBody({type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,ignoreCollisionWithGroupNames:['particles']}));
 
-        this.listenToKeys(rect,rect.getRigidBody<ArcadeRigidBody>()!);
+        this.listenToKeys(hero,hero.getRigidBody<ArcadeRigidBody>()!);
         this.initParticleSystem();
     }
 
-    private listenToKeys(model:RenderableModel,body:ArcadeRigidBody):void {
+    private listenToKeys(model:AnimatedImage,body:ArcadeRigidBody):void {
         const velocity = 300;
-        const jumpVelocity = 300;
-        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, e=>{
+        const jumpVelocity = 800;
+        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
                     body.velocity.x = -Math.abs(velocity);
-                    model.scale.x = -1;
+                    model.scale.x = -Math.abs(model.scale.x);
+                    model.playFrameAnimation('run');
                     break;
                 case KEYBOARD_KEY.RIGHT:
                     body.velocity.x = Math.abs(velocity);
-                    model.scale.x = -1;
+                    model.scale.x = Math.abs(model.scale.x);
+                    model.playFrameAnimation('run');
                     break;
                 case KEYBOARD_KEY.SPACE:
                     if (model.getRigidBody<ArcadeRigidBody>()!.collisionFlags.bottom) {
@@ -69,6 +110,7 @@ export class MainScene extends Scene {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
                     body.velocity.x = 0;
+                    model.stopFrameAnimation();
                     break;
             }
         });
