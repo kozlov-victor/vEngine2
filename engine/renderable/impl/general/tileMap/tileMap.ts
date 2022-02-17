@@ -13,6 +13,7 @@ import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
 import {Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {Point2d} from "@engine/geometry/point2d";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 export interface ITiledJSON {
     width: number,
@@ -35,6 +36,7 @@ export interface ICollisionInfo {
     groupNames?: string[],
     restitution?:number,
     ignoreCollisionsWithGroupNames?:string[],
+    debug?:boolean,
 }
 
 export class TileMap extends RenderableModelWithTexture {
@@ -172,6 +174,14 @@ export class TileMap extends RenderableModelWithTexture {
                         new Size(this._tileWidth,this._tileHeight)
                     );
                     rigidBodies.push(rigidBody);
+                    if (collisionInfo.debug) {
+                        const debugRect = new Rectangle(this.game);
+                        debugRect.lineWidth = 0;
+                        debugRect.fillColor.setRGB(0,100,0);
+                        debugRect.alpha = 0.4;
+                        debugRect.setPosAndSize(x * this._tileWidth, y * this._tileHeight,this._tileWidth,this._tileHeight);
+                        this.appendChild(debugRect);
+                    }
                 }
             }
         }
@@ -197,7 +207,7 @@ export class TileMap extends RenderableModelWithTexture {
             size.setFrom(this.game.size);
             size.addWH(this._tileWidth*2,this._tileHeight*2);
             this._drawingSurface = new DrawingSurface(this.game,size);
-            this.appendChild(this._drawingSurface);
+            this.prependChild(this._drawingSurface);
         }
     }
 

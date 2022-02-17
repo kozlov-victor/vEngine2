@@ -86,10 +86,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
             const playerBodyRect = playerBody.calcAndGetBoundRect();
 
-            // object is out of world, ignore
-            if (playerBody.spacialCellsOccupied.length===0) continue;
-
-            for (const c of playerBody.spacialCellsOccupied) {
+            for (const c of playerBody.spatialCellsOccupied) {
 
                 //if we can ignore the whole spatial cell
                 if (include(c.groupNames,playerBody.ignoreCollisionWithGroupNames)) {

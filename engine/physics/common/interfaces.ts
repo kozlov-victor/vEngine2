@@ -10,7 +10,7 @@ export interface IRigidBody extends ICloneable<IRigidBody>{
     acceleration:Point2d;
     groupNames:Int;
     ignoreCollisionWithGroupNames:Int;
-    spacialCellsOccupied:SpatialCell[];
+    spatialCellsOccupied:SpatialCell[];
     setBoundsAndObserveModel(model:RenderableModel):void;
     nextTick():void;
     debugRender():void;

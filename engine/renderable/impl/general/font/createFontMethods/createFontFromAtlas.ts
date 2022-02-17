@@ -5,24 +5,29 @@ import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import ITextureWithId = FontTypes.ITextureWithId;
 import IFontContext = FontTypes.IFontContext;
 import {DebugError} from "@engine/debug/debugError";
+import {isNumber} from "@engine/misc/object";
 
-const querySelector = (doc:XmlDocument, path:string):XmlNode=>{
+const querySelector = (doc:XmlDocument, path:string, attrName:string,required:boolean = false):string=>{
     const res:XmlNode = doc.querySelector(path);
     if (DEBUG && res===undefined) {
         console.error(doc);
         throw new DebugError(`can not receive node ${path} from document`);
     }
-    return res;
+    if (res) return res.getAttribute(attrName) || '';
+    if (DEBUG && required && !res) {
+        throw new DebugError(`can not create font from atlas: node "${path}" with attribute "${attrName}" is mandatory`)
+    }
+    return '';
 };
 
 export const createFontFromAtlas = async (game:Game,texturePages:ITextureWithId[],doc:XmlDocument):Promise<Font>=>{
     // http://www.angelcode.com/products/bmfont/doc/file_format.html
-    const [up,right,down,left] = querySelector(doc,'info').getAttribute('padding').split(',').map(it=>+it || 0);
-    const [spacingHorizontal, spacingVertical] = querySelector(doc,'info').getAttribute('spacing').split(',').map(it=>+it || 0);
-    const lineHeight:number = +(querySelector(doc,'common').getAttribute('lineHeight'));
-    const base:number = +(querySelector(doc,'common').getAttribute('base') || lineHeight);
-    const fontFamily:string = querySelector(doc,'info').getAttribute('face');
-    const fontSize:number = +querySelector(doc,'info').getAttribute('size');
+    const [up,right,down,left] = querySelector(doc,'info','padding').split(',').map(it=>+it || 0);
+    const [spacingHorizontal, spacingVertical] = querySelector(doc,'info','spacing').split(',').map(it=>+it || 0);
+    const lineHeight:number = +(querySelector(doc,'common','lineHeight',true));
+    const base:number = +(querySelector(doc,'common','base') || lineHeight);
+    const fontFamily:string = querySelector(doc,'info','face',true);
+    const fontSize:number = +querySelector(doc,'info','size',true);
     const kerning:Record<string, number> = {};
     doc.getElementsByTagName('kerning').forEach(el=>{
         const first:string = String.fromCharCode(+el.getAttribute('first'));
@@ -34,8 +39,8 @@ export const createFontFromAtlas = async (game:Game,texturePages:ITextureWithId[
         fontFamily,
         fontSize,
         lineHeight,
-        padding: [up,right,down,left],
-        spacing: [spacingHorizontal, spacingVertical],
+        padding: [up || 0,right || 0,down || 0,left || 0],
+        spacing: [spacingHorizontal || 0, spacingVertical || 0],
         symbols: {},
         kerning,
         base,
@@ -46,7 +51,8 @@ export const createFontFromAtlas = async (game:Game,texturePages:ITextureWithId[
         const el:XmlNode = chars[i];
         const id:number = +(el.getAttribute('id'));
         const width:number = +(el.getAttribute('width')) || ~~(lineHeight / 3) || 16;
-        const widthAdvanced:number = +(el.getAttribute('xadvance')) || width;
+        let widthAdvanced:number = +(el.getAttribute('xadvance')) || width;
+        if (widthAdvanced>width) widthAdvanced = width; // this is feature of https://www.71squared.com/glyphdesigner, it can provide incorrect xadvance
         const height:number = +(el.getAttribute('height')) || 0.0001;
         const x:number = +(el.getAttribute('x'));
         const y:number = +(el.getAttribute('y'));

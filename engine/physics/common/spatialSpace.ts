@@ -110,9 +110,9 @@ export class SpatialSpace {
 
     public updateSpaceByObject(body:IRigidBody, rect:IRectJSON):void {
         this.allBodies.push(body);
-        body.spacialCellsOccupied.length = 0;
-        this.getCellsInRect(rect,body.spacialCellsOccupied);
-        for (const c of body.spacialCellsOccupied) {
+        body.spatialCellsOccupied.length = 0;
+        this.getCellsInRect(rect,body.spatialCellsOccupied);
+        for (const c of body.spatialCellsOccupied) {
             c.objects.push(body);
             (c.groupNames as number)|=body.groupNames;
             c.debugView.fillColor = activeColor;

@@ -67,7 +67,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public readonly acceleration:Point2d = new Point2d();
     public groupNames:Int = 0 as Int;
     public ignoreCollisionWithGroupNames:Int = 0 as Int;
-    public readonly spacialCellsOccupied:SpatialCell[] = [];
+    public readonly spatialCellsOccupied:SpatialCell[] = [];
 
     public readonly collisionEventHandler:EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody> = new EventEmitterDelegate(this.game);
 
