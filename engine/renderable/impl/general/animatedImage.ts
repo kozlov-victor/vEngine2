@@ -42,15 +42,31 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
         fa._target = this;
     }
 
-    public playFrameAnimation(fr:string|AbstractFrameAnimation<any>):void{
+    private findFrameAnimation(fr:string|AbstractFrameAnimation<any>):AbstractFrameAnimation<any> {
         let frameAnimation:AbstractFrameAnimation<any>;
         if (typeof fr==='string') {
             frameAnimation = this._frameAnimations[fr];
         } else frameAnimation = fr;
         if (DEBUG && !frameAnimation) throw new DebugError(`no such frame animation: '${fr}'`);
+        return frameAnimation;
+    }
+
+    public playFrameAnimation(fr:string|AbstractFrameAnimation<any>):void{
+        const frameAnimation = this.findFrameAnimation(fr);
         if (this._currFrameAnimation) this._currFrameAnimation.stop();
         this._currFrameAnimation = frameAnimation;
         frameAnimation.play();
+    }
+
+    public gotoAndPlay(fr:string|AbstractFrameAnimation<any>,frame:number):void{
+        const frameAnimation = this.findFrameAnimation(fr);
+        frameAnimation.gotoAndPlay(frame);
+    }
+
+    public gotoAndStop(fr:string|AbstractFrameAnimation<any>,frame:number):void{
+        const frameAnimation = this.findFrameAnimation(fr);
+        frameAnimation.gotoAndStop(frame);
+        this._currFrameAnimation = undefined;
     }
 
     public stopFrameAnimation():void {
@@ -60,6 +76,10 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
 
     public getCurrentFrameAnimation():Optional<AbstractFrameAnimation<any>>{
         return this._currFrameAnimation;
+    }
+
+    public getCurrentFrameAnimationName():Optional<string>{
+        return this._currFrameAnimation?.getName();
     }
 
 

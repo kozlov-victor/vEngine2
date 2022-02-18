@@ -22,6 +22,8 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
     protected abstract keyReleased: string;
     protected abstract keyHold: string;
 
+    public type:string;
+
     protected buffer: T[] = [];
 
     private reflectKey: { control: AbstractKeypad<any> | undefined, map: Record<number, number> | undefined } = {
@@ -35,6 +37,9 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
     }
 
     public reflectToControl(control: AbstractKeypad<any>, map: Record<number, number>): void {
+        if (DEBUG && control.type===this.type) {
+            throw new DebugError(`control ${this.type} can not be reflected to self`)
+        }
         this.reflectKey.control = control;
         this.reflectKey.map = map;
     }

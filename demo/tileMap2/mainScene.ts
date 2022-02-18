@@ -15,6 +15,8 @@ import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAnimation";
+import {CrtScreenFilter} from "@engine/renderer/webGl/filters/texture/crtScreenFilter";
+import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 
 interface IUnityMeta {
     TextureImporter: {
@@ -40,7 +42,12 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         const tileMap:TileMap = new TileMap(this.game,this.tilesTexture);
-        tileMap.fromTiledJSON(this.levelData,{useCollision:true,collideWithTiles:'all'});
+        tileMap.fromTiledJSON(this.levelData,{
+            useCollision:true,
+            collideWithTiles:'all',
+            exceptCollisionTiles: [102],
+            restitution: 0.1,
+        });
 
         const hero = new AnimatedImage(this.game,this.heroTexture);
 
@@ -69,12 +76,14 @@ export class MainScene extends Scene {
         hero.size.setWH(32);
         hero.scale.setXY(3);
         hero.transformPoint.setToCenter();
+        hero.gotoAndStop('run',4);
 
         const phys = this.game.getPhysicsSystem<ArcadePhysicsSystem>();
         hero.setRigidBody(phys.createRigidBody({
             type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
             ignoreCollisionWithGroupNames:['particles'],
             rect: new Rect(0,0,30,60),
+            restitution:0.2,
         }));
 
 
@@ -84,18 +93,18 @@ export class MainScene extends Scene {
 
     private listenToKeys(model:AnimatedImage,body:ArcadeRigidBody):void {
         const velocity = 300;
-        const jumpVelocity = 800;
-        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
+        const jumpVelocity = 500;
+        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, e=>{
             switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
-                    body.velocity.x = -Math.abs(velocity);
+                    body.velocity.x = -velocity;
                     model.scale.x = -Math.abs(model.scale.x);
-                    model.playFrameAnimation('run');
+                    if (model.getCurrentFrameAnimationName()!=='run') model.playFrameAnimation('run');
                     break;
                 case KEYBOARD_KEY.RIGHT:
-                    body.velocity.x = Math.abs(velocity);
+                    body.velocity.x = velocity;
                     model.scale.x = Math.abs(model.scale.x);
-                    model.playFrameAnimation('run');
+                    if (model.getCurrentFrameAnimationName()!=='run') model.playFrameAnimation('run');
                     break;
                 case KEYBOARD_KEY.SPACE:
                     if (model.getRigidBody<ArcadeRigidBody>()!.collisionFlags.bottom) {
@@ -110,7 +119,9 @@ export class MainScene extends Scene {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
                     body.velocity.x = 0;
-                    model.stopFrameAnimation();
+                    model.gotoAndStop('run',4);
+                    break;
+                default:
                     break;
             }
         });

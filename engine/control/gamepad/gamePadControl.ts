@@ -76,7 +76,7 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
 
     public static SENSITIVITY:number = 0.05;
 
-    public readonly type:string = 'GamePadControl';
+    public override readonly type:string = 'GamePadControl';
 
     protected keyPressed: string = GAME_PAD_EVENTS.buttonPressed;
     protected keyHold: string = GAME_PAD_EVENTS.buttonHold;
