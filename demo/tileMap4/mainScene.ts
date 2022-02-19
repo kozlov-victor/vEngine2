@@ -32,7 +32,7 @@ export class MainScene extends Scene {
         this.appendChild(this.rect);
 
         const tileMap:TileMap = new TileMap(this.game,this.tilesTexture);
-        tileMap.fromTiledJSON(this.levelData,{useCollision:true,collideWithTiles:[]});
+        tileMap.fromTiledJSON(this.levelData,{useCollision:true,collideWithTiles:[],groupNames:['tileMap']});
         this.tileMap = tileMap;
 
         this.prependChild(this.tileMap);
@@ -41,9 +41,6 @@ export class MainScene extends Scene {
         const v:number = 50;
         this.rect.pos.setY(120);
         this.rect.transformPoint.setToCenter();
-        this.rect.setRigidBody(this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
-            type: ARCADE_RIGID_BODY_TYPE.DYNAMIC
-        }));
 
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             const body = this.rect.getRigidBody<ArcadeRigidBody>()!;

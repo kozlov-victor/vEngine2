@@ -43,6 +43,8 @@ export class TileMap extends RenderableModelWithTexture {
 
     public override readonly type:string = "TileMap";
 
+    public override getRigidBody:never = undefined!;
+
     private _data:number[][] = [];
     private _tileWidth:number;
     private _tileHeight:number;
@@ -159,8 +161,8 @@ export class TileMap extends RenderableModelWithTexture {
         const rigidBodies:IRigidBody[] = [];
         for (let y:number=0;y<this._numOfTilesInMapByY;y++) {
             for (let x:number=0;x<this._numOfTilesInMapByX;x++) {
-                const tileVal:number =this._data[y][x];
-                if (tileVal>0 && TileMap._isTileCollideable(tileVal-1,collisionInfo)) {
+                const tileId:number =this._data[y][x] - 1;
+                if (tileId>0 && TileMap._isTileCollideable(tileId,collisionInfo)) {
                     const rigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
                         type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
                         rect: new Rect(0,0,this._tileWidth,this._tileHeight),
@@ -168,6 +170,7 @@ export class TileMap extends RenderableModelWithTexture {
                         ignoreCollisionWithGroupNames: collisionInfo.ignoreCollisionsWithGroupNames,
                         restitution: collisionInfo.restitution,
                     });
+                    rigidBody.addInfo = {tileId};
                     rigidBody.setModel(this);
                     rigidBody.setBounds(
                         new Point2d(x * this._tileWidth, y * this._tileHeight),

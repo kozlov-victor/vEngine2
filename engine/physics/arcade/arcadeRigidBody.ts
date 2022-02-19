@@ -74,6 +74,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public debug:boolean = false;
     public readonly id:number = cnt++;
 
+    public addInfo:Record<any, any> = {};
     public _modelType: ARCADE_RIGID_BODY_TYPE = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
     public readonly _boundRect:Rect = new Rect();
     public _restitution:number = 0.5;

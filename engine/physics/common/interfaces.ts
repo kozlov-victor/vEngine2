@@ -15,6 +15,7 @@ export interface IRigidBody extends ICloneable<IRigidBody>{
     nextTick():void;
     debugRender():void;
     getHostModel():RenderableModel;
+    addInfo:Record<any, any>;
 }
 
 export interface IPhysicsSystem {

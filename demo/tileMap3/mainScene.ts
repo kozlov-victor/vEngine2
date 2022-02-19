@@ -28,12 +28,19 @@ export class MainScene extends Scene {
         this.rect.pos.setXY(20);
         this.rect.transformPoint.setToCenter();
         this.rect.setRigidBody(this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
-            type: ARCADE_RIGID_BODY_TYPE.DYNAMIC
+            type: ARCADE_RIGID_BODY_TYPE.DYNAMIC,
         }));
         this.appendChild(this.rect);
+        this.rect.getRigidBody<ArcadeRigidBody>().onCollidedWithGroup('tileMap',e=>{
+            //
+        });
 
         const tileMap:TileMap = new TileMap(this.game,this.tilesTexture);
-        tileMap.fromTiledJSON(this.levelData,{useCollision:true,collideWithTiles:[0,10,20,30,40,50,26,27,28,56,57,58,59]});
+        tileMap.fromTiledJSON(this.levelData,{
+            useCollision:true,
+            collideWithTiles:[0,10,20,30,40,50,26,27,28,56,57,58,59],
+            groupNames:['tileMap'],
+        });
         this.tileMap = tileMap;
 
         this.prependChild(this.tileMap);
@@ -42,9 +49,6 @@ export class MainScene extends Scene {
         const v:number = 50;
         this.rect.pos.setY(120);
         this.rect.transformPoint.setToCenter();
-        this.rect.setRigidBody(this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
-            type: ARCADE_RIGID_BODY_TYPE.DYNAMIC
-        }));
 
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{
             const body = this.rect.getRigidBody<ArcadeRigidBody>()!;

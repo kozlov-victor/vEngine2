@@ -164,7 +164,7 @@ export abstract class RenderableModel
         rigidBody.setBoundsAndObserveModel(this);
     }
 
-    public getRigidBody<T extends IRigidBody>(): Optional<T> {
+    public getRigidBody<T extends IRigidBody>(): T {
         return this._rigidBody as T;
     }
 
