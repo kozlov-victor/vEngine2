@@ -3,7 +3,6 @@ import {ShapeAnimation} from "@engine/animation/shapeAnimation/shapeAnimation";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
-import {Color} from "@engine/renderer/common/color";
 import {EasingElastic} from "@engine/misc/easing/functions/elastic";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 

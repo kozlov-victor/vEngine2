@@ -5,13 +5,15 @@ import {Size} from "@engine/geometry/size";
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {IRect, Rect} from "@engine/geometry/rect";
+import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {ICloneable, Optional} from "@engine/core/declarations";
+import {ICloneable, Int, Optional} from "@engine/core/declarations";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
+import {SpatialCell} from "@engine/physics/common/spatialSpace";
+import {CollisionGroup} from "@engine/physics/arcade/collisionGroup";
 
 export const enum ARCADE_RIGID_BODY_TYPE {
     // Kinematic entities are not affected by gravity, and
@@ -54,6 +56,8 @@ class CollisionFlags implements ICollisionWith {
     }
 }
 
+let cnt = 0;
+
 export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> {
 
     // collideWorldBounds
@@ -61,13 +65,16 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public readonly type:'ArcadeRigidBody';
     public readonly velocity:Point2d = new Point2d();
     public readonly acceleration:Point2d = new Point2d();
-    public readonly groupNames:string[] = [];
-    public readonly ignoreCollisionWithGroupNames:string[] = [];
+    public groupNames:Int = 0 as Int;
+    public ignoreCollisionWithGroupNames:Int = 0 as Int;
+    public readonly spatialCellsOccupied:SpatialCell[] = [];
 
     public readonly collisionEventHandler:EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody> = new EventEmitterDelegate(this.game);
 
     public debug:boolean = false;
+    public readonly id:number = cnt++;
 
+    public addInfo:Record<any, any> = {};
     public _modelType: ARCADE_RIGID_BODY_TYPE = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
     public readonly _boundRect:Rect = new Rect();
     public _restitution:number = 0.5;
@@ -100,16 +107,17 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         }
         this._pos.x  += this.velocity.x * delta;
         this._pos.y  += this.velocity.y * delta;
+
+        const spatialSpace = this.game.getCurrentScene()._spatialSpace;
+        if (spatialSpace) {
+            spatialSpace.updateSpaceByObject(this,this.calcAndGetBoundRect());
+        }
     }
 
-    public updateBounds(model:RenderableModel):void {
+    public setBoundsAndObserveModel(model:RenderableModel):void {
         model.revalidate();
         this._model = model;
-        this._pos = model.pos;
-        this._oldPos = this._pos.clone();
-        if (!this._rect) this._rect = new Rect(0,0,model.size.width,model.size.height);
-        this._halfSize.width = this._rect.width/2;
-        this._halfSize.height = this._rect.height/2;
+        this.setBounds(model.pos,model.size);
         if (this._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) {
             let oldX:Optional<number>;
             this._pos.observe(()=>{
@@ -118,6 +126,18 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
                 oldX = this._pos.x;
             });
         }
+    }
+
+    public setModel(model:RenderableModel):void {
+        this._model = model;
+    }
+
+    public setBounds(pos:Point2d, size:Size):void {
+        this._pos = pos;
+        this._oldPos = this._pos.clone();
+        if (!this._rect) this._rect = new Rect(0,0,size.width,size.height);
+        this._halfSize.width = this._rect.width/2;
+        this._halfSize.height = this._rect.height/2;
     }
 
     // Getters for the mid point of the rect
@@ -147,7 +167,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         return this._pos.y + this._rect.y + this._rect.height;
     }
 
-    public calcAndGetBoundRect():IRect {
+    public calcAndGetBoundRect():IRectJSON {
         this._boundRect.setXYWH(
             this._pos.x + this._rect.x,
             this._pos.y + this._rect.y,
@@ -181,14 +201,18 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
 
     public onCollidedWithGroup(groupName:string, callBack: (arg:ArcadeRigidBody)=>void): (arg:ArcadeRigidBody)=>void {
         return this.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED,e=>{
-            if (e.groupNames.indexOf(groupName)>-1) {
+            const groupNameMask = CollisionGroup.getBitMaskByName(groupName);
+            if (groupNameMask===undefined) return;
+            if ((e.groupNames & groupNameMask)>0) {
                 callBack(e);
             }
         });
     }
     public onOverlappedWithGroup(groupName:string, callBack: (arg:ArcadeRigidBody)=>void): (arg:ArcadeRigidBody)=>void {
         return this.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED,e=>{
-            if (e.groupNames.indexOf(groupName)>-1) {
+            const groupNameMask = CollisionGroup.getBitMaskByName(groupName);
+            if (groupNameMask===undefined) return;
+            if ((e.groupNames & groupNameMask)>0) {
                 callBack(e);
             }
         });
@@ -200,9 +224,9 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         body.acceleration.set(this.acceleration);
         body._restitution = this._restitution;
         body._rect = this._rect.clone();
-        body.groupNames.push(...this.groupNames);
-        body.ignoreCollisionWithGroupNames.push(...this.ignoreCollisionWithGroupNames);
-        body.updateBounds(this._model);
+        body.groupNames = this.groupNames;
+        body.ignoreCollisionWithGroupNames = this.ignoreCollisionWithGroupNames;
+        body.setBoundsAndObserveModel(this._model);
     }
 
 }

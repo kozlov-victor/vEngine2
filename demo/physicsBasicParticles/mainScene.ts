@@ -8,7 +8,6 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {MathEx} from "@engine/misc/mathEx";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
-import {createRange} from "@engine/misc/object";
 
 export class MainScene extends Scene {
 
@@ -44,7 +43,7 @@ export class MainScene extends Scene {
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.emitAuto = false;
-        ps.maxParticlesInCache = 1500;
+        ps.maxParticlesInCache = 2000;
         ps.addParticlePrefab(particle);
 
         ps.emissionRadius = 5;

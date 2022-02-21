@@ -5,8 +5,9 @@ import {MainScene} from "./mainScene";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 
-const game = new Game();
+const game = new Game({width:1024,height:600});
 game.setRenderer(WebGlRenderer);
+game.getRenderer<WebGlRenderer>().setPixelPerfect(true);
 game.addControl(KeyboardControl);
 ArcadePhysicsSystem.gravity.setXY(0);
 game.setPhysicsSystem(ArcadePhysicsSystem);

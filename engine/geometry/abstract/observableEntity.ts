@@ -26,6 +26,7 @@ export abstract class ObservableEntity extends ReleaseableEntity{
     }
 
     protected triggerObservable():void {
+        if (this._onChanged.length===0) return;
         for (const fn of this._onChanged) {
             fn();
         }

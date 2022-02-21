@@ -19,6 +19,7 @@ import type {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 import {createFontFromAtlas} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromAtlas";
 import {createFontFromCssDescription} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
 import {IParser} from "@engine/misc/parsers/iParser";
+import type {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 
 namespace ResourceCache {
 
@@ -112,6 +113,12 @@ export class ResourceLoader {
         const text = await this.loadText(req,progress);
         const xmlParser = new xmlParserClass(text);
         return xmlParser.getTree();
+    }
+
+    public async loadYAML(yamlParserClass: typeof YamlParser,req: string|IURLRequest,progress?:(n:number)=>void): Promise<XmlDocument> {
+        const text = await this.loadText(req,progress);
+        const yamlParser = new yamlParserClass(text);
+        return yamlParser.getResult();
     }
 
     public async loadJSON<T>(req: string|IURLRequest,progress?:(n:number)=>void): Promise<T> {

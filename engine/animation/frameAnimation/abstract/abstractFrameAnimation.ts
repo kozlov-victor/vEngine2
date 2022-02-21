@@ -31,11 +31,12 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
     protected _isRepeating:boolean = true;
     protected _frames:T[] = [];
 
-    private _currFrame:number = -1;
+    private _currFrame:number = 0;
     private _startTime:number = 0;
     private _timeForOneFrame:number;
     private _isPlaying:boolean = false;
     private _loopReached:boolean = false;
+
 
     public readonly animationEventHandler:EventEmitterDelegate<FRAME_ANIMATION_EVENTS,void> = new EventEmitterDelegate(this.game);
 
@@ -54,7 +55,7 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
     public revalidate():void {
         if (DEBUG && !this._frames.length) throw new DebugError(`animation frames can not be empty`);
         this._timeForOneFrame = ~~(this._duration / this._frames.length);
-        this.onNextFrame(0);
+        this.onNextFrame(this._currFrame);
     }
 
     public play():this {
@@ -69,6 +70,18 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
         }
         this._isPlaying = true;
         return this;
+    }
+
+    public gotoAndPlay(frame:number):void {
+        this._currFrame = frame;
+        this.play();
+    }
+
+    public gotoAndStop(frame:number):void {
+        this._currFrame = frame;
+        this.onNextFrame(frame);
+        this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.completed);
+        this.stop();
     }
 
     public setDuration(duration:number):void {

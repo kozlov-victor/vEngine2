@@ -6,7 +6,7 @@ import {Optional} from "@engine/core/declarations";
 
 export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IControl {
 
-    public readonly type:string = 'KeyboardControl';
+    public override readonly type:string = 'KeyboardControl';
 
     protected keyPressed: string = KEYBOARD_EVENTS.keyPressed;
     protected keyHold: string = KEYBOARD_EVENTS.keyHold;

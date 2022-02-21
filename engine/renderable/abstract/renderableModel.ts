@@ -161,10 +161,10 @@ export abstract class RenderableModel
 
     public setRigidBody(rigidBody: IRigidBody): void {
         this._rigidBody = rigidBody;
-        rigidBody.updateBounds(this);
+        rigidBody.setBoundsAndObserveModel(this);
     }
 
-    public getRigidBody<T extends IRigidBody>(): Optional<T> {
+    public getRigidBody<T extends IRigidBody>(): T {
         return this._rigidBody as T;
     }
 

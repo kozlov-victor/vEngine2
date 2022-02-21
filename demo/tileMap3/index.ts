@@ -7,6 +7,7 @@ import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 
 const game = new Game();
 game.setRenderer(WebGlRenderer);
+game.getRenderer<WebGlRenderer>().setPixelPerfect(true);
 game.addControl(KeyboardControl);
 ArcadePhysicsSystem.gravity.setXY(0);
 game.setPhysicsSystem(ArcadePhysicsSystem);

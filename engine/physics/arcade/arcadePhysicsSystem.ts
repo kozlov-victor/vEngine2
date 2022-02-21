@@ -2,12 +2,12 @@ import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {IPhysicsSystem} from "@engine/physics/common/interfaces";
 import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/mathEx";
-import {Optional} from "@engine/core/declarations";
-import {Rect} from "@engine/geometry/rect";
+import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {Scene} from "@engine/scene/scene";
-import {Layer} from "@engine/scene/layer";
+import {SpatialSpace} from "@engine/physics/common/spatialSpace";
+import {CollisionGroup} from "@engine/physics/arcade/collisionGroup";
+import {Int} from "@engine/core/declarations";
 
 export interface ICreateRigidBodyParams {
     type?: ARCADE_RIGID_BODY_TYPE;
@@ -18,18 +18,25 @@ export interface ICreateRigidBodyParams {
     ignoreCollisionWithGroupNames?:string[];
 }
 
-const intersect = (a:string[],b:string[]):boolean=> {
-    if (a.length===0 || b.length===0) return false;
-    for (let i = 0; i < a.length; i++) {
-        if (b.indexOf(a[i])>-1) return true;
-    }
-    return false;
+const intersect = (a:Int,b:Int):boolean=> {
+    return ((a as number) & (b as number))>0;
 };
+
+const include = (a:Int,b:Int):boolean=> { // true if "a" contains all elements of "b"
+    if (a===0 || b===0) return false;
+    return (((a as Int) | (b as Int)) as Int)===a;
+}
+
+const testedCollisionsCache = new Set();
+
+const SKIP_EACH_N_FRAME_IF_CAN = 5 as const;
+let frameCnt = -1;
 
 export class ArcadePhysicsSystem implements IPhysicsSystem {
 
     public static readonly gravity:Point2d = new Point2d(0,5);
     public static STICKY_THRESHOLD:number = 0.01;
+
 
     constructor(private game:Game) {
     }
@@ -41,37 +48,77 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         body._restitution = params?.restitution??body._restitution;
         if (params?.rect!==undefined) body._rect = params.rect.clone();
         if (params?.debug!==undefined) body.debug = params.debug;
-        if (params?.groupNames) body.groupNames.push(...params.groupNames);
-        if (params?.ignoreCollisionWithGroupNames) body.ignoreCollisionWithGroupNames.push(...params.ignoreCollisionWithGroupNames);
+        if (params?.groupNames) {
+            params.groupNames.forEach(g=>{
+                const mask = CollisionGroup.createGroupBitMaskByName(g);
+                body.groupNames = ((body.groupNames as number) | (mask as number)) as Int;
+            });
+        }
+        if (params?.ignoreCollisionWithGroupNames) {
+            params.ignoreCollisionWithGroupNames.forEach(g=>{
+                const mask = CollisionGroup.createGroupBitMaskByName(g);
+                body.ignoreCollisionWithGroupNames = ((body.ignoreCollisionWithGroupNames as number) | (mask as number)) as Int;
+            });
+        }
 
         return body as unknown as ArcadeRigidBody;
     }
 
     public nextTick(scene:Scene):void {
-        for (let ind:number = 0, layerLength:number = scene.getLayers().length; ind < layerLength; ind++) {
-            const layer:Layer = scene.getLayers()[ind];
-            const all:RenderableModel[] = layer._children;
-            for (let i:number = 0; i < all.length; i++) {
-                const player:RenderableModel = all[i];
-                const playerBody:Optional<ArcadeRigidBody> = player.getRigidBody();
-                if (playerBody===undefined) continue;
-                for (let j:number = i + 1; j < all.length; j++) {
-                    const entity:RenderableModel = all[j];
-                    const entityBody:Optional<ArcadeRigidBody> = entity.getRigidBody();
-                    if (entityBody===undefined) continue;
-                    if (!MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) continue;
+
+        if (scene._spatialSpace===undefined) {
+            scene._spatialSpace = new SpatialSpace(this.game,32,32, scene.size.width, scene.size.height);
+        }
+        frameCnt++;
+        if (frameCnt===SKIP_EACH_N_FRAME_IF_CAN) frameCnt=-1;
+
+        testedCollisionsCache.clear();
+        const all:ArcadeRigidBody[] = scene._spatialSpace.allBodies as ArcadeRigidBody[];
+        for (let i=0,max=all.length;i<max;i++) {
+            const playerBody = all[i];
+
+            if (
+                playerBody._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC &&
+                playerBody.velocity.x<=5 &&
+                playerBody.velocity.y<=5 &&
+                frameCnt===-1
+            ) continue;
+
+            const playerBodyRect = playerBody.calcAndGetBoundRect();
+
+            for (const c of playerBody.spatialCellsOccupied) {
+
+                //if we can ignore the whole spatial cell
+                if (include(c.groupNames,playerBody.ignoreCollisionWithGroupNames)) {
+                    continue;
+                }
+
+                for (const obj of c.objects) {
+                    const entityBody = obj as ArcadeRigidBody;
+                    if (entityBody===playerBody) continue;
+                    const abKey = `${playerBody.id}_${entityBody.id}`;
+                    const baKey = `${entityBody.id}_${playerBody.id}`;
+                    if (testedCollisionsCache.has(baKey) || testedCollisionsCache.has(abKey)) {
+                        continue;
+                    }
+                    testedCollisionsCache.add(abKey);
+                    const entityBodyRect = entityBody.calcAndGetBoundRect();
+                    if (!MathEx.overlapTest(playerBodyRect,entityBodyRect)) continue;
                     if (
                         intersect(playerBody.groupNames,entityBody.ignoreCollisionWithGroupNames) ||
                         intersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
                     ) {
                         this.emitOverlapEvents(playerBody, entityBody);
                     } else {
-                        this.interpolateAndResolveCollision(playerBody, entityBody);
-                        this.interpolateAndResolveCollision(entityBody, playerBody);
+                        this.interpolateAndResolveCollision(playerBody, playerBodyRect, entityBody);
+                        this.interpolateAndResolveCollision(entityBody, entityBodyRect, playerBody);
                     }
                 }
             }
+
         }
+
+        scene._spatialSpace.clear();
     }
 
 
@@ -115,7 +162,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         }
     }
 
-    private interpolateAndResolveCollision(playerBody:ArcadeRigidBody, entityBody:ArcadeRigidBody):void {
+    private interpolateAndResolveCollision(playerBody:ArcadeRigidBody, playerBodyRect: IRectJSON, entityBody:ArcadeRigidBody):void {
         if (playerBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) return;
         let oldEntityPosX:number = entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entityBody._pos.x:entityBody._oldPos.x;
         let oldEntityPosY:number = entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entityBody._pos.y:entityBody._oldPos.y;
@@ -129,7 +176,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         let steps:number = 0;
         while (steps<=entityLengthMax) {
             entityBody._pos.setXY(oldEntityPosX,oldEntityPosY);
-            if (MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) {
+            if (MathEx.overlapTest(playerBodyRect,entityBody.calcAndGetBoundRect())) {
                 break;
             }
             oldEntityPosX+=entityDeltaX;

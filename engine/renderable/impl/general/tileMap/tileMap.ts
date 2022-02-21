@@ -7,11 +7,43 @@ import {Optional} from "@engine/core/declarations";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
 import {ITexture} from "@engine/renderer/common/texture";
+import {TileMapRigidBodyDelegate} from "@engine/physics/arcade/tileMapRigidBodyDelegate";
+import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
+import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
+import {Rect} from "@engine/geometry/rect";
+import {IRigidBody} from "@engine/physics/common/interfaces";
+import {Point2d} from "@engine/geometry/point2d";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
+export interface ITiledJSON {
+    width: number,
+    height: number,
+    tilesets: {
+        "tileheight":number,
+        "tilewidth":number,
+    }[],
+    layers: {
+        name: string,
+        type: 'objectgroup'|'tilelayer',
+        data: number[],
+    }[]
+}
+
+export interface ICollisionInfo {
+    useCollision:boolean,
+    collideWithTiles:number[]|'all',
+    exceptCollisionTiles?:number[],
+    groupNames?: string[],
+    restitution?:number,
+    ignoreCollisionsWithGroupNames?:string[],
+    debug?:boolean,
+}
 
 export class TileMap extends RenderableModelWithTexture {
 
     public override readonly type:string = "TileMap";
+
+    public override getRigidBody:never = undefined!;
 
     private _data:number[][] = [];
     private _tileWidth:number;
@@ -36,12 +68,44 @@ export class TileMap extends RenderableModelWithTexture {
     private _cellImage:Image;
     private _drawingSurface:DrawingSurface;
 
+    private _rigidBodyDelegate: TileMapRigidBodyDelegate;
+
+    private static _isTileCollideable(tileId:number,collisionInfo:ICollisionInfo) {
+        let result:boolean;
+        if (typeof collisionInfo.collideWithTiles ==='string') {
+            result = true;
+        } else {
+            result = collisionInfo.collideWithTiles.indexOf(tileId)>-1;
+        }
+        if (collisionInfo.exceptCollisionTiles!==undefined) {
+            if (result) {
+                result = collisionInfo.exceptCollisionTiles.indexOf(tileId)===-1;
+            }
+        }
+        return result;
+    }
+
     constructor(game:Game,texture:ITexture){
         super(game);
         this.setTexture(texture);
     }
 
-    public fromTiledJSON(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number): void{
+    public fromData(source:number[],mapWidth:number,mapHeight:Optional<number>,tileWidth:number,tileHeight:number,collisionInfo:ICollisionInfo = {useCollision:false,collideWithTiles:[]}): void{
+        if (DEBUG) {
+            if (!source?.length) {
+                throw new DebugError(`can not create tileMap: wrong "source" parameter`);
+            }
+            if (!mapWidth) {
+                throw new DebugError(`can not create tileMap: wrong "mapWidth" parameter: ${mapWidth}`);
+            }
+            if (!tileWidth) {
+                throw new DebugError(`can not create tileMap: wrong "tileWidth" parameter: ${tileWidth}`);
+            }
+            if (!tileHeight) {
+                throw new DebugError(`can not create tileMap: wrong "tileHeight" parameter: ${tileHeight}`);
+            }
+        }
+
         if (!mapHeight) mapHeight = source.length / mapWidth;
         this._data = new Array<number[]>(mapHeight);
         let cnt:number = 0;
@@ -68,7 +132,65 @@ export class TileMap extends RenderableModelWithTexture {
                 throw new DebugError(`Incorrect mapWidth/mapHeight provided. Expected ${expected} tiles, but ${found} found (${mapWidth}*${mapHeight}=${mapWidth*mapHeight})`);
             }
         }
+        this.initCollisions(collisionInfo);
     }
+
+    public fromTiledJSON(map:ITiledJSON,collisionInfo?:ICollisionInfo):void {
+        const tileMapLayer = map.layers.find(it=>it.type==='tilelayer')!;
+
+        if (DEBUG) {
+            if (!tileMapLayer) {
+                throw new DebugError('no layer with type "tilelayer"');
+            }
+            if (!map.tilesets.length) {
+                throw new DebugError(`tileSet is not provided`);
+            }
+        }
+
+        const source = tileMapLayer.data;
+        const mapWidth = map.width;
+        const mapHeight = map.height;
+        const tileWidth = map.tilesets[0].tilewidth;
+        const tileHeight = map.tilesets[0].tileheight;
+
+        this.fromData(source,mapWidth,mapHeight,tileWidth,tileHeight,collisionInfo);
+    }
+
+    private initCollisions(collisionInfo:ICollisionInfo):void {
+        if (!collisionInfo.useCollision) return;
+        const rigidBodies:IRigidBody[] = [];
+        for (let y:number=0;y<this._numOfTilesInMapByY;y++) {
+            for (let x:number=0;x<this._numOfTilesInMapByX;x++) {
+                const tileId:number =this._data[y][x] - 1;
+                if (tileId>0 && TileMap._isTileCollideable(tileId,collisionInfo)) {
+                    const rigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
+                        type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
+                        rect: new Rect(0,0,this._tileWidth,this._tileHeight),
+                        groupNames: collisionInfo.groupNames,
+                        ignoreCollisionWithGroupNames: collisionInfo.ignoreCollisionsWithGroupNames,
+                        restitution: collisionInfo.restitution,
+                    });
+                    rigidBody.addInfo = {tileId};
+                    rigidBody.setModel(this);
+                    rigidBody.setBounds(
+                        new Point2d(x * this._tileWidth, y * this._tileHeight),
+                        new Size(this._tileWidth,this._tileHeight)
+                    );
+                    rigidBodies.push(rigidBody);
+                    if (collisionInfo.debug) {
+                        const debugRect = new Rectangle(this.game);
+                        debugRect.lineWidth = 0;
+                        debugRect.fillColor.setRGB(0,100,0);
+                        debugRect.alpha = 0.4;
+                        debugRect.setPosAndSize(x * this._tileWidth, y * this._tileHeight,this._tileWidth,this._tileHeight);
+                        this.appendChild(debugRect);
+                    }
+                }
+            }
+        }
+        this._rigidBodyDelegate = new TileMapRigidBodyDelegate(rigidBodies);
+    }
+
 
     public override revalidate(): void{
 
@@ -88,12 +210,13 @@ export class TileMap extends RenderableModelWithTexture {
             size.setFrom(this.game.size);
             size.addWH(this._tileWidth*2,this._tileHeight*2);
             this._drawingSurface = new DrawingSurface(this.game,size);
-            this.appendChild(this._drawingSurface);
+            this.prependChild(this._drawingSurface);
         }
     }
 
 
     public override update(): void {
+        if (this._rigidBodyDelegate!==undefined) this._rigidBodyDelegate.nextTick();
         this.prepareDrawableInfo();
         super.update();
     }
@@ -105,6 +228,7 @@ export class TileMap extends RenderableModelWithTexture {
             return;
         }
 
+        this._drawingSurface.clear();
         for (let y:number=0;y<this._numOfTilesInScreenByY;y++) {
             const currTileByY:number = this._drawInfo.firstTileToDrawByY + y;
             if (currTileByY<0) continue;
@@ -114,7 +238,9 @@ export class TileMap extends RenderableModelWithTexture {
                 if (currTileByX<0) continue;
                 if (currTileByX>this._numOfTilesInMapByX-1) continue;
 
-                const tileVal:number =this._data[currTileByY][currTileByX];
+                let tileVal:number =this._data[currTileByY][currTileByX];
+                if (tileVal===0) continue;
+                tileVal-=1;
                 this._cellImage.getSrcRect().setXY(this.getFramePosX(tileVal),this.getFramePosY(tileVal));
                 this._cellImage.pos.setXY(x * this._tileWidth, y * this._tileHeight);
                 this._drawingSurface.drawModel(this._cellImage);
