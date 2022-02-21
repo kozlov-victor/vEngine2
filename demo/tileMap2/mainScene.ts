@@ -15,8 +15,6 @@ import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAnimation";
-import {CrtScreenFilter} from "@engine/renderer/webGl/filters/texture/crtScreenFilter";
-import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 
 interface IUnityMeta {
     TextureImporter: {
@@ -132,12 +130,11 @@ export class MainScene extends Scene {
         const physicsSystem = this.game.getPhysicsSystem<ArcadePhysicsSystem>();
 
         const particle:Rectangle = new Rectangle(this.game);
-        particle.size.setWH(5,5);
+        particle.size.setWH(10,10);
         particle.transformPoint.setXY(particle.size.width/2,particle.size.height/2);
         particle.fillColor.setRGBA(133,200,0);
         particle.setRigidBody(physicsSystem.createRigidBody(
             {
-                        rect: new Rect(0,0,20,5),
                         type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
                         groupNames:['particles'],
                         ignoreCollisionWithGroupNames:['particles']
@@ -156,13 +153,16 @@ export class MainScene extends Scene {
         ps.particleVelocity = { from: 50, to: 100 };
         ps.particleAngle = { from: 0, to: 2 * Math.PI };
 
+        const col1 = ColorFactory.fromCSS(`#4fb404`);
+        const col2 = ColorFactory.fromCSS(`#ce0000`);
+
         this.appendChild(ps);
         ps.onEmitParticle(p=>{
             const ptcl = p as Rectangle;
             if (MathEx.randomUint8()>128) {
-                ptcl.fillColor.setFrom(ColorFactory.fromCSS(`#4fb404`));
+                ptcl.fillColor = col1;
             } else {
-                ptcl.fillColor.setFrom(ColorFactory.fromCSS(`#ce0000`));
+                ptcl.fillColor = col2;
             }
         });
 
