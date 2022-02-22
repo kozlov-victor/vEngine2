@@ -233,7 +233,7 @@ module.exports = async (env={})=>{
                             enforce: 'pre',
                             use: [
                                 {
-                                    loader: "ts-engine-precompiler/ts-engine-precompiler"
+                                    loader: "ts-engine-precompiler/resource-loader-precompiler"
                                 },
                             ]
                         }
