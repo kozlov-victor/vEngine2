@@ -27,7 +27,7 @@ interface IRequestData<T> {
     success?: (arg:T)=>void;
     error?: (opts:{status:number,error:string})=>void;
     setup?: (xhr:XMLHttpRequest)=>void;
-    requestType?: string;
+    requestType?: 'multipart/form-data'|'application/json'|'application/x-www-form-urlencoded'|string;
     timeout?: number;
     ontimeout?: ()=>void;
     headers?:Record<string, string>;
