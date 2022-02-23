@@ -1,7 +1,7 @@
 import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
 import {Game} from "@engine/core/game";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 
 export const waitFor = (time:number):Promise<void>=> {
     return new Promise(resolve=>{

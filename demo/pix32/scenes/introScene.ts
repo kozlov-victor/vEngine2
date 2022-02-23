@@ -1,7 +1,7 @@
 import {KernelBurnAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/kernelBurnAccumulativeFilter";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {BasePix32Scene, loadSound} from "./base/basePix32Scene";
 import {GetReadyScene} from "./getReadyScene";
 import {Sound} from "@engine/media/sound";

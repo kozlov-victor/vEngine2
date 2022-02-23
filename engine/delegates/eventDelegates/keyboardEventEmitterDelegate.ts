@@ -1,5 +1,5 @@
 import {EventEmitterDelegate, getControlErrorMessage} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {DebugError} from "@engine/debug/debugError";

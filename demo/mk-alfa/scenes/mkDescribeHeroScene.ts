@@ -5,7 +5,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 import {MathEx} from "@engine/misc/mathEx";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {MkAbstractScene} from "./mkAbstractScene";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";

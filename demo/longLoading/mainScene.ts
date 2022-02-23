@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {ITexture} from "@engine/renderer/common/texture";
 import {TaskQueue} from "@engine/resources/taskQueue";
 

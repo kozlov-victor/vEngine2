@@ -7,7 +7,7 @@ import {MathEx} from "@engine/misc/mathEx";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Color} from "@engine/renderer/common/color";
 import {Tween} from "@engine/animation/tween";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Timer} from "@engine/misc/timer";
 import {Optional} from "@engine/core/declarations";

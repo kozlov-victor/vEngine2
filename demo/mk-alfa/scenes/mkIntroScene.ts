@@ -12,7 +12,7 @@ import {Sound} from "@engine/media/sound";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MkAbstractScene} from "./mkAbstractScene";
 import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {Resource} from "@engine/resources/resourceDecorators";

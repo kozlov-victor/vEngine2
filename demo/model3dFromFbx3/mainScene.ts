@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {TrackBall} from "../model3dFromFbx/trackBall";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {FbxAsciiParser} from "@engine/renderable/impl/3d/fbxParser/fbxAsciiParser";
 

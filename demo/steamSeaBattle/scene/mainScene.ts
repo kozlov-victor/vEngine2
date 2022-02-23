@@ -1,6 +1,6 @@
 import {AssetsDocumentHolder} from "../data/assetsDocumentHolder";
 import {MathEx} from "@engine/misc/mathEx";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {BaseScene} from "./baseScene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {NixieDisplay} from "./object/nixieDisplay";

@@ -3,7 +3,8 @@ import {IControl} from "@engine/control/abstract/iControl";
 import {AbstractKeypad, KEY_STATE} from "@engine/control/abstract/abstractKeypad";
 import {Optional} from "@engine/core/declarations";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
-import {GAME_PAD_EVENTS, GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
+import {GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 // g.vibrationActuator.playEffect("dual-rumble", {
 //     duration: 100,
@@ -78,9 +79,6 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
 
     public override readonly type:string = 'GamePadControl';
 
-    protected keyPressed: string = GAME_PAD_EVENTS.buttonPressed;
-    protected keyHold: string = GAME_PAD_EVENTS.buttonHold;
-    protected keyReleased: string = GAME_PAD_EVENTS.buttonReleased;
     declare protected buffer:GamePadEvent[];
 
     private _gamepads:Gamepad[];
@@ -140,7 +138,8 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
 
     public destroy():void {}
 
-    protected override notify(eventName: GAME_PAD_EVENTS, e: GamePadEvent): void {
+    protected override notify(eventName: KEYBOARD_EVENTS, e: GamePadEvent): void {
+        super.notify(eventName,e);
         this.game.getCurrentScene().gamepadEventHandler.trigger(eventName,e);
     }
 

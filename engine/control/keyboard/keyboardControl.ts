@@ -1,7 +1,8 @@
 import {IControl} from "@engine/control/abstract/iControl";
 import {AbstractKeypad, KEY_STATE} from "@engine/control/abstract/abstractKeypad";
-import {KEYBOARD_EVENTS, KeyBoardEvent} from "@engine/control/keyboard/keyboardEvents";
+import {KeyBoardEvent} from "@engine/control/keyboard/keyboardEvent";
 import {Optional} from "@engine/core/declarations";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 
 export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IControl {
@@ -91,6 +92,7 @@ export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IC
     }
 
     protected override notify(eventName: KEYBOARD_EVENTS, e: KeyBoardEvent): void {
+        super.notify(eventName,e);
         this.game.getCurrentScene().keyboardEventHandler.trigger(eventName,e);
     }
 

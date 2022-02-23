@@ -26,7 +26,7 @@ import {
 } from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearFromRandomPointTextAnimation";
 import {BgMatrix} from "../component/bgMatrix";
 import {Flip3dHorizontalInTransition} from "@engine/scene/transition/flip/flip3dTransition";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {QuizScene} from "./quizScene";
 
 class IntroSceneUI extends VEngineTsxComponent {

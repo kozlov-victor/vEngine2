@@ -18,7 +18,7 @@ import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhit
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {Sound} from "@engine/media/sound";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {MkDescribeHeroScene} from "./mkDescribeHeroScene";
 import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";

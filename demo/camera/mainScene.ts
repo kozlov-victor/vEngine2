@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";

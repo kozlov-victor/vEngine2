@@ -1,6 +1,7 @@
 import {Game} from "@engine/core/game";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 import {DebugError} from "@engine/debug/debugError";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export const enum KEY_STATE  {
     KEY_JUST_PRESSED = 2,
@@ -18,9 +19,6 @@ export abstract class KeyPadEvent extends ObservableEntity {
 export abstract class AbstractKeypad<T extends KeyPadEvent> {
     protected game: Game;
 
-    protected abstract keyPressed: string;
-    protected abstract keyReleased: string;
-    protected abstract keyHold: string;
 
     public type:string;
 
@@ -37,9 +35,6 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
     }
 
     public reflectToControl(control: AbstractKeypad<any>, map: Record<number, number>): void {
-        if (DEBUG && control.type===this.type) {
-            throw new DebugError(`control ${this.type} can not be reflected to self`)
-        }
         this.reflectKey.control = control;
         this.reflectKey.map = map;
     }
@@ -47,14 +42,12 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
     public press(event: T): void {
         event.keyState = KEY_STATE.KEY_PRESSED;
         this.buffer.push(event);
-        this.notify(this.keyPressed, event);
-        this._reflectPressOrRelease(event,true);
+        this.notify(KEYBOARD_EVENTS.keyPressed, event);
     }
 
     public release(event: T): void {
         event.keyState = KEY_STATE.KEY_JUST_RELEASED;
-        this.notify(this.keyReleased, event);
-        this._reflectPressOrRelease(event,false);
+        this.notify(KEYBOARD_EVENTS.keyReleased, event);
     }
 
     public update(): void {
@@ -73,7 +66,7 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
                     event.keyState = KEY_STATE.KEY_PRESSED;
                     break;
                 case KEY_STATE.KEY_PRESSED:
-                    this.notify(this.keyHold, event);
+                    this.notify(KEYBOARD_EVENTS.keyHold, event);
                     break;
                 default:
                     if (DEBUG) throw new DebugError(`unknown button state: ${keyVal}`);
@@ -82,9 +75,7 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
         }
     }
 
-    protected abstract notify(eventName: string, e: T): void;
-
-    private _reflectPressOrRelease(e:T,isPress:boolean):void {
+    protected notify(eventName: KEYBOARD_EVENTS, e: T): void {
         if (this.reflectKey.control !== undefined && this.reflectKey.map![e.button]) {
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const self = this;
@@ -95,8 +86,7 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
                     this.button = self.reflectKey.map![e.button]
                 }
             }
-            if (isPress) this.reflectKey.control!.press(clonedEvent);
-            else this.reflectKey.control!.release(clonedEvent);
+            this.reflectKey.control!.notify(eventName,clonedEvent);
         }
     }
 

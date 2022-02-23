@@ -18,7 +18,7 @@ import {
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {AnswerButton} from "../component/answerButton";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {IQuizQuestion, QuizRunner} from "../quizRunner";
 import {DATA} from "../asset/resource/questions";

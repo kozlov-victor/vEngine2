@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Image} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";

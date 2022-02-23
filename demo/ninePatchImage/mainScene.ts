@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {NinePatchImage} from "@engine/renderable/impl/general/ninePatchImage";

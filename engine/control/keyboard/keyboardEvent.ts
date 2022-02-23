@@ -4,12 +4,6 @@ import {ObjectPool} from "@engine/misc/objectPool";
 import {Optional} from "@engine/core/declarations";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 
-export const enum KEYBOARD_EVENTS {
-    keyPressed = 'keyPressed',
-    keyRepeated = 'keyRepeated',
-    keyReleased = 'keyReleased',
-    keyHold = 'keyHold'
-}
 
 export class KeyBoardEvent extends KeyPadEvent implements IKeyBoardEvent {
 

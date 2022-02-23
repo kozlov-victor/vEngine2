@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Optional} from "@engine/core/declarations";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 

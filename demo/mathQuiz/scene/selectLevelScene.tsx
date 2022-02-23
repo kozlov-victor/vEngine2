@@ -8,7 +8,7 @@ import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactor
 import {BgMatrix} from "../component/bgMatrix";
 import {AnswerButton} from "../component/answerButton";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {singleton, waitFor} from "../helper";
 import {Color} from "@engine/renderer/common/color";
