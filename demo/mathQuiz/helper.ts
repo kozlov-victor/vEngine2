@@ -1,4 +1,3 @@
-import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
 import {Game} from "@engine/core/game";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
@@ -18,14 +17,4 @@ export const waitForKey = (game:Game,button:KEYBOARD_KEY):Promise<void>=> {
             }
         });
    });
-}
-
-
-const singletons:Record<string, any> = {}
-export const singleton = <T extends ResourceAutoHolder>(key:string,factory:()=>T)=>{
-    if (!singletons[key]) {
-        singletons[key] = factory();
-        console.log(singletons);
-    }
-    return singletons[key];
 }

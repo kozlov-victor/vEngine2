@@ -3,7 +3,7 @@ import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComp
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {Assets} from "../asset/assets";
-import {singleton, waitFor, waitForKey} from "../helper";
+import {waitFor, waitForKey} from "../helper";
 import {Game} from "@engine/core/game";
 import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
 import {BgMatrix} from "../component/bgMatrix";
@@ -25,6 +25,7 @@ import {DATA} from "../asset/resource/questions";
 import {ResultScene} from "./resultScene";
 import {Flip3dHorizontalInTransition} from "@engine/scene/transition/flip/flip3dTransition";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 
 class QuizSceneUI extends VEngineTsxComponent {
@@ -215,7 +216,7 @@ class QuizSceneUI extends VEngineTsxComponent {
 
 export class QuizScene extends Scene {
 
-    private assets:Assets = singleton(Assets.name,()=>new Assets(this));
+    @Resource.ResourceHolder() private assets:Assets;
 
     constructor(game:Game, private level:number) {
         super(game);

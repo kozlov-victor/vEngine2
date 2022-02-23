@@ -23,10 +23,11 @@ import {Image} from "@engine/renderable/impl/general/image";
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private r:PrayResourcesHolder = new PrayResourcesHolder(this);
+    @Resource.ResourceHolder() private r:PrayResourcesHolder;
 
     public override onReady():void {
 

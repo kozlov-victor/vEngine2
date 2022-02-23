@@ -29,7 +29,8 @@ const createStatementsForPreloadingMethod = (template,params)=>{
 }
 
 module.exports = function(content) {
-    const ast = tsquery.ast(content,undefined,2); // tsx
+    const type = this.resourcePath.endsWith('.tsx')?4:3;
+    const ast = tsquery.ast(content,undefined,type);
 
     const allClasses = tsquery(ast, `ClassDeclaration`);
     let modified = false;
@@ -57,7 +58,7 @@ module.exports = function(content) {
             preloadingMethod.parameters &&
             preloadingMethod.parameters[0] &&
             preloadingMethod.parameters[0].name;
-        //if (preloadingMethodFirstArg===undefined) throw new Error(`wrong arguments of onPreloading method`);
+
         const statements = [];
         allDecoratedFields.forEach(f=> {
             const newDecorators = [];
@@ -89,11 +90,50 @@ module.exports = function(content) {
             f.decorators = newDecorators;
         });
 
-        //const autoHolderDecoratedFields = tsquery(cl, `PropertyDeclaration:has(Decorator:has(Identifier[name="ResourceAutoHolder"]))`);
-
         preloadingMethod.body.statements = [...preloadingMethod.body.statements, ...statements];
 
     });
+
+    allClasses.forEach(cl=> {
+        const allDecoratedFields = tsquery(cl, `PropertyDeclaration:has(Decorator:has(Identifier[name="ResourceHolder"]))`);
+        if (allDecoratedFields.length === 0) return;
+        modified = true;
+        allDecoratedFields.forEach(f => {
+            const newDecorators = [];
+            f.decorators.forEach((d) => {
+                const decoratorName =
+                    d.expression &&
+                    d.expression.expression &&
+                    d.expression.expression.name &&
+                    d.expression.expression.name.escapedText;
+                if (decoratorName && decoratorName === 'ResourceHolder') {
+                    const factory = ts.factory;
+                    // require("@engine/resources/injectResourceHolderHelper").injectResourceHolder(this,Assets);
+                    const callExpression =
+                        factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                                factory.createCallExpression(
+                                    factory.createIdentifier("require"),
+                                    undefined,
+                                    [factory.createStringLiteral("@engine/resources/injectResourceHolderHelper")]
+                                ),
+                                factory.createIdentifier("injectResourceHolder")
+                            ),
+                            undefined,
+                            [
+                                factory.createThis(),
+                                factory.createIdentifier(f.type?.typeName?.escapedText || 'undefined')
+                            ]
+                        )
+                    f.initializer = callExpression;
+                } else {
+                    newDecorators.push(d);
+                }
+            });
+            f.decorators = newDecorators;
+        });
+    });
+
     if (!modified) return content;
     return ts.createPrinter().printFile(ast);
 };

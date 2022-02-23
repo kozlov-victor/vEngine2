@@ -6,15 +6,14 @@ import {Rocket} from "../prefabs/enemies/rocket";
 import {Bomb} from "../prefabs/enemies/bomb";
 import {Stone} from "../prefabs/enemies/stone";
 import {Heart} from "../prefabs/bonuses/heart";
-import {Boss3} from "../prefabs/bosses/boss3";
-import {Boss4} from "../prefabs/bosses/boss4";
 import {Boss5} from "../prefabs/bosses/boss5";
 import {Plus} from "../prefabs/bonuses/plus";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 
 export class Scene1 extends Scene {
 
-    private r = new AssetsHolder(this);
+    @Resource.ResourceHolder() private r:AssetsHolder;
 
     public override onReady():void {
 

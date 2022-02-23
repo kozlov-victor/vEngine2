@@ -2,14 +2,14 @@ import {Scene} from "@engine/scene/scene";
 import {MainWidget} from "./ui/mainWidget";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {ResourceHolder} from "./resource/resourceHolder";
-import {Color} from "@engine/renderer/common/color";
 import {STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 
 export class MainScene extends Scene {
 
-    private resourceHolder:ResourceHolder = new ResourceHolder(this);
+    @Resource.ResourceHolder() private resourceHolder:ResourceHolder;
 
     public override onReady():void {
 

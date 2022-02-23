@@ -54,7 +54,6 @@ export class Assets extends ResourceAutoHolder{
 
     constructor(scene:Scene) {
         super(scene);
-        console.log('created');
     }
 
 }

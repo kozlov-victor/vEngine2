@@ -17,7 +17,7 @@ import {AnimatedTextField} from "@engine/renderable/impl/ui/textField/animated/a
 import {
     AppearRandomLetterTextAnimation
 } from "@engine/renderable/impl/ui/textField/animated/textAnimation/appearRandomLetterTextAnimation";
-import {singleton, waitFor} from "../helper";
+import {waitFor} from "../helper";
 import {
     FallLettersTextAnimation
 } from "@engine/renderable/impl/ui/textField/animated/textAnimation/fallLettersTextAnimation";
@@ -28,6 +28,7 @@ import {BgMatrix} from "../component/bgMatrix";
 import {Flip3dHorizontalInTransition} from "@engine/scene/transition/flip/flip3dTransition";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {QuizScene} from "./quizScene";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 class IntroSceneUI extends VEngineTsxComponent {
 
@@ -91,7 +92,7 @@ class IntroSceneUI extends VEngineTsxComponent {
 
 export class IntroScene extends Scene {
 
-    private assets:Assets = singleton(Assets.name,()=>new Assets(this));
+    @Resource.ResourceHolder() private assets:Assets;
 
     constructor(game:Game,private level:number) {
         super(game);

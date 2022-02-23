@@ -92,7 +92,7 @@ export class MainScene extends Scene {
     private listenToKeys(model:AnimatedImage,body:ArcadeRigidBody):void {
         const velocity = 300;
         const jumpVelocity = 500;
-        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, e=>{
+        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
                     body.velocity.x = -velocity;

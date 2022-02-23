@@ -6,10 +6,11 @@ import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {LogoResources} from "./logoResources";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private logoRes:LogoResources = new LogoResources(this);
+    @Resource.ResourceHolder() private logoRes:LogoResources;
 
     public override onReady():void {
 

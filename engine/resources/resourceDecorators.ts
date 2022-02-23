@@ -11,12 +11,12 @@ import type {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 
 
 export const Resource = {
-    // Inject: ()=>{
-    //     return (target: Scene, fieldName: string):void => {
-    //         // stub for precompiler only
-    //         throw new DebugError(`something wrong with precompiler for Texture decorator`);
-    //     };
-    // },
+    ResourceHolder: ()=>{
+        return (target: Scene, fieldName: string):void => {
+            // stub for precompiler only
+            throw new DebugError(`something wrong with precompiler for Texture decorator`);
+        };
+    },
     Texture: (src:string|IURLRequest)=> {
         return (target: Scene|ResourceAutoHolder, fieldName: string):void => {
             // stub for precompiler only
@@ -91,11 +91,5 @@ export const Resource = {
             throw new DebugError(`something wrong with precompiler for Font decorator`);
         };
     },
-    ResourceAutoHolder: ()=>{
-        return (target:Scene, propertyKey:string):void => {
-            // stub for precompiler only
-            throw new DebugError(`something wrong with precompiler for ResourceAutoHolder decorator`);
-        };
-    }
 };
 

@@ -10,12 +10,13 @@ import {AnswerButton} from "../component/answerButton";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {singleton, waitFor} from "../helper";
+import {waitFor} from "../helper";
 import {Color} from "@engine/renderer/common/color";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IntroScene} from "./introScene";
 import {Flip3dVerticalInTransition} from "@engine/scene/transition/flip/flip3dTransition";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 class SelectLevelSceneUI extends VEngineTsxComponent {
 
@@ -89,7 +90,7 @@ class SelectLevelSceneUI extends VEngineTsxComponent {
 
 export class SelectLevelScene extends Scene {
 
-    private assets:Assets = singleton(Assets.name,()=>new Assets(this));
+    @Resource.ResourceHolder() private assets:Assets;
 
     constructor(game:Game) {
         super(game);

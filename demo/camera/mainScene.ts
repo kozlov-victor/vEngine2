@@ -10,10 +10,11 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {ResourceHolder} from "./resources/resourceHolder";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    private resourceHolder:ResourceHolder = new ResourceHolder(this);
+    @Resource.ResourceHolder() private resourceHolder:ResourceHolder;
 
     public override onReady():void {
 

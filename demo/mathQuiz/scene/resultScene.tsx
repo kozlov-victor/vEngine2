@@ -3,7 +3,7 @@ import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComp
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {Assets} from "../asset/assets";
-import {singleton, waitFor} from "../helper";
+import {waitFor} from "../helper";
 import {Game} from "@engine/core/game";
 import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
 import {BgMatrix} from "../component/bgMatrix";
@@ -19,6 +19,7 @@ import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {SelectLevelScene} from "./selectLevelScene";
 import {Flip3dVerticalOutTransition} from "@engine/scene/transition/flip/flip3dTransition";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {Resource} from "@engine/resources/resourceDecorators";
 
 
 class ResultSceneUI extends VEngineTsxComponent {
@@ -63,7 +64,7 @@ class ResultSceneUI extends VEngineTsxComponent {
 
 export class ResultScene extends Scene {
 
-    private assets:Assets = singleton(Assets.name,()=>new Assets(this));
+    @Resource.ResourceHolder() private assets:Assets;
 
     constructor(game:Game, private correct:number,private total:number) {
         super(game);

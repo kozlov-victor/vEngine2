@@ -9,7 +9,7 @@ interface IGameHolder {
     game: Game;
 }
 
-const devConsole:HTMLElement = document.createElement('div');
+const fpsLabel:HTMLElement = document.createElement('div');
 const css:IKeyVal<string|number> = {
     position: 'absolute',
     right: 0,
@@ -20,14 +20,14 @@ const css:IKeyVal<string|number> = {
     opacity: 0.5,
     'pointer-events':'none',
     display:'block',
-    'z-index':1000
+    'z-index':1000,
+    color:'white',
+    'user-select': 'none',
 };
-Object.keys(css).forEach((key:string)=>devConsole.style.setProperty(key,''+css[key]));
+Object.keys(css).forEach((key:string)=>fpsLabel.style.setProperty(key,''+css[key]));
 
-const fpsLabel:HTMLElement = document.createElement('span');
-fpsLabel.style.cssText = 'color:white;user-select: none;';
-devConsole.appendChild(fpsLabel);
 let tmr:number;
+let destroyed = false;
 
 const onLoad = (fn:()=>void)=>{
     if (document.readyState==='complete') fn();
@@ -40,7 +40,8 @@ const onLoad = (fn:()=>void)=>{
 
 onLoad(()=>{
     if (!DEBUG) return;
-    document.body.appendChild(devConsole);
+    if (destroyed) return;
+    document.body.appendChild(fpsLabel);
     tmr = setInterval(()=>{
         const game:Game = (window as unknown as IGameHolder).game;
         if (!game) return;
@@ -79,7 +80,10 @@ const prepareMessage = (e:any,lineNum?:number):string=>{
 
 
 const stopGame = ()=>{
+    destroyed = true;
     clearInterval(tmr);
+    fpsLabel.remove();
+    console.log('destroyred');
     const game:Game = (window as unknown as IGameHolder).game as Game;
     if (game) {
         try {
@@ -129,8 +133,10 @@ window.addEventListener('unhandledrejection', (e:PromiseRejectionEvent)=> {
     renderError({filename:'',runtimeInfo:extractPromiseError(e.reason)});
 });
 
-window.onerror = (event: Event | string)=>{
-    renderError({runtimeInfo:prepareMessage(event)});
+window.onerror = (e: Event | string)=>{
+    console.error(e);
+    stopGame();
+    renderError({runtimeInfo:prepareMessage(e)});
 };
 
 // let inspectorShowed = false;
