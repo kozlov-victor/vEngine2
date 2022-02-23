@@ -3,9 +3,7 @@ import {Color} from "@engine/renderer/common/color";
 import {ITexture} from "@engine/renderer/common/texture";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {MathEx} from "@engine/misc/mathEx";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {MkAbstractScene} from "./mkAbstractScene";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
@@ -22,6 +20,7 @@ import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderab
 import {Point2d} from "@engine/geometry/point2d";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 
 export class MkDescribeHeroScene extends MkAbstractScene {
@@ -106,7 +105,7 @@ export class MkDescribeHeroScene extends MkAbstractScene {
         this.tfInfo = tf;
         this.appendChild(tf);
 
-        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonPressed, e=>{
+        this.gamepadEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             this.goBack();
         });
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, (e)=>{

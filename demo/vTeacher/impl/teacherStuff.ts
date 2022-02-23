@@ -2,13 +2,13 @@ import {ICommand} from "./declarations";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {HttpClient} from "@engine/debug/httpClient";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {History} from "./history";
 import {Game} from "@engine/core/game";
 import {Board} from "./board";
 import {Optional} from "@engine/core/declarations";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class TeacherStuff {
 

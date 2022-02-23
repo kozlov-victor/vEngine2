@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {ITiledJSON, TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {ITexture} from "@engine/renderer/common/texture";
@@ -9,6 +8,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {CrtScreenFilter} from "@engine/renderer/webGl/filters/texture/crtScreenFilter";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
 

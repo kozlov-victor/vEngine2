@@ -15,10 +15,8 @@ import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/nois
 import {HexagonalFilter} from "@engine/renderer/webGl/filters/texture/hexagonalFilter";
 import {MathEx} from "@engine/misc/mathEx";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {Sound} from "@engine/media/sound";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {MkDescribeHeroScene} from "./mkDescribeHeroScene";
 import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
@@ -33,6 +31,7 @@ import {AlignText, AlignTextContentHorizontal} from "@engine/renderable/impl/ui/
 import {Point2d} from "@engine/geometry/point2d";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 
 class TabStrip {
@@ -288,7 +287,7 @@ export class MkSelectHeroScene extends MkAbstractScene {
 
         this.appendChild(this.tabStrip.getRoot());
 
-        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonPressed, e=>{
+        this.gamepadEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             if (e.button===GAME_PAD_BUTTON.STICK_L_LEFT || e.button===GAME_PAD_BUTTON.D_PAD_LEFT) {
                 this.tabStrip.goPrev();
                 this.soundLink1.play();

@@ -2,7 +2,6 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Camera} from "@engine/renderer/camera";
 import * as doc from "./level.xml";
@@ -10,6 +9,7 @@ import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
 

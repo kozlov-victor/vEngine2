@@ -1,6 +1,5 @@
 import {AssetsDocumentHolder} from "../data/assetsDocumentHolder";
 import {MathEx} from "@engine/misc/mathEx";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {BaseScene} from "./baseScene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {NixieDisplay} from "./object/nixieDisplay";
@@ -14,6 +13,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {ImageButton} from "@engine/renderable/impl/ui/button/imageButton";
 import {XmlNode} from "@engine/misc/parsers/xml/xmlELements";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 const MANOMETER_SCALE:number = MathEx.degToRad(360-111);
 const MAX_NUM_OF_SHOOTS:number = 10;

@@ -1,14 +1,13 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
 
@@ -49,7 +48,7 @@ export class MainScene extends Scene {
                     spr.angle+=0.1;
             }
         });
-        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonPressed, e=>{
+        this.gamepadEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             console.log(e);
         });
 

@@ -33,6 +33,13 @@ game.getControl<GamePadControl>('GamePadControl')!.reflectToControl(
     }
 );
 
+game.getControl<GamePadControl>('KeyboardControl')!.reflectToControl(
+    game.getControl<KeyboardControl>('KeyboardControl')!,
+    {
+        [KEYBOARD_KEY.UP]: KEYBOARD_KEY.SPACE,
+    }
+);
+
 ArcadePhysicsSystem.gravity.y = 10;
 game.setPhysicsSystem(ArcadePhysicsSystem);
 const mainScene: Scene = new MainScene(game);

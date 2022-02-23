@@ -1,7 +1,6 @@
 import {ITexture} from "@engine/renderer/common/texture";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {Game} from "@engine/core/game";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
@@ -19,6 +18,7 @@ import {GameManager} from "../../../gameManager";
 import {Virus} from "../../object/impl/virus";
 import {Fan} from "../../object/impl/fan";
 import {createRange} from "@engine/misc/object";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 const LEFT:number = -1;
 const RIGHT:number = 1;

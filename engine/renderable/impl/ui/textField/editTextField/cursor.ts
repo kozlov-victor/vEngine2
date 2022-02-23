@@ -10,7 +10,6 @@ import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/str
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 import {Optional} from "@engine/core/declarations";
 import {Font} from "@engine/renderable/impl/general/font/font";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {IRect} from "@engine/geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
@@ -18,6 +17,7 @@ import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {TypeHelper} from "@engine/renderable/impl/ui/textField/editTextField/typeHelper";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 
 export class Cursor {

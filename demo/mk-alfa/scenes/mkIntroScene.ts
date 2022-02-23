@@ -6,16 +6,15 @@ import {createGlowTweenFilter, createScaleTweenMovie} from "../utils/miscFunctio
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
 import {MathEx} from "@engine/misc/mathEx";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {MkSelectHeroScene} from "./mkSelectHeroScene";
 import {Sound} from "@engine/media/sound";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {MkAbstractScene} from "./mkAbstractScene";
 import {CurtainsOpeningTransition} from "@engine/scene/transition/appear/curtains/curtainsOpeningTransition";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvents";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MkIntroScene extends MkAbstractScene {
 
@@ -70,7 +69,7 @@ export class MkIntroScene extends MkAbstractScene {
             if (MathEx.randomInt(0,50)<25) this.camera.shake(5,200);
         },1000);
 
-        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonPressed, _=>{
+        this.gamepadEventHandler.on(KEYBOARD_EVENTS.keyPressed, _=>{
             this.sound.play();
             this.game.runScene(new MkSelectHeroScene(this.game),new CurtainsOpeningTransition(this.game));
         });
