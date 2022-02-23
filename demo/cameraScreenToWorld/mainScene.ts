@@ -2,13 +2,13 @@ import {Scene} from "@engine/scene/scene";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
 
@@ -40,7 +40,7 @@ export class MainScene extends Scene {
         this.camera.followTo(spr);
 
 
-        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonHold, (e:IGamePadEvent)=>{
+        this.gamepadEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IGamePadEvent)=>{
             switch (e.button) {
                 case GAME_PAD_BUTTON.STICK_L_LEFT:
                     spr.pos.addX(-1);

@@ -3,9 +3,9 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
 
@@ -33,7 +33,7 @@ export class MainScene extends Scene {
         this.appendChild(spr);
         spr.transformPoint.setToCenter();
         spr.scale.setXY(0.1);
-        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonHold, (e:IGamePadEvent)=>{
+        this.gamepadEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IGamePadEvent)=>{
 
             switch (e.button) {
                 case GAME_PAD_BUTTON.STICK_L_LEFT:

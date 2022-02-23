@@ -1,7 +1,5 @@
 import {KernelBurnAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/kernelBurnAccumulativeFilter";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {BasePix32Scene, loadSound} from "./base/basePix32Scene";
 import {GetReadyScene} from "./getReadyScene";
 import {Sound} from "@engine/media/sound";
@@ -9,6 +7,7 @@ import {AbstractChipTrack} from "../ym-player/abstract/abstractChipTrack";
 import {Ym} from "../ym-player/formats/ym";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 
 export class IntroScene extends BasePix32Scene {

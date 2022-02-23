@@ -1,11 +1,11 @@
 import {Optional} from "@engine/core/declarations";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Game} from "@engine/core/game";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 class ProgramInstruction {
     public number:number;

@@ -1,13 +1,12 @@
 import {Scene} from "@engine/scene/scene";
 import {Image} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {yamlTest} from "@engine/misc/parsers/yaml/yaml-test";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
 
@@ -38,7 +37,7 @@ export class MainScene extends Scene {
                     spr.angle += 0.1;
             }
         });
-        this.gamepadEventHandler.on(GAME_PAD_EVENTS.buttonPressed, e => {
+        this.gamepadEventHandler.on(KEYBOARD_EVENTS.keyPressed, e => {
             console.log(e);
         });
         yamlTest();

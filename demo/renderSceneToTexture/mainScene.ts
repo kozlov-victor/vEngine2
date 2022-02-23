@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
@@ -9,6 +8,7 @@ import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/nois
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
 

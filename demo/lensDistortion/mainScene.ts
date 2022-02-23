@@ -2,7 +2,6 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {LensDistortionFilter} from "@engine/renderer/webGl/filters/texture/lensDistortionFilter";
@@ -10,6 +9,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
 

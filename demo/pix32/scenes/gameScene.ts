@@ -5,9 +5,7 @@ import {Image} from "@engine/renderable/impl/general/image";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MathEx} from "@engine/misc/mathEx";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Color} from "@engine/renderer/common/color";
 import {Tween} from "@engine/animation/tween";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Timer} from "@engine/misc/timer";
 import {Optional} from "@engine/core/declarations";
@@ -17,6 +15,7 @@ import {Sound} from "@engine/media/sound";
 import {GameOverScene} from "./gameOverScene";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 interface IMoveable {
     model:RenderableModel;

@@ -1,12 +1,12 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {VideoGlitchFilter} from "@engine/renderer/webGl/filters/texture/videoGlitchFilter";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
 

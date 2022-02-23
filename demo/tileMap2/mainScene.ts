@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {ITiledJSON, TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
@@ -15,8 +14,7 @@ import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
 import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAnimation";
-import {CrtScreenFilter} from "@engine/renderer/webGl/filters/texture/crtScreenFilter";
-import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 interface IUnityMeta {
     TextureImporter: {

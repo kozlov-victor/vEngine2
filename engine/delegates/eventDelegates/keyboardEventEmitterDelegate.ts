@@ -1,11 +1,10 @@
 import {EventEmitterDelegate, getControlErrorMessage} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
-import {GAME_PAD_EVENTS} from "@engine/control/gamepad/gamePadEvents";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {DebugError} from "@engine/debug/debugError";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
-export class KeyboardEventEmitterDelegate extends EventEmitterDelegate<KEYBOARD_EVENTS|GAME_PAD_EVENTS,IKeyBoardEvent> {
+export class KeyboardEventEmitterDelegate extends EventEmitterDelegate<KEYBOARD_EVENTS,IKeyBoardEvent> {
 
     public override on(eventName: KEYBOARD_EVENTS, callBack: (arg: IKeyBoardEvent) => void): (arg: IKeyBoardEvent) => void {
         if (DEBUG) {

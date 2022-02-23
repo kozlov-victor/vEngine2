@@ -15,10 +15,10 @@ import {
     AlignTextContentVertical,
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
-import {KEYBOARD_EVENTS} from "@engine/control/keyboard/keyboardEvent";
 import {SelectLevelScene} from "./selectLevelScene";
 import {Flip3dVerticalOutTransition} from "@engine/scene/transition/flip/flip3dTransition";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 
 class ResultSceneUI extends VEngineTsxComponent {
