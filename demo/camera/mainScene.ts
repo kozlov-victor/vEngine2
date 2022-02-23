@@ -9,6 +9,7 @@ import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {ResourceHolder} from "./resources/resourceHolder";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 
 export class MainScene extends Scene {
 

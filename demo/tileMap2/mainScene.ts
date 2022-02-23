@@ -104,9 +104,17 @@ export class MainScene extends Scene {
                     model.scale.x = Math.abs(model.scale.x);
                     if (model.getCurrentFrameAnimationName()!=='run') model.playFrameAnimation('run');
                     break;
+
+            }
+        });
+        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, e=>{
+            switch (e.button) {
                 case KEYBOARD_KEY.SPACE:
-                    if (model.getRigidBody<ArcadeRigidBody>()!.collisionFlags.bottom) {
+                    if (model.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
                         body.velocity.y -=jumpVelocity;
+                        console.log('yes');
+                    } else {
+                        console.log('no');
                     }
                     break;
 
