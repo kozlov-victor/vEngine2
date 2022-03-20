@@ -94,6 +94,10 @@ export class CubeMapTexture extends AbstractTexture implements ICubeMapTexture{
                 throw new DebugError(`can not create cube texture: the same size of images is required`);
             }
 
+            if (w!==h) {
+                throw new DebugError(`with and height must be the same for cubeMapTexture, but ${w}*${h} size provided`)
+            }
+
         }
     }
 

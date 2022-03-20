@@ -85,12 +85,13 @@ export class MainScene extends Scene {
         }));
 
 
-        this.listenToKeys(hero,hero.getRigidBody<ArcadeRigidBody>()!);
+        this.listenToKeys(hero);
         this.initParticleSystem();
     }
 
-    private listenToKeys(model:AnimatedImage,body:ArcadeRigidBody):void {
+    private listenToKeys(model:AnimatedImage):void {
         const velocity = 300;
+        const body = model.getRigidBody<ArcadeRigidBody>()!;
         const jumpVelocity = 500;
         this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.button) {

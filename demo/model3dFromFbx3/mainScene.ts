@@ -5,20 +5,35 @@ import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {FbxAsciiParser} from "@engine/renderable/impl/3d/fbxParser/fbxAsciiParser";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {ICubeMapTexture} from "@engine/renderer/common/texture";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {FbxModelWrapper} from "@engine/renderable/impl/3d/fbxParser/_internal/fbxNodes";
 
 export class MainScene extends Scene {
+
+    @Resource.CubeTexture(
+        './cubeMapTexture/textures/cm_left.jpg',
+        './cubeMapTexture/textures/cm_right.jpg',
+        './cubeMapTexture/textures/cm_top.jpg',
+        './cubeMapTexture/textures/cm_bottom.jpg',
+        './cubeMapTexture/textures/cm_front.jpg',
+        './cubeMapTexture/textures/cm_back.jpg'
+    )
+    private cubeTexture:ICubeMapTexture;
 
     private models:string[] = [
         'test_cinema_4d','test1'
     ]
     private cnt:number = 0;
     private trackBall:TrackBall;
-    private lastModel:RenderableModel;
+    private lastModel:FbxModelWrapper;
     private loading:boolean = false;
 
     private async loadNextModel():Promise<void>{
         if (this.loading) return;
         this.loading = true;
+
+        this.cnt%=this.models.length;
 
         if (this.lastModel) {
             this.lastModel.removeSelf();
@@ -28,7 +43,6 @@ export class MainScene extends Scene {
         const loader = new ResourceLoader(this.game);
         console.log(this.models[this.cnt]);
         const textData = await loader.loadText(`./model3dFromFbx3/models/${this.models[this.cnt]}.fbx`);
-        this.cnt%=this.models.length;
 
 
         const parser = new FbxAsciiParser(this.game,textData,{
@@ -43,6 +57,10 @@ export class MainScene extends Scene {
         this.appendChild(this.lastModel);
         this.lastModel.pos.setXY(300,300);
         this.lastModel.size.setWH(400,400);
+        this.lastModel.getMeshes().forEach(m=>{
+            m.material.reflectivity = 0.05;
+            m.cubeMapTexture = this.cubeTexture;
+        });
         if (!this.trackBall) this.trackBall = new TrackBall(this,this.lastModel);
         else this.trackBall.setModel(this.lastModel);
         console.log(this.lastModel);

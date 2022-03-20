@@ -370,7 +370,7 @@ export abstract class FbxAbstractParser {
         this.completed = true;
     }
 
-    public async getModel():Promise<RenderableModel> {
+    public async getModel():Promise<FbxModelWrapper> {
         if (!this.completed) await this.parse();
         return this.containerTransformWrap;
     }
