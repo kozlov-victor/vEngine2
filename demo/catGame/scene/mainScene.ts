@@ -23,7 +23,7 @@ import {Water} from "../entity/object/impl/water";
 import {Bullet} from "../entity/object/impl/bullet";
 import {Sound} from "@engine/media/sound";
 import {InfoPanel} from "../entity/object/impl/infoPanel";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {GenericSprite} from "../entity/sprite/genericSprite";
 import {Virus} from "../entity/object/impl/virus";
 import {Fan} from "../entity/object/impl/fan";

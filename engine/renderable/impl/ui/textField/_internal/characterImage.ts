@@ -1,4 +1,4 @@
-import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
+import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {DebugError} from "@engine/debug/debugError";

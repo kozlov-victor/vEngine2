@@ -1,7 +1,7 @@
 import {BasePix32Scene} from "./base/basePix32Scene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Tween} from "@engine/animation/tween";
 import {GameScene} from "./gameScene";
 

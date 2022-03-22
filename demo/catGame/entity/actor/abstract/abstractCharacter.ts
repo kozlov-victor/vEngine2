@@ -1,6 +1,6 @@
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {Size} from "@engine/geometry/size";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";

@@ -5,7 +5,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {NixieDisplay} from "./object/nixieDisplay";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
 import {ResultScene} from "./resultScene";
-import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";

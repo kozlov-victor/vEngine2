@@ -9,7 +9,7 @@ import {Optional} from "@engine/core/declarations";
 import {AbstractEntity} from "../../entity/abstract/abstractEntity";
 import {Wall} from "../../entity/object/impl/wall";
 import {Size} from "@engine/geometry/size";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import * as intro from "../../level/intro.json";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";

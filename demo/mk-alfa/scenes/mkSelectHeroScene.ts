@@ -10,7 +10,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {EasingBounce} from "@engine/misc/easing/functions/bounce";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {HexagonalFilter} from "@engine/renderer/webGl/filters/texture/hexagonalFilter";
 import {MathEx} from "@engine/misc/mathEx";

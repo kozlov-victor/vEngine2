@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Tween} from "@engine/animation/tween";
 import {Machine} from "./machine";
 import {ITexture} from "@engine/renderer/common/texture";

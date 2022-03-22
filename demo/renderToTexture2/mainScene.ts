@@ -3,7 +3,7 @@ import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {PalletOffsetFilter} from "@engine/renderer/webGl/filters/texture/palletOffsetFilter";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";

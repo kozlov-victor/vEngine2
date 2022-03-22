@@ -2,7 +2,7 @@ import {Game} from "@engine/core/game";
 import {ICloneable, Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 
 

@@ -1,4 +1,4 @@
-import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {Game} from "@engine/core/game";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";

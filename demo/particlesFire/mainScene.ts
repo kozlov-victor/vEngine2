@@ -1,11 +1,11 @@
 import {Scene} from "@engine/scene/scene";
-import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Color} from "@engine/renderer/common/color";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {Resource} from "@engine/resources/resourceDecorators";
 
 

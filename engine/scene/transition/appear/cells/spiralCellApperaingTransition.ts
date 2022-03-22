@@ -1,6 +1,6 @@
 import {AbstractCellsAppearingTransition} from "@engine/scene/transition/appear/cells/abstractCellsAppearingTransition";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 
 export abstract class SpiralCellsAppearingDisappearingTransition extends AbstractCellsAppearingTransition {
 

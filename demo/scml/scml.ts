@@ -3,7 +3,7 @@ import {ObjectPool} from "@engine/misc/objectPool";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IURLRequest} from "@engine/resources/urlLoader";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DebugError} from "@engine/debug/debugError";
 import {Optional} from "@engine/core/declarations";

@@ -14,7 +14,7 @@ import createImageFromData = ResourceUtil.createImageFromData;
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import ICssFontParameters = FontTypes.ICssFontParameters;
 import ITextureWithId = FontTypes.ITextureWithId;
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import type {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 import {createFontFromAtlas} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromAtlas";
 import {createFontFromCssDescription} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";

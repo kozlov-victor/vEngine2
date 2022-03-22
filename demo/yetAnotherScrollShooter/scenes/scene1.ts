@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
+import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
 import {AssetsHolder} from "../assets/assetsHolder";
 import {MainShip} from "../prefabs/mainShip";
 import {Rocket} from "../prefabs/enemies/rocket";

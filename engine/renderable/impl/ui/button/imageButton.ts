@@ -1,6 +1,6 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {DebugError} from "@engine/debug/debugError";

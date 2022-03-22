@@ -6,7 +6,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Color} from "@engine/renderer/common/color";
-import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {AbstractEntity} from "../common/abstractEntity";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";

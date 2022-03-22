@@ -1,7 +1,7 @@
 import {AbstractEntity} from "../../abstract/abstractEntity";
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
+import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
 import {Size} from "@engine/geometry/size";
 import {Rect} from "@engine/geometry/rect";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";

@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {AssetsHolder} from "../assets/assetsHolder";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {Submarine} from "../prefabs/enemies/submarine";

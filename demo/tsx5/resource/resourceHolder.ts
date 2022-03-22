@@ -7,7 +7,7 @@ import {MathEx} from "@engine/misc/mathEx";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import * as fntXML from "xml/angelcode-loader!./font/pixel.fnt";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class ResourceHolder extends ResourceAutoHolder {

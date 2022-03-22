@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {IntroScene} from "./introScene";
 import {CellsAppearingTransition} from "@engine/scene/transition/appear/cells/cellsAppearingTransition";
 import {Tween} from '@engine/animation/tween';

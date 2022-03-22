@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";

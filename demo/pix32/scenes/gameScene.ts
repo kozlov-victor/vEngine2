@@ -1,7 +1,7 @@
 import {BasePix32Scene, loadSound, waitFor} from "./base/basePix32Scene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MathEx} from "@engine/misc/mathEx";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";

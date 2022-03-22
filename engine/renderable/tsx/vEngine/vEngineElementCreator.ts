@@ -6,7 +6,7 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {DebugError} from "@engine/debug/debugError";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";

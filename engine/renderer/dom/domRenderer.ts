@@ -1,5 +1,5 @@
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";

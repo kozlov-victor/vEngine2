@@ -3,7 +3,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAnimation";
 import {IRectJSON} from "@engine/geometry/rect";

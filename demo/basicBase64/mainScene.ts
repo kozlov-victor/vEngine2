@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import * as logoBase64 from "../assets/engine.jpg";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";

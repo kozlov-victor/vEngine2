@@ -24,7 +24,9 @@ import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 class ResultSceneUI extends VEngineTsxComponent {
 
-    constructor(private game:Game, private assets:Assets,private correct:number, private total:number) {
+    private assets:Assets = Assets.getInstance();
+
+    constructor(private game:Game, private correct:number, private total:number) {
         super(new VEngineTsxDOMRenderer(game));
     }
 
@@ -75,7 +77,7 @@ export class ResultScene extends Scene {
         this.assets.completedSound.play();
         const root = new SimpleGameObjectContainer(this.game);
         this.appendChild(root);
-        const resultSceneUI = new ResultSceneUI(this.game,this.assets,this.correct,this.total);
+        const resultSceneUI = new ResultSceneUI(this.game,this.correct,this.total);
         resultSceneUI.mountTo(root);
         (async ()=>{
             await waitFor(3000);

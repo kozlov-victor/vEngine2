@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 
 export class MainScene extends Scene {

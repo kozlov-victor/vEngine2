@@ -5,7 +5,7 @@ import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAn
 import {Scene} from "@engine/scene/scene";
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {

@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Tween} from "@engine/animation/tween";
 import {Point2d} from "@engine/geometry/point2d";

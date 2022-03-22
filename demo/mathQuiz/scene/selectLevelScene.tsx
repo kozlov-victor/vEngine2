@@ -23,7 +23,9 @@ class SelectLevelSceneUI extends VEngineTsxComponent {
     private currentButton:number|undefined = undefined;
     private answerSelected:boolean = false;
 
-    constructor(private game:Game, private assets:Assets) {
+    private assets:Assets = Assets.getInstance();
+
+    constructor(private game:Game) {
         super(new VEngineTsxDOMRenderer(game));
     }
 
@@ -104,7 +106,7 @@ export class SelectLevelScene extends Scene {
         super.onReady();
         const root = new SimpleGameObjectContainer(this.game);
         this.appendChild(root);
-        const selectLevelSceneUI = new SelectLevelSceneUI(this.game,this.assets);
+        const selectLevelSceneUI = new SelectLevelSceneUI(this.game);
         selectLevelSceneUI.mountTo(root);
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, k=>{
             switch (k.button) {

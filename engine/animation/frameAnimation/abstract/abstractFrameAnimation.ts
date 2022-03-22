@@ -2,7 +2,7 @@ import {ICloneable} from "@engine/core/declarations";
 import {Game} from "@engine/core/game";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {DebugError} from "@engine/debug/debugError";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {ITargetAnimation} from "@engine/animation/iAnimation";
 
 export const enum FRAME_ANIMATION_EVENTS {

@@ -39,6 +39,8 @@ class QuizSceneUI extends VEngineTsxComponent {
     private quizRunner:QuizRunner;
     private currentQuestion:IQuizQuestion;
 
+    private assets:Assets = Assets.getInstance();
+
     private textFieldBg:Rectangle = (()=>{
         const rect = new Rectangle(this.game);
         rect.fillColor = ColorFactory.fromCSS(`rgba(40, 40, 40, 0.53)`);
@@ -53,7 +55,7 @@ class QuizSceneUI extends VEngineTsxComponent {
         return rect;
     })();
 
-    constructor(private game:Game, private assets:Assets,level:number) {
+    constructor(private game:Game, level:number) {
         super(new VEngineTsxDOMRenderer(game));
         this.quizRunner = new QuizRunner(DATA(),level);
         this.nextQuestion().catch(e=>console.log(e));
@@ -226,7 +228,7 @@ export class QuizScene extends Scene {
     public override onReady() {
         const root = new SimpleGameObjectContainer(this.game);
         this.appendChild(root);
-        const mainSceneUI = new QuizSceneUI(this.game,this.assets,this.level);
+        const mainSceneUI = new QuizSceneUI(this.game,this.level);
         mainSceneUI.mountTo(root);
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, k=>{
             switch (k.button) {

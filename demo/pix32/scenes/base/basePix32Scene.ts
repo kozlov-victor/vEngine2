@@ -13,7 +13,7 @@ import {PalletOffsetFilter} from "@engine/renderer/webGl/filters/texture/palletO
 import {AlignText, AlignTextContentHorizontal, WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ChipOscilloscope} from "../../misc/chipOscilloscope";
 import {AbstractChipTrack} from "../../ym-player/abstract/abstractChipTrack";

@@ -6,7 +6,7 @@ import {MathEx} from "@engine/misc/mathEx";
 import {MkAbstractScene} from "./mkAbstractScene";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";

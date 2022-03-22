@@ -6,7 +6,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
 import {ColorizeFilter} from "@engine/renderer/webGl/filters/texture/colorizeFilter";
 import {PixelFilter} from "@engine/renderer/webGl/filters/texture/pixelFilter";

@@ -5,7 +5,7 @@ import {Game} from "@engine/core/game";
 import {ISize} from "@engine/geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";

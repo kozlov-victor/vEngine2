@@ -7,7 +7,7 @@ import {ShaderGenerator} from "../../../../shaderGenerator/shaderGenerator";
 import * as fragmentSource from "./shape.fragment.glsl";
 import * as fragmentStructuresSource from "./fragment-structures.glsl";
 import {parametrizeString} from "@engine/misc/object";
-import {STRETCH_MODE} from "@engine/renderable/impl/general/image";
+import {STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 
 export const enum SHAPE_TYPE {

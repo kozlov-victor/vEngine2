@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {MainWidget} from "./ui/mainWidget";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {ResourceHolder} from "./resource/resourceHolder";
-import {STRETCH_MODE} from "@engine/renderable/impl/general/image";
+import {STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Resource} from "@engine/resources/resourceDecorators";
 

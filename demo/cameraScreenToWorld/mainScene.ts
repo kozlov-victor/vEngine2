@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
+import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";

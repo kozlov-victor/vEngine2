@@ -14,7 +14,7 @@ import {
 } from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 import {Size} from "@engine/geometry/size";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 
 

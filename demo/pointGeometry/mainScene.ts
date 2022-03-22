@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Vec2} from "@engine/geometry/vec2";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";

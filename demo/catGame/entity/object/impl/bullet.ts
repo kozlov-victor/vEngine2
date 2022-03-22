@@ -6,7 +6,7 @@ import {Size} from "@engine/geometry/size";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
 import {Rect} from "@engine/geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {Hero} from "../../actor/impl/hero";
 
 export class Bullet extends AbstractEntity {

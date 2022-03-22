@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {ITexture} from "@engine/renderer/common/texture";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {MultiImageAtlasFrameAnimation} from "@engine/animation/frameAnimation/multiImageAtlasFrameAnimation";
 import {IRectJSON} from "@engine/geometry/rect";

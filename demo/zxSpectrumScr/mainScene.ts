@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {ScrReader} from "./scrReader";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";

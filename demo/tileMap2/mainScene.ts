@@ -6,12 +6,12 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {MathEx} from "@engine/misc/mathEx";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAnimation";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
@@ -113,9 +113,6 @@ export class MainScene extends Scene {
                 case KEYBOARD_KEY.SPACE:
                     if (model.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
                         body.velocity.y -=jumpVelocity;
-                        console.log('yes');
-                    } else {
-                        console.log('no');
                     }
                     break;
 

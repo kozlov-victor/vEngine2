@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";

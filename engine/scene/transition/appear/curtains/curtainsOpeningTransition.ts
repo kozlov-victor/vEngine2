@@ -1,7 +1,7 @@
 import {AbstractCurtainsTransition} from "@engine/scene/transition/appear/curtains/abstractCurtainsTransition";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 import {CurtainsClosingTransition} from "@engine/scene/transition/appear/curtains/curtainsClosingTransition";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 
 export class CurtainsOpeningTransition extends AbstractCurtainsTransition {
 

@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {ITexture} from "@engine/renderer/common/texture";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
 
 

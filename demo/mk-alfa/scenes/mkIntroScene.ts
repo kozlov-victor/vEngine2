@@ -1,6 +1,6 @@
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {Color} from "@engine/renderer/common/color";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {createGlowTweenFilter, createScaleTweenMovie} from "../utils/miscFunctions";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";

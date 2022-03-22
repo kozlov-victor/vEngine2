@@ -3,7 +3,7 @@ import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Color} from "@engine/renderer/common/color";
 import {MoveByEllipseAnimation} from "@engine/animation/propertyAnimation/moveByEllipseAnimation";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
-import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {GlowFilter} from "@engine/renderer/webGl/filters/texture/glowFilter";
 

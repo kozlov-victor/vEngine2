@@ -1,5 +1,5 @@
 import {AbstractSceneTransition} from "@engine/scene/transition/abstract/abstractSceneTransition";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Game} from "@engine/core/game";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";

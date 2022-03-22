@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnimation";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ITexture} from "@engine/renderer/common/texture";
-import {AnimatedImage} from "@engine/renderable/impl/general/animatedImage";
+import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
 
 

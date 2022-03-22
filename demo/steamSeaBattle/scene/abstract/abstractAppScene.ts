@@ -3,7 +3,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Layer} from "@engine/scene/layer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Sound} from "@engine/media/sound";
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";

@@ -15,7 +15,7 @@ import {MathEx} from "@engine/misc/mathEx";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {LazyImageCacheSurface} from "@engine/renderable/impl/surface/lazyImageCacheSurface";
 import {ITexture} from "@engine/renderer/common/texture";

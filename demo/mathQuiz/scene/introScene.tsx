@@ -35,8 +35,9 @@ class IntroSceneUI extends VEngineTsxComponent {
     private textField:AnimatedTextField;
     private started:boolean = false;
     private readonly classLevel:number;
+    private assets:Assets = Assets.getInstance();
 
-    constructor(private game:Game,private assets:Assets,private level:number) {
+    constructor(private game:Game,private level:number) {
         super(new VEngineTsxDOMRenderer(game));
         this.classLevel = this.level===0?6:9;
         game.getCurrentScene().keyboardEventHandler.once(KEYBOARD_EVENTS.keyPressed, e=>{
@@ -102,7 +103,7 @@ export class IntroScene extends Scene {
     public override onReady() {
         const root = new SimpleGameObjectContainer(this.game);
         this.appendChild(root);
-        const mainSceneUI = new IntroSceneUI(this.game,this.assets,this.level);
+        const mainSceneUI = new IntroSceneUI(this.game,this.level);
         mainSceneUI.mountTo(root);
     }
 }

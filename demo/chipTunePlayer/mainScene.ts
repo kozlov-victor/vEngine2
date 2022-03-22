@@ -20,7 +20,7 @@ import {fontLoader} from "../fontTtf/FontLoader";
 import {ChipOscilloscope} from "./chipOscilloscope";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import loadFont = fontLoader.loadFont;

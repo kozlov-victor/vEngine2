@@ -11,7 +11,7 @@ import {MeshPainter} from "@engine/renderer/webGl/programs/impl/base/mesh/meshPa
 import type {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import type {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import type {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import type {Image} from "@engine/renderable/impl/general/image";
+import type {Image} from "@engine/renderable/impl/general/image/image";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Mat4} from "@engine/geometry/mat4";

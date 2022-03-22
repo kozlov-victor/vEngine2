@@ -4,7 +4,7 @@ import {Rect} from "../../geometry/rect";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";

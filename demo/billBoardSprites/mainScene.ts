@@ -5,7 +5,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 import {MathEx} from "@engine/misc/mathEx";
 import {VignetteFilter} from "@engine/renderer/webGl/filters/texture/vignetteFilter";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {

@@ -2,7 +2,7 @@ import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {Scene} from "@engine/scene/scene";
 import {Optional} from "@engine/core/declarations";
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {Game} from "@engine/core/game";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {EaseFn} from "@engine/misc/easing/type";

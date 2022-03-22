@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ITexture} from "@engine/renderer/common/texture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {NinePatchImage} from "@engine/renderable/impl/general/ninePatchImage";
+import {NinePatchImage} from "@engine/renderable/impl/general/image/ninePatchImage";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TaskQueue} from "@engine/resources/taskQueue";

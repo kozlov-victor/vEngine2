@@ -5,7 +5,7 @@ import {PointLight} from "@engine/light/impl/pointLight";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {Color} from "@engine/renderer/common/color";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {TaskQueue} from "@engine/resources/taskQueue";

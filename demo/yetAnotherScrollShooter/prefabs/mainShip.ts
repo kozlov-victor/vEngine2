@@ -9,7 +9,7 @@ import {Scene} from "@engine/scene/scene";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/mathEx";
-import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {Color} from "@engine/renderer/common/color";
 import {AbstractEntity} from "./common/abstractEntity";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";

@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {AssetsHolder} from "../assets/assetsHolder";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {MathEx} from "@engine/misc/mathEx";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MainShip} from "../prefabs/mainShip";

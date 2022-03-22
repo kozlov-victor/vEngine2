@@ -5,7 +5,7 @@ import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MathEx} from "@engine/misc/mathEx";
-import {ParticleSystem} from "@engine/renderable/impl/general/particleSystem";
+import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 
 export class MainScene extends Scene {
 

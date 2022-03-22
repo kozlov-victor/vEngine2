@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
-import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image";
+import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";

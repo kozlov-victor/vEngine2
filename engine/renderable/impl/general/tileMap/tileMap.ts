@@ -1,5 +1,5 @@
 import {Game} from "@engine/core/game";
-import {Image} from "@engine/renderable/impl/general/image";
+import {Image} from "@engine/renderable/impl/general/image/image";
 import {DebugError} from "@engine/debug/debugError";
 import {Camera} from "@engine/renderer/camera";
 import {ISize, Size} from "@engine/geometry/size";
@@ -50,7 +50,6 @@ export class TileMap extends RenderableModelWithTexture {
     private _tileHeight:number;
 
     private readonly _drawInfo = {
-        dirty:true,
         firstTileToDrawByX: NaN,
         firstTileToDrawByY: NaN,
     };
@@ -72,7 +71,7 @@ export class TileMap extends RenderableModelWithTexture {
 
     private static _isTileCollideable(tileId:number,collisionInfo:ICollisionInfo) {
         let result:boolean;
-        if (typeof collisionInfo.collideWithTiles ==='string') {
+        if (collisionInfo.collideWithTiles ==='all') {
             result = true;
         } else {
             result = collisionInfo.collideWithTiles.indexOf(tileId)>-1;
@@ -222,8 +221,8 @@ export class TileMap extends RenderableModelWithTexture {
     }
 
     public draw(): void {
-
-        if (!this._drawInfo.dirty) {
+        const camera:Camera = this.game.getCurrentScene().camera;
+        if (!camera.worldTransformDirty) {
             this.updateDrawingSurfacePos();
             return;
         }
@@ -246,7 +245,7 @@ export class TileMap extends RenderableModelWithTexture {
                 this._drawingSurface.drawModel(this._cellImage);
             }
         }
-        this._drawInfo.dirty = false;
+
         this.updateDrawingSurfacePos();
     }
 
@@ -313,8 +312,6 @@ export class TileMap extends RenderableModelWithTexture {
         const firstTileToDrawByX:number = ~~((camera.pos.x) / this._tileWidth) - 1;
         const firstTileToDrawByY:number = ~~((camera.pos.y) / this._tileHeight) - 1;
 
-        this._drawInfo.dirty =
-            this._drawInfo.firstTileToDrawByX!==firstTileToDrawByX || this._drawInfo.firstTileToDrawByY!==firstTileToDrawByY;
         this._drawInfo.firstTileToDrawByX = firstTileToDrawByX;
         this._drawInfo.firstTileToDrawByY = firstTileToDrawByY;
     }

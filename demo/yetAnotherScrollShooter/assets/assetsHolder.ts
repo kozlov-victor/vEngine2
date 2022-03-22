@@ -4,6 +4,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 
 const base = 'yetAnotherScrollShooter';
 
+
 export class AssetsHolder extends ResourceAutoHolder {
 
     // ship

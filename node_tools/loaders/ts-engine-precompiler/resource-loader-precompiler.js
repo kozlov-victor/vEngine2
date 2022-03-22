@@ -108,7 +108,7 @@ module.exports = function(content) {
                     d.expression.expression.name.escapedText;
                 if (decoratorName && decoratorName === 'ResourceHolder') {
                     const factory = ts.factory;
-                    // require("@engine/resources/injectResourceHolderHelper").injectResourceHolder(this,Assets);
+                    // require("@engine/resources/__injectResourceHolderHelper").injectResourceHolder(this,Assets);
                     const callExpression =
                         factory.createCallExpression(
                             factory.createPropertyAccessExpression(
@@ -117,7 +117,7 @@ module.exports = function(content) {
                                     undefined,
                                     [factory.createStringLiteral("@engine/resources/injectResourceHolderHelper")]
                                 ),
-                                factory.createIdentifier("injectResourceHolder")
+                                factory.createIdentifier("__injectResourceHolder")
                             ),
                             undefined,
                             [
