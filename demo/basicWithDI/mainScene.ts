@@ -13,6 +13,8 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
+        console.log(LogoResources.getInstance().logoTexture);
+
         const spr:Image = new Image(this.game,this.logoRes.logoTexture);
         spr.pos.fromJSON({x:10,y:10});
         spr.addBehaviour(new DraggableBehaviour(this.game));
