@@ -23,7 +23,6 @@ class SelectLevelSceneUI extends VEngineTsxComponent {
     private currentButton:number|undefined = undefined;
     private answerSelected:boolean = false;
 
-    private assets:Assets = Assets.getInstance();
 
     constructor(private game:Game) {
         super(new VEngineTsxDOMRenderer(game));
@@ -35,13 +34,11 @@ class SelectLevelSceneUI extends VEngineTsxComponent {
                 <BgMatrix/>
                 <AnswerButton
                     click={()=>this.onAnswerClick(0)}
-                    assets={this.assets}
                     pos={{x:280,y:110}}
                     lightUpState={this.resolveLightUpButtonState(0)}
                     text={'6 клас'}/>
                 <AnswerButton
                     click={()=>this.onAnswerClick(1)}
-                    assets={this.assets}
                     pos={{x:280,y:310}}
                     lightUpState={this.resolveLightUpButtonState(1)}
                     text={'9 клас'}/>
@@ -60,7 +57,7 @@ class SelectLevelSceneUI extends VEngineTsxComponent {
         if (this.answerSelected) return;
         if (this.currentButton===undefined) this.currentButton = 0;
         else if (this.currentButton===1) this.currentButton = 0;
-        this.assets.btn1Sound.play();
+        Assets.getInstance().btn1Sound.play();
     }
 
     @ReactiveMethod()
@@ -68,14 +65,14 @@ class SelectLevelSceneUI extends VEngineTsxComponent {
         if (this.answerSelected) return;
         if (this.currentButton===undefined) this.currentButton = 0;
         else if (this.currentButton===0) this.currentButton = 1;
-        this.assets.btn1Sound.play();
+        Assets.getInstance().btn1Sound.play();
     }
 
     public async onAnswerSelected() {
         if (this.currentButton===undefined) return;
         if (this.answerSelected) return;
         this.answerSelected = true;
-        this.assets.selectedSound.play();
+        Assets.getInstance().selectedSound.play();
         await waitFor(100);
         const transition = new Flip3dVerticalInTransition(this.game,false);
         transition.setBackgroundColor(Color.GREY.clone());

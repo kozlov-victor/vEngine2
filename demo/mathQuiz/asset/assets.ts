@@ -6,14 +6,8 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Sound} from "@engine/media/sound";
 import {AngelCodeParser} from "@engine/misc/parsers/angelCode/angelCodeParser";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
-import {ISingleton, staticImplements} from "@engine/resources/singleton";
 
-@staticImplements<ISingleton<Assets>>()
 export class Assets extends ResourceAutoHolder{
-
-    public static getInstance():Assets {
-        return undefined!;
-    }
 
     @Resource.Sound('./mathQuiz/asset/sound/btn1.wav') public btn1Sound:Sound;
     @Resource.Sound('./mathQuiz/asset/sound/completed.wav') public completedSound:Sound;

@@ -4,7 +4,13 @@ import {DebugError} from "@engine/debug/debugError";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {GAME_EVENTS} from "@engine/core/game";
 
+type Constructor<T> = { new (scene:Scene): T }
+
 export abstract class ResourceAutoHolder {
+
+    public static getInstance<T>(this: Constructor<T>): T {
+        return undefined!;// dummy impl, real impl is provided in __injectResourceHolder function
+    }
 
     protected onPreloading(taskQueue:TaskQueue):void{
         //  method stub for autogenerator

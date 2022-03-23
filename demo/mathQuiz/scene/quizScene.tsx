@@ -118,23 +118,21 @@ class QuizSceneUI extends VEngineTsxComponent {
                 />
                 <AnswerButton
                     click={()=>this.onAnswerClick(0)}
-                    assets={this.assets}
                     pos={{x:100,y:300}}
                     lightUpState={this.resolveLightUpButtonState(0)}
                     text={this.currentQuestion.answers[0].text}/>
                 <AnswerButton
                     click={()=>this.onAnswerClick(1)}
-                    assets={this.assets} pos={{x:520,y:300}}
+                    pos={{x:520,y:300}}
                     lightUpState={this.resolveLightUpButtonState(1)}
                     text={this.currentQuestion.answers[1].text}/>
                 <AnswerButton
                     click={()=>this.onAnswerClick(2)}
-                    assets={this.assets} pos={{x:100,y:450}}
+                    pos={{x:100,y:450}}
                     lightUpState={this.resolveLightUpButtonState(2)}
                     text={this.currentQuestion.answers[2].text}/>
                 <AnswerButton
                     click={()=>this.onAnswerClick(3)}
-                    assets={this.assets}
                     pos={{x:520,y:450}}
                     lightUpState={this.resolveLightUpButtonState(3)}
                     text={this.currentQuestion.answers[3].text}/>

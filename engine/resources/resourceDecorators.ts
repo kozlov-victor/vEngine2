@@ -9,7 +9,6 @@ import {IParser} from "@engine/misc/parsers/iParser";
 import type {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 import type {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 
-
 export const Resource = {
     ResourceHolder: ()=>{
         return (target: Scene, fieldName: string):void => {
