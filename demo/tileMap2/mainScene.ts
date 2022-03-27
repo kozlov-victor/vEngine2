@@ -183,6 +183,12 @@ export class MainScene extends Scene {
                 ps.emitTo(this);
             }
         });
+
+        // this.filters = [
+        //     new EmbossKernelFilter(this.game)
+        // ];
+
     }
+
 
 }
