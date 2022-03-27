@@ -39,7 +39,7 @@ export const enum SCENE_EVENTS {
 
 export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IAlphaBlendable {
 
-    public static currentRenderingScene:Scene;
+    public static _currentRenderingScene:Scene;
 
     constructor(protected game:Game) {
         this._renderingObjectStack = new RenderingObjectStack();
@@ -53,7 +53,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     public alpha:number = 1;
     public readonly size:Size = new Size();
     public lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED;
-    public preloadingGameObject!:RenderableModel;
+    public preloadingGameObject:RenderableModel;
     public readonly camera:Camera = new Camera(this.game,this);
     public _spatialSpace:SpatialSpace;
 
@@ -226,7 +226,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
 
 
     public render():void {
-        Scene.currentRenderingScene = this;
+        Scene._currentRenderingScene = this;
         this._renderingObjectStack.clear();
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();

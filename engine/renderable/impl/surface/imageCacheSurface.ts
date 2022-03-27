@@ -25,7 +25,7 @@ export class ImageCacheSurface extends RenderableModel {
     public override render():void {
 
         // two pass drawing
-        const renderingSessionInfo:RenderingSessionInfo = Scene.currentRenderingScene._renderingSessionInfo;
+        const renderingSessionInfo:RenderingSessionInfo = Scene._currentRenderingScene._renderingSessionInfo;
 
         // 1. render to drawing surface
         this._drawToSurface();

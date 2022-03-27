@@ -205,7 +205,7 @@ export abstract class RenderableModel
             throw new DebugError(`can not render destroyed object`);
         }
 
-        if (this._scene === undefined) this._scene = Scene.currentRenderingScene;
+        if (this._scene === undefined) this._scene = Scene._currentRenderingScene;
         if (this._layer === undefined) this._layer = this._scene._renderingSessionInfo.currentLayer;
         if (this._scene._renderingSessionInfo.drawingStackEnabled) {
             this._scene._renderingObjectStack.add(this, this._scene._renderingSessionInfo.currentConstrainObjects);

@@ -192,9 +192,9 @@ export class TileMap extends RenderableModelWithTexture {
 
 
     public override revalidate(): void{
-
-        this.game.getCurrentScene().size.width = this._numOfTilesInMapByX * this._tileWidth;
-        this.game.getCurrentScene().size.height = this._numOfTilesInMapByY * this._tileHeight;
+        const scene = this.game.getCurrentScene();
+        scene.size.width = Math.max(scene.size.width,this._numOfTilesInMapByX * this._tileWidth);
+        scene.size.height = Math.max(scene.size.height,this._numOfTilesInMapByY * this._tileHeight);
 
         const texSize:ISize = this.getTexture().size;
         this._numOfTilesInSpriteByX = ~~(texSize.width / this._tileWidth);
