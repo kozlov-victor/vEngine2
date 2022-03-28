@@ -22,6 +22,7 @@ interface IStackItem {
     frameBuffer:FrameBuffer;
     filters:readonly AbstractGlFilter[];
     pointer:IStateStackPointer;
+    alpha:number;
 }
 
 export interface IStateStackPointer {
@@ -52,7 +53,8 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         this._stack.push({
             frameBuffer: new FrameBuffer(this._gl,this._size),
             filters:NONE_FILTERS,
-            pointer: {ptr:0}
+            pointer: {ptr:0},
+            alpha: 1,
         });
         this._stackPointer = 1;
 
@@ -80,17 +82,19 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     }
 
-    public pushState(filters:AbstractGlFilter[],forceDrawChildrenOnNewSurface:boolean):IStateStackPointer{
+    public pushState(filters:AbstractGlFilter[],alpha:number,forceDrawChildrenOnNewSurface:boolean):IStateStackPointer{
         const prevPointer:IStateStackPointer = this._getLast().pointer;
-        if (filters.length>0 || forceDrawChildrenOnNewSurface) {
+        if (filters.length>0 || alpha!==1 || forceDrawChildrenOnNewSurface) {
             if (this._stack[this._stackPointer]===undefined) {
                 this._stack[this._stackPointer] = {
                     frameBuffer: new FrameBuffer(this._gl,this._size),
                     filters:NONE_FILTERS,
+                    alpha,
                     pointer: {ptr:this._stackPointer}
                 };
             }
             this._stack[this._stackPointer].filters = filters;
+            this._stack[this._stackPointer].alpha = alpha;
             this._stack[this._stackPointer].frameBuffer.bind();
             this._stack[this._stackPointer].frameBuffer.clear(Color.NONE,false);
             this._stackPointer++;
@@ -151,6 +155,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
             this._simpleRectPainter.setUniform(this._simpleRectPainter.u_textureMatrix,IDENTITY);
             const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,this._getLast().frameBuffer.getTexture().size);
             this._simpleRectPainter.setUniform(this._simpleRectPainter.u_vertexMatrix,m16h.mat16);
+            this._simpleRectPainter.setUniform(this._simpleRectPainter.u_alpha,currItem.alpha);
             this._simpleRectPainter.attachTexture('texture',filteredTexture);
             this._blender.setBlendMode(BLEND_MODE.NORMAL);
             this._simpleRectPainter.draw();
@@ -168,6 +173,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         this._gl.viewport(0, 0, ~~w,~~h);
         this._simpleRectPainter.setUniform(this._simpleRectPainter.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
         this._simpleRectPainter.setUniform(this._simpleRectPainter.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
+        this._simpleRectPainter.setUniform(this._simpleRectPainter.u_alpha,1);
         this._simpleRectPainter.attachTexture('texture',this._getLast().frameBuffer.getTexture());
         this._simpleRectPainter.draw();
     }

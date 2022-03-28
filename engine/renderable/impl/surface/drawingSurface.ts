@@ -27,7 +27,6 @@ import {
 } from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 import {SvgPathToVertexArrayBuilder} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArrayBuilder";
 import MAT16 = Mat4.MAT16;
-import {InfoPanel} from "../../../../demo/catGame/entity/object/impl/infoPanel";
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {
@@ -356,6 +355,10 @@ export class DrawingSurface
         } else { // r g b a
             return new Color(col as Uint8,g!,b!,a);
         }
+    }
+
+    public override getChildrenCount():number {
+        return 0;
     }
 
     public clone(): DrawingSurface {return undefined!;}

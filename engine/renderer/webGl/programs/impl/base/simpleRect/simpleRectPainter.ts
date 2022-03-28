@@ -15,6 +15,7 @@ export class SimpleRectPainter extends AbstractPainter {
     public gen:ShaderGenerator;
 
     public readonly a_position:string;
+    public readonly u_alpha:string;
     public readonly a_texCoord:string;
     public readonly u_vertexMatrix:string;
     public readonly u_textureMatrix:string;
@@ -29,6 +30,7 @@ export class SimpleRectPainter extends AbstractPainter {
         this.a_texCoord = gen.addAttribute(GL_TYPE.FLOAT_VEC2,'a_texCoord');
         this.u_vertexMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_vertexMatrix');
         this.u_textureMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_textureMatrix');
+        this.u_alpha = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
         gen.addVarying(GL_TYPE.FLOAT_VEC2,'v_texCoord');
 
         //language=GLSL
@@ -42,7 +44,7 @@ export class SimpleRectPainter extends AbstractPainter {
         //language=GLSL
         gen.setFragmentMainFn(`
             void main(){
-                gl_FragColor = texture2D(texture, v_texCoord);
+                gl_FragColor = texture2D(texture, v_texCoord)*u_alpha;
             }
         `);
     }

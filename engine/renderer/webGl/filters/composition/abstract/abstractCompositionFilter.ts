@@ -47,6 +47,7 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         // 0. prepare for composition drawing
         this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_textureMatrix,IDENTITY);
         this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_vertexMatrix,m16h.mat16);
+        this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_alpha,1);
         Blender.getSingleton(this.game.getRenderer<WebGlRenderer>().getNativeContext()).setBlendMode(BLEND_MODE.NORMAL);
         // 1. copy current destination texture to accumulatorBefore
         this.destCopy.bind();

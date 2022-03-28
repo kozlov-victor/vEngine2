@@ -56,6 +56,7 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
         this.simpleRectPainter.setUniform(this.simpleRectPainter.u_textureMatrix,IDENTITY);
         const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,size);
         this.simpleRectPainter.setUniform(this.simpleRectPainter.u_vertexMatrix,m16h.mat16);
+        this.simpleRectPainter.setUniform(this.simpleRectPainter.u_alpha,1);
         m16h.release();
         destFrameBuffer.bind();
         destFrameBuffer.clear(Color.NONE);

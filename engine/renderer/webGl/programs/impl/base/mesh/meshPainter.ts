@@ -73,7 +73,7 @@ export class MeshPainter extends AbstractPainter {
         this.setUniform(this.u_textureMatrix,m);
     }
 
-    public setAlfa(a:number):void{
+    public setAlpha(a:number):void{
         this.setUniform(this.u_alpha,a);
     }
 

@@ -56,11 +56,8 @@ export class WebGlRendererHelper extends RendererHelper {
         const renderer:WebGlRenderer = this.game.getRenderer();
         this.saveRenderTarget();
         renderer.setRenderTarget(renderTarget);
-        renderer.saveAlphaBlend();
-        renderer.setAlphaBlend(1);
         scene.render();
         this.restoreRenderTarget();
-        renderer.restoreAlphaBlend();
     }
 
     public override renderModelToTexture(m: RenderableModel, renderTarget:FrameBufferStack, clearColor?:Color,omitSaveAndResoreRenderTaget?:boolean): void {
@@ -70,19 +67,16 @@ export class WebGlRendererHelper extends RendererHelper {
         renderer.setRenderTarget(renderTarget);
         renderer.transformSave();
         renderer.transformSet(IDENTITY);
-        renderer.saveAlphaBlend();
-        renderer.setAlphaBlend(1);
         const clearBeforeRenderOrig:boolean = renderer.clearBeforeRender;
         const clearColorOrig:Color = renderer.clearColor;
         renderer.clearBeforeRender = clearColor!==undefined;
         if (clearColor!==undefined) renderer.clearColor.setFrom(clearColor);
-        const statePointer:IStateStackPointer = renderer.beforeFrameDraw(m.filters as AbstractGlFilter[]);
+        const statePointer:IStateStackPointer = renderer.beforeFrameDraw(m.filters as AbstractGlFilter[],m.alpha);
         m.render();
         renderer.afterFrameDraw(statePointer);
         if (!omitSaveAndResoreRenderTaget) this.restoreRenderTarget();
         renderer.clearBeforeRender = clearBeforeRenderOrig;
         renderer.clearColor.setFrom(clearColorOrig);
         renderer.transformRestore();
-        renderer.restoreAlphaBlend();
     }
 }
