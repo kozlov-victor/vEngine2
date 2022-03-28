@@ -42,6 +42,7 @@ export class MainScene extends Scene {
         // https://www.dwitter.net/d/8876
 
         let j,h,v = 0,z:number;
+        this.surface.setLineWidth(0);
 
         x.drawBatch(batch=>{
             for(j=20,h=96;h--;) {

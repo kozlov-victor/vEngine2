@@ -3,8 +3,9 @@ import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
-import {Scene} from "@engine/scene/scene";
 import {DebugError} from "@engine/debug/debugError";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Color} from "@engine/renderer/common/color";
 
 export class DebugLayer extends Layer {
 
@@ -73,6 +74,17 @@ export class DebugLayer extends Layer {
     public println(...args:any[]):void {
         this.clearLog();
         this.log(...args);
+    }
+
+    public getTextField():TextField {
+        return this.textField;
+    }
+
+    public setSolidBackground():void {
+        const rect = new Rectangle(this.game);
+        rect.fillColor = Color.WHITE;
+        this.textField.setBackground(rect);
+        this.textField.setAutoSize(true);
     }
 
 

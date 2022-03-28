@@ -12,7 +12,6 @@ export abstract class AbstractKernelAccumulativeFilter extends AbstractGlFilter 
     private readonly rt_h:string;
     private readonly u_kernel:string;
     private readonly u_kernelWeight:string;
-    private kernel:Kernel3x3;
     private kernelWeight:number = 0;
 
     constructor(game:Game) {
@@ -54,10 +53,9 @@ export abstract class AbstractKernelAccumulativeFilter extends AbstractGlFilter 
     }
 
     public setKernel(kernel:Kernel3x3):void{
-        this.kernel = kernel;
         this.kernelWeight = 0;
-        this.setUniform(this.u_kernel,new Float32Array(this.kernel));
-        this.kernel.forEach(it=>this.kernelWeight+=it);
+        this.setUniform(this.u_kernel,new Float32Array(kernel));
+        kernel.forEach(it=>this.kernelWeight+=it);
         if (this.kernelWeight<=0) this.kernelWeight = 1;
     }
 

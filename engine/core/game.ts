@@ -246,9 +246,9 @@ export class Game {
         const currTimeCopy:number = this._currTime;
         if (!this._lastTime) this._lastTime = this._currTime;
         this._deltaTime = this._currTime - this._lastTime;
+        const dt = this._deltaTime;
 
         if (DEBUG) {
-            this.fps = ~~(1000 / this._deltaTime);
             const renderError:Optional<{code:number,desc:string}> = this._renderer.getError();
             if (renderError!==undefined) {
                 throw new DebugError(`rendering error with code ${renderError.code} (${renderError.desc})`);
@@ -279,6 +279,9 @@ export class Game {
 
         if (this._currSceneTransition!==undefined) this._currSceneTransition.render();
         else currentScene.render();
+        if (DEBUG) {
+            this.fps = ~~(1000 / dt);
+        }
     }
 
     public hasCurrentTransition():boolean {

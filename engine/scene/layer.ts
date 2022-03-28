@@ -1,20 +1,23 @@
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "../renderable/abstract/renderableModel";
-import {IParentChild, Optional} from "@engine/core/declarations";
+import {IFilterable, IParentChild, Optional} from "@engine/core/declarations";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {Scene} from "@engine/scene/scene";
+import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 
 export const enum LayerTransformType {
     TRANSFORM,
     STICK_TO_CAMERA,
 }
 
-export class Layer implements IParentChild {
+export class Layer implements IParentChild, IFilterable {
 
     public readonly type:string = 'Layer';
     public transformType:LayerTransformType = LayerTransformType.TRANSFORM;
     public readonly parent:IParentChild;
     public id:string;
+    public filters:IFilter[] = [];
+
     public readonly _children:RenderableModel[] = [];
 
     protected _parentChildDelegate:ParentChildDelegate<IParentChild> = new ParentChildDelegate<IParentChild>(this);
@@ -111,9 +114,12 @@ export class Layer implements IParentChild {
     }
 
     public render():void {
+        const renderer = this.game.getRenderer();
+        const layerStatePointer:IStateStackPointer = renderer.beforeItemStackDraw(this.filters,this.filters.length>0);
         for (const obj of this._children) {
             obj.render();
         }
+        renderer.afterItemStackDraw(layerStatePointer);
     }
 
 }

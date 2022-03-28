@@ -233,7 +233,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         renderer.saveAlphaBlend();
         renderer.pushAlphaBlend(this.alpha);
         renderer.clearColor.setFrom(this.backgroundColor);
-        const statePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters);
+        const sceneStatePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters);
 
         if (this.camera.worldTransformDirty) {
             this.camera._translate();
@@ -243,8 +243,6 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
             this.game.getRenderer().transformSet(this.camera.worldTransformMatrix.mat16);
         }
 
-        renderer.pushAlphaBlend(this.alpha);
-
         if (this.lifeCycleState===SceneLifeCycleState.PRELOADING) {
             if (this.preloadingGameObject!==undefined) {
                 this.preloadingGameObject.render();
@@ -252,12 +250,13 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         } else {
             for (const l of this._layers) {
                 this._renderingSessionInfo.currentLayer = l;
-                if (l.transformType===LayerTransformType.STICK_TO_CAMERA) {
+                const isStuck = l.transformType===LayerTransformType.STICK_TO_CAMERA;
+                if (isStuck) {
                     renderer.transformSave();
                     renderer.transformSet(IDENTITY_HOLDER.mat16);
                 }
                 l.render();
-                if (l.transformType===LayerTransformType.STICK_TO_CAMERA) {
+                if (isStuck) {
                     renderer.transformRestore();
                 }
             }
@@ -269,7 +268,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         if (this.lifeCycleState===SceneLifeCycleState.COMPLETED) this.onRender();
         renderer.transformRestore();
 
-        renderer.afterFrameDraw(statePointer);
+        renderer.afterFrameDraw(sceneStatePointer);
         renderer.transformRestore();
 
         this.camera.worldTransformDirty = false;

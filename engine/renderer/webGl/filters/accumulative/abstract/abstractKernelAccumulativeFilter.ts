@@ -19,7 +19,6 @@ export class AbstractKernelAccumulativeFilter extends AbstractAccumulativeFilter
     private readonly u_noiseIntensity:string;
     private readonly u_time:string;
 
-    private kernel:Kernel3x3;
     private kernelWeight:number = 0;
     private noiseIntensity:number = 0;
     private time:number = 0;
@@ -63,7 +62,6 @@ export class AbstractKernelAccumulativeFilter extends AbstractAccumulativeFilter
         const {width,height} = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.setUniform(this.rt_w,width);
         this.setUniform(this.rt_h,height);
-        this.setUniform(this.u_kernel,new Float32Array(this.kernel));
         this.setUniform(this.u_kernelWeight,this.kernelWeight);
         this.setUniform(this.u_noiseIntensity,this.noiseIntensity);
         this.time+=0.01;
@@ -72,9 +70,9 @@ export class AbstractKernelAccumulativeFilter extends AbstractAccumulativeFilter
     }
 
     public setKernel(kernel:Kernel3x3):void{
-        this.kernel = kernel;
+        this.setUniform(this.u_kernel,new Float32Array(kernel));
         this.kernelWeight = 0;
-        this.kernel.forEach(it=>this.kernelWeight+=it);
+        kernel.forEach(it=>this.kernelWeight+=it);
     }
 
     public setNoiseIntensity(intensity:number):void{

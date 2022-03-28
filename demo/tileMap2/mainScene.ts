@@ -143,7 +143,7 @@ export class MainScene extends Scene {
             {
                         type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
                         groupNames:['particles'],
-                        ignoreCollisionWithGroupNames:['particles']
+                        ignoreCollisionWithGroupNames:['particles'],
                     }
             )
         );
@@ -183,10 +183,6 @@ export class MainScene extends Scene {
                 ps.emitTo(this);
             }
         });
-
-        // this.filters = [
-        //     new EmbossKernelFilter(this.game)
-        // ];
 
     }
 

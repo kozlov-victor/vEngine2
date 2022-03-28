@@ -4,14 +4,14 @@ import {
 import {Game} from "@engine/core/game";
 
 // https://webgl2fundamentals.org/webgl/lessons/webgl-image-processing.html
-export class EmbossKernelFilter extends AbstractKernelAccumulativeFilter {
+export class SharpenKernelFilter extends AbstractKernelAccumulativeFilter {
 
     constructor(game:Game) {
         super(game);
         this.setKernel([
-            -2, -1,  0,
-            -1,  1,  1,
-             0,  1,  2
+             0, -1,  0,
+            -1,  5, -1,
+             0, -1,  0,
         ]);
     }
 

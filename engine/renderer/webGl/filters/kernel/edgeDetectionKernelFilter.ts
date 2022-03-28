@@ -3,6 +3,7 @@ import {
 } from "@engine/renderer/webGl/filters/accumulative/abstract/abstractKernelFilter";
 import {Game} from "@engine/core/game";
 
+// https://webgl2fundamentals.org/webgl/lessons/webgl-image-processing.html
 export class EdgeDetectionKernelFilter extends AbstractKernelAccumulativeFilter {
 
     constructor(game:Game) {
