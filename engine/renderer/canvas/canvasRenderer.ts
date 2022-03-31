@@ -182,11 +182,10 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.transformRestore();
     }
 
-    public override beforeFrameDraw(filters:AbstractGlFilter[]): IStateStackPointer {
+    public override beforeFrameDraw(): void {
         if (!this.clearBeforeRender) return undefined!;
         this.ctx.fillStyle = this.clearColor.asCssRgba();
         this.ctx.fillRect(0,0,this.game.size.width,this.game.size.height);
-        return undefined!;
     }
 
 

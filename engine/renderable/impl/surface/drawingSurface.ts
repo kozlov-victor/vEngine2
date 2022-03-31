@@ -273,6 +273,8 @@ class DrawingSession implements IDrawingSession {
 
     public _draw():void {
         if (this._omitSelfOnRendering) return;
+        this.canvasImage.alpha = this.surface.alpha;
+        this.canvasImage.filters = this.surface.filters;
         this.game.getRenderer().drawImage(this.canvasImage);
     }
 
@@ -338,6 +340,8 @@ export class DrawingSurface
         this.clear();
     }
 
+    public override type = 'DrawingSurface';
+
     public setResourceLink:never = undefined as unknown as never;
     private _matrixStack:MatrixStack = new MatrixStack();
 
@@ -361,9 +365,9 @@ export class DrawingSurface
         return 0;
     }
 
-    public clone(): DrawingSurface {return undefined!;}
+    public clone(): DrawingSurface {return undefined!;} // todo
 
-    public draw(): void {
+    public override draw(): void {
         this._drawingSession._draw();
     }
 

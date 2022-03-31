@@ -454,16 +454,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public override beforeFrameDraw(filters:AbstractGlFilter[],alpha:number):IStateStackPointer{
-        const ptr:IStateStackPointer = this._currFrameBufferStack.pushState(filters,alpha,false);
+    public override beforeFrameDraw():void{
         if (this.clearBeforeRender) {
-            this._currFrameBufferStack.clear(this.clearColor,1);
+            this._currFrameBufferStack.clear(this.clearColor, 1);
         }
-        return ptr;
     }
 
-    public override afterFrameDraw(stackPointer:IStateStackPointer):void{
-        this._currFrameBufferStack.reduceState(stackPointer);
+    public override afterFrameDraw():void{
         if (this._currFrameBufferStack===this._origFrameBufferStack) {
             if (this._lockRect!==undefined) {
                 const rect = this._lockRect;

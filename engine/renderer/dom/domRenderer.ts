@@ -104,11 +104,10 @@ export class DomRenderer extends AbstractRenderer {
         this.registerResize();
     }
 
-    public override beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
+    public override beforeFrameDraw():void{
         if (this._nodes.properties.bg_color!==this.clearColor.asCssRgba()) {
             this.container.style.backgroundColor = this.clearColor.asCssRgba();
         }
-        return undefined!;
     }
 
     public drawImage(img: Image): void {

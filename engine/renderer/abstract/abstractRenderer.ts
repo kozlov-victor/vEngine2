@@ -81,11 +81,11 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     public afterItemStackDraw(stackPointer:IStateStackPointer):void {}
 
-    public beforeFrameDraw(filters:IFilter[],alpha:number):IStateStackPointer {
-        return undefined!;
+    public beforeFrameDraw():void {
+
     }
 
-    public afterFrameDraw(stackPointer:IStateStackPointer):void {}
+    public afterFrameDraw():void {}
 
     public destroy():void {
         globalThis.removeEventListener('resize',this.onResize);

@@ -231,7 +231,9 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
         renderer.clearColor.setFrom(this.backgroundColor);
-        const sceneStatePointer:IStateStackPointer = renderer.beforeFrameDraw(this.filters,this.alpha);
+
+        const ptr:IStateStackPointer = renderer.beforeItemStackDraw(this.filters,this.alpha,false);
+        renderer.beforeFrameDraw();
 
         if (this.camera.worldTransformDirty) {
             this.camera._translate();
@@ -264,7 +266,8 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         if (this.lifeCycleState===SceneLifeCycleState.COMPLETED) this.onRender();
         renderer.transformRestore();
 
-        renderer.afterFrameDraw(sceneStatePointer);
+        renderer.afterItemStackDraw(ptr);
+        renderer.afterFrameDraw();
         renderer.transformRestore();
 
         this.camera.worldTransformDirty = false;
