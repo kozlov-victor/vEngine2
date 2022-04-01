@@ -78,7 +78,7 @@ export namespace Mat4 {
         0, 1, 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1
-    ]) as unknown as Readonly<MAT16>;
+    ]) as Readonly<MAT16>;
 
     export const makeIdentity = (out:Mat16Holder):void => {
         out.fromMat16(identityArray);
@@ -271,7 +271,9 @@ export namespace Mat4 {
 
     export const makeRotationReset = (out:Mat16Holder):void=>{
         const m:MAT16 = out.mat16 as MAT16;
-        const d:n = Math.sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
+
+        const m0 = m[0], m1 = m[1], m2 = m[2];
+        const d:n = Math.sqrt(m0 * m0 + m1 * m1 + m2 * m2);
         m[0] = d;
         m[1] = 0;
         m[2] = 0;
@@ -288,12 +290,17 @@ export namespace Mat4 {
     };
 
     export const makeScale = (out:Mat16Holder,sx:n, sy:n, sz:n):void=> {
-        out.set(
-            sx, 0,  0,  0,
-            0, sy,  0,  0,
-            0,  0, sz,  0,
-            0,  0,  0,  1
-        );
+        // out.set(
+        //     sx, 0,  0,  0,
+        //     0, sy,  0,  0,
+        //     0,  0, sz,  0,
+        //     0,  0,  0,  1
+        // );
+        const m = out.mat16 as MAT16;
+        out.mat16.set(identityArray);
+        m[ 0] = sx;
+        m[ 5] = sy;
+        m[10] = sz;
     };
 
 

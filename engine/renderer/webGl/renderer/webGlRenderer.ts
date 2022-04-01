@@ -2,7 +2,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {FILL_TYPE, SHAPE_TYPE, ShapePainter} from "@engine/renderer/webGl/programs/impl/base/shape/shapePainter";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {Rect} from "@engine/geometry/rect";
+import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {Game, SCALE_STRATEGY} from "@engine/core/game";
 import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
 import {Color} from "@engine/renderer/common/color";
@@ -131,7 +131,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private _blender:Blender;
 
 
-    private _lockRect:Optional<Rect>;
+    private _lockRect:Optional<IRectJSON>;
     private _glCachedAccessor:GlCachedAccessor;
     private _pixelPerfectMode:boolean = false;
 
@@ -436,7 +436,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return this._matrixStack.getCurrentValue().mat16;
     }
 
-    public setLockRect(rect:Rect):void {
+    public setLockRect(rect:IRectJSON):void {
         this._lockRect = rect;
     }
 
@@ -462,13 +462,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public override afterFrameDraw():void{
         if (this._currFrameBufferStack===this._origFrameBufferStack) {
-            if (this._lockRect!==undefined) {
-                const rect = this._lockRect;
+            const hasLockRect = this._lockRect!==undefined;
+            if (hasLockRect) {
+                const rect = this._lockRect!;
                 this._gl.enable(this._gl.SCISSOR_TEST);
                 this._gl.scissor(~~rect.x, ~~(this.game.size.height - rect.height - rect.y), ~~rect.width,~~rect.height);
             }
             this._currFrameBufferStack.renderToScreen();
-            this._gl.disable(this._gl.SCISSOR_TEST);
+            if (hasLockRect) this._gl.disable(this._gl.SCISSOR_TEST);
         }
     }
 
