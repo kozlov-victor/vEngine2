@@ -63,6 +63,9 @@ const calcNumberWithMeasure = (val:number,measure:string,containerSize:number,):
             return val*96;
         case 'pc':
             return val*16;
+        case 'pt':
+            // 1pt ≅ 1.3333px
+            return val*1.3333;
         default:
             throw new DebugError(`unknown measure: ` + measure);
     }

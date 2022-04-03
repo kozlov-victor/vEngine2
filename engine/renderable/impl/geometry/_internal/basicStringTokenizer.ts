@@ -18,7 +18,7 @@ export class BasicStringTokenizer {
     }
 
     public getNextNumber(defaultResult?:number):number{
-        this.skipWhiteSpaces();
+        this.skipEmptySymbols();
         const lastPos:number = this._lastPos as number;
         let sign:number = 1;
         if (this.source[this._pos]==='-') {
@@ -33,12 +33,12 @@ export class BasicStringTokenizer {
             s+='e'+this.getNextNumber();
         }
         if (DEBUG && s.length===0) {
-            console.error(this.source);
+            this._debug();
             throw new DebugError(`can not read number, wrong next symbol: ${this.source[this._pos]}`);
         }
         let n:number = +s;
         if (DEBUG && isNaN(n)) {
-            console.error(this.source);
+            this._debug();
             throw new DebugError(`can not read number: ${sign===1?'':'-'}${s}`);
         }
         n*=sign;
@@ -50,21 +50,21 @@ export class BasicStringTokenizer {
         return this.source.substr(this._pos);
     }
 
-    private skipWhiteSpaces():void{
+    private skipEmptySymbols():void{
         while (!this.isEof()){
-            if ([',',' '].indexOf(this.source[this._pos])===-1) break;
+            if ([',',' ','\n'].indexOf(this.source[this._pos])===-1) break;
             this._pos++;
         }
     }
 
     public getNextToken(allowedSymbols:string, limit:number = 0):string{
         if (DEBUG && this.isEof()) {
-            console.error(this.source);
+            this._debug();
             throw new DebugError(`unexpected end of string`);
         }
         let char:string;
         let res:string = '';
-        this.skipWhiteSpaces();
+        this.skipEmptySymbols();
         this._lastPos = this._pos;
         while (!this.isEof()){
             char = this.source[this._pos];
@@ -84,19 +84,19 @@ export class BasicStringTokenizer {
 
     public skipRequiredToken(tkn:string):void {
         if (!this.skipOptionalToken(tkn)) {
-            console.error(this.source);
-            throw new Error(`token "${tkn}" is expected`);
+            this._debug();
+            throw new DebugError(`token "${tkn}" is expected`);
         }
     }
 
     public readUntilSymbol(symbol:string):string{
         if (DEBUG && this.isEof()) {
-            console.error(this.source);
+            this._debug();
             throw new DebugError(`unexpected end of string, expected: ${symbol}`);
         }
         let char:string;
         let res:string = '';
-        this.skipWhiteSpaces();
+        this.skipEmptySymbols();
         this._lastPos = this._pos;
         while (!this.isEof()){
             char = this.source[this._pos];
@@ -105,6 +105,14 @@ export class BasicStringTokenizer {
             this._pos++;
         }
         return res;
+    }
+
+    private _debug():void {
+        console.error(this.source);
+        console.log(
+            `%c${this.source.substr(0,this._pos+1)}%c<---%c${this.source.substr(this._pos+1)}`,
+            'color:black','color:red;font-weight:bold;','color:black',
+        );
     }
 
 }
