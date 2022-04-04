@@ -139,13 +139,13 @@ window.onerror = (e: Event | string)=>{
     renderError({runtimeInfo:prepareMessage(e)});
 };
 
-// let inspectorShowed = false;
-// window.addEventListener('keyup', (e:KeyboardEvent)=> {
-//     if (inspectorShowed) return;
-//     inspectorShowed = true;
-//     if (e.ctrlKey && e.key==='i') {
-//         const script = document.createElement('script');
-//         script.src = './out/inspector.js?r'+new Date().getTime();
-//         document.body.appendChild(script);
-//     }
-// });
+let inspectorShowed = false;
+window.addEventListener('keyup', (e:KeyboardEvent)=> {
+    if (inspectorShowed) return;
+    inspectorShowed = true;
+    if (e.ctrlKey && e.key==='i') {
+        const script = document.createElement('script');
+        script.src = './out/inspector.js?r'+new Date().getTime();
+        document.body.appendChild(script);
+    }
+});

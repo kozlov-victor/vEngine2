@@ -5,6 +5,7 @@ import {TextPath} from "@engine/renderable/impl/ui/textField/textPath/TextPath";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Tween} from "@engine/animation/tween";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
@@ -36,6 +37,10 @@ export class MainScene extends Scene {
             },
             time: 5000,
         }));
+
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, e=>{
+            textPath.affectAngle = !textPath.affectAngle;
+        })
 
     }
 
