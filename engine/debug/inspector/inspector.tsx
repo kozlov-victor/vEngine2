@@ -7,41 +7,8 @@ import {Game} from "@engine/core/game";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Layer} from "@engine/scene/layer";
+import {createDraggableElement, init} from "@engine/debug/inspector/helpers";
 
-export interface IState {
-    test:boolean;
-}
-
-const createDraggableElement = ():HTMLDivElement=>{
-    const el = document.createElement('div');
-    el.style.position = 'absolute';
-    el.style.left = '0';
-    el.style.top = '0';
-    el.style.width = '100%';
-    el.style.height = '100%';
-    const mouseDownPoint = {x:0,y:0};
-    let isMouseDown:boolean = false;
-    el.onmousedown = e=>{
-        mouseDownPoint.x = e.screenX - parseInt(el.style.left);
-        mouseDownPoint.y = e.screenY -  parseInt(el.style.top);
-        isMouseDown = true;
-    };
-    document.body.addEventListener('mouseup',e=>{
-        isMouseDown = false;
-    },true);
-    document.body.addEventListener('mousemove',e=>{
-        if (!isMouseDown) return;
-        el.style.left = `${e.screenX - mouseDownPoint.x}px`;
-        el.style.top =  `${e.screenY - mouseDownPoint.y}px`;
-    },true);
-    return el;
-};
-
-const createCss = (str:string):void=>{
-    const style = document.createElement('style');
-    style.textContent = str;
-    document.head.appendChild(style);
-}
 
 const game:Game = (window as any).game;
 
@@ -67,13 +34,19 @@ const NodeLeafs = (props:{tagName:string,__id?:number,model:RenderableModel|Laye
             {
                 (()=>{
                     const arr = [];
+                    let tooManyChildrenWarn = false;
                     for (let i=0;i<props.model.getChildrenCount();i++) {
+                        if (i>20) {
+                            tooManyChildrenWarn = true;
+                        }
                         const c = props.model.getChildAt(i);
                         arr.push(
                             <NodeRoot nested={true} opened={opened} onClicked={(id)=> props.onClicked(id)}>
                                 <NodeLeafs onClicked={(id)=> props.onClicked(id)} tagName={c.constructor.name} model={c}/>
+                                {tooManyChildrenWarn && <div className={'tooManyChildrenWarn'}>too many children...</div>}
                             </NodeRoot>
                         );
+                        if (tooManyChildrenWarn) break;
                     }
                     return arr;
                 })()
@@ -96,10 +69,11 @@ class InspectorWidget extends VEngineTsxComponent{
     }
 
     render(): VirtualNode {
+        if (!game) return <></>;
         return (
             <NodeRoot nested={false} opened={true} onClicked={(id)=>this.onClicked(id)}>
                 {game.getCurrentScene().getLayers().map(l=>
-                    <NodeLeafs onClicked={(id)=>this.onClicked(id)} tagName='layer' model={l}/>
+                    <NodeLeafs onClicked={(id)=>this.onClicked(id)} tagName={l.constructor.name} model={l}/>
                 )}
             </NodeRoot>
         );
@@ -107,52 +81,7 @@ class InspectorWidget extends VEngineTsxComponent{
 
 }
 
-//language=css
-createCss(`
-    /* Remove default bullets */
-        ul {
-            list-style-type: none;
-        }
-
-        ul.root {
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Hide the nested list */
-        ul.nested {
-            padding-left: 10px;
-        }
-
-        /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
-        ul.active {
-            display: block;
-        }
-
-        /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
-        ul.inactive {
-            display: none;
-        }
-
-        /* Style the caret/arrow */
-        .caret {
-            cursor: pointer;
-            user-select: none; /* Prevent text selection */
-        }
-
-        /* Create the caret/arrow with a unicode, and style it */
-        .caret::before {
-            content: "\\25B6";
-            color: black;
-            display: inline-block;
-            margin-right: 6px;
-        }
-
-        /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
-        .caret-down::before {
-            transform: rotate(90deg);
-        }
-`);
-const draggableElContainer = createDraggableElement();
+init();
+const draggableElContainer = createDraggableElement({className:'panel'});
 document.body.appendChild(draggableElContainer);
 new InspectorWidget().mountTo(new HTMLElementWrap(draggableElContainer));

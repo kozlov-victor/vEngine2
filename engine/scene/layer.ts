@@ -1,23 +1,24 @@
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "../renderable/abstract/renderableModel";
-import {IAlphaBlendable, IFilterable, IParentChild, Optional} from "@engine/core/declarations";
+import {IAlphaBlendable, IFilterable, IParentChild, IWithId, Optional} from "@engine/core/declarations";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {Scene} from "@engine/scene/scene";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
+import {Incrementer} from "@engine/resources/incrementer";
 
 export const enum LayerTransformType {
     TRANSFORM,
     STICK_TO_CAMERA,
 }
 
-export class Layer implements IParentChild, IFilterable,IAlphaBlendable {
+export class Layer implements IParentChild, IFilterable,IAlphaBlendable, IWithId {
 
     public readonly type:string = 'Layer';
     public transformType:LayerTransformType = LayerTransformType.TRANSFORM;
     public readonly parent:IParentChild;
-    public id:string;
     public filters:IFilter[] = [];
     public alpha:number = 1;
+    public id:string = `object_${Incrementer.getValue()}`;
 
     public readonly _children:RenderableModel[] = [];
 

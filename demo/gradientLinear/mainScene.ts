@@ -14,10 +14,10 @@ export class MainScene extends Scene {
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
         gradient.angle = 0;
-        gradient.setColorAtPosition(0,ColorFactory.fromCSS(`#ffa100`));
-        gradient.setColorAtPosition(0.55,ColorFactory.fromCSS(`#59a584`));
-        gradient.setColorAtPosition(0.8,ColorFactory.fromCSS(`#533eca`));
-        gradient.setColorAtPosition(1,ColorFactory.fromCSS(`hsl(83, 51%, 48%)`));
+        gradient.setColorAtPosition(0,ColorFactory.fromCSS(`rgba(255, 161, 0, 0.81)`));
+        gradient.setColorAtPosition(0.55,ColorFactory.fromCSS(`rgba(89, 165, 132, 0.45)`));
+        gradient.setColorAtPosition(0.8,ColorFactory.fromCSS(`rgba(83, 62, 202, 0.8)`));
+        gradient.setColorAtPosition(1,ColorFactory.fromCSS(`hsla(83, 51%, 48%, 0.87)`));
         rect.fillGradient = gradient;
         rect.color = Color.RGB(0,0,40);
         rect.lineWidth = 0;

@@ -8,7 +8,7 @@ import {
     IRenderable,
     IRevalidatable,
     ITweenable,
-    IUpdatable,
+    IUpdatable, IWithId,
     Optional
 } from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
@@ -53,11 +53,11 @@ export abstract class RenderableModel
     implements
         IRenderable,
         IRevalidatable, ITweenable,
-        IParentChild,
+        IParentChild, IWithId,
         IAlphaBlendable, IFilterable,
         IUpdatable, IDestroyable {
 
-    public id: string;
+    public id: string = `object_${Incrementer.getValue()}`;
 
     public alpha: number = 1;
     public visible: boolean = true;
@@ -98,7 +98,6 @@ export abstract class RenderableModel
 
     protected constructor(game: Game) {
         super(game);
-        this.id = `object_${Incrementer.getValue()}`;
         this._parentChildDelegate.afterChildAppended = (child: RenderableModel) => {
             child._setLayer(this._layer!);
             child._setScene(this._scene);

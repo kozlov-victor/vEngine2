@@ -39,7 +39,7 @@ vec4 getInterpolatedGradientColor(float position) {
         vec4(currentLeftPoint.r,currentLeftPoint.g,currentLeftPoint.b,currentLeftPoint.a),
         vec4(currentRightPoint.r,currentRightPoint.g,currentRightPoint.b,currentRightPoint.a),
         (position - currentLeftPoint.value)/(currentRightPoint.value - currentLeftPoint.value+0.00001)
-    ) * currentLeftPoint.a;
+    );
 }
 
 
