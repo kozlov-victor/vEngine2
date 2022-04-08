@@ -20,8 +20,9 @@ export class AlphaMaskFilter extends AbstractGlFilter{
             void main(){
                 vec4 alfaTextureColor = texture2D(maskTexture, v_texCoord);
                 vec4 origColor = texture2D(texture, v_texCoord);
-                gl_FragColor = origColor;
-                gl_FragColor.a = alfaTextureColor.r;
+                float a = alfaTextureColor.r;
+                gl_FragColor = origColor*a;
+                gl_FragColor.a = a;
             }
         `);
         this.simpleRectPainter.initProgram();

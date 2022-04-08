@@ -66,7 +66,7 @@ export class MainScene extends Scene {
         const gradient:LinearGradient  = new LinearGradient();
         this.setInterval(()=>{
             gradient.angle+=0.01;
-        },10)
+        },10);
         gradient.setColorAtPosition(0,ColorFactory.fromCSS(`rgba(24, 241, 99, 0.48)`));
         gradient.setColorAtPosition(1,ColorFactory.fromCSS(`rgba(200,111,1,0.96)`));
         rect.fillGradient = gradient;

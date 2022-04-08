@@ -12,7 +12,7 @@ export const isCommonArray = (a:unknown):a is unknown[]=> {
 };
 
 export const isTypedArray = (a:unknown):a is Float32Array|Int32Array=> {
-    return !!((a as {buffer:ArrayBufferLike}).buffer);
+    return (a as RelativeIndexable<number>).at!==undefined;
 };
 
 export const isArray = (a:unknown):a is Float32Array|Int32Array|unknown[]=> {

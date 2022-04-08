@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 import {ShaderProgram} from "./shaderProgram";
 import {Int, Optional} from "@engine/core/declarations";
-import {IKeyVal, isTypedArray} from "@engine/misc/object";
+import {IKeyVal} from "@engine/misc/object";
 
 
 interface IShaderErrorInfo {

@@ -11,7 +11,8 @@ export const init = ()=>{
     /* Remove default bullets */
 
     .panel {
-        background-color: #e5e5e5;
+        background-color: #e5e5e5ed;
+        border-radius: 7px 7px 0 0;
     }
 
     ul {
@@ -62,6 +63,30 @@ export const init = ()=>{
         margin-right: 5px;
         color: #840000;
     }
+
+    .win-header {
+        background-color: #8585ff;
+        color: white;
+        padding: 2px;
+    }
+
+    .reload-btn,.close-btn {
+        display: inline-block;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    .close-btn {
+        float: right;
+        font-family: monospace;
+        padding-right: 5px;
+        color: #ffa9a9;
+    }
+
+    .listWrap {
+        padding: 3px;
+    }
+
 `);
 }
 
@@ -70,7 +95,6 @@ export const createDraggableElement = ({className = ''} = {}):HTMLDivElement=>{
     el.style.position = 'absolute';
     el.style.left = '0';
     el.style.top = '0';
-    el.style.padding = '3px';
     el.className = className;
     const mouseDownPoint = {x:0,y:0};
     let isMouseDown:boolean = false;
