@@ -15,6 +15,7 @@ import {
     AlignTextContentVertical,
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {
 
@@ -22,6 +23,10 @@ export class MainScene extends Scene {
     public font:Font;
 
     public override onReady():void {
+
+        this.mouseEventHandler.once(MOUSE_EVENTS.click, e=>{
+            this.game.getRenderer().requestFullScreen();
+        });
 
         this.backgroundColor = ColorFactory.fromCSS('black');
 
@@ -51,7 +56,7 @@ export class MainScene extends Scene {
         tf.setAlignTextContentHorizontal(AlignTextContentHorizontal.CENTER);
         tf.setAlignTextContentVertical(AlignTextContentVertical.CENTER);
         tf.textColor.setFrom(ColorFactory.fromCSS('#3da500'));
-        tf.setText('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,');
+        tf.setText('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean turpis arcu, suscipit ornare sem non, convallis malesuada arcu. Aenean vel sapien laoreet ante convallis imperdiet. Donec tempor mauris nec enim viverra mattis. Nullam vulputate dictum est, at consectetur urna molestie eget. Vestibulum facilisis mauris odio, quis feugiat ex hendrerit a. Sed vitae dapibus nisl. Integer tincidunt pretium tincidunt. In hac habitasse platea dictumst');
         const maskFilter = new AlphaMaskFilter(this.game,drawingSurface.getTexture());
         tf.filters = [maskFilter];
         this.appendChild(tf);
