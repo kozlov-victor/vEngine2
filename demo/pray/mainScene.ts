@@ -16,7 +16,6 @@ import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnim
 import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Color} from "@engine/renderer/common/color";
 import {InsetBorder} from "@engine/renderable/impl/geometry/insetBorder";
 import {Button} from "@engine/renderable/impl/ui/button/button";
 import {Image} from "@engine/renderable/impl/general/image/image";
