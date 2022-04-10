@@ -20,7 +20,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontSize: 20})
-    public font:Font;
+    private font:Font;
 
     public override onReady():void {
 

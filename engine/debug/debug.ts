@@ -41,6 +41,7 @@ const onLoad = (fn:()=>void)=>{
 onLoad(()=>{
     if (!DEBUG) return;
     if (destroyed) return;
+    if (!(window as any).game) return;
     document.body.appendChild(fpsLabel);
     tmr = setInterval(()=>{
         const game:Game = (window as unknown as IGameHolder).game;

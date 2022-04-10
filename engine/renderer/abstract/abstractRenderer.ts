@@ -157,7 +157,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         this.onResize();
         globalThis.addEventListener('resize', () => {
             this.onResize();
-            setTimeout(()=>this.onResize(),100);
+            setTimeout(()=>this.onResize(),1000);
         });
         // to prevent zoom on ios
         document.addEventListener('gesturestart', (e:Event)=>e.preventDefault());

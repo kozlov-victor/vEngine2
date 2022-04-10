@@ -14,18 +14,41 @@ interface IItem {
 export class Widget extends VEngineTsxComponent {
 
     private loadingInfo:string = '';
-    private selectedItem:string;
+    private selectedIndex: number;
     private listLoading:boolean = true;
     private items:IItem[] = [];
     private frameRef:HTMLIFrameElement;
     private scrollableWrapperRef:HTMLDivElement;
 
+    private allItemNames:string[] = [];
+
     constructor() {
         super(new HtmlTsxDOMRenderer());
-        this.loadList().then();
+        this.loadList().then(_=>{
+            this.items.forEach(item=>{
+                item.names.forEach(name=>{
+                    this.allItemNames.push(name);
+                });
+                this.triggerRendering();
+            })
+        });
+
+        document.addEventListener('keydown',e=>{
+            if (e.key==='ArrowRight') {
+                this.selectedIndex++;
+                if (this.selectedIndex>this.allItemNames.length-1) this.selectedIndex = 0;
+                this.triggerRendering();
+                document.querySelector('.active')?.scrollIntoView();
+            }
+            else if (e.key==='ArrowLeft') {
+                this.selectedIndex--;
+                if (this.selectedIndex<0) this.selectedIndex = this.allItemNames.length-1;
+                this.triggerRendering();
+                document.querySelector('.active')?.scrollIntoView();
+            }
+        });
     }
 
-    @ReactiveMethod()
     private async loadList():Promise<void>{
         let items = await HttpClient.get<IItem[]>('./index.json',{r:Math.random()},undefined,undefined, xhr => {
             xhr.setRequestHeader('Content-Type','application/json');
@@ -40,8 +63,9 @@ export class Widget extends VEngineTsxComponent {
     @ReactiveMethod()
     private selectItem(e:Event,name:string):void{
         e.preventDefault();
-        if (this.selectedItem===name) this.frameRef.contentDocument!.location.reload();
-        this.selectedItem = name;
+        const index = this.allItemNames.indexOf(name);
+        if (this.selectedIndex===index) this.frameRef.contentDocument!.location.reload();
+        this.selectedIndex = index;
         this.loadingInfo = 'loading...';
     }
 
@@ -58,7 +82,7 @@ export class Widget extends VEngineTsxComponent {
                     <iframe
                         ref={(el)=>this.frameRef = el}
                         onload={()=>this.onFrameLoaded()}
-                        src={this.selectedItem?'./demo.html?name='+this.selectedItem:undefined}
+                        src={this.selectedIndex!==undefined?'./demo.html?name='+this.allItemNames[this.selectedIndex]:undefined}
                         frameBorder="0" id="frame"/>
                 </div>
                 <div className="down" ref={el=>this.scrollableWrapperRef = el}>
@@ -66,23 +90,27 @@ export class Widget extends VEngineTsxComponent {
                         <div className="loading">loading...</div>:
                         <ul id="list">
                             {
-                                this.items.map((item,index)=>
-                                    item.names.map((it)=>{
-                                        return (
-                                            <li className={it === this.selectedItem ? 'active' : undefined}>
-                                                <div className={((index % 2 === 0) ? 'even' : 'odd')+' ' + 'even_odd'}>
-                                                    <a
-                                                        className={'selectItem'}
-                                                        onclick={(e) => this.selectItem(e, it)}
-                                                        href="#">
-                                                        {(it === this.selectedItem ? '<' : '') + it + (it === this.selectedItem ? '>' : '')}
-                                                    </a>
-                                                    <a target="_blank" href={'./demo.html?name=' + it}> {'>>>>>'} </a>
-                                                </div>
-                                            </li>
-                                        );
-                                    })
-                                )
+                                (()=>{
+                                    let ind = -1;
+                                    return this.items.map((item,index)=>
+                                        item.names.map((name)=>{
+                                            ind++;
+                                            return (
+                                                <li className={ind===this.selectedIndex ? 'active' : undefined}>
+                                                    <div className={((index % 2 === 0) ? 'even' : 'odd')+' ' + 'even_odd'}>
+                                                        <a
+                                                            className={'selectItem'}
+                                                            onclick={(e) => this.selectItem(e, name)}
+                                                            href="#">
+                                                            {(ind===this.selectedIndex ? '<' : '') + name + (ind===this.selectedIndex ? '>' : '')}
+                                                        </a>
+                                                        <a target="_blank" href={'./demo.html?name=' + name}> {'>>>>>'} </a>
+                                                    </div>
+                                                </li>
+                                            );
+                                        })
+                                    )
+                                })()
                             }
                         </ul>
                     }

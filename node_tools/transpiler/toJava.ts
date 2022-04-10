@@ -1,31 +1,26 @@
 
 // https://github.com/searchfe/ts2php/blob/master/src/emitter.ts
 // tsc .\node_tools\transpiler\toJava.ts | node .\node_tools\transpiler\toJava.js
-
+// node node_modules\typescript\bin\tsc .\node_tools\transpiler\toJava.ts | node .\node_tools\transpiler\toJava.js
 
 import * as ts from 'typescript';
 import {ScriptKind} from 'typescript';
 
 const code = `
 
+class A {
 
-// class A {
-//
-//     protected a:number = 1+4;
-//
-//     private static testMethod(param1:string,param2:string):string {
-//         return "3";
-//     }
-// }
+    protected a:number = 1+4;
+
+    private static testMethod(param1:string,param2:string):string {
+        const s:string = "3";
+        return s;
+    }
+}
 
 `;
 
 const sourceFile = ts.createSourceFile('temp.ts', code,ts.ScriptTarget.ESNext,false,ScriptKind.TSX);
-// const program = ts.createProgram({
-//     rootNames: [],
-//     options: {}
-// });
-// const typeChecker = program.getTypeChecker();
 
 class CodeBuilder {
 
