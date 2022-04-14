@@ -30,7 +30,8 @@ export class HTMLElementWrap implements IRealNode {
 
     public getChildAt(index:number):HTMLElementWrap{
         if (this.htmlElement.nodeType===3) return undefined!;
-        return this._getChildren()[index];
+        const c = (this.htmlElement as HTMLElement).childNodes[index];
+        return wrap(c as HTMLElement);
     }
 
     private _getChildren(): HTMLElementWrap[] {
@@ -44,7 +45,7 @@ export class HTMLElementWrap implements IRealNode {
 
     public getChildrenCount(): number {
         if (this.htmlElement.nodeType===3) return 0;
-        return this.htmlElement.childNodes.length;
+        return (this.htmlElement as HTMLElement).childNodes.length;
     }
 
     public getParentNode(): IRealNode {

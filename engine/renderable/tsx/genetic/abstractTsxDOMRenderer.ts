@@ -83,16 +83,17 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     }
 
     private reconcileChildren(newVirtualNode:Optional<VirtualNode>,oldVirtualNode:Optional<VirtualNode>,parent:T):void{
-        let maxNumOfChild:number = newVirtualNode?.children?.length || 0;
-        if (oldVirtualNode) {
-            const l:number = oldVirtualNode.children?.length ?? 0;
-            if (l>maxNumOfChild) maxNumOfChild = l;
-        }
-        //const children:T[] = (parent as any)._getChildren() as T[];
+        const maxNumOfChild:number =
+            Math.max(
+                newVirtualNode?.children?.length ?? 0,
+                oldVirtualNode?.children?.length ?? 0
+            );
+        const realChildren:IRealNode[] = [];
+        for (let i=0,max=parent.getChildrenCount();i<max;i++) realChildren.push(parent.getChildAt(i));
         for (let i:number = 0;i<maxNumOfChild;i++) {
             const newVirtualChild:Optional<VirtualNode> = newVirtualNode?.children?.[i];
             const oldVirtualChild:Optional<VirtualNode> = oldVirtualNode?.children?.[i];
-            this.reconcile(newVirtualChild,oldVirtualChild,parent.getChildAt(i) as T,parent);
+            this.reconcile(newVirtualChild,oldVirtualChild,realChildren[i] as T,parent);
         }
     }
 

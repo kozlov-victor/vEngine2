@@ -65,25 +65,24 @@ class InspectorWidget extends VEngineTsxComponent{
     }
 
     render(): VirtualNode {
+        //return <></>;
         if (!game || !this._shown) return <></>;
         return (
             <>
-                <div>
-                    <div className={'win-header'} >
-                        <div className={'reload-btn'} onclick={_=>this.triggerRendering()}>↻</div>
-                        <div className={'close-btn'} onclick={_=>this.hide()}>x</div>
-                    </div>
-                    <div className={'listWrap'}>
-                        <NodeRoot nested={false} opened={true}>
-                            {game.getCurrentScene().getLayers().map(l=>
-                                <NodeLeafs  tagName={l.constructor.name} model={l}/>
-                            )}
-                            {
-                                !game.getCurrentScene().getLayers().length &&
-                                '<'+'empty scene'+'>'
-                            }
-                        </NodeRoot>
-                    </div>
+                <div className={'win-header'} >
+                    <div className={'reload-btn'} onclick={_=>this.triggerRendering()}>↻</div>
+                    <div className={'close-btn'} onclick={_=>this.hide()}>x</div>
+                </div>
+                <div className={'listWrap'}>
+                    <NodeRoot nested={false} opened={true}>
+                        {game.getCurrentScene().getLayers().map(l=>
+                            <NodeLeafs tagName={l.constructor.name} model={l}/>
+                        )}
+                        {
+                            !game.getCurrentScene().getLayers().length &&
+                            '<'+'empty scene'+'>'
+                        }
+                    </NodeRoot>
                 </div>
             </>
         );
