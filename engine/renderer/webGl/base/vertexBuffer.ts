@@ -12,7 +12,7 @@ export class VertexBuffer extends AbstractBuffer {
 
     constructor(private readonly _gl:WebGLRenderingContext){
         super();
-        if (DEBUG && !_gl) throw new DebugError("can not create VertexBuffer, gl context not passed to constructor, expected: VertexBuffer(gl)");
+        if (DEBUG && !_gl) throw new DebugError(`can not create VertexBuffer, gl context not passed to the constructor, expected: new VertexBuffer(gl), found expected: new VertexBuffer(${_gl})`);
         this.buffer = _gl.createBuffer() as WebGLBuffer;
         if (DEBUG && !this.buffer) throw new DebugError(`can not allocate memory for vertex buffer`);
     }

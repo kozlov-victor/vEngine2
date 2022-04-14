@@ -13,6 +13,8 @@ import {HexagonalFilter} from "@engine/renderer/webGl/filters/texture/hexagonalF
 import {LowResolutionFilter} from "@engine/renderer/webGl/filters/texture/lowResolutionFilter";
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
 import {PosterizeFilter} from "@engine/renderer/webGl/filters/texture/posterizeFilter";
+import {InvertBgColorCompositionFilter} from "@engine/renderer/webGl/filters/composition/invertBgColorCompositionFilter";
+import {InvertColorFilter} from "@engine/renderer/webGl/filters/texture/invertColorFilter";
 
 export class MainScene extends Scene {
 
@@ -48,11 +50,12 @@ export class MainScene extends Scene {
             new HexagonalFilter(this.game),
             new LowResolutionFilter(this.game),
             new MotionBlurFilter(this.game),
-            new PosterizeFilter(this.game)
+            new PosterizeFilter(this.game),
+            new InvertColorFilter(this.game)
         ];
         let cnt = -1;
         const debugLayer = new DebugLayer(this.game);
-        debugLayer.setSolidBackground();
+        debugLayer.filters = [new InvertBgColorCompositionFilter(this.game)];
         this.appendChild(debugLayer);
         debugLayer.println('press Right key to set filter');
         this.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.RIGHT,e=>{

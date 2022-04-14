@@ -1,6 +1,5 @@
 import {Mat4} from "@engine/geometry/mat4";
 import Mat16Holder = Mat4.Mat16Holder;
-import {Optional} from "@engine/core/declarations";
 import {IPropertyStack} from "@engine/renderer/common/propertyStack";
 import {Stack} from "@engine/misc/collection/stack";
 import {Mat4Special} from "@engine/geometry/mat4Special";
@@ -32,7 +31,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     public restore():void {
        if (this._stack.isEmpty()) this.setIdentity();
        else {
-           const last:Optional<Mat16Holder> = this._stack.pop()!;
+           const last:Mat16Holder = this._stack.pop()!;
            last.release();
        }
     }

@@ -35,11 +35,13 @@ vec4 getInterpolatedGradientColor(float position) {
             currentRightPoint = currentPointFromRtoL;
         }
     }
+    GradientPoint lp = currentLeftPoint;
+    GradientPoint rp = currentRightPoint;
     return mix(
-        vec4(currentLeftPoint.r,currentLeftPoint.g,currentLeftPoint.b,currentLeftPoint.a),
-        vec4(currentRightPoint.r,currentRightPoint.g,currentRightPoint.b,currentRightPoint.a),
+        vec4(lp.r*lp.a,lp.g*lp.a,lp.b*lp.a,lp.a),
+        vec4(rp.r*rp.a,rp.g*rp.a,rp.b*rp.a,rp.a),
         (position - currentLeftPoint.value)/(currentRightPoint.value - currentLeftPoint.value+0.00001)
-    ) * currentLeftPoint.a;
+    );
 }
 
 
@@ -56,7 +58,7 @@ vec4 getFillColor(){
         angle+=u_fillGradientAngle;
         float x = r*cos(angle);
         float y = r*sin(angle);
-        return getInterpolatedGradientColor(x  + HALF);
+        return getInterpolatedGradientColor(x + HALF);
     }
     else if (u_fillType==FILL_TYPE_RADIAL_GRADIENT) {
         float r = distance(vec2(u_radialGradientCenterX, u_radialGradientCenterY), v_position.xy);
@@ -95,12 +97,12 @@ float calcRadiusAtPosition(vec2 pos,vec2 center,vec2 radius,float lineWidth) {
     return rx*ry/sqrt(rx*rx*sinA*sinA+ry*ry*cosA*cosA);
 }
 
-void _drawElliplse(){
-    float rOutterAtCurrAngle = calcRadiusAtPosition(v_position.xy, vec2(HALF,HALF),vec2(u_rx, u_ry),ZERO);
+void _drawEllipse(){
+    float rOuterAtCurrAngle = calcRadiusAtPosition(v_position.xy, vec2(HALF,HALF),vec2(u_rx, u_ry),ZERO);
     float rInnerAtCurrAngle  = calcRadiusAtPosition(v_position.xy, vec2(HALF,HALF),vec2(u_rx, u_ry),u_lineWidth);
 
     float dist = distance(vec2(HALF, HALF), v_position.xy);
-    if (dist > rOutterAtCurrAngle) discard;
+    if (dist > rOuterAtCurrAngle) discard;
     else if (dist > rInnerAtCurrAngle) gl_FragColor = vec4(
         u_color.r*u_color.a,
         u_color.g*u_color.a,
@@ -114,7 +116,7 @@ void drawEllipse(){
     bool isArcNotUsed = u_arcAngleFrom==u_arcAngleTo;
 
     if (isArcNotUsed) {
-        _drawElliplse();
+        _drawEllipse();
     } else {
         float angle = atan(v_position.y-HALF, v_position.x-HALF);
         float angleFrom = u_arcAngleFrom;
@@ -134,11 +136,11 @@ void drawEllipse(){
         bool withinArc = (angleFrom<=angle) && (angle<=angleTo);
         if (withinArc) {
             if (anticlockwise) discard;
-            else _drawElliplse();
+            else _drawEllipse();
         }
         else {
             if (!anticlockwise) discard;
-            else _drawElliplse();
+            else _drawEllipse();
         }
     }
 }

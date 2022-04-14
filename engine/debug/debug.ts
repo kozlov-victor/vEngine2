@@ -41,6 +41,7 @@ const onLoad = (fn:()=>void)=>{
 onLoad(()=>{
     if (!DEBUG) return;
     if (destroyed) return;
+    if (!(window as any).game) return;
     document.body.appendChild(fpsLabel);
     tmr = setInterval(()=>{
         const game:Game = (window as unknown as IGameHolder).game;
@@ -139,13 +140,13 @@ window.onerror = (e: Event | string)=>{
     renderError({runtimeInfo:prepareMessage(e)});
 };
 
-// let inspectorShowed = false;
-// window.addEventListener('keyup', (e:KeyboardEvent)=> {
-//     if (inspectorShowed) return;
-//     inspectorShowed = true;
-//     if (e.ctrlKey && e.key==='i') {
-//         const script = document.createElement('script');
-//         script.src = './out/inspector.js?r'+new Date().getTime();
-//         document.body.appendChild(script);
-//     }
-// });
+window.addEventListener('keyup', function callback(e:KeyboardEvent) {
+    console.log(e);
+    if (e.ctrlKey && e.code==='KeyI') {
+        const script = document.createElement('script');
+        script.src = './out/inspector.js?r'+new Date().getTime();
+        document.body.appendChild(script);
+        console.log('created script',script);
+        window.removeEventListener('keyup',callback);
+    }
+});

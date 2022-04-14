@@ -42,6 +42,10 @@ export interface IAlphaBlendable {
     alpha:number;
 }
 
+export interface IWithId {
+    id:string;
+}
+
 export interface IDestroyable {
     destroy():void;
 }

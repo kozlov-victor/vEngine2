@@ -32,7 +32,7 @@ export const enum ContainerState {
 
 export class WidgetContainer extends MarkableGameObjectContainer implements IContainerWithMarginPadding, IFocusable{
 
-    public static readonly INTERNAL_CHILD_OFFSET_INDEX = 4;
+    protected readonly INTERNAL_CHILD_OFFSET_INDEX = 4;
 
     constructor(game: Game) {
         super(game);
@@ -160,6 +160,14 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         this.recalculateClientRect();
         this.fitBackgroundToSize();
         this.markAsDirty();
+    }
+
+    public override getChildrenCount(): number {
+        return super.getChildrenCount() - this.INTERNAL_CHILD_OFFSET_INDEX;
+    }
+
+    public override getChildAt(index: number): this {
+        return super.getChildAt(index + this.INTERNAL_CHILD_OFFSET_INDEX);
     }
 
     public override revalidate(): void {

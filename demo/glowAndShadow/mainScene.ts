@@ -12,6 +12,7 @@ import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {ITexture} from "@engine/renderer/common/texture";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {EndCapStyle, JointStyle} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
@@ -63,9 +64,11 @@ export class MainScene extends Scene {
 
         const rect:Rectangle = new Rectangle(this.game);
         const gradient:LinearGradient  = new LinearGradient();
-        gradient.angle = 0.2;
-        gradient.setColorAtPosition(0,Color.RGBA(100,0,20,122));
-        gradient.setColorAtPosition(1,Color.RGBA(200,111,1,254));
+        this.setInterval(()=>{
+            gradient.angle+=0.01;
+        },10);
+        gradient.setColorAtPosition(0,ColorFactory.fromCSS(`rgba(24, 241, 99, 0.48)`));
+        gradient.setColorAtPosition(1,ColorFactory.fromCSS(`rgba(200,111,1,0.96)`));
         rect.fillGradient = gradient;
         rect.borderRadius = 5;
         rect.color = Color.RGB(0,0,40);

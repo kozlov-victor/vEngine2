@@ -15,7 +15,6 @@ export class RadialGradient extends AbstractGradient {
         return `radial-gradient(circle at ${this.center.x*100}% ${this.center.y*100}%, ${this._points.map(it=>`${it.color.asCssRgba()} ${~~(it.value*100)}%`).join(',')}`;
     }
 
-
     public override setUniforms(sd: ShapePainter):void {
         super.setUniforms(sd);
         sd.setUniform(sd.u_radialGradientCenterX,this.center.x);

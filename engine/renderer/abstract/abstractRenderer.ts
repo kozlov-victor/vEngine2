@@ -10,7 +10,6 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
-import {AlphaBlendStack} from "@engine/renderer/common/alphaBlendStack";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
@@ -46,7 +45,6 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     protected abstract rendererHelper: RendererHelper;
 
-    private _alphaBlendStack:AlphaBlendStack = new AlphaBlendStack();
     private _fullScreenRequested:boolean = false;
 
     protected constructor(protected game:Game){
@@ -77,17 +75,17 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     }
 
 
-    public beforeItemStackDraw(filters:IFilter[],forceDrawChildrenOnNewSurface:boolean):IStateStackPointer {
+    public beforeItemStackDraw(filters:IFilter[],alpha:number,forceDrawChildrenOnNewSurface:boolean):IStateStackPointer {
         return undefined!;
     }
 
     public afterItemStackDraw(stackPointer:IStateStackPointer):void {}
 
-    public beforeFrameDraw(filters:IFilter[]):IStateStackPointer {
-        return undefined!;
+    public beforeFrameDraw():void {
+
     }
 
-    public afterFrameDraw(stackPointer:IStateStackPointer):void {}
+    public afterFrameDraw():void {}
 
     public destroy():void {
         globalThis.removeEventListener('resize',this.onResize);
@@ -139,27 +137,6 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     public killObject(r:RenderableModel):void {}
 
-    public saveAlphaBlend():void{
-        this._alphaBlendStack.save();
-    }
-
-    public restoreAlphaBlend():void{
-        this._alphaBlendStack.restore();
-    }
-
-    public pushAlphaBlend(alpha:number):void{
-        this._alphaBlendStack.mult(alpha);
-    }
-
-    public setAlphaBlend(alpha:number):void{
-        this._alphaBlendStack.setCurrentValue(alpha);
-    }
-
-    public getAlphaBlend():number{
-        return this._alphaBlendStack.getCurrentValue();
-    }
-
-
     public getHelper():RendererHelper{
         return this.rendererHelper;
     }
@@ -180,7 +157,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         this.onResize();
         globalThis.addEventListener('resize', () => {
             this.onResize();
-            setTimeout(()=>this.onResize(),100);
+            setTimeout(()=>this.onResize(),1000);
         });
         // to prevent zoom on ios
         document.addEventListener('gesturestart', (e:Event)=>e.preventDefault());

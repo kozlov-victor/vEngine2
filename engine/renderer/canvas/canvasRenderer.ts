@@ -10,12 +10,10 @@ import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
-import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
-import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/geometry/mat4";
-import MAT16 = Mat4.MAT16;
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {noop} from "@engine/misc/object";
+import MAT16 = Mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -182,11 +180,10 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.transformRestore();
     }
 
-    public override beforeFrameDraw(filters:AbstractGlFilter[]): IStateStackPointer {
+    public override beforeFrameDraw(): void {
         if (!this.clearBeforeRender) return undefined!;
         this.ctx.fillStyle = this.clearColor.asCssRgba();
         this.ctx.fillRect(0,0,this.game.size.width,this.game.size.height);
-        return undefined!;
     }
 
 

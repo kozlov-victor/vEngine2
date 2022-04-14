@@ -61,7 +61,9 @@ export class VEngineTsxFactory<T> {
         else if ((item as (props:Record<string, any>)=>VirtualNode).call!==undefined) {
             return (item as (arg:any)=>VirtualNode)(propsFull);
         }
-        else return new VirtualNode(propsFull, item as string, flattenedNoFragments);
+        else {
+            return new VirtualNode(propsFull, item as string, flattenedNoFragments);
+        }
     }
 
     public static destroyElement(el:VirtualNode) {

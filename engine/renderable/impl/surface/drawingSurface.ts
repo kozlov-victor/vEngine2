@@ -27,7 +27,6 @@ import {
 } from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 import {SvgPathToVertexArrayBuilder} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArrayBuilder";
 import MAT16 = Mat4.MAT16;
-import {InfoPanel} from "../../../../demo/catGame/entity/object/impl/infoPanel";
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {
@@ -274,6 +273,8 @@ class DrawingSession implements IDrawingSession {
 
     public _draw():void {
         if (this._omitSelfOnRendering) return;
+        this.canvasImage.alpha = this.surface.alpha;
+        this.canvasImage.filters = this.surface.filters;
         this.game.getRenderer().drawImage(this.canvasImage);
     }
 
@@ -339,6 +340,8 @@ export class DrawingSurface
         this.clear();
     }
 
+    public override type = 'DrawingSurface';
+
     public setResourceLink:never = undefined as unknown as never;
     private _matrixStack:MatrixStack = new MatrixStack();
 
@@ -358,9 +361,13 @@ export class DrawingSurface
         }
     }
 
-    public clone(): DrawingSurface {return undefined!;}
+    public override getChildrenCount():number {
+        return 0;
+    }
 
-    public draw(): void {
+    public clone(): DrawingSurface {return undefined!;} // todo
+
+    public override draw(): void {
         this._drawingSession._draw();
     }
 

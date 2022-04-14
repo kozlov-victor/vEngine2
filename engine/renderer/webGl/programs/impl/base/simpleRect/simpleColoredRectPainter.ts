@@ -62,6 +62,7 @@ export class SimpleColoredRectPainter extends AbstractPainter {
             posIndexInfo: {array: this.primitive.indexArr},
             drawMethod: DRAW_METHOD.TRIANGLE_STRIP
         } as IBufferInfoDescription);
+        this.setUniform(this.u_alpha,1);
     }
 
 }

@@ -8,7 +8,7 @@ import {
     IRenderable,
     IRevalidatable,
     ITweenable,
-    IUpdatable,
+    IUpdatable, IWithId,
     Optional
 } from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
@@ -53,11 +53,11 @@ export abstract class RenderableModel
     implements
         IRenderable,
         IRevalidatable, ITweenable,
-        IParentChild,
+        IParentChild, IWithId,
         IAlphaBlendable, IFilterable,
         IUpdatable, IDestroyable {
 
-    public id: string;
+    public id: string = `object_${Incrementer.getValue()}`;
 
     public alpha: number = 1;
     public visible: boolean = true;
@@ -98,7 +98,6 @@ export abstract class RenderableModel
 
     protected constructor(game: Game) {
         super(game);
-        this.id = `object_${Incrementer.getValue()}`;
         this._parentChildDelegate.afterChildAppended = (child: RenderableModel) => {
             child._setLayer(this._layer!);
             child._setScene(this._scene);
@@ -213,9 +212,7 @@ export abstract class RenderableModel
         if (this.alpha === 0) return;
 
         const renderer: AbstractRenderer = this.game.getRenderer();
-        if (renderer.getAlphaBlend() === 0) return;
 
-        renderer.saveAlphaBlend();
         renderer.transformSave();
         if (this._scene.camera.worldTransformDirty) this.worldTransformDirty = true;
 
@@ -227,29 +224,30 @@ export abstract class RenderableModel
             renderer.transformSet(this.worldTransformMatrix.mat16);
         }
 
-        renderer.pushAlphaBlend(this.alpha);
         const filters: IFilter[] =
             this._scene._renderingSessionInfo.drawingEnabled ? this.filters : EMPTY_FILTERS_ARR;
-        const statePointer: IStateStackPointer = renderer.beforeItemStackDraw(filters, this.forceDrawChildrenOnNewSurface);
+        const statePointer: IStateStackPointer =
+            renderer.beforeItemStackDraw(
+                filters,
+                this.getChildrenCount()===0?1:this.alpha,
+                this.forceDrawChildrenOnNewSurface
+            );
 
         if (this._scene._renderingSessionInfo.drawingEnabled) this.draw();
 
         if (this._children.length > 0) {
             renderer.transformSave();
-            renderer.saveAlphaBlend();
             for (let i: number = 0, max = this._children.length; i < max; i++) {
                 const c: RenderableModel = this._children[i];
                 c.worldTransformDirty = this.worldTransformDirty || c.worldTransformDirty;
                 c.render();
             }
             renderer.transformRestore();
-            renderer.restoreAlphaBlend();
         }
 
         renderer.afterItemStackDraw(statePointer);
 
         renderer.transformRestore();
-        renderer.restoreAlphaBlend();
         this.worldTransformDirty = false;
 
         if (DEBUG && this._rigidBody !== undefined) this._rigidBody.debugRender();

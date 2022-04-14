@@ -1,5 +1,8 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {BaseTsxComponent} from "@engine/renderable/tsx/genetic/baseTsxComponent";
+
+export interface IBaseProps {
+    __id?:number;
+}
 
 export class VirtualNode implements INode{
 

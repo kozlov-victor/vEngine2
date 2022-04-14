@@ -1,31 +1,30 @@
 
 // https://github.com/searchfe/ts2php/blob/master/src/emitter.ts
 // tsc .\node_tools\transpiler\toJava.ts | node .\node_tools\transpiler\toJava.js
-
+// node node_modules\typescript\bin\tsc .\node_tools\transpiler\toJava.ts | node .\node_tools\transpiler\toJava.js
 
 import * as ts from 'typescript';
 import {ScriptKind} from 'typescript';
 
+//language=TypeScript
 const code = `
-
 
 // class A {
 //
-//     protected a:number = 1+4;
+//     protected a:number = 1 + 4;
 //
 //     private static testMethod(param1:string,param2:string):string {
-//         return "3";
+//        const s:string = "str0";
+//        const s1:string = "str1" + "str2";
+//        return s;
 //     }
 // }
+
+const s:string = "str0";
 
 `;
 
 const sourceFile = ts.createSourceFile('temp.ts', code,ts.ScriptTarget.ESNext,false,ScriptKind.TSX);
-// const program = ts.createProgram({
-//     rootNames: [],
-//     options: {}
-// });
-// const typeChecker = program.getTypeChecker();
 
 class CodeBuilder {
 
@@ -53,13 +52,11 @@ const emitClassDeclaration = (node:ts.ClassDeclaration):void=> {
     emitModifiers(node, node.modifiers);
     codeBuilder.print('class ');
     codeBuilder.print(node!.name!.escapedText.toString());
-
     if (node.heritageClauses && node.heritageClauses.length > 0) {
         //emitList(node, node.heritageClauses);
     }
     codeBuilder.println('{');
-    //emitList(node, node.members);
-    node.forEachChild(visitNode);
+    node.members.forEach(visitNode);
     codeBuilder.println('}');
 }
 
@@ -77,20 +74,37 @@ const emitMethodDeclaration = (node:ts.MethodDeclaration):void=> {
     });
     codeBuilder.print(')');
     codeBuilder.println('{');
-    node.forEachChild(visitNode);
+    node.body?.forEachChild(visitNode);
     codeBuilder.println("");
     codeBuilder.println('}');
 }
 
 const emitPropertyDeclaration = (node:ts.PropertyDeclaration):void=>{
     emitModifiers(node, node.modifiers);
-    codeBuilder.print(node.type!.getText(sourceFile));
+    const propName = node.name.getText(sourceFile);
+    const propType = node.type!.getText(sourceFile);
+    codeBuilder.print(propType);
     codeBuilder.print(' ');
-    codeBuilder.print(node.name.getText(sourceFile));
-    if (node.getChildCount(sourceFile)) {
+    codeBuilder.print(propName);
+    if (node.initializer) {
         codeBuilder.print('=');
-        node.forEachChild(visitNode);
+        node.initializer.forEachChild(visitNode);
     }
+    codeBuilder.println(';');
+}
+
+const emitVariableDeclaration = (node:ts.VariableDeclaration):void=>{
+    const varName = node.name.getText(sourceFile);
+    const varType = node.type!.getText(sourceFile);
+    codeBuilder.print(varType);
+    codeBuilder.print(' ');
+    codeBuilder.print(varName);
+    // if (node.initializer) {
+    //     codeBuilder.print('=');
+    //     console.log(node.initializer);
+    //     node.initializer.forEachChild(visitNode);
+    // }
+    node.forEachChild(visitNode);
     codeBuilder.println(';');
 }
 
@@ -110,10 +124,12 @@ function visitNode(node:ts.Node) {
     indent++;
     switch (node.kind) {
         //case ts.SyntaxKind.ExpressionStatement:
-        //case ts.SyntaxKind.BinaryExpression:
         case ts.SyntaxKind.SourceFile:
-        case ts.SyntaxKind.EndOfFileToken:
-        {
+        case ts.SyntaxKind.EndOfFileToken: {
+            node.forEachChild(visitNode);
+            break;
+        }
+        case ts.SyntaxKind.BinaryExpression: {
             node.forEachChild(visitNode);
             break;
         }
@@ -126,7 +142,23 @@ function visitNode(node:ts.Node) {
             break;
         }
         case ts.SyntaxKind.PropertyDeclaration: {
-            emitPropertyDeclaration(node as ts.PropertyDeclaration)
+            emitPropertyDeclaration(node as ts.PropertyDeclaration);
+            break;
+        }
+        case ts.SyntaxKind.Block: {
+            node.forEachChild(visitNode);
+            break;
+        }
+        case ts.SyntaxKind.FirstStatement: {
+            node.forEachChild(visitNode);
+            break;
+        }
+        case ts.SyntaxKind.VariableDeclarationList: {
+            node.forEachChild(visitNode);
+            break;
+        }
+        case ts.SyntaxKind.VariableDeclaration: {
+            emitVariableDeclaration(node as ts.VariableDeclaration);
             break;
         }
         case ts.SyntaxKind.ReturnStatement: {
@@ -138,10 +170,10 @@ function visitNode(node:ts.Node) {
             codeBuilder.print(node.getText(sourceFile));
             break;
         }
-        // case ts.SyntaxKind.Identifier: {
-        //     codeBuilder.print(-1,` ${node.getText(sourceFile)}`);
-        //     break;
-        // }
+        case ts.SyntaxKind.Identifier: {
+            codeBuilder.print(node.getText(sourceFile));
+            break;
+        }
         case ts.SyntaxKind.FirstLiteralToken: {
             codeBuilder.print(node.getText(sourceFile));
             break;

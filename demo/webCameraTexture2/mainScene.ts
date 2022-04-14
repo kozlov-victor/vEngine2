@@ -44,6 +44,7 @@ export class MainScene extends Scene {
         ];
         let cnt = -1;
         const debugLayer = new DebugLayer(this.game);
+        debugLayer.setSolidBackground();
         this.appendChild(debugLayer);
         debugLayer.println('press Right key to set filter')
         this.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.RIGHT,e=>{

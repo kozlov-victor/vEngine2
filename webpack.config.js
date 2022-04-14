@@ -31,7 +31,7 @@ class InputOutputResolver {
             }
 
             entry['debug'] = './engine/debug/debug.ts';
-            entry['inspector'] = './engine/debug/inspector.tsx';
+            entry['inspector'] = './engine/debug/inspector/inspector.tsx';
             entry['polyfills-separate'] = './engine/misc/polyfills-separate.ts';
             output.path = path.resolve('./demo/out');
         }
@@ -172,7 +172,6 @@ module.exports = async (env={})=>{
         const projectsToSelect = [...allProjectsFlat,'build_tools'];
         const index = await cliUI.choose('Select a project',projectsToSelect);
         project = projectsToSelect[index];
-        console.log(`Selected: ${project}`);
     } if (mode===2) {
         project = await cliUI.prompt("Enter project name to compile")
     }
@@ -184,6 +183,7 @@ module.exports = async (env={})=>{
     console.log('webpack started at',new Date());
     console.log('env',env);
     console.log({entry,output});
+    console.log(`Selected: ${project ?? 'all'}`);
 
     const config = {
         entry,

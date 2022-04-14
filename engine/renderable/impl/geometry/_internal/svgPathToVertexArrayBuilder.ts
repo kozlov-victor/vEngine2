@@ -246,11 +246,11 @@ export class SvgPathToVertexArrayBuilder {
                 break;
             }
             case 'H': {
-                this.lineTo( tokenizer.getNextNumber(),this!.lastPoint!.y);
+                this.lineTo(tokenizer.getNextNumber(),this!.lastPoint!.y);
                 break;
             }
             case 'h': {
-                this.lineBy( tokenizer.getNextNumber(),0);
+                this.lineBy(tokenizer.getNextNumber(),0);
                 break;
             }
             case 'V': {

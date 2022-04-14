@@ -2,7 +2,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {FILL_TYPE, SHAPE_TYPE, ShapePainter} from "@engine/renderer/webGl/programs/impl/base/shape/shapePainter";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {Texture} from "@engine/renderer/webGl/base/texture";
-import {Rect} from "@engine/geometry/rect";
+import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {Game, SCALE_STRATEGY} from "@engine/core/game";
 import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
 import {Color} from "@engine/renderer/common/color";
@@ -131,7 +131,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private _blender:Blender;
 
 
-    private _lockRect:Optional<Rect>;
+    private _lockRect:Optional<IRectJSON>;
     private _glCachedAccessor:GlCachedAccessor;
     private _pixelPerfectMode:boolean = false;
 
@@ -221,7 +221,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setModelMatrix(modelMatrix.mat16);
         md.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
         md.setProjectionMatrix(zToWProjectionMatrix.mat16);
-        md.setAlfa(this.getAlphaBlend());
+        md.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
 
         const isTextureUsed:boolean = mesh.texture!==undefined;
         if (DEBUG && isTextureUsed && mesh._modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
@@ -290,7 +290,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         md.setModelMatrix(modelMatrix.mat16);
         md.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
         md.setProjectionMatrix(zToWProjectionMatrix.mat16);
-        md.setAlfa(this.getAlphaBlend());
+        md.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
         md.setTextureUsed(false);
         md.attachTexture('u_texture',this._nullTexture);
 
@@ -436,7 +436,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return this._matrixStack.getCurrentValue().mat16;
     }
 
-    public setLockRect(rect:Rect):void {
+    public setLockRect(rect:IRectJSON):void {
         this._lockRect = rect;
     }
 
@@ -444,8 +444,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
        this._lockRect = undefined;
     }
 
-    public override beforeItemStackDraw(filters:AbstractGlFilter[],forceDrawChildrenOnNewSurface:boolean):IStateStackPointer {
-        return this._currFrameBufferStack.pushState(filters,forceDrawChildrenOnNewSurface);
+    public override beforeItemStackDraw(filters:AbstractGlFilter[],alpha:number,forceDrawChildrenOnNewSurface:boolean):IStateStackPointer {
+        return this._currFrameBufferStack.pushState(filters,alpha,forceDrawChildrenOnNewSurface);
     }
 
     public override afterItemStackDraw(stackPointer:IStateStackPointer):void {
@@ -454,24 +454,22 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
 
-    public override beforeFrameDraw(filters:AbstractGlFilter[]):IStateStackPointer{
-        const ptr:IStateStackPointer = this._currFrameBufferStack.pushState(filters,false);
+    public override beforeFrameDraw():void{
         if (this.clearBeforeRender) {
-            this._currFrameBufferStack.clear(this.clearColor,this.getAlphaBlend());
+            this._currFrameBufferStack.clear(this.clearColor, 1);
         }
-        return ptr;
     }
 
-    public override afterFrameDraw(stackPointer:IStateStackPointer):void{
-        this._currFrameBufferStack.reduceState(stackPointer);
+    public override afterFrameDraw():void{
         if (this._currFrameBufferStack===this._origFrameBufferStack) {
-            if (this._lockRect!==undefined) {
-                const rect = this._lockRect;
+            const hasLockRect = this._lockRect!==undefined;
+            if (hasLockRect) {
+                const rect = this._lockRect!;
                 this._gl.enable(this._gl.SCISSOR_TEST);
                 this._gl.scissor(~~rect.x, ~~(this.game.size.height - rect.height - rect.y), ~~rect.width,~~rect.height);
             }
             this._currFrameBufferStack.renderToScreen();
-            this._gl.disable(this._gl.SCISSOR_TEST);
+            if (hasLockRect) this._gl.disable(this._gl.SCISSOR_TEST);
         }
     }
 
@@ -584,7 +582,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             scd.setUniform(scd.u_vertexMatrix,rectangle.modelViewProjectionMatrix.mat16);
         }
 
-        scd.setUniform(scd.u_alpha,this.getAlphaBlend());
+        scd.setUniform(scd.u_alpha,rectangle.getChildrenCount()===0?rectangle.alpha:1);
         scd.setUniform(scd.u_color,((rectangle.fillColor) as Color).asGL());
         scd.draw();
     }
@@ -632,7 +630,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             sd.setUniform(sd.u_vertexMatrix,model.modelViewProjectionMatrix.mat16);
         }
 
-        sd.setUniform(sd.u_alpha,this.getAlphaBlend());
+        sd.setUniform(sd.u_alpha,model.getChildrenCount()===0?model.alpha:1);
         this._blender.setBlendMode(model.blendMode);
         this._glCachedAccessor.setDepthTest(model.depthTest);
 
