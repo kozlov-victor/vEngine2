@@ -1,12 +1,12 @@
 import {Tween} from "../animation/tween";
-import {MathEx} from "../misc/mathEx";
+import {MathEx} from "../misc/math/mathEx";
 import {Rect} from "../geometry/rect";
 import {Point2d} from "../geometry/point2d";
 import {Game} from "../core/game";
 import {Scene} from "../scene/scene";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import {IRevalidatable, ITransformable, IUpdatable, Optional} from "@engine/core/declarations";
 import Mat16Holder = Mat4.Mat16Holder;
 import {Point3d} from "@engine/geometry/point3d";

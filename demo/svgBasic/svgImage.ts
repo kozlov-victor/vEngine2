@@ -11,7 +11,7 @@ import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
 import {BasicStringTokenizer} from "@engine/renderable/impl/geometry/_internal/basicStringTokenizer";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";

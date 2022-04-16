@@ -1,7 +1,7 @@
 import {Wheel} from "./wheel";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {WinScene} from "../winScene";
 import {defineWinType, WIN_TYPE} from "./common";
 import {ITexture} from "@engine/renderer/common/texture";

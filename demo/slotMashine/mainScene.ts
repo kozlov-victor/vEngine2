@@ -4,7 +4,7 @@ import {Image} from "@engine/renderable/impl/general/image/image";
 import {Machine} from "./entities/machine";
 import {BarrelDistortionFilter} from "@engine/renderer/webGl/filters/texture/barrelDistortionFilter";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";

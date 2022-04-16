@@ -3,7 +3,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {CollectableEntity} from "../abstract/collectableEntity";
 import {Rect} from "@engine/geometry/rect";
 import {Bullet} from "./bullet";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 export class Virus extends CollectableEntity {

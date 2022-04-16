@@ -1,9 +1,9 @@
-import {Mat4} from "@engine/geometry/mat4";
 import Mat16Holder = Mat4.Mat16Holder;
 import {IPropertyStack} from "@engine/renderer/common/propertyStack";
 import {Stack} from "@engine/misc/collection/stack";
-import {Mat4Special} from "@engine/geometry/mat4Special";
 import MAT16 = Mat4.MAT16;
+import {Mat4} from "@engine/misc/math/mat4";
+import {Mat4Special} from "@engine/misc/math/mat4Special";
 
 export interface IMatrixTransformable {
     transformSave():void;
@@ -37,8 +37,10 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
     public save():void {
-        const copy:Mat16Holder = Mat16Holder.fromPool();
-        copy.fromMat16(this.getCurrentValue().mat16);
+        const copy = Mat16Holder.fromPool();
+        const curVal = this.getCurrentValue();
+        copy.identityFlag = curVal.identityFlag;
+        copy.mat16.set(curVal.mat16);
         this._stack.push(copy);
     }
 
@@ -51,13 +53,11 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
     public translate(x:number, y:number, z:number = 0):this {
-        const t:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.makeTranslation(t, x, y, z);
+        const res:Mat16Holder = Mat16Holder.fromPool();
+        Mat4.makeTranslation(res, x, y, z);
         const m:Mat16Holder = this.getCurrentValue();
-        const result:Mat16Holder = Mat16Holder.fromPool();
-        Mat4Special.multiplyTranslationByAny(result,t, m);
-        this.setCurrentValue(result);
-        t.release();
+        Mat4Special.multiplyTranslationByAny(res,res, m);
+        this.setCurrentValue(res);
         m.release();
         return this;
     }
@@ -77,25 +77,21 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
     public skewX(angle:number):this {
-        const t:Mat16Holder = Mat16Holder.fromPool()!;
-        Mat4.makeXSkew(t,angle);
+        const res:Mat16Holder = Mat16Holder.fromPool()!;
+        Mat4.makeXSkew(res,angle);
         const m:Mat16Holder = this.getCurrentValue();
-        const result:Mat16Holder = Mat16Holder.fromPool();
-        Mat4Special.multiplySkewXByAny(result,t, m);
-        this.setCurrentValue(result);
-        t.release();
+        Mat4Special.multiplySkewXByAny(res,res, m);
+        this.setCurrentValue(res);
         m.release();
         return this;
     }
 
     public skewY(angle:number):this {
-        const t:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.makeYSkew(t,angle);
+        const res:Mat16Holder = Mat16Holder.fromPool();
+        Mat4.makeYSkew(res,angle);
         const m:Mat16Holder = this.getCurrentValue();
-        const result:Mat16Holder = Mat16Holder.fromPool();
-        Mat4Special.multiplySkewYByAny(result,t, m);
-        this.setCurrentValue(result);
-        t.release();
+        Mat4Special.multiplySkewYByAny(res,res, m);
+        this.setCurrentValue(res);
         m.release();
         return this;
     }
@@ -103,53 +99,39 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     public rotateX(angleInRadians:number):this {
         const t:Mat16Holder = Mat16Holder.fromPool();
         Mat4.makeXRotation(t,angleInRadians);
-
         const m:Mat16Holder = this.getCurrentValue();
-        const result:Mat16Holder = Mat16Holder.fromPool();
-        Mat4Special.multiplyRotationXByAny(result,t, m);
-        this.setCurrentValue(result);
+        Mat4Special.multiplyRotationXByAny(t,t, m);
+        this.setCurrentValue(t);
         m.release();
-
-        t.release();
         return this;
     }
 
     public rotateY(angleInRadians:number):this {
-        const t:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.makeYRotation(t,angleInRadians);
-
+        const res:Mat16Holder = Mat16Holder.fromPool();
+        Mat4.makeYRotation(res,angleInRadians);
         const m:Mat16Holder = this.getCurrentValue();
-        const result:Mat16Holder = Mat16Holder.fromPool();
-        Mat4Special.multiplyRotationYByAny(result,t, m);
-        this.setCurrentValue(result);
+        Mat4Special.multiplyRotationYByAny(res,res, m);
+        this.setCurrentValue(res);
         m.release();
-
-        t.release();
         return this;
     }
 
     public rotateZ(angleInRadians:number):this {
-        const t:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.makeZRotation(t,angleInRadians);
-
+        const res:Mat16Holder = Mat16Holder.fromPool();
+        Mat4.makeZRotation(res,angleInRadians);
         const m:Mat16Holder = this.getCurrentValue();
-        const result:Mat16Holder = Mat16Holder.fromPool();
-        Mat4Special.multiplyRotationZByAny(result,t, m);
-        this.setCurrentValue(result);
+        Mat4Special.multiplyRotationZByAny(res,res, m);
+        this.setCurrentValue(res);
         m.release();
-
-        t.release();
         return this;
     }
 
     public scale(x:number, y:number, z:number = 1):this {
         const t:Mat16Holder =  Mat16Holder.fromPool();
-        Mat4.makeScale(t,x, y, z);
+        Mat4.makeScale(t, x, y, z);
         const m:Mat16Holder = this.getCurrentValue();
-        const result:Mat16Holder = Mat16Holder.fromPool();
-        Mat4Special.multiplyScaleByAny(result,t, m);
-        this.setCurrentValue(result);
-        t.release();
+        Mat4Special.multiplyScaleByAny(t,t, m);
+        this.setCurrentValue(t);
         m.release();
         return this;
     }

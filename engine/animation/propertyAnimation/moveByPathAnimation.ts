@@ -1,6 +1,6 @@
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {IPoint2d, Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {AbstractMoveAnimation} from "@engine/animation/propertyAnimation/abstract/abstractMoveAnimation";

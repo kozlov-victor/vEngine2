@@ -18,7 +18,7 @@ import {Font} from "@engine/renderable/impl/general/font/font";
 import {DebugError} from "@engine/debug/debugError";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import {arcToSvgCurve} from "@engine/renderable/impl/geometry/_internal/arcToSvgCurve";
 import {
     EndCapStyle,

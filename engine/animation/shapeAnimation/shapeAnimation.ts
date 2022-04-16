@@ -9,7 +9,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ControlPointByLengthPassedResolver} from "@engine/animation/propertyAnimation/moveByPathAnimation";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {calcPolylineLength} from "@engine/renderable/impl/geometry/_internal/calcPolylineLength";
 import {Optional} from "@engine/core/declarations";
 

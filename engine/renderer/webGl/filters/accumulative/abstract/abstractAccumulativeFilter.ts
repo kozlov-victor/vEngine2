@@ -5,7 +5,7 @@ import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {ISize} from "@engine/geometry/size";
 import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import {Color} from "@engine/renderer/common/color";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";

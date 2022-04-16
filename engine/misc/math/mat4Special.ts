@@ -1,4 +1,4 @@
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 
 // some special cases of matrix multiplication
 
@@ -31,14 +31,15 @@ export namespace Mat4Special {
         // r[11] = b[11];
 
         // fast version of above code block
-        r.set(b.subarray(0,12),0);
-
         const a12 = a[12], a13 = a[13], a14 = a[14];
+        const b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3], b4 = b[4], b5 = b[5], b6 = b[6], b7 = b[7];
+        const b8 = b[8], b9 = b[9], b10 = b[10], b11 = b[11], b12 = b[12], b13 = b[13], b14 = b[14], b15 = b[15];
+        r.set(b);
 
-        r[12] = a12 * b[0] + a13 * b[4] + a14 * b[8]  + b[12];
-        r[13] = a12 * b[1] + a13 * b[5] + a14 * b[9]  + b[13];
-        r[14] = a12 * b[2] + a13 * b[6] + a14 * b[10] + b[14];
-        r[15] = a12 * b[3] + a13 * b[7] + a14 * b[11] + b[15];
+        r[12] = a12 * b0 + a13 * b4 + a14 * b8  + b12;
+        r[13] = a12 * b1 + a13 * b5 + a14 * b9  + b13;
+        r[14] = a12 * b2 + a13 * b6 + a14 * b10 + b14;
+        r[15] = a12 * b3 + a13 * b7 + a14 * b11 + b15;
 
     };
 
@@ -195,16 +196,6 @@ export namespace Mat4Special {
         const a4 = a[4];
         const b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3];
 
-        r[0] = b0;
-        r[1] = b1;
-        r[2] = b2;
-        r[3] = b3;
-
-        r[4] = a4 * b0 + b[4];
-        r[5] = a4 * b1 + b[5];
-        r[6] = a4 * b2 + b[6];
-        r[7] = a4 * b3 + b[7];
-
         // r[8] =  b[8];
         // r[9] =  b[9];
         // r[10] = b[10];
@@ -216,7 +207,19 @@ export namespace Mat4Special {
         // r[15] = b[15];
 
         // fast version of above code block
-        r.set(b.subarray(8,8+16),8);
+        const b4 = b[4], b5 = b[5], b6 = b[6], b7 = b[7];
+        r.set(b);
+
+        r[0] = b0;
+        r[1] = b1;
+        r[2] = b2;
+        r[3] = b3;
+
+        r[4] = a4 * b0 + b4;
+        r[5] = a4 * b1 + b5;
+        r[6] = a4 * b2 + b6;
+        r[7] = a4 * b3 + b7;
+
 
     };
 
@@ -228,13 +231,6 @@ export namespace Mat4Special {
         const r:MAT16 = out.mat16 as MAT16;
         const a:MAT16 = aHolder.mat16 as MAT16;
         const b:MAT16 = bHolder.mat16 as MAT16;
-
-        const a1 = a[1];
-
-        r[0] = b[0] + a1 * b[4];
-        r[1] = b[1] + a1 * b[5];
-        r[2] = b[2] + a1 * b[6];
-        r[3] = b[3] + a1 * b[7];
 
         // r[4] = b[4];
         // r[5] = b[5];
@@ -252,7 +248,17 @@ export namespace Mat4Special {
         // r[15] = b[15];
 
         // fast version of above code block
-        r.set(b.subarray(4,4+16),4);
+
+        const a1 = a[1];
+        const b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3];
+        const b4 = b[4], b5 = b[5], b6 = b[6], b7 = b[7];
+
+        r.set(b);
+
+        r[0] = b0 + a1 * b4;
+        r[1] = b1 + a1 * b5;
+        r[2] = b2 + a1 * b6;
+        r[3] = b3 + a1 * b7;
 
     };
 
@@ -286,12 +292,13 @@ export namespace Mat4Special {
         // r[15] = a[14] * b[11] + a[15];
 
         // fast version of above code block
-        r.set(a);
         const b11 = b[11];
-        r[3] += a[2] * b11;
-        r[7] += a[6] * b11;
-        r[11] = a[10] * b11 + a[15];
-        r[15] += a[14] * b11;
+        const a2 = a[2], a6 = a[6], a10 = a[10], a14 = a[14], a15 = a[15];
+        r.set(a);
+        r[3] += a2 * b11;
+        r[7] += a6 * b11;
+        r[11] = a10 * b11 + a15;
+        r[15] += a14 * b11;
     };
 
     /**
@@ -303,28 +310,29 @@ export namespace Mat4Special {
         const a:MAT16 = aHolder.mat16 as MAT16;
         const b:MAT16 = bHolder.mat16 as MAT16;
 
-        const a3 = a[3], a7 = a[7], a11 = a[11], a15 = a[15];
+        const a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3], a4 = a[4], a5 = a[5], a6 = a[6], a7 = a[7];
+        const a8 = a[8], a9 = a[9], a10 = a[10], a11 = a[11], a12 = a[12], a13 = a[13], a14 = a[14], a15 = a[15];
         const b0 = b[0], b5 = b[5], b10 = b[10];
         const b12 = b[12], b13 = b[13], b14 = b[14];
 
-        r[0] = a[0] * b0 + a3 * b12;
-        r[1] = a[1] * b5 + a3 * b13;
-        r[2] = a[2] * b10 + a3 * b14;
+        r[0] = a0 * b0 + a3 * b12;
+        r[1] = a1 * b5 + a3 * b13;
+        r[2] = a2 * b10 + a3 * b14;
         r[3] = a3;
 
-        r[4] = a[4] * b0 + a7 * b12;
-        r[5] = a[5] * b5 + a7 * b13;
-        r[6] = a[6] * b10 + a7 * b14;
+        r[4] = a4 * b0 + a7 * b12;
+        r[5] = a5 * b5 + a7 * b13;
+        r[6] = a6 * b10 + a7 * b14;
         r[7] = a7;
 
-        r[8] = a[8] * b0 + a11 * b12;
-        r[9] = a[9] * b5 + a11 * b13;
-        r[10] = a[10] * b10 + a11 * b14;
+        r[8] = a8 * b0 + a11 * b12;
+        r[9] = a9 * b5 + a11 * b13;
+        r[10] = a10 * b10 + a11 * b14;
         r[11] = a11;
 
-        r[12] = a[12] * b0 + a15 * b12;
-        r[13] = a[13] * b5 + a15 * b13;
-        r[14] = a[14] * b10 + a15 * b14;
+        r[12] = a12 * b0 + a15 * b12;
+        r[13] = a13 * b5 + a15 * b13;
+        r[14] = a14 * b10 + a15 * b14;
         r[15] = a15;
 
     };

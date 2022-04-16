@@ -1,4 +1,4 @@
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {ObjectPool} from "@engine/misc/objectPool";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";

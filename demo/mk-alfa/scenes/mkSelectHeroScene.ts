@@ -13,7 +13,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {HexagonalFilter} from "@engine/renderer/webGl/filters/texture/hexagonalFilter";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {Sound} from "@engine/media/sound";

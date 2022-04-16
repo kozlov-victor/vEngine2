@@ -13,7 +13,7 @@ import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitte
 import {Point2d} from "@engine/geometry/point2d";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IAnimation} from "@engine/animation/iAnimation";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {DebugError} from "@engine/debug/debugError";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";

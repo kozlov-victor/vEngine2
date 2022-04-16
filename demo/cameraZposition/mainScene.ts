@@ -4,7 +4,7 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 

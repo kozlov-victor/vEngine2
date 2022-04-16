@@ -1,4 +1,4 @@
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Game} from "@engine/core/game";
 import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";

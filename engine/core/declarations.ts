@@ -2,7 +2,7 @@ import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {Layer} from "@engine/scene/layer";
 import {Scene} from "@engine/scene/scene";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import Mat16Holder = Mat4.Mat16Holder;
 
 export type Clazz<T> = new() => T;

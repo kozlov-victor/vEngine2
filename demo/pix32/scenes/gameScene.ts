@@ -3,7 +3,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Tween} from "@engine/animation/tween";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";

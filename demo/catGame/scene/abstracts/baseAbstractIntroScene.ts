@@ -4,7 +4,7 @@ import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Color} from "@engine/renderer/common/color";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Optional} from "@engine/core/declarations";
 import {AbstractEntity} from "../../entity/abstract/abstractEntity";
 import {Wall} from "../../entity/object/impl/wall";

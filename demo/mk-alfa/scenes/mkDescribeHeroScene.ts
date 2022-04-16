@@ -2,7 +2,7 @@ import {Font} from "@engine/renderable/impl/general/font/font";
 import {Color} from "@engine/renderer/common/color";
 import {ITexture} from "@engine/renderer/common/texture";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {MkAbstractScene} from "./mkAbstractScene";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {Circle} from "@engine/renderable/impl/geometry/circle";

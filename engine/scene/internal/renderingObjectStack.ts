@@ -1,7 +1,7 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ObjectPool} from "@engine/misc/objectPool";
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import Mat16Holder = Mat4.Mat16Holder;
 
 export class RenderingObjectStackItem extends ReleaseableEntity {

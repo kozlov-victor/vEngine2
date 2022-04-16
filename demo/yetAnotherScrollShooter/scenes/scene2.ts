@@ -2,7 +2,7 @@ import {AssetsHolder} from "../assets/assetsHolder";
 import {Scene} from "@engine/scene/scene";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {MainShip} from "../prefabs/mainShip";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Rocket} from "../prefabs/enemies/rocket";
 import {Bomb} from "../prefabs/enemies/bomb";
 import {Stone} from "../prefabs/enemies/stone";

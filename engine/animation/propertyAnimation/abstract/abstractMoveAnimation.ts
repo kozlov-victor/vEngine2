@@ -1,6 +1,6 @@
 import {AbstractPropertyAnimation} from "@engine/animation/propertyAnimation/abstract/abstractPropertyAnimation";
 import {Point2d} from "@engine/geometry/point2d";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 
 export abstract class AbstractMoveAnimation extends AbstractPropertyAnimation {
 

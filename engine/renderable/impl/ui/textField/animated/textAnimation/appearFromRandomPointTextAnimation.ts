@@ -6,7 +6,7 @@ import {Tween} from "@engine/animation/tween";
 import {AnimatedTextField} from "@engine/renderable/impl/ui/textField/animated/animatedTextField";
 import {EaseFn} from "@engine/misc/easing/type";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 
 export class AppearFromRandomPointTextAnimation extends AbstractTextAnimation {
 

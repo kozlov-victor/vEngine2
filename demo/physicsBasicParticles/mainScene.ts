@@ -5,7 +5,7 @@ import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/ar
 import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 

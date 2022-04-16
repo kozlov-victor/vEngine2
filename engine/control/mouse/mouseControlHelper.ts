@@ -2,7 +2,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IObjectMouseEvent, MousePoint, MousePointsPullHolder} from "@engine/control/mouse/mousePoint";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Rect} from "@engine/geometry/rect";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import {Vec4} from "@engine/geometry/vec4";
 import {LayerTransformType} from "@engine/scene/layer";
 import {IPoint2d, Point2d} from "@engine/geometry/point2d";

@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
 

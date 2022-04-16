@@ -7,7 +7,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IRectJSON, Rect} from "@engine/geometry/rect";

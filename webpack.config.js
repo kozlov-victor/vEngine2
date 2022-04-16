@@ -311,7 +311,7 @@ module.exports = async (env={})=>{
     config.plugins = [
         new webpack.DefinePlugin({
             BUILD_AT: webpack.DefinePlugin.runtimeValue(() => new Date().getTime()),
-            COMMIT_HASH: webpack.DefinePlugin.runtimeValue(() => `'${getBranchName()}(${getCommitHash()})'`),
+            COMMIT_HASH: webpack.DefinePlugin.runtimeValue(() => `'${getBranchName()} (${getCommitHash()})'`),
             DEBUG: debug,
         }),
         new ESLintPlugin({

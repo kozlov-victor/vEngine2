@@ -1,5 +1,5 @@
 import {ICloneable} from "@engine/core/declarations";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {AbstractGradient, IGradientPoint} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 import {ShapePainter} from "@engine/renderer/webGl/programs/impl/base/shape/shapePainter";
 import {Color} from "@engine/renderer/common/color";

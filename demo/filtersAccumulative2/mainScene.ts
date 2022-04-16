@@ -4,7 +4,7 @@ import {KernelBlurAccumulativeFilter} from "@engine/renderer/webGl/filters/accum
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Color} from "@engine/renderer/common/color";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Tween} from "@engine/animation/tween";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
 import {TaskQueue} from "@engine/resources/taskQueue";

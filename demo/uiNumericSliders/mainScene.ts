@@ -4,7 +4,7 @@ import {HorizontalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/
 import {VerticalNumericSlider} from "@engine/renderable/impl/ui/numericSlider/verticalNumericSlider";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 

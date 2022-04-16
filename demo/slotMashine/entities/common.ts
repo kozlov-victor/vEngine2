@@ -1,4 +1,4 @@
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 
 enum WHEEL_SECTOR  {
     CAR = 1,

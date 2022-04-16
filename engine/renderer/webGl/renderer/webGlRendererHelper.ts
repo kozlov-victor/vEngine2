@@ -5,7 +5,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ISize} from "@engine/geometry/size";
 import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {Game} from "@engine/core/game";
 import Mat16Holder = Mat4.Mat16Holder;

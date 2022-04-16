@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Sound} from "@engine/media/sound";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Resource} from "@engine/resources/resourceDecorators";
 
 

@@ -1,6 +1,6 @@
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {
     assignPos,

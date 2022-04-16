@@ -5,7 +5,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {createGlowTweenFilter, createScaleTweenMovie} from "../utils/miscFunctions";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {MkSelectHeroScene} from "./mkSelectHeroScene";
 import {Sound} from "@engine/media/sound";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";

@@ -1,6 +1,6 @@
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Size} from "@engine/geometry/size";
 import {Rect} from "@engine/geometry/rect";
 import {Hero} from "./hero";

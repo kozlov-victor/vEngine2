@@ -2,7 +2,7 @@ import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Size} from "@engine/geometry/size";
 import {Rect} from "@engine/geometry/rect";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {AbstractMonster} from "../abstract/abstractMonster";
 import {Sound} from "@engine/media/sound";
 

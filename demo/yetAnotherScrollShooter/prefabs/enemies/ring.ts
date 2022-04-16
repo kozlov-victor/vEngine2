@@ -8,7 +8,7 @@ import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {Color} from "@engine/renderer/common/color";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 

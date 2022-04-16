@@ -1,6 +1,6 @@
 import {FrameBuffer} from "../../base/frameBuffer";
 import {DebugError} from "@engine/debug/debugError";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";

@@ -3,7 +3,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import * as fntXML from "xml/angelcode-loader!./font/pixel.fnt";
 import {Circle} from "@engine/renderable/impl/geometry/circle";

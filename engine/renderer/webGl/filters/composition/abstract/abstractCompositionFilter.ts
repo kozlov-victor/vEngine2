@@ -5,7 +5,7 @@ import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {ISize} from "@engine/geometry/size";
 import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Color} from "@engine/renderer/common/color";
@@ -56,7 +56,7 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         this._simpleRectCopyPainter.draw();
         // 2. prepare nextFrameBuffer
         nextFrameBuffer.bind();
-        nextFrameBuffer.clear(Color.NONE); // we dont require blending with this buffer, already blended
+        nextFrameBuffer.clear(Color.NONE); // we don't require blending with this buffer, already blended
         // 3. attach destTexture as copy of destination
         this.simpleRectPainter.attachTexture('destTexture',this.destCopy.getTexture());
         // 4. filter

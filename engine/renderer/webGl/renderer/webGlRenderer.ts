@@ -14,7 +14,7 @@ import type {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import type {Image} from "@engine/renderable/impl/general/image/image";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import type {Line} from "@engine/renderable/impl/geometry/line";
@@ -28,7 +28,7 @@ import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractT
 import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 import {SimpleColoredRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleColoredRectPainter";
 import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
-import {Mat4Special} from "@engine/geometry/mat4Special";
+import {Mat4Special} from "@engine/misc/math/mat4Special";
 import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
 import Mat16Holder = Mat4.Mat16Holder;
@@ -69,26 +69,16 @@ const makeModelViewProjectionMatrix = (rect:Rect,viewSize:Size,matrixStack:Matri
     const translationMatrix:Mat16Holder = Mat16Holder.fromPool();
     Mat4.makeTranslation(translationMatrix,rect.x, rect.y, 0);
 
-    const matrix1:Mat16Holder = Mat16Holder.fromPool();
-    Mat4Special.multiplyScaleByAny(matrix1,scaleMatrix,translationMatrix);
-
-    const matrix2:Mat16Holder = Mat16Holder.fromPool();
-    Mat4.matrixMultiply(matrix2,matrix1, matrixStack.getCurrentValue());
-
-    const matrix3:Mat16Holder = Mat16Holder.fromPool();
-    Mat4Special.multiplyAnyByProjection(matrix3,matrix2, projectionMatrix);
-
-    const matrix4:Mat16Holder = Mat16Holder.fromPool();
-    Mat4Special.multiplyAnyByZtoW(matrix4,matrix3, zToWMatrix);
+    const matrixResult:Mat16Holder = Mat16Holder.fromPool();
+    Mat4Special.multiplyScaleByAny(matrixResult,scaleMatrix,translationMatrix);
+    Mat4.matrixMultiply(matrixResult,matrixResult, matrixStack.getCurrentValue());
+    Mat4Special.multiplyAnyByProjection(matrixResult,matrixResult, projectionMatrix);
+    Mat4Special.multiplyAnyByZtoW(matrixResult,matrixResult, zToWMatrix);
 
     projectionMatrix.release();
     scaleMatrix.release();
     translationMatrix.release();
-    matrix1.release();
-    matrix2.release();
-
-    matrix3.release();
-    return matrix4;
+    return matrixResult;
 };
 
 

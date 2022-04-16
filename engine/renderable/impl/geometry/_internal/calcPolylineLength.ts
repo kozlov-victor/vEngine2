@@ -1,7 +1,7 @@
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Point2d} from "@engine/geometry/point2d";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 
 export const calcPolylineLength = (p:PolyLine):number=>{
     const zeroPoint:Point2d = new Point2d();

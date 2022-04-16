@@ -3,7 +3,7 @@ import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {FindFreePointStrategy, WaterRippleFilter} from "@engine/renderer/webGl/filters/texture/waterRippleFilter";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {

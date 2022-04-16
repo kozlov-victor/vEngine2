@@ -7,7 +7,7 @@ import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
 import {FLIP_TEXTURE_MATRIX, makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";

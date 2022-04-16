@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {Torus} from "@engine/renderer/webGl/primitives/torus";
 import {Int} from "@engine/core/declarations";

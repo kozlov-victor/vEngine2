@@ -1,10 +1,10 @@
-import {IPoint2d, Point2d} from "../geometry/point2d";
-import {IRect, IRectJSON, Rect} from "../geometry/rect";
+import {IPoint2d, Point2d} from "../../geometry/point2d";
+import {IRectJSON} from "../../geometry/rect";
 
 
 export namespace MathEx {
 
-    export const isPointInRect = (point: IPoint2d, rect: IRect): boolean => {
+    export const isPointInRect = (point: IPoint2d, rect: IRectJSON): boolean => {
         return point.x > rect.x &&
         point.x < (rect.x + rect.width) &&
         point.y > rect.y &&

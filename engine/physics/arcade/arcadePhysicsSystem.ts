@@ -2,7 +2,7 @@ import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {IPhysicsSystem} from "@engine/physics/common/interfaces";
 import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {Scene} from "@engine/scene/scene";
 import {SpatialSpace} from "@engine/physics/common/spatialSpace";

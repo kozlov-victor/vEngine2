@@ -13,7 +13,12 @@ export class InvertBgColorCompositionFilter extends AbstractCompositionFilter {
                 vec4 sourceColor = texture2D(texture, v_texCoord);
                 if (destColor.a==0. && sourceColor.a>0.) gl_FragColor = sourceColor;
                 if (destColor.a>0. && sourceColor.a==0.) gl_FragColor = destColor;
-                else gl_FragColor = 1.-destColor;
+                else gl_FragColor = vec4(
+                    (1.-destColor.r)*destColor.a,
+                    (1.-destColor.g)*destColor.a,
+                    (1.-destColor.b)*destColor.a,
+                    destColor.a
+                );
             }`
         );
         this.simpleRectPainter.initProgram();

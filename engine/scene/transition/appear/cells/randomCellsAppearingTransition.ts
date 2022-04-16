@@ -1,6 +1,6 @@
 import {ISceneTransition} from "@engine/scene/transition/abstract/iSceneTransition";
 import {Image} from "@engine/renderable/impl/general/image/image";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {AbstractCellsAppearingTransition} from "@engine/scene/transition/appear/cells/abstractCellsAppearingTransition";
 
 abstract class RandomCellsAppearingDisappearingTransition extends AbstractCellsAppearingTransition{

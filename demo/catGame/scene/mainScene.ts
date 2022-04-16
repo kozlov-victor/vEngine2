@@ -13,7 +13,7 @@ import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Color} from "@engine/renderer/common/color";
-import {MathEx} from "@engine/misc/mathEx";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Zombie} from "../entity/actor/impl/zombie";
 import {Monster2} from "../entity/actor/impl/monster2";
 import {BloodDrop} from "../entity/object/impl/bloodDrop";

@@ -5,7 +5,7 @@ import type {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {DebugError} from "@engine/debug/debugError";
 import * as fragmentSource from "./mesh.fragment.glsl";
 import * as vertexSource from "./mesh.vertex.glsl";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import {Color} from "@engine/renderer/common/color";
 import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import MAT16 = Mat4.MAT16;

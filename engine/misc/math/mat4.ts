@@ -1,4 +1,4 @@
-import {DebugError} from "../debug/debugError";
+import {DebugError} from "../../debug/debugError";
 import {ObjectPool} from "@engine/misc/objectPool";
 import {ICloneable} from "@engine/core/declarations";
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
@@ -28,6 +28,8 @@ export namespace Mat4 {
 
     export class Mat16Holder extends ReleaseableEntity implements ICloneable<Mat16Holder>{
 
+        public identityFlag:boolean = false; // todo experimental flag
+
         public constructor(){
             super();
             this.set(
@@ -44,7 +46,7 @@ export namespace Mat4 {
         public readonly mat16:Readonly<MAT16> = (new Float32Array(16) as unknown) as MAT16; // exports only readonly arr
 
         public static fromPool():Mat16Holder {
-            return Mat16Holder.m16hPool.getFreeObject()!;
+            return  Mat16Holder.m16hPool.getFreeObject()!;
         }
 
         public static create(): Mat4.Mat16Holder {
@@ -57,10 +59,12 @@ export namespace Mat4 {
             mat16[4 ]= v4;mat16[5 ]=v5 ;mat16[6 ]=v6 ;mat16[7 ]=v7;
             mat16[8 ]= v8;mat16[9 ]=v9 ;mat16[10]=v10;mat16[11]=v11;
             mat16[12]=v12;mat16[13]=v13;mat16[14]=v14;mat16[15]=v15;
+            this.identityFlag = false;
         }
 
         public fromMat16(mat16:Readonly<MAT16>):void{
             this.mat16.set(mat16,0);
+            this.identityFlag = false;
         }
 
         public clone(): Mat4.Mat16Holder {
@@ -68,6 +72,7 @@ export namespace Mat4 {
             for (let i:n=0;i<this.mat16.length;i++) {
                 (m.mat16 as MAT16)[i] = this.mat16[i];
             }
+            m.identityFlag = this.identityFlag;
             return m;
         }
 
@@ -81,7 +86,8 @@ export namespace Mat4 {
     ]) as Readonly<MAT16>;
 
     export const makeIdentity = (out:Mat16Holder):void => {
-        out.fromMat16(identityArray);
+        out.mat16.set(identityArray);
+        out.identityFlag = true;
     };
 
 
@@ -90,8 +96,9 @@ export namespace Mat4 {
         // 0, 1, 0, 0,
         // 0, 0, 1, fudgeFactor,
         // 0, 0, 0, 1
-        out.fromMat16(identityArray);
+        out.mat16.set(identityArray);
         (out.mat16 as MAT16)[11] = fudgeFactor;
+        out.identityFlag = false;
     };
 
     export const make2DProjection = (out: Mat16Holder,width:n, height:n, depth:n):void => {
@@ -132,6 +139,8 @@ export namespace Mat4 {
         outMat16[12] = (left + right) * lr;
         outMat16[13] = (top + bottom) * bt;
         outMat16[14] = (near + far) * nf;
+
+        out.identityFlag = false;
     };
 
     export const perspective = (out:Mat16Holder,fovy:n, aspect:n, near:n, far:n):void => {
@@ -159,6 +168,9 @@ export namespace Mat4 {
         outMat16[13] = 0;
         outMat16[14] = (2 * far * near) * nf;
         outMat16[15] = 0;
+
+        out.identityFlag = false;
+
     };
 
 
@@ -176,6 +188,8 @@ export namespace Mat4 {
         m[12] = tx;
         m[13] = ty;
         m[14] = tz;
+
+        out.identityFlag = false;
     };
 
 
@@ -193,6 +207,8 @@ export namespace Mat4 {
         m.set(identityArray);
         m[4] = t;
 
+        out.identityFlag = false;
+
     };
 
     export const makeYSkew = (out:Mat16Holder,angle:n):void => {
@@ -208,6 +224,8 @@ export namespace Mat4 {
         const m:MAT16 = out.mat16 as MAT16;
         m.set(identityArray);
         m[1] = t;
+
+        out.identityFlag = false;
 
     };
 
@@ -228,6 +246,8 @@ export namespace Mat4 {
         m[6] = s;
         m[9] = -s;
         m[10] = c;
+
+        out.identityFlag = false;
     };
 
     export const makeYRotation = (out:Mat16Holder,angleInRadians:n):void=> {
@@ -247,6 +267,8 @@ export namespace Mat4 {
         m[2] = -s;
         m[8] = s;
         m[10] = c;
+
+        out.identityFlag = false;
     };
 
     export const makeZRotation = (out:Mat16Holder,angleInRadians:n):void=> {
@@ -266,6 +288,8 @@ export namespace Mat4 {
         m[1] = s;
         m[4] = -s;
         m[5] = c;
+
+        out.identityFlag = false;
     };
 
 
@@ -273,20 +297,34 @@ export namespace Mat4 {
         const m:MAT16 = out.mat16 as MAT16;
 
         const m0 = m[0], m1 = m[1], m2 = m[2];
+        const m12 = m[12], m13 = m[13], m14 = m[14];
         const d:n = Math.sqrt(m0 * m0 + m1 * m1 + m2 * m2);
+
+        // m[0] = d;
+        // m[1] = 0;
+        // m[2] = 0;
+        // m[3] = 0;
+        // m[4] = 0;
+        // m[5] = d;
+        // m[6] = 0;
+        // m[7] = 0;
+        // m[8] = 0;
+        // m[9] = 0;
+        // m[10] = d;
+        // m[11] = 0;
+        // m[15] = 1;
+
+        out.mat16.set(identityArray);
+
         m[0] = d;
-        m[1] = 0;
-        m[2] = 0;
-        m[3] = 0;
-        m[4] = 0;
         m[5] = d;
-        m[6] = 0;
-        m[7] = 0;
-        m[8] = 0;
-        m[9] = 0;
         m[10] = d;
-        m[11] = 0;
-        m[15] = 1;
+        m[12] = m12;
+        m[13] = m13;
+        m[14] = m14;
+
+        out.identityFlag = false;
+
     };
 
     export const makeScale = (out:Mat16Holder,sx:n, sy:n, sz:n):void=> {
@@ -301,6 +339,8 @@ export namespace Mat4 {
         m[ 0] = sx;
         m[ 5] = sy;
         m[10] = sz;
+
+        out.identityFlag = false;
     };
 
 
@@ -378,6 +418,9 @@ export namespace Mat4 {
             throw new DebugError("can not invert matrix with zero determinant");
         }
         for (let i:n = 0; i < 16; i++) r[i] /= det;
+
+        out.identityFlag = false;
+
     };
 
     export const transpose = (out:Mat16Holder,mHolder:Mat16Holder):void=>{
@@ -414,5 +457,6 @@ export namespace Mat4 {
     export const IDENTITY:Readonly<MAT16> = identityArray;
     export const IDENTITY_HOLDER:Readonly<Mat16Holder> = new Mat16Holder();
     IDENTITY_HOLDER.fromMat16(IDENTITY);
+    (IDENTITY_HOLDER as Mat16Holder).identityFlag = true;
 }
 

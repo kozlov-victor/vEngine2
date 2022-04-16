@@ -13,7 +13,7 @@ import {IDestroyable, Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
-import {Mat4} from "@engine/geometry/mat4";
+import {Mat4} from "@engine/misc/math/mat4";
 import MAT16 = Mat4.MAT16;
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 
