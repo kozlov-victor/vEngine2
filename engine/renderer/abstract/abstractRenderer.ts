@@ -14,8 +14,8 @@ import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/misc/math/mat4";
-import MAT16 = Mat4.MAT16;
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
+import Mat16Holder = Mat4.Mat16Holder;
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>Promise<void>;
@@ -131,9 +131,9 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     public abstract transformRotateZ(a:number):void;
 
-    public abstract transformSet(val:Readonly<MAT16>): void;
+    public abstract transformSet(val:Readonly<Mat16Holder>): void;
 
-    public abstract transformGet():Readonly<MAT16>;
+    public abstract transformGet():Readonly<Mat16Holder>;
 
     public killObject(r:RenderableModel):void {}
 

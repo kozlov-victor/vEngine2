@@ -22,7 +22,7 @@ export class MainScene extends Scene {
         surface.setLineWidth(0);
         this.appendChild(surface);
         this.filters = [
-            new AlphaMaskFilter(this.game,this.mask)
+            new AlphaMaskFilter(this.game,this.mask,'r')
         ]
     }
 

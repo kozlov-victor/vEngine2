@@ -26,6 +26,13 @@ export namespace Mat4 {
         n,n,n,n
     ] & Float32Array;
 
+    export const IDENTITY:Readonly<MAT16> = Float32Array.from([
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    ]) as Readonly<MAT16>;
+
     export class Mat16Holder extends ReleaseableEntity implements ICloneable<Mat16Holder>{
 
         public identityFlag:boolean = false; // todo experimental flag
@@ -62,9 +69,9 @@ export namespace Mat4 {
             this.identityFlag = false;
         }
 
-        public fromMat16(mat16:Readonly<MAT16>):void{
-            this.mat16.set(mat16,0);
-            this.identityFlag = false;
+        public fromMat16(mat16Holder:Readonly<Mat16Holder>):void{
+            this.mat16.set(mat16Holder.mat16);
+            this.identityFlag = mat16Holder.identityFlag;
         }
 
         public clone(): Mat4.Mat16Holder {
@@ -78,15 +85,8 @@ export namespace Mat4 {
 
     }
 
-    const identityArray = Float32Array.from([
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
-    ]) as Readonly<MAT16>;
-
     export const makeIdentity = (out:Mat16Holder):void => {
-        out.mat16.set(identityArray);
+        out.mat16.set(IDENTITY);
         out.identityFlag = true;
     };
 
@@ -96,7 +96,7 @@ export namespace Mat4 {
         // 0, 1, 0, 0,
         // 0, 0, 1, fudgeFactor,
         // 0, 0, 0, 1
-        out.mat16.set(identityArray);
+        out.mat16.set(IDENTITY);
         (out.mat16 as MAT16)[11] = fudgeFactor;
         out.identityFlag = false;
     };
@@ -130,7 +130,7 @@ export namespace Mat4 {
             bt:n = 1.0 / (bottom - top),
             nf:n = 1.0 / (near - far);
         const outMat16:MAT16 = out.mat16 as MAT16;
-        outMat16.set(identityArray);
+        outMat16.set(IDENTITY);
 
         outMat16[0] = -2 * lr;
         outMat16[5] = -2 * bt;
@@ -184,7 +184,7 @@ export namespace Mat4 {
         //     tx, ty, tz,  1
         // );
 
-        m.set(identityArray);
+        m.set(IDENTITY);
         m[12] = tx;
         m[13] = ty;
         m[14] = tz;
@@ -204,7 +204,7 @@ export namespace Mat4 {
         // );
 
         const m:MAT16 = out.mat16 as MAT16;
-        m.set(identityArray);
+        m.set(IDENTITY);
         m[4] = t;
 
         out.identityFlag = false;
@@ -222,7 +222,7 @@ export namespace Mat4 {
         // );
 
         const m:MAT16 = out.mat16 as MAT16;
-        m.set(identityArray);
+        m.set(IDENTITY);
         m[1] = t;
 
         out.identityFlag = false;
@@ -241,7 +241,7 @@ export namespace Mat4 {
         // );
 
         const m:MAT16 = out.mat16 as MAT16;
-        m.set(identityArray);
+        m.set(IDENTITY);
         m[5] = c;
         m[6] = s;
         m[9] = -s;
@@ -262,7 +262,7 @@ export namespace Mat4 {
         // );
 
         const m:MAT16 = out.mat16 as MAT16;
-        m.set(identityArray);
+        m.set(IDENTITY);
         m[0] = c;
         m[2] = -s;
         m[8] = s;
@@ -283,7 +283,7 @@ export namespace Mat4 {
         // );
 
         const m:MAT16 = out.mat16 as MAT16;
-        m.set(identityArray);
+        m.set(IDENTITY);
         m[0] = c;
         m[1] = s;
         m[4] = -s;
@@ -314,7 +314,7 @@ export namespace Mat4 {
         // m[11] = 0;
         // m[15] = 1;
 
-        out.mat16.set(identityArray);
+        out.mat16.set(IDENTITY);
 
         m[0] = d;
         m[5] = d;
@@ -335,7 +335,7 @@ export namespace Mat4 {
         //     0,  0,  0,  1
         // );
         const m = out.mat16 as MAT16;
-        out.mat16.set(identityArray);
+        out.mat16.set(IDENTITY);
         m[ 0] = sx;
         m[ 5] = sy;
         m[10] = sz;
@@ -379,12 +379,17 @@ export namespace Mat4 {
     };
 
     export const multVecByMatrix = (out:Vec4Holder, matrix:Mat16Holder, vec4Arr:Vec4Holder):void => {
+        const vec4Arr_vec4_0 = vec4Arr.vec4[0];
+        const vec4Arr_vec4_1 = vec4Arr.vec4[1];
+        const vec4Arr_vec4_2 = vec4Arr.vec4[2];
+        const vec4Arr_vec4_3 = vec4Arr.vec4[3];
+        const mat16 = matrix.mat16;
         for (let i:n = 0; i < 4; i++) {
             (out.vec4 as VEC4)[i] =
-                vec4Arr.vec4[0] * matrix.mat16[0 * 4 + i] +
-                vec4Arr.vec4[1] * matrix.mat16[1 * 4 + i] +
-                vec4Arr.vec4[2] * matrix.mat16[2 * 4 + i] +
-                vec4Arr.vec4[3] * matrix.mat16[3 * 4 + i];
+                vec4Arr_vec4_0 * mat16[    0 + i] +
+                vec4Arr_vec4_1 * mat16[    4 + i] +
+                vec4Arr_vec4_2 * mat16[2 * 4 + i] +
+                vec4Arr_vec4_3 * mat16[3 * 4 + i];
         }
     };
 
@@ -392,25 +397,28 @@ export namespace Mat4 {
         const r:MAT16 = out.mat16 as MAT16;
         const m:MAT16 = mHolder.mat16 as MAT16;
 
-        r[0] = m[5]*m[10]*m[15] - m[5]*m[14]*m[11] - m[6]*m[9]*m[15] + m[6]*m[13]*m[11] + m[7]*m[9]*m[14] - m[7]*m[13]*m[10];
-        r[1] = -m[1]*m[10]*m[15] + m[1]*m[14]*m[11] + m[2]*m[9]*m[15] - m[2]*m[13]*m[11] - m[3]*m[9]*m[14] + m[3]*m[13]*m[10];
-        r[2] = m[1]*m[6]*m[15] - m[1]*m[14]*m[7] - m[2]*m[5]*m[15] + m[2]*m[13]*m[7] + m[3]*m[5]*m[14] - m[3]*m[13]*m[6];
-        r[3] = -m[1]*m[6]*m[11] + m[1]*m[10]*m[7] + m[2]*m[5]*m[11] - m[2]*m[9]*m[7] - m[3]*m[5]*m[10] + m[3]*m[9]*m[6];
+        const m0 = m[0], m1 = m[1], m2 = m[2], m3 = m[3], m4 = m[4], m5 = m[5], m6 = m[6], m7 = m[7];
+        const m8 = m[8], m9 = m[9], m10 = m[10], m11 = m[11], m12 = m[12], m13 = m[13], m14 = m[14], m15 = m[15];
 
-        r[4] = -m[4]*m[10]*m[15] + m[4]*m[14]*m[11] + m[6]*m[8]*m[15] - m[6]*m[12]*m[11] - m[7]*m[8]*m[14] + m[7]*m[12]*m[10];
-        r[5] = m[0]*m[10]*m[15] - m[0]*m[14]*m[11] - m[2]*m[8]*m[15] + m[2]*m[12]*m[11] + m[3]*m[8]*m[14] - m[3]*m[12]*m[10];
-        r[6] = -m[0]*m[6]*m[15] + m[0]*m[14]*m[7] + m[2]*m[4]*m[15] - m[2]*m[12]*m[7] - m[3]*m[4]*m[14] + m[3]*m[12]*m[6];
-        r[7] = m[0]*m[6]*m[11] - m[0]*m[10]*m[7] - m[2]*m[4]*m[11] + m[2]*m[8]*m[7] + m[3]*m[4]*m[10] - m[3]*m[8]*m[6];
+        r[0] = m5*m10*m15 - m5*m14*m11 - m6*m9*m15 + m6*m13*m11 + m7*m9*m14 - m7*m13*m10;
+        r[1] = -m1*m10*m15 + m1*m14*m11 + m2*m9*m15 - m2*m13*m11 - m3*m9*m14 + m3*m13*m10;
+        r[2] = m1*m6*m15 - m1*m14*m7 - m2*m5*m15 + m2*m13*m7 + m3*m5*m14 - m3*m13*m6;
+        r[3] = -m1*m6*m11 + m1*m10*m7 + m2*m5*m11 - m2*m9*m7 - m3*m5*m10 + m3*m9*m6;
 
-        r[8] = m[4]*m[9]*m[15] - m[4]*m[13]*m[11] - m[5]*m[8]*m[15] + m[5]*m[12]*m[11] + m[7]*m[8]*m[13] - m[7]*m[12]*m[9];
-        r[9] = -m[0]*m[9]*m[15] + m[0]*m[13]*m[11] + m[1]*m[8]*m[15] - m[1]*m[12]*m[11] - m[3]*m[8]*m[13] + m[3]*m[12]*m[9];
-        r[10] = m[0]*m[5]*m[15] - m[0]*m[13]*m[7] - m[1]*m[4]*m[15] + m[1]*m[12]*m[7] + m[3]*m[4]*m[13] - m[3]*m[12]*m[5];
-        r[11] = -m[0]*m[5]*m[11] + m[0]*m[9]*m[7] + m[1]*m[4]*m[11] - m[1]*m[8]*m[7] - m[3]*m[4]*m[9] + m[3]*m[8]*m[5];
+        r[4] = -m4*m10*m15 + m4*m14*m11 + m6*m8*m15 - m6*m12*m11 - m7*m8*m14 + m7*m12*m10;
+        r[5] = m0*m10*m15 - m0*m14*m11 - m2*m8*m15 + m2*m12*m11 + m3*m8*m14 - m3*m12*m10;
+        r[6] = -m0*m6*m15 + m0*m14*m7 + m2*m4*m15 - m2*m12*m7 - m3*m4*m14 + m3*m12*m6;
+        r[7] = m0*m6*m11 - m0*m10*m7 - m2*m4*m11 + m2*m8*m7 + m3*m4*m10 - m3*m8*m6;
 
-        r[12] = -m[4]*m[9]*m[14] + m[4]*m[13]*m[10] + m[5]*m[8]*m[14] - m[5]*m[12]*m[10] - m[6]*m[8]*m[13] + m[6]*m[12]*m[9];
-        r[13] = m[0]*m[9]*m[14] - m[0]*m[13]*m[10] - m[1]*m[8]*m[14] + m[1]*m[12]*m[10] + m[2]*m[8]*m[13] - m[2]*m[12]*m[9];
-        r[14] = -m[0]*m[5]*m[14] + m[0]*m[13]*m[6] + m[1]*m[4]*m[14] - m[1]*m[12]*m[6] - m[2]*m[4]*m[13] + m[2]*m[12]*m[5];
-        r[15] = m[0]*m[5]*m[10] - m[0]*m[9]*m[6] - m[1]*m[4]*m[10] + m[1]*m[8]*m[6] + m[2]*m[4]*m[9] - m[2]*m[8]*m[5];
+        r[8] = m4*m9*m15 - m4*m13*m11 - m5*m8*m15 + m5*m12*m11 + m7*m8*m13 - m7*m12*m9;
+        r[9] = -m0*m9*m15 + m0*m13*m11 + m1*m8*m15 - m1*m12*m11 - m3*m8*m13 + m3*m12*m9;
+        r[10] = m0*m5*m15 - m0*m13*m7 - m1*m4*m15 + m1*m12*m7 + m3*m4*m13 - m3*m12*m5;
+        r[11] = -m0*m5*m11 + m0*m9*m7 + m1*m4*m11 - m1*m8*m7 - m3*m4*m9 + m3*m8*m5;
+
+        r[12] = -m4*m9*m14 + m4*m13*m10 + m5*m8*m14 - m5*m12*m10 - m6*m8*m13 + m6*m12*m9;
+        r[13] = m0*m9*m14 - m0*m13*m10 - m1*m8*m14 + m1*m12*m10 + m2*m8*m13 - m2*m12*m9;
+        r[14] = -m0*m5*m14 + m0*m13*m6 + m1*m4*m14 - m1*m12*m6 - m2*m4*m13 + m2*m12*m5;
+        r[15] = m0*m5*m10 - m0*m9*m6 - m1*m4*m10 + m1*m8*m6 + m2*m4*m9 - m2*m8*m5;
 
         const det:n = m[0]*r[0] + m[1]*r[4] + m[2]*r[8] + m[3]*r[12];
         if (DEBUG && det===0) {
@@ -451,12 +459,8 @@ export namespace Mat4 {
         return pointResult;
     };
 
-    const m16h:Mat16Holder = Mat16Holder.create();
-    makeIdentity(m16h);
-
-    export const IDENTITY:Readonly<MAT16> = identityArray;
     export const IDENTITY_HOLDER:Readonly<Mat16Holder> = new Mat16Holder();
-    IDENTITY_HOLDER.fromMat16(IDENTITY);
+    IDENTITY_HOLDER.mat16.set(IDENTITY);
     (IDENTITY_HOLDER as Mat16Holder).identityFlag = true;
 }
 

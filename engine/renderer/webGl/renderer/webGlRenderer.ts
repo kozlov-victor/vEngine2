@@ -31,10 +31,10 @@ import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstract
 import {Mat4Special} from "@engine/misc/math/mat4Special";
 import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
+import {GlCachedAccessor} from "@engine/renderer/webGl/blender/glCachedAccessor";
 import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
-import MAT16 = Mat4.MAT16;
-import {GlCachedAccessor} from "@engine/renderer/webGl/blender/glCachedAccessor";
+import IDENTITY = Mat4.IDENTITY;
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -273,12 +273,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
         Mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
 
-        const inverseTransposeModelMatrix:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.inverse(inverseTransposeModelMatrix,modelMatrix);
-        Mat4.transpose(inverseTransposeModelMatrix,inverseTransposeModelMatrix);
-
         md.setModelMatrix(modelMatrix.mat16);
-        md.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
+        md.setInverseTransposeModelMatrix(IDENTITY);
         md.setProjectionMatrix(zToWProjectionMatrix.mat16);
         md.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
         md.setTextureUsed(false);
@@ -302,7 +298,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         zToWMatrix.release();
         orthoProjectionMatrix.release();
         zToWProjectionMatrix.release();
-        inverseTransposeModelMatrix.release();
     }
 
     public destroyMesh(mesh:Mesh2d):void {
@@ -418,12 +413,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._matrixStack.restore();
     }
 
-    public transformSet(val:Readonly<MAT16>): void {
+    public transformSet(val:Readonly<Mat16Holder>): void {
         this._matrixStack.setMatrix(val);
     }
 
-    public transformGet(): Readonly<MAT16> {
-        return this._matrixStack.getCurrentValue().mat16;
+    public transformGet(): Readonly<Mat16Holder> {
+        return this._matrixStack.getCurrentValue();
     }
 
     public setLockRect(rect:IRectJSON):void {
@@ -564,7 +559,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
             const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
             scd.setUniform(scd.u_vertexMatrix,mvpHolder.mat16);
-            rectangle.modelViewProjectionMatrix.fromMat16(mvpHolder.mat16);
+            rectangle.modelViewProjectionMatrix.fromMat16(mvpHolder);
             mvpHolder.release();
             rect.release();
             size.release();
@@ -611,7 +606,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const size:Size = Size.fromPool();
             size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
             const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
-            model.modelViewProjectionMatrix.fromMat16(mvpHolder.mat16);
+            model.modelViewProjectionMatrix.fromMat16(mvpHolder);
             sd.setUniform(sd.u_vertexMatrix,mvpHolder.mat16);
             mvpHolder.release();
             rect.release();

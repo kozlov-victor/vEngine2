@@ -221,7 +221,7 @@ export abstract class RenderableModel
             this._transform();
             this.worldTransformMatrix.fromMat16(renderer.transformGet());
         } else {
-            renderer.transformSet(this.worldTransformMatrix.mat16);
+            renderer.transformSet(this.worldTransformMatrix);
         }
 
         const filters: IFilter[] =

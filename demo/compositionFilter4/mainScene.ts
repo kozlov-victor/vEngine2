@@ -55,7 +55,7 @@ export class MainScene extends Scene {
         const spr:Image = new Image(this.game,this.plasmaLink);
         this.appendChild(spr);
         const palletFilter:PalletOffsetFilter = new PalletOffsetFilter(this.game,this.palletLink);
-        const maskFilter = new AlphaMaskFilter(this.game,drawingSurface.getTexture());
+        const maskFilter = new AlphaMaskFilter(this.game,drawingSurface.getTexture(),'a');
         spr.filters = [palletFilter,maskFilter];
         let offset:number = 0;
         this.setInterval(()=>{

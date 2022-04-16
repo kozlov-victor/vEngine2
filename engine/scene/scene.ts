@@ -240,7 +240,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
             this.camera._transform();
             this.camera.worldTransformMatrix.fromMat16(this.game.getRenderer().transformGet());
         } else {
-            this.game.getRenderer().transformSet(this.camera.worldTransformMatrix.mat16);
+            this.game.getRenderer().transformSet(this.camera.worldTransformMatrix);
         }
 
         if (this.lifeCycleState===SceneLifeCycleState.PRELOADING) {
@@ -253,7 +253,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
                 const isStuck = l.transformType===LayerTransformType.STICK_TO_CAMERA;
                 if (isStuck) {
                     renderer.transformSave();
-                    renderer.transformSet(IDENTITY_HOLDER.mat16);
+                    renderer.transformSet(IDENTITY_HOLDER);
                 }
                 l.render();
                 if (isStuck) {

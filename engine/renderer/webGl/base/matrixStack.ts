@@ -1,7 +1,6 @@
 import Mat16Holder = Mat4.Mat16Holder;
 import {IPropertyStack} from "@engine/renderer/common/propertyStack";
 import {Stack} from "@engine/misc/collection/stack";
-import MAT16 = Mat4.MAT16;
 import {Mat4} from "@engine/misc/math/mat4";
 import {Mat4Special} from "@engine/misc/math/mat4Special";
 
@@ -9,7 +8,7 @@ export interface IMatrixTransformable {
     transformSave():void;
     transformReset():void;
     transformRestore():void;
-    transformSet(val:Readonly<MAT16>):void;
+    transformSet(val:Readonly<Mat16Holder>):void;
     transformScale(x:number, y:number, z?:number):void;
     transformTranslate(x:number, y:number, z?:number):void;
     transformSkewX(angle:number):void;
@@ -39,8 +38,8 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     public save():void {
         const copy = Mat16Holder.fromPool();
         const curVal = this.getCurrentValue();
-        copy.identityFlag = curVal.identityFlag;
         copy.mat16.set(curVal.mat16);
+        copy.identityFlag = curVal.identityFlag;
         this._stack.push(copy);
     }
 
@@ -63,7 +62,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
 
-    public setMatrix(val:Readonly<MAT16>):this {
+    public setMatrix(val:Readonly<Mat16Holder>):this {
         this.getCurrentValue().fromMat16(val);
         return this;
     }

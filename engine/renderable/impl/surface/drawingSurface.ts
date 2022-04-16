@@ -26,7 +26,7 @@ import {
     JointStyle
 } from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 import {SvgPathToVertexArrayBuilder} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArrayBuilder";
-import MAT16 = Mat4.MAT16;
+import Mat16Holder = Mat4.Mat16Holder;
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {
@@ -38,7 +38,7 @@ class ContainerForDrawingSurface extends SimpleGameObjectContainer {
     public override render(): void {
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
-        renderer.transformSet(this.matrixStack.getCurrentValue().mat16);
+        renderer.transformSet(this.matrixStack.getCurrentValue());
         renderer.transformTranslate(this.pos.x,this.pos.y);
         this.pos.setXY(0);
         this.worldTransformDirty = true;
@@ -417,7 +417,7 @@ export class DrawingSurface
         this._matrixStack.resetTransform();
     }
 
-    public transformSet(val:Readonly<MAT16>): void {
+    public transformSet(val:Readonly<Mat16Holder>): void {
         this._matrixStack.setMatrix(val);
     }
 

@@ -26,7 +26,7 @@ export class RenderingObjectStack {
 
     public add(obj:RenderableModel,constrainObjects:readonly RenderableModel[]):void {
         const stackItem:RenderingObjectStackItem = pool.getFreeObject()!;
-        stackItem.mat4.fromMat16(obj.worldTransformMatrix.mat16);
+        stackItem.mat4.fromMat16(obj.worldTransformMatrix);
         stackItem.obj = obj;
         stackItem.constrainObjects.push(...constrainObjects);
         this.stack.push(stackItem);

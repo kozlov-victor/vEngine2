@@ -10,7 +10,7 @@ export class AlphaMaskFilter extends AbstractGlFilter{
 
     private readonly maskTexture:string;
 
-    constructor(game:Game,private maskTextureGl:ITexture){
+    constructor(game:Game,private maskTextureGl:ITexture,private alphaChannel:'r'|'g'|'b'|'a'){
         super(game);
 
         const programGen:ShaderGenerator = this.simpleRectPainter.gen;
@@ -20,7 +20,7 @@ export class AlphaMaskFilter extends AbstractGlFilter{
             void main(){
                 vec4 alfaTextureColor = texture2D(maskTexture, v_texCoord);
                 vec4 origColor = texture2D(texture, v_texCoord);
-                float a = alfaTextureColor.r;
+                float a = alfaTextureColor.${this.alphaChannel};
                 gl_FragColor = origColor*a;
                 gl_FragColor.a = a;
             }

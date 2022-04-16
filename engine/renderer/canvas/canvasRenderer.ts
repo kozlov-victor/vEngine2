@@ -13,7 +13,7 @@ import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {Mat4} from "@engine/misc/math/mat4";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {noop} from "@engine/misc/object";
-import MAT16 = Mat4.MAT16;
+import Mat16Holder = Mat4.Mat16Holder;
 
 
 const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
@@ -162,10 +162,10 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     public transformRotationReset(): void {
     }
 
-    public transformSet(val:Readonly<MAT16>): void {
+    public transformSet(val:Readonly<Mat16Holder>): void {
     }
 
-    public transformGet(): Readonly<MAT16> {
+    public transformGet(): Readonly<Mat16Holder> {
         return undefined!;
     }
 

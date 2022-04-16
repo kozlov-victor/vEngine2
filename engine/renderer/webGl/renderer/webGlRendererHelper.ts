@@ -3,16 +3,15 @@ import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {Scene} from "@engine/scene/scene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ISize} from "@engine/geometry/size";
-import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
-import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
+import {FrameBufferStack} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/misc/math/mat4";
 import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
 import {Game} from "@engine/core/game";
-import Mat16Holder = Mat4.Mat16Holder;
 import {Color} from "@engine/renderer/common/color";
 import {LruMap} from "@engine/misc/collection/lruMap";
-import IDENTITY = Mat4.IDENTITY;
 import {Stack} from "@engine/misc/collection/stack";
+import Mat16Holder = Mat4.Mat16Holder;
+import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 
 const identityPositionMatrixCache:LruMap<string, Mat16Holder> = new LruMap<string, Mat4.Mat16Holder>();
 
@@ -66,7 +65,7 @@ export class WebGlRendererHelper extends RendererHelper {
         if (!omitSaveAndResoreRenderTaget) this.saveRenderTarget();
         renderer.setRenderTarget(renderTarget);
         renderer.transformSave();
-        renderer.transformSet(IDENTITY);
+        renderer.transformSet(IDENTITY_HOLDER);
         const clearBeforeRenderOrig:boolean = renderer.clearBeforeRender;
         const clearColorOrig:Color = renderer.clearColor;
         renderer.clearBeforeRender = clearColor!==undefined;

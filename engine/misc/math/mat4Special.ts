@@ -11,6 +11,10 @@ export namespace Mat4Special {
      */
     export const multiplyTranslationByAny = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
 
+        if (bHolder.identityFlag && out===aHolder) {
+            return;
+        }
+
         const r:MAT16 = out.mat16 as MAT16;
         const a:MAT16 = aHolder.mat16 as MAT16;
         const b:MAT16 = bHolder.mat16 as MAT16;
@@ -48,6 +52,10 @@ export namespace Mat4Special {
      */
     export const multiplyRotationXByAny = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
 
+        if (bHolder.identityFlag && out===aHolder) {
+            return;
+        }
+
         const r:MAT16 = out.mat16 as MAT16;
         const a:MAT16 = aHolder.mat16 as MAT16;
         const b:MAT16 = bHolder.mat16 as MAT16;
@@ -83,6 +91,10 @@ export namespace Mat4Special {
      */
     export const multiplyRotationYByAny = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
 
+        if (bHolder.identityFlag && out===aHolder) {
+            return;
+        }
+
         const r:MAT16 = out.mat16 as MAT16;
         const a:MAT16 = aHolder.mat16 as MAT16;
         const b:MAT16 = bHolder.mat16 as MAT16;
@@ -117,6 +129,10 @@ export namespace Mat4Special {
      * multiply rotationZ matrix by any matrix
      */
     export const multiplyRotationZByAny = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
+
+        if (bHolder.identityFlag && out===aHolder) {
+            return;
+        }
 
         const r:MAT16 = out.mat16 as MAT16;
         const a:MAT16 = aHolder.mat16 as MAT16;
@@ -156,31 +172,38 @@ export namespace Mat4Special {
      */
     export const multiplyScaleByAny = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
 
+        if (bHolder.identityFlag && out===aHolder) {
+            return;
+        }
+
         const r:MAT16 = out.mat16 as MAT16;
         const a:MAT16 = aHolder.mat16 as MAT16;
         const b:MAT16 = bHolder.mat16 as MAT16;
 
         const a0 = a[0], a5 = a[5], a10 = a[10];
 
-        r[0] = a0 * b[0];
-        r[1] = a0 * b[1];
-        r[2] = a0 * b[2];
-        r[3] = a0 * b[3];
+        const b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3], b4 = b[4], b5 = b[5], b6 = b[6], b7 = b[7];
+        const b8 = b[8], b9 = b[9], b10 = b[10], b11 = b[11], b12 = b[12], b13 = b[13], b14 = b[14], b15 = b[15];
 
-        r[4] = a5 * b[4];
-        r[5] = a5 * b[5];
-        r[6] = a5 * b[6];
-        r[7] = a5 * b[7];
+        r[0] = a0 * b0;
+        r[1] = a0 * b1;
+        r[2] = a0 * b2;
+        r[3] = a0 * b3;
 
-        r[8] =  a10 * b[8];
-        r[9] =  a10 * b[9];
-        r[10] = a10 * b[10];
-        r[11] = a10 * b[11];
+        r[4] = a5 * b4;
+        r[5] = a5 * b5;
+        r[6] = a5 * b6;
+        r[7] = a5 * b7;
 
-        r[12] = b[12];
-        r[13] = b[13];
-        r[14] = b[14];
-        r[15] = b[15];
+        r[8] =  a10 * b8;
+        r[9] =  a10 * b9;
+        r[10] = a10 * b10;
+        r[11] = a10 * b11;
+
+        r[12] = b12;
+        r[13] = b13;
+        r[14] = b14;
+        r[15] = b15;
 
     };
 
@@ -188,6 +211,10 @@ export namespace Mat4Special {
      * multiply skewX matrix by any matrix
      */
     export const multiplySkewXByAny = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
+
+        if (bHolder.identityFlag && out===aHolder) {
+            return;
+        }
 
         const r:MAT16 = out.mat16 as MAT16;
         const a:MAT16 = aHolder.mat16 as MAT16;
@@ -228,6 +255,10 @@ export namespace Mat4Special {
      */
     export const multiplySkewYByAny = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
 
+        if (bHolder.identityFlag && out===aHolder) {
+            return;
+        }
+
         const r:MAT16 = out.mat16 as MAT16;
         const a:MAT16 = aHolder.mat16 as MAT16;
         const b:MAT16 = bHolder.mat16 as MAT16;
@@ -267,6 +298,10 @@ export namespace Mat4Special {
      */
     export const multiplyAnyByZtoW = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
 
+        if (bHolder.identityFlag && out===aHolder) {
+            return;
+        }
+
         const r:MAT16 = out.mat16 as MAT16;
         const a:MAT16 = aHolder.mat16 as MAT16;
         const b:MAT16 = bHolder.mat16 as MAT16;
@@ -305,6 +340,10 @@ export namespace Mat4Special {
      * multiply any matrix by projection matrix
      */
     export const multiplyAnyByProjection = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
+
+        if (bHolder.identityFlag && out===aHolder) {
+            return;
+        }
 
         const r:MAT16 = out.mat16 as MAT16;
         const a:MAT16 = aHolder.mat16 as MAT16;

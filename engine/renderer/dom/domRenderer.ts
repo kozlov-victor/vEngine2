@@ -12,14 +12,12 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Rect} from "@engine/geometry/rect";
 import {Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
-import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
-import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {DebugError} from "@engine/debug/debugError";
 import {Mat4} from "@engine/misc/math/mat4";
-import MAT16 = Mat4.MAT16;
 import {Incrementer} from "@engine/resources/incrementer";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {noop} from "@engine/misc/object";
+import Mat16Holder = Mat4.Mat16Holder;
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
@@ -199,10 +197,10 @@ export class DomRenderer extends AbstractRenderer {
         this._matrixStack.restore();
     }
 
-    public transformSet(val:Readonly<MAT16>): void {
+    public transformSet(val:Readonly<Mat16Holder>): void {
     }
 
-    public transformGet(): Readonly<MAT16> {
+    public transformGet(): Readonly<Mat16Holder> {
         return undefined!;
     }
 
