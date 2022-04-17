@@ -61,7 +61,6 @@ export class MainScene extends Scene {
         tf.filters = [maskFilter];
         this.appendChild(tf);
 
-
         this.filters = [new CrtScreenFilter(this.game)];
 
     }

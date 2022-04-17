@@ -26,7 +26,7 @@ export namespace Mat4 {
         n,n,n,n
     ] & Float32Array;
 
-    export const IDENTITY:Readonly<MAT16> = Float32Array.from([
+    export const IDENTITY:Readonly<MAT16> = new Float32Array([
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
@@ -356,23 +356,23 @@ export namespace Mat4 {
         const b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3], b4 = b[4], b5 = b[5], b6 = b[6] , b7 = b[7], b8 = b[8];
         const b9 = b[9], b10 = b[10], b11 = b[11], b12 = b[12], b13 = b[13], b14 = b[14], b15 = b[15];
 
-        r[0] = a0 * b0 + a1 * b4 + a2 * b8 + a3 * b12;
-        r[1] = a0 * b1 + a1 * b5 + a2 * b9 + a3 * b13;
-        r[2] = a0 * b2 + a1 * b6 + a2 * b10 + a3 * b14;
-        r[3] = a0 * b3 + a1 * b7 + a2 * b11 + a3 * b15;
+        r[0 ] =  a0 * b0 +  a1 * b4 +  a2 *  b8 +  a3 * b12;
+        r[1 ] =  a0 * b1 +  a1 * b5 +  a2 *  b9 +  a3 * b13;
+        r[2 ] =  a0 * b2 +  a1 * b6 +  a2 * b10 +  a3 * b14;
+        r[3 ] =  a0 * b3 +  a1 * b7 +  a2 * b11 +  a3 * b15;
 
-        r[4] = a4 * b0 + a5 * b4 + a6 * b8 + a7 * b12;
-        r[5] = a4 * b1 + a5 * b5 + a6 * b9 + a7 * b13;
-        r[6] = a4 * b2 + a5 * b6 + a6 * b10 + a7 * b14;
-        r[7] = a4 * b3 + a5 * b7 + a6 * b11 + a7 * b15;
+        r[4 ] =  a4 * b0 +  a5 * b4 +  a6 *  b8 +  a7 * b12;
+        r[5 ] =  a4 * b1 +  a5 * b5 +  a6 *  b9 +  a7 * b13;
+        r[6 ] =  a4 * b2 +  a5 * b6 +  a6 * b10 +  a7 * b14;
+        r[7 ] =  a4 * b3 +  a5 * b7 +  a6 * b11 +  a7 * b15;
 
-        r[8] = a8 * b0 + a9 * b4 + a10 * b8 + a11 * b12;
-        r[9] = a8 * b1 + a9 * b5 + a10 * b9 + a11 * b13;
-        r[10] = a8 * b2 + a9 * b6 + a10 * b10 + a11 * b14;
-        r[11] = a8 * b3 + a9 * b7 + a10 * b11 + a11 * b15;
+        r[8 ] =  a8 * b0 +  a9 * b4 + a10 *  b8 + a11 * b12;
+        r[9 ] =  a8 * b1 +  a9 * b5 + a10 *  b9 + a11 * b13;
+        r[10] =  a8 * b2 +  a9 * b6 + a10 * b10 + a11 * b14;
+        r[11] =  a8 * b3 +  a9 * b7 + a10 * b11 + a11 * b15;
 
-        r[12] = a12 * b0 + a13 * b4 + a14 * b8 + a15 * b12;
-        r[13] = a12 * b1 + a13 * b5 + a14 * b9 + a15 * b13;
+        r[12] = a12 * b0 + a13 * b4 + a14 *  b8 + a15 * b12;
+        r[13] = a12 * b1 + a13 * b5 + a14 *  b9 + a15 * b13;
         r[14] = a12 * b2 + a13 * b6 + a14 * b10 + a15 * b14;
         r[15] = a12 * b3 + a13 * b7 + a14 * b11 + a15 * b15;
 
@@ -420,7 +420,7 @@ export namespace Mat4 {
         r[14] = -m0*m5*m14 + m0*m13*m6 + m1*m4*m14 - m1*m12*m6 - m2*m4*m13 + m2*m12*m5;
         r[15] = m0*m5*m10 - m0*m9*m6 - m1*m4*m10 + m1*m8*m6 + m2*m4*m9 - m2*m8*m5;
 
-        const det:n = m[0]*r[0] + m[1]*r[4] + m[2]*r[8] + m[3]*r[12];
+        const det:n = m0*r[0] + m1*r[4] + m2*r[8] + m3*r[12];
         if (DEBUG && det===0) {
             console.error(m);
             throw new DebugError("can not invert matrix with zero determinant");

@@ -35,6 +35,7 @@ import {GlCachedAccessor} from "@engine/renderer/webGl/blender/glCachedAccessor"
 import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import IDENTITY = Mat4.IDENTITY;
+import {LruMap} from "@engine/misc/collection/lruMap";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -58,10 +59,20 @@ const SCENE_DEPTH:number = 1000;
 const zToWMatrix:Mat16Holder = Mat16Holder.create();
 Mat4.makeZToWMatrix(zToWMatrix,1);
 
+const lruCache = new LruMap<string, Mat4.Mat16Holder>();
+
 const makeModelViewProjectionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat16Holder=>{
     // proj * modelView
-    const projectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-    Mat4.ortho(projectionMatrix,0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
+
+    let projectionMatrix:Mat16Holder;
+    const viewSizeStr = `${viewSize.width}_${viewSize.height}`;
+    if (lruCache.has(viewSizeStr)) projectionMatrix = lruCache.get(viewSizeStr)!;
+    else {
+        const m = Mat16Holder.create();
+        Mat4.ortho(m,0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
+        lruCache.put(viewSizeStr,m);
+        projectionMatrix = m;
+    }
 
     const scaleMatrix:Mat16Holder = Mat16Holder.fromPool();
     Mat4.makeScale(scaleMatrix,rect.width, rect.height, 1);

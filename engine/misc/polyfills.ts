@@ -67,9 +67,3 @@ if (!Array.prototype.findIndex) {
     };
 }
 
-if (!Float32Array.from) {
-    Float32Array.from = (arr:number[])=> {
-        return new Float32Array(arr);
-    };
-}
-
