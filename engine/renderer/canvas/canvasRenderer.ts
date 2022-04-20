@@ -197,7 +197,8 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         return {
             size,
             source: c,
-            destroy: noop
+            destroy: noop,
+            isDestroyed: ()=> false,
         };
     }
 

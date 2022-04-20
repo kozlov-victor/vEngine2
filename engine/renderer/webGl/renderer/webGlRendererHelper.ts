@@ -15,7 +15,7 @@ import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 
 const identityPositionMatrixCache:LruMap<string, Mat16Holder> = new LruMap<string, Mat4.Mat16Holder>();
 
-export const makeIdentityPositionMatrix = (dstX:number,dstY:number,destSize:ISize):Mat16Holder =>{
+export const getIdentityPositionMatrix = (dstX:number, dstY:number, destSize:ISize):Mat16Holder =>{
     const key:string = `${dstX}_${dstY}_${destSize.width}_${destSize.height}`;
     if (identityPositionMatrixCache.has(key)) return identityPositionMatrixCache.get(key)!;
     const projectionMatrix:Mat16Holder = Mat16Holder.create();

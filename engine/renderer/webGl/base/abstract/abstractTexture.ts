@@ -41,7 +41,7 @@ export abstract class AbstractTexture implements ITexture {
     protected abstract samplerType:GLenum;
 
     protected tex:WebGLTexture;
-    protected destroyed:boolean = false;
+    private _destroyed:boolean = false;
 
     private _currentTextureAt0:Optional<AbstractTexture>;
     private _interpolationMode:INTERPOLATION_MODE;
@@ -63,7 +63,7 @@ export abstract class AbstractTexture implements ITexture {
                 console.error(this);
                 throw new DebugError(`can not bind texture with index ${i}. Max supported value by device is ${AbstractTexture._MAX_TEXTURE_IMAGE_UNITS}`);
             }
-            if (this.destroyed) {
+            if (this._destroyed) {
                 console.error(this);
                 throw new DebugError(`can not bind destroyed texture`);
             }
@@ -86,7 +86,11 @@ export abstract class AbstractTexture implements ITexture {
     public destroy():void{
         this.gl.deleteTexture(this.tex);
         AbstractTexture._instances.splice(AbstractTexture._instances.indexOf(this),1);
-        this.destroyed = true;
+        this._destroyed = true;
+    }
+
+    public isDestroyed(): boolean {
+        return this._destroyed;
     }
 
     public getGlTexture():WebGLTexture {

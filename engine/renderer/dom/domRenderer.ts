@@ -147,7 +147,9 @@ export class DomRenderer extends AbstractRenderer {
                 width:bitmap.width,
                 height:bitmap.height
             },
-            destroy:noop};
+            destroy:noop,
+            isDestroyed: ()=> false,
+        };
     }
 
     public createCubeTexture(

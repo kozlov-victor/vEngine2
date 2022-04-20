@@ -1,11 +1,14 @@
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractBuffer} from "@engine/renderer/webGl/base/abstract/abstractBuffer";
+import {Optional} from "@engine/core/declarations";
 
 
 export class IndexBuffer extends AbstractBuffer {
 
     private readonly _buffer:WebGLRenderbuffer;
     private _dataLength:number;
+
+    private static currentBuffer:Optional<IndexBuffer>;
 
     constructor(private readonly _gl:WebGLRenderingContext){
         super();
@@ -23,9 +26,12 @@ export class IndexBuffer extends AbstractBuffer {
         const gl:WebGLRenderingContext = this._gl;
 
         this._dataLength = bufferData.length;
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._buffer);
+
+        const lastBound = IndexBuffer.currentBuffer;
+        this.bind();
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(bufferData), gl.STATIC_DRAW);
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+        this.unbind();
+        if (lastBound && !lastBound.isDestroyed()) lastBound.bind();
     }
 
     public getGlBuffer():WebGLRenderbuffer{
@@ -34,11 +40,15 @@ export class IndexBuffer extends AbstractBuffer {
 
     public bind():void{
         this.checkDestroyed();
-        this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this._buffer);
+        if (IndexBuffer.currentBuffer!==this) {
+            this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this._buffer);
+            IndexBuffer.currentBuffer = this;
+        }
     }
 
     public unbind():void{
         this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, null);
+        IndexBuffer.currentBuffer = undefined;
     }
 
     public override destroy():void{

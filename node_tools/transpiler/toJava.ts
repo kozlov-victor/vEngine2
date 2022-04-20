@@ -19,9 +19,7 @@ const code = `
 //        return s;
 //     }
 // }
-
-const s:string = "str0";
-
+const s1:string = "str1" + "str2";
 `;
 
 const sourceFile = ts.createSourceFile('temp.ts', code,ts.ScriptTarget.ESNext,false,ScriptKind.TSX);
@@ -99,13 +97,17 @@ const emitVariableDeclaration = (node:ts.VariableDeclaration):void=>{
     codeBuilder.print(varType);
     codeBuilder.print(' ');
     codeBuilder.print(varName);
-    // if (node.initializer) {
-    //     codeBuilder.print('=');
-    //     console.log(node.initializer);
-    //     node.initializer.forEachChild(visitNode);
-    // }
-    node.forEachChild(visitNode);
-    codeBuilder.println(';');
+    if (node.initializer) {
+        codeBuilder.print('=');
+        const children = [];
+        for (let i=0;i<node.getChildCount(sourceFile);i++) {
+            children.push(node.getChildAt(i,sourceFile));
+        }
+        //children.pop();
+        //children.pop();
+        children.forEach(visitNode);
+    }
+    // codeBuilder.println(';');
 }
 
 const emitModifiers = (node: ts.ClassDeclaration | ts.MethodDeclaration | ts.PropertyDeclaration, modifiers: ts.NodeArray<ts.Modifier> | undefined):void=> {
@@ -191,7 +193,7 @@ function visitNode(node:ts.Node) {
             break;
         }
         default: {
-            //codeBuilder.println(`unknown node: ${ts.SyntaxKind[node.kind]} (${node.kind})`);
+            codeBuilder.println(`unknown node: <${ts.SyntaxKind[node.kind]} (${node.kind})>`);
             node.forEachChild(visitNode);
         }
     }

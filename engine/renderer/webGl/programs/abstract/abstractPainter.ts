@@ -42,13 +42,16 @@ export class AbstractPainter implements IPainter, IDestroyable{
 
     protected bufferInfo:BufferInfo;
 
-    public static unbindLastInstance():void {
-        if (this.currentInstance!==undefined) this.currentInstance.unbind();
-    }
+    private _destroyed:boolean = false;
 
     public destroy():void{
         if (this.bufferInfo) this.bufferInfo.destroy();
         if (this.program!==undefined) this.program.destroy();
+        this._destroyed = true;
+    }
+
+    public isDestroyed(): boolean {
+        return this._destroyed;
     }
 
     public setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
@@ -132,12 +135,12 @@ export class AbstractPainter implements IPainter, IDestroyable{
             throw new DebugError(`can not init painter: initProgram method must be invoked!`);
         }
 
-        if (AbstractPainter.currentInstance===this) return;
+        if (AbstractPainter.currentInstance!==this) {
+            AbstractPainter.currentInstance?.unbind();
+            AbstractPainter.currentInstance = this;
+            this.bufferInfo.bind(this.program);
+        }
 
-        AbstractPainter.currentInstance?.unbind();
-
-        AbstractPainter.currentInstance = this;
-        this.bufferInfo.bind(this.program);
     }
 
     protected unbind():void{

@@ -50,7 +50,7 @@ const loadViaXmlHttp = <T>(urlRequest:IURLRequest,onProgress?:(n:number)=>void):
         };
         if (onProgress) {
             xhr.onprogress = (e:ProgressEvent)=>{
-                onProgress(e.loaded / e.total);
+                if (e.total!==0) onProgress(e.loaded / e.total);
             };
         }
 

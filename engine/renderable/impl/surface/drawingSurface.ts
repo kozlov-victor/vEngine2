@@ -337,14 +337,12 @@ export class DrawingSurface
         super(game);
         this.size.setFrom(size);
         this._drawingSession = new DrawingSession(this.game,this,this._matrixStack);
-        this.clear();
     }
 
     public override type = 'DrawingSurface';
 
     public setResourceLink:never = undefined as unknown as never;
     private _matrixStack:MatrixStack = new MatrixStack();
-
     private _font:Font;
     private _drawingSession:DrawingSession;
 

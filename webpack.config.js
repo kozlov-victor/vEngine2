@@ -80,7 +80,11 @@ class WebpackDonePlugin{
                 if (stats.compilation.errors && stats.compilation.errors.length) {
                     cliUI.showErrorWindow(
                         [
-                            `--===compiled with errors===--`,
+                            `--===compilation errors===--`,
+                            (()=>{
+                                if (project) return `-=project: ${project}=-`;
+                                else return `-=${allProjectsFlat.length} projects=-`
+                            })(),
                             `-----${hh}:${mm}:${ss}-----`
                         ]
                     );

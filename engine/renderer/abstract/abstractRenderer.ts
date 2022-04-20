@@ -46,6 +46,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     protected abstract rendererHelper: RendererHelper;
 
     private _fullScreenRequested:boolean = false;
+    private _destroyed:boolean = false;
 
     protected constructor(protected game:Game){
         this.game = game;
@@ -89,6 +90,11 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     public destroy():void {
         globalThis.removeEventListener('resize',this.onResize);
+        this._destroyed = true;
+    }
+
+    isDestroyed(): boolean {
+        return this._destroyed;
     }
 
     public abstract getError():Optional<{code:number,desc:string}>;

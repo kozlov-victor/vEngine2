@@ -10,7 +10,7 @@ import Mat16Holder = Mat4.Mat16Holder;
 import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
 import {Color} from "@engine/renderer/common/color";
 import {FastMap} from "@engine/misc/collection/fastMap";
-import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
+import {getIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {ISize} from "@engine/geometry/size";
 import IDENTITY = Mat4.IDENTITY;
 import {IDestroyable} from "@engine/core/declarations";
@@ -24,6 +24,8 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
     protected simpleRectPainter:SimpleRectPainter;
 
     private _uniformCache:FastMap<string,UNIFORM_VALUE_TYPE> = new FastMap();
+
+    private _destroyed:boolean = false;
 
 
     protected constructor(protected game:Game){
@@ -54,7 +56,7 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
         }
         const size:ISize = this.simpleRectPainter.getAttachedTextureAt(0).size;
         this.simpleRectPainter.setUniform(this.simpleRectPainter.u_textureMatrix,IDENTITY);
-        const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,size);
+        const m16h:Mat16Holder = getIdentityPositionMatrix(0,0,size);
         this.simpleRectPainter.setUniform(this.simpleRectPainter.u_vertexMatrix,m16h.mat16);
         this.simpleRectPainter.setUniform(this.simpleRectPainter.u_alpha,1);
         m16h.release();
@@ -64,7 +66,12 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
     }
 
     public destroy():void {
+        this.simpleRectPainter.destroy();
+        this._destroyed = true;
+    }
 
+    isDestroyed(): boolean {
+        return this._destroyed;
     }
 
 }

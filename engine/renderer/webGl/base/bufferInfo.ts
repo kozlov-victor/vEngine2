@@ -84,9 +84,9 @@ export class BufferInfo {
         this.posVertexBuffer.setData(
             description.posVertexInfo.array,
             description.posVertexInfo.type,
-            description.posVertexInfo.size
+            description.posVertexInfo.size,
+            description.posVertexInfo.attrName
         );
-        this.posVertexBuffer.setAttrName(description.posVertexInfo.attrName);
 
         if (description.posIndexInfo) {
             this.posIndexBuffer = new IndexBuffer(gl);
@@ -98,9 +98,9 @@ export class BufferInfo {
             this.texVertexBuffer.setData(
                 description.texVertexInfo.array,
                 description.texVertexInfo.type,
-                description.texVertexInfo.size
+                description.texVertexInfo.size,
+                description.texVertexInfo.attrName
             );
-            this.texVertexBuffer.setAttrName(description.texVertexInfo.attrName);
         }
 
         if (description.colorVertexInfo) {
@@ -108,9 +108,9 @@ export class BufferInfo {
             this.colorVertexBuffer.setData(
                 description.colorVertexInfo.array,
                 description.colorVertexInfo.type,
-                description.colorVertexInfo.size
+                description.colorVertexInfo.size,
+                description.colorVertexInfo.attrName
             );
-            this.colorVertexBuffer.setAttrName(description.colorVertexInfo.attrName);
         }
 
         if (description.normalInfo) {
@@ -118,27 +118,28 @@ export class BufferInfo {
             this.normalBuffer.setData(
                 description.normalInfo.array,
                 description.normalInfo.type,
-                description.normalInfo.size);
-            this.normalBuffer.setAttrName(description.normalInfo.attrName);
+                description.normalInfo.size,
+                description.normalInfo.attrName
+            );
         }
     }
 
     public bind(program:ShaderProgram):void{
         program.bind();
         if (this.posIndexBuffer!==undefined) this.posIndexBuffer.bind();
-        if (this.posVertexBuffer!==undefined) this.posVertexBuffer.bind(program);
-        if (this.texVertexBuffer!==undefined) this.texVertexBuffer.bind(program);
-        if (this.normalBuffer!==undefined) this.normalBuffer.bind(program);
-        if (this.colorVertexBuffer!==undefined) this.colorVertexBuffer.bind(program);
+        if (this.posVertexBuffer!==undefined) program.bindVertexBuffer(this.posVertexBuffer);
+        if (this.texVertexBuffer!==undefined) program.bindVertexBuffer(this.texVertexBuffer);
+        if (this.normalBuffer!==undefined) program.bindVertexBuffer(this.normalBuffer);
+        if (this.colorVertexBuffer!==undefined) program.bindVertexBuffer(this.colorVertexBuffer);
     }
 
-    public unbind(program:ShaderProgram):void{
+    public unbind(program:ShaderProgram):void {
         program.unbind();
-        if (this.posIndexBuffer!==undefined) this.posIndexBuffer.unbind();
-        if (this.posVertexBuffer!==undefined) this.posVertexBuffer.unbind();
-        if (this.texVertexBuffer!==undefined) this.texVertexBuffer.unbind();
-        if (this.normalBuffer!==undefined) this.normalBuffer.unbind();
-        if (this.colorVertexBuffer!==undefined) this.colorVertexBuffer.unbind();
+        if (this.posIndexBuffer !== undefined) this.posIndexBuffer.unbind();
+        if (this.posVertexBuffer !== undefined) program.unbindVertexBuffer(this.posVertexBuffer);
+        if (this.texVertexBuffer !== undefined) program.unbindVertexBuffer(this.texVertexBuffer);
+        if (this.normalBuffer !== undefined) program.unbindVertexBuffer(this.normalBuffer);
+        if (this.colorVertexBuffer !== undefined) program.unbindVertexBuffer(this.colorVertexBuffer);
     }
 
     public destroy():void{

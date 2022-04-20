@@ -92,19 +92,6 @@ export class PolyLine extends RenderableModel {
         return l;
     }
 
-    public cacheAsBitmap():Image {
-        const sizeInt:Size = new Size().setWH(~~this.size.width,~~this.size.height);
-        const renderTarget:IRenderTarget =
-            this.game.getRenderer().getHelper().
-            createRenderTarget(this.game,sizeInt);
-
-        const image:Image = new Image(this.game,renderTarget.getTexture());
-        image.size.setFrom(sizeInt);
-        this.renderToTexture(renderTarget,Color.NONE);
-        renderTarget.destroy();
-        return image;
-    }
-
     public draw():void{}
 
 

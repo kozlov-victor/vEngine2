@@ -11,4 +11,8 @@ export abstract class AbstractBuffer {
         this._destroyed = true;
     }
 
+    public isDestroyed():boolean {
+        return this._destroyed;
+    }
+
 }

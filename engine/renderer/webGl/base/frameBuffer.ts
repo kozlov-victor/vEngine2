@@ -3,13 +3,13 @@ import {DebugError} from "@engine/debug/debugError";
 
 import {Texture} from "./texture";
 import {Color} from "@engine/renderer/common/color";
-import {Optional} from "@engine/core/declarations";
+import {IDestroyable, Optional} from "@engine/core/declarations";
 import {ISize} from "@engine/geometry/size";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 
 
-export class FrameBuffer implements IRenderTarget {
+export class FrameBuffer implements IRenderTarget, IDestroyable {
 
 
     constructor(private readonly _gl:WebGLRenderingContext,size:ISize){
@@ -22,12 +22,14 @@ export class FrameBuffer implements IRenderTarget {
         this.texture = new Texture(_gl);
         this.texture.setImage(undefined,size);
         this._init(_gl,size);
+        const lastBound = FrameBuffer.currentBuffer;
         this.bind();
-        this.clear(Color.RGB(0,0,0,),true,0);
+        this.clear(Color.RGB(0,0,0),true,0);
         this.unbind();
+        if (lastBound && !lastBound.isDestroyed()) lastBound.bind();
     }
 
-    private static _currInstance:Optional<FrameBuffer>;
+    private static currentBuffer:Optional<FrameBuffer>;
 
     private readonly texture:Texture;
     private glRenderBuffer:WebGLRenderbuffer;
@@ -39,7 +41,7 @@ export class FrameBuffer implements IRenderTarget {
     private _destroyed:boolean = false;
 
     public static getCurrent():FrameBuffer{
-        return this._currInstance!;
+        return this.currentBuffer!;
     }
 
     public setInterpolationMode(mode:INTERPOLATION_MODE):void {
@@ -53,16 +55,16 @@ export class FrameBuffer implements IRenderTarget {
                 throw new DebugError(`can not bind destroyed frame buffer`);
             }
         }
-        if (FrameBuffer._currInstance===this) return;
+        if (FrameBuffer.currentBuffer===this) return;
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, this.glFrameBuffer);
         this._gl.viewport(0, 0, ~~this._width,~~this._height);
-        FrameBuffer._currInstance = this;
+        FrameBuffer.currentBuffer = this;
     }
 
     public unbind():void{
         this._checkBound();
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
-        FrameBuffer._currInstance = undefined;
+        FrameBuffer.currentBuffer = undefined;
     }
 
     public clear(color:Color,withDepth:boolean = false,alphaBlendValue:number = 1):void{
@@ -77,6 +79,10 @@ export class FrameBuffer implements IRenderTarget {
         this._gl.deleteRenderbuffer(this.glRenderBuffer);
         this._gl.deleteFramebuffer(this.glFrameBuffer);
         this._destroyed = true;
+    }
+
+    public isDestroyed():boolean {
+        return this._destroyed;
     }
 
 
@@ -109,7 +115,7 @@ export class FrameBuffer implements IRenderTarget {
 
     private _checkBound():void{
         if (!DEBUG) return;
-        if (FrameBuffer._currInstance!==this) throw new DebugError(`frame buffer is not bound; call bind() method firstly`);
+        if (FrameBuffer.currentBuffer!==this) throw new DebugError(`frame buffer is not bound; call bind() method firstly`);
     }
 
 }

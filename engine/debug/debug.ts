@@ -84,7 +84,6 @@ const stopGame = ()=>{
     destroyed = true;
     clearInterval(tmr);
     fpsLabel.remove();
-    console.log('destroyred');
     const game:Game = (window as unknown as IGameHolder).game as Game;
     if (game) {
         try {
@@ -141,12 +140,10 @@ window.onerror = (e: Event | string)=>{
 };
 
 window.addEventListener('keyup', function callback(e:KeyboardEvent) {
-    console.log(e);
     if (e.ctrlKey && e.code==='KeyI') {
         const script = document.createElement('script');
         script.src = './out/inspector.js?r'+new Date().getTime();
         document.body.appendChild(script);
-        console.log('created script',script);
         window.removeEventListener('keyup',callback);
     }
 });

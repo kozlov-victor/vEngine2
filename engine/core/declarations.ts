@@ -48,6 +48,7 @@ export interface IWithId {
 
 export interface IDestroyable {
     destroy():void;
+    isDestroyed():boolean;
 }
 
 export interface IUpdatable {

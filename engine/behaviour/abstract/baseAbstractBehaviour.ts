@@ -10,21 +10,26 @@ export abstract class BaseAbstractBehaviour implements IUpdatable, IDestroyable,
     protected game:Game;
     protected parameters:IKeyVal<unknown>;
 
+    private _destroyed:boolean = false;
+
     protected constructor(game:Game,parameters:IKeyVal<unknown>){
         this.game = game;
         this.parameters = parameters;
     }
 
-    public manage(gameObject:RenderableModel):void{
-        console.error(this);
-        if (DEBUG) throw new DebugError(`BaseAbstractBehaviour: method 'manage' not implemented`);
-    }
+    public abstract manage(gameObject:RenderableModel):void;
 
     public update():void{}
 
     public revalidate():void{}
 
-    public destroy():void{}
+    public destroy():void{
+        this._destroyed = true;
+    }
+
+    public isDestroyed(): boolean {
+        return this._destroyed;
+    }
 
     public abstract clone(): this;
 

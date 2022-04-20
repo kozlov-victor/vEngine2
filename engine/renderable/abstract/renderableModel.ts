@@ -8,7 +8,8 @@ import {
     IRenderable,
     IRevalidatable,
     ITweenable,
-    IUpdatable, IWithId,
+    IUpdatable,
+    IWithId,
     Optional
 } from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
@@ -80,12 +81,12 @@ export abstract class RenderableModel
     private _layer: Optional<Layer>;
     private _scene: Scene;
     private _rigidBody: IRigidBody;
+    private _destroyed:boolean = false;
 
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate(this.game);
     private _timerDelegate: TimerDelegate = new TimerDelegate(this.game);
     private tsxEvents: Record<string, () => void> = {};
     private memoizeCache: Record<string, RenderableModel> = {};
-    private destroyed: boolean = false;
 
     protected _parentChildDelegate: ParentChildDelegate<RenderableModel> = new ParentChildDelegate<RenderableModel>(this);
     public declare readonly _children: RenderableModel[];
@@ -171,22 +172,13 @@ export abstract class RenderableModel
 
     public destroy(): void {
 
-        if (this.destroyed) {
+        if (this._destroyed) {
             return;
         }
 
         for (const c of this._children) c.destroy();
 
-        // if (DEBUG && !this.getParent()) throw new DebugError(`can not kill object: gameObject is detached`);
-        //
-        // const parentArray:RenderableModel[] = this.getParent()!.children as RenderableModel[];
-        // const index:number = parentArray.indexOf(this);
-        // if (DEBUG && index===-1) {
-        //     console.error(this);
-        //     throw new DebugError('can not kill: object is not belong to current scene');
-        // }
-        // parentArray.splice(index,1);
-        this.destroyed = true;
+        this._destroyed = true;
 
         for (const b of this._behaviours) {
             b.destroy();
@@ -194,12 +186,16 @@ export abstract class RenderableModel
         this.game.getRenderer().killObject(this);
     }
 
+    public isDestroyed(): boolean {
+        return this._destroyed;
+    }
+
     public render(): void {
 
         if (!this.visible) return;
         if (this.scale.equal(0)) return;
 
-        if (DEBUG && this.destroyed) {
+        if (DEBUG && this._destroyed) {
             console.error(this);
             throw new DebugError(`can not render destroyed object`);
         }
@@ -318,6 +314,14 @@ export abstract class RenderableModel
 
     public prependChild(newChild: RenderableModel): void {
         this._parentChildDelegate.prependChild(newChild);
+    }
+
+    public appendTo(parent:Scene|Layer|RenderableModel):void {
+        parent.appendChild(this);
+    }
+
+    public prependTo(parent:Scene|Layer|RenderableModel):void {
+        parent.prependChild(this);
     }
 
     public removeChild(c: RenderableModel): void {

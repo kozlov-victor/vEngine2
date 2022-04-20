@@ -27,24 +27,24 @@ import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 import {SimpleColoredRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleColoredRectPainter";
-import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
 import {Mat4Special} from "@engine/misc/math/mat4Special";
 import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
 import {GlCachedAccessor} from "@engine/renderer/webGl/blender/glCachedAccessor";
+import {LruMap} from "@engine/misc/collection/lruMap";
 import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import IDENTITY = Mat4.IDENTITY;
-import {LruMap} from "@engine/misc/collection/lruMap";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
     const contextAttrs:WebGLContextAttributes = {alpha:false,premultipliedAlpha:false};
     const possibles:string[] = ['webgl','experimental-webgl','webkit-3d','moz-webgl'];
     for (const p of possibles) {
-        const ctx:WebGLRenderingContext = el.getContext(p,contextAttrs)  as WebGLRenderingContext;
-        //if (DEBUG && ctx) console.log(`context using: ${p}`);
+        const ctx = el.getContext(p,contextAttrs) as WebGLRenderingContext;
         if (ctx) {
+            //if (DEBUG) console.log(`using context: ${p}`);
+            //ContextDebugWrap.wrap(ctx); // very slow, use for debug only
             return ctx;
         }
     }
@@ -118,10 +118,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     protected rendererHelper:RendererHelper = new WebGlRendererHelper(this.game);
 
     private _gl:WebGLRenderingContext;
-    private readonly _matrixStack:MatrixStack = new MatrixStack();
-    private _shapePainterHolder:InstanceHolder<ShapePainter> = new InstanceHolder(ShapePainter);
-    private _coloredRectPainterHolder:InstanceHolder<SimpleColoredRectPainter> = new InstanceHolder(SimpleColoredRectPainter);
-    private _meshPainterHolder:InstanceHolder<MeshPainter> = new InstanceHolder(MeshPainter);
+    private readonly _matrixStack = new MatrixStack();
+
+    private _shapePainterHolder = new InstanceHolder(ShapePainter);
+    private _coloredRectPainterHolder = new InstanceHolder(SimpleColoredRectPainter);
+    private _meshPainterHolder = new InstanceHolder(MeshPainter);
 
     private _nullTexture:Texture;
     private _nullCubeMapTexture:CubeMapTexture;
@@ -163,23 +164,23 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
         const maxSize:number = Math.max(img.size.width,img.size.height);
 
-        const sd:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
+        const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         this.prepareGeometryUniformInfo(img);
 
-        sd.setUniform(sd.u_lineWidth,Math.min(img.lineWidth/maxSize,1));
-        sd.setUniform(sd.u_color,img.color.asGL());
+        sp.setUniform(sp.u_lineWidth,Math.min(img.lineWidth/maxSize,1));
+        sp.setUniform(sp.u_color,img.color.asGL());
 
         const repeatFactor:Size = Size.fromPool();
         repeatFactor.setWH(
             img.size.width/img.getSrcRect().width,
             img.size.height/img.getSrcRect().height
         );
-        sd.setUniform(sd.u_repeatFactor,repeatFactor.toArray());
+        sp.setUniform(sp.u_repeatFactor,repeatFactor.toArray());
         repeatFactor.release();
 
-        sd.setUniform(sd.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
-        sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
-        sd.setUniform(sd.u_fillType,FILL_TYPE.TEXTURE);
+        sp.setUniform(sp.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
+        sp.setUniform(sp.u_shapeType,SHAPE_TYPE.RECT);
+        sp.setUniform(sp.u_fillType,FILL_TYPE.TEXTURE);
         const {width: textureWidth,height: textureHeight} = texture.size;
         const {x:srcRectX,y:srcRectY} = img.getSrcRect();
         const {width:destRectWidth,height:destRectHeight} = img.getSrcRect();
@@ -190,22 +191,22 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             destRectWidth/textureWidth,
             destRectHeight/textureHeight).release().toArray();
 
-        sd.setUniform(sd.u_texRect, destArr);
+        sp.setUniform(sp.u_texRect, destArr);
 
         const offSetArr:Float32Array = Size.fromPool().setWH(img.offset.x/maxSize,img.offset.y/maxSize).release().toArray();
-        sd.setUniform(sd.u_texOffset,offSetArr);
-        sd.setUniform(sd.u_stretchMode,img.stretchMode);
-        sd.attachTexture('texture',texture);
-        sd.draw();
+        sp.setUniform(sp.u_texOffset,offSetArr);
+        sp.setUniform(sp.u_stretchMode,img.stretchMode);
+        sp.attachTexture('texture',texture);
+        sp.draw();
 
     }
 
     public drawMesh3d(mesh:Mesh3d):void {
 
-        const md:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
+        const mp:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
 
-        md.bindMesh3d(mesh);
-        md.bind();
+        mp.bindMesh3d(mesh);
+        mp.bind();
 
         const modelMatrix:Mat16Holder = this._matrixStack.getCurrentValue();
 
@@ -219,33 +220,33 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         Mat4.inverse(inverseTransposeModelMatrix,modelMatrix);
         Mat4.transpose(inverseTransposeModelMatrix,inverseTransposeModelMatrix);
 
-        md.setModelMatrix(modelMatrix.mat16);
-        md.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
-        md.setProjectionMatrix(zToWProjectionMatrix.mat16);
-        md.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
+        mp.setModelMatrix(modelMatrix.mat16);
+        mp.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
+        mp.setProjectionMatrix(zToWProjectionMatrix.mat16);
+        mp.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
 
         const isTextureUsed:boolean = mesh.texture!==undefined;
         if (DEBUG && isTextureUsed && mesh._modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
-        md.setTextureUsed(isTextureUsed);
-        if (isTextureUsed) md.setTextureMatrix(FLIP_TEXTURE_MATRIX.mat16);
-        md.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this._nullTexture);
+        mp.setTextureUsed(isTextureUsed);
+        if (isTextureUsed) mp.setTextureMatrix(FLIP_TEXTURE_MATRIX.mat16);
+        mp.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this._nullTexture);
 
         const isVertexColorUsed:boolean = mesh._modelPrimitive.vertexColorArr!==undefined;
-        md.setVertexColorUsed(isVertexColorUsed);
+        mp.setVertexColorUsed(isVertexColorUsed);
 
         const isNormalsTextureUsed:boolean = mesh.normalsTexture!==undefined;
-        md.setNormalsTextureUsed(isNormalsTextureUsed);
-        md.attachTexture('u_normalsTexture',isNormalsTextureUsed?mesh.normalsTexture as Texture:this._nullTexture);
+        mp.setNormalsTextureUsed(isNormalsTextureUsed);
+        mp.attachTexture('u_normalsTexture',isNormalsTextureUsed?mesh.normalsTexture as Texture:this._nullTexture);
 
         const isSpecularTextureUsed:boolean = mesh.specularTexture!==undefined;
-        md.setSpecularTextureUsed(isSpecularTextureUsed);
-        md.attachTexture('u_specularTexture',isSpecularTextureUsed?mesh.specularTexture as Texture:this._nullTexture);
+        mp.setSpecularTextureUsed(isSpecularTextureUsed);
+        mp.attachTexture('u_specularTexture',isSpecularTextureUsed?mesh.specularTexture as Texture:this._nullTexture);
 
         const isCubeMapTextureUsed:boolean = mesh.cubeMapTexture!==undefined;
         if (DEBUG && !isCubeMapTextureUsed && mesh.material.reflectivity!==0) throw new DebugError(`can not apply reflectivity without cubeMapTexture`);
-        md.setCubeMapTextureUsed(isCubeMapTextureUsed);
-        md.setReflectivity(mesh.material.reflectivity);
-        md.attachTexture('u_cubeMapTexture',isCubeMapTextureUsed?mesh.cubeMapTexture as CubeMapTexture:this._nullCubeMapTexture);
+        mp.setCubeMapTextureUsed(isCubeMapTextureUsed);
+        mp.setReflectivity(mesh.material.reflectivity);
+        mp.attachTexture('u_cubeMapTexture',isCubeMapTextureUsed?mesh.cubeMapTexture as CubeMapTexture:this._nullCubeMapTexture);
 
         if (DEBUG && mesh.isLightAccepted()) {
             if (!mesh.getBufferInfo().normalBuffer) {
@@ -253,16 +254,16 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
                 throw new DebugError(`can not accept light: normals are not specified`);
             }
         }
-        md.setLightUsed(mesh.isLightAccepted()||false);
-        md.setColor(mesh.material.diffuseColor);
-        md.setColorMix(mesh.material.diffuseColorMix);
-        md.setSpecular(mesh.material.specular);
+        mp.setLightUsed(mesh.isLightAccepted()||false);
+        mp.setColor(mesh.material.diffuseColor);
+        mp.setColorMix(mesh.material.diffuseColorMix);
+        mp.setSpecular(mesh.material.specular);
 
         //this.gl.enable(this.gl.CULL_FACE);
         this._glCachedAccessor.setDepthTest(mesh.depthTest);
         this._blender.setBlendMode(mesh.blendMode);
         mesh.onUpdatingBuffers();
-        md.draw();
+        mp.draw();
         //this.gl.disable(this.gl.CULL_FACE);
         orthoProjectionMatrix.release();
         zToWProjectionMatrix.release();
@@ -271,10 +272,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public drawMesh2d(mesh:Mesh2d):void {
 
-        const md:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
+        const mp:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
 
-        md.bindMesh2d(mesh);
-        md.bind();
+        mp.bindMesh2d(mesh);
+        mp.bind();
 
         const modelMatrix:Mat16Holder = this._matrixStack.getCurrentValue();
 
@@ -284,38 +285,38 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
         Mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
 
-        md.setModelMatrix(modelMatrix.mat16);
-        md.setInverseTransposeModelMatrix(IDENTITY);
-        md.setProjectionMatrix(zToWProjectionMatrix.mat16);
-        md.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
-        md.setTextureUsed(false);
-        md.attachTexture('u_texture',this._nullTexture);
+        mp.setModelMatrix(modelMatrix.mat16);
+        mp.setInverseTransposeModelMatrix(IDENTITY);
+        mp.setProjectionMatrix(zToWProjectionMatrix.mat16);
+        mp.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
+        mp.setTextureUsed(false);
+        mp.attachTexture('u_texture',this._nullTexture);
 
-        md.setNormalsTextureUsed(false);
-        md.attachTexture('u_normalsTexture',this._nullTexture);
+        mp.setNormalsTextureUsed(false);
+        mp.attachTexture('u_normalsTexture',this._nullTexture);
 
-        md.setCubeMapTextureUsed(false);
-        md.setReflectivity(0);
-        md.attachTexture('u_cubeMapTexture',this._nullCubeMapTexture);
+        mp.setCubeMapTextureUsed(false);
+        mp.setReflectivity(0);
+        mp.attachTexture('u_cubeMapTexture',this._nullCubeMapTexture);
 
-        md.setLightUsed(false);
-        md.setColor(mesh.fillColor);
-        md.setColorMix(0);
-        md.setSpecular(0);
+        mp.setLightUsed(false);
+        mp.setColor(mesh.fillColor);
+        mp.setColorMix(0);
+        mp.setSpecular(0);
 
         this._glCachedAccessor.setDepthTest(mesh.depthTest);
         this._blender.setBlendMode(mesh.blendMode);
-        md.draw();
+        mp.draw();
         zToWMatrix.release();
         orthoProjectionMatrix.release();
         zToWProjectionMatrix.release();
     }
 
     public destroyMesh(mesh:Mesh2d):void {
-        const md:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
-        md.bindMesh2d(mesh);
-        md.bind();
-        md.disableAllAttributes();
+        const mp:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
+        mp.bindMesh2d(mesh);
+        mp.bind();
+        mp.disableAllAttributes();
         mesh.getBufferInfo().destroy();
     }
 
@@ -327,13 +328,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const rw:number = rectangle.size.width;
             const rh:number = rectangle.size.height;
             const maxSize:number = Math.max(rw,rh);
-            const sd:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
+            const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
             this.prepareGeometryUniformInfo(rectangle);
             this.prepareShapeUniformInfo(rectangle);
-            sd.setUniform(sd.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
-            sd.setUniform(sd.u_shapeType,SHAPE_TYPE.RECT);
-            sd.attachTexture('texture',this._nullTexture);
-            sd.draw();
+            sp.setUniform(sp.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
+            sp.setUniform(sp.u_shapeType,SHAPE_TYPE.RECT);
+            sp.attachTexture('texture',this._nullTexture);
+            sp.draw();
         }
 
     }
@@ -350,26 +351,26 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.prepareGeometryUniformInfo(ellipse);
         this.prepareShapeUniformInfo(ellipse);
 
-        const sd:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
+        const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
         if (maxR===ellipse.radiusX) {
-            sd.setUniform(sd.u_rx,0.5);
-            sd.setUniform(sd.u_ry,ellipse.radiusY/ellipse.radiusX*0.5);
+            sp.setUniform(sp.u_rx,0.5);
+            sp.setUniform(sp.u_ry,ellipse.radiusY/ellipse.radiusX*0.5);
         } else {
-            sd.setUniform(sd.u_ry,0.5);
-            sd.setUniform(sd.u_rx,ellipse.radiusX/ellipse.radiusY*0.5);
+            sp.setUniform(sp.u_ry,0.5);
+            sp.setUniform(sp.u_rx,ellipse.radiusX/ellipse.radiusY*0.5);
         }
 
-        sd.setUniform(sd.u_shapeType,SHAPE_TYPE.ELLIPSE);
-        sd.setUniform(sd.u_width,1);
-        sd.setUniform(sd.u_height,1);
-        sd.setUniform(sd.u_rectOffsetLeft,1);
-        sd.setUniform(sd.u_rectOffsetTop,1);
-        sd.setUniform(sd.u_arcAngleFrom,ellipse.arcAngleFrom % (2*Math.PI));
-        sd.setUniform(sd.u_arcAngleTo,ellipse.arcAngleTo % (2*Math.PI));
-        sd.setUniform(sd.u_anticlockwise,ellipse.anticlockwise);
-        sd.attachTexture('texture',this._nullTexture);
-        sd.draw();
+        sp.setUniform(sp.u_shapeType,SHAPE_TYPE.ELLIPSE);
+        sp.setUniform(sp.u_width,1);
+        sp.setUniform(sp.u_height,1);
+        sp.setUniform(sp.u_rectOffsetLeft,1);
+        sp.setUniform(sp.u_rectOffsetTop,1);
+        sp.setUniform(sp.u_arcAngleFrom,ellipse.arcAngleFrom % (2*Math.PI));
+        sp.setUniform(sp.u_arcAngleTo,ellipse.arcAngleTo % (2*Math.PI));
+        sp.setUniform(sp.u_anticlockwise,ellipse.anticlockwise);
+        sp.attachTexture('texture',this._nullTexture);
+        sp.draw();
 
     }
 
@@ -504,12 +505,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public setRenderTarget(fbs:FrameBufferStack):void{
-
         if (DEBUG && fbs===undefined) throw new DebugError('undefined parameter: setRenderTarget(undefined)');
-
-        if (this._currFrameBufferStack!==fbs) {
-            AbstractPainter.unbindLastInstance();
-        }
         this._currFrameBufferStack = fbs;
     }
 
@@ -594,20 +590,20 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const {width:rw,height:rh} = model.size;
         const maxSize:number = Math.max(rw,rh);
-        const sd:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
+        const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         let offsetX:number = 0,offsetY:number = 0;
         if (maxSize===rw) {
-            sd.setUniform(sd.u_width,1);
-            sd.setUniform(sd.u_height,rh/rw);
+            sp.setUniform(sp.u_width,1);
+            sp.setUniform(sp.u_height,rh/rw);
             offsetY = (maxSize - rh)/2;
-            sd.setUniform(sd.u_rectOffsetLeft,0);
-            sd.setUniform(sd.u_rectOffsetTop,offsetY/maxSize);
+            sp.setUniform(sp.u_rectOffsetLeft,0);
+            sp.setUniform(sp.u_rectOffsetTop,offsetY/maxSize);
         } else {
-            sd.setUniform(sd.u_height,1);
-            sd.setUniform(sd.u_width,rw/rh);
+            sp.setUniform(sp.u_height,1);
+            sp.setUniform(sp.u_width,rw/rh);
             offsetX = (maxSize - rw)/2;
-            sd.setUniform(sd.u_rectOffsetLeft,offsetX/maxSize);
-            sd.setUniform(sd.u_rectOffsetTop,0);
+            sp.setUniform(sp.u_rectOffsetLeft,offsetX/maxSize);
+            sp.setUniform(sp.u_rectOffsetTop,0);
         }
 
 
@@ -618,15 +614,15 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
             const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
             model.modelViewProjectionMatrix.fromMat16(mvpHolder);
-            sd.setUniform(sd.u_vertexMatrix,mvpHolder.mat16);
+            sp.setUniform(sp.u_vertexMatrix,mvpHolder.mat16);
             mvpHolder.release();
             rect.release();
             size.release();
         } else {
-            sd.setUniform(sd.u_vertexMatrix,model.modelViewProjectionMatrix.mat16);
+            sp.setUniform(sp.u_vertexMatrix,model.modelViewProjectionMatrix.mat16);
         }
 
-        sd.setUniform(sd.u_alpha,model.getChildrenCount()===0?model.alpha:1);
+        sp.setUniform(sp.u_alpha,model.getChildrenCount()===0?model.alpha:1);
         this._blender.setBlendMode(model.blendMode);
         this._glCachedAccessor.setDepthTest(model.depthTest);
 
@@ -642,21 +638,21 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         }
 
         const maxSize:number = Math.max(model.size.width,model.size.height);
-        const sd:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
-        sd.setUniform(sd.u_lineWidth,Math.min(model.lineWidth/maxSize,1));
-        sd.setUniform(sd.u_color,model.color.asGL());
+        const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
+        sp.setUniform(sp.u_lineWidth,Math.min(model.lineWidth/maxSize,1));
+        sp.setUniform(sp.u_color,model.color.asGL());
 
         if (model.fillGradient!==undefined) {
-            model.fillGradient.setUniforms(sd);
+            model.fillGradient.setUniforms(sp);
             if (model.fillGradient.type==='LinearGradient') {
-                sd.setUniform(sd.u_fillType,FILL_TYPE.LINEAR_GRADIENT);
+                sp.setUniform(sp.u_fillType,FILL_TYPE.LINEAR_GRADIENT);
             } else {
-                model.fillGradient.setUniforms(sd);
-                sd.setUniform(sd.u_fillType,FILL_TYPE.RADIAL_GRADIENT);
+                model.fillGradient.setUniforms(sp);
+                sp.setUniform(sp.u_fillType,FILL_TYPE.RADIAL_GRADIENT);
             }
         } else {
-            sd.setUniform(sd.u_fillColor,model.fillColor.asGL());
-            sd.setUniform(sd.u_fillType,FILL_TYPE.COLOR);
+            sp.setUniform(sp.u_fillColor,model.fillColor.asGL());
+            sp.setUniform(sp.u_fillType,FILL_TYPE.COLOR);
         }
     }
 

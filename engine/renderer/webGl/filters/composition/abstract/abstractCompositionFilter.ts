@@ -4,7 +4,7 @@ import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpl
 import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {ISize} from "@engine/geometry/size";
-import {makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
+import {getIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {Mat4} from "@engine/misc/math/mat4";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
@@ -42,7 +42,7 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         this.watchFrameBuffer(destFrameBuffer);
 
         const size:ISize = destFrameBuffer.getTexture().size;
-        const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,size);
+        const m16h:Mat16Holder = getIdentityPositionMatrix(0,0,size);
 
         // 0. prepare for composition drawing
         this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_textureMatrix,IDENTITY);

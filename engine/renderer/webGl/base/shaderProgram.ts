@@ -74,7 +74,8 @@ export class ShaderProgram {
         uniformWrapper.setter(this._gl, uniformWrapper.location, value);
     }
 
-    public bindBuffer(buffer:VertexBuffer, attrName:string):void {
+    public bindVertexBuffer(buffer:VertexBuffer):void {
+        const attrName = buffer.getAttrName();
         if (DEBUG) {
             if (!attrName) throw new DebugError(`can not find attribute location: attrName not defined`);
             if (this._attributes[attrName]===undefined) {
@@ -88,7 +89,8 @@ export class ShaderProgram {
             }
         }
 
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, buffer.getGlBuffer());
+        buffer.bind();
+
         this.enableAttribute(attrName);
         const attrLocation:GLuint = this._attributes[attrName];
         this._gl.vertexAttribPointer(
@@ -99,6 +101,12 @@ export class ShaderProgram {
             0,      // number of bytes to skip in between elements
             0       // offsets to the first element
         );
+    }
+
+    public unbindVertexBuffer(buffer:VertexBuffer):void {
+        const attrName = buffer.getAttrName();
+        buffer.unbind();
+        this.disableAttribute(attrName);
     }
 
     public disableAttribute(attrName:string):void{

@@ -167,6 +167,10 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
         return (this._r<<16)|(this._g<<8)|this._b;
     }
 
+    public asRGBANumeric():number {
+        return (this._r<<24)|(this._g<<16)|(this._b<<8)|(this._a);
+    }
+
     public toJSON():IColorJSON{
         return {r:this._r,g:this._g,b:this._b,a:this._a};
     }

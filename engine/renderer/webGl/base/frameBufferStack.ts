@@ -10,7 +10,7 @@ import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstract
 import {Mat4} from "@engine/misc/math/mat4";
 import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
-import {FLIP_TEXTURE_MATRIX, makeIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
+import {FLIP_TEXTURE_MATRIX, getIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 import {Device} from "@engine/misc/device";
@@ -48,6 +48,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
     private _blender:Blender = Blender.getSingleton(this._gl);
 
     private readonly _resourceTexture:ITexture;
+    private _destroyed:boolean = false;
 
     constructor(protected readonly game:Game,private readonly _gl:WebGLRenderingContext, private readonly _size:ISize){
         this._stack.push({
@@ -136,6 +137,10 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         this._simpleRectPainter.destroy();
     }
 
+    public isDestroyed(): boolean {
+        return this._destroyed;
+    }
+
     public reduceState(to:IStateStackPointer):void{
         if (this._stackPointer===1) return;
         for (let i:number = this._stackPointer-1; i>to.ptr; i--) {
@@ -153,7 +158,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
             nextItem.frameBuffer.bind();
             nextItem.frameBuffer.setInterpolationMode(this._interpolationMode);
             this._simpleRectPainter.setUniform(this._simpleRectPainter.u_textureMatrix,IDENTITY);
-            const m16h:Mat16Holder = makeIdentityPositionMatrix(0,0,this._getLast().frameBuffer.getTexture().size);
+            const m16h:Mat16Holder = getIdentityPositionMatrix(0,0,this._getLast().frameBuffer.getTexture().size);
             this._simpleRectPainter.setUniform(this._simpleRectPainter.u_vertexMatrix,m16h.mat16);
             this._simpleRectPainter.setUniform(this._simpleRectPainter.u_alpha,currItem.alpha);
             this._simpleRectPainter.attachTexture('texture',filteredTexture);

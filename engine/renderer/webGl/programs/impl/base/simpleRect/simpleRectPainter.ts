@@ -20,8 +20,6 @@ export class SimpleRectPainter extends AbstractPainter {
     public readonly u_vertexMatrix:string;
     public readonly u_textureMatrix:string;
 
-    private readonly BATCH_SIZE = 1024;
-
     constructor(gl:WebGLRenderingContext) {
         super(gl);
         this.gen = new ShaderGenerator();

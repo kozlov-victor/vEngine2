@@ -2,6 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {MoveByPathAnimation} from "@engine/animation/propertyAnimation/moveByPathAnimation";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {BitmapCacheHelper} from "@engine/renderable/bitmapCacheHelper";
 
 export class MainScene extends Scene {
 
@@ -21,7 +22,8 @@ export class MainScene extends Scene {
            M 250,80 H 50 Q 30,80 30,50 Q 30,20 50,20 H 250 Q 280,20,280,50 Q 280,80,250,80Z
            `
         );
-        this.appendChild(polyLine1.cacheAsBitmap());
+        const cached = BitmapCacheHelper.cacheAsBitmap(this.game,polyLine1);
+        this.appendChild(cached);
 
         const anim1 = new MoveByPathAnimation(this.game,polyLine1);
         anim1.velocity = 150;

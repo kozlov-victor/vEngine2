@@ -55,6 +55,14 @@ export class Layer implements IParentChild, IFilterable,IAlphaBlendable, IWithId
         this._parentChildDelegate.prependChild(newChild);
     }
 
+    public appendTo(parent:Scene):void {
+        parent.appendChild(this);
+    }
+
+    public prependTo(parent:Scene):void {
+        parent.prependChild(this);
+    }
+
     public removeChildAt(i:number):void{
         this._parentChildDelegate.removeChildAt(i);
     }

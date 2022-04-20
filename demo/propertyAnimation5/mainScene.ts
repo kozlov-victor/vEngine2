@@ -6,6 +6,7 @@ import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MathEx} from "@engine/misc/math/mathEx";
 import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
+import {BitmapCacheHelper} from "@engine/renderable/bitmapCacheHelper";
 
 export class MainScene extends Scene {
 
@@ -16,7 +17,8 @@ export class MainScene extends Scene {
             M298.3727321057046,152.1270653836292 C369.0813467766147,-15.027008172167507 646.1200173724658,152.1270653836292 298.3727321057046,367.0394456696475 C-49.37455316105007,152.1270653836292 227.66411743479748,-15.027008172167507 298.3727321057046,152.1270653836292 z
         `);
 
-        this.appendChild(polyLine1.cacheAsBitmap());
+        const cached = BitmapCacheHelper.cacheAsBitmap(this.game,polyLine1);
+        this.appendChild(cached);
 
         const circle:Circle = new Circle(this.game);
         circle.radius = 6;
