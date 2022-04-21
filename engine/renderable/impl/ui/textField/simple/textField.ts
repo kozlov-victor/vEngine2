@@ -13,7 +13,6 @@ import {
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
-import {FrameSkipper} from "@engine/misc/frameSkipper";
 import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
@@ -37,7 +36,6 @@ export class TextField extends WidgetContainer {
     private pixelPerfect:boolean = false;
 
     private _text:string = '';
-    private frameSkipper:FrameSkipper = new FrameSkipper(this.game);
     private _autosize:boolean = false;
     private measurer:TextRowSet;
 
@@ -166,8 +164,8 @@ export class TextField extends WidgetContainer {
         if (this.cacheSurface!==undefined) this.cacheSurface.destroy();
     }
 
-    public override update():void {
-        super.update();
+    public override draw():void {
+        super.draw();
         if (this.isDirty()) this.revalidate();
         if (this.needTextRedraw) this.redrawText();
     }
@@ -285,7 +283,6 @@ export class TextField extends WidgetContainer {
     private redrawText():void {
         if (!this.needTextRedraw) return;
         this.rowSet.updateRowsVisibility();
-        if (this.frameSkipper.willNextFrameBeSkipped()) return;
         if (this.cacheSurface!==undefined) {
             this.cacheSurface.clear();
             this.cacheSurface.drawModel(this.rowSet);

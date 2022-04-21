@@ -1,4 +1,4 @@
-import {isEqualArray, isTypedArray} from "@engine/misc/object";
+import {isCommonArray, isEqualArray} from "@engine/misc/object";
 import {AbstractPrimitive} from "../../primitives/abstractPrimitive";
 import {ShaderProgram} from "../../base/shaderProgram";
 import {BufferInfo} from "../../base/bufferInfo";
@@ -63,7 +63,7 @@ export class AbstractPainter implements IPainter, IDestroyable{
             console.trace();
             throw new DebugError(`can not set uniform with name ${name} and value ${value}`);
         }
-        if (isTypedArray(value)) {
+        if (isCommonArray(value)) {
             if (!this.uniformCache.has(name)) {
                 // todo how to define Float32Array or Int32Array???
                 this.uniformCache.put(name,{value:new Float32Array(value.length),dirty:true});
@@ -72,7 +72,7 @@ export class AbstractPainter implements IPainter, IDestroyable{
             const arr:Float32Array = uniformInCache.value as Float32Array;
 
             if (!isEqualArray(arr,value)) {
-                arr.set(value);
+                arr.set(value as Float32Array);
                 uniformInCache.dirty = true;
             }
         } else {

@@ -38,7 +38,7 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
     private _x:number = 0;
     private _y:number = 0;
 
-    private _arr:Float32Array = new Float32Array([0,0]);
+    protected _arr:Float32Array = new Float32Array([0,0]);
 
     public static fromPool():Point2d {
         return Point2d.pool.getFreeObject()!;
@@ -54,6 +54,8 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         if (changed) {
             this._x = x;
             this._y = y;
+            this._arr[0] = this._x;
+            this._arr[1] = this._y;
             this.triggerObservable();
         }
         return this;
@@ -132,8 +134,6 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
     }
 
     public toArray():Float32Array{
-        this._arr[0] = this._x;
-        this._arr[1] = this._y;
         return this._arr;
     }
 

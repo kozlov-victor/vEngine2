@@ -144,7 +144,7 @@ export namespace Mat4 {
     };
 
     export const perspective = (out:Mat16Holder,fovy:n, aspect:n, near:n, far:n):void => {
-        const f:n = 1.0 / Math.tan(fovy / 2),
+        const f:n = 1.0 / tan(fovy / 2),
             nf:n = 1 / (near - far);
 
         const outMat16:MAT16 = out.mat16 as MAT16;
@@ -284,10 +284,10 @@ export namespace Mat4 {
 
         const m:MAT16 = out.mat16 as MAT16;
         m.set(IDENTITY);
-        m[0] = c;
-        m[1] = s;
+        m[0] =  c;
+        m[1] =  s;
         m[4] = -s;
-        m[5] = c;
+        m[5] =  c;
 
         out.identityFlag = false;
     };
@@ -316,8 +316,8 @@ export namespace Mat4 {
 
         out.mat16.set(IDENTITY);
 
-        m[0] = d;
-        m[5] = d;
+        m[ 0] = d;
+        m[ 5] = d;
         m[10] = d;
         m[12] = m12;
         m[13] = m13;

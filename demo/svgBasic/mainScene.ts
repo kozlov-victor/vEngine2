@@ -148,6 +148,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
 
 const images:XmlDocument[] = [
+
     svgEx127,
     svgEx122,svgEx123,svgEx124,svgEx125,svgEx126,
     svgEx116,svgEx117,svgEx118,svgEx119,svgEx120,svgEx121,

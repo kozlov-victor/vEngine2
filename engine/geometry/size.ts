@@ -16,11 +16,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
             console.trace();
             throw new DebugError(`Size.width: wrong numeric argument  ${val}`);
         }
-        const changed:boolean = this._width!==val;
-        if (changed) {
-            this._width = val;
-            this.triggerObservable();
-        }
+        this.setWH(val,this._height);
     }
 
     get width(): number {
@@ -32,11 +28,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
             console.trace();
             throw new DebugError(`Size.height: wrong numeric argument  ${val}`);
         }
-        const changed:boolean = this._height!==val;
-        if (changed) {
-            this._height = val;
-            this.triggerObservable();
-        }
+        this.setWH(this._width,val);
     }
 
     get height(): number {
@@ -54,7 +46,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
     private _width:number;
     private _height:number;
 
-    private _arr:Float32Array;
+    private _arr = new Float32Array([0,0]);
 
     public static fromPool():Size {
         return Size.rectPool.getFreeObject()!;
@@ -80,6 +72,8 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         if (changed) {
             this._width = width;
             this._height = height;
+            this._arr[0] = width;
+            this._arr[1] = height;
             this.triggerObservable();
         }
         return this;
@@ -115,11 +109,6 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
     }
 
     public toArray():Float32Array & [number,number]{
-        if (this._arr===undefined) {
-            this._arr = new Float32Array([0,0]);
-        }
-        this._arr[0] = this._width;
-        this._arr[1] = this._height;
         return this._arr as Float32Array & [number,number];
     }
 
