@@ -93,7 +93,7 @@ export class XmlNode implements IXmlNode, ICloneable<XmlNode> {
 
     public fromJSON(obj:IXmlNode):void {
         this.tagName = obj.tagName;
-        this.attributes = obj.attributes;
+        this.attributes = {...obj.attributes};
         this.children = [];
         for (const c of obj.children) {
             if ((c as IXmlTextNode).data!==undefined) this.children.push(c as IXmlTextNode);
