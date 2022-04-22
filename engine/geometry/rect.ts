@@ -109,10 +109,6 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
             this._height = height;
             this._right = this._x+this._width;
             this._bottom = this._y+this._height;
-            this._arr[0] = this._x;
-            this._arr[1] = this._y;
-            this._arr[2] = this._width;
-            this._arr[3] = this._height;
             this.triggerObservable();
         }
         return this;
@@ -184,6 +180,10 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
     }
 
     public toArray():Float32Array & [number,number,number,number]{
+        this._arr[0] = this._x;
+        this._arr[1] = this._y;
+        this._arr[2] = this._width;
+        this._arr[3] = this._height;
         return this._arr as Float32Array & [number,number,number,number];
     }
 

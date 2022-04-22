@@ -34,8 +34,6 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
     public setXYZ(x:number,y:number = x,z:number = y):this{
         this.x = x;
         this.y = y;
-        this._arrCache[0] = x;
-        this._arrCache[1] = y;
         if (DEBUG && (isNotNumber(z))) {
             console.trace();
             throw new DebugError(`Point3d: wrong numeric arguments ${x},${y},${z}`);
@@ -43,7 +41,6 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
         const changed:boolean = this._z!==z;
         if (changed) {
             this._z = z;
-            this._arrCache[2] = z;
             this.triggerObservable();
         }
         return this;
@@ -69,6 +66,9 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
     }
 
     public override toArray():Float32Array{
+        this._arrCache[0] = this.x;
+        this._arrCache[1] = this.y;
+        this._arrCache[2] = this._z;
         return this._arrCache;
     }
 

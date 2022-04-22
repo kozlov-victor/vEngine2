@@ -83,7 +83,7 @@ export class XmlNode implements IXmlNode, ICloneable<XmlNode> {
     }
 
     public toJSON():IXmlNode {
-        const res:IXmlNode = {tagName:this.tagName,attributes:this.attributes,children:[]};
+        const res:IXmlNode = {tagName:this.tagName,attributes:{...this.attributes},children:[]};
         for (const c of this.children) {
             if (c instanceof XmlNode) res.children.push(c.toJSON());
             else res.children.push({data:c.data});

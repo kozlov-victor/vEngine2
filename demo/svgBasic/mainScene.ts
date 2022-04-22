@@ -149,6 +149,8 @@ import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
 
 const images:XmlDocument[] = [
 
+    svgEx42,
+
     svgEx127,
     svgEx122,svgEx123,svgEx124,svgEx125,svgEx126,
     svgEx116,svgEx117,svgEx118,svgEx119,svgEx120,svgEx121,
@@ -172,7 +174,7 @@ const images:XmlDocument[] = [
     svgEx56,svgEx57,svgEx58,svgEx59,svgEx60,
     svgEx52, svgEx53,svgEx54, svgEx55,
     svgEx48, svgEx49, svgEx50, svgEx51,
-    svgEx44, svgEx43, svgEx42, svgEx45, svgEx46, svgEx47,
+    svgEx44, svgEx43, svgEx45, svgEx46, svgEx47,
     svgEx38,svgEx39,svgEx40,svgEx41,
     svgEx34,svgEx35,svgEx36,svgEx37,
 
