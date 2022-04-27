@@ -64,6 +64,11 @@ class SvgTokenizer extends BasicStringTokenizer {
     }
 }
 
+interface IVertexGroup {
+    vertexArray: number[],
+    closed: boolean;
+}
+
 export class SvgPathToVertexArrayBuilder {
 
     private lastPoint:Optional<Point2d>;
@@ -73,14 +78,14 @@ export class SvgPathToVertexArrayBuilder {
     public lastPenPoint:Point2d = new Point2d();
 
     private tokenizer:SvgTokenizer;
-    private currentVertexArray:number[] = [];
-    private result:number[][] = [];
+    private currentVertexGroup:IVertexGroup = {vertexArray:[],closed:false};
+    private result:IVertexGroup[] = [];
 
     constructor(private game:Game) {
-        this.result.push(this.currentVertexArray);
+        this.result.push(this.currentVertexGroup);
     }
 
-    public parsePolylines(path:string,close:boolean):number[][]{
+    public parsePolylines(path:string,close:boolean):IVertexGroup[]{
         this.tokenizer = new SvgTokenizer(path);
         let lastCommand:Optional<string>;
         while (!this.tokenizer.isEof()) {
@@ -98,20 +103,20 @@ export class SvgPathToVertexArrayBuilder {
             }
         }
         if (close) this.close();
-        if (this.result.indexOf(this.currentVertexArray)===-1) this.result.push(this.currentVertexArray);
+        if (this.result.indexOf(this.currentVertexGroup)===-1) this.result.push(this.currentVertexGroup);
         return this.result;
     }
 
-    public getLastResult():number[] {
-        return this.currentVertexArray;
+    public getLastResult():IVertexGroup {
+        return this.currentVertexGroup;
     }
 
-    public getResult():number[][] {
+    public getResult():IVertexGroup[] {
         return this.result;
     }
 
     public moveTo(x:number,y:number):void{
-        if (this.currentVertexArray.length>0) this.complete();
+        if (this.currentVertexGroup.vertexArray.length>0) this.complete();
         if (!this.lastPoint) this.lastPoint = new Point2d();
         this.lastPoint.setXY(x,y);
         this.lastPenPoint.setXY(x,y);
@@ -174,14 +179,15 @@ export class SvgPathToVertexArrayBuilder {
     public close():void{
         if (!this.firstPoint) return;
         this.lineTo(this!.firstPoint!.x,this!.firstPoint!.y);
+        this.currentVertexGroup.closed = true;
         this.complete();
     }
 
     private createNextVertexArray():void {
         // const p:PolyLine = PolyLine.fromVertices(this.game,this.currentVertexArray);
         // p.passMouseEventsThrough = true;
-        if (this.result.indexOf(this.currentVertexArray)===-1) this.result.push(this.currentVertexArray);
-        this.currentVertexArray = [];
+        if (this.result.indexOf(this.currentVertexGroup)===-1) this.result.push(this.currentVertexGroup);
+        this.currentVertexGroup = {vertexArray:[],closed:false};
     }
 
     private _bezierTo(p1:v2,p2:v2,p3:v2,p4:v2):void{
@@ -227,8 +233,10 @@ export class SvgPathToVertexArrayBuilder {
     private addSegment(x:number,y:number,x1:number,y1:number):void{
         // const line:Line = new Line(this.game);
         // line.setXYX1Y1(x,y,x1,y1);
-        if (this.currentVertexArray.length===0) this.currentVertexArray.push(x,y);
-        this.currentVertexArray.push(x1,y1);
+        if (this.currentVertexGroup.vertexArray.length===0) {
+            this.currentVertexGroup.vertexArray.push(x,y);
+        }
+        this.currentVertexGroup.vertexArray.push(x1,y1);
     }
 
     // https://developer.mozilla.org/ru/docs/Web/SVG/Tutorial/Paths

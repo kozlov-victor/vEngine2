@@ -222,8 +222,12 @@ class DrawingSession implements IDrawingSession {
             return;
         }
         const polyLines:PolyLine[] = [];
-        const points:number[][] = this._svgPathToVertexArrayBuilder.getResult();
-        for (const vertices of points) polyLines.push(PolyLine.fromVertices(this.game,vertices,this.pathParams));
+        const groups = this._svgPathToVertexArrayBuilder.getResult();
+        for (const group of groups) {
+            polyLines.push(
+                PolyLine.fromVertices(this.game,group.vertexArray,this.pathParams,group.closed)
+            );
+        }
         for (const p of polyLines) {
             p.color.setFrom(this.drawColor);
             this.drawModel(p);

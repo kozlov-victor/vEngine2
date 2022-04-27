@@ -259,12 +259,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         mp.setColorMix(mesh.material.diffuseColorMix);
         mp.setSpecular(mesh.material.specular);
 
-        //this.gl.enable(this.gl.CULL_FACE);
+        //this._gl.enable(this._gl.CULL_FACE);
         this._glCachedAccessor.setDepthTest(mesh.depthTest);
         this._blender.setBlendMode(mesh.blendMode);
         mesh.onUpdatingBuffers();
         mp.draw();
-        //this.gl.disable(this.gl.CULL_FACE);
+        //this._gl.disable(this._gl.CULL_FACE);
         orthoProjectionMatrix.release();
         zToWProjectionMatrix.release();
         inverseTransposeModelMatrix.release();
@@ -294,6 +294,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         mp.setNormalsTextureUsed(false);
         mp.attachTexture('u_normalsTexture',this._nullTexture);
+
+        mp.setSpecularTextureUsed(false);
+        mp.attachTexture('u_specularTexture',this._nullTexture);
 
         mp.setCubeMapTextureUsed(false);
         mp.setReflectivity(0);
@@ -557,7 +560,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     // optimised version of rectangle drawing
     private drawSimpleColoredRectangle(rectangle:Rectangle):void{
 
-        const scd:SimpleColoredRectPainter = this._coloredRectPainterHolder.getInstance(this._gl);
+        const scp:SimpleColoredRectPainter = this._coloredRectPainterHolder.getInstance(this._gl);
 
         if (rectangle.worldTransformDirty) {
             const rect:Rect = Rect.fromPool();
@@ -565,18 +568,18 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const size:Size = Size.fromPool();
             size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
             const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
-            scd.setUniform(scd.u_vertexMatrix,mvpHolder.mat16);
+            scp.setUniform(scp.u_vertexMatrix,mvpHolder.mat16);
             rectangle.modelViewProjectionMatrix.fromMat16(mvpHolder);
             mvpHolder.release();
             rect.release();
             size.release();
         } else {
-            scd.setUniform(scd.u_vertexMatrix,rectangle.modelViewProjectionMatrix.mat16);
+            scp.setUniform(scp.u_vertexMatrix,rectangle.modelViewProjectionMatrix.mat16);
         }
 
-        scd.setUniform(scd.u_alpha,rectangle.getChildrenCount()===0?rectangle.alpha:1);
-        scd.setUniform(scd.u_color,((rectangle.fillColor) as Color).asGL());
-        scd.draw();
+        scp.setUniform(scp.u_alpha,rectangle.getChildrenCount()===0?rectangle.alpha:1);
+        scp.setUniform(scp.u_color,((rectangle.fillColor) as Color).asGL());
+        scp.draw();
     }
 
     private prepareGeometryUniformInfo(model:RenderableModel):void{

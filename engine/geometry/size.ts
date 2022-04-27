@@ -54,7 +54,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
     private _width:number;
     private _height:number;
 
-    private _arr:Float32Array;
+    private _arr = new Float32Array([0,0]);
 
     public static fromPool():Size {
         return Size.rectPool.getFreeObject()!;
@@ -80,6 +80,8 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         if (changed) {
             this._width = width;
             this._height = height;
+            this._arr[0] = this._width;
+            this._arr[1] = this._height;
             this.triggerObservable();
         }
         return this;
@@ -115,11 +117,6 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
     }
 
     public toArray():Float32Array & [number,number]{
-        if (this._arr===undefined) {
-            this._arr = new Float32Array([0,0]);
-        }
-        this._arr[0] = this._width;
-        this._arr[1] = this._height;
         return this._arr as Float32Array & [number,number];
     }
 

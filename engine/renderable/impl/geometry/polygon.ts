@@ -62,10 +62,11 @@ export class Polygon extends Mesh2d {
     }
 
     public static fromPolyline(game:Game,p:PolyLine):Polygon {
-        const vertices:number[] = [];
+        let vertices:number[] = [];
         for (const l of p.getSegments()) {
             vertices.push(l.pos.x,l.pos.y);
         }
+        if (p.closed) vertices = closePolylinePoints(vertices);
         const triangulatedIndices:number[] = earCut(vertices);
         const triangulatedVertices:number[] = [];
         for (const ind of triangulatedIndices) {
@@ -198,6 +199,7 @@ export class Polygon extends Mesh2d {
         }();
         m.depthTest = true;
         m.material.diffuseColor = this.fillColor.clone();
+        m.size.setFrom(this.size);
         return m;
     }
 

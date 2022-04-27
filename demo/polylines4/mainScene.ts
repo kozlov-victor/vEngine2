@@ -4,6 +4,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {EvenOddCompositionFilter} from "@engine/renderer/webGl/filters/composition/evenOddCompositionFilter";
 
 
 export class MainScene extends Scene {
@@ -13,6 +14,7 @@ export class MainScene extends Scene {
 
 
         const n = new SimpleGameObjectContainer(this.game);
+        n.forceDrawChildrenOnNewSurface = true;
         n.scale.setXY(0.5);
         n.size.setWH(500);
         n.addBehaviour(new DraggableBehaviour(this.game));
@@ -24,12 +26,12 @@ export class MainScene extends Scene {
 
             `;
 
-        Polygon.fromMultiCurveSvgPath(this.game,path).forEach(p=>{
+        Polygon.fromMultiCurveSvgPath(this.game,path).forEach((p,i)=>{
             p.pos.setXY(0,0);
             p.fillColor.setFrom(Color.RGB(12,200,22));
+            if (i>0) p.filters = [new EvenOddCompositionFilter(this.game)];
             n.appendChild(p);
         });
-
 
     }
 

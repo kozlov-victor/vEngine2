@@ -89,10 +89,11 @@ export class AbstractPainter implements IPainter, IDestroyable{
     }
 
     public attachTexture(uniformName:string,texture:AbstractTexture):void{
-        this.texturesToBind.texturesInfo[this.texturesToBind.length] =
-            this.texturesToBind.texturesInfo[this.texturesToBind.length] || {uniformName:undefined,texture:undefined};
-        this.texturesToBind.texturesInfo[this.texturesToBind.length].uniformName = uniformName;
-        this.texturesToBind.texturesInfo[this.texturesToBind.length].texture = texture;
+        const tx =
+            this.texturesToBind.texturesInfo[this.texturesToBind.length] ??=
+            {uniformName:undefined!,texture:undefined!};
+        tx.uniformName = uniformName;
+        tx.texture = texture;
         this.texturesToBind.length++;
     }
 

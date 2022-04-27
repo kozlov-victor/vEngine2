@@ -22,7 +22,7 @@ export class PolyLine extends RenderableModel {
 
     public readonly color:Color = Color.BLACK.clone();
 
-    private constructor(game:Game){
+    private constructor(game:Game,public readonly closed:boolean){
         super(game);
     }
 
@@ -38,11 +38,11 @@ export class PolyLine extends RenderableModel {
             });
         }
 
-        if (DEBUG && vertices.length===0) return new PolyLine(game);
+        if (DEBUG && vertices.length===0) return new PolyLine(game,close);
 
         if (close) vertices = closePolylinePoints(vertices);
 
-        const p:PolyLine = new PolyLine(game);
+        const p:PolyLine = new PolyLine(game,close);
         for (let i:number=0;i<vertices.length-2;i+=2) {
             const line:Line = new Line(game);
             const x1 = vertices[i], y1 = vertices[i+1];
@@ -65,9 +65,13 @@ export class PolyLine extends RenderableModel {
     }
 
     public static fromMultiCurveSvgPath(game:Game,path:string, params:ITriangulatedPathParams = {},close:boolean = false):PolyLine[]{
-        const arr:number[][] = new SvgPathToVertexArrayBuilder(game).parsePolylines(path, close);
+        const arr = new SvgPathToVertexArrayBuilder(game).parsePolylines(path, close);
         const result:PolyLine[] = [];
-        for (const vertices of arr) result.push(this.fromVertices(game,vertices,params));
+        for (const group of arr) {
+            result.push(
+                this.fromVertices(game,group.vertexArray,params,group.closed)
+            );
+        }
         return result;
     }
 
@@ -87,7 +91,7 @@ export class PolyLine extends RenderableModel {
     }
 
     public clone(): PolyLine {
-        const l:PolyLine = new PolyLine(this.game);
+        const l:PolyLine = new PolyLine(this.game,this.closed);
         this.setClonedProperties(l);
         return l;
     }

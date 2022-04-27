@@ -1,17 +1,13 @@
-import {Point2d} from "@engine/geometry/point2d";
+import {IPoint2d, Point2d} from "@engine/geometry/point2d";
 import {ICloneable} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {isNotNumber} from "@engine/misc/object";
 
-export interface IPoint3d {
-    readonly x:number;
-    readonly y: number;
+export interface IPoint3d extends IPoint2d{
     readonly z: number;
 }
 
 export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
-
-    private _arrCache:Float32Array = new Float32Array([0,0,0]);
 
     private _z:number = 0;
 
@@ -41,6 +37,7 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
         const changed:boolean = this._z!==z;
         if (changed) {
             this._z = z;
+            this._arr[2] = z;
             this.triggerObservable();
         }
         return this;
@@ -63,13 +60,6 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
 
     public override toJSON():IPoint3d{
         return {x:this.x,y:this.y,z:this._z};
-    }
-
-    public override toArray():Float32Array{
-        this._arrCache[0] = this.x;
-        this._arrCache[1] = this.y;
-        this._arrCache[2] = this._z;
-        return this._arrCache;
     }
 
 }

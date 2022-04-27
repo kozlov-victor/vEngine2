@@ -11,19 +11,19 @@ export namespace Vec4 {
 
 
         get x():n{
-            return (this.vec4 as VEC4)[0];
+            return this.vec4[0];
         }
 
         get y():n{
-            return (this.vec4 as VEC4)[1];
+            return this.vec4[1];
         }
 
         get z():n{
-            return (this.vec4 as VEC4)[2];
+            return this.vec4[2];
         }
 
         get w():n{
-            return (this.vec4 as VEC4)[3];
+            return this.vec4[3];
         }
         private static pool = new ObjectPool<Vec4Holder>(Vec4Holder,32);
 

@@ -125,13 +125,15 @@ export abstract class AbstractTexture implements ITexture {
     }
 
     protected beforeOperation():void {
-        if (this._currentTextureAt0!==undefined) return;
         this._currentTextureAt0 = AbstractTexture.currentBindTextureAt[0];
-        this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
+        this.gl.bindTexture(this.samplerType, this.tex);
     }
 
     protected afterOperation():void{
-        if (this._currentTextureAt0) this.gl.bindTexture(this.gl.TEXTURE_2D, this._currentTextureAt0.tex);
+        const texAt0 = this._currentTextureAt0;
+        if (texAt0!==undefined) {
+            this.gl.bindTexture(texAt0.samplerType, texAt0.tex);
+        }
         else this.gl.bindTexture(this.gl.TEXTURE_2D, null);
         this._currentTextureAt0 = undefined;
     }

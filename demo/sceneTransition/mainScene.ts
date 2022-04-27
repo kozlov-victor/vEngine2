@@ -96,6 +96,7 @@ export class MainScene extends Scene {
         this.listView.size.setFrom(this.game.size);
         this.listView.setPadding(10);
         this.listView.setMargin(10);
+        this.listView.alpha = 0.8;
         this.appendChild(this.listView);
 
         this.backgroundColor = Color.RGB(233);
@@ -180,7 +181,6 @@ export class MainScene extends Scene {
     private createTransitionButton(text:string,transition:ISceneTransition):void{
         const tf:TextField = new TextField(this.game,this.fnt);
         tf.textColor.setRGB(10);
-        tf.alpha = 0.8;
         tf.size.setWH(this.game.width,40);
         tf.setText(text);
         tf.setFont(this.fnt);
