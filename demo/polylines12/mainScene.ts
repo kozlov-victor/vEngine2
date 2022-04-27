@@ -20,13 +20,14 @@ export class MainScene extends Scene {
         container.size.setWH(300,300);
         container.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(container);
+        container.pos.setY(100);
         container.setInterval(()=>{
             container.angle3d.x+=0.01;
         },1);
 
         const word:string = 'vEngine Hello!';
         let offsetX:number = 0;
-        const scale:number = 0.1;
+        const scale:number = 0.08;
         const faceTypeToSvg:FaceTypeToSvg = new FaceTypeToSvg();
         word.split('').forEach(letter=>{
             const path = this.fontJsonLink.glyphs[letter].o;

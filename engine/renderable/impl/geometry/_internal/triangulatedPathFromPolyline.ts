@@ -70,7 +70,9 @@ export const enum EndCapStyle {
 export const triangulatedPathFromPolyline = (game:Game,p:PolyLine, params:ITriangulatedPathParams):Polygon=>{
     params.lineWidth??=1;
     params.jointStyle??=JointStyle.MITER;
-    params.endCapStyle??=EndCapStyle.BUTT;
+    if (p.closed) params.endCapStyle = EndCapStyle.JOINT;
+    else params.endCapStyle??=EndCapStyle.BUTT;
+
     const vertices:Vec2[] = [];
     p.getSegments().forEach((l:Readonly<Line>)=>{
         vertices.push(new Vec2(l.pos.x,l.pos.y));

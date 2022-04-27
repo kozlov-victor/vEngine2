@@ -25,22 +25,22 @@ const length = (a:Readonly<v2>,b:Readonly<v2>):number=>{
     return Math.sqrt(Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1]));
 };
 
-const getPointOnBezierCurve =(points:Readonly<v2>[], offset:number, t:number):v2=> {
+const getPointOnBezierCurve =(points:Readonly<v2>[], t:number):v2=> {
     const invT:number = 1 - t;
-    return add(mult(points[offset + 0], invT * invT * invT),
-        mult(points[offset + 1], 3 * t * invT * invT),
-        mult(points[offset + 2], 3 * invT * t * t),
-        mult(points[offset + 3], t * t  *t));
+    return add(mult(points[0], invT * invT * invT),
+        mult(points[1], 3 * t * invT * invT),
+        mult(points[2], 3 * invT * t * t),
+        mult(points[3], t * t  * t));
 };
 
-const getPointsOnBezierCurve = (points:Readonly<v2>[], offset:number, numPoints:number):v2[]=> {
+const getPointsOnBezierCurve = (points:Readonly<v2>[], length:number):v2[]=> {
     const cPoints:v2[] = [];
-    for (let i:number = 0; i < numPoints-1; ++i) {
-        const t:number = i / (numPoints - 1);
-        cPoints.push(getPointOnBezierCurve(points, offset, t));
+    const step = length<5?0.2:1;
+    for (let i:number = 0; i < length - step; i+=step) {
+        const t:number = i / length;
+        cPoints.push(getPointOnBezierCurve(points, t));
     }
-    // correct possible deviation of last point
-    cPoints[cPoints.length-1] = points[points.length-1] as v2;
+    cPoints.push(getPointOnBezierCurve(points, 1));
     return cPoints;
 };
 
@@ -192,7 +192,7 @@ export class SvgPathToVertexArrayBuilder {
 
     private _bezierTo(p1:v2,p2:v2,p3:v2,p4:v2):void{
         const l:number = length(p1,p2)+length(p2,p3)+length(p3,p4);
-        const bezier:v2[] = getPointsOnBezierCurve([p1,p2,p3,p4],0,l);
+        const bezier:v2[] = getPointsOnBezierCurve([p1,p2,p3,p4],l);
         bezier.forEach((v:v2)=>{
             this.lineTo(v[0],v[1]);
         });
