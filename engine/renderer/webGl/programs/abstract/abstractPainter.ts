@@ -100,7 +100,7 @@ export class AbstractPainter implements IPainter, IDestroyable{
             this.uniformCache.put(name,{value:new Float32Array(value.length),dirty:true});
         }
         const uniformInCache = this.uniformCache.get(name) as IUniformValue;
-        const arr = uniformInCache.value as Float32Array;
+        const arr = uniformInCache.value as UNIFORM_VALUE_ARRAY_TYPE;
 
         if (dirtyFlag || !isEqualArray(arr,value)) {
             arr.set(value);
