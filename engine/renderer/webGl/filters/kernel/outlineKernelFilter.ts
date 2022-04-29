@@ -1,6 +1,6 @@
 import {
     AbstractKernelAccumulativeFilter
-} from "@engine/renderer/webGl/filters/accumulative/abstract/abstractKernelFilter";
+} from "@engine/renderer/webGl/filters/kernel/abstract/abstractKernelFilter";
 import {Game} from "@engine/core/game";
 
 // https://setosa.io/ev/image-kernels/

@@ -1,6 +1,6 @@
 import {
     AbstractKernelAccumulativeFilter
-} from "@engine/renderer/webGl/filters/accumulative/abstract/abstractKernelFilter";
+} from "@engine/renderer/webGl/filters/kernel/abstract/abstractKernelFilter";
 import {Game} from "@engine/core/game";
 
 // https://webgl2fundamentals.org/webgl/lessons/webgl-image-processing.html

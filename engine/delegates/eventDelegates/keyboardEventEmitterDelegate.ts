@@ -24,6 +24,16 @@ export class KeyboardEventEmitterDelegate extends EventEmitterDelegate<KEYBOARD_
         this.off(KEYBOARD_EVENTS.keyPressed,callBack);
     }
 
+    public onKeyHold(key:KEYBOARD_KEY,callBack: (arg: IKeyBoardEvent) => void):(arg: IKeyBoardEvent) => void {
+        return this.on(KEYBOARD_EVENTS.keyHold, e=>{
+            if (e.button===key) callBack(e);
+        });
+    }
+
+    public offKeyHold(callBack: (arg: IKeyBoardEvent) => void):void {
+        this.off(KEYBOARD_EVENTS.keyHold,callBack);
+    }
+
     public onKeyReleased(key:KEYBOARD_KEY,callBack: (arg: IKeyBoardEvent) => void):(arg: IKeyBoardEvent) => void {
         return this.on(KEYBOARD_EVENTS.keyReleased, e=>{
             if (e.button===key) callBack(e);
