@@ -30,7 +30,7 @@ export const getIdentityPositionMatrix = (dstX:number, dstY:number, destSize:ISi
     return result;
 };
 
-export const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).scale(1,-1).release().getCurrentValue().clone();
+export const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).scale(1,-1).getCurrentValue();
 
 export class WebGlRendererHelper extends RendererHelper {
 

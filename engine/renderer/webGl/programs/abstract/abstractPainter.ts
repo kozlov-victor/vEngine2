@@ -78,7 +78,7 @@ export class AbstractPainter implements IPainter, IDestroyable{
         if (!this.uniformCache.has(name)) {
             this.uniformCache.put(name,{value,dirty:true});
         } else {
-            const valueInCache:IUniformValue = this.uniformCache.get(name)!;
+            const valueInCache = this.uniformCache.get(name)!;
             if (valueInCache.value!==value) {
                 valueInCache.value = value;
                 valueInCache.dirty = true;
