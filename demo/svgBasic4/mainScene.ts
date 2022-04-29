@@ -8,6 +8,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
 import {CrtScreenFilter} from "@engine/renderer/webGl/filters/texture/crtScreenFilter";
 import {NoiseHorizontalFilter} from "@engine/renderer/webGl/filters/texture/noiseHorizontalFilter";
+import {SepiaColorMatrixFilter} from "@engine/renderer/webGl/filters/colorMatrix/sepiaColorMatrixFilter";
 
 const images:XmlDocument[] = [
     tbl
@@ -17,9 +18,12 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
-        this.filters = [new CrtScreenFilter(this.game),new NoiseHorizontalFilter(this.game)];
+        const sepia = new SepiaColorMatrixFilter(this.game);
+
+        this.filters = [new CrtScreenFilter(this.game),new NoiseHorizontalFilter(this.game),sepia];
         this.mouseEventHandler.on(MOUSE_EVENTS.click, _=>{
            this.game.getRenderer().requestFullScreen();
+           sepia.enabled=!sepia.enabled;
         });
 
         let i = 0;
