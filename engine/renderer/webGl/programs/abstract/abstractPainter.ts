@@ -4,7 +4,11 @@ import {ShaderProgram} from "../../base/shaderProgram";
 import {BufferInfo} from "../../base/bufferInfo";
 import {IPainter} from "../interface/iPainter";
 import {DebugError} from "@engine/debug/debugError";
-import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {
+    UNIFORM_VALUE_ARRAY_TYPE,
+    UNIFORM_VALUE_PRIMITIVE_TYPE,
+    UNIFORM_VALUE_TYPE
+} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {AbstractTexture} from "@engine/renderer/webGl/base/abstract/abstractTexture";
@@ -55,6 +59,14 @@ export class AbstractPainter implements IPainter, IDestroyable{
     }
 
     public setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
+        if (isCommonArray(value)) {
+            this.setUniformVector(name,value as UNIFORM_VALUE_ARRAY_TYPE);
+        } else {
+            this.setUniformScalar(name,value as UNIFORM_VALUE_PRIMITIVE_TYPE);
+        }
+    }
+
+    public setUniformScalar(name:string,value:UNIFORM_VALUE_PRIMITIVE_TYPE):void{
         if (DEBUG && !name) {
             console.trace();
             throw new DebugError(`can not set uniform with value ${value}: name is not provided`);
@@ -63,28 +75,36 @@ export class AbstractPainter implements IPainter, IDestroyable{
             console.trace();
             throw new DebugError(`can not set uniform with name ${name} and value ${value}`);
         }
-        if (isCommonArray(value)) {
-            if (!this.uniformCache.has(name)) {
-                // todo how to define Float32Array or Int32Array???
-                this.uniformCache.put(name,{value:new Float32Array(value.length),dirty:true});
-            }
-            const uniformInCache:IUniformValue = this.uniformCache.get(name) as IUniformValue;
-            const arr:Float32Array = uniformInCache.value as Float32Array;
-
-            if (!isEqualArray(arr,value)) {
-                arr.set(value as Float32Array);
-                uniformInCache.dirty = true;
-            }
+        if (!this.uniformCache.has(name)) {
+            this.uniformCache.put(name,{value,dirty:true});
         } else {
-            if (!this.uniformCache.has(name)) {
-                this.uniformCache.put(name,{value,dirty:true});
-            } else {
-                const valueInCache:IUniformValue = this.uniformCache.get(name)!;
-                if (valueInCache.value!==value) {
-                    valueInCache.value = value;
-                    valueInCache.dirty = true;
-                }
+            const valueInCache:IUniformValue = this.uniformCache.get(name)!;
+            if (valueInCache.value!==value) {
+                valueInCache.value = value;
+                valueInCache.dirty = true;
             }
+        }
+    }
+
+    public setUniformVector(name:string,value:UNIFORM_VALUE_ARRAY_TYPE,dirtyFlag:boolean = false):void{
+        if (DEBUG && !name) {
+            console.trace();
+            throw new DebugError(`can not set uniform with value ${value}: name is not provided`);
+        }
+        if (DEBUG && value===null  || value===undefined) {
+            console.trace();
+            throw new DebugError(`can not set uniform with name ${name} and value ${value}`);
+        }
+        if (!this.uniformCache.has(name)) {
+            // todo how to define Float32Array or Int32Array???
+            this.uniformCache.put(name,{value:new Float32Array(value.length),dirty:true});
+        }
+        const uniformInCache = this.uniformCache.get(name) as IUniformValue;
+        const arr = uniformInCache.value as Float32Array;
+
+        if (dirtyFlag || !isEqualArray(arr,value)) {
+            arr.set(value);
+            uniformInCache.dirty = true;
         }
     }
 

@@ -54,19 +54,23 @@ const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
 
 const SCENE_DEPTH:number = 1000;
 
-
-
 const zToWMatrix:Mat16Holder = Mat16Holder.create();
 Mat4.makeZToWMatrix(zToWMatrix,1);
 
 const lruCache = new LruMap<string, Mat4.Mat16Holder>();
+
+const scaleMatrix:Mat16Holder = Mat16Holder.create();
+const translationMatrix:Mat16Holder = Mat16Holder.create();
+const matrixResult:Mat16Holder = Mat16Holder.create();
 
 const makeModelViewProjectionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat16Holder=>{
     // proj * modelView
 
     let projectionMatrix:Mat16Holder;
     const viewSizeStr = `${viewSize.width}_${viewSize.height}`;
-    if (lruCache.has(viewSizeStr)) projectionMatrix = lruCache.get(viewSizeStr)!;
+    if (lruCache.has(viewSizeStr)) {
+        projectionMatrix = lruCache.get(viewSizeStr)!
+    }
     else {
         const m = Mat16Holder.create();
         Mat4.ortho(m,0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
@@ -74,21 +78,14 @@ const makeModelViewProjectionMatrix = (rect:Rect,viewSize:Size,matrixStack:Matri
         projectionMatrix = m;
     }
 
-    const scaleMatrix:Mat16Holder = Mat16Holder.fromPool();
     Mat4.makeScale(scaleMatrix,rect.width, rect.height, 1);
-
-    const translationMatrix:Mat16Holder = Mat16Holder.fromPool();
     Mat4.makeTranslation(translationMatrix,rect.x, rect.y, 0);
 
-    const matrixResult:Mat16Holder = Mat16Holder.fromPool();
     Mat4Special.multiplyScaleByAny(matrixResult,scaleMatrix,translationMatrix);
     Mat4.matrixMultiply(matrixResult,matrixResult, matrixStack.getCurrentValue());
     Mat4Special.multiplyAnyByProjection(matrixResult,matrixResult, projectionMatrix);
     Mat4Special.multiplyAnyByZtoW(matrixResult,matrixResult, zToWMatrix);
 
-    projectionMatrix.release();
-    scaleMatrix.release();
-    translationMatrix.release();
     return matrixResult;
 };
 
@@ -110,6 +107,9 @@ class InstanceHolder<T extends IDestroyable> {
         return this.instance!==undefined;
     }
 }
+
+const rect = new Rect();
+const size = new Size();
 
 export class WebGlRenderer extends AbstractCanvasRenderer {
 
@@ -167,35 +167,34 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         this.prepareGeometryUniformInfo(img);
 
-        sp.setUniform(sp.u_lineWidth,Math.min(img.lineWidth/maxSize,1));
-        sp.setUniform(sp.u_color,img.color.asGL());
+        sp.setUniformScalar(sp.u_lineWidth,Math.min(img.lineWidth/maxSize,1));
+        sp.setUniformVector(sp.u_color,img.color.asGL());
 
-        const repeatFactor:Size = Size.fromPool();
+        const repeatFactor:Size = size;
         repeatFactor.setWH(
             img.size.width/img.getSrcRect().width,
             img.size.height/img.getSrcRect().height
         );
-        sp.setUniform(sp.u_repeatFactor,repeatFactor.toArray());
-        repeatFactor.release();
+        sp.setUniformVector(sp.u_repeatFactor,repeatFactor.toArray());
 
-        sp.setUniform(sp.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
-        sp.setUniform(sp.u_shapeType,SHAPE_TYPE.RECT);
-        sp.setUniform(sp.u_fillType,FILL_TYPE.TEXTURE);
+        sp.setUniformScalar(sp.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
+        sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.RECT);
+        sp.setUniformScalar(sp.u_fillType,FILL_TYPE.TEXTURE);
         const {width: textureWidth,height: textureHeight} = texture.size;
         const {x:srcRectX,y:srcRectY} = img.getSrcRect();
         const {width:destRectWidth,height:destRectHeight} = img.getSrcRect();
 
-        const destArr:Float32Array = Rect.fromPool().setXYWH(
+        const destArr:Float32Array = rect.setXYWH(
             srcRectX/textureWidth,
             srcRectY/textureHeight,
             destRectWidth/textureWidth,
-            destRectHeight/textureHeight).release().toArray();
+            destRectHeight/textureHeight).toArray();
 
-        sp.setUniform(sp.u_texRect, destArr);
+        sp.setUniformVector(sp.u_texRect, destArr);
 
-        const offSetArr:Float32Array = Size.fromPool().setWH(img.offset.x/maxSize,img.offset.y/maxSize).release().toArray();
-        sp.setUniform(sp.u_texOffset,offSetArr);
-        sp.setUniform(sp.u_stretchMode,img.stretchMode);
+        const offSetArr:Float32Array = size.setWH(img.offset.x/maxSize,img.offset.y/maxSize).toArray();
+        sp.setUniformVector(sp.u_texOffset,offSetArr);
+        sp.setUniformScalar(sp.u_stretchMode,img.stretchMode);
         sp.attachTexture('texture',texture);
         sp.draw();
 
@@ -334,8 +333,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
             this.prepareGeometryUniformInfo(rectangle);
             this.prepareShapeUniformInfo(rectangle);
-            sp.setUniform(sp.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
-            sp.setUniform(sp.u_shapeType,SHAPE_TYPE.RECT);
+            sp.setUniformScalar(sp.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
+            sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.RECT);
             sp.attachTexture('texture',this._nullTexture);
             sp.draw();
         }
@@ -357,21 +356,21 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
         if (maxR===ellipse.radiusX) {
-            sp.setUniform(sp.u_rx,0.5);
-            sp.setUniform(sp.u_ry,ellipse.radiusY/ellipse.radiusX*0.5);
+            sp.setUniformScalar(sp.u_rx,0.5);
+            sp.setUniformScalar(sp.u_ry,ellipse.radiusY/ellipse.radiusX*0.5);
         } else {
-            sp.setUniform(sp.u_ry,0.5);
-            sp.setUniform(sp.u_rx,ellipse.radiusX/ellipse.radiusY*0.5);
+            sp.setUniformScalar(sp.u_ry,0.5);
+            sp.setUniformScalar(sp.u_rx,ellipse.radiusX/ellipse.radiusY*0.5);
         }
 
-        sp.setUniform(sp.u_shapeType,SHAPE_TYPE.ELLIPSE);
-        sp.setUniform(sp.u_width,1);
-        sp.setUniform(sp.u_height,1);
-        sp.setUniform(sp.u_rectOffsetLeft,1);
-        sp.setUniform(sp.u_rectOffsetTop,1);
-        sp.setUniform(sp.u_arcAngleFrom,ellipse.arcAngleFrom % (2*Math.PI));
-        sp.setUniform(sp.u_arcAngleTo,ellipse.arcAngleTo % (2*Math.PI));
-        sp.setUniform(sp.u_anticlockwise,ellipse.anticlockwise);
+        sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.ELLIPSE);
+        sp.setUniformScalar(sp.u_width,1);
+        sp.setUniformScalar(sp.u_height,1);
+        sp.setUniformScalar(sp.u_rectOffsetLeft,1);
+        sp.setUniformScalar(sp.u_rectOffsetTop,1);
+        sp.setUniformScalar(sp.u_arcAngleFrom,ellipse.arcAngleFrom % (2*Math.PI));
+        sp.setUniformScalar(sp.u_arcAngleTo,ellipse.arcAngleTo % (2*Math.PI));
+        sp.setUniformScalar(sp.u_anticlockwise,ellipse.anticlockwise);
         sp.attachTexture('texture',this._nullTexture);
         sp.draw();
 
@@ -563,22 +562,18 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const scp:SimpleColoredRectPainter = this._coloredRectPainterHolder.getInstance(this._gl);
 
         if (rectangle.worldTransformDirty) {
-            const rect:Rect = Rect.fromPool();
             rect.setXYWH( 0,0,rectangle.size.width,rectangle.size.height);
-            const size:Size = Size.fromPool();
             size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
             const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
-            scp.setUniform(scp.u_vertexMatrix,mvpHolder.mat16);
+            scp.setUniformVector(scp.u_vertexMatrix,mvpHolder.mat16, true);
             rectangle.modelViewProjectionMatrix.fromMat16(mvpHolder);
             mvpHolder.release();
-            rect.release();
-            size.release();
         } else {
-            scp.setUniform(scp.u_vertexMatrix,rectangle.modelViewProjectionMatrix.mat16);
+            scp.setUniformVector(scp.u_vertexMatrix,rectangle.modelViewProjectionMatrix.mat16);
         }
 
-        scp.setUniform(scp.u_alpha,rectangle.getChildrenCount()===0?rectangle.alpha:1);
-        scp.setUniform(scp.u_color,((rectangle.fillColor) as Color).asGL());
+        scp.setUniformScalar(scp.u_alpha,rectangle.getChildrenCount()===0?rectangle.alpha:1);
+        scp.setUniformVector(scp.u_color,((rectangle.fillColor) as Color).asGL());
         scp.draw();
     }
 
@@ -591,41 +586,38 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             }
         }
 
-        const {width:rw,height:rh} = model.size;
+        const rw = model.size.width;
+        const rh = model.size.height;
         const maxSize:number = Math.max(rw,rh);
         const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         let offsetX:number = 0,offsetY:number = 0;
         if (maxSize===rw) {
-            sp.setUniform(sp.u_width,1);
-            sp.setUniform(sp.u_height,rh/rw);
+            sp.setUniformScalar(sp.u_width,1);
+            sp.setUniformScalar(sp.u_height,rh/rw);
             offsetY = (maxSize - rh)/2;
-            sp.setUniform(sp.u_rectOffsetLeft,0);
-            sp.setUniform(sp.u_rectOffsetTop,offsetY/maxSize);
+            sp.setUniformScalar(sp.u_rectOffsetLeft,0);
+            sp.setUniformScalar(sp.u_rectOffsetTop,offsetY/maxSize);
         } else {
-            sp.setUniform(sp.u_height,1);
-            sp.setUniform(sp.u_width,rw/rh);
+            sp.setUniformScalar(sp.u_height,1);
+            sp.setUniformScalar(sp.u_width,rw/rh);
             offsetX = (maxSize - rw)/2;
-            sp.setUniform(sp.u_rectOffsetLeft,offsetX/maxSize);
-            sp.setUniform(sp.u_rectOffsetTop,0);
+            sp.setUniformScalar(sp.u_rectOffsetLeft,offsetX/maxSize);
+            sp.setUniformScalar(sp.u_rectOffsetTop,0);
         }
 
 
         if (model.worldTransformDirty) {
-            const rect:Rect = Rect.fromPool();
             rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
-            const size:Size = Size.fromPool();
             size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
             const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
             model.modelViewProjectionMatrix.fromMat16(mvpHolder);
-            sp.setUniform(sp.u_vertexMatrix,mvpHolder.mat16);
+            sp.setUniformVector(sp.u_vertexMatrix,mvpHolder.mat16,true);
             mvpHolder.release();
-            rect.release();
-            size.release();
         } else {
-            sp.setUniform(sp.u_vertexMatrix,model.modelViewProjectionMatrix.mat16);
+            sp.setUniformVector(sp.u_vertexMatrix,model.modelViewProjectionMatrix.mat16);
         }
 
-        sp.setUniform(sp.u_alpha,model.getChildrenCount()===0?model.alpha:1);
+        sp.setUniformScalar(sp.u_alpha,model.getChildrenCount()===0?model.alpha:1);
         this._blender.setBlendMode(model.blendMode);
         this._glCachedAccessor.setDepthTest(model.depthTest);
 
@@ -642,20 +634,20 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const maxSize:number = Math.max(model.size.width,model.size.height);
         const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
-        sp.setUniform(sp.u_lineWidth,Math.min(model.lineWidth/maxSize,1));
-        sp.setUniform(sp.u_color,model.color.asGL());
+        sp.setUniformScalar(sp.u_lineWidth,Math.min(model.lineWidth/maxSize,1));
+        sp.setUniformVector(sp.u_color,model.color.asGL());
 
         if (model.fillGradient!==undefined) {
             model.fillGradient.setUniforms(sp);
             if (model.fillGradient.type==='LinearGradient') {
-                sp.setUniform(sp.u_fillType,FILL_TYPE.LINEAR_GRADIENT);
+                sp.setUniformScalar(sp.u_fillType,FILL_TYPE.LINEAR_GRADIENT);
             } else {
                 model.fillGradient.setUniforms(sp);
-                sp.setUniform(sp.u_fillType,FILL_TYPE.RADIAL_GRADIENT);
+                sp.setUniformScalar(sp.u_fillType,FILL_TYPE.RADIAL_GRADIENT);
             }
         } else {
-            sp.setUniform(sp.u_fillColor,model.fillColor.asGL());
-            sp.setUniform(sp.u_fillType,FILL_TYPE.COLOR);
+            sp.setUniformVector(sp.u_fillColor,model.fillColor.asGL());
+            sp.setUniformScalar(sp.u_fillType,FILL_TYPE.COLOR);
         }
     }
 

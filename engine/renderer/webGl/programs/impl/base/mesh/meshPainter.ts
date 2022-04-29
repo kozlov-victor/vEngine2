@@ -58,67 +58,67 @@ export class MeshPainter extends AbstractPainter {
     }
 
     public setModelMatrix(m:Readonly<MAT16>):void{
-        this.setUniform(this.u_modelMatrix,m);
+        this.setUniformVector(this.u_modelMatrix,m);
     }
 
     public setInverseTransposeModelMatrix(m:Readonly<MAT16>):void{
-        this.setUniform(this.u_inverseTransposeModelMatrix,m);
+        this.setUniformVector(this.u_inverseTransposeModelMatrix,m);
     }
 
     public setProjectionMatrix(m:Readonly<MAT16>):void{
-        this.setUniform(this.u_projectionMatrix,m);
+        this.setUniformVector(this.u_projectionMatrix,m);
     }
 
     public setTextureMatrix(m:Readonly<MAT16>):void{
-        this.setUniform(this.u_textureMatrix,m);
+        this.setUniformVector(this.u_textureMatrix,m);
     }
 
     public setAlpha(a:number):void{
-        this.setUniform(this.u_alpha,a);
+        this.setUniformScalar(this.u_alpha,a);
     }
 
     public setSpecular(s:number):void{
-        this.setUniform(this.u_specular,s);
+        this.setUniformScalar(this.u_specular,s);
     }
 
     public setReflectivity(r:number):void{
-        this.setUniform(this.u_reflectivity,r);
+        this.setUniformScalar(this.u_reflectivity,r);
     }
 
     public setTextureUsed(used:boolean):void{
-        this.setUniform(this.u_textureUsed,used);
+        this.setUniformScalar(this.u_textureUsed,used);
     }
 
     public setNormalsTextureUsed(used:boolean):void{
-        this.setUniform(this.u_normalsTextureUsed,used);
+        this.setUniformScalar(this.u_normalsTextureUsed,used);
     }
 
     public setSpecularTextureUsed(used:boolean):void{
-        this.setUniform(this.u_specularTextureUsed,used);
+        this.setUniformScalar(this.u_specularTextureUsed,used);
     }
 
     public setVertexColorUsed(used:boolean):void{
-        this.setUniform(this.u_vertexColorUsed,used);
+        this.setUniformScalar(this.u_vertexColorUsed,used);
     }
 
     public setCubeMapTextureUsed(used:boolean):void{
-        this.setUniform(this.u_cubeMapTextureUsed,used);
+        this.setUniformScalar(this.u_cubeMapTextureUsed,used);
     }
 
     public setHeightMapFactor(val:number):void{
-        this.setUniform(this.u_heightMapFactor,val);
+        this.setUniformScalar(this.u_heightMapFactor,val);
     }
 
     public setLightUsed(used:boolean):void{
-        this.setUniform(this.u_lightUsed,used);
+        this.setUniformScalar(this.u_lightUsed,used);
     }
 
     public setColor(c:Color):void{
-        this.setUniform(this.u_color,c.asGL());
+        this.setUniformVector(this.u_color,c.asGL());
     }
 
     public setColorMix(val:number):void{
-        this.setUniform(this.u_color_mix,val);
+        this.setUniformScalar(this.u_color_mix,val);
     }
 
     public override bind():void{

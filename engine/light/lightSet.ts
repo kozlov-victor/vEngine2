@@ -34,7 +34,7 @@ export class LightSet {
         map.put('u_numOfPointLights',this.pointLights.length);
         this.ambientLight.setUniformsToMap(map);
         this.material.setUniformsToMap(map);
-        for (let i:number=0;i<this.pointLights.length;i++){
+        for (let i:number=0;i<this.pointLights.length;i++) {
             const p:AbstractLight = this.pointLights[i];
             p.setUniformsToMap(map,i);
         }
