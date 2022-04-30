@@ -68,7 +68,7 @@ export class ProgressBar extends WidgetContainer {
 
     private updateProgressViewGeometry():void {
         const clientRect = this.getClientRect();
-        this.backgroundProgress.pos.set(clientRect);
+        this.backgroundProgress.pos.setFrom(clientRect);
         this.backgroundProgress.size.height = clientRect.height;
         this.backgroundProgress.size.width = clientRect.width*this._progress/this._max || 0.001;
     }

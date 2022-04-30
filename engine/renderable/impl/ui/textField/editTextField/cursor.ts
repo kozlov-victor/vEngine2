@@ -57,7 +57,7 @@ export class Cursor {
             this.cacheSurface.destroy();
         }
         this.cacheSurface = new DrawingSurface(this.game,rect);
-        this.cacheSurface.pos.set(rect);
+        this.cacheSurface.pos.setFrom(rect);
         this.parent.appendChildBefore(this.rowSetContainer,this.cacheSurface);
     }
 

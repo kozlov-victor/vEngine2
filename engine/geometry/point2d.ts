@@ -71,7 +71,7 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         return this;
     }
 
-    public set(another:IPoint2d):this{
+    public setFrom(another:IPoint2d):this{
         this.setXY(another.x,another.y);
         return this;
     }

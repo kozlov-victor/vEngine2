@@ -67,7 +67,7 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
         cloned._srcRect.set(this._srcRect);
         cloned.size.setFrom(this.size);
         cloned.borderRadius = this.borderRadius;
-        cloned.offset.set(this.offset);
+        cloned.offset.setFrom(this.offset);
         cloned.stretchMode = this.stretchMode;
         cloned.color = this.color.clone();
         cloned.lineWidth = this.lineWidth;

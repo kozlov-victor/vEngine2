@@ -33,8 +33,8 @@ export class MainScene extends Scene {
         const copy:Model3d = new Model3d(this.game,wire);
         copy.material.diffuseColor.setRGB(255,0,0);
         copy.material.diffuseColorMix = 1;
-        copy.pos.setXYZ(200,100, -100);
-        copy.size.setWH(100,100);
+        copy.pos.setFrom(obj.pos);
+        copy.size.setFrom(obj.size);
         copy.appendTo(container);
 
         const timer = this.setInterval(()=>{

@@ -162,21 +162,21 @@ export abstract class TransformableModel extends BaseModel implements ITransform
     }
 
     public setProps(props:ITransformableProps&IPositionableProps):void{
-        if (props.pos!==undefined) this.pos.set(props.pos);
+        if (props.pos!==undefined) this.pos.setFrom(props.pos);
         if (props.size!==undefined) this.size.setFrom(props.size);
-        if (props.scale!==undefined) this.scale.set(props.scale);
-        if (props.anchorPoint!==undefined) this.anchorPoint.set(props.anchorPoint);
-        if (props.transformPoint!==undefined) this.transformPoint.set(props.transformPoint);
+        if (props.scale!==undefined) this.scale.setFrom(props.scale);
+        if (props.anchorPoint!==undefined) this.anchorPoint.setFrom(props.anchorPoint);
+        if (props.transformPoint!==undefined) this.transformPoint.setFrom(props.transformPoint);
     }
 
     protected setClonedProperties(cloned:TransformableModel):void{
         cloned.angle = this.angle;
         cloned.angleVelocity = this.angleVelocity;
-        cloned.pos.set(this.pos);
-        cloned.scale.set(this.scale);
-        cloned.anchorPoint.set(this.anchorPoint);
-        cloned.skew.set(this.skew);
-        cloned.transformPoint.set(this.transformPoint);
+        cloned.pos.setFrom(this.pos);
+        cloned.scale.setFrom(this.scale);
+        cloned.anchorPoint.setFrom(this.anchorPoint);
+        cloned.skew.setFrom(this.skew);
+        cloned.transformPoint.setFrom(this.transformPoint);
         const angle3dCloned:AnglePoint3d = this.angle3d.clone(this);
         cloned.angle3d.x = angle3dCloned.x;
         cloned.angle3d.y = angle3dCloned.y;

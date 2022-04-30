@@ -32,7 +32,7 @@ export class MainScene extends Scene {
         this.addPropertyAnimation(anim1);
 
         const ellipse:Ellipse = new Ellipse(this.game);
-        ellipse.center.set(anim1.center);
+        ellipse.center.setFrom(anim1.center);
         ellipse.fillColor = Color.NONE;
         ellipse.color.setRGB(233,0,0);
         ellipse.radiusX = anim1.radiusX;
@@ -41,7 +41,7 @@ export class MainScene extends Scene {
         this.prependChild(ellipse);
 
         anim1.onProgress((p)=>{
-            ps.emissionPosition.set(p);
+            ps.emissionPosition.setFrom(p);
         });
 
 

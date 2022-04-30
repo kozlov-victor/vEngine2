@@ -14,7 +14,7 @@ export abstract class AbstractEntity extends SimpleGameObjectContainer {
 
     protected fire():void {
         const bullet = new Rectangle(this.game);
-        bullet.pos.set(this.pos);
+        bullet.pos.setFrom(this.pos);
         bullet.size.setWH(40,5);
         bullet.fillColor = ColorFactory.fromCSS(`#ffe406`);
         bullet.velocity.x = 150;

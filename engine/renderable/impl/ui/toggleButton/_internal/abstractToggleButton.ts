@@ -43,7 +43,7 @@ export abstract class AbstractToggleButton extends WidgetContainer {
     public override revalidate():void{
         super.revalidate();
         const clientRect = this.getClientRect();
-        this.backgroundChecked.pos.set(clientRect);
+        this.backgroundChecked.pos.setFrom(clientRect);
         this.backgroundChecked.size.setFrom(clientRect);
     }
 

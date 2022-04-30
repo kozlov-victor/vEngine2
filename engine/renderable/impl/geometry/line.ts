@@ -62,7 +62,7 @@ export class Line extends RenderableModel implements ICloneable<Line>, ILineProp
     }
 
     protected override setClonedProperties(cloned:Line):void{
-        cloned.pointTo.set(this.pointTo);
+        cloned.pointTo.setFrom(this.pointTo);
         super.setClonedProperties(cloned);
     }
 

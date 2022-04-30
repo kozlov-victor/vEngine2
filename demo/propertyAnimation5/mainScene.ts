@@ -49,7 +49,7 @@ export class MainScene extends Scene {
         this.addPropertyAnimation(anim1);
 
         anim1.onProgress((p,a)=>{
-            ps.emissionPosition.set(p);
+            ps.emissionPosition.setFrom(p);
             ps.particleAngle = {from:a-0.1,to:a+0.1};
         });
 

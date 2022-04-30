@@ -120,7 +120,7 @@ export class MoveByPathAnimation extends AbstractMoveAnimation {
         const lengthPassed:number = this.velocity * this.passedTime / 1000;
         const point:Optional<IPoint2d> = this._controlPointResolver.nextPointByLengthPassed(lengthPassed);
         if (point===undefined) return;
-        this.progressPoint.set(point);
+        this.progressPoint.setFrom(point);
         if (lengthPassed>=this._controlPointResolver.getTotalLength()) {
             this.reset();
             this.numOfLoopPassed++;

@@ -80,7 +80,7 @@ export class TextPath extends MarkableGameObjectContainer {
                 c.visible = false;
             } else {
                 c.visible = true;
-                c.pos.set(point);
+                c.pos.setFrom(point);
                 if (this._affectAngle) c.angle  = point.angle;
                 else c.angle = 0;
             }

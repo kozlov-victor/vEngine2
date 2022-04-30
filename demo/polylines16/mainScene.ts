@@ -37,7 +37,7 @@ export class MainScene extends Scene {
         mesh2.size.setWH(300,300);
         mesh2.addBehaviour(new DraggableBehaviour(this.game));
         mesh2.fillColor = polyLine1.color;
-        mesh2.pos.set(polyLine1.pos);
+        mesh2.pos.setFrom(polyLine1.pos);
         mesh2.alpha = 0.8;
         this.appendChild(mesh2);
 

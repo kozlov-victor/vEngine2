@@ -28,7 +28,7 @@ export class ScrollView extends WidgetContainer {
     public override revalidate():void {
         super.revalidate();
         const clientRect: Readonly<IRectJSON> = this.getClientRect();
-        this._constrainContainer.pos.set(clientRect);
+        this._constrainContainer.pos.setFrom(clientRect);
         this._constrainContainer.size.setFrom(clientRect);
         if (this._constrainContainer.size.isZero()) this._constrainContainer.size.setFrom(this.size);
         if (this._scrollContainerDelegate === undefined) {

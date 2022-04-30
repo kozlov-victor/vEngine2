@@ -404,7 +404,7 @@ export abstract class RenderableModel
         cloned.depthTest = this.depthTest;
         cloned.filters = [...this.filters];
         cloned.forceDrawChildrenOnNewSurface = this.forceDrawChildrenOnNewSurface;
-        cloned.velocity.set(this.velocity);
+        cloned.velocity.setFrom(this.velocity);
         cloned.passMouseEventsThrough = this.passMouseEventsThrough;
         if (this.getRigidBody() !== undefined) cloned.setRigidBody(this.getRigidBody()!.clone());
         this._behaviours.forEach(b => {

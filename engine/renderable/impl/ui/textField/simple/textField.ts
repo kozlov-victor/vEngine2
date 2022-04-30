@@ -109,7 +109,7 @@ export class TextField extends WidgetContainer {
         super.revalidate();
         let rectIsDirty:boolean = false;
         const clientRect:Readonly<IRectJSON> = this.getClientRect();
-        this.rowSetContainer.pos.set(clientRect);
+        this.rowSetContainer.pos.setFrom(clientRect);
         this.rowSetContainer.size.setFrom(clientRect);
         if (this.cacheSurface===undefined) {
             this.cacheSurface = new DrawingSurface(this.game,clientRect);
@@ -147,7 +147,7 @@ export class TextField extends WidgetContainer {
             this.rowSet = new TextRowSet(this.game, this.font, clientRect, this.textColor);
             this.rowSetContainer.appendChild(this.rowSet);
         }
-        this.rowSetContainer.pos.set(clientRect);
+        this.rowSetContainer.pos.setFrom(clientRect);
         this.rowSetContainer.size.setFrom(clientRect);
         this._applyText();
         if (this._autosize) {

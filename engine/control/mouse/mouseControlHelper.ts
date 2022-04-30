@@ -129,10 +129,10 @@ export class MouseControlHelper {
 
     public resolveSceneCoordinates(mousePoint:MousePoint,layerTransform:LayerTransformType):void{
         if (layerTransform===LayerTransformType.STICK_TO_CAMERA) {
-            mousePoint.sceneCoordinate.set(mousePoint.screenCoordinate);
+            mousePoint.sceneCoordinate.setFrom(mousePoint.screenCoordinate);
         } else {
             const worldPoint:Point2d = this.game.getCurrentScene().camera.screenToWorld(mousePoint.screenCoordinate);
-            mousePoint.sceneCoordinate.set(worldPoint);
+            mousePoint.sceneCoordinate.setFrom(worldPoint);
             worldPoint.release();
         }
     }

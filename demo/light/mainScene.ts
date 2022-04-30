@@ -51,7 +51,7 @@ export class MainScene extends Scene {
 
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e:ISceneMouseEvent)=>{
             pointLight.pos.setXY(e.screenX,e.screenY);
-            dirLight.pos.set(pointLight.pos);
+            dirLight.pos.setFrom(pointLight.pos);
         });
         spr.addBehaviour(new DraggableBehaviour(this.game));
 

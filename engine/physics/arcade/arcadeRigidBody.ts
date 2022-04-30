@@ -94,7 +94,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     }
 
     public nextTick():void {
-        this._oldPos.set(this._pos);
+        this._oldPos.setFrom(this._pos);
         const delta:number = this.game.getDeltaTime() / 1000;
         (this._collisionFlagsOld as CollisionFlags).copyFrom(this.collisionFlags as CollisionFlags);
         (this.collisionFlags as CollisionFlags).reset();
@@ -220,8 +220,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
 
     private setClonedProperties(body:ArcadeRigidBody):void {
         body._modelType = this._modelType;
-        body.velocity.set(this.velocity);
-        body.acceleration.set(this.acceleration);
+        body.velocity.setFrom(this.velocity);
+        body.acceleration.setFrom(this.acceleration);
         body._restitution = this._restitution;
         body._rect = this._rect.clone();
         body.groupNames = this.groupNames;

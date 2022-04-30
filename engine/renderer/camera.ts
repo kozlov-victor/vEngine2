@@ -76,7 +76,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
         }
         this._objFollowTo = gameObject;
         this._objFollowToPrevPos = new Point2d();
-        this._objFollowToPrevPos.set(this._objFollowTo.pos);
+        this._objFollowToPrevPos.setFrom(this._objFollowTo.pos);
         this.revalidate();
     }
 
@@ -92,7 +92,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
             if ((gameObject.pos.y - this._objFollowToPrevPos.y)>0) this._directionCorrection = DIRECTION_CORRECTION.DOWN;
             else if ((gameObject.pos.y - this._objFollowToPrevPos.y)<0) this._directionCorrection = DIRECTION_CORRECTION.UP;
 
-            this._objFollowToPrevPos.set(gameObject.pos);
+            this._objFollowToPrevPos.setFrom(gameObject.pos);
 
             const {width,height} = this.getRect();
             if (this._directionCorrection === DIRECTION_CORRECTION.RIGHT)
@@ -120,7 +120,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
             const wDiv2:number = w/2;
             const hDiv2:number = h/2;
 
-            pointToFollow.set(gameObject.pos);
+            pointToFollow.setFrom(gameObject.pos);
             pointToFollow.addXY(-wDiv2,-hDiv2);
             newPos.x = this.pos.x+(pointToFollow.x + this._cameraPosCorrection.current.x - this.pos.x)*Camera.FOLLOW_FACTOR.x;
             newPos.y = this.pos.y+(pointToFollow.y + this._cameraPosCorrection.current.y - this.pos.y)*Camera.FOLLOW_FACTOR.y;
@@ -139,7 +139,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
                 newPos.y = scene.size.height - h;
             }
 
-            this.pos.set(newPos);
+            this.pos.setFrom(newPos);
             newPos.release();
             pointToFollow.release();
 

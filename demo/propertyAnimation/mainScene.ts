@@ -18,7 +18,7 @@ export class MainScene extends Scene {
         model.addPropertyAnimation(anim1);
 
         const circle:Circle = new Circle(this.game);
-        circle.center.set(anim1.center);
+        circle.center.setFrom(anim1.center);
         circle.fillColor = Color.NONE;
         circle.color.setRGB(233,0,0);
         circle.radius = anim1.radius;

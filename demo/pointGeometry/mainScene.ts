@@ -23,7 +23,7 @@ export class MainScene extends Scene {
         this.ship.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         this.appendChild(this.ship);
         this.ship.anchorPoint.setXY(this.ship.size.width/2,this.ship.size.height/2);
-        this.ship.transformPoint.set(this.ship.anchorPoint);
+        this.ship.transformPoint.setFrom(this.ship.anchorPoint);
         const center:Vec2 = new Vec2(this.ship.pos.x,this.ship.pos.y);
         const point:Vec2 = new Vec2(0,0);
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(p:ISceneMouseEvent)=>{
