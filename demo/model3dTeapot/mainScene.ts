@@ -5,6 +5,8 @@ import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {TrackBall} from "../model3dFromFbx/trackBall";
 
 class Teapot extends AbstractPrimitive {
 
@@ -35,12 +37,15 @@ export class MainScene extends Scene {
         obj.size.setWH(100,100);
         obj.scale.setXYZ(20,40,15);
         this.appendChild(obj);
-        obj.addBehaviour(new DraggableBehaviour(this.game));
-        this.setInterval(()=>{
+        const timer = this.setInterval(()=>{
             obj.angle3d.y+=0.01;
             obj.angle3d.z+=0.01;
             obj.angle3d.x+=0.01;
         },20);
+        this.mouseEventHandler.once(MOUSE_EVENTS.click, _=>{
+            timer.kill();
+            new TrackBall(this,obj);
+        });
 
     }
 

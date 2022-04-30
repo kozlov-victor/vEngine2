@@ -6,6 +6,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Color} from "@engine/renderer/common/color";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
+import {TrackBall} from "../model3dFromFbx/trackBall";
 
 // // https://free3d.com/ru/3d-models/obj
 export class MainScene extends Scene {
@@ -29,14 +30,11 @@ export class MainScene extends Scene {
             texture: this.dataTexture,
             normalsTexture: this.dataTextureNormal,
         });
-        obj.pos.setXY(200,250);
+        obj.pos.setXY(300,250);
         obj.size.setWH(200,200);
         obj.scale.setXYZ(1);
         this.appendChild(obj);
-        obj.addBehaviour(new DraggableBehaviour(this.game));
-        this.setInterval(()=>{
-            obj.angle3d.y-=0.005;
-        },20);
+        new TrackBall(this,obj);
 
     }
 

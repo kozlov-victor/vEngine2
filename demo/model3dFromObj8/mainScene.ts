@@ -5,6 +5,8 @@ import {ICubeMapTexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {TrackBall} from "../model3dFromFbx/trackBall";
 
 
 export class MainScene extends Scene {
@@ -36,11 +38,14 @@ export class MainScene extends Scene {
         obj._children.forEach(c=>{
             (c as Mesh3d).material.reflectivity = 0.3;
         });
-        obj.addBehaviour(new DraggableBehaviour(this.game));
-        this.setInterval(()=>{
+        const timer = this.setInterval(()=>{
             obj.angle3d.x+=0.01;
             obj.angle3d.z-=0.01;
         },20);
+        this.mouseEventHandler.once(MOUSE_EVENTS.click, _=>{
+            timer.kill();
+            new TrackBall(this,obj);
+        });
 
 
     }

@@ -3,6 +3,8 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {TrackBall} from "../model3dFromFbx/trackBall";
 
 
 export class MainScene extends Scene {
@@ -22,10 +24,13 @@ export class MainScene extends Scene {
         obj.size.setWH(200,200);
         obj.scale.setXYZ(820);
         this.appendChild(obj);
-        obj.addBehaviour(new DraggableBehaviour(this.game));
-        this.setInterval(()=>{
+        const timer = this.setInterval(()=>{
             obj.angle3d.y-=0.01;
         },20);
+        this.mouseEventHandler.once(MOUSE_EVENTS.click, _=>{
+            timer.kill();
+            new TrackBall(this,obj);
+        });
 
     }
 
