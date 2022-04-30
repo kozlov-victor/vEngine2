@@ -47,8 +47,8 @@ const normalize = (a:Point3d):void=> {
 export class Knot extends AbstractPrimitive {
 
     constructor(
-        radius = 1,
-        tube = 0.4,
+        radius = 200,
+        tube = 50,
         tubularSegments = 64,
         radialSegments = 8,
         p = 2,
