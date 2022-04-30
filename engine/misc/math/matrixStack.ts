@@ -52,11 +52,11 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
     public translate(x:number, y:number, z:number = 0):this {
-        const res:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.makeTranslation(res, x, y, z);
+        const t:Mat16Holder = Mat16Holder.fromPool();
+        Mat4.makeTranslation(t, x, y, z);
         const m:Mat16Holder = this.getCurrentValue();
-        Mat4Special.multiplyTranslationByAny(res,res, m);
-        this.setCurrentValue(res);
+        Mat4Special.multiplyTranslationByAny(t,t, m);
+        this.setCurrentValue(t);
         m.release();
         return this;
     }
@@ -76,11 +76,11 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
     public skewX(angle:number):this {
-        const res:Mat16Holder = Mat16Holder.fromPool()!;
-        Mat4.makeXSkew(res,angle);
+        const t:Mat16Holder = Mat16Holder.fromPool()!;
+        Mat4.makeXSkew(t,angle);
         const m:Mat16Holder = this.getCurrentValue();
-        Mat4Special.multiplySkewXByAny(res,res, m);
-        this.setCurrentValue(res);
+        Mat4Special.multiplySkewXByAny(t,t, m);
+        this.setCurrentValue(t);
         m.release();
         return this;
     }
@@ -106,21 +106,21 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     }
 
     public rotateY(angleInRadians:number):this {
-        const res:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.makeYRotation(res,angleInRadians);
+        const t:Mat16Holder = Mat16Holder.fromPool();
+        Mat4.makeYRotation(t,angleInRadians);
         const m:Mat16Holder = this.getCurrentValue();
-        Mat4Special.multiplyRotationYByAny(res,res, m);
-        this.setCurrentValue(res);
+        Mat4Special.multiplyRotationYByAny(t,t, m);
+        this.setCurrentValue(t);
         m.release();
         return this;
     }
 
     public rotateZ(angleInRadians:number):this {
-        const res:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.makeZRotation(res,angleInRadians);
+        const t:Mat16Holder = Mat16Holder.fromPool();
+        Mat4.makeZRotation(t,angleInRadians);
         const m:Mat16Holder = this.getCurrentValue();
-        Mat4Special.multiplyRotationZByAny(res,res, m);
-        this.setCurrentValue(res);
+        Mat4Special.multiplyRotationZByAny(t,t, m);
+        this.setCurrentValue(t);
         m.release();
         return this;
     }

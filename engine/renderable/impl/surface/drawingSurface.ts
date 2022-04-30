@@ -11,7 +11,7 @@ import {Shape} from "@engine/renderable/abstract/shape";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
-import {IMatrixTransformable, MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
+import {IMatrixTransformable, MatrixStack} from "@engine/misc/math/matrixStack";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {isNumber, isString} from "@engine/misc/object";
 import {Font} from "@engine/renderable/impl/general/font/font";

@@ -2,7 +2,7 @@ import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
+import {MatrixStack} from "@engine/misc/math/matrixStack";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {MathEx} from "@engine/misc/math/mathEx";

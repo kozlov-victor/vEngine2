@@ -1,6 +1,6 @@
 import {DebugError} from "@engine/debug/debugError";
 import {FILL_TYPE, SHAPE_TYPE, ShapePainter} from "@engine/renderer/webGl/programs/impl/base/shape/shapePainter";
-import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
+import {MatrixStack} from "@engine/misc/math/matrixStack";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {Game, SCALE_STRATEGY} from "@engine/core/game";

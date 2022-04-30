@@ -11,7 +11,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
-import {IMatrixTransformable} from "@engine/renderer/webGl/base/matrixStack";
+import {IMatrixTransformable} from "@engine/misc/math/matrixStack";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/misc/math/mat4";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";

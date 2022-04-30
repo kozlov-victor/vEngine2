@@ -5,7 +5,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ISize} from "@engine/geometry/size";
 import {FrameBufferStack} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/misc/math/mat4";
-import {MatrixStack} from "@engine/renderer/webGl/base/matrixStack";
+import {MatrixStack} from "@engine/misc/math/matrixStack";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {LruMap} from "@engine/misc/collection/lruMap";

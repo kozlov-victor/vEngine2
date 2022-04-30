@@ -9,17 +9,23 @@ import {ScriptKind} from 'typescript';
 //language=TypeScript
 const code = `
 
-// class A {
-//
-//     protected a:number = 1 + 4;
-//
-//     private static testMethod(param1:string,param2:string):string {
-//        const s:string = "str0";
-//        const s1:string = "str1" + "str2";
-//        return s;
-//     }
-// }
-const s1:string = "str1" + "str2";
+class A {
+
+    //protected a:string = 1 + 4 + "3";
+
+    protected doIt():void {
+        let a:number = 2;
+        a=a+2;
+        return;
+    }
+
+    // private static testMethod(param1:number,param2:string):string {
+    //    const s:string = "str0";
+    //    const s1:string = "str1" + "str2" + param1;
+    //    return s+8+s1 + param1;
+    // }
+}
+//const s1:string = "str1" + "str2".substr(0,1);
 `;
 
 const sourceFile = ts.createSourceFile('temp.ts', code,ts.ScriptTarget.ESNext,false,ScriptKind.TSX);
@@ -86,7 +92,7 @@ const emitPropertyDeclaration = (node:ts.PropertyDeclaration):void=>{
     codeBuilder.print(propName);
     if (node.initializer) {
         codeBuilder.print('=');
-        node.initializer.forEachChild(visitNode);
+        node.forEachChild(visitNode);
     }
     codeBuilder.println(';');
 }
@@ -99,15 +105,15 @@ const emitVariableDeclaration = (node:ts.VariableDeclaration):void=>{
     codeBuilder.print(varName);
     if (node.initializer) {
         codeBuilder.print('=');
-        const children = [];
-        for (let i=0;i<node.getChildCount(sourceFile);i++) {
-            children.push(node.getChildAt(i,sourceFile));
+        if (node.initializer.getChildCount(sourceFile)) {
+            node.initializer.forEachChild(visitNode);
+        } else {
+            codeBuilder.print(node.initializer.getText(sourceFile));
         }
-        //children.pop();
-        //children.pop();
-        children.forEach(visitNode);
+    } else {
+        node.forEachChild(visitNode);
     }
-    // codeBuilder.println(';');
+    codeBuilder.println(';');
 }
 
 const emitModifiers = (node: ts.ClassDeclaration | ts.MethodDeclaration | ts.PropertyDeclaration, modifiers: ts.NodeArray<ts.Modifier> | undefined):void=> {
@@ -166,6 +172,18 @@ function visitNode(node:ts.Node) {
         case ts.SyntaxKind.ReturnStatement: {
             codeBuilder.print('return ');
             node.forEachChild(visitNode);
+            codeBuilder.println(';');
+            break;
+        }
+        case ts.SyntaxKind.PropertyAccessExpression: {
+            //codeBuilder.print('.');
+            node.forEachChild(visitNode);
+            break;
+        }
+        case ts.SyntaxKind.CallExpression: {
+            codeBuilder.print('(');
+            node.forEachChild(visitNode);
+            codeBuilder.print(')');
             break;
         }
         case ts.SyntaxKind.StringLiteral: {
@@ -190,6 +208,15 @@ function visitNode(node:ts.Node) {
         }
         case ts.SyntaxKind.FirstTemplateToken: {
             node.forEachChild(visitNode);
+            break;
+        }
+        case ts.SyntaxKind.FirstAssignment: {
+            node.forEachChild(visitNode);
+            break;
+        }
+        case ts.SyntaxKind.ProtectedKeyword:
+        case ts.SyntaxKind.StringKeyword:
+        case ts.SyntaxKind.NumberKeyword: {
             break;
         }
         default: {
