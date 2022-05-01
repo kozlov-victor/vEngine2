@@ -7,6 +7,9 @@ export class Device {
     public static readonly isIPhone:boolean = navigator.platform.toLowerCase().indexOf('iphone')>-1;
     public static readonly embeddedEngine:boolean = navigator.userAgent==='vEngine';
 
+    public static getScreenResolution():[number,number]{
+        return [globalThis.innerWidth,globalThis.innerHeight];
+    }
 
     public static logInfo():void {
         console.log({

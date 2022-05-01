@@ -5,7 +5,7 @@ import {MainScene} from "./mainScene";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 
-const game = new Game({width:1024,height:600,scaleStrategy: SCALE_STRATEGY.FIT});
+const game = new Game({width:1024,height:600,scaleStrategy: SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN});
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);

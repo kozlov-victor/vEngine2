@@ -8,7 +8,7 @@ import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 const W:number = Wheel.CELL_WIDTH*3+Wheel.CELL_PADDING*2; // 745;
 const H:number = 433;
-const game:Game = new Game({width:W,height:H,scaleStrategy:SCALE_STRATEGY.STRETCH});
+const game:Game = new Game({width:W,height:H,scaleStrategy:SCALE_STRATEGY.STRETCH_CANVAS_TO_SCREEN});
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);

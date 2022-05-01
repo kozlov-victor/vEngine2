@@ -16,6 +16,7 @@ import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/misc/math/mat4";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import Mat16Holder = Mat4.Mat16Holder;
+import {ScaleStrategyFactory} from "@engine/renderer/abstract/scaleStrategy/factory/ScaleStrategyFactory";
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>Promise<void>;
@@ -47,6 +48,8 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     private _fullScreenRequested:boolean = false;
     private _destroyed:boolean = false;
+
+    private _scaleStrategy = ScaleStrategyFactory.getScaleStrategy(this.game.scaleStrategy);
 
     protected constructor(protected game:Game){
         this.game = game;
@@ -171,49 +174,8 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     }
 
     protected onResize():void {
-        const container:HTMLElement = this.container;
-
-        const [innerWidth,innerHeight] = AbstractRenderer.getScreenResolution();
-
-        if (this.game.scaleStrategy===SCALE_STRATEGY.NO_SCALE) return;
-        else if (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH) {
-            container.style.width = `${innerWidth}px`;
-            container.style.height = `${innerHeight}px`;
-            (this.viewPortSize as Size).setWH(innerWidth,innerHeight);
-            this.game.scale.setXY(innerWidth/this.game.size.width,innerHeight/this.game.size.height);
-            this.game.pos.setXY(0);
-        } else {
-            // else FIT
-            const canvasRatio:number = this.game.size.height / this.game.size.width;
-            const windowRatio:number = innerHeight / innerWidth;
-            let width:number;
-            let height:number;
-
-            if (windowRatio < canvasRatio) {
-                height = innerHeight;
-                width = height / canvasRatio;
-            } else {
-                width = innerWidth;
-                height = width * canvasRatio;
-            }
-
-            this.game.scale.setXY(width / this.game.size.width, height / this.game.size.height);
-            this.game.pos.setXY(
-                (innerWidth - width) / 2,
-                (innerHeight - height) / 2
-            );
-
-            this.container.style.width = width + 'px';
-            this.container.style.height = height + 'px';
-            this.container.style.marginTop = `${this.game.pos.y}px`;
-
-            (this.viewPortSize as Size).setWH(width,height);
-        }
-
-    }
-
-    private static getScreenResolution():[number,number]{
-        return [globalThis.innerWidth,globalThis.innerHeight];
+        const container = this.container as HTMLCanvasElement;
+        this._scaleStrategy.onResize(container,this.game,this);
     }
 
     private _requestFullScreen():boolean {

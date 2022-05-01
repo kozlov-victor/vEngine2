@@ -524,7 +524,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     protected override onResize(): void {
         super.onResize();
-        if (this._pixelPerfectMode && (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH || this.game.scaleStrategy===SCALE_STRATEGY.FIT)) {
+        if (this._pixelPerfectMode && (this.game.scaleStrategy===SCALE_STRATEGY.STRETCH_CANVAS_TO_SCREEN || this.game.scaleStrategy===SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN)) {
             this.container.width = this.viewPortSize.width;
             this.container.height = this.viewPortSize.height;
         } else {

@@ -18,8 +18,8 @@ import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitte
 
 export const enum SCALE_STRATEGY {
     NO_SCALE,
-    FIT,
-    STRETCH
+    FIT_CANVAS_TO_SCREEN,
+    STRETCH_CANVAS_TO_SCREEN
 }
 
 export interface IGameConstructorParams {
@@ -42,7 +42,7 @@ export class Game {
 
     public readonly loadEventHandler = new EventEmitterDelegate<GAME_EVENTS,{taskQueue:TaskQueue}>(this);
 
-    constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT, containerElement}:IGameConstructorParams = {}){
+    constructor({width = 320,height = 240,scaleStrategy = SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN, containerElement}:IGameConstructorParams = {}){
         Game._instance = this;
         if (DEBUG) (window as unknown as {game:Game}).game = this;
         (this.size as Size).setWH(width,height);
@@ -73,7 +73,7 @@ export class Game {
 
     public fps:number = 0;
 
-    private readonly _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT;
+    private readonly _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN;
 
     private readonly _startedTime:number = 0;
     private _lastTime:number = 0;
