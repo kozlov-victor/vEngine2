@@ -46,7 +46,17 @@ vec4 getInterpolatedGradientColor(float position) {
 
 
 vec4 getFillColor(){
-    if (u_fillType==FILL_TYPE_COLOR) return vec4(
+    if (u_fillType==FILL_TYPE_TEXTURE) {
+        float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2];
+        float ty = (v_position.y-u_rectOffsetTop)/u_height*u_texRect[3];
+        vec4 txVec;
+        if (u_stretchMode==STRETCH_MODE_STRETCH) txVec = mixTextureColorWithTint(getStretchedImage(tx,ty),u_color);
+        else if (u_stretchMode==STRETCH_MODE_REPEAT) txVec = mixTextureColorWithTint(getRepeatedImage(tx,ty),u_color);
+        else txVec = ERROR_COLOR;
+        if (txVec.a==ZERO) discard;
+        return txVec;
+    }
+    else if (u_fillType==FILL_TYPE_COLOR) return vec4(
         u_fillColor.r*u_fillColor.a,
         u_fillColor.g*u_fillColor.a,
         u_fillColor.b*u_fillColor.a,
@@ -72,16 +82,6 @@ vec4 getFillColor(){
         if (radiusTopRight>maxRadius) maxRadius = radiusTopRight;
         if (radiusBottomRight>maxRadius) maxRadius = radiusBottomRight;
         return getInterpolatedGradientColor(r/maxRadius);
-    }
-    else if (u_fillType==FILL_TYPE_TEXTURE) {
-        float tx = (v_position.x-u_rectOffsetLeft)/u_width*u_texRect[2];
-        float ty = (v_position.y-u_rectOffsetTop)/u_height*u_texRect[3];
-        vec4 txVec;
-        if (u_stretchMode==STRETCH_MODE_STRETCH) txVec = mixTextureColorWithTint(getStretchedImage(tx,ty),u_color);
-        else if (u_stretchMode==STRETCH_MODE_REPEAT) txVec = mixTextureColorWithTint(getRepeatedImage(tx,ty),u_color);
-        else txVec = ERROR_COLOR;
-        if (txVec.a==ZERO) discard;
-        return txVec;
     }
     else return ERROR_COLOR;
 }

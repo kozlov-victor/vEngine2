@@ -1,8 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
-import {Resource} from "@engine/resources/resourceDecorators";
 import {Font} from "@engine/renderable/impl/general/font/font";
-import {Color} from "@engine/renderer/common/color";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
@@ -22,8 +20,6 @@ export class MainScene extends Scene {
             this.game.getRenderer<WebGlRenderer>().requestFullScreen();
         });
 
-        // https://www.dwitter.net/d/23732
-        // https://www.dwitter.net/d/23826
 
         const surface:DrawingSurface = new DrawingSurface(this.game,this.game.size);
         this.surface = surface;

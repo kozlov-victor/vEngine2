@@ -327,10 +327,6 @@ export namespace Mat4Special {
      */
     export const multiplyAnyByZtoW = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
 
-        if (bHolder.identityFlag && out===aHolder) {
-            return;
-        }
-
         // r[0] = a[0];
         // r[1] = a[1];
         // r[2] = a[2];
@@ -359,6 +355,7 @@ export namespace Mat4Special {
         const b11 = b[11];
         const a2 = a[2], a3 = a[3], a6 = a[6], a7 = a[7], a10 = a[10], a14 = a[14], a15 = a[15];
         r.set(a);
+
         r[ 3] = a3  + a2  * b11;
         r[ 7] = a7  + a6  * b11;
         r[11] = a15 + a10 * b11;

@@ -111,7 +111,6 @@ export namespace Mat4 {
         );
     };
 
-
     export const ortho = (
         out:Mat16Holder,
         left:n, right:n,

@@ -1,5 +1,7 @@
 precision mediump float;
 
+#define FUDGE_FACTOR 1.
+
 attribute vec4 a_position;
 attribute vec2 a_texCoord;
 attribute vec3 a_normal;
@@ -26,15 +28,14 @@ void main() {
 
     v_position = u_projectionMatrix * u_modelMatrix * position;
 
-    // compute the vector of the surface to the light
-    // and pass it to the fragment shader
+    // the vector of the surface to the light
     v_surfaceToLight = vec3(600,200,1000) - vec3(u_modelMatrix * position);
 
-    // compute the vector of the surface to the view/camera
-    // and pass it to the fragment shader
+    // the vector of the surface to the view/camera
     v_surfaceToView = normalize(vec3(500,300,1000) - vec3(u_modelMatrix * position));
 
     v_vertexColor = a_vertexColor;
 
-    gl_Position = v_position;
+    float zToDivideBy = 1.0 + v_position.z * FUDGE_FACTOR;
+    gl_Position = vec4(v_position.xy / zToDivideBy, v_position.zw);
 }
