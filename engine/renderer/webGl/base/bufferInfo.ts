@@ -27,6 +27,7 @@ export interface IBufferInfoDescription {
     texVertexInfo?:IVertexArrayInfo;
     colorVertexInfo?:IVertexArrayInfo;
     normalInfo?:IVertexArrayInfo;
+    miscBuffersInfo?:IVertexArrayInfo[];
     drawMethod:DRAW_METHOD;
 }
 
@@ -68,6 +69,7 @@ export class BufferInfo {
     public texVertexBuffer:Optional<VertexBuffer>;
     public colorVertexBuffer:Optional<VertexBuffer>;
     public normalBuffer:Optional<VertexBuffer>;
+    public miscVertexBuffers:VertexBuffer[] = [];
     public drawMethod:GLenum;
     public numOfElementsToDraw:number = 0;
 
@@ -83,10 +85,7 @@ export class BufferInfo {
         if (DEBUG && !description.posVertexInfo)
             throw new DebugError(`can not create BufferInfo: posVertexInfo is mandatory`);
         this.posVertexBuffer = new VertexBuffer(gl);
-        this.posVertexBuffer.setData(
-            description.posVertexInfo.array,
-            description.posVertexInfo
-        );
+        this.posVertexBuffer.setData(description.posVertexInfo);
 
         if (description.posIndexInfo) {
             this.posIndexBuffer = new IndexBuffer(gl);
@@ -95,27 +94,27 @@ export class BufferInfo {
 
         if (description.texVertexInfo) {
             this.texVertexBuffer = new VertexBuffer(gl);
-            this.texVertexBuffer.setData(
-                description.texVertexInfo.array,
-                description.texVertexInfo
-            );
+            this.texVertexBuffer.setData(description.texVertexInfo);
         }
 
         if (description.colorVertexInfo) {
             this.colorVertexBuffer = new VertexBuffer(gl);
-            this.colorVertexBuffer.setData(
-                description.colorVertexInfo.array,
-                description.colorVertexInfo
-            );
+            this.colorVertexBuffer.setData(description.colorVertexInfo);
         }
 
         if (description.normalInfo) {
             this.normalBuffer = new VertexBuffer(gl);
-            this.normalBuffer.setData(
-                description.normalInfo.array,
-                description.normalInfo
-            );
+            this.normalBuffer.setData(description.normalInfo);
         }
+
+        if (description.miscBuffersInfo) {
+            for (const d of description.miscBuffersInfo) {
+                const buffer = new VertexBuffer(gl);
+                buffer.setData(d);
+                this.miscVertexBuffers.push(buffer);
+            }
+        }
+
     }
 
     public bind(program:ShaderProgram):void{
@@ -125,6 +124,7 @@ export class BufferInfo {
         if (this.texVertexBuffer!==undefined) program.bindVertexBuffer(this.texVertexBuffer);
         if (this.normalBuffer!==undefined) program.bindVertexBuffer(this.normalBuffer);
         if (this.colorVertexBuffer!==undefined) program.bindVertexBuffer(this.colorVertexBuffer);
+        for (const b of this.miscVertexBuffers) program.bindVertexBuffer(b);
     }
 
     public unbind(program:ShaderProgram):void {
@@ -134,6 +134,7 @@ export class BufferInfo {
         if (this.texVertexBuffer !== undefined) program.unbindVertexBuffer(this.texVertexBuffer);
         if (this.normalBuffer !== undefined) program.unbindVertexBuffer(this.normalBuffer);
         if (this.colorVertexBuffer !== undefined) program.unbindVertexBuffer(this.colorVertexBuffer);
+        for (const b of this.miscVertexBuffers) program.unbindVertexBuffer(b);
     }
 
     public destroy():void{
@@ -142,6 +143,7 @@ export class BufferInfo {
         if (this.texVertexBuffer!==undefined) this.texVertexBuffer.destroy();
         if (this.normalBuffer!==undefined) this.normalBuffer.destroy();
         if (this.colorVertexBuffer!==undefined) this.colorVertexBuffer.destroy();
+        for (const b of this.miscVertexBuffers) b.destroy();
         this._destroyed = true;
     }
 

@@ -3,21 +3,22 @@ import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGene
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {ShaderProgram} from "@engine/renderer/webGl/base/shaderProgram";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/bufferInfo";
-import {Plane} from "@engine/renderer/webGl/primitives/plane";
 
 // http://tmtg.nl/glesjs/glesjs-demo/game.js
 
 export class BatchPainter extends AbstractPainter {
 
-    private readonly aIdx: string;
+    private readonly a_idx: string;
+    private readonly a_color: string;
 
     constructor(gl:WebGLRenderingContext) {
         super(gl);
         const gen: ShaderGenerator = new ShaderGenerator();
 
-        this.aIdx = gen.addAttribute(GL_TYPE.FLOAT,'a_idx');
+        this.a_idx = gen.addAttribute(GL_TYPE.FLOAT,'a_idx');
+        this.a_color = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_color');
         //this.u_textureMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_textureMatrix');
-        //gen.addVarying(GL_TYPE.FLOAT_VEC2,'v_texCoord');
+        gen.addVarying(GL_TYPE.FLOAT_VEC4,'v_color');
 
         //language=GLSL
         gen.setVertexMainFn(`
@@ -58,6 +59,7 @@ export class BatchPainter extends AbstractPainter {
                 //gl_Position = vec4(pos,0.,0.);
                 //v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
                 //v_texCoord = a_idx;
+                v_color = a_color;
             }
         `);
 
@@ -66,7 +68,7 @@ export class BatchPainter extends AbstractPainter {
             precision mediump float;
             void main(){
                 // gl_FragColor = texture2D(texture, v_texCoord);
-                gl_FragColor = vec4(1.,0.,1.,1.);
+                gl_FragColor = v_color;
             }
         `);
         this.program = new ShaderProgram(
@@ -80,14 +82,32 @@ export class BatchPainter extends AbstractPainter {
             // triangle 2
             0, 2, 3,
         ]);
+        const colorArray = new Float32Array([
+            // triangle 1
+            0.5,0.6,0.7,1,
+            0.1,0.7,0.2,1,
+            0.6,0.5,0.4,1,
+            // triangle 2
+            0.7,0.1,0.2,1,
+            0.1,0.4,0.6,1,
+            0.3,0.1,0.7,1,
+        ]);
+
         const bufferInfoDesc:IBufferInfoDescription = {
             posVertexInfo:{
-                array:vertexArray, type:this.gl.FLOAT,
-                size:1, attrName:this.aIdx,
+                array:vertexArray, type:gl.FLOAT,
+                size:1, attrName:this.a_idx,
             },
+            miscBuffersInfo: [
+                {
+                    array:colorArray, type:gl.FLOAT,
+                    size:4, attrName:this.a_color,
+                }
+            ],
             drawMethod:DRAW_METHOD.TRIANGLES
         };
         this.bufferInfo = new BufferInfo(this.gl,bufferInfoDesc);
+
     }
 
 }
