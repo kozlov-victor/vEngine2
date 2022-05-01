@@ -54,8 +54,8 @@ const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
 
 const SCENE_DEPTH:number = 1000;
 
-// const zToWMatrix:Mat16Holder = Mat16Holder.create();
-// Mat4.makeZToWMatrix(zToWMatrix,1);
+const zToWMatrix:Mat16Holder = Mat16Holder.create();
+Mat4.makeZToWMatrix(zToWMatrix,1);
 
 const lruCache = new LruMap<string, Mat4.Mat16Holder>();
 
@@ -84,7 +84,7 @@ const makeModelViewProjectionMatrix = (rect:Rect,viewSize:Size,matrixStack:Matri
     Mat4Special.multiplyScaleByAny(matrixResult,scaleMatrix,translationMatrix);
     Mat4.matrixMultiply(matrixResult,matrixResult, matrixStack.getCurrentValue());
     Mat4Special.multiplyAnyByProjection(matrixResult,matrixResult, projectionMatrix);
-    //Mat4Special.multiplyAnyByZtoW(matrixResult,matrixResult, zToWMatrix);
+    Mat4Special.multiplyAnyByZtoW(matrixResult,matrixResult, zToWMatrix);
 
     return matrixResult;
 };
@@ -212,8 +212,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const orthoProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
         const currViewSize:ISize = this._currFrameBufferStack.getCurrentTargetSize();
         Mat4.ortho(orthoProjectionMatrix,0,currViewSize.width,0,currViewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
-        // const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        // Mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
+        const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+        Mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
 
         const inverseTransposeModelMatrix:Mat16Holder = Mat16Holder.fromPool();
         Mat4.inverse(inverseTransposeModelMatrix,modelMatrix);
@@ -221,7 +221,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         mp.setModelMatrix(modelMatrix.mat16);
         mp.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
-        mp.setProjectionMatrix(orthoProjectionMatrix.mat16);
+        mp.setProjectionMatrix(zToWProjectionMatrix.mat16);
         mp.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
 
         const isTextureUsed:boolean = mesh.texture!==undefined;
@@ -265,6 +265,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         mp.draw();
         //this._gl.disable(this._gl.CULL_FACE);
         orthoProjectionMatrix.release();
+        zToWProjectionMatrix.release();
         inverseTransposeModelMatrix.release();
     }
 
@@ -280,12 +281,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const orthoProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
         const currViewSize:ISize = this._currFrameBufferStack.getCurrentTargetSize();
         Mat4.ortho(orthoProjectionMatrix,0,currViewSize.width,0,currViewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
-        // const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        // Mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
+        const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
+        Mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
 
         mp.setModelMatrix(modelMatrix.mat16);
         mp.setInverseTransposeModelMatrix(IDENTITY);
-        mp.setProjectionMatrix(orthoProjectionMatrix.mat16);
+        mp.setProjectionMatrix(zToWProjectionMatrix.mat16);
         mp.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
         mp.setTextureUsed(false);
         mp.attachTexture('u_texture',this._nullTexture);
@@ -308,6 +309,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._glCachedAccessor.setDepthTest(mesh.depthTest);
         this._blender.setBlendMode(mesh.blendMode);
         mp.draw();
+        zToWMatrix.release();
         orthoProjectionMatrix.release();
     }
 

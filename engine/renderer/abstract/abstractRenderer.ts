@@ -176,6 +176,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     protected onResize():void {
         const container = this.container as HTMLCanvasElement;
         this._scaleStrategy.onResize(container,this.game,this);
+        window.scrollTo(0, 1);
     }
 
     private _requestFullScreen():boolean {

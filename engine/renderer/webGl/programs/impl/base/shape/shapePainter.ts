@@ -55,16 +55,10 @@ export class ShapePainter extends AbstractPainter {
         super(gl);
         const gen:ShaderGenerator = new ShaderGenerator();
         // language=glsl
-        gen.prependVertexCodeBlock(`
-            #define FUDGE_FACTOR 1.
-        `);
-        // language=glsl
         gen.setVertexMainFn(`
             void main(){
                 v_position = a_position;
-                vec4 p = u_vertexMatrix * a_position;
-                float zToDivideBy = 1.0 + p.z * FUDGE_FACTOR;
-                gl_Position = vec4(p.xy / zToDivideBy, p.zw);
+                gl_Position = u_vertexMatrix * a_position;
             }
         `);
         // base uniforms and attrs

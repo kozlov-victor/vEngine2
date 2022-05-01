@@ -32,15 +32,21 @@ export class BatchPainter extends AbstractPainter {
                 }
                 gl_Position = pos;
                 //v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
+                v_texCoord = pos;
             }
         `);
 
         //language=GLSL
         gen.setFragmentMainFn(`
             void main(){
-                gl_FragColor = texture2D(texture, v_texCoord);
+                // gl_FragColor = texture2D(texture, v_texCoord);
+                gl_FragColor = vec4(1.,0.,0.,1.);
             }
         `);
+    }
+
+    public override bind():void{
+
     }
 
 }

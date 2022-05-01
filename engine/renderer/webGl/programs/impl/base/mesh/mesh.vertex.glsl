@@ -1,7 +1,5 @@
 precision mediump float;
 
-#define FUDGE_FACTOR 1.
-
 attribute vec4 a_position;
 attribute vec2 a_texCoord;
 attribute vec3 a_normal;
@@ -36,6 +34,5 @@ void main() {
 
     v_vertexColor = a_vertexColor;
 
-    float zToDivideBy = 1.0 + v_position.z * FUDGE_FACTOR;
-    gl_Position = vec4(v_position.xy / zToDivideBy, v_position.zw);
+    gl_Position = v_position;
 }

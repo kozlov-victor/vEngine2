@@ -9,7 +9,7 @@ import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
-const game = new Game({width:window.innerWidth,height:window.innerHeight});
+const game = new Game({width:1280,height:720});
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);
