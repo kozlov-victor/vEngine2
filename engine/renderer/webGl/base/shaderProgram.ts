@@ -96,10 +96,10 @@ export class ShaderProgram {
         this._gl.vertexAttribPointer(
             attrLocation,
             buffer.getItemSize(),
-            buffer.getItemType(), // type of data
-            false,  // if the content is normalized [0..1] vectors
-            0,      // number of bytes to skip in between elements
-            0       // offsets to the first element
+            buffer.getItemType(),  // type of data
+            false,       // if the content is normalized [0..1] vectors
+            buffer.getStride(),    // number of bytes to skip in between elements
+            buffer.getOffset()     // offsets to the first element
         );
     }
 

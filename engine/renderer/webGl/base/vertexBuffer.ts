@@ -81,4 +81,12 @@ export class VertexBuffer extends AbstractBuffer {
         return this.dataLength;
     }
 
+    public getStride():number {
+        return this.vertexArrayInfo.stride ?? 0;
+    }
+
+    public getOffset():number {
+        return this.vertexArrayInfo.offset ?? 0;
+    }
+
 }

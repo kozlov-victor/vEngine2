@@ -15,7 +15,7 @@ export class BatchPainter extends AbstractPainter {
         super(gl);
         const gen: ShaderGenerator = new ShaderGenerator();
 
-        this.aIdx = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_idx');
+        this.aIdx = gen.addAttribute(GL_TYPE.FLOAT,'a_idx');
         //this.u_textureMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_textureMatrix');
         //gen.addVarying(GL_TYPE.FLOAT_VEC2,'v_texCoord');
 
@@ -23,20 +23,16 @@ export class BatchPainter extends AbstractPainter {
         gen.setVertexMainFn(`
             precision mediump float;
             void main(){
-//                vec2 pos;
-//                // 0 = topleft
-//                // 1 = bottomleft
-//                // 2 = topright
-//                // 3 = bottomright
-//                if (a_idx==0.) {
-//                    pos = vec2(0.0, 0.0);
-//                } else if (a_idx==1.) {
-//                    pos = vec2(1.0, 0.0);
-//                } else if (a_idx==2.) {
-//                    pos = vec2(0.0, 1.0);
-//                } else {
-//                    pos = vec2(1.0, 1.0);
-//                }
+                vec2 pos;
+                if (int(a_idx)==0) {
+                    pos = vec2(0.0, 0.0);
+                } else if (int(a_idx)==1) {
+                    pos = vec2(0.0, 1.0);
+                } else if (int(a_idx)==2) {
+                    pos = vec2(1.0, 0.0);
+                } else {
+                    pos = vec2(1.0, 1.0);
+                }
 
                 mat4 vertexMatrix = mat4(
                      0.38109755516052246,
@@ -57,7 +53,7 @@ export class BatchPainter extends AbstractPainter {
                      1.
                 );
 
-                gl_Position = vertexMatrix * a_idx;
+                gl_Position = vertexMatrix * vec4(pos,0.,1.);
 
                 //gl_Position = vec4(pos,0.,0.);
                 //v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
@@ -78,22 +74,16 @@ export class BatchPainter extends AbstractPainter {
             gen.getVertexSource(),
             gen.getFragmentSource()
         );
-        const arr = new Float32Array([
+        const vertexArray = new Float32Array([
             // triangle 1
-            0, 0, // 0
-            0, 1, // 1
-            1, 1, // 3
-
+            0, 1, 3,
             // triangle 2
-            0, 0, // 0
-            1, 0, // 2
-            1, 1, // 3
-
+            0, 2, 3,
         ]);
         const bufferInfoDesc:IBufferInfoDescription = {
             posVertexInfo:{
-                array:arr, type:this.gl.FLOAT,
-                size:2, attrName:this.aIdx
+                array:vertexArray, type:this.gl.FLOAT,
+                size:1, attrName:this.aIdx,
             },
             drawMethod:DRAW_METHOD.TRIANGLES
         };
