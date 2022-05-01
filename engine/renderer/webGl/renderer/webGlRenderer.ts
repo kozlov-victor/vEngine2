@@ -35,6 +35,7 @@ import {LruMap} from "@engine/misc/collection/lruMap";
 import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import IDENTITY = Mat4.IDENTITY;
+import {BatchPainter} from "@engine/renderer/webGl/programs/impl/batch/batchPainter";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -123,6 +124,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private _shapePainterHolder = new InstanceHolder(ShapePainter);
     private _coloredRectPainterHolder = new InstanceHolder(SimpleColoredRectPainter);
     private _meshPainterHolder = new InstanceHolder(MeshPainter);
+    private _experimentalBatchPainterHolder = new InstanceHolder(BatchPainter);
 
     private _nullTexture:Texture;
     private _nullCubeMapTexture:CubeMapTexture;
@@ -198,6 +200,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sp.attachTexture('texture',texture);
         sp.draw();
 
+    }
+
+    public drawExperimentalBatch():void{
+        const bp = this._experimentalBatchPainterHolder.getInstance(this._gl);
+        bp.draw();
     }
 
     public drawMesh3d(mesh:Mesh3d):void {

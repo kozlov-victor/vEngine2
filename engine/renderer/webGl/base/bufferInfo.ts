@@ -10,7 +10,7 @@ import {Optional} from "@engine/core/declarations";
 
 export interface IVertexArrayInfo {
     array:Float32Array;
-    type:number;
+    type:number; // // BYTE, FLOAT, INT, UNSIGNED_SHORT ...
     size:1|2|3|4;
     attrName:string;
 }
@@ -83,9 +83,7 @@ export class BufferInfo {
         this.posVertexBuffer = new VertexBuffer(gl);
         this.posVertexBuffer.setData(
             description.posVertexInfo.array,
-            description.posVertexInfo.type,
-            description.posVertexInfo.size,
-            description.posVertexInfo.attrName
+            description.posVertexInfo
         );
 
         if (description.posIndexInfo) {
@@ -97,9 +95,7 @@ export class BufferInfo {
             this.texVertexBuffer = new VertexBuffer(gl);
             this.texVertexBuffer.setData(
                 description.texVertexInfo.array,
-                description.texVertexInfo.type,
-                description.texVertexInfo.size,
-                description.texVertexInfo.attrName
+                description.texVertexInfo
             );
         }
 
@@ -107,9 +103,7 @@ export class BufferInfo {
             this.colorVertexBuffer = new VertexBuffer(gl);
             this.colorVertexBuffer.setData(
                 description.colorVertexInfo.array,
-                description.colorVertexInfo.type,
-                description.colorVertexInfo.size,
-                description.colorVertexInfo.attrName
+                description.colorVertexInfo
             );
         }
 
@@ -117,9 +111,7 @@ export class BufferInfo {
             this.normalBuffer = new VertexBuffer(gl);
             this.normalBuffer.setData(
                 description.normalInfo.array,
-                description.normalInfo.type,
-                description.normalInfo.size,
-                description.normalInfo.attrName
+                description.normalInfo
             );
         }
     }
