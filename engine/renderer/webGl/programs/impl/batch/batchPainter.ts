@@ -79,9 +79,16 @@ export class BatchPainter extends AbstractPainter {
             gen.getFragmentSource()
         );
         const arr = new Float32Array([
-            0, 0,
-            0, 1,
-            1, 1
+            // triangle 1
+            0, 0, // 0
+            0, 1, // 1
+            1, 1, // 3
+
+            // triangle 2
+            0, 0, // 0
+            1, 0, // 2
+            1, 1, // 3
+
         ]);
         const bufferInfoDesc:IBufferInfoDescription = {
             posVertexInfo:{
