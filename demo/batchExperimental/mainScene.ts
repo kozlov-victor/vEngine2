@@ -21,15 +21,19 @@ class ExperimentalModel extends RenderableModel {
 export class MainScene extends Scene {
 
     public override onReady():void {
-        const model = new ExperimentalModel(this.game);
-        model.size.setWH(200,100);
-        model.pos.setXY(0,40);
-        model.transformPoint.setToCenter();
-        // model.setInterval(()=>{
-        //     model.angle+=0.1;
-        // },1);
-        model.addBehaviour(new DraggableBehaviour(this.game));
-        model.appendTo(this);
+
+        for (let i=0;i<2;i++) {
+            const model = new ExperimentalModel(this.game);
+            model.size.setWH(200,100);
+            model.pos.setXY(Math.random()*200,Math.random()*300);
+            model.transformPoint.setToCenter();
+            // model.setInterval(()=>{
+            //     model.angle+=0.1;
+            // },1);
+            model.addBehaviour(new DraggableBehaviour(this.game));
+            model.appendTo(this);
+        }
+
     }
 
 }
