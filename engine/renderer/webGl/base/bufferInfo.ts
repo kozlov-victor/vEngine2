@@ -11,7 +11,7 @@ import {Optional} from "@engine/core/declarations";
 export interface IVertexArrayInfo {
     array:Float32Array;
     type:number; // BYTE, FLOAT, INT, UNSIGNED_SHORT ...
-    size:1|2|3|4;
+    size:1|2|3|4|16;
     attrName:string;
     stride?:number; // number of bytes to skip in between elements
     offset?:number; // offsets to the first element
