@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import * as ts from "typescript/lib/tsserverlibrary";
 import {Game} from "@engine/core/game";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 
@@ -22,7 +21,7 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
-        for (let i=0;i<2;i++) {
+        for (let i=0;i<3;i++) {
             const model = new ExperimentalModel(this.game);
             model.size.setWH(200,100);
             model.pos.setXY(Math.random()*200,Math.random()*300);

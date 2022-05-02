@@ -13,7 +13,7 @@ import {VertexBuffer} from "@engine/renderer/webGl/base/vertexBuffer";
 
 export class BatchPainter extends AbstractPainter {
 
-    private readonly NUM_OF_QUADS_IN_BATCH = 2;
+    private readonly NUM_OF_QUADS_IN_BATCH = 3;
     private currentModelIndex:number = 0;
     private readonly a_idx: string;
     private readonly a_color: string;
@@ -41,36 +41,28 @@ export class BatchPainter extends AbstractPainter {
             gen.getFragmentSource()
         );
 
-        const indexArray:number[] = [0,1,3,0,2,3,4,5,7,4,6,7];
-        // for (let i=0;i<this.NUM_OF_QUADS_IN_BATCH;i+=4) {
-        //     indexArray.push(...
-        //         [
-        //             i+0,
-        //             i+1,
-        //             i+3,
-        //             i+0,
-        //             i+2,
-        //             i+3
-        //         ]
-        //     );
-        // }
+        const indexArray:number[] = [];
+        for (let i=0;i<4*this.NUM_OF_QUADS_IN_BATCH;i+=4) {
+            indexArray.push(...
+                [
+                    i+0,
+                    i+1,
+                    i+3,
+                    i+0,
+                    i+2,
+                    i+3
+                ]
+            );
+        }
         console.log(indexArray);
 
         const vertexIdxArray = new Float32Array(4*1*this.NUM_OF_QUADS_IN_BATCH);
-        // for (let i=0;i<4*vertexIdxArray.length;i+=4) {
-        //     vertexIdxArray[i + 0] = 0;
-        //     vertexIdxArray[i + 1] = 1;
-        //     vertexIdxArray[i + 2] = 2;
-        //     vertexIdxArray[i + 3] = 3;
-        // }
-        vertexIdxArray[0] = 0;
-        vertexIdxArray[1] = 1;
-        vertexIdxArray[2] = 2;
-        vertexIdxArray[3] = 3;
-        vertexIdxArray[4] = 0;
-        vertexIdxArray[5] = 1;
-        vertexIdxArray[6] = 2;
-        vertexIdxArray[7] = 3;
+        for (let i=0;i<vertexIdxArray.length;i+=4) {
+            vertexIdxArray[i + 0] = 0;
+            vertexIdxArray[i + 1] = 1;
+            vertexIdxArray[i + 2] = 2;
+            vertexIdxArray[i + 3] = 3;
+        }
         console.log(vertexIdxArray);
 
         const colorArray = new Float32Array(4*4*this.NUM_OF_QUADS_IN_BATCH);
