@@ -13,10 +13,12 @@ import {VertexBuffer} from "@engine/renderer/webGl/base/vertexBuffer";
 
 export class BatchPainter extends AbstractPainter {
 
-    private readonly NUM_OF_QUADS_IN_BATCH = 1;
+    private readonly NUM_OF_QUADS_IN_BATCH = 2;
+    private currentModelIndex:number = 0;
     private readonly a_idx: string;
     private readonly a_color: string;
     private readonly a_transform: string;
+    private dirty:boolean = false;
 
     private readonly transformArray:Float32Array;
     private readonly transformBuffer:VertexBuffer;
@@ -39,29 +41,20 @@ export class BatchPainter extends AbstractPainter {
             gen.getFragmentSource()
         );
 
-        const indexArray = [
-            // quad
-            0, 1, 3, 0, 2, 3,
-        ];
+        const indexArray:number[] = [];
+        for (let i=0;i<this.NUM_OF_QUADS_IN_BATCH;i++) indexArray.push(...[0, 1, 3, 0, 2, 3]);
 
-        const vertexIdxArray = new Float32Array([
-            // quad
-            0, 1, 2, 3,
-        ]);
-        const colorArray = new Float32Array([
-            // quad
-            0.5,0.6,0.7,1,
-            0.5,0.6,0.7,1,
-            0.5,0.6,0.7,1,
-            0.5,0.6,0.7,1,
-        ]);
+        const vertexIdxArray = new Float32Array(4*1*this.NUM_OF_QUADS_IN_BATCH);
+        for (let i=0;i<this.NUM_OF_QUADS_IN_BATCH;i+=4) {
+            vertexIdxArray[i + 0] = 0;
+            vertexIdxArray[i + 1] = 1;
+            vertexIdxArray[i + 2] = 2;
+            vertexIdxArray[i + 3] = 3;
+        }
 
-        this.transformArray = new Float32Array([
-            0.38109755516052246, 0., 0., 0., 0., 1.6129032373428345, 0., 0., 0., 0., -0.0010000000474974513, 0., -0.9847561120986938, -1.454838752746582, 0., 1.,
-            0.38109755516052246, 0., 0., 0., 0., 1.6129032373428345, 0., 0., 0., 0., -0.0010000000474974513, 0., -0.9847561120986938, -1.454838752746582, 0., 1.,
-            0.38109755516052246, 0., 0., 0., 0., 1.6129032373428345, 0., 0., 0., 0., -0.0010000000474974513, 0., -0.9847561120986938, -1.454838752746582, 0., 1.,
-            0.38109755516052246, 0., 0., 0., 0., 1.6129032373428345, 0., 0., 0., 0., -0.0010000000474974513, 0., -0.9847561120986938, -1.454838752746582, 0., 1.,
-        ]);
+        const colorArray = new Float32Array(4*4*this.NUM_OF_QUADS_IN_BATCH);
+
+        this.transformArray = new Float32Array(4*16*this.NUM_OF_QUADS_IN_BATCH);
 
         const bufferInfoDesc:IBufferInfoDescription = {
             posIndexInfo: {
@@ -89,15 +82,28 @@ export class BatchPainter extends AbstractPainter {
     }
 
     public pushNextModel(model:RenderableModel):void {
-        this.transformArray.set(model.modelViewProjectionMatrix.mat16);
-        this.transformArray.set(model.modelViewProjectionMatrix.mat16,16);
-        this.transformArray.set(model.modelViewProjectionMatrix.mat16,16*2);
-        this.transformArray.set(model.modelViewProjectionMatrix.mat16,16*3);
+        if (this.currentModelIndex===this.NUM_OF_QUADS_IN_BATCH) {
+            this.flush();
+        }
+        const offset = this.currentModelIndex*16;
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset+16*0);
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset+16*1);
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset+16*2);
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset+16*3);
+        this.currentModelIndex++;
+        this.dirty = true;
     }
 
     public flush():void {
+        if (!this.dirty) return;
         this.transformBuffer.updateDada(this.transformArray);
         this.draw();
+        this.reset();
+    }
+
+    private reset():void {
+        this.currentModelIndex = 0;
+        this.dirty = false;
     }
 
 
