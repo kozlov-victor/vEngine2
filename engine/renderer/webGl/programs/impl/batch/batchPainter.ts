@@ -84,17 +84,16 @@ export class BatchPainter extends AbstractPainter {
             drawMethod:DRAW_METHOD.TRIANGLES
         };
         this.bufferInfo = new BufferInfo(this.gl,bufferInfoDesc);
-        this.transformBuffer = this.bufferInfo.miscVertexBuffers[0];
+        this.transformBuffer = this.bufferInfo.miscVertexBuffers[1];
 
     }
 
     public pushNextModel(model:RenderableModel):void {
-        this.transformArray.set(model.worldTransformMatrix.mat16);
-        this.transformArray.set(model.worldTransformMatrix.mat16,16);
-        this.transformArray.set(model.worldTransformMatrix.mat16,16*2);
-        this.transformArray.set(model.worldTransformMatrix.mat16,16*3);
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16);
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16,16);
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16,16*2);
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16,16*3);
     }
-
 
     public flush():void {
         this.transformBuffer.updateDada(this.transformArray);

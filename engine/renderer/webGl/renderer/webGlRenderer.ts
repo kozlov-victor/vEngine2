@@ -202,9 +202,16 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     }
 
-    public drawExperimentalBatch():void{
+    public drawExperimentalBatch(model:RenderableModel):void{
         const bp = this._experimentalBatchPainterHolder.getInstance(this._gl);
-        bp.draw();
+        if (model.worldTransformDirty) {
+            rect.setXYWH( 0,0,model.size.width,model.size.height);
+            size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
+            const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
+            model.modelViewProjectionMatrix.fromMat16(mvpHolder);
+            mvpHolder.release();
+        }
+        bp.pushNextModel(model);
     }
 
     public drawMesh3d(mesh:Mesh3d):void {
@@ -473,6 +480,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
                 this._gl.enable(this._gl.SCISSOR_TEST);
                 this._gl.scissor(~~rect.x, ~~(this.game.size.height - rect.height - rect.y), ~~rect.width,~~rect.height);
             }
+            this._experimentalBatchPainterHolder.getInstance(this._gl).flush();
             this._currFrameBufferStack.renderToScreen();
             if (hasLockRect) this._gl.disable(this._gl.SCISSOR_TEST);
         }
