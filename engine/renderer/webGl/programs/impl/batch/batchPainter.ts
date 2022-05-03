@@ -107,7 +107,7 @@ export class BatchPainter extends AbstractPainter {
 
     public flush():void {
         if (!this.dirty) return;
-        this.transformBuffer.updateDada(this.transformArray);
+        this.transformBuffer.updateData(this.transformArray);
         this.draw();
         this.reset();
     }

@@ -44,7 +44,7 @@ class QuadMesh extends Mesh3d {
 
     public override onUpdatingBuffers():void {
         if (this._vertexBufferDataToUpdate===undefined) return;
-        this.getBufferInfo().posVertexBuffer!.updateDada(this._vertexBufferDataToUpdate);
+        this.getBufferInfo().posVertexBuffer!.updateData(this._vertexBufferDataToUpdate);
         this._vertexBufferDataToUpdate = undefined;
     }
 

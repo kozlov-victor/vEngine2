@@ -1,11 +1,8 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ObjectPool} from "@engine/misc/objectPool";
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
-import {Mat4} from "@engine/misc/math/mat4";
-import Mat16Holder = Mat4.Mat16Holder;
 
 export class RenderingObjectStackItem extends ReleaseableEntity {
-    public readonly mat4:Mat16Holder = new Mat16Holder();
     public obj:RenderableModel;
     public constrainObjects:RenderableModel[] = [];
 }
@@ -26,9 +23,8 @@ export class RenderingObjectStack {
 
     public add(obj:RenderableModel,constrainObjects:readonly RenderableModel[]):void {
         const stackItem:RenderingObjectStackItem = pool.getFreeObject()!;
-        stackItem.mat4.fromMat16(obj.worldTransformMatrix);
         stackItem.obj = obj;
-        stackItem.constrainObjects.push(...constrainObjects);
+        if (constrainObjects.length>0) stackItem.constrainObjects.push(...constrainObjects);
         this.stack.push(stackItem);
     }
 

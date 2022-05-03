@@ -19,7 +19,7 @@ export class VertexBuffer extends AbstractBuffer {
         if (DEBUG && !this.buffer) throw new DebugError(`can not allocate memory for vertex buffer`);
     }
 
-    public setData(desc:IVertexArrayInfo):void{
+    public setData(desc:IVertexArrayInfo,drawMethod:GLenum = this._gl.STATIC_DRAW):void{
         if (DEBUG) {
             if (!desc) throw new DebugError(`can not set data to vertex buffer: wrong desc parameter: ${desc}`);
             if (!desc.array) throw new DebugError('can not set data to vertex buffer: bufferData is not specified');
@@ -31,7 +31,7 @@ export class VertexBuffer extends AbstractBuffer {
         const lastBound = VertexBuffer.currentBuffer;
         this.bind();
         // gl.bufferSubData(gl.ARRAY_BUFFER, 0, new Float32Array(bufferSubData));
-        gl.bufferData(gl.ARRAY_BUFFER, desc.array, gl.STATIC_DRAW); // DYNAMIC_DRAW, STREAM_DRAW
+        gl.bufferData(gl.ARRAY_BUFFER, desc.array, drawMethod); // DYNAMIC_DRAW, STREAM_DRAW
         this.unbind();
         if (lastBound && !lastBound.isDestroyed()) lastBound.bind();
 
@@ -40,9 +40,9 @@ export class VertexBuffer extends AbstractBuffer {
         this.attrName = desc.attrName;
     }
 
-    public updateDada(bufferData:Float32Array):void {
+    public updateData(bufferData:Float32Array):void {
         this.vertexArrayInfo.array = bufferData;
-        this.setData(this.vertexArrayInfo);
+        this.setData(this.vertexArrayInfo,this._gl.DYNAMIC_DRAW);
     }
 
     public getAttrName():string {

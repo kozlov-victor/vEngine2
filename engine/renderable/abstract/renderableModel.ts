@@ -190,34 +190,55 @@ export abstract class RenderableModel
         return this._destroyed;
     }
 
+    public update(): void {
+
+        if (this._scene === undefined) this._scene = Scene._currentRenderingScene;
+        if (this._layer === undefined) this._layer = this._scene._renderingSessionInfo.currentLayer;
+
+        const delta: number = this.game.getDeltaTime();
+
+        this._tweenDelegate.update();
+        this._timerDelegate.update();
+
+        for (const bh of this._behaviours) bh.update();
+        for (const pa of this._propertyAnimations) pa.update();
+
+        if (this._rigidBody === undefined) {
+            if (this.velocity.x!==0) this.pos.x += this.velocity.x * delta / 1000;
+            if (this.velocity.y!==0) this.pos.y += this.velocity.y * delta / 1000;
+        }
+
+        if (this._angleVelocity3d.x!==0) this.angle3d.x += this._angleVelocity3d.x * delta / 1000;
+        if (this._angleVelocity3d.y!==0) this.angle3d.y += this._angleVelocity3d.y * delta / 1000;
+        if (this._angleVelocity3d.z!==0) this.angle3d.z += this._angleVelocity3d.z * delta / 1000;
+
+    }
+
     public render(): void {
-
-        this.update();
-
-        if (!this.visible) return;
-        if (this.scale.equal(0)) return;
 
         if (DEBUG && this._destroyed) {
             console.error(this);
             throw new DebugError(`can not render destroyed object`);
         }
 
-        if (this._scene === undefined) this._scene = Scene._currentRenderingScene;
-        if (this._layer === undefined) this._layer = this._scene._renderingSessionInfo.currentLayer;
-        if (this._scene._renderingSessionInfo.drawingStackEnabled) {
-            this._scene._renderingObjectStack.add(this, this._scene._renderingSessionInfo.currentConstrainObjects);
-        }
+        this.update();
+
+        if (!this.visible) return;
+        if (this.scale.equal(0)) return;
         if (this.alpha === 0) return;
+
+        if (this._scene._renderingSessionInfo.drawingStackEnabled) {
+            // this._scene._renderingObjectStack.add(this, this._scene._renderingSessionInfo.currentConstrainObjects);
+        }
 
         const renderer: AbstractRenderer = this.game.getRenderer();
 
         renderer.transformSave();
-        if (this._scene.camera.worldTransformDirty) this.worldTransformDirty = true;
 
         if (this.worldTransformDirty) {
             this._translate();
             this._transform();
-            this.worldTransformMatrix.fromMat16(renderer.transformGet());
+            this.worldTransformMatrix.mat16.set(renderer.transformGet().mat16);
         } else {
             renderer.transformSet(this.worldTransformMatrix);
         }
@@ -249,26 +270,6 @@ export abstract class RenderableModel
         this.worldTransformDirty = false;
 
         if (DEBUG && this._rigidBody !== undefined) this._rigidBody.debugRender();
-    }
-
-    public update(): void {
-        const delta: number = this.game.getDeltaTime();
-
-        this._tweenDelegate.update();
-        this._timerDelegate.update();
-
-        for (const bh of this._behaviours) bh.update();
-        for (const pa of this._propertyAnimations) pa.update();
-
-        if (this._rigidBody === undefined) {
-            if (this.velocity.x!==0) this.pos.x += this.velocity.x * delta / 1000;
-            if (this.velocity.y!==0) this.pos.y += this.velocity.y * delta / 1000;
-        }
-
-        if (this._angleVelocity3d.x!==0) this.angle3d.x += this._angleVelocity3d.x * delta / 1000;
-        if (this._angleVelocity3d.y!==0) this.angle3d.y += this._angleVelocity3d.y * delta / 1000;
-        if (this._angleVelocity3d.z!==0) this.angle3d.z += this._angleVelocity3d.z * delta / 1000;
-
     }
 
 

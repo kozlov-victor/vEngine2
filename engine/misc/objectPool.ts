@@ -19,7 +19,7 @@ export class ObjectPool<T extends IReleasealable> {
     }
 
     public getFreeObject(silently:boolean = false):Optional<T>{
-        for (let i:number=this._ptr;i<this.numberOfInstances;i++) {
+        for (let i:number=this._ptr,max=this.numberOfInstances;i<max;i++) {
             const possible = this._getFreeObjectAt(i);
             if (possible!==undefined) return possible;
         }
@@ -44,12 +44,10 @@ export class ObjectPool<T extends IReleasealable> {
     }
 
     public releaseAll():void{
-        for (let i:number=0;i<this.numberOfInstances;i++) {
-            const current:Optional<IReleasealable> = this._pool[i];
-            if (current!==undefined) {
-                current.release();
-            }
+        for (const item of this._pool) {
+            if (item!==undefined) item.release();
         }
+        this._ptr = 0;
     }
 
     private _getFreeObjectAt(i:number):Optional<T>{
