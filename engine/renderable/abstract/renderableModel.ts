@@ -192,6 +192,8 @@ export abstract class RenderableModel
 
     public render(): void {
 
+        this.update();
+
         if (!this.visible) return;
         if (this.scale.equal(0)) return;
 
@@ -258,20 +260,14 @@ export abstract class RenderableModel
         for (const bh of this._behaviours) bh.update();
         for (const pa of this._propertyAnimations) pa.update();
 
-        if (this._rigidBody !== undefined) {
-            this._rigidBody.nextTick();
-        } else {
-            if (this.velocity.x) this.pos.x += this.velocity.x * delta / 1000;
-            if (this.velocity.y) this.pos.y += this.velocity.y * delta / 1000;
+        if (this._rigidBody === undefined) {
+            if (this.velocity.x!==0) this.pos.x += this.velocity.x * delta / 1000;
+            if (this.velocity.y!==0) this.pos.y += this.velocity.y * delta / 1000;
         }
 
-        if (this._angleVelocity3d.x) this.angle3d.x += this._angleVelocity3d.x * delta / 1000;
-        if (this._angleVelocity3d.y) this.angle3d.y += this._angleVelocity3d.y * delta / 1000;
-        if (this._angleVelocity3d.z) this.angle3d.z += this._angleVelocity3d.z * delta / 1000;
-
-        for (const c of this._children) {
-            c.update();
-        }
+        if (this._angleVelocity3d.x!==0) this.angle3d.x += this._angleVelocity3d.x * delta / 1000;
+        if (this._angleVelocity3d.y!==0) this.angle3d.y += this._angleVelocity3d.y * delta / 1000;
+        if (this._angleVelocity3d.z!==0) this.angle3d.z += this._angleVelocity3d.z * delta / 1000;
 
     }
 

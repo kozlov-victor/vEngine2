@@ -32,7 +32,7 @@ export class MainScene extends Scene {
             this.game.runScene(new MainScene(this.game));
         });
 
-        for (let i=0;i<12000;i++) {
+        for (let i=0;i<30000;i++) {
 
             let model;
 

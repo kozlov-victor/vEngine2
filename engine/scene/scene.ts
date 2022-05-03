@@ -284,7 +284,6 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         this._tweenDelegate.update();
         this._timerDelegate.update();
         for (const a of this._propertyAnimations) a.update();
-        for (const l of this._layers) l.update();
         if (this.game.hasPhysicsSystem()) this.game.getPhysicsSystem().nextTick(this);
         this.onUpdate();
     }
