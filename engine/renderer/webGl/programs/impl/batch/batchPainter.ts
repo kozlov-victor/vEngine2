@@ -13,7 +13,7 @@ import {VertexBuffer} from "@engine/renderer/webGl/base/vertexBuffer";
 
 export class BatchPainter extends AbstractPainter {
 
-    private readonly NUM_OF_QUADS_IN_BATCH = 3;
+    private readonly NUM_OF_QUADS_IN_BATCH = 4000;
     private currentModelIndex:number = 0;
     private readonly a_idx: string;
     private readonly a_color: string;
@@ -54,7 +54,6 @@ export class BatchPainter extends AbstractPainter {
                 ]
             );
         }
-        console.log(indexArray);
 
         const vertexIdxArray = new Float32Array(4*1*this.NUM_OF_QUADS_IN_BATCH);
         for (let i=0;i<vertexIdxArray.length;i+=4) {
@@ -63,7 +62,6 @@ export class BatchPainter extends AbstractPainter {
             vertexIdxArray[i + 2] = 2;
             vertexIdxArray[i + 3] = 3;
         }
-        console.log(vertexIdxArray);
 
         const colorArray = new Float32Array(4*4*this.NUM_OF_QUADS_IN_BATCH);
 
@@ -98,11 +96,11 @@ export class BatchPainter extends AbstractPainter {
         if (this.currentModelIndex===this.NUM_OF_QUADS_IN_BATCH) {
             this.flush();
         }
-        const offset = this.currentModelIndex*16*4;
-        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset+16*0);
-        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset+16*1);
-        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset+16*2);
-        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset+16*3);
+        let offset = this.currentModelIndex*16*4;
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset);offset+=16;
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset);offset+=16;
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset);offset+=16;
+        this.transformArray.set(model.modelViewProjectionMatrix.mat16,offset);
         this.currentModelIndex++;
         this.dirty = true;
     }
