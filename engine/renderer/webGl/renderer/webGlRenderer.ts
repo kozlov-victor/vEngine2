@@ -162,6 +162,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public drawImage(img:Image):void{
 
+        this.flush();
+
         const texture:Texture = img.getTexture() as Texture;
         texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
         const maxSize:number = Math.max(img.size.width,img.size.height);
@@ -214,6 +216,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public drawMesh3d(mesh:Mesh3d):void {
+
+        this.flush();
 
         const mp:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
 
@@ -284,6 +288,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public drawMesh2d(mesh:Mesh2d):void {
 
+        this.flush();
+
         const mp:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
 
         mp.bindMesh2d(mesh);
@@ -336,6 +342,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public drawRectangle(rectangle:Rectangle):void{
 
+        this.flush();
+
         if (rectangle.lineWidth===0 && rectangle.borderRadius===0 && rectangle.fillGradient===undefined) {
             this.drawSimpleColoredRectangle(rectangle); // optimise drawing of simple rectangle with very simple gl program
         } else {
@@ -355,12 +363,17 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
 
     public drawLine(line:Line):void{
+
+        this.flush();
+
         const r:Rectangle = line.getRectangleRepresentation();
         this.drawRectangle(r);
     }
 
 
     public drawEllipse(ellipse:Ellipse):void{
+
+        this.flush();
 
         this.prepareGeometryUniformInfo(ellipse);
         this.prepareShapeUniformInfo(ellipse);
@@ -386,6 +399,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sp.attachTexture('texture',this._nullTexture);
         sp.draw();
 
+    }
+
+    public flush() {
+        this._experimentalBatchPainterHolder.getInstance(this._gl).flush();
     }
 
     public transformSave():void {
@@ -479,7 +496,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
                 this._gl.enable(this._gl.SCISSOR_TEST);
                 this._gl.scissor(~~rect.x, ~~(this.game.size.height - rect.height - rect.y), ~~rect.width,~~rect.height);
             }
-            this._experimentalBatchPainterHolder.getInstance(this._gl).flush();
+            this.flush();
             this._currFrameBufferStack.renderToScreen();
             if (hasLockRect) this._gl.disable(this._gl.SCISSOR_TEST);
         }
@@ -493,6 +510,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         }
         return undefined;
     }
+
 
     public createTexture(bitmap:ImageBitmap|HTMLImageElement|HTMLCanvasElement):ITexture{
         const texture:Texture = new Texture(this._gl);
@@ -521,6 +539,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public setRenderTarget(fbs:FrameBufferStack):void{
         if (DEBUG && fbs===undefined) throw new DebugError('undefined parameter: setRenderTarget(undefined)');
+        this.flush();
         this._currFrameBufferStack = fbs;
     }
 
@@ -580,7 +599,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
             scp.setUniformVector(scp.u_vertexMatrix,mvpHolder.mat16, true);
             rectangle.modelViewProjectionMatrix.fromMat16(mvpHolder);
-            mvpHolder.release();
         } else {
             scp.setUniformVector(scp.u_vertexMatrix,rectangle.modelViewProjectionMatrix.mat16);
         }
@@ -625,7 +643,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
             model.modelViewProjectionMatrix.fromMat16(mvpHolder);
             sp.setUniformVector(sp.u_vertexMatrix,mvpHolder.mat16,true);
-            mvpHolder.release();
         } else {
             sp.setUniformVector(sp.u_vertexMatrix,model.modelViewProjectionMatrix.mat16);
         }

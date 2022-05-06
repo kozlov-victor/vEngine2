@@ -38,6 +38,7 @@ export class MainScene extends Scene {
         drawLayer.appendTo(this);
 
         const debugLayer = new DebugLayer(this.game);
+        debugLayer.setSolidBackground();
         debugLayer.appendTo(this);
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click, _=>{
@@ -55,7 +56,7 @@ export class MainScene extends Scene {
                 model.angle = Math.random();
                 model.pos.setXY(Math.random()*this.game.width,Math.random()*this.game.height);
                 model.transformPoint.setToCenter();
-                model.angleVelocity = 0.2;
+                model.angleVelocity = 0.4;
                 //model.addBehaviour(new DraggableBehaviour(this.game));
                 model.appendTo(this.getLayerAtIndex(0));
                 this.models.push(model);
