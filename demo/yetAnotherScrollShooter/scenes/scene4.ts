@@ -22,7 +22,6 @@ export class Scene4 extends Scene {
         for (let i:number=0;i<30;i++) {
             const star = new Circle(this.game);
             star.radius = MathEx.randomInt(1,3);
-            star.passMouseEventsThrough = true;
             star.depthTest = true;
             star.pos.z = i*10;
             star.velocity.x = -MathEx.randomInt(50,100);

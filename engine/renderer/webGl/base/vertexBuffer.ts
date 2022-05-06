@@ -32,8 +32,8 @@ export class VertexBuffer extends AbstractBuffer {
         this.bind();
         // gl.bufferSubData(gl.ARRAY_BUFFER, 0, new Float32Array(bufferSubData));
         gl.bufferData(gl.ARRAY_BUFFER, desc.array, drawMethod); // DYNAMIC_DRAW, STREAM_DRAW
-        this.unbind();
         if (lastBound && !lastBound.isDestroyed()) lastBound.bind();
+        else this.unbind();
 
         this.vertexArrayInfo = desc;
         this.dataLength = desc.array.length;

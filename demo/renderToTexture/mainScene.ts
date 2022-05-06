@@ -38,7 +38,6 @@ export class MainScene extends Scene {
         img.visible = true;
         this.appendChild(img);
         img.scale.setXY(0.2);
-        img.passMouseEventsThrough = true;
 
         const clearColor:Color = Color.NONE;
         this.setInterval(()=>{

@@ -49,7 +49,6 @@ export class SpatialSpace {
             cell.debugView.size.setWH(cellWidth,cellHeight);
             cell.debugView.alpha = 0.1;
             cell.debugView.fillColor = initialColor;
-            cell.debugView.passMouseEventsThrough = true;
             //this.game.getCurrentScene().appendChild(cell.debugView);
             this.cells.push(cell);
         }

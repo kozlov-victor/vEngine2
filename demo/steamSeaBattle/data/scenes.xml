@@ -162,7 +162,6 @@
                         src="top.png"
                         id="top"
                         left="0"
-                        passMouseEventsThrough="1"
                         top="0"
                         width="800"
                         height="600"/>

@@ -13,7 +13,7 @@ import {VertexBuffer} from "@engine/renderer/webGl/base/vertexBuffer";
 
 export class BatchPainter extends AbstractPainter {
 
-    private readonly NUM_OF_QUADS_IN_BATCH = 4000;
+    private readonly NUM_OF_QUADS_IN_BATCH = 8000;
     private currentModelIndex:number = 0;
     private readonly a_idx: string;
     private readonly a_color: string;

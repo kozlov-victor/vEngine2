@@ -51,6 +51,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     public readonly pos:Point2d = new Point2d();
     public filters:IFilter[] = [];
     public alpha:number = 1;
+    public interactive:boolean = false;
     public readonly size:Size = new Size();
     public lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED;
     public preloadingGameObject:RenderableModel;
@@ -60,7 +61,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
 
     public readonly keyboardEventHandler:KeyboardEventEmitterDelegate = new KeyboardEventEmitterDelegate(this.game);
     public readonly gamepadEventHandler:GamepadEventEmitterDelegate = new GamepadEventEmitterDelegate(this.game);
-    public readonly mouseEventHandler:MouseEventEmitterDelegate<ISceneMouseEvent> = new MouseEventEmitterDelegate<ISceneMouseEvent>(this.game);
+    public readonly mouseEventHandler:MouseEventEmitterDelegate<ISceneMouseEvent> = new MouseEventEmitterDelegate<ISceneMouseEvent>(this.game,this);
     public readonly sceneEventHandler = new EventEmitterDelegate<SCENE_EVENTS,{taskQueue:TaskQueue}>(this.game);
 
     public readonly _renderingObjectStack:RenderingObjectStack;

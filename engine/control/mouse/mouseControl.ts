@@ -5,7 +5,7 @@ import {IControl} from "@engine/control/abstract/iControl";
 import {DebugError} from "@engine/debug/debugError";
 import {IObjectMouseEvent, ISceneMouseEvent, MousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Layer} from "@engine/scene/layer";
+import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {MouseControlHelper} from "@engine/control/mouse/mouseControlHelper";
 import {Optional} from "@engine/core/declarations";
 import {CapturedObjectsByTouchIdHolder} from "@engine/control/mouse/capturedObjectsByTouchIdHolder";
@@ -208,48 +208,54 @@ export class MouseControl implements IControl {
         const objectStackItems:RenderingObjectStackItem[] = this.game.getCurrentScene()._renderingObjectStack.get();
         let i:number = objectStackItems.length; // reversed loop
         if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.clear(mousePoint.id);
-        // trigger the most top object
-        while(i--) {
-            const objectStackItem:RenderingObjectStackItem = objectStackItems[i];
-            const obj:RenderableModel = objectStackItem.obj;
-            const constrainObjects:RenderableModel[] = objectStackItem.constrainObjects;
-            if (obj.passMouseEventsThrough) continue;
-            const layer:Layer = obj.getLayer();
-            if (layer===undefined) continue;
 
-            this._helper.resolveSceneCoordinates(mousePoint,layer.transformType);
-            const capturedEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e, mouseEvent, mousePoint, obj, obj, constrainObjects);
-            if (capturedEvent!==undefined) {
-                mousePoint.target = obj;
-                if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,obj);
-                // propagate event to parents
-                let parent:Optional<RenderableModel> = obj.parent;
-                while (parent!==undefined) {
-                    const propagationEvent:Optional<IObjectMouseEvent> =
-                        this._helper.captureObject(e,mouseEvent,mousePoint,parent, obj, constrainObjects);
-                    if (propagationEvent!==undefined) {
-                        if (!propagationEvent.isPropagated) break;
-                        if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,parent);
+
+        if (i===0) {
+            this._helper.resolveSceneCoordinates(mousePoint,LayerTransformType.TRANSFORM);
+        } else {
+            // trigger the most top object
+            while(i--) {
+                const objectStackItem:RenderingObjectStackItem = objectStackItems[i];
+                const obj:RenderableModel = objectStackItem.obj;
+                const constrainObjects:RenderableModel[] = objectStackItem.constrainObjects;
+                const layer:Layer = obj.getLayer();
+                if (layer===undefined) continue;
+
+                this._helper.resolveSceneCoordinates(mousePoint,layer.transformType);
+                const capturedEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e, mouseEvent, mousePoint, obj, obj, constrainObjects);
+                if (capturedEvent!==undefined) {
+                    mousePoint.target = obj;
+                    if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,obj);
+                    // propagate event to parents
+                    let parent:Optional<RenderableModel> = obj.parent;
+                    while (parent!==undefined) {
+                        const propagationEvent:Optional<IObjectMouseEvent> =
+                            this._helper.captureObject(e,mouseEvent,mousePoint,parent, obj, constrainObjects);
+                        if (propagationEvent!==undefined) {
+                            if (!propagationEvent.isPropagated) break;
+                            if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,parent);
+                        }
+                        parent = parent.parent;
                     }
-                    parent = parent.parent;
+                    break;
                 }
-                break;
             }
         }
+        if (scene.interactive) {
+            if (mousePoint.target===undefined) mousePoint.target = scene;
+            scene.mouseEventHandler.trigger(mouseEvent,{
+                screenX:mousePoint.screenCoordinate.x,
+                screenY:mousePoint.screenCoordinate.y,
+                sceneX: mousePoint.sceneCoordinate.x,
+                sceneY: mousePoint.sceneCoordinate.y,
+                id:mousePoint.id,
+                eventName: mouseEvent,
+                nativeEvent: e as Event,
+                button: (e as MouseEvent).buttons,
+                isMouseDown,
+            } as ISceneMouseEvent);
+        }
 
-        if (mousePoint.target===undefined) mousePoint.target = scene;
-        // @ts-ignore
-        scene.mouseEventHandler.trigger(mouseEvent,{
-            screenX:mousePoint.screenCoordinate.x,
-            screenY:mousePoint.screenCoordinate.y,
-            sceneX: mousePoint.sceneCoordinate.x,
-            sceneY: mousePoint.sceneCoordinate.y,
-            id:mousePoint.id,
-            eventName: mouseEvent,
-            nativeEvent: e as Event,
-            button: (e as MouseEvent).buttons,
-            isMouseDown,
-        } as ISceneMouseEvent);
 
         return mousePoint;
     }

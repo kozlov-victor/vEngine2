@@ -69,11 +69,11 @@ export abstract class RenderableModel
 
     public readonly parent: RenderableModel;
 
-    public readonly mouseEventHandler: MouseEventEmitterDelegate<IObjectMouseEvent> = new MouseEventEmitterDelegate(this.game);
+    public readonly mouseEventHandler: MouseEventEmitterDelegate<IObjectMouseEvent> = new MouseEventEmitterDelegate(this.game,this);
     public readonly dragEventHandler: EventEmitterDelegate<DRAG_EVENTS, IDragPoint> = new EventEmitterDelegate(this.game);
 
     public readonly velocity = new Point2d(0, 0);
-    public passMouseEventsThrough: boolean = false;
+    public interactive: boolean = false;
 
     private _destRect: Rect = new Rect();
     private _behaviours: BaseAbstractBehaviour[] = [];
@@ -227,8 +227,8 @@ export abstract class RenderableModel
         if (this.scale.equal(0)) return;
         if (this.alpha === 0) return;
 
-        if (this._scene._renderingSessionInfo.drawingStackEnabled) {
-            // this._scene._renderingObjectStack.add(this, this._scene._renderingSessionInfo.currentConstrainObjects);
+        if (this.interactive && this._scene._renderingSessionInfo.drawingStackEnabled) {
+            this._scene._renderingObjectStack.add(this, this._scene._renderingSessionInfo.currentConstrainObjects);
         }
 
         const renderer: AbstractRenderer = this.game.getRenderer();
@@ -402,7 +402,6 @@ export abstract class RenderableModel
         cloned.filters = [...this.filters];
         cloned.forceDrawChildrenOnNewSurface = this.forceDrawChildrenOnNewSurface;
         cloned.velocity.setFrom(this.velocity);
-        cloned.passMouseEventsThrough = this.passMouseEventsThrough;
         if (this.getRigidBody() !== undefined) cloned.setRigidBody(this.getRigidBody()!.clone());
         this._behaviours.forEach(b => {
             cloned.addBehaviour(b.clone());

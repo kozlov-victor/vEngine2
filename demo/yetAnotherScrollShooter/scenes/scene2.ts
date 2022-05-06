@@ -60,7 +60,6 @@ export class Scene2 extends Scene {
         for (let i:number=0;i<30;i++) {
             const cloud = new Image(this.game,this.r.cloud);
             cloud.alpha = 0.6;
-            cloud.passMouseEventsThrough = true;
             cloud.depthTest = true;
             cloud.pos.z = i*10;
             cloud.velocity.x = -MathEx.randomInt(50,100);

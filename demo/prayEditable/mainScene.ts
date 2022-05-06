@@ -103,7 +103,6 @@ export class MainScene extends Scene {
         animatedImage.playFrameAnimation(anim);
         animatedImage.scale.setXY(0.5);
         animatedImage.transformPoint.setToCenter();
-        animatedImage.passMouseEventsThrough = true;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticlePrefab(animatedImage);
@@ -121,7 +120,6 @@ export class MainScene extends Scene {
         });
 
         const bg = new Image(this.game,this.r.bgTexture);
-        bg.passMouseEventsThrough = true;
         this.appendChild(bg);
 
 

@@ -209,7 +209,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
             const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
             model.modelViewProjectionMatrix.fromMat16(mvpHolder);
-            mvpHolder.release();
         }
         bp.pushNextModel(model);
     }

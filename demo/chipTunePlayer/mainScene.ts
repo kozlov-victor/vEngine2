@@ -120,7 +120,6 @@ export class MainScene extends Scene {
         let pending:boolean = false;
 
         const img = new Image(this.game,this.skinTexture);
-        img.passMouseEventsThrough = true;
         this.appendChild(img);
 
         btn.mouseEventHandler.on(MOUSE_EVENTS.click, async _=>{

@@ -21,14 +21,20 @@ export class ObjectPool<T extends IReleasealable> {
     public getFreeObject(silently:boolean = false):Optional<T>{
         for (let i:number=this._ptr,max=this.numberOfInstances;i<max;i++) {
             const possible = this._getFreeObjectAt(i);
-            if (possible!==undefined) return possible;
+            if (possible!==undefined) {
+                this._ptr = (++i)%this.numberOfInstances;
+                return possible;
+            }
         }
         for (let i:number=0;i<this._ptr;i++) {
             const possible = this._getFreeObjectAt(i);
-            if (possible!==undefined) return possible;
+            if (possible!==undefined) {
+                this._ptr = (++i)%this.numberOfInstances;
+                return possible;
+            }
         }
         if (DEBUG && !silently) {
-            console.error(this._pool);
+            console.trace(this._pool);
             throw new DebugError(`can not get free object: no free object in pool`);
         }
         return undefined;
@@ -53,14 +59,12 @@ export class ObjectPool<T extends IReleasealable> {
     private _getFreeObjectAt(i:number):Optional<T>{
         let current:T = this._pool[i];
         if (current===undefined) {
-            current = this._pool[this._ptr] = new this.Class();
+            current = this._pool[i] = new this.Class();
             current.capture(i);
-            this._ptr = (++i)%this._pool.length;
             return current;
         }
         else if (!current.isCaptured()) {
             current.capture(i);
-            this._ptr = (++i)%this._pool.length;
             return current;
         }
         else return undefined;

@@ -114,7 +114,6 @@ export abstract class AbstractAppScene extends Scene {
         r.transformPoint.setXY(rotationPointX,rotationPointY);
         r.id = el.getAttribute('id');
         r.visible = !this.getBoolean(el.getAttribute('hidden'));
-        r.passMouseEventsThrough = this.getBoolean(el.getAttribute('passMouseEventsThrough'));
         root.appendChild(r);
         this.resolveChildren(r,el.getChildNodes());
     }
