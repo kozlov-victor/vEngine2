@@ -59,7 +59,7 @@ export class MainScene extends Scene {
                 //model.addBehaviour(new DraggableBehaviour(this.game));
                 model.appendTo(this.getLayerAtIndex(0));
                 this.models.push(model);
-                //debugLayer.println(`objects: `+this.models.length);
+                debugLayer.println(`objects: `+this.models.length);
             }
         });
 

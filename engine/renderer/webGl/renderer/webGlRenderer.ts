@@ -322,7 +322,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._glCachedAccessor.setDepthTest(mesh.depthTest);
         this._blender.setBlendMode(mesh.blendMode);
         mp.draw();
-        zToWMatrix.release();
+        zToWProjectionMatrix.release();
         orthoProjectionMatrix.release();
     }
 

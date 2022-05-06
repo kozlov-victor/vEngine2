@@ -43,7 +43,6 @@ export class ObjectPool<T extends IReleasealable> {
     public releaseObject(obj:T):void{
         const indexOf:number = obj.getCapturedIndex();
         if (DEBUG && indexOf===-1) {
-            console.error(obj);
             throw new DebugError(`can not release the object: it does not belong to the pool`);
         }
         this._pool[indexOf].release();
