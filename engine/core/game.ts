@@ -277,10 +277,12 @@ export class Game {
             }
         } while (loopCnt<numOfLoops);
 
+        this._deltaTime = dt;
+
         if (this._currSceneTransition!==undefined) this._currSceneTransition.render();
         else currentScene.render();
         if (DEBUG) {
-            this._fpsCounter.enterFrame(dt);
+            this._fpsCounter.enterFrame(this._deltaTime);
         }
     }
 
