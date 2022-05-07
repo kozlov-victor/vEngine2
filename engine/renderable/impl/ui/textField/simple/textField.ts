@@ -132,23 +132,13 @@ export class TextField extends WidgetContainer {
     }
 
     private _revalidateWithoutCache():void {
-        const clientRect: Readonly<IRectJSON> = this.getClientRect();
-        let rectIsDirty: boolean = true;
-        if (this.rowSet !== undefined) {
-            const currentClientRect = this.rowSet.getDestRect();
-            rectIsDirty =
-                clientRect.x !== currentClientRect.x ||
-                clientRect.y !== currentClientRect.y ||
-                clientRect.width !== currentClientRect.width ||
-                clientRect.height !== currentClientRect.height;
-        }
-        if (this.rowSet === undefined || rectIsDirty) {
-            if (this.rowSet !== undefined) this.rowSet.removeSelf();
+        if (this.rowSet === undefined) {
+            const clientRect: Readonly<IRectJSON> = this.getClientRect();
+            this.rowSetContainer.pos.setFrom(clientRect);
+            this.rowSetContainer.size.setFrom(clientRect);
             this.rowSet = new TextRowSet(this.game, this.font, clientRect, this.textColor);
             this.rowSetContainer.appendChild(this.rowSet);
         }
-        this.rowSetContainer.pos.setFrom(clientRect);
-        this.rowSetContainer.size.setFrom(clientRect);
         this._applyText();
         if (this._autosize) {
             this.size.setWH(

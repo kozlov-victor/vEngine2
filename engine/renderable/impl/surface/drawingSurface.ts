@@ -176,14 +176,16 @@ class DrawingSession implements IDrawingSession {
         if (DEBUG && this.surface.getFont()===undefined) {
             throw new DebugError(`font is not set`);
         }
-        if (this._textField===undefined) this._textField = new TextFieldWithoutCache(this.game,this.surface.getFont());
+        if (this._textField===undefined) {
+            this._textField = new TextFieldWithoutCache(this.game,this.surface.getFont());
+            this._textField.revalidate();
+        }
         this._textField.setFont(this.surface.getFont());
-        this._textField.setAutoSize(true);
         this._textField.setWordBrake(WordBrake.PREDEFINED);
         this._textField.textColor.setFrom(this.surface.getDrawColor());
         this._textField.pos.setXY(x,y);
         this._textField.setText(text);
-        this._textField.revalidate();
+        this._textField.update();
         this.drawModel(this._textField);
     }
 
