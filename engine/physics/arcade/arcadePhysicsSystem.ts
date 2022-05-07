@@ -117,10 +117,8 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
             }
 
         }
+
         scene._spatialSpace.clear();
-        for (let i=0,max=all.length;i<max;i++) {
-            all[i].nextTick();
-        }
     }
 
 

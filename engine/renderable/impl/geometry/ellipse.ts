@@ -54,9 +54,6 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
         this.game.getRenderer().drawEllipse(this);
     }
 
-    public override update():void {
-        super.update();
-    }
 
     public clone():Ellipse {
         const cloned:Ellipse = new Ellipse(this.game);

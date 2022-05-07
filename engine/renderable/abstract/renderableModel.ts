@@ -196,6 +196,10 @@ export abstract class RenderableModel
             this._rigidBody.nextTick();
         }
 
+        for (const c of this._children) {
+            c.update();
+        }
+
     }
 
     public render(): void {
@@ -220,8 +224,6 @@ export abstract class RenderableModel
         if (this._rigidBody === undefined) {
             if (this.velocity.x!==0) this.pos.x += this.velocity.x * dSeconds;
             if (this.velocity.y!==0) this.pos.y += this.velocity.y * dSeconds;
-        } else {
-            this._rigidBody.nextTick();
         }
 
         if (this._angleVelocity3d.x!==0) this.angle3d.x += this._angleVelocity3d.x * dSeconds;
