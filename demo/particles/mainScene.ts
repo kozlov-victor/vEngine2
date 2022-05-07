@@ -32,7 +32,7 @@ export class MainScene extends Scene {
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticlePrefab(circle);
         ps.addParticlePrefab(rect);
-        ps.emissionRadius = 10;
+        ps.emissionRadius = 30;
         ps.forceDrawChildrenOnNewSurface = true;
 
 

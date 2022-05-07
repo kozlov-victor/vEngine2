@@ -142,8 +142,12 @@ export class ParticleSystem extends SimpleGameObjectContainer {
             const rigidBody:Optional<IRigidBody> = particle.getRigidBody();
             const velocity:Point2d = rigidBody===undefined?particle.velocity:rigidBody.velocity;
             velocity.setXY(velocityX,velocityY);
-            particle.pos.x = rnd({from:-this.emissionRadius,to:+this.emissionRadius}) + this.emissionPosition.x;
-            particle.pos.y = rnd({from:-this.emissionRadius,to:+this.emissionRadius}) + this.emissionPosition.y;
+
+            const emissionRadius = rnd({from:0,to:this.emissionRadius});
+            const a = MathEx.random(0,Math.PI*2);
+            particle.pos.x = emissionRadius*Math.cos(a) + this.emissionPosition.x;
+            particle.pos.y = emissionRadius*Math.sin(a) + this.emissionPosition.y;
+
             holder.lifeTime = rnd(this.particleLiveTime);
             holder.createdTime = this.game.getCurrentTime();
             holder.active = true;
