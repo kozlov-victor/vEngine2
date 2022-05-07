@@ -14,6 +14,7 @@ import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
+import {FpsCounter} from "@engine/core/fpsCounter";
 
 
 export const enum SCALE_STRATEGY {
@@ -71,8 +72,6 @@ export class Game {
     public readonly pos:Point2d = new Point2d(0,0);
     public readonly rootContainerElement:Optional<HTMLElement>;
 
-    public fps:number = 0;
-
     private readonly _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN;
 
     private readonly _startedTime:number = 0;
@@ -89,7 +88,8 @@ export class Game {
     private _controls:IControl[] = [];
     private _audioPlayer:IAudioPlayer;
     private _physicsSystem:IPhysicsSystem;
-    private _mainLoop:MainLoop = new MainLoop(this);
+    private _mainLoop = new MainLoop(this);
+    private _fpsCounter = new FpsCounter();
 
     public static getInstance():Game{
         return Game._instance;
@@ -280,12 +280,16 @@ export class Game {
         if (this._currSceneTransition!==undefined) this._currSceneTransition.render();
         else currentScene.render();
         if (DEBUG) {
-            this.fps = ~~(1000 / dt);
+            this._fpsCounter.enterFrame(dt);
         }
     }
 
     public hasCurrentTransition():boolean {
         return this._currSceneTransition!==undefined;
+    }
+
+    public get fps():number {
+        return this._fpsCounter.getFps();
     }
 
     public destroy():void{
