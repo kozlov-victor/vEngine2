@@ -140,8 +140,8 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
             }
 
             this.pos.setFrom(newPos);
-            newPos.release();
-            pointToFollow.release();
+            Point2d.toPool(newPos);
+            Point2d.toPool(pointToFollow);
 
         }
         if (this._cameraShakeTween!==undefined) this._cameraShakeTween.update();

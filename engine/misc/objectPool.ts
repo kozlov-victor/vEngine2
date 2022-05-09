@@ -16,6 +16,9 @@ export class ObjectPool<T extends IReleasealable> {
 
     constructor(private Class:Clazz<T>, private readonly numberOfInstances = 32){
         if (DEBUG && !Class) throw new DebugError(`can not instantiate ObjectPool: class not provided in constructor`);
+        if (numberOfInstances!==Infinity) {
+            for (let i=0;i<numberOfInstances;i++) this._pool.push(undefined!);
+        }
     }
 
     public getFreeObject(silently:boolean = false):Optional<T>{
@@ -45,6 +48,7 @@ export class ObjectPool<T extends IReleasealable> {
         if (DEBUG && indexOf===-1) {
             throw new DebugError(`can not release the object: it does not belong to the pool`);
         }
+        this._ptr = indexOf;
         this._pool[indexOf].release();
     }
 

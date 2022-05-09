@@ -153,7 +153,7 @@ export class MainScene extends Scene {
         ps.maxParticlesInCache = 2000;
         ps.addParticlePrefab(particle);
 
-        ps.emissionRadius = 5;
+        ps.emissionRadius = 20;
         ps.numOfParticlesToEmit = { from: 15, to: 20 };
         ps.particleLiveTime = { from: 2000, to: 10000 };
         ps.particleVelocity = { from: 50, to: 100 };
@@ -171,6 +171,11 @@ export class MainScene extends Scene {
                 ptcl.fillColor = col2;
             }
         });
+
+        ps.setInterval(()=>{
+            ps.emissionPosition.setXY(100,100);
+            ps.emit();
+        },100);
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click,(e)=>{
             ps.emissionPosition.setXY(e.sceneX,e.sceneY);

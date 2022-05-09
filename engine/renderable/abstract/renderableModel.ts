@@ -229,7 +229,6 @@ export abstract class RenderableModel
         if (this._angleVelocity3d.x!==0) this.angle3d.x += this._angleVelocity3d.x * dSeconds;
         if (this._angleVelocity3d.y!==0) this.angle3d.y += this._angleVelocity3d.y * dSeconds;
         if (this._angleVelocity3d.z!==0) this.angle3d.z += this._angleVelocity3d.z * dSeconds;
-
         if (this._scene === undefined) this._scene = Scene._currentRenderingScene;
         if (this._layer === undefined) this._layer = this._scene._renderingSessionInfo.currentLayer;
 
@@ -245,7 +244,7 @@ export abstract class RenderableModel
         if (this.worldTransformDirty) {
             this._translate();
             this._transform();
-            this.worldTransformMatrix.mat16.set(renderer.transformGet().mat16);
+            this.worldTransformMatrix.fromMat16(renderer.transformGet());
         } else {
             renderer.transformSet(this.worldTransformMatrix);
         }

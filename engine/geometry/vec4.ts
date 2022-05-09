@@ -33,6 +33,10 @@ export namespace Vec4 {
             return Vec4Holder.pool.getFreeObject()!;
         }
 
+        public static toPool(obj:Vec4Holder):void {
+            return Vec4Holder.pool.releaseObject(obj);
+        }
+
         public set(x:n,y:n,z:n,w:n):void{
             const v:VEC4 = this.vec4 as VEC4;
             v[0] = x;

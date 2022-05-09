@@ -41,7 +41,7 @@ export class MouseControlHelper {
     }
 
     private isPointInRect(mousePoint:MousePoint, obj:RenderableModel,constrainObjects?:RenderableModel[]):boolean {
-        const goRect:Rect = Rect.fromPool();
+        const modelRect:Rect = Rect.fromPool();
 
         const pointBottomRight:Vec4Holder = Vec4Holder.fromPool();
         pointBottomRight.set(obj.size.width,obj.size.height,0,1);
@@ -78,16 +78,16 @@ export class MouseControlHelper {
             }
         }
 
-        goRect.release();
+        Rect.toPool(modelRect);
 
-        pointBottomRight.release();
-        pointBottomRightTransformation.release();
-        pointTopRight.release();
-        pointTopRightTransformation.release();
-        pointTopLeft.release();
-        pointTopLeftTransformation.release();
-        pointBottomLeft.release();
-        pointBottomLeftTransformation.release();
+        Vec4Holder.toPool(pointBottomRight);
+        Vec4Holder.toPool(pointBottomRightTransformation);
+        Vec4Holder.toPool(pointTopRight);
+        Vec4Holder.toPool(pointTopRightTransformation);
+        Vec4Holder.toPool(pointTopLeft);
+        Vec4Holder.toPool(pointTopLeftTransformation);
+        Vec4Holder.toPool(pointBottomLeft);
+        Vec4Holder.toPool(pointBottomLeftTransformation);
         return result;
     }
 

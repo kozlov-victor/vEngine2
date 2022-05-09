@@ -44,6 +44,10 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         return Point2d.pool.getFreeObject()!;
     }
 
+    public static toPool(obj:Point2d):void {
+        return Point2d.pool.releaseObject(obj);
+    }
+
     // noinspection JSSuspiciousNameCombination
     public setXY(x:number = 0,y:number = x):this{
         if (DEBUG && (isNotNumber(x) || isNotNumber(y))) {

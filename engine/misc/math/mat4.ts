@@ -56,6 +56,10 @@ export namespace Mat4 {
             return  Mat16Holder.m16hPool.getFreeObject()!;
         }
 
+        public static toPool(obj:Mat16Holder):void {
+            return  Mat16Holder.m16hPool.releaseObject(obj);
+        }
+
         public static create(): Mat4.Mat16Holder {
             return new Mat16Holder();
         }
@@ -450,11 +454,11 @@ export namespace Mat4 {
 
         const vec4Transformed:Vec4Holder = Vec4Holder.fromPool();
         Mat4.multVecByMatrix(vec4Transformed, invProjectionView, vec4Holder);
-        invProjectionView.release();
-        vec4Holder.release();
+        Mat16Holder.toPool(invProjectionView);
+        Vec4Holder.toPool(vec4Holder);
         const pointResult:Point2d = Point2d.fromPool();
         pointResult.setXY(vec4Transformed.x,vec4Transformed.y);
-        vec4Transformed.release();
+        Vec4Holder.toPool(vec4Transformed);
         return pointResult;
     };
 

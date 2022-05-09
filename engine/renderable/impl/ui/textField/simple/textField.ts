@@ -132,13 +132,13 @@ export class TextField extends WidgetContainer {
     }
 
     private _revalidateWithoutCache():void {
+        const clientRect: Readonly<IRectJSON> = this.getClientRect();
         if (this.rowSet === undefined) {
-            const clientRect: Readonly<IRectJSON> = this.getClientRect();
-            this.rowSetContainer.pos.setFrom(clientRect);
-            this.rowSetContainer.size.setFrom(clientRect);
             this.rowSet = new TextRowSet(this.game, this.font, clientRect, this.textColor);
             this.rowSetContainer.appendChild(this.rowSet);
         }
+        this.rowSetContainer.pos.setFrom(clientRect);
+        this.rowSetContainer.size.setFrom(clientRect);
         this._applyText();
         if (this._autosize) {
             this.size.setWH(

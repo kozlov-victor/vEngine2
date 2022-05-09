@@ -29,20 +29,16 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
-        // this.mouseEventHandler.on(MOUSE_EVENTS.click, _=>{
-        //     experimental = !experimental;
-        //     this.game.runScene(new MainScene(this.game));
-        // });
-
         const drawLayer = new Layer(this.game);
         drawLayer.appendTo(this);
 
         const debugLayer = new DebugLayer(this.game);
         debugLayer.setSolidBackground();
         debugLayer.appendTo(this);
+        debugLayer.println('click to add objects')
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click, _=>{
-            for (let i=0;i<1000;i++) {
+            for (let i=0;i<5000;i++) {
 
                 let model;
 
