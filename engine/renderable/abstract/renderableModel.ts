@@ -395,7 +395,7 @@ export abstract class RenderableModel
     }
 
     protected override setClonedProperties(cloned: RenderableModel): void {
-        cloned.size.setFrom(cloned.size);
+        cloned.size.setFrom(this.size);
         cloned.alpha = this.alpha;
         cloned.blendMode = this.blendMode;
         cloned.visible = this.visible;

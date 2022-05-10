@@ -1,22 +1,34 @@
 precision mediump float;
 
 void main(){
-    vec2 pos;
+
+    vec2 uv;
     int idx = int(a_idx);
     if (idx==0) {
-        pos = vec2(0.0, 0.0);
+        uv = vec2(0.0, 0.0);
     } else if (idx==1) {
-        pos = vec2(0.0, 1.0);
+        uv = vec2(0.0, 1.0);
     } else if (idx==2) {
-        pos = vec2(1.0, 0.0);
+        uv = vec2(1.0, 0.0);
     } else {
-        pos = vec2(1.0, 1.0);
+        uv = vec2(1.0, 1.0);
     }
 
-    gl_Position = a_transform * vec4(pos,0.,1.);
+    float objWidth  = a_pos.z;
+    float objHeight = a_pos.w;
 
-    //gl_Position = vec4(pos,0.,0.);
-    //v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
-    //v_texCoord = a_idx;
+    vec2 pos = vec2(
+        a_pos.x + sin(a_angle)*objHeight *(-0.5 + uv.y)
+                + cos(a_angle)*objWidth  *(-0.5 + uv.x),
+        a_pos.y + cos(a_angle)*objHeight *(-0.5 + uv.y)
+                - sin(a_angle)*objWidth  *(-0.5 + uv.x)
+    	);
+
+    gl_Position = vec4(
+        -1.0 + 2.0 * pos.x/u_viewPort.x,
+        -1.0 + 2.0 * pos.y/u_viewPort.y,
+         0.0,  1.0
+    );
+
     v_color = a_color;
 }

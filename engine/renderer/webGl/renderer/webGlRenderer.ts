@@ -36,6 +36,7 @@ import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import IDENTITY = Mat4.IDENTITY;
 import {BatchPainter} from "@engine/renderer/webGl/programs/impl/batch/batchPainter";
+import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -124,7 +125,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private _shapePainterHolder = new InstanceHolder(ShapePainter);
     private _coloredRectPainterHolder = new InstanceHolder(SimpleColoredRectPainter);
     private _meshPainterHolder = new InstanceHolder(MeshPainter);
-    private _experimentalBatchPainterHolder = new InstanceHolder(BatchPainter);
+    private _batchPainterHolder = new InstanceHolder(BatchPainter);
 
     private _nullTexture:Texture;
     private _nullCubeMapTexture:CubeMapTexture;
@@ -204,15 +205,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     }
 
-    public drawExperimentalBatch(model:RenderableModel):void{
-        const bp = this._experimentalBatchPainterHolder.getInstance(this._gl);
-        if (model.worldTransformDirty) {
-            rect.setXYWH( 0,0,model.size.width,model.size.height);
-            size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
-            const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
-            model.modelViewProjectionMatrix.fromMat16(mvpHolder);
-        }
-        bp.pushNextModel(model);
+    public drawBatchedImage(model:BatchedImage):void{
+        const bp = this._batchPainterHolder.getInstance(this._gl);
+        bp.pushNextModel(model,this);
     }
 
     public drawMesh3d(mesh:Mesh3d):void {
@@ -402,7 +397,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public flush() {
-        this._experimentalBatchPainterHolder.getInstance(this._gl).flush();
+        this._batchPainterHolder.getInstance(this._gl).flush(this);
     }
 
     public transformSave():void {

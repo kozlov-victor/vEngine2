@@ -1,27 +1,14 @@
 import {Scene} from "@engine/scene/scene";
-import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Game} from "@engine/core/game";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {Layer} from "@engine/scene/layer";
+import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
+import {MathEx} from "@engine/misc/math/mathEx";
 
 
-class ExperimentalModel extends RenderableModel {
-
-    constructor(game: Game) {
-        super(game);
-    }
-
-    override draw() {
-        const glRenderer = this.game.getRenderer<WebGlRenderer>();
-        glRenderer.drawExperimentalBatch(this);
-    }
-}
-
-const experimental:boolean = true;
+const batch:boolean = true;
 
 export class MainScene extends Scene {
 
@@ -38,17 +25,18 @@ export class MainScene extends Scene {
         debugLayer.println('click to add objects')
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click, _=>{
-            for (let i=0;i<5000;i++) {
+            for (let i=0;i<10_000;i++) {
 
                 let model;
 
-                if (experimental) {
-                    model = new ExperimentalModel(this.game);
+                if (batch) {
+                    model = new BatchedImage(this.game);
                 } else {
                     model = new Rectangle(this.game);
                     (model as Rectangle).lineWidth = 0;
                 }
-                model.size.setWH(Math.random()*10,Math.random()*10);
+                model.fillColor.setRGBA(MathEx.randomUint8(),MathEx.randomUint8(),MathEx.randomUint8(),MathEx.randomUint8());
+                model.size.setWH(MathEx.randomInt(10,50),MathEx.randomInt(10,50));
                 model.angle = Math.random();
                 model.pos.setXY(Math.random()*this.game.width,Math.random()*this.game.height);
                 model.transformPoint.setToCenter();
@@ -56,8 +44,8 @@ export class MainScene extends Scene {
                 //model.addBehaviour(new DraggableBehaviour(this.game));
                 model.appendTo(this.getLayerAtIndex(0));
                 this.models.push(model);
-                debugLayer.println(`objects: `+this.models.length);
             }
+            debugLayer.println(`objects: `+this.models.length);
         });
 
 
