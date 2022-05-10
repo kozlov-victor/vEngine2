@@ -1,7 +1,8 @@
 import {Shape} from "../../abstract/shape";
-import {ICloneable} from "@engine/core/declarations";
+import {ICloneable, Optional} from "@engine/core/declarations";
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
+import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 
 export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps{
 
@@ -29,6 +30,7 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
         this.center.forceTriggerChange();
     }
 
+    public fillGradient:Optional<AbstractGradient>;
     public readonly center:Point2d = new Point2d();
 
     public arcAngleFrom:number = 0;

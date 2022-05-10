@@ -37,6 +37,7 @@ import glEnumToString = DebugUtil.glEnumToString;
 import IDENTITY = Mat4.IDENTITY;
 import {BatchPainter} from "@engine/renderer/webGl/programs/impl/batch/batchPainter";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
+import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -348,6 +349,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
             this.prepareGeometryUniformInfo(rectangle);
             this.prepareShapeUniformInfo(rectangle);
+            this.prepareShapeFillUniformInfo(rectangle);
             sp.setUniformScalar(sp.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
             sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.RECT);
             sp.attachTexture('texture',this._nullTexture);
@@ -372,6 +374,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this.prepareGeometryUniformInfo(ellipse);
         this.prepareShapeUniformInfo(ellipse);
+        this.prepareShapeFillUniformInfo(ellipse);
 
         const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
@@ -661,7 +664,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         sp.setUniformScalar(sp.u_lineWidth,Math.min(model.lineWidth/maxSize,1));
         sp.setUniformVector(sp.u_color,model.color.asGL());
+    }
 
+    private prepareShapeFillUniformInfo(model:{fillGradient:Optional<AbstractGradient>,fillColor:Color}) {
+        const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
         if (model.fillGradient!==undefined) {
             model.fillGradient.setUniforms(sp);
             if (model.fillGradient.type==='LinearGradient') {

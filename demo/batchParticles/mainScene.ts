@@ -27,11 +27,11 @@ export class MainScene extends Scene {
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticlePrefab(particle1);
         ps.addParticlePrefab(particle2);
-        ps.emissionRadius = 30;
+        ps.emissionRadius = 20;
         ps.forceDrawChildrenOnNewSurface = true;
 
-        ps.numOfParticlesToEmit = {from:20,to:80};
-        ps.particleLiveTime = {from:600,to:5000};
+        ps.numOfParticlesToEmit = {from:30,to:100};
+        ps.particleLiveTime = {from:2000,to:6000};
         ps.particleAngle = {from:MathEx.degToRad(270-30),to:MathEx.degToRad(270+30)};
         ps.onEmitParticle(p=>{
             const b = p as BatchedImage;

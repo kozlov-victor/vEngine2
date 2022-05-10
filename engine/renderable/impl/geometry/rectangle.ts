@@ -1,11 +1,13 @@
 import {Game} from "@engine/core/game";
 import {Shape} from "../../abstract/shape";
-import {ICloneable} from "@engine/core/declarations";
+import {ICloneable, Optional} from "@engine/core/declarations";
+import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 
 export class Rectangle extends Shape implements ICloneable<Rectangle>, IRectangleProps{
 
     public override readonly type:string = 'Rectangle';
     public borderRadius:number = 0;
+    public fillGradient:Optional<AbstractGradient>;
 
     constructor(game: Game) {
         super(game);
@@ -32,6 +34,7 @@ export class Rectangle extends Shape implements ICloneable<Rectangle>, IRectangl
         cloned.borderRadius  = this.borderRadius;
         cloned.size.setFrom(this.size);
         cloned.lineWidth = this.lineWidth;
+        if (this.fillGradient!==undefined) cloned.fillGradient = this.fillGradient.clone();
         super.setClonedProperties(cloned);
     }
 

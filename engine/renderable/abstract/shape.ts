@@ -17,7 +17,6 @@ export abstract class Shape extends RenderableModel implements IShapeProps{
     public color:Color = Color.BLACK.clone();
     protected _lineWidth:number = 0;
     public fillColor:Color = Color.GREY.clone();
-    public fillGradient:Optional<AbstractGradient>;
 
     protected constructor(game:Game){
         super(game);
@@ -38,7 +37,6 @@ export abstract class Shape extends RenderableModel implements IShapeProps{
         cloned.color.setFrom(this.color);
         cloned._lineWidth = this._lineWidth;
         cloned.fillColor = this.fillColor.clone();
-        if (this.fillGradient!==undefined) cloned.fillGradient = this.fillGradient.clone();
         cloned.filters = [...this.filters];
         super.setClonedProperties(cloned);
     }
