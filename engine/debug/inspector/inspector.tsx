@@ -43,7 +43,7 @@ const NodeLeafs = (props:{tagName:string,model:RenderableModel|Layer}&IBaseProps
                         arr.push(
                             <NodeRoot nested={true} opened={opened}>
                                 <NodeLeafs tagName={c.constructor.name} model={c}/>
-                                {tooManyChildrenWarn && <div className={'tooManyChildrenWarn'}>too many children...</div>}
+                                {tooManyChildrenWarn && <div className={'tooManyChildrenWarn'}>{`too many children (${props.model.getChildrenCount()})...`}</div>}
                             </NodeRoot>
                         );
                         if (tooManyChildrenWarn) break;
