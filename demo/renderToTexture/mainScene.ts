@@ -39,10 +39,9 @@ export class MainScene extends Scene {
         this.appendChild(img);
         img.scale.setXY(0.2);
 
-        const clearColor:Color = Color.NONE;
         this.setInterval(()=>{
             img.visible = false;
-            spr.renderToTexture(renderTarget,clearColor);
+            spr.renderToTexture(renderTarget,true);
             img.visible = true;
         },1);
 

@@ -35,7 +35,7 @@ export namespace Mat4 {
 
     export class Mat16Holder extends ReleaseableEntity implements ICloneable<Mat16Holder>{
 
-        public identityFlag:boolean = false; // todo experimental flag
+        public identityFlag:boolean = false;
 
         public constructor(){
             super();
@@ -47,12 +47,12 @@ export namespace Mat4 {
             );
         }
 
-
-        private static m16hPool:ObjectPool<Mat16Holder> = new ObjectPool<Mat16Holder>(Mat16Holder,64);
+        private static m16hPool:ObjectPool<Mat16Holder> = new ObjectPool<Mat16Holder>(Mat16Holder,140); // find leak!
 
         public readonly mat16:Readonly<MAT16> = (new Float32Array(16) as unknown) as MAT16; // exports only readonly arr
 
         public static fromPool():Mat16Holder {
+            (window as any).p = this.m16hPool;
             return  Mat16Holder.m16hPool.getFreeObject()!;
         }
 

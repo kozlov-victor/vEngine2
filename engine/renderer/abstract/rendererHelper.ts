@@ -21,7 +21,7 @@ export class RendererHelper {
 
     }
 
-    public renderModelToTexture(m:RenderableModel, renderTarget:IRenderTarget, clearColor?:Color,omitSaveAndResoreRenderTaget?:boolean):void {
+    public renderModelToTexture(m:RenderableModel, renderTarget:IRenderTarget, clear: boolean = false):void {
         return undefined!;
     }
 

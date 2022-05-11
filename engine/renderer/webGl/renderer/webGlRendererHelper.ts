@@ -59,23 +59,18 @@ export class WebGlRendererHelper extends RendererHelper {
         this.restoreRenderTarget();
     }
 
-    public override renderModelToTexture(m: RenderableModel, renderTarget:FrameBufferStack, clearColor?:Color,omitSaveAndResoreRenderTaget?:boolean): void {
+    public override renderModelToTexture(m: RenderableModel, renderTarget:FrameBufferStack, clear:boolean = false): void {
         const renderer:WebGlRenderer = this.game.getRenderer();
         if (m.size.isZero()) m.revalidate();
-        if (!omitSaveAndResoreRenderTaget) this.saveRenderTarget();
+        const currRenderTarget = this.game.getRenderer<WebGlRenderer>().getRenderTarget();
+        const needSave = currRenderTarget!==renderTarget;
+        if (needSave) this.saveRenderTarget();
         renderer.setRenderTarget(renderTarget);
         renderer.transformSave();
         renderer.transformSet(IDENTITY_HOLDER);
-        const clearBeforeRenderOrig:boolean = renderer.clearBeforeRender;
-        const clearColorOrig:Color = renderer.clearColor;
-        renderer.clearBeforeRender = clearColor!==undefined;
-        if (clearColor!==undefined) renderer.clearColor.setFrom(clearColor);
-        renderer.beforeFrameDraw();
+        if (clear) renderTarget.clear(Color.NONE,0);
         m.render();
-        renderer.afterFrameDraw();
-        if (!omitSaveAndResoreRenderTaget) this.restoreRenderTarget();
-        renderer.clearBeforeRender = clearBeforeRenderOrig;
-        renderer.clearColor.setFrom(clearColorOrig);
+        if (needSave) this.restoreRenderTarget();
         renderer.transformRestore();
     }
 }

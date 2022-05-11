@@ -28,6 +28,7 @@ import {
 import {SvgPathToVertexArrayBuilder} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArrayBuilder";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import Mat16Holder = Mat4.Mat16Holder;
+import {FrameBufferStack} from "@engine/renderer/webGl/base/frameBufferStack";
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {
@@ -72,12 +73,11 @@ class DrawingSession implements IDrawingSession {
     private _batchedImage:BatchedImage = new BatchedImage(this.game);
     private _ellipse:Ellipse = new Ellipse(this.game);
     private _textField:TextFieldWithoutCache;
-    private _nullGameObject:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
     private _transformableContainer:ContainerForDrawingSurface = new ContainerForDrawingSurface(this.game,this._matrixStack);
     private _svgPathToVertexArrayBuilder:Optional<SvgPathToVertexArrayBuilder>;
 
-    private readonly _renderTarget:IRenderTarget;
-    private _omitSelfOnRendering:boolean = false;
+    public readonly _renderTarget:FrameBufferStack;
+    public canvasImage:Image;
 
     public pathParams:ITriangulatedPathParams = {
         lineWidth:1
@@ -85,17 +85,14 @@ class DrawingSession implements IDrawingSession {
     public fillColor:Color = Color.RGBA(0,0,0,255);
     public drawColor:Color = Color.RGBA(0,0,0,255);
 
-    private readonly canvasImage:Image;
 
     constructor(private game:Game,private surface:DrawingSurface,private _matrixStack:MatrixStack) {
-        this._renderTarget = this.game.getRenderer().getHelper().createRenderTarget(this.game,this.surface.size);
-        this.canvasImage = new Image(this.game,this._renderTarget.getTexture());
-        this.canvasImage.size.setFrom(surface.size);
-        this.canvasImage.revalidate();
+        this._renderTarget =
+            this.game.getRenderer().getHelper().createRenderTarget(this.game,this.surface.size) as FrameBufferStack;
     }
 
     public clear():void{
-        this.drawModel(this._nullGameObject,Color.NONE);
+        this._renderTarget.clear(Color.NONE,0);
     }
 
     public drawRoundedRect(x:number,y:number,width:number,height:number, radius:number):void {
@@ -113,17 +110,21 @@ class DrawingSession implements IDrawingSession {
             y-=height;
             height=-height;
         }
-        if (this._matrixStack.getCurrentValue().identityFlag && this.pathParams.lineWidth===0) {
-            this._batchedImage.pos.setXY(x,y);
-            this._batchedImage.size.setWH(width, height);
-            this._batchedImage.fillColor.setFrom(this.surface.getFillColor());
-            this._batchedImage.render();
-        } else {
+        // if (
+        //     this._matrixStack.getCurrentValue().identityFlag &&
+        //     this.pathParams.lineWidth===0 &&
+        //     this._rect.borderRadius===0
+        // ) {
+        //     this._batchedImage.pos.setXY(x,y);
+        //     this._batchedImage.size.setWH(width, height);
+        //     this._batchedImage.fillColor.setFrom(this.surface.getFillColor());
+        //     this._batchedImage.draw();
+        // } else {
             this._rect.pos.setXY(x,y);
             this._rect.size.setWH(width,height);
             this.drawSimpleShape(this._rect);
             this._rect.borderRadius = 0;
-        }
+        //}
     }
 
     public drawCircle(cx:number,cy:number,radius:number):void {
@@ -266,31 +267,20 @@ class DrawingSession implements IDrawingSession {
         this.drawModel(p);
     }
 
-    public drawModel(model:RenderableModel,clearColor?:Color):void{
+    public drawModel(model:RenderableModel):void{
         if (DEBUG && !model) throw new DebugError(`illegal argument: ${model}`);
         const parent:RenderableModel = model.parent;
         (model as IParentChild).parent = undefined;
-        this.surface.appendChild(this._transformableContainer);
         this._transformableContainer.appendChild(model);
-        this._omitSelfOnRendering = true;
         this.game.getCurrentScene()._renderingSessionInfo.drawingStackEnabled = false;
-        this.surface.renderToTexture(this._renderTarget,clearColor,true);
+        this._transformableContainer.renderToTexture(this._renderTarget);
         this.game.getCurrentScene()._renderingSessionInfo.drawingStackEnabled = !this.game.hasCurrentTransition(); // true if we dont draw transition
-        this._omitSelfOnRendering = false;
-        this.surface.removeChild(this._transformableContainer);
         this._transformableContainer.removeChild(model);
         (model as IParentChild).parent = parent;
     }
 
     public _getTexture():ITexture{
         return this.canvasImage.getTexture();
-    }
-
-    public _draw():void {
-        if (this._omitSelfOnRendering) return;
-        this.canvasImage.alpha = this.surface.alpha;
-        this.canvasImage.filters = this.surface.filters;
-        this.game.getRenderer().drawImage(this.canvasImage);
     }
 
     public _destroy():void {
@@ -348,10 +338,17 @@ export class DrawingSurface
         IMatrixTransformable, IDestroyable,
         IDrawingSession {
 
+    private readonly canvasImage:Image;
+
     constructor(game:Game,size:Readonly<ISize>){
         super(game);
         this.size.setFrom(size);
         this._drawingSession = new DrawingSession(this.game,this,this._matrixStack);
+        this.canvasImage = new Image(this.game,this._drawingSession._renderTarget.getTexture());
+        this.canvasImage.size.setFrom(this.size);
+        this.canvasImage.revalidate();
+        this._drawingSession.canvasImage = this.canvasImage;
+        this.appendChild(this.canvasImage);
     }
 
     public override type = 'DrawingSurface';
@@ -380,9 +377,7 @@ export class DrawingSurface
 
     public clone(): DrawingSurface {return undefined!;} // todo
 
-    public override draw(): void {
-        this._drawingSession._draw();
-    }
+    public override draw(): void {}
 
     public getTexture(): ITexture {
         return this._drawingSession._getTexture();

@@ -479,7 +479,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._currFrameBufferStack.reduceState(stackPointer);
     }
 
-
     public override beforeFrameDraw():void{
         if (this.clearBeforeRender) {
             this._currFrameBufferStack.clear(this.clearColor, 1);

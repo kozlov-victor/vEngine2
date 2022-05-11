@@ -181,7 +181,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     public override beforeFrameDraw(): void {
-        if (!this.clearBeforeRender) return undefined!;
+        if (!this.clearBeforeRender) return;
         this.ctx.fillStyle = this.clearColor.asCssRgba();
         this.ctx.fillRect(0,0,this.game.size.width,this.game.size.height);
     }

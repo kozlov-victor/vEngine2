@@ -362,9 +362,9 @@ export abstract class RenderableModel
         return this.parent || this._layer;
     }
 
-    public renderToTexture(target: IRenderTarget, clearColor?: Color, omitSaveAndResoreRenderTaget?: boolean): void {
+    public renderToTexture(target: IRenderTarget,clear:boolean = false): void {
         this.worldTransformDirty = true;
-        this.game.getRenderer().getHelper().renderModelToTexture(this, target, clearColor, omitSaveAndResoreRenderTaget);
+        this.game.getRenderer().getHelper().renderModelToTexture(this, target, clear);
         this.worldTransformDirty = true;
     }
 
