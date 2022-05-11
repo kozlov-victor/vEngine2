@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         this.mouseEventHandler.on(MOUSE_EVENTS.click, _=>{
             for (let i=0;i<10_000;i++) {
 
-                let model;
+                let model:BatchedImage|Rectangle;
 
                 if (batch) {
                     model = new BatchedImage(this.game);
@@ -45,7 +45,7 @@ export class MainScene extends Scene {
                 model.appendTo(this.getLayerAtIndex(0));
                 this.models.push(model);
             }
-            debugLayer.println(`objects: `+this.models.length);
+            debugLayer.println(`objects: ${this.models.length}`);
         });
 
 

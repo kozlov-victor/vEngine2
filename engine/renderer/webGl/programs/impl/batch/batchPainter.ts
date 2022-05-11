@@ -18,7 +18,7 @@ import {Color} from "@engine/renderer/common/color";
 
 export class BatchPainter extends AbstractPainter {
 
-    private readonly NUM_OF_QUADS_IN_BATCH = 8000;
+    private readonly NUM_OF_QUADS_IN_BATCH = 8000; // max is 65535/4
     private currentModelIndex:number = 0;
     private readonly a_idx: string;
     private readonly a_color: string;
@@ -59,10 +59,10 @@ export class BatchPainter extends AbstractPainter {
         for (let i=0;i<4*this.NUM_OF_QUADS_IN_BATCH;i+=4) {
             indexArray.push(...
                 [
-                    i+0,
+                    i  ,
                     i+1,
                     i+3,
-                    i+0,
+                    i  ,
                     i+2,
                     i+3
                 ]

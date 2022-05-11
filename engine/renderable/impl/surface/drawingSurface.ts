@@ -26,6 +26,7 @@ import {
     JointStyle
 } from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 import {SvgPathToVertexArrayBuilder} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArrayBuilder";
+import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import Mat16Holder = Mat4.Mat16Holder;
 
 
@@ -68,6 +69,7 @@ export interface IDrawingSession {
 class DrawingSession implements IDrawingSession {
 
     private _rect:Rectangle = new Rectangle(this.game);
+    private _batchedImage:BatchedImage = new BatchedImage(this.game);
     private _ellipse:Ellipse = new Ellipse(this.game);
     private _textField:TextFieldWithoutCache;
     private _nullGameObject:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
@@ -111,10 +113,17 @@ class DrawingSession implements IDrawingSession {
             y-=height;
             height=-height;
         }
-        this._rect.pos.setXY(x,y);
-        this._rect.size.setWH(width,height);
-        this.drawSimpleShape(this._rect);
-        this._rect.borderRadius = 0;
+        if (this._matrixStack.getCurrentValue().identityFlag && this.pathParams.lineWidth===0) {
+            this._batchedImage.pos.setXY(x,y);
+            this._batchedImage.size.setWH(width, height);
+            this._batchedImage.fillColor.setFrom(this.surface.getFillColor());
+            this._batchedImage.render();
+        } else {
+            this._rect.pos.setXY(x,y);
+            this._rect.size.setWH(width,height);
+            this.drawSimpleShape(this._rect);
+            this._rect.borderRadius = 0;
+        }
     }
 
     public drawCircle(cx:number,cy:number,radius:number):void {
@@ -350,7 +359,7 @@ export class DrawingSurface
     public setResourceLink:never = undefined as unknown as never;
     private _matrixStack:MatrixStack = new MatrixStack();
     private _font:Font;
-    private _drawingSession:DrawingSession;
+    private readonly _drawingSession:DrawingSession;
 
     private static normalizeColor(col:Uint8|number|Color, g?:Uint8, b?:Uint8, a:Uint8 = 255):Color {
         if ((col as Color).type==='Color') { // Color

@@ -80,9 +80,7 @@ export namespace Mat4 {
 
         public clone(): Mat4.Mat16Holder {
             const m:Mat16Holder = new Mat16Holder();
-            for (let i:n=0;i<this.mat16.length;i++) {
-                (m.mat16 as MAT16)[i] = this.mat16[i];
-            }
+            m.fromMat16(this);
             m.identityFlag = this.identityFlag;
             return m;
         }

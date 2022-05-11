@@ -38,8 +38,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     public save():void {
         const copy = Mat16Holder.fromPool();
         const curVal = this.getCurrentValue();
-        copy.mat16.set(curVal.mat16);
-        copy.identityFlag = curVal.identityFlag;
+        copy.fromMat16(curVal);
         this._stack.push(copy);
     }
 

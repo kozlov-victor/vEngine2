@@ -49,11 +49,14 @@ export class MainScene extends Scene {
 
         this.surface.setLineWidth(0);
 
+        const r =(arg?:number)=>Math.random()+0.000001;
         this.renderScene = (session)=>{
             const t = this.game.getElapsedTime() / 1000;
             let X,Y,Z,q,i:number;
-            const r =(arg?:number)=>Math.random()+0.000001;
-            for (r(), X = r(Y = r(Z = r())), i = 255; i--; x.setFillColor(R(X / Y / Z, Y / Z / X, Z / X / Y),byte(r() / 5))) session.drawRect(1920 * r() - i / 2, 1080 * r(), asNum(q = X / Y / Z ^ i), asNum(T(q) / T(i * t) * 6));
+            for (r(), X = r(Y = r(Z = r())), i = 255; i--;) {
+                x.setFillColor(R(X / Y / Z, Y / Z / X, Z / X / Y),byte(r() / 5));
+                session.drawRect(1920 * r() - i / 2, 1080 * r(), asNum(q = X / Y / Z ^ i), asNum(T(q) / T(i * t) * 6));
+            }
         };
 
     }
