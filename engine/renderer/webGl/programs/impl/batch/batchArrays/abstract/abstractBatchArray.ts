@@ -5,12 +5,17 @@ export abstract class AbstractBatchArray<T> {
 
     private readonly array:Float32Array;
     private onPutNextChunkCallback:(model:T,array:Float32Array,offset:number)=>void;
+    private vertexBuffer:VertexBuffer;
 
-    protected constructor(private size: number, private vertexBuffer:VertexBuffer) {
+    protected constructor(private size: number) {
         this.array = new Float32Array(4*size*BatchPainter.NUM_OF_QUADS_IN_BATCH);
     }
 
-    public setOnPutNextChunkCallback(cb:(model:T,array:Float32Array,offset: number)=>void): void {
+    public setVertexBuffer(vb:VertexBuffer):void {
+        this.vertexBuffer = vb;
+    }
+
+    protected setOnPutNextChunkCallback(cb:(model:T,array:Float32Array,offset: number)=>void): void {
         this.onPutNextChunkCallback = cb;
     }
 
@@ -26,6 +31,10 @@ export abstract class AbstractBatchArray<T> {
     public uploadToVertexBufferAndReset():void {
         this.vertexBuffer.updateData(this.array);
         this.array.fill(0);
+    }
+
+    public getArray():Float32Array {
+        return this.array;
     }
 
 

@@ -1,11 +1,10 @@
 import {AbstractBatchArray} from "@engine/renderer/webGl/programs/impl/batch/batchArrays/abstract/abstractBatchArray";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
-import {VertexBuffer} from "@engine/renderer/webGl/base/vertexBuffer";
 
-export class posBufferArray extends AbstractBatchArray<BatchedImage> {
+export class PosBatchArray extends AbstractBatchArray<BatchedImage> {
 
-    constructor(buffer:VertexBuffer) {
-        super(4, buffer);
+    constructor() {
+        super(4);
         this.setOnPutNextChunkCallback((model,array,offset)=>{
             const pos  = model.pos;
             const size = model.size;
