@@ -105,6 +105,10 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         return prevPointer;
     }
 
+    public bind():void {
+        this._getLast().frameBuffer.bind();
+    }
+
     public clear(color:Color,alphaBlend?:number):void{
         for (const b of this._stack) {
             b.frameBuffer.bind();

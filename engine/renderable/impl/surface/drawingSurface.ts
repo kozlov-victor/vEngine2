@@ -29,6 +29,7 @@ import {SvgPathToVertexArrayBuilder} from "@engine/renderable/impl/geometry/_int
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import Mat16Holder = Mat4.Mat16Holder;
 import {FrameBufferStack} from "@engine/renderer/webGl/base/frameBufferStack";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {
@@ -110,21 +111,23 @@ class DrawingSession implements IDrawingSession {
             y-=height;
             height=-height;
         }
-        // if (
-        //     this._matrixStack.getCurrentValue().identityFlag &&
-        //     this.pathParams.lineWidth===0 &&
-        //     this._rect.borderRadius===0
-        // ) {
-        //     this._batchedImage.pos.setXY(x,y);
-        //     this._batchedImage.size.setWH(width, height);
-        //     this._batchedImage.fillColor.setFrom(this.surface.getFillColor());
-        //     this._batchedImage.draw();
-        // } else {
+        const userExperimental = true;
+        if (
+            userExperimental &&
+            this._matrixStack.getCurrentValue().identityFlag &&
+            this.pathParams.lineWidth===0 &&
+            this._rect.borderRadius===0
+        ) {
+            this._batchedImage.pos.setXY(x,y);
+            this._batchedImage.size.setWH(width, height);
+            this._batchedImage.fillColor.setFrom(this.surface.getFillColor());
+            this._batchedImage.draw();
+        } else {
             this._rect.pos.setXY(x,y);
             this._rect.size.setWH(width,height);
             this.drawSimpleShape(this._rect);
             this._rect.borderRadius = 0;
-        //}
+        }
     }
 
     public drawCircle(cx:number,cy:number,radius:number):void {
@@ -283,6 +286,12 @@ class DrawingSession implements IDrawingSession {
         return this.canvasImage.getTexture();
     }
 
+    public _draw():void {
+        this.canvasImage.alpha = this.surface.alpha;
+        this.canvasImage.filters = this.surface.filters;
+        this.game.getRenderer().drawImage(this.canvasImage);
+    }
+
     public _destroy():void {
         this._renderTarget.destroy();
     }
@@ -348,7 +357,6 @@ export class DrawingSurface
         this.canvasImage.size.setFrom(this.size);
         this.canvasImage.revalidate();
         this._drawingSession.canvasImage = this.canvasImage;
-        this.appendChild(this.canvasImage);
     }
 
     public override type = 'DrawingSurface';
@@ -377,7 +385,9 @@ export class DrawingSurface
 
     public clone(): DrawingSurface {return undefined!;} // todo
 
-    public override draw(): void {}
+    public override draw(): void {
+        this._drawingSession._draw();
+    }
 
     public getTexture(): ITexture {
         return this._drawingSession._getTexture();
@@ -477,64 +487,74 @@ export class DrawingSurface
         this._drawingSession._setPixelPerfect(val);
     }
 
-    public drawBatch(fn:(s:IDrawingSession)=>void):void {
+    private _beforeSession():void {
         this.game.getRenderer().getHelper().saveRenderTarget();
-        fn(this._drawingSession);
+        this.game.getRenderer<WebGlRenderer>().setRenderTarget(this._drawingSession._renderTarget);
+        this._drawingSession._renderTarget.bind();
+    }
+
+    private _afterSession():void {
         this.game.getRenderer().getHelper().restoreRenderTarget();
+    }
+
+    public drawBatch(fn:(s:IDrawingSession)=>void):void {
+        this._beforeSession();
+        fn(this._drawingSession);
+        this._afterSession();
     }
 
     public drawArc(cx: number, cy: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.drawArc(cx,cy,radius,startAngle,endAngle,anticlockwise);
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public fillArc(cx: number, cy: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.fillArc(cx,cy,radius,startAngle,endAngle,anticlockwise);
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public drawCircle(cx: number, cy: number, radius: number): void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.drawCircle(cx,cy,radius);
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public drawEllipse(cx: number, cy: number, radiusX: number, radiusY: number): void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.drawEllipse(cx,cy,radiusX,radiusY);
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public drawPolygon(pathOrVertices: string | number[]): void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.drawPolygon(pathOrVertices);
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public drawPolyline(pathOrVertices: string | number[]): void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.drawPolyline(pathOrVertices);
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public drawRect(x: number, y: number, width: number, height: number): void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.drawRect(x,y,width,height);
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public drawRoundedRect(x: number, y: number, width: number, height: number, radius: number): void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.drawRoundedRect(x,y,width,height,radius);
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public drawText(text: string | number, x: number, y: number): void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.drawText(text,x,y);
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public lineTo(x: number, y: number): void {
@@ -554,21 +574,21 @@ export class DrawingSurface
     }
 
     public completePolyline():void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.completePolyline();
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public drawModel(m:RenderableModel):void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.drawModel(m);
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public clear():void {
-        this.game.getRenderer().getHelper().saveRenderTarget();
+        this._beforeSession();
         this._drawingSession.clear();
-        this.game.getRenderer().getHelper().restoreRenderTarget();
+        this._afterSession();
     }
 
     public override destroy():void {

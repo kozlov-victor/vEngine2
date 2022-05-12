@@ -4,8 +4,8 @@ import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {ShaderProgram} from "@engine/renderer/webGl/base/shaderProgram";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/bufferInfo";
 
-import * as batchVertexSource from "@engine/renderer/webGl/programs/impl/batch/batch.vertex.glsl";
-import * as batchFragmentSource from "@engine/renderer/webGl/programs/impl/batch/batch.fragment.glsl";
+import * as batchVertexSource from "@engine/renderer/webGl/programs/impl/batch/shaders/batch.vertex.glsl";
+import * as batchFragmentSource from "@engine/renderer/webGl/programs/impl/batch/shaders/batch.fragment.glsl";
 import {VertexBuffer} from "@engine/renderer/webGl/base/vertexBuffer";
 import {Point2d} from "@engine/geometry/point2d";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
@@ -18,7 +18,7 @@ import {Color} from "@engine/renderer/common/color";
 
 export class BatchPainter extends AbstractPainter {
 
-    private readonly NUM_OF_QUADS_IN_BATCH = 8000; // max is 65535/4
+    public static readonly NUM_OF_QUADS_IN_BATCH = 8000; // max is 65535/4
     private currentModelIndex:number = 0;
     private readonly a_idx: string;
     private readonly a_color: string;
@@ -56,7 +56,7 @@ export class BatchPainter extends AbstractPainter {
         );
 
         const indexArray:number[] = [];
-        for (let i=0;i<4*this.NUM_OF_QUADS_IN_BATCH;i+=4) {
+        for (let i=0;i<4*BatchPainter.NUM_OF_QUADS_IN_BATCH;i+=4) {
             indexArray.push(...
                 [
                     i  ,
@@ -69,7 +69,7 @@ export class BatchPainter extends AbstractPainter {
             );
         }
 
-        const vertexIdxArray = new Float32Array(4*1*this.NUM_OF_QUADS_IN_BATCH);
+        const vertexIdxArray = new Float32Array(4*1*BatchPainter.NUM_OF_QUADS_IN_BATCH);
         for (let i=0;i<vertexIdxArray.length;i+=4) {
             vertexIdxArray[i    ] = 0;
             vertexIdxArray[i + 1] = 1;
@@ -77,10 +77,9 @@ export class BatchPainter extends AbstractPainter {
             vertexIdxArray[i + 3] = 3;
         }
 
-        this.colorArray     = new Float32Array(4*4*this.NUM_OF_QUADS_IN_BATCH);
-        this.angleArray     = new Float32Array(4  *this.NUM_OF_QUADS_IN_BATCH);
-        this.posArray       = new Float32Array(4*4*this.NUM_OF_QUADS_IN_BATCH);
-
+        this.colorArray     = new Float32Array(4*4*BatchPainter.NUM_OF_QUADS_IN_BATCH);
+        this.angleArray     = new Float32Array(4  *BatchPainter.NUM_OF_QUADS_IN_BATCH);
+        this.posArray       = new Float32Array(4*4*BatchPainter.NUM_OF_QUADS_IN_BATCH);
 
         const bufferInfoDesc:IBufferInfoDescription = {
             posIndexInfo: {
@@ -132,7 +131,6 @@ export class BatchPainter extends AbstractPainter {
         let offset = this.currentModelIndex*size*4;
         for (let i=0;i<4;i++) {
             this.angleArray[offset] = angle;
-            this.angleArray[offset+1] = angle;
             offset+=size;
         }
     }
@@ -141,17 +139,16 @@ export class BatchPainter extends AbstractPainter {
         const size = 4;
         let offset = this.currentModelIndex*size*4;
         for (let i=0;i<4;i++) {
-            this.posArray[offset  ] = modelPos.x;
-            this.posArray[offset+1] = modelPos.y;
+            this.posArray[offset  ] = modelPos.x + modelSize.width/2;
+            this.posArray[offset+1] = modelPos.y + modelSize.height/2;
             this.posArray[offset+2] = modelSize.width;
             this.posArray[offset+3] = modelSize.height;
             offset+=size;
         }
     }
 
-
-    public pushNextModel(model:BatchedImage,renderer:WebGlRenderer):void {
-        if (this.currentModelIndex===this.NUM_OF_QUADS_IN_BATCH) {
+    public putNextModel(model:BatchedImage, renderer:WebGlRenderer):void {
+        if (this.currentModelIndex===BatchPainter.NUM_OF_QUADS_IN_BATCH) {
             this.flush(renderer);
         }
         this.putNextColor(model.fillColor);
@@ -175,7 +172,7 @@ export class BatchPainter extends AbstractPainter {
 
     private reset():void {
         this.currentModelIndex = 0;
-        this.colorArray.fill(0);
+        this.posArray.fill(0);
         this.dirty = false;
     }
 

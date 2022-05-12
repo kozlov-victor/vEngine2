@@ -208,7 +208,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public drawBatchedImage(model:BatchedImage):void{
         const bp = this._batchPainterHolder.getInstance(this._gl);
-        bp.pushNextModel(model,this);
+        bp.putNextModel(model,this);
     }
 
     public drawMesh3d(mesh:Mesh3d):void {
@@ -400,6 +400,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public flush() {
+        this._glCachedAccessor.setDepthTest(false);
         this._batchPainterHolder.getInstance(this._gl).flush(this);
     }
 

@@ -40,7 +40,6 @@ export class MainScene extends Scene {
         //const T = Math.tan;
         //const c = this.surface;
         const x = this.surface;
-        // tslint:disable-next-line:no-shadowed-variable
         const R = (r:number,g:number = r,b:number = g)=>{
             if (r>255) r = 255;
             if (g>255) g = 255;
@@ -58,7 +57,6 @@ export class MainScene extends Scene {
         // x.setFillColor(Color.BLACK.asRGBNumeric());
 
         this.backgroundColor = ColorFactory.fromCSS('#04290e');
-
 
         let z:number, w:number, m:number,r: number,a:number,X:number;
         let b:number,Y:number;
