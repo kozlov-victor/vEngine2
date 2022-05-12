@@ -1,6 +1,8 @@
 import {BatchPainter} from "@engine/renderer/webGl/programs/impl/batch/batchPainter";
 import {VertexBuffer} from "@engine/renderer/webGl/base/vertexBuffer";
 
+const NUM_OF_VERTICES_IN_QUAD = 4;
+
 export abstract class AbstractBatchArray<T> {
 
     private readonly array:Float32Array;
@@ -8,7 +10,7 @@ export abstract class AbstractBatchArray<T> {
     private vertexBuffer:VertexBuffer;
 
     protected constructor(private size: number) {
-        this.array = new Float32Array(4*size*BatchPainter.NUM_OF_QUADS_IN_BATCH);
+        this.array = new Float32Array(NUM_OF_VERTICES_IN_QUAD*size*BatchPainter.NUM_OF_QUADS_IN_BATCH);
     }
 
     public setVertexBuffer(vb:VertexBuffer):void {
@@ -21,8 +23,8 @@ export abstract class AbstractBatchArray<T> {
 
     public putNextChunk(model:T,chunkIndex:number):void {
         const size = this.size;
-        let offset = chunkIndex*size*4;
-        for (let i=0;i<4;i++) {
+        let offset = chunkIndex*size*NUM_OF_VERTICES_IN_QUAD;
+        for (let i=0;i<NUM_OF_VERTICES_IN_QUAD;i++) {
             this.onPutNextChunkCallback(model,this.array,offset);
             offset+=size;
         }
