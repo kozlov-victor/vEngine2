@@ -40,6 +40,22 @@ const getCh = ()=>{
     })
 };
 
+const wrapTextToFrame = (text)=>{
+    const strings = text.substr?text.split('\n'):text;
+    let maxLength = Math.max(...strings.map(it=>it.length));
+    if (maxLength<3) maxLength = 3;
+    const result = [];
+
+    result.push(`╔═▓${getLine('═',maxLength-2)}╗`);
+    for (const string of strings) {
+        result.push(
+            `║${centerPad(string,maxLength)}║`
+        );
+    }
+    result.push(`╚${getLine('═',maxLength)}╝`,colors.bg.Cyan,'',colors.Reset);
+    result.push(` ${getLine(' ',maxLength)} `);
+    return result.join('\n');
+}
 
 const showWindow = (text,colorBg,colorFg)=>{
     const strings = text.substr?text.split('\n'):text;
@@ -111,7 +127,13 @@ const choose = async (message,chooseArray)=>{
         if (canScrollUp) popup = '...\n' + popup;
         if (canScrollDown) popup+='\n...';
         console.clear();
-        if (message) console.log(message);
+        console.log('       '+new Array(maxLengthOfMessage+2).fill('-').join(''));
+        if (message) {
+            console.log(
+                '    ',colors.bg.Green,colors.fg.White,centerPad(message,maxLengthOfMessage+2),colors.bg.Green,'',colors.Reset
+            );
+            console.log('       '+new Array(maxLengthOfMessage+2).fill('-').join(''));
+        }
         showInfoWindow(popup);
     };
     let loop = true;
