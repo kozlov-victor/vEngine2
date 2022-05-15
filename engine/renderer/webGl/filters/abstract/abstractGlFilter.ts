@@ -27,12 +27,11 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
 
     private _destroyed:boolean = false;
 
-
     protected constructor(protected game:Game){
 
         const renderer:AbstractRenderer = game.getRenderer();
         if (DEBUG && !(renderer instanceof WebGlRenderer)) {
-            throw new DebugError(`can not apply filter: filters awailable only for WebGlRenerer`);
+            throw new DebugError(`can not apply filter: filters available only for WebGlRenderer`);
         }
 
         this.gl = (game.getRenderer() as any as WebGlRenderer).getNativeContext();

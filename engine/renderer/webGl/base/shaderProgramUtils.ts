@@ -198,10 +198,12 @@ export const extractUniformsFromShader = (gl:WebGLRenderingContext, program:Shad
         if (DEBUG && !uniformData) throw new DebugError(`can not receive active uniforms info: gl.getActiveUniform()`);
         const type:string = mapType(gl, uniformData.type);
         const name:string = normalizeUniformName(uniformData.name);
-        const location:WebGLUniformLocation = gl.getUniformLocation(glProgram, name)!;
-        if (DEBUG && location===null) {
-            console.log(program);
-            throw new DebugError(`error finding uniform location: ${uniformData.name}`);
+        const location = gl.getUniformLocation(glProgram, name);
+        if (location===null) {
+            // it can happen in some browsers, when uniform is available via getActiveUniform
+            // but is not accessible by getUniformLocation because it is not used in compiled shader
+            // ignore it
+            continue;
         }
         uniforms[name] = {
             type,
@@ -278,6 +280,7 @@ const isBoolean = (val:UNIFORM_VALUE_TYPE):val is boolean=>{
 };
 
 const isArrayOfType = (val:UNIFORM_VALUE_TYPE,checker:(val:UNIFORM_VALUE_TYPE)=>boolean,size:number):val is Float32Array|Int32Array=> {
+    // too expensive even for debug, turn it on only for exclusive situations
     // if (!DEBUG) return true;
     // else if (!val)
     //     throw new DebugError(`can not set uniform  value: ${val}`);

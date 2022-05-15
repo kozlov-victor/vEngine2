@@ -67,3 +67,15 @@ if (!Array.prototype.findIndex) {
     };
 }
 
+if (!Array.prototype.fill) {
+    (Array as any).prototype.Fill = function(val:number) {
+        for (let i=0;i<this.length;i++) {
+            this[i] = val;
+        }
+    }
+}
+
+if (!Float32Array.prototype.fill) {
+    (Float32Array as any).prototype.fill = Array.prototype.fill;
+}
+
