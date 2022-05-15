@@ -93,27 +93,14 @@ export class ShaderProgram {
         this.enableAttribute(attrName);
         const attrLocation:GLuint = this._attributes[attrName];
 
-        if (buffer.getItemSize()===16) {
-            for (let i = 0; i < 4; ++i) {
-                this._gl.enableVertexAttribArray(attrLocation + i)
-                this._gl.vertexAttribPointer(
-                    attrLocation + i,
-                    4,
-                    buffer.getItemType(),
-                    false,
-                    16 * 4,
-                    i * 16)
-            }
-        } else {
-            this._gl.vertexAttribPointer(
-                attrLocation,
-                buffer.getItemSize(),
-                buffer.getItemType(),  // type of data
-                false,       // if the content is normalized [0..1] vectors
-                buffer.getStride(),    // number of bytes to skip in between elements
-                buffer.getOffset()     // offsets to the first element
-            );
-        }
+        this._gl.vertexAttribPointer(
+            attrLocation,
+            buffer.getItemSize(),
+            buffer.getItemType(),  // type of data
+            false,       // if the content is normalized [0..1] vectors
+            buffer.getStride(),    // number of bytes to skip in between elements
+            buffer.getOffset()     // offsets to the first element
+        );
     }
 
     public unbindVertexBuffer(buffer:VertexBuffer):void {
