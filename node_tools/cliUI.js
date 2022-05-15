@@ -57,32 +57,32 @@ const wrapTextToFrame = (text)=>{
     return result.join('\n');
 }
 
+const getLeftPadStringToCenterWindow = (length)=>{
+    const TERM_LENGTH = process.stdout.columns;
+    const leftPadLength = ~~((TERM_LENGTH - length)/2);
+    return  new Array(leftPadLength).fill(' ').join('');
+}
+
 const showWindow = (text,colorBg,colorFg)=>{
     const strings = text.substr?text.split('\n'):text;
     let maxLength = Math.max(...strings.map(it=>it.length));
     if (maxLength<3) maxLength = 3;
+    const leftPadString = getLeftPadStringToCenterWindow(maxLength);
 
-    console.log('    ',colorBg,colorFg,`╔═▓${getLine('═',maxLength-2)}╗`,colors.Reset);
+    console.log(leftPadString,colorBg,colorFg,`╔═▓${getLine('═',maxLength-2)}╗`,colors.Reset);
     for (const string of strings) {
         console.log(
-            '    ',colorBg,colorFg,`║${centerPad(string,maxLength)}║`,colors.bg.Cyan,'',colors.Reset
+            leftPadString,colorBg,colorFg,`║${centerPad(string,maxLength)}║`,colors.bg.Cyan,'',colors.Reset
         );
     }
-    console.log('    ',colorBg,colorFg,`╚${getLine('═',maxLength)}╝`,colors.bg.Cyan,'',colors.Reset);
-    console.log('     ',colors.bg.Cyan,` ${getLine(' ',maxLength)} `,colors.bg.Cyan,'',colors.Reset);
+    console.log(leftPadString,colorBg,colorFg,`╚${getLine('═',maxLength)}╝`,colors.bg.Cyan,'',colors.Reset);
+    console.log(leftPadString+' ',colors.bg.Cyan,` ${getLine(' ',maxLength)} `,colors.bg.Cyan,'',colors.Reset);
 };
 
 const showInfoWindow = (text)=>{
    showWindow(text,colors.bg.Blue,colors.fg.Cyan);
 };
 
-const showTable = (arr)=>{
-    let res = '';
-    const maxLengthArr = [];
-    arr.forEach((rowArr,i)=>{
-       const maxColLength = Math.max();
-    });
-};
 
 const showErrorWindow = (text)=>{
     showWindow(text,colors.bg.Magenta,colors.fg.White);
@@ -127,12 +127,13 @@ const choose = async (message,chooseArray)=>{
         if (canScrollUp) popup = '...\n' + popup;
         if (canScrollDown) popup+='\n...';
         console.clear();
-        console.log('       '+new Array(maxLengthOfMessage+2).fill('-').join(''));
+        const leftPadString = getLeftPadStringToCenterWindow(maxLengthOfMessage);
+        console.log(leftPadString+'  '+new Array(maxLengthOfMessage+2).fill('-').join(''));
         if (message) {
             console.log(
-                '    ',colors.bg.Green,colors.fg.White,centerPad(message,maxLengthOfMessage+2),colors.bg.Green,'',colors.Reset
+                leftPadString,colors.bg.Green,colors.fg.White,centerPad(message,maxLengthOfMessage+2),colors.bg.Green,'',colors.Reset
             );
-            console.log('       '+new Array(maxLengthOfMessage+2).fill('-').join(''));
+            console.log(leftPadString+'   '+new Array(maxLengthOfMessage+2).fill('-').join(''));
         }
         showInfoWindow(popup);
     };

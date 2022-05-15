@@ -209,15 +209,14 @@ export abstract class RenderableModel
             throw new DebugError(`can not render destroyed object`);
         }
 
+        this._tweenDelegate.update();
+        this._timerDelegate.update();
+        for (const bh of this._behaviours) bh.update();
+        for (const pa of this._propertyAnimations) pa.update();
+
         if (!this.visible) return;
         if (this.scale.equal(0)) return;
         if (this.alpha === 0) return;
-
-        this._tweenDelegate.update();
-        this._timerDelegate.update();
-
-        for (const bh of this._behaviours) bh.update();
-        for (const pa of this._propertyAnimations) pa.update();
 
         const delta: number = this.game.getDeltaTime();
         const dSeconds = delta / 1000;

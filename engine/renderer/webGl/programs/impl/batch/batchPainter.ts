@@ -112,7 +112,7 @@ export class BatchPainter extends AbstractPainter {
         }
         const index = this.currentModelIndex;
         this.colorBatchArray.putNextChunk(model.fillColor,index);
-        this.angleBatchArray.putNextChunk(model.angle,index);
+        if (model.angle!==0) this.angleBatchArray.putNextChunk(model.angle,index);
         this.posBatchArray.putNextChunk(model,index);
         this.currentModelIndex++;
         this.dirty = true;

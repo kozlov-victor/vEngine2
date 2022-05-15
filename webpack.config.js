@@ -20,6 +20,7 @@ class InputOutputResolver {
         if (project==='build_tools') {
             entry['xmlParser'] = './engine/misc/parsers/xml/xmlParser.ts';
             entry['angelCodeParser'] = './engine/misc/parsers/angelCode/angelCodeParser.ts';
+            entry['textTable'] = './engine/renderable/impl/ui/textHelpers/textTable.ts';
             output.path = path.resolve('./node_tools/build');
         } else {
             if (!project) {
@@ -42,6 +43,18 @@ class InputOutputResolver {
         return {entry,output};
     }
 
+}
+
+const getTime = ()=>{
+    const date = new Date();
+    const leadZero = (val)=>{
+        if ((''+val).length===1) return `0${val}`;
+        else return `${val}`;
+    };
+    const hh = leadZero(date.getHours());
+    const mm = leadZero(date.getMinutes());
+    const ss = leadZero(date.getSeconds());
+    return {mm,hh,ss};
 }
 
 const getCommitHash = ()=>{
@@ -68,19 +81,13 @@ class WebpackDonePlugin{
     apply(compiler){
 
         compiler.hooks.done.tap('compilation',  (stats)=> {
-            const date = new Date();
-            const leadZero = (val)=>{
-                if ((''+val).length===1) return `0${val}`;
-                else return `${val}`;
-            };
-            const hh = leadZero(date.getHours());
-            const mm = leadZero(date.getMinutes());
-            const ss = leadZero(date.getSeconds());
+            const {mm,hh,ss} = getTime();
             setTimeout(()=>{
                 if (stats.compilation.errors && stats.compilation.errors.length) {
                     cliUI.showErrorWindow(
                         [
-                            `--===compilation errors===--`,
+                            `--===compiled with errors===--`,
+                            `total errors number: ${stats.compilation.errors.length}`,
                             (()=>{
                                 if (project) return `-=project: ${project}=-`;
                                 else return `-=${allProjectsFlat.length} projects=-`
@@ -194,10 +201,19 @@ module.exports = async (env={})=>{
 
     const {entry,output} = new InputOutputResolver().resolve(project,allProjectsFlat);
 
-    console.log('webpack started at',new Date());
-    console.log('env',env);
-    console.log({entry,output});
-    console.log(`Selected: ${project ?? 'all'}`);
+    if (project==='build_tools') {
+        console.log({entry,output});
+    } else {
+        const TextTable = require('./node_tools/build/textTable').TextTable;
+        const {mm,hh,ss} = getTime();
+        console.clear();
+        console.log(TextTable.fromArrays([
+            ['webpack started at',`${hh}:${mm}:${ss}`],
+            ['Selected',project ?? 'all'],
+            ['Branch',getBranchName()],
+            ['Commit',getCommitHash()],
+        ],{border:true,pad:true}).toString());
+    }
 
     const config = {
         entry,

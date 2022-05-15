@@ -5,6 +5,7 @@ const NUM_OF_VERTICES_IN_QUAD = 4;
 
 export abstract class AbstractBatchArray<T> {
 
+    private dirty:boolean = false;
     private readonly array:Float32Array;
     private onPutNextChunkCallback:(model:T,array:Float32Array,offset:number)=>void;
     private vertexBuffer:VertexBuffer;
@@ -22,6 +23,7 @@ export abstract class AbstractBatchArray<T> {
     }
 
     public putNextChunk(model:T,chunkIndex:number):void {
+        this.dirty = true;
         const size = this.size;
         let offset = chunkIndex*size*NUM_OF_VERTICES_IN_QUAD;
         for (let i=0;i<NUM_OF_VERTICES_IN_QUAD;i++) {
@@ -31,6 +33,8 @@ export abstract class AbstractBatchArray<T> {
     }
 
     public uploadToVertexBufferAndReset():void {
+        if (!this.dirty) return;
+        this.dirty = false;
         this.vertexBuffer.updateData(this.array);
         this.array.fill(0);
     }

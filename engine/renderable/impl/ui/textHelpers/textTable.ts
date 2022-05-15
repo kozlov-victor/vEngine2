@@ -1,8 +1,9 @@
 import {AlignTextContentHorizontal} from "@engine/renderable/impl/ui/textField/textAlign";
 
-export interface ITetTableParams {
+export interface ITextTableParams {
     border?: boolean;
     align?: AlignTextContentHorizontal;
+    pad?:boolean;
 }
 
 export class TextTable {
@@ -59,20 +60,19 @@ export class TextTable {
         let maxLength:number = Math.max(...strings.map(it=>it.length));
         if (maxLength<3) maxLength = 3;
         let res:string = '';
-        res+=(`*${this.getLine('*',maxLength)}*\n`);
+        res+=(`+${this.getLine('-',maxLength)}+\n`);
         for (const s of strings) {
-            res+=`*${this.centerPad(s,maxLength)}*\n`;
+            res+=`|${this.centerPad(s,maxLength)}|\n`;
         }
-        res+=`*${this.getLine('*',maxLength)}*`;
+        res+=`+${this.getLine('-',maxLength)}+`;
         return res;
     }
 
-
-    public static fromArrays(arr:string[][],params?:ITetTableParams):TextTable {
+    public static fromArrays(arr:string[][],params?:ITextTableParams):TextTable {
         return new TextTable(arr,params);
     }
 
-    public static fromTabbedString(s:string,params?:ITetTableParams):TextTable {
+    public static fromTabbedString(s:string,params?:ITextTableParams):TextTable {
         const arr:string[][] = [];
         s.split('\n').forEach(line=>{
             arr.push(line.split('\t'));
@@ -80,7 +80,7 @@ export class TextTable {
         return new TextTable(arr,params);
     }
 
-    public static fromCSV(s:string,params?:ITetTableParams):TextTable {
+    public static fromCSV(s:string,params?:ITextTableParams):TextTable {
         const arr:string[][] = [];
         s.split('\n').forEach(line=>{
             arr.push(line.split(','));
@@ -88,8 +88,7 @@ export class TextTable {
         return new TextTable(arr,params);
     }
 
-    private constructor(arr:string[][],params?:ITetTableParams) {
-        const border:boolean = params?.border ?? false;
+    private constructor(arr:string[][],params?:ITextTableParams) {
         const align:AlignTextContentHorizontal = params?.align ?? AlignTextContentHorizontal.LEFT;
 
         const res:string[] = [];
@@ -98,10 +97,12 @@ export class TextTable {
         const numOfColumns:number = Math.max(...arr.map(it=>it.length));
         TextTable.normalize(arr,numOfColumns);
 
+        const padSymbol = params?.pad?' ':'';
         for (let j:number = 0; j < numOfColumns; j++) {
             const cols:string[] = [];
             for (let i:number = 0; i < numOfRows; i++) {
-                cols.push(arr[i][j]);
+                const col = `${padSymbol}${arr[i][j]}${padSymbol}`;
+                cols.push(col);
             }
             const maxColLength:number = Math.max(...cols.map(it=>it.length));
             alignedCols.push(cols.map(it=>TextTable.pad(it,maxColLength,align)));
@@ -113,15 +114,19 @@ export class TextTable {
             for (let i:number = 0; i < alignedCols.length; i++) {
                 row.push(alignedCols[i][j]);
             }
-            res.push(row.join(border?'*':' '));
+            res.push(row.join(params?.border?'|':' '));
         }
-        if (border) this.result = TextTable.createFramedText(res);
+        if (params?.border) this.result = TextTable.createFramedText(res);
         else this.result = res.join('\n');
 
     }
 
-    toString():string{
+    public toString():string{
         return this.result;
     }
 
+}
+
+if (typeof exports!=='undefined') {
+    exports.TextTable = TextTable;
 }
