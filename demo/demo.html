@@ -77,6 +77,10 @@
         return !isFinite(n);
     };
 
+    if (!window.Number.isFinite) Number.isFinite = function(n){
+        return isFinite(n);
+    };
+
     if (!window.Math.sign) {
         window.Math.sign = function(a) {
             return a>=0?1:-1;
