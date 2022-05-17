@@ -17,8 +17,7 @@ export class SimpleRectPainter extends AbstractPainter {
     public readonly a_position:string;
     public readonly u_alpha:string;
     public readonly a_texCoord:string;
-    public readonly u_vertexMatrix:string;
-    public readonly u_textureMatrix:string;
+    public readonly u_flip:string;
 
     constructor(gl:WebGLRenderingContext) {
         super(gl);
@@ -26,16 +25,22 @@ export class SimpleRectPainter extends AbstractPainter {
         const gen:ShaderGenerator = this.gen;
         this.a_position = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_position');
         this.a_texCoord = gen.addAttribute(GL_TYPE.FLOAT_VEC2,'a_texCoord');
-        this.u_vertexMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_vertexMatrix');
-        this.u_textureMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_textureMatrix');
         this.u_alpha = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
+        this.u_flip = gen.addVertexUniform(GL_TYPE.BOOL,'u_flip');
         gen.addVarying(GL_TYPE.FLOAT_VEC2,'v_texCoord');
 
         //language=GLSL
         gen.setVertexMainFn(`
             void main(){
-                gl_Position = u_vertexMatrix * a_position;
-                v_texCoord = (u_textureMatrix * vec4(a_texCoord, 0, 1)).xy;
+                gl_Position = vec4(
+                    -1.0 + 2.0 * a_position.x,
+                    -1.0 + 2.0 * a_position.y,
+                     0.0,  1.0
+                );
+                float y;
+                if (u_flip) y = 1.-a_texCoord.y;
+                else y = a_texCoord.y;
+                v_texCoord =  vec2(a_texCoord.x,y);
             }
         `);
         gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');

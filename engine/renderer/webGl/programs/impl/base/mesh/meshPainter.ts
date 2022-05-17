@@ -21,7 +21,6 @@ export class MeshPainter extends AbstractPainter {
     private readonly a_vertexColor:string = 'a_vertexColor';
     private readonly u_modelMatrix:string = 'u_modelMatrix';
     private readonly u_inverseTransposeModelMatrix:string = 'u_inverseTransposeModelMatrix';
-    private readonly u_textureMatrix:string = 'u_textureMatrix';
     private readonly u_projectionMatrix:string = 'u_projectionMatrix';
     private readonly u_color:string = 'u_color';
     private readonly u_color_mix:string = 'u_color_mix';
@@ -67,10 +66,6 @@ export class MeshPainter extends AbstractPainter {
 
     public setProjectionMatrix(m:Readonly<MAT16>):void{
         this.setUniformVector(this.u_projectionMatrix,m);
-    }
-
-    public setTextureMatrix(m:Readonly<MAT16>):void{
-        this.setUniformVector(this.u_textureMatrix,m);
     }
 
     public setAlpha(a:number):void{

@@ -13,24 +13,6 @@ import {Stack} from "@engine/misc/collection/stack";
 import Mat16Holder = Mat4.Mat16Holder;
 import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 
-const identityPositionMatrixCache:LruMap<string, Mat16Holder> = new LruMap<string, Mat4.Mat16Holder>();
-
-export const getIdentityPositionMatrix = (dstX:number, dstY:number, destSize:ISize):Mat16Holder =>{
-    const key:string = `${dstX}_${dstY}_${destSize.width}_${destSize.height}`;
-    if (identityPositionMatrixCache.has(key)) return identityPositionMatrixCache.get(key)!;
-    const projectionMatrix:Mat16Holder = Mat16Holder.create();
-    const dstWidth:number = destSize.width;
-    const dstHeight:number = destSize.height;
-    Mat4.ortho(projectionMatrix,0,dstWidth,0,dstHeight,-1,1);
-    const scaleMatrix:Mat16Holder = Mat16Holder.create();
-    Mat4.makeScale(scaleMatrix,dstWidth, dstHeight, 1);
-    const result:Mat16Holder = Mat16Holder.create();
-    Mat4.matrixMultiply(result,scaleMatrix, projectionMatrix);
-    identityPositionMatrixCache.put(key,result);
-    return result;
-};
-
-export const FLIP_TEXTURE_MATRIX:Mat16Holder = new MatrixStack().translate(0,1).scale(1,-1).getCurrentValue();
 
 export class WebGlRendererHelper extends RendererHelper {
 

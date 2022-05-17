@@ -3,14 +3,10 @@ import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
-import {ISize} from "@engine/geometry/size";
-import {getIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {Mat4} from "@engine/misc/math/mat4";
 import {Color} from "@engine/renderer/common/color";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
-import Mat16Holder = Mat4.Mat16Holder;
-import IDENTITY = Mat4.IDENTITY;
 
 
 export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
@@ -44,14 +40,9 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
     public override doFilter(destFrameBuffer:FrameBuffer):void{
 
         this.watchFrameBuffer(destFrameBuffer);
-
-        const size:ISize = destFrameBuffer.getTexture().size;
-        const m16h:Mat16Holder = getIdentityPositionMatrix(0,0,size);
-
         // 0. prepare for accumulator drawing
-        this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_textureMatrix,IDENTITY);
-        this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_vertexMatrix,m16h.mat16);
         this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_alpha,1);
+        this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_flip,false);
         Blender.getSingleton(this.game.getRenderer<WebGlRenderer>().getNativeContext()).setBlendMode(BLEND_MODE.NORMAL);
         // 1. copy accumulatorAfter to accumulatorBefore
         this.accumulatorBefore.bind();
@@ -72,7 +63,6 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
         this.accumulatorAfter.clear(Color.NONE);
         this._simpleRectCopyPainter.attachTexture('texture',destFrameBuffer.getTexture());
         this._simpleRectCopyPainter.draw();
-        m16h.release();
     }
 
     public override destroy() {

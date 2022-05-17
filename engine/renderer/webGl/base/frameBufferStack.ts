@@ -7,16 +7,12 @@ import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
-import {Mat4} from "@engine/misc/math/mat4";
 import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
-import {FLIP_TEXTURE_MATRIX, getIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 import {Device} from "@engine/misc/device";
 import {ITexture} from "@engine/renderer/common/texture";
-import IDENTITY = Mat4.IDENTITY;
-import Mat16Holder = Mat4.Mat16Holder;
 
 interface IStackItem {
     frameBuffer:FrameBuffer;
@@ -29,7 +25,6 @@ export interface IStateStackPointer {
     ptr:number;
 }
 
-let FLIP_POSITION_MATRIX:Mat16Holder;
 
 const NONE_FILTERS:readonly AbstractGlFilter[] = [];
 
@@ -64,21 +59,6 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
         this._blender.enable();
         this._blender.setBlendMode(BLEND_MODE.NORMAL);
-
-        if (FLIP_POSITION_MATRIX===undefined) {
-            const m16hResult:Mat16Holder = Mat16Holder.fromPool();
-            const m16Scale:Mat16Holder = Mat16Holder.fromPool();
-            Mat4.makeScale(m16Scale,this.game.size.width, this.game.size.height, 1);
-            const m16Ortho:Mat16Holder = Mat16Holder.fromPool();
-            Mat4.ortho(m16Ortho,0,this.game.size.width,0,this.game.size.height,-1,1);
-
-            Mat4.matrixMultiply(m16hResult, m16Scale, m16Ortho);
-            FLIP_POSITION_MATRIX = m16hResult.clone();
-
-            m16hResult.release();
-            m16Scale.release();
-            m16Ortho.release();
-        }
         this._resourceTexture = this._getFirst().frameBuffer.getTexture();
 
     }
@@ -161,14 +141,11 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
             nextItem.frameBuffer.bind();
             nextItem.frameBuffer.setInterpolationMode(this._interpolationMode);
-            this._simpleRectPainter.setUniform(this._simpleRectPainter.u_textureMatrix,IDENTITY);
-            const m16h:Mat16Holder = getIdentityPositionMatrix(0,0,this._getLast().frameBuffer.getTexture().size);
-            this._simpleRectPainter.setUniform(this._simpleRectPainter.u_vertexMatrix,m16h.mat16);
             this._simpleRectPainter.setUniform(this._simpleRectPainter.u_alpha,currItem.alpha);
+            this._simpleRectPainter.setUniform(this._simpleRectPainter.u_flip,false);
             this._simpleRectPainter.attachTexture('texture',filteredTexture);
             this._blender.setBlendMode(BLEND_MODE.NORMAL);
             this._simpleRectPainter.draw();
-            m16h.release();
         }
         this._stackPointer = to.ptr + 1;
     }
@@ -180,9 +157,8 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         const h:number = needFullScreen?this.game.getRenderer().viewPortSize.height:this.game.size.height;
         FrameBuffer.getCurrent().unbind();
         this._gl.viewport(0, 0, ~~w,~~h);
-        this._simpleRectPainter.setUniform(this._simpleRectPainter.u_textureMatrix,FLIP_TEXTURE_MATRIX.mat16);
-        this._simpleRectPainter.setUniform(this._simpleRectPainter.u_vertexMatrix,FLIP_POSITION_MATRIX.mat16);
         this._simpleRectPainter.setUniform(this._simpleRectPainter.u_alpha,1);
+        this._simpleRectPainter.setUniform(this._simpleRectPainter.u_flip,true);
         this._simpleRectPainter.attachTexture('texture',this._getLast().frameBuffer.getTexture());
         this._simpleRectPainter.draw();
     }

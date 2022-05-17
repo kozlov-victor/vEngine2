@@ -207,7 +207,7 @@ module.exports = async (env={})=>{
         const TextTable = require('./node_tools/build/textTable').TextTable;
         const {mm,hh,ss} = getTime();
         console.clear();
-        console.log(TextTable.fromArrays([
+        cliUI.showPlainWindow(TextTable.fromArrays([
             ['webpack started at',`${hh}:${mm}:${ss}`],
             ['Selected',project ?? 'all'],
             ['Branch',getBranchName()],

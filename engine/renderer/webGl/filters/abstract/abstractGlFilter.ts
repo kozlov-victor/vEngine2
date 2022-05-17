@@ -6,13 +6,9 @@ import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import Mat16Holder = Mat4.Mat16Holder;
 import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
 import {Color} from "@engine/renderer/common/color";
 import {FastMap} from "@engine/misc/collection/fastMap";
-import {getIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
-import {ISize} from "@engine/geometry/size";
-import IDENTITY = Mat4.IDENTITY;
 import {IDestroyable} from "@engine/core/declarations";
 
 export abstract class AbstractGlFilter implements IFilter,IDestroyable {
@@ -53,12 +49,8 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
             const value:UNIFORM_VALUE_TYPE = this._uniformCache.get(keys[i])!;
             this.simpleRectPainter.setUniform(name,value);
         }
-        const size:ISize = this.simpleRectPainter.getAttachedTextureAt(0).size;
-        this.simpleRectPainter.setUniform(this.simpleRectPainter.u_textureMatrix,IDENTITY);
-        const m16h:Mat16Holder = getIdentityPositionMatrix(0,0,size);
-        this.simpleRectPainter.setUniform(this.simpleRectPainter.u_vertexMatrix,m16h.mat16);
         this.simpleRectPainter.setUniform(this.simpleRectPainter.u_alpha,1);
-        m16h.release();
+        this.simpleRectPainter.setUniform(this.simpleRectPainter.u_flip,false);
         destFrameBuffer.bind();
         destFrameBuffer.clear(Color.NONE);
         this.simpleRectPainter.draw();

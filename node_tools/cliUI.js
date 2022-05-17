@@ -83,10 +83,19 @@ const showInfoWindow = (text)=>{
    showWindow(text,colors.bg.Blue,colors.fg.Cyan);
 };
 
-
 const showErrorWindow = (text)=>{
     showWindow(text,colors.bg.Magenta,colors.fg.White);
 };
+
+const showPlainWindow = (text)=>{
+    const strings = text.substr?text.split('\n'):text;
+    let maxLength = Math.max(...strings.map(it=>it.length));
+    if (maxLength<3) maxLength = 3;
+    const leftPadString = getLeftPadStringToCenterWindow(maxLength);
+    strings.forEach(s=>{
+        console.log(`${leftPadString}${s}`);
+    });
+}
 
 const prompt = (text)=>{
     return new Promise((resolve)=>{
@@ -172,6 +181,7 @@ const choose = async (message,chooseArray)=>{
 module.exports.showWindow = showWindow;
 module.exports.showInfoWindow = showInfoWindow;
 module.exports.showErrorWindow = showErrorWindow;
+module.exports.showPlainWindow = showPlainWindow;
 module.exports.prompt = prompt;
 module.exports.choose = choose;
 

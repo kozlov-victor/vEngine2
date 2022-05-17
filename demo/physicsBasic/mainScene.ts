@@ -20,6 +20,7 @@ export class MainScene extends Scene {
         rect1.pos.setXY(10,10);
         const rigidBody1:ArcadeRigidBody = physicsSystem.createRigidBody();
         rect1.setRigidBody(rigidBody1);
+        rect1.getRigidBody().velocity.x = 12;
         this.appendChild(rect1);
 
         const rect2:Rectangle = new Rectangle(this.game);
@@ -35,6 +36,14 @@ export class MainScene extends Scene {
         rect3.setRigidBody(rigidBody3);
         this.appendChild(rect3);
 
+        const rect4:Rectangle = new Rectangle(this.game);
+        rect4.size.setWH(15,10);
+        rect4.pos.setXY(80,0);
+        const rigidBody4:ArcadeRigidBody =
+            physicsSystem.createRigidBody({type: ARCADE_RIGID_BODY_TYPE.DYNAMIC});
+        rect4.setRigidBody(rigidBody4);
+        rect4.getRigidBody().velocity.x = -8;
+        this.appendChild(rect4);
 
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.button) {

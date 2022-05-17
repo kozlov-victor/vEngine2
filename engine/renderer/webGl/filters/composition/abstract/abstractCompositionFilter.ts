@@ -3,15 +3,10 @@ import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
-import {ISize} from "@engine/geometry/size";
-import {getIdentityPositionMatrix} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
-import {Mat4} from "@engine/misc/math/mat4";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Color} from "@engine/renderer/common/color";
 import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import Mat16Holder = Mat4.Mat16Holder;
-import IDENTITY = Mat4.IDENTITY;
 
 
 export abstract class AbstractCompositionFilter extends AbstractGlFilter {
@@ -41,13 +36,9 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
 
         this.watchFrameBuffer(destFrameBuffer);
 
-        const size:ISize = destFrameBuffer.getTexture().size;
-        const m16h:Mat16Holder = getIdentityPositionMatrix(0,0,size);
-
         // 0. prepare for composition drawing
-        this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_textureMatrix,IDENTITY);
-        this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_vertexMatrix,m16h.mat16);
         this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_alpha,1);
+        this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_flip,false);
         Blender.getSingleton(this.game.getRenderer<WebGlRenderer>().getNativeContext()).setBlendMode(BLEND_MODE.NORMAL);
         // 1. copy current destination texture to accumulatorBefore
         this.destCopy.bind();
@@ -61,9 +52,6 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         this.simpleRectPainter.attachTexture('destTexture',this.destCopy.getTexture());
         // 4. filter
         super.doFilter(destFrameBuffer,nextFrameBuffer);
-        // 5. complete
-        m16h.release();
-
     }
 
     public override destroy():void {

@@ -22,7 +22,7 @@ import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {DebugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import {ClazzEx, IDestroyable, Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
-import {FLIP_TEXTURE_MATRIX, WebGlRendererHelper} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
+import {WebGlRendererHelper} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
@@ -240,7 +240,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const isTextureUsed:boolean = mesh.texture!==undefined;
         if (DEBUG && isTextureUsed && mesh._modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
         mp.setTextureUsed(isTextureUsed);
-        if (isTextureUsed) mp.setTextureMatrix(FLIP_TEXTURE_MATRIX.mat16);
         mp.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this._nullTexture);
 
         const isVertexColorUsed:boolean = mesh._modelPrimitive.vertexColorArr!==undefined;

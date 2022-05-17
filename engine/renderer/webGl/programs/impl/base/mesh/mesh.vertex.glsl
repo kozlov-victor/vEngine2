@@ -8,7 +8,6 @@ attribute vec4 a_vertexColor;
 uniform mat4 u_modelMatrix;
 uniform mat4 u_inverseTransposeModelMatrix;
 uniform mat4 u_projectionMatrix;
-uniform mat4 u_textureMatrix;
 
 varying vec2 v_texCoord;
 varying vec3 v_normal;
@@ -21,7 +20,7 @@ varying vec3 v_surfaceToView;
 void main() {
 
     vec4 position = a_position;
-    v_texCoord = (u_textureMatrix * vec4(a_texCoord,1.,1.)).xy;
+    v_texCoord = vec2(a_texCoord.x,1.-a_texCoord.y);
     v_normal = mat3(u_inverseTransposeModelMatrix) * a_normal;
 
     v_position = u_projectionMatrix * u_modelMatrix * position;
