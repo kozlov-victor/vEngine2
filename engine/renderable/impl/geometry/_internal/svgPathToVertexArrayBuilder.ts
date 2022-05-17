@@ -4,47 +4,8 @@ import {arcToBezier} from "@engine/renderable/impl/geometry/_internal/arcToBezie
 import {Optional} from "@engine/core/declarations";
 import {Game} from "@engine/core/game";
 import {BasicStringTokenizer} from "@engine/renderable/impl/geometry/_internal/basicStringTokenizer";
-
-type v2 = [number,number];
-
-// adds 1 or more v2s
-const add = (a:Readonly<v2>, ...args:Readonly<v2>[]):v2=> {
-    const n:v2 = [...a] as v2;
-    args.forEach((p) => {
-        n[0] += p[0];
-        n[1] += p[1];
-    });
-    return n;
-};
-
-const mult =(a:Readonly<v2>, s:number):v2=> {
-    return [a[0] * s, a[1] * s];
-};
-
-const length = (a:Readonly<v2>,b:Readonly<v2>):number=>{
-    return Math.sqrt(Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1]));
-};
-
-const getPointOnBezierCurve =(points:Readonly<v2>[], t:number):v2=> {
-    const invT:number = 1 - t;
-    return add(mult(points[0], invT * invT * invT),
-        mult(points[1], 3 * t * invT * invT),
-        mult(points[2], 3 * invT * t * t),
-        mult(points[3], t * t  * t));
-};
-
-const getPointsOnBezierCurve = (points:Readonly<v2>[], length:number):v2[]=> {
-    const cPoints:v2[] = [];
-    const step = length<5?0.2:1;
-    for (let i:number = 0; i < length - step; i+=step) {
-        const t:number = i / length;
-        cPoints.push(getPointOnBezierCurve(points, t));
-    }
-    cPoints.push(getPointOnBezierCurve(points, 1));
-    return cPoints;
-};
-
-// quadratic-bezier-to-a-cubic-one
+import {add, v2} from "@engine/renderable/impl/geometry/_internal/v2";
+import {getPointsOnBezierCurveWithSplitting} from "@engine/renderable/impl/geometry/_internal/getPointsOnBezierCurve";
 
 class SvgTokenizer extends BasicStringTokenizer {
 
@@ -184,15 +145,12 @@ export class SvgPathToVertexArrayBuilder {
     }
 
     private createNextVertexArray():void {
-        // const p:PolyLine = PolyLine.fromVertices(this.game,this.currentVertexArray);
-        // p.passMouseEventsThrough = true;
         if (this.result.indexOf(this.currentVertexGroup)===-1) this.result.push(this.currentVertexGroup);
         this.currentVertexGroup = {vertexArray:[],closed:false};
     }
 
     private _bezierTo(p1:v2,p2:v2,p3:v2,p4:v2):void{
-        const l:number = length(p1,p2)+length(p2,p3)+length(p3,p4);
-        const bezier:v2[] = getPointsOnBezierCurve([p1,p2,p3,p4],l);
+        const bezier:v2[] = getPointsOnBezierCurveWithSplitting([p1,p2,p3,p4], 0, 0.5);
         bezier.forEach((v:v2)=>{
             this.lineTo(v[0],v[1]);
         });
