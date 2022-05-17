@@ -9,6 +9,7 @@ import * as fragmentStructuresSource from "./fragment-structures.glsl";
 import {parametrizeString} from "@engine/misc/object";
 import {STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
+import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/programs/misc";
 
 export const enum SHAPE_TYPE {
     ELLIPSE,RECT
@@ -21,6 +22,7 @@ export const enum FILL_TYPE {
 export class ShapePainter extends AbstractPainter {
 
     public readonly u_vertexMatrix:string;
+    public readonly u_projectionMatrix:string;
     public readonly a_position:string;
     public readonly u_lineWidth:string;
     public readonly u_width:string;
@@ -55,14 +57,19 @@ export class ShapePainter extends AbstractPainter {
         super(gl);
         const gen:ShaderGenerator = new ShaderGenerator();
         // language=glsl
+        gen.prependVertexCodeBlock(`
+            #define zToW_matrix mat4(${Z_To_W_MATRIX_SOURCE})
+        `);
+        // language=glsl
         gen.setVertexMainFn(`
             void main(){
                 v_position = a_position;
-                gl_Position = u_vertexMatrix * a_position;
+                gl_Position = zToW_matrix * u_projectionMatrix * u_vertexMatrix * a_position;
             }
         `);
         // base uniforms and attrs
         this.u_vertexMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_vertexMatrix');
+        this.u_projectionMatrix = gen.addVertexUniform(GL_TYPE.FLOAT_MAT4,'u_projectionMatrix');
         this.a_position = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_position');
         gen.addVarying(GL_TYPE.FLOAT_VEC4,'v_position');
         gen.prependFragmentCodeBlock(parametrizeString(fragmentStructuresSource,{

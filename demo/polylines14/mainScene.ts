@@ -29,15 +29,22 @@ export class MainScene extends Scene {
         polygon2.addBehaviour(new DraggableBehaviour(this.game));
 
         this.mouseEventHandler.once(MOUSE_EVENTS.click, e=>{
-            const mesh = polygon2.extrudeToMesh(100);
-            mesh.transformPoint.setToCenter();
-            mesh.addBehaviour(new DraggableBehaviour(this.game));
-            mesh.pos.setXY(100);
-            this.appendChild(mesh);
-            mesh.setInterval(()=>{
-                mesh.angle3d.x+=0.01;
-                mesh.angle3d.y+=0.01;
-            },10)
+            const meshes = [
+                polygon1.extrudeToMesh(100),
+                polygon2.extrudeToMesh(100),
+            ];
+
+            meshes.forEach(mesh=>{
+                mesh.transformPoint.setToCenter();
+                mesh.addBehaviour(new DraggableBehaviour(this.game));
+                mesh.pos.setXY(100);
+                this.appendChild(mesh);
+                mesh.setInterval(()=>{
+                    mesh.angle3d.x+=0.01;
+                    mesh.angle3d.y+=0.01;
+                },10);
+            });
+
         });
 
     }

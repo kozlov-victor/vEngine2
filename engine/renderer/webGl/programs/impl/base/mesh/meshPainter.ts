@@ -9,6 +9,8 @@ import {Mat4} from "@engine/misc/math/mat4";
 import {Color} from "@engine/renderer/common/color";
 import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import MAT16 = Mat4.MAT16;
+import {parametrizeString} from "@engine/misc/object";
+import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/programs/misc";
 
 
 export class MeshPainter extends AbstractPainter {
@@ -39,7 +41,9 @@ export class MeshPainter extends AbstractPainter {
         super(gl);
         this.program = new ShaderProgram(
             gl,
-            vertexSource,
+            parametrizeString(vertexSource,{
+                __Z_To_W_MATRIX_SOURCE__:Z_To_W_MATRIX_SOURCE
+            }),
             fragmentSource
         );
     }

@@ -57,18 +57,13 @@ const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
 
 const SCENE_DEPTH:number = 1000;
 
-const zToWMatrix:Mat16Holder = Mat16Holder.create();
-Mat4.makeZToWMatrix(zToWMatrix,1);
-
 const lruCache = new LruMap<string, Mat4.Mat16Holder>();
 
 const scaleMatrix:Mat16Holder = Mat16Holder.create();
 const translationMatrix:Mat16Holder = Mat16Holder.create();
 const matrixResult:Mat16Holder = Mat16Holder.create();
 
-const makeModelViewProjectionMatrix = (rect:Rect,viewSize:Size,matrixStack:MatrixStack):Mat16Holder=>{
-    // proj * modelView
-
+const getProjectionMatrix = (viewSize:ISize):Mat16Holder=>{
     let projectionMatrix:Mat16Holder;
     const viewSizeStr = `${viewSize.width}_${viewSize.height}`;
     if (lruCache.has(viewSizeStr)) {
@@ -80,14 +75,16 @@ const makeModelViewProjectionMatrix = (rect:Rect,viewSize:Size,matrixStack:Matri
         lruCache.put(viewSizeStr,m);
         projectionMatrix = m;
     }
+    return projectionMatrix;
+}
+
+const makeModelViewMatrix = (rect:Rect,matrixStack:MatrixStack):Mat16Holder=>{
 
     Mat4.makeScale(scaleMatrix,rect.width, rect.height, 1);
     Mat4.makeTranslation(translationMatrix,rect.x, rect.y, 0);
 
     Mat4Special.multiplyScaleByAny(matrixResult,scaleMatrix,translationMatrix);
     Mat4.matrixMultiply(matrixResult,matrixResult, matrixStack.getCurrentValue());
-    Mat4Special.multiplyAnyByProjection(matrixResult,matrixResult, projectionMatrix);
-    Mat4Special.multiplyAnyByZtoW(matrixResult,matrixResult, zToWMatrix);
 
     return matrixResult;
 };
@@ -222,19 +219,13 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const modelMatrix:Mat16Holder = this._matrixStack.getCurrentValue();
 
-        const orthoProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        const currViewSize:ISize = this._currFrameBufferStack.getCurrentTargetSize();
-        Mat4.ortho(orthoProjectionMatrix,0,currViewSize.width,0,currViewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
-        const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
-
         const inverseTransposeModelMatrix:Mat16Holder = Mat16Holder.fromPool();
         Mat4.inverse(inverseTransposeModelMatrix,modelMatrix);
         Mat4.transpose(inverseTransposeModelMatrix,inverseTransposeModelMatrix);
 
         mp.setModelMatrix(modelMatrix.mat16);
         mp.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
-        mp.setProjectionMatrix(zToWProjectionMatrix.mat16);
+        mp.setProjectionMatrix(getProjectionMatrix(this.getRenderTarget().getCurrentTargetSize()).mat16);
         mp.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
 
         const isTextureUsed:boolean = mesh.texture!==undefined;
@@ -276,8 +267,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         mesh.onUpdatingBuffers();
         mp.draw();
         //this._gl.disable(this._gl.CULL_FACE);
-        orthoProjectionMatrix.release();
-        zToWProjectionMatrix.release();
         inverseTransposeModelMatrix.release();
     }
 
@@ -292,15 +281,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const modelMatrix:Mat16Holder = this._matrixStack.getCurrentValue();
 
-        const orthoProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        const currViewSize:ISize = this._currFrameBufferStack.getCurrentTargetSize();
-        Mat4.ortho(orthoProjectionMatrix,0,currViewSize.width,0,currViewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
-        const zToWProjectionMatrix:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.matrixMultiply(zToWProjectionMatrix,orthoProjectionMatrix, zToWMatrix);
-
         mp.setModelMatrix(modelMatrix.mat16);
         mp.setInverseTransposeModelMatrix(IDENTITY);
-        mp.setProjectionMatrix(zToWProjectionMatrix.mat16);
+        mp.setProjectionMatrix(getProjectionMatrix(this.getRenderTarget().getCurrentTargetSize()).mat16);
         mp.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
         mp.setTextureUsed(false);
         mp.attachTexture('u_texture',this._nullTexture);
@@ -323,8 +306,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._glCachedAccessor.setDepthTest(mesh.depthTest);
         this._blender.setBlendMode(mesh.blendMode);
         mp.draw();
-        zToWProjectionMatrix.release();
-        orthoProjectionMatrix.release();
     }
 
     public destroyMesh(mesh:Mesh2d):void {
@@ -593,13 +574,17 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (rectangle.worldTransformDirty) {
             rect.setXYWH( 0,0,rectangle.size.width,rectangle.size.height);
             size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
-            const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
+            const mvpHolder:Mat16Holder = makeModelViewMatrix(rect,this._matrixStack);
             scp.setUniformVector(scp.u_vertexMatrix,mvpHolder.mat16, true);
-            rectangle.modelViewProjectionMatrix.fromMat16(mvpHolder);
+            rectangle.modelViewMatrix.fromMat16(mvpHolder);
         } else {
-            scp.setUniformVector(scp.u_vertexMatrix,rectangle.modelViewProjectionMatrix.mat16);
+            scp.setUniformVector(scp.u_vertexMatrix,rectangle.modelViewMatrix.mat16);
         }
 
+        scp.setUniformVector(
+            scp.u_projectionMatrix,
+            getProjectionMatrix(this._currFrameBufferStack.getCurrentTargetSize()).mat16
+        );
         scp.setUniformScalar(scp.u_alpha,rectangle.getChildrenCount()===0?rectangle.alpha:1);
         scp.setUniformVector(scp.u_color,((rectangle.fillColor) as Color).asGL());
         scp.draw();
@@ -636,14 +621,16 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         if (model.worldTransformDirty) {
             rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
-            size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
-            const mvpHolder:Mat16Holder = makeModelViewProjectionMatrix(rect,size,this._matrixStack);
-            model.modelViewProjectionMatrix.fromMat16(mvpHolder);
+            const mvpHolder:Mat16Holder = makeModelViewMatrix(rect,this._matrixStack);
+            model.modelViewMatrix.fromMat16(mvpHolder);
             sp.setUniformVector(sp.u_vertexMatrix,mvpHolder.mat16,true);
         } else {
-            sp.setUniformVector(sp.u_vertexMatrix,model.modelViewProjectionMatrix.mat16);
+            sp.setUniformVector(sp.u_vertexMatrix,model.modelViewMatrix.mat16);
         }
-
+        sp.setUniformVector(
+            sp.u_projectionMatrix,
+            getProjectionMatrix(this._currFrameBufferStack.getCurrentTargetSize()).mat16
+        );
         sp.setUniformScalar(sp.u_alpha,model.getChildrenCount()===0?model.alpha:1);
         this._blender.setBlendMode(model.blendMode);
         this._glCachedAccessor.setDepthTest(model.depthTest);

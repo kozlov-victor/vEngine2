@@ -92,7 +92,7 @@ class ModelPoint2d extends Point2d {
 export abstract class TransformableModel extends BaseModel implements ITransformable, ITransformableProps, IPositionableProps {
 
     public readonly worldTransformMatrix:Mat16Holder = new Mat16Holder();
-    public readonly modelViewProjectionMatrix:Mat16Holder = new Mat16Holder();
+    public readonly modelViewMatrix:Mat16Holder = new Mat16Holder();
     public worldTransformDirty:boolean = true;
 
     public readonly _children:TransformableModel[] = [];
