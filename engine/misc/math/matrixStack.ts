@@ -69,7 +69,7 @@ export class MatrixStack implements IPropertyStack<Mat16Holder>{
     public transform(val:Mat16Holder):void {
         const m:Mat16Holder = this.getCurrentValue();
         const result:Mat16Holder = Mat16Holder.fromPool();
-        Mat4.matrixMultiply(result,val, m);
+        Mat4Special.matrixMultiplyOptimized(result,val, m);
         this.setCurrentValue(result);
         Mat16Holder.toPool(m);
     }

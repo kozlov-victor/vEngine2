@@ -84,7 +84,7 @@ const makeModelViewMatrix = (rect:Rect,matrixStack:MatrixStack):Mat16Holder=>{
     Mat4.makeTranslation(translationMatrix,rect.x, rect.y, 0);
 
     Mat4Special.multiplyScaleByAny(matrixResult,scaleMatrix,translationMatrix);
-    Mat4.matrixMultiply(matrixResult,matrixResult, matrixStack.getCurrentValue());
+    Mat4Special.matrixMultiplyOptimized(matrixResult,matrixResult, matrixStack.getCurrentValue());
 
     return matrixResult;
 };
