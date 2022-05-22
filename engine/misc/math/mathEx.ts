@@ -18,10 +18,10 @@ export namespace MathEx {
     };
 
     export const overlapTest = (a: IRectJSON, b: IRectJSON): boolean => {
-        return (a.x < b.x + b.width) &&
-            (a.x + a.width > b.x) &&
-            (a.y < b.y + b.height) &&
-            (a.y + a.height > b.y);
+        return  (a.x < b.x + b.width)   &&
+                (a.x + a.width > b.x)   &&
+                (a.y < b.y + b.height)  &&
+                (a.y + a.height > b.y);
     };
 
     export const radToDeg = (rad: number): number => {
@@ -62,6 +62,7 @@ export namespace MathEx {
         return Math.atan2(dy, dx);
     };
 
+    // max is not inclusive
     export const random = (min: number, max: number): number => {
         if (min > max) {
             const tmp:number = min;
@@ -71,10 +72,12 @@ export namespace MathEx {
         return Math.random() * (max - min) + min;
     };
 
+    // max is inclusive
     export const randomInt = (min: number, max: number): number => {
-        return ~~random(min,max);
+        return ~~random(min,max+1);
     };
 
+    // max is inclusive
     export const randomUint8 = (min: Uint8 = 0, max: Uint8= 255): Uint8 => {
         return randomInt(min,max) as Uint8;
     };

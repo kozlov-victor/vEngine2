@@ -126,7 +126,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
                     particle = holder.particle;
                     append = false;
                 } else {
-                    const particleProto:RenderableCloneable = this._prototypes[MathEx.randomInt(0,this._prototypes.length)];
+                    const particleProto:RenderableCloneable = this._prototypes[MathEx.randomInt(0,this._prototypes.length-1)];
                     particle  = particleProto.clone();
                     holder = {particle,lifeTime:0,createdTime:0,active:true};
                     this._particles.push(holder);
