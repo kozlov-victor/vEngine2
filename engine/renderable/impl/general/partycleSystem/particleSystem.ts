@@ -154,8 +154,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
 
             this._onEmitParticle(particle);
             if (append) {
-                if (MathEx.random(0,10)>3) parent.prependChild(particle);
-                else parent.appendChild(particle);
+                parent.appendChild(particle);
             }
         }
 

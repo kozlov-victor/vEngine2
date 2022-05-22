@@ -35,15 +35,14 @@ export class MainScene extends Scene {
         this.appendChild(rect3);
 
 
-        const particle:Rectangle = new Rectangle(this.game);
+        const particle = new Rectangle(this.game);
         particle.size.setWH(5);
         particle.transformPoint.setXY(particle.size.width/2,particle.size.height/2);
-        particle.fillColor.setRGBA(133,200,0);
         particle.setRigidBody(physicsSystem.createRigidBody({type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,groupNames:['particles'],ignoreCollisionWithGroupNames:['particles']}));
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.emitAuto = false;
-        ps.maxParticlesInCache = 2000;
+        ps.maxParticlesInCache = 3000;
         ps.addParticlePrefab(particle);
 
         ps.emissionRadius = 5;
@@ -56,9 +55,9 @@ export class MainScene extends Scene {
         ps.onEmitParticle(p=>{
             const ptcl = p as Rectangle;
             if (MathEx.randomUint8()>128) {
-                ptcl.fillColor.setFrom(ColorFactory.fromCSS(`#4fb404`));
+                ptcl.fillColor.setFrom(ColorFactory.fromCSS(`#6d00e3`));
             } else {
-                ptcl.fillColor.setFrom(ColorFactory.fromCSS(`#ce0000`));
+                ptcl.fillColor.setFrom(ColorFactory.fromCSS(`#088b86`));
             }
         });
 
