@@ -84,6 +84,12 @@ export class MouseControl implements IControl {
                 this.resolveButtonPressed(e);
             }
         };
+        container.onpointerdown = (e:MouseEvent):void=>{
+            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseDown, e.clientX,e.clientY)) {
+                return;
+            }
+            this.resolveClick(e);
+        };
         // mouseUp
         container.ontouchend = container.ontouchcancel = (e:TouchEvent):void=>{
             if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.changedTouches[0].clientX,e.changedTouches[0].clientY)) {
