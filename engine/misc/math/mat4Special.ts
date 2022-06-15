@@ -48,7 +48,7 @@ export namespace Mat4Special {
         r[12] = a12 * b0 + a13 * b4 + a14 * b8  + b12;
         r[13] = a12 * b1 + a13 * b5 + a14 * b9  + b13;
         r[14] = a12 * b2 + a13 * b6 + a14 * b10 + b14;
-        r[15] = a12 * b3 + a13 * b7 + a14 * b11 + b15;
+        // r[15] = a12 * b3 + a13 * b7 + a14 * b11 + b15;
 
     };
 

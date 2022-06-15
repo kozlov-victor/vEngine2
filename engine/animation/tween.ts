@@ -218,7 +218,7 @@ export class Tween<T> {
             this._propsToChange.forEach(key => {
                 if (!(key in this._target)) {
                     console.error('target',this._target);
-                    throw new DebugError(`Can not create tween animation: property "${key}" does not belong to target object`);
+                    throw new DebugError(`Can not create tween animation: property "${String(key)}" does not belong to target object`);
                 }
             });
         }
