@@ -31,6 +31,7 @@ class InputOutputResolver {
                 entry[project] = [`./demo/${project}/index.ts`];
             }
 
+            entry['editor'] = './node_tools/editor/index.ts';
             entry['debug'] = './engine/debug/debug.ts';
             entry['inspector'] = './engine/debug/inspector/inspector.tsx';
             entry['polyfills-separate'] = './engine/misc/polyfills-separate.ts';

@@ -38,6 +38,7 @@ import IDENTITY = Mat4.IDENTITY;
 import {BatchPainter} from "@engine/renderer/webGl/programs/impl/batch/batchPainter";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
+import MAT16 = Mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -59,10 +60,6 @@ const SCENE_DEPTH:number = 1000;
 
 const lruCache = new LruMap<string, Mat4.Mat16Holder>();
 
-const scaleMatrix:Mat16Holder = Mat16Holder.create();
-const translationMatrix:Mat16Holder = Mat16Holder.create();
-const matrixResult:Mat16Holder = Mat16Holder.create();
-
 const getProjectionMatrix = (viewSize:ISize):Mat16Holder=>{
     let projectionMatrix:Mat16Holder;
     const viewSizeStr = `${viewSize.width}_${viewSize.height}`;
@@ -78,15 +75,23 @@ const getProjectionMatrix = (viewSize:ISize):Mat16Holder=>{
     return projectionMatrix;
 }
 
+const hlpMatrix1:Mat16Holder = Mat16Holder.create();
+Mat4.makeIdentity(hlpMatrix1);
+const hlpMatrix2:Mat16Holder = Mat16Holder.create();
+
 const makeModelViewMatrix = (rect:Rect,matrixStack:MatrixStack):Mat16Holder=>{
 
-    Mat4.makeScale(scaleMatrix,rect.width, rect.height, 1);
-    Mat4.makeTranslation(translationMatrix,rect.x, rect.y, 0);
+    const m = hlpMatrix1.mat16 as MAT16;
+    // fast makeScale * makeTranslation
+    m[ 0] = rect.width;
+    m[ 5] = rect.height;
 
-    Mat4Special.multiplyScaleByAny(matrixResult,scaleMatrix,translationMatrix);
-    Mat4Special.matrixMultiplyOptimized(matrixResult,matrixResult, matrixStack.getCurrentValue());
+    m[12] = rect.x;
+    m[13] = rect.y;
 
-    return matrixResult;
+    Mat4Special.multiplyScaleTranslateByAny(hlpMatrix2,hlpMatrix1, matrixStack.getCurrentValue());
+
+    return hlpMatrix2;
 };
 
 
@@ -574,7 +579,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (rectangle.worldTransformDirty) {
             rect.setXYWH( 0,0,rectangle.size.width,rectangle.size.height);
             size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
-            const mvpHolder:Mat16Holder = makeModelViewMatrix(rect,this._matrixStack);
+            const mvpHolder = makeModelViewMatrix(rect,this._matrixStack);
             scp.setUniformVector(scp.u_vertexMatrix,mvpHolder.mat16, true);
             rectangle.modelViewMatrix.fromMat16(mvpHolder);
         } else {
@@ -586,7 +591,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             getProjectionMatrix(this._currFrameBufferStack.getCurrentTargetSize()).mat16
         );
         scp.setUniformScalar(scp.u_alpha,rectangle.getChildrenCount()===0?rectangle.alpha:1);
-        scp.setUniformVector(scp.u_color,((rectangle.fillColor) as Color).asGL());
+        scp.setUniformVector(scp.u_color,rectangle.fillColor.asGL());
         scp.draw();
     }
 
