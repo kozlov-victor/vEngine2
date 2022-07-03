@@ -11,9 +11,9 @@ import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {CopyDestCompositionFilter} from "@engine/renderer/webGl/filters/composition/copyDestCompositionFilter";
 import {ITexture} from "@engine/renderer/common/texture";
-import {FastBlurFilter} from "@engine/renderer/webGl/filters/texture/fastBlurFilter";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {SepiaColorMatrixFilter} from "@engine/renderer/webGl/filters/colorMatrix/sepiaColorMatrixFilter";
+import {LensDistortionFilter} from "@engine/renderer/webGl/filters/texture/lensDistortionFilter";
 
 const text:string=
     `Lorem ipsum dolor sit amet,\t\n\r
@@ -45,6 +45,7 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         document.body.style.cursor = 'none';
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>this.game.getRenderer().requestFullScreen());
 
 
         const tf = new TextField(this.game,this.fnt);
@@ -72,9 +73,11 @@ export class MainScene extends Scene {
         cursor.appendTo(this);
 
         const alphaMask = new DrawingSurface(this.game,this.game.size);
+        const lensFilter = new LensDistortionFilter(this.game).setLengthSize(150);
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, e=>{
             cursorMask.pos.setXY(e.screenX,e.screenY);
             cursor.pos.setFrom(cursorMask.pos);
+            lensFilter.setMouseScreenCoordinates(e.screenX+cursor.size.width/2,e.screenY+cursor.size.height/2);
             alphaMask.clear();
             alphaMask.drawModel(cursorMask);
         });
@@ -82,7 +85,7 @@ export class MainScene extends Scene {
         cursorContainer.filters = [
             new CopyDestCompositionFilter(this.game),
             new SepiaColorMatrixFilter(this.game),
-            new FastBlurFilter(this.game),
+            lensFilter,
             new AlphaMaskFilter(this.game,alphaMask.getTexture(),'a')
         ];
 
