@@ -42,8 +42,9 @@ export class BarrelDistortionFilter extends AbstractGlFilter {
         this.simpleRectPainter.initProgram();
     }
 
-    public setDistortion(val:number):void{
+    public setDistortion(val:number):this{
         this.setUniform(this.u_distortion,val);
+        return this;
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{

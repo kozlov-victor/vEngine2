@@ -26,8 +26,9 @@ export class FadeAccumulativeFilter extends AbstractAccumulativeFilter {
         this.simpleRectPainter.initProgram();
     }
 
-    public setFadeValue(val:number):void{
+    public setFadeValue(val:number):this{
         this.simpleRectPainter.setUniform(this.u_fadeValue,val);
+        return this;
     }
 
 }

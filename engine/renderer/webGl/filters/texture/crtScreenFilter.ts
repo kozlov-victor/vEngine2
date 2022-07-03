@@ -83,26 +83,31 @@ export class CrtScreenFilter extends AbstractGlFilter {
         this.simpleRectPainter.initProgram();
     }
 
-    public setCurvature(x:number,y:number):void {
+    public setCurvature(x:number,y:number):this {
         const arr = new Float32Array([x,y]);
         this.setUniform(this.curvature,arr);
+        return this;
     }
 
-    public setScanLineOpacity(x:number,y:number):void {
+    public setScanLineOpacity(x:number,y:number):this {
         const arr = new Float32Array([x,y]);
         this.setUniform(this.scanLineOpacity,arr);
+        return this;
     }
 
-    public setVignetteLineOpacity(val:number):void {
+    public setVignetteLineOpacity(val:number):this {
         this.setUniform(this.vignetteOpacity,val);
+        return this;
     }
 
-    public setVignetteRoundness(val:number):void {
+    public setVignetteRoundness(val:number):this {
         this.setUniform(this.vignetteRoundness,val);
+        return this;
     }
 
-    public setBrightness(val:number):void {
+    public setBrightness(val:number):this {
         this.setUniform(this.brightness,val);
+        return this;
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{

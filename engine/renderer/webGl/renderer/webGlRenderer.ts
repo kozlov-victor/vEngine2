@@ -58,18 +58,17 @@ const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
 
 const SCENE_DEPTH:number = 1000;
 
-const lruCache = new LruMap<string, Mat4.Mat16Holder>();
+const lruCache = new LruMap<number, Mat4.Mat16Holder>();
 
-const getProjectionMatrix = (viewSize:ISize):Mat16Holder=>{
+const getProjectionMatrix = (id:number,viewSize:ISize):Mat16Holder=>{
     let projectionMatrix:Mat16Holder;
-    const viewSizeStr = `${viewSize.width}_${viewSize.height}`;
-    if (lruCache.has(viewSizeStr)) {
-        projectionMatrix = lruCache.get(viewSizeStr)!
+    if (lruCache.has(id)) {
+        projectionMatrix = lruCache.get(id)!
     }
     else {
         const m = Mat16Holder.create();
         Mat4.ortho(m,0,viewSize.width,0,viewSize.height,-SCENE_DEPTH,SCENE_DEPTH);
-        lruCache.put(viewSizeStr,m);
+        lruCache.put(id,m);
         projectionMatrix = m;
     }
     return projectionMatrix;
@@ -230,7 +229,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         mp.setModelMatrix(modelMatrix.mat16);
         mp.setInverseTransposeModelMatrix(inverseTransposeModelMatrix.mat16);
-        mp.setProjectionMatrix(getProjectionMatrix(this.getRenderTarget().getCurrentTargetSize()).mat16);
+        mp.setProjectionMatrix(getProjectionMatrix(this._currFrameBufferStack.id,this._currFrameBufferStack.getCurrentTargetSize()).mat16);
         mp.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
 
         const isTextureUsed:boolean = mesh.texture!==undefined;
@@ -288,7 +287,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         mp.setModelMatrix(modelMatrix.mat16);
         mp.setInverseTransposeModelMatrix(IDENTITY);
-        mp.setProjectionMatrix(getProjectionMatrix(this.getRenderTarget().getCurrentTargetSize()).mat16);
+        mp.setProjectionMatrix(getProjectionMatrix(this._currFrameBufferStack.id,this._currFrameBufferStack.getCurrentTargetSize()).mat16);
         mp.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
         mp.setTextureUsed(false);
         mp.attachTexture('u_texture',this._nullTexture);
@@ -588,7 +587,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         scp.setUniformVector(
             scp.u_projectionMatrix,
-            getProjectionMatrix(this._currFrameBufferStack.getCurrentTargetSize()).mat16
+            getProjectionMatrix(this._currFrameBufferStack.id,this._currFrameBufferStack.getCurrentTargetSize()).mat16
         );
         scp.setUniformScalar(scp.u_alpha,rectangle.getChildrenCount()===0?rectangle.alpha:1);
         scp.setUniformVector(scp.u_color,rectangle.fillColor.asGL());
@@ -632,9 +631,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         } else {
             sp.setUniformVector(sp.u_vertexMatrix,model.modelViewMatrix.mat16);
         }
+
         sp.setUniformVector(
             sp.u_projectionMatrix,
-            getProjectionMatrix(this._currFrameBufferStack.getCurrentTargetSize()).mat16
+            getProjectionMatrix(this._currFrameBufferStack.id,this._currFrameBufferStack.getCurrentTargetSize()).mat16
         );
         sp.setUniformScalar(sp.u_alpha,model.getChildrenCount()===0?model.alpha:1);
         this._blender.setBlendMode(model.blendMode);

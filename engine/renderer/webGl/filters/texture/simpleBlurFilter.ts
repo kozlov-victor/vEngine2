@@ -47,8 +47,9 @@ export class SimpleBlurFilter extends AbstractGlFilter {
     }
 
 
-    public setSize(val:number):void { //0...1
+    public setSize(val:number):this { //0...1
         this.setUniform(this.blurSize,val);
+        return this;
     }
 
 

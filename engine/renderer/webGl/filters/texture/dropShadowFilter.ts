@@ -78,13 +78,16 @@ export class DropShadowFilter  extends AbstractGlFilter{
     }
 
 
-    public setColor(c:Color):void{
+    public setColor(c:Color):this{
         this.setUniform(this.color,c.asGL());
+        return this;
     }
 
-    public setShift(x:number,y:number = x):void{
+    // noinspection JSSuspiciousNameCombination
+    public setShift(x:number,y:number = x):this{
         this.shiftX = x;
         this.shiftY = y;
+        return this;
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{

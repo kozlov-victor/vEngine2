@@ -8,13 +8,14 @@ export class BrightnessColorMatrixFilter extends AbstractColorMatrixFilter {
         this.setBrightness(1);
     }
 
-    public setBrightness(b:number):void {
+    public setBrightness(b:number):this {
         this.updateMatrix(new Float32Array([
             b, 0, 0, 0, 0,
             0, b, 0, 0, 0,
             0, 0, b, 0, 0,
             0, 0, 0, 1, 0
-        ]))
+        ]));
+        return this;
     }
 
 }

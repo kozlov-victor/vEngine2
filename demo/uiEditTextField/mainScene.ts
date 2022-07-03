@@ -1,15 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font/font";
-import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {
-    AlignText,
-    AlignTextContentHorizontal,
-    AlignTextContentVertical,
-    WordBrake
-} from "@engine/renderable/impl/ui/textField/textAlign";
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 // https://getemoji.com/

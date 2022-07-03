@@ -53,8 +53,9 @@ export class HexagonalFilter extends AbstractGlFilter {
     }
 
 
-    public setSize(val:number):void {
+    public setSize(val:number):this {
         this.setUniform(this.scale,new Float32Array([val,val]));
+        return this;
     }
 
 

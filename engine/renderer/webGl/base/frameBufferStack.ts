@@ -13,6 +13,7 @@ import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 import {Device} from "@engine/misc/device";
 import {ITexture} from "@engine/renderer/common/texture";
+import {Incrementer} from "@engine/resources/incrementer";
 
 interface IStackItem {
     frameBuffer:FrameBuffer;
@@ -44,6 +45,8 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     private readonly _resourceTexture:ITexture;
     private _destroyed:boolean = false;
+
+    public readonly id:number = Incrementer.getValue();
 
     constructor(protected readonly game:Game,private readonly _gl:WebGLRenderingContext, private readonly _size:ISize){
         this._stack.push({

@@ -37,17 +37,18 @@ export class PalletOffsetFilter extends AbstractGlFilter{
         this.simpleRectPainter.initProgram();
     }
 
-    public setPalletOffset(n:number):void { // 0 - txWidth
+    public setPalletOffset(n:number):this { // 0 - txWidth
         this.setUniform(this.palletOffset,n);
+        return this;
     }
 
+    public setPalletTexture(tx:Texture):this {
+        this.palletTextureGl = tx;
+        return this;
+    }
 
     public override doFilter(destFrameBuffer: FrameBuffer):void {
         this.simpleRectPainter.attachTexture(this.palletTexture,this.palletTextureGl);
         super.doFilter(destFrameBuffer);
-    }
-
-    private setPalletTexture(tx:Texture):void {
-        this.palletTextureGl = tx;
     }
 }

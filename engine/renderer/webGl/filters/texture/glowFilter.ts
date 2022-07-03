@@ -70,16 +70,19 @@ export class GlowFilter extends AbstractGlFilter {
         this.simpleRectPainter.initProgram();
     }
 
-    public setInnerStrength(n:number):void{
+    public setInnerStrength(n:number):this{
         this.setUniform(this.innerStrength,n);
+        return this;
     }
 
-    public setOuterStrength(n:number):void{
+    public setOuterStrength(n:number):this{
         this.setUniform(this.outerStrength,n);
+        return this;
     }
 
-    public setGlowColor(c:Color):void{
+    public setGlowColor(c:Color):this{
         this.setUniform(this.glowColor,c.asGL());
+        return this;
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
@@ -89,8 +92,9 @@ export class GlowFilter extends AbstractGlFilter {
         super.doFilter(destFrameBuffer);
     }
 
-    private setDistance(n:number):void{
+    private setDistance(n:number):this{
         this.setUniform(this.distance,n);
+        return this;
     }
 
 

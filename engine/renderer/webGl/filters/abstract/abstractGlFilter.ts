@@ -34,7 +34,7 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
         this.simpleRectPainter = new SimpleRectPainter(this.gl);
     }
 
-    public setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
+    protected setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
         this._uniformCache.put(name,value);
     }
 
@@ -61,7 +61,7 @@ export abstract class AbstractGlFilter implements IFilter,IDestroyable {
         this._destroyed = true;
     }
 
-    isDestroyed(): boolean {
+    public isDestroyed(): boolean {
         return this._destroyed;
     }
 

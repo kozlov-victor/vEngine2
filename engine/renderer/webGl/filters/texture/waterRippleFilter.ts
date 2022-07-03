@@ -85,23 +85,19 @@ export class WaterRippleFilter extends AbstractGlFilter {
         this.setAmount(0.1);
     }
 
-    public setAmount(val:number):void {
+    public setAmount(val:number):this {
         this.setUniform(this.amount,val);
+        return this;
     }
 
-    public override doFilter(destFrameBuffer:FrameBuffer):void{
-        this.animateDrops();
-        this.setUniform(this.drops,this.dropVectors);
-        this.setUniform(this.time,this.game.getElapsedTime()/1_000);
-        super.doFilter(destFrameBuffer);
-    }
 
-    public dropAt(x:number,y:number):void {
+    public dropAt(x:number,y:number):this {
         const ind:Optional<number> = this.getNextPointIndex();
-        if (ind===undefined) return;
+        if (ind===undefined) return this;
         this.dropVectors[ind]     = x / this.game.size.width;
         this.dropVectors[ind+1]   = y / this.game.size.height;
         this.dropVectors[ind+2]   = -2;
+        return this;
     }
 
     private getNextPointIndex():Optional<number> {
@@ -145,6 +141,13 @@ export class WaterRippleFilter extends AbstractGlFilter {
                 }
             }
         }
+    }
+
+    public override doFilter(destFrameBuffer:FrameBuffer):void{
+        this.animateDrops();
+        this.setUniform(this.drops,this.dropVectors);
+        this.setUniform(this.time,this.game.getElapsedTime()/1_000);
+        super.doFilter(destFrameBuffer);
     }
 
 

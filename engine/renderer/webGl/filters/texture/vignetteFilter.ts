@@ -34,12 +34,14 @@ export class VignetteFilter extends AbstractGlFilter{
         this.simpleRectPainter.initProgram();
     }
 
-    public setSize(val:number):void {
+    public setSize(val:number):this {
         this.setUniform(this.size,val);
+        return this;
     }
 
-    public setAmount(val:number):void {
+    public setAmount(val:number):this {
         this.setUniform(this.amount,val);
+        return this;
     }
 
 

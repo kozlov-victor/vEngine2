@@ -1,9 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
-import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {EvenOddCompositionFilter} from "@engine/renderer/webGl/filters/composition/evenOddCompositionFilter";
-import {SimpleBlurFilter} from "@engine/renderer/webGl/filters/texture/simpleBlurFilter";
 import {LightenCompositionFilter} from "@engine/renderer/webGl/filters/composition/lightenCompositionFilter";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {Resource} from "@engine/resources/resourceDecorators";
@@ -11,9 +9,9 @@ import {Texture} from "@engine/renderer/webGl/base/texture";
 import {DarkenCompositionFilter} from "@engine/renderer/webGl/filters/composition/darkenCompositionFilter";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {ScreenCompositionFilter} from "@engine/renderer/webGl/filters/composition/screenCompositionFilter";
-import {DebugError} from "@engine/debug/debugError";
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {Layer} from "@engine/scene/layer";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
 export class MainScene extends Scene {
@@ -21,11 +19,19 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/star.png')
     private img:Texture;
 
+    @Resource.Texture('./assets/repeat.jpg')
+    public bgTexture:ITexture;
+
     public override onReady():void {
+
+        const image = new Image(this.game,this.bgTexture);
+        image.pos.setXY(50);
+        image.appendTo(this);
 
         const debugLayer = new DebugLayer(this.game);
         this.appendChild(debugLayer);
         this.appendChild(new Layer(this.game));
+
 
         const root = new SimpleGameObjectContainer(this.game);
         root.forceDrawChildrenOnNewSurface = true;

@@ -57,17 +57,20 @@ export class FastBlurFilter extends AbstractGlFilter {
         super.doFilter(destFrameBuffer);
     }
 
-    public setSize(n:number):void{
+    public setSize(n:number):this{
         this.setWidth(n);
         this.setHeight(n);
+        return this;
     }
 
-    public setWidth(n:number):void{
+    public setWidth(n:number):this{
         this.setUniform(this.u_direction_x,n);
+        return this;
     }
 
-    public setHeight(n:number):void{
+    public setHeight(n:number):this{
         this.setUniform(this.u_direction_y,n);
+        return this;
     }
 
 }

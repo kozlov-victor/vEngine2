@@ -54,14 +54,16 @@ export class MotionBlurFilter extends AbstractGlFilter {
     }
 
 
-    public setStrength(val:number):void{
+    public setStrength(val:number):this{
         this.setUniform(this.strength,val);
+        return this;
     }
 
-    public setCenter(x:number,y:number):void{
+    public setCenter(x:number,y:number):this{
         this.centerArr[0] = x;
         this.centerArr[1] = y;
         this.setUniform(this.center,this.centerArr);
+        return this;
     }
 
 

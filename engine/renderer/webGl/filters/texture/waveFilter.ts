@@ -36,12 +36,14 @@ export class WaveFilter extends AbstractGlFilter {
         this.simpleRectPainter.initProgram();
     }
 
-    public setFrequency(val:number):void{
+    public setFrequency(val:number):this{
         this.setUniform(this.u_frequency,val);
+        return this;
     }
 
-    public setAmplitude(val:number):void{
+    public setAmplitude(val:number):this{
         this.setUniform(this.u_amplitude,val);
+        return this;
     }
 
 

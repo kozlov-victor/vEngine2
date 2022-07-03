@@ -28,8 +28,9 @@ export class ColorizeFilter extends AbstractGlFilter{
     }
 
 
-    public setColor(c:Color):void{
+    public setColor(c:Color):this{
         this.setUniform(this.uPixelColor,c.asGL());
+        return this;
     }
 
 }

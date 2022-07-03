@@ -47,7 +47,8 @@ export class OffsetMapFilter extends AbstractGlFilter{
         super.doFilter(destFrameBuffer);
     }
 
-    private setForce(val:number):void {
+    public setForce(val:number):this {
         this.setUniform(this.offsetForce,val); // -infinity..infinity
+        return this;
     }
 }

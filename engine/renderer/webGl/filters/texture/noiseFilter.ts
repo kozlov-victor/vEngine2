@@ -45,8 +45,9 @@ export class NoiseFilter extends AbstractGlFilter {
     }
 
 
-    public setIntensivity(val:number):void{
+    public setIntensivity(val:number):this{
        this.setUniform(this.u_noise_intensity,val);
+       return this;
     }
 
 

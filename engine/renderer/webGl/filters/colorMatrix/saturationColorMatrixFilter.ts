@@ -8,7 +8,7 @@ export class SaturationColorMatrixFilter extends AbstractColorMatrixFilter {
         this.setSaturation(1);
     }
 
-    public setSaturation(s:number):void {
+    public setSaturation(s:number):this {
         const x = (s || 0) * 2/3 + 1;
         const y = ((x-1) *-0.5);
         this.updateMatrix(new Float32Array([
@@ -16,7 +16,8 @@ export class SaturationColorMatrixFilter extends AbstractColorMatrixFilter {
             y, x, y, 0, 0,
             y, y, x, 0, 0,
             0, 0, 0, 1, 0
-        ]))
+        ]));
+        return this;
     }
 
 }

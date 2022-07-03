@@ -36,12 +36,14 @@ export class BrightessContrastFilter extends AbstractGlFilter{
     }
 
 
-    public setContrast(c:number):void{
+    public setContrast(c:number):this{
         this.setUniform(this.u_contrast,c);
+        return this;
     }
 
-    public setBrightness(b:number):void{
+    public setBrightness(b:number):this{
         this.setUniform(this.u_brightness,b);
+        return this;
     }
 
 }

@@ -26,8 +26,9 @@ export class BlackWhiteFilter extends AbstractGlFilter{
         this.simpleRectPainter.initProgram();
     }
 
-    public setMixFactor(n:number):void {
+    public setMixFactor(n:number):this {
         this.setUniform(this.u_mixFactor,n);
+        return this;
     }
 
 }

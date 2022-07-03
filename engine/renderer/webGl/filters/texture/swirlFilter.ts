@@ -49,18 +49,21 @@ export class SwirlFilter extends AbstractGlFilter {
     }
 
 
-    public setRadius(val:number):void{
+    public setRadius(val:number):this{
         this.setUniform(this.radius,val);
+        return this;
     }
 
-    public setAngle(val:number):void{
+    public setAngle(val:number):this{
         this.setUniform(this.angle,val);
+        return this;
     }
 
-    public setCenter(x:number,y:number):void{
+    public setCenter(x:number,y:number):this{
         this.centerArr[0] = x;
         this.centerArr[1] = y;
         this.setUniform(this.center,this.centerArr);
+        return this;
     }
 
 

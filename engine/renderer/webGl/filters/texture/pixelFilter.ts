@@ -41,17 +41,20 @@ export class PixelFilter extends AbstractGlFilter {
     }
 
 
-    public setPixelWidth(n:number):void{
+    public setPixelWidth(n:number):this{
         this.setUniform(this.pixel_w,n);
+        return this;
     }
 
-    public setPixelHeight(n:number):void{
+    public setPixelHeight(n:number):this{
         this.setUniform(this.pixel_h,n);
+        return this;
     }
 
-    public setPixelSize(n:number):void {
+    public setPixelSize(n:number):this {
         this.setPixelWidth(n);
         this.setPixelHeight(n);
+        return this;
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{

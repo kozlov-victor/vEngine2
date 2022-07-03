@@ -67,18 +67,21 @@ export class LensDistortionFilter extends AbstractGlFilter {
         this.simpleRectPainter.initProgram();
     }
 
-    public setLengthSize(val:number):void{
+    public setLengthSize(val:number):this{
         this.setUniform(this.u_length_size,val);
+        return this;
     }
 
-    public setForce(val:number):void{
+    public setForce(val:number):this{
         this.setUniform(this.u_force,val);
+        return this;
     }
 
-    public setMouseScreenCoordinates(x:number,y:number):void{
+    public setMouseScreenCoordinates(x:number,y:number):this{
         this.coordinates[0] = x;
         this.coordinates[1] = y;
         this.setUniform(this.u_mouse,this.coordinates);
+        return this;
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{

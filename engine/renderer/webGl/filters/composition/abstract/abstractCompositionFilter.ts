@@ -14,6 +14,9 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
     private destCopy:FrameBuffer;
     private _simpleRectCopyPainter:SimpleRectPainter;
 
+    protected clearNextFrameBuffer = true;
+
+
     protected constructor(game:Game) {
         super(game);
         const gl:WebGLRenderingContext = this.game.getRenderer<WebGlRenderer>().getNativeContext();
@@ -46,8 +49,10 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         this._simpleRectCopyPainter.attachTexture('texture',nextFrameBuffer.getTexture());
         this._simpleRectCopyPainter.draw();
         // 2. prepare nextFrameBuffer
-        nextFrameBuffer.bind();
-        nextFrameBuffer.clear(Color.NONE); // we don't require blending with this buffer, already blended
+        if (this.clearNextFrameBuffer) {
+            nextFrameBuffer.bind();
+            nextFrameBuffer.clear(Color.NONE); // we don't require blending with this buffer, will be blended by filter program
+        }
         // 3. attach destTexture as copy of destination
         this.simpleRectPainter.attachTexture('destTexture',this.destCopy.getTexture());
         // 4. filter

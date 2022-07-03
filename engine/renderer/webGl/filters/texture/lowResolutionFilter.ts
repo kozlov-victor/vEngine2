@@ -46,8 +46,9 @@ export class LowResolutionFilter extends AbstractGlFilter {
         this.simpleRectPainter.initProgram();
     }
 
-    public setResolution(val:number):void{
+    public setResolution(val:number):this{
         this.setUniform(this.u_resolution,val);
+        return this;
     }
 
 

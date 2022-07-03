@@ -8,7 +8,7 @@ export class ContrastColorMatrixFilter extends AbstractColorMatrixFilter {
         this.setContrast(1);
     }
 
-    public setContrast(c:number):void {
+    public setContrast(c:number):this {
         const t = (1.0 - c) / 2.0;
         this.updateMatrix(new Float32Array([
             c,0,0,0,0,
@@ -16,7 +16,8 @@ export class ContrastColorMatrixFilter extends AbstractColorMatrixFilter {
             0,0,c,0,0,
             0,0,0,1,0,
             t,t,t,0,1
-        ]))
+        ]));
+        return this;
     }
 
 }
