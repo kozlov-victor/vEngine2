@@ -199,6 +199,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             source: c,
             destroy: noop,
             isDestroyed: ()=> false,
+            kind: 'texture',
         };
     }
 

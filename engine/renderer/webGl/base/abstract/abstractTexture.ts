@@ -30,6 +30,7 @@ export abstract class AbstractTexture implements ITexture {
         }
         this.tex = gl.createTexture() as WebGLTexture;
         if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);
+
     }
 
     public static currentBindTextureAt:{[index:number]:AbstractTexture} = {};

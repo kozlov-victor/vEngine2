@@ -148,6 +148,7 @@ export class DomRenderer extends AbstractRenderer {
                 height:bitmap.height
             },
             destroy:noop,
+            kind : 'texture',
             isDestroyed: ()=> false,
         };
     }

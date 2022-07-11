@@ -2,6 +2,7 @@
 export abstract class AbstractCanvasFilter implements IFilter {
 
     public readonly type:string = 'CanvasFilter';
+    public readonly kind = 'filter';
 
     public abstract processPixel(arr:Uint8ClampedArray,i:number):void;
 
