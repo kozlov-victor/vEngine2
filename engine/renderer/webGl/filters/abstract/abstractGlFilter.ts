@@ -14,6 +14,7 @@ import {IDestroyable} from "@engine/core/declarations";
 export abstract class AbstractGlFilter implements IFilter,IDestroyable {
 
     public readonly type:string = 'WebglFilter';
+    public readonly kind = 'filter';
     public enabled:boolean = true;
 
     protected gl:WebGLRenderingContext;

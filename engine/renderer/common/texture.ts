@@ -3,6 +3,7 @@ import {IDestroyable} from "@engine/core/declarations";
 
 export interface ITexture extends IDestroyable {
     size: Readonly<ISize>;
+    kind: 'texture';
 }
 
 export interface ICubeMapTexture extends ITexture {

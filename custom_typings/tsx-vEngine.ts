@@ -16,6 +16,7 @@ type vFont = {
 
 interface IFilter {
     type:string;
+    kind: 'filter';
 }
 
 interface IGenericProps<T> {

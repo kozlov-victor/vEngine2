@@ -15,6 +15,8 @@ export const enum INTERPOLATION_MODE {
 
 export abstract class AbstractTexture implements ITexture {
 
+    public readonly kind = 'texture';
+
     protected constructor(protected readonly gl:WebGLRenderingContext){
         if (DEBUG) {
             if (!gl) throw new DebugError("can not create Texture, gl context not passed to constructor, expected: Texture(gl)");
