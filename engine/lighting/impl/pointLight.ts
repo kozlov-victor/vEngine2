@@ -2,8 +2,6 @@ import {Game} from "../../core/game";
 import {AbstractLight} from "../abstract/abstractLight";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {FastMap} from "@engine/misc/collection/fastMap";
-import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
-import {LightSet} from "@engine/lighting/lightSet";
 
 
 export class PointLight extends AbstractLight {
