@@ -1,10 +1,10 @@
 import {DebugError} from "../debug/debugError";
 import {Game} from "../core/game";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {AbstractLight} from "@engine/light/abstract/abstractLight";
-import {PointLight} from "@engine/light/impl/pointLight";
-import {AmbientLight} from "@engine/light/impl/ambientLight";
-import {ShaderMaterial} from "@engine/light/material/shaderMaterial";
+import {AbstractLight} from "@engine/lighting/abstract/abstractLight";
+import {PointLight} from "@engine/lighting/impl/pointLight";
+import {AmbientLight} from "@engine/lighting/impl/ambientLight";
+import {ShaderMaterial} from "@engine/lighting/material/shaderMaterial";
 import {FastMap} from "@engine/misc/collection/fastMap";
 
 export class LightSet {

@@ -6,7 +6,7 @@ import {structures} from "@engine/renderer/webGl/filters/light/shader/fragment-s
 import {functions} from "@engine/renderer/webGl/filters/light/shader/fragment-functions.shader";
 import {mainFnSource} from "@engine/renderer/webGl/filters/light/shader/mainFn.shader";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
-import {LightSet} from "@engine/light/lightSet";
+import {LightSet} from "@engine/lighting/lightSet";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Optional} from "@engine/core/declarations";

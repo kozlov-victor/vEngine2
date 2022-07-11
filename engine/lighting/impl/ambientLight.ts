@@ -18,4 +18,8 @@ export class AmbientLight extends AbstractLight{
         map.put('u_ambientLight.intensity',this.intensity);
     }
 
+    public draw(): void {}
+
+
+
 }

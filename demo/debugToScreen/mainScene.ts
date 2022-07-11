@@ -1,13 +1,20 @@
 import {Scene} from "@engine/scene/scene";
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {Rect} from "@engine/geometry/rect";
+import {MathEx} from "@engine/misc/math/mathEx";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 export class MainScene extends Scene {
 
     public override onReady():void {
+
+        this.backgroundColor = ColorFactory.fromCSS(`rgba(14, 0, 37, 0.35)`);
+        this.game.getRenderer<WebGlRenderer>().setPixelPerfect(true);
+
         const debugLayer = new DebugLayer(this.game);
+        debugLayer.getTextField().textColor.setFrom(ColorFactory.fromCSS('green'));
         this.appendChild(debugLayer);
-        // tslint:disable-next-line:no-null-keyword
         debugLayer.log(null,undefined,{test:42});
         debugLayer.log('test log');
         debugLayer.log(document);
@@ -17,9 +24,15 @@ export class MainScene extends Scene {
         debugLayer.log(Number);
         debugLayer.log(new Rect());
 
+        const codeLines = [
+            ...this.game.constructor.toString().split('\n'),
+            ...this.constructor.toString().split('\n'),
+            ...this.game.getRenderer().constructor.toString().split('\n'),
+        ];
+
         this.setInterval(()=>{
-            debugLayer.log(this.game.getCurrentTime());
-        },500);
+            debugLayer.log(codeLines[MathEx.randomInt(0,codeLines.length-1)]);
+        },1000);
     }
 
 }

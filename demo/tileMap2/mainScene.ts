@@ -15,6 +15,9 @@ import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage
 import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAnimation";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
+import {LightSet} from "@engine/lighting/lightSet";
+import {PointLight} from "@engine/lighting/impl/pointLight";
 
 interface IUnityMeta {
     TextureImporter: {
@@ -75,6 +78,17 @@ export class MainScene extends Scene {
         hero.scale.setXY(3);
         hero.transformPoint.setToCenter();
         hero.gotoAndStop('run',4);
+
+        const lightSet = new LightSet(this.game);
+        const pointLight = new PointLight(this.game);
+        lightSet.addPointLight(pointLight);
+        pointLight.pos.setXY(40,20);
+        pointLight.nearRadius = 10;
+        pointLight.farRadius = 80;
+        pointLight.color.setRGB(200,200,100);
+        pointLight.appendTo(hero);
+        const light = new LightFilter(this.game,lightSet);
+        this.filters = [light];
 
         const phys = this.game.getPhysicsSystem<ArcadePhysicsSystem>();
         hero.setRigidBody(phys.createRigidBody({

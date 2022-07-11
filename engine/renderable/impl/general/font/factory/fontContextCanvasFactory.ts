@@ -1,7 +1,9 @@
-import {ISize} from "@engine/geometry/size";
+import {ISize, Size} from "@engine/geometry/size";
 import {FontContextAbstractFactory} from "@engine/renderable/impl/general/font/factory/fontContextAbstractFactory";
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
+
+declare const OffscreenCanvas: any;
 
 interface IPrefixedContext {
     mozImageSmoothingEnabled?: boolean;
@@ -10,13 +12,24 @@ interface IPrefixedContext {
     oImageSmoothingEnabled?: boolean;
 }
 
+const createCanvas = (size:ISize):HTMLCanvasElement=>{
+    if (typeof OffscreenCanvas!=='undefined') {
+        return new OffscreenCanvas(size.width, size.height);
+    } else {
+        const c = document.createElement('canvas');
+        c.width = size.width;
+        c.height = size.height;
+        return c;
+    }
+}
+
 export class FontContextCanvasFactory extends FontContextAbstractFactory<CanvasRenderingContext2D> {
 
     private measureCanvas:CanvasRenderingContext2D;
 
     constructor(game:Game,private strFont:string) {
         super(game);
-        const el = document.createElement('canvas');
+        const el = createCanvas(new Size().setWH(512));
         this.measureCanvas = el.getContext('2d')!;
         this.measureCanvas.font = strFont;
     }
@@ -40,9 +53,7 @@ export class FontContextCanvasFactory extends FontContextAbstractFactory<CanvasR
     }
 
     protected override createTexturePage(size: ISize): CanvasRenderingContext2D {
-        const cnv:HTMLCanvasElement = document.createElement('canvas');
-        cnv.width = size.width;
-        cnv.height = size.height;
+        const cnv = createCanvas(size);
         const ctx:CanvasRenderingContext2D = cnv.getContext('2d')!;
         ctx.font = this.strFont;
         ctx.textBaseline = 'top';

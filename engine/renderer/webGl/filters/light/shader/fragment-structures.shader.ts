@@ -1,8 +1,8 @@
 
 
-import {LightSet} from "@engine/light/lightSet";
-import {PointLight} from "@engine/light/impl/pointLight";
-import {DirectionalLight} from "@engine/light/impl/directionalLight";
+import {LightSet} from "@engine/lighting/lightSet";
+import {PointLight} from "@engine/lighting/impl/pointLight";
+import {DirectionalLight} from "@engine/lighting/impl/directionalLight";
 
 //language=GLSL
 export const structures:string = `

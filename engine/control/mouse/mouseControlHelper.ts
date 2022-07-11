@@ -9,8 +9,8 @@ import {IPoint2d, Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {Optional} from "@engine/core/declarations";
 import Vec4Holder = Vec4.Vec4Holder;
+import {getScreenCoords} from "@engine/renderable/_helper/getScreenCoords";
 
-const recycledArray:Readonly<Vec4.VEC4>[] = [undefined!,undefined!,undefined!,undefined!];
 
 export class MouseControlHelper {
 
@@ -41,34 +41,8 @@ export class MouseControlHelper {
     }
 
     private isPointInRect(mousePoint:MousePoint, obj:RenderableModel,constrainObjects?:RenderableModel[]):boolean {
-        const modelRect:Rect = Rect.fromPool();
 
-        const pointBottomRight:Vec4Holder = Vec4Holder.fromPool();
-        pointBottomRight.set(obj.size.width,obj.size.height,0,1);
-        const pointBottomRightTransformation:Vec4Holder = Vec4Holder.fromPool();
-        Mat4.multVecByMatrix(pointBottomRightTransformation,obj.worldTransformMatrix,pointBottomRight);
-
-        const pointTopRight:Vec4Holder = Vec4Holder.fromPool();
-        pointTopRight.set(obj.size.width,0,0,1);
-        const pointTopRightTransformation:Vec4Holder = Vec4Holder.fromPool();
-        Mat4.multVecByMatrix(pointTopRightTransformation,obj.worldTransformMatrix,pointTopRight);
-
-        const pointTopLeft:Vec4Holder = Vec4Holder.fromPool();
-        pointTopLeft.set(0,0,0,1);
-        const pointTopLeftTransformation:Vec4Holder = Vec4Holder.fromPool();
-        Mat4.multVecByMatrix(pointTopLeftTransformation,obj.worldTransformMatrix,pointTopLeft);
-
-        const pointBottomLeft:Vec4Holder = Vec4Holder.fromPool();
-        pointBottomLeft.set(0,obj.size.height,0,1);
-        const pointBottomLeftTransformation:Vec4Holder = Vec4Holder.fromPool();
-        Mat4.multVecByMatrix(pointBottomLeftTransformation,obj.worldTransformMatrix,pointBottomLeft);
-
-        recycledArray[0] = pointTopLeftTransformation.vec4;
-        recycledArray[1] = pointTopRightTransformation.vec4;
-        recycledArray[2] = pointBottomRightTransformation.vec4;
-        recycledArray[3] = pointBottomLeftTransformation.vec4;
-
-        let result:boolean = this.isPointInPolygon4(recycledArray,mousePoint.screenCoordinate);
+        let result:boolean = this.isPointInPolygon4(getScreenCoords(obj),mousePoint.screenCoordinate);
         if (result && constrainObjects!==undefined) {
             for (let i:number=0;i<constrainObjects.length;i++) {
                 if (!this.isPointInRect(mousePoint,constrainObjects[i])) {
@@ -78,16 +52,6 @@ export class MouseControlHelper {
             }
         }
 
-        Rect.toPool(modelRect);
-
-        Vec4Holder.toPool(pointBottomRight);
-        Vec4Holder.toPool(pointBottomRightTransformation);
-        Vec4Holder.toPool(pointTopRight);
-        Vec4Holder.toPool(pointTopRightTransformation);
-        Vec4Holder.toPool(pointTopLeft);
-        Vec4Holder.toPool(pointTopLeftTransformation);
-        Vec4Holder.toPool(pointBottomLeft);
-        Vec4Holder.toPool(pointBottomLeftTransformation);
         return result;
     }
 

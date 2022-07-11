@@ -8,6 +8,8 @@ import {ITransformable} from "@engine/core/declarations";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 import Mat16Holder = Mat4.Mat16Holder;
 import {Point3d} from "@engine/geometry/point3d";
+import {Vec4} from "@engine/geometry/vec4";
+import {getScreenCoords} from "@engine/renderable/_helper/getScreenCoords";
 
 class AnglePoint3d extends ObservableEntity{
 
@@ -97,6 +99,8 @@ export abstract class TransformableModel extends BaseModel implements ITransform
 
     public readonly _children:TransformableModel[] = [];
 
+    private _screenCoords:Readonly<Vec4.VEC4>[];
+
     get angle():number{
         return this._angle;
     }
@@ -169,6 +173,10 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         if (props.scale!==undefined) this.scale.setFrom(props.scale);
         if (props.anchorPoint!==undefined) this.anchorPoint.setFrom(props.anchorPoint);
         if (props.transformPoint!==undefined) this.transformPoint.setFrom(props.transformPoint);
+    }
+
+    public getScreenCoords():[Vec4.VEC4,Vec4.VEC4,Vec4.VEC4,Vec4.VEC4] {
+        return getScreenCoords(this);
     }
 
     protected setClonedProperties(cloned:TransformableModel):void{
