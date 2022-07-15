@@ -99,8 +99,6 @@ export abstract class TransformableModel extends BaseModel implements ITransform
 
     public readonly _children:TransformableModel[] = [];
 
-    private _screenCoords:Readonly<Vec4.VEC4>[];
-
     get angle():number{
         return this._angle;
     }

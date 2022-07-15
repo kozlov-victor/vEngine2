@@ -73,7 +73,7 @@ export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSur
         if (!path) return defaultWidth;
         const polygons = Polygon.fromMultiCurveSvgPath(this.game, path);
         if (!polygons.length) return defaultWidth;
-        const res = polygons[0].size.width*this.scale;
+        const res = Math.max(defaultWidth,...polygons.map(it=>it.size.width*this.scale));
         polygons.forEach(p => p.destroy());
         return res;
     }

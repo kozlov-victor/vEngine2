@@ -36,6 +36,7 @@ export class MainScene extends Scene {
         pointLight.farRadius = 120;
         pointLight.pos.setXY(50,50);
         pointLight.color.setRGB(255,255,255);
+        pointLight.appendTo(this);
 
         const lightSet:LightSet = new LightSet(this.game);
         lightSet.addPointLight(pointLight);

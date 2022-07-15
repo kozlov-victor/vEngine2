@@ -30,13 +30,15 @@ export class MainScene extends Scene {
         pointLight.farRadius = 120;
         pointLight.pos.setXY(50,50);
         pointLight.color.setRGB(200,200,100);
+        pointLight.appendTo(this);
 
-        const dirLight:DirectionalLight = new DirectionalLight(this.game);
+        const dirLight = new DirectionalLight(this.game);
         dirLight.nearRadius = 20;
         dirLight.farRadius = 100;
         dirLight.pos.setXY(100,100);
-        dirLight.direction = new Float32Array([-1,0,0]);
+        dirLight.direction.setXY(-1,0);
         dirLight.color.setRGB(100,0,0);
+        dirLight.appendTo(this);
 
         const lightSet:LightSet = new LightSet(this.game);
         lightSet.addPointLight(pointLight);
@@ -50,7 +52,7 @@ export class MainScene extends Scene {
         spr.filters = [lightFilter];
 
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e:ISceneMouseEvent)=>{
-            pointLight.pos.setXY(e.screenX,e.screenY);
+            pointLight.pos.setXY(e.sceneX,e.sceneY);
             dirLight.pos.setFrom(pointLight.pos);
         });
         spr.addBehaviour(new DraggableBehaviour(this.game));

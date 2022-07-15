@@ -17,7 +17,6 @@ import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAn
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
 import {LightSet} from "@engine/lighting/lightSet";
-import {PointLight} from "@engine/lighting/impl/pointLight";
 import {DirectionalLight} from "@engine/lighting/impl/directionalLight";
 
 interface IUnityMeta {
@@ -81,15 +80,17 @@ export class MainScene extends Scene {
         hero.gotoAndStop('run',4);
 
         const lightSet = new LightSet(this.game);
-        const l = new PointLight(this.game);
+        lightSet.ambientLight.intensity = 0.3;
+        const l = new DirectionalLight(this.game);
         lightSet.addPointLight(l);
-        l.pos.setXY(0,20);
+        l.pos.setXY(20,20);
         l.nearRadius = 0;
-        l.farRadius = 120;
+        l.farRadius = 600;
+        l.direction.setXY(-1,0);
         l.color.setRGB(200,200,100);
         l.appendTo(hero);
-        const light = new LightFilter(this.game,lightSet);
-        this.filters = [light];
+        const lightFilter = new LightFilter(this.game,lightSet);
+        this.filters = [lightFilter];
 
         const phys = this.game.getPhysicsSystem<ArcadePhysicsSystem>();
         hero.setRigidBody(phys.createRigidBody({
