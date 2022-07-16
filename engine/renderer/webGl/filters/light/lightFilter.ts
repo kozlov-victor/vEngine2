@@ -2,15 +2,14 @@ import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {Game} from "@engine/core/game";
 import {ShaderGenerator} from "../../shaderGenerator/shaderGenerator";
 import {GL_TYPE, UNIFORM_VALUE_TYPE} from "../../base/shaderProgramUtils";
-import {structures} from "@engine/renderer/webGl/filters/light/shader/fragment-structures.shader";
-import {functions} from "@engine/renderer/webGl/filters/light/shader/fragment-functions.shader";
-import {mainFnSource} from "@engine/renderer/webGl/filters/light/shader/mainFn.shader";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {LightSet} from "@engine/lighting/lightSet";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Optional} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
+import {light2dShader} from "@engine/renderer/webGl/filters/light/shader/light2dShader";
+import {Light2dShaderFunctions} from "@engine/renderer/webGl/filters/light/shader/light2dShaderFunctions";
 
 
 export class LightFilter extends AbstractGlFilter {
@@ -22,21 +21,20 @@ export class LightFilter extends AbstractGlFilter {
     private readonly _u_dimension:string;
 
     private normalMap:Optional<ITexture>;
+    private _dimension = new Float32Array([0,0]);
 
 
     constructor(game:Game, private lightArray:LightSet) {
         super(game);
         const gen: ShaderGenerator = this.simpleRectPainter.gen;
-        gen.prependFragmentCodeBlock(structures);
-        gen.appendFragmentCodeBlock(functions);
         gen.addStructFragmentUniform("PointLight",'u_pointLights[MAX_NUM_OF_POINT_LIGHTS]');
         gen.addStructFragmentUniform("AmbientLight",'u_ambientLight');
-        gen.addStructFragmentUniform("Material",'u_material');
         this._normalTexture = gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'normalTexture');
         this._u_useNormalMap = gen.addScalarFragmentUniform(GL_TYPE.BOOL,'u_useNormalMap');
         this._u_dimension = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_dimension');
         gen.addScalarFragmentUniform(GL_TYPE.INT,'u_numOfPointLights');
-        gen.setFragmentMainFn(mainFnSource);
+        gen.prependFragmentCodeBlock(Light2dShaderFunctions);
+        gen.setFragmentMainFn(light2dShader);
         this.simpleRectPainter.initProgram();
     }
 
@@ -49,6 +47,10 @@ export class LightFilter extends AbstractGlFilter {
     }
 
     public override doFilter(destFrameBuffer:FrameBuffer):void{
+        this._dimension[0] = destFrameBuffer.getTexture().size.width;
+        this._dimension[1] = destFrameBuffer.getTexture().size.height;
+        this.setUniform(this._u_dimension,this._dimension);
+
         this.lightArray.setUniformsToMap(this._uniformInfo);
         this.simpleRectPainter.setUniformsFromMap(this._uniformInfo);
         const useNormalMap:boolean = this.normalMap!==undefined;

@@ -3,7 +3,38 @@ import {AbstractLight} from "../abstract/abstractLight";
 import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {FastMap} from "@engine/misc/collection/fastMap";
 
+/*
 
+                                &&&@@@@@@@@&&&
+                      %@@@@@,,                  ,&@@@@&(
+                 @@@@/                                  *@@@#
+             &@@(                                            (@@/
+          @@@                                                    @@&
+       /@@                          ,@#,,                          ,@@.
+     %@@                     %@@@@   @(    @@@@@                      @@
+    @@                    @@@        @(          @@@                   ,@@
+  /@@                  &@@           @(            *@@      ----->(2) &@@@@.
+ (@,                 (@&             @(1)<-----      ,@@        @@@@@@/   #@
+ @%                 (@(              @(                @@@@@@/             @@
+@@                  @@               @(          &@@@@(,@,                 ,@,
+@@                 ,@,               @(  ,#@@@@%        @@                  @@
+@@                 ,@*               @@@&               @@                  @@
+@@                  @@                                 @@                  ,@,
+ @(                  @@                               @@                   @@
+ %@                   (@@                           %@@                   (@
+  (@                     @@/                      @@@                    %@
+   .@@                     .@@@/             *@@@#                      @@
+     %@&                         #@@@@@@@@@##                         @@
+       &@@                                                          @@*
+          @@                                                     %@@
+             @@@                                              @@@
+                .@@@&                                    &@@@.
+                     ,@@@@@#                     (#@@@@&
+                              //@@@@@@@@@@@@@@//
+
+(1) - near radius
+(2) - far radius
+ */
 export class PointLight extends AbstractLight {
 
     public static readonly LIGHT_TYPE:number = 0;

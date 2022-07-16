@@ -4,7 +4,6 @@ import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils
 import {AbstractLight} from "@engine/lighting/abstract/abstractLight";
 import {PointLight} from "@engine/lighting/impl/pointLight";
 import {AmbientLight} from "@engine/lighting/impl/ambientLight";
-import {ShaderMaterial} from "@engine/lighting/material/shaderMaterial";
 import {FastMap} from "@engine/misc/collection/fastMap";
 
 export class LightSet {
@@ -12,7 +11,6 @@ export class LightSet {
     public static MAX_NUM_OF_POINT_LIGHTS:number = 16;
 
     public readonly ambientLight:AmbientLight = new AmbientLight(this.game);
-    public readonly material:ShaderMaterial = new ShaderMaterial();
     private readonly pointLights:PointLight[] = [];
 
     constructor(private game:Game){
@@ -33,7 +31,6 @@ export class LightSet {
     public setUniformsToMap(map:FastMap<string,UNIFORM_VALUE_TYPE>):void{
         map.put('u_numOfPointLights',this.pointLights.length);
         this.ambientLight.setUniformsToMap(map);
-        this.material.setUniformsToMap(map);
         for (let i:number=0;i<this.pointLights.length;i++) {
             const p:AbstractLight = this.pointLights[i];
             p.setUniformsToMap(map,i);

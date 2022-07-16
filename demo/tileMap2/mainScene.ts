@@ -18,6 +18,8 @@ import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
 import {LightSet} from "@engine/lighting/lightSet";
 import {DirectionalLight} from "@engine/lighting/impl/directionalLight";
+import {PointLight} from "@engine/lighting/impl/pointLight";
+import {Tween} from "@engine/animation/tween";
 
 interface IUnityMeta {
     TextureImporter: {
@@ -84,11 +86,37 @@ export class MainScene extends Scene {
         const l = new DirectionalLight(this.game);
         lightSet.addPointLight(l);
         l.pos.setXY(20,20);
-        l.nearRadius = 0;
-        l.farRadius = 600;
-        l.direction.setXY(-1,0);
+        l.nearRadius = 10;
         l.color.setRGB(200,200,100);
         l.appendTo(hero);
+        this.addTween(new Tween<{num:number}>(this.game,{
+            target: {num: 0},
+            from : {num:200},
+            to : {num:400},
+            yoyo: true,
+            loop: true,
+            progress: it=>l.farRadius = it.num,
+            time: 1000,
+        }));
+
+
+        const particleLight = new PointLight(this.game);
+        particleLight.appendTo(this);
+        particleLight.pos.setXY(100,100);
+        particleLight.color.setFrom(ColorFactory.fromCSS(`#9b0303`));
+        this.addTween(new Tween<{num:number}>(this.game,{
+            target: {num: 0},
+            from : {num:200},
+            to : {num:300},
+            yoyo: true,
+            loop: true,
+            progress: it=>particleLight.farRadius = it.num,
+            time: 2000,
+        }));
+
+        lightSet.addPointLight(particleLight);
+
+
         const lightFilter = new LightFilter(this.game,lightSet);
         this.filters = [lightFilter];
 
