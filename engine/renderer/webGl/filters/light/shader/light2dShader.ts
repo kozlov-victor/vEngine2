@@ -14,14 +14,12 @@ export const light2dShader:string = `
         return smoothstep(1.,0.,attenuation);
     }
 
-    float calcDistanceAttenuation(PointLight light) {
-        float dist = distance(light.pos,v_texCoord * u_dimension);
+    float calcDistanceAttenuation(PointLight light, float dist) {
         float attenuation = clamp((dist - light.nearRadius)/(light.farRadius - light.nearRadius),0.,1.);
         return smoothstep(1.,0.,attenuation);
     }
 
-    float calcSpecular(PointLight light, vec4 normal) {
-        float dist = distance(light.pos,v_texCoord * u_dimension);
+    float calcSpecular(PointLight light, vec4 normal, float dist) {
         float spec = max(0.,dot(normal.xyz,vec3(0.,0.,-1.)));
         return spec / dist * light.specular;
     }
@@ -41,9 +39,10 @@ export const light2dShader:string = `
         for (int i=0;i<MAX_NUM_OF_POINT_LIGHTS;i++) {
             if (i>u_numOfPointLights) break;
             PointLight l = u_pointLights[i];
+            float dist = distance(l.pos,v_texCoord * u_dimension);
             if (u_pointLights[i].isOn) {
-                float atten = calcDistanceAttenuation(l) * calcAngleAttenuation(l);
-                if (atten>0.) atten+=calcSpecular(l,normal);
+                float atten = calcDistanceAttenuation(l, dist) * calcAngleAttenuation(l);
+                if (atten>0.) atten+=calcSpecular(l, normal, dist);
                 lightResult +=
                     atten *
                     l.color *
