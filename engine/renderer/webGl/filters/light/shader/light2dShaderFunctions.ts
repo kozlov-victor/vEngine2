@@ -13,13 +13,16 @@ export const Light2dShaderFunctions = `
     #define PI ${Math.PI}
 
     struct PointLight {
+        // common ligth
         int type;
         vec2 pos;
         vec4 color;
+        float intensity;
+        float specular;
+        bool isOn;
+        // point light
         float nearRadius;
         float farRadius;
-        float intensity;
-        bool isOn;
         // directional light
         vec2 direction;
         float nearFieldAngle;

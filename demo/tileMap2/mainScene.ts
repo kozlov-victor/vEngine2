@@ -82,7 +82,7 @@ export class MainScene extends Scene {
         hero.gotoAndStop('run',4);
 
         const lightSet = new LightSet(this.game);
-        lightSet.ambientLight.intensity = 0.3;
+        lightSet.ambientLight.intensity = 0.6;
         const l = new DirectionalLight(this.game);
         lightSet.addPointLight(l);
         l.pos.setXY(20,20);
@@ -104,6 +104,7 @@ export class MainScene extends Scene {
         particleLight.appendTo(this);
         particleLight.pos.setXY(100,100);
         particleLight.color.setFrom(ColorFactory.fromCSS(`#9b0303`));
+        particleLight.specular = 5;
         this.addTween(new Tween<{num:number}>(this.game,{
             target: {num: 0},
             from : {num:200},

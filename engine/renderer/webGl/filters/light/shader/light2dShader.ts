@@ -4,8 +4,10 @@
 export const light2dShader:string = `
 
     float calcAngleAttenuation(PointLight light) {
+        if (light.type==LIGHT_TYPE_POINT) return 1.;
         vec2 vec = vec2(v_texCoord.x*u_dimension.x - light.pos.x,v_texCoord.y*u_dimension.y - light.pos.y);
         float angle = acos(dot(normalize(vec), normalize(light.direction)));
+        if (angle>2.*PI) return 0.;
         float farSemiangle = light.farFieldAngle / 2.;
         float nearSemiangle = light.nearFieldAngle / 2.;
         float attenuation = clamp((angle - nearSemiangle) / (farSemiangle - nearSemiangle),0.,1.);
@@ -18,10 +20,10 @@ export const light2dShader:string = `
         return smoothstep(1.,0.,attenuation);
     }
 
-    float calcAttenuation(PointLight light) {
-        float result =  calcDistanceAttenuation(light);
-        if (light.type==LIGHT_TYPE_DIRECTIONAL) result*=calcAngleAttenuation(light);
-        return result;
+    float calcSpecular(PointLight light, vec4 normal) {
+        float dist = distance(light.pos,v_texCoord * u_dimension);
+        float spec = max(0.,dot(normal.xyz,vec3(0.,0.,-1.)));
+        return spec / dist * light.specular;
     }
 
     void main(){
@@ -38,8 +40,14 @@ export const light2dShader:string = `
 
         for (int i=0;i<MAX_NUM_OF_POINT_LIGHTS;i++) {
             if (i>u_numOfPointLights) break;
+            PointLight l = u_pointLights[i];
             if (u_pointLights[i].isOn) {
-                lightResult+= calcAttenuation(u_pointLights[i])*u_pointLights[i].color*u_pointLights[i].intensity;
+                float atten = calcDistanceAttenuation(l) * calcAngleAttenuation(l);
+                if (atten>0.) atten+=calcSpecular(l,normal);
+                lightResult +=
+                    atten *
+                    l.color *
+                    l.intensity;
             }
         }
         lightResult = clamp(lightResult,vec4(0.,0.,0.,0.),vec4(1.,1.,1.,1.));

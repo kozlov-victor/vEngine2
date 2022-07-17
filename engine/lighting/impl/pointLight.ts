@@ -39,6 +39,7 @@ export class PointLight extends AbstractLight {
 
     public static readonly LIGHT_TYPE:number = 0;
 
+    public specular = 1;
     public nearRadius: number = 10;
     public farRadius: number = 100;
     public isOn:boolean = true;
@@ -60,6 +61,7 @@ export class PointLight extends AbstractLight {
         map.put(`u_pointLights[${i}].color`,this.color.asGL());
         map.put(`u_pointLights[${i}].intensity`,this.intensity);
         map.put(`u_pointLights[${i}].type`,PointLight.LIGHT_TYPE);
+        map.put(`u_pointLights[${i}].specular`,this.specular);
     }
 
     public draw(): void {}
