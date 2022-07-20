@@ -24,6 +24,11 @@ export const light2dShader:string = `
         return spec / dist * light.specular;
     }
 
+    float calcBumpMappngAttenuation(PointLight light, vec4 normal) {
+        vec3 direction = normalize(vec3(light.pos - gl_FragCoord.xy,0.));
+        return max(0.,dot(normal.xyz,direction));
+    }
+
     void main(){
         vec4 texColor = texture2D(texture, v_texCoord);
 
@@ -41,7 +46,10 @@ export const light2dShader:string = `
             PointLight l = u_pointLights[i];
             float dist = distance(l.pos,v_texCoord * u_dimension);
             if (u_pointLights[i].isOn) {
-                float atten = calcDistanceAttenuation(l, dist) * calcAngleAttenuation(l);
+                float atten =
+                    calcDistanceAttenuation(l, dist) *
+                    calcAngleAttenuation(l) *
+                    calcBumpMappngAttenuation(l, normal);
                 if (atten>0.) atten+=calcSpecular(l, normal, dist);
                 lightResult +=
                     atten *
@@ -49,6 +57,7 @@ export const light2dShader:string = `
                     l.intensity;
             }
         }
+
         lightResult = clamp(lightResult,vec4(0.,0.,0.,0.),vec4(1.,1.,1.,1.));
         gl_FragColor = texColor * lightResult;
         gl_FragColor.a = texColor.a;

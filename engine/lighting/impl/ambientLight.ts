@@ -4,7 +4,7 @@ import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils
 import {FastMap} from "@engine/misc/collection/fastMap";
 
 
-export class AmbientLight extends AbstractLight{
+export class AmbientLight extends AbstractLight {
 
     constructor(game: Game) {
         super(game);

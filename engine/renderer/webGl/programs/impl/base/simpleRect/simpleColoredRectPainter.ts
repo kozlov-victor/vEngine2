@@ -50,7 +50,7 @@ export class SimpleColoredRectPainter extends AbstractPainter {
         this.initProgram();
     }
 
-    public initProgram():void{
+    private initProgram():void{
 
         if (DEBUG) {
             if (!this.gen) throw new DebugError(

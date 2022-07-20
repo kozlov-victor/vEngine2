@@ -39,6 +39,7 @@ import {BatchPainter} from "@engine/renderer/webGl/programs/impl/batch/batchPain
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 import MAT16 = Mat4.MAT16;
+import {SimpleImagePainter} from "@engine/renderer/webGl/programs/impl/base/simpleImage/simpleImagePainter";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -125,6 +126,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private readonly _matrixStack = new MatrixStack();
 
     private _shapePainterHolder = new InstanceHolder(ShapePainter);
+    private _simpleImagePainterHolder = new InstanceHolder(SimpleImagePainter);
     private _coloredRectPainterHolder = new InstanceHolder(SimpleColoredRectPainter);
     private _meshPainterHolder = new InstanceHolder(MeshPainter);
     private _batchPainterHolder = new InstanceHolder(BatchPainter);
@@ -167,6 +169,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this.flush();
 
+        this.drawSimpleImage(img);
+        // noinspection PointlessBooleanExpressionJS
+        // eslint-disable-next-line no-constant-condition
+        if (true) return;
+
         const texture:Texture = img.getTexture() as Texture;
         texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
         const maxSize:number = Math.max(img.size.width,img.size.height);
@@ -188,8 +195,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.RECT);
         sp.setUniformScalar(sp.u_fillType,FILL_TYPE.TEXTURE);
         const {width: textureWidth,height: textureHeight} = texture.size;
-        const {x:srcRectX,y:srcRectY} = img.getSrcRect();
-        const {width:destRectWidth,height:destRectHeight} = img.getSrcRect();
+        const {x:srcRectX,y:srcRectY,width:destRectWidth,height:destRectHeight} = img.getSrcRect();
 
         const destArr:Float32Array = rect.setXYWH(
             srcRectX/textureWidth,
@@ -592,6 +598,50 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         scp.setUniformScalar(scp.u_alpha,rectangle.getChildrenCount()===0?rectangle.alpha:1);
         scp.setUniformVector(scp.u_color,rectangle.fillColor.asGL());
         scp.draw();
+    }
+
+    // optimised version of rectangle drawing
+    private drawSimpleImage(img:Image):void{
+
+        const sip = this._simpleImagePainterHolder.getInstance(this._gl);
+
+        const texture:Texture = img.getTexture() as Texture;
+        texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
+
+        if (img.worldTransformDirty) {
+            rect.setXYWH( 0,0,img.size.width,img.size.height);
+            size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
+            const mvpHolder = makeModelViewMatrix(rect,this._matrixStack);
+            sip.setUniformVector(sip.u_vertexMatrix,mvpHolder.mat16, true);
+            img.modelViewMatrix.fromMat16(mvpHolder);
+        } else {
+            sip.setUniformVector(sip.u_vertexMatrix,img.modelViewMatrix.mat16);
+        }
+        sip.setUniformVector(
+            sip.u_projectionMatrix,
+            getProjectionMatrix(this._currFrameBufferStack.id,this._currFrameBufferStack.getCurrentTargetSize()).mat16
+        );
+        sip.setUniformScalar(sip.u_alpha,img.getChildrenCount()===0?img.alpha:1);
+        sip.setUniformVector(sip.u_color,img.color.asGL());
+        const {width: textureWidth,height: textureHeight} = texture.size;
+        const {x:srcRectX,y:srcRectY,width:destRectWidth,height:destRectHeight} = img.getSrcRect();
+
+        const destArr:Float32Array = rect.setXYWH(
+            srcRectX/textureWidth,
+            srcRectY/textureHeight,
+            destRectWidth/textureWidth,
+            destRectHeight/textureHeight).toArray();
+
+        sip.setUniformVector(sip.u_texRect, destArr);
+
+        sip.setUniformScalar(sip.u_width,destRectWidth);
+        sip.setUniformScalar(sip.u_height,destRectHeight);
+        sip.attachTexture('texture',texture);
+
+        this._blender.setBlendMode(img.blendMode);
+        this._glCachedAccessor.setDepthTest(img.depthTest);
+
+        sip.draw();
     }
 
     private prepareGeometryUniformInfo(model:RenderableModel):void{
