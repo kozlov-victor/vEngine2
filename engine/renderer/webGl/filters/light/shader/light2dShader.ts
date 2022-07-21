@@ -24,7 +24,8 @@ export const light2dShader:string = `
         return spec / dist * light.specular;
     }
 
-    float calcBumpMappngAttenuation(PointLight light, vec4 normal) {
+    float calcBumpMappingAttenuation(PointLight light, vec4 normal) {
+        if (!u_useNormalMap) return 1.;
         vec3 direction = normalize(vec3(light.pos - gl_FragCoord.xy,0.));
         return max(0.,dot(normal.xyz,direction));
     }
@@ -36,7 +37,7 @@ export const light2dShader:string = `
         if (u_useNormalMap) {
             normal = texture2D(normalTexture, v_texCoord) * 2. - 1.;
         } else {
-            normal = vec4(0.,0.,-1.,0.);
+            normal = vec4(0.,0.,-1.,1.);
         }
 
         vec4 lightResult = u_ambientLight.color * vec4(u_ambientLight.intensity);
@@ -49,7 +50,7 @@ export const light2dShader:string = `
                 float atten =
                     calcDistanceAttenuation(l, dist) *
                     calcAngleAttenuation(l) *
-                    calcBumpMappngAttenuation(l, normal);
+                    calcBumpMappingAttenuation(l, normal);
                 if (atten>0.) atten+=calcSpecular(l, normal, dist);
                 lightResult +=
                     atten *

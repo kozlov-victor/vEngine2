@@ -82,7 +82,8 @@ export class MainScene extends Scene {
         hero.gotoAndStop('run',4);
 
         const lightSet = new LightSet(this.game);
-        lightSet.ambientLight.intensity = 0.6;
+        lightSet.ambientLight.intensity = 0.3;
+        lightSet.ambientLight.color = ColorFactory.fromCSS(`#0a8504`);
         const l = new DirectionalLight(this.game);
         lightSet.addPointLight(l);
         l.pos.setXY(20,20);
