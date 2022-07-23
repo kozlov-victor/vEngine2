@@ -117,12 +117,12 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
     }
 
     // noinspection JSSuspiciousNameCombination
-    public equal(x:number,y:number = x):boolean {
+    public equals(x:number, y:number = x):boolean {
         return this._x===x && this._y===y;
     }
 
-    public equalPoint(point:IPoint2d):boolean {
-        return this.equal(point.x,point.y);
+    public equalsToPoint(point:IPoint2d):boolean {
+        return this.equals(point.x,point.y);
     }
 
     public clone():Point2d {

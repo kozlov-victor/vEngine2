@@ -12,6 +12,7 @@ import type {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import type {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import type {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import type {Image} from "@engine/renderable/impl/general/image/image";
+import {STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Mat4} from "@engine/misc/math/mat4";
@@ -32,14 +33,14 @@ import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
 import {GlCachedAccessor} from "@engine/renderer/webGl/blender/glCachedAccessor";
 import {LruMap} from "@engine/misc/collection/lruMap";
-import Mat16Holder = Mat4.Mat16Holder;
-import glEnumToString = DebugUtil.glEnumToString;
-import IDENTITY = Mat4.IDENTITY;
 import {BatchPainter} from "@engine/renderer/webGl/programs/impl/batch/batchPainter";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
-import MAT16 = Mat4.MAT16;
 import {SimpleImagePainter} from "@engine/renderer/webGl/programs/impl/base/simpleImage/simpleImagePainter";
+import Mat16Holder = Mat4.Mat16Holder;
+import glEnumToString = DebugUtil.glEnumToString;
+import IDENTITY = Mat4.IDENTITY;
+import MAT16 = Mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -169,47 +170,16 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this.flush();
 
-        this.drawSimpleImage(img);
-        // noinspection PointlessBooleanExpressionJS
-        // eslint-disable-next-line no-constant-condition
-        if (true) return;
-
-        const texture:Texture = img.getTexture() as Texture;
-        texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
-        const maxSize:number = Math.max(img.size.width,img.size.height);
-
-        const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
-        this.prepareGeometryUniformInfo(img);
-
-        sp.setUniformScalar(sp.u_lineWidth,Math.min(img.lineWidth/maxSize,1));
-        sp.setUniformVector(sp.u_color,img.color.asGL());
-
-        const repeatFactor:Size = size;
-        repeatFactor.setWH(
-            img.size.width/img.getSrcRect().width,
-            img.size.height/img.getSrcRect().height
-        );
-        sp.setUniformVector(sp.u_repeatFactor,repeatFactor.toArray());
-
-        sp.setUniformScalar(sp.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
-        sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.RECT);
-        sp.setUniformScalar(sp.u_fillType,FILL_TYPE.TEXTURE);
-        const {width: textureWidth,height: textureHeight} = texture.size;
-        const {x:srcRectX,y:srcRectY,width:destRectWidth,height:destRectHeight} = img.getSrcRect();
-
-        const destArr:Float32Array = rect.setXYWH(
-            srcRectX/textureWidth,
-            srcRectY/textureHeight,
-            destRectWidth/textureWidth,
-            destRectHeight/textureHeight).toArray();
-
-        sp.setUniformVector(sp.u_texRect, destArr);
-
-        const offSetArr:Float32Array = size.setWH(img.offset.x/maxSize,img.offset.y/maxSize).toArray();
-        sp.setUniformVector(sp.u_texOffset,offSetArr);
-        sp.setUniformScalar(sp.u_stretchMode,img.stretchMode);
-        sp.attachTexture('texture',texture);
-        sp.draw();
+        if (
+            img.stretchMode===STRETCH_MODE.STRETCH &&
+            img.offset.equals(0) &&
+            img.borderRadius===0 &&
+            img.lineWidth===0
+        ) {
+            this._drawSimpleImage(img);
+        } else {
+            this._drawImage(img);
+        }
 
     }
 
@@ -331,19 +301,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.flush();
 
         if (rectangle.lineWidth===0 && rectangle.borderRadius===0 && rectangle.fillGradient===undefined) {
-            this.drawSimpleColoredRectangle(rectangle); // optimise drawing of simple rectangle with very simple gl program
+            this._drawSimpleColoredRectangle(rectangle); // optimise drawing of simple rectangle with very simple gl program
         } else {
-            const rw:number = rectangle.size.width;
-            const rh:number = rectangle.size.height;
-            const maxSize:number = Math.max(rw,rh);
-            const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
-            this.prepareGeometryUniformInfo(rectangle);
-            this.prepareShapeUniformInfo(rectangle);
-            this.prepareShapeFillUniformInfo(rectangle);
-            sp.setUniformScalar(sp.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
-            sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.RECT);
-            sp.attachTexture('texture',this._nullTexture);
-            sp.draw();
+            this._drawRectangle(rectangle);
         }
 
     }
@@ -577,9 +537,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     // optimised version of rectangle drawing
-    private drawSimpleColoredRectangle(rectangle:Rectangle):void{
+    private _drawSimpleColoredRectangle(rectangle:Rectangle):void{
 
         const scp:SimpleColoredRectPainter = this._coloredRectPainterHolder.getInstance(this._gl);
+        if (rectangle._lastProgramId!==undefined && rectangle._lastProgramId!==scp.id) rectangle.worldTransformDirty = true;
+        rectangle._lastProgramId = scp.id;
 
         if (rectangle.worldTransformDirty) {
             rect.setXYWH( 0,0,rectangle.size.width,rectangle.size.height);
@@ -600,10 +562,70 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         scp.draw();
     }
 
-    // optimised version of rectangle drawing
-    private drawSimpleImage(img:Image):void{
+    private _drawRectangle(rectangle:Rectangle):void {
+        const rw:number = rectangle.size.width;
+        const rh:number = rectangle.size.height;
+        const maxSize:number = Math.max(rw,rh);
+        const sp = this._shapePainterHolder.getInstance(this._gl);
+        if (rectangle._lastProgramId!==undefined && rectangle._lastProgramId!==sp.id) rectangle.worldTransformDirty = true;
+        rectangle._lastProgramId = sp.id;
+
+        this.prepareGeometryUniformInfo(rectangle);
+        this.prepareShapeUniformInfo(rectangle);
+        this.prepareShapeFillUniformInfo(rectangle);
+        sp.setUniformScalar(sp.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
+        sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.RECT);
+        sp.attachTexture('texture',this._nullTexture);
+        sp.draw();
+    }
+
+    private _drawImage(img:Image):void {
+        const texture:Texture = img.getTexture() as Texture;
+        texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
+        const maxSize:number = Math.max(img.size.width,img.size.height);
+
+        const sp = this._shapePainterHolder.getInstance(this._gl);
+        if (img._lastProgramId!==undefined && img._lastProgramId!==sp.id) img.worldTransformDirty = true;
+        img._lastProgramId = sp.id;
+        this.prepareGeometryUniformInfo(img);
+
+        sp.setUniformScalar(sp.u_lineWidth,Math.min(img.lineWidth/maxSize,1));
+        sp.setUniformVector(sp.u_color,img.color.asGL());
+
+        size.setWH(
+            img.size.width/img.getSrcRect().width,
+            img.size.height/img.getSrcRect().height
+        );
+        sp.setUniformVector(sp.u_repeatFactor,size.toArray());
+
+        sp.setUniformScalar(sp.u_borderRadius,Math.min(img.borderRadius/maxSize,1));
+        sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.RECT);
+        sp.setUniformScalar(sp.u_fillType,FILL_TYPE.TEXTURE);
+        const {width: textureWidth,height: textureHeight} = texture.size;
+        const {x:srcRectX,y:srcRectY} = img.getSrcRect();
+        const {width:destRectWidth,height:destRectHeight} = img.getSrcRect();
+
+        const destArr:Float32Array = rect.setXYWH(
+            srcRectX/textureWidth,
+            srcRectY/textureHeight,
+            destRectWidth/textureWidth,
+            destRectHeight/textureHeight).toArray();
+
+        sp.setUniformVector(sp.u_texRect, destArr);
+
+        const offSetArr:Float32Array = size.setWH(img.offset.x/maxSize,img.offset.y/maxSize).toArray();
+        sp.setUniformVector(sp.u_texOffset,offSetArr);
+        sp.setUniformScalar(sp.u_stretchMode,img.stretchMode);
+        sp.attachTexture('texture',texture);
+        sp.draw();
+    }
+
+    // optimised version of image drawing
+    private _drawSimpleImage(img:Image):void{
 
         const sip = this._simpleImagePainterHolder.getInstance(this._gl);
+        if (img._lastProgramId!==undefined && img._lastProgramId!==sip.id) img.worldTransformDirty = true;
+        img._lastProgramId = sip.id;
 
         const texture:Texture = img.getTexture() as Texture;
         texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
@@ -623,14 +645,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         );
         sip.setUniformScalar(sip.u_alpha,img.getChildrenCount()===0?img.alpha:1);
         sip.setUniformVector(sip.u_color,img.color.asGL());
-        const {width: textureWidth,height: textureHeight} = texture.size;
+        const {width: srcRectWidth,height: srcRectHeight} =texture.size;
         const {x:srcRectX,y:srcRectY,width:destRectWidth,height:destRectHeight} = img.getSrcRect();
 
         const destArr:Float32Array = rect.setXYWH(
-            srcRectX/textureWidth,
-            srcRectY/textureHeight,
-            destRectWidth/textureWidth,
-            destRectHeight/textureHeight).toArray();
+            srcRectX/srcRectWidth,
+            srcRectY/srcRectHeight,
+            destRectWidth/srcRectWidth,
+            destRectHeight/srcRectHeight).toArray();
 
         sip.setUniformVector(sip.u_texRect, destArr);
 
@@ -671,7 +693,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             sp.setUniformScalar(sp.u_rectOffsetLeft,offsetX/maxSize);
             sp.setUniformScalar(sp.u_rectOffsetTop,0);
         }
-
 
         if (model.worldTransformDirty) {
             rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);

@@ -81,11 +81,8 @@ export class MainScene extends Scene {
         hero.transformPoint.setToCenter();
         hero.gotoAndStop('run',4);
 
-        const lightSet = new LightSet(this.game);
-        lightSet.ambientLight.intensity = 0.3;
-        lightSet.ambientLight.color = ColorFactory.fromCSS(`#0a8504`);
+
         const l = new DirectionalLight(this.game);
-        lightSet.addPointLight(l);
         l.pos.setXY(20,20);
         l.nearRadius = 10;
         l.color.setRGB(200,200,100);
@@ -116,9 +113,10 @@ export class MainScene extends Scene {
             time: 2000,
         }));
 
-        lightSet.addPointLight(particleLight);
 
-
+        const lightSet = new LightSet(this.game,[l,particleLight]);
+        lightSet.ambientLight.intensity = 0.3;
+        lightSet.ambientLight.color = ColorFactory.fromCSS(`#0a8504`);
         const lightFilter = new LightFilter(this.game,lightSet);
         this.filters = [lightFilter];
 

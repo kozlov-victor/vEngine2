@@ -35,8 +35,8 @@ export class FontContextCanvasFactory extends FontContextAbstractFactory<CanvasR
     }
 
     protected override getFontHeight(): number {
-        const parent:HTMLSpanElement = document.createElement("span");
-        parent.appendChild(document.createTextNode("height"));
+        const parent = document.createElement("span");
+        parent.appendChild(document.createTextNode("height!"));
         document.body.appendChild(parent);
         parent.style.cssText = `font: ${this.strFont}; white-space: nowrap; display: inline-block;line-height:1em;`;
         const height:number = parent.offsetHeight;
@@ -49,12 +49,15 @@ export class FontContextCanvasFactory extends FontContextAbstractFactory<CanvasR
     }
 
     protected override texturePageToTexture(page: CanvasRenderingContext2D): ITexture {
+        // const img = document.createElement('img');
+        // img.src = page.canvas.toDataURL();
+        // document.body.appendChild(img);
         return this.game.getRenderer().createTexture(page.canvas);
     }
 
     protected override createTexturePage(size: ISize): CanvasRenderingContext2D {
         const cnv = createCanvas(size);
-        const ctx:CanvasRenderingContext2D = cnv.getContext('2d')!;
+        const ctx = cnv.getContext('2d')!;
         ctx.font = this.strFont;
         ctx.textBaseline = 'top';
         ctx.imageSmoothingEnabled = false;

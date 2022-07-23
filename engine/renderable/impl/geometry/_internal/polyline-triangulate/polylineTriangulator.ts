@@ -69,7 +69,7 @@ export class PolylineTriangulator {
 
             // to avoid division-by-zero errors,
             // only create a line segment for non-identical points
-            if (!Vec2.equal(point1, point2)) {
+            if (!Vec2.equals(point1, point2)) {
                 segments.push(
                     new PolySegment(
                         new LineSegment(point1,point2),
@@ -87,7 +87,7 @@ export class PolylineTriangulator {
 
             // to avoid division-by-zero errors,
             // only create a line segment for non-identical points
-            if (!Vec2.equal(point1, point2)) {
+            if (!Vec2.equals(point1, point2)) {
                 segments.push(
                     new PolySegment(
                         new LineSegment(point1,point2),

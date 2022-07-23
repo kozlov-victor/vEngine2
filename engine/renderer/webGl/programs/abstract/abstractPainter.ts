@@ -12,6 +12,7 @@ import {
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {AbstractTexture} from "@engine/renderer/webGl/base/abstract/abstractTexture";
+import {Incrementer} from "@engine/resources/incrementer";
 
 
 interface ITextureInfo {
@@ -35,6 +36,8 @@ export class AbstractPainter implements IPainter, IDestroyable{
     constructor(gl:WebGLRenderingContext){
         this.gl = gl;
     }
+
+    public readonly id = Incrementer.getValue();
 
     private static currentInstance:Optional<AbstractPainter>;
 

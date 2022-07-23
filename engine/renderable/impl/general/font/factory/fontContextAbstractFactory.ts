@@ -62,11 +62,11 @@ export abstract class FontContextAbstractFactory<T> {
             }
         }
         this.symbols[char] = {
-            x: this.currX,
-            y: this.currY,
+            x: this.currX + this.SYMBOL_PADDING,
+            y: this.currY + this.SYMBOL_PADDING,
             width: textWidthPlusPadding,
             widthAdvanced: textWidth,
-            height: this.getFontHeight() + 2 * this.SYMBOL_PADDING,
+            height: this.getFontHeight(),
             destOffsetX: 0,
             destOffsetY: 0,
             pageId: this.currentPageIndex,
@@ -94,10 +94,7 @@ export abstract class FontContextAbstractFactory<T> {
             symbols:this.symbols,
             pageRects:this.pageRects,
             padding: [
-                this.SYMBOL_PADDING,
-                this.SYMBOL_PADDING,
-                this.SYMBOL_PADDING,
-                this.SYMBOL_PADDING
+                0,0,0,0
             ],
             spacing: [0,0],
             lineHeight,
@@ -111,15 +108,15 @@ export abstract class FontContextAbstractFactory<T> {
         this.texturePages.push(texturePage);
         const symbolsForThisPage =
             Object.keys(this.symbols).
-            map(key=>({char:key,info:this.symbols[key]})).
-            filter(it=>(it.info.pageId===pageId));
+                map(key=>({char:key,info:this.symbols[key]})).
+                filter(it=>(it.info.pageId===pageId));
         symbolsForThisPage.forEach(symbol=>{
             const rect:IRectJSON = symbol.info;
             this.drawLetter(
                 texturePage,
                 symbol.char,
-                rect.x + this.SYMBOL_PADDING,
-                rect.y + this.SYMBOL_PADDING
+                rect.x,
+                rect.y
             );
         });
     }

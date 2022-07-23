@@ -75,6 +75,8 @@ export abstract class RenderableModel
     public readonly velocity = new Point2d(0, 0);
     public interactive: boolean = false;
 
+    public _lastProgramId:number;
+
     private _destRect: Rect = new Rect();
     private _behaviours: BaseAbstractBehaviour[] = [];
     private _propertyAnimations: IAnimation[] = [];
@@ -215,7 +217,7 @@ export abstract class RenderableModel
         for (const pa of this._propertyAnimations) pa.update();
 
         if (!this.visible) return;
-        if (this.scale.equal(0)) return;
+        if (this.scale.equals(0)) return;
         if (this.alpha === 0) return;
 
         const delta: number = this.game.getDeltaTime();

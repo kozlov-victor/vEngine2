@@ -4,6 +4,7 @@ import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
 import {Game} from "@engine/core/game";
 import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Optional} from "@engine/core/declarations";
+import {createRange} from "@engine/misc/object";
 
 // thanks to https://codepen.io/Blindman67/pen/pwVyVx
 
@@ -37,11 +38,10 @@ export class WaterRippleFilter extends AbstractGlFilter {
         this.time = programGen.addScalarFragmentUniform(GL_TYPE.FLOAT,'time');
         this.drops =
             // x,y are pos z is age
-            programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC3,'drops[MAX_DROPS]',true);
+            programGen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC3,`drops[${maxDrops}]`,true);
 
         //language=GLSL
         programGen.prependFragmentCodeBlock(`
-            #define MAX_DROPS ${maxDrops}
             #define TWO_PI ${(Math.PI * 2).toFixed(6)}
 
             vec2 offset;
@@ -61,16 +61,22 @@ export class WaterRippleFilter extends AbstractGlFilter {
                 surf = vec2(sin(cau), cos(cau)) * 0.01;
                 cau = distance(vec2(1.0, 1.0), txC) * 30.0 + time;
                 surf += vec2(sin(cau), cos(cau)) * 0.02;
-                for(int i = 0; i < MAX_DROPS; i+= 1){
-                    if(drops[i].z > -90.0){
-                        dir = drops[i].xy - txC;
-                        dist = length(dir);
-                        dir = normalize(dir);
-                        w = cos((4.0 / (1.0 + pow(2.0, dist * 50.0 - drops[i].z))) * TWO_PI) * -0.5 + 0.5;
-                        wave = w * pow(2.0, -dist * 8.0);
-                        surf += dir * wave;
-                    }
-                }
+
+                ${createRange({from:0,to:maxDrops}).map(i=>{
+                    return `
+                    {
+                        // drop ${i}
+                        if(drops[${i}].z > -90.0) {
+                            dir = drops[${i}].xy - txC;
+                            dist = length(dir);
+                            dir = normalize(dir);
+                            w = cos((4.0 / (1.0 + pow(2.0, dist * 50.0 - drops[${i}].z))) * TWO_PI) * -0.5 + 0.5;
+                            wave = w * pow(2.0, -dist * 8.0);
+                            surf += dir * wave;
+                        }
+                    }`;
+                }).join('\n')}
+
                 offset = v_texCoord + surf * amount;
                 vec3 tx = vec3(v_texCoord, 0.0);
                 vec3 norm = normalize(vec3(surf, 1.0));
@@ -101,7 +107,6 @@ export class WaterRippleFilter extends AbstractGlFilter {
     }
 
     private getNextPointIndex():Optional<number> {
-        (window as any).a = this.dropVectors;
         switch (this.findFreePointStrategy) {
             case FindFreePointStrategy.GET_NEXT: {
                 return (this.currentDrop++ % this.maxDrops) * 3;

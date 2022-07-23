@@ -172,7 +172,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
     public _transform():void{
         const renderer:AbstractRenderer = this.game.getRenderer();
 
-        const needTransform = this.angle!==0 || !this.scale.equal(1);
+        const needTransform = this.angle!==0 || !this.scale.equals(1);
         if (needTransform) {
             renderer.transformTranslate(this.game.size.width/2,this.game.size.height/2,0);
             //rotate

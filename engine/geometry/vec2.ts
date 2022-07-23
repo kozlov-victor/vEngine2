@@ -34,7 +34,7 @@ export class Vec2 {
         return axMinusBx**2 + ayMinusBy**2;
     }
 
-    public static equal(a:Vec2,b:Vec2):boolean {
+    public static equals(a:Vec2, b:Vec2):boolean {
         return a.x === b.x && a.y === b.y;
     }
 

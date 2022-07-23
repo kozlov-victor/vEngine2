@@ -40,9 +40,7 @@ export class MainScene extends Scene {
         dirLight.color.setRGB(100,0,0);
         dirLight.appendTo(this);
 
-        const lightSet:LightSet = new LightSet(this.game);
-        lightSet.addPointLight(pointLight);
-        lightSet.addPointLight(dirLight);
+        const lightSet:LightSet = new LightSet(this.game,[pointLight,dirLight]);
         lightSet.ambientLight.color.setRGB(10,10,10);
         lightSet.ambientLight.intensity = 0.1;
 

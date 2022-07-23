@@ -1,13 +1,11 @@
 
 
-import {LightSet} from "@engine/lighting/lightSet";
 import {PointLight} from "@engine/lighting/impl/pointLight";
 import {DirectionalLight} from "@engine/lighting/impl/directionalLight";
 
 //language=GLSL
 export const Light2dShaderFunctions = `
 
-    #define MAX_NUM_OF_POINT_LIGHTS ${LightSet.MAX_NUM_OF_POINT_LIGHTS}
     #define LIGHT_TYPE_POINT ${PointLight.LIGHT_TYPE}
     #define LIGHT_TYPE_DIRECTIONAL ${DirectionalLight.LIGHT_TYPE}
     #define PI ${Math.PI}

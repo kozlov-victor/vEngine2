@@ -157,7 +157,7 @@ export class ColliderEngine {
     // }
     //
     // private boundAndCollideAcrade(a:GameObject,b:GameObject){
-    //     if (a.velocity.equal(0) && b.velocity.equal(0)) return;
+    //     if (a.velocity.equals(0) && b.velocity.equals(0)) return;
     //     let numOfIterations = 0;
     //     let isOverlapped = MathEx.overlapTest(a.getSrcRect(),b.getSrcRect());
     //     if (!isOverlapped) return;

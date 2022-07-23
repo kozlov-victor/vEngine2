@@ -24,17 +24,16 @@ export class LightFilter extends AbstractGlFilter {
     private _dimension = new Float32Array([0,0]);
 
 
-    constructor(game:Game, private lightArray:LightSet) {
+    constructor(game:Game, private lightSet:LightSet) {
         super(game);
         const gen: ShaderGenerator = this.simpleRectPainter.gen;
-        gen.addStructFragmentUniform("PointLight",'u_pointLights[MAX_NUM_OF_POINT_LIGHTS]');
+        gen.addStructFragmentUniform("PointLight",`u_pointLights[${lightSet.getSize()}]`);
         gen.addStructFragmentUniform("AmbientLight",'u_ambientLight');
         this._normalTexture = gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'normalTexture');
         this._u_useNormalMap = gen.addScalarFragmentUniform(GL_TYPE.BOOL,'u_useNormalMap');
         this._u_dimension = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC2,'u_dimension');
-        gen.addScalarFragmentUniform(GL_TYPE.INT,'u_numOfPointLights');
         gen.prependFragmentCodeBlock(Light2dShaderFunctions);
-        gen.setFragmentMainFn(light2dShader);
+        gen.setFragmentMainFn(light2dShader(lightSet.getSize()));
         this.simpleRectPainter.initProgram();
     }
 
@@ -51,7 +50,7 @@ export class LightFilter extends AbstractGlFilter {
         this._dimension[1] = destFrameBuffer.getTexture().size.height;
         this.setUniform(this._u_dimension,this._dimension);
 
-        this.lightArray.setUniformsToMap(this._uniformInfo);
+        this.lightSet.setUniformsToMap(this._uniformInfo);
         this.simpleRectPainter.setUniformsFromMap(this._uniformInfo);
         const useNormalMap:boolean = this.normalMap!==undefined;
         this.simpleRectPainter.setUniform(this._u_useNormalMap,useNormalMap);
