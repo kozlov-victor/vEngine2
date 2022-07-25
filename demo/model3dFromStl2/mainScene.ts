@@ -12,12 +12,12 @@ export class MainScene extends Scene {
     private data1:string;
 
     @Resource.CubeTexture(
-        './cubeMapTexture/textures/cm_left.jpg',
-        './cubeMapTexture/textures/cm_right.jpg',
-        './cubeMapTexture/textures/cm_top.jpg',
-        './cubeMapTexture/textures/cm_bottom.jpg',
-        './cubeMapTexture/textures/cm_front.jpg',
-        './cubeMapTexture/textures/cm_back.jpg',
+        './model3dFromStl/textures/miramar_left.png',
+        './model3dFromStl/textures/miramar_right.png',
+        './model3dFromStl/textures/miramar_top.png',
+        './model3dFromStl/textures/miramar_bottom.png',
+        './model3dFromStl/textures/miramar_front.png',
+        './model3dFromStl/textures/miramar_back.png',
     )
     private cubeTexture:ICubeMapTexture;
 

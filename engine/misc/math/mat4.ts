@@ -380,18 +380,24 @@ export namespace Mat4 {
     };
 
     export const multVecByMatrix = (out:Vec4Holder, matrix:Mat16Holder, vec4Arr:Vec4Holder):void => {
-        const vec4Arr_vec4_0 = vec4Arr.vec4[0];
-        const vec4Arr_vec4_1 = vec4Arr.vec4[1];
-        const vec4Arr_vec4_2 = vec4Arr.vec4[2];
-        const vec4Arr_vec4_3 = vec4Arr.vec4[3];
-        const mat16 = matrix.mat16;
-        for (let i:n = 0; i < 4; i++) {
-            (out.vec4 as VEC4)[i] =
-                vec4Arr_vec4_0 * mat16[    0 + i] +
-                vec4Arr_vec4_1 * mat16[    4 + i] +
-                vec4Arr_vec4_2 * mat16[2 * 4 + i] +
-                vec4Arr_vec4_3 * mat16[3 * 4 + i];
-        }
+
+        const v = vec4Arr.vec4;
+        const mat4 = matrix.mat16;
+        const x = v[0], y = v[1], z = v[2], w = v[3];
+        const
+            c1r1 = mat4[ 0], c2r1 = mat4[ 1], c3r1 = mat4[ 2], c4r1 = mat4[ 3],
+            c1r2 = mat4[ 4], c2r2 = mat4[ 5], c3r2 = mat4[ 6], c4r2 = mat4[ 7],
+            c1r3 = mat4[ 8], c2r3 = mat4[ 9], c3r3 = mat4[10], c4r3 = mat4[11],
+            c1r4 = mat4[12], c2r4 = mat4[13], c3r4 = mat4[14], c4r4 = mat4[15];
+
+        out.set(
+            x*c1r1 + y*c1r2 + z*c1r3 + w*c1r4,
+            x*c2r1 + y*c2r2 + z*c2r3 + w*c2r4,
+            x*c3r1 + y*c3r2 + z*c3r3 + w*c3r4,
+            x*c4r1 + y*c4r2 + z*c4r3 + w*c4r4
+        );
+
+
     };
 
     export const inverse = (out:Mat16Holder,mHolder:Mat16Holder):void=>{
@@ -401,25 +407,25 @@ export namespace Mat4 {
         const m0 = m[0], m1 = m[1], m2 = m[2], m3 = m[3], m4 = m[4], m5 = m[5], m6 = m[6], m7 = m[7];
         const m8 = m[8], m9 = m[9], m10 = m[10], m11 = m[11], m12 = m[12], m13 = m[13], m14 = m[14], m15 = m[15];
 
-        r[0] = m5*m10*m15 - m5*m14*m11 - m6*m9*m15 + m6*m13*m11 + m7*m9*m14 - m7*m13*m10;
-        r[1] = -m1*m10*m15 + m1*m14*m11 + m2*m9*m15 - m2*m13*m11 - m3*m9*m14 + m3*m13*m10;
-        r[2] = m1*m6*m15 - m1*m14*m7 - m2*m5*m15 + m2*m13*m7 + m3*m5*m14 - m3*m13*m6;
-        r[3] = -m1*m6*m11 + m1*m10*m7 + m2*m5*m11 - m2*m9*m7 - m3*m5*m10 + m3*m9*m6;
+        r[0] = m5 * m10 * m15 - m5 * m14 * m11 - m6 * m9 * m15 + m6 * m13 * m11 + m7 * m9 * m14 - m7 * m13 * m10;
+        r[1] = -m1 * m10 * m15 + m1 * m14 * m11 + m2 * m9 * m15 - m2 * m13 * m11 - m3 * m9 * m14 + m3 * m13 * m10;
+        r[2] = m1 * m6 * m15 - m1 * m14 * m7 - m2 * m5 * m15 + m2 * m13 * m7 + m3 * m5 * m14 - m3 * m13 * m6;
+        r[3] = -m1 * m6 * m11 + m1 * m10 * m7 + m2 * m5 * m11 - m2 * m9 * m7 - m3 * m5 * m10 + m3 * m9 * m6;
 
-        r[4] = -m4*m10*m15 + m4*m14*m11 + m6*m8*m15 - m6*m12*m11 - m7*m8*m14 + m7*m12*m10;
-        r[5] = m0*m10*m15 - m0*m14*m11 - m2*m8*m15 + m2*m12*m11 + m3*m8*m14 - m3*m12*m10;
-        r[6] = -m0*m6*m15 + m0*m14*m7 + m2*m4*m15 - m2*m12*m7 - m3*m4*m14 + m3*m12*m6;
-        r[7] = m0*m6*m11 - m0*m10*m7 - m2*m4*m11 + m2*m8*m7 + m3*m4*m10 - m3*m8*m6;
+        r[4] = -m4 * m10 * m15 + m4 * m14 * m11 + m6 * m8 * m15 - m6 * m12 * m11 - m7 * m8 * m14 + m7 * m12 * m10;
+        r[5] = m0 * m10 * m15 - m0 * m14 * m11 - m2 * m8 * m15 + m2 * m12 * m11 + m3 * m8 * m14 - m3 * m12 * m10;
+        r[6] = -m0 * m6 * m15 + m0 * m14 * m7 + m2 * m4 * m15 - m2 * m12 * m7 - m3 * m4 * m14 + m3 * m12 * m6;
+        r[7] = m0 * m6 * m11 - m0 * m10 * m7 - m2 * m4 * m11 + m2 * m8 * m7 + m3 * m4 * m10 - m3 * m8 * m6;
 
-        r[8] = m4*m9*m15 - m4*m13*m11 - m5*m8*m15 + m5*m12*m11 + m7*m8*m13 - m7*m12*m9;
-        r[9] = -m0*m9*m15 + m0*m13*m11 + m1*m8*m15 - m1*m12*m11 - m3*m8*m13 + m3*m12*m9;
-        r[10] = m0*m5*m15 - m0*m13*m7 - m1*m4*m15 + m1*m12*m7 + m3*m4*m13 - m3*m12*m5;
-        r[11] = -m0*m5*m11 + m0*m9*m7 + m1*m4*m11 - m1*m8*m7 - m3*m4*m9 + m3*m8*m5;
+        r[8] = m4 * m9 * m15 - m4 * m13 * m11 - m5 * m8 * m15 + m5 * m12 * m11 + m7 * m8 * m13 - m7 * m12 * m9;
+        r[9] = -m0 * m9 * m15 + m0 * m13 * m11 + m1 * m8 * m15 - m1 * m12 * m11 - m3 * m8 * m13 + m3 * m12 * m9;
+        r[10] = m0 * m5 * m15 - m0 * m13 * m7 - m1 * m4 * m15 + m1 * m12 * m7 + m3 * m4 * m13 - m3 * m12 * m5;
+        r[11] = -m0 * m5 * m11 + m0 * m9 * m7 + m1 * m4 * m11 - m1 * m8 * m7 - m3 * m4 * m9 + m3 * m8 * m5;
 
-        r[12] = -m4*m9*m14 + m4*m13*m10 + m5*m8*m14 - m5*m12*m10 - m6*m8*m13 + m6*m12*m9;
-        r[13] = m0*m9*m14 - m0*m13*m10 - m1*m8*m14 + m1*m12*m10 + m2*m8*m13 - m2*m12*m9;
-        r[14] = -m0*m5*m14 + m0*m13*m6 + m1*m4*m14 - m1*m12*m6 - m2*m4*m13 + m2*m12*m5;
-        r[15] = m0*m5*m10 - m0*m9*m6 - m1*m4*m10 + m1*m8*m6 + m2*m4*m9 - m2*m8*m5;
+        r[12] = -m4 * m9 * m14 + m4 * m13 * m10 + m5 * m8 * m14 - m5 * m12 * m10 - m6 * m8 * m13 + m6 * m12 * m9;
+        r[13] = m0 * m9 * m14 - m0 * m13 * m10 - m1 * m8 * m14 + m1 * m12 * m10 + m2 * m8 * m13 - m2 * m12 * m9;
+        r[14] = -m0 * m5 * m14 + m0 * m13 * m6 + m1 * m4 * m14 - m1 * m12 * m6 - m2 * m4 * m13 + m2 * m12 * m5;
+        r[15] = m0 * m5 * m10 - m0 * m9 * m6 - m1 * m4 * m10 + m1 * m8 * m6 + m2 * m4 * m9 - m2 * m8 * m5;
 
         const det:n = m0*r[0] + m1*r[4] + m2*r[8] + m3*r[12];
         if (DEBUG && det===0) {
