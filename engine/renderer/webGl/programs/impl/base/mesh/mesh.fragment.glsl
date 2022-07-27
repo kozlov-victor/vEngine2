@@ -31,13 +31,14 @@ void main() {
 
     if (u_textureUsed) gl_FragColor = mix(texture2D(u_texture, v_texCoord),u_color,u_color_mix);
     else if (u_vertexColorUsed) gl_FragColor = v_vertexColor;
-
     else gl_FragColor = u_color;
+
+    vec3 normal = normalize(v_normal);
+    vec3 surfaceToViewDirection = normalize(v_surfaceToView);
+
     if (u_lightUsed) {
-        vec3 normal = normalize(v_normal);
 
         vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
-        vec3 surfaceToViewDirection = normalize(v_surfaceToView);
         vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
 
         if (u_normalsTextureUsed) {
@@ -64,9 +65,8 @@ void main() {
     }
 
     if (u_cubeMapTextureUsed) {
-        vec3 I = normalize(vec3(v_position));
-        vec3 R = reflect(I, normalize(v_normal));
-        vec4 reflectionColor = textureCube(u_cubeMapTexture, R);
+        vec3 direction = reflect(surfaceToViewDirection,normal);
+        vec4 reflectionColor = textureCube(u_cubeMapTexture, direction);
         gl_FragColor = mix(gl_FragColor,reflectionColor,u_reflectivity);
     }
 

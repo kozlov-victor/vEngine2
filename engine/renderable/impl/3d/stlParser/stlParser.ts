@@ -183,7 +183,7 @@ export class StlParser {
         return pr;
     }
 
-    public parse(game:Game,params:{meshData:ArrayBuffer|string,diffuseColor?:IColor,cubeMapTexture?:ICubeMapTexture}):SimpleGameObjectContainer{
+    public parse(game:Game,params:{meshData:ArrayBuffer|string,diffuseColor?:IColor,cubeMapTexture?:ICubeMapTexture}):Model3d{
         const parsed =
             ((params.meshData as string).substr!==undefined)?
                 StlParser.parseAscii(params.meshData as string):

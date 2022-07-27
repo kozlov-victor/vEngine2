@@ -50,6 +50,7 @@ export class MainScene extends Scene {
             cubeMapTexture: this.cubeTexture
         });
         obj.pos.setXY(200,250);
+        obj.material.reflectivity = 0.8;
         obj.angle3d.observe(()=>{
             skyBox.angle3d.setXYZ(
                 -obj.angle3d.x,
@@ -57,6 +58,7 @@ export class MainScene extends Scene {
                 -obj.angle3d.z
             )
         });
+
         this.appendChild(obj);
         const timer = this.setInterval(()=>{
             obj.angle3d.y+=0.01;
